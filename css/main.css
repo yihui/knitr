@@ -7,82 +7,20 @@
     Resets
 
 */
-html,
-body,
-div,
-span,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-a,
-blockquote,
-pre,
-abbr,
-address,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-samp,
-small,
-strong,
-sub,
-sup,
-var,
-b,
-i,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section,
-menu,
-time,
-mark,
-audio,
-video,
-canvas {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p,
+a, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins,
+kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul,
+li, fieldset, form, label, legend, table, caption, tbody, tfoot,
+thead, tr, th, td, article, aside, figure, footer, header, hgroup,
+menu, nav, section, menu, time, mark, audio, video, canvas {
+    margin: 0; 
+    padding: 0; 
+    border: 0; 
+    outline: 0;
 }
-input, textarea {
-  margin: 0;
-}
+
+input, textarea { margin: 0; }
 /*
 
     Consistency fixes
@@ -150,11 +88,8 @@ strong {
   line-height: 1.3846153846153846em;
   border-bottom: solid 2px;
 }
-body,
-h1,
-h3,
-pre {
-  font: 100%/1.5 pt-sans, sans-serif;
+body, h1, h3 {
+    font-family: 'Sorts Mill Goudy', "Baskerville", "Georgia", serif;
 }
 #copyright p,
 code,
@@ -170,7 +105,7 @@ small {
 
 */
 #content header h1 {
-  font-family: etica, sans-serif;
+
 }
 #logo h1, #articles h1, h3 {
   font-weight: bold;
@@ -489,7 +424,7 @@ nav ul {
   padding-left: 30%;
 }
 nav ul {
-    width: 25em;
+    width: 45em;
     padding-left: 0;
   }
 .ie nav ul {
@@ -639,7 +574,6 @@ p#first_about {
     max-width: none;
   }
   #logo {
-    width: 25em;
   }
   #logo div {
     padding-left: 3.75em;
