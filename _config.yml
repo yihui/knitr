@@ -11,7 +11,7 @@ plugins:     ./_plugins
 future:      true
 lsi:         false
 pygments:    true 
-markdown:    textile
+markdown:    maruku
 permalink:   /:categories/:title/
 
 maruku:
