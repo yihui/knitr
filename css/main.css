@@ -99,6 +99,9 @@ small {
   font-size: 0.8125em;
   line-height: 1.3846153846153846em;
 }
+pre code {
+  font-size: 0.9em;
+}
 /*  
 
     Typography
@@ -434,7 +437,7 @@ nav ul {
 nav li {
   list-style: none;
   float: left;
-  width: 20%;
+  width: 15%;
 }
 nav li.about {
   width: 50%;
