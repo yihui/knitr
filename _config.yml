@@ -1,8 +1,8 @@
+baseurl:     /knitr/
 source:      .
 destination: ./_site
 plugins:     ./_plugins
 
 pygments:    true 
-markdown:    redcarpet
 permalink:   /:categories/:title/
 
