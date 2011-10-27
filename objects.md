@@ -11,14 +11,14 @@ The **knitr** package uses a special object to control options and settings (den
 - `obj$merge(values)`: temporarily merges a list of new options into the current list and returns the merged list (original list not changed)
 - `obj$restore()`: restores the object
 
-Three such objects are visible to users in **knitr**:
+Four such objects are visible to users in **knitr**:
 
 - [`optc`](options#chunk_options): manages **opt**ions for code **c**hunks
 - [`optk`](options#package_options): manages **opt**ions for the **k**nitr package
 - [`hooks`](hooks): manages hook functions
 - [`kpat`](patterns): manages regular expressions to extract R code from the input document
 
-Except `kpat`, all other three objects are initialized with default values, and `kpat` will be automatically determined according to the type of input document if not provided.
+Except `kpat`, all other three objects are initialized with default values, and `kpat` will be automatically determined according to the type of input document if not provided. The `hooks` object is supposed to be used most frequently, and the other three are usually not to be used directly. For example, `optc` is usually set in the input document rather than using the command line directly.
 
 It is recommended to get the settings done in the first chunk with `echo = FALSE` and `results = FALSE` like this (we may call this chunk as the configuration chunk):
 
