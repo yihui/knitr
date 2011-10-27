@@ -20,7 +20,7 @@ Like Sweave, there are two types of R code in **knitr**: code chunks (like parag
 
 ## Built-in Patterns
 
-There are several built-in pattern lists in **knitr** which are stored in `kopt$get('all.patterns')`.
+There are several built-in pattern lists in **knitr** which are stored in `optk$get('all.patterns')`.
 
 {% highlight r %}
 library(knitr)
