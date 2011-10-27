@@ -13,3 +13,6 @@ knitr-spin.html
 /inst/examples/*.sty
 .*.Rnb.cached
 revdep
+_site
+_knit_*
+knit-all.R
