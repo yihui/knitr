@@ -84,7 +84,12 @@ block_exec = function(code, ...) {
         } else {
             if (options$fig.hold) res = c(res[!figs], res[figs]) # rearrange to the end
             figs = sapply(res, is.recordedplot) # only keep last plot
-            if (options$fig.last) res = res[-head(which(figs), sum(figs) - 1)]
+            if (sum(figs) > 1) {
+                if (options$fig.last) res = res[-head(which(figs), sum(figs) - 1)] else {
+                    ## merge low-level plotting changes
+                    if (!options$fig.low) res = merge_low_plot(res, figs)
+                }
+            }
         }
     }
     ## single or multiple plots?

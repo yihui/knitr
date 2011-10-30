@@ -32,7 +32,7 @@ optc =
     new_defaults(list(eval = TRUE, echo = TRUE, results = TRUE, tidy = TRUE,
                       cache = FALSE, purge = FALSE, ref = NULL, prefix.string = '',
                       prompt = FALSE, comment = '##', fig = FALSE, fig.ext = NULL,
-                      dev = 'pdf', dpi = 72, width = 7, height = 7,
+                      fig.low = FALSE, dev = 'pdf', dpi = 72, width = 7, height = 7,
                       out.width = NULL, out.height = NULL,
                       resize.width = NULL, resize.height = NULL, align = 'default',
                       external = FALSE, sanitize = FALSE,
