@@ -8,8 +8,19 @@
                     ifelse(is.null(rh), '!', rh))
         resize2 = '} '
     }
+
     tikz = options$dev == 'tikz' && !options$external
-    paste(resize1,
+
+    a = options$align; plot.cur = options$plot.cur
+    align1 = switch(a, left = '\n\n', center = '\n\n\\hfill{}', right = '\n\n\\hfill{}', '')
+    align2 = switch(a, left = '\\hfill{}\n\n', center = '\\hfill{}\n\n', right = '\n\n', '')
+    ## multiple plots: begin at 1, end at plot.num
+    if (options$fig.hold && plot.cur > 1L)
+        align1 = ''
+    if (options$fig.hold && plot.cur > 0L && plot.cur < options$plot.num)
+        align2 = ''
+
+    paste(align1, resize1,
 
           if (tikz) sprintf('\\input{%s.tikz}', x[1]) else {
               size =
@@ -19,7 +30,7 @@
               sprintf('\\includegraphics%s{%s} ', size, x[1])
           },
 
-          resize2, sep = '')
+          resize2, align2, sep = '')
 }
 .plot.hook.html = function(x, options) {
     ## TODO: output size not implemented for HTML yet
@@ -34,13 +45,6 @@
 }
 .chunk.hook.tex = function(x, options) {
     if (is_blank(x)) return(x)
-    a = options$align
-    x =
-        sprintf(switch(a, default = '%s',
-                       left = '\\begin{flushleft}\n%s\n\\end{flushleft}',
-                       right = '\\begin{flushright}\n%s\n\\end{flushright}',
-                       center = '\\begin{center}\n%s\n\\end{center}'),
-                x)
     if (str_detect(opts_knit$get('header')['framed'], fixed('\\usepackage{framed}')))
         x = str_c(framed_color(options$background), '\\begin{shaded}\n', x, '\n\\end{shaded}')
     x
