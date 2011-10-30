@@ -92,8 +92,8 @@ block_exec = function(code, ...) {
             }
         }
     }
-    ## single or multiple plots?
-    options$single = !length(res) || sum(sapply(res, is.recordedplot)) <= 1
+    ## number of plots in this chunk
+    options$plot.num = if (length(res)) sum(sapply(res, is.recordedplot)) else 0L
 
     ## merge source lines if they do not have output; is there an elegant way??
     iss = if (length(res)) which(sapply(res, is.source)) else NULL

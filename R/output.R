@@ -145,7 +145,7 @@ wrap.recordedplot = function(x, options) {
         odir = setwd(base.dir); on.exit(setwd(odir)) # switch to abs dir, then restore
     }
     ## figure number sequence for multiple plots
-    if (options$single) plot.cur = '' else {
+    if (options$plot.num <= 1) plot.cur = 0L else {
         plot.cur = plot_counter(); options$plot.cur = plot.cur # put fig num in options
     }
     prefix = options$prefix.string
