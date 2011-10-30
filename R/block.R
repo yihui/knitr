@@ -112,18 +112,19 @@ block_exec = function(code, ...) {
 
     output = str_c(unlist(wrap(res, options)), collapse = '') # wrap all results together
     output = str_c(c(res.before, output, res.after), collapse = '')  # insert hook results
-    if (length(output) == 0) output = ''
+    output = if (length(output) == 0L) '' else knit_hooks$get('chunk')(output, options)
     plot_counter(reset = TRUE)  # restore plot number
 
     if (options$cache) {
         hash = options$hash
-        assign(str_c('.', hash), output, envir = globalenv())
+        outname = str_c('.', hash)
+        assign(outname, output, envir = globalenv())
         cache$purge(str_c(options$label, '_*')) # try to purge old cache
-        cache$save(ls(env, all = TRUE), hash)
+        cache$save(c(ls(env, all = TRUE), outname), hash)
         cache$mark(hash)
     }
 
-    knit_hooks$get('chunk')(output, options)
+    output
 }
 
 
