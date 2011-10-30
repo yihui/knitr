@@ -11,6 +11,15 @@ The **knitr** package shares most options with Sweave, but some were dropped/cha
 
 ## Chunk Options
 
+Take Rnw files as an example: usually we write chunk options like this
+
+{% highlight r %}
+<<mychunk, cache=TRUE, fig.hold=TRUE, dev=png, background=.97;.97;1>>=
+@
+{% endhighlight %}
+
+And `\SweaveOpts{comment=#, width=6, height=6}` can change the default global options in a document. All available options in **knitr** are:
+
 - `eval`: (`TRUE`) whether to evaluate the code chunk
 - `echo`: (`TRUE`) whether to include R source code in the output file
 - `results`: (`TRUE`) whether to include normal R output (not warnings, messages or errors) in the output file
@@ -22,17 +31,18 @@ The **knitr** package shares most options with Sweave, but some were dropped/cha
 - `prompt`: (`FALSE`) whether to add the prompt characters in the R code (see `prompt` and `continue` in `?base::options`; note that adding prompts can make it difficult for readers to copy R code from the output, so `prompt = FALSE` may be a better choice
 - `comment`: (`##`) the prefix to be put before source code output; default is to comment out the output by `##`, which is good for readers to copy R source code since output is masked in comments (set `comment=` to disable this feature)
 - `fig`: (`FALSE`) whether to record plots in chunks (unlike Sweave, this option needs a screen device to be available (will be checked automatically when loading this package), and this should not be a big problem unless it is running on a computer without a desktop environment, e.g. a Unix server; besides, any number of plots can be recorded in a single code chunk, and this package does not need to know how many plots are in a chunk in advance -- it can figure out automatically, and name these images as `prefix-string-label-i` where `i` is incremental from 1); if a code chunk does not actually produce any plots, **knitr** will not record anything either (the graphics device is open *only when plots are really produced*); in other words, it does not matter if `fig=TRUE` but no plots were produced
+- `fig.low`: (`FALSE`) whether to let low-level plotting functions produce new plots instead of adding to the current plot; if `TRUE`, calling a low-level plotting function like `lines()` or `points()` will generate a new plot
+- `fig.hold`: (`FALSE`) whether to hold all plots and output them in the very end of a code chunk; if `FALSE`, plots will be generated inline just as if the code were run in an R terminal
+- `fig.last`: (`FALSE`) whether to keep the last plot only (and discard all previous plots in a chunk)
 - `dev`: (`pdf`) a character string of the function name which will be used as a graphical device to record plots; for the convenience of usage, this package has included all the graphics devices in base R as well as those in **Cairo**, **cairoDevice** and **tikzDevice**, e.g. if we set `dev = CairoPDF`, the function with the same name in the **Cairo** package will be used for graphics output; if none of the 20 built-in devices is appropriate, we can still provide yet another name as long as it is a legal function name which can record plots (it must be of the form `function(filename, width, height)`, however); note the units for images are *always* inches (even for bitmap devices, in which DPI is used to convert between pixels and inches); currently available devices are `bmp`, `postscript`, `pdf`, `png`, `svg`, `jpeg`, `pictex`, `tiff`, `win.metafile`, `cairo_pdf`, `cairo_ps`, `CairoJPEG`, `CairoPNG`, `CairoPS`, `CairoPDF`, `CairoSVG`, `CairoTIFF`, `Cairo_pdf`, `Cairo_png`, `Cairo_ps`, `Cairo_svg`, `tikz`
 - `fig.ext`: (`NULL`) file extension of the figure output (if `NULL`, it will be derived from the graphical device; see `knitr:::dev2ext` for details)
 - `dpi`: (default 72) the DPI (dots per inch) for bitmap devices (`dpi * inches = pixels`
 - `width`, `height`: (both are `7`) width and height of the plot, to be used in the graphics device (in inches)
 - `out.width`, `out.height`: (`NULL`) width and height of the plot in the final output file (can be different with its real `width` and `height`, i.e. plots can be scaled in the output document)
 - `resize.width`, `resize.height`: (`NULL`) the width and height to be used in `\resizebox{}{}` in LaTeX; these two options are not needed unless you want to resize tikz graphics because there is no natural way to do it; however, according to **tikzDevice** authors, tikz graphics is not meant to be resized to maintain consistency in style with other texts in LaTeX; if only one of them is `NULL`, `!` will be used (read the documentation of **graphicx** if you do not understand this)
-- `align`: (`default`) alignment of chunks in the output document (possible values are `left`, `right` and `center`; default is not to make any alignment adjustments)
+- `align`: (`default`) alignment of figures in the output document (possible values are `left`, `right` and `center`; default is not to make any alignment adjustments)
 - `external`: (`FALSE`) whether to externalize tikz graphics (pre-compile tikz graphics to PDF); it is only used for the `tikz()` device in the **tikzDevice** package (i.e., when `dev = tikz`)
 - `sanitize`: whether to sanitize tikz graphics (escape special LaTeX characters); see documentation in the **tikzDevice** package
-- `fig.hold`: (`FALSE`) whether to hold all plots and output them in the very end of a code chunk; if `FALSE`, plots will be generated inline just as if the code were run in an R terminal
-- `fig.last`: (`FALSE`) whether to keep the last plot only (and discard all previous plots in a chunk)
 - `warning`: (`TRUE`) whether to show warnings (produced by `warning()`) in the output like we run R code in a terminal
 - `error`: (`TRUE`) whether to show errors (from `stop()`) (by default, the evaluation will not stop even in case of errors!!)
 - `message`: (`TRUE`) whether to show messages emitted by `message()`
