@@ -49,8 +49,10 @@ knit = function(input, output, pattern) {
     owd = setwd(dirname(input)); on.exit(setwd(owd), add = TRUE)
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
     ## for tikz graphics (cache the dictionary); turn off fancy quotes
-    oopts = options(tikzMetricsDictionary = str_c(sub("([^.]+)\\.[[:alnum:]]+$", "\\1",
-                    basename(input)), '-tikzDictionary'), useFancyQuotes = FALSE)
+    oopts =
+        options(tikzMetricsDictionary = str_c(sub("([^.]+)\\.[[:alnum:]]+$", "\\1",
+                basename(input)), '-tikzDictionary'), useFancyQuotes = FALSE,
+                digits = 4, width = 70)
     on.exit(options(oopts), add = TRUE)
 
     res = process_file(basename(input))
