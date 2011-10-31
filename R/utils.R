@@ -7,16 +7,6 @@ copy_env = function(from, to) {
 }
 
 
-screen_dev = function() {
-    dev = opts_knit$get('screen.dev')
-    if (is.null(dev))
-        stop('no screen device has been set; please set by optk$set(screen.dev = ...)')
-    dev()
-    ## if (!dev.interactive())
-    ##     stop("optk$get('screen.dev') must be an interactive device")
-}
-
-
 fix_sweave_params = function(params) {
     ## hide means FALSE, otherwise TRUE
     if (length(params$results) && params$results %in% c('verbatim', 'tex', 'hide'))

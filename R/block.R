@@ -54,11 +54,6 @@ block_exec = function(code, ...) {
     ## eval chunks (in an empty envir if cache)
     env = if (options$cache) new.env(parent = globalenv()) else globalenv()
 
-    if (!dev.interactive() && options$fig) {
-        screen_dev()  # need a screen device to record plots
-        on.exit(dev.off())
-    }
-
     res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
     res = evaluate(code, envir = env) # run code
     res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks

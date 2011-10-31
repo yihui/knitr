@@ -80,7 +80,7 @@ optk =
                       render.to = NULL,
                       cache.dir = 'cache', base.dir = NULL, base.url = NULL,
 
-                      all.patterns = .all.patterns, screen.dev = NULL,
+                      all.patterns = .all.patterns,
 
                       header = c(highlight = '', tikz = '', framed = ''))
 )

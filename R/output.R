@@ -64,6 +64,8 @@ process_file = function(path) {
     groups = split_file(path)
     n = length(groups); res = character(n)
 
+    dev.control(displaylist = 'enable')  # need to record plots
+
     if (opts_knit$get('progress'))
         pb = txtProgressBar(0, n, char = '>', style = 3)
     for (i in 1:n) {
