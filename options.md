@@ -9,7 +9,7 @@ subtitle: Chunk options and package options
 
 The **knitr** package shares most options with Sweave, but some were dropped/changed and some new options were added. The default values are in the parentheses below. Note that the chunk label for each chunk is assumed to be unique, i.e., no two chunks share the same label. This is especially important for cache and plot filenames. Chunks without labels will be assigned labels like `unnamed-chunk-i` where `i` is the chunk number.
 
-## Chunk Options
+## Chunk Options <a id="chunk_options"></a>
 
 Take Rnw files as an example: usually we write chunk options like this
 
@@ -48,7 +48,7 @@ And `\SweaveOpts{comment=#, width=6, height=6}` can change the default global op
 - `message`: (`TRUE`) whether to show messages emitted by `message()`
 - `background`: (`.97;.97;.97`) background color of chunks in LaTeX output (passed to the LaTeX package **framed**); the color model is `rgb`; the three numbers, all between 0 and 1, should be separated by `;` (very important because `,` is reserved as the separator of chunk options)
 
-## Package Options
+## Package Options <a id="package_options"></a>
 
 - `progress`: (`TRUE`) whether to display a progress bar when running **knitr**
 - `verbose`: (`FALSE`) whether to show verbose information (e.g., R code in each chunk) or just show chunk labels and options

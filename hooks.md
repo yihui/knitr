@@ -9,7 +9,7 @@ subtitle: Customizable functions to run before/after a code chunk and tweak the 
 
 The object `hooks` in the **knitr** package is used to set hooks; the basic usage is `hooks$set(param = FUN)` (see [objects](objects) for details) where `param` is the name of a chunk option (can be arbitrary), and `FUN` is a function. There are two types of hooks: chunk hooks and output hooks. Hook functions may have different forms, depending what they are designed to do.
 
-## Chunk hooks
+## Chunk hooks <a id="chunk_hooks"></a>
 
 Chunk hooks are functions to be called before or after a code chunk when the chunk option is `TRUE`, and they should be defined with three arguments:
 
@@ -73,7 +73,7 @@ To sum up,
 3. a hook can be run before and/or after a chunk;
 4. character results returned by hooks will be written into the output without modifications;
 
-## Output hooks
+## Output hooks <a id="output_hooks"></a>
 
 Output hooks are used to customize and polish the *raw* output from chunks. There are 8 output hooks in all to deal with different types of output: 
 
