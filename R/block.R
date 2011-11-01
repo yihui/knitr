@@ -8,7 +8,7 @@ process_group.inline = function(x) call_inline(x)
 
 call_block = function(block) {
     ## TODO: code may come from an R script
-    params = opts_chunk$merge(params)
+    params = opts_chunk$merge(block$params)
     params = c(list(code = block$code), params)
     if (opts_knit$get('progress')) print(block)
 
@@ -125,7 +125,7 @@ block_exec = function(code, ...) {
 call_inline = function(block) {
 
     ## change global options if detected inline options
-    options = fix_sweave_params(block$params)  # for compatibility
+    options = block$params  # for compatibility
     if (length(options)) opts_chunk$set(options)
     if (opts_knit$get('progress')) print(block)
 
