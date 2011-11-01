@@ -38,7 +38,7 @@ optc =
                       external = FALSE, sanitize = FALSE,
                       fig.hold = FALSE, fig.last = FALSE, highlight = TRUE,
                       warning = TRUE, error = TRUE, message = TRUE,
-                      background = '.97;.97;.97', split = FALSE))
+                      background = '.97;.97;.97', split = FALSE, include = TRUE))
 
 opts_chunk = optc
 

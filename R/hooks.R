@@ -1,5 +1,6 @@
 ## default plot hook: x is c(filename, extension)
 .plot.hook.tex = function(x, options) {
+    if (!options$include) return('')
     rw = options$resize.width; rh = options$resize.height
     resize1 = resize2 = ''
     if (!is.null(rw) || !is.null(rh)) {
@@ -52,7 +53,7 @@
         if (!file.exists(dirname(name)))
             dir.create(dirname(name))
         cat(x, file = name)
-        sprintf('\\input{%s}', name)
+        if (options$include) sprintf('\\input{%s}', name) else ''
     } else x
 }
 .chunk.hook.html = function(x, options) {
