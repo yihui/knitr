@@ -52,7 +52,7 @@ knit = function(input, output, pattern) {
     oopts =
         options(tikzMetricsDictionary = str_c(sub("([^.]+)\\.[[:alnum:]]+$", "\\1",
                 basename(input)), '-tikzDictionary'), useFancyQuotes = FALSE,
-                digits = 4, width = 70)
+                digits = 4, width = 75)
     on.exit(options(oopts), add = TRUE)
 
     res = process_file(basename(input))
@@ -128,7 +128,7 @@ wrap.character = function(x, options) {
 wrap.source = function(x, options) {
     ## TODO: optionally highlight code here
     src = x$src
-    if (options$highlight && identical(opts_knit$get('theme'), 'tex')) {
+    if (options$highlight && identical(opts_knit$get('theme'), 'latex')) {
         src = hilight_latex(str_c(src, collapse = ''), options)
     } else if (options$prompt) src = sapply(src, evaluate:::line_prompt, USE.NAMES = FALSE)
     src = str_c(src, collapse = '')

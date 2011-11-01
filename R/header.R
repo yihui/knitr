@@ -30,5 +30,5 @@ set_header = function(...) {
 set_header_highlight = function() {
     theme = opts_knit$get('theme')
     if (is.null(theme)) return()
-    set_header(highlight = switch(theme, tex = .hi.tex.header, html = .hi.html.header, ''))
+    set_header(highlight = switch(theme, latex = .hi.tex.header, html = .hi.html.header, ''))
 }
