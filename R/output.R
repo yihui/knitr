@@ -38,13 +38,13 @@ knit = function(input, output, pattern) {
     ohooks = knit_hooks$get(); on.exit(knit_hooks$set(ohooks), add = TRUE)
     if (is.null(oopts$theme)) {
         theme =
-            switch(ext, rnw = 'tex', tex = 'tex', html = 'html', md = 'jekyll',
-                   stop('cannot automatically decide the output filetype'))
+            switch(ext, rnw = 'latex', tex = 'latex', html = 'html', md = 'jekyll',
+                   stop('cannot automatically decide the theme'))
         ## set built-in hooks
         opts_knit$set(theme = theme)
     }
-    switch(opts_knit$get('theme'), tex = hooks_latex(), html = hooks_html(),
-           jekyll = hooks_jekyll())
+    switch(opts_knit$get('theme'), latex = theme_latex(), html = theme_html(),
+           jekyll = theme_jekyll())
 
     owd = setwd(dirname(input)); on.exit(setwd(owd), add = TRUE)
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter

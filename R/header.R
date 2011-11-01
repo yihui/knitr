@@ -5,7 +5,7 @@ insert_header = function(x) {
         i = which(str_detect(x, b))[1]
         if (length(i) == 1) {
             theme = opts_knit$get('theme')
-            if (identical('tex', theme))
+            if (identical('latex', theme))
                 h = c('\\usepackage{graphicx, color}', h)
             if (identical('html', theme))
                 h = h['highlight']

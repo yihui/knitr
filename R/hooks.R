@@ -117,7 +117,17 @@ run_hooks = function(before, options, envir) {
     out
 }
 
-hooks_html = function() {
+##' Themes for output
+##'
+##' The theme functions are used to set output hooks. Currently there
+##' are built-in themes for LaTeX, HTML, Markdown, GFM (GitHub
+##' Flavored Markdown) and Jekyll (a blogging system on GitHub). The
+##' original Sweave style is supported via \code{theme_sweave()}.
+##' @rdname themes
+##' @return \code{NULL}; corresponding hooks are set
+##' @export
+##' @references See output hooks in \url{http://yihui.github.com/knitr/hooks}
+theme_html = function() {
     knit_hooks$restore()
     ## use div with different classes
     html.hook = function(name) {
@@ -131,10 +141,10 @@ hooks_html = function() {
                    sprintf('<code class="knit inline">%s</code>', .inline.hook(x)),
                    plot = .plot.hook.html, chunk = .chunk.hook.html)
 }
-
-hooks_latex = function() {
+##' @rdname themes
+##' @export
+theme_latex = function() {
     knit_hooks$restore()
-    ## wrap source code in the Sinput environment, output in Soutput
     verb.hook = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
     knit_hooks$set(source = function(x, options) {
         if (options$highlight) {
@@ -146,14 +156,28 @@ hooks_latex = function() {
                    }, plot = .plot.hook.tex,
                    chunk = .chunk.hook.tex)
 }
-
-hooks_jekyll = function() {
+##' @rdname themes
+##' @export
+theme_sweave = function() {
     knit_hooks$restore()
-    hook.r = function(x, options) str_c('{% highlight r %}\n', x, '{% endhighlight %}\n')
-    hook.t = function(x, options) str_c('{% highlight text %}\n', x, '{% endhighlight %}\n')
-    knit_hooks$set(source = hook.r, output = hook.t, warning = hook.t,
+    ## wrap source code in the Sinput environment, output in Soutput
+    hook.i = function(x, options) str_c('\\begin{Sinput}\n', x, '\\end{Sinput}\n')
+    hook.o = function(x, options) str_c('\\begin{Soutput}\n', x, '\\end{Soutput}\n')
+    hook.c = function(x, options) str_c('\\begin{Schunk}\n', x, '\\end{Schunk}\n')
+    knit_hooks$set(source = hook.i, output = hook.o, warning = hook.o,
+                   message = hook.o, error = hook.o, inline = identity,
+                   plot = function(x, options) sprintf('\\includegraphics{%s}', x[1]),
+                   chunk = hook.c)
+}
+##' @rdname themes
+##' @export
+theme_markdown = function() {
+    knit_hooks$restore()
+    ## four spaces lead to <pre></pre>
+    hook.t = function(x, options) evaluate:::line_prompt(x, '    ', '    ')
+    knit_hooks$set(source = hook.t, output = hook.t, warning = hook.t,
                    error = hook.t, message = hook.t,
-                   inline = function(x) sprintf('`%s`', x),
+                   inline = function(x) sprintf('`%s`', .inline.hook(x)),
                    plot = function(x, options) {
                        base = opts_knit$get('base.url')
                        if (is.null(base)) base = ''
@@ -161,18 +185,23 @@ hooks_jekyll = function() {
                                base, x[1], x[2])
                    })
 }
-
-hooks_markdown = function() {
-    knit_hooks$restore()
+##' @rdname themes
+##' @export
+theme_gfm = function() {
+    ## gfm and jekyll are derived from markdown
+    theme_markdown()
     hook.r = function(x, options) str_c('```r\n', x, '```\n')
     hook.t = function(x, options) str_c('```\n', x, '```\n')
     knit_hooks$set(source = hook.r, output = hook.t, warning = hook.t,
-                   error = hook.t, message = hook.t,
-                   inline = function(x) sprintf('`%s`', x),
-                   plot = function(x, options) {
-                       base = opts_knit$get('base.url')
-                       if (is.null(base)) base = ''
-                       sprintf('![plot of chunk %s](%s%s.%s)', options$label,
-                               base, x[1], x[2])
-                   })
+                   error = hook.t, message = hook.t)
 }
+##' @rdname themes
+##' @export
+theme_jekyll = function() {
+    theme_markdown()
+    hook.r = function(x, options) str_c('{% highlight r %}\n', x, '{% endhighlight %}\n')
+    hook.t = function(x, options) str_c('{% highlight text %}\n', x, '{% endhighlight %}\n')
+    knit_hooks$set(source = hook.r, output = hook.t, warning = hook.t,
+                   error = hook.t, message = hook.t)
+}
+## may add textile, ReST and many other markup languages
