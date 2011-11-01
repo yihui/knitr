@@ -47,6 +47,7 @@ And `\SweaveOpts{comment=#, width=6, height=6}` can change the default global op
 - `error`: (`TRUE`) whether to show errors (from `stop()`) (by default, the evaluation will not stop even in case of errors!!)
 - `message`: (`TRUE`) whether to show messages emitted by `message()`
 - `background`: (`.97;.97;.97`) background color of chunks in LaTeX output (passed to the LaTeX package **framed**); the color model is `rgb`; the three numbers, all between 0 and 1, should be separated by `;` (very important because `,` is reserved as the separator of chunk options)
+- `split`: (`FALSE`) whether to split the output from R into separate files and include them into LaTeX by `\input{}` (for LaTeX only)
 
 ## Package Options <a id="package_options"></a>
 
