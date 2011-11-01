@@ -36,14 +36,14 @@ knit = function(input, output, pattern) {
 
     oopts = opts_knit$get(); on.exit(opts_knit$set(oopts), add = TRUE)
     ohooks = knit_hooks$get(); on.exit(knit_hooks$set(ohooks), add = TRUE)
-    if (is.null(oopts$render.to)) {
-        render.to =
+    if (is.null(oopts$theme)) {
+        theme =
             switch(ext, rnw = 'tex', tex = 'tex', html = 'html', md = 'jekyll',
                    stop('cannot automatically decide the output filetype'))
         ## set built-in hooks
-        opts_knit$set(render.to = render.to)
+        opts_knit$set(theme = theme)
     }
-    switch(opts_knit$get('render.to'), tex = hooks_latex(), html = hooks_html(),
+    switch(opts_knit$get('theme'), tex = hooks_latex(), html = hooks_html(),
            jekyll = hooks_jekyll())
 
     owd = setwd(dirname(input)); on.exit(setwd(owd), add = TRUE)
@@ -128,7 +128,7 @@ wrap.character = function(x, options) {
 wrap.source = function(x, options) {
     ## TODO: optionally highlight code here
     src = x$src
-    if (options$highlight && identical(opts_knit$get('render.to'), 'tex')) {
+    if (options$highlight && identical(opts_knit$get('theme'), 'tex')) {
         src = hilight_latex(str_c(src, collapse = ''), options)
     } else if (options$prompt) src = sapply(src, evaluate:::line_prompt, USE.NAMES = FALSE)
     src = str_c(src, collapse = '')

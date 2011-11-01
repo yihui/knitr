@@ -4,10 +4,10 @@ insert_header = function(x) {
         h = opts_knit$get('header')
         i = which(str_detect(x, b))[1]
         if (length(i) == 1) {
-            render.to = opts_knit$get('render.to')
-            if (identical('tex', render.to))
+            theme = opts_knit$get('theme')
+            if (identical('tex', theme))
                 h = c('\\usepackage{graphicx, color}', h)
-            if (identical('html', render.to))
+            if (identical('html', theme))
                 h = h['highlight']
             h = h[nzchar(h)]; if (length(h) == 0) h = ''
             loc = str_locate(x[i], b)
@@ -28,7 +28,7 @@ set_header = function(...) {
 }
 
 set_header_highlight = function() {
-    render.to = opts_knit$get('render.to')
-    if (is.null(render.to)) return()
-    set_header(highlight = switch(render.to, tex = .hi.tex.header, html = .hi.html.header, ''))
+    theme = opts_knit$get('theme')
+    if (is.null(theme)) return()
+    set_header(highlight = switch(theme, tex = .hi.tex.header, html = .hi.html.header, ''))
 }

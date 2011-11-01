@@ -77,7 +77,7 @@ opts_chunk = optc
 ##' @examples optk$get('verbose'); optk$set(verbose = TRUE)  # change it
 optk =
     new_defaults(list(progress = TRUE, verbose = FALSE,
-                      render.to = NULL,
+                      theme = NULL,
                       cache.dir = 'cache', base.dir = NULL, base.url = NULL,
 
                       all.patterns = .all.patterns,
