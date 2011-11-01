@@ -44,7 +44,9 @@ knit = function(input, output, pattern) {
         opts_knit$set(theme = theme)
     }
     switch(opts_knit$get('theme'), latex = theme_latex(), html = theme_html(),
-           jekyll = theme_jekyll())
+           sweave = {opts_chunk$set(highlight = FALSE); theme_sweave()},
+           jekyll = theme_jekyll(), markdown = theme_markdown(),
+           gfm = theme_gfm())
 
     owd = setwd(dirname(input)); on.exit(setwd(owd), add = TRUE)
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
