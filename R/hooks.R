@@ -47,7 +47,13 @@
     if (is_blank(x)) return(x)
     if (str_detect(opts_knit$get('header')['framed'], fixed('\\usepackage{framed}')))
         x = str_c(framed_color(options$background), '\\begin{shaded}\n', x, '\n\\end{shaded}')
-    x
+    if (options$split) {
+        name = str_c(options$prefix.string, options$label, '.tex')
+        if (!file.exists(dirname(name)))
+            dir.create(dirname(name))
+        cat(x, file = name)
+        sprintf('\\input{%s}', name)
+    } else x
 }
 .chunk.hook.html = function(x, options) {
     if (is_blank(x)) return(x)
