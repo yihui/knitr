@@ -64,6 +64,11 @@ process_file = function(path) {
     groups = split_file(path)
     n = length(groups); res = character(n)
 
+    ## Paul will look at the null device; hope he can solve the math
+    ## expr problem so we can use the null device to avoid Rplots.pdf
+    if (str_detect(deparse(args(getOption('device')))[1], fixed('function (file')))
+        dev.new(file = tempfile()) else dev.new()
+    dv = dev.cur(); on.exit(dev.off(dv))
     dev.control(displaylist = 'enable')  # need to record plots
 
     if (opts_knit$get('progress'))
