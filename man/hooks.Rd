@@ -21,7 +21,7 @@ hooks$get("source")
 hooks$get("inline")
 }
 \references{
-  Usage: \url{http://yihui.github.com/knitr/hooks}
+  Usage: \url{http://yihui.github.com/knitr/objects}
 
   Components in \code{kpat}:
   \url{http://yihui.github.com/knitr/hooks}
