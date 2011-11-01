@@ -84,7 +84,7 @@
 ##' values of arguments and returns desired output. The object
 ##' \code{hooks} is used to access or set hooks in this package.
 ##' @export
-##' @references Usage: \url{http://yihui.github.com/knitr/hooks}
+##' @references Usage: \url{http://yihui.github.com/knitr/objects}
 ##'
 ##' Components in \code{kpat}: \url{http://yihui.github.com/knitr/hooks}
 ##' @examples hooks$get('source'); hooks$get('inline')
