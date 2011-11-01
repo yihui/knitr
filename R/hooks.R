@@ -127,22 +127,6 @@ run_hooks = function(before, options, envir) {
 ##' @return \code{NULL}; corresponding hooks are set
 ##' @export
 ##' @references See output hooks in \url{http://yihui.github.com/knitr/hooks}
-theme_html = function() {
-    knit_hooks$restore()
-    ## use div with different classes
-    html.hook = function(name) {
-        function (x, options) sprintf('<div class="knit %s">%s</div>\n', name, x)
-    }
-    z = list()
-    for (i in c('source', 'output', 'warning', 'message', 'error'))
-        z[[i]] = html.hook(i)
-    knit_hooks$set(z)
-    knit_hooks$set(inline = function(x)
-                   sprintf('<code class="knit inline">%s</code>', .inline.hook(x)),
-                   plot = .plot.hook.html, chunk = .chunk.hook.html)
-}
-##' @rdname themes
-##' @export
 theme_latex = function() {
     knit_hooks$restore()
     verb.hook = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
@@ -168,6 +152,22 @@ theme_sweave = function() {
                    message = hook.o, error = hook.o, inline = identity,
                    plot = function(x, options) sprintf('\\includegraphics{%s}', x[1]),
                    chunk = hook.c)
+}
+##' @rdname themes
+##' @export
+theme_html = function() {
+    knit_hooks$restore()
+    ## use div with different classes
+    html.hook = function(name) {
+        function (x, options) sprintf('<div class="knit %s">%s</div>\n', name, x)
+    }
+    z = list()
+    for (i in c('source', 'output', 'warning', 'message', 'error'))
+        z[[i]] = html.hook(i)
+    knit_hooks$set(z)
+    knit_hooks$set(inline = function(x)
+                   sprintf('<code class="knit inline">%s</code>', .inline.hook(x)),
+                   plot = .plot.hook.html, chunk = .chunk.hook.html)
 }
 ##' @rdname themes
 ##' @export
