@@ -121,6 +121,7 @@ wrap.list = function(x, options = list()) {
 }
 
 wrap.character = function(x, options) {
+    if (options$results %in% c('tex', 'asis')) return(x)
     knit_hooks$get('output')(comment_out(x, options), options)
 }
 

@@ -8,7 +8,6 @@ process_group.inline = function(x) call_inline(x)
 
 call_block = function(block) {
     ## TODO: code may come from an R script
-    params = fix_sweave_params(block$params)  # for compatibility
     params = opts_chunk$merge(params)
     params = c(list(code = block$code), params)
     if (opts_knit$get('progress')) print(block)
@@ -62,7 +61,7 @@ block_exec = function(code, ...) {
     ## remove some components according options
     if (!options$echo)
         res = Filter(Negate(is.source), res)
-    if (!options$results)
+    if (options$results == 'hide')
         res = Filter(Negate(is.character), res)
     if (!options$warning)
         res = Filter(Negate(is.warning), res)

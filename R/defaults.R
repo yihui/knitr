@@ -29,7 +29,7 @@ new_defaults = function(value = list()) {
 ##' @export
 ##' @examples optc$get('prompt'); optc$get('fig.hold')
 optc =
-    new_defaults(list(eval = TRUE, echo = TRUE, results = TRUE, tidy = TRUE,
+    new_defaults(list(eval = TRUE, echo = TRUE, results = 'format', tidy = TRUE,
                       cache = FALSE, purge = FALSE, ref = NULL, prefix.string = '',
                       prompt = FALSE, comment = '##', fig = FALSE, fig.ext = NULL,
                       fig.low = FALSE, dev = 'pdf', dpi = 72, width = 7, height = 7,

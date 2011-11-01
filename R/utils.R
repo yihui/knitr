@@ -7,14 +7,6 @@ copy_env = function(from, to) {
 }
 
 
-fix_sweave_params = function(params) {
-    ## hide means FALSE, otherwise TRUE
-    if (length(params$results) && params$results %in% c('verbatim', 'tex', 'hide'))
-        params$results = params$results != 'hide'
-    params
-}
-
-
 knit_counter = function(init = 0L) {
     n = init
     function(reset = FALSE) {
