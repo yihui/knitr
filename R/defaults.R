@@ -49,7 +49,8 @@ opts_chunk = optc
          inline.code = '\\\\Sexpr\\{([^\\}]*)\\}',
          global.options = '\\\\SweaveOpts\\{([^\\}]*)\\}',
          header.begin = '\n*\\s*\\\\documentclass[^\\}]+\\}',
-         document.begin = '\n*\\s*\\\\begin\\{document\\}'),
+         document.begin = '\n*\\s*\\\\begin\\{document\\}',
+         ref.label = '^## @knitr (.*)$'),
 
          `brew` = list(inline.code = '<%[=]{0,1}\\s+(.*)[\\s-]+%>'),
 
@@ -58,13 +59,15 @@ opts_chunk = optc
          global.options = '%+\\s*roptions\\s*([^\n]*)',
          inline.code = '\\\\rinline\\{([^\\}]*)\\}',
          header.begin = '\n*\\s*\\\\documentclass[^\\}]+\\}',
-         document.begin = '\n*\\s*\\\\begin\\{document\\}'),
+         document.begin = '\n*\\s*\\\\begin\\{document\\}',
+         ref.label = '^## @knitr (.*)$'),
 
          `html` = list(chunk.begin = '^<!--\\s*begin.rcode\\s*(.*)',
          chunk.end = '^\\s*end.rcode\\s*-->',
          inline.code = '<!--\\s*rinline\\s*(.*)\\s*-->',
          global.options = '<!--\\s*roptions\\s*(.*)\\s*-->',
-         header.begin = '\n*\\s*<head>'))
+         header.begin = '\n*\\s*<head>',
+         ref.label = '^## @knitr (.*)$'))
 
 ##' Options for the knitr package
 ##'
