@@ -11,7 +11,7 @@ call_block = function(block) {
     params = c(list(code = block$code), params)
     ## code from external R script
     if (!length(params$code)) {
-        ref = opts_chunk$get('ref')
+        ref = params$ref
         if (!is.null(ref) && file.exists(ref)) {
             ext.code = .knitEnv$ext.code
             if (!identical(ref, .knitEnv$ext.path)) ext.code = parse_external(ref)
