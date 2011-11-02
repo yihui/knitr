@@ -54,8 +54,7 @@ str(apats)
 ##   ..$ chunk.end      : chr "^\\s*end.rcode\\s*-->"
 ##   ..$ inline.code    : chr "<!--\\s*rinline\\s*(.*)\\s*-->"
 ##   ..$ global.options : chr "<!--\\s*roptions\\s*(.*)\\s*-->"
-##   ..$ header.begin   : chr "\n*\\s*<head>
-\usepackage{framed}"
+##   ..$ header.begin   : chr "\n*\\s*<head>"
 ##   ..$ external.script: chr "^## @knitr (.*)$"
 {% endhighlight %}
 
