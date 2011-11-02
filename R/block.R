@@ -7,9 +7,17 @@ process_group.inline = function(x) call_inline(x)
 
 
 call_block = function(block) {
-    ## TODO: code may come from an R script
     params = opts_chunk$merge(block$params)
     params = c(list(code = block$code), params)
+    ## code from external R script
+    if (!length(params$code)) {
+        ref = opts_chunk$get('ref')
+        if (!is.null(ref) && file.exists(ref)) {
+            ext.code = .knitEnv$ext.code
+            if (!identical(ref, .knitEnv$ext.path)) ext.code = parse_external(ref)
+            params$code = ext.code[[params$label]]
+        }
+    }
     if (opts_knit$get('progress')) print(block)
 
     if ((!params$eval && !params$echo) || length(params$code) == 0 ||

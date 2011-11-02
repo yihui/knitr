@@ -136,3 +136,28 @@ print.inline = function(x, ...) {
     } else cat('  ordinary text without R code\n')
     cat('\n')
 }
+
+## parse an external R script
+parse_external = function(path) {
+    lines = readLines(path, warn = FALSE)
+    es = knit_patterns$get('external.script')
+    if (!group_pattern(es)) return()
+    groups = unname(split(lines, cumsum(str_detect(lines, es))))
+    labels = str_trim(str_replace(sapply(groups, `[`, 1), es, '\\1'))
+    code = lapply(groups, strip_external)
+    idx = nzchar(labels); code = code[idx]; labels = labels[idx]
+    names(code) = labels
+    .knitEnv$ext.code = code; .knitEnv$ext.path = path
+    code
+}
+
+strip_external = function(x) {
+    x = x[-1]; if (!length(x)) return(x)
+    while(is_blank(x[1])) {
+        x = x[-1]; if (!length(x)) return(x)
+    }
+    while(is_blank(x[(n <- length(x))])) {
+        x = x[-n]; if (n < 2) return(x)
+    }
+    x
+}
