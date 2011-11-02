@@ -140,10 +140,10 @@ print.inline = function(x, ...) {
 ## parse an external R script
 parse_external = function(path) {
     lines = readLines(path, warn = FALSE)
-    es = knit_patterns$get('external.script')
-    if (!group_pattern(es)) return()
-    groups = unname(split(lines, cumsum(str_detect(lines, es))))
-    labels = str_trim(str_replace(sapply(groups, `[`, 1), es, '\\1'))
+    lab = knit_patterns$get('ref.label')
+    if (!group_pattern(lab)) return()
+    groups = unname(split(lines, cumsum(str_detect(lines, lab))))
+    labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\1'))
     code = lapply(groups, strip_external)
     idx = nzchar(labels); code = code[idx]; labels = labels[idx]
     names(code) = labels
