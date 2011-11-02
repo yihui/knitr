@@ -30,29 +30,33 @@ str(apats)
 {% endhighlight %}
 {% highlight text %}
 ## List of 4
-##  $ rnw :List of 6
-##   ..$ chunk.begin   : chr "^<<(.*)>>="
-##   ..$ chunk.end     : chr "^@\\s*$"
-##   ..$ inline.code   : chr "\\\\Sexpr\\{([^\\}]*)\\}"
-##   ..$ global.options: chr "\\\\SweaveOpts\\{([^\\}]*)\\}"
-##   ..$ header.begin  : chr "^\\s*\\\\documentclass[^\\}]+\\}"
-##   ..$ document.begin: chr "^\\s*\\\\begin\\{document\\}"
+##  $ rnw :List of 7
+##   ..$ chunk.begin    : chr "^<<(.*)>>="
+##   ..$ chunk.end      : chr "^@\\s*$"
+##   ..$ inline.code    : chr "\\\\Sexpr\\{([^\\}]*)\\}"
+##   ..$ global.options : chr "\\\\SweaveOpts\\{([^\\}]*)\\}"
+##   ..$ header.begin   : chr "\n*\\s*\\\\documentclass[^\\}]+\\}"
+##   ..$ document.begin : chr "\n*\\s*\\\\begin\\{document\\}"
+##   ..$ external.script: chr "^## @knitr (.*)$"
 ##  $ brew:List of 1
 ##   ..$ inline.code: chr "<%[=]{0,1}\\s+(.*)[\\s-]+%>"
-##  $ tex :List of 7
-##   ..$ chunk.begin   : chr "^%+\\s*begin.rcode\\s*(.*)"
-##   ..$ chunk.end     : chr "^%+\\s*end.rcode"
-##   ..$ chunk.code    : chr "^%+"
-##   ..$ global.options: chr "%+\\s*roptions\\s*([^\n]*)"
-##   ..$ inline.code   : chr "\\\\rinline\\{([^\\}]*)\\}"
-##   ..$ header.begin  : chr "^\\s*\\\\documentclass[^\\}]+\\}"
-##   ..$ document.begin: chr "^\\s*\\\\begin\\{document\\}"
-##  $ html:List of 5
-##   ..$ chunk.begin   : chr "^<!--\\s*begin.rcode\\s*(.*)"
-##   ..$ chunk.end     : chr "^\\s*end.rcode\\s*-->"
-##   ..$ inline.code   : chr "<!--\\s*rinline\\s*(.*)\\s*-->"
-##   ..$ global.options: chr "<!--\\s*roptions\\s*(.*)\\s*-->"
-##   ..$ header.begin  : chr "^\\s*<head>"
+##  $ tex :List of 8
+##   ..$ chunk.begin    : chr "^%+\\s*begin.rcode\\s*(.*)"
+##   ..$ chunk.end      : chr "^%+\\s*end.rcode"
+##   ..$ chunk.code     : chr "^%+"
+##   ..$ global.options : chr "%+\\s*roptions\\s*([^\n]*)"
+##   ..$ inline.code    : chr "\\\\rinline\\{([^\\}]*)\\}"
+##   ..$ header.begin   : chr "\n*\\s*\\\\documentclass[^\\}]+\\}"
+##   ..$ document.begin : chr "\n*\\s*\\\\begin\\{document\\}"
+##   ..$ external.script: chr "^## @knitr (.*)$"
+##  $ html:List of 6
+##   ..$ chunk.begin    : chr "^<!--\\s*begin.rcode\\s*(.*)"
+##   ..$ chunk.end      : chr "^\\s*end.rcode\\s*-->"
+##   ..$ inline.code    : chr "<!--\\s*rinline\\s*(.*)\\s*-->"
+##   ..$ global.options : chr "<!--\\s*roptions\\s*(.*)\\s*-->"
+##   ..$ header.begin   : chr "\n*\\s*<head>
+\usepackage{framed}"
+##   ..$ external.script: chr "^## @knitr (.*)$"
 {% endhighlight %}
 
 
