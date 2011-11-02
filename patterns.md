@@ -13,6 +13,7 @@ The [object](objects) `kpat` manages patterns in **knitr**. For example, we can 
 - `global.options`: the pattern to extract global options for chunks (options are extracted like those in `chunk.begin` but they permanently change global options, whereas chunk options only locally affect a specific chunk)
 - `header.begin`: the pattern to find out where the document header begins; this is used to insert some header information into the output document (e.g. commands in the preamble in LaTeX, or CSS styles in HTML)
 - `document.begin`: the pattern to find out where the body of the document begins (currently only used to externalize tikz graphics)
+- `ref.label`: the pattern to get the chunk labels in an external R script
 
 Patterns that are `NULL` will not be matched.
 
