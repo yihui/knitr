@@ -46,7 +46,7 @@ Description: This package provides a general-purpose tool
     Most features are borrowed or inspired by Sweave,
     cacheSweave, pgfSweave, brew and decumar.
 Imports:
-    evaluate,
+    evaluate (>= 0.4),
     digest,
     formatR,
     stringr,
