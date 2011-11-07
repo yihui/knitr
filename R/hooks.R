@@ -36,7 +36,7 @@
 .plot.hook.html = function(x, options) {
     ## TODO: output size not implemented for HTML yet
     a = options$align
-    sprintf('<img src="%s" class="knit plot" %s/>\n',
+    sprintf('<img src="%s" class="knitr plot" %s/>\n',
             paste(x, collapse = '.'),
             switch(a,
                    default = '',
@@ -164,14 +164,14 @@ theme_html = function() {
     knit_hooks$restore()
     ## use div with different classes
     html.hook = function(name) {
-        function (x, options) sprintf('<div class="knit %s">%s</div>\n', name, x)
+        function (x, options) sprintf('<div class="knitr %s">%s</div>\n', name, x)
     }
     z = list()
     for (i in c('source', 'output', 'warning', 'message', 'error'))
         z[[i]] = html.hook(i)
     knit_hooks$set(z)
     knit_hooks$set(inline = function(x)
-                   sprintf('<code class="knit inline">%s</code>', .inline.hook(x)),
+                   sprintf('<code class="knitr inline">%s</code>', .inline.hook(x)),
                    plot = .plot.hook.html, chunk = .chunk.hook.html)
 }
 ##' @rdname themes
