@@ -27,8 +27,13 @@ set_header = function(...) {
     opts_knit$set(header = h)
 }
 
-set_header_highlight = function() {
-    theme = opts_knit$get('theme')
-    if (is.null(theme)) return()
-    set_header(highlight = switch(theme, latex = .hi.tex.header, html = .hi.html.header, ''))
-}
+
+.header.framed = '\\usepackage{framed}
+\\newenvironment{kframe}{%
+\\def\\FrameCommand{\\fboxsep=\\FrameSep \\colorbox{shadecolor}}%
+\\MakeFramed {\\advance\\hsize-\\width \\FrameRestore}}%
+{\\endMakeFramed}'
+
+## LaTeX styles for highlight
+.header.hi.tex = str_c(c(styler('default', 'sty', styler_assistant_latex), boxes_latex()), collapse = '\n')
+.header.hi.html = str_c(styler('default'), collapse = '\n')

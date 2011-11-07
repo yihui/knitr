@@ -35,9 +35,6 @@ hilight_latex = function(x, options) {
     str_c(out, collapse = '\n')
 }
 
-## LaTeX styles for highlight
-.hi.tex.header = str_c(c(styler('default', 'sty', styler_assistant_latex), boxes_latex()), collapse = '\n')
-.hi.html.header = str_c(styler('default'), collapse = '\n')
 
 is_blank = function(x) {
     str_detect(x, '^\\s*$')

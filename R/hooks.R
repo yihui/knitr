@@ -46,8 +46,7 @@
 }
 .chunk.hook.tex = function(x, options) {
     if (is_blank(x)) return(x)
-    if (str_detect(opts_knit$get('header')['framed'], fixed('\\usepackage{framed}')))
-        x = str_c(framed_color(options$background), '\\begin{shaded}\n', x, '\n\\end{shaded}')
+    x = str_c(framed_color(options$background), '\\begin{kframe}\n', x, '\n\\end{kframe}')
     if (options$split) {
         name = str_c(options$prefix.string, options$label, '.tex')
         if (!file.exists(dirname(name)))
@@ -128,6 +127,12 @@ run_hooks = function(before, options, envir) {
 ##' @export
 ##' @references See output hooks in \url{http://yihui.github.com/knitr/hooks}
 theme_latex = function() {
+    res = try(system("kpsewhich framed.sty", intern = TRUE), silent = TRUE)
+    if (inherits(res, 'try-error') || !length(res)) {
+        warning("unable to find LaTeX package 'framed'; will copy from the knitr package")
+        file.copy(system.file('misc', 'framed.sty', package = 'knitr'), '.')
+    }
+    set_header(framed = .header.framed, highlight = .header.hi.tex)
     knit_hooks$restore()
     verb.hook = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
     knit_hooks$set(source = function(x, options) {

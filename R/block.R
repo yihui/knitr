@@ -24,7 +24,6 @@ call_block = function(block) {
         all(is_blank(params$code)))
         return('') # a trivial chunk; do nothing
 
-    if (params$highlight) set_header_highlight()
     if (params$dev == 'tikz') set_header(tikz = '\\usepackage{tikz}')
 
     ## Check cache
