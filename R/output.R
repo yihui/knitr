@@ -34,6 +34,7 @@ knit = function(input, output, pattern) {
         knit_patterns$set(apat[[pattern]])
     }
 
+    owd = setwd(dirname(input)); on.exit(setwd(owd), add = TRUE)
     oopts = opts_knit$get(); on.exit(opts_knit$set(oopts), add = TRUE)
     ohooks = knit_hooks$get(); on.exit(knit_hooks$set(ohooks), add = TRUE)
     if (is.null(oopts$theme)) {
@@ -48,7 +49,6 @@ knit = function(input, output, pattern) {
            jekyll = theme_jekyll(), markdown = theme_markdown(),
            gfm = theme_gfm())
 
-    owd = setwd(dirname(input)); on.exit(setwd(owd), add = TRUE)
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
     ## for tikz graphics (cache the dictionary); turn off fancy quotes
     oopts =
