@@ -27,12 +27,20 @@ set_header = function(...) {
     opts_knit$set(header = h)
 }
 
-
+## many thanks to Donald Arseneau
 .header.framed = '\\usepackage{framed}
+\\makeatletter
 \\newenvironment{kframe}{%
-\\def\\FrameCommand{\\fboxsep=\\FrameSep \\colorbox{shadecolor}}%
-\\MakeFramed {\\advance\\hsize-\\width \\FrameRestore}}%
-{\\endMakeFramed}'
+ \\def\\FrameCommand##1{\\hskip\\@totalleftmargin \\hskip-\\fboxsep
+ \\colorbox{shadecolor}{##1}\\hskip-\\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \\hskip-\\linewidth \\hskip-\\@totalleftmargin \\hskip\\columnwidth}%
+ \\MakeFramed {\\advance\\hsize-\\width
+   \\@totalleftmargin\\z@ \\linewidth\\hsize
+   \\@setminipage}}%
+ {\\par\\unskip\\endMakeFramed}
+\\makeatother
+'
 
 ## LaTeX styles for highlight
 .header.hi.tex = str_c(c(styler('default', 'sty', styler_assistant_latex), boxes_latex()), collapse = '\n')
