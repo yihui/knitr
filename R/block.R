@@ -54,7 +54,8 @@ block_exec = function(code, ...) {
     }
     ## no eval chunks
     if (!options$eval) {
-        return(str_c(code, collapse = '\n'))
+        return(knit_hooks$get('chunk')(wrap.source(list(src = str_c(code, collapse = '\n')),
+                                                   options), options))
     }
 
     ## eval chunks (in an empty envir if cache)
