@@ -60,7 +60,8 @@ save_plot = function(plot, name, options) {
                tikz = function(...) {
                    if (do.call('require', list(package = 'tikzDevice'))) {
                        get('tikz', envir = as.environment('package:tikzDevice'))(...,
-                                   sanitize = options$sanitize)
+                                   sanitize = options$sanitize,
+                                   standAlone = options$external)
                    } else {
                        stop("package 'tikzDevice' not available (has to be installed)",
                             call. = FALSE)
