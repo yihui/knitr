@@ -22,7 +22,7 @@ chunk_counter = knit_counter(1L)
 ## add a prefix to output
 comment_out = function(x, options) {
     prefix = options$comment
-    if (!is.null(prefix) && nzchar(prefix)) {
+    if (!is.null(prefix) && nzchar(prefix) && !is.na(prefix)) {
         prefix = str_c(prefix, ' ')
         evaluate:::line_prompt(x, prompt = prefix, continue = prefix)
     } else x
