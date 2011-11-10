@@ -11,7 +11,7 @@ new_cache = function() {
     }
 
     cache_purge = function(hash) {
-        unlink(str_c(cache_path(hash), c('.rdb', '.rdx')))
+        unlink(str_c(cache_path(hash), c('.rdb', '.rdx', '_changed')))
     }
 
     cache_save = function(keys, hash) {
