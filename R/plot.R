@@ -59,9 +59,14 @@ save_plot = function(plot, name, options) {
 
                tikz = function(...) {
                    if (do.call('require', list(package = 'tikzDevice'))) {
+                       packages =
+                           switch(getOption("tikzDefaultEngine"),
+                                  pdftex = getOption("tikzLatexPackages"),
+                                  xetex = getOption("tikzXelatexPackages"))
                        get('tikz', envir = as.environment('package:tikzDevice'))(...,
                                    sanitize = options$sanitize,
-                                   standAlone = options$external)
+                                   standAlone = options$external,
+                                   packages = c('\n', packages, .knitEnv$tikzPackages))
                    } else {
                        stop("package 'tikzDevice' not available (has to be installed)",
                             call. = FALSE)
@@ -74,6 +79,21 @@ save_plot = function(plot, name, options) {
     device(path, width = options$width, height = options$height)
     print(plot)
     dev.off()
+
+    ## compile tikz to pdf
+    if (dev == 'tikz' && options$external) {
+        unlink(pdf.plot <- str_c(name, '.pdf'))
+        owd = setwd(dirname(path))
+        system(str_c(switch(getOption("tikzDefaultEngine"),
+                            pdftex = getOption('tikzLatex'),
+                            xetex = getOption("tikzXelatex"),
+                            stop("a LaTeX engine must be specified for tikzDevice",
+                                 call. = FALSE)), sQuote(basename(path)), sep = ' '))
+        setwd(owd)
+        if (file.exists(pdf.plot)) ext = 'pdf' else {
+            stop('failed to compile ', path, ' to PDF', call. = FALSE)
+        }
+    }
 
     invisible(c(name, ext))
 }

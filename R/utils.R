@@ -63,3 +63,33 @@ dependson_changed = function(labels) {
     }
     FALSE
 }
+
+## extract LaTeX packages for tikzDevice
+set_tikz_opts = function(input, cb, ce) {
+    hb = knit_patterns$get('header.begin')
+    if (length(hb) == 1L) {
+        idx = str_detect(input, hb)
+        if (any(idx)) {
+            options(tikzDocumentDeclaration = input[idx][1])
+            db = knit_patterns$get('document.begin')
+            if (length(db) == 1L) {
+                idx2 = str_detect(input, db)
+                if (any(idx2)) {
+                    idx = which(idx)[1]; idx2 = which(idx2)[1]
+                    if (idx2 - idx > 1) {
+                        preamble = pure_preamble(input[seq(idx + 1, idx2 - 1)], cb, ce)
+                        .knitEnv$tikzPackages = c(preamble, '\n')
+                    }
+                }
+            }
+        }
+    }
+}
+## filter out code chunks from preamble if they exist (they do in LyX/Sweave)
+pure_preamble = function(preamble, chunk.begin, chunk.end) {
+    blks = which(str_detect(preamble, chunk.begin))
+    if (!length(blks)) return(preamble)
+    ends = which(str_detect(preamble, chunk.end))
+    idx = unlist(mapply(seq, from = blks, to = ends, SIMPLIFY = FALSE))
+    preamble[-idx]
+}

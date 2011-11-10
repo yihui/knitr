@@ -12,6 +12,8 @@ split_file = function(path) {
         return(str_c(lines, collapse = '\n'))
     }
 
+    set_tikz_opts(lines, chunk.begin, chunk.end)  # prepare for tikz option 'standAlone'
+
     blks = which(str_detect(lines, chunk.begin))
     ends = which(str_detect(lines, chunk.end))
 
