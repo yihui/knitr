@@ -64,6 +64,8 @@ knit = function(input, output, pattern) {
 
 process_file = function(path) {
     groups = split_file(path)
+    if (!is.list(groups)) return(groups)
+
     n = length(groups); res = character(n)
 
     ## TODO: https://github.com/yihui/knitr/issues/9

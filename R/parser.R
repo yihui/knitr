@@ -7,8 +7,10 @@ split_file = function(path) {
     n = length(lines)
     chunk.begin = knit_patterns$get('chunk.begin')
     chunk.end = knit_patterns$get('chunk.end')
-    if (is.null(chunk.begin) || is.null(chunk.end))
-        return(structure(list(lines), blocks = FALSE))  # no chunks found
+    if (is.null(chunk.begin) || is.null(chunk.end)) {
+        warning("no patterns found! input not parsed")
+        return(str_c(lines, collapse = '\n'))
+    }
 
     blks = which(str_detect(lines, chunk.begin))
     ends = which(str_detect(lines, chunk.end))
