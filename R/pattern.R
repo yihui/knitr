@@ -28,7 +28,7 @@
 kpat =
     new_defaults(list(chunk.begin = NULL, chunk.end = NULL, chunk.code = NULL,
                       inline.code = NULL, global.options = NULL,
-                      header.begin = NULL, document.begin = NULL))
+                      header.begin = NULL, document.begin = NULL, ref.label = NULL))
 
 knit_patterns = kpat  # I feel safter to use this longer name internally
 
