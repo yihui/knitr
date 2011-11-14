@@ -82,7 +82,7 @@ opts_chunk = optc
 optk =
     new_defaults(list(progress = TRUE, verbose = FALSE,
                       theme = NULL,
-                      cache.dir = 'cache', base.dir = NULL, base.url = NULL,
+                      base.dir = NULL, base.url = NULL,
 
                       all.patterns = .all.patterns,
 

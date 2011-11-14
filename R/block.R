@@ -27,7 +27,7 @@ call_block = function(block) {
     if (params$dev == 'tikz') set_header(tikz = '\\usepackage{tikz}')
 
     ## Check cache
-    hash = str_c(params$label, '_', digest(block))
+    hash = str_c(valid_prefix(params$prefix.string), params$label, '_', digest(block))
     params = c(params, list(hash = hash))
     if (params$purge) {
         cache$purge(hash) # clear cache

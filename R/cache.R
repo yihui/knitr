@@ -5,9 +5,9 @@
 new_cache = function() {
 
     cache_path = function(hash) {
-        d = opts_knit$get('cache.dir')
+        d = dirname(hash)
         if (!file.exists(d)) dir.create(d, showWarnings = FALSE)
-        file.path(d, hash)
+        hash
     }
 
     cache_purge = function(hash) {
