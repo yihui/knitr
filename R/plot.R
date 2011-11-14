@@ -124,3 +124,14 @@ is_low_change = function(p1, p2) {
     if ((n2 <- length(p2)) < (n1 <- length(p1))) return(FALSE)  # length must increase
     identical(p1[1:n1], p2[1:n1])
 }
+
+## recorded plots should not contain par primitive
+rm_par_plot = function(x) {
+    idx = sapply(x, function(plot) {
+        if (!is.recordedplot(plot)) return(TRUE)
+        prims = lapply(plot[[1]], "[[", 1)
+        chars = sapply(prims, deparse)
+        !any(chars %in% ".Primitive(\"par\")")
+    })
+    x[idx]
+}
