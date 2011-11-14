@@ -39,6 +39,10 @@ hilight_latex = function(x, options) {
 is_blank = function(x) {
     str_detect(x, '^\\s*$')
 }
+valid_prefix = function(x) {
+    if (length(x) == 0 || is.na(x) || x == 'NA') return('')
+    x
+}
 
 framed_color = function(x) {
     x = str_split(x, fixed(';'))[[1]]

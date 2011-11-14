@@ -161,8 +161,7 @@ wrap.recordedplot = function(x, options) {
     if (options$plot.num <= 1) plot.cur = 0L else {
         plot.cur = plot_counter(); options$plot.cur = plot.cur # put fig num in options
     }
-    prefix = options$prefix.string
-    if (length(prefix) == 0 || is.na(prefix) || prefix == 'NA') prefix = ''
+    prefix = valid_prefix(options$prefix.string)
     name = str_c(prefix, options$label, ifelse(plot.cur == 0L, '', plot.cur))
     if (!file.exists(dirname(name)))
         dir.create(dirname(name)) # automatically creates dir for plots
