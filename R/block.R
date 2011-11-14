@@ -122,7 +122,8 @@ block_exec = function(code, ...) {
         hash = options$hash
         outname = str_c('.', hash)
         assign(outname, output, envir = globalenv())
-        cache$purge(str_c(options$label, '_*')) # try to purge old cache
+        cache$purge(str_c(valid_prefix(options$prefix.string),
+                          options$label, '_*')) # try to purge old cache
         cache$save(c(ls(env, all = TRUE), outname), hash)
         cache$mark(hash)
     }
