@@ -61,6 +61,12 @@ block_exec = function(code, ...) {
     ## eval chunks (in an empty envir if cache)
     env = if (options$cache) new.env(parent = globalenv()) else globalenv()
 
+    ## TODO: https://github.com/yihui/knitr/issues/9
+    if (!is.null(formals(getOption('device'))$file))
+        dev.new(file = tempfile()) else dev.new()
+    dv = dev.cur(); on.exit(dev.off(dv))
+    dev.control(displaylist = 'enable')  # need to record plots
+
     res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
     res = evaluate(code, envir = env) # run code
     res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks

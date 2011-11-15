@@ -68,12 +68,6 @@ process_file = function(path) {
 
     n = length(groups); res = character(n)
 
-    ## TODO: https://github.com/yihui/knitr/issues/9
-    if (str_detect(deparse(args(getOption('device')))[1], fixed('function (file')))
-        dev.new(file = tempfile()) else dev.new()
-    dv = dev.cur(); on.exit(dev.off(dv))
-    dev.control(displaylist = 'enable')  # need to record plots
-
     if (opts_knit$get('progress'))
         pb = txtProgressBar(0, n, char = '>', style = 3)
     for (i in 1:n) {
