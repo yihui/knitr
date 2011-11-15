@@ -159,8 +159,9 @@ wrap.recordedplot = function(x, options) {
     }
     ## figure number sequence for multiple plots
     if (options$plot.num <= 1) plot.cur = 0L else {
-        plot.cur = plot_counter(); options$plot.cur = plot.cur # put fig num in options
+        plot.cur = plot_counter()
     }
+    options$plot.cur = plot.cur # put fig num in options
     prefix = valid_prefix(options$prefix.string)
     name = str_c(prefix, options$label, ifelse(plot.cur == 0L, '', plot.cur))
     if (!file.exists(dirname(name)))
