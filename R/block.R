@@ -91,7 +91,6 @@ block_exec = function(code, ...) {
             res = res[!figs] # remove all
         } else {
             if (options$fig.hold) res = c(res[!figs], res[figs]) # rearrange to the end
-            res = rm_par_plot(res)  # remove plots triggered by par()
             figs = sapply(res, is.recordedplot) # only keep last plot
             if (sum(figs) > 1) {
                 if (options$fig.last) res = res[-head(which(figs), sum(figs) - 1)] else {
