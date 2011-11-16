@@ -13,8 +13,8 @@
     tikz = options$dev == 'tikz' && !options$external
 
     a = options$align; plot.cur = options$plot.cur
-    align1 = switch(a, left = '\n\n', center = '\n\n\\hfill{}', right = '\n\n\\hfill{}', '')
-    align2 = switch(a, left = '\\hfill{}\n\n', center = '\\hfill{}\n\n', right = '\n\n', '')
+    align1 = switch(a, left = '\n\n', center = '\n\n\\centering{}', right = '\n\n\\hfill{}', '')
+    align2 = switch(a, left = '\\hfill{}\n\n', center = '\n\n', right = '\n\n', '')
     ## multiple plots: begin at 1, end at plot.num
     if (options$fig.hold && plot.cur > 1L)
         align1 = ''
