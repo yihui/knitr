@@ -161,7 +161,8 @@ wrap.recordedplot = function(x, options) {
     if (!file.exists(dirname(name)))
         dir.create(dirname(name)) # automatically creates dir for plots
 
-    knit_hooks$get('plot')(save_plot(x, name, options), options)
+    name.ext = save_plot(x, name, options)
+    knit_hooks$get('plot')(name.ext, options)
 }
 
 
