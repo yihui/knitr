@@ -113,7 +113,10 @@ load_device = function(name, package, dpi = NULL) {
 merge_low_plot = function(x, idx) {
     idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
     for (i in 1:(n - 1)) {
-        if (is_low_change(x[[idx[i]]], x[[idx[i + 1]]])) m = c(m, idx[i])
+        p1 = x[[idx[i]]]; p2 = x[[idx[i + 1]]]
+        if (is_low_change(p1, p2)) {
+            m = c(m, if (is_par_change(p1, p2)) idx[i + 1] else idx[i])
+        }
     }
     if (is.null(m)) x else x[-m]
 }
@@ -123,4 +126,13 @@ is_low_change = function(p1, p2) {
     p1 = p1[[1]]; p2 = p2[[1]]  # real plot info is in [[1]]
     if ((n2 <- length(p2)) < (n1 <- length(p1))) return(FALSE)  # length must increase
     identical(p1[1:n1], p2[1:n1])
+}
+
+plot_calls = evaluate:::plot_calls
+
+## is the new plot identical to the old one except a few par/layout primitives in the end?
+is_par_change = function(p1, p2) {
+    prims = setdiff(plot_calls(p2), plot_calls(p1))
+    prims = setdiff(prims, c('layout', 'par'))  # TODO: is this list exhaustive?
+    length(prims) == 0L
 }
