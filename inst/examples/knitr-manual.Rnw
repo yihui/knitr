@@ -1,0 +1,602 @@
+%% LyX 2.1.0svn created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass{article}
+\usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\usepackage{url}
+\usepackage[authoryear]{natbib}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{
+ pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\providecommand{\LyX}{\texorpdfstring%
+  {L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
+  {LyX}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\floatpagefraction}{0.75}
+
+\usepackage[buttonsize=1em]{animate}
+% \usepackage{Sweave}  % no Sweave please
+
+\makeatother
+
+\begin{document}
+
+% \SweaveOpts{prefix.string=figure/manual-,align=center,external=TRUE,fig.hold=TRUE}
+
+<<setup,echo=FALSE,results=hide,message=FALSE>>=
+options(replace.assign=TRUE,width=90)
+hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
+@
+
+
+\title{knitr: A General-Purpose Tool for Dynamic Report Generation in R}
+
+
+\author{Yihui Xie}
+
+\maketitle
+The original paradigm of literate programming was brought forward
+mainly for software development, or specifically, to mix source code
+(for computer) and documentation (for human) together. Early systems
+include \href{http://www.literateprogramming.com/web.pdf}{WEB} and
+\href{http://www.cs.tufts.edu/~nr/noweb/}{Noweb}; Sweave \citet{leisch2002}
+was derived from the latter, but it is less focused on documenting
+software, instead it is mainly used for reproducible data analysis
+and generating statistical reports. The \textbf{knitr} package \citep{knitr-manual}
+is following the steps of Sweave. For this manual, I assume readers
+have some background knowledge of Sweave to understand the technical
+details; for a reference of available options, hooks and demos, see
+the package homepage \url{http://yihui.github.com/knitr/}.
+
+
+\section{Hello World}
+
+A natural question is why to reinvent the wheel. The short answer
+is that extending Sweave by hacking \textsf{SweaveDrivers.R} in the
+\textbf{utils} package is no longer the way I want to go. Many features
+in \textbf{knitr} come naturally as users would have expected. Figure
+\ref{fig:cars-demo} is a simple demo of some features of \textbf{knitr}.
+
+\begin{figure}
+<<cars-demo,fig=TRUE,dev=tikz,width=4,height=2.8,out.width=.45\textwidth,message=FALSE,cache=TRUE>>=
+fit=lm(dist~speed,data=cars) # linear regression
+par(mar=c(4, 4, 1, .1), mgp=c(2,1,0))
+with(cars,plot(speed,dist,panel.last=abline(fit)))
+text(10,100,'$Y = \\beta_0 + \\beta_1x + \\epsilon$')
+library(ggplot2)
+qplot(speed, dist, data=cars)+geom_smooth()
+@
+
+\caption{\label{fig:cars-demo}A simple demo of possible output in \textbf{knitr}:
+(1) multiple plots per chunk; (2) no need to \emph{print()} objects
+in \textbf{ggplot2}; (3) device size is $4\times2.8$ (inches) but
+output size is adjusted to \texttt{.45\textbackslash{}textwidth} in
+chunk options; (4) base graphics and \textbf{ggplot2} can sit side
+by side; (5) use the \emph{tikz()} device in \textbf{tikzDevice} simply
+by setting chunk option \texttt{dev=tikz} (hence can write native
+\protect\LaTeX{} expressions in R plots); (6) code highlighting.}
+\end{figure}
+
+
+I would have chosen to hide the R code if this were a real report,
+but here I show the code just for the sake of demonstration. If we
+type \emph{qplot()} in R, we get a plot, and the same thing happens
+in \textbf{knitr}. If we draw two plots in the code, \textbf{knitr}
+will show two plots and we do not need to tell it how many plots are
+there in the code in advance. If we set \texttt{out.width=.49\textbackslash{}textwidth}
+in chunk options, we get it in the final output document. If we say
+\texttt{align=center}, the plots are centered. That's it. Many enhancements
+and new features will be introduced later.
+
+
+\section{Design}
+
+The flow of processing an input file is similar to Sweave, and two
+major differences are that \textbf{knitr} provides far more flexibility
+to the users to customize the processing, and has many built-in options
+such as the support to a wide range of graphics devices and cache.
+Below is a brief description of the process:
+\begin{enumerate}
+\item \textbf{knitr} takes an input file and automatically determines an
+appropriate set of patterns to use if they are not provided in advance
+(e.g. \textsf{file.Rnw} will use \texttt{kpat\$get('rnw')});
+\item a set of hooks will also be set up automatically according to the
+filename extension (e.g. use \LaTeX{} environments to wrap R results
+for \LaTeX{} output);
+\item the input file is read in and split into pieces consisting of R code
+chunks and normal texts; the former will be executed one after the
+other, and the latter may contain global chunk options or inline R
+code;
+\item for each chunk, the code is evaluated using the \textbf{evaluate}
+package \citep{evaluate-manual}, and the results may be filtered
+according to chunk options (e.g. \texttt{echo=FALSE} will remove the
+R source code)
+
+\begin{enumerate}
+\item if \texttt{cache=TRUE} for this chunk, \textbf{knitr} will first check
+if there are previously cached results under the cache directory before
+really evaluating the chunk; if cached results exist and this code
+chunk has not been changed (use MD5 sum to verify), the cached results
+will be (lazy-) loaded, otherwise new cache will be built; if a cached
+chunk depends on other chunks (see the \texttt{dependson} option)
+and any one of these chunks has changed, this chunk must be forcibly
+updated (old cache will be purged)
+\item there are six types of possible output from \textbf{evaluate}, and
+their classes are \texttt{character} (normal text output), \texttt{source}
+(source code), \texttt{warning}, \texttt{message}, \texttt{error}
+and \texttt{recordedplot}; an internal S3 generic function \emph{wrap()}
+is used to deal with different types of output, using output hooks
+defined in the object \texttt{hooks}
+\item note plots are recorded as R objects before they are really saved
+to files, so graphics devices will not be opened unless plots are
+really produced in a chunk
+\item a code chunk is evaluated in a separate environment, and all the objects
+in this environment after the evaluation will be saved if \texttt{cache=TRUE}
+\item chunk hooks can be run before and/or after a chunk
+\end{enumerate}
+\item for normal texts, \textbf{knitr} will find out if there are chunk
+options set among them (e.g. \texttt{\textbackslash{}SweaveOpts\{\}}),
+and evaluate inline R code (e.g. \texttt{\textbackslash{}Sexpr\{\}});
+the latter is involved with the \texttt{inline} hook;
+\end{enumerate}
+The hooks play important roles in \textbf{knitr}: this package makes
+almost everything accessible to the users. Consider the following
+extremely simple example which may demonstrate this freedom:
+
+<<simple-example>>=
+1+1
+@
+
+There are two parts in the final output: the source code \texttt{1
++ 1} and the output \texttt{{[}1{]} 2}; the comment characters \texttt{\#\#}
+are from the default chunk option \texttt{comment}. Users may define
+a hook function for the source code like this to use the \texttt{lstlisting}
+environment:
+
+<<hook-source,eval=FALSE>>=
+hooks$set(source = function(x, options) {
+paste('\\begin{lstlisting}\n', x, '\\end{lstlisting}\n', sep = '')
+})
+@
+
+Similarly we can put other types of output into other environments.
+There is no need to hack at \textsf{Sweave.sty} for \textbf{knitr}
+and you can put the output in any environments. What is more, the
+output hooks make \textbf{knitr} ready for other types of output,
+and a typical one is HTML (there are built-in hooks). In fact I use
+this package to build its website.
+
+
+\section{Features}
+
+The \textbf{knitr} package borrowed features such as tikz graphics
+and cache from \textbf{pgfSweave} \citep{pgfSweave-manual} and \textbf{cacheSweave}
+\citep{cacheSweave-manual} respectively, but the implementations
+are different. New features like code reference from an external R
+script as well as output customization are also introduced. The feature
+of hook functions in Sweave is re-implemented and hooks have new usage
+now. There are several other small features which are motivated from
+my everyday use of Sweave. For example, a progress bar is provided
+when knitting a file so we roughly know how long we still need to
+wait; output from inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}})
+is formatted by \emph{formatC()} if the result is numeric so we do
+not get too many digits by default.
+
+
+\subsection{Code Decoration}
+
+The \textbf{highlight} package \citep{highlight-manual} is used by
+default to highlight R code, and \textbf{formatR} \citep{formatR-manual}
+is used to reformat R code (like \texttt{keep.source=FALSE} in Sweave
+but will also try to retain comments). For \LaTeX{} output, the \textbf{framed}
+package is used to decorate code chunks with a light gray background.
+It this \LaTeX{} package is not found in the system, a version will
+be copied directly from \textbf{knitr}. The prompt characters are
+removed by default because they mangle the R source code in the output
+and make it difficult to copy R code. The R output is masked in comments
+by default based on the same rationale. It is easy to revert to the
+output with prompts (set option \texttt{prompt=TRUE}), and you will
+quickly realize the inconvenience to the readers if they want to copy
+and run the code in the output document:
+
+<<stupid-prompts,prompt=TRUE,comment= ,highlight=FALSE>>=
+x=rnorm(5)
+x
+var(x)
+@
+
+The example below shows the effect of \texttt{tidy=TRUE/FALSE}:
+
+<<tidy-no,eval=FALSE,tidy=FALSE>>=
+## option tidy=FALSE
+for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
+@
+<<tidy-yes,eval=FALSE,tidy=TRUE>>=
+## option tidy=TRUE
+for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
+@
+
+Note \texttt{=} is replaced by \texttt{<-} because \texttt{options('replace.assign')}
+was set to be \texttt{TRUE} in this document; see the documentation
+of \emph{tidy.source()} in \textbf{formatR} for details.
+
+
+\subsection{Graphics}
+
+Graphics is an important part of reports, and several enhancements
+have been made in \textbf{knitr}. For example, grid graphics may not
+need to be explicitly printed as long as the same code can produce
+plots in R (in some cases, however, they have to be printed, e.g.
+in a loop, because you have to do so in an R terminal).
+
+
+\subsubsection{Graphical Devices}
+
+Over a long time, a frequently requested feature for Sweave was the
+support for other graphics devices, which has been implemented since
+R 2.13.0. Instead of using logical options like \texttt{png} or \texttt{jpeg}
+(this list can go on and on), \textbf{knitr} uses a single option
+\texttt{dev} (like \texttt{grdevice} in Sweave) which has support
+for more than 20 devices. For instance, \texttt{dev=png} will use
+the \emph{png()} device, and \texttt{dev=CairoJPEG} uses the \emph{CairoJPEG()}
+device in the \textbf{Cairo} package (it has to be installed first,
+of course). If none of these devices is satisfactory, you can provide
+the name of a customized device function, which must have been defined
+before it is called.
+
+
+\subsubsection{Plot Recording}
+
+As mentioned before, all the plots in a code chunk are first recorded
+as R objects and then ``replayed'' inside a graphical device to
+generate plot files. The \textbf{evaluate} package will record plots
+per \emph{expression} basis, in other words, the source code is split
+into individual complete expressions and \textbf{evaluate} will examine
+possible plot changes in snapshots after each single expression has
+been evaluated. For example, the code below consists of three expressions,
+out of which two are related to drawing plots, therefore \textbf{evaluate}
+will produce two plots by default:
+
+<<low-level-plots,fig=TRUE,dev=tikz,width=2.5,height=2.5,out.width=.3\textwidth,fig.low=TRUE,cache=TRUE>>=
+par(mar=c(3,3,.1,.1))
+plot(1:10, ann=FALSE,las=1)
+text(5,9,'mass $\\rightarrow$ energy\n$E=mc^2$')
+@
+
+This brings a significant difference with traditional tools in R for
+dynamic report generation, since low-level plotting changes can also
+be recorded. The option \texttt{fig.low} controls whether to keep
+low-level changes as separate plots; by default (\texttt{fig.low=FALSE}),
+\textbf{knitr} will not record all the low-level changes, and they
+will be merged into one plot, like most graphics devices do. This
+feature may be useful for teaching R graphics step by step. Note,
+however, low-level plotting commands in a single expression (a typical
+case is a loop) will not be recorded accumulatively, but high-level
+plotting commands, regardless of where they are, will always be recorded.
+For example, this chunk will only produce 2 plots instead of 21 plots
+because there are 2 complete expressions:
+
+<<low-plot-loop,eval=FALSE>>=
+plot(0,0,type='n',ann=FALSE)
+for(i in seq(0, 2*pi,length=20)) points(cos(i),sin(i))
+@
+
+But this will produce 20 plots as expected:
+
+<<high-plot-loop,eval=FALSE>>=
+for(i in seq(0, 2*pi,length=20)) {plot(cos(i),sin(i),xlim=c(-1,1),ylim=c(-1,1))}
+@
+
+
+\subsubsection{Plot Rearrangement}
+
+Due to the flexibility of \textbf{evaluate}, \textbf{knitr} gained
+other two chunk options: \texttt{fig.hold} and \texttt{fig.last}.
+For the former option, we can decide whether to hold all plots while
+evaluating the code and ``flush'' all of them to the end of a chunk,
+or just insert them to the place where they were created. For the
+latter, we can discard all previous plots and keep the last one only,
+or keep all the plots. As I showed in the beginning of this manual,
+it is straightforward to let \textbf{knitr} keep all the plots in
+a chunk and insert them into the output document, so we no longer
+need the \texttt{cat('\textbackslash{}\textbackslash{}includegraphics\{\}')}
+trick.
+
+Here is an example of \texttt{fig.hold=FALSE}:
+
+<<fig-hold,fig=TRUE,fig.hold=FALSE,dev=pdf,width=6,height=4,out.width=.35\linewidth>>=
+contour(volcano)  # contour lines
+filled.contour(volcano)  # fill contour plot with colors
+@
+
+
+\subsubsection{Plot Size}
+
+The \texttt{width} and \texttt{height} options specify the size of
+plots in the graphics device, and the real size in the output document
+can be different (see \texttt{out.width} and \texttt{out.height}).
+When there are multiple plots per chunk, it is possible to arrange
+more than one plot per line in \LaTeX{} -- just specify \texttt{out.width}
+to be less than half of the current line width.
+
+
+\subsubsection{The tikz Device}
+
+Beside PDF, PNG and other traditional R graphical devices, \textbf{knitr}
+has special support to tikz graphics via the \textbf{tikzDevice} package
+\citep{tikzDevice-manual}, which is similar to \textbf{pgfSweave}.
+If we set the chunk option \texttt{dev=tikz}, the \emph{tikz()} device
+in \textbf{tikzDevice} will be used to record plots. Options \texttt{sanitize}
+and \texttt{external} are related to the tikz device: see the documentation
+of \emph{tikz()} for explanation on \texttt{sanitize}, and \texttt{external=TRUE}
+in \textbf{knitr} has a different meaning with \textbf{pgfSweave}
+-- it means \texttt{standAlone=TRUE} in \emph{tikz()}, and the tikz
+graphics output will be compiled to PDF \emph{immediately} after it
+was created, so the ``externalization'' does not depend on the \textbf{tikz}
+package; to maintain consistency in (font) styles, \textbf{knitr}
+will read the preamble of the input document and use it in the tikz
+device. At the moment, I'm not sure if this is a faithful way to externalize
+tikz graphics, but I have not seen any problems so far. 
+
+Below is an example taken from StackOverflow%
+\footnote{\url{http://stackoverflow.com/q/8190087/559676}%
+}; we usually have to write R code like this to obtain a math expression
+$\mathrm{d}\mathbf{x}_{t}=\alpha[(\theta-\mathbf{x}_{t})\mathrm{d}t+4]\mathrm{d}B_{t}$
+in R graphics:
+
+<<math-expr-R,eval=FALSE>>=
+qplot(1:10, 1:10) + opts(title = substitute(paste(d * 
+    bolditalic(x)[italic(t)] == alpha * (theta - bolditalic(x)[italic(t)]) * 
+    d * italic(t) + lambda * d * italic(B)[italic(t)]), list(lambda = 4))) 
+@
+
+With the tikz device, it is both straightforward and more beautiful: 
+
+<<math-expr-tikz,fig=TRUE,dev=tikz,width=5,height=3,out.width=.55\linewidth,cache=TRUE,message=FALSE>>=
+library(ggplot2)
+qplot(1:10, 1:10) + 
+opts(title = sprintf('$\\mathrm{d}\\mathbf{x}_{t} = \\alpha[(\\theta - \\mathbf{x}_{t})\\mathrm{d}t + %d]\\mathrm{d}B_{t}$', 4))
+@
+
+The advantage of tikz graphics is the consistency of styles%
+\footnote{Users are encouraged to read the vignette of \textbf{tikzDevice},
+which is the most beautiful vignette I have ever seen in R packages:
+\url{http://cran.r-project.org/web/packages/tikzDevice/vignettes/tikzDevice.pdf}%
+}, and one disadvantage is that \LaTeX{} may not be able to handle
+too large tikz files (it can run out of memory). For example, an R
+plot with tens of thousands of graphical elements may fail to compile
+in \LaTeX{} if we use the tikz device. In such cases, we can switch
+to the PDF or PNG device, or reconsider our decision on the type of
+plots, e.g., a scatter plot with millions of points is usually difficult
+to read, and a contour plot or a hexagon plot showing the 2D density
+can be a better alternative (they are smaller in size).
+
+
+\subsubsection{Animation}
+
+The chunk option \texttt{animate} (if \texttt{TRUE}) make it possible
+to insert animations into the output document. In \LaTeX{}, the package
+\textbf{animate} is used to put together image frames as an animation.
+For animations to work, there must be more than one plot produced
+in a chunk. The option \texttt{interval} controls the time interval
+between animation frames; by default it is 1 second. Note you have
+to add \texttt{\textbackslash{}usepackage\{animate\}} in the \LaTeX{}
+preamble, because \textbf{knitr} will not add it automatically. Animations
+in the PDF output can only be viewed in Acrobat Reader.
+
+As a simple demonstration, here is a \href{http://en.wikipedia.org/wiki/Mandelbrot_set}{Mandelbrot animation}
+taken from the \textbf{animation} package \citep{animation-manual};
+note the PNG device is used because PDF files are too large. You should
+be able to see the animation immediately with Acrobat Reader since
+it was set to play automatically:
+
+<<animate-demo,fig=TRUE,dev=png,out.width=.45\linewidth,animate=TRUE,interval=.5,aniopts=controls;loop;autoplay,cache=TRUE>>=
+library(animation)
+demo('Mandelbrot', echo = FALSE, package = 'animation')
+@
+
+
+\subsection{Cache}
+
+The feature of cache is not a new idea -- both \textbf{cacheSweave}
+and \textbf{weaver} have implemented it based on Sweave, with the
+former using \textbf{filehash} and the latter using \textsf{.RData}
+images; \textbf{cacheSweave} also supports lazy-loading of objects
+based on \textbf{filehash}. The \textbf{knitr} package directly uses
+internal base R functions to save (\emph{tools:::makeLazyLoadDB()})
+and lazy-load objects (\emph{lazyLoad()}). These functions are either
+undocumented or marked as internal, but as far as I understand, they
+are the tools to implement lazy-loading for packages. The \textbf{cacheSweave}
+vignette has clearly explained lazy-loading, and roughly speaking,
+lazy-loading means an object will not be really loaded into memory
+unless it is really used somewhere. This is very useful for cache;
+sometimes we read a large object and cache it, then take a subset
+for analysis and this subset is also cached; in the future, the initial
+large object will not be loaded into R if our computation is only
+based on the object of its subset.
+
+The paths of cache files are determined by the chunk option \texttt{prefix.string};
+by default all cache files are created under the current working directory,
+and if the prefix string contains a directory (e.g. \texttt{prefix.string=cache/abc-}),
+cache files will be stored under that directory. The cache is invalidated
+and purged on any changes to the code chunk, including both the R
+code and chunk options. Unlike \textbf{weaver} or \textbf{cacheSweave},
+\textbf{knitr} will try to preserve side-effects, meaning that any
+output of a code chunk will be loaded into the output document for
+a cached chunk, although it is not really evaluated. The reason is
+\textbf{knitr} also cache the output of a chunk as a character string.
+Note this means graphics output is also cached since it is part of
+the output. It has been a pain for me for a long time to have to lose
+output to gain cache.
+
+Although \textbf{knitr} tries to keep the side-effects of printing,
+there are still other types of side-effects. For example, loading
+packages, or setting \emph{par()}, etc. Users should be aware of these
+special cases, and make sure to clearly separate the code which is
+not meant to be cached to other chunks which are not cached, e.g.,
+load all the required packages in the first chunk of a document.
+
+Sometimes a cached chunk may need to use objects from other cached
+chunks, which can bring a serious problem -- if objects in previous
+chunks have changed, this chunk will not be aware of the changes and
+will still use old cached results, unless there is a way to detect
+such changes from other chunks. There is an option called \texttt{dependson}
+in \textbf{cacheSweave} which does this job. We can explicitly specify
+which other chunks this chunk depends on by setting an option like
+\texttt{dependson=chunkA;chunkB}. Before loading cached results, all
+the dependent chunks will be examined to make sure they were not changed,
+otherwise the current cache will be rebuilt. The way I implement \texttt{dependson}
+is that a file named in the form \texttt{chunk-label\_MD5\_changed}
+is used to indicate if a chunk was changed; this file is created each
+time cached objects are saved, and removed the next time when cache
+is loaded, so if this file does not exist, it means nothing was changed
+in this chunk.
+
+
+\subsection{Code Reference}
+
+It can be more convenient to write R code in a separate file, rather
+than mixing it into a \LaTeX{} document; for example, we can run R
+code successively from one chunk to the other without jumping through
+other texts. Since I prefer using \LyX{} to write reports, Sweave
+is even more inconvenient because I have to recompile the whole document
+each time, even if I only want to know the results of a single chunk.
+Therefore \textbf{knitr} introduced the feature of code reference
+to an external R script. Currently the setting is like this: the R
+script also uses chunk labels (marked in the form \texttt{\#\# @knitr
+chunk-label} by default); if the code chunk in the input document
+is empty, \textbf{knitr} will match its label with the label in the
+R script to read external R code. The path of the reference script
+is set in the chunk option \texttt{ref}, and it is allowed to use
+difference sources of R scripts for different chunks.
+
+
+\subsection{Customization}
+
+The \textbf{knitr} package is ready for customization. Both the patterns
+and hooks can be customized; see the package website for details.
+Here I show an example on how to save \textbf{rgl} plots \citep{rgl-manual}
+using a customized hook function. First we define a hook function
+named \texttt{rgl}:
+
+<<rgl-demo>>=
+hooks$set(rgl = function(before, options, envir) {
+    if (!before) {
+        ## after a chunk has been evaluated
+    if (rgl.cur() == 0) return()  # no active device
+        name = paste(options$prefix.string, options$label, sep = '')
+    rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png')
+    return(paste('\\\\centering{}\\\\includegraphics[', sprintf('width=%s',options$out.width), ']{', name, '}\n', sep = ''))
+    }
+})
+@
+
+Then we only have to set the chunk option \texttt{rgl=TRUE}:
+
+<<fancy-rgl, rgl=TRUE, out.width=2in,message=FALSE,cache=TRUE>>=
+library(rgl)
+demo('bivar',package='rgl',echo=FALSE) 
+par3d(zoom = .7)
+@
+
+
+\section{Comparison}
+
+Some features of Sweave were dropped in \textbf{knitr} and some were
+changed, including:
+\begin{description}
+\item [{concordance}] was dropped: I have never used it and I do not plan
+to reimplement it either
+\item [{keep.source}] was merged into a more flexible option \texttt{tidy} 
+\item [{print}] was dropped: whether an R expression is going to be printed
+is consistent with your experince of using R (e.g., \texttt{x <- 1}
+will not be printed, while \texttt{1:10} will; just imagine you are
+typing the commands in an R console/terminal); if you really want
+the output of an expression to be invisible, you may use the function
+\emph{invisible()} 
+\item [{term}] was dropped (think \texttt{term=TRUE}) 
+\item [{stripe.white}] was dropped (rarely used, and can be achieved by
+hooks)
+\item [{prefix}] was dropped (think \texttt{prefix=TRUE}; \texttt{prefix.string}
+is always used for figure filenames)
+\item [{eps,~pdf}] and all logical options for graphics devices were dropped:
+please use the new option \texttt{dev}, which is similar to \texttt{grdevice}
+in Sweave but has more than 20 predefined graphical devices (if that
+is not enough, I will be surprised and please let me know, or set
+it in chunk options by yourself); note only one device can be used
+for a chunk (in old ages, we may have to use both \texttt{eps} and
+\texttt{pdf}, but nowadays there is usually no need to generate multiple
+image formats for the same plot)
+\end{description}
+Chunk reference using \texttt{<\textcompwordmark{}<chunk-label>\textcompwordmark{}>}
+was dropped since R has \emph{functions}; if you want to reuse a chunk,
+consider writing a function instead of explicitly repeating code.
+
+Besides, the \LaTeX{} style file \textsf{Sweave.sty} was dropped as
+well; it has brought too much confusion to users since it is shipped
+with R instead of \LaTeX{}; \textbf{knitr} has built-in styles using
+standard \LaTeX{} packages, and users are free to change them using
+hooks.
+
+Some answers to Sweave FAQ's from \texttt{vignette('Sweave', package='utils')}
+are different in \textbf{knitr}:
+\begin{description}
+\item [{A.4}] empty figure chunks will not cause \LaTeX{} errors because
+figures will not be generated at all, and it is safe to use \texttt{fig=TRUE}
+even if there are not plots in a chunk
+\item [{A.5}] \textbf{lattice}, \textbf{ggplot2} and other grid-based graphics
+will work as expected in \textbf{knitr}
+\item [{A.7}] multiple figures per chunk will work as expected; no need
+to use any special tricks
+\item [{A.9}] we can use output hooks to change the formatting of output,
+and there is complete freedom -- the output does not have to rely
+on the \textbf{fancyvrb} package, and there is no need to hack at
+\textsf{Sweave.sty} either
+\item [{A.10}] the width option is set to 75 by default in \textbf{knitr},
+since R's default is often too wide (besides, the \texttt{useFancyQuotes}
+option is set to \texttt{FALSE} to avoid a common problem caused by
+multi-byte characters, and \texttt{digits} is set to 4 to avoid too
+many digits)
+\item [{A.13}] hooks can be used to obtain HTML output
+\end{description}
+It also has some differences with \textbf{pgfSweave} and \textbf{cacheSweave}:
+\begin{itemize}
+\item For the former, \texttt{dev=tikz} in \textbf{knitr} means \texttt{tikz=TRUE}
+in \textbf{pgfSweave}, and \texttt{external=TRUE} was implemented
+differently -- the cache of tikz graphics is moved to the R level
+instead of relying on the \LaTeX{} package \textbf{tikz} (if a tikz
+plot is externalized, \textbf{knitr} will try to compile it to PDF
+immediately and use \texttt{\textbackslash{}includegraphics\{filename\}}
+to insert it into the output; in comparison, \texttt{external=FALSE}
+uses \texttt{\textbackslash{}input\{filename.tikz\}}); this frees
+the users from the GNU \texttt{make} utility and understanding tikz
+externalization;
+\item For the latter, \texttt{cache} is implemented with functions in base
+R (e.g., \emph{lazyLoad()}) and does not rely on other add-on packages;
+for cached chunks, the results from the last run will be written into
+the output, and this is more consistent with the default behavior
+of R code (users may wonder why \texttt{print(x)} does not produce
+any output for cached chunks; plots in cached chunks will still be
+in the output as well); 
+\end{itemize}
+\bibliographystyle{jss}
+\bibliography{knitr-manual,knitr-packages}
+
+
+\end{document}
