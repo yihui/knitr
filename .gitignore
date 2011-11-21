@@ -4,3 +4,6 @@
 *.aux
 *.log
 *.out
+noinstall
+knitr-*.pdf
+vignettes/figure
