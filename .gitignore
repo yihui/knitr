@@ -1,4 +1,6 @@
-_site
-_knit_*
-knit-all.R
-
+*.rdb
+*.rdx
+*-tikzDictionary
+*.aux
+*.log
+*.out
