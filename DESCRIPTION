@@ -54,7 +54,9 @@ Imports:
     highlight,
     utils
 Suggests:
-    testthat
+    testthat,
+    rgl,
+    tikzDevice
 License: GPL
 URL: https://github.com/yihui/knitr
 BugReports: https://github.com/yihui/knitr/issues
