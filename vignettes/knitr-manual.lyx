@@ -163,7 +163,7 @@ target "http://www.cs.tufts.edu/~nr/noweb/"
 
 ; Sweave 
 \begin_inset CommandInset citation
-LatexCommand citet
+LatexCommand citep
 key "leisch2002"
 
 \end_inset
