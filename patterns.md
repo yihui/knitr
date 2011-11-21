@@ -4,7 +4,7 @@ title: Patterns
 subtitle: A list of regular expressions to extract R code and chunk options from the input document
 ---
 
-The [object](objects) `kpat` manages patterns in **knitr**. For example, we can use `kpat$get()` to check the current pattern list. A pattern list includes the following components:
+The [object](objects) `knit_patterns` manages patterns in **knitr**. For example, we can use `knit_patterns$get()` to check the current pattern list. A pattern list includes the following components:
 
 - `chunk.begin`: the pattern for the beginning of a code chunk; it must contain a group defined by `()`, which will be used to extract chunk options
 - `chunk.end`: the pattern for the end of a chunk
@@ -21,11 +21,11 @@ Like Sweave, there are two types of R code in **knitr**: code chunks (like parag
 
 ## Built-in Patterns
 
-There are several built-in pattern lists in **knitr** which are stored in `optk$get('all.patterns')`.
+There are several built-in pattern lists in **knitr** which are stored in `opts_knit$get('all.patterns')`.
 
 {% highlight r %}
 library(knitr)
-apats = optk$get("all.patterns")  # a list of all built-in patterns
+apats = opts_knit$get("all.patterns")  # a list of all built-in patterns
 str(apats)
 {% endhighlight %}
 {% highlight text %}

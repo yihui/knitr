@@ -13,19 +13,19 @@ The **knitr** package uses a special object to control options and settings (den
 
 Four such objects are visible to users in **knitr**:
 
-- [`optc`](options#chunk_options): manages **opt**ions for code **c**hunks
-- [`optk`](options#package_options): manages **opt**ions for the **k**nitr package
-- [`hooks`](hooks): manages hook functions
-- [`kpat`](patterns): manages regular expressions to extract R code from the input document
+- [`opts_chunk`](options#chunk_options): manages **opt**ions for code **c**hunks
+- [`opts_knit`](options#package_options): manages **opt**ions for the **k**nitr package
+- [`knit_hooks`](hooks): manages hook functions
+- [`knit_patterns`](patterns): manages regular expressions to extract R code from the input document
 
-Except `kpat`, all other three objects are initialized with default values, and `kpat` will be automatically determined according to the type of input document if not provided. The `hooks` object is supposed to be used most frequently, and the other three are usually not to be used directly. For example, `optc` is usually set in the input document rather than using the command line directly.
+Except `knit_patterns`, all other three objects are initialized with default values, and `knit_patterns` will be automatically determined according to the type of input document if not provided. The `knit_hooks` object is supposed to be used most frequently, and the other three are usually not to be used directly. For example, `opts_chunk` is usually set in the input document rather than using the command line directly.
 
 It is recommended to get the settings done in the first chunk with `echo = FALSE` and `results = FALSE` like this (we may call this chunk as the configuration chunk):
 
 {% highlight r %}
 <<knitr-config, echo=FALSE, results=FALSE>>=
 library(knitr)
-kopt$set(header = c('\\usepackage{listings}', '\\lstset{language=R}'))
+opts_knit$set(header = c('\\usepackage{listings}', '\\lstset{language=R}'))
 ## change the header information to use the LaTeX package listings
 ## you need to change hooks accordingly, of course
 @
