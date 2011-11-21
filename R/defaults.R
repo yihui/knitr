@@ -27,8 +27,8 @@ new_defaults = function(value = list()) {
 ##'
 ##' A list of available options: \url{http://yihui.github.com/knitr/options#chunk_options}
 ##' @export
-##' @examples optc$get('prompt'); optc$get('fig.hold')
-optc =
+##' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.hold')
+opts_chunk =
     new_defaults(list(eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
                       cache = FALSE, purge = FALSE, dependson = NULL,
                       ref = NULL, prefix.string = '',
@@ -42,10 +42,15 @@ optc =
                       background = '.97;.97;.97', split = FALSE, include = TRUE,
                       animate = FALSE, interval = 1, aniopts = 'controls;loop'))
 
-opts_chunk = optc
-
-## all built-in patterns
-.all.patterns =
+##' All built-in patterns
+##'
+##' This object is a named list of all built-in patterns.
+##' @references Usage: \url{http://yihui.github.com/knitr/patterns}
+##' @export
+##' @examples all_patterns$rnw; all_patterns$html
+##'
+##' str(all_patterns)
+all_patterns =
 
     list(`rnw` = list(chunk.begin = '^<<(.*)>>=', chunk.end = '^@\\s*$',
          inline.code = '\\\\Sexpr\\{([^\\}]*)\\}',
@@ -74,22 +79,19 @@ opts_chunk = optc
 ##' Options for the knitr package
 ##'
 ##' Options including whether to use a progress bar when knitting a
-##' document, and the cache directory, etc.
+##' document, and the base directory of images, etc.
 ##' @references Usage: \url{http://yihui.github.com/knitr/objects}
 ##'
 ##' A list of available options: \url{http://yihui.github.com/knitr/options#package_options}
 ##' @export
-##' @examples optk$get('verbose'); optk$set(verbose = TRUE)  # change it
-optk =
+##' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
+opts_knit =
     new_defaults(list(progress = TRUE, verbose = FALSE,
                       theme = NULL,
                       base.dir = NULL, base.url = NULL,
 
-                      all.patterns = .all.patterns,
+                      all.patterns = all_patterns,
 
                       header = c(highlight = '', tikz = '', framed = ''))
 )
 ## header should not be set by hand unless you know what you are doing
-
-opts_knit = optk  # I feel safter to use this longer name internally
-

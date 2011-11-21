@@ -9,7 +9,7 @@
 ##' usually a filename without a directory name); if not set, this
 ##' function will try to guess
 ##' @param pattern the name of the pattern in
-##' \code{optk$get('all.patterns')} to be used
+##' \code{opts_knit$get('all.patterns')} to be used
 ##' @return The parsed document is written into the output file.
 ##' @export
 ##' @examples library(knitr)
@@ -28,8 +28,8 @@ knit = function(input, output, pattern) {
             pattern = ext; if (ext == 'md') pattern = 'html'
         }
         if (!(pattern %in% names(apat)))
-            stop("a pattern list has not been set up for pattern = '", pattern, "' yet; ",
-                 'see ?kpat on how to set up customized patterns')
+            stop("a pattern list is not found for pattern = '", pattern, "' in built-in pattern lists; ",
+                 'see ?knit_patterns on how to set up customized patterns')
         knit_patterns$restore()
         knit_patterns$set(apat[[pattern]])
     }

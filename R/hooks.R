@@ -94,13 +94,13 @@
 ##'
 ##' A hook is a function of a pre-defined form (arguments) that takes
 ##' values of arguments and returns desired output. The object
-##' \code{hooks} is used to access or set hooks in this package.
+##' \code{knit_hooks} is used to access or set hooks in this package.
 ##' @export
 ##' @references Usage: \url{http://yihui.github.com/knitr/objects}
 ##'
-##' Components in \code{kpat}: \url{http://yihui.github.com/knitr/hooks}
-##' @examples hooks$get('source'); hooks$get('inline')
-hooks =
+##' Components in \code{knit_hooks}: \url{http://yihui.github.com/knitr/hooks}
+##' @examples knit_hooks$get('source'); knit_hooks$get('inline')
+knit_hooks =
     new_defaults(c(
                    ## hooks for code output
                    list(source = .out.hook, output = .out.hook,
@@ -110,8 +110,6 @@ hooks =
 
                    ## and hooks for params
                    ))
-
-knit_hooks = hooks  # I use this longer name internally
 
 ## hooks that return character values will be inserted into final output
 run_hooks = function(before, options, envir) {
