@@ -7,7 +7,7 @@ subtitle: Customizable functions to run before/after a code chunk and tweak the 
 - [Chunk hooks](#chunk_hooks)
 - [Output hooks](#output_hooks)
 
-The object `hooks` in the **knitr** package is used to set hooks; the basic usage is `hooks$set(param = FUN)` (see [objects](objects) for details) where `param` is the name of a chunk option (can be arbitrary), and `FUN` is a function. There are two types of hooks: chunk hooks and output hooks. Hook functions may have different forms, depending what they are designed to do.
+The object `knit_hooks` in the **knitr** package is used to set hooks; the basic usage is `knit_hooks$set(param = FUN)` (see [objects](objects) for details) where `param` is the name of a chunk option (can be arbitrary), and `FUN` is a function. There are two types of hooks: chunk hooks and output hooks. Hook functions may have different forms, depending what they are designed to do.
 
 ## Chunk hooks <a id="chunk_hooks"></a>
 
@@ -26,7 +26,7 @@ foo_hook = function(before, options, envir) {
 When **knitr** is processing the document, `foo_hook(before = TRUE)` will be called before a code chunk is executed (unless the chunk is cached or set not to be evaluated), and `foo_hook(before = FALSE)` is called after a chunk; the argument `options` is a list of [options](options) in the current chunk (e.g. `options$label` is the label of the current chunk), and `envir` is the environment in which the code chunk is evaluated. The latter two arguments can be optionally used in a chunk hook. For example, if we set a hook for the `small.mar` option as:
 
 {% highlight r %}
-hooks$set(small.mar = function(before, options, envir) {
+knit_hooks$set(small.mar = function(before, options, envir) {
     if (before) par(mar = c(4, 4, .1, .1))  # smaller margin on top and right
 })
 {% endhighlight %}
@@ -39,10 +39,10 @@ hist(rnorm(100), main = '')  # no main title
 @
 {% endhighlight %}
 
-In **knitr**, hooks can also be used to insert texts into the output. To do this, the hook function must return a character result. This feature can greatly extend the power of hooks. Take the **rgl** package for example: if we want to insert 3D snapshots produced in **rgl** into our LaTeX document, we may consider this hook function:
+In **knitr**, hooks can also be used to insert texts into the output. To do this, the hook function must return a character result. This feature can greatly extend the power of hooks. Take the **rgl** package for example: if we want to insert 3D snapshots produced in **rgl** into our LaTeX document, we may consider this hook function (see the more sophisticated `hook_rgl()` in this package):
 
 {% highlight r %}
-hooks$set(rgl = function(before, options, envir) {
+knit_hooks$set(rgl = function(before, options, envir) {
     if (!before) {
         ## after a chunk has been evaluated
 	if (rgl.cur() == 0) return()  # no active device
@@ -68,7 +68,7 @@ In the LaTeX output, we will see `\includegraphics{fancy-rgl}`.
 
 To sum up,
 
-1. the hook can be set in `hooks` by `hooks$set(foo = FUN)`;
+1. the hook can be set in `knit_hooks` by `knit_hooks$set(foo = FUN)`;
 2. the chunk option `foo` should be `TRUE` for this chunk for the hook function to run;
 3. a hook can be run before and/or after a chunk;
 4. character results returned by hooks will be written into the output without modifications;
