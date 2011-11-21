@@ -1,0 +1,8 @@
+.gitignore
+clean-up.R
+rdb$
+rdx$
+tikzDictionary$
+aux$
+log$
+out$
