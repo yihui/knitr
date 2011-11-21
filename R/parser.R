@@ -118,6 +118,10 @@ parse_inline = function(input) {
         last = tail(opts.line, 1)
         opts = str_match(str_sub(input, last[1, 1], last[1, 2]), global.options)[, 2]
         params = parse_params(opts, label = FALSE)
+        ## remove texts for global options
+        text.line = t(matrix(c(1L, t(opts.line) + c(-1L, 1L), str_length(input)), nrow = 2))
+        text.line = text.line[text.line[, 1] <= text.line[, 2], , drop = FALSE]
+        input = str_c(str_sub(input, text.line[, 1], text.line[, 2]), collapse = '')
     }
     inline.code = knit_patterns$get('inline.code')
     loc = locate_inline(inline.code)
