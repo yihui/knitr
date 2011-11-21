@@ -105,7 +105,7 @@ print.block = function(x, ...) {
 parse_inline = function(input) {
     input = str_c(input, collapse = '\n') # merge into one line
 
-    locate_inline = function(pattern) {
+    locate_inline = function(input, pattern) {
         x = cbind(start = numeric(0), end = numeric(0))
         if (group_pattern(pattern))
             x = str_locate_all(input, pattern)[[1]]
@@ -113,7 +113,7 @@ parse_inline = function(input) {
     }
 
     params = list(); global.options = knit_patterns$get('global.options')
-    opts.line = locate_inline(global.options)
+    opts.line = locate_inline(input, global.options)
     if (nrow(opts.line)) {
         last = tail(opts.line, 1)
         opts = str_match(str_sub(input, last[1, 1], last[1, 2]), global.options)[, 2]
@@ -124,7 +124,7 @@ parse_inline = function(input) {
         input = str_c(str_sub(input, text.line[, 1], text.line[, 2]), collapse = '')
     }
     inline.code = knit_patterns$get('inline.code')
-    loc = locate_inline(inline.code)
+    loc = locate_inline(input, inline.code)
 
     structure(list(input = input, location = loc, params = params,
                    code = str_match(str_sub(input, loc[, 1], loc[, 2]), inline.code)[, 2]),
