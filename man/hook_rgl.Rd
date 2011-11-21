@@ -21,3 +21,7 @@ hook_rgl(before, options, envir)
 \references{
   \url{http://yihui.github.com/knitr/hooks#chunk_hooks}
 }
+\seealso{
+  \code{\link[rgl]{rgl.snapshot}},
+  \code{\link[rgl]{rgl.postscript}}
+}

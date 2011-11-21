@@ -14,7 +14,7 @@ knit(input, output, pattern)
   guess}
 
   \item{pattern}{the name of the pattern in
-  \code{optk$get('all.patterns')} to be used}
+  \code{opts_knit$get('all.patterns')} to be used}
 }
 \value{
   The parsed document is written into the output file.
@@ -27,7 +27,7 @@ knit(input, output, pattern)
 \examples{
 library(knitr)
 (f = tempfile(fileext = ".Rnw"))
-file.copy(system.file("examples", "sweave-ex.Rnw", 
+file.copy(system.file("examples", "knitr-minimal.Rnw", 
     package = "knitr"), f, overwrite = TRUE)
 knit(f)
 }

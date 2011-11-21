@@ -1,6 +1,6 @@
 \docType{data}
-\name{optk}
-\alias{optk}
+\name{opts_knit}
+\alias{opts_knit}
 \title{Options for the knitr package}
 \format{List of 4
  $ get    :function (name, default = FALSE)  
@@ -8,15 +8,16 @@
  $ merge  :function (values)  
  $ restore:function ()}
 \usage{
-optk
+opts_knit
 }
 \description{
   Options including whether to use a progress bar when
-  knitting a document, and the cache directory, etc.
+  knitting a document, and the base directory of images,
+  etc.
 }
 \examples{
-optk$get("verbose")
-optk$set(verbose = TRUE)  # change it
+opts_knit$get("verbose")
+opts_knit$set(verbose = TRUE)  # change it
 }
 \references{
   Usage: \url{http://yihui.github.com/knitr/objects}
