@@ -1,3 +1,4 @@
+export(hook_rgl)
 export(hooks)
 export(knit)
 export(kpat)

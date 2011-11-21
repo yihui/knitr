@@ -223,3 +223,33 @@ theme_jekyll = function() {
                    error = hook.t, message = hook.t)
 }
 ## may add textile, ReST and many other markup languages
+
+##' A hook function to save rgl plots
+##'
+##' This function can be set as a hook in \pkg{knitr} to save plots
+##' produced by the \pkg{rgl} package. According to the chunk option
+##' \samp{dev} (graphical device), plots can be save to different
+##' formats (\samp{postscript}: \samp{eps}; \samp{pdf}: \samp{pdf};
+##' other devices correspond to the default PNG format). The plot
+##' window will be adjusted according to chunk options \samp{width}
+##' and \samp{height}. Filenames are derived from chunk labels and the
+##' prefix string.
+##' @param before,options,envir see references
+##' @references \url{http://yihui.github.com/knitr/hooks#chunk_hooks}
+##' @seealso \code{\link[rgl]{rgl.snapshot}},
+##' \code{\link[rgl]{rgl.postscript}}
+##' @export
+hook_rgl = function(before, options, envir) {
+    ## after a chunk has been evaluated
+    if (before || !require('rgl') || rgl.cur() == 0) return()  # no active device
+    name = paste(valid_prefix(options$prefix.string), options$label, sep = '')
+    par3d(windowRect = 100 + options$dpi * c(0, 0, options$width, options$height))
+    Sys.sleep(.05) # need time to respond to window size change
+    ## support 3 formats: eps, pdf and png (default)
+    switch(options$dev,
+           postscript = rgl.postscript(paste(name, '.eps', sep = ''), fmt = 'eps'),
+           pdf = rgl.postscript(paste(name, '.pdf', sep = ''), fmt = 'pdf'),
+           rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png'))
+    paste(ifelse(options$align == 'center', '\\centering{}', ''), '\\includegraphics[',
+          sprintf('width=%s', options$out.width), ']{', name, '}\n', sep = '')
+}
