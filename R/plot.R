@@ -132,7 +132,8 @@ plot_calls = evaluate:::plot_calls
 
 ## is the new plot identical to the old one except a few par/layout primitives in the end?
 is_par_change = function(p1, p2) {
-    prims = setdiff(plot_calls(p2), plot_calls(p1))
-    prims = setdiff(prims, c('layout', 'par'))  # TODO: is this list exhaustive?
-    length(prims) == 0L
+    n1 = length(prim1 <- plot_calls(p1))
+    n2 = length(prim2 <- plot_calls(p2))
+    if (n2 <= n1) return(TRUE)
+    all(prim2[(n1 + 1):n2] %in% c('layout', 'par'))  # TODO: is this list exhaustive?
 }
