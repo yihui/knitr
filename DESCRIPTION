@@ -48,7 +48,7 @@ Description: This package provides a general-purpose tool
 Imports:
     evaluate (>= 0.4),
     digest,
-    formatR,
+    formatR (>= 0.3-4),
     stringr,
     tools,
     highlight,
