@@ -41,6 +41,8 @@ set_header = function(...) {
    \\@setminipage}}%
  {\\par\\unskip\\endMakeFramed}
 \\makeatother
+
+\\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
 '
 
 ## LaTeX styles for highlight

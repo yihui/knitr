@@ -60,6 +60,7 @@
 .chunk.hook.tex = function(x, options) {
     if (is_blank(x)) return(x)
     x = str_c(framed_color(options$background), '\\begin{kframe}\n', x, '\n\\end{kframe}')
+    x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
     if (options$split) {
         name = str_c(options$prefix.string, options$label, '.tex')
         if (!file.exists(dirname(name)))
