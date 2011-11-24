@@ -95,7 +95,8 @@ status open
 
 % 
 \backslash
-SweaveOpts{prefix.string=figure/manual-,align=center,external=TRUE,fig.hold=TRUE}
+SweaveOpts{prefix.string=figure/manual-,prefix.cache=figure/manual-,align=center,e
+xternal=TRUE,fig.hold=TRUE}
 \end_layout
 
 \end_inset
@@ -1702,17 +1703,33 @@ on is only based on the object of its subset.
 \begin_layout Standard
 The paths of cache files are determined by the chunk option 
 \family typewriter
-prefix.string
+prefix.cache
 \family default
-; by default all cache files are created under the current working directory,
- and if the prefix string contains a directory (e.g.
+; by default all cache files are created under a directory 
+\family sans
+cache
+\family default
+ relative to the current working directory, and if the prefix contains a
+ directory (e.g.
  
 \family typewriter
 prefix.string=cache/abc-
 \family default
-), cache files will be stored under that directory.
+), cache files will be stored under that directory (automatically created
+ if it does not exist).
  The cache is invalidated and purged on any changes to the code chunk, including
- both the R code and chunk options.
+ both the R code and chunk options; this means previous cache files of this
+ chunk are removed (filenames are identified by the chunk label).
+ Unlike 
+\series bold
+pgfSweave
+\series default
+, cache files will never accumulate since old cache files will always be
+ removed in 
+\series bold
+knitr
+\series default
+.
  Unlike 
 \series bold
 weaver

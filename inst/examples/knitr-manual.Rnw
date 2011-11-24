@@ -37,11 +37,11 @@
 
 \begin{document}
 
-% \SweaveOpts{prefix.string=figure/manual-,align=center,external=TRUE,fig.hold=TRUE}
+% \SweaveOpts{prefix.string=figure/manual-,prefix.cache=figure/manual-,align=center,external=TRUE,fig.hold=TRUE}
 
 <<setup,echo=FALSE,results=hide,message=FALSE>>=
 options(replace.assign=TRUE,width=90)
-hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
+knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
 @
 
 
@@ -55,7 +55,7 @@ The original paradigm of literate programming was brought forward
 mainly for software development, or specifically, to mix source code
 (for computer) and documentation (for human) together. Early systems
 include \href{http://www.literateprogramming.com/web.pdf}{WEB} and
-\href{http://www.cs.tufts.edu/~nr/noweb/}{Noweb}; Sweave \citet{leisch2002}
+\href{http://www.cs.tufts.edu/~nr/noweb/}{Noweb}; Sweave \citep{leisch2002}
 was derived from the latter, but it is less focused on documenting
 software, instead it is mainly used for reproducible data analysis
 and generating statistical reports. The \textbf{knitr} package \citep{knitr-manual}
@@ -115,7 +115,7 @@ Below is a brief description of the process:
 \begin{enumerate}
 \item \textbf{knitr} takes an input file and automatically determines an
 appropriate set of patterns to use if they are not provided in advance
-(e.g. \textsf{file.Rnw} will use \texttt{kpat\$get('rnw')});
+(e.g. \textsf{file.Rnw} will use \texttt{knit\_patterns\$get('rnw')});
 \item a set of hooks will also be set up automatically according to the
 filename extension (e.g. use \LaTeX{} environments to wrap R results
 for \LaTeX{} output);
@@ -431,12 +431,17 @@ for analysis and this subset is also cached; in the future, the initial
 large object will not be loaded into R if our computation is only
 based on the object of its subset.
 
-The paths of cache files are determined by the chunk option \texttt{prefix.string};
-by default all cache files are created under the current working directory,
-and if the prefix string contains a directory (e.g. \texttt{prefix.string=cache/abc-}),
-cache files will be stored under that directory. The cache is invalidated
-and purged on any changes to the code chunk, including both the R
-code and chunk options. Unlike \textbf{weaver} or \textbf{cacheSweave},
+The paths of cache files are determined by the chunk option \texttt{prefix.cache};
+by default all cache files are created under a directory \textsf{cache}
+relative to the current working directory, and if the prefix contains
+a directory (e.g. \texttt{prefix.string=cache/abc-}), cache files
+will be stored under that directory (automatically created if it does
+not exist). The cache is invalidated and purged on any changes to
+the code chunk, including both the R code and chunk options; this
+means previous cache files of this chunk are removed (filenames are
+identified by the chunk label). Unlike \textbf{pgfSweave}, cache files
+will never accumulate since old cache files will always be removed
+in \textbf{knitr}. Unlike \textbf{weaver} or \textbf{cacheSweave},
 \textbf{knitr} will try to preserve side-effects, meaning that any
 output of a code chunk will be loaded into the output document for
 a cached chunk, although it is not really evaluated. The reason is
@@ -493,26 +498,19 @@ The \textbf{knitr} package is ready for customization. Both the patterns
 and hooks can be customized; see the package website for details.
 Here I show an example on how to save \textbf{rgl} plots \citep{rgl-manual}
 using a customized hook function. First we define a hook function
-named \texttt{rgl}:
+named \texttt{rgl} using the function \emph{hook\_rgl()} in \textbf{knitr}:
 
 <<rgl-demo>>=
-hooks$set(rgl = function(before, options, envir) {
-    if (!before) {
-        ## after a chunk has been evaluated
-    if (rgl.cur() == 0) return()  # no active device
-        name = paste(options$prefix.string, options$label, sep = '')
-    rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png')
-    return(paste('\\\\centering{}\\\\includegraphics[', sprintf('width=%s',options$out.width), ']{', name, '}\n', sep = ''))
-    }
-})
+knit_hooks$set(rgl = hook_rgl)
+head(knit_hooks$get('rgl'))  # the hook function is defined as this
 @
 
 Then we only have to set the chunk option \texttt{rgl=TRUE}:
 
-<<fancy-rgl, rgl=TRUE, out.width=2in,message=FALSE,cache=TRUE>>=
+<<fancy-rgl,rgl=TRUE,dev=png,width=5,height=5,out.width=2in,message=FALSE,cache=TRUE>>=
 library(rgl)
-demo('bivar',package='rgl',echo=FALSE) 
-par3d(zoom = .7)
+demo('bivar', package='rgl', echo=FALSE) 
+par3d(zoom=.7)
 @
 
 
@@ -554,6 +552,20 @@ with R instead of \LaTeX{}; \textbf{knitr} has built-in styles using
 standard \LaTeX{} packages, and users are free to change them using
 hooks.
 
+The syntax is slightly different with Sweave: Sweave uses the syntax
+of Noweb, in which \texttt{<\textcompwordmark{}<>\textcompwordmark{}>=}
+means a code chunk begins, and \texttt{@} means a chunk ends, so we
+can begin a chunk without ending it (all the following lines will
+be treated as program code), or begin chunks one after another without
+ending them in-between; \textbf{knitr} requires the beginning and
+ending of a chunk must be strictly matched -- one beginning must be
+followed one ending. The chunks below are valid in Sweave but not
+in \textbf{knitr}:
+
+<<valid-sweave,echo=FALSE,comment=>>=
+cat(c('<<one-chunk,eval=FALSE>>=','1+1','<<another-chunk,echo=TRUE>>=','rnorm(10)','@'), sep='\n')
+@
+
 Some answers to Sweave FAQ's from \texttt{vignette('Sweave', package='utils')}
 are different in \textbf{knitr}:
 \begin{description}
@@ -587,7 +599,7 @@ to insert it into the output; in comparison, \texttt{external=FALSE}
 uses \texttt{\textbackslash{}input\{filename.tikz\}}); this frees
 the users from the GNU \texttt{make} utility and understanding tikz
 externalization;
-\item For the latter, \texttt{cache} is implemented with functions in base
+\item For the latter, \texttt{cache} was implemented with functions in base
 R (e.g., \emph{lazyLoad()}) and does not rely on other add-on packages;
 for cached chunks, the results from the last run will be written into
 the output, and this is more consistent with the default behavior
@@ -595,6 +607,27 @@ of R code (users may wonder why \texttt{print(x)} does not produce
 any output for cached chunks; plots in cached chunks will still be
 in the output as well); 
 \end{itemize}
+
+\section*{About This Document}
+
+This manual was written in \LyX{} and compiled with \textbf{knitr}.
+The \LyX{} source and the Rnw document exported from \LyX{} can be
+found under these directories:
+
+<<source-location,eval=FALSE>>=
+system.file('doc', 'knitr-manual.lyx', package='knitr')  # lyx source
+system.file('examples', 'knitr-manual.Rnw', package='knitr')  # Rnw source
+@
+
+You can use the function \emph{knit()} to knit the Rnw document (remember
+to put the two \textsf{.bib} files under the same directory), and
+you need to make sure all the R packages used in this document are
+installed:
+
+<<required-packages,eval=FALSE>>=
+install.packages(c('animation', 'rgl', 'tikzDevice'))
+@
+
 \bibliographystyle{jss}
 \bibliography{knitr-manual,knitr-packages}
 
