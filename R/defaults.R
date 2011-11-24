@@ -54,7 +54,7 @@ all_patterns =
 
     list(`rnw` = list(chunk.begin = '^<<(.*)>>=', chunk.end = '^@\\s*$',
          inline.code = '\\\\Sexpr\\{([^\\}]*)\\}',
-         global.options = '\\\\SweaveOpts\\{([^\\}]*)\\}',
+         global.options = '\\\\SweaveOpts\\{([^}]*)\\}',
          header.begin = '\n*\\s*\\\\documentclass[^\\}]+\\}',
          document.begin = '\n*\\s*\\\\begin\\{document\\}',
          ref.label = '^## @knitr (.*)$'),
