@@ -56,6 +56,14 @@ And `\SweaveOpts{comment=#, width=6, height=6}` can change the default global op
 
 ## Package Options <a id="package_options"></a>
 
+The package options can be changed using the object [`opts_knit`](objects); for example,
+
+{% highlight r %}
+opts_knit$set(progress = TRUE, verbose = TRUE)
+{% endhighlight %}
+
+All package options are:
+
 - `progress`: (`TRUE`) whether to display a progress bar when running **knitr**
 - `verbose`: (`FALSE`) whether to show verbose information (e.g., R code in each chunk) or just show chunk labels and options
 - `theme`: (`NULL`) possible values are `latex`, `sweave`, `html`, `markdown`, `gfm` and `jekyll`; it will be automatically determined based on the input file, and this option will affect which set of hooks to use
