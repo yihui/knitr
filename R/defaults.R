@@ -30,7 +30,7 @@ new_defaults = function(value = list()) {
 ##' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.hold')
 opts_chunk =
     new_defaults(list(eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
-                      cache = FALSE, purge = FALSE, dependson = NULL,
+                      cache = FALSE, purge = FALSE, dependson = NULL, prefix.cache = 'cache/',
                       ref = NULL, prefix.string = '',
                       prompt = FALSE, comment = '##', fig = FALSE, fig.ext = NULL,
                       fig.low = FALSE, dev = 'pdf', dpi = 72, width = 7, height = 7,

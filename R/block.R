@@ -27,7 +27,7 @@ call_block = function(block) {
     if (params$dev == 'tikz') set_header(tikz = '\\usepackage{tikz}')
 
     ## Check cache
-    hash = str_c(valid_prefix(params$prefix.string), params$label, '_', digest(params))
+    hash = str_c(valid_prefix(params$prefix.cache), params$label, '_', digest(params))
     params = c(params, list(hash = hash))
     if (params$purge) {
         cache$purge(hash) # clear cache
@@ -127,7 +127,7 @@ block_exec = function(code, ...) {
         hash = options$hash
         outname = str_c('.', hash)
         assign(outname, output, envir = globalenv())
-        cache$purge(str_c(valid_prefix(options$prefix.string),
+        cache$purge(str_c(valid_prefix(options$prefix.cache),
                           options$label, '_*')) # try to purge old cache
         cache$save(c(ls(env, all = TRUE), outname), hash)
         cache$mark(hash)
