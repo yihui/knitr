@@ -29,9 +29,7 @@ call_block = function(block) {
     ## Check cache
     hash = str_c(valid_prefix(params$prefix.cache), params$label, '_', digest(params))
     params = c(params, list(hash = hash))
-    if (params$purge) {
-        cache$purge(hash) # clear cache
-    } else if (params$cache && cache$exists(hash)) {
+    if (params$cache && cache$exists(hash)) {
         if (!dependson_changed(params$dependson)) {
             cache$load(hash)
             cache$unmark(hash)
