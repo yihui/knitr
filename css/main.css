@@ -138,11 +138,12 @@ p {
   hyphens: auto;
   font-size: 1.2em;
 }
-#content ul {
-  list-style: square;
-}
 #content li {
   list-style-position: inside;
+  font-size: 1.125em;
+}
+#content li li {
+    font-size: 1.0625em;
 }
 code {
   font-family: Menlo, "Andale Mono", Consolas, Monaco, monospace;
