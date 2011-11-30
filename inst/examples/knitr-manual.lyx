@@ -2118,8 +2118,8 @@ status open
 
 \begin_layout Plain Layout
 
-cat(c('<<one-chunk,eval=FALSE>>=','1+1','<<another-chunk,echo=TRUE>>=','rnorm(10
-)','@'), sep='
+cat(c(' <<one-chunk,eval=FALSE>>=',' 1+1',' <<another-chunk,echo=TRUE>>=','
+ rnorm(10)',' @'), sep='
 \backslash
 n')
 \end_layout
@@ -2332,7 +2332,7 @@ status open
 
 \begin_layout Plain Layout
 
-system.file('examples', 'knitr-manual.lyx', package='knitr')  # lyx source
+system.file('doc', 'knitr-manual.lyx', package='knitr')  # lyx source
 \end_layout
 
 \begin_layout Plain Layout
