@@ -2,7 +2,7 @@
 \alias{knit}
 \title{Knit a document}
 \usage{
-knit(input, output, pattern)
+knit(input, output, pattern, tangle = FALSE)
 }
 \arguments{
   \item{input}{path of the input file}
@@ -13,8 +13,11 @@ knit(input, output, pattern)
   directory name); if not set, this function will try to
   guess}
 
-  \item{pattern}{the name of the pattern in
+  \item{pattern}{the name of the pattern list in
   \code{opts_knit$get('all.patterns')} to be used}
+
+  \item{tangle}{whether to tangle the R code from the input
+  file (like \code{\link[utils]{Stangle}})}
 }
 \value{
   The parsed document is written into the output file.
@@ -22,7 +25,8 @@ knit(input, output, pattern)
 \description{
   This function takes an input file, extracts the R code in
   it according to a list of patterns, evaluates the code
-  and writes the output in another file.
+  and writes the output in another file. It can also tangle
+  R source code from the input document.
 }
 \examples{
 library(knitr)
@@ -30,4 +34,6 @@ library(knitr)
 file.copy(system.file("examples", "knitr-minimal.Rnw", 
     package = "knitr"), f, overwrite = TRUE)
 knit(f)
+
+knit(f, tangle = TRUE)  # extract R code only
 }
