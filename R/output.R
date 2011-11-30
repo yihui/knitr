@@ -2,21 +2,25 @@
 ##'
 ##' This function takes an input file, extracts the R code in it
 ##' according to a list of patterns, evaluates the code and writes the
-##' output in another file.
+##' output in another file. It can also tangle R source code from the
+##' input document.
 ##' @param input path of the input file
 ##' @param output path of output file (note the working directory will
 ##' be set to the directory of the input file, so this argument is
 ##' usually a filename without a directory name); if not set, this
 ##' function will try to guess
-##' @param pattern the name of the pattern in
+##' @param pattern the name of the pattern list in
 ##' \code{opts_knit$get('all.patterns')} to be used
+##' @param tangle whether to tangle the R code from the input file
+##' (like \code{\link[utils]{Stangle}})
 ##' @return The parsed document is written into the output file.
 ##' @export
 ##' @examples library(knitr)
 ##' (f = tempfile(fileext = '.Rnw'))
 ##' file.copy(system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'), f, overwrite = TRUE)
 ##' knit(f)
-knit = function(input, output, pattern) {
+##'
+##' knit(f, tangle = TRUE)  # extract R code only
 knit = function(input, output, pattern, tangle = FALSE) {
 
     if (missing(output)) output = basename(auto_out_name(input, tangle))
