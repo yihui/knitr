@@ -2,6 +2,8 @@
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[sc]{mathpazo}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
@@ -550,7 +552,7 @@ Besides, the \LaTeX{} style file \textsf{Sweave.sty} was dropped as
 well; it has brought too much confusion to users since it is shipped
 with R instead of \LaTeX{}; \textbf{knitr} has built-in styles using
 standard \LaTeX{} packages, and users are free to change them using
-hooks.
+hooks. 
 
 The syntax is slightly different with Sweave: Sweave uses the syntax
 of Noweb, in which \texttt{<\textcompwordmark{}<>\textcompwordmark{}>=}
@@ -565,6 +567,9 @@ in \textbf{knitr}:
 <<valid-sweave,echo=FALSE,comment=>>=
 cat(c('<<one-chunk,eval=FALSE>>=','1+1','<<another-chunk,echo=TRUE>>=','rnorm(10)','@'), sep='\n')
 @
+
+We can call \texttt{knit(..., tangle = TRUE)} to tangle R code, which
+is similar to \emph{Stangle()}.
 
 Some answers to Sweave FAQ's from \texttt{vignette('Sweave', package='utils')}
 are different in \textbf{knitr}:
@@ -615,7 +620,7 @@ The \LyX{} source and the Rnw document exported from \LyX{} can be
 found under these directories:
 
 <<source-location,eval=FALSE>>=
-system.file('doc', 'knitr-manual.lyx', package='knitr')  # lyx source
+system.file('examples', 'knitr-manual.lyx', package='knitr')  # lyx source
 system.file('examples', 'knitr-manual.Rnw', package='knitr')  # Rnw source
 @
 

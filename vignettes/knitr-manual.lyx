@@ -22,8 +22,8 @@ knitr
 \inputencoding default
 \fontencoding global
 \font_roman palatino
-\font_sans default
-\font_typewriter default
+\font_sans lmss
+\font_typewriter lmtt
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc true
@@ -2079,6 +2079,7 @@ knitr
 \series default
  has built-in styles using standard LaTeX packages, and users are free to
  change them using hooks.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -2131,6 +2132,18 @@ n')
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+We can call 
+\family typewriter
+knit(..., tangle = TRUE)
+\family default
+ to tangle R code, which is similar to 
+\emph on
+Stangle()
+\emph default
+.
 \end_layout
 
 \begin_layout Standard
@@ -2319,7 +2332,7 @@ status open
 
 \begin_layout Plain Layout
 
-system.file('doc', 'knitr-manual.lyx', package='knitr')  # lyx source
+system.file('examples', 'knitr-manual.lyx', package='knitr')  # lyx source
 \end_layout
 
 \begin_layout Plain Layout
