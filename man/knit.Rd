@@ -37,3 +37,7 @@ knit(f)
 
 knit(f, tangle = TRUE)  # extract R code only
 }
+\references{
+  The \pkg{knitr} manual:
+  \url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}
+}

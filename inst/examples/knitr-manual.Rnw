@@ -565,7 +565,7 @@ followed one ending. The chunks below are valid in Sweave but not
 in \textbf{knitr}:
 
 <<valid-sweave,echo=FALSE,comment=>>=
-cat(c('<<one-chunk,eval=FALSE>>=','1+1','<<another-chunk,echo=TRUE>>=','rnorm(10)','@'), sep='\n')
+cat(c(' <<one-chunk,eval=FALSE>>=',' 1+1',' <<another-chunk,echo=TRUE>>=',' rnorm(10)',' @'), sep='\n')
 @
 
 We can call \texttt{knit(..., tangle = TRUE)} to tangle R code, which
@@ -620,7 +620,7 @@ The \LyX{} source and the Rnw document exported from \LyX{} can be
 found under these directories:
 
 <<source-location,eval=FALSE>>=
-system.file('examples', 'knitr-manual.lyx', package='knitr')  # lyx source
+system.file('doc', 'knitr-manual.lyx', package='knitr')  # lyx source
 system.file('examples', 'knitr-manual.Rnw', package='knitr')  # Rnw source
 @
 

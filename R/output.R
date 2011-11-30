@@ -15,6 +15,8 @@
 ##' (like \code{\link[utils]{Stangle}})
 ##' @return The parsed document is written into the output file.
 ##' @export
+##' @references The \pkg{knitr} manual:
+##' \url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}
 ##' @examples library(knitr)
 ##' (f = tempfile(fileext = '.Rnw'))
 ##' file.copy(system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'), f, overwrite = TRUE)
