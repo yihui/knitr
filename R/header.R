@@ -46,5 +46,20 @@ set_header = function(...) {
 '
 
 ## LaTeX styles for highlight
-.header.hi.tex = str_c(c(styler('default', 'sty', styler_assistant_latex), boxes_latex()), collapse = '\n')
+.header.hi.tex =
+    str_c(c("\\newcommand{\\hlnumber}[1]{\\textcolor[rgb]{0,0,0}{#1}}%",
+            "\\newcommand{\\hlfunctioncall}[1]{\\textcolor[rgb]{.5,0,.33}{\\textbf{#1}}}%",
+            "\\newcommand{\\hlstring}[1]{\\textcolor[rgb]{.6,.6,1}{#1}}%",
+            "\\newcommand{\\hlkeyword}[1]{\\textbf{#1}}%",
+            "\\newcommand{\\hlargument}[1]{\\textcolor[rgb]{.69,.25,.02}{#1}}%",
+            "\\newcommand{\\hlcomment}[1]{\\textcolor[rgb]{.18,.6,.34}{#1}}%",
+            "\\newcommand{\\hlroxygencomment}[1]{\\textcolor[rgb]{.44,.48,.7}{#1}}%",
+            "\\newcommand{\\hlformalargs}[1]{\\hlargument{#1}}%",
+            "\\newcommand{\\hleqformalargs}[1]{\\hlargument{#1}}%",
+            "\\newcommand{\\hlassignement}[1]{\\textbf{#1}}%",
+            "\\newcommand{\\hlpackage}[1]{\\textcolor[rgb]{.59,.71,.145}{#1}}%",
+            "\\newcommand{\\hlslot}[1]{\\textit{#1}}%",
+            "\\newcommand{\\hlsymbol}[1]{#1}%",
+            "\\newcommand{\\hlprompt}[1]{\\textcolor[rgb]{.5,.5,.5}{#1}}%",
+          boxes_latex()), collapse = '\n')
 .header.hi.html = str_c(styler('default'), collapse = '\n')
