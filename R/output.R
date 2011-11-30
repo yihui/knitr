@@ -17,8 +17,9 @@
 ##' file.copy(system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'), f, overwrite = TRUE)
 ##' knit(f)
 knit = function(input, output, pattern) {
+knit = function(input, output, pattern, tangle = FALSE) {
 
-    if (missing(output)) output = basename(auto_out_name(input))
+    if (missing(output)) output = basename(auto_out_name(input, tangle))
 
     ext = tolower(file_ext(input))
     apat = opts_knit$get('all.patterns')
@@ -57,12 +58,12 @@ knit = function(input, output, pattern) {
                 digits = 4, width = 75)
     on.exit(options(oopts), add = TRUE)
 
-    res = process_file(basename(input))
+    res = process_file(basename(input), tangle)
     cat(res, file = output)
     message('output file: ', normalizePath(output))
 }
 
-process_file = function(path) {
+process_file = function(path, tangle) {
     groups = split_file(path)
     if (!is.list(groups)) return(groups)
 
@@ -73,18 +74,20 @@ process_file = function(path) {
     for (i in 1:n) {
         if (opts_knit$get('progress')) {
             setTxtProgressBar(pb, i)
-            cat('\n')
+            if (!tangle) cat('\n')
+            flush.console()
         }
-        res[i] = process_group(groups[[i]])
+        res[i] = (if (tangle) process_tangle else process_group)(groups[[i]])
     }
     if (opts_knit$get('progress')) close(pb)
 
-    res = insert_header(res)  # insert header
+    if (!tangle) res = insert_header(res)  # insert header
     str_c(c(res, ""), collapse = "\n")
 }
 
-auto_out_name = function(input) {
+auto_out_name = function(input, tangle) {
     ext = file_ext(input)
+    if (tangle) return(str_replace(input, str_c(ext, '$'), 'R'))
     if (tolower(ext) == 'rnw') return(str_replace(input, str_c(ext, '$'), 'tex'))
     if (tolower(ext) %in% c('brew', 'tex', 'html', 'md')) {
         if (str_detect(input, '_knit_')) {
@@ -163,12 +166,4 @@ wrap.recordedplot = function(x, options) {
 
     name.ext = save_plot(x, name, options)
     knit_hooks$get('plot')(name.ext, options)
-}
-
-
-## TODO: tangle R code
-output_code = function(path, output_path = NULL) {
-}
-
-extract_code = function(block) {
 }

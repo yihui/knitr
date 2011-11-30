@@ -164,3 +164,17 @@ inline_exec = function(block) {
     }
     input
 }
+
+process_tangle = function(x) {
+    UseMethod('process_tangle', x)
+}
+process_tangle.block = function(x) {
+    label_code(x$code, x$params$label)
+}
+process_tangle.inline = function(x) return('')
+
+
+## add a label to a code chunk
+label_code = function(code, label) {
+    str_c(str_c('## @knitr ', label), '\n', str_c(code, collapse = '\n'), '\n')
+}
