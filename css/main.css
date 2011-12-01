@@ -345,6 +345,7 @@ body {
   max-width: 33.75em;
   margin: 0 auto;
   position: relative;
+  -webkit-text-size-adjust: 100%;
 }
 .ie body {
   width: 33.75em;
