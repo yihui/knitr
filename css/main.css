@@ -89,7 +89,7 @@ strong {
   border-bottom: solid 2px;
 }
 body, h1, h3 {
-    font-family: 'Sorts Mill Goudy', "Baskerville", "Georgia", serif;
+    font-family: "Palatino Linotype", Palatino, Georgia, serif;
 }
 #copyright p,
 code,
@@ -140,10 +140,9 @@ p {
 }
 #content li {
   list-style-position: inside;
-  font-size: 1.125em;
 }
 #content li li {
-    font-size: 1.0625em;
+    margin: 0.4em auto 0.4em 1em;
 }
 code {
   font-family: Menlo, "Andale Mono", Consolas, Monaco, monospace;
