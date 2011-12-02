@@ -71,7 +71,7 @@
 }
 .chunk.hook.html = function(x, options) {
     if (is_blank(x)) return(x)
-    sprintf('<pre>%s</pre>', x)
+    sprintf('<pre class="knitr">%s</pre>', x)
 }
 
 ## format a single inline object
@@ -177,8 +177,9 @@ theme_html = function() {
     ## use div with different classes
     html.hook = function(name) {
         force(name)
-        function (x, options) sprintf('<div class="knitr %s">%s</div>\n', name, x)
+        function (x, options) sprintf('<div class="%s">%s</div>\n', name, x)
     }
+    set_header(highlight = .header.hi.html)
     z = list()
     for (i in c('source', 'output', 'warning', 'message', 'error'))
         z[[i]] = html.hook(i)

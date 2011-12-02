@@ -62,4 +62,15 @@ set_header = function(...) {
             "\\newcommand{\\hlsymbol}[1]{#1}%",
             "\\newcommand{\\hlprompt}[1]{\\textcolor[rgb]{.5,.5,.5}{#1}}%",
           boxes_latex()), collapse = '\n')
-.header.hi.html = str_c(styler('default'), collapse = '\n')
+.header.hi.html =
+    str_c(c('<style type="text/css">', '.knitr {
+	background-color: #EEE;
+        padding: 1em;
+}', '.error {
+	font-weight: bold;
+        color: #FF0000;
+}', '.warning {
+	font-weight: bold;
+}', '.message {
+        font-style: italic;
+}', styler('default'), '</style>'), collapse = '\n')
