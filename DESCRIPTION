@@ -56,7 +56,7 @@ Imports:
 Suggests:
     testthat,
     rgl,
-    tikzDevice
+    tikzDevice (>= 0.6.2)
 License: GPL
 URL: https://github.com/yihui/knitr
 BugReports: https://github.com/yihui/knitr/issues
