@@ -40,11 +40,11 @@ The ideas are borrowed from other packages, and some of them are re-implemented 
   - the regular expressions to parse R code can be defined, i.e., you do not have to use `<<>>=` and `@` or `\Sexpr{}`; if you like, you can use any patterns, e.g., `%% begin.rcode` and `%% end.rcode`
   - hooks can be defined to control the output; e.g. you may want to put errors in red bold texts, or you want the source code to be italic, etc; hooks can also be defined to be executed before or after a code chunk, and there are infinite possibilities to extend the power of this package by hooks (e.g. animations, rgl 3D plots, ...)
 
-Lots of efforts have been made to producing beautiful output and enhancing readability by default. For example, code chunks are highlighted and put in the `shaded` environment in LaTeX with a very light gray background, so they can stand out a little bit from other texts. The reading experience is hopefully better than the `verbatim` or `Verbatim` environments. The leading characters `>` and `+` (called prompts) in the output are *not* added by default (you can bring them back by `prompt = TRUE`, though). I find them really annoying in the output when I read the output document, because it is so very inconvenient to copy and run the code which is messed up by these characters.
+Lots of efforts have been made to producing beautiful output and enhancing readability by default. For example, code chunks are highlighted and put in a shaded environment in LaTeX with a very light gray background (the [**framed**](http://www.ctan.org/pkg/framed) package), so they can stand out a little bit from other texts. The reading experience is hopefully better than the `verbatim` or `Verbatim` environments. The leading characters `>` and `+` (called prompts) in the output are *not* added by default (you can bring them back by `prompt = TRUE`, though). I find them really annoying in the output when I read the output document, because it is so very inconvenient to copy and run the code which is messed up by these characters.
 
 ## Acknowledgements
 
-I thank the authors of Sweave, pgfSweave, cacheSweave, brew, decumar, R2HTML, tikzDevice, highlight, digest, evaluate, roxygen2 and of course, R, for the many inspiring ideas and tools. This package was initiated based on the design of decumar.
+I thank the authors of Sweave, pgfSweave, cacheSweave, brew, decumar, R2HTML, tikzDevice, highlight, digest, evaluate, roxygen2 and of course, R, for the many inspiring ideas and tools. I really appreciate the [feedback](https://github.com/yihui/knitr/issues) from many early beta testers. This package was initiated based on the design of decumar.
 
 ## Misc
 
