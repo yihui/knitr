@@ -7,6 +7,7 @@ The R package **knitr** is a general-purpose literate programming engine, with l
 This package is not on CRAN yet. Currently you can either check out the repository with GIT and run `R CMD INSTALL`, or use the **devtools** package to install:
 
 ```r
+## you may need to update your packages first: update.packages()
 library(devtools); install_github('knitr', 'yihui')
 ```
 
