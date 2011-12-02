@@ -134,8 +134,9 @@ wrap.character = function(x, options) {
 wrap.source = function(x, options) {
     ## TODO: optionally highlight code here
     src = x$src
-    if (options$highlight && identical(opts_knit$get('theme'), 'latex')) {
-        src = hilight_latex(str_c(src, collapse = ''), options)
+    if (options$highlight) {
+        theme = opts_knit$get('theme')
+        src = hilight_source(str_c(src, collapse = ''), theme, options)
     } else if (options$prompt) src = sapply(src, evaluate:::line_prompt, USE.NAMES = FALSE)
     src = str_c(src, collapse = '')
     src = str_replace(src, '([^\n]+)$', '\\1\n')

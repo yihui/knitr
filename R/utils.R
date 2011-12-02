@@ -28,13 +28,17 @@ comment_out = function(x, options) {
     } else x
 }
 
-hilight_latex = function(x, options) {
+hiren_latex = renderer_latex(document = FALSE)
+hiren_html = renderer_html(document = FALSE, header = function() '', footer = function() '')
+
+hilight_source = function(x, theme, options) {
+    if (!(theme %in% c('latex', 'html'))) return(x)
     con = textConnection(x)
     on.exit(close(con))
-    out = capture.output(highlight(con, renderer = renderer_latex(document=FALSE), showPrompts = options$prompt))
+    r = if (theme == 'latex') hiren_latex else hiren_html
+    out = capture.output(highlight(con, renderer = r, showPrompts = options$prompt))
     str_c(out, collapse = '\n')
 }
-
 
 is_blank = function(x) {
     str_detect(x, '^\\s*$')

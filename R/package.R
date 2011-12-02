@@ -4,7 +4,7 @@
 ##' @import stringr
 ##' @importFrom tools file_ext
 ##' @importFrom utils modifyList
-##' @importFrom highlight highlight renderer_latex styler boxes_latex
+##' @importFrom highlight highlight renderer_latex renderer_html styler boxes_latex
 NULL
 
 .knitEnv = new.env()
