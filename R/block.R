@@ -60,8 +60,12 @@ block_exec = function(code, ...) {
     env = if (options$cache) new.env(parent = globalenv()) else globalenv()
 
     ## TODO: https://github.com/yihui/knitr/issues/9
-    if (!is.null(formals(getOption('device'))$file))
-        dev.new(file = tempfile()) else dev.new()
+    dargs = formals(getOption('device'))
+    if (!is.null(dargs$file)) {
+        dev.new(file = tempfile())
+    } else if (is.null(dargs)) {
+        pdf(file = tempfile())  # should not use RStudio's GD
+    } else dev.new()
     dv = dev.cur(); on.exit(dev.off(dv))
     dev.control(displaylist = 'enable')  # need to record plots
 
