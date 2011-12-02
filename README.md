@@ -1,10 +1,11 @@
 # knitr
 
-<span style="float:right;"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="xieyihui">Tweet</a>
+<div style="float:right;">
+<a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="xieyihui">Tweet</a>
 
 <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 
-<g:plusone size="small"></g:plusone>
+<div class="g-plusone" data-size="small"></div>
 
 <script type="text/javascript">
   (function() {
@@ -14,7 +15,8 @@
   })();
 </script>
 
-</span>
+</div>
+
 The R package **knitr** is a general-purpose literate programming engine, with lightweight API's designed to give users full control of the output without heavy coding work. It combines many features into one package with slight tweaks motivated from my everyday use of Sweave. See the [package homepage](http://yihui.github.com/knitr) for  details and examples.
 
 ## Installation
