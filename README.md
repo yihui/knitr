@@ -2,6 +2,20 @@
 
 The R package **knitr** is a general-purpose literate programming engine, with lightweight API's designed to give users full control of the output without heavy coding work. It combines many features into one package with slight tweaks motivated from my everyday use of Sweave. See the [package homepage](http://yihui.github.com/knitr) for  details and examples.
 
+## Installation
+
+This package is not on CRAN yet. Currently you can either check out the repository with GIT and run `R CMD INSTALL`, or use the **devtools** package to install:
+
+```r
+library(devtools); install_github('knitr', 'yihui')
+```
+
+Note Windows users have to first install [Rtools](http://www.murdoch-sutherland.com/Rtools/). After the package is released (hopefully in the very near future), you will be able to use the normal approach to install it:
+
+```r
+install.packages('knitr')
+```
+
 ## Motivation
 
 While Sweave and related add-on packages like [**cacheSweave**](http://cran.r-project.org/package=cacheSweave) and [**pgfSweave**](http://cran.r-project.org/package=pgfSweave) are fairly good engines for literate programming in R, but I often feel my hands are tied, for example:
@@ -23,6 +37,7 @@ The package **knitr** was designed to give the user access to every part of the 
 
 ```r
 library(knitr)
+?knit
 knit(input)
 ```
 
