@@ -58,7 +58,7 @@
                    center = 'style="margin: auto; display: block"'))
 }
 .chunk.hook.tex = function(x, options) {
-    if (is_blank(x)) return(x)
+    if (is_blank(x) || options$results %in% c('tex', 'asis')) return(x)
     x = str_c(framed_color(options$background), '\\begin{kframe}\n', x, '\n\\end{kframe}')
     x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
     if (options$split) {
