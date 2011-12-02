@@ -176,6 +176,7 @@ theme_html = function() {
     knit_hooks$restore()
     ## use div with different classes
     html.hook = function(name) {
+        force(name)
         function (x, options) sprintf('<div class="knitr %s">%s</div>\n', name, x)
     }
     z = list()
