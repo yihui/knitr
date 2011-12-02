@@ -1,0 +1,41 @@
+<!--roptions dev=png,width=5,height=5 -->
+<html>
+<head>
+  <title>A minimal knitr example in HTML</title>
+</head>
+<body>
+
+  <p>This is a minimal example which shows <strong>knitr</strong>
+  working with HTML
+  pages. See <a href="https://github.com/downloads/yihui/knitr/knitr-minimal.html">here</a>
+  for the output.</p>
+
+  <p>Boring stuff as usual:</p>
+  
+<!--begin.rcode
+    ## a simple calculator
+    1+1
+    ## boring random numbers
+    set.seed(123)
+    rnorm(5)
+    end.rcode-->
+
+  <p>We can also produce plots (centered by the
+  option <code>align=center</code>):</p>
+
+<!--begin.rcode html-cars-scatter,fig=TRUE,message=FALSE,align=center
+    library(ggplot2)
+    qplot(hp, mpg, data=mtcars)+geom_smooth()
+    end.rcode-->
+
+  <p>Errors, messages and warnings can be put into <code>div</code>'s
+  with different <code>class</code>es:</p>
+
+<!--begin.rcode
+    sqrt(-1)  # warning
+    message('knitr says hello to HTML!')
+    1+'a'  # mission impossible
+    end.rcode-->
+
+</body>
+</html>
