@@ -1,18 +1,23 @@
 # knitr
 
 <div style="float:right;">
+
 <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="xieyihui">Tweet</a>
 
-<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+<script type="text/javascript" src="//platform.twitter.com/widgets.js">
+
+</script>
 
 <div class="g-plusone" data-size="small"></div>
 
 <script type="text/javascript">
+
   (function() {
   var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
   po.src = 'https://apis.google.com/js/plusone.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
   })();
+
 </script>
 
 </div>
