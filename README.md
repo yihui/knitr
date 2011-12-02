@@ -1,27 +1,5 @@
 # knitr
 
-<div style="float:right;">
-
-<a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="xieyihui">Tweet</a>
-
-<script type="text/javascript" src="//platform.twitter.com/widgets.js">
-
-</script>
-
-<div class="g-plusone" data-size="small"></div>
-
-<script type="text/javascript">
-
-  (function() {
-  var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-  po.src = 'https://apis.google.com/js/plusone.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-
-</script>
-
-</div>
-
 The R package **knitr** is a general-purpose literate programming engine, with lightweight API's designed to give users full control of the output without heavy coding work. It combines many features into one package with slight tweaks motivated from my everyday use of Sweave. See the [package homepage](http://yihui.github.com/knitr) for  details and examples.
 
 ## Installation
