@@ -22,4 +22,4 @@ str(all_patterns)
 \references{
   Usage: \url{http://yihui.github.com/knitr/patterns}
 }
-\keyword{dataset}
+\keyword{datasets}

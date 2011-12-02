@@ -23,4 +23,4 @@ opts_chunk$get("fig.hold")
   A list of available options:
   \url{http://yihui.github.com/knitr/options#chunk_options}
 }
-\keyword{dataset}
+\keyword{datasets}

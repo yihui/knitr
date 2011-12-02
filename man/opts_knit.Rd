@@ -25,4 +25,4 @@ opts_knit$set(verbose = TRUE)  # change it
   A list of available options:
   \url{http://yihui.github.com/knitr/options#package_options}
 }
-\keyword{dataset}
+\keyword{datasets}

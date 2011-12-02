@@ -26,4 +26,4 @@ knit_hooks$get("inline")
   Components in \code{knit_hooks}:
   \url{http://yihui.github.com/knitr/hooks}
 }
-\keyword{dataset}
+\keyword{datasets}
