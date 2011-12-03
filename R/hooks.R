@@ -57,6 +57,12 @@
                    right = 'style="float: right"',
                    center = 'style="margin: auto; display: block"'))
 }
+.plot.hook.markdown = function(x, options) {
+    base = opts_knit$get('base.url')
+    if (is.null(base)) base = ''
+    sprintf('![plot of chunk %s](%s%s.%s)', options$label,
+            base, x[1], x[2])
+}
 .chunk.hook.tex = function(x, options) {
     if (is_blank(x) || options$results %in% c('tex', 'asis')) return(x)
     x = str_c(framed_color(options$background), '\\begin{kframe}\n', x, '\n\\end{kframe}')
@@ -197,12 +203,7 @@ theme_markdown = function() {
     knit_hooks$set(source = hook.t, output = hook.t, warning = hook.t,
                    error = hook.t, message = hook.t,
                    inline = function(x) sprintf('`%s`', .inline.hook(x)),
-                   plot = function(x, options) {
-                       base = opts_knit$get('base.url')
-                       if (is.null(base)) base = ''
-                       sprintf('![plot of chunk %s](%s%s.%s)', options$label,
-                               base, x[1], x[2])
-                   })
+                   plot = .plot.hook.markdown)
 }
 ##' @rdname themes
 ##' @export
