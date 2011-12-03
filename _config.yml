@@ -4,6 +4,6 @@ destination: ./_site
 plugins:     ./_plugins
 
 pygments:    true 
-permalink:   /knitr/:categories/:title
+permalink:   /knitr/:categories/:title/
 markdown:    redcarpet
 
