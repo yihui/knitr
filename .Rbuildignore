@@ -11,4 +11,5 @@ inst/examples/figure
 inst/examples/ex-out*
 knitr-minimal.html
 knitr-minimal.md
+knitr-latex.tex
 png$

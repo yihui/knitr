@@ -8,4 +8,5 @@ knitr-*.pdf
 inst/examples/figure
 inst/examples/ex-out*
 knitr-minimal.html
+knitr-latex.tex
 
