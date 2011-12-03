@@ -2332,7 +2332,7 @@ status open
 
 \begin_layout Plain Layout
 
-system.file('doc', 'knitr-manual.lyx', package='knitr')  # lyx source
+system.file('examples', 'knitr-manual.lyx', package='knitr')  # lyx source
 \end_layout
 
 \begin_layout Plain Layout

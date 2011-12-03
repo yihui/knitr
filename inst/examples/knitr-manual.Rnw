@@ -620,7 +620,7 @@ The \LyX{} source and the Rnw document exported from \LyX{} can be
 found under these directories:
 
 <<source-location,eval=FALSE>>=
-system.file('doc', 'knitr-manual.lyx', package='knitr')  # lyx source
+system.file('examples', 'knitr-manual.lyx', package='knitr')  # lyx source
 system.file('examples', 'knitr-manual.Rnw', package='knitr')  # Rnw source
 @
 
