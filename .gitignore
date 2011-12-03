@@ -4,6 +4,8 @@
 *.aux
 *.log
 *.out
-noinstall
 knitr-*.pdf
-vignettes/figure
+inst/examples/figure
+inst/examples/ex-out*
+knitr-minimal.html
+
