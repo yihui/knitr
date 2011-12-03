@@ -152,12 +152,13 @@ theme_latex = function() {
     }
     set_header(framed = .header.framed, highlight = .header.hi.tex)
     knit_hooks$restore()
-    verb.hook = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
+    hook.v = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
+    hook.o = function(x, options) if (output_asis(x, options)) x else hook.v(x, options)
     knit_hooks$set(source = function(x, options) {
         if (options$highlight) {
             str_c('\\begin{flushleft}\n', x, '\\end{flushleft}\n')
-        } else verb.hook(x, options)}, output = verb.hook,
-                   warning = verb.hook, message = verb.hook, error = verb.hook,
+        } else hook.v(x, options)}, output = hook.o,
+                   warning = hook.v, message = hook.v, error = hook.v,
                    inline = function(x) {
                        sprintf('\\verb|%s|', .inline.hook(x))
                    }, plot = .plot.hook.tex,
@@ -169,10 +170,11 @@ theme_sweave = function() {
     knit_hooks$restore()
     ## wrap source code in the Sinput environment, output in Soutput
     hook.i = function(x, options) str_c('\\begin{Sinput}\n', x, '\\end{Sinput}\n')
-    hook.o = function(x, options) str_c('\\begin{Soutput}\n', x, '\\end{Soutput}\n')
+    hook.s = function(x, options) str_c('\\begin{Soutput}\n', x, '\\end{Soutput}\n')
+    hook.o = function(x, options) if (output_asis(x, options)) x else hook.s(x, options)
     hook.c = function(x, options) str_c('\\begin{Schunk}\n', x, '\\end{Schunk}\n')
-    knit_hooks$set(source = hook.i, output = hook.o, warning = hook.o,
-                   message = hook.o, error = hook.o, inline = identity,
+    knit_hooks$set(source = hook.i, output = hook.o, warning = hook.s,
+                   message = hook.s, error = hook.s, inline = identity,
                    plot = function(x, options) sprintf('\\includegraphics{%s}', x[1]),
                    chunk = hook.c)
 }
@@ -200,7 +202,8 @@ theme_markdown = function() {
     knit_hooks$restore()
     ## four spaces lead to <pre></pre>
     hook.t = function(x, options) evaluate:::line_prompt(x, '    ', '    ')
-    knit_hooks$set(source = hook.t, output = hook.t, warning = hook.t,
+    hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
+    knit_hooks$set(source = hook.t, output = hook.o, warning = hook.t,
                    error = hook.t, message = hook.t,
                    inline = function(x) sprintf('`%s`', .inline.hook(x)),
                    plot = .plot.hook.markdown)
@@ -212,7 +215,8 @@ theme_gfm = function() {
     theme_markdown()
     hook.r = function(x, options) str_c('```r\n', x, '```\n')
     hook.t = function(x, options) str_c('```\n', x, '```\n')
-    knit_hooks$set(source = hook.r, output = hook.t, warning = hook.t,
+    hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
+    knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
                    error = hook.t, message = hook.t)
 }
 ##' @rdname themes
@@ -221,7 +225,8 @@ theme_jekyll = function() {
     theme_markdown()
     hook.r = function(x, options) str_c('{% highlight r %}\n', x, '{% endhighlight %}\n')
     hook.t = function(x, options) str_c('{% highlight text %}\n', x, '{% endhighlight %}\n')
-    knit_hooks$set(source = hook.r, output = hook.t, warning = hook.t,
+    hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
+    knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
                    error = hook.t, message = hook.t)
 }
 ## may add textile, ReST and many other markup languages
