@@ -247,11 +247,20 @@ hook_rgl = function(before, options, envir) {
     name = paste(valid_prefix(options$prefix.string), options$label, sep = '')
     par3d(windowRect = 100 + options$dpi * c(0, 0, options$width, options$height))
     Sys.sleep(.05) # need time to respond to window size change
+
+    theme = opts_knit$get('theme')
+    if (theme %in% c('html', 'markdown', 'gfm', 'jekyll')) options$dev = 'png'
+
     ## support 3 formats: eps, pdf and png (default)
     switch(options$dev,
            postscript = rgl.postscript(paste(name, '.eps', sep = ''), fmt = 'eps'),
            pdf = rgl.postscript(paste(name, '.pdf', sep = ''), fmt = 'pdf'),
            rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png'))
+
+    if (theme == 'html') return(.plot.hook.html(c(name, 'png'), options))
+    if (theme %in% c('markdown', 'gfm', 'jekyll'))
+        return(.plot.hook.markdown(c(name, 'png'), options))
+
     paste(ifelse(options$align == 'center', '\\centering{}', ''), '\\includegraphics[',
           sprintf('width=%s', options$out.width), ']{', name, '}\n', sep = '')
 }
