@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Demo 
+title: Demos
 ---
 
 <div id="home">
