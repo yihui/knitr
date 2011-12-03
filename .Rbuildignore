@@ -6,3 +6,9 @@ tikzDictionary$
 aux$
 log$
 out$
+knitr-.*.pdf
+inst/examples/figure
+inst/examples/ex-out*
+knitr-minimal.html
+knitr-minimal.md
+png$
