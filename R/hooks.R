@@ -49,7 +49,7 @@
 .plot.hook.html = function(x, options) {
     ## TODO: output size not implemented for HTML yet
     a = options$align
-    sprintf('<img src="%s" class="knitr plot" %s/>\n',
+    sprintf('<img src="%s" class="plot" %s/>\n',
             paste(x, collapse = '.'),
             switch(a,
                    default = '',
