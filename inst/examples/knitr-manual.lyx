@@ -95,8 +95,8 @@ status open
 
 % 
 \backslash
-SweaveOpts{prefix.string=figure/manual-,prefix.cache=figure/manual-,align=center,e
-xternal=TRUE,fig.hold=TRUE}
+SweaveOpts{prefix.string=figure/manual-,prefix.cache=cache/manual-,align=center,ex
+ternal=TRUE,fig.hold=TRUE}
 \end_layout
 
 \end_inset
