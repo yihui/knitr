@@ -39,7 +39,7 @@
 
 \begin{document}
 
-% \SweaveOpts{prefix.string=figure/manual-,prefix.cache=figure/manual-,align=center,external=TRUE,fig.hold=TRUE}
+% \SweaveOpts{prefix.string=figure/manual-,prefix.cache=cache/manual-,align=center,external=TRUE,fig.hold=TRUE}
 
 <<setup,echo=FALSE,results=hide,message=FALSE>>=
 options(replace.assign=TRUE,width=90)
@@ -354,7 +354,10 @@ was created, so the ``externalization'' does not depend on the \textbf{tikz}
 package; to maintain consistency in (font) styles, \textbf{knitr}
 will read the preamble of the input document and use it in the tikz
 device. At the moment, I'm not sure if this is a faithful way to externalize
-tikz graphics, but I have not seen any problems so far. 
+tikz graphics, but I have not seen any problems so far. The assumption
+to make, however, is that you declare all the styles in the preamble;
+\textbf{knitr} is agnostic of \emph{local} style changes in the body
+of the document.
 
 Below is an example taken from StackOverflow%
 \footnote{\url{http://stackoverflow.com/q/8190087/559676}%
@@ -515,6 +518,12 @@ demo('bivar', package='rgl', echo=FALSE)
 par3d(zoom=.7)
 @
 
+Due to the flexibility of output hooks, \textbf{knitr} supports several
+different output formats. The implementation is fairly easy, e.g.,
+for \LaTeX{} we put R output in \texttt{verbatim} environments, and
+in HTML, it is only a matter of putting output in a \texttt{div} layer.
+These are simply character string operations.
+
 
 \section{Comparison}
 
@@ -590,7 +599,8 @@ since R's default is often too wide (besides, the \texttt{useFancyQuotes}
 option is set to \texttt{FALSE} to avoid a common problem caused by
 multi-byte characters, and \texttt{digits} is set to 4 to avoid too
 many digits)
-\item [{A.13}] hooks can be used to obtain HTML output
+\item [{A.13}] \textbf{knitr} comes with a set of hooks to deal with HTML
+output (see \href{https://github.com/yihui/knitr/tree/master/inst/examples}{demos in the website})
 \end{description}
 It also has some differences with \textbf{pgfSweave} and \textbf{cacheSweave}:
 \begin{itemize}
