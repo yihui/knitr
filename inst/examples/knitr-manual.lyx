@@ -1966,6 +1966,24 @@ par3d(zoom=.7)
 
 \end_layout
 
+\begin_layout Standard
+Due to the flexibility of output hooks, 
+\series bold
+knitr
+\series default
+ supports several different output formats.
+ The implementation is fairly easy, e.g., for LaTeX we put R output in 
+\family typewriter
+verbatim
+\family default
+ environments, and in HTML, it is only a matter of putting output in a 
+\family typewriter
+div
+\family default
+ layer.
+ These are simply character string operations.
+\end_layout
+
 \begin_layout Section
 Comparison
 \end_layout
