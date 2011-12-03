@@ -6,7 +6,7 @@ new_cache = function() {
 
     cache_path = function(hash) {
         d = dirname(hash)
-        if (!file.exists(d)) dir.create(d, showWarnings = FALSE)
+        if (!file.exists(d)) dir.create(d, showWarnings = FALSE, recursive = TRUE)
         hash
     }
 

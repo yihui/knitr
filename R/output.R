@@ -169,7 +169,7 @@ wrap.recordedplot = function(x, options) {
     prefix = valid_prefix(options$prefix.string)
     name = str_c(prefix, options$label, ifelse(plot.cur == 0L, '', plot.cur))
     if (!file.exists(dirname(name)))
-        dir.create(dirname(name)) # automatically creates dir for plots
+        dir.create(dirname(name), recursive = TRUE) # automatically creates dir for plots
 
     name.ext = save_plot(x, name, options)
     knit_hooks$get('plot')(name.ext, options)
