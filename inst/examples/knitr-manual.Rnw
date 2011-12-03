@@ -172,7 +172,7 @@ a hook function for the source code like this to use the \texttt{lstlisting}
 environment:
 
 <<hook-source,eval=FALSE>>=
-hooks$set(source = function(x, options) {
+knit_hooks$set(source = function(x, options) {
 paste('\\begin{lstlisting}\n', x, '\\end{lstlisting}\n', sep = '')
 })
 @

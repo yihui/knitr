@@ -640,7 +640,7 @@ status open
 
 \begin_layout Plain Layout
 
-hooks$set(source = function(x, options) {
+knit_hooks$set(source = function(x, options) {
 \end_layout
 
 \begin_layout Plain Layout
