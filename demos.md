@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Demos
+subtitle: Source and output of demos
 ---
 
 <div id="home">
