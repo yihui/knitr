@@ -1,4 +1,4 @@
-<!--roptions dev=png,width=5,height=5 -->
+<!--roptions dev=png,width=5,height=5,prefix.string=ex-out- -->
 <html>
 <head>
   <title>A minimal knitr example in HTML</title>
@@ -36,6 +36,23 @@
     message('knitr says hello to HTML!')
     1+'a'  # mission impossible
     end.rcode-->
+
+  <p>In the end, let's show off a 3D plot from
+  the <strong>rgl</strong> package.</p>
+
+<!--begin.rcode
+    knit_hooks$set(rgl = hook_rgl)  # set up the hook first
+    end.rcode-->
+
+<!--begin.rcode fancy-rgl,rgl=TRUE,align=center,width=4,height=4
+    if (require('rgl')) {
+    demo('bivar', package='rgl', echo=FALSE) 
+    par3d(zoom=.7)
+    }
+    end.rcode-->
+
+  <p>Well, everything seems to be working. Let's ask R what is the
+  value of &pi;? Of course it is <!--rinline pi -->.</p>
 
 </body>
 </html>
