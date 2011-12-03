@@ -227,6 +227,9 @@ figcaption,
 .readingTime {
   color: #CD0021;
 }
+#home li span {
+  color: #696969;
+}
 body,
 .links span,
 .byline dt,
