@@ -45,6 +45,8 @@ Description: This package provides a general-purpose tool
     specified R code fragment before or after a code chunk.
     Most features are borrowed or inspired by Sweave,
     cacheSweave, pgfSweave, brew and decumar.
+Depends:
+    R (>= 2.14.0)
 Imports:
     evaluate (>= 0.4),
     digest,
