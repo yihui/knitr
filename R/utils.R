@@ -101,3 +101,7 @@ pure_preamble = function(preamble, chunk.begin, chunk.end) {
     idx = unlist(mapply(seq, from = blks, to = ends, SIMPLIFY = FALSE))
     preamble[-idx]
 }
+## whether to write results as-is?
+output_asis = function(x, options) {
+    is_blank(x) || options$results %in% c('tex', 'asis')
+}

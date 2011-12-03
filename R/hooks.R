@@ -64,7 +64,7 @@
             base, x[1], x[2])
 }
 .chunk.hook.tex = function(x, options) {
-    if (is_blank(x) || options$results %in% c('tex', 'asis')) return(x)
+    if (output_asis(x, options)) return(x)
     x = str_c(framed_color(options$background), '\\begin{kframe}\n', x, '\n\\end{kframe}')
     x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
     if (options$split) {
