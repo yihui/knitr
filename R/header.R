@@ -64,13 +64,14 @@ set_header = function(...) {
           boxes_latex()), collapse = '\n')
 .header.hi.html =
     str_c(c('<style type="text/css">', '.knitr {
-	background-color: #EEE;
-        padding: 1em;
+	background-color: #F7F7F7;
 }', '.error {
 	font-weight: bold;
-        color: #FF0000;
+	color: #FF0000;
 }', '.warning {
 	font-weight: bold;
 }', '.message {
-        font-style: italic;
+	font-style: italic;
+}', '.source, .output, .warning, .error, .message {
+	padding: 0.5em 1em;
 }', styler('default'), '</style>'), collapse = '\n')
