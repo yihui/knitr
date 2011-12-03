@@ -2247,7 +2247,19 @@ digits
 \end_layout
 
 \begin_layout Description
-A.13 hooks can be used to obtain HTML output
+A.13 
+\series bold
+knitr
+\series default
+ comes with a set of hooks to deal with HTML output (see 
+\begin_inset CommandInset href
+LatexCommand href
+name "demos in the website"
+target "https://github.com/yihui/knitr/tree/master/inst/examples"
+
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Standard
