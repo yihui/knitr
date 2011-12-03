@@ -1373,7 +1373,16 @@ knitr
  will read the preamble of the input document and use it in the tikz device.
  At the moment, I'm not sure if this is a faithful way to externalize tikz
  graphics, but I have not seen any problems so far.
- 
+ The assumption to make, however, is that you declare all the styles in
+ the preamble; 
+\series bold
+knitr
+\series default
+ is agnostic of 
+\emph on
+local
+\emph default
+ style changes in the body of the document.
 \end_layout
 
 \begin_layout Standard
