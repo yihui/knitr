@@ -160,7 +160,7 @@ theme_latex = function() {
         } else hook.v(x, options)}, output = hook.o,
                    warning = hook.v, message = hook.v, error = hook.v,
                    inline = function(x) {
-                       sprintf('\\verb|%s|', .inline.hook(x))
+                       sprintf('\\texttt{%s}', .inline.hook(x))
                    }, plot = .plot.hook.tex,
                    chunk = .chunk.hook.tex)
 }
