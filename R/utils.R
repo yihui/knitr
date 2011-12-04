@@ -59,11 +59,12 @@ framed_color = function(x) {
 }
 
 ## whether dependent chunks have changed; if so, invalidate cache for this chunk
-dependson_changed = function(labels) {
+dependson_changed = function(labels, prefix) {
     if (is.null(labels)) return(FALSE)
-    if (!file.exists(d <- opts_knit$get('cache.dir'))) return(FALSE)
+    if (!file.exists(d <- dirname(prefix))) return(FALSE)
+    base = if (isTRUE(file.info(prefix)[, 'isdir'])) '' else basename(prefix)
     for (f in str_split(labels, fixed(';'))[[1]]) {
-        p = list.files(d, str_c(f, '_[[:alnum:]]{32}\\.(rdb|rdx)'), full.names = TRUE)
+        p = list.files(d, str_c(base, f, '_[[:alnum:]]{32}\\.(rdb|rdx)'), full.names = TRUE)
         if (length(p)) {
             if (any(file.exists(unique(str_replace(p, '\\.(rdb|rdx)$', '_changed')))))
                 return(TRUE)

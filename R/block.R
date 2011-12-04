@@ -30,7 +30,7 @@ call_block = function(block) {
     hash = str_c(valid_prefix(params$prefix.cache), params$label, '_', digest(params))
     params = c(params, list(hash = hash))
     if (params$cache && cache$exists(hash)) {
-        if (!dependson_changed(params$dependson)) {
+        if (!dependson_changed(params$dependson, params$prefix.cache)) {
             cache$load(hash)
             cache$unmark(hash)
             return(cache$output(hash))
