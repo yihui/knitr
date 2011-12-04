@@ -1,0 +1,150 @@
+%% LyX 2.1.0svn created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[10pt]{beamer}
+\usepackage[T1]{fontenc}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+\usepackage{url}
+\ifx\hypersetup\undefined
+  \AtBeginDocument{%
+    \hypersetup{unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false}
+  }
+\else
+  \hypersetup{unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false}
+\fi
+\usepackage{breakurl}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\providecommand{\LyX}{\texorpdfstring%
+  {L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
+  {LyX}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+ % this default might be overridden by plain title style
+ \newcommand\makebeamertitle{\frame{\maketitle}}%
+ \AtBeginDocument{
+   \let\origtableofcontents=\tableofcontents
+   \def\tableofcontents{\@ifnextchar[{\origtableofcontents}{\gobbletableofcontents}}
+   \def\gobbletableofcontents#1{\origtableofcontents}
+ }
+ \def\lyxframeend{} % In case there is a superfluous frame end
+ \long\def\lyxframe#1{\@lyxframe#1\@lyxframestop}%
+ \def\@lyxframe{\@ifnextchar<{\@@lyxframe}{\@@lyxframe<*>}}%
+ \def\@@lyxframe<#1>{\@ifnextchar[{\@@@lyxframe<#1>}{\@@@lyxframe<#1>[]}}
+ \def\@@@lyxframe<#1>[{\@ifnextchar<{\@@@@@lyxframe<#1>[}{\@@@@lyxframe<#1>[<*>][}}
+ \def\@@@@@lyxframe<#1>[#2]{\@ifnextchar[{\@@@@lyxframe<#1>[#2]}{\@@@@lyxframe<#1>[#2][]}}
+ \long\def\@@@@lyxframe<#1>[#2][#3]#4\@lyxframestop#5\lyxframeend{%
+   \frame<#1>[#2][#3]{\frametitle{#4}#5}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usetheme{PaloAlto}
+% use footnotesize for knitr output
+\ifdefined\knitrout
+  \renewenvironment{knitrout}{\begin{footnotesize}}{\end{footnotesize}}
+\else
+\fi
+
+\makeatother
+
+\begin{document}
+
+% \SweaveOpts{prefix.string=figure/beamer-,align=center,fig.hold=TRUE,size=footnotesize}
+
+
+\title[knitr, Beamer, and FragileFrame]{A Minimal Demo of knitr with Beamer and Fragile Frames}
+
+
+\author{Yihui Xie%
+\thanks{I thank Richard E. Goldberg for providing this demo.%
+}}
+
+\makebeamertitle
+
+\lyxframeend{}
+
+
+\lyxframeend{}\lyxframe{Background}
+\begin{itemize}
+\item The \textbf{knitr}\textbf{\emph{ }}package allows you to embed R code
+and figures in \LaTeX{} documents
+
+\begin{itemize}
+\item It has functionality similar to Sweave but looks nicer and gives you
+more control
+\end{itemize}
+\item If you already have Sweave working in \LyX{}, getting \textbf{knitr}
+to work is trivial
+
+\begin{enumerate}
+\item Install the \textbf{knitr} package in \emph{R}
+\item Read \url{http://yihui.github.com/knitr/demo/lyx/}
+\end{enumerate}
+\item If you use Sweave or \textbf{knitr} with Beamer in \LyX{}, you probably
+use the FragileFrame module too. Let's see if \textbf{knitr} works
+with Beamer and FragileFrame in this small demo. 
+\end{itemize}
+
+\lyxframeend{}\section{First Test}
+
+\begin{frame}
+[fragile]
+\frametitle{First Test}
+
+OK, let's get started with just some text:
+
+<<echo=FALSE,results=hide>>=
+# some setup
+options(width=60)  # make the printing fit on the page
+set.seed(1121)   # make the results repeatable
+@
+
+<<>>= 
+# create some random numbers
+(x=rnorm(20))  
+mean(x);var(x)  
+@
+
+BTW, the first element of \texttt{x} is \Sexpr{x[1]}. (Did you notice
+the use of\texttt{ \textbackslash{}Sexpr\{\}}.)
+\end{frame}
+
+
+
+\lyxframeend{}\section{Second Test}
+
+\begin{frame}
+[fragile]
+\frametitle{Second Test}
+
+Text is nice but let's see what happens if we make a couple of plots
+in our chunk:
+
+<<boring-plots,fig=TRUE,width=4,height=4,out.width=.45\linewidth>>=
+par(las=1,mar=c(4,4,.1,.1))  # tick labels direction
+boxplot(x) 
+hist(x,main='',col="blue",probability=TRUE) 
+lines(density(x),col="red")
+@
+\end{frame}
+
+
+
+\lyxframeend{}\section{The Big Question}
+
+
+\lyxframeend{}\lyxframe{The Big Question}
+
+Do the above chunks work? You should be able to compile the \LyX{}
+document and get a nice-looking PDF slide presentation. If not, time
+to double-check everything...
+
+
+\lyxframeend{}
+
+\end{document}
