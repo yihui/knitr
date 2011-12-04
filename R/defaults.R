@@ -37,7 +37,8 @@ opts_chunk =
                       out.width = NULL, out.height = NULL,
                       resize.width = NULL, resize.height = NULL, align = 'default',
                       external = FALSE, sanitize = FALSE,
-                      fig.hold = FALSE, fig.last = FALSE, highlight = TRUE,
+                      fig.hold = FALSE, fig.last = FALSE,
+                      highlight = TRUE, size = 'normalsize',
                       warning = TRUE, error = TRUE, message = TRUE,
                       background = '.97;.97;.97', split = FALSE, include = TRUE,
                       animate = FALSE, interval = 1, aniopts = 'controls;loop'))

@@ -36,7 +36,7 @@ hilight_source = function(x, theme, options) {
     con = textConnection(x)
     on.exit(close(con))
     r = if (theme == 'latex') hiren_latex else hiren_html
-    out = capture.output(highlight(con, renderer = r, showPrompts = options$prompt))
+    out = capture.output(highlight(con, renderer = r, showPrompts = options$prompt, size = options$size))
     str_c(out, collapse = '\n')
 }
 
