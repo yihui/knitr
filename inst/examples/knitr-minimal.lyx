@@ -94,7 +94,7 @@ status open
 
 % 
 \backslash
-SweaveOpts{prefix.string=figure/miminal-,align=center,external=TRUE,fig.hold=TRUE}
+SweaveOpts{prefix.string=figure/minimal-,align=center,external=TRUE,fig.hold=TRUE}
 \end_layout
 
 \end_inset

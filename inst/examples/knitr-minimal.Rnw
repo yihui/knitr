@@ -29,7 +29,7 @@
 
 \begin{document}
 
-% \SweaveOpts{prefix.string=figure/miminal-,align=center,external=TRUE,fig.hold=TRUE}
+% \SweaveOpts{prefix.string=figure/minimal-,align=center,external=TRUE,fig.hold=TRUE}
 
 <<setup,echo=FALSE,results=hide,message=FALSE>>=
 options(replace.assign=TRUE,width=90)
