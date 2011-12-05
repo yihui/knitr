@@ -15,3 +15,8 @@ The key to use code reference is the `ref` option; it specifies a filename, e.g.
   - Rnw source: [Stat579-HW8-Xie.Rnw](https://github.com/downloads/yihui/knitr/Stat579-HW8-Xie.Rnw)
   - R source: [Stat579-HW8-Xie.R](https://github.com/downloads/yihui/knitr/Stat579-HW8-Xie.R)
   - PDF output: [Stat579-HW8-Xie.pdf](https://github.com/downloads/yihui/knitr/Stat579-HW8-Xie.pdf)
+- Another homework
+  - Rnw source: [Stat546-HW4-Xie.Rnw](https://github.com/downloads/yihui/knitr/Stat546-HW4-Xie.Rnw)
+  - R source: [Stat546-HW4-Xie.R](https://github.com/downloads/yihui/knitr/Stat546-HW4-Xie.R)
+  - data source: [GOOG2010.csv](https://github.com/downloads/yihui/knitr/GOOG2010.csv)
+  - PDF output: [Stat546-HW4-Xie.pdf](https://github.com/downloads/yihui/knitr/Stat546-HW4-Xie.pdf)
