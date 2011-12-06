@@ -78,7 +78,7 @@ in \textbf{knitr} come naturally as users would have expected. Figure
 \begin{figure}
 <<cars-demo,fig=TRUE,dev=tikz,width=4,height=2.8,out.width=.45\textwidth,message=FALSE,cache=TRUE>>=
 fit=lm(dist~speed,data=cars) # linear regression
-par(mar=c(4, 4, 1, .1), mgp=c(2,1,0))
+par(mar=c(4, 4, 1, .1), mgp=c(2,1,0),bg='white')
 with(cars,plot(speed,dist,panel.last=abline(fit)))
 text(10,100,'$Y = \\beta_0 + \\beta_1x + \\epsilon$')
 library(ggplot2)
