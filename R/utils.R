@@ -106,3 +106,10 @@ pure_preamble = function(preamble, chunk.begin, chunk.end) {
 output_asis = function(x, options) {
     is_blank(x) || options$results %in% c('tex', 'asis')
 }
+
+## path relative to dir of the input file
+input_dir = function() {
+    id = opts_knit$get('input.dir')
+    if (is.null(id)) return('.')
+    id
+}

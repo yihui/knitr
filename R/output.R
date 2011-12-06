@@ -43,6 +43,7 @@ knit = function(input, output, pattern, tangle = FALSE) {
 
     owd = setwd(dirname(input)); on.exit(setwd(owd), add = TRUE)
     oopts = opts_knit$get(); on.exit(opts_knit$set(oopts), add = TRUE)
+    opts_knit$set(input.dir = getwd())  # record current working dir
     ohooks = knit_hooks$get(); on.exit(knit_hooks$set(ohooks), add = TRUE)
     if (is.null(oopts$theme)) {
         theme =
