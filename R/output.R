@@ -66,6 +66,7 @@ knit = function(input, output, pattern, tangle = FALSE) {
     on.exit(options(oopts), add = TRUE)
 
     res = process_file(basename(input), tangle)
+    setwd(input_dir())
     cat(res, file = output)
     message('output file: ', normalizePath(output))
 }
