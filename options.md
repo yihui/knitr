@@ -48,7 +48,7 @@ And `\SweaveOpts{comment=#, width=6, height=6}` can change the default global op
 - `error`: (`TRUE`) whether to show errors (from `stop()`) (by default, the evaluation will not stop even in case of errors!!)
 - `message`: (`TRUE`) whether to show messages emitted by `message()`
 - `highlight`: (`TRUE`) whether to highlight the source code
-- `size`: (`normalsize`) font size for highlighting (see the `highlight()` function in the **highlight** package)
+- `size`: (`normalsize`) font size for highlighting some special characters such as the prompts `>` (see `?highlight` in the **highlight** package for details); to change the font size for the whole chunk, you can redefine the `knitrout` environment in the LaTeX preamble (see the chunk hook in the [hooks](/knitr/hooks) page and [an example](/knitr/demo/beamer))
 - `background`: (`.97;.97;.97`) background color of chunks in LaTeX output (passed to the LaTeX package **framed**); the color model is `rgb`; the three numbers, all between 0 and 1, should be separated by `;` (very important because `,` is reserved as the separator of chunk options)
 - `split`: (`FALSE`) whether to split the output from R into separate files and include them into LaTeX by `\input{}` (for LaTeX only)
 - `include`: (`TRUE`) whether to include the chunk output in the final output document when `split=TRUE` and graphics output (if `include=FALSE`, you may want to manually insert output somewhere; this option is for LaTeX only)
