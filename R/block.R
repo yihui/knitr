@@ -27,7 +27,9 @@ call_block = function(block) {
     if (params$dev == 'tikz') set_header(tikz = '\\usepackage{tikz}')
 
     ## Check cache
-    hash = str_c(valid_prefix(params$prefix.cache), params$label, '_', digest(params))
+    hash =
+        str_c(valid_prefix(params$prefix.cache), params$label, '_',
+              digest(list(params, getOption('width'))))
     params = c(params, list(hash = hash))
     if (params$cache && cache$exists(hash)) {
         if (!dependson_changed(params$dependson, params$prefix.cache)) {
