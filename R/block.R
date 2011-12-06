@@ -71,8 +71,6 @@ block_exec = function(code, ...) {
 
     res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
     res = evaluate(code, envir = env) # run code
-    res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
-    if (options$cache) copy_env(env, globalenv())
 
     ## remove some components according options
     if (!options$echo)
@@ -121,6 +119,10 @@ block_exec = function(code, ...) {
     }
 
     output = str_c(unlist(wrap(res, options)), collapse = '') # wrap all results together
+
+    res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
+    if (options$cache) copy_env(env, globalenv())
+
     output = str_c(c(res.before, output, res.after), collapse = '')  # insert hook results
     output = if (length(output) == 0L) '' else knit_hooks$get('chunk')(output, options)
     plot_counter(reset = TRUE)  # restore plot number
