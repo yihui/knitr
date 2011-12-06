@@ -75,8 +75,6 @@ save_plot = function(plot, name, options) {
 
                get(dev))
 
-    owd1 = setwd(input_dir())
-
     ## re-plot the recorded plot to an off-screen device
     device(path, width = options$width, height = options$height)
     print(plot)
@@ -96,8 +94,6 @@ save_plot = function(plot, name, options) {
             stop('failed to compile ', path, ' to PDF', call. = FALSE)
         }
     }
-
-    setwd(owd1)
 
     invisible(c(name, ext))
 }
