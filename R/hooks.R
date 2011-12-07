@@ -159,6 +159,8 @@ theme_latex = function() {
         } else hook.v(x, options)}, output = hook.o,
                    warning = hook.v, message = hook.v, error = hook.v,
                    inline = function(x) {
+                       if (is.numeric(x))
+                           return(.inline.hook(format_sci(x, 'latex')))
                        sprintf('\\texttt{%s}', .inline.hook(x))
                    }, plot = .plot.hook.tex,
                    chunk = .chunk.hook.tex)
@@ -191,9 +193,9 @@ theme_html = function() {
     for (i in c('source', 'output', 'warning', 'message', 'error'))
         z[[i]] = html.hook(i)
     knit_hooks$set(z)
-    knit_hooks$set(inline = function(x)
-                   sprintf('<code class="knitr inline">%s</code>', .inline.hook(x)),
-                   plot = .plot.hook.html, chunk = .chunk.hook.html)
+    knit_hooks$set(inline = function(x) {
+        sprintf('<code class="knitr inline">%s</code>', .inline.hook(format_sci(x, 'html')))
+    }, plot = .plot.hook.html, chunk = .chunk.hook.html)
 }
 ##' @rdname themes
 ##' @export
@@ -204,7 +206,7 @@ theme_markdown = function() {
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
     knit_hooks$set(source = hook.t, output = hook.o, warning = hook.t,
                    error = hook.t, message = hook.t,
-                   inline = function(x) sprintf('`%s`', .inline.hook(x)),
+                   inline = function(x) sprintf('`%s`', .inline.hook(format_sci(x, 'html'))),
                    plot = .plot.hook.markdown)
 }
 ##' @rdname themes
