@@ -1,7 +1,7 @@
 ## ideas borrowed from cacheSweave but not as sophisticated
 
 ## ideas adapted from Hadley's decumar: https://github.com/hadley/decumar
-## but it is using R image files (.RData) as 'hard cache' (instead of cache in memory)
+## but it is using .rdb and .rdx as 'hard cache' (instead of cache in memory)
 new_cache = function() {
 
     cache_path = function(hash) {
