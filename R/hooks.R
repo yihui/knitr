@@ -82,7 +82,6 @@
 
 ## format a single inline object
 .inline.hook = function(x) {
-    if (is.numeric(x)) x = formatC(x)
     paste(as.character(x), collapse = ', ')
 }
 
