@@ -72,8 +72,8 @@ all_patterns =
 
          `html` = list(chunk.begin = '^<!--\\s*begin.rcode\\s*(.*)',
          chunk.end = '^\\s*end.rcode\\s*-->',
-         inline.code = '<!--\\s*rinline\\s*(.*)\\s*-->',
-         global.options = '<!--\\s*roptions\\s*(.*)\\s*-->',
+         inline.code = '<!--\\s*rinline\\s*([^>]*)\\s*-->',
+         global.options = '<!--\\s*roptions\\s*([^>]*)\\s*-->',
          header.begin = '\n*\\s*<head>',
          ref.label = '^## @knitr (.*)$'))
 
