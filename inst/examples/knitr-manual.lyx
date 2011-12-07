@@ -741,11 +741,20 @@ key "cacheSweave-manual"
 \backslash
 Sexpr{x[1]}
 \family default
-) is formatted by 
-\emph on
-formatC()
-\emph default
- if the result is numeric so we do not get too many digits by default.
+) is automatically formatted in TeX math notation (like 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{123456789}
+\end_layout
+
+\end_inset
+
+) if the result is numeric, and we will not get too many digits by default.
 \end_layout
 
 \begin_layout Subsection

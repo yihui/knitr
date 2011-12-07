@@ -197,8 +197,8 @@ now. There are several other small features which are motivated from
 my everyday use of Sweave. For example, a progress bar is provided
 when knitting a file so we roughly know how long we still need to
 wait; output from inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}})
-is formatted by \emph{formatC()} if the result is numeric so we do
-not get too many digits by default.
+is automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
+if the result is numeric, and we will not get too many digits by default.
 
 
 \subsection{Code Decoration}
