@@ -5,10 +5,13 @@
 new_cache = function() {
 
     cache_path = function(hash) {
-        id = input_dir()
-        d = file.path(id, dirname(hash))
+        d = dirname(hash)
+        if (!abs_path(d)) {
+            id = input_dir()
+            d = file.path(id, d)  # turn relative path to abs path
+        }
         if (!file.exists(d)) dir.create(d, showWarnings = FALSE, recursive = TRUE)
-        file.path(id, hash)
+        file.path(d, basename(hash))
     }
 
     cache_purge = function(hash) {
