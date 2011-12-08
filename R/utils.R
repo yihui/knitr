@@ -128,3 +128,8 @@ format_sci = function(x, theme = 'latex', d = getOption('digits')) {
     formatC(x)
 }
 
+## absolute path?
+abs_path = function(x) {
+    if (.Platform$OS.type == 'windows')
+        grepl(':', x, fixed = TRUE) || grepl('^\\', x) else grepl('^/', x)
+}
