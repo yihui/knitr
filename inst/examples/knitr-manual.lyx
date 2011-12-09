@@ -755,6 +755,19 @@ Sexpr{123456789}
 \end_inset
 
 ) if the result is numeric, and we will not get too many digits by default.
+ You may check out a number of specific manuals dedicated to specific features
+ such as graphics in the website: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://yihui.github.com/knitr/demos
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
@@ -2264,7 +2277,7 @@ knitr
 \begin_inset CommandInset href
 LatexCommand href
 name "demos in the website"
-target "https://github.com/yihui/knitr/tree/master/inst/examples"
+target "http://yihui.github.com/knitr/demos"
 
 \end_inset
 

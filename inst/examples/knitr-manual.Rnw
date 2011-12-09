@@ -199,6 +199,8 @@ when knitting a file so we roughly know how long we still need to
 wait; output from inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}})
 is automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
 if the result is numeric, and we will not get too many digits by default.
+You may check out a number of specific manuals dedicated to specific
+features such as graphics in the website: \url{http://yihui.github.com/knitr/demos}.
 
 
 \subsection{Code Decoration}
@@ -600,7 +602,7 @@ option is set to \texttt{FALSE} to avoid a common problem caused by
 multi-byte characters, and \texttt{digits} is set to 4 to avoid too
 many digits)
 \item [{A.13}] \textbf{knitr} comes with a set of hooks to deal with HTML
-output (see \href{https://github.com/yihui/knitr/tree/master/inst/examples}{demos in the website})
+output (see \href{http://yihui.github.com/knitr/demos}{demos in the website})
 \end{description}
 It also has some differences with \textbf{pgfSweave} and \textbf{cacheSweave}:
 \begin{itemize}
