@@ -1,0 +1,59 @@
+.number{
+	color: #3300cc ;
+}
+
+.functioncall{
+	color: #7b3587 ;
+}
+
+.string{
+	color: #f6f647 ;
+}
+
+.keyword{
+	font-weight: bolder ;
+	color: #004c00;
+}
+
+.argument{
+	color: #fffdec ;
+}
+
+.comment{
+	color: #500000 ;
+}
+
+.roxygencomment{
+	color: #500000;
+}
+
+.formalargs{
+	color: #fffdec;
+}
+
+.eqformalargs{
+	color: #fffdec;
+}
+
+.assignement{
+	font-weight: bolder;
+	color: #fffdec;
+}
+
+.package{
+	color: ;
+}
+
+.slot{
+	font-style:italic;
+	color: #fffdec;
+}
+
+.symbol{
+	color: #2b2b2b ;
+}
+
+.prompt{
+	color: #fffdec ;
+}
+

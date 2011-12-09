@@ -1,0 +1,23 @@
+.number{
+	color: #000000 ;
+}
+
+.functioncall{
+	color: #0000ff ;
+}
+
+.string{
+	color: #800000 ;
+}
+
+.keyword{
+	font-weight: bolder ;
+	color: #0000ff;
+}
+
+.argument{
+	color: #000000 ;
+}
+
+.comment{
+	color: 
