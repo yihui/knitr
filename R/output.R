@@ -93,7 +93,7 @@ process_file = function(path, tangle) {
     str_c(c(res, ""), collapse = "\n")
 }
 
-auto_out_name = function(input, tangle) {
+auto_out_name = function(input, tangle = FALSE) {
     ext = file_ext(input)
     if (tangle) return(str_replace(input, str_c(ext, '$'), 'R'))
     if (tolower(ext) == 'rnw') return(str_replace(input, str_c(ext, '$'), 'tex'))
