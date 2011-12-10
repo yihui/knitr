@@ -54,7 +54,7 @@ The FAQ's are compiled from the [issues](https://github.com/yihui/knitr/issues) 
 1. **knitr** does not work...
   - Please first update all your R packages (use `update.packages()`) and probably R itself ([what is the current R version?](http://cran.r-project.org/)), then see if it works; if not, file an [issue](https://github.com/yihui/knitr/issues) to me (email is fine, too).
 1. Oh, the tons of arguments like `Sweave(..., prefix.string=abc, keep.source=FALSE, foo=bar)` are really flexible; why `knit()` only has so few arguments?
-  - Because I believe putting these arguments in `knit()` breaks the principle of reproducibility, and so does using environmental variables (see #19 for details).
+  - Because I believe putting these arguments in `knit()` breaks the principle of reproducibility, and so does using environmental variables (see [#19](https://github.com/yihui/knitr/issues/19) for details).
 1. I love RStudio and Sweave is sweet there; is **knitr** going to work with RStudio?
   - I love RStudio too; although I use Emacs most of the time, I recommend RStudio to other users who do not use Emacs. Unfortunately the function behind that `compile` button was hard-coded and only supports Sweave, so you may want to pursuade RStudio developers providing an option to choose between Sweave and **knitr**. By the way, I actually recommend LyX over RStudio if you want to use Sweave or **knitr**.
 1. You mentioned LyX so many times, so what the heck is LyX?
@@ -62,9 +62,9 @@ The FAQ's are compiled from the [issues](https://github.com/yihui/knitr/issues) 
 1. Where are those prompt characters `>` and `+`? I feel uncomfortable reading R output without them.
   - They are removed by default, because I believe they make no sense. This is the reason why I hate books on R which used `>` and `+`; they twist my mind and make my eyes bleed when I read the R code in the books. Please join me pursuading future authors discarding these characters in publications. For those who really want to read R code like `> 1+1` instead of `1 + 1`, you have the [chunk option](http://yihui.github.com/knitr/options) `prompt`.
 1. Can I change my working directory?
-  - Yes, you can use `setwd()` freely in your code, which will bring you troubles in Sweave but not in **knitr**. The default working directory is the directory where your input document comes from. I need to warn you, however, that this is a bad practice in general. See #38 for a discussion. You should also try to avoid absolute directories whenever possible (use relative directories instead), because it makes things less reproducible.
+  - Yes, you can use `setwd()` freely in your code, which will bring you troubles in Sweave but not in **knitr**. The default working directory is the directory where your input document comes from. I need to warn you, however, that this is a bad practice in general. See [#38](https://github.com/yihui/knitr/issues/38) for a discussion. You should also try to avoid absolute directories whenever possible (use relative directories instead), because it makes things less reproducible.
 1. The gray (shading) box is too narrow for my output.
-  - No, it is not because the box is too narrow (the box uses the current line width); it is because your output is too wide. Use a smaller `width` option to avoid output exceeding the page margin, e.g. `options(width = 60)`; see #44.
+  - No, it is not because the box is too narrow (the box uses the current line width); it is because your output is too wide. Use a smaller `width` option to avoid output exceeding the page margin, e.g. `options(width = 60)`; see [#44](https://github.com/yihui/knitr/issues/44).
 1. I have done something cool with **knitr**; could you add a link in your website?
   - Sure! I'd love to; just let me know.
 1. What can I do for you?
