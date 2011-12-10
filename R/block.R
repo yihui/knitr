@@ -76,6 +76,11 @@ block_exec = function(code, ...) {
     dv = dev.cur(); on.exit(dev.off(dv))
     dev.control(displaylist = 'enable')  # need to record plots
 
+    ## guess plot file type if it is NULL
+    if (is.null(options$fig.ext)) {
+        options$fig.ext = dev2ext(options$dev)
+    }
+
     res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
     res = evaluate(code, envir = env) # run code
 
