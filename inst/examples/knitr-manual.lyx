@@ -2184,7 +2184,28 @@ n')
 \end_layout
 
 \begin_layout Standard
-We can call 
+For inline R code as in 
+\family typewriter
+
+\backslash
+Sexpr{}
+\family default
+, 
+\series bold
+knitr
+\series default
+ will automatically format the results -- numbers will be written in real
+ scientific notations (e.g.
+ 
+\begin_inset Formula $3.14\times10^{-5}$
+\end_inset
+
+ instead of the less readable 
+\family typewriter
+3.14e-05
+\family default
+).
+ Finally, we can call 
 \family typewriter
 knit(..., tangle = TRUE)
 \family default
