@@ -8,6 +8,7 @@ process_group.inline = function(x) call_inline(x)
 
 call_block = function(block) {
     params = opts_chunk$merge(block$params)
+    params = fix_sweave_opts(params)  # for compatibility with Sweave
     params = c(list(code = block$code), params)
     ## code from external R script
     if (!length(params$code)) {
@@ -49,6 +50,10 @@ block_exec = function(code, ...) {
         res = try(tidy.source(text = code, output = FALSE), silent = TRUE)
         if (!inherits(res, 'try-error')) {
             code = res$text.tidy
+            enc = Encoding(code)
+            idx = enc != 'unknown'
+            ## convert non-native enc
+            if (any(idx)) code[idx] = iconv(code[idx], enc[idx])
         } else warning('failed to tidy R code in chunk <', options$label, '>\n',
                        'reason: ', res)
     }

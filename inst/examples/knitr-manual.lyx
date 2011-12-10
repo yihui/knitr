@@ -755,6 +755,19 @@ Sexpr{123456789}
 \end_inset
 
 ) if the result is numeric, and we will not get too many digits by default.
+ You may check out a number of specific manuals dedicated to specific features
+ such as graphics in the website: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://yihui.github.com/knitr/demos
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
@@ -2171,7 +2184,28 @@ n')
 \end_layout
 
 \begin_layout Standard
-We can call 
+For inline R code as in 
+\family typewriter
+
+\backslash
+Sexpr{}
+\family default
+, 
+\series bold
+knitr
+\series default
+ will automatically format the results -- numbers will be written in real
+ scientific notations (e.g.
+ 
+\begin_inset Formula $3.14\times10^{-5}$
+\end_inset
+
+ instead of the less readable 
+\family typewriter
+3.14e-05
+\family default
+).
+ Finally, we can call 
 \family typewriter
 knit(..., tangle = TRUE)
 \family default
@@ -2264,7 +2298,7 @@ knitr
 \begin_inset CommandInset href
 LatexCommand href
 name "demos in the website"
-target "https://github.com/yihui/knitr/tree/master/inst/examples"
+target "http://yihui.github.com/knitr/demos"
 
 \end_inset
 

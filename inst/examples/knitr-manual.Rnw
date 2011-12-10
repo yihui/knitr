@@ -199,6 +199,8 @@ when knitting a file so we roughly know how long we still need to
 wait; output from inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}})
 is automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
 if the result is numeric, and we will not get too many digits by default.
+You may check out a number of specific manuals dedicated to specific
+features such as graphics in the website: \url{http://yihui.github.com/knitr/demos}.
 
 
 \subsection{Code Decoration}
@@ -577,8 +579,11 @@ in \textbf{knitr}:
 cat(c(' <<one-chunk,eval=FALSE>>=',' 1+1',' <<another-chunk,echo=TRUE>>=',' rnorm(10)',' @'), sep='\n')
 @
 
-We can call \texttt{knit(..., tangle = TRUE)} to tangle R code, which
-is similar to \emph{Stangle()}.
+For inline R code as in \texttt{\textbackslash{}Sexpr\{\}}, \textbf{knitr}
+will automatically format the results -- numbers will be written in
+real scientific notations (e.g. $3.14\times10^{-5}$ instead of the
+less readable \texttt{3.14e-05}). Finally, we can call \texttt{knit(...,
+tangle = TRUE)} to tangle R code, which is similar to \emph{Stangle()}.
 
 Some answers to Sweave FAQ's from \texttt{vignette('Sweave', package='utils')}
 are different in \textbf{knitr}:
@@ -600,7 +605,7 @@ option is set to \texttt{FALSE} to avoid a common problem caused by
 multi-byte characters, and \texttt{digits} is set to 4 to avoid too
 many digits)
 \item [{A.13}] \textbf{knitr} comes with a set of hooks to deal with HTML
-output (see \href{https://github.com/yihui/knitr/tree/master/inst/examples}{demos in the website})
+output (see \href{http://yihui.github.com/knitr/demos}{demos in the website})
 \end{description}
 It also has some differences with \textbf{pgfSweave} and \textbf{cacheSweave}:
 \begin{itemize}

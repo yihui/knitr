@@ -36,6 +36,9 @@ hilight_source = function(x, theme, options) {
     con = textConnection(x)
     on.exit(close(con))
     r = if (theme == 'latex') hiren_latex else hiren_html
+    enc = getOption('encoding')
+    options(encoding = 'native.enc')  # make sure parser() writes with correct enc
+    on.exit(options(encoding = enc), add = TRUE)
     out = capture.output(highlight(con, renderer = r, showPrompts = options$prompt, size = options$size))
     str_c(out, collapse = '\n')
 }
@@ -50,10 +53,13 @@ valid_prefix = function(x) {
 
 framed_color = function(x) {
     x = str_split(x, fixed(';'))[[1]]
-    if (length(x) != 3) {
-        x = rep(.97, 3)
-        warning("background color should be of the from red;green;blue; ",
-                "using default background color...")
+    if ((n <- length(x)) != 3L) {
+        if (n == 1L) x = drop(col2rgb(x)/255) else {
+            x = rep(.97, 3)
+            warning("the background color provided failed; ",
+                    "using default background color...",
+                    "see http://yihui.github.com/knitr/options")
+        }
     }
     sprintf('\\definecolor{shadecolor}{rgb}{%s, %s, %s}', x[1], x[2], x[3])
 }
@@ -132,4 +138,16 @@ format_sci = function(x, theme = 'latex', d = getOption('digits')) {
 abs_path = function(x) {
     if (.Platform$OS.type == 'windows')
         grepl(':', x, fixed = TRUE) || grepl('^\\', x) else grepl('^/', x)
+}
+
+## convert options for devices in Sweave to option 'dev' in knitr
+fix_sweave_opts = function(options) {
+    for (dev in c('pdf', 'eps', 'jpeg', 'png')) {
+        if (isTRUE(options[[dev]])) {
+            options$dev = dev
+            break
+        }
+    }
+    if (options$dev == 'eps') options$dev = 'postscript'
+    options
 }
