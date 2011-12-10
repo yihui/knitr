@@ -139,3 +139,15 @@ abs_path = function(x) {
     if (.Platform$OS.type == 'windows')
         grepl(':', x, fixed = TRUE) || grepl('^\\', x) else grepl('^/', x)
 }
+
+## convert options for devices in Sweave to option 'dev' in knitr
+fix_sweave_opts = function(options) {
+    for (dev in c('pdf', 'eps', 'jpeg', 'png')) {
+        if (isTRUE(options[[dev]])) {
+            options$dev = dev
+            break
+        }
+    }
+    if (options$dev == 'eps') options$dev = 'postscript'
+    options
+}

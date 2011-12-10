@@ -8,6 +8,7 @@ process_group.inline = function(x) call_inline(x)
 
 call_block = function(block) {
     params = opts_chunk$merge(block$params)
+    params = fix_sweave_opts(params)  # for compatibility with Sweave
     params = c(list(code = block$code), params)
     ## code from external R script
     if (!length(params$code)) {
