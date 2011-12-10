@@ -13,7 +13,7 @@ dev2ext = function(x) {
            tikz = 'tikz',
 
            stop('device name \'', x, '\' not supported yet; please go to ',
-                'https://github.com/yihui/knit/issues to report this issue',
+                'https://github.com/yihui/knitr/issues to report this issue',
                 call. = FALSE))
 }
 
