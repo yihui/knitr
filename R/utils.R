@@ -53,10 +53,13 @@ valid_prefix = function(x) {
 
 framed_color = function(x) {
     x = str_split(x, fixed(';'))[[1]]
-    if (length(x) != 3) {
-        x = rep(.97, 3)
-        warning("background color should be of the from red;green;blue; ",
-                "using default background color...")
+    if ((n <- length(x)) != 3L) {
+        if (n == 1L) x = drop(col2rgb(x)/255) else {
+            x = rep(.97, 3)
+            warning("the background color provided failed; ",
+                    "using default background color...",
+                    "see http://yihui.github.com/knitr/options")
+        }
     }
     sprintf('\\definecolor{shadecolor}{rgb}{%s, %s, %s}', x[1], x[2], x[3])
 }
