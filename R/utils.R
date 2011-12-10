@@ -36,6 +36,9 @@ hilight_source = function(x, theme, options) {
     con = textConnection(x)
     on.exit(close(con))
     r = if (theme == 'latex') hiren_latex else hiren_html
+    enc = getOption('encoding')
+    options(encoding = 'native.enc')  # make sure parser() writes with correct enc
+    on.exit(options(encoding = enc), add = TRUE)
     out = capture.output(highlight(con, renderer = r, showPrompts = options$prompt, size = options$size))
     str_c(out, collapse = '\n')
 }
