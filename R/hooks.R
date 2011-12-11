@@ -133,13 +133,13 @@ run_hooks = function(before, options, envir) {
     out
 }
 
-##' Themes for output
+##' Set output hooks for different output formats
 ##'
-##' The theme functions are used to set output hooks. Currently there
-##' are built-in themes for LaTeX, HTML, Markdown, GFM (GitHub
-##' Flavored Markdown) and Jekyll (a blogging system on GitHub). The
-##' original Sweave style is supported via \code{theme_sweave()}.
-##' @rdname themes
+##' Currently there are built-in output hooks for LaTeX, HTML,
+##' Markdown, GFM (GitHub Flavored Markdown) and Jekyll (a blogging
+##' system on GitHub). The original Sweave style is supported via
+##' \code{render_sweave()}.
+##' @rdname output_hooks
 ##' @return \code{NULL}; corresponding hooks are set
 ##' @export
 ##' @references See output hooks in \url{http://yihui.github.com/knitr/hooks}
