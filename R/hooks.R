@@ -65,7 +65,7 @@
 }
 .chunk.hook.tex = function(x, options) {
     if (output_asis(x, options)) return(x)
-    x = str_c(framed_color(options$background), '\\begin{kframe}\n', x, '\n\\end{kframe}')
+    x = str_c(color_def(options$background), '\\begin{kframe}\n', x, '\n\\end{kframe}')
     x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
     if (options$split) {
         name = str_c(options$prefix.string, options$label, '.tex')
