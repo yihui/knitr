@@ -3,6 +3,8 @@
 \documentclass{article}
 \usepackage[sc]{mathpazo}
 \usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+%\usepackage[scaled=0.88]{beramono}
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \setcounter{secnumdepth}{2}
@@ -32,7 +34,7 @@
 % \SweaveOpts{prefix.string=figure/minimal-,align=center,external=TRUE,fig.hold=TRUE}
 
 <<setup,echo=FALSE,results=hide,message=FALSE>>=
-set_theme('acid')
+set_theme('wombat')
 options(replace.assign=TRUE,width=90)
 knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
 @
@@ -48,31 +50,23 @@ You can test if \textbf{knitr} works with this minimal demo. OK, let's
 get started with some boring random numbers:
 
 <<chunk2, eval = FALSE, message = FALSE>>=
-# 1. LOAD ALL REQUIRED LIBRARIES  
 
-library(XML);
-library(reshape);
-library(plyr);
-library(ggplot2);
-library(reshape2)
-
-
-# 2. SCRAPE THE DATA FROM WEB 
+# 1. SCRAPE THE DATA FROM WEB 
 
 url.base = 'http://www.mlsoccer.com/stats' ;
 years = 1996:2010;
 
 save_data = function(y){
   url  = paste(url.base, as.character(y), 'reg', sep = '/');
-  tab  = readHTMLTable(url, header = FALSE, stringsAsFactors = FALSE);
+  tab  = XML::readHTMLTable(url, header = FALSE, stringsAsFactors = FALSE);
   pos  = max(grep("United", tab));
   tab  = tab[[pos]];
   tab$year   = y;
   return(tab)            
 }
 	
-team.list  = llply(years, save_data);
-mls        = merge_recurse(team.list);
+team.list  = plyr::llply(years, save_data);
+mls        = reshape::merge_recurse(team.list);
 @
 
 <<boring-random, comment = >>=
