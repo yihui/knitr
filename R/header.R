@@ -61,7 +61,8 @@ set_header = function(...) {
             "\\newcommand{\\hlslot}[1]{\\textit{#1}}%",
             "\\newcommand{\\hlsymbol}[1]{#1}%",
             "\\newcommand{\\hlprompt}[1]{\\textcolor[rgb]{.5,.5,.5}{#1}}%",
-          boxes_latex()), collapse = '\n')
+            boxes_latex(), "\\definecolor{fgcolor}{rgb}{0,0,0}"), collapse = '\n')
+
 .header.hi.html =
     str_c(c('<style type="text/css">', '.knitr {
 	background-color: #F7F7F7;
