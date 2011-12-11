@@ -65,7 +65,7 @@
 }
 .chunk.hook.tex = function(x, options) {
     if (output_asis(x, options)) return(x)
-    x = str_c(framed_color(options$background), '\\begin{kframe}\n', x, '\n\\end{kframe}')
+    x = str_c(color_def(options$background), '\\begin{kframe}\n', x, '\n\\end{kframe}')
     x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
     if (options$split) {
         name = str_c(options$prefix.string, options$label, '.tex')
@@ -133,17 +133,17 @@ run_hooks = function(before, options, envir) {
     out
 }
 
-##' Themes for output
+##' Set output hooks for different output formats
 ##'
-##' The theme functions are used to set output hooks. Currently there
-##' are built-in themes for LaTeX, HTML, Markdown, GFM (GitHub
-##' Flavored Markdown) and Jekyll (a blogging system on GitHub). The
-##' original Sweave style is supported via \code{theme_sweave()}.
-##' @rdname themes
+##' Currently there are built-in output hooks for LaTeX, HTML,
+##' Markdown, GFM (GitHub Flavored Markdown) and Jekyll (a blogging
+##' system on GitHub). The original Sweave style is supported via
+##' \code{render_sweave()}.
+##' @rdname output_hooks
 ##' @return \code{NULL}; corresponding hooks are set
 ##' @export
 ##' @references See output hooks in \url{http://yihui.github.com/knitr/hooks}
-theme_latex = function() {
+render_latex = function() {
     res = try(system("kpsewhich framed.sty", intern = TRUE), silent = TRUE)
     if (inherits(res, 'try-error') || !length(res)) {
         warning("unable to find LaTeX package 'framed'; will copy from the knitr package")
@@ -165,9 +165,9 @@ theme_latex = function() {
                    }, plot = .plot.hook.tex,
                    chunk = .chunk.hook.tex)
 }
-##' @rdname themes
+##' @rdname output_hooks
 ##' @export
-theme_sweave = function() {
+render_sweave = function() {
     knit_hooks$restore()
     ## wrap source code in the Sinput environment, output in Soutput
     hook.i = function(x, options) str_c('\\begin{Sinput}\n', x, '\\end{Sinput}\n')
@@ -179,9 +179,9 @@ theme_sweave = function() {
                    plot = function(x, options) sprintf('\\includegraphics{%s}', x[1]),
                    chunk = hook.c)
 }
-##' @rdname themes
+##' @rdname output_hooks
 ##' @export
-theme_html = function() {
+render_html = function() {
     knit_hooks$restore()
     ## use div with different classes
     html.hook = function(name) {
@@ -197,9 +197,9 @@ theme_html = function() {
         sprintf('<code class="knitr inline">%s</code>', .inline.hook(format_sci(x, 'html')))
     }, plot = .plot.hook.html, chunk = .chunk.hook.html)
 }
-##' @rdname themes
+##' @rdname output_hooks
 ##' @export
-theme_markdown = function() {
+render_markdown = function() {
     knit_hooks$restore()
     ## four spaces lead to <pre></pre>
     hook.t = function(x, options) evaluate:::line_prompt(x, '    ', '    ')
@@ -209,21 +209,21 @@ theme_markdown = function() {
                    inline = function(x) sprintf('`%s`', .inline.hook(format_sci(x, 'html'))),
                    plot = .plot.hook.markdown)
 }
-##' @rdname themes
+##' @rdname output_hooks
 ##' @export
-theme_gfm = function() {
+render_gfm = function() {
     ## gfm and jekyll are derived from markdown
-    theme_markdown()
+    render_markdown()
     hook.r = function(x, options) str_c('```r\n', x, '```\n')
     hook.t = function(x, options) str_c('```\n', x, '```\n')
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
     knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
                    error = hook.t, message = hook.t)
 }
-##' @rdname themes
+##' @rdname output_hooks
 ##' @export
-theme_jekyll = function() {
-    theme_markdown()
+render_jekyll = function() {
+    render_markdown()
     hook.r = function(x, options) str_c('{% highlight r %}\n', x, '{% endhighlight %}\n')
     hook.t = function(x, options) str_c('{% highlight text %}\n', x, '{% endhighlight %}\n')
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
@@ -271,8 +271,8 @@ hook_rgl = function(before, options, envir) {
     par3d(windowRect = 100 + options$dpi * c(0, 0, options$width, options$height))
     Sys.sleep(.05) # need time to respond to window size change
 
-    theme = opts_knit$get('theme')
-    if (theme %in% c('html', 'markdown', 'gfm', 'jekyll')) options$dev = 'png'
+    fmt = opts_knit$get('out.format')
+    if (fmt %in% c('html', 'markdown', 'gfm', 'jekyll')) options$dev = 'png'
 
     ## support 3 formats: eps, pdf and png (default)
     switch(options$dev,
@@ -280,8 +280,8 @@ hook_rgl = function(before, options, envir) {
            pdf = rgl.postscript(paste(name, '.pdf', sep = ''), fmt = 'pdf'),
            rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png'))
 
-    if (theme == 'html') return(.plot.hook.html(c(name, 'png'), options))
-    if (theme %in% c('markdown', 'gfm', 'jekyll'))
+    if (fmt == 'html') return(.plot.hook.html(c(name, 'png'), options))
+    if (fmt %in% c('markdown', 'gfm', 'jekyll'))
         return(.plot.hook.markdown(c(name, 'png'), options))
 
     paste(ifelse(options$align == 'center', '\\centering{}', ''), '\\includegraphics[',

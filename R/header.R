@@ -4,11 +4,11 @@ insert_header = function(x) {
         h = opts_knit$get('header')
         i = which(str_detect(x, b))[1]
         if (length(i) == 1) {
-            theme = opts_knit$get('theme')
-            if (theme %in% c('markdown', 'gfm', 'jekyll')) return(x)
-            if (identical('latex', theme))
+            fmt = opts_knit$get('out.format')
+            if (fmt %in% c('markdown', 'gfm', 'jekyll')) return(x)
+            if (identical('latex', fmt))
                 h = c('\\usepackage{graphicx, color}', h)
-            if (identical('html', theme))
+            if (identical('html', fmt))
                 h = h['highlight']
             h = h[nzchar(h)]; if (length(h) == 0) h = ''
             loc = str_locate(x[i], b)

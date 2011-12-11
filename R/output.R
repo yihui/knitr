@@ -45,17 +45,17 @@ knit = function(input, output, pattern, tangle = FALSE) {
     oopts = opts_knit$get(); on.exit(opts_knit$set(oopts), add = TRUE)
     opts_knit$set(input.dir = getwd())  # record current working dir
     ohooks = knit_hooks$get(); on.exit(knit_hooks$set(ohooks), add = TRUE)
-    if (is.null(oopts$theme)) {
-        theme =
+    if (is.null(oopts$out.format)) {
+        fmt =
             switch(ext, rnw = 'latex', tex = 'latex', html = 'html', md = 'jekyll',
-                   stop('cannot automatically decide the theme'))
+                   stop('cannot automatically decide the output format'))
         ## set built-in hooks
-        opts_knit$set(theme = theme)
+        opts_knit$set(out.format = fmt)
     }
-    switch(opts_knit$get('theme'), latex = theme_latex(), html = theme_html(),
-           sweave = {opts_chunk$set(highlight = FALSE); theme_sweave()},
-           jekyll = theme_jekyll(), markdown = theme_markdown(),
-           gfm = theme_gfm())
+    switch(opts_knit$get('out.format'), latex = render_latex(), html = render_html(),
+           sweave = {opts_chunk$set(highlight = FALSE); render_sweave()},
+           jekyll = render_jekyll(), markdown = render_markdown(),
+           gfm = render_gfm())
 
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
     ## for tikz graphics (cache the dictionary); turn off fancy quotes
@@ -137,8 +137,8 @@ wrap.source = function(x, options) {
     ## TODO: optionally highlight code here
     src = x$src
     if (options$highlight) {
-        theme = opts_knit$get('theme')
-        src = hilight_source(str_c(src, collapse = ''), theme, options)
+        fmt = opts_knit$get('out.format')
+        src = hilight_source(str_c(src, collapse = ''), fmt, options)
     } else if (options$prompt) src = sapply(src, evaluate:::line_prompt, USE.NAMES = FALSE)
     src = str_c(src, collapse = '')
     src = str_replace(src, '([^\n]+)$', '\\1\n')

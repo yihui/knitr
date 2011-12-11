@@ -31,11 +31,11 @@ comment_out = function(x, options) {
 hiren_latex = renderer_latex(document = FALSE)
 hiren_html = renderer_html(document = FALSE, header = function() '', footer = function() '')
 
-hilight_source = function(x, theme, options) {
-    if (!(theme %in% c('latex', 'html'))) return(x)
+hilight_source = function(x, format, options) {
+    if (!(format %in% c('latex', 'html'))) return(x)
     con = textConnection(x)
     on.exit(close(con))
-    r = if (theme == 'latex') hiren_latex else hiren_html
+    r = if (format == 'latex') hiren_latex else hiren_html
     enc = getOption('encoding')
     options(encoding = 'native.enc')  # make sure parser() writes with correct enc
     on.exit(options(encoding = enc), add = TRUE)
@@ -51,17 +51,18 @@ valid_prefix = function(x) {
     x
 }
 
-framed_color = function(x) {
-    x = str_split(x, fixed(';'))[[1]]
+## define a color variable in TeX
+color_def = function(col, variable = 'shadecolor') {
+    x = str_split(col, fixed(';'))[[1]]
     if ((n <- length(x)) != 3L) {
         if (n == 1L) x = drop(col2rgb(x)/255) else {
-            x = rep(.97, 3)
-            warning("the background color provided failed; ",
-                    "using default background color...",
+            x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
+            warning("the color '", col, "' is invalid;",
+                    "using default color...",
                     "see http://yihui.github.com/knitr/options")
         }
     }
-    sprintf('\\definecolor{shadecolor}{rgb}{%s, %s, %s}', x[1], x[2], x[3])
+    sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
 }
 
 ## whether dependent chunks have changed; if so, invalidate cache for this chunk
@@ -121,14 +122,14 @@ input_dir = function() {
 }
 
 ## scientific notation in TeX
-format_sci = function(x, theme = 'latex', d = getOption('digits')) {
+format_sci = function(x, format = 'latex', d = getOption('digits')) {
     if (!is.numeric(x)) return(x)
     if (any(abs(lx <- floor(log(abs(x), 10))) >= d)) {
         b = formatC(x/10^lx)
         b[b %in% c('1', '-1')] = ''
-        if (theme == 'latex')
+        if (format == 'latex')
             return(sprintf('$%s%s10^{%s}$', b, ifelse(b == '', '', '\\times '), floor(lx)))
-        if (theme == 'html')
+        if (format == 'html')
             return(sprintf('%s%s10<sup>%s</sup>', b, ifelse(b == '', '', ' &times; '), floor(lx)))
     }
     formatC(x)
@@ -137,7 +138,7 @@ format_sci = function(x, theme = 'latex', d = getOption('digits')) {
 ## absolute path?
 abs_path = function(x) {
     if (.Platform$OS.type == 'windows')
-        grepl(':', x, fixed = TRUE) || grepl('^\\', x) else grepl('^/', x)
+        grepl(':', x, fixed = TRUE) || grepl('^\\\\', x) else grepl('^/', x)
 }
 
 ## convert options for devices in Sweave to option 'dev' in knitr
