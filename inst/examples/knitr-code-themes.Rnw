@@ -5,6 +5,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{inconsolata}
 %\usepackage[scaled=0.88]{beramono}
+%\usepackage{luximono}
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \setcounter{secnumdepth}{2}
@@ -34,7 +35,7 @@
 % \SweaveOpts{prefix.string=figure/minimal-,align=center,external=TRUE,fig.hold=TRUE}
 
 <<setup,echo=FALSE,results=hide,message=FALSE>>=
-set_theme('wombat')
+set_code_theme('wombat')
 options(replace.assign=TRUE,width=90)
 knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
 @
