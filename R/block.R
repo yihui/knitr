@@ -77,7 +77,7 @@ block_exec = function(code, ...) {
     dev.control(displaylist = 'enable')  # need to record plots
 
     ## guess plot file type if it is NULL
-    if (is.null(options$fig.ext)) {
+    if (options$fig && is.null(options$fig.ext)) {
         options$fig.ext = dev2ext(options$dev)
     }
 
