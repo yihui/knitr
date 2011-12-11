@@ -291,8 +291,10 @@ hook_rgl = function(before, options, envir) {
 ##' @rdname hooks
 hook_pdfcrop = function(before, options, envir) {
     ## crops PDF after a chunk is evaluated and PDF files produced
-    if (before || !options$fig || options$fig.ext != 'pdf' ||
-        (plot.num <- options$plot.num) == 0L) return()
+    ext = options$fig.ext
+    if (options$dev == 'tikz' && options$external) ext = 'pdf'
+    if (before || !options$fig || ext != 'pdf' || (plot.num <- options$plot.num) == 0L)
+        return()
 
     paths =
         paste(valid_prefix(options$prefix.string), options$label,
