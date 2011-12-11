@@ -1,0 +1,1724 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 417
+\begin_document
+\begin_header
+\textclass tufte-handout
+\begin_preamble
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\floatpagefraction}{0.75}
+
+\usepackage[buttonsize=1em]{animate}
+
+\usepackage[breaklinks=true,pdfstartview=FitH]{hyperref}
+\end_preamble
+\options justified
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\use_undertilde 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+% 
+\backslash
+SweaveOpts{prefix.string=figure/graphics-, prefix.cache=cache/graphics-, fig=TRUE,
+ align=center, dev=tikz, external=TRUE, width=5, height=5, fig.hold=TRUE,
+ cache=TRUE, align=center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<setup,echo=FALSE,results=hide,cache=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+options(replace.assign=TRUE,width=78)
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.
+1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)}, crop=hook_pdfcrop)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+knitr Graphics Manual
+\end_layout
+
+\begin_layout Author
+Yihui Xie
+\end_layout
+
+\begin_layout Abstract
+This manual shows features of graphics in the 
+\series bold
+knitr
+\series default
+ package in detail, including the graphical devices, plot recording, plot
+ rearrangement, control of plot sizes, the tikz device, animations and rgl
+ plots.
+\end_layout
+
+\begin_layout Standard
+Before reading this specific manual
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/downloads/yihui/knitr/knitr-graphics.pdf
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, you must have finished the main manual
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/downloads/yihui/knitr/knitr-manual.pdf
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Graphical Devices
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+knitr
+\series default
+ package comes with more than 20 built-in graphical devices, and you can
+ specify them through the 
+\family typewriter
+dev
+\family default
+ option.
+ This document uses the global option 
+\family typewriter
+dev=tikz
+\family default
+, i.e., the plots are recorded by the tikz device by default, but we can change
+ the device locally.
+ Since tikz will be used extensively throughout this manual and you will
+ see plenty of tikz graphics later, now we first show a few other devices.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<test-plot>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+test_plot=function() {
+\end_layout
+
+\begin_layout Plain Layout
+
+with(trees, symbols(Height, Volume, circles = Girth/16, inches = FALSE,
+ bg = 'deeppink', fg = 'gray30'))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float marginfigure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<pdf-dev,dev=pdf,out.width=
+\backslash
+linewidth,echo=FALSE,dependson=test-plot>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+test_plot()
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The default PDF device.
+\begin_inset CommandInset label
+LatexCommand label
+name "mar:pdf-dev"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float marginfigure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<png-dev,dev=png,out.width=
+\backslash
+linewidth,echo=FALSE,dependson=test-plot>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+test_plot()
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The PNG device.
+\begin_inset CommandInset label
+LatexCommand label
+name "mar:png-dev"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "mar:pdf-dev"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "mar:png-dev"
+
+\end_inset
+
+ show two standard devices in the 
+\series bold
+grDevices
+\series default
+ package.
+ We can also use devices in the 
+\series bold
+Cairo
+\series default
+ or 
+\series bold
+cairoDevice
+\series default
+ package, e.g., the chunk below uses the 
+\emph on
+Cairo_png()
+\emph default
+ device in the 
+\series bold
+cairoDevice
+\series default
+ package.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<cairo-png-dev,dev=Cairo_png,out.width=.5
+\backslash
+linewidth,echo=FALSE,dependson=test-plot>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+test_plot()
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally we show an example of 
+\emph on
+cairo_pdf()
+\emph default
+ (in base R) with some multi-byte characters (say hello in Chinese):
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<cairo-pdf-dev,dev=cairo_pdf,width=8,height=2,out.width=.8
+\backslash
+linewidth,warning=FALSE,tidy=FALSE,echo=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mar=c(2,2,.1,.1),las=1)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(1,type='n',ann=FALSE)
+\end_layout
+
+\begin_layout Plain Layout
+
+text(1,1,'
+\backslash
+u55E8
+\backslash
+uFF0C
+\backslash
+u4F60
+\backslash
+u597D
+\backslash
+u5417',cex=4) # hello
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Depending on the graphics packages and devices you use, the background of
+ plots might be transparent (e.g.
+ tikz for base graphics) or white (e.g.
+ 
+\series bold
+ggplot2
+\series default
+) by default.
+ If you definitely want the background color to be always white for base
+ graphics, you can set up a hook for the 
+\family typewriter
+fig
+\family default
+ option like this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<white-background,eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_hooks$set(fig = function(before, options, envir) {if (before) par(bg
+ = 'white')})
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Plot Recording
+\end_layout
+
+\begin_layout Standard
+As mentioned in the main manual, 
+\series bold
+knitr
+\series default
+ uses the 
+\series bold
+evaluate
+\series default
+ package to record plots.
+ There are two sources of plots: first, whenever 
+\emph on
+plot.new()
+\emph default
+ or 
+\emph on
+grid.newpage()
+\emph default
+ is called, 
+\series bold
+evaluate
+\series default
+ will try to save a snapshot of the current plot
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+For technical details, see 
+\family typewriter
+?setHook
+\family default
+ and 
+\family typewriter
+?recordPlot
+\end_layout
+
+\end_inset
+
+; second, after each complete expression is evaluated, a snapshot is also
+ saved.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:two-high"
+
+\end_inset
+
+ shows two expressions producing two high-level plots.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<two-high,fig=TRUE,width=3,height=2.5,out.width=.49
+\backslash
+linewidth>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(cars)
+\end_layout
+
+\begin_layout Plain Layout
+
+boxplot(cars$dist,xlab='dist')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Two high-level plots are captured.
+ The key to arrange two plots side by side is to specify the 
+\family typewriter
+out.width
+\family default
+ option so that each plot takes less than half of the line width.
+ We do not have to use the 
+\family typewriter
+par(mfrow)
+\family default
+ trick, and it may not work in some cases (e.g.
+ to put base graphics and 
+\series bold
+ggplot2
+\series default
+ side by side; recall Figure 1 in the main manual).
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:two-high"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:low-plot-loop"
+
+\end_inset
+
+ shows another example of two R expressions, but the second expression only
+ involves with low-level plotting changes.
+ By default, low-level plot changes are discarded, but you can retain them
+ with the option 
+\family typewriter
+fig.low=TRUE
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<low-plot-loop,fig=TRUE,width=3,height=2.5,out.width=.49
+\backslash
+linewidth,fig.low=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(0,0,type='n',ann=FALSE)
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in seq(0, 2*pi,length=20)) points(cos(i),sin(i))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Two complete R expressions will produce at most two plots, as long as there
+ are not multiple high-level plotting calls in each expression; option 
+\family typewriter
+fig.low=TRUE
+\family default
+ here.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:low-plot-loop"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Together with 
+\family typewriter
+fig.hold=FALSE
+\family default
+, we can show the process of plotting step by step like Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:high-with-low"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<high-with-low,fig=TRUE,width=3,height=2.25,out.width=.5
+\backslash
+linewidth,fig.low=TRUE,fig.hold=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(cars)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(lm(dist~speed, data=cars))  # a regression line
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Low-level plot changes in base graphics can be recorded separately, and
+ plots can be put in the places where they were produced.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:high-with-low"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A further note on plot recording: 
+\series bold
+knitr
+\series default
+ examines all recorded plots (as R objects) and compares them sequentially;
+ if the previous plot is a 
+\begin_inset Quotes eld
+\end_inset
+
+subset
+\begin_inset Quotes erd
+\end_inset
+
+ of the next plot (= previous plot + low-level changes), the previous plot
+ will be removed when 
+\family typewriter
+fig.low=FALSE
+\family default
+; this is how 
+\family typewriter
+fig.low
+\family default
+ works.
+ If two successive plots are identical, the second one will be removed by
+ default, so it might be a little bit surprising that the following chunk
+ will only produce one plot by default
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+adapted from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/yihui/knitr/issues/41
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<identical-plots,eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+m = matrix(1:100, ncol = 10)
+\end_layout
+
+\begin_layout Plain Layout
+
+image(m)
+\end_layout
+
+\begin_layout Plain Layout
+
+image(m*2)  # exactly the same as previous plot
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Plot Rearrangement
+\end_layout
+
+\begin_layout Standard
+We can rearrange the plots in chunks in several ways.
+ They can be inserted right after the line(s) of R code which produced them,
+ or accumulated till the end of the chunk.
+ There is an example in the main manual demonstrating 
+\family typewriter
+fig.hold=FALSE
+\family default
+ for two high-level plots, and Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:high-with-low"
+
+\end_inset
+
+ in this manual also demonstrates this option for a high-level plot followed
+ by a low-level change.
+\end_layout
+
+\begin_layout Standard
+Here is an example demonstrating the option 
+\family typewriter
+fig.last
+\family default
+; when it is 
+\family typewriter
+TRUE
+\family default
+, only the last plot is kept:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<fig-last,fig=TRUE,width=5.2,height=3,out.width=.7
+\backslash
+linewidth,fig.last=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+suppressMessages(library(ggplot2))
+\end_layout
+
+\begin_layout Plain Layout
+
+pie <- ggplot(diamonds, aes(x = factor(1), fill = cut)) + xlab('cut') +
+ geom_bar(width = 1) 
+\end_layout
+
+\begin_layout Plain Layout
+
+pie + coord_polar(theta = "y") # a pie chart
+\end_layout
+
+\begin_layout Plain Layout
+
+pie + coord_polar() # the bullseye chart 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Two plots were produced in this chunk, but only the last one is kept.
+ This can be useful when we experiment with many plots, but only want the
+ last result.
+ (Adapted from the 
+\series bold
+ggplot2
+\series default
+ website)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can also set the alignment of plots easily with the 
+\family typewriter
+align
+\family default
+ option; this document uses 
+\family typewriter
+align=center
+\family default
+ as a global option, and we can also set plots to be left/right-aligned.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:maruko-plot"
+
+\end_inset
+
+ is an example of a left-aligned plot.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<maruko-plot,fig=TRUE,width=7,height=4,out.width=.5
+\backslash
+linewidth,align=left,crop=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+stars(cbind(1:16,10*(16:1)),draw.segments=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A left-aligned plot adapted from 
+\family typewriter
+?stars
+\family default
+ (I call this the 
+\begin_inset Quotes eld
+\end_inset
+
+Maruko
+\begin_inset Quotes erd
+\end_inset
+
+ plot, and it is one of my favorites; see 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://en.wikipedia.org/wiki/Chibi_Maruko-chan
+\end_layout
+
+\end_inset
+
+).
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:maruko-plot"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Plot Size
+\end_layout
+
+\begin_layout Standard
+We have seen several examples in which two or more plots can be put side
+ by side, and this is because the plots were resized in the output document;
+ with the chunk option 
+\family typewriter
+out.width
+\family default
+ less than half of the line width, LaTeX will arrange two plots in one line;
+ if it is less than 
+\begin_inset Formula $1/3$
+\end_inset
+
+ of the line width, three plots can be put in one line.
+ Of course we can also set it to be an absolute width like 
+\family typewriter
+3in
+\family default
+ (3 inches).
+ This option is used extensively in this document to control the size of
+ plots in the output document.
+\end_layout
+
+\begin_layout Section
+The tikz Device
+\end_layout
+
+\begin_layout Standard
+The main advantage of using tikz graphics is the consistency of styles between
+ texts in plots and those in the main document.
+ Since we can use native LaTeX commands in plots, the styles of texts in
+ plots can be very sophisticated.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<math-formula-tt,fig=TRUE,width=6,height=2,out.width=
+\backslash
+linewidth,echo=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(0:1,0:1,type='n', ylab='origin of statistics', xlab='statistical presentati
+on rocks with 
+\backslash
+
+\backslash
+LaTeX{}')
+\end_layout
+
+\begin_layout Plain Layout
+
+text(.5,c(.8,.5,.2), c('
+\backslash
+
+\backslash
+texttt{lm(y 
+\backslash
+
+\backslash
+textasciitilde{} x)}', '$
+\backslash
+
+\backslash
+hat{
+\backslash
+
+\backslash
+beta}=(X^{
+\backslash
+
+\backslash
+prime}X)^{-1}X^{
+\backslash
+
+\backslash
+prime}y$',  '$(
+\backslash
+
+\backslash
+Omega,
+\backslash
+
+\backslash
+mathcal{F},
+\backslash
+
+\backslash
+mu)$'))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A plot created by 
+\series bold
+tikzDevice
+\series default
+ with math expressions and typewriter fonts.
+ Note the font style consistency -- we write the same expressions in LaTeX
+ here: 
+\begin_inset Formula $\hat{\beta}=(X^{\prime}X)^{-1}X^{\prime}y$
+\end_inset
+
+ and 
+\begin_inset Formula $(\Omega,\mathcal{F},\mu)$
+\end_inset
+
+; also 
+\family typewriter
+lm(y ~ x)
+\family default
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When using XeLaTeX instead of PDFLaTeX to compile the document, we need
+ to tell the 
+\series bold
+tikzDevice
+\series default
+ package by setting the 
+\family typewriter
+tikzDefaultEngine
+\family default
+ option before all plot chunks (preferably in the first chunk):
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<xetex-tikz,eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+options(tikzDefaultEngine='xetex')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is useful and often necessary to compile tikz plots which contain (UTF8)
+ multi-byte characters.
+\end_layout
+
+\begin_layout Section
+Animation
+\end_layout
+
+\begin_layout Standard
+When multiple plots are produced by a code chunk, we may want to turn them
+ into an animation with the option 
+\family typewriter
+animate
+\family default
+.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:clock-animation"
+
+\end_inset
+
+ shows a simple clock animation; you may compare the code to Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:high-with-low"
+
+\end_inset
+
+ to understand that high-level plots are always recorded, regardless of
+ where they appeared.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<clock-animation,fig=TRUE,width=3,height=3,out.width=.4
+\backslash
+linewidth,animate=TRUE,crop=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mar=rep(3,4))
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in seq(pi/2, -4/3*pi,length=12)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(0,0,pch=20,ann=FALSE,axes=FALSE)
+\end_layout
+
+\begin_layout Plain Layout
+
+arrows(0, 0, cos(i),sin(i))
+\end_layout
+
+\begin_layout Plain Layout
+
+axis(1,0,'VI');axis(2,0,'IX');axis(3,0,'XII');axis(4,0,'III')
+\end_layout
+
+\begin_layout Plain Layout
+
+box()
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A clock animation.
+ You have to view it in Adobe Reader: click to play/pause; there are also
+ buttons to speed up or slow down the animation.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:clock-animation"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Other Features
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+knitr
+\series default
+ package can be extended with hook functions, and here I give a few examples
+ illustrating the flexibility.
+\end_layout
+
+\begin_layout Subsection
+Cropping PDF Graphics
+\end_layout
+
+\begin_layout Standard
+Many R users have been suffering from the extra margins in R plots, especially
+ in base graphics (
+\series bold
+ggplot2
+\series default
+ is much better in this aspect).
+ The default graphical option 
+\family typewriter
+mar
+\family default
+ is about 
+\family typewriter
+c(5, 4, 4, 2)
+\family default
+ (see 
+\family typewriter
+?par
+\family default
+), which is often too big.
+ Instead of endlessly setting 
+\family typewriter
+par(mar)
+\family default
+, you may consider the program 
+\family typewriter
+pdfcrop
+\family default
+, which can crop the extra white margin automatically
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.ctan.org/pkg/pdfcrop
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ In 
+\series bold
+knitr
+\series default
+, we can set up the hook 
+\emph on
+hook_pdfcrop()
+\emph default
+ to work with a chunk option, say, 
+\family typewriter
+crop
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<crop-hook,cache=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_hooks$set(crop=hook_pdfcrop)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we compare two plots below.
+ The first one is not cropped:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<pdf-nocrop,fig=TRUE,width=3.2,height=3.2,out.width=.4
+\backslash
+linewidth>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+test_crop=function(){
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mar=c(5,4,4,2),bg='white')  # large margin
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+test_crop()
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The original plot produced in R, with a large margin.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then the same plot is produced but with a chunk option 
+\family typewriter
+crop=TRUE
+\family default
+ which will call the cropping hook:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<pdf-crop,echo=FALSE,fig=TRUE,width=3.2,height=3.2,out.width=.4
+\backslash
+linewidth,crop=TRUE,dependson=pdf-nocrop>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+test_crop()
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The cropped plot; it fits better in the document.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we can see, the white margins are gone.
+ If we use 
+\emph on
+par()
+\emph default
+, it might be hard and tedious to figure out a reasonable amount of margin
+ in order that neither is any label cropped nor do we get a too large margin.
+ My experience is that 
+\family typewriter
+pdfcrop
+\family default
+ works well with base graphics, but barely works with 
+\series bold
+grid
+\series default
+ graphics (therefore 
+\series bold
+lattice
+\series default
+ and 
+\series bold
+ggplot2
+\series default
+ are ruled out).
+\end_layout
+
+\begin_layout Subsection
+rgl Plots
+\end_layout
+
+\begin_layout Standard
+With the hook 
+\emph on
+hook_rgl()
+\emph default
+, we can easily save snapshots from the 
+\series bold
+rgl
+\series default
+ package.
+ We have shown an example in the main manual, and here we add some details.
+ The rgl hook is a good example of taking care of details by carefully using
+ the 
+\family typewriter
+options
+\family default
+ argument in the hook; for example, we cannot directly set the width and
+ height of rgl plots in 
+\emph on
+rgl.snapshot()
+\emph default
+ or 
+\emph on
+rgl.postscript()
+\emph default
+, so we make use of the options 
+\family typewriter
+width
+\family default
+, 
+\family typewriter
+height
+\family default
+ and 
+\family typewriter
+dpi
+\family default
+ to calculate the expected size of the window, then resize the current window
+ by 
+\emph on
+par3d()
+\emph default
+, and finally save the plot.
+\end_layout
+
+\end_body
+\end_document

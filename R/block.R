@@ -27,6 +27,8 @@ call_block = function(block) {
 
     if (params$dev == 'tikz') set_header(tikz = '\\usepackage{tikz}')
 
+    owd = setwd(input_dir()); on.exit(setwd(owd))
+
     ## Check cache
     hash =
         str_c(valid_prefix(params$prefix.cache), params$label, '_',
