@@ -1,5 +1,5 @@
 # knitr
-<img style="float: right;" src="http://yihui.github.com/knitr/images/knit-logo.png" />
+<div style="float: right;"><img src="http://yihui.github.com/knitr/images/knit-logo.png" /></div>
 
 The R package **knitr** is a general-purpose literate programming engine, with lightweight API's designed to give users full control of the output without heavy coding work. It combines many features into one package with slight tweaks motivated from my everyday use of Sweave. See the [package homepage](http://yihui.github.com/knitr) for  details and examples.
 
