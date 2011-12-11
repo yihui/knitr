@@ -17,8 +17,10 @@ xml_to_list <- function(xml_file){
   return(list(doclist = doclist, docname = docname))
 }
 
-#' Download XML style file from http://www.eclipsecolorthemes.org/, convert it
-#' to a CSS using a template and save it
+#' Convert XML style file downloaded from http://www.eclipsecolorthemes.org/
+#' to a CSS style file using a template and save it to the themes folder.
+#  TODO: Right now the css converter only uses the color specifications. It
+#  would be useful to add other specs like font-weight, font-style etc.
 xml_to_css <- function(xml_file){
   xml_list   <- xml_to_list(xml_file)
   doccolors  <- lapply(xml_list$doclist, "[", 'color')
@@ -30,19 +32,9 @@ xml_to_css <- function(xml_file){
   cat('Theme', style, 'saved to', css_file)
 }
 
-style_to_latex <- function(style){
-  css_file <- file.path('themes/css_files', sprintf("%s.css", style))
-  css_out  <- highlight::css.parser(css_file)
-  style    <- highlight::styler_assistant_latex(css_out)
-  style    <- gsub("[%]", "", style)
-  style    <- stringr::str_c(c(style, highlight::boxes_latex()), collapse = '\n')
-  return(style)
+save_eclipse_theme <- function(theme_no){
+  xml_file <- download_theme_xml(theme_no)
+  xml_to_css(xml_file)
 }
-
-col2knit <- function(color){
-  paste(round(col2rgb(color)/255, 2), collapse = ";")
-}
-
-
 
 
