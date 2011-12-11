@@ -31,11 +31,11 @@ comment_out = function(x, options) {
 hiren_latex = renderer_latex(document = FALSE)
 hiren_html = renderer_html(document = FALSE, header = function() '', footer = function() '')
 
-hilight_source = function(x, theme, options) {
-    if (!(theme %in% c('latex', 'html'))) return(x)
+hilight_source = function(x, format, options) {
+    if (!(format %in% c('latex', 'html'))) return(x)
     con = textConnection(x)
     on.exit(close(con))
-    r = if (theme == 'latex') hiren_latex else hiren_html
+    r = if (format == 'latex') hiren_latex else hiren_html
     enc = getOption('encoding')
     options(encoding = 'native.enc')  # make sure parser() writes with correct enc
     on.exit(options(encoding = enc), add = TRUE)
@@ -122,14 +122,14 @@ input_dir = function() {
 }
 
 ## scientific notation in TeX
-format_sci = function(x, theme = 'latex', d = getOption('digits')) {
+format_sci = function(x, format = 'latex', d = getOption('digits')) {
     if (!is.numeric(x)) return(x)
     if (any(abs(lx <- floor(log(abs(x), 10))) >= d)) {
         b = formatC(x/10^lx)
         b[b %in% c('1', '-1')] = ''
-        if (theme == 'latex')
+        if (format == 'latex')
             return(sprintf('$%s%s10^{%s}$', b, ifelse(b == '', '', '\\times '), floor(lx)))
-        if (theme == 'html')
+        if (format == 'html')
             return(sprintf('%s%s10<sup>%s</sup>', b, ifelse(b == '', '', ' &times; '), floor(lx)))
     }
     formatC(x)
