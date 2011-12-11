@@ -26,8 +26,7 @@ render_jekyll()
   Currently there are built-in output hooks for LaTeX,
   HTML, Markdown, GFM (GitHub Flavored Markdown) and Jekyll
   (a blogging system on GitHub). The original Sweave style
-  is supported via \code{render_sweave()}. The prefix
-  \samp{render_} stands for \dQuote{output hooks}.
+  is supported via \code{render_sweave()}.
 }
 \references{
   See output hooks in
