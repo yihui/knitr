@@ -52,10 +52,10 @@ knit = function(input, output, pattern, tangle = FALSE) {
         ## set built-in hooks
         opts_knit$set(out.format = fmt)
     }
-    switch(opts_knit$get('theme'), latex = theme_latex(), html = theme_html(),
-           sweave = {opts_chunk$set(highlight = FALSE); theme_sweave()},
-           jekyll = theme_jekyll(), markdown = theme_markdown(),
-           gfm = theme_gfm())
+    switch(opts_knit$get('out.format'), latex = render_latex(), html = render_html(),
+           sweave = {opts_chunk$set(highlight = FALSE); render_sweave()},
+           jekyll = render_jekyll(), markdown = render_markdown(),
+           gfm = render_gfm())
 
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
     ## for tikz graphics (cache the dictionary); turn off fancy quotes

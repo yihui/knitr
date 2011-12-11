@@ -143,7 +143,7 @@ run_hooks = function(before, options, envir) {
 ##' @return \code{NULL}; corresponding hooks are set
 ##' @export
 ##' @references See output hooks in \url{http://yihui.github.com/knitr/hooks}
-theme_latex = function() {
+render_latex = function() {
     res = try(system("kpsewhich framed.sty", intern = TRUE), silent = TRUE)
     if (inherits(res, 'try-error') || !length(res)) {
         warning("unable to find LaTeX package 'framed'; will copy from the knitr package")
@@ -165,9 +165,9 @@ theme_latex = function() {
                    }, plot = .plot.hook.tex,
                    chunk = .chunk.hook.tex)
 }
-##' @rdname themes
+##' @rdname output_hooks
 ##' @export
-theme_sweave = function() {
+render_sweave = function() {
     knit_hooks$restore()
     ## wrap source code in the Sinput environment, output in Soutput
     hook.i = function(x, options) str_c('\\begin{Sinput}\n', x, '\\end{Sinput}\n')
@@ -179,9 +179,9 @@ theme_sweave = function() {
                    plot = function(x, options) sprintf('\\includegraphics{%s}', x[1]),
                    chunk = hook.c)
 }
-##' @rdname themes
+##' @rdname output_hooks
 ##' @export
-theme_html = function() {
+render_html = function() {
     knit_hooks$restore()
     ## use div with different classes
     html.hook = function(name) {
@@ -197,9 +197,9 @@ theme_html = function() {
         sprintf('<code class="knitr inline">%s</code>', .inline.hook(format_sci(x, 'html')))
     }, plot = .plot.hook.html, chunk = .chunk.hook.html)
 }
-##' @rdname themes
+##' @rdname output_hooks
 ##' @export
-theme_markdown = function() {
+render_markdown = function() {
     knit_hooks$restore()
     ## four spaces lead to <pre></pre>
     hook.t = function(x, options) evaluate:::line_prompt(x, '    ', '    ')
@@ -209,21 +209,21 @@ theme_markdown = function() {
                    inline = function(x) sprintf('`%s`', .inline.hook(format_sci(x, 'html'))),
                    plot = .plot.hook.markdown)
 }
-##' @rdname themes
+##' @rdname output_hooks
 ##' @export
-theme_gfm = function() {
+render_gfm = function() {
     ## gfm and jekyll are derived from markdown
-    theme_markdown()
+    render_markdown()
     hook.r = function(x, options) str_c('```r\n', x, '```\n')
     hook.t = function(x, options) str_c('```\n', x, '```\n')
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
     knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
                    error = hook.t, message = hook.t)
 }
-##' @rdname themes
+##' @rdname output_hooks
 ##' @export
-theme_jekyll = function() {
-    theme_markdown()
+render_jekyll = function() {
+    render_markdown()
     hook.r = function(x, options) str_c('{% highlight r %}\n', x, '{% endhighlight %}\n')
     hook.t = function(x, options) str_c('{% highlight text %}\n', x, '{% endhighlight %}\n')
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
