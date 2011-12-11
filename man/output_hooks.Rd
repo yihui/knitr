@@ -1,33 +1,33 @@
-\name{theme_latex}
-\alias{theme_gfm}
-\alias{theme_html}
-\alias{theme_jekyll}
-\alias{theme_latex}
-\alias{theme_markdown}
-\alias{theme_sweave}
-\title{Themes for output}
+\name{render_latex}
+\alias{render_gfm}
+\alias{render_html}
+\alias{render_jekyll}
+\alias{render_latex}
+\alias{render_markdown}
+\alias{render_sweave}
+\title{Set output hooks for different output formats}
 \usage{
-theme_latex()
+render_latex()
 
-theme_sweave()
+render_sweave()
 
-theme_html()
+render_html()
 
-theme_markdown()
+render_markdown()
 
-theme_gfm()
+render_gfm()
 
-theme_jekyll()
+render_jekyll()
 }
 \value{
   \code{NULL}; corresponding hooks are set
 }
 \description{
-  The theme functions are used to set output hooks.
-  Currently there are built-in themes for LaTeX, HTML,
-  Markdown, GFM (GitHub Flavored Markdown) and Jekyll (a
-  blogging system on GitHub). The original Sweave style is
-  supported via \code{theme_sweave()}.
+  Currently there are built-in output hooks for LaTeX,
+  HTML, Markdown, GFM (GitHub Flavored Markdown) and Jekyll
+  (a blogging system on GitHub). The original Sweave style
+  is supported via \code{render_sweave()}. The prefix
+  \samp{render_} stands for \dQuote{output hooks}.
 }
 \references{
   See output hooks in
