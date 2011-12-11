@@ -13,7 +13,7 @@ dev2ext = function(x) {
            tikz = 'tikz',
 
            stop('device name \'', x, '\' not supported yet; please go to ',
-                'https://github.com/yihui/knit/issues to report this issue',
+                'https://github.com/yihui/knitr/issues to report this issue',
                 call. = FALSE))
 }
 
@@ -21,11 +21,6 @@ dev2ext = function(x) {
 save_plot = function(plot, name, options) {
 
     dev = options$dev; ext = options$fig.ext; dpi = options$dpi
-
-    ## guess file type if NULL
-    if (is.null(ext)) {
-        ext = dev2ext(dev)
-    }
     path = str_c(name, ".", ext)
 
     ## built-in devices
