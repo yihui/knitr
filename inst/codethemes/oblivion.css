@@ -14,7 +14,6 @@
 }
 
 .keyword{
-	font-weight: bolder ;
 	color: #FFFFFF;
 }
 
@@ -39,12 +38,11 @@
 }
 
 .assignement{
-	font-weight: bolder;
-	color: #FFC600;
+	color: #D8D8D8;
 }
 
 .package{
-	text-decoration: underline;
+	font-weight: bolder;
 	color: #D25252;
 }
 
@@ -54,7 +52,7 @@
 }
 
 .symbol{
-	color: #D8D8D8 ;
+	color: #79ABFF ;
 }
 
 .prompt{

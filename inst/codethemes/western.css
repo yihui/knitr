@@ -6,6 +6,7 @@
 }
 
 .functioncall{
+  font-weight: bolder;
 	color: #7D1B7E ;
 }
 
@@ -14,7 +15,6 @@
 }
 
 .keyword{
-	font-weight: bolder ;
 	color: #7D1B7E;
 }
 
@@ -39,12 +39,12 @@
 }
 
 .assignement{
-	font-weight: bolder;
 	color: #7D1B7E;
 }
 
 .package{
-	color: #7D1B7E;
+  font-weight:bolder;
+	color: #7D0552;
 }
 
 .slot{
@@ -53,7 +53,7 @@
 }
 
 .symbol{
-	color: #7D1B7E ;
+	color: #347C17 ;
 }
 
 .prompt{

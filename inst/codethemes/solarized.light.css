@@ -14,7 +14,6 @@
 }
 
 .keyword{
-	font-weight: bolder ;
 	color: #B58900;
 }
 
@@ -39,12 +38,12 @@
 }
 
 .assignement{
-	font-weight: bolder;
-	color: #2AA198;
+	color: #657A81;
 }
 
 .package{
-	color: #D30102;
+	font-weight: bolder;
+	color: #657A81;
 }
 
 .slot{
