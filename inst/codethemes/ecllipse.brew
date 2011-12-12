@@ -15,7 +15,6 @@
 }
 
 .keyword{
-	font-weight: bolder ;
 	color: <%= keyword %>;
 }
 
@@ -40,12 +39,11 @@
 }
 
 .assignement{
-	font-weight: bolder;
-	color: <%= string %>;
+	color: <%= foreground %>;
 }
 
 .package{
-	text-decoration: underline;
+	font-weight: bolder;
 	color: <%= class %>;
 }
 
@@ -55,7 +53,7 @@
 }
 
 .symbol{
-	color: <%= bracket %> ;
+	color: <%= localVariable %> ;
 }
 
 .prompt{
