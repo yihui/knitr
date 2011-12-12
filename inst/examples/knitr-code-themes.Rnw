@@ -4,7 +4,7 @@
 \usepackage[sc]{mathpazo}
 \usepackage[T1]{fontenc}
 \usepackage{inconsolata}
-%\usepackage[scaled=0.88]{beramono}
+\usepackage[scaled=0.88]{beramono}
 %\usepackage{luximono}
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
@@ -35,20 +35,20 @@
 % \SweaveOpts{prefix.string=figure/minimal-,align=center,external=TRUE,fig.hold=TRUE}
 
 <<setup,echo=FALSE,results=hide,message=FALSE>>=
-set_code_theme('wombat')
-options(replace.assign=TRUE,width=90)
+code_theme <- 'wombat'
+set_code_theme(code_theme)
+options(replace.assign=TRUE)
 knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
 @
 
 
-\title{A Minimal Demo of knitr}
+\title{Syntax Highlighting Themes}
 
 
-\author{Yihui Xie}
+\author{Yihui Xie, Ramnath Vaidyanathan}
 
 \maketitle
-You can test if \textbf{knitr} works with this minimal demo. OK, let's
-get started with some boring random numbers:
+\noindent This document uses the code theme \Sexpr{code_theme}
 
 <<chunk2, eval = FALSE, message = FALSE>>=
 
