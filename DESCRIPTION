@@ -2,7 +2,7 @@ Package: knitr
 Type: Package
 Title: A general-purpose package for dynamic report
     generation in R
-Version: 0.0.5
+Version: 0.0.6
 Date: 2011-11-30
 Authors@R: c(person("Hadley", "Wickham", email =
     "hadley@rice.edu", role = "ctb"), person("Yihui",
@@ -60,7 +60,7 @@ Suggests:
     rgl,
     tikzDevice (>= 0.6.2)
 License: GPL
-URL: https://github.com/yihui/knitr
+URL: http://yihui.github.com/knitr/
 BugReports: https://github.com/yihui/knitr/issues
 Collate:
     'package.R'
