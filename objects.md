@@ -20,10 +20,10 @@ Four such objects are visible to users in **knitr**:
 
 Except `knit_patterns`, all other three objects are initialized with default values, and `knit_patterns` will be automatically determined according to the type of input document if not provided. The `knit_hooks` object is supposed to be used most frequently, and the other three are usually not to be used directly. For example, `opts_chunk` is usually set in the input document rather than using the command line directly.
 
-It is recommended to get the settings done in the first chunk with `echo = FALSE` and `results = FALSE` like this (we may call this chunk as the configuration chunk):
+It is recommended to get the settings done in the first chunk with `echo = FALSE` and `results = hide` like this (we may call this chunk as the configuration chunk):
 
 {% highlight r %}
-<<knitr-config, echo=FALSE, results=FALSE>>=
+<<knitr-config, echo=FALSE, results=hide>>=
 library(knitr)
 opts_knit$set(header = c('\\usepackage{listings}', '\\lstset{language=R}'))
 ## change the header information to use the LaTeX package listings
