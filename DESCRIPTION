@@ -60,7 +60,7 @@ Suggests:
     rgl,
     tikzDevice (>= 0.6.2)
 License: GPL
-URL: https://github.com/yihui/knitr
+URL: http://yihui.github.com/knitr/
 BugReports: https://github.com/yihui/knitr/issues
 Collate:
     'package.R'
