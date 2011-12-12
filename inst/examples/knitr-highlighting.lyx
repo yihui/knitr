@@ -1,0 +1,328 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass tufte-handout
+\begin_preamble
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\floatpagefraction}{0.75}
+
+\usepackage[buttonsize=1em]{animate}
+
+\usepackage[breaklinks=true,pdfstartview=FitH]{hyperref}
+% \SweaveOpts{prefix.string=figure/graphics-, prefix.cache=cache/graphics-, fig=TRUE, align=center, dev=pdf,  width=5, height=5, fig.hold=TRUE, cache=TRUE, align=center}
+
+% LOAD MINTED PACKAGE AND DEFINE OPTIONS ------------------------------
+\usepackage{minted}
+\usemintedstyle{perldoc}
+\definecolor{cssbg}{rgb}{0.97,0.97,0.97}
+\end_preamble
+\options xcolor = table, noae, justified
+\use_default_options true
+\begin_modules
+sweave
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 88
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\pdf_author "Ramnath Vaidyanathan"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen true
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\pdf_quoted_options "citecolor = blue, linkcolor = magenta, urlcolor = green"
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<setup,echo=FALSE,results=hide,cache=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+options(replace.assign=TRUE,width=78)
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.
+1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)}, crop=hook_pdfcrop)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+Customizing Syntax Highlighting
+\end_layout
+
+\begin_layout Author
+Yihui Xie, Ramnath Vaidyanathan
+\end_layout
+
+\begin_layout Abstract
+This manual shows how to customize syntax highlighting of source code using
+ themes.
+ It walks the user through the basics of syntax highlighting in 
+\family typewriter
+knitr, 
+\family default
+the use of built-in themes to alter the highlighting scheme, and finally
+ how to create a user-defined theme.
+\end_layout
+
+\begin_layout Standard
+Before reading this specific manual
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/downloads/yihui/knitr/knitr-graphics.pdf
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, you must have finished the main manual
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/downloads/yihui/knitr/knitr-manual.pdf
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section*
+Basics
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+knitr 
+\family default
+uses the 
+\family typewriter
+highlight 
+\family default
+package by Romain Francois to highlight source code in a document.
+ In short, the 
+\family typewriter
+highlight
+\family default
+ package parses the source code using the 
+\family typewriter
+bison
+\family default
+ parser, tokenizes it into grammar symbols, and formats their appearance
+ based on a 
+\family typewriter
+css
+\family default
+ style file (see 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{acid_css}
+\end_layout
+
+\end_inset
+
+).
+ The easiest way to customize syntax highlighting is by specifying you own
+ 
+\family typewriter
+css
+\family default
+ style file.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{listing}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+inputminted[tabsize = 2, bgcolor = cssbg]{css}{"/Users/ramnathvaidyanathan/Deskt
+op/R_Projects/knitr/inst/codethemes/acid.css"}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+caption{CSS Style File for the Acid Theme}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+label{acid_css}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{listing}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<test-plot, eval = F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+test_plot=function() {
+\end_layout
+
+\begin_layout Plain Layout
+
+with(trees, symbols(Height, Volume, circles = Girth/16, inches = FALSE,
+ bg = 'deeppink', fg = 'gray30'))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
