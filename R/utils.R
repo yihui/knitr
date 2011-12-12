@@ -152,3 +152,14 @@ fix_sweave_opts = function(options) {
     if (options$dev == 'eps') options$dev = 'postscript'
     options
 }
+
+#' Generate a pdf of a rnw file using knit and texi2dvi
+#'
+#' @export
+#' @importFrom tools file_path_sans_ext texi2dvi
+knit_to_pdf <- function(rnw_file){
+  # require(knitr)
+  knit(rnw_file)
+  tex_file <- sprintf("%s.tex", file_path_sans_ext(rnw_file))
+  texi2dvi(tex_file, pdf = TRUE, clean = TRUE)
+}
