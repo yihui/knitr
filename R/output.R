@@ -23,7 +23,7 @@
 ##' knit(f)
 ##'
 ##' knit(f, tangle = TRUE)  # extract R code only
-knit = function(input, output, pattern, tangle = FALSE) {
+knit = function(input, output, tangle = FALSE) {
 
     if (missing(output)) output = basename(auto_out_name(input, tangle))
 
@@ -31,11 +31,10 @@ knit = function(input, output, pattern, tangle = FALSE) {
     apat = opts_knit$get('all.patterns')
     opat = knit_patterns$get(); on.exit(knit_patterns$set(opat), add = TRUE)
     if (length(opat) == 0 || all(sapply(opat, is.null))) {
-        if (missing(pattern)) {
-            pattern = ext; if (ext == 'md') pattern = 'html'
-        }
+        pattern = if (ext == 'md') 'html' else ext
         if (!(pattern %in% names(apat)))
-            stop("a pattern list is not found for pattern = '", pattern, "' in built-in pattern lists; ",
+            stop("a pattern list cannot be automatically found for the file extension '",
+                 ext, "' in built-in pattern lists; ",
                  'see ?knit_patterns on how to set up customized patterns')
         knit_patterns$restore()
         knit_patterns$set(apat[[pattern]])
