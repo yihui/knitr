@@ -1,12 +1,14 @@
+
 .background{
-  color: #272822;
+  color: #272822 ;
 }
 .number{
-	color: #7FB347 ;
+	color: #AE81FF ;
 }
 
 .functioncall{
-	color: #BED6FF ;
+    font-weight: 'bolder' ;
+	color: #95f067 ;
 }
 
 .string{
@@ -14,12 +16,12 @@
 }
 
 .keyword{
-  font-weight: bolder;
-	color: #D8D8D8;
+	font-weight: bolder ;
+	color: #F92672;
 }
 
 .argument{
-	color: #79ABFF ;
+	color: #F8F8F2 ;
 }
 
 .comment{
@@ -27,11 +29,11 @@
 }
 
 .roxygencomment{
-	color: #CCDF32;
+	color: #75715E;
 }
 
 .formalargs{
-	color: #BED6FF;
+	color: #F8F8F2;
 }
 
 .eqformalargs{
@@ -43,8 +45,8 @@
 }
 
 .package{
-	font-weight: bolder;
-	color: #FFFFFF;
+  font-weight: bolder;
+	color: #66D9EF;
 }
 
 .slot{
@@ -53,7 +55,7 @@
 }
 
 .symbol{
-	color: #79ABFF ;
+	color: #F8F8F2 ;
 }
 
 .prompt{
