@@ -2104,7 +2104,40 @@ pdf
 \end_layout
 
 \begin_layout Standard
-Chunk reference using 
+For logical options, only 
+\family typewriter
+TRUE
+\family default
+/
+\family typewriter
+FALSE
+\family default
+/
+\family typewriter
+T
+\family default
+/
+\family typewriter
+F
+\family default
+ are supported (the first two are recommended), and 
+\family typewriter
+true
+\family default
+/
+\family typewriter
+false
+\family default
+ will not work, e.g., 
+\family typewriter
+eval=FALSE
+\family default
+ is OK, and 
+\family typewriter
+eval=false
+\family default
+ is not.
+ Chunk reference using 
 \family typewriter
 <<chunk-label>>
 \family default

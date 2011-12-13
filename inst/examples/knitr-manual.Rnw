@@ -555,7 +555,10 @@ for a chunk (in old ages, we may have to use both \texttt{eps} and
 \texttt{pdf}, but nowadays there is usually no need to generate multiple
 image formats for the same plot)
 \end{description}
-Chunk reference using \texttt{<\textcompwordmark{}<chunk-label>\textcompwordmark{}>}
+For logical options, only \texttt{TRUE}/\texttt{FALSE}/\texttt{T}/\texttt{F}
+are supported (the first two are recommended), and \texttt{true}/\texttt{false}
+will not work, e.g., \texttt{eval=FALSE} is OK, and \texttt{eval=false}
+is not. Chunk reference using \texttt{<\textcompwordmark{}<chunk-label>\textcompwordmark{}>}
 was dropped since R has \emph{functions}; if you want to reuse a chunk,
 consider writing a function instead of explicitly repeating code.
 
