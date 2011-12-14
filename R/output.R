@@ -177,7 +177,6 @@ wrap.character = function(x, options) {
 }
 
 wrap.source = function(x, options) {
-    ## TODO: optionally highlight code here
     src = x$src
     if (options$highlight) {
         fmt = opts_knit$get('out.format')
