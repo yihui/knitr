@@ -21,6 +21,9 @@ call_block = function(block) {
     }
     if (opts_knit$get('progress')) print(block)
 
+    params$echo = eval_opt(params$echo)
+    params$eval = eval_opt(params$eval)
+
     if ((!params$eval && !params$echo) || length(params$code) == 0 ||
         all(is_blank(params$code)))
         return('') # a trivial chunk; do nothing
@@ -46,9 +49,6 @@ call_block = function(block) {
 
 block_exec = function(code, ...) {
     options = list(...)
-
-    options$echo = eval_opt(options$echo)
-    options$eval = eval_opt(options$eval)
 
     ## tidy code if echo
     if (options$echo && options$tidy) {
