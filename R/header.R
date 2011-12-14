@@ -20,7 +20,40 @@ insert_header = function(x) {
 
 }
 
-## e.g. set_header(tikz = '\\usepackage{tikz}')
+##' Set the header information
+##'
+##' Some output documents may need appropriate header information, for
+##' example, for LaTeX output, we need to write
+##' \samp{\\usepackage{tikz}} into the preamble if we use tikz
+##' graphics; this function sets the header information to be written
+##' into the output.
+##'
+##' By default, \pkg{knitr} will set up the header automatically. For
+##' example, if the tikz device is used, \pkg{knitr} will add
+##' \samp{\\usepackage{tikz}} to the LaTeX preamble, and this is done
+##' by setting the header component \code{tikz} to be a character
+##' string: \code{set_header(tikz = '\\usepackage{tikz}')}. Similary,
+##' when we highlight R code using the \pkg{highlight} package
+##' (i.e. the chunk option \code{highlight = TRUE}), \pkg{knitr} will
+##' set the \code{highlight} component of the header vector
+##' automatically; if the output type is HTML, this component will be
+##' different -- instead of LaTeX commands, it contains CSS
+##' definitions.
+##'
+##' For power uses, all the components can be modified to adapt to a
+##' customized type of output. For instance, we can change
+##' \code{highlight} to LaTeX definitions of the \pkg{listings}
+##' package (and modify the output hooks accordingly), so we can
+##' decorate R code using the \pkg{listings} package.
+##' @param ... the header components; currently possible components
+##' are \code{highlight}, \code{tikz} and \code{framed}, which contain
+##' the necessary commands to be used in the HTML header or LaTeX
+##' preamble; note HTML output only uses the \code{highlight}
+##' component (the other two are ignored)
+##' @return The header vector in \code{opts_knit} is set.
+##' @export
+##' @examples set_header(tikz = '\\usepackage{tikz}')
+##' opts_knit$get('header')
 set_header = function(...) {
     h = opts_knit$get('header')
     z = c(...)
