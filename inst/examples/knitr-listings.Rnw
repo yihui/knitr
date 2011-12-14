@@ -1,0 +1,133 @@
+%% LyX 2.1.0svn created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass{article}
+\usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\lstset{language=R}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage{url}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{
+ pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{color}
+% we need this because the chunk hook still need it
+\definecolor{fgcolor}{rgb}{0,0,0}
+
+\makeatother
+
+\begin{document}
+
+% \SweaveOpts{highlight=FALSE}
+
+<<setup,echo=FALSE>>=
+options(replace.assign=TRUE)
+@
+
+
+\title{Using listings with knitr}
+
+
+\author{Yihui Xie}
+
+\maketitle
+To use the \textbf{listings} package, we need to declare it in the
+\LaTeX{} preamble first (the second line is optional):
+
+\begin{lstlisting}[language=TeX]
+\usepackage{listings}
+\lstset{language=R}
+\end{lstlisting}
+
+
+Then we need to modify the output hooks and header information accordingly.
+In this demo, I use options \texttt{language=R,numbers=left,stepnumber=2}
+for the R source code in the \texttt{lstlistings} environemnt; for
+R output, I use the typewriter font; for warnings, messages and errors,
+I use bold font. We do not need the header information in \texttt{highlight},
+so we empty it. The R code used is below (not all output hooks need
+to be set, e.g. \texttt{inline}, \texttt{plot} and \texttt{chunk}
+hooks):
+
+\begin{verbatim}
+## a common hook for messages, warnings and errors
+hook_lst_bf = function(x, options) {
+    paste("\\begin{lstlisting}[basicstyle={\\bfseries}]\n", x, 
+        "\\end{lstlisting}\n", sep = "")
+}
+knit_hooks$set(source = function(x, options) {
+    paste("\\begin{lstlisting}[language=R,numbers=left,stepnumber=2]\n", x, 
+        "\\end{lstlisting}\n", sep = "")
+}, output = function(x, options) {
+    paste("\\begin{lstlisting}[basicstyle={\\ttfamily}]\n", x, 
+        "\\end{lstlisting}\n", sep = "")
+}, warning = hook_lst_bf, message = hook_lst_bf, error = hook_lst_bf)
+set_header(highlight = "")
+\end{verbatim}
+
+<<listings-hooks,echo=FALSE>>=
+## for those who read source code here: I cannot use echo=TRUE here because
+## the code \begin{lstlistings} and \end{lstlistings} will confuse the listings package and cause LaTeX errors
+hook_lst_bf = function(x, options) {
+  paste('\\begin{lstlisting}[basicstyle={\\bfseries}]\n', x, '\\end{lstlisting}\n', sep = '')
+}
+knit_hooks$set(source = function(x, options) {
+  paste('\\begin{lstlisting}[language=R,numbers=left,stepnumber=2]\n', x, '\\end{lstlisting}\n', sep = '')
+}, output = function(x, options) {
+  paste('\\begin{lstlisting}[basicstyle={\\ttfamily}]\n', x, '\\end{lstlisting}\n', sep = '')
+}, warning = hook_lst_bf, message = hook_lst_bf, error = hook_lst_bf)
+set_header(highlight = '')
+@
+
+Now we can see how the results look like with our new settings:
+
+<<boring-random>>=
+set.seed(1121)  # for reproducibility
+options(width=70)
+x=rnorm(20)
+x
+mean(x)
+sqrt(-1)  # this will give you a warning message
+@
+
+Another chunk:
+
+<<rgl-hook-demo,eval=FALSE>>=
+hook_rgl = function(before, options, envir) {
+    ## after a chunk has been evaluated
+    if (before || !require('rgl') || rgl.cur() == 0) return()  # no active device
+    name = paste(valid_prefix(options$prefix.string), options$label, sep = '')
+    par3d(windowRect = 100 + options$dpi * c(0, 0, options$width, options$height))
+    Sys.sleep(.05) # need time to respond to window size change
+
+    fmt = opts_knit$get('out.format')
+    if (fmt %in% c('html', 'markdown', 'gfm', 'jekyll')) options$dev = 'png'
+
+    ## support 3 formats: eps, pdf and png (default)
+    switch(options$dev,
+           postscript = rgl.postscript(paste(name, '.eps', sep = ''), fmt = 'eps'),
+           pdf = rgl.postscript(paste(name, '.pdf', sep = ''), fmt = 'pdf'),
+           rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png'))
+
+    if (fmt == 'html') return(.plot.hook.html(c(name, 'png'), options))
+    if (fmt %in% c('markdown', 'gfm', 'jekyll'))
+        return(.plot.hook.markdown(c(name, 'png'), options))
+
+    paste(ifelse(options$align == 'center', '\\centering{}', ''), '\\includegraphics[',
+          sprintf('width=%s', options$out.width), ']{', name, '}\n', sep = '')
+}
+@
+
+You should be able to compile the \TeX{} document and get a PDF file
+like this one: \url{https://github.com/downloads/yihui/knitr/knitr-listings.pdf}.
+For more information about out hooks, see \url{http://yihui.github.com/knitr/hooks}.
+
+\end{document}

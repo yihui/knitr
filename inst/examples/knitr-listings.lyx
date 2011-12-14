@@ -1,0 +1,686 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 417
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{color}
+% we need this because the chunk hook still need it
+\definecolor{fgcolor}{rgb}{0,0,0}
+\end_preamble
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding default
+\fontencoding global
+\font_roman palatino
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc true
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen true
+\pdf_bookmarksopenlevel 2
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\pdf_quoted_options "pdfstartview={XYZ null null 1}"
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\use_undertilde 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.5cm
+\topmargin 2.5cm
+\rightmargin 2.5cm
+\bottommargin 2.5cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "language=R"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+% 
+\backslash
+SweaveOpts{highlight=FALSE}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<setup,echo=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+options(replace.assign=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+Using listings with knitr
+\end_layout
+
+\begin_layout Author
+Yihui Xie
+\end_layout
+
+\begin_layout Standard
+To use the 
+\series bold
+listings
+\series default
+ package, we need to declare it in the LaTeX preamble first (the second
+ line is optional):
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=TeX"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+usepackage{listings}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+lstset{language=R}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then we need to modify the output hooks and header information accordingly.
+ In this demo, I use options 
+\family typewriter
+language=R,numbers=left,stepnumber=2
+\family default
+ for the R source code in the 
+\family typewriter
+lstlistings
+\family default
+ environemnt; for R output, I use the typewriter font; for warnings, messages
+ and errors, I use bold font.
+ We do not need the header information in 
+\family typewriter
+highlight
+\family default
+, so we empty it.
+ The R code used is below (not all output hooks need to be set, e.g.
+ 
+\family typewriter
+inline
+\family default
+, 
+\family typewriter
+plot
+\family default
+ and 
+\family typewriter
+chunk
+\family default
+ hooks):
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+## a common hook for messages, warnings and errors
+\end_layout
+
+\begin_layout Plain Layout
+
+hook_lst_bf = function(x, options) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    paste("
+\backslash
+
+\backslash
+begin{lstlisting}[basicstyle={
+\backslash
+
+\backslash
+bfseries}]
+\backslash
+n", x, 
+\end_layout
+
+\begin_layout Plain Layout
+
+        "
+\backslash
+
+\backslash
+end{lstlisting}
+\backslash
+n", sep = "")
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_hooks$set(source = function(x, options) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    paste("
+\backslash
+
+\backslash
+begin{lstlisting}[language=R,numbers=left,stepnumber=2]
+\backslash
+n", x, 
+\end_layout
+
+\begin_layout Plain Layout
+
+        "
+\backslash
+
+\backslash
+end{lstlisting}
+\backslash
+n", sep = "")
+\end_layout
+
+\begin_layout Plain Layout
+
+}, output = function(x, options) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    paste("
+\backslash
+
+\backslash
+begin{lstlisting}[basicstyle={
+\backslash
+
+\backslash
+ttfamily}]
+\backslash
+n", x, 
+\end_layout
+
+\begin_layout Plain Layout
+
+        "
+\backslash
+
+\backslash
+end{lstlisting}
+\backslash
+n", sep = "")
+\end_layout
+
+\begin_layout Plain Layout
+
+}, warning = hook_lst_bf, message = hook_lst_bf, error = hook_lst_bf)
+\end_layout
+
+\begin_layout Plain Layout
+
+set_header(highlight = "")
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<listings-hooks,echo=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+## for those who read source code here: I cannot use echo=TRUE here because
+\end_layout
+
+\begin_layout Plain Layout
+
+## the code 
+\backslash
+begin{lstlistings} and 
+\backslash
+end{lstlistings} will confuse the listings package and cause LaTeX errors
+\end_layout
+
+\begin_layout Plain Layout
+
+hook_lst_bf = function(x, options) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  paste('
+\backslash
+
+\backslash
+begin{lstlisting}[basicstyle={
+\backslash
+
+\backslash
+bfseries}]
+\backslash
+n', x, '
+\backslash
+
+\backslash
+end{lstlisting}
+\backslash
+n', sep = '')
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_hooks$set(source = function(x, options) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  paste('
+\backslash
+
+\backslash
+begin{lstlisting}[language=R,numbers=left,stepnumber=2]
+\backslash
+n', x, '
+\backslash
+
+\backslash
+end{lstlisting}
+\backslash
+n', sep = '')
+\end_layout
+
+\begin_layout Plain Layout
+
+}, output = function(x, options) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  paste('
+\backslash
+
+\backslash
+begin{lstlisting}[basicstyle={
+\backslash
+
+\backslash
+ttfamily}]
+\backslash
+n', x, '
+\backslash
+
+\backslash
+end{lstlisting}
+\backslash
+n', sep = '')
+\end_layout
+
+\begin_layout Plain Layout
+
+}, warning = hook_lst_bf, message = hook_lst_bf, error = hook_lst_bf)
+\end_layout
+
+\begin_layout Plain Layout
+
+set_header(highlight = '')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we can see how the results look like with our new settings:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<boring-random>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+set.seed(1121)  # for reproducibility
+\end_layout
+
+\begin_layout Plain Layout
+
+options(width=70)
+\end_layout
+
+\begin_layout Plain Layout
+
+x=rnorm(20)
+\end_layout
+
+\begin_layout Plain Layout
+
+x
+\end_layout
+
+\begin_layout Plain Layout
+
+mean(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+sqrt(-1)  # this will give you a warning message
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Another chunk:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<rgl-hook-demo,eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+hook_rgl = function(before, options, envir) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    ## after a chunk has been evaluated
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (before || !require('rgl') || rgl.cur() == 0) return()  # no active
+ device
+\end_layout
+
+\begin_layout Plain Layout
+
+    name = paste(valid_prefix(options$prefix.string), options$label, sep
+ = '')
+\end_layout
+
+\begin_layout Plain Layout
+
+    par3d(windowRect = 100 + options$dpi * c(0, 0, options$width, options$height
+))
+\end_layout
+
+\begin_layout Plain Layout
+
+    Sys.sleep(.05) # need time to respond to window size change
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    fmt = opts_knit$get('out.format')
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (fmt %in% c('html', 'markdown', 'gfm', 'jekyll')) options$dev = 'png'
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    ## support 3 formats: eps, pdf and png (default)
+\end_layout
+
+\begin_layout Plain Layout
+
+    switch(options$dev,
+\end_layout
+
+\begin_layout Plain Layout
+
+           postscript = rgl.postscript(paste(name, '.eps', sep = ''), fmt
+ = 'eps'),
+\end_layout
+
+\begin_layout Plain Layout
+
+           pdf = rgl.postscript(paste(name, '.pdf', sep = ''), fmt = 'pdf'),
+\end_layout
+
+\begin_layout Plain Layout
+
+           rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png'))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (fmt == 'html') return(.plot.hook.html(c(name, 'png'), options))
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (fmt %in% c('markdown', 'gfm', 'jekyll'))
+\end_layout
+
+\begin_layout Plain Layout
+
+        return(.plot.hook.markdown(c(name, 'png'), options))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    paste(ifelse(options$align == 'center', '
+\backslash
+
+\backslash
+centering{}', ''), '
+\backslash
+
+\backslash
+includegraphics[',
+\end_layout
+
+\begin_layout Plain Layout
+
+          sprintf('width=%s', options$out.width), ']{', name, '}
+\backslash
+n', sep = '')
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You should be able to compile the TeX document and get a PDF file like this
+ one: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/downloads/yihui/knitr/knitr-listings.pdf
+\end_layout
+
+\end_inset
+
+.
+ For more information about out hooks, see 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://yihui.github.com/knitr/hooks
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document
