@@ -33,7 +33,6 @@
 \renewcommand{\floatpagefraction}{0.75}
 
 \usepackage[buttonsize=1em]{animate}
-% \usepackage{Sweave}  % no Sweave please
 
 \makeatother
 
