@@ -47,6 +47,9 @@ call_block = function(block) {
 block_exec = function(code, ...) {
     options = list(...)
 
+    options$echo = eval_opt(options$echo)
+    options$eval = eval_opt(options$eval)
+
     ## tidy code if echo
     if (options$echo && options$tidy) {
         res = try(tidy.source(text = code, output = FALSE), silent = TRUE)
