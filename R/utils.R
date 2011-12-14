@@ -152,3 +152,11 @@ fix_sweave_opts = function(options) {
     if (options$dev == 'eps') options$dev = 'postscript'
     options
 }
+
+## try eval an option (character) to an expected result
+eval_opt = function(x, expect_class = is.logical) {
+    if (expect_class(x)) return(x)
+    res = eval(parse(text = x), envir = globalenv())
+    if (!expect_class(res)) stop('option value ', x, ' did not give an expected result')
+    res
+}
