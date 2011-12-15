@@ -18,7 +18,12 @@ Take Rnw files as an example: usually we write chunk options like this
 @
 {% endhighlight %}
 
-And `\SweaveOpts{comment=#, width=6, height=6}` can change the default global options in a document. All available options in **knitr** are:
+And `\SweaveOpts{comment=#, width=6, height=6}` can change the default global options in a document. A few special notes on the options:
+
+1. Avoid spaces ` ` and periods `.` in chunk labels and directory names; if your output is a TeX document, these characters can cause troubles (in general it is recommended to use alphabetic characters with words separated by `-` and avoid other characters), e.g. `setup-options` is a good label, whereas `setup.options` and `chunk 1` are bad; `prefix.string=figures/mcmc-` is a good prefix for figure output if this project is about MCMC, and `prefix.string=markov chain/monte carlo` is bad;
+2. For options that take _character_ values, you should not quote them as you do in R (e.g. should write `prefix.string=abc` instead of `prefix.string="abc"`), and should avoid the comma `,` in the character string since it is the separator of chunk options; for logical options, `TRUE` and `FALSE` are OK, and `true`/`false` will not work as you might have expected;
+
+All available options in **knitr** are:
 
 - `eval`: (`TRUE`) whether to evaluate the code chunk
 - `echo`: (`TRUE`) whether to include R source code in the output file
