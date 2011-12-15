@@ -15,6 +15,7 @@
 }
 
 .keyword{
+	font-weight: bolder;
 	color: <%= keyword %>;
 }
 
@@ -27,7 +28,7 @@
 }
 
 .roxygencomment{
-	color: <%= multiLineComment %>;
+	color: <%= javadoc %>;
 }
 
 .formalargs{
@@ -53,7 +54,7 @@
 }
 
 .symbol{
-	color: <%= localVariable %> ;
+	color: <%= localVariableDeclaration %> ;
 }
 
 .prompt{
