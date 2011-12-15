@@ -36,7 +36,7 @@
 
 <<setup,echo=FALSE,results=hide,message=FALSE>>=
 # theme_name <- save_eclipse_theme(244)
-set_theme(theme_name)
+# set_theme(theme_name)
 options(replace.assign=TRUE)
 knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
 @
