@@ -179,6 +179,9 @@ knit_to_pdf <- function(rnw_file, theme = NULL, line_numbers = FALSE){
     tex_file <- insert_line_numbers(tex_file)
     # on.exit(unlink(tex_file))
   }
-  file.rename(tex_file, tex_file_name) 
-  texi2dvi(tex_file_name, pdf = TRUE, clean = TRUE)
+  file.rename(tex_file, tex_file_name)
+  oldwd <- getwd()
+  setwd(dirname(tex_file_name)) 
+  texi2dvi(basename(tex_file_name), pdf = TRUE, clean = TRUE)
+  setwd(oldwd)
 }
