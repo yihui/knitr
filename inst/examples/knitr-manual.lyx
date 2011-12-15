@@ -2362,58 +2362,6 @@ knitr
 \end_layout
 
 \begin_layout Standard
-The syntax is slightly different with Sweave: Sweave uses the syntax of
- Noweb, in which 
-\family typewriter
-<<>>=
-\family default
- means a code chunk begins, and 
-\family typewriter
-@
-\family default
- means a chunk ends, so we can begin a chunk without ending it (all the
- following lines will be treated as program code), or begin chunks one after
- another without ending them in-between; 
-\series bold
-knitr
-\series default
- requires the beginning and ending of a chunk must be strictly matched --
- one beginning must be followed one ending.
- The chunks below are valid in Sweave but not in 
-\series bold
-knitr
-\series default
-:
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-<<valid-sweave,echo=FALSE,comment=>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-cat(c(' <<one-chunk,eval=FALSE>>=',' 1+1',' <<another-chunk,echo=TRUE>>=','
- rnorm(10)',' @'), sep='
-\backslash
-n')
-\end_layout
-
-\begin_layout Plain Layout
-
-@
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 For inline R code as in 
 \family typewriter
 
