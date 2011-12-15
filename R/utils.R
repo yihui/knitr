@@ -196,9 +196,8 @@ add_theme_chunk <- function(rnw_file, theme){
 
 #' Get path to the codethemes folder
 fetch_css_folder <- function(){
-  # TODO: REPLACE THEME_FOLDER BEFORE PACKAGE INSTALLATION
-  # theme_folder <- system.file('themes', package = 'knitr')
-  css_folder <- path.expand("~/Desktop/R_Projects/knitr/inst/themes")
+  css_folder <- system.file('themes', package = 'knitr')
+  # css_folder <- path.expand("~/Desktop/R_Projects/knitr/inst/themes")
   return(css_folder)
 }
 
