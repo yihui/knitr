@@ -155,11 +155,60 @@ fix_sweave_opts = function(options) {
 
 #' Generate a pdf of a rnw file using knit and texi2dvi
 #'
+#' @author Ramnath Vaidyanathan
 #' @export
 #' @importFrom tools file_path_sans_ext texi2dvi
-knit_to_pdf <- function(rnw_file){
+knit_to_pdf <- function(rnw_file, theme = NULL, line_numbers = FALSE){
   # require(knitr)
+  if (!missing(theme)){
+    rnw_file <- add_theme_chunk(rnw_file, theme)
+  }
   knit(rnw_file)
   tex_file <- sprintf("%s.tex", file_path_sans_ext(rnw_file))
+  if (line_numbers) {
+    tex_file <- insert_line_numbers(tex_file)
+  } 
   texi2dvi(tex_file, pdf = TRUE, clean = TRUE)
+}
+# TODO: rename pdf file based on orginal rnw_file
+
+
+add_theme_chunk <- function(rnw_file, theme){
+  doc <- readLines(rnw_file)
+  begin_line <- grep("begin{document}", doc, fixed = TRUE)
+  theme_chunk  <- c(
+    "<<set-theme, echo = FALSE, results = hide>>=",
+    paste("set_theme(", "'", theme, "'",")", sep = ""),
+    "@")
+  doc <- c(doc[1:begin_line], theme_chunk, doc[-c(1:begin_line)])
+  tf <- tempfile(tmpdir = dirname(rnw_file), fileext = ".rnw")
+  writeLines(doc, tf)
+  return(path.expand(tf))
+}
+
+#' Get path to the codethemes folder
+fetch_css_folder <- function(){
+  # TODO: REPLACE THEME_FOLDER BEFORE PACKAGE INSTALLATION
+  # theme_folder <- system.file('themes', package = 'knitr')
+  css_folder <- path.expand("~/Desktop/R_Projects/knitr/inst/themes")
+  return(css_folder)
+}
+
+#' Insert line numbers for code lines
+#'
+#' @author Ramnath Vaidyanathan
+insert_line_numbers <- function(tex_file){
+  require(stringr)
+  doc <- readLines(tex_file)
+  code_lines   <- grep("^(\\\\hlstd|\\\\hlfunctioncall)", doc)
+  max_lines    <- length(code_lines)
+  line_numbers <- str_pad(seq_along(code_lines), width = 2, side = "left")
+
+  # line_numbers <- str_c("\\1\\\\hlline\\{", line_numbers, "   \\}\\2")
+  line_numbers <- str_c("\\\\hlline\\{", line_numbers, "   \\}\\1\\2")
+
+  pat <- "^(\\\\hlstd\\{\\}|\\\\hlfunctioncall\\{.*\\})(.*)$"
+  doc[code_lines] <- str_replace(doc[code_lines], pat, line_numbers)
+  writeLines(doc, tex_file)
+  return(path.expand(tex_file))
 }
