@@ -32,7 +32,7 @@ opts_chunk =
     new_defaults(list(eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
                       cache = FALSE, dependson = NULL, prefix.cache = 'cache/',
                       ref = NULL, prefix.string = '',
-                      prompt = FALSE, comment = '##', fig = FALSE, fig.ext = NULL,
+                      prompt = FALSE, comment = '##', fig = TRUE, fig.ext = NULL,
                       fig.low = FALSE, dev = 'pdf', dpi = 72, width = 7, height = 7,
                       out.width = NULL, out.height = NULL,
                       resize.width = NULL, resize.height = NULL, align = 'default',
