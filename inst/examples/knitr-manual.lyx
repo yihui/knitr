@@ -407,8 +407,8 @@ The flow of processing an input file is similar to Sweave, and two major
 \series bold
 knitr
 \series default
- provides far more flexibility to the users to customize the processing,
- and has many built-in options such as the support to a wide range of graphics
+ provides more flexibility to the users to customize the processing, and
+ has many built-in options such as the support to a wide range of graphics
  devices and cache.
  Below is a brief description of the process:
 \end_layout
@@ -419,7 +419,15 @@ knitr
 knitr
 \series default
  takes an input file and automatically determines an appropriate set of
- patterns to use if they are not provided in advance (e.g.
+ 
+\begin_inset CommandInset href
+LatexCommand href
+name "patterns"
+target "http://yihui.github.com/knitr/patterns"
+
+\end_inset
+
+ to use if they are not provided in advance (e.g.
  
 \family sans
 file.Rnw
@@ -432,8 +440,15 @@ knit_patterns$get('rnw')
 \end_layout
 
 \begin_layout Enumerate
-a set of hooks will also be set up automatically according to the filename
- extension (e.g.
+a set of out 
+\begin_inset CommandInset href
+LatexCommand href
+name "hooks"
+target "http://yihui.github.com/knitr/hooks"
+
+\end_inset
+
+ will also be set up automatically according to the filename extension (e.g.
  use LaTeX environments to wrap R results for LaTeX output);
 \end_layout
 
@@ -481,8 +496,16 @@ knitr
 \family typewriter
 dependson
 \family default
- option) and any one of these chunks has changed, this chunk must be forcibly
- updated (old cache will be purged)
+ 
+\begin_inset CommandInset href
+LatexCommand href
+name "option"
+target "http://yihui.github.com/knitr/options"
+
+\end_inset
+
+) and any one of these chunks has changed, this chunk must be forcibly updated
+ (old cache will be purged)
 \end_layout
 
 \begin_layout Enumerate
@@ -521,18 +544,19 @@ wrap()
  is used to deal with different types of output, using output hooks defined
  in the object 
 \family typewriter
-hooks
+knit_hooks
 \end_layout
 
 \begin_layout Enumerate
 note plots are recorded as R objects before they are really saved to files,
- so graphics devices will not be opened unless plots are really produced
+ so graphics devices will not be opened unless plots have really been produced
  in a chunk
 \end_layout
 
 \begin_layout Enumerate
-a code chunk is evaluated in a separate environment, and all the objects
- in this environment after the evaluation will be saved if 
+a code chunk is evaluated in a separate empty environment with the global
+ environment as its parent, and all the objects in this environment after
+ the evaluation will be saved if 
 \family typewriter
 cache=TRUE
 \end_layout
@@ -691,7 +715,8 @@ knitr
 \series default
  ready for other types of output, and a typical one is HTML (there are built-in
  hooks).
- In fact I use this package to build its website.
+ The website has provided many examples demonstrating the flexibility of
+ the output.
 \end_layout
 
 \begin_layout Section
@@ -1687,7 +1712,7 @@ usepackage{animate}
 knitr
 \series default
  will not add it automatically.
- Animations in the PDF output can only be viewed in Acrobat Reader.
+ Animations in the PDF output can only be viewed in Adobe Reader.
 \end_layout
 
 \begin_layout Standard
@@ -1830,7 +1855,7 @@ cache
  directory (e.g.
  
 \family typewriter
-prefix.string=cache/abc-
+prefix.cache=cache/abc-
 \family default
 ), cache files will be stored under that directory (automatically created
  if it does not exist).
@@ -1913,8 +1938,8 @@ dependson=chunkA;chunkB
 \family default
 .
  Before loading cached results, all the dependent chunks will be examined
- to make sure they were not changed, otherwise the current cache will be
- rebuilt.
+ to make sure they were not changed, otherwise the current chunk has to
+ be re-evaluated and its cache will be rebuilt.
  The way I implement 
 \family typewriter
 dependson
@@ -2152,7 +2177,7 @@ key "rgl-manual"
 \end_inset
 
  using a customized hook function.
- First we define a hook function named 
+ First we define a hook named 
 \family typewriter
 rgl
 \family default
@@ -2741,6 +2766,42 @@ install.packages(c('animation', 'rgl', 'tikzDevice'))
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Feedback and comments on this manual and the package are always welcome.
+ Bug reports and feature requests can be sent to 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/yihui/knitr/issues
+\end_layout
+
+\end_inset
+
+, and questions can be delivered to the 
+\begin_inset CommandInset href
+LatexCommand href
+name "mailing list"
+target "knitr@googlegroups.com"
+type "mailto:"
+
+\end_inset
+
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://groups.google.com/group/knitr
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
