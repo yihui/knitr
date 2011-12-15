@@ -219,5 +219,6 @@ insert_line_numbers <- function(tex_file){
   doc[code_lines] <- str_replace(doc[code_lines], pat, line_numbers)
   writeLines(doc, tex_file)
   return(path.expand(tex_file))
+}
   
 
