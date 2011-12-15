@@ -70,8 +70,8 @@ the package homepage \url{http://yihui.github.com/knitr/}.
 
 A natural question is why to reinvent the wheel. The short answer
 is that extending Sweave by hacking \textsf{SweaveDrivers.R} in the
-\textbf{utils} package is no longer the way I want to go. Many features
-in \textbf{knitr} come naturally as users would have expected. Figure
+\textbf{utils} package is a difficult job to me. Many features in
+\textbf{knitr} come naturally as users would have expected. Figure
 \ref{fig:cars-demo} is a simple demo of some features of \textbf{knitr}.
 
 \begin{figure}
@@ -238,6 +238,16 @@ for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
 Note \texttt{=} is replaced by \texttt{<-} because \texttt{options('replace.assign')}
 was set to be \texttt{TRUE} in this document; see the documentation
 of \emph{tidy.source()} in \textbf{formatR} for details.
+
+Many highlighting themes can be used in \textbf{knitr}, which are
+borrowed from the \textbf{highlight} package by \href{http://www.andre-simon.de/}{Andre Simon}%
+\footnote{not the R package mentioned before; for a preview of these themes,
+see \url{http://www.andre-simon.de/dokuwiki/doku.php?id=theme_examples}%
+}; it is also possible to use themes from \url{http://www.eclipsecolorthemes.org/}
+by providing a theme id to \textbf{knitr}%
+\footnote{many thanks to \href{https://github.com/ramnathv}{Ramnath Vaidyanathan}
+for the work on themes%
+}.
 
 
 \subsection{Graphics}

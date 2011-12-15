@@ -213,7 +213,7 @@ SweaveDrivers.R
 \series bold
 utils
 \series default
- package is no longer the way I want to go.
+ package is a difficult job to me.
  Many features in 
 \series bold
 knitr
@@ -940,6 +940,80 @@ tidy.source()
 formatR
 \series default
  for details.
+\end_layout
+
+\begin_layout Standard
+Many highlighting themes can be used in 
+\series bold
+knitr
+\series default
+, which are borrowed from the 
+\series bold
+highlight
+\series default
+ package by 
+\begin_inset CommandInset href
+LatexCommand href
+name "Andre Simon"
+target "http://www.andre-simon.de/"
+
+\end_inset
+
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+not the R package mentioned before; for a preview of these themes, see 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.andre-simon.de/dokuwiki/doku.php?id=theme_examples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+; it is also possible to use themes from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.eclipsecolorthemes.org/
+\end_layout
+
+\end_inset
+
+ by providing a theme id to 
+\series bold
+knitr
+\series default
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+many thanks to 
+\begin_inset CommandInset href
+LatexCommand href
+name "Ramnath Vaidyanathan"
+target "https://github.com/ramnathv"
+
+\end_inset
+
+ for the work on themes
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
