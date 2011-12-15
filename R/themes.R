@@ -3,11 +3,11 @@
 #' @export
 #' @author Ramnath Vaidyanathan
 #  TODO: change par()$col to foreground colour so that figure displays well.
-set_code_theme <- function(theme){
-  theme <- fetch_code_theme(theme)
-  hi <- paste(c(theme$highlight, boxes_latex()), collapse = "\n")
-  opts_chunk$set(background = theme$background)
-  set_header(highlight = hi)
+set_theme <- function(theme){
+  header     <- theme_to_header(theme)
+  highlight  <- paste(c(header$highlight, boxes_latex()), collapse = "\n")
+  opts_chunk$set(background = header$background)
+  set_header(highlight = highlight)
   # par(col = theme$foreground)
   return()
 }
@@ -16,30 +16,25 @@ set_code_theme <- function(theme){
 #'
 #' @export
 #' @author Ramnath Vaidyanathan
-get_code_theme <- function(theme = NULL){
-  # TODO: replace with system.file during installation
-  # theme_folder <- system.file(package = 'knitr')
-  theme_folder <- path.expand("~/Desktop/R_Projects/knitr/inst")
+get_theme <- function(theme = NULL){
+  css_folder <- fetch_css_folder()
   if (is.null(theme)){
     message('List of Available Code Themes')
-    theme_files <- list.files(file.path(theme_folder, 'codethemes'), 
-      pattern = "css")
-    return(file_path_sans_ext(basename(theme_files)))
+    css_files <- list.files(css_folder, pattern = "css")
+    return(file_path_sans_ext(basename(css_files)))
   } else {
-    fetch_code_theme(theme)
+    theme_to_header(theme)
   }
 }
 
-#' Fetches theme file given theme name
+#' Fetches css file given theme name
 #'
 #' @keywords internal
 #' @author Ramnath Vaidyanathan
-fetch_theme_file <- function(theme){
-  theme_file <- sprintf("%s.css", theme)
-  # TODO: replace with system.file during installation
-  theme_folder <- path.expand("~/Desktop/R_Projects/knitr/inst")
-  # theme_folder <- system.file(package = 'knitr')
-  return(file.path(theme_folder, 'codethemes', theme_file))
+fetch_css <- function(theme){
+  css_file   <- sprintf("%s.css", theme)
+  css_folder <- fetch_css_folder()
+  return(file.path(css_folder, css_file))
 }
 
 #' Generates latex header based on theme
@@ -47,16 +42,16 @@ fetch_theme_file <- function(theme){
 #' @importFrom highlight css.parser styler_assistant_latex
 #' @keywords internal
 #' @author Ramnath Vaidyanathan
-fetch_code_theme  <- function(theme){
-  css_file   <- fetch_theme_file(theme)
-  css_out    <-  css.parser(css_file)
+theme_to_header  <- function(theme){
+  css_file   <- fetch_css(theme)
+  css_out    <- css.parser(css_file)
   
   # get background and foreground colors
   background <- css_out$background$color
   foreground <- css_out$prompt$color
   
   # write latex highlight header
-  fgheader <- color_def(foreground, 'fgcolor')
+  fgheader  <- color_def(foreground, 'fgcolor')
   highlight <- c(fgheader, styler_assistant_latex(css_out[-1]))
   
   return(list(
