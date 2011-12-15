@@ -32,8 +32,8 @@ knit(input, output, tangle = FALSE)
   enough. This function will try to determine many internal
   settings automatically. For the sake of reproducibility,
   it is a better practice to include the options inside the
-  input document, instead of setting them before knitting
-  the document.
+  input document (to be self-contained), instead of setting
+  them before knitting the document.
 
   First the filename of the output document is determined
   in this way: \file{foo.Rnw} generates \file{foo.tex}, and
@@ -43,7 +43,8 @@ knit(input, output, tangle = FALSE)
   creates the output \file{foo.html}, so you can use files
   named in this way as templates; if \samp{_knit_} is not
   found in the filename, \file{foo.ext} will produce
-  \file{foo-out.ext}.
+  \file{foo-out.ext}. If \code{tangle = TRUE},
+  \file{foo.ext} generates an R script \file{foo.R}.
 
   Based on the file extension of the input document, a list
   of patterns will be used to extract R code in the

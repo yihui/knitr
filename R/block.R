@@ -21,6 +21,9 @@ call_block = function(block) {
     }
     if (opts_knit$get('progress')) print(block)
 
+    params$echo = eval_opt(params$echo)
+    params$eval = eval_opt(params$eval)
+
     if ((!params$eval && !params$echo) || length(params$code) == 0 ||
         all(is_blank(params$code)))
         return('') # a trivial chunk; do nothing
@@ -76,7 +79,7 @@ block_exec = function(code, ...) {
         pdf(file = tempfile())  # should not use RStudio's GD
     } else dev.new()
     dv = dev.cur(); on.exit(dev.off(dv))
-    dev.control(displaylist = 'enable')  # need to record plots
+    dev.control(displaylist = if (options$fig) 'enable' else 'inhibit')  # enable recording
 
     ## guess plot file type if it is NULL
     if (options$fig && is.null(options$fig.ext)) {

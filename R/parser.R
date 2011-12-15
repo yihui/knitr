@@ -14,22 +14,11 @@ split_file = function(path) {
 
     set_tikz_opts(lines, chunk.begin, chunk.end)  # prepare for tikz option 'standAlone'
 
-    blks = which(str_detect(lines, chunk.begin))
-    ends = which(str_detect(lines, chunk.end))
+    blks = str_detect(lines, chunk.begin)
+    txts = str_detect(lines, chunk.end)
 
-    if ((n1 <- length(blks)) > (n2 <- length(ends))) {
-        stop('chunk not closed at line ', str_c(tail(blks, n1 - n2), collapse = ','),
-             call. = FALSE)
-    } else if (n1 < n2) {
-        lines[tail(ends, n2 - n1)] = ''  # remove these ends
-        warning('extra endings ', chunk.end, ' removed')
-        ends = head(ends, n1)
-    }
-    if (n1 && length(n3 <- which(diff(as.vector(t(cbind(blks, ends)))) <= 0)))
-        stop('chunk ended too early at line ', ends[ceiling(n3[1] / 2)], call. = FALSE)
+    tmp = logical(n); tmp[blks | txts] = TRUE; lines[txts] = ''
 
-    tmp = logical(n)
-    tmp[blks] = TRUE; tmp[ends + 1] = TRUE; length(tmp) = n
     groups = unname(split(lines, cumsum(tmp)))
 
     ## parse 'em all
@@ -41,8 +30,8 @@ split_file = function(path) {
 
 ## strip the pattern in code
 strip_block = function(x) {
-    if (!is.null(prefix <- knit_patterns$get('chunk.code')) && (n <- length(x)) > 2) {
-        x[-c(1, n)] = str_replace(x[-c(1, n)], prefix, "")
+    if (!is.null(prefix <- knit_patterns$get('chunk.code')) && (n <- length(x)) > 1) {
+        x[-1L] = str_replace(x[-1L], prefix, "")
     }
     x
 }
@@ -53,7 +42,7 @@ parse_block = function(input) {
     n = length(block); chunk.begin = knit_patterns$get('chunk.begin')
     params = if (group_pattern(chunk.begin)) gsub(chunk.begin, '\\1', block[1]) else ''
 
-    structure(list(params = parse_params(params), code = block[-c(1, n)]),
+    structure(list(params = parse_params(params), code = block[-1L]),
               class = 'block')
 }
 

@@ -60,7 +60,7 @@ The FAQ's are compiled from the [issues](https://github.com/yihui/knitr/issues) 
 1. You mentioned LyX so many times, so what the heck is LyX?
   - It is an intelligent wrapper for LaTeX; see http://www.lyx.org for details. I would like to define it as a software package that can both increase the productivity of an _experienced_ LaTeX user by 300%, and decrease it by 500% for a LaTeX novice. Don't use it simply because its GUI is so tempting; it is not MS Word. I have added support for **knitr** in LyX; see [the lyx demo page](http://yihui.github.com/knitr/demo/lyx/).
 1. Where are those prompt characters `>` and `+`? I feel uncomfortable reading R output without them.
-  - They are removed by default, because I believe they make no sense. This is the reason why I hate books on R which used `>` and `+`; they twist my mind and make my eyes bleed when I read the R code in the books. Please join me pursuading future authors discarding these characters in publications. For those who really want to read R code like `> 1+1` instead of `1 + 1`, you have the [chunk option](http://yihui.github.com/knitr/options) `prompt`.
+  - They are removed by default, because I believe they make no sense. This is the reason why I dislike books on R which used `>` and `+`; they twist my mind and make my eyes bleed when I read the R code in the books. For those who really want to read R code like `> 1+1` instead of `1 + 1`, you have the [chunk option](http://yihui.github.com/knitr/options) `prompt`.
 1. Can I change my working directory?
   - Yes, you can use `setwd()` freely in your code, which will bring you troubles in Sweave but not in **knitr**. The default working directory is the directory where your input document comes from. I need to warn you, however, that this is a bad practice in general. See [#38](https://github.com/yihui/knitr/issues/38) for a discussion. You should also try to avoid absolute directories whenever possible (use relative directories instead), because it makes things less reproducible.
 1. The gray (shading) box is too narrow for my output.
@@ -68,4 +68,4 @@ The FAQ's are compiled from the [issues](https://github.com/yihui/knitr/issues) 
 1. I have done something cool with **knitr**; could you add a link in your website?
   - Sure! I'd love to; just let me know.
 1. What can I do for you?
-  - Many things, e.g. donate me zillions of money, buy me beer, [tweet](https://twitter.com/xieyihui) my [links](http://yihui.github.com), mention **knitr** on [Google+](https://plus.google.com/u/0/109653178371807724268/posts) or Facebook, or just say hello to me somewhere
+  - Many things, e.g. donate me zillions of money (well, I'm kidding), buy me beer, [tweet](https://twitter.com/xieyihui) my [links](http://yihui.github.com), mention **knitr** on [Google+](https://plus.google.com/u/0/109653178371807724268/posts) or Facebook, or fork this repository and contribute code, or just say hello to me somewhere

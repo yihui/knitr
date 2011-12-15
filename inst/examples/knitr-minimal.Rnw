@@ -23,8 +23,6 @@
 \renewcommand{\bottomfraction}{0.8}
 \renewcommand{\floatpagefraction}{0.75}
 
-% \usepackage{Sweave}  % no Sweave please
-
 \makeatother
 
 \begin{document}

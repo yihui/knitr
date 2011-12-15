@@ -153,6 +153,14 @@ fix_sweave_opts = function(options) {
     options
 }
 
+## try eval an option (character) to an expected result
+eval_opt = function(x, expect_class = is.logical) {
+    if (expect_class(x)) return(x)
+    res = eval(parse(text = x), envir = globalenv())
+    if (!expect_class(res)) stop('option value ', x, ' did not give an expected result')
+    res
+}
+
 #' Generate a pdf of a rnw file using knit and texi2dvi
 #'
 #' @author Ramnath Vaidyanathan
@@ -211,4 +219,5 @@ insert_line_numbers <- function(tex_file){
   doc[code_lines] <- str_replace(doc[code_lines], pat, line_numbers)
   writeLines(doc, tex_file)
   return(path.expand(tex_file))
-}
+  
+

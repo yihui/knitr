@@ -10,7 +10,6 @@
 \renewcommand{\floatpagefraction}{0.75}
 
 \usepackage[buttonsize=1em]{animate}
-% \usepackage{Sweave}  % no Sweave please
 \end_preamble
 \use_default_options true
 \begin_modules
@@ -214,7 +213,7 @@ SweaveDrivers.R
 \series bold
 utils
 \series default
- package is no longer the way I want to go.
+ package is a difficult job to me.
  Many features in 
 \series bold
 knitr
@@ -941,6 +940,80 @@ tidy.source()
 formatR
 \series default
  for details.
+\end_layout
+
+\begin_layout Standard
+Many highlighting themes can be used in 
+\series bold
+knitr
+\series default
+, which are borrowed from the 
+\series bold
+highlight
+\series default
+ package by 
+\begin_inset CommandInset href
+LatexCommand href
+name "Andre Simon"
+target "http://www.andre-simon.de/"
+
+\end_inset
+
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+not the R package mentioned before; for a preview of these themes, see 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.andre-simon.de/dokuwiki/doku.php?id=theme_examples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+; it is also possible to use themes from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.eclipsecolorthemes.org/
+\end_layout
+
+\end_inset
+
+ by providing a theme id to 
+\series bold
+knitr
+\series default
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+many thanks to 
+\begin_inset CommandInset href
+LatexCommand href
+name "Ramnath Vaidyanathan"
+target "https://github.com/ramnathv"
+
+\end_inset
+
+ for the work on themes
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
@@ -1673,6 +1746,19 @@ demo('Mandelbrot', echo = FALSE, package = 'animation')
 
 \end_layout
 
+\begin_layout Standard
+The graphics manual contains more detailed information and you can check
+ it out in the 
+\begin_inset CommandInset href
+LatexCommand href
+name "website"
+target "http://yihui.github.com/knitr/demo/graphics/"
+
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Subsection
 Cache
 \end_layout
@@ -1877,6 +1963,171 @@ ref
  chunks.
 \end_layout
 
+\begin_layout Standard
+Different documents can refer to the same R script, so the R code can be
+ reusable across different input documents.
+\end_layout
+
+\begin_layout Subsection
+Conditional Evaluation
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:conditional"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Instead of setting chunk options 
+\family typewriter
+eval
+\family default
+ and 
+\family typewriter
+echo
+\family default
+ to be 
+\family typewriter
+TRUE
+\family default
+ or 
+\family typewriter
+FALSE
+\family default
+, their values can be controlled by global variables in the current R session.
+ This enables 
+\series bold
+knitr
+\series default
+ to conditionally evaluate code chunks according to variables.
+ For example, here we assign 
+\family typewriter
+TRUE
+\family default
+ to a variable 
+\family typewriter
+dothis
+\family default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<cond-variable>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+dothis=TRUE
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the next chunk, we set chunk options 
+\family typewriter
+eval=dothis
+\family default
+ and 
+\family typewriter
+echo=!dothis
+\family default
+, both are valid R expressions since the variable 
+\family typewriter
+dothis
+\family default
+ exists.
+ As we can see, the source code is hidden, but it was indeed evaluated:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<cond-out1,eval=dothis,echo=!dothis>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+print('you cannot see my source because !dothis is FALSE')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then we set 
+\family typewriter
+eval=dothis
+\family default
+ and 
+\family typewriter
+echo=dothis
+\family default
+ for another chunk:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<cond-out2,eval=dothis,echo=dothis>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+dothis
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If we change the value of 
+\family typewriter
+dothis
+\family default
+ to 
+\family typewriter
+FALSE
+\family default
+, neither of the above chunks will be evaluated any more.
+ Therefore we can control many chunks with a single variable, and present
+ results selectively.
+\end_layout
+
 \begin_layout Subsection
 Customization
 \end_layout
@@ -2004,6 +2255,19 @@ div
 \family default
  layer.
  These are simply character string operations.
+ The demo of using the 
+\series bold
+listings
+\series default
+ package in the 
+\begin_inset CommandInset href
+LatexCommand href
+name "website"
+target "http://yihui.github.com/knitr/demo/listings/"
+
+\end_inset
+
+ shows this idea clearly.
 \end_layout
 
 \begin_layout Section
@@ -2089,9 +2353,9 @@ dev
 grdevice
 \family default
  in Sweave but has more than 20 predefined graphical devices (if that is
- not enough, I will be surprised and please let me know, or set it in chunk
- options by yourself); note only one device can be used for a chunk (in
- old ages, we may have to use both 
+ not enough, please let me know, or set it in chunk options by yourself);
+ note only one device can be used for a chunk (in old ages, we may have
+ to use both 
 \family typewriter
 eps
 \family default
@@ -2104,7 +2368,47 @@ pdf
 \end_layout
 
 \begin_layout Standard
-Chunk reference using 
+For logical options, only 
+\family typewriter
+TRUE
+\family default
+/
+\family typewriter
+FALSE
+\family default
+/
+\family typewriter
+T
+\family default
+/
+\family typewriter
+F
+\family default
+ are supported (the first two are recommended), and 
+\family typewriter
+true
+\family default
+/
+\family typewriter
+false
+\family default
+ will not work, e.g., 
+\family typewriter
+eval=FALSE
+\family default
+ is OK, and 
+\family typewriter
+eval=false
+\family default
+ is not (not exactly true; see Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:conditional"
+
+\end_inset
+
+).
+ Chunk reference using 
 \family typewriter
 <<chunk-label>>
 \family default
@@ -2132,58 +2436,6 @@ knitr
 \end_layout
 
 \begin_layout Standard
-The syntax is slightly different with Sweave: Sweave uses the syntax of
- Noweb, in which 
-\family typewriter
-<<>>=
-\family default
- means a code chunk begins, and 
-\family typewriter
-@
-\family default
- means a chunk ends, so we can begin a chunk without ending it (all the
- following lines will be treated as program code), or begin chunks one after
- another without ending them in-between; 
-\series bold
-knitr
-\series default
- requires the beginning and ending of a chunk must be strictly matched --
- one beginning must be followed one ending.
- The chunks below are valid in Sweave but not in 
-\series bold
-knitr
-\series default
-:
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-<<valid-sweave,echo=FALSE,comment=>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-cat(c(' <<one-chunk,eval=FALSE>>=',' 1+1',' <<another-chunk,echo=TRUE>>=','
- rnorm(10)',' @'), sep='
-\backslash
-n')
-\end_layout
-
-\begin_layout Plain Layout
-
-@
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 For inline R code as in 
 \family typewriter
 
@@ -2205,7 +2457,7 @@ knitr
 3.14e-05
 \family default
 ).
- Finally, we can call 
+ We can also call 
 \family typewriter
 knit(..., tangle = TRUE)
 \family default
@@ -2303,6 +2555,28 @@ target "http://yihui.github.com/knitr/demos"
 \end_inset
 
 )
+\end_layout
+
+\begin_layout Standard
+Currently the multilingual support is limited, especially under Windows
+ (I do not have much experience with encodings).
+ For systems which use the UTF8 locale, 
+\series bold
+knitr
+\series default
+ works fine for multi-byte characters.
+ Note, however, 
+\series bold
+knitr
+\series default
+ does not check the encoding of the input document at all, so the tricks
+ in Sweave like using 
+\family typewriter
+
+\backslash
+usepackage[foo]{inputenc}
+\family default
+ will not work.
 \end_layout
 
 \begin_layout Standard

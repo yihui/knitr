@@ -30,7 +30,6 @@ knit_patterns =
                       inline.code = NULL, global.options = NULL,
                       header.begin = NULL, document.begin = NULL, ref.label = NULL))
 
-## TODO: use inline.sep to alternate between R code and text, like <?php for begin ?>text<?php for end ?> (text will be printed as-is for several times)
 ## in LaTeX, may need to put this \newcommand{\rinline}[1]{R output}
 
 

@@ -8,8 +8,6 @@
 \renewcommand{\topfraction}{0.8}
 \renewcommand{\bottomfraction}{0.8}
 \renewcommand{\floatpagefraction}{0.75}
-
-% \usepackage{Sweave}  % no Sweave please
 \end_preamble
 \use_default_options true
 \begin_modules

@@ -33,7 +33,6 @@
 \renewcommand{\floatpagefraction}{0.75}
 
 \usepackage[buttonsize=1em]{animate}
-% \usepackage{Sweave}  % no Sweave please
 
 \makeatother
 
@@ -71,8 +70,8 @@ the package homepage \url{http://yihui.github.com/knitr/}.
 
 A natural question is why to reinvent the wheel. The short answer
 is that extending Sweave by hacking \textsf{SweaveDrivers.R} in the
-\textbf{utils} package is no longer the way I want to go. Many features
-in \textbf{knitr} come naturally as users would have expected. Figure
+\textbf{utils} package is a difficult job to me. Many features in
+\textbf{knitr} come naturally as users would have expected. Figure
 \ref{fig:cars-demo} is a simple demo of some features of \textbf{knitr}.
 
 \begin{figure}
@@ -239,6 +238,16 @@ for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
 Note \texttt{=} is replaced by \texttt{<-} because \texttt{options('replace.assign')}
 was set to be \texttt{TRUE} in this document; see the documentation
 of \emph{tidy.source()} in \textbf{formatR} for details.
+
+Many highlighting themes can be used in \textbf{knitr}, which are
+borrowed from the \textbf{highlight} package by \href{http://www.andre-simon.de/}{Andre Simon}%
+\footnote{not the R package mentioned before; for a preview of these themes,
+see \url{http://www.andre-simon.de/dokuwiki/doku.php?id=theme_examples}%
+}; it is also possible to use themes from \url{http://www.eclipsecolorthemes.org/}
+by providing a theme id to \textbf{knitr}%
+\footnote{many thanks to \href{https://github.com/ramnathv}{Ramnath Vaidyanathan}
+for the work on themes%
+}.
 
 
 \subsection{Graphics}
@@ -418,6 +427,9 @@ library(animation)
 demo('Mandelbrot', echo = FALSE, package = 'animation')
 @
 
+The graphics manual contains more detailed information and you can
+check it out in the \href{http://yihui.github.com/knitr/demo/graphics/}{website}.
+
 
 \subsection{Cache}
 
@@ -498,6 +510,41 @@ R script to read external R code. The path of the reference script
 is set in the chunk option \texttt{ref}, and it is allowed to use
 difference sources of R scripts for different chunks.
 
+Different documents can refer to the same R script, so the R code
+can be reusable across different input documents.
+
+
+\subsection{Conditional Evaluation\label{sub:conditional}}
+
+Instead of setting chunk options \texttt{eval} and \texttt{echo} to
+be \texttt{TRUE} or \texttt{FALSE}, their values can be controlled
+by global variables in the current R session. This enables \textbf{knitr}
+to conditionally evaluate code chunks according to variables. For
+example, here we assign \texttt{TRUE} to a variable \texttt{dothis}:
+
+<<cond-variable>>=
+dothis=TRUE
+@
+
+In the next chunk, we set chunk options \texttt{eval=dothis} and \texttt{echo=!dothis},
+both are valid R expressions since the variable \texttt{dothis} exists.
+As we can see, the source code is hidden, but it was indeed evaluated:
+
+<<cond-out1,eval=dothis,echo=!dothis>>=
+print('you cannot see my source because !dothis is FALSE')
+@
+
+Then we set \texttt{eval=dothis} and \texttt{echo=dothis} for another
+chunk:
+
+<<cond-out2,eval=dothis,echo=dothis>>=
+dothis
+@
+
+If we change the value of \texttt{dothis} to \texttt{FALSE}, neither
+of the above chunks will be evaluated any more. Therefore we can control
+many chunks with a single variable, and present results selectively.
+
 
 \subsection{Customization}
 
@@ -524,7 +571,9 @@ Due to the flexibility of output hooks, \textbf{knitr} supports several
 different output formats. The implementation is fairly easy, e.g.,
 for \LaTeX{} we put R output in \texttt{verbatim} environments, and
 in HTML, it is only a matter of putting output in a \texttt{div} layer.
-These are simply character string operations.
+These are simply character string operations. The demo of using the
+\textbf{listings} package in the \href{http://yihui.github.com/knitr/demo/listings/}{website}
+shows this idea clearly.
 
 
 \section{Comparison}
@@ -549,13 +598,17 @@ is always used for figure filenames)
 \item [{eps,~pdf}] and all logical options for graphics devices were dropped:
 please use the new option \texttt{dev}, which is similar to \texttt{grdevice}
 in Sweave but has more than 20 predefined graphical devices (if that
-is not enough, I will be surprised and please let me know, or set
-it in chunk options by yourself); note only one device can be used
-for a chunk (in old ages, we may have to use both \texttt{eps} and
-\texttt{pdf}, but nowadays there is usually no need to generate multiple
-image formats for the same plot)
+is not enough, please let me know, or set it in chunk options by yourself);
+note only one device can be used for a chunk (in old ages, we may
+have to use both \texttt{eps} and \texttt{pdf}, but nowadays there
+is usually no need to generate multiple image formats for the same
+plot)
 \end{description}
-Chunk reference using \texttt{<\textcompwordmark{}<chunk-label>\textcompwordmark{}>}
+For logical options, only \texttt{TRUE}/\texttt{FALSE}/\texttt{T}/\texttt{F}
+are supported (the first two are recommended), and \texttt{true}/\texttt{false}
+will not work, e.g., \texttt{eval=FALSE} is OK, and \texttt{eval=false}
+is not (not exactly true; see Section \ref{sub:conditional}). Chunk
+reference using \texttt{<\textcompwordmark{}<chunk-label>\textcompwordmark{}>}
 was dropped since R has \emph{functions}; if you want to reuse a chunk,
 consider writing a function instead of explicitly repeating code.
 
@@ -565,24 +618,10 @@ with R instead of \LaTeX{}; \textbf{knitr} has built-in styles using
 standard \LaTeX{} packages, and users are free to change them using
 hooks. 
 
-The syntax is slightly different with Sweave: Sweave uses the syntax
-of Noweb, in which \texttt{<\textcompwordmark{}<>\textcompwordmark{}>=}
-means a code chunk begins, and \texttt{@} means a chunk ends, so we
-can begin a chunk without ending it (all the following lines will
-be treated as program code), or begin chunks one after another without
-ending them in-between; \textbf{knitr} requires the beginning and
-ending of a chunk must be strictly matched -- one beginning must be
-followed one ending. The chunks below are valid in Sweave but not
-in \textbf{knitr}:
-
-<<valid-sweave,echo=FALSE,comment=>>=
-cat(c(' <<one-chunk,eval=FALSE>>=',' 1+1',' <<another-chunk,echo=TRUE>>=',' rnorm(10)',' @'), sep='\n')
-@
-
 For inline R code as in \texttt{\textbackslash{}Sexpr\{\}}, \textbf{knitr}
 will automatically format the results -- numbers will be written in
 real scientific notations (e.g. $3.14\times10^{-5}$ instead of the
-less readable \texttt{3.14e-05}). Finally, we can call \texttt{knit(...,
+less readable \texttt{3.14e-05}). We can also call \texttt{knit(...,
 tangle = TRUE)} to tangle R code, which is similar to \emph{Stangle()}.
 
 Some answers to Sweave FAQ's from \texttt{vignette('Sweave', package='utils')}
@@ -607,6 +646,13 @@ many digits)
 \item [{A.13}] \textbf{knitr} comes with a set of hooks to deal with HTML
 output (see \href{http://yihui.github.com/knitr/demos}{demos in the website})
 \end{description}
+Currently the multilingual support is limited, especially under Windows
+(I do not have much experience with encodings). For systems which
+use the UTF8 locale, \textbf{knitr} works fine for multi-byte characters.
+Note, however, \textbf{knitr} does not check the encoding of the input
+document at all, so the tricks in Sweave like using \texttt{\textbackslash{}usepackage{[}foo{]}\{inputenc\}}
+will not work.
+
 It also has some differences with \textbf{pgfSweave} and \textbf{cacheSweave}:
 \begin{itemize}
 \item For the former, \texttt{dev=tikz} in \textbf{knitr} means \texttt{tikz=TRUE}
