@@ -171,7 +171,7 @@ knit_to_pdf <- function(rnw_file, theme = NULL, line_numbers = FALSE){
   tex_file_name <- sprintf("%s.tex", file_path_sans_ext(rnw_file))
   if (!missing(theme)){
     rnw_file <- add_theme_chunk(rnw_file, theme)
-    # on.exit(unlink(rnw_file))
+    on.exit(unlink(rnw_file))
   }
   knit(rnw_file)
   tex_file <- sprintf("%s.tex", file_path_sans_ext(rnw_file))
