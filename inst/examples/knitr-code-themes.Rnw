@@ -3,8 +3,8 @@
 \documentclass{article}
 \usepackage[sc]{mathpazo}
 \usepackage[T1]{fontenc}
-\usepackage{inconsolata}
-\usepackage[scaled=0.88]{beramono}
+%\usepackage{inconsolata}
+\usepackage[scaled=0.85]{beramono}
 %\usepackage{luximono}
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
@@ -30,13 +30,13 @@
 
 \makeatother
 
+% \SweaveOpts{prefix.string=figure/minimal-,align=center,external=TRUE,fig.hold=TRUE, background = 0.95;0.95;0.95}
+
 \begin{document}
 
-% \SweaveOpts{prefix.string=figure/minimal-,align=center,external=TRUE,fig.hold=TRUE}
-
 <<setup,echo=FALSE,results=hide,message=FALSE>>=
-code_theme <- 'wombat'
-set_code_theme(code_theme)
+# theme_name <- save_eclipse_theme(244)
+set_theme(theme_name)
 options(replace.assign=TRUE)
 knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
 @
@@ -48,15 +48,16 @@ knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1
 \author{Yihui Xie, Ramnath Vaidyanathan}
 
 \maketitle
-\noindent This document uses the code theme \Sexpr{code_theme}
+\noindent This document uses the code theme 
 
 <<chunk2, eval = FALSE, message = FALSE>>=
 
 # 1. SCRAPE THE DATA FROM WEB 
 
 url.base = 'http://www.mlsoccer.com/stats' ;
-years = 1996:2010;
+years    = 1996:2010;
 
+#' Function to save data for each year
 save_data = function(y){
   url  = paste(url.base, as.character(y), 'reg', sep = '/');
   tab  = XML::readHTMLTable(url, header = FALSE, stringsAsFactors = FALSE);
