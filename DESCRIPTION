@@ -75,3 +75,5 @@ Collate:
     'plot.R'
     'zzz.R'
     'header.R'
+    'themes.R'
+    'ecllipse.R'
