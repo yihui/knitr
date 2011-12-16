@@ -1,4 +1,4 @@
-#' Sets code theme to use for syntax highlighting
+#' Sets theme to use for syntax highlighting
 #'
 #' @export
 #' @author Ramnath Vaidyanathan
@@ -12,7 +12,7 @@ set_theme <- function(theme){
   return()
 }
 
-#' Gets details of code theme for syntax highlighting 
+#' Gets details of theme for syntax highlighting 
 #'
 #' @export
 #' @author Ramnath Vaidyanathan
@@ -37,7 +37,7 @@ fetch_css <- function(theme){
   return(file.path(css_folder, css_file))
 }
 
-#' Generates latex header based on theme
+#' Generates latex header based on a theme
 #' 
 #' @importFrom highlight css.parser styler_assistant_latex
 #' @keywords internal
@@ -59,6 +59,10 @@ theme_to_header  <- function(theme){
   )
 }
 
+#' Adds an Sweave chunk that sets the theme
+#'
+#' @author Ramnath Vaidyanathan
+#' @noRd
 add_theme_chunk <- function(rnw_file, theme){
   doc <- readLines(rnw_file)
   begin_line <- grep("begin{document}", doc, fixed = TRUE)
@@ -72,16 +76,19 @@ add_theme_chunk <- function(rnw_file, theme){
   return(path.expand(tf))
 }
 
-#' Get path to the codethemes folder
+#' Get path to the system folder containing css files of themes
+#'
+#' @author Ramnath Vaidyanathan
+#' @noRd
 fetch_css_folder <- function(){
   css_folder <- system.file('themes', package = 'knitr')
-  # css_folder <- path.expand("~/Desktop/R_Projects/knitr/inst/themes")
   return(css_folder)
 }
 
 #' Insert line numbers for code lines
 #'
 #' @author Ramnath Vaidyanathan
+#' @noRd
 insert_line_numbers <- function(tex_file){
   require(stringr)
   doc <- readLines(tex_file)
