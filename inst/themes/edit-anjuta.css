@@ -1,4 +1,3 @@
-
 .background{
   color: #ffffff ;
 }
@@ -9,11 +8,9 @@
   font-weight: 'bolder' ;
   color: #0000ff ;
 }
-
 .string{
   color: #ddbb00 ;
 }
-
 .keyword{
   font-weight: bolder ;
   color: #000080;

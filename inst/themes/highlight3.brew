@@ -1,5 +1,5 @@
 <% within(theme, {  -%>
-<% if (!exists("Operator")) Operator = Default %>
+<% if (!exists("Operator")) Operator = Default -%>
 .background{
   color: <%= Canvas$Colour %> ;
 }
@@ -10,11 +10,9 @@
   font-weight: 'bolder' ;
   color: <%= Keyword3$Colour %> ;
 }
-
 .string{
   color: <%= String$Colour %> ;
 }
-
 .keyword{
   font-weight: bolder ;
   color: <%= Keyword1$Colour %>;
