@@ -1,0 +1,1275 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass tufte-handout
+\begin_preamble
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\floatpagefraction}{0.75}
+
+\usepackage[buttonsize=1em]{animate}
+
+\usepackage[breaklinks=true,pdfstartview=FitH]{hyperref}
+% \SweaveOpts{prefix.string=figure/graphics-, prefix.cache=cache/graphics-, fig=TRUE, align=center, dev=pdf,  width=5, height=5, fig.hold=TRUE, cache=TRUE, align=center}
+
+% LOAD MINTED PACKAGE AND DEFINE OPTIONS ------------------------------
+\usepackage{minted}
+\usemintedstyle{perldoc}
+\definecolor{cssbg}{rgb}{0.97,0.97,0.97}
+\end_preamble
+\options xcolor = table, noae, justified
+\use_default_options true
+\begin_modules
+sweave
+todonotes
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 88
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\pdf_author "Ramnath Vaidyanathan"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen true
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\pdf_quoted_options "citecolor = blue, linkcolor = magenta, urlcolor = green"
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<setup,echo=FALSE, results =hide, message = FALSE, cache=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+options(replace.assign=TRUE,width=78)
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.
+1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)}, crop=hook_pdfcrop)
+\end_layout
+
+\begin_layout Plain Layout
+
+# code_theme <- save_eclipse_theme(27)
+\end_layout
+
+\begin_layout Plain Layout
+
+code_theme <- "solarized"
+\end_layout
+
+\begin_layout Plain Layout
+
+set_theme(code_theme)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+Customizing Syntax Highlighting
+\end_layout
+
+\begin_layout Author
+Yihui Xie, Ramnath Vaidyanathan
+\end_layout
+
+\begin_layout Abstract
+This manual shows how to customize syntax highlighting of source code using
+ themes.
+ It walks the user through the basics of syntax highlighting in 
+\family typewriter
+knitr, 
+\family default
+the use of built-in themes to alter the highlighting scheme, and finally
+ how to create a user-defined theme.
+\end_layout
+
+\begin_layout Section*
+Syntax Highlighting Basics
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float margintable
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{listing}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+inputminted[tabsize = 2, bgcolor = cssbg]{css}{"/Users/ramnathvaidyanathan/Deskt
+op/R_Projects/knitr/inst/themes/ide-eclipse.css"}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{listing}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+knitr 
+\family default
+uses the 
+\family typewriter
+highlight 
+\family default
+package by Romain Francois to highlight source code in a document.
+ In short, the 
+\family typewriter
+highlight
+\family default
+ package parses the source code using the 
+\family typewriter
+bison
+\family default
+ parser, tokenizes it into grammar symbols, and formats their appearance
+ based on a 
+\family typewriter
+css
+\family default
+ style file.
+ 
+\end_layout
+
+\begin_layout Standard
+The listing on the right shows the 
+\family typewriter
+css
+\family default
+ file for one of the themes, 
+\family typewriter
+acid
+\family default
+, which was adapted from Andre Simon's excellent highlighter.
+ The easiest way to customize syntax highlighting is by modifying an existing
+ 
+\family typewriter
+css
+\family default
+ file and saving it as 
+\family typewriter
+mytheme.css
+\family default
+.
+ In addition,
+\family typewriter
+ knitr
+\family default
+ comes pre-loaded with a number of themes.
+ You can see a list of all available code themes using
+\family typewriter
+ get_all_themes
+\family default
+.
+ Shown below is the use of a popular theme called 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{code_theme}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<, eval = FALSE, message = FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# SCRAPE THE DATA FROM WEB 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+base_url = sprintf("http://www.mlsoccer.com/stats/%s/reg")
+\end_layout
+
+\begin_layout Plain Layout
+
+years    = 1996:2010
+\end_layout
+
+\begin_layout Plain Layout
+
+options(width = 40)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#' Function to save data for each year
+\end_layout
+
+\begin_layout Plain Layout
+
+save_data = function(y){
+\end_layout
+
+\begin_layout Plain Layout
+
+  url  = sprintf(base_url, y)
+\end_layout
+
+\begin_layout Plain Layout
+
+  tab  = XML::readHTMLTable(url, header = FALSE, stringsAsFactors = FALSE);
+\end_layout
+
+\begin_layout Plain Layout
+
+  pos  = max(grep("United", tab));
+\end_layout
+
+\begin_layout Plain Layout
+
+  tab  = tab[[pos]];
+\end_layout
+
+\begin_layout Plain Layout
+
+  tab$year   = y;
+\end_layout
+
+\begin_layout Plain Layout
+
+  return(tab)            
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+team.list  = plyr::llply(years, save_data);
+\end_layout
+
+\begin_layout Plain Layout
+
+mls        = reshape::merge_recurse(team.list);
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Eclipse Color Themes
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float margintable
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+renewcommand
+\backslash
+arraystretch{1.5}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\begin_inset Tabular
+<lyxtabular version="3" rows="16" columns="2">
+<features booktabs="true" tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0pt">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Highlight (CSS)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Eclipse (XML)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+background
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+background
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+number
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+number
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+functioncall
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+method
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+string
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+string
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+keyword
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+keyword
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+argument
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+localVariable
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+comment
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+singleLineComment
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+roxygencomment
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+javadoc
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+formalargs
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+localVariable
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+eqformalargs
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+foreground
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+assignement
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+foreground
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+package
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+class
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+slot
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+foreground
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+symbol
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+localVariableDeclaration
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+prompt
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+foreground
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Token Mapping
+\begin_inset CommandInset label
+LatexCommand label
+name "mar:Token-Mapping"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A rich repository of syntax highlighting themes for use with Eclipse IDE
+ is available at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.eclipsecolorthemes.org/
+\end_layout
+
+\end_inset
+
+.
+ In order to use one of these themes with 
+\family typewriter
+knitr,
+\family default
+ it needs to be converted into a 
+\family typewriter
+css 
+\family default
+file that can be parsed by 
+\family typewriter
+highlight
+\family default
+.
+ This is achieved by mapping language tokens across the two formats (Table
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "mar:Token-Mapping"
+
+\end_inset
+
+), and using a template file 
+\family typewriter
+eclipse.brew
+\family default
+ to write them to 
+\family typewriter
+css.
+\end_layout
+
+\begin_layout Standard
+If you want to use an eclipse theme that is not shipped with 
+\family typewriter
+knitr
+\family default
+, you can use the utility function 
+\family typewriter
+save_eclipse_theme 
+\family default
+to automatically download, map and save the theme as a 
+\family typewriter
+css 
+\family default
+file.
+ For example, if you want to use the theme Oughsumm (Figure
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "mar:Oughsumm-Theme"
+
+\end_inset
+
+), you can save it to 
+\family typewriter
+css
+\family default
+ using 
+\family typewriter
+save_eclipse_theme(1885)
+\family default
+ and use it in your document by including 
+\family typewriter
+set_code_theme('oughsumm')
+\family default
+ in a code chunk.
+ 
+\begin_inset Float marginfigure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/ramnathvaidyanathan/Desktop/Picture 1.png
+	width 120text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Oughsumm Theme
+\begin_inset CommandInset label
+LatexCommand label
+name "mar:Oughsumm-Theme"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ You can further modify the appearance of source code, by changing the token
+ mapping in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "mar:Token-Mapping"
+
+\end_inset
+
+.
+ More details about how this can be done will be provided in an updated
+ version of the manual.
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,61 @@
+.background{
+  color: #242424;
+}
+.number{
+	color: #f08080 ;
+}
+
+.functioncall{
+	color: #f3f6ee ;
+}
+
+.string{
+	color: #95e454 ;
+}
+
+.keyword{
+	color: #8ac6f2;
+}
+
+.argument{
+	color: #D4C4A9 ;
+}
+
+.comment{
+	color: #99968b ;
+}
+
+.roxygencomment{
+	color: #99968b;
+}
+
+.formalargs{
+	color: #D4C4A9;
+}
+
+.eqformalargs{
+	color: #f6f3e8;
+}
+
+.assignement{
+	color: #f6f3e8;
+}
+
+.package{
+	font-weight: bolder;
+	color: #cae682;
+}
+
+.slot{
+	font-style:italic;
+	color: #f6f3e8;
+}
+
+.symbol{
+	color: #D4C4A9 ;
+}
+
+.prompt{
+	color: #f6f3e8 ;
+}
+

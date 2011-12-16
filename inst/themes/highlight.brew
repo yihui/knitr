@@ -1,0 +1,50 @@
+<% within(style1, {  -%>
+.background{
+  color: <%= BGCOLOUR %> ;
+}
+.number{
+  color: <%= `NUMBER` %> ;
+}
+.functioncall{
+  color: <%= `KW-GROUP(kwc)` %> ;
+}
+.string{
+  color: <%= STRING %> ;
+}
+.keyword{
+  font-weight: bolder ;
+  color: <%= `KW-GROUP(kwa)` %>;
+}
+.argument{
+  color: <%= DEFAULTCOLOUR %> ;
+}
+.comment{
+  color: <%= `COMMENT` %> ;
+}
+.roxygencomment{
+  color: <%= COMMENT %>;
+}
+.formalargs{
+  color: <%= DEFAULTCOLOUR %>;
+}
+.eqformalargs{
+  color: <%= DEFAULTCOLOUR %>;
+}
+.assignement{
+  font-weight: bolder;
+  color: <%= DEFAULTCOLOUR %>;
+}
+.package{
+  color: <% DIRECTIVE %>;
+}
+.slot{
+  font-style:italic;
+  color: <%= DEFAULTCOLOUR %>;
+}
+.symbol{
+  color: <%= SYMBOL %> ;
+}
+.prompt{
+  color: <%= DEFAULTCOLOUR %> ;
+}
+<% }) %>
