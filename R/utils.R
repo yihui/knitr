@@ -82,6 +82,7 @@ dependson_changed = function(labels, prefix) {
 
 ## extract LaTeX packages for tikzDevice
 set_tikz_opts = function(input, cb, ce) {
+    if (opts_knit$get('out.format') != 'latex') return()
     hb = knit_patterns$get('header.begin')
     if (length(hb) == 1L) {
         idx = str_detect(input, hb)

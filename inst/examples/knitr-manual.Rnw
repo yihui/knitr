@@ -109,17 +109,18 @@ and new features will be introduced later.
 \section{Design}
 
 The flow of processing an input file is similar to Sweave, and two
-major differences are that \textbf{knitr} provides far more flexibility
+major differences are that \textbf{knitr} provides more flexibility
 to the users to customize the processing, and has many built-in options
 such as the support to a wide range of graphics devices and cache.
 Below is a brief description of the process:
 \begin{enumerate}
 \item \textbf{knitr} takes an input file and automatically determines an
-appropriate set of patterns to use if they are not provided in advance
-(e.g. \textsf{file.Rnw} will use \texttt{knit\_patterns\$get('rnw')});
-\item a set of hooks will also be set up automatically according to the
-filename extension (e.g. use \LaTeX{} environments to wrap R results
-for \LaTeX{} output);
+appropriate set of \href{http://yihui.github.com/knitr/patterns}{patterns}
+to use if they are not provided in advance (e.g. \textsf{file.Rnw}
+will use \texttt{knit\_patterns\$get('rnw')});
+\item a set of out \href{http://yihui.github.com/knitr/hooks}{hooks} will
+also be set up automatically according to the filename extension (e.g.
+use \LaTeX{} environments to wrap R results for \LaTeX{} output);
 \item the input file is read in and split into pieces consisting of R code
 chunks and normal texts; the former will be executed one after the
 other, and the latter may contain global chunk options or inline R
@@ -135,7 +136,7 @@ if there are previously cached results under the cache directory before
 really evaluating the chunk; if cached results exist and this code
 chunk has not been changed (use MD5 sum to verify), the cached results
 will be (lazy-) loaded, otherwise new cache will be built; if a cached
-chunk depends on other chunks (see the \texttt{dependson} option)
+chunk depends on other chunks (see the \texttt{dependson} \href{http://yihui.github.com/knitr/options}{option})
 and any one of these chunks has changed, this chunk must be forcibly
 updated (old cache will be purged)
 \item there are six types of possible output from \textbf{evaluate}, and
@@ -143,12 +144,13 @@ their classes are \texttt{character} (normal text output), \texttt{source}
 (source code), \texttt{warning}, \texttt{message}, \texttt{error}
 and \texttt{recordedplot}; an internal S3 generic function \emph{wrap()}
 is used to deal with different types of output, using output hooks
-defined in the object \texttt{hooks}
+defined in the object \texttt{knit\_hooks}
 \item note plots are recorded as R objects before they are really saved
-to files, so graphics devices will not be opened unless plots are
-really produced in a chunk
-\item a code chunk is evaluated in a separate environment, and all the objects
-in this environment after the evaluation will be saved if \texttt{cache=TRUE}
+to files, so graphics devices will not be opened unless plots have
+really been produced in a chunk
+\item a code chunk is evaluated in a separate empty environment with the
+global environment as its parent, and all the objects in this environment
+after the evaluation will be saved if \texttt{cache=TRUE}
 \item chunk hooks can be run before and/or after a chunk
 \end{enumerate}
 \item for normal texts, \textbf{knitr} will find out if there are chunk
@@ -180,8 +182,8 @@ Similarly we can put other types of output into other environments.
 There is no need to hack at \textsf{Sweave.sty} for \textbf{knitr}
 and you can put the output in any environments. What is more, the
 output hooks make \textbf{knitr} ready for other types of output,
-and a typical one is HTML (there are built-in hooks). In fact I use
-this package to build its website.
+and a typical one is HTML (there are built-in hooks). The website
+has provided many examples demonstrating the flexibility of the output.
 
 
 \section{Features}
@@ -414,7 +416,7 @@ in a chunk. The option \texttt{interval} controls the time interval
 between animation frames; by default it is 1 second. Note you have
 to add \texttt{\textbackslash{}usepackage\{animate\}} in the \LaTeX{}
 preamble, because \textbf{knitr} will not add it automatically. Animations
-in the PDF output can only be viewed in Acrobat Reader.
+in the PDF output can only be viewed in Adobe Reader.
 
 As a simple demonstration, here is a \href{http://en.wikipedia.org/wiki/Mandelbrot_set}{Mandelbrot animation}
 taken from the \textbf{animation} package \citep{animation-manual};
@@ -453,21 +455,20 @@ based on the object of its subset.
 The paths of cache files are determined by the chunk option \texttt{prefix.cache};
 by default all cache files are created under a directory \textsf{cache}
 relative to the current working directory, and if the prefix contains
-a directory (e.g. \texttt{prefix.string=cache/abc-}), cache files
-will be stored under that directory (automatically created if it does
-not exist). The cache is invalidated and purged on any changes to
-the code chunk, including both the R code and chunk options; this
-means previous cache files of this chunk are removed (filenames are
-identified by the chunk label). Unlike \textbf{pgfSweave}, cache files
-will never accumulate since old cache files will always be removed
-in \textbf{knitr}. Unlike \textbf{weaver} or \textbf{cacheSweave},
-\textbf{knitr} will try to preserve side-effects, meaning that any
-output of a code chunk will be loaded into the output document for
-a cached chunk, although it is not really evaluated. The reason is
-\textbf{knitr} also cache the output of a chunk as a character string.
-Note this means graphics output is also cached since it is part of
-the output. It has been a pain for me for a long time to have to lose
-output to gain cache.
+a directory (e.g. \texttt{prefix.cache=cache/abc-}), cache files will
+be stored under that directory (automatically created if it does not
+exist). The cache is invalidated and purged on any changes to the
+code chunk, including both the R code and chunk options; this means
+previous cache files of this chunk are removed (filenames are identified
+by the chunk label). Unlike \textbf{pgfSweave}, cache files will never
+accumulate since old cache files will always be removed in \textbf{knitr}.
+Unlike \textbf{weaver} or \textbf{cacheSweave}, \textbf{knitr} will
+try to preserve side-effects, meaning that any output of a code chunk
+will be loaded into the output document for a cached chunk, although
+it is not really evaluated. The reason is \textbf{knitr} also cache
+the output of a chunk as a character string. Note this means graphics
+output is also cached since it is part of the output. It has been
+a pain for me for a long time to have to lose output to gain cache.
 
 Although \textbf{knitr} tries to keep the side-effects of printing,
 there are still other types of side-effects. For example, loading
@@ -485,12 +486,12 @@ in \textbf{cacheSweave} which does this job. We can explicitly specify
 which other chunks this chunk depends on by setting an option like
 \texttt{dependson=chunkA;chunkB}. Before loading cached results, all
 the dependent chunks will be examined to make sure they were not changed,
-otherwise the current cache will be rebuilt. The way I implement \texttt{dependson}
-is that a file named in the form \texttt{chunk-label\_MD5\_changed}
-is used to indicate if a chunk was changed; this file is created each
-time cached objects are saved, and removed the next time when cache
-is loaded, so if this file does not exist, it means nothing was changed
-in this chunk.
+otherwise the current chunk has to be re-evaluated and its cache will
+be rebuilt. The way I implement \texttt{dependson} is that a file
+named in the form \texttt{chunk-label\_MD5\_changed} is used to indicate
+if a chunk was changed; this file is created each time cached objects
+are saved, and removed the next time when cache is loaded, so if this
+file does not exist, it means nothing was changed in this chunk.
 
 
 \subsection{Code Reference}
@@ -551,8 +552,8 @@ many chunks with a single variable, and present results selectively.
 The \textbf{knitr} package is ready for customization. Both the patterns
 and hooks can be customized; see the package website for details.
 Here I show an example on how to save \textbf{rgl} plots \citep{rgl-manual}
-using a customized hook function. First we define a hook function
-named \texttt{rgl} using the function \emph{hook\_rgl()} in \textbf{knitr}:
+using a customized hook function. First we define a hook named \texttt{rgl}
+using the function \emph{hook\_rgl()} in \textbf{knitr}:
 
 <<rgl-demo>>=
 knit_hooks$set(rgl = hook_rgl)
@@ -693,6 +694,11 @@ installed:
 <<required-packages,eval=FALSE>>=
 install.packages(c('animation', 'rgl', 'tikzDevice'))
 @
+
+Feedback and comments on this manual and the package are always welcome.
+Bug reports and feature requests can be sent to \url{https://github.com/yihui/knitr/issues},
+and questions can be delivered to the \href{mailto:knitr@googlegroups.com}{mailing list}
+\url{https://groups.google.com/group/knitr}.
 
 \bibliographystyle{jss}
 \bibliography{knitr-manual,knitr-packages}
