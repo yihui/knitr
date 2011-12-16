@@ -1,5 +1,4 @@
 export(all_patterns)
-export(download_eclipse_theme)
 export(get_theme)
 export(hook_pdfcrop)
 export(hook_rgl)
