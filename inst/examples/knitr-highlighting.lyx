@@ -102,7 +102,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<setup,echo=FALSE,results=hide,cache=FALSE>>=
+<<setup,echo=FALSE, results =hide, message = FALSE, cache=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -118,27 +118,17 @@ knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1
 
 \begin_layout Plain Layout
 
-source("~/Desktop/R_Projects/knitr/R/themes_test.R")
+# code_theme <- save_eclipse_theme(27)
 \end_layout
 
 \begin_layout Plain Layout
 
-suppressMessages(library(highlight))
+code_theme <- "solarized"
 \end_layout
 
 \begin_layout Plain Layout
 
-suppressMessages(library(stringr))
-\end_layout
-
-\begin_layout Plain Layout
-
-code_theme <- 'ide-eclipse'
-\end_layout
-
-\begin_layout Plain Layout
-
-set_code_theme(code_theme)
+set_theme(code_theme)
 \end_layout
 
 \begin_layout Plain Layout
@@ -196,7 +186,7 @@ begin{listing}[H]
 
 \backslash
 inputminted[tabsize = 2, bgcolor = cssbg]{css}{"/Users/ramnathvaidyanathan/Deskt
-op/R_Projects/knitr/inst/codethemes/ide-eclipse.css"}
+op/R_Projects/knitr/inst/themes/ide-eclipse.css"}
 \end_layout
 
 \begin_layout Plain Layout
