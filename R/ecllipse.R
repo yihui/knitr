@@ -2,6 +2,7 @@
 #'
 #' @param theme_id id of theme to save as CSS
 #' @return theme name it is saved as.
+#' @export
 save_eclipse_theme <- function(theme_id){
   xml_file <- download_eclipse_theme(theme_id)
   css_file <- xml_to_css(xml_file)
@@ -9,6 +10,8 @@ save_eclipse_theme <- function(theme_id){
 }
 
 #' Get ids of top eclipse themes at www.eclipsecolorthemes.org
+#'
+#' @noRd
 #  TODO: Add a filter argument that would allow getting ids by top picks based 
 #        on bright, dark and highcontrast themes. The url has the format
 #  http://www.eclipsecolorthemes.org/?list=toppicks&filter=highcontrast&q=
@@ -21,6 +24,8 @@ top_eclipse_themes <- function(){
 }
 
 #' Download eclipse theme given theme_no
+#'
+#' @  noRd
 download_eclipse_theme <- function(theme_id){
   xml_file <- tempfile()
   url <- "http://www.eclipsecolorthemes.org/?view=empty&action=download&theme=%s&type=xml"
