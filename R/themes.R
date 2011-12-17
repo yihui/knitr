@@ -31,6 +31,7 @@ get_theme <- function(theme = NULL){
 #'
 #' @keywords internal
 #' @author Ramnath Vaidyanathan
+#' @noRd
 fetch_css <- function(theme){
   css_file   <- sprintf("%s.css", theme)
   css_folder <- fetch_css_folder()
@@ -42,6 +43,7 @@ fetch_css <- function(theme){
 #' @importFrom highlight css.parser styler_assistant_latex
 #' @keywords internal
 #' @author Ramnath Vaidyanathan
+#' @noRd
 theme_to_header  <- function(theme){
   css_file   <- fetch_css(theme)
   css_out    <- css.parser(css_file)
