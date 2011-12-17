@@ -1,5 +1,5 @@
 #LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 417
+\lyxformat 420
 \begin_document
 \begin_header
 \textclass article
@@ -56,10 +56,12 @@ knitr
 \use_mathdots 1
 \use_undertilde 1
 \cite_engine natbib_authoryear
+\biblio_style jss
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 1
 \index Index
 \shortcut idx
@@ -95,7 +97,7 @@ status open
 % 
 \backslash
 SweaveOpts{prefix.string=figure/manual-,prefix.cache=cache/manual-,align=center,ex
-ternal=TRUE,fig.hold=TRUE}
+ternal=TRUE,fig.show=hold,par=TRUE}
 \end_layout
 
 \end_inset
@@ -119,8 +121,18 @@ options(replace.assign=TRUE,width=90)
 
 \begin_layout Plain Layout
 
-knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.
-1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
+knit_hooks$set(par=function(before, options, envir){
+\end_layout
+
+\begin_layout Plain Layout
+
+if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mg
+p=c(2,.7,0),tcl=-.3)
+\end_layout
+
+\begin_layout Plain Layout
+
+})
 \end_layout
 
 \begin_layout Plain Layout
@@ -245,7 +257,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<cars-demo,fig=TRUE,dev=tikz,width=4,height=2.8,out.width=.45
+<<cars-demo,dev=tikz,width=4,height=2.8,out.width=.45
 \backslash
 textwidth,message=FALSE,cache=TRUE>>=
 \end_layout
@@ -767,7 +779,7 @@ Sexpr{x[1]}
 \family default
 ) is automatically formatted in TeX math notation (like 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -854,7 +866,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<stupid-prompts,prompt=TRUE,comment= ,highlight=FALSE>>=
+<<stupid-prompts,prompt=TRUE,comment=NA,highlight=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1155,9 +1167,9 @@ status open
 
 \begin_layout Plain Layout
 
-<<low-level-plots,fig=TRUE,dev=tikz,width=2.5,height=2.5,out.width=.3
+<<low-level-plots,fig.keep=all,dev=tikz,width=2.5,height=2.5,out.width=.3
 \backslash
-textwidth,fig.low=TRUE,cache=TRUE>>=
+textwidth,cache=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1196,19 +1208,22 @@ This brings a significant difference with traditional tools in R for dynamic
  report generation, since low-level plotting changes can also be recorded.
  The option 
 \family typewriter
-fig.low
+fig.keep
 \family default
- controls whether to keep low-level changes as separate plots; by default
- (
+ controls which plots to keep in the output; 
 \family typewriter
-fig.low=FALSE
+fig.keep=all
+\family default
+ will keep low-level changes as separate plots; by default (
+\family typewriter
+fig.keep=high
 \family default
 ), 
 \series bold
 knitr
 \series default
- will not record all the low-level changes, and they will be merged into
- one plot, like most graphics devices do.
+ will merge low-level plot changes into the previous high-level plot, like
+ most graphics devices do.
  This feature may be useful for teaching R graphics step by step.
  Note, however, low-level plotting commands in a single expression (a typical
  case is a loop) will not be recorded accumulatively, but high-level plotting
@@ -1274,42 +1289,8 @@ for(i in seq(0, 2*pi,length=20)) {plot(cos(i),sin(i),xlim=c(-1,1),ylim=c(-1,1))}
 
 \end_layout
 
-\begin_layout Subsubsection
-Plot Rearrangement
-\end_layout
-
 \begin_layout Standard
-Due to the flexibility of 
-\series bold
-evaluate
-\series default
-, 
-\series bold
-knitr
-\series default
- gained other two chunk options: 
-\family typewriter
-fig.hold
-\family default
- and 
-\family typewriter
-fig.last
-\family default
-.
- For the former option, we can decide whether to hold all plots while evaluating
- the code and 
-\begin_inset Quotes eld
-\end_inset
-
-flush
-\begin_inset Quotes erd
-\end_inset
-
- all of them to the end of a chunk, or just insert them to the place where
- they were created.
- For the latter, we can discard all previous plots and keep the last one
- only, or keep all the plots.
- As I showed in the beginning of this manual, it is straightforward to let
+As I showed in the beginning of this manual, it is straightforward to let
  
 \series bold
 knitr
@@ -1327,9 +1308,51 @@ includegraphics{}')
 \end_layout
 
 \begin_layout Standard
-Here is an example of 
+We can discard all previous plots and keep the last one only by 
 \family typewriter
-fig.hold=FALSE
+fig.keep=last
+\family default
+, or keep only the first plot by 
+\family typewriter
+fig.keep=first
+\family default
+, or discard all plots by 
+\family typewriter
+fig.keep=none
+\family default
+.
+\end_layout
+
+\begin_layout Subsubsection
+Plot Rearrangement
+\end_layout
+
+\begin_layout Standard
+The option 
+\family typewriter
+fig.show
+\family default
+ can decide whether to hold all plots while evaluating the code and 
+\begin_inset Quotes eld
+\end_inset
+
+flush
+\begin_inset Quotes erd
+\end_inset
+
+ all of them to the end of a chunk (
+\family typewriter
+fig.show=hold
+\family default
+), or just insert them to the place where they were created (by default
+ 
+\family typewriter
+fig.show=asis
+\family default
+).
+ Here is an example of 
+\family typewriter
+fig.show=asis
 \family default
 :
 \end_layout
@@ -1340,7 +1363,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<fig-hold,fig=TRUE,fig.hold=FALSE,dev=pdf,width=6,height=4,out.width=.35
+<<fig-hold,fig=TRUE,fig.show=asis,dev=pdf,width=6,height=4,out.width=.35
 \backslash
 linewidth>>=
 \end_layout
@@ -1353,6 +1376,107 @@ contour(volcano)  # contour lines
 \begin_layout Plain Layout
 
 filled.contour(volcano)  # fill contour plot with colors
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Beside 
+\family typewriter
+hold
+\family default
+ and 
+\family typewriter
+asis
+\family default
+, the option 
+\family typewriter
+fig.show
+\family default
+ can take a third value: 
+\family typewriter
+animate
+\family default
+, which makes it possible to insert animations into the output document.
+ In LaTeX, the package 
+\series bold
+animate
+\series default
+ is used to put together image frames as an animation.
+ For animations to work, there must be more than one plot produced in a
+ chunk.
+ The option 
+\family typewriter
+interval
+\family default
+ controls the time interval between animation frames; by default it is 1
+ second.
+ Note you have to add 
+\family typewriter
+
+\backslash
+usepackage{animate}
+\family default
+ in the LaTeX preamble, because 
+\series bold
+knitr
+\series default
+ will not add it automatically.
+ Animations in the PDF output can only be viewed in Adobe Reader.
+\end_layout
+
+\begin_layout Standard
+As a simple demonstration, here is a 
+\begin_inset CommandInset href
+LatexCommand href
+name "Mandelbrot animation"
+target "http://en.wikipedia.org/wiki/Mandelbrot_set"
+
+\end_inset
+
+ taken from the 
+\series bold
+animation
+\series default
+ package 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "animation-manual"
+
+\end_inset
+
+; note the PNG device is used because PDF files are too large.
+ You should be able to see the animation immediately with Acrobat Reader
+ since it was set to play automatically:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<animate-demo,fig.show=animate,dev=png,out.width=.45
+\backslash
+linewidth,interval=.5,aniopts=controls;loop;autoplay,cache=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(animation)
+\end_layout
+
+\begin_layout Plain Layout
+
+demo('Mandelbrot', echo = FALSE, package = 'animation')
 \end_layout
 
 \begin_layout Plain Layout
@@ -1580,7 +1704,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<math-expr-tikz,fig=TRUE,dev=tikz,width=5,height=3,out.width=.55
+<<math-expr-tikz,dev=tikz,width=5,height=3,out.width=.55
 \backslash
 linewidth,cache=TRUE,message=FALSE>>=
 \end_layout
@@ -1672,103 +1796,6 @@ http://cran.r-project.org/web/packages/tikzDevice/vignettes/tikzDevice.pdf
  decision on the type of plots, e.g., a scatter plot with millions of points
  is usually difficult to read, and a contour plot or a hexagon plot showing
  the 2D density can be a better alternative (they are smaller in size).
-\end_layout
-
-\begin_layout Subsubsection
-Animation
-\end_layout
-
-\begin_layout Standard
-The chunk option 
-\family typewriter
-animate
-\family default
- (if 
-\family typewriter
-TRUE
-\family default
-) make it possible to insert animations into the output document.
- In LaTeX, the package 
-\series bold
-animate
-\series default
- is used to put together image frames as an animation.
- For animations to work, there must be more than one plot produced in a
- chunk.
- The option 
-\family typewriter
-interval
-\family default
- controls the time interval between animation frames; by default it is 1
- second.
- Note you have to add 
-\family typewriter
-
-\backslash
-usepackage{animate}
-\family default
- in the LaTeX preamble, because 
-\series bold
-knitr
-\series default
- will not add it automatically.
- Animations in the PDF output can only be viewed in Adobe Reader.
-\end_layout
-
-\begin_layout Standard
-As a simple demonstration, here is a 
-\begin_inset CommandInset href
-LatexCommand href
-name "Mandelbrot animation"
-target "http://en.wikipedia.org/wiki/Mandelbrot_set"
-
-\end_inset
-
- taken from the 
-\series bold
-animation
-\series default
- package 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "animation-manual"
-
-\end_inset
-
-; note the PNG device is used because PDF files are too large.
- You should be able to see the animation immediately with Acrobat Reader
- since it was set to play automatically:
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-<<animate-demo,fig=TRUE,dev=png,out.width=.45
-\backslash
-linewidth,animate=TRUE,interval=.5,aniopts=controls;loop;autoplay,cache=TRUE>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-library(animation)
-\end_layout
-
-\begin_layout Plain Layout
-
-demo('Mandelbrot', echo = FALSE, package = 'animation')
-\end_layout
-
-\begin_layout Plain Layout
-
-@
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -2392,6 +2419,12 @@ pdf
  for the same plot)
 \end_layout
 
+\begin_layout Description
+fig was dropped; now use 
+\family typewriter
+fig.keep=high
+\end_layout
+
 \begin_layout Standard
 For logical options, only 
 \family typewriter
@@ -2509,9 +2542,13 @@ knitr
 A.4 empty figure chunks will not cause LaTeX errors because figures will
  not be generated at all, and it is safe to use 
 \family typewriter
+fig.keep
+\family default
+ (close to 
+\family typewriter
 fig=TRUE
 \family default
- even if there are not plots in a chunk
+ in Sweave) even if there are not plots in a chunk
 \end_layout
 
 \begin_layout Description

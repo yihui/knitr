@@ -38,11 +38,13 @@
 
 \begin{document}
 
-% \SweaveOpts{prefix.string=figure/manual-,prefix.cache=cache/manual-,align=center,external=TRUE,fig.hold=TRUE}
+% \SweaveOpts{prefix.string=figure/manual-,prefix.cache=cache/manual-,align=center,external=TRUE,fig.show=hold,par=TRUE}
 
 <<setup,echo=FALSE,results=hide,message=FALSE>>=
 options(replace.assign=TRUE,width=90)
-knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
+knit_hooks$set(par=function(before, options, envir){
+if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
+})
 @
 
 
@@ -75,7 +77,7 @@ is that extending Sweave by hacking \textsf{SweaveDrivers.R} in the
 \ref{fig:cars-demo} is a simple demo of some features of \textbf{knitr}.
 
 \begin{figure}
-<<cars-demo,fig=TRUE,dev=tikz,width=4,height=2.8,out.width=.45\textwidth,message=FALSE,cache=TRUE>>=
+<<cars-demo,dev=tikz,width=4,height=2.8,out.width=.45\textwidth,message=FALSE,cache=TRUE>>=
 fit=lm(dist~speed,data=cars) # linear regression
 par(mar=c(4, 4, 1, .1), mgp=c(2,1,0),bg='white')
 with(cars,plot(speed,dist,panel.last=abline(fit)))
@@ -220,7 +222,7 @@ output with prompts (set option \texttt{prompt=TRUE}), and you will
 quickly realize the inconvenience to the readers if they want to copy
 and run the code in the output document:
 
-<<stupid-prompts,prompt=TRUE,comment= ,highlight=FALSE>>=
+<<stupid-prompts,prompt=TRUE,comment=NA,highlight=FALSE>>=
 x=rnorm(5)
 x
 var(x)
@@ -288,7 +290,7 @@ been evaluated. For example, the code below consists of three expressions,
 out of which two are related to drawing plots, therefore \textbf{evaluate}
 will produce two plots by default:
 
-<<low-level-plots,fig=TRUE,dev=tikz,width=2.5,height=2.5,out.width=.3\textwidth,fig.low=TRUE,cache=TRUE>>=
+<<low-level-plots,fig.keep=all,dev=tikz,width=2.5,height=2.5,out.width=.3\textwidth,cache=TRUE>>=
 par(mar=c(3,3,.1,.1))
 plot(1:10, ann=FALSE,las=1)
 text(5,9,'mass $\\rightarrow$ energy\n$E=mc^2$')
@@ -296,16 +298,16 @@ text(5,9,'mass $\\rightarrow$ energy\n$E=mc^2$')
 
 This brings a significant difference with traditional tools in R for
 dynamic report generation, since low-level plotting changes can also
-be recorded. The option \texttt{fig.low} controls whether to keep
-low-level changes as separate plots; by default (\texttt{fig.low=FALSE}),
-\textbf{knitr} will not record all the low-level changes, and they
-will be merged into one plot, like most graphics devices do. This
-feature may be useful for teaching R graphics step by step. Note,
-however, low-level plotting commands in a single expression (a typical
-case is a loop) will not be recorded accumulatively, but high-level
-plotting commands, regardless of where they are, will always be recorded.
-For example, this chunk will only produce 2 plots instead of 21 plots
-because there are 2 complete expressions:
+be recorded. The option \texttt{fig.keep} controls which plots to
+keep in the output; \texttt{fig.keep=all} will keep low-level changes
+as separate plots; by default (\texttt{fig.keep=high}), \textbf{knitr}
+will merge low-level plot changes into the previous high-level plot,
+like most graphics devices do. This feature may be useful for teaching
+R graphics step by step. Note, however, low-level plotting commands
+in a single expression (a typical case is a loop) will not be recorded
+accumulatively, but high-level plotting commands, regardless of where
+they are, will always be recorded. For example, this chunk will only
+produce 2 plots instead of 21 plots because there are 2 complete expressions:
 
 <<low-plot-loop,eval=FALSE>>=
 plot(0,0,type='n',ann=FALSE)
@@ -318,26 +320,49 @@ But this will produce 20 plots as expected:
 for(i in seq(0, 2*pi,length=20)) {plot(cos(i),sin(i),xlim=c(-1,1),ylim=c(-1,1))}
 @
 
+As I showed in the beginning of this manual, it is straightforward
+to let \textbf{knitr} keep all the plots in a chunk and insert them
+into the output document, so we no longer need the \texttt{cat('\textbackslash{}\textbackslash{}includegraphics\{\}')}
+trick.
+
+We can discard all previous plots and keep the last one only by \texttt{fig.keep=last},
+or keep only the first plot by \texttt{fig.keep=first}, or discard
+all plots by \texttt{fig.keep=none}.
+
 
 \subsubsection{Plot Rearrangement}
 
-Due to the flexibility of \textbf{evaluate}, \textbf{knitr} gained
-other two chunk options: \texttt{fig.hold} and \texttt{fig.last}.
-For the former option, we can decide whether to hold all plots while
-evaluating the code and ``flush'' all of them to the end of a chunk,
-or just insert them to the place where they were created. For the
-latter, we can discard all previous plots and keep the last one only,
-or keep all the plots. As I showed in the beginning of this manual,
-it is straightforward to let \textbf{knitr} keep all the plots in
-a chunk and insert them into the output document, so we no longer
-need the \texttt{cat('\textbackslash{}\textbackslash{}includegraphics\{\}')}
-trick.
+The option \texttt{fig.show} can decide whether to hold all plots
+while evaluating the code and ``flush'' all of them to the end of
+a chunk (\texttt{fig.show=hold}), or just insert them to the place
+where they were created (by default \texttt{fig.show=asis}). Here
+is an example of \texttt{fig.show=asis}:
 
-Here is an example of \texttt{fig.hold=FALSE}:
-
-<<fig-hold,fig=TRUE,fig.hold=FALSE,dev=pdf,width=6,height=4,out.width=.35\linewidth>>=
+<<fig-hold,fig=TRUE,fig.show=asis,dev=pdf,width=6,height=4,out.width=.35\linewidth>>=
 contour(volcano)  # contour lines
 filled.contour(volcano)  # fill contour plot with colors
+@
+
+Beside \texttt{hold} and \texttt{asis}, the option \texttt{fig.show}
+can take a third value: \texttt{animate}, which makes it possible
+to insert animations into the output document. In \LaTeX{}, the package
+\textbf{animate} is used to put together image frames as an animation.
+For animations to work, there must be more than one plot produced
+in a chunk. The option \texttt{interval} controls the time interval
+between animation frames; by default it is 1 second. Note you have
+to add \texttt{\textbackslash{}usepackage\{animate\}} in the \LaTeX{}
+preamble, because \textbf{knitr} will not add it automatically. Animations
+in the PDF output can only be viewed in Adobe Reader.
+
+As a simple demonstration, here is a \href{http://en.wikipedia.org/wiki/Mandelbrot_set}{Mandelbrot animation}
+taken from the \textbf{animation} package \citep{animation-manual};
+note the PNG device is used because PDF files are too large. You should
+be able to see the animation immediately with Acrobat Reader since
+it was set to play automatically:
+
+<<animate-demo,fig.show=animate,dev=png,out.width=.45\linewidth,interval=.5,aniopts=controls;loop;autoplay,cache=TRUE>>=
+library(animation)
+demo('Mandelbrot', echo = FALSE, package = 'animation')
 @
 
 
@@ -386,7 +411,7 @@ qplot(1:10, 1:10) + opts(title = substitute(paste(d *
 
 With the tikz device, it is both straightforward and more beautiful: 
 
-<<math-expr-tikz,fig=TRUE,dev=tikz,width=5,height=3,out.width=.55\linewidth,cache=TRUE,message=FALSE>>=
+<<math-expr-tikz,dev=tikz,width=5,height=3,out.width=.55\linewidth,cache=TRUE,message=FALSE>>=
 library(ggplot2)
 qplot(1:10, 1:10) + 
 opts(title = sprintf('$\\mathrm{d}\\mathbf{x}_{t} = \\alpha[(\\theta - \\mathbf{x}_{t})\\mathrm{d}t + %d]\\mathrm{d}B_{t}$', 4))
@@ -404,30 +429,6 @@ to the PDF or PNG device, or reconsider our decision on the type of
 plots, e.g., a scatter plot with millions of points is usually difficult
 to read, and a contour plot or a hexagon plot showing the 2D density
 can be a better alternative (they are smaller in size).
-
-
-\subsubsection{Animation}
-
-The chunk option \texttt{animate} (if \texttt{TRUE}) make it possible
-to insert animations into the output document. In \LaTeX{}, the package
-\textbf{animate} is used to put together image frames as an animation.
-For animations to work, there must be more than one plot produced
-in a chunk. The option \texttt{interval} controls the time interval
-between animation frames; by default it is 1 second. Note you have
-to add \texttt{\textbackslash{}usepackage\{animate\}} in the \LaTeX{}
-preamble, because \textbf{knitr} will not add it automatically. Animations
-in the PDF output can only be viewed in Adobe Reader.
-
-As a simple demonstration, here is a \href{http://en.wikipedia.org/wiki/Mandelbrot_set}{Mandelbrot animation}
-taken from the \textbf{animation} package \citep{animation-manual};
-note the PNG device is used because PDF files are too large. You should
-be able to see the animation immediately with Acrobat Reader since
-it was set to play automatically:
-
-<<animate-demo,fig=TRUE,dev=png,out.width=.45\linewidth,animate=TRUE,interval=.5,aniopts=controls;loop;autoplay,cache=TRUE>>=
-library(animation)
-demo('Mandelbrot', echo = FALSE, package = 'animation')
-@
 
 The graphics manual contains more detailed information and you can
 check it out in the \href{http://yihui.github.com/knitr/demo/graphics/}{website}.
@@ -604,6 +605,7 @@ note only one device can be used for a chunk (in old ages, we may
 have to use both \texttt{eps} and \texttt{pdf}, but nowadays there
 is usually no need to generate multiple image formats for the same
 plot)
+\item [{fig}] was dropped; now use \texttt{fig.keep=high}
 \end{description}
 For logical options, only \texttt{TRUE}/\texttt{FALSE}/\texttt{T}/\texttt{F}
 are supported (the first two are recommended), and \texttt{true}/\texttt{false}
@@ -629,8 +631,9 @@ Some answers to Sweave FAQ's from \texttt{vignette('Sweave', package='utils')}
 are different in \textbf{knitr}:
 \begin{description}
 \item [{A.4}] empty figure chunks will not cause \LaTeX{} errors because
-figures will not be generated at all, and it is safe to use \texttt{fig=TRUE}
-even if there are not plots in a chunk
+figures will not be generated at all, and it is safe to use \texttt{fig.keep}
+(close to \texttt{fig=TRUE} in Sweave) even if there are not plots
+in a chunk
 \item [{A.5}] \textbf{lattice}, \textbf{ggplot2} and other grid-based graphics
 will work as expected in \textbf{knitr}
 \item [{A.7}] multiple figures per chunk will work as expected; no need

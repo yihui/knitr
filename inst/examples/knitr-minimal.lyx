@@ -1,5 +1,5 @@
 #LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 417
+\lyxformat 420
 \begin_document
 \begin_header
 \textclass article
@@ -53,11 +53,13 @@ knitr
 \use_mhchem 1
 \use_mathdots 1
 \use_undertilde 1
-\cite_engine natbib_authoryear
+\cite_engine basic
+\biblio_style plainnat
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 1
 \index Index
 \shortcut idx
@@ -92,7 +94,7 @@ status open
 
 % 
 \backslash
-SweaveOpts{prefix.string=figure/minimal-,align=center,external=TRUE,fig.hold=TRUE}
+SweaveOpts{prefix.string=figure/minimal-,align=center,fig.show=hold}
 \end_layout
 
 \end_inset
@@ -116,8 +118,8 @@ options(replace.assign=TRUE,width=90)
 
 \begin_layout Plain Layout
 
-knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.
-1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
+knit_hooks$set(par=function(before, options, envir){if (before) par(mar=c(4,4,.1,.
+1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3,las=1)})
 \end_layout
 
 \begin_layout Plain Layout
@@ -209,14 +211,14 @@ status open
 
 \begin_layout Plain Layout
 
-<<boring-plots,fig=TRUE,dev=pdf,width=5,height=5,out.width=.45
+<<boring-plots,dev=pdf,width=5,height=5,out.width=.45
 \backslash
-linewidth>>=
+linewidth,par=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
 
-par(las=1)  # tick labels direction
+## two plots side by side (option fig.show=hold)
 \end_layout
 
 \begin_layout Plain Layout

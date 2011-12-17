@@ -6,7 +6,7 @@ First, the input file was named as `knitr-minimal_knit_.md` ([click to view its 
 Note we may need to set up a few options before knitting this file, e.g. I used the code below to make sure **knitr** uses the correct hooks to wrap my output, and writes correct URL's for my images.
 
 <!--begin.rcode eval=FALSE
-opts_knit$set(theme='gfm', base.url='https://github.com/yihui/knitr/raw/master/inst/examples/')
+opts_knit$set(out.format='gfm', base.url='https://github.com/yihui/knitr/raw/master/inst/examples/')
 end.rcode-->
 
 Now we write some code chunks in this markdown file:
@@ -21,7 +21,7 @@ end.rcode-->
 
 We can also produce plots:
 
-<!--begin.rcode md-cars-scatter,fig=TRUE,message=FALSE
+<!--begin.rcode md-cars-scatter,message=FALSE
 library(ggplot2)
 qplot(hp, mpg, data=mtcars)+geom_smooth()
 end.rcode-->

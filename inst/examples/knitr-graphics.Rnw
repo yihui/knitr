@@ -4,6 +4,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
 \usepackage{url}
+\usepackage[unicode=true]
+ {hyperref}
+\usepackage{breakurl}
 
 \makeatletter
 
@@ -20,17 +23,19 @@
 
 \usepackage[buttonsize=1em]{animate}
 
-\usepackage[breaklinks=true,pdfstartview=FitH]{hyperref}
+\hypersetup{breaklinks=true,pdfstartview=FitH}
 
 \makeatother
 
 \begin{document}
 
-% \SweaveOpts{prefix.string=figure/graphics-, prefix.cache=cache/graphics-, fig=TRUE, align=center, dev=tikz, external=TRUE, width=5, height=5, fig.hold=TRUE, cache=TRUE, align=center}
+% \SweaveOpts{prefix.string=figure/graphics-, prefix.cache=cache/graphics-, align=center, dev=tikz, external=TRUE, width=5, height=5, fig.show=hold, cache=TRUE, align=center, par=TRUE}
 
 <<setup,echo=FALSE,results=hide,cache=FALSE>>=
-options(replace.assign=TRUE,width=78)
-knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)}, crop=hook_pdfcrop)
+options(replace.assign=TRUE,width=80)
+knit_hooks$set(par=function(before, options, envir){
+if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
+}, crop=hook_pdfcrop)
 @
 
 \maketitle
@@ -103,11 +108,15 @@ Depending on the graphics packages and devices you use, the background
 of plots might be transparent (e.g. tikz for base graphics) or white
 (e.g. \textbf{ggplot2}) by default. If you definitely want the background
 color to be always white for base graphics, you can set up a hook
-for the \texttt{fig} option like this:
+for the \texttt{white} option like this:
 
 <<white-background,eval=FALSE>>=
-knit_hooks$set(fig = function(before, options, envir) {if (before) par(bg = 'white')})
+knit_hooks$set(white = function(before, options, envir) {if (before) par(bg = 'white')})
 @
+
+Then set \texttt{white=TRUE} in the global option (e.g. \texttt{\textbackslash{}SweaveOpts\{white
+= TRUE\}}). Note the hook name \texttt{white} is arbitrary; see the
+\href{http://yihui.github.com/knitr/hooks}{hooks} page in the website.
 
 
 \section{Plot Recording}
@@ -122,7 +131,7 @@ is also saved. Figure \ref{fig:two-high} shows two expressions producing
 two high-level plots.
 
 \begin{figure}
-<<two-high,fig=TRUE,width=3,height=2.5,out.width=.49\linewidth>>=
+<<two-high,width=3,height=2,out.width=.49\linewidth>>=
 plot(cars)
 boxplot(cars$dist,xlab='dist')
 @
@@ -139,25 +148,25 @@ to put base graphics and \textbf{ggplot2} side by side; recall Figure
 Figure \ref{fig:low-plot-loop} shows another example of two R expressions,
 but the second expression only involves with low-level plotting changes.
 By default, low-level plot changes are discarded, but you can retain
-them with the option \texttt{fig.low=TRUE}.
+them with the option \texttt{fig.keep=all}.
 
 \begin{figure}
-<<low-plot-loop,fig=TRUE,width=3,height=2.5,out.width=.49\linewidth,fig.low=TRUE>>=
+<<low-plot-loop,width=3,height=2.5,out.width=.49\linewidth,fig.keep=all>>=
 plot(0,0,type='n',ann=FALSE)
 for(i in seq(0, 2*pi,length=20)) points(cos(i),sin(i))
 @
 
 \caption{Two complete R expressions will produce at most two plots, as long
 as there are not multiple high-level plotting calls in each expression;
-option \texttt{fig.low=TRUE} here.\label{fig:low-plot-loop}}
+option \texttt{fig.keep=all} here.\label{fig:low-plot-loop}}
 \end{figure}
 
 
-Together with \texttt{fig.hold=FALSE}, we can show the process of
-plotting step by step like Figure \ref{fig:high-with-low}.
+Together with \texttt{fig.show=asis}, we can show the process of plotting
+step by step like Figure \ref{fig:high-with-low}.
 
 \begin{figure}
-<<high-with-low,fig=TRUE,width=3,height=2.25,out.width=.5\linewidth,fig.low=TRUE,fig.hold=FALSE>>=
+<<high-with-low,width=3,height=2,out.width=.5\linewidth,fig.keep=all,fig.show=asis>>=
 plot(cars)
 abline(lm(dist~speed, data=cars))  # a regression line
 @
@@ -170,11 +179,10 @@ and plots can be put in the places where they were produced.\label{fig:high-with
 A further note on plot recording: \textbf{knitr} examines all recorded
 plots (as R objects) and compares them sequentially; if the previous
 plot is a ``subset'' of the next plot (= previous plot + low-level
-changes), the previous plot will be removed when \texttt{fig.low=FALSE};
-this is how \texttt{fig.low} works. If two successive plots are identical,
-the second one will be removed by default, so it might be a little
-bit surprising that the following chunk will only produce one plot
-by default%
+changes), the previous plot will be removed when \texttt{fig.keep=high}.
+If two successive plots are identical, the second one will be removed
+by default, so it might be a little bit surprising that the following
+chunk will only produce one plot by default%
 \footnote{adapted from \url{https://github.com/yihui/knitr/issues/41}%
 }:
 
@@ -190,15 +198,15 @@ image(m*2)  # exactly the same as previous plot
 We can rearrange the plots in chunks in several ways. They can be
 inserted right after the line(s) of R code which produced them, or
 accumulated till the end of the chunk. There is an example in the
-main manual demonstrating \texttt{fig.hold=FALSE} for two high-level
+main manual demonstrating \texttt{fig.show=asis} for two high-level
 plots, and Figure \ref{fig:high-with-low} in this manual also demonstrates
 this option for a high-level plot followed by a low-level change.
 
-Here is an example demonstrating the option \texttt{fig.last}; when
-it is \texttt{TRUE}, only the last plot is kept:
+Here is an example demonstrating the option \texttt{fig.keep=last}
+(only the last plot is kept):
 
 \begin{figure}
-<<fig-last,fig=TRUE,width=5.2,height=3,out.width=.7\linewidth,fig.last=TRUE>>=
+<<fig-last,width=5.2,height=3,out.width=.7\linewidth,fig.keep=last>>=
 suppressMessages(library(ggplot2))
 pie <- ggplot(diamonds, aes(x = factor(1), fill = cut)) + xlab('cut') + geom_bar(width = 1) 
 pie + coord_polar(theta = "y") # a pie chart
@@ -211,13 +219,36 @@ the last result. (Adapted from the \textbf{ggplot2} website)}
 \end{figure}
 
 
+When multiple plots are produced by a code chunk, we may want to show
+them as an animation with the option \texttt{fig.show=animate}. Figure
+\ref{fig:clock-animation} shows a simple clock animation; you may
+compare the code to Figure \ref{fig:high-with-low} to understand
+that high-level plots are always recorded, regardless of where they
+appeared.
+
+\begin{figure}
+<<clock-animation,width=3,height=3,out.width=.4\linewidth,fig.show=animate,tidy=FALSE,crop=TRUE>>=
+par(mar = rep(3, 4))
+for (i in seq(pi/2, -4/3 * pi, length = 12)) {
+    plot(0, 0, pch = 20, ann = FALSE, axes = FALSE)
+    arrows(0, 0, cos(i), sin(i))
+    axis(1, 0, "VI"); axis(2, 0, "IX")
+    axis(3, 0, "XII"); axis(4, 0, "III"); box()
+}
+@
+
+\caption{A clock animation. You have to view it in Adobe Reader: click to play/pause;
+there are also buttons to speed up or slow down the animation.\label{fig:clock-animation}}
+\end{figure}
+
+
 We can also set the alignment of plots easily with the \texttt{align}
 option; this document uses \texttt{align=center} as a global option,
 and we can also set plots to be left/right-aligned. Figure \ref{fig:maruko-plot}
 is an example of a left-aligned plot.
 
 \begin{figure}
-<<maruko-plot,fig=TRUE,width=7,height=4,out.width=.5\linewidth,align=left,crop=TRUE>>=
+<<maruko-plot,width=7,height=4,out.width=.45\linewidth,align=left,crop=TRUE>>=
 stars(cbind(1:16,10*(16:1)),draw.segments=TRUE)
 @
 
@@ -247,7 +278,7 @@ use native \LaTeX{} commands in plots, the styles of texts in plots
 can be very sophisticated.
 
 \begin{figure}
-<<math-formula-tt,fig=TRUE,width=6,height=2,out.width=\linewidth,echo=FALSE>>=
+<<math-formula-tt,width=6,height=2,out.width=\linewidth,echo=T>>=
 plot(0:1,0:1,type='n', ylab='origin of statistics', xlab='statistical presentation rocks with \\LaTeX{}')
 text(.5,c(.8,.5,.2), c('\\texttt{lm(y \\textasciitilde{} x)}', '$\\hat{\\beta}=(X^{\\prime}X)^{-1}X^{\\prime}y$',  '$(\\Omega,\\mathcal{F},\\mu)$'))
 @
@@ -271,31 +302,6 @@ This is useful and often necessary to compile tikz plots which contain
 (UTF8) multi-byte characters.
 
 
-\section{Animation}
-
-When multiple plots are produced by a code chunk, we may want to turn
-them into an animation with the option \texttt{animate}. Figure \ref{fig:clock-animation}
-shows a simple clock animation; you may compare the code to Figure
-\ref{fig:high-with-low} to understand that high-level plots are always
-recorded, regardless of where they appeared.
-
-\begin{figure}
-<<clock-animation,fig=TRUE,width=3,height=3,out.width=.4\linewidth,animate=TRUE,crop=TRUE>>=
-par(mar=rep(3,4))
-for(i in seq(pi/2, -4/3*pi,length=12)) {
-plot(0,0,pch=20,ann=FALSE,axes=FALSE)
-arrows(0, 0, cos(i),sin(i))
-axis(1,0,'VI');axis(2,0,'IX');axis(3,0,'XII');axis(4,0,'III')
-box()
-}
-@
-
-\caption{A clock animation. You have to view it in Adobe Reader: click to play/pause;
-there are also buttons to speed up or slow down the animation.\label{fig:clock-animation}}
-\end{figure}
-
-
-
 \section{Other Features}
 
 The \textbf{knitr} package can be extended with hook functions, and
@@ -304,12 +310,12 @@ here I give a few examples illustrating the flexibility.
 
 \subsection{Cropping PDF Graphics}
 
-Many R users have been suffering from the extra margins in R plots,
+Some R users may have been suffering from the extra margins in R plots,
 especially in base graphics (\textbf{ggplot2} is much better in this
 aspect). The default graphical option \texttt{mar} is about \texttt{c(5,
 4, 4, 2)} (see \texttt{?par}), which is often too big. Instead of
 endlessly setting \texttt{par(mar)}, you may consider the program
-\texttt{pdfcrop}, which can crop the extra white margin automatically%
+\texttt{pdfcrop}, which can crop the white margin automatically%
 \footnote{\url{http://www.ctan.org/pkg/pdfcrop}%
 }. In \textbf{knitr}, we can set up the hook \emph{hook\_pdfcrop()}
 to work with a chunk option, say, \texttt{crop}.
@@ -321,7 +327,7 @@ knit_hooks$set(crop=hook_pdfcrop)
 Now we compare two plots below. The first one is not cropped:
 
 \begin{figure}
-<<pdf-nocrop,fig=TRUE,width=3.2,height=3.2,out.width=.4\linewidth>>=
+<<pdf-nocrop,width=3.2,height=3.2,out.width=.4\linewidth>>=
 test_crop=function(){
 par(mar=c(5,4,4,2),bg='white')  # large margin
 plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
@@ -337,7 +343,7 @@ Then the same plot is produced but with a chunk option \texttt{crop=TRUE}
 which will call the cropping hook:
 
 \begin{figure}
-<<pdf-crop,echo=FALSE,fig=TRUE,width=3.2,height=3.2,out.width=.4\linewidth,crop=TRUE,dependson=pdf-nocrop>>=
+<<pdf-crop,echo=FALSE,width=3.2,height=3.2,out.width=.4\linewidth,crop=TRUE,dependson=pdf-nocrop>>=
 test_crop()
 @
 

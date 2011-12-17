@@ -1,5 +1,5 @@
 #LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 413
+\lyxformat 420
 \begin_document
 \begin_header
 \textclass tufte-handout
@@ -11,7 +11,7 @@
 
 \usepackage[buttonsize=1em]{animate}
 
-\usepackage[breaklinks=true,pdfstartview=FitH]{hyperref}
+\hypersetup{breaklinks=true,pdfstartview=FitH}
 \end_preamble
 \options justified
 \use_default_options true
@@ -49,10 +49,12 @@ knitr
 \use_mathdots 1
 \use_undertilde 1
 \cite_engine basic
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 1
 \index Index
 \shortcut idx
@@ -83,9 +85,9 @@ status open
 
 % 
 \backslash
-SweaveOpts{prefix.string=figure/graphics-, prefix.cache=cache/graphics-, fig=TRUE,
- align=center, dev=tikz, external=TRUE, width=5, height=5, fig.hold=TRUE,
- cache=TRUE, align=center}
+SweaveOpts{prefix.string=figure/graphics-, prefix.cache=cache/graphics-, align=cen
+ter, dev=tikz, external=TRUE, width=5, height=5, fig.show=hold, cache=TRUE,
+ align=center, par=TRUE}
 \end_layout
 
 \end_inset
@@ -104,13 +106,23 @@ status open
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE,width=78)
+options(replace.assign=TRUE,width=80)
 \end_layout
 
 \begin_layout Plain Layout
 
-knit_hooks$set(fig=function(before, options, envir){if (before) par(mar=c(4,4,.1,.
-1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)}, crop=hook_pdfcrop)
+knit_hooks$set(par=function(before, options, envir){
+\end_layout
+
+\begin_layout Plain Layout
+
+if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mg
+p=c(2,.7,0),tcl=-.3)
+\end_layout
+
+\begin_layout Plain Layout
+
+}, crop=hook_pdfcrop)
 \end_layout
 
 \begin_layout Plain Layout
@@ -488,7 +500,7 @@ ggplot2
  If you definitely want the background color to be always white for base
  graphics, you can set up a hook for the 
 \family typewriter
-fig
+white
 \family default
  option like this:
 \end_layout
@@ -504,7 +516,7 @@ status open
 
 \begin_layout Plain Layout
 
-knit_hooks$set(fig = function(before, options, envir) {if (before) par(bg
+knit_hooks$set(white = function(before, options, envir) {if (before) par(bg
  = 'white')})
 \end_layout
 
@@ -516,6 +528,34 @@ knit_hooks$set(fig = function(before, options, envir) {if (before) par(bg
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Then set 
+\family typewriter
+white=TRUE
+\family default
+ in the global option (e.g.
+ 
+\family typewriter
+
+\backslash
+SweaveOpts{white = TRUE}
+\family default
+).
+ Note the hook name 
+\family typewriter
+white
+\family default
+ is arbitrary; see the 
+\begin_inset CommandInset href
+LatexCommand href
+name "hooks"
+target "http://yihui.github.com/knitr/hooks"
+
+\end_inset
+
+ page in the website.
 \end_layout
 
 \begin_layout Section
@@ -584,7 +624,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<two-high,fig=TRUE,width=3,height=2.5,out.width=.49
+<<two-high,width=3,height=2,out.width=.49
 \backslash
 linewidth>>=
 \end_layout
@@ -661,7 +701,7 @@ reference "fig:low-plot-loop"
  By default, low-level plot changes are discarded, but you can retain them
  with the option 
 \family typewriter
-fig.low=TRUE
+fig.keep=all
 \family default
 .
 \end_layout
@@ -678,9 +718,9 @@ status open
 
 \begin_layout Plain Layout
 
-<<low-plot-loop,fig=TRUE,width=3,height=2.5,out.width=.49
+<<low-plot-loop,width=3,height=2.5,out.width=.49
 \backslash
-linewidth,fig.low=TRUE>>=
+linewidth,fig.keep=all>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -710,7 +750,7 @@ for(i in seq(0, 2*pi,length=20)) points(cos(i),sin(i))
 Two complete R expressions will produce at most two plots, as long as there
  are not multiple high-level plotting calls in each expression; option 
 \family typewriter
-fig.low=TRUE
+fig.keep=all
 \family default
  here.
 \begin_inset CommandInset label
@@ -735,7 +775,7 @@ name "fig:low-plot-loop"
 \begin_layout Standard
 Together with 
 \family typewriter
-fig.hold=FALSE
+fig.show=asis
 \family default
 , we can show the process of plotting step by step like Figure 
 \begin_inset CommandInset ref
@@ -759,9 +799,9 @@ status open
 
 \begin_layout Plain Layout
 
-<<high-with-low,fig=TRUE,width=3,height=2.25,out.width=.5
+<<high-with-low,width=3,height=2,out.width=.5
 \backslash
-linewidth,fig.low=TRUE,fig.hold=FALSE>>=
+linewidth,fig.keep=all,fig.show=asis>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -826,13 +866,9 @@ subset
  of the next plot (= previous plot + low-level changes), the previous plot
  will be removed when 
 \family typewriter
-fig.low=FALSE
+fig.keep=high
 \family default
-; this is how 
-\family typewriter
-fig.low
-\family default
- works.
+.
  If two successive plots are identical, the second one will be removed by
  default, so it might be a little bit surprising that the following chunk
  will only produce one plot by default
@@ -903,7 +939,7 @@ We can rearrange the plots in chunks in several ways.
  or accumulated till the end of the chunk.
  There is an example in the main manual demonstrating 
 \family typewriter
-fig.hold=FALSE
+fig.show=asis
 \family default
  for two high-level plots, and Figure 
 \begin_inset CommandInset ref
@@ -919,13 +955,9 @@ reference "fig:high-with-low"
 \begin_layout Standard
 Here is an example demonstrating the option 
 \family typewriter
-fig.last
+fig.keep=last
 \family default
-; when it is 
-\family typewriter
-TRUE
-\family default
-, only the last plot is kept:
+ (only the last plot is kept):
 \end_layout
 
 \begin_layout Standard
@@ -940,9 +972,9 @@ status open
 
 \begin_layout Plain Layout
 
-<<fig-last,fig=TRUE,width=5.2,height=3,out.width=.7
+<<fig-last,width=5.2,height=3,out.width=.7
 \backslash
-linewidth,fig.last=TRUE>>=
+linewidth,fig.keep=last>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1001,6 +1033,119 @@ ggplot2
 \end_layout
 
 \begin_layout Standard
+When multiple plots are produced by a code chunk, we may want to show them
+ as an animation with the option 
+\family typewriter
+fig.show=animate
+\family default
+.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:clock-animation"
+
+\end_inset
+
+ shows a simple clock animation; you may compare the code to Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:high-with-low"
+
+\end_inset
+
+ to understand that high-level plots are always recorded, regardless of
+ where they appeared.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<clock-animation,width=3,height=3,out.width=.4
+\backslash
+linewidth,fig.show=animate,tidy=FALSE,crop=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mar = rep(3, 4))
+\end_layout
+
+\begin_layout Plain Layout
+
+for (i in seq(pi/2, -4/3 * pi, length = 12)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    plot(0, 0, pch = 20, ann = FALSE, axes = FALSE)
+\end_layout
+
+\begin_layout Plain Layout
+
+    arrows(0, 0, cos(i), sin(i))
+\end_layout
+
+\begin_layout Plain Layout
+
+    axis(1, 0, "VI"); axis(2, 0, "IX")
+\end_layout
+
+\begin_layout Plain Layout
+
+    axis(3, 0, "XII"); axis(4, 0, "III"); box()
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A clock animation.
+ You have to view it in Adobe Reader: click to play/pause; there are also
+ buttons to speed up or slow down the animation.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:clock-animation"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 We can also set the alignment of plots easily with the 
 \family typewriter
 align
@@ -1032,7 +1177,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<maruko-plot,fig=TRUE,width=7,height=4,out.width=.5
+<<maruko-plot,width=7,height=4,out.width=.45
 \backslash
 linewidth,align=left,crop=TRUE>>=
 \end_layout
@@ -1148,9 +1293,9 @@ status open
 
 \begin_layout Plain Layout
 
-<<math-formula-tt,fig=TRUE,width=6,height=2,out.width=
+<<math-formula-tt,width=6,height=2,out.width=
 \backslash
-linewidth,echo=FALSE>>=
+linewidth,echo=T>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1292,123 +1437,6 @@ This is useful and often necessary to compile tikz plots which contain (UTF8)
 \end_layout
 
 \begin_layout Section
-Animation
-\end_layout
-
-\begin_layout Standard
-When multiple plots are produced by a code chunk, we may want to turn them
- into an animation with the option 
-\family typewriter
-animate
-\family default
-.
- Figure 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:clock-animation"
-
-\end_inset
-
- shows a simple clock animation; you may compare the code to Figure 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:high-with-low"
-
-\end_inset
-
- to understand that high-level plots are always recorded, regardless of
- where they appeared.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-<<clock-animation,fig=TRUE,width=3,height=3,out.width=.4
-\backslash
-linewidth,animate=TRUE,crop=TRUE>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-par(mar=rep(3,4))
-\end_layout
-
-\begin_layout Plain Layout
-
-for(i in seq(pi/2, -4/3*pi,length=12)) {
-\end_layout
-
-\begin_layout Plain Layout
-
-plot(0,0,pch=20,ann=FALSE,axes=FALSE)
-\end_layout
-
-\begin_layout Plain Layout
-
-arrows(0, 0, cos(i),sin(i))
-\end_layout
-
-\begin_layout Plain Layout
-
-axis(1,0,'VI');axis(2,0,'IX');axis(3,0,'XII');axis(4,0,'III')
-\end_layout
-
-\begin_layout Plain Layout
-
-box()
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\begin_layout Plain Layout
-
-@
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-A clock animation.
- You have to view it in Adobe Reader: click to play/pause; there are also
- buttons to speed up or slow down the animation.
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:clock-animation"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
 Other Features
 \end_layout
 
@@ -1426,8 +1454,8 @@ Cropping PDF Graphics
 \end_layout
 
 \begin_layout Standard
-Many R users have been suffering from the extra margins in R plots, especially
- in base graphics (
+Some R users may have been suffering from the extra margins in R plots,
+ especially in base graphics (
 \series bold
 ggplot2
 \series default
@@ -1453,7 +1481,7 @@ par(mar)
 \family typewriter
 pdfcrop
 \family default
-, which can crop the extra white margin automatically
+, which can crop the white margin automatically
 \begin_inset Foot
 status open
 
@@ -1530,7 +1558,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<pdf-nocrop,fig=TRUE,width=3.2,height=3.2,out.width=.4
+<<pdf-nocrop,width=3.2,height=3.2,out.width=.4
 \backslash
 linewidth>>=
 \end_layout
@@ -1607,7 +1635,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<pdf-crop,echo=FALSE,fig=TRUE,width=3.2,height=3.2,out.width=.4
+<<pdf-crop,echo=FALSE,width=3.2,height=3.2,out.width=.4
 \backslash
 linewidth,crop=TRUE,dependson=pdf-nocrop>>=
 \end_layout

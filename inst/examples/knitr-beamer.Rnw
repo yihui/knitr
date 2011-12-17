@@ -54,7 +54,7 @@
 
 \begin{document}
 
-% \SweaveOpts{prefix.string=figure/beamer-,align=center,fig.hold=TRUE,size=footnotesize}
+% \SweaveOpts{prefix.string=figure/beamer-,align=center,fig.show=hold,size=footnotesize}
 
 
 \title[knitr, Beamer, and FragileFrame]{A Minimal Demo of knitr with Beamer and Fragile Frames}
@@ -125,7 +125,7 @@ the use of\texttt{ \textbackslash{}Sexpr\{\}}.)
 Text is nice but let's see what happens if we make a couple of plots
 in our chunk:
 
-<<boring-plots,fig=TRUE,width=4,height=4,out.width=.45\linewidth>>=
+<<boring-plots,width=4,height=4,out.width=.45\linewidth>>=
 par(las=1,mar=c(4,4,.1,.1))  # tick labels direction
 boxplot(x) 
 hist(x,main='',col="blue",probability=TRUE) 
