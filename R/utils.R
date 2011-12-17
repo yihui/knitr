@@ -142,15 +142,46 @@ abs_path = function(x) {
         grepl(':', x, fixed = TRUE) || grepl('^\\\\', x) else grepl('^/', x)
 }
 
-## convert options for devices in Sweave to option 'dev' in knitr
-fix_sweave_opts = function(options) {
+## compatibility with Sweave and old beta versions of knitr
+fix_options = function(options) {
+    ## compatibility with Sweave
     for (dev in c('pdf', 'eps', 'jpeg', 'png')) {
         if (isTRUE(options[[dev]])) {
             options$dev = dev
+            warning("chunk option ", dev,
+                    "=TRUE deprecated in knitr; use new option 'dev' please")
             break
         }
     }
     if (options$dev == 'eps') options$dev = 'postscript'
+    ## compatibility with old version of knitr
+    fig = options$fig
+    if (identical(fig, FALSE)) {
+        warning("option 'fig' deprecated; use fig.keep=none please")
+        options$fig.keep = 'none'
+    } else if (identical(fig, TRUE)) {
+        if (isTRUE(options$fig.last)) {
+            warning("option 'fig.last' deprecated; use fig.keep=last please")
+            options$fig.keep = 'last'
+        }
+        if (isTRUE(options$fig.low)) {
+            warning("option 'fig.low' deprecated; use fig.keep=all please")
+            options$fig.keep = 'all'
+        }
+    }
+    hold = options$fig.hold
+    if (identical(hold, FALSE)) {
+        warning("option 'fig.hold' deprecated; use fig.show=asis please")
+        options$fig.show = 'asis'
+    } else if (identical(hold, TRUE)) {
+        warning("option 'fig.hold' deprecated; use fig.show=hold please")
+        options$fig.show = 'hold'
+    }
+    if (isTRUE(options$animate)) {
+        warning("option 'animate' deprecated; use fig.show=animate please")
+        options$fig.show = 'animate'
+    }
+
     options
 }
 
