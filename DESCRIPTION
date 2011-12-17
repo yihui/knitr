@@ -77,3 +77,4 @@ Collate:
     'header.R'
     'themes.R'
     'ecllipse.R'
+    'highlight.R'
