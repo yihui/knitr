@@ -78,10 +78,12 @@ block_exec = function(code, ...) {
         pdf(file = tempfile())  # should not use RStudio's GD
     } else dev.new()
     dv = dev.cur(); on.exit(dev.off(dv))
-    dev.control(displaylist = if (options$fig) 'enable' else 'inhibit')  # enable recording
+
+    keep = options$fig.keep
+    dev.control(displaylist = if (keep != 'none') 'enable' else 'inhibit')  # enable recording
 
     ## guess plot file type if it is NULL
-    if (options$fig && is.null(options$fig.ext)) {
+    if (keep != 'none' && is.null(options$fig.ext)) {
         options$fig.ext = dev2ext(options$dev)
     }
 
@@ -103,15 +105,17 @@ block_exec = function(code, ...) {
     ## rearrange locations of figures
     figs = sapply(res, is.recordedplot)
     if (length(figs) && any(figs)) {
-        if (!options$fig) {
+        if (keep == 'none') {
             res = res[!figs] # remove all
         } else {
-            if (options$fig.hold) res = c(res[!figs], res[figs]) # rearrange to the end
-            figs = sapply(res, is.recordedplot) # only keep last plot
+            if (options$fig.show == 'hold') res = c(res[!figs], res[figs]) # move to the end
+            figs = sapply(res, is.recordedplot)
             if (sum(figs) > 1) {
-                if (options$fig.last) res = res[-head(which(figs), sum(figs) - 1)] else {
+                if (keep %in% c('first', 'last')) {
+                    res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
+                } else {
                     ## merge low-level plotting changes
-                    if (!options$fig.low) res = merge_low_plot(res, figs)
+                    if (keep == 'high') res = merge_low_plot(res, figs)
                 }
             }
         }

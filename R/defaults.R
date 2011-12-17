@@ -32,16 +32,16 @@ opts_chunk =
     new_defaults(list(eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
                       cache = FALSE, dependson = NULL, prefix.cache = 'cache/',
                       ref = NULL, prefix.string = '',
-                      prompt = FALSE, comment = '##', fig = TRUE, fig.ext = NULL,
-                      fig.low = FALSE, dev = 'pdf', dpi = 72, width = 7, height = 7,
+                      prompt = FALSE, comment = '##',
+                      fig.keep = 'high', fig.show = 'asis',
+                      fig.ext = NULL, dev = 'pdf', dpi = 72, width = 7, height = 7,
                       out.width = NULL, out.height = NULL,
                       resize.width = NULL, resize.height = NULL, align = 'default',
                       external = FALSE, sanitize = FALSE,
-                      fig.hold = FALSE, fig.last = FALSE,
                       highlight = TRUE, size = 'normalsize',
                       warning = TRUE, error = TRUE, message = TRUE,
                       background = '.97;.97;.97', split = FALSE, include = TRUE,
-                      animate = FALSE, interval = 1, aniopts = 'controls;loop'))
+                      interval = 1, aniopts = 'controls;loop'))
 
 ##' All built-in patterns
 ##'
