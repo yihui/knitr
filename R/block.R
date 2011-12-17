@@ -14,8 +14,7 @@ call_block = function(block) {
     if (!length(params$code)) {
         ref = params$ref
         if (!is.null(ref) && file.exists(ref)) {
-            ext.code = .knitEnv$ext.code
-            if (!identical(ref, .knitEnv$ext.path)) ext.code = parse_external(ref)
+            ext.code = parse_external(ref)
             params$code = ext.code[[params$label]]
         }
     }
