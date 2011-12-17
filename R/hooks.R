@@ -295,7 +295,7 @@ hook_pdfcrop = function(before, options, envir) {
     ## crops PDF after a chunk is evaluated and PDF files produced
     ext = options$fig.ext
     if (options$dev == 'tikz' && options$external) ext = 'pdf'
-    if (before || !options$fig || ext != 'pdf' || (plot.num <- options$plot.num) == 0L)
+    if (before || (plot.num <- options$plot.num) == 0L || ext != 'pdf')
         return()
 
     paths =
