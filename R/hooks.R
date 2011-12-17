@@ -155,7 +155,9 @@ render_latex = function() {
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.v(x, options)
     knit_hooks$set(source = function(x, options) {
         if (options$highlight) {
-            str_c('\\begin{flushleft}\n', x, '\\end{flushleft}\n')
+            ## gsub() makes sure " will not produce an umlaut
+            str_c('\\begin{flushleft}\n', gsub('"', '"{}', x, fixed = TRUE),
+                  '\\end{flushleft}\n')
         } else hook.v(x, options)}, output = hook.o,
                    warning = hook.v, message = hook.v, error = hook.v,
                    inline = function(x) {
