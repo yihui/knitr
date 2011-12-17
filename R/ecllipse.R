@@ -25,7 +25,8 @@ top_eclipse_themes <- function(){
 
 #' Download eclipse theme given theme_no
 #'
-#' @  noRd
+#' @keywords internal
+#' @noRd
 download_eclipse_theme <- function(theme_id){
   xml_file <- tempfile()
   url <- "http://www.eclipsecolorthemes.org/?view=empty&action=download&theme=%s&type=xml"
@@ -37,6 +38,7 @@ download_eclipse_theme <- function(theme_id){
 #'
 #' @param xml_file path to xml file of eclipse theme
 #' @return return a list containing theme name and syntax highlighting tokens.
+#' @noRd
 xml_to_list <- function(xml_file){
   require(XML)
   doc      <- xmlParse(xml_file)
@@ -50,6 +52,7 @@ xml_to_list <- function(xml_file){
 #' 
 #' @param xml_file path to xml file of eclipse theme
 #' @return saves css file of eclipse theme to the themes folder of knitr
+#' @noRd
 #  TODO: Parse more formatting variables like font-weight, font-style etc.
 xml_to_css <- function(xml_file){
   xml_list   <- xml_to_list(xml_file)
@@ -63,7 +66,7 @@ xml_to_css <- function(xml_file){
   return(css_file)
 }
 
-
+# Get eclipse themes
 get_eclipse_themes <- function(page = 1){
   require(XML)
   url <- "http://www.eclipsecolorthemes.org/?list=all&q="
