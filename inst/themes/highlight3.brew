@@ -1,65 +1,52 @@
 <% within(theme, {  -%>
-<% if (!exists("Operator")) Operator = Default %>
+<% if (!exists("Operator")) Operator = Default -%>
 .background{
   color: <%= Canvas$Colour %> ;
 }
 .number{
-	color: <%= Number$Colour %> ;
+  color: <%= Number$Colour %> ;
 }
-
 .functioncall{
-    font-weight: 'bolder' ;
-	color: <%= Keyword3$Colour %> ;
+  font-weight: 'bolder' ;
+  color: <%= Keyword3$Colour %> ;
 }
-
 .string{
-	color: <%= String$Colour %> ;
+  color: <%= String$Colour %> ;
 }
-
 .keyword{
-	font-weight: bolder ;
-	color: <%= Keyword1$Colour %>;
+  font-weight: bolder ;
+  color: <%= Keyword1$Colour %>;
 }
-
 .argument{
-	color: <%= Default$Colour %> ;
+  color: <%= Default$Colour %> ;
 }
-
 .comment{
-	color: <%= BlockComment$Colour %> ;
+  color: <%= BlockComment$Colour %> ;
 }
-
 .roxygencomment{
-	color: <%= BlockComment$Colour %>;
+  color: <%= BlockComment$Colour %>;
 }
-
 .formalargs{
-	color: <%= Default$Colour %>;
+  color: <%= Default$Colour %>;
 }
-
 .eqformalargs{
-	color: <%= Default$Colour %>;
+  color: <%= Default$Colour %>;
 }
-
 .assignement{
-	color: <%= Default$Colour %>;
+  color: <%= Default$Colour %>;
 }
-
 .package{
   font-weight: bolder;
-	color: <%= Keyword2$Colour %>;
+  color: <%= Keyword2$Colour %>;
 }
-
 .slot{
-	font-style:italic;
-	color: <%= Default$Colour %>;
+  font-style:italic;
+  color: <%= Default$Colour %>;
 }
-
 .symbol{
-	color: <%= Operator$Colour %> ;
+  color: <%= Operator$Colour %> ;
 }
-
 .prompt{
-	color: <%= Default$Colour %> ;
+  color: <%= Default$Colour %> ;
 }
 <% }) %>
