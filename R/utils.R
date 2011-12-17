@@ -167,7 +167,7 @@ eval_opt = function(x, expect_class = is.logical) {
 #' @author Ramnath Vaidyanathan
 #' @export
 #' @importFrom tools file_path_sans_ext texi2dvi
-knit_to_pdf <- function(rnw_file, theme = NULL, line_numbers = FALSE){
+knit2pdf <- function(rnw_file, theme = NULL, line_numbers = FALSE){
   # require(knitr)
   tex_file_name <- sprintf("%s.tex", file_path_sans_ext(rnw_file))
   if (!missing(theme)){
