@@ -16,10 +16,9 @@
     align1 = switch(a, left = '\n\n', center = '\n\n\\centering{}', right = '\n\n\\hfill{}', '')
     align2 = switch(a, left = '\\hfill{}\n\n', center = '\n\n', right = '\n\n', '')
     ## multiple plots: begin at 1, end at plot.num
-    if (options$fig.hold && plot.cur > 1L)
-        align1 = ''
-    if (options$fig.hold && plot.cur > 0L && plot.cur < plot.num)
-        align2 = ''
+    hold = options$fig.show == 'hold'
+    if (hold && plot.cur > 1L) align1 = ''
+    if (hold && plot.cur > 0L && plot.cur < plot.num) align2 = ''
 
     size =
         paste(sprintf('width=%s', options$out.width),
