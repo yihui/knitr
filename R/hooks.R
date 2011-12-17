@@ -13,6 +13,9 @@
     tikz = options$dev == 'tikz' && !options$external
 
     a = options$align; plot.cur = options$plot.cur; plot.num = options$plot.num
+    animate = options$fig.show == 'animate'
+    if (!tikz && animate && plot.cur < plot.num) return('')
+
     align1 = switch(a, left = '\n\n', center = '\n\n\\centering{}', right = '\n\n\\hfill{}', '')
     align2 = switch(a, left = '\\hfill{}\n\n', center = '\n\n', right = '\n\n', '')
     ## multiple plots: begin at 1, end at plot.num
@@ -28,16 +31,14 @@
 
           if (tikz) {
               sprintf('\\input{%s.tikz}', x[1])
-          } else if (options$animate) {
+          } else if (animate) {
               ## \animategraphics{} should be inserted only *once*!
-              if (plot.cur == 1L) {
-                  aniopts = options$aniopts
-                  aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
-                  size = paste(size, sprintf(',%s', aniopts), sep = '')
-                  if (nzchar(size)) size = sprintf('[%s]', size)
-                  sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1/options$interval,
-                          sub('1$', '', x[1]), 1L, plot.num)
-              }
+              aniopts = options$aniopts
+              aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
+              size = paste(size, sprintf(',%s', aniopts), sep = '')
+              if (nzchar(size)) size = sprintf('[%s]', size)
+              sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1/options$interval,
+                      sub(str_c(plot.num, '$'), '', x[1]), 1L, plot.num)
           } else {
               if (nzchar(size)) size = sprintf('[%s]', size)
               sprintf('\\includegraphics%s{%s} ', size, x[1])
