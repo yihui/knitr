@@ -8,7 +8,9 @@ This package is not on CRAN yet. Currently you can either check out the reposito
 
 ```r
 ## this package depends on R >= 2.14.0
-## you may also need to update your packages: update.packages()
+## you may also need to update your packages: 
+## options(repos = c(CRAN = 'http://cran.r-project.org'))
+## update.packages()
 library(devtools); install_github('knitr', 'yihui')
 ```
 
