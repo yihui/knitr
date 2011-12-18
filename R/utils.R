@@ -154,6 +154,7 @@ fix_options = function(options) {
         }
     }
     if (options$dev == 'eps') options$dev = 'postscript'
+
     ## compatibility with old version of knitr
     fig = options$fig
     if (identical(fig, FALSE)) {
@@ -180,6 +181,33 @@ fix_options = function(options) {
     if (isTRUE(options$animate)) {
         warning("option 'animate' deprecated; use fig.show=animate please")
         options$fig.show = 'animate'
+    }
+
+    align = options$align
+    if (!is.null(align)) {
+        warning("option 'align' deprecated; use fig.align instead")
+        options$fig.align = align
+    }
+    width = options$width
+    if (!is.null(width)) {
+        warning("option 'width' deprecated; use fig.width instead")
+        options$fig.width = width
+    }
+    height = options$height
+    if (!is.null(height)) {
+        warning("option 'height' deprecated; use fig.height instead")
+        options$fig.height = height
+    }
+
+    prefix = options$prefix.string
+    if (!is.null(prefix)) {
+        warning("option 'prefix.string' deprecated; use fig.path instead")
+        options$fig.path = prefix
+    }
+    prefix = options$prefix.cache
+    if (!is.null(prefix)) {
+        warning("option 'prefix.cache' deprecated; use cache.path instead")
+        options$cache.path = prefix
     }
 
     options
