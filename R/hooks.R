@@ -12,7 +12,7 @@
 
     tikz = options$dev == 'tikz' && !options$external
 
-    a = options$align; plot.cur = options$plot.cur; plot.num = options$plot.num
+    a = options$fig.align; plot.cur = options$plot.cur; plot.num = options$plot.num
     animate = options$fig.show == 'animate'
     if (!tikz && animate && plot.cur < plot.num) return('')
 
@@ -48,7 +48,7 @@
 }
 .plot.hook.html = function(x, options) {
     ## TODO: output size not implemented for HTML yet
-    a = options$align
+    a = options$fig.align
     sprintf('<img src="%s" class="plot" %s/>\n',
             paste(x, collapse = '.'),
             switch(a,
@@ -286,7 +286,7 @@ hook_rgl = function(before, options, envir) {
     if (fmt %in% c('markdown', 'gfm', 'jekyll'))
         return(.plot.hook.markdown(c(name, 'png'), options))
 
-    paste(ifelse(options$align == 'center', '\\centering{}', ''), '\\includegraphics[',
+    paste(ifelse(options$fig.align == 'center', '\\centering{}', ''), '\\includegraphics[',
           sprintf('width=%s', options$out.width), ']{', name, '}\n', sep = '')
 }
 ##' @export
