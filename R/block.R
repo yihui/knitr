@@ -33,11 +33,11 @@ call_block = function(block) {
 
     ## Check cache
     hash =
-        str_c(valid_prefix(params$prefix.cache), params$label, '_',
+        str_c(valid_prefix(params$cache.path), params$label, '_',
               digest(list(params, getOption('width'))))
     params = c(params, list(hash = hash))
     if (params$cache && cache$exists(hash)) {
-        if (!dependson_changed(params$dependson, params$prefix.cache)) {
+        if (!dependson_changed(params$dependson, params$cache.path)) {
             cache$load(hash)
             cache$unmark(hash)
             return(cache$output(hash))
@@ -152,7 +152,7 @@ block_exec = function(code, ...) {
         hash = options$hash
         outname = str_c('.', hash)
         assign(outname, output, envir = globalenv())
-        cache$purge(str_c(valid_prefix(options$prefix.cache),
+        cache$purge(str_c(valid_prefix(options$cache.path),
                           options$label, '_*')) # try to purge old cache
         cache$save(c(ls(env, all = TRUE), outname), hash)
         cache$mark(hash)
