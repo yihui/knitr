@@ -68,7 +68,7 @@
     x = str_c(color_def(options$background), '{\\color{fgcolor}\\begin{kframe}\n', x, '\\end{kframe}}')
     x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
     if (options$split) {
-        name = str_c(options$prefix.string, options$label, '.tex')
+        name = str_c(options$fig.path, options$label, '.tex')
         if (!file.exists(dirname(name)))
             dir.create(dirname(name))
         cat(x, file = name)
@@ -269,7 +269,7 @@ render_jekyll = function() {
 hook_rgl = function(before, options, envir) {
     ## after a chunk has been evaluated
     if (before || !require('rgl') || rgl.cur() == 0) return()  # no active device
-    name = paste(valid_prefix(options$prefix.string), options$label, sep = '')
+    name = paste(valid_prefix(options$fig.path), options$label, sep = '')
     par3d(windowRect = 100 + options$dpi * c(0, 0, options$width, options$height))
     Sys.sleep(.05) # need time to respond to window size change
 
@@ -299,7 +299,7 @@ hook_pdfcrop = function(before, options, envir) {
         return()
 
     paths =
-        paste(valid_prefix(options$prefix.string), options$label,
+        paste(valid_prefix(options$fig.path), options$label,
               if (plot.num == 1L) '' else seq_len(plot.num), ".pdf", sep = "")
 
     lapply(paths, function(x) {
