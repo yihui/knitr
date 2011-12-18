@@ -8,8 +8,7 @@ split_file = function(path) {
     chunk.begin = knit_patterns$get('chunk.begin')
     chunk.end = knit_patterns$get('chunk.end')
     if (is.null(chunk.begin) || is.null(chunk.end)) {
-        warning("no patterns found! input not parsed")
-        return(str_c(lines, collapse = '\n'))
+        return(list(parse_inline(lines)))
     }
 
     set_tikz_opts(lines, chunk.begin, chunk.end)  # prepare for tikz option 'standAlone'
