@@ -91,6 +91,7 @@ knit = function(input, output, tangle = FALSE) {
     if (is.null(optk$out.format)) {
         fmt =
             switch(ext, rnw = 'latex', tex = 'latex', html = 'html', md = 'jekyll',
+                   brew = 'brew',
                    stop('cannot automatically decide the output format'))
         ## set built-in hooks
         opts_knit$set(out.format = fmt)
