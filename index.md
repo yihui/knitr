@@ -33,8 +33,8 @@ The ideas are borrowed from other packages, and some of them are re-implemented 
 - more than 20 graphics devices are directly supported: with `dev = CairoPNG` in the chunk options, you can switch to the `CairoPNG()` device in [**Cairo**](http://cran.r-project.org/package=Cairo) in a second; with `dev = tikz`, the `tikz()` device in [**tikzDevice**](http://cran.r-project.org/package=tikzDevice) is used; how things can be even easier? These built-in devices (strictly speaking, wrappers) use inches as units, even for bitmap devices (pixels are converted to inches by the option `dpi`, which defaults to 72)
 - even more flexibility on graphics: 
   - width and height in the output document of plots can be additionally specified (the `width` option is for the graphics device, and `out.width` is for the output document; think `out.width=.8\textwidth`)
-  - locations of plots can be rearranged: they can either appear exactly in the place where they are created, or go to the end of a chunk together (option `fig.hold=TRUE`)
-  - multiple plots per code chunk are recorded, unless you really  want to keep the last plot only (option `fig.last=TRUE`)
+  - locations of plots can be rearranged: they can either appear exactly in the place where they are created, or go to the end of a chunk together (option `fig.show=hold`)
+  - multiple plots per code chunk are recorded, unless you really  want to keep the last plot only (option `fig.keep=last`)
 - R code not only can come from code chunks in the input document, but also may be from an external R script, which makes it easier to run the code as you write the document (this will especially benefit LyX)
 - for power users, further customization is still possible:
   - the regular expressions to parse R code can be defined, i.e., you do not have to use `<<>>=` and `@` or `\Sexpr{}`; if you like, you can use any patterns, e.g., `%% begin.rcode` and `%% end.rcode`
