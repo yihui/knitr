@@ -61,7 +61,7 @@ all_patterns =
          document.begin = '\n*\\s*\\\\begin\\{document\\}',
          ref.label = '^## @knitr (.*)$'),
 
-         `brew` = list(inline.code = '<%[=]{0,1}\\s+(.*)\\s+[-]*%>'),
+         `brew` = list(inline.code = '<%[=]{0,1}\\s+([^%]*)\\s+[-]*%>'),
 
          `tex` = list(chunk.begin = '^%+\\s*begin.rcode\\s*(.*)',
          chunk.end = '^%+\\s*end.rcode', chunk.code = '^%+',
