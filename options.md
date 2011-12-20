@@ -18,7 +18,7 @@ Take Rnw files as an example: usually we write chunk options like this
 @
 {% endhighlight %}
 
-And `\SweaveOpts{comment=#, fig.width=6, fig.height=6}` can change the default global options in a document. A few special notes on the options:
+And `\SweaveOpts{}` can change the default global options in a document (e.g. `\SweaveOpts{comment=#, fig.width=6, fig.height=6}`). A few special notes on the options:
 
 1. Avoid spaces ` ` and periods `.` in chunk labels and directory names; if your output is a TeX document, these characters can cause troubles (in general it is recommended to use alphabetic characters with words separated by `-` and avoid other characters), e.g. `setup-options` is a good label, whereas `setup.options` and `chunk 1` are bad; `fig.path=figures/mcmc-` is a good prefix for figure output if this project is about MCMC, and `fig.path=markov chain/monte carlo` is bad;
 2. For options that take _character_ values, you should not quote them as you do in R (e.g. should write `fig.path=abc` instead of `fig.path="abc"`), and should avoid the comma `,` in the character string since it is the separator of chunk options; for logical options, `TRUE` and `FALSE` are OK, and `true`/`false` will not work as you might have expected;
@@ -101,6 +101,8 @@ Normally this produces 2 plots in the output (i.e. when `fig.keep=high`); for `f
 - `aniopts`: (`controls;loop`) extra options for animations (should be separated by `;` in chunk options, and `;` will be replaced by `,` internally); see the [documentation of the animate package](http://www.ctan.org/tex-archive/macros/latex/contrib/animate)
 
 ### Code Reference
+
+**WARNING: this feature is experimental and likely to change in the future.**
 
 - `ref`: (`NULL`) a filename of a reference R script in which a code chunk can be extracted using the chunk label as the identifier (in R code, use `## @knitr chunk-label` to denote the code below will go to the chunk; the pattern here is from `knit_patterns$get('ref.label')`); this make it possible to separate the main file and the R script, because sometimes it is easier to maintain a separate R script than to copy and paste R code directly into the main file (e.g. in LyX with an Sweave module, it is often difficult to run R code without compiling the whole document, which can be very time-consuming when we only want to run a small portion of the code); note this options is used only when the original chunk has no R code
 
