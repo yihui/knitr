@@ -29,7 +29,7 @@
 
 \begin{document}
 
-% \SweaveOpts{prefix.string=figure/graphics-, prefix.cache=cache/graphics-, align=center, dev=tikz, external=TRUE, width=5, height=5, fig.show=hold, cache=TRUE, align=center, par=TRUE}
+% \SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=tikz, external=TRUE, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE}
 
 <<setup,echo=FALSE,results=hide,cache=FALSE>>=
 options(replace.assign=TRUE,width=80)
@@ -98,7 +98,7 @@ test_plot()
 Finally we show an example of \emph{cairo\_pdf()} (in base R) with
 some multi-byte characters (say hello in Chinese):
 
-<<cairo-pdf-dev,dev=cairo_pdf,width=8,height=2,out.width=.8\linewidth,warning=FALSE,tidy=FALSE,echo=FALSE>>=
+<<cairo-pdf-dev,dev=cairo_pdf,fig.width=8,fig.height=2,out.width=.8\linewidth,warning=FALSE,tidy=FALSE,echo=FALSE>>=
 par(mar=c(2,2,.1,.1),las=1)
 plot(1,type='n',ann=FALSE)
 text(1,1,'\u55E8\uFF0C\u4F60\u597D\u5417',cex=4) # hello
@@ -131,7 +131,7 @@ is also saved. Figure \ref{fig:two-high} shows two expressions producing
 two high-level plots.
 
 \begin{figure}
-<<two-high,width=3,height=2,out.width=.49\linewidth>>=
+<<two-high,fig.width=3,fig.height=2,out.width=.49\linewidth>>=
 plot(cars)
 boxplot(cars$dist,xlab='dist')
 @
@@ -151,7 +151,7 @@ By default, low-level plot changes are discarded, but you can retain
 them with the option \texttt{fig.keep=all}.
 
 \begin{figure}
-<<low-plot-loop,width=3,height=2.5,out.width=.49\linewidth,fig.keep=all>>=
+<<low-plot-loop,fig.width=3,fig.height=2.5,out.width=.49\linewidth,fig.keep=all>>=
 plot(0,0,type='n',ann=FALSE)
 for(i in seq(0, 2*pi,length=20)) points(cos(i),sin(i))
 @
@@ -166,7 +166,7 @@ Together with \texttt{fig.show=asis}, we can show the process of plotting
 step by step like Figure \ref{fig:high-with-low}.
 
 \begin{figure}
-<<high-with-low,width=3,height=2,out.width=.5\linewidth,fig.keep=all,fig.show=asis>>=
+<<high-with-low,fig.width=3,fig.height=2,out.width=.5\linewidth,fig.keep=all,fig.show=asis>>=
 plot(cars)
 abline(lm(dist~speed, data=cars))  # a regression line
 @
@@ -206,7 +206,7 @@ Here is an example demonstrating the option \texttt{fig.keep=last}
 (only the last plot is kept):
 
 \begin{figure}
-<<fig-last,width=5.2,height=3,out.width=.7\linewidth,fig.keep=last>>=
+<<fig-last,fig.width=5.2,fig.height=3,out.width=.7\linewidth,fig.keep=last>>=
 suppressMessages(library(ggplot2))
 pie <- ggplot(diamonds, aes(x = factor(1), fill = cut)) + xlab('cut') + geom_bar(width = 1) 
 pie + coord_polar(theta = "y") # a pie chart
@@ -227,7 +227,7 @@ that high-level plots are always recorded, regardless of where they
 appeared.
 
 \begin{figure}
-<<clock-animation,width=3,height=3,out.width=.4\linewidth,fig.show=animate,tidy=FALSE,crop=TRUE>>=
+<<clock-animation,fig.width=3,fig.height=3,out.width=.4\linewidth,fig.show=animate,tidy=FALSE,crop=TRUE>>=
 par(mar = rep(3, 4))
 for (i in seq(pi/2, -4/3 * pi, length = 12)) {
     plot(0, 0, pch = 20, ann = FALSE, axes = FALSE)
@@ -242,13 +242,13 @@ there are also buttons to speed up or slow down the animation.\label{fig:clock-a
 \end{figure}
 
 
-We can also set the alignment of plots easily with the \texttt{align}
-option; this document uses \texttt{align=center} as a global option,
+We can also set the alignment of plots easily with the \texttt{fig.align}
+option; this document uses \texttt{fig.align=center} as a global option,
 and we can also set plots to be left/right-aligned. Figure \ref{fig:maruko-plot}
 is an example of a left-aligned plot.
 
 \begin{figure}
-<<maruko-plot,width=7,height=4,out.width=.45\linewidth,align=left,crop=TRUE>>=
+<<maruko-plot,fig.width=7,fig.height=4,out.width=.45\linewidth,fig.align=left,crop=TRUE>>=
 stars(cbind(1:16,10*(16:1)),draw.segments=TRUE)
 @
 
@@ -278,7 +278,7 @@ use native \LaTeX{} commands in plots, the styles of texts in plots
 can be very sophisticated.
 
 \begin{figure}
-<<math-formula-tt,width=6,height=2,out.width=\linewidth,echo=T>>=
+<<math-formula-tt,fig.width=6,fig.height=2,out.width=\linewidth,echo=T>>=
 plot(0:1,0:1,type='n', ylab='origin of statistics', xlab='statistical presentation rocks with \\LaTeX{}')
 text(.5,c(.8,.5,.2), c('\\texttt{lm(y \\textasciitilde{} x)}', '$\\hat{\\beta}=(X^{\\prime}X)^{-1}X^{\\prime}y$',  '$(\\Omega,\\mathcal{F},\\mu)$'))
 @
@@ -327,7 +327,7 @@ knit_hooks$set(crop=hook_pdfcrop)
 Now we compare two plots below. The first one is not cropped:
 
 \begin{figure}
-<<pdf-nocrop,width=3.2,height=3.2,out.width=.4\linewidth>>=
+<<pdf-nocrop,fig.width=3.2,fig.height=3.2,out.width=.4\linewidth>>=
 test_crop=function(){
 par(mar=c(5,4,4,2),bg='white')  # large margin
 plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
@@ -343,7 +343,7 @@ Then the same plot is produced but with a chunk option \texttt{crop=TRUE}
 which will call the cropping hook:
 
 \begin{figure}
-<<pdf-crop,echo=FALSE,width=3.2,height=3.2,out.width=.4\linewidth,crop=TRUE,dependson=pdf-nocrop>>=
+<<pdf-crop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.4\linewidth,crop=TRUE,dependson=pdf-nocrop>>=
 test_crop()
 @
 
@@ -367,8 +367,9 @@ and here we add some details. The rgl hook is a good example of taking
 care of details by carefully using the \texttt{options} argument in
 the hook; for example, we cannot directly set the width and height
 of rgl plots in \emph{rgl.snapshot()} or \emph{rgl.postscript()},
-so we make use of the options \texttt{width}, \texttt{height} and
-\texttt{dpi} to calculate the expected size of the window, then resize
-the current window by \emph{par3d()}, and finally save the plot.
+so we make use of the options \texttt{fig.width}, \texttt{fig.height}
+and \texttt{dpi} to calculate the expected size of the window, then
+resize the current window by \emph{par3d()}, and finally save the
+plot.
 
 \end{document}

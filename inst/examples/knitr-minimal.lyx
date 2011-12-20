@@ -94,7 +94,7 @@ status open
 
 % 
 \backslash
-SweaveOpts{prefix.string=figure/minimal-,align=center,fig.show=hold}
+SweaveOpts{fig.path=figure/minimal-,fig.align=center,fig.show=hold}
 \end_layout
 
 \end_inset
@@ -211,7 +211,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<boring-plots,dev=pdf,width=5,height=5,out.width=.45
+<<boring-plots,dev=pdf,fig.width=5,fig.height=5,out.width=.45
 \backslash
 linewidth,par=TRUE>>=
 \end_layout

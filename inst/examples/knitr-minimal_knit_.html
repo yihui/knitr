@@ -1,4 +1,4 @@
-<!--roptions dev=png,width=5,height=5,prefix.string=ex-out- -->
+<!--roptions dev=png,fig.width=5,fig.height=5,fig.path=ex-out- -->
 <html>
 <head>
   <title>A minimal knitr example in HTML</title>
@@ -44,7 +44,7 @@
     knit_hooks$set(rgl = hook_rgl)  # set up the hook first
     end.rcode-->
 
-<!--begin.rcode fancy-rgl,rgl=TRUE,align=center,width=4,height=4
+<!--begin.rcode fancy-rgl,rgl=TRUE,align=center,fig.width=4,fig.height=4
     if (require('rgl')) {
     demo('bivar', package='rgl', echo=FALSE) 
     par3d(zoom=.7)

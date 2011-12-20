@@ -85,9 +85,9 @@ status open
 
 % 
 \backslash
-SweaveOpts{prefix.string=figure/graphics-, prefix.cache=cache/graphics-, align=cen
-ter, dev=tikz, external=TRUE, width=5, height=5, fig.show=hold, cache=TRUE,
- align=center, par=TRUE}
+SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center,
+ dev=tikz, external=TRUE, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE,
+ par=TRUE}
 \end_layout
 
 \end_inset
@@ -448,7 +448,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<cairo-pdf-dev,dev=cairo_pdf,width=8,height=2,out.width=.8
+<<cairo-pdf-dev,dev=cairo_pdf,fig.width=8,fig.height=2,out.width=.8
 \backslash
 linewidth,warning=FALSE,tidy=FALSE,echo=FALSE>>=
 \end_layout
@@ -624,7 +624,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<two-high,width=3,height=2,out.width=.49
+<<two-high,fig.width=3,fig.height=2,out.width=.49
 \backslash
 linewidth>>=
 \end_layout
@@ -718,7 +718,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<low-plot-loop,width=3,height=2.5,out.width=.49
+<<low-plot-loop,fig.width=3,fig.height=2.5,out.width=.49
 \backslash
 linewidth,fig.keep=all>>=
 \end_layout
@@ -799,7 +799,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<high-with-low,width=3,height=2,out.width=.5
+<<high-with-low,fig.width=3,fig.height=2,out.width=.5
 \backslash
 linewidth,fig.keep=all,fig.show=asis>>=
 \end_layout
@@ -972,7 +972,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<fig-last,width=5.2,height=3,out.width=.7
+<<fig-last,fig.width=5.2,fig.height=3,out.width=.7
 \backslash
 linewidth,fig.keep=last>>=
 \end_layout
@@ -1069,7 +1069,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<clock-animation,width=3,height=3,out.width=.4
+<<clock-animation,fig.width=3,fig.height=3,out.width=.4
 \backslash
 linewidth,fig.show=animate,tidy=FALSE,crop=TRUE>>=
 \end_layout
@@ -1148,11 +1148,11 @@ name "fig:clock-animation"
 \begin_layout Standard
 We can also set the alignment of plots easily with the 
 \family typewriter
-align
+fig.align
 \family default
  option; this document uses 
 \family typewriter
-align=center
+fig.align=center
 \family default
  as a global option, and we can also set plots to be left/right-aligned.
  Figure 
@@ -1177,9 +1177,9 @@ status open
 
 \begin_layout Plain Layout
 
-<<maruko-plot,width=7,height=4,out.width=.45
+<<maruko-plot,fig.width=7,fig.height=4,out.width=.45
 \backslash
-linewidth,align=left,crop=TRUE>>=
+linewidth,fig.align=left,crop=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1293,7 +1293,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<math-formula-tt,width=6,height=2,out.width=
+<<math-formula-tt,fig.width=6,fig.height=2,out.width=
 \backslash
 linewidth,echo=T>>=
 \end_layout
@@ -1558,7 +1558,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<pdf-nocrop,width=3.2,height=3.2,out.width=.4
+<<pdf-nocrop,fig.width=3.2,fig.height=3.2,out.width=.4
 \backslash
 linewidth>>=
 \end_layout
@@ -1635,7 +1635,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<pdf-crop,echo=FALSE,width=3.2,height=3.2,out.width=.4
+<<pdf-crop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.4
 \backslash
 linewidth,crop=TRUE,dependson=pdf-nocrop>>=
 \end_layout
@@ -1730,11 +1730,11 @@ rgl.postscript()
 \emph default
 , so we make use of the options 
 \family typewriter
-width
+fig.width
 \family default
 , 
 \family typewriter
-height
+fig.height
 \family default
  and 
 \family typewriter

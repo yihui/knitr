@@ -2,7 +2,7 @@
 \usepackage{graphicx}
 %% for inline R code: if the inline code is not correctly parsed, you will see a message
 \newcommand{\rinline}[1]{SOMETHING WRONG WITH knitr}
-%% roptions prefix.string=figure/latex-,prefix.cache=cache/latex-
+%% roptions fig.path=figure/latex-,cache.path=cache/latex-
 \begin{document}
 
 Boring stuff as usual:
@@ -36,7 +36,7 @@ of x becomes \rinline{x[1]}.
 How about figures? Let's use the Cairo PDF device (assumes R >=
 2.14.0).
 
-%% begin.rcode cairo-scatter,dev=cairo_pdf,width=5,height=5,out.width=.8\textwidth
+%% begin.rcode cairo-scatter,dev=cairo_pdf,fig.width=5,fig.height=5,out.width=.8\textwidth
 % plot(cars) # a scatter plot
 %% end.rcode
 

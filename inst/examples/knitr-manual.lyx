@@ -96,8 +96,8 @@ status open
 
 % 
 \backslash
-SweaveOpts{prefix.string=figure/manual-,prefix.cache=cache/manual-,align=center,ex
-ternal=TRUE,fig.show=hold,par=TRUE}
+SweaveOpts{fig.path=figure/manual-,cache.path=cache/manual-,fig.align=center,extern
+al=TRUE,fig.show=hold,par=TRUE}
 \end_layout
 
 \end_inset
@@ -257,7 +257,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<cars-demo,dev=tikz,width=4,height=2.8,out.width=.45
+<<cars-demo,dev=tikz,fig.width=4,fig.height=2.8,out.width=.45
 \backslash
 textwidth,message=FALSE,cache=TRUE>>=
 \end_layout
@@ -402,7 +402,7 @@ textwidth
  in chunk options, we get it in the final output document.
  If we say 
 \family typewriter
-align=center
+fig.align=center
 \family default
 , the plots are centered.
  That's it.
@@ -1167,7 +1167,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<low-level-plots,fig.keep=all,dev=tikz,width=2.5,height=2.5,out.width=.3
+<<low-level-plots,fig.keep=all,dev=tikz,fig.width=2.5,fig.height=2.5,out.width=.3
 \backslash
 textwidth,cache=TRUE>>=
 \end_layout
@@ -1363,7 +1363,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<fig-hold,fig=TRUE,fig.show=asis,dev=pdf,width=6,height=4,out.width=.35
+<<fig-hold,fig=TRUE,fig.show=asis,dev=pdf,fig.width=6,fig.height=4,out.width=.35
 \backslash
 linewidth>>=
 \end_layout
@@ -1496,11 +1496,11 @@ Plot Size
 \begin_layout Standard
 The 
 \family typewriter
-width
+fig.width
 \family default
  and 
 \family typewriter
-height
+fig.height
 \family default
  options specify the size of plots in the graphics device, and the real
  size in the output document can be different (see 
@@ -1704,7 +1704,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<math-expr-tikz,dev=tikz,width=5,height=3,out.width=.55
+<<math-expr-tikz,dev=tikz,fig.width=5,fig.height=3,out.width=.55
 \backslash
 linewidth,cache=TRUE,message=FALSE>>=
 \end_layout
@@ -1872,17 +1872,17 @@ on is only based on the object of its subset.
 \begin_layout Standard
 The paths of cache files are determined by the chunk option 
 \family typewriter
-prefix.cache
+cache.path
 \family default
 ; by default all cache files are created under a directory 
 \family sans
 cache
 \family default
- relative to the current working directory, and if the prefix contains a
- directory (e.g.
+ relative to the current working directory, and if the option value contains
+ a directory (e.g.
  
 \family typewriter
-prefix.cache=cache/abc-
+cache.path=cache/abc-
 \family default
 ), cache files will be stored under that directory (automatically created
  if it does not exist).
@@ -2262,8 +2262,8 @@ status open
 
 \begin_layout Plain Layout
 
-<<fancy-rgl,rgl=TRUE,dev=png,width=5,height=5,out.width=2in,message=FALSE,cache=T
-RUE>>=
+<<fancy-rgl,rgl=TRUE,dev=png,fig.width=5,fig.height=5,out.width=2in,message=FALSE,c
+ache=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -2383,11 +2383,15 @@ prefix was dropped (think
 \family typewriter
 prefix=TRUE
 \family default
-; 
+)
+\end_layout
+
+\begin_layout Description
+prefix.string was renamed to 
 \family typewriter
-prefix.string
+fig.path
 \family default
- is always used for figure filenames)
+ and it is always used for figure filenames
 \end_layout
 
 \begin_layout Description
@@ -2422,7 +2426,39 @@ pdf
 \begin_layout Description
 fig was dropped; now use 
 \family typewriter
+fig.keep
+\family default
+: 
+\family typewriter
 fig.keep=high
+\family default
+ is equivalent to 
+\family typewriter
+fig=TRUE
+\family default
+ and 
+\family typewriter
+fig.keep=none
+\family default
+ is the same as 
+\family typewriter
+fig=FALSE
+\end_layout
+
+\begin_layout Description
+width,
+\begin_inset space ~
+\end_inset
+
+height were dropped; use 
+\family typewriter
+fig.width
+\family default
+ and 
+\family typewriter
+fig.height
+\family default
+ instead
 \end_layout
 
 \begin_layout Standard

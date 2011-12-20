@@ -92,8 +92,8 @@ status open
 
 % 
 \backslash
-SweaveOpts{prefix.string=figure/beamer-,align=center,fig.show=hold,size=footnotesi
-ze}
+SweaveOpts{fig.path=figure/beamer-,fig.align=center,fig.show=hold,size=footnotesize
+}
 \end_layout
 
 \end_inset
@@ -339,7 +339,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<boring-plots,width=4,height=4,out.width=.45
+<<boring-plots,fig.width=4,fig.height=4,out.width=.45
 \backslash
 linewidth>>=
 \end_layout

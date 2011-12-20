@@ -1,4 +1,4 @@
-<!--roptions dev=png,width=5,height=5 -->
+<!--roptions dev=png,fig.width=5,fig.height=5 -->
 This is a miminal example of using **knitr** with in HTML pages. I am actually using markdown here since it is more convenient in GitHub.
 
 First, the input file was named as `knitr-minimal_knit_.md` ([click to view its source](https://github.com/yihui/knitr/raw/master/inst/examples/knitr-minimal_knit_.md)), which contains `_knit_` so that **knitr** will automatically determine the output filename to be `knitr-minimal.md`. 

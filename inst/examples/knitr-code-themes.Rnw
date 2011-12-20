@@ -30,7 +30,7 @@
 
 \makeatother
 
-% \SweaveOpts{prefix.string=figure/minimal-,align=center,external=TRUE,fig.hold=TRUE, background = 0.95;0.95;0.95}
+% \SweaveOpts{fig.path=figure/minimal-,align=center,external=TRUE,fig.hold=TRUE, background = 0.95;0.95;0.95}
 
 \begin{document}
 

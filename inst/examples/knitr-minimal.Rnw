@@ -27,7 +27,7 @@
 
 \begin{document}
 
-% \SweaveOpts{prefix.string=figure/minimal-,align=center,fig.show=hold}
+% \SweaveOpts{fig.path=figure/minimal-,fig.align=center,fig.show=hold}
 
 <<setup,echo=FALSE,results=hide,message=FALSE>>=
 options(replace.assign=TRUE,width=90)
@@ -53,7 +53,7 @@ mean(x);var(x)
 The first element of \texttt{x} is \Sexpr{x[1]}. Boring boxplots
 and histograms recorded by the PDF device:
 
-<<boring-plots,dev=pdf,width=5,height=5,out.width=.45\linewidth,par=TRUE>>=
+<<boring-plots,dev=pdf,fig.width=5,fig.height=5,out.width=.45\linewidth,par=TRUE>>=
 ## two plots side by side (option fig.show=hold)
 boxplot(x)
 hist(x,main='')

@@ -38,7 +38,7 @@
 
 \begin{document}
 
-% \SweaveOpts{prefix.string=figure/manual-,prefix.cache=cache/manual-,align=center,external=TRUE,fig.show=hold,par=TRUE}
+% \SweaveOpts{fig.path=figure/manual-,cache.path=cache/manual-,fig.align=center,external=TRUE,fig.show=hold,par=TRUE}
 
 <<setup,echo=FALSE,results=hide,message=FALSE>>=
 options(replace.assign=TRUE,width=90)
@@ -77,7 +77,7 @@ is that extending Sweave by hacking \textsf{SweaveDrivers.R} in the
 \ref{fig:cars-demo} is a simple demo of some features of \textbf{knitr}.
 
 \begin{figure}
-<<cars-demo,dev=tikz,width=4,height=2.8,out.width=.45\textwidth,message=FALSE,cache=TRUE>>=
+<<cars-demo,dev=tikz,fig.width=4,fig.height=2.8,out.width=.45\textwidth,message=FALSE,cache=TRUE>>=
 fit=lm(dist~speed,data=cars) # linear regression
 par(mar=c(4, 4, 1, .1), mgp=c(2,1,0),bg='white')
 with(cars,plot(speed,dist,panel.last=abline(fit)))
@@ -104,8 +104,8 @@ in \textbf{knitr}. If we draw two plots in the code, \textbf{knitr}
 will show two plots and we do not need to tell it how many plots are
 there in the code in advance. If we set \texttt{out.width=.49\textbackslash{}textwidth}
 in chunk options, we get it in the final output document. If we say
-\texttt{align=center}, the plots are centered. That's it. Many enhancements
-and new features will be introduced later.
+\texttt{fig.align=center}, the plots are centered. That's it. Many
+enhancements and new features will be introduced later.
 
 
 \section{Design}
@@ -290,7 +290,7 @@ been evaluated. For example, the code below consists of three expressions,
 out of which two are related to drawing plots, therefore \textbf{evaluate}
 will produce two plots by default:
 
-<<low-level-plots,fig.keep=all,dev=tikz,width=2.5,height=2.5,out.width=.3\textwidth,cache=TRUE>>=
+<<low-level-plots,fig.keep=all,dev=tikz,fig.width=2.5,fig.height=2.5,out.width=.3\textwidth,cache=TRUE>>=
 par(mar=c(3,3,.1,.1))
 plot(1:10, ann=FALSE,las=1)
 text(5,9,'mass $\\rightarrow$ energy\n$E=mc^2$')
@@ -338,7 +338,7 @@ a chunk (\texttt{fig.show=hold}), or just insert them to the place
 where they were created (by default \texttt{fig.show=asis}). Here
 is an example of \texttt{fig.show=asis}:
 
-<<fig-hold,fig=TRUE,fig.show=asis,dev=pdf,width=6,height=4,out.width=.35\linewidth>>=
+<<fig-hold,fig=TRUE,fig.show=asis,dev=pdf,fig.width=6,fig.height=4,out.width=.35\linewidth>>=
 contour(volcano)  # contour lines
 filled.contour(volcano)  # fill contour plot with colors
 @
@@ -368,9 +368,9 @@ demo('Mandelbrot', echo = FALSE, package = 'animation')
 
 \subsubsection{Plot Size}
 
-The \texttt{width} and \texttt{height} options specify the size of
-plots in the graphics device, and the real size in the output document
-can be different (see \texttt{out.width} and \texttt{out.height}).
+The \texttt{fig.width} and \texttt{fig.height} options specify the
+size of plots in the graphics device, and the real size in the output
+document can be different (see \texttt{out.width} and \texttt{out.height}).
 When there are multiple plots per chunk, it is possible to arrange
 more than one plot per line in \LaTeX{} -- just specify \texttt{out.width}
 to be less than half of the current line width.
@@ -411,7 +411,7 @@ qplot(1:10, 1:10) + opts(title = substitute(paste(d *
 
 With the tikz device, it is both straightforward and more beautiful: 
 
-<<math-expr-tikz,dev=tikz,width=5,height=3,out.width=.55\linewidth,cache=TRUE,message=FALSE>>=
+<<math-expr-tikz,dev=tikz,fig.width=5,fig.height=3,out.width=.55\linewidth,cache=TRUE,message=FALSE>>=
 library(ggplot2)
 qplot(1:10, 1:10) + 
 opts(title = sprintf('$\\mathrm{d}\\mathbf{x}_{t} = \\alpha[(\\theta - \\mathbf{x}_{t})\\mathrm{d}t + %d]\\mathrm{d}B_{t}$', 4))
@@ -453,23 +453,24 @@ for analysis and this subset is also cached; in the future, the initial
 large object will not be loaded into R if our computation is only
 based on the object of its subset.
 
-The paths of cache files are determined by the chunk option \texttt{prefix.cache};
+The paths of cache files are determined by the chunk option \texttt{cache.path};
 by default all cache files are created under a directory \textsf{cache}
-relative to the current working directory, and if the prefix contains
-a directory (e.g. \texttt{prefix.cache=cache/abc-}), cache files will
-be stored under that directory (automatically created if it does not
-exist). The cache is invalidated and purged on any changes to the
-code chunk, including both the R code and chunk options; this means
-previous cache files of this chunk are removed (filenames are identified
-by the chunk label). Unlike \textbf{pgfSweave}, cache files will never
-accumulate since old cache files will always be removed in \textbf{knitr}.
-Unlike \textbf{weaver} or \textbf{cacheSweave}, \textbf{knitr} will
-try to preserve side-effects, meaning that any output of a code chunk
-will be loaded into the output document for a cached chunk, although
-it is not really evaluated. The reason is \textbf{knitr} also cache
-the output of a chunk as a character string. Note this means graphics
-output is also cached since it is part of the output. It has been
-a pain for me for a long time to have to lose output to gain cache.
+relative to the current working directory, and if the option value
+contains a directory (e.g. \texttt{cache.path=cache/abc-}), cache
+files will be stored under that directory (automatically created if
+it does not exist). The cache is invalidated and purged on any changes
+to the code chunk, including both the R code and chunk options; this
+means previous cache files of this chunk are removed (filenames are
+identified by the chunk label). Unlike \textbf{pgfSweave}, cache files
+will never accumulate since old cache files will always be removed
+in \textbf{knitr}. Unlike \textbf{weaver} or \textbf{cacheSweave},
+\textbf{knitr} will try to preserve side-effects, meaning that any
+output of a code chunk will be loaded into the output document for
+a cached chunk, although it is not really evaluated. The reason is
+\textbf{knitr} also cache the output of a chunk as a character string.
+Note this means graphics output is also cached since it is part of
+the output. It has been a pain for me for a long time to have to lose
+output to gain cache.
 
 Although \textbf{knitr} tries to keep the side-effects of printing,
 there are still other types of side-effects. For example, loading
@@ -563,7 +564,7 @@ head(knit_hooks$get('rgl'))  # the hook function is defined as this
 
 Then we only have to set the chunk option \texttt{rgl=TRUE}:
 
-<<fancy-rgl,rgl=TRUE,dev=png,width=5,height=5,out.width=2in,message=FALSE,cache=TRUE>>=
+<<fancy-rgl,rgl=TRUE,dev=png,fig.width=5,fig.height=5,out.width=2in,message=FALSE,cache=TRUE>>=
 library(rgl)
 demo('bivar', package='rgl', echo=FALSE) 
 par3d(zoom=.7)
@@ -595,8 +596,9 @@ the output of an expression to be invisible, you may use the function
 \item [{term}] was dropped (think \texttt{term=TRUE}) 
 \item [{stripe.white}] was dropped (rarely used, and can be achieved by
 hooks)
-\item [{prefix}] was dropped (think \texttt{prefix=TRUE}; \texttt{prefix.string}
-is always used for figure filenames)
+\item [{prefix}] was dropped (think \texttt{prefix=TRUE})
+\item [{prefix.string}] was renamed to \texttt{fig.path} and it is always
+used for figure filenames
 \item [{eps,~pdf}] and all logical options for graphics devices were dropped:
 please use the new option \texttt{dev}, which is similar to \texttt{grdevice}
 in Sweave but has more than 20 predefined graphical devices (if that
@@ -605,7 +607,11 @@ note only one device can be used for a chunk (in old ages, we may
 have to use both \texttt{eps} and \texttt{pdf}, but nowadays there
 is usually no need to generate multiple image formats for the same
 plot)
-\item [{fig}] was dropped; now use \texttt{fig.keep=high}
+\item [{fig}] was dropped; now use \texttt{fig.keep}: \texttt{fig.keep=high}
+is equivalent to \texttt{fig=TRUE} and \texttt{fig.keep=none} is the
+same as \texttt{fig=FALSE}
+\item [{width,~height}] were dropped; use \texttt{fig.width} and \texttt{fig.height}
+instead
 \end{description}
 For logical options, only \texttt{TRUE}/\texttt{FALSE}/\texttt{T}/\texttt{F}
 are supported (the first two are recommended), and \texttt{true}/\texttt{false}

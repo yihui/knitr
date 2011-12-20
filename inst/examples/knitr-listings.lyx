@@ -1,5 +1,5 @@
 #LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 417
+\lyxformat 420
 \begin_document
 \begin_header
 \textclass article
@@ -52,11 +52,13 @@ knitr
 \use_mhchem 1
 \use_mathdots 1
 \use_undertilde 1
-\cite_engine natbib_authoryear
+\cite_engine basic
+\biblio_style plainnat
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 1
 \index Index
 \shortcut idx
@@ -537,8 +539,7 @@ hook_rgl = function(before, options, envir) {
 
 \begin_layout Plain Layout
 
-    name = paste(valid_prefix(options$prefix.string), options$label, sep
- = '')
+    name = paste(valid_prefix(options$fig.path), options$label, sep = '')
 \end_layout
 
 \begin_layout Plain Layout
