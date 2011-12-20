@@ -18,10 +18,10 @@ Take Rnw files as an example: usually we write chunk options like this
 @
 {% endhighlight %}
 
-And `\SweaveOpts{comment=#, width=6, height=6}` can change the default global options in a document. A few special notes on the options:
+And `\SweaveOpts{comment=#, fig.width=6, fig.height=6}` can change the default global options in a document. A few special notes on the options:
 
-1. Avoid spaces ` ` and periods `.` in chunk labels and directory names; if your output is a TeX document, these characters can cause troubles (in general it is recommended to use alphabetic characters with words separated by `-` and avoid other characters), e.g. `setup-options` is a good label, whereas `setup.options` and `chunk 1` are bad; `prefix.string=figures/mcmc-` is a good prefix for figure output if this project is about MCMC, and `prefix.string=markov chain/monte carlo` is bad;
-2. For options that take _character_ values, you should not quote them as you do in R (e.g. should write `prefix.string=abc` instead of `prefix.string="abc"`), and should avoid the comma `,` in the character string since it is the separator of chunk options; for logical options, `TRUE` and `FALSE` are OK, and `true`/`false` will not work as you might have expected;
+1. Avoid spaces ` ` and periods `.` in chunk labels and directory names; if your output is a TeX document, these characters can cause troubles (in general it is recommended to use alphabetic characters with words separated by `-` and avoid other characters), e.g. `setup-options` is a good label, whereas `setup.options` and `chunk 1` are bad; `fig.path=figures/mcmc-` is a good prefix for figure output if this project is about MCMC, and `fig.path=markov chain/monte carlo` is bad;
+2. For options that take _character_ values, you should not quote them as you do in R (e.g. should write `fig.path=abc` instead of `fig.path="abc"`), and should avoid the comma `,` in the character string since it is the separator of chunk options; for logical options, `TRUE` and `FALSE` are OK, and `true`/`false` will not work as you might have expected;
 
 All available options in **knitr** are:
 
@@ -51,12 +51,12 @@ All available options in **knitr** are:
 ### Cache
 
 - `cache`: (`FALSE`) whether to cache a code chunk; when evaluating code chunks, the cached chunks are skipped, but the objects created in these chunks are (lazy) loaded from previously saved databases (`.rdb` and `.rdx`) files, and these files are saved when a chunk is evaluated for the first time, or when cached files are not found (e.g. you may have removed them by hand); note the filename consists of the chunk label with an MD5 digest of the R code in the chunk (the MD5 string is a summary of the chunk text, and any changes in the chunk will produce a different MD5 digest); unlike the **cacheSweave** package which uses **stashR**, this package directly uses internal functions in base R for cache, and another difference is that results of the code will *still* be included in the output even in case of cache (whereas **cacheSweave** has no output when a chunk is cached), because **knitr** also caches the printed output of a code chunk as a character string
-- `prefix.cache`: (`cache/`) a prefix to be used for the names of cache files (by default they are saved to a directory named `cache` relative to the current working directory; you can also use an absolute dir here, e.g. `/home/foo/bar-` or `D:\\abc\\mycache`, but it is not recommended since such absolute directories may not exist in other people's systems, therefore it is recommended to use relative directories)
+- `cache.path`: (`cache/`) a prefix to be used for the names of cache files (by default they are saved to a directory named `cache` relative to the current working directory; you can also use an absolute dir here, e.g. `/home/foo/bar-` or `D:\\abc\\mycache`, but it is not recommended since such absolute directories may not exist in other people's systems, therefore it is recommended to use relative directories)
 - `dependson`: (`NULL`) which other chunks does this chunk depend on? the chunk labels should be separated by `;`, e.g. `chunk1;chunk2`; this option applies to cached chunks only -- sometimes the objects in a cached chunk may depend on other cached chunks, so when other chunks are changed, this chunk must be updated accordingly
 
 ### Plots
 
-- `prefix.string`: (default an empty string) prefix to be used for figure filenames (`prefix.string` and chunk labels are concatenated to make filenames); it may contain a directory like `figure/prefix-` (will be created if it does not exist); the default empty string means files will be created under the current working directory
+- `fig.path`: (default an empty string) prefix to be used for figure filenames (`fig.path` and chunk labels are concatenated to make filenames); it may contain a directory like `figure/prefix-` (will be created if it does not exist); the default empty string means files will be created under the current working directory
 - `fig.keep`: (`high`) how plots in chunks should be kept; it takes five possible values (see the end of this section for an example)
   - `high`: only keep high-level plots (merge low-level changes into high-level plots);
   - `none`: discard all plots;
@@ -70,10 +70,10 @@ All available options in **knitr** are:
 - `dev`: (`pdf`) a character string of the function name which will be used as a graphical device to record plots; for the convenience of usage, this package has included all the graphics devices in base R as well as those in **Cairo**, **cairoDevice** and **tikzDevice**, e.g. if we set `dev = CairoPDF`, the function with the same name in the **Cairo** package will be used for graphics output; if none of the 20 built-in devices is appropriate, we can still provide yet another name as long as it is a legal function name which can record plots (it must be of the form `function(filename, width, height)`, however); note the units for images are *always* inches (even for bitmap devices, in which DPI is used to convert between pixels and inches); currently available devices are `bmp`, `postscript`, `pdf`, `png`, `svg`, `jpeg`, `pictex`, `tiff`, `win.metafile`, `cairo_pdf`, `cairo_ps`, `CairoJPEG`, `CairoPNG`, `CairoPS`, `CairoPDF`, `CairoSVG`, `CairoTIFF`, `Cairo_pdf`, `Cairo_png`, `Cairo_ps`, `Cairo_svg`, `tikz`
 - `fig.ext`: (`NULL`) file extension of the figure output (if `NULL`, it will be derived from the graphical device; see `knitr:::dev2ext` for details)
 - `dpi`: (default 72) the DPI (dots per inch) for bitmap devices (`dpi * inches = pixels`)
-- `width`, `height`: (both are `7`) width and height of the plot, to be used in the graphics device (in inches)
-- `out.width`, `out.height`: (`NULL`) width and height of the plot in the final output file (can be different with its real `width` and `height`, i.e. plots can be scaled in the output document)
+- `fig.width`, `fig.height`: (both are `7`) width and height of the plot, to be used in the graphics device (in inches)
+- `out.width`, `out.height`: (`NULL`) width and height of the plot in the final output file (can be different with its real `fig.width` and `fig.height`, i.e. plots can be scaled in the output document)
 - `resize.width`, `resize.height`: (`NULL`) the width and height to be used in `\resizebox{}{}` in LaTeX; these two options are not needed unless you want to resize tikz graphics because there is no natural way to do it; however, according to **tikzDevice** authors, tikz graphics is not meant to be resized to maintain consistency in style with other texts in LaTeX; if only one of them is `NULL`, `!` will be used (read the documentation of **graphicx** if you do not understand this)
-- `align`: (`default`) alignment of figures in the output document (possible values are `left`, `right` and `center`; default is not to make any alignment adjustments)
+- `fig.align`: (`default`) alignment of figures in the output document (possible values are `left`, `right` and `center`; default is not to make any alignment adjustments)
 - `external`: (`FALSE`) whether to externalize tikz graphics (pre-compile tikz graphics to PDF); it is only used for the `tikz()` device in the **tikzDevice** package (i.e., when `dev=tikz`)
 - `sanitize`: whether to sanitize tikz graphics (escape special LaTeX characters); see documentation in the **tikzDevice** package
 
