@@ -270,7 +270,7 @@ hook_rgl = function(before, options, envir) {
     ## after a chunk has been evaluated
     if (before || !require('rgl') || rgl.cur() == 0) return()  # no active device
     name = paste(valid_prefix(options$fig.path), options$label, sep = '')
-    par3d(windowRect = 100 + options$dpi * c(0, 0, options$width, options$height))
+    par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
     Sys.sleep(.05) # need time to respond to window size change
 
     fmt = opts_knit$get('out.format')
