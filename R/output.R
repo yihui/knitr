@@ -117,8 +117,6 @@ knit = function(input, output, tangle = FALSE) {
 
 process_file = function(path, tangle) {
     groups = split_file(path)
-    if (!is.list(groups)) return(groups)
-
     n = length(groups); res = character(n)
 
     if (opts_knit$get('progress'))
