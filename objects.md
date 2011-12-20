@@ -13,8 +13,8 @@ The **knitr** package uses a special object to control options and settings (den
 
 Four such objects are visible to users in **knitr**:
 
-- [`opts_chunk`](options#chunk_options): manages **opt**ions for code **c**hunks
-- [`opts_knit`](options#package_options): manages **opt**ions for the **k**nitr package
+- [`opts_chunk`](options#chunk_options): manages **opt**ions for code **chunk**s
+- [`opts_knit`](options#package_options): manages **opt**ions for the **knit**r package
 - [`knit_hooks`](hooks): manages hook functions
 - [`knit_patterns`](patterns): manages regular expressions to extract R code from the input document
 
