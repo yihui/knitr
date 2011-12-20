@@ -116,6 +116,7 @@ knit = function(input, output, tangle = FALSE) {
 }
 
 process_file = function(path, tangle) {
+    knit_code$restore()  # clear code list
     groups = split_file(path)
     n = length(groups); res = character(n)
 
@@ -130,6 +131,7 @@ process_file = function(path, tangle) {
         res[i] = (if (tangle) process_tangle else process_group)(groups[[i]])
     }
     if (opts_knit$get('progress')) close(pb)
+    knit_code$restore()
 
     if (!tangle) res = insert_header(res)  # insert header
     str_c(c(res, ""), collapse = "\n")

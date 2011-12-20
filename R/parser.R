@@ -27,6 +27,9 @@ split_file = function(path) {
     })
 }
 
+## a code manager to manage R code in all chunks
+knit_code = new_defaults()
+
 ## strip the pattern in code
 strip_block = function(x) {
     if (!is.null(prefix <- knit_patterns$get('chunk.code')) && (n <- length(x)) > 1) {
@@ -40,9 +43,14 @@ parse_block = function(input) {
     block = strip_block(input)
     n = length(block); chunk.begin = knit_patterns$get('chunk.begin')
     params = if (group_pattern(chunk.begin)) gsub(chunk.begin, '\\1', block[1]) else ''
+    params = parse_params(params)
 
-    structure(list(params = parse_params(params), code = block[-1L]),
-              class = 'block')
+    label = params$label
+    if (label %in% names(knit_code$get())) message("duplicated label '", label, "'")
+    code = block[-1L]
+    if (length(code)) knit_code$set(structure(list(code), .Names = label))
+
+    structure(list(params = params), class = 'block')
 }
 
 ## parse params from chunk header
@@ -81,10 +89,13 @@ print.block = function(x, ...) {
         cat(str_c(strwrap(str_c(params$label, ": ", if (length(idx)) {
             str_c(idx, "=", unlist(params[idx]), collapse = ", ")
         } else ''), indent = 2, exdent = 4), collapse = '\n'), "\n")
-    if (opts_knit$get('verbose') && length(x$code) && !all(str_detect(x$code, '^\\s*$'))) {
-        cat("\n  ", str_pad(" R code chunk ", getOption('width') - 10L, 'both', '~'), "\n")
-        cat(str_c('   ', x$code, collapse = '\n'), '\n')
-        cat('  ', str_dup('~', getOption('width') - 10L), '\n')
+    if (opts_knit$get('verbose')){
+        code = knit_code$get(params$label)
+        if (length(code) && !all(is_blank(code))) {
+            cat("\n  ", str_pad(" R code chunk ", getOption('width') - 10L, 'both', '~'), "\n")
+            cat(str_c('   ', code, collapse = '\n'), '\n')
+            cat('  ', str_dup('~', getOption('width') - 10L), '\n')
+        }
     }
     cat('\n')
 }

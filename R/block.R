@@ -9,15 +9,8 @@ process_group.inline = function(x) call_inline(x)
 call_block = function(block) {
     params = opts_chunk$merge(block$params)
     params = fix_options(params)  # for compatibility
-    params = c(list(code = block$code), params)
-    ## code from external R script
-    if (!length(params$code)) {
-        ref = params$ref
-        if (!is.null(ref) && file.exists(ref)) {
-            ext.code = parse_external(ref)
-            params$code = ext.code[[params$label]]
-        }
-    }
+    label = params$label
+    params = c(list(code = knit_code$get(label)), params)
     if (opts_knit$get('progress')) print(block)
 
     params$echo = eval_opt(params$echo)
@@ -196,7 +189,8 @@ process_tangle = function(x) {
     UseMethod('process_tangle', x)
 }
 process_tangle.block = function(x) {
-    label_code(x$code, x$params$label)
+    label = x$params$label
+    label_code(knit_code$get(label), label)
 }
 process_tangle.inline = function(x) return('')
 
