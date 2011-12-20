@@ -155,8 +155,7 @@ parse_external = function(path) {
     code = lapply(groups, strip_external)
     idx = nzchar(labels); code = code[idx]; labels = labels[idx]
     names(code) = labels
-    .knitEnv$ext.code = code; .knitEnv$ext.path = path
-    code
+    knit_code$set(code)
 }
 
 strip_external = function(x) {
