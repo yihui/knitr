@@ -171,13 +171,13 @@ read_chunk = function(path) {
     if (!group_pattern(lab)) return()
     groups = unname(split(lines, cumsum(str_detect(lines, lab))))
     labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\1'))
-    code = lapply(groups, strip_external)
+    code = lapply(groups, strip_chunk)
     idx = nzchar(labels); code = code[idx]; labels = labels[idx]
     names(code) = labels
     knit_code$set(code)
 }
 
-strip_external = function(x) {
+strip_chunk = function(x) {
     x = x[-1]; if (!length(x)) return(x)
     while(is_blank(x[1])) {
         x = x[-1]; if (!length(x)) return(x)
