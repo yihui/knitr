@@ -106,7 +106,7 @@ knit = function(input, output, tangle = FALSE) {
     oopts =
         options(tikzMetricsDictionary = str_c(sub("([^.]+)\\.[[:alnum:]]+$", "\\1",
                 basename(input)), '-tikzDictionary'), useFancyQuotes = FALSE,
-                digits = 4, width = 75)
+                digits = 4L, width = 75L, warn = 1L)
     on.exit(options(oopts), add = TRUE)
 
     res = process_file(basename(input), tangle)
