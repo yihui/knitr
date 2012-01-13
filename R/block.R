@@ -63,12 +63,10 @@ block_exec = function(code, ...) {
     ## eval chunks (in an empty envir if cache)
     env = if (options$cache) new.env(parent = globalenv()) else globalenv()
 
-    ## TODO: https://github.com/yihui/knitr/issues/9
-    dargs = formals(getOption('device'))
-    if (!is.null(dargs$file)) {
-        dev.new(file = tempfile())
-    } else if (is.null(dargs)) {
-        pdf(file = tempfile())  # should not use RStudio's GD
+    ## open a graphical device to record graphics
+    dargs = formals(getOption('device'))  # is NULL in RStudio's GD
+    if (is.null(dargs) || !interactive()) {
+        pdf(file = NULL)
     } else dev.new()
     dv = dev.cur(); on.exit(dev.off(dv))
 
