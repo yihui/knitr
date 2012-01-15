@@ -28,7 +28,7 @@ call_block = function(block) {
     ## Check cache
     hash =
         str_c(valid_prefix(params$cache.path), params$label, '_',
-              digest(list(params, getOption('width'))))
+              digest(list(params[setdiff(names(params), 'include')], getOption('width'))))
     params = c(params, list(hash = hash))
     if (params$cache && cache$exists(hash)) {
         if (!dependson_changed(params$dependson, params$cache.path)) {
