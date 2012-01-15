@@ -12,16 +12,16 @@
 
     tikz = options$dev == 'tikz' && !options$external
 
-    a = options$fig.align; plot.cur = options$plot.cur; plot.num = options$plot.num
+    a = options$fig.align; fig.cur = options$fig.cur; fig.num = options$fig.num
     animate = options$fig.show == 'animate'
-    if (!tikz && animate && plot.cur < plot.num) return('')
+    if (!tikz && animate && fig.cur < fig.num) return('')
 
     align1 = switch(a, left = '\n\n', center = '\n\n\\centering{}', right = '\n\n\\hfill{}', '')
     align2 = switch(a, left = '\\hfill{}\n\n', center = '\n\n', right = '\n\n', '')
-    ## multiple plots: begin at 1, end at plot.num
+    ## multiple plots: begin at 1, end at fig.num
     hold = options$fig.show == 'hold'
-    if (hold && plot.cur > 1L) align1 = ''
-    if (hold && plot.cur > 0L && plot.cur < plot.num) align2 = ''
+    if (hold && fig.cur > 1L) align1 = ''
+    if (hold && fig.cur > 0L && fig.cur < fig.num) align2 = ''
 
     size =
         paste(sprintf('width=%s', options$out.width),
@@ -38,7 +38,7 @@
               size = paste(size, sprintf(',%s', aniopts), sep = '')
               if (nzchar(size)) size = sprintf('[%s]', size)
               sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1/options$interval,
-                      sub(str_c(plot.num, '$'), '', x[1]), 1L, plot.num)
+                      sub(str_c(fig.num, '$'), '', x[1]), 1L, fig.num)
           } else {
               if (nzchar(size)) size = sprintf('[%s]', size)
               sprintf('\\includegraphics%s{%s} ', size, x[1])
@@ -295,12 +295,12 @@ hook_pdfcrop = function(before, options, envir) {
     ## crops PDF after a chunk is evaluated and PDF files produced
     ext = options$fig.ext
     if (options$dev == 'tikz' && options$external) ext = 'pdf'
-    if (before || (plot.num <- options$plot.num) == 0L || ext != 'pdf')
+    if (before || (fig.num <- options$fig.num) == 0L || ext != 'pdf')
         return()
 
     paths =
         paste(valid_prefix(options$fig.path), options$label,
-              if (plot.num == 1L) '' else seq_len(plot.num), ".pdf", sep = "")
+              if (fig.num == 1L) '' else seq_len(fig.num), ".pdf", sep = "")
 
     lapply(paths, function(x) {
         message('cropping ', x)

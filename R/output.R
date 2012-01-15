@@ -208,12 +208,12 @@ wrap.recordedplot = function(x, options) {
         odir = setwd(base.dir); on.exit(setwd(odir)) # switch to abs dir, then restore
     }
     ## figure number sequence for multiple plots
-    if (options$plot.num <= 1) plot.cur = 0L else {
-        plot.cur = plot_counter()
+    if (options$fig.num <= 1) fig.cur = 0L else {
+        fig.cur = plot_counter()
     }
-    options$plot.cur = plot.cur # put fig num in options
+    options$fig.cur = fig.cur # put fig num in options
     prefix = valid_prefix(options$fig.path)
-    name = str_c(prefix, options$label, ifelse(plot.cur == 0L, '', plot.cur))
+    name = str_c(prefix, options$label, ifelse(fig.cur == 0L, '', fig.cur))
     if (!file.exists(dirname(name)))
         dir.create(dirname(name), recursive = TRUE) # automatically creates dir for plots
 
