@@ -72,7 +72,7 @@
         if (!file.exists(dirname(name)))
             dir.create(dirname(name))
         cat(x, file = name)
-        if (options$include) sprintf('\\input{%s}', name) else ''
+        sprintf('\\input{%s}', name)
     } else x
 }
 .chunk.hook.html = function(x, options) {

@@ -32,6 +32,7 @@ call_block = function(block) {
     params$hash = hash
     if (params$cache && cache$exists(hash)) {
         if (!dependson_changed(params$dependson, params$cache.path)) {
+            if (!params$include) return('')
             cache$load(hash)
             cache$unmark(hash)
             return(cache$output(hash))
@@ -150,7 +151,7 @@ block_exec = function(code, ...) {
         cache$mark(hash)
     }
 
-    output
+    if (!options$include) '' else output
 }
 
 
