@@ -20,9 +20,13 @@ new_defaults = function(value = list()) {
     list(get = get, set = set, merge = merge, restore = restore)
 }
 
-##' Chunk options
+##' Default and current chunk options
 ##'
-##' Options for R code chunks.
+##' Options for R code chunks. When running R code, the object
+##' \code{opts_chunk} (default options) is not modified by chunks
+##' (local chunk options are merged with default options), whereas
+##' \code{opts_current} (current options) changes with different
+##' chunks.
 ##' @references Usage: \url{http://yihui.github.com/knitr/objects}
 ##'
 ##' A list of available options: \url{http://yihui.github.com/knitr/options#chunk_options}
