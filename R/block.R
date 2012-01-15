@@ -9,8 +9,9 @@ process_group.inline = function(x) call_inline(x)
 call_block = function(block) {
     params = opts_chunk$merge(block$params)
     params = fix_options(params)  # for compatibility
-    label = params$label
-    params = c(list(code = knit_code$get(label)), params)
+    label = ref.label = params$label
+    if (!is.null(params$ref.label)) ref.label = str_split(params$ref.label, fixed(';'))[[1]]
+    params$code = unlist(knit_code$get(ref.label), use.names = FALSE)
     if (opts_knit$get('progress')) print(block)
 
     params$echo = eval_opt(params$echo)
