@@ -69,7 +69,9 @@ color_def = function(col, variable = 'shadecolor') {
 dependson_changed = function(labels, prefix) {
     if (is.null(labels)) return(FALSE)
     if (!file.exists(d <- dirname(prefix))) return(FALSE)
-    base = if (isTRUE(file.info(prefix)[, 'isdir'])) '' else basename(prefix)
+    if (isTRUE(file.info(prefix)[, 'isdir'])) {
+        base = ''; d = prefix
+    } else base = basename(prefix)
     for (f in str_split(labels, fixed(';'))[[1]]) {
         p = list.files(d, str_c(base, f, '_[[:alnum:]]{32}\\.(rdb|rdx)'), full.names = TRUE)
         if (length(p)) {
