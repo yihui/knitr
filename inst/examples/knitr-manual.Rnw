@@ -491,14 +491,9 @@ will still use old cached results, unless there is a way to detect
 such changes from other chunks. There is an option called \texttt{dependson}
 in \textbf{cacheSweave} which does this job. We can explicitly specify
 which other chunks this chunk depends on by setting an option like
-\texttt{dependson=chunkA;chunkB}. Before loading cached results, all
-the dependent chunks will be examined to make sure they were not changed,
-otherwise the current chunk has to be re-evaluated and its cache will
-be rebuilt. The way I implement \texttt{dependson} is that a file
-named in the form \texttt{chunk-label\_MD5\_changed} is used to indicate
-if a chunk was changed; this file is created each time cached objects
-are saved, and removed the next time when cache is loaded, so if this
-file does not exist, it means nothing was changed in this chunk.
+\texttt{dependson=chunkA;chunkB}. Each time the cache of a chunk is
+rebuilt, all other chunks which depend on this chunk will lose cache,
+hence their cache will be rebuilt as well.
 
 
 \subsection{Code Externalization}
