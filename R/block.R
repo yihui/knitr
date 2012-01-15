@@ -9,6 +9,7 @@ process_group.inline = function(x) call_inline(x)
 call_block = function(block) {
     params = opts_chunk$merge(block$params)
     params = fix_options(params)  # for compatibility
+    opts_current$restore(); opts_current$set(params)  # save current options
     label = ref.label = params$label
     if (!is.null(params$ref.label)) ref.label = str_split(params$ref.label, fixed(';'))[[1]]
     params$code = unlist(knit_code$get(ref.label), use.names = FALSE)
