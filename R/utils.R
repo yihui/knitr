@@ -139,7 +139,7 @@ format_sci = function(x, format = 'latex', d = getOption('digits')) {
 ## absolute path?
 is_abs_path = function(x) {
     if (.Platform$OS.type == 'windows')
-        grepl(':', x, fixed = TRUE) || grepl('^\\\\', x) else grepl('^/', x)
+        grepl(':', x, fixed = TRUE) || grepl('^\\\\', x) else grepl('^[/~]', x)
 }
 
 ## compatibility with Sweave and old beta versions of knitr
