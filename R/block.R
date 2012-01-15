@@ -32,12 +32,9 @@ call_block = function(block) {
               digest(list(params[setdiff(names(params), 'include')], getOption('width'))))
     params$hash = hash
     if (params$cache && cache$exists(hash)) {
-        if (!dependson_changed(params$dependson, params$cache.path)) {
-            if (!params$include) return('')
-            cache$load(hash)
-            cache$unmark(hash)
-            return(cache$output(hash))
-        }
+        if (!params$include) return('')
+        cache$load(hash)
+        return(cache$output(hash))
     }
     do.call('block_exec', params)
 }
@@ -146,10 +143,10 @@ block_exec = function(code, ...) {
         hash = options$hash
         outname = str_c('.', hash)
         assign(outname, output, envir = globalenv())
+        ## purge my old cache and cache of chunks dependent on me
         cache$purge(str_c(valid_prefix(options$cache.path),
-                          options$label, '_*')) # try to purge old cache
+                          c(options$label, dep_list$get(options$label)), '_*'))
         cache$save(c(ls(env, all = TRUE), outname), hash)
-        cache$mark(hash)
     }
 
     if (!options$include) '' else output

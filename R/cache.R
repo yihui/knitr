@@ -15,7 +15,7 @@ new_cache = function() {
     }
 
     cache_purge = function(hash) {
-        unlink(str_c(cache_path(hash), c('.rdb', '.rdx', '_changed')))
+        for (h in hash) unlink(str_c(cache_path(h), c('.rdb', '.rdx')))
     }
 
     cache_save = function(keys, hash) {
@@ -37,17 +37,8 @@ new_cache = function() {
         } else ''
     }
 
-    cache_mark = function(hash) {
-        file.create(str_c(cache_path(hash), '_changed'))
-    }
-
-    cache_unmark = function(hash) {
-        unlink(str_c(cache_path(hash), '_changed'))
-    }
-
     list(purge = cache_purge, save = cache_save, load = cache_load,
-         exists = cache_exists, output = cache_output,
-         mark = cache_mark, unmark = cache_unmark)
+         exists = cache_exists, output = cache_output)
 }
 
 cache = new_cache()

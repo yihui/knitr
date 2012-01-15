@@ -112,6 +112,7 @@ knit = function(input, output, tangle = FALSE) {
     res = process_file(basename(input), tangle)
     setwd(input_dir())
     cat(res, file = output)
+    dep_list$restore()  # empty dependency list
     message('output file: ', normalizePath(output))
 }
 

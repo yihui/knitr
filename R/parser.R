@@ -38,6 +38,9 @@ strip_block = function(x) {
     x
 }
 
+## an object to store chunk dependencies
+dep_list = new_defaults()
+
 ## separate params and R code in code chunks
 parse_block = function(input) {
     block = strip_block(input)
@@ -49,6 +52,12 @@ parse_block = function(input) {
     if (label %in% names(knit_code$get())) message("duplicated label '", label, "'")
     code = block[-1L]
     if (length(code)) knit_code$set(structure(list(code), .Names = label))
+
+    ## store dependencies
+    if (!is.null(deps <- params$dependson)) {
+        for (i in sc_split(deps))
+            dep_list$set(structure(list(c(dep_list$get(i), label)), .Names = i))
+    }
 
     structure(list(params = params), class = 'block')
 }
