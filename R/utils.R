@@ -53,7 +53,7 @@ valid_prefix = function(x) {
 
 ## define a color variable in TeX
 color_def = function(col, variable = 'shadecolor') {
-    x = str_split(col, fixed(';'))[[1]]
+    x = sc_split(col)
     if ((n <- length(x)) != 3L) {
         if (n == 1L) x = drop(col2rgb(x)/255) else {
             x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
@@ -65,6 +65,9 @@ color_def = function(col, variable = 'shadecolor') {
     sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
 }
 
+## split by semicolon
+sc_split = function(string) {
+    str_split(string, fixed(';'))[[1]]
 ## whether dependent chunks have changed; if so, invalidate cache for this chunk
 dependson_changed = function(labels, prefix) {
     if (is.null(labels)) return(FALSE)

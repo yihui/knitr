@@ -11,7 +11,7 @@ call_block = function(block) {
     params = fix_options(params)  # for compatibility
     opts_current$restore(); opts_current$set(params)  # save current options
     label = ref.label = params$label
-    if (!is.null(params$ref.label)) ref.label = str_split(params$ref.label, fixed(';'))[[1]]
+    if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
     params$code = unlist(knit_code$get(ref.label), use.names = FALSE)
     if (opts_knit$get('progress')) print(block)
 
