@@ -100,12 +100,6 @@ Normally this produces 2 plots in the output (i.e. when `fig.keep=high`); for `f
 - `interval`: (`1`) number of seconds to pause between animation frames
 - `aniopts`: (`controls;loop`) extra options for animations (should be separated by `;` in chunk options, and `;` will be replaced by `,` internally); see the [documentation of the animate package](http://www.ctan.org/tex-archive/macros/latex/contrib/animate)
 
-### Code Reference
-
-**WARNING: this feature is experimental and likely to change in the future.**
-
-- `ref`: (`NULL`) a filename of a reference R script in which a code chunk can be extracted using the chunk label as the identifier (in R code, use `## @knitr chunk-label` to denote the code below will go to the chunk; the pattern here is from `knit_patterns$get('ref.label')`); this make it possible to separate the main file and the R script, because sometimes it is easier to maintain a separate R script than to copy and paste R code directly into the main file (e.g. in LyX with an Sweave module, it is often difficult to run R code without compiling the whole document, which can be very time-consuming when we only want to run a small portion of the code); note this options is used only when the original chunk has no R code
-
 ## Package Options <a id="package_options"></a>
 
 The package options can be changed using the object [`opts_knit`](objects); for example,
