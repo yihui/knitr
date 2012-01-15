@@ -100,6 +100,10 @@ Normally this produces 2 plots in the output (i.e. when `fig.keep=high`); for `f
 - `interval`: (`1`) number of seconds to pause between animation frames
 - `aniopts`: (`controls;loop`) extra options for animations (should be separated by `;` in chunk options, and `;` will be replaced by `,` internally); see the [documentation of the animate package](http://www.ctan.org/tex-archive/macros/latex/contrib/animate)
 
+### Chunk Reference
+
+- `ref.label`: (`NULL`) labels of the chunks from which R code is borrowed; multiple labels should be separated by `;` (see the demo for [chunk reference](/knitr/demo/reference/))
+
 ## Package Options <a id="package_options"></a>
 
 The package options can be changed using the object [`opts_knit`](objects); for example,
