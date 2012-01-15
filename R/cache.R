@@ -6,7 +6,7 @@ new_cache = function() {
 
     cache_path = function(hash) {
         d = dirname(hash)
-        if (!abs_path(d)) {
+        if (!is_abs_path(d)) {
             id = input_dir()
             d = file.path(id, d)  # turn relative path to abs path
         }
