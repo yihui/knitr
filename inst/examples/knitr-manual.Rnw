@@ -459,10 +459,15 @@ relative to the current working directory, and if the option value
 contains a directory (e.g. \texttt{cache.path=cache/abc-}), cache
 files will be stored under that directory (automatically created if
 it does not exist). The cache is invalidated and purged on any changes
-to the code chunk, including both the R code and chunk options; this
-means previous cache files of this chunk are removed (filenames are
-identified by the chunk label). Unlike \textbf{pgfSweave}, cache files
-will never accumulate since old cache files will always be removed
+to the code chunk, including both the R code and chunk options%
+\footnote{One exception is the \texttt{include} option, which is not cached
+because \texttt{include=TRUE/FALSE} does not affect code evaluation;
+meanwhile, the value \texttt{getOption('width')} is also cached, so
+if you change this option, the cache will also be invalidated (this
+option affects the width of text output)%
+}; this means previous cache files of this chunk are removed (filenames
+are identified by the chunk label). Unlike \textbf{pgfSweave}, cache
+files will never accumulate since old cache files will always be removed
 in \textbf{knitr}. Unlike \textbf{weaver} or \textbf{cacheSweave},
 \textbf{knitr} will try to preserve side-effects, meaning that any
 output of a code chunk will be loaded into the output document for

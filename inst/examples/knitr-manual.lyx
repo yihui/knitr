@@ -1887,8 +1887,31 @@ cache.path=cache/abc-
 ), cache files will be stored under that directory (automatically created
  if it does not exist).
  The cache is invalidated and purged on any changes to the code chunk, including
- both the R code and chunk options; this means previous cache files of this
- chunk are removed (filenames are identified by the chunk label).
+ both the R code and chunk options
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+One exception is the 
+\family typewriter
+include
+\family default
+ option, which is not cached because 
+\family typewriter
+include=TRUE/FALSE
+\family default
+ does not affect code evaluation; meanwhile, the value 
+\family typewriter
+getOption('width')
+\family default
+ is also cached, so if you change this option, the cache will also be invalidate
+d (this option affects the width of text output)
+\end_layout
+
+\end_inset
+
+; this means previous cache files of this chunk are removed (filenames are
+ identified by the chunk label).
  Unlike 
 \series bold
 pgfSweave
