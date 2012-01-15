@@ -44,6 +44,10 @@ opts_chunk =
                       background = '.97;.97;.97', split = FALSE, include = TRUE,
                       interval = 1, aniopts = 'controls;loop'))
 
+##' @rdname opts_chunk
+##' @export
+opts_current = new_defaults()
+
 ##' All built-in patterns
 ##'
 ##' This object is a named list of all built-in patterns.
