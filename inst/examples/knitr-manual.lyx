@@ -1981,7 +1981,7 @@ chunk-label_MD5_changed
 \end_layout
 
 \begin_layout Subsection
-Code Reference
+Code Externalization
 \end_layout
 
 \begin_layout Standard
@@ -1995,7 +1995,7 @@ It can be more convenient to write R code in a separate file, rather than
 \series bold
 knitr
 \series default
- introduced the feature of code reference to an external R script.
+ introduced the feature of code externalization to a separate R script.
  Currently the setting is like this: the R script also uses chunk labels
  (marked in the form 
 \family typewriter
@@ -2005,19 +2005,142 @@ knitr
 \series bold
 knitr
 \series default
- will match its label with the label in the R script to read external R
+ will match its label with the label in the R script to input external R
  code.
- The path of the reference script is set in the chunk option 
+ For example, suppose this is a code chunk labelled as 
 \family typewriter
-ref
+Q1
 \family default
-, and it is allowed to use difference sources of R scripts for different
- chunks.
+ in an R script named 
+\family sans
+homework1-xie.R
+\family default
+ which is under the same directory as the Rnw document:
 \end_layout
 
 \begin_layout Standard
-Different documents can refer to the same R script, so the R code can be
- reusable across different input documents.
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<ext-r-code,eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+## @knitr Q1
+\end_layout
+
+\begin_layout Plain Layout
+
+gcd = function(m, n) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    while ((r <- m %% n) != 0) {
+\end_layout
+
+\begin_layout Plain Layout
+
+       m = n; n = r
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    n
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the Rnw document, we can first read the script using the function 
+\emph on
+read_chunk()
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<read-chunk,eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+read_chunk('homework1-xie.R')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is usually done in an early chunk, and we can use the chunk 
+\family typewriter
+Q1
+\family default
+ later in the Rnw document:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<use-ext-chunk,echo=FALSE,comment=NA>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+cat('<<Q1, echo=TRUE, tidy=TRUE>>=','@',sep='
+\backslash
+n')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Different documents can read the same R script, so the R code can be reusable
+ across different input documents.
 \end_layout
 
 \begin_layout Subsection
@@ -2506,12 +2629,29 @@ reference "sub:conditional"
 \family typewriter
 <<chunk-label>>
 \family default
- was dropped since R has 
-\emph on
-functions
-\emph default
-; if you want to reuse a chunk, consider writing a function instead of explicitl
-y repeating code.
+ was dropped; if you want to reuse a chunk, either consider writing a function
+ instead of explicitly repeating code, or make use of code externalization
+ as introduced before, or use the new option 
+\family typewriter
+ref.label
+\family default
+ (see the demo 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset CommandInset href
+LatexCommand href
+name "Chunk Reference"
+target "http://yihui.github.com/knitr/demo/reference/"
+
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ in the website).
 \end_layout
 
 \begin_layout Standard

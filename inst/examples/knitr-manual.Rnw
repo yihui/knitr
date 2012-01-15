@@ -496,7 +496,7 @@ are saved, and removed the next time when cache is loaded, so if this
 file does not exist, it means nothing was changed in this chunk.
 
 
-\subsection{Code Reference}
+\subsection{Code Externalization}
 
 It can be more convenient to write R code in a separate file, rather
 than mixing it into a \LaTeX{} document; for example, we can run R
@@ -504,17 +504,41 @@ code successively from one chunk to the other without jumping through
 other texts. Since I prefer using \LyX{} to write reports, Sweave
 is even more inconvenient because I have to recompile the whole document
 each time, even if I only want to know the results of a single chunk.
-Therefore \textbf{knitr} introduced the feature of code reference
-to an external R script. Currently the setting is like this: the R
+Therefore \textbf{knitr} introduced the feature of code externalization
+to a separate R script. Currently the setting is like this: the R
 script also uses chunk labels (marked in the form \texttt{\#\# @knitr
 chunk-label} by default); if the code chunk in the input document
 is empty, \textbf{knitr} will match its label with the label in the
-R script to read external R code. The path of the reference script
-is set in the chunk option \texttt{ref}, and it is allowed to use
-difference sources of R scripts for different chunks.
+R script to input external R code. For example, suppose this is a
+code chunk labelled as \texttt{Q1} in an R script named \textsf{homework1-xie.R}
+which is under the same directory as the Rnw document:
 
-Different documents can refer to the same R script, so the R code
-can be reusable across different input documents.
+<<ext-r-code,eval=FALSE>>=
+## @knitr Q1
+gcd = function(m, n) {
+    while ((r <- m %% n) != 0) {
+       m = n; n = r
+    }
+    n
+}
+@
+
+In the Rnw document, we can first read the script using the function
+\emph{read\_chunk()}:
+
+<<read-chunk,eval=FALSE>>=
+read_chunk('homework1-xie.R')
+@
+
+This is usually done in an early chunk, and we can use the chunk \texttt{Q1}
+later in the Rnw document:
+
+<<use-ext-chunk,echo=FALSE,comment=NA>>=
+cat('<<Q1, echo=TRUE, tidy=TRUE>>=','@',sep='\n')
+@
+
+Different documents can read the same R script, so the R code can
+be reusable across different input documents.
 
 
 \subsection{Conditional Evaluation\label{sub:conditional}}
@@ -618,8 +642,11 @@ are supported (the first two are recommended), and \texttt{true}/\texttt{false}
 will not work, e.g., \texttt{eval=FALSE} is OK, and \texttt{eval=false}
 is not (not exactly true; see Section \ref{sub:conditional}). Chunk
 reference using \texttt{<\textcompwordmark{}<chunk-label>\textcompwordmark{}>}
-was dropped since R has \emph{functions}; if you want to reuse a chunk,
-consider writing a function instead of explicitly repeating code.
+was dropped; if you want to reuse a chunk, either consider writing
+a function instead of explicitly repeating code, or make use of code
+externalization as introduced before, or use the new option \texttt{ref.label}
+(see the demo ``\href{http://yihui.github.com/knitr/demo/reference/}{Chunk Reference}''
+in the website).
 
 Besides, the \LaTeX{} style file \textsf{Sweave.sty} was dropped as
 well; it has brought too much confusion to users since it is shipped
