@@ -11,12 +11,24 @@ There are several advantages of separating the main document with the R script(s
 
 The function `read_chunk()` was designed for this feature. For example, if the R code is in [Stat579-HW8-Xie.R](https://github.com/downloads/yihui/knitr/Stat579-HW8-Xie.R), you can use `read_chunk('Stat579-HW8-Xie.R')` to read the code into the input document in an early chunk. It is possible to use multiple external R scripts (just call `read_chunk()` for multiple times).
 
+Note this function should only be used in an _uncached_ chunk, e.g.
+
+{% highlight r %}
+<<external-code, cache=FALSE>>=
+read_chunk('foo-bar.R')
+@
+{% endhighlight %}
+
+Some examples:
+
 - A homework solution
   - Rnw source: [Stat579-HW8-Xie.Rnw](https://github.com/downloads/yihui/knitr/Stat579-HW8-Xie.Rnw)
   - R source: [Stat579-HW8-Xie.R](https://github.com/downloads/yihui/knitr/Stat579-HW8-Xie.R)
   - PDF output: [Stat579-HW8-Xie.pdf](https://github.com/downloads/yihui/knitr/Stat579-HW8-Xie.pdf)
+  - note that `\SweaveOpts{cache=TRUE}` is put after the `set-options` chunk, and this chunk is not cached because `cache=FALSE` by default
 - Another homework
   - Rnw source: [Stat546-HW4-Xie.Rnw](https://github.com/downloads/yihui/knitr/Stat546-HW4-Xie.Rnw)
   - R source: [Stat546-HW4-Xie.R](https://github.com/downloads/yihui/knitr/Stat546-HW4-Xie.R)
   - data source: [GOOG2010.csv](https://github.com/downloads/yihui/knitr/GOOG2010.csv)
   - PDF output: [Stat546-HW4-Xie.pdf](https://github.com/downloads/yihui/knitr/Stat546-HW4-Xie.pdf)
+  - in this example, I explicitly used `cache=FALSE` for the chunk that uses `read_chunk()`
