@@ -310,7 +310,7 @@ render_jekyll = function() {
 hook_rgl = function(before, options, envir) {
     ## after a chunk has been evaluated
     if (before || !require('rgl') || rgl.cur() == 0) return()  # no active device
-    name = paste(valid_prefix(options$fig.path), options$label, sep = '')
+    name = fig_path()
     par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
     Sys.sleep(.05) # need time to respond to window size change
 
@@ -319,16 +319,11 @@ hook_rgl = function(before, options, envir) {
 
     ## support 3 formats: eps, pdf and png (default)
     switch(options$dev,
-           postscript = rgl.postscript(paste(name, '.eps', sep = ''), fmt = 'eps'),
-           pdf = rgl.postscript(paste(name, '.pdf', sep = ''), fmt = 'pdf'),
-           rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png'))
+           postscript = rgl.postscript(str_c(name, '.eps'), fmt = 'eps'),
+           pdf = rgl.postscript(str_c(name, '.pdf'), fmt = 'pdf'),
+           rgl.snapshot(str_c(name, '.png'), fmt = 'png'))
 
-    if (fmt == 'html') return(hook_plot_html(c(name, 'png'), options))
-    if (fmt %in% c('markdown', 'gfm', 'jekyll'))
-        return(hook_plot_md(c(name, 'png'), options))
-
-    paste(ifelse(options$fig.align == 'center', '\\centering{}', ''), '\\includegraphics[',
-          sprintf('width=%s', options$out.width), ']{', name, '}\n', sep = '')
+    hook_plot_custom(before, options, envir)
 }
 ##' @export
 ##' @rdname hooks
