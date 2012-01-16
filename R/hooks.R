@@ -19,10 +19,10 @@
 ##' @export
 ##' @examples ## this is what happens for a chunk like this
 ##' ## <<foo-bar-plot, dev=pdf, out.width=.7\linewidth, fig.align=right>>=
-##' hook_plot_tex(c('foo-bar-plot', 'pdf'), opts_chunk$merge(list(out.width='.7\\linewidth',fig.align='right',fig.cur=0, fig.num=1)))
+##' hook_plot_tex(c('foo-bar-plot', 'pdf'), opts_chunk$merge(list(out.width='.7\\linewidth',fig.align='right')))
 ##'
 ##' ## <<bar, dev=tikz>>=
-##' hook_plot_tex(c('bar', 'tikz'), opts_chunk$merge(list(dev='tikz',fig.cur=0, fig.num=1)))
+##' hook_plot_tex(c('bar', 'tikz'), opts_chunk$merge(list(dev='tikz')))
 ##'
 ##' ## <<foo, dev=pdf, fig.show=animate, interval=.1>>=
 ##' ## 5 plots are generated in this chunk
