@@ -22,7 +22,7 @@ opts_current
 }
 \examples{
 opts_chunk$get("prompt")
-opts_chunk$get("fig.hold")
+opts_chunk$get("fig.keep")
 }
 \references{
   Usage: \url{http://yihui.github.com/knitr/objects}

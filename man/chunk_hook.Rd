@@ -1,11 +1,14 @@
 \name{hook_rgl}
 \alias{hook_pdfcrop}
+\alias{hook_plot_custom}
 \alias{hook_rgl}
 \title{Built-in chunk hooks to extend knitr}
 \usage{
 hook_rgl(before, options, envir)
 
 hook_pdfcrop(before, options, envir)
+
+hook_plot_custom(before, options, envir)
 }
 \arguments{
   \item{before,options,envir}{see references}
@@ -15,7 +18,7 @@ hook_pdfcrop(before, options, envir)
   options are \code{TRUE} to do additional jobs beside the
   R code in chunks. This package provides a few useful
   hooks, which can also serve as examples of how to define
-  hooks in \pkg{knitr}.
+  chunk hooks in \pkg{knitr}.
 }
 \details{
   The function \code{hook_rgl} can be set as a hook in
@@ -38,6 +41,13 @@ hook_pdfcrop(before, options, envir)
   need to install it separately (use
   \code{Sys.which('pdfcrop')} to check it; if it not empty,
   you are able to use it).
+
+  When the plots are not recordable via
+  \code{\link[grDevices]{recordPlot}} and we save the plots
+  to files manually via other functions (e.g. \pkg{rgl}
+  plots), we can use the chunk hook \code{hook_plot_custom}
+  to help write code for graphics output into the output
+  document.
 }
 \examples{
 knit_hooks$set(rgl = hook_rgl)
