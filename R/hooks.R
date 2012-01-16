@@ -36,7 +36,7 @@ hook_plot_tex = function(x, options) {
               ## \animategraphics{} should be inserted only *once*!
               aniopts = options$aniopts
               aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
-              size = paste(size, sprintf(',%s', aniopts), sep = '')
+              if (nzchar(size)) size = paste(size, sprintf('%s', aniopts), sep = ',')
               if (nzchar(size)) size = sprintf('[%s]', size)
               sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1/options$interval,
                       sub(str_c(fig.num, '$'), '', x[1]), 1L, fig.num)
