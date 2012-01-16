@@ -1,21 +1,29 @@
-##' Default plot hook for LaTeX output
+##' Default plot hooks for different output formats
 ##'
-##' This hook function defines how to mark up plots in LaTeX output;
-##' depending on the options passed over, it may write the normal
-##' \samp{\\includegraphics{}} command, or \samp{\\input{}} (for tikz
-##' files), or \samp{\\animategraphics{}} (for animations).
+##' These hook functions define how to mark up graphics output in
+##' different output formats.
 ##'
-##' In most cases we do not need to call this hook function
-##' explicitly, and it was designed to be used internally. However, it
-##' can save a lot of efforts when the plots are not recordable via
-##' \code{\link[grDevices]{recordPlot}} and we save the plots to files
-##' manually (e.g. \pkg{rgl} plots). We can use a chunk hook to help
-##' write LaTeX code into the output document.
+##' Depending on the options passed over, \code{hook_plot_tex} may
+##' return the normal \samp{\\includegraphics{}} command, or
+##' \samp{\\input{}} (for tikz files), or \samp{\\animategraphics{}}
+##' (for animations); it also takes many other options into
+##' consideration to align plots and set figure sizes, etc. Similarly,
+##' \code{hook_plot_html} and \code{hook_plot_md} return character
+##' strings which are HTML or Markdown code.
+##'
+##' In most cases we do not need to call these hooks explicitly, and
+##' it was designed to be used internally. Sometimes we may not be
+##' able to record R plots using \code{\link[grDevices]{recordPlot}},
+##' and we can make use of these hooks to insert graphics output in
+##' the output document; see \code{\link{hook_plot_custom}} for
+##' details.
 ##' @param x a character vector of length 2 ; \code{x[1]} is the plot
 ##' base filename, and \code{x[2]} is the file extension
 ##' @param options a list of the current chunk options
-##' @return A character string (LaTeX code)
+##' @rdname hook_plot
+##' @return A character string (code with plot filenames wrapped)
 ##' @references \url{http://yihui.github.com/knitr/demo/plot-hook/}
+##' @seealso \code{\link{hook_plot_custom}}
 ##' @export
 ##' @examples ## this is what happens for a chunk like this
 ##' ## <<foo-bar-plot, dev=pdf, out.width=.7\linewidth, fig.align=right>>=
@@ -75,6 +83,8 @@ hook_plot_tex = function(x, options) {
 
           resize2, align2, sep = '')
 }
+##' @rdname hook_plot
+##' @export
 hook_plot_html = function(x, options) {
     ## TODO: output size not implemented for HTML yet
     a = options$fig.align
@@ -86,6 +96,8 @@ hook_plot_html = function(x, options) {
                    right = 'style="float: right"',
                    center = 'style="margin: auto; display: block"'))
 }
+##' @rdname hook_plot
+##' @export
 hook_plot_md = function(x, options) {
     base = opts_knit$get('base.url')
     if (is.null(base)) base = ''
