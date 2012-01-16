@@ -41,6 +41,7 @@ hook_plot_tex = function(x, options) {
     tikz = options$dev == 'tikz' && !options$external
 
     a = options$fig.align; fig.cur = options$fig.cur; fig.num = options$fig.num
+    if (is.null(fig.cur)) fig.cur = 0L
     animate = options$fig.show == 'animate'
     if (!tikz && animate && fig.cur < fig.num) return('')
 
