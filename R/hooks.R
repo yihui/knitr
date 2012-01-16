@@ -350,3 +350,22 @@ hook_pdfcrop = function(before, options, envir) {
     })
     return()
 }
+##' @export
+##' @rdname chunk_hook
+hook_plot_custom = function(before, options, envir){
+    if(before) return() # run hook after the chunk
+
+    ext = options$fig.ext
+    if(is.null(ext)) ext = dev2ext(options$dev)
+    name = fig_path()
+    fmt = opts_knit$get('out.format')
+    hook = switch(fmt, latex = hook_plot_tex, html = hook_plot_html, hook_plot_md)
+
+    n = options$fig.num
+    if (is.null(n)) hook(c(name, ext), options) else {
+        res = unlist(lapply(seq_len(n), function(i) {
+            hook(c(str_c(name, i), ext), modifyList(options, list(fig.cur = i)))
+        }), use.names = FALSE)
+        str_c(res, collapse = '')
+    }
+}
