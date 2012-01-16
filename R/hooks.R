@@ -1,5 +1,6 @@
 ## default plot hook: x is c(filename, extension)
 .plot.hook.tex = function(x, options) {
+hook_plot_tex = function(x, options) {
     if (!options$include) return('')
     rw = options$resize.width; rh = options$resize.height
     resize1 = resize2 = ''
@@ -111,7 +112,7 @@ knit_hooks =
                    ## hooks for code output
                    list(source = .out.hook, output = .out.hook,
                         warning = .out.hook, message = .out.hook, error = .out.hook,
-                        plot = .plot.hook.tex,
+                        plot = hook_plot_tex,
                         inline = .inline.hook, chunk = function(x, options) x)
 
                    ## and hooks for params
@@ -164,7 +165,7 @@ render_latex = function() {
                        if (is.numeric(x))
                            return(.inline.hook(format_sci(x, 'latex')))
                        sprintf('\\texttt{%s}', .inline.hook(x))
-                   }, plot = .plot.hook.tex,
+                   }, plot = hook_plot_tex,
                    chunk = .chunk.hook.tex)
 }
 ##' @rdname output_hooks
