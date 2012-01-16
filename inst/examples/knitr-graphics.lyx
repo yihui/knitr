@@ -149,8 +149,12 @@ This manual shows features of graphics in the
 knitr
 \series default
  package in detail, including the graphical devices, plot recording, plot
- rearrangement, control of plot sizes, the tikz device, animations and rgl
- plots.
+ rearrangement, control of plot sizes, the tikz device, animations and other
+ types of plots such as 
+\series bold
+rgl
+\series default
+ or GGobi plots.
 \end_layout
 
 \begin_layout Standard
@@ -1700,6 +1704,205 @@ ggplot2
 \end_layout
 
 \begin_layout Subsection
+Manually Saved Plots
+\end_layout
+
+\begin_layout Standard
+We have explained how R plots are recorded before.
+ In some cases, it is not possible to capture plots by 
+\emph on
+recordPlot()
+\emph default
+ (such as 
+\series bold
+rgl
+\series default
+ plots), but we can save them using other functions.
+ To insert these plots into the output, we need to set up a hook first like
+ this (see 
+\family typewriter
+?hook_plot_custom
+\family default
+ for details):
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<custom-plot-hook,cache=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_hooks$set(custom.plot = hook_plot_custom)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then we set the chunk option 
+\family typewriter
+custom.plot=TRUE
+\family default
+, and manually write plot files in the chunk.
+ Here we show an example of capturing GGobi plots using the function 
+\emph on
+ggobi_display_save_picture()
+\emph default
+ in the 
+\series bold
+rggobi
+\series default
+ package:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<ggobi-plot,custom.plot=TRUE,fig.ext=png,out.width=2.5in,results=hide>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(rggobi)
+\end_layout
+
+\begin_layout Plain Layout
+
+ggobi(ggobi_find_file('data', 'flea.csv'))
+\end_layout
+
+\begin_layout Plain Layout
+
+Sys.sleep(1)  # wait for snapshot
+\end_layout
+
+\begin_layout Plain Layout
+
+ggobi_display_save_picture(path=fig_path('.png'))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+One thing to note here is we have to make sure the plot filename is from
+ 
+\emph on
+fig_path()
+\emph default
+, which is a convenience function to return the figure path for the current
+ chunk.
+\end_layout
+
+\begin_layout Standard
+We can do whatever normal R plots can do with this hook, and we give another
+ example below to show how to work with animations.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<rgl-animation,custom.plot=TRUE,fig.ext=png,out.width=2.5in,fig.show=animate,fig.num=
+20, interval=.4, aniopts=controls;autoplay, results=hide>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(animation) # adapted from demo('rgl_animation')
+\end_layout
+
+\begin_layout Plain Layout
+
+data(pollen)
+\end_layout
+
+\begin_layout Plain Layout
+
+uM = matrix(c(-0.37, -0.51, -0.77, 0, -0.73, 0.67, -0.1, 0, 0.57, 0.53, -0.63, 0,
+ 0, 0, 0, 1), 4, 4)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(rgl)
+\end_layout
+
+\begin_layout Plain Layout
+
+open3d(userMatrix = uM, windowRect = c(0, 0, 400, 400))
+\end_layout
+
+\begin_layout Plain Layout
+
+plot3d(pollen[, 1:3])
+\end_layout
+
+\begin_layout Plain Layout
+
+zm = seq(1, 0.05, length = 20)
+\end_layout
+
+\begin_layout Plain Layout
+
+par3d(zoom = 1)  # change the zoom factor gradually later
+\end_layout
+
+\begin_layout Plain Layout
+
+for (i in 1:length(zm)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    par3d(zoom = zm[i]); Sys.sleep(.05)
+\end_layout
+
+\begin_layout Plain Layout
+
+    rgl.snapshot(paste(fig_path(i), 'png', sep = '.'))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
 rgl Plots
 \end_layout
 
@@ -1746,6 +1949,22 @@ dpi
 par3d()
 \emph default
 , and finally save the plot.
+\end_layout
+
+\begin_layout Standard
+This hook is actually built upon 
+\emph on
+hook_plot_custom()
+\emph default
+ -- first it saves the 
+\series bold
+rgl
+\series default
+ snapshot, then it calls 
+\emph on
+hook_plot_custom()
+\emph default
+ to write the output code.
 \end_layout
 
 \end_body

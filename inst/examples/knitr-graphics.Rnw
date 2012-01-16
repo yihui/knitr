@@ -42,7 +42,8 @@ if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axi
 \begin{abstract}
 This manual shows features of graphics in the \textbf{knitr} package
 in detail, including the graphical devices, plot recording, plot rearrangement,
-control of plot sizes, the tikz device, animations and rgl plots.
+control of plot sizes, the tikz device, animations and other types
+of plots such as \textbf{rgl} or GGobi plots.
 \end{abstract}
 Before reading this specific manual%
 \footnote{\url{https://github.com/downloads/yihui/knitr/knitr-graphics.pdf}%
@@ -359,6 +360,53 @@ with base graphics, but barely works with \textbf{grid} graphics (therefore
 \textbf{lattice} and \textbf{ggplot2} are ruled out).
 
 
+\subsection{Manually Saved Plots}
+
+We have explained how R plots are recorded before. In some cases,
+it is not possible to capture plots by \emph{recordPlot()} (such as
+\textbf{rgl} plots), but we can save them using other functions. To
+insert these plots into the output, we need to set up a hook first
+like this (see \texttt{?hook\_plot\_custom} for details):
+
+<<custom-plot-hook,cache=FALSE>>=
+knit_hooks$set(custom.plot = hook_plot_custom)
+@
+
+Then we set the chunk option \texttt{custom.plot=TRUE}, and manually
+write plot files in the chunk. Here we show an example of capturing
+GGobi plots using the function \emph{ggobi\_display\_save\_picture()}
+in the \textbf{rggobi} package:
+
+<<ggobi-plot,custom.plot=TRUE,fig.ext=png,out.width=2.5in,results=hide>>=
+library(rggobi)
+ggobi(ggobi_find_file('data', 'flea.csv'))
+Sys.sleep(1)  # wait for snapshot
+ggobi_display_save_picture(path=fig_path('.png'))
+@
+
+One thing to note here is we have to make sure the plot filename is
+from \emph{fig\_path()}, which is a convenience function to return
+the figure path for the current chunk.
+
+We can do whatever normal R plots can do with this hook, and we give
+another example below to show how to work with animations.
+
+<<rgl-animation,custom.plot=TRUE,fig.ext=png,out.width=2.5in,fig.show=animate,fig.num=20, interval=.4, aniopts=controls;autoplay, results=hide>>=
+library(animation) # adapted from demo('rgl_animation')
+data(pollen)
+uM = matrix(c(-0.37, -0.51, -0.77, 0, -0.73, 0.67, -0.1, 0, 0.57, 0.53, -0.63, 0, 0, 0, 0, 1), 4, 4)
+library(rgl)
+open3d(userMatrix = uM, windowRect = c(0, 0, 400, 400))
+plot3d(pollen[, 1:3])
+zm = seq(1, 0.05, length = 20)
+par3d(zoom = 1)  # change the zoom factor gradually later
+for (i in 1:length(zm)) {
+    par3d(zoom = zm[i]); Sys.sleep(.05)
+    rgl.snapshot(paste(fig_path(i), 'png', sep = '.'))
+}
+@
+
+
 \subsection{rgl Plots}
 
 With the hook \emph{hook\_rgl()}, we can easily save snapshots from
@@ -371,5 +419,9 @@ so we make use of the options \texttt{fig.width}, \texttt{fig.height}
 and \texttt{dpi} to calculate the expected size of the window, then
 resize the current window by \emph{par3d()}, and finally save the
 plot.
+
+This hook is actually built upon \emph{hook\_plot\_custom()} -- first
+it saves the \textbf{rgl} snapshot, then it calls \emph{hook\_plot\_custom()}
+to write the output code.
 
 \end{document}
