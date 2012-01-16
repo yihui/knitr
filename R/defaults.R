@@ -31,7 +31,7 @@ new_defaults = function(value = list()) {
 ##'
 ##' A list of available options: \url{http://yihui.github.com/knitr/options#chunk_options}
 ##' @export
-##' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.hold')
+##' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
 opts_chunk =
     new_defaults(list(eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
                       cache = FALSE, dependson = NULL, cache.path = 'cache/',
