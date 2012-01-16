@@ -7,7 +7,7 @@ The R package **knitr** is a general-purpose literate programming engine, with l
 This package is not on CRAN yet. Currently you can either check out the repository with GIT and run `R CMD INSTALL`, or use the **devtools** package to install:
 
 ```r
-## this package depends on R >= 2.14.0
+## this package depends on R >= 2.14.1
 ## you may also need to update your packages: 
 ## options(repos = c(CRAN = 'http://cran.r-project.org'))
 ## update.packages()
