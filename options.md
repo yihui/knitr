@@ -95,6 +95,8 @@ for(i in 1:10) {
 
 Normally this produces 2 plots in the output (i.e. when `fig.keep=high`); for `fig.keep=none`, no plots will be saved; for `fig.keep=all`, 4 plots are saved; for `fig.keep=first`, the plot produced by `plot(1)` is saved, and for `fig.keep=last`, the last plot with 10 vertical lines is saved.
 
+There are two hidden options which are not designed to be set by the users: `fig.cur` (the current figure number or index when there are multiple figures) and `fig.num` (the total number of figures in a chunk). The purpose of these two options is to help **knitr** deal with the filenames of multiple figures as well as animations. In some cases, we can make use of them to write animations into the output using plot files which are saved manually (see the [graphics manual](https://github.com/downloads/yihui/knitr/knitr-graphics.pdf) for examples).
+
 ### Animation
 
 - `interval`: (`1`) number of seconds to pause between animation frames
