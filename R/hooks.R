@@ -280,7 +280,7 @@ render_jekyll = function() {
 ##' Hook functions are called when the corresponding chunk options are
 ##' \code{TRUE} to do additional jobs beside the R code in
 ##' chunks. This package provides a few useful hooks, which can also
-##' serve as examples of how to define hooks in \pkg{knitr}.
+##' serve as examples of how to define chunk hooks in \pkg{knitr}.
 ##'
 ##' The function \code{hook_rgl} can be set as a hook in \pkg{knitr}
 ##' to save plots produced by the \pkg{rgl} package. According to the
@@ -299,7 +299,13 @@ render_jekyll = function() {
 ##' LaTeX distribution such as MiKTeX or TeXLive, and you may not need
 ##' to install it separately (use \code{Sys.which('pdfcrop')} to
 ##' check it; if it not empty, you are able to use it).
-##' @rdname hooks
+##'
+##' When the plots are not recordable via
+##' \code{\link[grDevices]{recordPlot}} and we save the plots to files
+##' manually via other functions (e.g. \pkg{rgl} plots), we can use
+##' the chunk hook \code{hook_plot_custom} to help write code for
+##' graphics output into the output document.
+##' @rdname chunk_hook
 ##' @param before,options,envir see references
 ##' @references \url{http://yihui.github.com/knitr/hooks#chunk_hooks}
 ##' @seealso \code{\link[rgl]{rgl.snapshot}},
@@ -326,7 +332,7 @@ hook_rgl = function(before, options, envir) {
     hook_plot_custom(before, options, envir)
 }
 ##' @export
-##' @rdname hooks
+##' @rdname chunk_hook
 hook_pdfcrop = function(before, options, envir) {
     ## crops PDF after a chunk is evaluated and PDF files produced
     ext = options$fig.ext
