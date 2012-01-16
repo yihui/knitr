@@ -2369,7 +2369,7 @@ knit_hooks$set(rgl = hook_rgl)
 
 \begin_layout Plain Layout
 
-head(knit_hooks$get('rgl'))  # the hook function is defined as this
+head(hook_rgl)  # the hook function is defined as this
 \end_layout
 
 \begin_layout Plain Layout

@@ -583,7 +583,7 @@ using the function \emph{hook\_rgl()} in \textbf{knitr}:
 
 <<rgl-demo>>=
 knit_hooks$set(rgl = hook_rgl)
-head(knit_hooks$get('rgl'))  # the hook function is defined as this
+head(hook_rgl)  # the hook function is defined as this
 @
 
 Then we only have to set the chunk option \texttt{rgl=TRUE}:
