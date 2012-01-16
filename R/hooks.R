@@ -86,7 +86,7 @@ hook_plot_html = function(x, options) {
                    right = 'style="float: right"',
                    center = 'style="margin: auto; display: block"'))
 }
-.plot.hook.markdown = function(x, options) {
+hook_plot_md = function(x, options) {
     base = opts_knit$get('base.url')
     if (is.null(base)) base = ''
     sprintf('![plot of chunk %s](%s%s.%s)', options$label,
@@ -238,7 +238,7 @@ render_markdown = function() {
     knit_hooks$set(source = hook.t, output = hook.o, warning = hook.t,
                    error = hook.t, message = hook.t,
                    inline = function(x) sprintf('`%s`', .inline.hook(format_sci(x, 'html'))),
-                   plot = .plot.hook.markdown)
+                   plot = hook_plot_md)
 }
 ##' @rdname output_hooks
 ##' @export
@@ -313,7 +313,7 @@ hook_rgl = function(before, options, envir) {
 
     if (fmt == 'html') return(hook_plot_html(c(name, 'png'), options))
     if (fmt %in% c('markdown', 'gfm', 'jekyll'))
-        return(.plot.hook.markdown(c(name, 'png'), options))
+        return(hook_plot_md(c(name, 'png'), options))
 
     paste(ifelse(options$fig.align == 'center', '\\centering{}', ''), '\\includegraphics[',
           sprintf('width=%s', options$out.width), ']{', name, '}\n', sep = '')
