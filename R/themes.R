@@ -61,23 +61,6 @@ theme_to_header  <- function(theme){
   )
 }
 
-#' Adds an Sweave chunk that sets the theme
-#'
-#' @author Ramnath Vaidyanathan
-#' @noRd
-add_theme_chunk <- function(rnw_file, theme){
-  doc <- readLines(rnw_file)
-  begin_line <- grep("begin{document}", doc, fixed = TRUE)
-  theme_chunk  <- c(
-    "<<set-theme, echo = FALSE, results = hide>>=",
-    paste("set_theme(", "'", theme, "'",")", sep = ""),
-    "@")
-  doc <- c(doc[1:begin_line], theme_chunk, doc[-c(1:begin_line)])
-  tf <- tempfile(tmpdir = dirname(rnw_file), fileext = ".rnw")
-  writeLines(doc, tf)
-  return(path.expand(tf))
-}
-
 #' Get path to the system folder containing css files of themes
 #'
 #' @author Ramnath Vaidyanathan

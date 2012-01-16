@@ -236,13 +236,9 @@ fig_path = function(suffix = '', options = opts_current$get()) {
 #' @author Ramnath Vaidyanathan
 #' @export
 #' @importFrom tools file_path_sans_ext texi2dvi
-knit2pdf <- function(rnw_file, theme = NULL){
+knit2pdf <- function(rnw_file){
   # require(knitr)
   tex_file_name <- sprintf("%s.tex", file_path_sans_ext(rnw_file))
-  if (!missing(theme)){
-    rnw_file <- add_theme_chunk(rnw_file, theme)
-    on.exit(unlink(rnw_file))
-  }
   knit(rnw_file)
   oldwd <- getwd()
   setwd(dirname(tex_file_name)) 
