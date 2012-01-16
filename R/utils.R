@@ -216,17 +216,19 @@ eval_opt = function(x, expect_class = is.logical) {
 ##' The filename of figure files is the combination of options
 ##' \code{fig.path} and \code{label}. This function returns the path
 ##' of figures for the current chunk by default.
+##' @param suffix a suffix of the filename
 ##' @param options a list of options; by default the options of the
 ##' current chunk
 ##' @return A character string (path)
 ##' @note When there are multiple figures in a chunk, this function
-##' only provides a prefix of the filenames, and the actually
-##' filenames are of the form \file{prefix1}, \file{prefix2},
+##' only provides a prefix of the filenames by default, and the
+##' actual filenames are of the form \file{prefix1}, \file{prefix2},
 ##' ... where \file{prefix} is the string returned by this function.
 ##' @export
-##' @examples fig_path(list(fig.path='figure/abc-', label='first-plot'))
-fig_path = function(options = opts_current$get()) {
-    str_c(valid_prefix(options$fig.path), options$label)
+##' @examples fig_path('.pdf', list(fig.path='figure/abc-', label='first-plot'))
+##' fig_path(1:10, list(fig.path='foo-', label='bar'))
+fig_path = function(suffix = '', options = opts_current$get()) {
+    str_c(valid_prefix(options$fig.path), options$label, suffix)
 }
 
 #' Generate a pdf of a rnw file using knit and texi2dvi
