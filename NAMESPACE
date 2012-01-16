@@ -1,6 +1,7 @@
 export(all_patterns)
 export(get_theme)
 export(hook_pdfcrop)
+export(hook_plot_tex)
 export(hook_rgl)
 export(knit)
 export(knit2pdf)
