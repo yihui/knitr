@@ -112,7 +112,9 @@ block_exec = function(code, ...) {
         }
     }
     ## number of plots in this chunk
-    options$fig.num = if (length(res)) sum(sapply(res, is.recordedplot)) else 0L
+    if (is.null(options$fig.num)) {
+        options$fig.num = if (length(res)) sum(sapply(res, is.recordedplot)) else 0L
+    }
 
     ## merge source lines if they do not have output; is there an elegant way??
     iss = if (length(res)) which(sapply(res, is.source)) else NULL
