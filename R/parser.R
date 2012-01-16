@@ -166,6 +166,8 @@ print.inline = function(x, ...) {
 ##' @return Code chunks are read into the current session so that
 ##' future chunks can use the R code.
 ##' @references \url{http://yihui.github.com/knitr/demo/reference/}
+##' @note This function can only be used in a chunk which is
+##' \emph{not} cached (chunk option \code{cache = FALSE}).
 ##' @export
 ##' @examples ## the default format
 ##'

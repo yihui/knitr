@@ -21,6 +21,10 @@ read_chunk(path)
   (\code{knit_patterns$get('ref.label')}) defines the
   format of code chunks.
 }
+\note{
+  This function can only be used in a chunk which is
+  \emph{not} cached (chunk option \code{cache = FALSE}).
+}
 \examples{
 ## the default format
 
