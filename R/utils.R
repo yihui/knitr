@@ -236,7 +236,7 @@ fig_path = function(suffix = '', options = opts_current$get()) {
 #' @author Ramnath Vaidyanathan
 #' @export
 #' @importFrom tools file_path_sans_ext texi2dvi
-knit2pdf <- function(rnw_file, theme = NULL, line_numbers = FALSE){
+knit2pdf <- function(rnw_file, theme = NULL){
   # require(knitr)
   tex_file_name <- sprintf("%s.tex", file_path_sans_ext(rnw_file))
   if (!missing(theme)){
@@ -244,12 +244,6 @@ knit2pdf <- function(rnw_file, theme = NULL, line_numbers = FALSE){
     on.exit(unlink(rnw_file))
   }
   knit(rnw_file)
-  tex_file <- sprintf("%s.tex", file_path_sans_ext(rnw_file))
-  if (line_numbers) {
-    tex_file <- insert_line_numbers(tex_file)
-    # on.exit(unlink(tex_file))
-  }
-  file.rename(tex_file, tex_file_name)
   oldwd <- getwd()
   setwd(dirname(tex_file_name)) 
   texi2dvi(basename(tex_file_name), pdf = TRUE, clean = TRUE)

@@ -86,23 +86,3 @@ fetch_css_folder <- function(){
   css_folder <- system.file('themes', package = 'knitr')
   return(css_folder)
 }
-
-#' Insert line numbers for code lines
-#'
-#' @author Ramnath Vaidyanathan
-#' @noRd
-insert_line_numbers <- function(tex_file){
-  require(stringr)
-  doc <- readLines(tex_file)
-  code_lines   <- grep("^(\\\\hlstd|\\\\hlfunctioncall)", doc)
-  max_lines    <- length(code_lines)
-  line_numbers <- str_pad(seq_along(code_lines), width = 2, side = "left")
-
-  # line_numbers <- str_c("\\1\\\\hlline\\{", line_numbers, "   \\}\\2")
-  line_numbers <- str_c("\\\\hlline\\{", line_numbers, "   \\}\\1\\2")
-
-  pat <- "^(\\\\hlstd\\{\\}|\\\\hlfunctioncall\\{.*\\})(.*)$"
-  doc[code_lines] <- str_replace(doc[code_lines], pat, line_numbers)
-  writeLines(doc, tex_file)
-  return(path.expand(tex_file))
-}
