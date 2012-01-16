@@ -75,7 +75,7 @@ hook_plot_tex = function(x, options) {
 
           resize2, align2, sep = '')
 }
-.plot.hook.html = function(x, options) {
+hook_plot_html = function(x, options) {
     ## TODO: output size not implemented for HTML yet
     a = options$fig.align
     sprintf('<img src="%s" class="plot" %s/>\n',
@@ -226,7 +226,7 @@ render_html = function() {
     knit_hooks$set(z)
     knit_hooks$set(inline = function(x) {
         sprintf('<code class="knitr inline">%s</code>', .inline.hook(format_sci(x, 'html')))
-    }, plot = .plot.hook.html, chunk = .chunk.hook.html)
+    }, plot = hook_plot_html, chunk = .chunk.hook.html)
 }
 ##' @rdname output_hooks
 ##' @export
@@ -311,7 +311,7 @@ hook_rgl = function(before, options, envir) {
            pdf = rgl.postscript(paste(name, '.pdf', sep = ''), fmt = 'pdf'),
            rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png'))
 
-    if (fmt == 'html') return(.plot.hook.html(c(name, 'png'), options))
+    if (fmt == 'html') return(hook_plot_html(c(name, 'png'), options))
     if (fmt %in% c('markdown', 'gfm', 'jekyll'))
         return(.plot.hook.markdown(c(name, 'png'), options))
 
