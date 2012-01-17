@@ -36,7 +36,7 @@ set_header(...)
   HTML, this component will be different -- instead of
   LaTeX commands, it contains CSS definitions.
 
-  For power uses, all the components can be modified to
+  For power users, all the components can be modified to
   adapt to a customized type of output. For instance, we
   can change \code{highlight} to LaTeX definitions of the
   \pkg{listings} package (and modify the output hooks
