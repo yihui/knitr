@@ -58,7 +58,8 @@ Imports:
 Suggests:
     testthat,
     rgl,
-    tikzDevice (>= 0.6.2)
+    tikzDevice (>= 0.6.2),
+    XML
 License: GPL
 URL: http://yihui.github.com/knitr/
 BugReports: https://github.com/yihui/knitr/issues
@@ -76,5 +77,4 @@ Collate:
     'zzz.R'
     'header.R'
     'themes.R'
-    'ecllipse.R'
-    'highlight.R'
+    'eclipse.R'
