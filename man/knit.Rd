@@ -17,7 +17,8 @@ knit(input, output, tangle = FALSE)
   file (like \code{\link[utils]{Stangle}})}
 }
 \value{
-  The parsed document is written into the output file.
+  The compiled document is written into the output file,
+  and the output filename is returned.
 }
 \description{
   This function takes an input file, extracts the R code in
