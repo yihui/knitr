@@ -231,17 +231,17 @@ fig_path = function(suffix = '', options = opts_current$get()) {
     str_c(valid_prefix(options$fig.path), options$label, suffix)
 }
 
-#' Generate a pdf of a rnw file using knit and texi2dvi
-#'
-#' @author Ramnath Vaidyanathan
-#' @export
-#' @importFrom tools file_path_sans_ext texi2dvi
-knit2pdf <- function(rnw_file){
-  # require(knitr)
-  tex_file_name <- sprintf("%s.tex", file_path_sans_ext(rnw_file))
-  knit(rnw_file)
-  oldwd <- getwd()
-  setwd(dirname(tex_file_name)) 
-  texi2dvi(basename(tex_file_name), pdf = TRUE, clean = TRUE)
-  setwd(oldwd)
+##' Convert Rnw to PDF using knit and texi2pdf
+##'
+##' Knit the input Rnw document to a tex document, and compile it
+##' using \code{texi2pdf}.
+##' @inheritParams knit
+##' @author Ramnath Vaidyanathan and Yihui Xie
+##' @export
+##' @importFrom tools texi2pdf
+##' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}}
+knit2pdf = function(input){
+    out = knit(input)
+    owd = setwd(dirname(input)); on.exit(setwd(owd))
+    texi2pdf(out, clean = TRUE)
 }
