@@ -32,4 +32,10 @@ knit_theme$set(thm)
 \author{
   Ramnath Vaidyanathan and Yihui Xie
 }
+\references{
+  \url{https://github.com/downloads/yihui/knitr/knitr-themes.pdf}
+}
+\seealso{
+  \code{\link{eclipse_theme}} (use Eclipse themes)
+}
 \keyword{datasets}
