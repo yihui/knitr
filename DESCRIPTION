@@ -9,41 +9,32 @@ Authors@R: c(person("Hadley", "Wickham", email = "hadley@rice.edu", role =
     "Xie", email = "xie@yihui.name", role = c("aut", "cre")))
 Author: Yihui Xie
 Maintainer: Yihui Xie <xie@yihui.name>
-Description: This package provides a general-purpose tool
-    for dynamic report generation in R, which can be used
-    to deal with any type of (plain text) files, including
-    Sweave and HTML. The patterns of code chunks and inline
-    R expressions can be customized. R code is evaluated as
-    if it were copied and pasted in an R terminal thanks to
-    the evaluate package (e.g. we do not need to explicitly
-    print() plots from ggplot2 or lattice). R code can be
-    reformatted by the formatR package so that long lines
-    are automatically wrapped, with indent and spaces being
-    added, and comments being preserved. A simple caching
-    mechanism is provided to optionally cache results from
-    computations for the first time and the computations
-    will be skipped the next time. Almost all common
-    graphics devices, including those in base R and add-on
-    packages like Cairo, cairoDevice and tikzDevice, are
-    built-in with this package and it is straightforward to
-    switch between devices without writing any special
-    functions. The width and height as well as alignment of
-    plots in the output document can be specified in chunk
-    options (the size of plots for graphics devices is
-    still supported as usual). Multiple plots can be
-    recorded in a single code chunk, and it is also allowed
-    to rearrange plots to the end of a chunk or just keep
-    the last plot. Warnings, messages and errors are
-    written in the output document by default (can be
-    turned off). Currently LaTeX and HTML are well
-    supported, and other output formats can be supported by
-    hook functions. The large collection of hooks in this
-    package makes it possible for the user to control
-    almost everything in the R code input and output. Hooks
-    can be used either to format the output or to run a
-    specified R code fragment before or after a code chunk.
-    Most features are borrowed or inspired by Sweave,
-    cacheSweave, pgfSweave, brew and decumar.
+Description: This package provides a general-purpose tool for dynamic report
+    generation in R, which can be used to deal with any type of (plain text)
+    files, including Sweave and HTML. The patterns of code chunks and inline R
+    expressions can be customized. R code is evaluated as if it were copied and
+    pasted in an R terminal thanks to the evaluate package (e.g. we do not need
+    to explicitly print() plots from ggplot2 or lattice). R code can be
+    reformatted by the formatR package so that long lines are automatically
+    wrapped, with indent and spaces being added, and comments being preserved.
+    A simple caching mechanism is provided to cache results from computations
+    for the first time and the computations will be skipped the next time.
+    Almost all common graphics devices, including those in base R and add-on
+    packages like Cairo, cairoDevice and tikzDevice, are built-in with this
+    package and it is straightforward to switch between devices without writing
+    any special functions. The width and height as well as alignment of plots
+    in the output document can be specified in chunk options (the size of plots
+    for graphics devices is still supported as usual). Multiple plots can be
+    recorded in a single code chunk, and it is also allowed to rearrange plots
+    to the end of a chunk or just keep the last plot. Warnings, messages and
+    errors are written in the output document by default (can be turned off).
+    Currently LaTeX, HTML and Markdown are supported, and other output formats
+    can be supported by hook functions. The large collection of hooks in this
+    package makes it possible for the user to control almost everything in the
+    R code input and output. Hooks can be used either to format the output or
+    to run a specified R code fragment before or after a code chunk. Most
+    features are borrowed or inspired by Sweave, cacheSweave, pgfSweave, brew
+    and decumar.
 Depends:
     R (>= 2.14.1)
 Imports:
