@@ -1051,6 +1051,11 @@ target "https://github.com/ramnathv"
 \end_inset
 
 .
+ See 
+\family typewriter
+?knit_theme
+\family default
+ for details.
 \end_layout
 
 \begin_layout Subsection

@@ -251,7 +251,7 @@ see \url{http://www.andre-simon.de/dokuwiki/doku.php?id=theme_examples}%
 by providing a theme id to \textbf{knitr}%
 \footnote{many thanks to \href{https://github.com/ramnathv}{Ramnath Vaidyanathan}
 for the work on themes%
-}.
+}. See \texttt{?knit\_theme} for details.
 
 
 \subsection{Graphics}
