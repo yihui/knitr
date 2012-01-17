@@ -4,10 +4,9 @@ Title: A general-purpose package for dynamic report
     generation in R
 Version: 0.0.9
 Date: 2011-11-30
-Authors@R: c(person("Hadley", "Wickham", email =
-    "hadley@rice.edu", role = "ctb"), person("Yihui",
-    "Xie", email = "xie@yihui.name", role = c("aut",
-    "cre")))
+Authors@R: c(person("Hadley", "Wickham", email = "hadley@rice.edu", role =
+    "ctb"), person("Ramnath", "Vaidyanathan", role = "ctb"), person("Yihui",
+    "Xie", email = "xie@yihui.name", role = c("aut", "cre")))
 Author: Yihui Xie
 Maintainer: Yihui Xie <xie@yihui.name>
 Description: This package provides a general-purpose tool
