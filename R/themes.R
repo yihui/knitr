@@ -29,6 +29,8 @@ get_theme = function(theme = NULL) {
 ##' method, it can also be a list returned by the \code{get()}
 ##' method. See examples below.
 ##' @author Ramnath Vaidyanathan and Yihui Xie
+##' @seealso \code{\link{eclipse_theme}} (use Eclipse themes)
+##' @references \url{https://github.com/downloads/yihui/knitr/knitr-themes.pdf}
 ##' @export
 ##' @examples knit_theme$set('edit-vim')
 ##'
