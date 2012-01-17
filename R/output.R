@@ -51,7 +51,8 @@
 ##' function will try to guess
 ##' @param tangle whether to tangle the R code from the input file
 ##' (like \code{\link[utils]{Stangle}})
-##' @return The parsed document is written into the output file.
+##' @return The compiled document is written into the output file, and
+##' the output filename is returned.
 ##' @export
 ##' @references Package homepage: \url{http://yihui.github.com/knitr/}
 ##'
@@ -114,6 +115,7 @@ knit = function(input, output, tangle = FALSE) {
     cat(res, file = output)
     dep_list$restore()  # empty dependency list
     message('output file: ', normalizePath(output))
+    invisible(output)
 }
 
 process_file = function(path, tangle) {
