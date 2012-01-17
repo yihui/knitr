@@ -4,7 +4,13 @@ The R package **knitr** is a general-purpose literate programming engine, with l
 
 ## Installation
 
-This package is not on CRAN yet. Currently you can either check out the repository with GIT and run `R CMD INSTALL`, or use the **devtools** package to install:
+You can install the stable version on CRAN:
+
+```r
+install.packages('knitr', dependencies = TRUE)
+```
+
+Or check out `git://github.com/yihui/knitr.git` with GIT and run `R CMD INSTALL`, or use the **devtools** package to install the development version:
 
 ```r
 ## this package depends on R >= 2.14.1
@@ -14,11 +20,7 @@ This package is not on CRAN yet. Currently you can either check out the reposito
 library(devtools); install_github('knitr', 'yihui')
 ```
 
-Note Windows users have to first install [Rtools](http://www.murdoch-sutherland.com/Rtools/). After the package is released (hopefully in the very near future), you will be able to use the normal approach to install it:
-
-```r
-install.packages('knitr')
-```
+Note Windows users have to first install [Rtools](http://www.murdoch-sutherland.com/Rtools/).
 
 ## Motivation
 
