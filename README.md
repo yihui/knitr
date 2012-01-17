@@ -47,9 +47,7 @@ library(knitr)
 knit(input)
 ```
 
-If options are not explicitly specified, **knitr** will try to guess reasonable default settings.
-
-As I'm still working on more features, please feel free to give me feedback on this package or share your experience of literate programming with R at the [issues page](https://github.com/yihui/knitr/issues).
+If options are not explicitly specified, **knitr** will try to guess reasonable default settings. A few manuals are available such as the [main manual](https://github.com/downloads/yihui/knitr/knitr-manual.pdf), the [graphics manual](https://github.com/downloads/yihui/knitr/knitr-graphics.pdf), and the [themes manual](https://github.com/downloads/yihui/knitr/knitr-themes.pdf).
 
 ## FAQ
 
