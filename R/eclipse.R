@@ -51,6 +51,6 @@ xml_to_css = function(xml_file){
     assign('.doccolors', doccolors, envir = globalenv())
     knit(template, css_file)
     rm(list = '.doccolors', envir = globalenv())
-    message('Theme', style, 'saved to', css_file)
+    message('Theme ', style, ' saved to ', css_file)
     css_file
 }
