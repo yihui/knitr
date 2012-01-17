@@ -162,13 +162,13 @@ pre {
 ::selection {
   background: black;
   text-shadow: none;
-  color: #CD0021f;
+  color: #CD0021;
 }
 
 ::-moz-selection {
   background: black;
   text-shadow: none;
-  color: #CD0021f;
+  color: #CD0021;
 }
 table {
 color: black;
