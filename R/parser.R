@@ -49,9 +49,11 @@ parse_block = function(input) {
     params = parse_params(params)
 
     label = params$label
-    if (label %in% names(knit_code$get())) message("duplicated label '", label, "'")
     code = block[-1L]
-    if (length(code)) knit_code$set(structure(list(code), .Names = label))
+    if (length(code)) {
+        if (label %in% names(knit_code$get())) warning("duplicated label '", label, "'")
+        knit_code$set(structure(list(code), .Names = label))
+    }
 
     ## store dependencies
     if (!is.null(deps <- params$dependson)) {
