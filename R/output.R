@@ -87,6 +87,7 @@ knit = function(input, output, tangle = FALSE) {
 
     owd = setwd(dirname(input)); on.exit(setwd(owd), add = TRUE)
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
+    optc = opts_chunk$get(); on.exit(opts_knit$set(optc), add = TRUE)
     opts_knit$set(input.dir = getwd())  # record current working dir
     ohooks = knit_hooks$get(); on.exit(knit_hooks$set(ohooks), add = TRUE)
     if (is.null(optk$out.format)) {
