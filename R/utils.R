@@ -19,12 +19,14 @@ knit_counter = function(init = 0L) {
 plot_counter = knit_counter(1L)
 chunk_counter = knit_counter(1L)
 
+line_prompt = evaluate:::line_prompt
+
 ## add a prefix to output
 comment_out = function(x, options) {
     prefix = options$comment
     if (!is.null(prefix) && nzchar(prefix) && !is.na(prefix)) {
         prefix = str_c(prefix, ' ')
-        evaluate:::line_prompt(x, prompt = prefix, continue = prefix)
+        line_prompt(x, prompt = prefix, continue = prefix)
     } else x
 }
 

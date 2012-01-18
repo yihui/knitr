@@ -247,7 +247,7 @@ render_html = function() {
 render_markdown = function() {
     knit_hooks$restore()
     ## four spaces lead to <pre></pre>
-    hook.t = function(x, options) evaluate:::line_prompt(x, '    ', '    ')
+    hook.t = function(x, options) line_prompt(x, '    ', '    ')
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
     knit_hooks$set(source = hook.t, output = hook.o, warning = hook.t,
                    error = hook.t, message = hook.t,

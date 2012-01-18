@@ -186,7 +186,7 @@ wrap.source = function(x, options) {
     if (options$highlight) {
         fmt = opts_knit$get('out.format')
         src = hilight_source(str_c(src, collapse = ''), fmt, options)
-    } else if (options$prompt) src = sapply(src, evaluate:::line_prompt, USE.NAMES = FALSE)
+    } else if (options$prompt) src = sapply(src, line_prompt, USE.NAMES = FALSE)
     src = str_c(src, collapse = '')
     src = str_replace(src, '([^\n]+)$', '\\1\n')
     knit_hooks$get('source')(src, options)
