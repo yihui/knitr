@@ -52,7 +52,8 @@
 ##' @param tangle whether to tangle the R code from the input file
 ##' (like \code{\link[utils]{Stangle}})
 ##' @return The compiled document is written into the output file, and
-##' the output filename is returned.
+##' the path of the output file is returned (depending on the path of
+##' input, this path can be absolute or relative).
 ##' @export
 ##' @references Package homepage: \url{http://yihui.github.com/knitr/}
 ##'
@@ -115,7 +116,7 @@ knit = function(input, output, tangle = FALSE) {
     cat(res, file = output)
     dep_list$restore()  # empty dependency list
     message('output file: ', normalizePath(output))
-    invisible(output)
+    invisible(file.path(dirname(input), output))
 }
 
 process_file = function(path, tangle) {
