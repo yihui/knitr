@@ -242,6 +242,6 @@ fig_path = function(suffix = '', options = opts_current$get()) {
 ##' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}}
 knit2pdf = function(input){
     out = knit(input)
-    owd = setwd(dirname(input)); on.exit(setwd(owd))
-    texi2pdf(out, clean = TRUE)
+    owd = setwd(dirname(out)); on.exit(setwd(owd))
+    texi2pdf(basename(out), clean = TRUE)
 }
