@@ -206,7 +206,8 @@ render_latex = function() {
                    inline = function(x) {
                        if (is.numeric(x))
                            return(.inline.hook(format_sci(x, 'latex')))
-                       sprintf('\\texttt{%s}', .inline.hook(x))
+                       hx = .inline.hook(x)
+                       if (inherits(x, 'AsIs')) hx else sprintf('\\texttt{%s}', hx)
                    }, plot = hook_plot_tex,
                    chunk = .chunk.hook.tex)
 }
