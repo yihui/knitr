@@ -45,10 +45,10 @@
 ##' about \pkg{knitr}, including the full documentation of chunk
 ##' options and demos, etc.
 ##' @param input path of the input file
-##' @param output path of output file (note the working directory will
-##' be set to the directory of the input file, so this argument is
-##' usually a filename without a directory name); if not set, this
-##' function will try to guess
+##' @param output base filename of output file (note the working
+##' directory will be set to the directory of the input file, and this
+##' argument should be a filename without a directory name); if not
+##' set, this function will try to guess
 ##' @param tangle whether to tangle the R code from the input file
 ##' (like \code{\link[utils]{Stangle}})
 ##' @return The compiled document is written into the output file, and
