@@ -7,18 +7,20 @@ knit(input, output, tangle = FALSE)
 \arguments{
   \item{input}{path of the input file}
 
-  \item{output}{path of output file (note the working
-  directory will be set to the directory of the input file,
-  so this argument is usually a filename without a
-  directory name); if not set, this function will try to
-  guess}
+  \item{output}{base filename of output file (note the
+  working directory will be set to the directory of the
+  input file, and this argument should be a filename
+  without a directory name); if not set, this function will
+  try to guess}
 
   \item{tangle}{whether to tangle the R code from the input
   file (like \code{\link[utils]{Stangle}})}
 }
 \value{
   The compiled document is written into the output file,
-  and the output filename is returned.
+  and the path of the output file is returned (depending on
+  the path of input, this path can be absolute or
+  relative).
 }
 \description{
   This function takes an input file, extracts the R code in
