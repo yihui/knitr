@@ -177,6 +177,7 @@ auto_out_name = function(input, tangle = FALSE) {
 ##' @return A character string of the form
 ##' \samp{\command{child-doc.tex}}, of which the class is \samp{AsIs},
 ##' so the inline hook will not wrap it in \command{texttt}.
+##' @references \url{http://yihui.github.com/knitr/demo/child/}
 ##' @export
 ##' @examples ## you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input child-doc.tex in main.tex
 knit_child = function(..., command = 'input') {
