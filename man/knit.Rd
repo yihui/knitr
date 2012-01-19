@@ -1,8 +1,11 @@
 \name{knit}
 \alias{knit}
+\alias{purl}
 \title{Knit a document}
 \usage{
 knit(input, output, tangle = FALSE)
+
+purl(...)
 }
 \arguments{
   \item{input}{path of the input file}
@@ -15,6 +18,8 @@ knit(input, output, tangle = FALSE)
 
   \item{tangle}{whether to tangle the R code from the input
   file (like \code{\link[utils]{Stangle}})}
+
+  \item{...}{arguments passed to \code{\link{knit}}}
 }
 \value{
   The compiled document is written into the output file,
@@ -26,7 +31,8 @@ knit(input, output, tangle = FALSE)
   This function takes an input file, extracts the R code in
   it according to a list of patterns, evaluates the code
   and writes the output in another file. It can also tangle
-  R source code from the input document.
+  R source code from the input document (\code{purl()} is a
+  wrapper to \code{knit(..., tangle = TRUE)}).
 }
 \details{
   For most of the time, it is not necessary to set any
@@ -72,6 +78,12 @@ knit(input, output, tangle = FALSE)
   know more about \pkg{knitr}, including the full
   documentation of chunk options and demos, etc.
 }
+\note{
+  The name \code{knit} comes from its counterpart
+  \samp{weave} (as in Sweave), and the name \code{purl} (as
+  \samp{tangle} in Stangle) comes from a knitting method
+  `knit one, purl one'.
+}
 \examples{
 library(knitr)
 (f = tempfile(fileext = ".Rnw"))
@@ -79,7 +91,7 @@ file.copy(system.file("examples", "knitr-minimal.Rnw",
     package = "knitr"), f, overwrite = TRUE)
 knit(f)
 
-knit(f, tangle = TRUE)  # extract R code only
+purl(f)  # extract R code only
 }
 \references{
   Package homepage: \url{http://yihui.github.com/knitr/}

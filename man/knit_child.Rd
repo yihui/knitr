@@ -28,3 +28,6 @@ knit_child(..., command = "input")
 #   an Rnw file 'main.Rnw' to input child-doc.tex in
 #   main.tex
 }
+\references{
+  \url{http://yihui.github.com/knitr/demo/child/}
+}
