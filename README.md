@@ -4,13 +4,13 @@ The R package **knitr** is a general-purpose literate programming engine, with l
 
 ## Installation
 
-You can install the stable version on CRAN:
+You can install the stable version on [CRAN](http://cran.r-project.org/package=knitr):
 
 ```r
 install.packages('knitr', dependencies = TRUE)
 ```
 
-Or check out `git://github.com/yihui/knitr.git` with GIT and run `R CMD INSTALL`, or use the **devtools** package to install the development version:
+Or download the [zip ball](https://github.com/yihui/knitr/zipball/master) or [tar ball](https://github.com/yihui/knitr/tarball/master), decompress and run `R CMD INSTALL` on it, or use the **devtools** package to install the development version:
 
 ```r
 ## this package depends on R >= 2.14.1
