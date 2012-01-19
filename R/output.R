@@ -118,6 +118,12 @@ knit = function(input, output, tangle = FALSE) {
     message('output file: ', normalizePath(output))
     invisible(file.path(dirname(input), output))
 }
+##' @rdname knit
+##' @param ... arguments passed to \code{\link{knit}}
+##' @export
+purl = function(...) {
+    knit(..., tangle = TRUE)
+}
 
 process_file = function(path, tangle) {
     knit_code$restore()  # clear code list
