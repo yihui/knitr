@@ -3,7 +3,8 @@
 ##' This function takes an input file, extracts the R code in it
 ##' according to a list of patterns, evaluates the code and writes the
 ##' output in another file. It can also tangle R source code from the
-##' input document.
+##' input document (\code{purl()} is a wrapper to \code{knit(...,
+##' tangle = TRUE)}).
 ##'
 ##' For most of the time, it is not necessary to set any options
 ##' outside the input document; in other words, a single call like
@@ -54,6 +55,9 @@
 ##' @return The compiled document is written into the output file, and
 ##' the path of the output file is returned (depending on the path of
 ##' input, this path can be absolute or relative).
+##' @note The name \code{knit} comes from its counterpart \samp{weave}
+##' (as in Sweave), and the name \code{purl} (as \samp{tangle} in
+##' Stangle) comes from a knitting method `knit one, purl one'.
 ##' @export
 ##' @references Package homepage: \url{http://yihui.github.com/knitr/}
 ##'
@@ -68,7 +72,7 @@
 ##'   f, overwrite = TRUE)
 ##' knit(f)
 ##'
-##' knit(f, tangle = TRUE)  # extract R code only
+##' purl(f)  # extract R code only
 knit = function(input, output, tangle = FALSE) {
 
     if (missing(output)) output = basename(auto_out_name(input, tangle))
