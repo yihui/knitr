@@ -35,7 +35,7 @@ new_defaults = function(value = list()) {
 opts_chunk =
     new_defaults(list(eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
                       cache = FALSE, dependson = NULL, cache.path = 'cache/',
-                      ref.label = NULL,
+                      ref.label = NULL, child = NULL,
                       prompt = FALSE, comment = '##',
                       fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
                       fig.path = '', fig.ext = NULL, dev = 'pdf', dpi = 72,

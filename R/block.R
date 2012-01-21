@@ -18,6 +18,11 @@ call_block = function(block) {
     params$echo = eval_opt(params$echo)
     params$eval = eval_opt(params$eval)
 
+    if (params$eval && !is.null(params$child)) {
+        cmds = lapply(sc_split(params$child), knit_child)
+        return(str_c(unlist(cmds), collapse = '\n'))
+    }
+
     if ((!params$eval && !params$echo) || length(params$code) == 0 ||
         all(is_blank(params$code)))
         return('') # a trivial chunk; do nothing
