@@ -254,7 +254,19 @@ https://github.com/downloads/yihui/knitr/knitr-minimal.pdf
 
 \end_inset
 
+.
+ The Rnw source of this document is at 
+\begin_inset Flex URL
+status collapsed
 
+\begin_layout Plain Layout
+
+https://github.com/yihui/knitr/blob/master/inst/examples/knitr-minimal.Rnw
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \end_body

@@ -30,7 +30,10 @@ get_theme = function(theme = NULL) {
 ##' method. See examples below.
 ##' @author Ramnath Vaidyanathan and Yihui Xie
 ##' @seealso \code{\link{eclipse_theme}} (use Eclipse themes)
-##' @references \url{https://github.com/downloads/yihui/knitr/knitr-themes.pdf}
+##' @references
+##' \url{https://github.com/downloads/yihui/knitr/knitr-themes.pdf}
+##' (its Rnw source is at
+##' \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw})
 ##' @export
 ##' @examples knit_theme$set('edit-vim')
 ##'

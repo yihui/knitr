@@ -60,6 +60,7 @@ hist(x,main='')
 @
 
 Do the above chunks work? You should be able to compile the \TeX{}
-document and get a PDF file like this one: \url{https://github.com/downloads/yihui/knitr/knitr-minimal.pdf}
+document and get a PDF file like this one: \url{https://github.com/downloads/yihui/knitr/knitr-minimal.pdf}.
+The Rnw source of this document is at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-minimal.Rnw}.
 
 \end{document}

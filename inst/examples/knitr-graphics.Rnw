@@ -46,7 +46,7 @@ control of plot sizes, the tikz device, animations and other types
 of plots such as \textbf{rgl} or GGobi plots.
 \end{abstract}
 Before reading this specific manual%
-\footnote{\url{https://github.com/downloads/yihui/knitr/knitr-graphics.pdf}%
+\footnote{source code at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-graphics.Rnw}%
 }, you must have finished the main manual%
 \footnote{\url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}%
 }.

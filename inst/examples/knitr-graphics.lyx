@@ -163,12 +163,13 @@ Before reading this specific manual
 status open
 
 \begin_layout Plain Layout
+source code at 
 \begin_inset Flex URL
 status collapsed
 
 \begin_layout Plain Layout
 
-https://github.com/downloads/yihui/knitr/knitr-graphics.pdf
+https://github.com/yihui/knitr/blob/master/inst/examples/knitr-graphics.Rnw
 \end_layout
 
 \end_inset

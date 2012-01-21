@@ -41,10 +41,11 @@ knit_theme$set(thm)
 
 \maketitle
 \begin{abstract}
-This manual shows how to customize syntax highlighting of source code
-using themes. It walks the user through the basics of syntax highlighting
-in \textbf{knitr}, the use of built-in themes as well as those from
-\url{http://www.eclipsecolorthemes.org/}.
+This manual%
+\footnote{source code at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw}%
+} shows how to customize syntax highlighting of source code using themes.
+It walks the user through the basics of syntax highlighting in \textbf{knitr},
+the use of built-in themes as well as those from \url{http://www.eclipsecolorthemes.org/}.
 \end{abstract}
 The \textbf{knitr} package uses the \textbf{highlight} package by
 Romain Francois to highlight source code in a document. In short,

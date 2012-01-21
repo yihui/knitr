@@ -34,6 +34,8 @@ knit_theme$set(thm)
 }
 \references{
   \url{https://github.com/downloads/yihui/knitr/knitr-themes.pdf}
+  (its Rnw source is at
+  \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw})
 }
 \seealso{
   \code{\link{eclipse_theme}} (use Eclipse themes)

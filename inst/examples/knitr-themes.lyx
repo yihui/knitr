@@ -160,8 +160,28 @@ Yihui Xie & Ramnath Vaidyanathan
 \end_layout
 
 \begin_layout Abstract
-This manual shows how to customize syntax highlighting of source code using
- themes.
+This manual
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+source code at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ shows how to customize syntax highlighting of source code using themes.
  It walks the user through the basics of syntax highlighting in 
 \series bold
 knitr
