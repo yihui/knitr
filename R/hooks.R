@@ -112,7 +112,7 @@ hook_plot_md = function(x, options) {
               '\\begin{kframe}\n', x, '\\end{kframe}}')
     x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
     if (options$split) {
-        name = str_c(options$fig.path, options$label, '.tex')
+        name = fig_path('.tex', options)
         if (!file.exists(dirname(name)))
             dir.create(dirname(name))
         cat(x, file = name)
