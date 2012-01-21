@@ -97,7 +97,7 @@ all_patterns =
 ##' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
 opts_knit =
     new_defaults(list(progress = TRUE, verbose = FALSE,
-                      out.format = NULL,
+                      out.format = NULL, child.command = 'input',
                       base.dir = NULL, base.url = NULL,
 
                       all.patterns = all_patterns,
