@@ -177,17 +177,24 @@ auto_out_name = function(input, tangle = FALSE) {
 ##' returns the command to input the result into the main document. It
 ##' is designed to be used in the inline R code and serves as the
 ##' alternative to the \command{SweaveInput} command in Sweave.
+##'
+##' The LaTeX command used to input the child document (usually
+##' \samp{input} or \samp{include}) is from the package option
+##' \code{child.command} (\code{opts_knit$get('child.command')}).
 ##' @param ... arguments passed to \code{\link{knit}}
-##' @param command the LaTeX command to use (usually \samp{input} or
-##' \samp{include})
+##' @param eval logical: whether to evaluate the child document
 ##' @return A character string of the form
 ##' \samp{\command{child-doc.tex}}, of which the class is \samp{AsIs},
 ##' so the inline hook will not wrap it in \command{texttt}.
 ##' @references \url{http://yihui.github.com/knitr/demo/child/}
 ##' @export
 ##' @examples ## you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input child-doc.tex in main.tex
-knit_child = function(..., command = 'input') {
-    I(str_c('\\', command, '{', knit(...), '}'))
+##'
+##' ## comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', FALSE)}
+##'
+##' ## use \include: opts_knit$set(child.command = 'include')
+knit_child = function(..., eval = TRUE) {
+    I(if (eval) str_c('\\', opts_knit$get('child.command'), '{', knit(...), '}') else '')
 }
 
 ##' Wrap evaluated results for output
