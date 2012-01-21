@@ -12,6 +12,10 @@ the file \textsf{knitr-input-child.Rnw}:
 
 \Sexpr{knit_child('knitr-input-child.Rnw')}
 
+% Or alternatively, use a chunk:
+% <<child-doc, child=knitr-input-child.Rnw>>=
+% @
+
 Done!
 
 \end{document}
