@@ -106,6 +106,10 @@ There are two hidden options which are not designed to be set by the users: `fig
 
 - `ref.label`: (`NULL`) labels of the chunks from which R code is borrowed; multiple labels should be separated by `;` (see the demo for [chunk reference](/knitr/demo/reference/))
 
+### Child Documents
+
+- `child`: (`NULL`) filenames of child documents to be run and input into the main document (should be separated by `;` if there are multiple child documents)
+
 ## Package Options <a id="package_options"></a>
 
 The package options can be changed using the object [`opts_knit`](objects); for example,
@@ -119,6 +123,7 @@ All package options are:
 - `progress`: (`TRUE`) whether to display a progress bar when running **knitr**
 - `verbose`: (`FALSE`) whether to show verbose information (e.g., R code in each chunk) or just show chunk labels and options
 - `out.format`: (`NULL`) possible values are `latex`, `sweave`, `html`, `markdown`, `gfm` and `jekyll`; it will be automatically determined based on the input file, and this option will affect which set of hooks to use (see `?render_latex` for example)
+- `child.command`: (`'input'`) the LaTeX command to be used to insert child documents into the main document (usually `input` or `include`)
 - `all.patterns`: a list of built-in patterns
 - `header`: the text to be inserted into the output document before the document begins (e.g. after `\documentclass{article}` in LaTeX, or `<head>` in HTML); this is useful for defining commands and styles in the LaTeX preamble or HTML header; the beginning of document is found using the pattern defined in `knit_patternss$get('document.begin')`
 - `base.dir`: (`NULL`) an absolute directory under which the plots are generated
