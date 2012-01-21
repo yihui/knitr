@@ -173,11 +173,13 @@ inline_exec = function(block) {
 
     loc = block$location
     for (i in 1:n) {
-        res = eval(parse(text = code[i]), envir = globalenv())
+        res = try(eval(parse(text = code[i]), envir = globalenv()))
         d = nchar(input)
         ## replace with evaluated results
         str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
-            knit_hooks$get('inline')(res)
+            if (inherits(res, 'try-error')) {
+                knit_hooks$get('error')(str_c('\n', res, '\n'), opts_chunk$get())
+            } else knit_hooks$get('inline')(res)
         } else ''
         if (i < n) loc[(i + 1):n, ] = loc[(i + 1):n, ] - (d - nchar(input))
         ## may need to move back and forth because replacement may be longer or shorter
