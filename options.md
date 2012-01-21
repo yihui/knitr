@@ -36,7 +36,7 @@ All available options in **knitr** are:
 - `warning`: (`TRUE`) whether to show warnings (produced by `warning()`) in the output like we run R code in a terminal
 - `error`: (`TRUE`) whether to show errors (from `stop()`) (by default, the evaluation will not stop even in case of errors!!)
 - `message`: (`TRUE`) whether to show messages emitted by `message()`
-- `split`: (`FALSE`) whether to split the output from R into separate files and include them into LaTeX by `\input{}` (for LaTeX only)
+- `split`: (`FALSE`) whether to split the output from R into separate files and include them into LaTeX by `\input{}` or HTML by `<iframe></iframe>`
 - `include`: (`TRUE`) whether to include the chunk output in the final output document; if `include=FALSE`, nothing will be written into the output document, but the code is still evaluated and plot files are generated if there are any plots in the chunk, so you can manually insert figures; note this is the only chunk option that is not cached, i.e., changing it will not invalidate the cache
 
 ### Code Decoration
