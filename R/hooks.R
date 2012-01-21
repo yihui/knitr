@@ -120,8 +120,15 @@ hook_plot_md = function(x, options) {
     } else x
 }
 .chunk.hook.html = function(x, options) {
-    if (is_blank(x)) return(x)
-    sprintf('<pre class="knitr">%s</pre>', x)
+    if (output_asis(x, options)) return(x)
+    x = sprintf('<pre class="knitr">%s</pre>', x)
+    if (options$split) {
+        name = fig_path('.html', options)
+        if (!file.exists(dirname(name)))
+            dir.create(dirname(name))
+        cat(x, file = name)
+        sprintf('<iframe src="%s" class="knitr" width="100%%"></iframe>', name)
+    } else x
 }
 
 ## format a single inline object
