@@ -81,7 +81,7 @@ Output hooks are used to customize and polish the *raw* output from chunks. Ther
 - `output`: ordinary R output (i.e., what would have been printed in an R terminal) except warnings, messages and errors
 - `warning`: warnings from `warning()`
 - `message`: messages from `message()`
-- `error`: errors from `stop()`
+- `error`: errors from `stop()` (applies to errors in both code chunks and inline R code)
 - `plot`: graphics output
 - `inline`: output of inline R code
 - `chunk`: all the output of a chunk (i.e., those produced by the previous hooks)
