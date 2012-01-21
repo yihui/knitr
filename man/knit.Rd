@@ -3,7 +3,7 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output, tangle = FALSE)
+knit(input, output, tangle = FALSE, text = NULL)
 
 purl(...)
 }
@@ -18,6 +18,11 @@ purl(...)
 
   \item{tangle}{whether to tangle the R code from the input
   file (like \code{\link[utils]{Stangle}})}
+
+  \item{text}{a character vector as an alternative way to
+  provide the input file (\code{text} is written into a
+  temporary file as \code{input}); this argument is mainly
+  for test purposes only}
 
   \item{...}{arguments passed to \code{\link{knit}}}
 }
