@@ -52,6 +52,9 @@
 ##' set, this function will try to guess
 ##' @param tangle whether to tangle the R code from the input file
 ##' (like \code{\link[utils]{Stangle}})
+##' @param text a character vector as an alternative way to provide
+##' the input file (\code{text} is written into a temporary file as
+##' \code{input}); this argument is mainly for test purposes only
 ##' @return The compiled document is written into the output file, and
 ##' the path of the output file is returned (depending on the path of
 ##' input, this path can be absolute or relative).
@@ -73,8 +76,10 @@
 ##' knit(f)
 ##'
 ##' purl(f)  # extract R code only
-knit = function(input, output, tangle = FALSE) {
-
+knit = function(input, output, tangle = FALSE, text = NULL) {
+    if (is.character(text)) {
+        input = tempfile(); writeLines(text, con = input)
+    }
     if (missing(output)) output = basename(auto_out_name(input, tangle))
 
     ext = tolower(file_ext(input))
