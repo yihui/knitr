@@ -134,6 +134,11 @@ is_abs_path = function(x) {
         grepl(':', x, fixed = TRUE) || grepl('^\\\\', x) else grepl('^[/~]', x)
 }
 
+## is tikz device without externalization?
+is_tikz_dev = function(options) {
+    options$dev == 'tikz' && !options$external
+}
+
 ## compatibility with Sweave and old beta versions of knitr
 fix_options = function(options) {
     ## compatibility with Sweave
