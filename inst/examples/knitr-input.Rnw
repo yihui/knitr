@@ -10,11 +10,9 @@ summary(iris)
 Let's see how to work with child documents in knitr. Below we input
 the file \textsf{knitr-input-child.Rnw}:
 
-\Sexpr{knit_child('knitr-input-child.Rnw')}
-
-% Or alternatively, use a chunk:
-% <<child-doc, child=knitr-input-child.Rnw>>=
-% @
+<<child-demo, child=knitr-input-child.Rnw>>=
+@
+% Or alternatively, use knit_child('knitr-input-child.Rnw') in \Sexpr
 
 Done!
 
