@@ -69,7 +69,7 @@ color_def = function(col, variable = 'shadecolor') {
 
 ## split by semicolon
 sc_split = function(string) {
-    str_split(string, fixed(';'))[[1]]
+    str_trim(str_split(string, fixed(';'))[[1]])
 }
 
 ## extract LaTeX packages for tikzDevice
