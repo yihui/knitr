@@ -42,7 +42,7 @@ opts_chunk =
                       fig.width = 7, fig.height = 7,
                       out.width = NULL, out.height = NULL,
                       resize.width = NULL, resize.height = NULL,
-                      external = FALSE, sanitize = FALSE,
+                      external = TRUE, sanitize = FALSE,
                       highlight = TRUE, size = 'normalsize',
                       warning = TRUE, error = TRUE, message = TRUE,
                       background = '.97;.97;.97', split = FALSE, include = TRUE,
