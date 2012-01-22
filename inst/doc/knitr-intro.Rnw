@@ -1,0 +1,50 @@
+%% LyX 2.1.0svn created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass{article}
+\usepackage{mathpazo}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage{url}
+\usepackage[authoryear]{natbib}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+% \VignetteIndexEntry{An Introduction to knitr}
+
+\makeatother
+
+\begin{document}
+
+
+\title{An Introduction to knitr}
+
+
+\author{Yihui Xie}
+
+\maketitle
+The \textbf{knitr} package \citep{knitr-manual} is an alternative
+tool to Sweave based on a different design with more features. This
+document is not the real vignette, but only serves as a placeholder
+to guide you to the real manuals of this package. You can find them
+in the package website: \url{http://yihui.github.com/knitr}, and
+remember to read the help pages of functions in this package.
+
+Anyway, here is a code chunk that shows you can compile vignettes
+with \textbf{knitr} as well by using a proper \textsf{Makefile} (see
+\url{http://yihui.github.com/knitr/demo/vignette/}):
+
+<<show-off>>=
+rnorm(5)
+df=data.frame(y=rnorm(100), x=1:100)
+summary(lm(y~x, data=df))
+@
+
+\bibliographystyle{jss}
+\bibliography{knitr-intro}
+
+
+\end{document}
