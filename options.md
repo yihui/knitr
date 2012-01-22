@@ -74,8 +74,8 @@ All available options in **knitr** are:
 - `out.width`, `out.height`: (`NULL`) width and height of the plot in the final output file (can be different with its real `fig.width` and `fig.height`, i.e. plots can be scaled in the output document)
 - `resize.width`, `resize.height`: (`NULL`) the width and height to be used in `\resizebox{}{}` in LaTeX; these two options are not needed unless you want to resize tikz graphics because there is no natural way to do it; however, according to **tikzDevice** authors, tikz graphics is not meant to be resized to maintain consistency in style with other texts in LaTeX; if only one of them is `NULL`, `!` will be used (read the documentation of **graphicx** if you do not understand this)
 - `fig.align`: (`default`) alignment of figures in the output document (possible values are `left`, `right` and `center`; default is not to make any alignment adjustments)
-- `external`: (`FALSE`) whether to externalize tikz graphics (pre-compile tikz graphics to PDF); it is only used for the `tikz()` device in the **tikzDevice** package (i.e., when `dev=tikz`)
-- `sanitize`: whether to sanitize tikz graphics (escape special LaTeX characters); see documentation in the **tikzDevice** package
+- `external`: (`TRUE`) whether to externalize tikz graphics (pre-compile tikz graphics to PDF); it is only used for the `tikz()` device in the **tikzDevice** package (i.e., when `dev=tikz`) and it can save time for LaTeX compilation
+- `sanitize`: (`FALSE`) whether to sanitize tikz graphics (escape special LaTeX characters); see documentation in the **tikzDevice** package
 
 Note any number of plots can be recorded in a single code chunk, and this package does not need to know how many plots are in a chunk in advance -- it can figure out automatically, and name these images as `prefix-string-label-i` where `i` is incremental from 1; if a code chunk does not actually produce any plots, **knitr** will not record anything either (the graphics device is open *only when plots are really produced*); in other words, it does not matter if `fig.keep=high` but no plots were produced.
 
