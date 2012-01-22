@@ -27,7 +27,7 @@ call_block = function(block) {
         all(is_blank(params$code)))
         return('') # a trivial chunk; do nothing
 
-    if (params$dev == 'tikz') set_header(tikz = '\\usepackage{tikz}')
+    if (is_tikz_dev(params)) set_header(tikz = '\\usepackage{tikz}')
 
     owd = setwd(input_dir()); on.exit(setwd(owd))
 

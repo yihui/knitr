@@ -46,7 +46,7 @@ hook_plot_tex = function(x, options) {
         resize2 = '} '
     }
 
-    tikz = options$dev == 'tikz' && !options$external
+    tikz = is_tikz_dev(options)
 
     a = options$fig.align; fig.cur = options$fig.cur; fig.num = options$fig.num
     if (is.null(fig.cur)) fig.cur = 0L
@@ -108,7 +108,7 @@ hook_plot_md = function(x, options) {
     if (output_asis(x, options)) return(x)
     x =
         str_c(color_def(options$background), '{',
-              ifelse(options$external, '\\color{fgcolor}', ''),
+              ifelse(is_tikz_dev(options), '', '\\color{fgcolor}'),
               '\\begin{kframe}\n', x, '\\end{kframe}}')
     x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
     if (options$split) {
