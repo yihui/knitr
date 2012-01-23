@@ -101,7 +101,7 @@ hook_plot_html = function(x, options) {
 hook_plot_md = function(x, options) {
     base = opts_knit$get('base.url')
     if (is.null(base)) base = ''
-    sprintf('![plot of chunk %s](%s%s.%s)', options$label,
+    sprintf('![plot of chunk %s](%s%s.%s) ', options$label,
             base, x[1], x[2])
 }
 .chunk.hook.tex = function(x, options) {
@@ -258,7 +258,7 @@ render_html = function() {
 render_markdown = function() {
     knit_hooks$restore()
     ## four spaces lead to <pre></pre>
-    hook.t = function(x, options) line_prompt(x, '    ', '    ')
+    hook.t = function(x, options) str_c('\n\n', line_prompt(x, '    ', '    '), '\n')
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
     knit_hooks$set(source = hook.t, output = hook.o, warning = hook.t,
                    error = hook.t, message = hook.t,
@@ -270,8 +270,8 @@ render_markdown = function() {
 render_gfm = function() {
     ## gfm and jekyll are derived from markdown
     render_markdown()
-    hook.r = function(x, options) str_c('```r\n', x, '```\n')
-    hook.t = function(x, options) str_c('```\n', x, '```\n')
+    hook.r = function(x, options) str_c('\n\n```r\n', x, '```\n\n')
+    hook.t = function(x, options) str_c('\n\n```\n', x, '```\n\n')
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
     knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
                    error = hook.t, message = hook.t)
@@ -280,8 +280,8 @@ render_gfm = function() {
 ##' @export
 render_jekyll = function() {
     render_markdown()
-    hook.r = function(x, options) str_c('{% highlight r %}\n', x, '{% endhighlight %}\n')
-    hook.t = function(x, options) str_c('{% highlight text %}\n', x, '{% endhighlight %}\n')
+    hook.r = function(x, options) str_c('\n\n{% highlight r %}\n', x, '{% endhighlight %}\n\n')
+    hook.t = function(x, options) str_c('\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n')
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
     knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
                    error = hook.t, message = hook.t)
