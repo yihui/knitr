@@ -133,13 +133,25 @@ parse_inline = function(input) {
         text.line = text.line[text.line[, 1] <= text.line[, 2], , drop = FALSE]
         input = str_c(str_sub(input, text.line[, 1], text.line[, 2]), collapse = '')
     }
-    inline.code = knit_patterns$get('inline.code')
-    loc = locate_inline(input, inline.code)
-    code = str_match(str_sub(input, loc[, 1], loc[, 2]), inline.code)
-    if (NCOL(code) == 2L) code = code[, 2] else code = character(0)
+    res1 = extract_inline(input, 'inline.code', locate_inline)
+    res2 = extract_inline(input, 'input.doc', locate_inline)
+    if (length(res2$code)) {
+        res2$code = sprintf("knit_child('%s')", res2$code)  # input chide with knit_child()
+    }
 
-    structure(list(input = input, location = loc, params = params, code = code),
+    structure(list(input = input, location = rbind(res1$location, res2$location),
+                   params = params, code = c(res1$code, res2$code)),
               class = 'inline')
+}
+
+## locate and extract inline R code
+extract_inline = function(input, pat.name, locate.fun) {
+    pattern = knit_patterns$get(pat.name)
+    loc = locate.fun(input, pattern)
+    code = character(0)
+    if (nrow(loc)) code = str_match(str_sub(input, loc[, 1L], loc[, 2L]), pattern)
+    code = if (NCOL(code) == 2L) code[, 2L] else character(0)
+    list(location = loc, code = code)
 }
 
 print.inline = function(x, ...) {
