@@ -9,7 +9,9 @@
 ##' @name knitr-package
 ##' @aliases knitr
 ##' @author Yihui Xie <\url{http://yihui.name}>
-##' @references \url{http://yihui.github.com/knitr/}
+##' @references Full documentation and demos:
+##' \url{http://yihui.github.com/knitr/}; FAQ's:
+##' \url{https://github.com/yihui/knitr/blob/master/FAQ.md}
 ##' @importFrom evaluate evaluate is.recordedplot is.source is.warning is.error is.message
 ##' @importFrom formatR tidy.source
 ##' @importFrom digest digest
