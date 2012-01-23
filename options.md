@@ -41,7 +41,7 @@ All available options in **knitr** are:
 
 ### Code Decoration
 
-- `tidy`: (`TRUE`) whether R code should be tidied up using the function `tidy.source()` in the **formatR** package; if it failed to tidy up, original R code will not be changed; `tidy=TRUE` is like `keep.source=FALSE` in Sweave, but it also tries not to discard R comments
+- `tidy`: (`TRUE`) whether R code should be tidied up using the function `tidy.source()` in the **formatR** package; if it failed to tidy up, original R code will not be changed; `tidy=TRUE` is like `keep.source=FALSE` in Sweave, but it also tries not to discard R comments (N.B. this option does not work in certain cases; see <https://github.com/yihui/formatR/wiki> for more information)
 - `prompt`: (`FALSE`) whether to add the prompt characters in the R code (see `prompt` and `continue` in `?base::options`; note that adding prompts can make it difficult for readers to copy R code from the output, so `prompt = FALSE` may be a better choice
 - `comment`: (`##`) the prefix to be put before source code output; default is to comment out the output by `##`, which is good for readers to copy R source code since output is masked in comments (set `comment=NA` to disable this feature)
 - `highlight`: (`TRUE`) whether to highlight the source code
