@@ -23,5 +23,8 @@ test_that('parsing inline texts', {
     expect_identical(res$params, list(b=FALSE))
     expect_identical(nchar(res$input), 0L)
 
+    res = parse_inline('blabla \\SweaveInput{abc.Rnw} foobar \\Sexpr{1+1}')
+    expect_identical(res$code, c("knit_child('abc.Rnw')", "1+1"))
+
     knit_patterns$restore()
 })
