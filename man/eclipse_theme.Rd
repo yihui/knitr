@@ -20,13 +20,18 @@ eclipse_theme(id)
 }
 \examples{
 ## http://www.eclipsecolorthemes.org/?view=theme&id=1
+\dontrun{
 (css = eclipse_theme(1))
 thm = knit_theme$get(css)
 knit_theme$set(thm)
+}
 }
 \author{
   Ramnath Vaidyanathan
 }
 \references{
   \url{http://www.eclipsecolorthemes.org/}
+}
+\seealso{
+  \code{\link{knit_theme}}
 }
