@@ -9,11 +9,14 @@
 ##' @return Path to the CSS file converted from the website.
 ##' @references \url{http://www.eclipsecolorthemes.org/}
 ##' @author Ramnath Vaidyanathan
+##' @seealso \code{\link{knit_theme}}
 ##' @export
 ##' @examples ## http://www.eclipsecolorthemes.org/?view=theme&id=1
+##' \dontrun{
 ##' (css = eclipse_theme(1))
 ##' thm = knit_theme$get(css)
 ##' knit_theme$set(thm)
+##' }
 eclipse_theme = function(id){
     xml_file = tempfile()
     url = "http://www.eclipsecolorthemes.org/?view=empty&action=download&theme=%s&type=xml"
