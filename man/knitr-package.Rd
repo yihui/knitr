@@ -15,5 +15,7 @@
   Yihui Xie <\url{http://yihui.name}>
 }
 \references{
-  \url{http://yihui.github.com/knitr/}
+  Full documentation and demos:
+  \url{http://yihui.github.com/knitr/}; FAQ's:
+  \url{https://github.com/yihui/knitr/blob/master/FAQ.md}
 }
