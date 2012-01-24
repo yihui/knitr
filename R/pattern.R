@@ -27,7 +27,7 @@
 ##' knit_patterns$set(opat)  # put the old patterns back
 knit_patterns =
     new_defaults(list(chunk.begin = NULL, chunk.end = NULL, chunk.code = NULL,
-                      inline.code = NULL, global.options = NULL,
+                      inline.code = NULL, global.options = NULL, input.doc = NULL,
                       header.begin = NULL, document.begin = NULL, ref.label = NULL))
 
 ## in LaTeX, may need to put this \newcommand{\rinline}[1]{R output}
