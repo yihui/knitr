@@ -120,6 +120,7 @@ knit = function(input, output, tangle = FALSE, text = NULL) {
                 digits = 4L, width = 75L, warn = 1L)
     on.exit(options(oopts), add = TRUE)
 
+    message('processing file: ', input)
     res = process_file(basename(input), tangle)
     setwd(input_dir())
     unlink('NA')  # temp fix to issue 94
