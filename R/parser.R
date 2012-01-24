@@ -138,9 +138,11 @@ parse_inline = function(input) {
     if (length(res2$code)) {
         res2$code = sprintf("knit_child('%s')", res2$code)  # input chide with knit_child()
     }
+    loc = rbind(res1$location, res2$location)
+    idx = order(loc[, 1L])
 
-    structure(list(input = input, location = rbind(res1$location, res2$location),
-                   params = params, code = c(res1$code, res2$code)),
+    structure(list(input = input, location = loc[idx, , drop = FALSE],
+                   params = params, code = c(res1$code, res2$code)[idx]),
               class = 'inline')
 }
 
