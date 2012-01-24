@@ -4,6 +4,9 @@ dev2ext = function(x) {
            jpeg = 'jpeg', pictex = 'tex', tiff = 'tiff', win.metafile = 'wmf',
            cairo_pdf = 'pdf', cairo_ps = 'eps',
 
+           quartz_pdf = 'pdf', quartz_png = 'png', quartz_jpeg = 'jpeg',
+           quartz_tiff = 'tiff', quartz_gif = 'gif', quartz_psd = 'psd', quartz_bmp = 'bmp',
+
            CairoJPEG = 'jpeg', CairoPNG = 'png', CairoPS = 'eps', CairoPDF = 'pdf',
            CairoSVG = 'svg', CairoTIFF = 'tiff',
 
@@ -15,6 +18,14 @@ dev2ext = function(x) {
            stop('device name \'', x, '\' not supported yet; please go to ',
                 'https://github.com/yihui/knitr/issues to report this issue',
                 call. = FALSE))
+}
+
+## quartiz devices under Mac
+quartz_dev = function(type, dpi) {
+    force(type); force(dpi)
+    function(file, width, height) {
+        quartz(file = file, width = width, height = height, type = type, dpi = dpi)
+    }
 }
 
 ## save a recorded plot
@@ -39,6 +50,14 @@ save_plot = function(plot, name, options) {
                win.metafile = function(...) win.metafile(...),
                cairo_pdf = function(...) cairo_pdf(...),
                cairo_ps = function(...) cairo_ps(...),
+
+               quartz_pdf = quartz_dev('pdf', dpi),
+               quartz_png = quartz_dev('png', dpi),
+               quartz_jpeg = quartz_dev('jpeg', dpi),
+               quartz_tiff = quartz_dev('tiff', dpi),
+               quartz_gif = quartz_dev('gif', dpi),
+               quartz_psd = quartz_dev('psd', dpi),
+               quartz_bmp = quartz_dev('bmp', dpi),
 
                CairoJPEG = load_device('CairoJPEG', 'Cairo', dpi = dpi),
                CairoPNG = load_device('CairoPNG', 'Cairo', dpi = dpi),
