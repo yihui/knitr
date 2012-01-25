@@ -214,10 +214,8 @@ render_latex = function() {
         } else hook.v(x, options)}, output = hook.o,
                    warning = hook.v, message = hook.v, error = hook.v,
                    inline = function(x) {
-                       if (is.numeric(x))
-                           return(.inline.hook(format_sci(x, 'latex')))
-                       hx = .inline.hook(x)
-                       if (inherits(x, 'AsIs')) hx else sprintf('\\texttt{%s}', hx)
+                       if (is.numeric(x)) x = format_sci(x, 'latex')
+                       .inline.hook(x)
                    }, plot = hook_plot_tex,
                    chunk = .chunk.hook.tex)
 }
