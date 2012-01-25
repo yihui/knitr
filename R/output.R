@@ -80,6 +80,7 @@ knit = function(input, output, tangle = FALSE, text = NULL) {
     if (is.character(text)) {
         input = tempfile(); writeLines(text, con = input)
     }
+    opts_knit$set(tangle = tangle)
     if (missing(output)) output = basename(auto_out_name(input, tangle))
 
     ext = tolower(file_ext(input))
