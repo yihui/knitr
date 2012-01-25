@@ -137,7 +137,8 @@ purl = function(...) {
 }
 
 process_file = function(path, tangle) {
-    ocode = knit_code$get(); on.exit(knit_code$set(ocode), add = TRUE)
+    ocode = knit_code$get()
+    on.exit({knit_code$restore(); knit_code$set(ocode)}, add = TRUE)
     groups = split_file(path)
     n = length(groups); res = character(n)
 
