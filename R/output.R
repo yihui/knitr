@@ -122,13 +122,13 @@ knit = function(input, output, tangle = FALSE, text = NULL) {
                 digits = 4L, width = 75L, warn = 1L)
     on.exit(options(oopts), add = TRUE)
 
-    message('processing file: ', input)
+    message('\n\nprocessing file: ', input)
     res = process_file(basename(input), tangle)
     setwd(input_dir())
     unlink('NA')  # temp fix to issue 94
     cat(res, file = output)
     dep_list$restore()  # empty dependency list
-    message('output file: ', normalizePath(output))
+    message('output file: ', normalizePath(output), '\n')
     invisible(file.path(dirname(input), output))
 }
 ##' @rdname knit
