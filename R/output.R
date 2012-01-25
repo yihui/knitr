@@ -186,8 +186,7 @@ auto_out_name = function(input, tangle = FALSE) {
 ##' @param ... arguments passed to \code{\link{knit}}
 ##' @param eval logical: whether to evaluate the child document
 ##' @return A character string of the form
-##' \samp{\command{child-doc.tex}}, of which the class is \samp{AsIs},
-##' so the inline hook will not wrap it in \command{texttt}.
+##' \samp{\command{child-doc.tex}}
 ##' @references \url{http://yihui.github.com/knitr/demo/child/}
 ##' @export
 ##' @examples ## you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input child-doc.tex in main.tex
@@ -196,7 +195,7 @@ auto_out_name = function(input, tangle = FALSE) {
 ##'
 ##' ## use \include: opts_knit$set(child.command = 'include')
 knit_child = function(..., eval = TRUE) {
-    I(if (eval) str_c('\\', opts_knit$get('child.command'), '{', knit(...), '}') else '')
+    if (eval) str_c('\\', opts_knit$get('child.command'), '{', knit(...), '}') else ''
 }
 
 ##' Wrap evaluated results for output
