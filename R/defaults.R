@@ -104,7 +104,7 @@ opts_knit =
                       out.format = NULL, child.command = 'input',
                       base.dir = NULL, base.url = NULL,
 
-                      all.patterns = all_patterns,
+                      all.patterns = all_patterns, tangle = FALSE,
 
                       header = c(highlight = '', tikz = '', framed = ''))
 )
