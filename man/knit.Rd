@@ -88,6 +88,9 @@ purl(...)
   \samp{weave} (as in Sweave), and the name \code{purl} (as
   \samp{tangle} in Stangle) comes from a knitting method
   `knit one, purl one'.
+
+  If the input document has child documents, they will also
+  be compiled recursively. See \code{\link{knit_child}}.
 }
 \examples{
 library(knitr)

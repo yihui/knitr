@@ -12,15 +12,16 @@ knit_child(..., eval = TRUE)
 }
 \value{
   A character string of the form
-  \samp{\command{child-doc.tex}}, of which the class is
-  \samp{AsIs}, so the inline hook will not wrap it in
-  \command{texttt}.
+  \samp{\command{child-doc.tex}} or
+  \code{source("child-doc.R")}, depending on the argument
+  \code{tangle} passed in.
 }
 \description{
-  This function is for LaTeX only; it knits a child
-  document and returns the command to input the result into
-  the main document. It is designed to be used in the
-  inline R code and serves as the alternative to the
+  This function is for LaTeX only except when it is used to
+  extract R code from the document; by default it knits a
+  child document and returns the command to input the
+  result into the main document. It is designed to be used
+  in the inline R code and serves as the alternative to the
   \command{SweaveInput} command in Sweave.
 }
 \details{
@@ -28,6 +29,10 @@ knit_child(..., eval = TRUE)
   (usually \samp{input} or \samp{include}) is from the
   package option \code{child.command}
   (\code{opts_knit$get('child.command')}).
+
+  When we call \code{knit_child(tangle = TRUE)} to extract
+  R code, the code in the child document is extracted and
+  saved into an R script.
 }
 \examples{
 ## you can write \\Sexpr{knit_child('child-doc.Rnw')} in
