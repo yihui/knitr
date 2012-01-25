@@ -61,6 +61,9 @@
 ##' @note The name \code{knit} comes from its counterpart \samp{weave}
 ##' (as in Sweave), and the name \code{purl} (as \samp{tangle} in
 ##' Stangle) comes from a knitting method `knit one, purl one'.
+##'
+##' If the input document has child documents, they will also be
+##' compiled recursively. See \code{\link{knit_child}}.
 ##' @export
 ##' @references Package homepage: \url{http://yihui.github.com/knitr/}
 ##'
@@ -176,7 +179,8 @@ auto_out_name = function(input, tangle = FALSE) {
 
 ##' Knit a child document
 ##'
-##' This function is for LaTeX only; it knits a child document and
+##' This function is for LaTeX only except when it is used to extract
+##' R code from the document; by default it knits a child document and
 ##' returns the command to input the result into the main document. It
 ##' is designed to be used in the inline R code and serves as the
 ##' alternative to the \command{SweaveInput} command in Sweave.
@@ -184,10 +188,15 @@ auto_out_name = function(input, tangle = FALSE) {
 ##' The LaTeX command used to input the child document (usually
 ##' \samp{input} or \samp{include}) is from the package option
 ##' \code{child.command} (\code{opts_knit$get('child.command')}).
+##'
+##' When we call \code{knit_child(tangle = TRUE)} to extract R code,
+##' the code in the child document is extracted and saved into an R
+##' script.
 ##' @param ... arguments passed to \code{\link{knit}}
 ##' @param eval logical: whether to evaluate the child document
 ##' @return A character string of the form
-##' \samp{\command{child-doc.tex}}
+##' \samp{\command{child-doc.tex}} or \code{source("child-doc.R")},
+##' depending on the argument \code{tangle} passed in.
 ##' @references \url{http://yihui.github.com/knitr/demo/child/}
 ##' @export
 ##' @examples ## you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input child-doc.tex in main.tex
