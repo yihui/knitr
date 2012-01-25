@@ -196,8 +196,13 @@ process_tangle = function(x) {
     UseMethod('process_tangle', x)
 }
 process_tangle.block = function(x) {
-    label = x$params$label
-    label_code(knit_code$get(label), label)
+    params = opts_chunk$merge(x$params)
+    label = params$label
+    code = if (params$eval && !is.null(params$child)) {
+        cmds = lapply(sc_split(params$child), knit_child, tangle = TRUE)
+        str_c(unlist(cmds), collapse = '\n')
+    } else knit_code$get(label)
+    label_code(code, label)
 }
 process_tangle.inline = function(x) return('')
 
