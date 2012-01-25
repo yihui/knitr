@@ -22,6 +22,8 @@ The FAQ's are compiled from the [issues](https://github.com/yihui/knitr/issues) 
   - Yes, you can use `setwd()` freely in your code, which will bring you troubles in Sweave but not in **knitr**. The default working directory is the directory where your input document comes from. I need to warn you, however, that this is a bad practice in general. See [#38](https://github.com/yihui/knitr/issues/38) for a discussion. You should also try to avoid absolute directories whenever possible (use relative directories instead), because it makes things less reproducible.
 1. The gray (shading) box is too narrow for my output.
   - No, it is not because the box is too narrow (the box uses the current line width); it is because your output is too wide. Use a smaller `width` option to avoid output exceeding the page margin, e.g. `options(width = 60)`; see [#44](https://github.com/yihui/knitr/issues/44).
+1. How to comment out inline R code like in `\Sexpr{code}`?
+  - see issue [#110](https://github.com/yihui/knitr/issues/110): `%\%Sexpr{code}` or `\Sexpr{#code}`
 1. I have done something cool with **knitr**; could you add a link in your website?
   - Sure! I'd love to; just let me know.
 1. What can I do for you?
