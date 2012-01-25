@@ -196,7 +196,11 @@ auto_out_name = function(input, tangle = FALSE) {
 ##'
 ##' ## use \include: opts_knit$set(child.command = 'include')
 knit_child = function(..., eval = TRUE) {
-    if (eval) str_c('\\', opts_knit$get('child.command'), '{', knit(...), '}') else ''
+    if (!eval) return('')
+    path = knit(...)
+    if (opts_knit$get('tangle')) {
+        str_c('source("', path, '")')
+    } else str_c('\\', opts_knit$get('child.command'), '{', path, '}')
 }
 
 ##' Wrap evaluated results for output
