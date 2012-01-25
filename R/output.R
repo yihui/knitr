@@ -84,7 +84,10 @@ knit = function(input, output, tangle = FALSE, text = NULL) {
 
     ext = tolower(file_ext(input))
     apat = opts_knit$get('all.patterns')
-    opat = knit_patterns$get(); on.exit(knit_patterns$set(opat), add = TRUE)
+    optc = opts_chunk$get()
+    on.exit({opts_chunk$restore(); opts_chunk$set(optc)}, add = TRUE)
+    opat = knit_patterns$get()
+    on.exit({knit_patterns$restore(); knit_patterns$set(opat)}, add = TRUE)
     if (length(opat) == 0 || all(sapply(opat, is.null))) {
         pattern = if (ext == 'md') 'html' else ext
         if (!(pattern %in% names(apat)))
