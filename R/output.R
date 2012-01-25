@@ -96,10 +96,8 @@ knit = function(input, output, tangle = FALSE, text = NULL) {
     }
 
     owd = setwd(dirname(input)); on.exit(setwd(owd), add = TRUE)
-    optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
-    optc = opts_chunk$get(); on.exit(opts_chunk$set(optc), add = TRUE)
     opts_knit$set(input.dir = getwd())  # record current working dir
-    if (is.null(optk$out.format)) {
+    if (is.null(opts_knit$get('out.format'))) {
         fmt =
             switch(ext, rnw = 'latex', tex = 'latex', html = 'html', md = 'jekyll',
                    brew = 'brew',
