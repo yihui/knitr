@@ -248,7 +248,8 @@ render_html = function() {
         z[[i]] = html.hook(i)
     knit_hooks$set(z)
     knit_hooks$set(inline = function(x) {
-        sprintf('<code class="knitr inline">%s</code>', .inline.hook(format_sci(x, 'html')))
+        sprintf(if (inherits(x, 'AsIs')) '%s' else '<code class="knitr inline">%s</code>',
+                .inline.hook(format_sci(x, 'html')))
     }, plot = hook_plot_html, chunk = .chunk.hook.html)
 }
 ##' @rdname output_hooks
