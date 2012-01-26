@@ -31,7 +31,7 @@ All available options in **knitr** are:
 
 ### Text Results
 
-- `echo`: (`TRUE`) whether to include R source code in the output file
+- `echo`: (`TRUE`) whether to include R source code in the output file; besides `TRUE`/`FALSE` which completely turns on/off the source code, we can also use a numeric vector to select which R expression(s) to echo in a chunk, e.g. `echo=2:3` means only echo the 2nd and 3rd expressions, and `echo=-4` means to exclude the 4th expression (note currently it does not support a value containing commas, so values like `echo=c(1,3)` will not work; a workaround is to assign a numeric vector to a global variable, say, `foo.echo` and use `echo=foo.echo`)
 - `results`: (`markup`) takes three possible values `markup` (mark up the results using the output hook, e.g. put results in a special LaTeX environment), `asis` (output as-is, i.e., write raw results from R into the output document), or `hide` (hide results); note this option only applies to normal R output (not warnings, messages or errors), and `markup` and `asis` are equivalent to `verbatim` and `tex` in Sweave respectively (you can still use the latter two, but they can be misleading, e.g., `verbatim` does not really mean verbatim in R, and `tex` seems to be restricted to LaTeX)
 - `warning`: (`TRUE`) whether to show warnings (produced by `warning()`) in the output like we run R code in a terminal
 - `error`: (`TRUE`) whether to show errors (from `stop()`) (by default, the evaluation will not stop even in case of errors!!)
