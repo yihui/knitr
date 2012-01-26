@@ -155,7 +155,9 @@ process_file = function(path, tangle) {
             if (!tangle) cat('\n')
             flush.console()
         }
-        res[i] = (if (tangle) process_tangle else process_group)(groups[[i]])
+        txt = try((if (tangle) process_tangle else process_group)(groups[[i]]))
+        if (inherits(txt, 'try-error')) break
+        res[i] = txt
     }
     if (opts_knit$get('progress')) close(pb)
 
