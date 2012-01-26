@@ -36,6 +36,10 @@ NEW FEATURES
   'dev' option has more choices (see
   http://yihui.github.com/knitr/options)
 
+  o chunk option 'echo' can take a numeric vector to select which R
+  expressions to echo into the output now (#108); see
+  http://yihui.github.com/knitr/options
+
 BUG FIXES
 
   o the code used to merge global chunk options and local options was
@@ -44,6 +48,9 @@ BUG FIXES
   re-evaluated with this version, which should be regarded as a normal
   phenomenon, and on the second run, the cached chunks will not be
   evaluated again
+
+  o fixed a buglet when using both options 'out.width' and
+  'out.height' in Rnw (#113)
 
   
 			CHANGES IN knitr VERSION 0.1
