@@ -40,6 +40,10 @@ NEW FEATURES
   expressions to echo into the output now (#108); see
   http://yihui.github.com/knitr/options
 
+  o a new function stitch() which is a convenience function to insert
+  an R script into a template and compile (to quickly create a report
+  based on an R script)
+
 BUG FIXES
 
   o the code used to merge global chunk options and local options was
