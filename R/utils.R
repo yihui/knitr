@@ -30,6 +30,15 @@ comment_out = function(x, options) {
     } else x
 }
 
+## assign string in comments to a global variable
+comment_to_var = function(x, varname, pattern) {
+    if (str_detect(x, pattern)) {
+        assign(varname, str_replace(x, pattern, ''), envir = globalenv())
+        return(TRUE)
+    }
+    FALSE
+}
+
 hiren_latex = renderer_latex(document = FALSE)
 hiren_html = renderer_html(document = FALSE, header = function() '', footer = function() '')
 
