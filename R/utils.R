@@ -216,6 +216,17 @@ eval_opt = function(x) {
     eval(parse(text = x), envir = globalenv())
 }
 
+## counterpart of isTRUE()
+isFALSE = function(x) identical(x, FALSE)
+
+## choose a subset of source code to echo (iss: all indices of source;
+## echo: which to echo; n: length of all results)
+echo_index = function(iss, echo, n) {
+    echo = na.omit(seq_along(iss)[echo])  # in case echo < 0L
+    iss = c(iss, n + 1L)
+    idx = NULL
+    for (i in echo) idx = c(idx, seq.int(iss[i], iss[i + 1L] - 1L))
+    idx
 }
 
 ##' Path for figure files
