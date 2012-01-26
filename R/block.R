@@ -23,7 +23,7 @@ call_block = function(block) {
         return(str_c(unlist(cmds), collapse = '\n'))
     }
 
-    if ((!params$eval && !params$echo) || length(params$code) == 0 ||
+    if ((!params$eval && isFALSE(params$echo)) || length(params$code) == 0 ||
         all(is_blank(params$code)))
         return('') # a trivial chunk; do nothing
 
@@ -48,7 +48,8 @@ block_exec = function(code, ...) {
     options = list(...)
 
     ## tidy code if echo
-    if (options$echo && options$tidy) {
+    echo = options$echo
+    if (!isFALSE(echo) && options$tidy) {
         res = try(tidy.source(text = code, output = FALSE), silent = TRUE)
         if (!inherits(res, 'try-error')) {
             code = res$text.tidy
@@ -87,8 +88,13 @@ block_exec = function(code, ...) {
     res = evaluate(code, envir = env) # run code
 
     ## remove some components according options
-    if (!options$echo)
+    if (isFALSE(echo)) {
         res = Filter(Negate(is.source), res)
+    } else if (is.numeric(echo)) {
+        ## choose expressions to echo using a numeric vector
+        iss = which(sapply(res, is.source))
+        res = res[echo_index(iss, echo, length(res))]
+    }
     if (options$results == 'hide')
         res = Filter(Negate(is.character), res)
     if (!options$warning)
