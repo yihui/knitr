@@ -215,6 +215,45 @@ knit_child = function(..., eval = TRUE) {
     } else str_c('\\', opts_knit$get('child.command'), '{', path, '}')
 }
 
+##' Automatically create a report based on an R script and a template
+##'
+##' This is a convenience function for small-scale automatic reporting
+##' based on an R script and a template.
+##'
+##' The first two lines of the R script can contain the title and
+##' author of the report in comments of the form \samp{## title:} and
+##' \samp{## author:}. The template must have a chunk named
+##' \samp{auto-report}, which will be used to input all the R code
+##' from the script. See the examples below.
+##' @param script path to the R script
+##' @param template path of the template to use (by default the Rnw
+##' template in this package; there is also an HTML template in
+##' \pkg{knitr})
+##' @return path of the output document
+##' @export
+##' @examples s = system.file('misc', 'stitch-test.R', package = 'knitr')
+##' \dontrun{stitch(s)}
+##'
+##' ## HTML report
+##' out = stitch(s, system.file('misc', 'knitr-minimal_knit_.html', package = 'knitr'))
+##' if (interactive()) browseURL(out)
+stitch = function(script, template = system.file('misc', 'knitr-template.Rnw',
+                          package = 'knitr')) {
+    lines = readLines(script, warn = FALSE)
+    ## extract title and author from first two lines
+    if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:')) lines = lines[-1L]
+    if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:')) lines = lines[-1L]
+    knit_code$set(`auto-report` = lines)
+    file.copy(template, '.', overwrite = TRUE)
+    out = knit(basename(template))
+    if (str_detect(out, '\\.tex$')) {
+        texi2pdf(out, clean = TRUE)
+        system(paste(getOption('pdfviewer'), shQuote(str_replace(out, '\\.tex$', '.pdf'))))
+    }
+    knit_code$restore()
+    out
+}
+
 ##' Wrap evaluated results for output
 ##'
 ##' @param x output from \code{\link[evaluate]{evaluate}}
