@@ -61,8 +61,8 @@ hook_plot_tex = function(x, options) {
     if (hold && fig.cur > 0L && fig.cur < fig.num) align2 = ''
 
     size =
-        paste(sprintf('width=%s', options$out.width),
-              sprintf('height=%s', options$out.height), sep = '', collapse = ',')
+        paste(c(sprintf('width=%s', options$out.width),
+                sprintf('height=%s', options$out.height)), collapse = ',')
 
     paste(align1, resize1,
 
