@@ -128,3 +128,4 @@ All package options are:
 - `header`: the text to be inserted into the output document before the document begins (e.g. after `\documentclass{article}` in LaTeX, or `<head>` in HTML); this is useful for defining commands and styles in the LaTeX preamble or HTML header; the beginning of document is found using the pattern defined in `knit_patternss$get('document.begin')`
 - `base.dir`: (`NULL`) an absolute directory under which the plots are generated
 - `base.url`: (`NULL`) the base url for HTML pages
+- `eval.opts`: (`c('eval', 'echo')`) a character vector of option names; these options will be evaluated as R code if they originally take character values (e.g. for `eval=dothis`, R will use the value of a global variable `dothis` as the real value of `eval` instead of a character string `'dothis'`)
