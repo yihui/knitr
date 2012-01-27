@@ -15,8 +15,8 @@ call_block = function(block) {
     params$code = unlist(knit_code$get(ref.label), use.names = FALSE)
     if (opts_knit$get('progress')) print(block)
 
-    params$echo = eval_opt(params$echo)
-    params$eval = eval_opt(params$eval)
+    ## evaluate options as R code instead of character strings
+    for (o in opts_knit$get('eval.opts')) params[[o]] = eval_opt(params[[o]])
 
     if (params$eval && !is.null(params$child)) {
         cmds = lapply(sc_split(params$child), knit_child)

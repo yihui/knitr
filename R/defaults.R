@@ -103,7 +103,7 @@ opts_knit =
     new_defaults(list(progress = TRUE, verbose = FALSE,
                       out.format = NULL, child.command = 'input',
                       base.dir = NULL, base.url = NULL,
-
+                      eval.opts = c('eval', 'echo'),
                       all.patterns = all_patterns, tangle = FALSE,
 
                       header = c(highlight = '', tikz = '', framed = ''))
