@@ -26,9 +26,7 @@ purl(...)
 }
 \value{
   The compiled document is written into the output file,
-  and the path of the output file is returned (depending on
-  the path of input, this path can be absolute or
-  relative).
+  and the path of the output file is returned.
 }
 \description{
   This function takes an input file, extracts the R code in

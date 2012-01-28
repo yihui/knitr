@@ -55,8 +55,7 @@
 ##' the input file (\code{text} is written into a temporary file as
 ##' \code{input}); this argument is mainly for test purposes only
 ##' @return The compiled document is written into the output file, and
-##' the path of the output file is returned (depending on the path of
-##' input, this path can be absolute or relative).
+##' the path of the output file is returned.
 ##' @note The name \code{knit} comes from its counterpart \samp{weave}
 ##' (as in Sweave), and the name \code{purl} (as \samp{tangle} in
 ##' Stangle) comes from a knitting method `knit one, purl one'.
