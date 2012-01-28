@@ -84,6 +84,7 @@
 ##' file.copy(system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'),
 ##'   f, overwrite = TRUE)
 ##' knit(f)
+##' ## or setwd(dirname(f)); knit(basename(f))
 ##'
 ##' purl(f)  # extract R code only
 knit = function(input, output, tangle = FALSE, text = NULL) {
