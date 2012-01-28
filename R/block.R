@@ -29,8 +29,6 @@ call_block = function(block) {
 
     if (is_tikz_dev(params)) set_header(tikz = '\\usepackage{tikz}')
 
-    owd = setwd(input_dir()); on.exit(setwd(owd))
-
     ## Check cache
     hash =
         str_c(valid_prefix(params$cache.path), params$label, '_',
@@ -85,7 +83,9 @@ block_exec = function(code, ...) {
     }
 
     res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
+    owd = setwd(input_dir())
     res = evaluate(code, envir = env) # run code
+    setwd(owd)
 
     ## remove some components according options
     if (isFALSE(echo)) {
@@ -142,7 +142,6 @@ block_exec = function(code, ...) {
         if (length(k2)) res = res[-k2] # remove lines that have been merged back
     }
 
-    owd = setwd(input_dir()); on.exit(setwd(owd), add = TRUE)
     output = str_c(unlist(wrap(res, options)), collapse = '') # wrap all results together
 
     res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks

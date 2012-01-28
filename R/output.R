@@ -84,8 +84,9 @@ knit = function(input, output, tangle = FALSE, text = NULL) {
         input = tempfile(); writeLines(text, con = input)
     }
     opts_knit$set(tangle = tangle)
-    if (missing(output)) output = basename(auto_out_name(input, tangle))
-
+    if (missing(output)) {
+        output = file.path(dirname(input), basename(auto_out_name(input, tangle)))
+    }
     ext = tolower(file_ext(input))
     apat = opts_knit$get('all.patterns')
     optc = opts_chunk$get()
@@ -102,9 +103,10 @@ knit = function(input, output, tangle = FALSE, text = NULL) {
         knit_patterns$set(apat[[pattern]])
     }
 
-    owd = setwd(dirname(input)); on.exit(setwd(owd), add = TRUE)
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
-    opts_knit$set(input.dir = getwd())  # record current working dir
+    if (is.null(optk$input.dir)) {
+        opts_knit$set(input.dir = dirname(input))  # record current working dir
+    }
     if (is.null(opts_knit$get('out.format'))) {
         fmt =
             switch(ext, rnw = 'latex', tex = 'latex', html = 'html', md = 'jekyll',
@@ -127,13 +129,12 @@ knit = function(input, output, tangle = FALSE, text = NULL) {
     on.exit(options(oopts), add = TRUE)
 
     message('\n\nprocessing file: ', input)
-    res = process_file(basename(input), tangle)
-    setwd(input_dir())
+    res = process_file(input, tangle)
     unlink('NA')  # temp fix to issue 94
     cat(res, file = output)
     dep_list$restore()  # empty dependency list
     message('output file: ', normalizePath(output), '\n')
-    invisible(file.path(dirname(input), output))
+    invisible(output)
 }
 ##' @rdname knit
 ##' @param ... arguments passed to \code{\link{knit}}
