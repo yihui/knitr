@@ -103,6 +103,7 @@ knit = function(input, output, tangle = FALSE, text = NULL) {
     }
 
     owd = setwd(dirname(input)); on.exit(setwd(owd), add = TRUE)
+    optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
     opts_knit$set(input.dir = getwd())  # record current working dir
     if (is.null(opts_knit$get('out.format'))) {
         fmt =
@@ -111,7 +112,6 @@ knit = function(input, output, tangle = FALSE, text = NULL) {
                    stop('cannot automatically decide the output format'))
         ## set built-in hooks
         opts_knit$set(out.format = fmt)
-        on.exit(opts_knit$set(out.format = NULL), add = TRUE)
     }
     switch(opts_knit$get('out.format'), latex = render_latex(), html = render_html(),
            sweave = {opts_chunk$set(highlight = FALSE); render_sweave()},
