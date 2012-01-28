@@ -92,7 +92,7 @@ purl(...)
 
   The working directory when evaluating R code chunks is
   the directory of the input document, so if the R code
-  involes with external files (like \code{read.table()}),
+  involves with external files (like \code{read.table()}),
   it is better to put these files under the same directory
   of the input document so that we can use relative paths.
   It is recommended to change the working directory to the
