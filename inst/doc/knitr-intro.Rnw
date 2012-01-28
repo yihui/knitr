@@ -5,7 +5,6 @@
 \renewcommand{\sfdefault}{lmss}
 \renewcommand{\ttdefault}{lmtt}
 \usepackage[T1]{fontenc}
-\usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \usepackage{url}
