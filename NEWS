@@ -53,6 +53,9 @@ NEW FEATURES
   directory as the input document; instead, these files are written in
   the current working directory (see ?knit)
 
+  o a new function knit_env() that makes the environment of the
+  current chunk accessible to the user
+
 BUG FIXES
 
   o the code used to merge global chunk options and local options was
