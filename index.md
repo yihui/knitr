@@ -12,7 +12,7 @@ The **knitr** package was designed to be a transparent engine for dynamic report
 - **knitr** tries to be consistent with users' expections by running R code as if it were pasted in an R terminal, e.g., `qplot(x, y)` directly produces the plot (no need to `print()` it), and *all* the plots in a code chunk will be written to the output by default; **knitr** also added options like `out.width` to set the width of plots in the output document (think `.8\textwidth` in LaTeX), so we no longer need to hack in LaTeX
 - Packages like **pgfSweave** and **cacheSweave** have added useful features to Sweave (high-quality tikz graphics and cache), and **knitr** has simplified the implementations
 
-This package is developed on  [GitHub](https://github.com/yihui/knitr); for installation instructions and FAQ's, see [README](https://github.com/yihui/knitr#readme). This website serves as the full documentation of **knitr**, and you can find the [main manual](https://github.com/downloads/yihui/knitr/knitr-manual.pdf), the [graphics manual](https://github.com/downloads/yihui/knitr/knitr-graphics.pdf) and other [demos](/knitr/demos) here.
+This package is developed on  [GitHub](https://github.com/yihui/knitr); for installation instructions and [FAQ's](https://github.com/yihui/knitr/blob/master/FAQ.md), see [README](https://github.com/yihui/knitr#readme). This website serves as the full documentation of **knitr**, and you can find the [main manual](https://github.com/downloads/yihui/knitr/knitr-manual.pdf), the [graphics manual](https://github.com/downloads/yihui/knitr/knitr-graphics.pdf) and other [demos](/knitr/demos) here.
 
 ## Motivation
 
