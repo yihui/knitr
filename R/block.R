@@ -66,6 +66,7 @@ block_exec = function(code, ...) {
 
     ## eval chunks (in an empty envir if cache)
     env = if (options$cache) new.env(parent = globalenv()) else globalenv()
+    .knitEnv$knit_env = env # make a copy of the envir
 
     ## open a graphical device to record graphics
     dargs = formals(getOption('device'))  # is NULL in RStudio's GD

@@ -258,6 +258,22 @@ fig_path = function(suffix = '', options = opts_current$get()) {
     str_c(valid_prefix(options$fig.path), options$label, suffix)
 }
 
+##' The environment in which a code chunk is evaluated
+##'
+##' This function makes the environment of a code chunk accessible
+##' inside a chunk.
+##'
+##' In some special cases, we need access to the environment of the
+##' current chunk; a typical example is when we use \code{source()} in
+##' a cached chunk, we have to make sure the script is executed in the
+##' correct environment (should not use the default local
+##' environment). See references for an example.
+##' @references \url{http://yihui.github.com/knitr/demo/cache/}
+##' @export
+knit_env = function() {
+    .knitEnv$knit_env
+}
+
 ##' Convert Rnw to PDF using knit and texi2pdf
 ##'
 ##' Knit the input Rnw document to a tex document, and compile it
