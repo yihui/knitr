@@ -44,6 +44,11 @@ NEW FEATURES
   an R script into a template and compile (to quickly create a report
   based on an R script)
 
+  o for a chunk hook to run, the corresponding chunk option no longer
+  has to be TRUE; it can be any non-null values; this enables us to
+  make use of the option value directly instead of only knowing it is
+  TRUE (see http://yihui.github.com/knitr/demo/cache/ for an example)
+
 BUG FIXES
 
   o the code used to merge global chunk options and local options was
