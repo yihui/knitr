@@ -49,6 +49,10 @@ NEW FEATURES
   make use of the option value directly instead of only knowing it is
   TRUE (see http://yihui.github.com/knitr/demo/cache/ for an example)
 
+  o knit() will no longer write figure or cache files in the same
+  directory as the input document; instead, these files are written in
+  the current working directory (see ?knit)
+
 BUG FIXES
 
   o the code used to merge global chunk options and local options was
