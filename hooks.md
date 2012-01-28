@@ -11,7 +11,7 @@ The object `knit_hooks` in the **knitr** package is used to set hooks; the basic
 
 ## Chunk hooks <a id="chunk_hooks"></a>
 
-Chunk hooks are functions to be called before or after a code chunk when the chunk option is `TRUE`, and they should be defined with three arguments:
+Chunk hooks are functions to be called before or after a code chunk when the chunk option is not `NULL` (it basically means as long as you set a option, the hook will be run), and they should be defined with three arguments:
 
 {% highlight r %}
 foo_hook = function(before, options, envir) {
@@ -34,6 +34,7 @@ knit_hooks$set(small.mar = function(before, options, envir) {
 Then this function will be called for a chunk like this:
 
 {% highlight r %}
+% small.mar does not have to be TRUE, it can be any non-null value
 <<myplot, small.mar=TRUE>>=
 hist(rnorm(100), main = '')  # no main title
 @
@@ -69,7 +70,7 @@ In the LaTeX output, we will see `\includegraphics{fancy-rgl}`.
 To sum up,
 
 1. the hook can be set in `knit_hooks` by `knit_hooks$set(foo = FUN)`;
-2. the chunk option `foo` should be `TRUE` for this chunk for the hook function to run;
+2. the chunk option `foo` should take a non-`NULL` value in this chunk for the hook function to run;
 3. a hook can be run before and/or after a chunk;
 4. character results returned by hooks will be written into the output without modifications;
 
