@@ -25,7 +25,7 @@ And `\SweaveOpts{}` can change the default global options in a document (e.g. `\
 2. For options that take _character_ values, you should not quote them as you do in R (e.g. should write `fig.path=abc` instead of `fig.path="abc"`), and should avoid the comma `,` in the character string since it is the separator of chunk options; for logical options, `TRUE` and `FALSE` are OK, and `true`/`false` will not work as you might have expected;
 1. It is possible to set certain options to take values from R expressions instead of fixed values; see the package option `eval.opts`;
 
-All available options in **knitr** are:
+All built-in options in **knitr** are:
 
 ### Code Evaluation
 
