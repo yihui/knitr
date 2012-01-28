@@ -10,6 +10,7 @@ The [object](objects) `knit_patterns` manages patterns in **knitr**. For example
 - `chunk.end`: the pattern for the end of a chunk
 - `chunk.code`: the pattern to be used to extract R code from a chunk by removing characters of this pattern
 - `inline.code`: the pattern to be used to extract the pieces of R code mixed inline with other texts (i.e. those which are not in separate code chunks); like `chunk.begin`, it must contain a group 
+- `input.doc`: the pattern to find out child documents
 - `global.options`: the pattern to extract global options for chunks (options are extracted like those in `chunk.begin` but they permanently change global options, whereas chunk options only locally affect a specific chunk)
 - `header.begin`: the pattern to find out where the document header begins; this is used to insert some header information into the output document (e.g. commands in the preamble in LaTeX, or CSS styles in HTML)
 - `document.begin`: the pattern to find out where the body of the document begins (currently only used to externalize tikz graphics)
@@ -23,17 +24,23 @@ Like Sweave, there are two types of R code in **knitr**: code chunks (like parag
 
 There are several built-in pattern lists in **knitr** which are stored in `opts_knit$get('all.patterns')`.
 
+
+
 {% highlight r %}
 library(knitr)
 apats = opts_knit$get("all.patterns")  # a list of all built-in patterns
 str(apats)
 {% endhighlight %}
+
+
+
 {% highlight text %}
 ## List of 4
-##  $ rnw :List of 7
+##  $ rnw :List of 8
 ##   ..$ chunk.begin   : chr "^<<(.*)>>="
 ##   ..$ chunk.end     : chr "^@\\s*$"
 ##   ..$ inline.code   : chr "\\\\Sexpr\\{([^\\}]*)\\}"
+##   ..$ input.doc     : chr "\\\\SweaveInput\\{([^\\}]*)\\}"
 ##   ..$ global.options: chr "\\\\SweaveOpts\\{([^}]*)\\}"
 ##   ..$ header.begin  : chr "\n*\\s*\\\\documentclass[^\\}]+\\}"
 ##   ..$ document.begin: chr "\n*\\s*\\\\begin\\{document\\}"
@@ -57,6 +64,7 @@ str(apats)
 ##   ..$ header.begin  : chr "\n*\\s*<head>"
 ##   ..$ ref.label     : chr "^## @knitr (.*)$"
 {% endhighlight %}
+
 
 
 
