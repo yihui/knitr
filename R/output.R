@@ -46,10 +46,9 @@
 ##' about \pkg{knitr}, including the full documentation of chunk
 ##' options and demos, etc.
 ##' @param input path of the input file
-##' @param output base filename of output file (note the working
-##' directory will be set to the directory of the input file, and this
-##' argument should be a filename without a directory name); if not
-##' set, this function will try to guess
+##' @param output path of the output file; if not set, this function
+##' will try to guess and it will be under the same directory as
+##' \code{input}
 ##' @param tangle whether to tangle the R code from the input file
 ##' (like \code{\link[utils]{Stangle}})
 ##' @param text a character vector as an alternative way to provide
@@ -64,6 +63,14 @@
 ##'
 ##' If the input document has child documents, they will also be
 ##' compiled recursively. See \code{\link{knit_child}}.
+##'
+##' The working directory when evaluating R code chunks is the
+##' directory of the input document, so if the R code involes with
+##' external files (like \code{read.table()}), it is better to put
+##' these files under the same directory of the input document so that
+##' we can use relative paths. It is recommended to change the working
+##' directory to the input directory before calling \code{knit()},
+##' especially when the input document contains child documents.
 ##' @export
 ##' @references Package homepage: \url{http://yihui.github.com/knitr/}
 ##'
