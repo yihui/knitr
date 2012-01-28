@@ -175,7 +175,7 @@ run_hooks = function(before, options, envir) {
     hooks.a = hooks.n[setdiff(names(hooks.n), names(hooks.d))] # a list of hooks to run
     out = NULL
     for (i in names(hooks.a)) {
-        if (isTRUE(options[[i]])) {
+        if (!is.null(options[[i]])) {
             ## run only when option is TRUE
             res = hooks.a[[i]](before = before, options = options, envir = envir)
             if (is.character(res)) out = c(out, res)
