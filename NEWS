@@ -1,3 +1,18 @@
+			 CHANGES IN knitr VERSION 0.3
+
+NEW FEATURES
+
+  o new function run_chunk() to run the code in a specified chunk,
+  which is an alternative to the chunk reference in Sweave (<<label>>
+  in Sweave is now equivalent to run_chunk(label) in knitr); thanks to
+  Kevin R. Coombe and Terry Therneau for the discussion
+
+MINOR CHANGES
+
+  o the default value for the 'output' argument in knit() is NULL now,
+  so we can also provide output filenames to stitch() and knit2pdf()
+  (#119)
+  
 			 CHANGES IN knitr VERSION 0.2
 
 NEW FEATURES
