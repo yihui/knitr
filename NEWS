@@ -11,6 +11,10 @@ NEW FEATURES
   'knitr') which makes it easier to call knitr via command line under
   *nix (call 'knit input [output] [--pdf]')
 
+  o the inline hooks respect getOption('digits') and
+  getOption('scipen') now (see ?options); numbers returned from inline
+  R code will be formatted according to these two options
+
 MINOR CHANGES
 
   o the default value for the 'output' argument in knit() is NULL now,
