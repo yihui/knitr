@@ -3,16 +3,16 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output, tangle = FALSE, text = NULL)
+knit(input, output = NULL, tangle = FALSE, text = NULL)
 
 purl(...)
 }
 \arguments{
   \item{input}{path of the input file}
 
-  \item{output}{path of the output file; if not set, this
-  function will try to guess and it will be under the same
-  directory as \code{input}}
+  \item{output}{path of the output file; if \code{NULL},
+  this function will try to guess and it will be under the
+  same directory as \code{input}}
 
   \item{tangle}{whether to tangle the R code from the input
   file (like \code{\link[utils]{Stangle}})}

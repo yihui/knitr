@@ -3,7 +3,7 @@
 \title{Automatically create a report based on an R script and a template}
 \usage{
 stitch(script, template = system.file("misc", "knitr-template.Rnw", 
-    package = "knitr"))
+    package = "knitr"), output = NULL)
 }
 \arguments{
   \item{script}{path to the R script}
@@ -11,6 +11,9 @@ stitch(script, template = system.file("misc", "knitr-template.Rnw",
   \item{template}{path of the template to use (by default
   the Rnw template in this package; there is also an HTML
   template in \pkg{knitr})}
+
+  \item{output}{the output filename (passed to
+  \code{\link{knit}})}
 }
 \value{
   path of the output document
