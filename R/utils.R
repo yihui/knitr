@@ -128,14 +128,14 @@ format_sci = function(x, format = 'latex') {
     if (!is.numeric(x)) return(x)
     scipen = getOption('scipen') + 4L
     if (any(abs(lx <- floor(log(abs(x), 10))) >= scipen)) {
-        b = str_trim(formatC(x/10^lx, digits = getOption('digits')))
+        b = round(x/10^lx, getOption('digits'))
         b[b %in% c('1', '-1')] = ''
         if (format == 'latex')
             return(sprintf('$%s%s10^{%s}$', b, ifelse(b == '', '', '\\times '), floor(lx)))
         if (format == 'html')
             return(sprintf('%s%s10<sup>%s</sup>', b, ifelse(b == '', '', ' &times; '), floor(lx)))
     }
-    formatC(x, digits = getOption('digits'))
+    round(x, getOption('digits'))
 }
 
 ## absolute path?
