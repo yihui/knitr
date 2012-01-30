@@ -7,6 +7,10 @@ NEW FEATURES
   in Sweave is now equivalent to run_chunk(label) in knitr); thanks to
   Kevin R. Coombe and Terry Therneau for the discussion
 
+  o a executable script 'knit' under system.files('bin', package =
+  'knitr') which makes it easier to call knitr via command line under
+  *nix (call 'knit input [output] [--pdf]')
+
 MINOR CHANGES
 
   o the default value for the 'output' argument in knit() is NULL now,
