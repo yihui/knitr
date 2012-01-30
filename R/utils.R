@@ -283,8 +283,8 @@ knit_env = function() {
 ##' @export
 ##' @importFrom tools texi2pdf
 ##' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}}
-knit2pdf = function(input){
-    out = knit(input)
+knit2pdf = function(input, output = NULL){
+    out = knit(input, output)
     owd = setwd(dirname(out)); on.exit(setwd(owd))
     texi2pdf(basename(out), clean = TRUE)
 }
