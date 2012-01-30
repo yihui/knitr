@@ -237,6 +237,7 @@ knit_child = function(..., eval = TRUE) {
 ##' @param template path of the template to use (by default the Rnw
 ##' template in this package; there is also an HTML template in
 ##' \pkg{knitr})
+##' @param output the output filename (passed to \code{\link{knit}})
 ##' @return path of the output document
 ##' @export
 ##' @examples s = system.file('misc', 'stitch-test.R', package = 'knitr')
@@ -246,14 +247,14 @@ knit_child = function(..., eval = TRUE) {
 ##' out = stitch(s, system.file('misc', 'knitr-minimal_knit_.html', package = 'knitr'))
 ##' if (interactive()) browseURL(out)
 stitch = function(script, template = system.file('misc', 'knitr-template.Rnw',
-                          package = 'knitr')) {
+                          package = 'knitr'), output = NULL) {
     lines = readLines(script, warn = FALSE)
     ## extract title and author from first two lines
     if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:')) lines = lines[-1L]
     if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:')) lines = lines[-1L]
     knit_code$set(`auto-report` = lines)
     file.copy(template, '.', overwrite = TRUE)
-    out = knit(basename(template))
+    out = knit(basename(template), output)
     if (str_detect(out, '\\.tex$')) {
         texi2pdf(out, clean = TRUE)
         system(paste(getOption('pdfviewer'), shQuote(str_replace(out, '\\.tex$', '.pdf'))))
