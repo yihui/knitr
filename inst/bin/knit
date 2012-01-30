@@ -1,0 +1,18 @@
+#!/usr/bin/env Rscript
+
+p = commandArgs(TRUE)
+print(p)
+if (length(p) == 0L || '--help' %in% p) {
+  message('usage: 
+    knit input [output] [--pdf]
+    knit --help to print help messages')
+  q()
+}
+library(knitr)
+knit_fun = if ('--pdf' %in% p) {
+  p = setdiff(p, '--pdf')
+  if (length(p) == 0L) stop('no input file provided')
+  knit2pdf 
+} else knit
+knit_fun(p[1], if (length(p) < 2L) NULL else p[2])
+
