@@ -124,17 +124,18 @@ input_dir = function() {
 }
 
 ## scientific notation in TeX
-format_sci = function(x, format = 'latex', d = getOption('digits')) {
+format_sci = function(x, format = 'latex') {
     if (!is.numeric(x)) return(x)
-    if (any(abs(lx <- floor(log(abs(x), 10))) >= d)) {
-        b = formatC(x/10^lx)
+    scipen = getOption('scipen') + 4L
+    if (any(abs(lx <- floor(log(abs(x), 10))) >= scipen)) {
+        b = str_trim(formatC(x/10^lx, digits = getOption('digits')))
         b[b %in% c('1', '-1')] = ''
         if (format == 'latex')
             return(sprintf('$%s%s10^{%s}$', b, ifelse(b == '', '', '\\times '), floor(lx)))
         if (format == 'html')
             return(sprintf('%s%s10<sup>%s</sup>', b, ifelse(b == '', '', ' &times; '), floor(lx)))
     }
-    formatC(x)
+    formatC(x, digits = getOption('digits'))
 }
 
 ## absolute path?
