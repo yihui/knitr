@@ -46,9 +46,9 @@
 ##' about \pkg{knitr}, including the full documentation of chunk
 ##' options and demos, etc.
 ##' @param input path of the input file
-##' @param output path of the output file; if not set, this function
-##' will try to guess and it will be under the same directory as
-##' \code{input}
+##' @param output path of the output file; if \code{NULL}, this
+##' function will try to guess and it will be under the same directory
+##' as \code{input}
 ##' @param tangle whether to tangle the R code from the input file
 ##' (like \code{\link[utils]{Stangle}})
 ##' @param text a character vector as an alternative way to provide
@@ -86,12 +86,12 @@
 ##' ## or setwd(dirname(f)); knit(basename(f))
 ##'
 ##' purl(f)  # extract R code only
-knit = function(input, output, tangle = FALSE, text = NULL) {
+knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     if (is.character(text)) {
         input = tempfile(); writeLines(text, con = input)
     }
     opts_knit$set(tangle = tangle)
-    if (missing(output)) {
+    if (is.null(output)) {
         output = file.path(dirname(input), basename(auto_out_name(input, tangle)))
     }
     ext = tolower(file_ext(input))
