@@ -29,6 +29,8 @@ call_block = function(block) {
 
     if (is_tikz_dev(params)) set_header(tikz = '\\usepackage{tikz}')
 
+    params$code = parse_chunk(params$code) # parse sub-chunk references
+
     ## Check cache
     hash =
         str_c(valid_prefix(params$cache.path), params$label, '_',
@@ -208,7 +210,7 @@ process_tangle.block = function(x) {
         cmds = lapply(sc_split(params$child), knit_child, tangle = TRUE)
         str_c(unlist(cmds), collapse = '\n')
     } else knit_code$get(label)
-    label_code(code, label)
+    label_code(parse_chunk(code), label)
 }
 process_tangle.inline = function(x) return('')
 

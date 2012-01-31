@@ -214,3 +214,16 @@ strip_chunk = function(x) {
     }
     x
 }
+
+## (recursively) parse chunk references inside a chunk
+parse_chunk = function(x) {
+    rc = knit_patterns$get('ref.chunk')
+    if (!group_pattern(rc) || !any(idx <- str_detect(x, rc))) return(x)
+    labels = str_replace(x[idx], rc, '\\1')
+    code = knit_code$get(labels)
+    if (length(labels) <= 1L) code = list(code)
+    x[idx] = unlist(lapply(code, function(z) {
+        str_c(parse_chunk(z), collapse = '\n')
+    }), use.names = FALSE)
+    x
+}
