@@ -2,10 +2,13 @@
 \alias{run_chunk}
 \title{Run the code in a specified chunk}
 \usage{
-run_chunk(label)
+run_chunk(label, envir = parent.frame())
 }
 \arguments{
   \item{label}{the chunk label}
+
+  \item{envir}{the environment in which to evaluate the
+  code}
 }
 \value{
   Values returned by the code in the chunk.
@@ -16,11 +19,12 @@ run_chunk(label)
   the chunk reference in Sweave.
 }
 \details{
-  The difference between this type of chunk reference to
+  The difference between this type of chunk reference and
   the chunk option \code{ref.label} is that the latter can
-  only use the same code as the reference chunk, and this
-  function makes it possible to collect several little
-  chunks and run them inside another big chunk.
+  only be used for a chunk so that it has exactly the same
+  code as the reference chunk, whereas this function makes
+  it possible to collect several little chunks and run them
+  inside another big chunk.
 }
 \note{
   Recursion (must be finite, of course) of reference is
