@@ -321,6 +321,6 @@ knit2pdf = function(input, output = NULL){
 ##' # <<b>>=
 ##' # run_chunk('a')
 ##' # @@
-run_chunk = function(label) {
-    eval(parse(text = knit_code$get(label)), envir = knit_env())
+run_chunk = function(label, envir = parent.frame()) {
+    eval(parse(text = knit_code$get(label)), envir = envir)
 }
