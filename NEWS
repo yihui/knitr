@@ -2,10 +2,12 @@
 
 NEW FEATURES
 
-  o new function run_chunk() to run the code in a specified chunk,
-  which is an alternative to the chunk reference in Sweave (<<label>>
-  in Sweave is now equivalent to run_chunk(label) in knitr); thanks to
+  o chunk references using <<label>> is supported now (#86); thanks to
   Kevin R. Coombe and Terry Therneau for the discussion
+
+  o new function run_chunk() to run the code in a specified chunk,
+  which is an alternative to the chunk reference in Sweave; see
+  http://yihui.github.com/knitr/demo/reference/
 
   o a executable script 'knit' under system.files('bin', package =
   'knitr') which makes it easier to call knitr via command line under
