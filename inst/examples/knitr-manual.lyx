@@ -1,5 +1,5 @@
 #LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 420
+\lyxformat 424
 \begin_document
 \begin_header
 \textclass article
@@ -50,12 +50,14 @@ knitr
 \pdf_quoted_options "pdfstartview={XYZ null null 1}"
 \papersize default
 \use_geometry true
-\use_amsmath 1
-\use_esint 1
-\use_mhchem 1
-\use_mathdots 1
-\use_undertilde 1
-\cite_engine natbib_authoryear
+\use_package amsmath 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
 \biblio_style jss
 \use_bibtopic false
 \use_indices false
@@ -2645,12 +2647,15 @@ reference "sub:conditional"
 \family typewriter
 <<chunk-label>>
 \family default
- was dropped; if you want to reuse a chunk, either consider writing a function
- instead of explicitly repeating code, or make use of code externalization
- as introduced before, or use the new option 
+ is still available, and there are other approaches for reusing chunks,
+ e.g., use the new option 
 \family typewriter
 ref.label
 \family default
+ or the function 
+\emph on
+run_chunk()
+\emph default
  (see the demo 
 \begin_inset Quotes eld
 \end_inset
@@ -2696,8 +2701,8 @@ Sexpr{}
 \series bold
 knitr
 \series default
- will automatically format the results -- numbers will be written in real
- scientific notations (e.g.
+ will automatically format the results -- too big or too small numbers will
+ be written in scientific notations (e.g.
  
 \begin_inset Formula $3.14\times10^{-5}$
 \end_inset
@@ -2709,9 +2714,9 @@ knitr
 ).
  We can also call 
 \family typewriter
-knit(..., tangle = TRUE)
+purl()
 \family default
- to tangle R code, which is similar to 
+ to extract R code, which is similar to 
 \emph on
 Stangle()
 \emph default

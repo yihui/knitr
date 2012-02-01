@@ -642,9 +642,8 @@ are supported (the first two are recommended), and \texttt{true}/\texttt{false}
 will not work, e.g., \texttt{eval=FALSE} is OK, and \texttt{eval=false}
 is not (not exactly true; see Section \ref{sub:conditional}). Chunk
 reference using \texttt{<\textcompwordmark{}<chunk-label>\textcompwordmark{}>}
-was dropped; if you want to reuse a chunk, either consider writing
-a function instead of explicitly repeating code, or make use of code
-externalization as introduced before, or use the new option \texttt{ref.label}
+is still available, and there are other approaches for reusing chunks,
+e.g., use the new option \texttt{ref.label} or the function \emph{run\_chunk()}
 (see the demo ``\href{http://yihui.github.com/knitr/demo/reference/}{Chunk Reference}''
 in the website).
 
@@ -655,10 +654,10 @@ standard \LaTeX{} packages, and users are free to change them using
 hooks. 
 
 For inline R code as in \texttt{\textbackslash{}Sexpr\{\}}, \textbf{knitr}
-will automatically format the results -- numbers will be written in
-real scientific notations (e.g. $3.14\times10^{-5}$ instead of the
-less readable \texttt{3.14e-05}). We can also call \texttt{knit(...,
-tangle = TRUE)} to tangle R code, which is similar to \emph{Stangle()}.
+will automatically format the results -- too big or too small numbers
+will be written in scientific notations (e.g. $3.14\times10^{-5}$
+instead of the less readable \texttt{3.14e-05}). We can also call
+\texttt{purl()} to extract R code, which is similar to \emph{Stangle()}.
 
 Some answers to Sweave FAQ's from \texttt{vignette('Sweave', package='utils')}
 are different in \textbf{knitr}:
