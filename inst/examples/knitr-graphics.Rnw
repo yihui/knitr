@@ -29,7 +29,7 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=tikz, external=TRUE, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE}
+% \SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=tikz, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE}
 
 <<setup,echo=FALSE,results=hide,cache=FALSE>>=
 options(replace.assign=TRUE,width=80)
@@ -62,15 +62,12 @@ the device locally. Since tikz will be used extensively throughout
 this manual and you will see plenty of tikz graphics later, now we
 first show a few other devices.
 
-<<test-plot>>=
-test_plot=function() {
+<<test-plot, eval=FALSE>>=
 with(trees, symbols(Height, Volume, circles = Girth/16, inches = FALSE, bg = 'deeppink', fg = 'gray30'))
-}
 @
 
 \begin{marginfigure}
-<<pdf-dev,dev=pdf,out.width=\linewidth,echo=FALSE,dependson=test-plot>>=
-test_plot()
+<<pdf-dev,ref.label=test-plot,dev=pdf,out.width=\linewidth,echo=FALSE>>=
 @
 
 \caption{The default PDF device.\label{mar:pdf-dev}}
@@ -78,8 +75,7 @@ test_plot()
 
 
 \begin{marginfigure}
-<<png-dev,dev=png,out.width=\linewidth,echo=FALSE,dependson=test-plot>>=
-test_plot()
+<<png-dev,ref.label=test-plot,dev=png,out.width=\linewidth,echo=FALSE>>=
 @
 
 \caption{The PNG device.\label{mar:png-dev}}
@@ -92,8 +88,7 @@ in the \textbf{Cairo} or \textbf{cairoDevice} package, e.g., the chunk
 below uses the \emph{Cairo\_png()} device in the \textbf{cairoDevice}
 package.
 
-<<cairo-png-dev,dev=Cairo_png,out.width=.5\linewidth,echo=FALSE,dependson=test-plot>>=
-test_plot()
+<<cairo-png-dev,ref.label=test-plot,dev=Cairo_png,out.width=.5\linewidth,echo=FALSE>>=
 @
 
 Finally we show an example of \emph{cairo\_pdf()} (in base R) with
@@ -107,9 +102,9 @@ text(1,1,'\u55E8\uFF0C\u4F60\u597D\u5417',cex=4) # hello
 
 Depending on the graphics packages and devices you use, the background
 of plots might be transparent (e.g. tikz for base graphics) or white
-(e.g. \textbf{ggplot2}) by default. If you definitely want the background
-color to be always white for base graphics, you can set up a hook
-for the \texttt{white} option like this:
+by default. If you definitely want the background color to be always
+white for base graphics, you can set up a hook for the \texttt{white}
+option like this:
 
 <<white-background,eval=FALSE>>=
 knit_hooks$set(white = function(before, options, envir) {if (before) par(bg = 'white')})
@@ -329,11 +324,8 @@ Now we compare two plots below. The first one is not cropped:
 
 \begin{figure}
 <<pdf-nocrop,fig.width=3.2,fig.height=3.2,out.width=.4\linewidth>>=
-test_crop=function(){
 par(mar=c(5,4,4,2),bg='white')  # large margin
 plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
-}
-test_crop()
 @
 
 \caption{The original plot produced in R, with a large margin.}
@@ -344,8 +336,7 @@ Then the same plot is produced but with a chunk option \texttt{crop=TRUE}
 which will call the cropping hook:
 
 \begin{figure}
-<<pdf-crop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.4\linewidth,crop=TRUE,dependson=pdf-nocrop>>=
-test_crop()
+<<pdf-crop,ref.label=pdf-nocrop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.4\linewidth,crop=TRUE>>=
 @
 
 \caption{The cropped plot; it fits better in the document.}

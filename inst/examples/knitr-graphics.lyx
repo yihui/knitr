@@ -1,5 +1,5 @@
 #LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 420
+\lyxformat 424
 \begin_document
 \begin_header
 \textclass tufte-handout
@@ -43,12 +43,14 @@ knitr
 \use_hyperref false
 \papersize default
 \use_geometry true
-\use_amsmath 1
-\use_esint 1
-\use_mhchem 1
-\use_mathdots 1
-\use_undertilde 1
+\use_package amsmath 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package undertilde 1
 \cite_engine basic
+\cite_engine_type numerical
 \biblio_style plain
 \use_bibtopic false
 \use_indices false
@@ -86,8 +88,7 @@ status open
 % 
 \backslash
 SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center,
- dev=tikz, external=TRUE, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE,
- par=TRUE}
+ dev=tikz, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE}
 \end_layout
 
 \end_inset
@@ -233,23 +234,13 @@ status open
 
 \begin_layout Plain Layout
 
-<<test-plot>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-test_plot=function() {
+<<test-plot, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
 
 with(trees, symbols(Height, Volume, circles = Girth/16, inches = FALSE,
  bg = 'deeppink', fg = 'gray30'))
-\end_layout
-
-\begin_layout Plain Layout
-
-}
 \end_layout
 
 \begin_layout Plain Layout
@@ -274,14 +265,9 @@ status open
 
 \begin_layout Plain Layout
 
-<<pdf-dev,dev=pdf,out.width=
+<<pdf-dev,ref.label=test-plot,dev=pdf,out.width=
 \backslash
-linewidth,echo=FALSE,dependson=test-plot>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-test_plot()
+linewidth,echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -330,14 +316,9 @@ status open
 
 \begin_layout Plain Layout
 
-<<png-dev,dev=png,out.width=
+<<png-dev,ref.label=test-plot,dev=png,out.width=
 \backslash
-linewidth,echo=FALSE,dependson=test-plot>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-test_plot()
+linewidth,echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -419,14 +400,9 @@ status open
 
 \begin_layout Plain Layout
 
-<<cairo-png-dev,dev=Cairo_png,out.width=.5
+<<cairo-png-dev,ref.label=test-plot,dev=Cairo_png,out.width=.5
 \backslash
-linewidth,echo=FALSE,dependson=test-plot>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-test_plot()
+linewidth,echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -496,12 +472,7 @@ u5417',cex=4) # hello
 \begin_layout Standard
 Depending on the graphics packages and devices you use, the background of
  plots might be transparent (e.g.
- tikz for base graphics) or white (e.g.
- 
-\series bold
-ggplot2
-\series default
-) by default.
+ tikz for base graphics) or white by default.
  If you definitely want the background color to be always white for base
  graphics, you can set up a hook for the 
 \family typewriter
@@ -1570,27 +1541,12 @@ linewidth>>=
 
 \begin_layout Plain Layout
 
-test_crop=function(){
-\end_layout
-
-\begin_layout Plain Layout
-
 par(mar=c(5,4,4,2),bg='white')  # large margin
 \end_layout
 
 \begin_layout Plain Layout
 
 plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\begin_layout Plain Layout
-
-test_crop()
 \end_layout
 
 \begin_layout Plain Layout
@@ -1640,14 +1596,9 @@ status open
 
 \begin_layout Plain Layout
 
-<<pdf-crop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.4
+<<pdf-crop,ref.label=pdf-nocrop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.4
 \backslash
-linewidth,crop=TRUE,dependson=pdf-nocrop>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-test_crop()
+linewidth,crop=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
