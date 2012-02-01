@@ -79,7 +79,7 @@ x
 @
 {% endhighlight %}
 
-Note the code in chunk `c` is actually a recursive call: `c` calls `a` which in turn calls `b`. With **knitr**, the level of recursion can be arbitrary (Sweave only allows one level), but you have to make sure there is no infinite recursion (e.g. `a` calls `b` and `b` also calls `a`).
+Note the code in chunk `c` is actually a recursive call: `c` calls `a` which in turn calls `b`. Like the `<<>>` approach, the level of recursion can be arbitrary, but you have to make sure there is no infinite recursion (e.g. `a` calls `b` and `b` also calls `a`).
 
 Guess what are the values of `x` in each chunk?
 
