@@ -271,7 +271,7 @@ fit=lm(dist~speed,data=cars) # linear regression
 
 \begin_layout Plain Layout
 
-par(mar=c(4, 4, 1, .1), mgp=c(2,1,0),bg='white')
+par(mar=c(4, 4, 1, .1), mgp=c(2,1,0))
 \end_layout
 
 \begin_layout Plain Layout
