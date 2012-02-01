@@ -1,7 +1,6 @@
 #!/usr/bin/env Rscript
 
 p = commandArgs(TRUE)
-print(p)
 if (length(p) == 0L || '--help' %in% p) {
   message('usage: 
     knit input [output] [--pdf]
