@@ -5,7 +5,7 @@ subtitle: How to reuse chunks
 category: demo
 ---
 
-Sweave has the feature of chunk reference to reuse chunks, e.g.
+Sweave has the feature of chunk reference to reuse chunks with the syntax `<<chunk-label>>` (without `=` compared to `<<>>=`), e.g.
 
 {% highlight r %}
 <<chunk1>>=
@@ -17,7 +17,9 @@ Sweave has the feature of chunk reference to reuse chunks, e.g.
 @
 {% endhighlight %}
 
-In `chunk2`, the code in `chunk1` will be inserted. The feature of chunk reference is different in **knitr**: it does not use `<<chunk-label>>`; there are three approaches to reuse chunks in **knitr**.
+In `chunk2`, the code in `chunk1` will be inserted. This feature is also available in **knitr**, but note **knitr** supports arbitrary (finite) levels of recursion in chunk references (Sweave only supports one level), i.e. one chunk can reference another chunk which references yet another chunk.
+
+There are still three additional approaches to reuse chunks in **knitr**.
 
 1. use the same label as the previous chunk to be reused
 1. use the chunk option `ref.label` to reference another chunk
