@@ -2989,7 +2989,7 @@ status open
 
 \begin_layout Plain Layout
 
-install.packages(c('animation', 'rgl', 'tikzDevice'))
+install.packages(c('animation', 'rgl', 'tikzDevice', 'ggplot2'))
 \end_layout
 
 \begin_layout Plain Layout

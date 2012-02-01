@@ -727,7 +727,7 @@ you need to make sure all the R packages used in this document are
 installed:
 
 <<required-packages,eval=FALSE>>=
-install.packages(c('animation', 'rgl', 'tikzDevice'))
+install.packages(c('animation', 'rgl', 'tikzDevice', 'ggplot2'))
 @
 
 Feedback and comments on this manual and the package are always welcome.
