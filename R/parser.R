@@ -19,6 +19,7 @@ split_file = function(path) {
     tmp = logical(n); tmp[blks | txts] = TRUE; lines[txts] = ''
 
     groups = unname(split(lines, cumsum(tmp)))
+    groups = Filter(function(x) !identical(x, ''), groups) # rm empty groups
 
     ## parse 'em all
     lapply(groups, function(g) {
