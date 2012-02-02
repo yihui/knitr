@@ -13,7 +13,7 @@ The FAQ's are compiled from the [issues](https://github.com/yihui/knitr/issues) 
 1. Oh, the tons of arguments like `Sweave(..., prefix.string=abc, keep.source=FALSE, foo=bar)` are really flexible; why `knit()` only has so few arguments?
   - Because I believe putting these arguments in `knit()` breaks the principle of reproducibility, and so does using environmental variables (see [#19](https://github.com/yihui/knitr/issues/19) for details).
 1. I love RStudio and Sweave is sweet there; is **knitr** going to work with RStudio?
-  - I love RStudio too; currently **knitr** is not supported yet, but [the developers said](http://blog.rstudio.org/2012/01/10/rstudio-v0-95-preview/#comment-275) it was on their radar, so you have to wait for a while. By the way, I also recommend LyX if you want to use Sweave or **knitr**.
+  - I love RStudio too, and yes, **knitr** is going to be supported in RStudio thanks to RStudio developers; currently you can try the [development version](http://www.rstudio.org/download/daily/) as long as you understand what a development version means. By the way, I also recommend LyX if you want to use Sweave or **knitr**.
 1. You mentioned LyX so many times, so what the heck is LyX?
   - It is an intelligent wrapper for LaTeX; see http://www.lyx.org for details. I would like to define it as a software package that can both increase the productivity of an _experienced_ LaTeX user by 300%, and decrease it by 500% for a LaTeX novice. Don't use it simply because its GUI is so tempting; it is not MS Word. I have added support for **knitr** in LyX; see [the lyx demo page](http://yihui.github.com/knitr/demo/lyx/).
 1. Where are those prompt characters `>` and `+`? I feel uncomfortable reading R output without them.
