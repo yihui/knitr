@@ -114,6 +114,10 @@ block_exec = function(code, ...) {
             res = res[!figs] # remove all
         } else {
             if (options$fig.show == 'hold') res = c(res[!figs], res[figs]) # move to the end
+            res = Filter(function(x) {
+                ## filter out plot objects purely for layout (raised by par(), layout())
+                !is.recordedplot(x) || !all(plot_calls(x) %in% c('par', 'layout'))
+            }, res)
             figs = sapply(res, is.recordedplot)
             if (sum(figs) > 1) {
                 if (keep %in% c('first', 'last')) {
