@@ -255,7 +255,7 @@ stitch = function(script, template = system.file('misc', 'knitr-template.Rnw',
     if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:')) lines = lines[-1L]
     knit_code$set(`auto-report` = lines)
     input = basename(template)
-    input = str_c(file_path_sans_ext(script), '.', file_ext(input))
+    input = str_c(file_path_sans_ext(basename(script)), '.', file_ext(input))
     file.copy(template, input, overwrite = TRUE)
     out = knit(input, output)
     if (str_detect(out, '\\.tex$')) {
