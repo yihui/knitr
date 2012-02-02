@@ -44,7 +44,6 @@ Imports:
     stringr,
     tools,
     highlight,
-    utils
 Suggests:
     testthat,
     rgl,
