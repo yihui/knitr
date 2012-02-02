@@ -13,7 +13,8 @@ stitch(script, template = system.file("misc", "knitr-template.Rnw",
   template in \pkg{knitr})}
 
   \item{output}{the output filename (passed to
-  \code{\link{knit}})}
+  \code{\link{knit}}); by default it uses the base filename
+  of the script}
 }
 \value{
   path of the output document
