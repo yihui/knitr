@@ -253,8 +253,10 @@ stitch = function(script, template = system.file('misc', 'knitr-template.Rnw',
     if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:')) lines = lines[-1L]
     if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:')) lines = lines[-1L]
     knit_code$set(`auto-report` = lines)
-    file.copy(template, '.', overwrite = TRUE)
-    out = knit(basename(template), output)
+    input = basename(template)
+    input = str_c(file_path_sans_ext(script), '.', file_ext(input))
+    file.copy(template, input, overwrite = TRUE)
+    out = knit(input, output)
     if (str_detect(out, '\\.tex$')) {
         texi2pdf(out, clean = TRUE)
         system(paste(getOption('pdfviewer'), shQuote(str_replace(out, '\\.tex$', '.pdf'))))
