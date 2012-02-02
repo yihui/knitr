@@ -237,7 +237,8 @@ knit_child = function(..., eval = TRUE) {
 ##' @param template path of the template to use (by default the Rnw
 ##' template in this package; there is also an HTML template in
 ##' \pkg{knitr})
-##' @param output the output filename (passed to \code{\link{knit}})
+##' @param output the output filename (passed to \code{\link{knit}});
+##' by default it uses the base filename of the script
 ##' @return path of the output document
 ##' @export
 ##' @examples s = system.file('misc', 'stitch-test.R', package = 'knitr')
