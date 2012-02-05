@@ -65,7 +65,7 @@ opts_current = new_defaults()
 ##' str(all_patterns)
 all_patterns =
 
-    list(`rnw` = list(chunk.begin = '^<<(.*)>>=', chunk.end = '^@\\s*$',
+    list(`rnw` = list(chunk.begin = '^<<(.*)>>=', chunk.end = '^@\\s*%*',
          inline.code = '\\\\Sexpr\\{([^\\}]*)\\}',
          input.doc = '\\\\SweaveInput\\{([^\\}]*)\\}',
          ref.chunk = '^<<(.*)>>\\s*$',
