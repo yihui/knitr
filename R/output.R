@@ -140,7 +140,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     unlink('NA')  # temp fix to issue 94
     cat(res, file = output)
     dep_list$restore()  # empty dependency list
-    message('output file: ', normalizePath(output), '\n')
+    if (is.character(output) && file.exists(output)) {
+        message('output file: ', normalizePath(output), '\n')
+    }
     invisible(output)
 }
 ##' @rdname knit
