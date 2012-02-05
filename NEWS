@@ -22,6 +22,11 @@ MINOR CHANGES
   o the default value for the 'output' argument in knit() is NULL now,
   so we can also provide output filenames to stitch() and knit2pdf()
   (#119)
+
+  o the starting pattern of normal texts in an Rnw document is
+  '^@\\s*%*' instead of '^@\\s*$' now, meaning you can write '@ % a
+  comment' to end a code chunk (this is consistent with Sweave)
+
   
 			 CHANGES IN knitr VERSION 0.2
 
