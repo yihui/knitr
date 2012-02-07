@@ -50,7 +50,7 @@ Suggests:
     tikzDevice (>= 0.6.2),
     XML
 License: GPL
-URL: http://yihui.github.com/knitr/
+URL: http://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
 Collate:
     'package.R'
