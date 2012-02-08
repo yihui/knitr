@@ -107,9 +107,9 @@ hook_plot_md = function(x, options) {
 .chunk.hook.tex = function(x, options) {
     if (output_asis(x, options)) return(x)
     x =
-        str_c(color_def(options$background), '{',
+        str_c(color_def(options$background), '',
               ifelse(is_tikz_dev(options), '', '\\color{fgcolor}'),
-              '\\begin{kframe}\n', x, '\\end{kframe}}')
+              '\\begin{kframe}\n', x, '\\end{kframe}')
     x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
     if (options$split) {
         name = fig_path('.tex', options)
