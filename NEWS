@@ -27,6 +27,13 @@ MINOR CHANGES
   '^@\\s*%*' instead of '^@\\s*$' now, meaning you can write '@ % a
   comment' to end a code chunk (this is consistent with Sweave)
 
+BUG FIXES
+
+  o the object opts_current does not give the evaluated version of the
+  current chunk options because it was created before the options are
+  evaluated; this has been fixed and opts_current$get() will give the
+  expected values of options (thanks, Frank Harrell)
+
   
 			 CHANGES IN knitr VERSION 0.2
 
