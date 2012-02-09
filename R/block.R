@@ -9,14 +9,14 @@ process_group.inline = function(x) call_inline(x)
 call_block = function(block) {
     params = opts_chunk$merge(block$params)
     params = fix_options(params)  # for compatibility
+    ## evaluate options as R code instead of character strings
+    for (o in opts_knit$get('eval.opts')) params[[o]] = eval_opt(params[[o]])
+
     opts_current$restore(); opts_current$set(params)  # save current options
     label = ref.label = params$label
     if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
     params$code = unlist(knit_code$get(ref.label), use.names = FALSE)
     if (opts_knit$get('progress')) print(block)
-
-    ## evaluate options as R code instead of character strings
-    for (o in opts_knit$get('eval.opts')) params[[o]] = eval_opt(params[[o]])
 
     if (params$eval && !is.null(params$child)) {
         cmds = lapply(sc_split(params$child), knit_child)
