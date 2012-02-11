@@ -7,7 +7,7 @@ NEW FEATURES
 
   o new function run_chunk() to run the code in a specified chunk,
   which is an alternative to the chunk reference in Sweave; see
-  http://yihui.github.com/knitr/demo/reference/
+  http://yihui.name/knitr/demo/reference/
 
   o a executable script 'knit' under system.files('bin', package =
   'knitr') which makes it easier to call knitr via command line under
@@ -42,7 +42,7 @@ NEW FEATURES
 
   o added support for including child documents in a main document
   (like \SweaveInput{} but with different implementations); see
-  http://yihui.github.com/knitr/demo/child/ (#92)
+  http://yihui.name/knitr/demo/child/ (#92)
 
   o for inline R code, character results are returned as-is now
   (without \texttt{})
@@ -68,15 +68,14 @@ NEW FEATURES
   in the last version)
 
   o added a new demo to show how to build package vignettes with
-  knitr: http://yihui.github.com/knitr/demo/vignette/
+  knitr: http://yihui.name/knitr/demo/vignette/
 
   o added support to the quartz() device under Mac (#103); now the
-  'dev' option has more choices (see
-  http://yihui.github.com/knitr/options)
+  'dev' option has more choices (see http://yihui.name/knitr/options)
 
   o chunk option 'echo' can take a numeric vector to select which R
   expressions to echo into the output now (#108); see
-  http://yihui.github.com/knitr/options
+  http://yihui.name/knitr/options
 
   o a new function stitch() which is a convenience function to insert
   an R script into a template and compile (to quickly create a report
@@ -85,7 +84,7 @@ NEW FEATURES
   o for a chunk hook to run, the corresponding chunk option no longer
   has to be TRUE; it can be any non-null values; this enables us to
   make use of the option value directly instead of only knowing it is
-  TRUE (see http://yihui.github.com/knitr/demo/cache/ for an example)
+  TRUE (see http://yihui.name/knitr/demo/cache/ for an example)
 
   o knit() will no longer writes figure or cache files in the same
   directory as the input document; instead, these files are written in
@@ -113,7 +112,7 @@ NEW FEATURES
 		
   o first version of knitr: it covers most features in Sweave,
   cacheSweave and pgfSweave; see package homepage for documentation
-  and examples: http://yihui.github.com/knitr/
+  and examples: http://yihui.name/knitr/
 
 MISC
 
