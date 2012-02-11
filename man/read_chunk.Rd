@@ -23,7 +23,10 @@ read_chunk(path)
 }
 \note{
   This function can only be used in a chunk which is
-  \emph{not} cached (chunk option \code{cache = FALSE}).
+  \emph{not} cached (chunk option \code{cache = FALSE}),
+  and the code is read and stored in the current session
+  \emph{without} being executed (to actually run the code,
+  you have to use a chunk with a corresponding label).
 }
 \examples{
 ## the default format
