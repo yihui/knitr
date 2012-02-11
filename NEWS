@@ -15,7 +15,8 @@ NEW FEATURES
 
   o the inline hooks respect getOption('digits') and
   getOption('scipen') now (see ?options); numbers returned from inline
-  R code will be formatted according to these two options
+  R code will be formatted according to these two options (see a demo
+  at http://yihui.name/knitr/demo/output/)
 
 MINOR CHANGES
 
