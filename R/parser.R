@@ -67,7 +67,9 @@ parse_block = function(input) {
 
 ## parse params from chunk header
 parse_params = function(params, label = TRUE) {
-    pieces = str_split(str_split(params, ',')[[1]], '=')
+    ## split by , (literal comma has to be escaped as \,) and then by =
+    pieces = str_split(params, perl('(?<=[^\\\\]),'))[[1]]
+    pieces = str_split(str_replace_all(pieces, fixed('\\,'), ','), '=', n = 2L)
     n = sapply(pieces, length)
     ## when global options are empty
     if (length(n) == 1 && length(pieces[[1]]) == 1) {
