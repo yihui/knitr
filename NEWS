@@ -18,6 +18,10 @@ NEW FEATURES
   R code will be formatted according to these two options (see a demo
   at http://yihui.name/knitr/demo/output/)
 
+  o it is possible to write literal commas in chunk options now --
+  they have to be escaped by \, e.g. echo=c(1\, 3\, 6); this will be
+  parsed to c(1, 3, 6)
+
 MINOR CHANGES
 
   o the default value for the 'output' argument in knit() is NULL now,
