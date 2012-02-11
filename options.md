@@ -22,7 +22,7 @@ And `\SweaveOpts{}` can change the default global options in a document (e.g. `\
 
 1. Chunk options must be written in one line, and you should not break them into multiple lines;
 1. Avoid spaces ` ` and periods `.` in chunk labels and directory names; if your output is a TeX document, these characters can cause troubles (in general it is recommended to use alphabetic characters with words separated by `-` and avoid other characters), e.g. `setup-options` is a good label, whereas `setup.options` and `chunk 1` are bad; `fig.path=figures/mcmc-` is a good prefix for figure output if this project is about MCMC, and `fig.path=markov chain/monte carlo` is bad;
-2. For options that take _character_ values, you should not quote them as you do in R (e.g. should write `fig.path=abc` instead of `fig.path="abc"`), and should avoid the comma `,` in the character string since it is the separator of chunk options; for logical options, `TRUE` and `FALSE` are OK, and `true`/`false` will not work as you might have expected;
+2. For options that take _character_ values, you should not quote them as you do in R (e.g. should write `fig.path=abc` instead of `fig.path="abc"`), and should avoid the comma `,` in the character string since it is the separator of chunk options (in some cases, we use `;` to replace `,` such as the options `background` and `ani.opts`, and for other cases, literal commas have to be escaped as `\\,`); for logical options, `TRUE` and `FALSE` are OK, and `true`/`false` will not work as you might have expected;
 1. It is possible to set certain options to take values from R expressions instead of fixed values; see the package option `eval.opts`;
 
 All built-in options in **knitr** are:
