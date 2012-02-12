@@ -43,7 +43,7 @@ Imports:
     formatR (>= 0.3-4),
     stringr,
     tools,
-    highlight,
+    highlight
 Suggests:
     testthat,
     rgl,
