@@ -26,6 +26,12 @@ NEW FEATURES
   specify the program to compile the tex document to PDF, such as
   xelatex (#131) (thanks, Ramnath Vaidyanathan and Dennis Murphy)
 
+  o a new function imgur_upload() to upload images to imgur.com; it
+  can be used in HTML or Markdown hooks so the output is a
+  self-contained document which does not need additional image files;
+  opts_knit$get('upload') controls whether to upload images
+  automatically (#66)
+
 MINOR CHANGES
 
   o the default value for the 'output' argument in knit() is NULL now,
