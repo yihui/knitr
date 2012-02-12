@@ -270,13 +270,25 @@ knit_env = function() {
 ##' Knit the input Rnw document to a tex document, and compile it
 ##' using \code{texi2pdf}.
 ##' @inheritParams knit
+##' @param compiler a character string which gives the LaTeX program
+##' used to compile the tex document to PDF (by default it uses the
+##' default setting of \code{\link[tools]{texi2pdf}}, which is often
+##' PDFLaTeX); this argument will be used to temporarily set the
+##' environmental variable \samp{PDFLATEX}
 ##' @author Ramnath Vaidyanathan and Yihui Xie
 ##' @export
 ##' @importFrom tools texi2pdf
 ##' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}}
-knit2pdf = function(input, output = NULL){
+##' @examples ## compile with xelatex
+##' ## knit2pdf(..., compiler = 'xelatex')
+knit2pdf = function(input, output = NULL, compiler = NULL){
     out = knit(input, output)
     owd = setwd(dirname(out)); on.exit(setwd(owd))
+    if (!is.null(compiler)) {
+        oc = Sys.getenv('PDFLATEX')
+        on.exit(Sys.setenv(PDFLATEX = oc), add = TRUE)
+        Sys.setenv(PDFLATEX = compiler)
+    }
     texi2pdf(basename(out), clean = TRUE)
 }
 
