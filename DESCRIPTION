@@ -48,7 +48,8 @@ Suggests:
     testthat,
     rgl,
     tikzDevice (>= 0.6.2),
-    XML
+    XML,
+    RCurl
 License: GPL
 URL: http://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
@@ -67,3 +68,4 @@ Collate:
     'header.R'
     'themes.R'
     'eclipse.R'
+    'upload.R'
