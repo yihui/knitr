@@ -21,7 +21,8 @@
 ##' @note Please register your own Imgur application to get your API
 ##' key; you can certainly use mine, but this key is in the public
 ##' domain so everyone has access to all images associated to it.
-##' @references \url{http://api.imgur.com/}
+##' @references Imgur API: \url{http://api.imgur.com/}; a demo:
+##' \url{http://yihui.name/knitr/demo/upload/}
 ##' @export
 ##' @examples f = tempfile(fileext = '.png')
 ##' png(f); plot(rnorm(100), main = R.version.string); dev.off()

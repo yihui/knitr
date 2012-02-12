@@ -54,5 +54,6 @@ if (interactive())
   Statham
 }
 \references{
-  \url{http://api.imgur.com/}
+  Imgur API: \url{http://api.imgur.com/}; a demo:
+  \url{http://yihui.name/knitr/demo/upload/}
 }
