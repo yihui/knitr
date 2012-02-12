@@ -88,8 +88,7 @@ hook_plot_tex = function(x, options) {
 hook_plot_html = function(x, options) {
     ## TODO: output size not implemented for HTML yet
     a = options$fig.align
-    sprintf('<img src="%s" class="plot" %s/>\n',
-            paste(x, collapse = '.'),
+    sprintf('<img src="%s" class="plot" %s/>\n', .upload.url(x),
             switch(a,
                    default = '',
                    left = 'style="float: left"',
@@ -101,9 +100,18 @@ hook_plot_html = function(x, options) {
 hook_plot_md = function(x, options) {
     base = opts_knit$get('base.url')
     if (is.null(base)) base = ''
-    sprintf('![plot of chunk %s](%s%s.%s) ', options$label,
-            base, x[1], x[2])
+    sprintf('![plot of chunk %s](%s%s) ', options$label, base, .upload.url(x))
 }
+
+## a wrapper to imgur_upload to get the URL of images when option upload==TRUE
+.upload.url = function(x) {
+    file = paste(x, collapse = '.')
+    if (opts_knit$get('upload')) {
+        file = .upload.url(file)
+        imgur_upload(file)$links$original
+    } else file
+}
+
 .chunk.hook.tex = function(x, options) {
     if (output_asis(x, options)) return(x)
     x =
