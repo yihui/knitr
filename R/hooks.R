@@ -107,7 +107,6 @@ hook_plot_md = function(x, options) {
 .upload.url = function(x) {
     file = paste(x, collapse = '.')
     if (opts_knit$get('upload')) {
-        file = .upload.url(file)
         imgur_upload(file)$links$original
     } else file
 }
