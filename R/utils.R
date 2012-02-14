@@ -130,8 +130,10 @@ format_sci = function(x, format = 'latex') {
     if (any(abs(lx <- floor(log(abs(x), 10))) >= scipen)) {
         b = round(x/10^lx, getOption('digits'))
         b[b %in% c('1', '-1')] = ''
-        if (format == 'latex')
-            return(sprintf('$%s%s10^{%s}$', b, ifelse(b == '', '', '\\times '), floor(lx)))
+        if (format == 'latex') {
+            res = sprintf('%s%s10^{%s}', b, ifelse(b == '', '', '\\times '), floor(lx))
+            return(if (inherits(x, 'AsIs')) res else sprintf('$%s$', res))
+        }
         if (format == 'html')
             return(sprintf('%s%s10<sup>%s</sup>', b, ifelse(b == '', '', ' &times; '), floor(lx)))
     }
