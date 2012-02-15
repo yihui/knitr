@@ -1,23 +1,27 @@
 ## x is the output of processed document
 insert_header = function(x) {
-    if (!is.null(b <- knit_patterns$get('header.begin'))) {
-        h = opts_knit$get('header')
-        i = which(str_detect(x, b))[1]
-        if (length(i) == 1) {
-            fmt = opts_knit$get('out.format')
-            if (fmt %in% c('markdown', 'gfm', 'jekyll')) return(x)
-            if (identical('latex', fmt))
-                h = c('\\usepackage{graphicx, color}', h)
-            if (identical('html', fmt))
-                h = h['highlight']
-            h = h[nzchar(h)]; if (length(h) == 0) h = ''
-            loc = str_locate(x[i], b)
-            str_sub(x[i], loc[, 1], loc[, 2]) =
-                str_c(str_sub(x[i], loc[, 1], loc[, 2]), '\n', str_c(h, collapse = '\n'))
+    if (is.null(b <- knit_patterns$get('header.begin'))) return(x)
+    h = opts_knit$get('header')
+    i = which(str_detect(x, b))
+    if (length(i) == 1L) {
+        fmt = opts_knit$get('out.format')
+        if (fmt %in% c('markdown', 'gfm', 'jekyll')) return(x)
+        if (identical('latex', fmt))
+            h = c('\\usepackage{graphicx, color}', h)
+        if (identical('html', fmt))
+            h = h['highlight']
+        h = h[nzchar(h)]; if (length(h) == 0) h = ''
+        loc = str_locate(x[i], b)
+        str_sub(x[i], loc[, 1], loc[, 2]) =
+            str_c(str_sub(x[i], loc[, 1], loc[, 2]), '\n', str_c(h, collapse = '\n'))
+    } else if (length(i) == 0L) {
+        if (opts_knit$get('parent')) {
+            h = c('\\usepackage{graphicx, color}', h)
+            x = c(getOption('tikzDocumentDeclaration'), str_c(h, collapse = '\n'),
+                 .knitEnv$tikzPackages, '\\begin{document}', x, '\\end{document}')
         }
     }
     x
-
 }
 
 ##' Set the header information
