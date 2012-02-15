@@ -67,9 +67,7 @@
 ##' directory of the input document, so if the R code involves with
 ##' external files (like \code{read.table()}), it is better to put
 ##' these files under the same directory of the input document so that
-##' we can use relative paths. It is recommended to change the working
-##' directory to the input directory before calling \code{knit()},
-##' especially when the input document contains child documents.
+##' we can use relative paths.
 ##' @export
 ##' @references Package homepage: \url{http://yihui.github.com/knitr/}
 ##'
@@ -111,9 +109,12 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     }
 
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
-    if (is.null(optk$input.dir)) {
-        opts_knit$set(input.dir = dirname(input))  # record current working dir
+    if (opts_knit$get('child')) {
+        ## in child mode, input path needs to be adjusted
+        if (!is_abs_path(input)) input = file.path(input_dir(), input)
     }
+    opts_knit$set(input.dir = dirname(input))  # record current working dir
+
     if (is.null(opts_knit$get('out.format'))) {
         fmt =
             switch(ext, rnw = 'latex', tex = 'latex', html = 'html', md = 'jekyll',
