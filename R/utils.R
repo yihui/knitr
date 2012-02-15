@@ -118,6 +118,7 @@ pure_preamble = function(preamble, chunk.begin, chunk.end) {
 ##' the complete output is written.
 ##' @note Obviously this function is only useful when the output
 ##' format is LaTeX.
+##' @references \url{http://yihui.name/knitr/demo/child/}
 ##' @export
 ##' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')}
 ##' ## or use it in a chunk with echo=FALSE
