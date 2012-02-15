@@ -117,7 +117,11 @@ pure_preamble = function(preamble, chunk.begin, chunk.end) {
 ##' @return The preamble is extracted and stored to be used later when
 ##' the complete output is written.
 ##' @note Obviously this function is only useful when the output
-##' format is LaTeX.
+##' format is LaTeX. This function only works when the child document
+##' is compiled in a standalone mode using \code{\link{knit}()}
+##' (instead of being called in \code{\link{knit_child}()}); when the
+##' parent document is compiled, this function in the child document
+##' will be ignored.
 ##' @references \url{http://yihui.name/knitr/demo/child/}
 ##' @export
 ##' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')}
