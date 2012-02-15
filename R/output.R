@@ -220,6 +220,9 @@ auto_out_name = function(input, tangle = FALSE) {
 ##' ## use \include: opts_knit$set(child.command = 'include')
 knit_child = function(..., eval = TRUE) {
     if (!eval) return('')
+    child = opts_knit$get('child')
+    opts_knit$set(child = TRUE) # yes, in child mode now
+    on.exit(opts_knit$set(child = child)) # restore child status
     path = knit(...)
     if (opts_knit$get('tangle')) {
         str_c('source("', path, '")')
