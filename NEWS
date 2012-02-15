@@ -32,6 +32,15 @@ NEW FEATURES
   opts_knit$get('upload') controls whether to upload images
   automatically (#66)
 
+  o a child document can be compiled individually with the LaTeX
+  preamble borrowed automatically from a parent document using a new
+  function set_parent(); see the help page for details (#136) (thanks,
+  Helder Correia)
+
+  o to avoid $$ around numbers in the inline output, we can use I() to
+  protect the numeric inline output, e.g. $x = \Sexpr{I(10^7)}$ where
+  as \Sexpr{10^7} gives $10^7$ (thanks, Kevin Middleton)
+
 MINOR CHANGES
 
   o the default value for the 'output' argument in knit() is NULL now,
@@ -46,7 +55,16 @@ MAJOR CHANGES
 
   o the default value of the argument 'output' will be a filename
   under the current working directory; in previous versions, the
-  output file will be under the same directory as the input file
+  output file will be under the same directory as the input file; this
+  change makes it possible to completely separate the input files and
+  output files into different places, and hopefully will give users
+  better experience in managing a whole collection of files (including
+  child documents): put all source files in one place and output files
+  in another place
+
+  o the package homepage is http://yihui.name/knitr now (the previous
+  URL yihui.github.com/knitr will be automatically redirected to the
+  new address)
 
 BUG FIXES
 
