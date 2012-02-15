@@ -1,6 +1,6 @@
 # knitr
 
-The R package **knitr** is a general-purpose literate programming engine, with lightweight API's designed to give users full control of the output without heavy coding work. It combines many features into one package with slight tweaks motivated from my everyday use of Sweave. See the [package homepage](http://yihui.github.com/knitr) for  details and examples. See [FAQ's](https://github.com/yihui/knitr/blob/master/FAQ.md) for a list of frequently asked questions (including where to ask questions).
+The R package **knitr** is a general-purpose literate programming engine, with lightweight API's designed to give users full control of the output without heavy coding work. It combines many features into one package with slight tweaks motivated from my everyday use of Sweave. See the [package homepage](http://yihui.name/knitr) for  details and examples. See [FAQ's](https://github.com/yihui/knitr/blob/master/FAQ.md) for a list of frequently asked questions (including where to ask questions).
 
 ## Installation
 
