@@ -25,3 +25,6 @@ set_parent(parent)
 ## can use, e.g. \\Sexpr{set_parent('parent_doc.Rnw')}
 ## or use it in a chunk with echo=FALSE
 }
+\references{
+  \url{http://yihui.name/knitr/demo/child/}
+}
