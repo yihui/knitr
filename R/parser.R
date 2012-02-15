@@ -11,7 +11,9 @@ split_file = function(path) {
         return(list(parse_inline(lines)))
     }
 
-    set_preamble(lines, chunk.begin, chunk.end)  # prepare for tikz option 'standAlone'
+    if (!opts_knit$get('child')) {
+        set_preamble(lines, chunk.begin, chunk.end)  # prepare for tikz option 'standAlone'
+    }
 
     blks = str_detect(lines, chunk.begin)
     txts = str_detect(lines, chunk.end)
