@@ -107,7 +107,12 @@ opts_knit =
                       imgur.key = '60e9e47cff8483c6dc289a1cd674b40f', upload = FALSE,
                       eval.opts = c('eval', 'echo'),
                       all.patterns = all_patterns, tangle = FALSE,
+                      child = FALSE, parent = FALSE,
 
                       header = c(highlight = '', tikz = '', framed = ''))
 )
 ## header should not be set by hand unless you know what you are doing
+
+## tangle: whether I'm in tangle mode; child: whether I'm in child
+## document mode; parent: whether I need to add parent preamble to the
+## child output
