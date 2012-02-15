@@ -113,7 +113,7 @@ pure_preamble = function(preamble, chunk.begin, chunk.end) {
 ##' use for the child document, so that the child document can be
 ##' compiled as an individual document.
 ##' @param parent path to the parent document (relative to the current
-##' working directory)
+##' child document)
 ##' @return The preamble is extracted and stored to be used later when
 ##' the complete output is written.
 ##' @note Obviously this function is only useful when the output
@@ -125,7 +125,7 @@ pure_preamble = function(preamble, chunk.begin, chunk.end) {
 set_parent = function(parent) {
     if (opts_knit$get('child')) return() # quit if in child mode
     opts_knit$set(parent = TRUE)
-    set_preamble(readLines(parent, warn = FALSE),
+    set_preamble(readLines(file.path(input_dir(), parent), warn = FALSE),
                  knit_patterns$get('chunk.begin'), knit_patterns$get('chunk.end'))
     invisible(NULL)
 }
