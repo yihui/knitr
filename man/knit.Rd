@@ -93,9 +93,6 @@ purl(...)
   involves with external files (like \code{read.table()}),
   it is better to put these files under the same directory
   of the input document so that we can use relative paths.
-  It is recommended to change the working directory to the
-  input directory before calling \code{knit()}, especially
-  when the input document contains child documents.
 }
 \examples{
 library(knitr)

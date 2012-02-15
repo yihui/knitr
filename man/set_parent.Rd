@@ -6,7 +6,7 @@ set_parent(parent)
 }
 \arguments{
   \item{parent}{path to the parent document (relative to
-  the current working directory)}
+  the current child document)}
 }
 \value{
   The preamble is extracted and stored to be used later
@@ -19,7 +19,12 @@ set_parent(parent)
 }
 \note{
   Obviously this function is only useful when the output
-  format is LaTeX.
+  format is LaTeX. This function only works when the child
+  document is compiled in a standalone mode using
+  \code{\link{knit}()} (instead of being called in
+  \code{\link{knit_child}()}); when the parent document is
+  compiled, this function in the child document will be
+  ignored.
 }
 \examples{
 ## can use, e.g. \\Sexpr{set_parent('parent_doc.Rnw')}
