@@ -1,22 +1,23 @@
 #!/usr/bin/env Rscript
 
-p = commandArgs(TRUE)
-if (length(p) == 0L || '--help' %in% p) {
-  message('usage: 
+local({
+    p = commandArgs(TRUE)
+    if (length(p) == 0L || '--help' %in% p) {
+        message('usage:
     knit input [output] [--pdf]
     knit --help to print help messages')
-  q()
-}
+        q()
+    }
 
-library(knitr)
-knit_fun = if ('--pdf' %in% p) {
-  p = setdiff(p, '--pdf')
-  if (length(p) == 0L) stop('no input file provided')
-  knit2pdf 
-} else knit
+    library(knitr)
+    knit_fun = if ('--pdf' %in% p) {
+        p = setdiff(p, '--pdf')
+        if (length(p) == 0L) stop('no input file provided')
+        knit2pdf
+    } else knit
 
-if (!file.exists(p[1]))
-  stop("file '", p[1], "' does not exist!")
+    if (!file.exists(p[1]))
+        stop("file '", p[1], "' does not exist!")
 
-knit_fun(p[1], if (length(p) < 2L) NULL else p[2])
-
+    knit_fun(p[1], if (length(p) < 2L) NULL else p[2])
+})
