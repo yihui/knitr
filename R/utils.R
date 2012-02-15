@@ -82,7 +82,7 @@ sc_split = function(string) {
 }
 
 ## extract LaTeX packages for tikzDevice
-set_tikz_opts = function(input, cb, ce) {
+set_preamble = function(input, cb, ce) {
     if (opts_knit$get('out.format') != 'latex') return()
     db = knit_patterns$get('document.begin')
     if (length(db) != 1L) return()  # no \begin{document} pattern
