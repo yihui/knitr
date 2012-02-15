@@ -38,9 +38,15 @@ MINOR CHANGES
   so we can also provide output filenames to stitch() and knit2pdf()
   (#119)
 
+MAJOR CHANGES
+
   o the starting pattern of normal texts in an Rnw document is
   '^@\\s*%*' instead of '^@\\s*$' now, meaning you can write '@ % a
   comment' to end a code chunk (this is consistent with Sweave)
+
+  o the default value of the argument 'output' will be a filename
+  under the current working directory; in previous versions, the
+  output file will be under the same directory as the input file
 
 BUG FIXES
 

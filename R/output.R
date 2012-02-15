@@ -47,8 +47,8 @@
 ##' options and demos, etc.
 ##' @param input path of the input file
 ##' @param output path of the output file; if \code{NULL}, this
-##' function will try to guess and it will be under the same directory
-##' as \code{input}
+##' function will try to guess and it will be under the current
+##' working directory
 ##' @param tangle whether to tangle the R code from the input file
 ##' (like \code{\link[utils]{Stangle}})
 ##' @param text a character vector as an alternative way to provide
@@ -92,7 +92,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     }
     opts_knit$set(tangle = tangle)
     if (is.null(output)) {
-        output = file.path(dirname(input), basename(auto_out_name(input, tangle)))
+        output = basename(auto_out_name(input, tangle))
     }
     ext = tolower(file_ext(input))
     apat = opts_knit$get('all.patterns')
