@@ -106,6 +106,29 @@ pure_preamble = function(preamble, chunk.begin, chunk.end) {
     idx = unlist(mapply(seq, from = blks, to = ends, SIMPLIFY = FALSE))
     preamble[-idx]
 }
+
+##' Specify the parent document of child documents
+##'
+##' This function extract the LaTeX preamble of the parent document to
+##' use for the child document, so that the child document can be
+##' compiled as an individual document.
+##' @param parent path to the parent document (relative to the current
+##' working directory)
+##' @return The preamble is extracted and stored to be used later when
+##' the complete output is written.
+##' @note Obviously this function is only useful when the output
+##' format is LaTeX.
+##' @export
+##' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')}
+##' ## or use it in a chunk with echo=FALSE
+set_parent = function(parent) {
+    if (opts_knit$get('child')) return() # quit if in child mode
+    opts_knit$set(parent = TRUE)
+    set_preamble(readLines(parent, warn = FALSE),
+                 knit_patterns$get('chunk.begin'), knit_patterns$get('chunk.end'))
+    invisible(NULL)
+}
+
 ## whether to write results as-is?
 output_asis = function(x, options) {
     is_blank(x) || options$results %in% c('tex', 'asis')
