@@ -129,7 +129,7 @@ pure_preamble = function(preamble, chunk.begin, chunk.end) {
 set_parent = function(parent) {
     if (opts_knit$get('child')) return() # quit if in child mode
     opts_knit$set(parent = TRUE)
-    set_preamble(readLines(file.path(input_dir(), parent), warn = FALSE),
+    set_preamble(readLines(parent, warn = FALSE),
                  knit_patterns$get('chunk.begin'), knit_patterns$get('chunk.end'))
     invisible(NULL)
 }
