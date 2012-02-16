@@ -41,7 +41,7 @@ Imports:
     evaluate (>= 0.4),
     digest,
     formatR (>= 0.3-4),
-    stringr,
+    stringr (>= 0.6),
     tools,
     highlight
 Suggests:
