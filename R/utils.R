@@ -124,8 +124,11 @@ pure_preamble = function(preamble, chunk.begin, chunk.end) {
 ##' will be ignored.
 ##' @references \url{http://yihui.name/knitr/demo/child/}
 ##' @export
-##' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')}
-##' ## or use it in a chunk with echo=FALSE
+##' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
+##'
+##' ## <<setup-child, include=FALSE>>=
+##' ## set_parent('parent_doc.Rnw')
+##' ## @
 set_parent = function(parent) {
     if (opts_knit$get('child')) return() # quit if in child mode
     opts_knit$set(parent = TRUE)
