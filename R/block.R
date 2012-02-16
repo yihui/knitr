@@ -188,6 +188,7 @@ inline_exec = function(block) {
     code = block$code; input = block$input
     if ((n <- length(code)) == 0) return(input) # untouched if no code is found
 
+    owd = setwd(input_dir()); on.exit(setwd(owd))
     loc = block$location
     for (i in 1:n) {
         res = try(eval(parse(text = code[i]), envir = globalenv()))
