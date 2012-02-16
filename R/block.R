@@ -210,6 +210,7 @@ process_tangle = function(x) {
 process_tangle.block = function(x) {
     params = opts_chunk$merge(x$params)
     label = params$label
+    params$eval = eval_opt(params$eval)
     code = if (params$eval && !is.null(params$child)) {
         cmds = lapply(sc_split(params$child), knit_child, tangle = TRUE)
         str_c(unlist(cmds), collapse = '\n')
