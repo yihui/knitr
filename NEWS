@@ -38,8 +38,8 @@ NEW FEATURES
   Helder Correia)
 
   o to avoid $$ around numbers in the inline output, we can use I() to
-  protect the numeric inline output, e.g. $x = \Sexpr{I(10^7)}$ where
-  as \Sexpr{10^7} gives $10^7$ (thanks, Kevin Middleton)
+  protect the numeric inline output, e.g. $x = \Sexpr{I(10^7)}$
+  whereas \Sexpr{10^7} gives $10^7$ (thanks, Kevin Middleton)
 
 MINOR CHANGES
 
