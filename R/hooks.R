@@ -236,9 +236,8 @@ render_sweave = function() {
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.s(x, options)
     hook.c = function(x, options) str_c('\\begin{Schunk}\n', x, '\\end{Schunk}\n')
     knit_hooks$set(source = hook.i, output = hook.o, warning = hook.s,
-                   message = hook.s, error = hook.s, inline = identity,
-                   plot = function(x, options) sprintf('\\includegraphics{%s}', x[1]),
-                   chunk = hook.c)
+                   message = hook.s, error = hook.s, inline = .inline.hook.tex,
+                   plot = hook_plot_tex, chunk = hook.c)
 }
 ##' @rdname output_hooks
 ##' @export
