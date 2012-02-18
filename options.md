@@ -133,3 +133,4 @@ All package options are:
 - `eval.opts`: (`c('eval', 'echo')`) a character vector of option names; these options will be evaluated as R code if they originally take character values (e.g. for `eval=dothis`, R will use the value of a global variable `dothis` as the real value of `eval` instead of a character string `'dothis'`)
 - `upload`: (`FALSE`) whether to upload R plots to <imgur.com> when the output format is HTML or Markdown
 - `imgur.key`: (`60e9e47cff8483c6dc289a1cd674b40f`) the key to use the [Imgur API](http://api.imgur.com); it is recommended that you register one by yourself instead of using this default public key
+- `cache.extra`: (`NULL`) extra content that should affect [cache](/knitr/demo/cache)
