@@ -142,7 +142,11 @@ hook_plot_md = function(x, options) {
 .inline.hook = function(x) {
     paste(as.character(x), collapse = ', ')
 }
-
+## inline hook for tex
+.inline.hook.tex = function(x) {
+    if (is.numeric(x)) x = format_sci(x, 'latex')
+    .inline.hook(x)
+}
 ## single param hook: a function of one argument
 .param.hook = function(before, options, envir) {
     if (before) {
@@ -153,6 +157,7 @@ hook_plot_md = function(x, options) {
 }
 
 .out.hook = function(x, options) x
+.verb.hook = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
 
 ##' Hooks for R code chunks, inline R code and output
 ##'
