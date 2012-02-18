@@ -32,9 +32,9 @@ call_block = function(block) {
     params$code = parse_chunk(params$code) # parse sub-chunk references
 
     ## Check cache
-    hash =
-        str_c(valid_prefix(params$cache.path), params$label, '_',
-              digest(list(params[setdiff(names(params), 'include')], getOption('width'))))
+    content = list(params[setdiff(names(params), 'include')], getOption('width'))
+    content[[3L]] = opts_knit$get('cache.extra')
+    hash = str_c(valid_prefix(params$cache.path), params$label, '_', digest(content))
     params$hash = hash
     if (params$cache && cache$exists(hash)) {
         if (!params$include) return('')
