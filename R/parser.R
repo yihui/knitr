@@ -2,8 +2,7 @@
 
 ## split input document into groups containing chunks and other texts
 ## (may contain inline R code)
-split_file = function(path) {
-    lines = readLines(path, warn = FALSE)
+split_file = function(path, lines = readLines(path, warn = FALSE), set.preamble = TRUE) {
     n = length(lines)
     chunk.begin = knit_patterns$get('chunk.begin')
     chunk.end = knit_patterns$get('chunk.end')
@@ -11,8 +10,8 @@ split_file = function(path) {
         return(list(parse_inline(lines)))
     }
 
-    if (!opts_knit$get('child')) {
-        set_preamble(lines, chunk.begin, chunk.end)  # prepare for tikz option 'standAlone'
+    if (!opts_knit$get('child') && set.preamble) {
+        set_preamble(lines)  # prepare for tikz option 'standAlone'
     }
 
     blks = str_detect(lines, chunk.begin)
@@ -26,6 +25,9 @@ split_file = function(path) {
     ## parse 'em all
     lapply(groups, function(g) {
         block = str_detect(g[1], chunk.begin)
+        if (!set.preamble && !opts_knit$get('parent')) {
+            return(if (block) '' else g) # only need to remove chunks to get pure preamble
+        }
         if (block) parse_block(g) else parse_inline(g)
     })
 }

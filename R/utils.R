@@ -99,12 +99,15 @@ set_preamble = function(input) {
     .knitEnv$tikzPackages = c(preamble, '\n')
 }
 ## filter out code chunks from preamble if they exist (they do in LyX/Sweave)
-pure_preamble = function(preamble, chunk.begin, chunk.end) {
-    blks = which(str_detect(preamble, chunk.begin))
-    if (!length(blks)) return(preamble)
-    ends = which(str_detect(preamble, chunk.end))
-    idx = unlist(mapply(seq, from = blks, to = ends, SIMPLIFY = FALSE))
-    preamble[-idx]
+pure_preamble = function(preamble) {
+    res = split_file(lines = preamble, set.preamble = FALSE) # should avoid recursion
+    if (!opts_knit$get('parent')) {
+        ## when not in parent mode, just return normal texts and skip code
+        return(unlist(res))
+    }
+    owd = setwd(input_dir()); on.exit(setwd(owd))
+    ## run the code in the preamble
+    sapply(res, if (opts_knit$get('tangle')) process_tangle else process_group)
 }
 
 ##' Specify the parent document of child documents
