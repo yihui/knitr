@@ -212,9 +212,9 @@ render_latex = function() {
         warning("unable to find LaTeX package 'framed'; will copy from the knitr package")
         file.copy(system.file('misc', 'framed.sty', package = 'knitr'), '.')
     }
-    optk = opts_knit$get('header')
-    if (!nzchar(optk['framed'])) set_header(framed = .header.framed)
-    if (!nzchar(optk['highlight'])) set_header(highlight = .header.hi.tex)
+    h = opts_knit$get('header')
+    if (!nzchar(h['framed'])) set_header(framed = .header.framed)
+    if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
     knit_hooks$restore()
     hook.v = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
     hook.o = function(x, options) if (output_asis(x, options)) x else hook.v(x, options)
