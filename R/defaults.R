@@ -108,6 +108,7 @@ opts_knit =
                       eval.opts = c('eval', 'echo'),
                       all.patterns = all_patterns, tangle = FALSE,
                       child = FALSE, parent = FALSE,
+                      cache.extra = NULL,
 
                       header = c(highlight = '', tikz = '', framed = ''))
 )
