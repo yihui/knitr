@@ -102,7 +102,8 @@ save_plot = function(plot, name, options) {
                             pdftex = getOption('tikzLatex'),
                             xetex = getOption("tikzXelatex"),
                             stop("a LaTeX engine must be specified for tikzDevice",
-                                 call. = FALSE)), shQuote(basename(path)), sep = ' '))
+                                 call. = FALSE)), shQuote(basename(path)), sep = ' '),
+               ignore.stdout = TRUE)
         setwd(owd)
         if (file.exists(pdf.plot)) ext = 'pdf' else {
             stop('failed to compile ', path, ' to PDF', call. = FALSE)
