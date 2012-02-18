@@ -112,9 +112,15 @@ pure_preamble = function(preamble) {
 
 ##' Specify the parent document of child documents
 ##'
-##' This function extract the LaTeX preamble of the parent document to
-##' use for the child document, so that the child document can be
+##' This function extracts the LaTeX preamble of the parent document
+##' to use for the child document, so that the child document can be
 ##' compiled as an individual document.
+##'
+##' When the preamble of the parent document also contains code chunks
+##' and inline R code, they will be evaluated as if they were in this
+##' child document. For examples, when \pkg{knitr} hooks or other
+##' options are set in the preamble of the parent document, it will
+##' apply to the child document as well.
 ##' @param parent path to the parent document (relative to the current
 ##' child document)
 ##' @return The preamble is extracted and stored to be used later when
