@@ -1,4 +1,6 @@
 ## S3 method to deal with chunks and inline text respectively
+##' @S3method process_group block
+##' @S3method process_group inline
 process_group = function(x) {
     UseMethod('process_group', x)
 }
@@ -205,6 +207,8 @@ inline_exec = function(block) {
     input
 }
 
+##' @S3method process_tangle block
+##' @S3method process_tangle inline
 process_tangle = function(x) {
     UseMethod('process_tangle', x)
 }
