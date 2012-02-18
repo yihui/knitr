@@ -240,6 +240,13 @@ render_sweave = function() {
 }
 ##' @rdname output_hooks
 ##' @export
+render_listings = function() {
+    render_sweave()
+    test_latex_pkg('Sweavel', system.file('misc', 'Sweavel.sty', package = 'knitr'))
+    set_header(framed = '', highlight = '\\usepackage{Sweavel}')
+}
+##' @rdname output_hooks
+##' @export
 render_html = function() {
     knit_hooks$restore()
     ## use div with different classes
