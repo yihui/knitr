@@ -207,11 +207,7 @@ run_hooks = function(before, options, envir) {
 ##' @export
 ##' @references See output hooks in \url{http://yihui.github.com/knitr/hooks}
 render_latex = function() {
-    res = try(system("kpsewhich framed.sty", intern = TRUE), silent = TRUE)
-    if (inherits(res, 'try-error') || !length(res)) {
-        warning("unable to find LaTeX package 'framed'; will copy from the knitr package")
-        file.copy(system.file('misc', 'framed.sty', package = 'knitr'), '.')
-    }
+    test_latex_pkg('framed', system.file('misc', 'framed.sty', package = 'knitr'))
     h = opts_knit$get('header')
     if (!nzchar(h['framed'])) set_header(framed = .header.framed)
     if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
