@@ -216,20 +216,15 @@ render_latex = function() {
     if (!nzchar(h['framed'])) set_header(framed = .header.framed)
     if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
     knit_hooks$restore()
-    hook.v = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
-    hook.o = function(x, options) if (output_asis(x, options)) x else hook.v(x, options)
+    hook.o = function(x, options) if (output_asis(x, options)) x else .verb.hook(x, options)
     knit_hooks$set(source = function(x, options) {
         if (options$highlight) {
             ## gsub() makes sure " will not produce an umlaut
             str_c('\\begin{flushleft}\n', gsub('"', '"{}', x, fixed = TRUE),
                   '\\end{flushleft}\n')
-        } else hook.v(x, options)}, output = hook.o,
-                   warning = hook.v, message = hook.v, error = hook.v,
-                   inline = function(x) {
-                       if (is.numeric(x)) x = format_sci(x, 'latex')
-                       .inline.hook(x)
-                   }, plot = hook_plot_tex,
-                   chunk = .chunk.hook.tex)
+        } else .verb.hook(x, options)
+    }, output = hook.o, warning = .verb.hook, message = .verb.hook, error = .verb.hook,
+                   inline = .inline.hook.tex, plot = hook_plot_tex, chunk = .chunk.hook.tex)
 }
 ##' @rdname output_hooks
 ##' @export
