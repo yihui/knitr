@@ -45,6 +45,9 @@ NEW FEATURES
   ?render_listings); the default style is borrowed from Sweavel.sty
   written by Frank Harrell (#101) (thanks, Frank)
 
+  o new package option 'cache.extra' which allows more objects to
+  affect cache; see http://yihui.name/knitr/demo/cache/ (#134)
+
 MINOR CHANGES
 
   o the default value for the 'output' argument in knit() is NULL now,
