@@ -257,6 +257,15 @@ eval_opt = function(x) {
 ## counterpart of isTRUE()
 isFALSE = function(x) identical(x, FALSE)
 
+## check latex packages; if not exist, copy them over to ./
+test_latex_pkg = function(name, path) {
+    res = try(system(sprintf("kpsewhich %s.sty", name), intern = TRUE), silent = TRUE)
+    if (inherits(res, 'try-error') || !length(res)) {
+        warning("unable to find LaTeX package '", name, "'; will use a copy from knitr")
+        file.copy(path, '.')
+    }
+}
+
 ##' Path for figure files
 ##'
 ##' The filename of figure files is the combination of options
