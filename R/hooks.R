@@ -225,6 +225,9 @@ render_latex = function() {
 ##' @rdname output_hooks
 ##' @export
 render_sweave = function() {
+    opts_chunk$set(highlight = FALSE, comment = NA, prompt = TRUE) # mimic Sweave settings
+    test_latex_pkg('Sweave', file.path(R.home("share"), "texmf", "tex", "latex", "Sweave.sty"))
+    set_header(framed = '', highlight = '\\usepackage{Sweave}')
     knit_hooks$restore()
     ## wrap source code in the Sinput environment, output in Soutput
     hook.i = function(x, options) str_c('\\begin{Sinput}\n', x, '\\end{Sinput}\n')
