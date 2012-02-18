@@ -72,7 +72,7 @@ save_plot = function(plot, name, options) {
                Cairo_svg = load_device('Cairo_svg', 'cairoDevice'),
 
                tikz = function(...) {
-                   if (do.call('require', list(package = 'tikzDevice'))) {
+                   if (suppressPackageStartupMessages(require('tikzDevice'))) {
                        packages =
                            switch(getOption("tikzDefaultEngine"),
                                   pdftex = getOption("tikzLatexPackages"),
