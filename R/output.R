@@ -124,7 +124,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
         opts_knit$set(out.format = fmt)
     }
     switch(opts_knit$get('out.format'), latex = render_latex(), html = render_html(),
-           sweave = {opts_chunk$set(highlight = FALSE); render_sweave()},
+           sweave = render_sweave(), listings = render_listings(),
            jekyll = render_jekyll(), markdown = render_markdown(),
            gfm = render_gfm())
 
