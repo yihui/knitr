@@ -82,7 +82,7 @@ sc_split = function(string) {
 }
 
 ## extract LaTeX packages for tikzDevice
-set_preamble = function(input, cb, ce) {
+set_preamble = function(input) {
     if (opts_knit$get('out.format') != 'latex') return()
     db = knit_patterns$get('document.begin')
     if (length(db) != 1L) return()  # no \begin{document} pattern
@@ -95,7 +95,7 @@ set_preamble = function(input, cb, ce) {
     idx = str_locate(txt, hb)  # locate documentclass
     if (any(is.na(idx))) return()
     options(tikzDocumentDeclaration = str_sub(txt, idx[, 1L], idx[, 2L]))
-    preamble = pure_preamble(str_split(str_sub(txt, idx[, 2L] + 1L), '\n')[[1L]], cb, ce)
+    preamble = pure_preamble(str_split(str_sub(txt, idx[, 2L] + 1L), '\n')[[1L]])
     .knitEnv$tikzPackages = c(preamble, '\n')
 }
 ## filter out code chunks from preamble if they exist (they do in LyX/Sweave)
@@ -132,8 +132,7 @@ pure_preamble = function(preamble, chunk.begin, chunk.end) {
 set_parent = function(parent) {
     if (opts_knit$get('child')) return() # quit if in child mode
     opts_knit$set(parent = TRUE)
-    set_preamble(readLines(parent, warn = FALSE),
-                 knit_patterns$get('chunk.begin'), knit_patterns$get('chunk.end'))
+    set_preamble(readLines(parent, warn = FALSE))
     invisible(NULL)
 }
 
