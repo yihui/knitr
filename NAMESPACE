@@ -1,3 +1,7 @@
+S3method(process_group,block)
+S3method(process_group,inline)
+S3method(process_tangle,block)
+S3method(process_tangle,inline)
 S3method(wrap,character)
 S3method(wrap,error)
 S3method(wrap,list)
