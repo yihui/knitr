@@ -41,6 +41,10 @@ NEW FEATURES
   protect the numeric inline output, e.g. $x = \Sexpr{I(10^7)}$
   whereas \Sexpr{10^7} gives $10^7$ (thanks, Kevin Middleton)
 
+  o the listings package is formally supported now (see
+  ?render_listings); the default style is borrowed from Sweavel.sty
+  written by Frank Harrell (#101) (thanks, Frank)
+
 MINOR CHANGES
 
   o the default value for the 'output' argument in knit() is NULL now,
