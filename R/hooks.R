@@ -224,6 +224,7 @@ run_hooks = function(before, options, envir) {
 ##' @export
 ##' @references See output hooks in \url{http://yihui.github.com/knitr/hooks}
 render_latex = function() {
+    if (child_mode()) return()
     test_latex_pkg('framed', system.file('misc', 'framed.sty', package = 'knitr'))
     h = opts_knit$get('header')
     if (!nzchar(h['framed'])) set_header(framed = .header.framed)
@@ -242,6 +243,7 @@ render_latex = function() {
 ##' @rdname output_hooks
 ##' @export
 render_sweave = function() {
+    if (child_mode()) return()
     opts_chunk$set(highlight = FALSE, comment = NA, prompt = TRUE) # mimic Sweave settings
     test_latex_pkg('Sweave', file.path(R.home("share"), "texmf", "tex", "latex", "Sweave.sty"))
     set_header(framed = '', highlight = '\\usepackage{Sweave}')
@@ -258,6 +260,7 @@ render_sweave = function() {
 ##' @rdname output_hooks
 ##' @export
 render_listings = function() {
+    if (child_mode()) return()
     render_sweave()
     test_latex_pkg('Sweavel', system.file('misc', 'Sweavel.sty', package = 'knitr'))
     set_header(framed = '', highlight = '\\usepackage{Sweavel}')

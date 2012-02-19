@@ -274,6 +274,10 @@ test_latex_pkg = function(name, path) {
     }
 }
 
+## get child and parent mode
+child_mode = function() opts_knit$get('child')
+parent_mode = function() opts_knit$get('parent')
+
 ##' Path for figure files
 ##'
 ##' The filename of figure files is the combination of options
