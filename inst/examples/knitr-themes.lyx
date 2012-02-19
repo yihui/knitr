@@ -1,5 +1,5 @@
-#LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 420
+#LyX 2.1.0svn created this file. For more info see http://www.lyx.org/
+\lyxformat 413
 \begin_document
 \begin_header
 \textclass tufte-handout
@@ -30,7 +30,6 @@ knitr
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 88
-
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -56,14 +55,11 @@ knitr
 \use_esint 1
 \use_mhchem 1
 \use_mathdots 1
-\use_undertilde 1
 \cite_engine basic
-\biblio_style plainnat
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
-\justification false
 \use_refstyle 0
 \index Index
 \shortcut idx
