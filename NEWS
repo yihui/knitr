@@ -48,6 +48,9 @@ NEW FEATURES
   o new package option 'cache.extra' which allows more objects to
   affect cache; see http://yihui.name/knitr/demo/cache/ (#134)
 
+  o new package option 'child.path' to specify the search path of
+  child documents relative to the parent document (#141)
+
 MINOR CHANGES
 
   o the default value for the 'output' argument in knit() is NULL now,
