@@ -262,6 +262,7 @@ render_sweave = function() {
 render_listings = function() {
     if (child_mode()) return()
     render_sweave()
+    opts_chunk$set(prompt = FALSE)
     test_latex_pkg('Sweavel', system.file('misc', 'Sweavel.sty', package = 'knitr'))
     set_header(framed = '', highlight = '\\usepackage{Sweavel}')
 }
