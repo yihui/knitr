@@ -208,6 +208,8 @@ auto_out_name = function(input, tangle = FALSE) {
 ##' When we call \code{knit_child(tangle = TRUE)} to extract R code,
 ##' the code in the child document is extracted and saved into an R
 ##' script.
+##'
+##' The path of the child document is relative to the parent document.
 ##' @param ... arguments passed to \code{\link{knit}}
 ##' @param eval logical: whether to evaluate the child document
 ##' @return A character string of the form
