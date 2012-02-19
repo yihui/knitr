@@ -101,7 +101,7 @@ set_preamble = function(input) {
 ## filter out code chunks from preamble if they exist (they do in LyX/Sweave)
 pure_preamble = function(preamble) {
     res = split_file(lines = preamble, set.preamble = FALSE) # should avoid recursion
-    if (!opts_knit$get('parent')) {
+    if (!parent_mode()) {
         ## when not in parent mode, just return normal texts and skip code
         return(unlist(res))
     }

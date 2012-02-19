@@ -25,7 +25,7 @@ split_file = function(path, lines = readLines(path, warn = FALSE), set.preamble 
     ## parse 'em all
     lapply(groups, function(g) {
         block = str_detect(g[1], chunk.begin)
-        if (!set.preamble && !opts_knit$get('parent')) {
+        if (!set.preamble && !parent_mode()) {
             return(if (block) '' else g) # only need to remove chunks to get pure preamble
         }
         if (block) parse_block(g) else parse_inline(g)

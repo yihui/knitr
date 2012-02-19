@@ -15,7 +15,7 @@ insert_header = function(x) {
         str_sub(x[i], loc[, 1], loc[, 2]) =
             str_c(str_sub(x[i], loc[, 1], loc[, 2]), '\n', str_c(h, collapse = '\n'))
     } else if (length(i) == 0L) {
-        if (opts_knit$get('parent')) {
+        if (parent_mode()) {
             h = c('\\usepackage{graphicx, color}', h)
             x = c(getOption('tikzDocumentDeclaration'), str_c(h, collapse = '\n'),
                  .knitEnv$tikzPackages, '\\begin{document}', x, '\\end{document}')
