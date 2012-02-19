@@ -126,6 +126,7 @@ All package options are:
 - `verbose`: (`FALSE`) whether to show verbose information (e.g., R code in each chunk) or just show chunk labels and options
 - `out.format`: (`NULL`) possible values are `latex`, `sweave`, `html`, `markdown`, `gfm` and `jekyll`; it will be automatically determined based on the input file, and this option will affect which set of hooks to use (see `?render_latex` for example); note this option has to be set _before_ `knit()` runs (i.e. it does not work if you set it in the document), or alternatively, you can use the `render_*` series inside the document to set up the hooks
 - `child.command`: (`'input'`) the LaTeX command to be used to insert child documents into the main document (usually `input` or `include`)
+- `child.path`: (`''`) the search path for child documents; by default child documents are searched for relative to the directory of the parent document
 - `all.patterns`: a list of built-in patterns
 - `header`: the text to be inserted into the output document before the document begins (e.g. after `\documentclass{article}` in LaTeX, or `<head>` in HTML); this is useful for defining commands and styles in the LaTeX preamble or HTML header; the beginning of document is found using the pattern defined in `knit_patternss$get('document.begin')`
 - `base.dir`: (`NULL`) an absolute directory under which the plots are generated
