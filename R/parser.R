@@ -10,7 +10,7 @@ split_file = function(path, lines = readLines(path, warn = FALSE), set.preamble 
         return(list(parse_inline(lines)))
     }
 
-    if (!opts_knit$get('child') && set.preamble) {
+    if (!child_mode() && set.preamble) {
         set_preamble(lines)  # prepare for tikz option 'standAlone'
     }
 

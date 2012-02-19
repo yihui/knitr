@@ -109,7 +109,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     }
 
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
-    if (opts_knit$get('child')) {
+    if (child_mode()) {
         ## in child mode, input path needs to be adjusted
         if (!is_abs_path(input)) input = file.path(input_dir(), input)
     }
@@ -221,7 +221,7 @@ auto_out_name = function(input, tangle = FALSE) {
 ##' ## use \include: opts_knit$set(child.command = 'include')
 knit_child = function(..., eval = TRUE) {
     if (!eval) return('')
-    child = opts_knit$get('child')
+    child = child_mode()
     opts_knit$set(child = TRUE) # yes, in child mode now
     on.exit(opts_knit$set(child = child)) # restore child status
     path = knit(...)
