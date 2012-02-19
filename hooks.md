@@ -102,6 +102,10 @@ If the output file type is LaTeX, default hooks will put most output in the `ver
 
 Put source code in the `Sinput` environment, output in the `Soutput` enviroment and the whole chunk in the `Schunk` environment. The style file `Sweave.sty` is required to use this theme, or at least these three environments have to be defined.
 
+## Listings
+
+Similar to Sweave, and [`Sweavel.sty`](https://github.com/yihui/knitr/blob/master/inst/misc/Sweavel.sty) is used instead.
+
 ### HTML
 
 To write output into an HTML file, the hooks will be automatically adjusted. Basically the output from chunks is put in `div` layers with classes, e.g. source code is in `<div class="knitr source"></div>`; the whole chunk output is in `<pre></pre>`; inline output is in `<code class="knitr inline"></code>`.
