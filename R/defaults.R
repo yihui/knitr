@@ -103,7 +103,7 @@ all_patterns =
 opts_knit =
     new_defaults(list(progress = TRUE, verbose = FALSE,
                       out.format = NULL, child.command = 'input',
-                      base.dir = NULL, base.url = NULL,
+                      base.dir = NULL, base.url = NULL, child.path = '',
                       imgur.key = '60e9e47cff8483c6dc289a1cd674b40f', upload = FALSE,
                       eval.opts = c('eval', 'echo'),
                       all.patterns = all_patterns, tangle = FALSE,

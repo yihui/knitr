@@ -111,7 +111,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
     if (child_mode()) {
         ## in child mode, input path needs to be adjusted
-        if (!is_abs_path(input)) input = file.path(input_dir(), input)
+        if (!is_abs_path(input))
+            input = file.path(input_dir(), opts_knit$get('child.path'), input)
     }
     opts_knit$set(input.dir = dirname(input))  # record current working dir
 
