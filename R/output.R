@@ -206,9 +206,8 @@ auto_out_name = function(input) {
 ##' \samp{input} or \samp{include}) is from the package option
 ##' \code{child.command} (\code{opts_knit$get('child.command')}).
 ##'
-##' When we call \code{knit_child(tangle = TRUE)} to extract R code,
-##' the code in the child document is extracted and saved into an R
-##' script.
+##' When we call \code{purl()} to extract R code, the code in the
+##' child document is extracted and saved into an R script.
 ##'
 ##' The path of the child document is relative to the parent document.
 ##' @param ... arguments passed to \code{\link{knit}}
@@ -217,6 +216,9 @@ auto_out_name = function(input) {
 ##' \samp{\command{child-doc.tex}} or \code{source("child-doc.R")},
 ##' depending on the argument \code{tangle} passed in.
 ##' @references \url{http://yihui.github.com/knitr/demo/child/}
+##' @note This function is not supposed be called directly like
+##' \code{\link{knit}()}; instead it must be placed in a parent
+##' document to let \code{\link{knit}()} call it indirectly.
 ##' @export
 ##' @examples ## you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input child-doc.tex in main.tex
 ##'
