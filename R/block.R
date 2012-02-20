@@ -216,7 +216,7 @@ process_tangle.block = function(x) {
     params = opts_chunk$merge(x$params)
     label = params$label
     code = if (!isFALSE(params$eval) && !is.null(params$child)) {
-        cmds = lapply(sc_split(params$child), knit_child, tangle = TRUE)
+        cmds = lapply(sc_split(params$child), knit_child)
         str_c(unlist(cmds), collapse = '\n')
     } else knit_code$get(label)
     label_code(parse_chunk(code), label)

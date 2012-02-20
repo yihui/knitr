@@ -90,7 +90,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     }
     opts_knit$set(tangle = tangle)
     if (is.null(output)) {
-        output = basename(auto_out_name(input, tangle))
+        output = basename(auto_out_name(input))
     }
     ext = tolower(file_ext(input))
     apat = opts_knit$get('all.patterns')
@@ -139,7 +139,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
 
     progress = opts_knit$get('progress')
     message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
-    res = process_file(input, tangle)
+    res = process_file(input)
     unlink('NA')  # temp fix to issue 94
     cat(res, file = output)
     dep_list$restore()  # empty dependency list
@@ -155,11 +155,12 @@ purl = function(...) {
     knit(..., tangle = TRUE)
 }
 
-process_file = function(path, tangle) {
+process_file = function(path) {
     ocode = knit_code$get()
     on.exit({knit_code$restore(); knit_code$set(ocode)}, add = TRUE)
     groups = split_file(path)
     n = length(groups); res = character(n)
+    tangle = opts_knit$get('tangle')
 
     if (opts_knit$get('progress'))
         pb = txtProgressBar(0, n, char = '>', style = 3)
@@ -179,9 +180,9 @@ process_file = function(path, tangle) {
     str_c(c(res, ""), collapse = "\n")
 }
 
-auto_out_name = function(input, tangle = FALSE) {
+auto_out_name = function(input) {
     ext = file_ext(input)
-    if (tangle) return(str_replace(input, str_c(ext, '$'), 'R'))
+    if (opts_knit$get('tangle')) return(str_replace(input, str_c(ext, '$'), 'R'))
     if (tolower(ext) == 'rnw') return(str_replace(input, str_c(ext, '$'), 'tex'))
     if (tolower(ext) %in% c('brew', 'tex', 'html', 'md')) {
         if (str_detect(input, '_knit_')) {
@@ -227,7 +228,7 @@ knit_child = function(..., eval = TRUE) {
     child = child_mode()
     opts_knit$set(child = TRUE) # yes, in child mode now
     on.exit(opts_knit$set(child = child)) # restore child status
-    path = knit(...)
+    path = knit(..., tangle = opts_knit$get('tangle'))
     if (opts_knit$get('tangle')) {
         str_c('source("', path, '")')
     } else str_c('\\', opts_knit$get('child.command'), '{', path, '}')
