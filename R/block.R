@@ -221,7 +221,13 @@ process_tangle.block = function(x) {
     } else knit_code$get(label)
     label_code(parse_chunk(code), label)
 }
-process_tangle.inline = function(x) return('')
+process_tangle.inline = function(x) {
+    code = x$code
+    if ((n <- length(code)) == 0 || !any(idx <- str_detect(code, "knit_child\\(.+\\)")))
+        return('')
+    str_c(str_c(sapply(code[idx], function(z) eval(parse(text = z))),
+                collapse = '\n'), '\n')
+}
 
 
 ## add a label to a code chunk
