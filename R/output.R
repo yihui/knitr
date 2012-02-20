@@ -219,7 +219,7 @@ auto_out_name = function(input, tangle = FALSE) {
 ##' @export
 ##' @examples ## you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input child-doc.tex in main.tex
 ##'
-##' ## comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', FALSE)}
+##' ## comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
 ##'
 ##' ## use \include: opts_knit$set(child.command = 'include')
 knit_child = function(..., eval = TRUE) {
