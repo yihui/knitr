@@ -51,6 +51,9 @@ NEW FEATURES
   o new package option 'child.path' to specify the search path of
   child documents relative to the parent document (#141)
 
+  o new package option 'aliases' to set aliases for chunk options; see
+  http://yihui.name/knitr/options (#144)
+
 MINOR CHANGES
 
   o the default value for the 'output' argument in knit() is NULL now,
