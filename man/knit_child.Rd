@@ -30,9 +30,18 @@ knit_child(..., eval = TRUE)
   package option \code{child.command}
   (\code{opts_knit$get('child.command')}).
 
-  When we call \code{knit_child(tangle = TRUE)} to extract
-  R code, the code in the child document is extracted and
-  saved into an R script.
+  When we call \code{purl()} to extract R code, the code in
+  the child document is extracted and saved into an R
+  script.
+
+  The path of the child document is relative to the parent
+  document.
+}
+\note{
+  This function is not supposed be called directly like
+  \code{\link{knit}()}; instead it must be placed in a
+  parent document to let \code{\link{knit}()} call it
+  indirectly.
 }
 \examples{
 ## you can write \\Sexpr{knit_child('child-doc.Rnw')} in
@@ -40,7 +49,7 @@ knit_child(..., eval = TRUE)
 #   main.tex
 
 ## comment out the child doc by
-#   \\Sexpr{knit_child('child-doc.Rnw', FALSE)}
+#   \\Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
 
 ## use \\include: opts_knit$set(child.command =
 #   'include')
