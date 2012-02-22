@@ -159,7 +159,7 @@ extract_inline = function(input, pat.name, locate.fun) {
     loc = locate.fun(input, pattern)
     code = character(0)
     if (nrow(loc)) code = str_match(str_sub(input, loc[, 1L], loc[, 2L]), pattern)
-    code = if (NCOL(code) == 2L) code[, 2L] else character(0)
+    code = if (NCOL(code) >= 2L) code[, NCOL(code)] else character(0)
     list(location = loc, code = code)
 }
 
