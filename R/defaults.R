@@ -67,7 +67,7 @@ all_patterns =
 
     list(`rnw` = list(chunk.begin = '^<<(.*)>>=', chunk.end = '^@\\s*%*',
          inline.code = '\\\\Sexpr\\{([^}]*)\\}',
-         input.doc = '\\\\SweaveInput\\{([^\\}]*)\\}',
+         input.doc = '(^|\n) *\\\\SweaveInput\\{([^}]*)\\}',
          ref.chunk = '^<<(.*)>>\\s*$',
          global.options = '\\\\SweaveOpts\\{([^}]*)\\}',
          header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
