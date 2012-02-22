@@ -66,11 +66,11 @@ opts_current = new_defaults()
 all_patterns =
 
     list(`rnw` = list(chunk.begin = '^<<(.*)>>=', chunk.end = '^@\\s*%*',
-         inline.code = '\\\\Sexpr\\{([^\\}]*)\\}',
+         inline.code = '\\\\Sexpr\\{([^}]*)\\}',
          input.doc = '\\\\SweaveInput\\{([^\\}]*)\\}',
          ref.chunk = '^<<(.*)>>\\s*$',
          global.options = '\\\\SweaveOpts\\{([^}]*)\\}',
-         header.begin = '\n*\\s*\\\\documentclass[^\\}]+\\}',
+         header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
          document.begin = '\n*\\s*\\\\begin\\{document\\}',
          ref.label = '^## @knitr (.*)$'),
 
@@ -79,8 +79,8 @@ all_patterns =
          `tex` = list(chunk.begin = '^%+\\s*begin.rcode\\s*(.*)',
          chunk.end = '^%+\\s*end.rcode', chunk.code = '^%+',
          global.options = '%+\\s*roptions\\s*([^\n]*)',
-         inline.code = '\\\\rinline\\{([^\\}]*)\\}',
-         header.begin = '\n*\\s*\\\\documentclass[^\\}]+\\}',
+         inline.code = '\\\\rinline\\{([^}]*)\\}',
+         header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
          document.begin = '\n*\\s*\\\\begin\\{document\\}',
          ref.label = '^## @knitr (.*)$'),
 
