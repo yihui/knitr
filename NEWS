@@ -63,6 +63,8 @@ MINOR CHANGES
   o standard LaTeX messages are suppressed when a tikz plot is
   compiled to PDF so that we can see the knitr process more clearly
 
+  o %\SweaveInput{} will be ignored now
+
 MAJOR CHANGES
 
   o the starting pattern of normal texts in an Rnw document is
