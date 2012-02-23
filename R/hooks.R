@@ -61,12 +61,26 @@ hook_plot_tex = function(x, options) {
                                   right = '\n\n\\hfill{}', '')
     if (plot2) align2 = switch(a, left = '\\hfill{}\n\n', center = '\n\n',
                                   right = '\n\n', '')
+    ## figure environment: caption, short caption, label
+    cap = options$fig.cap; fig1 = fig2 = ''
+    if(length(cap) && !is.na(cap)) {
+        if (plot1) {
+            lab = str_c(options$fig.lp, options$label)
+            fig1 = sprintf('\\begin{figure}\\label{%s}\n', lab)
+        }
+        if (plot2) {
+            scap = options$fig.scap
+            if (is.null(scap)) scap = str_split(cap, '\\.|;')[[1L]][1L]
+            scap = if(is.na(scap)) '' else str_c('[', scap, ']')
+            fig2 = sprintf('\\caption%s{%s}\n\\end{figure}\n', scap, cap)
+        }
+    }
 
     size =
         paste(c(sprintf('width=%s', options$out.width),
                 sprintf('height=%s', options$out.height)), collapse = ',')
 
-    paste(align1, resize1,
+    paste(fig1, align1, resize1,
 
           if (tikz) {
               sprintf('\\input{%s.tikz}', x[1])
@@ -83,7 +97,7 @@ hook_plot_tex = function(x, options) {
               sprintf('\\includegraphics%s{%s} ', size, x[1])
           },
 
-          resize2, align2, sep = '')
+          resize2, align2, fig2, sep = '')
 }
 ##' @rdname hook_plot
 ##' @export
