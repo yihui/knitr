@@ -36,13 +36,14 @@ str(apats)
 
 {% highlight text %}
 ## List of 4
-##  $ rnw :List of 8
+##  $ rnw :List of 9
 ##   ..$ chunk.begin   : chr "^<<(.*)>>="
-##   ..$ chunk.end     : chr "^@\\s*$"
-##   ..$ inline.code   : chr "\\\\Sexpr\\{([^\\}]*)\\}"
-##   ..$ input.doc     : chr "\\\\SweaveInput\\{([^\\}]*)\\}"
+##   ..$ chunk.end     : chr "^@\\s*%*"
+##   ..$ inline.code   : chr "\\\\Sexpr\\{([^}]*)\\}"
+##   ..$ input.doc     : chr "(^|\n) *\\\\SweaveInput\\{([^}]*)\\}"
+##   ..$ ref.chunk     : chr "^<<(.*)>>\\s*$"
 ##   ..$ global.options: chr "\\\\SweaveOpts\\{([^}]*)\\}"
-##   ..$ header.begin  : chr "\n*\\s*\\\\documentclass[^\\}]+\\}"
+##   ..$ header.begin  : chr "\n*\\s*\\\\documentclass[^}]+\\}"
 ##   ..$ document.begin: chr "\n*\\s*\\\\begin\\{document\\}"
 ##   ..$ ref.label     : chr "^## @knitr (.*)$"
 ##  $ brew:List of 1
@@ -52,8 +53,8 @@ str(apats)
 ##   ..$ chunk.end     : chr "^%+\\s*end.rcode"
 ##   ..$ chunk.code    : chr "^%+"
 ##   ..$ global.options: chr "%+\\s*roptions\\s*([^\n]*)"
-##   ..$ inline.code   : chr "\\\\rinline\\{([^\\}]*)\\}"
-##   ..$ header.begin  : chr "\n*\\s*\\\\documentclass[^\\}]+\\}"
+##   ..$ inline.code   : chr "\\\\rinline\\{([^}]*)\\}"
+##   ..$ header.begin  : chr "\n*\\s*\\\\documentclass[^}]+\\}"
 ##   ..$ document.begin: chr "\n*\\s*\\\\begin\\{document\\}"
 ##   ..$ ref.label     : chr "^## @knitr (.*)$"
 ##  $ html:List of 6
@@ -69,3 +70,5 @@ str(apats)
 
 
 Depending on the extension of the input filename, **knitr** will automatically choose a pattern list from the above lists, e.g. `file.Rnw` will use `apats$rnw`, and `file.html` will use `apats$html`, etc.
+
+A series of convenience functions `pat_rnw()`, `pat_html()`, `pat_tex()` and `pat_brew()` can be used to set built-in patterns.
