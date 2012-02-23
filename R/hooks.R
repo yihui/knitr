@@ -70,7 +70,7 @@ hook_plot_tex = function(x, options) {
         }
         if (plot2) {
             scap = options$fig.scap
-            if (is.null(scap)) scap = str_split(cap, '\\.|;')[[1L]][1L]
+            if (is.null(scap)) scap = str_split(cap, '\\.|;|:')[[1L]][1L]
             scap = if(is.na(scap)) '' else str_c('[', scap, ']')
             fig2 = sprintf('\\caption%s{%s}\n\\end{figure}\n', scap, cap)
         }
