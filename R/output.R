@@ -232,8 +232,8 @@ knit_child = function(..., eval = TRUE) {
     on.exit(opts_knit$set(child = child)) # restore child status
     path = knit(..., tangle = opts_knit$get('tangle'))
     if (opts_knit$get('tangle')) {
-        str_c('source("', path, '")')
-    } else str_c('\\', opts_knit$get('child.command'), '{', path, '}')
+        str_c('\n', 'source("', path, '")')
+    } else str_c('\n\\', opts_knit$get('child.command'), '{', path, '}')
 }
 
 ##' Automatically create a report based on an R script and a template
