@@ -72,6 +72,10 @@ MINOR CHANGES
 
   o %\SweaveInput{} will be ignored now
 
+  o results=asis will no longer affect the 'chunk' hook (in the past,
+  the chunk output was not wrapped in the kframe environment when
+  results=asis); it only affects the 'output' hook now
+
 MAJOR CHANGES
 
   o the starting pattern of normal texts in an Rnw document is
