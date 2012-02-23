@@ -54,6 +54,10 @@ NEW FEATURES
   o new package option 'aliases' to set aliases for chunk options; see
   http://yihui.name/knitr/options (#144)
 
+  o new chunk options 'fig.cap', 'fig.scap' and 'fig.lp' to write
+  captions, short captions, label prefix for the figure environment in
+  LaTeX (#145) (thanks, Frank Harrell)
+
 MINOR CHANGES
 
   o the default value for the 'output' argument in knit() is NULL now,
