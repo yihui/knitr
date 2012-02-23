@@ -7,6 +7,8 @@
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
+\setlength{\parskip}{\bigskipamount}
+\setlength{\parindent}{0pt}
 \usepackage{calc}
 \usepackage{url}
 \usepackage[unicode=true,pdfusetitle,
@@ -30,7 +32,7 @@
 
 % \SweaveOpts{fig.path=figure/twocolumn-,fig.align=center,fig.show=hold}
 
-<<setup,echo=FALSE,results=hide,message=FALSE>>=
+<<setup,include=FALSE>>=
 options(replace.assign=TRUE,width=90)
 knit_hooks$set(par=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3,las=1)})
 @
@@ -42,30 +44,51 @@ knit_hooks$set(par=function(before, options, envir){if (before) par(mar=c(4,4,.1
 \author{Yihui Xie}
 
 \maketitle
-You can use the \texttt{figure{*}} environment in \LaTeX{}, and \texttt{results=asis}
-in \textbf{knitr} so that figures can span over two columns. Note
-your chunk should not have other types of output like text output,
-or messages or warnings. Currently you will lose the background color
-for these chunks (\href{https://github.com/yihui/knitr/issues/102}{issue \#{}102}).
+We can use the \texttt{figure{*}} environment in \LaTeX{}, and the
+\texttt{chunk} hook in \textbf{knitr} so that figures can span over
+two columns. The reason to reset the chunk hook is that the \textbf{framed}
+package does not work well with the \texttt{figure{*}} environment.
 
-\framebox{\begin{minipage}[t][2in]{1\linewidth}%
-%
+<<chunk-hook>>=
+knit_hooks$set(chunk = function(x, options) x)
+@
+
+You will lose the background color for these chunks (\href{https://github.com/yihui/knitr/issues/102}{issue \#{}102}).
+
+\framebox{\begin{minipage}[t][1in]{1\linewidth}%
+\hfill{}%
 \end{minipage}}
 
-\framebox{\begin{minipage}[t][2in]{1\linewidth}%
-%
+\framebox{\begin{minipage}[t][1in]{1\linewidth}%
+\hfill{}%
 \end{minipage}}
 
-\framebox{\begin{minipage}[t][2in]{1\linewidth}%
-%
+\framebox{\begin{minipage}[t][1in]{1\linewidth}%
+\hfill{}%
 \end{minipage}}
 
-\framebox{\begin{minipage}[t][2in]{1\linewidth}%
-%
+\framebox{\begin{minipage}[t][1in]{1\linewidth}%
+\hfill{}%
 \end{minipage}}
 
-\framebox{\begin{minipage}[t][2in]{1\linewidth}%
-%
+\framebox{\begin{minipage}[t][1in]{1\linewidth}%
+\hfill{}%
+\end{minipage}}
+
+\framebox{\begin{minipage}[t][1in]{1\linewidth}%
+\hfill{}%
+\end{minipage}}
+
+\framebox{\begin{minipage}[t][1in]{1\linewidth}%
+\hfill{}%
+\end{minipage}}
+
+\framebox{\begin{minipage}[t][1in]{1\linewidth}%
+\hfill{}%
+\end{minipage}}
+
+\framebox{\begin{minipage}[t][1in]{1\linewidth}%
+\hfill{}%
 \end{minipage}}
 
 \begin{figure*}
@@ -79,8 +102,7 @@ hist(x,main='')
 \end{figure*}
 
 
-You should be able to compile the \LaTeX{} document to get a PDF file
-like: \url{https://github.com/downloads/yihui/knitr/knitr-twocolumn.pdf}.
+The output PDF file will be like: \url{https://github.com/downloads/yihui/knitr/knitr-twocolumn.pdf}.
 The Rnw source of this document is at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-twocolumn.Rnw}.
 
 \end{document}

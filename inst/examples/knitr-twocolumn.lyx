@@ -1,4 +1,4 @@
-#LyX 2.1.0svn created this file. For more info see http://www.lyx.org/
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 413
 \begin_document
 \begin_header
@@ -27,6 +27,7 @@ knitr
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -67,8 +68,8 @@ knitr
 \bottommargin 3cm
 \secnumdepth 2
 \tocdepth 2
-\paragraph_separation indent
-\paragraph_indentation default
+\paragraph_separation skip
+\defskip bigskip
 \quotes_language english
 \papercolumns 2
 \papersides 1
@@ -104,7 +105,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<setup,echo=FALSE,results=hide,message=FALSE>>=
+<<setup,include=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -137,22 +138,56 @@ Yihui Xie
 \end_layout
 
 \begin_layout Standard
-You can use the 
+We can use the 
 \family typewriter
 figure*
 \family default
- environment in LaTeX, and 
+ environment in LaTeX, and the 
 \family typewriter
-results=asis
+chunk
 \family default
- in 
+ hook in 
 \series bold
 knitr
 \series default
  so that figures can span over two columns.
- Note your chunk should not have other types of output like text output,
- or messages or warnings.
- Currently you will lose the background color for these chunks (
+ The reason to reset the chunk hook is that the 
+\series bold
+framed
+\series default
+ package does not work well with the 
+\family typewriter
+figure*
+\family default
+ environment.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<chunk-hook>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_hooks$set(chunk = function(x, options) x)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You will lose the background color for these chunks (
 \begin_inset CommandInset href
 LatexCommand href
 name "issue #102"
@@ -173,11 +208,14 @@ use_parbox 0
 use_makebox 0
 width "100line%"
 special "none"
-height "2in"
+height "1in"
 height_special "none"
 status open
 
 \begin_layout Plain Layout
+\begin_inset space \hfill{}
+\end_inset
+
 
 \end_layout
 
@@ -196,11 +234,14 @@ use_parbox 0
 use_makebox 0
 width "100line%"
 special "none"
-height "2in"
+height "1in"
 height_special "none"
 status open
 
 \begin_layout Plain Layout
+\begin_inset space \hfill{}
+\end_inset
+
 
 \end_layout
 
@@ -219,11 +260,14 @@ use_parbox 0
 use_makebox 0
 width "100line%"
 special "none"
-height "2in"
+height "1in"
 height_special "none"
 status open
 
 \begin_layout Plain Layout
+\begin_inset space \hfill{}
+\end_inset
+
 
 \end_layout
 
@@ -242,11 +286,14 @@ use_parbox 0
 use_makebox 0
 width "100line%"
 special "none"
-height "2in"
+height "1in"
 height_special "none"
 status open
 
 \begin_layout Plain Layout
+\begin_inset space \hfill{}
+\end_inset
+
 
 \end_layout
 
@@ -265,11 +312,118 @@ use_parbox 0
 use_makebox 0
 width "100line%"
 special "none"
-height "2in"
+height "1in"
 height_special "none"
 status open
 
 \begin_layout Plain Layout
+\begin_inset space \hfill{}
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100line%"
+special "none"
+height "1in"
+height_special "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset space \hfill{}
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100line%"
+special "none"
+height "1in"
+height_special "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset space \hfill{}
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100line%"
+special "none"
+height "1in"
+height_special "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset space \hfill{}
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100line%"
+special "none"
+height "1in"
+height_special "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset space \hfill{}
+\end_inset
+
 
 \end_layout
 
@@ -338,8 +492,7 @@ Two plots spanning over two columns.
 \end_layout
 
 \begin_layout Standard
-You should be able to compile the LaTeX document to get a PDF file like:
- 
+The output PDF file will be like: 
 \begin_inset Flex URL
 status collapsed
 
