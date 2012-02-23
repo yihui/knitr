@@ -58,6 +58,9 @@ NEW FEATURES
   captions, short captions, label prefix for the figure environment in
   LaTeX (#145) (thanks, Frank Harrell)
 
+  o a series of convenience functions pat_rnw(), pat_tex(), pat_brew()
+  and pat_html() to set built-in patterns (syntax) to read input
+
 MINOR CHANGES
 
   o the default value for the 'output' argument in knit() is NULL now,
