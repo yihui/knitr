@@ -79,6 +79,7 @@ All built-in options in **knitr** are:
 - `fig.cap`: (`NULL`) figure caption to be used in a figure environment in LaTeX (in `\caption{}`); if `NULL` or `NA`, it will be ignored, otherwise a figure environment will be used for the plots in the chunk (output in `\begin{figure}` and `\end{figure}`)
 - `fig.scap`: (`NULL`) short caption; if `NULL`, all the words before `.` or `;` or `:` will be used as a short caption; if `NA`, it will be ignored
 - `fig.lp`: (`fig:`) label prefix for the figure label to be used in `\label{}`
+- `fig.pos`: (an empty string) a character string for the figure position arrangement to be used in `\begin{figure}[fig.pos]`
 - `external`: (`TRUE`) whether to externalize tikz graphics (pre-compile tikz graphics to PDF); it is only used for the `tikz()` device in the **tikzDevice** package (i.e., when `dev=tikz`) and it can save time for LaTeX compilation
 - `sanitize`: (`FALSE`) whether to sanitize tikz graphics (escape special LaTeX characters); see documentation in the **tikzDevice** package
 
