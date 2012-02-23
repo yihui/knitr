@@ -128,7 +128,6 @@ hook_plot_md = function(x, options) {
 }
 
 .chunk.hook.tex = function(x, options) {
-    if (output_asis(x, options)) return(x)
     x =
         str_c(color_def(options$background), '',
               ifelse(is_tikz_dev(options), '', '\\color{fgcolor}'),
