@@ -53,12 +53,14 @@ hook_plot_tex = function(x, options) {
     animate = options$fig.show == 'animate'
     if (!tikz && animate && fig.cur < fig.num) return('')
 
-    align1 = switch(a, left = '\n\n', center = '\n\n\\centering{}', right = '\n\n\\hfill{}', '')
-    align2 = switch(a, left = '\\hfill{}\n\n', center = '\n\n', right = '\n\n', '')
+    align1 = align2 = ''
     ## multiple plots: begin at 1, end at fig.num
-    hold = options$fig.show == 'hold'
-    if (hold && fig.cur > 1L) align1 = ''
-    if (hold && fig.cur > 0L && fig.cur < fig.num) align2 = ''
+    ai = options$fig.show != 'hold'
+    plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == 0L || fig.cur == fig.num
+    if (plot1) align1 = switch(a, left = '\n\n', center = '\n\n\\centering{}',
+                                  right = '\n\n\\hfill{}', '')
+    if (plot2) align2 = switch(a, left = '\\hfill{}\n\n', center = '\n\n',
+                                  right = '\n\n', '')
 
     size =
         paste(c(sprintf('width=%s', options$out.width),
