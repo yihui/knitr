@@ -65,14 +65,14 @@ hook_plot_tex = function(x, options) {
     cap = options$fig.cap; fig1 = fig2 = ''
     if(length(cap) && !is.na(cap)) {
         if (plot1) {
-            lab = str_c(options$fig.lp, options$label)
-            fig1 = sprintf('\\begin{figure}\\label{%s}\n', lab)
+            fig1 = '\\begin{figure}\n'
         }
         if (plot2) {
+            lab = str_c(options$fig.lp, options$label)
             scap = options$fig.scap
             if (is.null(scap)) scap = str_split(cap, '\\.|;|:')[[1L]][1L]
             scap = if(is.na(scap)) '' else str_c('[', scap, ']')
-            fig2 = sprintf('\\caption%s{%s}\n\\end{figure}\n', scap, cap)
+            fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{figure}\n', scap, cap, lab)
         }
     }
 
