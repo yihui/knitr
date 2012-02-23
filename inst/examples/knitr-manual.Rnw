@@ -40,7 +40,7 @@
 
 % \SweaveOpts{fig.path=figure/manual-,cache.path=cache/manual-,fig.align=center,external=TRUE,fig.show=hold,par=TRUE}
 
-<<setup,echo=FALSE,results=hide,message=FALSE>>=
+<<setup, include=FALSE, cache=FALSE>>=
 options(replace.assign=TRUE,width=90)
 knit_hooks$set(par=function(before, options, envir){
 if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)

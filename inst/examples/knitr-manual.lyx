@@ -108,7 +108,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<setup,echo=FALSE,results=hide,message=FALSE>>=
+<<setup, include=FALSE, cache=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
