@@ -65,7 +65,7 @@ hook_plot_tex = function(x, options) {
     cap = options$fig.cap; fig1 = fig2 = ''
     if(length(cap) && !is.na(cap)) {
         if (plot1) {
-            fig1 = '\\begin{figure}\n'
+            fig1 = sprintf('\\begin{figure}[%s]\n', options$fig.pos)
         }
         if (plot2) {
             lab = str_c(options$fig.lp, options$label)

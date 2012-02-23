@@ -43,7 +43,7 @@ opts_chunk =
                       fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
                       fig.path = '', fig.ext = NULL, dev = 'pdf', dpi = 72,
                       fig.width = 7, fig.height = 7,
-                      fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:',
+                      fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:', fig.pos = '',
                       out.width = NULL, out.height = NULL,
                       resize.width = NULL, resize.height = NULL,
                       external = TRUE, sanitize = FALSE,
