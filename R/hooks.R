@@ -128,10 +128,16 @@ hook_plot_md = function(x, options) {
 }
 
 .chunk.hook.tex = function(x, options) {
-    x =
-        str_c(color_def(options$background), '',
-              ifelse(is_tikz_dev(options), '', '\\color{fgcolor}'),
-              '\\begin{kframe}\n', x, '\\end{kframe}')
+    k1 = str_c(color_def(options$background),
+               ifelse(is_tikz_dev(options), '', '\\color{fgcolor}'), '\\begin{kframe}\n')
+    k2 = '\\end{kframe}'
+    x = str_c(k1, x, k2)
+    ## table/figure cannot work inside kframe; this is gory...
+    x = gsub('\\begin{figure', str_c(k2, '\\begin{figure'), x, fixed = TRUE)
+    x = gsub('\\begin{table', str_c(k2, '\\begin{table'), x, fixed = TRUE)
+    x = gsub('\\end{figure}', str_c('\\end{figure}', k1), x, fixed = TRUE)
+    x = gsub('\\end{table}', str_c('\\end{table}', k1), x, fixed = TRUE)
+    x = gsub('\\\\begin\\{kframe\\}\\s*\\\\end\\{kframe\\}', '', x)  # rm empty kframe
     x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
     if (options$split) {
         name = fig_path('.tex', options)
