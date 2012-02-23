@@ -1,4 +1,4 @@
-#LyX 2.1.0svn created this file. For more info see http://www.lyx.org/
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 413
 \begin_document
 \begin_header
@@ -32,6 +32,7 @@ knitr
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -1407,6 +1408,59 @@ This is useful and often necessary to compile tikz plots which contain (UTF8)
 \end_layout
 
 \begin_layout Section
+Figure Caption
+\end_layout
+
+\begin_layout Standard
+If the chunk option 
+\family typewriter
+fig.cap
+\family default
+ is not 
+\family typewriter
+NULL
+\family default
+ or 
+\family typewriter
+NA
+\family default
+, the plots will be put in a 
+\family typewriter
+figure
+\family default
+ environment when the output format is LaTeX, and this option is used to
+ write a caption in this environment using 
+\family typewriter
+
+\backslash
+caption{}
+\family default
+.
+ The other two related options are 
+\family typewriter
+fig.scap
+\family default
+ and 
+\family typewriter
+fig.lp
+\family default
+ which set the short caption and a prefix string for the figure label.
+ The default short caption is extracted from the caption by truncating it
+ at the first period or colon or semi-colon.
+ The label is a combination of 
+\family typewriter
+fig.lp
+\family default
+ and the chunk label.
+ Because 
+\family typewriter
+figure
+\family default
+ is a float environment, it can float away from the chunk output to other
+ places such as the top or bottom of a page when the TeX document is compiled.
+\end_layout
+
+\begin_layout Section
 Other Features
 \end_layout
 
@@ -1528,7 +1582,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<pdf-nocrop,fig.width=3.2,fig.height=3.2,out.width=.4
+<<pdf-nocrop,fig.width=3.2,fig.height=3.2,out.width=.5
 \backslash
 linewidth>>=
 \end_layout
@@ -1590,7 +1644,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<pdf-crop,ref.label=pdf-nocrop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.4
+<<pdf-crop,ref.label=pdf-nocrop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.5
 \backslash
 linewidth,crop=TRUE>>=
 \end_layout

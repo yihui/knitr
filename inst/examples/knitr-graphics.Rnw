@@ -298,6 +298,22 @@ This is useful and often necessary to compile tikz plots which contain
 (UTF8) multi-byte characters.
 
 
+\section{Figure Caption}
+
+If the chunk option \texttt{fig.cap} is not \texttt{NULL} or \texttt{NA},
+the plots will be put in a \texttt{figure} environment when the output
+format is \LaTeX{}, and this option is used to write a caption in
+this environment using \texttt{\textbackslash{}caption\{\}}. The other
+two related options are \texttt{fig.scap} and \texttt{fig.lp} which
+set the short caption and a prefix string for the figure label. The
+default short caption is extracted from the caption by truncating
+it at the first period or colon or semi-colon. The label is a combination
+of \texttt{fig.lp} and the chunk label. Because \texttt{figure} is
+a float environment, it can float away from the chunk output to other
+places such as the top or bottom of a page when the \TeX{} document
+is compiled.
+
+
 \section{Other Features}
 
 The \textbf{knitr} package can be extended with hook functions, and
@@ -323,7 +339,7 @@ knit_hooks$set(crop=hook_pdfcrop)
 Now we compare two plots below. The first one is not cropped:
 
 \begin{figure}
-<<pdf-nocrop,fig.width=3.2,fig.height=3.2,out.width=.4\linewidth>>=
+<<pdf-nocrop,fig.width=3.2,fig.height=3.2,out.width=.5\linewidth>>=
 par(mar=c(5,4,4,2),bg='white')  # large margin
 plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
 @
@@ -336,7 +352,7 @@ Then the same plot is produced but with a chunk option \texttt{crop=TRUE}
 which will call the cropping hook:
 
 \begin{figure}
-<<pdf-crop,ref.label=pdf-nocrop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.4\linewidth,crop=TRUE>>=
+<<pdf-crop,ref.label=pdf-nocrop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.5\linewidth,crop=TRUE>>=
 @
 
 \caption{The cropped plot; it fits better in the document.}
