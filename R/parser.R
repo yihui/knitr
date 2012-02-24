@@ -69,8 +69,14 @@ parse_block = function(input) {
   structure(list(params = params), class = 'block')
 }
 
+## autoname for unnamed chunk
+unnamed_chunk = function() str_c('unnamed-chunk-', chunk_counter())
+
 ## parse params from chunk header
 parse_params = function(params, label = TRUE) {
+  if (is_blank(params)) {
+    return(if (!label) list() else list(label = unnamed_chunk()))
+  }
   ## split by , (literal comma has to be escaped as \,) and then by =
   pieces = str_split(params, perl('(?<=[^\\\\]),'))[[1]]
   pieces = str_split(str_replace_all(pieces, fixed('\\,'), ','), '=', n = 2L)
@@ -92,7 +98,7 @@ parse_params = function(params, label = TRUE) {
                 "all options must be of the form 'tag=value' except the chunk label",
                 call. = FALSE)
   } else if (label && !str_detect(params, '\\s*label\\s*=')) {
-    pieces[[length(pieces) + 1]] = c('label', str_c('unnamed-chunk-', chunk_counter()))
+    pieces[[length(pieces) + 1]] = c('label', unnamed_chunk())
   }
   
   values = lapply(pieces, function(x) str_trim(x[2]))
