@@ -77,6 +77,24 @@ parse_params = function(params, label = TRUE) {
   if (is_blank(params)) {
     return(if (!label) list() else list(label = unnamed_chunk()))
   }
+  res = try(eval(parse(text = str_c("alist(", params, ")"))))
+  if (!inherits(res, 'try-error') && valid_opts(res)) {
+    ## good, you seem to be using valid R code
+    idx = which(names(res) == '')  # which option is not named?
+    if (is.null(names(res))) idx = 1L  # empty name, must be label
+    if ((n <- length(idx)) > 1L) {
+      stop("all options must be of the form 'tag=value' except the chunk label")
+    } else if (!label && n > 0L) stop('all global options must be of the form tag=value')
+    if (n == 1L) {
+      names(res)[idx] = 'label'
+      if (!is.character(res[[idx]]))
+        res[[idx]] = gsub(' ', '', as.character(as.expression(res[[idx]])))
+    } else if (label) {
+      if (!('label' %in% names(res))) res$label = unnamed_chunk()
+    }
+    return(res)
+  } else warning('are you using old Sweave syntax? go http://yihui.name/knitr/options')
+
   ## split by , (literal comma has to be escaped as \,) and then by =
   pieces = str_split(params, perl('(?<=[^\\\\]),'))[[1]]
   pieces = str_split(str_replace_all(pieces, fixed('\\,'), ','), '=', n = 2L)
@@ -100,6 +118,19 @@ parse_params = function(params, label = TRUE) {
   names(values) = str_trim(tolower(lapply(pieces, `[`, 1)))
   
   lapply(values, type.convert, as.is = TRUE)
+}
+
+## is the options list from eval() valid?
+valid_opts = function(options) {
+  nms = setdiff(names(options), c('', 'label'))
+  if (!length(nms)) return(TRUE)
+  ## not a rigorous check; you should go to the new syntax finally!
+  chk = c('results', 'fig.keep', 'fig.show', 'dev', 'out.width', 'out.height', 
+          'fig.align', 'fig.path', 'cache.path')
+  for (o in options[intersect(chk, nms)]) {
+    if (!is.null(o) && !is.character(o)) return(FALSE)
+  }
+  TRUE
 }
 
 print.block = function(x, ...) {

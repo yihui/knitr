@@ -9,11 +9,12 @@ process_group.inline = function(x) call_inline(x)
 
 
 call_block = function(block) {
+  ## now try eval all options except those in eval.after
+  for (o in setdiff(names(block$params), opts_knit$get('eval.after')))
+    block$params[[o]] = eval_lang(block$params[[o]])
+
   params = opts_chunk$merge(block$params)
   params = fix_options(params)  # for compatibility
-  ## evaluate options as R code instead of character strings
-  for (o in opts_knit$get('eval.opts')) params[[o]] = eval_opt(params[[o]])
-  
   opts_current$restore(); opts_current$set(params)  # save current options
   label = ref.label = params$label
   if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
@@ -92,6 +93,9 @@ block_exec = function(code, ...) {
   res = evaluate(code, envir = env) # run code
   setwd(owd)
   
+  ## eval other options after the chunk
+  for (o in opts_knit$get('eval.after')) options[[o]] = eval_lang(options[[o]], env)
+
   ## remove some components according options
   if (isFALSE(echo)) {
     res = Filter(Negate(is.source), res)
@@ -177,7 +181,7 @@ block_exec = function(code, ...) {
 call_inline = function(block) {
   
   ## change global options if detected inline options
-  options = block$params  # for compatibility
+  options = block$params = lapply(block$params, eval_lang)  # try eval global options
   if (length(options)) opts_chunk$set(options)
   if (opts_knit$get('progress')) print(block)
   
