@@ -269,6 +269,12 @@ eval_opt = function(x) {
     eval(parse(text = x), envir = globalenv())
 }
 
+## eval options as symbol/language objects
+eval_lang = function(x, envir = globalenv()) {
+  if (!is.symbol(x) && !is.language(x)) return(x)
+  eval(x, envir = envir)
+}
+
 ## counterpart of isTRUE()
 isFALSE = function(x) identical(x, FALSE)
 
