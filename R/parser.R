@@ -83,12 +83,7 @@ parse_params = function(params, label = TRUE) {
   n = sapply(pieces, length)
   ## when global options are empty
   if (length(n) == 1 && length(pieces[[1]]) == 1) {
-    if (!label) {
-      return(list())
-    } else {
-      return(list(label = if (is_blank(pieces[[1]]))
-        str_c('unnamed-chunk-', chunk_counter()) else pieces[[1]]))
-    }
+    return(if (label) list(label = pieces[[1]]) else list())
   }
   
   if (any(n == 1)) {
