@@ -58,11 +58,21 @@ NEW FEATURES
   captions, short captions, label prefix for the figure environment in
   LaTeX (#145) (thanks, Frank Harrell)
 
+  o new package option 'eval.after' to set a character vector of chunk
+  options which should be evaluated _after_ a chunk is executed
+  (thanks, Frank Harrell)
+
   o a series of convenience functions pat_rnw(), pat_tex(), pat_brew()
   and pat_html() to set built-in patterns (syntax) to read input
 
 MINOR CHANGES
 
+  o package option 'eval.opts' has been dropped: all options of
+  classes 'symbol' or 'language' will be evaluated, so there is no
+  need to specify which options to evaluate manually; remember, the
+  chunk options are similar to function arguments, so you can use any
+  valid R code there
+  
   o the default value for the 'output' argument in knit() is NULL now,
   so we can also provide output filenames to stitch() and knit2pdf()
   (#119)
@@ -70,7 +80,7 @@ MINOR CHANGES
   o standard LaTeX messages are suppressed when a tikz plot is
   compiled to PDF so that we can see the knitr process more clearly
 
-  o %\SweaveInput{} will be ignored now
+  o %\SweaveInput{} will be ignored now (#150)
 
   o results=asis will no longer affect the 'chunk' hook (in the past,
   the chunk output was not wrapped in the kframe environment when

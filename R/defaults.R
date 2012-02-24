@@ -106,7 +106,7 @@ opts_knit =
                       out.format = NULL, child.command = 'input',
                       base.dir = NULL, base.url = NULL, child.path = '',
                       imgur.key = '60e9e47cff8483c6dc289a1cd674b40f', upload = FALSE,
-                      eval.opts = c('eval', 'echo'),
+                      eval.after = NULL,
                       all.patterns = all_patterns, tangle = FALSE,
                       child = FALSE, parent = FALSE,
                       cache.extra = NULL, aliases = NULL,
