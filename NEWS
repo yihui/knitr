@@ -2,6 +2,13 @@
 
 NEW FEATURES
 
+  o a fundamental and important new feature for writing chunk options:
+  they can be written as valid R code now, just like we write function
+  arguments (e.g. echo=c(1, 3, 5), fig.cap="my figure caption"); all
+  options will be parsed and evaluated as R code by default; see
+  http://yihui.name/knitr/options for details (#142) (thanks, Baptiste
+  Auguie)
+
   o chunk references using <<label>> is supported now (#86); thanks to
   Kevin R. Coombe and Terry Therneau for the discussion
 
