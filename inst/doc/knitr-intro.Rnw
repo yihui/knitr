@@ -29,12 +29,12 @@ The \textbf{knitr} package \citep{knitr-manual} is an alternative
 tool to Sweave based on a different design with more features. This
 document is not the real vignette, but only serves as a placeholder
 to guide you to the real manuals of this package. You can find them
-in the package website: \url{http://yihui.github.com/knitr}, and
-remember to read the help pages of functions in this package.
+in the package website: \url{http://yihui.name/knitr}, and remember
+to read the help pages of functions in this package.
 
 Anyway, here is a code chunk that shows you can compile vignettes
 with \textbf{knitr} as well by using a proper \textsf{Makefile} (see
-\url{http://yihui.github.com/knitr/demo/vignette/}):
+\url{http://yihui.name/knitr/demo/vignette/}):
 
 <<show-off>>=
 rnorm(5)
