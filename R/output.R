@@ -269,7 +269,7 @@ stitch = function(script, template = system.file('misc', 'knitr-template.Rnw',
     knit_code$set(`auto-report` = lines)
     input = basename(template)
     input = str_c(file_path_sans_ext(basename(script)), '.', file_ext(input))
-    file.copy(template, input, overwrite = TRUE)
+    if (file.exists(input)) warning(input, ' already exists') else file.copy(template, input)
     out = knit(input, output)
     if (str_detect(out, '\\.tex$')) {
         texi2pdf(out, clean = TRUE)
