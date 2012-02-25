@@ -118,6 +118,11 @@ options(replace.assign=TRUE,width=90)
 
 \begin_layout Plain Layout
 
+## tune details of base graphics (http://yihui.name/knitr/hooks)
+\end_layout
+
+\begin_layout Plain Layout
+
 knit_hooks$set(par=function(before, options, envir){
 \end_layout
 
@@ -200,7 +205,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-http://yihui.github.com/knitr/
+http://yihui.name/knitr/
 \end_layout
 
 \end_inset
@@ -434,7 +439,7 @@ knitr
 \begin_inset CommandInset href
 LatexCommand href
 name "patterns"
-target "http://yihui.github.com/knitr/patterns"
+target "http://yihui.name/knitr/patterns"
 
 \end_inset
 
@@ -455,7 +460,7 @@ a set of out
 \begin_inset CommandInset href
 LatexCommand href
 name "hooks"
-target "http://yihui.github.com/knitr/hooks"
+target "http://yihui.name/knitr/hooks"
 
 \end_inset
 
@@ -511,7 +516,7 @@ dependson
 \begin_inset CommandInset href
 LatexCommand href
 name "option"
-target "http://yihui.github.com/knitr/options"
+target "http://yihui.name/knitr/options"
 
 \end_inset
 
@@ -797,7 +802,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-http://yihui.github.com/knitr/demos
+http://yihui.name/knitr/demos
 \end_layout
 
 \end_inset
@@ -1818,7 +1823,7 @@ The graphics manual contains more detailed information and you can check
 \begin_inset CommandInset href
 LatexCommand href
 name "website"
-target "http://yihui.github.com/knitr/demo/graphics/"
+target "http://yihui.name/knitr/demo/graphics/"
 
 \end_inset
 
@@ -2049,7 +2054,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<ext-r-code,eval=FALSE>>=
+<<ext-r-code, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -2463,7 +2468,7 @@ listings
 \begin_inset CommandInset href
 LatexCommand href
 name "website"
-target "http://yihui.github.com/knitr/demo/listings/"
+target "http://yihui.name/knitr/demo/listings/"
 
 \end_inset
 
@@ -2671,7 +2676,7 @@ run_chunk()
 \begin_inset CommandInset href
 LatexCommand href
 name "Chunk Reference"
-target "http://yihui.github.com/knitr/demo/reference/"
+target "http://yihui.name/knitr/demo/reference/"
 
 \end_inset
 
@@ -2816,7 +2821,7 @@ knitr
 \begin_inset CommandInset href
 LatexCommand href
 name "demos in the website"
-target "http://yihui.github.com/knitr/demos"
+target "http://yihui.name/knitr/demos"
 
 \end_inset
 
