@@ -134,11 +134,12 @@ valid_opts = function(options) {
 }
 
 print.block = function(x, ...) {
-  if (length(params <- x$params) > 0)
-    idx = setdiff(names(params), 'label')
-  cat(str_c(strwrap(str_c(params$label, ": ", if (length(idx)) {
-    str_c(idx, "=", unlist(params[idx]), collapse = ", ")
-  } else ''), indent = 2, exdent = 4), collapse = '\n'), "\n")
+  params = x$params
+  cat('label:', params$label)
+  if (length(params) > 1L) {
+    cat(' (with options) \n')
+    str(params[setdiff(names(params), 'label')])
+  }
   if (opts_knit$get('verbose')){
     code = knit_code$get(params$label)
     if (length(code) && !all(is_blank(code))) {
