@@ -38,7 +38,7 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path=figure/manual-,cache.path=cache/manual-,fig.align=center,external=TRUE,fig.show=hold,par=TRUE}
+% \SweaveOpts{fig.path='figure/manual-', cache.path='cache/manual-', fig.align='center', external=TRUE, fig.show='hold', par=TRUE}
 
 <<setup, include=FALSE, cache=FALSE>>=
 options(replace.assign=TRUE,width=90)
@@ -77,7 +77,7 @@ is that extending Sweave by hacking \textsf{SweaveDrivers.R} in the
 \ref{fig:cars-demo} is a simple demo of some features of \textbf{knitr}.
 
 \begin{figure}
-<<cars-demo,dev=tikz,fig.width=4,fig.height=2.8,out.width=.45\textwidth,message=FALSE,cache=TRUE>>=
+<<cars-demo,dev='tikz',fig.width=4,fig.height=2.8,out.width='.45\\textwidth',message=FALSE,cache=TRUE>>=
 fit=lm(dist~speed,data=cars) # linear regression
 par(mar=c(4, 4, 1, .1), mgp=c(2,1,0))
 with(cars,plot(speed,dist,panel.last=abline(fit)))
@@ -174,7 +174,7 @@ are from the default chunk option \texttt{comment}. Users may define
 a hook function for the source code like this to use the \texttt{lstlisting}
 environment:
 
-<<hook-source,eval=FALSE>>=
+<<hook-source, eval=FALSE>>=
 knit_hooks$set(source = function(x, options) {
 paste('\\begin{lstlisting}\n', x, '\\end{lstlisting}\n', sep = '')
 })
@@ -222,7 +222,7 @@ output with prompts (set option \texttt{prompt=TRUE}), and you will
 quickly realize the inconvenience to the readers if they want to copy
 and run the code in the output document:
 
-<<stupid-prompts,prompt=TRUE,comment=NA,highlight=FALSE>>=
+<<stupid-prompts, prompt=TRUE, comment=NA, highlight=FALSE>>=
 x=rnorm(5)
 x
 var(x)
@@ -230,11 +230,11 @@ var(x)
 
 The example below shows the effect of \texttt{tidy=TRUE/FALSE}:
 
-<<tidy-no,eval=FALSE,tidy=FALSE>>=
+<<tidy-no, eval=FALSE, tidy=FALSE>>=
 ## option tidy=FALSE
 for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
 @
-<<tidy-yes,eval=FALSE,tidy=TRUE>>=
+<<tidy-yes, eval=FALSE, tidy=TRUE>>=
 ## option tidy=TRUE
 for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
 @
@@ -290,7 +290,7 @@ been evaluated. For example, the code below consists of three expressions,
 out of which two are related to drawing plots, therefore \textbf{evaluate}
 will produce two plots by default:
 
-<<low-level-plots,fig.keep=all,dev=tikz,fig.width=2.5,fig.height=2.5,out.width=.3\textwidth,cache=TRUE>>=
+<<low-level-plots, fig.keep='all', dev='tikz', fig.width=2.5, fig.height=2.5, out.width='.3\\textwidth', cache=TRUE>>=
 par(mar=c(3,3,.1,.1))
 plot(1:10, ann=FALSE,las=1)
 text(5,9,'mass $\\rightarrow$ energy\n$E=mc^2$')
@@ -309,14 +309,14 @@ accumulatively, but high-level plotting commands, regardless of where
 they are, will always be recorded. For example, this chunk will only
 produce 2 plots instead of 21 plots because there are 2 complete expressions:
 
-<<low-plot-loop,eval=FALSE>>=
+<<low-plot-loop, eval=FALSE>>=
 plot(0,0,type='n',ann=FALSE)
 for(i in seq(0, 2*pi,length=20)) points(cos(i),sin(i))
 @
 
 But this will produce 20 plots as expected:
 
-<<high-plot-loop,eval=FALSE>>=
+<<high-plot-loop, eval=FALSE>>=
 for(i in seq(0, 2*pi,length=20)) {plot(cos(i),sin(i),xlim=c(-1,1),ylim=c(-1,1))}
 @
 
@@ -338,7 +338,7 @@ a chunk (\texttt{fig.show=hold}), or just insert them to the place
 where they were created (by default \texttt{fig.show=asis}). Here
 is an example of \texttt{fig.show=asis}:
 
-<<fig-hold,fig=TRUE,fig.show=asis,dev=pdf,fig.width=6,fig.height=4,out.width=.35\linewidth>>=
+<<fig-hold, fig=TRUE, fig.show='asis', dev='pdf', fig.width=6, fig.height=4, out.width='.35\\linewidth'>>=
 contour(volcano)  # contour lines
 filled.contour(volcano)  # fill contour plot with colors
 @
@@ -360,7 +360,7 @@ note the PNG device is used because PDF files are too large. You should
 be able to see the animation immediately with Acrobat Reader since
 it was set to play automatically:
 
-<<animate-demo,fig.show=animate,dev=png,out.width=.45\linewidth,interval=.5,aniopts=controls;loop;autoplay,cache=TRUE>>=
+<<animate-demo, fig.show='animate', dev='png', out.width='.45\\linewidth', interval=.5, aniopts='controls,loop,autoplay',  cache=TRUE>>=
 library(animation)
 demo('Mandelbrot', echo = FALSE, package = 'animation')
 @
@@ -403,7 +403,7 @@ Below is an example taken from StackOverflow%
 $\mathrm{d}\mathbf{x}_{t}=\alpha[(\theta-\mathbf{x}_{t})\mathrm{d}t+4]\mathrm{d}B_{t}$
 in R graphics:
 
-<<math-expr-R,eval=FALSE>>=
+<<math-expr-R, eval=FALSE>>=
 qplot(1:10, 1:10) + opts(title = substitute(paste(d * 
     bolditalic(x)[italic(t)] == alpha * (theta - bolditalic(x)[italic(t)]) * 
     d * italic(t) + lambda * d * italic(B)[italic(t)]), list(lambda = 4))) 
@@ -411,7 +411,7 @@ qplot(1:10, 1:10) + opts(title = substitute(paste(d *
 
 With the tikz device, it is both straightforward and more beautiful: 
 
-<<math-expr-tikz,dev=tikz,fig.width=5,fig.height=3,out.width=.55\linewidth,cache=TRUE,message=FALSE>>=
+<<math-expr-tikz, dev='tikz', fig.width=5, fig.height=3, out.width='.55\\linewidth', cache=TRUE, message=FALSE>>=
 library(ggplot2)
 qplot(1:10, 1:10) + 
 opts(title = sprintf('$\\mathrm{d}\\mathbf{x}_{t} = \\alpha[(\\theta - \\mathbf{x}_{t})\\mathrm{d}t + %d]\\mathrm{d}B_{t}$', 4))
@@ -513,7 +513,7 @@ R script to input external R code. For example, suppose this is a
 code chunk labelled as \texttt{Q1} in an R script named \textsf{homework1-xie.R}
 which is under the same directory as the Rnw document:
 
-<<ext-r-code,eval=FALSE>>=
+<<ext-r-code, eval=FALSE>>=
 ## @knitr Q1
 gcd = function(m, n) {
     while ((r <- m %% n) != 0) {
@@ -526,14 +526,14 @@ gcd = function(m, n) {
 In the Rnw document, we can first read the script using the function
 \emph{read\_chunk()}:
 
-<<read-chunk,eval=FALSE>>=
+<<read-chunk, eval=FALSE>>=
 read_chunk('homework1-xie.R')
 @
 
 This is usually done in an early chunk, and we can use the chunk \texttt{Q1}
 later in the Rnw document:
 
-<<use-ext-chunk,echo=FALSE,comment=NA>>=
+<<use-ext-chunk, echo=FALSE, comment=NA>>=
 cat('<<Q1, echo=TRUE, tidy=TRUE>>=','@',sep='\n')
 @
 
@@ -557,7 +557,7 @@ In the next chunk, we set chunk options \texttt{eval=dothis} and \texttt{echo=!d
 both are valid R expressions since the variable \texttt{dothis} exists.
 As we can see, the source code is hidden, but it was indeed evaluated:
 
-<<cond-out1,eval=dothis,echo=!dothis>>=
+<<cond-out1, eval=dothis, echo=!dothis>>=
 print('you cannot see my source because !dothis is FALSE')
 @
 
@@ -588,7 +588,7 @@ head(hook_rgl)  # the hook function is defined as this
 
 Then we only have to set the chunk option \texttt{rgl=TRUE}:
 
-<<fancy-rgl,rgl=TRUE,dev=png,fig.width=5,fig.height=5,out.width=2in,message=FALSE,cache=TRUE>>=
+<<fancy-rgl, rgl=TRUE, dev='png', fig.width=5, fig.height=5, out.width='2in', message=FALSE, cache=TRUE>>=
 library(rgl)
 demo('bivar', package='rgl', echo=FALSE) 
 par3d(zoom=.7)
@@ -716,7 +716,7 @@ This manual was written in \LyX{} and compiled with \textbf{knitr}.
 The \LyX{} source and the Rnw document exported from \LyX{} can be
 found under these directories:
 
-<<source-location,eval=FALSE>>=
+<<source-location, eval=FALSE>>=
 system.file('examples', 'knitr-manual.lyx', package='knitr')  # lyx source
 system.file('examples', 'knitr-manual.Rnw', package='knitr')  # Rnw source
 @
@@ -726,7 +726,7 @@ to put the two \textsf{.bib} files under the same directory), and
 you need to make sure all the R packages used in this document are
 installed:
 
-<<required-packages,eval=FALSE>>=
+<<required-packages, eval=FALSE>>=
 install.packages(c('animation', 'rgl', 'tikzDevice', 'ggplot2'))
 @
 

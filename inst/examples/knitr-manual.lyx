@@ -93,8 +93,8 @@ status open
 
 % 
 \backslash
-SweaveOpts{fig.path=figure/manual-,cache.path=cache/manual-,fig.align=center,extern
-al=TRUE,fig.show=hold,par=TRUE}
+SweaveOpts{fig.path='figure/manual-', cache.path='cache/manual-', fig.align='center
+', external=TRUE, fig.show='hold', par=TRUE}
 \end_layout
 
 \end_inset
@@ -254,9 +254,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<cars-demo,dev=tikz,fig.width=4,fig.height=2.8,out.width=.45
+<<cars-demo,dev='tikz',fig.width=4,fig.height=2.8,out.width='.45
 \backslash
-textwidth,message=FALSE,cache=TRUE>>=
+
+\backslash
+textwidth',message=FALSE,cache=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -667,7 +669,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<hook-source,eval=FALSE>>=
+<<hook-source, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -863,7 +865,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<stupid-prompts,prompt=TRUE,comment=NA,highlight=FALSE>>=
+<<stupid-prompts, prompt=TRUE, comment=NA, highlight=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -905,7 +907,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<tidy-no,eval=FALSE,tidy=FALSE>>=
+<<tidy-no, eval=FALSE, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -925,7 +927,7 @@ for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
 
 \begin_layout Plain Layout
 
-<<tidy-yes,eval=FALSE,tidy=TRUE>>=
+<<tidy-yes, eval=FALSE, tidy=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1169,9 +1171,12 @@ status open
 
 \begin_layout Plain Layout
 
-<<low-level-plots,fig.keep=all,dev=tikz,fig.width=2.5,fig.height=2.5,out.width=.3
+<<low-level-plots, fig.keep='all', dev='tikz', fig.width=2.5, fig.height=2.5,
+ out.width='.3
 \backslash
-textwidth,cache=TRUE>>=
+
+\backslash
+textwidth', cache=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1240,7 +1245,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<low-plot-loop,eval=FALSE>>=
+<<low-plot-loop, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1273,7 +1278,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<high-plot-loop,eval=FALSE>>=
+<<high-plot-loop, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1365,9 +1370,12 @@ status open
 
 \begin_layout Plain Layout
 
-<<fig-hold,fig=TRUE,fig.show=asis,dev=pdf,fig.width=6,fig.height=4,out.width=.35
+<<fig-hold, fig=TRUE, fig.show='asis', dev='pdf', fig.width=6, fig.height=4,
+ out.width='.35
 \backslash
-linewidth>>=
+
+\backslash
+linewidth'>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1466,9 +1474,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<animate-demo,fig.show=animate,dev=png,out.width=.45
+<<animate-demo, fig.show='animate', dev='png', out.width='.45
 \backslash
-linewidth,interval=.5,aniopts=controls;loop;autoplay,cache=TRUE>>=
+
+\backslash
+linewidth', interval=.5, aniopts='controls,loop,autoplay',  cache=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1666,7 +1676,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<math-expr-R,eval=FALSE>>=
+<<math-expr-R, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1706,9 +1716,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<math-expr-tikz,dev=tikz,fig.width=5,fig.height=3,out.width=.55
+<<math-expr-tikz, dev='tikz', fig.width=5, fig.height=3, out.width='.55
 \backslash
-linewidth,cache=TRUE,message=FALSE>>=
+
+\backslash
+linewidth', cache=TRUE, message=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -2099,7 +2111,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<read-chunk,eval=FALSE>>=
+<<read-chunk, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -2131,7 +2143,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<use-ext-chunk,echo=FALSE,comment=NA>>=
+<<use-ext-chunk, echo=FALSE, comment=NA>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -2248,7 +2260,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<cond-out1,eval=dothis,echo=!dothis>>=
+<<cond-out1, eval=dothis, echo=!dothis>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -2398,8 +2410,8 @@ status open
 
 \begin_layout Plain Layout
 
-<<fancy-rgl,rgl=TRUE,dev=png,fig.width=5,fig.height=5,out.width=2in,message=FALSE,c
-ache=TRUE>>=
+<<fancy-rgl, rgl=TRUE, dev='png', fig.width=5, fig.height=5, out.width='2in',
+ message=FALSE, cache=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -2937,7 +2949,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<source-location,eval=FALSE>>=
+<<source-location, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -2979,7 +2991,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<required-packages,eval=FALSE>>=
+<<required-packages, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
