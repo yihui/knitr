@@ -49,7 +49,7 @@ opts_chunk =
                     external = TRUE, sanitize = FALSE,
                     highlight = TRUE, size = 'normalsize',
                     warning = TRUE, error = TRUE, message = TRUE,
-                    background = '.97;.97;.97', split = FALSE, include = TRUE,
+                    background = '#F7F7F7', split = FALSE, include = TRUE,
                     interval = 1, aniopts = 'controls;loop'))
 
 ##' @rdname opts_chunk
