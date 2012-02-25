@@ -43,7 +43,7 @@ run_chunk(label, envir = parent.frame())
 # <<a>>
 # @
 
-## In knitr, we use
+## In knitr, we can use the same, or
 # <<b>>=
 # run_chunk('a')
 # @
