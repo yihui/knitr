@@ -1,9 +1,5 @@
-baseurl:     /knitr/
-source:      .
-destination: ./_site
-plugins:     ./_plugins
-
 pygments:    true 
 permalink:   /:categories/:title/
 markdown:    redcarpet
+url:         /knitr
 
