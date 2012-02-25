@@ -44,11 +44,12 @@ call_block = function(block) {
     cache$load(hash)
     return(cache$output(hash))
   }
-  do.call('block_exec', params)
+  block_exec(params)
 }
 
-block_exec = function(code, ...) {
-  options = list(...)
+block_exec = function(params) {
+  code = params$code
+  options = params
   
   ## tidy code if echo
   echo = options$echo
