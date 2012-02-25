@@ -64,15 +64,16 @@ valid_prefix = function(x) {
 
 ## define a color variable in TeX
 color_def = function(col, variable = 'shadecolor') {
-  x = sc_split(col)
+  x = if (length(col) == 1L) sc_split(col) else col
   if ((n <- length(x)) != 3L) {
     if (n == 1L) x = drop(col2rgb(x)/255) else {
       x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
       warning("the color '", col, "' is invalid;",
               "using default color...",
-              "see http://yihui.github.com/knitr/options")
+              "see http://yihui.name/knitr/options")
     }
   }
+  if (length(x) != 3L) stop('invalid color:', col)
   sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
 }
 
