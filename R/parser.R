@@ -93,7 +93,8 @@ parse_params = function(params, label = TRUE) {
       if (!('label' %in% names(res))) res$label = unnamed_chunk()
     }
     return(res)
-  } else warning('are you using old Sweave syntax? go http://yihui.name/knitr/options')
+  } else warning('I saw options ', params,
+                 '\n are you using old Sweave syntax? go http://yihui.name/knitr/options')
 
   ## split by , (literal comma has to be escaped as \,) and then by =
   pieces = str_split(params, perl('(?<=[^\\\\]),'))[[1]]
