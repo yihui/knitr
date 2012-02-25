@@ -9,8 +9,10 @@ process_group.inline = function(x) call_inline(x)
 
 
 call_block = function(block) {
-  ## now try eval all options except those in eval.after
-  for (o in setdiff(names(block$params), opts_knit$get('eval.after')))
+  ## now try eval all options except those in eval.after and their aliases
+  af = opts_knit$get('eval.after'); al = opts_knit$get('aliases')
+  if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
+  for (o in setdiff(names(block$params), af))
     block$params[[o]] = eval_lang(block$params[[o]])
 
   params = opts_chunk$merge(block$params)
