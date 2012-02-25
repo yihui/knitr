@@ -122,7 +122,7 @@ pure_preamble = function(preamble) {
 ##' options are set in the preamble of the parent document, it will
 ##' apply to the child document as well.
 ##' @param parent path to the parent document (relative to the current
-  ##' child document)
+##' child document)
 ##' @return The preamble is extracted and stored to be used later when
 ##' the complete output is written.
 ##' @note Obviously this function is only useful when the output
@@ -320,7 +320,7 @@ fig_path = function(suffix = '', options = opts_current$get()) {
 ##' current chunk; a typical example is when we use \code{source()} in
 ##' a cached chunk, we have to make sure the script is executed in the
 ##' correct environment (should not use the default local
-  ##' environment). See references for an example.
+##' environment). See references for an example.
 ##' @references \url{http://yihui.github.com/knitr/demo/cache/}
 ##' @export
 knit_env = function() {
@@ -334,8 +334,8 @@ knit_env = function() {
 ##' @inheritParams knit
 ##' @param compiler a character string which gives the LaTeX program
 ##' used to compile the tex document to PDF (by default it uses the
-  ##' default setting of \code{\link[tools]{texi2pdf}}, which is often
-                         ##' PDFLaTeX); this argument will be used to temporarily set the
+##' default setting of \code{\link[tools]{texi2pdf}}, which is often
+##' PDFLaTeX); this argument will be used to temporarily set the
 ##' environmental variable \samp{PDFLATEX}
 ##' @author Ramnath Vaidyanathan and Yihui Xie
 ##' @export
