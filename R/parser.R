@@ -107,7 +107,7 @@ parse_params = function(params, label = TRUE) {
   if (any(n == 1)) {
     if (label && length(idx <- which(n == 1)) == 1) {
       pieces[[idx]] = c('label', pieces[[idx]])
-    } else stop("illegal tags: ", str_c(names(pieces)[idx[-1]], collapse = ', '), "\n",
+    } else stop("illegal tags in: ", params, "\n",
                 "all options must be of the form 'tag=value' except the chunk label",
                 call. = FALSE)
   } else if (label && !str_detect(params, '\\s*label\\s*=')) {
