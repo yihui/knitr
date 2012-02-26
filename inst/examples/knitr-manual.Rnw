@@ -494,9 +494,10 @@ will still use old cached results, unless there is a way to detect
 such changes from other chunks. There is an option called \texttt{dependson}
 in \textbf{cacheSweave} which does this job. We can explicitly specify
 which other chunks this chunk depends on by setting an option like
-\texttt{dependson='chunkA;chunkB'}. Each time the cache of a chunk
-is rebuilt, all other chunks which depend on this chunk will lose
-cache, hence their cache will be rebuilt as well.
+\texttt{dependson='chunkA;chunkB'} or equivalently \texttt{dependson=c('chunkA',
+'chunkB')}. Each time the cache of a chunk is rebuilt, all other chunks
+which depend on this chunk will lose cache, hence their cache will
+be rebuilt as well.
 
 
 \subsection{Code Externalization}

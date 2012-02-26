@@ -2020,6 +2020,10 @@ cacheSweave
 \family typewriter
 dependson='chunkA;chunkB'
 \family default
+ or equivalently 
+\family typewriter
+dependson=c('chunkA', 'chunkB')
+\family default
 .
  Each time the cache of a chunk is rebuilt, all other chunks which depend
  on this chunk will lose cache, hence their cache will be rebuilt as well.
