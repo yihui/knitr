@@ -80,7 +80,7 @@ is that extending Sweave by hacking \textsf{SweaveDrivers.R} in the
 \begin{figure}
 <<cars-demo,dev='tikz',fig.width=4,fig.height=2.8,out.width='.45\\textwidth',message=FALSE,cache=TRUE>>=
 fit=lm(dist~speed,data=cars) # linear regression
-par(mar=c(4, 4, 1, .1), mgp=c(2,1,0))
+par(mar=c(4, 4, 1, .1), mgp=c(2,1,0), bg='white')
 with(cars,plot(speed,dist,panel.last=abline(fit)))
 text(10,100,'$Y = \\beta_0 + \\beta_1x + \\epsilon$')
 library(ggplot2)
@@ -92,9 +92,9 @@ qplot(speed, dist, data=cars)+geom_smooth()
 in \textbf{ggplot2}; (3) device size is $4\times2.8$ (inches) but
 output size is adjusted to \texttt{.45\textbackslash{}textwidth} in
 chunk options; (4) base graphics and \textbf{ggplot2} can sit side
-by side; (5) use the \emph{tikz()} device in \textbf{tikzDevice} simply
-by setting chunk option \texttt{dev=tikz} (hence can write native
-\protect\LaTeX{} expressions in R plots); (6) code highlighting.}
+by side; (5) use the \emph{tikz()} device in \textbf{tikzDevice} by
+setting chunk option \texttt{dev='tikz'} (hence can write native \protect\LaTeX{}
+expressions in R plots); (6) code highlighting.}
 \end{figure}
 
 
@@ -103,10 +103,12 @@ but here I show the code just for the sake of demonstration. If we
 type \emph{qplot()} in R, we get a plot, and the same thing happens
 in \textbf{knitr}. If we draw two plots in the code, \textbf{knitr}
 will show two plots and we do not need to tell it how many plots are
-there in the code in advance. If we set \texttt{out.width=.49\textbackslash{}textwidth}
+there in the code in advance. If we set \texttt{out.width='.49\textbackslash{}\textbackslash{}textwidth'}
 in chunk options, we get it in the final output document. If we say
-\texttt{fig.align=center}, the plots are centered. That's it. Many
-enhancements and new features will be introduced later.
+\texttt{fig.align='center'}, the plots are centered. That's it. Many
+enhancements and new features will be introduced later. If you come
+from the Sweave land, you can take a look at the page of transition
+first: \url{http://yihui.name/knitr/demo/sweave/}.
 
 
 \section{Design}
@@ -271,8 +273,8 @@ support for other graphics devices, which has been implemented since
 R 2.13.0. Instead of using logical options like \texttt{png} or \texttt{jpeg}
 (this list can go on and on), \textbf{knitr} uses a single option
 \texttt{dev} (like \texttt{grdevice} in Sweave) which has support
-for more than 20 devices. For instance, \texttt{dev=png} will use
-the \emph{png()} device, and \texttt{dev=CairoJPEG} uses the \emph{CairoJPEG()}
+for more than 20 devices. For instance, \texttt{dev='png'} will use
+the \emph{png()} device, and \texttt{dev='CairoJPEG'} uses the \emph{CairoJPEG()}
 device in the \textbf{Cairo} package (it has to be installed first,
 of course). If none of these devices is satisfactory, you can provide
 the name of a customized device function, which must have been defined
@@ -300,8 +302,8 @@ text(5,9,'mass $\\rightarrow$ energy\n$E=mc^2$')
 This brings a significant difference with traditional tools in R for
 dynamic report generation, since low-level plotting changes can also
 be recorded. The option \texttt{fig.keep} controls which plots to
-keep in the output; \texttt{fig.keep=all} will keep low-level changes
-as separate plots; by default (\texttt{fig.keep=high}), \textbf{knitr}
+keep in the output; \texttt{fig.keep='all'} will keep low-level changes
+as separate plots; by default (\texttt{fig.keep='high'}), \textbf{knitr}
 will merge low-level plot changes into the previous high-level plot,
 like most graphics devices do. This feature may be useful for teaching
 R graphics step by step. Note, however, low-level plotting commands
@@ -326,18 +328,18 @@ to let \textbf{knitr} keep all the plots in a chunk and insert them
 into the output document, so we no longer need the \texttt{cat('\textbackslash{}\textbackslash{}includegraphics\{\}')}
 trick.
 
-We can discard all previous plots and keep the last one only by \texttt{fig.keep=last},
-or keep only the first plot by \texttt{fig.keep=first}, or discard
-all plots by \texttt{fig.keep=none}.
+We can discard all previous plots and keep the last one only by \texttt{fig.keep='last'},
+or keep only the first plot by \texttt{fig.keep='first'}, or discard
+all plots by \texttt{fig.keep='none'}.
 
 
 \subsubsection{Plot Rearrangement}
 
 The option \texttt{fig.show} can decide whether to hold all plots
 while evaluating the code and ``flush'' all of them to the end of
-a chunk (\texttt{fig.show=hold}), or just insert them to the place
-where they were created (by default \texttt{fig.show=asis}). Here
-is an example of \texttt{fig.show=asis}:
+a chunk (\texttt{fig.show='hold'}), or just insert them to the place
+where they were created (by default \texttt{fig.show='asis'}). Here
+is an example of \texttt{fig.show='asis'}:
 
 <<fig-hold, fig=TRUE, fig.show='asis', dev='pdf', fig.width=6, fig.height=4, out.width='.35\\linewidth'>>=
 contour(volcano)  # contour lines
@@ -382,21 +384,21 @@ to be less than half of the current line width.
 Beside PDF, PNG and other traditional R graphical devices, \textbf{knitr}
 has special support to tikz graphics via the \textbf{tikzDevice} package
 \citep{tikzDevice-manual}, which is similar to \textbf{pgfSweave}.
-If we set the chunk option \texttt{dev=tikz}, the \emph{tikz()} device
-in \textbf{tikzDevice} will be used to record plots. Options \texttt{sanitize}
-and \texttt{external} are related to the tikz device: see the documentation
-of \emph{tikz()} for explanation on \texttt{sanitize}, and \texttt{external=TRUE}
-in \textbf{knitr} has a different meaning with \textbf{pgfSweave}
--- it means \texttt{standAlone=TRUE} in \emph{tikz()}, and the tikz
-graphics output will be compiled to PDF \emph{immediately} after it
-was created, so the ``externalization'' does not depend on the \textbf{tikz}
-package; to maintain consistency in (font) styles, \textbf{knitr}
-will read the preamble of the input document and use it in the tikz
-device. At the moment, I'm not sure if this is a faithful way to externalize
-tikz graphics, but I have not seen any problems so far. The assumption
-to make, however, is that you declare all the styles in the preamble;
-\textbf{knitr} is agnostic of \emph{local} style changes in the body
-of the document.
+If we set the chunk option \texttt{dev='tikz'}, the \emph{tikz()}
+device in \textbf{tikzDevice} will be used to record plots. Options
+\texttt{sanitize} and \texttt{external} are related to the tikz device:
+see the documentation of \emph{tikz()} for explanation on \texttt{sanitize},
+and \texttt{external=TRUE} in \textbf{knitr} has a different meaning
+with \textbf{pgfSweave} -- it means \texttt{standAlone=TRUE} in \emph{tikz()},
+and the tikz graphics output will be compiled to PDF \emph{immediately}
+after it was created, so the ``externalization'' does not depend
+on the \textbf{tikz} package; to maintain consistency in (font) styles,
+\textbf{knitr} will read the preamble of the input document and use
+it in the tikz device. At the moment, I'm not sure if this is a faithful
+way to externalize tikz graphics, but I have not seen any problems
+so far. The assumption to make, however, is that you declare all the
+styles in the preamble; \textbf{knitr} is agnostic of \emph{local}
+style changes in the body of the document.
 
 Below is an example taken from StackOverflow%
 \footnote{\url{http://stackoverflow.com/q/8190087/559676}%
@@ -457,7 +459,7 @@ based on the object of its subset.
 The paths of cache files are determined by the chunk option \texttt{cache.path};
 by default all cache files are created under a directory \textsf{cache}
 relative to the current working directory, and if the option value
-contains a directory (e.g. \texttt{cache.path=cache/abc-}), cache
+contains a directory (e.g. \texttt{cache.path='cache/abc-'}), cache
 files will be stored under that directory (automatically created if
 it does not exist). The cache is invalidated and purged on any changes
 to the code chunk, including both the R code and chunk options%
@@ -492,9 +494,9 @@ will still use old cached results, unless there is a way to detect
 such changes from other chunks. There is an option called \texttt{dependson}
 in \textbf{cacheSweave} which does this job. We can explicitly specify
 which other chunks this chunk depends on by setting an option like
-\texttt{dependson=chunkA;chunkB}. Each time the cache of a chunk is
-rebuilt, all other chunks which depend on this chunk will lose cache,
-hence their cache will be rebuilt as well.
+\texttt{dependson='chunkA;chunkB'}. Each time the cache of a chunk
+is rebuilt, all other chunks which depend on this chunk will lose
+cache, hence their cache will be rebuilt as well.
 
 
 \subsection{Code Externalization}

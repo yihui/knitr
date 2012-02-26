@@ -273,7 +273,7 @@ fit=lm(dist~speed,data=cars) # linear regression
 
 \begin_layout Plain Layout
 
-par(mar=c(4, 4, 1, .1), mgp=c(2,1,0))
+par(mar=c(4, 4, 1, .1), mgp=c(2,1,0), bg='white')
 \end_layout
 
 \begin_layout Plain Layout
@@ -362,9 +362,9 @@ tikz()
 \series bold
 tikzDevice
 \series default
- simply by setting chunk option 
+ by setting chunk option 
 \family typewriter
-dev=tikz
+dev='tikz'
 \family default
  (hence can write native LaTeX expressions in R plots); (6) code highlighting.
 \end_layout
@@ -399,18 +399,33 @@ knitr
  in the code in advance.
  If we set 
 \family typewriter
-out.width=.49
+out.width='.49
 \backslash
-textwidth
+
+\backslash
+textwidth'
 \family default
  in chunk options, we get it in the final output document.
  If we say 
 \family typewriter
-fig.align=center
+fig.align='center'
 \family default
 , the plots are centered.
  That's it.
  Many enhancements and new features will be introduced later.
+ If you come from the Sweave land, you can take a look at the page of transition
+ first: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://yihui.name/knitr/demo/sweave/
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -1109,7 +1124,7 @@ grdevice
  in Sweave) which has support for more than 20 devices.
  For instance, 
 \family typewriter
-dev=png
+dev='png'
 \family default
  will use the 
 \emph on
@@ -1117,7 +1132,7 @@ png()
 \emph default
  device, and 
 \family typewriter
-dev=CairoJPEG
+dev='CairoJPEG'
 \family default
  uses the 
 \emph on
@@ -1224,11 +1239,11 @@ fig.keep
 \family default
  controls which plots to keep in the output; 
 \family typewriter
-fig.keep=all
+fig.keep='all'
 \family default
  will keep low-level changes as separate plots; by default (
 \family typewriter
-fig.keep=high
+fig.keep='high'
 \family default
 ), 
 \series bold
@@ -1322,15 +1337,15 @@ includegraphics{}')
 \begin_layout Standard
 We can discard all previous plots and keep the last one only by 
 \family typewriter
-fig.keep=last
+fig.keep='last'
 \family default
 , or keep only the first plot by 
 \family typewriter
-fig.keep=first
+fig.keep='first'
 \family default
 , or discard all plots by 
 \family typewriter
-fig.keep=none
+fig.keep='none'
 \family default
 .
 \end_layout
@@ -1354,17 +1369,17 @@ flush
 
  all of them to the end of a chunk (
 \family typewriter
-fig.show=hold
+fig.show='hold'
 \family default
 ), or just insert them to the place where they were created (by default
  
 \family typewriter
-fig.show=asis
+fig.show='asis'
 \family default
 ).
  Here is an example of 
 \family typewriter
-fig.show=asis
+fig.show='asis'
 \family default
 :
 \end_layout
@@ -1564,7 +1579,7 @@ pgfSweave
 .
  If we set the chunk option 
 \family typewriter
-dev=tikz
+dev='tikz'
 \family default
 , the 
 \emph on
@@ -1901,7 +1916,7 @@ cache
  a directory (e.g.
  
 \family typewriter
-cache.path=cache/abc-
+cache.path='cache/abc-'
 \family default
 ), cache files will be stored under that directory (automatically created
  if it does not exist).
@@ -2003,7 +2018,7 @@ cacheSweave
  We can explicitly specify which other chunks this chunk depends on by setting
  an option like 
 \family typewriter
-dependson=chunkA;chunkB
+dependson='chunkA;chunkB'
 \family default
 .
  Each time the cache of a chunk is rebuilt, all other chunks which depend
