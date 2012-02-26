@@ -39,7 +39,7 @@ opts_chunk =
   new_defaults(list(eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
                     cache = FALSE, dependson = NULL, cache.path = 'cache/',
                     ref.label = NULL, child = NULL, concordance = FALSE,
-                    prompt = FALSE, comment = '##',
+                    prompt = FALSE, comment = '##', autodep = FALSE,
                     fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
                     fig.path = '', fig.ext = NULL, dev = 'pdf', dpi = 72,
                     fig.width = 7, fig.height = 7,
