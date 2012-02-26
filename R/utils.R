@@ -79,6 +79,7 @@ color_def = function(col, variable = 'shadecolor') {
 
 ## split by semicolon
 sc_split = function(string) {
+  if (length(string) > 1L) return(string)
   str_trim(str_split(string, fixed(';'))[[1]])
 }
 
