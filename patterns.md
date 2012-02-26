@@ -18,7 +18,7 @@ The [object](objects) `knit_patterns` manages patterns in **knitr**. For example
 
 Patterns that are `NULL` will not be matched.
 
-Like Sweave, there are two types of R code in **knitr**: code chunks (like paragraphs) and inline R code which will be executed within text lines. For chunks in a document, options are of the form `label, opt1=TRUE, opt2=FALSE, opt3=character.string` (connected by `,` and `=`; only the chunk label does not need to have a `value`, since it is implicitly the `value` of the chunk option `label`).
+Like Sweave, there are two types of R code in **knitr**: code chunks (like paragraphs) and inline R code which will be executed within text lines. For chunks in a document, options are of the form `label, opt1=TRUE, opt2=FALSE, opt3='character.string'` (connected by `,` and `=`; only the chunk label does not need to have a `value`, since it is implicitly the `value` of the chunk option `label`).
 
 ## Built-in Patterns
 
