@@ -47,8 +47,9 @@ NEW FEATURES
   Helder Correia)
 
   o to avoid $$ around numbers in the inline output, we can use I() to
-  protect the numeric inline output, e.g. $x = \Sexpr{I(10^7)}$
-  whereas \Sexpr{10^7} gives $10^7$ (thanks, Kevin Middleton)
+  protect the numeric inline output, e.g. $x = \Sexpr{I(10^7)}$ gives
+  $x = 10^7$ whereas \Sexpr{10^7} gives $10^7$ (thanks, Kevin
+  Middleton)
 
   o the listings package is formally supported now (see
   ?render_listings); the default style is borrowed from Sweavel.sty
@@ -94,6 +95,8 @@ MINOR CHANGES
   o results=asis will no longer affect the 'chunk' hook (in the past,
   the chunk output was not wrapped in the kframe environment when
   results=asis); it only affects the 'output' hook now
+
+  o the package website allows comments now
 
 MAJOR CHANGES
 
