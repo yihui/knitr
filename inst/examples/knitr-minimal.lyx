@@ -1,14 +1,8 @@
-#LyX 2.1.0svn created this file. For more info see http://www.lyx.org/
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 413
 \begin_document
 \begin_header
 \textclass article
-\begin_preamble
-\renewcommand{\textfraction}{0.05}
-\renewcommand{\topfraction}{0.8}
-\renewcommand{\bottomfraction}{0.8}
-\renewcommand{\floatpagefraction}{0.75}
-\end_preamble
 \use_default_options true
 \begin_modules
 knitr
@@ -27,6 +21,7 @@ knitr
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -90,7 +85,7 @@ status open
 
 % 
 \backslash
-SweaveOpts{fig.path=figure/minimal-,fig.align=center,fig.show=hold}
+SweaveOpts{fig.path='figure/minimal-', fig.align='center', fig.show='hold'}
 \end_layout
 
 \end_inset
@@ -104,18 +99,12 @@ status open
 
 \begin_layout Plain Layout
 
-<<setup,echo=FALSE,results=hide,message=FALSE,cache=FALSE>>=
+<<setup, include=FALSE, cache=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
 
 options(replace.assign=TRUE,width=90)
-\end_layout
-
-\begin_layout Plain Layout
-
-knit_hooks$set(par=function(before, options, envir){if (before) par(mar=c(4,4,.1,.
-1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3,las=1)})
 \end_layout
 
 \begin_layout Plain Layout
@@ -186,7 +175,7 @@ x
 \family default
  is 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -207,14 +196,21 @@ status open
 
 \begin_layout Plain Layout
 
-<<boring-plots,dev=pdf,fig.width=5,fig.height=5,out.width=.45
+<<boring-plots, fig.width=4, fig.height=4, out.width='.4
 \backslash
-linewidth,par=TRUE>>=
+
+\backslash
+linewidth'>>=
 \end_layout
 
 \begin_layout Plain Layout
 
-## two plots side by side (option fig.show=hold)
+## two plots side by side (option fig.show='hold')
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3,las=1)
 \end_layout
 
 \begin_layout Plain Layout
