@@ -471,7 +471,7 @@ knit_patterns$get('rnw')
 \end_layout
 
 \begin_layout Enumerate
-a set of out 
+a set of output 
 \begin_inset CommandInset href
 LatexCommand href
 name "hooks"
@@ -480,7 +480,7 @@ target "http://yihui.name/knitr/hooks"
 \end_inset
 
  will also be set up automatically according to the filename extension (e.g.
- use LaTeX environments to wrap R results for LaTeX output);
+ use LaTeX environments or HTML elements to wrap up R results);
 \end_layout
 
 \begin_layout Enumerate
@@ -521,9 +521,9 @@ knitr
 \series default
  will first check if there are previously cached results under the cache
  directory before really evaluating the chunk; if cached results exist and
- this code chunk has not been changed (use MD5 sum to verify), the cached
- results will be (lazy-) loaded, otherwise new cache will be built; if a
- cached chunk depends on other chunks (see the 
+ this code chunk has not been changed since last run (use MD5 sum to verify),
+ the cached results will be (lazy-) loaded, otherwise new cache will be
+ built; if a cached chunk depends on other chunks (see the 
 \family typewriter
 dependson
 \family default
@@ -1549,7 +1549,16 @@ out.height
 \family typewriter
 out.width
 \family default
- to be less than half of the current line width.
+ to be less than half of the current line width, e.g.
+ 
+\family typewriter
+out.width='.49
+\backslash
+
+\backslash
+linewidth'
+\family default
+.
 \end_layout
 
 \begin_layout Subsubsection
@@ -1602,11 +1611,8 @@ external
 \emph on
 tikz()
 \emph default
- for explanation on 
-\family typewriter
-sanitize
-\family default
-, and 
+ for details.
+ Note 
 \family typewriter
 external=TRUE
 \family default
@@ -1630,7 +1636,7 @@ tikz()
 \emph on
 immediately
 \emph default
- after it was created, so the 
+ after it is created, so the 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2036,7 +2042,8 @@ Code Externalization
 \begin_layout Standard
 It can be more convenient to write R code in a separate file, rather than
  mixing it into a LaTeX document; for example, we can run R code successively
- from one chunk to the other without jumping through other texts.
+ in a pure R script from one chunk to the other without jumping through
+ other texts.
  Since I prefer using LyX to write reports, Sweave is even more inconvenient
  because I have to recompile the whole document each time, even if I only
  want to know the results of a single chunk.
@@ -2193,7 +2200,7 @@ Different documents can read the same R script, so the R code can be reusable
 \end_layout
 
 \begin_layout Subsection
-Conditional Evaluation
+Evaluation of Chunk Options
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:conditional"
@@ -2204,7 +2211,73 @@ name "sub:conditional"
 \end_layout
 
 \begin_layout Standard
-Instead of setting chunk options 
+By default 
+\series bold
+knitr
+\series default
+ uses a new syntax to parse chunk options: it treats them as function arguments
+ instead of a text string to be split to obtain option values.
+ This gives the user much more power than the old syntax; we can pass arbitrary
+ R objects to chunk options besides simple ones like 
+\family typewriter
+TRUE
+\family default
+/
+\family typewriter
+FALSE
+\family default
+, numbers and character strings.
+ The page 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://yihui.name/knitr/demo/sweave/
+\end_layout
+
+\end_inset
+
+ has given two examples to show the advantages of the new syntax.
+ Here we show yet another useful application.
+\end_layout
+
+\begin_layout Standard
+Before 
+\series bold
+knitr
+\series default
+ 0.3, there was a feature named 
+\begin_inset Quotes eld
+\end_inset
+
+conditional evaluation
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+request from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://plus.google.com/u/0/116405544829727492615/posts/43WrRUffjzK
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ The idea is, instead of setting chunk options 
 \family typewriter
 eval
 \family default
@@ -2220,7 +2293,8 @@ TRUE
 \family typewriter
 FALSE
 \family default
-, their values can be controlled by global variables in the current R session.
+ (constants), their values can be controlled by global variables in the
+ current R session.
  This enables 
 \series bold
 knitr
@@ -2352,6 +2426,38 @@ FALSE
  results selectively.
 \end_layout
 
+\begin_layout Standard
+This old feature requires 
+\series bold
+knitr
+\series default
+ to treat 
+\family typewriter
+eval
+\family default
+ and 
+\family typewriter
+echo
+\family default
+ specially, and we can easily see that it is no longer necessary with the
+ new syntax: 
+\family typewriter
+eval=dothis
+\family default
+ will tell R to find the variable 
+\family typewriter
+dothis
+\family default
+ automatically just like we call a function 
+\family typewriter
+foobar(eval = dothis)
+\family default
+.
+ What is more, all options will be evaluated as R expressions unless they
+ are already constants which do not need to be evaluated, so this old feature
+ has been generalized to all other options naturally.
+\end_layout
+
 \begin_layout Subsection
 Customization
 \end_layout
@@ -2473,25 +2579,93 @@ knitr
 \family typewriter
 verbatim
 \family default
- environments, and in HTML, it is only a matter of putting output in a 
+ environments, and in HTML, it is only a matter of putting output in 
 \family typewriter
 div
 \family default
- layer.
+ layers.
  These are simply character string operations.
- The demo of using the 
-\series bold
-listings
-\series default
- package in the 
-\begin_inset CommandInset href
-LatexCommand href
-name "website"
-target "http://yihui.name/knitr/demo/listings/"
+ Many demos in 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://yihui.name/knitr/demos
+\end_layout
 
 \end_inset
 
- shows this idea clearly.
+ show this idea clearly.
+ This manual did not cover all the features of 
+\series bold
+knitr
+\series default
+, and users are encouraged to thumb through the website to know more possible
+ features.
+\end_layout
+
+\begin_layout Section
+Editors
+\end_layout
+
+\begin_layout Standard
+You can use any text editors to write the source documents, but some have
+ built-in support for 
+\series bold
+knitr
+\series default
+.
+ Both RStudio (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.rstudio.org
+\end_layout
+
+\end_inset
+
+) and LyX (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.lyx.org
+\end_layout
+
+\end_inset
+
+) have full support for 
+\series bold
+knitr
+\series default
+, and you can compile the document to PDF with just one click.
+ See 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://yihui.name/knitr/demo/rstudio/
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://yihui.name/knitr/demo/lyx/
+\end_layout
+
+\end_inset
+
+ respectively.
 \end_layout
 
 \begin_layout Section*
