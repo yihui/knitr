@@ -124,7 +124,13 @@ BUG FIXES
   evaluated; this has been fixed and opts_current$get() will give the
   expected values of options (thanks, Frank Harrell)
 
-  
+MISC
+
+  o number of downloads (https://github.com/yihui/knitr/downloads) of
+  knitr documentation before I removed and updated them on GitHub:
+  c(main = 1300, graphics = 549, themes = 130, beamer = 565, listings
+  = 240, minimal = 160)
+
 			 CHANGES IN knitr VERSION 0.2
 
 NEW FEATURES
@@ -209,3 +215,6 @@ MISC
   released to CRAN) in the Applications of R in Business Contest
   hosted by Revolution Analytics: http://bit.ly/wP1Dii
   http://bit.ly/wDRCPV
+  
+  o in this NEWS file, #n means the issue number on GitHub, e.g. #142
+  is https://github.com/yihui/knitr/issues/142
