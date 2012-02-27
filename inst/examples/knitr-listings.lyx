@@ -1,13 +1,8 @@
-#LyX 2.1.0svn created this file. For more info see http://www.lyx.org/
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 413
 \begin_document
 \begin_header
 \textclass article
-\begin_preamble
-\usepackage{color}
-% we need this because the chunk hook still need it
-\definecolor{fgcolor}{rgb}{0,0,0}
-\end_preamble
 \use_default_options true
 \begin_modules
 knitr
@@ -26,6 +21,7 @@ knitr
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -90,26 +86,26 @@ status open
 
 % 
 \backslash
-SweaveOpts{highlight=FALSE}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-<<setup,echo=FALSE>>=
+SweaveOpts{fig.path='figure/listings-'}
 \end_layout
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+<<setup, include=FALSE, cache=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+options(replace.assign = TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+render_listings()
 \end_layout
 
 \begin_layout Plain Layout
@@ -135,66 +131,16 @@ To use the
 \series bold
 listings
 \series default
- package, we need to declare it in the LaTeX preamble first (the second
- line is optional):
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "language=TeX"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-usepackage{listings}
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-lstset{language=R}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Then we need to modify the output hooks and header information accordingly.
- In this demo, I use options 
+ package with 
+\series bold
+knitr
+\series default
+, all you need to do is to call a function in your first setup chunk (that
+ chunk should be hidden from the output with 
 \family typewriter
-language=R,numbers=left,stepnumber=2
+include=FALSE
 \family default
- for the R source code in the 
-\family typewriter
-lstlistings
-\family default
- environemnt; for R output, I use the typewriter font; for warnings, messages
- and errors, I use bold font.
- We do not need the header information in 
-\family typewriter
-highlight
-\family default
-, so we empty it.
- The R code used is below (not all output hooks need to be set, e.g.
- 
-\family typewriter
-inline
-\family default
-, 
-\family typewriter
-plot
-\family default
- and 
-\family typewriter
-chunk
-\family default
- hooks):
+ and should not be cached):
 \end_layout
 
 \begin_layout Standard
@@ -203,242 +149,12 @@ status open
 
 \begin_layout Plain Layout
 
-
-\backslash
-begin{verbatim}
+% I just want to echo the 2nd line
 \end_layout
 
 \begin_layout Plain Layout
 
-## a common hook for messages, warnings and errors
-\end_layout
-
-\begin_layout Plain Layout
-
-hook_lst_bf = function(x, options) {
-\end_layout
-
-\begin_layout Plain Layout
-
-    paste("
-\backslash
-
-\backslash
-begin{lstlisting}[basicstyle={
-\backslash
-
-\backslash
-bfseries}]
-\backslash
-n", x, 
-\end_layout
-
-\begin_layout Plain Layout
-
-        "
-\backslash
-
-\backslash
-end{lstlisting}
-\backslash
-n", sep = "")
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\begin_layout Plain Layout
-
-knit_hooks$set(source = function(x, options) {
-\end_layout
-
-\begin_layout Plain Layout
-
-    paste("
-\backslash
-
-\backslash
-begin{lstlisting}[language=R,numbers=left,stepnumber=2]
-\backslash
-n", x, 
-\end_layout
-
-\begin_layout Plain Layout
-
-        "
-\backslash
-
-\backslash
-end{lstlisting}
-\backslash
-n", sep = "")
-\end_layout
-
-\begin_layout Plain Layout
-
-}, output = function(x, options) {
-\end_layout
-
-\begin_layout Plain Layout
-
-    paste("
-\backslash
-
-\backslash
-begin{lstlisting}[basicstyle={
-\backslash
-
-\backslash
-ttfamily}]
-\backslash
-n", x, 
-\end_layout
-
-\begin_layout Plain Layout
-
-        "
-\backslash
-
-\backslash
-end{lstlisting}
-\backslash
-n", sep = "")
-\end_layout
-
-\begin_layout Plain Layout
-
-}, warning = hook_lst_bf, message = hook_lst_bf, error = hook_lst_bf)
-\end_layout
-
-\begin_layout Plain Layout
-
-set_header(highlight = "")
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-<<listings-hooks,echo=FALSE>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-## for those who read source code here: I cannot use echo=TRUE here because
-\end_layout
-
-\begin_layout Plain Layout
-
-## the code 
-\backslash
-begin{lstlistings} and 
-\backslash
-end{lstlistings} will confuse the listings package and cause LaTeX errors
-\end_layout
-
-\begin_layout Plain Layout
-
-hook_lst_bf = function(x, options) {
-\end_layout
-
-\begin_layout Plain Layout
-
-  paste('
-\backslash
-
-\backslash
-begin{lstlisting}[basicstyle={
-\backslash
-
-\backslash
-bfseries}]
-\backslash
-n', x, '
-\backslash
-
-\backslash
-end{lstlisting}
-\backslash
-n', sep = '')
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\begin_layout Plain Layout
-
-knit_hooks$set(source = function(x, options) {
-\end_layout
-
-\begin_layout Plain Layout
-
-  paste('
-\backslash
-
-\backslash
-begin{lstlisting}[language=R,numbers=left,stepnumber=2]
-\backslash
-n', x, '
-\backslash
-
-\backslash
-end{lstlisting}
-\backslash
-n', sep = '')
-\end_layout
-
-\begin_layout Plain Layout
-
-}, output = function(x, options) {
-\end_layout
-
-\begin_layout Plain Layout
-
-  paste('
-\backslash
-
-\backslash
-begin{lstlisting}[basicstyle={
-\backslash
-
-\backslash
-ttfamily}]
-\backslash
-n', x, '
-\backslash
-
-\backslash
-end{lstlisting}
-\backslash
-n', sep = '')
-\end_layout
-
-\begin_layout Plain Layout
-
-}, warning = hook_lst_bf, message = hook_lst_bf, error = hook_lst_bf)
-\end_layout
-
-\begin_layout Plain Layout
-
-set_header(highlight = '')
+<<setup, echo=2>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -449,6 +165,32 @@ set_header(highlight = '')
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+This function modifies the output hooks and header information so that the
+ output is written in 
+\series bold
+listings
+\series default
+ environments, which are kindly provided by Frank Harrell and can be found
+ in 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/yihui/knitr/blob/master/inst/misc/Sweavel.sty
+\end_layout
+
+\end_inset
+
+.
+ Of course you have to install the 
+\series bold
+listings
+\series default
+ package if your LaTeX toolset does not include this package.
 \end_layout
 
 \begin_layout Standard
@@ -471,7 +213,7 @@ set.seed(1121)  # for reproducibility
 
 \begin_layout Plain Layout
 
-options(width=70)
+options(width=85)
 \end_layout
 
 \begin_layout Plain Layout
@@ -652,6 +394,99 @@ n', sep = '')
 \end_layout
 
 \begin_layout Standard
+Well, we can do crazier things with 
+\series bold
+knitr
+\series default
+.
+ Here we use the 
+\family typewriter
+fig.cap
+\family default
+ option to write plots into the 
+\family typewriter
+figure
+\family default
+ environment automatically, and the caption is generated from data dynamically
+ (see Figure 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:boxplot-ex}
+\end_layout
+
+\end_inset
+
+):
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+% set an option first
+\end_layout
+
+\begin_layout Plain Layout
+
+<<eval-opts, echo=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+opts_knit$set(eval.after = 'fig.cap') # evaluate fig.cap after the chunk
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<boxplot-ex, fig.height=2, out.width='.8
+\backslash
+
+\backslash
+linewidth', fig.cap=sprintf('This is a boxplot; the median is %.2f.', median(x))>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mar=c(4,4,.1,.1))
+\end_layout
+
+\begin_layout Plain Layout
+
+boxplot(x, horizontal=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we know, 
+\family typewriter
+figure
+\family default
+ is a float environment, so it has floated away from the R code to the top
+ of this page.
+ This should not be surprising to LaTeX users.
+\end_layout
+
+\begin_layout Standard
 You should be able to compile the TeX document and get a PDF file like this
  one: 
 \begin_inset Flex URL
@@ -671,7 +506,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-http://yihui.github.com/knitr/hooks
+http://yihui.name/knitr/hooks
 \end_layout
 
 \end_inset
