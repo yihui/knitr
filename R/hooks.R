@@ -26,8 +26,8 @@
 ##' @seealso \code{\link{hook_plot_custom}}
 ##' @export
 ##' @examples ## this is what happens for a chunk like this
-##' ## <<foo-bar-plot, dev='pdf', out.width='.7\\linewidth', fig.align='right'>>=
-##' hook_plot_tex(c('foo-bar-plot', 'pdf'), opts_chunk$merge(list(out.width='.7\\linewidth',fig.align='right')))
+##' ## <<foo-bar-plot, dev='pdf', fig.align='right'>>=
+##' hook_plot_tex(c('foo-bar-plot', 'pdf'), opts_chunk$merge(list(fig.align='right')))
 ##'
 ##' ## <<bar, dev='tikz'>>=
 ##' hook_plot_tex(c('bar', 'tikz'), opts_chunk$merge(list(dev='tikz')))
