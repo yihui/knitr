@@ -2,7 +2,7 @@
 \usepackage{graphicx}
 %% for inline R code: if the inline code is not correctly parsed, you will see a message
 \newcommand{\rinline}[1]{SOMETHING WRONG WITH knitr}
-%% roptions fig.path=figure/latex-,cache.path=cache/latex-
+%% roptions fig.path='figure/latex-', cache.path='cache/latex-'
 \begin{document}
 
 Boring stuff as usual:
@@ -19,7 +19,7 @@ the first time you compile this document, but it takes no time the
 next time you run it again.
 
 %% chunk options: cache this chunk
-%% begin.rcode my-cache,cache=TRUE
+%% begin.rcode my-cache, cache=TRUE
 % set.seed(123)
 % x = runif(10)
 % sd(x)  # standard deviation
@@ -36,7 +36,7 @@ of x becomes \rinline{x[1]}.
 How about figures? Let's use the Cairo PDF device (assumes R >=
 2.14.0).
 
-%% begin.rcode cairo-scatter,dev=cairo_pdf,fig.width=5,fig.height=5,out.width=.8\textwidth
+%% begin.rcode cairo-scatter, dev='cairo_pdf', fig.width=5, fig.height=5, out.width='.8\\textwidth'
 % plot(cars) # a scatter plot
 %% end.rcode
 

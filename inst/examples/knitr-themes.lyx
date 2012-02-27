@@ -1,4 +1,4 @@
-#LyX 2.1.0svn created this file. For more info see http://www.lyx.org/
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 413
 \begin_document
 \begin_header
@@ -18,8 +18,8 @@ knitr
 \end_modules
 \maintain_unincluded_children false
 \language english
-\language_package default
-\inputencoding auto
+\language_package none
+\inputencoding default
 \fontencoding global
 \font_roman default
 \font_sans default
@@ -30,6 +30,7 @@ knitr
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 88
+
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -94,7 +95,7 @@ status open
 
 % 
 \backslash
-SweaveOpts{fig.path=figure/theme-, cache.path=cache/theme-, cache=TRUE}
+SweaveOpts{fig.path='figure/theme-', cache.path='cache/theme-', cache=TRUE}
 \end_layout
 
 \begin_layout Plain Layout
@@ -103,7 +104,7 @@ SweaveOpts{fig.path=figure/theme-, cache.path=cache/theme-, cache=TRUE}
 
 \begin_layout Plain Layout
 
-<<setup,echo=FALSE, results=hide, cache=FALSE>>=
+<<setup, include=FALSE, cache=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -276,7 +277,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<eclipse-css,comment=NA,echo=FALSE>>=
+<<eclipse-css, comment=NA, echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1297,7 +1298,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<eclipse-theme,eval=FALSE>>=
+<<eclipse-theme, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1381,7 +1382,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<apply-theme,eval=FALSE>>=
+<<apply-theme, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1464,9 +1465,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<plot-color, fig.width=6, fig.height=4, out.width=.8
+<<plot-color, fig.width=6, fig.height=4, out.width='.8
 \backslash
-linewidth, par=TRUE>>=
+
+\backslash
+linewidth', par=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout

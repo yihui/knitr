@@ -1,4 +1,4 @@
-<!--roptions dev=png,fig.width=5,fig.height=5,fig.path=ex-out- -->
+<!--roptions dev='png', fig.width=5, fig.height=5, fig.path='ex-out-' -->
 <html>
 <head>
   <title>A minimal knitr example in HTML</title>
@@ -21,9 +21,9 @@
     end.rcode-->
 
   <p>We can also produce plots (centered by the
-  option <code>fig.align=center</code>):</p>
+  option <code>fig.align='center'</code>):</p>
 
-<!--begin.rcode html-cars-scatter,message=FALSE,fig.align=center
+<!--begin.rcode html-cars-scatter, message=FALSE, fig.align='center'
     library(ggplot2)
     qplot(hp, mpg, data=mtcars)+geom_smooth()
     end.rcode-->
@@ -44,7 +44,7 @@
     knit_hooks$set(rgl = hook_rgl)  # set up the hook first
     end.rcode-->
 
-<!--begin.rcode fancy-rgl,rgl=TRUE,fig.align=center,fig.width=4,fig.height=4
+<!--begin.rcode fancy-rgl, rgl=TRUE, fig.align='center', fig.width=4, fig.height=4
     if (require('rgl')) {
     demo('bivar', package='rgl', echo=FALSE) 
     par3d(zoom=.7)

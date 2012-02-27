@@ -91,7 +91,7 @@ status open
 
 % 
 \backslash
-SweaveOpts{fig.path=figure/twocolumn-,fig.align=center,fig.show=hold}
+SweaveOpts{fig.path='figure/twocolumn-', fig.align='center', fig.show='hold'}
 \end_layout
 
 \end_inset
@@ -105,7 +105,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<setup,include=FALSE>>=
+<<setup, include=FALSE, cache=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -444,9 +444,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<boring-plots,dev=pdf,fig.width=5,fig.height=5,out.width=.45
+<<boring-plots, fig.width=5, fig.height=5, out.width='.45
 \backslash
-linewidth,par=TRUE,results=asis>>=
+
+\backslash
+linewidth', par=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
