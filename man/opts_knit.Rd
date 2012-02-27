@@ -20,9 +20,9 @@ opts_knit$get("verbose")
 opts_knit$set(verbose = TRUE)  # change it
 }
 \references{
-  Usage: \url{http://yihui.github.com/knitr/objects}
+  Usage: \url{http://yihui.name/knitr/objects}
 
   A list of available options:
-  \url{http://yihui.github.com/knitr/options#package_options}
+  \url{http://yihui.name/knitr/options#package_options}
 }
 \keyword{datasets}

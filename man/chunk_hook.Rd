@@ -54,7 +54,7 @@ knit_hooks$set(rgl = hook_rgl)
 ## then in code chunks, use the option rgl=TRUE
 }
 \references{
-  \url{http://yihui.github.com/knitr/hooks#chunk_hooks}
+  \url{http://yihui.name/knitr/hooks#chunk_hooks}
 }
 \seealso{
   \code{\link[rgl]{rgl.snapshot}},

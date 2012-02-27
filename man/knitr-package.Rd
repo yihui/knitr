@@ -16,6 +16,6 @@
 }
 \references{
   Full documentation and demos:
-  \url{http://yihui.github.com/knitr/}; FAQ's:
+  \url{http://yihui.name/knitr/}; FAQ's:
   \url{https://github.com/yihui/knitr/blob/master/FAQ.md}
 }

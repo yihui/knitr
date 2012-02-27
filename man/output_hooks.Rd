@@ -51,6 +51,5 @@ render_jekyll()
   output hooks; see references.
 }
 \references{
-  See output hooks in
-  \url{http://yihui.github.com/knitr/hooks}
+  See output hooks in \url{http://yihui.name/knitr/hooks}
 }

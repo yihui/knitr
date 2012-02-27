@@ -105,7 +105,7 @@ knit(f)
 purl(f)  # extract R code only
 }
 \references{
-  Package homepage: \url{http://yihui.github.com/knitr/}
+  Package homepage: \url{http://yihui.name/knitr/}
 
   The \pkg{knitr} main manual:
   \url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}

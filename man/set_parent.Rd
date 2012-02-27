@@ -39,7 +39,7 @@ set_parent(parent)
 
 ## <<setup-child, include=FALSE>>=
 ## set_parent('parent_doc.Rnw')
-##
+## @
 }
 \references{
   \url{http://yihui.name/knitr/demo/child/}

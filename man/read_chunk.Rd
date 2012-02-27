@@ -38,5 +38,5 @@ lm(y ~ x, data = data.frame(x = 1:10, y = rnorm(10)))
 ## later you can use <<my-label>>= to reference this chunk
 }
 \references{
-  \url{http://yihui.github.com/knitr/demo/reference/}
+  \url{http://yihui.name/knitr/demo/reference/}
 }

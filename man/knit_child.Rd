@@ -55,5 +55,5 @@ knit_child(..., eval = TRUE)
 #   'include')
 }
 \references{
-  \url{http://yihui.github.com/knitr/demo/child/}
+  \url{http://yihui.name/knitr/demo/child/}
 }

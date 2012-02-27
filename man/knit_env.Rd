@@ -17,5 +17,5 @@ knit_env()
   for an example.
 }
 \references{
-  \url{http://yihui.github.com/knitr/demo/cache/}
+  \url{http://yihui.name/knitr/demo/cache/}
 }

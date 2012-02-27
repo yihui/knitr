@@ -21,9 +21,9 @@ knit_hooks$get("source")
 knit_hooks$get("inline")
 }
 \references{
-  Usage: \url{http://yihui.github.com/knitr/objects}
+  Usage: \url{http://yihui.name/knitr/objects}
 
   Components in \code{knit_hooks}:
-  \url{http://yihui.github.com/knitr/hooks}
+  \url{http://yihui.name/knitr/hooks}
 }
 \keyword{datasets}

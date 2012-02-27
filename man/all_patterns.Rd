@@ -20,6 +20,6 @@ all_patterns$html
 str(all_patterns)
 }
 \references{
-  Usage: \url{http://yihui.github.com/knitr/patterns}
+  Usage: \url{http://yihui.name/knitr/patterns}
 }
 \keyword{datasets}
