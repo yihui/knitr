@@ -22,7 +22,7 @@
 ##' @param options a list of the current chunk options
 ##' @rdname hook_plot
 ##' @return A character string (code with plot filenames wrapped)
-##' @references \url{http://yihui.github.com/knitr/demo/plot-hook/}
+##' @references \url{http://yihui.name/knitr/hooks}
 ##' @seealso \code{\link{hook_plot_custom}}
 ##' @export
 ##' @examples ## this is what happens for a chunk like this
@@ -186,9 +186,9 @@ hook_plot_md = function(x, options) {
 ##' values of arguments and returns desired output. The object
 ##' \code{knit_hooks} is used to access or set hooks in this package.
 ##' @export
-##' @references Usage: \url{http://yihui.github.com/knitr/objects}
+##' @references Usage: \url{http://yihui.name/knitr/objects}
 ##'
-##' Components in \code{knit_hooks}: \url{http://yihui.github.com/knitr/hooks}
+##' Components in \code{knit_hooks}: \url{http://yihui.name/knitr/hooks}
 ##' @examples knit_hooks$get('source'); knit_hooks$get('inline')
 knit_hooks =
     new_defaults(c(
@@ -243,7 +243,7 @@ run_hooks = function(before, options, envir) {
 ##' @rdname output_hooks
 ##' @return \code{NULL}; corresponding hooks are set as a side effect
 ##' @export
-##' @references See output hooks in \url{http://yihui.github.com/knitr/hooks}
+##' @references See output hooks in \url{http://yihui.name/knitr/hooks}
 render_latex = function() {
     if (child_mode()) return()
     test_latex_pkg('framed', system.file('misc', 'framed.sty', package = 'knitr'))
@@ -373,7 +373,7 @@ render_jekyll = function() {
 ##' graphics output into the output document.
 ##' @rdname chunk_hook
 ##' @param before,options,envir see references
-##' @references \url{http://yihui.github.com/knitr/hooks#chunk_hooks}
+##' @references \url{http://yihui.name/knitr/hooks#chunk_hooks}
 ##' @seealso \code{\link[rgl]{rgl.snapshot}},
 ##' \code{\link[rgl]{rgl.postscript}}
 ##' @export

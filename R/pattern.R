@@ -5,9 +5,9 @@
 ##' options. The object \code{knit_patterns} controls the patterns
 ##' currently used; see the references and examples for usage.
 ##'
-##' @references Usage: \url{http://yihui.github.com/knitr/objects}
+##' @references Usage: \url{http://yihui.name/knitr/objects}
 ##'
-##' Components in \code{knit_patterns}: \url{http://yihui.github.com/knitr/patterns}
+##' Components in \code{knit_patterns}: \url{http://yihui.name/knitr/patterns}
 ##' @export
 ##' @examples library(knitr)
 ##' opat = knit_patterns$get() # old pattern list (to restore later)

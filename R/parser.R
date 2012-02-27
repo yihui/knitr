@@ -226,7 +226,7 @@ print.inline = function(x, ...) {
 ##' @param path the path to the R script
 ##' @return Code chunks are read into the current session so that
 ##' future chunks can use the R code.
-##' @references \url{http://yihui.github.com/knitr/demo/reference/}
+##' @references \url{http://yihui.name/knitr/demo/reference/}
 ##' @note This function can only be used in a chunk which is
 ##' \emph{not} cached (chunk option \code{cache = FALSE}), and the
 ##' code is read and stored in the current session \emph{without}

@@ -69,7 +69,7 @@
 ##' these files under the same directory of the input document so that
 ##' we can use relative paths.
 ##' @export
-##' @references Package homepage: \url{http://yihui.github.com/knitr/}
+##' @references Package homepage: \url{http://yihui.name/knitr/}
 ##'
 ##' The \pkg{knitr} main manual:
 ##' \url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}
@@ -215,7 +215,7 @@ auto_out_name = function(input) {
 ##' @return A character string of the form
 ##' \samp{\command{child-doc.tex}} or \code{source("child-doc.R")},
 ##' depending on the argument \code{tangle} passed in.
-##' @references \url{http://yihui.github.com/knitr/demo/child/}
+##' @references \url{http://yihui.name/knitr/demo/child/}
 ##' @note This function is not supposed be called directly like
 ##' \code{\link{knit}()}; instead it must be placed in a parent
 ##' document to let \code{\link{knit}()} call it indirectly.

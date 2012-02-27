@@ -323,7 +323,7 @@ fig_path = function(suffix = '', options = opts_current$get()) {
 ##' a cached chunk, we have to make sure the script is executed in the
 ##' correct environment (should not use the default local
 ##' environment). See references for an example.
-##' @references \url{http://yihui.github.com/knitr/demo/cache/}
+##' @references \url{http://yihui.name/knitr/demo/cache/}
 ##' @export
 knit_env = function() {
   .knitEnv$knit_env

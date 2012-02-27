@@ -30,9 +30,9 @@ new_defaults = function(value = list()) {
 ##' (local chunk options are merged with default options), whereas
 ##' \code{opts_current} (current options) changes with different
 ##' chunks.
-##' @references Usage: \url{http://yihui.github.com/knitr/objects}
+##' @references Usage: \url{http://yihui.name/knitr/objects}
 ##'
-##' A list of available options: \url{http://yihui.github.com/knitr/options#chunk_options}
+##' A list of available options: \url{http://yihui.name/knitr/options#chunk_options}
 ##' @export
 ##' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
 opts_chunk = 
@@ -59,7 +59,7 @@ opts_current = new_defaults()
 ##' All built-in patterns
 ##'
 ##' This object is a named list of all built-in patterns.
-##' @references Usage: \url{http://yihui.github.com/knitr/patterns}
+##' @references Usage: \url{http://yihui.name/knitr/patterns}
 ##' @export
 ##' @examples all_patterns$rnw; all_patterns$html
 ##'
@@ -96,9 +96,9 @@ all_patterns =
 ##'
 ##' Options including whether to use a progress bar when knitting a
 ##' document, and the base directory of images, etc.
-##' @references Usage: \url{http://yihui.github.com/knitr/objects}
+##' @references Usage: \url{http://yihui.name/knitr/objects}
 ##'
-##' A list of available options: \url{http://yihui.github.com/knitr/options#package_options}
+##' A list of available options: \url{http://yihui.name/knitr/options#package_options}
 ##' @export
 ##' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
 opts_knit =
