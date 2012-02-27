@@ -135,8 +135,10 @@ hook_plot_md = function(x, options) {
     ## table/figure cannot work inside kframe; this is gory...
     x = gsub('\\begin{figure', str_c(k2, '\\begin{figure'), x, fixed = TRUE)
     x = gsub('\\begin{table', str_c(k2, '\\begin{table'), x, fixed = TRUE)
+    x = gsub('\\begin{longtable', str_c(k2, '\\begin{longtable'), x, fixed = TRUE)
     x = gsub('\\end{figure}', str_c('\\end{figure}', k1), x, fixed = TRUE)
     x = gsub('\\end{table}', str_c('\\end{table}', k1), x, fixed = TRUE)
+    x = gsub('\\end{longtable}', str_c('\\end{longtable}', k1), x, fixed = TRUE)
     x = gsub('\\\\begin\\{kframe\\}\\s*\\\\end\\{kframe\\}', '', x)  # rm empty kframe
     x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
     if (options$split) {
