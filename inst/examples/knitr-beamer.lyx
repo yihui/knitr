@@ -1,4 +1,4 @@
-#LyX 2.1.0svn created this file. For more info see http://www.lyx.org/
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 413
 \begin_document
 \begin_header
@@ -30,6 +30,7 @@ beamer-fragile
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -88,8 +89,8 @@ status open
 
 % 
 \backslash
-SweaveOpts{fig.path=figure/beamer-,fig.align=center,fig.show=hold,size=footnotesize
-}
+SweaveOpts{fig.path='figure/beamer-',fig.align='center',fig.show='hold',size='footn
+otesize'}
 \end_layout
 
 \end_inset
@@ -222,7 +223,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<echo=FALSE,results=hide>>=
+<<echo=FALSE,results='hide'>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -335,9 +336,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<boring-plots,fig.width=4,fig.height=4,out.width=.45
+<<boring-plots,fig.width=4,fig.height=4,out.width='.45
 \backslash
-linewidth>>=
+
+\backslash
+linewidth'>>=
 \end_layout
 
 \begin_layout Plain Layout

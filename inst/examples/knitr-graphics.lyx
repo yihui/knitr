@@ -20,8 +20,8 @@ knitr
 \end_modules
 \maintain_unincluded_children false
 \language english
-\language_package default
-\inputencoding auto
+\language_package none
+\inputencoding default
 \fontencoding global
 \font_roman default
 \font_sans default
@@ -82,8 +82,9 @@ status open
 
 % 
 \backslash
-SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center,
- dev=tikz, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE}
+SweaveOpts{fig.path='figure/graphics-', cache.path='cache/graphics-', fig.align='ce
+nter', dev='tikz', fig.width=5, fig.height=5, fig.show='hold', cache=TRUE,
+ par=TRUE}
 \end_layout
 
 \end_inset
@@ -97,7 +98,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<setup,echo=FALSE,results=hide,cache=FALSE>>=
+<<setup, include=FALSE, cache=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -159,18 +160,17 @@ Before reading this specific manual
 status open
 
 \begin_layout Plain Layout
-source code at 
 \begin_inset Flex URL
 status collapsed
 
 \begin_layout Plain Layout
 
-https://github.com/yihui/knitr/blob/master/inst/examples/knitr-graphics.Rnw
+http://bit.ly/knitr-graphics-src
 \end_layout
 
 \end_inset
 
-
+ (Rnw source)
 \end_layout
 
 \end_inset
@@ -185,7 +185,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://github.com/downloads/yihui/knitr/knitr-manual.pdf
+http://bit.ly/knitr-main-pdf
 \end_layout
 
 \end_inset
@@ -215,7 +215,7 @@ dev
  option.
  This document uses the global option 
 \family typewriter
-dev=tikz
+dev='tikz'
 \family default
 , i.e., the plots are recorded by the tikz device by default, but we can change
  the device locally.
@@ -260,9 +260,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<pdf-dev,ref.label=test-plot,dev=pdf,out.width=
+<<pdf-dev, ref.label='test-plot', dev='pdf', out.width='
 \backslash
-linewidth,echo=FALSE>>=
+
+\backslash
+linewidth', echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -311,9 +313,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<png-dev,ref.label=test-plot,dev=png,out.width=
+<<png-dev, ref.label='test-plot', dev='png', out.width='
 \backslash
-linewidth,echo=FALSE>>=
+
+\backslash
+linewidth', echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -395,9 +399,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<cairo-png-dev,ref.label=test-plot,dev=Cairo_png,out.width=.5
+<<cairo-png-dev, ref.label='test-plot', dev='Cairo_png', out.width='.5
 \backslash
-linewidth,echo=FALSE>>=
+
+\backslash
+linewidth', echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -424,9 +430,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<cairo-pdf-dev,dev=cairo_pdf,fig.width=8,fig.height=2,out.width=.8
+<<cairo-pdf-dev, dev='cairo_pdf', fig.width=8, fig.height=2, out.width='.8
 \backslash
-linewidth,warning=FALSE,tidy=FALSE,echo=FALSE>>=
+
+\backslash
+linewidth', warning=FALSE, tidy=FALSE, echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -482,7 +490,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<white-background,eval=FALSE>>=
+<<white-background, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -595,9 +603,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<two-high,fig.width=3,fig.height=2,out.width=.49
+<<two-high, fig.width=3, fig.height=2, out.width='.49
 \backslash
-linewidth>>=
+
+\backslash
+linewidth'>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -672,7 +682,7 @@ reference "fig:low-plot-loop"
  By default, low-level plot changes are discarded, but you can retain them
  with the option 
 \family typewriter
-fig.keep=all
+fig.keep='all'
 \family default
 .
 \end_layout
@@ -689,9 +699,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<low-plot-loop,fig.width=3,fig.height=2.5,out.width=.49
+<<low-plot-loop, fig.width=3, fig.height=2.5, out.width='.49
 \backslash
-linewidth,fig.keep=all>>=
+
+\backslash
+linewidth', fig.keep='all'>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -721,7 +733,7 @@ for(i in seq(0, 2*pi,length=20)) points(cos(i),sin(i))
 Two complete R expressions will produce at most two plots, as long as there
  are not multiple high-level plotting calls in each expression; option 
 \family typewriter
-fig.keep=all
+fig.keep='all'
 \family default
  here.
 \begin_inset CommandInset label
@@ -746,7 +758,7 @@ name "fig:low-plot-loop"
 \begin_layout Standard
 Together with 
 \family typewriter
-fig.show=asis
+fig.show='asis'
 \family default
 , we can show the process of plotting step by step like Figure 
 \begin_inset CommandInset ref
@@ -770,9 +782,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<high-with-low,fig.width=3,fig.height=2,out.width=.5
+<<high-with-low, fig.width=3, fig.height=2, out.width='.5
 \backslash
-linewidth,fig.keep=all,fig.show=asis>>=
+
+\backslash
+linewidth', fig.keep='all', fig.show='asis'>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -837,7 +851,7 @@ subset
  of the next plot (= previous plot + low-level changes), the previous plot
  will be removed when 
 \family typewriter
-fig.keep=high
+fig.keep='high'
 \family default
 .
  If two successive plots are identical, the second one will be removed by
@@ -910,7 +924,7 @@ We can rearrange the plots in chunks in several ways.
  or accumulated till the end of the chunk.
  There is an example in the main manual demonstrating 
 \family typewriter
-fig.show=asis
+fig.show='asis'
 \family default
  for two high-level plots, and Figure 
 \begin_inset CommandInset ref
@@ -926,7 +940,7 @@ reference "fig:high-with-low"
 \begin_layout Standard
 Here is an example demonstrating the option 
 \family typewriter
-fig.keep=last
+fig.keep='last'
 \family default
  (only the last plot is kept):
 \end_layout
@@ -943,14 +957,16 @@ status open
 
 \begin_layout Plain Layout
 
-<<fig-last,fig.width=5.2,fig.height=3,out.width=.7
+<<fig-last, fig.width=5.2, fig.height=3, out.width='.7
 \backslash
-linewidth,fig.keep=last>>=
+
+\backslash
+linewidth', fig.keep='last', message=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
 
-suppressMessages(library(ggplot2))
+library(ggplot2)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1007,7 +1023,7 @@ ggplot2
 When multiple plots are produced by a code chunk, we may want to show them
  as an animation with the option 
 \family typewriter
-fig.show=animate
+fig.show='animate'
 \family default
 .
  Figure 
@@ -1040,9 +1056,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<clock-animation,fig.width=3,fig.height=3,out.width=.4
+<<clock-animation, fig.width=3, fig.height=3, out.width='.4
 \backslash
-linewidth,fig.show=animate,tidy=FALSE,crop=TRUE>>=
+
+\backslash
+linewidth', fig.show='animate', tidy=FALSE, crop=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1123,7 +1141,7 @@ fig.align
 \family default
  option; this document uses 
 \family typewriter
-fig.align=center
+fig.align='center'
 \family default
  as a global option, and we can also set plots to be left/right-aligned.
  Figure 
@@ -1148,9 +1166,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<maruko-plot,fig.width=7,fig.height=4,out.width=.45
+<<maruko-plot, fig.width=7, fig.height=4, out.width='.45
 \backslash
-linewidth,fig.align=left,crop=TRUE>>=
+
+\backslash
+linewidth', fig.align='left', crop=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1264,9 +1284,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<math-formula-tt,fig.width=6,fig.height=2,out.width=
+<<math-formula-tt, fig.width=6, fig.height=2, out.width='
 \backslash
-linewidth,echo=T>>=
+
+\backslash
+linewidth'>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1384,7 +1406,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<xetex-tikz,eval=FALSE>>=
+<<xetex-tikz, eval=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1547,7 +1569,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<crop-hook,cache=FALSE>>=
+<<crop-hook, cache=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1582,9 +1604,11 @@ status open
 
 \begin_layout Plain Layout
 
-<<pdf-nocrop,fig.width=3.2,fig.height=3.2,out.width=.5
+<<pdf-nocrop, fig.width=3.2, fig.height=3.2, out.width='.5
 \backslash
-linewidth>>=
+
+\backslash
+linewidth'>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1644,9 +1668,12 @@ status open
 
 \begin_layout Plain Layout
 
-<<pdf-crop,ref.label=pdf-nocrop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.5
+<<pdf-crop, ref.label='pdf-nocrop', echo=FALSE, fig.width=3.2, fig.height=3.2,
+ out.width='.5
 \backslash
-linewidth,crop=TRUE>>=
+
+\backslash
+linewidth', crop=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1732,7 +1759,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<custom-plot-hook,cache=FALSE>>=
+<<custom-plot-hook, cache=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1773,7 +1800,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<ggobi-plot,custom.plot=TRUE,fig.ext=png,out.width=2.5in,results=hide>>=
+<<ggobi-plot, custom.plot=TRUE, fig.ext='png', out.width='2.5in', results='hide'>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1827,8 +1854,8 @@ status open
 
 \begin_layout Plain Layout
 
-<<rgl-animation,custom.plot=TRUE,fig.ext=png,out.width=2.5in,fig.show=animate,fig.num=
-20, interval=.4, aniopts=controls;autoplay, results=hide>>=
+<<rgl-animation, custom.plot=TRUE, fig.ext='png', out.width='2.5in', fig.show='animat
+e', fig.num=20, interval=.4,  aniopts='controls,autoplay', results='hide'>>=
 \end_layout
 
 \begin_layout Plain Layout
