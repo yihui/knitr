@@ -30,11 +30,11 @@ There are still three additional approaches to reuse chunks in **knitr**.
 An example for the first approach:
 
 {% highlight r %}
-<<chunk1, echo=TRUE, results=hide>>=
+<<chunk1, echo=TRUE, results='hide'>>=
 1 + 1
 @
 
-<<chunk1, echo=FALSE, results=markup>>=
+<<chunk1, echo=FALSE, results='markup'>>=
 @
 {% endhighlight %}
 
@@ -45,11 +45,11 @@ The second chunk is empty, so **knitr** will look for another chunk with the sam
 An example for the second approach:
 
 {% highlight r %}
-<<chunk1, echo=TRUE, results=hide>>=
+<<chunk1, echo=TRUE, results='hide'>>=
 1 + 1
 @
 
-<<chunk2, ref.label=chunk1, echo=FALSE, results=markup>>=
+<<chunk2, ref.label='chunk1', echo=FALSE, results='markup'>>=
 @
 {% endhighlight %}
 

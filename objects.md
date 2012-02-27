@@ -23,7 +23,7 @@ Except `knit_patterns`, all other objects are initialized with default values, a
 It is recommended to get the settings done in the first chunk with `echo = FALSE` and `results = hide` like this (we may call this chunk as the configuration chunk):
 
 {% highlight r %}
-<<knitr-config, echo=FALSE, results=hide>>=
+<<knitr-config, echo=FALSE, results='hide'>>=
 library(knitr)
 opts_knit$set(header = c('\\usepackage{listings}', '\\lstset{language=R}'))
 ## change the header information to use the LaTeX package listings
