@@ -139,7 +139,7 @@ pure_preamble = function(preamble) {
 ##'
 ##' ## <<setup-child, include=FALSE>>=
 ##' ## set_parent('parent_doc.Rnw')
-##' ## @
+##' ## @@
 set_parent = function(parent) {
   if (child_mode()) return() # quit if in child mode
   opts_knit$set(parent = TRUE)
