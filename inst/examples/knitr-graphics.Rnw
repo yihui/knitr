@@ -2,7 +2,6 @@
 %% Do not edit unless you really know what you are doing.
 \documentclass[nohyper,justified]{tufte-handout}
 \usepackage[T1]{fontenc}
-\usepackage[latin9]{inputenc}
 \usepackage{url}
 \usepackage[unicode=true]
  {hyperref}
@@ -29,9 +28,9 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=tikz, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE}
+% \SweaveOpts{fig.path='figure/graphics-', cache.path='cache/graphics-', fig.align='center', dev='tikz', fig.width=5, fig.height=5, fig.show='hold', cache=TRUE, par=TRUE}
 
-<<setup,echo=FALSE,results=hide,cache=FALSE>>=
+<<setup, include=FALSE, cache=FALSE>>=
 options(replace.assign=TRUE,width=80)
 knit_hooks$set(par=function(before, options, envir){
 if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
@@ -46,9 +45,9 @@ control of plot sizes, the tikz device, animations and other types
 of plots such as \textbf{rgl} or GGobi plots.
 \end{abstract}
 Before reading this specific manual%
-\footnote{source code at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-graphics.Rnw}%
+\footnote{\url{http://bit.ly/knitr-graphics-src} (Rnw source)%
 }, you must have finished the main manual%
-\footnote{\url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}%
+\footnote{\url{http://bit.ly/knitr-main-pdf}%
 }.
 
 
@@ -56,7 +55,7 @@ Before reading this specific manual%
 
 The \textbf{knitr} package comes with more than 20 built-in graphical
 devices, and you can specify them through the \texttt{dev} option.
-This document uses the global option \texttt{dev=tikz}, i.e., the
+This document uses the global option \texttt{dev='tikz'}, i.e., the
 plots are recorded by the tikz device by default, but we can change
 the device locally. Since tikz will be used extensively throughout
 this manual and you will see plenty of tikz graphics later, now we
@@ -67,7 +66,7 @@ with(trees, symbols(Height, Volume, circles = Girth/16, inches = FALSE, bg = 'de
 @
 
 \begin{marginfigure}
-<<pdf-dev,ref.label=test-plot,dev=pdf,out.width=\linewidth,echo=FALSE>>=
+<<pdf-dev, ref.label='test-plot', dev='pdf', out.width='\\linewidth', echo=FALSE>>=
 @
 
 \caption{The default PDF device.\label{mar:pdf-dev}}
@@ -75,7 +74,7 @@ with(trees, symbols(Height, Volume, circles = Girth/16, inches = FALSE, bg = 'de
 
 
 \begin{marginfigure}
-<<png-dev,ref.label=test-plot,dev=png,out.width=\linewidth,echo=FALSE>>=
+<<png-dev, ref.label='test-plot', dev='png', out.width='\\linewidth', echo=FALSE>>=
 @
 
 \caption{The PNG device.\label{mar:png-dev}}
@@ -88,13 +87,13 @@ in the \textbf{Cairo} or \textbf{cairoDevice} package, e.g., the chunk
 below uses the \emph{Cairo\_png()} device in the \textbf{cairoDevice}
 package.
 
-<<cairo-png-dev,ref.label=test-plot,dev=Cairo_png,out.width=.5\linewidth,echo=FALSE>>=
+<<cairo-png-dev, ref.label='test-plot', dev='Cairo_png', out.width='.5\\linewidth', echo=FALSE>>=
 @
 
 Finally we show an example of \emph{cairo\_pdf()} (in base R) with
 some multi-byte characters (say hello in Chinese):
 
-<<cairo-pdf-dev,dev=cairo_pdf,fig.width=8,fig.height=2,out.width=.8\linewidth,warning=FALSE,tidy=FALSE,echo=FALSE>>=
+<<cairo-pdf-dev, dev='cairo_pdf', fig.width=8, fig.height=2, out.width='.8\\linewidth', warning=FALSE, tidy=FALSE, echo=FALSE>>=
 par(mar=c(2,2,.1,.1),las=1)
 plot(1,type='n',ann=FALSE)
 text(1,1,'\u55E8\uFF0C\u4F60\u597D\u5417',cex=4) # hello
@@ -106,7 +105,7 @@ by default. If you definitely want the background color to be always
 white for base graphics, you can set up a hook for the \texttt{white}
 option like this:
 
-<<white-background,eval=FALSE>>=
+<<white-background, eval=FALSE>>=
 knit_hooks$set(white = function(before, options, envir) {if (before) par(bg = 'white')})
 @
 
@@ -127,7 +126,7 @@ is also saved. Figure \ref{fig:two-high} shows two expressions producing
 two high-level plots.
 
 \begin{figure}
-<<two-high,fig.width=3,fig.height=2,out.width=.49\linewidth>>=
+<<two-high, fig.width=3, fig.height=2, out.width='.49\\linewidth'>>=
 plot(cars)
 boxplot(cars$dist,xlab='dist')
 @
@@ -144,25 +143,25 @@ to put base graphics and \textbf{ggplot2} side by side; recall Figure
 Figure \ref{fig:low-plot-loop} shows another example of two R expressions,
 but the second expression only involves with low-level plotting changes.
 By default, low-level plot changes are discarded, but you can retain
-them with the option \texttt{fig.keep=all}.
+them with the option \texttt{fig.keep='all'}.
 
 \begin{figure}
-<<low-plot-loop,fig.width=3,fig.height=2.5,out.width=.49\linewidth,fig.keep=all>>=
+<<low-plot-loop, fig.width=3, fig.height=2.5, out.width='.49\\linewidth', fig.keep='all'>>=
 plot(0,0,type='n',ann=FALSE)
 for(i in seq(0, 2*pi,length=20)) points(cos(i),sin(i))
 @
 
 \caption{Two complete R expressions will produce at most two plots, as long
 as there are not multiple high-level plotting calls in each expression;
-option \texttt{fig.keep=all} here.\label{fig:low-plot-loop}}
+option \texttt{fig.keep='all'} here.\label{fig:low-plot-loop}}
 \end{figure}
 
 
-Together with \texttt{fig.show=asis}, we can show the process of plotting
-step by step like Figure \ref{fig:high-with-low}.
+Together with \texttt{fig.show='asis'}, we can show the process of
+plotting step by step like Figure \ref{fig:high-with-low}.
 
 \begin{figure}
-<<high-with-low,fig.width=3,fig.height=2,out.width=.5\linewidth,fig.keep=all,fig.show=asis>>=
+<<high-with-low, fig.width=3, fig.height=2, out.width='.5\\linewidth', fig.keep='all', fig.show='asis'>>=
 plot(cars)
 abline(lm(dist~speed, data=cars))  # a regression line
 @
@@ -175,7 +174,7 @@ and plots can be put in the places where they were produced.\label{fig:high-with
 A further note on plot recording: \textbf{knitr} examines all recorded
 plots (as R objects) and compares them sequentially; if the previous
 plot is a ``subset'' of the next plot (= previous plot + low-level
-changes), the previous plot will be removed when \texttt{fig.keep=high}.
+changes), the previous plot will be removed when \texttt{fig.keep='high'}.
 If two successive plots are identical, the second one will be removed
 by default, so it might be a little bit surprising that the following
 chunk will only produce one plot by default%
@@ -194,16 +193,16 @@ image(m*2)  # exactly the same as previous plot
 We can rearrange the plots in chunks in several ways. They can be
 inserted right after the line(s) of R code which produced them, or
 accumulated till the end of the chunk. There is an example in the
-main manual demonstrating \texttt{fig.show=asis} for two high-level
+main manual demonstrating \texttt{fig.show='asis'} for two high-level
 plots, and Figure \ref{fig:high-with-low} in this manual also demonstrates
 this option for a high-level plot followed by a low-level change.
 
-Here is an example demonstrating the option \texttt{fig.keep=last}
+Here is an example demonstrating the option \texttt{fig.keep='last'}
 (only the last plot is kept):
 
 \begin{figure}
-<<fig-last,fig.width=5.2,fig.height=3,out.width=.7\linewidth,fig.keep=last>>=
-suppressMessages(library(ggplot2))
+<<fig-last, fig.width=5.2, fig.height=3, out.width='.7\\linewidth', fig.keep='last', message=FALSE>>=
+library(ggplot2)
 pie <- ggplot(diamonds, aes(x = factor(1), fill = cut)) + xlab('cut') + geom_bar(width = 1) 
 pie + coord_polar(theta = "y") # a pie chart
 pie + coord_polar() # the bullseye chart 
@@ -216,14 +215,14 @@ the last result. (Adapted from the \textbf{ggplot2} website)}
 
 
 When multiple plots are produced by a code chunk, we may want to show
-them as an animation with the option \texttt{fig.show=animate}. Figure
-\ref{fig:clock-animation} shows a simple clock animation; you may
-compare the code to Figure \ref{fig:high-with-low} to understand
+them as an animation with the option \texttt{fig.show='animate'}.
+Figure \ref{fig:clock-animation} shows a simple clock animation;
+you may compare the code to Figure \ref{fig:high-with-low} to understand
 that high-level plots are always recorded, regardless of where they
 appeared.
 
 \begin{figure}
-<<clock-animation,fig.width=3,fig.height=3,out.width=.4\linewidth,fig.show=animate,tidy=FALSE,crop=TRUE>>=
+<<clock-animation, fig.width=3, fig.height=3, out.width='.4\\linewidth', fig.show='animate', tidy=FALSE, crop=TRUE>>=
 par(mar = rep(3, 4))
 for (i in seq(pi/2, -4/3 * pi, length = 12)) {
     plot(0, 0, pch = 20, ann = FALSE, axes = FALSE)
@@ -239,12 +238,12 @@ there are also buttons to speed up or slow down the animation.\label{fig:clock-a
 
 
 We can also set the alignment of plots easily with the \texttt{fig.align}
-option; this document uses \texttt{fig.align=center} as a global option,
-and we can also set plots to be left/right-aligned. Figure \ref{fig:maruko-plot}
-is an example of a left-aligned plot.
+option; this document uses \texttt{fig.align='center'} as a global
+option, and we can also set plots to be left/right-aligned. Figure
+\ref{fig:maruko-plot} is an example of a left-aligned plot.
 
 \begin{figure}
-<<maruko-plot,fig.width=7,fig.height=4,out.width=.45\linewidth,fig.align=left,crop=TRUE>>=
+<<maruko-plot, fig.width=7, fig.height=4, out.width='.45\\linewidth', fig.align='left', crop=TRUE>>=
 stars(cbind(1:16,10*(16:1)),draw.segments=TRUE)
 @
 
@@ -274,7 +273,7 @@ use native \LaTeX{} commands in plots, the styles of texts in plots
 can be very sophisticated.
 
 \begin{figure}
-<<math-formula-tt,fig.width=6,fig.height=2,out.width=\linewidth,echo=T>>=
+<<math-formula-tt, fig.width=6, fig.height=2, out.width='\\linewidth'>>=
 plot(0:1,0:1,type='n', ylab='origin of statistics', xlab='statistical presentation rocks with \\LaTeX{}')
 text(.5,c(.8,.5,.2), c('\\texttt{lm(y \\textasciitilde{} x)}', '$\\hat{\\beta}=(X^{\\prime}X)^{-1}X^{\\prime}y$',  '$(\\Omega,\\mathcal{F},\\mu)$'))
 @
@@ -290,7 +289,7 @@ When using Xe\LaTeX{} instead of PDF\LaTeX{} to compile the document,
 we need to tell the \textbf{tikzDevice} package by setting the \texttt{tikzDefaultEngine}
 option before all plot chunks (preferably in the first chunk):
 
-<<xetex-tikz,eval=FALSE>>=
+<<xetex-tikz, eval=FALSE>>=
 options(tikzDefaultEngine='xetex')
 @
 
@@ -332,14 +331,14 @@ endlessly setting \texttt{par(mar)}, you may consider the program
 }. In \textbf{knitr}, we can set up the hook \emph{hook\_pdfcrop()}
 to work with a chunk option, say, \texttt{crop}.
 
-<<crop-hook,cache=FALSE>>=
+<<crop-hook, cache=FALSE>>=
 knit_hooks$set(crop=hook_pdfcrop)
 @
 
 Now we compare two plots below. The first one is not cropped:
 
 \begin{figure}
-<<pdf-nocrop,fig.width=3.2,fig.height=3.2,out.width=.5\linewidth>>=
+<<pdf-nocrop, fig.width=3.2, fig.height=3.2, out.width='.5\\linewidth'>>=
 par(mar=c(5,4,4,2),bg='white')  # large margin
 plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
 @
@@ -352,7 +351,7 @@ Then the same plot is produced but with a chunk option \texttt{crop=TRUE}
 which will call the cropping hook:
 
 \begin{figure}
-<<pdf-crop,ref.label=pdf-nocrop,echo=FALSE,fig.width=3.2,fig.height=3.2,out.width=.5\linewidth,crop=TRUE>>=
+<<pdf-crop, ref.label='pdf-nocrop', echo=FALSE, fig.width=3.2, fig.height=3.2, out.width='.5\\linewidth', crop=TRUE>>=
 @
 
 \caption{The cropped plot; it fits better in the document.}
@@ -375,7 +374,7 @@ it is not possible to capture plots by \emph{recordPlot()} (such as
 insert these plots into the output, we need to set up a hook first
 like this (see \texttt{?hook\_plot\_custom} for details):
 
-<<custom-plot-hook,cache=FALSE>>=
+<<custom-plot-hook, cache=FALSE>>=
 knit_hooks$set(custom.plot = hook_plot_custom)
 @
 
@@ -384,7 +383,7 @@ write plot files in the chunk. Here we show an example of capturing
 GGobi plots using the function \emph{ggobi\_display\_save\_picture()}
 in the \textbf{rggobi} package:
 
-<<ggobi-plot,custom.plot=TRUE,fig.ext=png,out.width=2.5in,results=hide>>=
+<<ggobi-plot, custom.plot=TRUE, fig.ext='png', out.width='2.5in', results='hide'>>=
 library(rggobi)
 ggobi(ggobi_find_file('data', 'flea.csv'))
 Sys.sleep(1)  # wait for snapshot
@@ -398,7 +397,7 @@ the figure path for the current chunk.
 We can do whatever normal R plots can do with this hook, and we give
 another example below to show how to work with animations.
 
-<<rgl-animation,custom.plot=TRUE,fig.ext=png,out.width=2.5in,fig.show=animate,fig.num=20, interval=.4, aniopts=controls;autoplay, results=hide>>=
+<<rgl-animation, custom.plot=TRUE, fig.ext='png', out.width='2.5in', fig.show='animate', fig.num=20, interval=.4,  aniopts='controls,autoplay', results='hide'>>=
 library(animation) # adapted from demo('rgl_animation')
 data(pollen)
 uM = matrix(c(-0.37, -0.51, -0.77, 0, -0.73, 0.67, -0.1, 0, 0.57, 0.53, -0.63, 0, 0, 0, 0, 1), 4, 4)

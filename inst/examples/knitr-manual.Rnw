@@ -123,9 +123,9 @@ Below is a brief description of the process:
 appropriate set of \href{http://yihui.name/knitr/patterns}{patterns}
 to use if they are not provided in advance (e.g. \textsf{file.Rnw}
 will use \texttt{knit\_patterns\$get('rnw')});
-\item a set of out \href{http://yihui.name/knitr/hooks}{hooks} will also
-be set up automatically according to the filename extension (e.g.
-use \LaTeX{} environments to wrap R results for \LaTeX{} output);
+\item a set of output \href{http://yihui.name/knitr/hooks}{hooks} will
+also be set up automatically according to the filename extension (e.g.
+use \LaTeX{} environments or HTML elements to wrap up R results);
 \item the input file is read in and split into pieces consisting of R code
 chunks and normal texts; the former will be executed one after the
 other, and the latter may contain global chunk options or inline R
@@ -139,11 +139,12 @@ R source code)
 \item if \texttt{cache=TRUE} for this chunk, \textbf{knitr} will first check
 if there are previously cached results under the cache directory before
 really evaluating the chunk; if cached results exist and this code
-chunk has not been changed (use MD5 sum to verify), the cached results
-will be (lazy-) loaded, otherwise new cache will be built; if a cached
-chunk depends on other chunks (see the \texttt{dependson} \href{http://yihui.name/knitr/options}{option})
-and any one of these chunks has changed, this chunk must be forcibly
-updated (old cache will be purged)
+chunk has not been changed since last run (use MD5 sum to verify),
+the cached results will be (lazy-) loaded, otherwise new cache will
+be built; if a cached chunk depends on other chunks (see the \texttt{dependson}
+\href{http://yihui.name/knitr/options}{option}) and any one of these
+chunks has changed, this chunk must be forcibly updated (old cache
+will be purged)
 \item there are six types of possible output from \textbf{evaluate}, and
 their classes are \texttt{character} (normal text output), \texttt{source}
 (source code), \texttt{warning}, \texttt{message}, \texttt{error}
@@ -376,7 +377,7 @@ size of plots in the graphics device, and the real size in the output
 document can be different (see \texttt{out.width} and \texttt{out.height}).
 When there are multiple plots per chunk, it is possible to arrange
 more than one plot per line in \LaTeX{} -- just specify \texttt{out.width}
-to be less than half of the current line width.
+to be less than half of the current line width, e.g. \texttt{out.width='.49\textbackslash{}\textbackslash{}linewidth'}.
 
 
 \subsubsection{The tikz Device}
@@ -387,18 +388,18 @@ has special support to tikz graphics via the \textbf{tikzDevice} package
 If we set the chunk option \texttt{dev='tikz'}, the \emph{tikz()}
 device in \textbf{tikzDevice} will be used to record plots. Options
 \texttt{sanitize} and \texttt{external} are related to the tikz device:
-see the documentation of \emph{tikz()} for explanation on \texttt{sanitize},
-and \texttt{external=TRUE} in \textbf{knitr} has a different meaning
-with \textbf{pgfSweave} -- it means \texttt{standAlone=TRUE} in \emph{tikz()},
-and the tikz graphics output will be compiled to PDF \emph{immediately}
-after it was created, so the ``externalization'' does not depend
-on the \textbf{tikz} package; to maintain consistency in (font) styles,
-\textbf{knitr} will read the preamble of the input document and use
-it in the tikz device. At the moment, I'm not sure if this is a faithful
-way to externalize tikz graphics, but I have not seen any problems
-so far. The assumption to make, however, is that you declare all the
-styles in the preamble; \textbf{knitr} is agnostic of \emph{local}
-style changes in the body of the document.
+see the documentation of \emph{tikz()} for details. Note \texttt{external=TRUE}
+in \textbf{knitr} has a different meaning with \textbf{pgfSweave}
+-- it means \texttt{standAlone=TRUE} in \emph{tikz()}, and the tikz
+graphics output will be compiled to PDF \emph{immediately} after it
+is created, so the ``externalization'' does not depend on the \textbf{tikz}
+package; to maintain consistency in (font) styles, \textbf{knitr}
+will read the preamble of the input document and use it in the tikz
+device. At the moment, I'm not sure if this is a faithful way to externalize
+tikz graphics, but I have not seen any problems so far. The assumption
+to make, however, is that you declare all the styles in the preamble;
+\textbf{knitr} is agnostic of \emph{local} style changes in the body
+of the document.
 
 Below is an example taken from StackOverflow%
 \footnote{\url{http://stackoverflow.com/q/8190087/559676}%
@@ -504,18 +505,19 @@ be rebuilt as well.
 
 It can be more convenient to write R code in a separate file, rather
 than mixing it into a \LaTeX{} document; for example, we can run R
-code successively from one chunk to the other without jumping through
-other texts. Since I prefer using \LyX{} to write reports, Sweave
-is even more inconvenient because I have to recompile the whole document
-each time, even if I only want to know the results of a single chunk.
-Therefore \textbf{knitr} introduced the feature of code externalization
-to a separate R script. Currently the setting is like this: the R
-script also uses chunk labels (marked in the form \texttt{\#\# @knitr
-chunk-label} by default); if the code chunk in the input document
-is empty, \textbf{knitr} will match its label with the label in the
-R script to input external R code. For example, suppose this is a
-code chunk labelled as \texttt{Q1} in an R script named \textsf{homework1-xie.R}
-which is under the same directory as the Rnw document:
+code successively in a pure R script from one chunk to the other without
+jumping through other texts. Since I prefer using \LyX{} to write
+reports, Sweave is even more inconvenient because I have to recompile
+the whole document each time, even if I only want to know the results
+of a single chunk. Therefore \textbf{knitr} introduced the feature
+of code externalization to a separate R script. Currently the setting
+is like this: the R script also uses chunk labels (marked in the form
+\texttt{\#\# @knitr chunk-label} by default); if the code chunk in
+the input document is empty, \textbf{knitr} will match its label with
+the label in the R script to input external R code. For example, suppose
+this is a code chunk labelled as \texttt{Q1} in an R script named
+\textsf{homework1-xie.R} which is under the same directory as the
+Rnw document:
 
 <<ext-r-code, eval=FALSE>>=
 ## @knitr Q1
@@ -545,13 +547,26 @@ Different documents can read the same R script, so the R code can
 be reusable across different input documents.
 
 
-\subsection{Conditional Evaluation\label{sub:conditional}}
+\subsection{Evaluation of Chunk Options\label{sub:conditional}}
 
-Instead of setting chunk options \texttt{eval} and \texttt{echo} to
-be \texttt{TRUE} or \texttt{FALSE}, their values can be controlled
-by global variables in the current R session. This enables \textbf{knitr}
-to conditionally evaluate code chunks according to variables. For
-example, here we assign \texttt{TRUE} to a variable \texttt{dothis}:
+By default \textbf{knitr} uses a new syntax to parse chunk options:
+it treats them as function arguments instead of a text string to be
+split to obtain option values. This gives the user much more power
+than the old syntax; we can pass arbitrary R objects to chunk options
+besides simple ones like \texttt{TRUE}/\texttt{FALSE}, numbers and
+character strings. The page \url{http://yihui.name/knitr/demo/sweave/}
+has given two examples to show the advantages of the new syntax. Here
+we show yet another useful application.
+
+Before \textbf{knitr} 0.3, there was a feature named ``conditional
+evaluation''%
+\footnote{request from \url{https://plus.google.com/u/0/116405544829727492615/posts/43WrRUffjzK}%
+}. The idea is, instead of setting chunk options \texttt{eval} and
+\texttt{echo} to be \texttt{TRUE} or \texttt{FALSE} (constants), their
+values can be controlled by global variables in the current R session.
+This enables \textbf{knitr} to conditionally evaluate code chunks
+according to variables. For example, here we assign \texttt{TRUE}
+to a variable \texttt{dothis}:
 
 <<cond-variable>>=
 dothis=TRUE
@@ -575,6 +590,15 @@ dothis
 If we change the value of \texttt{dothis} to \texttt{FALSE}, neither
 of the above chunks will be evaluated any more. Therefore we can control
 many chunks with a single variable, and present results selectively.
+
+This old feature requires \textbf{knitr} to treat \texttt{eval} and
+\texttt{echo} specially, and we can easily see that it is no longer
+necessary with the new syntax: \texttt{eval=dothis} will tell R to
+find the variable \texttt{dothis} automatically just like we call
+a function \texttt{foobar(eval = dothis)}. What is more, all options
+will be evaluated as R expressions unless they are already constants
+which do not need to be evaluated, so this old feature has been generalized
+to all other options naturally.
 
 
 \subsection{Customization}
@@ -601,10 +625,20 @@ par3d(zoom=.7)
 Due to the flexibility of output hooks, \textbf{knitr} supports several
 different output formats. The implementation is fairly easy, e.g.,
 for \LaTeX{} we put R output in \texttt{verbatim} environments, and
-in HTML, it is only a matter of putting output in a \texttt{div} layer.
-These are simply character string operations. The demo of using the
-\textbf{listings} package in the \href{http://yihui.name/knitr/demo/listings/}{website}
-shows this idea clearly.
+in HTML, it is only a matter of putting output in \texttt{div} layers.
+These are simply character string operations. Many demos in \url{http://yihui.name/knitr/demos}
+show this idea clearly. This manual did not cover all the features
+of \textbf{knitr}, and users are encouraged to thumb through the website
+to know more possible features.
+
+
+\section{Editors}
+
+You can use any text editors to write the source documents, but some
+have built-in support for \textbf{knitr}. Both RStudio (\url{http://www.rstudio.org})
+and \LyX{} (\url{http://www.lyx.org}) have full support for \textbf{knitr},
+and you can compile the document to PDF with just one click. See \url{http://yihui.name/knitr/demo/rstudio/}
+and \url{http://yihui.name/knitr/demo/lyx/} respectively.
 
 
 \section*{About This Document}

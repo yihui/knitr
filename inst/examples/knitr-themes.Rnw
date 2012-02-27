@@ -2,7 +2,6 @@
 %% Do not edit unless you really know what you are doing.
 \documentclass[nohyper,justified]{tufte-handout}
 \usepackage[T1]{fontenc}
-\usepackage[latin9]{inputenc}
 \usepackage{booktabs}
 \usepackage{url}
 
@@ -28,9 +27,9 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path=figure/theme-, cache.path=cache/theme-, cache=TRUE}
+% \SweaveOpts{fig.path='figure/theme-', cache.path='cache/theme-', cache=TRUE}
 
-<<setup,echo=FALSE, results=hide, cache=FALSE>>=
+<<setup, include=FALSE, cache=FALSE>>=
 options(replace.assign=TRUE,width=78)
 knit_hooks$set(par=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
 @
@@ -67,7 +66,7 @@ of this document to be \texttt{solarized-dark}:
 \section{Built-in Themes}
 
 \begin{margintable}
-<<eclipse-css,comment=NA,echo=FALSE>>=
+<<eclipse-css, comment=NA, echo=FALSE>>=
 cat(c(readLines('../themes/edit-eclipse.css', n=30),'...'),sep='\n')
 @
 \end{margintable}
@@ -157,7 +156,7 @@ want to use the theme Oughsumm%
 id is 1885)%
 }, you can use the code below in your first chunk:
 
-<<eclipse-theme,eval=FALSE>>=
+<<eclipse-theme, eval=FALSE>>=
 css = eclipse_theme(1885)
 thm = knit_theme$get(css)
 knit_theme$set(thm)
@@ -177,7 +176,7 @@ thm = knit_theme$get(css)
 Then apply the theme:
 
 %% cache=FALSE for this chunk
-<<apply-theme,eval=FALSE>>=
+<<apply-theme, eval=FALSE>>=
 knit_theme$set(thm)
 @
 
@@ -201,7 +200,7 @@ thm$background  # background color
 
 When we make plots, we may use these colors, e.g.
 
-<<plot-color, fig.width=6, fig.height=4, out.width=.8\linewidth, par=TRUE>>=
+<<plot-color, fig.width=6, fig.height=4, out.width='.8\\linewidth', par=TRUE>>=
 ## can design a chunk hook to set foreground color automatically
 fgcolor=thm$foreground
 par(fg=fgcolor, col.axis=fgcolor, col.lab=fgcolor)

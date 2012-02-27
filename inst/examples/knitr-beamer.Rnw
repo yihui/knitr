@@ -54,7 +54,7 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path=figure/beamer-,fig.align=center,fig.show=hold,size=footnotesize}
+% \SweaveOpts{fig.path='figure/beamer-',fig.align='center',fig.show='hold',size='footnotesize'}
 
 
 \title[knitr, Beamer, and FragileFrame]{A Minimal Demo of knitr with Beamer and Fragile Frames}
@@ -98,7 +98,7 @@ with Beamer and FragileFrame in this small demo.
 
 OK, let's get started with just some text:
 
-<<echo=FALSE,results=hide>>=
+<<echo=FALSE,results='hide'>>=
 # some setup
 options(width=60)  # make the printing fit on the page
 set.seed(1121)   # make the results repeatable
@@ -125,7 +125,7 @@ the use of\texttt{ \textbackslash{}Sexpr\{\}}.)
 Text is nice but let's see what happens if we make a couple of plots
 in our chunk:
 
-<<boring-plots,fig.width=4,fig.height=4,out.width=.45\linewidth>>=
+<<boring-plots,fig.width=4,fig.height=4,out.width='.45\\linewidth'>>=
 par(las=1,mar=c(4,4,.1,.1))  # tick labels direction
 boxplot(x) 
 hist(x,main='',col="blue",probability=TRUE) 

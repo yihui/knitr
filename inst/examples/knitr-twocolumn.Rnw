@@ -30,9 +30,9 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path=figure/twocolumn-,fig.align=center,fig.show=hold}
+% \SweaveOpts{fig.path='figure/twocolumn-', fig.align='center', fig.show='hold'}
 
-<<setup,include=FALSE>>=
+<<setup, include=FALSE, cache=FALSE>>=
 options(replace.assign=TRUE,width=90)
 knit_hooks$set(par=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3,las=1)})
 @
@@ -92,7 +92,7 @@ You will lose the background color for these chunks (\href{https://github.com/yi
 \end{minipage}}
 
 \begin{figure*}
-<<boring-plots,dev=pdf,fig.width=5,fig.height=5,out.width=.45\linewidth,par=TRUE,results=asis>>=
+<<boring-plots, fig.width=5, fig.height=5, out.width='.45\\linewidth', par=TRUE>>=
 x=rnorm(100)
 boxplot(x)
 hist(x,main='')

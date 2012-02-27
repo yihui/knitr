@@ -15,21 +15,13 @@
 \hypersetup{
  pdfstartview={XYZ null null 1}}
 \usepackage{breakurl}
-
-\makeatletter
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
-\usepackage{color}
-% we need this because the chunk hook still need it
-\definecolor{fgcolor}{rgb}{0,0,0}
-
-\makeatother
-
 \begin{document}
 
-% \SweaveOpts{highlight=FALSE}
+% \SweaveOpts{fig.path='figure/listings-'}
 
-<<setup,echo=FALSE>>=
-options(replace.assign=TRUE)
+<<setup, include=FALSE, cache=FALSE>>=
+options(replace.assign = TRUE)
+render_listings()
 @
 
 
@@ -39,59 +31,26 @@ options(replace.assign=TRUE)
 \author{Yihui Xie}
 
 \maketitle
-To use the \textbf{listings} package, we need to declare it in the
-\LaTeX{} preamble first (the second line is optional):
+To use the \textbf{listings} package with \textbf{knitr}, all you
+need to do is to call a function in your first setup chunk (that chunk
+should be hidden from the output with \texttt{include=FALSE} and should
+not be cached):
 
-\begin{lstlisting}[language=TeX]
-\usepackage{listings}
-\lstset{language=R}
-\end{lstlisting}
-
-
-Then we need to modify the output hooks and header information accordingly.
-In this demo, I use options \texttt{language=R,numbers=left,stepnumber=2}
-for the R source code in the \texttt{lstlistings} environemnt; for
-R output, I use the typewriter font; for warnings, messages and errors,
-I use bold font. We do not need the header information in \texttt{highlight},
-so we empty it. The R code used is below (not all output hooks need
-to be set, e.g. \texttt{inline}, \texttt{plot} and \texttt{chunk}
-hooks):
-
-\begin{verbatim}
-## a common hook for messages, warnings and errors
-hook_lst_bf = function(x, options) {
-    paste("\\begin{lstlisting}[basicstyle={\\bfseries}]\n", x, 
-        "\\end{lstlisting}\n", sep = "")
-}
-knit_hooks$set(source = function(x, options) {
-    paste("\\begin{lstlisting}[language=R,numbers=left,stepnumber=2]\n", x, 
-        "\\end{lstlisting}\n", sep = "")
-}, output = function(x, options) {
-    paste("\\begin{lstlisting}[basicstyle={\\ttfamily}]\n", x, 
-        "\\end{lstlisting}\n", sep = "")
-}, warning = hook_lst_bf, message = hook_lst_bf, error = hook_lst_bf)
-set_header(highlight = "")
-\end{verbatim}
-
-<<listings-hooks,echo=FALSE>>=
-## for those who read source code here: I cannot use echo=TRUE here because
-## the code \begin{lstlistings} and \end{lstlistings} will confuse the listings package and cause LaTeX errors
-hook_lst_bf = function(x, options) {
-  paste('\\begin{lstlisting}[basicstyle={\\bfseries}]\n', x, '\\end{lstlisting}\n', sep = '')
-}
-knit_hooks$set(source = function(x, options) {
-  paste('\\begin{lstlisting}[language=R,numbers=left,stepnumber=2]\n', x, '\\end{lstlisting}\n', sep = '')
-}, output = function(x, options) {
-  paste('\\begin{lstlisting}[basicstyle={\\ttfamily}]\n', x, '\\end{lstlisting}\n', sep = '')
-}, warning = hook_lst_bf, message = hook_lst_bf, error = hook_lst_bf)
-set_header(highlight = '')
+% I just want to echo the 2nd line
+<<setup, echo=2>>=
 @
+
+This function modifies the output hooks and header information so
+that the output is written in \textbf{listings} environments, which
+are kindly provided by Frank Harrell and can be found in \url{https://github.com/yihui/knitr/blob/master/inst/misc/Sweavel.sty}.
+Of course you have to install the \textbf{listings} package if your
+\LaTeX{} toolset does not include this package.
 
 Now we can see how the results look like with our new settings:
 
 <<boring-random>>=
 set.seed(1121)  # for reproducibility
-options(width=70)
+options(width=85)
 x=rnorm(20)
 x
 mean(x)
@@ -126,8 +85,26 @@ hook_rgl = function(before, options, envir) {
 }
 @
 
+Well, we can do crazier things with \textbf{knitr}. Here we use the
+\texttt{fig.cap} option to write plots into the \texttt{figure} environment
+automatically, and the caption is generated from data dynamically
+(see Figure \ref{fig:boxplot-ex}):
+
+% set an option first
+<<eval-opts, echo=FALSE>>=
+opts_knit$set(eval.after = 'fig.cap') # evaluate fig.cap after the chunk
+
+<<boxplot-ex, fig.height=2, out.width='.8\\linewidth', fig.cap=sprintf('This is a boxplot; the median is %.2f.', median(x))>>=
+par(mar=c(4,4,.1,.1))
+boxplot(x, horizontal=TRUE)
+@
+
+As we know, \texttt{figure} is a float environment, so it has floated
+away from the R code to the top of this page. This should not be surprising
+to \LaTeX{} users.
+
 You should be able to compile the \TeX{} document and get a PDF file
 like this one: \url{https://github.com/downloads/yihui/knitr/knitr-listings.pdf}.
-For more information about out hooks, see \url{http://yihui.github.com/knitr/hooks}.
+For more information about out hooks, see \url{http://yihui.name/knitr/hooks}.
 
 \end{document}
