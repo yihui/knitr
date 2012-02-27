@@ -104,14 +104,14 @@ MAJOR CHANGES
   '^@\\s*%*' instead of '^@\\s*$' now, meaning you can write '@ % a
   comment' to end a code chunk (this is consistent with Sweave)
 
-  o the default value of the argument 'output' will be a filename
-  under the current working directory; in previous versions, the
-  output file will be under the same directory as the input file; this
-  change makes it possible to completely separate the input files and
-  output files into different places, and hopefully will give users
-  better experience in managing a whole collection of files (including
-  child documents): put all source files in one place and output files
-  in another place
+  o the default value of the argument 'output' of knit() will be a
+  filename under the current working directory; in previous versions,
+  the output file will be under the same directory as the input file;
+  this change makes it possible to completely separate the input files
+  and output files into different places, and hopefully will give
+  users better experience in managing a whole collection of files
+  (including child documents): put all source files in one place and
+  output files in another place
 
   o the package homepage is http://yihui.name/knitr now (the previous
   URL yihui.github.com/knitr will be automatically redirected to the
