@@ -57,9 +57,9 @@ hook_plot_tex = function(x, options) {
     ## multiple plots: begin at 1, end at fig.num
     ai = options$fig.show != 'hold'
     plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == 0L || fig.cur == fig.num
-    if (plot1) align1 = switch(a, left = '\n\n', center = '\n\n\\centering{}',
+    if (plot1) align1 = switch(a, left = '\n\n', center = '\n\n{\\centering ',
                                   right = '\n\n\\hfill{}', '')
-    if (plot2) align2 = switch(a, left = '\\hfill{}\n\n', center = '\n\n',
+    if (plot2) align2 = switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n',
                                   right = '\n\n', '')
     ## figure environment: caption, short caption, label
     cap = options$fig.cap; fig1 = fig2 = ''
