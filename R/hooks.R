@@ -59,14 +59,20 @@ hook_plot_tex = function(x, options) {
   if (plot2) align2 = switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n',
                              right = '\n\n', '')
   ## figure environment: caption, short caption, label
-  cap = options$fig.cap; fig1 = fig2 = ''
+  cap = options$fig.cap; scap = options$fig.scap; fig1 = fig2 = ''
+  mcap = fig.num > 1L && options$fig.show == 'asis'
+  if (mcap) {
+    cap = rep(cap, length.out = fig.num)[fig.cur] # multiple captions
+    scap = rep(scap, length.out = fig.num)[fig.cur]
+  } else {
+    cap = cap[1L]; scap = scap[1L]
+  }
   if(length(cap) && !is.na(cap)) {
     if (plot1) {
       fig1 = sprintf('\\begin{figure}[%s]\n', options$fig.pos)
     }
     if (plot2) {
-      lab = str_c(options$fig.lp, options$label)
-      scap = options$fig.scap
+      lab = str_c(options$fig.lp, options$label, ifelse(mcap, fig.cur, ''))
       if (is.null(scap)) scap = str_split(cap, '\\.|;|:')[[1L]][1L]
       scap = if(is.na(scap)) '' else str_c('[', scap, ']')
       fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{figure}\n', scap, cap, lab)
