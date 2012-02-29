@@ -1,3 +1,14 @@
+			 CHANGES IN knitr VERSION 0.4
+
+NEW FEATURES
+
+  o the chunk option 'fig.cap' supports multiple figure captions in
+  LaTeX now, e.g. if a chunk produces two plots, we can use fig.cap =
+  c('first caption', 'second caption') to assign two different
+  captions to them respectively when fig.show = 'asis' (#155) (thanks,
+  Jonathan Kennel)
+
+  
 			 CHANGES IN knitr VERSION 0.3
 
 NEW FEATURES
