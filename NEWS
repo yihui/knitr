@@ -8,6 +8,11 @@ NEW FEATURES
   captions to them respectively when fig.show = 'asis' (#155) (thanks,
   Jonathan Kennel)
 
+BUG FIXES
+
+  o for plots in LaTeX output, centering should be done with
+  {\centering } instead of \centering{} (#156) (thanks, Ramnath
+  Vaidyanathan)
   
 			 CHANGES IN knitr VERSION 0.3
 
