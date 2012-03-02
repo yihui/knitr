@@ -140,6 +140,7 @@ All package options are:
 - `base.url`: (`NULL`) the base url for HTML pages
 - `eval.after`: (`NULL`) a character vector of option names; these options will be evaluated _after_ a chunk is evaluated, and all other options will be evaluated before a chunk (e.g. for chunk option `fig.cap=paste('p-value is', t.test(x)$p.value)`, it will be evaluated after the chunk according to the value of `x` if `eval.after='fig.cap'`)
 - `upload`: (`FALSE`) whether to upload R plots to <http://imgur.com> when the output format is HTML or Markdown
+- `upload.fun`: (`imgur_upload`) a function that takes a filename as its input, uploads it to a image host and returns the link to the image
 - `imgur.key`: (`60e9e47cff8483c6dc289a1cd674b40f`) the key to use the [Imgur API](http://api.imgur.com); it is recommended that you register one by yourself instead of using this default public key
 - `cache.extra`: (`NULL`) extra content that should affect [cache](/knitr/demo/cache)
 - `aliases`: (`NULL`) a named character vector to specify the aliases of chunk options, e.g. `c(h = 'fig.height', w = 'fig.width')` tells **knitr** that the chunk option `h` really means `fig.height`, and `w` is an alias for `fig.width`; this option can be used to save some typing efforts for long option names
