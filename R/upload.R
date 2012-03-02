@@ -31,11 +31,11 @@
 #' if (interactive()) browseURL(res$links$imgur_page) # imgur page
 #' }
 imgur_upload = function(file, key = opts_knit$get('imgur.key')) {
-    if (is.null(key) || nchar(key) != 32L)
-        stop('The Imgur API Key must be a character string of length 32!')
-    if (!file.exists(file)) stop(file, 'does not exist!')
-    params = list(key = key, image = RCurl::fileUpload(file))
-    res = XML::xmlToList(RCurl::postForm("http://api.imgur.com/2/upload.xml", .params = params))
-    if (is.null(res$links$original)) stop('failed to upload ', file)
-    structure(res$links$original, XML = res)
+  if (is.null(key) || nchar(key) != 32L)
+    stop('The Imgur API Key must be a character string of length 32!')
+  if (!file.exists(file)) stop(file, 'does not exist!')
+  params = list(key = key, image = RCurl::fileUpload(file))
+  res = XML::xmlToList(RCurl::postForm("http://api.imgur.com/2/upload.xml", .params = params))
+  if (is.null(res$links$original)) stop('failed to upload ', file)
+  structure(res$links$original, XML = res)
 }
