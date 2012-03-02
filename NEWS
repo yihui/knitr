@@ -8,11 +8,22 @@ NEW FEATURES
   captions to them respectively when fig.show = 'asis' (#155) (thanks,
   Jonathan Kennel)
 
+  o new package option opts_knit$get('upload.fun') which is a function
+  that takes a plot file to upload to a certain host and returns the
+  link to the image; by default it is imgur_upload(), and you can use
+  your own function to upload images to other hosts like Flickr (#159)
+  (thanks, Carl Boettiger)
+
 BUG FIXES
 
   o for plots in LaTeX output, centering should be done with
   {\centering } instead of \centering{} (#156) (thanks, Ramnath
   Vaidyanathan)
+
+MINOR CHANGES
+
+  o imgur_upload() returns the link to the image directly, with the
+  XML list as its attribute (in v0.3 the list was returned)
   
 			 CHANGES IN knitr VERSION 0.3
 
