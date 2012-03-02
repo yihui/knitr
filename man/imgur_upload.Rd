@@ -12,8 +12,10 @@ imgur_upload(file, key = opts_knit$get("imgur.key"))
   per IP address)}
 }
 \value{
-  A list converted from the response XML file; see Imgur
-  API in the references.
+  A character string of the link to the image; this string
+  carries an attribute named \code{XML} which is a list
+  converted from the response XML file; see Imgur API in
+  the references.
 }
 \description{
   This function uses the \pkg{RCurl} package to upload a
@@ -44,7 +46,8 @@ plot(rnorm(100), main = R.version.string)
 dev.off()
 \dontrun{
 res = imgur_upload(f)
-res$links$original  # link to original URL of the image
+res  # link to original URL of the image
+attr(res, "XML")  # all information
 if (interactive()) 
     browseURL(res$links$imgur_page)  # imgur page
 }
