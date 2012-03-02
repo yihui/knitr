@@ -20,6 +20,10 @@ BUG FIXES
   {\centering } instead of \centering{} (#156) (thanks, Ramnath
   Vaidyanathan)
 
+  o the recorded plot is a more precise representation of the expected
+  plot now, because the recording device also takes the plot size into
+  consideration (#157) (thanks, Christiaan Klijn and Frank Harrell)
+
 MINOR CHANGES
 
   o imgur_upload() returns the link to the image directly, with the
