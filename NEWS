@@ -14,6 +14,10 @@ NEW FEATURES
   your own function to upload images to other hosts like Flickr (#159)
   (thanks, Carl Boettiger)
 
+  o all packages loaded in the current session are also cached, so as
+  long as a package has been loaded previously, it will be available
+  to all following chunks (#160)
+
 BUG FIXES
 
   o for plots in LaTeX output, centering should be done with
