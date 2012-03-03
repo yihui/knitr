@@ -402,7 +402,7 @@ hook_pdfcrop = function(before, options, envir) {
   if (before || (fig.num <- options$fig.num) == 0L || ext != 'pdf')
     return()
   
-  paths = paste(valid_prefix(options$fig.path), options$label,
+  paths = paste(valid_path(options$fig.path, options$label),
                 if (fig.num == 1L) '' else seq_len(fig.num), ".pdf", sep = "")
   
   lapply(paths, function(x) {

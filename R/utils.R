@@ -314,7 +314,7 @@ parent_mode = function() opts_knit$get('parent')
 ##' @examples fig_path('.pdf', list(fig.path='figure/abc-', label='first-plot'))
 ##' fig_path(1:10, list(fig.path='foo-', label='bar'))
 fig_path = function(suffix = '', options = opts_current$get()) {
-  str_c(valid_prefix(options$fig.path), options$label, suffix)
+  str_c(valid_path(options$fig.path, options$label), suffix)
 }
 
 ##' The environment in which a code chunk is evaluated

@@ -39,7 +39,7 @@ call_block = function(block) {
   ## Check cache
   content = list(params[setdiff(names(params), 'include')], getOption('width'))
   content[[3L]] = opts_knit$get('cache.extra')
-  hash = str_c(valid_prefix(params$cache.path), params$label, '_', digest(content))
+  hash = str_c(valid_path(params$cache.path, params$label), '_', digest(content))
   params$hash = hash
   if (params$cache && cache$exists(hash)) {
     if (!params$include) return('')
@@ -172,8 +172,8 @@ block_exec = function(params) {
     outname = str_c('.', hash)
     assign(outname, output, envir = globalenv())
     ## purge my old cache and cache of chunks dependent on me
-    cache$purge(str_c(valid_prefix(options$cache.path),
-                      c(options$label, dep_list$get(options$label)), '_*'))
+    cache$purge(str_c(valid_path(options$cache.path,
+                      c(options$label, dep_list$get(options$label))), '_*'))
     cache$save(c(ls(env, all.names = TRUE), outname), hash)
   }
   

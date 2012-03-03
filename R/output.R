@@ -338,8 +338,8 @@ wrap.recordedplot = function(x, options) {
         fig.cur = plot_counter()
     }
     options$fig.cur = fig.cur # put fig num in options
-    prefix = valid_prefix(options$fig.path)
-    name = str_c(prefix, options$label, ifelse(fig.cur == 0L, '', fig.cur))
+    prefix = valid_path(options$fig.path, options$label)
+    name = str_c(prefix, ifelse(fig.cur == 0L, '', fig.cur))
     if (!file.exists(dirname(name)))
         dir.create(dirname(name), recursive = TRUE) # automatically creates dir for plots
 
