@@ -46,6 +46,8 @@ call_block = function(block) {
     cache$load(hash)
     return(cache$output(hash))
   }
+  if (params$cache) cache$library(params$cache.path, save = FALSE) # load packages
+
   block_exec(params)
 }
 
@@ -175,6 +177,7 @@ block_exec = function(params) {
     cache$purge(str_c(valid_path(options$cache.path,
                       c(options$label, dep_list$get(options$label))), '_*'))
     cache$save(c(ls(env, all.names = TRUE), outname), hash)
+    cache$library(options$cache.path, save = TRUE)
   }
   
   if (!options$include) '' else output

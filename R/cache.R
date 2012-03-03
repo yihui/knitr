@@ -21,7 +21,20 @@ new_cache = function() {
   cache_load = function(hash) {
     lazyLoad(cache_path(hash), envir = globalenv())
   }
-  
+
+  cache_library = function(path, save = TRUE) {
+    ## save or load R packages
+    path = valid_path(path, 'packages')
+    if (save) {
+      x = .packages()
+      if (file.exists(path)) x = unique(c(x, readLines(path)))
+      cat(x, file = path, sep = '\n')
+    } else {
+      if (!file.exists(path)) return()
+      for (p in readLines(path)) library(p, character.only = TRUE)
+    }
+  }
+
   cache_exists = function(hash) {
     all(file.exists(str_c(cache_path(hash), c('.rdb', '.rdx'))))
   }
@@ -34,7 +47,7 @@ new_cache = function() {
   }
   
   list(purge = cache_purge, save = cache_save, load = cache_load,
-       exists = cache_exists, output = cache_output)
+       exists = cache_exists, output = cache_output, library = cache_library)
 }
 
 cache = new_cache()
