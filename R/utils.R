@@ -57,9 +57,9 @@ hilight_source = function(x, format, options) {
 is_blank = function(x) {
   str_detect(x, '^\\s*$')
 }
-valid_prefix = function(x) {
-  if (length(x) == 0 || is.na(x) || x == 'NA') return('')
-  x
+valid_path = function(prefix, label) {
+  if (length(prefix) == 0L || is.na(prefix) || prefix == 'NA') prefix = ''
+  str_c(prefix, label)
 }
 
 ## define a color variable in TeX
