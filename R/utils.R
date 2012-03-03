@@ -168,10 +168,14 @@ format_sci = function(x, format = 'latex') {
     b[b %in% c(1, -1)] = ''  # base is 1 or -1, do not use it
     if (format == 'latex') {
       res = sprintf('%s%s10^{%s}', b, ifelse(b == '', '', '\\times '), floor(lx))
+      res[x == 0] = 0
       return(if (inherits(x, 'AsIs')) res else sprintf('$%s$', res))
     }
-    if (format == 'html')
-      return(sprintf('%s%s10<sup>%s</sup>', b, ifelse(b == '', '', ' &times; '), floor(lx)))
+    if (format == 'html') {
+      res = sprintf('%s%s10<sup>%s</sup>', b, ifelse(b == '', '', ' &times; '), floor(lx))
+      res[x == 0] = 0
+      return(res)
+    }
   }
   round(x, getOption('digits'))
 }
