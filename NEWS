@@ -24,6 +24,10 @@ BUG FIXES
   plot now, because the recording device also takes the plot size into
   consideration (#157) (thanks, Christiaan Klijn and Frank Harrell)
 
+  o format_sci() now correctly formats 0; this function is used for
+  inline R code to format numbers in scientific notation (#161)
+  (thanks, Kihoro J. M.)
+
 MINOR CHANGES
 
   o imgur_upload() returns the link to the image directly, with the
