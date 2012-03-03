@@ -165,7 +165,7 @@ format_sci = function(x, format = 'latex') {
   scipen = getOption('scipen') + 4L
   if (any(abs(lx <- floor(log(abs(x), 10))) >= scipen)) {
     b = round(x/10^lx, getOption('digits'))
-    b[b %in% c('1', '-1')] = ''
+    b[b %in% c(1, -1)] = ''  # base is 1 or -1, do not use it
     if (format == 'latex') {
       res = sprintf('%s%s10^{%s}', b, ifelse(b == '', '', '\\times '), floor(lx))
       return(if (inherits(x, 'AsIs')) res else sprintf('$%s$', res))
