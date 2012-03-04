@@ -74,3 +74,51 @@ find_globals = function(code) {
 }
 
 cache = new_cache()
+
+#' Build automatic dependencies among chunks
+#' 
+#' When the chunk option \code{autodep = TRUE}, all names of objects created in 
+#' a chunk will be saved in a file named \file{__objects} and all global objects
+#' used in a chunk will be saved to \file{__globals}. This function can analyze 
+#' object names in these files to automatically build cache dependencies, which 
+#' is similar to the effect of the \code{dependson} option. It is supposed to be
+#' used in the first chunk of a document and this chunk must not be cached.
+#' @param path the path to the dependency file
+#' @return \code{NULL}. The dependencies are built as a side effect.
+#' @note Be cautious about \code{path}: because this function is used in a 
+#'   chunk, the working directory when the chunk is evaluated is the directory 
+#'   of the input document in \code{\link{knit}}, and if that directory differs 
+#'   from the working directory before calling \code{knit()}, you need to adjust
+#'   the \code{path} argument here to make sure this function can find the cache
+#'   files \file{__objects} and \file{__globals}.
+#' @export
+#' @references \url{http://yihui.name/knitr/demo/cache/}
+build_dep = function(path = opts_chunk$get('cache.path')) {
+  paths = valid_path(path, c('__objects', '__globals'))
+  locals = parse_objects(paths[1L]); globals = parse_objects(paths[2L])
+  if (is.null(locals) || is.null(globals)) return(invisible(NULL))
+  if (!identical(names(locals), names(globals))) {
+    warning('corrupt dependency files? \ntry remove ', 
+            str_c(paths, collapse = '; '))
+    return(invisible(NULL))
+  }
+  nms = intersect(names(knit_code$get()), names(locals)) # guarantee correct order
+  for (i in 2:length(nms)) {
+    for (j in 1:(i - 1L)) {
+      ## check if current globals are in old locals
+      if (length(globals[[i]]) && any(globals[[i]] %in% locals[[j]]))
+        dep_list$set(structure(list(c(dep_list$get(nms[j]), nms[i])), .Names = nms[j]))
+    }
+  }
+}
+# parse objects in dependency files
+parse_objects = function(path) {
+  if (!file.exists(path)) {
+    warning('file ', path, ' not found'); return()
+  }
+  lines = str_split(readLines(path), fixed('\t'))
+  if (length(lines) < 2L) return()  # impossible for dependson
+  objs = lapply(lines, `[`, -1L)
+  names(objs) = lapply(lines, `[`, 1L)
+  objs
+}
