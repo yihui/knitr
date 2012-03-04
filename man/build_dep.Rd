@@ -1,0 +1,36 @@
+\name{build_dep}
+\alias{build_dep}
+\title{Build automatic dependencies among chunks}
+\usage{
+build_dep(path = opts_chunk$get("cache.path"))
+}
+\arguments{
+  \item{path}{the path to the dependency file}
+}
+\value{
+  \code{NULL}. The dependencies are built as a side effect.
+}
+\description{
+  When the chunk option \code{autodep = TRUE}, all names of
+  objects created in a chunk will be saved in a file named
+  \file{__objects} and all global objects used in a chunk
+  will be saved to \file{__globals}. This function can
+  analyze object names in these files to automatically
+  build cache dependencies, which is similar to the effect
+  of the \code{dependson} option. It is supposed to be used
+  in the first chunk of a document and this chunk must not
+  be cached.
+}
+\note{
+  Be cautious about \code{path}: because this function is
+  used in a chunk, the working directory when the chunk is
+  evaluated is the directory of the input document in
+  \code{\link{knit}}, and if that directory differs from
+  the working directory before calling \code{knit()}, you
+  need to adjust the \code{path} argument here to make sure
+  this function can find the cache files \file{__objects}
+  and \file{__globals}.
+}
+\references{
+  \url{http://yihui.name/knitr/demo/cache/}
+}
