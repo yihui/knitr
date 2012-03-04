@@ -48,6 +48,7 @@ Suggests:
     testthat,
     rgl,
     tikzDevice (>= 0.6.2),
+    codetools,
     XML,
     RCurl
 License: GPL
