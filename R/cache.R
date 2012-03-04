@@ -24,7 +24,7 @@ new_cache = function() {
 
   cache_library = function(path, save = TRUE) {
     ## save or load R packages
-    path = valid_path(path, 'packages')
+    path = valid_path(path, '__packages')
     if (save) {
       x = .packages()
       if (file.exists(path)) x = unique(c(x, readLines(path)))
