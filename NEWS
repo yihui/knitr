@@ -18,6 +18,12 @@ NEW FEATURES
   long as a package has been loaded previously, it will be available
   to all following chunks (#160)
 
+  o new chunk option 'autodep' and function build_dep() to build cache
+  dependencies among cached chunks automatically by analyzing object
+  names in all cached chunks; this is a loose alternative to the
+  'dependson' option (see main manual and ?build_dep for details)
+  (#72) (thanks, Seth Falcon)
+
 BUG FIXES
 
   o for plots in LaTeX output, centering should be done with
