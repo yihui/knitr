@@ -1974,9 +1974,13 @@ cacheSweave
 \series bold
 knitr
 \series default
- will try to preserve side-effects, meaning that any output of a code chunk
- will be loaded into the output document for a cached chunk, although it
- is not really evaluated.
+ will try to preserve these side-effects:
+\end_layout
+
+\begin_layout Enumerate
+printed results: meaning that any output of a code chunk will be loaded
+ into the output document for a cached chunk, although it is not really
+ evaluated.
  The reason is 
 \series bold
 knitr
@@ -1985,7 +1989,28 @@ knitr
  Note this means graphics output is also cached since it is part of the
  output.
  It has been a pain for me for a long time to have to lose output to gain
- cache.
+ cache;
+\end_layout
+
+\begin_layout Enumerate
+loaded packages: after the evaluation of each cached chunk, the list of
+ packages used in the current R session is written to a file under the cache
+ path named 
+\family sans
+__packages
+\family default
+; next time if a cached chunk needs to be rebuilt, these packages will be
+ loaded first.
+ The reasons for caching package names are, it can be slow to load some
+ packages, and a package might be loaded in a previous cached chunk which
+ is not available to the next cached chunk when only the latter needs to
+ be rebuilt.
+ Note this only applies to cached chunks, and for uncached chunks, you must
+ always use 
+\emph on
+library()
+\emph default
+ to load packages explicitly;
 \end_layout
 
 \begin_layout Standard
@@ -1993,17 +2018,20 @@ Although
 \series bold
 knitr
 \series default
- tries to keep the side-effects of printing, there are still other types
- of side-effects.
- For example, loading packages, or setting 
+ tries to keep some side-effects, there are still other types of side-effects
+ like setting 
 \emph on
 par()
 \emph default
-, etc.
+ or 
+\emph on
+options()
+\emph default
+ which are not cached.
  Users should be aware of these special cases, and make sure to clearly
  separate the code which is not meant to be cached to other chunks which
- are not cached, e.g., load all the required packages in the first chunk of
- a document.
+ are not cached, e.g., set all global options in the first chunk of a document
+ and do not cache that chunk.
 \end_layout
 
 \begin_layout Standard
@@ -2033,6 +2061,92 @@ dependson=c('chunkA', 'chunkB')
 .
  Each time the cache of a chunk is rebuilt, all other chunks which depend
  on this chunk will lose cache, hence their cache will be rebuilt as well.
+\end_layout
+
+\begin_layout Standard
+Another way to specify the dependencies among chunks is to use the chunk
+ option 
+\family typewriter
+autodep
+\family default
+ and the function 
+\emph on
+build_dep()
+\emph default
+.
+ This is an experimental feature borrowed from 
+\series bold
+weaver
+\series default
+ which frees us from setting chunk dependencies manually.
+ The basic idea is, if a latter chunk uses any objects created from a previous
+ chunk, the latter chunk is said to depend on the previous one.
+ The function 
+\emph on
+findGlobals()
+\emph default
+ in the 
+\series bold
+codetools
+\series default
+ package is used to find out all global objects in a chunk, and according
+ to its documentation, the result is an approximation.
+ Global objects roughly mean the ones which are not created locally, e.g.
+ in the expression 
+\family typewriter
+function() {y <- x}
+\family default
+, 
+\family typewriter
+x
+\family default
+ should be a global object, whereas 
+\family typewriter
+y
+\family default
+ is local.
+ Meanwhile, we also need to save the list of objects created in each cached
+ chunk, so that we can compare them to the global objects in latter chunks.
+ For example, if chunk A created an object 
+\family typewriter
+x
+\family default
+ and chunk B uses this object, chunk B must depend on A, i.e.
+ whenever A changes, B must also be updated.
+ When 
+\family typewriter
+autodep=TRUE
+\family default
+, 
+\series bold
+knitr
+\series default
+ will write out the names of objects created in a cached chunk as well as
+ those global objects in two files named 
+\family sans
+__objects
+\family default
+ and 
+\family sans
+__globals
+\family default
+ respectively; later we can use the function 
+\emph on
+build_dep()
+\emph default
+ to analyze the object names to figure out the dependencies automatically.
+ See 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://yihui.name/knitr/demo/cache/
+\end_layout
+
+\end_inset
+
+ for examples.
 \end_layout
 
 \begin_layout Subsection
