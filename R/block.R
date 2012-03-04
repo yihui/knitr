@@ -176,8 +176,10 @@ block_exec = function(params) {
     ## purge my old cache and cache of chunks dependent on me
     cache$purge(str_c(valid_path(options$cache.path,
                       c(options$label, dep_list$get(options$label))), '_*'))
-    cache$save(c(ls(env, all.names = TRUE), outname), hash)
     cache$library(options$cache.path, save = TRUE)
+    objs = ls(env, all.names = TRUE)
+    if (options$autodep) cache$objects(objs, code, options$label, options$cache.path)
+    cache$save(c(objs, outname), hash)
   }
   
   if (!options$include) '' else output
