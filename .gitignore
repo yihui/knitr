@@ -1,10 +1,9 @@
-*.rdb
-*.rdx
 *-tikzDictionary
 *.aux
 *.log
 *.out
 knitr-*.pdf
+inst/examples/cache
 inst/examples/figure
 inst/examples/ex-out*
 knitr-minimal.html
