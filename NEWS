@@ -24,6 +24,10 @@ NEW FEATURES
   'dependson' option (see main manual and ?build_dep for details)
   (#72) (thanks, Seth Falcon)
 
+  o input and output in knit() are no longer restricted to files; they
+  can be stdin()/stdout() or other types of connections (#162; see
+  https://github.com/yihui/knitr/issues/162) (thanks, gabysbrain)
+
 BUG FIXES
 
   o for plots in LaTeX output, centering should be done with
