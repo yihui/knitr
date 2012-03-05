@@ -581,6 +581,11 @@ For technical details, see
 
 ; second, after each complete expression is evaluated, a snapshot is also
  saved.
+ To speed up recording, the null graphical device 
+\family typewriter
+pdf(file = NULL)
+\family default
+ is used.
  Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
