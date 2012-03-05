@@ -88,11 +88,12 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     if (is.character(text)) {
         input = tempfile(); writeLines(text, con = input)
     }
+    normal.input = is.character(input)
     opts_knit$set(tangle = tangle)
     if (is.null(output)) {
         output = basename(auto_out_name(input))
     }
-    ext = tolower(file_ext(input))
+    ext = if (normal.input) tolower(file_ext(input)) else 'unknown'
     apat = opts_knit$get('all.patterns')
     optc = opts_chunk$get()
     on.exit({opts_chunk$restore(); opts_chunk$set(optc)}, add = TRUE)
@@ -114,13 +115,12 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
         if (!is_abs_path(input))
             input = file.path(input_dir(), opts_knit$get('child.path'), input)
     }
-    opts_knit$set(input.dir = dirname(input))  # record current working dir
+    if (normal.input) opts_knit$set(input.dir = dirname(input)) # record working dir
 
     if (is.null(opts_knit$get('out.format'))) {
-        fmt =
-            switch(ext, rnw = 'latex', tex = 'latex', html = 'html', md = 'jekyll',
-                   brew = 'brew',
-                   stop('cannot automatically decide the output format'))
+        fmt = switch(ext, rnw = 'latex', tex = 'latex', html = 'html', md = 'jekyll',
+                     brew = 'brew',
+                     {warning('cannot automatically decide the output format'); 'unknown'})
         ## set built-in hooks
         opts_knit$set(out.format = fmt)
     }
@@ -131,14 +131,12 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
 
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
     ## for tikz graphics (cache the dictionary); turn off fancy quotes
-    oopts =
-        options(tikzMetricsDictionary = str_c(sub("([^.]+)\\.[[:alnum:]]+$", "\\1",
-                basename(input)), '-tikzDictionary'), useFancyQuotes = FALSE,
-                digits = 4L, width = 75L, warn = 1L)
+    oopts = options(tikzMetricsDictionary = tikz_dict(input, normal.input), 
+                    useFancyQuotes = FALSE, digits = 4L, width = 75L, warn = 1L)
     on.exit(options(oopts), add = TRUE)
 
     progress = opts_knit$get('progress')
-    message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
+    if (normal.input) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
     res = process_file(input)
     unlink('NA')  # temp fix to issue 94
     cat(res, file = output)
