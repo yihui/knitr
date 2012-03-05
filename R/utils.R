@@ -191,6 +191,10 @@ is_tikz_dev = function(options) {
   options$dev == 'tikz' && !options$external
 }
 
+tikz_dict = function(path, normal) {
+  str_c(if (normal) file_path_sans_ext(basename(path)) else 'unknown', '-tikzDictionary')
+}
+
 ## compatibility with Sweave and old beta versions of knitr
 fix_options = function(options) {
   ## compatibility with Sweave
