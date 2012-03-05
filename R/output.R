@@ -68,6 +68,12 @@
 ##' external files (like \code{read.table()}), it is better to put
 ##' these files under the same directory of the input document so that
 ##' we can use relative paths.
+##' 
+##' The arguments \code{input} and \code{output} do not have to be restricted to
+##' files; they can be \code{stdin()}/\code{stdout()} or other types of 
+##' connections, but the pattern list to read the input has to be set in advance
+##' (see \code{\link{pat_rnw}}), and the output hooks should also be set (see
+##' \code{\link{render_latex}}).
 ##' @export
 ##' @references Package homepage: \url{http://yihui.name/knitr/}
 ##'
