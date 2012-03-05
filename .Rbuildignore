@@ -1,13 +1,12 @@
 .gitignore
 clean-up.R
-rdb$
-rdx$
 tikzDictionary$
 aux$
 log$
 out$
 inst/examples/knitr-.*.pdf
 inst/examples/figure
+inst/examples/cache
 inst/examples/ex-out*
 knitr-minimal.html
 knitr-minimal.md
