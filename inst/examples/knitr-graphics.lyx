@@ -1565,6 +1565,13 @@ status open
 
 \begin_layout Plain Layout
 
+
+\backslash
+begin{kframe}
+\end_layout
+
+\begin_layout Plain Layout
+
 <<pdf-nocrop, fig.width=3.2, fig.height=3.2, out.width='.5
 \backslash
 
@@ -1585,6 +1592,13 @@ plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
 \begin_layout Plain Layout
 
 @
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{kframe}
 \end_layout
 
 \end_inset
@@ -1629,6 +1643,13 @@ status open
 
 \begin_layout Plain Layout
 
+
+\backslash
+begin{kframe}
+\end_layout
+
+\begin_layout Plain Layout
+
 <<pdf-crop, ref.label='pdf-nocrop', echo=FALSE, fig.width=3.2, fig.height=3.2,
  out.width='.5
 \backslash
@@ -1640,6 +1661,13 @@ linewidth', crop=TRUE>>=
 \begin_layout Plain Layout
 
 @
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{kframe}
 \end_layout
 
 \end_inset
