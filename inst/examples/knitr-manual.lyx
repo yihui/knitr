@@ -2791,7 +2791,20 @@ This manual was written in LyX and compiled with
 \series bold
 knitr
 \series default
-.
+ (version 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{packageVersion('knitr')}
+\end_layout
+
+\end_inset
+
+).
  The LyX source and the Rnw document exported from LyX can be found under
  these directories:
 \end_layout

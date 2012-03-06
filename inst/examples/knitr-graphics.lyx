@@ -145,9 +145,22 @@ This manual shows features of graphics in the
 \series bold
 knitr
 \series default
- package in detail, including the graphical devices, plot recording, plot
- rearrangement, control of plot sizes, the tikz device, animations and other
- types of plots such as 
+ package (version 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{packageVersion('knitr')}
+\end_layout
+
+\end_inset
+
+) in detail, including the graphical devices, plot recording, plot rearrangement
+, control of plot sizes, the tikz device, animations and other types of
+ plots such as 
 \series bold
 rgl
 \series default
