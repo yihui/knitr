@@ -10,8 +10,6 @@
 \renewcommand{\floatpagefraction}{0.75}
 
 \usepackage[buttonsize=1em]{animate}
-
-\hypersetup{breaklinks=true,pdfstartview=FitH}
 \end_preamble
 \options justified
 \use_default_options true
@@ -40,7 +38,17 @@ knitr
 \index_command default
 \paperfontsize default
 \spacing single
-\use_hyperref false
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen true
+\pdf_bookmarksopenlevel 2
+\pdf_breaklinks true
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\pdf_quoted_options "pdfstartview=FitH"
 \papersize default
 \use_geometry true
 \use_amsmath 1
