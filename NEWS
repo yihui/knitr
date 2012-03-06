@@ -28,6 +28,10 @@ NEW FEATURES
   can be stdin()/stdout() or other types of connections (#162; see
   https://github.com/yihui/knitr/issues/162) (thanks, gabysbrain)
 
+  o as-is output (results='asis') and plots are no longer put in the
+  framed environments because of incompatibilities (#163) (thanks,
+  DCCKC, Murray Logan and Jennym Hutchison)
+
 BUG FIXES
 
   o for plots in LaTeX output, centering should be done with
