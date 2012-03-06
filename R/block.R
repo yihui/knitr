@@ -175,7 +175,7 @@ block_exec = function(params) {
     if (options$autodep) cache$objects(objs, code, options$label, options$cache.path)
   }
   
-  if (!options$include) '' else output
+  if (options$include) output else ''
 }
 
 block_cache = function(options, output, objects) {
