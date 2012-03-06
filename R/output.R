@@ -304,8 +304,8 @@ wrap.list = function(x, options = list()) {
 }
 
 wrap.character = function(x, options) {
-    if (options$results %in% c('tex', 'asis')) return(x)
-    knit_hooks$get('output')(comment_out(x, options), options)
+    if (!output_asis(x, options)) x = comment_out(x, options)
+    knit_hooks$get('output')(x, options)
 }
 
 wrap.source = function(x, options) {
