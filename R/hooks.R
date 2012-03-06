@@ -128,19 +128,13 @@ hook_plot_md = function(x, options) {
 }
 
 .chunk.hook.tex = function(x, options) {
-  k1 = str_c(color_def(options$background),
-             ifelse(is_tikz_dev(options), '', '\\color{fgcolor}'), '\\begin{kframe}\n')
+  col = if (ai <- output_asis(x, options)) '' else 
+    str_c(color_def(options$background), ifelse(is_tikz_dev(options), '', '\\color{fgcolor}'))
+  k1 = str_c(col, '\\begin{kframe}\n')
   k2 = '\\end{kframe}'
   x = str_c(k1, x, k2)
-  ## table/figure cannot work inside kframe; this is gory...
-  x = gsub('\\begin{figure', str_c(k2, '\\begin{figure'), x, fixed = TRUE)
-  x = gsub('\\begin{table', str_c(k2, '\\begin{table'), x, fixed = TRUE)
-  x = gsub('\\begin{longtable', str_c(k2, '\\begin{longtable'), x, fixed = TRUE)
-  x = gsub('\\end{figure}', str_c('\\end{figure}', k1), x, fixed = TRUE)
-  x = gsub('\\end{table}', str_c('\\end{table}', k1), x, fixed = TRUE)
-  x = gsub('\\end{longtable}', str_c('\\end{longtable}', k1), x, fixed = TRUE)
   x = gsub('\\\\begin\\{kframe\\}\\s*\\\\end\\{kframe\\}', '', x)  # rm empty kframe
-  x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
+  if (!ai) x = str_c('\\begin{knitrout}\n', x, '\n\\end{knitrout}')
   if (options$split) {
     name = fig_path('.tex', options)
     if (!file.exists(dirname(name)))
@@ -148,7 +142,7 @@ hook_plot_md = function(x, options) {
     cat(x, file = name)
     sprintf('\\input{%s}', name)
   } else x
-  }
+}
 .chunk.hook.html = function(x, options) {
   if (output_asis(x, options)) return(x)
   x = sprintf('<pre class="knitr">%s</pre>', x)
@@ -250,15 +244,22 @@ render_latex = function() {
   if (!nzchar(h['framed'])) set_header(framed = .header.framed)
   if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
   knit_hooks$restore()
-  hook.o = function(x, options) if (output_asis(x, options)) x else .verb.hook(x, options)
   knit_hooks$set(source = function(x, options) {
     if (options$highlight) {
       ## gsub() makes sure " will not produce an umlaut
       str_c('\\begin{flushleft}\n', gsub('"', '"{}', x, fixed = TRUE),
             '\\end{flushleft}\n')
     } else .verb.hook(x, options)
-  }, output = hook.o, warning = .verb.hook, message = .verb.hook, error = .verb.hook,
-                 inline = .inline.hook.tex, plot = hook_plot_tex, chunk = .chunk.hook.tex)
+  }, output = function(x, options) {
+    if (output_asis(x, options)) {
+      str_c('\\end{kframe}\n', x, '\n\\begin{kframe}')
+    } else .verb.hook(x, options)
+  }, warning = .verb.hook, message = .verb.hook, error = .verb.hook,
+                 inline = .inline.hook.tex, chunk = .chunk.hook.tex,
+                 plot = function(x, options) {
+                   ## escape plot environments from kframe
+                   str_c('\\end{kframe}', hook_plot_tex(x, options), '\\begin{kframe}')
+                 })
 }
 #' @rdname output_hooks
 #' @export

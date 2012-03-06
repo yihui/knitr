@@ -79,6 +79,7 @@ set_header = function(...) {
  {\\par\\unskip\\endMakeFramed}
 \\makeatother
 
+\\definecolor{shadecolor}{rgb}{.97, .97, .97}
 \\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
 '
 
