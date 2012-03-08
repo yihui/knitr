@@ -104,19 +104,27 @@ hook_plot_tex = function(x, options) {
 #' @rdname hook_plot
 #' @export
 hook_plot_html = function(x, options) {
-  ## TODO: output size not implemented for HTML yet
-  a = options$fig.align
-  sprintf('<img src="%s" class="plot" %s/>\n', .upload.url(x),
-          switch(a, default = '', left = 'style="float: left"',
-                 right = 'style="float: right"',
-                 center = 'style="margin: auto; display: block"'))
+  if(options$fig.show == 'animate') {
+    .ani.plot.hook.html(x, options)
+  } else {
+    ## TODO: output size not implemented for HTML yet
+    a = options$fig.align
+    sprintf('<img src="%s" class="plot" %s/>\n', .upload.url(x),
+            switch(a, default = '', left = 'style="float: left"',
+                   right = 'style="float: right"',
+                   center = 'style="margin: auto; display: block"'))
+  }
 }
 #' @rdname hook_plot
 #' @export
 hook_plot_md = function(x, options) {
-  base = opts_knit$get('base.url')
-  if (is.null(base)) base = ''
-  sprintf('![plot of chunk %s](%s%s) ', options$label, base, .upload.url(x))
+  if(options$fig.show == 'animate') {
+    .ani.plot.hook.html(x, options)
+  } else {
+    base = opts_knit$get('base.url')
+    if (is.null(base)) base = ''
+    sprintf('![plot of chunk %s](%s%s) ', options$label, base, .upload.url(x))
+  }
 }
 
 ## a wrapper to imgur_upload to get the URL of images when option upload==TRUE
@@ -153,6 +161,37 @@ hook_plot_md = function(x, options) {
     cat(x, file = name)
     sprintf('<iframe src="%s" class="knitr" width="100%%"></iframe>', name)
   } else x
+}
+.ani.plot.hook.html = function(x, options) {
+  # pull out all the relevant plot options
+  animate <- options$fig.show == 'animate'
+  fig.num <- options$fig.num
+  fig.cur <- options$fig.cur
+  if(is.null(fig.cur)) fig.cur <- 0
+
+  # Don't print out intermediate plots if we're animating
+  if(animate && fig.cur < fig.num) return('')
+  
+  # TODO: only supports png device for now
+  # set up the ffmpeg run
+  ffmpeg.opts <- options$aniopts
+  fig.fname <- paste(sub(paste(fig.num, '$',sep=''), '', x[1]), "%d.png", sep="")
+  mov.fname <- paste(sub(paste(fig.num, '$',sep=''), '', x[1]), ".mp4", sep="")
+  if(is.na(ffmpeg.opts)) ffmpeg.opts <- NULL
+
+  ffmpeg.cmd <- paste("ffmpeg", "-y", "-r", 1/options$interval, 
+                      "-i", fig.fname, mov.fname)
+  system(ffmpeg.cmd, ignore.stdout=TRUE)
+
+  # figure out the options for the movie itself
+  mov.opts <- strsplit(options$aniopts, ';')[[1]]
+  opt.str <- paste(
+    " ",
+    if(!is.null(options$out.width)) sprintf('width=%s', options$out.width),
+    if(!is.null(options$out.height)) sprintf('height=%s', options$out.height),
+    if('controls' %in% mov.opts) 'controls="controls"',
+    if('loop' %in% mov.opts) 'loop="loop"')
+  sprintf('<video %s><source src="%s" type="video/mp4" />video of chunk %s</video>', opt.str, mov.fname, options$label)
 }
 
 ## format a single inline object
