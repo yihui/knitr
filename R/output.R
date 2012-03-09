@@ -166,8 +166,10 @@ process_file = function(path) {
     n = length(groups); res = character(n)
     tangle = opts_knit$get('tangle')
 
-    if (opts_knit$get('progress'))
+    if (opts_knit$get('progress')) {
         pb = txtProgressBar(0, n, char = '>', style = 3)
+        on.exit(close(pb), add = TRUE)
+    }
     for (i in 1:n) {
         if (opts_knit$get('progress')) {
             setTxtProgressBar(pb, i)
@@ -178,7 +180,6 @@ process_file = function(path) {
         if (inherits(txt, 'try-error')) break
         res[i] = txt
     }
-    if (opts_knit$get('progress')) close(pb)
 
     if (!tangle) res = insert_header(res)  # insert header
     str_c(c(res, ""), collapse = "\n")
