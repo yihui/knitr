@@ -121,6 +121,19 @@ out.width
  to exceed the page margin;
 \end_layout
 
+\begin_layout Enumerate
+most importantly, leave a blank line in the beginning of the subfloat environmen
+t, so that 
+\family typewriter
+<<>>=
+\family default
+ starts in a new line and 
+\series bold
+knitr
+\series default
+ can recognize it;
+\end_layout
+
 \begin_layout Standard
 Figure 
 \begin_inset CommandInset ref
