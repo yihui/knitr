@@ -147,9 +147,12 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     unlink('NA')  # temp fix to issue 94
     cat(res, file = output)
     dep_list$restore()  # empty dependency list
+
     if (is.character(output) && file.exists(output)) {
+      concord_gen(output)  # concordance file
         message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
     }
+
     invisible(output)
 }
 ##' @rdname knit
@@ -182,6 +185,8 @@ process_file = function(path) {
     }
 
     if (!tangle) res = insert_header(res)  # insert header
+    concord_output(n = str_count(res, fixed('\n')) + 1L)  # output line numbers
+
     str_c(c(res, ""), collapse = "\n")
 }
 
