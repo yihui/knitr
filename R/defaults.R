@@ -38,7 +38,7 @@ new_defaults = function(value = list()) {
 opts_chunk = 
   new_defaults(list(eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
                     cache = FALSE, dependson = NULL, cache.path = 'cache/',
-                    ref.label = NULL, child = NULL, concordance = FALSE,
+                    ref.label = NULL, child = NULL,
                     prompt = FALSE, comment = '##', autodep = FALSE,
                     fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
                     fig.path = '', fig.ext = NULL, dev = 'pdf', dpi = 72,
@@ -108,7 +108,7 @@ opts_knit =
                     base.dir = NULL, base.url = NULL, child.path = '',
                     imgur.key = '60e9e47cff8483c6dc289a1cd674b40f', upload = FALSE,
                     upload.fun = imgur_upload,
-                    eval.after = NULL,
+                    eval.after = NULL, concordance = FALSE,
                     all.patterns = all_patterns, tangle = FALSE,
                     child = FALSE, parent = FALSE,
                     cache.extra = NULL, aliases = NULL,
