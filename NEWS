@@ -2,17 +2,15 @@
 
 NEW FEATURES
 
-  o concordance was finally implemented but it is very different with
-  Sweave: when opts_knit$get('concordance') is TRUE, knitr will write
-  a file named 'input-concordance.tex' which contains the mapping
-  between input Rnw and output tex line numbers separated by ':'
-  (Sweave's concordance format was too difficult for me to understand,
-  although JJ Allaire and Joe Cheng explained in great detail to me);
-  this feature is mainly for RStudio to provide better error
-  navigations: you can jump from the TeX error message to the Rnw
-  source directly to know where the error comes from (the line number
-  of the source of the error may not be accurate but should be in the
-  ballpark) (#133) (thanks, JJ and Joe)
+  o Sweave concordance was finally implemented: when
+  opts_knit$get('concordance') is TRUE, knitr will write a file named
+  'input-concordance.tex' which contains the mapping between input Rnw
+  and output tex line numbers; this feature is mainly for (but not
+  limited to) RStudio to provide better error navigations: you can
+  jump from the TeX error message to the Rnw source directly to know
+  where the error comes from (the line number of the source of the
+  error may not be accurate but should be in the ballpark) (#133)
+  (thanks, JJ Allaire and Joe Cheng)
 
   o if output hooks have been set before calling knit(), they will be
   respected, i.e. knitr will no longer override them by default hooks;
