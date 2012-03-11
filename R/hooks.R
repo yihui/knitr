@@ -425,7 +425,8 @@ hook_plot_custom = function(before, options, envir){
   n = options$fig.num
   if (n <= 1L) hook(c(name, ext), options) else {
     res = unlist(lapply(seq_len(n), function(i) {
-      hook(c(str_c(name, i), ext), modifyList(options, list(fig.cur = i)))
+      options$fig.cur = i
+      hook(c(str_c(name, i), ext), options)
     }), use.names = FALSE)
     str_c(res, collapse = '')
   }
