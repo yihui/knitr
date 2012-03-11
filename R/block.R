@@ -95,6 +95,7 @@ block_exec = function(params) {
     options$fig.ext = dev2ext(options$dev)
   }
   
+  obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
   res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
   owd = setwd(input_dir())
   res = evaluate(code, envir = env) # run code
@@ -172,7 +173,8 @@ block_exec = function(params) {
   plot_counter(reset = TRUE)  # restore plot number
   
   if (options$cache) {
-    objs = ls(env, all.names = TRUE)
+    obj.after = ls(globalenv(), all.names = TRUE)  # figure out new global objs
+    objs = c(ls(env, all.names = TRUE), setdiff(obj.after, obj.before))
     block_cache(options, output, objs)
     if (options$autodep) cache$objects(objs, code, options$label, options$cache.path)
   }
