@@ -127,7 +127,7 @@ valid_opts = function(options) {
   if (!length(nms)) return(TRUE)
   ## not a rigorous check; you should go to the new syntax finally!
   chk = c('results', 'fig.keep', 'fig.show', 'dev', 'out.width', 'out.height', 
-          'fig.align', 'fig.path', 'cache.path', 'ref.label', 'child')
+          'fig.align', 'fig.path', 'cache.path', 'ref.label', 'child', 'dependson')
   for (o in intersect(chk, nms)) {
     if (!is.null(options[[o]]) && !is.character(options[[o]])) {
       warning('unexpected option ', o, '; forgot to quote it?')
