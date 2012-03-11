@@ -130,7 +130,7 @@ valid_opts = function(options) {
           'fig.align', 'fig.path', 'cache.path', 'ref.label', 'child', 'dependson')
   for (o in intersect(chk, nms)) {
     if (!is.null(options[[o]]) && !is.character(options[[o]])) {
-      warning('unexpected option ', o, '; forgot to quote it?')
+      warning('unexpected option ', sQuote(o), '; forgot to quote it?')
       str(options[[o]])
       return(FALSE)
     }
