@@ -112,34 +112,32 @@ pure_preamble = function(preamble) {
   sapply(res, if (opts_knit$get('tangle')) process_tangle else process_group)
 }
 
-##' Specify the parent document of child documents
-##'
-##' This function extracts the LaTeX preamble of the parent document
-##' to use for the child document, so that the child document can be
-##' compiled as an individual document.
-##'
-##' When the preamble of the parent document also contains code chunks
-##' and inline R code, they will be evaluated as if they were in this
-##' child document. For examples, when \pkg{knitr} hooks or other
-##' options are set in the preamble of the parent document, it will
-##' apply to the child document as well.
-##' @param parent path to the parent document (relative to the current
-##' child document)
-##' @return The preamble is extracted and stored to be used later when
-##' the complete output is written.
-##' @note Obviously this function is only useful when the output
-##' format is LaTeX. This function only works when the child document
-##' is compiled in a standalone mode using \code{\link{knit}()}
-##' (instead of being called in \code{\link{knit_child}()}); when the
-##' parent document is compiled, this function in the child document
-##' will be ignored.
-##' @references \url{http://yihui.name/knitr/demo/child/}
-##' @export
-##' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
-##'
-##' ## <<setup-child, include=FALSE>>=
-##' ## set_parent('parent_doc.Rnw')
-##' ## @@
+#' Specify the parent document of child documents
+#' 
+#' This function extracts the LaTeX preamble of the parent document to use for
+#' the child document, so that the child document can be compiled as an
+#' individual document.
+#' 
+#' When the preamble of the parent document also contains code chunks and inline
+#' R code, they will be evaluated as if they were in this child document. For
+#' examples, when \pkg{knitr} hooks or other options are set in the preamble of
+#' the parent document, it will apply to the child document as well.
+#' @param parent path to the parent document (relative to the current child
+#'   document)
+#' @return The preamble is extracted and stored to be used later when the
+#'   complete output is written.
+#' @note Obviously this function is only useful when the output format is LaTeX.
+#'   This function only works when the child document is compiled in a
+#'   standalone mode using \code{\link{knit}()} (instead of being called in
+#'   \code{\link{knit_child}()}); when the parent document is compiled, this
+#'   function in the child document will be ignored.
+#' @references \url{http://yihui.name/knitr/demo/child/}
+#' @export
+#' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
+#'
+#' ## <<setup-child, include=FALSE>>=
+#' ## set_parent('parent_doc.Rnw')
+#' ## @@
 set_parent = function(parent) {
   if (child_mode()) return() # quit if in child mode
   opts_knit$set(parent = TRUE)
@@ -301,58 +299,55 @@ test_latex_pkg = function(name, path) {
 child_mode = function() opts_knit$get('child')
 parent_mode = function() opts_knit$get('parent')
 
-##' Path for figure files
-##'
-##' The filename of figure files is the combination of options
-##' \code{fig.path} and \code{label}. This function returns the path
-##' of figures for the current chunk by default.
-##' @param suffix a suffix of the filename
-##' @param options a list of options; by default the options of the
-##' current chunk
-##' @return A character string (path)
-##' @note When there are multiple figures in a chunk, this function
-##' only provides a prefix of the filenames by default, and the
-##' actual filenames are of the form \file{prefix1}, \file{prefix2},
-##' ... where \file{prefix} is the string returned by this function.
-##' @export
-##' @examples fig_path('.pdf', list(fig.path='figure/abc-', label='first-plot'))
-##' fig_path(1:10, list(fig.path='foo-', label='bar'))
+#' Path for figure files
+#' 
+#' The filename of figure files is the combination of options \code{fig.path}
+#' and \code{label}. This function returns the path of figures for the current
+#' chunk by default.
+#' @param suffix a suffix of the filename
+#' @param options a list of options; by default the options of the current chunk
+#' @return A character string (path)
+#' @note When there are multiple figures in a chunk, this function only provides
+#'   a prefix of the filenames by default, and the actual filenames are of the
+#'   form \file{prefix1}, \file{prefix2}, ... where \file{prefix} is the string
+#'   returned by this function.
+#' @export
+#' @examples fig_path('.pdf', list(fig.path='figure/abc-', label='first-plot'))
+#' fig_path(1:10, list(fig.path='foo-', label='bar'))
 fig_path = function(suffix = '', options = opts_current$get()) {
   str_c(valid_path(options$fig.path, options$label), suffix)
 }
 
-##' The environment in which a code chunk is evaluated
-##'
-##' This function makes the environment of a code chunk accessible
-##' inside a chunk.
-##'
-##' In some special cases, we need access to the environment of the
-##' current chunk; a typical example is when we use \code{source()} in
-##' a cached chunk, we have to make sure the script is executed in the
-##' correct environment (should not use the default local
-##' environment). See references for an example.
-##' @references \url{http://yihui.name/knitr/demo/cache/}
-##' @export
+#' The environment in which a code chunk is evaluated
+#' 
+#' This function makes the environment of a code chunk accessible inside a
+#' chunk.
+#' 
+#' In some special cases, we need access to the environment of the current
+#' chunk; a typical example is when we use \code{source()} in a cached chunk, we
+#' have to make sure the script is executed in the correct environment (should
+#' not use the default local environment). See references for an example.
+#' @references \url{http://yihui.name/knitr/demo/cache/}
+#' @export
 knit_env = function() {
   .knitEnv$knit_env
 }
 
-##' Convert Rnw to PDF using knit and texi2pdf
-##'
-##' Knit the input Rnw document to a tex document, and compile it
-##' using \code{texi2pdf}.
-##' @inheritParams knit
-##' @param compiler a character string which gives the LaTeX program
-##' used to compile the tex document to PDF (by default it uses the
-##' default setting of \code{\link[tools]{texi2pdf}}, which is often
-##' PDFLaTeX); this argument will be used to temporarily set the
-##' environmental variable \samp{PDFLATEX}
-##' @author Ramnath Vaidyanathan and Yihui Xie
-##' @export
-##' @importFrom tools texi2pdf
-##' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}}
-##' @examples ## compile with xelatex
-##' ## knit2pdf(..., compiler = 'xelatex')
+#' Convert Rnw to PDF using knit and texi2pdf
+#' 
+#' Knit the input Rnw document to a tex document, and compile it using
+#' \code{texi2pdf}.
+#' @inheritParams knit
+#' @param compiler a character string which gives the LaTeX program used to
+#'   compile the tex document to PDF (by default it uses the default setting of
+#'   \code{\link[tools]{texi2pdf}}, which is often PDFLaTeX); this argument will
+#'   be used to temporarily set the environmental variable \samp{PDFLATEX}
+#' @author Ramnath Vaidyanathan and Yihui Xie
+#' @export
+#' @importFrom tools texi2pdf
+#' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}}
+#' @examples ## compile with xelatex
+#' ## knit2pdf(..., compiler = 'xelatex')
 knit2pdf = function(input, output = NULL, compiler = NULL){
   out = knit(input, output)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
@@ -364,38 +359,36 @@ knit2pdf = function(input, output = NULL, compiler = NULL){
   texi2pdf(basename(out), clean = TRUE)
 }
 
-##' Run the code in a specified chunk
-##'
-##' We can specify a chunk label and use this function to evaluate the
-##' code in this chunk. It is an alternative to the chunk reference in
-##' Sweave.
-##'
-##' The difference between this type of chunk reference and the chunk
-##' option \code{ref.label} is that the latter can only be used for a
-##' chunk so that it has exactly the same code as the reference chunk,
-##' whereas this function makes it possible to collect several little
-##' chunks and run them inside another big chunk.
-##' @param label the chunk label
-##' @param envir the environment in which to evaluate the code
-##' @return Values returned by the code in the chunk.
-##' @note Recursion (must be finite, of course) of reference is
-##' allowed, e.g. we may run the code of \samp{chunk2} in
-##' \samp{chunk1}, and \samp{chunk2} also contains a reference to
-##' \samp{chunk3}, then if we run \samp{chunk1}, both the code in
-##' \samp{chunk2} and \samp{chunk3} will be evaluated.
-##' @export
-##' @examples ## In Sweave we use chunk reference like this
-##' # <<a>>=
-##' # 1+1
-##' # @@
-##' # <<b>>=
-##' # <<a>>
-##' # @@
-##'
-##' ## In knitr, we can use the same, or
-##' # <<b>>=
-##' # run_chunk('a')
-##' # @@
+#' Run the code in a specified chunk
+#' 
+#' We can specify a chunk label and use this function to evaluate the code in
+#' this chunk. It is an alternative to the chunk reference in Sweave.
+#' 
+#' The difference between this type of chunk reference and the chunk option
+#' \code{ref.label} is that the latter can only be used for a chunk so that it
+#' has exactly the same code as the reference chunk, whereas this function makes
+#' it possible to collect several little chunks and run them inside another big
+#' chunk.
+#' @param label the chunk label
+#' @param envir the environment in which to evaluate the code
+#' @return Values returned by the code in the chunk.
+#' @note Recursion (must be finite, of course) of reference is allowed, e.g. we
+#'   may run the code of \samp{chunk2} in \samp{chunk1}, and \samp{chunk2} also
+#'   contains a reference to \samp{chunk3}, then if we run \samp{chunk1}, both
+#'   the code in \samp{chunk2} and \samp{chunk3} will be evaluated.
+#' @export
+#' @examples ## In Sweave we use chunk reference like this
+#' # <<a>>=
+#' # 1+1
+#' # @@
+#' # <<b>>=
+#' # <<a>>
+#' # @@
+#'
+#' ## In knitr, we can use the same, or
+#' # <<b>>=
+#' # run_chunk('a')
+#' # @@
 run_chunk = function(label, envir = parent.frame()) {
   eval(parse(text = knit_code$get(label)), envir = envir)
 }

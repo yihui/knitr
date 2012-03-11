@@ -1,68 +1,64 @@
 ## x is the output of processed document
 insert_header = function(x) {
-    if (is.null(b <- knit_patterns$get('header.begin'))) return(x)
-    h = opts_knit$get('header')
-    i = which(str_detect(x, b))
-    if (length(i) == 1L) {
-        fmt = opts_knit$get('out.format')
-        if (fmt %in% c('markdown', 'gfm', 'jekyll')) return(x)
-        if (identical('latex', fmt))
-            h = c('\\usepackage{graphicx, color}', h)
-        if (identical('html', fmt))
-            h = h['highlight']
-        h = h[nzchar(h)]; if (length(h) == 0) h = ''
-        loc = str_locate(x[i], b)
-        str_sub(x[i], loc[, 1], loc[, 2]) =
-            str_c(str_sub(x[i], loc[, 1], loc[, 2]), '\n', str_c(h, collapse = '\n'))
-    } else if (length(i) == 0L) {
-        if (parent_mode()) {
-            h = c('\\usepackage{graphicx, color}', h)
-            x = c(getOption('tikzDocumentDeclaration'), str_c(h, collapse = '\n'),
-                 .knitEnv$tikzPackages, '\\begin{document}', x, '\\end{document}')
-        }
+  if (is.null(b <- knit_patterns$get('header.begin'))) return(x)
+  h = opts_knit$get('header')
+  i = which(str_detect(x, b))
+  if (length(i) == 1L) {
+    fmt = opts_knit$get('out.format')
+    if (fmt %in% c('markdown', 'gfm', 'jekyll')) return(x)
+    if (identical('latex', fmt))
+      h = c('\\usepackage{graphicx, color}', h)
+    if (identical('html', fmt))
+      h = h['highlight']
+    h = h[nzchar(h)]; if (length(h) == 0) h = ''
+    loc = str_locate(x[i], b)
+    str_sub(x[i], loc[, 1], loc[, 2]) =
+      str_c(str_sub(x[i], loc[, 1], loc[, 2]), '\n', str_c(h, collapse = '\n'))
+  } else if (length(i) == 0L) {
+    if (parent_mode()) {
+      h = c('\\usepackage{graphicx, color}', h)
+      x = c(getOption('tikzDocumentDeclaration'), str_c(h, collapse = '\n'),
+            .knitEnv$tikzPackages, '\\begin{document}', x, '\\end{document}')
     }
-    x
+  }
+  x
 }
 
-##' Set the header information
-##'
-##' Some output documents may need appropriate header information, for
-##' example, for LaTeX output, we need to write
-##' \samp{\\usepackage{tikz}} into the preamble if we use tikz
-##' graphics; this function sets the header information to be written
-##' into the output.
-##'
-##' By default, \pkg{knitr} will set up the header automatically. For
-##' example, if the tikz device is used, \pkg{knitr} will add
-##' \samp{\\usepackage{tikz}} to the LaTeX preamble, and this is done
-##' by setting the header component \code{tikz} to be a character
-##' string: \code{set_header(tikz = '\\usepackage{tikz}')}. Similary,
-##' when we highlight R code using the \pkg{highlight} package
-##' (i.e. the chunk option \code{highlight = TRUE}), \pkg{knitr} will
-##' set the \code{highlight} component of the header vector
-##' automatically; if the output type is HTML, this component will be
-##' different -- instead of LaTeX commands, it contains CSS
-##' definitions.
-##'
-##' For power users, all the components can be modified to adapt to a
-##' customized type of output. For instance, we can change
-##' \code{highlight} to LaTeX definitions of the \pkg{listings}
-##' package (and modify the output hooks accordingly), so we can
-##' decorate R code using the \pkg{listings} package.
-##' @param ... the header components; currently possible components
-##' are \code{highlight}, \code{tikz} and \code{framed}, which contain
-##' the necessary commands to be used in the HTML header or LaTeX
-##' preamble; note HTML output only uses the \code{highlight}
-##' component (the other two are ignored)
-##' @return The header vector in \code{opts_knit} is set.
-##' @export
-##' @examples set_header(tikz = '\\usepackage{tikz}')
-##' opts_knit$get('header')
+#' Set the header information
+#' 
+#' Some output documents may need appropriate header information, for example,
+#' for LaTeX output, we need to write \samp{\\usepackage{tikz}} into the
+#' preamble if we use tikz graphics; this function sets the header information
+#' to be written into the output.
+#' 
+#' By default, \pkg{knitr} will set up the header automatically. For example, if
+#' the tikz device is used, \pkg{knitr} will add \samp{\\usepackage{tikz}} to
+#' the LaTeX preamble, and this is done by setting the header component
+#' \code{tikz} to be a character string: \code{set_header(tikz =
+#' '\\usepackage{tikz}')}. Similary, when we highlight R code using the
+#' \pkg{highlight} package (i.e. the chunk option \code{highlight = TRUE}),
+#' \pkg{knitr} will set the \code{highlight} component of the header vector 
+#' automatically; if the output type is HTML, this component will be different
+#' -- instead of LaTeX commands, it contains CSS definitions.
+#' 
+#' For power users, all the components can be modified to adapt to a customized
+#' type of output. For instance, we can change \code{highlight} to LaTeX
+#' definitions of the \pkg{listings} package (and modify the output hooks
+#' accordingly), so we can decorate R code using the \pkg{listings} package.
+#' @param ... the header components; currently possible components are
+#'   \code{highlight}, \code{tikz} and \code{framed}, which contain the
+#'   necessary commands to be used in the HTML header or LaTeX preamble; note
+#'   HTML output only uses the \code{highlight} component (the other two are
+#'   ignored)
+#' @return The header vector in \code{opts_knit} is set.
+#' @export
+#' @examples set_header(tikz = '\\usepackage{tikz}')
+#' opts_knit$get('header')
 set_header = function(...) {
-    h = opts_knit$get('header')
-    z = c(...)
-    h[names(z)] = z
-    opts_knit$set(header = h)
+  h = opts_knit$get('header')
+  z = c(...)
+  h[names(z)] = z
+  opts_knit$set(header = h)
 }
 
 ## many thanks to Donald Arseneau
