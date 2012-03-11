@@ -19,6 +19,12 @@ NEW FEATURES
   you need to make sure *all* output hooks are set appropriately,
   e.g. you can start by render_latex() and change some individual
   hooks later (#165) (thanks, Andrew Redd)
+
+  o newly created objects in the global environment will also be
+  cached if cache is turned on (cache=TRUE); in previous versions
+  knitr is unaware of objects created in globalenv(),
+  e.g. setGeneric() creates S4 generic functions in globalenv() and
+  knitr was unable to capture them (#138) (thanks, syoh)
   
   o the chunk option 'fig.cap' supports multiple figure captions in
   LaTeX now, e.g. if a chunk produces two plots, we can use fig.cap =
