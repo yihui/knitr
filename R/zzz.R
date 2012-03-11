@@ -1,2 +1,0 @@
-.onLoad = function(lib, pkg) {
-}
