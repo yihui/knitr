@@ -144,3 +144,5 @@ All package options are:
 - `imgur.key`: (`60e9e47cff8483c6dc289a1cd674b40f`) the key to use the [Imgur API](http://api.imgur.com); it is recommended that you register one by yourself instead of using this default public key
 - `cache.extra`: (`NULL`) extra content that should affect [cache](/knitr/demo/cache)
 - `aliases`: (`NULL`) a named character vector to specify the aliases of chunk options, e.g. `c(h = 'fig.height', w = 'fig.width')` tells **knitr** that the chunk option `h` really means `fig.height`, and `w` is an alias for `fig.width`; this option can be used to save some typing efforts for long option names
+- `concordance`: (`FALSE`) whether to write a concordance file to map the output line numbers to the input line numbers; this enables one to navigate from the output to the input and can be helpful especially when TeX error occurs (this feature is mainly for RStudio)
+
