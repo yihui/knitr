@@ -123,11 +123,15 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     ## set built-in hooks
     opts_knit$set(out.format = fmt)
   }
-  switch(opts_knit$get('out.format'), latex = render_latex(), html = render_html(),
-         sweave = render_sweave(), listings = render_listings(),
-         jekyll = render_jekyll(), markdown = render_markdown(),
-         gfm = render_gfm())
-  
+  ## change output hooks only if they are not set beforehand
+  if (identical(knit_hooks$get(names(.default.hooks)), .default.hooks)) {
+    switch(opts_knit$get('out.format'), latex = render_latex(), 
+           sweave = render_sweave(), listings = render_listings(),
+           html = render_html(), jekyll = render_jekyll(), 
+           markdown = render_markdown(), gfm = render_gfm())
+    on.exit(knit_hooks$restore(), add = TRUE)
+  }
+
   on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
   ## for tikz graphics (cache the dictionary); turn off fancy quotes
   oopts = options(tikzMetricsDictionary = tikz_dict(input, normal.input), 
