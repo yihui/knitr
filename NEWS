@@ -2,6 +2,18 @@
 
 NEW FEATURES
 
+  o concordance was finally implemented but it is very different with
+  Sweave: when opts_knit$get('concordance') is TRUE, knitr will write
+  a file named 'input-concordance.tex' which contains the mapping
+  between input Rnw and output tex line numbers separated by ':'
+  (Sweave's concordance format was too difficult for me to understand,
+  although JJ Allaire and Joe Cheng explained in great detail to me);
+  this feature is mainly for RStudio to provide better error
+  navigations: you can jump from the TeX error message to the Rnw
+  source directly to know where the error comes from (the line number
+  of the source of the error may not be accurate but should be in the
+  ballpark) (#133) (thanks, JJ and Joe)
+  
   o the chunk option 'fig.cap' supports multiple figure captions in
   LaTeX now, e.g. if a chunk produces two plots, we can use fig.cap =
   c('first caption', 'second caption') to assign two different
