@@ -29,6 +29,21 @@ concord_gen = function(file) {
       c(rep(1L, o[k] - 1L), i[k] - o[k] + 1L)
     })
   }
-  file = str_c(file_path_sans_ext(file), '-concordance.tex')
-  writeLines(str_c(cumsum(steps), seq_along(steps), sep = ':'), file)
+  
+  # generate data structure
+  linesout <- cumsum(steps) 
+  vals <- rle(diff(linesout))
+  vals <- c(linesout[1L], as.numeric(rbind(vals$lengths, vals$values)))
+  concordance <- paste(strwrap(paste(vals, collapse = " ")), 
+                       collapse = " %\n")
+  
+  # build record
+  inputFile <- str_c(file_path_sans_ext(file), '.Rnw')          
+  output <- paste("\\Sconcordance{concordance:", file, ":",
+                  inputFile, ":", "%\n", concordance,"}\n", 
+                  sep = "")
+  
+  # write to file
+  concordFile = str_c(file_path_sans_ext(file), '-concordance.tex')
+  cat(output, file = concordFile, append = FALSE)      
 }
