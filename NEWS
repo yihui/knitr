@@ -25,6 +25,10 @@ NEW FEATURES
   knitr is unaware of objects created in globalenv(),
   e.g. setGeneric() creates S4 generic functions in globalenv() and
   knitr was unable to capture them (#138) (thanks, syoh)
+
+  o an experimental feature for animations created by FFmpeg in
+  HTML/markdown output when fig.show='animate' (#166) (thanks,
+  gabysbrain)
   
   o the chunk option 'fig.cap' supports multiple figure captions in
   LaTeX now, e.g. if a chunk produces two plots, we can use fig.cap =
