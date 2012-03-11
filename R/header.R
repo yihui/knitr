@@ -77,6 +77,10 @@ set_header = function(...) {
 
 \\definecolor{shadecolor}{rgb}{.97, .97, .97}
 \\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\\newcommand{\\SweaveOpts}[1]{}  % do not interfere with LaTeX
+\\newcommand{\\SweaveInput}[1]{} % because they are not real TeX commands
+\\newcommand{\\Sexpr}[1]{}       % will only be parsed by R
 '
 
 ## LaTeX styles for highlight
