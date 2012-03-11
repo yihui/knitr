@@ -13,6 +13,12 @@ NEW FEATURES
   source directly to know where the error comes from (the line number
   of the source of the error may not be accurate but should be in the
   ballpark) (#133) (thanks, JJ and Joe)
+
+  o if output hooks have been set before calling knit(), they will be
+  respected, i.e. knitr will no longer override them by default hooks;
+  you need to make sure *all* output hooks are set appropriately,
+  e.g. you can start by render_latex() and change some individual
+  hooks later (#165) (thanks, Andrew Redd)
   
   o the chunk option 'fig.cap' supports multiple figure captions in
   LaTeX now, e.g. if a chunk produces two plots, we can use fig.cap =
