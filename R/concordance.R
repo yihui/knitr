@@ -12,7 +12,7 @@ concord_output = function(n) {
 }
 
 ## generate concordance for RStudio
-concord_gen = function(file) {
+concord_gen = function(infile, outfile) {
   if (!concord_mode()) return()
   i = .knitEnv$input; o = .knitEnv$output
   if (is.null(i) || is.null(o)) {
@@ -37,11 +37,10 @@ concord_gen = function(file) {
   concordance = paste(strwrap(paste(vals, collapse = " ")), collapse = " %\n")
   
   # build record
-  inputFile = str_c(file_path_sans_ext(file), '.Rnw')
-  output = str_c("\\Sconcordance{concordance:", file, ":",
-                  inputFile, ":", "%\n", concordance,"}\n")
+  output = str_c("\\Sconcordance{concordance:", outfile, ":",
+                  infile, ":", "%\n", concordance,"}\n")
   
   # write to file
-  concordFile = str_c(file_path_sans_ext(file), '-concordance.tex')
-  cat(output, file = concordFile, append = FALSE)      
+  confile = str_c(file_path_sans_ext(outfile), '-concordance.tex')
+  cat(output, file = confile)
 }

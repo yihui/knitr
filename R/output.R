@@ -146,7 +146,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
   dep_list$restore()  # empty dependency list
   
   if (is.character(output) && file.exists(output)) {
-    concord_gen(output)  # concordance file
+    concord_gen(input, output)  # concordance file
     message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
   }
   
