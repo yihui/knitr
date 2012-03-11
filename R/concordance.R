@@ -31,17 +31,15 @@ concord_gen = function(file) {
   }
   
   # generate data structure
-  linesout <- cumsum(steps) 
-  vals <- rle(diff(linesout))
-  vals <- c(linesout[1L], as.numeric(rbind(vals$lengths, vals$values)))
-  concordance <- paste(strwrap(paste(vals, collapse = " ")), 
-                       collapse = " %\n")
+  linesout = cumsum(steps)
+  vals = rle(diff(linesout))
+  vals = c(linesout[1L], as.numeric(rbind(vals$lengths, vals$values)))
+  concordance = paste(strwrap(paste(vals, collapse = " ")), collapse = " %\n")
   
   # build record
-  inputFile <- str_c(file_path_sans_ext(file), '.Rnw')          
-  output <- paste("\\Sconcordance{concordance:", file, ":",
-                  inputFile, ":", "%\n", concordance,"}\n", 
-                  sep = "")
+  inputFile = str_c(file_path_sans_ext(file), '.Rnw')
+  output = str_c("\\Sconcordance{concordance:", file, ":",
+                  inputFile, ":", "%\n", concordance,"}\n")
   
   # write to file
   concordFile = str_c(file_path_sans_ext(file), '-concordance.tex')
