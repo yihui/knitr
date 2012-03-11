@@ -5,7 +5,7 @@ concord_mode = function() {
 
 ## record line numbers in input and output
 concord_input = function(n) {
-  if (concord_mode()) .knitEnv$input = n
+  if (!child_mode()) .knitEnv$input = n
 }
 concord_output = function(n) {
   if (concord_mode()) .knitEnv$output = n
