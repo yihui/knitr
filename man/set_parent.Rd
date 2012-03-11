@@ -27,7 +27,7 @@ set_parent(parent)
 }
 \note{
   Obviously this function is only useful when the output
-  format is LaTeX. This function only works when the child
+  format is LaTeX.  This function only works when the child
   document is compiled in a standalone mode using
   \code{\link{knit}()} (instead of being called in
   \code{\link{knit_child}()}); when the parent document is

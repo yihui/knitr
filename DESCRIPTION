@@ -70,3 +70,4 @@ Collate:
     'header.R'
     'themes.R'
     'eclipse.R'
+    'concordance.R'
