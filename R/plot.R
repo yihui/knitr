@@ -80,10 +80,9 @@ save_plot = function(plot, name, options) {
                         switch(getOption("tikzDefaultEngine"),
                                pdftex = getOption("tikzLatexPackages"),
                                xetex = getOption("tikzXelatexPackages"))
-                      tikz_dev = get('tikz', envir = as.environment('package:tikzDevice'))
-                      tikz_dev(..., sanitize = options$sanitize,
-                               standAlone = options$external,
-                               packages = c('\n', packages, .knitEnv$tikzPackages))
+                      tikzDevice::tikz(..., sanitize = options$sanitize,
+                                       standAlone = options$external,
+                                       packages = c('\n', packages, .knitEnv$tikzPackages))
                     } else {
                       stop("package 'tikzDevice' not available (has to be installed)",
                            call. = FALSE)
