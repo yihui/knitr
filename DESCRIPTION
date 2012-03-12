@@ -5,8 +5,9 @@ Title: A general-purpose package for dynamic report
 Version: 0.3.7
 Date: 2012-02-28
 Authors@R: c(person("Hadley", "Wickham", email = "hadley@rice.edu", role =
-    "ctb"), person("Ramnath", "Vaidyanathan", role = "ctb"), person("Yihui",
-    "Xie", email = "xie@yihui.name", role = c("aut", "cre")))
+    "ctb"), person("Ramnath", "Vaidyanathan", role = "ctb"), person("Joseph",
+    "Allaire", role = "ctb"), person("Yihui", "Xie", email =
+    "xie@yihui.name", role = c("aut", "cre")))
 Author: Yihui Xie
 Maintainer: Yihui Xie <xie@yihui.name>
 Description: This package provides a general-purpose tool for dynamic report
