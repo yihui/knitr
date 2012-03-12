@@ -1,23 +1,27 @@
+## graphics devices in base R, plus those in Cairo, cairoDevice, tikzDevice
+auto_exts = c(bmp = 'bmp', postscript = 'eps', pdf = 'pdf', png = 'png',
+              svg = 'svg', jpeg = 'jpeg', pictex = 'tex', tiff = 'tiff',
+              win.metafile = 'wmf', cairo_pdf = 'pdf', cairo_ps = 'eps',
+
+              quartz_pdf = 'pdf', quartz_png = 'png', quartz_jpeg = 'jpeg',
+              quartz_tiff = 'tiff', quartz_gif = 'gif', quartz_psd = 'psd',
+              quartz_bmp = 'bmp',
+
+              CairoJPEG = 'jpeg', CairoPNG = 'png', CairoPS = 'eps',
+              CairoPDF = 'pdf', CairoSVG = 'svg', CairoTIFF = 'tiff',
+
+              Cairo_pdf = 'pdf', Cairo_png = 'png', Cairo_ps = 'eps',
+              Cairo_svg = 'svg',
+
+              tikz = 'tikz')
+
 dev2ext = function(x) {
-  ## graphics devices in base R, plus those in Cairo, cairoDevice, tikzDevice
-  switch(x, bmp = 'bmp', postscript = 'eps', pdf = 'pdf', png = 'png', svg = 'svg',
-         jpeg = 'jpeg', pictex = 'tex', tiff = 'tiff', win.metafile = 'wmf',
-         cairo_pdf = 'pdf', cairo_ps = 'eps',
-         
-         quartz_pdf = 'pdf', quartz_png = 'png', quartz_jpeg = 'jpeg',
-         quartz_tiff = 'tiff', quartz_gif = 'gif', quartz_psd = 'psd', quartz_bmp = 'bmp',
-         
-         CairoJPEG = 'jpeg', CairoPNG = 'png', CairoPS = 'eps', CairoPDF = 'pdf',
-         CairoSVG = 'svg', CairoTIFF = 'tiff',
-         
-         Cairo_pdf = 'pdf', Cairo_png = 'png', Cairo_ps = 'eps',
-         Cairo_svg = 'svg',
-         
-         tikz = 'tikz',
-         
-         stop('device name \'', x, '\' not supported yet; please go to ',
-              'https://github.com/yihui/knitr/issues to report this issue',
-              call. = FALSE))
+  res = auto_exts[x]
+  if (any(idx <- is.na(res)))
+    stop('cannot find appropriate filename extensions for device ', x[idx],
+         "please use chunk option 'fig.ext' (http://yihui.name/knitr/options)",
+         call. = FALSE)
+  res
 }
 
 ## quartiz devices under Mac
