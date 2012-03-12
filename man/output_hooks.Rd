@@ -42,10 +42,11 @@ render_jekyll()
   \pkg{listings} package). Default HTML output hooks are
   set by \code{render_html()}.
 
-  These functions can be used in the first chunk of the
-  input document (ideally this chunk has options
-  \code{include = FALSE} and \code{cache = FALSE}) so that
-  all the following chunks will be formatted as expected.
+  These functions can be used before \code{knit()} or in
+  the first chunk of the input document (ideally this chunk
+  has options \code{include = FALSE} and \code{cache =
+  FALSE}) so that all the following chunks will be
+  formatted as expected.
 
   You can use \code{\link{knit_hooks}} to further customize
   output hooks; see references.
