@@ -186,7 +186,7 @@ is_abs_path = function(x) {
 
 ## is tikz device without externalization?
 is_tikz_dev = function(options) {
-  options$dev == 'tikz' && !options$external
+  'tikz' %in% options$dev && !options$external
 }
 
 tikz_dict = function(path, normal) {
@@ -204,7 +204,7 @@ fix_options = function(options) {
       break
     }
   }
-  if (options$dev == 'eps') options$dev = 'postscript'
+  if (any(idx <- options$dev == 'eps')) options$dev[idx] = 'postscript'
   
   ## compatibility with old version of knitr
   fig = options$fig
