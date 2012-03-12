@@ -109,7 +109,7 @@ save_plot = function(plot, name, options) {
     }
   }
   
-  invisible(c(name, ext))
+  c(name, ext)
 }
 
 ## this is mainly for Cairo and cairoDevice
