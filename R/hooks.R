@@ -164,13 +164,12 @@ hook_plot_md = function(x, options) {
 }
 .ani.plot.hook.html = function(x, options) {
   # pull out all the relevant plot options
-  animate <- options$fig.show == 'animate'
   fig.num <- options$fig.num
   fig.cur <- options$fig.cur
   if(is.null(fig.cur)) fig.cur <- 0
 
   # Don't print out intermediate plots if we're animating
-  if(animate && fig.cur < fig.num) return('')
+  if(fig.cur < fig.num) return('')
   
   # set up the ffmpeg run
   ffmpeg.opts <- options$aniopts
