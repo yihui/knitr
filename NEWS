@@ -24,6 +24,11 @@ NEW FEATURES
   e.g. setGeneric() creates S4 generic functions in globalenv() and
   knitr was unable to capture them (#138) (thanks, syoh)
 
+  o chunk options dev, fig.ext and dpi can be vectors now; this allows
+  one to save a plot to multiple formats, e.g. <<foo, dev=c('pdf',
+  'png')>>= creates two files for the same plot: foo.pdf and foo.png
+  (#168) (thanks, MYaseen208)
+
   o an experimental feature for animations created by FFmpeg in
   HTML/markdown output when fig.show='animate' (#166) (thanks,
   gabysbrain)
