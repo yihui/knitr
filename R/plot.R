@@ -86,7 +86,7 @@ save_plot = function(plot, name, options) {
                     }
                   },
                   
-                  get(dev))
+                  get(dev, mode = 'function'))
   
   ## re-plot the recorded plot to an off-screen device
   device(path, width = options$fig.width, height = options$fig.height)
