@@ -421,6 +421,7 @@ hook_plot_custom = function(before, options, envir){
   if(is.null(ext)) ext = dev2ext(options$dev)
   name = fig_path()
   fmt = opts_knit$get('out.format')
+  if (fmt %in% c('sweave', 'listings')) fmt = 'latex'
   hook = switch(fmt, latex = hook_plot_tex, html = hook_plot_html, hook_plot_md)
   
   n = options$fig.num
