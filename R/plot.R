@@ -33,9 +33,8 @@ quartz_dev = function(type, dpi) {
 }
 
 ## save a recorded plot
-save_plot = function(plot, name, options) {
+save_plot = function(plot, name, dev, ext, dpi, options) {
   
-  dev = options$dev; ext = options$fig.ext; dpi = options$dpi
   path = str_c(name, ".", ext)
   
   ## built-in devices
