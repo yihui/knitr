@@ -104,6 +104,7 @@ hook_plot_tex = function(x, options) {
 #' @rdname hook_plot
 #' @export
 hook_plot_html = function(x, options) {
+  ## TODO: output size not implemented for HTML yet
   if(options$fig.show == 'animate') {
     .ani.plot.hook.html(x, options)
   } else {
