@@ -186,10 +186,8 @@ hook_plot_md = function(x, options) {
 
   # figure out the options for the movie itself
   mov.opts = sc_split(options$aniopts)
-  opt.str <- paste(
-    " ",
-    if(!is.null(options$out.width)) sprintf('width=%s', options$out.width),
-    if(!is.null(options$out.height)) sprintf('height=%s', options$out.height),
+  opt.str = paste(sprintf('width=%s', options$out.width),
+    sprintf('height=%s', options$out.height),
     if('controls' %in% mov.opts) 'controls="controls"',
     if('loop' %in% mov.opts) 'loop="loop"')
   sprintf('<video %s><source src="%s" type="video/mp4" />video of chunk %s</video>',
