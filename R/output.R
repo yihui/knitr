@@ -179,8 +179,9 @@ process_file = function(path) {
     group = groups[[i]]
     txt = try((if (tangle) process_tangle else process_group)(group), silent = TRUE)
     if (inherits(txt, 'try-error')) {
-      message(sprintf('Quitting from lines %s: %s', current_lines(i), txt))
       print(group)
+      msg = sprintf('Quitting from lines %s: %s', current_lines(i), txt)
+      (if (interactive()) message else stop)(msg)
       break
     }
     res[i] = txt
