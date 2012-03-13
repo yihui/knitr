@@ -77,6 +77,10 @@ BUG FIXES
   inline R code to format numbers in scientific notation (#161)
   (thanks, Kihoro J. M.)
 
+  o fixed a bug for the case in which the chunk option only contains
+  the label like <<label=foobar>>=; knitr 0.3 was unable to parse the
+  label correctly (<<foobar>>= is OK) (thanks, Muhammad Yaseen)
+
 MINOR CHANGES
 
   o imgur_upload() returns the link to the image directly, with the
