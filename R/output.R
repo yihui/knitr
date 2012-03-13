@@ -176,8 +176,13 @@ process_file = function(path) {
       if (!tangle) cat('\n')
       flush.console()
     }
-    txt = try((if (tangle) process_tangle else process_group)(groups[[i]]))
-    if (inherits(txt, 'try-error')) break
+    group = groups[[i]]
+    txt = try((if (tangle) process_tangle else process_group)(group), silent = TRUE)
+    if (inherits(txt, 'try-error')) {
+      message(sprintf('Quitting from lines %s: %s', current_lines(i), txt))
+      print(group)
+      break
+    }
     res[i] = txt
   }
   
