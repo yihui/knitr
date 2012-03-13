@@ -80,7 +80,7 @@ is that extending Sweave by hacking \textsf{SweaveDrivers.R} in the
 \begin{figure}
 <<cars-demo,dev='tikz',fig.width=4,fig.height=2.8,out.width='.45\\textwidth',message=FALSE,cache=TRUE>>=
 fit=lm(dist~speed,data=cars) # linear regression
-par(mar=c(4, 4, 1, .1), mgp=c(2,1,0), bg='white')
+par(mar=c(4, 4, 1, .1), mgp=c(2,1,0))
 with(cars,plot(speed,dist,panel.last=abline(fit)))
 text(10,100,'$Y = \\beta_0 + \\beta_1x + \\epsilon$')
 library(ggplot2)
@@ -473,20 +473,31 @@ option affects the width of text output)%
 are identified by the chunk label). Unlike \textbf{pgfSweave}, cache
 files will never accumulate since old cache files will always be removed
 in \textbf{knitr}. Unlike \textbf{weaver} or \textbf{cacheSweave},
-\textbf{knitr} will try to preserve side-effects, meaning that any
-output of a code chunk will be loaded into the output document for
-a cached chunk, although it is not really evaluated. The reason is
-\textbf{knitr} also cache the output of a chunk as a character string.
-Note this means graphics output is also cached since it is part of
-the output. It has been a pain for me for a long time to have to lose
-output to gain cache.
-
-Although \textbf{knitr} tries to keep the side-effects of printing,
-there are still other types of side-effects. For example, loading
-packages, or setting \emph{par()}, etc. Users should be aware of these
-special cases, and make sure to clearly separate the code which is
-not meant to be cached to other chunks which are not cached, e.g.,
-load all the required packages in the first chunk of a document.
+\textbf{knitr} will try to preserve these side-effects:
+\begin{enumerate}
+\item printed results: meaning that any output of a code chunk will be loaded
+into the output document for a cached chunk, although it is not really
+evaluated. The reason is \textbf{knitr} also cache the output of a
+chunk as a character string. Note this means graphics output is also
+cached since it is part of the output. It has been a pain for me for
+a long time to have to lose output to gain cache;
+\item loaded packages: after the evaluation of each cached chunk, the list
+of packages used in the current R session is written to a file under
+the cache path named \textsf{\_\_packages}; next time if a cached
+chunk needs to be rebuilt, these packages will be loaded first. The
+reasons for caching package names are, it can be slow to load some
+packages, and a package might be loaded in a previous cached chunk
+which is not available to the next cached chunk when only the latter
+needs to be rebuilt. Note this only applies to cached chunks, and
+for uncached chunks, you must always use \emph{library()} to load
+packages explicitly;
+\end{enumerate}
+Although \textbf{knitr} tries to keep some side-effects, there are
+still other types of side-effects like setting \emph{par()} or \emph{options()}
+which are not cached. Users should be aware of these special cases,
+and make sure to clearly separate the code which is not meant to be
+cached to other chunks which are not cached, e.g., set all global
+options in the first chunk of a document and do not cache that chunk.
 
 Sometimes a cached chunk may need to use objects from other cached
 chunks, which can bring a serious problem -- if objects in previous
@@ -499,6 +510,28 @@ which other chunks this chunk depends on by setting an option like
 'chunkB')}. Each time the cache of a chunk is rebuilt, all other chunks
 which depend on this chunk will lose cache, hence their cache will
 be rebuilt as well.
+
+Another way to specify the dependencies among chunks is to use the
+chunk option \texttt{autodep} and the function \emph{build\_dep()}.
+This is an experimental feature borrowed from \textbf{weaver} which
+frees us from setting chunk dependencies manually. The basic idea
+is, if a latter chunk uses any objects created from a previous chunk,
+the latter chunk is said to depend on the previous one. The function
+\emph{findGlobals()} in the \textbf{codetools} package is used to
+find out all global objects in a chunk, and according to its documentation,
+the result is an approximation. Global objects roughly mean the ones
+which are not created locally, e.g. in the expression \texttt{function()
+\{y <- x\}}, \texttt{x} should be a global object, whereas \texttt{y}
+is local. Meanwhile, we also need to save the list of objects created
+in each cached chunk, so that we can compare them to the global objects
+in latter chunks. For example, if chunk A created an object \texttt{x}
+and chunk B uses this object, chunk B must depend on A, i.e. whenever
+A changes, B must also be updated. When \texttt{autodep=TRUE}, \textbf{knitr}
+will write out the names of objects created in a cached chunk as well
+as those global objects in two files named \textsf{\_\_objects} and
+\textsf{\_\_globals} respectively; later we can use the function \emph{build\_dep()}
+to analyze the object names to figure out the dependencies automatically.
+See \url{http://yihui.name/knitr/demo/cache/} for examples.
 
 
 \subsection{Code Externalization}
@@ -643,9 +676,9 @@ and \url{http://yihui.name/knitr/demo/lyx/} respectively.
 
 \section*{About This Document}
 
-This manual was written in \LyX{} and compiled with \textbf{knitr}.
-The \LyX{} source and the Rnw document exported from \LyX{} can be
-found under these directories:
+This manual was written in \LyX{} and compiled with \textbf{knitr}
+(version \Sexpr{packageVersion('knitr')}). The \LyX{} source and
+the Rnw document exported from \LyX{} can be found under these directories:
 
 <<source-location, eval=FALSE>>=
 system.file('examples', 'knitr-manual.lyx', package='knitr')  # lyx source

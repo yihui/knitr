@@ -94,15 +94,6 @@ status open
 SweaveOpts{fig.path='figure/twocolumn-', fig.align='center', fig.show='hold'}
 \end_layout
 
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
 \begin_layout Plain Layout
 
 <<setup, include=FALSE, cache=FALSE>>=
@@ -110,13 +101,7 @@ status open
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE,width=90)
-\end_layout
-
-\begin_layout Plain Layout
-
-knit_hooks$set(par=function(before, options, envir){if (before) par(mar=c(4,4,.1,.
-1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3,las=1)})
+render_listings()
 \end_layout
 
 \begin_layout Plain Layout
@@ -142,24 +127,22 @@ We can use the
 \family typewriter
 figure*
 \family default
- environment in LaTeX, and the 
-\family typewriter
-chunk
-\family default
- hook in 
-\series bold
-knitr
-\series default
- so that figures can span over two columns.
- The reason to reset the chunk hook is that the 
+ environment in LaTeX so that figures can span over two columns.
+ Because the output hooks use the 
 \series bold
 framed
 \series default
- package does not work well with the 
+ package which does not work well with the 
 \family typewriter
 figure*
 \family default
- environment.
+ environment, we can either modify the output hooks or use other packages
+ like 
+\series bold
+listings
+\series default
+.
+ For example,
 \end_layout
 
 \begin_layout Standard
@@ -173,258 +156,12 @@ status open
 
 \begin_layout Plain Layout
 
-knit_hooks$set(chunk = function(x, options) x)
+<<setup>>
 \end_layout
 
 \begin_layout Plain Layout
 
 @
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-You will lose the background color for these chunks (
-\begin_inset CommandInset href
-LatexCommand href
-name "issue #102"
-target "https://github.com/yihui/knitr/issues/102"
-
-\end_inset
-
-).
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Boxed
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100line%"
-special "none"
-height "1in"
-height_special "none"
-status open
-
-\begin_layout Plain Layout
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Boxed
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100line%"
-special "none"
-height "1in"
-height_special "none"
-status open
-
-\begin_layout Plain Layout
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Boxed
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100line%"
-special "none"
-height "1in"
-height_special "none"
-status open
-
-\begin_layout Plain Layout
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Boxed
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100line%"
-special "none"
-height "1in"
-height_special "none"
-status open
-
-\begin_layout Plain Layout
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Boxed
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100line%"
-special "none"
-height "1in"
-height_special "none"
-status open
-
-\begin_layout Plain Layout
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Boxed
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100line%"
-special "none"
-height "1in"
-height_special "none"
-status open
-
-\begin_layout Plain Layout
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Boxed
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100line%"
-special "none"
-height "1in"
-height_special "none"
-status open
-
-\begin_layout Plain Layout
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Boxed
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100line%"
-special "none"
-height "1in"
-height_special "none"
-status open
-
-\begin_layout Plain Layout
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Boxed
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100line%"
-special "none"
-height "1in"
-height_special "none"
-status open
-
-\begin_layout Plain Layout
-\begin_inset space \hfill{}
-\end_inset
-
-
 \end_layout
 
 \end_inset
@@ -448,12 +185,17 @@ status open
 \backslash
 
 \backslash
-linewidth', par=TRUE>>=
+linewidth'>>=
 \end_layout
 
 \begin_layout Plain Layout
 
 x=rnorm(100)
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mar=c(4,4,.1,.1))
 \end_layout
 
 \begin_layout Plain Layout

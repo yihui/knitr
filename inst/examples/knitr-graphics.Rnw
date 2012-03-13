@@ -3,8 +3,12 @@
 \documentclass[nohyper,justified]{tufte-handout}
 \usepackage[T1]{fontenc}
 \usepackage{url}
-\usepackage[unicode=true]
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=true,pdfborder={0 0 1},backref=false,colorlinks=false]
  {hyperref}
+\hypersetup{
+ pdfstartview=FitH}
 \usepackage{breakurl}
 
 \makeatletter
@@ -22,8 +26,6 @@
 
 \usepackage[buttonsize=1em]{animate}
 
-\hypersetup{breaklinks=true,pdfstartview=FitH}
-
 \makeatother
 
 \begin{document}
@@ -40,9 +42,10 @@ if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axi
 \maketitle
 \begin{abstract}
 This manual shows features of graphics in the \textbf{knitr} package
-in detail, including the graphical devices, plot recording, plot rearrangement,
-control of plot sizes, the tikz device, animations and other types
-of plots such as \textbf{rgl} or GGobi plots.
+(version \Sexpr{packageVersion('knitr')}) in detail, including the
+graphical devices, plot recording, plot rearrangement, control of
+plot sizes, the tikz device, animations and other types of plots such
+as \textbf{rgl} or GGobi plots.
 \end{abstract}
 Before reading this specific manual%
 \footnote{\url{http://bit.ly/knitr-graphics-src} (Rnw source)%
@@ -99,20 +102,6 @@ plot(1,type='n',ann=FALSE)
 text(1,1,'\u55E8\uFF0C\u4F60\u597D\u5417',cex=4) # hello
 @
 
-Depending on the graphics packages and devices you use, the background
-of plots might be transparent (e.g. tikz for base graphics) or white
-by default. If you definitely want the background color to be always
-white for base graphics, you can set up a hook for the \texttt{white}
-option like this:
-
-<<white-background, eval=FALSE>>=
-knit_hooks$set(white = function(before, options, envir) {if (before) par(bg = 'white')})
-@
-
-Then set \texttt{white=TRUE} in the global option (e.g. \texttt{\textbackslash{}SweaveOpts\{white
-= TRUE\}}). Note the hook name \texttt{white} is arbitrary; see the
-\href{http://yihui.github.com/knitr/hooks}{hooks} page in the website.
-
 
 \section{Plot Recording}
 
@@ -122,8 +111,9 @@ package to record plots. There are two sources of plots: first, whenever
 will try to save a snapshot of the current plot%
 \footnote{For technical details, see \texttt{?setHook} and \texttt{?recordPlot}%
 }; second, after each complete expression is evaluated, a snapshot
-is also saved. Figure \ref{fig:two-high} shows two expressions producing
-two high-level plots.
+is also saved. To speed up recording, the null graphical device \texttt{pdf(file
+= NULL)} is used. Figure \ref{fig:two-high} shows two expressions
+producing two high-level plots.
 
 \begin{figure}
 <<two-high, fig.width=3, fig.height=2, out.width='.49\\linewidth'>>=
@@ -338,10 +328,12 @@ knit_hooks$set(crop=hook_pdfcrop)
 Now we compare two plots below. The first one is not cropped:
 
 \begin{figure}
+\begin{kframe}
 <<pdf-nocrop, fig.width=3.2, fig.height=3.2, out.width='.5\\linewidth'>>=
 par(mar=c(5,4,4,2),bg='white')  # large margin
 plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
 @
+\end{kframe}
 
 \caption{The original plot produced in R, with a large margin.}
 \end{figure}
@@ -351,8 +343,10 @@ Then the same plot is produced but with a chunk option \texttt{crop=TRUE}
 which will call the cropping hook:
 
 \begin{figure}
+\begin{kframe}
 <<pdf-crop, ref.label='pdf-nocrop', echo=FALSE, fig.width=3.2, fig.height=3.2, out.width='.5\\linewidth', crop=TRUE>>=
 @
+\end{kframe}
 
 \caption{The cropped plot; it fits better in the document.}
 \end{figure}
