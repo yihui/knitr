@@ -322,6 +322,7 @@ render_listings = function() {
   opts_chunk$set(prompt = FALSE)
   test_latex_pkg('Sweavel', system.file('misc', 'Sweavel.sty', package = 'knitr'))
   set_header(framed = '', highlight = '\\usepackage{Sweavel}')
+  invisible(NULL)
 }
 #' @rdname output_hooks
 #' @export
