@@ -88,7 +88,7 @@ parse_params = function(params, label = TRUE) {
     if (n == 1L) names(res)[idx] = 'label' else if (label) {
       if (!('label' %in% names(res))) res$label = unnamed_chunk()
     }
-    if (!is.character(res$label))
+    if (label && !is.character(res$label))
       res$label = gsub(' ', '', as.character(as.expression(res$label)))
     return(res)
   } else warning('I saw options ', params,
