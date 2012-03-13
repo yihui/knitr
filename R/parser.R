@@ -87,11 +87,11 @@ parse_params = function(params, label = TRUE) {
     } else if (!label && n > 0L) stop('all global options must be of the form tag=value')
     if (n == 1L) {
       names(res)[idx] = 'label'
-      if (!is.character(res[[idx]]))
-        res[[idx]] = gsub(' ', '', as.character(as.expression(res[[idx]])))
     } else if (label) {
       if (!('label' %in% names(res))) res$label = unnamed_chunk()
     }
+    if (!is.character(res$label))
+      res$label = gsub(' ', '', as.character(as.expression(res$label)))
     return(res)
   } else warning('I saw options ', params,
                  '\n are you using old Sweave syntax? go http://yihui.name/knitr/options')
