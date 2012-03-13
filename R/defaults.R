@@ -13,6 +13,7 @@ new_defaults = function(value = list()) {
     if (length(dots) == 1 && is.list(dots[[1]]))
       dots = dots[[1]]
     defaults <<- merge(dots)
+    invisible(NULL)
   }
   merge = function(values) {
     defaults[names(values)] = values
