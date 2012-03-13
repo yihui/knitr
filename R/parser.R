@@ -126,7 +126,6 @@ valid_opts = function(options) {
   ## not a rigorous check; you should go to the new syntax finally!
   chk = c('results', 'fig.keep', 'fig.show', 'dev', 'out.width', 'out.height', 
           'fig.align', 'fig.path', 'cache.path', 'ref.label', 'child', 'dependson')
-  if (is.language(options$dev)) options$dev = eval(options$dev)
   for (o in intersect(chk, nms)) {
     if (!is.null(options[[o]]) && !is.character(options[[o]])) {
       warning('unexpected option ', sQuote(o), '; forgot to quote it?')
