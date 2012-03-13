@@ -85,9 +85,7 @@ parse_params = function(params, label = TRUE) {
     if ((n <- length(idx)) > 1L) {
       stop("all options must be of the form 'tag=value' except the chunk label")
     } else if (!label && n > 0L) stop('all global options must be of the form tag=value')
-    if (n == 1L) {
-      names(res)[idx] = 'label'
-    } else if (label) {
+    if (n == 1L) names(res)[idx] = 'label' else if (label) {
       if (!('label' %in% names(res))) res$label = unnamed_chunk()
     }
     if (!is.character(res$label))
