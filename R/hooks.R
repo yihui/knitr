@@ -185,7 +185,7 @@ hook_plot_md = function(x, options) {
   system(ffmpeg.cmd, ignore.stdout=TRUE)
 
   # figure out the options for the movie itself
-  mov.opts <- sc_split(options$aniopts)[[1]]
+  mov.opts <- sc_split(options$aniopts)
   opt.str <- paste(
     " ",
     if(!is.null(options$out.width)) sprintf('width=%s', options$out.width),
