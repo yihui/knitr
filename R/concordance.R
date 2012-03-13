@@ -7,6 +7,12 @@ concord_mode = function() {
 concord_input = function(n) {
   if (!child_mode()) .knitEnv$input = n
 }
+current_lines = function(i) {
+  # a helpr function to return line numbers for block i
+  n = .knitEnv$input
+  n0 = sum(head(n, i - 1L)) + 1L; n1 = n0 + n[i] - 1L
+  sprintf('%s-%s', n0, n1)
+}
 concord_output = function(n) {
   if (concord_mode()) .knitEnv$output = n
 }
