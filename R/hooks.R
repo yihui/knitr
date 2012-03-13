@@ -167,32 +167,33 @@ hook_plot_md = function(x, options) {
 }
 .ani.plot.hook.html = function(x, options) {
   # pull out all the relevant plot options
-  fig.num <- options$fig.num
-  fig.cur <- options$fig.cur
-  if(is.null(fig.cur)) fig.cur <- 0
+  fig.num = options$fig.num
+  fig.cur = options$fig.cur
+  if(is.null(fig.cur)) fig.cur = 0
 
   # Don't print out intermediate plots if we're animating
   if(fig.cur < fig.num) return('')
   
   # set up the ffmpeg run
-  ffmpeg.opts <- options$aniopts
-  fig.fname <- str_c(sub(str_c(fig.num, '$'), '%d', x[1]), x[2])
-  mov.fname <- str_c(sub(paste(fig.num, '$',sep=''), '', x[1]), ".mp4")
-  if(is.na(ffmpeg.opts)) ffmpeg.opts <- NULL
+  ffmpeg.opts = options$aniopts
+  fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), x[2])
+  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), ".mp4")
+  if(is.na(ffmpeg.opts)) ffmpeg.opts = NULL
 
-  ffmpeg.cmd <- paste("ffmpeg", "-y", "-r", 1/options$interval, 
+  ffmpeg.cmd = paste("ffmpeg", "-y", "-r", 1/options$interval,
                       "-i", fig.fname, mov.fname)
-  system(ffmpeg.cmd, ignore.stdout=TRUE)
+  system(ffmpeg.cmd, ignore.stdout = TRUE)
 
   # figure out the options for the movie itself
-  mov.opts <- sc_split(options$aniopts)
+  mov.opts = sc_split(options$aniopts)
   opt.str <- paste(
     " ",
     if(!is.null(options$out.width)) sprintf('width=%s', options$out.width),
     if(!is.null(options$out.height)) sprintf('height=%s', options$out.height),
     if('controls' %in% mov.opts) 'controls="controls"',
     if('loop' %in% mov.opts) 'loop="loop"')
-  sprintf('<video %s><source src="%s" type="video/mp4" />video of chunk %s</video>', opt.str, mov.fname, options$label)
+  sprintf('<video %s><source src="%s" type="video/mp4" />video of chunk %s</video>',
+          opt.str, mov.fname, options$label)
 }
 
 ## format a single inline object
