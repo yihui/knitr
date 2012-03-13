@@ -7,6 +7,7 @@ test_that('parsing options', {
   expect_error(parse_params('a,c=qwer', label=FALSE))
   expect_identical(parse_params('a,opt=c(1,3,5)'),alist(label='a',opt=c(1,3,5)))
   expect_identical(parse_params('label="xx",opt=zz'),alist(label='xx',opt=zz))
+  expect_identical(parse_params('label=foo'),alist(label='foo'))
   expect_identical(parse_params('a,b=2,c="qwer",asdf="efg"'),
                    alist(label='a', b=2, c='qwer',asdf='efg'))
   ## back-compatibility with Sweave
