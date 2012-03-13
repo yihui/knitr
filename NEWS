@@ -85,7 +85,11 @@ MINOR CHANGES
 
   o imgur_upload() returns the link to the image directly, with the
   XML list as its attribute (in v0.3 the list was returned)
-  
+
+  o more verbose messages in case of chunk errors: both line numbers
+  of the source and chunk info will be printed
+
+
 			 CHANGES IN knitr VERSION 0.3
 
 NEW FEATURES
