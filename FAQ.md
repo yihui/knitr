@@ -23,7 +23,7 @@ The FAQ's are compiled from the [issues](https://github.com/yihui/knitr/issues) 
 1. The gray (shading) box is too narrow for my output.
   - No, it is not because the box is too narrow (the box uses the current line width); it is because your output is too wide. Use a smaller `width` option to avoid text output exceeding the page margin, e.g. `options(width = 60)` (see [#44](https://github.com/yihui/knitr/issues/44)), and tune the option `out.width` to make your graphics output stay within the margin (see [#171](https://github.com/yihui/knitr/issues/171)).
 1. LaTeX told me there was an error related to `\end{kframe}`.
-  - `kframe` is a LaTeX environment that I defined for the chunk output, and it does not work well with certain other LaTeX environments, e.g. the `center` environment; when you want to center your plots, you should use chunk option `fig.align='center'` instead of putting the whole chunk inside `\begin{center}` and `\end{center}`.
+  - `kframe` is a LaTeX environment that I defined for the chunk output, and it does not work well with certain other LaTeX environments, e.g. the `center` environment; when you want to center your plots, you should use chunk option `fig.align='center'` instead of putting the whole chunk inside `\begin{center}` and `\end{center}`. For more info, see [demo page for framed](http://yihui.name/knitr/demo/framed/).
 1. How to comment out inline R code like in `\Sexpr{code}`?
   - see issue [#110](https://github.com/yihui/knitr/issues/110): `%\%Sexpr{code}` or `\Sexpr{#code}`
 1. I have done something cool with **knitr**; could you add a link in your website?
