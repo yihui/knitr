@@ -130,8 +130,8 @@ NEW FEATURES
   o a new function imgur_upload() to upload images to imgur.com; it
   can be used in HTML or Markdown hooks so the output is a
   self-contained document which does not need additional image files;
-  opts_knit$get('upload') controls whether to upload images
-  automatically (#66)
+  opts_knit$get('upload.fun') can use this function (#66) (thanks,
+  Ramnath Vaidyanathan)
 
   o a child document can be compiled individually with the LaTeX
   preamble borrowed automatically from a parent document using a new
