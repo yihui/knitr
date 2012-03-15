@@ -31,7 +31,7 @@
 #' if (interactive()) browseURL(res$links$imgur_page) # imgur page
 #' 
 #' ## to use your own key
-#' opts_knit$get(upload.fun = function(file) imgur_upload(file, key = 'your imgur key'))
+#' opts_knit$set(upload.fun = function(file) imgur_upload(file, key = 'your imgur key'))
 #' }
 imgur_upload = function(file, key = '60e9e47cff8483c6dc289a1cd674b40f') {
   if (is.null(key) || nchar(key) != 32L)
