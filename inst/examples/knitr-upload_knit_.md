@@ -7,7 +7,7 @@ I used the code below to make sure **knitr** uses the correct hooks to wrap my o
 
 <!--begin.rcode setup
 render_gfm() # use GFM hooks for output
-opts_knit$set(upload = TRUE) # upload all images to imgur.com
+opts_knit$set(upload.fun = imgur_upload) # upload all images to imgur.com
 end.rcode-->
 
 Now we write some code chunks in this markdown file:
