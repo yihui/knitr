@@ -3,6 +3,7 @@
 \documentclass{article}
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
+\usepackage{url}
 
 \makeatletter
 
@@ -49,6 +50,7 @@ starts in a new line and \textbf{knitr} can recognize it;
 Figure \ref{fig:knitr-subfloat} is an example.
 
 This document was compiled with \textbf{knitr} \Sexpr{packageVersion('knitr')}.
+Rnw source at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-subfloats.Rnw}.
 
 \begin{figure}
 \subfloat[this is a subfloat]{

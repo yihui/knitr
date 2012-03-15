@@ -9,7 +9,7 @@ I used the code below to make sure **knitr** uses the correct hooks to wrap my o
 
 ```r
 render_gfm()  # use GFM hooks for output
-opts_knit$set(upload = TRUE)  # upload all images to imgur.com
+opts_knit$set(upload.fun = imgur_upload)  # upload all images to imgur.com
 ```
 
 
@@ -56,13 +56,13 @@ library(ggplot2)
 qplot(hp, mpg, data = mtcars) + geom_smooth()
 ```
 
-![plot of chunk md-cars-scatter](http://i.imgur.com/gwijE.png) 
+![plot of chunk md-cars](http://i.imgur.com/4SSRD.png) 
 
 ```r
 ggpcp(mtcars) + geom_line()
 ```
 
-![plot of chunk md-cars-scatter](http://i.imgur.com/v20vt.png) 
+![plot of chunk md-cars](http://i.imgur.com/HFmwH.png) 
 
 
 So **knitr** is ready with GitHub with a single markdown file.
