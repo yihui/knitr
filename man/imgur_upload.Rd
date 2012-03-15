@@ -2,7 +2,7 @@
 \alias{imgur_upload}
 \title{Upload a image to imgur.com}
 \usage{
-imgur_upload(file, key = opts_knit$get("imgur.key"))
+imgur_upload(file, key = "60e9e47cff8483c6dc289a1cd674b40f")
 }
 \arguments{
   \item{file}{the path to the image file to be uploaded}
@@ -25,13 +25,12 @@ imgur_upload(file, key = opts_knit$get("imgur.key"))
 }
 \details{
   When the output format from \code{\link{knit}()} is HTML
-  or Markdown, this function will be used to upload local
-  image files to Imgur when the package option
-  \code{upload} is \code{TRUE}
-  (\code{opts_knit$get('upload')}), so the output document
-  is completely self-contained, i.e. it does not need
-  external image files any more, and it is ready to be
-  published online.
+  or Markdown, this function can be used to upload local
+  image files to Imgur, e.g. set the package option
+  \code{opts_knit$get(upload.fun = imgur_upload)}, so the
+  output document is completely self-contained, i.e. it
+  does not need external image files any more, and it is
+  ready to be published online.
 }
 \note{
   Please register your own Imgur application to get your
@@ -50,6 +49,10 @@ res  # link to original URL of the image
 attr(res, "XML")  # all information
 if (interactive()) 
     browseURL(res$links$imgur_page)  # imgur page
+
+## to use your own key
+opts_knit$get(upload.fun = function(file) imgur_upload(file, 
+    key = "your imgur key"))
 }
 }
 \author{
