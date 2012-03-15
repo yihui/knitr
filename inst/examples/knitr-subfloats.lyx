@@ -164,6 +164,18 @@ Sexpr{packageVersion('knitr')}
 \end_inset
 
 .
+ Rnw source at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/yihui/knitr/blob/master/inst/examples/knitr-subfloats.Rnw
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
