@@ -30,7 +30,7 @@
 #' attr(res, 'XML')  # all information
 #' if (interactive()) browseURL(res$links$imgur_page) # imgur page
 #' }
-imgur_upload = function(file, key = opts_knit$get('imgur.key')) {
+imgur_upload = function(file, key = '60e9e47cff8483c6dc289a1cd674b40f') {
   if (is.null(key) || nchar(key) != 32L)
     stop('The Imgur API Key must be a character string of length 32!')
   if (!file.exists(file)) stop(file, 'does not exist!')

@@ -131,9 +131,7 @@ hook_plot_md = function(x, options) {
 ## a wrapper to imgur_upload to get the URL of images when option upload==TRUE
 .upload.url = function(x) {
   file = paste(x, collapse = '.')
-  if (opts_knit$get('upload')) {
-    opts_knit$get('upload.fun')(file)
-  } else file
+  opts_knit$get('upload.fun')(file)
 }
 
 .chunk.hook.tex = function(x, options) {
