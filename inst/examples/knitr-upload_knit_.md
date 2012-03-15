@@ -1,4 +1,4 @@
-<!--roptions dev='png', fig.width=5, fig.height=5, fig.path='ex-out-' -->
+<!--roptions dev='png', fig.width=5, fig.height=5, fig.path='ex-out-', cache=TRUE, cache.path='cache/upload-' -->
 This is an example of using **knitr** with [GFM](http://github.github.com/github-flavored-markdown/) and uploading images to imgur.com automatically. Note you should set the graphical device to create images that can be displayed in the web browser, e.g. `dev = 'png'` or `'jpeg'` works, but the default `'pdf'` does not.
 
 First, the input file was named as `knitr-upload_knit_.md` ([click to view its source](https://github.com/yihui/knitr/raw/master/inst/examples/knitr-upload_knit_.md)), which contains `_knit_` so that **knitr** will automatically determine the output filename to be `knitr-upload.md`. 
