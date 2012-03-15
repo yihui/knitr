@@ -89,6 +89,20 @@ MINOR CHANGES
   o more verbose messages in case of chunk errors: both line numbers
   of the source and chunk info will be printed
 
+DOCUMENTATION
+
+  o website updated as usual: http://yihui.name/knitr
+
+  o added an example for subfloat environment:
+  https://github.com/downloads/yihui/knitr/knitr-subfloats.pdf
+
+  o most manuals (main or graphics manuals) have been updated
+
+MISC
+
+  o number of downloads (https://github.com/yihui/knitr/downloads) of
+  knitr documentation before I removed and updated them on GitHub:
+  c(main = 355, graphics = 155)
 
 			 CHANGES IN knitr VERSION 0.3
 
