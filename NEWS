@@ -102,7 +102,7 @@ MISC
 
   o number of downloads (https://github.com/yihui/knitr/downloads) of
   knitr documentation before I removed and updated them on GitHub:
-  c(main = 355, graphics = 155)
+  c(main = 400, graphics = 177)
 
 			 CHANGES IN knitr VERSION 0.3
 
