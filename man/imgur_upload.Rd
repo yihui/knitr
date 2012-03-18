@@ -51,7 +51,7 @@ if (interactive())
     browseURL(res$links$imgur_page)  # imgur page
 
 ## to use your own key
-opts_knit$get(upload.fun = function(file) imgur_upload(file, 
+opts_knit$set(upload.fun = function(file) imgur_upload(file, 
     key = "your imgur key"))
 }
 }

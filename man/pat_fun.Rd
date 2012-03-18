@@ -1,5 +1,6 @@
 \name{pat_rnw}
 \alias{pat_brew}
+\alias{pat_gfm}
 \alias{pat_html}
 \alias{pat_rnw}
 \alias{pat_tex}
@@ -12,6 +13,8 @@ pat_brew()
 pat_tex()
 
 pat_html()
+
+pat_gfm()
 }
 \value{
   The patterns object \code{\link{knit_patterns}} is
