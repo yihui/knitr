@@ -1,3 +1,18 @@
+			 CHANGES IN knitr VERSION 0.5
+
+NEW FEATURES
+
+  o white spaces are allowed before <<>> when using chunk references,
+  and this approach of references is supported in tex and html
+  documents as well
+
+  o added a new pattern list named 'gfm' so that R code blocks can be
+  written more naturally in GFM and pandoc (use ``` {r label, opts} to
+  begin a chunk and ```` to end a chunk); call pat_gfm() before knit()
+  so knitr can make use of this pattern list to process the input
+  document
+
+  
 			 CHANGES IN knitr VERSION 0.4
 
 NEW FEATURES
