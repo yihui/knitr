@@ -80,6 +80,7 @@ all_patterns =
        
        `tex` = list(chunk.begin = '^%+\\s*begin.rcode\\s*(.*)',
                     chunk.end = '^%+\\s*end.rcode', chunk.code = '^%+',
+                    ref.chunk = '^%+\\s*<<(.*)>>\\s*$',
                     global.options = '%+\\s*roptions\\s*([^\n]*)',
                     inline.code = '\\\\rinline\\{([^}]*)\\}',
                     header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
@@ -88,6 +89,7 @@ all_patterns =
        
        `html` = list(chunk.begin = '^<!--\\s*begin.rcode\\s*(.*)',
                      chunk.end = '^\\s*end.rcode\\s*-->',
+                     ref.chunk = '^\\s*<<(.*)>>\\s*$',
                      inline.code = '<!--\\s*rinline\\s*([^>]*)\\s*-->',
                      global.options = '<!--\\s*roptions\\s*([^>]*)\\s*-->',
                      header.begin = '\n*\\s*<head>',
