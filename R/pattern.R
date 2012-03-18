@@ -65,6 +65,9 @@ pat_tex = function() set_pattern('tex')
 #' @rdname pat_fun
 #' @export
 pat_html = function() set_pattern('html')
+#' @rdname pat_fun
+#' @export
+pat_gfm = function() set_pattern('gfm')
 
 ## helper functions
 
