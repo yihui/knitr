@@ -124,7 +124,12 @@ hook_plot_md = function(x, options) {
   } else {
     base = opts_knit$get('base.url')
     if (is.null(base)) base = ''
-    sprintf('![plot of chunk %s](%s%s) ', options$label, base, .upload.url(x))
+    cap = if (is.null(fig.cap <- options$fig.cap)) {
+      sprintf('plot of chunk %s', options$label)
+    } else {
+      if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
+    }
+    sprintf('![%s](%s%s) ', cap, base, .upload.url(x))
   }
 }
 
