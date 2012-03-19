@@ -82,7 +82,7 @@ All built-in options in **knitr** are:
 - `fig.align`: (`'default'`; character) alignment of figures in the output document (possible values are `left`, `right` and `center`; default is not to make any alignment adjustments)
 - `fig.cap`: (`NULL`; character) figure caption to be used in a figure environment in LaTeX (in `\caption{}`); if `NULL` or `NA`, it will be ignored, otherwise a figure environment will be used for the plots in the chunk (output in `\begin{figure}` and `\end{figure}`)
 - `fig.scap`: (`NULL`; character) short caption; if `NULL`, all the words before `.` or `;` or `:` will be used as a short caption; if `NA`, it will be ignored
-- `fig.lp`: (`'fig:'`; character) label prefix for the figure label to be used in `\label{}`
+- `fig.lp`: (`'fig:'`; character) label prefix for the figure label to be used in `\label{}`; the actual label is made by concatenating this prefix and the chunk label, e.g. the figure label for `<<foo-plot>>=` will be `fig:foo-plot` by default
 - `fig.pos`: (`''`; character) a character string for the figure position arrangement to be used in `\begin{figure}[fig.pos]`
 - `external`: (`TRUE`; logical) whether to externalize tikz graphics (pre-compile tikz graphics to PDF); it is only used for the `tikz()` device in the **tikzDevice** package (i.e., when `dev='tikz'`) and it can save time for LaTeX compilation
 - `sanitize`: (`FALSE`; character) whether to sanitize tikz graphics (escape special LaTeX characters); see documentation in the **tikzDevice** package
