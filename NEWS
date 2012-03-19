@@ -12,6 +12,8 @@ NEW FEATURES
   so knitr can make use of this pattern list to process the input
   document
 
+  o the chunk option fig.cap is also used in markdown output now
+
   
 			 CHANGES IN knitr VERSION 0.4
 
