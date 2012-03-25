@@ -66,39 +66,3 @@ set_header = function(...) {
 .knit.sty      <- system.file('misc', 'knitr.sty', package = 'knitr')  
 .header.framed <- paste(readLines(.knit.sty), collapse = "\n")
 
-## LaTeX styles for highlight
-## TODO: these lines can be removed since theme_to_header_latex('default') 
-##       would return this directly
-.header.hi.tex =
-    str_c(c("\\newcommand{\\hlnumber}[1]{\\textcolor[rgb]{0,0,0}{#1}}%",
-            "\\newcommand{\\hlfunctioncall}[1]{\\textcolor[rgb]{.5,0,.33}{\\textbf{#1}}}%",
-            "\\newcommand{\\hlstring}[1]{\\textcolor[rgb]{.6,.6,1}{#1}}%",
-            "\\newcommand{\\hlkeyword}[1]{\\textbf{#1}}%",
-            "\\newcommand{\\hlargument}[1]{\\textcolor[rgb]{.69,.25,.02}{#1}}%",
-            "\\newcommand{\\hlcomment}[1]{\\textcolor[rgb]{.18,.6,.34}{#1}}%",
-            "\\newcommand{\\hlroxygencomment}[1]{\\textcolor[rgb]{.44,.48,.7}{#1}}%",
-            "\\newcommand{\\hlformalargs}[1]{\\hlargument{#1}}%",
-            "\\newcommand{\\hleqformalargs}[1]{\\hlargument{#1}}%",
-            "\\newcommand{\\hlassignement}[1]{\\textbf{#1}}%",
-            "\\newcommand{\\hlpackage}[1]{\\textcolor[rgb]{.59,.71,.145}{#1}}%",
-            "\\newcommand{\\hlslot}[1]{\\textit{#1}}%",
-            "\\newcommand{\\hlsymbol}[1]{#1}%",
-            "\\newcommand{\\hlprompt}[1]{\\textcolor[rgb]{.5,.5,.5}{#1}}%",
-            boxes_latex(), "\\definecolor{fgcolor}{rgb}{0,0,0}"), collapse = '\n')
-
-## LaTeX styles for highlight
-## TODO: these lines can be removed since theme_to_header_html('default') 
-##       would return this directly
-.header.hi.html =
-    str_c(c('<style type="text/css">', '.knitr {
-	background-color: #F7F7F7;
-}', '.error {
-	font-weight: bold;
-	color: #FF0000;
-}', '.warning {
-	font-weight: bold;
-}', '.message {
-	font-style: italic;
-}', '.source, .output, .warning, .error, .message {
-	padding: 0.5em 1em;
-}', styler('default'), '</style>'), collapse = '\n')
