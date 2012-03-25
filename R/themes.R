@@ -96,3 +96,12 @@ theme_to_header_html <- function(theme){
 		'</style>')
 	return(list(highlight = css))
 }
+
+# TODO: may want to move it back to header.R. currently theme_to_header_latex
+#       is not recognized in header.R probably because it is loaded first.
+
+# Header for Latex Syntax Highlighting
+.header.hi.tex = paste(theme_to_header_latex('edit-eclipse')$highlight, collapse = '\n')
+
+# CSS for html syntax highlighting
+.header.hi.html = paste(theme_to_header_html('default')$highlight, collapse = '\n')
