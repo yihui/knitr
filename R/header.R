@@ -62,26 +62,9 @@ set_header = function(...) {
 }
 
 ## many thanks to Donald Arseneau
-.header.framed = '\\usepackage{framed}
-\\makeatletter
-\\newenvironment{kframe}{%
- \\def\\FrameCommand##1{\\hskip\\@totalleftmargin \\hskip-\\fboxsep
- \\colorbox{shadecolor}{##1}\\hskip-\\fboxsep
-     % There is no \\@totalrightmargin, so:
-     \\hskip-\\linewidth \\hskip-\\@totalleftmargin \\hskip\\columnwidth}%
- \\MakeFramed {\\advance\\hsize-\\width
-   \\@totalleftmargin\\z@ \\linewidth\\hsize
-   \\@setminipage}}%
- {\\par\\unskip\\endMakeFramed}
-\\makeatother
-
-\\definecolor{shadecolor}{rgb}{.97, .97, .97}
-\\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
-
-\\newcommand{\\SweaveOpts}[1]{}  % do not interfere with LaTeX
-\\newcommand{\\SweaveInput}[1]{} % because they are not real TeX commands
-\\newcommand{\\Sexpr}[1]{}       % will only be parsed by R
-'
+## COMMIT: move .header.framed to a style file of its own so that it can be  ##         included or copied directly to the tex file
+.knit.sty      <- system.file('misc', 'knitr.sty', package = 'knitr')  
+.header.framed <- paste(readLines(.knit.sty), collapse = "\n")
 
 ## LaTeX styles for highlight
 ## TODO: these lines can be removed since theme_to_header_latex('default') 
