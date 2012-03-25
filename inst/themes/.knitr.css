@@ -1,0 +1,19 @@
+.knitr {
+	background-color: #fdf6e3;
+    border-style:solid;
+    border-width:1px;
+    border-color: #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}, 
+.warning {
+	font-weight: bold;
+} 
+.message {
+	font-style: italic;
+} 
+.source, .output, .warning, .error, .message {
+	padding: 0.5em 1em;
+}
