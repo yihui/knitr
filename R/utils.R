@@ -349,7 +349,7 @@ knit_env = function() {
 #' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}}
 #' @examples ## compile with xelatex
 #' ## knit2pdf(..., compiler = 'xelatex')
-knit2pdf = function(input, output = NULL, compiler = NULL){
+knit2pdf = function(input, output = NULL, compiler = NULL, quiet=TRUE){
   out = knit(input, output)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (!is.null(compiler)) {
@@ -357,7 +357,7 @@ knit2pdf = function(input, output = NULL, compiler = NULL){
     on.exit(Sys.setenv(PDFLATEX = oc), add = TRUE)
     Sys.setenv(PDFLATEX = compiler)
   }
-  texi2pdf(basename(out), clean = TRUE)
+  texi2pdf(basename(out), clean = TRUE, quiet = quiet)
 }
 
 #' Run the code in a specified chunk
