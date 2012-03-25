@@ -1,8 +1,6 @@
 .knitr {
-	background-color: #fdf6e3;
-    border-style:solid;
-    border-width:1px;
-    border-color: #B0B0B0;
+	background-color: #F7F7F7;
+    border:solid 1px #B0B0B0;
 }
 .error {
 	font-weight: bold;
