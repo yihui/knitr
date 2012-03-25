@@ -355,7 +355,8 @@ render_markdown = function() {
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
   knit_hooks$set(source = hook.t, output = hook.o, warning = hook.t,
                  error = hook.t, message = hook.t,
-                 inline = function(x) sprintf('`%s`', .inline.hook(format_sci(x, 'html'))),
+                 inline = function(x) sprintf(if (inherits(x, 'AsIs')) '%s' else '`%s`',
+                                              .inline.hook(format_sci(x, 'html'))),
                  plot = hook_plot_md)
 }
 #' @rdname output_hooks
