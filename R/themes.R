@@ -2,9 +2,12 @@
 #' @noRd
 #' @author Ramnath Vaidyanathan
 set_theme = function(theme) {
+	fmt = opts_knit$get('out.format')
   header = if (is.list(theme)) theme else theme_to_header(theme)
-  highlight = paste(c(header$highlight, boxes_latex()), collapse = "\n")
-  opts_chunk$set(background = header$background)
+  highlight = paste(header$highlight, collapse = "\n")
+  if(fmt == 'latex') {
+  	opts_chunk$set(background = header$background)
+  }
   set_header(highlight = highlight)
   ## par(col = theme$foreground)
 }
@@ -41,11 +44,23 @@ get_theme = function(theme = NULL) {
 #' knit_theme$set(thm)
 knit_theme = list(set = set_theme, get = get_theme)
 
+
+#' Generates header based on a theme and output format of document
+#' @author Ramnath Vaidyanathan
+#' @noRd
+theme_to_header = function(theme){
+	fmt <- opts_knit$get('out.format')
+	if (fmt == 'latex'){
+		theme_to_header_latex(theme)
+	} else
+		theme_to_header_html(theme)
+}	
+
 #' Generates latex header based on a theme
 #' @importFrom highlight css.parser styler_assistant_latex
 #' @author Ramnath Vaidyanathan
 #' @noRd
-theme_to_header = function(theme) {
+theme_to_header_latex = function(theme) {
   css_file = if (file.exists(theme)) theme else {
     system.file("themes", sprintf("%s.css", theme), package = "knitr")
   }
@@ -57,7 +72,27 @@ theme_to_header = function(theme) {
   
   ## write latex highlight header
   fgheader = color_def(foreground, "fgcolor")
-  highlight = c(fgheader, styler_assistant_latex(css_out[-1]))
-  
+  highlight = c(fgheader, styler_assistant_latex(css_out[-1]), boxes_latex())
   list(highlight = highlight, background = background, foreground = foreground)
+}
+
+#' Generates css header based on a theme
+#' @author Ramnath Vaidyanathan
+#' @noRd
+#  HACK: replace ugly sub hack to match knitr background with theme
+#  TODO: warning, error, source etc. are still black, an issue for dark themes
+#  TODO: might be a good idea to regenerate the css files appending the 
+#        .knitr.css template to the existing templates
+theme_to_header_html <- function(theme){
+	css_file = if (file.exists(theme)) theme else {
+		system.file("themes", sprintf("%s.css", theme), package = "knitr")
+	}
+	bgcolor <- css.parser(css_file)$background$color
+	css_knitr = system.file('themes', '.knitr.css', package = 'knitr')
+	css_knitr_lines <- readLines(css_knitr)
+	css_knitr_lines  <-  sub('^([[:space:]]+background-color:\\s+)(.*)$', 
+	  sprintf('\\1%s;', bgcolor), css_knitr_lines)
+	css <- c('<style type="text/css">', css_knitr_lines, readLines(css_file), 
+		'</style>')
+	return(list(highlight = css))
 }
