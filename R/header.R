@@ -84,6 +84,8 @@ set_header = function(...) {
 '
 
 ## LaTeX styles for highlight
+## TODO: these lines can be removed since theme_to_header_latex('default') 
+##       would return this directly
 .header.hi.tex =
     str_c(c("\\newcommand{\\hlnumber}[1]{\\textcolor[rgb]{0,0,0}{#1}}%",
             "\\newcommand{\\hlfunctioncall}[1]{\\textcolor[rgb]{.5,0,.33}{\\textbf{#1}}}%",
@@ -101,6 +103,9 @@ set_header = function(...) {
             "\\newcommand{\\hlprompt}[1]{\\textcolor[rgb]{.5,.5,.5}{#1}}%",
             boxes_latex(), "\\definecolor{fgcolor}{rgb}{0,0,0}"), collapse = '\n')
 
+## LaTeX styles for highlight
+## TODO: these lines can be removed since theme_to_header_html('default') 
+##       would return this directly
 .header.hi.html =
     str_c(c('<style type="text/css">', '.knitr {
 	background-color: #F7F7F7;
