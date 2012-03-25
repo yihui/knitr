@@ -330,13 +330,14 @@ render_listings = function() {
 #' @rdname output_hooks
 #' @export
 render_html = function() {
-  knit_hooks$restore()
+	knit_hooks$restore()
   ## use div with different classes
   html.hook = function(name) {
     force(name)
     function (x, options) sprintf('<div class="%s">%s</div>', name, x)
   }
-  set_header(highlight = .header.hi.html)
+  h = opts_knit$get('header')
+  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
   z = list()
   for (i in c('source', 'output', 'warning', 'message', 'error'))
     z[[i]] = html.hook(i)
