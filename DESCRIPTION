@@ -58,6 +58,7 @@ BugReports: https://github.com/yihui/knitr/issues
 Collate:
     'package.R'
     'upload.R'
+    'plot.R'
     'defaults.R'
     'parser.R'
     'cache.R'
@@ -66,7 +67,6 @@ Collate:
     'block.R'
     'hooks.R'
     'utils.R'
-    'plot.R'
     'header.R'
     'themes.R'
     'eclipse.R'
