@@ -342,7 +342,12 @@ render_html = function() {
     function (x, options) sprintf('<div class="%s">%s</div>', name, x)
   }
   h = opts_knit$get('header')
-  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
+  if (!nzchar(h['highlight'])) {
+		# CSS for html syntax highlighting
+		.header.hi.html = paste(theme_to_header_html('default')$highlight, 
+		   collapse = '\n')
+		 set_header(highlight = .header.hi.html)
+	}
   z = list()
   for (i in c('source', 'output', 'warning', 'message', 'error'))
     z[[i]] = html.hook(i)

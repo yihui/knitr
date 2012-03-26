@@ -97,9 +97,3 @@ theme_to_header_html <- function(theme){
 	return(list(highlight = css))
 }
 
-# TODO: may want to move it back to header.R. currently theme_to_header_latex
-#       is not recognized in header.R probably because it is loaded first.
-
-
-# CSS for html syntax highlighting
-.header.hi.html = paste(theme_to_header_html('default')$highlight, collapse = '\n')
