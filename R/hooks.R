@@ -281,7 +281,12 @@ render_latex = function() {
   test_latex_pkg('framed', system.file('misc', 'framed.sty', package = 'knitr'))
   h = opts_knit$get('header')
   if (!nzchar(h['framed'])) set_header(framed = .header.framed)
-  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
+  if (!nzchar(h['highlight'])) {
+		# header for Latex Syntax Highlighting
+		.header.hi.tex = paste(theme_to_header_latex('edit-eclipse')$highlight, 
+		   collapse = '\n')
+		set_header(highlight = .header.hi.tex)
+	}
   knit_hooks$restore()
   knit_hooks$set(source = function(x, options) {
     if (options$highlight) {
