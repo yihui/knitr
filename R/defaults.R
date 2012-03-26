@@ -57,6 +57,19 @@ opts_chunk =
 #' @export
 opts_current = new_defaults()
 
+## a list of options attributes for RStudio
+opts_chunk_attr = (function() {
+  opts = lapply(opts_chunk$get(), class)
+  opts[opts == 'NULL'] = 'character'
+  opts$results = list('markup', 'asis', 'hide')
+  opts$fig.show = list('asis', 'hold', 'animate')
+  opts$fig.keep = list('high', 'none', 'all', 'first', 'last')
+  opts$fig.align = list('default', 'left', 'right', 'center')
+  opts$dev = as.list(names(auto_exts))
+  opts$fig.ext = as.list(unique(auto_exts))
+  opts
+})()
+
 #' All built-in patterns
 #'
 #' This object is a named list of all built-in patterns.

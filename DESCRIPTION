@@ -2,7 +2,7 @@ Package: knitr
 Type: Package
 Title: A general-purpose package for dynamic report
     generation in R
-Version: 0.4.1
+Version: 0.4.2
 Date: 2012-03-15
 Authors@R: c(person("Hadley", "Wickham", email = "hadley@rice.edu", role =
     "ctb"), person("Ramnath", "Vaidyanathan", role = "ctb"), person("Joseph",
@@ -58,6 +58,7 @@ BugReports: https://github.com/yihui/knitr/issues
 Collate:
     'package.R'
     'upload.R'
+    'plot.R'
     'defaults.R'
     'parser.R'
     'cache.R'
@@ -66,7 +67,6 @@ Collate:
     'block.R'
     'hooks.R'
     'utils.R'
-    'plot.R'
     'header.R'
     'themes.R'
     'eclipse.R'

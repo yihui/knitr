@@ -15,6 +15,8 @@ new_cache = function() {
   }
   
   cache_save = function(keys, hash) {
+    ## cache the random seed as well for reproducibility
+    if (exists('.Random.seed', envir = globalenv())) keys = c(keys, '.Random.seed')
     tools:::makeLazyLoadDB(globalenv(), cache_path(hash), variables = keys)
   }
 
@@ -38,6 +40,11 @@ new_cache = function() {
 
   cache_load = function(hash) {
     lazyLoad(cache_path(hash), envir = globalenv())
+    ## .Random.seed cannot be promise; must evaluate
+    if (exists('.Random.seed', envir = globalenv())) {
+      assign('.Random.seed', get('.Random.seed', envir = globalenv()),
+             envir = globalenv())
+    }
   }
 
   cache_library = function(path, save = TRUE) {

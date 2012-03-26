@@ -14,6 +14,8 @@ NEW FEATURES
 
   o the chunk option fig.cap is also used in markdown output now
 
+  o the random seed .Random.seed is also cached for the sake of
+  reprodubibility in random simulations
   
 			 CHANGES IN knitr VERSION 0.4
 

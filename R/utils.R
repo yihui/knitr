@@ -148,7 +148,7 @@ set_parent = function(parent) {
 
 ## whether to write results as-is?
 output_asis = function(x, options) {
-  is_blank(x) || options$results %in% c('tex', 'asis')
+  is_blank(x) || options$results == 'asis'
 }
 
 ## path relative to dir of the input file
@@ -206,6 +206,10 @@ fix_options = function(options) {
     }
   }
   if (any(idx <- options$dev == 'eps')) options$dev[idx] = 'postscript'
+  if (options$results == 'tex') {
+    warning("option 'results' was changed from 'tex' to 'asis'")
+    options$results = 'asis'
+  }
   
   ## compatibility with old version of knitr
   fig = options$fig
