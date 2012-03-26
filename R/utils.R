@@ -393,20 +393,3 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ...){
 run_chunk = function(label, envir = parent.frame()) {
   eval(parse(text = knit_code$get(label)), envir = envir)
 }
-
-knitup2pdf = function(input, output = NULL, compiler = NULL, ...){
-  out = knit(input, output)
-  owd = setwd(dirname(out)); on.exit(setwd(owd))
-  if (!is.null(compiler)) {
-    oc = Sys.getenv('PDFLATEX')
-    on.exit(Sys.setenv(PDFLATEX = oc), add = TRUE)
-    Sys.setenv(PDFLATEX = compiler)
-  }
-  fLine <- scan(file = input, what=character(), nlines =1)
-  if (fLine[length(fLine)-1] == "master:")   
-    master <- fLine[length(fLine)]
-  else
-    exit()
-  setwd(dirname(master))
-  texi2pdf(basename(master),  ...)
-}
