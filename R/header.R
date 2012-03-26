@@ -61,8 +61,3 @@ set_header = function(...) {
   opts_knit$set(header = h)
 }
 
-## many thanks to Donald Arseneau
-## COMMIT: move .header.framed to a style file of its own so that it can be  ##         included or copied directly to the tex file
-.knit.sty      <- system.file('misc', 'knitr.sty', package = 'knitr')  
-.header.framed <- paste(readLines(.knit.sty), collapse = "\n")
-
