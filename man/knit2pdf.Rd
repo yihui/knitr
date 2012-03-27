@@ -17,8 +17,6 @@ knit2pdf(input, output = NULL, compiler = NULL)
   \item{output}{path of the output file; if \code{NULL},
   this function will try to guess and it will be under the
   current working directory}
-  
-  \item{...}{options to be passed to texi2pdf.}
 }
 \description{
   Knit the input Rnw document to a tex document, and

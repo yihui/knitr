@@ -343,6 +343,7 @@ knit_env = function() {
 #'   compile the tex document to PDF (by default it uses the default setting of
 #'   \code{\link[tools]{texi2pdf}}, which is often PDFLaTeX); this argument will
 #'   be used to temporarily set the environmental variable \samp{PDFLATEX}
+#' @param ... options to be passed to \code{\link[tools]{texi2pdf}}
 #' @author Ramnath Vaidyanathan and Yihui Xie
 #' @export
 #' @importFrom tools texi2pdf
@@ -357,7 +358,7 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ...){
     on.exit(Sys.setenv(PDFLATEX = oc), add = TRUE)
     Sys.setenv(PDFLATEX = compiler)
   }
-  texi2pdf(basename(out), clean = TRUE, ...)
+  texi2pdf(basename(out), ...)
 }
 
 #' Run the code in a specified chunk
