@@ -9,3 +9,4 @@ inst/examples/ex-out*
 knitr-minimal.html
 knitr-latex.tex
 
+.Rproj.user
