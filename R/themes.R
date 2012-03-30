@@ -13,8 +13,9 @@ set_theme = function(theme) {
 }
 get_theme = function(theme = NULL) {
   if (is.null(theme)) {
-    f = list.files(system.file("themes", package = "knitr"), pattern = "\\.css$")
-    gsub("\\.css$", "", basename(f))
+    theme_dir = system.file("themes", package = "knitr")
+    theme_files = list.files(theme_dir,  pattern = "\\.css$")
+    gsub("\\.css$", "", basename(theme_files))
   } else {
     theme_to_header(theme)
   }
