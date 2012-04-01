@@ -71,3 +71,4 @@ Collate:
     'themes.R'
     'eclipse.R'
     'concordance.R'
+    'myhooks.R'
