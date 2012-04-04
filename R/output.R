@@ -173,7 +173,7 @@ process_file = function(path) {
   for (i in 1:n) {
     if (opts_knit$get('progress')) {
       setTxtProgressBar(pb, i)
-      if (!tangle) cat('\n')
+      if (!tangle) cat('\n')  # under tangle mode, only show one progress bar
       flush.console()
     }
     group = groups[[i]]
