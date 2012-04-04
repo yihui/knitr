@@ -238,6 +238,10 @@ process_tangle.block = function(x) {
     cmds = lapply(sc_split(params$child), knit_child)
     str_c(unlist(cmds), collapse = '\n')
   } else knit_code$get(label)
+  # read external code if exists
+  if (length(code) && str_detect(code, 'read_chunk\\(.+\\)')) {
+    eval(parse(text = unlist(str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
+  }
   label_code(parse_chunk(code), label)
 }
 process_tangle.inline = function(x) {
