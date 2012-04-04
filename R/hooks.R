@@ -24,6 +24,7 @@
 #' @seealso \code{\link{hook_plot_custom}}
 #' @export
 #' @examples ## this is what happens for a chunk like this
+#' 
 #' ## <<foo-bar-plot, dev='pdf', fig.align='right'>>=
 #' hook_plot_tex(c('foo-bar-plot', 'pdf'), opts_chunk$merge(list(fig.align='right')))
 #'
@@ -31,6 +32,7 @@
 #' hook_plot_tex(c('bar', 'tikz'), opts_chunk$merge(list(dev='tikz')))
 #'
 #' ## <<foo, dev='pdf', fig.show='animate', interval=.1>>=
+#' 
 #' ## 5 plots are generated in this chunk
 #' hook_plot_tex(c('foo5', 'pdf'), opts_chunk$merge(list(fig.show='animate',interval=.1,fig.cur=5, fig.num=5)))
 hook_plot_tex = function(x, options) {
