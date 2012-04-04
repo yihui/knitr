@@ -64,7 +64,7 @@ block_exec = function(params) {
       enc = Encoding(code)
       idx = enc != 'unknown'
       ## convert non-native enc
-      if (any(idx)) code[idx] = iconv(code[idx], enc[idx])
+      if (any(idx)) code[idx] = iconv(code[idx], enc[idx][1L])
     } else warning('failed to tidy R code in chunk <', options$label, '>\n',
                    'reason: ', res)
   }
