@@ -82,9 +82,9 @@ block_exec = function(params) {
   
   ## open a graphical device to record graphics
   dargs = formals(getOption('device'))  # is NULL in RStudio's GD
-  if (is.null(dargs) || !interactive()) {
-    pdf(file = NULL, width = options$fig.width, height = options$fig.height)
-  } else dev.new()
+  (if (is.null(dargs) || !interactive()) {
+    function(...) pdf(file = NULL, ...)
+  } else dev.new)(width = options$fig.width, height = options$fig.height)
   dv = dev.cur(); on.exit(dev.off(dv))
   
   keep = options$fig.keep
