@@ -105,8 +105,8 @@ purl(...)
 \examples{
 library(knitr)
 (f = tempfile(fileext = ".Rnw"))
-file.copy(system.file("examples", "knitr-minimal.Rnw", 
-    package = "knitr"), f, overwrite = TRUE)
+file.copy(system.file("examples", "knitr-minimal.Rnw", package = "knitr"), 
+    f, overwrite = TRUE)
 knit(f)
 ## or setwd(dirname(f)); knit(basename(f))
 

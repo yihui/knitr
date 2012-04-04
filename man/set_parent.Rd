@@ -37,9 +37,11 @@ set_parent(parent)
 \examples{
 ## can use, e.g. \\Sexpr{set_parent('parent_doc.Rnw')} or
 
-## <<setup-child, include=FALSE>>=
-## set_parent('parent_doc.Rnw')
-## @
+# <<setup-child, include=FALSE>>=
+
+# set_parent('parent_doc.Rnw')
+
+# @
 }
 \references{
   \url{http://yihui.name/knitr/demo/child/}

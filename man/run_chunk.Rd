@@ -35,16 +35,16 @@ run_chunk(label, envir = parent.frame())
   evaluated.
 }
 \examples{
-## In Sweave we use chunk reference like this
-# <<a>>=
-# 1+1
-# @
-# <<b>>=
-# <<a>>
-# @
+\dontrun{## In Sweave we use chunk reference like this
+<<a>>=
+1+1
+@
+<<b>>=
+<<a>>
+@
 
 ## In knitr, we can use the same, or
-# <<b>>=
-# run_chunk('a')
-# @
+<<b>>=
+run_chunk('a')
+@}
 }

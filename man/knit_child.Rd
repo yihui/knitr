@@ -44,15 +44,13 @@ knit_child(..., eval = TRUE)
   indirectly.
 }
 \examples{
-## you can write \\Sexpr{knit_child('child-doc.Rnw')} in
-#   an Rnw file 'main.Rnw' to input child-doc.tex in
-#   main.tex
+## you can write \\Sexpr{knit_child('child-doc.Rnw')} in an Rnw file
+## 'main.Rnw' to input child-doc.tex in main.tex
 
-## comment out the child doc by
-#   \\Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
+## comment out the child doc by \\Sexpr{knit_child('child-doc.Rnw', eval =
+## FALSE)}
 
-## use \\include: opts_knit$set(child.command =
-#   'include')
+## use \\include: opts_knit$set(child.command = 'include')
 }
 \references{
   \url{http://yihui.name/knitr/demo/child/}

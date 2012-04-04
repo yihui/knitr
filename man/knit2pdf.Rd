@@ -2,7 +2,7 @@
 \alias{knit2pdf}
 \title{Convert Rnw to PDF using knit and texi2pdf}
 \usage{
-knit2pdf(input, output = NULL, compiler = NULL)
+knit2pdf(input, output = NULL, compiler = NULL, ...)
 }
 \arguments{
   \item{compiler}{a character string which gives the LaTeX
@@ -11,6 +11,9 @@ knit2pdf(input, output = NULL, compiler = NULL)
   \code{\link[tools]{texi2pdf}}, which is often PDFLaTeX);
   this argument will be used to temporarily set the
   environmental variable \samp{PDFLATEX}}
+
+  \item{...}{options to be passed to
+  \code{\link[tools]{texi2pdf}}}
 
   \item{input}{path of the input file}
 
@@ -24,6 +27,7 @@ knit2pdf(input, output = NULL, compiler = NULL)
 }
 \examples{
 ## compile with xelatex
+
 ## knit2pdf(..., compiler = 'xelatex')
 }
 \author{
