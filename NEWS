@@ -16,6 +16,9 @@ NEW FEATURES
 
   o the random seed .Random.seed is also cached for the sake of
   reprodubibility in random simulations
+
+  o the function call read_chunk() will be evaluated when tangling R
+  code via purl() (#175) (thanks, Carl Boettiger)
   
 			 CHANGES IN knitr VERSION 0.4
 
