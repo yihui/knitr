@@ -124,7 +124,7 @@ valid_opts = function(options) {
   nms = setdiff(names(options), c('', 'label'))
   if (!length(nms)) return(TRUE)
   ## not a rigorous check; you should go to the new syntax finally!
-  chk = c('results', 'fig.keep', 'fig.show', 'dev', 'out.width', 'out.height', 
+  chk = c('results', 'fig.keep', 'fig.show', 'dev', 'out.width', 'out.height', 'prefix.string',
           'fig.align', 'fig.path', 'cache.path', 'ref.label', 'child', 'dependson')
   for (o in intersect(chk, nms)) {
     if (!is.null(options[[o]]) && !is.character(options[[o]])) {
