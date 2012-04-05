@@ -114,7 +114,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     if (!is_abs_path(input))
       input = file.path(input_dir(), opts_knit$get('child.path'), input)
   }
-  if (normal.input) opts_knit$set(input.dir = dirname(input)) # record working dir
+  if (normal.input) opts_knit$set(input.dir = dirname(input)) # record input dir
   
   if (is.null(opts_knit$get('out.format'))) {
     fmt = switch(ext, rnw = 'latex', tex = 'latex', html = 'html', md = 'jekyll',
