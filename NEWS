@@ -19,6 +19,13 @@ NEW FEATURES
 
   o the function call read_chunk() will be evaluated when tangling R
   code via purl() (#175) (thanks, Carl Boettiger)
+
+MAJOR CHANGES
+
+  o knitr will completely stop when duplicated labels are found and
+  the corresponding chunks are non-empty; in previous version, only a
+  warning is given and R code in later chunks will override previous
+  chunks (#185) (thanks, Randall Pruim)
   
 			 CHANGES IN knitr VERSION 0.4
 
