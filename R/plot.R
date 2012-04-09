@@ -81,7 +81,8 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
                                xetex = getOption("tikzXelatexPackages"))
                       tikzDevice::tikz(..., sanitize = options$sanitize,
                                        standAlone = options$external,
-                                       packages = c('\n', packages, .knitEnv$tikzPackages))
+                                       packages = c('\n\\nonstopmode\n', packages, 
+                                                    .knitEnv$tikzPackages))
                     } else {
                       stop("package 'tikzDevice' not available (has to be installed)",
                            call. = FALSE)
