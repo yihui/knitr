@@ -217,7 +217,7 @@ default to highlight R code, and \textbf{formatR} \citep{formatR-manual}
 is used to reformat R code (like \texttt{keep.source=FALSE} in Sweave
 but will also try to retain comments). For \LaTeX{} output, the \textbf{framed}
 package is used to decorate code chunks with a light gray background.
-It this \LaTeX{} package is not found in the system, a version will
+If this \LaTeX{} package is not found in the system, a version will
 be copied directly from \textbf{knitr}. The prompt characters are
 removed by default because they mangle the R source code in the output
 and make it difficult to copy R code. The R output is masked in comments

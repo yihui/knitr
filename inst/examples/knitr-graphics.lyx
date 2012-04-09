@@ -111,7 +111,7 @@ status open
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE,width=80)
+options(replace.assign=TRUE,width=60)
 \end_layout
 
 \begin_layout Plain Layout
@@ -167,8 +167,8 @@ Sexpr{packageVersion('knitr')}
 \end_inset
 
 ) in detail, including the graphical devices, plot recording, plot rearrangement
-, control of plot sizes, the tikz device, animations and other types of
- plots such as 
+, control of plot sizes, the tikz device, figure captions, animations and
+ other types of plots such as 
 \series bold
 rgl
 \series default
@@ -437,62 +437,6 @@ linewidth', echo=FALSE>>=
 
 \end_layout
 
-\begin_layout Standard
-Finally we show an example of 
-\emph on
-cairo_pdf()
-\emph default
- (in base R) with some multi-byte characters (say hello in Chinese):
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-<<cairo-pdf-dev, dev='cairo_pdf', fig.width=8, fig.height=2, out.width='.8
-\backslash
-
-\backslash
-linewidth', warning=FALSE, tidy=FALSE, echo=FALSE>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-par(mar=c(2,2,.1,.1),las=1)
-\end_layout
-
-\begin_layout Plain Layout
-
-plot(1,type='n',ann=FALSE)
-\end_layout
-
-\begin_layout Plain Layout
-
-text(1,1,'
-\backslash
-u55E8
-\backslash
-uFF0C
-\backslash
-u4F60
-\backslash
-u597D
-\backslash
-u5417',cex=4) # hello
-\end_layout
-
-\begin_layout Plain Layout
-
-@
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Section
 Plot Recording
 \end_layout
@@ -564,7 +508,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<two-high, fig.width=3, fig.height=2, out.width='.49
+<<two-high, fig.width=3, fig.height=2.5, out.width='.49
 \backslash
 
 \backslash
@@ -674,7 +618,7 @@ plot(0,0,type='n',ann=FALSE)
 
 \begin_layout Plain Layout
 
-for(i in seq(0, 2*pi,length=20)) points(cos(i),sin(i))
+for(i in seq(0, 2*pi,length=20)) {points(cos(i),sin(i))}
 \end_layout
 
 \begin_layout Plain Layout
@@ -743,7 +687,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<high-with-low, fig.width=3, fig.height=2, out.width='.5
+<<high-with-low, fig.width=3, fig.height=2.5, out.width='.5
 \backslash
 
 \backslash
@@ -1230,7 +1174,14 @@ The tikz Device
 The main advantage of using tikz graphics is the consistency of styles between
  texts in plots and those in the main document.
  Since we can use native LaTeX commands in plots, the styles of texts in
- plots can be very sophisticated.
+ plots can be very sophisticated (see Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:math-formula-tt"
+
+\end_inset
+
+ for an example).
 \end_layout
 
 \begin_layout Standard
@@ -1336,6 +1287,13 @@ tikzDevice
 lm(y ~ x)
 \family default
 .
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:math-formula-tt"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1550,7 +1508,25 @@ knit_hooks$set(crop=hook_pdfcrop)
 
 \begin_layout Standard
 Now we compare two plots below.
- The first one is not cropped:
+ The first one is not cropped (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:pdf-nocrop"
+
+\end_inset
+
+); then the same plot is produced but with a chunk option 
+\family typewriter
+crop=TRUE
+\family default
+ which will call the cropping hook (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:pdf-crop"
+
+\end_inset
+
+).
 \end_layout
 
 \begin_layout Standard
@@ -1611,7 +1587,9 @@ end{kframe}
 
 \begin_layout Plain Layout
 The original plot produced in R, with a large margin.
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:pdf-nocrop"
 
 \end_inset
 
@@ -1623,12 +1601,9 @@ The original plot produced in R, with a large margin.
 
 \end_layout
 
-\begin_layout Standard
-Then the same plot is produced but with a chunk option 
-\family typewriter
-crop=TRUE
-\family default
- which will call the cropping hook:
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1680,6 +1655,13 @@ end{kframe}
 
 \begin_layout Plain Layout
 The cropped plot; it fits better in the document.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:pdf-crop"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset

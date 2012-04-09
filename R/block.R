@@ -64,7 +64,7 @@ block_exec = function(params) {
       enc = Encoding(code)
       idx = enc != 'unknown'
       ## convert non-native enc
-      if (any(idx)) code[idx] = iconv(code[idx], enc[idx])
+      if (any(idx)) code[idx] = iconv(code[idx], enc[idx][1L])
     } else warning('failed to tidy R code in chunk <', options$label, '>\n',
                    'reason: ', res)
   }
@@ -82,9 +82,9 @@ block_exec = function(params) {
   
   ## open a graphical device to record graphics
   dargs = formals(getOption('device'))  # is NULL in RStudio's GD
-  if (is.null(dargs) || !interactive()) {
-    pdf(file = NULL, width = options$fig.width, height = options$fig.height)
-  } else dev.new()
+  (if (is.null(dargs) || !interactive()) {
+    function(...) pdf(file = NULL, ...)
+  } else dev.new)(width = options$fig.width, height = options$fig.height)
   dv = dev.cur(); on.exit(dev.off(dv))
   
   keep = options$fig.keep
@@ -238,6 +238,10 @@ process_tangle.block = function(x) {
     cmds = lapply(sc_split(params$child), knit_child)
     str_c(unlist(cmds), collapse = '\n')
   } else knit_code$get(label)
+  # read external code if exists
+  if (length(code) && str_detect(code, 'read_chunk\\(.+\\)')) {
+    eval(parse(text = unlist(str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
+  }
   label_code(parse_chunk(code), label)
 }
 process_tangle.inline = function(x) {

@@ -2,8 +2,8 @@
 \alias{stitch}
 \title{Automatically create a report based on an R script and a template}
 \usage{
-stitch(script, template = system.file("misc", "knitr-template.Rnw", 
-    package = "knitr"), output = NULL)
+stitch(script, template = system.file("misc", "knitr-template.Rnw", package = "knitr"), 
+    output = NULL)
 }
 \arguments{
   \item{script}{path to the R script}
@@ -38,7 +38,6 @@ stitch(s)
 }
 
 ## HTML report
-out = stitch(s, system.file("misc", "knitr-minimal_knit_.html", 
-    package = "knitr"))
+out = stitch(s, system.file("misc", "knitr-minimal_knit_.html", package = "knitr"))
 if (interactive()) browseURL(out)
 }

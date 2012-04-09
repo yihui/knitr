@@ -56,7 +56,7 @@ parse_block = function(input) {
   label = params$label
   code = block[-1L]
   if (length(code)) {
-    if (label %in% names(knit_code$get())) warning("duplicated label '", label, "'")
+    if (label %in% names(knit_code$get())) stop("duplicated label '", label, "'")
     knit_code$set(structure(list(code), .Names = label))
   }
   
@@ -124,7 +124,7 @@ valid_opts = function(options) {
   nms = setdiff(names(options), c('', 'label'))
   if (!length(nms)) return(TRUE)
   ## not a rigorous check; you should go to the new syntax finally!
-  chk = c('results', 'fig.keep', 'fig.show', 'dev', 'out.width', 'out.height', 
+  chk = c('results', 'fig.keep', 'fig.show', 'dev', 'out.width', 'out.height', 'prefix.string',
           'fig.align', 'fig.path', 'cache.path', 'ref.label', 'child', 'dependson')
   for (o in intersect(chk, nms)) {
     if (!is.null(options[[o]]) && !is.character(options[[o]])) {

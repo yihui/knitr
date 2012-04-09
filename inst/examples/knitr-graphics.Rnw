@@ -33,7 +33,7 @@
 % \SweaveOpts{fig.path='figure/graphics-', cache.path='cache/graphics-', fig.align='center', dev='tikz', fig.width=5, fig.height=5, fig.show='hold', cache=TRUE, par=TRUE}
 
 <<setup, include=FALSE, cache=FALSE>>=
-options(replace.assign=TRUE,width=80)
+options(replace.assign=TRUE,width=60)
 knit_hooks$set(par=function(before, options, envir){
 if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
 }, crop=hook_pdfcrop)
@@ -44,8 +44,8 @@ if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axi
 This manual shows features of graphics in the \textbf{knitr} package
 (version \Sexpr{packageVersion('knitr')}) in detail, including the
 graphical devices, plot recording, plot rearrangement, control of
-plot sizes, the tikz device, animations and other types of plots such
-as \textbf{rgl} or GGobi plots.
+plot sizes, the tikz device, figure captions, animations and other
+types of plots such as \textbf{rgl} or GGobi plots.
 \end{abstract}
 Before reading this specific manual%
 \footnote{\url{http://bit.ly/knitr-graphics-src} (Rnw source)%
@@ -93,15 +93,6 @@ package.
 <<cairo-png-dev, ref.label='test-plot', dev='Cairo_png', out.width='.5\\linewidth', echo=FALSE>>=
 @
 
-Finally we show an example of \emph{cairo\_pdf()} (in base R) with
-some multi-byte characters (say hello in Chinese):
-
-<<cairo-pdf-dev, dev='cairo_pdf', fig.width=8, fig.height=2, out.width='.8\\linewidth', warning=FALSE, tidy=FALSE, echo=FALSE>>=
-par(mar=c(2,2,.1,.1),las=1)
-plot(1,type='n',ann=FALSE)
-text(1,1,'\u55E8\uFF0C\u4F60\u597D\u5417',cex=4) # hello
-@
-
 
 \section{Plot Recording}
 
@@ -116,7 +107,7 @@ is also saved. To speed up recording, the null graphical device \texttt{pdf(file
 producing two high-level plots.
 
 \begin{figure}
-<<two-high, fig.width=3, fig.height=2, out.width='.49\\linewidth'>>=
+<<two-high, fig.width=3, fig.height=2.5, out.width='.49\\linewidth'>>=
 plot(cars)
 boxplot(cars$dist,xlab='dist')
 @
@@ -138,7 +129,7 @@ them with the option \texttt{fig.keep='all'}.
 \begin{figure}
 <<low-plot-loop, fig.width=3, fig.height=2.5, out.width='.49\\linewidth', fig.keep='all'>>=
 plot(0,0,type='n',ann=FALSE)
-for(i in seq(0, 2*pi,length=20)) points(cos(i),sin(i))
+for(i in seq(0, 2*pi,length=20)) {points(cos(i),sin(i))}
 @
 
 \caption{Two complete R expressions will produce at most two plots, as long
@@ -151,7 +142,7 @@ Together with \texttt{fig.show='asis'}, we can show the process of
 plotting step by step like Figure \ref{fig:high-with-low}.
 
 \begin{figure}
-<<high-with-low, fig.width=3, fig.height=2, out.width='.5\\linewidth', fig.keep='all', fig.show='asis'>>=
+<<high-with-low, fig.width=3, fig.height=2.5, out.width='.5\\linewidth', fig.keep='all', fig.show='asis'>>=
 plot(cars)
 abline(lm(dist~speed, data=cars))  # a regression line
 @
@@ -260,7 +251,8 @@ to control the size of plots in the output document.
 The main advantage of using tikz graphics is the consistency of styles
 between texts in plots and those in the main document. Since we can
 use native \LaTeX{} commands in plots, the styles of texts in plots
-can be very sophisticated.
+can be very sophisticated (see Figure \ref{fig:math-formula-tt} for
+an example).
 
 \begin{figure}
 <<math-formula-tt, fig.width=6, fig.height=2, out.width='\\linewidth'>>=
@@ -271,7 +263,7 @@ text(.5,c(.8,.5,.2), c('\\texttt{lm(y \\textasciitilde{} x)}', '$\\hat{\\beta}=(
 \caption{A plot created by \textbf{tikzDevice} with math expressions and typewriter
 fonts. Note the font style consistency -- we write the same expressions
 in \protect\LaTeX{} here: $\hat{\beta}=(X^{\prime}X)^{-1}X^{\prime}y$ and
-$(\Omega,\mathcal{F},\mu)$; also \texttt{lm(y \textasciitilde{} x)}.}
+$(\Omega,\mathcal{F},\mu)$; also \texttt{lm(y \textasciitilde{} x)}.\label{fig:math-formula-tt}}
 \end{figure}
 
 
@@ -325,7 +317,10 @@ to work with a chunk option, say, \texttt{crop}.
 knit_hooks$set(crop=hook_pdfcrop)
 @
 
-Now we compare two plots below. The first one is not cropped:
+Now we compare two plots below. The first one is not cropped (Figure
+\ref{fig:pdf-nocrop}); then the same plot is produced but with a
+chunk option \texttt{crop=TRUE} which will call the cropping hook
+(Figure \ref{fig:pdf-crop}).
 
 \begin{figure}
 \begin{kframe}
@@ -335,12 +330,9 @@ plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
 @
 \end{kframe}
 
-\caption{The original plot produced in R, with a large margin.}
+\caption{The original plot produced in R, with a large margin.\label{fig:pdf-nocrop}}
 \end{figure}
 
-
-Then the same plot is produced but with a chunk option \texttt{crop=TRUE}
-which will call the cropping hook:
 
 \begin{figure}
 \begin{kframe}
@@ -348,7 +340,7 @@ which will call the cropping hook:
 @
 \end{kframe}
 
-\caption{The cropped plot; it fits better in the document.}
+\caption{The cropped plot; it fits better in the document.\label{fig:pdf-crop}}
 \end{figure}
 
 

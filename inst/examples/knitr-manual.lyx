@@ -862,7 +862,7 @@ keep.source=FALSE
 framed
 \series default
  package is used to decorate code chunks with a light gray background.
- It this LaTeX package is not found in the system, a version will be copied
+ If this LaTeX package is not found in the system, a version will be copied
  directly from 
 \series bold
 knitr

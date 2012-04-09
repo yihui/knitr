@@ -136,9 +136,11 @@ pure_preamble = function(preamble) {
 #' @export
 #' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
 #'
-#' ## <<setup-child, include=FALSE>>=
-#' ## set_parent('parent_doc.Rnw')
-#' ## @@
+#' # <<setup-child, include=FALSE>>=
+#' 
+#' # set_parent('parent_doc.Rnw')
+#' 
+#' # @@
 set_parent = function(parent) {
   if (child_mode()) return() # quit if in child mode
   opts_knit$set(parent = TRUE)
@@ -347,13 +349,15 @@ knit_env = function() {
 #'   compile the tex document to PDF (by default it uses the default setting of
 #'   \code{\link[tools]{texi2pdf}}, which is often PDFLaTeX); this argument will
 #'   be used to temporarily set the environmental variable \samp{PDFLATEX}
+#' @param ... options to be passed to \code{\link[tools]{texi2pdf}}
 #' @author Ramnath Vaidyanathan and Yihui Xie
 #' @export
 #' @importFrom tools texi2pdf
 #' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}}
 #' @examples ## compile with xelatex
+#' 
 #' ## knit2pdf(..., compiler = 'xelatex')
-knit2pdf = function(input, output = NULL, compiler = NULL){
+knit2pdf = function(input, output = NULL, compiler = NULL, ...){
   out = knit(input, output)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (!is.null(compiler)) {
@@ -361,7 +365,7 @@ knit2pdf = function(input, output = NULL, compiler = NULL){
     on.exit(Sys.setenv(PDFLATEX = oc), add = TRUE)
     Sys.setenv(PDFLATEX = compiler)
   }
-  texi2pdf(basename(out), clean = TRUE)
+  texi2pdf(basename(out), ...)
 }
 
 #' Run the code in a specified chunk
@@ -382,18 +386,18 @@ knit2pdf = function(input, output = NULL, compiler = NULL){
 #'   contains a reference to \samp{chunk3}, then if we run \samp{chunk1}, both
 #'   the code in \samp{chunk2} and \samp{chunk3} will be evaluated.
 #' @export
-#' @examples ## In Sweave we use chunk reference like this
-#' # <<a>>=
-#' # 1+1
-#' # @@
-#' # <<b>>=
-#' # <<a>>
-#' # @@
+#' @examples \dontrun{## In Sweave we use chunk reference like this
+#' <<a>>=
+#' 1+1
+#' @@
+#' <<b>>=
+#' <<a>>
+#' @@
 #'
 #' ## In knitr, we can use the same, or
-#' # <<b>>=
-#' # run_chunk('a')
-#' # @@
+#' <<b>>=
+#' run_chunk('a')
+#' @@}
 run_chunk = function(label, envir = parent.frame()) {
   eval(parse(text = knit_code$get(label)), envir = envir)
 }
