@@ -26,7 +26,13 @@ MAJOR CHANGES
   the corresponding chunks are non-empty; in previous version, only a
   warning is given and R code in later chunks will override previous
   chunks (#185) (thanks, Randall Pruim)
-  
+
+BUG FIXES
+
+  o the compilation of tikz graphics can hang up when there are TeX
+  errors in the tikz file; now we use \nonstopmode to avoid hiccup
+  (#188)
+
 			 CHANGES IN knitr VERSION 0.4
 
 NEW FEATURES
