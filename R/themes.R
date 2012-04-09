@@ -93,8 +93,7 @@ theme_to_header_html <- function(theme){
 	css_knitr_lines <- readLines(css_knitr)
 	css_knitr_lines  <-  sub('^([[:space:]]+background-color:\\s+)(.*)$', 
 	  sprintf('\\1%s;', bgcolor), css_knitr_lines)
-	css <- c('<style type="text/css">', css_knitr_lines, readLines(css_file), 
-		'</style>')
+	css <- c(css_knitr_lines, readLines(css_file))
 	return(list(highlight = css))
 }
 
