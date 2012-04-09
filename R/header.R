@@ -1,27 +1,66 @@
-## x is the output of processed document
-insert_header = function(x) {
-  if (is.null(b <- knit_patterns$get('header.begin'))) return(x)
-  h = opts_knit$get('header')
-  i = which(str_detect(x, b))
-  if (length(i) == 1L) {
-    fmt = opts_knit$get('out.format')
-    if (fmt %in% c('markdown', 'gfm', 'jekyll')) return(x)
-    if (identical('latex', fmt))
-      h = c('\\usepackage{graphicx, color}', h)
-    if (identical('html', fmt))
-      h = h['highlight']
-    h = h[nzchar(h)]; if (length(h) == 0) h = ''
-    loc = str_locate(x[i], b)
-    str_sub(x[i], loc[, 1], loc[, 2]) =
-      str_c(str_sub(x[i], loc[, 1], loc[, 2]), '\n', str_c(h, collapse = '\n'))
-  } else if (length(i) == 0L) {
-    if (parent_mode()) {
-      h = c('\\usepackage{graphicx, color}', h)
-      x = c(getOption('tikzDocumentDeclaration'), str_c(h, collapse = '\n'),
-            .knitEnv$tikzPackages, '\\begin{document}', x, '\\end{document}')
-    }
-  }
-  x
+## doc is the output of processed document
+insert_header <- function(doc){
+	fmt = opts_knit$get('out.format')
+	switch(fmt, 
+		html  = insert_header_html(doc), 
+		latex = insert_header_latex(doc),
+		doc
+	)
+}
+
+## Makes latex header with macros required for highlighting, tikz and framed
+make_header_latex <- function(){
+	h <- "\\usepackage{graphicx, color}"
+	h <- paste(c(h, opts_knit$get('header')), collapse = "\n")
+	if (opts_knit$get('self.contained')){
+		return(h)
+	} else {
+		writeLines(h, 'knitr.sty')
+		return('\\usepackage{knitr}')
+	}
+}
+
+insert_header_latex <- function(doc){
+	# TODO: is this really required since b will never be NULL for latex.
+	if (is.null(b <- knit_patterns$get('header.begin'))){
+		return(doc)
+	}
+	h   <- make_header_latex()
+	i   <- which(str_detect(doc, b))
+	l   <- str_locate(doc[i], b)
+	if (length(i) == 1L){
+		tmp <- str_sub(doc[i], l[, 1], l[, 2])
+		str_sub(doc[i], l[,1], l[,2]) <- str_c(tmp, "\n", h)
+	} else if (length(i) == 0L) {
+		doc <- str_c(getOption('tikzDocumentDeclaration'), h, .knitEnv$packages,
+			"\\begin{document}", doc, "\\end{document}")
+	}
+	return(doc)
+}
+
+make_header_html <- function(){
+	h <- opts_knit$get('header')[['highlight']]
+	if (opts_knit$get('self.contained')){
+		h <- str_c('<style type="text/css">', h, '</style>', collapse = "\n")
+		return(h)
+	} else {
+		writeLines(h, 'knitr.css')
+		return('<link rel="stylesheet" href="knitr.css" type="text/css" />')
+	}
+}
+
+insert_header_html <- function(doc){
+	if (is.null(b <- knit_patterns$get('header.begin'))){
+		return(doc)
+	}
+	h <- make_header_html()
+	i <- which(str_detect(doc, b))
+	l <- str_locate(doc[i], b)
+	if (length(i) == 1L){
+		tmp <- str_sub(doc[i], l[, 1], l[, 2])
+		str_sub(doc[i], l[,1], l[,2]) <- str_c(tmp, "\n", h)
+	}
+	return(doc)
 }
 
 #' Set the header information
