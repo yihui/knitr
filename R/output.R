@@ -84,15 +84,28 @@
 #'
 #' purl(f)  # extract R code only
 knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
-  if (is.character(text)) {
-    input = tempfile(); writeLines(text, con = input)
+
+  in.file = !missing(input) && is.character(input)  # is a file input
+  if (child_mode()) {
+    setwd(opts_knit$get('output.dir')) # always restore original working dir
+    ## in child mode, input path needs to be adjusted
+    if (in.file && !is_abs_path(input))
+      input = file.path(input_dir(), opts_knit$get('child.path'), input)
+  } else opts_knit$set(output.dir = getwd()) # record working directory in 1st run
+
+  ext = 'unknown'
+  if (in.file) {
+    opts_knit$set(input.dir = dirname(input)) # record input dir
+    if (is.null(output)) output = basename(auto_out_name(input))
+    ext = tolower(file_ext(input))
+    options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
   }
-  normal.input = is.character(input)
+
+  text = if (is.null(text)) readLines(input, warn = FALSE) else {
+    unlist(strsplit(text, '\n', fixed = TRUE)) # make sure each element is one line
+  }
+
   opts_knit$set(tangle = tangle)
-  if (is.null(output)) {
-    output = basename(auto_out_name(input))
-  }
-  ext = if (normal.input) tolower(file_ext(input)) else 'unknown'
   apat = opts_knit$get('all.patterns')
   optc = opts_chunk$get()
   on.exit({opts_chunk$restore(); opts_chunk$set(optc)}, add = TRUE)
@@ -107,16 +120,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     knit_patterns$restore()
     knit_patterns$set(apat[[pattern]])
   }
-  
+
   optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
-  if (child_mode()) {
-    setwd(opts_knit$get('output.dir')) # always restore original working dir
-    ## in child mode, input path needs to be adjusted
-    if (!is_abs_path(input))
-      input = file.path(input_dir(), opts_knit$get('child.path'), input)
-  } else opts_knit$set(output.dir = getwd()) # record working directory in 1st run
-  if (normal.input) opts_knit$set(input.dir = dirname(input)) # record input dir
-  
+
   if (is.null(opts_knit$get('out.format'))) {
     fmt = switch(ext, rnw = 'latex', tex = 'latex', html = 'html', md = 'jekyll',
                  brew = 'brew', {warning('cannot automatically decide the output format');
@@ -134,24 +140,23 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
   }
 
   on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
-  ## for tikz graphics (cache the dictionary); turn off fancy quotes
-  oopts = options(tikzMetricsDictionary = tikz_dict(input, normal.input), 
-                  useFancyQuotes = FALSE, digits = 4L, width = 75L, warn = 1L)
+  ## turn off fancy quotes, use smaller digits/width, warn immediately
+  oopts = options(useFancyQuotes = FALSE, digits = 4L, width = 75L, warn = 1L)
   on.exit(options(oopts), add = TRUE)
-  
+
   progress = opts_knit$get('progress')
-  if (normal.input) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
-  res = process_file(input)
+  if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
+  res = process_file(text)
   unlink('NA')  # temp fix to issue 94
-  cat(res, file = output)
+  cat(res, file = if (is.null(output)) '' else output)
   dep_list$restore()  # empty dependency list
-  
-  if (is.character(output) && file.exists(output)) {
+
+  if (in.file && is.character(output) && file.exists(output)) {
     concord_gen(input, output)  # concordance file
     message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
   }
-  
-  invisible(output)
+
+  invisible(if (is.null(output)) res else output)
 }
 #' @rdname knit
 #' @param ... arguments passed to \code{\link{knit}}
@@ -160,10 +165,10 @@ purl = function(...) {
   knit(..., tangle = TRUE)
 }
 
-process_file = function(path) {
+process_file = function(text) {
   ocode = knit_code$get()
   on.exit({knit_code$restore(); knit_code$set(ocode)}, add = TRUE)
-  groups = split_file(path)
+  groups = split_file(lines = text)
   n = length(groups); res = character(n)
   tangle = opts_knit$get('tangle')
   
