@@ -1,42 +1,42 @@
 #' Knit a document
-#' 
+#'
 #' This function takes an input file, extracts the R code in it according to a
 #' list of patterns, evaluates the code and writes the output in another file.
 #' It can also tangle R source code from the input document (\code{purl()} is a
 #' wrapper to \code{knit(..., tangle = TRUE)}).
-#' 
+#'
 #' For most of the time, it is not necessary to set any options outside the
-#' input document; in other words, a single call like 
+#' input document; in other words, a single call like
 #' \code{knit('my_input.Rnw')} is usually enough. This function will try to
 #' determine many internal settings automatically. For the sake of
 #' reproducibility, it is a better practice to include the options inside the
 #' input document (to be self-contained), instead of setting them before
 #' knitting the document.
-#' 
+#'
 #' First the filename of the output document is determined in this way:
 #' \file{foo.Rnw} generates \file{foo.tex}, and for other types of files, the
 #' file extension is reserved; if the filename contains \samp{_knit_}, this part
 #' will be removed in the output file, e.g., \file{foo_knit_.html} creates the
 #' output \file{foo.html}, so you can use files named in this way as templates;
-#' if \samp{_knit_} is not found in the filename, \file{foo.ext} will produce 
+#' if \samp{_knit_} is not found in the filename, \file{foo.ext} will produce
 #' \file{foo-out.ext}. If \code{tangle = TRUE}, \file{foo.ext} generates an R
 #' script \file{foo.R}.
-#' 
+#'
 #' Based on the file extension of the input document, a list of patterns will be
 #' used to extract R code in the document. All built-in pattern lists can be
 #' found in \code{opts_knit$get('all.patterns')} (call it \code{apat}).
 #' \samp{Rnw} files use the list \code{apat$rnw}, \samp{tex} uses the list
 #' \code{apat$tex}, \samp{brew} uses \code{apat$brew} and HTML-like files use
 #' \code{apat$html} (e.g. \samp{html} and \samp{md} files). You can manually set
-#' the pattern list using the \code{\link{knit_patterns}} object, and 
+#' the pattern list using the \code{\link{knit_patterns}} object, and
 #' \pkg{knitr} will respect the setting.
-#' 
+#'
 #' According to the output format (\code{opts_knit$get('out.format')}), a set of
-#' output hooks will be set to mark up results from R (see 
+#' output hooks will be set to mark up results from R (see
 #' \code{\link{render_latex}}). The output format can be LaTeX, Sweave and HTML,
 #' etc. The output hooks decide how to mark up the results (you can customize
 #' the hooks).
-#' 
+#'
 #' See the package website and manuals in the references to know more about
 #' \pkg{knitr}, including the full documentation of chunk options and demos,
 #' etc.
@@ -52,17 +52,17 @@
 #' @note The name \code{knit} comes from its counterpart \samp{weave} (as in
 #'   Sweave), and the name \code{purl} (as \samp{tangle} in Stangle) comes from
 #'   a knitting method `knit one, purl one'.
-#'   
+#'
 #'   If the input document has child documents, they will also be compiled
 #'   recursively. See \code{\link{knit_child}}.
-#'   
+#'
 #'   The working directory when evaluating R code chunks is the directory of the
 #'   input document, so if the R code involves with external files (like
 #'   \code{read.table()}), it is better to put these files under the same
 #'   directory of the input document so that we can use relative paths.
-#'   
+#'
 #'   The arguments \code{input} and \code{output} do not have to be restricted
-#'   to files; they can be \code{stdin()}/\code{stdout()} or other types of 
+#'   to files; they can be \code{stdin()}/\code{stdout()} or other types of
 #'   connections, but the pattern list to read the input has to be set in
 #'   advance (see \code{\link{pat_rnw}}), and the output hooks should also be
 #'   set (see \code{\link{render_latex}}), otherwise \pkg{knitr} will try to
@@ -70,11 +70,11 @@
 #' @export
 #' @references Package homepage: \url{http://yihui.name/knitr/}
 #'
-#' The \pkg{knitr} main manual:
-#' \url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}
+#'   The \pkg{knitr} main manual:
+#'   \url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}
 #'
-#' The \pkg{knitr} graphics manual:
-#' \url{https://github.com/downloads/yihui/knitr/knitr-graphics.pdf}
+#'   The \pkg{knitr} graphics manual:
+#'   \url{https://github.com/downloads/yihui/knitr/knitr-graphics.pdf}
 #' @examples library(knitr)
 #' (f = tempfile(fileext = '.Rnw'))
 #' file.copy(system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'),
@@ -132,9 +132,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
   }
   ## change output hooks only if they are not set beforehand
   if (identical(knit_hooks$get(names(.default.hooks)), .default.hooks)) {
-    switch(opts_knit$get('out.format'), latex = render_latex(), 
+    switch(opts_knit$get('out.format'), latex = render_latex(),
            sweave = render_sweave(), listings = render_listings(),
-           html = render_html(), jekyll = render_jekyll(), 
+           html = render_html(), jekyll = render_jekyll(),
            markdown = render_markdown(), gfm = render_gfm())
     on.exit(knit_hooks$restore(), add = TRUE)
   }
@@ -171,7 +171,7 @@ process_file = function(text) {
   groups = split_file(lines = text)
   n = length(groups); res = character(n)
   tangle = opts_knit$get('tangle')
-  
+
   if (opts_knit$get('progress')) {
     pb = txtProgressBar(0, n, char = '>', style = 3)
     on.exit(close(pb), add = TRUE)
@@ -192,10 +192,10 @@ process_file = function(text) {
     }
     res[i] = txt
   }
-  
+
   if (!tangle) res = insert_header(res)  # insert header
   concord_output(n = str_count(res, fixed('\n')) + 1L)  # output line numbers
-  
+
   str_c(c(res, ""), collapse = "\n")
 }
 
@@ -214,20 +214,20 @@ auto_out_name = function(input) {
 }
 
 #' Knit a child document
-#' 
+#'
 #' This function is for LaTeX only except when it is used to extract R code from
 #' the document; by default it knits a child document and returns the command to
 #' input the result into the main document. It is designed to be used in the
 #' inline R code and serves as the alternative to the \command{SweaveInput}
 #' command in Sweave.
-#' 
+#'
 #' The LaTeX command used to input the child document (usually \samp{input} or
 #' \samp{include}) is from the package option \code{child.command}
 #' (\code{opts_knit$get('child.command')}).
-#' 
+#'
 #' When we call \code{purl()} to extract R code, the code in the child document
 #' is extracted and saved into an R script.
-#' 
+#'
 #' The path of the child document is relative to the parent document.
 #' @param ... arguments passed to \code{\link{knit}}
 #' @param eval logical: whether to evaluate the child document
@@ -235,7 +235,7 @@ auto_out_name = function(input) {
 #'   \code{source("child-doc.R")}, depending on the argument \code{tangle}
 #'   passed in.
 #' @references \url{http://yihui.name/knitr/demo/child/}
-#' @note This function is not supposed be called directly like 
+#' @note This function is not supposed be called directly like
 #'   \code{\link{knit}()}; instead it must be placed in a parent document to let
 #'   \code{\link{knit}()} call it indirectly.
 #' @export
@@ -256,10 +256,10 @@ knit_child = function(..., eval = TRUE) {
 }
 
 #' Automatically create a report based on an R script and a template
-#' 
+#'
 #' This is a convenience function for small-scale automatic reporting based on
 #' an R script and a template.
-#' 
+#'
 #' The first two lines of the R script can contain the title and author of the
 #' report in comments of the form \samp{## title:} and \samp{## author:}. The
 #' template must have a chunk named \samp{auto-report}, which will be used to
@@ -277,7 +277,7 @@ knit_child = function(..., eval = TRUE) {
 #' ## HTML report
 #' out = stitch(s, system.file('misc', 'knitr-minimal_knit_.html', package = 'knitr'))
 #' if (interactive()) browseURL(out)
-stitch = function(script, 
+stitch = function(script,
                   template = system.file('misc', 'knitr-template.Rnw', package = 'knitr'),
                   output = NULL) {
   lines = readLines(script, warn = FALSE)
