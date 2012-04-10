@@ -75,3 +75,12 @@ pat_gfm = function() set_pattern('gfm')
 group_pattern = function(pattern) {
   !is.null(pattern) && str_detect(pattern, '\\(.+\\)')
 }
+
+## automatically detect the chunk patterns
+detect_pattern = function(text) {
+  for (p in names(all_patterns)) {
+    pat = all_patterns[[p]][['chunk.begin']]
+    if (length(pat) && length(grep(pat, text))) return(p)
+  }
+  NULL
+}
