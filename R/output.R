@@ -46,8 +46,7 @@
 #' @param tangle whether to tangle the R code from the input file (like
 #'   \code{\link[utils]{Stangle}})
 #' @param text a character vector as an alternative way to provide the input
-#'   file (\code{text} is written into a temporary file as \code{input}); this
-#'   argument is mainly for test purposes only
+#'   file
 #' @return The compiled document is written into the output file, and the path
 #'   of the output file is returned.
 #' @note The name \code{knit} comes from its counterpart \samp{weave} (as in
@@ -66,7 +65,8 @@
 #'   to files; they can be \code{stdin()}/\code{stdout()} or other types of 
 #'   connections, but the pattern list to read the input has to be set in
 #'   advance (see \code{\link{pat_rnw}}), and the output hooks should also be
-#'   set (see \code{\link{render_latex}}).
+#'   set (see \code{\link{render_latex}}), otherwise \pkg{knitr} will try to
+#'   guess the patterns and output format.
 #' @export
 #' @references Package homepage: \url{http://yihui.name/knitr/}
 #'
