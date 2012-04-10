@@ -18,9 +18,7 @@ purl(...)
   file (like \code{\link[utils]{Stangle}})}
 
   \item{text}{a character vector as an alternative way to
-  provide the input file (\code{text} is written into a
-  temporary file as \code{input}); this argument is mainly
-  for test purposes only}
+  provide the input file}
 
   \item{...}{arguments passed to \code{\link{knit}}}
 }
@@ -56,17 +54,22 @@ purl(...)
   \file{foo-out.ext}. If \code{tangle = TRUE},
   \file{foo.ext} generates an R script \file{foo.R}.
 
-  Based on the file extension of the input document, a list
-  of patterns will be used to extract R code in the
-  document. All built-in pattern lists can be found in
-  \code{opts_knit$get('all.patterns')} (call it
-  \code{apat}). \samp{Rnw} files use the list
-  \code{apat$rnw}, \samp{tex} uses the list
-  \code{apat$tex}, \samp{brew} uses \code{apat$brew} and
-  HTML-like files use \code{apat$html} (e.g. \samp{html}
-  and \samp{md} files). You can manually set the pattern
-  list using the \code{\link{knit_patterns}} object, and
-  \pkg{knitr} will respect the setting.
+  We need a set of syntax to identify special markups for R
+  code chunks and R options, etc. The syntax is defined in
+  a pattern list. All built-in pattern lists can be found
+  in \code{opts_knit$get('all.patterns')} (call it
+  \code{apat}). First the content of the input document is
+  matched against all pattern lists to automatically which
+  pattern list is being used. If automatic detection
+  failed, the pattern list will be decided based on the
+  filename extension of the input document. \samp{Rnw}
+  files use the list \code{apat$rnw}, \samp{tex} uses the
+  list \code{apat$tex}, \samp{brew} uses \code{apat$brew}
+  and HTML-like files use \code{apat$html} (e.g.
+  \samp{html} and \samp{md} files). You can manually set
+  the pattern list using the \code{\link{knit_patterns}}
+  object or the \code{\link{pat_rnw}} series functions in
+  advance and \pkg{knitr} will respect the setting.
 
   According to the output format
   (\code{opts_knit$get('out.format')}), a set of output
@@ -100,7 +103,8 @@ purl(...)
   connections, but the pattern list to read the input has
   to be set in advance (see \code{\link{pat_rnw}}), and the
   output hooks should also be set (see
-  \code{\link{render_latex}}).
+  \code{\link{render_latex}}), otherwise \pkg{knitr} will
+  try to guess the patterns and output format.
 }
 \examples{
 library(knitr)
