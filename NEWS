@@ -12,6 +12,13 @@ NEW FEATURES
   so knitr can make use of this pattern list to process the input
   document
 
+  o if the pattern list is not set in advance, knitr will try to
+  detect the syntax automatically by matching all built-in pattern
+  lists against the input document, e.g. if the input contains <<>>=,
+  the Rnw syntax will be used; this feature enables us to use
+  different sets of syntax freely, e.g. we can use Sweave syntax in
+  markdown files and knitr will be able to recognize it (#189)
+
   o the chunk option fig.cap is also used in markdown output now
 
   o the random seed .Random.seed is also cached for the sake of
