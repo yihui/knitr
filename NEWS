@@ -34,6 +34,10 @@ MAJOR CHANGES
   warning is given and R code in later chunks will override previous
   chunks (#185) (thanks, Randall Pruim)
 
+  o the default graphical device for HTML and markdown output is png()
+  now to avoid the possible unexpected consequence that PDF plots are
+  included in an HTML page which will not work normally in browsers
+
 BUG FIXES
 
   o the compilation of tikz graphics can hang up when there are TeX

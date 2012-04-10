@@ -333,6 +333,7 @@ render_listings = function() {
 #' @export
 render_html = function() {
   knit_hooks$restore()
+  opts_chunk$set(dev = 'png') # default device is png in HTML and markdown
   ## use div with different classes
   html.hook = function(name) {
     force(name)
@@ -352,6 +353,7 @@ render_html = function() {
 #' @export
 render_markdown = function() {
   knit_hooks$restore()
+  opts_chunk$set(dev = 'png')
   ## four spaces lead to <pre></pre>
   hook.t = function(x, options) str_c('\n\n', line_prompt(x, '    ', '    '), '\n')
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
