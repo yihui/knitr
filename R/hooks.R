@@ -426,7 +426,7 @@ hook_rgl = function(before, options, envir) {
   Sys.sleep(.05) # need time to respond to window size change
 
   fmt = opts_knit$get('out.format')
-  if (fmt %in% c('html', 'markdown', 'gfm', 'jekyll')) options$dev = 'png'
+  if (fmt %in% c('html', 'markdown', 'jekyll')) options$dev = 'png'
 
   ## support 3 formats: eps, pdf and png (default)
   switch(options$dev,
