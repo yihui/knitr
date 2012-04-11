@@ -111,7 +111,7 @@ all_patterns =
        `md` = list(chunk.begin = '^``` \\{r(.*)\\}\\s*$',
                    chunk.end = '^````\\s*$',
                    ref.chunk = '^\\s*<<(.*)>>\\s*$',
-                   inline.code = '`ri\\s+([^`]*)\\s+ir`',
+                   inline.code = '`r\\s+([^`]*)\\s+`',
                    global.options = '`ro\\s+([^`]*)\\s+or`',
                    ref.label = '^## @knitr (.*)$'))
 
