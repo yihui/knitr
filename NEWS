@@ -67,6 +67,12 @@ BUG FIXES
   errors in the tikz file; now we use \nonstopmode to avoid hiccup
   (#188)
 
+MISC
+
+  o number of downloads (https://github.com/yihui/knitr/downloads) of
+  knitr documentation before I removed and updated them on GitHub:
+  c(main = ?, graphics = 275+)
+
 			 CHANGES IN knitr VERSION 0.4
 
 NEW FEATURES
