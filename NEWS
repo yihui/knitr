@@ -48,6 +48,19 @@ MAJOR CHANGES
   now to avoid the possible unexpected consequence that PDF plots are
   included in an HTML page which will not work normally in browsers
 
+  o markdown output will use the extended markdown hooks by default
+  now: render_markdown(strict = FALSE); in the past the default was
+  render_jekyll(); the major difference is that the code blocks are
+  put in ```r and ```; if you want the strict markdown syntax, you can
+  all render_markdown(strict = TRUE) which will indent code blocks by
+  4 spaces
+
+  o render_gfm() has been removed because the name can be misleading;
+  the main purpose of this function was to put code blocks in ```, and
+  now we can replace it by render_markdown(FALSE); other markdown
+  flavors also support such fenced code blocks (e.g. pandoc) -- it is
+  not limited to Github only
+
 BUG FIXES
 
   o the compilation of tikz graphics can hang up when there are TeX
