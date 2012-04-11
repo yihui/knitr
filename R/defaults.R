@@ -108,7 +108,7 @@ all_patterns =
                      header.begin = '\n*\\s*<head>',
                      ref.label = '^## @knitr (.*)$'),
 
-       `md` = list(chunk.begin = '^``` \\{r(.*)\\}\\s*$',
+       `md` = list(chunk.begin = '^```\\s*\\{r(.*)\\}\\s*$',
                    chunk.end = '^```\\s*$',
                    chunk.end.is.terminator = TRUE,
                    ref.chunk = '^\\s*<<(.*)>>\\s*$',
