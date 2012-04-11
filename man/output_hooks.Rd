@@ -1,5 +1,4 @@
 \name{render_latex}
-\alias{render_gfm}
 \alias{render_html}
 \alias{render_jekyll}
 \alias{render_latex}
@@ -16,11 +15,14 @@ render_listings()
 
 render_html()
 
-render_markdown()
-
-render_gfm()
+render_markdown(strict = FALSE)
 
 render_jekyll()
+}
+\arguments{
+  \item{strict}{whether to use strict markdown syntax; if
+  \code{TRUE}, code blocks will be indented by 4 spaces,
+  otherwise they are put in fences made by three backticks}
 }
 \value{
   \code{NULL}; corresponding hooks are set as a side effect
@@ -31,16 +33,18 @@ render_jekyll()
 }
 \details{
   There are three variants of markdown documents: ordinary
-  markdown (\code{render_markdown()}), GFM (GitHub Flavored
-  Markdown; \code{render_gfm()}) and Jekyll (a blogging
-  system on GitHub; \code{render_jekyll()}). For LaTeX
-  output, there are three variants as well: \pkg{knitr}'s
-  default style (\code{render_latex()}; use the LaTeX
-  \pkg{framed} package), Sweave style
-  (\code{render_sweave()}; use \file{Sweave.sty}) and
-  listings style (\code{render_listings()}; use LaTeX
-  \pkg{listings} package). Default HTML output hooks are
-  set by \code{render_html()}.
+  markdown (\code{render_markdown(strict = TRUE)}),
+  extended markdown (e.g. GitHub Flavored Markdown and
+  pandoc; \code{render_markdown(strict = FALSE)}), and
+  Jekyll (a blogging system on GitHub;
+  \code{render_jekyll()}). For LaTeX output, there are
+  three variants as well: \pkg{knitr}'s default style
+  (\code{render_latex()}; use the LaTeX \pkg{framed}
+  package), Sweave style (\code{render_sweave()}; use
+  \file{Sweave.sty}) and listings style
+  (\code{render_listings()}; use LaTeX \pkg{listings}
+  package). Default HTML output hooks are set by
+  \code{render_html()}.
 
   These functions can be used before \code{knit()} or in
   the first chunk of the input document (ideally this chunk
