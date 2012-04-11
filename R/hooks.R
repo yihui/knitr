@@ -351,28 +351,25 @@ render_html = function() {
 }
 #' @rdname output_hooks
 #' @export
-render_markdown = function() {
+#' @param strict whether to use strict markdown syntax; if \code{TRUE}, code
+#'   blocks will be indented by 4 spaces, otherwise they are put in fences made
+#'   by three backticks
+render_markdown = function(strict = FALSE) {
   knit_hooks$restore()
   opts_chunk$set(dev = 'png')
   ## four spaces lead to <pre></pre>
-  hook.t = function(x, options) str_c('\n\n', line_prompt(x, '    ', '    '), '\n')
+  hook.t = function(x, options) {
+    if (strict) {
+      str_c('\n\n', line_prompt(x, '    ', '    '), '\n')
+    } else str_c('\n\n```\n', x, '```\n\n')
+  }
+  hook.r = function(x, options) str_c('\n\n```r\n', x, '```\n\n')
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
-  knit_hooks$set(source = hook.t, output = hook.o, warning = hook.t,
-                 error = hook.t, message = hook.t,
+  knit_hooks$set(source = if (strict) hook.t else hook.r, output = hook.o,
+                 warning = hook.t, error = hook.t, message = hook.t,
                  inline = function(x) sprintf(if (inherits(x, 'AsIs')) '%s' else '`%s`',
                                               .inline.hook(format_sci(x, 'html'))),
                  plot = hook_plot_md)
-}
-#' @rdname output_hooks
-#' @export
-render_gfm = function() {
-  ## gfm and jekyll are derived from markdown
-  render_markdown()
-  hook.r = function(x, options) str_c('\n\n```r\n', x, '```\n\n')
-  hook.t = function(x, options) str_c('\n\n```\n', x, '```\n\n')
-  hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
-  knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
-                 error = hook.t, message = hook.t)
 }
 #' @rdname output_hooks
 #' @export

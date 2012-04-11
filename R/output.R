@@ -126,7 +126,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     knit_patterns$restore()
     knit_patterns$set(apat[[pattern]])
     opts_knit$set(out.format = switch(pattern, rnw = 'latex', tex = 'latex',
-                                      html = 'html', gfm = 'gfm'))
+                                      html = 'html', md = 'markdown'))
   }
 
   optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
@@ -143,7 +143,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     switch(opts_knit$get('out.format'), latex = render_latex(),
            sweave = render_sweave(), listings = render_listings(),
            html = render_html(), jekyll = render_jekyll(),
-           markdown = render_markdown(), gfm = render_gfm())
+           markdown = render_markdown())
     on.exit(knit_hooks$restore(), add = TRUE)
   }
 
