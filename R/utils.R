@@ -74,7 +74,7 @@ color_def = function(col, variable = 'shadecolor') {
     }
   }
   if (length(x) != 3L) stop('invalid color:', col)
-  x = round(x, 3L)
+  if (is.numeric(x)) x = round(x, 3L)
   sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
 }
 
