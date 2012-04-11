@@ -110,7 +110,6 @@ all_patterns =
 
        `md` = list(chunk.begin = '^```\\s*\\{r(.*)\\}\\s*$',
                    chunk.end = '^```\\s*$',
-                   chunk.end.is.terminator = TRUE,
                    ref.chunk = '^\\s*<<(.*)>>\\s*$',
                    inline.code = '`r\\s+([^`]*)\\s*`',
                    global.options = '`ro\\s+([^`]*)\\s+or`',
