@@ -208,15 +208,16 @@ process_file = function(text) {
 }
 
 auto_out_name = function(input) {
-  ext = file_ext(input)
-  if (opts_knit$get('tangle')) return(str_replace(input, str_c(ext, '$'), 'R'))
-  if (tolower(ext) == 'rnw') return(str_replace(input, str_c(ext, '$'), 'tex'))
-  if (tolower(ext) %in% c('brew', 'tex', 'html', 'md')) {
+  base = file_path_sans_ext(input)
+  if (opts_knit$get('tangle')) return(str_c(base, '.R'))
+  ext = tolower(file_ext(input))
+  if (ext == 'rnw') return(str_c(base, '.tex'))
+  if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex'))
+    return(str_c(base, '.', substring(ext, 2L)))
+  if (ext %in% c('brew', 'tex', 'html', 'md')) {
     if (str_detect(input, '_knit_')) {
       return(str_replace(input, '_knit_', ''))
-    } else {
-      return(str_replace(input, str_c('(\\.', ext, ')$'), '-out\\1'))
-    }
+    } else return(str_c(base, '-out.', ext))
   }
   stop('cannot determine the output filename automatically')
 }
