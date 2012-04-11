@@ -16,6 +16,8 @@ split_file = function(path, lines = readLines(path, warn = FALSE), set.preamble 
   
   blks = str_detect(lines, chunk.begin)
   txts = str_detect(lines, chunk.end)
+  if (isTRUE(as.logical(knit_patterns$get('chunk.end.is.terminator'))))
+    txts = filter_chunk_end(blks, txts)
   
   tmp = logical(n); tmp[blks | txts] = TRUE; lines[txts] = ''
   
@@ -270,4 +272,22 @@ parse_chunk = function(x) {
     str_c(parse_chunk(z), collapse = '\n')
   }), use.names = FALSE)
   x
+}
+
+## filter chunk.end lines that don't actually end a chunk
+filter_chunk_end = function(chunk.begin, chunk.end) {
+  in.chunk = FALSE
+  fun = function(is.begin, is.end) {
+    if (in.chunk && is.end) {
+      in.chunk <<- FALSE
+      return(TRUE)
+    }
+    else if (!in.chunk && is.begin) {
+      in.chunk <<- TRUE
+      return(FALSE)
+    }
+    else
+      return(FALSE)
+  }
+  mapply(fun, chunk.begin, chunk.end)
 }
