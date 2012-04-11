@@ -5,7 +5,7 @@ insert_header = function(x) {
   i = which(str_detect(x, b))
   if (length(i) == 1L) {
     fmt = opts_knit$get('out.format')
-    if (fmt %in% c('markdown', 'jekyll')) return(x)
+    if (fmt %in% c('markdown', 'gfm', 'jekyll')) return(x)
     if (identical('latex', fmt))
       h = c('\\usepackage{graphicx, color}', h)
     if (identical('html', fmt))
