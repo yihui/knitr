@@ -22,6 +22,13 @@ NEW FEATURES
   different sets of syntax freely, e.g. we can use Sweave syntax in
   markdown files and knitr will be able to recognize it (#189)
 
+  o new filename extensions with a prefix 'R' or 'r' are introduced:
+  *.Rhtml, *.Rhtm, *.Rtex, *.Rmd and *.Rmarkdown will be recognized as
+  source documents like *.Rnw, and the output filename will be
+  automatically determined by removing the 'R' prefix, e.g. foo.Rmd
+  produces foo.md by default; the old clumsy naming convention
+  foo_knit_.md is still preserved but not recommended any more (#187)
+
   o the chunk option fig.cap is also used in markdown output now
 
   o the random seed .Random.seed is also cached for the sake of
