@@ -67,11 +67,20 @@ pat_tex = function() set_pattern('tex')
 pat_html = function() set_pattern('html')
 #' @rdname pat_fun
 #' @export
-pat_gfm = function() set_pattern('gfm')
+pat_md = function() set_pattern('md')
 
 ## helper functions
 
 ## is it a group pattern?
 group_pattern = function(pattern) {
   !is.null(pattern) && str_detect(pattern, '\\(.+\\)')
+}
+
+## automatically detect the chunk patterns
+detect_pattern = function(text) {
+  for (p in names(all_patterns)) {
+    pat = all_patterns[[p]][['chunk.begin']]
+    if (length(pat) && length(grep(pat, text))) return(p)
+  }
+  NULL
 }

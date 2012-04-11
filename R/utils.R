@@ -74,7 +74,7 @@ color_def = function(col, variable = 'shadecolor') {
     }
   }
   if (length(x) != 3L) stop('invalid color:', col)
-  x = round(x, 3L)
+  if (is.numeric(x)) x = round(x, 3L)
   sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
 }
 
@@ -192,8 +192,8 @@ is_tikz_dev = function(options) {
   'tikz' %in% options$dev && !options$external
 }
 
-tikz_dict = function(path, normal) {
-  str_c(if (normal) file_path_sans_ext(basename(path)) else 'unknown', '-tikzDictionary')
+tikz_dict = function(path) {
+  str_c(file_path_sans_ext(basename(path)), '-tikzDictionary')
 }
 
 ## compatibility with Sweave and old beta versions of knitr

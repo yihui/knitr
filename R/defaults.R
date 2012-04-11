@@ -108,10 +108,10 @@ all_patterns =
                      header.begin = '\n*\\s*<head>',
                      ref.label = '^## @knitr (.*)$'),
 
-       `gfm` = list(chunk.begin = '^``` \\{r (.*)\\}\\s*$',
+       `md` = list(chunk.begin = '^``` \\{r(.*)\\}\\s*$',
                    chunk.end = '^````\\s*$',
                    ref.chunk = '^\\s*<<(.*)>>\\s*$',
-                   inline.code = '`ri\\s+([^`]*)\\s+ir`',
+                   inline.code = '`r\\s+([^`]*)\\s*`',
                    global.options = '`ro\\s+([^`]*)\\s+or`',
                    ref.label = '^## @knitr (.*)$'))
 

@@ -81,7 +81,8 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
                                xetex = getOption("tikzXelatexPackages"))
                       tikzDevice::tikz(..., sanitize = options$sanitize,
                                        standAlone = options$external,
-                                       packages = c('\n', packages, .knitEnv$tikzPackages))
+                                       packages = c('\n\\nonstopmode\n', packages, 
+                                                    .knitEnv$tikzPackages))
                     } else {
                       stop("package 'tikzDevice' not available (has to be installed)",
                            call. = FALSE)
@@ -99,6 +100,9 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
   if (dev == 'tikz' && options$external) {
     unlink(pdf.plot <- str_c(name, '.pdf'))
     owd = setwd(dirname(path))
+    # add old wd to TEXINPUTS (see #188)
+    oti = Sys.getenv('TEXINPUTS'); on.exit(Sys.setenv(TEXINPUTS = oti))
+    Sys.setenv(TEXINPUTS = str_c('.', owd, oti, sep = ':'))
     system(str_c(switch(getOption("tikzDefaultEngine"),
                         pdftex = getOption('tikzLatex'),
                         xetex = getOption("tikzXelatex"),

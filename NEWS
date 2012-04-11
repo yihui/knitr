@@ -6,11 +6,28 @@ NEW FEATURES
   and this approach of references is supported in tex and html
   documents as well
 
-  o added a new pattern list named 'gfm' so that R code blocks can be
-  written more naturally in GFM and pandoc (use ``` {r label, opts} to
-  begin a chunk and ```` to end a chunk); call pat_gfm() before knit()
-  so knitr can make use of this pattern list to process the input
-  document
+  o added a new pattern list named 'md' so that R code blocks can be
+  written more naturally in extended markdown (e.g. GFM and pandoc):
+  use ``` {r label, opts} to begin a chunk and ```` (four backticks)
+  to begin normal text, and write inline R code in `r code.here`; it
+  is the default syntax for markdown input, or you can call pat_md()
+  before knit() so knitr can make use of this pattern list to process
+  the input document
+
+  o if the pattern list is not set in advance, knitr will try to
+  detect the syntax automatically by matching all built-in pattern
+  lists against the input document, e.g. if the input contains <<>>=,
+  the Rnw syntax will be used, and if ``` {r} is detected, the
+  markdown syntax will be used; this feature enables us to use
+  different sets of syntax freely, e.g. we can use Sweave syntax in
+  markdown files and knitr will be able to recognize it (#189)
+
+  o new filename extensions with a prefix 'R' or 'r' are introduced:
+  *.Rhtml, *.Rhtm, *.Rtex, *.Rmd and *.Rmarkdown will be recognized as
+  source documents like *.Rnw, and the output filename will be
+  automatically determined by removing the 'R' prefix, e.g. foo.Rmd
+  produces foo.md by default; the old clumsy naming convention
+  foo_knit_.md is still preserved but not recommended any more (#187)
 
   o the chunk option fig.cap is also used in markdown output now
 
@@ -26,7 +43,36 @@ MAJOR CHANGES
   the corresponding chunks are non-empty; in previous version, only a
   warning is given and R code in later chunks will override previous
   chunks (#185) (thanks, Randall Pruim)
-  
+
+  o the default graphical device for HTML and markdown output is png()
+  now to avoid the possible unexpected consequence that PDF plots are
+  included in an HTML page which will not work normally in browsers
+
+  o markdown output will use the extended markdown hooks by default
+  now: render_markdown(strict = FALSE); in the past the default was
+  render_jekyll(); the major difference is that the code blocks are
+  put in ```r and ```; if you want the strict markdown syntax, you can
+  all render_markdown(strict = TRUE) which will indent code blocks by
+  4 spaces
+
+  o render_gfm() has been removed because the name can be misleading;
+  the main purpose of this function was to put code blocks in ```, and
+  now we can replace it by render_markdown(FALSE); other markdown
+  flavors also support such fenced code blocks (e.g. pandoc) -- it is
+  not limited to Github only
+
+BUG FIXES
+
+  o the compilation of tikz graphics can hang up when there are TeX
+  errors in the tikz file; now we use \nonstopmode to avoid hiccup
+  (#188)
+
+MISC
+
+  o number of downloads (https://github.com/yihui/knitr/downloads) of
+  knitr documentation before I removed and updated them on GitHub:
+  c(main = ?, graphics = 275+)
+
 			 CHANGES IN knitr VERSION 0.4
 
 NEW FEATURES

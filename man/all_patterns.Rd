@@ -7,7 +7,7 @@
  $ brew:List of 1
  $ tex :List of 9
  $ html:List of 7
- $ gfm :List of 6}
+ $ md  :List of 6}
 \usage{
 all_patterns
 }

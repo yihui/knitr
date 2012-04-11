@@ -1,7 +1,7 @@
 \name{pat_rnw}
 \alias{pat_brew}
-\alias{pat_gfm}
 \alias{pat_html}
+\alias{pat_md}
 \alias{pat_rnw}
 \alias{pat_tex}
 \title{Set regular expressions to read input documents}
@@ -14,7 +14,7 @@ pat_tex()
 
 pat_html()
 
-pat_gfm()
+pat_md()
 }
 \value{
   The patterns object \code{\link{knit_patterns}} is
