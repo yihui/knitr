@@ -118,7 +118,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
   if (length(opat) == 0 || all(sapply(opat, is.null))) {
     # use ext if cannot auto detect pattern
     if (is.null(pattern <- detect_pattern(text)))
-      pattern = if (ext %in% c('md', 'markdown', 'htm')) 'html' else ext
+      pattern = if (ext %in% c('htm', 'rhtm', 'rhtml')) 'html' else {
+        if (ext %in% c('rmd', 'rmarkdown', 'markdown')) 'md' else ext
+      }
     if (!(pattern %in% names(apat)))
       stop("a pattern list cannot be automatically found for the file extension '",
            ext, "' in built-in pattern lists; ",
