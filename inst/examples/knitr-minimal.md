@@ -1,14 +1,13 @@
 
-This is a miminal example of using **knitr** with in HTML pages. I am actually using markdown here since it is more convenient in GitHub.
+This is a minimal example of using **knitr** with in HTML pages. I am actually using markdown here since it is more convenient in GitHub.
 
-First, the input file was named as `knitr-minimal_knit_.md` ([click to view its source](https://github.com/yihui/knitr/raw/master/inst/examples/knitr-minimal_knit_.md)), which contains `_knit_` so that **knitr** will automatically determine the output filename to be `knitr-minimal.md`. 
+First, the input file was named as `knitr-minimal.Rmd` ([click to view its source](https://github.com/yihui/knitr/raw/master/inst/examples/knitr-minimal.Rmd)), and **knitr** will automatically determine the output filename to be `knitr-minimal.md` (`*.Rmd --> *.md`).
 
-I used the code below to make sure **knitr** uses the correct hooks to wrap my output, and writes correct URL's for my images.
+I used the code below to make sure **knitr** writes correct URL's for my images.
 
 
 
 ```r
-render_gfm()  # use GFM hooks for output
 opts_knit$set(base.url = "https://github.com/yihui/knitr/raw/master/inst/examples/")
 ```
 
