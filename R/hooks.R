@@ -282,8 +282,17 @@ render_latex = function() {
   if (child_mode()) return()
   test_latex_pkg('framed', system.file('misc', 'framed.sty', package = 'knitr'))
   h = opts_knit$get('header')
-  if (!nzchar(h['framed'])) set_header(framed = .header.framed)
-  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
+  if (!nzchar(h['framed'])) {
+		.knit.sty      <- system.file('misc', 'knitr.sty', package = 'knitr')  
+		.header.framed <- paste(readLines(.knit.sty), collapse = "\n")
+		set_header(framed = .header.framed)
+	}
+  if (!nzchar(h['highlight'])) {
+		# header for Latex Syntax Highlighting
+		.header.hi.tex = paste(theme_to_header_latex('edit-eclipse')$highlight, 
+		   collapse = '\n')
+		set_header(highlight = .header.hi.tex)
+	}
   knit_hooks$restore()
   knit_hooks$set(source = function(x, options) {
     if (options$highlight) {
@@ -339,7 +348,13 @@ render_html = function() {
     force(name)
     function (x, options) sprintf('<div class="%s">%s</div>', name, x)
   }
-  set_header(highlight = .header.hi.html)
+  h = opts_knit$get('header')
+  if (!nzchar(h['highlight'])) {
+		# CSS for html syntax highlighting
+		.header.hi.html = paste(theme_to_header_html('default')$highlight, 
+		   collapse = '\n')
+		 set_header(highlight = .header.hi.html)
+	}
   z = list()
   for (i in c('source', 'output', 'warning', 'message', 'error'))
     z[[i]] = html.hook(i)

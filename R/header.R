@@ -1,27 +1,66 @@
-## x is the output of processed document
-insert_header = function(x) {
-  if (is.null(b <- knit_patterns$get('header.begin'))) return(x)
-  h = opts_knit$get('header')
-  i = which(str_detect(x, b))
-  if (length(i) == 1L) {
-    fmt = opts_knit$get('out.format')
-    if (fmt %in% c('markdown', 'gfm', 'jekyll')) return(x)
-    if (identical('latex', fmt))
-      h = c('\\usepackage{graphicx, color}', h)
-    if (identical('html', fmt))
-      h = h['highlight']
-    h = h[nzchar(h)]; if (length(h) == 0) h = ''
-    loc = str_locate(x[i], b)
-    str_sub(x[i], loc[, 1], loc[, 2]) =
-      str_c(str_sub(x[i], loc[, 1], loc[, 2]), '\n', str_c(h, collapse = '\n'))
-  } else if (length(i) == 0L) {
-    if (parent_mode()) {
-      h = c('\\usepackage{graphicx, color}', h)
-      x = c(getOption('tikzDocumentDeclaration'), str_c(h, collapse = '\n'),
-            .knitEnv$tikzPackages, '\\begin{document}', x, '\\end{document}')
-    }
-  }
-  x
+## doc is the output of processed document
+insert_header <- function(doc){
+	fmt = opts_knit$get('out.format')
+	switch(fmt, 
+		html  = insert_header_html(doc), 
+		latex = insert_header_latex(doc),
+		doc
+	)
+}
+
+## Makes latex header with macros required for highlighting, tikz and framed
+make_header_latex <- function(){
+	h <- "\\usepackage{graphicx, color}"
+	h <- paste(c(h, opts_knit$get('header')), collapse = "\n")
+	if (opts_knit$get('self.contained')){
+		return(h)
+	} else {
+		writeLines(h, 'knitr.sty')
+		return('\\usepackage{knitr}')
+	}
+}
+
+insert_header_latex <- function(doc){
+	# TODO: is this really required since b will never be NULL for latex.
+	if (is.null(b <- knit_patterns$get('header.begin'))){
+		return(doc)
+	}
+	h   <- make_header_latex()
+	i   <- which(str_detect(doc, b))
+	l   <- str_locate(doc[i], b)
+	if (length(i) == 1L){
+		tmp <- str_sub(doc[i], l[, 1], l[, 2])
+		str_sub(doc[i], l[,1], l[,2]) <- str_c(tmp, "\n", h)
+	} else if (length(i) == 0L) {
+		doc <- str_c(getOption('tikzDocumentDeclaration'), h, .knitEnv$packages,
+			"\\begin{document}", doc, "\\end{document}")
+	}
+	return(doc)
+}
+
+make_header_html <- function(){
+	h <- opts_knit$get('header')[['highlight']]
+	if (opts_knit$get('self.contained')){
+		h <- str_c('<style type="text/css">', h, '</style>', collapse = "\n")
+		return(h)
+	} else {
+		writeLines(h, 'knitr.css')
+		return('<link rel="stylesheet" href="knitr.css" type="text/css" />')
+	}
+}
+
+insert_header_html <- function(doc){
+	if (is.null(b <- knit_patterns$get('header.begin'))){
+		return(doc)
+	}
+	h <- make_header_html()
+	i <- which(str_detect(doc, b))
+	l <- str_locate(doc[i], b)
+	if (length(i) == 1L){
+		tmp <- str_sub(doc[i], l[, 1], l[, 2])
+		str_sub(doc[i], l[,1], l[,2]) <- str_c(tmp, "\n", h)
+	}
+	return(doc)
 }
 
 #' Set the header information
@@ -61,56 +100,3 @@ set_header = function(...) {
   opts_knit$set(header = h)
 }
 
-## many thanks to Donald Arseneau
-.header.framed = '\\usepackage{framed}
-\\makeatletter
-\\newenvironment{kframe}{%
- \\def\\FrameCommand##1{\\hskip\\@totalleftmargin \\hskip-\\fboxsep
- \\colorbox{shadecolor}{##1}\\hskip-\\fboxsep
-     % There is no \\@totalrightmargin, so:
-     \\hskip-\\linewidth \\hskip-\\@totalleftmargin \\hskip\\columnwidth}%
- \\MakeFramed {\\advance\\hsize-\\width
-   \\@totalleftmargin\\z@ \\linewidth\\hsize
-   \\@setminipage}}%
- {\\par\\unskip\\endMakeFramed}
-\\makeatother
-
-\\definecolor{shadecolor}{rgb}{.97, .97, .97}
-\\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
-
-\\newcommand{\\SweaveOpts}[1]{}  % do not interfere with LaTeX
-\\newcommand{\\SweaveInput}[1]{} % because they are not real TeX commands
-\\newcommand{\\Sexpr}[1]{}       % will only be parsed by R
-'
-
-## LaTeX styles for highlight
-.header.hi.tex =
-    str_c(c("\\newcommand{\\hlnumber}[1]{\\textcolor[rgb]{0,0,0}{#1}}%",
-            "\\newcommand{\\hlfunctioncall}[1]{\\textcolor[rgb]{.5,0,.33}{\\textbf{#1}}}%",
-            "\\newcommand{\\hlstring}[1]{\\textcolor[rgb]{.6,.6,1}{#1}}%",
-            "\\newcommand{\\hlkeyword}[1]{\\textbf{#1}}%",
-            "\\newcommand{\\hlargument}[1]{\\textcolor[rgb]{.69,.25,.02}{#1}}%",
-            "\\newcommand{\\hlcomment}[1]{\\textcolor[rgb]{.18,.6,.34}{#1}}%",
-            "\\newcommand{\\hlroxygencomment}[1]{\\textcolor[rgb]{.44,.48,.7}{#1}}%",
-            "\\newcommand{\\hlformalargs}[1]{\\hlargument{#1}}%",
-            "\\newcommand{\\hleqformalargs}[1]{\\hlargument{#1}}%",
-            "\\newcommand{\\hlassignement}[1]{\\textbf{#1}}%",
-            "\\newcommand{\\hlpackage}[1]{\\textcolor[rgb]{.59,.71,.145}{#1}}%",
-            "\\newcommand{\\hlslot}[1]{\\textit{#1}}%",
-            "\\newcommand{\\hlsymbol}[1]{#1}%",
-            "\\newcommand{\\hlprompt}[1]{\\textcolor[rgb]{.5,.5,.5}{#1}}%",
-            boxes_latex(), "\\definecolor{fgcolor}{rgb}{0,0,0}"), collapse = '\n')
-
-.header.hi.html =
-    str_c(c('<style type="text/css">', '.knitr {
-	background-color: #F7F7F7;
-}', '.error {
-	font-weight: bold;
-	color: #FF0000;
-}', '.warning {
-	font-weight: bold;
-}', '.message {
-	font-style: italic;
-}', '.source, .output, .warning, .error, .message {
-	padding: 0.5em 1em;
-}', styler('default'), '</style>'), collapse = '\n')
