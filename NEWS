@@ -9,14 +9,16 @@ NEW FEATURES
   o added a new pattern list named 'md' so that R code blocks can be
   written more naturally in extended markdown (e.g. GFM and pandoc):
   use ``` {r label, opts} to begin a chunk and ```` (four backticks)
-  to begin normal text; it is the default syntax for markdown input,
-  or you can call pat_md() before knit() so knitr can make use of this
-  pattern list to process the input document
+  to begin normal text, and write inline R code in `r code.here`; it
+  is the default syntax for markdown input, or you can call pat_md()
+  before knit() so knitr can make use of this pattern list to process
+  the input document
 
   o if the pattern list is not set in advance, knitr will try to
   detect the syntax automatically by matching all built-in pattern
   lists against the input document, e.g. if the input contains <<>>=,
-  the Rnw syntax will be used; this feature enables us to use
+  the Rnw syntax will be used, and if ``` {r} is detected, the
+  markdown syntax will be used; this feature enables us to use
   different sets of syntax freely, e.g. we can use Sweave syntax in
   markdown files and knitr will be able to recognize it (#189)
 
