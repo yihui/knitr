@@ -132,9 +132,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
   optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
 
   if (is.null(opts_knit$get('out.format'))) {
-    fmt = switch(ext, rnw = 'latex', tex = 'latex', html = 'html', md = 'jekyll',
-                 brew = 'brew', {warning('cannot automatically decide the output format');
-                                 'unknown'})
+    fmt = switch(ext, rnw = 'latex', tex = 'latex', htm = 'html', html = 'html',
+                 md = 'markdown', markdown = 'markdown', brew = 'brew',
+                 {warning('cannot automatically decide the output format'); 'unknown'})
     ## set built-in hooks
     opts_knit$set(out.format = fmt)
   }
