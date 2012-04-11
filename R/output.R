@@ -108,6 +108,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
   text = if (is.null(text)) readLines(input, warn = FALSE) else {
     unlist(strsplit(text, '\n', fixed = TRUE)) # make sure each element is one line
   }
+  if (!length(text)) return() # a trivial case: simply and exit
 
   opts_knit$set(tangle = tangle)
   apat = opts_knit$get('all.patterns')
