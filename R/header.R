@@ -19,17 +19,15 @@ make_header_latex = function() {
 }
 
 insert_header_latex = function(doc, b) {
-  h = make_header_latex()
   i = which(str_detect(doc, b))
-  l = str_locate(doc[i], b)
-  if (length(i) == 1L){
+  if (length(i) == 1L) {
+    l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])
-    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, "\n", h)
-  } else if (length(i) == 0L) {
-    if (parent_mode()) {
-      doc = str_c(getOption('tikzDocumentDeclaration'), h, .knitEnv$packages,
-                  "\\begin{document}", doc, "\\end{document}")
-    }
+    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, "\n", make_header_latex())
+  } else if (length(i) == 0L && parent_mode()) {
+    # in parent mode, we fill doc to be a complete document
+    doc = str_c(getOption('tikzDocumentDeclaration'), make_header_latex(),
+                .knitEnv$packages, "\\begin{document}", doc, "\\end{document}")
   }
   doc
 }
