@@ -289,7 +289,7 @@ render_latex = function() {
 	}
   if (!nzchar(h['highlight'])) {
 		# header for Latex Syntax Highlighting
-		.header.hi.tex = paste(theme_to_header_latex('edit-eclipse')$highlight, 
+		.header.hi.tex = paste(theme_to_header_latex('default')$highlight, 
 		   collapse = '\n')
 		set_header(highlight = .header.hi.tex)
 	}
