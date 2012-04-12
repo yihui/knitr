@@ -69,7 +69,7 @@ Collate:
     'block.R'
     'hooks.R'
     'utils.R'
-    'header.R'
     'themes.R'
+    'header.R'
     'eclipse.R'
     'concordance.R'
