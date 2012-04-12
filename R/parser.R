@@ -281,9 +281,7 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
       in.chunk <<- FALSE
       return(TRUE)
     }
-    if (!in.chunk && is.begin) {
-      in.chunk <<- TRUE
-    }
+    if (!in.chunk && is.begin) in.chunk <<- TRUE
     FALSE
   }
   mapply(fun, chunk.begin, chunk.end)
