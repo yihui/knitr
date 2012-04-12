@@ -8,4 +8,6 @@ inst/examples/figure
 inst/examples/ex-out*
 knitr-minimal.html
 knitr-latex.tex
-
+.Rproj.user
+misc
+knitr.Rproj
