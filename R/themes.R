@@ -49,9 +49,8 @@ knit_theme = list(set = set_theme, get = get_theme)
 #' Generates header based on a theme and output format of document
 #' @author Ramnath Vaidyanathan
 #' @noRd
-theme_to_header = function(theme){
-  fmt = opts_knit$get('out.format')
-  if (fmt == 'latex') {
+theme_to_header = function(theme, format = opts_knit$get('out.format')){
+  if (format == 'latex') {
     theme_to_header_latex(theme)
   } else theme_to_header_html(theme)
 }
