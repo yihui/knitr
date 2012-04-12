@@ -43,12 +43,11 @@ make_header_html = function() {
 }
 
 insert_header_html = function(doc, b) {
-  h = make_header_html()
   i = which(str_detect(doc, b))
-  l = str_locate(doc[i], b)
   if (length(i) == 1L) {
+    l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])
-    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, "\n", h)
+    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, "\n", make_header_html())
   }
   doc
 }
