@@ -35,6 +35,10 @@ NEW FEATURES
   often too long, so opts_knit$set(self.contained = FALSE) can help in
   this case (#176) (thanks, Ramnath Vaidyanathan)
 
+  o new package option 'filter.chunk.end' which decides if the
+  'chunk.end' pattern really means 'chunk.end'; see
+  http://yihui.name/knitr/options (thanks, Joe Cheng)
+
   o the chunk option fig.cap is also used in markdown output now
 
   o the random seed .Random.seed is also cached for the sake of
