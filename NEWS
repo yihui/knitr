@@ -8,11 +8,11 @@ NEW FEATURES
 
   o added a new pattern list named 'md' so that R code blocks can be
   written more naturally in extended markdown (e.g. GFM and pandoc):
-  use ``` {r label, opts} to begin a chunk and ```` (four backticks)
-  to begin normal text, and write inline R code in `r code.here`; it
-  is the default syntax for markdown input, or you can call pat_md()
-  before knit() so knitr can make use of this pattern list to process
-  the input document
+  use ``` {r label, opts} to begin a chunk and ``` (three or more
+  backticks) to begin normal text, and write inline R code in `r
+  code.here`; it is the default syntax for markdown input, or you can
+  call pat_md() before knit() so knitr can make use of this pattern
+  list to process the input document
 
   o if the pattern list is not set in advance, knitr will try to
   detect the syntax automatically by matching all built-in pattern
