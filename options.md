@@ -130,18 +130,18 @@ opts_knit$set(progress = TRUE, verbose = TRUE)
 
 All package options are:
 
-- `progress`: (`TRUE`) whether to display a progress bar when running **knitr**
-- `verbose`: (`FALSE`) whether to show verbose information (e.g., R code in each chunk) or just show chunk labels and options
-- `out.format`: (`NULL`) possible values are `latex`, `sweave`, `html`, `markdown`, `gfm` and `jekyll`; it will be automatically determined based on the input file, and this option will affect which set of hooks to use (see `?render_latex` for example); note this option has to be set _before_ `knit()` runs (i.e. it does not work if you set it in the document), or alternatively, you can use the `render_*` series inside the document to set up the hooks
-- `child.command`: (`'input'`) the LaTeX command to be used to insert child documents into the main document (usually `input` or `include`)
-- `child.path`: (`''`) the search path for child documents; by default child documents are searched for relative to the directory of the parent document
+- `aliases`: (`NULL`) a named character vector to specify the aliases of chunk options, e.g. `c(h = 'fig.height', w = 'fig.width')` tells **knitr** that the chunk option `h` really means `fig.height`, and `w` is an alias for `fig.width`; this option can be used to save some typing efforts for long option names
 - `all.patterns`: a list of built-in patterns
-- `header`: the text to be inserted into the output document before the document begins (e.g. after `\documentclass{article}` in LaTeX, or `<head>` in HTML); this is useful for defining commands and styles in the LaTeX preamble or HTML header; the beginning of document is found using the pattern defined in `knit_patternss$get('document.begin')`
 - `base.dir`: (`NULL`) an absolute directory under which the plots are generated
 - `base.url`: (`NULL`) the base url for HTML pages
-- `eval.after`: (`NULL`) a character vector of option names; these options will be evaluated _after_ a chunk is evaluated, and all other options will be evaluated before a chunk (e.g. for chunk option `fig.cap=paste('p-value is', t.test(x)$p.value)`, it will be evaluated after the chunk according to the value of `x` if `eval.after='fig.cap'`)
-- `upload.fun`: (`identity`) a function that takes a filename as its input, processes it and returns a character string when the output format is HTML or Markdown; typically it is a function to upload a image and return the link to the image, e.g. `opts_knit$set(upload.fun = imgur_upload)` can upload a file to <http://imgur.com> (see `?imgur_upload`)
 - `cache.extra`: (`NULL`) extra content that should affect [cache](/knitr/demo/cache)
-- `aliases`: (`NULL`) a named character vector to specify the aliases of chunk options, e.g. `c(h = 'fig.height', w = 'fig.width')` tells **knitr** that the chunk option `h` really means `fig.height`, and `w` is an alias for `fig.width`; this option can be used to save some typing efforts for long option names
+- `child.command`: (`'input'`) the LaTeX command to be used to insert child documents into the main document (usually `input` or `include`)
+- `child.path`: (`''`) the search path for child documents; by default child documents are searched for relative to the directory of the parent document
 - `concordance`: (`FALSE`) whether to write a concordance file to map the output line numbers to the input line numbers; this enables one to navigate from the output to the input and can be helpful especially when TeX error occurs (this feature is mainly for RStudio)
+- `eval.after`: (`NULL`) a character vector of option names; these options will be evaluated _after_ a chunk is evaluated, and all other options will be evaluated before a chunk (e.g. for chunk option `fig.cap=paste('p-value is', t.test(x)$p.value)`, it will be evaluated after the chunk according to the value of `x` if `eval.after='fig.cap'`)
+- `header`: the text to be inserted into the output document before the document begins (e.g. after `\documentclass{article}` in LaTeX, or `<head>` in HTML); this is useful for defining commands and styles in the LaTeX preamble or HTML header; the beginning of document is found using the pattern defined in `knit_patternss$get('document.begin')`
+- `out.format`: (`NULL`) possible values are `latex`, `sweave`, `html`, `markdown`, `gfm` and `jekyll`; it will be automatically determined based on the input file, and this option will affect which set of hooks to use (see `?render_latex` for example); note this option has to be set _before_ `knit()` runs (i.e. it does not work if you set it in the document), or alternatively, you can use the `render_*` series inside the document to set up the hooks
+- `progress`: (`TRUE`) whether to display a progress bar when running **knitr**
+- `upload.fun`: (`identity`) a function that takes a filename as its input, processes it and returns a character string when the output format is HTML or Markdown; typically it is a function to upload a image and return the link to the image, e.g. `opts_knit$set(upload.fun = imgur_upload)` can upload a file to <http://imgur.com> (see `?imgur_upload`)
+- `verbose`: (`FALSE`) whether to show verbose information (e.g., R code in each chunk) or just show chunk labels and options
 
