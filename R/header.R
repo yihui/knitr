@@ -92,7 +92,7 @@ set_header = function(...) {
 }
 
 # where is the inst directory?
-.inst.dir = file.path(c('..', '.'), 'inst/')
+.inst.dir = file.path(c('..', '.'), 'inst')
 .inst.dir = .inst.dir[file.exists(.inst.dir)]
 
 .default.sty = file.path(.inst.dir, 'themes', 'default.css')
