@@ -91,3 +91,16 @@ set_header = function(...) {
   opts_knit$set(header = h)
 }
 
+# where is the inst directory?
+.inst.dir = file.path(c('..', '.'), 'inst/')
+.inst.dir = .inst.dir[file.exists(.inst.dir)]
+
+.default.sty = file.path(.inst.dir, 'themes', 'default.css')
+# header for Latex Syntax Highlighting
+.header.hi.tex = paste(theme_to_header_latex(.default.sty)$highlight,
+                       collapse = '\n')
+.header.framed = paste(readLines(file.path(.inst.dir, 'misc', 'knitr.sty')),
+                       collapse = "\n")
+# CSS for html syntax highlighting
+.header.hi.html = paste(theme_to_header_html(.default.sty)$highlight,
+                        collapse = '\n')
