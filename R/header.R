@@ -1,9 +1,11 @@
 ## doc is the output of processed document
 insert_header <- function(doc){
-	fmt = opts_knit$get('out.format')
+  if (is.null(b <- knit_patterns$get('header.begin'))) return(doc)
+
+  fmt = opts_knit$get('out.format')
 	switch(fmt, 
-		html  = insert_header_html(doc), 
-		latex = insert_header_latex(doc),
+		html  = insert_header_html(doc, b),
+		latex = insert_header_latex(doc, b),
 		doc
 	)
 }
@@ -20,11 +22,7 @@ make_header_latex <- function(){
 	}
 }
 
-insert_header_latex <- function(doc){
-	# TODO: is this really required since b will never be NULL for latex.
-	if (is.null(b <- knit_patterns$get('header.begin'))){
-		return(doc)
-	}
+insert_header_latex <- function(doc, b) {
 	h   <- make_header_latex()
 	i   <- which(str_detect(doc, b))
 	l   <- str_locate(doc[i], b)
@@ -49,10 +47,7 @@ make_header_html <- function(){
 	}
 }
 
-insert_header_html <- function(doc){
-	if (is.null(b <- knit_patterns$get('header.begin'))){
-		return(doc)
-	}
+insert_header_html <- function(doc, b) {
 	h <- make_header_html()
 	i <- which(str_detect(doc, b))
 	l <- str_locate(doc[i], b)
