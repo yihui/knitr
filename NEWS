@@ -29,6 +29,12 @@ NEW FEATURES
   produces foo.md by default; the old clumsy naming convention
   foo_knit_.md is still preserved but not recommended any more (#187)
 
+  o new package option 'self.contained' which decides whether to write
+  style definitions (highlighting) in external files or put them in
+  the output document; the highlighting definitions in LaTeX output is
+  often too long, so opts_knit$set(self.contained = FALSE) can help in
+  this case (#176) (thanks, Ramnath Vaidyanathan)
+
   o the chunk option fig.cap is also used in markdown output now
 
   o the random seed .Random.seed is also cached for the sake of
