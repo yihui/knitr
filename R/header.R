@@ -3,9 +3,11 @@ insert_header = function(doc) {
   if (is.null(b <- knit_patterns$get('header.begin'))) return(doc)
 
   fmt = opts_knit$get('out.format')
-  switch(fmt, html  = insert_header_html(doc, b),
-         latex = insert_header_latex(doc, b),
-         doc)
+  if (fmt == 'html')
+    return(insert_header_html(doc, b))
+  if (fmt %in% c('latex', 'listings', 'sweave'))
+    return(insert_header_latex(doc, b))
+  doc
 }
 
 ## Makes latex header with macros required for highlighting, tikz and framed
