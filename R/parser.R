@@ -16,8 +16,7 @@ split_file = function(path, lines = readLines(path, warn = FALSE), set.preamble 
   
   blks = str_detect(lines, chunk.begin)
   txts = str_detect(lines, chunk.end)
-  if (isTRUE(as.logical(knit_patterns$get('chunk.end.is.terminator'))))
-    txts = filter_chunk_end(blks, txts)
+  if (opts_knit$get('filter.chunk.end')) txts = filter_chunk_end(blks, txts)
   
   tmp = logical(n); tmp[blks | txts] = TRUE; lines[txts] = ''
   

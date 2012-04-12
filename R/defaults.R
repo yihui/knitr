@@ -134,7 +134,7 @@ opts_knit =
                     all.patterns = all_patterns, tangle = FALSE,
                     child = FALSE, parent = FALSE,
                     cache.extra = NULL, aliases = NULL,
-                    self.contained = TRUE,
+                    self.contained = TRUE, filter.chunk.end = TRUE,
                     header = c(highlight = '', tikz = '', framed = ''))
                )
 ## header should not be set by hand unless you know what you are doing
