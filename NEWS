@@ -75,6 +75,11 @@ MAJOR CHANGES
   flavors also support such fenced code blocks (e.g. pandoc) -- it is
   not limited to Github only
 
+  o the default value for the 'fig.path' option is 'figure/' now so
+  that plots will be put under this directory by default; the default
+  was './' in the past which makes the current directory messy when
+  there are many plots
+
 BUG FIXES
 
   o the compilation of tikz graphics can hang up when there are TeX

@@ -42,7 +42,7 @@ opts_chunk =
                     ref.label = NULL, child = NULL,
                     prompt = FALSE, comment = '##', autodep = FALSE,
                     fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
-                    fig.path = '', fig.ext = NULL, dev = 'pdf', dpi = 72,
+                    fig.path = 'figure/', fig.ext = NULL, dev = 'pdf', dpi = 72,
                     fig.width = 7, fig.height = 7,
                     fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:', fig.pos = '',
                     out.width = NULL, out.height = NULL,
