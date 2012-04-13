@@ -61,7 +61,7 @@ All built-in options in **knitr** are:
 
 ### Plots
 
-- `fig.path`: (`''`; character) prefix to be used for figure filenames (`fig.path` and chunk labels are concatenated to make filenames); it may contain a directory like `figure/prefix-` (will be created if it does not exist); the default empty string means files will be created under the current working directory
+- `fig.path`: (`'figure/'`; character) prefix to be used for figure filenames (`fig.path` and chunk labels are concatenated to make filenames); it may contain a directory like `figure/prefix-` (will be created if it does not exist); this path is relative to the current working directory
 - `fig.keep`: (`'high'`; character) how plots in chunks should be kept; it takes five possible values (see the end of this section for an example)
   - `high`: only keep high-level plots (merge low-level changes into high-level plots);
   - `none`: discard all plots;
