@@ -24,7 +24,9 @@ purl(...)
 }
 \value{
   The compiled document is written into the output file,
-  and the path of the output file is returned.
+  and the path of the output file is returned, but if the
+  \code{output} path is \code{NULL}, the output is returned
+  as a character vector.
 }
 \description{
   This function takes an input file, extracts the R code in
@@ -45,12 +47,16 @@ purl(...)
 
   First the filename of the output document is determined
   in this way: \file{foo.Rnw} generates \file{foo.tex}, and
-  for other types of files, the file extension is reserved;
-  if the filename contains \samp{_knit_}, this part will be
-  removed in the output file, e.g., \file{foo_knit_.html}
-  creates the output \file{foo.html}, so you can use files
-  named in this way as templates; if \samp{_knit_} is not
-  found in the filename, \file{foo.ext} will produce
+  other filename extensions like \file{.Rtex},
+  \file{.Rhtml} (\file{.Rhtm}) and \file{.Rmd}
+  (\file{.Rmarkdown}) will generate \file{.tex},
+  \file{.html} and \file{.md} respectively. For other types
+  of files, the file extension is reserved; if the filename
+  contains \samp{_knit_}, this part will be removed in the
+  output file, e.g., \file{foo_knit_.html} creates the
+  output \file{foo.html}, so you can use files named in
+  this way as templates; if \samp{_knit_} is not found in
+  the filename, \file{foo.ext} will produce
   \file{foo-out.ext}. If \code{tangle = TRUE},
   \file{foo.ext} generates an R script \file{foo.R}.
 
