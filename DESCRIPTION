@@ -52,6 +52,7 @@ Suggests:
     rgl,
     tikzDevice (>= 0.6.2),
     codetools,
+    markdown (>= 0.4),
     XML,
     RCurl
 License: GPL
