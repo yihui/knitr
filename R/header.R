@@ -97,7 +97,8 @@ set_header = function(...) {
 
 .default.sty = file.path(.inst.dir, 'themes', 'default.css')
 # header for Latex Syntax Highlighting
-.header.hi.tex = paste(theme_to_header_latex(.default.sty)$highlight,
+.header.hi.tex = paste(c('\\IfFileExists{upquote.sty}{\\usepackage{upquote}}{}',
+                         theme_to_header_latex(.default.sty)$highlight),
                        collapse = '\n')
 .header.framed = paste(readLines(file.path(.inst.dir, 'misc', 'knitr.sty')),
                        collapse = "\n")
