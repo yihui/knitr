@@ -54,8 +54,7 @@ purl(...)
   of files, the file extension is reserved; if the filename
   contains \samp{_knit_}, this part will be removed in the
   output file, e.g., \file{foo_knit_.html} creates the
-  output \file{foo.html}, so you can use files named in
-  this way as templates; if \samp{_knit_} is not found in
+  output \file{foo.html}; if \samp{_knit_} is not found in
   the filename, \file{foo.ext} will produce
   \file{foo-out.ext}. If \code{tangle = TRUE},
   \file{foo.ext} generates an R script \file{foo.R}.
