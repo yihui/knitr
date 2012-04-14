@@ -29,6 +29,9 @@ NEW FEATURES
   produces foo.md by default; the old clumsy naming convention
   foo_knit_.md is still preserved but not recommended any more (#187)
 
+  o new function knit2html() to knit an Rmd file (R with markdown) and
+  convert to HTML in one step using the markdown package
+
   o new package option 'self.contained' which decides whether to write
   style definitions (highlighting) in external files or put them in
   the output document; the highlighting definitions in LaTeX output is
