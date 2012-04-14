@@ -84,11 +84,17 @@ MAJOR CHANGES
   was './' in the past which makes the current directory messy when
   there are many plots
 
+  o knitr will fully stop when an error is encountered in knit(); in
+  the past only a message was issued in this case in an interactive R
+  session
+
 BUG FIXES
 
   o the compilation of tikz graphics can hang up when there are TeX
   errors in the tikz file; now we use \nonstopmode to avoid hiccup
   (#188)
+
+  o multiple devices per chunk was buggy (#181)
 
 MISC
 
