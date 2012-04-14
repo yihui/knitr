@@ -1,4 +1,4 @@
 _site
-_knit_*
+*.Rmd
 knit-all.R
 
