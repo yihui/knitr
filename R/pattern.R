@@ -79,8 +79,10 @@ group_pattern = function(pattern) {
 ## automatically detect the chunk patterns
 detect_pattern = function(text) {
   for (p in names(all_patterns)) {
-    pat = all_patterns[[p]][['chunk.begin']]
-    if (length(pat) && length(grep(pat, text))) return(p)
+    for (i in c('chunk.begin', 'inline.code')) {
+      pat = all_patterns[[p]][[i]]
+      if (length(pat) && length(grep(pat, text))) return(p)
+    }
   }
   NULL
 }
