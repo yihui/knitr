@@ -51,6 +51,10 @@ NEW FEATURES
   o the function call read_chunk() will be evaluated when tangling R
   code via purl() (#175) (thanks, Carl Boettiger)
 
+  o the default LaTeX output will use the upquote package if it exists
+  so that single quotes are straight in the output (thanks,
+  Mathematical Coffee http://bit.ly/IKjluw)
+
 MAJOR CHANGES
 
   o knitr will completely stop when duplicated labels are found and
