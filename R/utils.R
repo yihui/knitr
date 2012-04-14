@@ -368,6 +368,24 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ...){
   texi2pdf(basename(out), ...)
 }
 
+#' Convert markdown to HTML using knit() and markdownToHTML()
+#'
+#' This is a convenience function to knit the input markdown source and call
+#' \code{markdownToHTML()} to convert the result to HTML.
+#' @inheritParams knit
+#' @param ... options passed to \code{\link{knit}}
+#' @export
+#' @seealso \code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}
+#' @examples # a minimal example
+#' writeLines(c('# hello markdown', '``` {r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
+#' knit2html('test.Rmd')
+#' if (interactive()) browseURL('test.html')
+knit2html = function(input, ...){
+  out = knit(input, ...)
+  markdown::markdownToHTML(out, str_c(file_path_sans_ext(out), '.html'))
+}
+
+
 #' Run the code in a specified chunk
 #' 
 #' We can specify a chunk label and use this function to evaluate the code in
