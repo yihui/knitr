@@ -7,7 +7,7 @@ subtitle: A list of regular expressions to extract R code and chunk options from
 The [object](objects) `knit_patterns` manages patterns in **knitr**. For example, we can use `knit_patterns$get()` to check the current pattern list. A pattern list includes the following components:
 
 - `chunk.begin`: the pattern for the beginning of a code chunk; it must contain a group defined by `()`, which will be used to extract chunk options
-- `chunk.end`: the pattern for the end of a chunk
+- `chunk.end`: the pattern for the end of a chunk (the original meaning of this pattern in literate programming is different: it used to indicate the beginning of normal text; if you want the original meaning, see the [package option](/knitr/options) `filter.chunk.end`)
 - `chunk.code`: the pattern to be used to extract R code from a chunk by removing characters of this pattern
 - `inline.code`: the pattern to be used to extract the pieces of R code mixed inline with other texts (i.e. those which are not in separate code chunks); like `chunk.begin`, it must contain a group 
 - `input.doc`: the pattern to find out child documents
@@ -22,53 +22,61 @@ Like Sweave, there are two types of R code in **knitr**: code chunks (like parag
 
 ## Built-in Patterns
 
-There are several built-in pattern lists in **knitr** which are stored in `opts_knit$get('all.patterns')`.
+There are several built-in pattern lists in **knitr** which are stored in `all_patterns`.
 
 
 
 {% highlight r %}
 library(knitr)
-apats = opts_knit$get("all.patterns")  # a list of all built-in patterns
-str(apats)
+str(all_patterns)
 {% endhighlight %}
 
 
 
 {% highlight text %}
-## List of 4
+## List of 5
 ##  $ rnw :List of 9
 ##   ..$ chunk.begin   : chr "^<<(.*)>>="
 ##   ..$ chunk.end     : chr "^@\\s*%*"
 ##   ..$ inline.code   : chr "\\\\Sexpr\\{([^}]*)\\}"
 ##   ..$ input.doc     : chr "(^|\n) *\\\\SweaveInput\\{([^}]*)\\}"
-##   ..$ ref.chunk     : chr "^<<(.*)>>\\s*$"
+##   ..$ ref.chunk     : chr "^\\s*<<(.*)>>\\s*$"
 ##   ..$ global.options: chr "\\\\SweaveOpts\\{([^}]*)\\}"
 ##   ..$ header.begin  : chr "\n*\\s*\\\\documentclass[^}]+\\}"
 ##   ..$ document.begin: chr "\n*\\s*\\\\begin\\{document\\}"
 ##   ..$ ref.label     : chr "^## @knitr (.*)$"
 ##  $ brew:List of 1
 ##   ..$ inline.code: chr "<%[=]{0,1}\\s+([^%]*)\\s+[-]*%>"
-##  $ tex :List of 8
+##  $ tex :List of 9
 ##   ..$ chunk.begin   : chr "^%+\\s*begin.rcode\\s*(.*)"
 ##   ..$ chunk.end     : chr "^%+\\s*end.rcode"
 ##   ..$ chunk.code    : chr "^%+"
+##   ..$ ref.chunk     : chr "^%+\\s*<<(.*)>>\\s*$"
 ##   ..$ global.options: chr "%+\\s*roptions\\s*([^\n]*)"
 ##   ..$ inline.code   : chr "\\\\rinline\\{([^}]*)\\}"
 ##   ..$ header.begin  : chr "\n*\\s*\\\\documentclass[^}]+\\}"
 ##   ..$ document.begin: chr "\n*\\s*\\\\begin\\{document\\}"
 ##   ..$ ref.label     : chr "^## @knitr (.*)$"
-##  $ html:List of 6
+##  $ html:List of 7
 ##   ..$ chunk.begin   : chr "^<!--\\s*begin.rcode\\s*(.*)"
 ##   ..$ chunk.end     : chr "^\\s*end.rcode\\s*-->"
+##   ..$ ref.chunk     : chr "^\\s*<<(.*)>>\\s*$"
 ##   ..$ inline.code   : chr "<!--\\s*rinline\\s*([^>]*)\\s*-->"
 ##   ..$ global.options: chr "<!--\\s*roptions\\s*([^>]*)\\s*-->"
 ##   ..$ header.begin  : chr "\n*\\s*<head>"
+##   ..$ ref.label     : chr "^## @knitr (.*)$"
+##  $ md  :List of 6
+##   ..$ chunk.begin   : chr "^`{3,}\\s*\\{r(.*)\\}\\s*$"
+##   ..$ chunk.end     : chr "^`{3,}\\s*$"
+##   ..$ ref.chunk     : chr "^\\s*<<(.*)>>\\s*$"
+##   ..$ inline.code   : chr "`r\\s+([^`]*)\\s*`"
+##   ..$ global.options: chr "`ro\\s+([^`]*)\\s+or`"
 ##   ..$ ref.label     : chr "^## @knitr (.*)$"
 {% endhighlight %}
 
 
 
 
-Depending on the extension of the input filename, **knitr** will automatically choose a pattern list from the above lists, e.g. `file.Rnw` will use `apats$rnw`, and `file.html` will use `apats$html`, etc.
+**Knitr** will first examine the content of the input to decide an appropriate set of patterns, if this automatic detection fails, then depending on the extension of the input filename, **knitr** will automatically choose a pattern list from the above lists, e.g. `file.Rnw` will use `all_patterns$rnw`, and `file.html` will use `all_patterns$html`, etc.
 
-A series of convenience functions `pat_rnw()`, `pat_html()`, `pat_tex()` and `pat_brew()` can be used to set built-in patterns.
+A series of convenience functions `pat_rnw()`, `pat_html()`, `pat_md()`, `pat_tex()` and `pat_brew()` can be used to set built-in patterns.
