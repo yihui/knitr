@@ -99,7 +99,7 @@ set_preamble = function(input) {
   if (any(is.na(idx))) return()
   options(tikzDocumentDeclaration = str_sub(txt, idx[, 1L], idx[, 2L]))
   preamble = pure_preamble(str_split(str_sub(txt, idx[, 2L] + 1L), '\n')[[1L]])
-  .knitEnv$tikzPackages = c(preamble, '\n')
+  .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
 }
 ## filter out code chunks from preamble if they exist (they do in LyX/Sweave)
 pure_preamble = function(preamble) {

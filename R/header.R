@@ -105,3 +105,9 @@ set_header = function(...) {
 # CSS for html syntax highlighting
 .header.hi.html = paste(theme_to_header_html(.default.sty)$highlight,
                         collapse = '\n')
+
+.header.sweave.cmd =
+'\\newcommand{\\SweaveOpts}[1]{}  % do not interfere with LaTeX
+\\newcommand{\\SweaveInput}[1]{} % because they are not real TeX commands
+\\newcommand{\\Sexpr}[1]{}       % will only be parsed by R
+'
