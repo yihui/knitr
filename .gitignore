@@ -14,5 +14,5 @@ knitr-spin.html
 .*.Rnb.cached
 revdep
 _site
-_knit_*
+*.Rmd
 knit-all.R
