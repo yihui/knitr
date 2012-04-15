@@ -97,10 +97,17 @@ set_header = function(...) {
 
 .default.sty = file.path(.inst.dir, 'themes', 'default.css')
 # header for Latex Syntax Highlighting
-.header.hi.tex = paste(theme_to_header_latex(.default.sty)$highlight,
+.header.hi.tex = paste(c('\\IfFileExists{upquote.sty}{\\usepackage{upquote}}{}',
+                         theme_to_header_latex(.default.sty)$highlight),
                        collapse = '\n')
 .header.framed = paste(readLines(file.path(.inst.dir, 'misc', 'knitr.sty')),
                        collapse = "\n")
 # CSS for html syntax highlighting
 .header.hi.html = paste(theme_to_header_html(.default.sty)$highlight,
                         collapse = '\n')
+
+.header.sweave.cmd =
+'\\newcommand{\\SweaveOpts}[1]{}  % do not interfere with LaTeX
+\\newcommand{\\SweaveInput}[1]{} % because they are not real TeX commands
+\\newcommand{\\Sexpr}[1]{}       % will only be parsed by R
+'

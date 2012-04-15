@@ -1,6 +1,6 @@
 \name{knit2pdf}
 \alias{knit2pdf}
-\title{Convert Rnw to PDF using knit and texi2pdf}
+\title{Convert Rnw to PDF using knit() and texi2pdf()}
 \usage{
 knit2pdf(input, output = NULL, compiler = NULL, ...)
 }

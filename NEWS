@@ -29,6 +29,9 @@ NEW FEATURES
   produces foo.md by default; the old clumsy naming convention
   foo_knit_.md is still preserved but not recommended any more (#187)
 
+  o new function knit2html() to knit an Rmd file (R with markdown) and
+  convert to HTML in one step using the markdown package
+
   o new package option 'self.contained' which decides whether to write
   style definitions (highlighting) in external files or put them in
   the output document; the highlighting definitions in LaTeX output is
@@ -50,6 +53,10 @@ NEW FEATURES
 
   o the function call read_chunk() will be evaluated when tangling R
   code via purl() (#175) (thanks, Carl Boettiger)
+
+  o the default LaTeX output will use the upquote package if it exists
+  so that single quotes are straight in the output (thanks,
+  Mathematical Coffee http://bit.ly/IKjluw)
 
 MAJOR CHANGES
 
@@ -75,11 +82,22 @@ MAJOR CHANGES
   flavors also support such fenced code blocks (e.g. pandoc) -- it is
   not limited to Github only
 
+  o the default value for the 'fig.path' option is 'figure/' now so
+  that plots will be put under this directory by default; the default
+  was './' in the past which makes the current directory messy when
+  there are many plots
+
+  o knitr will fully stop when an error is encountered in knit(); in
+  the past only a message was issued in this case in an interactive R
+  session
+
 BUG FIXES
 
   o the compilation of tikz graphics can hang up when there are TeX
   errors in the tikz file; now we use \nonstopmode to avoid hiccup
   (#188)
+
+  o multiple devices per chunk was buggy (#181)
 
 MISC
 

@@ -14,11 +14,13 @@
 #' knitting the document.
 #'
 #' First the filename of the output document is determined in this way:
-#' \file{foo.Rnw} generates \file{foo.tex}, and for other types of files, the
-#' file extension is reserved; if the filename contains \samp{_knit_}, this part
-#' will be removed in the output file, e.g., \file{foo_knit_.html} creates the
-#' output \file{foo.html}, so you can use files named in this way as templates;
-#' if \samp{_knit_} is not found in the filename, \file{foo.ext} will produce
+#' \file{foo.Rnw} generates \file{foo.tex}, and other filename extensions like
+#' \file{.Rtex}, \file{.Rhtml} (\file{.Rhtm}) and \file{.Rmd}
+#' (\file{.Rmarkdown}) will generate \file{.tex}, \file{.html} and \file{.md}
+#' respectively. For other types of files, the file extension is reserved; if
+#' the filename contains \samp{_knit_}, this part will be removed in the output
+#' file, e.g., \file{foo_knit_.html} creates the output \file{foo.html}; if
+#' \samp{_knit_} is not found in the filename, \file{foo.ext} will produce
 #' \file{foo-out.ext}. If \code{tangle = TRUE}, \file{foo.ext} generates an R
 #' script \file{foo.R}.
 #'
@@ -52,7 +54,8 @@
 #' @param text a character vector as an alternative way to provide the input
 #'   file
 #' @return The compiled document is written into the output file, and the path
-#'   of the output file is returned.
+#'   of the output file is returned, but if the \code{output} path is
+#'   \code{NULL}, the output is returned as a character vector.
 #' @note The name \code{knit} comes from its counterpart \samp{weave} (as in
 #'   Sweave), and the name \code{purl} (as \samp{tangle} in Stangle) comes from
 #'   a knitting method `knit one, purl one'.
@@ -197,9 +200,7 @@ process_file = function(text) {
     txt = try((if (tangle) process_tangle else process_group)(group), silent = TRUE)
     if (inherits(txt, 'try-error')) {
       print(group)
-      msg = sprintf('Quitting from lines %s: %s', current_lines(i), txt)
-      (if (interactive()) message else stop)(msg)
-      break
+      stop(sprintf('Quitting from lines %s: %s', current_lines(i), txt))
     }
     res[i] = txt
   }
