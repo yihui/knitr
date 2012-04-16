@@ -357,7 +357,7 @@ render_html = function() {
 #'   by three backticks
 render_markdown = function(strict = FALSE) {
   knit_hooks$restore()
-  opts_chunk$set(dev = 'png')
+  opts_chunk$set(dev = 'png', highlight = FALSE)
   ## four spaces lead to <pre></pre>
   hook.t = function(x, options) {
     if (strict) {
