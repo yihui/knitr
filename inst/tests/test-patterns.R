@@ -5,7 +5,7 @@ test_that('auto detect patterns', {
   expect_identical(detect_pattern('<<foo, bar=TRUE>>='), 'rnw')
   expect_identical(detect_pattern('% begin.rcode'), 'tex')
   expect_identical(detect_pattern('<!--begin.rcode'), 'html')
-  expect_identical(detect_pattern('``` {r}'), 'gfm')
+  expect_identical(detect_pattern('``` {r}'), 'md')
 })
 
 test_that('does a pattern contain a group?', {
