@@ -99,6 +99,10 @@ BUG FIXES
 
   o multiple devices per chunk was buggy (#181)
 
+  o S4 objects will be printed by show() instead of print(); this is a
+  bug of the evaluate package, which has been fixed (please update it
+  to be > 0.4.2)
+
 MISC
 
   o number of downloads (https://github.com/yihui/knitr/downloads) of
