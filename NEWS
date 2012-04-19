@@ -58,6 +58,14 @@ NEW FEATURES
   so that single quotes are straight in the output (thanks,
   Mathematical Coffee http://bit.ly/IKjluw)
 
+  o the chunk option 'engine' is back but it is used to run code from
+  other languages instead of just ignoring the code in chunks which
+  have engine != 'R'; currently this option is still in rough edges
+  and only supports python and awk; other languages may be added in
+  future versions, but users can also do it by themselves by
+  knit_engines$set(language = function(options) {...}); see an example
+  at system.file('examples', 'knitr-lang.Rmd') (#201)
+
 MAJOR CHANGES
 
   o knitr will completely stop when duplicated labels are found and
