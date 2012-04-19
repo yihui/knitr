@@ -15,7 +15,7 @@ for (i in list.files(pattern = '\\.lyx$')) {
   flush.console()
 }
 
-for (i in list.files(pattern = '_knit_\\.')) {
+for (i in list.files(pattern = '\\.R(tex|md|html)')) {
   message(i)
   stopifnot(identical(system(sprintf('knit %s', i)), 0L))
   flush.console()

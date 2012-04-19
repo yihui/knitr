@@ -52,6 +52,8 @@ call_block = function(block) {
 }
 
 block_exec = function(params) {
+  # when code is not R language
+  if (params$engine != 'R') return(knit_engines$get(params$engine)(params))
   code = params$code
   options = params
   

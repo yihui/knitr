@@ -178,7 +178,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-http://yihui.github.com/knitr/demo/lyx/
+http://yihui.name/knitr/demo/lyx/
 \end_layout
 
 \end_inset
@@ -192,12 +192,36 @@ If you use Sweave or
 \series bold
 knitr
 \series default
- with Beamer in LyX, you probably use the FragileFrame module too.
+ with Beamer in LyX, you probably use the 
+\emph on
+Beamer Fragile
+\emph default
+ module
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.lyx.org/trac/ticket/7273
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ too.
  Let's see if 
 \series bold
 knitr
 \series default
- works with Beamer and FragileFrame in this small demo.
+ works with Beamer in this small demo.
  
 \end_layout
 
