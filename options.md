@@ -120,6 +120,10 @@ There are two hidden options which are not designed to be set by the users: `fig
 
 - `child`: (`NULL`; character) a character vector of filenames of child documents to be run and input into the main document
 
+### Language Engines
+
+- `engine`: (`'R'`; character) the language name of the code chunk; currently other possible values are `'python'` and `'awk'`/`'gawk'`; the object `knit_engines` in this package can be used to set up engines for other languages
+
 ## Package Options <a id="package_options"></a>
 
 The package options can be changed using the object [`opts_knit`](objects); for example,
