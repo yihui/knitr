@@ -1,0 +1,29 @@
+# Test of other languages in knitr
+
+R works, of course.
+
+``` {r test-r, engine='R'}
+rnorm(5)
+```
+
+Can **knitr** deal with other languages? You should have them installed.
+
+## Python
+
+``` {r test-python, engine='python'}
+x = 'hello, python world!'
+print x
+print x.split(' ')
+```
+
+## Awk
+
+We need to pass a `file` option to Awk.
+
+``` {r test-awk, engine='awk', file=system.file('examples', 'knitr-manual.Rnw', package = 'knitr')}
+# how many non-empty lines?
+NF {
+  i = i + 1
+}
+END { print i }
+```
