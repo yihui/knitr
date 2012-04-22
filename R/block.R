@@ -56,7 +56,13 @@ block_exec = function(params) {
   if (params$engine != 'R') return(knit_engines$get(params$engine)(params))
   code = params$code
   options = params
-  
+
+  ## eval chunks (in an empty envir if cache)
+  env = if (options$cache) new.env(parent = globalenv()) else globalenv()
+  .knitEnv$knit_env = env # make a copy of the envir
+  obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
+  res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
+
   ## tidy code if echo
   echo = options$echo
   if (!isFALSE(echo) && options$tidy) {
@@ -77,11 +83,7 @@ block_exec = function(params) {
     if (options$cache) block_cache(options, output, character(0))
     return(if (options$include) output else '')
   }
-  
-  ## eval chunks (in an empty envir if cache)
-  env = if (options$cache) new.env(parent = globalenv()) else globalenv()
-  .knitEnv$knit_env = env # make a copy of the envir
-  
+
   ## open a graphical device to record graphics
   dargs = formals(getOption('device'))  # is NULL in RStudio's GD
   (if (is.null(dargs) || !interactive()) {
@@ -96,9 +98,7 @@ block_exec = function(params) {
   if (keep != 'none' && is.null(options$fig.ext)) {
     options$fig.ext = dev2ext(options$dev)
   }
-  
-  obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
-  res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
+
   owd = setwd(input_dir())
   res = evaluate(code, envir = env) # run code
   setwd(owd)
