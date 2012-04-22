@@ -93,8 +93,8 @@ parse_params = function(params, label = TRUE) {
       res$label = gsub(' ', '', as.character(as.expression(res$label)))
     return(res)
   }
-  warning('(*) NOTE: I saw options ', params,
-          '\n are you using the old Sweave syntax? go http://yihui.name/knitr/options')
+  warning('(*) NOTE: I saw options "', params,
+          '"\n are you using the old Sweave syntax? go http://yihui.name/knitr/options')
   Sys.sleep(10)  # force you to pay attention!
 
   ## split by , (literal comma has to be escaped as \,) and then by =
