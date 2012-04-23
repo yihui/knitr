@@ -79,7 +79,7 @@ parse_params = function(params, label = TRUE) {
     return(if (!label) list() else list(label = unnamed_chunk()))
   }
   res = try(eval(parse(text = str_c("alist(", params, ")"))))
-  if (!inherits(res, 'try-error') && valid_opts(res)) {
+  if (!inherits(res, 'try-error') && valid_opts(params)) {
     ## good, you seem to be using valid R code
     idx = which(names(res) == '')  # which option is not named?
     if (is.null(names(res))) idx = 1L  # empty name, must be label
@@ -93,8 +93,8 @@ parse_params = function(params, label = TRUE) {
       res$label = gsub(' ', '', as.character(as.expression(res$label)))
     return(res)
   }
-  warning('(*) NOTE: I saw options ', params,
-          '\n are you using the old Sweave syntax? go http://yihui.name/knitr/options')
+  warning('(*) NOTE: I saw options "', params,
+          '"\n are you using the old Sweave syntax? go http://yihui.name/knitr/options')
   Sys.sleep(10)  # force you to pay attention!
 
   ## split by , (literal comma has to be escaped as \,) and then by =
@@ -122,22 +122,15 @@ parse_params = function(params, label = TRUE) {
   lapply(values, type.convert, as.is = TRUE)
 }
 
-## is the options list from eval() valid?
-valid_opts = function(options) {
-  nms = setdiff(names(options), c('', 'label'))
-  if (!length(nms)) return(TRUE)
+## is the options list valid with knitr's new syntax?
+.wrong.opts = c('results\\s*=\\s*(verbatim|tex|hide|asis|markup)',
+                'fig.keep\\s*=\\s*(none|all|high|last|first)',
+                'fig.show\\s*=\\s*(hold|asis|animate)',
+                sprintf('dev\\s*=\\s*(%s)', paste(names(auto_exts), collapse = '|')),
+                'fig.align\\s*=\\s*(default|left|center|right)')
+valid_opts = function(x) {
   ## not a rigorous check; you should go to the new syntax finally!
-  chk = c('results', 'fig.keep', 'fig.show', 'dev', 'out.width', 'out.height', 'prefix.string',
-          'fig.align', 'fig.path', 'cache.path', 'ref.label', 'child', 'dependson')
-  if (!is.character(options$dev)) options$dev = eval(options$dev)
-  for (o in intersect(chk, nms)) {
-    if (!is.null(options[[o]]) && !is.character(options[[o]])) {
-      warning('unexpected option ', sQuote(o), '; forgot to quote it?')
-      str(options[[o]])
-      return(FALSE)
-    }
-  }
-  TRUE
+  !any(str_detect(x, .wrong.opts))
 }
 
 print.block = function(x, ...) {

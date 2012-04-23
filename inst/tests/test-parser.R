@@ -13,6 +13,10 @@ test_that('parsing options', {
   ## back-compatibility with Sweave
   expect_identical(parse_params('abc,fig.path=foo/bar-'),
                    list(label='abc',fig.path='foo/bar-'))
+  expect_true(valid_opts('a, results="hide"'))
+  expect_false(valid_opts('a, results=hide'))
+  expect_true(valid_opts('a, fig.show="asis"'))
+  expect_false(valid_opts('a, fig.show=animate'))
 })
 
 

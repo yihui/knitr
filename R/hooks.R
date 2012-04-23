@@ -362,7 +362,7 @@ render_markdown = function(strict = FALSE) {
   hook.t = function(x, options) {
     if (strict) {
       str_c('\n\n', line_prompt(x, '    ', '    '), '\n')
-    } else str_c('\n\n```no-highlight\n', x, '```\n\n')
+    } else str_c('\n\n```\n', x, '```\n\n')
   }
   hook.r = function(x, options) str_c('\n\n```r\n', x, '```\n\n')
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)

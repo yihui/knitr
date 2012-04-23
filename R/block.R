@@ -22,20 +22,20 @@ call_block = function(block) {
   if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
   params$code = unlist(knit_code$get(ref.label), use.names = FALSE)
   if (opts_knit$get('progress')) print(block)
-  
+
   if (params$eval && !is.null(params$child)) {
     cmds = lapply(sc_split(params$child), knit_child)
     return(str_c(unlist(cmds), collapse = '\n'))
   }
-  
+
   if ((!params$eval && isFALSE(params$echo)) || length(params$code) == 0 ||
     all(is_blank(params$code)))
     return('') # a trivial chunk; do nothing
-  
+
   if (is_tikz_dev(params)) set_header(tikz = '\\usepackage{tikz}')
-  
+
   params$code = parse_chunk(params$code) # parse sub-chunk references
-  
+
   ## Check cache
   content = list(params[setdiff(names(params), 'include')], getOption('width'))
   content[[3L]] = opts_knit$get('cache.extra')
@@ -56,7 +56,13 @@ block_exec = function(params) {
   if (params$engine != 'R') return(knit_engines$get(params$engine)(params))
   code = params$code
   options = params
-  
+
+  ## eval chunks (in an empty envir if cache)
+  env = if (options$cache) new.env(parent = globalenv()) else globalenv()
+  .knitEnv$knit_env = env # make a copy of the envir
+  obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
+  res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
+
   ## tidy code if echo
   echo = options$echo
   if (!isFALSE(echo) && options$tidy) {
@@ -77,32 +83,26 @@ block_exec = function(params) {
     if (options$cache) block_cache(options, output, character(0))
     return(if (options$include) output else '')
   }
-  
-  ## eval chunks (in an empty envir if cache)
-  env = if (options$cache) new.env(parent = globalenv()) else globalenv()
-  .knitEnv$knit_env = env # make a copy of the envir
-  
+
   ## open a graphical device to record graphics
   dargs = formals(getOption('device'))  # is NULL in RStudio's GD
   (if (is.null(dargs) || !interactive()) {
     function(...) pdf(file = NULL, ...)
   } else dev.new)(width = options$fig.width, height = options$fig.height)
   dv = dev.cur(); on.exit(dev.off(dv))
-  
+
   keep = options$fig.keep
   dev.control(displaylist = if (keep != 'none') 'enable' else 'inhibit')  # enable recording
-  
+
   ## guess plot file type if it is NULL
   if (keep != 'none' && is.null(options$fig.ext)) {
     options$fig.ext = dev2ext(options$dev)
   }
-  
-  obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
-  res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
+
   owd = setwd(input_dir())
   res = evaluate(code, envir = env) # run code
   setwd(owd)
-  
+
   ## eval other options after the chunk
   for (o in opts_knit$get('eval.after')) options[[o]] = eval_lang(options[[o]], env)
 
@@ -122,7 +122,7 @@ block_exec = function(params) {
     res = Filter(Negate(is.error), res)
   if (!options$message)
     res = Filter(Negate(is.message), res)
-  
+
   ## rearrange locations of figures
   figs = sapply(res, is.recordedplot)
   if (length(figs) && any(figs)) {
@@ -149,7 +149,7 @@ block_exec = function(params) {
   if (is.null(options$fig.num)) {
     options$fig.num = if (length(res)) sum(sapply(res, is.recordedplot)) else 0L
   }
-  
+
   ## merge source lines if they do not have output; is there an elegant way??
   iss = if (length(res)) which(sapply(res, is.source)) else NULL
   if ((n <- length(iss)) > 1) {
@@ -164,23 +164,23 @@ block_exec = function(params) {
     }
     if (length(k2)) res = res[-k2] # remove lines that have been merged back
   }
-  
+
   output = str_c(unlist(wrap(res, options)), collapse = '') # wrap all results together
-  
+
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
   if (options$cache) copy_env(env, globalenv())
-  
+
   output = str_c(c(res.before, output, res.after), collapse = '')  # insert hook results
   output = if (length(output) == 0L) '' else knit_hooks$get('chunk')(output, options)
   plot_counter(reset = TRUE)  # restore plot number
-  
+
   if (options$cache) {
     obj.after = ls(globalenv(), all.names = TRUE)  # figure out new global objs
     objs = c(ls(env, all.names = TRUE), setdiff(obj.after, obj.before))
     block_cache(options, output, objs)
     if (options$autodep) cache$objects(objs, code, options$label, options$cache.path)
   }
-  
+
   if (options$include) output else ''
 }
 
@@ -196,21 +196,21 @@ block_cache = function(options, output, objects) {
 }
 
 call_inline = function(block) {
-  
+
   ## change global options if detected inline options
   options = block$params = lapply(block$params, eval_lang)  # try eval global options
   if (length(options)) opts_chunk$set(options)
   if (opts_knit$get('progress')) print(block)
-  
+
   inline_exec(block)
 }
 
 inline_exec = function(block) {
-  
+
   ## run inline code and substitute original texts
   code = block$code; input = block$input
   if ((n <- length(code)) == 0) return(input) # untouched if no code is found
-  
+
   owd = setwd(input_dir()); on.exit(setwd(owd))
   loc = block$location
   for (i in 1:n) {

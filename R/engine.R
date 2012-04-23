@@ -10,13 +10,14 @@
 #' @examples knit_engines$get('python'); knit_engines$get('awk')
 knit_engines = new_defaults()
 
-wrap_fmt = function(x, lang = 'text') {
+wrap_fmt = function(x, lang = '') {
   fmt = opts_knit$get('out.format')
   tpl = if (fmt %in% c('latex', 'listings', 'sweave')) {
     '\\begin{verbatim}\n%s\\end{verbatim}'
   } else switch(fmt, html = '<pre class="knitr">%s</pre>',
                 markdown = str_c('```', lang, '\n%s\n```'),
-                jekyll = str_c('{%% highlight ', lang, ' %%}\n%s\n{%% endhighlight %%}'),
+                jekyll = str_c('{%% highlight ', if (lang == '') 'text' else lang,
+                               ' %%}\n%s\n{%% endhighlight %%}'),
                 '%s')
   sprintf(tpl, str_c(x, collapse = '\n'))
 }
