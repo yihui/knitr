@@ -134,6 +134,28 @@ hook_plot_md = function(x, options) {
     sprintf('![%s](%s%s) ', cap, base, .upload.url(x))
   }
 }
+#' @rdname hook_plot
+#' @export
+## TODO: add all options for figure
+## See http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
+## http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure
+hook_plot_rest <- function (x, options)
+{
+    print(x)
+    ## Use * and only first name of the plot?
+    y = sprintf("\n.. figure:: %s.*", x[1])
+    opts.str = c()
+    if (!is.null(options$out.height)) {
+        opts.str = c(opts.str,
+                      sprintf("   :height: %s", options$out.height))
+    }
+    if (!is.null(options$out.width)) {
+        opts.str = c(opts.str,
+                      sprintf("   :width: %s", options$out.width))
+    }
+    paste(y, paste(opts.str, collapse="\n"), sep="\n")
+}
+
 
 ## a wrapper to imgur_upload to get the URL of images when option upload==TRUE
 .upload.url = function(x) {
@@ -382,7 +404,49 @@ render_jekyll = function() {
   knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
                  error = hook.t, message = hook.t)
 }
-## may add textile, ReST and many other markup languages
+#' @rdname output_hooks
+#' @export
+render_rest = function() {
+    knit_hooks$restore()
+    opts_chunk$set(dev = 'png', highlight = FALSE)
+    hook.src = function(x, options) {
+        c("\n\n::\n\n", line_prompt(x, "   ",  "   "), "\n")
+    }
+    hook.output = function(x, options) {
+        if(output_asis(x, options)) {
+            x
+        } else {
+            hook.src(x, options)
+        }
+    }
+    hook.warning = hook.src
+    hook.error = hook.src
+    hook.message = hook.src
+    hook.inline = function(x) {
+        sprintf(if (inherits(x, 'AsIs')) '%s' else '``%s``',
+                .inline.hook(x))
+    }
+    hook.plot = hook_plot_rest
+    knit_hooks$set(source = hook.src,
+                   output = hook.output,
+                   warning = hook.warning,
+                   error = hook.error,
+                   message = hook.message,
+                   inline = hook.inline,
+                   plot = hook.plot)
+}
+#' @rdname output_hooks
+#' @export
+render_sphinx = function() {
+    render_rest()
+    hook.src = function(x, options) {
+        c(".. code-block:: r\n",
+          str_c("\n", line_prompt(x, "   ",  "   ")),
+          "\n")
+    }
+    knit_hooks$set(source = hook.src)
+}
+## may add textile, and many other markup languages
 
 #' Built-in chunk hooks to extend knitr
 #'

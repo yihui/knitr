@@ -1,18 +1,18 @@
 ## initial pattern list
 .pat.init = list(chunk.begin = NULL, chunk.end = NULL, chunk.code = NULL,
                 inline.code = NULL, global.options = NULL, input.doc = NULL,
-                ref.chunk = NULL, header.begin = NULL, document.begin = NULL, 
+                ref.chunk = NULL, header.begin = NULL, document.begin = NULL,
                 ref.label = NULL)
 
 #' Patterns to match and extract R code in a document
-#' 
+#'
 #' Patterns are regular expressions and will be used in functions like
 #' \code{\link[base]{grep}} to extract R code and chunk options. The object
 #' \code{knit_patterns} controls the patterns currently used; see the references
 #' and examples for usage.
-#' 
+#'
 #' @references Usage: \url{http://yihui.name/knitr/objects}
-#'   
+#'
 #' Components in \code{knit_patterns}: \url{http://yihui.name/knitr/patterns}
 #' @export
 #' @examples library(knitr)
@@ -42,7 +42,7 @@ set_pattern = function(type) {
 }
 
 #' Set regular expressions to read input documents
-#' 
+#'
 #' These are convenience functions to set pre-defined pattern lists (the syntax
 #' to read input documents). The function names are built from corresponding
 #' file extensions, e.g. \code{pat_rnw()} can set the Sweave syntax to read Rnw
@@ -68,6 +68,9 @@ pat_html = function() set_pattern('html')
 #' @rdname pat_fun
 #' @export
 pat_md = function() set_pattern('md')
+#' @rdname pat_fun
+#' @export
+pat_rest = function() set_pattern('rest')
 
 ## helper functions
 
