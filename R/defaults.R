@@ -1,6 +1,6 @@
 new_defaults = function(value = list()) {
   defaults = value
-  
+
   get = function(name, default = FALSE) {
     if (default) defaults = value  # this is only a local version
     if (missing(name)) defaults else {
@@ -20,23 +20,23 @@ new_defaults = function(value = list()) {
     defaults
   }
   restore = function() defaults <<- value
-  
+
   list(get = get, set = set, merge = merge, restore = restore)
 }
 
 #' Default and current chunk options
-#' 
+#'
 #' Options for R code chunks. When running R code, the object \code{opts_chunk}
 #' (default options) is not modified by chunks (local chunk options are merged
 #' with default options), whereas \code{opts_current} (current options) changes
 #' with different chunks.
 #' @references Usage: \url{http://yihui.name/knitr/objects}
-#'   
+#'
 #' A list of available options:
 #' \url{http://yihui.name/knitr/options#chunk_options}
 #' @export
 #' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
-opts_chunk = 
+opts_chunk =
   new_defaults(list(eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
                     cache = FALSE, dependson = NULL, cache.path = 'cache/',
                     ref.label = NULL, child = NULL, engine = 'R',
@@ -79,7 +79,7 @@ opts_chunk_attr = (function() {
 #'
 #' str(all_patterns)
 all_patterns =
-  
+
   list(`rnw` = list(chunk.begin = '^<<(.*)>>=', chunk.end = '^@\\s*%*',
                     inline.code = '\\\\Sexpr\\{([^}]*)\\}',
                     input.doc = '(^|\n) *\\\\SweaveInput\\{([^}]*)\\}',
@@ -88,9 +88,9 @@ all_patterns =
                     header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
                     document.begin = '\n*\\s*\\\\begin\\{document\\}',
                     ref.label = '^## @knitr (.*)$'),
-       
+
        `brew` = list(inline.code = '<%[=]{0,1}\\s+([^%]*)\\s+[-]*%>'),
-       
+
        `tex` = list(chunk.begin = '^%+\\s*begin.rcode\\s*(.*)',
                     chunk.end = '^%+\\s*end.rcode', chunk.code = '^%+',
                     ref.chunk = '^%+\\s*<<(.*)>>\\s*$',
@@ -99,7 +99,7 @@ all_patterns =
                     header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
                     document.begin = '\n*\\s*\\\\begin\\{document\\}',
                     ref.label = '^## @knitr (.*)$'),
-       
+
        `html` = list(chunk.begin = '^<!--\\s*begin.rcode\\s*(.*)',
                      chunk.end = '^\\s*end.rcode\\s*-->',
                      ref.chunk = '^\\s*<<(.*)>>\\s*$',
@@ -113,14 +113,22 @@ all_patterns =
                    ref.chunk = '^\\s*<<(.*)>>\\s*$',
                    inline.code = '`r +([^`\n]+)\\s*`',
                    global.options = '`ro\\s+([^`]*)\\s+or`',
-                   ref.label = '^## @knitr (.*)$'))
+                   ref.label = '^## @knitr (.*)$'),
+
+       `rest` = list(chunk.begin = "^\\.\\.\\s+<<(.*)>>=\\s*$",
+                     chunk.end = "^\\.\\.\\s+@\\s*$",
+                     chunk.code = "^\\.\\.",
+                     ref.chunk = "^\\.\\.\\s*<<(.*)>>\\s*$",
+                     inline.code = ":R:`([^`]*)`",
+                     global.options = ":roptions:\\s+([^\n]*)",
+                     ref.label = "^## @knitr (.*)$"))
 
 #' Options for the knitr package
-#' 
+#'
 #' Options including whether to use a progress bar when knitting a document, and
 #' the base directory of images, etc.
 #' @references Usage: \url{http://yihui.name/knitr/objects}
-#'   
+#'
 #' A list of available options:
 #' \url{http://yihui.name/knitr/options#package_options}
 #' @export
