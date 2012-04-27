@@ -7,10 +7,11 @@
 #' normal \samp{\\includegraphics{}} command, or \samp{\\input{}} (for tikz
 #' files), or \samp{\\animategraphics{}} (for animations); it also takes many
 #' other options into consideration to align plots and set figure sizes, etc.
-#' Similarly, \code{hook_plot_html} and \code{hook_plot_md} return character
-#' strings which are HTML or Markdown code.
+#' Similarly, \code{hook_plot_html}, \code{hook_plot_md} and
+#' \code{hook_plot_rst} return character strings which are HTML, Markdown, ReST
+#' code.
 #'
-#' In most cases we do not need to call these hooks explicitly, and it was
+#' In most cases we do not need to call these hooks explicitly, and they were
 #' designed to be used internally. Sometimes we may not be able to record R
 #' plots using \code{\link[grDevices]{recordPlot}}, and we can make use of these
 #' hooks to insert graphics output in the output document; see
