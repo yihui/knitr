@@ -419,3 +419,13 @@ knit2html = function(input, ...){
 run_chunk = function(label, envir = parent.frame()) {
   eval(parse(text = knit_code$get(label)), envir = envir)
 }
+
+# Indents a Block
+#  Input
+#     "library(ggplot2)\nqplot(wt, mpg, data = mtcars)"
+#  Output
+#          library(ggplot2)
+#          qplot(wt, mpg, data  = mtcars)
+indent_block = function(block, spaces = '    ') {
+  line_prompt(block, spaces, spaces)
+}

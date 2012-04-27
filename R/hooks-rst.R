@@ -63,17 +63,3 @@ make_directive <- function(name, arg, opt, content = ""){
 	l  <- c(l1, indent_block(l2), indent_block(content))
 	paste(l1, indent_block(l2), "\n\n", indent_block(content), sep = "")
 }
-
-#' Indents a Block
-#' 
-#  Input
-#     "library(ggplot2)\nqplot(wt, mpg, data = mtcars)"
-#  Output
-#          library(ggplot2)
-#          qplot(wt, mpg, data  = mtcars)
-indent_block <- function(block, nspaces = 4){
-	.pad   <- paste(rep(" ", nspaces), collapse = "")
-	.lines <- readLines(textConnection(block))
-	paste(.pad, .lines, collapse = "\n")
-}
-
