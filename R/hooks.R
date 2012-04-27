@@ -134,33 +134,6 @@ hook_plot_md = function(x, options) {
     sprintf('![%s](%s%s) ', cap, base, .upload.url(x))
   }
 }
-#' @rdname hook_plot
-#' @export
-## TODO: add all options for figure
-## See http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
-## http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure
-hook_plot_rest = function (x, options)
-{
-    name = sprintf("%s.%s", x[1], x[2])
-    opts.str = c(sprintf(":height: %s", options$out.height),
-                 sprintf(":width: %s", options$out.width),
-                 sprintf(":align: %s", options$fig.align)
-                 ## Add out.scale?
-                 ## sprintf("   :scale: %s", options$out.scale),
-                 ## sprintf("   :target: %s", options$fig.target),
-                 ## sprintf("   :alt: %s", options$fig.alt)
-                 ## TODO: class, figclass, figwidth
-                 )
-    if (is.null(options$fig.cap)) {
-        cap = sprintf('plot of chunk %s', options$label)
-    } else {
-        cap = options$fig.cap
-    }
-    str_c(sprintf("\n.. figure:: %s", name),
-          str_c("   ", opts.str, collapse = "\n"),
-          str_c("\n   ", cap, collapse = "\n"), sep = "\n")
-}
-
 
 ## a wrapper to imgur_upload to get the URL of images when option upload==TRUE
 .upload.url = function(x) {

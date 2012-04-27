@@ -1,22 +1,23 @@
 # SET OF HOOKS FOR RESTRUCTURED TEXT ---
+
+#' @rdname hook_plot
+#' @export
 hook_plot_rst <- function (x, options) {
-	if (options$fig.show == "animate") {
-		.ani.plot.hook.html(x, options)
-	}
-	else {
-		base = opts_knit$get("base.url")
-		if (is.null(base)) 
-			base = ""
-		cap = if (is.null(fig.cap <- options$fig.cap)) {
-			sprintf("plot of chunk %s", options$label)
-		} else {
-			if (options$fig.num == 1L) 
-				fig.cap[1]
-			else fig.cap[options$fig.cur]
-		}
-		make_directive('figure', sprintf('%s%s', base, .upload.url(x)), 
-			list(align = options$fig.align, alt = cap))
-	}
+  if (options$fig.show == "animate") return(.ani.plot.hook.html(x, options))
+
+  base = opts_knit$get("base.url")
+  if (is.null(base)) base = ""
+  cap = if (is.null(fig.cap <- options$fig.cap)) {
+    sprintf("plot of chunk %s", options$label)
+  } else {
+    if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
+  }
+  # TODO: add all options for figure
+  # See http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
+  # http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure
+  make_directive('figure', str_c(base, .upload.url(x)),
+                 c(align = options$fig.align, alt = cap,
+                   width = options$out.width, height = options$out.height))
 }
 
 render_rst <- function (){
