@@ -77,3 +77,4 @@ Collate:
     'eclipse.R'
     'concordance.R'
     'engine.R'
+    'citation.R'
