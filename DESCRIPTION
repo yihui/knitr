@@ -70,6 +70,7 @@ Collate:
     'output.R'
     'block.R'
     'hooks.R'
+    'hooks-rst.R'
     'utils.R'
     'themes.R'
     'header.R'
