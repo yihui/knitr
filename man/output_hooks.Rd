@@ -4,6 +4,7 @@
 \alias{render_latex}
 \alias{render_listings}
 \alias{render_markdown}
+\alias{render_rst}
 \alias{render_sweave}
 \title{Set output hooks for different output formats}
 \usage{
@@ -18,11 +19,17 @@ render_html()
 render_markdown(strict = FALSE)
 
 render_jekyll()
+
+render_rst(strict = FALSE)
 }
 \arguments{
-  \item{strict}{whether to use strict markdown syntax; if
-  \code{TRUE}, code blocks will be indented by 4 spaces,
-  otherwise they are put in fences made by three backticks}
+  \item{strict}{whether to use strict markdown or ReST
+  syntax; for markdown: if \code{TRUE}, code blocks will be
+  indented by 4 spaces, otherwise they are put in fences
+  made by three backticks; for ReST, if \code{TRUE}, code
+  is put under two colons and indented by 4 spaces,
+  otherwise is put under the \samp{sourcecode} directive
+  (e.g. it is useful for Sphinx)}
 }
 \value{
   \code{NULL}; corresponding hooks are set as a side effect

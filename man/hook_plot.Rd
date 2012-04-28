@@ -1,6 +1,7 @@
 \name{hook_plot_tex}
 \alias{hook_plot_html}
 \alias{hook_plot_md}
+\alias{hook_plot_rst}
 \alias{hook_plot_tex}
 \title{Default plot hooks for different output formats}
 \usage{
@@ -9,6 +10,8 @@ hook_plot_tex(x, options)
 hook_plot_html(x, options)
 
 hook_plot_md(x, options)
+
+hook_plot_rst(x, options)
 }
 \arguments{
   \item{x}{a character vector of length 2 ; \code{x[1]} is
@@ -31,11 +34,12 @@ hook_plot_md(x, options)
   (for tikz files), or \samp{\\animategraphics{}} (for
   animations); it also takes many other options into
   consideration to align plots and set figure sizes, etc.
-  Similarly, \code{hook_plot_html} and \code{hook_plot_md}
-  return character strings which are HTML or Markdown code.
+  Similarly, \code{hook_plot_html}, \code{hook_plot_md} and
+  \code{hook_plot_rst} return character strings which are
+  HTML, Markdown, ReST code.
 
   In most cases we do not need to call these hooks
-  explicitly, and it was designed to be used internally.
+  explicitly, and they were designed to be used internally.
   Sometimes we may not be able to record R plots using
   \code{\link[grDevices]{recordPlot}}, and we can make use
   of these hooks to insert graphics output in the output

@@ -3,6 +3,7 @@
 \alias{pat_html}
 \alias{pat_md}
 \alias{pat_rnw}
+\alias{pat_rst}
 \alias{pat_tex}
 \title{Set regular expressions to read input documents}
 \usage{
@@ -15,6 +16,8 @@ pat_tex()
 pat_html()
 
 pat_md()
+
+pat_rst()
 }
 \value{
   The patterns object \code{\link{knit_patterns}} is
