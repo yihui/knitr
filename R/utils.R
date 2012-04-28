@@ -404,18 +404,7 @@ knit2html = function(input, ...){
 #'   contains a reference to \samp{chunk3}, then if we run \samp{chunk1}, both
 #'   the code in \samp{chunk2} and \samp{chunk3} will be evaluated.
 #' @export
-#' @examples \dontrun{## In Sweave we use chunk reference like this
-#' <<a>>=
-#' 1+1
-#' @@
-#' <<b>>=
-#' <<a>>
-#' @@
-#'
-#' ## In knitr, we can use the same, or
-#' <<b>>=
-#' run_chunk('a')
-#' @@}
+#' @examples # see http://yihui.name/knitr/demo/reference/
 run_chunk = function(label, envir = parent.frame()) {
   eval(parse(text = knit_code$get(label)), envir = envir)
 }
