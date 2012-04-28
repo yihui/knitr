@@ -32,6 +32,12 @@ NEW FEATURES
   o new function knit2html() to knit an Rmd file (R with markdown) and
   convert to HTML in one step using the markdown package
 
+  o new functions pat_rst() and render_rst() to support
+  reStructuredText; use .. {r label, options} and .. .. to write R
+  code chunks; see
+  https://github.com/yihui/knitr/tree/master/inst/examples/knitr-minimal.Rrst
+  (thanks, Jeffrey Arnold and Ramnath Vaidyanathan)
+
   o new package option 'self.contained' which decides whether to write
   style definitions (highlighting) in external files or put them in
   the output document; the highlighting definitions in LaTeX output is
