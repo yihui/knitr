@@ -38,6 +38,6 @@ stitch(s)
 }
 
 ## HTML report
-out = stitch(s, system.file("misc", "knitr-minimal_knit_.html", package = "knitr"))
+out = stitch(s, system.file("misc", "knitr-template.Rhtml", package = "knitr"))
 if (interactive()) browseURL(out)
 }
