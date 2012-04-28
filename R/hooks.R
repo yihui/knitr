@@ -256,7 +256,8 @@ run_hooks = function(before, options, envir) {
 
 #' Set output hooks for different output formats
 #'
-#' These functions set built-in output hooks for LaTeX, HTML and Markdown.
+#' These functions set built-in output hooks for LaTeX, HTML, Markdown and
+#' reStructuredText.
 #'
 #' There are three variants of markdown documents: ordinary markdown
 #' (\code{render_markdown(strict = TRUE)}), extended markdown (e.g. GitHub
@@ -266,7 +267,8 @@ run_hooks = function(before, options, envir) {
 #' (\code{render_latex()}; use the LaTeX \pkg{framed} package), Sweave style
 #' (\code{render_sweave()}; use \file{Sweave.sty}) and listings style
 #' (\code{render_listings()}; use LaTeX \pkg{listings} package). Default HTML
-#' output hooks are set by \code{render_html()}.
+#' output hooks are set by \code{render_html()}, and reStructuredText uses
+#' \code{render_rst()}.
 #'
 #' These functions can be used before \code{knit()} or in the first chunk of the
 #' input document (ideally this chunk has options \code{include = FALSE} and
@@ -353,9 +355,9 @@ render_html = function() {
 }
 #' @rdname output_hooks
 #' @export
-#' @param strict whether to use strict markdown or ReST syntax; for markdown: if
+#' @param strict whether to use strict markdown or reST syntax; for markdown: if
 #'   \code{TRUE}, code blocks will be indented by 4 spaces, otherwise they are
-#'   put in fences made by three backticks; for ReST, if \code{TRUE}, code is
+#'   put in fences made by three backticks; for reST, if \code{TRUE}, code is
 #'   put under two colons and indented by 4 spaces, otherwise is put under the
 #'   \samp{sourcecode} directive (e.g. it is useful for Sphinx)
 render_markdown = function(strict = FALSE) {
