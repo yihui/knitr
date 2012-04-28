@@ -364,7 +364,7 @@ render_markdown = function(strict = FALSE) {
   ## four spaces lead to <pre></pre>
   hook.t = function(x, options) {
     if (strict) {
-      str_c('\n\n', line_prompt(x, '    ', '    '), '\n')
+      str_c('\n\n', indent_block(x), '\n')
     } else str_c('\n\n```\n', x, '```\n\n')
   }
   hook.r = function(x, options) str_c('\n\n```r\n', x, '```\n\n')
