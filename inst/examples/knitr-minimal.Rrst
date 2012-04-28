@@ -1,0 +1,37 @@
+A reST document for knitr
+=========================
+
+This is a reStructuredText document. The input filename extension is ``Rrst``
+and the output filename will be ``rst``. Here is how we write R code in
+**knitr**:
+
+.. {r setup}
+options(width = 75)
+render_rst(strict=TRUE)  # do not use the sourcecode directive
+opts_knit$set(upload.fun = imgur_upload) # upload images
+opts_chunk$set(cache=TRUE, cache.path='cache/rst-', fig.path='figure/rst-',
+  fig.width=5, fig.height=5) # global chunk options
+.. ..
+
+More examples
+-------------
+
+A code chunk begins with ``.. {r label, options}``, and ends with ``.. ..``
+(note the space in between). Optionally you can precede all R code with two
+dots, e.g.
+
+.. {r rst-example}
+.. 1+1
+.. rnorm(10)
+.. warning('do not forget the space after ..!')
+.. ..
+
+Here is a plot:
+
+.. {r rst-plot, out.width='360px', fig.cap='A ggplot2 example'}
+library(ggplot2)
+qplot(hp, mpg, data=mtcars) + geom_smooth()
+.. ..
+
+Inline R code is like this: the value of pi is :r:`pi`.
+
