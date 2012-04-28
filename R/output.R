@@ -290,7 +290,7 @@ knit_child = function(..., eval = TRUE) {
 #' \dontrun{stitch(s)}
 #'
 #' ## HTML report
-#' out = stitch(s, system.file('misc', 'knitr-minimal_knit_.html', package = 'knitr'))
+#' out = stitch(s, system.file('misc', 'knitr-template.Rhtml', package = 'knitr'))
 #' if (interactive()) browseURL(out)
 stitch = function(script,
                   template = system.file('misc', 'knitr-template.Rnw', package = 'knitr'),
