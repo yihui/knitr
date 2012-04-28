@@ -16,6 +16,7 @@ wrap_fmt = function(x, lang = '') {
     '\\begin{verbatim}\n%s\\end{verbatim}'
   } else switch(fmt, html = '<pre class="knitr">%s</pre>',
                 markdown = str_c('```', lang, '\n%s\n```'),
+                rst = str_c('::\n\n', indent_block(x), '\n'),
                 jekyll = str_c('{%% highlight ', if (lang == '') 'text' else lang,
                                ' %%}\n%s\n{%% endhighlight %%}'),
                 '%s')

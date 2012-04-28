@@ -432,7 +432,7 @@ hook_rgl = function(before, options, envir) {
   Sys.sleep(.05) # need time to respond to window size change
 
   fmt = opts_knit$get('out.format')
-  if (fmt %in% c('html', 'markdown', 'jekyll')) options$dev = 'png'
+  if (fmt %in% c('html', 'markdown', 'jekyll', 'rst')) options$dev = 'png'
 
   ## support 3 formats: eps, pdf and png (default)
   switch(options$dev,
@@ -471,7 +471,8 @@ hook_plot_custom = function(before, options, envir){
   name = fig_path()
   fmt = opts_knit$get('out.format')
   if (fmt %in% c('sweave', 'listings')) fmt = 'latex'
-  hook = switch(fmt, latex = hook_plot_tex, html = hook_plot_html, hook_plot_md)
+  hook = switch(fmt, latex = hook_plot_tex, html = hook_plot_html,
+                rst = hook_plot_rst, hook_plot_md)
 
   n = options$fig.num
   if (n <= 1L) hook(c(name, ext), options) else {
