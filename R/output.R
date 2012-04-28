@@ -123,7 +123,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     # use ext if cannot auto detect pattern
     if (is.null(pattern <- detect_pattern(text)))
       pattern = if (ext %in% c('htm', 'rhtm', 'rhtml')) 'html' else {
-        if (ext %in% c('rmd', 'rmarkdown', 'markdown')) 'md' else ext
+        if (ext %in% c('rmd', 'rmarkdown', 'markdown')) 'md' else {
+          if (ext == 'rrst') 'rst' else ext
+        }
       }
     if (!(pattern %in% names(apat)))
       stop("a pattern list cannot be automatically found for the file extension '",
@@ -132,14 +134,14 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     knit_patterns$restore()
     knit_patterns$set(apat[[pattern]])
     opts_knit$set(out.format = switch(pattern, rnw = 'latex', tex = 'latex',
-                                      html = 'html', md = 'markdown'))
+                                      html = 'html', md = 'markdown', rst = 'rst'))
   }
 
   optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
 
   if (is.null(opts_knit$get('out.format'))) {
     fmt = switch(ext, rnw = 'latex', tex = 'latex', htm = 'html', html = 'html',
-                 md = 'markdown', markdown = 'markdown', brew = 'brew',
+                 md = 'markdown', markdown = 'markdown', brew = 'brew', rst = 'rst',
                  {warning('cannot automatically decide the output format'); 'unknown'})
     ## set built-in hooks
     opts_knit$set(out.format = fmt)
@@ -149,7 +151,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     switch(opts_knit$get('out.format'), latex = render_latex(),
            sweave = render_sweave(), listings = render_listings(),
            html = render_html(), jekyll = render_jekyll(),
-           markdown = render_markdown())
+           markdown = render_markdown(), rst = render_rst())
     on.exit(knit_hooks$restore(), add = TRUE)
   }
 
@@ -216,7 +218,7 @@ auto_out_name = function(input) {
   if (opts_knit$get('tangle')) return(str_c(base, '.R'))
   ext = tolower(file_ext(input))
   if (ext == 'rnw') return(str_c(base, '.tex'))
-  if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex'))
+  if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'rrst'))
     return(str_c(base, '.', substring(ext, 2L)))
   if (ext %in% c('brew', 'tex', 'html', 'md')) {
     if (str_detect(input, '_knit_')) {
