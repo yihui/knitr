@@ -86,7 +86,7 @@ knitr
  package 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "knitr-manual"
+key "R-knitr"
 
 \end_inset
 
@@ -168,7 +168,7 @@ summary(lm(y~x, data=df))
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
-bibfiles "knitr-intro"
+bibfiles "../examples/knitr-packages"
 options "jss"
 
 \end_inset
