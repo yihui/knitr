@@ -115,13 +115,14 @@ all_patterns =
                    global.options = '`ro\\s+([^`]*)\\s+or`',
                    ref.label = '^## @knitr (.*)$'),
 
-       `rest` = list(chunk.begin = "^\\.\\.\\s+<<(.*)>>=\\s*$",
-                     chunk.end = "^\\.\\.\\s+@\\s*$",
-                     chunk.code = "^\\.\\.",
-                     ref.chunk = "^\\.\\.\\s*<<(.*)>>\\s*$",
-                     inline.code = ":R:`([^`]*)`",
-                     global.options = ":roptions:\\s+([^\n]*)",
-                     ref.label = "^## @knitr (.*)$"))
+       `rst` = list(chunk.begin = "^\\.{2}\\s+\\{r(.*)\\}\\s*$",
+                    chunk.end = "^\\.{2}\\s+\\.{2,}\\s*$",
+                    chunk.code = "^\\.{2}",
+                    ref.chunk = "^\\.{2}\\s*<<(.*)>>\\s*$",
+                    inline.code = ":r:`([^`]*)`",
+                    global.options = ":roptions:`([^`]*)`",
+                    ref.label = "^## @knitr (.*)$")
+)
 
 #' Options for the knitr package
 #'
