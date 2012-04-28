@@ -2912,6 +2912,42 @@ https://groups.google.com/group/knitr
 \end_layout
 
 \begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+% when knitr is updated, this chunk will be updated; why?
+\end_layout
+
+\begin_layout Plain Layout
+
+<<auto-bib, version=packageVersion('knitr'), echo=FALSE, cache=TRUE, message=FAL
+SE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# write all packages in the current session to a bib file
+\end_layout
+
+\begin_layout Plain Layout
+
+write_bib(c(.packages(), 'cacheSweave', 'evaluate', 'formatR', 'highlight',
+ 'pgfSweave'), file = 'knitr-packages.bib')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
 bibfiles "knitr-manual,knitr-packages"
