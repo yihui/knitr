@@ -35,16 +35,5 @@ run_chunk(label, envir = parent.frame())
   evaluated.
 }
 \examples{
-\dontrun{## In Sweave we use chunk reference like this
-<<a>>=
-1+1
-@
-<<b>>=
-<<a>>
-@
-
-## In knitr, we can use the same, or
-<<b>>=
-run_chunk('a')
-@}
+# see http://yihui.name/knitr/demo/reference/
 }
