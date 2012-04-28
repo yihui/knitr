@@ -353,9 +353,11 @@ render_html = function() {
 }
 #' @rdname output_hooks
 #' @export
-#' @param strict whether to use strict markdown syntax; if \code{TRUE}, code
-#'   blocks will be indented by 4 spaces, otherwise they are put in fences made
-#'   by three backticks
+#' @param strict whether to use strict markdown or ReST syntax; for markdown: if
+#'   \code{TRUE}, code blocks will be indented by 4 spaces, otherwise they are
+#'   put in fences made by three backticks; for ReST, if \code{TRUE}, code is
+#'   put under two colons and indented by 4 spaces, otherwise is put under the
+#'   \samp{sourcecode} directive (e.g. it is useful for Sphinx)
 render_markdown = function(strict = FALSE) {
   knit_hooks$restore()
   opts_chunk$set(dev = 'png', highlight = FALSE)
@@ -382,48 +384,6 @@ render_jekyll = function() {
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
   knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
                  error = hook.t, message = hook.t)
-}
-#' @rdname output_hooks
-#' @export
-render_rest = function() {
-    knit_hooks$restore()
-    opts_chunk$set(dev = 'png', highlight = FALSE, fig.align = 'center')
-    hook.src = function(x, options) {
-        c("\n\n::\n\n", line_prompt(x, "   ",  "   "), "\n")
-    }
-    hook.output = function(x, options) {
-        if(output_asis(x, options)) {
-            x
-        } else {
-            hook.src(x, options)
-        }
-    }
-    hook.warning = hook.src
-    hook.error = hook.src
-    hook.message = hook.src
-    hook.inline = function(x) {
-        sprintf(if (inherits(x, 'AsIs')) '%s' else '``%s``',
-                .inline.hook(x))
-    }
-    hook.plot = hook_plot_rest
-    knit_hooks$set(source = hook.src,
-                   output = hook.output,
-                   warning = hook.warning,
-                   error = hook.error,
-                   message = hook.message,
-                   inline = hook.inline,
-                   plot = hook.plot)
-}
-#' @rdname output_hooks
-#' @export
-render_sphinx = function() {
-    render_rest()
-    hook.src = function(x, options) {
-        c(".. code-block:: r\n",
-          str_c("\n", line_prompt(x, "   ",  "   ")),
-          "\n")
-    }
-    knit_hooks$set(source = hook.src)
 }
 ## may add textile, and many other markup languages
 
