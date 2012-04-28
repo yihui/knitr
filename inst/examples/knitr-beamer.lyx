@@ -87,10 +87,18 @@ status open
 
 \begin_layout Plain Layout
 
-% 
-\backslash
-SweaveOpts{fig.path='figure/beamer-',fig.align='center',fig.show='hold',size='footn
-otesize'}
+<<setup, include=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+opts_chunk$set(fig.path='figure/beamer-',fig.align='center',fig.show='hold',size='f
+ootnotesize')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
 \end_layout
 
 \end_inset

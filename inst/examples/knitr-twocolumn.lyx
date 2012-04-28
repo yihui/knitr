@@ -89,14 +89,12 @@ status open
 
 \begin_layout Plain Layout
 
-% 
-\backslash
-SweaveOpts{fig.path='figure/twocolumn-', fig.align='center', fig.show='hold'}
+<<setup, include=FALSE, cache=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
 
-<<setup, include=FALSE, cache=FALSE>>=
+opts_chunk$set(fig.path='figure/twocolumn-', fig.align='center', fig.show='hold')
 \end_layout
 
 \begin_layout Plain Layout
@@ -151,7 +149,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<chunk-hook>>=
+<<chunk-hook, echo=2>>=
 \end_layout
 
 \begin_layout Plain Layout

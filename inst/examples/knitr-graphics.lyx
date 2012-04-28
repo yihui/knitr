@@ -88,30 +88,19 @@ status open
 
 \begin_layout Plain Layout
 
-% 
-\backslash
-SweaveOpts{fig.path='figure/graphics-', cache.path='cache/graphics-', fig.align='ce
-nter', dev='tikz', fig.width=5, fig.height=5, fig.show='hold', cache=TRUE,
- par=TRUE}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
 <<setup, include=FALSE, cache=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
 
 options(replace.assign=TRUE,width=60)
+\end_layout
+
+\begin_layout Plain Layout
+
+opts_chunk$set(fig.path='figure/graphics-', cache.path='cache/graphics-',
+ fig.align='center', dev='tikz', fig.width=5, fig.height=5, fig.show='hold',
+ cache=TRUE, par=TRUE)
 \end_layout
 
 \begin_layout Plain Layout
@@ -405,11 +394,11 @@ cairoDevice
 \series default
  package, e.g., the chunk below uses the 
 \emph on
-Cairo_png()
+CairoPNG()
 \emph default
  device in the 
 \series bold
-cairoDevice
+Cairo
 \series default
  package.
 \end_layout
@@ -420,7 +409,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<cairo-png-dev, ref.label='test-plot', dev='Cairo_png', out.width='.5
+<<cairo-png-dev, ref.label='test-plot', dev='CairoPNG', out.width='.5
 \backslash
 
 \backslash
@@ -1771,7 +1760,8 @@ status open
 
 \begin_layout Plain Layout
 
-<<ggobi-plot, custom.plot=TRUE, fig.ext='png', out.width='2.5in', results='hide'>>=
+<<ggobi-plot, custom.plot=TRUE, fig.ext='png', out.width='2.5in', results='hide',
+ warning=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout

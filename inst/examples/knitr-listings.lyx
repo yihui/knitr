@@ -84,18 +84,12 @@ status open
 
 \begin_layout Plain Layout
 
-% 
-\backslash
-SweaveOpts{fig.path='figure/listings-'}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
 <<setup, include=FALSE, cache=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+opts_chunk$set(fig.path = 'figure/listings-')
 \end_layout
 
 \begin_layout Plain Layout

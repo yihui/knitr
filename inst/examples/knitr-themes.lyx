@@ -93,18 +93,12 @@ status open
 
 \begin_layout Plain Layout
 
-% 
-\backslash
-SweaveOpts{fig.path='figure/theme-', cache.path='cache/theme-', cache=TRUE}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
 <<setup, include=FALSE, cache=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+opts_chunk$set(fig.path='figure/theme-', cache.path='cache/theme-', cache=TRUE)
 \end_layout
 
 \begin_layout Plain Layout

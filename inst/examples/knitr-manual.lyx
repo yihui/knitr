@@ -91,29 +91,30 @@ status open
 
 \begin_layout Plain Layout
 
-% 
-\backslash
-SweaveOpts{fig.path='figure/manual-', cache.path='cache/manual-', fig.align='center
-', external=TRUE, fig.show='hold', par=TRUE}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
 <<setup, include=FALSE, cache=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE,width=90)
+## this is equivalent to 
+\backslash
+SweaveOpts{}
+\end_layout
+
+\begin_layout Plain Layout
+
+opts_chunk$set(fig.path='figure/manual-', cache.path='cache/manual-', fig.align='ce
+nter', fig.show='hold', par=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+## I use = but I can replace it with <-; set code/output width to be 68
+\end_layout
+
+\begin_layout Plain Layout
+
+options(replace.assign=TRUE, width=68)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1390,8 +1391,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<fig-hold, fig=TRUE, fig.show='asis', dev='pdf', fig.width=6, fig.height=4,
- out.width='.35
+<<fig-hold, fig.show='asis', dev='pdf', fig.width=6, fig.height=4, out.width='.35
 \backslash
 
 \backslash

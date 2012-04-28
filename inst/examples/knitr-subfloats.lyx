@@ -75,9 +75,17 @@ status open
 
 \begin_layout Plain Layout
 
-% 
-\backslash
-SweaveOpts{fig.path='figure/subfloats-'}
+<<setup, include=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+opts_chunk$set(fig.path='figure/subfloats-')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
 \end_layout
 
 \end_inset

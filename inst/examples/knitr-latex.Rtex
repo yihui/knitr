@@ -2,7 +2,9 @@
 \usepackage{graphicx}
 %% for inline R code: if the inline code is not correctly parsed, you will see a message
 \newcommand{\rinline}[1]{SOMETHING WRONG WITH knitr}
-%% roptions fig.path='figure/latex-', cache.path='cache/latex-'
+%% begin.rcode setup, include=FALSE
+% opts_chunk$set(fig.path='figure/latex-', cache.path='cache/latex-')
+%% end.rcode
 \begin{document}
 
 Boring stuff as usual:
