@@ -122,6 +122,10 @@ BUG FIXES
 
 MISC
 
+  o it is recommended to use opts_chunk$set() to set global chunk
+  options now instead of \SweaveOpts{}; all documentation has been
+  updated (#216)
+
   o number of downloads (https://github.com/yihui/knitr/downloads) of
   knitr documentation before I removed and updated them on GitHub:
   c(main = ?, graphics = 275+)
