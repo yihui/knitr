@@ -93,6 +93,7 @@
 knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
 
   in.file = !missing(input) && is.character(input)  # is a file input
+  opts_knit$set(tangle = tangle)
   if (child_mode()) {
     setwd(opts_knit$get('output.dir')) # always restore original working dir
     ## in child mode, input path needs to be adjusted
@@ -113,7 +114,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
   }
   if (!length(text)) return() # a trivial case: simply and exit
 
-  opts_knit$set(tangle = tangle)
   apat = opts_knit$get('all.patterns')
   optc = opts_chunk$get()
   on.exit({opts_chunk$restore(); opts_chunk$set(optc)}, add = TRUE)
