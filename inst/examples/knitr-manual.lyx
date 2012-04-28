@@ -192,7 +192,7 @@ knitr
  package 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "knitr-manual"
+key "R-knitr"
 
 \end_inset
 
@@ -497,7 +497,7 @@ evaluate
  package 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "evaluate-manual"
+key "R-evaluate"
 
 \end_inset
 
@@ -766,7 +766,7 @@ pgfSweave
  
 \begin_inset CommandInset citation
 LatexCommand citep
-key "pgfSweave-manual"
+key "R-pgfSweave"
 
 \end_inset
 
@@ -777,7 +777,7 @@ cacheSweave
  
 \begin_inset CommandInset citation
 LatexCommand citep
-key "cacheSweave-manual"
+key "R-cacheSweave"
 
 \end_inset
 
@@ -837,7 +837,7 @@ highlight
  package 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "highlight-manual"
+key "R-highlight"
 
 \end_inset
 
@@ -848,7 +848,7 @@ formatR
  
 \begin_inset CommandInset citation
 LatexCommand citep
-key "formatR-manual"
+key "R-formatR"
 
 \end_inset
 
@@ -1479,7 +1479,7 @@ animation
  package 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "animation-manual"
+key "R-animation"
 
 \end_inset
 
@@ -1577,7 +1577,7 @@ tikzDevice
  package 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "tikzDevice-manual"
+key "R-tikzDevice"
 
 \end_inset
 
@@ -2591,7 +2591,7 @@ rgl
  plots 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "rgl-manual"
+key "R-rgl"
 
 \end_inset
 
