@@ -61,6 +61,14 @@ block_exec = function(params) {
   env = if (options$cache) new.env(parent = globalenv()) else globalenv()
   .knitEnv$knit_env = env # make a copy of the envir
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
+
+  ## open a graphical device to record graphics
+  dargs = formals(getOption('device'))  # is NULL in RStudio's GD
+  (if (is.null(dargs) || !interactive()) {
+    function(...) pdf(file = NULL, ...)
+  } else dev.new)(width = options$fig.width, height = options$fig.height)
+  dv = dev.cur(); on.exit(dev.off(dv))
+
   res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
 
   ## tidy code if echo
@@ -83,13 +91,6 @@ block_exec = function(params) {
     if (options$cache) block_cache(options, output, character(0))
     return(if (options$include) output else '')
   }
-
-  ## open a graphical device to record graphics
-  dargs = formals(getOption('device'))  # is NULL in RStudio's GD
-  (if (is.null(dargs) || !interactive()) {
-    function(...) pdf(file = NULL, ...)
-  } else dev.new)(width = options$fig.width, height = options$fig.height)
-  dv = dev.cur(); on.exit(dev.off(dv))
 
   keep = options$fig.keep
   dev.control(displaylist = if (keep != 'none') 'enable' else 'inhibit')  # enable recording
