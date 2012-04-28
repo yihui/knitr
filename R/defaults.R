@@ -117,7 +117,7 @@ all_patterns = list(
   `rst` = list(chunk.begin = "^\\.{2}\\s+\\{r(.*)\\}\\s*$",
                chunk.end = "^\\.{2}\\s+\\.{2,}\\s*$",
                chunk.code = "^\\.{2}",
-               ref.chunk = "^\\.{2}\\s*<<(.*)>>\\s*$",
+               ref.chunk = "^\\.*\\s*<<(.*)>>\\s*$",
                inline.code = ":r:`([^`]*)`",
                global.options = ":roptions:`([^`]*)`",
                ref.label = "^## @knitr (.*)$")
