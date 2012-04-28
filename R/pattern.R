@@ -50,27 +50,22 @@ set_pattern = function(type) {
 #' @rdname pat_fun
 #' @return The patterns object \code{\link{knit_patterns}} is modified as a side
 #'   effect.
-#' @export
+#' @export pat_rnw pat_brew pat_tex pat_html pat_md pat_rst
 #' @examples ## see how knit_patterns is modified
 #' knit_patterns$get(); pat_rnw(); knit_patterns$get()
 #'
 #' knit_patterns$restore()  # empty the list
 pat_rnw = function() set_pattern('rnw')
 #' @rdname pat_fun
-#' @export
 pat_brew = function() set_pattern('brew')
 #' @rdname pat_fun
-#' @export
 pat_tex = function() set_pattern('tex')
 #' @rdname pat_fun
-#' @export
 pat_html = function() set_pattern('html')
 #' @rdname pat_fun
-#' @export
 pat_md = function() set_pattern('md')
 #' @rdname pat_fun
-#' @export
-pat_rest = function() set_pattern('rest')
+pat_rst = function() set_pattern('rst')
 
 ## helper functions
 
