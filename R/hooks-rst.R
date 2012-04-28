@@ -16,8 +16,8 @@ hook_plot_rst = function(x, options) {
   # See http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
   # http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure
   make_directive('figure', str_c(base, .upload.url(x)),
-                 c(align = options$fig.align, alt = cap,
-                   width = options$out.width, height = options$out.height))
+                 c(align = if (options$fig.align == 'default') NULL else options$fig.align,
+                   alt = cap, width = options$out.width, height = options$out.height))
 }
 
 #' @rdname output_hooks
