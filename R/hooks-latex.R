@@ -124,10 +124,6 @@ hook_plot_tex = function(x, options) {
   } else x
 }
 
-## format a single inline object
-.inline.hook = function(x) {
-  paste(as.character(x), collapse = ', ')
-}
 ## inline hook for tex
 .inline.hook.tex = function(x) {
   if (is.numeric(x)) x = format_sci(x, 'latex')
@@ -142,24 +138,7 @@ hook_plot_tex = function(x, options) {
   }
 }
 
-.out.hook = function(x, options) x
 .verb.hook = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
-
-.default.hooks = list(source = .out.hook, output = .out.hook, warning = .out.hook,
-                      message = .out.hook, error = .out.hook, plot = hook_plot_tex,
-                      inline = .inline.hook, chunk = function(x, options) x)
-
-#' Hooks for R code chunks, inline R code and output
-#'
-#' A hook is a function of a pre-defined form (arguments) that takes values of
-#' arguments and returns desired output. The object \code{knit_hooks} is used to
-#' access or set hooks in this package.
-#' @export
-#' @references Usage: \url{http://yihui.name/knitr/objects}
-#'
-#' Components in \code{knit_hooks}: \url{http://yihui.name/knitr/hooks}
-#' @examples knit_hooks$get('source'); knit_hooks$get('inline')
-knit_hooks = new_defaults(.default.hooks)
 
 #' Set output hooks for different output formats
 #'
