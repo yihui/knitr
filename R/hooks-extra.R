@@ -54,19 +54,27 @@ hook_rgl = function(before, options, envir) {
 #' @export
 #' @rdname chunk_hook
 hook_pdfcrop = function(before, options, envir) {
-  ## crops PDF after a chunk is evaluated and PDF files produced
+  ## crops plots after a chunk is evaluated and plot files produced
   ext = options$fig.ext
   if (options$dev == 'tikz' && options$external) ext = 'pdf'
-  if (before || (fig.num <- options$fig.num) == 0L || ext != 'pdf')
+  if (before || (fig.num <- options$fig.num) == 0L) return()
+  if (ext == 'pdf' && !nzchar(Sys.which('pdfcrop'))) {
+    warning('pdfcrop not installed or not in PATH')
     return()
-
+  }
+  if (ext != 'pdf' && !nzchar(Sys.which('convert'))) {
+    warning('ImageMagick not installed or not in PATH')
+    return()
+  }
   paths = paste(valid_path(options$fig.path, options$label),
-                if (fig.num == 1L) '' else seq_len(fig.num), ".pdf", sep = "")
+                if (fig.num == 1L) '' else seq_len(fig.num), ".", ext,
+                sep = "")
 
   lapply(paths, function(x) {
     message('cropping ', x)
     x = shQuote(x)
-    system(paste("pdfcrop", x, x, sep = " "))
+    cmd = if (ext == 'pdf') paste("pdfcrop", x, x) else paste('convert', x, '-trim', x)
+    (if (.Platform$OS.type == 'windows') shell else system)(cmd)
   })
   return()
 }
