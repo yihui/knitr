@@ -59,7 +59,7 @@ library(ggplot2)
 qplot(hp, mpg, data = mtcars) + geom_smooth()
 ```
 
-![plot of chunk md-cars-scatter](https://github.com/yihui/knitr/raw/master/inst/examples/figure/md-cars-scatter.png) 
+![plot of chunk md-cars-scatter](https://github.com/yihui/knitr/raw/master/inst/examples/md-cars-scatter.png) 
 
 
 So no more hesitation on using GitHub and **knitr**! You just write a minimal
