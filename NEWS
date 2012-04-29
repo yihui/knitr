@@ -111,6 +111,10 @@ MAJOR CHANGES
   the past only a message was issued in this case in an interactive R
   session
 
+  o the package option 'all.patterns' has been dropped; please use the
+  objects 'all_patterns' or 'knit_patterns' directly if you want to
+  tweak the syntax
+
 BUG FIXES
 
   o the compilation of tikz graphics can hang up when there are TeX

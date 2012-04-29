@@ -19,7 +19,7 @@
 #' @examples library(knitr)
 #' opat = knit_patterns$get() # old pattern list (to restore later)
 #'
-#' apats = opts_knit$get('all.patterns')  # a list of all built-in patterns
+#' apats = all_patterns  # a list of all built-in patterns
 #' str(apats)
 #' knit_patterns$set(apats[['rnw']]) # set pattern list from apats
 #'

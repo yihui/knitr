@@ -26,16 +26,16 @@
 #'
 #' We need a set of syntax to identify special markups for R code chunks and R
 #' options, etc. The syntax is defined in a pattern list. All built-in pattern
-#' lists can be found in \code{opts_knit$get('all.patterns')} (call it
-#' \code{apat}). First the content of the input document is matched against all
-#' pattern lists to automatically which pattern list is being used. If automatic
-#' detection failed, the pattern list will be decided based on the filename
-#' extension of the input document. \samp{Rnw} files use the list
-#' \code{apat$rnw}, \samp{tex} uses the list \code{apat$tex}, \samp{brew} uses
-#' \code{apat$brew} and HTML-like files use \code{apat$html} (e.g. \samp{html}
-#' and \samp{md} files). You can manually set the pattern list using the
-#' \code{\link{knit_patterns}} object or the \code{\link{pat_rnw}} series
-#' functions in advance and \pkg{knitr} will respect the setting.
+#' lists can be found in \code{all_patterns} (call it \code{apat}). First the
+#' content of the input document is matched against all pattern lists to
+#' automatically which pattern list is being used. If automatic detection
+#' failed, the pattern list will be decided based on the filename extension of
+#' the input document. \samp{Rnw} files use the list \code{apat$rnw}, \samp{tex}
+#' uses the list \code{apat$tex}, \samp{brew} uses \code{apat$brew} and
+#' HTML-like files use \code{apat$html} (e.g. \samp{html} and \samp{md} files).
+#' You can manually set the pattern list using the \code{\link{knit_patterns}}
+#' object or the \code{\link{pat_rnw}} series functions in advance and
+#' \pkg{knitr} will respect the setting.
 #'
 #' According to the output format (\code{opts_knit$get('out.format')}), a set of
 #' output hooks will be set to mark up results from R (see
@@ -114,10 +114,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
   }
   if (!length(text)) return() # a trivial case: simply and exit
 
-  apat = opts_knit$get('all.patterns')
   optc = opts_chunk$get()
   on.exit({opts_chunk$restore(); opts_chunk$set(optc)}, add = TRUE)
-  opat = knit_patterns$get()
+  apat = all_patterns; opat = knit_patterns$get()
   on.exit({knit_patterns$restore(); knit_patterns$set(opat)}, add = TRUE)
   if (length(opat) == 0 || all(sapply(opat, is.null))) {
     # use ext if cannot auto detect pattern

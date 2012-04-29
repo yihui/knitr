@@ -138,7 +138,7 @@ opts_knit = new_defaults(
   list(progress = TRUE, verbose = FALSE, out.format = NULL,
        child.command = 'input', base.dir = NULL, base.url = NULL, child.path = '',
        upload.fun = identity, eval.after = NULL, concordance = FALSE,
-       all.patterns = all_patterns, tangle = FALSE, child = FALSE, parent = FALSE,
+       tangle = FALSE, child = FALSE, parent = FALSE,
        cache.extra = NULL, aliases = NULL,
        self.contained = TRUE, filter.chunk.end = TRUE,
        header = c(highlight = '', tikz = '', framed = ''))
