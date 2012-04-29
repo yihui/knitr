@@ -72,8 +72,8 @@ NEW FEATURES
   knit_engines$set(language = function(options) {...}); see an example
   at system.file('examples', 'knitr-lang.Rmd') (#201)
 
-  o new function write_bib() to write Bibtex citations for R packages
-  (#13)
+  o new function write_bib() to write Bibtex citations for R packages;
+  see the main manual for a sample usage (#13)
 
 MAJOR CHANGES
 
