@@ -91,33 +91,34 @@ All these hooks should be of the form `function(x, options)` (except the `inline
 
 This package tried hard to set reasonable default output hooks for different parts of output and to accommodate different output formats such as LaTeX, HTML and even Jekyll. A series of functions of the form `render_xxx()` are provided to set built-in output hooks for different output formats, e.g. `render_latex()` and `render_html()`, etc. Details for these formats:
 
-### LaTeX
+### LaTeX: render_latex()
 
 If the output file type is LaTeX, default hooks will put most output in the `verbatim` environment, and numeric `inline` output will be formatted in scientific notation (see [output demo](/knitr/demo/output/) for details); `plot` and `chunk` hooks are more complicated:
 
 - the default `plot` hook takes many factors into account to give a reasonable output, for example, if the graphics device is `tikz`, the command `\input{}` will be used, otherwise it uses the normal `\includegraphics{}`; depending on the `out.width` and `out.height` options, the hook will reset the size of the plot (e.g. `\includegraphics[width=.8\textwidth]{file}`); if there are multiple plots per chunk, we can set the option `fig.show = hold` with an appropriate width so more than one plot can be arranged in a row (e.g., `.45\textwidth` means 2 plots per row); note this is not true for tikz graphics because they are inserted by `\input{}`, however, the chunk option `resize.width` and `resize.height` can be used to arrange multiple tikz plots in a row (via `\resizebox{resize.width}{resize.height}{file.tikz}`; if one option is `NULL`, it will be replaced by `!`; see LaTeX package `graphicx` for details); this hook function gives the user full power of using graphics in automatic report generation -- not only multiple plots per chunk and setting sizes of plots become possible, but also we can even put base graphics and grid graphics (e.g. **ggplot2**) or multiple grid plots side by side (think how hard it is, if not possible, for one to put two such plots in one window in R); there are four values for the `fig.align` option to decide how to align plots (`default`, `left`, `right`, `center`), e.g., it is easy to center the plots (set chunk option `fig.align=center`)
 - the default `chunk` hook is mainly used to decorate chunks; if the LaTeX package `framed` is available in the user's TeX software package (TeXLive or MikTeX or other packages), the chunk hook will put the whole output in the `kframe` environment with customizable background colors (default is very light gray), which makes the chunks cognitively better (they stands out from other normal texts yet do not have a too strong visual impact); in the end, all the output is wrapped in a `knitrout` environment, and the user can redefine this environment in LaTeX
 
-### Sweave
+### Sweave: render_sweave()
 
 Put source code in the `Sinput` environment, output in the `Soutput` enviroment and the whole chunk in the `Schunk` environment. The style file `Sweave.sty` is required to use this theme, or at least these three environments have to be defined.
 
-## Listings
+## Listings: render_listings()
 
 Similar to Sweave, and [`Sweavel.sty`](https://github.com/yihui/knitr/blob/master/inst/misc/Sweavel.sty) is used instead.
 
-### HTML
+### HTML: render_html()
 
 To write output into an HTML file, the hooks will be automatically adjusted. Basically the output from chunks is put in `div` layers with classes, e.g. source code is in `<div class="knitr source"></div>`; the whole chunk output is in `<pre></pre>`; inline output is in `<code class="knitr inline"></code>`.
 
-### Markdown
+### Markdown: render_markdown()
 
-The source code and output will be indented by 4 spaces.
+The source code and output will be indented by 4 spaces. For GitHub Flavored Markdown, the source code is put in between ```` ```r ```` and ```` ``` ````; output is between ```` ``` ```` and ```` ``` ````.
 
-### GFM
-
-For GitHub Flavored Markdown, the source code is put in between **\`\`\`r** and **\`\`\`**; output is between **\`\`\`** and **\`\`\`**.
-
-### Jekyll
+### Jekyll: render_jekyll()
 
 I need to build this site so I also set up some hooks especially for Jekyll, and they are actually quite simple: R souce code is put in a highlight environment with the language set to `r`, and the rest of output belongs to the highlight environemnt with the `text` language (nearly no highlighting at all). Currently plots are written out according to the syntax of Markdown.
+
+### reStructuredText: render_rst()
+
+Code is put after `::` and indented by 4 spaces, or in the `sourcecode` directive.
+
