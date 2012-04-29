@@ -3,6 +3,7 @@
 R works, of course.
 
 ``` {r test-r, engine='R'}
+set.seed(123)
 rnorm(5)
 ```
 
