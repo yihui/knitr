@@ -14,6 +14,10 @@ NEW FEATURES
   call pat_md() before knit() so knitr can make use of this pattern
   list to process the input document
 
+  o RStudio has added full support to knitr: we can knit HTML and
+  Markdown documents easily now, and markdown output will be
+  automatically converted to an HTML preview page just like TeX to PDF
+
   o if the pattern list is not set in advance, knitr will try to
   detect the syntax automatically by matching all built-in pattern
   lists against the input document, e.g. if the input contains <<>>=,
