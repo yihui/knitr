@@ -34,7 +34,7 @@ str(all_patterns)
 
 
 {% highlight text %}
-## List of 5
+## List of 6
 ##  $ rnw :List of 9
 ##   ..$ chunk.begin   : chr "^<<(.*)>>="
 ##   ..$ chunk.end     : chr "^@\\s*%*"
@@ -69,8 +69,16 @@ str(all_patterns)
 ##   ..$ chunk.begin   : chr "^`{3,}\\s*\\{r(.*)\\}\\s*$"
 ##   ..$ chunk.end     : chr "^`{3,}\\s*$"
 ##   ..$ ref.chunk     : chr "^\\s*<<(.*)>>\\s*$"
-##   ..$ inline.code   : chr "`r\\s+([^`]*)\\s*`"
+##   ..$ inline.code   : chr "`r +([^`\n]+)\\s*`"
 ##   ..$ global.options: chr "`ro\\s+([^`]*)\\s+or`"
+##   ..$ ref.label     : chr "^## @knitr (.*)$"
+##  $ rst :List of 7
+##   ..$ chunk.begin   : chr "^\\.{2}\\s+\\{r(.*)\\}\\s*$"
+##   ..$ chunk.end     : chr "^\\.{2}\\s+\\.{2,}\\s*$"
+##   ..$ chunk.code    : chr "^\\.{2}"
+##   ..$ ref.chunk     : chr "^\\.*\\s*<<(.*)>>\\s*$"
+##   ..$ inline.code   : chr ":r:`([^`]*)`"
+##   ..$ global.options: chr ":roptions:`([^`]*)`"
 ##   ..$ ref.label     : chr "^## @knitr (.*)$"
 {% endhighlight %}
 
