@@ -1,8 +1,9 @@
 ## initial pattern list
-.pat.init = list(chunk.begin = NULL, chunk.end = NULL, chunk.code = NULL,
-                inline.code = NULL, global.options = NULL, input.doc = NULL,
-                ref.chunk = NULL, header.begin = NULL, document.begin = NULL,
-                ref.label = NULL)
+.pat.init = list(
+  chunk.begin = NULL, chunk.end = NULL, chunk.code = NULL, inline.code = NULL,
+  global.options = NULL, input.doc = NULL, ref.chunk = NULL,
+  header.begin = NULL, document.begin = NULL, ref.label = NULL
+)
 
 #' Patterns to match and extract R code in a document
 #'

@@ -36,22 +36,23 @@ new_defaults = function(value = list()) {
 #' \url{http://yihui.name/knitr/options#chunk_options}
 #' @export
 #' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
-opts_chunk =
-  new_defaults(list(eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
-                    cache = FALSE, dependson = NULL, cache.path = 'cache/',
-                    ref.label = NULL, child = NULL, engine = 'R',
-                    prompt = FALSE, comment = '##', autodep = FALSE,
-                    fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
-                    fig.path = 'figure/', fig.ext = NULL, dev = 'pdf', dpi = 72,
-                    fig.width = 7, fig.height = 7,
-                    fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:', fig.pos = '',
-                    out.width = NULL, out.height = NULL,
-                    resize.width = NULL, resize.height = NULL,
-                    external = TRUE, sanitize = FALSE,
-                    highlight = TRUE, size = 'normalsize',
-                    warning = TRUE, error = TRUE, message = TRUE,
-                    background = '#F7F7F7', split = FALSE, include = TRUE,
-                    interval = 1, aniopts = 'controls;loop'))
+opts_chunk = new_defaults(
+  list(eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
+       cache = FALSE, dependson = NULL, cache.path = 'cache/',
+       ref.label = NULL, child = NULL, engine = 'R',
+       prompt = FALSE, comment = '##', autodep = FALSE,
+       fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
+       fig.path = 'figure/', fig.ext = NULL, dev = 'pdf', dpi = 72,
+       fig.width = 7, fig.height = 7,
+       fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:', fig.pos = '',
+       out.width = NULL, out.height = NULL,
+       resize.width = NULL, resize.height = NULL,
+       external = TRUE, sanitize = FALSE,
+       highlight = TRUE, size = 'normalsize',
+       warning = TRUE, error = TRUE, message = TRUE,
+       background = '#F7F7F7', split = FALSE, include = TRUE,
+       interval = 1, aniopts = 'controls,loop')
+)
 
 #' @rdname opts_chunk
 #' @export
@@ -133,18 +134,15 @@ all_patterns = list(
 #' \url{http://yihui.name/knitr/options#package_options}
 #' @export
 #' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
-opts_knit =
-  new_defaults(list(progress = TRUE, verbose = FALSE,
-                    out.format = NULL, child.command = 'input',
-                    base.dir = NULL, base.url = NULL, child.path = '',
-                    upload.fun = identity,
-                    eval.after = NULL, concordance = FALSE,
-                    all.patterns = all_patterns, tangle = FALSE,
-                    child = FALSE, parent = FALSE,
-                    cache.extra = NULL, aliases = NULL,
-                    self.contained = TRUE, filter.chunk.end = TRUE,
-                    header = c(highlight = '', tikz = '', framed = ''))
-               )
+opts_knit = new_defaults(
+  list(progress = TRUE, verbose = FALSE, out.format = NULL,
+       child.command = 'input', base.dir = NULL, base.url = NULL, child.path = '',
+       upload.fun = identity, eval.after = NULL, concordance = FALSE,
+       all.patterns = all_patterns, tangle = FALSE, child = FALSE, parent = FALSE,
+       cache.extra = NULL, aliases = NULL,
+       self.contained = TRUE, filter.chunk.end = TRUE,
+       header = c(highlight = '', tikz = '', framed = ''))
+)
 ## header should not be set by hand unless you know what you are doing
 
 ## tangle: whether I'm in tangle mode; child: whether I'm in child
