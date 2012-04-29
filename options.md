@@ -136,7 +136,6 @@ opts_knit$set(progress = TRUE, verbose = TRUE)
 All package options are:
 
 - `aliases`: (`NULL`) a named character vector to specify the aliases of chunk options, e.g. `c(h = 'fig.height', w = 'fig.width')` tells **knitr** that the chunk option `h` really means `fig.height`, and `w` is an alias for `fig.width`; this option can be used to save some typing efforts for long option names
-- `all.patterns`: a list of built-in patterns
 - `base.dir`: (`NULL`) an absolute directory under which the plots are generated
 - `base.url`: (`NULL`) the base url for HTML pages
 - `cache.extra`: (`NULL`) extra content that should affect [cache](/knitr/demo/cache)
