@@ -96,15 +96,18 @@ set_header = function(...) {
 .inst.dir = .inst.dir[file.exists(.inst.dir)]
 
 .default.sty = file.path(.inst.dir, 'themes', 'default.css')
+.default.sty = .default.sty[file.exists(.default.sty)][1L]
 # header for Latex Syntax Highlighting
 .header.hi.tex = paste(c('\\IfFileExists{upquote.sty}{\\usepackage{upquote}}{}',
                          theme_to_header_latex(.default.sty)$highlight),
                        collapse = '\n')
-.header.framed = paste(readLines(file.path(.inst.dir, 'misc', 'knitr.sty')),
-                       collapse = "\n")
+.knitr.sty = file.path(.inst.dir, 'misc', 'knitr.sty')
+.knitr.sty = .knitr.sty[file.exists(.knitr.sty)][1L]
+.header.framed = paste(readLines(.knitr.sty), collapse = "\n")
 # CSS for html syntax highlighting
 .header.hi.html = paste(theme_to_header_html(.default.sty)$highlight,
                         collapse = '\n')
+rm(list = c('.inst.dir', '.default.sty', '.knitr.sty')) # do not need them any more
 
 .header.sweave.cmd =
 '\\newcommand{\\SweaveOpts}[1]{}  % do not interfere with LaTeX
