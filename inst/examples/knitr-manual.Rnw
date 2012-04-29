@@ -38,10 +38,11 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path='figure/manual-', cache.path='cache/manual-', fig.align='center', external=TRUE, fig.show='hold', par=TRUE}
-
 <<setup, include=FALSE, cache=FALSE>>=
-options(replace.assign=TRUE,width=90)
+## this is equivalent to \SweaveOpts{}
+opts_chunk$set(fig.path='figure/manual-', cache.path='cache/manual-', fig.align='center', fig.show='hold', par=TRUE)
+## I use = but I can replace it with <-; set code/output width to be 68
+options(replace.assign=TRUE, width=68)
 ## tune details of base graphics (http://yihui.name/knitr/hooks)
 knit_hooks$set(par=function(before, options, envir){
 if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
@@ -62,7 +63,7 @@ include \href{http://www.literateprogramming.com/web.pdf}{WEB} and
 \href{http://www.cs.tufts.edu/~nr/noweb/}{Noweb}; Sweave \citep{leisch2002}
 was derived from the latter, but it is less focused on documenting
 software, instead it is mainly used for reproducible data analysis
-and generating statistical reports. The \textbf{knitr} package \citep{knitr-manual}
+and generating statistical reports. The \textbf{knitr} package \citep{R-knitr}
 is following the steps of Sweave. For this manual, I assume readers
 have some background knowledge of Sweave to understand the technical
 details; for a reference of available options, hooks and demos, see
@@ -131,9 +132,9 @@ chunks and normal texts; the former will be executed one after the
 other, and the latter may contain global chunk options or inline R
 code;
 \item for each chunk, the code is evaluated using the \textbf{evaluate}
-package \citep{evaluate-manual}, and the results may be filtered
-according to chunk options (e.g. \texttt{echo=FALSE} will remove the
-R source code)
+package \citep{R-evaluate}, and the results may be filtered according
+to chunk options (e.g. \texttt{echo=FALSE} will remove the R source
+code)
 
 \begin{enumerate}
 \item if \texttt{cache=TRUE} for this chunk, \textbf{knitr} will first check
@@ -195,16 +196,16 @@ has provided many examples demonstrating the flexibility of the output.
 \section{Features}
 
 The \textbf{knitr} package borrowed features such as tikz graphics
-and cache from \textbf{pgfSweave} \citep{pgfSweave-manual} and \textbf{cacheSweave}
-\citep{cacheSweave-manual} respectively, but the implementations
-are different. New features like code reference from an external R
-script as well as output customization are also introduced. The feature
-of hook functions in Sweave is re-implemented and hooks have new usage
-now. There are several other small features which are motivated from
-my everyday use of Sweave. For example, a progress bar is provided
-when knitting a file so we roughly know how long we still need to
-wait; output from inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}})
-is automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
+and cache from \textbf{pgfSweave} \citep{R-pgfSweave} and \textbf{cacheSweave}
+\citep{R-cacheSweave} respectively, but the implementations are different.
+New features like code reference from an external R script as well
+as output customization are also introduced. The feature of hook functions
+in Sweave is re-implemented and hooks have new usage now. There are
+several other small features which are motivated from my everyday
+use of Sweave. For example, a progress bar is provided when knitting
+a file so we roughly know how long we still need to wait; output from
+inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}}) is
+automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
 if the result is numeric, and we will not get too many digits by default.
 You may check out a number of specific manuals dedicated to specific
 features such as graphics in the website: \url{http://yihui.name/knitr/demos}.
@@ -212,10 +213,10 @@ features such as graphics in the website: \url{http://yihui.name/knitr/demos}.
 
 \subsection{Code Decoration}
 
-The \textbf{highlight} package \citep{highlight-manual} is used by
-default to highlight R code, and \textbf{formatR} \citep{formatR-manual}
-is used to reformat R code (like \texttt{keep.source=FALSE} in Sweave
-but will also try to retain comments). For \LaTeX{} output, the \textbf{framed}
+The \textbf{highlight} package \citep{R-highlight} is used by default
+to highlight R code, and \textbf{formatR} \citep{R-formatR} is used
+to reformat R code (like \texttt{keep.source=FALSE} in Sweave but
+will also try to retain comments). For \LaTeX{} output, the \textbf{framed}
 package is used to decorate code chunks with a light gray background.
 If this \LaTeX{} package is not found in the system, a version will
 be copied directly from \textbf{knitr}. The prompt characters are
@@ -342,7 +343,7 @@ a chunk (\texttt{fig.show='hold'}), or just insert them to the place
 where they were created (by default \texttt{fig.show='asis'}). Here
 is an example of \texttt{fig.show='asis'}:
 
-<<fig-hold, fig=TRUE, fig.show='asis', dev='pdf', fig.width=6, fig.height=4, out.width='.35\\linewidth'>>=
+<<fig-hold, fig.show='asis', dev='pdf', fig.width=6, fig.height=4, out.width='.35\\linewidth'>>=
 contour(volcano)  # contour lines
 filled.contour(volcano)  # fill contour plot with colors
 @
@@ -359,8 +360,8 @@ preamble, because \textbf{knitr} will not add it automatically. Animations
 in the PDF output can only be viewed in Adobe Reader.
 
 As a simple demonstration, here is a \href{http://en.wikipedia.org/wiki/Mandelbrot_set}{Mandelbrot animation}
-taken from the \textbf{animation} package \citep{animation-manual};
-note the PNG device is used because PDF files are too large. You should
+taken from the \textbf{animation} package \citep{R-animation}; note
+the PNG device is used because PDF files are too large. You should
 be able to see the animation immediately with Acrobat Reader since
 it was set to play automatically:
 
@@ -384,22 +385,21 @@ to be less than half of the current line width, e.g. \texttt{out.width='.49\text
 
 Beside PDF, PNG and other traditional R graphical devices, \textbf{knitr}
 has special support to tikz graphics via the \textbf{tikzDevice} package
-\citep{tikzDevice-manual}, which is similar to \textbf{pgfSweave}.
-If we set the chunk option \texttt{dev='tikz'}, the \emph{tikz()}
-device in \textbf{tikzDevice} will be used to record plots. Options
-\texttt{sanitize} and \texttt{external} are related to the tikz device:
-see the documentation of \emph{tikz()} for details. Note \texttt{external=TRUE}
-in \textbf{knitr} has a different meaning with \textbf{pgfSweave}
--- it means \texttt{standAlone=TRUE} in \emph{tikz()}, and the tikz
-graphics output will be compiled to PDF \emph{immediately} after it
-is created, so the ``externalization'' does not depend on the \textbf{tikz}
-package; to maintain consistency in (font) styles, \textbf{knitr}
-will read the preamble of the input document and use it in the tikz
-device. At the moment, I'm not sure if this is a faithful way to externalize
-tikz graphics, but I have not seen any problems so far. The assumption
-to make, however, is that you declare all the styles in the preamble;
-\textbf{knitr} is agnostic of \emph{local} style changes in the body
-of the document.
+\citep{R-tikzDevice}, which is similar to \textbf{pgfSweave}. If
+we set the chunk option \texttt{dev='tikz'}, the \emph{tikz()} device
+in \textbf{tikzDevice} will be used to record plots. Options \texttt{sanitize}
+and \texttt{external} are related to the tikz device: see the documentation
+of \emph{tikz()} for details. Note \texttt{external=TRUE} in \textbf{knitr}
+has a different meaning with \textbf{pgfSweave} -- it means \texttt{standAlone=TRUE}
+in \emph{tikz()}, and the tikz graphics output will be compiled to
+PDF \emph{immediately} after it is created, so the ``externalization''
+does not depend on the \textbf{tikz} package; to maintain consistency
+in (font) styles, \textbf{knitr} will read the preamble of the input
+document and use it in the tikz device. At the moment, I'm not sure
+if this is a faithful way to externalize tikz graphics, but I have
+not seen any problems so far. The assumption to make, however, is
+that you declare all the styles in the preamble; \textbf{knitr} is
+agnostic of \emph{local} style changes in the body of the document.
 
 Below is an example taken from StackOverflow%
 \footnote{\url{http://stackoverflow.com/q/8190087/559676}%
@@ -638,7 +638,7 @@ to all other options naturally.
 
 The \textbf{knitr} package is ready for customization. Both the patterns
 and hooks can be customized; see the package website for details.
-Here I show an example on how to save \textbf{rgl} plots \citep{rgl-manual}
+Here I show an example on how to save \textbf{rgl} plots \citep{R-rgl}
 using a customized hook function. First we define a hook named \texttt{rgl}
 using the function \emph{hook\_rgl()} in \textbf{knitr}:
 
@@ -698,6 +698,12 @@ Feedback and comments on this manual and the package are always welcome.
 Bug reports and feature requests can be sent to \url{https://github.com/yihui/knitr/issues},
 and questions can be delivered to the \href{mailto:knitr@googlegroups.com}{mailing list}
 \url{https://groups.google.com/group/knitr}.
+
+% when knitr is updated, this chunk will be updated; why?
+<<auto-bib, version=packageVersion('knitr'), echo=FALSE, cache=TRUE, message=FALSE>>=
+# write all packages in the current session to a bib file
+write_bib(c(.packages(), 'cacheSweave', 'evaluate', 'formatR', 'highlight', 'pgfSweave'), file = 'knitr-packages.bib')
+@
 
 \bibliographystyle{jss}
 \bibliography{knitr-manual,knitr-packages}

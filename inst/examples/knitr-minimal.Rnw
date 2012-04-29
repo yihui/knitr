@@ -17,9 +17,9 @@
 \usepackage{breakurl}
 \begin{document}
 
-% \SweaveOpts{fig.path='figure/minimal-', fig.align='center', fig.show='hold'}
-
 <<setup, include=FALSE, cache=FALSE>>=
+# this is equivalent to \SweaveOpts{...}
+opts_chunk$set(fig.path='figure/minimal-', fig.align='center', fig.show='hold')
 options(replace.assign=TRUE,width=90)
 @
 

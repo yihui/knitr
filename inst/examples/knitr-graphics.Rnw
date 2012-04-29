@@ -30,10 +30,9 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path='figure/graphics-', cache.path='cache/graphics-', fig.align='center', dev='tikz', fig.width=5, fig.height=5, fig.show='hold', cache=TRUE, par=TRUE}
-
 <<setup, include=FALSE, cache=FALSE>>=
 options(replace.assign=TRUE,width=60)
+opts_chunk$set(fig.path='figure/graphics-', cache.path='cache/graphics-', fig.align='center', dev='tikz', fig.width=5, fig.height=5, fig.show='hold', cache=TRUE, par=TRUE)
 knit_hooks$set(par=function(before, options, envir){
 if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
 }, crop=hook_pdfcrop)
@@ -87,10 +86,9 @@ with(trees, symbols(Height, Volume, circles = Girth/16, inches = FALSE, bg = 'de
 Figure \ref{mar:pdf-dev} and \ref{mar:png-dev} show two standard
 devices in the \textbf{grDevices} package. We can also use devices
 in the \textbf{Cairo} or \textbf{cairoDevice} package, e.g., the chunk
-below uses the \emph{Cairo\_png()} device in the \textbf{cairoDevice}
-package.
+below uses the \emph{CairoPNG()} device in the \textbf{Cairo} package.
 
-<<cairo-png-dev, ref.label='test-plot', dev='Cairo_png', out.width='.5\\linewidth', echo=FALSE>>=
+<<cairo-png-dev, ref.label='test-plot', dev='CairoPNG', out.width='.5\\linewidth', echo=FALSE>>=
 @
 
 
@@ -369,7 +367,7 @@ write plot files in the chunk. Here we show an example of capturing
 GGobi plots using the function \emph{ggobi\_display\_save\_picture()}
 in the \textbf{rggobi} package:
 
-<<ggobi-plot, custom.plot=TRUE, fig.ext='png', out.width='2.5in', results='hide'>>=
+<<ggobi-plot, custom.plot=TRUE, fig.ext='png', out.width='2.5in', results='hide', warning=FALSE>>=
 library(rggobi)
 ggobi(ggobi_find_file('data', 'flea.csv'))
 Sys.sleep(1)  # wait for snapshot

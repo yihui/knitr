@@ -29,8 +29,8 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path='figure/twocolumn-', fig.align='center', fig.show='hold'}
 <<setup, include=FALSE, cache=FALSE>>=
+opts_chunk$set(fig.path='figure/twocolumn-', fig.align='center', fig.show='hold')
 render_listings()
 @
 
@@ -47,7 +47,7 @@ figures can span over two columns. Because the output hooks use the
 environment, we can either modify the output hooks or use other packages
 like \textbf{listings}. For example,
 
-<<chunk-hook>>=
+<<chunk-hook, echo=2>>=
 <<setup>>
 @
 

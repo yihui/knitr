@@ -5,13 +5,14 @@ R works, of course.
 
 
 ```r
+set.seed(123)
 rnorm(5)
 ```
 
 
 
-```no-highlight
-## [1]  0.1143 -0.6663  1.5533 -0.6486  0.4476
+```
+## [1] -0.56048 -0.23018  1.55871  0.07051  0.12929
 ```
 
 
@@ -26,7 +27,7 @@ x = 'hello, python world!'
 print x
 print x.split(' ')
 ```
-```text
+```
 hello, python world!
 ['hello,', 'python', 'world!']
 ```
@@ -43,7 +44,7 @@ NF {
 }
 END { print i }
 ```
-```text
-586
+```
+594
 ```
 

@@ -54,7 +54,9 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path='figure/beamer-',fig.align='center',fig.show='hold',size='footnotesize'}
+<<setup, include=FALSE>>=
+opts_chunk$set(fig.path='figure/beamer-',fig.align='center',fig.show='hold',size='footnotesize')
+@
 
 
 \title[knitr, Beamer, and FragileFrame]{A Minimal Demo of knitr with Beamer and Fragile Frames}
@@ -83,11 +85,13 @@ to work is trivial
 
 \begin{enumerate}
 \item Install the \textbf{knitr} package in \emph{R}
-\item Read \url{http://yihui.github.com/knitr/demo/lyx/}
+\item Read \url{http://yihui.name/knitr/demo/lyx/}
 \end{enumerate}
 \item If you use Sweave or \textbf{knitr} with Beamer in \LyX{}, you probably
-use the FragileFrame module too. Let's see if \textbf{knitr} works
-with Beamer and FragileFrame in this small demo. 
+use the \emph{Beamer Fragile} module%
+\footnote{\url{http://www.lyx.org/trac/ticket/7273}%
+} too. Let's see if \textbf{knitr} works with Beamer in this small
+demo. 
 \end{itemize}
 
 \lyxframeend{}\section{First Test}

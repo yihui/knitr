@@ -17,9 +17,8 @@
 \usepackage{breakurl}
 \begin{document}
 
-% \SweaveOpts{fig.path='figure/listings-'}
-
 <<setup, include=FALSE, cache=FALSE>>=
+opts_chunk$set(fig.path = 'figure/listings-')
 options(replace.assign = TRUE)
 render_listings()
 @

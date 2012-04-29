@@ -23,7 +23,9 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path='figure/subfloats-'}
+<<setup, include=FALSE>>=
+opts_chunk$set(fig.path='figure/subfloats-')
+@
 
 
 \title{Using subfloats in \LyX{} with knitr}

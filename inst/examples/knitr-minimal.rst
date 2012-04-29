@@ -10,7 +10,7 @@ and the output filename will be ``rst``. Here is how we write R code in
 ::
 
     options(width = 75)
-    render_rst(strict = TRUE)
+    render_rst(strict = TRUE)  # do not use the sourcecode directive
     opts_knit$set(upload.fun = imgur_upload)  # upload images
     opts_chunk$set(cache = TRUE, cache.path = "cache/rst-", fig.path = "figure/rst-", 
         fig.width = 5, fig.height = 5)  # global chunk options
@@ -47,8 +47,8 @@ dots, e.g.
 
 ::
 
-    ##  [1] -0.1835 -0.4287  1.1259 -0.1039 -0.6829  0.4316  1.1405 -0.2924
-    ##  [9] -0.4319 -0.5229
+    ##  [1]  0.5865 -0.1336  0.4643  0.3953  0.2307  0.6304 -1.5677 -0.2125
+    ##  [9] -0.1971 -1.3298
 
 
 
@@ -81,7 +81,7 @@ Here is a plot:
     ## geom_smooth: method="auto" and size of largest group is <1000, so using loess. Use 'method = x' to change the smoothing method.
 
 
-.. figure:: http://i.imgur.com/5trZl.png
+.. figure:: http://i.imgur.com/PhcRs.png
     :alt: A ggplot2 example
     :width: 360px
 

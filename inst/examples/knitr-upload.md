@@ -1,7 +1,14 @@
 
-This is an example of using **knitr** with extended markdown (e.g. [GFM](http://github.github.com/github-flavored-markdown/)) and uploading images to imgur.com automatically. Note you should set the graphical device to create images that can be displayed in the web browser, e.g. `dev = 'png'` (it is the default for markdown output) works but `'pdf'` does not.
+This is an example of using **knitr** with extended markdown (e.g.
+[GFM](http://github.github.com/github-flavored-markdown/)) and uploading images
+to imgur.com automatically. Note you should set the graphical device to create
+images that can be displayed in the web browser, e.g. `dev = 'png'` (it is the
+default for markdown output) works but `'pdf'` does not.
 
-First, the input file was named as `knitr-upload.Rmd` ([click to view its source](https://github.com/yihui/knitr/raw/master/inst/examples/knitr-upload.Rmd)), and **knitr** will automatically determine the output filename to be `knitr-upload.md`. 
+First, the input file was named as `knitr-upload.Rmd`
+([source](https://github.com/yihui/knitr/blob/master/inst/examples/knitr-upload.Rmd)),
+and **knitr** will automatically determine the output filename to be
+`knitr-upload.md`. 
 
 I used the code below to make sure **knitr** will upload images.
 
@@ -55,13 +62,13 @@ library(ggplot2)
 qplot(hp, mpg, data = mtcars) + geom_smooth()
 ```
 
-![plot of chunk md-cars](http://i.imgur.com/4SSRD.png) 
+![plot of chunk md-cars](http://i.imgur.com/mBRVS.png) 
 
 ```r
 ggpcp(mtcars) + geom_line()
 ```
 
-![plot of chunk md-cars](http://i.imgur.com/HFmwH.png) 
+![plot of chunk md-cars](http://i.imgur.com/mSEgC.png) 
 
 
 So **knitr** is ready with GitHub with a single markdown file.
