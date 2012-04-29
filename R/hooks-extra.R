@@ -1,0 +1,94 @@
+#' Built-in chunk hooks to extend knitr
+#'
+#' Hook functions are called when the corresponding chunk options are
+#' \code{TRUE} to do additional jobs beside the R code in chunks. This package
+#' provides a few useful hooks, which can also serve as examples of how to
+#' define chunk hooks in \pkg{knitr}.
+#'
+#' The function \code{hook_rgl} can be set as a hook in \pkg{knitr} to save
+#' plots produced by the \pkg{rgl} package. According to the chunk option
+#' \samp{dev} (graphical device), plots can be save to different formats
+#' (\samp{postscript}: \samp{eps}; \samp{pdf}: \samp{pdf}; other devices
+#' correspond to the default PNG format). The plot window will be adjusted
+#' according to chunk options \samp{width} and \samp{height}. Filenames are
+#' derived from chunk labels and the prefix string.
+#'
+#' The function \code{hook_pdfcrop} can use the program \command{pdfcrop} to
+#' crop the extra white margin in order to make better use of the space in the
+#' output document, otherwise we often have to struggle with
+#' \code{\link[graphics]{par}} to set appropriate margins. Note
+#' \command{pdfcrop} often comes with a LaTeX distribution such as MiKTeX or
+#' TeXLive, and you may not need to install it separately (use
+#' \code{Sys.which('pdfcrop')} to check it; if it not empty, you are able to use
+#' it).
+#'
+#' When the plots are not recordable via \code{\link[grDevices]{recordPlot}} and
+#' we save the plots to files manually via other functions (e.g. \pkg{rgl}
+#' plots), we can use the chunk hook \code{hook_plot_custom} to help write code
+#' for graphics output into the output document.
+#' @rdname chunk_hook
+#' @param before,options,envir see references
+#' @references \url{http://yihui.name/knitr/hooks#chunk_hooks}
+#' @seealso \code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}}
+#' @export
+#' @examples knit_hooks$set(rgl = hook_rgl)
+#' ## then in code chunks, use the option rgl=TRUE
+hook_rgl = function(before, options, envir) {
+  ## after a chunk has been evaluated
+  if (before || !require('rgl') || rgl.cur() == 0) return()  # no active device
+  name = fig_path()
+  par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
+  Sys.sleep(.05) # need time to respond to window size change
+
+  fmt = opts_knit$get('out.format')
+  if (fmt %in% c('html', 'markdown', 'jekyll', 'rst')) options$dev = 'png'
+
+  ## support 3 formats: eps, pdf and png (default)
+  switch(options$dev,
+         postscript = rgl.postscript(str_c(name, '.eps'), fmt = 'eps'),
+         pdf = rgl.postscript(str_c(name, '.pdf'), fmt = 'pdf'),
+         rgl.snapshot(str_c(name, '.png'), fmt = 'png'))
+
+  hook_plot_custom(before, options, envir)
+}
+#' @export
+#' @rdname chunk_hook
+hook_pdfcrop = function(before, options, envir) {
+  ## crops PDF after a chunk is evaluated and PDF files produced
+  ext = options$fig.ext
+  if (options$dev == 'tikz' && options$external) ext = 'pdf'
+  if (before || (fig.num <- options$fig.num) == 0L || ext != 'pdf')
+    return()
+
+  paths = paste(valid_path(options$fig.path, options$label),
+                if (fig.num == 1L) '' else seq_len(fig.num), ".pdf", sep = "")
+
+  lapply(paths, function(x) {
+    message('cropping ', x)
+    x = shQuote(x)
+    system(paste("pdfcrop", x, x, sep = " "))
+  })
+  return()
+}
+#' @export
+#' @rdname chunk_hook
+hook_plot_custom = function(before, options, envir){
+  if(before) return() # run hook after the chunk
+
+  ext = options$fig.ext
+  if(is.null(ext)) ext = dev2ext(options$dev)
+  name = fig_path()
+  fmt = opts_knit$get('out.format')
+  if (fmt %in% c('sweave', 'listings')) fmt = 'latex'
+  hook = switch(fmt, latex = hook_plot_tex, html = hook_plot_html,
+                rst = hook_plot_rst, hook_plot_md)
+
+  n = options$fig.num
+  if (n <= 1L) hook(c(name, ext), options) else {
+    res = unlist(lapply(seq_len(n), function(i) {
+      options$fig.cur = i
+      hook(c(str_c(name, i), ext), options)
+    }), use.names = FALSE)
+    str_c(res, collapse = '')
+  }
+}
