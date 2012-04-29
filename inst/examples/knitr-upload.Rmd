@@ -1,7 +1,14 @@
 `r opts_chunk$set(fig.width=5, fig.height=5, fig.path='ex-out-', cache=TRUE, cache.path='cache/upload-')`
-This is an example of using **knitr** with extended markdown (e.g. [GFM](http://github.github.com/github-flavored-markdown/)) and uploading images to imgur.com automatically. Note you should set the graphical device to create images that can be displayed in the web browser, e.g. `dev = 'png'` (it is the default for markdown output) works but `'pdf'` does not.
+This is an example of using **knitr** with extended markdown (e.g.
+[GFM](http://github.github.com/github-flavored-markdown/)) and uploading images
+to imgur.com automatically. Note you should set the graphical device to create
+images that can be displayed in the web browser, e.g. `dev = 'png'` (it is the
+default for markdown output) works but `'pdf'` does not.
 
-First, the input file was named as `knitr-upload.Rmd` ([click to view its source](https://github.com/yihui/knitr/raw/master/inst/examples/knitr-upload.Rmd)), and **knitr** will automatically determine the output filename to be `knitr-upload.md`. 
+First, the input file was named as `knitr-upload.Rmd`
+([source](https://github.com/yihui/knitr/blob/master/inst/examples/knitr-upload.Rmd)),
+and **knitr** will automatically determine the output filename to be
+`knitr-upload.md`. 
 
 I used the code below to make sure **knitr** will upload images.
 
