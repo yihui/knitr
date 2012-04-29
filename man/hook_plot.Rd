@@ -36,7 +36,7 @@ hook_plot_rst(x, options)
   consideration to align plots and set figure sizes, etc.
   Similarly, \code{hook_plot_html}, \code{hook_plot_md} and
   \code{hook_plot_rst} return character strings which are
-  HTML, Markdown, ReST code.
+  HTML, Markdown, reST code.
 
   In most cases we do not need to call these hooks
   explicitly, and they were designed to be used internally.
