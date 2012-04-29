@@ -75,6 +75,9 @@ NEW FEATURES
   o new function write_bib() to write Bibtex citations for R packages;
   see the main manual for a sample usage (#13)
 
+  o hook_pdfcrop() also supports cropping other image formats like PNG
+  or JPEG through ImageMagick (convert -trim) (#203) (thanks, @r2d3)
+
 MAJOR CHANGES
 
   o knitr will completely stop when duplicated labels are found and
