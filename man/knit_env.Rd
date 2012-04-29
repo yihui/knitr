@@ -10,11 +10,8 @@ knit_env()
 }
 \details{
   In some special cases, we need access to the environment
-  of the current chunk; a typical example is when we use
-  \code{source()} in a cached chunk, we have to make sure
-  the script is executed in the correct environment (should
-  not use the default local environment). See references
-  for an example.
+  of the current chunk, e.g., to make sure the code is
+  executed in the correct environment.
 }
 \references{
   \url{http://yihui.name/knitr/demo/cache/}
