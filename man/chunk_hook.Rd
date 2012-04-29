@@ -15,32 +15,36 @@ hook_plot_custom(before, options, envir)
 }
 \description{
   Hook functions are called when the corresponding chunk
-  options are \code{TRUE} to do additional jobs beside the
-  R code in chunks. This package provides a few useful
+  options are not \code{NULL} to do additional jobs beside
+  the R code in chunks. This package provides a few useful
   hooks, which can also serve as examples of how to define
   chunk hooks in \pkg{knitr}.
 }
 \details{
   The function \code{hook_rgl} can be set as a hook in
   \pkg{knitr} to save plots produced by the \pkg{rgl}
-  package. According to the chunk option \samp{dev}
+  package. According to the chunk option \code{dev}
   (graphical device), plots can be save to different
-  formats (\samp{postscript}: \samp{eps}; \samp{pdf}:
+  formats (\code{postscript}: \samp{eps}; \code{pdf}:
   \samp{pdf}; other devices correspond to the default PNG
   format). The plot window will be adjusted according to
-  chunk options \samp{width} and \samp{height}. Filenames
-  are derived from chunk labels and the prefix string.
+  chunk options \code{fig.width} and \code{fig.height}.
+  Filenames are derived from chunk labels and the
+  \code{fig.path} option.
 
   The function \code{hook_pdfcrop} can use the program
-  \command{pdfcrop} to crop the extra white margin in order
-  to make better use of the space in the output document,
-  otherwise we often have to struggle with
+  \command{pdfcrop} to crop the extra white margin when the
+  plot format is PDF to make better use of the space in the
+  output document, otherwise we often have to struggle with
   \code{\link[graphics]{par}} to set appropriate margins.
   Note \command{pdfcrop} often comes with a LaTeX
   distribution such as MiKTeX or TeXLive, and you may not
   need to install it separately (use
   \code{Sys.which('pdfcrop')} to check it; if it not empty,
-  you are able to use it).
+  you are able to use it). Similarly, when the plot format
+  is not PDF (e.g. PNG), the program \command{convert} in
+  ImageMagick is used to trim the white margins (call
+  \command{convert input -trim output}).
 
   When the plots are not recordable via
   \code{\link[grDevices]{recordPlot}} and we save the plots
