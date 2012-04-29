@@ -161,23 +161,6 @@ hook_plot_tex = function(x, options) {
 #' @examples knit_hooks$get('source'); knit_hooks$get('inline')
 knit_hooks = new_defaults(.default.hooks)
 
-
-## hooks that return character values will be inserted into final output
-run_hooks = function(before, options, envir) {
-  ## default and user-defined new hooks
-  hooks.d = knit_hooks$get(default = TRUE); hooks.n = knit_hooks$get()
-  hooks.a = hooks.n[setdiff(names(hooks.n), names(hooks.d))] # a list of hooks to run
-  out = NULL
-  for (i in names(hooks.a)) {
-    if (!is.null(options[[i]])) {
-      ## run only when option is not NULL
-      res = hooks.a[[i]](before = before, options = options, envir = envir)
-      if (is.character(res)) out = c(out, res)
-    }
-  }
-  out
-}
-
 #' Set output hooks for different output formats
 #'
 #' These functions set built-in output hooks for LaTeX, HTML, Markdown and
