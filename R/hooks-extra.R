@@ -68,9 +68,8 @@ hook_pdfcrop = function(before, options, envir) {
     warning('ImageMagick not installed or not in PATH')
     return()
   }
-  paths = paste(valid_path(options$fig.path, options$label),
-                if (fig.num == 1L) '' else seq_len(fig.num), ".", ext,
-                sep = "")
+  paths = fig_path(paste(if (fig.num == 1L) '' else seq_len(fig.num),
+                         ".", ext, sep = ""), options)
 
   lapply(paths, function(x) {
     message('cropping ', x)
