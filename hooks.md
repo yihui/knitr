@@ -102,7 +102,7 @@ If the output file type is LaTeX, default hooks will put most output in the `ver
 
 Put source code in the `Sinput` environment, output in the `Soutput` enviroment and the whole chunk in the `Schunk` environment. The style file `Sweave.sty` is required to use this theme, or at least these three environments have to be defined.
 
-## Listings: render_listings()
+### Listings: render_listings()
 
 Similar to Sweave, and [`Sweavel.sty`](https://github.com/yihui/knitr/blob/master/inst/misc/Sweavel.sty) is used instead.
 
