@@ -192,7 +192,7 @@ format_sci <- function (x, format = "latex")
             } else {
                 ## This needs the following line at the top of the file to define |times|
                 ## .. include <isonum.txt>
-                res = sprintf("%s%s10:sup:`%s`", b, ifelse(b ==
+                res = sprintf("%s%s10 :sup:`%s`", b, ifelse(b ==
                 "", "", " |times| "), floor(lx))
                 res[x == 0] = 0
             }
