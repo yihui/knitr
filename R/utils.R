@@ -161,24 +161,45 @@ input_dir = function() {
 }
 
 ## scientific notation in TeX
-format_sci = function(x, format = 'latex') {
-  if (!is.numeric(x)) return(x)
-  scipen = getOption('scipen') + 4L
-  if (any(abs(lx <- floor(log(abs(x), 10))) >= scipen)) {
-    b = round(x/10^lx, getOption('digits'))
-    b[b %in% c(1, -1)] = ''  # base is 1 or -1, do not use it
-    if (format == 'latex') {
-      res = sprintf('%s%s10^{%s}', b, ifelse(b == '', '', '\\times '), floor(lx))
-      res[x == 0] = 0
-      return(if (inherits(x, 'AsIs')) res else sprintf('$%s$', res))
+format_sci <- function (x, format = "latex")
+{
+    if (!is.numeric(x))
+        return(x)
+    scipen = getOption("scipen") + 4L
+    if (any(abs(lx <- floor(log(abs(x), 10))) >= scipen)) {
+        b = round(x/10^lx, getOption("digits"))
+        b[b %in% c(1, -1)] = ""
+        if (format == "latex") {
+            res = sprintf("%s%s10^{%s}", b, ifelse(b == "", "",
+                "\\times "), floor(lx))
+            res[x == 0] = 0
+            return(if (inherits(x, "AsIs")) res else sprintf("$%s$",
+                res))
+        }
+        if (format == "html") {
+            res = sprintf("%s%s10<sup>%s</sup>", b, ifelse(b ==
+                "", "", " &times; "), floor(lx))
+            res[x == 0] = 0
+            return(res)
+        }
+        if (format == "rst") {
+            ## If AsIf, then use the :math: directive
+            if (inherits(x, "AsIs")) {
+                res = sprintf("%s%s10^{%s}`", b, ifelse(b == "", "",
+                "\\times "), floor(lx))
+                res[x == 0] = 0
+                res = sprintf(":math:`%s`", res)
+            } else {
+                ## This needs the following line at the top of the file to define |times|
+                ## .. include <isonum.txt>
+                res = sprintf("%s%s10 :sup:`%s`", b, ifelse(b ==
+                "", "", " |times| "), floor(lx))
+                res[x == 0] = 0
+            }
+            return(res)
+        }
     }
-    if (format == 'html') {
-      res = sprintf('%s%s10<sup>%s</sup>', b, ifelse(b == '', '', ' &times; '), floor(lx))
-      res[x == 0] = 0
-      return(res)
-    }
-  }
-  round(x, getOption('digits'))
+    round(x, getOption("digits"))
 }
 
 ## absolute path?

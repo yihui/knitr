@@ -37,7 +37,7 @@ render_rst = function(strict = FALSE) {
   }
   hook.i = function(x) {
     sprintf(if (inherits(x, "AsIs")) "%s" else "``%s``",
-            .inline.hook(format_sci(x, "html")))
+            .inline.hook(format_sci(x, "rst")))
   }
   knit_hooks$set(source = if (strict) hook.s else hook.t,
                  warning = hook.s, error = hook.s, message = hook.s,
