@@ -423,6 +423,6 @@ run_chunk = function(label, envir = parent.frame()) {
 #          library(ggplot2)
 #          qplot(wt, mpg, data  = mtcars)
 indent_block = function(block, spaces = '    ') {
-  if (!nzchar(block)) return(spaces)
+  if (is.null(block) || !nzchar(block)) return(spaces)
   line_prompt(block, spaces, spaces)
 }
