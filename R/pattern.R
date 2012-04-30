@@ -1,3 +1,56 @@
+#' All built-in patterns
+#'
+#' This object is a named list of all built-in patterns.
+#' @references Usage: \url{http://yihui.name/knitr/patterns}
+#' @export
+#' @examples all_patterns$rnw; all_patterns$html
+#'
+#' str(all_patterns)
+all_patterns = list(
+  `rnw` = list(chunk.begin = '^<<(.*)>>=', chunk.end = '^@\\s*%*',
+               inline.code = '\\\\Sexpr\\{([^}]*)\\}',
+               input.doc = '(^|\n) *\\\\SweaveInput\\{([^}]*)\\}',
+               ref.chunk = '^\\s*<<(.*)>>\\s*$',
+               global.options = '\\\\SweaveOpts\\{([^}]*)\\}',
+               header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
+               document.begin = '\n*\\s*\\\\begin\\{document\\}',
+               ref.label = '^## @knitr (.*)$'),
+
+  `brew` = list(inline.code = '<%[=]{0,1}\\s+([^%]*)\\s+[-]*%>'),
+
+  `tex` = list(chunk.begin = '^%+\\s*begin.rcode\\s*(.*)',
+               chunk.end = '^%+\\s*end.rcode', chunk.code = '^%+',
+               ref.chunk = '^%+\\s*<<(.*)>>\\s*$',
+               global.options = '%+\\s*roptions\\s*([^\n]*)',
+               inline.code = '\\\\rinline\\{([^}]*)\\}',
+               header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
+               document.begin = '\n*\\s*\\\\begin\\{document\\}',
+               ref.label = '^## @knitr (.*)$'),
+
+  `html` = list(chunk.begin = '^<!--\\s*begin.rcode\\s*(.*)',
+                chunk.end = '^\\s*end.rcode\\s*-->',
+                ref.chunk = '^\\s*<<(.*)>>\\s*$',
+                inline.code = '<!--\\s*rinline\\s*([^>]*)\\s*-->',
+                global.options = '<!--\\s*roptions\\s*([^>]*)\\s*-->',
+                header.begin = '\n*\\s*<head>',
+                ref.label = '^## @knitr (.*)$'),
+
+  `md` = list(chunk.begin = '^`{3,}\\s*\\{r(.*)\\}\\s*$',
+              chunk.end = '^`{3,}\\s*$',
+              ref.chunk = '^\\s*<<(.*)>>\\s*$',
+              inline.code = '`r +([^`\n]+)\\s*`',
+              global.options = '`ro\\s+([^`]*)\\s+or`',
+              ref.label = '^## @knitr (.*)$'),
+
+  `rst` = list(chunk.begin = "^\\.{2}\\s+\\{r(.*)\\}\\s*$",
+               chunk.end = "^\\.{2}\\s+\\.{2,}\\s*$",
+               chunk.code = "^\\.{2}",
+               ref.chunk = "^\\.*\\s*<<(.*)>>\\s*$",
+               inline.code = ":r:`([^`]*)`",
+               global.options = ":roptions:`([^`]*)`",
+               ref.label = "^## @knitr (.*)$")
+)
+
 ## initial pattern list
 .pat.init = list(
   chunk.begin = NULL, chunk.end = NULL, chunk.code = NULL, inline.code = NULL,
