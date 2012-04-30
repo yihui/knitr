@@ -161,38 +161,33 @@ input_dir = function() {
 }
 
 ## scientific notation in TeX
-format_sci = function (x, format = "latex") {
+format_sci = function(x, format = "latex") {
   if (!is.numeric(x)) return(x)
   scipen = getOption("scipen") + 4L
-  if (any(abs(lx <- floor(log(abs(x), 10))) >= scipen)) {
-    b = round(x/10^lx, getOption("digits"))
-    b[b %in% c(1, -1)] = ""
-    if (format == "latex") {
-      res = sprintf("%s%s10^{%s}", b, ifelse(b == "", "", "\\times "), floor(lx))
-      res[x == 0] = 0
-      return(if (inherits(x, "AsIs")) res else sprintf("$%s$", res))
+  if (all(abs(lx <- floor(log(abs(x), 10))) < scipen))
+    return(round(x, getOption("digits"))) # no need sci notation
+  b = round(x/10^lx, getOption("digits"))
+  b[b %in% c(1, -1)] = ""
+  res = switch(format, latex = {
+    s = sci_notation("%s%s10^{%s}", b, "\\times ", lx)
+    if (inherits(x, "AsIs")) s else sprintf("$%s$", s)
+  }, html = sci_notation("%s%s10<sup>%s</sup>", b, " &times; ", lx), rst = {
+    # if AsIs, use the :math: directive
+    if (inherits(x, "AsIs")) {
+      s = sci_notation("%s%s10^{%s}", b, "\\times ", lx)
+      sprintf(":math:`%s`", s)
+    } else {
+      # This needs the following line at the top of the file to define |times|
+      # .. include <isonum.txt>
+      sci_notation("%s%s10 :sup:`%s`", b, " |times| ", lx)
     }
-    if (format == "html") {
-      res = sprintf("%s%s10<sup>%s</sup>", b, ifelse(b == "", "", " &times; "), floor(lx))
-      res[x == 0] = 0
-      return(res)
-    }
-    if (format == "rst") {
-      # if AsIs, use the :math: directive
-      if (inherits(x, "AsIs")) {
-        res = sprintf("%s%s10^{%s}", b, ifelse(b == "", "", "\\times "), floor(lx))
-        res[x == 0] = 0
-        res = sprintf(":math:`%s`", res)
-      } else {
-        # This needs the following line at the top of the file to define |times|
-        # .. include <isonum.txt>
-        res = sprintf("%s%s10 :sup:`%s`", b, ifelse(b == "", "", " |times| "), floor(lx))
-        res[x == 0] = 0
-      }
-      return(res)
-    }
-  }
-  round(x, getOption("digits"))
+  }, x)
+  res[x == 0] = 0
+  res
+}
+
+sci_notation = function(format, base, times, power) {
+  sprintf(format, base, ifelse(base == "", "", times), power)
 }
 
 ## absolute path?
