@@ -6,6 +6,9 @@ BUG FIXES
 
   o the templates for stitch() used results=hide which should really
   be results='hide' (#219) (thanks, @r2d3)
+
+  o format numbers with the reST syntax instead of HTML (#218)
+  (thanks, Jeffrey Arnold)
   
 			 CHANGES IN knitr VERSION 0.5
 
