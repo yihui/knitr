@@ -180,7 +180,7 @@ format_sci = function (x, format = "latex") {
     if (format == "rst") {
       # if AsIs, use the :math: directive
       if (inherits(x, "AsIs")) {
-        res = sprintf("%s%s10^{%s}`", b, ifelse(b == "", "", "\\times "), floor(lx))
+        res = sprintf("%s%s10^{%s}", b, ifelse(b == "", "", "\\times "), floor(lx))
         res[x == 0] = 0
         res = sprintf(":math:`%s`", res)
       } else {
