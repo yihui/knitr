@@ -1,5 +1,4 @@
 .gitignore
-clean-up.R
 tikzDictionary$
 aux$
 log$
