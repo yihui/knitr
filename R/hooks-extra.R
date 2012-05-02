@@ -75,7 +75,8 @@ hook_pdfcrop = function(before, options, envir) {
     message('cropping ', x)
     x = shQuote(x)
     cmd = if (ext == 'pdf') paste("pdfcrop", x, x) else paste('convert', x, '-trim', x)
-    (if (.Platform$OS.type == 'windows') shell else system)(cmd)
+    if (.Platform$OS.type == 'windows') cmd = paste(Sys.getenv("COMSPEC"), "/c", cmd)
+    system(cmd)
   })
   return()
 }
