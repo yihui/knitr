@@ -2,6 +2,11 @@
 
 NEW FEATURES
 
+  o for LaTeX output, the chunk option 'out.width' defaults to
+  '\\maxwidth' now; see http://yihui.name/knitr/demo/framed/ for its
+  definition; this makes sure the figures do not overflow the page
+  margins (#221)
+
 BUG FIXES
 
   o the templates for stitch() used results=hide which should really
