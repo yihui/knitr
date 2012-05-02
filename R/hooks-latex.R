@@ -170,6 +170,7 @@ hook_plot_tex = function(x, options) {
 render_latex = function() {
   if (child_mode()) return()
   test_latex_pkg('framed', system.file('misc', 'framed.sty', package = 'knitr'))
+  opts_chunk$set(out.width = '\\maxwidth')
   h = opts_knit$get('header')
   if (!nzchar(h['framed'])) set_header(framed = .header.framed)
   if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)

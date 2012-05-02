@@ -13,7 +13,7 @@ insert_header = function(doc) {
 ## Makes latex header with macros required for highlighting, tikz and framed
 make_header_latex = function() {
   h = "\\usepackage{graphicx, color}"
-  h = paste(c(h, opts_knit$get('header')), collapse = "\n")
+  h = paste(c(h, .header.maxwidth, opts_knit$get('header')), collapse = "\n")
   if (opts_knit$get('self.contained')) h else {
     writeLines(h, 'knitr.sty')
     '\\usepackage{knitr}'
@@ -113,4 +113,18 @@ rm(list = c('.inst.dir', '.default.sty', '.knitr.sty')) # do not need them any m
 '\\newcommand{\\SweaveOpts}[1]{}  % do not interfere with LaTeX
 \\newcommand{\\SweaveInput}[1]{} % because they are not real TeX commands
 \\newcommand{\\Sexpr}[1]{}       % will only be parsed by R
+'
+
+.header.maxwidth =
+'%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\\makeatletter
+\\def\\maxwidth{ %
+  \\ifdim\\Gin@nat@width>\\linewidth
+    \\linewidth
+  \\else
+    \\Gin@nat@width
+  \\fi
+}
+\\makeatother
 '
