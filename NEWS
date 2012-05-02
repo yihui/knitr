@@ -12,6 +12,8 @@ BUG FIXES
 
   o hook_pdfcrop() should work better under Windows now (#209) (thanks
   @DCCKC and @r2d3)
+
+  o tikz compilation fails on Windows network drives
   
 			 CHANGES IN knitr VERSION 0.5
 
