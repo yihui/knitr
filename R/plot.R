@@ -102,7 +102,7 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
     owd = setwd(dirname(path))
     # add old wd to TEXINPUTS (see #188)
     oti = Sys.getenv('TEXINPUTS'); on.exit(Sys.setenv(TEXINPUTS = oti))
-    Sys.setenv(TEXINPUTS = str_c('.', owd, oti, sep = ':'))
+    Sys.setenv(TEXINPUTS = str_c(owd, oti, sep = ':'))
     system(str_c(switch(getOption("tikzDefaultEngine"),
                         pdftex = getOption('tikzLatex'),
                         xetex = getOption("tikzXelatex"),
