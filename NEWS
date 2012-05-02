@@ -9,6 +9,9 @@ BUG FIXES
 
   o format numbers with the reST syntax instead of HTML (#218)
   (thanks, Jeffrey Arnold)
+
+  o hook_pdfcrop() should work better under Windows now (#209) (thanks
+  @DCCKC and @r2d3)
   
 			 CHANGES IN knitr VERSION 0.5
 
