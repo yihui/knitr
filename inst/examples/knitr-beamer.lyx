@@ -5,11 +5,6 @@
 \textclass beamer
 \begin_preamble
 \usetheme{PaloAlto}
-% use footnotesize for knitr output
-\ifdefined\knitrout
-  \renewenvironment{knitrout}{\begin{footnotesize}}{\end{footnotesize}}
-\else
-\fi
 \end_preamble
 \use_default_options true
 \begin_modules
