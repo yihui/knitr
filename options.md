@@ -50,7 +50,7 @@ All built-in options in **knitr** are:
 - `prompt`: (`FALSE`; logical) whether to add the prompt characters in the R code (see `prompt` and `continue` in `?base::options`; note that adding prompts can make it difficult for readers to copy R code from the output, so `prompt=FALSE` may be a better choice
 - `comment`: (`'##'`; character) the prefix to be put before source code output; default is to comment out the output by `##`, which is good for readers to copy R source code since output is masked in comments (set `comment=NA` to disable this feature)
 - `highlight`: (`TRUE`; character) whether to highlight the source code (it is `FALSE` by default the output is markdown or Sweave or listings)
-- `size`: (`'normalsize'`; character) font size for highlighting some special characters such as the prompts `>` (see `?highlight` in the **highlight** package for details); to change the font size for the whole chunk, you can redefine the `knitrout` environment in the LaTeX preamble (see the chunk hook in the [hooks](/knitr/hooks) page and [an example](/knitr/demo/beamer))
+- `size`: (`'normalsize'`; character) font size for the default LaTeX output (see `?highlight` in the **highlight** package for a list of possible values)
 - `background`: (`'#F7F7F7'`; character or numeric) background color of chunks in LaTeX output (passed to the LaTeX package **framed**); the color model is `rgb`; it can be either a numeric vector of length 3, with each element between 0 and 1 to denote red, green and blue, or any built-in color in R like `red` or `springgreen3` (see `colors()` for a full list), or a hex string like `#FFFF00`, or an integer (all these colors will be converted to the RGB model; see `?col2rgb` for details)
 
 ### Cache
