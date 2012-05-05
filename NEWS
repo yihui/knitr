@@ -7,6 +7,12 @@ NEW FEATURES
   definition; this makes sure the figures do not overflow the page
   margins (#221)
 
+  o the chunk option 'size' now defines the font size of the whole
+  chunk instead of only some special characters in it, so that the old
+  trick of redefining the 'knitrout' environment for different font
+  sizes is no longer necessary; see updates in the beamer examples:
+  http://yihui.name/knitr/demo/beamer/ (thanks, Baptiste Auguie)
+
 BUG FIXES
 
   o the templates for stitch() used results=hide which should really
