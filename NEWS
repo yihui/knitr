@@ -25,6 +25,9 @@ BUG FIXES
   @DCCKC and @r2d3)
 
   o tikz compilation fails on Windows network drives
+
+  o FFmpeg does not really work for HTML/Markdown output because the
+  dot in figure filenames was omitted (thanks, Ming Kuo)
   
 			 CHANGES IN knitr VERSION 0.5
 
