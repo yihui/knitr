@@ -42,7 +42,7 @@ hook_plot_html = function(x, options) {
   
   # set up the ffmpeg run
   ffmpeg.opts = options$aniopts
-  fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), x[2])
+  fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
   mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), ".mp4")
   if(is.na(ffmpeg.opts)) ffmpeg.opts = NULL
   
