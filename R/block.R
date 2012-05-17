@@ -29,8 +29,10 @@ call_block = function(block) {
   }
 
   if ((!params$eval && isFALSE(params$echo)) || length(params$code) == 0 ||
-    all(is_blank(params$code)))
+    all(is_blank(params$code))) {
+    message('chunk "', label, '" is empty or set not to be evaluated')
     return('') # a trivial chunk; do nothing
+  }
 
   if (is_tikz_dev(params)) set_header(tikz = '\\usepackage{tikz}')
 
