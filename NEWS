@@ -28,6 +28,13 @@ BUG FIXES
 
   o FFmpeg does not really work for HTML/Markdown output because the
   dot in figure filenames was omitted (thanks, Ming Kuo)
+
+MINOR CHANGES
+
+  o knitr will show a message when a chunk is empty; this helps users
+  who do not actually want a chunk to be empty realize the problem
+  like #229; in the past, knitr just silently returns an empty string
+  from such chunks
   
 			 CHANGES IN knitr VERSION 0.5
 
