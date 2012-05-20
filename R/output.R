@@ -133,7 +133,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     knit_patterns$restore()
     knit_patterns$set(apat[[pattern]])
     opts_knit$set(out.format = switch(pattern, rnw = 'latex', tex = 'latex',
-                                      html = 'html', md = 'markdown', rst = 'rst'))
+                                      html = 'html', md = 'markdown', rst = 'rst',
+                                      brew = 'brew'))
   }
 
   optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
