@@ -18,7 +18,7 @@ Now we write some code chunks in this markdown file:
 
 ``` {r}
 ## a simple calculator
-1+1
+(x <- 1+1)
 ## boring random numbers
 set.seed(123)
 rnorm(5)
@@ -30,6 +30,9 @@ We can also produce plots:
 library(ggplot2)
 qplot(hp, mpg, data=mtcars)+geom_smooth()
 ````
+
+Inline R code is also supported, e.g. the value of `x` is `r x`, and 2 times pi
+= `r 2*pi`.
 
 So no more hesitation on using GitHub and **knitr**! You just write a minimal
 amount of code to get beautiful output on the web.
