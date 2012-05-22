@@ -10,6 +10,7 @@ and **knitr** will automatically determine the output filename to be
 I used the code below to make sure **knitr** writes correct URL's for my images.
 
 ``` {r setup}
+# you do not need this unless you also commit images to your Github repository
 opts_knit$set(base.url='https://github.com/yihui/knitr/raw/master/inst/examples/')
 ````
 
