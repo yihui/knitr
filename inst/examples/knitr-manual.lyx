@@ -2780,6 +2780,23 @@ http://yihui.name/knitr/demo/lyx/
 \end_inset
 
  respectively.
+ It is also possible to support other editors like 
+\begin_inset CommandInset href
+LatexCommand href
+name "Eclipse"
+target "http://yihui.name/knitr/demo/eclipse/"
+
+\end_inset
+
+, 
+\begin_inset CommandInset href
+LatexCommand href
+name "Texmaker and WinEdt"
+target "http://yihui.name/knitr/demo/editors/"
+
+\end_inset
+
+; see the demo list in the website for configuration instructions.
 \end_layout
 
 \begin_layout Section*

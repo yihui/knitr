@@ -671,7 +671,10 @@ You can use any text editors to write the source documents, but some
 have built-in support for \textbf{knitr}. Both RStudio (\url{http://www.rstudio.org})
 and \LyX{} (\url{http://www.lyx.org}) have full support for \textbf{knitr},
 and you can compile the document to PDF with just one click. See \url{http://yihui.name/knitr/demo/rstudio/}
-and \url{http://yihui.name/knitr/demo/lyx/} respectively.
+and \url{http://yihui.name/knitr/demo/lyx/} respectively. It is also
+possible to support other editors like \href{http://yihui.name/knitr/demo/eclipse/}{Eclipse},
+\href{http://yihui.name/knitr/demo/editors/}{Texmaker and WinEdt};
+see the demo list in the website for configuration instructions.
 
 
 \section*{About This Document}
