@@ -35,6 +35,10 @@ MINOR CHANGES
   who do not actually want a chunk to be empty realize the problem
   like #229; in the past, knitr just silently returns an empty string
   from such chunks
+
+  o knitr will show a message when the cache is loaded and the option
+  opts_knit$get('verbose') is TRUE (#249) (thanks, Carl Boettiger)
+
   
 			 CHANGES IN knitr VERSION 0.5
 
