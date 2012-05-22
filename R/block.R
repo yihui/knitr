@@ -45,6 +45,7 @@ call_block = function(block) {
   params$hash = hash
   if (params$cache && cache$exists(hash)) {
     if (!params$include) return('')
+    if (opts_knit$get('verbose')) message('  loading cache from ', hash)
     cache$load(hash)
     return(cache$output(hash))
   }
