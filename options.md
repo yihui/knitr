@@ -18,7 +18,7 @@ Take Rnw files as an example: usually we write chunk options in the form `tag=va
 @
 {% endhighlight %}
 
-And `\SweaveOpts{}` can change the default global options in a document (e.g. `\SweaveOpts{comment=NA, fig.width=6, fig.height=6}`). A few special notes on the options:
+And `\SweaveOpts{}` can change the default global options in a document (e.g. `\SweaveOpts{comment=NA, fig.width=6, fig.height=6}`), but it is recommended to use real R code `opts_chunk$set(opt = value)` to change global options instead. A few special notes on the options:
 
 1. Chunk options must be written in one line, and you should not break them into multiple lines; no spaces are allowed before `<<` or `@` (see [#236](https://github.com/yihui/knitr/issues/236));
 1. Avoid spaces ` ` and periods `.` in chunk labels and directory names; if your output is a TeX document, these characters can cause troubles (in general it is recommended to use alphabetic characters with words separated by `-` or `_` and avoid other characters), e.g. `setup-options` is a good label, whereas `setup.options` and `chunk 1` are bad; `fig.path='figures/mcmc-'` is a good prefix for figure output if this project is about MCMC, and `fig.path='markov chain/monte carlo'` is bad;
