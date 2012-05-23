@@ -46,6 +46,8 @@ new_cache = function() {
   cache_load = function(hash) {
     path = cache_path(hash)
     lazyLoad(path, envir = globalenv())
+    if (exists('.Random.seed', envir = globalenv()))
+      assign('.Random.seed', get('.Random.seed', envir = globalenv()), envir = globalenv())
     # load .Random.seed if exists
     if (file.exists(path2 <- str_c(path, '.RData'))) {
       load(path2, envir = globalenv())
