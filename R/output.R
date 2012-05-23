@@ -217,7 +217,7 @@ auto_out_name = function(input) {
   base = file_path_sans_ext(input)
   if (opts_knit$get('tangle')) return(str_c(base, '.R'))
   ext = tolower(file_ext(input))
-  if (ext == 'rnw') return(str_c(base, '.tex'))
+  if (ext %in% c('rnw', 'snw')) return(str_c(base, '.tex'))
   if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'rrst'))
     return(str_c(base, '.', substring(ext, 2L)))
   if (ext %in% c('brew', 'tex', 'html', 'md')) {
