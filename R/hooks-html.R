@@ -9,9 +9,8 @@ hook_plot_html = function(x, options) {
     fig.cur = options$fig.cur; fig.num = options$fig.num
     ai = options$fig.show == 'asis'
     plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == 0L || fig.cur == fig.num
-    options$fig.show != 'hold'
-    d1 = if (plot1) sprintf('<div class="rimage %s">', options$fig.align) else ''
-    d2 = if (plot2) '</div>' else ''
+    d1 = if (plot1) sprintf('</div><div class="rimage %s">', options$fig.align) else ''
+    d2 = if (plot2) '</div><div class="rcode">' else ''
     sprintf('%s<img src="%s" class="plot" />%s\n', d1, .upload.url(x), d2)
   }
 }
@@ -24,7 +23,8 @@ hook_plot_html = function(x, options) {
 
 .chunk.hook.html = function(x, options) {
   if (output_asis(x, options)) return(x)
-  x = sprintf('<div class="chunk">%s</div>', x)
+  x = sprintf('<div class="chunk"><div class="rcode">%s</div></div>', x)
+  x = gsub('<div class="rcode">\\s*</div>', '', x) # rm empty rcode layers
   if (options$split) {
     name = fig_path('.html', options)
     if (!file.exists(dirname(name)))
