@@ -89,5 +89,5 @@ Here is a plot:
     
 
 
-Inline R code is like this: the value of pi is ``3.1416``.
+Inline R code is like this: the value of pi is 3.1416.
 
