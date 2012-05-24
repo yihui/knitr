@@ -1,5 +1,5 @@
-.knitr {
-  background-color: #F7F7F7;
+.knitr.inline {
+  background-color: #f7f7f7;
   border:solid 1px #B0B0B0;
 }
 .error {
@@ -13,5 +13,19 @@
 	font-style: italic;
 } 
 .source, .output, .warning, .error, .message {
-	padding: 0.5em 1em;
+	padding: 0em 1em;
+  border:solid 1px #F7F7F7;
 }
+.source {
+  background-color: #F7F7F7;
+}
+.rimage.left {
+  text-align: left;
+}
+.rimage.right {
+  text-align: right;
+}
+.rimage.center {
+  text-align: center;
+}
+
