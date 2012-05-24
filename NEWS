@@ -39,6 +39,13 @@ MINOR CHANGES
   o knitr will show a message when the cache is loaded and the option
   opts_knit$get('verbose') is TRUE (#249) (thanks, Carl Boettiger)
 
+  o the filename extension Snw is also supported (foo.Snw produces
+  foo.tex)
+
+  o the HTML output hooks are changed according to the suggestion of
+  Barry Rowlingson (#250) and the default CSS is also slightly
+  modified
+
   
 			 CHANGES IN knitr VERSION 0.5
 
