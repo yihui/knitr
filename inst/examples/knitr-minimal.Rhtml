@@ -29,6 +29,7 @@
 
 <!--begin.rcode html-cars-scatter, message=FALSE, fig.align='center'
     library(ggplot2)
+    plot(mpg~hp, mtcars)
     qplot(hp, mpg, data=mtcars)+geom_smooth()
     end.rcode-->
 
