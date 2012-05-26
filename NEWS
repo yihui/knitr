@@ -29,6 +29,14 @@ BUG FIXES
   o FFmpeg does not really work for HTML/Markdown output because the
   dot in figure filenames was omitted (thanks, Ming Kuo)
 
+MAJOR CHANGES
+
+  o .Random.seed is not cached any more because of weird problems due
+  to lazy loading (#248 and #253); users should use set.seed() to make
+  sure reproducibility of random simulations; the chunk output is
+  cached in a .RData database instead of a lazy load database to avoid
+  problems in #253
+  
 MINOR CHANGES
 
   o knitr will show a message when a chunk is empty; this helps users
