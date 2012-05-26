@@ -196,7 +196,7 @@ block_cache = function(options, output, objects) {
   cache$purge(str_c(valid_path(options$cache.path,
                                c(options$label, dep_list$get(options$label))), '_*'))
   cache$library(options$cache.path, save = TRUE)
-  cache$save(c(objects, outname), hash)
+  cache$save(objects, outname, hash)
 }
 
 call_inline = function(block) {

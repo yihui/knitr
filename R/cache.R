@@ -14,14 +14,10 @@ new_cache = function() {
     for (h in hash) unlink(str_c(cache_path(h), c('.rdb', '.rdx')))
   }
   
-  cache_save = function(keys, hash) {
-    ## FIXME: https://stat.ethz.ch/pipermail/r-help/2012-May/313571.html
-    ## currently .Random.seed must not be lazy loaded, but Luke might fix it (#248)
+  cache_save = function(keys, outname, hash) {
+    # keys are new variables created; outname is the text output of a chunk
     path = cache_path(hash)
-    ## cache the random seed as well for reproducibility
-    if (exists('.Random.seed', envir = globalenv())) {
-      save(list = '.Random.seed', file = str_c(path, '.RData'), envir = globalenv())
-    }
+    save(list = outname, file = str_c(path, '.RData'), envir = globalenv())
     tools:::makeLazyLoadDB(globalenv(), path, variables = keys)
   }
 
@@ -46,9 +42,7 @@ new_cache = function() {
   cache_load = function(hash) {
     path = cache_path(hash)
     lazyLoad(path, envir = globalenv())
-    if (exists('.Random.seed', envir = globalenv()))
-      assign('.Random.seed', get('.Random.seed', envir = globalenv()), envir = globalenv())
-    # load .Random.seed if exists
+    # load output from last run if exists
     if (file.exists(path2 <- str_c(path, '.RData'))) {
       load(path2, envir = globalenv())
     }
