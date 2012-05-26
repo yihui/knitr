@@ -163,7 +163,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
 
   progress = opts_knit$get('progress')
   if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
-  res = process_file(text)
+  res = process_file(text, output)
   unlink('NA')  # temp fix to issue 94
   cat(res, file = if (is.null(output)) '' else output)
   dep_list$restore()  # empty dependency list
@@ -182,7 +182,7 @@ purl = function(...) {
   knit(..., tangle = TRUE)
 }
 
-process_file = function(text) {
+process_file = function(text, output) {
   ocode = knit_code$get()
   on.exit({knit_code$restore(); knit_code$set(ocode)}, add = TRUE)
   groups = split_file(lines = text)
@@ -203,6 +203,7 @@ process_file = function(text) {
     txt = try((if (tangle) process_tangle else process_group)(group), silent = TRUE)
     if (inherits(txt, 'try-error')) {
       print(group)
+      cat(txt, sep = '\n', file = if (is.null(output)) '' else output)
       stop(sprintf('Quitting from lines %s: %s', current_lines(i), txt))
     }
     res[i] = txt
