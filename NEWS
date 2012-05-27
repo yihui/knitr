@@ -13,6 +13,9 @@ NEW FEATURES
   sizes is no longer necessary; see updates in the beamer examples:
   http://yihui.name/knitr/demo/beamer/ (thanks, Baptiste Auguie)
 
+  o added a new chunk option 'dev.args' which can be used to pass more
+  arguments to the graphical device (#254) (thanks, knokknok)
+
 BUG FIXES
 
   o the templates for stitch() used results=hide which should really
