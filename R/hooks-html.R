@@ -75,11 +75,13 @@ render_html = function() {
   h = opts_knit$get('header')
   if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
   z = list()
-  for (i in c('source', 'output', 'warning', 'message', 'error'))
+  for (i in c('source', 'warning', 'message', 'error'))
     z[[i]] = html.hook(i)
   knit_hooks$set(z)
   knit_hooks$set(inline = function(x) {
     sprintf(if (inherits(x, 'AsIs')) '%s' else '<code class="knitr inline">%s</code>',
             .inline.hook(format_sci(x, 'html')))
+  }, output = function(x, options) {
+    if (output_asis(x, options)) x else html.hook('output')(x)
   }, plot = hook_plot_html, chunk = .chunk.hook.html)
 }
