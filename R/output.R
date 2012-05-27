@@ -220,7 +220,7 @@ auto_out_name = function(input) {
   if (opts_knit$get('tangle')) return(str_c(base, '.R'))
   ext = tolower(file_ext(input))
   if (ext %in% c('rnw', 'snw')) return(str_c(base, '.tex'))
-  if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'rrst'))
+  if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'stex', 'rrst'))
     return(str_c(base, '.', substring(ext, 2L)))
   if (ext %in% c('brew', 'tex', 'html', 'md')) {
     if (str_detect(input, '_knit_')) {
