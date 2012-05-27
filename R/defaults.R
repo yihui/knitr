@@ -43,7 +43,7 @@ opts_chunk = new_defaults(
        prompt = FALSE, comment = '##', autodep = FALSE,
        fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
        fig.path = 'figure/', fig.ext = NULL, dev = 'pdf', dpi = 72,
-       fig.width = 7, fig.height = 7,
+       dev.args = NULL, fig.width = 7, fig.height = 7,
        fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:', fig.pos = '',
        out.width = NULL, out.height = NULL,
        resize.width = NULL, resize.height = NULL,

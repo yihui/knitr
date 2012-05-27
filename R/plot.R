@@ -92,7 +92,8 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
                   get(dev, mode = 'function'))
   
   ## re-plot the recorded plot to an off-screen device
-  device(path, width = options$fig.width, height = options$fig.height)
+  do.call(device, c(list(path, width = options$fig.width, height = options$fig.height),
+                    options$dev.args))
   print(plot)
   dev.off()
   
