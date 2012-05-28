@@ -32,6 +32,9 @@ BUG FIXES
   o FFmpeg does not really work for HTML/Markdown output because the
   dot in figure filenames was omitted (thanks, Ming Kuo)
 
+  o child documents can fail when they are in different sub
+  directories (thanks, Christoph J)
+
 MAJOR CHANGES
 
   o .Random.seed is not cached any more because of weird problems due

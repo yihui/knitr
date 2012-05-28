@@ -93,6 +93,7 @@
 knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
 
   in.file = !missing(input) && is.character(input)  # is a file input
+  optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
   opts_knit$set(tangle = tangle)
   if (child_mode()) {
     setwd(opts_knit$get('output.dir')) # always restore original working dir
@@ -136,8 +137,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
                                       html = 'html', md = 'markdown', rst = 'rst',
                                       brew = 'brew'))
   }
-
-  optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
 
   if (is.null(opts_knit$get('out.format'))) {
     fmt = switch(ext, rnw = 'latex', tex = 'latex', htm = 'html', html = 'html',
