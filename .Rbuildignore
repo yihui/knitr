@@ -4,6 +4,7 @@ aux$
 log$
 out$
 inst/examples/knitr-.*.pdf
+inst/examples/child/knitr-.*.pdf
 inst/examples/figure
 inst/examples/cache
 inst/examples/ex-out*
@@ -12,3 +13,4 @@ knitr-minimal.md
 knitr-latex.tex
 png$
 ^\.Rproj\.user$
+.*.Rproj
