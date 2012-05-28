@@ -35,6 +35,9 @@ BUG FIXES
   o child documents can fail when they are in different sub
   directories (thanks, Christoph J)
 
+  o set_parent() failed to work in the last version due to a bug when
+  inserting the parent preamble into the child document (#240)
+
 MAJOR CHANGES
 
   o .Random.seed is not cached any more because of weird problems due
