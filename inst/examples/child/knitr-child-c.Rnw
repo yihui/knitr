@@ -1,0 +1,7 @@
+\section{Child via \textbackslash{}SweaveInput\{\} (not recommended)}
+
+This chunk below is from \textbackslash{}SweaveInput\{\}.
+
+<<test-c>>=
+1+1 # child c
+@

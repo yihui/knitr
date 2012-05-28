@@ -1,0 +1,5 @@
+\section{Child in a sub directory}
+
+<<test-d>>=
+1+1 # child d
+@

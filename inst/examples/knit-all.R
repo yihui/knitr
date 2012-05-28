@@ -26,3 +26,11 @@ for (i in list.files(pattern = '\\.R(tex|md|html|rst)')) {
   flush.console()
 }
 
+setwd('child')
+for (i in c('knitr-main.Rnw', 'knitr-parent.Rnw')) {
+  cmd = sprintf('knit %s --pdf', i)
+  stopifnot(identical(system(cmd), 0L))
+}
+unlink('*.tex')
+setwd('..')
+
