@@ -18,6 +18,8 @@ new_cache = function() {
     # keys are new variables created; outname is the text output of a chunk
     path = cache_path(hash)
     save(list = outname, file = str_c(path, '.RData'), envir = globalenv())
+    # FIXME: after R 2.15.0, this line can be removed
+    keys = setdiff(keys, '.Random.seed')
     tools:::makeLazyLoadDB(globalenv(), path, variables = keys)
   }
 
