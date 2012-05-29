@@ -157,7 +157,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
   on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
   ## turn off fancy quotes, use smaller digits/width, warn immediately
   oopts = options(useFancyQuotes = FALSE, digits = 4L, width = 75L, warn = 1L,
-                  device = function(file = NULL, ...) pdf(file, ...))
+                  device = function(file = NULL, width = 7, height = 7, ...) {
+                    pdf(file, width, height, ...)
+                  })
   on.exit(options(oopts), add = TRUE)
 
   progress = opts_knit$get('progress')
