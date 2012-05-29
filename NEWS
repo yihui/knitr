@@ -43,6 +43,8 @@ BUG FIXES
   o set_parent() failed to work in the last version due to a bug when
   inserting the parent preamble into the child document (#240)
 
+  o better preserve plot sizes in interactive sessions (#258)
+
 MAJOR CHANGES
 
   o .Random.seed is not cached any more because of weird problems due
