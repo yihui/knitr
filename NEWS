@@ -16,6 +16,11 @@ NEW FEATURES
   o added a new chunk option 'dev.args' which can be used to pass more
   arguments to the graphical device (#254) (thanks, knokknok)
 
+  o warnings, messages and errors will be wrapped according to
+  options('width'); this will make long messages stay within the page
+  margin when the width option is appropriately small (#259) (thanks,
+  @muelleki)
+
 BUG FIXES
 
   o the templates for stitch() used results=hide which should really
