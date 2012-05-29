@@ -350,17 +350,18 @@ wrap.source = function(x, options) {
 }
 
 wrap.warning = function(x, options) {
-  knit_hooks$get('warning')(comment_out(str_c("Warning message: ", x$message, "\n"),
-                                        options), options)
+  msg = str_wrap(str_c("Warning: ", x$message), width = getOption('width'))
+  knit_hooks$get('warning')(comment_out(msg, options), options)
 }
 
 wrap.message = function(x, options) {
-  msg = str_replace(x$message, "\n$", "") # because message() comes with \n by default
-  knit_hooks$get('message')(comment_out(str_c(msg, "\n"), options), options)
+  msg = str_wrap(x$message, width = getOption('width'))
+  knit_hooks$get('message')(comment_out(msg, options), options)
 }
 
 wrap.error = function(x, options) {
-  knit_hooks$get('error')(comment_out(str_c("Error: ", x$message, "\n"), options), options)
+  msg = str_wrap(str_c("Error: ", x$message), width = getOption('width'))
+  knit_hooks$get('error')(comment_out(msg, options), options)
 }
 
 wrap.recordedplot = function(x, options) {
