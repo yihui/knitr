@@ -78,10 +78,10 @@ color_def = function(col, variable = 'shadecolor') {
   sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
 }
 
-## split by semicolon
+## split by semicolon or colon
 sc_split = function(string) {
   if (length(string) > 1L) return(string)
-  str_trim(str_split(string, fixed(';'))[[1]])
+  str_trim(str_split(string, ';|,')[[1]])
 }
 
 ## extract LaTeX packages for tikzDevice
