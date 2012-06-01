@@ -165,7 +165,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
   progress = opts_knit$get('progress')
   if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
-  unlink('NA')  # temp fix to issue 94
   cat(res, file = if (is.null(output)) '' else output)
   dep_list$restore()  # empty dependency list
 
