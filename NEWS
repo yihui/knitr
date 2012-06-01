@@ -52,6 +52,10 @@ MAJOR CHANGES
   sure reproducibility of random simulations; the chunk output is
   cached in a .RData database instead of a lazy load database to avoid
   problems in #253
+
+  o the default graphics device is set to the null PDF device before
+  evaluating code chunks, i.e. pdf(file = NULL), so that neither
+  Rplots.pdf nor plot windows will be opened during knitting
   
 MINOR CHANGES
 
