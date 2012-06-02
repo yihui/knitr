@@ -37,12 +37,14 @@ get_theme = function(theme = NULL) {
 #' (its Rnw source is at
 #' \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw})
 #' @export
-#' @examples knit_theme$set('edit-vim')
+#' @examples opts_knit$set(out.format='latex'); knit_theme$set('edit-vim')
 #'
 #' knit_theme$get()  # names of all available themes
 #'
 #' thm = knit_theme$get('acid')  # parse the theme to a list
 #' knit_theme$set(thm)
+#' 
+#' opts_knit$set(out.format=NULL) # restore option
 knit_theme = list(set = set_theme, get = get_theme)
 
 
