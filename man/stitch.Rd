@@ -37,7 +37,9 @@ s = system.file("misc", "stitch-test.R", package = "knitr")
 stitch(s)
 }
 
-## HTML report
-out = stitch(s, system.file("misc", "knitr-template.Rhtml", package = "knitr"))
-if (interactive()) browseURL(out)
+# HTML report
+stitch(s, system.file("misc", "knitr-template.Rhtml", package = "knitr"))
+
+# or convert markdown to HTML
+stitch(s, system.file("misc", "knitr-template.Rmd", package = "knitr"))
 }
