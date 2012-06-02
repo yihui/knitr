@@ -306,10 +306,14 @@ stitch = function(script,
   input = str_c(file_path_sans_ext(basename(script)), '.', file_ext(input))
   if (file.exists(input)) warning(input, ' already exists') else file.copy(template, input)
   out = knit(input, output)
-  if (str_detect(out, '\\.tex$')) {
+  switch(file_ext(out), tex = {
     texi2pdf(out, clean = TRUE)
     system(paste(getOption('pdfviewer'), shQuote(str_replace(out, '\\.tex$', '.pdf'))))
-  }
+  }, md = {
+    out.html = str_c(file_path_sans_ext(out), '.html')
+    markdown::markdownToHTML(out, out.html)
+    browseURL(out.html)
+  }, html = browseURL(out))
   knit_code$restore()
   out
 }
