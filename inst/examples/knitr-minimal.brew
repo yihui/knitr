@@ -1,0 +1,9 @@
+We know the value of pi is <% pi %>, and 2 times pi is <% 2*pi %>.
+
+The brew syntax in knitr is similar to the brew package, but all kinds of
+syntax in the brew package will be treated in the same way in knitr: they are
+nothing but inline R code.
+
+<% x<-1.234; NULL %>
+
+You can write a number as <% x %>, or <%= x %>, or <% x -%>.

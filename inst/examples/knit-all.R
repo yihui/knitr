@@ -26,6 +26,9 @@ for (i in list.files(pattern = '\\.R(tex|md|html|rst)')) {
   flush.console()
 }
 
+cmd = sprintf("Rscript -e 'library(knitr);knit(\"knitr-minimal.brew\", \"\")'")
+stopifnot(identical(system(cmd), 0L))
+
 setwd('child')
 for (i in c('knitr-main.Rnw', 'knitr-parent.Rnw')) {
   cmd = sprintf('knit %s --pdf', i)
