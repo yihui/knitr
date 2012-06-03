@@ -78,6 +78,10 @@ MINOR CHANGES
   pdf(file = NULL) before R 2.14.2 (which was a bug and fixed later);
   you should update R if you see this file
 
+DOCUMENTATION
+
+  o added a minimal brew example under system.file('examples', package
+  = 'knitr')
   
 			 CHANGES IN knitr VERSION 0.5
 
