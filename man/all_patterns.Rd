@@ -3,9 +3,9 @@
 \alias{all_patterns}
 \title{All built-in patterns}
 \format{List of 6
- $ rnw :List of 9
+ $ rnw :List of 10
  $ brew:List of 1
- $ tex :List of 9
+ $ tex :List of 10
  $ html:List of 7
  $ md  :List of 6
  $ rst :List of 7}
