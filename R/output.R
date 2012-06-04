@@ -53,6 +53,8 @@
 #'   \code{\link[utils]{Stangle}})
 #' @param text a character vector as an alternative way to provide the input
 #'   file
+#' @param envir the environment in which the code chunks are to be evaluated
+#'   (can use \code{\link{new.env}()} to guarantee an empty new environment)
 #' @return The compiled document is written into the output file, and the path
 #'   of the output file is returned, but if the \code{output} path is
 #'   \code{NULL}, the output is returned as a character vector.
@@ -90,7 +92,7 @@
 #' ## or setwd(dirname(f)); knit(basename(f))
 #'
 #' purl(f)  # extract R code only
-knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
+knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame()) {
 
   in.file = !missing(input) && is.character(input)  # is a file input
   optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
@@ -167,6 +169,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
 
   progress = opts_knit$get('progress')
   if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
+  .knitEnv$knit_global = envir  # the envir to eval code
   res = process_file(text, output)
   cat(res, file = if (is.null(output)) '' else output)
   dep_list$restore()  # empty dependency list

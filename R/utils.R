@@ -30,7 +30,7 @@ comment_out = function(x, options) {
 ## assign string in comments to a global variable
 comment_to_var = function(x, varname, pattern) {
   if (str_detect(x, pattern)) {
-    assign(varname, str_replace(x, pattern, ''), envir = globalenv())
+    assign(varname, str_replace(x, pattern, ''), envir = knit_global())
     return(TRUE)
   }
   FALSE
@@ -287,11 +287,11 @@ fix_options = function(options) {
 ## try eval an option (character) to its value
 eval_opt = function(x) {
   if (!is.character(x)) return(x)
-  eval(parse(text = x), envir = globalenv())
+  eval(parse(text = x), envir = knit_global())
 }
 
 ## eval options as symbol/language objects
-eval_lang = function(x, envir = globalenv()) {
+eval_lang = function(x, envir = knit_global()) {
   if (!is.symbol(x) && !is.language(x)) return(x)
   eval(x, envir = envir)
 }
