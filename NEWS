@@ -25,6 +25,12 @@ NEW FEATURES
   to a report (make a silk purse out of a sow's ear); see
   http://yihui.name/knitr/demo/stitch/ (#223) (thanks, Rich FitzJohn)
 
+  o knit() gained a new argument 'envir' to specify the environment in
+  which to evaluate code chunks (by default in the parent frame); this
+  will allow users to run code in a specified environment so that the
+  global environment will not be cluttered by objects in chunks, which
+  can hopefully make the documents more reproducible (#228)
+
   o added a new component 'inline.comment' in knit_patterns to strip
   off inline R code from inline comments, e.g. a comment line like '%
   x is \Sexpr{x}' will become '% x is ' (#110); this will only happen
