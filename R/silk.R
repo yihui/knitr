@@ -14,7 +14,11 @@
 #'   as \code{sowsear()})
 #' @return The path of the literate programming document.
 #' @export
-#' @examples s = system.file('examples', 'knitr-silk.R', package = 'knitr')
+#' @seealso \code{\link{stitch}} (feed a template with an R script)
+#' @examples #' write normal text like this and chunk options like below
+#' #+ label, opt=value
+#'
+#' (s = system.file('examples', 'knitr-silk.R', package = 'knitr'))
 #' silk(s)  # default markdown
 #' o = silk(s, knit = FALSE) # convert only
 #' knit2html(o) # compile to HTML

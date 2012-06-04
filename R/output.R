@@ -288,12 +288,13 @@ knit_child = function(..., eval = TRUE) {
 #'   it uses the base filename of the script
 #' @return path of the output document
 #' @export
+#' @seealso \code{\link{silk}} (turn a specially formatted R script to a report)
 #' @examples s = system.file('misc', 'stitch-test.R', package = 'knitr')
 #' \dontrun{stitch(s)}
 #'
 #' # HTML report
 #' stitch(s, system.file('misc', 'knitr-template.Rhtml', package = 'knitr'))
-#' 
+#'
 #' # or convert markdown to HTML
 #' stitch(s, system.file('misc', 'knitr-template.Rmd', package = 'knitr'))
 stitch = function(script,
