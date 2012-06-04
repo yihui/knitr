@@ -155,7 +155,9 @@ print.block = function(x, ...) {
 parse_inline = function(input) {
   inline.comment = knit_patterns$get('inline.comment')
   if (!is.null(inline.comment)) {
-    input = str_replace(input, inline.comment, '') # strip off inline comments
+    idx = str_detect(input, inline.comment)
+    # strip off inline code
+    input[idx] = str_replace_all(input[idx], knit_patterns$get('inline.code'), '')
   }
   input = str_c(input, collapse = '\n') # merge into one line
   
