@@ -25,7 +25,7 @@ The FAQ's are compiled from the [issues](https://github.com/yihui/knitr/issues) 
 1. LaTeX told me there was an error related to `\end{kframe}`.
   - `kframe` is a LaTeX environment that I defined for the chunk output, and it does not work well with certain other LaTeX environments, e.g. the `center` environment; when you want to center your plots, you should use chunk option `fig.align='center'` instead of putting the whole chunk inside `\begin{center}` and `\end{center}`. For more info, see [demo page for framed](http://yihui.name/knitr/demo/framed/).
 1. How to comment out inline R code like in `\Sexpr{code}`?
-  - see issue [#110](https://github.com/yihui/knitr/issues/110): `%\%Sexpr{code}` or `\Sexpr{#code}`
+  - see issue [#110](https://github.com/yihui/knitr/issues/110): you can destroy `\Sexpr` by `%\%Sexpr{code}` or comment out R code like `\Sexpr{#code}`, or just comment out the whole paragraph with `%` in the beginning of lines.
 1. I have done something cool with **knitr**; could you add a link in your website?
   - Sure! I'd love to; just let me know.
 1. What can I do for you?
