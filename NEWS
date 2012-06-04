@@ -25,6 +25,12 @@ NEW FEATURES
   to a report (make a silk purse out of a sow's ear); see
   http://yihui.name/knitr/demo/stitch/ (#223) (thanks, Rich FitzJohn)
 
+  o added a new component 'inline.comment' in knit_patterns to strip
+  off inline comments, e.g. a comment line like '% \Sexpr{x}' will not
+  be evaluated any more (#110); this will only happen to LaTeX
+  documents because HTML does not have inline comments (it only has
+  block comments <!-- -->)
+
 BUG FIXES
 
   o the templates for stitch() used results=hide which should really
