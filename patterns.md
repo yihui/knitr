@@ -11,6 +11,7 @@ The [object](objects) `knit_patterns` manages patterns in **knitr**. For example
 - `chunk.code`: the pattern to be used to extract R code from a chunk by removing characters of this pattern
 - `inline.code`: the pattern to be used to extract the pieces of R code mixed inline with other texts (i.e. those which are not in separate code chunks); like `chunk.begin`, it must contain a group 
 - `input.doc`: the pattern to find out child documents
+- `inline.comment`: the pattern of inline comments (lines that match with this pattern will be removed)
 - `global.options`: the pattern to extract global options for chunks (options are extracted like those in `chunk.begin` but they permanently change global options, whereas chunk options only locally affect a specific chunk)
 - `header.begin`: the pattern to find out where the document header begins; this is used to insert some header information into the output document (e.g. commands in the preamble in LaTeX, or CSS styles in HTML)
 - `document.begin`: the pattern to find out where the body of the document begins (currently only used to externalize tikz graphics)
@@ -35,11 +36,12 @@ str(all_patterns)
 
 {% highlight text %}
 ## List of 6
-##  $ rnw :List of 9
+##  $ rnw :List of 10
 ##   ..$ chunk.begin   : chr "^<<(.*)>>="
 ##   ..$ chunk.end     : chr "^@\\s*%*"
 ##   ..$ inline.code   : chr "\\\\Sexpr\\{([^}]*)\\}"
 ##   ..$ input.doc     : chr "(^|\n) *\\\\SweaveInput\\{([^}]*)\\}"
+##   ..$ inline.comment: chr "^\\s*%.*"
 ##   ..$ ref.chunk     : chr "^\\s*<<(.*)>>\\s*$"
 ##   ..$ global.options: chr "\\\\SweaveOpts\\{([^}]*)\\}"
 ##   ..$ header.begin  : chr "\n*\\s*\\\\documentclass[^}]+\\}"
@@ -47,11 +49,12 @@ str(all_patterns)
 ##   ..$ ref.label     : chr "^## @knitr (.*)$"
 ##  $ brew:List of 1
 ##   ..$ inline.code: chr "<%[=]{0,1}\\s+([^%]*)\\s+[-]*%>"
-##  $ tex :List of 9
+##  $ tex :List of 10
 ##   ..$ chunk.begin   : chr "^%+\\s*begin.rcode\\s*(.*)"
 ##   ..$ chunk.end     : chr "^%+\\s*end.rcode"
 ##   ..$ chunk.code    : chr "^%+"
 ##   ..$ ref.chunk     : chr "^%+\\s*<<(.*)>>\\s*$"
+##   ..$ inline.comment: chr "^\\s*%.*"
 ##   ..$ global.options: chr "%+\\s*roptions\\s*([^\n]*)"
 ##   ..$ inline.code   : chr "\\\\rinline\\{([^}]*)\\}"
 ##   ..$ header.begin  : chr "\n*\\s*\\\\documentclass[^}]+\\}"
