@@ -3,7 +3,7 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL)
+knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame())
 
 purl(...)
 }
@@ -19,6 +19,10 @@ purl(...)
 
   \item{text}{a character vector as an alternative way to
   provide the input file}
+
+  \item{envir}{the environment in which the code chunks are
+  to be evaluated (can use \code{\link{new.env}()} to
+  guarantee an empty new environment)}
 
   \item{...}{arguments passed to \code{\link{knit}}}
 }
