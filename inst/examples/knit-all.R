@@ -15,6 +15,9 @@ for (i in list.files(pattern = '\\.lyx$')) {
   flush.console()
 }
 
+call_knit = function(cmd) {
+  stopifnot(identical(system(cmd), 0L))
+}
 for (i in list.files(pattern = '\\.R(tex|md|html|rst)')) {
   message(i)
   cmd = if (i == 'knitr-minimal.Rmd') {
@@ -22,12 +25,12 @@ for (i in list.files(pattern = '\\.R(tex|md|html|rst)')) {
   } else {
     sprintf('knit %s', i)
   }
-  stopifnot(identical(system(cmd), 0L))
+  call_knit(cmd)
   flush.console()
 }
 
-cmd = sprintf("Rscript -e 'library(knitr);knit(\"knitr-minimal.brew\", \"\")'")
-stopifnot(identical(system(cmd), 0L))
+call_knit(sprintf("Rscript -e 'library(knitr);knit(\"knitr-minimal.brew\", \"\")'"))
+call_knit(sprintf("Rscript -e 'library(knitr);silk(\"knitr-silk.R\")'"))
 
 setwd('child')
 for (i in c('knitr-main.Rnw', 'knitr-parent.Rnw')) {
