@@ -28,7 +28,9 @@ silk(input, knit = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"))
   out of a sow's ear (R script).
 }
 \examples{
-s = system.file("examples", "knitr-silk.R", package = "knitr")
+#' write normal text like this and chunk options like below + label, opt=value
+
+(s = system.file("examples", "knitr-silk.R", package = "knitr"))
 silk(s)  # default markdown
 o = silk(s, knit = FALSE)  # convert only
 knit2html(o)  # compile to HTML
@@ -42,4 +44,7 @@ silk(s, FALSE, format = "Rrst")
 \author{
   Yihui Xie, with the original idea from Richard FitzJohn
   (who named it as \code{sowsear()})
+}
+\seealso{
+  \code{\link{stitch}} (feed a template with an R script)
 }
