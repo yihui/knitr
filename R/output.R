@@ -103,6 +103,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     if (in.file && !is_abs_path(input))
       input = file.path(input_dir(), opts_knit$get('child.path'), input)
   } else {
+    .knitEnv$knit_global = envir  # the envir to eval code
     opts_knit$set(output.dir = getwd()) # record working directory in 1st run
     knit_log$restore()
   }
@@ -169,7 +170,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
 
   progress = opts_knit$get('progress')
   if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
-  .knitEnv$knit_global = envir  # the envir to eval code
   res = process_file(text, output)
   cat(res, file = if (is.null(output)) '' else output)
   dep_list$restore()  # empty dependency list
