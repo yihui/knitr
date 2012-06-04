@@ -10,6 +10,7 @@ inst/examples/cache
 inst/examples/ex-out*
 knitr-minimal.html
 knitr-minimal.md
+knitr-silk.md
 knitr-latex.tex
 png$
 ^\.Rproj\.user$
