@@ -346,6 +346,10 @@ fig_path = function(suffix = '', options = opts_current$get()) {
 knit_env = function() {
   .knitEnv$knit_env
 }
+# 'global' environment for knitr
+knit_global = function() {
+  .knitEnv$knit_global
+}
 
 #' Convert Rnw to PDF using knit() and texi2pdf()
 #'
