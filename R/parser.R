@@ -245,8 +245,10 @@ read_chunk = function(path) {
   knit_code$set(code)
 }
 
-strip_chunk = function(x) {
-  x = x[-1]; if (!length(x)) return(x)
+strip_chunk = function(x) strip_white(x[-1])
+# strip lines that are pure white spaces
+strip_white = function(x) {
+  if (!length(x)) return(x)
   while(is_blank(x[1])) {
     x = x[-1]; if (!length(x)) return(x)
   }
