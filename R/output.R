@@ -100,7 +100,10 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
     ## in child mode, input path needs to be adjusted
     if (in.file && !is_abs_path(input))
       input = file.path(input_dir(), opts_knit$get('child.path'), input)
-  } else opts_knit$set(output.dir = getwd()) # record working directory in 1st run
+  } else {
+    opts_knit$set(output.dir = getwd()) # record working directory in 1st run
+    knit_log$restore()
+  }
 
   ext = 'unknown'
   if (in.file) {
@@ -167,6 +170,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL) {
   res = process_file(text, output)
   cat(res, file = if (is.null(output)) '' else output)
   dep_list$restore()  # empty dependency list
+  print_knitlog()
 
   if (in.file && is.character(output) && file.exists(output)) {
     concord_gen(input, output)  # concordance file
@@ -321,6 +325,8 @@ stitch = function(script,
   out
 }
 
+knit_log = new_defaults()  # knitr log for errors, warnings and messages
+
 #' Wrap evaluated results for output
 #'
 #' @param x output from \code{\link[evaluate]{evaluate}}
@@ -357,19 +363,25 @@ wrap.source = function(x, options) {
   knit_hooks$get('source')(src, options)
 }
 
+msg_wrap = function(message, type, options) {
+  message = str_wrap(message, width = getOption('width'))
+  knit_log$set(
+    structure(list(c(knit_log$get(type), str_c('Chunk ', options$label, ':\n  ', message))),
+    .Names = type)
+  )
+  knit_hooks$get(type)(comment_out(message, options), options)
+}
+
 wrap.warning = function(x, options) {
-  msg = str_wrap(str_c("Warning: ", x$message), width = getOption('width'))
-  knit_hooks$get('warning')(comment_out(msg, options), options)
+  msg_wrap(str_c("Warning: ", x$message), 'warning', options)
 }
 
 wrap.message = function(x, options) {
-  msg = str_wrap(x$message, width = getOption('width'))
-  knit_hooks$get('message')(comment_out(msg, options), options)
+  msg_wrap(x$message, 'message', options)
 }
 
 wrap.error = function(x, options) {
-  msg = str_wrap(str_c("Error: ", x$message), width = getOption('width'))
-  knit_hooks$get('error')(comment_out(msg, options), options)
+  msg_wrap(str_c("Error: ", x$message), 'error', options)
 }
 
 wrap.recordedplot = function(x, options) {

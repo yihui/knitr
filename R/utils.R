@@ -426,3 +426,12 @@ indent_block = function(block, spaces = '    ') {
   if (is.null(block) || !nzchar(block)) return(spaces)
   line_prompt(block, spaces, spaces)
 }
+
+# print knitr logs
+print_knitlog = function() {
+  if (!opts_knit$get('verbose') || child_mode() || !length(klog <- knit_log$get()))
+    return()
+  for (i in unlist(klog, use.names = FALSE)) cat(i, '\n')
+  cat('\nNumber of messages:\n')
+  print(sapply(klog, length))
+}
