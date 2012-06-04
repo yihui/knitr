@@ -51,9 +51,7 @@ xml_to_css = function(xml_file){
   style      = xml_list$docname
   css_file   = file.path(tempdir(), sprintf("%s.css", style))
   template   = system.file('themes', 'eclipse.brew', package = 'knitr')
-  assign('.doccolors', doccolors, envir = globalenv())
-  knit(template, css_file)
-  rm(list = '.doccolors', envir = globalenv())
+  with(doccolors, knit(template, css_file))
   message('Theme ', style, ' saved to ', css_file)
   css_file
 }

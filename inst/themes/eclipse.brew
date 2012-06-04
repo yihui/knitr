@@ -1,62 +1,62 @@
 .background{
-  color: <%= .doccolors$background %>;
+  color: <%= background %>;
 }
 .number{
-	color: <%= .doccolors$number %> ;
+	color: <%= number %> ;
 }
 
 .functioncall{
-	color: <%= .doccolors$method %> ;
+	color: <%= method %> ;
 }
 
 .string{
-	color: <%= .doccolors$string %> ;
+	color: <%= string %> ;
 }
 
 .keyword{
 	font-weight: bolder;
-	color: <%= .doccolors$keyword %>;
+	color: <%= keyword %>;
 }
 
 .argument{
-	color: <%= .doccolors$localVariable %> ;
+	color: <%= localVariable %> ;
 }
 
 .comment{
-	color: <%= .doccolors$singleLineComment %> ;
+	color: <%= singleLineComment %> ;
 }
 
 .roxygencomment{
-	color: <%= .doccolors$javadoc %>;
+	color: <%= javadoc %>;
 }
 
 .formalargs{
-	color: <%= .doccolors$localVariable %>;
+	color: <%= localVariable %>;
 }
 
 .eqformalargs{
-	color: <%= .doccolors$foreground %>;
+	color: <%= foreground %>;
 }
 
 .assignement{
-	color: <%= .doccolors$foreground %>;
+	color: <%= foreground %>;
 }
 
 .package{
 	font-weight: bolder;
-	color: <%= .doccolors$class %>;
+	color: <%= class %>;
 }
 
 .slot{
 	font-style:italic;
-	color: <%= .doccolors$foreground %>;
+	color: <%= foreground %>;
 }
 
 .symbol{
-	color: <%= .doccolors$localVariableDeclaration %> ;
+	color: <%= localVariableDeclaration %> ;
 }
 
 .prompt{
-	color: <%= .doccolors$foreground %> ;
+	color: <%= foreground %> ;
 }
 
