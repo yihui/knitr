@@ -1,9 +1,6 @@
 ## copy objects in one environment to the other
-copy_env = function(from, to) {
-  x = ls(envir = from, all.names = TRUE)
-  for (i in x) {
-    assign(i, get(i, envir = from, inherits = FALSE), envir = to)
-  }
+copy_env = function(from, to, keys = ls(envir = from, all.names = TRUE)) {
+  for (i in keys) assign(i, get(i, envir = from, inherits = FALSE), envir = to)
 }
 
 
