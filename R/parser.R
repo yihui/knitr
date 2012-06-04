@@ -153,6 +153,10 @@ print.block = function(x, ...) {
 
 ## extract inline R code fragments (as well as global options)
 parse_inline = function(input) {
+  inline.comment = knit_patterns$get('inline.comment')
+  if (!is.null(inline.comment)) {
+    input = str_replace(input, inline.comment, '') # strip off inline comments
+  }
   input = str_c(input, collapse = '\n') # merge into one line
   
   locate_inline = function(input, pattern) {
