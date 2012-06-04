@@ -31,6 +31,11 @@ NEW FEATURES
   documents because HTML does not have inline comments (it only has
   block comments <!-- -->)
 
+  o all messages, errors and warnings during evaluation are recorded
+  in an internal object knit_log (use knitr:::knit_log$get() to get
+  all messages) and they are printed if the package option 'verbose'
+  is TRUE (i.e. opts_knit$get('verbose')) (#224)
+
 BUG FIXES
 
   o the templates for stitch() used results=hide which should really
