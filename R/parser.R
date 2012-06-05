@@ -157,7 +157,7 @@ parse_inline = function(input) {
   if (!is.null(inline.comment)) {
     idx = str_detect(input, inline.comment)
     # strip off inline code
-    input[idx] = str_replace_all(input[idx], knit_patterns$get('inline.code'), '')
+    input[idx] = str_replace_all(input[idx], knit_patterns$get('inline.code'), '\\1')
   }
   input = str_c(input, collapse = '\n') # merge into one line
   

@@ -32,10 +32,10 @@ NEW FEATURES
   can hopefully make the documents more reproducible (#228)
 
   o added a new component 'inline.comment' in knit_patterns to strip
-  off inline R code from inline comments, e.g. a comment line like '%
-  x is \Sexpr{x}' will become '% x is ' (#110); this will only happen
-  to LaTeX documents because HTML does not have inline comments (it
-  only has block comments <!-- -->)
+  off tokens of inline R code from inline comments, e.g. a comment
+  line like '% x is \Sexpr{x}' will become '% x is x' (#110); this
+  will only happen to LaTeX documents because HTML does not have
+  inline comments (it only has block comments <!-- -->)
 
   o all messages, errors and warnings during evaluation are recorded
   in an internal object knit_log (use knitr:::knit_log$get() to get
