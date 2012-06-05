@@ -28,7 +28,7 @@
 #' silk(s, FALSE, format='Rhtml')
 #' silk(s, FALSE, format='Rtex')
 #' silk(s, FALSE, format='Rrst')
-silk = function(input, knit = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst')) {
+silk = function(input, purse = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst')) {
 
   format = match.arg(format)
   x = readLines(input, warn = FALSE); r = rle(str_detect(x, "^#+'"))
@@ -57,7 +57,7 @@ silk = function(input, knit = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'R
 
   outsrc = str_c(file_path_sans_ext(input), '.', format)
   cat(unlist(txt), file = outsrc, sep = '\n')
-  if (knit) knit(outsrc)
+  if (purse) knit(outsrc)
 
   invisible(outsrc)
 }
