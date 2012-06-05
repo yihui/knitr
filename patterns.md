@@ -11,7 +11,7 @@ The [object](objects) `knit_patterns` manages patterns in **knitr**. For example
 - `chunk.code`: the pattern to be used to extract R code from a chunk by removing characters of this pattern
 - `inline.code`: the pattern to be used to extract the pieces of R code mixed inline with other texts (i.e. those which are not in separate code chunks); like `chunk.begin`, it must contain a group 
 - `input.doc`: the pattern to find out child documents
-- `inline.comment`: the pattern of inline comments (lines that match with this pattern will be removed)
+- `inline.comment`: the pattern of inline comments (inline R code  will be removed from lines that match with this pattern)
 - `global.options`: the pattern to extract global options for chunks (options are extracted like those in `chunk.begin` but they permanently change global options, whereas chunk options only locally affect a specific chunk)
 - `header.begin`: the pattern to find out where the document header begins; this is used to insert some header information into the output document (e.g. commands in the preamble in LaTeX, or CSS styles in HTML)
 - `document.begin`: the pattern to find out where the body of the document begins (currently only used to externalize tikz graphics)
