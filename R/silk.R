@@ -1,11 +1,11 @@
 #' Convert an R script to a literate programming document
 #'
 #' This function takes a specially formatted R script and converts it to a
-#' literate programming document. Normal text should be written after the
-#' roxygen comment (\code{#'}) and code chunk options are written after
-#' \code{#+} or \code{#-}.
+#' literate programming document. Normal text (documentation) should be written
+#' after the roxygen comment (\code{#'}) and code chunk options are written
+#' after \code{#+} or \code{#-}.
 #' @param input the path to the R script
-#' @param knit logical: whether to compile the document after conversion
+#' @param purse logical: whether to compile the document after conversion
 #' @param format character: the output format (it takes five possible values);
 #'   the default is R Markdown
 #' @note The function name came from this idiom: make a silk purse out of a
@@ -15,12 +15,13 @@
 #' @return The path of the literate programming document.
 #' @export
 #' @seealso \code{\link{stitch}} (feed a template with an R script)
+#' @references \url{http://yihui.name/knitr/demo/stitch/}
 #' @examples #' write normal text like this and chunk options like below
 #' #+ label, opt=value
 #'
 #' (s = system.file('examples', 'knitr-silk.R', package = 'knitr'))
 #' silk(s)  # default markdown
-#' o = silk(s, knit = FALSE) # convert only
+#' o = silk(s, purse = FALSE) # convert only; do not make a purse yet
 #' knit2html(o) # compile to HTML
 #'
 #' # other formats
