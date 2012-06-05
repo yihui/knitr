@@ -365,8 +365,8 @@ knit_global = function() {
 #' @examples ## compile with xelatex
 #'
 #' ## knit2pdf(..., compiler = 'xelatex')
-knit2pdf = function(input, output = NULL, compiler = NULL, ...){
-  out = knit(input, output)
+knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.frame()){
+  out = knit(input, output, envir = envir)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (!is.null(compiler)) {
     oc = Sys.getenv('PDFLATEX')
@@ -388,8 +388,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ...){
 #' writeLines(c('# hello markdown', '``` {r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')
-knit2html = function(input, ...){
-  out = knit(input, ...)
+knit2html = function(input, ..., envir = parent.frame()){
+  out = knit(input, ..., envir = envir)
   markdown::markdownToHTML(out, str_c(file_path_sans_ext(out), '.html'))
 }
 
