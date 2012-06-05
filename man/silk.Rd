@@ -2,12 +2,12 @@
 \alias{silk}
 \title{Convert an R script to a literate programming document}
 \usage{
-silk(input, knit = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"))
+silk(input, purse = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"))
 }
 \arguments{
   \item{input}{the path to the R script}
 
-  \item{knit}{logical: whether to compile the document
+  \item{purse}{logical: whether to compile the document
   after conversion}
 
   \item{format}{character: the output format (it takes five
@@ -19,9 +19,9 @@ silk(input, knit = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"))
 \description{
   This function takes a specially formatted R script and
   converts it to a literate programming document. Normal
-  text should be written after the roxygen comment
-  (\code{#'}) and code chunk options are written after
-  \code{#+} or \code{#-}.
+  text (documentation) should be written after the roxygen
+  comment (\code{#'}) and code chunk options are written
+  after \code{#+} or \code{#-}.
 }
 \note{
   The function name came from this idiom: make a silk purse
@@ -32,7 +32,7 @@ silk(input, knit = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"))
 
 (s = system.file("examples", "knitr-silk.R", package = "knitr"))
 silk(s)  # default markdown
-o = silk(s, knit = FALSE)  # convert only
+o = silk(s, purse = FALSE)  # convert only; do not make a purse yet
 knit2html(o)  # compile to HTML
 
 # other formats
@@ -44,6 +44,9 @@ silk(s, FALSE, format = "Rrst")
 \author{
   Yihui Xie, with the original idea from Richard FitzJohn
   (who named it as \code{sowsear()})
+}
+\references{
+  \url{http://yihui.name/knitr/demo/stitch/}
 }
 \seealso{
   \code{\link{stitch}} (feed a template with an R script)
