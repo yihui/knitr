@@ -2,7 +2,7 @@
 \alias{knit2pdf}
 \title{Convert Rnw to PDF using knit() and texi2pdf()}
 \usage{
-knit2pdf(input, output = NULL, compiler = NULL, ...)
+knit2pdf(input, output = NULL, compiler = NULL, ..., envir = parent.frame())
 }
 \arguments{
   \item{compiler}{a character string which gives the LaTeX
@@ -20,6 +20,10 @@ knit2pdf(input, output = NULL, compiler = NULL, ...)
   \item{output}{path of the output file; if \code{NULL},
   this function will try to guess and it will be under the
   current working directory}
+
+  \item{envir}{the environment in which the code chunks are
+  to be evaluated (can use \code{\link{new.env}()} to
+  guarantee an empty new environment)}
 }
 \description{
   Knit the input Rnw document to a tex document, and
