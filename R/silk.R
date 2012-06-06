@@ -1,13 +1,17 @@
 #' Convert an R script to a literate programming document
 #'
 #' This function takes a specially formatted R script and converts it to a
-#' literate programming document. Normal text (documentation) should be written
-#' after the roxygen comment (\code{#'}) and code chunk options are written
-#' after \code{#+} or \code{#-}.
+#' literate programming document. By default normal text (documentation) should
+#' be written after the roxygen comment (\code{#'}) and code chunk options are
+#' written after \code{#+} or \code{#-}.
 #' @param input the path to the R script
 #' @param purse logical: whether to compile the document after conversion
 #' @param format character: the output format (it takes five possible values);
 #'   the default is R Markdown
+#' @param doc a regular expression to identify the documentation lines; by
+#'   default it follows the roxygen convention, but it can be customized, e.g.
+#'   if you want to use \code{##} to denote documentation, you can use
+#'   \code{'^##\\s*'}
 #' @note The function name came from this idiom: make a silk purse out of a
 #'   sow's ear (R script).
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
@@ -29,10 +33,11 @@
 #' silk(s, FALSE, format='Rhtml')
 #' silk(s, FALSE, format='Rtex')
 #' silk(s, FALSE, format='Rrst')
-silk = function(input, purse = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst')) {
+silk = function(input, purse = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
+                doc = "^#+\\s*'") {
 
   format = match.arg(format)
-  x = readLines(input, warn = FALSE); r = rle(str_detect(x, "^#+'"))
+  x = readLines(input, warn = FALSE); r = rle(str_detect(x, doc))
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
   p = .fmt.pat[[tolower(format)]]
   p1 = str_replace(str_c('^', p[1L], '.*', p[2L], '$'), '\\{', '\\\\{')
@@ -41,7 +46,7 @@ silk = function(input, purse = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', '
     block = x[seq(idx[i] + 1L, idx[i+1])]
     txt[[i]] = if (r$value[i]) {
       # normal text; just strip #'
-      str_replace(block, "^#+'\\s*", '')
+      str_replace(block, doc, '')
     } else {
       # R code; #+/- indicates chunk options
       block = strip_white(block) # rm white lines in beginning and end
