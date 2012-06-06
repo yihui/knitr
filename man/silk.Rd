@@ -2,7 +2,8 @@
 \alias{silk}
 \title{Convert an R script to a literate programming document}
 \usage{
-silk(input, purse = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"))
+silk(input, purse = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), 
+    doc = "^#+\\s*'")
 }
 \arguments{
   \item{input}{the path to the R script}
@@ -12,16 +13,22 @@ silk(input, purse = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"))
 
   \item{format}{character: the output format (it takes five
   possible values); the default is R Markdown}
+
+  \item{doc}{a regular expression to identify the
+  documentation lines; by default it follows the roxygen
+  convention, but it can be customized, e.g.  if you want
+  to use \code{##} to denote documentation, you can use
+  \code{'^##\\s*'}}
 }
 \value{
   The path of the literate programming document.
 }
 \description{
   This function takes a specially formatted R script and
-  converts it to a literate programming document. Normal
-  text (documentation) should be written after the roxygen
-  comment (\code{#'}) and code chunk options are written
-  after \code{#+} or \code{#-}.
+  converts it to a literate programming document. By
+  default normal text (documentation) should be written
+  after the roxygen comment (\code{#'}) and code chunk
+  options are written after \code{#+} or \code{#-}.
 }
 \note{
   The function name came from this idiom: make a silk purse
