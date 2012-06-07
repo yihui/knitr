@@ -47,8 +47,8 @@ dots, e.g.
 
 ::
 
-    ##  [1]  0.5865 -0.1336  0.4643  0.3953  0.2307  0.6304 -1.5677 -0.2125
-    ##  [9] -0.1971 -1.3298
+    ##  [1] -1.2721 -0.7205 -0.5392  2.0504  0.2321 -0.8445 -0.1221 -0.6043
+    ##  [9] -0.7840  1.1898
 
 
 
@@ -81,12 +81,13 @@ Here is a plot:
     ## geom_smooth: method="auto" and size of largest group is <1000, so using loess. Use 'method = x' to change the smoothing method.
 
 
-.. figure:: http://i.imgur.com/PhcRs.png
+.. figure:: http://i.imgur.com/wvTsc.png
     :alt: A ggplot2 example
     :width: 360px
 
 
-    
+    A ggplot2 example
+
 
 
 Inline R code is like this: the value of pi is 3.1416.

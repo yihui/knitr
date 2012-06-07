@@ -59,7 +59,7 @@ library(ggplot2)
 qplot(speed, dist, data = cars) + geom_smooth()
 ```
 
-![A scatterplot of `cars`](http://i.imgur.com/Vwn9A.png) 
+![A scatterplot of `cars`](http://i.imgur.com/hAAlT.png) 
 
 
 # How
@@ -86,7 +86,7 @@ qplot(speed, dist, data = cars) + geom_smooth()
 
 # Reproducible research
 
-It is good to include the session info, e.g. this document is produced with **knitr** version `0.5.1`. Here is my session info:
+It is good to include the session info, e.g. this document is produced with **knitr** version `0.5.11`. Here is my session info:
 
 
 
@@ -101,20 +101,20 @@ print(sessionInfo(), locale = FALSE)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] methods   stats     graphics  grDevices utils     datasets  base     
 ## 
 ## other attached packages:
-## [1] ggplot2_0.9.0 knitr_0.5.1  
+## [1] ggplot2_0.9.1 knitr_0.5.6  
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] codetools_0.2-8    colorspace_1.1-1   dichromat_1.2-4   
 ##  [4] digest_0.5.2       evaluate_0.4.2     formatR_0.4.1     
-##  [7] grid_2.15.0        highlight_0.3.1    MASS_7.3-17       
-## [10] memoise_0.1        munsell_0.3        parser_0.0-14     
-## [13] plyr_1.7.1         proto_0.3-9.2      RColorBrewer_1.0-5
-## [16] Rcpp_0.9.10        RCurl_1.91-1       reshape2_1.2.1    
-## [19] scales_0.2.0       stringr_0.6        tools_2.15.0      
-## [22] XML_3.6-2         
+##  [7] grid_2.15.0        highlight_0.3.1    labeling_0.1      
+## [10] MASS_7.3-18        memoise_0.1        munsell_0.3       
+## [13] parser_0.0-14      plyr_1.7.1         proto_0.3-9.2     
+## [16] RColorBrewer_1.0-5 Rcpp_0.9.10        RCurl_1.91-1      
+## [19] reshape2_1.2.1     scales_0.2.1       stringr_0.6       
+## [22] tools_2.15.0       XML_3.6-2         
 ```
 
 
