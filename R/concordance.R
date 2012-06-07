@@ -37,9 +37,8 @@ concord_gen = function(infile, outfile) {
   }
   
   # generate data structure
-  linesout = cumsum(steps)
-  vals = rle(diff(linesout))
-  vals = c(linesout[1L], as.numeric(rbind(vals$lengths, vals$values)))
+  vals = rle(steps)
+  vals = c(steps[1L], as.numeric(rbind(vals$lengths, vals$values)))
   concordance = paste(strwrap(paste(vals, collapse = " ")), collapse = " %\n")
   
   # build record
