@@ -87,7 +87,7 @@ opts_knit = new_defaults(
        child.command = 'input', base.dir = NULL, base.url = NULL, child.path = '',
        upload.fun = identity, eval.after = NULL, concordance = FALSE,
        tangle = FALSE, child = FALSE, parent = FALSE,
-       cache.extra = NULL, aliases = NULL, roxygen.comment = "^#+\\s*'",
+       cache.extra = NULL, aliases = NULL,
        self.contained = TRUE, filter.chunk.end = TRUE,
        header = c(highlight = '', tikz = '', framed = ''))
 )

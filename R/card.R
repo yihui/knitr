@@ -38,7 +38,7 @@
 #' card(s, FALSE, format='Rtex')
 #' card(s, FALSE, format='Rrst')
 card = function(wool, knit = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
-                doc = opts_knit$get('roxygen.comment')) {
+                doc = "^#+'[ ]?") {
 
   format = match.arg(format)
   x = readLines(wool, warn = FALSE); r = rle(str_detect(x, doc))
