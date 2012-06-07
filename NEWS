@@ -21,9 +21,9 @@ NEW FEATURES
   margin when the width option is appropriately small (#259) (thanks,
   @muelleki)
 
-  o added a new function silk() to turn a specially formatted R script
-  to a report (make a silk purse out of a sow's ear); see
-  http://yihui.name/knitr/demo/stitch/ (#223) (thanks, Rich FitzJohn)
+  o added a new function card() to turn a specially formatted R script
+  to a report; see http://yihui.name/knitr/demo/stitch/ (#223)
+  (thanks, Rich FitzJohn)
 
   o knit() gained a new argument 'envir' to specify the environment in
   which to evaluate code chunks (by default in the parent frame); this
