@@ -219,7 +219,9 @@ process_file = function(text, output) {
     if (inherits(txt, 'try-error')) {
       print(group)
       cat(res, sep = '\n', file = if (is.null(output)) '' else output)
-      stop(sprintf('Quitting from lines %s: %s', current_lines(i), txt))
+      stop(sprintf('Quitting from lines %s: (%s) %s',
+                   str_c(current_lines(i), collapse = '-'),
+                   paste('', knit_concord$get('infile'), sep = ''), txt))
     }
     res[i] = txt
   }
