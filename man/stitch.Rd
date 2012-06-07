@@ -44,6 +44,6 @@ stitch(s, system.file("misc", "knitr-template.Rhtml", package = "knitr"))
 stitch(s, system.file("misc", "knitr-template.Rmd", package = "knitr"))
 }
 \seealso{
-  \code{\link{silk}} (turn a specially formatted R script
+  \code{\link{card}} (turn a specially formatted R script
   to a report)
 }

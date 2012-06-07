@@ -1,14 +1,14 @@
-\name{silk}
-\alias{silk}
+\name{card}
+\alias{card}
 \title{Convert an R script to a literate programming document}
 \usage{
-silk(input, purse = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), 
+card(wool, purse = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), 
     doc = "^#+\\s*'")
 }
 \arguments{
-  \item{input}{the path to the R script}
+  \item{wool}{the path to the R script}
 
-  \item{purse}{logical: whether to compile the document
+  \item{knit}{logical: whether to compile the document
   after conversion}
 
   \item{format}{character: the output format (it takes five
@@ -30,27 +30,33 @@ silk(input, purse = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"),
   after the roxygen comment (\code{#'}) and code chunk
   options are written after \code{#+} or \code{#-}.
 }
-\note{
-  The function name came from this idiom: make a silk purse
-  out of a sow's ear (R script).
+\details{
+  The function name came from the carding process: carding
+  breaks open the entangled scoured wool and removes the
+  burrs and seeds, leaving the wool as a continuous web
+  called a sliver (thanks to Jenny Hutchison). Obviously
+  the entangled wool is the original R script, and the
+  sliver is the literate programming document (ready to be
+  knitted).
 }
 \examples{
 #' write normal text like this and chunk options like below + label, opt=value
 
-(s = system.file("examples", "knitr-silk.R", package = "knitr"))
-silk(s)  # default markdown
-o = silk(s, purse = FALSE)  # convert only; do not make a purse yet
+(s = system.file("examples", "knitr-card.R", package = "knitr"))
+card(s)  # default markdown
+o = card(s, knit = FALSE)  # convert only; do not make a purse yet
 knit2html(o)  # compile to HTML
 
 # other formats
-silk(s, FALSE, format = "Rnw")  # you need to write documentclass after #'
-silk(s, FALSE, format = "Rhtml")
-silk(s, FALSE, format = "Rtex")
-silk(s, FALSE, format = "Rrst")
+card(s, FALSE, format = "Rnw")  # you need to write documentclass after #'
+card(s, FALSE, format = "Rhtml")
+card(s, FALSE, format = "Rtex")
+card(s, FALSE, format = "Rrst")
 }
 \author{
   Yihui Xie, with the original idea from Richard FitzJohn
-  (who named it as \code{sowsear()})
+  (who named it as \code{sowsear()} which meant to make a
+  silk purse out of a sow's ear)
 }
 \references{
   \url{http://yihui.name/knitr/demo/stitch/}
