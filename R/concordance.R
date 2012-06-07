@@ -38,9 +38,12 @@ concord_gen = function(infile, outfile) {
   concordance = paste(strwrap(paste(vals, collapse = " ")), collapse = " %\n")
   
   # build record
+  parent = knit_concord$get('parent'); parent.line = knit_concord$get('parent.line')
+  extra = if (is.null(parent) || is.null(parent.line)) '' else {
+    str_c(parent, ':', parent.line, ':')
+  }
   output = str_c("\\Sconcordance{concordance:", outfile, ":",
-                  infile, ":", "%\n", concordance,"}\n")
-  
+                  infile, ":", extra, "%\n", concordance,"}\n")
   # write to file
   confile = str_c(file_path_sans_ext(outfile), '-concordance.tex')
   cat(output, file = confile)
