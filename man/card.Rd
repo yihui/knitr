@@ -2,8 +2,8 @@
 \alias{card}
 \title{Convert an R script to a literate programming document}
 \usage{
-card(wool, purse = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), 
-    doc = "^#+\\s*'")
+card(wool, knit = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), 
+    doc = opts_knit$get("roxygen.comment"))
 }
 \arguments{
   \item{wool}{the path to the R script}
