@@ -38,9 +38,9 @@ All built-in options in **knitr** are:
   - `asis`: output as-is, i.e., write raw results from R into the output document
   - `hide` hide results; this option only applies to normal R output (not warnings, messages or errors)
   - note `markup` and `asis` are equivalent to `verbatim` and `tex` in Sweave respectively (you can still use the latter two, but they can be misleading, e.g., `verbatim` does not really mean verbatim in R, and `tex` seems to be restricted to LaTeX)
-- `warning`: (`TRUE`; logical) whether to show warnings (produced by `warning()`) in the output like we run R code in a terminal
-- `error`: (`TRUE`; logical) whether to show errors (from `stop()`) (by default, the evaluation will not stop even in case of errors!!)
-- `message`: (`TRUE`; logical) whether to show messages emitted by `message()`
+- `warning`: (`TRUE`; logical) whether to preserve warnings (produced by `warning()`) in the output like we run R code in a terminal (if `FALSE`, all warnings will be discarded)
+- `error`: (`TRUE`; logical) whether to preserve errors (from `stop()`) (by default, the evaluation will not stop even in case of errors!!)
+- `message`: (`TRUE`; logical) whether to preserve messages emitted by `message()`
 - `split`: (`FALSE`; logical) whether to split the output from R into separate files and include them into LaTeX by `\input{}` or HTML by `<iframe></iframe>`
 - `include`: (`TRUE`; logical) whether to include the chunk output in the final output document; if `include=FALSE`, nothing will be written into the output document, but the code is still evaluated and plot files are generated if there are any plots in the chunk, so you can manually insert figures; note this is the only chunk option that is not cached, i.e., changing it will not invalidate the cache
 
