@@ -37,7 +37,7 @@
 #' card(s, FALSE, format='Rhtml')
 #' card(s, FALSE, format='Rtex')
 #' card(s, FALSE, format='Rrst')
-card = function(wool, purse = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
+card = function(wool, knit = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
                 doc = "^#+\\s*'") {
 
   format = match.arg(format)
