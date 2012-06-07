@@ -96,6 +96,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
 
   in.file = !missing(input) && is.character(input)  # is a file input
   optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
+  oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
   opts_knit$set(tangle = tangle)
   if (child_mode()) {
     setwd(opts_knit$get('output.dir')) # always restore original working dir
@@ -201,6 +202,7 @@ process_file = function(text, output) {
     on.exit(close(pb), add = TRUE)
   }
   for (i in 1:n) {
+    knit_concord$set(block = i)
     if (opts_knit$get('progress')) {
       setTxtProgressBar(pb, i)
       if (!tangle) cat('\n')  # under tangle mode, only show one progress bar
@@ -217,7 +219,8 @@ process_file = function(text, output) {
   }
 
   if (!tangle) res = insert_header(res)  # insert header
-  concord_output(n = str_count(res, fixed('\n')) + 1L)  # output line numbers
+  # output line numbers
+  if (concord_mode()) knit_concord$set(outlines = str_count(res, fixed('\n')) + 1L)
 
   str_c(c(res, ""), collapse = "\n")
 }

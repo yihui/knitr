@@ -1,31 +1,27 @@
-## currently we do not consider concordance for child documents
-concord_mode = function() {
-  opts_knit$get('concordance') && !child_mode()
-}
+# record input/output lines numbers in Rnw/tex, filenames, line number of child
+# in parent, and current block number
+knit_concord = new_defaults(
+  list(inlines = NULL, outlines = NULL, infile = NULL, parent = NULL,
+       parent.line = NULL, block = NULL)
+)
 
-## record line numbers in input and output
-concord_input = function(n) {
-  if (!child_mode()) .knitEnv$input = n
-}
-current_lines = function(i) {
+concord_mode = function() opts_knit$get('concordance')
+
+current_lines = function(i = knit_concord$get('block')) {
   # a helpr function to return line numbers for block i
-  n = .knitEnv$input
+  n = knit_concord$get('inlines')
   n0 = sum(head(n, i - 1L)) + 1L; n1 = n0 + n[i] - 1L
-  sprintf('%s-%s', n0, n1)
-}
-concord_output = function(n) {
-  if (concord_mode()) .knitEnv$output = n
+  c(n0, n1)
 }
 
 ## generate concordance for RStudio
 concord_gen = function(infile, outfile) {
   if (!concord_mode()) return()
-  i = .knitEnv$input; o = .knitEnv$output
+  i = knit_concord$get('inlines'); o = knit_concord$get('outlines')
   if (is.null(i) || is.null(o)) {
     warning('cannot generate concordance due to incomplete line numbers')
     return()
   }
-  .knitEnv$input = .knitEnv$output = NULL
 
   steps = NULL # how many steps to jump forward to match output line numbers
   for (k in seq_along(i)) {

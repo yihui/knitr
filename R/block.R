@@ -24,6 +24,7 @@ call_block = function(block) {
   if (opts_knit$get('progress')) print(block)
 
   if (params$eval && !is.null(params$child)) {
+    if (concord_mode()) knit_concord$set(parent.line = current_lines()[1L])
     cmds = lapply(sc_split(params$child), knit_child)
     return(str_c(unlist(cmds), collapse = '\n'))
   }

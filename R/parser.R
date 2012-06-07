@@ -21,7 +21,7 @@ split_file = function(path, lines = readLines(path, warn = FALSE), set.preamble 
   tmp = logical(n); tmp[blks | txts] = TRUE; lines[txts] = ''
   
   groups = unname(split(lines, cumsum(tmp)))
-  concord_input(n = sapply(groups, length)) # input line numbers for concordance
+  knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
 
   ## parse 'em all
   lapply(groups, function(g) {
