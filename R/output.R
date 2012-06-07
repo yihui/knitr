@@ -98,11 +98,16 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
   opts_knit$set(tangle = tangle)
+  if (in.file) input2 = input # make a copy of the input path
   if (child_mode()) {
     setwd(opts_knit$get('output.dir')) # always restore original working dir
-    ## in child mode, input path needs to be adjusted
-    if (in.file && !is_abs_path(input))
-      input = file.path(input_dir(), opts_knit$get('child.path'), input)
+    # 'infile' from last call is my parent
+    if (concord_mode()) knit_concord$set(parent = knit_concord$get('infile'))
+    # in child mode, input path needs to be adjusted
+    if (in.file && !is_abs_path(input)) {
+      input2 = str_c(opts_knit$get('child.path'), input)
+      input = file.path(input_dir(), input2)
+    }
   } else {
     .knitEnv$knit_global = envir  # the envir to eval code
     opts_knit$set(output.dir = getwd()) # record working directory in 1st run
@@ -115,6 +120,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     if (is.null(output)) output = basename(auto_out_name(input))
     ext = tolower(file_ext(input))
     options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
+    knit_concord$set(infile = input2) # note: this to be done _after_ setting parent!
   }
 
   text = if (is.null(text)) readLines(input, warn = FALSE) else {
@@ -177,7 +183,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   print_knitlog()
 
   if (in.file && is.character(output) && file.exists(output)) {
-    concord_gen(input, output)  # concordance file
+    concord_gen(input2, output)  # concordance file
     message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
   }
 
