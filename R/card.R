@@ -33,11 +33,11 @@
 #' silk(s, FALSE, format='Rhtml')
 #' silk(s, FALSE, format='Rtex')
 #' silk(s, FALSE, format='Rrst')
-silk = function(input, purse = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
+card = function(wool, purse = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
                 doc = "^#+\\s*'") {
 
   format = match.arg(format)
-  x = readLines(input, warn = FALSE); r = rle(str_detect(x, doc))
+  x = readLines(wool, warn = FALSE); r = rle(str_detect(x, doc))
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
   p = .fmt.pat[[tolower(format)]]
   p1 = str_replace(str_c('^', p[1L], '.*', p[2L], '$'), '\\{', '\\\\{')
@@ -61,9 +61,9 @@ silk = function(input, purse = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', '
     }
   }
 
-  outsrc = str_c(file_path_sans_ext(input), '.', format)
+  outsrc = str_c(file_path_sans_ext(wool), '.', format)
   cat(unlist(txt), file = outsrc, sep = '\n')
-  if (purse) knit(outsrc)
+  if (knit) knit(outsrc)
 
   invisible(outsrc)
 }
