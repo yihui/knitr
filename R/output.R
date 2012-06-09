@@ -203,7 +203,7 @@ process_file = function(text, output) {
   ocode = knit_code$get()
   on.exit({knit_code$restore(); knit_code$set(ocode)}, add = TRUE)
   groups = split_file(lines = text)
-  n = length(groups); res = character(n)
+  n = length(groups); res = character(n); olines = integer(n)
   tangle = opts_knit$get('tangle')
 
   if (opts_knit$get('progress')) {
@@ -227,11 +227,15 @@ process_file = function(text, output) {
                    paste('', knit_concord$get('infile'), sep = ''), txt))
     }
     res[i] = txt
+    # output line numbers
+    if (concord_mode()) {
+      olines[i] = line_count(txt)
+      knit_concord$set(outlines = olines)
+    }
   }
 
   if (!tangle) res = insert_header(res)  # insert header
-  # output line numbers
-  if (concord_mode()) knit_concord$set(outlines = str_count(res, fixed('\n')) + 1L)
+
 
   str_c(c(res, ""), collapse = "\n")
 }
