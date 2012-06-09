@@ -48,9 +48,13 @@ concord_gen = function(infile = knit_concord$get('infile'),
   concordance = paste(strwrap(paste(vals, collapse = " ")), collapse = " %\n")
 
   # build record
-  parent = knit_concord$get('parent'); parent.line = knit_concord$get('parent.line')
-  extra = if (is.null(parent) || is.null(parent.line)) '' else {
-    str_c(parent, ':', parent.line, ':')
+  extra = if (is.null(parent)) {
+    # parent document needs to consider where to start the output line number
+    if (is.null(out.next <- knit_concord$get('out.next'))) '' else
+      str_c('ofs ', out.next, ':')
+  } else {
+    outfile = parent # all children write to parent output
+    str_c('ofs ', parent.line, ':')
   }
   output = str_c("\\Sconcordance{concordance:", outfile, ":",
                   infile, ":", extra, "%\n", concordance,"}\n")
