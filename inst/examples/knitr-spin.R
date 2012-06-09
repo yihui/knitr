@@ -33,5 +33,5 @@ sum(x^2) # chi-square distribution with df 5
 #+ test-chisq4
 sum((x - mean(x))^2) # df is 4 now
 
-#' Done. Call silk('knitr-silk.R') to make silk from sow's ear now and knit a
+#' Done. Call spin('knitr-spin.R') to make silk from sow's ear now and knit a
 #' lovely purse.

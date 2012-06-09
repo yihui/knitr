@@ -30,7 +30,7 @@ for (i in list.files(pattern = '\\.R(tex|md|html|rst)')) {
 }
 
 call_knit(sprintf("Rscript -e 'library(knitr);knit(\"knitr-minimal.brew\", \"\")'"))
-call_knit(sprintf("Rscript -e 'library(knitr);card(\"knitr-card.R\")'"))
+call_knit(sprintf("Rscript -e 'library(knitr);spin(\"knitr-spin.R\")'"))
 
 setwd('child')
 for (i in c('knitr-main.Rnw', 'knitr-parent.Rnw')) {

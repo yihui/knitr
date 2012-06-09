@@ -8,6 +8,6 @@ inst/examples/figure
 inst/examples/ex-out*
 knitr-minimal.html
 knitr-latex.tex
-knitr-card.md
+knitr-spin.md
 .Rproj.user
 knitr.Rproj
