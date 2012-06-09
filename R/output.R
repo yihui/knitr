@@ -187,7 +187,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
   }
 
-  invisible(if (is.null(output)) res else output)
+  if ((child_mode() && concord_mode()) || is.null(output)) res else output
 }
 #' @rdname knit
 #' @param ... arguments passed to \code{\link{knit}}
@@ -287,7 +287,9 @@ knit_child = function(..., eval = TRUE) {
   path = knit(..., tangle = opts_knit$get('tangle'))
   if (opts_knit$get('tangle')) {
     str_c('\n', 'source("', path, '")')
-  } else str_c('\n\\', opts_knit$get('child.command'), '{', path, '}')
+  } else if (concord_mode()) path else {
+    str_c('\n\\', opts_knit$get('child.command'), '{', path, '}')
+  }
 }
 
 #' Automatically create a report based on an R script and a template
