@@ -18,7 +18,7 @@ card(wool, knit = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"),
   documentation lines; by default it follows the roxygen
   convention, but it can be customized, e.g.  if you want
   to use \code{##} to denote documentation, you can use
-  \code{'^##\\s*'}}
+  \code{'^##\\\\s*'}}
 }
 \value{
   The path of the literate programming document.
@@ -40,7 +40,9 @@ card(wool, knit = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"),
   knitted).
 }
 \examples{
-#' write normal text like this and chunk options like below + label, opt=value
+#' write normal text like this and chunk options like below
+
+# + label, opt=value
 
 (s = system.file("examples", "knitr-card.R", package = "knitr"))
 card(s)  # default markdown
