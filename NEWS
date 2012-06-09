@@ -37,6 +37,13 @@ NEW FEATURES
   will only happen to LaTeX documents because HTML does not have
   inline comments (it only has block comments <!-- -->)
 
+  o concordance works for child documents as well now (try RStudio),
+  although it is not very precise (#225); note when concordance is
+  enabled, the results from child documents will be written into the
+  parent output instead of individual tex files; also note you have to
+  set opts_knit$set(self.contained = FALSE) for concordance to work
+  better
+
   o added an OpenCPU app so that we can run knitr in the cloud now;
   see system.file('opencpu', 'apps', 'index.html', package = 'knitr')
   or http://public.opencpu.org/apps/knitr (thanks, Jeroen Ooms)
