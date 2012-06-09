@@ -21,7 +21,7 @@ NEW FEATURES
   margin when the width option is appropriately small (#259) (thanks,
   @muelleki)
 
-  o added a new function card() to turn a specially formatted R script
+  o added a new function spin() to turn a specially formatted R script
   to a report; see http://yihui.name/knitr/demo/stitch/ (#223)
   (thanks, Rich FitzJohn)
 
