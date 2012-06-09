@@ -436,3 +436,6 @@ print_knitlog = function() {
   cat('\nNumber of messages:\n')
   print(sapply(klog, length))
 }
+
+# count the number of lines
+line_count = function(x) str_count(x, fixed('\n')) + 1L
