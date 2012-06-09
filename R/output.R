@@ -101,8 +101,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   if (in.file) input2 = input # make a copy of the input path
   if (child_mode()) {
     setwd(opts_knit$get('output.dir')) # always restore original working dir
-    # 'infile' from last call is my parent
-    if (concord_mode()) knit_concord$set(parent = knit_concord$get('infile'))
     # in child mode, input path needs to be adjusted
     if (in.file && !is_abs_path(input)) {
       input2 = str_c(opts_knit$get('child.path'), input)
@@ -121,6 +119,11 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     ext = tolower(file_ext(input))
     options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
     knit_concord$set(infile = input2)
+  }
+  if (concord_mode()) {
+    # 'outfile' from last parent call is my parent
+    if (child_mode()) knit_concord$set(parent = knit_concord$get('outfile'))
+    knit_concord$set(outfile = output)
   }
 
   text = if (is.null(text)) readLines(input, warn = FALSE) else {
