@@ -23,6 +23,14 @@ concord_gen = function(infile = knit_concord$get('infile'),
     warning('cannot generate concordance due to incomplete line numbers')
     return()
   }
+  parent = knit_concord$get('parent'); parent.line = knit_concord$get('parent.line')
+  # if output lines contain 0, it means child documents are inserted
+  if (any(o == 0) || (!child_mode() && length(o) == knit_concord$get('i'))) {
+    start = if (is.null(parent.line)) 1L else knit_concord$get('in.next')
+    end = max(which(o != 0))  # last non-zero element
+    idx = start:end
+    i = i[idx]; o = o[idx]  # use a part of line numbers to build concordance
+  }
 
   steps = NULL # how many steps to jump forward to match output line numbers
   for (k in seq_along(i)) {
