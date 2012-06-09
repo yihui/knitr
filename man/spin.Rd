@@ -1,12 +1,12 @@
-\name{card}
-\alias{card}
-\title{Convert an R script to a literate programming document}
+\name{spin}
+\alias{spin}
+\title{Spin goat's hair into wool}
 \usage{
-card(wool, knit = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), 
+spin(hair, knit = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), 
     doc = "^#+'[ ]?")
 }
 \arguments{
-  \item{wool}{the path to the R script}
+  \item{hair}{the path to the R script}
 
   \item{knit}{logical: whether to compile the document
   after conversion}
@@ -31,29 +31,25 @@ card(wool, knit = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"),
   options are written after \code{#+} or \code{#-}.
 }
 \details{
-  The function name came from the carding process: carding
-  breaks open the entangled scoured wool and removes the
-  burrs and seeds, leaving the wool as a continuous web
-  called a sliver (thanks to Jenny Hutchison). Obviously
-  the entangled wool is the original R script, and the
-  sliver is the literate programming document (ready to be
-  knitted).
+  Obviously the goat's hair is the original R script, and
+  the wool is the literate programming document (ready to
+  be knitted).
 }
 \examples{
 #' write normal text like this and chunk options like below
 
 # + label, opt=value
 
-(s = system.file("examples", "knitr-card.R", package = "knitr"))
-card(s)  # default markdown
-o = card(s, knit = FALSE)  # convert only; do not make a purse yet
+(s = system.file("examples", "knitr-spin.R", package = "knitr"))
+spin(s)  # default markdown
+o = spin(s, knit = FALSE)  # convert only; do not make a purse yet
 knit2html(o)  # compile to HTML
 
 # other formats
-card(s, FALSE, format = "Rnw")  # you need to write documentclass after #'
-card(s, FALSE, format = "Rhtml")
-card(s, FALSE, format = "Rtex")
-card(s, FALSE, format = "Rrst")
+spin(s, FALSE, format = "Rnw")  # you need to write documentclass after #'
+spin(s, FALSE, format = "Rhtml")
+spin(s, FALSE, format = "Rtex")
+spin(s, FALSE, format = "Rrst")
 }
 \author{
   Yihui Xie, with the original idea from Richard FitzJohn

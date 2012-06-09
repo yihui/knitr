@@ -84,4 +84,4 @@ Collate:
     'hooks-html.R'
     'hooks-md.R'
     'hooks-rst.R'
-    'card.R'
+    'spin.R'
