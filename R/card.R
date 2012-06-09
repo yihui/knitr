@@ -17,7 +17,7 @@
 #' @param doc a regular expression to identify the documentation lines; by
 #'   default it follows the roxygen convention, but it can be customized, e.g.
 #'   if you want to use \code{##} to denote documentation, you can use
-#'   \code{'^##\\s*'}
+#'   \code{'^##\\\\s*'}
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
 #'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
 #' @return The path of the literate programming document.
@@ -25,6 +25,7 @@
 #' @seealso \code{\link{stitch}} (feed a template with an R script)
 #' @references \url{http://yihui.name/knitr/demo/stitch/}
 #' @examples #' write normal text like this and chunk options like below
+#'
 #' #+ label, opt=value
 #'
 #' (s = system.file('examples', 'knitr-card.R', package = 'knitr'))
