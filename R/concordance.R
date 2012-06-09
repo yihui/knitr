@@ -40,12 +40,13 @@ concord_gen = function(infile = knit_concord$get('infile'),
       c(rep(1L, o[k] - 1L), i[k] - o[k] + 1L)
     })
   }
-  
+
   # generate data structure
   vals = rle(steps)
-  vals = c(steps[1L], as.numeric(rbind(vals$lengths, vals$values)))
+  vals = c(if (is.null(parent.line) || child_mode()) 1L else parent.line + 1L,
+           as.numeric(rbind(vals$lengths, vals$values)))
   concordance = paste(strwrap(paste(vals, collapse = " ")), collapse = " %\n")
-  
+
   # build record
   parent = knit_concord$get('parent'); parent.line = knit_concord$get('parent.line')
   extra = if (is.null(parent) || is.null(parent.line)) '' else {
