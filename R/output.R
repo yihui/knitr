@@ -187,7 +187,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
 
   if (in.file && is.character(output) && file.exists(output)) {
     concord_gen(input2, output)  # concordance file
-    if (!child_mode()) {
+    if (!child_mode() && concord_mode()) {
       confile = str_c(file_path_sans_ext(output), '-concordance.tex')
       cat(.knitEnv$concordance, file = confile)
       .knitEnv$concordance = NULL # empty concord string
@@ -240,7 +240,6 @@ process_file = function(text, output) {
   }
 
   if (!tangle) res = insert_header(res)  # insert header
-
 
   str_c(c(res, ""), collapse = "\n")
 }
