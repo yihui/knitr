@@ -37,6 +37,10 @@ NEW FEATURES
   will only happen to LaTeX documents because HTML does not have
   inline comments (it only has block comments <!-- -->)
 
+  o added an OpenCPU app so that we can run knitr in the cloud now;
+  see system.file('opencpu', 'apps', 'index.html', package = 'knitr')
+  or http://public.opencpu.org/apps/knitr (thanks, Jeroen Ooms)
+
   o all messages, errors and warnings during evaluation are recorded
   in an internal object knit_log (use knitr:::knit_log$get() to get
   all messages) and they are printed if the package option 'verbose'
