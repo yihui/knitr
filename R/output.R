@@ -211,7 +211,7 @@ process_file = function(text, output) {
     on.exit(close(pb), add = TRUE)
   }
   for (i in 1:n) {
-    knit_concord$set(block = i)
+    knit_concord$set(i = i)
     if (opts_knit$get('progress')) {
       setTxtProgressBar(pb, i)
       if (!tangle) cat('\n')  # under tangle mode, only show one progress bar

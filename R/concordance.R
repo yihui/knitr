@@ -1,13 +1,13 @@
 # record input/output lines numbers in Rnw/tex, filenames, line number of child
-# in parent, and current block number
+# in parent, current block number (i), line number of next block after a child
 knit_concord = new_defaults(
-  list(inlines = NULL, outlines = NULL, infile = NULL, parent = NULL,
-       parent.line = NULL, block = NULL)
+  list(inlines = NULL, outlines = NULL, infile = NULL, outfile = NULL,
+       parent = NULL, parent.line = NULL, i = NULL, in.next = 1L, out.next = NULL)
 )
 
 concord_mode = function() opts_knit$get('concordance')
 
-current_lines = function(i = knit_concord$get('block')) {
+current_lines = function(i = knit_concord$get('i')) {
   # a helpr function to return line numbers for block i
   n = knit_concord$get('inlines')
   n0 = sum(head(n, i - 1L)) + 1L; n1 = n0 + n[i] - 1L
