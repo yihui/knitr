@@ -1,16 +1,13 @@
-#' Convert an R script to a literate programming document
+#' Spin goat's hair into wool
 #'
 #' This function takes a specially formatted R script and converts it to a
 #' literate programming document. By default normal text (documentation) should
 #' be written after the roxygen comment (\code{#'}) and code chunk options are
 #' written after \code{#+} or \code{#-}.
 #'
-#' The function name came from the carding process: carding breaks open the
-#' entangled scoured wool and removes the burrs and seeds, leaving the wool as a
-#' continuous web called a sliver (thanks to Jenny Hutchison). Obviously the
-#' entangled wool is the original R script, and the sliver is the literate
-#' programming document (ready to be knitted).
-#' @param wool the path to the R script
+#' Obviously the goat's hair is the original R script, and the wool is the
+#' literate programming document (ready to be knitted).
+#' @param hair the path to the R script
 #' @param knit logical: whether to compile the document after conversion
 #' @param format character: the output format (it takes five possible values);
 #'   the default is R Markdown
@@ -28,17 +25,17 @@
 #'
 #' #+ label, opt=value
 #'
-#' (s = system.file('examples', 'knitr-card.R', package = 'knitr'))
-#' card(s)  # default markdown
-#' o = card(s, knit = FALSE) # convert only; do not make a purse yet
+#' (s = system.file('examples', 'knitr-spin.R', package = 'knitr'))
+#' spin(s)  # default markdown
+#' o = spin(s, knit = FALSE) # convert only; do not make a purse yet
 #' knit2html(o) # compile to HTML
 #'
 #' # other formats
-#' card(s, FALSE, format='Rnw')  # you need to write documentclass after #'
-#' card(s, FALSE, format='Rhtml')
-#' card(s, FALSE, format='Rtex')
-#' card(s, FALSE, format='Rrst')
-card = function(wool, knit = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
+#' spin(s, FALSE, format='Rnw')  # you need to write documentclass after #'
+#' spin(s, FALSE, format='Rhtml')
+#' spin(s, FALSE, format='Rtex')
+#' spin(s, FALSE, format='Rrst')
+spin = function(hair, knit = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
                 doc = "^#+'[ ]?") {
 
   format = match.arg(format)

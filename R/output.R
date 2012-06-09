@@ -320,7 +320,7 @@ knit_child = function(..., eval = TRUE) {
 #'   it uses the base filename of the script
 #' @return path of the output document
 #' @export
-#' @seealso \code{\link{card}} (turn a specially formatted R script to a report)
+#' @seealso \code{\link{spin}} (turn a specially formatted R script to a report)
 #' @examples s = system.file('misc', 'stitch-test.R', package = 'knitr')
 #' \dontrun{stitch(s)}
 #'
