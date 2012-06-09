@@ -120,7 +120,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     if (is.null(output)) output = basename(auto_out_name(input))
     ext = tolower(file_ext(input))
     options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
-    knit_concord$set(infile = input2) # note: this to be done _after_ setting parent!
+    knit_concord$set(infile = input2)
   }
 
   text = if (is.null(text)) readLines(input, warn = FALSE) else {
