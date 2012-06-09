@@ -187,6 +187,11 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
 
   if (in.file && is.character(output) && file.exists(output)) {
     concord_gen(input2, output)  # concordance file
+    if (!child_mode()) {
+      confile = str_c(file_path_sans_ext(output), '-concordance.tex')
+      cat(.knitEnv$concordance, file = confile)
+      .knitEnv$concordance = NULL # empty concord string
+    }
     message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
   }
 

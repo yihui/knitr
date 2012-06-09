@@ -14,6 +14,8 @@ current_lines = function(i = knit_concord$get('i')) {
   c(n0, n1)
 }
 
+.knitEnv$concordance = NULL # store the concordance string
+
 ## generate concordance for RStudio
 concord_gen = function(infile = knit_concord$get('infile'),
                        outfile = knit_concord$get('outfile')) {
@@ -59,6 +61,5 @@ concord_gen = function(infile = knit_concord$get('infile'),
   output = str_c("\\Sconcordance{concordance:", outfile, ":",
                   infile, ":", extra, "%\n", concordance,"}\n")
   # write to file
-  confile = str_c(file_path_sans_ext(outfile), '-concordance.tex')
-  cat(output, file = confile)
+  .knitEnv$concordance = paste(.knitEnv$concordance, output, sep = '', collapse = '\n')
 }
