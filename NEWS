@@ -53,6 +53,12 @@ NEW FEATURES
   all messages) and they are printed if the package option 'verbose'
   is TRUE (i.e. opts_knit$get('verbose')) (#224)
 
+  o child documents are also supported in other document formats
+  besides LaTeX, e.g. Markdown and HTML, etc; please use the chunk
+  option 'child' to specify the child documents; see
+  system.file('examples', 'child', 'knitr-main.Rmd', package =
+  'knitr') for an example in markdown (#268) (thanks, @martinaryee)
+
 BUG FIXES
 
   o the templates for stitch() used results=hide which should really
