@@ -37,7 +37,12 @@ render_markdown = function(strict = FALSE) {
                  warning = hook.t, error = hook.t, message = hook.t,
                  inline = function(x) sprintf(if (inherits(x, 'AsIs')) '%s' else '`%s`',
                                               .inline.hook(format_sci(x, 'html'))),
-                 plot = hook_plot_md)
+                 plot = hook_plot_md,
+                 chunk = function(x, options) {
+                   x = gsub('```[\n]+```', '```\n\n```', x)
+                   x = gsub('```[\n]+$', '```\n\n', x)
+                   gsub('^[\n]+```', '\n\n```', x)
+                 })
 }
 #' @rdname output_hooks
 #' @export
