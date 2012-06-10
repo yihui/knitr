@@ -27,7 +27,7 @@ Note Windows users have to first install [Rtools](http://www.murdoch-sutherland.
 While Sweave and related add-on packages like [**cacheSweave**](http://cran.r-project.org/package=cacheSweave) and [**pgfSweave**](http://cran.r-project.org/package=pgfSweave) are fairly good engines for literate programming in R, but I often feel my hands are tied, for example:
 
 - I stared at the source code of Sweave and wished for hundreds of times that *if only I could easily insert* `[width=.8\textwidth]` *between* `\includegraphics` *and* `{my-plot.pdf}` (the official way in Sweave is `\setkeys{Gin}` but it is setting a global width, which is unrealistic since we often have to set widths individually; yes, you can use `\setkeys{Gin}` for many times, but why not just provide an option for each chunk?)
-- I wished for many times that *if only I could use graphics devices other than PDF and postscript*; now the dream has come true in the official R, but what I was hoping for was an option as simple as `dev = png` or `dev = CairoJPEG`
+- I wished for many times that *if only I could use graphics devices other than PDF and postscript*; now the dream has come true in the official R, but what I was hoping for was an option as simple as `dev = 'png'` or `dev = 'CairoJPEG'`
 - I wished multiple plots in a code chunk could be recorded instead of only the last one
 - I wished there was a way to round the numbers in `\Sexpr{}` other than writing expressions like `\Sexpr{round(x, 3)}` for *each single* `\Sexpr{}`
 - I wished I did not have to `print()` plots from [**ggplot2**](http://cran.r-project.org/package=ggplot2) and a simple `qplot(x, y)` would just give me a plot in Sweave
