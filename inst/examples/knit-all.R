@@ -38,5 +38,6 @@ for (i in c('knitr-main.Rnw', 'knitr-parent.Rnw')) {
   stopifnot(identical(system(cmd), 0L))
 }
 unlink('*.tex')
+call_knit(sprintf('knit %s', 'knitr-main.Rmd'))
 setwd('..')
 
