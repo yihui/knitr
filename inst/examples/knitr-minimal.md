@@ -25,21 +25,15 @@ Now we write some code chunks in this markdown file:
 (x <- 1 + 1)
 ```
 
-
-
 ```
 ## [1] 2
 ```
-
-
 
 ```r
 ## boring random numbers
 set.seed(123)
 rnorm(5)
 ```
-
-
 
 ```
 ## [1] -0.56048 -0.23018  1.55871  0.07051  0.12929

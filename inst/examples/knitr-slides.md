@@ -86,7 +86,7 @@ qplot(speed, dist, data = cars) + geom_smooth()
 
 # Reproducible research
 
-It is good to include the session info, e.g. this document is produced with **knitr** version `0.5.11`. Here is my session info:
+It is good to include the session info, e.g. this document is produced with **knitr** version `0.6`. Here is my session info:
 
 
 
