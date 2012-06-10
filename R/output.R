@@ -279,7 +279,9 @@ auto_out_name = function(input) {
 #' @param eval logical: whether to evaluate the child document
 #' @return A character string of the form \samp{\command{child-doc.tex}} or
 #'   \code{source("child-doc.R")}, depending on the argument \code{tangle}
-#'   passed in.
+#'   passed in. When concordance is turned on or the output format is not LaTeX,
+#'   the content of the compiled child document is returned as a character
+#'   string so it can be written back to the main document directly.
 #' @references \url{http://yihui.name/knitr/demo/child/}
 #' @note This function is not supposed be called directly like
 #'   \code{\link{knit}()}; instead it must be placed in a parent document to let
@@ -298,7 +300,10 @@ knit_child = function(..., eval = TRUE) {
   path = knit(..., tangle = opts_knit$get('tangle'))
   if (opts_knit$get('tangle')) {
     str_c('\n', 'source("', path, '")')
-  } else if (concord_mode()) path else {
+  } else if (concord_mode() || opts_knit$get('out.format') != 'latex') {
+    on.exit(unlink(path)) # child output file is temporary
+    str_c(readLines(path), collapse = '\n')
+  } else {
     str_c('\n\\', opts_knit$get('child.command'), '{', path, '}')
   }
 }
