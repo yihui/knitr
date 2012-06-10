@@ -34,8 +34,7 @@ call_knit(sprintf("Rscript -e 'library(knitr);spin(\"knitr-spin.R\")'"))
 
 setwd('child')
 for (i in c('knitr-main.Rnw', 'knitr-parent.Rnw')) {
-  cmd = sprintf('knit %s --pdf', i)
-  stopifnot(identical(system(cmd), 0L))
+  call_knit(sprintf('knit %s --pdf', i))
 }
 unlink('*.tex')
 call_knit(sprintf('knit %s', 'knitr-main.Rmd'))
