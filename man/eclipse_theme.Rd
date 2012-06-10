@@ -21,6 +21,7 @@ eclipse_theme(id)
 \examples{
 ## http://www.eclipsecolorthemes.org/?view=theme&id=1
 \dontrun{
+opts_knit$set(out.format = "latex")
 (css = eclipse_theme(1))
 thm = knit_theme$get(css)
 knit_theme$set(thm)
