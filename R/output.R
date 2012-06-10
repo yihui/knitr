@@ -195,7 +195,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
   }
 
-  if ((child_mode() && concord_mode()) || is.null(output)) res else output
+  if (is.null(output)) res else output
 }
 #' @rdname knit
 #' @param ... arguments passed to \code{\link{knit}}
