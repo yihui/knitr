@@ -261,15 +261,15 @@ auto_out_name = function(input) {
 
 #' Knit a child document
 #'
-#' This function is for LaTeX only except when it is used to extract R code from
-#' the document; by default it knits a child document and returns the command to
-#' input the result into the main document. It is designed to be used in the
-#' inline R code and serves as the alternative to the \command{SweaveInput}
-#' command in Sweave.
+#' This function knits a child document and returns a character string to input
+#' the result into the main document. It is designed to be used in the chunk
+#' option \code{child} and serves as the alternative to the
+#' \command{SweaveInput} command in Sweave.
 #'
-#' The LaTeX command used to input the child document (usually \samp{input} or
-#' \samp{include}) is from the package option \code{child.command}
-#' (\code{opts_knit$get('child.command')}).
+#' For LaTeX output, the command used to input the child document (usually
+#' \samp{input} or \samp{include}) is from the package option
+#' \code{child.command} (\code{opts_knit$get('child.command')}). For other types
+#' of output, the content of the compiled child document is returned.
 #'
 #' When we call \code{purl()} to extract R code, the code in the child document
 #' is extracted and saved into an R script.
