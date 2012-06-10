@@ -1,0 +1,6 @@
+Hi, there. I'm a child.
+
+```{r test-child}
+1+1
+dnorm(0)
+```

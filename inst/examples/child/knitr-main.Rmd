@@ -1,0 +1,10 @@
+You can also use the `child` option to include child documents in markdown.
+
+```{r test-main, child='knitr-child.Rmd'}
+```
+
+You can continue your main document below, of course.
+
+```{r test-another}
+pmax(1:10, 5)
+```
