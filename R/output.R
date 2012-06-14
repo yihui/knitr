@@ -322,6 +322,7 @@ knit_child = function(..., eval = TRUE) {
 #'   this package; there is also an HTML template in \pkg{knitr})
 #' @param output the output filename (passed to \code{\link{knit}}); by default
 #'   it uses the base filename of the script
+#' @inheritParams knit
 #' @return path of the output document
 #' @export
 #' @seealso \code{\link{spin}} (turn a specially formatted R script to a report)
@@ -335,7 +336,7 @@ knit_child = function(..., eval = TRUE) {
 #' stitch(s, system.file('misc', 'knitr-template.Rmd', package = 'knitr'))
 stitch = function(script,
                   template = system.file('misc', 'knitr-template.Rnw', package = 'knitr'),
-                  output = NULL) {
+                  output = NULL, envir = parent.frame()) {
   lines = readLines(script, warn = FALSE)
   ## extract title and author from first two lines
   if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:')) lines = lines[-1L]
@@ -344,7 +345,7 @@ stitch = function(script,
   input = basename(template)
   input = str_c(file_path_sans_ext(basename(script)), '.', file_ext(input))
   if (file.exists(input)) warning(input, ' already exists') else file.copy(template, input)
-  out = knit(input, output)
+  out = knit(input, output, envir = envir)
   switch(file_ext(out), tex = {
     texi2pdf(out, clean = TRUE)
     system(paste(getOption('pdfviewer'), shQuote(str_replace(out, '\\.tex$', '.pdf'))))
