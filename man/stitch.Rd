@@ -3,7 +3,7 @@
 \title{Automatically create a report based on an R script and a template}
 \usage{
 stitch(script, template = system.file("misc", "knitr-template.Rnw", package = "knitr"), 
-    output = NULL)
+    output = NULL, envir = parent.frame())
 }
 \arguments{
   \item{script}{path to the R script}
@@ -15,6 +15,10 @@ stitch(script, template = system.file("misc", "knitr-template.Rnw", package = "k
   \item{output}{the output filename (passed to
   \code{\link{knit}}); by default it uses the base filename
   of the script}
+
+  \item{envir}{the environment in which the code chunks are
+  to be evaluated (can use \code{\link{new.env}()} to
+  guarantee an empty new environment)}
 }
 \value{
   path of the output document
