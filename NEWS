@@ -8,6 +8,9 @@ BUG FIXES
   default; in 0.6, the default parent frame for the inner knit() was
   a wrong environment to use (thanks, Michael Nelson)
 
+  o use unnamed-chunk-i as the label when chunk label == '' (#280)
+  (thanks, Josh Paulson)
+
 
 			 CHANGES IN knitr VERSION 0.6
 
