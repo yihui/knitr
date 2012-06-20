@@ -91,7 +91,7 @@ parse_params = function(params, label = TRUE) {
     }
     if (label && !is.character(res$label))
       res$label = gsub(' ', '', as.character(as.expression(res$label)))
-    if (res$label == '') res$label = unnamed_chunk()
+    if (identical(res$label, '')) res$label = unnamed_chunk()
     return(res)
   }
   warning('(*) NOTE: I saw options "', params,
