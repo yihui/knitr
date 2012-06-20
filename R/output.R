@@ -140,7 +140,12 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     if (is.null(pattern <- detect_pattern(text)))
       pattern = if (ext %in% c('htm', 'rhtm', 'rhtml')) 'html' else {
         if (ext %in% c('rmd', 'rmarkdown', 'markdown')) 'md' else {
-          if (ext == 'rrst') 'rst' else ext
+          if (ext == 'rrst') 'rst' else {
+            # nothing to be executed; just return original input
+            if (is.null(output)) return(text) else {
+              cat(text, file = output); return(output)
+            }
+          }
         }
       }
     if (!(pattern %in% names(apat)))
