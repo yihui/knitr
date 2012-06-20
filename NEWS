@@ -11,6 +11,8 @@ BUG FIXES
   o use unnamed-chunk-i as the label when chunk label == '' (#280)
   (thanks, Josh Paulson)
 
+  o fixed #279 and #281, both of which are about concordance
+
 
 			 CHANGES IN knitr VERSION 0.6
 
