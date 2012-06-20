@@ -239,7 +239,8 @@ process_file = function(text, output) {
     res[i] = txt
     # output line numbers
     if (concord_mode()) {
-      olines[i] = line_count(txt)
+      # look back and see who is 0, then fill them up
+      idx = which(olines[1:i] == 0L); olines[idx] = line_count(res[idx])
       knit_concord$set(outlines = olines)
     }
   }
