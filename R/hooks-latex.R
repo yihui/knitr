@@ -178,6 +178,7 @@ render_latex = function() {
   knit_hooks$restore()
   knit_hooks$set(source = function(x, options) {
     if (options$highlight) {
+      if (!has_package('highlight')) return(x)
       ## gsub() makes sure " will not produce an umlaut
       str_c('\\begin{flushleft}\n', gsub('"', '"{}', x, fixed = TRUE),
             '\\end{flushleft}\n')
