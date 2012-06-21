@@ -370,7 +370,7 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.f
 #' @export
 #' @seealso \code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}
 #' @examples # a minimal example
-#' writeLines(c('# hello markdown', '``` {r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
+#' writeLines(c("# hello markdown", '``` {r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')
 knit2html = function(input, ..., envir = parent.frame()){
