@@ -395,7 +395,7 @@ wrap.source = function(x, options) {
   src = x$src
   if (options$highlight) {
     fmt = opts_knit$get('out.format')
-    src = hilight_source(str_c(src, collapse = ''), fmt, options)
+    src = hilight_source(src, fmt, options)
   } else if (options$prompt) src = sapply(src, line_prompt, USE.NAMES = FALSE)
   src = str_c(src, collapse = '')
   src = str_replace(src, '([^\n]+)$', '\\1\n')
