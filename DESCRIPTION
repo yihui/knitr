@@ -47,8 +47,7 @@ Imports:
     digest,
     formatR (>= 0.3-4),
     stringr (>= 0.6),
-    tools,
-    highlight
+    tools
 Suggests:
     testthat,
     rgl,
@@ -73,6 +72,9 @@ Collate:
     'hooks.R'
     'utils.R'
     'themes.R'
+    'highlight-00_sizes.R'
+    'highlight-css.R'
+    'highlight-renderer.R'
     'header.R'
     'eclipse.R'
     'concordance.R'
@@ -85,3 +87,4 @@ Collate:
     'hooks-md.R'
     'hooks-rst.R'
     'spin.R'
+    'highlight.R'
