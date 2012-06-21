@@ -109,7 +109,7 @@ set_header = function(...) {
 # CSS for html syntax highlighting
 .header.hi.html = paste(theme_to_header_html(.default.sty)$highlight,
                         collapse = '\n')
-rm(list = c('.inst.dir', '.default.sty', '.knitr.sty')) # do not need them any more
+rm(list = c('.inst.dir', '.knitr.sty')) # do not need them any more
 
 .header.sweave.cmd =
 '\\newcommand{\\SweaveOpts}[1]{}  % do not interfere with LaTeX
