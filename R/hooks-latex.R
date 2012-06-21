@@ -113,7 +113,7 @@ hook_plot_tex = function(x, options) {
   x = str_c(k1, x, k2)
   ## rm empty kframe and verbatim environments
   x = gsub('\\\\begin\\{(kframe)\\}\\s*\\\\end\\{\\1\\}', '', x)
-  x = gsub('\\\\end\\{(verbatim)\\}\\s*\\\\begin\\{\\1\\}[\n]?', '', x)
+  x = gsub('\\\\end\\{(verbatim)\\}\\s*\\\\begin\\{\\1\\}[\n]?', '\n', x)
   size = if (options$size == 'normalsize') '' else str_c('\\', options$size)
   if (!ai) x = str_c('\\begin{knitrout}', size, '\n', x, '\n\\end{knitrout}')
   if (options$split) {
