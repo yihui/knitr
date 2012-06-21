@@ -28,9 +28,9 @@ comment_out = function(x, options) {
 }
 
 ## assign string in comments to a global variable
-comment_to_var = function(x, varname, pattern) {
+comment_to_var = function(x, varname, pattern, envir) {
   if (str_detect(x, pattern)) {
-    assign(varname, str_replace(x, pattern, ''), envir = knit_global())
+    assign(varname, str_replace(x, pattern, ''), envir = envir)
     return(TRUE)
   }
   FALSE

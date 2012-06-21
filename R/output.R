@@ -345,8 +345,8 @@ stitch = function(script,
                   output = NULL, envir = parent.frame()) {
   lines = readLines(script, warn = FALSE)
   ## extract title and author from first two lines
-  if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:')) lines = lines[-1L]
-  if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:')) lines = lines[-1L]
+  if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:', envir)) lines = lines[-1L]
+  if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:', envir)) lines = lines[-1L]
   knit_code$set(`auto-report` = lines)
   input = basename(template)
   input = str_c(file_path_sans_ext(basename(script)), '.', file_ext(input))
