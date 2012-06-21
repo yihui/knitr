@@ -100,6 +100,7 @@ set_header = function(...) {
 .default.sty = .default.sty[file.exists(.default.sty)][1L]
 # header for Latex Syntax Highlighting
 .header.hi.tex = paste(c('\\IfFileExists{upquote.sty}{\\usepackage{upquote}}{}',
+                         if (!has_package('highlight')) '\\usepackage{alltt}',
                          theme_to_header_latex(.default.sty)$highlight),
                        collapse = '\n')
 .knitr.sty = file.path(.inst.dir, 'misc', 'knitr.sty')
