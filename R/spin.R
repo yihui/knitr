@@ -9,6 +9,7 @@
 #' literate programming document (ready to be knitted).
 #' @param hair the path to the R script
 #' @param knit logical: whether to compile the document after conversion
+#' @param report logical: whether to generate report. Ignored if knit = FALSE.
 #' @param format character: the output format (it takes five possible values);
 #'   the default is R Markdown
 #' @param doc a regular expression to identify the documentation lines; by
@@ -36,7 +37,7 @@
 #' spin(s, FALSE, format='Rhtml')
 #' spin(s, FALSE, format='Rtex')
 #' spin(s, FALSE, format='Rrst')
-spin = function(hair, knit = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
+spin = function(hair, knit = TRUE, report = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
                 doc = "^#+'[ ]?", envir = parent.frame()) {
 
   format = match.arg(format)
@@ -66,7 +67,13 @@ spin = function(hair, knit = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rr
 
   outsrc = str_c(file_path_sans_ext(hair), '.', format)
   cat(unlist(txt), file = outsrc, sep = '\n')
-  if (knit) knit(outsrc, envir = envir)
+  if (knit && !report) {
+    knit(outsrc, envir = envir)
+  } else if (knit && report) {
+    switch(format,
+           Rmd =, Rhtml =, Rrst = { knit2html(outsrc, envir = envir) },
+           Rnw =, Rtex = { knit2pdf(outsrc, envir = envir) })
+  }
 
   invisible(outsrc)
 }
