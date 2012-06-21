@@ -58,7 +58,6 @@ theme_to_header = function(theme, format = opts_knit$get('out.format')){
 }
 
 #' Generates latex header based on a theme
-#' @importFrom highlight css.parser styler_assistant_latex
 #' @author Ramnath Vaidyanathan
 #' @noRd
 theme_to_header_latex = function(theme) {
