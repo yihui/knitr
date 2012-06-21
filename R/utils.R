@@ -36,21 +36,6 @@ comment_to_var = function(x, varname, pattern, envir) {
   FALSE
 }
 
-hiren_latex = renderer_latex(document = FALSE)
-hiren_html = renderer_html(document = FALSE, header = function() '', footer = function() '')
-
-hilight_source = function(x, format, options) {
-  if (!(format %in% c('latex', 'html'))) return(x)
-  con = textConnection(x)
-  on.exit(close(con))
-  r = if (format == 'latex') hiren_latex else hiren_html
-  enc = getOption('encoding')
-  options(encoding = 'native.enc')  # make sure parser() writes with correct enc
-  on.exit(options(encoding = enc), add = TRUE)
-  out = capture.output(highlight(con, renderer = r, showPrompts = options$prompt, size = options$size))
-  str_c(out, collapse = '\n')
-}
-
 is_blank = function(x) {
   str_detect(x, '^\\s*$')
 }
