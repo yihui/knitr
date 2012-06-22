@@ -1,6 +1,11 @@
 \usepackage{framed}
 \makeatletter
 \newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
  \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
  \colorbox{shadecolor}{##1}\hskip-\fboxsep
      % There is no \\@totalrightmargin, so:
@@ -8,7 +13,8 @@
  \MakeFramed {\advance\hsize-\width
    \@totalleftmargin\z@ \linewidth\hsize
    \@setminipage}}%
- {\par\unskip\endMakeFramed}
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
 \makeatother
 
 \definecolor{shadecolor}{rgb}{.97, .97, .97}
