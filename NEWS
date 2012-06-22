@@ -2,6 +2,10 @@
 
 NEW FEATURES
 
+  o spin() gained a new argument 'report' for Rnw/Rtex/Rmd documents
+  to be compiled to PDF/HTML respectively (#287) (thanks, kohske
+  takahashi)
+
 BUG FIXES
 
   o stitch() and spin() should use parent.frame() to evaluate code by
