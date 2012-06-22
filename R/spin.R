@@ -67,12 +67,11 @@ spin = function(hair, knit = TRUE, report = TRUE, format = c('Rmd', 'Rnw', 'Rhtm
 
   outsrc = str_c(file_path_sans_ext(hair), '.', format)
   cat(unlist(txt), file = outsrc, sep = '\n')
-  if (knit && !report) {
-    knit(outsrc, envir = envir)
-  } else if (knit && report) {
-    switch(format,
-           Rmd =, Rhtml =, Rrst = { knit2html(outsrc, envir = envir) },
-           Rnw =, Rtex = { knit2pdf(outsrc, envir = envir) })
+  if (knit) {
+    if (report) {
+      if (format == 'Rmd') knit2html(outsrc, envir = envir) else
+        if (format %in% c('Rnw', 'Rtex')) knit2pdf(outsrc, envir = envir)
+    } else knit(outsrc, envir = envir)
   }
 
   invisible(outsrc)
