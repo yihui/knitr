@@ -1,5 +1,18 @@
 			 CHANGES IN knitr VERSION 0.7
 
+MAJOR CHANGES
+
+  o this is a urgent patch version for CRAN: the dependencies on
+  highlight and parser were removed because these two package were
+  orphaned on CRAN; now knitr uses a naive syntax highlighter for
+  LateX and HTML output if highlight is not available, which has a
+  similar appearance with highlight; when the parser package is not
+  available, users should be careful with the chunk option tidy=TRUE:
+  replace.assign may not work as expected; see the NEWS of formatR for
+  details: https://github.com/yihui/formatR/blob/master/NEWS; you are
+  welcome to improve the naive highlighter:
+  https://github.com/yihui/knitr/tree/master/R/highlight.R
+
 NEW FEATURES
 
   o spin() gained a new argument 'report' for Rnw/Rtex/Rmd documents
