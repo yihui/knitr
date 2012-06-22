@@ -9,7 +9,8 @@
 #' literate programming document (ready to be knitted).
 #' @param hair the path to the R script
 #' @param knit logical: whether to compile the document after conversion
-#' @param report logical: whether to generate report. Ignored if knit = FALSE.
+#' @param report logical: whether to generate report for \file{Rmd}, \file{Rnw}
+#'   and \file{Rtex} output (ignored if \code{knit = FALSE})
 #' @param format character: the output format (it takes five possible values);
 #'   the default is R Markdown
 #' @param doc a regular expression to identify the documentation lines; by
