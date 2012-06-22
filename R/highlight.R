@@ -13,7 +13,7 @@ hi_latex = function(x, fragment = FALSE) {
   x = gsub('\\textbackslash\\{\\}', '\\textbackslash{}', x, fixed = TRUE)
   x = unlist(strsplit(x, '\n', fixed = TRUE))
   # function names
-  x = gsub('([[:alnum:]_\\.]+)\\(', '\\\\hlfunctioncall{\\1}(', x)
+  x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '\\\\hlfunctioncall{\\1}\\2(', x)
   # comments: what if # inside quotes?
   if (any(idx <- grepl('#', x, fixed = TRUE) & !grepl('"', x, fixed = TRUE)))
     x[idx] = gsub('(#.*)', '\\\\hlcomment{\\1}', x[idx])
@@ -35,7 +35,7 @@ hi_html = function(x) {
   x = gsub('"([^"]*)"', '<span class="string">"\\1"</span>', x)
   x = gsub("'([^']*)'", "<span class=\"string\">'\\1'</span>", x)
   # function names
-  x = gsub('([[:alnum:]_\\.]+)\\(', '<span class="functioncall">\\1</span>(', x)
+  x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '<span class="functioncall">\\1</span>\\2(', x)
   if (any(idx <- grepl('#', x, fixed = TRUE) & !grepl('"', x, fixed = TRUE)))
     x[idx] = gsub('(#.*)', '<span class="comment">\\1</span>', x[idx])
   x = gsub(hi.keywords, '\\1<span class="keyword">\\2</span>\\3', x)
