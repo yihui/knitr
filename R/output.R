@@ -408,7 +408,7 @@ msg_wrap = function(message, type, options) {
     structure(list(c(knit_log$get(type), str_c('Chunk ', options$label, ':\n  ', message))),
     .Names = type)
   )
-  knit_hooks$get(type)(comment_out(message, options), options)
+  knit_hooks$get(type)(comment_out(str_c(message, '\n'), options), options)
 }
 
 wrap.warning = function(x, options) {
