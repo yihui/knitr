@@ -1,3 +1,11 @@
+			 CHANGES IN knitr VERSION 0.7
+
+BUG FIXES
+
+  o fixed #286: messages (including warnings and errors) are
+  guaranteed to be ended by \n, so even when chunk option comment=NA,
+  messages will also be rendered correctly (thanks, Carl Boettiger)
+
 			 CHANGES IN knitr VERSION 0.6.3
 
 MAJOR CHANGES
