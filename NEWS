@@ -6,6 +6,12 @@ BUG FIXES
   guaranteed to be ended by \n, so even when chunk option comment=NA,
   messages will also be rendered correctly (thanks, Carl Boettiger)
 
+MINOR CHANGES
+
+  o the LaTeX environment 'kframe' was updated so that it can be used
+  in other environments such as 'center' or 'tabular' (#283) (thanks,
+  @muelleki)
+  
 			 CHANGES IN knitr VERSION 0.6.3
 
 MAJOR CHANGES
