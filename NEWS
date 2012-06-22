@@ -17,6 +17,11 @@ BUG FIXES
 
   o fixed #279 and #281, both of which are about concordance
 
+  o '\\maxwidth' does not apply to LaTeX/PDF animations, so the
+  default value of 'out.width' for animations in LaTeX is still NULL;
+  you will have to set 'out.width' manually for a reasonable width
+  (#282) (thanks, Ramnath Vaidyanathan)
+
 
 			 CHANGES IN knitr VERSION 0.6
 
