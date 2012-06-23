@@ -1,5 +1,12 @@
 			 CHANGES IN knitr VERSION 0.7
 
+NEW FEATURES
+
+  o when opts_knit$get('verbose') is TRUE, logs (messages, warnings
+  and errors) along with the corresponding R code will be printed
+  after knit() is done; this might help users figure out possible
+  problems in R code quickly (#276)
+
 BUG FIXES
 
   o fixed #286: messages (including warnings and errors) are
