@@ -431,3 +431,6 @@ line_count = function(x) str_count(x, fixed('\n')) + 1L
 
 # faster than require() but less rigorous
 has_package = function(pkg) pkg %in% .packages(TRUE)
+
+# if LHS is NULL, return the RHS
+`%n%` = function(x, y) if (is.null(x)) y else x
