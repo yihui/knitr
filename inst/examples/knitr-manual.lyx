@@ -842,7 +842,8 @@ key "R-highlight"
 
 \end_inset
 
- is used by default to highlight R code, and 
+ will be used to highlight R code if it is installed (otherwise an internal
+ naive syntax highlighter is used), and 
 \series bold
 formatR
 \series default
