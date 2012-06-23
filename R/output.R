@@ -186,7 +186,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   progress = opts_knit$get('progress')
   if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
-  cat(res, file = if (is.null(output)) '' else output)
+  cat(res, file = output %n% '')
   dep_list$restore()  # empty dependency list
 
   if (in.file && is.character(output) && file.exists(output)) {
@@ -199,7 +199,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
   }
 
-  if (is.null(output)) res else output
+  output %n% res
 }
 #' @rdname knit
 #' @param ... arguments passed to \code{\link{knit}}
@@ -230,7 +230,7 @@ process_file = function(text, output) {
     txt = try((if (tangle) process_tangle else process_group)(group), silent = TRUE)
     if (inherits(txt, 'try-error')) {
       print(group)
-      cat(res, sep = '\n', file = if (is.null(output)) '' else output)
+      cat(res, sep = '\n', file = output %n% '')
       stop(sprintf('Quitting from lines %s: (%s) %s',
                    str_c(current_lines(i), collapse = '-'),
                    paste('', knit_concord$get('infile'), sep = ''), txt))

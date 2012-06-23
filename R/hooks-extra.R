@@ -85,8 +85,7 @@ hook_pdfcrop = function(before, options, envir) {
 hook_plot_custom = function(before, options, envir){
   if(before) return() # run hook after the chunk
 
-  ext = options$fig.ext
-  if(is.null(ext)) ext = dev2ext(options$dev)
+  ext = options$fig.ext %n% dev2ext(options$dev)
   name = fig_path()
   fmt = opts_knit$get('out.format')
   if (fmt %in% c('sweave', 'listings')) fmt = 'latex'

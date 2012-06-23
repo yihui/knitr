@@ -5,8 +5,7 @@
 hook_plot_rst = function(x, options) {
   if (options$fig.show == "animate") return(.ani.plot.hook.html(x, options))
 
-  base = opts_knit$get("base.url")
-  if (is.null(base)) base = ""
+  base = opts_knit$get("base.url") %n% ""
   cap = if (is.null(fig.cap <- options$fig.cap)) {
     sprintf("plot of chunk %s", options$label)
   } else {

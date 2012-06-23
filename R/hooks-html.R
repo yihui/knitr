@@ -36,8 +36,7 @@ hook_plot_html = function(x, options) {
 .ani.plot.hook.html = function(x, options) {
   # pull out all the relevant plot options
   fig.num = options$fig.num
-  fig.cur = options$fig.cur
-  if(is.null(fig.cur)) fig.cur = 0
+  fig.cur = options$fig.cur %n% 0L
   
   # Don't print out intermediate plots if we're animating
   if(fig.cur < fig.num) return('')

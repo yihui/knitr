@@ -41,15 +41,14 @@ hook_plot_tex = function(x, options) {
   rw = options$resize.width; rh = options$resize.height
   resize1 = resize2 = ''
   if (!is.null(rw) || !is.null(rh)) {
-    resize1 = sprintf('\\resizebox{%s}{%s}{', ifelse(is.null(rw), '!', rw),
-                      ifelse(is.null(rh), '!', rh))
+    resize1 = sprintf('\\resizebox{%s}{%s}{', rw %n% '!', rh %n% '!')
     resize2 = '} '
   }
 
   tikz = is_tikz_dev(options)
 
-  a = options$fig.align; fig.cur = options$fig.cur; fig.num = options$fig.num
-  if (is.null(fig.cur)) fig.cur = 0L; if (is.null(fig.num)) fig.num = 1L
+  a = options$fig.align
+  fig.cur = options$fig.cur %n% 0L; fig.num = options$fig.num %n% 1L
   animate = options$fig.show == 'animate'
   if (!tikz && animate && fig.cur < fig.num) return('')
 
