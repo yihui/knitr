@@ -7,6 +7,16 @@ NEW FEATURES
   after knit() is done; this might help users figure out possible
   problems in R code quickly (#276)
 
+  o .Random.seed is cached again for the sake of reproducibility; see
+  http://yihui.name/knitr/demo/cache/ for how to maintain
+  reproducibility when the computation involves with random number
+  generation (#274) (thanks, Renaud)
+
+  o the package option opts_knit$get('cache.extra') can be an
+  unevaluated R expression now, e.g. opts_knit$set(cache.extra =
+  quote(.Random.seed)); see the cache page above for a concrete
+  example
+
 BUG FIXES
 
   o fixed #286: messages (including warnings and errors) are
