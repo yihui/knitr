@@ -417,7 +417,11 @@ indent_block = function(block, spaces = '    ') {
 print_knitlog = function() {
   if (!opts_knit$get('verbose') || child_mode() || !length(klog <- knit_log$get()))
     return()
-  for (i in unlist(klog, use.names = FALSE)) cat(i, '\n')
+  for (i in unlist(klog, use.names = FALSE)) {
+    cat(i, '\n\n')
+    cat(knit_code$get(sub('^Chunk ([^:]+):\n.*', '\\1', i)), sep = '\n')
+    cat('\n')
+  }
   cat('\nNumber of messages:\n')
   print(sapply(klog, length))
 }

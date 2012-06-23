@@ -188,7 +188,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   res = process_file(text, output)
   cat(res, file = if (is.null(output)) '' else output)
   dep_list$restore()  # empty dependency list
-  print_knitlog()
 
   if (in.file && is.character(output) && file.exists(output)) {
     concord_gen(input2, output)  # concordance file
@@ -246,6 +245,7 @@ process_file = function(text, output) {
   }
 
   if (!tangle) res = insert_header(res)  # insert header
+  print_knitlog()
 
   str_c(c(res, ""), collapse = "\n")
 }
