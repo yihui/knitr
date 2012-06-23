@@ -50,7 +50,7 @@ call_block = function(block) {
 
   ## Check cache
   content = list(params[setdiff(names(params), 'include')], getOption('width'))
-  content[[3L]] = opts_knit$get('cache.extra')
+  content[[3L]] = eval_lang(opts_knit$get('cache.extra'))
   hash = str_c(valid_path(params$cache.path, params$label), '_', digest(content))
   params$hash = hash
   if (params$cache && cache$exists(hash)) {
