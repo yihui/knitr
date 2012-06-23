@@ -56,6 +56,11 @@ BUG FIXES
   you will have to set 'out.width' manually for a reasonable width
   (#282) (thanks, Ramnath Vaidyanathan)
 
+MISC
+
+  o knitr and RStudio had an invited talk at useR! 2012; slides at
+  http://yihui.name/slides/2012-knitr-RStudio.html (source at
+  https://github.com/yihui/knitr-talks)
 
 			 CHANGES IN knitr VERSION 0.6
 
