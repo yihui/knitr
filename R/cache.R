@@ -43,6 +43,7 @@ new_cache = function() {
 
   cache_load = function(hash) {
     path = cache_path(hash)
+    if (!is_abs_path(path)) path = file.path(getwd(), path)
     lazyLoad(path, envir = knit_global())
     # load output from last run if exists
     if (file.exists(path2 <- str_c(path, '.RData'))) {
