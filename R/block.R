@@ -113,7 +113,7 @@ block_exec = function(params) {
     options$fig.ext = dev2ext(options$dev)
   }
 
-  owd = setwd(input_dir())
+  owd = setwd(opts_knit$get('root.dir') %n% input_dir())
   res = evaluate(code, envir = env) # run code
   setwd(owd)
 
