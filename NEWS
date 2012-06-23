@@ -17,6 +17,13 @@ NEW FEATURES
   quote(.Random.seed)); see the cache page above for a concrete
   example
 
+  o added a new package option 'root.dir' (default NULL) which can be
+  used to set the root directory to evaluate code chunks in a
+  document; by default, the root directory is the directory of the
+  input document, and this option enables users to set other
+  directories as the working directory for code chunks (#277) (thanks,
+  Ken Williams)
+
 BUG FIXES
 
   o fixed #286: messages (including warnings and errors) are
