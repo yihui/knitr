@@ -205,7 +205,7 @@ $('#knitForm').submit(function(event) {
       
   /* get some values from elements on the page: */
   var $form = $( this ),
-      term = $form.find('textarea[name="x"]').val(),
+      term = $form.find('textarea[name="x"]').val().replace(/\\/g, '\\\\').replace(/"/g, '\\"'),
       url = $form.attr('action'),
       rcode = '{library(knitr); library(markdown);' +
               'sub(".*<body>(.*)</body>.*", "\\\\1", ' +
