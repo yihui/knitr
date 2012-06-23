@@ -17,6 +17,11 @@ new_cache = function() {
   cache_save = function(keys, outname, hash) {
     # keys are new variables created; outname is the text output of a chunk
     path = cache_path(hash)
+    # add random seed to cache if exists
+    if (exists('.Random.seed', envir = globalenv())) {
+      copy_env(globalenv(), knit_global(), '.Random.seed')
+      outname = c('.Random.seed', outname)
+    }
     save(list = outname, file = str_c(path, '.RData'), envir = knit_global())
     # random seed is always load()ed
     keys = setdiff(keys, '.Random.seed')
@@ -48,6 +53,8 @@ new_cache = function() {
     # load output from last run if exists
     if (file.exists(path2 <- str_c(path, '.RData'))) {
       load(path2, envir = knit_global())
+      if (exists('.Random.seed', envir = knit_global()))
+        copy_env(knit_global(), globalenv(), '.Random.seed')
     }
   }
 
