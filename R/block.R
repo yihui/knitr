@@ -99,8 +99,7 @@ block_exec = function(params) {
   }
   ## no eval chunks
   if (!options$eval) {
-    output = knit_hooks$get('chunk')(wrap.source(list(src = str_c(code, collapse = '\n')),
-                                                 options), options)
+    output = knit_hooks$get('chunk')(wrap.source(list(src = code), options), options)
     if (options$cache) block_cache(options, output, character(0))
     return(if (options$include) output else '')
   }
