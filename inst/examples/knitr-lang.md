@@ -47,7 +47,7 @@ END { print i }
 ```
 
 
-## Ruby ##
+## Ruby
 
 ```ruby
 x = 'hello, ruby world!'
