@@ -43,4 +43,14 @@ eng_awk = function(options) {
 
 ## Java
 
-knit_engines$set(python = eng_python, awk = eng_awk, gawk = eng_awk)
+## Ruby
+
+eng_ruby = function(options) {
+  code = str_c(options$code, collapse = '\n')
+  cmd = sprintf('ruby -e %s', shQuote(code))
+  out = system(cmd, intern = TRUE)
+  str_c(wrap_fmt(code, 'ruby'), '\n', wrap_fmt(out))
+}
+
+
+knit_engines$set(python = eng_python, awk = eng_awk, gawk = eng_awk, ruby = eng_ruby)
