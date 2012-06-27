@@ -28,3 +28,11 @@ NF {
 }
 END { print i }
 ```
+
+## Ruby ##
+
+``` {r test-ruby, engine='ruby'}
+x = 'hello, ruby world!'
+p x.split(' ')
+```
+

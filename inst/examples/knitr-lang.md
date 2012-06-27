@@ -46,3 +46,15 @@ END { print i }
 595
 ```
 
+
+## Ruby ##
+
+```ruby
+x = 'hello, ruby world!'
+p x.split(' ')
+```
+```
+["hello,", "ruby", "world!"]
+```
+
+
