@@ -29,7 +29,7 @@ NF {
 END { print i }
 ```
 
-## Ruby ##
+## Ruby
 
 ``` {r test-ruby, engine='ruby'}
 x = 'hello, ruby world!'
