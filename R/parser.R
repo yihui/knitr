@@ -2,7 +2,7 @@
 
 ## split input document into groups containing chunks and other texts
 ## (may contain inline R code)
-split_file = function(path, lines = readLines(path, warn = FALSE), set.preamble = TRUE) {
+split_file = function(lines, set.preamble = TRUE) {
   n = length(lines)
   chunk.begin = knit_patterns$get('chunk.begin')
   chunk.end = knit_patterns$get('chunk.end')
