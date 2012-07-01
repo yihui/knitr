@@ -28,6 +28,10 @@ NEW FEATURES
   document class is specified in the R script so that the LaTeX output
   will be a complete document (#295) (thanks, Christiaan Klijn)
 
+  o added Ruby support in the 'engine' option; see the example
+  https://github.com/yihui/knitr/blob/master/inst/examples/knitr-lang.Rmd
+  (#294) (thanks, Ramnath Vaidyanathan)
+
 BUG FIXES
 
   o fixed #286: messages (including warnings and errors) are
