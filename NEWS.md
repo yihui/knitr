@@ -20,6 +20,8 @@
 
 - fixed #273: when knitting a file under another directory with cache turned on (e.g. `knit('foo/bar.Rnw')`), `lazyLoad()` is unable to load the cache files under a relative path because the working directory has been changed to the directory of the input file during evaluation
 
+- fixed #292: layout() may cause the capture of unwanted plots (thanks, Austen Wallace Head)
+
 ## MINOR CHANGES
 
 - the LaTeX environment `kframe` was updated so that it can be used in other environments such as `center` or `tabular` (#283) (thanks, @muelleki)
