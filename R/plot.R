@@ -130,6 +130,14 @@ load_device = function(name, package, dpi = NULL) {
   } else stop("package '", package, "' not available; please install it first")
 }
 
+
+## filter out plot objects purely for layout (raised by par(), layout())
+rm_blank_plot = function(res) {
+  Filter(function(x) {
+    !is.recordedplot(x) || !all(plot_calls(x) %in% c('par', 'layout', '.External2'))
+  }, res)
+}
+
 ## merge low-level plotting changes
 merge_low_plot = function(x, idx) {
   idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
