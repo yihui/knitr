@@ -139,7 +139,7 @@ rm_blank_plot = function(res) {
 }
 
 ## merge low-level plotting changes
-merge_low_plot = function(x, idx) {
+merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
   idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
   for (i in 1:(n - 1)) {
     p1 = x[[idx[i]]]; p2 = x[[idx[i + 1]]]
