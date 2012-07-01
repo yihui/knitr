@@ -47,6 +47,10 @@ MINOR CHANGES
 
   o for Sweave output, the results will not be put inside the Schunk
   environment when results='asis'
+
+  o stitch() templates use more sensible figure paths by default: the
+  path for figures is 'figure/input-script-name' now, i.e. it will be
+  different for different input R scripts to avoid possible clashes
   
 			 CHANGES IN knitr VERSION 0.6.3
 
