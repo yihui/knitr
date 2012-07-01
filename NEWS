@@ -60,6 +60,10 @@ MINOR CHANGES
   if the user did not set them in the R script (as meta comments #
   title: and # author: ), there will not be titles or authors in the
   output
+
+  o knitr will no longer use scientific notations for integers in
+  inline R code output; sci notation only applies to double-precision
+  numbers (#296) (thanks, @knokknok)
   
 			 CHANGES IN knitr VERSION 0.6.3
 
