@@ -67,7 +67,12 @@ spin = function(hair, knit = TRUE, report = TRUE, format = c('Rmd', 'Rnw', 'Rhtm
   }
 
   outsrc = str_c(file_path_sans_ext(hair), '.', format)
-  cat(unlist(txt), file = outsrc, sep = '\n')
+  txt = unlist(txt)
+  # make it a complete TeX document if document class not specified
+  if (format %in% c('Rnw', 'Rtex') && !str_detect(txt, '^\\s*\\\\documentclass')) {
+    txt = c('\\documentclass{article}', '\\begin{document}', txt, '\\end{document}')
+  }
+  cat(txt, file = outsrc, sep = '\n')
   if (knit) {
     if (report) {
       if (format == 'Rmd') knit2html(outsrc, envir = envir) else
