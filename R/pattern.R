@@ -131,12 +131,16 @@ group_pattern = function(pattern) {
 }
 
 ## automatically detect the chunk patterns
-detect_pattern = function(text) {
+detect_pattern = function(text, ext) {
   for (p in names(all_patterns)) {
     for (i in c('chunk.begin', 'inline.code')) {
       pat = all_patterns[[p]][[i]]
       if (length(pat) && length(grep(pat, text))) return(p)
     }
   }
+  if (missing(ext)) return(NULL)
+  if (ext %in% c('htm', 'rhtm', 'rhtml')) return('html')
+  if (ext %in% c('rmd', 'rmarkdown', 'markdown')) return('md')
+  if (ext == 'rrst') return('rst')
   NULL
 }

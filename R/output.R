@@ -140,17 +140,12 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   on.exit({knit_patterns$restore(); knit_patterns$set(opat)}, add = TRUE)
   if (length(opat) == 0 || all(sapply(opat, is.null))) {
     # use ext if cannot auto detect pattern
-    if (is.null(pattern <- detect_pattern(text)))
-      pattern = if (ext %in% c('htm', 'rhtm', 'rhtml')) 'html' else {
-        if (ext %in% c('rmd', 'rmarkdown', 'markdown')) 'md' else {
-          if (ext == 'rrst') 'rst' else {
-            # nothing to be executed; just return original input
-            if (is.null(output)) return(text) else {
-              cat(text, file = output); return(output)
-            }
-          }
-        }
+    if (is.null(pattern <- detect_pattern(text, ext))) {
+      # nothing to be executed; just return original input
+      if (is.null(output)) return(text) else {
+        cat(text, file = output); return(output)
       }
+    }
     if (!(pattern %in% names(apat)))
       stop("a pattern list cannot be automatically found for the file extension '",
            ext, "' in built-in pattern lists; ",
