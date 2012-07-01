@@ -44,6 +44,9 @@ MINOR CHANGES
 
   o the OpenCPU demo is more robust to double quotes in the text
   (#271); see http://public.opencpu.org/userapps/opencpu/knitr/
+
+  o for Sweave output, the results will not be put inside the Schunk
+  environment when results='asis'
   
 			 CHANGES IN knitr VERSION 0.6.3
 
