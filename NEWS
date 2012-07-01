@@ -51,6 +51,11 @@ MINOR CHANGES
   o stitch() templates use more sensible figure paths by default: the
   path for figures is 'figure/input-script-name' now, i.e. it will be
   different for different input R scripts to avoid possible clashes
+
+  o stitch() templates no longer use default title and author names;
+  if the user did not set them in the R script (as meta comments #
+  title: and # author: ), there will not be titles or authors in the
+  output
   
 			 CHANGES IN knitr VERSION 0.6.3
 
