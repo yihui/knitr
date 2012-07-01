@@ -144,7 +144,7 @@ input_dir = function() {
 
 ## scientific notation in TeX
 format_sci = function(x, format = "latex") {
-  if (!is.numeric(x)) return(x)
+  if (!is.double(x)) return(x)
   scipen = getOption("scipen") + 4L
   if (all(abs(lx <- floor(log(abs(x), 10))) < scipen))
     return(round(x, getOption("digits"))) # no need sci notation
