@@ -24,6 +24,10 @@ NEW FEATURES
   directories as the working directory for code chunks (#277) (thanks,
   Ken Williams)
 
+  o spin() will add \documentclass{article} for Rnw output if no
+  document class is specified in the R script so that the LaTeX output
+  will be a complete document (#295) (thanks, Christiaan Klijn)
+
 BUG FIXES
 
   o fixed #286: messages (including warnings and errors) are

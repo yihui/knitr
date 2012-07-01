@@ -21,6 +21,11 @@
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
 #'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
 #' @return The path of the literate programming document.
+#' @note If the output format is Rnw and no document class is specified in
+#'   roxygen comments, this function will automatically add the \code{article}
+#'   class to the LaTeX document so that it is complete and can be compiled. You
+#'   can always specify the document class and other LaTeX settings in roxygen
+#'   comments manually.
 #' @export
 #' @seealso \code{\link{stitch}} (feed a template with an R script)
 #' @references \url{http://yihui.name/knitr/demo/stitch/}
