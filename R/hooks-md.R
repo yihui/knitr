@@ -2,7 +2,7 @@
 #' @export
 hook_plot_md = function(x, options) {
   if(options$fig.show == 'animate') {
-    .ani.plot.hook.html(x, options)
+    opts_knit$get('animation.fun')(x, options)
   } else {
     base = opts_knit$get('base.url') %n% ''
     cap = if (is.null(fig.cap <- options$fig.cap)) {

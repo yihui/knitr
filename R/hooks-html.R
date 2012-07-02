@@ -3,7 +3,7 @@
 hook_plot_html = function(x, options) {
   ## TODO: output size not implemented for HTML yet
   if(options$fig.show == 'animate') {
-    .ani.plot.hook.html(x, options)
+    opts_knit$get('animation.fun')(x, options)
   } else {
     ## TODO: output size not implemented for HTML yet
     fig.cur = options$fig.cur; fig.num = options$fig.num
@@ -64,6 +64,8 @@ hook_ffmpeg_html = function(x, options) {
   sprintf('<video %s><source src="%s" type="video/mp4" />video of chunk %s</video>',
           opt.str, mov.fname, options$label)
 }
+
+opts_knit$set(animation.fun = hook_ffmpeg_html)
 
 #' @rdname output_hooks
 #' @export
