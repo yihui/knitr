@@ -67,6 +67,11 @@ hook_ffmpeg_html = function(x, options) {
 
 opts_knit$set(animation.fun = hook_ffmpeg_html)
 
+## use SciAnimator to create animations
+hook_scianimator = function(x, options) {
+  # write the div and js code here
+}
+
 #' @rdname output_hooks
 #' @export
 render_html = function() {
