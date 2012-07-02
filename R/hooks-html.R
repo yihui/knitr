@@ -72,6 +72,10 @@ hook_scianimator = function(x, options) {
   # write the div and js code here
 }
 
+hook_r2swf = function(x, options) {
+  # use the R2SWF package to create Flash animations
+}
+
 #' @rdname output_hooks
 #' @export
 render_html = function() {
