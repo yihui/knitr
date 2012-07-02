@@ -49,20 +49,20 @@ hook_ffmpeg_html = function(x, options) {
   # pull out all the relevant plot options
   fig.num = options$fig.num
   fig.cur = options$fig.cur %n% 0L
-  
+
   # Don't print out intermediate plots if we're animating
   if(fig.cur < fig.num) return('')
-  
+
   # set up the ffmpeg run
   ffmpeg.opts = options$aniopts
   fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
   mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), ".mp4")
   if(is.na(ffmpeg.opts)) ffmpeg.opts = NULL
-  
+
   ffmpeg.cmd = paste("ffmpeg", "-y", "-r", 1/options$interval,
                      "-i", fig.fname, mov.fname)
   system(ffmpeg.cmd, ignore.stdout = TRUE)
-  
+
   # figure out the options for the movie itself
   mov.opts = sc_split(options$aniopts)
   opt.str = paste(sprintf('width=%s', options$out.width),
