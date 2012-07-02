@@ -345,7 +345,7 @@ knit_global = function() {
 #'   default to using 'rst2pdf'.
 #' @param stylesheet a character string specifying a custom reST stylesheet
 #'   to use
-#' @author Alex Zvoleff and Yihui Xie
+#' @author Alex Zvoleff
 #' @export
 #' @seealso \code{\link{knit2pdf}}, \code{\link{knit}}
 #' @examples ## compile a reST file using rst2pdf
