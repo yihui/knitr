@@ -1,7 +1,6 @@
 #' @rdname hook_plot
 #' @export
 hook_plot_html = function(x, options) {
-  ## TODO: output size not implemented for HTML yet
   if(options$fig.show == 'animate') {
     opts_knit$get('animation.fun')(x, options)
   } else {
