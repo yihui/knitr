@@ -33,7 +33,11 @@ hook_plot_html = function(x, options) {
     sprintf('<iframe src="%s" class="knitr" width="100%%"></iframe>', name)
   } else x
 }
-.ani.plot.hook.html = function(x, options) {
+
+## use FFmpeg to convert images to a video
+#' @rdname hook_plot
+#' @export
+hook_ffmpeg_html = function(x, options) {
   # pull out all the relevant plot options
   fig.num = options$fig.num
   fig.cur = options$fig.cur %n% 0L
