@@ -34,8 +34,16 @@ hook_plot_html = function(x, options) {
   } else x
 }
 
-## use FFmpeg to convert images to a video
-#' @rdname hook_plot
+#' Hooks to create animations in HTML output
+#'
+#' \code{hook_ffmpeg_html()} uses FFmpeg to convert images to a video;
+#' \code{hook_scianimator()} uses the JavaScript library SciAnimator to create
+#' animations; \code{hook_r2swf()} uses the \pkg{R2SWF} package.
+#'
+#' These hooks are mainly for the package option \code{animation.fun}, e.g. you
+#' can set \code{opts_knit$set(animation.fun = hook_scianimator)}.
+#' @inheritParams hook_plot_tex
+#' @rdname hook_animation
 #' @export
 hook_ffmpeg_html = function(x, options) {
   # pull out all the relevant plot options
