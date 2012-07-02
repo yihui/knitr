@@ -2,16 +2,15 @@
 #' @export
 hook_plot_md = function(x, options) {
   if(options$fig.show == 'animate') {
-    .ani.plot.hook.html(x, options)
-  } else {
-    base = opts_knit$get('base.url') %n% ''
-    cap = if (is.null(fig.cap <- options$fig.cap)) {
-      sprintf('plot of chunk %s', options$label)
-    } else {
-      if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
-    }
-    sprintf('![%s](%s%s) ', cap, base, .upload.url(x))
+    return(opts_knit$get('animation.fun')(x, options))
   }
+  base = opts_knit$get('base.url') %n% ''
+  cap = if (is.null(fig.cap <- options$fig.cap)) {
+    sprintf('plot of chunk %s', options$label)
+  } else {
+    if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
+  }
+  sprintf('![%s](%s%s) ', cap, base, .upload.url(x))
 }
 
 #' @rdname output_hooks

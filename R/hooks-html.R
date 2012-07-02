@@ -1,18 +1,16 @@
 #' @rdname hook_plot
 #' @export
 hook_plot_html = function(x, options) {
-  ## TODO: output size not implemented for HTML yet
   if(options$fig.show == 'animate') {
-    .ani.plot.hook.html(x, options)
-  } else {
-    ## TODO: output size not implemented for HTML yet
-    fig.cur = options$fig.cur; fig.num = options$fig.num
-    ai = options$fig.show == 'asis'
-    plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == 0L || fig.cur == fig.num
-    d1 = if (plot1) sprintf('</div><div class="rimage %s">', options$fig.align) else ''
-    d2 = if (plot2) '</div><div class="rcode">' else ''
-    sprintf('%s<img src="%s" class="plot" />%s\n', d1, .upload.url(x), d2)
+    return(opts_knit$get('animation.fun')(x, options))
   }
+  ## TODO: output size not implemented for HTML yet
+  fig.cur = options$fig.cur; fig.num = options$fig.num
+  ai = options$fig.show == 'asis'
+  plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == 0L || fig.cur == fig.num
+  d1 = if (plot1) sprintf('</div><div class="rimage %s">', options$fig.align) else ''
+  d2 = if (plot2) '</div><div class="rcode">' else ''
+  sprintf('%s<img src="%s" class="plot" />%s\n', d1, .upload.url(x), d2)
 }
 
 ## a wrapper to upload an image and return the URL
@@ -33,24 +31,36 @@ hook_plot_html = function(x, options) {
     sprintf('<iframe src="%s" class="knitr" width="100%%"></iframe>', name)
   } else x
 }
-.ani.plot.hook.html = function(x, options) {
+
+#' Hooks to create animations in HTML output
+#'
+#' \code{hook_ffmpeg_html()} uses FFmpeg to convert images to a video;
+#' \code{hook_scianimator()} uses the JavaScript library SciAnimator to create
+#' animations; \code{hook_r2swf()} uses the \pkg{R2SWF} package.
+#'
+#' These hooks are mainly for the package option \code{animation.fun}, e.g. you
+#' can set \code{opts_knit$set(animation.fun = hook_scianimator)}.
+#' @inheritParams hook_plot_tex
+#' @rdname hook_animation
+#' @export
+hook_ffmpeg_html = function(x, options) {
   # pull out all the relevant plot options
   fig.num = options$fig.num
   fig.cur = options$fig.cur %n% 0L
-  
+
   # Don't print out intermediate plots if we're animating
   if(fig.cur < fig.num) return('')
-  
+
   # set up the ffmpeg run
   ffmpeg.opts = options$aniopts
   fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
   mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), ".mp4")
   if(is.na(ffmpeg.opts)) ffmpeg.opts = NULL
-  
+
   ffmpeg.cmd = paste("ffmpeg", "-y", "-r", 1/options$interval,
                      "-i", fig.fname, mov.fname)
   system(ffmpeg.cmd, ignore.stdout = TRUE)
-  
+
   # figure out the options for the movie itself
   mov.opts = sc_split(options$aniopts)
   opt.str = paste(sprintf('width=%s', options$out.width),
@@ -59,6 +69,17 @@ hook_plot_html = function(x, options) {
                   if('loop' %in% mov.opts) 'loop="loop"')
   sprintf('<video %s><source src="%s" type="video/mp4" />video of chunk %s</video>',
           opt.str, mov.fname, options$label)
+}
+
+opts_knit$set(animation.fun = hook_ffmpeg_html)
+
+## use SciAnimator to create animations
+hook_scianimator = function(x, options) {
+  # write the div and js code here
+}
+
+hook_r2swf = function(x, options) {
+  # use the R2SWF package to create Flash animations
 }
 
 #' @rdname output_hooks

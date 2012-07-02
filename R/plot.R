@@ -130,14 +130,30 @@ load_device = function(name, package, dpi = NULL) {
   } else stop("package '", package, "' not available; please install it first")
 }
 
+
+## filter out plot objects purely for layout (raised by par(), layout())
+rm_blank_plot = function(res) {
+  Filter(function(x) {
+    !is.recordedplot(x) || !all(plot_calls(x) %in% c('par', 'layout', '.External2'))
+  }, res)
+}
+
 ## merge low-level plotting changes
-merge_low_plot = function(x, idx) {
+merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
   idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
+  i1 = idx[1]; i2 = idx[2]  # compare plots sequentially
   for (i in 1:(n - 1)) {
-    p1 = x[[idx[i]]]; p2 = x[[idx[i + 1]]]
+    p1 = x[[i1]]; p2 = x[[i2]]
     if (is_low_change(p1, p2)) {
-      m = c(m, if (is_par_change(p1, p2)) idx[i + 1] else idx[i])
-    }
+      # if the next plot only differs with the previous plot by par() changes, 
+      # remove the next plot and keep the previous fixed, otherwise remove the
+      # previous and move its index to the next plot
+      if (is_par_change(p1, p2)) r = i2 else {
+        r = i1; i1 = idx[i + 1]
+      }
+      m = c(m, r)
+    } else i1 = idx[i + 1]
+    i2 = idx[i + 2]
   }
   if (is.null(m)) x else x[-m]
 }
