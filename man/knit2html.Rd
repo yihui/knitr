@@ -20,8 +20,8 @@ knit2html(input, ..., envir = parent.frame())
 }
 \examples{
 # a minimal example
-writeLines(c("# hello markdown", "``` {r hello-random, echo=TRUE}", "rnorm(5)", 
-    "```"), "test.Rmd")
+writeLines(c("# hello markdown", "``` {r hello-random, echo=TRUE}", "rnorm(5)", "```"), 
+    "test.Rmd")
 knit2html("test.Rmd")
 if (interactive()) browseURL("test.html")
 }

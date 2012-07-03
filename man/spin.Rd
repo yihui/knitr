@@ -2,8 +2,8 @@
 \alias{spin}
 \title{Spin goat's hair into wool}
 \usage{
-spin(hair, knit = TRUE, report = TRUE, format = c("Rmd", "Rnw", "Rhtml", 
-    "Rtex", "Rrst"), doc = "^#+'[ ]?", envir = parent.frame())
+spin(hair, knit = TRUE, report = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", 
+    "Rrst"), doc = "^#+'[ ]?", envir = parent.frame())
 }
 \arguments{
   \item{hair}{the path to the R script}
