@@ -26,7 +26,7 @@ insert_header_latex = function(doc, b) {
     i = i[1L]; l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])
     str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, make_header_latex())
-  } else if (length(i) == 0L && parent_mode()) {
+  } else if (parent_mode()) {
     # in parent mode, we fill doc to be a complete document
     doc = str_c(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
                 .knitEnv$tikzPackages, "\\begin{document}", doc, "\\end{document}"),
