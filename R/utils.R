@@ -350,16 +350,10 @@ knit_global = function() {
 #' @seealso \code{\link{knit2pdf}}, \code{\link{knit}}
 #' @examples ## compile a reST file using rst2pdf
 #'
-#' ## knit2pdf(...)
-rst2pdf = function(input, output = NULL, rst2pdfpath = NULL, stylesheet = NULL, envir = parent.frame()){
-  if (is.null(rst2pdfpath)) {
-    val = Sys.getenv('RST2PDF')
-    if (!val=="") rst2pdfpath = val
-    else rst2pdfpath = "rst2pdf"
-  }
+#' ## rst2pdf(...)
+rst2pdf = function(input, rst2pdfpath = "rst2pdf", options = NULL) {
   rst2pdf_args = input
-  if (!is.null(output)) rst2pdf_args = paste(rst2pdf_args, output)
-  if (!is.null(stylesheet)) rst2pdf_args = paste(rst2pdf_args, "-s", stylesheet)
+  if (!is.null(options)) rst2pdf_args = paste(rst2pdf_args, options)
   system2(rst2pdfpath, rst2pdf_args)
 }
 
