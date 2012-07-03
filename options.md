@@ -137,6 +137,7 @@ opts_knit$set(progress = TRUE, verbose = TRUE)
 
 All package options are:
 
+- `animation.fun`: (`hook_ffmpeg_html`) a hook function to create animations in HTML output; the default hook uses FFmpeg to convert images to an MP4 video
 - `aliases`: (`NULL`) a named character vector to specify the aliases of chunk options, e.g. `c(h = 'fig.height', w = 'fig.width')` tells **knitr** that the chunk option `h` really means `fig.height`, and `w` is an alias for `fig.width`; this option can be used to save some typing efforts for long option names
 - `base.dir`: (`NULL`) an absolute directory under which the plots are generated
 - `base.url`: (`NULL`) the base url for HTML pages
