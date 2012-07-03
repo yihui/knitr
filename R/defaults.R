@@ -45,7 +45,7 @@ opts_chunk = new_defaults(
        fig.path = 'figure/', fig.ext = NULL, dev = 'pdf', dpi = 72,
        dev.args = NULL, fig.width = 7, fig.height = 7,
        fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:', fig.pos = '',
-       out.width = NULL, out.height = NULL,
+       out.width = NULL, out.height = NULL, out.extra = NULL,
        resize.width = NULL, resize.height = NULL,
        external = TRUE, sanitize = FALSE,
        highlight = TRUE, size = 'normalsize',

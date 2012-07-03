@@ -84,7 +84,8 @@ hook_plot_tex = function(x, options) {
   # maxwidth does not work with animations
   if (animate && identical(options$out.width, '\\maxwidth')) options$out.width = NULL
   size = paste(c(sprintf('width=%s', options$out.width),
-                 sprintf('height=%s', options$out.height)), collapse = ',')
+                 sprintf('height=%s', options$out.height),
+                 options$out.extra), collapse = ',')
 
   paste(fig1, align1, resize1,
 
