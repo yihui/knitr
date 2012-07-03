@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- added a new chunk option `out.extra` to write extra graphics output options, e.g. `<<out.extra='angle=90'>>=` to rotate the figure by 90 degrees; see http://yihui.name/knitr/options (#301) (thanks, @knokknok)
+
 - when `opts_knit$get('verbose')` is TRUE, logs (messages, warnings and errors) along with the corresponding R code will be printed after `knit()` is done; this might help users figure out possible problems in R code quickly (#276)
 
 - `.Random.seed` is cached again for the sake of reproducibility; see http://yihui.name/knitr/demo/cache/ for how to maintain reproducibility when the computation involves with random number generation (#274) (thanks, Renaud)
