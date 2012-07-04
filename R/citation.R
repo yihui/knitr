@@ -74,6 +74,7 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
   maps = c(author = '  author = {Ray Brownrigg},'),
   Rcmdr = c(author = '  author = {John Fox},'),
   RGtk2 = c(author = '  author = {Michael Lawrence and Duncan {Temple Lang}},'),
+  roxygen2 = c(year = sprintf('  year = {%s},', format(Sys.Date(), '%Y'))),
   rpart = c(author = '  author = {Terry M Therneau and Beth Atkinson},'),
   sm = c(author = '  author = {Adrian Bowman and Adelchi Azzalini},'),
   survival = c(author = '  author = {Terry Therneau},'),
