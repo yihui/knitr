@@ -10,7 +10,8 @@ Authors@R: c(person("Hadley", "Wickham", email = "hadley@rice.edu", role =
     person("Jonathan", "Keane", role = "ctb"), person("Joe", "Cheng", role =
     "ctb"), person("Jeff", "Arnold", role = "ctb"), person("Kohske",
     "Takahashi", role = "ctb"), person("Taiyun", "Wei", role = "ctb"),
-    person("Yihui", "Xie", email = "xie@yihui.name", role = c("aut", "cre")))
+    person("Alex", "Zvoleff", role = "ctb"), person("Yihui", "Xie", email =
+    "xie@yihui.name", role = c("aut", "cre")))
 Author: Yihui Xie
 Maintainer: Yihui Xie <xie@yihui.name>
 Description: This package provides a general-purpose tool for dynamic report
