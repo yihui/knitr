@@ -351,10 +351,8 @@ knit_global = function() {
 #' @examples ## compile a reST file using rst2pdf
 #'
 #' ## rst2pdf(...)
-rst2pdf = function(input, rst2pdfpath = "rst2pdf", options = NULL) {
-  rst2pdf_args = input
-  if (!is.null(options)) rst2pdf_args = paste(rst2pdf_args, options)
-  system2(rst2pdfpath, rst2pdf_args)
+rst2pdf = function(input, rst2pdfpath = "rst2pdf", options = "") {
+  system2(rst2pdfpath, paste(input, options))
 }
 
 #' Convert Rnw or Rrst file to PDF using knit() and texi2pdf() or rst2pdf()
