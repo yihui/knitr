@@ -348,6 +348,7 @@ knit_global = function() {
 #' @author Alex Zvoleff
 #' @export
 #' @seealso \code{\link{knit2pdf}}
+#' @references \url{http://rst2pdf.ralsina.com.ar/}
 rst2pdf = function(input, command = "rst2pdf", options = "") {
   system2(command, paste(input, options))
 }
