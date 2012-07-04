@@ -37,9 +37,9 @@ render_markdown = function(strict = FALSE) {
                                               .inline.hook(format_sci(x, 'html'))),
                  plot = hook_plot_md,
                  chunk = function(x, options) {
-                   x = gsub('```[\n]+```', '```\n\n```', x)
-                   x = gsub('```[\n]+$', '```\n\n', x)
-                   gsub('^[\n]+```', '\n\n```', x)
+                   x = gsub('[\n]{2,}(```|    )', '\n\n\\1', x)
+                   x = gsub('[\n]+$', '', x)
+                   gsub('^[\n]+', '\n', x)
                  })
 }
 #' @rdname output_hooks
