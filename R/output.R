@@ -113,6 +113,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     .knitEnv$knit_global = envir  # the envir to eval code
     opts_knit$set(output.dir = getwd()) # record working directory in 1st run
     knit_log$restore()
+    on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
   }
 
   ext = 'unknown'
@@ -173,7 +174,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     on.exit(knit_hooks$restore(), add = TRUE)
   }
 
-  on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
   ## turn off fancy quotes, use smaller digits/width, warn immediately
   oopts = options(useFancyQuotes = FALSE, digits = 4L, width = 75L, warn = 1L,
                   device = function(file = NULL, width = 7, height = 7, ...) {
