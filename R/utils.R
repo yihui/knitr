@@ -347,7 +347,7 @@ knit_global = function() {
 #'   to use
 #' @author Alex Zvoleff
 #' @export
-#' @seealso \code{\link{knit2pdf}}, \code{\link{knit}}
+#' @seealso \code{\link{knit2pdf}}
 #' @examples ## compile a reST file using rst2pdf
 #'
 #' ## rst2pdf(...)
