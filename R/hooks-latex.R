@@ -183,12 +183,12 @@ render_latex = function() {
   }
   knit_hooks$restore()
   knit_hooks$set(source = function(x, options) {
-    if (options$highlight) {
-      if (!has_package('highlight')) return(x)
-      ## gsub() makes sure " will not produce an umlaut
-      str_c('\\begin{flushleft}\n', gsub('"', '"{}', x, fixed = TRUE),
-            '\\end{flushleft}\n')
-    } else .verb.hook(x, options)
+    if (options$engine != 'R' || !options$highlight)
+      return(.verb.hook(x, options))
+    if (!has_package('highlight')) return(x)
+    ## gsub() makes sure " will not produce an umlaut
+    str_c('\\begin{flushleft}\n', gsub('"', '"{}', x, fixed = TRUE),
+          '\\end{flushleft}\n')
   }, output = function(x, options) {
     if (output_asis(x, options)) {
       str_c('\\end{kframe}\n', x, '\n\\begin{kframe}')

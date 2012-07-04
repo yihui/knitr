@@ -29,7 +29,7 @@ render_rst = function(strict = FALSE) {
     str_c("\n\n::\n\n", indent_block(x), "\n")
   }
   hook.t = function(x, options) {
-    make_directive('sourcecode', "r", "", content = x)
+    make_directive('sourcecode', tolower(options$engine), "", content = x)
   }
   hook.o = function(x, options) {
     if (output_asis(x, options)) return(x)

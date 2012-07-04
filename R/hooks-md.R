@@ -29,7 +29,7 @@ render_markdown = function(strict = FALSE) {
       str_c('\n\n', indent_block(x), '\n')
     } else str_c('\n\n```\n', x, '```\n\n')
   }
-  hook.r = function(x, options) str_c('\n\n```r\n', x, '```\n\n')
+  hook.r = function(x, options) str_c('\n\n```', tolower(options$engine), '\n', x, '```\n\n')
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
   knit_hooks$set(source = if (strict) hook.t else hook.r, output = hook.o,
                  warning = hook.t, error = hook.t, message = hook.t,
@@ -46,7 +46,9 @@ render_markdown = function(strict = FALSE) {
 #' @export
 render_jekyll = function() {
   render_markdown()
-  hook.r = function(x, options) str_c('\n\n{% highlight r %}\n', x, '{% endhighlight %}\n\n')
+  hook.r = function(x, options) {
+    str_c('\n\n{% highlight ', tolower(options$engine), ' %}\n', x, '{% endhighlight %}\n\n')
+  }
   hook.t = function(x, options) str_c('\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n')
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
   knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,

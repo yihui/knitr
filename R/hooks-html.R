@@ -90,7 +90,9 @@ render_html = function() {
   ## use div with different classes
   html.hook = function(name) {
     force(name)
-    function (x, options) sprintf('<div class="%s"><pre class="knitr">%s</pre></div>', name, x)
+    function (x, options) {
+      sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>', name, options$engine, x)
+    }
   }
   h = opts_knit$get('header')
   if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
