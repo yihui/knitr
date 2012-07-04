@@ -1,5 +1,7 @@
 # Test of other languages in knitr
 
+## Languages
+
 R works, of course.
 
 ``` {r test-r, engine='R'}
@@ -9,7 +11,7 @@ rnorm(5)
 
 Can **knitr** deal with other languages? You should have them installed.
 
-## Python
+### Python
 
 ``` {r test-python, engine='python'}
 x = 'hello, python world!'
@@ -17,7 +19,7 @@ print x
 print x.split(' ')
 ```
 
-## Awk
+### Awk
 
 We need to pass a `file` option to Awk.
 
@@ -29,10 +31,45 @@ NF {
 END { print i }
 ```
 
-## Ruby
+### Ruby
 
 ``` {r test-ruby, engine='ruby'}
 x = 'hello, ruby world!'
 p x.split(' ')
 ```
 
+## Chunk Options
+
+You can use some chunk options like `eval`, `echo` and `results`. For example, `eval=FALSE` (do not evaluate code):
+
+```{r test-eval, engine='python', eval=FALSE, ref.label='test-python'}
+```
+
+or `echo=FALSE` (hide source code):
+
+```{r test-echo, engine='python', echo=FALSE, ref.label='test-python'}
+```
+
+or `results='hide'`:
+
+```{r test-hide, engine='python', results='hide', ref.label='test-python'}
+```
+
+or `results='asis'`:
+
+```{r test-asis, engine='python', results='asis'}
+print '**Write** _something_ in `Markdown` from `Python`!'
+```
+
+## Strict Markdown
+
+You can use strict markdown (i.e. indent by 4 spaces) by setting `render_markdown(TRUE)`.
+
+```{r strict-markdown}
+render_markdown(TRUE)
+```
+
+Now see how the output is changed:
+
+```{r test-py-again, ref.label='test-python', engine='python'}
+```
