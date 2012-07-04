@@ -379,13 +379,10 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.f
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (!is.null(compiler)) {
     if (compiler == "rst2pdf") {
-      # If compiler is rst2pdf, and the input is an Rrst file, compile the file 
-      # to PDF without using LaTeX.
-      if (tolower(file_ext(input)) != "rrst") stop("for rst2pdf compiler input must be a .Rrst file")
-      rst2pdf(basename(out), ...)
-    }
-    else {
-      # Otherwise use the specified PDFLATEX command
+      if (tolower(file_ext(out)) != "rst") stop("for rst2pdf compiler input must be a .rst file")
+      return(rst2pdf(basename(out), ...))
+    } else {
+      # use the specified PDFLATEX command
       oc = Sys.getenv('PDFLATEX')
       on.exit(Sys.setenv(PDFLATEX = oc), add = TRUE)
       Sys.setenv(PDFLATEX = compiler)
