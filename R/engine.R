@@ -21,6 +21,8 @@ knit_engines = new_defaults()
 engine_output = function(code, out, options) {
   if (length(code) != 1L) code = str_c(code, collapse = '\n')
   if (length(out) != 1L) out = str_c(out, collapse = '\n')
+  code = str_replace(code, '([^\n]+)$', '\\1\n')
+  out = str_replace(out, '([^\n]+)$', '\\1\n')
   txt = paste(c(
     if (options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) knit_hooks$get('output')(out, options)
