@@ -350,28 +350,30 @@ rst2pdf = function(input, command = "rst2pdf", options = "") {
   system2(command, paste(input, options))
 }
 
-#' Convert Rnw or Rrst file to PDF using knit() and texi2pdf() or rst2pdf()
+#' Convert Rnw or Rrst files to PDF using knit() and texi2pdf() or rst2pdf()
 #'
-#' Knit the input Rnw or Rrst document to a tex document, and compile it using
-#' \code{texi2pdf} or \code{rst2pdf}.
+#' Knit the input Rnw or Rrst document, and compile to PDF using \code{texi2pdf}
+#' or \code{rst2pdf}.
 #' @inheritParams knit
 #' @param compiler a character string which gives the LaTeX program used to
 #'   compile the tex document to PDF (by default it uses the default setting of
 #'   \code{\link[tools]{texi2pdf}}, which is often PDFLaTeX); this argument will
 #'   be used to temporarily set the environmental variable \samp{PDFLATEX}. For
-#'   an Rrst file, setting compiler to rst2pdf will use \code{\link{rst2pdf}}
-#'   to compiles the Rrst file to PDF using the ReportLab open-source library.
-#'   This option allows compiling Rrst to PDF without a LaTeX installation.
-#' @param ... options to be passed to \code{\link[tools]{texi2pdf}} or \code{\link{rst2pdf}}
-#' @author Ramnath Vaidyanathan and Yihui Xie
+#'   an Rrst file, setting compiler to \code{'rst2pdf'} will use
+#'   \code{\link{rst2pdf}} to compiles the rst file to PDF using the ReportLab
+#'   open-source library.
+#' @param ... options to be passed to \code{\link[tools]{texi2pdf}} or
+#'   \code{\link{rst2pdf}}
+#' @author Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
 #' @export
 #' @importFrom tools texi2pdf
-#' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}}, \code{\link{rst2pdf}}
+#' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}},
+#'   \code{\link{rst2pdf}}
 #' @examples ## compile with xelatex
 #'
 #' ## knit2pdf(..., compiler = 'xelatex')
-#' 
-#' ## compile a reST file with rst2pdf (using ReportLab open-source library)
+#'
+#' ## compile a reST file with rst2pdf
 #'
 #' ## knit2pdf(..., compiler = 'rst2pdf')
 knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.frame()) {
