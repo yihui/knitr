@@ -10,7 +10,17 @@ hook_plot_md = function(x, options) {
   } else {
     if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
   }
-  sprintf('![%s](%s%s) ', cap, base, .upload.url(x))
+  if(is.null(options$out.width)&is.null(options$out.height))
+	sprintf('![%s](%s%s) ', cap, base, .upload.url(x))
+  else if(is.null(options$out.height))		
+	sprintf('<img src=\'%s%s\', width=%s, alt=%s />', base, .upload.url(x),
+	        options$out.width,  cap)
+  else if(is.null(options$out.width))
+	sprintf('<img src=\'%s%s\', height=%s, alt=%s />', base, .upload.url(x),
+	        options$out.height, cap)  
+  else
+	sprintf('<img src=\'%s%s\', width=%s, height=%s, alt=%s />', base, 
+	        .upload.url(x), options$out.width, options$out.height, cap)  
 }
 
 #' @rdname output_hooks
