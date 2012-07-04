@@ -348,9 +348,6 @@ knit_global = function() {
 #' @author Alex Zvoleff
 #' @export
 #' @seealso \code{\link{knit2pdf}}
-#' @examples ## compile a reST file using rst2pdf
-#'
-#' ## rst2pdf(...)
 rst2pdf = function(input, command = "rst2pdf", options = "") {
   system2(command, paste(input, options))
 }
