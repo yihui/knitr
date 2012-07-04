@@ -333,32 +333,73 @@ knit_global = function() {
   .knitEnv$knit_global
 }
 
-#' Convert Rnw to PDF using knit() and texi2pdf()
+#' Convert reST to PDF using the ReportLab library through rst2pdf
 #'
-#' Knit the input Rnw document to a tex document, and compile it using
-#' \code{texi2pdf}.
+#' Knit the input Rrst document to a rst file, and compile it using
+#' \code{rst2pdf} (which converts from rst to PDF using the ReportLab
+#' open-source library).
+#' @param rst2pdfpath a character string which gives the path of the rst2pdf 
+#'   program used to compile the reST document to PDF. The script will try
+#'   to use the path specified in the \samp{RST2PDF} environment variable. If
+#'   the \samp{RST2PDF} environment variable is not set, the script with
+#'   default to using 'rst2pdf'.
+#' @param stylesheet a character string specifying a custom reST stylesheet
+#'   to use
+#' @author Alex Zvoleff
+#' @export
+#' @seealso \code{\link{knit2pdf}}, \code{\link{knit}}
+#' @examples ## compile a reST file using rst2pdf
+#'
+#' ## rst2pdf(...)
+rst2pdf = function(input, rst2pdfpath = "rst2pdf", options = "") {
+  system2(rst2pdfpath, paste(input, options))
+}
+
+#' Convert Rnw or Rrst file to PDF using knit() and texi2pdf() or rst2pdf()
+#'
+#' Knit the input Rnw or Rrst document to a tex document, and compile it using
+#' \code{texi2pdf} or \code{rst2pdf}.
 #' @inheritParams knit
 #' @param compiler a character string which gives the LaTeX program used to
 #'   compile the tex document to PDF (by default it uses the default setting of
 #'   \code{\link[tools]{texi2pdf}}, which is often PDFLaTeX); this argument will
-#'   be used to temporarily set the environmental variable \samp{PDFLATEX}
-#' @param ... options to be passed to \code{\link[tools]{texi2pdf}}
+#'   be used to temporarily set the environmental variable \samp{PDFLATEX}. For
+#'   an Rrst file, setting compiler to rst2pdf will use \code{\link{rst2pdf}}
+#'   to compiles the Rrst file to PDF using the ReportLab open-source library.
+#'   This option allows compiling Rrst to PDF without a LaTeX installation.
+#' @param ... options to be passed to \code{\link[tools]{texi2pdf}} or \code{\link{rst2pdf}}
 #' @author Ramnath Vaidyanathan and Yihui Xie
 #' @export
 #' @importFrom tools texi2pdf
-#' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}}
+#' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}}, \code{\link{rst2pdf}}
 #' @examples ## compile with xelatex
 #'
 #' ## knit2pdf(..., compiler = 'xelatex')
+#' 
+#' ## compile a reST file with rst2pdf (using ReportLab open-source library)
+#'
+#' ## knit2pdf(..., compiler = 'rst2pdf')
 knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.frame()){
   out = knit(input, output, envir = envir)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (!is.null(compiler)) {
-    oc = Sys.getenv('PDFLATEX')
-    on.exit(Sys.setenv(PDFLATEX = oc), add = TRUE)
-    Sys.setenv(PDFLATEX = compiler)
+    if (compiler == "rst2pdf") {
+      # If compiler is rst2pdf, and the input is an Rrst file, compile the file 
+      # to PDF without using LaTeX.
+      if (tolower(file_ext(input)) != "rrst") stop("for rst2pdf compiler input must be a .Rrst file")
+      rst2pdf(basename(out), ...)
+    }
+    else {
+      # Otherwise use the specified PDFLATEX command
+      oc = Sys.getenv('PDFLATEX')
+      on.exit(Sys.setenv(PDFLATEX = oc), add = TRUE)
+      Sys.setenv(PDFLATEX = compiler)
+      texi2pdf(basename(out), ...)
+    }
+  } else {
+      # If no compiler is specified, assume PDFLATEX, and use the defaults
+      texi2pdf(basename(out), ...)
   }
-  texi2pdf(basename(out), ...)
 }
 
 #' Convert markdown to HTML using knit() and markdownToHTML()
