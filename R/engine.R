@@ -32,7 +32,7 @@ engine_output = function(code, out, options) {
 eng_python = function(options) {
   code = str_c(options$code, collapse = '\n')
   cmd = sprintf('python -c %s', shQuote(code))
-  out = system(cmd, intern = TRUE)
+  out = if (options$eval) system(cmd, intern = TRUE) else ''
   engine_output(code, out, options)
 }
 
@@ -40,7 +40,7 @@ eng_python = function(options) {
 eng_awk = function(options) {
   code = str_c(options$code, collapse = '\n')
   cmd = paste(options$engine, shQuote(code), shQuote(options$file), options$awk.opts)
-  out = system(cmd, intern = TRUE)
+  out = if (options$eval) system(cmd, intern = TRUE) else ''
   engine_output(code, out, options)
 }
 
@@ -53,7 +53,7 @@ eng_awk = function(options) {
 eng_ruby = function(options) {
   code = str_c(options$code, collapse = '\n')
   cmd = sprintf('ruby -e %s', shQuote(code))
-  out = system(cmd, intern = TRUE)
+  out = if (options$eval) system(cmd, intern = TRUE) else ''
   engine_output(code, out, options)
 }
 
