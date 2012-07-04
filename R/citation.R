@@ -57,8 +57,10 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
   if (tweak) {
     for (i in intersect(names(.tweak.bib), x)) {
       message('tweaking ', i)
-      items = .tweak.bib[[i]]
-      bib[[i]][names(items)] = items
+      b = bib[[i]]; items = .tweak.bib[[i]]
+      b[names(items)] = items
+      idx = which(names(b) == '')
+      bib[[i]] = c(b[idx[1L]], b[-idx], b[idx[2L]])
     }
   }
   bib = bib[sort(x)]
