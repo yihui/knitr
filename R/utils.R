@@ -333,18 +333,15 @@ knit_global = function() {
   .knitEnv$knit_global
 }
 
-#' Convert reST to PDF using the ReportLab library through rst2pdf
+#' A wrapper for rst2pdf
 #'
-#' Knit the input Rrst document to a rst file, and compile it using
-#' \code{rst2pdf} (which converts from rst to PDF using the ReportLab
-#' open-source library).
-#' @param rst2pdfpath a character string which gives the path of the rst2pdf 
-#'   program used to compile the reST document to PDF. The script will try
-#'   to use the path specified in the \samp{RST2PDF} environment variable. If
-#'   the \samp{RST2PDF} environment variable is not set, the script with
-#'   default to using 'rst2pdf'.
-#' @param stylesheet a character string specifying a custom reST stylesheet
-#'   to use
+#' Convert reST to PDF using \command{rst2pdf} (which converts from rst to PDF
+#' using the ReportLab open-source library).
+#' @param input the input rst file
+#' @param command a character string which gives the path of the
+#'   \command{rst2pdf} program (if it is not in PATH, the full path has to be
+#'   given)
+#' @param options extra command line options, e.g. \code{'-o foo.pdf -v'}
 #' @author Alex Zvoleff
 #' @export
 #' @seealso \code{\link{knit2pdf}}
