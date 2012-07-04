@@ -386,12 +386,9 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.f
       oc = Sys.getenv('PDFLATEX')
       on.exit(Sys.setenv(PDFLATEX = oc), add = TRUE)
       Sys.setenv(PDFLATEX = compiler)
-      texi2pdf(basename(out), ...)
     }
-  } else {
-      # If no compiler is specified, assume PDFLATEX, and use the defaults
-      texi2pdf(basename(out), ...)
   }
+  texi2pdf(basename(out), ...)
 }
 
 #' Convert markdown to HTML using knit() and markdownToHTML()
