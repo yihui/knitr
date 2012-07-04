@@ -374,7 +374,7 @@ rst2pdf = function(input, command = "rst2pdf", options = "") {
 #' ## compile a reST file with rst2pdf (using ReportLab open-source library)
 #'
 #' ## knit2pdf(..., compiler = 'rst2pdf')
-knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.frame()){
+knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.frame()) {
   out = knit(input, output, envir = envir)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (!is.null(compiler)) {
