@@ -16,17 +16,16 @@
 #' @examples knit_engines$get('python'); knit_engines$get('awk')
 knit_engines = new_defaults()
 
-wrap_fmt = function(x, lang = '') {
-  fmt = opts_knit$get('out.format')
-  tpl = if (fmt %in% c('latex', 'listings', 'sweave')) {
-    '\\begin{verbatim}\n%s\\end{verbatim}'
-  } else switch(fmt, html = '<pre class="knitr">%s</pre>',
-                markdown = str_c('```', lang, '\n%s\n```'),
-                rst = str_c('::\n\n', indent_block(x), '\n'),
-                jekyll = str_c('{%% highlight ', if (lang == '') 'text' else lang,
-                               ' %%}\n%s\n{%% endhighlight %%}'),
-                '%s')
-  sprintf(tpl, str_c(x, collapse = '\n'))
+# give me source code, text output and I return formatted text using the three
+# hooks: source, output and chunk
+engine_output = function(code, out, options) {
+  if (length(code) != 1L) code = str_c(code, collapse = '\n')
+  if (length(out) != 1L) out = str_c(out, collapse = '\n')
+  txt = paste(c(
+    if (options$echo) knit_hooks$get('source')(code, options),
+    if (options$results != 'hide' && !is_blank(out)) knit_hooks$get('output')(out, options)
+  ), collapse = '\n')
+  if (options$include) knit_hooks$get('chunk')(txt, options) else ''
 }
 
 ## Python
@@ -34,7 +33,7 @@ eng_python = function(options) {
   code = str_c(options$code, collapse = '\n')
   cmd = sprintf('python -c %s', shQuote(code))
   out = system(cmd, intern = TRUE)
-  str_c(wrap_fmt(code, 'python'), '\n', wrap_fmt(out))
+  engine_output(code, out, options)
 }
 
 ## Awk: file is the file to read in; awk.opts are other options to pass to awk
@@ -42,7 +41,7 @@ eng_awk = function(options) {
   code = str_c(options$code, collapse = '\n')
   cmd = paste(options$engine, shQuote(code), shQuote(options$file), options$awk.opts)
   out = system(cmd, intern = TRUE)
-  str_c(wrap_fmt(code, 'awk'), '\n', wrap_fmt(out))
+  engine_output(code, out, options)
 }
 
 ## C
@@ -55,7 +54,7 @@ eng_ruby = function(options) {
   code = str_c(options$code, collapse = '\n')
   cmd = sprintf('ruby -e %s', shQuote(code))
   out = system(cmd, intern = TRUE)
-  str_c(wrap_fmt(code, 'ruby'), '\n', wrap_fmt(out))
+  engine_output(code, out, options)
 }
 
 
