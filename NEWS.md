@@ -49,7 +49,11 @@
 - `stitch()` templates no longer use default title and author names; if the user did not set them in the R script (as meta comments `# title:` and `# author:`), there will not be titles or authors in the output
 
 - **knitr** will no longer use scientific notations for integers in inline R code output; sci notation only applies to double-precision numbers (#296) (thanks, @knokknok)
-  
+
+## DOCUMENTATION
+
+- the example using other languages was updated to show how some chunk options (`eval`, `echo` and `results`) also work for foreign languages: https://github.com/yihui/knitr/blob/master/inst/examples/knitr-lang.Rmd
+
 # CHANGES IN knitr VERSION 0.6.3
 
 ## MAJOR CHANGES
