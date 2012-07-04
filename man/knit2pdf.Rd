@@ -1,6 +1,6 @@
 \name{knit2pdf}
 \alias{knit2pdf}
-\title{Convert Rnw to PDF using knit() and texi2pdf()}
+\title{Convert Rnw or Rrst files to PDF using knit() and texi2pdf() or rst2pdf()}
 \usage{
 knit2pdf(input, output = NULL, compiler = NULL, ..., envir = parent.frame())
 }
@@ -10,10 +10,13 @@ knit2pdf(input, output = NULL, compiler = NULL, ..., envir = parent.frame())
   default it uses the default setting of
   \code{\link[tools]{texi2pdf}}, which is often PDFLaTeX);
   this argument will be used to temporarily set the
-  environmental variable \samp{PDFLATEX}}
+  environmental variable \samp{PDFLATEX}. For an Rrst file,
+  setting compiler to \code{'rst2pdf'} will use
+  \code{\link{rst2pdf}} to compiles the rst file to PDF
+  using the ReportLab open-source library.}
 
   \item{...}{options to be passed to
-  \code{\link[tools]{texi2pdf}}}
+  \code{\link[tools]{texi2pdf}} or \code{\link{rst2pdf}}}
 
   \item{input}{path of the input file}
 
@@ -26,17 +29,22 @@ knit2pdf(input, output = NULL, compiler = NULL, ..., envir = parent.frame())
   guarantee an empty new environment)}
 }
 \description{
-  Knit the input Rnw document to a tex document, and
-  compile it using \code{texi2pdf}.
+  Knit the input Rnw or Rrst document, and compile to PDF
+  using \code{texi2pdf} or \code{rst2pdf}.
 }
 \examples{
 ## compile with xelatex
 
 ## knit2pdf(..., compiler = 'xelatex')
+
+## compile a reST file with rst2pdf
+
+## knit2pdf(..., compiler = 'rst2pdf')
 }
 \author{
-  Ramnath Vaidyanathan and Yihui Xie
+  Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
 }
 \seealso{
-  \code{\link{knit}}, \code{\link[tools]{texi2pdf}}
+  \code{\link{knit}}, \code{\link[tools]{texi2pdf}},
+  \code{\link{rst2pdf}}
 }
