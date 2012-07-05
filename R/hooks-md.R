@@ -16,7 +16,7 @@ hook_plot_md = function(x, options) {
       return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
     }
   # additional styles require the HTML syntax
-  add = paste(sprintf('width="%s"', w), sprintf('height="%s"', h), sprintf('style="%s"', s))
+  add = paste(sprintf('width="%s"', w), sprintf('height="%s"', h), s)
   sprintf('<img src="%s%s" %s alt="%s" title="%s" /> ', base, .upload.url(x), add, cap, cap)
 }
 
