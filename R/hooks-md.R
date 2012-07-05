@@ -10,7 +10,14 @@ hook_plot_md = function(x, options) {
   } else {
     if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
   }
-  sprintf('![%s](%s%s) ', cap, base, .upload.url(x))
+  
+  if(is.null(w <- options$out.width) && is.null(h<- options$out.height) &&
+    is.null(s <- options$out.extra)) {
+      return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
+    }
+  # additional styles require the HTML syntax
+  add = paste(sprintf('width="%s"', w), sprintf('height="%s"', h), sprintf('style="%s"', s))
+  sprintf('<img src="%s%s" %s alt="%s" title="%s" /> ', base, .upload.url(x), add, cap, cap)
 }
 
 #' @rdname output_hooks
