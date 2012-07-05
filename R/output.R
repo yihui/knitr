@@ -114,6 +114,12 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     opts_knit$set(output.dir = getwd()) # record working directory in 1st run
     knit_log$restore()
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
+    ## turn off fancy quotes, use smaller digits/width, warn immediately
+    oopts = options(useFancyQuotes = FALSE, digits = 4L, width = 75L, warn = 1L,
+                  device = function(file = NULL, width = 7, height = 7, ...) {
+                    pdf(file, width, height, ...)
+                  })
+    on.exit(options(oopts), add = TRUE)
   }
 
   ext = 'unknown'
@@ -173,13 +179,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
            markdown = render_markdown(), rst = render_rst())
     on.exit(knit_hooks$restore(), add = TRUE)
   }
-
-  ## turn off fancy quotes, use smaller digits/width, warn immediately
-  oopts = options(useFancyQuotes = FALSE, digits = 4L, width = 75L, warn = 1L,
-                  device = function(file = NULL, width = 7, height = 7, ...) {
-                    pdf(file, width, height, ...)
-                  })
-  on.exit(options(oopts), add = TRUE)
 
   progress = opts_knit$get('progress')
   if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
