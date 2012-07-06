@@ -75,12 +75,57 @@ opts_knit$set(animation.fun = hook_ffmpeg_html)
 
 ## use SciAnimator to create animations
 hook_scianimator = function(x, options) {
+  # pull out all the relevant plot options
+  fig.num <- options$fig.num
+  fig.cur = options$fig.cur %n% 0L
+
+  # Don't print out intermediate plots if we're animating
+  if(fig.cur < fig.num) return('')
+
+  # set up the r2swf run
+  scianimator.opts = options$aniopts
+  fig.fname <- str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
+  fig.name <- sprintf(fig.fname, 1:fig.num)
+  figures <- paste(shQuote(fig.name,  "sh"), collapse = ", ")
+
   # write the div and js code here
+  id = sub(paste("animation", fig.num, '$',sep = ''), '', x[1])
+  sharpid =  paste0("#", id)
+  sprintf("<div class=\"scianimator\"><div id=%s style=\"display: inline-block;\"></div></div>\n<script type=\"text/javascript\">\n(function($) { \n$(document).ready(function() { \n$(\'%s\').scianimator({ \n\'images\': [%s],\n\'delay\': %s,\n\'controls\': [\'first\', \'previous\', \'play\', \'next\', \'last\', \'loop\', \'speed\'], \n}); \n$(\'%s\').scianimator(\'play\'); \n}); \n})(jQuery); \n</script> \n</div>", 
+          id, sharpid, figures, options$interval * 1000, sharpid)
 }
+
+opts_knit$set(animation.fun = hook_scianimator)
+
 
 hook_r2swf = function(x, options) {
   # use the R2SWF package to create Flash animations
+  require(R2SWF)
+  # pull out all the relevant plot options
+  fig.num <- options$fig.num
+  fig.cur = options$fig.cur %n% 0L
+
+  # Don't print out intermediate plots if we're animating
+  if(fig.cur < fig.num) return('')
+
+  # set up the r2swf run
+  r2swf.opts = options$aniopts
+  fig.fname <- str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
+  fig.name <<- sprintf(fig.fname, 1:fig.num)
+  swf.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), ".swf")
+  output <<- paste0('./', swf.fname)
+  if(is.na(r2swf.opts)) r2swf.opts = NULL
+  #setwd("F:/myR"); knitr::knit2html("knitr-test001.Rmd")
+  
+  if(is.null(options$out.width)) options$out.width = options$fig.width * options$dpi
+  #if(is.null(options$out.height)) options$out.height = options$fig.width * options$dpi
+  
+  swfhtml = swf2html(file2swf(files = fig.name, output, interval = options$interval),
+           output = FALSE, fragment =TRUE,  width=options$out.width, height=options$out.height)
+  sprintf(paste('<div align=\"%s\">\n', swfhtml, '\n</div>'), options$fig.align)		   		
 }
+
+opts_knit$set(animation.fun = hook_r2swf)
 
 #' @rdname output_hooks
 #' @export
