@@ -74,6 +74,8 @@ hook_ffmpeg_html = function(x, options) {
 opts_knit$set(animation.fun = hook_ffmpeg_html)
 
 ## use SciAnimator to create animations
+#' @rdname hook_animation
+#' @export
 hook_scianimator = function(x, options) {
   # pull out all the relevant plot options
   fig.num = options$fig.num
@@ -84,50 +86,48 @@ hook_scianimator = function(x, options) {
 
   # set up the r2swf run
   scianimator.opts = options$aniopts
-  fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
-  fig.name = sprintf(fig.fname, 1:fig.num)
+  fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
   base = opts_knit$get('base.url') %n% ''
-  fig.pos = paste(paste0(base, shQuote(fig.name,  "sh")), collapse = ", ")
+  fig.paths = str_c(shQuote(str_c(base, fig.name)), collapse = ", ")
 
 
   # write the div and js code here
-  id = sub(paste("animation", fig.num, '$',sep = ''), '', x[1])
-  sharpid =  paste0("#", id)
+  id = options$label
+  sharpid = str_c("#", id)
   sprintf("<div class=\"scianimator\"><div id=%s style=\"display: inline-block;\"></div></div>\n<script type=\"text/javascript\">\n(function($) { \n$(document).ready(function() { \n$(\'%s\').scianimator({ \n\'images\': [%s],\n\'delay\': %s,\n\'controls\': [\'first\', \'previous\', \'play\', \'next\', \'last\', \'loop\', \'speed\'], \n}); \n$(\'%s\').scianimator(\'play\'); \n}); \n})(jQuery); \n</script> \n</div>", 
-          id, sharpid, fig.pos, options$interval * 1000, sharpid)
+          id, sharpid, fig.paths, options$interval * 1000, sharpid)
 }
 
-opts_knit$set(animation.fun = hook_scianimator)
 
-
+## use the R2SWF package to create Flash animations
+#' @rdname hook_animation
+#' @export
 hook_r2swf = function(x, options) {
-  # use the R2SWF package to create Flash animations
-  require(R2SWF)
+  library(R2SWF)
   # pull out all the relevant plot options
-  fig.num <- options$fig.num
+  fig.num = options$fig.num
   fig.cur = options$fig.cur %n% 0L
 
   # Don't print out intermediate plots if we're animating
   if(fig.cur < fig.num) return('')
 
-  # set up the r2swf run
+  # set up the R2SWF run
   r2swf.opts = options$aniopts
-  fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
-  fig.name = sprintf(fig.fname, 1:fig.num)
-  swf.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), ".swf")
-  output = paste0('./', swf.fname)
+  fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
+  swf.name = fig_path('.swf', options)
   if(is.na(r2swf.opts)) r2swf.opts = NULL
-  #setwd("F:/myR"); knitr::knit2html("knitr-test001.Rmd")
   
-  if(is.null(options$out.width)) options$out.width = options$fig.width * options$dpi
-  #if(is.null(options$out.height)) options$out.height = options$fig.width * options$dpi
+
+  w = options$out.width %n% (options$fig.width * options$dpi)
+  h = options$out.height %n% (options$fig.height * options$dpi)
   
-  swfhtml = swf2html(file2swf(files = fig.name, output, interval = options$interval),
-           output = FALSE, fragment =TRUE,  width=options$out.width, height=options$out.height)
-  sprintf(paste('<div align=\"%s\">\n', swfhtml, '\n</div>'), options$fig.align)		   		
+  
+  swfhtml = swf2html(file2swf(files = fig.name, swf.name, interval = options$interval),
+           output = FALSE, fragment = TRUE,  width = w, height = h)
+  if(options$fig.align == 'default')  sprintf(swfhtml)	 
+  else sprintf(paste('<div align=\"%s\">\n', swfhtml, '\n</div>'), options$fig.align)		   		
 }
 
-opts_knit$set(animation.fun = hook_r2swf)
 
 #' @rdname output_hooks
 #' @export
