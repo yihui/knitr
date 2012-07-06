@@ -11,7 +11,7 @@ hook_plot_md = function(x, options) {
     if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
   }
   
-  if(is.null(w <- options$out.width) && is.null(h<- options$out.height) &&
+  if(is.null(w <- options$out.width) & is.null(h <- options$out.height) &
     is.null(s <- options$out.extra)) {
       return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
     }
