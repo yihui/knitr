@@ -13,10 +13,10 @@ hook_plot_md = function(x, options) {
   
   if(is.null(w <- options$out.width) & is.null(h <- options$out.height) &
     is.null(s <- options$out.extra)) {
-      return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
-    }
+    return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
+  }
   # additional styles require the HTML syntax
-  add = paste(sprintf('width="%s"', w), sprintf('height="%s"', h), sprintf('style="%s"', s))
+  add = paste(sprintf('width="%s"', w), sprintf('height="%s"', h), s)
   sprintf('<img src="%s%s" %s alt="%s" title="%s" /> ', base, .upload.url(x), add, cap, cap)
 }
 
@@ -36,7 +36,7 @@ render_markdown = function(strict = FALSE) {
       str_c('\n\n', indent_block(x), '\n')
     } else str_c('\n\n```\n', x, '```\n\n')
   }
-  hook.r = function(x, options) str_c('\n\n```r\n', x, '```\n\n')
+  hook.r = function(x, options) str_c('\n\n```', tolower(options$engine), '\n', x, '```\n\n')
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
   knit_hooks$set(source = if (strict) hook.t else hook.r, output = hook.o,
                  warning = hook.t, error = hook.t, message = hook.t,
@@ -44,16 +44,18 @@ render_markdown = function(strict = FALSE) {
                                               .inline.hook(format_sci(x, 'html'))),
                  plot = hook_plot_md,
                  chunk = function(x, options) {
-                   x = gsub('```[\n]+```', '```\n\n```', x)
-                   x = gsub('```[\n]+$', '```\n\n', x)
-                   gsub('^[\n]+```', '\n\n```', x)
+                   x = gsub('[\n]{2,}(```|    )', '\n\n\\1', x)
+                   x = gsub('[\n]+$', '', x)
+                   gsub('^[\n]+', '\n', x)
                  })
 }
 #' @rdname output_hooks
 #' @export
 render_jekyll = function() {
   render_markdown()
-  hook.r = function(x, options) str_c('\n\n{% highlight r %}\n', x, '{% endhighlight %}\n\n')
+  hook.r = function(x, options) {
+    str_c('\n\n{% highlight ', tolower(options$engine), ' %}\n', x, '{% endhighlight %}\n\n')
+  }
   hook.t = function(x, options) str_c('\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n')
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
   knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
