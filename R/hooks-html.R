@@ -89,8 +89,7 @@ hook_scianimator = function(x, options) {
   fig.paths = str_c(shQuote(str_c(base, fig.name)), collapse = ", ")
 
   # write the div and js code here
-  id = gsub('[^[:alnum:]]', '_', options$label)
-  sharpid = str_c("#", id)
+  id = str_c('#', gsub('[^[:alnum:]]', '_', options$label))
   sprintf('
 <div class="scianimator"><div id="%s" style="display: inline-block;"></div></div>
 <script type="text/javascript">
