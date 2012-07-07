@@ -54,6 +54,7 @@ Imports:
 Suggests:
     testthat,
     rgl,
+    R2SWF (>= 0.4),	
     tikzDevice (>= 0.6.2),
     codetools,
     markdown (>= 0.4),
