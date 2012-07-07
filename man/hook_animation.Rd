@@ -1,8 +1,14 @@
 \name{hook_ffmpeg_html}
 \alias{hook_ffmpeg_html}
+\alias{hook_r2swf}
+\alias{hook_scianimator}
 \title{Hooks to create animations in HTML output}
 \usage{
 hook_ffmpeg_html(x, options)
+
+hook_scianimator(x, options)
+
+hook_r2swf(x, options)
 }
 \arguments{
   \item{x}{a character vector of length 2 ; \code{x[1]} is
