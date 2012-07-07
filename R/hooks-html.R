@@ -74,12 +74,52 @@ hook_ffmpeg_html = function(x, options) {
 opts_knit$set(animation.fun = hook_ffmpeg_html)
 
 ## use SciAnimator to create animations
+#' @rdname hook_animation
+#' @export
 hook_scianimator = function(x, options) {
+  # pull out all the relevant plot options
+  fig.num = options$fig.num
+  fig.cur = options$fig.cur %n% 0L
+
+  # Don't print out intermediate plots if we're animating
+  if(fig.cur < fig.num) return('')
+
+  fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
+  base = opts_knit$get('base.url') %n% ''
+  fig.paths = str_c(shQuote(str_c(base, fig.name)), collapse = ", ")
+
   # write the div and js code here
+  id = gsub('[^[:alnum:]]', '_', options$label)
+  sharpid = str_c("#", id)
+  sprintf('<div class=\"scianimator\"><div id="%s" style="display: inline-block;"></div></div>\n<script type="text/javascript">\n(function($) { \n$(document).ready(function() { \n$("%s").scianimator({ \n"images": [%s],\n"delay": %s,\n"controls": ["first", "previous", "play", "next", "last", "loop", "speed"], \n}); \n$("%s").scianimator("play"); \n}); \n})(jQuery); \n</script> \n</div>', 
+          id, sharpid, fig.paths, options$interval * 1000, sharpid)
 }
 
+
+## use the R2SWF package to create Flash animations
+#' @rdname hook_animation
+#' @export
 hook_r2swf = function(x, options) {
-  # use the R2SWF package to create Flash animations
+  library(R2SWF)
+  # pull out all the relevant plot options
+  fig.num = options$fig.num
+  fig.cur = options$fig.cur %n% 0L
+
+  # Don't print out intermediate plots if we're animating
+  if(fig.cur < fig.num) return('')
+
+  # set up the R2SWF run
+  fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
+  swf.name = fig_path('.swf', options)
+  if(is.na(r2swf.opts)) r2swf.opts = NULL
+  
+  w = options$out.width %n% (options$fig.width * options$dpi)
+  h = options$out.height %n% (options$fig.height * options$dpi)
+  
+  swfhtml = swf2html(file2swf(files = fig.name, swf.name, interval = options$interval),
+                     output = FALSE, fragment = TRUE,  width = w, height = h)
+  if(options$fig.align == 'default')  return(swfhtml) 
+  sprintf(paste('<div align = "%s">\n', swfhtml, '\n</div>'), options$fig.align))		   		
 }
 
 #' @rdname output_hooks
