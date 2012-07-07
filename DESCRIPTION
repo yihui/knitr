@@ -57,6 +57,7 @@ Suggests:
     tikzDevice (>= 0.6.2),
     codetools,
     markdown (>= 0.4),
+    R2SWF (>= 0.4),
     XML,
     RCurl
 License: GPL
