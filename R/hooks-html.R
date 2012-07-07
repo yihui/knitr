@@ -121,7 +121,9 @@ hook_r2swf = function(x, options) {
   
   swfhtml = swf2html(file2swf(files = fig.name, swf.name, interval = options$interval),
            output = FALSE, fragment = TRUE,  width = w, height = h)
-  ifelse(options$fig.align == 'default',  swfhtml,
+  if(options$fig.align == 'default')  
+    swfhtml
+  else  
     sprintf(paste('<div align = "%s">\n', swfhtml, '\n</div>'), options$fig.align))		   		
 }
 
