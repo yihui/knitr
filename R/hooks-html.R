@@ -91,7 +91,22 @@ hook_scianimator = function(x, options) {
   # write the div and js code here
   id = gsub('[^[:alnum:]]', '_', options$label)
   sharpid = str_c("#", id)
-  sprintf('<div class="scianimator"><div id="%s" style="display: inline-block;"></div></div>\n<script type="text/javascript">\n(function($) { \n$(document).ready(function() { \n$("%s").scianimator({ \n"images": [%s],\n"delay": %s,\n"controls": ["first", "previous", "play", "next", "last", "loop", "speed"], \n}); \n$("%s").scianimator("play"); \n}); \n})(jQuery); \n</script> \n</div>',
+  sprintf('
+<div class="scianimator"><div id="%s" style="display: inline-block;"></div></div>
+<script type="text/javascript">
+  (function($) {
+    $(document).ready(function() {
+      $("%s").scianimator({
+          "images": [%s],
+          "delay": %s,
+          "controls": ["first", "previous", "play", "next", "last", "loop", "speed"],
+      });
+      $("%s").scianimator("play");
+    });
+  })(jQuery);
+</script>
+</div>
+',
           id, sharpid, fig.paths, options$interval * 1000, sharpid)
 }
 
