@@ -105,7 +105,6 @@ hook_scianimator = function(x, options) {
     });
   })(jQuery);
 </script>
-</div>
 ',
           id, sharpid, fig.paths, options$interval * 1000, sharpid)
 }
