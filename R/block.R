@@ -88,14 +88,8 @@ block_exec = function(params) {
   echo = options$echo
   if (!isFALSE(echo) && options$tidy) {
     res = try(tidy.source(text = code, output = FALSE), silent = TRUE)
-    if (!inherits(res, 'try-error')) {
-      code = res$text.tidy
-      enc = Encoding(code)
-      idx = enc != 'unknown'
-      ## convert non-native enc
-      if (any(idx)) code[idx] = iconv(code[idx], enc[idx][1L])
-    } else warning('failed to tidy R code in chunk <', options$label, '>\n',
-                   'reason: ', res)
+    if (!inherits(res, 'try-error')) code = res$text.tidy else
+      warning('failed to tidy R code in chunk <', options$label, '>\n', 'reason: ', res)
   }
   ## no eval chunks
   if (!options$eval) {
