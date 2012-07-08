@@ -89,7 +89,8 @@ hook_scianimator = function(x, options) {
   fig.paths = str_c(shQuote(str_c(base, fig.name)), collapse = ", ")
 
   # write the div and js code here
-  id = str_c('#', gsub('[^[:alnum:]]', '_', options$label))
+  id = gsub('[^[:alnum:]]', '_', options$label)
+  sid = str_c('#', id)
   sprintf('
 <div class="scianimator"><div id="%s" style="display: inline-block;"></div></div>
 <script type="text/javascript">
@@ -105,7 +106,7 @@ hook_scianimator = function(x, options) {
   })(jQuery);
 </script>
 ',
-          id, id, fig.paths, options$interval * 1000, id)
+         id, sid, fig.paths, options$interval * 1000, sid)
 }
 
 
