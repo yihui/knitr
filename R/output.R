@@ -120,6 +120,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
                     pdf(file, width, height, ...)
                   })
     on.exit(options(oopts), add = TRUE)
+    # restore chunk options after parent exits
+    optc = opts_chunk$get()
+    on.exit({opts_chunk$restore(); opts_chunk$set(optc)}, add = TRUE)
   }
 
   ext = 'unknown'
@@ -141,8 +144,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   }
   if (!length(text)) return() # a trivial case: simply and exit
 
-  optc = opts_chunk$get()
-  on.exit({opts_chunk$restore(); opts_chunk$set(optc)}, add = TRUE)
   apat = all_patterns; opat = knit_patterns$get()
   on.exit({knit_patterns$restore(); knit_patterns$set(opat)}, add = TRUE)
   if (length(opat) == 0 || all(sapply(opat, is.null))) {
