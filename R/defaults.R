@@ -97,3 +97,11 @@ opts_knit = new_defaults(
 ## tangle: whether I'm in tangle mode; child: whether I'm in child
 ## document mode; parent: whether I need to add parent preamble to the
 ## child output
+
+#' Template for creating reusable chunk options.
+#' A label can be used to define a set of chunk options, which
+#' can be reused by just referencing the label again in all
+#' chunks that need it.
+#' @export
+#' @examples opts_template$set(list('myfigures' = list(fig.height = 4, fig. width = 4)))
+opts_template = new_defaults(list())
