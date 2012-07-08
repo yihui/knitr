@@ -172,7 +172,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     opts_knit$set(out.format = fmt)
   }
   ## change output hooks only if they are not set beforehand
-  if (identical(knit_hooks$get(names(.default.hooks)), .default.hooks)) {
+  if (identical(knit_hooks$get(names(.default.hooks)), .default.hooks) && !child_mode()) {
     switch(opts_knit$get('out.format'), latex = render_latex(),
            sweave = render_sweave(), listings = render_listings(),
            html = render_html(), jekyll = render_jekyll(),

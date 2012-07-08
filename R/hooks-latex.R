@@ -171,7 +171,6 @@ hook_plot_tex = function(x, options) {
 #' @export
 #' @references See output hooks in \url{http://yihui.name/knitr/hooks}
 render_latex = function() {
-  if (child_mode()) return()
   test_latex_pkg('framed', system.file('misc', 'framed.sty', package = 'knitr'))
   opts_chunk$set(out.width = '\\maxwidth')
   h = opts_knit$get('header')
@@ -203,7 +202,6 @@ render_latex = function() {
 #' @rdname output_hooks
 #' @export
 render_sweave = function() {
-  if (child_mode()) return()
   opts_chunk$set(highlight = FALSE, comment = NA, prompt = TRUE) # mimic Sweave settings
   test_latex_pkg('Sweave', file.path(R.home("share"), "texmf", "tex", "latex", "Sweave.sty"))
   set_header(framed = '', highlight = '\\usepackage{Sweave}')
@@ -223,7 +221,6 @@ render_sweave = function() {
 #' @rdname output_hooks
 #' @export
 render_listings = function() {
-  if (child_mode()) return()
   render_sweave()
   opts_chunk$set(prompt = FALSE)
   test_latex_pkg('Sweavel', system.file('misc', 'Sweavel.sty', package = 'knitr'))
