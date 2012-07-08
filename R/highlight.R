@@ -7,15 +7,15 @@ hi.keywords =  paste('(\\W)(', paste(c(
 
 #  at the moment, only highlight function names, strings and comments
 hi_latex = function(x, fragment = FALSE) {
-  x = gsub('\\', '\\textbackslash{}', x, fixed = TRUE)
+  x = gsub('\\\\', '\\\\textbackslash{}', x)
   x = gsub('([{}])', '\\\\\\1', x)
   # yes I know this is stupid...
-  x = gsub('\\textbackslash\\{\\}', '\\textbackslash{}', x, fixed = TRUE)
-  x = unlist(strsplit(x, '\n', fixed = TRUE))
+  x = gsub('\\\\textbackslash\\\\\\{\\\\\\}', '\\\\textbackslash{}', x)
+  x = unlist(strsplit(x, '\n'))
   # function names
   x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '\\\\hlfunctioncall{\\1}\\2(', x)
   # comments: what if # inside quotes?
-  if (any(idx <- grepl('#', x, fixed = TRUE) & !grepl('"', x, fixed = TRUE)))
+  if (any(idx <- grepl('#', x) & !grepl('"', x)))
     x[idx] = gsub('(#.*)', '\\\\hlcomment{\\1}', x[idx])
   # character strings
   x = gsub('"([^"]*)"', '\\\\hlstring{"\\1"}', x)
@@ -27,16 +27,16 @@ hi_latex = function(x, fragment = FALSE) {
   x
 }
 hi_html = function(x) {
-  x = gsub('&', "&amp;", x, fixed = TRUE)
-  x = gsub('<', '&lt;', x, fixed = TRUE)
-  x = gsub('>', '&gt;', x, fixed = TRUE)
-  x = unlist(strsplit(x, '\n', fixed = TRUE))
+  x = gsub('&', "&amp;", x)
+  x = gsub('<', '&lt;', x)
+  x = gsub('>', '&gt;', x)
+  x = unlist(strsplit(x, '\n'))
   # character strings
   x = gsub('"([^"]*)"', '<span class="string">"\\1"</span>', x)
   x = gsub("'([^']*)'", "<span class=\"string\">'\\1'</span>", x)
   # function names
   x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '<span class="functioncall">\\1</span>\\2(', x)
-  if (any(idx <- grepl('#', x, fixed = TRUE) & !grepl('"', x, fixed = TRUE)))
+  if (any(idx <- grepl('#', x) & !grepl('"', x)))
     x[idx] = gsub('(#.*)', '<span class="comment">\\1</span>', x[idx])
   x = gsub(hi.keywords, '\\1<span class="keyword">\\2</span>\\3', x)
   paste(x, collapse = '\n')
