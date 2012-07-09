@@ -158,6 +158,6 @@ render_html = function() {
     sprintf(if (inherits(x, 'AsIs')) '%s' else '<code class="knitr inline">%s</code>',
             .inline.hook(format_sci(x, 'html')))
   }, output = function(x, options) {
-    if (output_asis(x, options)) x else html.hook('output')(x)
+    if (output_asis(x, options)) x else html.hook('output')(x, options)
   }, plot = hook_plot_html, chunk = .chunk.hook.html)
 }
