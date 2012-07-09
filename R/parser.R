@@ -56,11 +56,6 @@ parse_block = function(input) {
   params = parse_params(params)
   
   label = params$label
-  if (str_detect(label, '[^-_[:alnum:]]')) {
-    label = str_replace_all(label, '[^-_[:alnum:]]', '_')
-    warning('replaced special characters in chunk label "', params$label, '" (', label, ')')
-    params$label = label
-  }
   code = block[-1L]
   if (length(code)) {
     if (label %in% names(knit_code$get())) stop("duplicated label '", label, "'")
