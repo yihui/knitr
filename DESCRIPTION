@@ -92,3 +92,4 @@ Collate:
     'hooks-rst.R'
     'spin.R'
     'highlight.R'
+    'base64.R'
