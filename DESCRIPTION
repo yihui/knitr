@@ -65,7 +65,7 @@ URL: http://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
 Collate:
     'package.R'
-    'upload.R'
+    'utils-upload.R'
     'plot.R'
     'defaults.R'
     'parser.R'
@@ -80,7 +80,7 @@ Collate:
     'highlight-css.R'
     'highlight-renderer.R'
     'header.R'
-    'eclipse.R'
+    'themes-eclipse.R'
     'concordance.R'
     'engine.R'
     'citation.R'
@@ -92,4 +92,4 @@ Collate:
     'hooks-rst.R'
     'spin.R'
     'highlight.R'
-    'base64.R'
+    'utils-base64.R'
