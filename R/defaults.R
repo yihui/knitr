@@ -10,7 +10,7 @@ new_defaults = function(value = list()) {
   set = function(...) {
     dots = list(...)
     if (length(dots) == 0) return()
-    if (length(dots) == 1 && is.list(dots[[1]]))
+    if (is.null(names(dots)) && length(dots) == 1 && is.list(dots[[1]]))
       dots = dots[[1]]
     defaults <<- merge(dots)
     invisible(NULL)
