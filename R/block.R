@@ -17,6 +17,10 @@ call_block = function(block) {
 
   params = opts_chunk$merge(block$params)
   params = fix_options(params)  # for compatibility
+  
+  # expand parameters defined via template
+  if(!is.null(params$opts.label)) params = merge_list(params, opts_template$get(params$opts.label))
+    
   opts_current$restore(); opts_current$set(params)  # save current options
   label = ref.label = params$label
   if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
