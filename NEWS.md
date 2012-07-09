@@ -44,6 +44,10 @@
 
 - `opts_chunk$set()` in a child document was only working in that child document, but was expected to change chunk options globally; now it works everywhere, and will affect all chunks after this setting, no matter where `opts_chunk$set()` is (thanks, Guy Lebanon) (http://bit.ly/MexHXd)
 
+## MAJOR CHANGES
+
+- if the chunk label contains non-alphanumeric characters (except `-` and `_`), they will be replaced by `_` and a warning will be issued; this is to guarantee the figure filenames are valid to LaTeX (#321) (thanks, (Roman Lustrik)
+
 ## MINOR CHANGES
 
 - the LaTeX environment `kframe` was updated so that it can be used in other environments such as `center` or `tabular` (#283) (thanks, @muelleki)
