@@ -1,96 +1,58 @@
-# Do the base64 encoding in C ( provided by other packages ) or in R ( 
-# if there is no such package existed )
-#
-# @param file_name   the file to be base64 encoded
-# @return base64 encoded string
-base64_encode <- function(file_name) {
-	packages.list <- rownames(installed.packages())
-	# check package lists
-	for ( pkg_name in names(base64_encoder.candidate)) {
-		if (sum( packages.list == base64_encoder.candidate[ pkg_name ] )) {
-			break
-		}
-	}
-	base64_encoder.wrapper(pkg_name)(file_name)
+#' Encode an image file to a data URI
+#'
+#' This function takes an image file and uses either the \pkg{markdown} package,
+#' or \pkg{RCurl} or the built-in function to encode it as a base64 string,
+#' which can be used in the \code{img} tag in HTML.
+#' @param f the path to the image file
+#' @return a character string (the data URI)
+#' @author Wush Wu and Yihui Xie
+#' @export
+#' @references \url{http://en.wikipedia.org/wiki/Data_URI_scheme}
+#' @examples uri = image_uri(file.path(R.home('doc'), "html", "logo.jpg"))
+#' cat(sprintf('<img src="%s" />', uri), file = 'logo.html')
+#' browseURL('logo.html') # you can check its HTML source
+image_uri = function(f) {
+  if (has_package('markdown')) return(markdown:::.b64EncodeFile(f))
+  content = readBin(f, what = 'raw', n = file.info(f)$size)
+  uri = if (has_package('RCurl')) {
+    paste(base64Encode(content, 'character'), collapse = '')
+  } else base64_encode(content)
+  str_c("data:", mime_type(f), ";base64,", uri)
 }
 
-# candidates of encoder and related package
-base64_encoder.candidate <- c(
-	markdown = "markdown:::.b64EncodeFile",
-	RCurl = "RCurl::base64Encode",
-	utils = "base64_encoder.R"
-	)
+base64_table = c(LETTERS, letters, 0:9, '+', '/')
 
-# specify the input type of the related package
-attr(base64_encoder.candidate,"type") <- c(
-	markdown = "file",
-	RCurl = "string",
-	utils = "string"
-	)
-
-# wrapper of encoder whose input is string
-base64_encoder.string_wrapper <- function(f) {
-	return(function(file_name) { 
-		fcontent <- readBin(file_name,what="raw",n=file.info(file_name)$size)
-		paste("data:", get_mime_type(file_name), ";base64,",as.character(f(fcontent)),sep="")
-	})	
+# base64 encode a raw string
+base64_encode = function(raw.string) {
+  n = length(s <- as.integer(raw.string))
+  res = rep(NA, (n + 2)/3 * 4)
+  i = 0L  # index of res vector
+  j = 1L  # index of base64_table
+  while (n > 2L) {
+    res[i <- i + 1L] = base64_table[s[j]%/%4L + 1L]
+    res[i <- i + 1L] = base64_table[16 * (s[j]%%4L) + s[j + 1L]%/%16 + 1L]
+    res[i <- i + 1L] = base64_table[4L * (s[j + 1L]%%16) + s[j + 2L]%/%64L + 1L]
+    res[i <- i + 1L] = base64_table[s[j + 2L]%%64L + 1L]
+    j = j + 3L
+    n = n - 3L
+  }
+  if (n) {
+    res[i <- i + 1L] = base64_table[s[j]%/%4L + 1L]
+    if (n > 1L) {
+      res[i <- i + 1L] = base64_table[16 * (s[j]%%4L) + s[j + 1L]%/%16 + 1L]
+      res[i <- i + 1L] = base64_table[4L * (s[j + 1L]%%16) + 1L]
+      res[i <- i + 1L] = "="
+    } else {
+      res[i <- i + 1L] = base64_table[16 * (s[j]%%4L) + 1L]
+      res[i <- i + 1L] = "="
+      res[i <- i + 1L] = "="
+    }
+  }
+  paste(res[!is.na(res)], collapse = "")
 }
 
-# general wrapper for unit test
-base64_encoder.wrapper <- function(pkg_name) {
-	encoder.origin <- eval(parse(text=base64_encoder.candidate[pkg_name]))
-	encoder <- switch( EXPR = attr(base64_encoder.candidate,"type")[pkg_name], 
-		"file" = encoder.origin,
-		"string" = base64_encoder.string_wrapper(encoder.origin)
-		)
-	encoder
-}
-
-# base64 encoder in R
-base64_table <- c(LETTERS, letters, 0:9, '+', '/')
-
-base64_encoder.R <- function( raw_string ) {
-	n <- length(raw_string)
-	int_string <- as.integer(raw_string)
-	retval <- rep(NA, (n + 2) / 3 * 4)
-	index <- 0
-	input_index <- 1
-	while(n > 2) {
-		retval[index <- index + 1] <- base64_table[int_string[ input_index ] %/% 4 + 1]
-		retval[index <- index + 1] <- base64_table[ 16 * (int_string[ input_index ] %% 4) + int_string[ input_index + 1 ] %/% 16 + 1]
-		retval[index <- index + 1] <- base64_table[ 4 * (int_string[ input_index + 1 ] %% 16) + int_string[ input_index + 2 ] %/% 64 + 1]
-		retval[index <- index + 1] <- base64_table[int_string[ input_index + 2 ] %% 64 + 1]
-		input_index <- input_index + 3
-		n <- n - 3
-	}
-	if(n) {
-		retval[index <- index + 1] <- base64_table[int_string[ input_index ] %/% 4 + 1]
-		if (n > 1) {
-			retval[index <- index + 1] <- base64_table[16 * (int_string[ input_index ] %% 4) + int_string[ input_index + 1] %/% 16 + 1]
-			retval[index <- index + 1] <- base64_table[ 4 * (int_string[ input_index + 1 ] %% 16) + 1]
-			retval[index <- index + 1] <- "="
-		} else {
-			retval[index <- index + 1] <- base64_table[16 * (int_string[ input_index ] %% 4) + 1]
-			retval[index <- index + 1] <- "="
-			retval[index <- index + 1] <- "="
-		}
-	}
-	paste(retval[!is.na(retval)],collapse="")
-}
-
-# Function copied from package markdown to specify the mimetype of the figure
-#
-# @param file the filename
-# @return character the mimetype
-get_mime_type <- function(file) 
-{
-    if (grepl(".png$", file, perl = TRUE, ignore.case = TRUE)) 
-        "image/png"
-    else if (grepl(".gif$", file, perl = TRUE, ignore.case = TRUE)) 
-        "image/gif"
-    else if (grepl("(.jpg$|.jpeg$)", file, perl = TRUE, ignore.case = TRUE)) 
-        "image/jpeg"
-    else if (grepl(".tiff?$", file, perl = TRUE, ignore.case = TRUE)) 
-        "image/tiff"
-    else ""
+# lazy man's mime function
+mime_type = function(file) {
+  ext = tolower(file_ext(file))
+  switch(ext, svg = 'image/svg+xml', paste('image', ext, sep = '/'))
 }
