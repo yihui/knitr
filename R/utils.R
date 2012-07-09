@@ -310,6 +310,11 @@ parent_mode = function() opts_knit$get('parent')
 #'   a prefix of the filenames by default, and the actual filenames are of the
 #'   form \file{prefix1}, \file{prefix2}, ... where \file{prefix} is the string
 #'   returned by this function.
+#'
+#'   When there are special characters (not alphanumeric or \samp{-} or
+#'   \samp{_}) in the path, they will be automatically replaced with \samp{_}.
+#'   For example, \file{a b/c.d-} will be sanitized to \file{a_b/c_d-}. This
+#'   makes the filenames safe to LaTeX.
 #' @export
 #' @examples fig_path('.pdf', list(fig.path='figure/abc-', label='first-plot'))
 #' fig_path(1:10, list(fig.path='foo-', label='bar'))
