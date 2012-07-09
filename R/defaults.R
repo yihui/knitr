@@ -97,9 +97,9 @@ opts_knit = new_defaults(
 
 #' Template for creating reusable chunk options
 #'
-#' Creates a template binding a label to a set of chunk options.
-#' Every chunk that references the template label will have
-#' the specificed set of options applied to it.
+#' Creates a template binding a label to a set of chunk options. Every chunk
+#' that references the template label will have the specificed set of options
+#' applied to it.
 #' @export
 #' @examples opts_template$set(myfigures = list(fig.height = 4, fig.width = 4))
 opts_template = new_defaults()
