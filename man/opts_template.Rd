@@ -1,26 +1,26 @@
 \docType{data}
 \name{opts_template}
 \alias{opts_template}
-\title{Template for creating reusable chunk options.
-A label can be used to define a set of chunk options, which
-can be reused by just referencing the label again in all
-chunks that need it.}
+\title{Template for creating reusable chunk options}
 \format{List of 4
  $ get    :function (name, default = FALSE)  
  $ set    :function (...)  
  $ merge  :function (values)  
  $ restore:function ()}
 \usage{
-  opts_template
+opts_template
 }
 \description{
-  Template for creating reusable chunk options. A label can
-  be used to define a set of chunk options, which can be
-  reused by just referencing the label again in all chunks
-  that need it.
+  Creates a template binding a label to a set of chunk
+  options. Every chunk that references the template label
+  will have the specificed set of options applied to it.
 }
 \examples{
-opts_template$set(list('myfigures' = list(fig.height = 4, fig. width = 4)))
+opts_template$set(myfigures = list(fig.height = 4, fig.width = 4))
+# later you can reuse these chunk options by 'opts.label', e.g.
+
+# <<foo, opts.label='myfigures'>>=
+
+# the above is equivalent to <<foo, fig.height=4, fig.width=4>>=
 }
 \keyword{datasets}
-
