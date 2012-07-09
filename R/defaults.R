@@ -102,4 +102,9 @@ opts_knit = new_defaults(
 #' applied to it.
 #' @export
 #' @examples opts_template$set(myfigures = list(fig.height = 4, fig.width = 4))
+#' # later you can reuse these chunk options by 'opts.label', e.g.
+#'
+#' # <<foo, opts.label='myfigures'>>=
+#'
+#' # the above is equivalent to <<foo, fig.height=4, fig.width=4>>=
 opts_template = new_defaults()
