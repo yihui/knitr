@@ -15,10 +15,7 @@ new_defaults = function(value = list()) {
     defaults <<- merge(dots)
     invisible(NULL)
   }
-  merge = function(values) {
-    defaults[names(values)] = values
-    defaults
-  }
+  merge = function(values) merge_list(defaults, values)
   restore = function() defaults <<- value
 
   list(get = get, set = set, merge = merge, restore = restore)

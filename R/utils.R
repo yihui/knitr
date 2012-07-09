@@ -467,3 +467,9 @@ has_package = function(pkg) pkg %in% .packages(TRUE)
 
 # if LHS is NULL, return the RHS
 `%n%` = function(x, y) if (is.null(x)) y else x
+
+# merge elements of y into x with the same names
+merge_list = function(x, y) {
+  x[names(y)] = y
+  x
+}
