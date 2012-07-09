@@ -430,7 +430,7 @@ wrap.recordedplot = function(x, options) {
     fig.cur = plot_counter()
   }
   options$fig.cur = fig.cur # put fig num in options
-  name = fig_path(ifelse(fig.cur == 0L, '', fig.cur), options)
+  name = fig_path(if(fig.cur == 0L) '' else fig.cur, options)
   if (!file.exists(dirname(name)))
     dir.create(dirname(name), recursive = TRUE) # automatically creates dir for plots
   ## vectorize over dev, ext and dpi: save multiple versions of the plot
