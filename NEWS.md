@@ -46,7 +46,7 @@
 
 ## MAJOR CHANGES
 
-- if the chunk label contains non-alphanumeric characters (except `-` and `_`), they will be replaced by `_` and a warning will be issued; this is to guarantee the figure filenames are valid to LaTeX (#321) (thanks, (Roman Lustrik)
+- if the chunk label contains non-alphanumeric characters (except `-` and `_`), these characters will be replaced by `_` in the figure filenames (if there are any) and a warning will be issued; this is to guarantee the figure filenames are valid to LaTeX (#321) (thanks, (Roman Lustrik)
 
 ## MINOR CHANGES
 
