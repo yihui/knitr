@@ -25,6 +25,12 @@ fig_path(suffix = "", options = opts_current$get())
   the actual filenames are of the form \file{prefix1},
   \file{prefix2}, ... where \file{prefix} is the string
   returned by this function.
+
+  When there are special characters (not alphanumeric or
+  \samp{-} or \samp{_}) in the path, they will be
+  automatically replaced with \samp{_}.  For example,
+  \file{a b/c.d-} will be sanitized to \file{a_b/c_d-}.
+  This makes the filenames safe to LaTeX.
 }
 \examples{
 fig_path(".pdf", list(fig.path = "figure/abc-", label = "first-plot"))
