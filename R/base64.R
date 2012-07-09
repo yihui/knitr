@@ -54,5 +54,6 @@ base64_encode = function(raw.string) {
 # lazy man's mime function
 mime_type = function(file) {
   ext = tolower(file_ext(file))
-  switch(ext, svg = 'image/svg+xml', paste('image', ext, sep = '/'))
+  switch(ext, svg = 'image/svg+xml', jpg = 'image/jpeg',
+         paste('image', ext, sep = '/'))
 }
