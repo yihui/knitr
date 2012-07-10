@@ -147,3 +147,21 @@ parse_objects = function(path) {
   names(objs) = lapply(lines, `[`, 1L)
   objs
 }
+
+#' Make later chunks depend on previous chunks
+#'
+#' This function can be used to build dependencies among chunks so that all
+#' later chunks depend on previous chunks, i.e. whenever the cache of a previous
+#' chunk is updated, the cache of all its later chunks will be updated.
+#' @return \code{NULL}; the internal dependency structure is updated as a side
+#'   effect.
+#' @export
+#' @seealso \code{\link{dep_auto}}
+#' @references \url{http://yihui.name/knitr/demo/cache/}
+dep_prev = function() {
+  labs = names(knit_code$get())
+  if ((n <- length(labs)) < 2L) return() # one chunk or less; no sense of deps
+  for (i in 2L:n) {
+    dep_list$set(structure(list(labs[seq_len(i - 1L)]), .Names = labs[i]))
+  }
+}
