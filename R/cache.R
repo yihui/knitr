@@ -111,7 +111,7 @@ cache = new_cache()
 #'   files \file{__objects} and \file{__globals}.
 #' @export
 #' @references \url{http://yihui.name/knitr/demo/cache/}
-build_dep = function(path = opts_chunk$get('cache.path')) {
+dep_auto = function(path = opts_chunk$get('cache.path')) {
   paths = valid_path(path, c('__objects', '__globals'))
   locals = parse_objects(paths[1L]); globals = parse_objects(paths[2L])
   if (is.null(locals) || is.null(globals)) return(invisible(NULL))
@@ -128,6 +128,12 @@ build_dep = function(path = opts_chunk$get('cache.path')) {
         dep_list$set(structure(list(c(dep_list$get(nms[j]), nms[i])), .Names = nms[j]))
     }
   }
+}
+#' @export
+#' @rdname dep_auto
+build_dep = function(path) {
+  warning('the function build_dep() is deprecated; please use dep_auto() instead')
+  dep_auto(path)
 }
 # parse objects in dependency files
 parse_objects = function(path) {
