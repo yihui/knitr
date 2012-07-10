@@ -484,3 +484,9 @@ merge_list = function(x, y) {
   x[names(y)] = y
   x
 }
+
+# paths of all figures
+all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
+  fig_path(paste(if (num == 1L) '' else seq_len(num),
+                 ".", ext, sep = ""), options)
+}
