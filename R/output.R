@@ -123,6 +123,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     # restore chunk options after parent exits
     optc = opts_chunk$get()
     on.exit({opts_chunk$restore(); opts_chunk$set(optc)}, add = TRUE)
+    ocode = knit_code$get()
+    on.exit({knit_code$restore(); knit_code$set(ocode)}, add = TRUE)
   }
 
   ext = 'unknown'
@@ -207,8 +209,6 @@ purl = function(...) {
 }
 
 process_file = function(text, output) {
-  ocode = knit_code$get()
-  on.exit({knit_code$restore(); knit_code$set(ocode)}, add = TRUE)
   groups = split_file(lines = text)
   n = length(groups); res = character(n); olines = integer(n)
   tangle = opts_knit$get('tangle')
