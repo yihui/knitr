@@ -125,7 +125,6 @@ hook_r2swf = function(x, options) {
   # set up the R2SWF run
   fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
   swf.name = fig_path('.swf', options)
-  if(is.na(r2swf.opts)) r2swf.opts = NULL
 
   w = options$out.width %n% (options$fig.width * options$dpi)
   h = options$out.height %n% (options$fig.height * options$dpi)
