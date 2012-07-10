@@ -3,17 +3,17 @@
 ## closure adapted from Hadley's decumar: https://github.com/hadley/decumar
 ## but it is using .rdb and .rdx as 'hard cache' (instead of cache in memory)
 new_cache = function() {
-  
+
   cache_path = function(hash) {
     d = dirname(hash)
     if (!file.exists(d)) dir.create(d, showWarnings = FALSE, recursive = TRUE)
     file.path(d, basename(hash))
   }
-  
+
   cache_purge = function(hash) {
     for (h in hash) unlink(str_c(cache_path(h), c('.rdb', '.rdx', '.RData')))
   }
-  
+
   cache_save = function(keys, outname, hash) {
     # keys are new variables created; outname is the text output of a chunk
     path = cache_path(hash)
@@ -74,14 +74,14 @@ new_cache = function() {
   cache_exists = function(hash) {
     all(file.exists(str_c(cache_path(hash), c('.rdb', '.rdx'))))
   }
-  
+
   ## code output is stored in .[hash], so cache=TRUE won't lose output as cacheSweave does
   cache_output = function(hash) {
     if (exists(str_c('.', hash), envir = knit_global(), mode = 'character')) {
       get(str_c('.', hash), envir = knit_global(), mode = 'character')
     } else ''
   }
-  
+
   list(purge = cache_purge, save = cache_save, load = cache_load, objects = cache_objects,
        exists = cache_exists, output = cache_output, library = cache_library)
 }
@@ -94,29 +94,30 @@ find_globals = function(code) {
 cache = new_cache()
 
 #' Build automatic dependencies among chunks
-#' 
-#' When the chunk option \code{autodep = TRUE}, all names of objects created in 
+#'
+#' When the chunk option \code{autodep = TRUE}, all names of objects created in
 #' a chunk will be saved in a file named \file{__objects} and all global objects
-#' used in a chunk will be saved to \file{__globals}. This function can analyze 
-#' object names in these files to automatically build cache dependencies, which 
+#' used in a chunk will be saved to \file{__globals}. This function can analyze
+#' object names in these files to automatically build cache dependencies, which
 #' is similar to the effect of the \code{dependson} option. It is supposed to be
 #' used in the first chunk of a document and this chunk must not be cached.
 #' @param path the path to the dependency file
 #' @return \code{NULL}. The dependencies are built as a side effect.
-#' @note Be cautious about \code{path}: because this function is used in a 
-#'   chunk, the working directory when the chunk is evaluated is the directory 
-#'   of the input document in \code{\link{knit}}, and if that directory differs 
+#' @note Be cautious about \code{path}: because this function is used in a
+#'   chunk, the working directory when the chunk is evaluated is the directory
+#'   of the input document in \code{\link{knit}}, and if that directory differs
 #'   from the working directory before calling \code{knit()}, you need to adjust
 #'   the \code{path} argument here to make sure this function can find the cache
 #'   files \file{__objects} and \file{__globals}.
 #' @export
+#' @seealso \code{\link{dep_prev}}
 #' @references \url{http://yihui.name/knitr/demo/cache/}
 dep_auto = function(path = opts_chunk$get('cache.path')) {
   paths = valid_path(path, c('__objects', '__globals'))
   locals = parse_objects(paths[1L]); globals = parse_objects(paths[2L])
   if (is.null(locals) || is.null(globals)) return(invisible(NULL))
   if (!identical(names(locals), names(globals))) {
-    warning('corrupt dependency files? \ntry remove ', 
+    warning('corrupt dependency files? \ntry remove ',
             str_c(paths, collapse = '; '))
     return(invisible(NULL))
   }
