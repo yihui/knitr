@@ -1,4 +1,5 @@
 \name{hook_rgl}
+\alias{hook_optipng}
 \alias{hook_pdfcrop}
 \alias{hook_plot_custom}
 \alias{hook_rgl}
@@ -7,6 +8,8 @@
 hook_rgl(before, options, envir)
 
 hook_pdfcrop(before, options, envir)
+
+hook_optipng(before, options, envir)
 
 hook_plot_custom(before, options, envir)
 }
@@ -45,6 +48,13 @@ hook_plot_custom(before, options, envir)
   is not PDF (e.g. PNG), the program \command{convert} in
   ImageMagick is used to trim the white margins (call
   \command{convert input -trim output}).
+
+  The function \code{hook_optipng} calls the program
+  \command{optipng} to optimize PNG images. Note the chunk
+  option \code{optipng.opts} can be used to provide
+  additional parameters to \command{optipng}, e.g.
+  \code{optipng.opts = '-o7'}. See
+  \url{http://optipng.sourceforge.net/} for details.
 
   When the plots are not recordable via
   \code{\link[grDevices]{recordPlot}} and we save the plots
