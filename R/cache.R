@@ -161,7 +161,7 @@ parse_objects = function(path) {
 dep_prev = function() {
   labs = names(knit_code$get())
   if ((n <- length(labs)) < 2L) return() # one chunk or less; no sense of deps
-  for (i in 2L:n) {
-    dep_list$set(structure(list(labs[seq_len(i - 1L)]), .Names = labs[i]))
+  for (i in 1L:(n - 1L)) {
+    dep_list$set(structure(list(labs[(i + 1L):n]), .Names = labs[i]))
   }
 }
