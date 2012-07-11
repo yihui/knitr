@@ -98,11 +98,11 @@ or `results='asis'`:
 
 
 ```python
-print 'Write something in `Markdown` from `Python`!'
+print '**Write** _something_ in `Markdown` from `Python`!'
 ```
 
 
-Write something in `Markdown` from `Python`!
+**Write** _something_ in `Markdown` from `Python`!
 
 
 ## Strict Markdown

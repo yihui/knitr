@@ -13,16 +13,12 @@ and **knitr** will automatically determine the output filename to be
 I used the code below to make sure **knitr** will upload images.
 
 
-
 ```r
 opts_knit$set(upload.fun = imgur_upload)  # upload all images to imgur.com
 ```
 
 
-
-
 Now we write some code chunks in this markdown file:
-
 
 
 ```r
@@ -30,13 +26,9 @@ Now we write some code chunks in this markdown file:
 1 + 1
 ```
 
-
-
 ```
 ## [1] 2
 ```
-
-
 
 ```r
 ## boring random numbers
@@ -44,17 +36,12 @@ set.seed(123)
 rnorm(5)
 ```
 
-
-
 ```
 ## [1] -0.56048 -0.23018  1.55871  0.07051  0.12929
 ```
 
 
-
-
 We can also produce plots which are uploaded to imgur.com:
-
 
 
 ```r
@@ -62,13 +49,13 @@ library(ggplot2)
 qplot(hp, mpg, data = mtcars) + geom_smooth()
 ```
 
-![plot of chunk md-cars](http://i.imgur.com/PHyDS.png) 
+![plot of chunk md-cars](http://i.imgur.com/R7Dap.png) 
 
 ```r
 ggpcp(mtcars) + geom_line()
 ```
 
-![plot of chunk md-cars](http://i.imgur.com/reIfT.png) 
+![plot of chunk md-cars](http://i.imgur.com/uQMpl.png) 
 
 
 So **knitr** is ready with GitHub with a single markdown file.

@@ -7,17 +7,13 @@ and **knitr** will automatically determine the output filename to be
 `knitr-minimal.md` (`*.Rmd --> *.md`).
 
 
-
 ```r
 # set global chunk options: images will be 5x5 inches
 opts_chunk$set(fig.width = 5, fig.height = 5)
 ```
 
 
-
-
 Now we write some code chunks in this markdown file:
-
 
 
 ```r
@@ -40,10 +36,7 @@ rnorm(5)
 ```
 
 
-
-
 We can also produce plots:
-
 
 
 ```r

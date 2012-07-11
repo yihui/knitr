@@ -16,12 +16,9 @@
 # A bit R code
 
 
-
 ```r
 head(cars)
 ```
-
-
 
 ```
 ##   speed dist
@@ -33,13 +30,9 @@ head(cars)
 ## 6     9   10
 ```
 
-
-
 ```r
 cor(cars)
 ```
-
-
 
 ```
 ##        speed   dist
@@ -48,10 +41,7 @@ cor(cars)
 ```
 
 
-
-
 # Graphics too
-
 
 
 ```r
@@ -59,7 +49,7 @@ library(ggplot2)
 qplot(speed, dist, data = cars) + geom_smooth()
 ```
 
-![A scatterplot of `cars`](http://i.imgur.com/hAAlT.png) 
+![A scatterplot of `cars`](http://i.imgur.com/n9HT6.png) 
 
 
 # How
@@ -86,38 +76,32 @@ qplot(speed, dist, data = cars) + geom_smooth()
 
 # Reproducible research
 
-It is good to include the session info, e.g. this document is produced with **knitr** version `0.6`. Here is my session info:
-
+It is good to include the session info, e.g. this document is produced with **knitr** version `0.6.13`. Here is my session info:
 
 
 ```r
 print(sessionInfo(), locale = FALSE)
 ```
 
-
-
 ```
-## R version 2.15.0 (2012-03-30)
+## R version 2.15.1 (2012-06-22)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## 
 ## attached base packages:
 ## [1] methods   stats     graphics  grDevices utils     datasets  base     
 ## 
 ## other attached packages:
-## [1] ggplot2_0.9.1 knitr_0.5.6  
+## [1] ggplot2_0.9.1 knitr_0.6.13 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] codetools_0.2-8    colorspace_1.1-1   dichromat_1.2-4   
-##  [4] digest_0.5.2       evaluate_0.4.2     formatR_0.4.1     
-##  [7] grid_2.15.0        highlight_0.3.1    labeling_0.1      
-## [10] MASS_7.3-18        memoise_0.1        munsell_0.3       
-## [13] parser_0.0-14      plyr_1.7.1         proto_0.3-9.2     
-## [16] RColorBrewer_1.0-5 Rcpp_0.9.10        RCurl_1.91-1      
-## [19] reshape2_1.2.1     scales_0.2.1       stringr_0.6       
-## [22] tools_2.15.0       XML_3.6-2         
+##  [1] colorspace_1.1-1   dichromat_1.2-4    digest_0.5.2      
+##  [4] evaluate_0.4.2     formatR_0.5.3      grid_2.15.1       
+##  [7] labeling_0.1       MASS_7.3-18        memoise_0.1       
+## [10] munsell_0.3        plyr_1.7.1         proto_0.3-9.2     
+## [13] RColorBrewer_1.0-5 RCurl_1.91-1       reshape2_1.2.1    
+## [16] scales_0.2.1       stringr_0.6        tools_2.15.1      
+## [19] XML_3.6-2         
 ```
-
-
 
 
 # Life is short

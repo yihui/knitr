@@ -41,14 +41,15 @@ dots, e.g.
 
 ::
 
+    set.seed(123)
     rnorm(10)
 
 
 
 ::
 
-    ##  [1] -1.2721 -0.7205 -0.5392  2.0504  0.2321 -0.8445 -0.1221 -0.6043
-    ##  [9] -0.7840  1.1898
+    ##  [1] -0.56048 -0.23018  1.55871  0.07051  0.12929  1.71506  0.46092
+    ##  [8] -1.26506 -0.68685 -0.44566
 
 
 
@@ -60,7 +61,7 @@ dots, e.g.
 
 ::
 
-    ## Warning message: do not forget the space after ..!
+    ## Warning: do not forget the space after ..!
 
 
 
@@ -78,10 +79,11 @@ Here is a plot:
 
 ::
 
-    ## geom_smooth: method="auto" and size of largest group is <1000, so using loess. Use 'method = x' to change the smoothing method.
+    ## geom_smooth: method="auto" and size of largest group is <1000, so using
+    ## loess. Use 'method = x' to change the smoothing method.
 
 
-.. figure:: http://i.imgur.com/wvTsc.png
+.. figure:: http://i.imgur.com/k6Vyv.png
     :alt: A ggplot2 example
     :width: 360px
 

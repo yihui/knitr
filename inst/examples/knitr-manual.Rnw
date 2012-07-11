@@ -213,8 +213,9 @@ features such as graphics in the website: \url{http://yihui.name/knitr/demos}.
 
 \subsection{Code Decoration}
 
-The \textbf{highlight} package \citep{R-highlight} is used by default
-to highlight R code, and \textbf{formatR} \citep{R-formatR} is used
+The \textbf{highlight} package \citep{R-highlight} will be used to
+highlight R code if it is installed (otherwise an internal naive syntax
+highlighter is used), and \textbf{formatR} \citep{R-formatR} is used
 to reformat R code (like \texttt{keep.source=FALSE} in Sweave but
 will also try to retain comments). For \LaTeX{} output, the \textbf{framed}
 package is used to decorate code chunks with a light gray background.
@@ -512,7 +513,7 @@ which depend on this chunk will lose cache, hence their cache will
 be rebuilt as well.
 
 Another way to specify the dependencies among chunks is to use the
-chunk option \texttt{autodep} and the function \emph{build\_dep()}.
+chunk option \texttt{autodep} and the function \emph{dep\_auto()}.
 This is an experimental feature borrowed from \textbf{weaver} which
 frees us from setting chunk dependencies manually. The basic idea
 is, if a latter chunk uses any objects created from a previous chunk,
@@ -529,9 +530,14 @@ and chunk B uses this object, chunk B must depend on A, i.e. whenever
 A changes, B must also be updated. When \texttt{autodep=TRUE}, \textbf{knitr}
 will write out the names of objects created in a cached chunk as well
 as those global objects in two files named \textsf{\_\_objects} and
-\textsf{\_\_globals} respectively; later we can use the function \emph{build\_dep()}
+\textsf{\_\_globals} respectively; later we can use the function \emph{dep\_auto()}
 to analyze the object names to figure out the dependencies automatically.
 See \url{http://yihui.name/knitr/demo/cache/} for examples.
+
+Yet another way to specify dependencies is \emph{dep\_prev()}: this
+is a conservative approach which sets the dependencies so that a cached
+chunk will depend on all its previous chunks, i.e. whenever a previous
+chunk is updated, all later chunks will be updated accordingly.
 
 
 \subsection{Code Externalization}
