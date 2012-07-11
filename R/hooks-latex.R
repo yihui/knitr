@@ -132,7 +132,7 @@ hook_plot_tex = function(x, options) {
   if (is.numeric(x)) x = format_sci(x, 'latex')
   .inline.hook(x)
 }
-## single param hook: a function of one argument
+# an example of a chunk hook
 .param.hook = function(before, options, envir) {
   if (before) {
     'do something before the code chunk'
