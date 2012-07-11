@@ -181,23 +181,27 @@ render_latex = function() {
     set_header(highlight = .header.hi.tex)
   }
   knit_hooks$restore()
-  knit_hooks$set(source = function(x, options) {
-    if (options$engine != 'R' || !options$highlight)
-      return(.verb.hook(x, options))
-    if (!has_package('highlight')) return(x)
-    ## gsub() makes sure " will not produce an umlaut
-    str_c('\\begin{flushleft}\n', gsub('"', '"{}', x, fixed = TRUE),
-          '\\end{flushleft}\n')
-  }, output = function(x, options) {
-    if (output_asis(x, options)) {
-      str_c('\\end{kframe}\n', x, '\n\\begin{kframe}')
-    } else .verb.hook(x, options)
-  }, warning = .verb.hook, message = .verb.hook, error = .verb.hook,
-                 inline = .inline.hook.tex, chunk = .chunk.hook.tex,
-                 plot = function(x, options) {
-                   ## escape plot environments from kframe
-                   str_c('\\end{kframe}', hook_plot_tex(x, options), '\\begin{kframe}')
-                 })
+  knit_hooks$set(
+    source = function(x, options) {
+      if (options$engine != 'R' || !options$highlight)
+        return(.verb.hook(x, options))
+      if (!has_package('highlight')) return(x)
+      ## gsub() makes sure " will not produce an umlaut
+      str_c('\\begin{flushleft}\n', gsub('"', '"{}', x, fixed = TRUE),
+            '\\end{flushleft}\n')
+    },
+    output = function(x, options) {
+      if (output_asis(x, options)) {
+        str_c('\\end{kframe}\n', x, '\n\\begin{kframe}')
+      } else .verb.hook(x, options)
+    },
+    warning = .verb.hook, message = .verb.hook, error = .verb.hook,
+    inline = .inline.hook.tex, chunk = .chunk.hook.tex,
+    plot = function(x, options) {
+      ## escape plot environments from kframe
+      str_c('\\end{kframe}', hook_plot_tex(x, options), '\\begin{kframe}')
+    }
+  )
 }
 #' @rdname output_hooks
 #' @export
