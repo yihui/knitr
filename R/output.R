@@ -129,7 +129,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
 
   ext = 'unknown'
   if (in.file) {
-    opts_knit$set(input.dir = dirname(input)) # record input dir
+    input.dir = .knitEnv$input.dir; on.exit(.knitEnv$input.dir = input.dir), add = TRUE)
+    .knitEnv$input.dir = dirname(input) # record input dir
     if (is.null(output)) output = basename(auto_out_name(input))
     ext = tolower(file_ext(input))
     options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary

@@ -138,7 +138,7 @@ output_asis = function(x, options) {
 
 ## path relative to dir of the input file
 input_dir = function() {
-  id = opts_knit$get('input.dir')
+  id = .knitEnv$input.dir
   if (is.null(id)) return('.')
   id
 }
