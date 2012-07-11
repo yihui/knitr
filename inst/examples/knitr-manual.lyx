@@ -2072,7 +2072,7 @@ autodep
 \family default
  and the function 
 \emph on
-build_dep()
+dep_auto()
 \emph default
 .
  This is an experimental feature borrowed from 
@@ -2133,7 +2133,7 @@ __globals
 \family default
  respectively; later we can use the function 
 \emph on
-build_dep()
+dep_auto()
 \emph default
  to analyze the object names to figure out the dependencies automatically.
  See 
