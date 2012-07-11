@@ -129,7 +129,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
 
   ext = 'unknown'
   if (in.file) {
-    input.dir = .knitEnv$input.dir; on.exit(.knitEnv$input.dir = input.dir), add = TRUE)
+    input.dir = .knitEnv$input.dir; on.exit({.knitEnv$input.dir = input.dir}, add = TRUE)
     .knitEnv$input.dir = dirname(input) # record input dir
     if (is.null(output)) output = basename(auto_out_name(input))
     ext = tolower(file_ext(input))
