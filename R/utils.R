@@ -137,11 +137,7 @@ output_asis = function(x, options) {
 }
 
 ## path relative to dir of the input file
-input_dir = function() {
-  id = .knitEnv$input.dir
-  if (is.null(id)) return('.')
-  id
-}
+input_dir = function() .knitEnv$input.dir %n% '.'
 
 ## scientific notation in TeX
 format_sci = function(x, format = "latex") {
