@@ -22,7 +22,7 @@ dots, e.g.
 
 .. {r rst-example}
 .. 1+1
-.. rnorm(10)
+.. set.seed(123); rnorm(10)
 .. warning('do not forget the space after ..!')
 .. ..
 
