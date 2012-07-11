@@ -32,6 +32,19 @@ quartz_dev = function(type, dpi) {
   }
 }
 
+# a wrapper of the tikzDevice::tikz device
+tikz_dev = function(...) {
+  suppressPackageStartupMessages(do.call('library', list('tikzDevice')))
+  packages = switch(
+    getOption('tikzDefaultEngine'),
+    pdftex = getOption('tikzLatexPackages'),
+    xetex = getOption('tikzXelatexPackages')
+  )
+  get('tikz', envir = as.environment('package:tikzDevice'))(
+    ..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages)
+  )
+}
+
 ## save a recorded plot
 save_plot = function(plot, name, dev, ext, dpi, options) {
   
@@ -72,23 +85,11 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
                   Cairo_png = load_device('Cairo_png', 'cairoDevice'),
                   Cairo_ps = load_device('Cairo_ps', 'cairoDevice'),
                   Cairo_svg = load_device('Cairo_svg', 'cairoDevice'),
-                  
+
                   tikz = function(...) {
-                    if (suppressPackageStartupMessages(require('tikzDevice'))) {
-                      packages =
-                        switch(getOption("tikzDefaultEngine"),
-                               pdftex = getOption("tikzLatexPackages"),
-                               xetex = getOption("tikzXelatexPackages"))
-                      tikzDevice::tikz(..., sanitize = options$sanitize,
-                                       standAlone = options$external,
-                                       packages = c('\n\\nonstopmode\n', packages, 
-                                                    .knitEnv$tikzPackages))
-                    } else {
-                      stop("package 'tikzDevice' not available (has to be installed)",
-                           call. = FALSE)
-                    }
+                    tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)
                   },
-                  
+
                   get(dev, mode = 'function'))
   
   ## re-plot the recorded plot to an off-screen device
