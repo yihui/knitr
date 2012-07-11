@@ -86,8 +86,9 @@ Output hooks are used to customize and polish the *raw* output from chunks. Ther
 - `plot`: graphics output
 - `inline`: output of inline R code
 - `chunk`: all the output of a chunk (i.e., those produced by the previous hooks)
+- `document`: the output of the whole document (is `base::identity` by default)
 
-All these hooks should be of the form `function(x, options)` (except the `inline` hook which only has one argument `x`), where `x` is the character string of the output, and `options` is a list of current chunk options. Unlike chunk hooks which are empty by default, output hooks all come with default values. 
+All these hooks should be of the form `function(x, options)` (except the `inline` and `document` hooks which only have one argument `x`), where `x` is the character string of the output, and `options` is a list of current chunk options. Unlike chunk hooks which are empty by default, output hooks all come with default values. 
 
 This package tried hard to set reasonable default output hooks for different parts of output and to accommodate different output formats such as LaTeX, HTML and even Jekyll. A series of functions of the form `render_xxx()` are provided to set built-in output hooks for different output formats, e.g. `render_latex()` and `render_html()`, etc. Details for these formats:
 
