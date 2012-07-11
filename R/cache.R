@@ -109,6 +109,9 @@ cache = new_cache()
 #'   from the working directory before calling \code{knit()}, you need to adjust
 #'   the \code{path} argument here to make sure this function can find the cache
 #'   files \file{__objects} and \file{__globals}.
+#'
+#'   \code{build_dep} is a deprecated alias for \code{dep_auto} and may be
+#'   removed in the future.
 #' @export
 #' @seealso \code{\link{dep_prev}}
 #' @references \url{http://yihui.name/knitr/demo/cache/}
