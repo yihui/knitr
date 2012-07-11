@@ -51,46 +51,48 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
   path = str_c(name, ".", ext)
 
   ## built-in devices
-  device = switch(dev,
-                  bmp = function(...) bmp(...,  res = dpi, units = "in"),
-                  postscript = function(...) {
-                    postscript(..., onefile = FALSE, horizontal = FALSE, paper = "special")
-                  },
-                  jpeg = function(...) jpeg(..., res = dpi, units = "in"),
-                  pdf = function(...) pdf(...),
-                  png = function(...) png(..., res = dpi, units = "in"),
-                  svg = function(...) svg(...),
-                  pictex = function(...) pictex(...),
-                  tiff = function(...) tiff(..., res = dpi, units = "in"),
-                  win.metafile = function(...) win.metafile(...),
-                  cairo_pdf = function(...) cairo_pdf(...),
-                  cairo_ps = function(...) cairo_ps(...),
+  device = switch(
+    dev,
+    bmp = function(...) bmp(...,  res = dpi, units = "in"),
+    postscript = function(...) {
+      postscript(..., onefile = FALSE, horizontal = FALSE, paper = "special")
+    },
+    jpeg = function(...) jpeg(..., res = dpi, units = "in"),
+    pdf = function(...) pdf(...),
+    png = function(...) png(..., res = dpi, units = "in"),
+    svg = function(...) svg(...),
+    pictex = function(...) pictex(...),
+    tiff = function(...) tiff(..., res = dpi, units = "in"),
+    win.metafile = function(...) win.metafile(...),
+    cairo_pdf = function(...) cairo_pdf(...),
+    cairo_ps = function(...) cairo_ps(...),
 
-                  quartz_pdf = quartz_dev('pdf', dpi),
-                  quartz_png = quartz_dev('png', dpi),
-                  quartz_jpeg = quartz_dev('jpeg', dpi),
-                  quartz_tiff = quartz_dev('tiff', dpi),
-                  quartz_gif = quartz_dev('gif', dpi),
-                  quartz_psd = quartz_dev('psd', dpi),
-                  quartz_bmp = quartz_dev('bmp', dpi),
+    quartz_pdf = quartz_dev('pdf', dpi),
+    quartz_png = quartz_dev('png', dpi),
+    quartz_jpeg = quartz_dev('jpeg', dpi),
+    quartz_tiff = quartz_dev('tiff', dpi),
+    quartz_gif = quartz_dev('gif', dpi),
+    quartz_psd = quartz_dev('psd', dpi),
+    quartz_bmp = quartz_dev('bmp', dpi),
 
-                  CairoJPEG = load_device('CairoJPEG', 'Cairo', dpi = dpi),
-                  CairoPNG = load_device('CairoPNG', 'Cairo', dpi = dpi),
-                  CairoTIFF = load_device('CairoTIFF', 'Cairo', dpi = dpi),
-                  CairoPS = load_device('CairoPS', 'Cairo'),
-                  CairoPDF = load_device('CairoPDF', 'Cairo'),
-                  CairoSVG = load_device('CairoSVG', 'Cairo'),
+    CairoJPEG = load_device('CairoJPEG', 'Cairo', dpi = dpi),
+    CairoPNG = load_device('CairoPNG', 'Cairo', dpi = dpi),
+    CairoTIFF = load_device('CairoTIFF', 'Cairo', dpi = dpi),
+    CairoPS = load_device('CairoPS', 'Cairo'),
+    CairoPDF = load_device('CairoPDF', 'Cairo'),
+    CairoSVG = load_device('CairoSVG', 'Cairo'),
 
-                  Cairo_pdf = load_device('Cairo_pdf', 'cairoDevice'),
-                  Cairo_png = load_device('Cairo_png', 'cairoDevice'),
-                  Cairo_ps = load_device('Cairo_ps', 'cairoDevice'),
-                  Cairo_svg = load_device('Cairo_svg', 'cairoDevice'),
+    Cairo_pdf = load_device('Cairo_pdf', 'cairoDevice'),
+    Cairo_png = load_device('Cairo_png', 'cairoDevice'),
+    Cairo_ps = load_device('Cairo_ps', 'cairoDevice'),
+    Cairo_svg = load_device('Cairo_svg', 'cairoDevice'),
 
-                  tikz = function(...) {
-                    tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)
-                  },
+    tikz = function(...) {
+      tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)
+    },
 
-                  get(dev, mode = 'function'))
+    get(dev, mode = 'function')
+  )
 
   ## re-plot the recorded plot to an off-screen device
   do.call(device, c(list(path, width = options$fig.width, height = options$fig.height),
