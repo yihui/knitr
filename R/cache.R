@@ -169,3 +169,9 @@ dep_prev = function() {
     dep_list$set(structure(list(labs[(i + 1L):n]), .Names = labs[i]))
   }
 }
+
+# unevaluated expression to return .Random.seed if exists when eval(rand_seed)
+rand_seed = quote({
+  if (exists('.Random.seed', envir = globalenv()))
+    get('.Random.seed', envir = globalenv())
+})
