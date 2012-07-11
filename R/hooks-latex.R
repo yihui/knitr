@@ -142,6 +142,13 @@ hook_plot_tex = function(x, options) {
 }
 
 .verb.hook = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
+.color.block = function(color1 = '', color2 = '') {
+  function(x, options) {
+    x = gsub('\n*$', '', x)
+    sprintf('\\begin{flushleft}\\ttfamily\\noindent%s%s%s\\end{flushleft}',
+            color1, escape_latex(x, newlines = TRUE), color2)
+  }
+}
 
 #' Set output hooks for different output formats
 #'
@@ -195,7 +202,9 @@ render_latex = function() {
         str_c('\\end{kframe}\n', x, '\n\\begin{kframe}')
       } else .verb.hook(x, options)
     },
-    warning = .verb.hook, message = .verb.hook, error = .verb.hook,
+    warning = .color.block('\\textcolor{warningcolor}{', '}'),
+    message = .color.block('\\itshape\\textcolor{messagecolor}{', '}'),
+    error = .color.block('\\bfseries\\textcolor{errorcolor}{', '}'),
     inline = .inline.hook.tex, chunk = .chunk.hook.tex,
     plot = function(x, options) {
       ## escape plot environments from kframe
