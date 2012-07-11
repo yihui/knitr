@@ -68,15 +68,17 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
   invisible(bib)
 }
 
+.this.year = sprintf('  year = {%s},', format(Sys.Date(), '%Y'))
 # hack non-standard entries; to be updated...
 .tweak.bib = list(
   cacheSweave = c(author = '  author = {Roger D. Peng},'),
   cluster = c(author = '  author = {Martin Maechler},'),
+  evaluate = c(year = .this.year),
   gWidgets = c(author = '  author = {John Verzani},'),
   maps = c(author = '  author = {Ray Brownrigg},'),
   Rcmdr = c(author = '  author = {John Fox},'),
   RGtk2 = c(author = '  author = {Michael Lawrence and Duncan {Temple Lang}},'),
-  roxygen2 = c(year = sprintf('  year = {%s},', format(Sys.Date(), '%Y'))),
+  roxygen2 = c(year = .this.year),
   rpart = c(author = '  author = {Terry M Therneau and Beth Atkinson},'),
   sm = c(author = '  author = {Adrian Bowman and Adelchi Azzalini},'),
   survival = c(author = '  author = {Terry Therneau},'),
