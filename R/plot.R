@@ -47,9 +47,9 @@ tikz_dev = function(...) {
 
 ## save a recorded plot
 save_plot = function(plot, name, dev, ext, dpi, options) {
-  
+
   path = str_c(name, ".", ext)
-  
+
   ## built-in devices
   device = switch(dev,
                   bmp = function(...) bmp(...,  res = dpi, units = "in"),
@@ -65,7 +65,7 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
                   win.metafile = function(...) win.metafile(...),
                   cairo_pdf = function(...) cairo_pdf(...),
                   cairo_ps = function(...) cairo_ps(...),
-                  
+
                   quartz_pdf = quartz_dev('pdf', dpi),
                   quartz_png = quartz_dev('png', dpi),
                   quartz_jpeg = quartz_dev('jpeg', dpi),
@@ -73,14 +73,14 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
                   quartz_gif = quartz_dev('gif', dpi),
                   quartz_psd = quartz_dev('psd', dpi),
                   quartz_bmp = quartz_dev('bmp', dpi),
-                  
+
                   CairoJPEG = load_device('CairoJPEG', 'Cairo', dpi = dpi),
                   CairoPNG = load_device('CairoPNG', 'Cairo', dpi = dpi),
                   CairoTIFF = load_device('CairoTIFF', 'Cairo', dpi = dpi),
                   CairoPS = load_device('CairoPS', 'Cairo'),
                   CairoPDF = load_device('CairoPDF', 'Cairo'),
                   CairoSVG = load_device('CairoSVG', 'Cairo'),
-                  
+
                   Cairo_pdf = load_device('Cairo_pdf', 'cairoDevice'),
                   Cairo_png = load_device('Cairo_png', 'cairoDevice'),
                   Cairo_ps = load_device('Cairo_ps', 'cairoDevice'),
@@ -91,13 +91,13 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
                   },
 
                   get(dev, mode = 'function'))
-  
+
   ## re-plot the recorded plot to an off-screen device
   do.call(device, c(list(path, width = options$fig.width, height = options$fig.height),
                     options$dev.args))
   print(plot)
   dev.off()
-  
+
   ## compile tikz to pdf
   if (dev == 'tikz' && options$external) {
     unlink(pdf.plot <- str_c(name, '.pdf'))
@@ -116,7 +116,7 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
       stop('failed to compile ', path, ' to PDF', call. = FALSE)
     }
   }
-  
+
   c(name, ext)
 }
 
@@ -146,7 +146,7 @@ merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
   for (i in 1:(n - 1)) {
     p1 = x[[i1]]; p2 = x[[i2]]
     if (is_low_change(p1, p2)) {
-      # if the next plot only differs with the previous plot by par() changes, 
+      # if the next plot only differs with the previous plot by par() changes,
       # remove the next plot and keep the previous fixed, otherwise remove the
       # previous and move its index to the next plot
       if (is_par_change(p1, p2)) r = i2 else {
