@@ -124,13 +124,10 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
 
 ## this is mainly for Cairo and cairoDevice
 load_device = function(name, package, dpi = NULL) {
-  if (do.call('require', list(package = package))) {
-    dev = get(name, envir = as.environment(str_c('package:', package)))
-    ## dpi is for bitmap devices; units must be inches!
-    if (is.null(dpi)) {
-      function(...) dev(...)
-    } else function(...) dev(..., dpi = dpi, units = 'in')
-  } else stop("package '", package, "' not available; please install it first")
+  do.call('library', list(package = package))
+  dev = get(name, envir = as.environment(str_c('package:', package)))
+  ## dpi is for bitmap devices; units must be inches!
+  if (is.null(dpi)) dev else function(...) dev(..., dpi = dpi, units = 'in')
 }
 
 
