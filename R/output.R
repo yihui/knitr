@@ -186,6 +186,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   progress = opts_knit$get('progress')
   if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
+  res = knit_hooks$get('document')(res)
   cat(res, file = output %n% '')
   dep_list$restore()  # empty dependency list
 
