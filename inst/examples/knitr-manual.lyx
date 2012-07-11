@@ -2150,6 +2150,17 @@ http://yihui.name/knitr/demo/cache/
  for examples.
 \end_layout
 
+\begin_layout Standard
+Yet another way to specify dependencies is 
+\emph on
+dep_prev()
+\emph default
+: this is a conservative approach which sets the dependencies so that a
+ cached chunk will depend on all its previous chunks, i.e.
+ whenever a previous chunk is updated, all later chunks will be updated
+ accordingly.
+\end_layout
+
 \begin_layout Subsection
 Code Externalization
 \end_layout
