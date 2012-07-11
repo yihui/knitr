@@ -125,7 +125,7 @@ dep_auto = function(path = opts_chunk$get('cache.path')) {
   for (i in 2:length(nms)) {
     for (j in 1:(i - 1L)) {
       ## check if current globals are in old locals
-      if (length(globals[[i]]) && any(globals[[i]] %in% locals[[j]]))
+      if (length(globals[[nms[i]]]) && any(globals[[nms[i]]] %in% locals[[nms[j]]]))
         dep_list$set(structure(list(c(dep_list$get(nms[j]), nms[i])), .Names = nms[j]))
     }
   }
