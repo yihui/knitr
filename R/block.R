@@ -53,17 +53,19 @@ call_block = function(block) {
   params$code = parse_chunk(params$code) # parse sub-chunk references
 
   ## Check cache
-  content = list(params[setdiff(names(params), 'include')], getOption('width'))
-  content[[3L]] = eval_lang(opts_knit$get('cache.extra'))
-  hash = str_c(valid_path(params$cache.path, params$label), '_', digest(content))
-  params$hash = hash
-  if (params$cache && cache$exists(hash)) {
-    if (!params$include) return('')
-    if (opts_knit$get('verbose')) message('  loading cache from ', hash)
-    cache$load(hash)
-    return(cache$output(hash))
+  if (params$cache) {
+    content = list(params[setdiff(names(params), 'include')], getOption('width'))
+    content[[3L]] = eval_lang(opts_knit$get('cache.extra'))
+    hash = str_c(valid_path(params$cache.path, params$label), '_', digest(content))
+    params$hash = hash
+    if (cache$exists(hash)) {
+      if (!params$include) return('')
+      if (opts_knit$get('verbose')) message('  loading cache from ', hash)
+      cache$load(hash)
+      return(cache$output(hash))
+    }
+    cache$library(params$cache.path, save = FALSE) # load packages
   }
-  if (params$cache) cache$library(params$cache.path, save = FALSE) # load packages
 
   block_exec(params)
 }
