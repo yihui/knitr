@@ -170,7 +170,19 @@ dep_prev = function() {
   }
 }
 
-# unevaluated expression to return .Random.seed if exists when eval(rand_seed)
+#' An unevaluated expression to return .Random.seed if exists
+#'
+#' This expression returns \code{.Random.seed} when \code{eval(rand_seed)} and
+#' \code{NULL} otherwise.
+#'
+#' It is designed to work with \code{opts_knit$set(cache.extra = rand_seed)} for
+#' reproducibility of chunks that involve with random number generation. See
+#' references.
+#' @export
+#' @references \url{http://yihui.name/knitr/demo/cache/}
+#' @examples eval(rand_seed)
+#' rnorm(1) # .Random.seed is created (or modified)
+#' eval(rand_seed)
 rand_seed = quote({
   if (exists('.Random.seed', envir = globalenv()))
     get('.Random.seed', envir = globalenv())
