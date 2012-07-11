@@ -490,3 +490,14 @@ all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
   fig_path(paste(if (num == 1L) '' else seq_len(num),
                  ".", ext, sep = ""), options)
 }
+
+# escape special LaTeX characters
+escape_latex = function(x, newlines = FALSE) {
+  x = gsub('\\\\', '\\\\textbackslash', x)
+  x = gsub('([#$%&_{}])', '\\\\\\1', x)
+  x = gsub('\\\\textbackslash([^{]|$)', '\\\\textbackslash{}\\1', x)
+  x = gsub('~', '\\\\textasciitilde{}', x)
+  x = gsub('\\^', '\\\\textasciicircum{}', x)
+  if (newlines) x = gsub('\n', ' \\\\\\\\ \n', x)
+  x
+}
