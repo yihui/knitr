@@ -51,9 +51,9 @@ hook_plot_custom(before, options, envir)
 
   The function \code{hook_optipng} calls the program
   \command{optipng} to optimize PNG images. Note the chunk
-  option \code{optipng.opts} can be used to provide
-  additional parameters to \command{optipng}, e.g.
-  \code{optipng.opts = '-o7'}. See
+  option \code{optipng} can be used to provide additional
+  parameters to the program \command{optipng}, e.g.
+  \code{optipng = '-o7'}. See
   \url{http://optipng.sourceforge.net/} for details.
 
   When the plots are not recordable via
