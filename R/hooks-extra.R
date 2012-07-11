@@ -25,9 +25,10 @@
 #' \command{convert input -trim output}).
 #'
 #' The function \code{hook_optipng} calls the program \command{optipng} to
-#' optimize PNG images. Note the chunk option \code{optipng.opts} can be used to
-#' provide additional parameters to \command{optipng}, e.g. \code{optipng.opts =
-#' '-o7'}. See \url{http://optipng.sourceforge.net/} for details.
+#' optimize PNG images. Note the chunk option \code{optipng} can be used to
+#' provide additional parameters to the program \command{optipng}, e.g.
+#' \code{optipng = '-o7'}. See \url{http://optipng.sourceforge.net/} for
+#' details.
 #'
 #' When the plots are not recordable via \code{\link[grDevices]{recordPlot}} and
 #' we save the plots to files manually via other functions (e.g. \pkg{rgl}
@@ -100,7 +101,7 @@ hook_optipng = function(before, options, envir) {
   lapply(paths, function(x) {
     message('optimizing ', x)
     x = shQuote(x)
-    cmd = paste('optipng', options$optpng.opts, x)
+    cmd = paste('optipng', if (is.character(options$optipng)) options$optipng, x)
     if (.Platform$OS.type == 'windows') cmd = paste(Sys.getenv("COMSPEC"), "/c", cmd)
     system(cmd)
   })
