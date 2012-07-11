@@ -98,9 +98,7 @@
 knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame()) {
 
   in.file = !missing(input) && is.character(input)  # is a file input
-  optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
-  opts_knit$set(tangle = tangle)
   if (in.file) input2 = input # make a copy of the input path
   if (child_mode()) {
     setwd(opts_knit$get('output.dir')) # always restore original working dir
@@ -125,6 +123,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     on.exit({opts_chunk$restore(); opts_chunk$set(optc)}, add = TRUE)
     ocode = knit_code$get()
     on.exit({knit_code$restore(); knit_code$set(ocode)}, add = TRUE)
+    optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
+    opts_knit$set(tangle = tangle)
   }
 
   ext = 'unknown'
