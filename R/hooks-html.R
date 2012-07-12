@@ -4,13 +4,15 @@ hook_plot_html = function(x, options) {
   if(options$fig.show == 'animate') {
     return(opts_knit$get('animation.fun')(x, options))
   }
-  ## TODO: output size not implemented for HTML yet
   fig.cur = options$fig.cur; fig.num = options$fig.num
   ai = options$fig.show == 'asis'
   plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == 0L || fig.cur == fig.num
   d1 = if (plot1) sprintf('</div><div class="rimage %s">', options$fig.align) else ''
   d2 = if (plot2) '</div><div class="rcode">' else ''
-  sprintf('%s<img src="%s" class="plot" />%s\n', d1, .upload.url(x), d2)
+  add = paste(c(sprintf('width="%s"', options$out.width),
+                sprintf('height="%s"', options$out.height),
+                options$out.extra), collapse = ' ')
+  sprintf('%s<img src="%s" %s class="plot" />%s\n', d1, .upload.url(x), add, d2)
 }
 
 ## a wrapper to upload an image and return the URL
