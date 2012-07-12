@@ -51,7 +51,6 @@ eng_awk = function(options) {
 ## Java
 
 ## Ruby
-
 eng_ruby = function(options) {
   code = str_c(options$code, collapse = '\n')
   cmd = sprintf('ruby -e %s', shQuote(code))

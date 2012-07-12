@@ -172,9 +172,8 @@ block_exec = function(params) {
     k1 = iss[1]; k2 = NULL
     for (i in 1:(n - 1)) {
       if (iss[i + 1] - iss[i] == 1) {
-        res[[k1]] =
-          structure(list(src = c(res[[k1]]$src, res[[iss[i + 1]]]$src)),
-                    class = 'source')  # CAUTION: now node src is a vector!!
+        res[[k1]] = structure(list(src = c(res[[k1]]$src, res[[iss[i + 1]]]$src)),
+                              class = 'source')  # CAUTION: now node src is a vector!!
         k2 = c(k2, iss[i + 1])
       } else k1 = iss[i + 1]
     }
