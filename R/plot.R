@@ -133,9 +133,13 @@ load_device = function(name, package, dpi = NULL) {
 
 
 ## filter out plot objects purely for layout (raised by par(), layout())
+
+# layout() results in plot_calls() of length 1 under R >= 2.16; all calls are
+# par/layout for par()/layout() under R <= 2.15, and are .External2 for R >=
+# 2.16; these blank plot objects should be removed
 rm_blank_plot = function(res) {
   Filter(function(x) {
-    !is.recordedplot(x) || !all(plot_calls(x) %in% c('par', 'layout', '.External2'))
+    !is.recordedplot(x) || (length(pc <- plot_calls(x)) > 1L && !all(pc %in% c('par', 'layout', '.External2')))
   }, res)
 }
 
@@ -173,5 +177,5 @@ is_par_change = function(p1, p2) {
   n1 = length(prim1 <- plot_calls(p1))
   n2 = length(prim2 <- plot_calls(p2))
   if (n2 <= n1) return(TRUE)
-  all(prim2[(n1 + 1):n2] %in% c('layout', 'par'))  # TODO: is this list exhaustive?
+  all(prim2[(n1 + 1):n2] %in% c('layout', 'par', '.External2'))  # TODO: is this list exhaustive?
 }
