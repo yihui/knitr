@@ -58,5 +58,13 @@ eng_ruby = function(options) {
   engine_output(code, out, options)
 }
 
+## Haskell
+eng_haskell = function(options) {
+  code = str_c(options$code, collapse = '\n')
+  cmd = sprintf('ghc -e %s', shQuote(code))
+  out = if (options$eval) system(cmd, intern = TRUE) else ''
+  engine_output(code, out, options)
+}
 
-knit_engines$set(python = eng_python, awk = eng_awk, gawk = eng_awk, ruby = eng_ruby)
+
+knit_engines$set(python = eng_python, awk = eng_awk, gawk = eng_awk, ruby = eng_ruby, haskell = eng_haskell)
