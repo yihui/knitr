@@ -11,12 +11,14 @@ test_that('parsing options', {
   expect_identical(parse_params('a,b=2,c="qwer",asdf="efg"'),
                    alist(label='a', b=2, c='qwer',asdf='efg'))
   ## back-compatibility with Sweave
+  opts_knit$set(sweave.penalty = 0)
   expect_identical(parse_params('abc,fig.path=foo/bar-'),
                    list(label='abc',fig.path='foo/bar-'))
   expect_true(valid_opts('a, results="hide"'))
   expect_false(valid_opts('a, results=hide'))
   expect_true(valid_opts('a, fig.show="asis"'))
   expect_false(valid_opts('a, fig.show=animate'))
+  opts_knit$set(sweave.penalty = 10)
 })
 
 
