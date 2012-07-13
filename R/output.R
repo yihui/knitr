@@ -153,7 +153,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     # use ext if cannot auto detect pattern
     if (is.null(pattern <- detect_pattern(text, ext))) {
       # nothing to be executed; just return original input
-      if (is.null(output)) return(text) else {
+      if (is.null(output)) return(paste(text, collapse = '\n')) else {
         cat(text, file = output); return(output)
       }
     }
