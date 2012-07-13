@@ -97,7 +97,7 @@ parse_params = function(params, label = TRUE) {
   }
   warning('(*) NOTE: I saw options "', params,
           '"\n are you using the old Sweave syntax? go http://yihui.name/knitr/options')
-  Sys.sleep(10)  # force you to pay attention!
+  Sys.sleep(opts_knit$get('sweave.penalty'))  # force you to pay attention!
 
   ## split by , (literal comma has to be escaped as \,) and then by =
   pieces = str_split(params, perl('(?<=[^\\\\]),'))[[1]]
