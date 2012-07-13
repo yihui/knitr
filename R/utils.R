@@ -406,16 +406,24 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.f
 #' This is a convenience function to knit the input markdown source and call
 #' \code{markdownToHTML()} to convert the result to HTML.
 #' @inheritParams knit
-#' @param ... options passed to \code{\link{knit}}
+#' @param ... options passed to \code{\link[markdown]{markdownToHTML}}
 #' @export
 #' @seealso \code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}
+#' @return If the argument \code{text} is NULL, a character string (HTML code)
+#'   is returned; otherwise the result is written into a file and \code{NULL} is
+#'   returned.
 #' @examples # a minimal example
 #' writeLines(c("# hello markdown", '``` {r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')
-knit2html = function(input, ..., envir = parent.frame()){
-  out = knit(input, ..., envir = envir)
-  markdown::markdownToHTML(out, str_c(file_path_sans_ext(out), '.html'))
+knit2html = function(input, ..., text = NULL, envir = parent.frame()){
+  if (is.null(text)) {
+    out = knit(input, envir = envir)
+    markdown::markdownToHTML(out, str_c(file_path_sans_ext(out), '.html'), ...)
+  } else {
+    out = knit(text = text, envir = envir)
+    markdown::markdownToHTML(text = out, ...)
+  }
 }
 
 
