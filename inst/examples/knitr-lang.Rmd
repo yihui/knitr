@@ -38,6 +38,12 @@ x = 'hello, ruby world!'
 p x.split(' ')
 ```
 
+### Haskell
+
+``` {r test-haskell, engine='haskell'}
+[x | x <- [1..10], odd x]
+```
+
 ## Chunk Options
 
 You can use some chunk options like `eval`, `echo` and `results`. For example, `eval=FALSE` (do not evaluate code):
