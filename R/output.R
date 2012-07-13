@@ -143,7 +143,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   }
 
   text = if (is.null(text)) readLines(input, warn = FALSE) else {
-    unlist(strsplit(text, '\n', fixed = TRUE)) # make sure each element is one line
+    unlist(strsplit(text, '\n')) # make sure each element is one line
   }
   if (!length(text)) return() # a trivial case: simply and exit
 

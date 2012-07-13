@@ -467,7 +467,7 @@ print_knitlog = function() {
 }
 
 # count the number of lines
-line_count = function(x) str_count(x, fixed('\n')) + 1L
+line_count = function(x) str_count(x, '\n') + 1L
 
 # faster than require() but less rigorous
 has_package = function(pkg) pkg %in% .packages(TRUE)

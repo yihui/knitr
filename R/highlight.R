@@ -52,6 +52,7 @@ hilight_source = function(x, format, options) {
   if (!(format %in% c('latex', 'html'))) return(x)
   if (has_package('highlight')) {
     highlight = getFromNamespace('highlight', 'highlight')
+    x = unlist(strsplit(x, '\n')) # remove the extra \n in code (#331)
     con = textConnection(x)
     on.exit(close(con))
     r = if (format == 'latex') hiren_latex else hiren_html

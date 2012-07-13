@@ -194,8 +194,7 @@ render_latex = function() {
         return(.verb.hook(x, options))
       if (!has_package('highlight')) return(x)
       ## gsub() makes sure " will not produce an umlaut
-      str_c('\\begin{flushleft}\n', gsub('"', '"{}', x, fixed = TRUE),
-            '\\end{flushleft}\n')
+      str_c('\\begin{flushleft}\n', gsub('"', '"{}', x), '\\end{flushleft}\n')
     },
     output = function(x, options) {
       if (output_asis(x, options)) {
