@@ -96,7 +96,8 @@ parse_params = function(params, label = TRUE) {
     return(res)
   }
   warning('(*) NOTE: I saw options "', params,
-          '"\n are you using the old Sweave syntax? go http://yihui.name/knitr/options')
+          '"\n are you using the old Sweave syntax? go http://yihui.name/knitr/options',
+          '\n (it is likely that you forgot to quote "character" options)')
   Sys.sleep(opts_knit$get('sweave.penalty'))  # force you to pay attention!
 
   ## split by , (literal comma has to be escaped as \,) and then by =
