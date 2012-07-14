@@ -28,6 +28,14 @@ check: build
 	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
 
+# the svn mirror created by
+# git svn clone svn+ssh://yihui@svn.r-forge.r-project.org/svnroot/isu/pkg/knitr-svn
+# commit everything to R-Forge
+svn:
+	cd ../knitr-svn;\
+	git pull git://github.com/yihui/knitr.git
+	git svn dcommit
+
 clean:
 	cd ..;\
 	rm -r $(PKGNAME).Rcheck/
