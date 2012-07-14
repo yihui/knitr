@@ -47,3 +47,13 @@ test_that('merge low-level changes', {
   expect_identical(sapply(merge_low_plot(res), class),
                    rep(c('source', 'recordedplot'), c(2, 1)))
 })
+
+test_that('captures grid graphics', {
+  in_null_dev({
+    res = evaluate('library(grid)
+    grid.newpage()
+    grid.rect(gp=gpar(fill="grey"))
+    grid.rect(gp=gpar(fill="red"))')
+  })
+  expect_identical(sapply(res, class), c('source', 'recordedplot')[c(1, 1, 1, 2, 1, 2)])
+})
