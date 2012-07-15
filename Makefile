@@ -38,5 +38,5 @@ svn:
 
 clean:
 	cd ..;\
-	rm -r $(PKGNAME).Rcheck/
+	$(RM) -r $(PKGNAME).Rcheck/
 
