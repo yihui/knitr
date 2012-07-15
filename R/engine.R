@@ -66,5 +66,19 @@ eng_haskell = function(options) {
   engine_output(code, out, options)
 }
 
+## Andre Simon's highlight
+eng_highlight = function(options) {
+  f = tempfile()
+  writeLines(code <- options$code, f)
+  on.exit(unlink(f))
+  # e.g. highlight.opts can be '-S matlab -O latex'
+  cmd = sprintf('highlight -f %s %s', options$highlight.opts %n% '-S text', shQuote(f))
+  out = if (options$eval) system(cmd, intern = TRUE) else ''
+  options$echo = FALSE; options$results = 'asis'  # do not echo source code
+  engine_output(code, out, options)
+}
 
-knit_engines$set(python = eng_python, awk = eng_awk, gawk = eng_awk, ruby = eng_ruby, haskell = eng_haskell)
+knit_engines$set(
+  python = eng_python, awk = eng_awk, gawk = eng_awk, ruby = eng_ruby,
+  haskell = eng_haskell, highlight = eng_highlight
+)
