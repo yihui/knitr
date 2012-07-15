@@ -34,6 +34,14 @@ NEW FEATURES
   https://github.com/yihui/knitr/blob/master/inst/examples/knitr-lang.Rmd
   (#294) (thanks, Ramnath Vaidyanathan)
 
+  - also added Haskell support in the option `engine='haskell'` through
+  calling `ghc` (#336) (thanks, Michel Kuhlmann)
+
+  - added support to Andre Simon's `highlight` through the option
+  `engine='highlight'`; see https://gist.github.com/3114112 for an example
+  of highlighting Matlab code in LaTeX (thanks, Dirk Eddelbuettel and
+  Renaud Gaujoux)
+
   - the output hooks for LaTeX, HTML, Markdown and reST will respect the
   `engine` option now, so these hooks can be readily used for output when
   the language is not R, e.g. `render_markdown(strict = TRUE)` also works
@@ -113,12 +121,20 @@ BUG FIXES
   everywhere, and will affect all chunks after this setting, no matter where
   `opts_chunk$set()` is (thanks, Guy Lebanon) (http://bit.ly/MexHXd)
 
+  - fixed #332: calling `purl()` inside a source document when `knit()`
+  the same document could cause clashes; now it is safe to put `purl()`
+  inside a source document and `knit()` it
+
 MAJOR CHANGES
 
   - if the chunk label contains non-alphanumeric characters (except `-` and
   `_`), these characters will be replaced by `_` in the figure filenames
   (if there are any) and a warning will be issued; this is to guarantee the
   figure filenames are valid to LaTeX (#321) (thanks, (Roman Lustrik)
+
+  - the [**highlight**](http://cran.r-project.org/package=highlight)
+  package is not enabled by default; use `opts_knit$set(use.highlight =
+  TRUE)` to enable it
 
   - the default LaTeX output will put messages, warnings and errors in special
   LaTeX environments: errors are red, warnings are magenta, and messages are
@@ -166,6 +182,11 @@ MINOR CHANGES
 
   - `options()` set in the main document will apply to its child documents
   (e.g. `options('digits')`) (#306) (thanks, Cassio Pereira)
+
+  - the `...` argument in `knit2html()` is passed to `markdownToHTML()` in
+  the **markdown** package instead of `knit()`; this allows us to pass more
+  arguments to control the rendering of HTML output, e.g. `knit2html(input,
+  fragment.only = TRUE)` (#333) (thanks, @Bart6114)
 
 DOCUMENTATION
 
