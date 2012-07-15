@@ -42,20 +42,25 @@ hi_html = function(x) {
   paste(x, collapse = '\n')
 }
 
-# may require the orphaned highlight package
+# may require the highlight package
+highlight_fun = function(name) getFromNamespace(name, 'highlight')
 
-hiren_latex = renderer_latex(document = FALSE,
-                             styles = styler_assistant_latex(css.parser(.default.sty)))
-hiren_html = renderer_html(document = FALSE, header = function() '', footer = function() '')
+.default.css = css.parser(.default.sty)
 
 hilight_source = function(x, format, options) {
   if (!(format %in% c('latex', 'html'))) return(x)
   if (opts_knit$get('use.highlight')) {
-    highlight = getFromNamespace('highlight', 'highlight')
+    highlight = highlight_fun('highlight')
     x = unlist(strsplit(x, '\n')) # remove the extra \n in code (#331)
     con = textConnection(x)
     on.exit(close(con))
-    r = if (format == 'latex') hiren_latex else hiren_html
+    r = if (format == 'latex') {
+      highlight_fun('renderer_latex')(
+        document = FALSE, styles = highlight_fun('styler_assistant_latex')(.default.css)
+      )
+    } else {
+      highlight_fun('renderer_html')(document = FALSE, header = function() '', footer = function() '')
+    }
     enc = getOption('encoding')
     options(encoding = 'native.enc')  # make sure parser() writes with correct enc
     on.exit(options(encoding = enc), add = TRUE)
