@@ -709,7 +709,7 @@ and questions can be delivered to the \href{mailto:knitr@googlegroups.com}{maili
 \url{https://groups.google.com/group/knitr}.
 
 % when knitr is updated, this chunk will be updated; why?
-<<auto-bib, version=packageVersion('knitr'), echo=FALSE, cache=TRUE, message=FALSE>>=
+<<auto-bib, version=packageVersion('knitr'), echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE>>=
 # write all packages in the current session to a bib file
 write_bib(c(.packages(), 'cacheSweave', 'evaluate', 'formatR', 'highlight', 'pgfSweave'), file = 'knitr-packages.bib')
 @

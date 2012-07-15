@@ -2952,7 +2952,7 @@ status open
 \begin_layout Plain Layout
 
 <<auto-bib, version=packageVersion('knitr'), echo=FALSE, cache=TRUE, message=FAL
-SE>>=
+SE, warning=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
