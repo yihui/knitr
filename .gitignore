@@ -9,5 +9,6 @@ inst/examples/ex-out*
 knitr-minimal.html
 knitr-latex.tex
 knitr-spin.md
+knitr-spin.html
 .Rproj.user
 knitr.Rproj
