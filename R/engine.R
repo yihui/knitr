@@ -82,3 +82,6 @@ knit_engines$set(
   python = eng_python, awk = eng_awk, gawk = eng_awk, ruby = eng_ruby,
   haskell = eng_haskell, highlight = eng_highlight
 )
+
+# possible values for engines (for auto-completion in RStudio)
+opts_chunk_attr$engine = as.list(c('R', names(knit_engines$get())))
