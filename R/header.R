@@ -2,10 +2,9 @@
 insert_header = function(doc) {
   if (is.null(b <- knit_patterns$get('header.begin'))) return(doc)
 
-  fmt = opts_knit$get('out.format')
-  if (fmt == 'html')
+  if (out_format('html'))
     return(insert_header_html(doc, b))
-  if (fmt %in% c('latex', 'listings', 'sweave'))
+  if (out_format(c('latex', 'listings', 'sweave')))
     return(insert_header_latex(doc, b))
   doc
 }

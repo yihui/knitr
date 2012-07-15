@@ -169,7 +169,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
                                       brew = 'brew'))
   }
 
-  if (is.null(opts_knit$get('out.format'))) {
+  if (is.null(out_format())) {
     fmt = switch(ext, rnw = 'latex', tex = 'latex', htm = 'html', html = 'html',
                  md = 'markdown', markdown = 'markdown', brew = 'brew', rst = 'rst',
                  {warning('cannot automatically decide the output format'); 'unknown'})
@@ -178,7 +178,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   }
   ## change output hooks only if they are not set beforehand
   if (identical(knit_hooks$get(names(.default.hooks)), .default.hooks) && !child_mode()) {
-    switch(opts_knit$get('out.format'), latex = render_latex(),
+    switch(out_format(), latex = render_latex(),
            sweave = render_sweave(), listings = render_listings(),
            html = render_html(), jekyll = render_jekyll(),
            markdown = render_markdown(), rst = render_rst())
@@ -307,7 +307,7 @@ knit_child = function(..., eval = TRUE) {
   path = knit(..., tangle = opts_knit$get('tangle'))
   if (opts_knit$get('tangle')) {
     str_c('\n', 'source("', path, '")')
-  } else if (concord_mode() || opts_knit$get('out.format') != 'latex') {
+  } else if (concord_mode() || !out_format('latex')) {
     on.exit(unlink(path)) # child output file is temporary
     str_c(readLines(path), collapse = '\n')
   } else {
@@ -395,8 +395,7 @@ wrap.character = function(x, options) {
 wrap.source = function(x, options) {
   src = x$src
   if (options$highlight) {
-    fmt = opts_knit$get('out.format')
-    src = hilight_source(src, fmt, options)
+    src = hilight_source(src, out_format(), options)
   } else if (options$prompt) src = sapply(src, line_prompt, USE.NAMES = FALSE)
   src = str_c(src, collapse = '')
   src = str_replace(src, '([^\n]+)$', '\\1\n')

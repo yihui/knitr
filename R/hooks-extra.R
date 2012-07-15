@@ -48,8 +48,7 @@ hook_rgl = function(before, options, envir) {
   par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
 
-  fmt = opts_knit$get('out.format')
-  if (fmt %in% c('html', 'markdown', 'jekyll', 'rst')) options$dev = 'png'
+  if (out_format(c('html', 'markdown', 'jekyll', 'rst'))) options$dev = 'png'
 
   ## support 3 formats: eps, pdf and png (default)
   switch(options$dev,
@@ -114,7 +113,7 @@ hook_plot_custom = function(before, options, envir){
 
   ext = options$fig.ext %n% dev2ext(options$dev)
   name = fig_path()
-  fmt = opts_knit$get('out.format')
+  fmt = out_format()
   if (fmt %in% c('sweave', 'listings')) fmt = 'latex'
   hook = switch(fmt, latex = hook_plot_tex, html = hook_plot_html,
                 rst = hook_plot_rst, hook_plot_md)

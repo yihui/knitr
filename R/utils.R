@@ -69,7 +69,7 @@ sc_split = function(string) {
 
 ## extract LaTeX packages for tikzDevice
 set_preamble = function(input) {
-  if (opts_knit$get('out.format') != 'latex') return()
+  if (!out_format('latex')) return()
   db = knit_patterns$get('document.begin')
   if (length(db) != 1L) return()  # no \begin{document} pattern
   hb = knit_patterns$get('header.begin')
