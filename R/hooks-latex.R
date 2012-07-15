@@ -211,6 +211,7 @@ render_latex = function() {
 #' @export
 render_sweave = function() {
   opts_chunk$set(highlight = FALSE, comment = NA, prompt = TRUE) # mimic Sweave settings
+  opts_knit$set(out.format = 'sweave')
   test_latex_pkg('Sweave', file.path(R.home("share"), "texmf", "tex", "latex", "Sweave.sty"))
   set_header(framed = '', highlight = '\\usepackage{Sweave}')
   knit_hooks$restore()
@@ -231,6 +232,7 @@ render_sweave = function() {
 render_listings = function() {
   render_sweave()
   opts_chunk$set(prompt = FALSE)
+  opts_knit$set(out.format = 'listings')
   test_latex_pkg('Sweavel', system.file('misc', 'Sweavel.sty', package = 'knitr'))
   set_header(framed = '', highlight = '\\usepackage{Sweavel}')
   invisible(NULL)
