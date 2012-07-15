@@ -182,11 +182,7 @@ render_latex = function() {
   opts_chunk$set(out.width = '\\maxwidth')
   h = opts_knit$get('header')
   if (!nzchar(h['framed'])) set_header(framed = .header.framed)
-  if (!nzchar(h['highlight'])) {
-    if (!has_package('highlight') && !str_detect(.header.hi.tex, fixed('\\usepackage{alltt}')))
-      .header.hi.tex = str_c(.header.hi.tex, '\\usepackage{alltt}', sep = '\n')
-    set_header(highlight = .header.hi.tex)
-  }
+  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
   knit_hooks$restore()
   knit_hooks$set(
     source = function(x, options) {

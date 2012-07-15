@@ -71,8 +71,7 @@ theme_to_header_latex = function(theme) {
 
   ## write latex highlight header
   fgheader = color_def(foreground, "fgcolor")
-  highlight = c(fgheader, styler_assistant_latex(css_out[-1]),
-                if (has_package('highlight')) boxes_latex() else '\\usepackage{alltt}')
+  highlight = c(fgheader, styler_assistant_latex(css_out[-1]))
   list(highlight = highlight, background = background, foreground = foreground)
 }
 

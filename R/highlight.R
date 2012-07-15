@@ -50,7 +50,7 @@ hiren_html = renderer_html(document = FALSE, header = function() '', footer = fu
 
 hilight_source = function(x, format, options) {
   if (!(format %in% c('latex', 'html'))) return(x)
-  if (has_package('highlight')) {
+  if (opts_knit$get('use.highlight')) {
     highlight = getFromNamespace('highlight', 'highlight')
     x = unlist(strsplit(x, '\n')) # remove the extra \n in code (#331)
     con = textConnection(x)
