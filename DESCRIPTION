@@ -75,7 +75,6 @@ Collate:
     'hooks.R'
     'utils.R'
     'themes.R'
-    'highlight-00_sizes.R'
     'highlight-css.R'
     'highlight-renderer.R'
     'header.R'
