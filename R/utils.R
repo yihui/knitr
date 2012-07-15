@@ -294,6 +294,12 @@ test_latex_pkg = function(name, path) {
 child_mode = function() opts_knit$get('child')
 parent_mode = function() opts_knit$get('parent')
 
+# return the output format, or if current format is in specified formats
+out_format = function(x) {
+  fmt = opts_knit$get('out.format')
+  if (missing(x)) fmt else fmt %in% x
+}
+
 #' Path for figure files
 #'
 #' The filename of figure files is the combination of options \code{fig.path}
