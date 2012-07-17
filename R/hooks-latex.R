@@ -188,7 +188,7 @@ render_latex = function() {
     source = function(x, options) {
       if (options$engine != 'R' || !options$highlight)
         return(.verb.hook(x, options))
-      if (!has_package('highlight')) return(x)
+      if (!opts_knit$get('use.highlight')) return(x)
       ## gsub() makes sure " will not produce an umlaut
       str_c('\\begin{flushleft}\n', gsub('"', '"{}', x), '\\end{flushleft}\n')
     },
