@@ -125,6 +125,8 @@ BUG FIXES
   the same document could cause clashes; now it is safe to put `purl()`
   inside a source document and `knit()` it
 
+  - fixed #342: when `eval=FALSE`, line breaks in the source code were missing
+
 MAJOR CHANGES
 
   - if the chunk label contains non-alphanumeric characters (except `-` and
