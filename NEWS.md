@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 0.8
+
+## BUG FIXES
+
+- dots in figure paths are more safely replaced with `_` now, e.g. `fig.path='../figure'` will no longer be replaced by `__/figure` (#346) (thanks, @ralfer)
+
 # CHANGES IN knitr VERSION 0.7
 
 ## NEW FEATURES
