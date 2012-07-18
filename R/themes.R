@@ -87,7 +87,7 @@ theme_to_header_html = function(theme){
     system.file("themes", sprintf("%s.css", theme), package = "knitr")
   }
   bgcolor = css.parser(css_file)$background$color
-  css_knitr = system.file('themes', '.knitr.css', package = 'knitr')
+  css_knitr = system.file('misc', 'knitr.css', package = 'knitr')
   css_knitr_lines = readLines(css_knitr)
   css_knitr_lines = sub('^([[:space:]]+background-color:\\s+)(.*)$',
                           sprintf('\\1%s;', bgcolor), css_knitr_lines)
