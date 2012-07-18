@@ -327,6 +327,14 @@ fig_path = function(suffix = '', options = opts_current$get()) {
     warning('replaced special characters in figure filename "', path, '" -> "',
             path <- str_replace_all(path, '[^-_./\\[:alnum:]]', '_'), '"')
   }
+  # replace . with _ except ../ and ./
+  s = str_split(path, '[/\\]')[[1L]]
+  i = (s != '.') & (s != '..') & str_detect(s, '\\.')
+  if (any(i)) {
+    s[i] = str_replace_all(s[i], '\\.', '_')
+    path = str_c(s, collapse = '/')
+    warning('dots in figure paths replaced with _ ("', path, '")')
+  }
   str_c(path, suffix)
 }
 
