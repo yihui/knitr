@@ -323,9 +323,9 @@ out_format = function(x) {
 fig_path = function(suffix = '', options = opts_current$get()) {
   path = valid_path(options$fig.path, options$label)
   # sanitize filename for LaTeX
-  if (str_detect(path, '[^-_/\\\\[:alnum:]]')) {
+  if (str_detect(path, '[^-_/\\[:alnum:]]')) {
     warning('replaced special characters in figure filename "', path, '" -> "',
-            path <- str_replace_all(path, '[^-_/\\\\[:alnum:]]', '_'), '"')
+            path <- str_replace_all(path, '[^-_/\\[:alnum:]]', '_'), '"')
   }
   str_c(path, suffix)
 }
