@@ -30,6 +30,8 @@ test_that('fig_path() sanitizes paths', {
     suppressWarnings(fig_path(, list(fig.path = 'fig space/', label = 'a.b'))),
     'fig_space/a_b'
   )
+  expect_identical(fig_path(, list(fig.path = '../', label = 'c.d')), '../c_d')
+  expect_identical(fig_path(, list(fig.path = './../', label = 'c..d')), './../c__d')
 })
 
 test_that('base64_encode() gets the same result as markdown:::.b64EncodeFile', {
