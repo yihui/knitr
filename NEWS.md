@@ -8,6 +8,10 @@
 
 - dots in figure paths are more safely replaced with `_` now, e.g. `fig.path='../figure'` will no longer be replaced by `__/figure` (#346) (thanks, @ralfer)
 
+## MINOR CHANGES
+
+- if `getOption('OutDec')` is not `.`, inline numeric output will be put inside `\text{}` in LaTeX to avoid situations like #348 (the normal math mode may add a space after the comma in `3,1415`)
+
 # CHANGES IN knitr VERSION 0.7
 
 ## NEW FEATURES
