@@ -130,11 +130,8 @@ hook_plot_tex = function(x, options) {
 ## inline hook for tex
 .inline.hook.tex = function(x) {
   if(is.numeric(x)) {
-    if(getOption('OutDec') != '.') {
-      if(!inherits(x, 'AsIs')) x = sprintf('\\text{%s}', format_sci(x, 'latex'))
-    } else {
-      x = format_sci(x, 'latex')
-    }
+    x = format_sci(x, 'latex')
+    if (getOption('OutDec') != '.') x = sprintf('\\text{%s}', x)
   }
   .inline.hook(x)
 }
