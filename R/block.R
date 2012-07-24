@@ -81,12 +81,20 @@ block_exec = function(params) {
   .knitEnv$knit_env = env # make a copy of the envir
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
 
-  ## open a graphical device to record graphics
-  dargs = formals(getOption('device'))  # is NULL in RStudio's GD
-  (if (is.null(dargs) || !interactive()) {
-    function(...) pdf(file = NULL, ...)
-  } else dev.new)(width = options$fig.width, height = options$fig.height)
-  dv = dev.cur(); on.exit(dev.off(dv))
+  keep = options$fig.keep
+  if (!opts_knit$get('global.device')) {
+    # open a graphical device to record graphics
+    dargs = formals(getOption('device'))  # is NULL in RStudio's GD
+    (if (is.null(dargs) || !interactive()) {
+      function(...) pdf(file = NULL, ...)
+    } else dev.new)(width = options$fig.width, height = options$fig.height)
+    dv = dev.cur(); on.exit(dev.off(dv))
+    dev.control(displaylist = if (keep != 'none') 'enable' else 'inhibit')  # enable recording
+  } else if (is.null(dev.list())) {
+    # want to use a global device but not open yet
+    dev.new(width = options$fig.width, height = options$fig.height)
+    dev.control('enable')
+  }
 
   res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
 
@@ -111,8 +119,6 @@ block_exec = function(params) {
     return(if (options$include) output else '')
   }
 
-  keep = options$fig.keep
-  dev.control(displaylist = if (keep != 'none') 'enable' else 'inhibit')  # enable recording
 
   ## guess plot file type if it is NULL
   if (keep != 'none' && is.null(options$fig.ext)) {
