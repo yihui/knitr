@@ -13,7 +13,7 @@ insert_header = function(doc) {
 make_header_latex = function() {
   h = paste(c(
     '\\usepackage{graphicx, color}', .header.maxwidth, opts_knit$get('header'),
-    if(getOption('OutDec') != '.') '\\usepackage{amsmath}',
+    if (getOption('OutDec') != '.') '\\usepackage{amsmath}',
     if (out_format('latex')) {
       if (opts_knit$get('use.highlight')) highlight_fun('boxes_latex')() else '\\usepackage{alltt}'
     }
