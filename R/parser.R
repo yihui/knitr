@@ -64,7 +64,12 @@ parse_block = function(input) {
   
   ## store dependencies
   if (!is.null(deps <- params$dependson)) {
-    for (i in sc_split(deps))
+    if (is.call(deps)) {
+      deps = eval(deps)
+    } else {
+      deps = sc_split(deps)
+    }
+    for (i in deps)
       dep_list$set(structure(list(c(dep_list$get(i), label)), .Names = i))
   }
   
