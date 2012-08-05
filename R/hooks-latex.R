@@ -148,7 +148,7 @@ hook_plot_tex = function(x, options) {
 .color.block = function(color1 = '', color2 = '') {
   function(x, options) {
     x = gsub('\n*$', '', x)
-    sprintf('\\begin{flushleft}\\ttfamily\\noindent%s%s%s\\end{flushleft}',
+    sprintf('\n\n\\ttfamily\\noindent%s%s%s',
             color1, escape_latex(x, newlines = TRUE), color2)
   }
 }
