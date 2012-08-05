@@ -23,6 +23,7 @@ comment_out = function(x, options) {
   prefix = options$comment
   if (!is.null(prefix) && nzchar(prefix) && !is.na(prefix)) {
     prefix = str_c(prefix, ' ')
+    x = gsub('\\s*$', '', x)
     line_prompt(x, prompt = prefix, continue = prefix)
   } else x
 }
