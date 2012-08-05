@@ -403,7 +403,9 @@ wrap.source = function(x, options) {
 }
 
 msg_wrap = function(message, type, options) {
-  message = str_wrap(message, width = getOption('width'))
+  # when output format is latex, do not wrap messages (let latex deal with wrapping)
+  if (!out_format(c('latex', 'listings', 'sweave')))
+    message = str_wrap(message, width = getOption('width'))
   knit_log$set(
     structure(list(c(knit_log$get(type), str_c('Chunk ', options$label, ':\n  ', message))),
     .Names = type)
