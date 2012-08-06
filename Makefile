@@ -29,8 +29,8 @@ check: build
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
 
 # the svn mirror created by
-# git svn clone svn+ssh://yihui@svn.r-forge.r-project.org/svnroot/isu/pkg/knitr-svn
-# commit everything to R-Forge
+# git svn clone svn://svn.rforge.net/knitr/trunk knitr-svn
+# commit everything to RForge
 svn:
 	cd ../knitr-svn;\
 	git pull git://github.com/yihui/knitr.git
