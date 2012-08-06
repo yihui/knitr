@@ -53,6 +53,16 @@ All built-in options in **knitr** are:
 - `size`: (`'normalsize'`; character) font size for the default LaTeX output (see `?highlight` in the **highlight** package for a list of possible values)
 - `background`: (`'#F7F7F7'`; character or numeric) background color of chunks in LaTeX output (passed to the LaTeX package **framed**); the color model is `rgb`; it can be either a numeric vector of length 3, with each element between 0 and 1 to denote red, green and blue, or any built-in color in R like `red` or `springgreen3` (see `colors()` for a full list), or a hex string like `#FFFF00`, or an integer (all these colors will be converted to the RGB model; see `?col2rgb` for details)
 
+There is a hidden option `indent` which stores the possible leading white spaces of the chunk, e.g. for the chunk below, `indent` is a character string of two spaces:
+
+{% highlight r %}
+  ```{r}
+  rnorm(10)
+  ```
+{% endhighlight %}
+
+Currently this option is only used to indent markdown output, because leading white spaces have special meanings in markdown.
+
 ### Cache
 
 - `cache`: (`FALSE`; logical) whether to cache a code chunk; when evaluating code chunks, the cached chunks are skipped, but the objects created in these chunks are (lazy-) loaded from previously saved databases (`.rdb` and `.rdx`) files, and these files are saved when a chunk is evaluated for the first time, or when cached files are not found (e.g. you may have removed them by hand); note the filename consists of the chunk label with an MD5 digest of the R code in the chunk (the MD5 string is a summary of the chunk text, and any changes in the chunk will produce a different MD5 digest); unlike the **cacheSweave** package which uses **stashR**, this package directly uses internal functions in base R for cache, and another difference is that results of the code will *still* be included in the output even when cache is used (whereas **cacheSweave** has no output when a chunk is cached), because **knitr** also caches the printed output of a code chunk as a character string
