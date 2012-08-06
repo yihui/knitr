@@ -47,7 +47,9 @@ render_markdown = function(strict = FALSE) {
     chunk = function(x, options) {
       x = gsub('[\n]{2,}(```|    )', '\n\n\\1', x)
       x = gsub('[\n]+$', '', x)
-      gsub('^[\n]+', '\n', x)
+      x = gsub('^[\n]+', '\n', x)
+      if (is.null(s <- options$indent)) return(x)
+      line_prompt(x, prompt = s, continue = s)
     }
   )
 }
