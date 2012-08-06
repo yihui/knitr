@@ -54,7 +54,11 @@ parse_block = function(input) {
   n = length(block); chunk.begin = knit_patterns$get('chunk.begin')
   params = if (group_pattern(chunk.begin)) gsub(chunk.begin, '\\1', block[1]) else ''
   params = parse_params(params)
-  
+  if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', block[1]))) {
+    params$indent = spaces
+    block = gsub(str_c('^', spaces), '', block) # remove indent for the whole chunk
+  }
+
   label = params$label
   code = block[-1L]
   if (length(code)) {
