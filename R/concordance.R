@@ -5,7 +5,9 @@ knit_concord = new_defaults(list(
   parent = NULL, parent.line = NULL, i = NULL, in.next = 1L, out.next = NULL
 ))
 
-concord_mode = function() opts_knit$get('concordance')
+concord_mode = function() {
+  opts_knit$get('concordance') && !is.null(knit_concord$get('infile'))
+}
 
 current_lines = function(i = knit_concord$get('i')) {
   # a helpr function to return line numbers for block i
