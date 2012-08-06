@@ -26,7 +26,7 @@ And `\SweaveOpts{}` can change the default global options in a document (e.g. `\
   - for example, options that take _character_ values must be quoted as you do in R (e.g. should write `fig.path="abc"` instead of `fig.path=abc`, and `out.width='\\textwidth'` instead of `out.width=\textwidth`)
   - in theory, the chunk label should be quoted as well but it is an exception for the sake of convenience; however sometimes it will not work, e.g. `<<2a>>=` (in this case we should write `<<'2a'>>=`)
   - for logical options, `TRUE` and `FALSE` are OK, and `true`/`false` will not work as you might have expected because `true` is not `TRUE`
-  - uou can write arbitrarily complicated expressions as you want as long as they are legitimate R code
+  - you can write arbitrarily complicated expressions as you want as long as they are legitimate R code
   - if you come from the Sweave land, please read the [transition page](/knitr/demo/sweave/) carefully because the syntax is different
 
 All built-in options in **knitr** are:
