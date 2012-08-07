@@ -59,9 +59,9 @@ call_block = function(block) {
     hash = str_c(valid_path(params$cache.path, params$label), '_', digest(content))
     params$hash = hash
     if (cache$exists(hash)) {
-      if (!params$include) return('')
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
       cache$load(hash)
+      if (!params$include) return('')
       return(cache$output(hash))
     }
     cache$library(params$cache.path, save = FALSE) # load packages
