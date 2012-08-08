@@ -11,6 +11,13 @@
   website in the references for more information and
   examples.
 }
+\note{
+  The pronunciation of \pkg{knitr} is similar to
+  \emph{neater} (neater than what?) or you can think of
+  \emph{knitter} (but it is \emph{single t}).  The name
+  comes from \code{knit} + \code{R} (while \code{Sweave} =
+  \code{S} + \code{weave}).
+}
 \author{
   Yihui Xie <\url{http://yihui.name}>
 }
@@ -18,4 +25,7 @@
   Full documentation and demos:
   \url{http://yihui.name/knitr/}; FAQ's:
   \url{https://github.com/yihui/knitr/blob/master/FAQ.md}
+}
+\seealso{
+  The core function in this package: \code{\link{knit}}
 }
