@@ -80,18 +80,9 @@ block_exec = function(params) {
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
 
   keep = options$fig.keep
-  if (!opts_knit$get('global.device')) {
-    # open a graphical device to record graphics
-    dargs = formals(getOption('device'))  # is NULL in RStudio's GD
-    (if (is.null(dargs) || !interactive()) {
-      function(...) pdf(file = NULL, ...)
-    } else dev.new)(width = options$fig.width, height = options$fig.height)
+  # open a device to record plots
+  if (chunk_device(options$fig.width, options$fig.height, keep != 'none')) {
     dv = dev.cur(); on.exit(dev.off(dv))
-    dev.control(displaylist = if (keep != 'none') 'enable' else 'inhibit')  # enable recording
-  } else if (is.null(dev.list())) {
-    # want to use a global device but not open yet
-    dev.new(width = options$fig.width, height = options$fig.height)
-    dev.control('enable')
   }
 
   res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
@@ -214,6 +205,25 @@ block_cache = function(options, output, objects) {
                                c(options$label, dep_list$get(options$label))), '_*'))
   cache$library(options$cache.path, save = TRUE)
   cache$save(objects, outname, hash)
+}
+
+# open a device for a chunk; depending on the option global.device, may or may
+# not need to close the device on exit
+chunk_device = function(width, height, record = TRUE) {
+  if (!opts_knit$get('global.device')) {
+    dargs = formals(getOption('device'))  # is NULL in RStudio's GD
+    (if (is.null(dargs) || !interactive()) {
+      function(...) pdf(file = NULL, ...)
+    } else dev.new)(width = width, height = height)
+    dev.control(displaylist = if (record) 'enable' else 'inhibit')  # enable recording
+    # if returns TRUE, we need to close this device after code is evaluated
+    return(TRUE)
+  } else if (is.null(dev.list())) {
+    # want to use a global device but not open yet
+    dev.new(width = width, height = height)
+    dev.control('enable')
+  }
+  FALSE
 }
 
 call_inline = function(block) {
