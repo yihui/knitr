@@ -155,7 +155,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
     if (is.null(pattern <- detect_pattern(text, ext))) {
       # nothing to be executed; just return original input
       if (is.null(output)) return(paste(text, collapse = '\n')) else {
-        cat(text, file = output); return(output)
+        cat(text, sep = '\n', file = output); return(output)
       }
     }
     if (!(pattern %in% names(apat)))
