@@ -30,7 +30,7 @@ engine_output = function(code, out, options) {
   if (options$include) knit_hooks$get('chunk')(txt, options) else ''
 }
 
-## Python
+## Python (TODO: how to emulate the console??)
 eng_python = function(options) {
   code = str_c(options$code, collapse = '\n')
   cmd = sprintf('python -c %s', shQuote(code))
