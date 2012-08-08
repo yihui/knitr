@@ -69,10 +69,14 @@ call_block = function(block) {
 }
 
 block_exec = function(params) {
-  # when code is not R language
-  if (params$engine != 'R') return(knit_engines$get(params$engine)(params))
-  code = params$code
   options = params
+  # when code is not R language
+  if (options$engine != 'R') {
+    output = knit_engines$get(options$engine)(options)
+    if (options$cache) block_cache(options, output, character(0))
+    return(output)
+  }
+  code = options$code
 
   ## eval chunks (in an empty envir if cache)
   env = if (options$cache) new.env(parent = knit_global()) else knit_global()
