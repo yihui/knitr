@@ -224,7 +224,7 @@ render_sweave = function() {
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.s(x, options)
   hook.c = function(x, options) {
     if (output_asis(x, options)) return(x)
-    str_c('\\begin{Schunk}\n', x, '\\end{Schunk}\n')
+    str_c('\\begin{Schunk}\n', x, '\\end{Schunk}')
   }
   knit_hooks$set(source = hook.i, output = hook.o, warning = hook.s,
                  message = hook.s, error = hook.s, inline = .inline.hook.tex,
