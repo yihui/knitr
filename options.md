@@ -142,6 +142,10 @@ There are two hidden options which are not designed to be set by the users: `fig
 
 - `engine`: (`'R'`; character) the language name of the code chunk; currently other possible values are `'python'` and `'awk'`/`'gawk'`; the object `knit_engines` in this package can be used to set up engines for other languages
 
+### Option templates
+
+- `opts.label`: (`NULL`; character) the label of options set in `opts_template` (see `?opts_template`); this option can save some typing efforts for sets of frequently used chunk options
+
 ## Package Options <a id="package_options"></a>
 
 The package options can be changed using the object [`opts_knit`](objects); for example,
