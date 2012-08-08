@@ -48,8 +48,6 @@ call_block = function(block) {
     return('') # a trivial chunk; do nothing
   }
 
-  if (is_tikz_dev(params)) set_header(tikz = '\\usepackage{tikz}')
-
   params$code = parse_chunk(params$code) # parse sub-chunk references
 
   ## Check cache
