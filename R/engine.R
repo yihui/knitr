@@ -84,4 +84,4 @@ knit_engines$set(
 )
 
 # possible values for engines (for auto-completion in RStudio)
-opts_chunk_attr$engine = as.list(c('R', names(knit_engines$get())))
+opts_chunk_attr$engine = as.list(sort(c('R', names(knit_engines$get()))))
