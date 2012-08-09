@@ -16,7 +16,10 @@ knit_counter = function(init = 0L) {
 plot_counter = knit_counter(1L)
 chunk_counter = knit_counter(1L)
 
-line_prompt = evaluate:::line_prompt
+line_prompt = function(x, ...) {
+  x[x == ''] = '\n'
+  evaluate:::line_prompt(x, ...)
+}
 
 ## add a prefix to output
 comment_out = function(x, options) {
