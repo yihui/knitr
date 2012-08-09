@@ -141,7 +141,9 @@ load_device = function(name, package, dpi = NULL) {
 # 2.16; these blank plot objects should be removed
 rm_blank_plot = function(res) {
   Filter(function(x) {
-    !is.recordedplot(x) || identical(pc <- plot_calls(x), 'recordGraphics') || (length(pc) > 1L && !all(pc %in% c('par', 'layout', '.External2')))
+    !is.recordedplot(x) ||
+      identical(pc <- plot_calls(x), 'recordGraphics') ||
+      (length(pc) > 1L && !all(pc %in% c('par', 'layout', '.External2')))
   }, res)
 }
 
