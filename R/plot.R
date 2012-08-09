@@ -143,6 +143,7 @@ rm_blank_plot = function(res) {
   Filter(function(x) {
     !is.recordedplot(x) ||
       identical(pc <- plot_calls(x), 'recordGraphics') ||
+      identical(pc, 'persp') ||
       (length(pc) > 1L && !all(pc %in% c('par', 'layout', '.External2')))
   }, res)
 }
