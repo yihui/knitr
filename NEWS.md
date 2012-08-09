@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- output from other languages (e.g. python, awk, ...) can also be cached like R output when `cache=TRUE`; see https://github.com/yihui/knitr-examples/023-engine-python.Rmd for an example
+- output from other languages (e.g. python, awk, ...) can also be cached like R output when `cache=TRUE`; see [023-engine-python.Rmd](https://github.com/yihui/knitr-examples/blob/master/023-engine-python.Rmd) for an example
 
 - added support for bash/shell scripts; use the chunk option `engine='bash'` or `engine='sh'` to write shell scripts in code chunks (#361)
 
