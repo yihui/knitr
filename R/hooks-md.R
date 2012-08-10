@@ -15,9 +15,13 @@ hook_plot_md = function(x, options) {
     is.null(s <- options$out.extra)) {
     return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
   }
-  # additional styles require the HTML syntax
-  add = paste(sprintf('width="%s"', w), sprintf('height="%s"', h), s)
-  sprintf('<img src="%s%s" %s alt="%s" title="%s" /> ', base, .upload.url(x), add, cap, cap)
+  # additional styles require the HTML or LaTeX syntax
+  if (opts_knit$get('md.dropback') == 'html') {
+    add = paste(sprintf('width="%s"', w), sprintf('height="%s"', h), s)
+    sprintf('<img src="%s%s" %s alt="%s" title="%s" /> ', base, .upload.url(x), add, cap, cap)
+  } else if(opts_knit$get('md.dropback') == 'latex') {
+    return(hook_plot_tex(x, options))
+  }
 }
 
 #' @rdname output_hooks
