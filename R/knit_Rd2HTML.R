@@ -4,21 +4,23 @@
 #' \code{extra} options of knitr
 #' \code{package} package name
 #' @export
-knit_Rd2HTML <- function(Rd, extra = "", package) {
-    Rd2html <- function(Rd, extra) {
-        base <- file_path_sans_ext(Rd)
+knit_Rd2HTML <- function(Rd, extra = "", package = NULL) {
+    Rd2html <- function(Rd, extra, package) {
+        base <- tools::file_path_sans_ext(Rd)
         out <- paste(base, "Rhtml", sep = ".")
         file.ex.R <- paste(base, "-examples.R", sep = ".")
-        tools::Rd2HTML(Rd, out = out, stylesheet = "stylesheet.css")
-        Rd2ex(Rd, file.ex.R)
+        tools::Rd2HTML(Rd, out = out, package = package, stylesheet = "stylesheet.css")
+        tools::Rd2ex(Rd, file.ex.R)
         ex.R <- readLines(file.ex.R)
-        ex.R <- c(paste("<!--begin.rcode", extra), ex.R, "end.rcode-->", sep = "\n")
+		ex.R <- gsub("##D", "", ex.R)
+		ex.R <- ex.R[(which(ex.R=="### ** Examples") + 1):length(ex.R)]
+		ex.R <- c(paste("<!--begin.rcode", extra), ex.R, "end.rcode-->", sep = "\n")
         Rhtml <- readLines(out)
         Rhtml <- c(Rhtml[seq_len(grep("<h3>Examples</h3>", Rhtml, fixed = TRUE))], ex.R, 
 		           Rhtml[(max(grep("</pre>", Rhtml, fixed = TRUE)) + 1):length(Rhtml)])
-        Rhtml <- gsub("## Not run:", "end.rcode--> \n\n <!--begin.rcode eval=FALSE", Rhtml)
-        Rhtml <- gsub("## End(Not run)", paste("end.rcode--> <!--begin.rcode", extra), Rhtml)
-        writeLines(Rhtml, out)
+		Rhtml <- gsub("## End(Not run)", paste("## End(Not run)\nend.rcode-->\n<!--begin.rcode", extra), Rhtml, fixed=TRUE)		   
+        Rhtml <- gsub("## Not run:", "end.rcode-->\n<!--begin.rcode eval=FALSE\n## Not run:", Rhtml, fixed=TRUE)      
+        writeLines(Rhtml, out) 
         file.html <- knit(out)
         
 		## Pull contents of first matched tag from parsed Rd file
@@ -26,17 +28,17 @@ knit_Rd2HTML <- function(Rd, extra = "", package) {
 			for (x in parseRd) if(attr(x, "Rd_tag") == tag) return(x)
 			stop("didn't find tag")
 		}
-        tmp <- parse_Rd(Rd)
+        tmp <- tools::parse_Rd(Rd)
         list(name = unlist(get.tag("\\name", tmp)), title = unlist(get.tag("\\title", tmp)), file = file.html)
     }
 
-    info <- lapply(Rd, function(x) Rd2html(x, extra = extra))
+    info <- lapply(Rd, function(x) Rd2html(x, extra = extra, package = package))
 	
     if (length(Rd) > 1) {
         contents <- sapply(info, function(x) sprintf("* [%s](%s) %s", 
 		                   x$name, x$file, paste(x$title, collapse = "")))
         contents <- gsub("\n", " ", contents)
-        contents <- c(sprintf("# Help files for %s", package), contents)
+        contents <- c(paste("# Help Pages", ifelse(is.null(package), "", paste("of", package))), contents)
         
         writeLines(paste(contents, collapse = "\n\n"), "index.md")
         markdown::markdownToHTML("index.md", output="index.html", stylesheet = "stylesheet.css")
