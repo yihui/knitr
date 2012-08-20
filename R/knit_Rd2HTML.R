@@ -1,8 +1,10 @@
 #' Rd2HTML with knitr
 #'
-#' \code{Rd} Rd files;
-#' \code{extra} options of knitr
-#' \code{package} package name
+#' Translating Rd files to html with knitr
+#'
+#' @param Rd name of Rd files;
+#' @param extra options of knitr, eg \code{extra="fig.align='center'"}
+#' @param package name of package
 #' @export
 knit_Rd2HTML <- function(Rd, extra = "", package = NULL) {
     Rd2html <- function(Rd, extra, package) {
@@ -12,31 +14,31 @@ knit_Rd2HTML <- function(Rd, extra = "", package = NULL) {
         tools::Rd2HTML(Rd, out = out, package = package, stylesheet = "stylesheet.css")
         tools::Rd2ex(Rd, file.ex.R)
         ex.R <- readLines(file.ex.R)
-		ex.R <- gsub("##D", "", ex.R)
-		ex.R <- ex.R[(which(ex.R=="### ** Examples") + 1):length(ex.R)]
-		ex.R <- c(paste("<!--begin.rcode", extra), ex.R, "end.rcode-->", sep = "\n")
+        ex.R <- gsub("##D", "", ex.R)
+        ex.R <- ex.R[(which(ex.R=="### ** Examples") + 1):length(ex.R)]
+        ex.R <- c(paste("<!--begin.rcode", extra), ex.R, "end.rcode-->", sep = "\n")
         Rhtml <- readLines(out)
         Rhtml <- c(Rhtml[seq_len(grep("<h3>Examples</h3>", Rhtml, fixed = TRUE))], ex.R, 
-		           Rhtml[(max(grep("</pre>", Rhtml, fixed = TRUE)) + 1):length(Rhtml)])
-		Rhtml <- gsub("## End(Not run)", paste("## End(Not run)\nend.rcode-->\n<!--begin.rcode", extra), Rhtml, fixed=TRUE)		   
+                   Rhtml[(max(grep("</pre>", Rhtml, fixed = TRUE)) + 1):length(Rhtml)])
+        Rhtml <- gsub("## End(Not run)", paste("## End(Not run)\nend.rcode-->\n<!--begin.rcode", extra), Rhtml, fixed=TRUE)		   
         Rhtml <- gsub("## Not run:", "end.rcode-->\n<!--begin.rcode eval=FALSE\n## Not run:", Rhtml, fixed=TRUE)      
         writeLines(Rhtml, out) 
         file.html <- knit(out)
         
-		## Pull contents of first matched tag from parsed Rd file
-		get.tag <- function(tag, parseRd){
-			for (x in parseRd) if(attr(x, "Rd_tag") == tag) return(x)
-			stop("didn't find tag")
-		}
+        ## Pull contents of first matched tag from parsed Rd file
+        get.tag <- function(tag, parseRd){
+            for (x in parseRd) if(attr(x, "Rd_tag") == tag) return(x)
+            stop("didn't find tag")
+        }
         tmp <- tools::parse_Rd(Rd)
         list(name = unlist(get.tag("\\name", tmp)), title = unlist(get.tag("\\title", tmp)), file = file.html)
     }
-
+    
     info <- lapply(Rd, function(x) Rd2html(x, extra = extra, package = package))
-	
+    
     if (length(Rd) > 1) {
         contents <- sapply(info, function(x) sprintf("* [%s](%s) %s", 
-		                   x$name, x$file, paste(x$title, collapse = "")))
+                                                     x$name, x$file, paste(x$title, collapse = "")))
         contents <- gsub("\n", " ", contents)
         contents <- c(paste("# Help Pages", ifelse(is.null(package), "", paste("of", package))), contents)
         
@@ -85,6 +87,6 @@ table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
     p.caption { display:none }
     "
 
-    if ( !file.exists(default.stylesheet) )
+    if(!file.exists(default.stylesheet))
         writeLines(default.stylesheet, "stylesheet.css")  
-}	
+}
