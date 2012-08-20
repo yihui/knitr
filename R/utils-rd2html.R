@@ -5,6 +5,8 @@
 #' @return All HTML pages corresponding to topics in the package are written
 #'   under the current working directory. An \file{index.html} is also written
 #'   as a table of content.
+#' @examples \dontrun{knit_rd('maps')
+#' knit_rd('rpart')}
 #' @export
 knit_rd = function(pkg) {
   library(pkg, character.only = TRUE)
