@@ -92,3 +92,4 @@ Collate:
     'spin.R'
     'highlight.R'
     'utils-base64.R'
+    'utils-rd2html.R'
