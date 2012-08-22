@@ -71,13 +71,13 @@ hook_plot_tex = function(x, options) {
   }
   if(length(cap) && !is.na(cap)) {
     if (plot1) {
-      fig1 = sprintf('\\begin{figure}[%s]\n', options$fig.pos)
+      fig1 = sprintf('\\begin{%s}[%s]\n', options$fig.env, options$fig.pos)
     }
     if (plot2) {
       lab = str_c(options$fig.lp, options$label, ifelse(mcap, fig.cur, ''))
       if (is.null(scap)) scap = str_split(cap, '\\.|;|:')[[1L]][1L]
       scap = if(is.na(scap)) '' else str_c('[', scap, ']')
-      fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{figure}\n', scap, cap, lab)
+      fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{%s}\n', scap, cap, lab, options$fig.env)
     }
   }
 
