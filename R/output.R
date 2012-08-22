@@ -169,13 +169,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
                                       brew = 'brew'))
   }
 
-  if (is.null(out_format())) {
-    fmt = switch(ext, rnw = 'latex', tex = 'latex', htm = 'html', html = 'html',
-                 md = 'markdown', markdown = 'markdown', brew = 'brew', rst = 'rst',
-                 {warning('cannot automatically decide the output format'); 'unknown'})
-    ## set built-in hooks
-    opts_knit$set(out.format = fmt)
-  }
+  if (is.null(out_format())) auto_format(ext)
   ## change output hooks only if they are not set beforehand
   if (identical(knit_hooks$get(names(.default.hooks)), .default.hooks) && !child_mode()) {
     switch(out_format(), latex = render_latex(),
@@ -264,6 +258,24 @@ auto_out_name = function(input) {
     } else return(str_c(base, '-out.', ext))
   }
   stop('cannot determine the output filename automatically')
+}
+
+## decide output format based on file extension
+ext2fmt = c(
+  rnw = 'latex', snw = 'latex', tex = 'latex', rtex = 'latex', stex = 'latex',
+  htm = 'html', html = 'html', rhtml = 'html', rhtm = 'html',
+  md = 'markdown', markdown = 'markdown', rmd = 'markdown', rmarkdown = 'markdown',
+  brew = 'brew', rst = 'rst', rrst = 'rst'
+)
+
+auto_format = function(ext) {
+  fmt = ext2fmt[ext]
+  if (is.na(fmt)) fmt = {
+    warning('cannot automatically decide the output format')
+    'unknown'
+  }
+  opts_knit$set(out.format = fmt)
+  invisible(fmt)
 }
 
 #' Knit a child document
