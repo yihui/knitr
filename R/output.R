@@ -252,7 +252,8 @@ auto_out_name = function(input) {
   if (ext %in% c('rnw', 'snw')) return(str_c(base, '.tex'))
   if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'stex', 'rrst'))
     return(str_c(base, '.', substring(ext, 2L)))
-  if (ext %in% c('brew', 'tex', 'html', 'md')) {
+  if (ext == 'brew') return(str_c(base, '.txt'))
+  if (ext %in% c('tex', 'html', 'md')) {
     if (str_detect(input, '_knit_')) {
       return(str_replace(input, '_knit_', ''))
     } else return(str_c(base, '-out.', ext))

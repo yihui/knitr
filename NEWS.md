@@ -34,6 +34,8 @@
 
 - if the chunk option `external==FALSE` (default is `TRUE`), **knitr** will no longer automatically add `\usepackage{tikz}` to the LaTeX preamble; you need to add it manually (but it is recommended to use `external=TRUE` with `cache=TRUE` for the sake of speed, because compilation of tikz graphics may be slow)
 
+- `*.brew` generates `*.txt` by default (instead of `*-out.brew`)
+
 # CHANGES IN knitr VERSION 0.7
 
 ## NEW FEATURES
