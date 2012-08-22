@@ -148,7 +148,7 @@ render_html = function() {
   html.hook = function(name) {
     force(name)
     function (x, options) {
-      sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>', name, options$engine, x)
+      sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>', name, tolower(options$engine), x)
     }
   }
   h = opts_knit$get('header')
