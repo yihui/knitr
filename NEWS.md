@@ -38,6 +38,8 @@
 
 - `*.brew` generates `*.txt` by default (instead of `*-out.brew`)
 
+- `knit(text = ...)` will no longer write output in the console (the output is only returned as a character string)
+
 # CHANGES IN knitr VERSION 0.7
 
 ## NEW FEATURES
