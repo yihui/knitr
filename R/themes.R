@@ -78,10 +78,6 @@ theme_to_header_latex = function(theme) {
 #' Generates css header based on a theme
 #' @author Ramnath Vaidyanathan
 #' @noRd
-#  HACK: replace ugly sub hack to match knitr background with theme
-#  TODO: warning, error, source etc. are still black, an issue for dark themes
-#  TODO: might be a good idea to regenerate the css files appending the
-#        .knitr.css template to the existing templates
 theme_to_header_html = function(theme){
   css_file = if (file.exists(theme)) theme else {
     system.file("themes", sprintf("%s.css", theme), package = "knitr")
