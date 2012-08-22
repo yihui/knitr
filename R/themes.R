@@ -86,12 +86,11 @@ theme_to_header_html = function(theme){
   css_file = if (file.exists(theme)) theme else {
     system.file("themes", sprintf("%s.css", theme), package = "knitr")
   }
-  bgcolor = css.parser(css_file)$background$color
-  css_knitr = system.file('misc', 'knitr.css', package = 'knitr')
-  css_knitr_lines = readLines(css_knitr)
-  css_knitr_lines = sub('^([[:space:]]+background-color:\\s+)(.*)$',
-                          sprintf('\\1%s;', bgcolor), css_knitr_lines)
-  css = c(css_knitr_lines, readLines(css_file))
-  return(list(highlight = css))
+  css = css.parser(css_file)
+  bgcolor = css$background$color; fgcolor = css$prompt$color
+  css_knitr = readLines(system.file('misc', 'knitr.css', package = 'knitr'))
+  css_knitr[-2] = sub('^(\\s+background-color:\\s+)(.*)$', sprintf('\\1%s;', bgcolor), css_knitr[-2])
+  css = c(css_knitr, sprintf('.source {\n  color: %s;\n}', fgcolor), readLines(css_file))
+  list(highlight = css)
 }
 
