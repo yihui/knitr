@@ -16,6 +16,7 @@ knit_rd = function(pkg) {
   optc = opts_chunk$get(); on.exit(opts_chunk$set(optc))
   file.copy(system.file('misc', c('highlight.css', 'highlight.pack.js', 'R.css'), package = 'knitr'), './')
   for (p in unique(objs)) {
+    message('knitting documentation of ', p)
     hf = utils:::.getHelpFile(file.path(path, 'help', p))
     tools::Rd2HTML(hf, f <- tempfile(), package = pkg)
     txt = readLines(f, warn = FALSE)
