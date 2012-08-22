@@ -20,7 +20,7 @@ knit_rd = function(pkg) {
     hf = utils:::.getHelpFile(file.path(path, 'help', p))
     tools::Rd2HTML(hf, f <- tempfile(), package = pkg)
     txt = readLines(f, warn = FALSE)
-    tits[p] = gsub('(.*<h2>)([^<]*)(</h2>.*)', '\\2', paste(txt, collapse = '\n'))
+    tits[p] = gsub('(.*<h2>)|(</h2>.*)', '', paste(txt, collapse = '\n'))
     if (length(i <- grep('<h3>Examples</h3>', txt)) == 1L &&
       length(grep('</pre>', txt[i:length(txt)]))) {
       i0 = grep('<pre>', txt); i0 = i0[i0 > i][1L] - 1L
