@@ -31,7 +31,7 @@ knit_rd = function(pkg) {
       ex = c('```{r}', ex, '```')
       ex = gsub('^(## Not run:\\s*)', '```{r eval=FALSE}\n\\1', ex)
       ex = gsub('^(## End\\(Not run\\)\\s*)', '\\1\n```{r}', ex)
-      opts_chunk$set(fig.path = str_c('figure/', p), tidy = FALSE)
+      opts_chunk$set(fig.path = str_c('figure/', p, '-'), tidy = FALSE)
       ex = knit2html(text = ex, envir = parent.frame(2), fragment.only = TRUE)
       txt = c(txt[1:i0], ex, txt[i1:length(txt)])
       txt = sub('</head>', '
