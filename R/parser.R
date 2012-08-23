@@ -62,7 +62,12 @@ parse_block = function(input) {
   label = params$label
   code = block[-1L]
   if (length(code)) {
-    if (label %in% names(knit_code$get())) stop("duplicated label '", label, "'")
+    if (label %in% names(knit_code$get())) {
+    	label = str_c(label, "-", chunk_counter())
+    	warning("Duplicate label ",params$label," renamed to ",label)
+    	params$label = label
+    }
+    	#stop("duplicated label '", label, "'")
     knit_code$set(structure(list(code), .Names = label))
   }
   
