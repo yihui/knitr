@@ -1,9 +1,0 @@
-see
-
-- https://github.com/yihui/knitr-examples/023-engine-python.Rmd
-- https://github.com/yihui/knitr-examples/024-engine-awk.Rmd
-- https://github.com/yihui/knitr-examples/025-engine-ruby.Rmd
-- https://github.com/yihui/knitr-examples/026-engine-haskell.Rmd
-
-for examples
-
