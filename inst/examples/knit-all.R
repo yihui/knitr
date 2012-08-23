@@ -18,7 +18,7 @@ for (i in list.files(pattern = '\\.lyx$')) {
 call_knit = function(cmd) {
   stopifnot(identical(system(cmd), 0L))
 }
-for (i in list.files(pattern = '\\.R(md|rst)')) {
+for (i in list.files(pattern = '\\.Rmd')) {
   message(i)
   cmd = if (i == 'knitr-minimal.Rmd') {
     sprintf("Rscript -e 'library(knitr);opts_knit$set(base.url=\"https://github.com/yihui/knitr/raw/master/inst/examples/\");opts_chunk$set(fig.path=\"\");knit(\"%s\")'", i)
