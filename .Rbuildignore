@@ -8,7 +8,6 @@ inst/examples/child/knitr-.*.pdf
 inst/examples/child/knitr-.*\.md
 inst/examples/figure
 inst/examples/cache
-inst/examples/ex-out*
 knitr-minimal.md
 knitr-spin.md
 png$
