@@ -20,5 +20,6 @@ knit_rd(pkg)
 \dontrun{
 knit_rd("maps")
 knit_rd("rpart")
+knit_rd("ggplot2")  # time-consuming!
 }
 }
