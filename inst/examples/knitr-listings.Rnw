@@ -2,7 +2,6 @@
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[sc]{mathpazo}
-\usepackage[T1]{fontenc}
 \usepackage{listings}
 \lstset{language=R}
 \usepackage{geometry}
