@@ -181,7 +181,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
 
   progress = opts_knit$get('progress')
   if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
-  res = process_file(text, output)
+  res = process_file(text)
   res = knit_hooks$get('document')(res)
   if (!is.null(output)) cat(res, file = output)
   dep_list$restore()  # empty dependency list
@@ -205,7 +205,7 @@ purl = function(...) {
   knit(..., tangle = TRUE)
 }
 
-process_file = function(text, output) {
+process_file = function(text) {
   groups = split_file(lines = text)
   n = length(groups); res = character(n); olines = integer(n)
   tangle = opts_knit$get('tangle')
@@ -224,11 +224,10 @@ process_file = function(text, output) {
     group = groups[[i]]
     txt = try((if (tangle) process_tangle else process_group)(group), silent = TRUE)
     if (inherits(txt, 'try-error')) {
-      print(group)
-      cat(res, sep = '\n', file = output %n% '')
-      stop(sprintf('Quitting from lines %s: (%s) %s',
+      message(sprintf('Got an error, quitting from lines %s: (%s) %s',
                    str_c(current_lines(i), collapse = '-'),
                    paste('', knit_concord$get('infile'), sep = ''), txt))
+      break
     }
     res[i] = txt
     # output line numbers
