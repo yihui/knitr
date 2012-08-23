@@ -11,7 +11,6 @@ inst/examples/cache
 inst/examples/ex-out*
 knitr-minimal.md
 knitr-spin.md
-knitr-latex.tex
 png$
 ^\.Rproj\.user$
 .*.Rproj
