@@ -28,6 +28,10 @@ check: build
 	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
 
+examples:
+	cd inst/examples;\
+	Rscript knit-all.R
+
 # the svn mirror created by
 # git svn clone svn://svn.rforge.net/knitr/trunk knitr-svn
 # commit everything to RForge
