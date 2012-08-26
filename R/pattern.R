@@ -133,7 +133,7 @@ group_pattern = function(pattern) {
 ## automatically detect the chunk patterns
 detect_pattern = function(text, ext) {
   if (!missing(ext)) {
-    if (ext %in% c('rnw', 'snw', 'stex', 'rtex')) return('rnw')
+    if (ext %in% c('rnw', 'snw', 'stex')) return('rnw')
     if (ext == 'brew') return('brew')
     if (ext %in% c('htm', 'html', 'rhtm', 'rhtml')) return('html')
     if (ext %in% c('rmd', 'rmarkdown', 'markdown', 'md')) return('md')
@@ -145,5 +145,8 @@ detect_pattern = function(text, ext) {
       if (length(pat) && length(grep(pat, text))) return(p)
     }
   }
+  # *.Rtex indicates the tex syntax in knitr, but Rnw syntax in traditional
+  # Sweave, which should have been detected in the above loop
+  if (!missing(ext) && ext == 'rtex') return('rnw')
   NULL
 }
