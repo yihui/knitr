@@ -246,7 +246,9 @@ inline_exec = function(block) {
   owd = setwd(input_dir()); on.exit(setwd(owd))
   loc = block$location
   for (i in 1:n) {
-    res = try(eval(parse(text = code[i]), envir = knit_global()))
+    res = if (opts_chunk$get('eval')) {
+      try(eval(parse(text = code[i]), envir = knit_global()))
+    } else '??'
     d = nchar(input)
     # replace with evaluated results
     str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
