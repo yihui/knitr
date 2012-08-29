@@ -37,7 +37,7 @@ examples:
 # commit everything to RForge
 svn:
 	cd ../knitr-svn;\
-	git pull git://github.com/yihui/knitr.git;\
+	git pull -X theirs git://github.com/yihui/knitr.git;\
 	git svn dcommit
 
 clean:
