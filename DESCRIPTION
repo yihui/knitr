@@ -42,8 +42,8 @@ Description: This package provides a general-purpose tool for dynamic report
     Hooks can be used either to format the output or to run a specified R code
     fragment before or after a code chunk. The language in code chunks is not
     restricted to R only (there is simple support to Python and Awk, etc). Many
-    features are borrowed or inspired by Sweave, cacheSweave, pgfSweave, brew
-    and decumar.
+    features are borrowed from or inspired by Sweave, cacheSweave, pgfSweave,
+    brew and decumar.
 Depends:
     R (>= 2.14.1)
 Imports:
