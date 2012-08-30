@@ -87,6 +87,7 @@ opts_knit = new_defaults(list(
   tangle = FALSE, child = FALSE, parent = FALSE,
   cache.extra = NULL, aliases = NULL, root.dir = NULL,
   self.contained = TRUE, filter.chunk.end = TRUE, use.highlight = FALSE,
+  cap.command = 'caption',
   header = c(highlight = '', tikz = '', framed = '')
 ))
 ## header should not be set by hand unless you know what you are doing
