@@ -58,6 +58,9 @@ MAJOR CHANGES
   [001-minimal.Rmd](https://github.com/yihui/knitr-examples/blob/master/001-minimal.Rmd)
   for example)
 
+  - when the global chunk option `eval=FALSE`, inline R code will not be
+  evaluated, and `??` is returned for inline R expressions (#367)
+
 MINOR CHANGES
 
   - if `getOption('OutDec')` is not `.`, inline numeric output will be put
@@ -74,6 +77,11 @@ MINOR CHANGES
 
   - `knit(text = ...)` will no longer write output in the console (the output
   is only returned as a character string)
+
+DOCUMENTATION
+
+  - added a simple reference card:
+  https://github.com/downloads/yihui/knitr/knitr-refcard.pdf
 
 		 CHANGES IN knitr VERSION 0.7
 
