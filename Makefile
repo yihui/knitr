@@ -32,6 +32,12 @@ examples:
 	cd inst/examples;\
 	Rscript knit-all.R
 
+vignettes:
+	cd inst/doc;\
+	lyx -e knitr knitr-intro.lyx;\
+	lyx -e pdflatex knitr-refcard.lyx;\
+	mv knitr-refcard.tex knitr-refcard.Rnw
+
 # the svn mirror created by
 # git svn clone svn://svn.rforge.net/knitr/trunk knitr-svn
 # commit everything to RForge
