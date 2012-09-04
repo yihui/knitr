@@ -1,10 +1,9 @@
-%% LyX 2.0.3 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.4 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage{mathpazo}
 \renewcommand{\sfdefault}{lmss}
 \renewcommand{\ttdefault}{lmtt}
-\usepackage[T1]{fontenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \usepackage{url}
