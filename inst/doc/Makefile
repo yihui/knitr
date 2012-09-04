@@ -1,7 +1,7 @@
 # Makefile to use knitr for package vignettes
 
 # put all PDF targets here, separated by spaces
-PDFS= knitr-intro.pdf
+PDFS= knitr-intro.pdf knitr-refcard.pdf
 
 all: $(PDFS) 
 
