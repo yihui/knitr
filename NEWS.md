@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 0.9
+
+## MINOR CHANGES
+
+- when `opts_knit$get('verbose')` is `TRUE`, a `timestamp()` will be printed before each code chunk is evaluated (#377) (thanks, Carl Boettiger)
+
 # CHANGES IN knitr VERSION 0.8
 
 ## NEW FEATURES
