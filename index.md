@@ -15,6 +15,8 @@ The **knitr** package was designed to be a transparent engine for dynamic report
 
 This package is developed on  [GitHub](https://github.com/yihui/knitr); for installation instructions and [FAQ's](https://github.com/yihui/knitr/blob/master/FAQ.md), see [README](https://github.com/yihui/knitr#readme). This website serves as the full documentation of **knitr**, and you can find the [main manual](https://github.com/downloads/yihui/knitr/knitr-manual.pdf), the [graphics manual](https://github.com/downloads/yihui/knitr/knitr-graphics.pdf) and other [demos](/knitr/demos) / [examples](https://github.com/yihui/knitr-examples) here.
 
+<div style="text-align: center;"><iframe src="http://www.screenr.com/embed/qcv8" width="650" height="396" frameborder="0"></iframe></div>
+
 ## Motivation
 
 One of the difficulties with extending Sweave is we have to copy a large amount of code from the **utils** package (the file `SweaveDrivers.R` has more than 700 lines of R code), and this is what the two packages mentioned above have done. Once the code is copied, the package authors have to pay close attention to what is changing in the version in official R -- apparently an extra burden. The **knitr** package tried to modularize the whole process of weaving a document into small manageable functions, so it is hopefully easier to maintain and extend (e.g. easy to support HTML output); on the other hand, **knitr** has many built-in features and it should not be the case to have to hack at the core components of this package. By the way, several FAQ's in the Sweave manual are solved in **knitr** directly.
