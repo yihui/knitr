@@ -144,15 +144,19 @@ output_asis = function(x, options) {
 ## path relative to dir of the input file
 input_dir = function() .knitEnv$input.dir %n% '.'
 
-## scientific notation in TeX
-format_sci = function(x, format = "latex") {
-  if (!is.double(x)) return(x)
-  scipen = getOption("scipen") + 4L
-  if (all(abs(lx <- floor(log(abs(x), 10))) < scipen))
-    return(round(x, getOption("digits"))) # no need sci notation
+## scientific notation in TeX, HTML and reST
+format_sci_one = function(x, format = 'latex') {
+
+  if (!is.double(x)) return(as.character(x))
+  if (x == 0) return('0')
+
+  if (abs(lx <- floor(log(abs(x), 10))) < getOption('scipen') + 4L)
+    return(as.character(round(x, getOption('digits')))) # no need sci notation
+
   b = round(x/10^lx, getOption("digits"))
   b[b %in% c(1, -1)] = ""
-  res = switch(format, latex = {
+
+  switch(format, latex = {
     s = sci_notation("%s%s10^{%s}", b, "\\times ", lx)
     if (inherits(x, "AsIs")) s else sprintf("$%s$", s)
   }, html = sci_notation("%s%s10<sup>%s</sup>", b, " &times; ", lx), rst = {
@@ -165,13 +169,16 @@ format_sci = function(x, format = "latex") {
       # .. include <isonum.txt>
       sci_notation("%s%s10 :sup:`%s`", b, " |times| ", lx)
     }
-  }, x)
-  res[x == 0] = 0
-  res
+  }, as.character(x))
 }
 
 sci_notation = function(format, base, times, power) {
   sprintf(format, base, ifelse(base == "", "", times), power)
+}
+
+## vectorized version of format_sci_one()
+format_sci = function(x, ...) {
+  vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 
 ## absolute path?
