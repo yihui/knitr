@@ -18,7 +18,7 @@ render_html()
 
 render_markdown(strict = FALSE)
 
-render_jekyll(highlight = c("pygments", "prettify", "none"))
+render_jekyll(highlight = c("pygments", "prettify", "none"), extra = "")
 
 render_rst(strict = FALSE)
 }
@@ -37,6 +37,10 @@ render_rst(strict = FALSE)
   prepared for the JavaScript library \file{prettify.js};
   for \code{none}, no highlighting engine will be used
   (code blocks are indented by 4 spaces)}
+
+  \item{extra}{extra tags for the highlighting engine; for
+  \code{pygments}, it can be \code{'linenos'}; for
+  \code{prettify}, it can be \code{'linenums'}}
 }
 \value{
   \code{NULL}; corresponding hooks are set as a side effect
