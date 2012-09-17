@@ -18,7 +18,7 @@ render_html()
 
 render_markdown(strict = FALSE)
 
-render_jekyll()
+render_jekyll(highlight = c("pygments", "prettify", "none"))
 
 render_rst(strict = FALSE)
 }
@@ -30,6 +30,13 @@ render_rst(strict = FALSE)
   is put under two colons and indented by 4 spaces,
   otherwise is put under the \samp{sourcecode} directive
   (e.g. it is useful for Sphinx)}
+
+  \item{highlight}{which code highlighting engine to use:
+  for \code{pygments}, the Liquid syntax is used (default
+  approach Jekyll); for \code{prettify}, the output is
+  prepared for the JavaScript library \file{prettify.js};
+  for \code{none}, no highlighting engine will be used
+  (code blocks are indented by 4 spaces)}
 }
 \value{
   \code{NULL}; corresponding hooks are set as a side effect
@@ -64,5 +71,10 @@ render_rst(strict = FALSE)
   output hooks; see references.
 }
 \references{
-  See output hooks in \url{http://yihui.name/knitr/hooks}
+  See output hooks in \url{http://yihui.name/knitr/hooks}.
+
+  Jekyll and Liquid:
+  \url{https://github.com/mojombo/jekyll/wiki/Liquid-Extensions};
+  prettify.js:
+  \url{http://code.google.com/p/google-code-prettify/}
 }
