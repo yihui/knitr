@@ -60,18 +60,20 @@ render_markdown = function(strict = FALSE) {
 #'   by 4 spaces)
 #' @rdname output_hooks
 #' @export
-render_jekyll = function(highlight = c('pygments', 'prettify', 'none')) {
+render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '') {
   hi = match.arg(highlight)
   render_markdown(TRUE)
   if (hi == 'none') return()
   switch(hi, pygments = {
     hook.r = function(x, options) {
-      str_c('\n\n{% highlight ', tolower(options$engine), ' %}\n', x, '{% endhighlight %}\n\n')
+      str_c('\n\n{% highlight ', tolower(options$engine), ' ', extra, ' %}\n',
+            x, '{% endhighlight %}\n\n')
     }
     hook.t = function(x, options) str_c('\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n')
   }, prettify = {
     hook.r = function(x, options) {
-      str_c('\n\n<pre><code class="prettyprint">', escape_html(x), '</code></pre>\n\n')
+      str_c('\n\n<pre><code class="prettyprint ', extra, '">',
+            escape_html(x), '</code></pre>\n\n')
     }
     hook.t = function(x, options) str_c('\n\n<pre><code>', escape_html(x), '</code></pre>\n\n')
   })
