@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 0.9
 
+## NEW FEATURES
+
+- `render_jekyll()` gained an argument `highlight` to specify which highlighting engine to use (Pygments or Prettify.js) (thanks, Yanping Chen)
+
 ## MINOR CHANGES
 
 - when `opts_knit$get('verbose')` is `TRUE`, a `timestamp()` will be printed before each code chunk is evaluated (#377) (thanks, Carl Boettiger)

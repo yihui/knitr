@@ -10,7 +10,7 @@ hook_plot_md = function(x, options) {
   } else {
     if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
   }
-  
+
   if(is.null(w <- options$out.width) & is.null(h <- options$out.height) &
     is.null(s <- options$out.extra)) {
     return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
@@ -53,14 +53,28 @@ render_markdown = function(strict = FALSE) {
     }
   )
 }
+#' @param highlight which code highlighting engine to use: for \code{pygments},
+#'   the Liquid syntax is used (default approach Jekyll); for \code{prettify},
+#'   the output is prepared for the JavaScript library \file{prettify.js}; for
+#'   \code{none}, no highlighting engine will be used (code blocks are indented
+#'   by 4 spaces)
 #' @rdname output_hooks
 #' @export
-render_jekyll = function() {
-  render_markdown()
-  hook.r = function(x, options) {
-    str_c('\n\n{% highlight ', tolower(options$engine), ' %}\n', x, '{% endhighlight %}\n\n')
-  }
-  hook.t = function(x, options) str_c('\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n')
+render_jekyll = function(highlight = c('pygments', 'prettify', 'none')) {
+  hi = match.arg(highlight)
+  render_markdown(TRUE)
+  if (hi == 'none') return()
+  switch(hi, pygments = {
+    hook.r = function(x, options) {
+      str_c('\n\n{% highlight ', tolower(options$engine), ' %}\n', x, '{% endhighlight %}\n\n')
+    }
+    hook.t = function(x, options) str_c('\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n')
+  }, prettify = {
+    hook.r = function(x, options) {
+      str_c('\n\n<pre><code class="prettyprint">', escape_html(x), '</code></pre>\n\n')
+    }
+    hook.t = function(x, options) str_c('\n\n<pre><code>', escape_html(x), '</code></pre>\n\n')
+  })
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
   knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
                  error = hook.t, message = hook.t)
