@@ -41,8 +41,7 @@ render_markdown = function(strict = FALSE) {
   knit_hooks$set(
     source = if (strict) hook.t else hook.r, output = hook.o,
     warning = hook.t, error = hook.t, message = hook.t,
-    inline = function(x) sprintf(if (inherits(x, 'AsIs')) '%s' else '`%s`',
-                                 .inline.hook(format_sci(x, 'html'))),
+    inline = function(x) .inline.hook(format_sci(x, 'html')),
     plot = hook_plot_md,
     chunk = function(x, options) {
       x = gsub('[\n]{2,}(```|    )', '\n\n\\1', x)
