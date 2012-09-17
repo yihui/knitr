@@ -4,6 +4,10 @@
 
 - `render_jekyll()` gained an argument `highlight` to specify which highlighting engine to use (Pygments or Prettify.js) (thanks, Yanping Chen)
 
+## MAJOR CHANGES
+
+- for markdown output, results from inline R code will no longer be put in a pair of backticks (#379)
+
 ## MINOR CHANGES
 
 - when `opts_knit$get('verbose')` is `TRUE`, a `timestamp()` will be printed before each code chunk is evaluated (#377) (thanks, Carl Boettiger)
