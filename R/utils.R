@@ -55,8 +55,8 @@ color_def = function(col, variable = 'shadecolor') {
     if (n == 1L) x = drop(col2rgb(x)/255) else {
       x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
       warning("the color '", col, "' is invalid;",
-              "using default color...",
-              "see http://yihui.name/knitr/options")
+              'using default color...',
+              'see http://yihui.name/knitr/options')
     }
   }
   if (length(x) != 3L) stop('invalid color:', col)
@@ -153,27 +153,27 @@ format_sci_one = function(x, format = 'latex') {
   if (abs(lx <- floor(log(abs(x), 10))) < getOption('scipen') + 4L)
     return(as.character(round(x, getOption('digits')))) # no need sci notation
 
-  b = round(x/10^lx, getOption("digits"))
-  b[b %in% c(1, -1)] = ""
+  b = round(x/10^lx, getOption('digits'))
+  b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
-    s = sci_notation("%s%s10^{%s}", b, "\\times ", lx)
-    if (inherits(x, "AsIs")) s else sprintf("$%s$", s)
-  }, html = sci_notation("%s%s10<sup>%s</sup>", b, " &times; ", lx), rst = {
+    s = sci_notation('%s%s10^{%s}', b, '\\times ', lx)
+    if (inherits(x, 'AsIs')) s else sprintf('$%s$', s)
+  }, html = sci_notation('%s%s10<sup>%s</sup>', b, ' &times; ', lx), rst = {
     # if AsIs, use the :math: directive
-    if (inherits(x, "AsIs")) {
-      s = sci_notation("%s%s10^{%s}", b, "\\times ", lx)
-      sprintf(":math:`%s`", s)
+    if (inherits(x, 'AsIs')) {
+      s = sci_notation('%s%s10^{%s}', b, '\\times ', lx)
+      sprintf(':math:`%s`', s)
     } else {
       # This needs the following line at the top of the file to define |times|
       # .. include <isonum.txt>
-      sci_notation("%s%s10 :sup:`%s`", b, " |times| ", lx)
+      sci_notation('%s%s10 :sup:`%s`', b, ' |times| ', lx)
     }
   }, as.character(x))
 }
 
 sci_notation = function(format, base, times, power) {
-  sprintf(format, base, ifelse(base == "", "", times), power)
+  sprintf(format, base, ifelse(base == '', '', times), power)
 }
 
 ## vectorized version of format_sci_one()
@@ -202,7 +202,7 @@ fix_options = function(options) {
   for (dev in c('pdf', 'eps', 'jpeg', 'png')) {
     if (isTRUE(options[[dev]])) {
       options$dev = dev
-      warning("chunk option ", dev,
+      warning('chunk option ', dev,
               "=TRUE deprecated in knitr; use new option 'dev' please")
       break
     }
@@ -295,7 +295,7 @@ isFALSE = function(x) identical(x, FALSE)
 
 ## check latex packages; if not exist, copy them over to ./
 test_latex_pkg = function(name, path) {
-  res = try(system(sprintf("kpsewhich %s.sty", name), intern = TRUE), silent = TRUE)
+  res = try(system(sprintf('kpsewhich %s.sty', name), intern = TRUE), silent = TRUE)
   if (inherits(res, 'try-error') || !length(res)) {
     warning("unable to find LaTeX package '", name, "'; will use a copy from knitr")
     file.copy(path, '.')
@@ -380,7 +380,7 @@ knit_global = function() {
 #' @export
 #' @seealso \code{\link{knit2pdf}}
 #' @references \url{http://rst2pdf.ralsina.com.ar/}
-rst2pdf = function(input, command = "rst2pdf", options = "") {
+rst2pdf = function(input, command = 'rst2pdf', options = '') {
   system2(command, paste(input, options))
 }
 
@@ -414,8 +414,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.f
   out = knit(input, output, envir = envir)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (!is.null(compiler)) {
-    if (compiler == "rst2pdf") {
-      if (tolower(file_ext(out)) != "rst") stop("for rst2pdf compiler input must be a .rst file")
+    if (compiler == 'rst2pdf') {
+      if (tolower(file_ext(out)) != 'rst') stop('for rst2pdf compiler input must be a .rst file')
       return(rst2pdf(basename(out), ...))
     } else {
       # use the specified PDFLATEX command
@@ -518,7 +518,7 @@ merge_list = function(x, y) {
 # paths of all figures
 all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
   fig_path(paste(if (num == 1L) '' else seq_len(num),
-                 ".", ext, sep = ""), options)
+                 '.', ext, sep = ''), options)
 }
 
 # escape special LaTeX characters
