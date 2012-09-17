@@ -524,3 +524,12 @@ escape_latex = function(x, newlines = FALSE) {
   if (newlines) x = gsub('\n', '\\\\\\\\', x)
   x
 }
+
+# escape special HTML chars
+escape_html = function(x) {
+  x = gsub('&', '&amp;', x)
+  x = gsub('<', '&lt;', x)
+  x = gsub('>', '&gt;', x)
+  x = gsub('"', '&quot;', x)
+  x
+}
