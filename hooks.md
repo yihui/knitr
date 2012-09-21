@@ -74,6 +74,8 @@ To sum up,
 3. a hook can be run before and/or after a chunk;
 4. character results returned by hooks will be written into the output without modifications;
 
+See [045-chunk-hook.md](https://github.com/yihui/knitr-examples/blob/master/045-chunk-hook.md) ([source](https://github.com/yihui/knitr-examples/blob/master/045-chunk-hook.Rmd)) for further examples.
+
 ## Output hooks <a id="output_hooks"></a>
 
 Output hooks are used to customize and polish the *raw* output from chunks. There are 8 output hooks in all to deal with different types of output: 
