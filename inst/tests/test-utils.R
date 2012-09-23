@@ -12,7 +12,7 @@ test_that('abs_path() is working', {
 
 test_that('scientific notation with format_sci()',{
   options(digits = 4, scipen = 0)
-  expect_identical(format_sci(1), 1)
+  expect_identical(format_sci(1), '1')
   expect_identical(format_sci(0), '0')
   expect_identical(format_sci(c(1.84e8, 1e5, 2.34e3)), c("$1.84\\times 10^{8}$", "$10^{5}$", "$2.34\\times 10^{3}$"))
   expect_identical(format_sci(1.23456789*10^-5), "$1.2346\\times 10^{-5}$")
