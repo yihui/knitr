@@ -249,14 +249,45 @@ print.inline = function(x, ...) {
 #' ## later you can use <<my-label>>= to reference this chunk
 read_chunk = function(path) {
   lines = readLines(path, warn = FALSE)
+read_chunk = function(path, lines = readLines(path, warn = FALSE),
+                      labels = NULL, from = NULL, to = NULL, from.offset = 0L, to.offset = 0L) {
   lab = knit_patterns$get('ref.label')
-  if (!group_pattern(lab)) return()
+  if (is.null(labels)) {
+    if (!group_pattern(lab)) return()
+  } else {
+    if (is.null(from)) from = 1L
+    if (!is.numeric(from)) from = pattern_index(from, lines)
+    if (is.null(to)) to = c(from[-1L] - 1L, length(lines))
+    if (!is.numeric(to)) to = pattern_index(to, lines)
+    stopifnot(length(labels) == length(from), length(from) == length(to))
+    from = from + from.offset; to = to + to.offset
+    code = list()
+    for (i in seq_along(labels)) {
+      code[[labels[i]]] = lines[from[i]:to[i]]
+    }
+    knit_code$set(code)
+    return()
+  }
   groups = unname(split(lines, cumsum(str_detect(lines, lab))))
   labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\1'))
   code = lapply(groups, strip_chunk)
   idx = nzchar(labels); code = code[idx]; labels = labels[idx]
   names(code) = labels
   knit_code$set(code)
+}
+
+# convert patterns to numeric indices in a character vector
+pattern_index = function(pattern, text) {
+  if (length(pattern) == 1L) {
+    idx = grep(pattern, text)
+    if (length(idx) == 0L) stop('pattern ', pattern, ' not found')
+    return(idx)
+  }
+  sapply(pattern, function(p) {
+    idx = grep(p, text)
+    if (length(idx) != 1L) stop('non-unique matches of ', p)
+    idx
+  })
 }
 
 strip_chunk = function(x) strip_white(x[-1])
