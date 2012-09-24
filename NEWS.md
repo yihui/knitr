@@ -18,6 +18,8 @@
 
 - when `opts_knit$get('verbose')` is `TRUE`, a `timestamp()` will be printed before each code chunk is evaluated (#377) (thanks, Carl Boettiger)
 
+- `stitch()` will no longer copy the template over to the current working directory (thanks, Michael Friendly)
+
 # CHANGES IN knitr VERSION 0.8
 
 ## NEW FEATURES
