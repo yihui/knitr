@@ -224,31 +224,68 @@ print.inline = function(x, ...) {
   cat('\n')
 }
 
-#' Read chunks from an external R script
-#' 
-#' Chunks can be put in an external R script, and this function reads chunks
-#' into the current \pkg{knitr} session.
-#' 
-#' The \code{ref.label} component in the pattern list 
-#' (\code{knit_patterns$get('ref.label')}) defines the format of code chunks.
+#' Read chunks from an external script
+#'
+#' Chunks can be put in an external script, and this function reads chunks into
+#' the current \pkg{knitr} session.
+#'
+#' There are two approaches to read external code into the current session: (1)
+#' Use a special separator in the script; the \code{ref.label} element in the
+#' pattern list (\code{knit_patterns$get('ref.label')}) is the pattern to
+#' separate code chunks; by default it is of the from \code{## @@knitr
+#' chunk-label}; (2) Manually specify the labels, starting and ending positions
+#' of code chunks in the script.
+#'
+#' The second approach will be used only when \code{labels} is not \code{NULL}.
+#' For this approach, if \code{from} is \code{NULL}, the starting position is 1;
+#' if \code{to} is \code{NULL}, each of its element takes the next element of
+#' \code{from} minus 1, and the last element of \code{to} will be the length of
+#' \code{lines} (e.g. when \code{from = c(1, 3, 8)} and the script has 10 lines
+#' in total, \code{to} will be \code{c(2, 7, 10)}). Alternatively, \code{from}
+#' and \code{to} can be character vectors as regular expressions to specify the
+#' positions; when their length is 1, the single regular expression will be
+#' matched against the \code{lines} vector, otherwise each element of
+#' \code{from}/\code{to} is matched against \code{lines} and the match is
+#' supposed to be unique so that the numeric positions returned from
+#' \code{grep()} will be of the same length of \code{from}/\code{to}. Note
+#' \code{labels} always has to match the length of \code{from} and \code{to}.
 #' @param path the path to the R script
-#' @return Code chunks are read into the current session so that future chunks
-#'   can use the R code.
+#' @param lines a character vector of the code lines (by default read from
+#'   \code{path})
+#' @param labels a character vector of chunk labels (default \code{NULL})
+#' @param from,to a numeric vector specifying the starting/ending line numbers
+#'   of code chunks, or a character vector; see Details
+#' @param from.offset,to.offset an offset to be added to \code{from}/\code{to}
+#' @return As a side effect, code chunks are read into the current session so
+#'   that future chunks can (re)use the code by chunk label references.
 #' @references \url{http://yihui.name/knitr/demo/reference/}
 #' @note This function can only be used in a chunk which is \emph{not} cached
 #'   (chunk option \code{cache = FALSE}), and the code is read and stored in the
 #'   current session \emph{without} being executed (to actually run the code,
 #'   you have to use a chunk with a corresponding label).
+#' @author Yihui Xie; the idea of the second approach came from Peter
+#'   Ruckdeschel (author of the \pkg{SweaveListingUtils} package)
 #' @export
-#' @examples ## the default format
+#' @examples ## put this in foo.R and read_chunk('foo.R')
 #'
 #' ## @@knitr my-label
 #' 1+1
 #' lm(y~x, data=data.frame(x=1:10,y=rnorm(10)))
 #'
 #' ## later you can use <<my-label>>= to reference this chunk
-read_chunk = function(path) {
-  lines = readLines(path, warn = FALSE)
+#'
+#' ## the 2nd approach
+#' code = c("#@@a", '1+1', "#@@b", "#@@a", 'rnorm(10)', "#@@b")
+#' read_chunk(lines = code, labels = 'foo') # put all code into one chun named foo
+#' read_chunk(lines = code, labels = 'foo', from = 2, to = 2) # line 2 into chunk foo
+#' read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4), to = c(3, 6))
+#' read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4)) # automatically figure out 'to'
+#' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a", to = "^#@@b")
+#' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a", to = "^#@@b", from.offset = 1, to.offset = -1)
+#'
+#' ## later you can use, e.g., <<foo>>=
+#' knitr:::knit_code$get() # use this to check chunks in the current session
+#' knitr:::knit_code$restore() # clean up the session
 read_chunk = function(path, lines = readLines(path, warn = FALSE),
                       labels = NULL, from = NULL, to = NULL, from.offset = 0L, to.offset = 0L) {
   lab = knit_patterns$get('ref.label')
