@@ -364,8 +364,7 @@ stitch = function(script,
   knit_code$set(`auto-report` = lines)
   input = basename(template)
   input = str_c(file_path_sans_ext(basename(script)), '.', file_ext(input))
-  if (file.exists(input)) warning(input, ' already exists') else file.copy(template, input)
-  out = knit(input, output, envir = envir)
+  out = knit(input, output, envir = envir, text = readLines(template, warn = FALSE))
   switch(file_ext(out), tex = {
     texi2pdf(out, clean = TRUE)
     system(paste(getOption('pdfviewer'), shQuote(str_replace(out, '\\.tex$', '.pdf'))))
