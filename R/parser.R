@@ -300,7 +300,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
     from = from + from.offset; to = to + to.offset
     code = list()
     for (i in seq_along(labels)) {
-      code[[labels[i]]] = lines[from[i]:to[i]]
+      code[[labels[i]]] = strip_white(lines[from[i]:to[i]])
     }
     knit_code$set(code)
     return(invisible())
