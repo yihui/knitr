@@ -540,3 +540,21 @@ escape_html = function(x) {
   x = gsub('"', '&quot;', x)
   x
 }
+
+#' Read source code from R-Forge
+#'
+#' This function reads source code from the SVN repositories on R-Forge.
+#' @param path relative path to the source script on R-Forge
+#' @param project name of the R-Forge project
+#' @param extra extra parameters to be passed to the URL (e.g. \code{extra =
+#'   '&revision=48'} to check out the source of revision 48)
+#' @param base the base URL
+#' @return A character vector of the source code.
+#' @author Yihui Xie and Peter Ruckdeschel
+#' @export
+#' @examples \dontrun{read_rforge('rgl/R/axes.R', project = 'rgl')
+#' read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')}
+read_rforge = function(path, project, extra = '',
+                      base = 'http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg') {
+  readLines(sprintf('%s/%s?root=%s%s', base, path, project, extra))
+}
