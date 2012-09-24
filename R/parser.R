@@ -9,17 +9,17 @@ split_file = function(lines, set.preamble = TRUE) {
   if (is.null(chunk.begin) || is.null(chunk.end)) {
     return(list(parse_inline(lines)))
   }
-  
+
   if (!child_mode() && set.preamble) {
     set_preamble(lines)  # prepare for tikz option 'standAlone'
   }
-  
+
   blks = str_detect(lines, chunk.begin)
   txts = str_detect(lines, chunk.end)
   if (opts_knit$get('filter.chunk.end')) txts = filter_chunk_end(blks, txts)
-  
+
   tmp = logical(n); tmp[blks | txts] = TRUE; lines[txts] = ''
-  
+
   groups = unname(split(lines, cumsum(tmp)))
   if (set.preamble)
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
@@ -65,13 +65,13 @@ parse_block = function(input) {
     if (label %in% names(knit_code$get())) stop("duplicated label '", label, "'")
     knit_code$set(structure(list(code), .Names = label))
   }
-  
+
   ## store dependencies
   if (!is.null(deps <- params$dependson)) {
     for (i in sc_split(deps))
       dep_list$set(structure(list(c(dep_list$get(i), label)), .Names = i))
   }
-  
+
   structure(list(params = params), class = 'block')
 }
 
@@ -112,7 +112,7 @@ parse_params = function(params, label = TRUE) {
   if (length(n) == 1 && length(pieces[[1]]) == 1) {
     return(if (label) list(label = pieces[[1]]) else list())
   }
-  
+
   if (any(n == 1)) {
     if (label && length(idx <- which(n == 1)) == 1) {
       pieces[[idx]] = c('label', pieces[[idx]])
@@ -122,10 +122,10 @@ parse_params = function(params, label = TRUE) {
   } else if (label && !str_detect(params, '\\s*label\\s*=')) {
     pieces[[length(pieces) + 1]] = c('label', unnamed_chunk())
   }
-  
+
   values = lapply(pieces, function(x) str_trim(x[2]))
   names(values) = str_trim(tolower(lapply(pieces, `[`, 1)))
-  
+
   lapply(values, type.convert, as.is = TRUE)
 }
 
@@ -168,14 +168,14 @@ parse_inline = function(input) {
     input[idx] = str_replace_all(input[idx], knit_patterns$get('inline.code'), '\\1')
   }
   input = str_c(input, collapse = '\n') # merge into one line
-  
+
   locate_inline = function(input, pattern) {
     x = cbind(start = numeric(0), end = numeric(0))
     if (group_pattern(pattern))
       x = str_locate_all(input, pattern)[[1]]
     x
   }
-  
+
   params = list(); global.options = knit_patterns$get('global.options')
   opts.line = locate_inline(input, global.options)
   if (nrow(opts.line)) {
@@ -194,7 +194,7 @@ parse_inline = function(input) {
   }
   loc = rbind(res1$location, res2$location)
   idx = order(loc[, 1L])
-  
+
   structure(list(input = input, location = loc[idx, , drop = FALSE],
                  params = params, code = c(res1$code, res2$code)[idx]),
             class = 'inline')
