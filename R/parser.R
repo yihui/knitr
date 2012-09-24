@@ -290,7 +290,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
                       labels = NULL, from = NULL, to = NULL, from.offset = 0L, to.offset = 0L) {
   lab = knit_patterns$get('ref.label')
   if (is.null(labels)) {
-    if (!group_pattern(lab)) return()
+    if (!group_pattern(lab)) return(invisible())
   } else {
     if (is.null(from)) from = 1L
     if (!is.numeric(from)) from = pattern_index(from, lines)
@@ -303,7 +303,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
       code[[labels[i]]] = lines[from[i]:to[i]]
     }
     knit_code$set(code)
-    return()
+    return(invisible())
   }
   groups = unname(split(lines, cumsum(str_detect(lines, lab))))
   labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\1'))
