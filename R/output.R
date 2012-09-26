@@ -401,7 +401,7 @@ wrap.list = function(x, options = list()) {
 }
 
 wrap.character = function(x, options) {
-  if (!output_asis(x, options)) x = comment_out(x, options)
+  if (!output_asis(x, options)) x = comment_out(x, options$comment)
   knit_hooks$get('output')(x, options)
 }
 
@@ -423,7 +423,7 @@ msg_wrap = function(message, type, options) {
     structure(list(c(knit_log$get(type), str_c('Chunk ', options$label, ':\n  ', message))),
     .Names = type)
   )
-  knit_hooks$get(type)(comment_out(str_c(message, '\n'), options), options)
+  knit_hooks$get(type)(comment_out(message, options$comment), options)
 }
 
 wrap.warning = function(x, options) {
