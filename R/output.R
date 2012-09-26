@@ -406,11 +406,10 @@ wrap.character = function(x, options) {
 }
 
 wrap.source = function(x, options) {
-  src = x$src
+  src = str_replace(x$src, '\n$', '')
   if (options$highlight) {
     src = hilight_source(src, out_format(), options)
   } else if (options$prompt) src = line_prompt(src)
-  src = str_replace(src, '\n$', '')
   src = str_c(c(src, ''), collapse = '\n')
   knit_hooks$get('source')(src, options)
 }
