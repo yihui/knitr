@@ -67,7 +67,7 @@ hilight_source = function(x, format, options) {
     out = capture.output(highlight(con, renderer = r, showPrompts = options$prompt, size = options$size))
     str_c(out, collapse = '\n')
   } else {
-    if (options$prompt) x = sapply(x, line_prompt, USE.NAMES = FALSE)
+    if (options$prompt) x = line_prompt(x)
     do.call(paste('hi', format, sep = '_'), list(x = x))
   }
 }
