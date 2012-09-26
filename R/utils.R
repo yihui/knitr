@@ -18,8 +18,8 @@ chunk_counter = knit_counter(1L)
 
 ## a vectorized and better version than evaluate:::line_prompt
 line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('continue')) {
-  x = str_replace(x, '\n$', '')
-  str_c(prompt, str_replace_all(x, '\n', str_c('\n', continue)), '\n')
+  # match a \n, then followed by any character (use zero width assertion)
+  str_c(prompt, gsub('(?<=\n)(?=.|\n)', continue, x, perl = TRUE))
 }
 
 ## add a prefix to output
