@@ -26,7 +26,7 @@ line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('co
 comment_out = function(x, prefix = '##', which = TRUE) {
   if (is.null(prefix) || !nzchar(prefix) || is.na(prefix)) return(x)
   prefix = str_c(prefix, ' ')
-  x = gsub('\\s*$', '', x)
+  x = gsub(' +([\n]*)$', '\\1', x)
   x[which] = line_prompt(x[which], prompt = prefix, continue = prefix)
   x
 }
