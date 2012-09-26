@@ -47,8 +47,8 @@ qplot(hp, mpg, data = mtcars) + geom_smooth()
 ![plot of chunk md-cars-scatter](https://github.com/yihui/knitr/raw/master/inst/examples/md-cars-scatter.png) 
 
 
-Inline R code is also supported, e.g. the value of `x` is `2`, and 2 times pi
-= `6.2832`.
+Inline R code is also supported, e.g. the value of `x` is 2, and 2 times pi
+= 6.2832.
 
 So no more hesitation on using GitHub and **knitr**! You just write a minimal
 amount of code to get beautiful output on the web.
