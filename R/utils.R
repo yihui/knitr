@@ -16,9 +16,10 @@ knit_counter = function(init = 0L) {
 plot_counter = knit_counter(1L)
 chunk_counter = knit_counter(1L)
 
-line_prompt = function(x, ...) {
-  x[x == ''] = '\n'
-  evaluate:::line_prompt(x, ...)
+## a vectorized and better version than evaluate:::line_prompt
+line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('continue')) {
+  x = str_replace(x, '\n$', '')
+  str_c(prompt, str_replace_all(x, '\n', str_c('\n', continue)), '\n')
 }
 
 ## add a prefix to output
