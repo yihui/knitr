@@ -11,7 +11,7 @@ hi_latex = function(x, fragment = FALSE) {
   x = gsub('([{}])', '\\\\\\1', x)
   # yes I know this is stupid...
   x = gsub('\\\\textbackslash\\\\\\{\\\\\\}', '\\\\textbackslash{}', x)
-  x = unlist(strsplit(x, '\n'))
+  x = unlist(str_split(x, '\n'))
   # function names
   x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '\\\\hlfunctioncall{\\1}\\2(', x)
   # comments: what if # inside quotes?
@@ -30,7 +30,7 @@ hi_html = function(x) {
   x = gsub('&', "&amp;", x)
   x = gsub('<', '&lt;', x)
   x = gsub('>', '&gt;', x)
-  x = unlist(strsplit(x, '\n'))
+  x = unlist(str_split(x, '\n'))
   # character strings
   x = gsub('"([^"]*)"', '<span class="string">"\\1"</span>', x)
   x = gsub("'([^']*)'", "<span class=\"string\">'\\1'</span>", x)
