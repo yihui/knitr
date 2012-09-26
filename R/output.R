@@ -318,6 +318,7 @@ knit_child = function(..., eval = TRUE) {
   opts_knit$set(child = TRUE) # yes, in child mode now
   on.exit(opts_knit$set(child = child)) # restore child status
   path = knit(..., tangle = opts_knit$get('tangle'))
+  if (is.null(path)) return() # the input document is empty
   if (opts_knit$get('tangle')) {
     str_c('\n', 'source("', path, '")')
   } else if (concord_mode() || !out_format('latex')) {
