@@ -33,7 +33,7 @@ All built-in options in **knitr** are:
 
 ### Code Evaluation
 
-- `eval`: (`TRUE`; logical) whether to evaluate the code chunk
+- `eval`: (`TRUE`; logical) whether to evaluate the code chunk; it can also be a numeric vector to select which R expression(s) to evaluate, e.g. `eval=c(1, 3, 4)` or `eval=-(4:5)`
 
 ### Text Results
 
