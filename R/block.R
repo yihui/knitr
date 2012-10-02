@@ -120,7 +120,7 @@ block_exec = function(params) {
   }
 
   owd = setwd(opts_knit$get('root.dir') %n% input_dir())
-  res = evaluate(code, envir = env) # run code
+  res = evaluate(code, envir = env, new_device = FALSE) # run code
   setwd(owd)
 
   # eval other options after the chunk
