@@ -210,7 +210,7 @@ render_latex = function() {
     inline = .inline.hook.tex, chunk = .chunk.hook.tex,
     plot = function(x, options) {
       ## escape plot environments from kframe
-      str_c('\\end{kframe}', hook_plot_tex(x, options), '\\begin{kframe}')
+      str_c('\\end{kframe}', hook_plot_tex(x, options), '\n\\begin{kframe}')
     }
   )
 }
