@@ -130,7 +130,7 @@ dep_auto = function(path = opts_chunk$get('cache.path')) {
     for (j in 1:(i - 1L)) {
       ## check if current globals are in old locals
       if (length(globals[[nms[i]]]) && any(globals[[nms[i]]] %in% locals[[nms[j]]]))
-        dep_list$set(structure(list(c(dep_list$get(nms[j]), nms[i])), .Names = nms[j]))
+        dep_list$set(setNames(list(c(dep_list$get(nms[j]), nms[i])), nms[j]))
     }
   }
 }
@@ -166,7 +166,7 @@ dep_prev = function() {
   labs = names(knit_code$get())
   if ((n <- length(labs)) < 2L) return() # one chunk or less; no sense of deps
   for (i in 1L:(n - 1L)) {
-    dep_list$set(structure(list(labs[(i + 1L):n]), .Names = labs[i]))
+    dep_list$set(setNames(list(labs[(i + 1L):n]), labs[i]))
   }
 }
 

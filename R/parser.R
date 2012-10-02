@@ -63,13 +63,13 @@ parse_block = function(input) {
   code = block[-1L]
   if (length(code)) {
     if (label %in% names(knit_code$get())) stop("duplicated label '", label, "'")
-    knit_code$set(structure(list(code), .Names = label))
+    knit_code$set(setNames(list(code), label))
   }
 
   ## store dependencies
   if (!is.null(deps <- params$dependson)) {
     for (i in sc_split(deps))
-      dep_list$set(structure(list(c(dep_list$get(i), label)), .Names = i))
+      dep_list$set(setNames(list(c(dep_list$get(i), label)), i))
   }
 
   structure(list(params = params), class = 'block')
