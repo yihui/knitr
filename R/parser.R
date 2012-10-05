@@ -45,7 +45,8 @@ strip_block = function(x) {
   x
 }
 
-## an object to store chunk dependencies
+## an object to store chunk dependencies; dep_list$get() is of the form list(foo
+## = c('chunk', 'labels', 'that', 'depend', 'on', 'chunk', 'foo'))
 dep_list = new_defaults()
 
 ## separate params and R code in code chunks
