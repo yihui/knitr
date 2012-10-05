@@ -60,7 +60,7 @@ parse_block = function(input) {
     block = gsub(str_c('^', spaces), '', block) # remove indent for the whole chunk
   }
 
-  label = params$label
+  label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
   code = block[-1L]
   if (length(code)) {
     if (label %in% names(knit_code$get())) stop("duplicated label '", label, "'")

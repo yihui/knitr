@@ -186,6 +186,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   if (!is.null(output)) cat(res, file = output)
   if (!child_mode()) {
     dep_list$restore()  # empty dependency list
+    .knitEnv$labels = NULL
   }
 
   if (in.file && is.character(output) && file.exists(output)) {
