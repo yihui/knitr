@@ -184,7 +184,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   res = process_file(text, output)
   res = knit_hooks$get('document')(res)
   if (!is.null(output)) cat(res, file = output)
-  dep_list$restore()  # empty dependency list
+  if (!child_mode()) {
+    dep_list$restore()  # empty dependency list
+  }
 
   if (in.file && is.character(output) && file.exists(output)) {
     concord_gen(input2, output)  # concordance file
