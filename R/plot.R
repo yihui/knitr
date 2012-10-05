@@ -28,8 +28,9 @@ dev2ext = function(x) {
 ## quartiz devices under Mac
 quartz_dev = function(type, dpi) {
   force(type); force(dpi)
-  function(file, width, height) {
-    quartz(file = file, width = width, height = height, type = type, dpi = dpi)
+  function(file, width, height, ...) {
+    quartz(file = file, width = width, height = height, type = type, dpi = dpi,
+           ...)
   }
 }
 
