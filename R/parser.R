@@ -69,7 +69,12 @@ parse_block = function(input) {
 
   ## store dependencies
   if (!is.null(deps <- params$dependson)) {
-    for (i in sc_split(deps))
+    deps = sc_split(deps)
+    if (is.numeric(deps)) {
+      deps[deps < 0] = length(.knitEnv$labels) + deps[deps < 0]
+      deps = .knitEnv$labels[deps[deps > 0]]
+    }
+    for (i in deps)
       dep_list$set(setNames(list(c(dep_list$get(i), label)), i))
   }
 
