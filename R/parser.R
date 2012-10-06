@@ -233,7 +233,8 @@ print.inline = function(x, ...) {
 #' Read chunks from an external script
 #'
 #' Chunks can be put in an external script, and this function reads chunks into
-#' the current \pkg{knitr} session.
+#' the current \pkg{knitr} session; \code{read_demo()} is a convenience function
+#' to read a demo script from a package.
 #'
 #' There are two approaches to read external code into the current session: (1)
 #' Use a special separator in the script; the \code{ref.label} element in the
@@ -317,6 +318,14 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
   idx = nzchar(labels); code = code[idx]; labels = labels[idx]
   names(code) = labels
   knit_code$set(code)
+}
+#' @rdname read_chunk
+#' @param topic,package name of the demo and the package see \code{\link[utils]{demo}}
+#' @param ... arguments to be passed to \code{\link{read_chunk}}
+#' @export
+read_demo = function(topic, package = NULL, ...) {
+  paths = list.files(file.path(find.package(package), 'demo'), full.names = TRUE)
+  read_chunk(paths[file_path_sans_ext(basename(paths)) == topic], ...)
 }
 
 # convert patterns to numeric indices in a character vector
