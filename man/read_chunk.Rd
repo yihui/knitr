@@ -1,9 +1,12 @@
 \name{read_chunk}
 \alias{read_chunk}
+\alias{read_demo}
 \title{Read chunks from an external script}
 \usage{
 read_chunk(path, lines = readLines(path, warn = FALSE), labels = NULL, from = NULL, 
     to = NULL, from.offset = 0L, to.offset = 0L)
+
+read_demo(topic, package = NULL, ...)
 }
 \arguments{
   \item{path}{the path to the R script}
@@ -20,6 +23,12 @@ read_chunk(path, lines = readLines(path, warn = FALSE), labels = NULL, from = NU
 
   \item{from.offset,to.offset}{an offset to be added to
   \code{from}/\code{to}}
+
+  \item{topic,package}{name of the demo and the package see
+  \code{\link[utils]{demo}}}
+
+  \item{...}{arguments to be passed to
+  \code{\link{read_chunk}}}
 }
 \value{
   As a side effect, code chunks are read into the current
@@ -29,7 +38,8 @@ read_chunk(path, lines = readLines(path, warn = FALSE), labels = NULL, from = NU
 \description{
   Chunks can be put in an external script, and this
   function reads chunks into the current \pkg{knitr}
-  session.
+  session; \code{read_demo()} is a convenience function to
+  read a demo script from a package.
 }
 \details{
   There are two approaches to read external code into the
