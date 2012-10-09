@@ -16,6 +16,8 @@
 
 - `purl()` gained a new argument `documentation` to also write documentation lines into the R script (#391) (thanks, Noam Ross)
 
+- we can also use `## @knitr` to write chunk options for `spin()` now (`#+` and `#-` still work)
+
 - `render_jekyll()` gained an argument `highlight` to specify which highlighting engine to use (Pygments or Prettify.js) (thanks, Yanping Chen)
 
 ## MAJOR CHANGES
