@@ -84,7 +84,7 @@ opts_knit = new_defaults(list(
   child.command = 'input', base.dir = NULL, base.url = NULL, child.path = '',
   upload.fun = identity, animation.fun = NULL, global.device = FALSE,
   eval.after = NULL, concordance = FALSE, sweave.penalty = 10,
-  tangle = FALSE, child = FALSE, parent = FALSE,
+  tangle = FALSE, child = FALSE, parent = FALSE, documentation = FALSE,
   cache.extra = NULL, aliases = NULL, root.dir = NULL,
   self.contained = TRUE, filter.chunk.end = TRUE, use.highlight = FALSE,
   header = c(highlight = '', tikz = '', framed = '')

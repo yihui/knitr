@@ -169,6 +169,7 @@ print.block = function(x, ...) {
 
 ## extract inline R code fragments (as well as global options)
 parse_inline = function(input) {
+  input.src = input  # keep a copy of the source
   inline.comment = knit_patterns$get('inline.comment')
   if (!is.null(inline.comment)) {
     idx = str_detect(input, inline.comment)
@@ -203,7 +204,7 @@ parse_inline = function(input) {
   loc = rbind(res1$location, res2$location)
   idx = order(loc[, 1L])
 
-  structure(list(input = input, location = loc[idx, , drop = FALSE],
+  structure(list(input = input, input.src = input.src, location = loc[idx, , drop = FALSE],
                  params = params, code = c(res1$code, res2$code)[idx]),
             class = 'inline')
 }

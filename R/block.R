@@ -285,6 +285,9 @@ process_tangle.block = function(x) {
   label_code(parse_chunk(code), x$params.src)
 }
 process_tangle.inline = function(x) {
+  if (opts_knit$get('documentation')) {
+    return(str_c(line_prompt(x$input.src, "#' ", "#' "), collapse = '\n'))
+  }
   code = x$code
   if ((n <- length(code)) == 0 || !any(idx <- str_detect(code, "knit_child\\(.+\\)")))
     return('')

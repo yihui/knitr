@@ -202,9 +202,14 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
   output %n% res
 }
 #' @rdname knit
+#' @param documentation logical: whether to write documentation lines into the
+#'   tangled file as roxygen comments (\code{FALSE} means only computer code is
+#'   written out)
 #' @param ... arguments passed to \code{\link{knit}}
 #' @export
-purl = function(...) {
+purl = function(..., documentation = FALSE) {
+  doc = opts_knit$get('documentation'); on.exit(opts_knit$set(documentation = doc))
+  opts_knit$set(documentation = documentation)
   knit(..., tangle = TRUE)
 }
 
