@@ -14,6 +14,8 @@
 
 - chunk options are also written after `## @knitr` along with chunk labels when tangling R scripts via `purl()`
 
+- `purl()` gained a new argument `documentation` to also write documentation lines into the R script (#391) (thanks, Noam Ross)
+
 - `render_jekyll()` gained an argument `highlight` to specify which highlighting engine to use (Pygments or Prettify.js) (thanks, Yanping Chen)
 
 ## MAJOR CHANGES
