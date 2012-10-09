@@ -12,22 +12,20 @@
 #' @export
 knit_rd = function(pkg) {
   library(pkg, character.only = TRUE)
-  path = find.package(pkg)
-  objs = readRDS(file.path(path, 'help', 'aliases.rds'))
-  tits = character()
   optc = opts_chunk$get(); on.exit(opts_chunk$set(optc))
   file.copy(system.file('misc', c('highlight.css', 'highlight.pack.js', 'R.css'), package = 'knitr'), './')
-  for (p in unique(objs)) {
+  pkgRdDB = tools:::fetchRdDB(file.path(find.package(pkg), 'help', pkg))
+  links = tools::findHTMLlinks(); topics = names(pkgRdDB)
+  for (p in topics) {
     message('knitting documentation of ', p)
-    hf = utils:::.getHelpFile(file.path(path, 'help', p))
-    tools::Rd2HTML(hf, f <- tempfile(), package = pkg)
+    tools::Rd2HTML(pkgRdDB[[p]], f <- tempfile(),
+            package = pkg, Links = links, no_links = is.null(links), stages = 'render')
     txt = readLines(f, warn = FALSE)
-    tits[p] = gsub('(.*<h2>)|(</h2>.*)', '', paste(txt, collapse = '\n'))
     if (length(i <- grep('<h3>Examples</h3>', txt)) == 1L &&
       length(grep('</pre>', txt[i:length(txt)]))) {
       i0 = grep('<pre>', txt); i0 = i0[i0 > i][1L] - 1L
       i1 = grep('</pre>', txt); i1 = i1[i1 > i0][1L] + 1L
-      tools::Rd2ex(hf, ef <- tempfile())
+      tools::Rd2ex(pkgRdDB[[p]], ef <- tempfile())
       ex = readLines(ef, warn = FALSE)
       ex = ex[-(1L:grep('### ** Examples', ex, fixed = TRUE))]
       ex = c('```{r}', ex, '```')
@@ -45,11 +43,25 @@ knit_rd = function(pkg) {
     writeLines(txt, str_c(p, '.html'))
   }
   unlink('figure/', recursive = TRUE)
-  tits = str_trim(tits)
-  toc = sprintf('- [%s](%s): %s', names(objs), str_c(objs, '.html'), tits[objs])
-  toc = c(str_c('# Help Pages of ', pkg), '', toc, '',
+  toc = sprintf('- <a href="%s" target="content">%s</a>', str_c(topics, '.html'), topics)
+  toc = c(str_c('# ', pkg), '', toc, '',
           paste('Generated with [knitr](http://yihui.name/knitr) ', packageVersion('knitr')))
-  markdown::markdownToHTML(text = paste(toc, collapse = '\n'), output = 'index.html',
+  markdown::markdownToHTML(text = paste(toc, collapse = '\n'), output = '00frame_toc.html',
                            title = str_c('R Documentation of ', pkg),
                            fragment.only = TRUE)
+  file.copy(file.path(find.package(pkg), 'html', '00Index.html'), '.', overwrite = TRUE)
+  # fix image links
+  txt = readLines('00Index.html')
+  writeLines(gsub('../../../doc/html/', 'http://stat.ethz.ch/R-manual/R-devel/doc/html/',
+                  txt, fixed = TRUE), '00Index.html')
+  writeLines(sprintf(
+'<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html>
+<head><title>Documentation of the %s package</title></head>
+<frameset cols="15%%,*">
+  <frame src="00frame_toc.html">
+  <frame src="00Index.html" name="content">
+</frameset>
+</html>
+', pkg), 'index.html')
 }

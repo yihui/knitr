@@ -16,6 +16,8 @@
 
 - `purl()` gained a new argument `documentation` to also write documentation lines into the R script (#391) (thanks, Noam Ross)
 
+- `knit_rd()` generates a navigation frame on the left and builds links now; this is like the CHM help in old days (thanks, Michael Friendly)
+
 - we can also use `## @knitr` to write chunk options for `spin()` now (`#+` and `#-` still work)
 
 - `render_jekyll()` gained an argument `highlight` to specify which highlighting engine to use (Pygments or Prettify.js) (thanks, Yanping Chen)
