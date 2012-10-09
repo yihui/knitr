@@ -12,6 +12,8 @@
 
 - a new convenience function `read_rforge()` to read code from R-Forge repositories; combined with `read_chunk()`, it can insert R code from R-Forge into **knitr** dynamically; see https://github.com/yihui/knitr-examples/blob/master/046-read-rforge.Rmd for an example (thanks, Peter Ruckdeschel)
 
+- chunk options are also written after `## @knitr` along with chunk labels when tangling R scripts via `purl()`
+
 - `render_jekyll()` gained an argument `highlight` to specify which highlighting engine to use (Pygments or Prettify.js) (thanks, Yanping Chen)
 
 ## MAJOR CHANGES

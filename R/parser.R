@@ -53,8 +53,10 @@ dep_list = new_defaults()
 parse_block = function(input) {
   block = strip_block(input)
   n = length(block); chunk.begin = knit_patterns$get('chunk.begin')
-  params = if (group_pattern(chunk.begin)) gsub(chunk.begin, '\\1', block[1]) else ''
-  params = parse_params(params)
+  params.src = if (group_pattern(chunk.begin)) {
+    str_trim(gsub(chunk.begin, '\\1', block[1]))
+  } else ''
+  params = parse_params(params.src)
   if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', block[1]))) {
     params$indent = spaces
     block = gsub(str_c('^', spaces), '', block) # remove indent for the whole chunk
@@ -78,7 +80,7 @@ parse_block = function(input) {
       dep_list$set(setNames(list(c(dep_list$get(i), label)), i))
   }
 
-  structure(list(params = params), class = 'block')
+  structure(list(params = params, params.src = params.src), class = 'block')
 }
 
 ## autoname for unnamed chunk

@@ -282,7 +282,7 @@ process_tangle.block = function(x) {
   if (!isFALSE(params$eval) && length(code) && str_detect(code, 'read_chunk\\(.+\\)')) {
     eval(parse(text = unlist(str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
   }
-  label_code(parse_chunk(code), label)
+  label_code(parse_chunk(code), x$params.src)
 }
 process_tangle.inline = function(x) {
   code = x$code
@@ -293,7 +293,7 @@ process_tangle.inline = function(x) {
 }
 
 
-# add a label to a code chunk
+# add a label [and extra chunk options] to a code chunk
 label_code = function(code, label) {
   str_c(str_c('## @knitr ', label), '\n', str_c(code, collapse = '\n'), '\n')
 }
