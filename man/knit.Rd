@@ -5,7 +5,7 @@
 \usage{
 knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame())
 
-purl(...)
+purl(..., documentation = FALSE)
 }
 \arguments{
   \item{input}{path of the input file}
@@ -23,6 +23,11 @@ purl(...)
   \item{envir}{the environment in which the code chunks are
   to be evaluated (can use \code{\link{new.env}()} to
   guarantee an empty new environment)}
+
+  \item{documentation}{logical: whether to write
+  documentation lines into the tangled file as roxygen
+  comments (\code{FALSE} means only computer code is
+  written out)}
 
   \item{...}{arguments passed to \code{\link{knit}}}
 }
