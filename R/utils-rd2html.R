@@ -2,6 +2,8 @@
 #'
 #' Run examples in a package and insert output into the examples code.
 #' @param pkg package name
+#' @param links a charactor vector of links to be passed to
+#'   \code{\link[tools]{Rd2HTML}}
 #' @return All HTML pages corresponding to topics in the package are written
 #'   under the current working directory. An \file{index.html} is also written
 #'   as a table of content.
@@ -10,12 +12,12 @@
 #' knit_rd('ggplot2') # time-consuming!
 #' }
 #' @export
-knit_rd = function(pkg) {
+knit_rd = function(pkg, links = tools::findHTMLlinks()) {
   library(pkg, character.only = TRUE)
   optc = opts_chunk$get(); on.exit(opts_chunk$set(optc))
   file.copy(system.file('misc', c('highlight.css', 'highlight.pack.js', 'R.css'), package = 'knitr'), './')
   pkgRdDB = tools:::fetchRdDB(file.path(find.package(pkg), 'help', pkg))
-  links = tools::findHTMLlinks(); topics = names(pkgRdDB)
+  force(links); topics = names(pkgRdDB)
   for (p in topics) {
     message('knitting documentation of ', p)
     tools::Rd2HTML(pkgRdDB[[p]], f <- tempfile(),
@@ -48,7 +50,7 @@ knit_rd = function(pkg) {
           paste('Generated with [knitr](http://yihui.name/knitr) ', packageVersion('knitr')))
   markdown::markdownToHTML(text = paste(toc, collapse = '\n'), output = '00frame_toc.html',
                            title = str_c('R Documentation of ', pkg),
-                           fragment.only = TRUE)
+                           options = NULL, extensions = NULL, stylesheet = 'R.css')
   file.copy(file.path(find.package(pkg), 'html', '00Index.html'), '.', overwrite = TRUE)
   # fix image links
   txt = readLines('00Index.html')
