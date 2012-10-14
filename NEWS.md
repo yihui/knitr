@@ -18,6 +18,8 @@
 
 - `knit_rd()` generates a navigation frame on the left and builds links now; this is like the CHM help in old days (thanks, Michael Friendly)
 
+- a new function `knit_rd_all()` to build static html help pages for all the packages installed
+
 - we can also use `## @knitr` to write chunk options for `spin()` now (`#+` and `#-` still work)
 
 - `render_jekyll()` gained an argument `highlight` to specify which highlighting engine to use (Pygments or Prettify.js) (thanks, Yanping Chen)

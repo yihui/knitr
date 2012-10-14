@@ -1,6 +1,8 @@
 #' Knit package documentation
 #'
-#' Run examples in a package and insert output into the examples code.
+#' Run examples in a package and insert output into the examples code;
+#' \code{knit_rd_all()} is a wrapper around \code{knit_rd()} to build static
+#' HTML help pages for all packages under the \file{html} directory of them.
 #' @param pkg package name
 #' @param links a charactor vector of links to be passed to
 #'   \code{\link[tools]{Rd2HTML}}
@@ -11,6 +13,8 @@
 #' @examples \dontrun{knit_rd('maps')
 #' knit_rd('rpart')
 #' knit_rd('ggplot2') # time-consuming!
+#'
+#' knit_rd_all()  # this may take really long time if you have many packages installed
 #' }
 #' @export
 knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
@@ -73,4 +77,18 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
 </frameset>
 </html>
 ', pkg), 'index.html')
+}
+
+#' @rdname knit_rd
+#' @export
+knit_rd_all = function() {
+  owd = getwd(); on.exit(setwd(owd))
+  optk = opts_knit$get(); on.exit(opts_knit$set(optk))
+  opts_knit$set(progress = FALSE)  # too much info to show
+  links = tools::findHTMLlinks()
+  for (p in .packages(TRUE)) {
+    message('* Making static html help pages for ', p)
+    setwd(system.file('html', package = p))
+    knit_rd(p, links, frame = FALSE)
+  }
 }
