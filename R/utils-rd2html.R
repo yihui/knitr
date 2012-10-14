@@ -10,8 +10,13 @@
 #' @return All HTML pages corresponding to topics in the package are written
 #'   under the current working directory. An \file{index.html} is also written
 #'   as a table of content.
+#' @note Ideally the html pages should be put under the \file{html} directory of
+#'   an installed package which can be found via \code{system.file('html',
+#'   package = 'your_package_name')}, otherwise some links may not work (e.g.
+#'   the link to the DESCRITION file).
 #' @examples \dontrun{knit_rd('maps')
 #' knit_rd('rpart')
+#' setwd(system.file('html', package = 'ggplot2'))
 #' knit_rd('ggplot2') # time-consuming!
 #'
 #' knit_rd_all()  # this may take really long time if you have many packages installed
