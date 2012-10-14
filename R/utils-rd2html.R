@@ -51,9 +51,8 @@ knit_rd = function(pkg, links = tools::findHTMLlinks()) {
   markdown::markdownToHTML(text = paste(toc, collapse = '\n'), output = '00frame_toc.html',
                            title = str_c('R Documentation of ', pkg),
                            options = NULL, extensions = NULL, stylesheet = 'R.css')
-  file.copy(file.path(find.package(pkg), 'html', '00Index.html'), '.', overwrite = TRUE)
+  txt = readLines(file.path(find.package(pkg), 'html', '00Index.html'))
   # fix image links
-  txt = readLines('00Index.html')
   writeLines(gsub('../../../doc/html/', 'http://stat.ethz.ch/R-manual/R-devel/doc/html/',
                   txt, fixed = TRUE), '00Index.html')
   writeLines(sprintf(
