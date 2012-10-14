@@ -4,6 +4,7 @@
 #' @param pkg package name
 #' @param links a charactor vector of links to be passed to
 #'   \code{\link[tools]{Rd2HTML}}
+#' @param frame whether to put a navigation frame on left of the index page
 #' @return All HTML pages corresponding to topics in the package are written
 #'   under the current working directory. An \file{index.html} is also written
 #'   as a table of content.
@@ -12,7 +13,7 @@
 #' knit_rd('ggplot2') # time-consuming!
 #' }
 #' @export
-knit_rd = function(pkg, links = tools::findHTMLlinks()) {
+knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   library(pkg, character.only = TRUE)
   optc = opts_chunk$get(); on.exit(opts_chunk$set(optc))
   file.copy(system.file('misc', c('highlight.css', 'highlight.pack.js', 'R.css'), package = 'knitr'), './')
@@ -52,9 +53,16 @@ knit_rd = function(pkg, links = tools::findHTMLlinks()) {
                            title = str_c('R Documentation of ', pkg),
                            options = NULL, extensions = NULL, stylesheet = 'R.css')
   txt = readLines(file.path(find.package(pkg), 'html', '00Index.html'))
+  unlink('00Index.html')
   # fix image links
   writeLines(gsub('../../../doc/html/', 'http://stat.ethz.ch/R-manual/R-devel/doc/html/',
                   txt, fixed = TRUE), '00Index.html')
+  if (!frame) {
+    unlink(c('00frame_toc.html', 'index.html'))
+    # do not need a navigation frame, so make 00Index the real homepage
+    (if (.Platform$OS.type == 'windows') file.copy else file.symlink)('00Index.html', 'index.html')
+    return(invisible())
+  }
   writeLines(sprintf(
 '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
 <html>
