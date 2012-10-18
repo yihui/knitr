@@ -50,18 +50,26 @@ eng_awk = function(options) {
 
 ## Java
 
-## Ruby
-eng_ruby = function(options) {
+## Haskell
+eng_haskell = function(options) {
   code = str_c(options$code, collapse = '\n')
-  cmd = sprintf('ruby -e %s', shQuote(code))
+  cmd = sprintf('%s -e %s', options$engine, shQuote(code))
   out = if (options$eval) system(cmd, intern = TRUE) else ''
   engine_output(code, out, options)
 }
 
-## Haskell
-eng_haskell = function(options) {
+## Perl
+eng_perl = function(options) {
   code = str_c(options$code, collapse = '\n')
-  cmd = sprintf('ghc -e %s', shQuote(code))
+  cmd = sprintf('%s -e %s', options$engine, shQuote(code))
+  out = if (options$eval) system(cmd, intern = TRUE) else ''
+  engine_output(code, out, options)
+}
+
+## Ruby
+eng_ruby = function(options) {
+  code = str_c(options$code, collapse = '\n')
+  cmd = sprintf('%s -e %s', options$engine, shQuote(code))
   out = if (options$eval) system(cmd, intern = TRUE) else ''
   engine_output(code, out, options)
 }
@@ -86,10 +94,19 @@ eng_bash = function(options) {
   engine_output(code, out, options)
 }
 
+## zsh
+eng_zsh = function(options) {
+  code = str_c(options$code, collapse = '\n')
+  cmd = paste(options$engine, '-c', shQuote(code))
+  out = if (options$eval) system(cmd, intern = TRUE) else ''
+  engine_output(code, out, options)
+}
+
 knit_engines$set(
   python = eng_python, awk = eng_awk, gawk = eng_awk, ruby = eng_ruby,
-  haskell = eng_haskell, highlight = eng_highlight,
-  bash = eng_bash, sh = eng_bash
+  haskell = eng_haskell, highlight = eng_highlight, bash = eng_bash, 
+  sh = eng_bash, zsh = eng_bash, perl = eng_perl
+
 )
 
 # possible values for engines (for auto-completion in RStudio)
