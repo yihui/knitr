@@ -29,50 +29,22 @@ engine_output = function(code, out, options) {
   ), collapse = '\n')
   if (options$include) knit_hooks$get('chunk')(txt, options) else ''
 }
-
+## python perl ruby haskell bash(sh) zsh awk sed
 ## Python (TODO: how to emulate the console??)
-eng_python = function(options) {
+## file is the file to read in cl.opts are additional options to the 
+## interpreter
+eng_interpreted = function(options) {
   code = str_c(options$code, collapse = '\n')
-  cmd = sprintf('python -c %s', shQuote(code))
+  code_option = switch(options$engine, bash = '-e', haskell = '-e', perl = '-e', 
+                       python = '-c', ruby = '-e', sh = '-e', zsh = '-e', '')
+  cmd = paste(options$engine, code_option, shQuote(code), 
+              shQuote(options$file), options$cl.opts)
   out = if (options$eval) system(cmd, intern = TRUE) else ''
   engine_output(code, out, options)
 }
-
-## Awk: file is the file to read in; awk.opts are other options to pass to awk
-eng_awk = function(options) {
-  code = str_c(options$code, collapse = '\n')
-  cmd = paste(options$engine, shQuote(code), shQuote(options$file), options$awk.opts)
-  out = if (options$eval) system(cmd, intern = TRUE) else ''
-  engine_output(code, out, options)
-}
-
 ## C
 
 ## Java
-
-## Haskell
-eng_haskell = function(options) {
-  code = str_c(options$code, collapse = '\n')
-  cmd = sprintf('%s -e %s', options$engine, shQuote(code))
-  out = if (options$eval) system(cmd, intern = TRUE) else ''
-  engine_output(code, out, options)
-}
-
-## Perl
-eng_perl = function(options) {
-  code = str_c(options$code, collapse = '\n')
-  cmd = sprintf('%s -e %s', options$engine, shQuote(code))
-  out = if (options$eval) system(cmd, intern = TRUE) else ''
-  engine_output(code, out, options)
-}
-
-## Ruby
-eng_ruby = function(options) {
-  code = str_c(options$code, collapse = '\n')
-  cmd = sprintf('%s -e %s', options$engine, shQuote(code))
-  out = if (options$eval) system(cmd, intern = TRUE) else ''
-  engine_output(code, out, options)
-}
 
 ## Andre Simon's highlight
 eng_highlight = function(options) {
@@ -86,27 +58,11 @@ eng_highlight = function(options) {
   engine_output(code, out, options)
 }
 
-## bash (sh)
-eng_bash = function(options) {
-  code = str_c(options$code, collapse = '\n')
-  cmd = paste(options$engine, '-c', shQuote(code))
-  out = if (options$eval) system(cmd, intern = TRUE) else ''
-  engine_output(code, out, options)
-}
-
-## zsh
-eng_zsh = function(options) {
-  code = str_c(options$code, collapse = '\n')
-  cmd = paste(options$engine, '-c', shQuote(code))
-  out = if (options$eval) system(cmd, intern = TRUE) else ''
-  engine_output(code, out, options)
-}
-
 knit_engines$set(
-  python = eng_python, awk = eng_awk, gawk = eng_awk, ruby = eng_ruby,
-  haskell = eng_haskell, highlight = eng_highlight, bash = eng_bash, 
-  sh = eng_bash, zsh = eng_bash, perl = eng_perl
-
+  awk = eng_interpreted, bash = eng_interpreted, gawk = eng_interpreted, 
+  haskell = eng_interpreted, highlight = eng_highlight, perl = eng_interpreted, 
+  python = eng_interpreted, ruby = eng_interpreted, sed = eng_interpreted, 
+  sh = eng_interpreted, zsh = eng_interpreted 
 )
 
 # possible values for engines (for auto-completion in RStudio)
