@@ -13,7 +13,7 @@ call_block = function(block) {
   af = opts_knit$get('eval.after'); al = opts_knit$get('aliases')
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
   for (o in setdiff(names(block$params), af))
-    block$params[[o]] = eval_lang(block$params[[o]])
+    block$params[o] = eval_lang(block$params[[o]]) %n% list(NULL)
 
   params = opts_chunk$merge(block$params)
   params = fix_options(params)  # for compatibility
