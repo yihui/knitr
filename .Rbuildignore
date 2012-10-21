@@ -12,4 +12,4 @@ knitr-minimal.md
 knitr-spin.md
 png$
 ^\.Rproj\.user$
-.*.Rproj
+^.*\.Rproj$
