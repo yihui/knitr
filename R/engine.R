@@ -35,8 +35,8 @@ engine_output = function(code, out, options) {
 ## interpreter
 eng_interpreted = function(options) {
   code = str_c(options$code, collapse = '\n')
-  code_option = switch(options$engine, bash = '-e', haskell = '-e', perl = '-e', 
-                       python = '-c', ruby = '-e', sh = '-e', zsh = '-e', '')
+  code_option = switch(options$engine, bash = '-c', haskell = '-e', perl = '-e', 
+                       python = '-c', ruby = '-e', sh = '-c', zsh = '-c', '')
   cmd = paste(options$engine, code_option, shQuote(code), 
               shQuote(options$file), options$cl.opts)
   out = if (options$eval) system(cmd, intern = TRUE) else ''
