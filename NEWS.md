@@ -36,6 +36,10 @@
 
 - `stitch()` will no longer copy the template over to the current working directory (thanks, Michael Friendly)
 
+## BUG FIXES
+
+- fixed #410: when the inline R code returns `NA_real_`, the scientific notation of numbers will run into errors (thanks, Rafik)
+
 # CHANGES IN knitr VERSION 0.8
 
 ## NEW FEATURES
