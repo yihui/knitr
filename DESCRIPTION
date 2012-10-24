@@ -1,19 +1,20 @@
 Package: knitr
 Type: Package
 Title: A general-purpose package for dynamic report generation in R
-Version: 0.8.7
+Version: 0.8.8
 Date: 2012-09-05
 Authors@R: c(person("Hadley", "Wickham", email = "hadley@rice.edu", role =
     "ctb"), person("Ramnath", "Vaidyanathan", role = "ctb"), person("Joseph",
-    "Allaire", "J.", role = "ctb"), person("Tom", "Torsney-Weir", role = "ctb"),
-    person("Jonathan", "Keane", role = "ctb"), person("Joe", "Cheng", role =
-    "ctb"), person("Jeff", "Arnold", role = "ctb"), person("Kohske",
+    "Allaire", "J.", role = "ctb"), person("Tom", "Torsney-Weir", role =
+    "ctb"), person("Jonathan", "Keane", role = "ctb"), person("Joe", "Cheng",
+    role = "ctb"), person("Jeff", "Arnold", role = "ctb"), person("Kohske",
     "Takahashi", role = "ctb"), person("Taiyun", "Wei", role = "ctb"),
     person("Alex", "Zvoleff", role = "ctb"), person("Cassio", "Pereira", role =
     "ctb"), person("Wush", "Wu", role = "ctb"), person("Simon", "de Bernard",
     role = "ctb"), person("Michel", "Kuhlmann", role = "ctb"),
-    person("Alastair", "Andrew", role = "ctb"), person("Jim", "Hester", role = "ctb"), person("Yihui", "Xie", email =
-    "xie@yihui.name", role = c("aut", "cre")))
+    person("Alastair", "Andrew", role = "ctb"), person("Jim", "Hester", role =
+    "ctb"), person("Yihui", "Xie", email = "xie@yihui.name", role = c("aut",
+    "cre")))
 Author: Yihui Xie
 Maintainer: Yihui Xie <xie@yihui.name>
 Description: This package provides a general-purpose tool for dynamic report
