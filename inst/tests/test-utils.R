@@ -20,6 +20,7 @@ test_that('scientific notation with format_sci()',{
   expect_identical(format_sci(9.87654e6, 'html'), "9.8765 &times; 10<sup>6</sup>")
   expect_identical(format_sci(9.87654e6, 'rst'), "9.8765 |times| 10 :sup:`6`")
   expect_identical(format_sci(letters), letters)
+  expect_identical(format_sci(NA_real_), NA_character_)
 })
 
 test_that('fig_path() sanitizes paths', {
