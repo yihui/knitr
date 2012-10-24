@@ -22,6 +22,8 @@
 
 - we can also use `## @knitr` to write chunk options for `spin()` now (`#+` and `#-` still work)
 
+- added new language support for Perl and Z Shell (`zsh`); see an example at https://github.com/yihui/knitr-examples/blob/master/028-engine-perl.Rmd (#406) (thanks, Jim Hester)
+
 - `render_jekyll()` gained an argument `highlight` to specify which highlighting engine to use (Pygments or Prettify.js) (thanks, Yanping Chen)
 
 ## MAJOR CHANGES
