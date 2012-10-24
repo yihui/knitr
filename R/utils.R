@@ -148,8 +148,7 @@ input_dir = function() .knitEnv$input.dir %n% '.'
 ## scientific notation in TeX, HTML and reST
 format_sci_one = function(x, format = 'latex') {
 
-  if (!is.double(x) || is.na(x)) return(as.character(x))
-  if (x == 0) return('0')
+  if (!is.double(x) || is.na(x) || x == 0) return(as.character(x))
 
   if (abs(lx <- floor(log10(abs(x)))) < getOption('scipen') + 4L)
     return(as.character(round(x, getOption('digits')))) # no need sci notation
