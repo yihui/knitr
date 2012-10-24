@@ -151,7 +151,7 @@ format_sci_one = function(x, format = 'latex') {
   if (!is.double(x)) return(as.character(x))
   if (x == 0) return('0')
 
-  if (abs(lx <- floor(log(abs(x), 10))) < getOption('scipen') + 4L)
+  if (abs(lx <- floor(log10(abs(x)))) < getOption('scipen') + 4L)
     return(as.character(round(x, getOption('digits')))) # no need sci notation
 
   b = round(x/10^lx, getOption('digits'))
