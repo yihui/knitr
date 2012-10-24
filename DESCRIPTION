@@ -5,7 +5,7 @@ Version: 0.8.7
 Date: 2012-09-05
 Authors@R: c(person("Hadley", "Wickham", email = "hadley@rice.edu", role =
     "ctb"), person("Ramnath", "Vaidyanathan", role = "ctb"), person("Joseph",
-    "Allaire", role = "ctb"), person("Tom", "Torsney-Weir", role = "ctb"),
+    "Allaire", "J.", role = "ctb"), person("Tom", "Torsney-Weir", role = "ctb"),
     person("Jonathan", "Keane", role = "ctb"), person("Joe", "Cheng", role =
     "ctb"), person("Jeff", "Arnold", role = "ctb"), person("Kohske",
     "Takahashi", role = "ctb"), person("Taiyun", "Wei", role = "ctb"),
