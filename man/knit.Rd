@@ -5,7 +5,7 @@
 \usage{
 knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame())
 
-purl(..., documentation = FALSE)
+purl(..., documentation = 1L)
 }
 \arguments{
   \item{input}{path of the input file}
@@ -24,10 +24,11 @@ purl(..., documentation = FALSE)
   to be evaluated (can use \code{\link{new.env}()} to
   guarantee an empty new environment)}
 
-  \item{documentation}{logical: whether to write
-  documentation lines into the tangled file as roxygen
-  comments (\code{FALSE} means only computer code is
-  written out)}
+  \item{documentation}{an integer specifying the level of
+  documentation to go the tangled script: \code{0} means
+  pure code (discard all text chunks); \code{1} (default)
+  means add the chunk headers to code; \code{2} means add
+  all text chunks to code as roxygen comments}
 
   \item{...}{arguments passed to \code{\link{knit}}}
 }
@@ -130,7 +131,9 @@ file.copy(system.file("examples", "knitr-minimal.Rnw", package = "knitr"), f, ov
 knit(f)
 ## or setwd(dirname(f)); knit(basename(f))
 
-purl(f)  # extract R code only
+purl(f)  # tangle R code
+purl(f, documentation = 0)  # extract R code only
+purl(f, documentation = 2)  # also include documentation
 }
 \references{
   Package homepage: \url{http://yihui.name/knitr/}
