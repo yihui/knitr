@@ -284,7 +284,7 @@ process_tangle.block = function(x) {
   label_code(parse_chunk(code), x$params.src)
 }
 process_tangle.inline = function(x) {
-  if (opts_knit$get('documentation')) {
+  if (opts_knit$get('documentation') == 2L) {
     return(str_c(line_prompt(x$input.src, "#' ", "#' "), collapse = '\n'))
   }
   code = x$code
@@ -297,5 +297,7 @@ process_tangle.inline = function(x) {
 
 # add a label [and extra chunk options] to a code chunk
 label_code = function(code, label) {
-  str_c(str_c('## @knitr ', label), '\n', str_c(code, collapse = '\n'), '\n')
+  code = str_c(c('', code, ''), collapse = '\n')
+  if (opts_knit$get('documentation') == 0L) return(code)
+  str_c('## @knitr ', label, code)
 }

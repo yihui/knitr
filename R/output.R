@@ -207,7 +207,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, envir = paren
 #'   written out)
 #' @param ... arguments passed to \code{\link{knit}}
 #' @export
-purl = function(..., documentation = FALSE) {
+purl = function(..., documentation = 1L) {
+  # for compatibility to knitr <= 0.8.8
+  if (is.logical(documentation)) documentation = ifelse(documentation, 2L, 1L)
   doc = opts_knit$get('documentation'); on.exit(opts_knit$set(documentation = doc))
   opts_knit$set(documentation = documentation)
   knit(..., tangle = TRUE)
