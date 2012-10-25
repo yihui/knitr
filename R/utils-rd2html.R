@@ -41,8 +41,6 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
       ex = readLines(ef, warn = FALSE)
       ex = ex[-(1L:grep('### ** Examples', ex, fixed = TRUE))]
       ex = c('```{r}', ex, '```')
-      ex = gsub('^(## Not run:\\s*)', '```{r eval=FALSE}\n\\1', ex)
-      ex = gsub('^(## End\\(Not run\\)\\s*)', '\\1\n```{r}', ex)
       opts_chunk$set(fig.path = str_c('figure/', p, '-'), tidy = FALSE)
       ex = knit2html(text = ex, envir = parent.frame(2), fragment.only = TRUE)
       txt = c(txt[1:i0], ex, txt[i1:length(txt)])
