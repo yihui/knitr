@@ -13,8 +13,8 @@ all_patterns = list(
                inline.comment = '^\\s*%.*',
                ref.chunk = '^\\s*<<(.*)>>\\s*$',
                global.options = '\\\\SweaveOpts\\{([^}]*)\\}',
-               header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
-               document.begin = '\n*\\s*\\\\begin\\{document\\}',
+               header.begin = '\\s*\\\\documentclass[^}]+\\}',
+               document.begin = '\\s*\\\\begin\\{document\\}',
                ref.label = '^## @knitr (.*)$'),
 
   `brew` = list(inline.code = '<%[=]{0,1}\\s+([^%]*)\\s+[-]*%>'),
@@ -25,8 +25,8 @@ all_patterns = list(
                inline.comment = '^\\s*%.*',
                global.options = '%+\\s*roptions\\s*([^\n]*)',
                inline.code = '\\\\rinline\\{([^}]*)\\}',
-               header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
-               document.begin = '\n*\\s*\\\\begin\\{document\\}',
+               header.begin = '\\s*\\\\documentclass[^}]+\\}',
+               document.begin = '\\s*\\\\begin\\{document\\}',
                ref.label = '^## @knitr (.*)$'),
 
   `html` = list(chunk.begin = '^\\s*<!--\\s*begin.rcode\\s*(.*)',
@@ -34,7 +34,7 @@ all_patterns = list(
                 ref.chunk = '^\\s*<<(.*)>>\\s*$',
                 inline.code = '<!--\\s*rinline\\s*([^>]*)\\s*-->',
                 global.options = '<!--\\s*roptions\\s*([^>]*)\\s*-->',
-                header.begin = '\n*\\s*<head>',
+                header.begin = '\\s*<head>',
                 ref.label = '^## @knitr (.*)$'),
 
   `md` = list(chunk.begin = '^\\s*`{3,}\\s*\\{r(.*)\\}\\s*$',
