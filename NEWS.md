@@ -14,7 +14,7 @@
 
 - chunk options are also written after `## @knitr` along with chunk labels when tangling R scripts via `purl()`
 
-- `purl()` gained a new argument `documentation` to also write documentation lines into the R script (#391) (thanks, Noam Ross)
+- `purl()` gained a new argument `documentation` to also write documentation lines into the R script (#391 and #401) (thanks, Noam Ross and Fernando Mayer)
 
 - `knit_rd()` generates a navigation frame on the left and builds links now; this is like the CHM help in old days (thanks, Michael Friendly)
 
