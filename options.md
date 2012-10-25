@@ -162,7 +162,6 @@ All package options are:
 - `aliases`: (`NULL`) a named character vector to specify the aliases of chunk options, e.g. `c(h = 'fig.height', w = 'fig.width')` tells **knitr** that the chunk option `h` really means `fig.height`, and `w` is an alias for `fig.width`; this option can be used to save some typing efforts for long option names
 - `base.dir`: (`NULL`) an absolute directory under which the plots are generated
 - `base.url`: (`NULL`) the base url for HTML pages
-- `cache.extra`: (`NULL`) extra content that should affect [cache](/knitr/demo/cache)
 - `child.command`: (`'input'`) the LaTeX command to be used to insert child documents into the main document (usually `input` or `include`)
 - `child.path`: (`''`) the search path for child documents; by default child documents are searched for relative to the directory of the parent document
 - `concordance`: (`FALSE`) whether to write a concordance file to map the output line numbers to the input line numbers; this enables one to navigate from the output to the input and can be helpful especially when TeX error occurs (this feature is mainly for RStudio)
