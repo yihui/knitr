@@ -418,7 +418,7 @@ With the tikz device, it is both straightforward and more beautiful:
 <<math-expr-tikz, dev='tikz', fig.width=5, fig.height=3, out.width='.55\\linewidth', cache=TRUE, message=FALSE>>=
 library(ggplot2)
 qplot(1:10, 1:10) + 
-opts(title = sprintf('$\\mathrm{d}\\mathbf{x}_{t} = \\alpha[(\\theta - \\mathbf{x}_{t})\\mathrm{d}t + %d]\\mathrm{d}B_{t}$', 4))
+labs(title = sprintf('$\\mathrm{d}\\mathbf{x}_{t} = \\alpha[(\\theta - \\mathbf{x}_{t})\\mathrm{d}t + %d]\\mathrm{d}B_{t}$', 4))
 @
 
 The advantage of tikz graphics is the consistency of styles%

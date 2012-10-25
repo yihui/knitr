@@ -1762,7 +1762,7 @@ qplot(1:10, 1:10) +
 
 \begin_layout Plain Layout
 
-opts(title = sprintf('$
+labs(title = sprintf('$
 \backslash
 
 \backslash
