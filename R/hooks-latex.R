@@ -201,7 +201,7 @@ render_latex = function() {
     },
     output = function(x, options) {
       if (output_asis(x, options)) {
-        str_c('\\end{kframe}\n', x, '\n\\begin{kframe}')
+        str_c('\\end{kframe}', x, '\\begin{kframe}')
       } else .verb.hook(x, options)
     },
     warning = .color.block('\\textcolor{warningcolor}{', '}'),
