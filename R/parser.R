@@ -88,6 +88,11 @@ unnamed_chunk = function() str_c('unnamed-chunk-', chunk_counter())
 
 ## parse params from chunk header
 parse_params = function(params, label = TRUE) {
+  # TODO: remove support for label = FALSE here
+  if (!label) {
+    reminder('it is recommended to set global chunk options via opts_chunk$set(', params, ')
+      instead of the ', knit_patterns$get('global.options'), 'syntax; the old syntax will be deprecated soon')
+  }
   if (is_blank(params)) {
     return(if (!label) list() else list(label = unnamed_chunk()))
   }
