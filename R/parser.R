@@ -204,6 +204,8 @@ parse_inline = function(input) {
   res1 = extract_inline(input, 'inline.code', locate_inline)
   res2 = extract_inline(input, 'input.doc', locate_inline)
   if (length(res2$code)) {
+    reminder('please use the chunk option to input child documents: child=',
+             sprintf('c(%s)',  str_c('"', res2$code, '"', collapse = ', ')))
     res2$code = sprintf("knit_child('%s')", res2$code)  # input child with knit_child()
   }
   loc = rbind(res1$location, res2$location)
