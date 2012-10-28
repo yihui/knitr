@@ -97,7 +97,8 @@ parse_params = function(params, label = TRUE) {
     idx = which(names(res) == '')  # which option is not named?
     if (is.null(names(res))) idx = 1L  # empty name, must be label
     if ((n <- length(idx)) > 1L) {
-      stop("all options must be of the form 'tag=value' except the chunk label")
+      stop("invalid chunk options: ", params,
+           "\n(all options must be of the form 'tag=value' except the chunk label)")
     } else if (!label && n > 0L) stop('all global options must be of the form tag=value')
     if (n == 1L) names(res)[idx] = 'label' else if (label) {
       if (!('label' %in% names(res))) res$label = unnamed_chunk()
