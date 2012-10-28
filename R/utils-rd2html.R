@@ -29,7 +29,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   pkgRdDB = tools:::fetchRdDB(file.path(find.package(pkg), 'help', pkg))
   force(links); topics = names(pkgRdDB)
   for (p in topics) {
-    message('knitting documentation of ', p)
+    message('** knitting documentation of ', p)
     tools::Rd2HTML(pkgRdDB[[p]], f <- tempfile(),
             package = pkg, Links = links, no_links = is.null(links), stages = 'render')
     txt = readLines(f, warn = FALSE)
