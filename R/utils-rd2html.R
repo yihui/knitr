@@ -42,8 +42,11 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
       ex = ex[-(1L:grep('### ** Examples', ex, fixed = TRUE))]
       ex = c('```{r}', ex, '```')
       opts_chunk$set(fig.path = str_c('figure/', p, '-'), tidy = FALSE)
-      ex = knit2html(text = ex, envir = parent.frame(2), fragment.only = TRUE)
-      txt = c(txt[1:i0], ex, txt[i1:length(txt)])
+      res = try(knit2html(text = ex, envir = parent.frame(2), fragment.only = TRUE))
+      if (inherits(res, 'try-error')) {
+        res = ex; res[1] = '<pre><code class="r">'; res[length(res)] = '</code></pre>'
+      }
+      txt = c(txt[1:i0], res, txt[i1:length(txt)])
       txt = sub('</head>', '
 <link rel="stylesheet" href="highlight.css">
 <script src="highlight.pack.js"></script>
