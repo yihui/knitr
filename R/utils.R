@@ -521,6 +521,12 @@ all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
                  '.', ext, sep = ''), options)
 }
 
+# remind about deprecated syntax
+reminder = function(msg) {
+  warning(msg, call. = FALSE)
+  Sys.sleep(opts_knit$get('sweave.penalty'))  # force you to pay attention!
+}
+
 # escape special LaTeX characters
 escape_latex = function(x, newlines = FALSE) {
   x = gsub('\\\\', '\\\\textbackslash', x)
