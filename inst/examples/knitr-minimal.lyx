@@ -88,9 +88,7 @@ status open
 
 \begin_layout Plain Layout
 
-# this is equivalent to 
-\backslash
-SweaveOpts{...}
+# set global chunk options
 \end_layout
 
 \begin_layout Plain Layout
