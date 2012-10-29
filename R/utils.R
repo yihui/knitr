@@ -522,8 +522,8 @@ all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
 }
 
 # remind about deprecated syntax
-reminder = function(msg) {
-  warning(msg, call. = FALSE)
+reminder = function(...) {
+  warning(..., call. = FALSE)
   Sys.sleep(opts_knit$get('sweave.penalty'))  # force you to pay attention!
 }
 
