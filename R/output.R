@@ -235,15 +235,16 @@ process_file = function(text, output) {
       flush.console()
     }
     group = groups[[i]]
-    txt = try((if (tangle) process_tangle else process_group)(group), silent = TRUE)
-    if (inherits(txt, 'try-error')) {
-      print(group)
-      cat(res, sep = '\n', file = output %n% '')
-      stop(sprintf('Quitting from lines %s: (%s) %s',
-                   str_c(current_lines(i), collapse = '-'),
-                   paste('', knit_concord$get('infile'), sep = ''), txt))
-    }
-    res[i] = txt
+    res[i] = withCallingHandlers(
+      (if (tangle) process_tangle else process_group)(group),
+      error = function(e) {
+        cat(res, sep = '\n', file = output %n% '')
+        message(
+          'Quitting from lines ', str_c(current_lines(i), collapse = '-'),
+          ' (', knit_concord$get('infile'), ') '
+        )
+      }
+    )
     # output line numbers
     if (concord_mode()) {
       # look back and see who is 0, then fill them up
