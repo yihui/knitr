@@ -172,6 +172,7 @@ All package options are:
 - `progress`: (`TRUE`) whether to display a progress bar when running **knitr**
 - `root.dir`: (`NULL`) the root directory when evaluating code chunks; if `NULL`, the directory of the input document will be used
 - `self.contained`: (`TRUE`) whether the output document should be self-contained (TeX styles written in the tex document, and CSS styles in HTML document)
+- `stop_on_error`: (`0L`) an integer (`0L`, `1L` or `2L`) to be passed to the **evaluate** package to decide the behavior of errors in code chunks; see `?evaluate::evaluate` for details
 - `upload.fun`: (`identity`) a function that takes a filename as its input, processes it and returns a character string when the output format is HTML or Markdown; typically it is a function to upload a image and return the link to the image, e.g. `opts_knit$set(upload.fun = imgur_upload)` can upload a file to <http://imgur.com> (see `?imgur_upload`)
 - `use.highlight`: (`FALSE`) whether to use the [**highlight**](http://cran.r-project.org/package=highlight) package
 - `verbose`: (`FALSE`) whether to show verbose information (e.g., R code in each chunk and message logs) or just show chunk labels and options
