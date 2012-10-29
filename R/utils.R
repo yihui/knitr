@@ -527,6 +527,12 @@ reminder = function(...) {
   Sys.sleep(opts_knit$get('sweave.penalty'))  # force you to pay attention!
 }
 
+# evaluate an expression in a diretory and restore wd after that
+in_dir = function(dir, expr) {
+  owd = setwd(dir); on.exit(setwd(owd))
+  expr
+}
+
 # escape special LaTeX characters
 escape_latex = function(x, newlines = FALSE) {
   x = gsub('\\\\', '\\\\textbackslash', x)
