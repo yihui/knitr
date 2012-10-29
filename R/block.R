@@ -120,7 +120,8 @@ block_exec = function(params) {
 
   res = in_dir(
     opts_knit$get('root.dir') %n% input_dir(),
-    evaluate(code, envir = env, new_device = FALSE)
+    evaluate(code, envir = env, new_device = FALSE,
+             stop_on_error = opts_knit$get('stop_on_error'))
   )
 
   # eval other options after the chunk
