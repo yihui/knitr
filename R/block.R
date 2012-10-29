@@ -118,9 +118,10 @@ block_exec = function(params) {
     options$fig.ext = dev2ext(options$dev)
   }
 
-  owd = setwd(opts_knit$get('root.dir') %n% input_dir())
-  res = evaluate(code, envir = env, new_device = FALSE) # run code
-  setwd(owd)
+  res = in_dir(
+    opts_knit$get('root.dir') %n% input_dir(),
+    evaluate(code, envir = env, new_device = FALSE)
+  )
 
   # eval other options after the chunk
   for (o in opts_knit$get('eval.after')) options[[o]] = eval_lang(options[[o]], env)
