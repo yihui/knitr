@@ -10,8 +10,8 @@
 \use_default_options true
 \maintain_unincluded_children false
 \language english
-\language_package default
-\inputencoding auto
+\language_package none
+\inputencoding default
 \fontencoding global
 \font_roman default
 \font_sans default
