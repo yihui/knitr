@@ -71,6 +71,87 @@ eng_Rcpp = function(options) {
   engine_output(code, '', options)
 }
 
+## tikz
+eng_tikz = function(options) {
+    procTikzString <- 
+        function   # Converts a tikz-string into pdf by calling `pdflatex`
+    (
+        tikz        # lines of tikz
+       ,tmpl        # file-name of tex-template 
+       ,dir         # output-directory
+       ,label       # path to output-file
+       ,cap = label # figure caption
+       ,dev = "pdf" # device to use
+       ,repl = "<>" # replacement-string
+            
+    )
+    {
+        # Insert tikz into tex-template
+        templ_lines <- readLines(tmpl)
+        i <- grep(repl, templ_lines)
+        s <- c(templ_lines[1:(i-1)], tikz, templ_lines[(i+1):length(templ_lines)])
+        # Call `pdflatex` to generate the pdf
+        f <- tempfile()
+        tex_file <- paste(f, ".tex", sep = "")
+        writeLines(s, tex_file)
+        cwd = getwd()
+        setwd(dirname(tex_file))
+        cmd = sprintf("pdflatex %s > /dev/null", tex_file)
+        exit_tex = system(cmd)
+        outfile = sprintf("%s%s.%s", dir, label, dev)
+        if  (exit_tex != 0)
+            stop("Problems with pdflatex and input file ", f, "; try to edit ", templ)
+        # Convert to the desired output-format, calling `convert`
+        if (dev != "pdf")
+        {
+            exit_conv = system(sprintf("convert %s.pdf %s.%s", f, f, dev))
+            if (exit_conv != 0)
+                stop("Problems with `convert`; probably not installed")
+        }
+        setwd(cwd)
+        dir.create(dir, showWarnings = FALSE)
+        file.copy(paste(f,".", dev, sep = ""), outfile)
+        sprintf("![%s](%s)", cap, outfile)
+        ### Produces as side effect the output-pdf and returns a markdown string
+    }
+    out = 
+    {
+        if (options$eval)
+        {
+            TIKZ_TMPL = ".tikz2pdf.tex.st"
+            if (!file.exists(TIKZ_TMPL))
+                file.copy(system.file("misc/tikz2pdf.tex.st", package = "knitr"), TIKZ_TMPL)
+            with(options, procTikzString(code, TIKZ_TMPL, fig.path, label, fig.cap, dev))
+        }
+        else 
+            ''
+    }
+    options$results = 'asis'
+    code = str_c(options$code, collapse = '\n')
+    engine_output(code, out, options)
+}
+
+## dot
+eng_dot = function(options){
+  f = tempfile()
+  writeLines(code <- options$code, f)
+  on.exit(unlink(f))
+  cmd = sprintf('dot -O %s -T%s', shQuote(f), options$dev)
+  dir.create(options$fig.path, showWarnings = FALSE)
+  out = 
+  {
+      if (options$eval) 
+      {
+          system(cmd)
+          fig = with(options, paste(fig.path, label, ".", dev, sep = "" ))
+          file.copy(paste(f, options$dev, sep = "."), fig)
+          sprintf("![%s](%s)", options$fig.cap, fig)
+      } else 
+          ''
+  }
+  options$results = 'asis'
+  engine_output(code, out, options)
+}
 ## Andre Simon's highlight
 eng_highlight = function(options) {
   f = tempfile()
@@ -93,7 +174,7 @@ for (i in c('awk', 'bash', 'gawk', 'haskell', 'perl', 'python', 'ruby', 'sed', '
   knit_engines$set(setNames(list(eng_interpreted), i))
 }
 # additional engines
-knit_engines$set(highlight = eng_highlight, Rcpp = eng_Rcpp)
+knit_engines$set(highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot)
 
 # possible values for engines (for auto-completion in RStudio)
 opts_chunk_attr$engine = as.list(sort(c('R', names(knit_engines$get()))))
