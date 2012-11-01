@@ -82,7 +82,8 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
   rpart = c(author = '  author = {Terry M Therneau and Beth Atkinson},'),
   sm = c(author = '  author = {Adrian Bowman and Adelchi Azzalini},'),
   survival = c(author = '  author = {Terry Therneau},'),
-  tuneR = c(author = '  author = {Uwe Ligges},')
+  tuneR = c(author = '  author = {Uwe Ligges},'),
+  weaver = c(year = .this.year)
 )
 # no need to write bib for these packages
 .base.pkgs = setdiff(rownames(installed.packages(priority = 'base')), 'base')
