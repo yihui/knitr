@@ -46,6 +46,37 @@ eng_interpreted = function(options) {
 
 ## Java
 
+## Rcpp
+eng_Rcpp = function(options) {
+  
+  # collapse code into a single string
+  code = str_c(options$code, collapse = '\n')
+  
+  # execute the build
+  if (options$eval) {
+    message("Building shared library for Rcpp code chunk:\n")
+    if (grepl("[[Rcpp::", code, fixed=T))
+      Rcpp::sourceCpp(code = code, showOutput=T)
+    else
+      Rcpp::cppFunction(code, 
+                        plugin=options$Rcpp.plugin, 
+                        env = globalenv(), 
+                        showOutput=T)
+    message("\n")
+  }
+  
+  # output if requested
+  if (options$include && options$echo) {
+    code = str_replace(code, '([^\n]+)$', '\\1\n')
+    txt = knit_hooks$get('source')(code, options)
+    txt = sub('```rcpp', '```cpp', txt, fixed=TRUE) 
+    txt
+  }
+  else {
+    ''
+  }
+}
+
 ## Andre Simon's highlight
 eng_highlight = function(options) {
   f = tempfile()
@@ -62,7 +93,7 @@ knit_engines$set(
   awk = eng_interpreted, bash = eng_interpreted, gawk = eng_interpreted, 
   haskell = eng_interpreted, highlight = eng_highlight, perl = eng_interpreted, 
   python = eng_interpreted, ruby = eng_interpreted, sed = eng_interpreted, 
-  sh = eng_interpreted, zsh = eng_interpreted 
+  sh = eng_interpreted, zsh = eng_interpreted, Rcpp = eng_Rcpp 
 )
 
 # possible values for engines (for auto-completion in RStudio)
