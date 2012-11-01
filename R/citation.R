@@ -73,6 +73,7 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
 .tweak.bib = list(
   cacheSweave = c(author = '  author = {Roger D. Peng},'),
   cluster = c(author = '  author = {Martin Maechler},'),
+  digest = c(author = '  author = {Dirk Eddelbuettel},'),
   evaluate = c(year = .this.year),
   gWidgets = c(author = '  author = {John Verzani},'),
   maps = c(author = '  author = {Ray Brownrigg},'),
