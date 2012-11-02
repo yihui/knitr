@@ -37,10 +37,9 @@ engine_output = function(code, out, options) {
   ), collapse = '\n')
   if (options$include) knit_hooks$get('chunk')(txt, options) else ''
 }
-## python perl ruby haskell bash(sh) zsh awk sed
-## Python (TODO: how to emulate the console??)
-## file is the file to read in cl.opts are additional options to the 
-## interpreter
+
+## TODO: how to emulate the console?? e.g. for Python
+
 eng_interpreted = function(options) {
   code = str_c(options$code, collapse = '\n')
   code_option = switch(options$engine, bash = '-c', haskell = '-e', perl = '-e', 
