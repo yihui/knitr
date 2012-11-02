@@ -88,12 +88,12 @@ eng_highlight = function(options) {
   engine_output('', out, options)
 }
 
-knit_engines$set(
-  awk = eng_interpreted, bash = eng_interpreted, gawk = eng_interpreted,
-  haskell = eng_interpreted, highlight = eng_highlight, perl = eng_interpreted,
-  python = eng_interpreted, ruby = eng_interpreted, sed = eng_interpreted,
-  sh = eng_interpreted, zsh = eng_interpreted, Rcpp = eng_Rcpp
-)
+# set engines for interpreted languages
+for (i in c('awk', 'bash', 'gawk', 'haskell', 'perl', 'python', 'ruby', 'sed', 'sh', 'zsh')) {
+  knit_engines$set(setNames(list(eng_interpreted), i))
+}
+# additional engines
+knit_engines$set(highlight = eng_highlight, Rcpp = eng_Rcpp)
 
 # possible values for engines (for auto-completion in RStudio)
 opts_chunk_attr$engine = as.list(sort(c('R', names(knit_engines$get()))))
