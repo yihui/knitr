@@ -11,6 +11,14 @@
 #' programs to run the code via \code{\link[base]{system}}. Other chunk options
 #' are also contained in this argument, e.g. \code{options$echo} and
 #' \code{options$eval}, etc.
+#'
+#' In most cases, \code{options$engine} can be directly used in command line to
+#' execute the code, e.g. \code{python} or \code{ruby}, but sometimes we may
+#' want to specify the path of the engine program, in which case we can pass it
+#' through the \code{engine.path} option. For example, \code{engine='ruby',
+#' engine.path='/usr/bin/ruby1.9.1'}. Additional command line arguments can be
+#' passed through \code{options$engine.opts}, e.g. \code{engine='ruby',
+#' engine.opts='-v'}.
 #' @export
 #' @references Usage: \url{http://yihui.name/knitr/objects}
 #' @examples knit_engines$get('python'); knit_engines$get('awk')
@@ -37,8 +45,8 @@ eng_interpreted = function(options) {
   code = str_c(options$code, collapse = '\n')
   code_option = switch(options$engine, bash = '-c', haskell = '-e', perl = '-e', 
                        python = '-c', ruby = '-e', sh = '-c', zsh = '-c', '')
-  cmd = paste(options$engine, code_option, shQuote(code), 
-              shQuote(options$file), options$cl.opts)
+  cmd = paste(shQuote(options$engine.path %n% options$engine),
+              code_option, shQuote(code), options$engine.opts)
   out = if (options$eval) system(cmd, intern = TRUE) else ''
   engine_output(code, out, options)
 }
@@ -87,7 +95,8 @@ eng_highlight = function(options) {
     warning("chunk option 'highlight.opts' has been deprecated; use 'engine.opts' instead")
     options$engine.opts = options$highlight.opts
   }
-  cmd = sprintf('highlight -f %s %s', options$highlight.opts %n% '-S text', shQuote(f))
+  cmd = sprintf('%s -f %s %s', shQuote(options$engine.path %n% options$engine),
+                options$engine.opts %n% '-S text', shQuote(f))
   out = if (options$eval) system(cmd, intern = TRUE) else ''
   options$echo = FALSE; options$results = 'asis'  # do not echo source code
   engine_output(code, out, options)
