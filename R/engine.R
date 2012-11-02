@@ -98,7 +98,7 @@ eng_highlight = function(options) {
                 options$engine.opts %n% '-S text', shQuote(f))
   out = if (options$eval) system(cmd, intern = TRUE) else ''
   options$echo = FALSE; options$results = 'asis'  # do not echo source code
-  engine_output(code, out, options)
+  engine_output('', out, options)
 }
 
 knit_engines$set(
