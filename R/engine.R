@@ -75,9 +75,8 @@ eng_Rcpp = function(options) {
   # output if requested
   if (options$include && options$echo) {
     code = str_replace(code, '([^\n]+)$', '\\1\n')
-    txt = knit_hooks$get('source')(code, options)
-    txt = sub('```rcpp', '```cpp', txt, fixed=TRUE)
-    txt
+    options$engine = 'cpp' # wrap up source code in cpp syntax instead of Rcpp
+    knit_hooks$get('source')(code, options)
   }
   else {
     ''
