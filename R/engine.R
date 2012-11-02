@@ -56,20 +56,15 @@ eng_interpreted = function(options) {
 ## Rcpp
 eng_Rcpp = function(options) {
 
-  # collapse code into a single string
   code = str_c(options$code, collapse = '\n')
-
-  # execute the build
   if (options$eval) {
-    message("Building shared library for Rcpp code chunk:\n")
-    if (grepl("[[Rcpp::", code, fixed=T))
-      Rcpp::sourceCpp(code = code, showOutput=T)
-    else
-      Rcpp::cppFunction(code,
-                        plugin=options$Rcpp.plugin,
-                        env = globalenv(),
-                        showOutput=T)
-    message("\n")
+    message('Building shared library for Rcpp code chunk:')
+    if (grepl('[[Rcpp::', code, fixed = TRUE)) {
+      Rcpp::sourceCpp(code = code, showOutput = TRUE)
+    } else {
+      Rcpp::cppFunction(code, plugin = options$Rcpp.plugin, env = globalenv(),
+                        showOutput = TRUE)
+    }
   }
 
   # output if requested
@@ -77,10 +72,7 @@ eng_Rcpp = function(options) {
     code = str_replace(code, '([^\n]+)$', '\\1\n')
     options$engine = 'cpp' # wrap up source code in cpp syntax instead of Rcpp
     knit_hooks$get('source')(code, options)
-  }
-  else {
-    ''
-  }
+  } else ''
 }
 
 ## Andre Simon's highlight
