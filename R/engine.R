@@ -57,14 +57,14 @@ eng_interpreted = function(options) {
 eng_Rcpp = function(options) {
 
   code = str_c(options$code, collapse = '\n')
+  # engine.opts is a list of arguments to be passed to Rcpp function, e.g.
+  # engine.opts=list(plugin='RcppArmadillo')
   if (options$eval) {
     message('Building shared library for Rcpp code chunk:')
-    if (grepl('[[Rcpp::', code, fixed = TRUE)) {
-      Rcpp::sourceCpp(code = code, showOutput = TRUE)
-    } else {
-      Rcpp::cppFunction(code, plugin = options$Rcpp.plugin, env = globalenv(),
-                        showOutput = TRUE)
-    }
+    do.call(
+      if (grepl('\\[\\[Rcpp::', code)) Rcpp::sourceCpp else Rcpp::cppFunction,
+      c(list(code = code, env = knit_global()), options$engine.opts)
+    )
   }
 
   # output if requested
