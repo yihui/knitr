@@ -38,6 +38,8 @@
 
 - the package option `opts_knit$get('cache.extra')` was removed because this option should really be a chunk option instead; see http://yihui.name/knitr/demo/cache/ for the updated documentation (#404 and #405) (thanks, Jim Hester)
 
+- the chunk option `highlight.opts` was deprecated and renamed to `engine.opts`; this affects users who use Andre Simon's highlight through the `highlight` engine in **knitr**
+
 ## MINOR CHANGES
 
 - when `opts_knit$get('verbose')` is `TRUE`, a `timestamp()` will be printed before each code chunk is evaluated (#377) (thanks, Carl Boettiger)

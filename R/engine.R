@@ -82,7 +82,11 @@ eng_highlight = function(options) {
   f = tempfile()
   writeLines(code <- options$code, f)
   on.exit(unlink(f))
-  # e.g. highlight.opts can be '-S matlab -O latex'
+  # e.g. engine.opts can be '-S matlab -O latex'
+  if (!is.null(options$highlight.opts)) {
+    warning("chunk option 'highlight.opts' has been deprecated; use 'engine.opts' instead")
+    options$engine.opts = options$highlight.opts
+  }
   cmd = sprintf('highlight -f %s %s', options$highlight.opts %n% '-S text', shQuote(f))
   out = if (options$eval) system(cmd, intern = TRUE) else ''
   options$echo = FALSE; options$results = 'asis'  # do not echo source code
