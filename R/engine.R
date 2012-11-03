@@ -63,7 +63,7 @@ eng_Rcpp = function(options) {
     message('Building shared library for Rcpp code chunk:')
     do.call(
       if (grepl('\\[\\[Rcpp::', code)) Rcpp::sourceCpp else Rcpp::cppFunction,
-      c(list(code = code, env = knit_global()), options$engine.opts)
+      c(list(code = code, env = knit_global(), showOutput = T), options$engine.opts)
     )
   }
 
