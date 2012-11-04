@@ -90,7 +90,7 @@ hook_scianimator = function(x, options) {
 
   fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
   base = opts_knit$get('base.url')
-  fig.paths = str_c(shQuote(str_c(base, fig.name)), collapse = ", ")
+  fig.paths = str_c('[', str_c('"', fig.name, '"', collapse = ", "), ']')
 
   # write the div and js code here
   id = gsub('[^[:alnum:]]', '_', options$label)
