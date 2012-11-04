@@ -94,26 +94,25 @@ hook_scianimator = function(x, options) {
 
   # write the div and js code here
   id = gsub('[^[:alnum:]]', '_', options$label)
-  sid = str_c('#', id)
   sprintf('
 <div class="scianimator"><div id="%s" style="display: inline-block;"></div></div>
 <script type="text/javascript">
   (function($) {
     $(document).ready(function() {
       var imgs = %s;%s
-      $("%s").scianimator({
+      $("#%s").scianimator({
           "images": imgs,
           "delay": %s,
           "controls": ["first", "previous", "play", "next", "last", "loop", "speed"],
       });
-      $("%s").scianimator("play");
+      $("#%s").scianimator("play");
     });
   })(jQuery);
 </script>
 ',
          id, fig.paths, if (is.null(base)) '' else {
            sprintf('\n      imgs = imgs.map(function(z) {return "%s" + z;})\n', base)
-         }, sid, options$interval * 1000, sid)
+         }, id, options$interval * 1000, id)
 }
 
 
