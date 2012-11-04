@@ -89,7 +89,7 @@ hook_scianimator = function(x, options) {
   if(fig.cur < fig.num) return('')
 
   fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
-  base = opts_knit$get('base.url') %n% ''
+  base = opts_knit$get('base.url')
   fig.paths = str_c(shQuote(str_c(base, fig.name)), collapse = ", ")
 
   # write the div and js code here
