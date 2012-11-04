@@ -89,7 +89,7 @@ hook_scianimator = function(x, options) {
   if(fig.cur < fig.num) return('')
 
   fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
-  base = opts_knit$get('base.url')
+  base = opts_knit$get('base.url') %n% ''
   fig.paths = str_c('[', str_c('"', fig.name, '"', collapse = ", "), ']')
 
   # write the div and js code here
@@ -99,7 +99,8 @@ hook_scianimator = function(x, options) {
 <script type="text/javascript">
   (function($) {
     $(document).ready(function() {
-      var imgs = %s;%s
+      var imgs = %s;
+      for (i=0; i<imgs.length; i++) {imgs[i] = "%s" + imgs[i];}
       $("#%s").scianimator({
           "images": imgs,
           "delay": %s,
@@ -110,9 +111,7 @@ hook_scianimator = function(x, options) {
   })(jQuery);
 </script>
 ',
-         id, fig.paths, if (is.null(base)) '' else {
-           sprintf('\n      imgs = imgs.map(function(z) {return "%s" + z;})\n', base)
-         }, id, options$interval * 1000, id)
+         id, fig.paths, base, id, options$interval * 1000, id)
 }
 
 
