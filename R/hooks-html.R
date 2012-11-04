@@ -100,8 +100,9 @@ hook_scianimator = function(x, options) {
 <script type="text/javascript">
   (function($) {
     $(document).ready(function() {
+      var imgs = %s;%s
       $("%s").scianimator({
-          "images": [%s],
+          "images": imgs,
           "delay": %s,
           "controls": ["first", "previous", "play", "next", "last", "loop", "speed"],
       });
@@ -110,7 +111,9 @@ hook_scianimator = function(x, options) {
   })(jQuery);
 </script>
 ',
-         id, sid, fig.paths, options$interval * 1000, sid)
+         id, fig.paths, if (is.null(base)) '' else {
+           sprintf('\n      imgs = imgs.map(function(z) {return "%s" + z;})\n', base)
+         }, sid, options$interval * 1000, sid)
 }
 
 
