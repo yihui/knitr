@@ -52,6 +52,8 @@
 
 - `stitch()` will no longer copy the template over to the current working directory (thanks, Michael Friendly)
 
+- the script `inst/bin/knit` can also convert R Markdown documents to HTML now; the argument `--pdf` was removed and a new argument `--no-convert` was added
+
 ## BUG FIXES
 
 - fixed #410: when the inline R code returns `NA_real_`, the scientific notation of numbers will run into errors (thanks, Rafik)
