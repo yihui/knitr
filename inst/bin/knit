@@ -19,5 +19,5 @@ local({
   if (!file.exists(p[1]))
     stop("file '", p[1], "' does not exist!")
 
-  knit_fun(p[1], if (length(p) < 2L) NULL else p[2])
+  knit_fun(p[1], if (length(p) < 2L) NULL else p[2], envir = globalenv())
 })
