@@ -67,7 +67,7 @@ render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = 
   if (hi == 'none') return()
   switch(hi, pygments = {
     hook.r = function(x, options) {
-      str_c('\n\n{% highlight ', tolower(options$engine), ' ', extra, ' %}\n',
+      str_c('\n\n{% highlight ', tolower(options$engine), if (extra != '') ' ', extra, ' %}\n',
             x, '{% endhighlight %}\n\n')
     }
     hook.t = function(x, options) str_c('\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n')
