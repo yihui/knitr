@@ -439,7 +439,7 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.f
 #'   is returned; otherwise the result is written into a file and \code{NULL} is
 #'   returned.
 #' @examples # a minimal example
-#' writeLines(c("# hello markdown", '``` {r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
+#' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')
 knit2html = function(input, ..., text = NULL, envir = parent.frame()){
