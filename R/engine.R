@@ -73,62 +73,75 @@ eng_Rcpp = function(options) {
 
 ## tikz
 eng_tikz = function(options) {
-    procTikzString <- 
-        function   # Converts a tikz-string into pdf by calling `pdflatex`
-    (
-        tikz        # lines of tikz
-       ,tmpl        # file-name of tex-template 
-       ,dir         # output-directory
-       ,label       # path to output-file
-       ,cap = label # figure caption
-       ,dev = "pdf" # device to use
-       ,repl = "<>" # replacement-string
-            
-    )
-    {
-        # Insert tikz into tex-template
-        templ_lines <- readLines(tmpl)
-        i <- grep(repl, templ_lines)
-        s <- c(templ_lines[1:(i-1)], tikz, templ_lines[(i+1):length(templ_lines)])
-        # Call `pdflatex` to generate the pdf
-        f <- tempfile()
-        tex_file <- paste(f, ".tex", sep = "")
-        writeLines(s, tex_file)
-        cwd = getwd()
-        setwd(dirname(tex_file))
-        cmd = sprintf("pdflatex %s > /dev/null", tex_file)
-        exit_tex = system(cmd)
-        outfile = sprintf("%s%s.%s", dir, label, dev)
-        if  (exit_tex != 0)
-            stop("Problems with pdflatex and input file ", f, "; try to edit ", templ)
-        # Convert to the desired output-format, calling `convert`
-        if (dev != "pdf")
-        {
-            exit_conv = system(sprintf("convert %s.pdf %s.%s", f, f, dev))
-            if (exit_conv != 0)
-                stop("Problems with `convert`; probably not installed")
-        }
-        setwd(cwd)
-        dir.create(dir, showWarnings = FALSE)
-        file.copy(paste(f,".", dev, sep = ""), outfile)
-        sprintf("![%s](%s)", cap, outfile)
-        ### Produces as side effect the output-pdf and returns a markdown string
-    }
-    out = 
-    {
-        if (options$eval)
-        {
-            TIKZ_TMPL = ".tikz2pdf.tex.st"
-            if (!file.exists(TIKZ_TMPL))
-                file.copy(system.file("misc/tikz2pdf.tex.st", package = "knitr"), TIKZ_TMPL)
-            with(options, procTikzString(code, TIKZ_TMPL, fig.path, label, fig.cap, dev))
-        }
-        else 
-            ''
-    }
-    options$results = 'asis'
-    code = str_c(options$code, collapse = '\n')
-    engine_output(code, out, options)
+  procTikzString <- 
+      function   # Converts a tikz-string into pdf by calling `pdflatex` and
+                 ### returns a reference in current output
+  (
+      tikz        # lines of tikz
+     ,tmpl        # file-name of tex-template 
+     ,dir         # output-directory
+     ,label       # path to output-file
+     ,cap = label # figure caption
+     ,dev = "pdf" # device to use
+     ,repl = "<>" # replacement-string
+          
+  )
+  {
+      # Insert tikz into tex-template
+      templ_lines <- readLines(tmpl)
+      i <- grep(repl, templ_lines)
+      if  (length(i)  != 1 ) 
+          stop("Couldn't find replacement string; or the are multiple of them.")
+      s <- c(templ_lines[1:(i-1)], tikz, templ_lines[(i+1):length(templ_lines)])
+      # Call `pdflatex` to generate the pdf
+      f <- tempfile()
+      tex_file <- paste(f, ".tex", sep = "")
+      writeLines(s, tex_file)
+      cwd = getwd()
+      setwd(dirname(tex_file))
+      cmd = sprintf("pdflatex %s > /dev/null", tex_file)
+      exit_tex = system(cmd)
+      outfile = sprintf("%s%s.%s", dir, label, dev)
+      if  (exit_tex != 0)
+          stop("Problems with pdflatex and input file ", f, "; try to edit ", templ)
+      # Convert to the desired output-format, calling `convert`
+      if (dev != "pdf")
+      {
+          exit_conv = system(sprintf("convert %s.pdf %s.%s", f, f, dev))
+          if (exit_conv != 0)
+              stop("Problems with `convert`; probably not installed")
+      }
+      setwd(cwd)
+      dir.create(dir, showWarnings = FALSE)
+      file.copy(paste(f,".", dev, sep = ""), outfile)
+      options$fig.num = 1
+      knit_hooks$get('plot')(c(paste(dir, label, sep = ""),dev), options)
+      ### Produces as side effect the output-pdf and returns a markdown string
+  }
+  # define defaults
+  if  (is.null(options$engine.opts)) 
+      options$engine.opts <- list()
+  if (is.null(options$engine.opts$repl.st)) 
+      options$engine.opts$repl.st = "<>"
+  if (is.null(options$engine.opts$repl.tmpl)) 
+      options$engine.opts$repl.tmpl = ".tikz2pdf.tex.st"
+  out = 
+  {
+      if (options$eval)
+      {
+          TIKZ_TMPL = options$engine.opts$repl.tmpl
+          if (!file.exists(TIKZ_TMPL))
+              file.copy(system.file("misc/tikz2pdf.tex.st", package = "knitr"), TIKZ_TMPL)
+          with(options, 
+               procTikzString(code, TIKZ_TMPL, fig.path, label, 
+                              fig.cap, dev, options$engine.opts$repl.st))
+      }
+      else 
+          ''
+  }
+  options$results = 'asis'
+  code = str_c(options$code, collapse = '\n')
+  engine_output(code, out, options)
 }
 
 ## dot
@@ -145,7 +158,11 @@ eng_dot = function(options){
           system(cmd)
           fig = with(options, paste(fig.path, label, ".", dev, sep = "" ))
           file.copy(paste(f, options$dev, sep = "."), fig)
-          sprintf("![%s](%s)", options$fig.cap, fig)
+          options$fig.num = 1
+          with(options, 
+              knit_hooks$get('plot')(c(paste(fig.path, label, sep = ""), options$dev), options)
+          )
+          
       } else 
           ''
   }
