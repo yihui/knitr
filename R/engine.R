@@ -152,21 +152,15 @@ eng_dot = function(options){
   on.exit(unlink(f))
   cmd = sprintf('dot -O %s -T%s', shQuote(f), options$dev)
   dir.create(options$fig.path, showWarnings = FALSE)
-  out = 
-  {
-      if (options$eval) 
-      {
-          system(cmd)
-          fig = with(options, paste(fig.path, label, ".", dev, sep = "" ))
-          file.copy(paste(f, options$dev, sep = "."), fig)
-          options$fig.num = 1
-          with(options, 
-              knit_hooks$get('plot')(c(paste(fig.path, label, sep = ""), options$dev), options)
-          )
-          
-      } else 
-          ''
-  }
+  out = if (options$eval) {
+    system(cmd)
+    fig = with(options, paste(fig.path, label, ".", dev, sep = "" ))
+    file.copy(paste(f, options$dev, sep = "."), fig)
+    options$fig.num = 1
+    with(options,
+         knit_hooks$get('plot')(c(paste(fig.path, label, sep = ""), options$dev), options)
+    )
+  } else ''
   options$results = 'asis'
   engine_output(options, code, out)
 }
