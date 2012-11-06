@@ -72,77 +72,35 @@ eng_Rcpp = function(options) {
   engine_output(options, code, '')
 }
 
-## tikz
+## convert tikz string to PDF
 eng_tikz = function(options) {
-  procTikzString <- 
-      function   # Converts a tikz-string into pdf by calling `pdflatex` and
-                 ### returns a reference in current output
-  (
-      tikz        # lines of tikz
-     ,tmpl        # file-name of tex-template 
-     ,dir         # output-directory
-     ,label       # path to output-file
-     ,cap = label # figure caption
-     ,dev = "pdf" # device to use
-     ,repl = "<>" # replacement-string
-          
-  )
-  {
-      # Insert tikz into tex-template
-      templ_lines <- readLines(tmpl)
-      i <- grep(repl, templ_lines)
-      if  (length(i)  != 1 ) 
-          stop("Couldn't find replacement string; or the are multiple of them.")
-      s <- c(templ_lines[1:(i-1)], tikz, templ_lines[(i+1):length(templ_lines)])
-      # Call `pdflatex` to generate the pdf
-      f <- tempfile()
-      tex_file <- paste(f, ".tex", sep = "")
-      writeLines(s, tex_file)
-      cwd = getwd()
-      setwd(dirname(tex_file))
-      cmd = sprintf("pdflatex %s > /dev/null", tex_file)
-      exit_tex = system(cmd)
-      outfile = sprintf("%s%s.%s", dir, label, dev)
-      if  (exit_tex != 0)
-          stop("Problems with pdflatex and input file ", f, "; try to edit ", templ)
-      # Convert to the desired output-format, calling `convert`
-      if (dev != "pdf")
-      {
-          exit_conv = system(sprintf("convert %s.pdf %s.%s", f, f, dev))
-          if (exit_conv != 0)
-              stop("Problems with `convert`; probably not installed")
-      }
-      setwd(cwd)
-      dir.create(dir, showWarnings = FALSE)
-      file.copy(paste(f,".", dev, sep = ""), outfile)
-      options$fig.num = 1
-      knit_hooks$get('plot')(c(paste(dir, label, sep = ""),dev), options)
-      ### Produces as side effect the output-pdf and returns a markdown string
+  if (!options$eval) return(engine_output(options, options$code, ''))
+
+  lines = readLines(tmpl <- options$engine.opts$template %n%
+                      system.file('misc', 'tikz2pdf.tex', package = 'knitr'))
+  i = grep('%% TIKZ_CODE %%', lines)
+  if (length(i) != 1L)
+    stop("Couldn't find replacement string; or the are multiple of them.")
+
+  s = append(lines, options$code, i)  # insert tikz into tex-template
+  writeLines(s, texf <- str_c(f <- tempfile('tikz', '.'), '.tex'))
+  unlink(outf <- str_c(f, '.pdf'))
+  texi2pdf(texf, clean = TRUE)
+  if (!file.exists(outf)) stop('failed to compile tikz; check the template: ', tmpl)
+  unlink(texf)
+
+  fig = fig_path('', options)
+  file.rename(outf, str_c(fig, '.pdf'))
+  # convert to the desired output-format, calling `convert`
+  ext = tolower(options$fig.ext %n% dev2ext(options$dev))
+  if (ext != 'pdf') {
+    conv = system(sprintf('convert %s.pdf %s.%s', fig, fig, ext))
+    if (conv != 0) stop('problems with `convert`; probably not installed?')
   }
-  # define defaults
-  if  (is.null(options$engine.opts)) 
-      options$engine.opts <- list()
-  if (is.null(options$engine.opts$repl.st)) 
-      options$engine.opts$repl.st = "<>"
-  if (is.null(options$engine.opts$repl.tmpl)) 
-      options$engine.opts$repl.tmpl = ".tikz2pdf.tex.st"
-  out = 
-  {
-      if (options$eval)
-      {
-          TIKZ_TMPL = options$engine.opts$repl.tmpl
-          if (!file.exists(TIKZ_TMPL))
-              file.copy(system.file("misc/tikz2pdf.tex.st", package = "knitr"), TIKZ_TMPL)
-          with(options, 
-               procTikzString(code, TIKZ_TMPL, fig.path, label, 
-                              fig.cap, dev, options$engine.opts$repl.st))
-      }
-      else 
-          ''
-  }
-  options$results = 'asis'
-  code = str_c(options$code, collapse = '\n')
-  engine_output(options, code, out)
+  options$fig.num = 1L; options$fig.cur = 0L
+  extra = knit_hooks$get('plot')(c(fig, ext), options)
+  options$engine = 'tex'  # for output hooks to use the correct language class
+  engine_output(options, options$code, '', extra)
 }
 
 ## dot
