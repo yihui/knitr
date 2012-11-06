@@ -350,7 +350,7 @@ knit_child = function(..., eval = TRUE) {
 #'
 #' The first two lines of the R script can contain the title and author of the
 #' report in comments of the form \samp{## title:} and \samp{## author:}. The
-#' template must have a chunk named \samp{auto-report}, which will be used to
+#' template must have a token \samp{%sCHUNK_LABEL_HERE}, which will be used to
 #' input all the R code from the script. See the examples below.
 #' @param script path to the R script
 #' @param template path of the template to use (by default the Rnw template in
@@ -376,10 +376,18 @@ stitch = function(script,
   ## extract title and author from first two lines
   if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:', envir)) lines = lines[-1L]
   if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:', envir)) lines = lines[-1L]
-  knit_code$set(`auto-report` = lines)
+  read_chunk(lines = lines)
+  if (length(knit_code$get()) == 0L) knit_code$set(`auto-report` = lines)
   input = basename(template)
   input = str_c(file_path_sans_ext(basename(script)), '.', file_ext(input))
-  out = knit(input, output, envir = envir, text = readLines(template, warn = FALSE))
+  txt = readLines(template, warn = FALSE)
+  i = grep('%sCHUNK_LABEL_HERE', txt)
+  if (length(i) != 1L) stop('Wrong template for stitch: ', template)
+  txt[i] = paste(sprintf(sub('CHUNK_LABEL_HERE', '', txt[i]), names(knit_code$get())),
+                 unlist(lapply(knit_code$get(), paste, collapse = '\n')),
+                 sep = '\n', collapse = '\n')
+  knit_code$restore()
+  out = knit(input, output, envir = envir, text = txt)
   switch(file_ext(out), tex = {
     texi2pdf(out, clean = TRUE)
     system(paste(getOption('pdfviewer'), shQuote(str_replace(out, '\\.tex$', '.pdf'))))
@@ -388,7 +396,6 @@ stitch = function(script,
     markdown::markdownToHTML(out, out.html)
     browseURL(out.html)
   }, html = browseURL(out))
-  knit_code$restore()
   out
 }
 
