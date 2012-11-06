@@ -56,6 +56,8 @@
 
 - `stitch()` will no longer copy the template over to the current working directory (thanks, Michael Friendly)
 
+- `stitch()` will no longer open the PDF/HTML output automatically (#411) (thanks, Michel Kuhlmann)
+
 - the script `inst/bin/knit` can also convert R Markdown documents to HTML now; the argument `--pdf` was removed and a new argument `--no-convert` was added
 
 ## BUG FIXES

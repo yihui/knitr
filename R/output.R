@@ -394,12 +394,12 @@ stitch = function(script,
   out = knit(input, output, envir = envir, text = txt)
   switch(file_ext(out), tex = {
     texi2pdf(out, clean = TRUE)
-    system(paste(getOption('pdfviewer'), shQuote(str_replace(out, '\\.tex$', '.pdf'))))
+    message('PDF output at: ', str_replace(out, '\\.tex$', '.pdf'))
   }, md = {
     out.html = str_c(file_path_sans_ext(out), '.html')
     markdown::markdownToHTML(out, out.html)
-    browseURL(out.html)
-  }, html = browseURL(out))
+    message('HTML output at: ', out.html)
+  })
   out
 }
 
