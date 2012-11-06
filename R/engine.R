@@ -22,6 +22,7 @@
 #' @export
 #' @references Usage: \url{http://yihui.name/knitr/objects}
 #' @examples knit_engines$get('python'); knit_engines$get('awk')
+#' names(knit_engines$get())
 knit_engines = new_defaults()
 
 # give me source code, text output and I return formatted text using the three
