@@ -26,14 +26,15 @@ knit_engines = new_defaults()
 
 # give me source code, text output and I return formatted text using the three
 # hooks: source, output and chunk
-engine_output = function(code, out, options) {
+engine_output = function(options, code, out, extra = NULL) {
   if (length(code) != 1L) code = str_c(code, collapse = '\n')
   if (length(out) != 1L) out = str_c(out, collapse = '\n')
   code = str_replace(code, '([^\n]+)$', '\\1\n')
   out = str_replace(out, '([^\n]+)$', '\\1\n')
   txt = paste(c(
     if (options$echo) knit_hooks$get('source')(code, options),
-    if (options$results != 'hide' && !is_blank(out)) knit_hooks$get('output')(out, options)
+    if (options$results != 'hide' && !is_blank(out)) knit_hooks$get('output')(out, options),
+    extra
   ), collapse = '\n')
   if (options$include) knit_hooks$get('chunk')(txt, options) else ''
 }
@@ -47,7 +48,7 @@ eng_interpreted = function(options) {
   cmd = paste(shQuote(options$engine.path %n% options$engine),
               code_option, shQuote(code), options$engine.opts)
   out = if (options$eval) system(cmd, intern = TRUE) else ''
-  engine_output(code, out, options)
+  engine_output(options, code, out)
 }
 ## C
 
@@ -68,7 +69,7 @@ eng_Rcpp = function(options) {
   }
 
   options$engine = 'cpp' # wrap up source code in cpp syntax instead of Rcpp
-  engine_output(code, '', options)
+  engine_output(options, code, '')
 }
 
 ## tikz
@@ -141,7 +142,7 @@ eng_tikz = function(options) {
   }
   options$results = 'asis'
   code = str_c(options$code, collapse = '\n')
-  engine_output(code, out, options)
+  engine_output(options, code, out)
 }
 
 ## dot
@@ -167,7 +168,7 @@ eng_dot = function(options){
           ''
   }
   options$results = 'asis'
-  engine_output(code, out, options)
+  engine_output(options, code, out)
 }
 ## Andre Simon's highlight
 eng_highlight = function(options) {
@@ -183,7 +184,7 @@ eng_highlight = function(options) {
                 options$engine.opts %n% '-S text', shQuote(f))
   out = if (options$eval) system(cmd, intern = TRUE) else ''
   options$echo = FALSE; options$results = 'asis'  # do not echo source code
-  engine_output('', out, options)
+  engine_output(options, '', out)
 }
 
 # set engines for interpreted languages
