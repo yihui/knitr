@@ -43,13 +43,10 @@ read_demo(topic, package = NULL, ...)
 }
 \details{
   There are two approaches to read external code into the
-  current session: (1) Use a special separator in the
-  script; the \code{ref.label} element in the pattern list
-  (\code{knit_patterns$get('ref.label')}) is the pattern to
-  separate code chunks; by default it is of the from
-  \code{## @knitr chunk-label}; (2) Manually specify the
-  labels, starting and ending positions of code chunks in
-  the script.
+  current session: (1) Use a special separator of the from
+  \code{## @knitr chunk-label} in the script; (2) Manually
+  specify the labels, starting and ending positions of code
+  chunks in the script.
 
   The second approach will be used only when \code{labels}
   is not \code{NULL}. For this approach, if \code{from} is

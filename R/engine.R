@@ -195,3 +195,4 @@ knit_engines$set(highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, do
 
 # possible values for engines (for auto-completion in RStudio)
 opts_chunk_attr$engine = as.list(sort(c('R', names(knit_engines$get()))))
+opts_chunk_attr[c('engine.path', 'engine.opts')] = list('character', 'character')

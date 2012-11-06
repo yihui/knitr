@@ -90,27 +90,28 @@ hook_scianimator = function(x, options) {
 
   fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
   base = opts_knit$get('base.url') %n% ''
-  fig.paths = str_c(shQuote(str_c(base, fig.name)), collapse = ", ")
+  fig.paths = str_c('[', str_c('"', fig.name, '"', collapse = ", "), ']')
 
   # write the div and js code here
   id = gsub('[^[:alnum:]]', '_', options$label)
-  sid = str_c('#', id)
   sprintf('
 <div class="scianimator"><div id="%s" style="display: inline-block;"></div></div>
 <script type="text/javascript">
   (function($) {
     $(document).ready(function() {
-      $("%s").scianimator({
-          "images": [%s],
+      var imgs = %s;
+      for (i=0; i<imgs.length; i++) {imgs[i] = "%s" + imgs[i];}
+      $("#%s").scianimator({
+          "images": imgs,
           "delay": %s,
           "controls": ["first", "previous", "play", "next", "last", "loop", "speed"],
       });
-      $("%s").scianimator("play");
+      $("#%s").scianimator("play");
     });
   })(jQuery);
 </script>
 ',
-         id, sid, fig.paths, options$interval * 1000, sid)
+         id, fig.paths, base, id, options$interval * 1000, id)
 }
 
 

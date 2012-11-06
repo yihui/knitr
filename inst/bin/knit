@@ -1,23 +1,24 @@
 #!/usr/bin/env Rscript
 
 local({
-    p = commandArgs(TRUE)
-    if (length(p) == 0L || '--help' %in% p) {
-        message('usage:
-    knit input [output] [--pdf]
-    knit --help to print help messages')
-        q()
+  p = commandArgs(TRUE)
+  if (length(p) == 0L || '--help' %in% p) {
+    message('usage: knit input [output] [--no-convert]
+    --help        to print help messages
+    --no-convert  do not convert tex to pdf, markdown to html, etc')
+    q()
+  }
+
+  library(knitr)
+  knit_fun = if ('--no-convert' %in% p) knit else {
+    if (length(p) == 0L) stop('no input file provided')
+    if (grepl('\\.(R|S)(nw|tex)$', p[1])) knit2pdf else {
+      if (grepl('\\.R(md|markdown)$', p[1])) knit2html else knit
     }
+  }
 
-    library(knitr)
-    knit_fun = if ('--pdf' %in% p) {
-        p = setdiff(p, '--pdf')
-        if (length(p) == 0L) stop('no input file provided')
-        knit2pdf
-    } else knit
+  if (!file.exists(p[1]))
+    stop("file '", p[1], "' does not exist!")
 
-    if (!file.exists(p[1]))
-        stop("file '", p[1], "' does not exist!")
-
-    knit_fun(p[1], if (length(p) < 2L) NULL else p[2])
+  knit_fun(p[1], if (length(p) < 2L) NULL else p[2], envir = globalenv())
 })

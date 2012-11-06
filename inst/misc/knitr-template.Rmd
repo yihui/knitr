@@ -17,7 +17,7 @@ knit_hooks$set(par = function(before, options, envir) {
 This report was automatically generated with the R package **knitr**
 (version `r packageVersion('knitr')`).
 
-```{r auto-report}
+```{r %sCHUNK_LABEL_HERE}
 ```
 
 The R session information (including the OS info, R version and all

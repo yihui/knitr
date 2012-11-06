@@ -52,7 +52,7 @@ knit_hooks$set(par = function(before, options, envir) {
 \Sexpr{if (exists('.knitr.title')) '\\maketitle'}
 The results below are generated from an R script.
 
-<<auto-report>>=
+<<%sCHUNK_LABEL_HERE>>=
 @
 
 The R session information (including the OS info, R version and all

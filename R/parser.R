@@ -247,11 +247,9 @@ print.inline = function(x, ...) {
 #' to read a demo script from a package.
 #'
 #' There are two approaches to read external code into the current session: (1)
-#' Use a special separator in the script; the \code{ref.label} element in the
-#' pattern list (\code{knit_patterns$get('ref.label')}) is the pattern to
-#' separate code chunks; by default it is of the from \code{## @@knitr
-#' chunk-label}; (2) Manually specify the labels, starting and ending positions
-#' of code chunks in the script.
+#' Use a special separator of the from \code{## @@knitr chunk-label} in the
+#' script; (2) Manually specify the labels, starting and ending positions of
+#' code chunks in the script.
 #'
 #' The second approach will be used only when \code{labels} is not \code{NULL}.
 #' For this approach, if \code{from} is \code{NULL}, the starting position is 1;
@@ -305,7 +303,11 @@ print.inline = function(x, ...) {
 #' knitr:::knit_code$restore() # clean up the session
 read_chunk = function(path, lines = readLines(path, warn = FALSE),
                       labels = NULL, from = NULL, to = NULL, from.offset = 0L, to.offset = 0L) {
-  lab = knit_patterns$get('ref.label')
+  if (!length(lines)) {
+    warning('code is empty')
+    return(invisible())
+  }
+  lab = .sep.label
   if (is.null(labels)) {
     if (!group_pattern(lab)) return(invisible())
   } else {
@@ -322,12 +324,13 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
     knit_code$set(code)
     return(invisible())
   }
-  groups = unname(split(lines, cumsum(str_detect(lines, lab))))
+  idx = cumsum(str_detect(lines, lab))
+  if (all(idx == 0)) return(invisible())
+  groups = unname(split(lines[idx != 0], idx[idx != 0]))
   labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\1'))
   code = lapply(groups, strip_chunk)
   idx = nzchar(labels); code = code[idx]; labels = labels[idx]
-  names(code) = labels
-  knit_code$set(code)
+  knit_code$set(setNames(code, labels))
 }
 #' @rdname read_chunk
 #' @param topic,package name of the demo and the package see \code{\link[utils]{demo}}

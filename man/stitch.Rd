@@ -31,9 +31,15 @@ stitch(script, template = system.file("misc", "knitr-template.Rnw", package = "k
   The first two lines of the R script can contain the title
   and author of the report in comments of the form \samp{##
   title:} and \samp{## author:}. The template must have a
-  chunk named \samp{auto-report}, which will be used to
+  token \samp{\%sCHUNK_LABEL_HERE}, which will be used to
   input all the R code from the script. See the examples
   below.
+
+  The R script may contain chunk headers of the form
+  \samp{## @knitr label}, which will be copied to the
+  template; if no chunk headers are found, the whole R
+  script will be inserted into the template as one code
+  chunk.
 }
 \examples{
 s = system.file("misc", "stitch-test.R", package = "knitr")
