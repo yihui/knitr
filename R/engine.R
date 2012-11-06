@@ -153,18 +153,13 @@ eng_dot = function(options){
   cmd = sprintf('%s %s -T%s -o%s', shQuote(options$engine %n% options$engine.path),
                 shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
                 shQuote(str_c(fig <- fig_path(), '.', ext)))
-  dir.create(options$fig.path, showWarnings = FALSE)
-  out = if (options$eval) {
+  dir.create(dirname(fig), showWarnings = FALSE)
+  extra = if (options$eval) {
     system(cmd)
-    fig = with(options, paste(fig.path, label, ".", dev, sep = "" ))
-    file.copy(paste(f, options$dev, sep = "."), fig)
-    options$fig.num = 1
-    with(options,
-         knit_hooks$get('plot')(c(paste(fig.path, label, sep = ""), options$dev), options)
-    )
-  } else ''
-  options$results = 'asis'
-  engine_output(options, code, out)
+    options$fig.num = 1L; options$fig.cur = 0L
+    knit_hooks$get('plot')(c(fig, ext), options)
+  }
+  engine_output(options, code, '', extra)
 }
 ## Andre Simon's highlight
 eng_highlight = function(options) {
