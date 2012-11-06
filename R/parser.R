@@ -325,10 +325,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
     return(invisible())
   }
   idx = cumsum(str_detect(lines, lab))
-  if (all(idx == 0)) {
-    warning('no code chunks detected')
-    return(invisible())
-  }
+  if (all(idx == 0)) return(invisible())
   groups = unname(split(lines[idx != 0], cumsum(idx[idx != 0])))
   labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\1'))
   code = lapply(groups, strip_chunk)
