@@ -350,8 +350,12 @@ knit_child = function(..., eval = TRUE) {
 #'
 #' The first two lines of the R script can contain the title and author of the
 #' report in comments of the form \samp{## title:} and \samp{## author:}. The
-#' template must have a token \samp{%sCHUNK_LABEL_HERE}, which will be used to
+#' template must have a token \samp{\%sCHUNK_LABEL_HERE}, which will be used to
 #' input all the R code from the script. See the examples below.
+#'
+#' The R script may contain chunk headers of the form \samp{## @@knitr label},
+#' which will be copied to the template; if no chunk headers are found, the
+#' whole R script will be inserted into the template as one code chunk.
 #' @param script path to the R script
 #' @param template path of the template to use (by default the Rnw template in
 #'   this package; there is also an HTML template in \pkg{knitr})
