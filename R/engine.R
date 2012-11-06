@@ -150,8 +150,9 @@ eng_dot = function(options){
   f = tempfile()
   writeLines(code <- options$code, f)
   on.exit(unlink(f))
-  cmd = sprintf('%s -O %s -T%s', shQuote(options$engine %n% options$engine.path),
-                shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev))
+  cmd = sprintf('%s %s -T%s -o%s', shQuote(options$engine %n% options$engine.path),
+                shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
+                shQuote(str_c(fig <- fig_path(), '.', ext)))
   dir.create(options$fig.path, showWarnings = FALSE)
   out = if (options$eval) {
     system(cmd)
