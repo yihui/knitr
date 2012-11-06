@@ -333,8 +333,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
   labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\1'))
   code = lapply(groups, strip_chunk)
   idx = nzchar(labels); code = code[idx]; labels = labels[idx]
-  names(code) = labels
-  knit_code$set(code)
+  knit_code$set(setNames(code, labels))
 }
 #' @rdname read_chunk
 #' @param topic,package name of the demo and the package see \code{\link[utils]{demo}}
