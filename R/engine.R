@@ -103,7 +103,7 @@ eng_tikz = function(options) {
   engine_output(options, options$code, '', extra)
 }
 
-## dot
+## GraphViz (dot)
 eng_dot = function(options){
   f = tempfile()
   writeLines(code <- options$code, f)
@@ -119,6 +119,7 @@ eng_dot = function(options){
   }
   engine_output(options, code, '', extra)
 }
+
 ## Andre Simon's highlight
 eng_highlight = function(options) {
   f = tempfile()
