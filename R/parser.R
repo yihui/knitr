@@ -303,6 +303,10 @@ print.inline = function(x, ...) {
 #' knitr:::knit_code$restore() # clean up the session
 read_chunk = function(path, lines = readLines(path, warn = FALSE),
                       labels = NULL, from = NULL, to = NULL, from.offset = 0L, to.offset = 0L) {
+  if (!length(lines)) {
+    warning('code is empty')
+    return(invisible())
+  }
   lab = .sep.label
   if (is.null(labels)) {
     if (!group_pattern(lab)) return(invisible())
@@ -320,7 +324,12 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
     knit_code$set(code)
     return(invisible())
   }
-  groups = unname(split(lines, cumsum(str_detect(lines, lab))))
+  idx = cumsum(str_detect(lines, lab))
+  if (all(idx == 0)) {
+    warning('no code chunks detected')
+    return(invisible())
+  }
+  groups = unname(split(lines[idx != 0], cumsum(idx[idx != 0])))
   labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\1'))
   code = lapply(groups, strip_chunk)
   idx = nzchar(labels); code = code[idx]; labels = labels[idx]
