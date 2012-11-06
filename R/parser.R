@@ -247,11 +247,9 @@ print.inline = function(x, ...) {
 #' to read a demo script from a package.
 #'
 #' There are two approaches to read external code into the current session: (1)
-#' Use a special separator in the script; the \code{ref.label} element in the
-#' pattern list (\code{knit_patterns$get('ref.label')}) is the pattern to
-#' separate code chunks; by default it is of the from \code{## @@knitr
-#' chunk-label}; (2) Manually specify the labels, starting and ending positions
-#' of code chunks in the script.
+#' Use a special separator of the from \code{## @@knitr chunk-label} in the
+#' script; (2) Manually specify the labels, starting and ending positions of
+#' code chunks in the script.
 #'
 #' The second approach will be used only when \code{labels} is not \code{NULL}.
 #' For this approach, if \code{from} is \code{NULL}, the starting position is 1;
@@ -305,7 +303,7 @@ print.inline = function(x, ...) {
 #' knitr:::knit_code$restore() # clean up the session
 read_chunk = function(path, lines = readLines(path, warn = FALSE),
                       labels = NULL, from = NULL, to = NULL, from.offset = 0L, to.offset = 0L) {
-  lab = knit_patterns$get('ref.label')
+  lab = .sep.label
   if (is.null(labels)) {
     if (!group_pattern(lab)) return(invisible())
   } else {
