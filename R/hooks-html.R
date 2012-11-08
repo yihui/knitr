@@ -88,9 +88,7 @@ hook_scianimator = function(x, options) {
   # Don't print out intermediate plots if we're animating
   if(fig.cur < fig.num) return('')
 
-  fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
   base = opts_knit$get('base.url') %n% ''
-  fig.paths = str_c('[', str_c('"', fig.name, '"', collapse = ", "), ']')
 
   # write the div and js code here
   id = gsub('[^[:alnum:]]', '_', options$label)
@@ -102,10 +100,10 @@ hook_scianimator = function(x, options) {
 <script type="text/javascript">
   (function($) {
     $(document).ready(function() {
-      var imgs = %s;
+      var imgs = Array(%s);
       for (i=0; ; i++) {
         if (i == imgs.length) break;
-        imgs[i] = "%s" + imgs[i];
+        imgs[i] = "%s%s" + (i + 1) + ".%s";
       }
       $("#%s").scianimator({
           "images": imgs,
@@ -117,7 +115,8 @@ hook_scianimator = function(x, options) {
   })(jQuery);
 </script>
 ',
-         id, fig.paths, base, id, options$interval * 1000, id)
+          id, fig.num, base, sub(str_c(fig.num, '$'), '', x[1]), x[2], id,
+          options$interval * 1000, id)
 }
 
 
