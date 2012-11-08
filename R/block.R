@@ -12,10 +12,10 @@ call_block = function(block) {
   # now try eval all options except those in eval.after and their aliases
   af = opts_knit$get('eval.after'); al = opts_knit$get('aliases')
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
-  for (o in setdiff(names(block$params), af))
-    block$params[o] = list(eval_lang(block$params[[o]]))
-
   params = opts_chunk$merge(block$params)
+  for (o in setdiff(names(params), af))
+    params[o] = list(eval_lang(params[[o]]))
+
   params = fix_options(params)  # for compatibility
 
   # expand parameters defined via template
