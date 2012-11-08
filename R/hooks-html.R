@@ -95,7 +95,10 @@ hook_scianimator = function(x, options) {
   # write the div and js code here
   id = gsub('[^[:alnum:]]', '_', options$label)
   sprintf('
-<div class="scianimator"><div id="%s" style="display: inline-block;"></div></div>
+<div class="scianimator">
+<div id="%s" style="display: inline-block;">
+</div>
+</div>
 <script type="text/javascript">
   (function($) {
     $(document).ready(function() {
