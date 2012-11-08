@@ -103,7 +103,10 @@ hook_scianimator = function(x, options) {
   (function($) {
     $(document).ready(function() {
       var imgs = %s;
-      for (i=0; i<imgs.length; i++) {imgs[i] = "%s" + imgs[i];}
+      for (i=0; ; i++) {
+        if (i == imgs.length) break;
+        imgs[i] = "%s" + imgs[i];
+      }
       $("#%s").scianimator({
           "images": imgs,
           "delay": %s,
