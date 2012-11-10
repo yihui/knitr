@@ -138,12 +138,25 @@ eng_highlight = function(options) {
   engine_output(options, '', out)
 }
 
+## SAS (I really do not understand SAS; this engine only runs SAS code)
+eng_sas = function(options) {
+  # SAS wants a physical file
+  writeLines(options$code, f <- basename(tempfile('sas', '.', '.sas')))
+  on.exit(unlink(c(f, sub('\\.sas$', '.log', f))))
+  cmd = paste(shQuote(options$engine.path %n% options$engine), '-SYSIN', f, options$engine.opts)
+  out = if (options$eval) system(cmd, intern = TRUE) else ''
+  engine_output(options, options$code, out)
+}
+
 # set engines for interpreted languages
 for (i in c('awk', 'bash', 'gawk', 'haskell', 'perl', 'python', 'ruby', 'sed', 'sh', 'zsh')) {
   knit_engines$set(setNames(list(eng_interpreted), i))
 }
 # additional engines
-knit_engines$set(highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot)
+knit_engines$set(
+  highlight = eng_highlight, Rcpp = eng_Rcpp, sas = eng_sas,
+  tikz = eng_tikz, dot = eng_dot
+)
 
 # possible values for engines (for auto-completion in RStudio)
 opts_chunk_attr$engine = as.list(sort(c('R', names(knit_engines$get()))))
