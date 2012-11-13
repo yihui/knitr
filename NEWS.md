@@ -64,6 +64,8 @@
 
 - the script `inst/bin/knit` can also convert R Markdown documents to HTML now; the argument `--pdf` was removed and a new argument `--no-convert` was added
 
+- dots in figure filenames will not be replaced with `_` when the output is not LaTeX (thanks, Stewart Macarthur)
+
 ## BUG FIXES
 
 - fixed #410: when the inline R code returns `NA_real_`, the scientific notation of numbers will run into errors (thanks, Rafik)
