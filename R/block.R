@@ -63,6 +63,7 @@ call_block = function(block) {
     cache$library(params$cache.path, save = FALSE) # load packages
   }
 
+  params$params.src = block$params.src
   opts_current$restore(params)  # save current options
 
   block_exec(params)
