@@ -103,14 +103,8 @@ block_exec = function(params) {
     } else warning('failed to tidy R code in chunk <', options$label, '>\n',
                    'reason: ', res)
   }
-  # no eval chunks
-  if (isFALSE(ev <- options$eval)) {
-    output = knit_hooks$get('chunk')(wrap.source(list(src = code), options), options)
-    if (options$cache) block_cache(options, output, character(0))
-    return(if (options$include) output else '')
-  }
   # only evaluate certain lines
-  if (is.numeric(ev)) {
+  if (is.numeric(ev <- options$eval)) {
     iss = seq_along(code)
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
@@ -119,7 +113,10 @@ block_exec = function(params) {
     options$fig.ext = dev2ext(options$dev)
   }
 
-  res = in_dir(
+  # return code with class 'source' if not eval chunks
+  res = if (isFALSE(ev)) {
+    list(structure(list(src = code), class = 'source'))
+  } else in_dir(
     opts_knit$get('root.dir') %n% input_dir(),
     evaluate(code, envir = env, new_device = FALSE,
              stop_on_error = opts_knit$get('stop_on_error'))
