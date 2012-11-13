@@ -123,10 +123,10 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     on.exit(options(oopts), add = TRUE)
     # restore chunk options after parent exits
     optc = opts_chunk$get()
-    on.exit({opts_chunk$restore(); opts_chunk$set(optc)}, add = TRUE)
+    on.exit(opts_chunk$restore(optc), add = TRUE)
     ocode = knit_code$get()
     if (tangle) knit_code$restore() # clean up code before tangling
-    on.exit({knit_code$restore(); knit_code$set(ocode)}, add = TRUE)
+    on.exit(knit_code$restore(ocode), add = TRUE)
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
     opts_knit$set(tangle = tangle)
   }
@@ -152,7 +152,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
   if (!length(text)) return() # a trivial case: simply and exit
 
   apat = all_patterns; opat = knit_patterns$get()
-  on.exit({knit_patterns$restore(); knit_patterns$set(opat)}, add = TRUE)
+  on.exit(knit_patterns$restore(opat), add = TRUE)
   if (length(opat) == 0 || all(sapply(opat, is.null))) {
     # use ext if cannot auto detect pattern
     if (is.null(pattern <- detect_pattern(text, ext))) {
@@ -165,8 +165,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
       stop("a pattern list cannot be automatically found for the file extension '",
            ext, "' in built-in pattern lists; ",
            'see ?knit_patterns on how to set up customized patterns')
-    knit_patterns$restore()
-    knit_patterns$set(apat[[pattern]])
+    set_pattern(pattern)
     opts_knit$set(out.format = switch(pattern, rnw = 'latex', tex = 'latex',
                                       html = 'html', md = 'markdown', rst = 'rst',
                                       brew = 'brew'))

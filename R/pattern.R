@@ -90,8 +90,7 @@ knit_patterns = new_defaults(.pat.init)
 
 ## convenience functions
 set_pattern = function(type) {
-  knit_patterns$restore()
-  knit_patterns$set(all_patterns[[type]])
+  knit_patterns$restore(all_patterns[[type]])
 }
 
 #' Set regular expressions to read input documents
