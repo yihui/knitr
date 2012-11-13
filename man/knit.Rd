@@ -3,7 +3,7 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame())
+knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame(), ...)
 
 purl(..., documentation = 1L)
 }
@@ -30,7 +30,9 @@ purl(..., documentation = 1L)
   means add the chunk headers to code; \code{2} means add
   all text chunks to code as roxygen comments}
 
-  \item{...}{arguments passed to \code{\link{knit}}}
+  \item{...}{arguments passed to \code{\link{knit}()} from
+  \code{purl()}; ignored if the arguments do not match with
+  any arguments in \code{knit()}}
 }
 \value{
   The compiled document is written into the output file,

@@ -6,7 +6,7 @@
  $ get    :function (name, default = FALSE)  
  $ set    :function (...)  
  $ merge  :function (values)  
- $ restore:function ()}
+ $ restore:function (target = value)}
 \usage{
 knit_patterns
 }
