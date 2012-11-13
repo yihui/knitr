@@ -21,7 +21,6 @@ call_block = function(block) {
   # expand parameters defined via template
   if(!is.null(params$opts.label)) params = merge_list(params, opts_template$get(params$opts.label))
 
-  opts_current$restore(params)  # save current options
   label = ref.label = params$label
   if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
   params$code = unlist(knit_code$get(ref.label), use.names = FALSE)
@@ -63,6 +62,8 @@ call_block = function(block) {
     }
     cache$library(params$cache.path, save = FALSE) # load packages
   }
+
+  opts_current$restore(params)  # save current options
 
   block_exec(params)
 }
