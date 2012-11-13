@@ -309,7 +309,7 @@ parent_mode = function() opts_knit$get('parent')
 # return the output format, or if current format is in specified formats
 out_format = function(x) {
   fmt = opts_knit$get('out.format')
-  if (missing(x)) fmt else fmt %in% x
+  if (missing(x)) fmt else !is.null(fmt) && (fmt %in% x)
 }
 
 #' Path for figure files
@@ -334,6 +334,7 @@ out_format = function(x) {
 #' fig_path(1:10, list(fig.path='foo-', label='bar'))
 fig_path = function(suffix = '', options = opts_current$get()) {
   path = valid_path(options$fig.path, options$label)
+  if (!out_format(c('latex', 'sweave', 'listings'))) return(str_c(path, suffix))
   # sanitize filename for LaTeX
   if (str_detect(path, '[^-_./\\[:alnum:]]')) {
     warning('replaced special characters in figure filename "', path, '" -> "',
