@@ -42,7 +42,7 @@ get_theme = function(theme = NULL) {
 #'
 #' thm = knit_theme$get('acid')  # parse the theme to a list
 #' knit_theme$set(thm)
-#' 
+#'
 #' opts_knit$set(out.format=NULL) # restore option
 knit_theme = list(set = set_theme, get = get_theme)
 

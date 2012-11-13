@@ -41,7 +41,7 @@ opts_chunk = new_defaults(list(
   fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
   fig.path = 'figure/', fig.ext = NULL, dev = 'pdf', dpi = 72,
   dev.args = NULL, fig.width = 7, fig.height = 7,
-  fig.env = 'figure', fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:', 
+  fig.env = 'figure', fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:',
   fig.pos = '', out.width = NULL, out.height = NULL, out.extra = NULL,
   resize.width = NULL, resize.height = NULL,
   external = TRUE, sanitize = FALSE,
@@ -80,12 +80,12 @@ opts_chunk_attr = (function() {
 #' @export
 #' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
 opts_knit = new_defaults(list(
-  progress = TRUE, verbose = FALSE, out.format = NULL, child.command = 'input', 
-  base.dir = NULL, base.url = NULL, child.path = '', upload.fun = identity, 
-  animation.fun = NULL, global.device = FALSE, eval.after = NULL, 
-  concordance = FALSE, sweave.penalty = 10, tangle = FALSE, child = FALSE, 
-  parent = FALSE, documentation = FALSE, aliases = NULL, root.dir = NULL, 
-  self.contained = TRUE, filter.chunk.end = TRUE, use.highlight = FALSE, 
+  progress = TRUE, verbose = FALSE, out.format = NULL, child.command = 'input',
+  base.dir = NULL, base.url = NULL, child.path = '', upload.fun = identity,
+  animation.fun = NULL, global.device = FALSE, eval.after = NULL,
+  concordance = FALSE, sweave.penalty = 10, tangle = FALSE, child = FALSE,
+  parent = FALSE, documentation = FALSE, aliases = NULL, root.dir = NULL,
+  self.contained = TRUE, filter.chunk.end = TRUE, use.highlight = FALSE,
   header = c(highlight = '', tikz = '', framed = ''), stop_on_error = 0L
 ))
 ## header should not be set by hand unless you know what you are doing
