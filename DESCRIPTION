@@ -95,3 +95,4 @@ Collate:
     'highlight.R'
     'utils-base64.R'
     'utils-rd2html.R'
+    'zzz.R'
