@@ -246,3 +246,53 @@ render_listings = function() {
 }
 
 ## may add textile, and many other markup languages
+
+#' A document hook function to move code out of floating environments
+#'
+#' This is a document hook to move code chunks out of LaTeX floating
+#' environments like \samp{figure} and \samp{table} when the chunks were
+#' actually written inside the floats.
+#'
+#' This function is primarily designed for LyX: we often insert code chunks into
+#' floats to generate figures or tables, but in the final output we do not want
+#' the code to float with the environments, so we use regular expressions to
+#' find out the floating environments, extract the code chunks and move them
+#' out.
+#' @param x a character string (the content of the whole document output)
+#' @return The post-processed document as a character string.
+#' @note This function is hackish. It assumes you to use the default output
+#'   hooks for LaTeX (not Sweave or listings), and every figure/table
+#'   environment must have a label.
+#' @export
+#' @examples \dontrun{knit_hooks$set(document = hook_movecode)}
+hook_movecode = function(x) {
+  x = unlist(str_split(x, '\n'))
+  res = split(x, cumsum(grepl('^\\\\(begin|end)\\{figure\\}', x)))
+  x = unlist(str_split(unlist(lapply(res, function(p) {
+    if (length(p) <= 4 || !grepl('^\\\\begin\\{figure\\}', p[1]) ||
+          !any(grepl('\\\\begin\\{(alltt|kframe)\\}', p))) return(p)
+    idx = c(1, grep('\\\\includegraphics', p))
+    if (length(i <- grep('\\{\\\\centering \\\\includegraphics', p)))
+      idx = c(idx, i - 1, i + 1, i + 2)
+    if (length(i <- grep('\\\\hfill\\{\\}\\\\includegraphics', p)))
+      idx = c(idx, i - 1, i + 1)
+    if (length(i <- grep('\\\\includegraphics.*\\\\hfill\\{\\}', p)))
+      idx = c(idx, i - 1, i + 1)
+    idx = sort(c(idx, seq(grep('\\\\caption', p), grep('\\\\label', p))))
+    p = paste(c(p[-idx], p[idx]), collapse = '\n')
+    gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
+  })), '\n'))
+
+  res = split(x, cumsum(grepl('^\\\\(begin|end)\\{table\\}', x)))
+  paste(unlist(lapply(res, function(p) {
+    if (length(p) <= 4 || !grepl('^\\\\begin\\{table\\}', p[1]) ||
+          !any(grepl('\\\\begin\\{(alltt|kframe)\\}', p))) return(p)
+    if (!any(grepl('\\\\label\\{.*\\}', p))) return(p)
+    idx = c(1, seq(grep('\\\\caption', p), grep('\\\\label', p)))
+    i0 = grep('\\\\begin\\{tabular\\}', p); i1 = grep('\\\\end\\{tabular\\}', p)
+    for (i in seq_along(i0)) idx = c(idx, i0[i]:i1[i])
+    idx = sort(idx)
+    p = paste(c(p[-idx], p[idx]), collapse = '\n')
+    gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
+  })), collapse = '\n')
+}
