@@ -219,7 +219,7 @@ render_latex = function() {
 render_sweave = function() {
   opts_chunk$set(highlight = FALSE, comment = NA, prompt = TRUE) # mimic Sweave settings
   opts_knit$set(out.format = 'sweave')
-  test_latex_pkg('Sweave', file.path(R.home("share"), "texmf", "tex", "latex", "Sweave.sty"))
+  test_latex_pkg('Sweave', file.path(R.home('share'), 'texmf', 'tex', 'latex', 'Sweave.sty'))
   set_header(framed = '', highlight = '\\usepackage{Sweave}')
   knit_hooks$restore()
   ## wrap source code in the Sinput environment, output in Soutput
