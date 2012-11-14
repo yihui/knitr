@@ -67,7 +67,8 @@ new_cache = function() {
       cat(x, file = path, sep = '\n')
     } else {
       if (!file.exists(path)) return()
-      for (p in setdiff(readLines(path), .base.pkgs)) library(p, character.only = TRUE)
+      for (p in setdiff(readLines(path), .base.pkgs))
+        suppressPackageStartupMessages(library(p, character.only = TRUE))
     }
   }
 
