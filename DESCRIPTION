@@ -61,7 +61,7 @@ Suggests:
     R2SWF (>= 0.4),
     XML,
     RCurl,
-    Rcpp (>= 0.9.15.6)
+    Rcpp (>= 0.10.0)
 License: GPL
 URL: http://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
