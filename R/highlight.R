@@ -12,14 +12,17 @@ hi_latex = function(x, fragment = FALSE) {
   # yes I know this is stupid...
   x = gsub('\\\\textbackslash\\\\\\{\\\\\\}', '\\\\textbackslash{}', x)
   x = unlist(str_split(x, '\n'))
+  i = grepl('^\\s*#', x)  # whole lines of comments
+  x[i] = sprintf('\\hlcomment{%s}', x[i])
+  i = which(!i)  # not comments
   # function names
-  x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '\\\\hlfunctioncall{\\1}\\2(', x)
+  x[i] = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '\\\\hlfunctioncall{\\1}\\2(', x[i])
   # comments: what if # inside quotes?
-  if (any(idx <- grepl('#', x) & !grepl('"', x)))
+  if (any(idx <- setdiff(which(grepl('#', x) & !grepl('"', x)), i)))
     x[idx] = gsub('(#.*)', '\\\\hlcomment{\\1}', x[idx])
   # character strings
-  x = gsub('"([^"]*)"', '\\\\hlstring{"\\1"}', x)
-  x = gsub("'([^']*)'", "\\\\hlstring{'\\1'}", x)
+  x[i] = gsub('"([^"]*)"', '\\\\hlstring{"\\1"}', x[i])
+  x[i] = gsub("'([^']*)'", "\\\\hlstring{'\\1'}", x[i])
   # do not highlight keywords at the moment
   # x = gsub(hi.keywords, '\\1\\\\hlkeyword{\\2}\\3', x)
   x = paste(x, collapse = '\n')
