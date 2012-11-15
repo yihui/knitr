@@ -128,10 +128,8 @@ purl(..., documentation = 1L)
 }
 \examples{
 library(knitr)
-(f = tempfile(fileext = ".Rnw"))
-file.copy(system.file("examples", "knitr-minimal.Rnw", package = "knitr"), f, overwrite = TRUE)
-knit(f)
-## or setwd(dirname(f)); knit(basename(f))
+(f = system.file("examples", "knitr-minimal.Rnw", package = "knitr"))
+knit(f)  # compile to tex
 
 purl(f)  # tangle R code
 purl(f, documentation = 0)  # extract R code only
