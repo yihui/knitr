@@ -14,12 +14,12 @@ hi_latex = function(x, fragment = FALSE) {
   x = unlist(str_split(x, '\n'))
   i = grepl('^\\s*#', x)  # whole lines of comments
   x[i] = sprintf('\\hlcomment{%s}', x[i])
+  # comments: what if # inside quotes?
+  if (any(idx <- grepl('#', x) & !grepl('"', x) & !i))
+    x[idx] = gsub('(#.*)', '\\\\hlcomment{\\1}', x[idx])
   i = which(!i)  # not comments
   # function names
   x[i] = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '\\\\hlfunctioncall{\\1}\\2(', x[i])
-  # comments: what if # inside quotes?
-  if (any(idx <- setdiff(which(grepl('#', x) & !grepl('"', x)), i)))
-    x[idx] = gsub('(#.*)', '\\\\hlcomment{\\1}', x[idx])
   # character strings
   x[i] = gsub('"([^"]*)"', '\\\\hlstring{"\\1"}', x[i])
   x[i] = gsub("'([^']*)'", "\\\\hlstring{'\\1'}", x[i])
