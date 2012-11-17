@@ -281,6 +281,7 @@ hook_movecode = function(x) {
     if (length(i <- grep('\\\\includegraphics.*\\\\hfill\\{\\}', p)))
       idx = c(idx, i - 1, i + 1)
     idx = sort(c(idx, seq(grep('\\\\caption', p), grep('\\\\label', p))))
+    idx = unique(idx)
     p = paste(c(p[-idx], p[idx]), collapse = '\n')
     gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
   })), '\n'))
