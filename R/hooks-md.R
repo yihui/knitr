@@ -5,11 +5,7 @@ hook_plot_md = function(x, options) {
     return(opts_knit$get('animation.fun')(x, options))
   }
   base = opts_knit$get('base.url') %n% ''
-  cap = if (is.null(fig.cap <- options$fig.cap)) {
-    sprintf('plot of chunk %s', options$label)
-  } else {
-    if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
-  }
+  cap = .img.cap(options)
 
   if(is.null(w <- options$out.width) & is.null(h <- options$out.height) &
     is.null(s <- options$out.extra)) {

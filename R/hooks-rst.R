@@ -6,11 +6,7 @@ hook_plot_rst = function(x, options) {
   if (options$fig.show == "animate") return(opts_knit$get('animation.fun')(x, options))
 
   base = opts_knit$get("base.url") %n% ""
-  cap = if (is.null(fig.cap <- options$fig.cap)) {
-    sprintf("plot of chunk %s", options$label)
-  } else {
-    if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
-  }
+  cap = .img.cap(options)
   # TODO: add all options for figure
   # See http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
   # http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure
