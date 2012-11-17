@@ -7,10 +7,9 @@ hook_plot_html = function(x, options) {
   fig.cur = options$fig.cur; fig.num = options$fig.num
   ai = options$fig.show == 'asis'
   plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == 0L || fig.cur == fig.num
-  d1 = d2 = ''
-  if (plot1) d1 = str_c(if (out_format('html')) '</div>',
+  d1 = if (plot1) str_c(if (out_format('html')) '</div>',
                         sprintf('<div class="rimage %s">', options$fig.align))
-  if (plot2) d2 = str_c('</div>', if (out_format('html')) '<div class="rcode">')
+  d2 = if (plot2) str_c('</div>', if (out_format('html')) '<div class="rcode">')
   paste(
     d1, .img.tag(
       .upload.url(x), options$out.width, options$out.height, .img.cap(options),
