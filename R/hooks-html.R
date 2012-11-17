@@ -11,10 +11,20 @@ hook_plot_html = function(x, options) {
   if (plot1) d1 = str_c(if (out_format('html')) '</div>',
                         sprintf('<div class="rimage %s">', options$fig.align))
   if (plot2) d2 = str_c('</div>', if (out_format('html')) '<div class="rcode">')
-  add = paste(c(sprintf('width="%s"', options$out.width),
-                sprintf('height="%s"', options$out.height),
-                options$out.extra), collapse = ' ')
-  sprintf('%s<img src="%s" %s class="plot" />%s\n', d1, .upload.url(x), add, d2)
+  paste(
+    d1, .img.tag(
+      .upload.url(x), options$out.width, options$out.height, .img.cap(options),
+      paste(c(options$out.extra, 'class="plot"'), collapse = ' ')
+    ), d2, '\n', sep = ''
+  )
+}
+
+.img.tag = function(src, width, height, caption, extra) {
+  extra = paste(c(sprintf('width="%s"', width), sprintf('height="%s"', height),
+                  extra), collapse = ' ')
+  paste('<img src="', opts_knit$get('base.url'), src,
+        '" title="', caption, '" alt="', caption, '" ', extra, ' />', sep = '')
+}
 
 .img.cap = function(options) {
   if (is.null(fig.cap <- options$fig.cap)) {

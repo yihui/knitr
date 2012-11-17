@@ -11,9 +11,8 @@ hook_plot_md = function(x, options) {
     is.null(s <- options$out.extra)) {
     return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
   }
-  # additional styles require the HTML syntax
-  add = paste(sprintf('width="%s"', w), sprintf('height="%s"', h), s)
-  sprintf('<img src="%s%s" %s alt="%s" title="%s" /> ', base, .upload.url(x), add, cap, cap)
+  # use HTML syntax <img src=...>
+  .img.tag(.upload.url(x), options$out.width, options$out.height, cap, options$out.extra)
 }
 
 #' @rdname output_hooks
