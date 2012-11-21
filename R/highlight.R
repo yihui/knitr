@@ -11,7 +11,7 @@ hi_latex = function(x, fragment = FALSE) {
   x = gsub('([{}])', '\\\\\\1', x)
   # yes I know this is stupid...
   x = gsub('\\\\textbackslash\\\\\\{\\\\\\}', '\\\\textbackslash{}', x)
-  x = unlist(str_split(x, '\n'))
+  x = split_lines(x)
   i = grepl('^\\s*#', x)  # whole lines of comments
   x[i] = sprintf('\\hlcomment{%s}', x[i])
   # comments: what if # inside quotes?
@@ -33,7 +33,7 @@ hi_html = function(x) {
   x = gsub('&', "&amp;", x)
   x = gsub('<', '&lt;', x)
   x = gsub('>', '&gt;', x)
-  x = unlist(str_split(x, '\n'))
+  x = split_lines(x)
   # character strings
   x = gsub('"([^"]*)"', '<span class="string">"\\1"</span>', x)
   x = gsub("'([^']*)'", "<span class=\"string\">'\\1'</span>", x)
@@ -54,7 +54,7 @@ hilight_source = function(x, format, options) {
   if (!(format %in% c('latex', 'html'))) return(x)
   if (opts_knit$get('use.highlight')) {
     highlight = highlight_fun('highlight')
-    x = unlist(strsplit(x, '\n')) # remove the extra \n in code (#331)
+    x = split_lines(x) # remove the extra \n in code (#331)
     con = textConnection(x)
     on.exit(close(con))
     r = if (format == 'latex') {

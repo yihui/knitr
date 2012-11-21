@@ -88,7 +88,7 @@ set_preamble = function(input) {
   idx = str_locate(txt, hb)  # locate documentclass
   if (any(is.na(idx))) return()
   options(tikzDocumentDeclaration = str_sub(txt, idx[, 1L], idx[, 2L]))
-  preamble = pure_preamble(str_split(str_sub(txt, idx[, 2L] + 1L), '\n')[[1L]])
+  preamble = pure_preamble(split_lines(str_sub(txt, idx[, 2L] + 1L)))
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
 }
 ## filter out code chunks from preamble if they exist (they do in LyX/Sweave)
@@ -571,4 +571,10 @@ escape_html = function(x) {
 read_rforge = function(path, project, extra = '',
                       base = 'http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg') {
   readLines(sprintf('%s/%s?root=%s%s', base, path, project, extra))
+}
+
+# because I think strsplit('', 'foo') should return '' instead of character(0)
+split_lines = function(x) {
+  x[x == ''] = '\n'
+  unlist(strsplit(x, '\n'), use.names = FALSE)
 }

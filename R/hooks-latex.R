@@ -266,9 +266,9 @@ render_listings = function() {
 #' @export
 #' @examples \dontrun{knit_hooks$set(document = hook_movecode)}
 hook_movecode = function(x) {
-  x = unlist(str_split(x, '\n'))
+  x = split_lines(x)
   res = split(x, cumsum(grepl('^\\\\(begin|end)\\{figure\\}', x)))
-  x = unlist(str_split(unlist(lapply(res, function(p) {
+  x = split_lines(unlist(lapply(res, function(p) {
     if (length(p) <= 4 || !grepl('^\\\\begin\\{figure\\}', p[1]) ||
           !any(grepl('\\\\begin\\{(alltt|kframe)\\}', p))) return(p)
     idx = c(1, grep('\\\\includegraphics', p))
@@ -286,7 +286,7 @@ hook_movecode = function(x) {
     idx = unique(idx)
     p = paste(c(p[-idx], p[idx]), collapse = '\n')
     gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
-  })), '\n'))
+  })))
 
   res = split(x, cumsum(grepl('^\\\\(begin|end)\\{table\\}', x)))
   paste(unlist(lapply(res, function(p) {
