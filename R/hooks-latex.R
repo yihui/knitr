@@ -286,7 +286,7 @@ hook_movecode = function(x) {
     idx = unique(idx)
     p = paste(c(p[-idx], p[idx]), collapse = '\n')
     gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
-  })))
+  }), use.names = FALSE))
 
   res = split(x, cumsum(grepl('^\\\\(begin|end)\\{table\\}', x)))
   paste(unlist(lapply(res, function(p) {
@@ -299,5 +299,5 @@ hook_movecode = function(x) {
     idx = sort(idx)
     p = paste(c(p[-idx], p[idx]), collapse = '\n')
     gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
-  })), collapse = '\n')
+  }), use.names = FALSE), collapse = '\n')
 }
