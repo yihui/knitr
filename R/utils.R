@@ -575,6 +575,8 @@ read_rforge = function(path, project, extra = '',
 
 # because I think strsplit('', 'foo') should return '' instead of character(0)
 split_lines = function(x) {
-  x[x == ''] = '\n'
-  unlist(strsplit(x, '\n'), use.names = FALSE)
+  if (length(grep('\n', x)) == 0L) return(x)
+  con = textConnection(x)
+  on.exit(close(con))
+  readLines(con)
 }
