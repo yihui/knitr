@@ -216,10 +216,7 @@ block_cache = function(options, output, objects) {
 # not need to close the device on exit
 chunk_device = function(width, height, record = TRUE) {
   if (!opts_knit$get('global.device')) {
-    dargs = formals(getOption('device'))  # is NULL in RStudio's GD
-    (if (is.null(dargs) || !interactive()) {
-      function(...) pdf(file = NULL, ...)
-    } else dev.new)(width = width, height = height)
+    dev.new(width = width, height = height)
     dev.control(displaylist = if (record) 'enable' else 'inhibit')  # enable recording
     # if returns TRUE, we need to close this device after code is evaluated
     return(TRUE)
