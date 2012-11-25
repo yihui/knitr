@@ -272,6 +272,7 @@ hook_movecode = function(x) {
     if (length(p) <= 4 || !grepl('^\\\\begin\\{figure\\}', p[1]) ||
           !any(grepl('\\\\begin\\{(alltt|kframe)\\}', p))) return(p)
     idx = c(1, grep('\\\\includegraphics', p))
+    if (length(idx) <= 1) return(p) # no graphics
     if (length(i <- grep('\\{\\\\centering \\\\includegraphics', p))) {
       idx = c(idx, i - 1, j2 <- i + 1)
       for (j in j2) {
