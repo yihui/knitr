@@ -22,7 +22,9 @@ hook_movecode(x)
   tables, but in the final output we do not want the code
   to float with the environments, so we use regular
   expressions to find out the floating environments,
-  extract the code chunks and move them out.
+  extract the code chunks and move them out. To disable
+  this behavior, use a comment \code{\% knitr_do_not_move}
+  in the floating environment.
 }
 \note{
   This function is hackish. It assumes you to use the
