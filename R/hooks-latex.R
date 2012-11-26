@@ -257,7 +257,8 @@ render_listings = function() {
 #' floats to generate figures or tables, but in the final output we do not want
 #' the code to float with the environments, so we use regular expressions to
 #' find out the floating environments, extract the code chunks and move them
-#' out.
+#' out. To disable this behavior, use a comment \code{\% knitr_do_not_move} in
+#' the floating environment.
 #' @param x a character string (the content of the whole document output)
 #' @return The post-processed document as a character string.
 #' @note This function is hackish. It assumes you to use the default output
@@ -270,6 +271,7 @@ hook_movecode = function(x) {
   res = split(x, cumsum(grepl('^\\\\(begin|end)\\{figure\\}', x)))
   x = split_lines(unlist(lapply(res, function(p) {
     if (length(p) <= 4 || !grepl('^\\\\begin\\{figure\\}', p[1]) ||
+          length(grep('% knitr_do_not_move', p)) ||
           !any(grepl('\\\\begin\\{(alltt|kframe)\\}', p))) return(p)
     idx = c(1, grep('\\\\includegraphics', p))
     if (length(idx) <= 1) return(p) # no graphics
@@ -292,6 +294,7 @@ hook_movecode = function(x) {
   res = split(x, cumsum(grepl('^\\\\(begin|end)\\{table\\}', x)))
   paste(unlist(lapply(res, function(p) {
     if (length(p) <= 4 || !grepl('^\\\\begin\\{table\\}', p[1]) ||
+          length(grep('% knitr_do_not_move', p)) ||
           !any(grepl('\\\\begin\\{(alltt|kframe)\\}', p))) return(p)
     if (!any(grepl('\\\\label\\{.*\\}', p))) return(p)
     idx = c(1, seq(grep('\\\\caption', p), grep('\\\\label', p)))
