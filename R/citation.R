@@ -61,6 +61,7 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
     }
     bib = lapply(bib, function(b) {
       b['author'] = sub('Duncan Temple Lang', 'Duncan {Temple Lang}', b['author'])
+      if (!('year' %in% names(b))) b['year'] = .this.year
       idx = which(names(b) == '')
       structure(c(b[idx[1L]], b[-idx], b[idx[2L]]), class = 'Bibtex')
     })
@@ -76,16 +77,13 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
   cacheSweave = c(author = '  author = {Roger D. Peng},'),
   cluster = c(author = '  author = {Martin Maechler},'),
   digest = c(author = '  author = {Dirk Eddelbuettel},'),
-  evaluate = c(year = .this.year),
   gWidgets = c(author = '  author = {John Verzani},'),
   maps = c(author = '  author = {Ray Brownrigg},'),
   Rcmdr = c(author = '  author = {John Fox},'),
-  roxygen2 = c(year = .this.year),
   rpart = c(author = '  author = {Terry M Therneau and Beth Atkinson},'),
   sm = c(author = '  author = {Adrian Bowman and Adelchi Azzalini},'),
   survival = c(author = '  author = {Terry Therneau},'),
-  tuneR = c(author = '  author = {Uwe Ligges},'),
-  weaver = c(year = .this.year)
+  tuneR = c(author = '  author = {Uwe Ligges},')
 )
 # no need to write bib for these packages
 .base.pkgs = setdiff(rownames(installed.packages(priority = 'base')), 'base')
