@@ -55,14 +55,15 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
     gsub('', '', entry)
   }, simplify = FALSE)
   if (tweak) {
-    bib = lapply(bib, function(b) {
-      b['author'] = sub('Duncan Temple Lang', 'Duncan {Temple Lang}', b['author'])
-      b
-    })
     for (i in intersect(names(.tweak.bib), x)) {
       message('tweaking ', i)
       bib[[i]] = merge_list(bib[[i]], .tweak.bib[[i]])
     }
+    bib = lapply(bib, function(b) {
+      b['author'] = sub('Duncan Temple Lang', 'Duncan {Temple Lang}', b['author'])
+      idx = which(names(b) == '')
+      structure(c(b[idx[1L]], b[-idx], b[idx[2L]]), class = 'Bibtex')
+    })
   }
   bib = bib[sort(x)]
   if (!is.null(file)) cat(unlist(bib), sep = '\n', file = file)
