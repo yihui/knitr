@@ -55,6 +55,10 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
     gsub('', '', entry)
   }, simplify = FALSE)
   if (tweak) {
+    bib = lapply(bib, function(b) {
+      b['author'] = sub('Duncan Temple Lang', 'Duncan {Temple Lang}', b['author'])
+      b
+    })
     for (i in intersect(names(.tweak.bib), x)) {
       message('tweaking ', i)
       b = bib[[i]]; items = .tweak.bib[[i]]
@@ -78,7 +82,6 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
   gWidgets = c(author = '  author = {John Verzani},'),
   maps = c(author = '  author = {Ray Brownrigg},'),
   Rcmdr = c(author = '  author = {John Fox},'),
-  RGtk2 = c(author = '  author = {Michael Lawrence and Duncan {Temple Lang}},'),
   roxygen2 = c(year = .this.year),
   rpart = c(author = '  author = {Terry M Therneau and Beth Atkinson},'),
   sm = c(author = '  author = {Adrian Bowman and Adelchi Azzalini},'),
