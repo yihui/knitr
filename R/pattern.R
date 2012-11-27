@@ -7,7 +7,7 @@
 #'
 #' str(all_patterns)
 all_patterns = list(
-  `rnw` = list(chunk.begin = '^\\s*<<(.*)>>=', chunk.end = '^\\s*@\\s*%*',
+  `rnw` = list(chunk.begin = '^\\s*<<(.*)>>=', chunk.end = '^\\s*@\\s*(%+.*|)$',
                inline.code = '\\\\Sexpr\\{([^}]*)\\}',
                input.doc = '(^|\n) *\\\\SweaveInput\\{([^}]*)\\}',
                inline.comment = '^\\s*%.*',

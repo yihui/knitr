@@ -74,6 +74,8 @@
 
 - fixed #410: when the inline R code returns `NA_real_`, the scientific notation of numbers will run into errors (thanks, Rafik)
 
+- the syntax pattern for Rnw documents was not quite right: `all_patterns$rnw$chunk.end = '^\\s*@\\s*%*'` actually allows any characters after `@`, but only LaTeX comments and white spaces are allowed; it has been fixed to `^\\s*@\\s*(%+.*|)$` now
+
 ## DOCUMENTATION
 
 - an example of combining R, knitr and D3 to draw a contour plot: http://yihui.name/knitr/demo/javascript/
