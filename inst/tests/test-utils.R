@@ -24,6 +24,7 @@ test_that('scientific notation with format_sci()',{
 })
 
 test_that('fig_path() sanitizes paths', {
+  opts_knit$set(out.format = 'latex')
   expect_identical(fig_path('.png', list(fig.path = 'fig/', label = 'foo')), 'fig/foo.png')
   opts = list(fig.path = 'figure/', label = 'a b')
   expect_warning(fig_path(, opts))
@@ -34,6 +35,7 @@ test_that('fig_path() sanitizes paths', {
   )
   expect_identical(fig_path(, list(fig.path = '../', label = 'c.d')), '../c_d')
   expect_identical(fig_path(, list(fig.path = './../', label = 'c..d')), './../c__d')
+  opts_knit$set(out.format = NULL)
 })
 
 test_that('base64_encode() gets the same result as markdown:::.b64EncodeFile', {
