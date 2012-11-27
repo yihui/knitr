@@ -11,5 +11,6 @@ inst/examples/cache
 knitr-minimal.md
 knitr-spin.md
 png$
+NEWS.md
 ^\.Rproj\.user$
 ^.*\.Rproj$
