@@ -62,9 +62,9 @@ eng_Rcpp = function(options) {
   # engine.opts is a list of arguments to be passed to Rcpp function, e.g.
   # engine.opts=list(plugin='RcppArmadillo')
   if (options$eval) {
-    message('Building shared library for Rcpp code chunk:')
+    message('Building shared library for Rcpp code chunk...')
     do.call(
-      if (grepl('\\[\\[Rcpp::', code)) Rcpp::sourceCpp else Rcpp::cppFunction,
+      Rcpp::sourceCpp,
       c(list(code = code, env = knit_global()), options$engine.opts)
     )
   }
