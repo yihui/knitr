@@ -33,5 +33,21 @@ $(document).ready(function() {
   var w = Math.max($(window).width()/2, 300);
   $('#notebook').width(w - 10);
   $('#nbOut').css('left', w + 10 + 'px');
+  var h = window.location.hash;
+  if (h) {
+    // pass a url after # in the url
+    h = h.replace('#', '');
+    $.get(h, function(data) {
+      var str = data.content;
+      if (data.encoding == 'base64') {
+        str = str.replace(/\n/g, '');
+        str = decodeURIComponent(escape(window.atob( str )));
+      }
+      if (str) editor.setValue(str);
+    })
+    .error(function() {
+      alert('unable to read ' + h);
+    });
+  }
   $('#nbSrc').val(editor.getValue());
 })
