@@ -56,7 +56,7 @@ $(document).ready(function() {
         editor.gotoLine(1);
         setSrc(false);
       } else setSrc(true);
-    }, 'json')
+    }, 'jsonp')
     .error(function() {
       setSrc(true);
     });
