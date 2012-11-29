@@ -51,11 +51,14 @@ $(document).ready(function() {
         str = str.replace(/\n/g, '');
         str = decodeURIComponent(escape(window.atob( str )));
       }
-      if (str) editor.setValue(str);
+      if (str) {
+        editor.setValue(str);
+        editor.gotoLine(1);
+        setSrc(false);
+      } else setSrc(true);
     })
     .error(function() {
-      alert('unable to read ' + h);
+      setSrc(true);
     });
-  }
-  $('#nbSrc').val(editor.getValue());
+  } else setSrc(false);
 })
