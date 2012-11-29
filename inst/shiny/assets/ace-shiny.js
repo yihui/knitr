@@ -46,6 +46,7 @@ $(document).ready(function() {
     h = h.replace('#', '');
     $.get(h, function(data) {
       var str = data.content;
+      if (typeof(str) != 'string') return(setSrc(true));
       if (data.encoding == 'base64') {
         str = str.replace(/\n/g, '');
         str = decodeURIComponent(escape(window.atob( str )));
