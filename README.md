@@ -26,7 +26,7 @@ Or download the [zip ball](https://github.com/yihui/knitr/zipball/master) or [ta
 library(devtools); install_github('knitr', 'yihui')
 ```
 
-Note Windows users have to first install [Rtools](http://www.murdoch-sutherland.com/Rtools/).
+Note Windows users have to first install [Rtools](http://cran.rstudio.com/bin/windows/Rtools/).
 
 ## Motivation
 
