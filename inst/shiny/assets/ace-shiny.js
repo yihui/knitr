@@ -44,8 +44,8 @@ $(document).ready(function() {
   if (h) {
     // pass a url after # in the url
     h = h.replace('#', '');
-    $.get(h, {}, function(data) {
-      var str = data.content;
+    $.get(h, {}, function(res) {
+      var data = res.data, str = data.content;
       if (typeof(str) != 'string') return(setSrc(true));
       if (data.encoding == 'base64') {
         str = str.replace(/\n/g, '');
