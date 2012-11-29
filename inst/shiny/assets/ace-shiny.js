@@ -44,7 +44,7 @@ $(document).ready(function() {
   if (h) {
     // pass a url after # in the url
     h = h.replace('#', '');
-    $.get(h, function(data) {
+    $.get(h, {}, function(data) {
       var str = data.content;
       if (typeof(str) != 'string') return(setSrc(true));
       if (data.encoding == 'base64') {
@@ -56,7 +56,7 @@ $(document).ready(function() {
         editor.gotoLine(1);
         setSrc(false);
       } else setSrc(true);
-    })
+    }, 'json')
     .error(function() {
       setSrc(true);
     });
