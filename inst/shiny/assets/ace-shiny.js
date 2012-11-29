@@ -30,10 +30,17 @@ editor.commands.addCommand({
 });
 
 $(document).ready(function() {
+  var h = window.location.hash;
+  function setSrc(msg) {
+    if (msg) {
+      alert('unable to read URL ' + h + '\n\nusing default R Markdown example');
+    }
+    $('#nbSrc').val(editor.getValue());
+    $('#proxy button').trigger('click');
+  }
   var w = Math.max($(window).width()/2, 300);
   $('#notebook').width(w - 10);
   $('#nbOut').css('left', w + 10 + 'px');
-  var h = window.location.hash;
   if (h) {
     // pass a url after # in the url
     h = h.replace('#', '');
