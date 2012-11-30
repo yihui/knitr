@@ -52,7 +52,7 @@ call_block = function(block) {
   # Check cache
   if (params$cache) {
     content = list(params[setdiff(names(params), 'include')], getOption('width'))
-    hash = str_c(valid_path(params$cache.path, params$label), '_', digest(content))
+    hash = str_c(valid_path(params$cache.path, label), '_', digest(content))
     params$hash = hash
     if (cache$exists(hash)) {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
