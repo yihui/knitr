@@ -61,7 +61,7 @@ This feature enables us to separate R code and R output in the output document. 
 
 Both above approaches only allow reusing complete chunks, i.e. you cannot reuse one chunk inside another one as a _part_ of it. To solve this problem, we introduced `run_chunk('foo-label')`, which acts as if the code were copied and pasted here from another chunk with label `foo-label`. The code will be evaluated in the environment in which `run_chunk()` is put (for technical details, see `?parent.frame`).
 
-Here is an exampel of three chunks labelled `a`, `b` and `c`:
+Here is an example of three chunks labelled `a`, `b` and `c`:
 
 {% highlight r %}
 <<a>>=
