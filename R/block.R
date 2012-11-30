@@ -97,7 +97,9 @@ block_exec = function(params) {
   code = options$code
   echo = options$echo  # tidy code if echo
   if (!isFALSE(echo) && options$tidy) {
-    res = try(tidy.source(text = code, output = FALSE), silent = TRUE)
+    res = try(do.call(
+      tidy.source, c(list(text = code, output = FALSE), options$tidy.opts)
+    ), silent = TRUE)
     if (!inherits(res, 'try-error')) {
       code = res$text.tidy
       enc = Encoding(code)
