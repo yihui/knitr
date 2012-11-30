@@ -65,6 +65,7 @@ opts_chunk_attr = (function() {
   opts$fig.align = list('default', 'left', 'right', 'center')
   opts$dev = as.list(names(auto_exts))
   opts$fig.ext = as.list(unique(auto_exts))
+  opts$tidy.opts = 'list'
   opts
 })()
 
