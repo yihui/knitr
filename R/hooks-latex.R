@@ -62,12 +62,6 @@ hook_plot_tex = function(x, options) {
   ## figure environment: caption, short caption, label
   cap = options$fig.cap; scap = options$fig.scap; fig1 = fig2 = ''
   mcap = fig.num > 1L && options$fig.show == 'asis'
-  if (mcap) {
-    cap = rep(cap, length.out = fig.num)[fig.cur] # multiple captions
-    scap = rep(scap, length.out = fig.num)[fig.cur]
-  } else {
-    cap = cap[1L]; scap = scap[1L]
-  }
   if(length(cap) && !is.na(cap)) {
     if (plot1) {
       fig1 = sprintf('\\begin{%s}[%s]\n', options$fig.env, options$fig.pos)

@@ -32,9 +32,7 @@ hook_plot_html = function(x, options) {
 .img.cap = function(options) {
   if (is.null(fig.cap <- options$fig.cap)) {
     sprintf('plot of chunk %s', options$label)
-  } else {
-    if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
-  }
+  } else fig.cap
 }
 
 ## a wrapper to upload an image and return the URL
