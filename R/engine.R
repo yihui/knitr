@@ -98,7 +98,7 @@ eng_tikz = function(options) {
     conv = system(sprintf('convert %s.pdf %s.%s', fig, fig, ext))
     if (conv != 0) stop('problems with `convert`; probably not installed?')
   }
-  options$fig.num = 1L; options$fig.cur = 0L
+  options$fig.num = 1L; options$fig.cur = 1L
   extra = knit_hooks$get('plot')(c(fig, ext), options)
   options$engine = 'tex'  # for output hooks to use the correct language class
   engine_output(options, options$code, '', extra)
@@ -115,7 +115,7 @@ eng_dot = function(options){
   dir.create(dirname(fig), showWarnings = FALSE)
   extra = if (options$eval) {
     system(cmd)
-    options$fig.num = 1L; options$fig.cur = 0L
+    options$fig.num = 1L; options$fig.cur = 1L
     knit_hooks$get('plot')(c(fig, ext), options)
   }
   engine_output(options, code, '', extra)

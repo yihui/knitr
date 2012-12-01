@@ -4,9 +4,9 @@ hook_plot_html = function(x, options) {
   if(options$fig.show == 'animate') {
     return(opts_knit$get('animation.fun')(x, options))
   }
-  fig.cur = options$fig.cur; fig.num = options$fig.num
+  fig.cur = options$fig.cur %n% 1L; fig.num = options$fig.num %n% 1L
   ai = options$fig.show == 'asis'
-  plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == 0L || fig.cur == fig.num
+  plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == fig.num
   d1 = if (plot1) str_c(if (out_format('html')) '</div>',
                         sprintf('<div class="rimage %s">', options$fig.align))
   d2 = if (plot2) str_c('</div>', if (out_format('html')) '<div class="rcode">')
@@ -65,8 +65,8 @@ hook_plot_html = function(x, options) {
 #' @export
 hook_ffmpeg_html = function(x, options) {
   # pull out all the relevant plot options
-  fig.num = options$fig.num
-  fig.cur = options$fig.cur %n% 0L
+  fig.num = options$fig.num %n% 1L
+  fig.cur = options$fig.cur %n% 1L
 
   # Don't print out intermediate plots if we're animating
   if(fig.cur < fig.num) return('')
@@ -98,8 +98,8 @@ opts_knit$set(animation.fun = hook_ffmpeg_html)
 #' @export
 hook_scianimator = function(x, options) {
   # pull out all the relevant plot options
-  fig.num = options$fig.num
-  fig.cur = options$fig.cur %n% 0L
+  fig.num = options$fig.num %n% 1L
+  fig.cur = options$fig.cur %n% 1L
 
   # Don't print out intermediate plots if we're animating
   if(fig.cur < fig.num) return('')
@@ -142,8 +142,8 @@ hook_scianimator = function(x, options) {
 hook_r2swf = function(x, options) {
   library(R2SWF)
   # pull out all the relevant plot options
-  fig.num = options$fig.num
-  fig.cur = options$fig.cur %n% 0L
+  fig.num = options$fig.num %n% 1L
+  fig.cur = options$fig.cur %n% 1L
 
   # Don't print out intermediate plots if we're animating
   if(fig.cur < fig.num) return('')
