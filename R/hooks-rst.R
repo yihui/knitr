@@ -3,7 +3,7 @@
 #' @rdname hook_plot
 #' @export
 hook_plot_rst = function(x, options) {
-  if (options$fig.show == "animate") return(opts_knit$get('animation.fun')(x, options))
+  if (options$fig.show == 'animate') return(hook_plot_html(x, options))
 
   base = opts_knit$get("base.url") %n% ""
   cap = .img.cap(options)

@@ -1,10 +1,14 @@
 #' @rdname hook_plot
 #' @export
 hook_plot_html = function(x, options) {
+  # pull out all the relevant plot options
+  fig.num = options$fig.num = options$fig.num %n% 1L
+  fig.cur = options$fig.cur %n% 1L
+
   if(options$fig.show == 'animate') {
-    return(opts_knit$get('animation.fun')(x, options))
+    # Don't print out intermediate plots if we're animating
+    return(if(fig.cur < fig.num) '' else opts_knit$get('animation.fun')(x, options))
   }
-  fig.cur = options$fig.cur %n% 1L; fig.num = options$fig.num %n% 1L
   ai = options$fig.show == 'asis'
   plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == fig.num
   d1 = if (plot1) str_c(if (out_format('html')) '</div>',
@@ -64,13 +68,7 @@ hook_plot_html = function(x, options) {
 #' @rdname hook_animation
 #' @export
 hook_ffmpeg_html = function(x, options) {
-  # pull out all the relevant plot options
-  fig.num = options$fig.num %n% 1L
-  fig.cur = options$fig.cur %n% 1L
-
-  # Don't print out intermediate plots if we're animating
-  if(fig.cur < fig.num) return('')
-
+  fig.num = options$fig.num
   # set up the ffmpeg run
   ffmpeg.opts = options$aniopts
   fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
@@ -97,13 +95,7 @@ opts_knit$set(animation.fun = hook_ffmpeg_html)
 #' @rdname hook_animation
 #' @export
 hook_scianimator = function(x, options) {
-  # pull out all the relevant plot options
-  fig.num = options$fig.num %n% 1L
-  fig.cur = options$fig.cur %n% 1L
-
-  # Don't print out intermediate plots if we're animating
-  if(fig.cur < fig.num) return('')
-
+  fig.num = options$fig.num
   base = opts_knit$get('base.url') %n% ''
 
   # write the div and js code here
@@ -141,13 +133,8 @@ hook_scianimator = function(x, options) {
 #' @export
 hook_r2swf = function(x, options) {
   library(R2SWF)
-  # pull out all the relevant plot options
-  fig.num = options$fig.num %n% 1L
-  fig.cur = options$fig.cur %n% 1L
 
-  # Don't print out intermediate plots if we're animating
-  if(fig.cur < fig.num) return('')
-
+  fig.num = options$fig.num
   # set up the R2SWF run
   fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
   swf.name = fig_path('.swf', options)
