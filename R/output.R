@@ -465,11 +465,9 @@ wrap.recordedplot = function(x, options) {
     odir = setwd(base.dir); on.exit(setwd(odir)) # switch to abs dir, then restore
   }
   ## figure number sequence for multiple plots
-  if (options$fig.num <= 1) fig.cur = 0L else {
-    fig.cur = plot_counter()
-  }
+  fig.cur = plot_counter()
   options$fig.cur = fig.cur # put fig num in options
-  name = fig_path(if(fig.cur == 0L) '' else fig.cur, options)
+  name = fig_path(if(options$fig.num <= 1) '' else fig.cur, options)
   if (!file.exists(dirname(name)))
     dir.create(dirname(name), recursive = TRUE) # automatically creates dir for plots
   ## vectorize over dev, ext and dpi: save multiple versions of the plot
