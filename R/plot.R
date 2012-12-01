@@ -185,3 +185,14 @@ is_par_change = function(p1, p2) {
   if (n2 <= n1) return(TRUE)
   all(prim2[(n1 + 1):n2] %in% c('layout', 'par', '.External2'))  # TODO: is this list exhaustive?
 }
+
+# recycle some plot options such as fig.cap, out.width/height, etc when there
+# are multiple plots per chunk
+recycle_plot_opts = function(options) {
+  n = options$fig.num
+  for (i in c('fig.cap', 'fig.scap', 'fig.env', 'fig.pos',
+              'out.width', 'out.height', 'out.extra')) {
+    options[[i]] = rep(options[[i]], length.out = n)
+  }
+  options
+}
