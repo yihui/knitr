@@ -51,13 +51,12 @@ hook_plot_tex = function(x, options) {
   animate = options$fig.show == 'animate'
   if (!tikz && animate && fig.cur < fig.num) return('')
 
-  align1 = align2 = ''
   ## multiple plots: begin at 1, end at fig.num
   ai = options$fig.show != 'hold'
   plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == fig.num
-  if (plot1) align1 = switch(a, left = '\n\n', center = '\n\n{\\centering ',
+  align1 = if (plot1) switch(a, left = '\n\n', center = '\n\n{\\centering ',
                              right = '\n\n\\hfill{}', '\n')
-  if (plot2) align2 = switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n',
+  align2 = if (plot2) switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n',
                              right = '\n\n', '')
   ## figure environment: caption, short caption, label
   cap = options$fig.cap; scap = options$fig.scap; fig1 = fig2 = ''
