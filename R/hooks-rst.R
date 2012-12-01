@@ -9,10 +9,13 @@ hook_plot_rst = function(x, options) {
   # TODO: add all options for figure
   # See http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
   # http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure
-  make_directive('figure', str_c(opts_knit$get('base.url'), .upload.url(x)),
-                 c(align = if (options$fig.align == 'default') NULL else options$fig.align,
-                   alt = cap, width = options$out.width, height = options$out.height),
-                 cap)
+  make_directive(
+    'figure',
+    str_c(opts_knit$get('base.url'), .upload.url(x)),
+    c(align = if (options$fig.align == 'default') NULL else options$fig.align,
+      alt = cap, width = options$out.width, height = options$out.height),
+    cap
+  )
 }
 
 #' @rdname output_hooks
