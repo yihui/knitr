@@ -186,6 +186,7 @@ block_exec = function(params) {
     if (length(k2)) res = res[-k2] # remove lines that have been merged back
   }
 
+  on.exit(plot_counter(reset = TRUE), add = TRUE)  # restore plot number
   output = str_c(unlist(wrap(res, options)), collapse = '') # wrap all results together
 
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
@@ -193,7 +194,6 @@ block_exec = function(params) {
 
   output = str_c(c(res.before, output, res.after), collapse = '')  # insert hook results
   output = if (length(output) == 0L) '' else knit_hooks$get('chunk')(output, options)
-  plot_counter(reset = TRUE)  # restore plot number
 
   if (options$cache) {
     obj.after = ls(globalenv(), all.names = TRUE)  # figure out new global objs
