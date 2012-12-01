@@ -192,9 +192,7 @@ render_latex = function() {
   knit_hooks$restore()
   knit_hooks$set(
     source = function(x, options) {
-      if (options$engine != 'R' || !options$highlight)
-        return(.verb.hook(x, options))
-      x
+      if (options$engine == 'R' && options$highlight) x else .verb.hook(x)
     },
     output = function(x, options) {
       if (output_asis(x, options)) {
