@@ -475,5 +475,5 @@ wrap.recordedplot = function(x, options) {
                     dev = options$dev, ext = options$fig.ext, dpi = options$dpi,
                     MoreArgs = list(plot = x, name = name, options = options),
                     SIMPLIFY = FALSE)[[1]]
-  knit_hooks$get('plot')(name.ext, options)
+  knit_hooks$get('plot')(name.ext, reduce_plot_opts(options))
 }

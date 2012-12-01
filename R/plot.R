@@ -196,3 +196,14 @@ recycle_plot_opts = function(options) {
   }
   options
 }
+
+# when passing options to plot hooks, reduce the recycled options to scalars
+reduce_plot_opts = function(options) {
+  if (options$fig.show == 'animate' || options$fig.num <= 1L) return(options)
+  fig.cur = options$fig.cur
+  for (i in c('fig.cap', 'fig.scap', 'fig.env', 'fig.pos',
+              'out.width', 'out.height', 'out.extra')) {
+    options[[i]] = options[[i]][fig.cur]
+  }
+  options
+}
