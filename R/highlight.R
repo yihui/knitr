@@ -65,9 +65,12 @@ hilight_source = function(x, format, options) {
     options(encoding = 'native.enc')  # make sure parser() writes with correct enc
     on.exit(options(encoding = enc), add = TRUE)
     out = capture.output(highlight(con, renderer = r, showPrompts = options$prompt, size = options$size))
-    str_c(out, collapse = '\n')
+    if (format == 'html') out else {
+      # gsub() makes sure " will not produce an umlaut
+      c('\\begin{flushleft}', gsub('"', '"{}', out), '\\end{flushleft}')
+    }
   } else {
     if (options$prompt) x = line_prompt(x)
-    do.call(paste('hi', format, sep = '_'), list(x = x))
+    if (format == 'html') hi_html(x) else c('\\begin{alltt}', hi_latex(x), '\\end{alltt}')
   }
 }
