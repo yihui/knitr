@@ -6,7 +6,7 @@ hi.keywords =  paste('(\\W)(', paste(c(
 ), collapse = '|'), ')(\\W)', sep = '')
 
 #  at the moment, only highlight function names, strings and comments
-hi_latex = function(x, fragment = FALSE) {
+hi_latex = function(x) {
   x = gsub('\\\\', '\\\\textbackslash{}', x)
   x = gsub('([{}])', '\\\\\\1', x)
   # yes I know this is stupid...
@@ -25,8 +25,6 @@ hi_latex = function(x, fragment = FALSE) {
   x[i] = gsub("'([^']*)'", "\\\\hlstring{'\\1'}", x[i])
   # do not highlight keywords at the moment
   # x = gsub(hi.keywords, '\\1\\\\hlkeyword{\\2}\\3', x)
-  x = paste(x, collapse = '\n')
-  if (!fragment) x = paste('\\begin{alltt}', x, '\\end{alltt}', sep = '\n')
   x
 }
 hi_html = function(x) {
@@ -41,8 +39,7 @@ hi_html = function(x) {
   x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '<span class="functioncall">\\1</span>\\2(', x)
   if (any(idx <- grepl('#', x) & !grepl('"', x)))
     x[idx] = gsub('(#.*)', '<span class="comment">\\1</span>', x[idx])
-  x = gsub(hi.keywords, '\\1<span class="keyword">\\2</span>\\3', x)
-  paste(x, collapse = '\n')
+  gsub(hi.keywords, '\\1<span class="keyword">\\2</span>\\3', x)
 }
 
 # may require the highlight package
