@@ -268,6 +268,8 @@ fix_options = function(options) {
     warning("option 'prefix.cache' deprecated; use cache.path instead")
     options$cache.path = prefix
   }
+  # if you want to use subfloats, fig.show must be 'hold'
+  if (length(options$fig.subcap)) options$fig.show = 'hold'
 
   ## deal with aliases: a1 is real option; a0 is alias
   if (length(a1 <- opts_knit$get('aliases')) && length(a0 <- names(a1))) {

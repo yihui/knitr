@@ -66,6 +66,7 @@ opts_chunk_attr = (function() {
   opts$dev = as.list(names(auto_exts))
   opts$fig.ext = as.list(unique(auto_exts))
   opts$tidy.opts = 'list'
+  opts$fig.subcap = 'character'
   opts
 })()
 

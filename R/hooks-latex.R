@@ -51,26 +51,33 @@ hook_plot_tex = function(x, options) {
   animate = options$fig.show == 'animate'
   if (!tikz && animate && fig.cur < fig.num) return('')
 
+  usesub = length(subcap <- options$fig.subcap) && fig.num > 1
   ## multiple plots: begin at 1, end at fig.num
   ai = options$fig.show != 'hold'
   plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == fig.num
-  align1 = if (plot1) switch(a, left = '\n\n', center = '\n\n{\\centering ',
-                             right = '\n\n\\hfill{}', '\n')
-  align2 = if (plot2) switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n',
-                             right = '\n\n', '')
+  align1 = if (plot1 || usesub)
+    switch(a, left = '\n\n', center = '\n\n{\\centering ', right = '\n\n\\hfill{}', '\n')
+  align2 = if (plot2 || usesub)
+    switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n', right = '\n\n', '')
+
   ## figure environment: caption, short caption, label
   cap = options$fig.cap; scap = options$fig.scap; fig1 = fig2 = ''
-  mcap = fig.num > 1L && options$fig.show == 'asis'
+  mcap = fig.num > 1L && options$fig.show == 'asis' && !length(subcap)
+  # use subfloats
+  sub1 = sub2 = ''
   if(length(cap) && !is.na(cap)) {
+    lab = str_c(options$fig.lp, options$label)
     if (plot1) {
       fig1 = sprintf('\\begin{%s}[%s]\n', options$fig.env, options$fig.pos)
     }
+    if (usesub) sub1 = sprintf('\\subfloat[%s\\label{%s}]{', subcap, str_c(lab, fig.cur))
     if (plot2) {
-      lab = str_c(options$fig.lp, options$label, ifelse(mcap, fig.cur, ''))
       if (is.null(scap)) scap = str_split(cap, '\\.|;|:')[[1L]][1L]
       scap = if(is.na(scap)) '' else str_c('[', scap, ']')
-      fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{%s}\n', scap, cap, lab, options$fig.env)
+      fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{%s}\n', scap, cap,
+                     str_c(lab, ifelse(mcap, fig.cur, '')), options$fig.env)
     }
+    if (usesub) sub2 = '}'
   }
 
   # maxwidth does not work with animations
@@ -79,7 +86,7 @@ hook_plot_tex = function(x, options) {
                  sprintf('height=%s', options$out.height),
                  options$out.extra), collapse = ',')
 
-  paste(fig1, align1, resize1,
+  paste(fig1, sub1, align1, resize1,
 
         if (tikz) {
           sprintf('\\input{%s.tikz}', x[1])
@@ -96,7 +103,7 @@ hook_plot_tex = function(x, options) {
           sprintf('\\includegraphics%s{%s} ', size, x[1])
         },
 
-        resize2, align2, fig2, sep = '')
+        resize2, align2, sub2, fig2, sep = '')
 }
 
 .chunk.hook.tex = function(x, options) {
