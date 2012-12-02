@@ -188,12 +188,11 @@ is_par_change = function(p1, p2) {
 
 # recycle some plot options such as fig.cap, out.width/height, etc when there
 # are multiple plots per chunk
+.recyle.opts = c('fig.cap', 'fig.scap', 'fig.env', 'fig.pos', 'fig.subcap',
+                 'out.width', 'out.height', 'out.extra')
 recycle_plot_opts = function(options) {
   n = options$fig.num
-  for (i in c('fig.cap', 'fig.scap', 'fig.env', 'fig.pos',
-              'out.width', 'out.height', 'out.extra')) {
-    options[[i]] = rep(options[[i]], length.out = n)
-  }
+  for (i in .recyle.opts) options[[i]] = rep(options[[i]], length.out = n)
   options
 }
 
@@ -201,9 +200,6 @@ recycle_plot_opts = function(options) {
 reduce_plot_opts = function(options) {
   if (options$fig.show == 'animate' || options$fig.num <= 1L) return(options)
   fig.cur = options$fig.cur
-  for (i in c('fig.cap', 'fig.scap', 'fig.env', 'fig.pos',
-              'out.width', 'out.height', 'out.extra')) {
-    options[[i]] = options[[i]][fig.cur]
-  }
+  for (i in .recyle.opts) options[[i]] = options[[i]][fig.cur]
   options
 }
