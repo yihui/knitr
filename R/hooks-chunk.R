@@ -4,7 +4,9 @@ run_hooks = function(before, options, envir) {
   hooks.n = knit_hooks$get()
   hooks.a = hooks.n[setdiff(names(hooks.n), names(.default.hooks))] # a list of hooks to run
   out = NULL
-  for (i in names(hooks.a)) {
+  nms = intersect(names(options), names(hooks.a))
+  if (!before) nms = rev(nms)
+  for (i in nms) {
     if (!is.null(options[[i]])) {
       ## run only when option is not NULL
       res = hooks.a[[i]](before = before, options = options, envir = envir)
