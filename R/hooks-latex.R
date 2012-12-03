@@ -111,10 +111,7 @@ hook_plot_tex = function(x, options) {
     str_c(color_def(options$background), ifelse(is_tikz_dev(options), '', '\\color{fgcolor}'))
   k1 = str_c(col, '\\begin{kframe}\n')
   k2 = '\\end{kframe}'
-  x = str_c(k1, x, k2)
-  ## rm empty kframe and verbatim environments
-  x = gsub('\\\\begin\\{(kframe)\\}\\s*\\\\end\\{\\1\\}', '', x)
-  x = gsub('\\\\end\\{(verbatim|alltt)\\}\\s*\\\\begin\\{\\1\\}[\n]?', '', x)
+  x = .rm.empty.envir(str_c(k1, x, k2))
   size = if (options$size == 'normalsize') '' else str_c('\\', options$size)
   if (!ai) x = str_c('\\begin{knitrout}', size, '\n', x, '\n\\end{knitrout}')
   if (options$split) {
@@ -124,6 +121,12 @@ hook_plot_tex = function(x, options) {
     cat(x, file = name)
     sprintf('\\input{%s}', name)
   } else x
+}
+
+## rm empty kframe and verbatim environments
+.rm.empty.envir = function(x) {
+  x = gsub('\\\\begin\\{(kframe)\\}\\s*\\\\end\\{\\1\\}', '', x)
+  gsub('\\\\end\\{(verbatim|alltt)\\}\\s*\\\\begin\\{\\1\\}[\n]?', '', x)
 }
 
 ## inline hook for tex
@@ -287,7 +290,7 @@ hook_movecode = function(x) {
   }), use.names = FALSE))
 
   res = split(x, cumsum(grepl('^\\\\(begin|end)\\{table\\}', x)))
-  paste(unlist(lapply(res, function(p) {
+  res = paste(unlist(lapply(res, function(p) {
     if (length(p) <= 4 || !grepl('^\\\\begin\\{table\\}', p[1]) ||
           length(grep('% knitr_do_not_move', p)) ||
           !any(grepl('\\\\begin\\{(alltt|kframe)\\}', p))) return(p)
@@ -299,4 +302,5 @@ hook_movecode = function(x) {
     p = paste(c(p[-idx], p[idx]), collapse = '\n')
     gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
   }), use.names = FALSE), collapse = '\n')
+  .rm.empty.envir(res)
 }
