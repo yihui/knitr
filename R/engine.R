@@ -34,7 +34,10 @@ engine_output = function(options, code, out, extra = NULL) {
   out = str_replace(out, '([^\n]+)$', '\\1\n')
   txt = paste(c(
     if (options$echo) knit_hooks$get('source')(code, options),
-    if (options$results != 'hide' && !is_blank(out)) knit_hooks$get('output')(out, options),
+    if (options$results != 'hide' && !is_blank(out)) {
+      if (!output_asis(out, options)) out = comment_out(out, options$comment)
+      knit_hooks$get('output')(out, options)
+    },
     extra
   ), collapse = '\n')
   if (options$include) knit_hooks$get('chunk')(txt, options) else ''
