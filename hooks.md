@@ -44,13 +44,13 @@ In **knitr**, hooks can also be used to insert texts into the output. To do this
 
 {% highlight r %}
 knit_hooks$set(rgl = function(before, options, envir) {
-    if (!before) {
-        ## after a chunk has been evaluated
-	if (rgl.cur() == 0) return()  # no active device
-        name = paste(options$fig.path, options$label, sep = '')
-	rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png')
-	return(paste('\\includegraphics{', name, '}\n', sep = ''))
-    }
+  if (!before) {
+    ## after a chunk has been evaluated
+    if (rgl.cur() == 0) return()  # no active device
+    name = paste(options$fig.path, options$label, sep = '')
+    rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png')
+    return(paste('\\includegraphics{', name, '}\n', sep = ''))
+  }
 })
 {% endhighlight %}
 
