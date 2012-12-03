@@ -80,6 +80,7 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
   gWidgets = c(author = '  author = {John Verzani},'),
   maps = c(author = '  author = {Ray Brownrigg},'),
   Rcmdr = c(author = '  author = {John Fox},'),
+  Rcpp = c(author = '  author = {Dirk Eddelbuettel and Romain Francois},'),
   rpart = c(author = '  author = {Terry M Therneau and Beth Atkinson},'),
   sm = c(author = '  author = {Adrian Bowman and Adelchi Azzalini},'),
   survival = c(author = '  author = {Terry Therneau},'),
