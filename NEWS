@@ -111,6 +111,10 @@ NEW FEATURES
   - all language engines also respect the `comment` option when writing output
   just like R code chunks (by default the output is commented out by `##`)
 
+  - added a new function `set_alias()` as a wrapper to `opts_knit$set(aliases
+  = ...)`, e.g. `set_alias(w = 'fig.width')` sets `w` as an alias for the
+  chunk option `fig.width`
+
 MAJOR CHANGES
 
   - global options are strongly recommended to be set via real R code
