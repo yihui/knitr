@@ -256,7 +256,9 @@ inline_exec = function(block) {
   loc = block$location
   for (i in 1:n) {
     res = if (opts_chunk$get('eval')) {
-      try(eval(parse(text = code[i]), envir = knit_global()))
+      (if (opts_knit$get('stop_on_error') == 2L) identity else try)(
+        eval(parse(text = code[i]), envir = knit_global())
+      )
     } else '??'
     d = nchar(input)
     # replace with evaluated results
