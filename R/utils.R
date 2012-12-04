@@ -363,6 +363,7 @@ fig_path = function(suffix = '', options = opts_current$get()) {
 #' In some special cases, we need access to the environment of the current
 #' chunk, e.g., to make sure the code is executed in the correct environment.
 #' @references \url{http://yihui.name/knitr/demo/cache/}
+#' @keywords internal
 #' @export
 knit_env = function() {
   .knitEnv$knit_env

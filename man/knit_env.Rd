@@ -16,3 +16,4 @@ knit_env()
 \references{
   \url{http://yihui.name/knitr/demo/cache/}
 }
+\keyword{internal}
