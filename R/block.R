@@ -243,7 +243,7 @@ call_inline = function(block) {
   if (length(options)) opts_chunk$set(options)
   if (opts_knit$get('progress')) print(block)
 
-  inline_exec(block)
+  in_dir(opts_knit$get('root.dir') %n% input_dir(), inline_exec(block))
 }
 
 inline_exec = function(block) {
@@ -252,7 +252,6 @@ inline_exec = function(block) {
   code = block$code; input = block$input
   if ((n <- length(code)) == 0) return(input) # untouched if no code is found
 
-  owd = setwd(input_dir()); on.exit(setwd(owd))
   loc = block$location
   for (i in 1:n) {
     res = if (opts_chunk$get('eval')) {
