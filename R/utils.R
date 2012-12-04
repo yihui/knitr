@@ -274,7 +274,8 @@ fix_options = function(options) {
   ## deal with aliases: a1 is real option; a0 is alias
   if (length(a1 <- opts_knit$get('aliases')) && length(a0 <- names(a1))) {
     for (i in seq_along(a1)) {
-      options[[a1[i]]] = options[[a0[i]]]
+      # use alias only if the name exists in options
+      if (a0[i] %in% names(options)) options[[a1[i]]] = options[[a0[i]]]
     }
   }
 
