@@ -3,7 +3,8 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame(), ...)
+knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame(), encoding = "unknown", 
+    ...)
 
 purl(..., documentation = 1L)
 }
@@ -23,6 +24,9 @@ purl(..., documentation = 1L)
   \item{envir}{the environment in which the code chunks are
   to be evaluated (can use \code{\link{new.env}()} to
   guarantee an empty new environment)}
+
+  \item{encoding}{the encoding of the input file; see
+  \code{\link{readLines}}}
 
   \item{documentation}{an integer specifying the level of
   documentation to go the tangled script: \code{0} means
