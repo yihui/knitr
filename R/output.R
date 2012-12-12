@@ -55,6 +55,7 @@
 #'   file
 #' @param envir the environment in which the code chunks are to be evaluated
 #'   (can use \code{\link{new.env}()} to guarantee an empty new environment)
+#' @param encoding the encoding of the input file; see \code{\link{readLines}}
 #' @return The compiled document is written into the output file, and the path
 #'   of the output file is returned, but if the \code{output} path is
 #'   \code{NULL}, the output is returned as a character vector.
@@ -95,7 +96,7 @@
 #' purl(f, documentation = 0)  # extract R code only
 #' purl(f, documentation = 2)  # also include documentation
 knit = function(input, output = NULL, tangle = FALSE, text = NULL,
-                envir = parent.frame(), ...) {
+                envir = parent.frame(), encoding = 'unknown', ...) {
 
   in.file = !missing(input) && is.character(input)  # is a file input
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
@@ -143,7 +144,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     knit_concord$set(outfile = output)
   }
 
-  text = if (is.null(text)) readLines(input, warn = FALSE) else {
+  text = if (is.null(text)) readLines(input, warn = FALSE, encoding = encoding) else {
     split_lines(text) # make sure each element is one line
   }
   if (!length(text)) return() # a trivial case: simply and exit

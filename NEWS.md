@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- `knit()` gained a new argument `encoding` to specify the encoding of the input file
+
 - inline R code also respects the option `opts_knti$get('stop_on_error')` now, e.g. if we set this option to `2L`, R will completely stop when error occurs in inline R code
 
 # CHANGES IN knitr VERSION 0.9
