@@ -7,15 +7,13 @@ The FAQ's are compiled from the [issues](https://github.com/yihui/knitr/issues) 
 1. What is the best place to ask questions when the [package website](http://yihui.name/knitr) is not helpful?
   - Depending what you want to ask, you may use these tools (I keep track of the first three more frequently):
   - [issues page](https://github.com/yihui/knitr/issues): bug reports and feature requests
-  - [knitr mailing list](https://groups.google.com/group/knitr) or R-help list: general questions and feedback via email in public; you can also email me in private (see `packageDescription('knitr', fields = 'Maintainer')`)
+  - [knitr mailing list](https://groups.google.com/group/knitr) or R-help list: general questions and feedback via email in public; you can also email me in private but I do not prefer this way (see `packageDescription('knitr', fields = 'Maintainer')`)
   - [StackOverflow](http://stackoverflow.com/questions/tagged/knitr): general questions (more public than emails)
   - Twitter ([`@xieyihui`](http://twitter.com/xieyihui)) or Google+ ([`+Yihui Xie`](https://plus.google.com/u/0/109653178371807724268/posts))
-1. Oh, the tons of arguments like `Sweave(..., prefix.string=abc, keep.source=FALSE, foo=bar)` are really flexible; why `knit()` only has so few arguments?
-  - Because I believe putting these arguments in `knit()` breaks the principle of reproducibility, and so does using environmental variables (see [#19](https://github.com/yihui/knitr/issues/19) for details).
-1. I love RStudio and Sweave is sweet there; is **knitr** going to work with RStudio?
-  - I love RStudio too, and yes, **knitr** is supported in RStudio thanks to RStudio developers since the [version 0.96](http://www.rstudio.org/download/). By the way, I also recommend LyX if you want to use Sweave or **knitr**.
-1. You mentioned LyX so many times, so what the heck is LyX?
-  - It is an intelligent wrapper for LaTeX; see http://www.lyx.org for details. I would like to define it as a software package that can both increase the productivity of an _experienced_ LaTeX user by 300%, and decrease it by 500% for a LaTeX novice. Don't use it simply because its GUI is so tempting; it is not MS Word. I have added support for **knitr** in LyX; see [the lyx demo page](http://yihui.name/knitr/demo/lyx/).
+1. How should I get started?
+  - Watch the [5-min video](http://www.screenr.com/qcv8) on the [homepage](http://yihui.name/knitr).
+1. What is the best editor for writing **knitr** source documents?
+  - For beginners, perhaps [RStudio](http://www.rstudio.com/ide/); **knitr** is also supported in [LyX](http://yihui.name/knitr/demo/lyx/), Emacs/ESS, WinEdt, Tinn-R and a variety of [editors](http://yihui.name/knitr/demo/editors/).
 1. Where are those prompt characters `>` and `+`? I feel uncomfortable reading R output without them.
   - They are removed by default, because I believe they make no sense. This is the reason why I dislike books on R which used `>` and `+`; they twist my mind and make my eyes bleed when I read the R code in the books. For those who really want to read R code like `> 1+1` instead of `1 + 1`, you have the [chunk option](http://yihui.name/knitr/options) `prompt`.
 1. What is the working directory? Can I change my working directory in my code chunks?
