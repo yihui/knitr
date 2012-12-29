@@ -202,9 +202,9 @@ render_latex = function() {
         str_c('\\end{kframe}', x, '\\begin{kframe}')
       } else .verb.hook(x)
     },
-    warning = .color.block('\\textcolor{warningcolor}{', '}'),
-    message = .color.block('\\itshape\\textcolor{messagecolor}{', '}'),
-    error = .color.block('\\bfseries\\textcolor{errorcolor}{', '}'),
+    warning = .color.block('\\color{warningcolor}{', '}'),
+    message = .color.block('\\itshape\\color{messagecolor}{', '}'),
+    error = .color.block('\\bfseries\\color{errorcolor}{', '}'),
     inline = .inline.hook.tex, chunk = .chunk.hook.tex,
     plot = function(x, options) {
       ## escape plot environments from kframe
