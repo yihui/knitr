@@ -546,7 +546,7 @@ escape_latex = function(x, newlines = FALSE) {
   x = gsub('\\\\textbackslash([^{]|$)', '\\\\textbackslash{}\\1', x)
   x = gsub('~', '\\\\textasciitilde{}', x)
   x = gsub('\\^', '\\\\textasciicircum{}', x)
-  if (newlines) x = gsub('\n', '\\\\\\\\', x)
+  if (newlines) x = gsub('(?<!\n)\n(?!\n)', '\\\\\\\\', x, perl = TRUE)
   x
 }
 

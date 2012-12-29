@@ -6,6 +6,10 @@
 
 - inline R code also respects the option `opts_knti$get('stop_on_error')` now, e.g. if we set this option to `2L`, R will completely stop when error occurs in inline R code
 
+## BUG FIXES
+
+- fixed #432: no longer uses `\\\\` in LaTeX output; only a single line break is converted to `\\` (thanks, Kevin Wright)
+
 # CHANGES IN knitr VERSION 0.9
 
 ## NEW FEATURES
