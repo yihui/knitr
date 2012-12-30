@@ -189,7 +189,7 @@ block_exec = function(options) {
   if (options$fig.show != 'animate' && options$fig.num > 1) {
     options = recycle_plot_opts(options)
   }
-  output = str_c(unlist(wrap(res, options)), collapse = '') # wrap all results together
+  output = unlist(wrap(res, options)) # wrap all results together
 
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
   if (options$cache) copy_env(env, knit_global())
