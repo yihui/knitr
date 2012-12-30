@@ -421,6 +421,7 @@ wrap = function(x, options = list()) {
 }
 
 wrap.list = function(x, options = list()) {
+  if (length(x) == 0L) return(x)
   lapply(x, wrap, options)
 }
 

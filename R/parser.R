@@ -370,6 +370,7 @@ strip_white = function(x) {
 
 ## (recursively) parse chunk references inside a chunk
 parse_chunk = function(x) {
+  if (length(x) == 0L) return(x)
   rc = knit_patterns$get('ref.chunk')
   if (!group_pattern(rc) || !any(idx <- str_detect(x, rc))) return(x)
   labels = str_replace(x[idx], rc, '\\1')
