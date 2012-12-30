@@ -43,7 +43,7 @@ comment_to_var = function(x, varname, pattern, envir) {
 }
 
 is_blank = function(x) {
-  str_detect(x, '^\\s*$')
+  if (length(x)) all(str_detect(x, '^\\s*$')) else TRUE
 }
 valid_path = function(prefix, label) {
   if (length(prefix) == 0L || is.na(prefix) || prefix == 'NA') prefix = ''
