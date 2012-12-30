@@ -41,12 +41,6 @@ call_block = function(block) {
     return(out)
   }
 
-  if ((!params$eval && isFALSE(params$echo)) || length(params$code) == 0 ||
-    all(is_blank(params$code))) {
-    message('chunk "', label, '" is empty or set not to be evaluated')
-    return('') # a trivial chunk; do nothing
-  }
-
   params$code = parse_chunk(params$code) # parse sub-chunk references
 
   # Check cache
@@ -119,7 +113,7 @@ block_exec = function(options) {
   }
 
   # return code with class 'source' if not eval chunks
-  res = if (isFALSE(ev)) {
+  res = if (is_blank(code)) list() else if (isFALSE(ev)) {
     list(structure(list(src = code), class = 'source'))
   } else in_dir(
     opts_knit$get('root.dir') %n% input_dir(),
