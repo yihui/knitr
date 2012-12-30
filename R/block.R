@@ -95,7 +95,7 @@ block_exec = function(options) {
 
   code = options$code
   echo = options$echo  # tidy code if echo
-  if (!isFALSE(echo) && options$tidy) {
+  if (!isFALSE(echo) && options$tidy && length(code)) {
     res = try(do.call(
       tidy.source, c(list(text = code, output = FALSE), options$tidy.opts)
     ), silent = TRUE)
