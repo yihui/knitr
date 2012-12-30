@@ -72,8 +72,7 @@ call_block = function(block) {
   block_exec(params)
 }
 
-block_exec = function(params) {
-  options = params
+block_exec = function(options) {
   # when code is not R language
   if (options$engine != 'R') {
     output = knit_engines$get(options$engine)(options)
