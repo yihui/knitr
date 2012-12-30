@@ -394,3 +394,10 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
   }
   mapply(fun, chunk.begin, chunk.end)
 }
+
+#' Get all chunk labels in a document
+#'
+#' This function returns all chunk labels as a chracter vector.
+#' @return A character vector.
+#' @export
+all_labels = function() names(knit_code$get())
