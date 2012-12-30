@@ -195,7 +195,7 @@ block_exec = function(options) {
   if (options$cache) copy_env(env, knit_global())
 
   output = str_c(c(res.before, output, res.after), collapse = '')  # insert hook results
-  output = if (length(output) == 0L) '' else knit_hooks$get('chunk')(output, options)
+  output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
 
   if (options$cache) {
     obj.after = ls(globalenv(), all.names = TRUE)  # figure out new global objs
