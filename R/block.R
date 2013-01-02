@@ -239,7 +239,9 @@ call_inline = function(block) {
   in_dir(opts_knit$get('root.dir') %n% input_dir(), inline_exec(block))
 }
 
-inline_exec = function(block) {
+inline_exec = function(block, eval = opts_chunk$get('eval'), envir = knit_global(),
+                       stop_on_error = opts_knit$get('stop_on_error'),
+                       hook = knit_hooks$get('inline')) {
 
   # run inline code and substitute original texts
   code = block$code; input = block$input
@@ -247,9 +249,9 @@ inline_exec = function(block) {
 
   loc = block$location
   for (i in 1:n) {
-    res = if (opts_chunk$get('eval')) {
-      (if (opts_knit$get('stop_on_error') == 2L) identity else try)(
-        eval(parse(text = code[i]), envir = knit_global())
+    res = if (eval) {
+      (if (stop_on_error == 2L) identity else try)(
+        eval(parse(text = code[i]), envir = envir)
       )
     } else '??'
     d = nchar(input)
@@ -257,7 +259,7 @@ inline_exec = function(block) {
     str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
       if (inherits(res, 'try-error')) {
         knit_hooks$get('error')(str_c('\n', res, '\n'), opts_chunk$get())
-      } else knit_hooks$get('inline')(res)
+      } else hook(res)
     } else ''
     if (i < n) loc[(i + 1):n, ] = loc[(i + 1):n, ] - (d - nchar(input))
     # may need to move back and forth because replacement may be longer or shorter
