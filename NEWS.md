@@ -16,6 +16,8 @@
 
 - fixed #432: no longer uses `\\\\` in LaTeX output; only a single line break is converted to `\\` (thanks, Kevin Wright)
 
+- `render_html()` guarantees that the R source code is highlighted when the chunk option `highlight = TRUE` (#447) (thanks, Ramnath Vaidyanathan)
+
 # CHANGES IN knitr VERSION 0.9
 
 ## NEW FEATURES
