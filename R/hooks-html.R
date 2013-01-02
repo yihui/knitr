@@ -41,7 +41,8 @@ hook_plot_html = function(x, options) {
 
 .chunk.hook.html = function(x, options) {
   if (output_asis(x, options)) return(x)
-  x = sprintf('<div class="chunk"><div class="rcode">%s</div></div>', x)
+  x = sprintf('<div class="chunk" id="%s"><div class="rcode">%s</div></div>',
+              options$label, x)
   x = gsub('<div class="rcode">\\s*</div>', '', x) # rm empty rcode layers
   if (options$split) {
     name = fig_path('.html', options)

@@ -10,6 +10,8 @@
 
 - chunk hooks will be run (if exist) even if the code chunk is empty
 
+- the chunk label is used as the id of the div element in R HTML output, e.g. `<div id='chunk-label'>...</div>`
+
 ## BUG FIXES
 
 - fixed #432: no longer uses `\\\\` in LaTeX output; only a single line break is converted to `\\` (thanks, Kevin Wright)
