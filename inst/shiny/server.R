@@ -3,7 +3,7 @@ options(device.ask.default = FALSE)
 
 shinyServer(function(input, output) {
 
-  output$nbOut = reactiveUI(function() {
+  output$nbOut = reactive(function() {
     src = input$nbSrc
     library(knitr)
     if (length(src) == 0L || src == '')
