@@ -43,7 +43,10 @@ hi_html = function(x) {
 }
 
 # may require the highlight package
-highlight_fun = function(name) getFromNamespace(name, 'highlight')
+highlight_fun = function(name) {
+  do.call('library', list(package = 'parser', character.only = TRUE))
+  getFromNamespace(name, 'highlight')
+}
 
 .default.css = css.parser(.default.sty)
 
