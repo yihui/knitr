@@ -23,7 +23,8 @@ hook_plot_md = function(x, options) {
 #'   \samp{sourcecode} directive (e.g. it is useful for Sphinx)
 render_markdown = function(strict = FALSE) {
   knit_hooks$restore()
-  opts_chunk$set(dev = 'png', highlight = FALSE)
+  opts_chunk$set(dev = 'png')
+  opts_knit$set(out.format = 'markdown')
   ## four spaces lead to <pre></pre>
   hook.t = function(x, options) {
     if (strict) {
