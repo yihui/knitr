@@ -12,6 +12,10 @@
 
 - the chunk label is used as the id of the div element in R HTML output, e.g. `<div id='chunk-label'>...</div>`
 
+## MINOR CHANGES
+
+- for inline R code, the value is returned only if the R code prints a visible value, e.g. `\Sexpr{x <- 1}` will be empty, and `\Sexpr{pi}` will return the value of pi
+
 ## BUG FIXES
 
 - fixed #432: no longer uses `\\\\` in LaTeX output; only a single line break is converted to `\\` (thanks, Kevin Wright)

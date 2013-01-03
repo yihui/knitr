@@ -251,7 +251,10 @@ inline_exec = function(block, eval = opts_chunk$get('eval'), envir = knit_global
   for (i in 1:n) {
     res = if (eval) {
       (if (stop_on_error == 2L) identity else try)(
-        eval(parse(text = code[i]), envir = envir)
+        {
+          v = withVisible(eval(parse(text = code[i]), envir = envir))
+          if (v$visible) v$value
+        }
       )
     } else '??'
     d = nchar(input)
