@@ -96,7 +96,7 @@ parse_params = function(params, label = TRUE) {
   if (is_blank(params)) {
     return(if (!label) list() else list(label = unnamed_chunk()))
   }
-  res = try(eval(parse(text = str_c("alist(", params, ")"))))
+  res = try(eval(parse(text = str_c("alist(", params, ")"), srcfile = NULL)))
   if (!inherits(res, 'try-error') && valid_opts(params)) {
     ## good, you seem to be using valid R code
     idx = which(names(res) == '')  # which option is not named?
