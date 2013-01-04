@@ -2,7 +2,7 @@
 \alias{knit_expand}
 \title{A simple macro preprocessor for templating purposes}
 \usage{
-knit_expand(file, ..., text = readLines(file, warn = FALSE), delim = "\\{\\{((.|\n)+?)\\}\\}")
+knit_expand(file, ..., text = readLines(file, warn = FALSE), delim = "\\\\{\\\\{((.|\\n)+?)\\\\}\\\\}")
 }
 \arguments{
   \item{file}{the template file}
