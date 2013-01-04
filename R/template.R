@@ -41,7 +41,7 @@
 #' # knit the source
 #' cat(knit(text = unlist(src)))
 knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
-                       delim = c("{{", "}}") {
+                       delim = c("{{", "}}") ){
 
   # check if delim is a pair, escaping regex as necessary
   if (length(delim) == 2){
