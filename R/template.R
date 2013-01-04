@@ -41,7 +41,15 @@
 #' # knit the source
 #' cat(knit(text = unlist(src)))
 knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
-                       delim = '\\{\\{((.|\n)+?)\\}\\}') {
+                       delim = c("{{", "}}") {
+
+  # check if delim is a pair, escaping regex as necessary
+  if (length(delim) == 2){
+    delim = escape_regex(delim)
+    delim = paste0(delim[1], "((.|\n)+?)", delim[2])
+  } else {
+    stop("Delimiter should be a pair of starting and ending tags")
+  }
   txt = str_c(text, collapse = '\n'); delim = perl(delim)
   loc = str_locate_all(txt, delim)[[1L]]
   if (nrow(loc) == 0L) return(txt) # no match
