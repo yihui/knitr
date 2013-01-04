@@ -10,7 +10,7 @@
 #' @references \url{http://en.wikipedia.org/wiki/Data_URI_scheme}
 #' @examples uri = image_uri(file.path(R.home('doc'), "html", "logo.jpg"))
 #' cat(sprintf('<img src="%s" />', uri), file = 'logo.html')
-#' browseURL('logo.html') # you can check its HTML source
+#' if (interactive()) browseURL('logo.html') # you can check its HTML source
 image_uri = function(f) {
   if (has_package('markdown')) return(markdown:::.b64EncodeFile(f))
   content = readBin(f, what = 'raw', n = file.info(f)$size)
