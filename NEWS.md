@@ -12,6 +12,8 @@
 
 - chunk hooks will be run (if exist) even if the code chunk is empty
 
+- added two wrapper functions `stitch_rhtml()` and `stitch_rmd()` which use the R HTML and R Markdown templates respectively when calling `stitch()`
+
 - the chunk label is used as the id of the div element in R HTML output, e.g. `<div id='chunk-label'>...</div>`
 
 ## MINOR CHANGES

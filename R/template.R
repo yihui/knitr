@@ -1,7 +1,9 @@
 #' Automatically create a report based on an R script and a template
 #'
 #' This is a convenience function for small-scale automatic reporting based on
-#' an R script and a template.
+#' an R script and a template. The default template is an Rnw file (LaTeX);
+#' \code{stitch_rhtml()} and \code{stitch_rmd()} are wrappers on top of
+#' \code{stitch()} using the R HTML and R Markdown templates respectively.
 #'
 #' The first two lines of the R script can contain the title and author of the
 #' report in comments of the form \samp{## title:} and \samp{## author:}. The
@@ -69,7 +71,17 @@ stitch = function(script,
   })
   out
 }
-
+#' @rdname stitch
+#' @param ... arguments passed to \code{stitch()}
+#' @export
+stitch_rhtml = function(...) {
+  stitch(..., template = system.file('misc', 'knitr-template.Rhtml', package = 'knitr'))
+}
+#' @rdname stitch
+#' @export
+stitch_rmd = function(...) {
+  stitch(..., template = system.file('misc', 'knitr-template.Rhtml', package = 'knitr'))
+}
 
 #' A simple macro preprocessor for templating purposes
 #'
