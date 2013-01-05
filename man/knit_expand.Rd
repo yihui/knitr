@@ -2,7 +2,7 @@
 \alias{knit_expand}
 \title{A simple macro preprocessor for templating purposes}
 \usage{
-knit_expand(file, ..., text = readLines(file, warn = FALSE), delim = "\\\\{\\\\{((.|\\n)+?)\\\\}\\\\}")
+knit_expand(file, ..., text = readLines(file, warn = FALSE), delim = c("{{", "}}"))
 }
 \arguments{
   \item{file}{the template file}
@@ -38,9 +38,9 @@ knit_expand(text = "a is {{a}} and b is {{b}}, with my own pi being {{pi}} inste
     a = 1, b = 2, pi = 3)
 ## custom delimiter <\% \%>
 knit_expand(text = "I do not like curly braces, so use \% with <> instead: a is <\% a \%>.", 
-    a = 8, delim = "<\%(.+?)\%>")
+    a = 8, delim = c("<\%", "\%>"))
 ## the pyexpander delimiter
-knit_expand(text = "hello $(LETTERS[24]) and $(pi)!", delim = "\\\\$\\\\((.+?)\\\\)")
+knit_expand(text = "hello $(LETTERS[24]) and $(pi)!", delim = c("$(", ")"))
 ## arbitrary R code
 knit_expand(text = "you cannot see the value of x {{x=rnorm(1)}}but it is indeed created: x = {{x}}")
 knit_expand(text = c(" x | x^2", "{{x=1:5;paste(sprintf(\"\%2d | \%3d\", x, x^2), collapse = \"\\n\")}}"))
