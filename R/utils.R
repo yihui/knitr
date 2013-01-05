@@ -584,15 +584,3 @@ split_lines = function(x) {
   on.exit(close(con))
   readLines(con)
 }
-
-
-
-#' Escapes any characters that would have special meaning in a reqular expression.
-#' 
-#' This function has been copied verbatim from the Hmisc package
-#' 
-#' @noRd
-#' @keywords internal
-escape_regex <- function(string){
-  gsub("([.|()\\^{}+$*?]|\\[|\\])", "\\\\\\1", string)
-}
