@@ -390,6 +390,18 @@ stitch = function(script,
                  unlist(lapply(knit_code$get(), paste, collapse = '\n')),
                  sep = '\n', collapse = '\n')
   knit_code$restore()
+  opts_chunk$set(
+    fig.align = 'center', out.width = '.6\\linewidth', par = TRUE,
+    fig.width = 6, fig.height = 6,
+    fig.path = paste('figure', gsub('[^[:alnum:]]', '-', input), sep = '/')
+  )
+  on.exit(opts_chunk$restore(), add = TRUE)
+  knit_hooks$set(par = function(before, options, envir) {
+    if (before) par(mar = c(4, 4, .1, .1), cex.lab = .95, cex.axis = .9,
+                    mgp = c(2, .7, 0), tcl = -.3, las = 1)
+  })
+  on.exit(knit_hooks$restore(), add = TRUE)
+
   out = knit(input, output, envir = envir, text = txt)
   switch(file_ext(out), tex = {
     texi2pdf(out, clean = TRUE)
