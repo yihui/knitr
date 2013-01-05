@@ -38,7 +38,7 @@ knit_hooks$set(par = function(before, options, envir) {
   if (before) par(mar=c(4,4,.1,.1), cex.lab=.95, cex.axis=.9, mgp=c(2,.7,0), tcl=-.3, las=1)
   })
 .knitr.title = if (exists('.knitr.title')) paste('\\title{', .knitr.title, '}', sep = '') else ''
-.knitr.author = if (exists('.knitr.author')) {
+.knitr.author = if (nzchar(.knitr.title) && exists('.knitr.author')) {
   paste('\\author{', .knitr.author, '%\n',
         '\\thanks{This report is automatically generated with the R package \\textbf{knitr}
         (version ', packageVersion('knitr'), ').}}', sep = '')
@@ -49,7 +49,7 @@ knit_hooks$set(par = function(before, options, envir) {
 
 \Sexpr{.knitr.author}
 
-\Sexpr{if (exists('.knitr.title')) '\\maketitle'}
+\Sexpr{if (nzchar(.knitr.title)) '\\maketitle'}
 The results below are generated from an R script.
 
 <<%sCHUNK_LABEL_HERE>>=
