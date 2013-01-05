@@ -214,39 +214,6 @@ fix_options = function(options) {
     options$results = 'asis'
   }
 
-  ## compatibility with old version of knitr
-  fig = options$fig
-  if (identical(fig, FALSE)) {
-    warning("option 'fig' deprecated; use fig.keep='none' please")
-    options$fig.keep = 'none'
-  } else if (identical(fig, TRUE)) {
-    if (isTRUE(options$fig.last)) {
-      warning("option 'fig.last' deprecated; use fig.keep='last' please")
-      options$fig.keep = 'last'
-    }
-    if (isTRUE(options$fig.low)) {
-      warning("option 'fig.low' deprecated; use fig.keep='all' please")
-      options$fig.keep = 'all'
-    }
-  }
-  hold = options$fig.hold
-  if (identical(hold, FALSE)) {
-    warning("option 'fig.hold' deprecated; use fig.show='asis' please")
-    options$fig.show = 'asis'
-  } else if (identical(hold, TRUE)) {
-    warning("option 'fig.hold' deprecated; use fig.show='hold' please")
-    options$fig.show = 'hold'
-  }
-  if (isTRUE(options$animate)) {
-    warning("option 'animate' deprecated; use fig.show='animate' please")
-    options$fig.show = 'animate'
-  }
-
-  align = options$align
-  if (!is.null(align)) {
-    warning("option 'align' deprecated; use fig.align instead")
-    options$fig.align = align
-  }
   width = options$width
   if (!is.null(width)) {
     warning("option 'width' deprecated; use fig.width instead")
@@ -262,11 +229,6 @@ fix_options = function(options) {
   if (!is.null(prefix)) {
     warning("option 'prefix.string' deprecated; use fig.path instead")
     options$fig.path = prefix
-  }
-  prefix = options$prefix.cache
-  if (!is.null(prefix)) {
-    warning("option 'prefix.cache' deprecated; use cache.path instead")
-    options$cache.path = prefix
   }
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
