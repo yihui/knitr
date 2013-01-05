@@ -23,9 +23,9 @@
 #' ## any number of variables
 #' knit_expand(text = 'a is {{a}} and b is {{b}}, with my own pi being {{pi}} instead of {{base::pi}}', a=1, b=2, pi=3)
 #' ## custom delimiter <% %>
-#' knit_expand(text = 'I do not like curly braces, so use % with <> instead: a is <% a %>.', a = 8, delim = '<%(.+?)%>')
+#' knit_expand(text = 'I do not like curly braces, so use % with <> instead: a is <% a %>.', a = 8, delim = c("<%", "%>"))
 #' ## the pyexpander delimiter
-#' knit_expand(text = 'hello $(LETTERS[24]) and $(pi)!', delim = '\\$\\((.+?)\\)')
+#' knit_expand(text = 'hello $(LETTERS[24]) and $(pi)!', delim = c("$(", ")"))
 #' ## arbitrary R code
 #' knit_expand(text = 'you cannot see the value of x {{x=rnorm(1)}}but it is indeed created: x = {{x}}')
 #' knit_expand(text = c(' x | x^2', '{{x=1:5;paste(sprintf("%2d | %3d", x, x^2), collapse = "\n")}}'))
@@ -41,7 +41,15 @@
 #' # knit the source
 #' cat(knit(text = unlist(src)))
 knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
-                       delim = '\\{\\{((.|\n)+?)\\}\\}') {
+                       delim = c("{{", "}}") ){
+
+  # check if delim is a pair, escaping regex as necessary
+  if (length(delim) == 2){
+    delim = escape_regex(delim)
+    delim = paste0(delim[1], "((.|\n)+?)", delim[2])
+  } else {
+    stop("Delimiter should be a pair of starting and ending tags")
+  }
   txt = str_c(text, collapse = '\n'); delim = perl(delim)
   loc = str_locate_all(txt, delim)[[1L]]
   if (nrow(loc) == 0L) return(txt) # no match
