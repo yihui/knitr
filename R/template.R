@@ -1,3 +1,76 @@
+#' Automatically create a report based on an R script and a template
+#'
+#' This is a convenience function for small-scale automatic reporting based on
+#' an R script and a template.
+#'
+#' The first two lines of the R script can contain the title and author of the
+#' report in comments of the form \samp{## title:} and \samp{## author:}. The
+#' template must have a token \samp{\%sCHUNK_LABEL_HERE}, which will be used to
+#' input all the R code from the script. See the examples below.
+#'
+#' The R script may contain chunk headers of the form \samp{## @@knitr label},
+#' which will be copied to the template; if no chunk headers are found, the
+#' whole R script will be inserted into the template as one code chunk.
+#' @param script path to the R script
+#' @param template path of the template to use (by default the Rnw template in
+#'   this package; there is also an HTML template in \pkg{knitr})
+#' @param output the output filename (passed to \code{\link{knit}}); by default
+#'   it uses the base filename of the script
+#' @inheritParams knit
+#' @return path of the output document
+#' @export
+#' @seealso \code{\link{spin}} (turn a specially formatted R script to a report)
+#' @examples s = system.file('misc', 'stitch-test.R', package = 'knitr')
+#' \dontrun{stitch(s)}
+#'
+#' # HTML report
+#' stitch(s, system.file('misc', 'knitr-template.Rhtml', package = 'knitr'))
+#'
+#' # or convert markdown to HTML
+#' stitch(s, system.file('misc', 'knitr-template.Rmd', package = 'knitr'))
+stitch = function(script,
+                  template = system.file('misc', 'knitr-template.Rnw', package = 'knitr'),
+                  output = NULL, envir = parent.frame()) {
+  lines = readLines(script, warn = FALSE)
+  ## extract title and author from first two lines
+  if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:', envir)) lines = lines[-1L]
+  if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:', envir)) lines = lines[-1L]
+  read_chunk(lines = lines)
+  if (length(knit_code$get()) == 0L) knit_code$set(`auto-report` = lines)
+  input = basename(template)
+  input = str_c(file_path_sans_ext(basename(script)), '.', file_ext(input))
+  txt = readLines(template, warn = FALSE)
+  i = grep('%sCHUNK_LABEL_HERE', txt)
+  if (length(i) != 1L) stop('Wrong template for stitch: ', template)
+  txt[i] = paste(sprintf(sub('CHUNK_LABEL_HERE', '', txt[i]), names(knit_code$get())),
+                 unlist(lapply(knit_code$get(), paste, collapse = '\n')),
+                 sep = '\n', collapse = '\n')
+  knit_code$restore()
+  opts_chunk$set(
+    fig.align = 'center', out.width = '.6\\linewidth', par = TRUE,
+    fig.width = 6, fig.height = 6,
+    fig.path = paste('figure', gsub('[^[:alnum:]]', '-', input), sep = '/')
+  )
+  on.exit(opts_chunk$restore(), add = TRUE)
+  knit_hooks$set(par = function(before, options, envir) {
+    if (before) par(mar = c(4, 4, .1, .1), cex.lab = .95, cex.axis = .9,
+                    mgp = c(2, .7, 0), tcl = -.3, las = 1)
+  })
+  on.exit(knit_hooks$restore(), add = TRUE)
+
+  out = knit(input, output, envir = envir, text = txt)
+  switch(file_ext(out), tex = {
+    texi2pdf(out, clean = TRUE)
+    message('PDF output at: ', str_replace(out, '\\.tex$', '.pdf'))
+  }, md = {
+    out.html = str_c(file_path_sans_ext(out), '.html')
+    markdown::markdownToHTML(out, out.html)
+    message('HTML output at: ', out.html)
+  })
+  out
+}
+
+
 #' A simple macro preprocessor for templating purposes
 #'
 #' This function expands a template based on the R expressions in \code{{{}}}
