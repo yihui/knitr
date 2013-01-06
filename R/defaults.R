@@ -99,7 +99,7 @@ opts_knit = new_defaults(list(
   progress = TRUE, verbose = FALSE, out.format = NULL, child.command = 'input',
   base.dir = NULL, base.url = NULL, child.path = '', upload.fun = identity,
   animation.fun = NULL, global.device = FALSE, eval.after = NULL,
-  concordance = FALSE, sweave.penalty = 10, tangle = FALSE, child = FALSE,
+  concordance = FALSE, tangle = FALSE, child = FALSE,
   parent = FALSE, documentation = FALSE, aliases = NULL, root.dir = NULL,
   self.contained = TRUE, filter.chunk.end = TRUE, use.highlight = FALSE,
   header = c(highlight = '', tikz = '', framed = ''), stop_on_error = 0L

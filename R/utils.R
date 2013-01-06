@@ -458,12 +458,6 @@ all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
                  '.', ext, sep = ''), options)
 }
 
-# remind about deprecated syntax
-reminder = function(...) {
-  warning(..., call. = FALSE)
-  Sys.sleep(opts_knit$get('sweave.penalty'))  # force you to pay attention!
-}
-
 # evaluate an expression in a diretory and restore wd after that
 in_dir = function(dir, expr) {
   owd = setwd(dir); on.exit(setwd(owd))
