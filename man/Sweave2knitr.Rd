@@ -59,7 +59,14 @@ Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file), encoding 
   removed; most of the character options (e.g.
   \code{engine} and \code{out.width}) are quoted;
   \code{keep.source=TRUE/FALSE} is changed to
-  \code{tidy=FALSE/TRUE} (note the order of values);
+  \code{tidy=FALSE/TRUE} (note the order of values).
+
+  If a line \code{@} (it closes a chunk) directly follows a
+  previous \code{@}, it is removed; if a line \code{@}
+  appears before a code chunk and no chunk is before it, it
+  is also removed, because \pkg{knitr} only uses one
+  \samp{@} after \samp{<<>>=} by default (which is not the
+  original Noweb syntax but more natural).
 }
 \note{
   If \samp{\\SweaveOpts{}} spans across multiple lines, it
@@ -75,6 +82,10 @@ Sweave2knitr(text = "<<eps=TRUE, pdf=FALSE, results=tex, width=5, prefix.string=
 Sweave2knitr(text = "<<,png=false,fig=TRUE>>=")
 Sweave2knitr(text = "\\\\SweaveOpts{echo=false}")
 Sweave2knitr(text = "\\\\SweaveInput{hello.Rnw}")
+# Sweave example in utils
+testfile = system.file("Sweave", "Sweave-test-1.Rnw", package = "utils")
+Sweave2knitr(testfile, output = "Sweave-test-knitr.Rnw")
+knit("Sweave-test-knitr.Rnw")  # or knit2pdf() directly
 }
 \references{
   The motivation of the changes in the syntax:
