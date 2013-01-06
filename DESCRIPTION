@@ -97,3 +97,4 @@ Collate:
     'utils-rd2html.R'
     'zzz.R'
     'template.R'
+    'utils-sweave.R'
