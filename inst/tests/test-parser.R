@@ -17,12 +17,8 @@ test_that('parsing options', {
 
 
 test_that('parsing inline texts', {
-  pat_rnw()
-
   res = parse_inline(c('aaa \\Sexpr{x}', 'bbb \\Sexpr{NA} and \\Sexpr{1+2}',
-                       'another expression \\Sexpr{rnorm(10)}'))
+                       'another expression \\Sexpr{rnorm(10)}'), all_patterns$rnw$inline.code, NULL)
   expect_identical(res$code, c('x', 'NA', '1+2', 'rnorm(10)'))
   expect_identical(nchar(res$input), 81L)
-
-  knit_patterns$restore()
 })
