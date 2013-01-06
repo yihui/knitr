@@ -153,29 +153,9 @@ parse_inline = function(input) {
     x
   }
 
-  params = list(); global.options = knit_patterns$get('global.options')
-  opts.line = locate_inline(input, global.options)
-  if (nrow(opts.line)) {
-    last = tail(opts.line, 1)
-    opts = str_match(str_sub(input, last[1, 1], last[1, 2]), global.options)[, 2]
-    params = parse_params(opts, label = FALSE)
-    ## remove texts for global options
-    text.line = t(matrix(c(1L, t(opts.line) + c(-1L, 1L), str_length(input)), nrow = 2))
-    text.line = text.line[text.line[, 1] <= text.line[, 2], , drop = FALSE]
-    input = str_c(str_sub(input, text.line[, 1], text.line[, 2]), collapse = '')
-  }
-  res1 = extract_inline(input, 'inline.code', locate_inline)
-  res2 = extract_inline(input, 'input.doc', locate_inline)
-  if (length(res2$code)) {
-    reminder('please use the chunk option to input child documents: child=',
-             sprintf('c(%s)',  str_c('"', res2$code, '"', collapse = ', ')))
-    res2$code = sprintf("knit_child('%s')", res2$code)  # input child with knit_child()
-  }
-  loc = rbind(res1$location, res2$location)
-  idx = order(loc[, 1L])
-
-  structure(list(input = input, input.src = input.src, location = loc[idx, , drop = FALSE],
-                 params = params, code = c(res1$code, res2$code)[idx]),
+  res = extract_inline(input, 'inline.code', locate_inline)
+  structure(list(input = input, input.src = input.src, location = res$location,
+                 code = res$code),
             class = 'inline')
 }
 
