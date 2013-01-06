@@ -104,7 +104,7 @@ parse_params = function(params) {
   # remove empty options
   for (i in idx) if (identical(res[[i]], alist(,)[[1]])) res[[i]] = NULL
   idx = which(names(res) == '')
-  if ((n <- length(idx)) > 1L)
+  if ((n <- length(idx)) > 1L || (length(res) > 1L && is.null(names(res))))
     stop("invalid chunk options: ", params,
          "\n(all options must be of the form 'tag=value' except the chunk label)")
   if (is.null(res$label)) {

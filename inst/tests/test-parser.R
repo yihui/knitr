@@ -3,6 +3,7 @@ context('Parser')
 test_that('parsing options', {
   ## new syntax
   expect_identical(parse_params('a-s-d,b=TRUE,c=def'), alist(label='a-s-d',b=TRUE,c=def))
+  expect_error(parse_params('a,b'))
   expect_error(parse_params('a,b,c=qwer'))
   expect_identical(parse_params('a,opt=c(1,3,5)'),alist(label='a',opt=c(1,3,5)))
   expect_identical(parse_params('label="xx",opt=zz'),alist(label='xx',opt=zz))
