@@ -136,13 +136,14 @@ print.block = function(x, ...) {
 }
 
 ## extract inline R code fragments (as well as global options)
-parse_inline = function(input) {
+parse_inline = function(input, inline.code = knit_patterns$get('inline.code'),
+                        inline.comment = knit_patterns$get('inline.comment')) {
   input.src = input  # keep a copy of the source
-  inline.comment = knit_patterns$get('inline.comment')
+
   if (!is.null(inline.comment)) {
     idx = str_detect(input, inline.comment)
     # strip off inline code
-    input[idx] = str_replace_all(input[idx], knit_patterns$get('inline.code'), '\\1')
+    input[idx] = str_replace_all(input[idx], inline.code, '\\1')
   }
   input = str_c(input, collapse = '\n') # merge into one line
 
