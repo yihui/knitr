@@ -92,7 +92,7 @@ parse_params = function(params) {
   if (is_blank(params)) return(list(label = unnamed_chunk()))
 
   res = withCallingHandlers(
-    eval(parse(text = str_c("alist(", params, ")"), srcfile = NULL)),
+    eval(parse(text = str_c("alist(", quote_label(params), ")"), srcfile = NULL)),
     error = function(e) {
       message('(*) NOTE: I saw chunk options "', params,
               '"\n please go to http://yihui.name/knitr/options',
@@ -114,6 +114,19 @@ parse_params = function(params) {
     res$label = gsub(' ', '', as.character(as.expression(res$label)))
   if (identical(res$label, '')) res$label = unnamed_chunk()
   res
+}
+
+# quote the chunk label if necessary
+quote_label = function(x) {
+  x = gsub('^\\s*,?', '', x)
+  if (grepl('^\\s*[^\'"](,|\\s*$)', x)){
+    # <<a,b=1>>= ---> <<'a',b=1>>=
+    x = gsub('^\\s*([^\'"])(,|\\s*$)', "'\\1'\\2", x)
+  } else if (grepl('^\\s*[^\'"](,|[^=]*(,|\\s*$))', x)) {
+    # <<abc,b=1>>= ---> <<'abc',b=1>>=
+    x = gsub('^\\s*([^\'"][^=]*)(,|\\s*$)', "'\\1'\\2", x)
+  }
+  x
 }
 
 print.block = function(x, ...) {
