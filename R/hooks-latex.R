@@ -151,7 +151,7 @@ hook_plot_tex = function(x, options) {
   function(x, options) {
     x = gsub('\n*$', '', x)
     sprintf('\n\n{\\ttfamily\\noindent%s%s%s}',
-            color1, escape_latex(x, newlines = TRUE), color2)
+            color1, escape_latex(x, newlines = TRUE, spaces = TRUE), color2)
   }
 }
 
