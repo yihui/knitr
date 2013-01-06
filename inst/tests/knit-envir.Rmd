@@ -1,7 +1,7 @@
 Test the `envir` argument of `knit()`.
 
 ```{r setup}
-knit_hooks$set(error = function(x, options) stop(x))
+opts_knit$set(stop_on_error = 2L)
 ```
 
 ```{r test}
