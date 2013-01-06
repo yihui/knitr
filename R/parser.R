@@ -147,26 +147,14 @@ parse_inline = function(input, inline.code = knit_patterns$get('inline.code'),
   }
   input = str_c(input, collapse = '\n') # merge into one line
 
-  locate_inline = function(input, pattern = inline.code) {
-    x = cbind(start = numeric(0), end = numeric(0))
-    if (group_pattern(pattern))
-      x = str_locate_all(input, pattern)[[1]]
-    x
-  }
-
-  res = extract_inline(input, locate_inline)
-  structure(list(input = input, input.src = input.src, location = res$location,
-                 code = res$code),
-            class = 'inline')
-}
-
-## locate and extract inline R code
-extract_inline = function(input, locate.fun) {
-  loc = locate.fun(input)
+  loc = cbind(start = numeric(0), end = numeric(0))
+  if (group_pattern(inline.code)) loc = str_locate_all(input, inline.code)[[1]]
   code = character(0)
-  if (nrow(loc)) code = str_match(str_sub(input, loc[, 1L], loc[, 2L]), pattern)
+  if (nrow(loc)) code = str_match(str_sub(input, loc[, 1L], loc[, 2L]), inline.code)
   code = if (NCOL(code) >= 2L) code[, NCOL(code)] else character(0)
-  list(location = loc, code = code)
+
+  structure(list(input = input, input.src = input.src, location = loc, code = code),
+            class = 'inline')
 }
 
 print.inline = function(x, ...) {
