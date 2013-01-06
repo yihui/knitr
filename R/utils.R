@@ -199,37 +199,6 @@ tikz_dict = function(path) {
 
 ## compatibility with Sweave and old beta versions of knitr
 fix_options = function(options) {
-  ## compatibility with Sweave
-  for (dev in c('pdf', 'eps', 'jpeg', 'png')) {
-    if (isTRUE(options[[dev]])) {
-      options$dev = dev
-      warning('chunk option ', dev,
-              "=TRUE deprecated in knitr; use new option 'dev' please")
-      break
-    }
-  }
-  if (any(idx <- options$dev == 'eps')) options$dev[idx] = 'postscript'
-  if (options$results == 'tex') {
-    warning("option 'results' was changed from 'tex' to 'asis'")
-    options$results = 'asis'
-  }
-
-  width = options$width
-  if (!is.null(width)) {
-    warning("option 'width' deprecated; use fig.width instead")
-    options$fig.width = width
-  }
-  height = options$height
-  if (!is.null(height)) {
-    warning("option 'height' deprecated; use fig.height instead")
-    options$fig.height = height
-  }
-
-  prefix = options$prefix.string
-  if (!is.null(prefix)) {
-    warning("option 'prefix.string' deprecated; use fig.path instead")
-    options$fig.path = prefix
-  }
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
 
