@@ -87,70 +87,33 @@ parse_block = function(input) {
 unnamed_chunk = function() str_c('unnamed-chunk-', chunk_counter())
 
 ## parse params from chunk header
-parse_params = function(params, label = TRUE) {
-  # TODO: remove support for label = FALSE here
-  if (!label) {
-    reminder('it is recommended to set global chunk options via opts_chunk$set(', params, ')
-      instead of the ', knit_patterns$get('global.options'), 'syntax; the old syntax will be deprecated soon')
-  }
-  if (is_blank(params)) {
-    return(if (!label) list() else list(label = unnamed_chunk()))
-  }
-  res = try(eval(parse(text = str_c("alist(", params, ")"), srcfile = NULL)))
-  if (!inherits(res, 'try-error') && valid_opts(params)) {
-    ## good, you seem to be using valid R code
-    idx = which(names(res) == '')  # which option is not named?
-    if (is.null(names(res))) idx = 1L  # empty name, must be label
-    if ((n <- length(idx)) > 1L) {
-      stop("invalid chunk options: ", params,
-           "\n(all options must be of the form 'tag=value' except the chunk label)")
-    } else if (!label && n > 0L) stop('all global options must be of the form tag=value')
-    if (n == 1L) names(res)[idx] = 'label' else if (label) {
-      if (!('label' %in% names(res))) res$label = unnamed_chunk()
-    }
-    if (label && !is.character(res$label))
-      res$label = gsub(' ', '', as.character(as.expression(res$label)))
-    if (identical(res$label, '')) res$label = unnamed_chunk()
-    return(res)
-  }
-  reminder('(*) NOTE: I saw options "', params,
-          '"\n are you using the old Sweave syntax? go http://yihui.name/knitr/options',
-          '\n (it is likely that you forgot to quote "character" options)')
+parse_params = function(params) {
 
-  ## split by , (literal comma has to be escaped as \,) and then by =
-  pieces = str_split(params, perl('(?<=[^\\\\]),'))[[1]]
-  pieces = str_split(str_replace_all(pieces, fixed('\\,'), ','), '=', n = 2L)
-  n = sapply(pieces, length)
-  ## when global options are empty
-  if (length(n) == 1 && length(pieces[[1]]) == 1) {
-    return(if (label) list(label = pieces[[1]]) else list())
+  if (is_blank(params)) return(list(label = unnamed_chunk()))
+
+  res = withCallingHandlers(
+    eval(parse(text = str_c("alist(", params, ")"), srcfile = NULL)),
+    error = function(e) {
+      message('(*) NOTE: I saw chunk options "', params,
+              '"\n please go to http://yihui.name/knitr/options',
+              '\n (it is likely that you forgot to quote "character" options)')
+    })
+
+  # good, now you seem to be using valid R code
+  idx = which(names(res) == '')  # which option is not named?
+  # remove empty options
+  for (i in idx) if (identical(res[[i]], alist(,)[[1]])) res[[i]] = NULL
+  idx = which(names(res) == '')
+  if ((n <- length(idx)) > 1L)
+    stop("invalid chunk options: ", params,
+         "\n(all options must be of the form 'tag=value' except the chunk label)")
+  if (is.null(res$label)) {
+    if (n == 0L) res$label = unnamed_chunk() else names(res)[idx] = 'label'
   }
-
-  if (any(n == 1)) {
-    if (label && length(idx <- which(n == 1)) == 1) {
-      pieces[[idx]] = c('label', pieces[[idx]])
-    } else stop("illegal tags in: ", params, "\n",
-                "all options must be of the form 'tag=value' except the chunk label",
-                call. = FALSE)
-  } else if (label && !str_detect(params, '\\s*label\\s*=')) {
-    pieces[[length(pieces) + 1]] = c('label', unnamed_chunk())
-  }
-
-  values = lapply(pieces, function(x) str_trim(x[2]))
-  names(values) = str_trim(tolower(lapply(pieces, `[`, 1)))
-
-  lapply(values, type.convert, as.is = TRUE)
-}
-
-## is the options list valid with knitr's new syntax?
-.wrong.opts = c('results\\s*=\\s*(verbatim|tex|hide|asis|markup)',
-                'fig.keep\\s*=\\s*(none|all|high|last|first)',
-                'fig.show\\s*=\\s*(hold|asis|animate)',
-                sprintf('dev\\s*=\\s*(%s)', paste(names(auto_exts), collapse = '|')),
-                'fig.align\\s*=\\s*(default|left|center|right)')
-valid_opts = function(x) {
-  ## not a rigorous check; you should go to the new syntax finally!
-  !any(str_detect(x, .wrong.opts))
+  if (!is.character(res$label))
+    res$label = gsub(' ', '', as.character(as.expression(res$label)))
+  if (identical(res$label, '')) res$label = unnamed_chunk()
+  res
 }
 
 print.block = function(x, ...) {
