@@ -138,3 +138,13 @@ is_sweave = function(x) {
     any(grepl('^<<.*([, ])(width|height)\\s*=\\s*(\\d+).*>>=', x)) ||
     any(grepl('^<<.*(keep.source|print|term|strip.white|prefix)\\s*=\\s*(TRUE|FALSE).*>>=', x))
 }
+
+remind_sweave = function(file) {
+  if (!capabilities('tcltk') || !capabilities('X11') || !tcltk:::.TkUp) return()
+  do.call(
+    getFromNamespace('tkmessageBox', 'tcltk'),
+    list(title = 'Sweave Noweb syntax?', icon = 'info',
+         message = str_c('It seems you are using the Sweave syntax; you may need ',
+                         'Sweave2knitr(', shQuote(file), ') to convert it to knitr'))
+  )
+}
