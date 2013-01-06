@@ -230,12 +230,7 @@ chunk_device = function(width, height, record = TRUE) {
 }
 
 call_inline = function(block) {
-
-  # change global options if detected inline options
-  options = block$params = lapply(block$params, eval_lang)  # try eval global options
-  if (length(options)) opts_chunk$set(options)
   if (opts_knit$get('progress')) print(block)
-
   in_dir(opts_knit$get('root.dir') %n% input_dir(), inline_exec(block))
 }
 
