@@ -10,6 +10,7 @@ test_that('parsing options', {
   expect_identical(parse_params('label=foo'),alist(label='foo'))
   expect_identical(parse_params('a,b=2,c="qwer",asdf="efg"'),
                    alist(label='a', b=2, c='qwer',asdf='efg'))
+  expect_identical(parse_params('2a'), alist(label='2a'))
   expect_identical(parse_params('abc-function,fig.path="foo/bar-"'),
                    alist(label='abc-function', fig.path="foo/bar-"))
 })
