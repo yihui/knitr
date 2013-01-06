@@ -87,7 +87,7 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
   i2 = grepl(all_patterns$rnw$chunk.end, x)
   i = which(i2 & !filter_chunk_end(i1, i2))
   if (length(i)) {
-    message('these extra lines are removed:\n',
+    message('removing extra lines (#n shows line numbers):\n',
             paste(formatUL(sprintf('(#%d) %s',i, x[i]), offset = 4), collapse = '\n'))
     x = x[-i]
   }
@@ -130,10 +130,10 @@ fix_sweave = function(x) {
   x = gsub_msg("replacing prefix.string=foo with fig.path='foo'",
                'prefix.string\\s*=\\s*([^,]+)', "fig.path='\\1'", x)
 
-  x = gsub_msg("removing the options 'print', 'term', 'stripe.white', 'prefix'",
+  x = gsub_msg("removing options 'print', 'term', 'stripe.white', 'prefix'",
                '(print|term|strip.white|prefix)\\s*=\\s*(TRUE|FALSE)', '', x)
 
-  x = gsub_msg("quoting the options engine, fig.path, cache.path, fig.keep, fig.show, dev, out.width, out.height, fig.align",
+  x = gsub_msg("quoting options engine, fig.path, cache.path, fig.keep, fig.show, dev, out.width, out.height, fig.align",
                "(engine|fig\\.path|cache\\.path|fig\\.keep|fig\\.show|dev|out\\.width|out\\.height|fig\\.align)\\s*=\\s*([^,'\"]+)",
                "\\1='\\2'", x)
 
