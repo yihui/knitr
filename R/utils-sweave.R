@@ -51,6 +51,10 @@
 #' Sweave2knitr(text="<<,png=false,fig=TRUE>>=")
 #' Sweave2knitr(text="\\SweaveOpts{echo=false}")
 #' Sweave2knitr(text="\\SweaveInput{hello.Rnw}")
+#' # Sweave example in utils
+#' testfile = system.file("Sweave", "Sweave-test-1.Rnw", package = "utils")
+#' Sweave2knitr(testfile, output = 'Sweave-test-knitr.Rnw')
+#' knit('Sweave-test-knitr.Rnw') # or knit2pdf() directly
 Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
                         encoding = 'unknown', text = NULL) {
   x = if (is.null(text)) readLines(file, warn = FALSE, encoding = encoding) else text
