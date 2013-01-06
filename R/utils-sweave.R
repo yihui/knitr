@@ -27,7 +27,13 @@
 #' \code{fig.path}; \code{print/term/strip.white/prefix=TRUE/FALSE} are removed;
 #' most of the character options (e.g. \code{engine} and \code{out.width}) are
 #' quoted; \code{keep.source=TRUE/FALSE} is changed to \code{tidy=FALSE/TRUE}
-#' (note the order of values);
+#' (note the order of values).
+#'
+#' If a line \code{@@} (it closes a chunk) directly follows a previous
+#' \code{@@}, it is removed; if a line \code{@@} appears before a code chunk and
+#' no chunk is before it, it is also removed, because \pkg{knitr} only uses one
+#' \samp{@@} after \samp{<<>>=} by default (which is not the original Noweb
+#' syntax but more natural).
 #' @param file the filename of the Rnw file
 #' @param output the output filename (by default \file{file.Rnw} produces
 #'   \file{file-knitr.Rnw}); if \code{text} is not NULL, no output file will be
@@ -75,6 +81,15 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
     for (j in seq_along(i))
       x[i[j]] = gsub('@_@_@', str_c('\n<<include=FALSE>>=\nopts_chunk$set(',
                                   opts[j], ')\n@\n'), x[i[j]])
+  }
+  # remove the extra @
+  i1 = grepl(all_patterns$rnw$chunk.begin, x)
+  i2 = grepl(all_patterns$rnw$chunk.end, x)
+  i = which(i2 & !filter_chunk_end(i1, i2))
+  if (length(i)) {
+    message('these extra lines are removed:\n',
+            paste(formatUL(sprintf('(#%d) %s',i, x[i]), offset = 4), collapse = '\n'))
+    x = x[-i]
   }
   if (is.null(text)) cat(x, sep = '\n', file = output) else x
 }
