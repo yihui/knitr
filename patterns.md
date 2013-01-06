@@ -10,12 +10,9 @@ The [object](objects) `knit_patterns` manages patterns in **knitr**. For example
 - `chunk.end`: the pattern for the end of a chunk (the original meaning of this pattern in literate programming is different: it used to indicate the beginning of normal text; if you want the original meaning, see the [package option](/knitr/options) `filter.chunk.end`)
 - `chunk.code`: the pattern to be used to extract R code from a chunk by removing characters of this pattern
 - `inline.code`: the pattern to be used to extract the pieces of R code mixed inline with other texts (i.e. those which are not in separate code chunks); like `chunk.begin`, it must contain a group 
-- `input.doc`: the pattern to find out child documents
-- `inline.comment`: the pattern of inline comments (inline R code  will be removed from lines that match with this pattern)
-- `global.options`: the pattern to extract global options for chunks (options are extracted like those in `chunk.begin` but they permanently change global options, whereas chunk options only locally affect a specific chunk)
+- `inline.comment`: the pattern of inline comments (tokens of inline R code will be removed from lines that match with this pattern)
 - `header.begin`: the pattern to find out where the document header begins; this is used to insert some header information into the output document (e.g. commands in the preamble in LaTeX, or CSS styles in HTML)
 - `document.begin`: the pattern to find out where the body of the document begins (currently only used to externalize tikz graphics)
-- `ref.label`: the pattern to get the chunk labels in an external R script
 
 Patterns that are `NULL` will not be matched.
 
@@ -24,7 +21,6 @@ Like Sweave, there are two types of R code in **knitr**: code chunks (like parag
 ## Built-in Patterns
 
 There are several built-in pattern lists in **knitr** which are stored in `all_patterns`.
-
 
 
 {% highlight r %}
@@ -36,56 +32,43 @@ str(all_patterns)
 
 {% highlight text %}
 ## List of 6
-##  $ rnw :List of 10
-##   ..$ chunk.begin   : chr "^<<(.*)>>="
-##   ..$ chunk.end     : chr "^@\\s*%*"
+##  $ rnw :List of 7
+##   ..$ chunk.begin   : chr "^\\s*<<(.*)>>="
+##   ..$ chunk.end     : chr "^\\s*@\\s*(%+.*|)$"
 ##   ..$ inline.code   : chr "\\\\Sexpr\\{([^}]*)\\}"
-##   ..$ input.doc     : chr "(^|\n) *\\\\SweaveInput\\{([^}]*)\\}"
 ##   ..$ inline.comment: chr "^\\s*%.*"
 ##   ..$ ref.chunk     : chr "^\\s*<<(.*)>>\\s*$"
-##   ..$ global.options: chr "\\\\SweaveOpts\\{([^}]*)\\}"
-##   ..$ header.begin  : chr "\n*\\s*\\\\documentclass[^}]+\\}"
-##   ..$ document.begin: chr "\n*\\s*\\\\begin\\{document\\}"
-##   ..$ ref.label     : chr "^## @knitr (.*)$"
+##   ..$ header.begin  : chr "\\s*\\\\documentclass[^}]+\\}"
+##   ..$ document.begin: chr "\\s*\\\\begin\\{document\\}"
 ##  $ brew:List of 1
 ##   ..$ inline.code: chr "<%[=]{0,1}\\s+([^%]*)\\s+[-]*%>"
-##  $ tex :List of 10
-##   ..$ chunk.begin   : chr "^%+\\s*begin.rcode\\s*(.*)"
-##   ..$ chunk.end     : chr "^%+\\s*end.rcode"
+##  $ tex :List of 8
+##   ..$ chunk.begin   : chr "^\\s*%+\\s*begin.rcode\\s*(.*)"
+##   ..$ chunk.end     : chr "^\\s*%+\\s*end.rcode"
 ##   ..$ chunk.code    : chr "^%+"
 ##   ..$ ref.chunk     : chr "^%+\\s*<<(.*)>>\\s*$"
 ##   ..$ inline.comment: chr "^\\s*%.*"
-##   ..$ global.options: chr "%+\\s*roptions\\s*([^\n]*)"
 ##   ..$ inline.code   : chr "\\\\rinline\\{([^}]*)\\}"
-##   ..$ header.begin  : chr "\n*\\s*\\\\documentclass[^}]+\\}"
-##   ..$ document.begin: chr "\n*\\s*\\\\begin\\{document\\}"
-##   ..$ ref.label     : chr "^## @knitr (.*)$"
-##  $ html:List of 7
-##   ..$ chunk.begin   : chr "^<!--\\s*begin.rcode\\s*(.*)"
-##   ..$ chunk.end     : chr "^\\s*end.rcode\\s*-->"
-##   ..$ ref.chunk     : chr "^\\s*<<(.*)>>\\s*$"
-##   ..$ inline.code   : chr "<!--\\s*rinline\\s*([^>]*)\\s*-->"
-##   ..$ global.options: chr "<!--\\s*roptions\\s*([^>]*)\\s*-->"
-##   ..$ header.begin  : chr "\n*\\s*<head>"
-##   ..$ ref.label     : chr "^## @knitr (.*)$"
-##  $ md  :List of 6
-##   ..$ chunk.begin   : chr "^`{3,}\\s*\\{r(.*)\\}\\s*$"
-##   ..$ chunk.end     : chr "^`{3,}\\s*$"
-##   ..$ ref.chunk     : chr "^\\s*<<(.*)>>\\s*$"
-##   ..$ inline.code   : chr "`r +([^`\n]+)\\s*`"
-##   ..$ global.options: chr "`ro\\s+([^`]*)\\s+or`"
-##   ..$ ref.label     : chr "^## @knitr (.*)$"
-##  $ rst :List of 7
-##   ..$ chunk.begin   : chr "^\\.{2}\\s+\\{r(.*)\\}\\s*$"
-##   ..$ chunk.end     : chr "^\\.{2}\\s+\\.{2,}\\s*$"
-##   ..$ chunk.code    : chr "^\\.{2}"
-##   ..$ ref.chunk     : chr "^\\.*\\s*<<(.*)>>\\s*$"
-##   ..$ inline.code   : chr ":r:`([^`]*)`"
-##   ..$ global.options: chr ":roptions:`([^`]*)`"
-##   ..$ ref.label     : chr "^## @knitr (.*)$"
+##   ..$ header.begin  : chr "\\s*\\\\documentclass[^}]+\\}"
+##   ..$ document.begin: chr "\\s*\\\\begin\\{document\\}"
+##  $ html:List of 5
+##   ..$ chunk.begin : chr "^\\s*<!--\\s*begin.rcode\\s*(.*)"
+##   ..$ chunk.end   : chr "^\\s*end.rcode\\s*-->"
+##   ..$ ref.chunk   : chr "^\\s*<<(.*)>>\\s*$"
+##   ..$ inline.code : chr "<!--\\s*rinline\\s*([^>]*)\\s*-->"
+##   ..$ header.begin: chr "\\s*<head>"
+##  $ md  :List of 4
+##   ..$ chunk.begin: chr "^\\s*`{3,}\\s*\\{r(.*)\\}\\s*$"
+##   ..$ chunk.end  : chr "^\\s*`{3,}\\s*$"
+##   ..$ ref.chunk  : chr "^\\s*<<(.*)>>\\s*$"
+##   ..$ inline.code: chr "`r +([^`\n]+)\\s*`"
+##  $ rst :List of 5
+##   ..$ chunk.begin: chr "^\\s*\\.{2}\\s+\\{r(.*)\\}\\s*$"
+##   ..$ chunk.end  : chr "^\\s*\\.{2}\\s+\\.{2,}\\s*$"
+##   ..$ chunk.code : chr "^\\.{2}"
+##   ..$ ref.chunk  : chr "^\\.*\\s*<<(.*)>>\\s*$"
+##   ..$ inline.code: chr ":r:`([^`]*)`"
 {% endhighlight %}
-
-
 
 
 **Knitr** will first examine the content of the input to decide an appropriate set of patterns, if this automatic detection fails, then depending on the extension of the input filename, **knitr** will automatically choose a pattern list from the above lists, e.g. `file.Rnw` will use `all_patterns$rnw`, and `file.html` will use `all_patterns$html`, etc.
