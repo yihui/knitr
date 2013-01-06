@@ -149,9 +149,10 @@ parse_inline = function(input, inline.code = knit_patterns$get('inline.code'),
 
   loc = cbind(start = numeric(0), end = numeric(0))
   if (group_pattern(inline.code)) loc = str_locate_all(input, inline.code)[[1]]
-  code = character(0)
-  if (nrow(loc)) code = str_match(str_sub(input, loc[, 1L], loc[, 2L]), inline.code)
-  code = if (NCOL(code) >= 2L) code[, NCOL(code)] else character(0)
+  if (nrow(loc)) {
+    code = str_match_all(input, inline.code)[[1L]]
+    code = if (NCOL(code) >= 2L) code[, NCOL(code)] else character(0)
+  } else code = character(0)
 
   structure(list(input = input, input.src = input.src, location = loc, code = code),
             class = 'inline')
