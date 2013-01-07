@@ -114,8 +114,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     setwd(opts_knit$get('output.dir')) # always restore original working dir
     # in child mode, input path needs to be adjusted
     if (in.file && !is_abs_path(input)) {
-      input2 = str_c(opts_knit$get('child.path'), input)
-      input = file.path(input_dir(), input2)
+      input = str_c(opts_knit$get('child.path'), input)
+      input = file.path(input_dir(), input)
     }
   } else {
     .knitEnv$knit_global = envir  # the envir to eval code
@@ -145,7 +145,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     if (is.null(output)) output = basename(auto_out_name(input))
     ext = tolower(file_ext(input))
     options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
-    knit_concord$set(infile = input2)
+    knit_concord$set(infile = input)
   }
   if (concord_mode()) {
     # 'outfile' from last parent call is my parent
