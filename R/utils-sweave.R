@@ -62,8 +62,8 @@
 #' Sweave2knitr(testfile, output = 'Sweave-test-knitr.Rnw')
 #' knit('Sweave-test-knitr.Rnw') # or knit2pdf() directly
 Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
-                        encoding = 'unknown', text = NULL) {
-  x = if (is.null(text)) readLines(file, warn = FALSE, encoding = encoding) else text
+                        encoding = getOption('encoding'), text = NULL) {
+  x = if (is.null(text)) readLines(file(file, encoding = encoding), warn = FALSE) else text
   x = gsub_msg("removing \\usepackage{Sweave}",
                '^\\s*\\\\usepackage(\\[.*\\])?\\{Sweave\\}', '', x)
   i = grep('^<<(.*)>>=\\s*$', x)
@@ -91,7 +91,10 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
             paste(formatUL(sprintf('(#%d) %s',i, x[i]), offset = 4), collapse = '\n'))
     x = x[-i]
   }
-  if (is.null(text)) cat(x, sep = '\n', file = output) else x
+  if (is.null(text)) {
+    if (encoding != 'native.enc') x = iconv(x, to =  encoding)
+    cat(x, sep = '\n', file = output)
+  } else x
 }
 
 gsub_msg = function(msg, pattern, replacement, x, ...) {
