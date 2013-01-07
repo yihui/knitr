@@ -195,7 +195,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
   if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
   res = knit_hooks$get('document')(res)
-  if (!is.null(output)) cat(res, file = output)
+  if (!is.null(output))
+    cat(if (encoding == '') res else iconv(res, to = encoding), file = output)
   if (!child_mode()) {
     dep_list$restore()  # empty dependency list
     .knitEnv$labels = NULL
