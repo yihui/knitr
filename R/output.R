@@ -101,6 +101,10 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
   # is input from a file? (or a connection on a file)
   in.file = !missing(input) &&
     (is.character(input) || prod(inherits(input, c('file', 'connection'), TRUE)))
+  if (encoding == 'native.enc') encoding = '' else if (!(encoding %in% iconvlist())) {
+    warning('encoding "', encoding, '" not supported; using the native encoding instead')
+    encoding = ''
+  }
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
   if (in.file) input2 = input # make a copy of the input path
   if (child_mode()) {
