@@ -3,7 +3,7 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame(), encoding = "unknown", 
+knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame(), encoding = getOption("encoding"), 
     ...)
 
 purl(..., documentation = 1L)
@@ -26,7 +26,7 @@ purl(..., documentation = 1L)
   guarantee an empty new environment)}
 
   \item{encoding}{the encoding of the input file; see
-  \code{\link{readLines}}}
+  \code{\link{file}}}
 
   \item{documentation}{an integer specifying the level of
   documentation to go the tangled script: \code{0} means

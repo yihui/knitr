@@ -2,7 +2,7 @@
 \alias{Sweave2knitr}
 \title{Convert Sweave to knitr documents}
 \usage{
-Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file), encoding = "unknown", 
+Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file), encoding = getOption("encoding"), 
     text = NULL)
 }
 \arguments{
