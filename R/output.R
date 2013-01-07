@@ -106,7 +106,10 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     encoding = ''
   }
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
-  if (in.file) input2 = input # make a copy of the input path
+  # make a copy of the input path in input2 and change input to file path
+  if (!missing(input)) input2 = input
+  if (in.file && !is.character(input)) input = summary(input)$description
+
   if (child_mode()) {
     setwd(opts_knit$get('output.dir')) # always restore original working dir
     # in child mode, input path needs to be adjusted
