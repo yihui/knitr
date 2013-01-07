@@ -154,10 +154,10 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
   }
 
   text = if (is.null(text)) {
-    readLines(file(input, encoding = encoding), warn = FALSE)
-  } else {
-    split_lines(text) # make sure each element is one line
-  }
+    readLines(if (is.character(input2)) {
+      con = file(input2, encoding = encoding); on.exit(close(con), add = TRUE); con
+    } else input2, warn = FALSE)
+  } else split_lines(text) # make sure each element is one line
   if (!length(text)) return() # a trivial case: simply and exit
 
   apat = all_patterns; opat = knit_patterns$get()
