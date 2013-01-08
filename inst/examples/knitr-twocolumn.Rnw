@@ -62,7 +62,7 @@ hist(x,main='')
 \end{figure*}
 
 
-The output PDF file will be like: \url{https://github.com/downloads/yihui/knitr/knitr-twocolumn.pdf}.
+The output PDF file will be like: \url{https://bitbucket.org/stat/knitr/downloads/knitr-twocolumn.pdf}.
 The Rnw source of this document is at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-twocolumn.Rnw}.
 
 \end{document}
