@@ -40,6 +40,8 @@
 
 - `render_html()` guarantees that the R source code is highlighted when the chunk option `highlight = TRUE` (#447) (thanks, Ramnath Vaidyanathan)
 
+- `dep_auto()` was unable to find the cache files if the input document is not under the current working directory (thanks, Hui Yao)
+
 # CHANGES IN knitr VERSION 0.9
 
 ## NEW FEATURES
