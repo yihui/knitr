@@ -36,7 +36,7 @@ opts_knit$set(out.format = NULL)  # restore option
   Ramnath Vaidyanathan and Yihui Xie
 }
 \references{
-  \url{https://github.com/downloads/yihui/knitr/knitr-themes.pdf}
+  \url{https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf}
   (its Rnw source is at
   \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw})
 }

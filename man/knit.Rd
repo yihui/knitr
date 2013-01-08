@@ -143,8 +143,8 @@ purl(f, documentation = 2)  # also include documentation
   Package homepage: \url{http://yihui.name/knitr/}
 
   The \pkg{knitr} main manual:
-  \url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}
+  \url{https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf}
 
   The \pkg{knitr} graphics manual:
-  \url{https://github.com/downloads/yihui/knitr/knitr-graphics.pdf}
+  \url{https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf}
 }
