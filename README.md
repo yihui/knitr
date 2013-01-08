@@ -10,12 +10,6 @@ You can install the stable version on [CRAN](http://cran.r-project.org/package=k
 install.packages('knitr', dependencies = TRUE)
 ```
 
-Or install the development version from [RForge](http://rforge.net):
-
-```r
-install.packages('knitr', repos = 'http://rforge.net/')
-```
-
 Or download the [zip ball](https://github.com/yihui/knitr/zipball/master) or [tar ball](https://github.com/yihui/knitr/tarball/master), decompress and run `R CMD INSTALL` on it, or use the **devtools** package to install the absolutely latest version:
 
 ```r
