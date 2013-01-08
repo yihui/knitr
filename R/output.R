@@ -84,10 +84,10 @@
 #' @references Package homepage: \url{http://yihui.name/knitr/}
 #'
 #'   The \pkg{knitr} main manual:
-#'   \url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}
+#'   \url{https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf}
 #'
 #'   The \pkg{knitr} graphics manual:
-#'   \url{https://github.com/downloads/yihui/knitr/knitr-graphics.pdf}
+#'   \url{https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf}
 #' @examples library(knitr)
 #' (f = system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'))
 #' knit(f)  # compile to tex

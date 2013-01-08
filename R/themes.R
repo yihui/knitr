@@ -32,7 +32,7 @@ get_theme = function(theme = NULL) {
 #' returned by the \code{get()} method. See examples below.
 #' @author Ramnath Vaidyanathan and Yihui Xie
 #' @seealso \code{\link{eclipse_theme}} (use Eclipse themes)
-#' @references \url{https://github.com/downloads/yihui/knitr/knitr-themes.pdf}
+#' @references \url{https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf}
 #' (its Rnw source is at
 #' \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw})
 #' @export

@@ -53,4 +53,4 @@ library(knitr)
 knit(input)
 ```
 
-If options are not explicitly specified, **knitr** will try to guess reasonable default settings. A few manuals are available such as the [main manual](https://github.com/downloads/yihui/knitr/knitr-manual.pdf), the [graphics manual](https://github.com/downloads/yihui/knitr/knitr-graphics.pdf), and the [themes manual](https://github.com/downloads/yihui/knitr/knitr-themes.pdf).
+If options are not explicitly specified, **knitr** will try to guess reasonable default settings. A few manuals are available such as the [main manual](https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf), the [graphics manual](https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf), and the [themes manual](https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf).

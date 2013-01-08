@@ -184,7 +184,7 @@
 
 ## DOCUMENTATION
 
-- added a simple reference card: https://github.com/downloads/yihui/knitr/knitr-refcard.pdf
+- added a simple reference card: https://bitbucket.org/stat/knitr/downloads/knitr-refcard.pdf
 
 # CHANGES IN knitr VERSION 0.7
 
@@ -490,7 +490,7 @@
 
 - website updated as usual: http://yihui.name/knitr
 
-- added an example for subfloat environment: https://github.com/downloads/yihui/knitr/knitr-subfloats.pdf
+- added an example for subfloat environment: https://bitbucket.org/stat/knitr/downloads/knitr-subfloats.pdf
 
 - most manuals (main or graphics manuals) have been updated
 
