@@ -8,6 +8,9 @@
 % \VignetteIndexEntry{knitr Reference Card}
 \end_preamble
 \use_default_options true
+\begin_modules
+knitr
+\end_modules
 \maintain_unincluded_children false
 \language english
 \language_package none
