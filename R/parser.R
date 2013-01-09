@@ -89,6 +89,7 @@ unnamed_chunk = function() str_c('unnamed-chunk-', chunk_counter())
 ## parse params from chunk header
 parse_params = function(params) {
 
+  params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
   if (is_blank(params)) return(list(label = unnamed_chunk()))
 
   res = withCallingHandlers(
