@@ -90,7 +90,7 @@ unnamed_chunk = function() str_c('unnamed-chunk-', chunk_counter())
 parse_params = function(params) {
 
   params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
-  if (is_blank(params)) return(list(label = unnamed_chunk()))
+  if (params == '') return(list(label = unnamed_chunk()))
 
   res = withCallingHandlers(
     eval(parse(text = str_c("alist(", quote_label(params), ")"), srcfile = NULL)),
