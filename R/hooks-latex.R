@@ -318,5 +318,5 @@ hook_rjournal = function(x) {
   x = split_lines(x)
   x = sub('^\\\\begin\\{document\\}$', '\\\\begin{document}\n\\\\begin{article}', x)
   x = sub('^\\\\end\\{document\\}$', '\\\\end{article}\n\\\\end{document}', x)
-  paste(x, collapse = '\n')
+  x
 }

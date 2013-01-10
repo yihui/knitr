@@ -267,7 +267,7 @@ process_file = function(text, output) {
   if (!tangle) res = insert_header(res)  # insert header
   print_knitlog()
 
-  str_c(c(res, ""), collapse = "\n")
+  res
 }
 
 auto_out_name = function(input) {
