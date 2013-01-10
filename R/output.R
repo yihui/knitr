@@ -101,10 +101,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
   # is input from a file? (or a connection on a file)
   in.file = !missing(input) &&
     (is.character(input) || prod(inherits(input, c('file', 'connection'), TRUE)))
-  if (encoding == 'native.enc') encoding = '' else if (!(encoding %in% iconvlist())) {
-    warning('encoding "', encoding, '" not supported; using the native encoding instead')
-    encoding = ''
-  }
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
   # make a copy of the input path in input2 and change input to file path
   if (!missing(input)) input2 = input
@@ -153,6 +149,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     knit_concord$set(outfile = output)
   }
 
+  encoding = correct_encode(encoding)
   text = if (is.null(text)) {
     readLines(if (is.character(input2)) {
       con = file(input2, encoding = encoding); on.exit(close(con), add = TRUE); con
