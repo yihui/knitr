@@ -64,6 +64,7 @@
 Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
                         encoding = getOption('encoding'), text = NULL) {
   x = if (is.null(text)) readLines(file(file, encoding = encoding), warn = FALSE) else text
+  x = native_encode(x)
   x = gsub_msg("removing \\usepackage{Sweave}",
                '^\\s*\\\\usepackage(\\[.*\\])?\\{Sweave\\}', '', x)
   i = grep('^<<(.*)>>=\\s*$', x)

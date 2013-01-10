@@ -159,6 +159,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     } else input2, warn = FALSE)
   } else split_lines(text) # make sure each element is one line
   if (!length(text)) return() # a trivial case: simply and exit
+  text = native_encode(text)
 
   apat = all_patterns; opat = knit_patterns$get()
   on.exit(knit_patterns$restore(opat), add = TRUE)
