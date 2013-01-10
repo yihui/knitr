@@ -192,12 +192,10 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
   progress = opts_knit$get('progress')
   if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
-  res = knit_hooks$get('document')(res)
+  res = paste(knit_hooks$get('document')(res), collapse = '\n')
   if (!is.null(output))
-    cat(if (encoding == '') res else {
-      enc = Encoding(res); if (enc == 'unknown') enc = ''
-      iconv(res, from = enc, to = encoding)
-    }, file = output)
+    writeLines(if (encoding == '') res else native_encode(res, to = encoding),
+               con = output, useBytes = encoding != '')
   if (!child_mode()) {
     dep_list$restore()  # empty dependency list
     .knitEnv$labels = NULL

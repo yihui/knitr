@@ -512,10 +512,12 @@ split_lines = function(x) {
 }
 
 # if a string has explicit encoding, convert it to native encoding
-native_encode = function(x) {
+native_encode = function(x, to = '') {
   enc = Encoding(x)
   idx = enc != 'unknown'
-  if (any(idx)) x[idx] = iconv(x[idx], enc[idx][1L])
+  if (to == '') {
+    if (any(idx)) x[idx] = iconv(x[idx], enc[idx][1L], to)
+  } else x = iconv(x, if (any(idx)) enc[idx][1L] else '', to)
   x
 }
 
