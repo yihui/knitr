@@ -510,3 +510,11 @@ split_lines = function(x) {
   on.exit(close(con))
   readLines(con)
 }
+
+# if a string has explicit encoding, convert it to native encoding
+native_encode = function(x) {
+  enc = Encoding(x)
+  idx = enc != 'unknown'
+  if (any(idx)) x[idx] = iconv(x[idx], enc[idx][1L])
+  x
+}
