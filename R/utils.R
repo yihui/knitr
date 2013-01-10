@@ -286,22 +286,22 @@ fig_path = function(suffix = '', options = opts_current$get()) {
   str_c(path, suffix)
 }
 
-#' The environment in which a code chunk is evaluated
+#' The global environment in which code chunks are evaluated
 #'
 #' This function makes the environment of a code chunk accessible inside a
 #' chunk.
 #'
-#' In some special cases, we need access to the environment of the current
-#' chunk, e.g., to make sure the code is executed in the correct environment.
-#' @references \url{http://yihui.name/knitr/demo/cache/}
-#' @keywords internal
+#' It returns the \code{envir} argument of \code{\link{knit}}, e.g. if we call
+#' \code{\link{knit}()} in the global environment, \code{knit_global()} returns
+#' R's global environment by default. You can call functions like
+#' \code{\link{ls}()} on this environment.
 #' @export
-knit_env = function() {
-  .knitEnv$knit_env
-}
-# 'global' environment for knitr
 knit_global = function() {
   .knitEnv$knit_global
+}
+# current environment for knitr's code chunks
+knit_env = function() {
+  .knitEnv$knit_env
 }
 
 #' A wrapper for rst2pdf
