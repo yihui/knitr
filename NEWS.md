@@ -30,6 +30,8 @@
 
 - if the chunk option `include=FALSE`, the evaluation will stop if errors occur (i.e. `stop_on_error=2L` for **evaluate**), because otherwise it will be very difficult for authors to notice errors in chunks which have `include=FALSE` (#453) (thanks, Joshua Pritikin)
 
+- the function `knit_env()` is no longer available (it is not exported any more), and `knit_global()` has been exported now
+
 ## MINOR CHANGES
 
 - for inline R code, the value is returned only if the R code prints a visible value, e.g. `\Sexpr{x <- 1}` will be empty, and `\Sexpr{pi}` will return the value of pi
