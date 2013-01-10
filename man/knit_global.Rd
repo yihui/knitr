@@ -1,19 +1,17 @@
-\name{knit_env}
-\alias{knit_env}
-\title{The environment in which a code chunk is evaluated}
+\name{knit_global}
+\alias{knit_global}
+\title{The global environment in which code chunks are evaluated}
 \usage{
-knit_env()
+knit_global()
 }
 \description{
   This function makes the environment of a code chunk
   accessible inside a chunk.
 }
 \details{
-  In some special cases, we need access to the environment
-  of the current chunk, e.g., to make sure the code is
-  executed in the correct environment.
+  It returns the \code{envir} argument of
+  \code{\link{knit}}, e.g. if we call \code{\link{knit}()}
+  in the global environment, \code{knit_global()} returns
+  R's global environment by default. You can call functions
+  like \code{\link{ls}()} on this environment.
 }
-\references{
-  \url{http://yihui.name/knitr/demo/cache/}
-}
-\keyword{internal}
