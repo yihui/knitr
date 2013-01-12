@@ -37,5 +37,6 @@ test_that('captures grid graphics', {
     grid.newpage()
     grid.rect(gp=gpar(fill="grey"))
     grid.rect(gp=gpar(fill="red"))')
+  res = rm_blank_plot(res) # do this for R > 2.15.2
   expect_identical(sapply(res, class), c('source', 'recordedplot')[c(1, 1, 1, 2, 1, 2)])
 })
