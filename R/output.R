@@ -96,7 +96,7 @@
 #' purl(f, documentation = 0)  # extract R code only
 #' purl(f, documentation = 2)  # also include documentation
 knit = function(input, output = NULL, tangle = FALSE, text = NULL,
-                envir = parent.frame(), encoding = getOption('encoding'), ...) {
+                envir = parent.frame(), encoding = getOption('encoding')) {
 
   # is input from a file? (or a connection on a file)
   in.file = !missing(input) &&
@@ -218,8 +218,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
 #'   the tangled script: \code{0} means pure code (discard all text chunks);
 #'   \code{1} (default) means add the chunk headers to code; \code{2} means add
 #'   all text chunks to code as roxygen comments
-#' @param ... arguments passed to \code{\link{knit}()} from \code{purl()};
-#'   ignored if the arguments do not match with any arguments in \code{knit()}
+#' @param ... arguments passed to \code{\link{knit}()} from \code{purl()}
 #' @export
 purl = function(..., documentation = 1L) {
   # for compatibility to knitr <= 0.8.8
