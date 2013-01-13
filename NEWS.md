@@ -44,6 +44,10 @@
 
 - `dep_auto()` was unable to find the cache files if the input document is not under the current working directory (thanks, Hui Yao)
 
+## Documentation
+
+- because Github has deprecated downloads, all downloads were moved to Bitbucket, and the links in the package website as well as all examples have been updated (#438)
+
 # CHANGES IN knitr VERSION 0.9
 
 ## NEW FEATURES
