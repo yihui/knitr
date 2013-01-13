@@ -94,8 +94,7 @@ stitch_rmd = function(...) {
 #'   the variables will be searched in the parent frame as well
 #' @param text an alternative way to \code{file} to specify the template code
 #'   directly (if provided, \code{file} will be ignored)
-#' @param delim the delimiter for the templating tags (a Perl regular
-#'   expression)
+#' @param delim the (opening and ending) delimiters for the templating tags
 #' @return A character vector, with the tags evaluated and replaced by their
 #'   values.
 #' @references This function was inspired by the pyexpander
