@@ -128,14 +128,10 @@ block_exec = function(options) {
     iss = which(sapply(res, is.source))
     if (length(idx <- setdiff(iss, iss[echo]))) res = res[-idx]
   }
-  if (options$results == 'hide')
-    res = Filter(Negate(is.character), res)
-  if (!options$warning)
-    res = Filter(Negate(is.warning), res)
-  if (!options$error)
-    res = Filter(Negate(is.error), res)
-  if (!options$message)
-    res = Filter(Negate(is.message), res)
+  if (options$results == 'hide') res = Filter(Negate(is.character), res)
+  if (!options$warning) res = Filter(Negate(is.warning), res)
+  if (!options$error) res = Filter(Negate(is.error), res)
+  if (!options$message) res = Filter(Negate(is.message), res)
 
   # rearrange locations of figures
   figs = sapply(res, is.recordedplot)
