@@ -15,8 +15,8 @@ knit_expand(file, ..., text = readLines(file, warn = FALSE), delim = c("{{", "}}
   the template code directly (if provided, \code{file} will
   be ignored)}
 
-  \item{delim}{the delimiter for the templating tags (a
-  Perl regular expression)}
+  \item{delim}{the (opening and ending) delimiters for the
+  templating tags}
 }
 \value{
   A character vector, with the tags evaluated and replaced

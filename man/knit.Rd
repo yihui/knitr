@@ -3,8 +3,7 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame(), encoding = getOption("encoding"), 
-    ...)
+knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame(), encoding = getOption("encoding"))
 
 purl(..., documentation = 1L)
 }
@@ -35,8 +34,7 @@ purl(..., documentation = 1L)
   all text chunks to code as roxygen comments}
 
   \item{...}{arguments passed to \code{\link{knit}()} from
-  \code{purl()}; ignored if the arguments do not match with
-  any arguments in \code{knit()}}
+  \code{purl()}}
 }
 \value{
   The compiled document is written into the output file,
