@@ -1,3 +1,92 @@
+		 CHANGES IN knitr VERSION 1.0
+
+NEW FEATURES
+
+  - a new function `knit_expand()` which is similar to **brew**
+  and mustache, e.g. it expands `pi is {{pi}}` to `pi is
+  3.14`; it can also be used for building child documents (see
+  https://github.com/yihui/knitr-examples/blob/master/075-knit-expand.Rnw
+  for example) (#397) (thanks, Frank Harrell)
+
+  - `knit()` gained a new argument `encoding` to specify the encoding of
+  the input file (multilingual support is complete now), e.g. `knit(...,
+  encoding = 'GBK')` for Simplified Chinese
+
+  - a new function `Sweave2knitr()` to convert Sweave documents to **knitr**;
+  several automatic translations can be done, e.g. `results=tex` to
+  `results='asis'`, `width=5` to `fig.width=5`, `echo=true` to `echo=TRUE`,
+  `keep.source=TRUE` to `tidy=FALSE`, `eps=TRUE` to `dev='postscript'`,
+  `\SweaveOpts{...}` to `opts_chunk$set(...)` and so on; see the documentation
+  in the package for details (#451)
+
+  - if the Sweave syntax is detected in an Rnw document, a message box
+  (**tcltk**) will pop up as a reminder on how to fix it
+
+  - inline R code also respects the option `opts_knti$get('stop_on_error')`
+  now, e.g. if we set this option to `2L`, R will completely stop when error
+  occurs in inline R code
+
+  - a new function `all_labels()` to get all chunk
+  labels in a document; see one application at
+  https://github.com/yihui/knitr-examples/blob/master/073-code-appendix.Rnw
+
+  - chunk hooks will be run (if exist) even if the code chunk is empty
+
+  - added two wrapper functions `stitch_rhtml()` and `stitch_rmd()` which
+  use the R HTML and R Markdown templates respectively when calling `stitch()`
+
+  - the chunk label is used as the id of the div element in R HTML output,
+  e.g. `<div id='chunk-label'>...</div>`
+
+MAJOR CHANGES
+
+  - (IMPORTANT) the internal compatibility with Sweave has been dropped
+  as scheduled in the last version, and the **knitr** parser was greatly
+  simplified accordingly; Sweave users can call the function `Sweave2knitr()`
+  to convert old Rnw files to **knitr** files before running `knit()`
+
+  - accordingly, the pattern elements `global.options` and `inline.doc`
+  were removed from `knit_patterns` (`\SweaveOpts{}` and `\SweaveInput{}`
+  will no longer be supported; please call `Sweave2knitr()` to convert
+  incompatible Sweave documents)
+
+  - chunk labels can be arbitrary characters now; in the past they had to be
+  valid R symbols, e.g. `2a` was an invalid label; this restriction has been
+  removed, because chunk labels will be automatically quoted when necessary
+  (`<<2a>>=` will become `<<'2a'>>=`, but `<<'3-function'>>=` will remain
+  untouched)
+
+  - if the chunk option `include=FALSE`, the evaluation will stop if errors
+  occur (i.e. `stop_on_error=2L` for **evaluate**), because otherwise it
+  will be very difficult for authors to notice errors in chunks which have
+  `include=FALSE` (#453) (thanks, Joshua Pritikin)
+
+  - the function `knit_env()` is no longer available (it is not exported
+  any more), and `knit_global()` has been exported now
+
+MINOR CHANGES
+
+  - for inline R code, the value is returned only if the R code prints
+  a visible value, e.g. `\Sexpr{x <- 1}` will be empty, and `\Sexpr{pi}`
+  will return the value of pi
+
+BUG FIXES
+
+  - fixed #432: no longer uses `\\\\` in LaTeX output; only a single line
+  break is converted to `\\` (thanks, Kevin Wright)
+
+  - `render_html()` guarantees that the R source code is highlighted when
+  the chunk option `highlight = TRUE` (#447) (thanks, Ramnath Vaidyanathan)
+
+  - `dep_auto()` was unable to find the cache files if the input document
+  is not under the current working directory (thanks, Hui Yao)
+
+Documentation
+
+  - because Github has deprecated downloads, all downloads were moved to
+  Bitbucket, and the links in the package website as well as all examples
+  have been updated (#438)
+
 		 CHANGES IN knitr VERSION 0.9
 
 NEW FEATURES
@@ -267,7 +356,7 @@ MINOR CHANGES
 DOCUMENTATION
 
   - added a simple reference card:
-  https://github.com/downloads/yihui/knitr/knitr-refcard.pdf
+  https://bitbucket.org/stat/knitr/downloads/knitr-refcard.pdf
 
 		 CHANGES IN knitr VERSION 0.7
 
@@ -847,7 +936,7 @@ DOCUMENTATION
   - website updated as usual: http://yihui.name/knitr
 
   - added an example for subfloat environment:
-  https://github.com/downloads/yihui/knitr/knitr-subfloats.pdf
+  https://bitbucket.org/stat/knitr/downloads/knitr-subfloats.pdf
 
   - most manuals (main or graphics manuals) have been updated
 
