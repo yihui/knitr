@@ -138,7 +138,7 @@ knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
   mat = str_extract_all(txt, delim)[[1L]]
   mat = str_replace(mat, delim, '\\1')
   env = list(...)
-  env = if (length(env)) list2env(env) else parent.frame()
+  env = if (length(env)) list2env(env, parent = parent.frame()) else parent.frame()
   inline_exec(list(code = mat, input = txt, location = loc),
               eval = TRUE, envir = env, stop_on_error = 2L, hook = identity)
 }
