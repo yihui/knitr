@@ -16,8 +16,7 @@ test_that('templates respect custom delimiter pairs', {
 
 test_that('templates respect pypi delimiters', {
   template = 'hello $(LETTERS[24]) and $(pi)!'
-  delim = c("$(", ")")
-  exp = knit_expand(text = template, delim = delim)
+  exp = knit_expand(text = template, delim = c("$(", ")"))
   act = "hello X and 3.14159265358979!"
   expect_equal(exp, act)
 })
