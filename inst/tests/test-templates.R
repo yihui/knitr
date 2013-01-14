@@ -27,12 +27,10 @@ test_that('error is thrown when delimiter is not a pair', {
   expect_error(knit_expand(text = template, a = 10, delim = c("<%")))
 })
 
-
-# test_that('templates use data from parent frame', {
-#   template = 'The value of a is {{a}}, and b + 1 is {{b + 1}}'
-#   set.seed(1234)
-#   b = round(rnorm(1), 2)
-#   exp = knit_expand(text = template, a = 10)
-#   act = "The value of a is 10, and b + 1 is -0.21"
-#   expect_equal(exp, act)
-# })
+test_that('templates use data from parent frame', {
+  template = 'The value of a is {{a}}, and b + 1 is {{b + 1}}'
+  b = -1.21
+  exp = knit_expand(text = template, a = 10)
+  act = "The value of a is 10, and b + 1 is -0.21"
+  expect_equal(exp, act)
+})
