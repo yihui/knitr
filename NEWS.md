@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.1
+
+## NEW FEATURES
+
+- a new engine for coffeescript (i.e. the chunk option `engine='coffee'`); see https://github.com/yihui/knitr-examples/blob/master/080-engine-coffeescript.Rmd for an example (thanks, Nacho Caballero)
+
 # CHANGES IN knitr VERSION 1.0
 
 ## NEW FEATURES
