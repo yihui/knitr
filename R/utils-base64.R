@@ -15,7 +15,7 @@ image_uri = function(f) {
   if (has_package('markdown')) return(markdown:::.b64EncodeFile(f))
   content = readBin(f, what = 'raw', n = file.info(f)$size)
   uri = if (has_package('RCurl')) {
-    paste(base64Encode(content, 'character'), collapse = '')
+    paste(RCurl::base64Encode(content, 'character'), collapse = '')
   } else base64_encode(content)
   str_c("data:", mime_type(f), ";base64,", uri)
 }
