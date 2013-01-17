@@ -38,12 +38,12 @@ vignettes:
 	lyx -e knitr knitr-refcard.lyx
 
 # the svn mirror created by
-# git svn clone svn://svn.rforge.net/knitr/trunk knitr-svn
-# commit everything to RForge
+# svn checkout svn+ssh://yihui@svn.r-forge.r-project.org/svnroot/isu/pkg/knitr
+# commit everything to R-Forge
 svn:
-	cd ../knitr-svn;\
-	git pull -X theirs git://github.com/yihui/knitr.git;\
-	git svn dcommit
+	git archive master > ../../svn/knitr.tar;\
+	cd ../../svn/knitr && rm -r `ls` && tar -xf ../knitr.tar;\
+	svn add --force . && svn commit -m 'sync with git'
 
 clean:
 	cd ..;\
