@@ -155,7 +155,7 @@ eng_sas = function(options) {
 
 ## CoffeeScript
 eng_coffee = function(options) {
-  f = basename(tempfile('coffee','.','.coffee'))
+  f = basename(tempfile('coffee', '.', '.coffee'))
   writeLines(options$code, f)
   on.exit(unlink(f))
   cmd = sprintf('%s -p %s %s', shQuote(options$engine.path %n% options$engine),
