@@ -153,15 +153,24 @@ eng_sas = function(options) {
   engine_output(options, options$code, out)
 }
 
+## CoffeeScript
+eng_coffee = function(options) {
+  f = basename(tempfile('coffee','.','.coffee'))
+  writeLines(code <- options$code, f)
+  on.exit(unlink(c(f, sub('\\.coffee$', '.js', f))))
+  cmd = sprintf('%s -p -c %s', shQuote(options$engine.path %n% options$engine), shQuote(f))
+  out = if (options$eval) system(cmd, intern = TRUE) else ''
+  engine_output(options, '', out)
+}
+
 # set engines for interpreted languages
-for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'perl', 'python', 'ruby',
-            'sed', 'sh', 'zsh')) {
+for (i in c('awk', 'bash', 'gawk', 'haskell', 'perl', 'python', 'ruby', 'sed', 'sh', 'zsh')) {
   knit_engines$set(setNames(list(eng_interpreted), i))
 }
 # additional engines
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, sas = eng_sas,
-  tikz = eng_tikz, dot = eng_dot
+  tikz = eng_tikz, dot = eng_dot, coffee = eng_coffee
 )
 
 # possible values for engines (for auto-completion in RStudio)
