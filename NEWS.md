@@ -4,6 +4,10 @@
 
 - a new engine for coffeescript (i.e. the chunk option `engine='coffee'`); see https://github.com/yihui/knitr-examples/blob/master/080-engine-coffeescript.Rmd for an example (thanks, Nacho Caballero)
 
+## MINOR CHANGES
+
+- slight improvement of encoding support in `knit()`
+
 # CHANGES IN knitr VERSION 1.0
 
 ## NEW FEATURES
