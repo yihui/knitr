@@ -98,3 +98,4 @@ Collate:
     'zzz.R'
     'template.R'
     'utils-sweave.R'
+    'utils-conversion.R'
