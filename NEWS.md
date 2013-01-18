@@ -4,6 +4,10 @@
 
 - a new engine for coffeescript (i.e. the chunk option `engine='coffee'`); see https://github.com/yihui/knitr-examples/blob/master/080-engine-coffeescript.Rmd for an example (thanks, Nacho Caballero)
 
+## BUG FIXES
+
+- fixed #465: when `eval=FALSE` and `echo` is numeric, code was incorrectly filtered by the indices in `echo` (thanks, @ateucher)
+
 ## MINOR CHANGES
 
 - slight improvement of encoding support in `knit()`

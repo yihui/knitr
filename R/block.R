@@ -125,8 +125,12 @@ block_exec = function(options) {
     res = Filter(Negate(is.source), res)
   } else if (is.numeric(echo)) {
     # choose expressions to echo using a numeric vector
-    iss = which(sapply(res, is.source))
-    if (length(idx <- setdiff(iss, iss[echo]))) res = res[-idx]
+    if (isFALSE(ev)) {
+      res = list(structure(list(src = code[echo]), class = 'source'))
+    } else {
+      iss = which(sapply(res, is.source))
+      if (length(idx <- setdiff(iss, iss[echo]))) res = res[-idx]
+    }
   }
   if (options$results == 'hide') res = Filter(Negate(is.character), res)
   if (!options$warning) res = Filter(Negate(is.warning), res)
