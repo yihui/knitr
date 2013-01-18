@@ -39,7 +39,7 @@ test_that('fig_path() sanitizes paths', {
 
 test_that('base64_encode() gets the same result as markdown:::.b64EncodeFile', {
   f = file.path(R.home('doc'), "html", "logo.jpg")
-  expect_identical(markdown:::.b64EncodeFile(f), image_uri(f))
+  if (require('markdown')) expect_identical(markdown:::.b64EncodeFile(f), image_uri(f))
 })
 
 test_that('escape special LaTeX characters', {
