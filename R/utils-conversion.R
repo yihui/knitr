@@ -61,7 +61,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.f
 #' Convert markdown to HTML using knit() and markdownToHTML()
 #'
 #' This is a convenience function to knit the input markdown source and call
-#' \code{markdownToHTML()} to convert the result to HTML.
+#' \code{\link[markdown]{markdownToHTML}()} in the \pkg{markdown} package to
+#' convert the result to HTML.
 #' @inheritParams knit
 #' @param ... options passed to \code{\link[markdown]{markdownToHTML}}
 #' @export
@@ -74,6 +75,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.f
 #' if (require('markdown')) {knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')}
 knit2html = function(input, ..., text = NULL, envir = parent.frame()){
+  if (!has_package('markdown'))
+    return(warning('the package markdown is not available'))
   if (is.null(text)) {
     out = knit(input, envir = envir)
     markdown::markdownToHTML(out, str_c(file_path_sans_ext(out), '.html'), ...)

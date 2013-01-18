@@ -64,7 +64,7 @@ stitch = function(script,
   switch(file_ext(out), tex = {
     texi2pdf(out, clean = TRUE)
     message('PDF output at: ', str_replace(out, '\\.tex$', '.pdf'))
-  }, md = {
+  }, md = if (has_package('markdown')) {
     out.html = str_c(file_path_sans_ext(out), '.html')
     markdown::markdownToHTML(out, out.html)
     message('HTML output at: ', out.html)
