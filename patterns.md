@@ -35,39 +35,39 @@ str(all_patterns)
 ##  $ rnw :List of 7
 ##   ..$ chunk.begin   : chr "^\\s*<<(.*)>>="
 ##   ..$ chunk.end     : chr "^\\s*@\\s*(%+.*|)$"
-##   ..$ inline.code   : chr "\\\\Sexpr\\{([^}]*)\\}"
+##   ..$ inline.code   : chr "\\\\Sexpr\\{([^}]+)\\}"
 ##   ..$ inline.comment: chr "^\\s*%.*"
-##   ..$ ref.chunk     : chr "^\\s*<<(.*)>>\\s*$"
+##   ..$ ref.chunk     : chr "^\\s*<<(.+)>>\\s*$"
 ##   ..$ header.begin  : chr "\\s*\\\\documentclass[^}]+\\}"
 ##   ..$ document.begin: chr "\\s*\\\\begin\\{document\\}"
 ##  $ brew:List of 1
-##   ..$ inline.code: chr "<%[=]{0,1}\\s+([^%]*)\\s+[-]*%>"
+##   ..$ inline.code: chr "<%[=]{0,1}\\s+([^%]+)\\s+[-]*%>"
 ##  $ tex :List of 8
 ##   ..$ chunk.begin   : chr "^\\s*%+\\s*begin.rcode\\s*(.*)"
 ##   ..$ chunk.end     : chr "^\\s*%+\\s*end.rcode"
 ##   ..$ chunk.code    : chr "^%+"
-##   ..$ ref.chunk     : chr "^%+\\s*<<(.*)>>\\s*$"
+##   ..$ ref.chunk     : chr "^%+\\s*<<(.+)>>\\s*$"
 ##   ..$ inline.comment: chr "^\\s*%.*"
-##   ..$ inline.code   : chr "\\\\rinline\\{([^}]*)\\}"
+##   ..$ inline.code   : chr "\\\\rinline\\{([^}]+)\\}"
 ##   ..$ header.begin  : chr "\\s*\\\\documentclass[^}]+\\}"
 ##   ..$ document.begin: chr "\\s*\\\\begin\\{document\\}"
 ##  $ html:List of 5
 ##   ..$ chunk.begin : chr "^\\s*<!--\\s*begin.rcode\\s*(.*)"
 ##   ..$ chunk.end   : chr "^\\s*end.rcode\\s*-->"
-##   ..$ ref.chunk   : chr "^\\s*<<(.*)>>\\s*$"
-##   ..$ inline.code : chr "<!--\\s*rinline\\s*([^>]*)\\s*-->"
+##   ..$ ref.chunk   : chr "^\\s*<<(.+)>>\\s*$"
+##   ..$ inline.code : chr "<!--\\s*rinline(.+?)-->"
 ##   ..$ header.begin: chr "\\s*<head>"
 ##  $ md  :List of 4
 ##   ..$ chunk.begin: chr "^\\s*`{3,}\\s*\\{r(.*)\\}\\s*$"
 ##   ..$ chunk.end  : chr "^\\s*`{3,}\\s*$"
-##   ..$ ref.chunk  : chr "^\\s*<<(.*)>>\\s*$"
+##   ..$ ref.chunk  : chr "^\\s*<<(.+)>>\\s*$"
 ##   ..$ inline.code: chr "`r +([^`\n]+)\\s*`"
 ##  $ rst :List of 5
 ##   ..$ chunk.begin: chr "^\\s*\\.{2}\\s+\\{r(.*)\\}\\s*$"
 ##   ..$ chunk.end  : chr "^\\s*\\.{2}\\s+\\.{2,}\\s*$"
 ##   ..$ chunk.code : chr "^\\.{2}"
-##   ..$ ref.chunk  : chr "^\\.*\\s*<<(.*)>>\\s*$"
-##   ..$ inline.code: chr ":r:`([^`]*)`"
+##   ..$ ref.chunk  : chr "^\\.*\\s*<<(.+)>>\\s*$"
+##   ..$ inline.code: chr ":r:`([^`]+)`"
 {% endhighlight %}
 
 
