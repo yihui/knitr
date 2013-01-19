@@ -13,8 +13,7 @@ call_block = function(block) {
   af = opts_knit$get('eval.after'); al = opts_knit$get('aliases')
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
   params = opts_chunk$merge(block$params)
-  for (o in setdiff(names(params), af))
-    params[o] = list(eval_lang(params[[o]]))
+  for (o in setdiff(names(params), af)) params[o] = list(eval_lang(params[[o]]))
 
   params = fix_options(params)  # for compatibility
 
@@ -56,10 +55,9 @@ call_block = function(block) {
       return(cache$output(hash))
     }
     cache$library(params$cache.path, save = FALSE) # load packages
-  } else if (label %in% names(dep_list$get())) {
+  } else if (label %in% names(dep_list$get()))
     warning('code chunks must not depend on the uncached chunk "', label, '"',
             call. = FALSE)
-  }
 
   params$params.src = block$params.src
   opts_current$restore(params)  # save current options
@@ -105,9 +103,8 @@ block_exec = function(options) {
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
   # guess plot file type if it is NULL
-  if (keep != 'none' && is.null(options$fig.ext)) {
+  if (keep != 'none' && is.null(options$fig.ext))
     options$fig.ext = dev2ext(options$dev)
-  }
 
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
@@ -158,9 +155,8 @@ block_exec = function(options) {
     }
   }
   # number of plots in this chunk
-  if (is.null(options$fig.num)) {
+  if (is.null(options$fig.num))
     options$fig.num = if (length(res)) sum(sapply(res, is.recordedplot)) else 0L
-  }
 
   # merge source lines if they do not have output; is there an elegant way??
   iss = if (length(res)) which(sapply(res, is.source)) else NULL

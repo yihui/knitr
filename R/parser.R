@@ -6,9 +6,7 @@ split_file = function(lines, set.preamble = TRUE) {
   n = length(lines)
   chunk.begin = knit_patterns$get('chunk.begin')
   chunk.end = knit_patterns$get('chunk.end')
-  if (is.null(chunk.begin) || is.null(chunk.end)) {
-    return(list(parse_inline(lines)))
-  }
+  if (is.null(chunk.begin) || is.null(chunk.end)) return(list(parse_inline(lines)))
 
   if (!child_mode() && set.preamble) {
     set_preamble(lines)  # prepare for tikz option 'standAlone'
@@ -38,10 +36,8 @@ split_file = function(lines, set.preamble = TRUE) {
 knit_code = new_defaults()
 
 ## strip the pattern in code
-strip_block = function(x) {
-  if (!is.null(prefix <- knit_patterns$get('chunk.code')) && (n <- length(x)) > 1) {
-    x[-1L] = str_replace(x[-1L], prefix, "")
-  }
+strip_block = function(x, prefix = knit_patterns$get('chunk.code')) {
+  if (!is.null(prefix) && (length(x) > 1)) x[-1L] = str_replace(x[-1L], prefix, '')
   x
 }
 
