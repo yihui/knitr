@@ -10,7 +10,7 @@ all_patterns = list(
   `rnw` = list(chunk.begin = '^\\s*<<(.*)>>=', chunk.end = '^\\s*@\\s*(%+.*|)$',
                inline.code = '\\\\Sexpr\\{([^}]+)\\}',
                inline.comment = '^\\s*%.*',
-               ref.chunk = '^\\s*<<(.*)>>\\s*$',
+               ref.chunk = '^\\s*<<(.+)>>\\s*$',
                header.begin = '\\s*\\\\documentclass[^}]+\\}',
                document.begin = '\\s*\\\\begin\\{document\\}'),
 
@@ -18,7 +18,7 @@ all_patterns = list(
 
   `tex` = list(chunk.begin = '^\\s*%+\\s*begin.rcode\\s*(.*)',
                chunk.end = '^\\s*%+\\s*end.rcode', chunk.code = '^%+',
-               ref.chunk = '^%+\\s*<<(.*)>>\\s*$',
+               ref.chunk = '^%+\\s*<<(.+)>>\\s*$',
                inline.comment = '^\\s*%.*',
                inline.code = '\\\\rinline\\{([^}]+)\\}',
                header.begin = '\\s*\\\\documentclass[^}]+\\}',
@@ -26,19 +26,19 @@ all_patterns = list(
 
   `html` = list(chunk.begin = '^\\s*<!--\\s*begin.rcode\\s*(.*)',
                 chunk.end = '^\\s*end.rcode\\s*-->',
-                ref.chunk = '^\\s*<<(.*)>>\\s*$',
+                ref.chunk = '^\\s*<<(.+)>>\\s*$',
                 inline.code = '<!--\\s*rinline(.+?)-->',
                 header.begin = '\\s*<head>'),
 
   `md` = list(chunk.begin = '^\\s*`{3,}\\s*\\{r(.*)\\}\\s*$',
               chunk.end = '^\\s*`{3,}\\s*$',
-              ref.chunk = '^\\s*<<(.*)>>\\s*$',
+              ref.chunk = '^\\s*<<(.+)>>\\s*$',
               inline.code = '`r +([^`\n]+)\\s*`'),
 
   `rst` = list(chunk.begin = "^\\s*\\.{2}\\s+\\{r(.*)\\}\\s*$",
                chunk.end = "^\\s*\\.{2}\\s+\\.{2,}\\s*$",
                chunk.code = "^\\.{2}",
-               ref.chunk = "^\\.*\\s*<<(.*)>>\\s*$",
+               ref.chunk = "^\\.*\\s*<<(.+)>>\\s*$",
                inline.code = ":r:`([^`]+)`")
 )
 
