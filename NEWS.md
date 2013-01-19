@@ -10,6 +10,10 @@
 
 - `>` was not allowed in HTML inline code expressions (http://stackoverflow.com/q/14360296/559676); now the regular expression works correctly to look for `-->` instead of `>`
 
+## MAJOR CHANGES
+
+- empty inline expressions are no longer recognized, e.g. `\Sexpr{}` will not be parsed; this allows one to write such markers in tutorials (e.g. `<!--rinline -->` and `` `r ` ``); internally `all_patterns$foo$inline.code` was changed
+
 ## MINOR CHANGES
 
 - slight improvement of encoding support in `knit()`
