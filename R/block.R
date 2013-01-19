@@ -26,7 +26,8 @@ call_block = function(block) {
   params$code = unlist(knit_code$get(ref.label), use.names = FALSE)
   if (opts_knit$get('progress')) print(block)
 
-  if (params$eval && !is.null(params$child)) {
+  if (!is.null(params$child)) {
+    if (!params$eval) return('')
     if (concord_mode()) {
       concord_gen()  # generate a partial concordance before knit children
       i = knit_concord$get('i'); olines = knit_concord$get('outlines')
