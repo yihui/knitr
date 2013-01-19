@@ -27,7 +27,7 @@ all_patterns = list(
   `html` = list(chunk.begin = '^\\s*<!--\\s*begin.rcode\\s*(.*)',
                 chunk.end = '^\\s*end.rcode\\s*-->',
                 ref.chunk = '^\\s*<<(.*)>>\\s*$',
-                inline.code = '<!--\\s*rinline\\s*([^>]*)\\s*-->',
+                inline.code = '<!--\\s*rinline(.*?)-->',
                 header.begin = '\\s*<head>'),
 
   `md` = list(chunk.begin = '^\\s*`{3,}\\s*\\{r(.*)\\}\\s*$',

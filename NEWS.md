@@ -8,6 +8,8 @@
 
 - fixed #465: when `eval=FALSE` and `echo` is numeric, code was incorrectly filtered by the indices in `echo` (thanks, @ateucher)
 
+- `>` was not allowed in HTML inline code expressions (http://stackoverflow.com/q/14360296/559676); now the regular expression works correctly to look for `-->` instead of `>`
+
 ## MINOR CHANGES
 
 - slight improvement of encoding support in `knit()`
