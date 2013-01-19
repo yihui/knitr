@@ -185,7 +185,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
            sweave = render_sweave(), listings = render_listings(),
            html = render_html(), jekyll = render_jekyll(),
            markdown = render_markdown(), rst = render_rst())
-    on.exit(knit_hooks$restore(), add = TRUE)
+    on.exit(knit_hooks$set(.default.hooks), add = TRUE)
   }
 
   progress = opts_knit$get('progress')
