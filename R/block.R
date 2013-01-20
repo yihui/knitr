@@ -274,7 +274,9 @@ process_tangle.block = function(x) {
   if (!isFALSE(params$eval) && length(code) && str_detect(code, 'read_chunk\\(.+\\)')) {
     eval(parse(text = unlist(str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
   }
-  label_code(parse_chunk(code), x$params.src)
+  code = parse_chunk(code)
+  if (isFALSE(params$eval)) code = comment_out(code, params$comment, newline = FALSE)
+  label_code(code, x$params.src)
 }
 process_tangle.inline = function(x) {
   if (opts_knit$get('documentation') == 2L) {
