@@ -265,17 +265,17 @@ process_tangle = function(x) {
 }
 process_tangle.block = function(x) {
   params = opts_chunk$merge(x$params)
-  label = params$label
-  code = if (!isFALSE(params$eval) && !is.null(params$child)) {
+  label = params$label; ev = params$eval
+  code = if (!isFALSE(ev) && !is.null(params$child)) {
     cmds = lapply(sc_split(params$child), knit_child)
     str_c(unlist(cmds), collapse = '\n')
   } else knit_code$get(label)
   # read external code if exists
-  if (!isFALSE(params$eval) && length(code) && str_detect(code, 'read_chunk\\(.+\\)')) {
+  if (!isFALSE(ev) && length(code) && str_detect(code, 'read_chunk\\(.+\\)')) {
     eval(parse(text = unlist(str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
   }
   code = parse_chunk(code)
-  if (isFALSE(params$eval)) code = comment_out(code, params$comment, newline = FALSE)
+  if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
   label_code(code, x$params.src)
 }
 process_tangle.inline = function(x) {
