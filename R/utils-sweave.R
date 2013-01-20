@@ -166,11 +166,14 @@ is_sweave = function(x) {
 }
 
 remind_sweave = function(file) {
-  if (!capabilities('tcltk') || !capabilities('X11') || !tcltk:::.TkUp) return()
-  do.call(
+  msg = str_c('It seems you are using the Sweave-specific syntax; you may need ',
+              'Sweave2knitr(', shQuote(file), ') to convert it to knitr')
+  # throw a normal warning when R CMD check or tcltk not available
+  if ('CheckExEnv' %in% search() || '_R_CHECK_TIMINGS_' %in% names(Sys.getenv()) ||
+        !capabilities('tcltk') || !capabilities('X11') || !tcltk:::.TkUp) {
+    warning(msg)
+  } else do.call(
     getFromNamespace('tkmessageBox', 'tcltk'),
-    list(title = 'Sweave Noweb syntax?', icon = 'info',
-         message = str_c('It seems you are using the Sweave syntax; you may need ',
-                         'Sweave2knitr(', shQuote(file), ') to convert it to knitr'))
+    list(title = 'Sweave Noweb syntax?', icon = 'info', message = msg)
   )
 }
