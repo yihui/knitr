@@ -281,7 +281,7 @@ process_tangle.inline = function(x) {
     return(str_c(line_prompt(x$input.src, "#' ", "#' "), collapse = '\n'))
   }
   code = x$code
-  if ((n <- length(code)) == 0 || !any(idx <- str_detect(code, "knit_child\\(.+\\)")))
+  if (length(code) == 0L || !any(idx <- str_detect(code, "knit_child\\(.+\\)")))
     return('')
   str_c(str_c(sapply(code[idx], function(z) eval(parse(text = z))),
               collapse = '\n'), '\n')
