@@ -20,7 +20,11 @@ Or download the [zip ball](https://github.com/yihui/knitr/zipball/master) or [ta
 library(devtools); install_github('knitr', 'yihui')
 ```
 
-Note Windows users have to first install [Rtools](http://cran.rstudio.com/bin/windows/Rtools/).
+Note Windows users have to first install [Rtools](http://cran.rstudio.com/bin/windows/Rtools/). If you do not know how to install R packages from source, another choice is [RForge](http://rforge.net/knitr/), which provides daily build of **knitr** (including Windows/Mac binaries):
+
+```r
+install.packages('knitr', repos = 'http://www.rforge.net/')
+```
 
 ## Motivation
 
