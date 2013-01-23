@@ -110,7 +110,7 @@ gsub_msg = function(msg, pattern, replacement, x, ...) {
 
 fix_sweave = function(x) {
   x = gsub_msg('capitalizing true/false to TRUE/FALSE',
-               '=\\s*(true|false)', '=\\U\\1', x, perl = TRUE)
+               '(echo|eval|split|include|fig|pdf|eps|jpeg|png|tikz|keep.source|print|term|strip.white|prefix)\\s*=\\s*(true|false)', '\\1=\\U\\2', x, perl = TRUE)
 
   x = gsub_msg('removing the unnecessary option fig=TRUE',
                'fig\\s*=\\s*TRUE', '', x)
@@ -159,7 +159,8 @@ fix_sweave = function(x) {
 # check the source code to see if it is an Sweave document
 is_sweave = function(x) {
   any(grepl('^\\s*\\\\(usepackage(\\[.*\\])?\\{Sweave|SweaveInput\\{|SweaveOpts\\{)\\}', x)) ||
-    any(grepl('^<<.*([a-z]+=\\s*(true|false)|results\\s*=(tex|verbatim|hide)).*>>=', x)) ||
+    any(grepl('^<<.*(echo|eval|split|include)\\s*=\\s*(true|false).*>>=', x)) ||
+    any(grepl('^<<.*results\\s*=\\s*(tex|verbatim|hide)).*>>=', x)) ||
     any(grepl('^<<.*(fig|pdf|eps|jpeg|png|tikz)\\s*=\\s*(true|false|T|F).*>>=', x)) ||
     any(grepl('^<<.*([, ])(width|height)\\s*=\\s*(\\d+).*>>=', x)) ||
     any(grepl('^<<.*(keep.source|print|term|strip.white|prefix)\\s*=\\s*(true|false|T|F).*>>=', x))
