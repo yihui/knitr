@@ -100,6 +100,8 @@ pure_preamble = function(preamble) {
     return(unlist(res))
   }
   owd = setwd(input_dir()); on.exit(setwd(owd))
+  progress = opts_knit$get('progress')  # suppress printing of blocks and texts
+  opts_knit$set(progress = FALSE); on.exit(opts_knit$set(progress = progress), add = TRUE)
   ## run the code in the preamble
   sapply(res, if (opts_knit$get('tangle')) process_tangle else process_group)
 }
