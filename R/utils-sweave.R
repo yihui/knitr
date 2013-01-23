@@ -160,9 +160,9 @@ fix_sweave = function(x) {
 is_sweave = function(x) {
   any(grepl('^\\s*\\\\(usepackage(\\[.*\\])?\\{Sweave|SweaveInput\\{|SweaveOpts\\{)\\}', x)) ||
     any(grepl('^<<.*([a-z]+=\\s*(true|false)|results\\s*=(tex|verbatim|hide)).*>>=', x)) ||
-    any(grepl('^<<.*(fig|pdf|eps|jpeg|png|tikz)\\s*=\\s*(TRUE|FALSE).*>>=', x)) ||
+    any(grepl('^<<.*(fig|pdf|eps|jpeg|png|tikz)\\s*=\\s*(true|false|T|F).*>>=', x)) ||
     any(grepl('^<<.*([, ])(width|height)\\s*=\\s*(\\d+).*>>=', x)) ||
-    any(grepl('^<<.*(keep.source|print|term|strip.white|prefix)\\s*=\\s*(TRUE|FALSE).*>>=', x))
+    any(grepl('^<<.*(keep.source|print|term|strip.white|prefix)\\s*=\\s*(true|false|T|F).*>>=', x))
 }
 
 remind_sweave = function(file) {
