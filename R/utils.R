@@ -133,7 +133,7 @@ pure_preamble = function(preamble) {
 #'
 #' # @@
 set_parent = function(parent) {
-  if (child_mode()) return() # quit if in child mode
+  if (child_mode()) return(invisible(NULL)) # quit if in child mode
   opts_knit$set(parent = TRUE)
   set_preamble(readLines(parent, warn = FALSE))
   invisible(NULL)
