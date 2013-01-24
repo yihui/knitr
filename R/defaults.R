@@ -101,7 +101,7 @@ opts_knit = new_defaults(list(
   animation.fun = NULL, global.device = FALSE, eval.after = NULL,
   concordance = FALSE, tangle = FALSE, child = FALSE,
   parent = FALSE, documentation = FALSE, aliases = NULL, root.dir = NULL,
-  self.contained = TRUE, filter.chunk.end = TRUE, use.highlight = FALSE,
+  self.contained = TRUE, use.highlight = FALSE,
   header = c(highlight = '', tikz = '', framed = ''), stop_on_error = 0L
 ))
 ## header should not be set by hand unless you know what you are doing

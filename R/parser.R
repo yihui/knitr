@@ -13,9 +13,7 @@ split_file = function(lines, set.preamble = TRUE) {
   }
 
   blks = str_detect(lines, chunk.begin)
-  txts = str_detect(lines, chunk.end)
-  if (opts_knit$get('filter.chunk.end')) txts = filter_chunk_end(blks, txts)
-
+  txts = filter_chunk_end(blks, str_detect(lines, chunk.end))
   tmp = logical(n); tmp[blks | txts] = TRUE; lines[txts] = ''
 
   groups = unname(split(lines, cumsum(tmp)))

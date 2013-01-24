@@ -18,6 +18,8 @@
 
 - empty inline expressions are no longer recognized, e.g. `\Sexpr{}` will not be parsed; this allows one to write such markers in tutorials (e.g. `<!--rinline -->` and `` `r ` ``); internally `all_patterns$foo$inline.code` was changed
 
+- the package option `filter.chunk.end` was removed; this means in Rnw documents, a single line `@` has the meaning of terminating a chunk _only if_ there is a chunk header `<<>>=` before it; otherwise it does not have any special meanings
+
 ## MINOR CHANGES
 
 - slight improvement of encoding support in `knit()`
