@@ -18,13 +18,13 @@ test_that('parsing options', {
 
 test_that('parsing inline texts', {
   res = parse_inline(c('aaa \\Sexpr{x}', 'bbb \\Sexpr{NA} and \\Sexpr{1+2}',
-                       'another expression \\Sexpr{rnorm(10)}'), all_patterns$rnw$inline.code, NULL)
+                       'another expression \\Sexpr{rnorm(10)}'), all_patterns$rnw)
   expect_identical(res$code, c('x', 'NA', '1+2', 'rnorm(10)'))
   expect_identical(nchar(res$input), 81L)
   # empty inline code is not recognized
-  expect_identical(parse_inline('\\Sexpr{}', all_patterns$rnw$inline.code)$code,
+  expect_identical(parse_inline('\\Sexpr{}', all_patterns$rnw)$code,
                    character(0))
   # can use > in HTML inline code
-  expect_identical(parse_inline('<!--rinline "<a>" -->', all_patterns$html$inline.code)$code,
+  expect_identical(parse_inline('<!--rinline "<a>" -->', all_patterns$html)$code,
                    ' "<a>" ')
 })

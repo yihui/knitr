@@ -2,14 +2,14 @@
 
 ## split input document into groups containing chunks and other texts
 ## (may contain inline R code)
-split_file = function(lines, set.preamble = TRUE) {
+split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()) {
   n = length(lines)
-  chunk.begin = knit_patterns$get('chunk.begin')
-  chunk.end = knit_patterns$get('chunk.end')
-  if (is.null(chunk.begin) || is.null(chunk.end)) return(list(parse_inline(lines)))
+  chunk.begin = patterns$chunk.begin; chunk.end = patterns$chunk.end
+  if (is.null(chunk.begin) || is.null(chunk.end))
+    return(list(parse_inline(lines, patterns)))
 
   if (!child_mode() && set.preamble) {
-    set_preamble(lines)  # prepare for tikz option 'standAlone'
+    set_preamble(lines, patterns)  # prepare for tikz option 'standAlone'
   }
 
   blks = str_detect(lines, chunk.begin)
@@ -26,7 +26,7 @@ split_file = function(lines, set.preamble = TRUE) {
     if (!set.preamble && !parent_mode()) {
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
     }
-    if (block) parse_block(g) else parse_inline(g)
+    if (block) parse_block(g, patterns) else parse_inline(g, patterns)
   })
 }
 
@@ -34,7 +34,7 @@ split_file = function(lines, set.preamble = TRUE) {
 knit_code = new_defaults()
 
 ## strip the pattern in code
-strip_block = function(x, prefix = knit_patterns$get('chunk.code')) {
+strip_block = function(x, prefix = NULL) {
   if (!is.null(prefix) && (length(x) > 1)) x[-1L] = str_replace(x[-1L], prefix, '')
   x
 }
@@ -44,9 +44,9 @@ strip_block = function(x, prefix = knit_patterns$get('chunk.code')) {
 dep_list = new_defaults()
 
 ## separate params and R code in code chunks
-parse_block = function(input) {
-  block = strip_block(input)
-  n = length(block); chunk.begin = knit_patterns$get('chunk.begin')
+parse_block = function(input, patterns) {
+  block = strip_block(input, patterns$chunk.code)
+  n = length(block); chunk.begin = patterns$chunk.begin
   params.src = if (group_pattern(chunk.begin)) {
     str_trim(gsub(chunk.begin, '\\1', block[1]))
   } else ''
@@ -144,10 +144,10 @@ print.block = function(x, ...) {
 }
 
 ## extract inline R code fragments (as well as global options)
-parse_inline = function(input, inline.code = knit_patterns$get('inline.code'),
-                        inline.comment = knit_patterns$get('inline.comment')) {
+parse_inline = function(input, patterns) {
   input.src = input  # keep a copy of the source
 
+  inline.code = patterns$inline.code; inline.comment = patterns$inline.comment
   if (!is.null(inline.comment)) {
     idx = str_detect(input, inline.comment)
     # strip off inline code
