@@ -24,7 +24,7 @@ And `opts_chunk$set()` can change the default global options in a document (e.g.
 1. Avoid spaces ` ` and periods `.` in chunk labels and directory names; if your output is a TeX document, these characters can cause troubles (in general it is recommended to use alphabetic characters with words separated by `-` or `_` and avoid other characters), e.g. `setup-options` is a good label, whereas `setup.options` and `chunk 1` are bad; `fig.path='figures/mcmc-'` is a good prefix for figure output if this project is about MCMC, and `fig.path='markov chain/monte carlo'` is bad; non-alphanumeric characters except `-` and `_` in figure filenames will be replaced with `_` automatically;
 1. All option values must be _valid R expressions_ just like how we write function arguments;
   - for example, options that take _character_ values must be quoted as you do in R (e.g. should write `fig.path="abc"` instead of `fig.path=abc`, and `out.width='\\textwidth'` instead of `out.width=\textwidth`)
-  - in theory, the chunk label should be quoted as well but it is an exception for the sake of convenience; however sometimes it will not work, e.g. `<<2a>>=` (in this case we should write `<<'2a'>>=`)
+  - in theory, the chunk label should be quoted as well but the sake of convenience it will be automatically quoted if you did not quote it (e.g. `<<2a>>=` will become `<<'2a'>>=`)
   - for logical options, `TRUE` and `FALSE` are OK, and `true`/`false` will not work as you might have expected because `true` is not `TRUE`
   - you can write arbitrarily complicated expressions as you want as long as they are legitimate R code
   - if you come from the Sweave land, please read the [transition page](/knitr/demo/sweave/) carefully because the syntax is different
