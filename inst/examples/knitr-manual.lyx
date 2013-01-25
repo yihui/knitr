@@ -1597,7 +1597,7 @@ tikz()
 \series bold
 tikzDevice
 \series default
- will be used to record plots.
+ will be used to save plots.
  Options 
 \family typewriter
 sanitize
