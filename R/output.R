@@ -130,7 +130,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     ocode = knit_code$get(); on.exit(knit_code$restore(ocode), add = TRUE)
     if (tangle) knit_code$restore() # clean up code before tangling
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
-    opts_knit$set(tangle = tangle)
+    opts_knit$set(tangle = tangle, encoding = encoding)
   }
 
   ext = 'unknown'
@@ -340,7 +340,8 @@ knit_child = function(..., eval = TRUE) {
   child = child_mode()
   opts_knit$set(child = TRUE) # yes, in child mode now
   on.exit(opts_knit$set(child = child)) # restore child status
-  path = knit(..., tangle = opts_knit$get('tangle'))
+  path = knit(..., tangle = opts_knit$get('tangle'),
+              encoding = opts_knit$get('encoding') %n% getOption('encoding'))
   if (is.null(path)) return() # the input document is empty
   if (opts_knit$get('tangle')) {
     str_c('\n', 'source("', path, '")')

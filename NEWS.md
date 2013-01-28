@@ -14,6 +14,8 @@
 
 - `set_parent()` should not print `NULL` in the child document: http://stackoverflow.com/q/14487718/559676 (thanks, Thomas Holz)
 
+- child documents now inherit the encoding parameter from their parent document, i.e. the `encoding` value in `knit(..., encoding = ?)` is applied to `knit_child()`; note this assumes the parent document and the child documents use the same encoding (thanks, Henrik Nyhus)
+
 ## MAJOR CHANGES
 
 - empty inline expressions are no longer recognized, e.g. `\Sexpr{}` will not be parsed; this allows one to write such markers in tutorials (e.g. `<!--rinline -->` and `` `r ` ``); internally `all_patterns$foo$inline.code` was changed
