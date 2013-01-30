@@ -1,11 +1,8 @@
 \name{dep_auto}
-\alias{build_dep}
 \alias{dep_auto}
 \title{Build automatic dependencies among chunks}
 \usage{
 dep_auto(path = opts_chunk$get("cache.path"))
-
-build_dep(path)
 }
 \arguments{
   \item{path}{the path to the dependency file}
@@ -33,9 +30,6 @@ build_dep(path)
   need to adjust the \code{path} argument here to make sure
   this function can find the cache files \file{__objects}
   and \file{__globals}.
-
-  \code{build_dep} is a deprecated alias for
-  \code{dep_auto} and may be removed in the future.
 }
 \references{
   \url{http://yihui.name/knitr/demo/cache/}

@@ -113,9 +113,6 @@ cache = new_cache()
 #'   from the working directory before calling \code{knit()}, you need to adjust
 #'   the \code{path} argument here to make sure this function can find the cache
 #'   files \file{__objects} and \file{__globals}.
-#'
-#'   \code{build_dep} is a deprecated alias for \code{dep_auto} and may be
-#'   removed in the future.
 #' @export
 #' @seealso \code{\link{dep_prev}}
 #' @references \url{http://yihui.name/knitr/demo/cache/}
@@ -138,12 +135,6 @@ dep_auto = function(path = opts_chunk$get('cache.path')) {
         dep_list$set(setNames(list(c(dep_list$get(nms[j]), nms[i])), nms[j]))
     }
   }
-}
-#' @export
-#' @rdname dep_auto
-build_dep = function(path) {
-  warning('the function build_dep() is deprecated; please use dep_auto() instead')
-  dep_auto(path)
 }
 # parse objects in dependency files
 parse_objects = function(path) {
