@@ -6,6 +6,8 @@
 
 - when the chunk option `eval=FALSE`, `purl()` will comment out the code when extracting code chunks (thanks, Randall Pruim)
 
+- the environment variable `R_KNITR_PROGRESS` can be used to set the package option `progress` in `opts_knit`, e.g. when `R_KNITR_PROGRESS` is `FALSE`, this option will be set to `FALSE` when the package is loaded (#395)
+
 ## BUG FIXES
 
 - fixed #465: when `eval=FALSE` and `echo` is numeric, code was incorrectly filtered by the indices in `echo` (thanks, @ateucher)
