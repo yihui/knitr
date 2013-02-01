@@ -12,6 +12,7 @@
 \makeatletter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 % \VignetteIndexEntry{An Introduction to knitr}
+% \VignetteEngine{knitr}
 
 \makeatother
 

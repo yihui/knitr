@@ -21,6 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \usepackage{multicol, upquote}
 % \VignetteIndexEntry{knitr Reference Card}
+% \VignetteEngine{knitr}
 
 \makeatother
 

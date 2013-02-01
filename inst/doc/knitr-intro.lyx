@@ -5,6 +5,7 @@
 \textclass article
 \begin_preamble
 % \VignetteIndexEntry{An Introduction to knitr}
+% \VignetteEngine{knitr}
 \end_preamble
 \use_default_options true
 \begin_modules
