@@ -26,6 +26,8 @@
 
 - the package option `filter.chunk.end` was removed; this means in Rnw documents, a single line `@` has the meaning of terminating a chunk _only if_ there is a chunk header `<<>>=` before it; otherwise it does not have any special meanings
 
+- the function `run_chunk()` was removed; it is redundant because we already have the chunk option `ref.label` as well as in-chunk reference `<<label>>`
+
 ## MINOR CHANGES
 
 - slight improvement of encoding support in `knit()`

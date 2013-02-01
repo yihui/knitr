@@ -305,29 +305,6 @@ knit_env = function() {
   .knitEnv$knit_env
 }
 
-#' Run the code in a specified chunk
-#'
-#' We can specify a chunk label and use this function to evaluate the code in
-#' this chunk. It is an alternative to the chunk reference in Sweave.
-#'
-#' The difference between this type of chunk reference and the chunk option
-#' \code{ref.label} is that the latter can only be used for a chunk so that it
-#' has exactly the same code as the reference chunk, whereas this function makes
-#' it possible to collect several little chunks and run them inside another big
-#' chunk.
-#' @param label the chunk label
-#' @param envir the environment in which to evaluate the code
-#' @return Values returned by the code in the chunk.
-#' @note Recursion (must be finite, of course) of reference is allowed, e.g. we
-#'   may run the code of \samp{chunk2} in \samp{chunk1}, and \samp{chunk2} also
-#'   contains a reference to \samp{chunk3}, then if we run \samp{chunk1}, both
-#'   the code in \samp{chunk2} and \samp{chunk3} will be evaluated.
-#' @export
-#' @examples # see http://yihui.name/knitr/demo/reference/
-run_chunk = function(label, envir = parent.frame()) {
-  eval(parse(text = knit_code$get(label)), envir = envir)
-}
-
 # Indents a Block
 #  Input
 #     "library(ggplot2)\nqplot(wt, mpg, data = mtcars)"
