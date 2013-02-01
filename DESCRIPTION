@@ -65,6 +65,7 @@ Suggests:
 License: GPL
 URL: http://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
+VignetteBuilder: knitr
 Collate:
     'package.R'
     'utils-upload.R'
@@ -99,3 +100,4 @@ Collate:
     'template.R'
     'utils-sweave.R'
     'utils-conversion.R'
+    'utils-vignettes.R'
