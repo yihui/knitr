@@ -3,12 +3,13 @@
 The FAQ's are compiled from the [issues](https://github.com/yihui/knitr/issues) and messages I received from blog posts and emails, etc.
 
 1. **knitr** does not work...
-  - Please first update all your R packages (use `update.packages()`) and probably R itself ([what is the current R version?](http://cran.r-project.org/)), then see if it works; if not, file an [issue](https://github.com/yihui/knitr/issues) to me (email is fine, too).
+  - Please first update all your R packages (use `update.packages()`) and probably R itself ([what is the current R version?](http://cran.r-project.org/)), then see if it works; if not, please file an [issue](https://github.com/yihui/knitr/issues) to me.
 1. What is the best place to ask questions when the [package website](http://yihui.name/knitr) is not helpful?
   - Depending what you want to ask, you may use these tools (I keep track of the first three more frequently):
-  - [issues page](https://github.com/yihui/knitr/issues): bug reports and feature requests
-  - [knitr mailing list](https://groups.google.com/group/knitr) or R-help list: general questions and feedback via email in public; you can also email me in private but I do not prefer this way (see `packageDescription('knitr', fields = 'Maintainer')`)
-  - [StackOverflow](http://stackoverflow.com/questions/tagged/knitr): general questions (more public than emails)
+  - (Recommended) [StackOverflow](http://stackoverflow.com/questions/tagged/knitr): general questions (more experts and quicker answers there)
+  - [Github issues](https://github.com/yihui/knitr/issues): bug reports and feature requests
+  - [knitr mailing list](https://groups.google.com/group/knitr) or [R-help](http://www.r-project.org/mail.html) list: general questions and feedback via email in public
+  - Private email is the least recommended way unless there are really private issues
   - Twitter ([`@xieyihui`](http://twitter.com/xieyihui)) or Google+ ([`+Yihui Xie`](https://plus.google.com/u/0/109653178371807724268/posts))
 1. How should I get started?
   - Watch the [5-min video](http://www.screenr.com/qcv8) on the [homepage](http://yihui.name/knitr).
