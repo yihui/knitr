@@ -41,8 +41,8 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' ## compile a reST file with rst2pdf
 #'
 #' ## knit2pdf(..., compiler = 'rst2pdf')
-knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.frame()) {
-  out = knit(input, output, envir = envir)
+knit2pdf = function(input, output = NULL, compiler = NULL, encoding = getOption('encoding'), ...) {
+  out = knit(input, output, envir = parent.frame(), encoding = encoding)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (!is.null(compiler)) {
     if (compiler == 'rst2pdf') {
@@ -74,14 +74,14 @@ knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.f
 #' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' if (require('markdown')) {knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')}
-knit2html = function(input, ..., text = NULL, envir = parent.frame()){
+knit2html = function(input, ..., text = NULL, encoding = getOption('encoding')){
   if (!has_package('markdown'))
     return(warning('the package markdown is not available'))
   if (is.null(text)) {
-    out = knit(input, envir = envir)
+    out = knit(input, envir = parent.frame(), encoding = encoding)
     markdown::markdownToHTML(out, str_c(file_path_sans_ext(out), '.html'), ...)
   } else {
-    out = knit(text = text, envir = envir)
+    out = knit(text = text, envir = parent.frame(), encoding = encoding)
     markdown::markdownToHTML(text = out, ...)
   }
 }
