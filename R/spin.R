@@ -17,7 +17,6 @@
 #'   default it follows the roxygen convention, but it can be customized, e.g.
 #'   if you want to use \code{##} to denote documentation, you can use
 #'   \code{'^##\\\\s*'}
-#' @inheritParams knit
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
 #'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
 #' @return The path of the literate programming document.
@@ -44,7 +43,7 @@
 #' spin(s, FALSE, format='Rtex')
 #' spin(s, FALSE, format='Rrst')
 spin = function(hair, knit = TRUE, report = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
-                doc = "^#+'[ ]?", envir = parent.frame()) {
+                doc = "^#+'[ ]?") {
 
   format = match.arg(format)
   x = readLines(hair, warn = FALSE); r = rle(str_detect(x, doc))
@@ -80,9 +79,9 @@ spin = function(hair, knit = TRUE, report = TRUE, format = c('Rmd', 'Rnw', 'Rhtm
   cat(txt, file = outsrc, sep = '\n')
   if (knit) {
     if (report) {
-      if (format == 'Rmd') knit2html(outsrc, envir = envir) else
-        if (format %in% c('Rnw', 'Rtex')) knit2pdf(outsrc, envir = envir)
-    } else knit(outsrc, envir = envir)
+      if (format == 'Rmd') knit2html(outsrc) else
+        if (format %in% c('Rnw', 'Rtex')) knit2pdf(outsrc)
+    } else knit(outsrc)
   }
 
   invisible(outsrc)
