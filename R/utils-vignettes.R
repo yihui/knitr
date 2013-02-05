@@ -2,7 +2,7 @@
 
 vweave = vtangle = function(file, driver, syntax, encoding = '', quiet = FALSE, ...) {
   if (quiet) opts_knit$set(progress = FALSE)
-  knit(file, encoding = encoding)
+  (if (grepl('\\.[Rr]md$', file)) knit2html else knit)(file, encoding = encoding)
 }
 
 body(vtangle)[3L] = expression(purl(file, encoding = encoding))
