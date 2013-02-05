@@ -6,7 +6,7 @@ PDFS= knitr-intro.pdf knitr-refcard.pdf
 all: $(PDFS) 
 
 clean:
-	rm -f *.tex *.bbl *.blg *.aux *.out *.log *.spl *tikzDictionary
+	rm -rf *.tex *.bbl *.blg *.aux *.out *.log *.spl *tikzDictionary *.md figure/
 
 %.pdf: %.Rnw
 	$(R_HOME)/bin/Rscript -e "if (getRversion() < '3.0.0') knitr::knit2pdf('$*.Rnw') else tools::texi2pdf('$*.tex')"
