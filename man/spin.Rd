@@ -3,7 +3,7 @@
 \title{Spin goat's hair into wool}
 \usage{
 spin(hair, knit = TRUE, report = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", 
-    "Rrst"), doc = "^#+'[ ]?", envir = parent.frame())
+    "Rrst"), doc = "^#+'[ ]?")
 }
 \arguments{
   \item{hair}{the path to the R script}
@@ -23,10 +23,6 @@ spin(hair, knit = TRUE, report = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex",
   convention, but it can be customized, e.g.  if you want
   to use \code{##} to denote documentation, you can use
   \code{'^##\\\\s*'}}
-
-  \item{envir}{the environment in which the code chunks are
-  to be evaluated (can use \code{\link{new.env}()} to
-  guarantee an empty new environment)}
 }
 \value{
   The path of the literate programming document.
