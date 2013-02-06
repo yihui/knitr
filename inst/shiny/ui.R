@@ -7,7 +7,7 @@ shinyUI(
   bootstrapPage(
     tags$head(
       tags$title('An R Notebook in Shiny'),
-      tags$script(src = 'http://animation.r-forge.r-project.org/ideas/ace/ace.js',
+      tags$script(src = 'http://ace.ajax.org/build/src-min-noconflict/ace.js',
                   type = 'text/javascript', charset = 'utf-8'),
       tags$link(rel = 'stylesheet', type = 'text/css', href = 'assets/ace-shiny.css'),
       tags$script(src = 'assets/highlight.pack.js', type = 'text/javascript'),
