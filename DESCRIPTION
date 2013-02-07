@@ -51,13 +51,13 @@ Imports:
     evaluate (>= 0.4.3),
     digest,
     formatR (>= 0.3-4),
+    markdown (>= 0.4),
     stringr (>= 0.6),
     tools
 Suggests:
     testthat,
     rgl,
     codetools,
-    markdown (>= 0.4),
     R2SWF (>= 0.4),
     XML,
     RCurl,
