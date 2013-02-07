@@ -75,8 +75,6 @@ knit2pdf = function(input, output = NULL, compiler = NULL, encoding = getOption(
 #' if (require('markdown')) {knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')}
 knit2html = function(input, ..., text = NULL, encoding = getOption('encoding')){
-  if (!has_package('markdown'))
-    return(warning('the package markdown is not available'))
   if (is.null(text)) {
     out = knit(input, envir = parent.frame(), encoding = encoding)
     markdown::markdownToHTML(out, str_c(file_path_sans_ext(out), '.html'), ...)
