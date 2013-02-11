@@ -8,7 +8,7 @@
 
 - when the chunk option `eval=FALSE`, `purl()` will comment out the code when extracting code chunks (thanks, Randall Pruim)
 
-- the environment variable `R_KNITR_PROGRESS` can be used to set the package option `progress` in `opts_knit`, e.g. when `R_KNITR_PROGRESS` is `FALSE`, this option will be set to `FALSE` when the package is loaded (#395)
+- the global option `KNITR_PROGRESS` can be used to set the package option `progress` in `opts_knit`, e.g. after `options(KNITR_PROGRESS = FALSE)`, this option will be set to `FALSE` when the package is loaded (#395)
 
 - a new function `knit2wp()` which compiles R Markdown documents and publishes the results to WordPress; see http://yihui.name/knitr/demo/wordpress/ for details
 
