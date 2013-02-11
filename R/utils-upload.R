@@ -1,4 +1,4 @@
-#' Upload a image to imgur.com
+#' Upload an image to imgur.com
 #'
 #' This function uses the \pkg{RCurl} package to upload a image to
 #' \url{imgur.com}, and parses the XML response to a list with \pkg{XML} which
@@ -19,7 +19,7 @@
 #' @note Please register your own Imgur application to get your client id; you
 #'   can certainly use mine, but this id is in the public domain so everyone
 #'   has access to all images associated to it.
-#' @references Imgur API: \url{http://api.imgur.com/}; a demo:
+#' @references Imgur API version 3: \url{http://api.imgur.com/}; a demo:
 #'   \url{http://yihui.name/knitr/demo/upload/}
 #' @export
 #' @examples f = tempfile(fileext = '.png')
