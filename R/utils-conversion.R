@@ -83,3 +83,31 @@ knit2html = function(input, ..., text = NULL, encoding = getOption('encoding')){
     markdown::markdownToHTML(text = out, ...)
   }
 }
+
+#' Knit an R Markdown document and post it to WordPress
+#'
+#' This function is a wrapper around the \pkg{RWordPress} package. It compiles
+#' an R Markdown document to HTML and post the results to WordPress.
+#' @param input the filename of the Rmd document
+#' @param title the post title
+#' @param ... other meta information of the post, e.g. \code{categories = c('R',
+#'   'Stats')} and \code{mt_keywords = c('knitr', 'wordpress')}, etc
+#' @param shortcode whether to use the shortcode \samp{[sourcecode lang='lang']}
+#'   which can be useful to WordPress.com users for syntax highlighting of
+#'   source code
+#' @export
+#' @references \url{http://yihui.name/knitr/demo/wordpress/}
+#' @author William K. Morris and Yihui Xie
+#' @examples # see the reference
+knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE) {
+  content = knit2html(text = readLines(input, warn = FALSE), fragment.only = TRUE)
+  if (shortcode) {
+    content = gsub('<pre><code class="([[:alpha:]]+)">', '[sourcecode language="\\1"]', content)
+    content = gsub('<pre><code( class="no-highlight"|)>', '[sourcecode]', content)
+    content = gsub('</code></pre>', '[/sourcecode]', content)
+  }
+  do.call('library', list(package = 'RWordPress', character.only = TRUE))
+  getFromNamespace('newPost', 'RWordPress')(list(
+    description = content, title = title, ...
+  ))
+}
