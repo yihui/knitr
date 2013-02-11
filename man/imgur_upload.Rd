@@ -1,15 +1,14 @@
 \name{imgur_upload}
 \alias{imgur_upload}
-\title{Upload a image to imgur.com}
+\title{Upload an image to imgur.com}
 \usage{
-imgur_upload(file, key = "60e9e47cff8483c6dc289a1cd674b40f")
+imgur_upload(file, key = "9f3460e67f308f6")
 }
 \arguments{
   \item{file}{the path to the image file to be uploaded}
 
-  \item{key}{the API key for Imgur (by default uses a key
-  created by Yihui Xie, which allows 50 uploads per hour
-  per IP address)}
+  \item{key}{the client id for Imgur (by default uses a
+  client id registered by Yihui Xie)}
 }
 \value{
   A character string of the link to the image; this string
@@ -34,7 +33,7 @@ imgur_upload(file, key = "60e9e47cff8483c6dc289a1cd674b40f")
 }
 \note{
   Please register your own Imgur application to get your
-  API key; you can certainly use mine, but this key is in
+  client id; you can certainly use mine, but this id is in
   the public domain so everyone has access to all images
   associated to it.
 }
@@ -48,7 +47,7 @@ res = imgur_upload(f)
 res  # link to original URL of the image
 attr(res, "XML")  # all information
 if (interactive()) 
-    browseURL(res$links$imgur_page)  # imgur page
+    browseURL(res)
 
 ## to use your own key
 opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "your imgur key"))
@@ -59,6 +58,6 @@ opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "your imgur k
   Statham
 }
 \references{
-  Imgur API: \url{http://api.imgur.com/}; a demo:
+  Imgur API version 3: \url{http://api.imgur.com/}; a demo:
   \url{http://yihui.name/knitr/demo/upload/}
 }
