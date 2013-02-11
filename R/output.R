@@ -120,7 +120,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     knit_log$restore()
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
     ## turn off fancy quotes, use smaller digits/width, warn immediately
-    oopts = options(useFancyQuotes = FALSE, digits = 4L, width = 75L, warn = 1L,
+    oopts = options(useFancyQuotes = FALSE, digits = 4L, warn = 1L,
+                    width = getOption('KNITR_WIDTH', 75L),
                   device = function(file = NULL, width = 7, height = 7, ...) {
                     pdf(file, width, height, ...)
                   })
