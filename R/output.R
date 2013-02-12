@@ -412,9 +412,6 @@ wrap.error = function(x, options) {
 }
 
 wrap.recordedplot = function(x, options) {
-  if (!is.null(base.dir <- opts_knit$get('base.dir'))) {
-    odir = setwd(base.dir); on.exit(setwd(odir)) # switch to abs dir, then restore
-  }
   ## figure number sequence for multiple plots
   fig.cur = plot_counter()
   options$fig.cur = fig.cur # put fig num in options
