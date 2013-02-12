@@ -2,7 +2,7 @@
 \alias{knit2wp}
 \title{Knit an R Markdown document and post it to WordPress}
 \usage{
-knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE)
+knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE, encoding = getOption("encoding"))
 }
 \arguments{
   \item{input}{the filename of the Rmd document}
@@ -17,6 +17,9 @@ knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE)
   \samp{[sourcecode lang='lang']} which can be useful to
   WordPress.com users for syntax highlighting of source
   code}
+
+  \item{encoding}{the encoding of the input file; see
+  \code{\link{file}}}
 }
 \description{
   This function is a wrapper around the \pkg{RWordPress}

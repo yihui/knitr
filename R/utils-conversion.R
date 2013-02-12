@@ -95,17 +95,23 @@ knit2html = function(input, ..., text = NULL, encoding = getOption('encoding')){
 #' @param shortcode whether to use the shortcode \samp{[sourcecode lang='lang']}
 #'   which can be useful to WordPress.com users for syntax highlighting of
 #'   source code
+#' @inheritParams knit
 #' @export
 #' @references \url{http://yihui.name/knitr/demo/wordpress/}
 #' @author William K. Morris and Yihui Xie
 #' @examples # see the reference
-knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE) {
-  content = knit2html(text = readLines(input, warn = FALSE), fragment.only = TRUE)
+knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
+                   encoding = getOption('encoding')) {
+  out = knit(input, encoding = encoding); on.exit(unlink(out))
+  con = file(out, encoding = encoding); on.exit(close(con), add = TRUE)
+  content = native_encode(readLines(con, warn = FALSE))
+  content = markdown::markdownToHTML(text = content, fragment.only = TRUE)
   if (shortcode) {
     content = gsub('<pre><code class="([[:alpha:]]+)">', '[sourcecode language="\\1"]', content)
     content = gsub('<pre><code( class="no-highlight"|)>', '[sourcecode]', content)
     content = gsub('</code></pre>', '[/sourcecode]', content)
   }
+  content = native_encode(content, 'UTF-8')
   do.call('library', list(package = 'RWordPress', character.only = TRUE))
   getFromNamespace('newPost', 'RWordPress')(list(
     description = content, title = title, ...
