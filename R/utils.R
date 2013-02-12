@@ -352,7 +352,9 @@ all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
 
 # evaluate an expression in a diretory and restore wd after that
 in_dir = function(dir, expr) {
-  owd = setwd(dir); on.exit(setwd(owd))
+  if (!is.null(dir)) {
+    owd = setwd(dir); on.exit(setwd(owd))
+  }
   expr
 }
 
