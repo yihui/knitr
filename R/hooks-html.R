@@ -83,7 +83,7 @@ hook_ffmpeg_html = function(x, options) {
                   if('controls' %in% mov.opts) 'controls="controls"',
                   if('loop' %in% mov.opts) 'loop="loop"')
   sprintf('<video %s><source src="%s" type="video/mp4" />video of chunk %s</video>',
-          opt.str, mov.fname, options$label)
+          opt.str, str_c(opts_knit$get('base.url'), mov.fname), options$label)
 }
 
 opts_knit$set(animation.fun = hook_ffmpeg_html)
