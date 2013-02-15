@@ -105,6 +105,7 @@ knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
   out = knit(input, encoding = encoding); on.exit(unlink(out))
   con = file(out, encoding = encoding); on.exit(close(con), add = TRUE)
   content = native_encode(readLines(con, warn = FALSE))
+  content = paste(content, collapse="\n")
   content = markdown::markdownToHTML(text = content, fragment.only = TRUE)
   if (shortcode) {
     content = gsub('<pre><code class="([[:alpha:]]+)">', '[sourcecode language="\\1"]', content)
@@ -112,6 +113,7 @@ knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
     content = gsub('</code></pre>', '[/sourcecode]', content)
   }
   content = native_encode(content, 'UTF-8')
+  title = native_encode(title, 'UTF-8')
   do.call('library', list(package = 'RWordPress', character.only = TRUE))
   getFromNamespace('newPost', 'RWordPress')(list(
     description = content, title = title, ...
