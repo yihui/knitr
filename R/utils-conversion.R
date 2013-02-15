@@ -99,13 +99,18 @@ knit2html = function(input, ..., text = NULL, encoding = getOption('encoding')){
 #' @export
 #' @references \url{http://yihui.name/knitr/demo/wordpress/}
 #' @author William K. Morris and Yihui Xie
+#' @note This function will convert the encoding of the post and the title to
+#'   UTF-8 internally. If you have additional data to send to WordPress (e.g.
+#'   keywords and categories), you may have to manually convert them to the
+#'   UTF-8 encoding with the \code{\link{iconv}(x, to = 'UTF-8')} function
+#'   (especially when using Windows).
 #' @examples # see the reference
 knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
                    encoding = getOption('encoding')) {
   out = knit(input, encoding = encoding); on.exit(unlink(out))
   con = file(out, encoding = encoding); on.exit(close(con), add = TRUE)
   content = native_encode(readLines(con, warn = FALSE))
-  content = paste(content, collapse="\n")
+  content = paste(content, collapse = '\n')
   content = markdown::markdownToHTML(text = content, fragment.only = TRUE)
   if (shortcode) {
     content = gsub('<pre><code class="([[:alpha:]]+)">', '[sourcecode language="\\1"]', content)
