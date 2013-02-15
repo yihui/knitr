@@ -45,7 +45,7 @@ hook_rgl = function(before, options, envir) {
   library(rgl)
   ## after a chunk has been evaluated
   if (before || rgl.cur() == 0) return()  # no active device
-  name = fig_path()
+  name = fig_path('', options)
   par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
 
