@@ -66,12 +66,11 @@ eng_Rcpp = function(options) {
   code = str_c(options$code, collapse = '\n')
   # engine.opts is a list of arguments to be passed to Rcpp function, e.g.
   # engine.opts=list(plugin='RcppArmadillo')
+  opts = options$engine.opts
+  if (!is.environment(opts$env)) opts$env = knit_global() # default env is knit_global()
   if (options$eval) {
     message('Building shared library for Rcpp code chunk...')
-    do.call(
-      Rcpp::sourceCpp,
-      c(list(code = code, env = knit_global()), options$engine.opts)
-    )
+    do.call(Rcpp::sourceCpp, c(list(code = code), opts))
   }
 
   options$engine = 'cpp' # wrap up source code in cpp syntax instead of Rcpp

@@ -40,6 +40,8 @@
 
 - the function `imgur_upload()` uses Imgur API version 3 now; if you are using the key obtained from version 2, you need to register for your own client id: http://api.imgur.com (#439)
 
+- allow users to pass a custom environment to `Rcpp::sourceCpp()` in the `Rcpp` engine; fixes http://stackoverflow.com/q/14882486/559676
+
 - slight improvement of encoding support in `knit()`
 
 # CHANGES IN knitr VERSION 1.0
