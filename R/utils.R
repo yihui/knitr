@@ -76,7 +76,7 @@ sc_split = function(string) {
 }
 
 ## extract LaTeX packages for tikzDevice
-set_preamble = function(input, patterns) {
+set_preamble = function(input, patterns = knit_patterns$get()) {
   if (!out_format('latex')) return()
   if (length(db <- patterns$document.begin) != 1L) return()  # no \begin{document} pattern
   if (length(hb <- patterns$header.begin) != 1L) return()  # no \documentclass{} pattern
