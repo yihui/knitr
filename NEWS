@@ -1,3 +1,83 @@
+		 CHANGES IN knitr VERSION 1.1
+
+NEW FEATURES
+
+  - (experimental) R 3.0.0 will support non-Sweave vignettes, e.g. Rnw
+  documents can be compiled by **knitr** instead of Sweave; in addition,
+  R Markdown vignettes have also become first-class citizens as R package
+  vignettes; see http://yihui.name/knitr/demo/vignette/ for details
+
+  - a new engine for coffeescript
+  (i.e. the chunk option `engine='coffee'`); see
+  https://github.com/yihui/knitr-examples/blob/master/080-engine-coffeescript.Rmd
+  for an example (thanks, Nacho Caballero)
+
+  - when the chunk option `eval=FALSE`, `purl()` will comment out the code
+  when extracting code chunks (thanks, Randall Pruim)
+
+  - the global option `KNITR_PROGRESS` can be used to set the package option
+  `progress` in `opts_knit`, e.g. after `options(KNITR_PROGRESS = FALSE)`,
+  this option will be set to `FALSE` when the package is loaded (#395)
+
+  - the global option `KNITR_WIDTH` can be use to set the R option `width`
+  before **knitr** is called; in the past this option was hard-coded to
+  `75`, and now it is set as `options(width = getOption('KNITR_WIDTH', 75L)`
+
+  - a new function `knit2wp()` which compiles R Markdown
+  documents and publishes the results to WordPress; see
+  http://yihui.name/knitr/demo/wordpress/ for details
+
+  - a new hook `hook_webgl()` which writes the WebGL code of an
+  **rgl** scene into the output using `rgl::writeWebGL()` so we
+  can reproduce a 3D plot in the browser (thanks, Stephane Laurent
+  http://stackoverflow.com/q/14879210/559676)
+
+BUG FIXES
+
+  - fixed #465: when `eval=FALSE` and `echo` is numeric, code was incorrectly
+  filtered by the indices in `echo` (thanks, @ateucher)
+
+  - `>` was not allowed in HTML inline code expressions
+  (http://stackoverflow.com/q/14360296/559676); now the regular expression
+  works correctly to look for `-->` instead of `>`
+
+  - `set_parent()` should not print `NULL` in the child document:
+  http://stackoverflow.com/q/14487718/559676 (thanks, Thomas Holz)
+
+  - child documents now inherit the encoding parameter from their parent
+  document, i.e. the `encoding` value in `knit(..., encoding = ?)` is applied
+  to `knit_child()`; note this assumes the parent document and the child
+  documents use the same encoding (thanks, Henrik Nyhus)
+
+MAJOR CHANGES
+
+  - empty inline expressions are no longer recognized, e.g. `\Sexpr{}`
+  will not be parsed; this allows one to write such markers in
+  tutorials (e.g. `<!--rinline -->` and `` `r ` ``); internally
+  `all_patterns$foo$inline.code` was changed
+
+  - the function `build_dep()` was removed (the warning has been there for
+  a long time); please use `dep_auto()` instead
+
+  - the package option `filter.chunk.end` was removed; this means in Rnw
+  documents, a single line `@` has the meaning of terminating a chunk _only
+  if_ there is a chunk header `<<>>=` before it; otherwise it does not have
+  any special meanings
+
+  - the function `run_chunk()` was removed; it is redundant because we already
+  have the chunk option `ref.label` as well as in-chunk reference `<<label>>`
+
+MINOR CHANGES
+
+  - the function `imgur_upload()` uses Imgur API version 3 now; if you are
+  using the key obtained from version 2, you need to register for your own
+  client id: http://api.imgur.com (#439)
+
+  - allow users to pass a custom environment to `Rcpp::sourceCpp()` in the
+  `Rcpp` engine; fixes http://stackoverflow.com/q/14882486/559676
+
+  - slight improvement of encoding support in `knit()`
+
 		 CHANGES IN knitr VERSION 1.0
 
 NEW FEATURES
