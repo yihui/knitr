@@ -387,7 +387,7 @@ Beside PDF, PNG and other traditional R graphical devices, \textbf{knitr}
 has special support to tikz graphics via the \textbf{tikzDevice} package
 \citep{R-tikzDevice}, which is similar to \textbf{pgfSweave}. If
 we set the chunk option \texttt{dev='tikz'}, the \emph{tikz()} device
-in \textbf{tikzDevice} will be used to record plots. Options \texttt{sanitize}
+in \textbf{tikzDevice} will be used to save plots. Options \texttt{sanitize}
 and \texttt{external} are related to the tikz device: see the documentation
 of \emph{tikz()} for details. Note \texttt{external=TRUE} in \textbf{knitr}
 has a different meaning with \textbf{pgfSweave} -- it means \texttt{standAlone=TRUE}
