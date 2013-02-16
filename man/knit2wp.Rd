@@ -26,6 +26,14 @@ knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE, encoding = g
   package. It compiles an R Markdown document to HTML and
   post the results to WordPress.
 }
+\note{
+  This function will convert the encoding of the post and
+  the title to UTF-8 internally. If you have additional
+  data to send to WordPress (e.g.  keywords and
+  categories), you may have to manually convert them to the
+  UTF-8 encoding with the \code{\link{iconv}(x, to =
+  'UTF-8')} function (especially when using Windows).
+}
 \examples{
 # see the reference
 }
