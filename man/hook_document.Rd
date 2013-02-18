@@ -1,11 +1,8 @@
 \name{hook_movecode}
 \alias{hook_movecode}
-\alias{hook_rjournal}
 \title{Some potentially useful document hooks}
 \usage{
 hook_movecode(x)
-
-hook_rjournal(x)
 }
 \arguments{
   \item{x}{a character string (the content of the whole
@@ -30,12 +27,6 @@ hook_rjournal(x)
   the floating environments, extract the code chunks and
   move them out. To disable this behavior, use a comment
   \code{\% knitr_do_not_move} in the floating environment.
-
-  \code{hook_rjournal()} is a hook designed for the R
-  Journal; it adds \samp{\\begin{article}} after
-  \samp{\\begin{document}}, and \samp{\\end{article}}
-  before \samp{\\end{document}}, because that is how the R
-  Journal style works, although it is unusual.
 }
 \note{
   These functions are hackish. Also note
