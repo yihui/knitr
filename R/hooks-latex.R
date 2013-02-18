@@ -258,11 +258,6 @@ render_listings = function() {
 #' environments, extract the code chunks and move them out. To disable this
 #' behavior, use a comment \code{\% knitr_do_not_move} in the floating
 #' environment.
-#'
-#' \code{hook_rjournal()} is a hook designed for the R Journal; it adds
-#' \samp{\\begin{article}} after \samp{\\begin{document}}, and
-#' \samp{\\end{article}} before \samp{\\end{document}}, because that is how the
-#' R Journal style works, although it is unusual.
 #' @rdname hook_document
 #' @param x a character string (the content of the whole document output)
 #' @return The post-processed document as a character string.
@@ -311,12 +306,4 @@ hook_movecode = function(x) {
     gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
   }), use.names = FALSE), collapse = '\n')
   .rm.empty.envir(res)
-}
-#' @rdname hook_document
-#' @export
-hook_rjournal = function(x) {
-  x = split_lines(x)
-  x = sub('^\\\\begin\\{document\\}$', '\\\\begin{document}\n\\\\begin{article}', x)
-  x = sub('^\\\\end\\{document\\}$', '\\\\end{article}\n\\\\end{document}', x)
-  x
 }
