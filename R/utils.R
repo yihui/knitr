@@ -298,7 +298,7 @@ fig_path = function(suffix = '', options = opts_current$get()) {
 #' \code{\link{ls}()} on this environment.
 #' @export
 knit_global = function() {
-  .knitEnv$knit_global
+  .knitEnv$knit_global %n% globalenv()
 }
 # current environment for knitr's code chunks
 knit_env = function() {
