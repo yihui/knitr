@@ -1,5 +1,5 @@
 ## hooks that return character values will be inserted into final output
-run_hooks = function(before, options, envir) {
+run_hooks = function(before, options, envir = knit_global()) {
   ## default and user-defined new hooks
   hooks.n = knit_hooks$get()
   hooks.a = hooks.n[setdiff(names(hooks.n), names(.default.hooks))] # a list of hooks to run
