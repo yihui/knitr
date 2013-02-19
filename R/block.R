@@ -68,7 +68,10 @@ call_block = function(block) {
 block_exec = function(options) {
   # when code is not R language
   if (options$engine != 'R') {
+    res.before = run_hooks(before = TRUE, options)
     output = knit_engines$get(options$engine)(options)
+    res.after = run_hooks(before = FALSE, options)
+    output = str_c(c(res.before, output, res.after), collapse = '')
     if (options$cache) block_cache(options, output, character(0))
     return(output)
   }
