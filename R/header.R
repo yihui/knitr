@@ -25,7 +25,7 @@ make_header_latex = function() {
 }
 
 insert_header_latex = function(doc, b) {
-  i = which(str_detect(doc, b))
+  i = grep(b, doc)
   if (length(i) >= 1L) {
     i = i[1L]; l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])
