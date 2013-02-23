@@ -63,11 +63,11 @@ new_cache = function() {
     path = valid_path(path, '__packages')
     if (save) {
       x = .packages()
-      if (file.exists(path)) x = unique(c(x, readLines(path)))
+      if (file.exists(path)) x = setdiff(c(x, readLines(path)), .base.pkgs)
       cat(x, file = path, sep = '\n')
     } else {
       if (!file.exists(path)) return()
-      for (p in setdiff(readLines(path), .base.pkgs))
+      for (p in readLines(path))
         suppressPackageStartupMessages(library(p, character.only = TRUE))
     }
   }
