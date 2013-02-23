@@ -1,7 +1,7 @@
 Package: knitr
 Type: Package
 Title: A general-purpose package for dynamic report generation in R
-Version: 1.1.1
+Version: 1.1.2
 Date: 2013-02-16
 Authors@R: c(person("Hadley", "Wickham", role = "ctb"),
     person("Ramnath", "Vaidyanathan", role = "ctb"),
