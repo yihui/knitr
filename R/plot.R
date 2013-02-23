@@ -97,9 +97,13 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
     get(dev, mode = 'function')
   )
 
+  dargs = options$dev.args
+  if (is.list(dargs) && length(options$dev) > 1L) {
+    # dev.args is list(dev1 = list(arg1 = val1, ...), dev2 = list(arg2, ...))
+    if (all(options$dev %in% names(dargs))) dargs = dargs[[dev]]
+  }
   ## re-plot the recorded plot to an off-screen device
-  do.call(device, c(list(path, width = options$fig.width, height = options$fig.height),
-                    options$dev.args))
+  do.call(device, c(list(path, width = options$fig.width, height = options$fig.height), dargs))
   print(plot)
   dev.off()
 
