@@ -64,7 +64,7 @@ new_cache = function() {
     if (save) {
       x = .packages()
       if (file.exists(path)) x = setdiff(c(x, readLines(path)), .base.pkgs)
-      writeLines(x, path)
+      writeLines(sort(x), path)
     } else {
       if (!file.exists(path)) return()
       for (p in readLines(path))
