@@ -49,8 +49,7 @@ stitch = function(script,
                  sep = '\n', collapse = '\n')
   knit_code$restore()
   opts_chunk$set(
-    fig.align = 'center', out.width = '.6\\linewidth', par = TRUE,
-    fig.width = 6, fig.height = 6,
+    fig.align = 'center', par = TRUE, fig.width = 6, fig.height = 6,
     fig.path = paste('figure', gsub('[^[:alnum:]]', '-', input), sep = '/')
   )
   on.exit(opts_chunk$restore(), add = TRUE)

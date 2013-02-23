@@ -8,6 +8,8 @@
 
 - fixed the problem reported in http://stackoverflow.com/q/12448507/559676 now \usepackage{upquote} should appear after \usepackage{fontenc}, so single quotes in verbatim environments will no longer cause problems
 
+- fixed #487: `stitch_rhtml()` and `stitch_rmd()` should not use the chunk option `out.width = '.6\\linewidth'` (thanks, Tal Galili)
+
 ## MAJOR CHANGES
 
 - the document hook `hook_rjournal()` was removed; it was too hackish (see http://yihui.name/en/2013/02/contribute-to-the-r-journal-with-lyx-knitr/ for how to write an article for The R Journal in a less hackish way)
