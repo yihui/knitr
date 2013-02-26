@@ -10,20 +10,18 @@ You can install the stable version on [CRAN](http://cran.r-project.org/package=k
 install.packages('knitr', dependencies = TRUE)
 ```
 
-Or download the [zip ball](https://github.com/yihui/knitr/zipball/master) or [tar ball](https://github.com/yihui/knitr/tarball/master), decompress and run `R CMD INSTALL` on it, or use the **devtools** package to install the absolutely latest version:
+You can also install the development version from [RForge](http://rforge.net/knitr/), which provides daily build of **knitr**:
 
 ```r
-## this package depends on R >= 2.14.1
-## you may also need to update your packages: 
-## options(repos = c(CRAN = 'http://cran.r-project.org'))
-## update.packages()
-library(devtools); install_github('knitr', 'yihui')
+install.packages('knitr', repos = 'http://www.rforge.net/', type = 'source')
 ```
 
-Note Windows users have to first install [Rtools](http://cran.rstudio.com/bin/windows/Rtools/). If you do not know how to install R packages from source, another choice is [RForge](http://rforge.net/knitr/), which provides daily build of **knitr** (including Windows/Mac binaries):
+If you know GIT and `R CMD build`, here is another way:
 
-```r
-install.packages('knitr', repos = 'http://www.rforge.net/')
+```bash
+git clone https://github.com/yihui/knitr.git
+R CMD build knitr
+R CMD INSTALL knitr_*.tar.gz
 ```
 
 ## Motivation
