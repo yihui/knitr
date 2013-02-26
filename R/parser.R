@@ -59,7 +59,7 @@ parse_block = function(input, patterns) {
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
   code = block[-1L]
   if (length(code)) {
-    if (label %in% names(knit_code$get())) stop("duplicated label '", label, "'")
+    if (label %in% names(knit_code$get())) stop("duplicate label '", label, "'")
     knit_code$set(setNames(list(code), label))
   }
 
