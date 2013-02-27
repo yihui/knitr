@@ -41,8 +41,8 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' ## compile a reST file with rst2pdf
 #'
 #' ## knit2pdf(..., compiler = 'rst2pdf')
-knit2pdf = function(input, output = NULL, compiler = NULL, encoding = getOption('encoding'), ...) {
-  out = knit(input, output, envir = parent.frame(), encoding = encoding)
+knit2pdf = function(input, output = NULL, compiler = NULL, encoding = getOption('encoding'), envir = parent.frame(), ...) {
+  out = knit(input, output, envir = envir, encoding = encoding)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (!is.null(compiler)) {
     if (compiler == 'rst2pdf') {
