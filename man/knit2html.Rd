@@ -2,8 +2,7 @@
 \alias{knit2html}
 \title{Convert markdown to HTML using knit() and markdownToHTML()}
 \usage{
-  knit2html(input, ..., envir = parent.frame(),
-    text = NULL, encoding = getOption("encoding"))
+knit2html(input, ..., envir = parent.frame(), text = NULL, encoding = getOption("encoding"))
 }
 \arguments{
   \item{...}{options passed to
