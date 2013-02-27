@@ -41,7 +41,8 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' ## compile a reST file with rst2pdf
 #'
 #' ## knit2pdf(..., compiler = 'rst2pdf')
-knit2pdf = function(input, output = NULL, compiler = NULL, encoding = getOption('encoding'), envir = parent.frame(), ...) {
+knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(),
+                    encoding = getOption('encoding'), ...) {
   out = knit(input, output, envir = envir, encoding = encoding)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (!is.null(compiler)) {
@@ -74,7 +75,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, encoding = getOption(
 #' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' if (require('markdown')) {knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')}
-knit2html = function(input, ..., envir = parent.frame(), text = NULL, encoding = getOption('encoding')){
+knit2html = function(input, ..., envir = parent.frame(), text = NULL,
+                     encoding = getOption('encoding')){
   if (is.null(text)) {
     out = knit(input, envir = envir, encoding = encoding)
     markdown::markdownToHTML(out, str_c(file_path_sans_ext(out), '.html'), ...)
