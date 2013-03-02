@@ -428,3 +428,12 @@ correct_encode = function(encoding) {
     ''
   } else iconvlist()[idx]
 }
+
+# import functions from tools
+file_ext = tools::file_ext
+sans_ext = tools::file_path_sans_ext
+# substitute extension
+sub_ext = function(x, ext) {
+  if (grepl('\\.([[:alnum:]]+)$', x)) x = sans_ext(x)
+  paste(x, ext, sep = '.')
+}
