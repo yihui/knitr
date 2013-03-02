@@ -110,3 +110,4 @@ Collate:
     'utils-sweave.R'
     'utils-conversion.R'
     'utils-vignettes.R'
+    'pandoc.R'
