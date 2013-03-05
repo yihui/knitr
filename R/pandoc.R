@@ -53,7 +53,7 @@ pandoc = function(input, format = 'html', config = getOption('config.pandoc')) {
   cmd = paste(cmd, pandoc_arg(cmn), '-f markdown', '-t', format, '-o', out,
               paste(shQuote(input), collapse = ' '))
   message('executing ', cmd)
-  if (system(cmd) == 0L) out else stop('an error occurred to Pandoc')
+  if (system(cmd) == 0L) out else stop('conversion failed')
 }
 
 # infer output extension from format
