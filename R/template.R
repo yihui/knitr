@@ -40,7 +40,7 @@ stitch = function(script,
   read_chunk(lines = lines)
   if (length(knit_code$get()) == 0L) knit_code$set(`auto-report` = lines)
   input = basename(template)
-  input = str_c(file_path_sans_ext(basename(script)), '.', file_ext(input))
+  input = sub_ext(basename(script), file_ext(input))
   txt = readLines(template, warn = FALSE)
   i = grep('%sCHUNK_LABEL_HERE', txt)
   if (length(i) != 1L) stop('Wrong template for stitch: ', template)
@@ -64,7 +64,7 @@ stitch = function(script,
     texi2pdf(out, clean = TRUE)
     message('PDF output at: ', str_replace(out, '\\.tex$', '.pdf'))
   }, md = {
-    out.html = str_c(file_path_sans_ext(out), '.html')
+    out.html = sub_ext(out, 'html')
     markdown::markdownToHTML(out, out.html)
     message('HTML output at: ', out.html)
   })

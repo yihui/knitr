@@ -278,7 +278,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
 #' @export
 read_demo = function(topic, package = NULL, ...) {
   paths = list.files(file.path(find.package(package), 'demo'), full.names = TRUE)
-  read_chunk(paths[file_path_sans_ext(basename(paths)) == topic], ...)
+  read_chunk(paths[sans_ext(basename(paths)) == topic], ...)
 }
 
 # convert patterns to numeric indices in a character vector

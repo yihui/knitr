@@ -203,7 +203,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
   if (in.file && is.character(output) && file.exists(output)) {
     concord_gen(input2, output)  # concordance file
     if (!child_mode() && concord_mode()) {
-      confile = str_c(file_path_sans_ext(output), '-concordance.tex')
+      confile = str_c(sans_ext(output), '-concordance.tex')
       cat(.knitEnv$concordance, file = confile)
       .knitEnv$concordance = NULL # empty concord string
     }
@@ -269,7 +269,7 @@ process_file = function(text, output) {
 }
 
 auto_out_name = function(input, ext = tolower(file_ext(input))) {
-  base = file_path_sans_ext(input)
+  base = sans_ext(input)
   if (opts_knit$get('tangle')) return(str_c(base, '.R'))
   if (ext %in% c('rnw', 'snw')) return(str_c(base, '.tex'))
   if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'stex', 'rrst'))

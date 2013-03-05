@@ -70,7 +70,7 @@ spin = function(hair, knit = TRUE, report = TRUE, format = c('Rmd', 'Rnw', 'Rhtm
     }
   }
 
-  outsrc = str_c(file_path_sans_ext(hair), '.', format)
+  outsrc = sub_ext(hair, format)
   txt = unlist(txt)
   # make it a complete TeX document if document class not specified
   if (report && format %in% c('Rnw', 'Rtex') && !str_detect(txt, '^\\s*\\\\documentclass')) {

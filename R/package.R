@@ -22,7 +22,6 @@
 #' @importFrom formatR tidy.source
 #' @importFrom digest digest
 #' @import stringr
-#' @importFrom tools file_ext file_path_sans_ext
 NULL
 
 .knitEnv = new.env()
