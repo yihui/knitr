@@ -1,8 +1,9 @@
 .onLoad = function(lib, pkg) {
-  if (R.version$`svn rev` >= 62130 && getRversion() >= '3.0.0') {
-    tools::vignetteEngine(
-      'knitr', weave = vweave, tangle = vtangle,
-      pattern = c('[.][rRsS](nw|tex)$', '[.][Rr](md|html)$'), package = pkg
+  if (R.version$`svn rev` >= 61843 && getRversion() >= '3.0.0') {
+    do.call(tools::vignetteEngine,
+      c(list(name = 'knitr', weave = vweave, tangle = vtangle),
+      if (R.version$`svn rev` >= 62130)
+        list(pattern = c('[.][rRsS](nw|tex)$', '[.][Rr](md|html)$'), package = pkg))
     )
   }
   # use the option KNITR_PROGRESS to control the progress bar
