@@ -16,6 +16,8 @@
 
 - fixed #487: `stitch_rhtml()` and `stitch_rmd()` should not use the chunk option `out.width = '.6\\linewidth'` (thanks, Tal Galili)
 
+- LaTeX child documents are included without the file extension `.tex`, e.g. `\include{foo}` instead of `\include{foo.tex}` (thanks, Petri Koistinen; reported at http://yihui.name/knitr/demo/child/#comment-820887691)
+
 ## MAJOR CHANGES
 
 - the document hook `hook_rjournal()` was removed; it was too hackish (see http://yihui.name/en/2013/02/contribute-to-the-r-journal-with-lyx-knitr/ for how to write an article for The R Journal in a less hackish way)

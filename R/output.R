@@ -348,6 +348,7 @@ knit_child = function(..., eval = TRUE) {
     on.exit(unlink(path)) # child output file is temporary
     str_c(readLines(path), collapse = '\n')
   } else {
+    path = gsub('[.]tex$', '', path, ignore.case = TRUE)
     str_c('\n\\', opts_knit$get('child.command'), '{', path, '}')
   }
 }
