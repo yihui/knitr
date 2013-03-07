@@ -1,0 +1,26 @@
+citHeader("To cite the 'knitr' package in publications use:")
+
+year = sub('.*(2[[:digit:]]{3})-.*', '\\1', meta$Date, perl = TRUE)
+vers = paste('R package version', meta$Version)
+
+citEntry(
+  entry = 'Manual',
+  title = paste('knitr:', meta$Title),
+  author = as.person(meta$Author),
+  year = year,
+  note = vers,
+  url = meta$URL,
+  textVersion = paste('Yihui Xie (', year, '). knitr: ', meta$Title, '. ', vers, '.', sep = '')
+)
+
+citEntry(
+  entry = 'Book',
+  title = 'Dynamic Documents with R and knitr',
+  author = as.person(meta$Author),
+  publisher = 'Chapman and Hall/CRC',
+  year = '2013',
+  note = 'ISBN 978-1482203530',
+  url = meta$URL,
+  textVersion = paste('Yihui Xie (2013)', 'Dynamic Documents with R and knitr',
+                      'Chapman and Hall/CRC. ISBN 978-1482203530')
+)
