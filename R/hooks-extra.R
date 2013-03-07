@@ -140,8 +140,11 @@ hook_webgl = function(before, options, envir) {
   par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
 
-  writeLines(c('%WebGL%', '<script>webGLStart();</script>'), tpl <- tempfile())
-  writeWebGL(dir = dirname(name), filename = name, template = tpl)
+  prefix = gsub('[^[:alnum:]]', '_', options$label) # identifier for JS, better be alnum
+  prefix = sub('^([^[:alpha:]])', '_\\1', prefix) # should start with letters or _
+  writeLines(sprintf(c('%%%sWebGL%%', '<script>%swebGLStart();</script>'), prefix),
+             tpl <- tempfile())
+  writeWebGL(dir = dirname(name), filename = name, template = tpl, prefix = prefix)
   res = readLines(name)
   res = res[!grepl('^\\s*$', res)] # remove blank lines
   paste(gsub('^\\s*<', '<', res), collapse = '\n') # no spaces before HTML tags
