@@ -52,8 +52,8 @@ eng_interpreted = function(options) {
     options$engine, bash = '-c', coffee = '-p -e', haskell = '-e', perl = '-e',
     python = '-c', ruby = '-e', sh = '-c', zsh = '-c', ''
   )
-  cmd = paste(shQuote(options$engine.path %n% options$engine),
-              code_option, shQuote(code), options$engine.opts)
+  cmd = paste(shQuote(options$engine.path %n% options$engine), options$engine.opts, code)
+  message('running: ', cmd)
   out = if (options$eval) system(cmd, intern = TRUE) else ''
   engine_output(options, options$code, out)
 }
