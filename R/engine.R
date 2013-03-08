@@ -32,6 +32,7 @@ engine_output = function(options, code, out, extra = NULL) {
   if (length(out) != 1L) out = str_c(out, collapse = '\n')
   code = str_replace(code, '([^\n]+)$', '\\1\n')
   out = str_replace(out, '([^\n]+)$', '\\1\n')
+  if (options$engine == 'Rscript') options$engine = 'r'
   txt = paste(c(
     if (options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) {
@@ -164,7 +165,8 @@ eng_coffee = function(options) {
 }
 
 # set engines for interpreted languages
-for (i in c('awk', 'bash', 'gawk', 'haskell', 'perl', 'python', 'ruby', 'sed', 'sh', 'zsh')) {
+for (i in c('awk', 'bash', 'gawk', 'haskell', 'perl', 'python', 'Rscript',
+            'ruby', 'sed', 'sh', 'zsh')) {
   knit_engines$set(setNames(list(eng_interpreted), i))
 }
 # additional engines
