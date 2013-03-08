@@ -128,51 +128,21 @@ eng_dot = function(options){
 
 ## Andre Simon's highlight
 eng_highlight = function(options) {
-  f = tempfile()
-  writeLines(code <- options$code, f)
-  on.exit(unlink(f))
   # e.g. engine.opts can be '-S matlab -O latex'
-  if (!is.null(options$highlight.opts)) {
-    warning("chunk option 'highlight.opts' has been deprecated; use 'engine.opts' instead")
-    options$engine.opts = options$highlight.opts
-  }
-  cmd = sprintf('%s -f %s %s', shQuote(options$engine.path %n% options$engine),
-                options$engine.opts %n% '-S text', shQuote(f))
-  out = if (options$eval) system(cmd, intern = TRUE) else ''
+  if (is.null(options$engine.opts)) options$engine.opts = '-S text'
+  options$engine.opts[1L] = paste('-f', options$engine.opts[1L])
   options$echo = FALSE; options$results = 'asis'  # do not echo source code
-  engine_output(options, '', out)
-}
-
-## SAS (I really do not understand SAS; this engine only runs SAS code)
-eng_sas = function(options) {
-  # SAS wants a physical file
-  writeLines(options$code, f <- basename(tempfile('sas', '.', '.sas')))
-  on.exit(unlink(c(f, sub('\\.sas$', '.log', f))))
-  cmd = paste(shQuote(options$engine.path %n% options$engine), '-SYSIN', f, options$engine.opts)
-  out = if (options$eval) system(cmd, intern = TRUE) else ''
-  engine_output(options, options$code, out)
-}
-
-## CoffeeScript
-eng_coffee = function(options) {
-  f = basename(tempfile('coffee', '.', '.coffee'))
-  writeLines(options$code, f)
-  on.exit(unlink(f))
-  cmd = sprintf('%s -p %s %s', shQuote(options$engine.path %n% options$engine),
-                options$engine.opts %n% '', shQuote(f))
-  out = if (options$eval) system(cmd, intern = TRUE) else ''
-  engine_output(options, options$code, out)
+  eng_interpreted(options)
 }
 
 # set engines for interpreted languages
-for (i in c('awk', 'bash', 'gawk', 'haskell', 'perl', 'python', 'Rscript',
-            'ruby', 'sed', 'sh', 'zsh')) {
+for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'perl', 'python',
+            'Rscript', 'ruby', 'sas', 'sed', 'sh', 'zsh')) {
   knit_engines$set(setNames(list(eng_interpreted), i))
 }
 # additional engines
 knit_engines$set(
-  highlight = eng_highlight, Rcpp = eng_Rcpp, sas = eng_sas,
-  tikz = eng_tikz, dot = eng_dot, coffee = eng_coffee
+  highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot
 )
 
 # possible values for engines (for auto-completion in RStudio)
