@@ -55,7 +55,7 @@ eng_interpreted = function(options) {
   cmd = paste(shQuote(options$engine.path %n% options$engine),
               code_option, shQuote(code), options$engine.opts)
   out = if (options$eval) system(cmd, intern = TRUE) else ''
-  engine_output(options, code, out)
+  engine_output(options, options$code, out)
 }
 ## C
 
