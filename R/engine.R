@@ -59,6 +59,7 @@ eng_interpreted = function(options) {
     options$engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
     ruby = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(str_c(options$code, collapse = '\n')))
+  # FIXME: for these engines, the correct order is options + code + file
   code = if (options$engine %in% c('awk', 'gawk', 'sed'))
     paste(code, options$engine.opts) else paste(options$engine.opts, code)
   cmd = paste(shQuote(options$engine.path %n% options$engine), code)
