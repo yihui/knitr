@@ -54,7 +54,7 @@ eng_interpreted = function(options) {
     f
   } else if (options$engine %in% c('haskell', 'Rscript')) {
     # need multiple -e because they do not accept \n in code
-    paste('-e', shQuote(code), collapse = ' ')
+    paste('-e', shQuote(options$code), collapse = ' ')
   } else paste(switch(
     options$engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
     ruby = '-e', sh = '-c', zsh = '-c', NULL
