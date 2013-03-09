@@ -47,11 +47,18 @@ engine_output = function(options, code, out, extra = NULL) {
 ## TODO: how to emulate the console?? e.g. for Python
 
 eng_interpreted = function(options) {
-  code = str_c(options$code, collapse = '\n')
-  code_option = switch(
-    options$engine, bash = '-c', coffee = '-p -e', haskell = '-e', perl = '-e',
-    python = '-c', ruby = '-e', sh = '-c', zsh = '-c', ''
-  )
+  code = if (options$engine %in% c('highlight', 'sas')) {
+    f = basename(tempfile(options$engine, '.', '.txt'))
+    writeLines(options$code, f)
+    on.exit(unlink(f))
+    f
+  } else if (options$engine %in% c('haskell', 'Rscript')) {
+    # need multiple -e because they do not accept \n in code
+    paste('-e', shQuote(code), collapse = ' ')
+  } else paste(switch(
+    options$engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
+    ruby = '-e', sh = '-c', zsh = '-c', NULL
+  ), shQuote(str_c(options$code, collapse = '\n')))
   cmd = paste(shQuote(options$engine.path %n% options$engine), options$engine.opts, code)
   message('running: ', cmd)
   out = if (options$eval) system(cmd, intern = TRUE) else ''
