@@ -47,13 +47,13 @@ engine_output = function(options, code, out, extra = NULL) {
 ## TODO: how to emulate the console?? e.g. for Python
 
 eng_interpreted = function(options) {
-  code = if (options$engine %in% c('highlight', 'sas')) {
+  code = if (options$engine %in% c('highlight', 'Rscript', 'sas')) {
     f = basename(tempfile(options$engine, '.', '.txt'))
     writeLines(options$code, f)
     on.exit(unlink(f))
     f
-  } else if (options$engine %in% c('haskell', 'Rscript')) {
-    # need multiple -e because they do not accept \n in code
+  } else if (options$engine %in% c('haskell')) {
+    # need multiple -e because the engine does not accept \n in code
     paste('-e', shQuote(options$code), collapse = ' ')
   } else paste(switch(
     options$engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
