@@ -12,6 +12,8 @@
 
 - as announced in the last version, R 3.0.0 will support non-Sweave vignettes; now it is also possible to compile R HTML vignettes via **knitr** since `*.Rhtml` files are also registered by **knitr** as vignette files
 
+- added a new engine `Rscript` to run the R code in a new R session; see http://stackoverflow.com/q/15271406/559676 for an example
+
 ## BUG FIXES
 
 - fixed the problem reported in http://stackoverflow.com/q/12448507/559676 now \usepackage{upquote} should appear after \usepackage{fontenc}, so single quotes in verbatim environments will no longer cause problems
