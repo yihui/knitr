@@ -37,7 +37,27 @@
 #' ## 5 plots are generated in this chunk
 #' hook_plot_tex(c('foo5', 'pdf'), opts_chunk$merge(list(fig.show='animate',interval=.1,fig.cur=5, fig.num=5)))
 hook_plot_tex = function(x, options) {
-  rw = options$resize.width; rh = options$resize.height
+  ## This function produces the image inclusion code for LaTeX.
+  ## optionally wrapped in code that resizes it, aligns it, handles it
+  ## as a subfigure, and/or wraps it in a float. Here is a road map of
+  ## the intermediate variables this function fills in (or leaves empty,
+  ## as needed), and an impression of their (possible) contents.
+  ##
+  ##     fig1,                   # \begin{...}[...]
+  ##       sub1,                 #   \subfloat{...}
+  ##         align1,             #     {\centering
+  ##           resize1,          #       \resizebox{...}{...}{
+  ##             tikz code       #         '\\input{chunkname.tikz}'
+  ##             or animate code #         or '\\animategraphics[size]{1/interval}{chunkname}{1}{fig.num}'
+  ##             or plain code   #         or '\\includegraphics[size]{chunkname}}'
+  ##           resize2,          #       }
+  ##         align2,             #     }
+  ##       sub2,                 #   }
+  ##     fig2                    #   \caption[...]{...\label{...}}
+  ##                             # \end{...}  % still fig2
+
+  rw = options$resize.width
+  rh = options$resize.height
   resize1 = resize2 = ''
   if (!is.null(rw) || !is.null(rh)) {
     resize1 = sprintf('\\resizebox{%s}{%s}{', rw %n% '!', rh %n% '!')
@@ -47,37 +67,60 @@ hook_plot_tex = function(x, options) {
   tikz = is_tikz_dev(options)
 
   a = options$fig.align
-  fig.cur = options$fig.cur %n% 1L; fig.num = options$fig.num %n% 1L
+  fig.cur = options$fig.cur %n% 1L
+  fig.num = options$fig.num %n% 1L
   animate = options$fig.show == 'animate'
+
+  # If this is a non-tikz animation, skip to the last fig.
   if (!tikz && animate && fig.cur < fig.num) return('')
 
   usesub = length(subcap <- options$fig.subcap) && fig.num > 1
   ## multiple plots: begin at 1, end at fig.num
   ai = options$fig.show != 'hold'
-  plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == fig.num
+
+  ## TRUE if this picture is standalone or first in set
+  plot1 = ai || fig.cur <= 1L
+  ## TRUE if this picture is standalone or last in set
+  plot2 = ai || fig.cur == fig.num
+
+  ## open align code if this picture is standalone/first in set/a subpic
   align1 = if (plot1 || usesub)
     switch(a, left = '\n\n', center = '\n\n{\\centering ', right = '\n\n\\hfill{}', '\n')
+  ## close align code if this picture is standalone/last in set/a subpic
   align2 = if (plot2 || usesub)
     switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n', right = '\n\n', '')
 
   ## figure environment: caption, short caption, label
-  cap = options$fig.cap; scap = options$fig.scap; fig1 = fig2 = ''
+  cap = options$fig.cap
+  scap = options$fig.scap
+  fig1 = fig2 = ''
   mcap = fig.num > 1L && options$fig.show == 'asis' && !length(subcap)
-  # use subfloats
+  # initialize subfloat strings
   sub1 = sub2 = ''
-  if(length(cap) && !is.na(cap)) {
+
+  # Wrap in figure environment only if user specifies a caption
+  if (length(cap) && !is.na(cap)) {
     lab = str_c(options$fig.lp, options$label)
+    # If pic is standalone/first in set: open figure environment
     if (plot1) {
       fig1 = sprintf('\\begin{%s}[%s]\n', options$fig.env, options$fig.pos)
     }
-    if (usesub) sub1 = sprintf('\\subfloat[%s\\label{%s}]{', subcap, str_c(lab, fig.cur))
+    # Add subfloat code if needed
+    if (usesub) {
+      sub1 = sprintf('\\subfloat[%s\\label{%s}]{',
+                     subcap, str_c(lab, fig.cur))
+      sub2 = '}'
+    }
+
+    # If pic is standalone/last in set:
+    # * place caption with label
+    # * close figure environment
     if (plot2) {
       if (is.null(scap)) scap = str_split(cap, '\\.|;|:')[[1L]][1L]
       scap = if(is.na(scap)) '' else str_c('[', scap, ']')
       fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{%s}\n', scap, cap,
                      str_c(lab, ifelse(mcap, fig.cur, '')), options$fig.env)
     }
-    if (usesub) sub2 = '}'
   }
 
   # maxwidth does not work with animations
@@ -87,23 +130,24 @@ hook_plot_tex = function(x, options) {
                  options$out.extra), collapse = ',')
 
   paste(fig1, sub1, align1, resize1,
+    if (tikz) {
+      sprintf('\\input{%s.tikz}', x[1])
+    } else if (animate) {
+      ## \animategraphics{} should be inserted only *once*!
+      aniopts = options$aniopts
+      aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
+      size = paste(c(size, sprintf('%s', aniopts)), collapse = ',')
+      if (nzchar(size)) size = sprintf('[%s]', size)
+      sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1/options$interval,
+              sub(str_c(fig.num, '$'), '', x[1]), 1L, fig.num)
+    } else {
+      if (nzchar(size)) size = sprintf('[%s]', size)
+      sprintf('\\includegraphics%s{%s} ', size, x[1])
+    },
 
-        if (tikz) {
-          sprintf('\\input{%s.tikz}', x[1])
-        } else if (animate) {
-          ## \animategraphics{} should be inserted only *once*!
-          aniopts = options$aniopts
-          aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
-          size = paste(c(size, sprintf('%s', aniopts)), collapse = ',')
-          if (nzchar(size)) size = sprintf('[%s]', size)
-          sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1/options$interval,
-                  sub(str_c(fig.num, '$'), '', x[1]), 1L, fig.num)
-        } else {
-          if (nzchar(size)) size = sprintf('[%s]', size)
-          sprintf('\\includegraphics%s{%s} ', size, x[1])
-        },
-
-        resize2, align2, sub2, fig2, sep = '')
+    resize2, align2, sub2, fig2, 
+    sep = ''
+  )
 }
 
 .chunk.hook.tex = function(x, options) {
