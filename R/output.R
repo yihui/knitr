@@ -190,7 +190,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
 
   progress = opts_knit$get('progress')
   if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
-  res = process_file(text, output)
+  res = process_file(text)
   res = paste(knit_hooks$get('document')(res), collapse = '\n')
   if (!is.null(output))
     writeLines(if (encoding == '') res else native_encode(res, to = encoding),
@@ -227,7 +227,7 @@ purl = function(..., documentation = 1L) {
   knit(..., tangle = TRUE)
 }
 
-process_file = function(text, output) {
+process_file = function(text) {
   groups = split_file(lines = text)
   n = length(groups); res = character(n); olines = integer(n)
   tangle = opts_knit$get('tangle')
