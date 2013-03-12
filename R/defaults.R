@@ -96,7 +96,7 @@ set_alias = function(...) {
 #' @export
 #' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
 opts_knit = new_defaults(list(
-  progress = TRUE, verbose = FALSE, out.format = NULL, child.command = 'input',
+  progress = TRUE, verbose = FALSE, out.format = NULL,
   base.dir = NULL, base.url = NULL, child.path = '', upload.fun = identity,
   animation.fun = NULL, global.device = FALSE, eval.after = NULL,
   concordance = FALSE, tangle = FALSE, child = FALSE,
