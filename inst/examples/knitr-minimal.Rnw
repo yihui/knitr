@@ -2,6 +2,7 @@
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \setcounter{secnumdepth}{2}

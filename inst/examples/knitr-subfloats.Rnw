@@ -1,6 +1,7 @@
 %% LyX 2.0.5.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
+\usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
 \usepackage{url}
 
@@ -45,7 +46,7 @@ in the output;
 \item set \texttt{out.width} to be less than half of the linewidth if you
 do not want the sub figures to exceed the page margin;
 \item most importantly, leave a blank line in the beginning of the subfloat
-environment, so that \texttt{\textless{}\textless{}\textgreater{}\textgreater{}=}
+environment, so that \texttt{<\textcompwordmark{}<>\textcompwordmark{}>=}
 starts in a new line and \textbf{knitr} can recognize it;
 \end{enumerate}
 Figure \ref{fig:knitr-subfloat} is an example.

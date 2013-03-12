@@ -4,6 +4,7 @@
 \usepackage[sc]{mathpazo}
 \renewcommand{\sfdefault}{lmss}
 \renewcommand{\ttdefault}{lmtt}
+\usepackage[T1]{fontenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \setcounter{secnumdepth}{2}
@@ -244,7 +245,7 @@ for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
 for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
 @
 
-Note \texttt{=} is replaced by \texttt{\textless{}-} because \texttt{options('replace.assign')}
+Note \texttt{=} is replaced by \texttt{<-} because \texttt{options('replace.assign')}
 was set to be \texttt{TRUE} in this document; see the documentation
 of \emph{tidy.source()} in \textbf{formatR} for details.
 
@@ -521,18 +522,17 @@ the latter chunk is said to depend on the previous one. The function
 find out all global objects in a chunk, and according to its documentation,
 the result is an approximation. Global objects roughly mean the ones
 which are not created locally, e.g. in the expression \texttt{function()
-\{y \textless{}- x\}}, \texttt{x} should be a global object, whereas
-\texttt{y} is local. Meanwhile, we also need to save the list of objects
-created in each cached chunk, so that we can compare them to the global
-objects in latter chunks. For example, if chunk A created an object
-\texttt{x} and chunk B uses this object, chunk B must depend on A,
-i.e. whenever A changes, B must also be updated. When \texttt{autodep=TRUE},
-\textbf{knitr} will write out the names of objects created in a cached
-chunk as well as those global objects in two files named \textsf{\_\_objects}
-and \textsf{\_\_globals} respectively; later we can use the function
-\emph{dep\_auto()} to analyze the object names to figure out the dependencies
-automatically. See \url{http://yihui.name/knitr/demo/cache/} for
-examples.
+\{y <- x\}}, \texttt{x} should be a global object, whereas \texttt{y}
+is local. Meanwhile, we also need to save the list of objects created
+in each cached chunk, so that we can compare them to the global objects
+in latter chunks. For example, if chunk A created an object \texttt{x}
+and chunk B uses this object, chunk B must depend on A, i.e. whenever
+A changes, B must also be updated. When \texttt{autodep=TRUE}, \textbf{knitr}
+will write out the names of objects created in a cached chunk as well
+as those global objects in two files named \textsf{\_\_objects} and
+\textsf{\_\_globals} respectively; later we can use the function \emph{dep\_auto()}
+to analyze the object names to figure out the dependencies automatically.
+See \url{http://yihui.name/knitr/demo/cache/} for examples.
 
 Yet another way to specify dependencies is \emph{dep\_prev()}: this
 is a conservative approach which sets the dependencies so that a cached
