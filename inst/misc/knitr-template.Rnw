@@ -27,18 +27,10 @@
 \begin{document}
 
 <<setup,include=FALSE,cache=FALSE>>=
-(function(x = knitr:::knit_concord$get('infile')) {
-  if (!is.character(x)) return()
-  opts_chunk$set(fig.path = paste('figure', gsub('[^[:alnum:]]', '-', x), sep = '/'))
-})()
-
-opts_chunk$set(fig.align='center', out.width='.6\\linewidth', fig.width=6, fig.height=6, par=TRUE)
 options(width=90)
-knit_hooks$set(par = function(before, options, envir) {
-  if (before) par(mar=c(4,4,.1,.1), cex.lab=.95, cex.axis=.9, mgp=c(2,.7,0), tcl=-.3, las=1)
-  })
+opts_chunk$set(out.width = '.6\\linewidth')
 .knitr.title = if (exists('.knitr.title')) paste('\\title{', .knitr.title, '}', sep = '') else ''
-.knitr.author = if (exists('.knitr.author')) {
+.knitr.author = if (nzchar(.knitr.title) && exists('.knitr.author')) {
   paste('\\author{', .knitr.author, '%\n',
         '\\thanks{This report is automatically generated with the R package \\textbf{knitr}
         (version ', packageVersion('knitr'), ').}}', sep = '')
@@ -49,10 +41,10 @@ knit_hooks$set(par = function(before, options, envir) {
 
 \Sexpr{.knitr.author}
 
-\Sexpr{if (exists('.knitr.title')) '\\maketitle'}
+\Sexpr{if (nzchar(.knitr.title)) '\\maketitle'}
 The results below are generated from an R script.
 
-<<auto-report>>=
+<<%sCHUNK_LABEL_HERE>>=
 @
 
 The R session information (including the OS info, R version and all

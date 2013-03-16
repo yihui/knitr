@@ -3,7 +3,7 @@
 #' This function takes a specially formatted R script and converts it to a
 #' literate programming document. By default normal text (documentation) should
 #' be written after the roxygen comment (\code{#'}) and code chunk options are
-#' written after \code{#+} or \code{#-}.
+#' written after \code{#+} or \code{#-} or \code{# @@knitr}.
 #'
 #' Obviously the goat's hair is the original R script, and the wool is the
 #' literate programming document (ready to be knitted).
@@ -17,7 +17,6 @@
 #'   default it follows the roxygen convention, but it can be customized, e.g.
 #'   if you want to use \code{##} to denote documentation, you can use
 #'   \code{'^##\\\\s*'}
-#' @inheritParams knit
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
 #'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
 #' @return The path of the literate programming document.
@@ -44,7 +43,7 @@
 #' spin(s, FALSE, format='Rtex')
 #' spin(s, FALSE, format='Rrst')
 spin = function(hair, knit = TRUE, report = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
-                doc = "^#+'[ ]?", envir = parent.frame()) {
+                doc = "^#+'[ ]?") {
 
   format = match.arg(format)
   x = readLines(hair, warn = FALSE); r = rle(str_detect(x, doc))
@@ -61,8 +60,8 @@ spin = function(hair, knit = TRUE, report = TRUE, format = c('Rmd', 'Rnw', 'Rhtm
       # R code; #+/- indicates chunk options
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
-      if (any(opt <- str_detect(block, '^#+(\\+|-)'))) {
-        block[opt] = str_c(p[1L], str_replace(block[opt], '^#+(\\+|-)\\s*', ''), p[2L])
+      if (any(opt <- str_detect(block, '^#+(\\+|-| @knitr)'))) {
+        block[opt] = str_c(p[1L], str_replace(block[opt], '^#+(\\+|-| @knitr)\\s*', ''), p[2L])
       }
       if (!str_detect(block[1L], p1)) {
         block = c(str_c(p[1L], p[2L]), block)
@@ -71,18 +70,18 @@ spin = function(hair, knit = TRUE, report = TRUE, format = c('Rmd', 'Rnw', 'Rhtm
     }
   }
 
-  outsrc = str_c(file_path_sans_ext(hair), '.', format)
+  outsrc = sub_ext(hair, format)
   txt = unlist(txt)
   # make it a complete TeX document if document class not specified
-  if (format %in% c('Rnw', 'Rtex') && !str_detect(txt, '^\\s*\\\\documentclass')) {
+  if (report && format %in% c('Rnw', 'Rtex') && !str_detect(txt, '^\\s*\\\\documentclass')) {
     txt = c('\\documentclass{article}', '\\begin{document}', txt, '\\end{document}')
   }
   cat(txt, file = outsrc, sep = '\n')
   if (knit) {
     if (report) {
-      if (format == 'Rmd') knit2html(outsrc, envir = envir) else
-        if (format %in% c('Rnw', 'Rtex')) knit2pdf(outsrc, envir = envir)
-    } else knit(outsrc, envir = envir)
+      if (format == 'Rmd') knit2html(outsrc) else
+        if (format %in% c('Rnw', 'Rtex')) knit2pdf(outsrc)
+    } else knit(outsrc)
   }
 
   invisible(outsrc)

@@ -1,5 +1,5 @@
 #' Download and convert a theme from eclipsecolorthemes.org to CSS
-#' 
+#'
 #' This function uses the \pkg{XML} package to parse the theme as an XML file,
 #' then converts to a CSS file using a brew template in the \pkg{knitr} package.
 #' The CSS file can be further parsed with \code{knit_theme$get()}, and the

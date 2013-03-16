@@ -1,3 +1,358 @@
+		 CHANGES IN knitr VERSION 1.1
+
+NEW FEATURES
+
+  - (experimental) R 3.0.0 will support non-Sweave vignettes, e.g. Rnw
+  documents can be compiled by **knitr** instead of Sweave; in addition,
+  R Markdown vignettes have also become first-class citizens as R package
+  vignettes; see http://yihui.name/knitr/demo/vignette/ for details
+
+  - a new engine for coffeescript
+  (i.e. the chunk option `engine='coffee'`); see
+  https://github.com/yihui/knitr-examples/blob/master/080-engine-coffeescript.Rmd
+  for an example (thanks, Nacho Caballero)
+
+  - when the chunk option `eval=FALSE`, `purl()` will comment out the code
+  when extracting code chunks (thanks, Randall Pruim)
+
+  - the global option `KNITR_PROGRESS` can be used to set the package option
+  `progress` in `opts_knit`, e.g. after `options(KNITR_PROGRESS = FALSE)`,
+  this option will be set to `FALSE` when the package is loaded (#395)
+
+  - the global option `KNITR_WIDTH` can be use to set the R option `width`
+  before **knitr** is called; in the past this option was hard-coded to
+  `75`, and now it is set as `options(width = getOption('KNITR_WIDTH', 75L)`
+
+  - a new function `knit2wp()` which compiles R Markdown
+  documents and publishes the results to WordPress; see
+  http://yihui.name/knitr/demo/wordpress/ for details
+
+  - a new hook `hook_webgl()` which writes the WebGL code of an
+  **rgl** scene into the output using `rgl::writeWebGL()` so we
+  can reproduce a 3D plot in the browser (thanks, Stephane Laurent
+  http://stackoverflow.com/q/14879210/559676)
+
+BUG FIXES
+
+  - fixed #465: when `eval=FALSE` and `echo` is numeric, code was incorrectly
+  filtered by the indices in `echo` (thanks, @ateucher)
+
+  - `>` was not allowed in HTML inline code expressions
+  (http://stackoverflow.com/q/14360296/559676); now the regular expression
+  works correctly to look for `-->` instead of `>`
+
+  - `set_parent()` should not print `NULL` in the child document:
+  http://stackoverflow.com/q/14487718/559676 (thanks, Thomas Holz)
+
+  - child documents now inherit the encoding parameter from their parent
+  document, i.e. the `encoding` value in `knit(..., encoding = ?)` is applied
+  to `knit_child()`; note this assumes the parent document and the child
+  documents use the same encoding (thanks, Henrik Nyhus)
+
+MAJOR CHANGES
+
+  - empty inline expressions are no longer recognized, e.g. `\Sexpr{}`
+  will not be parsed; this allows one to write such markers in
+  tutorials (e.g. `<!--rinline -->` and `` `r ` ``); internally
+  `all_patterns$foo$inline.code` was changed
+
+  - the function `build_dep()` was removed (the warning has been there for
+  a long time); please use `dep_auto()` instead
+
+  - the package option `filter.chunk.end` was removed; this means in Rnw
+  documents, a single line `@` has the meaning of terminating a chunk _only
+  if_ there is a chunk header `<<>>=` before it; otherwise it does not have
+  any special meanings
+
+  - the function `run_chunk()` was removed; it is redundant because we already
+  have the chunk option `ref.label` as well as in-chunk reference `<<label>>`
+
+MINOR CHANGES
+
+  - the function `imgur_upload()` uses Imgur API version 3 now; if you are
+  using the key obtained from version 2, you need to register for your own
+  client id: http://api.imgur.com (#439)
+
+  - allow users to pass a custom environment to `Rcpp::sourceCpp()` in the
+  `Rcpp` engine; fixes http://stackoverflow.com/q/14882486/559676
+
+  - slight improvement of encoding support in `knit()`
+
+		 CHANGES IN knitr VERSION 1.0
+
+NEW FEATURES
+
+  - a new function `knit_expand()` which is similar to **brew**
+  and mustache, e.g. it expands `pi is {{pi}}` to `pi is
+  3.14`; it can also be used for building child documents (see
+  https://github.com/yihui/knitr-examples/blob/master/075-knit-expand.Rnw
+  for example) (#397) (thanks, Frank Harrell)
+
+  - `knit()` gained a new argument `encoding` to specify the encoding of
+  the input file (multilingual support is complete now), e.g. `knit(...,
+  encoding = 'GBK')` for Simplified Chinese
+
+  - a new function `Sweave2knitr()` to convert Sweave documents to **knitr**;
+  several automatic translations can be done, e.g. `results=tex` to
+  `results='asis'`, `width=5` to `fig.width=5`, `echo=true` to `echo=TRUE`,
+  `keep.source=TRUE` to `tidy=FALSE`, `eps=TRUE` to `dev='postscript'`,
+  `\SweaveOpts{...}` to `opts_chunk$set(...)` and so on; see the documentation
+  in the package for details (#451)
+
+  - if the Sweave syntax is detected in an Rnw document, a message box
+  (**tcltk**) will pop up as a reminder on how to fix it
+
+  - inline R code also respects the option `opts_knti$get('stop_on_error')`
+  now, e.g. if we set this option to `2L`, R will completely stop when error
+  occurs in inline R code
+
+  - a new function `all_labels()` to get all chunk
+  labels in a document; see one application at
+  https://github.com/yihui/knitr-examples/blob/master/073-code-appendix.Rnw
+
+  - chunk hooks will be run (if exist) even if the code chunk is empty
+
+  - added two wrapper functions `stitch_rhtml()` and `stitch_rmd()` which
+  use the R HTML and R Markdown templates respectively when calling `stitch()`
+
+  - the chunk label is used as the id of the div element in R HTML output,
+  e.g. `<div id='chunk-label'>...</div>`
+
+MAJOR CHANGES
+
+  - (IMPORTANT) the internal compatibility with Sweave has been dropped
+  as scheduled in the last version, and the **knitr** parser was greatly
+  simplified accordingly; Sweave users can call the function `Sweave2knitr()`
+  to convert old Rnw files to **knitr** files before running `knit()`
+
+  - accordingly, the pattern elements `global.options` and `inline.doc`
+  were removed from `knit_patterns` (`\SweaveOpts{}` and `\SweaveInput{}`
+  will no longer be supported; please call `Sweave2knitr()` to convert
+  incompatible Sweave documents)
+
+  - chunk labels can be arbitrary characters now; in the past they had to be
+  valid R symbols, e.g. `2a` was an invalid label; this restriction has been
+  removed, because chunk labels will be automatically quoted when necessary
+  (`<<2a>>=` will become `<<'2a'>>=`, but `<<'3-function'>>=` will remain
+  untouched)
+
+  - if the chunk option `include=FALSE`, the evaluation will stop if errors
+  occur (i.e. `stop_on_error=2L` for **evaluate**), because otherwise it
+  will be very difficult for authors to notice errors in chunks which have
+  `include=FALSE` (#453) (thanks, Joshua Pritikin)
+
+  - the function `knit_env()` is no longer available (it is not exported
+  any more), and `knit_global()` has been exported now
+
+MINOR CHANGES
+
+  - for inline R code, the value is returned only if the R code prints
+  a visible value, e.g. `\Sexpr{x <- 1}` will be empty, and `\Sexpr{pi}`
+  will return the value of pi
+
+BUG FIXES
+
+  - fixed #432: no longer uses `\\\\` in LaTeX output; only a single line
+  break is converted to `\\` (thanks, Kevin Wright)
+
+  - `render_html()` guarantees that the R source code is highlighted when
+  the chunk option `highlight = TRUE` (#447) (thanks, Ramnath Vaidyanathan)
+
+  - `dep_auto()` was unable to find the cache files if the input document
+  is not under the current working directory (thanks, Hui Yao)
+
+Documentation
+
+  - because Github has deprecated downloads, all downloads were moved to
+  Bitbucket, and the links in the package website as well as all examples
+  have been updated (#438)
+
+		 CHANGES IN knitr VERSION 0.9
+
+NEW FEATURES
+
+  - added a demo named `notebook` which is an R notebook based on the **shiny**
+  package (https://github.com/rstudio/shiny); use `demo('notebook', package =
+  'knitr')` to see it, or visit http://glimmer.rstudio.com/yihui/knitr
+
+  - for numeric inline output in LaTeX, the `I()` trick is no longer needed,
+  e.g. `$x=\Sexpr{1.2e10}$` is safe for LaTeX now due to `\ensuremath{}`
+  (#137) (thanks, Randall Pruim)
+
+  - the chunk option `eval` can take numeric values now, specifying which
+  expressions to evaluate in a chunk (#383) (thanks, Jared Lander)
+
+  - a new package option `stop_on_error` which specifies the behavior of
+  errors in code chunks; this option is passed to the **evaluate** package,
+  e.g. `opts_knit$set(stop_on_error = 2L)` will make **knitr** completely
+  stop on errors (the default value is `0L` which means to move on even
+  if errors occurred); this makes it possible to see the call stacks via
+  `traceback()` in an interactive R session when an error occurs (#344)
+  (thanks, Hadley Wickham and Dzidorius Martinaitis)
+
+  - added support to the **Rcpp** package through the chunk option
+  `engine='Rcpp'` so that we can write C++ source code in the document; see
+  https://github.com/yihui/knitr-examples/blob/master/029-engine-Rcpp.Rmd
+  for an example (#415) (thanks, JJ Allaire)
+
+  - **knitr** throws a warning when a cached chunk depends on an uncached chunk
+  because this kind of dependency will be ignored (#431) (thanks, @ghostwheel)
+
+  - a list of arguments can be passed to `formatR::tidy.source()` as the
+  chunk option `tidy.opts` now, e.g. `tidy.opts=list(width.cutoff=60,
+  keep.blank.line=FALSE)` (#429)
+
+  - some chunk options are recycled for plots such as `fig.env`,
+  `out.width` and `out.extra`, etc; this means if there are multiple
+  plots per chunk, we can specify different output options for them
+  individually (e.g. `out.width=c('2in', '.4\\linewidth')` for two plots); see
+  https://github.com/yihui/knitr-examples/blob/master/067-graphics-options.Rnw
+  for an example (motivated by #430) (thanks, @autumnlin)
+
+  - added a new chunk option `fig.subcap` for captions of subfigures in
+  LaTeX; when there are multiple plots in a chunk, and neither `fig.subcap`
+  nor `fig.cap` is NULL, `\subfloat{}` will be used for individual
+  plots (you need to add `\usepackage{subfig}` in the preamble); also see
+  https://github.com/yihui/knitr-examples/blob/master/067-graphics-options.Rnw
+  for an example (#388) (thanks, @skipperhoyer)
+
+  - `stitch()` accepts labeled R scripts now; if an R script contains chunk
+  headers of the form `## @knitr label, options`, they will be used in the
+  template (#411) (thanks, @jamiefolson)
+
+  - the function `read_chunk()` gained a few new arguments so that we can
+  reference external code chunks in another way, which was an idea from the
+  **SweaveListingUtils** package (thanks, Peter Ruckdeschel)
+
+  - a new function `read_demo()` based on `read_chunk()` to read demo scripts
+  in R packages
+
+  - a new convenience function `read_rforge()` to read code
+  from R-Forge repositories; combined with `read_chunk()`, it
+  can insert R code from R-Forge into **knitr** dynamically; see
+  https://github.com/yihui/knitr-examples/blob/master/046-read-rforge.Rmd
+  for an example (thanks, Peter Ruckdeschel)
+
+  - chunk options are also written after `## @knitr` along with chunk labels
+  when tangling R scripts via `purl()`
+
+  - `purl()` gained a new argument `documentation` to also write documentation
+  lines into the R script (#391 and #401) (thanks, Noam Ross and Fernando
+  Mayer)
+
+  - `knit_rd()` generates a navigation frame on the left and builds links now;
+  this is like the CHM help in old days (thanks, Michael Friendly)
+
+  - a new function `knit_rd_all()` to build static html help pages for all
+  the packages installed
+
+  - we can also use `## @knitr` to write chunk options for `spin()` now
+  (`#+` and `#-` still work)
+
+  - added new language support for Perl and Z Shell (`zsh`); see an example
+  at https://github.com/yihui/knitr-examples/blob/master/028-engine-perl.Rmd
+  (#406) (thanks, Jim Hester)
+
+  - `render_jekyll()` gained an argument `highlight` to specify which
+  highlighting engine to use (Pygments or Prettify.js) (thanks, Yanping Chen)
+
+  - two new chunk options for language engines: `engine.path` and
+  `engine.opts`; the former can be used to specify the path of the program
+  (e.g. `<<engine='ruby', engine.path='/usr/bin/ruby1.9.1'>>=`); the latter
+  can be used to pass additional arguments to the engine program
+
+  - added new engines for GraphViz (`engine='dot'`) and TikZ (`engine='tikz'`);
+  see https://github.com/yihui/knitr-examples/blob/master/057-engine-dot.Rmd
+  and https://github.com/yihui/knitr-examples/blob/master/058-engine-tikz.Rmd
+  for examples (#419) (thanks, Michel Kuhlmann)
+
+  - added a preliminary engine for SAS which is basically a call like
+  `system('sas chunk-code.sas')` (#354)
+
+  - a new `document` hook to post-process the LaTeX output document to move
+  code chunks out of figure/table environments so that code chunks will not
+  float with the environments; see `?hook_movecode` for details
+
+  - chunk hooks are called in the _reverse_ order after a chunk (and natural
+  order before a chunk); this allows one to, e.g. write an opening environment
+  before a chunk and close it properly after a chunk
+
+  - all language engines also respect the `comment` option when writing output
+  just like R code chunks (by default the output is commented out by `##`)
+
+  - added a new function `set_alias()` as a wrapper to `opts_knit$set(aliases
+  = ...)`, e.g. `set_alias(w = 'fig.width')` sets `w` as an alias for the
+  chunk option `fig.width`
+
+MAJOR CHANGES
+
+  - global options are strongly recommended to be set via real R code
+  `opts_chunk$set(opt = value)` in a code chunk instead of the old
+  syntax in text chunks like `\SweaveOpts{opt = value}`, or `<!--roptions
+  opt=value-->`, etc, which will be deprecated in the next version; this
+  will make it cleaner and safer to parse the source documents, e.g. we can
+  write arbitrarily complicated expressions like `opts_chunk$set(fig.width =
+  if (foo == 'beamer') { 5 } else { 7 })` which is impossible in the old
+  syntax; if you still use the old syntax like `\SweaveOpts{}`, you will
+  see a warning with a pause of 10 seconds
+
+  - based on the same reason, it is recommended to use the chunk option `child`
+  to input child documents; old syntax like `\SweaveInput{}` will be deprecated
+
+  - for markdown output, results from inline R code will no longer be put
+  in a pair of backticks (#379)
+
+  - the package option `opts_knit$get('cache.extra')` was removed
+  because this option should really be a chunk option instead; see
+  http://yihui.name/knitr/demo/cache/ for the updated documentation (#404
+  and #405) (thanks, Jim Hester)
+
+  - the chunk option `highlight.opts` was deprecated and renamed to
+  `engine.opts`; this affects users who use Andre Simon's highlight through
+  the `highlight` engine in **knitr**
+
+  - the chunk option `file` for Awk was deprecated; we
+  can also use `engine.opts` to specify the file for Awk; see
+  https://github.com/yihui/knitr-examples/blob/master/024-engine-awk.Rmd
+  for example
+
+  - the pattern `knit_pattern$get('ref.label')` was deprecated since it is
+  unlikely to be customized; a fixed pattern `'^#+\\s*@knitr(.*)$'` will be
+  used instead
+
+MINOR CHANGES
+
+  - when `opts_knit$get('verbose')` is `TRUE`, a `timestamp()` will be
+  printed before each code chunk is evaluated (#377) (thanks, Carl Boettiger)
+
+  - `stitch()` will no longer copy the template over to the current working
+  directory (thanks, Michael Friendly)
+
+  - `stitch()` will no longer open the PDF/HTML output automatically (#411)
+  (thanks, Michel Kuhlmann)
+
+  - the script `inst/bin/knit` can also convert R Markdown documents to HTML
+  now; the argument `--pdf` was removed and a new argument `--no-convert`
+  was added
+
+  - dots in figure filenames will not be replaced with `_` when the output
+  is not LaTeX (thanks, Stewart Macarthur)
+
+BUG FIXES
+
+  - fixed #410: when the inline R code returns `NA_real_`, the scientific
+  notation of numbers will run into errors (thanks, Rafik)
+
+  - the syntax pattern for Rnw documents was not quite right:
+  `all_patterns$rnw$chunk.end = '^\\s*@\\s*%*'` actually allows any characters
+  after `@`, but only LaTeX comments and white spaces are allowed; it has
+  been fixed to `^\\s*@\\s*(%+.*|)$` now
+
+DOCUMENTATION
+
+  - an example of combining R, knitr and D3 to draw a contour plot:
+  http://yihui.name/knitr/demo/javascript/
+
 		 CHANGES IN knitr VERSION 0.8
 
 NEW FEATURES
@@ -58,6 +413,9 @@ MAJOR CHANGES
   [001-minimal.Rmd](https://github.com/yihui/knitr-examples/blob/master/001-minimal.Rmd)
   for example)
 
+  - when the global chunk option `eval=FALSE`, inline R code will not be
+  evaluated, and `??` is returned for inline R expressions (#367)
+
 MINOR CHANGES
 
   - if `getOption('OutDec')` is not `.`, inline numeric output will be put
@@ -74,6 +432,11 @@ MINOR CHANGES
 
   - `knit(text = ...)` will no longer write output in the console (the output
   is only returned as a character string)
+
+DOCUMENTATION
+
+  - added a simple reference card:
+  https://bitbucket.org/stat/knitr/downloads/knitr-refcard.pdf
 
 		 CHANGES IN knitr VERSION 0.7
 
@@ -653,7 +1016,7 @@ DOCUMENTATION
   - website updated as usual: http://yihui.name/knitr
 
   - added an example for subfloat environment:
-  https://github.com/downloads/yihui/knitr/knitr-subfloats.pdf
+  https://bitbucket.org/stat/knitr/downloads/knitr-subfloats.pdf
 
   - most manuals (main or graphics manuals) have been updated
 

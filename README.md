@@ -10,23 +10,19 @@ You can install the stable version on [CRAN](http://cran.r-project.org/package=k
 install.packages('knitr', dependencies = TRUE)
 ```
 
-Or install the development version from [RForge](http://rforge.net):
+You can also install the development version from [RForge](http://rforge.net/knitr/), which provides daily build of **knitr**:
 
 ```r
-install.packages('knitr', repos = 'http://rforge.net/')
+install.packages('knitr', repos = 'http://www.rforge.net/', type = 'source')
 ```
 
-Or download the [zip ball](https://github.com/yihui/knitr/zipball/master) or [tar ball](https://github.com/yihui/knitr/tarball/master), decompress and run `R CMD INSTALL` on it, or use the **devtools** package to install the absolutely latest version:
+If you know GIT and `R CMD build`, here is another way:
 
-```r
-## this package depends on R >= 2.14.1
-## you may also need to update your packages: 
-## options(repos = c(CRAN = 'http://cran.r-project.org'))
-## update.packages()
-library(devtools); install_github('knitr', 'yihui')
+```bash
+git clone https://github.com/yihui/knitr.git
+R CMD build knitr
+R CMD INSTALL knitr_*.tar.gz
 ```
-
-Note Windows users have to first install [Rtools](http://www.murdoch-sutherland.com/Rtools/).
 
 ## Motivation
 
@@ -53,4 +49,4 @@ library(knitr)
 knit(input)
 ```
 
-If options are not explicitly specified, **knitr** will try to guess reasonable default settings. A few manuals are available such as the [main manual](https://github.com/downloads/yihui/knitr/knitr-manual.pdf), the [graphics manual](https://github.com/downloads/yihui/knitr/knitr-graphics.pdf), and the [themes manual](https://github.com/downloads/yihui/knitr/knitr-themes.pdf).
+If options are not explicitly specified, **knitr** will try to guess reasonable default settings. A few manuals are available such as the [main manual](https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf), the [graphics manual](https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf), and the [themes manual](https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf).

@@ -1,20 +1,36 @@
 #' @rdname hook_plot
 #' @export
 hook_plot_html = function(x, options) {
+  # pull out all the relevant plot options
+  fig.num = options$fig.num = options$fig.num %n% 1L
+  fig.cur = options$fig.cur %n% 1L
+
   if(options$fig.show == 'animate') {
-    return(opts_knit$get('animation.fun')(x, options))
+    # Don't print out intermediate plots if we're animating
+    return(if(fig.cur < fig.num) '' else opts_knit$get('animation.fun')(x, options))
   }
-  fig.cur = options$fig.cur; fig.num = options$fig.num
   ai = options$fig.show == 'asis'
-  plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == 0L || fig.cur == fig.num
-  d1 = d2 = ''
-  if (plot1) d1 = str_c(if (out_format('html')) '</div>',
+  plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == fig.num
+  d1 = if (plot1) str_c(if (out_format('html')) '</div>',
                         sprintf('<div class="rimage %s">', options$fig.align))
-  if (plot2) d2 = str_c('</div>', if (out_format('html')) '<div class="rcode">')
-  add = paste(c(sprintf('width="%s"', options$out.width),
-                sprintf('height="%s"', options$out.height),
-                options$out.extra), collapse = ' ')
-  sprintf('%s<img src="%s" %s class="plot" />%s\n', d1, .upload.url(x), add, d2)
+  d2 = if (plot2) str_c('</div>', if (out_format('html')) '<div class="rcode">')
+  paste(
+    d1, .img.tag(
+      .upload.url(x), options$out.width, options$out.height, .img.cap(options),
+      paste(c(options$out.extra, 'class="plot"'), collapse = ' ')
+    ), d2, '\n', sep = ''
+  )
+}
+
+.img.tag = function(src, width, height, caption, extra) {
+  extra = paste(c(sprintf('width="%s"', width), sprintf('height="%s"', height),
+                  extra), collapse = ' ')
+  paste('<img src="', opts_knit$get('base.url'), src,
+        '" title="', caption, '" alt="', caption, '" ', extra, ' />', sep = '')
+}
+
+.img.cap = function(options) {
+  options$fig.cap %n% sprintf('plot of chunk %s', options$label)
 }
 
 ## a wrapper to upload an image and return the URL
@@ -25,7 +41,8 @@ hook_plot_html = function(x, options) {
 
 .chunk.hook.html = function(x, options) {
   if (output_asis(x, options)) return(x)
-  x = sprintf('<div class="chunk"><div class="rcode">%s</div></div>', x)
+  x = sprintf('<div class="chunk" id="%s"><div class="rcode">%s</div></div>',
+              options$label, x)
   x = gsub('<div class="rcode">\\s*</div>', '', x) # rm empty rcode layers
   if (options$split) {
     name = fig_path('.html', options)
@@ -48,13 +65,7 @@ hook_plot_html = function(x, options) {
 #' @rdname hook_animation
 #' @export
 hook_ffmpeg_html = function(x, options) {
-  # pull out all the relevant plot options
   fig.num = options$fig.num
-  fig.cur = options$fig.cur %n% 0L
-
-  # Don't print out intermediate plots if we're animating
-  if(fig.cur < fig.num) return('')
-
   # set up the ffmpeg run
   ffmpeg.opts = options$aniopts
   fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
@@ -72,7 +83,7 @@ hook_ffmpeg_html = function(x, options) {
                   if('controls' %in% mov.opts) 'controls="controls"',
                   if('loop' %in% mov.opts) 'loop="loop"')
   sprintf('<video %s><source src="%s" type="video/mp4" />video of chunk %s</video>',
-          opt.str, mov.fname, options$label)
+          opt.str, str_c(opts_knit$get('base.url'), mov.fname), options$label)
 }
 
 opts_knit$set(animation.fun = hook_ffmpeg_html)
@@ -81,36 +92,36 @@ opts_knit$set(animation.fun = hook_ffmpeg_html)
 #' @rdname hook_animation
 #' @export
 hook_scianimator = function(x, options) {
-  # pull out all the relevant plot options
   fig.num = options$fig.num
-  fig.cur = options$fig.cur %n% 0L
-
-  # Don't print out intermediate plots if we're animating
-  if(fig.cur < fig.num) return('')
-
-  fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
   base = opts_knit$get('base.url') %n% ''
-  fig.paths = str_c(shQuote(str_c(base, fig.name)), collapse = ", ")
 
   # write the div and js code here
   id = gsub('[^[:alnum:]]', '_', options$label)
-  sid = str_c('#', id)
   sprintf('
-<div class="scianimator"><div id="%s" style="display: inline-block;"></div></div>
+<div class="scianimator">
+<div id="%s" style="display: inline-block;">
+</div>
+</div>
 <script type="text/javascript">
   (function($) {
     $(document).ready(function() {
-      $("%s").scianimator({
-          "images": [%s],
+      var imgs = Array(%s);
+      for (i=0; ; i++) {
+        if (i == imgs.length) break;
+        imgs[i] = "%s%s" + (i + 1) + ".%s";
+      }
+      $("#%s").scianimator({
+          "images": imgs,
           "delay": %s,
           "controls": ["first", "previous", "play", "next", "last", "loop", "speed"],
       });
-      $("%s").scianimator("play");
+      $("#%s").scianimator("play");
     });
   })(jQuery);
 </script>
 ',
-         id, sid, fig.paths, options$interval * 1000, sid)
+          id, fig.num, base, sub(str_c(fig.num, '$'), '', x[1]), x[2], id,
+          options$interval * 1000, id)
 }
 
 
@@ -119,13 +130,8 @@ hook_scianimator = function(x, options) {
 #' @export
 hook_r2swf = function(x, options) {
   library(R2SWF)
-  # pull out all the relevant plot options
+
   fig.num = options$fig.num
-  fig.cur = options$fig.cur %n% 0L
-
-  # Don't print out intermediate plots if we're animating
-  if(fig.cur < fig.num) return('')
-
   # set up the R2SWF run
   fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
   swf.name = fig_path('.swf', options)
@@ -144,6 +150,7 @@ hook_r2swf = function(x, options) {
 render_html = function() {
   knit_hooks$restore()
   opts_chunk$set(dev = 'png') # default device is png in HTML and markdown
+  opts_knit$set(out.format = 'html')
   ## use div with different classes
   html.hook = function(name) {
     force(name)

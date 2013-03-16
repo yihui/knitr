@@ -1,9 +1,15 @@
 \name{stitch}
 \alias{stitch}
+\alias{stitch_rhtml}
+\alias{stitch_rmd}
 \title{Automatically create a report based on an R script and a template}
 \usage{
 stitch(script, template = system.file("misc", "knitr-template.Rnw", package = "knitr"), 
     output = NULL, envir = parent.frame())
+
+stitch_rhtml(...)
+
+stitch_rmd(...)
 }
 \arguments{
   \item{script}{path to the R script}
@@ -16,6 +22,8 @@ stitch(script, template = system.file("misc", "knitr-template.Rnw", package = "k
   \code{\link{knit}}); by default it uses the base filename
   of the script}
 
+  \item{...}{arguments passed to \code{stitch()}}
+
   \item{envir}{the environment in which the code chunks are
   to be evaluated (can use \code{\link{new.env}()} to
   guarantee an empty new environment)}
@@ -25,15 +33,25 @@ stitch(script, template = system.file("misc", "knitr-template.Rnw", package = "k
 }
 \description{
   This is a convenience function for small-scale automatic
-  reporting based on an R script and a template.
+  reporting based on an R script and a template. The
+  default template is an Rnw file (LaTeX);
+  \code{stitch_rhtml()} and \code{stitch_rmd()} are
+  wrappers on top of \code{stitch()} using the R HTML and R
+  Markdown templates respectively.
 }
 \details{
   The first two lines of the R script can contain the title
   and author of the report in comments of the form \samp{##
   title:} and \samp{## author:}. The template must have a
-  chunk named \samp{auto-report}, which will be used to
+  token \samp{\%sCHUNK_LABEL_HERE}, which will be used to
   input all the R code from the script. See the examples
   below.
+
+  The R script may contain chunk headers of the form
+  \samp{## @knitr label}, which will be copied to the
+  template; if no chunk headers are found, the whole R
+  script will be inserted into the template as one code
+  chunk.
 }
 \examples{
 s = system.file("misc", "stitch-test.R", package = "knitr")

@@ -12,3 +12,7 @@ test_that('automatic output file name works as expected', {
 
   expect_error(auto_out_name('foo.bar'))
 })
+
+test_that('chunks with include=FALSE should stop on error', {
+  expect_error(knit(text = c('<<include=F>>=', '1+"a"', '@')))
+})

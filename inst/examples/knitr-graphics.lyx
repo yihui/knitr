@@ -93,7 +93,7 @@ status open
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE,width=60)
+options(replace.assign=TRUE,width=50)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1953,6 +1953,29 @@ rgl
 hook_plot_custom()
 \emph default
  to write the output code.
+\end_layout
+
+\begin_layout Section
+\start_of_appendix
+How to Compile This Manual
+\end_layout
+
+\begin_layout Standard
+This manual has a long chain of dependencies, so it may not be easy to compile.
+ These packages are required (all of them are free software):
+\end_layout
+
+\begin_layout Description
+R Cairo, ggplot2, tikzDevice, rgl, rggobi, animation (all available on CRAN
+ except tikzDevice which is on R-Forge for the time being)
+\end_layout
+
+\begin_layout Description
+LaTeX animate, hyperref and the tufte-handout class
+\end_layout
+
+\begin_layout Description
+Other GGobi, pdfcrop
 \end_layout
 
 \end_body

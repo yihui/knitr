@@ -27,5 +27,7 @@
   \url{https://github.com/yihui/knitr/blob/master/FAQ.md}
 }
 \seealso{
-  The core function in this package: \code{\link{knit}}
+  The core function in this package: \code{\link{knit}}. If
+  you are an Sweave user, see \code{\link{Sweave2knitr}} on
+  how to convert Sweave files to \pkg{knitr}.
 }

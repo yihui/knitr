@@ -1,19 +1,29 @@
 Package: knitr
 Type: Package
 Title: A general-purpose package for dynamic report generation in R
-Version: 0.7.10
-Date: 2012-07-16
-Authors@R: c(person("Hadley", "Wickham", email = "hadley@rice.edu", role =
-    "ctb"), person("Ramnath", "Vaidyanathan", role = "ctb"), person("Joseph",
-    "Allaire", role = "ctb"), person("Tom", "Torsney-Weir", role = "ctb"),
-    person("Jonathan", "Keane", role = "ctb"), person("Joe", "Cheng", role =
-    "ctb"), person("Jeff", "Arnold", role = "ctb"), person("Kohske",
-    "Takahashi", role = "ctb"), person("Taiyun", "Wei", role = "ctb"),
-    person("Alex", "Zvoleff", role = "ctb"), person("Cassio", "Pereira", role =
-    "ctb"), person("Wush", "Wu", role = "ctb"), person("Simon", "de Bernard",
-    role = "ctb"), person("Michel", "Kuhlmann", role = "ctb"),
-    person("Alastair", "Andrew", role = "ctb"), person("Yihui", "Xie", email =
-    "xie@yihui.name", role = c("aut", "cre")))
+Version: 1.1.6
+Date: 2013-02-16
+Authors@R: c(person("Hadley", "Wickham", role = "ctb"),
+    person("Ramnath", "Vaidyanathan", role = "ctb"),
+    person("Joseph J.", "Allaire", role = "ctb"),
+    person("Tom", "Torsney-Weir", role = "ctb"),
+    person("Jonathan", "Keane", role = "ctb"),
+    person("Joe", "Cheng", role = "ctb"),
+    person("Jeff", "Arnold", role = "ctb"),
+    person("Kohske", "Takahashi", role = "ctb"),
+    person("Taiyun", "Wei", role = "ctb"),
+    person("Alex", "Zvoleff", role = "ctb"),
+    person("Cassio", "Pereira", role = "ctb"),
+    person("Wush", "Wu", role = "ctb"),
+    person("Simon", "de Bernard", role = "ctb"),
+    person("Michel", "Kuhlmann", role = "ctb"),
+    person("Alastair", "Andrew", role = "ctb"),
+    person("Jim", "Hester", role = "ctb"),
+    person("Nacho", "Caballero", role = "ctb"),
+    person("Heewon", "Jeon", role = "ctb"),
+    person("Brian", "Diggs", role = "ctb"),
+    person("Jeremy", "Stephens", role = "ctb"),
+    person("Yihui", "Xie", email = "xie@yihui.name", role = c("aut", "cre")))
 Author: Yihui Xie
 Maintainer: Yihui Xie <xie@yihui.name>
 Description: This package provides a general-purpose tool for dynamic report
@@ -42,27 +52,29 @@ Description: This package provides a general-purpose tool for dynamic report
     Hooks can be used either to format the output or to run a specified R code
     fragment before or after a code chunk. The language in code chunks is not
     restricted to R only (there is simple support to Python and Awk, etc). Many
-    features are borrowed or inspired by Sweave, cacheSweave, pgfSweave, brew
-    and decumar.
+    features are borrowed from or inspired by Sweave, cacheSweave, pgfSweave,
+    brew and decumar.
 Depends:
     R (>= 2.14.1)
 Imports:
-    evaluate (>= 0.4),
+    evaluate (>= 0.4.3),
     digest,
     formatR (>= 0.3-4),
+    markdown (>= 0.4),
     stringr (>= 0.6),
     tools
 Suggests:
     testthat,
     rgl,
     codetools,
-    markdown (>= 0.4),
     R2SWF (>= 0.4),
     XML,
-    RCurl
+    RCurl,
+    Rcpp (>= 0.10.0)
 License: GPL
 URL: http://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
+VignetteBuilder: knitr
 Collate:
     'package.R'
     'utils-upload.R'
@@ -93,3 +105,9 @@ Collate:
     'highlight.R'
     'utils-base64.R'
     'utils-rd2html.R'
+    'zzz.R'
+    'template.R'
+    'utils-sweave.R'
+    'utils-conversion.R'
+    'utils-vignettes.R'
+    'pandoc.R'

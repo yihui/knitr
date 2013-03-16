@@ -7,57 +7,48 @@
 #'
 #' str(all_patterns)
 all_patterns = list(
-  `rnw` = list(chunk.begin = '^\\s*<<(.*)>>=', chunk.end = '^\\s*@\\s*%*',
-               inline.code = '\\\\Sexpr\\{([^}]*)\\}',
-               input.doc = '(^|\n) *\\\\SweaveInput\\{([^}]*)\\}',
+  `rnw` = list(chunk.begin = '^\\s*<<(.*)>>=', chunk.end = '^\\s*@\\s*(%+.*|)$',
+               inline.code = '\\\\Sexpr\\{([^}]+)\\}',
                inline.comment = '^\\s*%.*',
-               ref.chunk = '^\\s*<<(.*)>>\\s*$',
-               global.options = '\\\\SweaveOpts\\{([^}]*)\\}',
-               header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
-               document.begin = '\n*\\s*\\\\begin\\{document\\}',
-               ref.label = '^## @knitr (.*)$'),
+               ref.chunk = '^\\s*<<(.+)>>\\s*$',
+               header.begin = '\\s*\\\\documentclass[^}]+\\}',
+               document.begin = '\\s*\\\\begin\\{document\\}'),
 
-  `brew` = list(inline.code = '<%[=]{0,1}\\s+([^%]*)\\s+[-]*%>'),
+  `brew` = list(inline.code = '<%[=]{0,1}\\s+([^%]+)\\s+[-]*%>'),
 
   `tex` = list(chunk.begin = '^\\s*%+\\s*begin.rcode\\s*(.*)',
                chunk.end = '^\\s*%+\\s*end.rcode', chunk.code = '^%+',
-               ref.chunk = '^%+\\s*<<(.*)>>\\s*$',
+               ref.chunk = '^%+\\s*<<(.+)>>\\s*$',
                inline.comment = '^\\s*%.*',
-               global.options = '%+\\s*roptions\\s*([^\n]*)',
-               inline.code = '\\\\rinline\\{([^}]*)\\}',
-               header.begin = '\n*\\s*\\\\documentclass[^}]+\\}',
-               document.begin = '\n*\\s*\\\\begin\\{document\\}',
-               ref.label = '^## @knitr (.*)$'),
+               inline.code = '\\\\rinline\\{([^}]+)\\}',
+               header.begin = '\\s*\\\\documentclass[^}]+\\}',
+               document.begin = '\\s*\\\\begin\\{document\\}'),
 
   `html` = list(chunk.begin = '^\\s*<!--\\s*begin.rcode\\s*(.*)',
                 chunk.end = '^\\s*end.rcode\\s*-->',
-                ref.chunk = '^\\s*<<(.*)>>\\s*$',
-                inline.code = '<!--\\s*rinline\\s*([^>]*)\\s*-->',
-                global.options = '<!--\\s*roptions\\s*([^>]*)\\s*-->',
-                header.begin = '\n*\\s*<head>',
-                ref.label = '^## @knitr (.*)$'),
+                ref.chunk = '^\\s*<<(.+)>>\\s*$',
+                inline.code = '<!--\\s*rinline(.+?)-->',
+                header.begin = '\\s*<head>'),
 
   `md` = list(chunk.begin = '^\\s*`{3,}\\s*\\{r(.*)\\}\\s*$',
               chunk.end = '^\\s*`{3,}\\s*$',
-              ref.chunk = '^\\s*<<(.*)>>\\s*$',
-              inline.code = '`r +([^`\n]+)\\s*`',
-              global.options = '`ro\\s+([^`]*)\\s+or`',
-              ref.label = '^## @knitr (.*)$'),
+              ref.chunk = '^\\s*<<(.+)>>\\s*$',
+              inline.code = '`r +([^`\n]+)\\s*`'),
 
   `rst` = list(chunk.begin = "^\\s*\\.{2}\\s+\\{r(.*)\\}\\s*$",
                chunk.end = "^\\s*\\.{2}\\s+\\.{2,}\\s*$",
                chunk.code = "^\\.{2}",
-               ref.chunk = "^\\.*\\s*<<(.*)>>\\s*$",
-               inline.code = ":r:`([^`]*)`",
-               global.options = ":roptions:`([^`]*)`",
-               ref.label = "^## @knitr (.*)$")
+               ref.chunk = "^\\.*\\s*<<(.+)>>\\s*$",
+               inline.code = ":r:`([^`]+)`")
 )
+
+.sep.label = '^#+\\s*@knitr(.*)$'  # pattern for code chunks in an R script
 
 ## initial pattern list
 .pat.init = list(
   chunk.begin = NULL, chunk.end = NULL, chunk.code = NULL, inline.code = NULL,
   global.options = NULL, input.doc = NULL, ref.chunk = NULL,
-  header.begin = NULL, document.begin = NULL, ref.label = NULL
+  header.begin = NULL, document.begin = NULL
 )
 
 #' Patterns to match and extract R code in a document
@@ -93,8 +84,7 @@ knit_patterns = new_defaults(.pat.init)
 
 ## convenience functions
 set_pattern = function(type) {
-  knit_patterns$restore()
-  knit_patterns$set(all_patterns[[type]])
+  knit_patterns$restore(all_patterns[[type]])
 }
 
 #' Set regular expressions to read input documents

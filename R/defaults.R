@@ -16,7 +16,7 @@ new_defaults = function(value = list()) {
     invisible(NULL)
   }
   merge = function(values) merge_list(defaults, values)
-  restore = function() defaults <<- value
+  restore = function(target = value) defaults <<- target
 
   list(get = get, set = set, merge = merge, restore = restore)
 }
@@ -41,8 +41,8 @@ opts_chunk = new_defaults(list(
   fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
   fig.path = 'figure/', fig.ext = NULL, dev = 'pdf', dpi = 72,
   dev.args = NULL, fig.width = 7, fig.height = 7,
-  fig.env = 'figure', fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:', fig.pos = '',
-  out.width = NULL, out.height = NULL, out.extra = NULL,
+  fig.env = 'figure', fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:',
+  fig.pos = '', out.width = NULL, out.height = NULL, out.extra = NULL,
   resize.width = NULL, resize.height = NULL,
   external = TRUE, sanitize = FALSE,
   highlight = TRUE, size = 'normalsize',
@@ -65,9 +65,25 @@ opts_chunk_attr = (function() {
   opts$fig.align = list('default', 'left', 'right', 'center')
   opts$dev = as.list(names(auto_exts))
   opts$fig.ext = as.list(unique(auto_exts))
+  opts$tidy.opts = 'list'
+  opts$fig.subcap = 'character'
   opts
 })()
 
+#' Set aliases for chunk options
+#'
+#' We do not have to use the chunk option names given in \pkg{knitr}; we can set
+#' aliases for them. The aliases is a named character vector; the names are
+#' aliases and the elements in this vector are the real option names.
+#' @param ... named arguments (argument names are aliases, and argument values
+#'   are real chunk options)
+#' @return NULL (\code{opts_knit$get('aliases')} is modified as the side effect)
+#' @export
+#' @examples set_alias(w = 'fig.width', h = 'fig.height')
+#' # then we can use options w and h in chunk headers instead of fig.width and fig.height
+set_alias = function(...) {
+  opts_knit$set(aliases = c(...))
+}
 
 #' Options for the knitr package
 #'
@@ -81,13 +97,12 @@ opts_chunk_attr = (function() {
 #' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
 opts_knit = new_defaults(list(
   progress = TRUE, verbose = FALSE, out.format = NULL,
-  child.command = 'input', base.dir = NULL, base.url = NULL, child.path = '',
-  upload.fun = identity, animation.fun = NULL, global.device = FALSE,
-  eval.after = NULL, concordance = FALSE, sweave.penalty = 10,
-  tangle = FALSE, child = FALSE, parent = FALSE,
-  cache.extra = NULL, aliases = NULL, root.dir = NULL,
-  self.contained = TRUE, filter.chunk.end = TRUE, use.highlight = FALSE,
-  header = c(highlight = '', tikz = '', framed = '')
+  base.dir = NULL, base.url = NULL, child.path = '', upload.fun = identity,
+  animation.fun = NULL, global.device = FALSE, eval.after = NULL,
+  concordance = FALSE, tangle = FALSE, child = FALSE,
+  parent = FALSE, documentation = FALSE, aliases = NULL, root.dir = NULL,
+  self.contained = TRUE, use.highlight = FALSE,
+  header = c(highlight = '', tikz = '', framed = ''), stop_on_error = 0L
 ))
 ## header should not be set by hand unless you know what you are doing
 

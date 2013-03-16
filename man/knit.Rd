@@ -3,9 +3,9 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame())
+knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame(), encoding = getOption("encoding"))
 
-purl(...)
+purl(..., documentation = 1L)
 }
 \arguments{
   \item{input}{path of the input file}
@@ -24,7 +24,17 @@ purl(...)
   to be evaluated (can use \code{\link{new.env}()} to
   guarantee an empty new environment)}
 
-  \item{...}{arguments passed to \code{\link{knit}}}
+  \item{encoding}{the encoding of the input file; see
+  \code{\link{file}}}
+
+  \item{documentation}{an integer specifying the level of
+  documentation to go the tangled script: \code{0} means
+  pure code (discard all text chunks); \code{1} (default)
+  means add the chunk headers to code; \code{2} means add
+  all text chunks to code as roxygen comments}
+
+  \item{...}{arguments passed to \code{\link{knit}()} from
+  \code{purl()}}
 }
 \value{
   The compiled document is written into the output file,
@@ -120,19 +130,19 @@ purl(...)
 }
 \examples{
 library(knitr)
-(f = tempfile(fileext = ".Rnw"))
-file.copy(system.file("examples", "knitr-minimal.Rnw", package = "knitr"), f, overwrite = TRUE)
-knit(f)
-## or setwd(dirname(f)); knit(basename(f))
+(f = system.file("examples", "knitr-minimal.Rnw", package = "knitr"))
+knit(f)  # compile to tex
 
-purl(f)  # extract R code only
+purl(f)  # tangle R code
+purl(f, documentation = 0)  # extract R code only
+purl(f, documentation = 2)  # also include documentation
 }
 \references{
   Package homepage: \url{http://yihui.name/knitr/}
 
   The \pkg{knitr} main manual:
-  \url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}
+  \url{https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf}
 
   The \pkg{knitr} graphics manual:
-  \url{https://github.com/downloads/yihui/knitr/knitr-graphics.pdf}
+  \url{https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf}
 }

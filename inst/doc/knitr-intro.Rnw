@@ -1,4 +1,4 @@
-%% LyX 2.0.3 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.5.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage{mathpazo}
@@ -13,6 +13,7 @@
 \makeatletter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 % \VignetteIndexEntry{An Introduction to knitr}
+% \VignetteEngine{knitr}
 
 \makeatother
 
@@ -30,8 +31,8 @@ to Sweave based on a different design with more features. This document
 is not the real vignette, but only serves as a placeholder to guide
 you to the real manuals of this package. You can find them in the
 package website: \url{http://yihui.name/knitr}%
-\footnote{e.g. the main manual: \url{https://github.com/downloads/yihui/knitr/knitr-manual.pdf}
-and the graphics manual: \url{https://github.com/downloads/yihui/knitr/knitr-graphics.pdf}%
+\footnote{e.g. the main manual: \url{https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf}
+and the graphics manual: \url{https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf}%
 }, and remember to read the help pages of functions in this package.
 
 Anyway, here is a code chunk that shows you can compile vignettes

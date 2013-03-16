@@ -5,6 +5,7 @@
 \textclass article
 \begin_preamble
 % \VignetteIndexEntry{An Introduction to knitr}
+% \VignetteEngine{knitr}
 \end_preamble
 \use_default_options true
 \begin_modules
@@ -117,7 +118,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://github.com/downloads/yihui/knitr/knitr-manual.pdf
+https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf
 \end_layout
 
 \end_inset
@@ -128,7 +129,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://github.com/downloads/yihui/knitr/knitr-graphics.pdf
+https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf
 \end_layout
 
 \end_inset

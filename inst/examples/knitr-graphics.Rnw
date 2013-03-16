@@ -1,6 +1,7 @@
-%% LyX 2.0.4 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.5.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[nohyper,justified]{tufte-handout}
+\usepackage[T1]{fontenc}
 \usepackage{url}
 \usepackage[unicode=true,pdfusetitle,
  bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
@@ -30,7 +31,7 @@
 \begin{document}
 
 <<setup, include=FALSE, cache=FALSE>>=
-options(replace.assign=TRUE,width=60)
+options(replace.assign=TRUE,width=50)
 opts_chunk$set(fig.path='figure/graphics-', cache.path='cache/graphics-', fig.align='center', dev='tikz', fig.width=5, fig.height=5, fig.show='hold', cache=TRUE, par=TRUE)
 knit_hooks$set(par=function(before, options, envir){
 if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
@@ -412,5 +413,18 @@ plot.
 This hook is actually built upon \emph{hook\_plot\_custom()} -- first
 it saves the \textbf{rgl} snapshot, then it calls \emph{hook\_plot\_custom()}
 to write the output code.
+
+\appendix
+
+\section{How to Compile This Manual}
+
+This manual has a long chain of dependencies, so it may not be easy
+to compile. These packages are required (all of them are free software):
+\begin{description}
+\item [{R}] Cairo, ggplot2, tikzDevice, rgl, rggobi, animation (all available
+on CRAN except tikzDevice which is on R-Forge for the time being)
+\item [{\LaTeX{}}] animate, hyperref and the tufte-handout class
+\item [{Other}] GGobi, pdfcrop\end{description}
+
 
 \end{document}

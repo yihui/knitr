@@ -6,7 +6,7 @@
  $ get    :function (name, default = FALSE)  
  $ set    :function (...)  
  $ merge  :function (values)  
- $ restore:function ()}
+ $ restore:function (target = value)}
 \usage{
 knit_engines
 }
@@ -25,10 +25,21 @@ knit_engines
   programs to run the code via \code{\link[base]{system}}.
   Other chunk options are also contained in this argument,
   e.g. \code{options$echo} and \code{options$eval}, etc.
+
+  In most cases, \code{options$engine} can be directly used
+  in command line to execute the code, e.g. \code{python}
+  or \code{ruby}, but sometimes we may want to specify the
+  path of the engine program, in which case we can pass it
+  through the \code{engine.path} option. For example,
+  \code{engine='ruby', engine.path='/usr/bin/ruby1.9.1'}.
+  Additional command line arguments can be passed through
+  \code{options$engine.opts}, e.g. \code{engine='ruby',
+  engine.opts='-v'}.
 }
 \examples{
 knit_engines$get("python")
 knit_engines$get("awk")
+names(knit_engines$get())
 }
 \references{
   Usage: \url{http://yihui.name/knitr/objects}

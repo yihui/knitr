@@ -57,11 +57,14 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
   if (tweak) {
     for (i in intersect(names(.tweak.bib), x)) {
       message('tweaking ', i)
-      b = bib[[i]]; items = .tweak.bib[[i]]
-      b[names(items)] = items
-      idx = which(names(b) == '')
-      bib[[i]] = c(b[idx[1L]], b[-idx], b[idx[2L]])
+      bib[[i]] = merge_list(bib[[i]], .tweak.bib[[i]])
     }
+    bib = lapply(bib, function(b) {
+      b['author'] = sub('Duncan Temple Lang', 'Duncan {Temple Lang}', b['author'])
+      if (!('year' %in% names(b))) b['year'] = .this.year
+      idx = which(names(b) == '')
+      structure(c(b[idx[1L]], b[-idx], b[idx[2L]]), class = 'Bibtex')
+    })
   }
   bib = bib[sort(x)]
   if (!is.null(file)) cat(unlist(bib), sep = '\n', file = file)
@@ -73,12 +76,12 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
 .tweak.bib = list(
   cacheSweave = c(author = '  author = {Roger D. Peng},'),
   cluster = c(author = '  author = {Martin Maechler},'),
-  evaluate = c(year = .this.year),
+  digest = c(author = '  author = {Dirk Eddelbuettel},'),
   gWidgets = c(author = '  author = {John Verzani},'),
+  Hmisc =  c(author = '  author = {Harrell, Jr, Frank E},'),
   maps = c(author = '  author = {Ray Brownrigg},'),
   Rcmdr = c(author = '  author = {John Fox},'),
-  RGtk2 = c(author = '  author = {Michael Lawrence and Duncan {Temple Lang}},'),
-  roxygen2 = c(year = .this.year),
+  Rcpp = c(author = '  author = {Dirk Eddelbuettel and Romain Francois},'),
   rpart = c(author = '  author = {Terry M Therneau and Beth Atkinson},'),
   sm = c(author = '  author = {Adrian Bowman and Adelchi Azzalini},'),
   survival = c(author = '  author = {Terry Therneau},'),

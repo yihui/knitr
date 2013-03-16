@@ -1,7 +1,8 @@
-%% LyX 2.0.4 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.5.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[twocolumn]{article}
 \usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \setcounter{secnumdepth}{2}
@@ -62,7 +63,7 @@ hist(x,main='')
 \end{figure*}
 
 
-The output PDF file will be like: \url{https://github.com/downloads/yihui/knitr/knitr-twocolumn.pdf}.
+The output PDF file will be like: \url{https://bitbucket.org/stat/knitr/downloads/knitr-twocolumn.pdf}.
 The Rnw source of this document is at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-twocolumn.Rnw}.
 
 \end{document}

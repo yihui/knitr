@@ -6,31 +6,32 @@ hi.keywords =  paste('(\\W)(', paste(c(
 ), collapse = '|'), ')(\\W)', sep = '')
 
 #  at the moment, only highlight function names, strings and comments
-hi_latex = function(x, fragment = FALSE) {
+hi_latex = function(x) {
   x = gsub('\\\\', '\\\\textbackslash{}', x)
   x = gsub('([{}])', '\\\\\\1', x)
   # yes I know this is stupid...
   x = gsub('\\\\textbackslash\\\\\\{\\\\\\}', '\\\\textbackslash{}', x)
-  x = unlist(strsplit(x, '\n'))
-  # function names
-  x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '\\\\hlfunctioncall{\\1}\\2(', x)
+  x = split_lines(x)
+  i = grepl('^\\s*#', x)  # whole lines of comments
+  x[i] = sprintf('\\hlcomment{%s}', x[i])
   # comments: what if # inside quotes?
-  if (any(idx <- grepl('#', x) & !grepl('"', x)))
+  if (any(idx <- grepl('#', x) & !grepl('"', x) & !i))
     x[idx] = gsub('(#.*)', '\\\\hlcomment{\\1}', x[idx])
+  i = which(!i)  # not comments
+  # function names
+  x[i] = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '\\\\hlfunctioncall{\\1}\\2(', x[i])
   # character strings
-  x = gsub('"([^"]*)"', '\\\\hlstring{"\\1"}', x)
-  x = gsub("'([^']*)'", "\\\\hlstring{'\\1'}", x)
+  x[i] = gsub('"([^"]*)"', '\\\\hlstring{"\\1"}', x[i])
+  x[i] = gsub("'([^']*)'", "\\\\hlstring{'\\1'}", x[i])
   # do not highlight keywords at the moment
   # x = gsub(hi.keywords, '\\1\\\\hlkeyword{\\2}\\3', x)
-  x = paste(x, collapse = '\n')
-  if (!fragment) x = paste('\\begin{alltt}', x, '\\end{alltt}', sep = '\n')
   x
 }
 hi_html = function(x) {
   x = gsub('&', "&amp;", x)
   x = gsub('<', '&lt;', x)
   x = gsub('>', '&gt;', x)
-  x = unlist(strsplit(x, '\n'))
+  x = split_lines(x)
   # character strings
   x = gsub('"([^"]*)"', '<span class="string">"\\1"</span>', x)
   x = gsub("'([^']*)'", "<span class=\"string\">'\\1'</span>", x)
@@ -38,20 +39,23 @@ hi_html = function(x) {
   x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '<span class="functioncall">\\1</span>\\2(', x)
   if (any(idx <- grepl('#', x) & !grepl('"', x)))
     x[idx] = gsub('(#.*)', '<span class="comment">\\1</span>', x[idx])
-  x = gsub(hi.keywords, '\\1<span class="keyword">\\2</span>\\3', x)
-  paste(x, collapse = '\n')
+  gsub(hi.keywords, '\\1<span class="keyword">\\2</span>\\3', x)
 }
 
 # may require the highlight package
-highlight_fun = function(name) getFromNamespace(name, 'highlight')
+highlight_fun = function(name) {
+  do.call('library', list(package = 'parser', character.only = TRUE))
+  getFromNamespace(name, 'highlight')
+}
 
 .default.css = css.parser(.default.sty)
 
 hilight_source = function(x, format, options) {
-  if (!(format %in% c('latex', 'html'))) return(x)
+  if (!((format %in% c('latex', 'html')) && options$highlight))
+    return(if (options$prompt) line_prompt(x) else x)
   if (opts_knit$get('use.highlight')) {
     highlight = highlight_fun('highlight')
-    x = unlist(strsplit(x, '\n')) # remove the extra \n in code (#331)
+    x = split_lines(x) # remove the extra \n in code (#331)
     con = textConnection(x)
     on.exit(close(con))
     r = if (format == 'latex') {
@@ -65,9 +69,12 @@ hilight_source = function(x, format, options) {
     options(encoding = 'native.enc')  # make sure parser() writes with correct enc
     on.exit(options(encoding = enc), add = TRUE)
     out = capture.output(highlight(con, renderer = r, showPrompts = options$prompt, size = options$size))
-    str_c(out, collapse = '\n')
+    if (format == 'html') out else {
+      # gsub() makes sure " will not produce an umlaut
+      c('\\begin{flushleft}', gsub('"', '"{}', out), '\\end{flushleft}')
+    }
   } else {
-    if (options$prompt) x = sapply(x, line_prompt, USE.NAMES = FALSE)
-    do.call(paste('hi', format, sep = '_'), list(x = x))
+    if (options$prompt) x = line_prompt(x)
+    if (format == 'html') hi_html(x) else c('\\begin{alltt}', hi_latex(x), '\\end{alltt}')
   }
 }

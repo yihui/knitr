@@ -28,8 +28,9 @@ dev2ext = function(x) {
 ## quartiz devices under Mac
 quartz_dev = function(type, dpi) {
   force(type); force(dpi)
-  function(file, width, height) {
-    quartz(file = file, width = width, height = height, type = type, dpi = dpi)
+  function(file, width, height, ...) {
+    quartz(file = file, width = width, height = height, type = type, dpi = dpi,
+           ...)
   }
 }
 
@@ -96,9 +97,13 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
     get(dev, mode = 'function')
   )
 
+  dargs = options$dev.args
+  if (is.list(dargs) && length(options$dev) > 1L) {
+    # dev.args is list(dev1 = list(arg1 = val1, ...), dev2 = list(arg2, ...))
+    if (all(options$dev %in% names(dargs))) dargs = dargs[[dev]]
+  }
   ## re-plot the recorded plot to an off-screen device
-  do.call(device, c(list(path, width = options$fig.width, height = options$fig.height),
-                    options$dev.args))
+  do.call(device, c(list(path, width = options$fig.width, height = options$fig.height), dargs))
   print(plot)
   dev.off()
 
@@ -183,4 +188,25 @@ is_par_change = function(p1, p2) {
   n2 = length(prim2 <- plot_calls(p2))
   if (n2 <= n1) return(TRUE)
   all(prim2[(n1 + 1):n2] %in% c('layout', 'par', '.External2'))  # TODO: is this list exhaustive?
+}
+
+# recycle some plot options such as fig.cap, out.width/height, etc when there
+# are multiple plots per chunk
+.recyle.opts = c('fig.cap', 'fig.scap', 'fig.env', 'fig.pos', 'fig.subcap',
+                 'out.width', 'out.height', 'out.extra')
+recycle_plot_opts = function(options) {
+  n = options$fig.num
+  for (i in .recyle.opts) {
+    if (length(options[[i]]) == 0L) next
+    options[[i]] = rep(options[[i]], length.out = n)
+  }
+  options
+}
+
+# when passing options to plot hooks, reduce the recycled options to scalars
+reduce_plot_opts = function(options) {
+  if (options$fig.show == 'animate' || options$fig.num <= 1L) return(options)
+  fig.cur = options$fig.cur
+  for (i in .recyle.opts) options[[i]] = options[[i]][fig.cur]
+  options
 }

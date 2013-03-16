@@ -1,7 +1,8 @@
-%% LyX 2.0.4 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.5.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
 \usepackage{listings}
 \lstset{language=R}
 \usepackage{geometry}
@@ -102,7 +103,7 @@ away from the R code to the top of this page. This should not be surprising
 to \LaTeX{} users.
 
 You should be able to compile the \TeX{} document and get a PDF file
-like this one: \url{https://github.com/downloads/yihui/knitr/knitr-listings.pdf}.
+like this one: \url{https://bitbucket.org/stat/knitr/downloads/knitr-listings.pdf}.
 For more information about out hooks, see \url{http://yihui.name/knitr/hooks}.
 
 \end{document}

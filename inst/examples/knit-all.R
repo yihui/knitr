@@ -21,7 +21,7 @@ call_knit = function(cmd) {
 for (i in list.files(pattern = '\\.Rmd')) {
   message(i)
   cmd = if (i == 'knitr-minimal.Rmd') {
-    sprintf("Rscript -e 'library(knitr);opts_knit$set(base.url=\"https://github.com/yihui/knitr/raw/master/inst/examples/\");opts_chunk$set(fig.path=\"\");knit(\"%s\")'", i)
+    sprintf("Rscript -e 'library(knitr);opts_knit$set(base.url=\"http://animation.r-forge.r-project.org/ideas/\");knit(\"%s\")'", i)
   } else {
     sprintf('knit %s', i)
   }
@@ -33,7 +33,7 @@ call_knit(sprintf("Rscript -e 'library(knitr);spin(\"knitr-spin.R\")'"))
 
 setwd('child')
 for (i in c('knitr-main.Rnw', 'knitr-parent.Rnw')) {
-  call_knit(sprintf('knit %s --pdf', i))
+  call_knit(sprintf('knit %s', i))
 }
 unlink('*.tex')
 call_knit(sprintf('knit %s', 'knitr-main.Rmd'))

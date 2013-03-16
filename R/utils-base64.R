@@ -10,12 +10,12 @@
 #' @references \url{http://en.wikipedia.org/wiki/Data_URI_scheme}
 #' @examples uri = image_uri(file.path(R.home('doc'), "html", "logo.jpg"))
 #' cat(sprintf('<img src="%s" />', uri), file = 'logo.html')
-#' browseURL('logo.html') # you can check its HTML source
+#' if (interactive()) browseURL('logo.html') # you can check its HTML source
 image_uri = function(f) {
   if (has_package('markdown')) return(markdown:::.b64EncodeFile(f))
   content = readBin(f, what = 'raw', n = file.info(f)$size)
   uri = if (has_package('RCurl')) {
-    paste(base64Encode(content, 'character'), collapse = '')
+    paste(RCurl::base64Encode(content, 'character'), collapse = '')
   } else base64_encode(content)
   str_c("data:", mime_type(f), ";base64,", uri)
 }

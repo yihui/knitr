@@ -1,0 +1,157 @@
+%% LyX 2.0.5.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[landscape]{geometry}
+\geometry{verbose,tmargin=0cm,bmargin=0cm,lmargin=1cm,rmargin=1cm}
+\setlength{\parskip}{0in}
+\setlength{\parindent}{0pt}
+\usepackage{url}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+ {hyperref}
+\usepackage{breakurl}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{multicol, upquote}
+% \VignetteIndexEntry{knitr Reference Card}
+% \VignetteEngine{knitr}
+
+\makeatother
+
+\begin{document}
+
+
+\title{knitr Reference Card}
+
+
+\author{Yihui Xie}
+
+\maketitle
+\begin{multicols}{2}
+
+
+\section{Syntax}
+
+\noindent \begin{center}
+\begin{tabular}{l|l|l|l|l}
+\hline 
+format & start & end & inline & output\tabularnewline
+\hline 
+Rnw & \verb|<<*>>=| & \texttt{@} & \verb|\|\verb|Sexpr{x}| & \TeX{}\tabularnewline
+\hline 
+Rmd & \verb|```{r *}| & \verb|```| & \verb|`r x`| & MD\tabularnewline
+\hline 
+Rhtml & \verb|<!--begin.rcode *| & \verb|end.rcode-->| & \verb|<!--rinline x-->| & HTML\tabularnewline
+\hline 
+Rrst & \texttt{..~\{r {*}\}} & \texttt{..~..} & \verb|:r:`x`| & reST\tabularnewline
+\hline 
+Rtex & \texttt{\% begin.rcode {*}} & \texttt{\% end.rcode} & \verb|\rinline{x}| & \TeX{}\tabularnewline
+\hline 
+brew &  &  & \verb|<% x %>| & text\tabularnewline
+\hline 
+\end{tabular}
+\par\end{center}
+
+\texttt{{*}} denotes local chunk options, e.g. \verb|<<label, eval=FALSE>>=|;
+\texttt{x} denotes inline R code, e.g. \verb|`r 1+2`| (MD stands
+for \href{http://en.wikipedia.org/wiki/Markdown}{Markdown})
+
+
+\section{Minimal Examples}
+
+\begin{multicols}{2}
+
+
+\subsection{Sweave ({*}.Rnw)}
+
+<<echo=FALSE>>=
+x=paste('\\Sexpr', '{', 'z}', sep = '')
+@
+\begin{verbatim}
+\document\Sexpr{'c'}lass{article}
+\be\Sexpr{'g'}in{document}
+
+Below is a code chunk.
+\Sexpr{''}<<foo, echo=TRUE>>=
+z = 1+1
+plot(cars)
+\Sexpr{''}@
+
+The value of z is \Sexpr{x}.
+\end{document}
+\end{verbatim}
+
+
+\subsection{R Markdown ({*}.Rmd)}
+
+\begin{verbatim}
+Hi _markdown_!
+
+```{r foo, echo=TRUE}
+z = 1+1
+plot(cars)
+```
+
+The value of z is `r z`.
+\end{verbatim}
+
+
+\subsection{Brew ({*}.brew)}
+
+\begin{verbatim}
+The value of pi is <% pi %>.
+\end{verbatim}
+
+\end{multicols}
+
+
+\section{Chunk Options}
+
+\texttt{opts\_chunk} controls global chunk options, e.g. \texttt{opts\_chunk\$set(tidy
+= FALSE)}, which can be overridden by local chunk options. See all
+options at \url{http://yihui.name/knitr/options}; some frequently
+used options:
+\begin{description}
+\item [{eval}] whether to evaluate the chunk
+\item [{echo}] whether to echo source code
+\item [{results}] \texttt{'markup'}, \texttt{'asis'}, \texttt{'hide'}
+\item [{tidy}] whether to reformat R code
+\item [{cache}] whether to cache results
+\item [{fig.width,\ fig.height,\ out.width,\ out.height}] device and
+output size of figures
+\item [{include}] whether to include the chunk results in output
+\item [{child}] filenames of child documents
+\item [{engine}] language name (R, python, ...)
+\end{description}
+
+\section{Functions}
+\begin{description}
+\item [{knit()}] the main function in this package; knit input document
+and write output
+\item [{purl()}] extract R code from an input document
+\item [{spin()}] spin goat's hair (an R script with roxygen comments) into
+wool (a literate programming document to be passed to \texttt{knit()})
+\item [{stitch()}] insert an R script into a template and compile the document
+\item [{knit\_hooks\$set()}] set or reset chunk and output \href{http://yihui.name/knitr/hooks}{hooks}
+\end{description}
+
+\section{Resources}
+\begin{itemize}
+\item homepage: \url{http://yihui.name/knitr} 
+\item development repository: \url{https://github.com/yihui/knitr} (\href{http://cran.r-project.org/package=knitr}{CRAN},
+\href{http://rforge.net/knitr}{Rforge})
+\item examples: \url{https://github.com/yihui/knitr-examples}
+\item stackoverflow: \url{http://stackoverflow.com/questions/tagged/knitr}
+\item mailing list: \url{https://groups.google.com/group/knitr}
+\end{itemize}
+\end{multicols}
+
+\end{document}

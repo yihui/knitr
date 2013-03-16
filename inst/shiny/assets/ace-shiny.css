@@ -1,0 +1,24 @@
+#proxy {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+}
+
+#notebook {
+  position: absolute;
+  width: 600px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
+#nbOut {
+  position: absolute;
+  left: 620px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding-right: 5px;
+  overflow-y: scroll;
+}

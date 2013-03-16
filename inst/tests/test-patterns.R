@@ -15,3 +15,12 @@ test_that('does a pattern contain a group?', {
   expect_false(group_pattern('abc'))
   expect_false(group_pattern(NULL))
 })
+
+test_that('patterns for Rnw', {
+  ce = all_patterns$rnw$chunk.end
+  expect_identical(grep(ce, '  @'), 1L) # spaces before @
+  expect_identical(grep(ce, '@  '), 1L) # spaces after @
+  expect_identical(grep(ce, '@ %asdf'), 1L) # comments after %
+  expect_identical(grep(ce, '@ asdf'), integer()) # only spaces/comments allowed
+  expect_identical(grep(ce, ' @ a% sdf'), integer())
+})

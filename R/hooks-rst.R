@@ -3,21 +3,19 @@
 #' @rdname hook_plot
 #' @export
 hook_plot_rst = function(x, options) {
-  if (options$fig.show == "animate") return(opts_knit$get('animation.fun')(x, options))
+  if (options$fig.show == 'animate') return(hook_plot_html(x, options))
 
-  base = opts_knit$get("base.url") %n% ""
-  cap = if (is.null(fig.cap <- options$fig.cap)) {
-    sprintf("plot of chunk %s", options$label)
-  } else {
-    if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
-  }
+  cap = .img.cap(options)
   # TODO: add all options for figure
   # See http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
   # http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure
-  make_directive('figure', str_c(base, .upload.url(x)),
-                 c(align = if (options$fig.align == 'default') NULL else options$fig.align,
-                   alt = cap, width = options$out.width, height = options$out.height),
-                 cap)
+  make_directive(
+    'figure',
+    str_c(opts_knit$get('base.url'), .upload.url(x)),
+    c(align = if (options$fig.align == 'default') NULL else options$fig.align,
+      alt = cap, width = options$out.width, height = options$out.height),
+    cap
+  )
 }
 
 #' @rdname output_hooks

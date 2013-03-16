@@ -13,6 +13,10 @@
 #' according to chunk options \code{fig.width} and \code{fig.height}. Filenames
 #' are derived from chunk labels and the \code{fig.path} option.
 #'
+#' The function \code{hook_webgl} is a wrapper for the
+#' \code{\link[rgl]{writeWebGL}()} function in the \pkg{rgl} package. It writes
+#' WebGL code to the output to reproduce the \pkg{rgl} scene in a browser.
+#'
 #' The function \code{hook_pdfcrop} can use the program \command{pdfcrop} to
 #' crop the extra white margin when the plot format is PDF to make better use of
 #' the space in the output document, otherwise we often have to struggle with
@@ -42,13 +46,12 @@
 #' @examples knit_hooks$set(rgl = hook_rgl)
 #' ## then in code chunks, use the option rgl=TRUE
 hook_rgl = function(before, options, envir) {
+  library(rgl)
   ## after a chunk has been evaluated
-  if (before || !require('rgl') || rgl.cur() == 0) return()  # no active device
-  name = fig_path()
+  if (before || rgl.cur() == 0) return()  # no active device
+  name = fig_path('', options)
   par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
-
-  if (out_format(c('html', 'markdown', 'jekyll', 'rst'))) options$dev = 'png'
 
   ## support 3 formats: eps, pdf and png (default)
   switch(options$dev,
@@ -122,8 +125,27 @@ hook_plot_custom = function(before, options, envir){
   if (n <= 1L) hook(c(name, ext), options) else {
     res = unlist(lapply(seq_len(n), function(i) {
       options$fig.cur = i
-      hook(c(str_c(name, i), ext), options)
+      hook(c(str_c(name, i), ext), reduce_plot_opts(options))
     }), use.names = FALSE)
     str_c(res, collapse = '')
   }
+}
+#' @export
+#' @rdname chunk_hook
+hook_webgl = function(before, options, envir) {
+  library(rgl)
+  ## after a chunk has been evaluated
+  if (before || rgl.cur() == 0) return()  # no active device
+  name = tempfile('rgl', '.', '.html'); on.exit(unlink(name))
+  par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
+  Sys.sleep(.05) # need time to respond to window size change
+
+  prefix = gsub('[^[:alnum:]]', '_', options$label) # identifier for JS, better be alnum
+  prefix = sub('^([^[:alpha:]])', '_\\1', prefix) # should start with letters or _
+  writeLines(sprintf(c('%%%sWebGL%%', '<script>%swebGLStart();</script>'), prefix),
+             tpl <- tempfile())
+  writeWebGL(dir = dirname(name), filename = name, template = tpl, prefix = prefix)
+  res = readLines(name)
+  res = res[!grepl('^\\s*$', res)] # remove blank lines
+  paste(gsub('^\\s*<', '<', res), collapse = '\n') # no spaces before HTML tags
 }

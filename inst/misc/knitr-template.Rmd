@@ -1,15 +1,3 @@
-```{r setup,include=FALSE,cache=FALSE}
-(function(x = knitr:::knit_concord$get('infile')) {
-  if (!is.character(x)) return()
-  opts_chunk$set(fig.path = paste('figure', gsub('[^[:alnum:]]', '-', x), sep = '/'))
-})()
-
-opts_chunk$set(fig.width = 6, fig.height = 6, par = TRUE)
-knit_hooks$set(par = function(before, options, envir) {
-  if (before) par(mar=c(4,4,.1,.1), cex.lab=.95, cex.axis=.9, mgp=c(2,.7,0), tcl=-.3, las=1)
-  })
-```
-
 `r if (exists('.knitr.title')) I(paste('#', .knitr.title, sep = ''))`
 
 `r if (exists('.knitr.author')) I(.knitr.author)`
@@ -17,7 +5,7 @@ knit_hooks$set(par = function(before, options, envir) {
 This report was automatically generated with the R package **knitr**
 (version `r packageVersion('knitr')`).
 
-```{r auto-report}
+```{r %sCHUNK_LABEL_HERE}
 ```
 
 The R session information (including the OS info, R version and all

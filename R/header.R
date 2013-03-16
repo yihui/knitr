@@ -25,8 +25,14 @@ make_header_latex = function() {
 }
 
 insert_header_latex = function(doc, b) {
-  i = which(str_detect(doc, b))
+  i = grep(b, doc)
   if (length(i) >= 1L) {
+    # it is safer to add usepackage{upquote} before begin{document} than after
+    # documentclass{article} because it must appear after usepackage{fontenc};
+    # see this weird problem: http://stackoverflow.com/q/12448507/559676
+    if (!out_format('listings') && length(j <- grep(p <- '(\\s*\\\\begin\\{document\\})', doc)[1L])) {
+      doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\\1', doc[j])
+    }
     i = i[1L]; l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])
     str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, make_header_latex())
@@ -103,15 +109,12 @@ set_header = function(...) {
 .default.sty = file.path(.inst.dir, 'themes', 'default.css')
 .default.sty = .default.sty[file.exists(.default.sty)][1L]
 # header for Latex Syntax Highlighting
-.header.hi.tex = paste(c('\\IfFileExists{upquote.sty}{\\usepackage{upquote}}{}',
-                         theme_to_header_latex(.default.sty)$highlight),
-                       collapse = '\n')
+.header.hi.tex = theme_to_header_latex(.default.sty)$highlight
 .knitr.sty = file.path(.inst.dir, 'misc', 'knitr.sty')
 .knitr.sty = .knitr.sty[file.exists(.knitr.sty)][1L]
 .header.framed = paste(readLines(.knitr.sty), collapse = "\n")
 # CSS for html syntax highlighting
-.header.hi.html = paste(theme_to_header_html(.default.sty)$highlight,
-                        collapse = '\n')
+.header.hi.html = theme_to_header_html(.default.sty)$highlight
 rm(list = c('.inst.dir', '.knitr.sty')) # do not need them any more
 
 .header.sweave.cmd =

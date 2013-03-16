@@ -3,6 +3,7 @@
 \alias{hook_pdfcrop}
 \alias{hook_plot_custom}
 \alias{hook_rgl}
+\alias{hook_webgl}
 \title{Built-in chunk hooks to extend knitr}
 \usage{
 hook_rgl(before, options, envir)
@@ -12,6 +13,8 @@ hook_pdfcrop(before, options, envir)
 hook_optipng(before, options, envir)
 
 hook_plot_custom(before, options, envir)
+
+hook_webgl(before, options, envir)
 }
 \arguments{
   \item{before,options,envir}{see references}
@@ -34,6 +37,11 @@ hook_plot_custom(before, options, envir)
   chunk options \code{fig.width} and \code{fig.height}.
   Filenames are derived from chunk labels and the
   \code{fig.path} option.
+
+  The function \code{hook_webgl} is a wrapper for the
+  \code{\link[rgl]{writeWebGL}()} function in the \pkg{rgl}
+  package. It writes WebGL code to the output to reproduce
+  the \pkg{rgl} scene in a browser.
 
   The function \code{hook_pdfcrop} can use the program
   \command{pdfcrop} to crop the extra white margin when the

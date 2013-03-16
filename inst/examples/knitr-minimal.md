@@ -1,15 +1,13 @@
-This is a minimal example of using **knitr** with in HTML pages. I am actually
-using markdown here since it is more convenient in GitHub.
+# A Minimal Example for Markdown
 
-First, the input file was named as `knitr-minimal.Rmd`
-([source](https://github.com/yihui/knitr/blob/master/inst/examples/knitr-minimal.Rmd)),
-and **knitr** will automatically determine the output filename to be
-`knitr-minimal.md` (`*.Rmd --> *.md`).
+This is a minimal example of using **knitr** to produce an _HTML_ page from _Markdown_.
+
+## R code chunks
 
 
 ```r
-# set global chunk options: images will be 5x5 inches
-opts_chunk$set(fig.width = 5, fig.height = 5)
+# set global chunk options: images will be 7x5 inches
+opts_chunk$set(fig.width = 7, fig.height = 5)
 ```
 
 
@@ -17,18 +15,9 @@ Now we write some code chunks in this markdown file:
 
 
 ```r
-## a simple calculator
-(x <- 1 + 1)
-```
-
-```
-## [1] 2
-```
-
-```r
-## boring random numbers
+x <- 1 + 1  # a simple calculator
 set.seed(123)
-rnorm(5)
+rnorm(5)  # boring random numbers
 ```
 
 ```
@@ -40,15 +29,50 @@ We can also produce plots:
 
 
 ```r
-library(ggplot2)
-qplot(hp, mpg, data = mtcars) + geom_smooth()
+par(mar = c(4, 4, 0.1, 0.1))
+with(mtcars, {
+    plot(mpg ~ hp, pch = 20, col = "darkgray")
+    lines(lowess(hp, mpg))
+})
 ```
 
-![plot of chunk md-cars-scatter](https://github.com/yihui/knitr/raw/master/inst/examples/md-cars-scatter.png) 
+![plot of chunk graphics](http://animation.r-forge.r-project.org/ideas/figure/graphics.png) 
 
 
-Inline R code is also supported, e.g. the value of `x` is `2`, and 2 times pi
-= `6.2832`.
+## Inline code
 
-So no more hesitation on using GitHub and **knitr**! You just write a minimal
-amount of code to get beautiful output on the web.
+Inline R code is also supported, e.g. the value of `x` is 2, and 2 &times; &pi;
+= 6.2832.
+
+## Math
+
+LaTeX math as usual: $f(\alpha, \beta) \propto x^{\alpha-1}(1-x)^{\beta-1}$.
+
+## Misc
+
+You can indent code chunks so they can nest within other environments such as lists.
+
+1. the area of a circle with radius x
+    
+    ```r
+    pi * x^2
+    ```
+    
+    ```
+    ## [1] 12.57
+    ```
+
+2. OK, that is great
+
+To compile me, use
+
+
+```r
+library(knitr)
+knit("knitr-minimal.Rmd")
+```
+
+
+## Conclusion
+
+Markdown is super easy to write. Go to **knitr** [homepage](http://yihui.name/knitr) for details.

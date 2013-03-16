@@ -1,23 +1,17 @@
 #' @rdname hook_plot
 #' @export
 hook_plot_md = function(x, options) {
-  if(options$fig.show == 'animate') {
-    return(opts_knit$get('animation.fun')(x, options))
-  }
+  if (options$fig.show == 'animate') return(hook_plot_html(x, options))
+
   base = opts_knit$get('base.url') %n% ''
-  cap = if (is.null(fig.cap <- options$fig.cap)) {
-    sprintf('plot of chunk %s', options$label)
-  } else {
-    if (options$fig.num == 1L) fig.cap[1] else fig.cap[options$fig.cur]
-  }
-  
+  cap = .img.cap(options)
+
   if(is.null(w <- options$out.width) & is.null(h <- options$out.height) &
     is.null(s <- options$out.extra)) {
     return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
   }
-  # additional styles require the HTML syntax
-  add = paste(sprintf('width="%s"', w), sprintf('height="%s"', h), s)
-  sprintf('<img src="%s%s" %s alt="%s" title="%s" /> ', base, .upload.url(x), add, cap, cap)
+  # use HTML syntax <img src=...>
+  .img.tag(.upload.url(x), options$out.width, options$out.height, cap, options$out.extra)
 }
 
 #' @rdname output_hooks
@@ -29,7 +23,8 @@ hook_plot_md = function(x, options) {
 #'   \samp{sourcecode} directive (e.g. it is useful for Sphinx)
 render_markdown = function(strict = FALSE) {
   knit_hooks$restore()
-  opts_chunk$set(dev = 'png', highlight = FALSE)
+  opts_chunk$set(dev = 'png')
+  opts_knit$set(out.format = 'markdown')
   ## four spaces lead to <pre></pre>
   hook.t = function(x, options) {
     if (strict) {
@@ -41,8 +36,7 @@ render_markdown = function(strict = FALSE) {
   knit_hooks$set(
     source = if (strict) hook.t else hook.r, output = hook.o,
     warning = hook.t, error = hook.t, message = hook.t,
-    inline = function(x) sprintf(if (inherits(x, 'AsIs')) '%s' else '`%s`',
-                                 .inline.hook(format_sci(x, 'html'))),
+    inline = function(x) .inline.hook(format_sci(x, 'html')),
     plot = hook_plot_md,
     chunk = function(x, options) {
       x = gsub('[\n]{2,}(```|    )', '\n\n\\1', x)
@@ -53,14 +47,32 @@ render_markdown = function(strict = FALSE) {
     }
   )
 }
-#' @rdname output_hooks
-#' @export
-render_jekyll = function() {
-  render_markdown()
-  hook.r = function(x, options) {
-    str_c('\n\n{% highlight ', tolower(options$engine), ' %}\n', x, '{% endhighlight %}\n\n')
-  }
-  hook.t = function(x, options) str_c('\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n')
+#'@param highlight which code highlighting engine to use: for \code{pygments},
+#'  the Liquid syntax is used (default approach Jekyll); for \code{prettify},
+#'  the output is prepared for the JavaScript library \file{prettify.js}; for
+#'  \code{none}, no highlighting engine will be used (code blocks are indented
+#'  by 4 spaces)
+#'@param extra extra tags for the highlighting engine; for \code{pygments}, it
+#'  can be \code{'linenos'}; for \code{prettify}, it can be \code{'linenums'}
+#'@rdname output_hooks
+#'@export
+render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '') {
+  hi = match.arg(highlight)
+  render_markdown(TRUE)
+  if (hi == 'none') return()
+  switch(hi, pygments = {
+    hook.r = function(x, options) {
+      str_c('\n\n{% highlight ', tolower(options$engine), if (extra != '') ' ', extra, ' %}\n',
+            x, '{% endhighlight %}\n\n')
+    }
+    hook.t = function(x, options) str_c('\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n')
+  }, prettify = {
+    hook.r = function(x, options) {
+      str_c('\n\n<pre><code class="prettyprint ', extra, '">',
+            escape_html(x), '</code></pre>\n\n')
+    }
+    hook.t = function(x, options) str_c('\n\n<pre><code>', escape_html(x), '</code></pre>\n\n')
+  })
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
   knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
                  error = hook.t, message = hook.t)

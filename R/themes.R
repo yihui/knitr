@@ -3,11 +3,10 @@
 #' @author Ramnath Vaidyanathan
 set_theme = function(theme) {
   header = if (is.list(theme)) theme else theme_to_header(theme)
-  highlight = paste(header$highlight, collapse = "\n")
   if(out_format('latex')) {
   	opts_chunk$set(background = header$background)
   }
-  set_header(highlight = highlight)
+  set_header(highlight = header$highlight)
   ## par(col = theme$foreground)
 }
 get_theme = function(theme = NULL) {
@@ -32,7 +31,7 @@ get_theme = function(theme = NULL) {
 #' returned by the \code{get()} method. See examples below.
 #' @author Ramnath Vaidyanathan and Yihui Xie
 #' @seealso \code{\link{eclipse_theme}} (use Eclipse themes)
-#' @references \url{https://github.com/downloads/yihui/knitr/knitr-themes.pdf}
+#' @references \url{https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf}
 #' (its Rnw source is at
 #' \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw})
 #' @export
@@ -42,7 +41,7 @@ get_theme = function(theme = NULL) {
 #'
 #' thm = knit_theme$get('acid')  # parse the theme to a list
 #' knit_theme$set(thm)
-#' 
+#'
 #' opts_knit$set(out.format=NULL) # restore option
 knit_theme = list(set = set_theme, get = get_theme)
 
@@ -71,7 +70,7 @@ theme_to_header_latex = function(theme) {
 
   ## write latex highlight header
   fgheader = color_def(foreground, "fgcolor")
-  highlight = c(fgheader, styler_assistant_latex(css_out[-1]))
+  highlight = paste(c(fgheader, styler_assistant_latex(css_out[-1])), collapse = '\n')
   list(highlight = highlight, background = background, foreground = foreground)
 }
 
@@ -87,6 +86,6 @@ theme_to_header_html = function(theme){
   css_knitr = readLines(system.file('misc', 'knitr.css', package = 'knitr'))
   css_knitr[-2] = sub('^(\\s+background-color:\\s+)(.*)$', sprintf('\\1%s;', bgcolor), css_knitr[-2])
   css = c(css_knitr, sprintf('.source {\n  color: %s;\n}', fgcolor), readLines(css_file))
-  list(highlight = css)
+  list(highlight = paste(css, collapse = '\n'))
 }
 
