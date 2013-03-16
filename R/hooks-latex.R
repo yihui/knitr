@@ -77,9 +77,7 @@ hook_plot_tex = function(x, options) {
       lab = str_c(options$fig.lp, options$label, ifelse(mcap, fig.cur, ''))
       if (is.null(scap)) scap = str_split(cap, '\\.|;|:')[[1L]][1L]
       scap = if(is.na(scap)) '' else str_c('[', scap, ']')
-      fig2 = sprintf('\\%s%s{%s\\label{%s}}\n\\end{%s}\n',
-                     opts_knit$get('cap.command'), scap, cap, lab,
-                     options$fig.env)
+      fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{%s}\n', scap, cap, lab, options$fig.env)
     }
   }
 
