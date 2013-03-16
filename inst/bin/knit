@@ -10,7 +10,10 @@ local({
   }
 
   library(knitr)
-  knit_fun = if ('--no-convert' %in% p) knit else {
+  knit_fun = if ('--no-convert' %in% p) {
+    p = setdiff(p, '--no-convert')
+    knit
+  } else {
     if (length(p) == 0L) stop('no input file provided')
     if (grepl('\\.(R|S)(nw|tex)$', p[1])) knit2pdf else {
       if (grepl('\\.R(md|markdown)$', p[1])) knit2html else knit
