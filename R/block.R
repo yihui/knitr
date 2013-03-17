@@ -147,7 +147,7 @@ block_exec = function(options) {
       if (options$fig.show == 'hold') res = c(res[!figs], res[figs]) # move to the end
       res = rm_blank_plot(res)
       figs = sapply(res, is.recordedplot)
-      if (sum(figs) > 1) {
+      if (length(figs) && sum(figs) > 1) {
         if (keep %in% c('first', 'last')) {
           res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
         } else {

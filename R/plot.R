@@ -156,6 +156,7 @@ rm_blank_plot = function(res) {
 ## merge low-level plotting changes
 merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
   idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
+  if (n <= 1) return(x)
   i1 = idx[1]; i2 = idx[2]  # compare plots sequentially
   for (i in 1:(n - 1)) {
     p1 = x[[i1]]; p2 = x[[i2]]
