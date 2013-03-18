@@ -9,7 +9,7 @@ concord_mode = function() {
     out_format(c('latex', 'sweave', 'listings'))
 }
 
-current_lines = function(i = knit_concord$get('i')) {
+current_lines = function(i) {
   # a helpr function to return line numbers for block i
   n = knit_concord$get('inlines')
   n0 = sum(head(n, i - 1L)) + 1L; n1 = n0 + n[i] - 1L
