@@ -24,6 +24,7 @@ concord_gen = function(infile, outfile) {
     warning('cannot generate concordance due to incomplete line numbers')
     return()
   }
+  stopifnot(length(i) == length(o))
 
   steps = NULL # how many steps to jump forward to match output line numbers
   for (k in seq_along(i)) {
