@@ -223,7 +223,7 @@ process_file = function(text, output) {
   tangle = opts_knit$get('tangle')
 
   if (opts_knit$get('progress')) {
-    pb = txtProgressBar(0, n, char = '>', style = 3)
+    pb = txtProgressBar(0, n, char = '.', style = 3)
     on.exit(close(pb), add = TRUE)
   }
   for (i in 1:n) {

@@ -30,6 +30,10 @@
 
 - the document hook `hook_rjournal()` was removed; it was too hackish (see http://yihui.name/en/2013/02/contribute-to-the-r-journal-with-lyx-knitr/ for how to write an article for The R Journal in a less hackish way)
 
+## MINOR CHANGES
+
+- the progress bar symbol was changed from `>` to `.` so it looks less intrusive (#395) (thanks, Michael Friendly)
+
 ## DOCUMENTATION
 
 - the **knitr** book is forthcoming: http://www.crcpress.com/product/isbn/9781482203530 run `citation('knitr')` or `toBibtex(citation('knitr'))` in R to obtain the citation info
