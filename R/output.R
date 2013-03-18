@@ -140,12 +140,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     ext = tolower(file_ext(input))
     if (is.null(output) && !child_mode()) output = basename(auto_out_name(input, ext))
     options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
-    knit_concord$set(infile = input)
-  }
-  if (concord_mode()) {
-    # 'outfile' from last parent call is my parent
-    if (child_mode()) knit_concord$set(parent = knit_concord$get('outfile'))
-    knit_concord$set(outfile = output)
+    knit_concord$set(infile = input, outfile = output)
   }
 
   encoding = correct_encode(encoding)
@@ -201,12 +196,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
   }
 
   if (in.file && is.character(output) && file.exists(output)) {
-    concord_gen(input2, output)  # concordance file
-    if (!child_mode() && concord_mode()) {
-      confile = str_c(sans_ext(output), '-concordance.tex')
-      cat(.knitEnv$concordance, file = confile)
-      .knitEnv$concordance = NULL # empty concord string
-    }
+    concord_gen(input, output)
     message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
   }
 
@@ -254,15 +244,11 @@ process_file = function(text, output) {
         )
       }
     )
-    # output line numbers
-    if (concord_mode()) {
-      # look back and see who is 0, then fill them up
-      idx = which(olines[1:i] == 0L); olines[idx] = line_count(res[idx])
-      knit_concord$set(outlines = olines)
-    }
   }
 
   if (!tangle) res = insert_header(res)  # insert header
+  # output line numbers
+  if (concord_mode()) knit_concord$set(outlines = line_count(res))
   print_knitlog()
 
   res

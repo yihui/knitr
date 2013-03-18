@@ -27,17 +27,8 @@ call_block = function(block) {
 
   if (!is.null(params$child)) {
     if (!params$eval) return('')
-    if (concord_mode()) {
-      concord_gen()  # generate a partial concordance before knit children
-      i = knit_concord$get('i'); olines = knit_concord$get('outlines')
-      knit_concord$set(parent.line = current_lines(i)[1L])
-    }
     cmds = lapply(sc_split(params$child), knit_child)
     out = str_c(unlist(cmds), collapse = '\n')
-    if (concord_mode()) {
-      knit_concord$set(out.next = sum(olines) + line_count(out) - 1L,
-                       in.next = i + 1L)
-    }
     return(out)
   }
 
