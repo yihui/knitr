@@ -38,9 +38,9 @@ insert_header_latex = function(doc, b) {
     str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, make_header_latex())
   } else if (parent_mode()) {
     # in parent mode, we fill doc to be a complete document
-    doc = str_c(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
-                .knitEnv$tikzPackages, "\\begin{document}", doc, "\\end{document}"),
-                collapse = '\n')
+    doc[1L] = str_c(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
+                      .knitEnv$tikzPackages, "\\begin{document}", doc[1L]), collapse = '\n')
+    doc[length(doc)] = str_c(doc[length(doc)], "\\end{document}", sep = '\n')
   }
   doc
 }
