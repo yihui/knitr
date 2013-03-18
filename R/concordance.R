@@ -17,8 +17,7 @@ current_lines = function(i) {
 }
 
 ## generate concordance for RStudio
-concord_gen = function(infile = knit_concord$get('infile'),
-                       outfile = knit_concord$get('outfile')) {
+concord_gen = function(infile, outfile) {
   if (!concord_mode()) return()
   i = knit_concord$get('inlines'); o = knit_concord$get('outlines')
   if (is.null(i) || is.null(o)) {
