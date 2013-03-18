@@ -200,7 +200,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
   }
 
-  if (child_mode() || is.null(output)) res else output
+  output %n% res
 }
 #' @rdname knit
 #' @param documentation an integer specifying the level of documentation to go
