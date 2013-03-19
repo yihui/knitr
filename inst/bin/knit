@@ -3,7 +3,7 @@
 local({
   p = commandArgs(TRUE)
   if (length(p) == 0L || '--help' %in% p) {
-    message('usage: knit input [output] [--no-convert]
+    message('usage: knit input [--no-convert]
     --help        to print help messages
     --no-convert  do not convert tex to pdf, markdown to html, etc')
     q()
@@ -23,5 +23,5 @@ local({
   if (!file.exists(p[1]))
     stop("file '", p[1], "' does not exist!")
 
-  knit_fun(p[1], if (length(p) < 2L) NULL else p[2], envir = globalenv())
+  knit_fun(p[1], envir = globalenv())
 })
