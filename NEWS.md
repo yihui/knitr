@@ -14,6 +14,8 @@
 
 - added a new engine `Rscript` to run the R code in a new R session; see http://stackoverflow.com/q/15271406/559676 for an example
 
+- the executable script `inst/bin/knit` can accept multiple input files now (e.g. `knit foo.Rnw bar.Rmd zzz.Rhtml`)
+
 ## BUG FIXES
 
 - fixed the problem reported in http://stackoverflow.com/q/12448507/559676 now \usepackage{upquote} should appear after \usepackage{fontenc}, so single quotes in verbatim environments will no longer cause problems

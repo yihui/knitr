@@ -20,8 +20,5 @@ local({
     }
   }
 
-  if (!file.exists(p[1]))
-    stop("file '", p[1], "' does not exist!")
-
-  knit_fun(p[1], envir = globalenv())
+  mapply(knit_fun, p, MoreArgs = list(envir = globalenv()))
 })
