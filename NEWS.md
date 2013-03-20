@@ -24,6 +24,8 @@
 
 - LaTeX child documents are included without the file extension `.tex`, e.g. `\include{foo}` instead of `\include{foo.tex}` (thanks, Petri Koistinen; reported at http://yihui.name/knitr/demo/child/#comment-820887691)
 
+- when the chunk option `engine` is not `R`, the code is also executed under the directory `opts_knit$get('root.dir')` (if specified); thanks, Winawer http://stackoverflow.com/q/15512545/559676
+
 ## MAJOR CHANGES
 
 - all child documents are inserted into the parent document as character strings of the (compiled) content, instead of being saved into files (e.g. `\input{foo-child.tex}`); no matter how many child documents there are, only one main output file will be generated; the package option `child.command` was removed accordingly since it is no longer used
