@@ -22,8 +22,6 @@
 
 - fixed #487: `stitch_rhtml()` and `stitch_rmd()` should not use the chunk option `out.width = '.6\\linewidth'` (thanks, Tal Galili)
 
-- LaTeX child documents are included without the file extension `.tex`, e.g. `\include{foo}` instead of `\include{foo.tex}` (thanks, Petri Koistinen; reported at http://yihui.name/knitr/demo/child/#comment-820887691)
-
 - when the chunk option `engine` is not `R`, the code is also executed under the directory `opts_knit$get('root.dir')` (if specified); thanks, Winawer http://stackoverflow.com/q/15512545/559676
 
 ## MAJOR CHANGES
