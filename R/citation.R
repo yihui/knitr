@@ -83,6 +83,7 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
   Rcmdr = c(author = '  author = {John Fox},'),
   Rcpp = c(author = '  author = {Dirk Eddelbuettel and Romain Francois},'),
   rpart = c(author = '  author = {Terry M Therneau and Beth Atkinson},'),
+  shiny = c(author = '  author = {{RStudio,}{ Inc.}},'),
   sm = c(author = '  author = {Adrian Bowman and Adelchi Azzalini},'),
   survival = c(author = '  author = {Terry Therneau},'),
   tuneR = c(author = '  author = {Uwe Ligges},')
