@@ -15,7 +15,7 @@ citEntry(
 
 citEntry(
   entry = 'book',
-  title = 'Dynamic Documents with R and knitr',
+  title = 'Dynamic Documents with {R} and knitr',
   author = 'Yihui Xie',
   publisher = 'Chapman and Hall/CRC',
   year = '2013',
