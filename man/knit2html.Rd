@@ -2,7 +2,7 @@
 \alias{knit2html}
 \title{Convert markdown to HTML using knit() and markdownToHTML()}
 \usage{
-knit2html(input, ..., envir = parent.frame(), text = NULL, encoding = getOption("encoding"))
+knit2html(input, ..., envir = parent.frame(), text = NULL, quiet = FALSE, encoding = getOption("encoding"))
 }
 \arguments{
   \item{...}{options passed to
@@ -16,6 +16,9 @@ knit2html(input, ..., envir = parent.frame(), text = NULL, encoding = getOption(
 
   \item{text}{a character vector as an alternative way to
   provide the input file}
+
+  \item{quiet}{whether to suppress the progress bar and
+  messages}
 
   \item{encoding}{the encoding of the input file; see
   \code{\link{file}}}

@@ -3,7 +3,8 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame(), encoding = getOption("encoding"))
+knit(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE, envir = parent.frame(), 
+    encoding = getOption("encoding"))
 
 purl(..., documentation = 1L)
 }
@@ -19,6 +20,9 @@ purl(..., documentation = 1L)
 
   \item{text}{a character vector as an alternative way to
   provide the input file}
+
+  \item{quiet}{whether to suppress the progress bar and
+  messages}
 
   \item{envir}{the environment in which the code chunks are
   to be evaluated (can use \code{\link{new.env}()} to
