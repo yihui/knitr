@@ -53,6 +53,7 @@
 #'   \code{\link[utils]{Stangle}})
 #' @param text a character vector as an alternative way to provide the input
 #'   file
+#' @param quiet whether to suppress the progress bar and messages
 #' @param envir the environment in which the code chunks are to be evaluated
 #'   (can use \code{\link{new.env}()} to guarantee an empty new environment)
 #' @param encoding the encoding of the input file; see \code{\link{file}}
@@ -95,7 +96,7 @@
 #' purl(f)  # tangle R code
 #' purl(f, documentation = 0)  # extract R code only
 #' purl(f, documentation = 2)  # also include documentation
-knit = function(input, output = NULL, tangle = FALSE, text = NULL,
+knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
                 envir = parent.frame(), encoding = getOption('encoding')) {
 
   # is input from a file? (or a connection on a file)
@@ -130,7 +131,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     ocode = knit_code$get(); on.exit(knit_code$restore(ocode), add = TRUE)
     if (tangle) knit_code$restore() # clean up code before tangling
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
-    opts_knit$set(tangle = tangle, encoding = encoding)
+    opts_knit$set(tangle = tangle, encoding = encoding, progress = !quiet)
   }
 
   ext = 'unknown'
@@ -184,7 +185,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
   }
 
   progress = opts_knit$get('progress')
-  if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
+  if (in.file && !quiet) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
   res = paste(knit_hooks$get('document')(res), collapse = '\n')
   if (!is.null(output))
@@ -197,7 +198,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
 
   if (in.file && is.character(output) && file.exists(output)) {
     concord_gen(input, output)
-    message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
+    if (!quiet) message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
   }
 
   output %n% res

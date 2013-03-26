@@ -75,13 +75,13 @@ knit2pdf = function(input, compiler = NULL, envir = parent.frame(),
 #' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' if (require('markdown')) {knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')}
-knit2html = function(input, ..., envir = parent.frame(), text = NULL,
+knit2html = function(input, ..., envir = parent.frame(), text = NULL, quiet = FALSE,
                      encoding = getOption('encoding')){
   if (is.null(text)) {
-    out = knit(input, envir = envir, encoding = encoding)
+    out = knit(input, envir = envir, encoding = encoding, quiet = quiet)
     markdown::markdownToHTML(out, sub_ext(out, 'html'), ...)
   } else {
-    out = knit(text = text, envir = envir, encoding = encoding)
+    out = knit(text = text, envir = envir, encoding = encoding, quiet = quiet)
     markdown::markdownToHTML(text = out, ...)
   }
 }
