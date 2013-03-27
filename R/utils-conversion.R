@@ -20,6 +20,8 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' Knit the input Rnw or Rrst document, and compile to PDF using \code{texi2pdf}
 #' or \code{rst2pdf}.
 #' @inheritParams knit
+#' @param output the output filename to be passed to the PDF compiler (e.g. a
+#'   tex document)
 #' @param compiler a character string which gives the LaTeX program used to
 #'   compile the tex document to PDF (by default it uses the default setting of
 #'   \code{\link[tools]{texi2pdf}}, which is often PDFLaTeX); this argument will
@@ -41,9 +43,9 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' ## compile a reST file with rst2pdf
 #'
 #' ## knit2pdf(..., compiler = 'rst2pdf')
-knit2pdf = function(input, compiler = NULL, envir = parent.frame(),
+knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(),
                     encoding = getOption('encoding'), ...) {
-  out = knit(input, envir = envir, encoding = encoding)
+  out = knit(input, output = output, envir = envir, encoding = encoding)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (!is.null(compiler)) {
     if (compiler == 'rst2pdf') {
