@@ -36,12 +36,10 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' @importFrom tools texi2pdf
 #' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}},
 #'   \code{\link{rst2pdf}}
-#' @examples ## compile with xelatex
-#'
+#' @examples #' compile with xelatex
 #' ## knit2pdf(..., compiler = 'xelatex')
 #'
-#' ## compile a reST file with rst2pdf
-#'
+#' #' compile a reST file with rst2pdf
 #' ## knit2pdf(..., compiler = 'rst2pdf')
 knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(),
                     encoding = getOption('encoding'), ...) {
