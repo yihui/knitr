@@ -131,7 +131,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     ocode = knit_code$get(); on.exit(knit_code$restore(ocode), add = TRUE)
     if (tangle) knit_code$restore() # clean up code before tangling
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
-    opts_knit$set(tangle = tangle, encoding = encoding, progress = !quiet)
+    # use the option KNITR_PROGRESS to control the progress bar
+    opts_knit$set(tangle = tangle, encoding = encoding,
+                  progress = getOption('KNITR_PROGRESS', TRUE) && !quiet)
   }
 
   ext = 'unknown'
