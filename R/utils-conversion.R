@@ -6,13 +6,17 @@
 #' @param command a character string which gives the path of the
 #'   \command{rst2pdf} program (if it is not in PATH, the full path has to be
 #'   given)
-#' @param options extra command line options, e.g. \code{'-o foo.pdf -v'}
-#' @author Alex Zvoleff
+#' @param options extra command line options, e.g. \code{'-v'}
+#' @author Alex Zvoleff and Yihui Xie
+#' @return An input file \file{*.rst} will produce \file{*.pdf} and this output
+#'   filename is returned if the conversion was successful.
 #' @export
 #' @seealso \code{\link{knit2pdf}}
 #' @references \url{http://rst2pdf.ralsina.com.ar/}
 rst2pdf = function(input, command = 'rst2pdf', options = '') {
-  system2(command, paste(input, options))
+  out = sub_ext(input, 'pdf')
+  system2(command, paste(shQuote(input), '-o', shQuote(out), options))
+  if (file.exists(out)) out else stop('conversion by rst2pdf failed!')
 }
 
 #' Convert Rnw or Rrst files to PDF using knit() and texi2pdf() or rst2pdf()
