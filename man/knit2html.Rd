@@ -26,7 +26,7 @@ knit2html(input, ..., envir = parent.frame(), text = NULL, quiet = FALSE, encodi
 \value{
   If the argument \code{text} is NULL, a character string
   (HTML code) is returned; otherwise the result is written
-  into a file and \code{NULL} is returned.
+  into a file and the filename is returned.
 }
 \description{
   This is a convenience function to knit the input markdown

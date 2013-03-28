@@ -31,6 +31,9 @@ knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), encoding
   \item{encoding}{the encoding of the input file; see
   \code{\link{file}}}
 }
+\value{
+  The filename of the PDF file.
+}
 \description{
   Knit the input Rnw or Rrst document, and compile to PDF
   using \code{texi2pdf} or \code{rst2pdf}.

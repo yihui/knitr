@@ -11,8 +11,13 @@ rst2pdf(input, command = "rst2pdf", options = "")
   the \command{rst2pdf} program (if it is not in PATH, the
   full path has to be given)}
 
-  \item{options}{extra command line options, e.g. \code{'-o
-  foo.pdf -v'}}
+  \item{options}{extra command line options, e.g.
+  \code{'-v'}}
+}
+\value{
+  An input file \file{*.rst} will produce \file{*.pdf} and
+  this output filename is returned if the conversion was
+  successful.
 }
 \description{
   Convert reST to PDF using \command{rst2pdf} (which
@@ -20,7 +25,7 @@ rst2pdf(input, command = "rst2pdf", options = "")
   library).
 }
 \author{
-  Alex Zvoleff
+  Alex Zvoleff and Yihui Xie
 }
 \references{
   \url{http://rst2pdf.ralsina.com.ar/}
