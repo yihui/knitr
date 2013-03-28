@@ -32,15 +32,15 @@
 #' stitch(s, system.file('misc', 'knitr-template.Rmd', package = 'knitr'))
 stitch = function(script,
                   template = system.file('misc', 'knitr-template.Rnw', package = 'knitr'),
-                  output = NULL, envir = parent.frame()) {
-  lines = readLines(script, warn = FALSE)
+                  output = NULL, text = NULL, envir = parent.frame()) {
+  lines = if (nosrc <- is.null(text)) readLines(script, warn = FALSE) else split_lines(text)
   ## extract title and author from first two lines
   if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:', envir)) lines = lines[-1L]
   if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:', envir)) lines = lines[-1L]
   read_chunk(lines = lines)
   if (length(knit_code$get()) == 0L) knit_code$set(`auto-report` = lines)
   input = basename(template)
-  input = sub_ext(basename(script), file_ext(input))
+  input = sub_ext(basename(if (nosrc) script else tempfile()), file_ext(input))
   txt = readLines(template, warn = FALSE)
   i = grep('%sCHUNK_LABEL_HERE', txt)
   if (length(i) != 1L) stop('Wrong template for stitch: ', template)
