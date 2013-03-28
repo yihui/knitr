@@ -36,6 +36,7 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' @param ... options to be passed to \code{\link[tools]{texi2pdf}} or
 #'   \code{\link{rst2pdf}}
 #' @author Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
+#' @return The filename of the PDF file.
 #' @export
 #' @importFrom tools texi2pdf
 #' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}},
@@ -52,7 +53,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
   if (!is.null(compiler)) {
     if (compiler == 'rst2pdf') {
       if (tolower(file_ext(out)) != 'rst') stop('for rst2pdf compiler input must be a .rst file')
-      return(rst2pdf(basename(out), ...))
+      rst2pdf(basename(out), ...)
+      return(sub_ext(out, 'pdf'))
     } else {
       # use the specified PDFLATEX command
       oc = Sys.getenv('PDFLATEX')
@@ -61,6 +63,7 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
     }
   }
   texi2pdf(basename(out), ...)
+  sub_ext(out, 'pdf')
 }
 
 #' Convert markdown to HTML using knit() and markdownToHTML()
@@ -73,8 +76,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
 #' @export
 #' @seealso \code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}
 #' @return If the argument \code{text} is NULL, a character string (HTML code)
-#'   is returned; otherwise the result is written into a file and \code{NULL} is
-#'   returned.
+#'   is returned; otherwise the result is written into a file and the filename
+#'   is returned.
 #' @examples # a minimal example
 #' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' if (require('markdown')) {knit2html('test.Rmd')
@@ -83,7 +86,8 @@ knit2html = function(input, ..., envir = parent.frame(), text = NULL, quiet = FA
                      encoding = getOption('encoding')){
   if (is.null(text)) {
     out = knit(input, envir = envir, encoding = encoding, quiet = quiet)
-    markdown::markdownToHTML(out, sub_ext(out, 'html'), ...)
+    markdown::markdownToHTML(out, outfile <- sub_ext(out, 'html'), ...)
+    invisible(outfile)
   } else {
     out = knit(text = text, envir = envir, encoding = encoding, quiet = quiet)
     markdown::markdownToHTML(text = out, ...)
