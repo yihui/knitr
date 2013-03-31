@@ -74,6 +74,7 @@ hook_ffmpeg_html = function(x, options) {
 
   ffmpeg.cmd = paste("ffmpeg", "-y", "-r", 1/options$interval,
                      "-i", fig.fname, mov.fname)
+  message('executing: ', ffmpeg.cmd)
   system(ffmpeg.cmd, ignore.stdout = TRUE)
 
   # figure out the options for the movie itself
