@@ -29,3 +29,4 @@ The FAQ's are compiled from the [issues](https://github.com/yihui/knitr/issues) 
   - Sure! I'd love to; just let me know.
 1. What can I do for you?
   - Many things, e.g. [donate me zillions of money](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ZRJDEBSEJEUJY&lc=US&item_name=Donate%20to%20Yihui%20Xie&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) (well, I'm kidding), buy me a book from my [Amazon wishlist](http://amzn.com/w/2S7M0GLEC32SB), [tweet](https://twitter.com/xieyihui) my [links](http://yihui.name/knitr), mention **knitr** on [Google+](https://plus.google.com/u/0/109653178371807724268/posts) or Facebook, or fork this repository and contribute code, or just say hello to me somewhere
+  - Cite the package and the [knitr book](http://www.crcpress.com/product/isbn/9781482203530); see `citation('knitr')` in R
