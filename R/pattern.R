@@ -1,4 +1,4 @@
-#' All built-in patterns
+﻿#' All built-in patterns
 #'
 #' This object is a named list of all built-in patterns.
 #' @references Usage: \url{http://yihui.name/knitr/patterns}
@@ -7,7 +7,8 @@
 #'
 #' str(all_patterns)
 all_patterns = list(
-  `rnw` = list(chunk.begin = '^\\s*<<(.*)>>=', chunk.end = '^\\s*@\\s*(%+.*|)$',
+  `rnw` = list(chunk.begin = '^\\s*<<(.*)>>=', 
+               chunk.end = '^\\s*@\\s*(%+.*|)$',
                inline.code = '\\\\Sexpr\\{([^}]+)\\}',
                inline.comment = '^\\s*%.*',
                ref.chunk = '^\\s*<<(.+)>>\\s*$',
@@ -39,7 +40,14 @@ all_patterns = list(
                chunk.end = "^\\s*\\.{2}\\s+\\.{2,}\\s*$",
                chunk.code = "^\\.{2}",
                ref.chunk = "^\\.*\\s*<<(.+)>>\\s*$",
-               inline.code = ":r:`([^`]+)`")
+               inline.code = ":r:`([^`]+)`"),
+
+  `asciidoc` = list(chunk.begin = '^-{4,}\\s*(.*)$',
+                    chunk.end = '-{4,}\\s*$',
+                    ref.chunk = '^\\s*<<(.+)>>\\s*$',
+                    inline.code = '\\+(.+)\\+',
+                    inline.comment = '^//.*',
+                    header.begin = '={4,}\\s*$')
 )
 
 .sep.label = '^#+\\s*@knitr(.*)$'  # pattern for code chunks in an R script
