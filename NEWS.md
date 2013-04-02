@@ -36,7 +36,7 @@
 
 - no longer generates concordance data for child documents; the past attempt did not really work well and the implementation was complicated, so now we only support concordance for the main document; the consequence of this change is the synchronization between PDF and Rnw for child documents no longer works at the line level (clicking in PDF will still bring the focus back to the child chunk)
 
-- `knit2pdf()` and `knit2html()` return the output filename when the input is a file (in previous versions, `NULL` is returned in this case)
+- `knit2pdf()` and `knit2html()` return the output filename when the input is a file (in previous versions, `NULL` was returned in this case)
 
 - the document hook `hook_rjournal()` was removed; it was too hackish (see http://yihui.name/en/2013/02/contribute-to-the-r-journal-with-lyx-knitr/ for how to write an article for The R Journal in a less hackish way)
 
