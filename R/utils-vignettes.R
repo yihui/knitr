@@ -3,7 +3,7 @@
 vweave = vtangle = function(file, driver, syntax, encoding = '', quiet = FALSE, ...) {
   opts_knit$set(stop_on_error = 2L)  # should not hide errors
   (if (grepl('\\.[Rr]md$', file)) knit2html else knit)(
-    file, encoding = encoding, quiet = quiet
+    file, encoding = encoding, quiet = quiet, envir = globalenv()
   )
 }
 
