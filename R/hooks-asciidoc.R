@@ -1,14 +1,14 @@
-﻿#' @rdname hook_plot
+#' @rdname hook_plot
 #' @export
 hook_plot_asciidoc = function(x, options) {
   base = opts_knit$get('base.url') %n% ''
   cap = .img.cap(options)
  
-  alt <- cap
-  width <- sprintf("width=%s", options$out.width)
-  height <- sprintf("height=%s", options$out.height)
-  align <- sprintf("align=%s", options$fig.align)  
-  tags <- paste(c(alt, width, height, align), collapse = ",")
+  alt = cap
+  width = sprintf("width=%s", options$out.width)
+  height = sprintf("height=%s", options$out.height)
+  align = sprintf("align=%s", options$fig.align)  
+  tags = paste(c(alt, width, height, align), collapse = ",")
   
   sprintf(
     '%s\nimage::%s[%s]',
@@ -53,7 +53,7 @@ render_asciidoc = function() {
   }
   hook.chunk = function(x, options) {
     x = gsub("-{4,}", "----", x)
-    if (is.null(s <- options$indent)) return(x)
+    if (is.null(s = options$indent)) return(x)
     line_prompt(x, prompt = s, continue = s)
   }
 
