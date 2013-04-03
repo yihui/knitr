@@ -1,4 +1,4 @@
-﻿#' All built-in patterns
+#' All built-in patterns
 #'
 #' This object is a named list of all built-in patterns.
 #' @references Usage: \url{http://yihui.name/knitr/patterns}
@@ -42,10 +42,10 @@ all_patterns = list(
                ref.chunk = "^\\.*\\s*<<(.+)>>\\s*$",
                inline.code = ":r:`([^`]+)`"),
 
-  `asciidoc` = list(chunk.begin = '^-{4,}\\s*(.*)$',
-                    chunk.end = '-{4,}\\s*$',
+  `asciidoc` = list(chunk.begin = '^/{4,}\\s*\\n\\[r,(.*)\\]$',
+                    chunk.end = '/-{4,}\\s*$',
                     ref.chunk = '^\\s*<<(.+)>>\\s*$',
-                    inline.code = '\\+(.+)\\+',
+                    inline.code = '`r +([^`\n]+)\\s*`',
                     inline.comment = '^//.*',
                     header.begin = '={4,}\\s*$')
 )
