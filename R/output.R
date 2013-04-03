@@ -202,7 +202,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
 
   if (in.file && is.character(output) && file.exists(output)) {
     concord_gen(input, output)
-    if (!quiet) message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
+    if (!quiet) message('output file: ', output, ifelse(progress, '\n', ''))
   }
 
   output %n% res
