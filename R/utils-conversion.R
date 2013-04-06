@@ -105,6 +105,7 @@ knit2html = function(input, ..., envir = parent.frame(), text = NULL, quiet = FA
 #' @param shortcode whether to use the shortcode \samp{[sourcecode lang='lang']}
 #'   which can be useful to WordPress.com users for syntax highlighting of
 #'   source code
+#' @param publish whether to publish the post immediately
 #' @inheritParams knit
 #' @export
 #' @references \url{http://yihui.name/knitr/demo/wordpress/}
@@ -116,7 +117,7 @@ knit2html = function(input, ..., envir = parent.frame(), text = NULL, quiet = FA
 #'   (especially when using Windows).
 #' @examples # see the reference
 knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
-                   encoding = getOption('encoding')) {
+                   encoding = getOption('encoding'), publish = TRUE) {
   out = knit(input, encoding = encoding); on.exit(unlink(out))
   con = file(out, encoding = encoding); on.exit(close(con), add = TRUE)
   content = native_encode(readLines(con, warn = FALSE))
@@ -132,5 +133,5 @@ knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
   do.call('library', list(package = 'RWordPress', character.only = TRUE))
   getFromNamespace('newPost', 'RWordPress')(list(
     description = content, title = title, ...
-  ))
+  ), publish = publish)
 }
