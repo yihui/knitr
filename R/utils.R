@@ -437,3 +437,65 @@ sub_ext = function(x, ext) {
   if (grepl('\\.([[:alnum:]]+)$', x)) x = sans_ext(x)
   paste(x, ext, sep = '.')
 }
+
+#' Wrap long lines in Rmd files
+#'
+#' This function wraps long paragraphs in an R Markdown file. Other elements are
+#' not wrapped: the YAML preamble, fenced code blocks, section headers and
+#' indented elements. The main reason for wrapping long lines is to make it
+#' easier to review differences in version control.
+#' @param file the input Rmd file
+#' @param width the expected line width
+#' @param text an alternative to \code{file} to input the text lines
+#' @param backup the path to back up the original file (in case anything goes
+#'   wrong); if \code{NULL}, it is ignored; by default it is constructed from
+#'   \code{file} by adding \code{__} before the base filename
+#' @return If \code{file} is provided, it is overwritten; if \code{text} is
+#'   provided, a character vector is returned.
+#' @note Currently it does not wrap blockquotes or lists (ordered or unordered).
+#'   This feature may or may not be added in the future.
+#' @export
+#' @examples wrap_rmd(text = c('```', '1+1', '```', '- a list item', '> a quote', '',
+#' paste(rep('this is a normal paragraph', 5), collapse = ' ')))
+wrap_rmd = function(file, width = 80, text = NULL, backup) {
+  x = if (is.null(text)) readLines(file, warn = FALSE) else split_lines(text)
+  x = strip_white(x)  # strip blank lines in the beginning and end
+  if ((n <- length(x)) <= 1L) return(x)  # are you kidding?
+  idx = NULL  # collect the lines to exclude from wrapping
+  i = grep('^---$', x)  # yaml preamble
+  if (length(i) > 1 && i[1L] == 1L) idx = c(idx, i[1L]:i[2L])
+  i = grep('^(```|\\{% (end|)highlight [a-z ]*%\\}|</?script.*>)', x)  # code blocks
+  if (length(i)) {
+    if (length(i) %% 2L != 0L) stop('markers for code blocks must be paired up')
+    idx = c(idx, unlist(apply(matrix(i, ncol = 2L, byrow = TRUE), 1L,
+                              function(z) z[1L]:z[2L])))
+  }
+  # section headers, indented code blocks and latex math
+  idx = c(idx, grep('^(#|===|---|    |\t)', x))
+  # blank lines
+  idx = c(idx, grep('^\\s*$', x))
+  # TODO: this is naive -- I treat a line as (a part of) a normal paragraph if
+  # it does not start with a space, or > (blockquotes) or -, *, 1. (lists), and
+  # only wrap paragraphs
+  idx = c(idx, grep('^\\s*( |> |- |\\* |\\d+ )', x))
+  idx = unique(idx)
+  if (length(idx) == n) return(x)  # no need to wrap anything
+
+  i = logical(n); i[idx] = TRUE; r = rle(i)
+  n = length(r$lengths); txt = vector('list', n); j = c(0L, cumsum(r$lengths))
+  for (i in seq_len(n)) {
+    block = x[seq(j[i] + 1L, j[i + 1])]
+    txt[[i]] = if (r$value[i]) {
+      # those lines not to be wrapped
+      gsub('\\s+$', '', block)  # strip pending spaces
+    } else {
+      strwrap(paste(block, collapse = '\n'), width)
+    }
+  }
+  txt = unlist(txt)
+  if (is.null(text)) {
+    if (missing(backup)) backup = file.path(dirname(file), paste0('__', basename(file)))
+    if (!is.null(backup)) file.copy(file, backup, overwrite = TRUE)
+    writeLines(txt, file)
+  } else txt
+}
