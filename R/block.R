@@ -70,7 +70,6 @@ block_exec = function(options) {
 
   # eval chunks (in an empty envir if cache)
   env = if (options$cache) new.env(parent = knit_global()) else knit_global()
-  .knitEnv$knit_env = env # make a copy of the envir
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
 
   keep = options$fig.keep

@@ -303,10 +303,6 @@ fig_path = function(suffix = '', options = opts_current$get()) {
 knit_global = function() {
   .knitEnv$knit_global %n% globalenv()
 }
-# current environment for knitr's code chunks
-knit_env = function() {
-  .knitEnv$knit_env
-}
 
 # Indents a Block
 #  Input
