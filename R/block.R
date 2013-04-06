@@ -236,7 +236,7 @@ inline_exec = function(block, eval = opts_chunk$get('eval'), envir = knit_global
     res = if (eval) {
       (if (stop_on_error == 2L) identity else try)(
         {
-          v = withVisible(eval(parse(text = code[i], srcfile = NULL), envir = envir))
+          v = withVisible(eval(parse_only(code[i]), envir = envir))
           if (v$visible) v$value
         }
       )
@@ -268,7 +268,7 @@ process_tangle.block = function(x) {
   } else knit_code$get(label)
   # read external code if exists
   if (!isFALSE(ev) && length(code) && str_detect(code, 'read_chunk\\(.+\\)')) {
-    eval(parse(text = unlist(str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
+    eval(parse_only(unlist(str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
   }
   code = parse_chunk(code)
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
@@ -281,7 +281,7 @@ process_tangle.inline = function(x) {
   code = x$code
   if (length(code) == 0L || !any(idx <- str_detect(code, "knit_child\\(.+\\)")))
     return('')
-  str_c(str_c(sapply(code[idx], function(z) eval(parse(text = z))),
+  str_c(str_c(sapply(code[idx], function(z) eval(parse_only(z))),
               collapse = '\n'), '\n')
 }
 

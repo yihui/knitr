@@ -87,7 +87,7 @@ parse_params = function(params) {
   if (params == '') return(list(label = unnamed_chunk()))
 
   res = withCallingHandlers(
-    eval(parse(text = str_c("alist(", quote_label(params), ")"), srcfile = NULL)),
+    eval(parse_only(str_c('alist(', quote_label(params), ')'))),
     error = function(e) {
       message('(*) NOTE: I saw chunk options "', params,
               '"\n please go to http://yihui.name/knitr/options',

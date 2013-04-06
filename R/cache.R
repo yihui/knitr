@@ -88,7 +88,7 @@ new_cache = function() {
 }
 # analyze code and find out global variables
 find_globals = function(code) {
-  fun = eval(parse(text = str_c(c('function(){', code, '}'), collapse='\n')))
+  fun = eval(parse_only(c('function(){', code, '}')))
   setdiff(codetools::findGlobals(fun), known_globals)
 }
 known_globals = c(

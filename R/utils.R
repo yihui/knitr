@@ -214,10 +214,13 @@ fix_options = function(options) {
   options
 }
 
+## parse but do not keep source
+parse_only = function(code) parse(text = code, keep.source = FALSE)
+
 ## try eval an option (character) to its value
 eval_opt = function(x) {
   if (!is.character(x)) return(x)
-  eval(parse(text = x), envir = knit_global())
+  eval(parse_only(x), envir = knit_global())
 }
 
 ## eval options as symbol/language objects
