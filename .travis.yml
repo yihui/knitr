@@ -10,9 +10,9 @@ install:
   - echo 'R_LIBS_USER=~/R' > ~/.Renviron
   - R --version
   - R -e '.libPaths(); sessionInfo()'
-  - sudo Rscript -e 'install.packages("knitr", dep = TRUE, repos = "http://cran.rstudio.org")'
+  - Rscript -e 'install.packages("knitr", dep = TRUE, repos = "http://cran.rstudio.org")'
 
 # run tests
 script:
-  - sudo make install
-  - sudo make check
+  - make install
+  - make check
