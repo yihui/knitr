@@ -7,7 +7,7 @@ env:
 
 # install dependencies
 install:
-  - sudo apt-add-repository ppa:marutter/rdev
+  - sudo apt-add-repository -y ppa:marutter/rdev
   - sudo apt-get update
   - sudo apt-get install r-base-dev libxml2-dev libcurl4-openssl-dev
   - if [[ -d ~/R ]]; then mkdir ~/R; fi
