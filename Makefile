@@ -16,7 +16,7 @@ deps:
 docs:
 	R -q -e 'library(Rd2roxygen); rab(".", build = FALSE)'
 
-build: docs
+build:
 	cd ..;\
 	R CMD build $(PKGSRC)
 
