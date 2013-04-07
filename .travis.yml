@@ -5,7 +5,7 @@ language: python
 install:
   - sudo apt-add-repository -y ppa:marutter/rdev
   - sudo apt-get update
-  - sudo apt-get install r-base-dev
+  - sudo apt-get install r-base-dev texinfo texlive-latex-base
   - if [[ -d ~/R ]]; then mkdir ~/R; fi
   - echo 'R_LIBS_USER=~/R' > ~/.Renviron
   - R --version
