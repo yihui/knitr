@@ -12,6 +12,8 @@
 
 - as announced in the last version, R 3.0.0 will support non-Sweave vignettes; now it is also possible to compile R HTML vignettes via **knitr** since `*.Rhtml` files are also registered by **knitr** as vignette files
 
+- a new chunk option `cache.vars` to manually specify which variables to save in the cache database; by default all newly created and modified variables are identified and saved, but in some cases, **knitr** may not be able to identify the modified variables, e.g. `DT[, foo:=value]` in **data.table** (we can set `cache.vars='DT'` to force **knitr** to save a copy of `DT`)
+
 - added a new engine `Rscript` to run the R code in a new R session; see http://stackoverflow.com/q/15271406/559676 for an example
 
 - the executable script `inst/bin/knit` can accept multiple input files now (e.g. `knit foo.Rnw bar.Rmd zzz.Rhtml`)
@@ -39,6 +41,8 @@
 - all child documents are inserted into the parent document as character strings of the (compiled) content, instead of being saved into files (e.g. `\input{foo-child.tex}`); no matter how many child documents there are, only one main output file will be generated; the package option `child.command` was removed accordingly since it is no longer used
 
 - no longer generates concordance data for child documents; the past attempt did not really work well and the implementation was complicated, so now we only support concordance for the main document; the consequence of this change is the synchronization between PDF and Rnw for child documents no longer works at the line level (clicking in PDF will still bring the focus back to the child chunk)
+
+- in previous versions, cached chunks were evaluated in separate (empty) environments in order to capture the newly created variables, but this brings confusion when we use functions depending on the current environment such as `ls()` (which will return `character(0)`); now all chunks, cached or not, are evaluated in the same environment `knit_global()` (finally fixed #456)
 
 - `knit2pdf()` and `knit2html()` return the output filename when the input is a file (in previous versions, `NULL` was returned in this case)
 

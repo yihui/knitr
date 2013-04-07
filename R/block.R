@@ -69,7 +69,7 @@ block_exec = function(options) {
   }
 
   # eval chunks (in an empty envir if cache)
-  env = if (options$cache) new.env(parent = knit_global()) else knit_global()
+  env = knit_global()
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
 
   keep = options$fig.keep
@@ -174,15 +174,16 @@ block_exec = function(options) {
     output = unlist(wrap(res, options)) # wrap all results together
     res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
   })
-  if (options$cache) copy_env(env, knit_global())
 
   output = str_c(c(res.before, output, res.after), collapse = '')  # insert hook results
   output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
 
   if (options$cache) {
-    obj.after = ls(globalenv(), all.names = TRUE)  # figure out new global objs
-    copy_env(globalenv(), knit_global(), setdiff(obj.after, obj.before))
-    objs = ls(env, all.names = TRUE)
+    obj.new = setdiff(ls(globalenv(), all.names = TRUE), obj.before)
+    copy_env(globalenv(), env, obj.new)
+    objs = options$cache.vars %n% codetools::findLocalsList(parse_only(code))
+    # make sure all objects to be saved exist in env
+    objs = intersect(c(objs, obj.new), ls(env, all.names = TRUE))
     block_cache(options, output, objs)
     if (options$autodep) cache$objects(objs, code, options$label, options$cache.path)
   }
