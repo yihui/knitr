@@ -1,16 +1,13 @@
 # it is not really python, but there is no R support on Travis CI yet
 language: python
 
-# environment variables
-env:
-  - R_LIBS_USER=~/R
-
 # install dependencies
 install:
   - sudo apt-add-repository -y ppa:marutter/rdev
   - sudo apt-get update
   - sudo apt-get install r-base-dev libxml2-dev libcurl4-openssl-dev
   - if [[ -d ~/R ]]; then mkdir ~/R; fi
+  - echo 'R_LIBS_USER=~/R' > ~/.Renviron
   - Rscript -e 'install.packages("knitr", dep = TRUE, repos = "http://cran.rstudio.org")'
 
 # run tests
