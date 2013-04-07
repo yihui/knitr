@@ -9,7 +9,7 @@ env:
 install:
   - sudo apt-add-repository -y ppa:marutter/rdev
   - sudo apt-get update
-  - sudo apt-get install r-base-dev texinfo texlive-latex-extra texlive-fonts-recommended
+  - sudo apt-get install r-base-dev qpdf texinfo texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
   - "[ ! -d ~/R ] && mkdir ~/R"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
