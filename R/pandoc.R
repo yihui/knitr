@@ -25,33 +25,32 @@ pandoc = function(input, format = 'html', config = getOption('config.pandoc')) {
   if (Sys.which('pandoc') == '')
     stop('Please install pandoc first: http://johnmacfarlane.net/pandoc/')
   cfg = if (is.null(config)) sub_ext(input[1L], 'pandoc') else config
-  cmd = 'pandoc'
   out = sub_ext(input[1L], pandoc_ext(format))
   cmn = NULL  # common arguments
-  if (file.exists(cfg)) {
-    cfg = read.dcf(cfg)
-    if (nrow(cfg) == 0L) stop('empty config file')
-    if (nrow(cfg) == 1L) {
-      if ('format' %in% colnames(cfg)) {
-        if (cfg[1L, 'format'] != format) cfg = NA
-      } else {cmn = drop(cfg); cfg = NA}
-    } else {
-      if (!('format' %in% colnames(cfg)))
-        stop('for a config file with multiple formats, there must be a field named "format"')
-      if (sum(idx <- is.na(cfg[, 'format'])) > 1L)
-        stop('at most one "format" field can be NA')
-      if (sum(idx) == 1L) cmn = cfg[idx, ]
-      cfg = cfg[!idx, , drop = FALSE]
-      cfg = cfg[cfg[, 'format'] == format, ]
-    }
-    out = unname(if (!is.na(cfg['o'])) cfg['o'] else {
-      if (!is.na(cfg['output'])) cfg['output'] else sub_ext(input, pandoc_ext(format))
-    })
-    cfg = cfg[setdiff(names(cfg), c('o', 'output', 'format'))]
-    cmd = paste(cmd, pandoc_arg(cfg))
+  txt = pandoc_cfg(readLines(input[1L], warn = FALSE))
+  if (file.exists(cfg)) txt = c(txt, '', readLines(cfg, warn = FALSE))
+  con = textConnection(txt); on.exit(close(con))
+  cfg = read.dcf(con)
+  if (nrow(cfg) == 0L) stop('empty config file')
+  if (nrow(cfg) == 1L) {
+    if ('format' %in% colnames(cfg)) {
+      if (cfg[1L, 'format'] != format) cfg = NA
+    } else {cmn = drop(cfg); cfg = NA}
+  } else {
+    if (!('format' %in% colnames(cfg)))
+      stop('for a config file with multiple formats, there must be a field named "format"')
+    if (sum(idx <- is.na(cfg[, 'format'])) > 1L)
+      stop('at most one "format" field can be NA')
+    if (sum(idx) == 1L) cmn = cfg[idx, ]
+    cfg = cfg[!idx, , drop = FALSE]
+    cfg = cfg[cfg[, 'format'] == format, ]
   }
-  cmd = paste(cmd, pandoc_arg(cmn), '-f markdown', '-t', format, '-o', out,
-              paste(shQuote(input), collapse = ' '))
+  out = unname(if (!is.na(cfg['o'])) cfg['o'] else {
+    if (!is.na(cfg['output'])) cfg['output'] else sub_ext(input[1L], pandoc_ext(format))
+  })
+  cfg = cfg[setdiff(names(cfg), c('o', 'output', 'format'))]
+  cmd = paste('pandoc', pandoc_arg(cfg), pandoc_arg(cmn), '-f markdown',
+              '-t', format, '-o', out, paste(shQuote(input), collapse = ' '))
   message('executing ', cmd)
   if (system(cmd) == 0L) out else stop('conversion failed')
 }
@@ -78,4 +77,15 @@ pandoc_arg = function(x) {
   }
   paste(ifelse(nchar(nms) == 1L, '-', '--'), nms,
         ifelse(x == '', '', '='), x, sep = '', collapse = ' ')
+}
+# identify pandoc config in markdown comments
+pandoc_cfg = function(x) {
+  if (length(i1 <- grep('^<!--pandoc', x)) == 0L ||
+        length(i2 <- grep('-->\\s*$', x)) == 0L) return(character(0))
+  i1 = i1[1L]; if (all(i2 < i1)) return(character(0))
+  i2 = i2[i2 >= i1][1L]
+  cfg = x[i1:i2]
+  cfg[1L] = gsub('^<!--pandoc\\s*', '', cfg[1L])
+  cfg[length(cfg)] = gsub('-->\\s*$', '', cfg[length(cfg)])
+  cfg
 }
