@@ -71,8 +71,8 @@ pandoc_ext = function(format) {
 }
 # give me a vector of arguments, I turn them into commandline
 pandoc_arg = function(x) {
+  if (length(x) == 0L || all(is.na(x))) return()
   x = x[!is.na(x)]  # options not provided
-  if (length(x) == 0L) return(NULL)
   nms = names(x)
   if (any(grepl('\n', x))) {
     # one argument used multiple times, e.g. --bibliography
