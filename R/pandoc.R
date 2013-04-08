@@ -38,7 +38,7 @@ pandoc = function(input, format = 'html', config = getOption('config.pandoc')) {
   cfg = read.dcf(con)
   if (nrow(cfg) == 0L) cfg = character(0) else if (nrow(cfg) == 1L) {
     if ('format' %in% colnames(cfg)) {
-      if (cfg[1L, 'format'] != format) cfg = NA
+      cfg = if (cfg[1L, 'format'] == format) drop(cfg) else NA
     } else {cmn = drop(cfg); cfg = NA}
   } else {
     if (!('format' %in% colnames(cfg)))
