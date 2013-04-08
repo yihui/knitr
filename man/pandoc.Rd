@@ -22,12 +22,18 @@ pandoc(input, format = "html", config = getOption("config.pandoc"))
 \description{
   This function calls Pandoc to convert Markdown documents
   to other formats such as HTML, LaTeX/PDF and Word, etc,
-  (optionally) based on a configuration file which
-  specifies the options to use for Pandoc.
+  (optionally) based on a configuration file or in-file
+  configurations which specify the options to use for
+  Pandoc.
 }
 \details{
-  The configuration file is a DCF file; see
-  \code{\link{read.dcf}}. This file must contain a field
+  There are two ways to input the Pandoc configurations --
+  through a config file, or embed the configurations in the
+  markdown file as special comments between
+  \verb{<!--pandoc} and \verb{-->}.
+
+  The configuration file is a DCF file (see
+  \code{\link{read.dcf}}). This file must contain a field
   named \code{format} which means the output format. The
   configurations are written in the form of
   \code{tag:value} and passed to Pandoc (if no value is
@@ -42,6 +48,9 @@ system("pandoc -h")  # see possible output formats
 }
 \references{
   Pandoc: \url{http://johnmacfarlane.net/pandoc/}; Examples
-  of the configuration file:
+  and rules of the configurations:
   \url{http://yihui.name/knitr/demo/pandoc}
+}
+\seealso{
+  \code{\link{read.dcf}}
 }
