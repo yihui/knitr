@@ -24,9 +24,9 @@
 pandoc = function(input, format = 'html', config = getOption('config.pandoc')) {
   if (Sys.which('pandoc') == '')
     stop('Please install pandoc first: http://johnmacfarlane.net/pandoc/')
+  cfg = if (is.null(config)) sub_ext(input[1L], 'pandoc') else config
   cmd = 'pandoc'
-  cfg = if (is.null(config)) sub_ext(input, 'pandoc') else config
-  out = sub_ext(input, pandoc_ext(format))
+  out = sub_ext(input[1L], pandoc_ext(format))
   cmn = NULL  # common arguments
   if (file.exists(cfg)) {
     cfg = read.dcf(cfg)
