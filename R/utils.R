@@ -215,7 +215,9 @@ fix_options = function(options) {
 }
 
 ## parse but do not keep source
-parse_only = function(code) parse(text = code, keep.source = FALSE)
+parse_only = if (getRversion() >= '3.0.0') {
+  function(code) parse(text = code, keep.source = FALSE)
+} else function(code) parse(text = code, srcfile = NULL)
 
 ## try eval an option (character) to its value
 eval_opt = function(x) {
