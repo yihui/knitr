@@ -36,8 +36,7 @@ pandoc = function(input, format = 'html', config = getOption('config.pandoc')) {
   if (file.exists(cfg)) txt = c(txt, '', readLines(cfg, warn = FALSE))
   con = textConnection(txt); on.exit(close(con))
   cfg = read.dcf(con)
-  if (nrow(cfg) == 0L) stop('empty config file')
-  if (nrow(cfg) == 1L) {
+  if (nrow(cfg) == 0L) cfg = character(0) else if (nrow(cfg) == 1L) {
     if ('format' %in% colnames(cfg)) {
       if (cfg[1L, 'format'] != format) cfg = NA
     } else {cmn = drop(cfg); cfg = NA}
