@@ -34,6 +34,7 @@ test_that('fig_path() sanitizes paths', {
     expect_identical(fig_path(, list(fig.path = '../', label = 'c.d')), '../c_d')
     expect_identical(fig_path(, list(fig.path = './../', label = 'c..d')), './../c__d')
   })
+  expect_identical(fig_path(, list(fig.path='C:/foo/', label='bar')), 'C:/foo/bar')
   opts_knit$set(out.format = NULL)
 })
 
