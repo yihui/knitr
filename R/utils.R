@@ -277,9 +277,9 @@ fig_path = function(suffix = '', options = opts_current$get()) {
   path = valid_path(options$fig.path, options$label)
   if (!out_format(c('latex', 'sweave', 'listings'))) return(str_c(path, suffix))
   # sanitize filename for LaTeX
-  if (str_detect(path, '[^:-_./\\[:alnum:]]')) {
+  if (str_detect(path, '[^~:-_./\\[:alnum:]]')) {
     warning('replaced special characters in figure filename "', path, '" -> "',
-            path <- str_replace_all(path, '[^:-_./\\[:alnum:]]', '_'), '"')
+            path <- str_replace_all(path, '[^~:-_./\\[:alnum:]]', '_'), '"')
   }
   # replace . with _ except ../ and ./
   s = str_split(path, '[/\\]')[[1L]]
