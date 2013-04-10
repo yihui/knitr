@@ -24,7 +24,7 @@ This FAQ is compiled from the [issues](https://github.com/yihui/knitr/issues) an
 1. How to comment out inline R code like in `\Sexpr{code}`?
   - see issue [#110](https://github.com/yihui/knitr/issues/110): you can destroy `\Sexpr` by `%\%Sexpr{code}` or comment out R code like `\Sexpr{#code}`, or just comment out the whole paragraph with `%` in the beginning of lines.
 1. How can I write a literal code chunk? i.e. write a code chunk which is not parsed and useful for tutorials?
-  - You need to destroy the chunk header, e.g. add an empty string before the chunk header: `\Sexpr{''}<<label, what=ever>>=`, or ```` `r ''` ```{r label, what=ever} ```` ([#443](https://github.com/yihui/knitr/issues/443))
+  - You need to destroy the chunk header, e.g. add an empty string before the chunk header: `\Sexpr{''}<<label, what=ever>>=`, or ```` `r ''` ```{r label, what=ever} ```` ([#443](https://github.com/yihui/knitr/issues/443)); see [example 062](https://github.com/yihui/knitr-examples)
 1. I have done something cool with **knitr**; could you add a link in your website?
   - Sure! I'd love to; just let me know.
 1. What can I do for you?
