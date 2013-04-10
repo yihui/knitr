@@ -38,6 +38,8 @@
 
 - `:` is permitted in `fig.path` now (#513) (thanks, Sebastian)
 
+- fixed an encoding problem (`CP950`) for Hong Kong Windows users reported at http://bit.ly/16RQL5E
+
 ## MAJOR CHANGES
 
 - all child documents are inserted into the parent document as character strings of the (compiled) content, instead of being saved into files (e.g. `\input{foo-child.tex}`); no matter how many child documents there are, only one main output file will be generated; the package option `child.command` was removed accordingly since it is no longer used
