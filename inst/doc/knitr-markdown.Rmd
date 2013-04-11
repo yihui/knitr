@@ -5,17 +5,23 @@
 
 This is an example of Markdown vignettes in R. Before R 3.0.0, only Sweave/PDF vignettes were supported in R. Markdown is gaining popularity over the years due to its simplicity, and R 3.0.0 starts to support package vignettes written in [R Markdown](http://www.rstudio.com/ide/docs/authoring/using_markdown).
 
+## Package vignettes
+
 To enable Markdown vignettes in an R package, you need to
 
 - add `*.Rmd` files under the `inst/doc` or `vignettes` directory
 - add `VignetteBuilder: knitr` to the `DESCRIPTION` file
 - specify the vignette engine `\VignetteEngine{knitr}` in the `Rmd` files (inside HTML comments)
 
+## View vignettes
+
 And R will load the **knitr** package to build these vignettes to HTML files, and you can see them when you open the HTML help:
 
 ```{r eval=FALSE}
 help(package = 'YourPackage', help_type = 'html')
 ```
+
+## Examples
 
 Below are some code chunks as examples.
 
