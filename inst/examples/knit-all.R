@@ -39,3 +39,4 @@ unlink('*.tex')
 call_knit(sprintf('knit %s', 'knitr-main.Rmd'))
 setwd('..')
 
+file.remove(c('knitr-slides.html', 'child/knitr-main.html'))
