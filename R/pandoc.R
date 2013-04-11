@@ -48,7 +48,10 @@ pandoc = function(input, format = 'html', config = getOption('config.pandoc')) {
     if (sum(idx) == 1L) cmn = cfg[idx, ]
     cfg = cfg[!idx, , drop = FALSE]
     cfg = cfg[cfg[, 'format'] == format, ]
-    if (!is.null(dim(cfg))) stop('the output format is not unique in config')
+    if (!is.null(dim(cfg))) {
+      if (nrow(cfg) > 1) stop('the output format is not unique in config')
+      cfg = character(0) # nrow(cfg) == 0; format not found in cfg
+    }
   }
   out = unname(if (!is.na(cfg['o'])) cfg['o'] else {
     if (!is.na(cfg['output'])) cfg['output'] else sub_ext(input[1L], pandoc_ext(format))
