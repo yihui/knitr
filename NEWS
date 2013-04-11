@@ -1,3 +1,122 @@
+		 CHANGES IN knitr VERSION 1.2
+
+NEW FEATURES
+
+  - added a Pandoc wrapper function `pandoc()` to convert Markdown documents
+  to other formats that Pandoc support such as LaTeX/PDF, OpenDocument,
+  HTML5 slides and unfortunately also Word (#206)
+
+  - in the past the chunk hooks were ignored when the chunk option `engine !=
+  'R'` (i.e. code in the chunk is not R); now they are executed regardless
+  of the language of the code chunk (#483) (thanks, @cdrv)
+
+  - multiple WebGL objects from the **rgl** package can be generated in the
+  same web page now; each object is uniquely identified by the corresponding
+  chunk label; see https://dl.dropbox.com/u/15335397/misc/webgl-rmd.html
+  for an example (#494) (thanks, Carson Sievert)
+
+  - if multiple graphical devices are used (the chunk option `dev` is a vector
+  of length greater than 1), the chunk option `dev.args` can be a named list
+  of lists of device arguments, with each element a list of arguments to be
+  passed to the single device; see http://yihui.name/knitr/options
+
+  - as announced in the last version, R 3.0.0 will support non-Sweave
+  vignettes; now it is also possible to compile R HTML vignettes via **knitr**
+  since `*.Rhtml` files are also registered by **knitr** as vignette files
+
+  - a new chunk option `cache.vars` to manually specify which variables to save
+  in the cache database; by default all newly created and modified variables
+  are identified and saved, but in some cases, **knitr** may not be able to
+  identify the modified variables, e.g. `DT[, foo:=value]` in **data.table**
+  (we can set `cache.vars='DT'` to force **knitr** to save a copy of `DT`)
+
+  - added a new engine `Rscript` to run the R code in a new R session;
+  see http://stackoverflow.com/q/15271406/559676 for an example
+
+  - the executable script `inst/bin/knit` can accept multiple input files now
+  (e.g. `knit foo.Rnw bar.Rmd zzz.Rhtml`)
+
+  - `knit()` and `knit2html()` gained a `quiet` argument to suppress messages
+  and the progress bar (thanks, Vince Buffalo)
+
+  - added the `text` argument to `spin()` and `stitch()` respectively as
+  an alternative way to provide the input like `knit()` (#509) (thanks,
+  Craig Watson)
+
+  - a new function `wrap_rmd()` to wrap long lines in Rmd files without
+  affecting the code blocks (if there are any); this makes it easier for
+  verson control purposes
+
+  - `rst2pdf()` will pass a default output filename to `rst2pdf` (if the
+  input is `foo.rst`, the output will be `foo.pdf`)
+
+  - `knit2wp()` gained a new argument `publish = TRUE` (thanks, Eric Nantz)
+  (#512)
+
+BUG FIXES
+
+  - fixed the problem reported in http://stackoverflow.com/q/12448507/559676
+  now \usepackage{upquote} should appear after \usepackage{fontenc}, so
+  single quotes in verbatim environments will no longer cause problems
+
+  - fixed #487: `stitch_rhtml()` and `stitch_rmd()` should not use the chunk
+  option `out.width = '.6\\linewidth'` (thanks, Tal Galili)
+
+  - when the chunk option `engine` is not `R`, the code is also executed
+  under the directory `opts_knit$get('root.dir')` (if specified); thanks,
+  Winawer http://stackoverflow.com/q/15512545/559676
+
+  - `:` is permitted in `fig.path` now (#513) (thanks, Sebastian)
+
+  - fixed an encoding problem (`CP950`) for Hong Kong Windows users reported
+  at http://bit.ly/16RQL5E
+
+MAJOR CHANGES
+
+  - all child documents are inserted into the parent document as character
+  strings of the (compiled) content, instead of being saved into files
+  (e.g. `\input{foo-child.tex}`); no matter how many child documents there
+  are, only one main output file will be generated; the package option
+  `child.command` was removed accordingly since it is no longer used
+
+  - no longer generates concordance data for child documents; the past attempt
+  did not really work well and the implementation was complicated, so now we
+  only support concordance for the main document; the consequence of this
+  change is the synchronization between PDF and Rnw for child documents no
+  longer works at the line level (clicking in PDF will still bring the focus
+  back to the child chunk)
+
+  - in previous versions, cached chunks were evaluated in separate (empty)
+  environments in order to capture the newly created variables, but this brings
+  confusion when we use functions depending on the current environment such as
+  `ls()` (which will return `character(0)`); now all chunks, cached or not,
+  are evaluated in the same environment `knit_global()` (finally fixed #456)
+
+  - `knit2pdf()` and `knit2html()` return the output filename when the input
+  is a file (in previous versions, `NULL` was returned in this case)
+
+  - the package option `stop_on_error` is set to `2` now when building package
+  vignettes, which means R will stop on errors in vignettes; this make it
+  easier to find out possible problems in vignettes during `R CMD build`
+
+  - the document hook `hook_rjournal()` was removed; it was too hackish (see
+  http://yihui.name/en/2013/02/contribute-to-the-r-journal-with-lyx-knitr/
+  for how to write an article for The R Journal in a less hackish way)
+
+MINOR CHANGES
+
+  - the progress bar symbol was changed from `>` to `.` so it looks less
+  intrusive (#395) (thanks, Michael Friendly)
+
+DOCUMENTATION
+
+  - the **knitr** book is forthcoming:
+  http://www.crcpress.com/product/isbn/9781482203530 run `citation('knitr')`
+  or `toBibtex(citation('knitr'))` in R to obtain the citation info
+
+  - open `help(package = 'knitr', help_type = 'html')` to see the vignette
+  examples (Rnw, R Markdown and R HTML)
+
 		 CHANGES IN knitr VERSION 1.1
 
 NEW FEATURES
@@ -21,7 +140,7 @@ NEW FEATURES
 
   - the global option `KNITR_WIDTH` can be use to set the R option `width`
   before **knitr** is called; in the past this option was hard-coded to
-  `75`, and now it is set as `options(width = getOption('KNITR_WIDTH', 75L)`
+  `75`, and now it is set as `options(width = getOption('KNITR_WIDTH', 75L))`
 
   - a new function `knit2wp()` which compiles R Markdown
   documents and publishes the results to WordPress; see
