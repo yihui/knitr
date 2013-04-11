@@ -62,6 +62,8 @@
 
 - the **knitr** book is forthcoming: http://www.crcpress.com/product/isbn/9781482203530 run `citation('knitr')` or `toBibtex(citation('knitr'))` in R to obtain the citation info
 
+- open `help(package = 'knitr', help_type = 'html')` to see the vignette examples (Rnw, R Markdown and R HTML)
+
 # CHANGES IN knitr VERSION 1.1
 
 ## NEW FEATURES
