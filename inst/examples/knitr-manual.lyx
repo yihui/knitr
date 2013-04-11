@@ -762,24 +762,10 @@ knitr
 \series bold
 pgfSweave
 \series default
- 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "R-pgfSweave"
-
-\end_inset
-
  and 
 \series bold
 cacheSweave
 \series default
- 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "R-cacheSweave"
-
-\end_inset
-
  respectively, but the implementations are different.
  New features like code reference from an external R script as well as output
  customization are also introduced.
@@ -829,23 +815,11 @@ Code Decoration
 \end_layout
 
 \begin_layout Standard
-The 
-\series bold
-highlight
-\series default
- package 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "R-highlight"
-
-\end_inset
-
- will be used to highlight R code if it is installed (otherwise an internal
- naive syntax highlighter is used), and 
+An internal syntax highlighter is used to highlight R code, and the 
 \series bold
 formatR
 \series default
- 
+ package 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "R-formatR"
@@ -2960,8 +2934,7 @@ SE, warning=FALSE>>=
 
 \begin_layout Plain Layout
 
-write_bib(c(.packages(), 'cacheSweave', 'evaluate', 'formatR', 'highlight',
- 'pgfSweave'), file = 'knitr-packages.bib')
+write_bib(c(.packages(), 'evaluate', 'formatR'), file = 'knitr-packages.bib')
 \end_layout
 
 \begin_layout Plain Layout

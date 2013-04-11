@@ -196,16 +196,15 @@ has provided many examples demonstrating the flexibility of the output.
 \section{Features}
 
 The \textbf{knitr} package borrowed features such as tikz graphics
-and cache from \textbf{pgfSweave} \citep{R-pgfSweave} and \textbf{cacheSweave}
-\citep{R-cacheSweave} respectively, but the implementations are different.
-New features like code reference from an external R script as well
-as output customization are also introduced. The feature of hook functions
-in Sweave is re-implemented and hooks have new usage now. There are
-several other small features which are motivated from my everyday
-use of Sweave. For example, a progress bar is provided when knitting
-a file so we roughly know how long we still need to wait; output from
-inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}}) is
-automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
+and cache from \textbf{pgfSweave} and \textbf{cacheSweave} respectively,
+but the implementations are different. New features like code reference
+from an external R script as well as output customization are also
+introduced. The feature of hook functions in Sweave is re-implemented
+and hooks have new usage now. There are several other small features
+which are motivated from my everyday use of Sweave. For example, a
+progress bar is provided when knitting a file so we roughly know how
+long we still need to wait; output from inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}})
+is automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
 if the result is numeric, and we will not get too many digits by default.
 You may check out a number of specific manuals dedicated to specific
 features such as graphics in the website: \url{http://yihui.name/knitr/demos}.
@@ -213,20 +212,19 @@ features such as graphics in the website: \url{http://yihui.name/knitr/demos}.
 
 \subsection{Code Decoration}
 
-The \textbf{highlight} package \citep{R-highlight} will be used to
-highlight R code if it is installed (otherwise an internal naive syntax
-highlighter is used), and \textbf{formatR} \citep{R-formatR} is used
-to reformat R code (like \texttt{keep.source=FALSE} in Sweave but
-will also try to retain comments). For \LaTeX{} output, the \textbf{framed}
-package is used to decorate code chunks with a light gray background.
-If this \LaTeX{} package is not found in the system, a version will
-be copied directly from \textbf{knitr}. The prompt characters are
-removed by default because they mangle the R source code in the output
-and make it difficult to copy R code. The R output is masked in comments
-by default based on the same rationale. It is easy to revert to the
-output with prompts (set option \texttt{prompt=TRUE}), and you will
-quickly realize the inconvenience to the readers if they want to copy
-and run the code in the output document:
+An internal syntax highlighter is used to highlight R code, and the
+\textbf{formatR} package \citep{R-formatR} is used to reformat R
+code (like \texttt{keep.source=FALSE} in Sweave but will also try
+to retain comments). For \LaTeX{} output, the \textbf{framed} package
+is used to decorate code chunks with a light gray background. If this
+\LaTeX{} package is not found in the system, a version will be copied
+directly from \textbf{knitr}. The prompt characters are removed by
+default because they mangle the R source code in the output and make
+it difficult to copy R code. The R output is masked in comments by
+default based on the same rationale. It is easy to revert to the output
+with prompts (set option \texttt{prompt=TRUE}), and you will quickly
+realize the inconvenience to the readers if they want to copy and
+run the code in the output document:
 
 <<stupid-prompts, prompt=TRUE, comment=NA, highlight=FALSE>>=
 x=rnorm(5)
@@ -711,7 +709,7 @@ and questions can be delivered to the \href{mailto:knitr@googlegroups.com}{maili
 % when knitr is updated, this chunk will be updated; why?
 <<auto-bib, version=packageVersion('knitr'), echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE>>=
 # write all packages in the current session to a bib file
-write_bib(c(.packages(), 'cacheSweave', 'evaluate', 'formatR', 'highlight', 'pgfSweave'), file = 'knitr-packages.bib')
+write_bib(c(.packages(), 'evaluate', 'formatR'), file = 'knitr-packages.bib')
 @
 
 \bibliographystyle{jss}
