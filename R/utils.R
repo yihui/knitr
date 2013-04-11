@@ -280,9 +280,9 @@ fig_path = function(suffix = '', options = opts_current$get()) {
 }
 # sanitize filename for LaTeX
 sanitize_fn = function(path, suffix = '') {
-  if (str_detect(path, '[^~:_./\\[:alnum:]]-')) {
+  if (str_detect(path, '[^~:_./\\[:alnum:]-]')) {
     warning('replaced special characters in figure filename "', path, '" -> "',
-            path <- str_replace_all(path, '[^~:_./\\[:alnum:]]-', '_'), '"')
+            path <- str_replace_all(path, '[^~:_./\\[:alnum:]-]', '_'), '"')
   }
   # replace . with _ except ../ and ./
   s = str_split(path, '[/\\]')[[1L]]
