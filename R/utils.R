@@ -275,8 +275,11 @@ out_format = function(x) {
 #' fig_path(1:10, list(fig.path='foo-', label='bar'))
 fig_path = function(suffix = '', options = opts_current$get()) {
   path = valid_path(options$fig.path, options$label)
-  if (!out_format(c('latex', 'sweave', 'listings'))) return(str_c(path, suffix))
-  # sanitize filename for LaTeX
+  (if (out_format(c('latex', 'sweave', 'listings'))) sanitize_fn else
+    str_c)(path, suffix)
+}
+# sanitize filename for LaTeX
+sanitize_fn = function(path, suffix = '') {
   if (str_detect(path, '[^~:_./\\[:alnum:]]-')) {
     warning('replaced special characters in figure filename "', path, '" -> "',
             path <- str_replace_all(path, '[^~:_./\\[:alnum:]]-', '_'), '"')
