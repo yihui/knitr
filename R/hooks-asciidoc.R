@@ -1,4 +1,4 @@
-#' @rdname hook_plot
+﻿#' @rdname hook_plot
 #' @export
 hook_plot_asciidoc = function(x, options) {
   base = opts_knit$get('base.url') %n% ''
@@ -52,7 +52,7 @@ render_asciidoc = function() {
     sprintf('+%s+', x)
   }
   hook.chunk = function(x, options) {
-    x = gsub("-{4,}", "----", x)
+    x = gsub("/{2,}", "", x)
     if (is.null(s = options$indent)) return(x)
     line_prompt(x, prompt = s, continue = s)
   }
