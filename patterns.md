@@ -22,7 +22,6 @@ Like Sweave, there are two types of R code in **knitr**: code chunks (like parag
 
 There are several built-in pattern lists in **knitr** which are stored in `all_patterns`.
 
-
 {% highlight r %}
 library(knitr)
 str(all_patterns)
@@ -69,7 +68,6 @@ str(all_patterns)
 ##   ..$ ref.chunk  : chr "^\\.*\\s*<<(.+)>>\\s*$"
 ##   ..$ inline.code: chr ":r:`([^`]+)`"
 {% endhighlight %}
-
 
 **Knitr** will first examine the content of the input to decide an appropriate set of patterns, if this automatic detection fails, then depending on the extension of the input filename, **knitr** will automatically choose a pattern list from the above lists, e.g. `file.Rnw` will use `all_patterns$rnw`, and `file.html` will use `all_patterns$html`, etc.
 
