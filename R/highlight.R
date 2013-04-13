@@ -55,9 +55,6 @@ hilight_source = function(x, format, options) {
     return(if (options$prompt) line_prompt(x) else x)
   if (opts_knit$get('use.highlight')) {
     highlight = highlight_fun('highlight')
-    x = split_lines(x) # remove the extra \n in code (#331)
-    con = textConnection(x)
-    on.exit(close(con))
     r = if (format == 'latex') {
       highlight_fun('renderer_latex')(
         document = FALSE, styles = highlight_fun('styler_assistant_latex')(.default.css)
@@ -65,10 +62,10 @@ hilight_source = function(x, format, options) {
     } else {
       highlight_fun('renderer_html')(document = FALSE, header = function() '', footer = function() '')
     }
-    enc = getOption('encoding')
-    options(encoding = 'native.enc')  # make sure parser() writes with correct enc
-    on.exit(options(encoding = enc), add = TRUE)
-    out = capture.output(highlight(con, renderer = r, showPrompts = options$prompt, size = options$size))
+    out = capture.output(highlight(
+      parse.output = parse(text = x, keep.source = TRUE), renderer = r,
+      showPrompts = options$prompt, size = options$size
+    ))
     if (format == 'html') out else {
       # gsub() makes sure " will not produce an umlaut
       c('\\begin{flushleft}', gsub('"', '"{}', out), '\\end{flushleft}')
