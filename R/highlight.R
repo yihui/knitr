@@ -44,7 +44,7 @@ hi_html = function(x) {
 
 # may require the highlight package
 highlight_fun = function(name) {
-  do.call('library', list(package = 'parser', character.only = TRUE))
+  stopifnot(getRversion() >= '3.0.0')
   getFromNamespace(name, 'highlight')
 }
 
