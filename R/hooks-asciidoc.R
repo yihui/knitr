@@ -33,12 +33,8 @@ render_asciidoc = function() {
   hook.output = function(x, options) {
     if (output_asis(x, options)) x else sprintf('\n----\n%s----\n', x)
   }
-  hook.inline = function(x, options) {
-    sprintf('+%s+', x)
-  }
   knit_hooks$set(
     source = hook.source, output = hook.output, message = hook.message,
-    warning = hook.warning, error = hook.error, plot = hook_plot_asciidoc,
-    inline = hook.inline
+    warning = hook.warning, error = hook.error, plot = hook_plot_asciidoc
   )
 }
