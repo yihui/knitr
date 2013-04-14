@@ -30,9 +30,9 @@ Author: Yihui Xie
 Maintainer: Yihui Xie <xie@yihui.name>
 Description: This package provides a general-purpose tool for dynamic report
     generation in R, which can be used to deal with any type of (plain text)
-    files, including Sweave, HTML, Markdown and reStructuredText. The patterns
-    of code chunks and inline R expressions can be customized. R code is
-    evaluated as if it were copied and pasted in an R terminal thanks to the
+    files, including Sweave, HTML, Markdown, reStructuredText and AsciiDoc. The
+    patterns of code chunks and inline R expressions can be customized. R code
+    is evaluated as if it were copied and pasted in an R terminal thanks to the
     evaluate package (e.g. we do not need to explicitly print() plots from
     ggplot2 or lattice). R code can be reformatted by the formatR package so
     that long lines are automatically wrapped, with indent and spaces being
