@@ -36,14 +36,9 @@ render_asciidoc = function() {
   hook.inline = function(x, options) {
     sprintf('+%s+', x)
   }
-  hook.chunk = function(x, options) {
-    if (is.null(s = options$indent)) return(x)
-    line_prompt(x, prompt = s, continue = s)
-  }
-
   knit_hooks$set(
     source = hook.source, output = hook.output, message = hook.message,
     warning = hook.warning, error = hook.error, plot = hook_plot_asciidoc,
-    inline = hook.inline, chunk = hook.chunk
+    inline = hook.inline
   )
 }
