@@ -69,12 +69,13 @@ purl(..., documentation = 1L)
   \file{.Rhtml} (\file{.Rhtm}) and \file{.Rmd}
   (\file{.Rmarkdown}) will generate \file{.tex},
   \file{.html} and \file{.md} respectively. For other types
-  of files, the file extension is reserved; if the filename
-  contains \samp{_knit_}, this part will be removed in the
-  output file, e.g., \file{foo_knit_.html} creates the
-  output \file{foo.html}; if \samp{_knit_} is not found in
-  the filename, \file{foo.ext} will produce
-  \file{foo-out.ext}. If \code{tangle = TRUE},
+  of files, if the filename contains \samp{_knit_}, this
+  part will be removed in the output file, e.g.,
+  \file{foo_knit_.html} creates the output \file{foo.html};
+  if \samp{_knit_} is not found in the filename,
+  \file{foo.ext} will produce \file{foo.txt} if \code{ext}
+  is not \code{txt}, otherwise the output is
+  \file{foo-out.txt}. If \code{tangle = TRUE},
   \file{foo.ext} generates an R script \file{foo.R}.
 
   We need a set of syntax to identify special markups for R
@@ -142,11 +143,10 @@ purl(f, documentation = 0)  # extract R code only
 purl(f, documentation = 2)  # also include documentation
 }
 \references{
-  Package homepage: \url{http://yihui.name/knitr/}
+  Package homepage: \url{http://yihui.name/knitr/}. The
+  \pkg{knitr} \href{http://bit.ly/117OLVl}{main manual}:
+  and \href{http://bit.ly/114GNdP}{graphics manual}.
 
-  The \pkg{knitr} main manual:
-  \url{https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf}
-
-  The \pkg{knitr} graphics manual:
-  \url{https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf}
+  See \code{citation('knitr')} for the citation
+  information.
 }
