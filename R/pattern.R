@@ -46,8 +46,7 @@ all_patterns = list(
                     chunk.end = '^//\\s*end[.]rcode$', chunk.code = '^/+',
                     ref.chunk = '^\\s*<<(.+)>>\\s*$',
                     inline.code = '`r +([^`\n]+)\\s*`',
-                    inline.comment = '^//.*',
-                    header.begin = '={4,}\\s*$')
+                    inline.comment = '^//.*')
 )
 
 .sep.label = '^#+\\s*@knitr(.*)$'  # pattern for code chunks in an R script
