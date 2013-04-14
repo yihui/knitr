@@ -157,8 +157,8 @@ hook_plot_tex = function(x, options) {
 
 #' Set output hooks for different output formats
 #'
-#' These functions set built-in output hooks for LaTeX, HTML, Markdown and
-#' reStructuredText.
+#' These functions set built-in output hooks for LaTeX, HTML, Markdown,
+#' reStructuredText and AsciiDoc.
 #'
 #' There are three variants of markdown documents: ordinary markdown
 #' (\code{render_markdown(strict = TRUE)}), extended markdown (e.g. GitHub
@@ -168,8 +168,8 @@ hook_plot_tex = function(x, options) {
 #' (\code{render_latex()}; use the LaTeX \pkg{framed} package), Sweave style
 #' (\code{render_sweave()}; use \file{Sweave.sty}) and listings style
 #' (\code{render_listings()}; use LaTeX \pkg{listings} package). Default HTML
-#' output hooks are set by \code{render_html()}, and reStructuredText uses
-#' \code{render_rst()}.
+#' output hooks are set by \code{render_html()}; \code{render_rst()} and
+#' \code{render_asciidoc()} are for reStructuredText and AsciiDoc respectively.
 #'
 #' These functions can be used before \code{knit()} or in the first chunk of the
 #' input document (ideally this chunk has options \code{include = FALSE} and
