@@ -96,7 +96,7 @@ set_pattern = function(type) {
 #' @rdname pat_fun
 #' @return The patterns object \code{\link{knit_patterns}} is modified as a side
 #'   effect.
-#' @export pat_rnw pat_brew pat_tex pat_html pat_md pat_rst
+#' @export pat_rnw pat_brew pat_tex pat_html pat_md pat_rst pat_asciidoc
 #' @examples ## see how knit_patterns is modified
 #' knit_patterns$get(); pat_rnw(); knit_patterns$get()
 #'
@@ -112,6 +112,8 @@ pat_html = function() set_pattern('html')
 pat_md = function() set_pattern('md')
 #' @rdname pat_fun
 pat_rst = function() set_pattern('rst')
+#' @rdname pat_fun
+pat_asciidoc = function() set_pattern('asciidoc')
 
 ## helper functions
 
