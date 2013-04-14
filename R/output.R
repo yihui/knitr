@@ -82,13 +82,11 @@
 #'   set (see \code{\link{render_latex}}), otherwise \pkg{knitr} will try to
 #'   guess the patterns and output format.
 #' @export
-#' @references Package homepage: \url{http://yihui.name/knitr/}
+#' @references Package homepage: \url{http://yihui.name/knitr/}. The \pkg{knitr}
+#'   \href{http://bit.ly/117OLVl}{main manual}: and
+#'   \href{http://bit.ly/114GNdP}{graphics manual}.
 #'
-#'   The \pkg{knitr} main manual:
-#'   \url{https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf}
-#'
-#'   The \pkg{knitr} graphics manual:
-#'   \url{https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf}
+#'   See \code{citation('knitr')} for the citation information.
 #' @examples library(knitr)
 #' (f = system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'))
 #' knit(f)  # compile to tex
