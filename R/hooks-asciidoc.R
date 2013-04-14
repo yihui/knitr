@@ -37,7 +37,6 @@ render_asciidoc = function() {
     sprintf('+%s+', x)
   }
   hook.chunk = function(x, options) {
-    x = gsub("/{2,}", "", x)
     if (is.null(s = options$indent)) return(x)
     line_prompt(x, prompt = s, continue = s)
   }
