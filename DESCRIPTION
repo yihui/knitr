@@ -113,3 +113,4 @@ Collate:
     'utils-conversion.R'
     'utils-vignettes.R'
     'pandoc.R'
+    'hooks-asciidoc.R'

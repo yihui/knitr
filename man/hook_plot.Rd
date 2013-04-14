@@ -1,4 +1,5 @@
 \name{hook_plot_tex}
+\alias{hook_plot_asciidoc}
 \alias{hook_plot_html}
 \alias{hook_plot_md}
 \alias{hook_plot_rst}
@@ -12,6 +13,8 @@ hook_plot_html(x, options)
 hook_plot_md(x, options)
 
 hook_plot_rst(x, options)
+
+hook_plot_asciidoc(x, options)
 }
 \arguments{
   \item{x}{a character vector of length 2 ; \code{x[1]} is
