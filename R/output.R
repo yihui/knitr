@@ -17,12 +17,12 @@
 #' \file{foo.Rnw} generates \file{foo.tex}, and other filename extensions like
 #' \file{.Rtex}, \file{.Rhtml} (\file{.Rhtm}) and \file{.Rmd}
 #' (\file{.Rmarkdown}) will generate \file{.tex}, \file{.html} and \file{.md}
-#' respectively. For other types of files, the file extension is reserved; if
-#' the filename contains \samp{_knit_}, this part will be removed in the output
-#' file, e.g., \file{foo_knit_.html} creates the output \file{foo.html}; if
-#' \samp{_knit_} is not found in the filename, \file{foo.ext} will produce
-#' \file{foo-out.ext}. If \code{tangle = TRUE}, \file{foo.ext} generates an R
-#' script \file{foo.R}.
+#' respectively. For other types of files, if the filename contains
+#' \samp{_knit_}, this part will be removed in the output file, e.g.,
+#' \file{foo_knit_.html} creates the output \file{foo.html}; if \samp{_knit_} is
+#' not found in the filename, \file{foo.ext} will produce \file{foo.txt} if
+#' \code{ext} is not \code{txt}, otherwise the output is \file{foo-out.txt}. If
+#' \code{tangle = TRUE}, \file{foo.ext} generates an R script \file{foo.R}.
 #'
 #' We need a set of syntax to identify special markups for R code chunks and R
 #' options, etc. The syntax is defined in a pattern list. All built-in pattern
@@ -259,13 +259,9 @@ auto_out_name = function(input, ext = tolower(file_ext(input))) {
   if (ext %in% c('rnw', 'snw')) return(str_c(base, '.tex'))
   if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'stex', 'rrst'))
     return(str_c(base, '.', substring(ext, 2L)))
-  if (ext == 'brew') return(str_c(base, '.txt'))
-  if (ext %in% c('tex', 'html', 'md')) {
-    if (str_detect(input, '_knit_')) {
-      return(str_replace(input, '_knit_', ''))
-    } else return(str_c(base, '-out.', ext))
-  }
-  stop('cannot determine the output filename automatically')
+  if (grepl('_knit_', input)) return(sub('_knit_', '', input))
+  if (ext != 'txt') return(str_c(base, '.txt'))
+  str_c(base, '-out.', ext)
 }
 
 ## decide output format based on file extension
