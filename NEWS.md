@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.3
+
+## NEW FEATURES
+
+- added support for AsciiDoc; see example 089 at https://github.com/yihui/knitr-examples/blob/master/089-minimal.Rasciidoc (thanks, Richard Cotton)
+
 # CHANGES IN knitr VERSION 1.2
 
 ## NEW FEATURES
