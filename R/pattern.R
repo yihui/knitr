@@ -37,7 +37,7 @@ all_patterns = list(
     ref.chunk = "^\\.*\\s*<<(.+)>>\\s*$", inline.code = ":r:`([^`]+)`"),
 
   `asciidoc` = list(
-    chunk.begin = '^//\\s*begin[.]rcode$', chunk.end = '^//\\s*end[.]rcode$',
+    chunk.begin = '^//\\s*begin[.]rcode(.*)$', chunk.end = '^//\\s*end[.]rcode\\s*$',
     chunk.code = '^//+', ref.chunk = '^\\s*<<(.+)>>\\s*$',
     inline.code = '`r +([^`\n]+)\\s*`', inline.comment = '^//.*')
 )
