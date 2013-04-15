@@ -146,11 +146,16 @@ load_device = function(name, package, dpi = NULL) {
 # .External2 for R >= 3.0; these blank plot objects should be removed
 rm_blank_plot = function(res) {
   Filter(function(x) {
-    !is.recordedplot(x) ||
-      identical(pc <- plot_calls(x), 'recordGraphics') ||
-      identical(pc, 'persp') ||
-      (length(pc) > 1L && !all(pc %in% c('par', 'layout', '.External2')))
+    !is.recordedplot(x) || nonempty_plot(x)
   }, res)
+}
+
+nonempty_plot = function(x) {
+  ver = getRversion(); pc = plot_calls(x)
+  if (ver < '3.0.0') {
+    identical(pc, 'recordGraphics') || identical(pc, 'persp') ||
+      (length(pc) > 1L && !all(pc %in% c('par', 'layout')))
+  } else length(pc) > 2L || !all(pc %in% c('.External.graphics', '.External2'))
 }
 
 ## merge low-level plotting changes

@@ -4,6 +4,10 @@
 
 - added support for AsciiDoc; see example 089 at https://github.com/yihui/knitr-examples/blob/master/089-minimal.Rasciidoc (thanks, Richard Cotton)
 
+## BUG FIXES
+
+- fixed #502: using `layout()` and `par()` at the same time under R 3.0.0 may lead to a corrupt plot (thanks, Hong Xu http://tex.stackexchange.com/q/108335/9128)
+
 # CHANGES IN knitr VERSION 1.2
 
 ## NEW FEATURES
