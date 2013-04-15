@@ -45,7 +45,8 @@ call_block = function(block) {
       if (!params$include) return('')
       return(cache$output(hash))
     }
-    cache$library(params$cache.path, save = FALSE) # load packages
+    if (params$engine == 'R')
+      cache$library(params$cache.path, save = FALSE) # load packages
   } else if (label %in% names(dep_list$get()))
     warning('code chunks must not depend on the uncached chunk "', label, '"',
             call. = FALSE)
