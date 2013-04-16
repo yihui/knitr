@@ -155,7 +155,8 @@ nonempty_plot = function(x) {
   if (ver < '3.0.0') {
     identical(pc, 'recordGraphics') || identical(pc, 'persp') ||
       (length(pc) > 1L && !all(pc %in% c('par', 'layout')))
-  } else length(pc) > 2L || !all(pc %in% c('.External.graphics', '.External2'))
+  } else !all(pc %in% c('.External.graphics', '.External2')) &&
+    !identical(pc, '.Call.graphics') # a single grid.new()
 }
 
 ## merge low-level plotting changes
