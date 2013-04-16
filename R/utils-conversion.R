@@ -80,8 +80,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
 #'   is returned.
 #' @examples # a minimal example
 #' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
-#' if (require('markdown')) {knit2html('test.Rmd')
-#' if (interactive()) browseURL('test.html')}
+#' knit2html('test.Rmd')
+#' if (interactive()) browseURL('test.html')
 knit2html = function(input, ..., envir = parent.frame(), text = NULL, quiet = FALSE,
                      encoding = getOption('encoding')){
   if (is.null(text)) {
