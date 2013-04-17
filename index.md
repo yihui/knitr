@@ -13,7 +13,7 @@ The **knitr** package was designed to be a transparent engine for dynamic report
 - Packages like **pgfSweave** and **cacheSweave** have added useful features to Sweave (high-quality tikz graphics and cache), and **knitr** has simplified the implementations
 - The design of **knitr** allows any input languages (e.g. R, Python and Awk) and any output markup languages (e.g. LaTeX, HTML, Markdown and reStructuredText)
 
-This package is developed on  [GitHub](https://github.com/yihui/knitr); for installation instructions and [FAQ's](https://github.com/yihui/knitr/blob/master/FAQ.md), see [README](https://github.com/yihui/knitr#readme). This website serves as the full documentation of **knitr**, and you can find the [main manual](https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf), the [graphics manual](https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf) and other [demos](/knitr/demos) / [examples](https://github.com/yihui/knitr-examples) here.
+This package is developed on  [GitHub](https://github.com/yihui/knitr); for installation instructions and [FAQ's](http://bit.ly/knitr-faq), see [README](https://github.com/yihui/knitr#readme). This website serves as the full documentation of **knitr**, and you can find the [main manual](http://bit.ly/117OLVl), the [graphics manual](http://bit.ly/114GNdP) and other [demos](/knitr/demos) / [examples](https://github.com/yihui/knitr-examples) here.
 
 <div style="text-align: center;"><iframe src="http://www.screenr.com/embed/qcv8" width="650" height="396" frameborder="0"></iframe></div>
 
