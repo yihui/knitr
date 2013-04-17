@@ -38,11 +38,8 @@ knit2html(input, ..., envir = parent.frame(), text = NULL, quiet = FALSE, encodi
 # a minimal example
 writeLines(c("# hello markdown", "```{r hello-random, echo=TRUE}", "rnorm(5)", "```"), 
     "test.Rmd")
-if (require("markdown")) {
-    knit2html("test.Rmd")
-    if (interactive()) 
-        browseURL("test.html")
-}
+knit2html("test.Rmd")
+if (interactive()) browseURL("test.html")
 }
 \seealso{
   \code{\link{knit}},
