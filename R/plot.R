@@ -146,7 +146,7 @@ load_device = function(name, package, dpi = NULL) {
 # .External2 for R >= 3.0; these blank plot objects should be removed
 rm_blank_plot = function(res) {
   Filter(function(x) {
-    !is.recordedplot(x) || nonempty_plot(x)
+    !is.recordedplot(x) || nonempty_plot(plot_calls(x))
   }, res)
 }
 
@@ -156,13 +156,11 @@ isR3 = getRversion() >= '3.0.0'
 empty_calls = if (isR3) c('C_par', 'C_layout', 'palette', 'palette2') else
   c('layout', 'par')
 
-nonempty_plot = function(x) {
-  ver = getRversion(); pc = plot_calls(x)
-  if (ver < '3.0.0') {
-    identical(pc, 'recordGraphics') || identical(pc, 'persp') ||
-      (length(pc) > 1L && !all(pc %in% c('par', 'layout')))
-  } else !all(pc %in% c('.External.graphics', '.External2')) &&
-    !identical(pc, '.Call.graphics') # a single grid.new()
+nonempty_plot = if (isR3) {
+  function(pc) !all(pc %in% empty_calls)
+} else function(pc) {
+  identical(pc, 'recordGraphics') || identical(pc, 'persp') ||
+    (length(pc) > 1L && !all(pc %in% empty_calls))
 }
 
 ## merge low-level plotting changes
@@ -193,14 +191,23 @@ is_low_change = function(p1, p2) {
   identical(p1[1:n1], p2[1:n1])
 }
 
-plot_calls = evaluate:::plot_calls
+plot_calls = if (isR3) {
+  function(plot) {
+    el = lapply(plot[[1]], '[[', 2)
+    if (length(el) == 0) return()
+    sapply(el, function(x) {
+      x = x[[1]]
+      x[['name']] %n% deparse(x)  # grid graphics do not have x$name
+    })
+  }
+} else evaluate:::plot_calls
 
 ## is the new plot identical to the old one except a few par/layout primitives in the end?
 is_par_change = function(p1, p2) {
   n1 = length(prim1 <- plot_calls(p1))
   n2 = length(prim2 <- plot_calls(p2))
   if (n2 <= n1) return(TRUE)
-  all(prim2[(n1 + 1):n2] %in% c('layout', 'par'))
+  all(prim2[(n1 + 1):n2] %in% empty_calls)
 }
 
 # recycle some plot options such as fig.cap, out.width/height, etc when there
