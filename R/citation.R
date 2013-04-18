@@ -78,7 +78,7 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
   cluster = c(author = '  author = {Martin Maechler},'),
   digest = c(author = '  author = {Dirk Eddelbuettel},'),
   gWidgets = c(author = '  author = {John Verzani},'),
-  Hmisc =  c(author = '  author = {Harrell, Jr, Frank E},'),
+  Hmisc =  c(author = '  author = {Harrell, Jr., Frank E},'),
   maps = c(author = '  author = {Ray Brownrigg},'),
   Rcmdr = c(author = '  author = {John Fox},'),
   Rcpp = c(author = '  author = {Dirk Eddelbuettel and Romain Francois},'),
