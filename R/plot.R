@@ -139,11 +139,7 @@ load_device = function(name, package, dpi = NULL) {
 }
 
 
-## filter out plot objects purely for layout (raised by par(), layout())
-
-# layout() results in plot_calls() of length 1 under R >= 3.0; all calls are
-# par/layout for par()/layout() under R < 3.0, and are .External.graphics or
-# .External2 for R >= 3.0; these blank plot objects should be removed
+# layout(), par() and palette() may produce blank plots that should be removed
 rm_blank_plot = function(res) {
   Filter(function(x) {
     !is.recordedplot(x) || nonempty_plot(plot_calls(x))
