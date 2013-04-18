@@ -194,7 +194,7 @@ is_par_change = function(p1, p2) {
   n1 = length(prim1 <- plot_calls(p1))
   n2 = length(prim2 <- plot_calls(p2))
   if (n2 <= n1) return(TRUE)
-  all(prim2[(n1 + 1):n2] %in% c('layout', 'par', '.External2'))  # TODO: is this list exhaustive?
+  all(prim2[(n1 + 1):n2] %in% c('layout', 'par'))
 }
 
 # recycle some plot options such as fig.cap, out.width/height, etc when there
