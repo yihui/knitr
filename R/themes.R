@@ -60,7 +60,7 @@ theme_to_header = function(theme, format = out_format()){
 #' @noRd
 theme_to_header_latex = function(theme) {
   css_file = if (file.exists(theme)) theme else {
-    system.file('themes', sprintf('%s.css', theme), package = 'knitr')
+    system.file('themes', sprintf('%s.css', theme), package = 'knitr', mustWork = TRUE)
   }
   css_out = css.parser(css_file)
 
