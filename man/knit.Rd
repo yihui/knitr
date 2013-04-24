@@ -11,9 +11,9 @@ purl(..., documentation = 1L)
 \arguments{
   \item{input}{path of the input file}
 
-  \item{output}{path of the output file; if \code{NULL},
-  this function will try to guess and it will be under the
-  current working directory}
+  \item{output}{path of the output file for \code{knit()};
+  if \code{NULL}, this function will try to guess and it
+  will be under the current working directory}
 
   \item{tangle}{whether to tangle the R code from the input
   file (like \code{\link[utils]{Stangle}})}
