@@ -8,6 +8,10 @@
 
 - fixed #502: using `layout()` and `par()` at the same time under R 3.0.0 may lead to a corrupt plot (thanks, Hong Xu http://tex.stackexchange.com/q/108335/9128)
 
+## MAJOR CHANGES
+
+- the script `inst/bin/knit` gains an option `-o` to specify the output filenames for `knit()` (#525, thanks, Aaron Wolen)
+
 # CHANGES IN knitr VERSION 1.2
 
 ## NEW FEATURES

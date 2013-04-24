@@ -82,9 +82,9 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
 #' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')
-knit2html = function(input, ..., envir = parent.frame(), text = NULL, quiet = FALSE,
-                     encoding = getOption('encoding')) {
-  out = knit(input, text = text, envir = envir, encoding = encoding, quiet = quiet)
+knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
+                     quiet = FALSE, encoding = getOption('encoding')) {
+  out = knit(input, output, text = text, envir = envir, encoding = encoding, quiet = quiet)
   if (is.null(text)) {
     markdown::markdownToHTML(out, outfile <- sub_ext(out, 'html'), ...)
     invisible(outfile)

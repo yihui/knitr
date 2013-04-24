@@ -141,7 +141,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     input.dir = .knitEnv$input.dir; on.exit({.knitEnv$input.dir = input.dir}, add = TRUE)
     .knitEnv$input.dir = dirname(input) # record input dir
     ext = tolower(file_ext(input))
-    if (is.null(output) && !child_mode()) output = basename(auto_out_name(input, ext))
+    if ((is.null(output) || is.na(output)) && !child_mode())
+      output = basename(auto_out_name(input, ext))
     options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
     knit_concord$set(infile = input, outfile = output)
   }
