@@ -24,8 +24,6 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' Knit the input Rnw or Rrst document, and compile to PDF using \code{texi2pdf}
 #' or \code{rst2pdf}.
 #' @inheritParams knit
-#' @param output the output filename to be passed to the PDF compiler (e.g. a
-#'   tex document)
 #' @param compiler a character string which gives the LaTeX program used to
 #'   compile the tex document to PDF (by default it uses the default setting of
 #'   \code{\link[tools]{texi2pdf}}, which is often PDFLaTeX); this argument will
@@ -37,6 +35,8 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #'   \code{\link{rst2pdf}}
 #' @author Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
 #' @return The filename of the PDF file.
+#' @note The \code{output} argument specifies the output filename to be passed
+#'   to the PDF compiler (e.g. a tex document) instead of the PDF filename.
 #' @export
 #' @importFrom tools texi2pdf
 #' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}},

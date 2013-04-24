@@ -47,8 +47,9 @@
 #' \pkg{knitr}, including the full documentation of chunk options and demos,
 #' etc.
 #' @param input path of the input file
-#' @param output path of the output file; if \code{NULL}, this function will try
-#'   to guess and it will be under the current working directory
+#' @param output path of the output file for \code{knit()}; if \code{NULL}, this
+#'   function will try to guess and it will be under the current working
+#'   directory
 #' @param tangle whether to tangle the R code from the input file (like
 #'   \code{\link[utils]{Stangle}})
 #' @param text a character vector as an alternative way to provide the input
