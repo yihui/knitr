@@ -2,10 +2,10 @@
 
 local({
   p = commandArgs(TRUE)
-  if (length(p) == 0L || '--help' %in% p) {
-    message('usage: knit input [--no-convert]
-    --help        to print help messages
-    --no-convert  do not convert tex to pdf, markdown to html, etc')
+  if (length(p) == 0L || any(c('-h', '--help') %in% p)) {
+    message('usage: knit input [input2 input3] [-n] [-o output output2 output3]
+    -h, --help        to print help messages
+    -n, --no-convert  do not convert tex to pdf, markdown to html, etc
     q('no')
   }
 
