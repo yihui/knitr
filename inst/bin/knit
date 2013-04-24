@@ -6,7 +6,7 @@ local({
     message('usage: knit input [--no-convert]
     --help        to print help messages
     --no-convert  do not convert tex to pdf, markdown to html, etc')
-    q()
+    q('no')
   }
 
   library(knitr)
