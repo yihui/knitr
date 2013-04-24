@@ -84,14 +84,11 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
 #' if (interactive()) browseURL('test.html')
 knit2html = function(input, ..., envir = parent.frame(), text = NULL, quiet = FALSE,
                      encoding = getOption('encoding')) {
+  out = knit(input, text = text, envir = envir, encoding = encoding, quiet = quiet)
   if (is.null(text)) {
-    out = knit(input, envir = envir, encoding = encoding, quiet = quiet)
     markdown::markdownToHTML(out, outfile <- sub_ext(out, 'html'), ...)
     invisible(outfile)
-  } else {
-    out = knit(text = text, envir = envir, encoding = encoding, quiet = quiet)
-    markdown::markdownToHTML(text = out, ...)
-  }
+  } else markdown::markdownToHTML(text = out, ...)
 }
 
 #' Knit an R Markdown document and post it to WordPress
