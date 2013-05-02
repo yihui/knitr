@@ -6,6 +6,8 @@
 
 - for `purl()`, code chunks with the option `include=FALSE` will not be included in the R script (#519, thanks, Sebastian)
 
+- new `hide` value to `fig.show` option. The figures are created but not included in the output document
+
 ## BUG FIXES
 
 - fixed #502: using `layout()` and `par()` at the same time under R 3.0.0 may lead to a corrupt plot (thanks, Hong Xu http://tex.stackexchange.com/q/108335/9128)
