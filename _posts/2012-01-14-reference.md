@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Chunk Reference
+title: Chunk Reference/Macro
 subtitle: How to reuse chunks
 category: demo
 ---
