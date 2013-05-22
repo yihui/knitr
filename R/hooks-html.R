@@ -69,7 +69,7 @@ hook_ffmpeg_html = function(x, options) {
   # set up the ffmpeg run
   ffmpeg.opts = options$aniopts
   fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
-  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), ".mp4")
+  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), ".ogg")
   if(is.na(ffmpeg.opts)) ffmpeg.opts = NULL
 
   ffmpeg.cmd = paste("ffmpeg", "-y", "-r", 1/options$interval,
@@ -83,7 +83,7 @@ hook_ffmpeg_html = function(x, options) {
                   sprintf('height=%s', options$out.height),
                   if('controls' %in% mov.opts) 'controls="controls"',
                   if('loop' %in% mov.opts) 'loop="loop"')
-  sprintf('<video %s><source src="%s" type="video/mp4" />video of chunk %s</video>',
+  sprintf('<video %s><source src="%s" />video of chunk %s</video>',
           opt.str, str_c(opts_knit$get('base.url'), mov.fname), options$label)
 }
 
