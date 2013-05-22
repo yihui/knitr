@@ -69,11 +69,11 @@ hook_ffmpeg_html = function(x, options) {
   # set up the ffmpeg run
   ffmpeg.opts = options$aniopts
   fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
-  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), ".ogg")
+  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), '.ogg')
   if(is.na(ffmpeg.opts)) ffmpeg.opts = NULL
 
-  ffmpeg.cmd = paste("ffmpeg", "-y", "-r", 1/options$interval,
-                     "-i", fig.fname, mov.fname)
+  ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1/options$interval,
+                     '-i', fig.fname, mov.fname)
   message('executing: ', ffmpeg.cmd)
   system(ffmpeg.cmd, ignore.stdout = TRUE)
 
