@@ -47,9 +47,10 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' #' compile a reST file with rst2pdf
 #' ## knit2pdf(..., compiler = 'rst2pdf')
 knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(),
-                    encoding = getOption('encoding'), ...) {
-  out = knit(input, output = output, envir = envir, encoding = encoding)
+                    quiet = FALSE, encoding = getOption('encoding'), ...) {
+  out = knit(input, output = output, envir = envir, quiet = quiet, encoding = encoding)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
+  if (is.null(compiler) && grepl('\\.rst$', out)) compiler = 'rst2pdf'
   if (!is.null(compiler)) {
     if (compiler == 'rst2pdf') {
       if (tolower(file_ext(out)) != 'rst') stop('for rst2pdf compiler input must be a .rst file')

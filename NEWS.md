@@ -4,6 +4,8 @@
 
 - added support for AsciiDoc; see example 089 at https://github.com/yihui/knitr-examples/blob/master/089-minimal.Rasciidoc (thanks, Richard Cotton)
 
+- added support for reStructuredText vignettes in packages; now `*.Rrst` documents are recognized as vignettes as well, and they will be compiled to PDF via `rst2pdf` (#533) (thanks, Trevor L Davis)
+
 - for `purl()`, code chunks with the option `include=FALSE` will not be included in the R script (#519, thanks, Sebastian)
 
 ## BUG FIXES
