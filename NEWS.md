@@ -10,6 +10,8 @@
 
 - fixed #502: using `layout()` and `par()` at the same time under R 3.0.0 may lead to a corrupt plot (thanks, Hong Xu http://tex.stackexchange.com/q/108335/9128)
 
+- fixed a bug in `pandoc()`: for single-lettered Pandoc arguments, the values are passed to them after spaces instead of equal signs (reported at http://stackoverflow.com/q/16569010/559676)
+
 ## MAJOR CHANGES
 
 - the script `inst/bin/knit` gains an option `-o` to specify the output filenames for `knit()` (#525, thanks, Aaron Wolen)

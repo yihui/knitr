@@ -83,8 +83,9 @@ pandoc_arg = function(x) {
     nms = rep(nms, sapply(x, length))
     x = unlist(x)
   }
-  paste(ifelse(nchar(nms) == 1L, '-', '--'), nms,
-        ifelse(x == '', '', '='), x, sep = '', collapse = ' ')
+  a1 = nchar(nms) == 1L
+  paste(ifelse(a1, '-', '--'), nms,
+        ifelse(x == '', '', ifelse(a1, ' ', '=')), x, sep = '', collapse = ' ')
 }
 # identify pandoc config in markdown comments
 pandoc_cfg = function(x) {
