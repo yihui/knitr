@@ -176,11 +176,7 @@ block_exec = function(options) {
     res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
   })
 
-  if (options$fig.show == 'hide') {
-    output = ''
-  } else {
-    output = str_c(c(res.before, output, res.after), collapse = '')  # insert hook results
-  }
+  output = str_c(c(res.before, output, res.after), collapse = '')  # insert hook results
   output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
 
   if (options$cache) {
