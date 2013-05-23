@@ -16,6 +16,8 @@
 
 - the script `inst/bin/knit` gains an option `-o` to specify the output filenames for `knit()` (#525, thanks, Aaron Wolen)
 
+- the default video format for animations is OGG (it is open and free) instead of MP4 (non-free) now; this means Internet Explorer under Windows may not work with the animations (consider Firefox, Chrome and other modern web browsers)
+
 # CHANGES IN knitr VERSION 1.2
 
 ## NEW FEATURES
