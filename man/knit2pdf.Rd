@@ -2,8 +2,8 @@
 \alias{knit2pdf}
 \title{Convert Rnw or Rrst files to PDF using knit() and texi2pdf() or rst2pdf()}
 \usage{
-knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), encoding = getOption("encoding"), 
-    ...)
+knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = FALSE, 
+    encoding = getOption("encoding"), ...)
 }
 \arguments{
   \item{compiler}{a character string which gives the LaTeX
@@ -28,6 +28,9 @@ knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), encoding
   \item{envir}{the environment in which the code chunks are
   to be evaluated (can use \code{\link{new.env}()} to
   guarantee an empty new environment)}
+
+  \item{quiet}{whether to suppress the progress bar and
+  messages}
 
   \item{encoding}{the encoding of the input file; see
   \code{\link{file}}}
