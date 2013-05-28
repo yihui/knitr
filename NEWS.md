@@ -16,6 +16,8 @@
 
 - fixed a bug in `pandoc()`: for single-lettered Pandoc arguments, the values are passed to them after spaces instead of equal signs (reported at http://stackoverflow.com/q/16569010/559676)
 
+- fixed #542: when a child document has a sub-child document and also uses `set_parent()`, the LaTeX header will be added to the wrong file (thanks, Johan Toloe)
+
 ## MAJOR CHANGES
 
 - the script `inst/bin/knit` gains an option `-o` to specify the output filenames for `knit()` (#525, thanks, Aaron Wolen)
