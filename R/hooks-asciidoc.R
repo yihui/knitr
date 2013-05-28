@@ -22,13 +22,13 @@ render_asciidoc = function() {
     sprintf('\n[source,%s]\n----\n%s----\n', tolower(options$engine), x)
   }
   hook.message = function(x, options) {
-    sprintf('\n[NOTE]\n%s\n', substring(x, comment_length(options$comment)))
+    sprintf('\n[NOTE]\n====\n.Message\n%s\n====\n', substring(x, comment_length(options$comment)))
   }
   hook.warning = function(x, options) {
-    sprintf('\n[WARNING]\n%s\n', gsub('^.*Warning: ', '', x))
+    sprintf('\n[WARNING]\n====\n.Warning\n%s\n====\n', gsub('^.*Warning: ', '', x))
   }
   hook.error = function(x, options) {
-    sprintf('\n[CAUTION]\n%s\n', gsub('^.*Error: ', '', x))
+    sprintf('\n[CAUTION]\n====\n.Error\n%s\n====\n', gsub('^.*Error: ', '', x))
   }
   hook.output = function(x, options) {
     if (output_asis(x, options)) x else sprintf('\n----\n%s----\n', x)
