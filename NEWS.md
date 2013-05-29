@@ -8,7 +8,7 @@
 
 - for `purl()`, code chunks with the option `include=FALSE` will not be included in the R script (#519, thanks, Sebastian)
 
-- new `hide` value to `fig.show` option. The figures are created but not included in the output document
+- new `'hide'` value to the `fig.show` option; the figures are created but not included in the output document (#532) (thanks, Simon)
 
 ## BUG FIXES
 
