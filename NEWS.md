@@ -18,6 +18,8 @@
 
 - fixed #542: when a child document has a sub-child document and also uses `set_parent()`, the LaTeX header will be added to the wrong file (thanks, Johan Toloe)
 
+- `stitch_rmd()` was using a wrong R Markdown template
+
 ## MAJOR CHANGES
 
 - the script `inst/bin/knit` gains an option `-o` to specify the output filenames for `knit()` (#525, thanks, Aaron Wolen)

@@ -79,7 +79,7 @@ stitch_rhtml = function(...) {
 #' @rdname stitch
 #' @export
 stitch_rmd = function(...) {
-  stitch(..., template = system.file('misc', 'knitr-template.Rhtml', package = 'knitr'))
+  stitch(..., template = system.file('misc', 'knitr-template.Rmd', package = 'knitr'))
 }
 
 #' A simple macro preprocessor for templating purposes
