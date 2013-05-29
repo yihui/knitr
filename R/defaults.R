@@ -60,7 +60,7 @@ opts_chunk_attr = (function() {
   opts = lapply(opts_chunk$get(), class)
   opts[opts == 'NULL'] = 'character'
   opts$results = list('markup', 'asis', 'hide')
-  opts$fig.show = list('asis', 'hold', 'animate')
+  opts$fig.show = list('asis', 'hold', 'animate', 'hide')
   opts$fig.keep = list('high', 'none', 'all', 'first', 'last')
   opts$fig.align = list('default', 'left', 'right', 'center')
   opts$dev = as.list(names(auto_exts))
