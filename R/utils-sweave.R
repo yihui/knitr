@@ -158,7 +158,7 @@ fix_sweave = function(x) {
 
 # check the source code to see if it is an Sweave document
 is_sweave = function(x) {
-  any(grepl('^\\s*\\\\(usepackage(\\[.*\\])?\\{Sweave|SweaveInput\\{|SweaveOpts\\{)\\}', x)) ||
+  any(grepl('^\\s*\\\\(usepackage(\\[.*\\])?\\{Sweave|SweaveInput\\{|SweaveOpts\\{)', x)) ||
     any(grepl('^<<.*(echo|eval|split|include)\\s*=\\s*(true|false).*>>=', x)) ||
     any(grepl('^<<.*results\\s*=\\s*(tex|verbatim|hide)).*>>=', x)) ||
     any(grepl('^<<.*(fig|pdf|eps|jpeg|png|tikz)\\s*=\\s*(true|false|T|F).*>>=', x)) ||
