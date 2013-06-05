@@ -48,6 +48,12 @@ plot(rnorm(n), rnorm(n), pch=21, cex=5*runif(n), col='white', bg='gray')
 
 You can use your own CSS file instead of the built-in style in the **markdown** package -- just set the option `markdown.HTML.stylesheet`, e.g.
 
-```{r css}
-options(markdown.HTML.stylesheet = system.file('misc', 'vignette.css', package='knitr'))
+```{r css, eval=FALSE}
+options(markdown.HTML.stylesheet = 'path/to/a/custom/style.css')
+```
+
+For this vignette, I use the `markdown.HTML.header` option to modify a few CSS rules in the default CSS style:
+
+```{r header}
+options(markdown.HTML.header = system.file('misc', 'vignette.css', package='knitr'))
 ```

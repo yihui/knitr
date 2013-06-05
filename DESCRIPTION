@@ -63,7 +63,7 @@ Imports:
     evaluate (>= 0.4.3),
     digest,
     formatR (>= 0.3-4),
-    markdown (>= 0.4),
+    markdown (>= 0.5.5),
     stringr (>= 0.6),
     tools
 Suggests:

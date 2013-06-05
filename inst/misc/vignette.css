@@ -1,30 +1,5 @@
-/* adapted from the markdown package; redefined some elements like the body/pre/img width */
-body,td{font-size:14px;width:800px;margin:auto;}
-tt,code,pre{font-family:'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;}
-h1{font-size:2.2em;}
-h2{font-size:1.8em;}
-h3{font-size:1.4em;}
-h4{font-size:1em;}
-h5{font-size:.9em;}
-h6{font-size:.8em;}
-a:visited{color:purple;}
-pre{margin-top:0;border:1px solid #EEE;white-space:pre-wrap;}
-pre code{display:block;padding:.5em;}
-code.r,code.cpp{background-color:#F8F8F8;}
-table,td,th{border:none;}
-blockquote{color:#666;padding-left:1em;border-left:.5em #EEE solid;margin:0;}
-hr{height:0;border-bottom:none;border-top-width:thin;border-top-style:dotted;border-top-color:#999;}
-img{max-width:100%;display:block;margin:auto;}
-@media print {
-*{background:transparent!important;color:#000!important;filter:none!important;-ms-filter:none!important;}
-body{font-size:12pt;max-width:100%;}
-a,a:visited{text-decoration:underline;}
-hr{visibility:hidden;page-break-before:always;}
-pre,blockquote{padding-right:1em;page-break-inside:avoid;}
-tr,img{page-break-inside:avoid;}
-img{max-width:100%!important;}
-@page :left{margin:15mm 20mm 15mm 10mm;}
-@page :right{margin:15mm 10mm 15mm 20mm;}
-p,h2,h3{orphans:3;widows:3;}
-h2,h3{page-break-after:avoid;}
-}
+<style type="text/css">
+body{width:800px;margin:auto;}
+pre,img{max-width:100%;}
+img{display:block;margin:auto;}
+</style>
