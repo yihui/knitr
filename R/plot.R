@@ -18,11 +18,12 @@ auto_exts = c(
 
 dev2ext = function(x) {
   res = auto_exts[x]
-  if (any(idx <- is.na(res)))
+  if (any(idx <- is.na(res))) {
     for (i in x[idx]) check_dev(i)
     stop('cannot find appropriate filename extensions for device ', x[idx],
          "; please use chunk option 'fig.ext' (http://yihui.name/knitr/options)",
          call. = FALSE)
+  }
   res
 }
 
