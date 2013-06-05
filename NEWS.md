@@ -20,6 +20,8 @@
 
 - `stitch_rmd()` was using a wrong R Markdown template
 
+- fixed #537: misleading error message when the graphical device does not exist (thanks, Scott Kostyshak)
+
 ## MAJOR CHANGES
 
 - the script `inst/bin/knit` gains an option `-o` to specify the output filenames for `knit()` (#525, thanks, Aaron Wolen)

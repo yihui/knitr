@@ -19,10 +19,17 @@ auto_exts = c(
 dev2ext = function(x) {
   res = auto_exts[x]
   if (any(idx <- is.na(res)))
+    for (i in x[idx]) check_dev(i)
     stop('cannot find appropriate filename extensions for device ', x[idx],
          "; please use chunk option 'fig.ext' (http://yihui.name/knitr/options)",
          call. = FALSE)
   res
+}
+
+check_dev = function(dev) {
+  if (exists(dev, mode = 'function', envir = knit_global()))
+    get(dev, mode = 'function', envir = knit_global()) else
+      stop('the graphical device', sQuote(dev), 'does not exist (as a function)')
 }
 
 ## quartiz devices under Mac
@@ -94,7 +101,7 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
       tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)
     },
 
-    get(dev, mode = 'function')
+    check_dev(dev)
   )
 
   dargs = options$dev.args
