@@ -82,6 +82,11 @@
 #'   advance (see \code{\link{pat_rnw}}), and the output hooks should also be
 #'   set (see \code{\link{render_latex}}), otherwise \pkg{knitr} will try to
 #'   guess the patterns and output format.
+#'
+#'   If the \code{output} argument is a file path, it is strongly recommended to
+#'   be in the current working directory (e.g. \file{foo.tex} instead of
+#'   \file{somewhere/foo.tex}), especially when the output has external
+#'   dependencies such as figure files.
 #' @export
 #' @references Package homepage: \url{http://yihui.name/knitr/}. The \pkg{knitr}
 #'   \href{http://bit.ly/117OLVl}{main manual}: and
