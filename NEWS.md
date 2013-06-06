@@ -28,6 +28,8 @@
 
 - the default video format for animations is OGG (it is open and free) instead of MP4 (non-free) now; this means Internet Explorer under Windows may not work with the animations (consider Firefox, Chrome and other modern web browsers)
 
+- warnings and messages in adjacent output chunks are merged, respectively (#534)
+
 # CHANGES IN knitr VERSION 1.2
 
 ## NEW FEATURES
