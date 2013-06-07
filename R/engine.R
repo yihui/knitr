@@ -49,7 +49,7 @@ engine_output = function(options, code, out, extra = NULL) {
 eng_interpreted = function(options) {
   engine = options$engine
   code = if (engine %in% c('highlight', 'Rscript', 'sas')) {
-    f = basename(tempfile(engine, '.', ifelse(engine=='sas','.sas','.txt')))
+    f = basename(tempfile(engine, '.', switch(engine, sas = '.sas', Rscript = '.R', '.txt')))
     # SAS runs code in example.sas and creates 'listing' file example.lst and log file example.log
     writeLines(options$code, f)
     on.exit(unlink(f))
