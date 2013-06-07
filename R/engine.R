@@ -75,7 +75,17 @@ eng_interpreted = function(options) {
     out = c(readLines(saslst), out)
   engine_output(options, options$code, out)
 }
-## C
+
+## C (via R CMD SHLIB)
+eng_c = function(options) {
+  writeLines(options$code, f <- basename(tempfile('c', '.', '.c')))
+  on.exit(unlink(c(f, sub_ext(f, c('o', 'so', 'dll')))))
+  if (options$eval) {
+    out = system(paste('R CMD SHLIB', f), intern = TRUE)
+    dyn.load(sub('[.]c$', .Platform$dynlib.ext, f))
+  } else out = ''
+  engine_output(options, options$code, out)
+}
 
 ## Java
 
@@ -160,7 +170,8 @@ for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'perl', 'python',
 }
 # additional engines
 knit_engines$set(
-  highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot
+  highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
+  c = eng_c
 )
 
 # possible values for engines (for auto-completion in RStudio)

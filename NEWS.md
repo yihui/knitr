@@ -14,6 +14,8 @@
 
 - the `sas` engine uses the listings output now (#541) (thanks, Nick Salkowski)
 
+- added a quick and dirty `c` engine (via `R CMD SHLIB`); see https://github.com/yihui/knitr-examples/blob/master/090-engine-c.Rmd for an example
+
 - added two package options `latex.options.graphicx` and `latex.options.color` to allow customization of LaTeX package options, e.g. `opts_knit$set(latex.options.color = 'monochrome')` generates `\usepackage[monochrome]{color}` in the LaTeX output (#546)
 
 ## BUG FIXES
