@@ -138,7 +138,7 @@ print.block = function(x, ...) {
       cat(str_c('   ', code, collapse = '\n'), '\n')
       cat('  ', str_dup('~', getOption('width') - 10L), '\n')
     }
-    timestamp()
+    cat(paste('##------', date(), '------##'), sep = '\n')
   }
   cat('\n')
 }

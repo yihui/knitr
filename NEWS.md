@@ -34,6 +34,8 @@
 
 - warnings and messages in adjacent output chunks are merged, respectively (#534)
 
+- when the package option `verbose = TRUE`, the time stamp will be printed after each chunk using `timestamp()`, but this will mess up with the R command history, so now **knitr** uses `cat()` to write the time stamp (#545) (thanks, @knokknok)
+
 # CHANGES IN knitr VERSION 1.2
 
 ## NEW FEATURES
