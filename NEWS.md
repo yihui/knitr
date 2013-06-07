@@ -12,6 +12,8 @@
 
 - new `'hide'` value to the `fig.show` option; the figures are created but not included in the output document (#532) (thanks, Simon)
 
+- the `sas` engine uses the listings output now (#541) (thanks, Nick Salkowski)
+
 ## BUG FIXES
 
 - fixed #502: using `layout()` and `par()` at the same time under R 3.0.0 may lead to a corrupt plot (thanks, Hong Xu http://tex.stackexchange.com/q/108335/9128)

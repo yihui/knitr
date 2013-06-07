@@ -51,6 +51,11 @@ eng_interpreted = function(options) {
     f = basename(tempfile(options$engine, '.', '.txt'))
     writeLines(options$code, f)
     on.exit(unlink(f))
+    if (options$engine == 'sas') {
+      saslst = sub('[.]txt$', '.lst', f)
+      writeLines(options$code, f)
+      on.exit(unlink(c(saslst, sub('[.]txt$', '.log', f))), add = TRUE)
+    }
     f
   } else if (options$engine %in% c('haskell')) {
     # need multiple -e because the engine does not accept \n in code
@@ -65,6 +70,8 @@ eng_interpreted = function(options) {
   cmd = paste(shQuote(options$engine.path %n% options$engine), code)
   message('running: ', cmd)
   out = if (options$eval) system(cmd, intern = TRUE) else ''
+  if (options$eval && options$engine == 'sas' && file.exists(saslst))
+    out = c(readLines(saslst), out)
   engine_output(options, options$code, out)
 }
 ## C
