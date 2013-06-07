@@ -368,11 +368,11 @@ msg_wrap = function(message, type, options) {
 }
 
 wrap.warning = function(x, options) {
-  msg_wrap(paste("Warning:", x$message, collapse = '\n\n'), 'warning', options)
+  msg_wrap(paste("Warning:", x$message, collapse = '\n'), 'warning', options)
 }
 
 wrap.message = function(x, options) {
-  msg_wrap(paste(x$message, collapse = '\n'), 'message', options)
+  msg_wrap(paste(x$message, collapse = ''), 'message', options)
 }
 
 wrap.error = function(x, options) {
