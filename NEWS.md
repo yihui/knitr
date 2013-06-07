@@ -14,6 +14,8 @@
 
 - the `sas` engine uses the listings output now (#541) (thanks, Nick Salkowski)
 
+- added two package options `latex.options.graphicx` and `latex.options.color` to allow customization of LaTeX package options, e.g. `opts_knit$set(latex.options.color = 'monochrome')` generates `\usepackage[monochrome]{color}` in the LaTeX output (#546)
+
 ## BUG FIXES
 
 - fixed #502: using `layout()` and `par()` at the same time under R 3.0.0 may lead to a corrupt plot (thanks, Hong Xu http://tex.stackexchange.com/q/108335/9128)

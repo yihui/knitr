@@ -12,7 +12,10 @@ insert_header = function(doc) {
 ## Makes latex header with macros required for highlighting, tikz and framed
 make_header_latex = function() {
   h = paste(c(
-    '\\usepackage{graphicx, color}', .header.maxwidth, opts_knit$get('header'),
+    sprintf('\\usepackage[%s]{graphicx}\\usepackage[%s]{color}',
+            opts_knit$get('latex.options.graphicx') %n% '',
+            opts_knit$get('latex.options.color') %n% ''),
+    .header.maxwidth, opts_knit$get('header'),
     if (getOption('OutDec') != '.') '\\usepackage{amsmath}',
     if (out_format('latex')) {
       if (opts_knit$get('use.highlight')) highlight_fun('boxes_latex')() else '\\usepackage{alltt}'
