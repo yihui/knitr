@@ -6,6 +6,8 @@
 
 - added support for reStructuredText vignettes in packages; now `*.Rrst` documents are recognized as vignettes as well, and they will be compiled to PDF via `rst2pdf` (#533) (thanks, Trevor L Davis)
 
+- the chunk options `fig.width` and `fig.height` are vectorized according to the `dev` option, e.g. `fig.wdith = c(7, 10)` and `dev = c('pdf', 'png')` (#538) (thanks, @baptiste)
+
 - for `purl()`, code chunks with the option `include=FALSE` will not be included in the R script (#519, thanks, Sebastian)
 
 - new `'hide'` value to the `fig.show` option; the figures are created but not included in the output document (#532) (thanks, Simon)

@@ -75,7 +75,7 @@ block_exec = function(options) {
 
   keep = options$fig.keep
   # open a device to record plots
-  if (chunk_device(options$fig.width, options$fig.height, keep != 'none')) {
+  if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none')) {
     dv = dev.cur(); on.exit(dev.off(dv))
   }
 

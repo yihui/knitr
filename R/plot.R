@@ -57,7 +57,7 @@ tikz_dev = function(...) {
 }
 
 ## save a recorded plot
-save_plot = function(plot, name, dev, ext, dpi, options) {
+save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
   path = str_c(name, ".", ext)
 
@@ -111,7 +111,7 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
     if (all(options$dev %in% names(dargs))) dargs = dargs[[dev]]
   }
   ## re-plot the recorded plot to an off-screen device
-  do.call(device, c(list(path, width = options$fig.width, height = options$fig.height), dargs))
+  do.call(device, c(list(path, width = width, height = height), dargs))
   print(plot)
   dev.off()
 
