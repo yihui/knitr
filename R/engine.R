@@ -50,8 +50,6 @@ eng_interpreted = function(options) {
   code = if (options$engine %in% c('highlight', 'Rscript', 'sas')) {
     f = basename(tempfile(options$engine, '.', ifelse(options$engine=='sas','.sas','.txt')))
     # SAS runs code in example.sas and creates 'listing' file example.lst and log file example.log
-    # SAS runs code in example.txt and creates example.txt.lst and example.txt.log
-    # So, things are a little neater if the filename extension of f is '.sas' rather than '.txt'
     writeLines(options$code, f)
     on.exit(unlink(f))
     if (options$engine == 'sas') {
@@ -68,7 +66,6 @@ eng_interpreted = function(options) {
   ), shQuote(str_c(options$code, collapse = '\n')))
   # FIXME: for these engines, the correct order is options + code + file
   code = if (options$engine %in% c('awk', 'gawk', 'sed', 'sas'))
-    # SAS also expects the options to follow the filename
     paste(code, options$engine.opts) else paste(options$engine.opts, code)
   cmd = paste(shQuote(options$engine.path %n% options$engine), code)
   message('running: ', cmd)
