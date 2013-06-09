@@ -2,11 +2,9 @@
   if (getRversion() >= '3.0.0') {
     tools::vignetteEngine(
       'knitr', weave = vweave, tangle = vtangle,
-      pattern = c('[.][rRsS](nw|tex)$', '[.][Rr](md|html)$'), package = pkg
+      pattern = c('[.][rRsS](nw|tex)$', '[.][Rr](md|html|rst)$'), package = pkg
     )
   }
-  # use the option KNITR_PROGRESS to control the progress bar
-  opts_knit$set(progress = getOption('KNITR_PROGRESS', TRUE))
   # add /usr/texbin to PATH for Mac OS
   if (Sys.info()['sysname'] != 'Darwin') return()
   if (!file.exists(texbin <- '/usr/texbin')) return()

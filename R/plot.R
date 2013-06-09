@@ -18,11 +18,19 @@ auto_exts = c(
 
 dev2ext = function(x) {
   res = auto_exts[x]
-  if (any(idx <- is.na(res)))
+  if (any(idx <- is.na(res))) {
+    for (i in x[idx]) check_dev(i)
     stop('cannot find appropriate filename extensions for device ', x[idx],
          "; please use chunk option 'fig.ext' (http://yihui.name/knitr/options)",
          call. = FALSE)
+  }
   res
+}
+
+check_dev = function(dev) {
+  if (exists(dev, mode = 'function', envir = knit_global()))
+    get(dev, mode = 'function', envir = knit_global()) else
+      stop('the graphical device', sQuote(dev), 'does not exist (as a function)')
 }
 
 ## quartiz devices under Mac
@@ -49,7 +57,7 @@ tikz_dev = function(...) {
 }
 
 ## save a recorded plot
-save_plot = function(plot, name, dev, ext, dpi, options) {
+save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
   path = str_c(name, ".", ext)
 
@@ -94,7 +102,7 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
       tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)
     },
 
-    get(dev, mode = 'function')
+    check_dev(dev)
   )
 
   dargs = options$dev.args
@@ -103,7 +111,7 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
     if (all(options$dev %in% names(dargs))) dargs = dargs[[dev]]
   }
   ## re-plot the recorded plot to an off-screen device
-  do.call(device, c(list(path, width = options$fig.width, height = options$fig.height), dargs))
+  do.call(device, c(list(path, width = width, height = height), dargs))
   print(plot)
   dev.off()
 
@@ -139,23 +147,30 @@ load_device = function(name, package, dpi = NULL) {
 }
 
 
-## filter out plot objects purely for layout (raised by par(), layout())
-
-# layout() results in plot_calls() of length 1 under R >= 2.16; all calls are
-# par/layout for par()/layout() under R <= 2.15, and are .External2 for R >=
-# 2.16; these blank plot objects should be removed
+# layout(), par() and palette() may produce blank plots that should be removed
 rm_blank_plot = function(res) {
   Filter(function(x) {
-    !is.recordedplot(x) ||
-      identical(pc <- plot_calls(x), 'recordGraphics') ||
-      identical(pc, 'persp') ||
-      (length(pc) > 1L && !all(pc %in% c('par', 'layout', '.External2')))
+    !is.recordedplot(x) || nonempty_plot(plot_calls(x))
   }, res)
+}
+
+# R 3.0 has significant changes in display lists
+isR3 = getRversion() >= '3.0.0'
+# if all calls are in these elements, the plot is basically empty
+empty_calls = if (isR3) c('C_par', 'C_layout', 'palette', 'palette2') else
+  c('layout', 'par')
+
+nonempty_plot = if (isR3) {
+  function(pc) !all(pc %in% empty_calls)
+} else function(pc) {
+  identical(pc, 'recordGraphics') || identical(pc, 'persp') ||
+    (length(pc) > 1L && !all(pc %in% empty_calls))
 }
 
 ## merge low-level plotting changes
 merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
   idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
+  if (n <= 1) return(x)
   i1 = idx[1]; i2 = idx[2]  # compare plots sequentially
   for (i in 1:(n - 1)) {
     p1 = x[[i1]]; p2 = x[[i2]]
@@ -180,14 +195,23 @@ is_low_change = function(p1, p2) {
   identical(p1[1:n1], p2[1:n1])
 }
 
-plot_calls = evaluate:::plot_calls
+plot_calls = if (isR3) {
+  function(plot) {
+    el = lapply(plot[[1]], '[[', 2)
+    if (length(el) == 0) return()
+    sapply(el, function(x) {
+      x = x[[1]]
+      x[['name']] %n% deparse(x)  # grid graphics do not have x$name
+    })
+  }
+} else evaluate:::plot_calls
 
 ## is the new plot identical to the old one except a few par/layout primitives in the end?
 is_par_change = function(p1, p2) {
   n1 = length(prim1 <- plot_calls(p1))
   n2 = length(prim2 <- plot_calls(p2))
   if (n2 <= n1) return(TRUE)
-  all(prim2[(n1 + 1):n2] %in% c('layout', 'par', '.External2'))  # TODO: is this list exhaustive?
+  all(prim2[(n1 + 1):n2] %in% empty_calls)
 }
 
 # recycle some plot options such as fig.cap, out.width/height, etc when there

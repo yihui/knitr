@@ -4,6 +4,7 @@
 \usepackage[sc]{mathpazo}
 \renewcommand{\sfdefault}{lmss}
 \renewcommand{\ttdefault}{lmtt}
+\usepackage[T1]{fontenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \setcounter{secnumdepth}{2}
@@ -195,16 +196,15 @@ has provided many examples demonstrating the flexibility of the output.
 \section{Features}
 
 The \textbf{knitr} package borrowed features such as tikz graphics
-and cache from \textbf{pgfSweave} \citep{R-pgfSweave} and \textbf{cacheSweave}
-\citep{R-cacheSweave} respectively, but the implementations are different.
-New features like code reference from an external R script as well
-as output customization are also introduced. The feature of hook functions
-in Sweave is re-implemented and hooks have new usage now. There are
-several other small features which are motivated from my everyday
-use of Sweave. For example, a progress bar is provided when knitting
-a file so we roughly know how long we still need to wait; output from
-inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}}) is
-automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
+and cache from \textbf{pgfSweave} and \textbf{cacheSweave} respectively,
+but the implementations are different. New features like code reference
+from an external R script as well as output customization are also
+introduced. The feature of hook functions in Sweave is re-implemented
+and hooks have new usage now. There are several other small features
+which are motivated from my everyday use of Sweave. For example, a
+progress bar is provided when knitting a file so we roughly know how
+long we still need to wait; output from inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}})
+is automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
 if the result is numeric, and we will not get too many digits by default.
 You may check out a number of specific manuals dedicated to specific
 features such as graphics in the website: \url{http://yihui.name/knitr/demos}.
@@ -212,20 +212,19 @@ features such as graphics in the website: \url{http://yihui.name/knitr/demos}.
 
 \subsection{Code Decoration}
 
-The \textbf{highlight} package \citep{R-highlight} will be used to
-highlight R code if it is installed (otherwise an internal naive syntax
-highlighter is used), and \textbf{formatR} \citep{R-formatR} is used
-to reformat R code (like \texttt{keep.source=FALSE} in Sweave but
-will also try to retain comments). For \LaTeX{} output, the \textbf{framed}
-package is used to decorate code chunks with a light gray background.
-If this \LaTeX{} package is not found in the system, a version will
-be copied directly from \textbf{knitr}. The prompt characters are
-removed by default because they mangle the R source code in the output
-and make it difficult to copy R code. The R output is masked in comments
-by default based on the same rationale. It is easy to revert to the
-output with prompts (set option \texttt{prompt=TRUE}), and you will
-quickly realize the inconvenience to the readers if they want to copy
-and run the code in the output document:
+An internal syntax highlighter is used to highlight R code, and the
+\textbf{formatR} package \citep{R-formatR} is used to reformat R
+code (like \texttt{keep.source=FALSE} in Sweave but will also try
+to retain comments). For \LaTeX{} output, the \textbf{framed} package
+is used to decorate code chunks with a light gray background. If this
+\LaTeX{} package is not found in the system, a version will be copied
+directly from \textbf{knitr}. The prompt characters are removed by
+default because they mangle the R source code in the output and make
+it difficult to copy R code. The R output is masked in comments by
+default based on the same rationale. It is easy to revert to the output
+with prompts (set option \texttt{prompt=TRUE}), and you will quickly
+realize the inconvenience to the readers if they want to copy and
+run the code in the output document:
 
 <<stupid-prompts, prompt=TRUE, comment=NA, highlight=FALSE>>=
 x=rnorm(5)
@@ -244,7 +243,7 @@ for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
 for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
 @
 
-Note \texttt{=} is replaced by \texttt{\textless{}-} because \texttt{options('replace.assign')}
+Note \texttt{=} is replaced by \texttt{<-} because \texttt{options('replace.assign')}
 was set to be \texttt{TRUE} in this document; see the documentation
 of \emph{tidy.source()} in \textbf{formatR} for details.
 
@@ -521,18 +520,17 @@ the latter chunk is said to depend on the previous one. The function
 find out all global objects in a chunk, and according to its documentation,
 the result is an approximation. Global objects roughly mean the ones
 which are not created locally, e.g. in the expression \texttt{function()
-\{y \textless{}- x\}}, \texttt{x} should be a global object, whereas
-\texttt{y} is local. Meanwhile, we also need to save the list of objects
-created in each cached chunk, so that we can compare them to the global
-objects in latter chunks. For example, if chunk A created an object
-\texttt{x} and chunk B uses this object, chunk B must depend on A,
-i.e. whenever A changes, B must also be updated. When \texttt{autodep=TRUE},
-\textbf{knitr} will write out the names of objects created in a cached
-chunk as well as those global objects in two files named \textsf{\_\_objects}
-and \textsf{\_\_globals} respectively; later we can use the function
-\emph{dep\_auto()} to analyze the object names to figure out the dependencies
-automatically. See \url{http://yihui.name/knitr/demo/cache/} for
-examples.
+\{y <- x\}}, \texttt{x} should be a global object, whereas \texttt{y}
+is local. Meanwhile, we also need to save the list of objects created
+in each cached chunk, so that we can compare them to the global objects
+in latter chunks. For example, if chunk A created an object \texttt{x}
+and chunk B uses this object, chunk B must depend on A, i.e. whenever
+A changes, B must also be updated. When \texttt{autodep=TRUE}, \textbf{knitr}
+will write out the names of objects created in a cached chunk as well
+as those global objects in two files named \textsf{\_\_objects} and
+\textsf{\_\_globals} respectively; later we can use the function \emph{dep\_auto()}
+to analyze the object names to figure out the dependencies automatically.
+See \url{http://yihui.name/knitr/demo/cache/} for examples.
 
 Yet another way to specify dependencies is \emph{dep\_prev()}: this
 is a conservative approach which sets the dependencies so that a cached
@@ -711,7 +709,7 @@ and questions can be delivered to the \href{mailto:knitr@googlegroups.com}{maili
 % when knitr is updated, this chunk will be updated; why?
 <<auto-bib, version=packageVersion('knitr'), echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE>>=
 # write all packages in the current session to a bib file
-write_bib(c(.packages(), 'cacheSweave', 'evaluate', 'formatR', 'highlight', 'pgfSweave'), file = 'knitr-packages.bib')
+write_bib(c(.packages(), 'evaluate', 'formatR'), file = 'knitr-packages.bib')
 @
 
 \bibliographystyle{jss}

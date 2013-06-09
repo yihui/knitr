@@ -47,27 +47,45 @@ engine_output = function(options, code, out, extra = NULL) {
 ## TODO: how to emulate the console?? e.g. for Python
 
 eng_interpreted = function(options) {
-  code = if (options$engine %in% c('highlight', 'Rscript', 'sas')) {
-    f = basename(tempfile(options$engine, '.', '.txt'))
+  engine = options$engine
+  code = if (engine %in% c('highlight', 'Rscript', 'sas')) {
+    f = basename(tempfile(engine, '.', switch(engine, sas = '.sas', Rscript = '.R', '.txt')))
+    # SAS runs code in example.sas and creates 'listing' file example.lst and log file example.log
     writeLines(options$code, f)
     on.exit(unlink(f))
+    if (engine == 'sas') {
+      saslst = sub('[.]sas$', '.lst', f)
+      on.exit(unlink(c(saslst, sub('[.]sas$', '.log', f))), add = TRUE)
+    }
     f
-  } else if (options$engine %in% c('haskell')) {
+  } else if (engine %in% c('haskell')) {
     # need multiple -e because the engine does not accept \n in code
     paste('-e', shQuote(options$code), collapse = ' ')
   } else paste(switch(
-    options$engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
+    engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
     ruby = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(str_c(options$code, collapse = '\n')))
   # FIXME: for these engines, the correct order is options + code + file
-  code = if (options$engine %in% c('awk', 'gawk', 'sed'))
+  code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
     paste(code, options$engine.opts) else paste(options$engine.opts, code)
-  cmd = paste(shQuote(options$engine.path %n% options$engine), code)
+  cmd = paste(shQuote(options$engine.path %n% engine), code)
   message('running: ', cmd)
   out = if (options$eval) system(cmd, intern = TRUE) else ''
+  if (options$eval && engine == 'sas' && file.exists(saslst))
+    out = c(readLines(saslst), out)
   engine_output(options, options$code, out)
 }
-## C
+
+## C (via R CMD SHLIB)
+eng_c = function(options) {
+  writeLines(options$code, f <- basename(tempfile('c', '.', '.c')))
+  on.exit(unlink(c(f, sub_ext(f, c('o', 'so', 'dll')))))
+  if (options$eval) {
+    out = system(paste('R CMD SHLIB', f), intern = TRUE)
+    dyn.load(sub('[.]c$', .Platform$dynlib.ext, f))
+  } else out = ''
+  engine_output(options, options$code, out)
+}
 
 ## Java
 
@@ -152,7 +170,8 @@ for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'perl', 'python',
 }
 # additional engines
 knit_engines$set(
-  highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot
+  highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
+  c = eng_c
 )
 
 # possible values for engines (for auto-completion in RStudio)

@@ -1,0 +1,21 @@
+# it is not really python, but there is no R support on Travis CI yet
+language: python
+
+# environment variables
+env:
+  - R_LIBS_USER=~/R
+
+# install dependencies
+install:
+  - sudo apt-add-repository -y ppa:marutter/rdev
+  - sudo apt-get update
+  - sudo apt-get install r-base-dev qpdf texinfo texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
+  - "[ ! -d ~/R ] && mkdir ~/R"
+  - R --version
+  - R -e '.libPaths(); sessionInfo()'
+  - Rscript -e 'install.packages("knitr", dep = TRUE, repos = "http://cran.rstudio.org")'
+
+# run tests
+script:
+  - make install
+  - make check

@@ -33,9 +33,10 @@ call_knit(sprintf("Rscript -e 'library(knitr);spin(\"knitr-spin.R\")'"))
 
 setwd('child')
 for (i in c('knitr-main.Rnw', 'knitr-parent.Rnw')) {
-  call_knit(sprintf('knit %s --pdf', i))
+  call_knit(sprintf('knit %s', i))
 }
 unlink('*.tex')
 call_knit(sprintf('knit %s', 'knitr-main.Rmd'))
 setwd('..')
 
+file.remove(c('knitr-slides.html', 'child/knitr-main.html'))

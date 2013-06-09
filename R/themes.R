@@ -11,9 +11,9 @@ set_theme = function(theme) {
 }
 get_theme = function(theme = NULL) {
   if (is.null(theme)) {
-    theme_dir = system.file("themes", package = "knitr")
-    theme_files = list.files(theme_dir,  pattern = "\\.css$")
-    gsub("\\.css$", "", basename(theme_files))
+    theme_dir = system.file('themes', package = 'knitr')
+    theme_files = list.files(theme_dir,  pattern = '\\.css$')
+    gsub('\\.css$', '', basename(theme_files))
   } else {
     theme_to_header(theme)
   }
@@ -60,7 +60,7 @@ theme_to_header = function(theme, format = out_format()){
 #' @noRd
 theme_to_header_latex = function(theme) {
   css_file = if (file.exists(theme)) theme else {
-    system.file("themes", sprintf("%s.css", theme), package = "knitr")
+    system.file('themes', sprintf('%s.css', theme), package = 'knitr', mustWork = TRUE)
   }
   css_out = css.parser(css_file)
 
@@ -69,7 +69,7 @@ theme_to_header_latex = function(theme) {
   foreground = css_out$prompt$color
 
   ## write latex highlight header
-  fgheader = color_def(foreground, "fgcolor")
+  fgheader = color_def(foreground, 'fgcolor')
   highlight = paste(c(fgheader, styler_assistant_latex(css_out[-1])), collapse = '\n')
   list(highlight = highlight, background = background, foreground = foreground)
 }
@@ -79,7 +79,7 @@ theme_to_header_latex = function(theme) {
 #' @noRd
 theme_to_header_html = function(theme){
   css_file = if (file.exists(theme)) theme else {
-    system.file("themes", sprintf("%s.css", theme), package = "knitr")
+    system.file('themes', sprintf('%s.css', theme), package = 'knitr')
   }
   css = css.parser(css_file)
   bgcolor = css$background$color; fgcolor = css$prompt$color

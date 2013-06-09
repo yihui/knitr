@@ -1,6 +1,7 @@
 %% LyX 2.0.5.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
+\usepackage[T1]{fontenc}
 \usepackage[landscape]{geometry}
 \geometry{verbose,tmargin=0cm,bmargin=0cm,lmargin=1cm,rmargin=1cm}
 \setlength{\parskip}{0in}

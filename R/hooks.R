@@ -23,3 +23,5 @@
 #' Components in \code{knit_hooks}: \url{http://yihui.name/knitr/hooks}
 #' @examples knit_hooks$get('source'); knit_hooks$get('inline')
 knit_hooks = new_defaults(.default.hooks)
+
+render_brew = function() NULL

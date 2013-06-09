@@ -3,22 +3,26 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL, envir = parent.frame(), encoding = getOption("encoding"))
+knit(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE, envir = parent.frame(), 
+    encoding = getOption("encoding"))
 
 purl(..., documentation = 1L)
 }
 \arguments{
   \item{input}{path of the input file}
 
-  \item{output}{path of the output file; if \code{NULL},
-  this function will try to guess and it will be under the
-  current working directory}
+  \item{output}{path of the output file for \code{knit()};
+  if \code{NULL}, this function will try to guess and it
+  will be under the current working directory}
 
   \item{tangle}{whether to tangle the R code from the input
   file (like \code{\link[utils]{Stangle}})}
 
   \item{text}{a character vector as an alternative way to
   provide the input file}
+
+  \item{quiet}{whether to suppress the progress bar and
+  messages}
 
   \item{envir}{the environment in which the code chunks are
   to be evaluated (can use \code{\link{new.env}()} to
@@ -65,12 +69,13 @@ purl(..., documentation = 1L)
   \file{.Rhtml} (\file{.Rhtm}) and \file{.Rmd}
   (\file{.Rmarkdown}) will generate \file{.tex},
   \file{.html} and \file{.md} respectively. For other types
-  of files, the file extension is reserved; if the filename
-  contains \samp{_knit_}, this part will be removed in the
-  output file, e.g., \file{foo_knit_.html} creates the
-  output \file{foo.html}; if \samp{_knit_} is not found in
-  the filename, \file{foo.ext} will produce
-  \file{foo-out.ext}. If \code{tangle = TRUE},
+  of files, if the filename contains \samp{_knit_}, this
+  part will be removed in the output file, e.g.,
+  \file{foo_knit_.html} creates the output \file{foo.html};
+  if \samp{_knit_} is not found in the filename,
+  \file{foo.ext} will produce \file{foo.txt} if \code{ext}
+  is not \code{txt}, otherwise the output is
+  \file{foo-out.txt}. If \code{tangle = TRUE},
   \file{foo.ext} generates an R script \file{foo.R}.
 
   We need a set of syntax to identify special markups for R
@@ -127,6 +132,12 @@ purl(..., documentation = 1L)
   output hooks should also be set (see
   \code{\link{render_latex}}), otherwise \pkg{knitr} will
   try to guess the patterns and output format.
+
+  If the \code{output} argument is a file path, it is
+  strongly recommended to be in the current working
+  directory (e.g. \file{foo.tex} instead of
+  \file{somewhere/foo.tex}), especially when the output has
+  external dependencies such as figure files.
 }
 \examples{
 library(knitr)
@@ -138,11 +149,10 @@ purl(f, documentation = 0)  # extract R code only
 purl(f, documentation = 2)  # also include documentation
 }
 \references{
-  Package homepage: \url{http://yihui.name/knitr/}
+  Package homepage: \url{http://yihui.name/knitr/}. The
+  \pkg{knitr} \href{http://bit.ly/117OLVl}{main manual}:
+  and \href{http://bit.ly/114GNdP}{graphics manual}.
 
-  The \pkg{knitr} main manual:
-  \url{https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf}
-
-  The \pkg{knitr} graphics manual:
-  \url{https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf}
+  See \code{citation('knitr')} for the citation
+  information.
 }

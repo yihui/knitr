@@ -27,17 +27,8 @@ call_block = function(block) {
 
   if (!is.null(params$child)) {
     if (!params$eval) return('')
-    if (concord_mode()) {
-      concord_gen()  # generate a partial concordance before knit children
-      i = knit_concord$get('i'); olines = knit_concord$get('outlines')
-      knit_concord$set(parent.line = current_lines(i)[1L])
-    }
     cmds = lapply(sc_split(params$child), knit_child)
     out = str_c(unlist(cmds), collapse = '\n')
-    if (concord_mode()) {
-      knit_concord$set(out.next = sum(olines) + line_count(out) - 1L,
-                       in.next = i + 1L)
-    }
     return(out)
   }
 
@@ -54,7 +45,8 @@ call_block = function(block) {
       if (!params$include) return('')
       return(cache$output(hash))
     }
-    cache$library(params$cache.path, save = FALSE) # load packages
+    if (params$engine == 'R')
+      cache$library(params$cache.path, save = FALSE) # load packages
   } else if (label %in% names(dep_list$get()))
     warning('code chunks must not depend on the uncached chunk "', label, '"',
             call. = FALSE)
@@ -69,7 +61,8 @@ block_exec = function(options) {
   # when code is not R language
   if (options$engine != 'R') {
     res.before = run_hooks(before = TRUE, options)
-    output = knit_engines$get(options$engine)(options)
+    output = in_dir(opts_knit$get('root.dir') %n% input_dir(),
+                    knit_engines$get(options$engine)(options))
     res.after = run_hooks(before = FALSE, options)
     output = str_c(c(res.before, output, res.after), collapse = '')
     if (options$cache) block_cache(options, output, character(0))
@@ -77,13 +70,12 @@ block_exec = function(options) {
   }
 
   # eval chunks (in an empty envir if cache)
-  env = if (options$cache) new.env(parent = knit_global()) else knit_global()
-  .knitEnv$knit_env = env # make a copy of the envir
+  env = knit_global()
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
 
   keep = options$fig.keep
   # open a device to record plots
-  if (chunk_device(options$fig.width, options$fig.height, keep != 'none')) {
+  if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none')) {
     dv = dev.cur(); on.exit(dev.off(dv))
   }
 
@@ -147,7 +139,7 @@ block_exec = function(options) {
       if (options$fig.show == 'hold') res = c(res[!figs], res[figs]) # move to the end
       res = rm_blank_plot(res)
       figs = sapply(res, is.recordedplot)
-      if (sum(figs) > 1) {
+      if (length(figs) && sum(figs) > 1) {
         if (keep %in% c('first', 'last')) {
           res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
         } else {
@@ -161,19 +153,9 @@ block_exec = function(options) {
   if (is.null(options$fig.num))
     options$fig.num = if (length(res)) sum(sapply(res, is.recordedplot)) else 0L
 
-  # merge source lines if they do not have output; is there an elegant way??
-  iss = if (length(res)) which(sapply(res, is.source)) else NULL
-  if ((n <- length(iss)) > 1) {
-    k1 = iss[1]; k2 = NULL
-    for (i in 1:(n - 1)) {
-      if (iss[i + 1] - iss[i] == 1) {
-        res[[k1]] = structure(list(src = c(res[[k1]]$src, res[[iss[i + 1]]]$src)),
-                              class = 'source')  # CAUTION: now node src is a vector!!
-        k2 = c(k2, iss[i + 1])
-      } else k1 = iss[i + 1]
-    }
-    if (length(k2)) res = res[-k2] # remove lines that have been merged back
-  }
+  # merge neighbor elements of the same class into one element
+  for (cls in c('source', 'warning', 'message'))
+    res = merge_class(res, cls)
 
   on.exit(plot_counter(reset = TRUE), add = TRUE)  # restore plot number
   if (options$fig.show != 'animate' && options$fig.num > 1) {
@@ -183,15 +165,16 @@ block_exec = function(options) {
     output = unlist(wrap(res, options)) # wrap all results together
     res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
   })
-  if (options$cache) copy_env(env, knit_global())
 
   output = str_c(c(res.before, output, res.after), collapse = '')  # insert hook results
   output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
 
   if (options$cache) {
-    obj.after = ls(globalenv(), all.names = TRUE)  # figure out new global objs
-    copy_env(globalenv(), knit_global(), setdiff(obj.after, obj.before))
-    objs = ls(env, all.names = TRUE)
+    obj.new = setdiff(ls(globalenv(), all.names = TRUE), obj.before)
+    copy_env(globalenv(), env, obj.new)
+    objs = options$cache.vars %n% codetools::findLocalsList(parse_only(code))
+    # make sure all objects to be saved exist in env
+    objs = intersect(c(objs, obj.new), ls(env, all.names = TRUE))
     block_cache(options, output, objs)
     if (options$autodep) cache$objects(objs, code, options$label, options$cache.path)
   }
@@ -226,6 +209,29 @@ chunk_device = function(width, height, record = TRUE) {
   FALSE
 }
 
+# merge neighbor elements of the same class in a list returned by evaluate()
+merge_class = function(res, class = c('source', 'warning', 'message')) {
+
+  class = match.arg(class)
+  idx = if (length(res)) which(sapply(res, inherits, what = class))
+  if ((n <- length(idx)) <= 1) return(res)
+
+  k1 = idx[1]; k2 = NULL
+  for (i in 1:(n - 1)) {
+    if (idx[i + 1] - idx[i] == 1) {
+      res[[k1]] = if (class == 'source') {
+        structure(list(src = c(res[[k1]]$src, res[[idx[i + 1]]]$src)), class = class)
+      } else {
+        structure(list(message = c(res[[k1]]$message, res[[idx[i + 1]]]$message)), class = class)
+      }
+      k2 = c(k2, idx[i + 1])
+    } else k1 = idx[i + 1]
+  }
+  if (length(k2)) res = res[-k2] # remove lines that have been merged back
+  res
+
+}
+
 call_inline = function(block) {
   if (opts_knit$get('progress')) print(block)
   in_dir(opts_knit$get('root.dir') %n% input_dir(), inline_exec(block))
@@ -244,7 +250,7 @@ inline_exec = function(block, eval = opts_chunk$get('eval'), envir = knit_global
     res = if (eval) {
       (if (stop_on_error == 2L) identity else try)(
         {
-          v = withVisible(eval(parse(text = code[i], srcfile = NULL), envir = envir))
+          v = withVisible(eval(parse_only(code[i]), envir = envir))
           if (v$visible) v$value
         }
       )
@@ -269,6 +275,7 @@ process_tangle = function(x) {
 }
 process_tangle.block = function(x) {
   params = opts_chunk$merge(x$params)
+  if (isFALSE(params$include)) return('')
   label = params$label; ev = params$eval
   code = if (!isFALSE(ev) && !is.null(params$child)) {
     cmds = lapply(sc_split(params$child), knit_child)
@@ -276,7 +283,7 @@ process_tangle.block = function(x) {
   } else knit_code$get(label)
   # read external code if exists
   if (!isFALSE(ev) && length(code) && str_detect(code, 'read_chunk\\(.+\\)')) {
-    eval(parse(text = unlist(str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
+    eval(parse_only(unlist(str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
   }
   code = parse_chunk(code)
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
@@ -289,7 +296,7 @@ process_tangle.inline = function(x) {
   code = x$code
   if (length(code) == 0L || !any(idx <- str_detect(code, "knit_child\\(.+\\)")))
     return('')
-  str_c(str_c(sapply(code[idx], function(z) eval(parse(text = z))),
+  str_c(str_c(sapply(code[idx], function(z) eval(parse_only(z))),
               collapse = '\n'), '\n')
 }
 

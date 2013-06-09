@@ -7,39 +7,39 @@
 #'
 #' str(all_patterns)
 all_patterns = list(
-  `rnw` = list(chunk.begin = '^\\s*<<(.*)>>=', chunk.end = '^\\s*@\\s*(%+.*|)$',
-               inline.code = '\\\\Sexpr\\{([^}]+)\\}',
-               inline.comment = '^\\s*%.*',
-               ref.chunk = '^\\s*<<(.+)>>\\s*$',
-               header.begin = '\\s*\\\\documentclass[^}]+\\}',
-               document.begin = '\\s*\\\\begin\\{document\\}'),
+  `rnw` = list(
+    chunk.begin = '^\\s*<<(.*)>>=', chunk.end = '^\\s*@\\s*(%+.*|)$',
+    inline.code = '\\\\Sexpr\\{([^}]+)\\}', inline.comment = '^\\s*%.*',
+    ref.chunk = '^\\s*<<(.+)>>\\s*$', header.begin = '\\s*\\\\documentclass[^}]+\\}',
+    document.begin = '\\s*\\\\begin\\{document\\}'),
 
   `brew` = list(inline.code = '<%[=]{0,1}\\s+([^%]+)\\s+[-]*%>'),
 
-  `tex` = list(chunk.begin = '^\\s*%+\\s*begin.rcode\\s*(.*)',
-               chunk.end = '^\\s*%+\\s*end.rcode', chunk.code = '^%+',
-               ref.chunk = '^%+\\s*<<(.+)>>\\s*$',
-               inline.comment = '^\\s*%.*',
-               inline.code = '\\\\rinline\\{([^}]+)\\}',
-               header.begin = '\\s*\\\\documentclass[^}]+\\}',
-               document.begin = '\\s*\\\\begin\\{document\\}'),
+  `tex` = list(
+    chunk.begin = '^\\s*%+\\s*begin.rcode\\s*(.*)', chunk.end = '^\\s*%+\\s*end.rcode',
+    chunk.code = '^%+', ref.chunk = '^%+\\s*<<(.+)>>\\s*$',
+    inline.comment = '^\\s*%.*', inline.code = '\\\\rinline\\{([^}]+)\\}',
+    header.begin = '\\s*\\\\documentclass[^}]+\\}',
+    document.begin = '\\s*\\\\begin\\{document\\}'),
 
-  `html` = list(chunk.begin = '^\\s*<!--\\s*begin.rcode\\s*(.*)',
-                chunk.end = '^\\s*end.rcode\\s*-->',
-                ref.chunk = '^\\s*<<(.+)>>\\s*$',
-                inline.code = '<!--\\s*rinline(.+?)-->',
-                header.begin = '\\s*<head>'),
+  `html` = list(
+    chunk.begin = '^\\s*<!--\\s*begin.rcode\\s*(.*)',
+    chunk.end = '^\\s*end.rcode\\s*-->', ref.chunk = '^\\s*<<(.+)>>\\s*$',
+    inline.code = '<!--\\s*rinline(.+?)-->', header.begin = '\\s*<head>'),
 
-  `md` = list(chunk.begin = '^\\s*`{3,}\\s*\\{r(.*)\\}\\s*$',
-              chunk.end = '^\\s*`{3,}\\s*$',
-              ref.chunk = '^\\s*<<(.+)>>\\s*$',
-              inline.code = '`r +([^`\n]+)\\s*`'),
+  `md` = list(
+    chunk.begin = '^\\s*```+\\s*\\{r(.*)\\}\\s*$', chunk.end = '^\\s*```+\\s*$',
+    ref.chunk = '^\\s*<<(.+)>>\\s*$', inline.code = '`r +([^`\n]+)\\s*`'),
 
-  `rst` = list(chunk.begin = "^\\s*\\.{2}\\s+\\{r(.*)\\}\\s*$",
-               chunk.end = "^\\s*\\.{2}\\s+\\.{2,}\\s*$",
-               chunk.code = "^\\.{2}",
-               ref.chunk = "^\\.*\\s*<<(.+)>>\\s*$",
-               inline.code = ":r:`([^`]+)`")
+  `rst` = list(
+    chunk.begin = "^\\s*[.][.]\\s+\\{r(.*)\\}\\s*$",
+    chunk.end = "^\\s*[.][.]\\s+[.][.]\\s*$", chunk.code = "^[.][.]",
+    ref.chunk = "^\\.*\\s*<<(.+)>>\\s*$", inline.code = ":r:`([^`]+)`"),
+
+  `asciidoc` = list(
+    chunk.begin = '^//\\s*begin[.]rcode(.*)$', chunk.end = '^//\\s*end[.]rcode\\s*$',
+    chunk.code = '^//+', ref.chunk = '^\\s*<<(.+)>>\\s*$',
+    inline.code = '[+]r +([^+\n]+)\\s*[+]', inline.comment = '^//.*')
 )
 
 .sep.label = '^#+\\s*@knitr(.*)$'  # pattern for code chunks in an R script
@@ -96,7 +96,7 @@ set_pattern = function(type) {
 #' @rdname pat_fun
 #' @return The patterns object \code{\link{knit_patterns}} is modified as a side
 #'   effect.
-#' @export pat_rnw pat_brew pat_tex pat_html pat_md pat_rst
+#' @export pat_rnw pat_brew pat_tex pat_html pat_md pat_rst pat_asciidoc
 #' @examples ## see how knit_patterns is modified
 #' knit_patterns$get(); pat_rnw(); knit_patterns$get()
 #'
@@ -112,6 +112,8 @@ pat_html = function() set_pattern('html')
 pat_md = function() set_pattern('md')
 #' @rdname pat_fun
 pat_rst = function() set_pattern('rst')
+#' @rdname pat_fun
+pat_asciidoc = function() set_pattern('asciidoc')
 
 ## helper functions
 

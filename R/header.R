@@ -12,7 +12,10 @@ insert_header = function(doc) {
 ## Makes latex header with macros required for highlighting, tikz and framed
 make_header_latex = function() {
   h = paste(c(
-    '\\usepackage{graphicx, color}', .header.maxwidth, opts_knit$get('header'),
+    sprintf('\\usepackage[%s]{graphicx}\\usepackage[%s]{color}',
+            opts_knit$get('latex.options.graphicx') %n% '',
+            opts_knit$get('latex.options.color') %n% ''),
+    .header.maxwidth, opts_knit$get('header'),
     if (getOption('OutDec') != '.') '\\usepackage{amsmath}',
     if (out_format('latex')) {
       if (opts_knit$get('use.highlight')) highlight_fun('boxes_latex')() else '\\usepackage{alltt}'
@@ -36,11 +39,11 @@ insert_header_latex = function(doc, b) {
     i = i[1L]; l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])
     str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, make_header_latex())
-  } else if (parent_mode()) {
+  } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
-    doc = str_c(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
-                .knitEnv$tikzPackages, "\\begin{document}", doc, "\\end{document}"),
-                collapse = '\n')
+    doc[1L] = str_c(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
+                      .knitEnv$tikzPackages, "\\begin{document}", doc[1L]), collapse = '\n')
+    doc[length(doc)] = str_c(doc[length(doc)], "\\end{document}", sep = '\n')
   }
   doc
 }

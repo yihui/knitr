@@ -87,7 +87,7 @@ parse_params = function(params) {
   if (params == '') return(list(label = unnamed_chunk()))
 
   res = withCallingHandlers(
-    eval(parse(text = str_c("alist(", quote_label(params), ")"), srcfile = NULL)),
+    eval(parse_only(str_c('alist(', quote_label(params), ')'))),
     error = function(e) {
       message('(*) NOTE: I saw chunk options "', params,
               '"\n please go to http://yihui.name/knitr/options',
@@ -138,7 +138,7 @@ print.block = function(x, ...) {
       cat(str_c('   ', code, collapse = '\n'), '\n')
       cat('  ', str_dup('~', getOption('width') - 10L), '\n')
     }
-    timestamp()
+    cat(paste('##------', date(), '------##'), sep = '\n')
   }
   cat('\n')
 }
@@ -213,7 +213,7 @@ print.inline = function(x, ...) {
 #' @param from.offset,to.offset an offset to be added to \code{from}/\code{to}
 #' @return As a side effect, code chunks are read into the current session so
 #'   that future chunks can (re)use the code by chunk label references.
-#' @references \url{http://yihui.name/knitr/demo/reference/}
+#' @references \url{http://yihui.name/knitr/demo/externalization/}
 #' @note This function can only be used in a chunk which is \emph{not} cached
 #'   (chunk option \code{cache = FALSE}), and the code is read and stored in the
 #'   current session \emph{without} being executed (to actually run the code,

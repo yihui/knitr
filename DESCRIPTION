@@ -1,8 +1,8 @@
 Package: knitr
 Type: Package
 Title: A general-purpose package for dynamic report generation in R
-Version: 1.1.5
-Date: 2013-02-16
+Version: 1.2.9
+Date: 2013-04-11
 Authors@R: c(person("Hadley", "Wickham", role = "ctb"),
     person("Ramnath", "Vaidyanathan", role = "ctb"),
     person("Joseph J.", "Allaire", role = "ctb"),
@@ -23,14 +23,17 @@ Authors@R: c(person("Hadley", "Wickham", role = "ctb"),
     person("Heewon", "Jeon", role = "ctb"),
     person("Brian", "Diggs", role = "ctb"),
     person("Jeremy", "Stephens", role = "ctb"),
+    person("Johan", "Toloe", role = "ctb"),
+    person("Richard", "Cotton", role = "ctb"),
+    person("Trevor", "Davis", role = "ctb"),
     person("Yihui", "Xie", email = "xie@yihui.name", role = c("aut", "cre")))
 Author: Yihui Xie
 Maintainer: Yihui Xie <xie@yihui.name>
 Description: This package provides a general-purpose tool for dynamic report
     generation in R, which can be used to deal with any type of (plain text)
-    files, including Sweave, HTML, Markdown and reStructuredText. The patterns
-    of code chunks and inline R expressions can be customized. R code is
-    evaluated as if it were copied and pasted in an R terminal thanks to the
+    files, including Sweave, HTML, Markdown, reStructuredText and AsciiDoc. The
+    patterns of code chunks and inline R expressions can be customized. R code
+    is evaluated as if it were copied and pasted in an R terminal thanks to the
     evaluate package (e.g. we do not need to explicitly print() plots from
     ggplot2 or lattice). R code can be reformatted by the formatR package so
     that long lines are automatically wrapped, with indent and spaces being
@@ -59,8 +62,8 @@ Depends:
 Imports:
     evaluate (>= 0.4.3),
     digest,
-    formatR (>= 0.3-4),
-    markdown (>= 0.4),
+    formatR (>= 0.7),
+    markdown (>= 0.5.5),
     stringr (>= 0.6),
     tools
 Suggests:
@@ -111,3 +114,4 @@ Collate:
     'utils-conversion.R'
     'utils-vignettes.R'
     'pandoc.R'
+    'hooks-asciidoc.R'

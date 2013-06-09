@@ -17,12 +17,12 @@
 #' \file{foo.Rnw} generates \file{foo.tex}, and other filename extensions like
 #' \file{.Rtex}, \file{.Rhtml} (\file{.Rhtm}) and \file{.Rmd}
 #' (\file{.Rmarkdown}) will generate \file{.tex}, \file{.html} and \file{.md}
-#' respectively. For other types of files, the file extension is reserved; if
-#' the filename contains \samp{_knit_}, this part will be removed in the output
-#' file, e.g., \file{foo_knit_.html} creates the output \file{foo.html}; if
-#' \samp{_knit_} is not found in the filename, \file{foo.ext} will produce
-#' \file{foo-out.ext}. If \code{tangle = TRUE}, \file{foo.ext} generates an R
-#' script \file{foo.R}.
+#' respectively. For other types of files, if the filename contains
+#' \samp{_knit_}, this part will be removed in the output file, e.g.,
+#' \file{foo_knit_.html} creates the output \file{foo.html}; if \samp{_knit_} is
+#' not found in the filename, \file{foo.ext} will produce \file{foo.txt} if
+#' \code{ext} is not \code{txt}, otherwise the output is \file{foo-out.txt}. If
+#' \code{tangle = TRUE}, \file{foo.ext} generates an R script \file{foo.R}.
 #'
 #' We need a set of syntax to identify special markups for R code chunks and R
 #' options, etc. The syntax is defined in a pattern list. All built-in pattern
@@ -47,12 +47,14 @@
 #' \pkg{knitr}, including the full documentation of chunk options and demos,
 #' etc.
 #' @param input path of the input file
-#' @param output path of the output file; if \code{NULL}, this function will try
-#'   to guess and it will be under the current working directory
+#' @param output path of the output file for \code{knit()}; if \code{NULL}, this
+#'   function will try to guess and it will be under the current working
+#'   directory
 #' @param tangle whether to tangle the R code from the input file (like
 #'   \code{\link[utils]{Stangle}})
 #' @param text a character vector as an alternative way to provide the input
 #'   file
+#' @param quiet whether to suppress the progress bar and messages
 #' @param envir the environment in which the code chunks are to be evaluated
 #'   (can use \code{\link{new.env}()} to guarantee an empty new environment)
 #' @param encoding the encoding of the input file; see \code{\link{file}}
@@ -80,14 +82,17 @@
 #'   advance (see \code{\link{pat_rnw}}), and the output hooks should also be
 #'   set (see \code{\link{render_latex}}), otherwise \pkg{knitr} will try to
 #'   guess the patterns and output format.
+#'
+#'   If the \code{output} argument is a file path, it is strongly recommended to
+#'   be in the current working directory (e.g. \file{foo.tex} instead of
+#'   \file{somewhere/foo.tex}), especially when the output has external
+#'   dependencies such as figure files.
 #' @export
-#' @references Package homepage: \url{http://yihui.name/knitr/}
+#' @references Package homepage: \url{http://yihui.name/knitr/}. The \pkg{knitr}
+#'   \href{http://bit.ly/117OLVl}{main manual}: and
+#'   \href{http://bit.ly/114GNdP}{graphics manual}.
 #'
-#'   The \pkg{knitr} main manual:
-#'   \url{https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf}
-#'
-#'   The \pkg{knitr} graphics manual:
-#'   \url{https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf}
+#'   See \code{citation('knitr')} for the citation information.
 #' @examples library(knitr)
 #' (f = system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'))
 #' knit(f)  # compile to tex
@@ -95,7 +100,7 @@
 #' purl(f)  # tangle R code
 #' purl(f, documentation = 0)  # extract R code only
 #' purl(f, documentation = 2)  # also include documentation
-knit = function(input, output = NULL, tangle = FALSE, text = NULL,
+knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
                 envir = parent.frame(), encoding = getOption('encoding')) {
 
   # is input from a file? (or a connection on a file)
@@ -130,7 +135,11 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     ocode = knit_code$get(); on.exit(knit_code$restore(ocode), add = TRUE)
     if (tangle) knit_code$restore() # clean up code before tangling
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
-    opts_knit$set(tangle = tangle, encoding = encoding)
+    # use the option KNITR_PROGRESS to control the progress bar
+    opts_knit$set(
+      tangle = tangle, encoding = encoding,
+      progress = opts_knit$get('progress') && getOption('KNITR_PROGRESS', TRUE) && !quiet
+    )
   }
 
   ext = 'unknown'
@@ -138,14 +147,10 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
     input.dir = .knitEnv$input.dir; on.exit({.knitEnv$input.dir = input.dir}, add = TRUE)
     .knitEnv$input.dir = dirname(input) # record input dir
     ext = tolower(file_ext(input))
-    if (is.null(output)) output = basename(auto_out_name(input, ext))
+    if ((is.null(output) || is.na(output)) && !child_mode())
+      output = basename(auto_out_name(input, ext))
     options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
-    knit_concord$set(infile = input)
-  }
-  if (concord_mode()) {
-    # 'outfile' from last parent call is my parent
-    if (child_mode()) knit_concord$set(parent = knit_concord$get('outfile'))
-    knit_concord$set(outfile = output)
+    knit_concord$set(infile = input, outfile = output)
   }
 
   encoding = correct_encode(encoding)
@@ -173,23 +178,21 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
            'see ?knit_patterns on how to set up customized patterns')
     set_pattern(pattern)
     if (pattern == 'rnw' && is_sweave(text)) remind_sweave(if (in.file) input)
-    opts_knit$set(out.format = switch(pattern, rnw = 'latex', tex = 'latex',
-                                      html = 'html', md = 'markdown', rst = 'rst',
-                                      brew = 'brew'))
+    opts_knit$set(out.format = switch(
+      pattern, rnw = 'latex', tex = 'latex', html = 'html', md = 'markdown',
+      rst = 'rst', brew = 'brew', asciidoc = 'asciidoc'
+    ))
   }
 
   if (is.null(out_format())) auto_format(ext)
   ## change output hooks only if they are not set beforehand
   if (identical(knit_hooks$get(names(.default.hooks)), .default.hooks) && !child_mode()) {
-    switch(out_format(), latex = render_latex(),
-           sweave = render_sweave(), listings = render_listings(),
-           html = render_html(), jekyll = render_jekyll(),
-           markdown = render_markdown(), rst = render_rst())
+    do.call(paste('render', out_format(), sep = '_'), list(), envir = getNamespace('knitr'))
     on.exit(knit_hooks$set(.default.hooks), add = TRUE)
   }
 
   progress = opts_knit$get('progress')
-  if (in.file) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
+  if (in.file && !quiet) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
   res = paste(knit_hooks$get('document')(res), collapse = '\n')
   if (!is.null(output))
@@ -201,13 +204,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL,
   }
 
   if (in.file && is.character(output) && file.exists(output)) {
-    concord_gen(input2, output)  # concordance file
-    if (!child_mode() && concord_mode()) {
-      confile = str_c(sans_ext(output), '-concordance.tex')
-      cat(.knitEnv$concordance, file = confile)
-      .knitEnv$concordance = NULL # empty concord string
-    }
-    message('output file: ', normalizePath(output), ifelse(progress, '\n', ''))
+    concord_gen(input, output)
+    if (!quiet) message('output file: ', output, ifelse(progress, '\n', ''))
   }
 
   output %n% res
@@ -233,11 +231,10 @@ process_file = function(text, output) {
   tangle = opts_knit$get('tangle')
 
   if (opts_knit$get('progress')) {
-    pb = txtProgressBar(0, n, char = '>', style = 3)
+    pb = txtProgressBar(0, n, char = '.', style = 3)
     on.exit(close(pb), add = TRUE)
   }
   for (i in 1:n) {
-    knit_concord$set(i = i)
     if (opts_knit$get('progress')) {
       setTxtProgressBar(pb, i)
       if (!tangle) cat('\n')  # under tangle mode, only show one progress bar
@@ -254,15 +251,11 @@ process_file = function(text, output) {
         )
       }
     )
-    # output line numbers
-    if (concord_mode()) {
-      # look back and see who is 0, then fill them up
-      idx = which(olines[1:i] == 0L); olines[idx] = line_count(res[idx])
-      knit_concord$set(outlines = olines)
-    }
   }
 
   if (!tangle) res = insert_header(res)  # insert header
+  # output line numbers
+  if (concord_mode()) knit_concord$set(outlines = line_count(res))
   print_knitlog()
 
   res
@@ -274,13 +267,9 @@ auto_out_name = function(input, ext = tolower(file_ext(input))) {
   if (ext %in% c('rnw', 'snw')) return(str_c(base, '.tex'))
   if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'stex', 'rrst'))
     return(str_c(base, '.', substring(ext, 2L)))
-  if (ext == 'brew') return(str_c(base, '.txt'))
-  if (ext %in% c('tex', 'html', 'md')) {
-    if (str_detect(input, '_knit_')) {
-      return(str_replace(input, '_knit_', ''))
-    } else return(str_c(base, '-out.', ext))
-  }
-  stop('cannot determine the output filename automatically')
+  if (grepl('_knit_', input)) return(sub('_knit_', '', input))
+  if (ext != 'txt') return(str_c(base, '.txt'))
+  str_c(base, '-out.', ext)
 }
 
 ## decide output format based on file extension
@@ -307,50 +296,29 @@ auto_format = function(ext) {
 #' the result into the main document. It is designed to be used in the chunk
 #' option \code{child} and serves as the alternative to the
 #' \command{SweaveInput} command in Sweave.
-#'
-#' For LaTeX output, the command used to input the child document (usually
-#' \samp{input} or \samp{include}) is from the package option
-#' \code{child.command} (\code{opts_knit$get('child.command')}). For other types
-#' of output, the content of the compiled child document is returned.
-#'
-#' When we call \code{purl()} to extract R code, the code in the child document
-#' is extracted and saved into an R script.
-#'
-#' The path of the child document is relative to the parent document.
 #' @param ... arguments passed to \code{\link{knit}}
 #' @param eval logical: whether to evaluate the child document
-#' @return A character string of the form \samp{\command{child-doc.tex}} or
-#'   \code{source("child-doc.R")}, depending on the argument \code{tangle}
-#'   passed in. When concordance is turned on or the output format is not LaTeX,
-#'   the content of the compiled child document is returned as a character
-#'   string so it can be written back to the main document directly.
+#' @return A character string of the content of the compiled child document is
+#'   returned as a character string so it can be written back to the parent
+#'   document directly.
 #' @references \url{http://yihui.name/knitr/demo/child/}
 #' @note This function is not supposed be called directly like
 #'   \code{\link{knit}()}; instead it must be placed in a parent document to let
 #'   \code{\link{knit}()} call it indirectly.
+#'
+#'   The path of the child document is relative to the parent document.
 #' @export
-#' @examples ## you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input child-doc.tex in main.tex
+#' @examples ## you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input results from child-doc.Rnw in main.tex
 #'
 #' ## comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
-#'
-#' ## use \include: opts_knit$set(child.command = 'include')
 knit_child = function(..., eval = TRUE) {
   if (!eval) return('')
   child = child_mode()
   opts_knit$set(child = TRUE) # yes, in child mode now
   on.exit(opts_knit$set(child = child)) # restore child status
-  path = knit(..., tangle = opts_knit$get('tangle'),
-              encoding = opts_knit$get('encoding') %n% getOption('encoding'))
-  if (is.null(path)) return() # the input document is empty
-  if (opts_knit$get('tangle')) {
-    str_c('\n', 'source("', path, '")')
-  } else if (concord_mode() || !out_format('latex')) {
-    on.exit(unlink(path)) # child output file is temporary
-    str_c(readLines(path), collapse = '\n')
-  } else {
-    path = gsub('[.]tex$', '', path, ignore.case = TRUE)
-    str_c('\n\\', opts_knit$get('child.command'), '{', path, '}')
-  }
+  res = knit(..., tangle = opts_knit$get('tangle'),
+             encoding = opts_knit$get('encoding') %n% getOption('encoding'))
+  paste(c('', res), collapse = '\n')
 }
 
 knit_log = new_defaults()  # knitr log for errors, warnings and messages
@@ -400,11 +368,11 @@ msg_wrap = function(message, type, options) {
 }
 
 wrap.warning = function(x, options) {
-  msg_wrap(str_c("Warning: ", x$message), 'warning', options)
+  msg_wrap(paste("Warning:", x$message, collapse = '\n'), 'warning', options)
 }
 
 wrap.message = function(x, options) {
-  msg_wrap(x$message, 'message', options)
+  msg_wrap(paste(x$message, collapse = ''), 'message', options)
 }
 
 wrap.error = function(x, options) {
@@ -419,9 +387,10 @@ wrap.recordedplot = function(x, options) {
   if (!file.exists(dirname(name)))
     dir.create(dirname(name), recursive = TRUE) # automatically creates dir for plots
   ## vectorize over dev, ext and dpi: save multiple versions of the plot
-  name.ext = mapply(save_plot,
+  name.ext = mapply(save_plot, width = options$fig.width, height = options$fig.height,
                     dev = options$dev, ext = options$fig.ext, dpi = options$dpi,
                     MoreArgs = list(plot = x, name = name, options = options),
                     SIMPLIFY = FALSE)[[1]]
+  if (options$fig.show == 'hide') return('')
   knit_hooks$get('plot')(name.ext, reduce_plot_opts(options))
 }

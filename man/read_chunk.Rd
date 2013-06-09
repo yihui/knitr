@@ -103,5 +103,5 @@ knitr:::knit_code$restore()  # clean up the session
   package)
 }
 \references{
-  \url{http://yihui.name/knitr/demo/reference/}
+  \url{http://yihui.name/knitr/demo/externalization/}
 }

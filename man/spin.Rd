@@ -2,8 +2,8 @@
 \alias{spin}
 \title{Spin goat's hair into wool}
 \usage{
-spin(hair, knit = TRUE, report = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex", 
-    "Rrst"), doc = "^#+'[ ]?")
+spin(hair, knit = TRUE, report = TRUE, text = NULL, format = c("Rmd", "Rnw", "Rhtml", 
+    "Rtex", "Rrst"), doc = "^#+'[ ]?")
 }
 \arguments{
   \item{hair}{the path to the R script}
@@ -15,6 +15,10 @@ spin(hair, knit = TRUE, report = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex",
   \file{Rmd}, \file{Rnw} and \file{Rtex} output (ignored if
   \code{knit = FALSE})}
 
+  \item{text}{a character vector as an alternative way to
+  \code{hair} to provide the R source; if \code{text} is
+  not \code{NULL}, \code{hair} will be ignored}
+
   \item{format}{character: the output format (it takes five
   possible values); the default is R Markdown}
 
@@ -25,7 +29,8 @@ spin(hair, knit = TRUE, report = TRUE, format = c("Rmd", "Rnw", "Rhtml", "Rtex",
   \code{'^##\\\\s*'}}
 }
 \value{
-  The path of the literate programming document.
+  If \code{text} is \code{NULL}, the path of the final
+  output document, otherwise the content of the output.
 }
 \description{
   This function takes a specially formatted R script and

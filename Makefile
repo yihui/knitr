@@ -2,7 +2,7 @@
 NEWS     = NEWS
 PKGNAME := $(shell sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGVERS := $(shell sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
-PKGSRC  := $(shell basename $(PWD))
+PKGSRC  := $(shell basename `pwd`)
 
 all: news check clean
 
@@ -16,7 +16,7 @@ deps:
 docs:
 	R -q -e 'library(Rd2roxygen); rab(".", build = FALSE)'
 
-build: docs
+build:
 	cd ..;\
 	R CMD build $(PKGSRC)
 

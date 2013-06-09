@@ -11,6 +11,9 @@
 #' @param knit logical: whether to compile the document after conversion
 #' @param report logical: whether to generate report for \file{Rmd}, \file{Rnw}
 #'   and \file{Rtex} output (ignored if \code{knit = FALSE})
+#' @param text a character vector as an alternative way to \code{hair} to
+#'   provide the R source; if \code{text} is not \code{NULL}, \code{hair} will
+#'   be ignored
 #' @param format character: the output format (it takes five possible values);
 #'   the default is R Markdown
 #' @param doc a regular expression to identify the documentation lines; by
@@ -19,7 +22,8 @@
 #'   \code{'^##\\\\s*'}
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
 #'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
-#' @return The path of the literate programming document.
+#' @return If \code{text} is \code{NULL}, the path of the final output document,
+#'   otherwise the content of the output.
 #' @note If the output format is Rnw and no document class is specified in
 #'   roxygen comments, this function will automatically add the \code{article}
 #'   class to the LaTeX document so that it is complete and can be compiled. You
@@ -42,11 +46,12 @@
 #' spin(s, FALSE, format='Rhtml')
 #' spin(s, FALSE, format='Rtex')
 #' spin(s, FALSE, format='Rrst')
-spin = function(hair, knit = TRUE, report = TRUE, format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
-                doc = "^#+'[ ]?") {
+spin = function(hair, knit = TRUE, report = TRUE, text = NULL,
+                format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'), doc = "^#+'[ ]?") {
 
   format = match.arg(format)
-  x = readLines(hair, warn = FALSE); r = rle(str_detect(x, doc))
+  x = if (nosrc <- is.null(text)) readLines(hair, warn = FALSE) else split_lines(text)
+  r = rle(str_detect(x, doc))
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
   p = .fmt.pat[[tolower(format)]]
   p1 = str_replace(str_c('^', p[1L], '.*', p[2L], '$'), '\\{', '\\\\{')
@@ -70,21 +75,22 @@ spin = function(hair, knit = TRUE, report = TRUE, format = c('Rmd', 'Rnw', 'Rhtm
     }
   }
 
-  outsrc = sub_ext(hair, format)
   txt = unlist(txt)
   # make it a complete TeX document if document class not specified
   if (report && format %in% c('Rnw', 'Rtex') && !str_detect(txt, '^\\s*\\\\documentclass')) {
     txt = c('\\documentclass{article}', '\\begin{document}', txt, '\\end{document}')
   }
-  cat(txt, file = outsrc, sep = '\n')
-  if (knit) {
-    if (report) {
-      if (format == 'Rmd') knit2html(outsrc) else
-        if (format %in% c('Rnw', 'Rtex')) knit2pdf(outsrc)
-    } else knit(outsrc)
+  if (nosrc) {
+    outsrc = sub_ext(hair, format)
+    cat(txt, file = outsrc, sep = '\n')
+    txt = NULL
+  } else outsrc = NULL
+  if (!knit) return(txt %n% outsrc)
+  if (report) {
+    if (format == 'Rmd') return(knit2html(outsrc, text = txt))
+    if (!nosrc && (format %in% c('Rnw', 'Rtex'))) return(knit2pdf(outsrc))
   }
-
-  invisible(outsrc)
+  knit(outsrc, text = txt)
 }
 
 .fmt.pat = list(
