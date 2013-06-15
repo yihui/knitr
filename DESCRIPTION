@@ -26,7 +26,7 @@ Authors@R: c(person("Hadley", "Wickham", role = "ctb"),
     person("Johan", "Toloe", role = "ctb"),
     person("Richard", "Cotton", role = "ctb"),
     person("Trevor", "Davis", role = "ctb"),
-    person("Noam", "Ross", role = "crb"),
+    person("Noam", "Ross", role = "ctb"),
     person("Yihui", "Xie", email = "xie@yihui.name", role = c("aut", "cre")))
 Author: Yihui Xie
 Maintainer: Yihui Xie <xie@yihui.name>
