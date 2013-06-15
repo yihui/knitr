@@ -59,6 +59,7 @@ hook_rgl = function(before, options, envir) {
          pdf = rgl.postscript(str_c(name, '.pdf'), fmt = 'pdf'),
          rgl.snapshot(str_c(name, '.png'), fmt = 'png'))
 
+  options$fig.num = 1L  # only one figure in total
   hook_plot_custom(before, options, envir)
 }
 #' @export

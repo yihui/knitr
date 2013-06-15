@@ -34,6 +34,8 @@
 
 - fixed #537: misleading error message when the graphical device does not exist (thanks, Scott Kostyshak)
 
+- fixed a bug in `hook_rgl()` reported at http://cos.name/cn/topic/110742 (incorrect LaTeX code when `fig.align='center'` and `fig.show='hold'`)
+
 ## MAJOR CHANGES
 
 - the script `inst/bin/knit` gains an option `-o` to specify the output filenames for `knit()` (#525, thanks, Aaron Wolen)
