@@ -2,8 +2,7 @@
 
 [![Build Status](https://travis-ci.org/yihui/knitr.png)](https://travis-ci.org/yihui/knitr)
 
-The R package **knitr** is a general-purpose literate programming engine, with lightweight API's designed to give users full control of the output without heavy coding work. It combines many features into one package with slight tweaks motivated from my everyday use of Sweave. See the [package homepage](http://yihui.name/knitr) for  details and examples. See [FAQ's](https://github.com/yihui/knitr/blob/master/FAQ.md) for a list of frequently asked questions (including where to ask questions).
-
+The R package **knitr** is a general-purpose literate programming engine, with lightweight API's designed to give users full control of the output without heavy coding work. It combines many features into one package with slight tweaks motivated from my everyday use of Sweave. See the [package homepage](http://yihui.name/knitr) for  details and examples. See [FAQ's](https://github.com/yihui/knitr/blob/master/FAQ.md) for a list of frequently asked questions (including where to ask questions). 
 ## Installation
 
 You can install the stable version on [CRAN](http://cran.r-project.org/package=knitr):
@@ -52,3 +51,39 @@ knit(input)
 ```
 
 If options are not explicitly specified, **knitr** will try to guess reasonable default settings. A few manuals are available such as the [main manual](https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf), the [graphics manual](https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf), and the [themes manual](https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf).
+
+## Contributing
+
+### Get the code
+
+First, [fork **knitr** on GitHub](https://github.com/yihui/knitr/fork), get the code, and prepare a feature branch.
+
+```bash
+git clone git@github.com:YOURNAME/knitr.git
+git branch my_feature_branch
+git checkout my_feature_branch
+```
+
+### Make changes and test them
+
+Now you are ready to work on the R code. When you are done, run the test suite to make sure you haven't broken anything. The tests are implemented using the `testthat` package, and the easiest way to run them is via the `devtools` package. 
+
+```R
+library(devtools)
+setwd('my/knitr/development/dir')
+load_all('.')  # (re)load the package in the current directory
+test()         # run all testthat tests in the package
+```
+If you added any features, add your own tests in `inst/tests`.
+
+### Make a pull request
+
+Once you are happy with the changes you made, commit them to your feature branch and push that branch to GitHub.
+
+```bash
+# Check you are still on your feature branch
+# git add and commit your changes
+git push origin my_feature_branch
+```
+
+Finally, open your repository on GitHub. Click the 'Pull request' button at the top of the page, and choose your feature branch as the head branch. Add a comment explaining what improvement you're offering. All done!
