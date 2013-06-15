@@ -69,7 +69,7 @@ git checkout my_feature_branch
 
 Now you are ready to work on the R code. When you are done, run the test suite to make sure you haven't broken anything. The tests are implemented using the `testthat` package, and the easiest way to run them is via the `devtools` package.
 
-```R
+```r
 library(devtools)
 setwd('my/knitr/development/dir')
 load_all('.')  # (re)load the package in the current directory
