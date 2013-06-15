@@ -1,0 +1,44 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Display Tables with the DataTables Library}
+-->
+
+# jQuery DataTables
+
+We can use the JavaScript library [`DataTables`](http://www.datatables.net) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
+
+```{r cool, results='asis'}
+library(knitr)
+kable(mtcars, 'html', table.attr='id="mtcars_table"')
+```
+
+Note we assigned an `id` to the table, and next we use the `DataTables` library to tweak the table.
+
+    <script type="text/javascript" charset="utf-8">
+    	$(document).ready(function() {
+    		$('#mtcars_table').dataTable();
+    	} );
+    </script>
+
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+		$('#mtcars_table').dataTable();
+	} );
+</script>
+
+Since this is a Markdown vignette, we need to add the JavaScript libraries as well as some additional CSS files to the HTML header, and this can be done via:
+
+```{r}
+options(markdown.HTML.header = paste(unlist(
+  sapply(system.file('misc', c('vignette.css', 'datatables.txt'), package = 'knitr'), readLines)
+  ), collapse = '\n')
+)
+```
+
+Two files `vignette.css` and `datatables.txt` under the `misc` directory of **knitr** were added to the HTML output.
+
+By comparison, below is an ordinary table:
+
+```{r boring, results='asis'}
+kable(head(mtcars), 'html')
+```
