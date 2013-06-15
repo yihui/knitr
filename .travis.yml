@@ -7,7 +7,7 @@ env:
 
 # install dependencies
 install:
-  - sudo apt-add-repository -y 'deb http://cran.rstudio.com/bin/linux/ubuntu precise/ #CRAN'
+  - sudo apt-add-repository -y 'deb http://cran.rstudio.com/bin/linux/ubuntu precise/'
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
   - sudo apt-add-repository -y ppa:marutter/c2d4u
   - sudo apt-get update
