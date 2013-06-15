@@ -234,7 +234,8 @@ print.inline = function(x, ...) {
 #' read_chunk(lines = code, labels = 'foo') # put all code into one chun named foo
 #' read_chunk(lines = code, labels = 'foo', from = 2, to = 2) # line 2 into chunk foo
 #' read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4), to = c(3, 6))
-#' read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4)) # automatically figure out 'to'
+#' # automatically figure out 'to'
+#' read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4))
 #' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a", to = "^#@@b")
 #' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a", to = "^#@@b", from.offset = 1, to.offset = -1)
 #'
