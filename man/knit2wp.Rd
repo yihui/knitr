@@ -2,8 +2,8 @@
 \alias{knit2wp}
 \title{Knit an R Markdown document and post it to WordPress}
 \usage{
-knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE, encoding = getOption("encoding"), 
-    publish = TRUE)
+knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE, 
+    encoding = getOption("encoding"), publish = TRUE)
 }
 \arguments{
   \item{input}{the filename of the Rmd document}

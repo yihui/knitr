@@ -116,3 +116,4 @@ Collate:
     'utils-vignettes.R'
     'pandoc.R'
     'hooks-asciidoc.R'
+    'table.R'

@@ -2,7 +2,7 @@
 \alias{read_rforge}
 \title{Read source code from R-Forge}
 \usage{
-read_rforge(path, project, extra = "", base = "http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg")
+read_rforge(path, project, extra = "")
 }
 \arguments{
   \item{path}{relative path to the source script on
@@ -13,8 +13,6 @@ read_rforge(path, project, extra = "", base = "http://r-forge.r-project.org/scm/
   \item{extra}{extra parameters to be passed to the URL
   (e.g. \code{extra = '&revision=48'} to check out the
   source of revision 48)}
-
-  \item{base}{the base URL}
 }
 \value{
   A character vector of the source code.

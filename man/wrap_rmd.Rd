@@ -34,6 +34,6 @@ wrap_rmd(file, width = 80, text = NULL, backup)
   the future.
 }
 \examples{
-wrap_rmd(text = c("```", "1+1", "```", "- a list item", "> a quote", "", paste(rep("this is a normal paragraph", 
-    5), collapse = " ")))
+wrap_rmd(text = c("```", "1+1", "```", "- a list item", "> a quote", "", 
+    paste(rep("this is a normal paragraph", 5), collapse = " ")))
 }

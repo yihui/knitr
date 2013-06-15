@@ -3,8 +3,8 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE, envir = parent.frame(), 
-    encoding = getOption("encoding"))
+knit(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE, 
+    envir = parent.frame(), encoding = getOption("encoding"))
 
 purl(..., documentation = 1L)
 }
