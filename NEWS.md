@@ -42,6 +42,8 @@
 
 - when the package option `verbose = TRUE`, the time stamp will be printed after each chunk using `timestamp()`, but this will mess up with the R command history, so now **knitr** uses `cat()` to write the time stamp (#545) (thanks, @knokknok)
 
+- the argument `base` in `read_rforge()` was removed and hard-coded inside the function instead
+
 # CHANGES IN knitr VERSION 1.2
 
 ## NEW FEATURES
