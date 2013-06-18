@@ -154,6 +154,30 @@ eng_dot = function(options){
   engine_output(options, code, '', extra)
 }
 
+## Asymptote
+# @todo check that the file is generated
+eng_asy = function(options){
+  f = tempfile()
+  writeLines(code <- options$code, f)
+  on.exit(unlink(f))
+  cmd = sprintf('asy %s -f %s -o %s ',
+                shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
+                outf <- shQuote(str_c(fig <- fig_path(), '.', ext)))
+  
+  dir.create(dirname(fig), showWarnings = FALSE)
+  outf <- str_c(fig <- fig_path(), '.', ext)
+  unlink(outf)
+  extra = if (options$eval) {
+    res = system(cmd)
+    if (!file.exists(outf)) {
+      stop('failed to compile asymptote file:',outf)
+    }
+    options$fig.num = 1L; options$fig.cur = 1L
+    knit_hooks$get('plot')(c(fig, ext), options)
+  }
+  engine_output(options, code, '', extra)
+}
+
 ## Andre Simon's highlight
 eng_highlight = function(options) {
   # e.g. engine.opts can be '-S matlab -O latex'
@@ -171,7 +195,7 @@ for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'perl', 'python',
 # additional engines
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
-  c = eng_c
+  c = eng_c, asy = eng_asy
 )
 
 # possible values for engines (for auto-completion in RStudio)
