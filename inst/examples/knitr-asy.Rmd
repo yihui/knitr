@@ -1,0 +1,20 @@
+# Asymptote graphics example
+
+## Description
+
+The engine runs the code using the `asy` command line program. The result can be `svg`, `png` or `pdf`. `svg` renders better within html. For latex `pdf` should be used.
+
+see [Asymptote website](http://asymptote.sourceforge.net/) for installation and documentation.
+
+On osx, one can simply run:
+
+    brew install asymptote
+
+## Example
+
+An example of the asy-engine:
+
+```{r asy-ex, engine = "asy", fig.cap = "Asymptote Example", fig.ext = 'svg', cache=FALSE}
+real u = 40;
+draw( (0,0) .. (u,u) .. (u,0) -- (0,0) );
+```
