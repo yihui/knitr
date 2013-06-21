@@ -7,11 +7,15 @@ hook_plot_md = function(x, options) {
   cap = .img.cap(options)
 
   if(is.null(w <- options$out.width) & is.null(h <- options$out.height) &
-    is.null(s <- options$out.extra)) {
+    is.null(s <- options$out.extra) & options$fig.align == 'default') {
     return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
   }
   # use HTML syntax <img src=...>
-  .img.tag(.upload.url(x), options$out.width, options$out.height, cap, options$out.extra)
+  .img.tag(.upload.url(x), w, h, cap, c(s, sprintf(
+    'style="display: block; margin: %s;"', switch(
+      options$fig.align, left = 'auto auto auto 0', center = 'auto',
+      right = 'auto 0 auto auto')
+  )))
 }
 
 #' @rdname output_hooks
