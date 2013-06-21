@@ -141,7 +141,7 @@ eng_tikz = function(options) {
 eng_dot = function(options) {
   
   # create temporary file
-  f = tempfile()
+  f = tempfile('code', '.')
   writeLines(code <- options$code, f)
   on.exit(unlink(f))
 
