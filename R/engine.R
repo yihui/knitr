@@ -138,7 +138,7 @@ eng_tikz = function(options) {
 }
 
 ## GraphViz (dot) and Asymptote are similar
-eng_dot = function(options){
+eng_dot = function(options) {
   
   # create temporary file
   f = tempfile()
@@ -146,19 +146,17 @@ eng_dot = function(options){
   on.exit(unlink(f))
 
   # adapt command to either graphviz or asymptote
-  if (options$engine=='dot') {
+  if (options$engine == 'dot') {
     command_string = '%s %s -T%s -o%s'
     syntax         = 'dot'
-  } else if (options$engine=='asy') {
+  } else if (options$engine == 'asy') {
     command_string = '%s %s -f %s -o %s'
     syntax         = 'cpp'  # use cpp syntax for syntax highlighting
   }
   
   # prepare system command
-  cmd = sprintf(command_string, 
-                shQuote(options$engine %n% options$engine.path),
-                shQuote(f), 
-                ext <- options$fig.ext %n% dev2ext(options$dev),
+  cmd = sprintf(command_string, shQuote(options$engine %n% options$engine.path),
+                shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
                 shQuote(str_c(fig <- fig_path(), '.', ext)))
   
   # generate output
