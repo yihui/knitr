@@ -164,6 +164,7 @@ eng_dot = function(options) {
   outf <- str_c(fig <- fig_path(), '.', ext)
   unlink(outf)
   extra = if (options$eval) {
+    message('running: ', cmd)
     system(cmd)
     if (!file.exists(outf)) stop('failed to compile content');
     options$fig.num = 1L; options$fig.cur = 1L
