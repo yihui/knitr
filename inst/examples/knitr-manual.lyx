@@ -2153,7 +2153,7 @@ knitr
  Currently the setting is like this: the R script also uses chunk labels
  (marked in the form 
 \family typewriter
-## @knitr chunk-label
+## ---- chunk-label
 \family default
  by default); if the code chunk in the input document is empty, 
 \series bold
@@ -2183,7 +2183,7 @@ status open
 
 \begin_layout Plain Layout
 
-## @knitr Q1
+## ---- Q1 ---------------------
 \end_layout
 
 \begin_layout Plain Layout

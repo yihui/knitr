@@ -549,15 +549,15 @@ the whole document each time, even if I only want to know the results
 of a single chunk. Therefore \textbf{knitr} introduced the feature
 of code externalization to a separate R script. Currently the setting
 is like this: the R script also uses chunk labels (marked in the form
-\texttt{\#\# @knitr chunk-label} by default); if the code chunk in
-the input document is empty, \textbf{knitr} will match its label with
-the label in the R script to input external R code. For example, suppose
-this is a code chunk labelled as \texttt{Q1} in an R script named
-\textsf{homework1-xie.R} which is under the same directory as the
-Rnw document:
+\texttt{\#\# -{}-{}-{}- chunk-label} by default); if the code chunk
+in the input document is empty, \textbf{knitr} will match its label
+with the label in the R script to input external R code. For example,
+suppose this is a code chunk labelled as \texttt{Q1} in an R script
+named \textsf{homework1-xie.R} which is under the same directory as
+the Rnw document:
 
 <<ext-r-code, eval=FALSE>>=
-## @knitr Q1
+## ---- Q1 ---------------------
 gcd = function(m, n) {
     while ((r <- m %% n) != 0) {
        m = n; n = r

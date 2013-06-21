@@ -10,7 +10,7 @@
 #' template must have a token \samp{\%sCHUNK_LABEL_HERE}, which will be used to
 #' input all the R code from the script. See the examples below.
 #'
-#' The R script may contain chunk headers of the form \samp{## @@knitr label},
+#' The R script may contain chunk headers of the form \samp{## ---- label},
 #' which will be copied to the template; if no chunk headers are found, the
 #' whole R script will be inserted into the template as one code chunk.
 #' @param script path to the R script
