@@ -601,21 +601,14 @@ for normal texts,
 \series bold
 knitr
 \series default
- will find out if there are chunk options set among them (e.g.
- 
-\family typewriter
-
-\backslash
-SweaveOpts{}
-\family default
-), and evaluate inline R code (e.g.
- 
+ will find inline R code (e.g.
+ in 
 \family typewriter
 
 \backslash
 Sexpr{}
 \family default
-); the latter is involved with the 
+) and evaluate it; the output is wrapped by the 
 \family typewriter
 inline
 \family default

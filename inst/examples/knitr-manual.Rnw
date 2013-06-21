@@ -160,10 +160,9 @@ global environment as its parent, and all the objects in this environment
 after the evaluation will be saved if \texttt{cache=TRUE}
 \item chunk hooks can be run before and/or after a chunk
 \end{enumerate}
-\item for normal texts, \textbf{knitr} will find out if there are chunk
-options set among them (e.g. \texttt{\textbackslash{}SweaveOpts\{\}}),
-and evaluate inline R code (e.g. \texttt{\textbackslash{}Sexpr\{\}});
-the latter is involved with the \texttt{inline} hook;
+\item for normal texts, \textbf{knitr} will find inline R code (e.g. in
+\texttt{\textbackslash{}Sexpr\{\}}) and evaluate it; the output is
+wrapped by the \texttt{inline} hook;
 \end{enumerate}
 The hooks play important roles in \textbf{knitr}: this package makes
 almost everything accessible to the users. Consider the following
