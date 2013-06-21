@@ -139,7 +139,7 @@ eng_tikz = function(options) {
 
 ## GraphViz (dot) and Asymptote are similar
 eng_dot = function(options) {
-  
+
   # create temporary file
   f = tempfile('code', '.')
   writeLines(code <- options$code, f)
@@ -153,12 +153,12 @@ eng_dot = function(options) {
     command_string = '%s %s -f %s -o %s'
     syntax         = 'cpp'  # use cpp syntax for syntax highlighting
   }
-  
+
   # prepare system command
   cmd = sprintf(command_string, shQuote(options$engine %n% options$engine.path),
                 shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
                 shQuote(str_c(fig <- fig_path(), '.', ext)))
-  
+
   # generate output
   dir.create(dirname(fig), showWarnings = FALSE)
   outf = str_c(fig, '.', ext)
@@ -170,7 +170,7 @@ eng_dot = function(options) {
     options$fig.num = 1L; options$fig.cur = 1L
     knit_hooks$get('plot')(c(fig, ext), options)
   }
-  
+
   # wrap
   options$engine = syntax
   engine_output(options, code, '', extra)

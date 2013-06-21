@@ -146,7 +146,7 @@ hook_plot_tex = function(x, options) {
       sprintf('\\includegraphics%s{%s} ', size, x[1])
     },
 
-    resize2, align2, sub2, fig2, 
+    resize2, align2, sub2, fig2,
     sep = ''
   )
 }
