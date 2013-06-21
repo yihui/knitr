@@ -137,7 +137,7 @@ eng_tikz = function(options) {
   engine_output(options, options$code, '', extra)
 }
 
-## GraphViz (dot)
+## GraphViz (dot) and Asymptote are similar
 eng_dot = function(options){
   
   # create temporary file
