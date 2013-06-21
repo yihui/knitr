@@ -1,4 +1,4 @@
-%% LyX 2.0.5.1 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.6 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[10pt]{beamer}
 \usepackage[T1]{fontenc}
@@ -91,8 +91,8 @@ demo.
 
 \lyxframeend{}\section{First Test}
 
-\begin{frame}
-[fragile]
+\begin{frame}[fragile]
+
 \frametitle{First Test}
 
 OK, let's get started with just some text:
@@ -117,8 +117,8 @@ the use of\texttt{ \textbackslash{}Sexpr\{\}}.)
 
 \lyxframeend{}\section{Second Test}
 
-\begin{frame}
-[fragile]
+\begin{frame}[fragile]
+
 \frametitle{Second Test}
 
 Text is nice but let's see what happens if we make a couple of plots
