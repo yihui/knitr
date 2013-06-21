@@ -38,7 +38,7 @@ spin(hair, knit = TRUE, report = TRUE, text = NULL, format = c("Rmd", "Rnw", "Rh
   default normal text (documentation) should be written
   after the roxygen comment (\code{#'}) and code chunk
   options are written after \code{#+} or \code{#-} or
-  \code{# @knitr}.
+  \code{# ----}.
 }
 \details{
   Obviously the goat's hair is the original R script, and
