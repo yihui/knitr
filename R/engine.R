@@ -161,7 +161,7 @@ eng_dot = function(options) {
   
   # generate output
   dir.create(dirname(fig), showWarnings = FALSE)
-  outf <- str_c(fig <- fig_path(), '.', ext)
+  outf = str_c(fig, '.', ext)
   unlink(outf)
   extra = if (options$eval) {
     message('running: ', cmd)
