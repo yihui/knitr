@@ -268,7 +268,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
   idx = cumsum(str_detect(lines, lab))
   if (all(idx == 0)) return(invisible())
   groups = unname(split(lines[idx != 0], idx[idx != 0]))
-  labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\1'))
+  labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\2'))
   code = lapply(groups, strip_chunk)
   idx = nzchar(labels); code = code[idx]; labels = labels[idx]
   knit_code$set(setNames(code, labels))

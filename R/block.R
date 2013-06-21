@@ -305,5 +305,6 @@ process_tangle.inline = function(x) {
 label_code = function(code, label) {
   code = str_c(c('', code, ''), collapse = '\n')
   if (opts_knit$get('documentation') == 0L) return(code)
-  str_c('## @knitr ', label, code)
+  str_c('## ----', str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
+        '----', code)
 }
