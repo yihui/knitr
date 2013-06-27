@@ -1,2 +1,2 @@
 library(testit)
-test_package("knitr")
+test_pkg("knitr")
