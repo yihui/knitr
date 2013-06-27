@@ -5,11 +5,13 @@ op = options(device = function(file = NULL, ...) {
   dev.control('enable')  # important! otherwise plots get discarded
 })
 
+list_class = function(x) sapply(x, class)
+
 # remove the blank plot
 res = evaluate('layout(t(1:2))')
 assert(
   'blank plots are removed',
-  identical(sapply(rm_blank_plot(res), class), 'source')
+  identical(list_class(rm_blank_plot(res)), 'source')
 )
 
 assert(
@@ -17,34 +19,34 @@ assert(
 {
   res = evaluate('par(mfrow = c(1, 2))\npie(islands)\nbarplot(islands)')
   res = rm_blank_plot(res)
-  identical(sapply(res, class), rep(c('source', 'recordedplot'), c(3, 1)))
+  identical(list_class(res), rep(c('source', 'recordedplot'), c(3, 1)))
 },
 {
   res = evaluate('layout(t(1:2))\npie(islands)\nbarplot(islands)')
   res1 = rm_blank_plot(res)
-  identical(sapply(res1, class), rep(c('source', 'recordedplot'), c(3, 1)))
+  identical(list_class(res1), rep(c('source', 'recordedplot'), c(3, 1)))
 },
 {
   res = evaluate('pie(islands)\nbarplot(islands)\npar(mfrow = c(1, 2))')
   res = merge_low_plot(res)
-  identical(sapply(res, class), rep(c('source', 'recordedplot'), length = 5))
+  identical(list_class(res), rep(c('source', 'recordedplot'), length = 5))
 },
 {
   res = evaluate('pie(islands)\npar(cex.main=1.2)\nbarplot(islands)')
   res = merge_low_plot(res)
-  identical(sapply(res, class), c('source', 'recordedplot')[c(1, 2, 1, 1, 2)])
+  identical(list_class(res), c('source', 'recordedplot')[c(1, 2, 1, 1, 2)])
 },
 {
   res = evaluate('par(cex.main=1.2)\npalette(c("red","black"))\nbarplot(islands)')
   res = rm_blank_plot(res)
-  identical(sapply(res, class), rep(c('source', 'recordedplot'), c(3, 1)))
+  identical(list_class(res), rep(c('source', 'recordedplot'), c(3, 1)))
 }
 )
 
 res = evaluate('plot(1)\npoints(1.1, 1.1)')
 assert(
   'merge low-level changes',
-  identical(sapply(merge_low_plot(res), class), rep(c('source', 'recordedplot'), c(2, 1)))
+  identical(list_class(merge_low_plot(res)), rep(c('source', 'recordedplot'), c(2, 1)))
 )
 
 res = evaluate('library(grid)
@@ -55,12 +57,13 @@ assert(
   'captures grid graphics',
 {
   res = rm_blank_plot(res)
-  identical(sapply(res, class), c('source', 'recordedplot')[c(1, 1, 1, 2, 1, 2)])
+  identical(list_class(res), c('source', 'recordedplot')[c(1, 1, 1, 2, 1, 2)])
 },
 {
   res = merge_low_plot(res)
-  identical(sapply(res, class), rep(c('source', 'recordedplot'), c(4, 1)))
+  identical(list_class(res), rep(c('source', 'recordedplot'), c(4, 1)))
 }
 )
 
 options(op); rm(op); rm(res)
+rm(list_class)
