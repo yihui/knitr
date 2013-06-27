@@ -23,10 +23,9 @@ assert(
   identical(format_sci(NA_real_), NA_character_)
 )
 
-sanitize_fn('figure/a b')
 assert(
   'sanitize_fn() warns against spaces in filenames',
-  length(last.warning) >= 1 && grepl('^replaced', names(last.warning)[1])
+  has_warning(sanitize_fn('figure/a b'))
 )
 
 options(op); rm(op)
@@ -34,7 +33,6 @@ options(op); rm(op)
 assert(
   'fig_path() sanitizes paths',
   identical(sanitize_fn('fig/foo', '.png'), 'fig/foo.png'),
-  has_warning(sanitize_fn('figure/a b')),
   suppressWarnings(c(
     identical(sanitize_fn('figure/a b'), 'figure/a_b'),
     identical(sanitize_fn('fig space/a.b'), 'fig_space/a_b'),
