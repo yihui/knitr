@@ -1,14 +1,24 @@
-context('knitr environments')
+library(testit)
 
-test_that('use a list as parent frame', {
-  opts_knit$set(progress = FALSE)
-  rm(list = ls())
-  z = 5
+rm(list = ls())
+z = 5
+env = new.env()
+
+assert(
+  'a list can be used as the parent frame for knit()',
   # evaluate in a new environment; should create an object in current envir
-  with(list(y = 4:8), knit('knit-envir.Rmd', envir = new.env()))
-  expect_false(exists('asdfqwerzxcv'))
-  
-  expect_error(knit('knit-envir.Rmd'))  # y is not found
-  with(list(y = letters), knit('knit-envir.Rmd'))
-  opts_knit$set(progress = TRUE)
-})
+  !has_error(with(list(y = 4:8), knit('knit-envir.Rmd', envir = env, quiet = TRUE)))
+)
+
+assert(
+  'knit() creates objects in its envir argument',
+  !exists('asdfqwerzxcv'), exists('asdfqwerzxcv', envir = env)
+)
+
+assert(
+  'undefined external objects should cause errors',
+  has_error(knit('knit-envir.Rmd')),  # y is not found
+  !has_error(with(list(y = letters), knit('knit-envir.Rmd')))
+)
+
+rm(env); rm(z)

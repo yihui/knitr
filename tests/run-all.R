@@ -1,4 +1,2 @@
-library(testthat)
-library(knitr)
-
+library(testit)
 test_package("knitr")

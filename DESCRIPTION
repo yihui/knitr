@@ -71,7 +71,7 @@ Imports:
     stringr (>= 0.6),
     tools
 Suggests:
-    testthat,
+    testit,
     rgl,
     codetools,
     R2SWF (>= 0.4),

@@ -1,26 +1,27 @@
-context('Patterns')
+library(testit)
 
-test_that('auto detect patterns', {
-  expect_identical(detect_pattern('<<>>='), 'rnw')
-  expect_identical(detect_pattern('<<foo, bar=TRUE>>='), 'rnw')
-  expect_identical(detect_pattern('% begin.rcode'), 'tex')
-  expect_identical(detect_pattern('<!--begin.rcode'), 'html')
-  expect_identical(detect_pattern('``` {r}'), 'md')
-  expect_identical(detect_pattern('asdf', 'rnw'), 'rnw')
-})
+assert(
+  'detect_pattern() automatically detects syntax patterns',
+  identical(detect_pattern('<<>>='), 'rnw'),
+  identical(detect_pattern('<<foo, bar=TRUE>>='), 'rnw'),
+  identical(detect_pattern('% begin.rcode'), 'tex'),
+  identical(detect_pattern('<!--begin.rcode'), 'html'),
+  identical(detect_pattern('``` {r}'), 'md'),
+  identical(detect_pattern('asdf', 'rnw'), 'rnw')
+)
 
-test_that('does a pattern contain a group?', {
-  expect_true(group_pattern('(.*)'))
-  expect_false(group_pattern('()'))
-  expect_false(group_pattern('abc'))
-  expect_false(group_pattern(NULL))
-})
+assert(
+  'group_pattern() checks if a pattern contains a group',
+  group_pattern('(.*)'), !group_pattern('()'), !group_pattern('abc'), !group_pattern(NULL)
+)
 
-test_that('patterns for Rnw', {
-  ce = all_patterns$rnw$chunk.end
-  expect_identical(grep(ce, '  @'), 1L) # spaces before @
-  expect_identical(grep(ce, '@  '), 1L) # spaces after @
-  expect_identical(grep(ce, '@ %asdf'), 1L) # comments after %
-  expect_identical(grep(ce, '@ asdf'), integer()) # only spaces/comments allowed
-  expect_identical(grep(ce, ' @ a% sdf'), integer())
-})
+ce = all_patterns$rnw$chunk.end
+assert(
+  'patterns for Rnw',
+  identical(grep(ce, '  @'), 1L), # spaces before @
+  identical(grep(ce, '@  '), 1L), # spaces after @
+  identical(grep(ce, '@ %asdf'), 1L), # comments after %
+  identical(grep(ce, '@ asdf'), integer()), # only spaces/comments allowed
+  identical(grep(ce, ' @ a% sdf'), integer())
+)
+rm(ce)
