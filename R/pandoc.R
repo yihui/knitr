@@ -30,7 +30,6 @@ pandoc = function(input, format = 'html', config = getOption('config.pandoc')) {
   if (Sys.which('pandoc') == '')
     stop('Please install pandoc first: http://johnmacfarlane.net/pandoc/')
   cfg = if (is.null(config)) sub_ext(input[1L], 'pandoc') else config
-  out = sub_ext(input[1L], pandoc_ext(format))
   cmn = NULL  # common arguments
   txt = pandoc_cfg(readLines(input[1L], warn = FALSE))
   if (file.exists(cfg)) txt = c(txt, '', readLines(cfg, warn = FALSE))
