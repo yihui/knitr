@@ -147,42 +147,15 @@ load_device = function(name, package, dpi = NULL) {
 }
 
 
-# layout(), par() and palette() may produce blank plots that should be removed
-rm_blank_plot = function(res) {
-  Filter(function(x) {
-    !is.recordedplot(x) || nonempty_plot(plot_calls(x))
-  }, res)
-}
-
-# R 3.0 has significant changes in display lists
-isR3 = getRversion() >= '3.0.0'
-# if all calls are in these elements, the plot is basically empty
-empty_calls = if (isR3) c('C_par', 'C_layout', 'palette', 'palette2') else
-  c('layout', 'par')
-
-nonempty_plot = if (isR3) {
-  function(pc) !all(pc %in% empty_calls)
-} else function(pc) {
-  identical(pc, 'recordGraphics') || identical(pc, 'persp') ||
-    (length(pc) > 1L && !all(pc %in% empty_calls))
-}
-
 ## merge low-level plotting changes
 merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
   idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
   if (n <= 1) return(x)
   i1 = idx[1]; i2 = idx[2]  # compare plots sequentially
   for (i in 1:(n - 1)) {
-    p1 = x[[i1]]; p2 = x[[i2]]
-    if (is_low_change(p1, p2)) {
-      # if the next plot only differs with the previous plot by par() changes,
-      # remove the next plot and keep the previous fixed, otherwise remove the
-      # previous and move its index to the next plot
-      if (is_par_change(p1, p2)) r = i2 else {
-        r = i1; i1 = idx[i + 1]
-      }
-      m = c(m, r)
-    } else i1 = idx[i + 1]
+    # remove the previous plot and move its index to the next plot
+    if (is_low_change(x[[i1]], x[[i2]])) m = c(m, i1)
+    i1 = idx[i + 1]
     i2 = idx[i + 2]
   }
   if (is.null(m)) x else x[-m]
@@ -193,25 +166,6 @@ is_low_change = function(p1, p2) {
   p1 = p1[[1]]; p2 = p2[[1]]  # real plot info is in [[1]]
   if ((n2 <- length(p2)) < (n1 <- length(p1))) return(FALSE)  # length must increase
   identical(p1[1:n1], p2[1:n1])
-}
-
-plot_calls = if (isR3) {
-  function(plot) {
-    el = lapply(plot[[1]], '[[', 2)
-    if (length(el) == 0) return()
-    sapply(el, function(x) {
-      x = x[[1]]
-      x[['name']] %n% deparse(x)  # grid graphics do not have x$name
-    })
-  }
-} else evaluate:::plot_calls
-
-## is the new plot identical to the old one except a few par/layout primitives in the end?
-is_par_change = function(p1, p2) {
-  n1 = length(prim1 <- plot_calls(p1))
-  n2 = length(prim2 <- plot_calls(p2))
-  if (n2 <= n1) return(TRUE)
-  all(prim2[(n1 + 1):n2] %in% empty_calls)
 }
 
 # recycle some plot options such as fig.cap, out.width/height, etc when there
