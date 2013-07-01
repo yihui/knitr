@@ -16,11 +16,12 @@
 #' formats, write each format and relevant configurations in a block, and
 #' separate blocks with blank lines.
 #' @param input a character vector of the Markdown filenames
-#' @param format the output format (see References)
+#' @param format the output format (see References); it can be a character
+#'   vector of multiple formats
 #' @param config the Pandoc configuration file; if missing, it is assumed to be
 #'   a file with the same base name as the \code{input} file and an extension
 #'   \code{.pandoc} (e.g. for \file{foo.md} it looks for \file{foo.pandoc})
-#' @return The output filename (or an error if the conversion failed).
+#' @return The output filename(s) (or an error if the conversion failed).
 #' @references Pandoc: \url{http://johnmacfarlane.net/pandoc/}; Examples and
 #'   rules of the configurations: \url{http://yihui.name/knitr/demo/pandoc}
 #' @seealso \code{\link{read.dcf}}
