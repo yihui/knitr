@@ -51,13 +51,11 @@ eng_interpreted = function(options) {
   code = if (engine %in% c('highlight', 'Rscript', 'sas')) {
     f = basename(tempfile(engine, '.', switch(engine, sas = '.sas', Rscript = '.R', '.txt')))
     # SAS runs code in example.sas and creates 'listing' file example.lst and log file example.log
-    if(engine == 'sas') {
-      writeLines(
-        c(
-          "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';",
-          options$code),
-        f)} else {
-        writeLines(options$code, f)}
+    writeLines(c(
+      if (engine == 'sas')
+        "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';",
+        options$code
+    ), f)
     on.exit(unlink(f))
     if (engine == 'sas') {
       saslst = sub('[.]sas$', '.lst', f)
