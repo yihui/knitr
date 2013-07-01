@@ -30,11 +30,15 @@ pandoc = function(input, format = 'html', config = getOption('config.pandoc')) {
   if (Sys.which('pandoc') == '')
     stop('Please install pandoc first: http://johnmacfarlane.net/pandoc/')
   cfg = if (is.null(config)) sub_ext(input[1L], 'pandoc') else config
-  cmn = NULL  # common arguments
   txt = pandoc_cfg(readLines(input[1L], warn = FALSE))
   if (file.exists(cfg)) txt = c(txt, '', readLines(cfg, warn = FALSE))
   con = textConnection(txt); on.exit(close(con))
   cfg = read.dcf(con)
+  mapply(pandoc_one, input, format, MoreArgs = list(cfg = cfg), USE.NAMES = FALSE)
+}
+# format is a scalar
+pandoc_one = function(input, format, cfg) {
+  cmn = NULL  # common arguments
   if (nrow(cfg) == 0L) cfg = character(0) else if (nrow(cfg) == 1L) {
     if ('format' %in% colnames(cfg)) {
       cfg = if (cfg[1L, 'format'] == format) drop(cfg) else NA
