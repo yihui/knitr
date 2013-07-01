@@ -14,7 +14,7 @@
 
 - new `'hide'` value to the `fig.show` option; the figures are created but not included in the output document (#532) (thanks, Simon)
 
-- the `sas` engine uses the listings output now (#541) (thanks, Nick Salkowski)
+- the `sas` engine uses the listings output now (#541) and was tweaked for better LaTeX display (#562) (thanks, Nick Salkowski)
 
 - added a quick and dirty `c` engine (via `R CMD SHLIB`); see https://github.com/yihui/knitr-examples/blob/master/090-engine-c.Rmd for an example
 
