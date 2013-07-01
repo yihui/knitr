@@ -57,7 +57,7 @@ pandoc_one = function(input, format, cfg) {
     }
   }
   out = unname(if (!is.na(cfg['o'])) cfg['o'] else {
-    if (!is.na(cfg['output'])) cfg['output'] else sub_ext(input[1L], pandoc_ext(format))
+    if (!is.na(cfg['output'])) cfg['output'] else sub_ext(input, pandoc_ext(format))
   })
   cfg = cfg[setdiff(names(cfg), c('o', 'output', 'format'))]
   cmd = paste('pandoc', pandoc_arg(cfg), pandoc_arg(cmn), '-f markdown',
