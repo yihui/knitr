@@ -21,10 +21,6 @@ styler_assistant_latex = function(x) {
       start = str_c(start, '\\textit{')
       end = str_c('}', end)
     }
-    if (has('text-decoration', 'underline')) {
-      start = str_c(start, '\\underline{')
-      end = str_c('}', end)
-    }
     sprintf('%s#1%s', start, end)
   })
   sprintf('\\newcommand{\\hl%s}[1]{%s}%%', names(x), styles)
