@@ -32,5 +32,5 @@ styler_assistant_latex = function(x) {
 
 col2latexrgb = function(hex) {
   col = col2rgb(hex)[, 1]/255
-  paste(col, collapse = ',')
+  paste(round(col, 3), collapse = ',')
 }
