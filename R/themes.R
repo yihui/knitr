@@ -66,7 +66,7 @@ theme_to_header_latex = function(theme) {
 
   ## get background and foreground colors
   background = css_out$background$color
-  foreground = css_out$prompt$color
+  foreground = css_out$std$color
 
   ## write latex highlight header
   fgheader = color_def(foreground, 'fgcolor')
@@ -82,7 +82,7 @@ theme_to_header_html = function(theme){
     system.file('themes', sprintf('%s.css', theme), package = 'knitr')
   }
   css = css.parser(css_file)
-  bgcolor = css$background$color; fgcolor = css$prompt$color
+  bgcolor = css$background$color; fgcolor = css$std$color
   css_knitr = readLines(system.file('misc', 'knitr.css', package = 'knitr'))
   css_knitr[-2] = sub('^(\\s+background-color:\\s+)(.*)$', sprintf('\\1%s;', bgcolor), css_knitr[-2])
   css = c(css_knitr, sprintf('.source {\n  color: %s;\n}', fgcolor), readLines(css_file))
