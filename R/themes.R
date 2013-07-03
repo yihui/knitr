@@ -85,7 +85,7 @@ theme_to_header_html = function(theme){
   bgcolor = css$background$color; fgcolor = css$std$color
   css_knitr = readLines(system.file('misc', 'knitr.css', package = 'knitr'))
   css_knitr[-2] = sub('^(\\s+background-color:\\s+)(.*)$', sprintf('\\1%s;', bgcolor), css_knitr[-2])
-  css = c(css_knitr, sprintf('.source {\n  color: %s;\n}', fgcolor), readLines(css_file))
+  css = c(css_knitr, gsub('^([.][a-z]{3} )', '.hl\\1', readLines(css_file)[-(1:3)]))
   list(highlight = paste(css, collapse = '\n'))
 }
 
