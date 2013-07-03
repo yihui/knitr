@@ -194,6 +194,8 @@ for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'perl', 'python',
             'Rscript', 'ruby', 'sas', 'sed', 'sh', 'zsh')) {
   knit_engines$set(setNames(list(eng_interpreted), i))
 }
+rm(i)
+
 # additional engines
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
