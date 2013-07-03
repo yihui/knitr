@@ -127,6 +127,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     ## turn off fancy quotes, use smaller digits/width, warn immediately
     oopts = options(
       useFancyQuotes = FALSE, digits = 4L, warn = 1L, width = getOption('KNITR_WIDTH', 75L),
+      knitr.in.progress = TRUE,
       device = function(width = 7, height = 7, ...) pdf(NULL, width, height, ...)
     )
     on.exit(options(oopts), add = TRUE)

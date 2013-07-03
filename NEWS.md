@@ -28,6 +28,8 @@
 
 - added a new package option `unnamed.chunk.label` to set the chunk labels for unnamed chunks, e.g. `opts_knit$set(unnamed.chunk.label = 'fig')` will generate chunk labels `fig-1`, `fig-2`, ... (#555) (thanks, Noam Ross)
 
+- when `knit()` is running, a global option `knitr.in.progress` will be set to `TRUE`; this allows other package authors (e.g. `rCharts` and `googleVis`) to adjust certain package options according to `getOption('knitr.in.progress')` (thanks, Ramnath V, #564)
+
 ## BUG FIXES
 
 - fixed #502: using `layout()` and `par()` at the same time under R 3.0.0 may lead to a corrupt plot (thanks, Hong Xu http://tex.stackexchange.com/q/108335/9128)
