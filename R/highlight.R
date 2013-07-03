@@ -13,18 +13,18 @@ hi_latex = function(x) {
   x = gsub('\\\\textbackslash\\\\\\{\\\\\\}', '\\\\textbackslash{}', x)
   x = split_lines(x)
   i = grepl('^\\s*#', x)  # whole lines of comments
-  x[i] = sprintf('\\hlcomment{%s}', x[i])
+  x[i] = sprintf('\\hlcom{%s}', x[i])
   # comments: what if # inside quotes?
   if (any(idx <- grepl('#', x) & !grepl('"', x) & !i))
-    x[idx] = gsub('(#.*)', '\\\\hlcomment{\\1}', x[idx])
+    x[idx] = gsub('(#.*)', '\\\\hlcom{\\1}', x[idx])
   i = which(!i)  # not comments
   # function names
-  x[i] = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '\\\\hlfunctioncall{\\1}\\2(', x[i])
+  x[i] = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '\\\\hlkwd{\\1}\\2(', x[i])
   # character strings
-  x[i] = gsub('"([^"]*)"', '\\\\hlstring{"\\1"}', x[i])
-  x[i] = gsub("'([^']*)'", "\\\\hlstring{'\\1'}", x[i])
+  x[i] = gsub('"([^"]*)"', '\\\\hlstr{"\\1"}', x[i])
+  x[i] = gsub("'([^']*)'", "\\\\hlstr{'\\1'}", x[i])
   # do not highlight keywords at the moment
-  # x = gsub(hi.keywords, '\\1\\\\hlkeyword{\\2}\\3', x)
+  # x = gsub(hi.keywords, '\\1\\\\hlkwa{\\2}\\3', x)
   x
 }
 hi_html = function(x) {
@@ -33,13 +33,13 @@ hi_html = function(x) {
   x = gsub('>', '&gt;', x)
   x = split_lines(x)
   # character strings
-  x = gsub('"([^"]*)"', '<span class="string">"\\1"</span>', x)
-  x = gsub("'([^']*)'", "<span class=\"string\">'\\1'</span>", x)
+  x = gsub('"([^"]*)"', '<span class="hl str">"\\1"</span>', x)
+  x = gsub("'([^']*)'", "<span class=\"hl str\">'\\1'</span>", x)
   # function names
-  x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '<span class="functioncall">\\1</span>\\2(', x)
+  x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '<span class="hl kwd">\\1</span>\\2(', x)
   if (any(idx <- grepl('#', x) & !grepl('"', x)))
-    x[idx] = gsub('(#.*)', '<span class="comment">\\1</span>', x[idx])
-  gsub(hi.keywords, '\\1<span class="keyword">\\2</span>\\3', x)
+    x[idx] = gsub('(#.*)', '<span class="hl com">\\1</span>', x[idx])
+  gsub(hi.keywords, '\\1<span class="hl kwa">\\2</span>\\3', x)
 }
 
 # may require the highlight package
