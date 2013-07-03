@@ -1,50 +1,36 @@
-.background{
-  color: #ffffff ;
+.background {
+  color: #ffffff;
 }
-.number{
-  color: #000000 ;
-}
-.functioncall{
-  font-weight: 'bolder' ;
-  color: #000000 ;
-}
-.string{
-  color: #000000 ;
-}
-.keyword{
-  font-weight: bolder ;
+.num {
   color: #000000;
 }
-.argument{
-  color: #000000 ;
+.str {
+  color: #000000;
 }
-.comment{
-  color: #666666 ;
-}
-.roxygencomment{
+.com {
   color: #666666;
+  font-style: italic;
 }
-.formalargs{
+.opt {
+  color: #000000;
+  font-weight: bold;
+}
+.std {
   color: #000000;
 }
-.eqformalargs{
+.kwa {
   color: #000000;
+  font-weight: bold;
 }
-.assignement{
+.kwb {
   color: #000000;
+  font-weight: bold;
 }
-.package{
-  font-weight: bolder;
+.kwc {
   color: #000000;
+  font-weight: bold;
 }
-.slot{
-  font-style:italic;
+.kwd {
   color: #000000;
+  font-weight: bold;
 }
-.symbol{
-  color: #000000 ;
-}
-.prompt{
-  color: #000000 ;
-}
-
