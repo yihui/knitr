@@ -89,3 +89,59 @@ theme_to_header_html = function(theme){
   list(highlight = paste(css, collapse = '\n'))
 }
 
+# parse a theme file from Highlight v3.x by Andre Simon to an R list of the form
+# list(Colour = hex, Bold = TRUE, Italic = TRUE)
+theme2list = function(theme.file) {
+  y = readLines(theme.file, warn = FALSE)
+  i = grep('^\\s*Description', y)
+  if (i > 1) y = y[-seq_len(i - 1)]
+  y = gsub('[{]', 'list(', y)
+  y = gsub('[}]', ')', y)
+  y = gsub(';', '', y)
+  y = gsub('true', 'TRUE', y)
+  y = paste(y, collapse = '\n')
+  y = gsub(',\\s*)', ')', y)
+  env = new.env()
+  #cat(y, sep = '\n')
+  eval(parse(text = y), envir = env)
+  y = as.list(env)
+  for (i in seq_along(y$Keywords)) {
+    y[[paste('Keyword', i, sep = '')]] = y$Keywords[[i]]
+  }
+  y$Keywords = NULL
+  y
+}
+
+# mapping between CSS class and Highlight theme elements
+cls2thm = c(
+  background = 'Canvas', num = 'Number', str = 'String', com = 'BlockComment',
+  opt = 'Operator', std = 'Default',
+  kwa = 'Keyword1', kwb = 'Keyword2', kwc = 'Keyword3', kwd = 'Keyword4'
+)
+
+# turn a list from theme2list() to CSS code
+list2css = function(lst) {
+  css = character(length(cls2thm))
+  for (i in seq_along(cls2thm)) {
+    m = cls2thm[i]; l = lst[[m]]
+    # if not found, use the default style
+    if (!is.list(l)) l = lst[['Default']]
+    css[i] = paste(c(
+      sprintf('.%s {', names(m)), sprintf('  color: %s;', l$Colour),
+      sprintf('  font-weight: %s;', if (isTRUE(l$Bold)) 'bold'),
+      sprintf('  font-style: %s;', if (isTRUE(l$Italic)) 'italic'), '}'
+    ), collapse = '\n')
+  }
+  css
+}
+
+# generate CSS files for all themes in Andre Simon's Highlight package, e.g.
+# themes2css('~/tmp/highlight/themes', '~/downloads/knitr/inst/themes')
+themes2css = function(theme.path, css.path) {
+  for (f in list.files(theme.path, pattern = '[.]theme$', full.names = TRUE)) {
+    theme.name = sub('[.]theme$', '', basename(f))
+    css.file = file.path(css.path, sprintf('%s.css', theme.name))
+    writeLines(list2css(theme2list(f)), css.file)
+    message('theme ', theme.name, ' saved to ', css.file)
+  }
+}
