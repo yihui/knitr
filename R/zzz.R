@@ -2,7 +2,7 @@
   if (getRversion() >= '3.0.0') {
     tools::vignetteEngine(
       'knitr', weave = vweave, tangle = vtangle,
-      pattern = c('[.][rRsS](nw|tex)$', '[.][Rr](md|html|rst)$'), package = pkg
+      pattern = '[.]([rRsS](nw|tex)|[Rr](md|html|rst))$', package = pkg
     )
   }
   # add /usr/texbin to PATH for Mac OS
