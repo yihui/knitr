@@ -106,43 +106,28 @@ manual](https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf).
 
 ## Contributing
 
-### Get the code
+For very simple changes such as fixing typos, you can just edit the file by
+clicking the button `Edit` after you open the file online. For more
+complicated changes, you will have to manually create a [pull
+request](https://help.github.com/articles/using-pull-requests) after
+[forking](https://help.github.com/articles/fork-a-repo) this repository.
 
-First, [fork **knitr** on GitHub](https://github.com/yihui/knitr/fork), get
-the code, and prepare a feature branch.
-
-```bash
-git clone git@github.com:YOURNAME/knitr.git
-git branch my_feature_branch
-git checkout my_feature_branch
-```
-
-### Make changes and test them
-
-Now you are ready to work on the R code. When you are done, run the test
-suite to make sure you haven't broken anything. The tests are implemented
-using the **testthat** package, and the easiest way to run them is via the
-**devtools** package.
-
-```r
-library(devtools)
-setwd('my/knitr/development/dir')
-load_all('.')  # (re)load the package in the current directory
-test()         # run all testthat tests in the package
-```
-If you added any features, add your own tests in `inst/tests`.
-
-### Make a pull request
-
-Once you are happy with the changes you made, commit them to your feature
-branch and push that branch to GitHub.
+To make sure you did not break anything, you need to run tests, which are
+done through the [**testit**](http://cran.r-project.org/package=testit)
+package. If you added any features, add your own tests in `tests/testit/`.
+You can run tests using `make`, e.g.
 
 ```bash
-# Check you are still on your feature branch
-# git add and commit your changes
-git push origin my_feature_branch
+cd knitr
+make check
 ```
 
-Finally, open your repository on GitHub. Click the 'Pull request' button at
-the top of the page, and choose your feature branch as the head branch. Add
-a comment explaining what improvement you're offering. All done!
+If you are lazy or do not understand what I said above, just forget about
+it. The simplest thing to do is to look at the `Commits` panel after you
+sent the pull request -- if you see green check marks ✔ on your commits, you
+are fine. [Travis
+CI](http://yihui.name/en/2013/04/travis-ci-general-purpose/) will run the
+tests automatically for me. If your pull request passes the tests, you see
+green check marks.
+
+
