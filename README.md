@@ -130,4 +130,6 @@ CI](http://yihui.name/en/2013/04/travis-ci-general-purpose/) will run the
 tests automatically for me. If your pull request passes the tests, you see
 green check marks.
 
+## License
 
+This package is free and open source software, licensed under GPL.
