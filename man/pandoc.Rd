@@ -8,7 +8,8 @@ pandoc(input, format = "html", config = getOption("config.pandoc"))
   \item{input}{a character vector of the Markdown
   filenames}
 
-  \item{format}{the output format (see References)}
+  \item{format}{the output format (see References); it can
+  be a character vector of multiple formats}
 
   \item{config}{the Pandoc configuration file; if missing,
   it is assumed to be a file with the same base name as the
@@ -16,7 +17,7 @@ pandoc(input, format = "html", config = getOption("config.pandoc"))
   for \file{foo.md} it looks for \file{foo.pandoc})}
 }
 \value{
-  The output filename (or an error if the conversion
+  The output filename(s) (or an error if the conversion
   failed).
 }
 \description{
