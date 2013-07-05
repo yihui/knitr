@@ -42,10 +42,13 @@ hi_html = function(x) {
   gsub(hi.keywords, '\\1<span class="hl kwa">\\2</span>\\3', x)
 }
 
-# may require the highlight package
-highlight_fun = function(name) {
-  stopifnot(getRversion() >= '3.0.0')
-  getFromNamespace(name, 'highlight')
+hi_naive = function(x, format) {
+  switch(format, html = hi_html(x), latex = hi_latex(x))
+}
+
+# need functions from my highr package
+hilight_fun = function(name) {
+  getFromNamespace(name, 'highr')
 }
 
 .default.css = css.parser(.default.sty)
@@ -53,25 +56,13 @@ highlight_fun = function(name) {
 hilight_source = function(x, format, options) {
   if (!((format %in% c('latex', 'html')) && options$highlight))
     return(if (options$prompt) line_prompt(x) else x)
-  if (opts_knit$get('use.highlight')) {
-    highlight = highlight_fun('highlight')
-    r = if (format == 'latex') {
-      highlight_fun('renderer_latex')(
-        document = FALSE, styles = highlight_fun('styler_assistant_latex')(.default.css)
-      )
-    } else {
-      highlight_fun('renderer_html')(document = FALSE, header = function() '', footer = function() '')
-    }
-    out = capture.output(highlight(
-      parse.output = parse(text = x, keep.source = TRUE), renderer = r,
-      showPrompts = options$prompt, size = options$size
-    ))
-    if (format == 'html') out else {
-      # gsub() makes sure " will not produce an umlaut
-      c('\\begin{flushleft}', gsub('"', '"{}', out), '\\end{flushleft}')
-    }
+  res = if (has_package('highr')) {
+    hilight = hilight_fun('hilight')
+    hilight(x, format, prompt = options$prompt)
   } else {
     if (options$prompt) x = line_prompt(x)
-    if (format == 'html') hi_html(x) else c('\\begin{alltt}', hi_latex(x), '\\end{alltt}')
+    hi_naive(x, format)
   }
+  if (format == 'html') return(res)
+  c('\\begin{alltt}', res, '\\end{alltt}')
 }
