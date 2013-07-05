@@ -52,6 +52,8 @@
 
 - syntax highlighting is done by the **highr** package if it has been installed, otherwise the old regular-expression-based syntax highlighting will still be used; the **highr** package does much better syntax highlighting than the regexp-based approach (#327)
 
+- the commands for syntax highlighting were changed for compatibility with Andre Simon's Highlight package; this will affect LaTeX and HTML users, e.g. `\hlnumber` was renamed to `\hlnum`; cached LaTeX and HTML will have to be rebuilt for the new syntax highlighting commands to work (#470)
+
 - the script `inst/bin/knit` gains an option `-o` to specify the output filenames for `knit()` (#525, thanks, Aaron Wolen)
 
 - the default video format for animations is OGG (it is open and free) instead of MP4 (non-free) now; this means Internet Explorer under Windows may not work with the animations (consider Firefox, Chrome and other modern web browsers)
