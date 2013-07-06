@@ -128,20 +128,15 @@ This is achieved by mapping language tokens across the two formats
 \textbf{Highlight (CSS)} & \textbf{Eclipse (XML)}\tabularnewline
 \midrule
 background & background\tabularnewline
-number & number\tabularnewline
-functioncall & method\tabularnewline
-string & string\tabularnewline
-keyword & keyword\tabularnewline
-argument & localVariable\tabularnewline
-comment & singleLineComment\tabularnewline
-roxygencomment & javadoc\tabularnewline
-formalargs & localVariable\tabularnewline
-eqformalargs & foreground\tabularnewline
-assignement & foreground\tabularnewline
-package & class\tabularnewline
-slot & foreground\tabularnewline
-symbol & localVariableDeclaration\tabularnewline
-prompt & foreground\tabularnewline
+kwa & keyword\tabularnewline
+kwb & localVariableDeclaration\tabularnewline
+kwc & parameterVariable\tabularnewline
+kwd & method\tabularnewline
+num & number\tabularnewline
+str & string\tabularnewline
+com & singleLineComment\tabularnewline
+opt & operator\tabularnewline
+std & foreground\tabularnewline
 \bottomrule
 \end{tabular}
 \end{margintable}
