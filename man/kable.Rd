@@ -2,8 +2,8 @@
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
-kable(x, format, digits = getOption("digits"), row.names = TRUE, align = NULL, 
-    output = TRUE, ...)
+kable(x, format, digits = getOption("digits"), row.names = TRUE, align, output = TRUE, 
+    ...)
 }
 \arguments{
   \item{x}{an R object (typically a matrix or data frame)}
@@ -22,7 +22,8 @@ kable(x, format, digits = getOption("digits"), row.names = TRUE, align = NULL,
   \item{align}{the alignment of columns: a character vector
   consisting of \code{'l'} (left), \code{'c'} (center)
   and/or \code{'r'} (right); by default, numeric columns
-  are right-aligned, and other columns are left-aligned}
+  are right-aligned, and other columns are left-aligned; if
+  \code{align = NULL}, the default alignment is used}
 
   \item{output}{whether to write out the output in the
   console}
@@ -52,6 +53,10 @@ kable(head(iris), format = "html", table.attr = "id=\"mytable\"")
 kable(head(mtcars), format = "rst")
 # no row names
 kable(head(mtcars), format = "rst", row.names = FALSE)
+# R Markdown/Github Markdown tables
+kable(head(mtcars[, 1:5]), format = "markdown")
+# Pandoc tables
+kable(head(mtcars), format = "pandoc")
 # save the value
 x = kable(mtcars, format = "html", output = FALSE)
 cat(x, sep = "\\n")
