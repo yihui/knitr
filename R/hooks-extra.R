@@ -123,6 +123,7 @@ hook_plot_custom = function(before, options, envir){
                 rst = hook_plot_rst, hook_plot_md)
 
   n = options$fig.num
+  if (n == 0L) n = options$fig.num = 1L # make sure fig.num is at least 1
   if (n <= 1L) hook(c(name, ext), options) else {
     res = unlist(lapply(seq_len(n), function(i) {
       options$fig.cur = i
