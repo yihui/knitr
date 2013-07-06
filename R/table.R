@@ -32,6 +32,10 @@
 #' kable(head(mtcars), format = 'rst')
 #' # no row names
 #' kable(head(mtcars), format = 'rst', row.names = FALSE)
+#' # R Markdown/Github Markdown tables
+#' kable(head(mtcars[, 1:5]), format = 'markdown')
+#' # Pandoc tables
+#' kable(head(mtcars), format = 'pandoc')
 #' # save the value
 #' x = kable(mtcars, format = 'html', output = FALSE)
 #' cat(x, sep = '\n')
