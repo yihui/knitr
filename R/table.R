@@ -101,22 +101,39 @@ kable_html = function(x, table.attr = '') {
   ), sep = '', collapse = '\n')
 }
 
-kable_markdown = function(x, flavor = c('markdown', 'pandoc', 'github', 'html'), ...) {
-  flavor = match.arg(flavor)
-  if (flavor == 'html') return(kable_html(x, ...))
-  stop('not implemented yet')
-}
-
-kable_rst = function(x) {
+#' Generate tables for Markdown and reST
+#'
+#' This function provides the basis for Markdown and reST tables.
+#' @param x the data matrix
+#' @param sep.row a chracter vector of length 3 that specifies the separators
+#'   before the header, after the header and at the end of the table,
+#'   respectively
+#' @param sep.col the column separator
+#' @return A character vector of the table content.
+#' @noRd
+kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ') {
   l = apply(x, 2, function(z) max(nchar(z), na.rm = TRUE))
   cn = colnames(x)
   if (!is.null(cn)) {
     if (grepl('^\\s*$', cn[1L])) cn[1L] = 'id'  # no empty cells
     l = pmax(l, nchar(cn))
   }
-  s = sapply(l, function(i) paste(rep('=', i), collapse = ''))
-  res = rbind(if (!is.null(cn)) rbind(s, cn), s, x, s)
-  apply(mat_pad(res, l), 1, paste, collapse = '  ')
+  if (!is.null(align <- attr(x, 'align'))) l = l + 2
+  s = sapply(l, function(i) paste(rep(sep.row[2], i), collapse = ''))
+  res = rbind(if (!is.na(sep.row[1])) s, cn, s, x, if (!is.na(sep.row[3])) s)
+  apply(mat_pad(res, l, align), 1, paste, collapse = sep.col)
+}
+
+kable_rst = kable_mark
+
+# actually R Markdown
+kable_markdown = function(x) {
+  if (is.null(colnames(x))) stop('the table must have a header (column names)')
+  kable_mark(x, c(NA, '-', NA), ' | ')
+}
+
+kable_pandoc = function(x) {
+  kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA), '  ')
 }
 
 # pad a matrix
