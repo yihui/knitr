@@ -107,7 +107,7 @@ kable_markdown = function(x, flavor = c('markdown', 'pandoc', 'github', 'html'),
 
 kable_rst = function(x) {
   l = apply(x, 2, function(z) max(nchar(z), na.rm = TRUE))
-  cn <- colnames(x)
+  cn = colnames(x)
   if (!is.null(cn)) {
     if (grepl('^\\s*$', cn[1L])) cn[1L] = 'id'  # no empty cells
     l = pmax(l, nchar(cn))
