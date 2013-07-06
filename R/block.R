@@ -274,7 +274,8 @@ process_tangle = function(x) {
 }
 process_tangle.block = function(x) {
   params = opts_chunk$merge(x$params)
-  for (o in c('purl', 'eval', 'child')) params[o] = list(eval_lang(params[[o]]))
+  for (o in c('purl', 'eval', 'child'))
+    try(params[o] <- list(eval_lang(params[[o]])))
   if (isFALSE(params$purl)) return('')
   label = params$label; ev = params$eval
   code = if (!isFALSE(ev) && !is.null(params$child)) {
