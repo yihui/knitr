@@ -86,6 +86,9 @@ Shown below is how the \texttt{solarized-dark} theme looks like when
 applied to R code:
 
 <<demo-code, eval = FALSE>>=
+library(XML)
+library(plyr)
+library(reshape)
 # SCRAPE THE DATA FROM WEB 
 
 base_url = "http://www.mlsoccer.com/stats/%s/reg"
@@ -95,15 +98,15 @@ options(width = 40)
 #' Function to save data for each year
 save_data = function(y){
   url  = sprintf(base_url, y)
-  tab  = XML::readHTMLTable(url, header = FALSE, stringsAsFactors = FALSE);
+  tab  = readHTMLTable(url, header = FALSE, stringsAsFactors = FALSE);
   pos  = max(grep("United", tab));
   tab  = tab[[pos]];
   tab$year   = y;
   return(tab)            
 }
 	
-team.list  = plyr::llply(years, save_data);
-mls        = reshape::merge_recurse(team.list);
+team.list  = llply(years, save_data);
+mls        = merge_recurse(team.list);
 @
 
 
