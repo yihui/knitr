@@ -3,8 +3,8 @@
 if (!nzchar(Sys.which('lyx')) || system('lyx -version') != 0L) q()
 
 call_lyx = function(file) {
-  res = sapply(sprintf('lyx -e %s %s', c('knitr', 'r', 'pdf2'), file), 
-               system, USE.NAMES = FALSE)
+  res = sapply(sprintf('lyx -e %s %s', c('knitr', 'r', 'pdf2'), file),
+               system, ignore.stdout = TRUE, USE.NAMES = FALSE)
   unlink(sub('\\.lyx$', '.R', file))
   stopifnot(identical(res, integer(3L)))
 }
@@ -16,7 +16,7 @@ for (i in list.files(pattern = '\\.lyx$')) {
 }
 
 call_knit = function(cmd) {
-  stopifnot(identical(system(cmd), 0L))
+  stopifnot(identical(system(cmd, ignore.stdout = TRUE), 0L))
 }
 for (i in list.files(pattern = '\\.Rmd')) {
   message(i)
