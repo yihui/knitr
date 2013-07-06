@@ -47,7 +47,7 @@ kable = function(x, format, digits = getOption('digits'), row.names = TRUE,
   ncn = is.null(colnames(x))
   if (!is.matrix(x) && !is.data.frame(x)) x = as.data.frame(x)
   # numeric columns
-  isn = if (is.matrix(x)) is.numeric(x) else sapply(x, is.numeric)
+  isn = if (is.matrix(x)) rep(is.numeric(x), ncol(x)) else sapply(x, is.numeric)
   if (is.null(align)) align = ifelse(isn, 'r', 'l')
   # rounding
   x = apply(x, 2, function(z) if (is.numeric(z)) format(round(z, digits)) else z)
