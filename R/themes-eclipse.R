@@ -8,7 +8,7 @@
 #' @param id id of theme to save as CSS
 #' @return Path to the CSS file converted from the website.
 #' @references \url{http://www.eclipsecolorthemes.org/}
-#' @author Ramnath Vaidyanathan
+#' @author Ramnath Vaidyanathan and Yihui Xie
 #' @seealso \code{\link{knit_theme}}
 #' @export
 #' @examples ## http://www.eclipsecolorthemes.org/?view=theme&id=1
@@ -19,40 +19,35 @@
 #' knit_theme$set(thm)
 #' }
 eclipse_theme = function(id){
-  xml_file = tempfile()
-  url = "http://www.eclipsecolorthemes.org/?view=empty&action=download&theme=%s&type=xml"
-  download.file(sprintf(url, id), xml_file)
-  xml_to_css(xml_file)
-}
-
-
-#' Parse XML file of eclipse theme
-#'
-#' @param xml_file path to xml file of eclipse theme
-#' @return return a list containing theme name and syntax highlighting tokens.
-#' @noRd
-xml_to_list = function(xml_file){
   library(XML)
-  doc      = xmlParse(xml_file)
-  docname  = xmlAttrs(xmlRoot(doc), 'colorTheme[@name]')['name']
-  docname  = make.names(tolower(docname))
-  doclist  = xmlToList(doc)
-  list(doclist = doclist, docname = docname)
+  url = 'http://www.eclipsecolorthemes.org/?view=empty&action=download&theme=%s&type=xml'
+  doc = xmlParse(sprintf(url, id))
+  docname = xmlAttrs(xmlRoot(doc), 'colorTheme[@name]')['name']
+  docname = make.names(tolower(docname))
+  lst = xmlToList(doc)
+
+  css = character(length(css2ecl))
+  for (i in seq_along(css2ecl)) {
+    m = css2ecl[i]; l = lst[[m]]
+    # if not found, use the default style
+    if (is.null(l)) l = lst[['foreground']]
+    css[i] = paste(c(
+      sprintf('.%s {', names(m)), sprintf('  color: %s;', l['color']),
+      sprintf('  font-weight: %s;', if (identical(unname(l['bold']), 'true')) 'bold'),
+      sprintf('  font-style: %s;', if (identical(unname(l['italic']), 'true')) 'italic'), '}'
+    ), collapse = '\n')
+  }
+
+  css_file = file.path(tempdir(), sprintf('%s.css', docname))
+  writeLines(css, css_file)
+  message('Theme ', docname, ' saved to ', css_file)
+  css_file
+
 }
 
-#' Convert XML file with eclipse theme to a CSS style file for use by highlight
-#'
-#' @param xml_file path to xml file of eclipse theme
-#' @return saves css file of eclipse theme to the themes folder of knitr
-#' @noRd
-##  TODO: Parse more formatting variables like font-weight, font-style etc.
-xml_to_css = function(xml_file){
-  xml_list   = xml_to_list(xml_file)
-  doccolors  = lapply(xml_list$doclist, "[", 'color')
-  style      = xml_list$docname
-  css_file   = file.path(tempdir(), sprintf("%s.css", style))
-  template   = system.file('themes', 'eclipse.brew', package = 'knitr')
-  with(doccolors, knit(template, css_file))
-  message('Theme ', style, ' saved to ', css_file)
-  css_file
-}
+# mapping between CSS class and Eclipse theme elements
+css2ecl = c(
+  background = 'background', num = 'number', str = 'string', com = 'singleLineComment',
+  opt = 'operator', std = 'foreground',
+  kwa = 'keyword', kwb = 'localVariableDeclaration', kwc = 'parameterVariable', kwd = 'method'
+)
