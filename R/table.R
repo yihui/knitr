@@ -120,11 +120,13 @@ kable_rst = function(x) {
 }
 
 # pad a matrix
-mat_pad = function(m, width) {
+mat_pad = function(m, width, align = NULL) {
   stopifnot((n <- ncol(m)) == length(width))
   res = matrix('', nrow = nrow(m), ncol = n)
+  side = rep('both', n)
+  if (!is.null(align)) side = c(l = 'right', c = 'both', r = 'left')[align]
   for (j in 1:n) {
-    res[, j] = str_pad(m[, j], width[j], side = 'both')
+    res[, j] = str_pad(m[, j], width[j], side = side[j])
   }
   res
 }
