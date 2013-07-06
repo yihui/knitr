@@ -1,33 +1,33 @@
 .background {
-  color: #F7F7F7;
+  color: #F5F5F5;
 }
 .num {
-  color: #e12f76;
+  color: #AF0F91;
 }
 .str {
-  color: #9999FF;
+  color: #317ECC;
 }
 .com {
-  color: #2E9957;
+  color: #AD95AF;
+  font-style: italic;
 }
 .opt {
   color: #000000;
 }
 .std {
-  color: #333333;
+  color: #585858;
 }
 .kwa {
+  color: #295F94;
   font-weight: bold;
-  color: black;
 }
 .kwb {
-  font-weight: bold;
-  color: #000000;
+  color: #B05A65;
 }
 .kwc {
-  color: #B04005;
+  color: #55aa55;
 }
 .kwd {
-  color: #800054;
+  color: #BC5A65;
   font-weight: bold;
 }
