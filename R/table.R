@@ -39,7 +39,7 @@
 kable = function(x, format, digits = getOption('digits'), row.names = TRUE,
                  align = NULL, output = TRUE, ...) {
   if (missing(format)) format = getOption('knitr.table.format', switch(
-    out_format(), latex = 'latex', listings = 'latex', sweave = 'latex',
+    out_format() %n% 'markdown', latex = 'latex', listings = 'latex', sweave = 'latex',
     html = 'html', markdown = 'markdown', rst = 'rst',
     stop('table format not implemented yet!')
   ))
