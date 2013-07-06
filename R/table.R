@@ -13,7 +13,7 @@
 #' @param align the alignment of columns: a character vector consisting of
 #'   \code{'l'} (left), \code{'c'} (center) and/or \code{'r'} (right); by
 #'   default, numeric columns are right-aligned, and other columns are
-#'   left-aligned
+#'   left-aligned; if \code{align = NULL}, the default alignment is used
 #' @param output whether to write out the output in the console
 #' @param ... other arguments (see examples)
 #' @return A character vector of the table source code. When \code{output =
@@ -37,7 +37,7 @@
 #' cat(x, sep = '\n')
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
 kable = function(x, format, digits = getOption('digits'), row.names = TRUE,
-                 align = NULL, output = TRUE, ...) {
+                 align, output = TRUE, ...) {
   if (missing(format)) format = getOption('knitr.table.format', switch(
     out_format() %n% 'markdown', latex = 'latex', listings = 'latex', sweave = 'latex',
     html = 'html', markdown = 'markdown', rst = 'rst',
@@ -48,15 +48,17 @@ kable = function(x, format, digits = getOption('digits'), row.names = TRUE,
   if (!is.matrix(x) && !is.data.frame(x)) x = as.data.frame(x)
   # numeric columns
   isn = if (is.matrix(x)) rep(is.numeric(x), ncol(x)) else sapply(x, is.numeric)
-  if (is.null(align)) align = ifelse(isn, 'r', 'l')
+  if (missing(align) || (format == 'latex' && is.null(align)))
+    align = ifelse(isn, 'r', 'l')
   # rounding
   x = apply(x, 2, function(z) if (is.numeric(z)) format(round(z, digits)) else z)
   if (row.names && !is.null(rownames(x))) {
     x = cbind(' ' = rownames(x), x)
-    align = c('l', align)  # left align row names
+    if (!is.null(align)) align = c('l', align)  # left align row names
   }
   x = as.matrix(x)
   if (ncn) colnames(x) = NULL
+  if (!is.null(align)) align = rep(align, length.out = ncol(x))
   attr(x, 'align') = align
   res = do.call(paste('kable', format, sep = '_'), list(x = x, ...))
   if (output) cat(res, sep = '\n')
@@ -65,7 +67,7 @@ kable = function(x, format, digits = getOption('digits'), row.names = TRUE,
 
 kable_latex = function(x, booktabs = FALSE, longtable = FALSE) {
   if (!is.null(align <- attr(x, 'align'))) {
-    align = paste(rep(align, length.out = ncol(x)), collapse = if (booktabs) '' else '|')
+    align = paste(align, collapse = if (booktabs) '' else '|')
     align = paste('{', align, '}', sep = '')
   }
 
