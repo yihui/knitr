@@ -182,6 +182,5 @@ All package options are:
 - `stop_on_error`: (`0L`) an integer (`0L`, `1L` or `2L`) to be passed to the **evaluate** package to decide the behavior of errors in code chunks; see `?evaluate::evaluate` for details
 - `unnamed.chunk.label`: (`unnamed-chunk`) the label prefix for unnamed chunks
 - `upload.fun`: (`identity`) a function that takes a filename as its input, processes it and returns a character string when the output format is HTML or Markdown; typically it is a function to upload a image and return the link to the image, e.g. `opts_knit$set(upload.fun = imgur_upload)` can upload a file to <http://imgur.com> (see `?imgur_upload`)
-- `use.highlight`: (`FALSE`) whether to use the [**highlight**](http://cran.r-project.org/package=highlight) package
 - `verbose`: (`FALSE`) whether to show verbose information (e.g., R code in each chunk and message logs) or just show chunk labels and options
 
