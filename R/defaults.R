@@ -35,7 +35,7 @@ new_defaults = function(value = list()) {
 #' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
 opts_chunk = new_defaults(list(
   eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
-  cache = FALSE, dependson = NULL, cache.path = 'cache/',
+  cache = FALSE, dependson = NULL, cache.path = 'cache/', cache.vars = NULL,
   ref.label = NULL, child = NULL, engine = 'R',
   prompt = FALSE, comment = '##', autodep = FALSE,
   fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
@@ -44,7 +44,7 @@ opts_chunk = new_defaults(list(
   fig.env = 'figure', fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:',
   fig.pos = '', out.width = NULL, out.height = NULL, out.extra = NULL,
   resize.width = NULL, resize.height = NULL,
-  external = TRUE, sanitize = FALSE,
+  external = TRUE, sanitize = FALSE, purl = TRUE,
   highlight = TRUE, size = 'normalsize',
   warning = TRUE, error = TRUE, message = TRUE,
   background = '#F7F7F7', split = FALSE, include = TRUE,
