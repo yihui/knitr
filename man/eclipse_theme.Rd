@@ -28,7 +28,7 @@ knit_theme$set(thm)
 }
 }
 \author{
-  Ramnath Vaidyanathan
+  Ramnath Vaidyanathan and Yihui Xie
 }
 \references{
   \url{http://www.eclipsecolorthemes.org/}

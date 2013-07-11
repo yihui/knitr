@@ -2,7 +2,7 @@
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
-kable(x, format, digits = getOption("digits"), row.names = TRUE, align, output = TRUE, 
+kable(x, format, digits = getOption("digits"), row.names = NA, align, output = TRUE, 
     ...)
 }
 \arguments{
@@ -17,7 +17,9 @@ kable(x, format, digits = getOption("digits"), row.names = TRUE, align, output =
   \item{digits}{the maximum number of digits for numeric
   columns (passed to \code{round()})}
 
-  \item{row.names}{whether to include row names}
+  \item{row.names}{whether to include row names; by
+  default, row names are included if they are neither
+  \code{NULL} nor identical to \code{1:nrow(x)}}
 
   \item{align}{the alignment of columns: a character vector
   consisting of \code{'l'} (left), \code{'c'} (center)
