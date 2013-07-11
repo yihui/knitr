@@ -67,7 +67,7 @@ for example:
 - I wished [**brew**](http://cran.r-project.org/package=brew) could support
   graphics
 - I wished [**R2HTML**](http://cran.r-project.org/package=R2HTML) could
-  support R code highlighting
+  support R code syntax highlighting
 - ...
 
 The package **knitr** was designed to give the user access to every part of
