@@ -275,7 +275,7 @@ out_format = function(x) {
 #' fig_path(1:10, list(fig.path='foo-', label='bar'))
 fig_path = function(suffix = '', options = opts_current$get()) {
   path = valid_path(options$fig.path, options$label)
-  (if (out_format(c('latex', 'sweave', 'listings'))) sanitize_fn else
+  (if (out_format(c('latex', 'sweave', 'listings', 'markdown'))) sanitize_fn else
     str_c)(path, suffix)
 }
 # sanitize filename for LaTeX
