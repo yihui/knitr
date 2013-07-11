@@ -186,7 +186,14 @@ eng_highlight = function(options) {
   if (is.null(options$engine.opts)) options$engine.opts = '-S text'
   options$engine.opts[1L] = paste('-f', options$engine.opts[1L])
   options$echo = FALSE; options$results = 'asis'  # do not echo source code
-  eng_interpreted(options)
+  res = eng_interpreted(options)
+  if (out_format('latex')) {
+    set_header(highlight.extra = paste(c(sprintf(
+      '\\let\\hl%s\\hlstd', c('esc', 'pps', 'lin')
+    ), '\\let\\hlslc\\hlcom'), collapse = ' '))
+    paste(color_def(options$background), '\\begin{kframe}',
+          sub('(.*)\\\\\\\\(.*)', '\\1\\2', res), '\\end{kframe}', sep = '')
+  } else res
 }
 
 # set engines for interpreted languages
