@@ -9,7 +9,8 @@
 #'   in the global option \code{knitr.table.format}
 #' @param digits the maximum number of digits for numeric columns (passed to
 #'   \code{round()})
-#' @param row.names whether to include row names
+#' @param row.names whether to include row names; by default, row names are
+#'   included if they are neither \code{NULL} nor identical to \code{1:nrow(x)}
 #' @param align the alignment of columns: a character vector consisting of
 #'   \code{'l'} (left), \code{'c'} (center) and/or \code{'r'} (right); by
 #'   default, numeric columns are right-aligned, and other columns are
@@ -40,7 +41,7 @@
 #' x = kable(mtcars, format = 'html', output = FALSE)
 #' cat(x, sep = '\n')
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
-kable = function(x, format, digits = getOption('digits'), row.names = TRUE,
+kable = function(x, format, digits = getOption('digits'), row.names = NA,
                  align, output = TRUE, ...) {
   if (missing(format)) format = getOption('knitr.table.format', switch(
     out_format() %n% 'markdown', latex = 'latex', listings = 'latex', sweave = 'latex',
@@ -56,7 +57,9 @@ kable = function(x, format, digits = getOption('digits'), row.names = TRUE,
     align = ifelse(isn, 'r', 'l')
   # rounding
   x = apply(x, 2, function(z) if (is.numeric(z)) format(round(z, digits)) else z)
-  if (row.names && !is.null(rownames(x))) {
+  if (is.na(row.names))
+    row.names = !is.null(rownames(x)) && !identical(rownames(x), as.character(seq_len(NROW(x))))
+  if (row.names) {
     x = cbind(' ' = rownames(x), x)
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
