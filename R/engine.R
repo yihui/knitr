@@ -196,6 +196,12 @@ eng_highlight = function(options) {
   } else res
 }
 
+## save the code
+eng_cat = function(options) {
+  do.call(cat, c(list(options$code, sep = '\n'), options$engine.opts))
+  ''
+}
+
 # set engines for interpreted languages
 for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'perl', 'python',
             'Rscript', 'ruby', 'sas', 'sed', 'sh', 'zsh')) {
@@ -206,7 +212,7 @@ rm(i)
 # additional engines
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
-  c = eng_c, asy = eng_dot
+  c = eng_c, asy = eng_dot, cat = eng_cat
 )
 
 # possible values for engines (for auto-completion in RStudio)

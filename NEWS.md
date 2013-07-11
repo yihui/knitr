@@ -20,6 +20,8 @@
 
 - added a new engine `asy` for Asymptote, a vector graphics language (http://asymptote.sourceforge.net); see examples 093 at https://github.com/yihui/knitr-examples (thanks, Thibaut Lamadon, #559)
 
+- added a new engine `cat` to write the content of a code chunk to a file; see the example 095 at https://github.com/yihui/knitr-examples (thanks, Stephen Eglen)
+
 - the chunk option `fig.align` also works for Markdown output now, e.g., `fig.align = 'center'` will center images in HTML via the `style` attribute of the `<img>` tag (#387)
 
 - the argument `format` in the `pandoc()` function was vectorized, e.g. we can call `pandoc(input, format = c('html', 'latex'))` and the input file will be converted to HTML and LaTeX, respectively (#547, thanks, Jeroen Ooms)
