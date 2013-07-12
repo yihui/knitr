@@ -6,7 +6,7 @@
 \begin_preamble
 \usepackage{multicol, upquote}
 % \VignetteIndexEntry{knitr Reference Card}
-% \VignetteEngine{knitr}
+% \VignetteEngine{knitr::knitr}
 \end_preamble
 \use_default_options true
 \begin_modules

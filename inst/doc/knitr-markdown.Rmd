@@ -1,5 +1,5 @@
 <!--
-%\VignetteEngine{knitr}
+%\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{An R Markdown Vignette with knitr}
 -->
 
@@ -11,7 +11,7 @@ To enable Markdown vignettes in an R package, you need to
 
 - add `*.Rmd` files under the `inst/doc` or `vignettes` directory
 - add `VignetteBuilder: knitr` to the `DESCRIPTION` file
-- specify the vignette engine `\VignetteEngine{knitr}` in the `Rmd` files (inside HTML comments)
+- specify the vignette engine `\VignetteEngine{knitr::knitr}` in the `Rmd` files (inside HTML comments)
 
 ## View vignettes
 

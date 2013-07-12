@@ -1,5 +1,5 @@
 <!--
-%\VignetteEngine{knitr}
+%\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{Display Tables with the DataTables Library}
 -->
 
