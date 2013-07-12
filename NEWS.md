@@ -72,6 +72,10 @@
 
 - for Markdown output, the figure filenames no longer allow special characters like spaces, and special characters will be automatically replaced by `_`; this change will avoid problems when publishing to RPubs from RStudio: if figure paths contain special characters, the figures will not be uploaded (thanks, Sangsoon Woo)
 
+## MAINTAINENCE
+
+- the testing is done via the **testit** package now (http://cran.r-project.org/package=testit)
+
 # CHANGES IN knitr VERSION 1.2
 
 ## NEW FEATURES
