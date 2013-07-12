@@ -243,7 +243,7 @@ process_file = function(text, output) {
     }
     group = groups[[i]]
     res[i] = withCallingHandlers(
-      (if (tangle) process_tangle else process_group)(group),
+      if (tangle) process_tangle(group) else process_group(group),
       error = function(e) {
         cat(res, sep = '\n', file = output %n% '')
         message(
