@@ -236,6 +236,11 @@ process_file = function(text, output) {
     on.exit(close(pb), add = TRUE)
   }
   for (i in 1:n) {
+    if (!is.null(.knitEnv$terminate)) {
+      res[i] = paste(.knitEnv$terminate, collapse = '\n')
+      knit_exit(NULL)
+      break  # must have called knit_exit(), so exit early
+    }
     if (opts_knit$get('progress')) {
       setTxtProgressBar(pb, i)
       if (!tangle) cat('\n')  # under tangle mode, only show one progress bar
@@ -320,6 +325,27 @@ knit_child = function(..., eval = TRUE) {
   res = knit(..., tangle = opts_knit$get('tangle'),
              encoding = opts_knit$get('encoding') %n% getOption('encoding'))
   paste(c('', res), collapse = '\n')
+}
+
+#' Exit knitting early
+#'
+#' Sometimes we may want to exit the knitting process early, and completely
+#' ignore the rest of the document. This function provides a mechanism to
+#' terminate \code{\link{knit}()}.
+#' @param append a character vector to be appended to the results from
+#'   \code{knit()} so far; by default, it is \verb{\end{document}} for LaTeX
+#'   output, and \verb{</body></html>} for HTML output to make the output
+#'   document complete; for other types of output, it is an empty string
+#' @return Invisible \code{NULL}. An internal signal is set up (as a side
+#'   effect) to notify \code{knit()} to quit as if it had reached the end of the
+#'   document.
+#' @export
+#' @examples # see https://github.com/yihui/knitr-examples/blob/master/096-knit-exit.Rmd
+knit_exit = function(append) {
+  if (missing(append)) append = if (out_format(c('latex', 'sweave', 'listings')))
+    '\\end{document}' else if (out_format('html')) '</body>\n</html>' else ''
+  .knitEnv$terminate = append # use this terminate variable to notify knit()
+  invisible()
 }
 
 knit_log = new_defaults()  # knitr log for errors, warnings and messages
