@@ -50,7 +50,7 @@ tikz_dev = function(...) {
     xetex = getOption('tikzXelatexPackages'),
     luatex = getOption('tikzLualatexPackages')
   )
-  get('tikz', envir = as.environment('package:tikzDevice'))(
+  getFromNamespace('tikz', 'tikzDevice')(
     ..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages)
   )
 }
@@ -140,7 +140,7 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 ## this is mainly for Cairo and cairoDevice
 load_device = function(name, package, dpi = NULL) {
   do.call('library', list(package = package))
-  dev = get(name, envir = as.environment(str_c('package:', package)))
+  dev = getFromNamespace(name, package)
   ## dpi is for bitmap devices; units must be inches!
   if (is.null(dpi)) dev else function(...) dev(..., dpi = dpi, units = 'in')
 }
