@@ -32,9 +32,9 @@ all_patterns = list(
     ref.chunk = '^\\s*<<(.+)>>\\s*$', inline.code = '`r +([^`\n]+)\\s*`'),
 
   `rst` = list(
-    chunk.begin = "^\\s*[.][.]\\s+\\{r(.*)\\}\\s*$",
-    chunk.end = "^\\s*[.][.]\\s+[.][.]\\s*$", chunk.code = "^[.][.]",
-    ref.chunk = "^\\.*\\s*<<(.+)>>\\s*$", inline.code = ":r:`([^`]+)`"),
+    chunk.begin = '^\\s*[.][.]\\s+\\{r(.*)\\}\\s*$',
+    chunk.end = '^\\s*[.][.]\\s+[.][.]\\s*$', chunk.code = '^[.][.]',
+    ref.chunk = '^\\.*\\s*<<(.+)>>\\s*$', inline.code = ':r:`([^`]+)`'),
 
   `asciidoc` = list(
     chunk.begin = '^//\\s*begin[.]rcode(.*)$', chunk.end = '^//\\s*end[.]rcode\\s*$',

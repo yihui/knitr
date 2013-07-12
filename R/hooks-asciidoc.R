@@ -4,10 +4,10 @@ hook_plot_asciidoc = function(x, options) {
   base = opts_knit$get('base.url') %n% ''
   cap = .img.cap(options)
 
-  width = sprintf("width=%s", options$out.width)
-  height = sprintf("height=%s", options$out.height)
-  align = sprintf("align=%s", options$fig.align)
-  tags = paste(c(cap, width, height, align), collapse = ",")
+  width = sprintf('width=%s', options$out.width)
+  height = sprintf('height=%s', options$out.height)
+  align = sprintf('align=%s', options$fig.align)
+  tags = paste(c(cap, width, height, align), collapse = ',')
 
   sprintf('.%s\nimage::%s[%s]', cap, .upload.url(x), tags)
 }

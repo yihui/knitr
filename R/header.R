@@ -40,8 +40,8 @@ insert_header_latex = function(doc, b) {
   } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
     doc[1L] = str_c(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
-                      .knitEnv$tikzPackages, "\\begin{document}", doc[1L]), collapse = '\n')
-    doc[length(doc)] = paste(doc[length(doc)], "\\end{document}", sep = '\n')
+                      .knitEnv$tikzPackages, '\\begin{document}', doc[1L]), collapse = '\n')
+    doc[length(doc)] = paste(doc[length(doc)], '\\end{document}', sep = '\n')
   }
   doc
 }
@@ -49,7 +49,7 @@ insert_header_latex = function(doc, b) {
 make_header_html = function() {
   h = opts_knit$get('header')[['highlight']]
   if (opts_knit$get('self.contained')){
-    str_c('<style type="text/css">', h, '</style>', collapse = "\n")
+    str_c('<style type="text/css">', h, '</style>', collapse = '\n')
   } else {
     writeLines(h, 'knitr.css')
     '<link rel="stylesheet" href="knitr.css" type="text/css" />'
@@ -61,7 +61,7 @@ insert_header_html = function(doc, b) {
   if (length(i) == 1L) {
     l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])
-    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, "\n", make_header_html())
+    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, '\n', make_header_html())
   }
   doc
 }
@@ -113,7 +113,7 @@ set_header = function(...) {
 .header.hi.tex = theme_to_header_latex(.default.sty)$highlight
 .knitr.sty = file.path(.inst.dir, 'misc', 'knitr.sty')
 .knitr.sty = .knitr.sty[file.exists(.knitr.sty)][1L]
-.header.framed = paste(readLines(.knitr.sty), collapse = "\n")
+.header.framed = paste(readLines(.knitr.sty), collapse = '\n')
 # CSS for html syntax highlighting
 .header.hi.html = theme_to_header_html(.default.sty)$highlight
 rm(list = c('.inst.dir', '.knitr.sty')) # do not need them any more

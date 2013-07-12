@@ -38,10 +38,10 @@ concord_gen = function(infile, outfile) {
   # generate data structure
   vals = rle(steps)
   vals = c(1L, as.numeric(rbind(vals$lengths, vals$values)))
-  concordance = paste(strwrap(paste(vals, collapse = " ")), collapse = " %\n")
+  concordance = paste(strwrap(paste(vals, collapse = ' ')), collapse = ' %\n')
 
   confile = str_c(sans_ext(outfile), '-concordance.tex')
   # write to file
-  cat(str_c("\\Sconcordance{concordance:", outfile, ":", infile, ":%\n",
-            concordance, "}\n"), file = confile)
+  cat(str_c('\\Sconcordance{concordance:', outfile, ':', infile, ':%\n',
+            concordance, '}\n'), file = confile)
 }

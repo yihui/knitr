@@ -295,7 +295,7 @@ process_tangle.inline = function(x) {
     return(paste(line_prompt(x$input.src, "#' ", "#' "), collapse = '\n'))
   }
   code = x$code
-  if (length(code) == 0L || !any(idx <- grepl("knit_child\\(.+\\)", code)))
+  if (length(code) == 0L || !any(idx <- grepl('knit_child\\(.+\\)', code)))
     return('')
   str_c(str_c(sapply(code[idx], function(z) eval(parse_only(z))),
               collapse = '\n'), '\n')

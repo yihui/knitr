@@ -24,17 +24,17 @@ render_rst = function(strict = FALSE) {
   knit_hooks$restore()
   opts_chunk$set(dev = 'png', highlight = FALSE)
   hook.s = function(x, options) {
-    str_c("\n\n::\n\n", indent_block(x), "\n")
+    str_c('\n\n::\n\n', indent_block(x), '\n')
   }
   hook.t = function(x, options) {
-    make_directive('sourcecode', tolower(options$engine), "", content = x)
+    make_directive('sourcecode', tolower(options$engine), '', content = x)
   }
   hook.o = function(x, options) {
     if (output_asis(x, options)) return(x)
     hook.s(x, options)
   }
   hook.i = function(x) {
-    .inline.hook(format_sci(x, "rst"))
+    .inline.hook(format_sci(x, 'rst'))
   }
   knit_hooks$set(source = if (strict) hook.s else hook.t,
                  warning = hook.s, error = hook.s, message = hook.s,
@@ -58,8 +58,8 @@ render_rst = function(strict = FALSE) {
 #  .. figure:: fig.png
 #      :align: center
 #      :alt: cap
-make_directive = function(name, arg, opt, content = "") {
-  l1 = sprintf("\n.. %s:: %s\n", name, arg)
-  l2 = paste(sprintf(":%s: %s", names(opt), opt), collapse = "\n")
-  paste(l1, indent_block(l2), "\n\n", indent_block(content), sep = "")
+make_directive = function(name, arg, opt, content = '') {
+  l1 = sprintf('\n.. %s:: %s\n', name, arg)
+  l2 = paste(sprintf(':%s: %s', names(opt), opt), collapse = '\n')
+  paste(l1, indent_block(l2), '\n\n', indent_block(content), sep = '')
 }

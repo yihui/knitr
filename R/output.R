@@ -363,7 +363,7 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 #' @S3method wrap error
 #' @S3method wrap recordedplot
 wrap = function(x, options = list()) {
-  UseMethod("wrap", x)
+  UseMethod('wrap', x)
 }
 
 wrap.list = function(x, options = list()) {
@@ -395,7 +395,7 @@ msg_wrap = function(message, type, options) {
 }
 
 wrap.warning = function(x, options) {
-  msg_wrap(paste("Warning:", x$message, collapse = '\n'), 'warning', options)
+  msg_wrap(paste('Warning:', x$message, collapse = '\n'), 'warning', options)
 }
 
 wrap.message = function(x, options) {
@@ -403,7 +403,7 @@ wrap.message = function(x, options) {
 }
 
 wrap.error = function(x, options) {
-  msg_wrap(str_c("Error: ", x$message), 'error', options)
+  msg_wrap(str_c('Error: ', x$message), 'error', options)
 }
 
 wrap.recordedplot = function(x, options) {

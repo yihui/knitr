@@ -101,7 +101,7 @@ parse_params = function(params) {
   for (i in idx) if (identical(res[[i]], alist(,)[[1]])) res[[i]] = NULL
   idx = if (is.null(names(res)) && length(res) == 1L) 1L else which(names(res) == '')
   if ((n <- length(idx)) > 1L || (length(res) > 1L && is.null(names(res))))
-    stop("invalid chunk options: ", params,
+    stop('invalid chunk options: ', params,
          "\n(all options must be of the form 'tag=value' except the chunk label)")
   if (is.null(res$label)) {
     if (n == 0L) res$label = unnamed_chunk() else names(res)[idx] = 'label'
@@ -135,7 +135,7 @@ print.block = function(x, ...) {
   if (opts_knit$get('verbose')) {
     code = knit_code$get(params$label)
     if (length(code) && !is_blank(code)) {
-      cat("\n  ", str_pad(" R code chunk ", getOption('width') - 10L, 'both', '~'), "\n")
+      cat('\n  ', str_pad(' R code chunk ', getOption('width') - 10L, 'both', '~'), '\n')
       cat(paste('  ', code, collapse = '\n'), '\n')
       cat('  ', str_dup('~', getOption('width') - 10L), '\n')
     }
@@ -171,7 +171,7 @@ print.inline = function(x, ...) {
   if (nrow(x$location)) {
     cat('   ')
     if (opts_knit$get('verbose')) {
-      cat(str_pad(" inline R code fragments ",
+      cat(str_pad(' inline R code fragments ',
                   getOption('width') - 10L, 'both', '-'), '\n')
       cat(sprintf('    %s:%s %s', x$location[, 1], x$location[, 2], x$code),
           sep = '\n')

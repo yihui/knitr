@@ -58,21 +58,21 @@ tikz_dev = function(...) {
 ## save a recorded plot
 save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
-  path = paste(name, ext, sep = ".")
+  path = paste(name, ext, sep = '.')
 
   ## built-in devices
   device = switch(
     dev,
-    bmp = function(...) bmp(...,  res = dpi, units = "in"),
+    bmp = function(...) bmp(...,  res = dpi, units = 'in'),
     postscript = function(...) {
-      postscript(..., onefile = FALSE, horizontal = FALSE, paper = "special")
+      postscript(..., onefile = FALSE, horizontal = FALSE, paper = 'special')
     },
-    jpeg = function(...) jpeg(..., res = dpi, units = "in"),
+    jpeg = function(...) jpeg(..., res = dpi, units = 'in'),
     pdf = grDevices::pdf,
-    png = function(...) png(..., res = dpi, units = "in"),
+    png = function(...) png(..., res = dpi, units = 'in'),
     svg = grDevices::svg,
     pictex = grDevices::pictex,
-    tiff = function(...) tiff(..., res = dpi, units = "in"),
+    tiff = function(...) tiff(..., res = dpi, units = 'in'),
     win.metafile = grDevices::win.metafile,
     cairo_pdf = grDevices::cairo_pdf,
     cairo_ps = grDevices::cairo_ps,
@@ -121,11 +121,11 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     # add old wd to TEXINPUTS (see #188)
     oti = Sys.getenv('TEXINPUTS'); on.exit(Sys.setenv(TEXINPUTS = oti))
     Sys.setenv(TEXINPUTS = paste(owd, oti, sep = ':'))
-    system(paste(switch(getOption("tikzDefaultEngine"),
+    system(paste(switch(getOption('tikzDefaultEngine'),
                         pdftex = getOption('tikzLatex'),
-                        xetex = getOption("tikzXelatex"),
-                        luatex = getOption("tikzLualatex"),
-                        stop("a LaTeX engine must be specified for tikzDevice",
+                        xetex = getOption('tikzXelatex'),
+                        luatex = getOption('tikzLualatex'),
+                        stop('a LaTeX engine must be specified for tikzDevice',
                              call. = FALSE)), shQuote(basename(path))),
            ignore.stdout = TRUE)
     setwd(owd)

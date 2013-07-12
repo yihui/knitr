@@ -65,7 +65,7 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
                         encoding = getOption('encoding'), text = NULL) {
   x = if (is.null(text)) readLines(file(file, encoding = encoding), warn = FALSE) else text
   x = native_encode(x)
-  x = gsub_msg("removing \\usepackage{Sweave}",
+  x = gsub_msg('removing \\usepackage{Sweave}',
                '^\\s*\\\\usepackage(\\[.*\\])?\\{Sweave\\}', '', x)
   i = grep('^<<(.*)>>=\\s*$', x)
   if (length(i)) {
@@ -124,11 +124,11 @@ fix_sweave = function(x) {
   x = gsub_msg("replacing eps=TRUE with dev='postscript'",
                'eps\\s*=\\s*TRUE', "dev='postscript'", x)
 
-  x = gsub_msg("replacing results=tex with results=asis",
-               'results\\s*=\\s*tex', "results=asis", x)
-  x = gsub_msg("replacing results=verbatim with results=markup",
-               'results\\s*=\\s*verbatim', "results=markup", x)
-  x = gsub_msg("quoting the results option",
+  x = gsub_msg('replacing results=tex with results=asis',
+               'results\\s*=\\s*tex', 'results=asis', x)
+  x = gsub_msg('replacing results=verbatim with results=markup',
+               'results\\s*=\\s*verbatim', 'results=markup', x)
+  x = gsub_msg('quoting the results option',
                'results\\s*=\\s*(asis|markup|hide)', "results='\\1'", x)
 
   x = gsub_msg('replacing width/height with fig.width/fig.height',
@@ -140,16 +140,16 @@ fix_sweave = function(x) {
   x = gsub_msg("removing options 'print', 'term', 'stripe.white', 'prefix'",
                '(print|term|strip.white|prefix)\\s*=\\s*(TRUE|FALSE)', '', x)
 
-  x = gsub_msg("quoting options engine, fig.path, cache.path, fig.keep, fig.show, dev, out.width, out.height, fig.align",
+  x = gsub_msg('quoting options engine, fig.path, cache.path, fig.keep, fig.show, dev, out.width, out.height, fig.align',
                "(engine|fig\\.path|cache\\.path|fig\\.keep|fig\\.show|dev|out\\.width|out\\.height|fig\\.align)\\s*=\\s*([^,'\"]+)",
                "\\1='\\2'", x)
 
-  x = gsub_msg("changing keep.source=TRUE to tidy=FALSE",
+  x = gsub_msg('changing keep.source=TRUE to tidy=FALSE',
                'keep\\.source\\s*=\\s*TRUE', 'tidy=FALSE', x)
-  x = gsub_msg("changing keep.source=FALSE to tidy=TRUE",
+  x = gsub_msg('changing keep.source=FALSE to tidy=TRUE',
                'keep\\.source\\s*=\\s*FALSE', 'tidy=TRUE', x)
 
-  x = gsub_msg("doubling backslashes", '\\', '\\\\', x, fixed = TRUE)
+  x = gsub_msg('doubling backslashes', '\\', '\\\\', x, fixed = TRUE)
   # after we remove some options, there might be , ,
   while (length(grep(',\\s*,', x))) x = gsub(',\\s*,', ',', x)
   x = gsub('^(\\s*,\\s*)+|(\\s*,\\s*)+$', '', x)

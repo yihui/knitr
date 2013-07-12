@@ -103,7 +103,7 @@ stitch_rmd = function(...) {
 #' @examples # see the knit_expand vignette
 #' if (interactive()) browseVignettes(package='knitr')
 knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
-                       delim = c("{{", "}}") ){
+                       delim = c('{{', '}}') ){
 
   # check if delim is a pair, escaping regex as necessary
   if (length(delim) != 2L) stop('"delim" must be of length 2')

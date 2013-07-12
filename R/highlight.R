@@ -28,7 +28,7 @@ hi_latex = function(x) {
   x
 }
 hi_html = function(x) {
-  x = gsub('&', "&amp;", x)
+  x = gsub('&', '&amp;', x)
   x = gsub('<', '&lt;', x)
   x = gsub('>', '&gt;', x)
   x = split_lines(x)
