@@ -252,7 +252,7 @@ process_file = function(text, output) {
       error = function(e) {
         cat(res, sep = '\n', file = output %n% '')
         message(
-          'Quitting from lines ', str_c(current_lines(i), collapse = '-'),
+          'Quitting from lines ', paste(current_lines(i), collapse = '-'),
           ' (', knit_concord$get('infile'), ') '
         )
       }
@@ -377,9 +377,9 @@ wrap.character = function(x, options) {
 }
 
 wrap.source = function(x, options) {
-  src = str_replace(x$src, '\n$', '')
+  src = sub('\n$', '', x$src)
   src = hilight_source(src, out_format(), options)
-  src = str_c(c(src, ''), collapse = '\n')
+  src = paste(c(src, ''), collapse = '\n')
   knit_hooks$get('source')(src, options)
 }
 

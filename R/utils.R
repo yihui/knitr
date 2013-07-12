@@ -36,15 +36,15 @@ comment_out = function(x, prefix = '##', which = TRUE, newline = TRUE) {
 
 ## assign string in comments to a global variable
 comment_to_var = function(x, varname, pattern, envir) {
-  if (str_detect(x, pattern)) {
-    assign(varname, str_replace(x, pattern, ''), envir = envir)
+  if (grepl(pattern, x)) {
+    assign(varname, sub(pattern, '', x), envir = envir)
     return(TRUE)
   }
   FALSE
 }
 
 is_blank = function(x) {
-  if (length(x)) all(str_detect(x, '^\\s*$')) else TRUE
+  if (length(x)) all(grepl('^\\s*$', x)) else TRUE
 }
 valid_path = function(prefix, label) {
   if (length(prefix) == 0L || is.na(prefix) || prefix == 'NA') prefix = ''
@@ -80,10 +80,10 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   if (!out_format('latex')) return()
   if (length(db <- patterns$document.begin) != 1L) return()  # no \begin{document} pattern
   if (length(hb <- patterns$header.begin) != 1L) return()  # no \documentclass{} pattern
-  idx2 = str_detect(input, db)
+  idx2 = grepl(db, input)
   if (!any(idx2)) return()
   if ((idx2 <- which(idx2)[1]) < 2L) return()
-  txt = str_c(input[seq_len(idx2 - 1L)], collapse = '\n')  # rough preamble
+  txt = paste(input[seq_len(idx2 - 1L)], collapse = '\n')  # rough preamble
   idx = str_locate(txt, hb)  # locate documentclass
   if (any(is.na(idx))) return()
   options(tikzDocumentDeclaration = str_sub(txt, idx[, 1L], idx[, 2L]))
@@ -280,16 +280,16 @@ fig_path = function(suffix = '', options = opts_current$get()) {
 }
 # sanitize filename for LaTeX
 sanitize_fn = function(path, suffix = '') {
-  if (str_detect(path, '[^~:_./\\[:alnum:]-]')) {
+  if (grepl('[^~:_./\\[:alnum:]-]', path)) {
     warning('replaced special characters in figure filename "', path, '" -> "',
-            path <- str_replace_all(path, '[^~:_./\\[:alnum:]-]', '_'), '"')
+            path <- gsub('[^~:_./\\[:alnum:]-]', '_', path), '"')
   }
   # replace . with _ except ../ and ./
   s = str_split(path, '[/\\]')[[1L]]
-  i = (s != '.') & (s != '..') & str_detect(s, '\\.')
+  i = (s != '.') & (s != '..') & grepl('\\.', s)
   if (any(i)) {
-    s[i] = str_replace_all(s[i], '\\.', '_')
-    path = str_c(s, collapse = '/')
+    s[i] = gsub('\\.', '_', s[i])
+    path = paste(s, collapse = '/')
     warning('dots in figure paths replaced with _ ("', path, '")')
   }
   str_c(path, suffix)

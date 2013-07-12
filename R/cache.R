@@ -30,7 +30,7 @@ new_cache = function() {
 
   save_objects = function(objs, label, path) {
     ## save object names
-    x = str_c(c(label, objs), collapse = '\t')
+    x = paste(c(label, objs), collapse = '\t')
     if (file.exists(path)) {
       lines = readLines(path)
       idx = substr(lines, 1L, nchar(label)) == label
@@ -124,7 +124,7 @@ dep_auto = function(path = opts_chunk$get('cache.path')) {
   if (is.null(locals) || is.null(globals)) return(invisible(NULL))
   if (!identical(names(locals), names(globals))) {
     warning('corrupt dependency files? \ntry remove ',
-            str_c(paths, collapse = '; '))
+            paste(paths, collapse = '; '))
     return(invisible(NULL))
   }
   nms = intersect(names(knit_code$get()), names(locals)) # guarantee correct order

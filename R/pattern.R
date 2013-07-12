@@ -119,7 +119,7 @@ pat_asciidoc = function() set_pattern('asciidoc')
 
 ## is it a group pattern?
 group_pattern = function(pattern) {
-  !is.null(pattern) && str_detect(pattern, '\\(.+\\)')
+  !is.null(pattern) && grepl('\\(.+\\)', pattern)
 }
 
 ## automatically detect the chunk patterns

@@ -52,16 +52,16 @@ spin = function(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.fr
 
   format = match.arg(format)
   x = if (nosrc <- is.null(text)) readLines(hair, warn = FALSE) else split_lines(text)
-  r = rle(str_detect(x, doc))
+  r = rle(grepl(doc, x))
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
   p = .fmt.pat[[tolower(format)]]
-  p1 = str_replace(str_c('^', p[1L], '.*', p[2L], '$'), '\\{', '\\\\{')
+  p1 = gsub('\\{', '\\\\{', str_c('^', p[1L], '.*', p[2L], '$'))
 
   for (i in seq_len(n)) {
     block = x[seq(idx[i] + 1L, idx[i+1])]
     txt[[i]] = if (r$value[i]) {
       # normal text; just strip #'
-      str_replace(block, doc, '')
+      sub(doc, '', block)
     } else {
       # R code; #+/- indicates chunk options
       block = strip_white(block) # rm white lines in beginning and end
@@ -69,7 +69,7 @@ spin = function(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.fr
       if (length(opt <- grep('^#+(\\+|-| ----+| @knitr)', block))) {
         block[opt] = str_c(p[1L], gsub('^#+(\\+|-| ----+| @knitr)\\s*|-*\\s*$', '', block[opt]), p[2L])
       }
-      if (!str_detect(block[1L], p1)) {
+      if (!grepl(p1, block[1L])) {
         block = c(str_c(p[1L], p[2L]), block)
       }
       c('', block, p[3L], '')
@@ -78,7 +78,7 @@ spin = function(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.fr
 
   txt = unlist(txt)
   # make it a complete TeX document if document class not specified
-  if (report && format %in% c('Rnw', 'Rtex') && !str_detect(txt, '^\\s*\\\\documentclass')) {
+  if (report && format %in% c('Rnw', 'Rtex') && !grepl('^\\s*\\\\documentclass', txt)) {
     txt = c('\\documentclass{article}', '\\begin{document}', txt, '\\end{document}')
   }
   if (nosrc) {

@@ -41,7 +41,7 @@ insert_header_latex = function(doc, b) {
     # in parent mode, we fill doc to be a complete document
     doc[1L] = str_c(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
                       .knitEnv$tikzPackages, "\\begin{document}", doc[1L]), collapse = '\n')
-    doc[length(doc)] = str_c(doc[length(doc)], "\\end{document}", sep = '\n')
+    doc[length(doc)] = paste(doc[length(doc)], "\\end{document}", sep = '\n')
   }
   doc
 }
@@ -57,7 +57,7 @@ make_header_html = function() {
 }
 
 insert_header_html = function(doc, b) {
-  i = which(str_detect(doc, b))
+  i = grep(b, doc)
   if (length(i) == 1L) {
     l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])

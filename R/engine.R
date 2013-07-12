@@ -28,10 +28,10 @@ knit_engines = new_defaults()
 # give me source code, text output and I return formatted text using the three
 # hooks: source, output and chunk
 engine_output = function(options, code, out, extra = NULL) {
-  if (length(code) != 1L) code = str_c(code, collapse = '\n')
-  if (length(out) != 1L) out = str_c(out, collapse = '\n')
-  code = str_replace(code, '([^\n]+)$', '\\1\n')
-  out = str_replace(out, '([^\n]+)$', '\\1\n')
+  if (length(code) != 1L) code = paste(code, collapse = '\n')
+  if (length(out) != 1L) out = paste(out, collapse = '\n')
+  code = sub('([^\n]+)$', '\\1\n', code)
+  out = sub('([^\n]+)$', '\\1\n', out)
   if (options$engine == 'Rscript') options$engine = 'r'
   txt = paste(c(
     if (options$echo) knit_hooks$get('source')(code, options),
@@ -68,7 +68,7 @@ eng_interpreted = function(options) {
   } else paste(switch(
     engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
     ruby = '-e', sh = '-c', zsh = '-c', NULL
-  ), shQuote(str_c(options$code, collapse = '\n')))
+  ), shQuote(paste(options$code, collapse = '\n')))
   # FIXME: for these engines, the correct order is options + code + file
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
     paste(code, options$engine.opts) else paste(options$engine.opts, code)
@@ -96,7 +96,7 @@ eng_c = function(options) {
 ## Rcpp
 eng_Rcpp = function(options) {
 
-  code = str_c(options$code, collapse = '\n')
+  code = paste(options$code, collapse = '\n')
   # engine.opts is a list of arguments to be passed to Rcpp function, e.g.
   # engine.opts=list(plugin='RcppArmadillo')
   opts = options$engine.opts

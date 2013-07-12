@@ -28,7 +28,7 @@ call_block = function(block) {
   if (!is.null(params$child)) {
     if (!params$eval) return('')
     cmds = lapply(sc_split(params$child), knit_child)
-    out = str_c(unlist(cmds), collapse = '\n')
+    out = paste(unlist(cmds), collapse = '\n')
     return(out)
   }
 
@@ -64,7 +64,7 @@ block_exec = function(options) {
     output = in_dir(opts_knit$get('root.dir') %n% input_dir(),
                     knit_engines$get(options$engine)(options))
     res.after = run_hooks(before = FALSE, options)
-    output = str_c(c(res.before, output, res.after), collapse = '')
+    output = paste(c(res.before, output, res.after), collapse = '')
     if (options$cache) block_cache(options, output, character(0))
     return(output)
   }
@@ -165,7 +165,7 @@ block_exec = function(options) {
     res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
   })
 
-  output = str_c(c(res.before, output, res.after), collapse = '')  # insert hook results
+  output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
   output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
 
   if (options$cache) {
@@ -280,10 +280,10 @@ process_tangle.block = function(x) {
   label = params$label; ev = params$eval
   code = if (!isFALSE(ev) && !is.null(params$child)) {
     cmds = lapply(sc_split(params$child), knit_child)
-    str_c(unlist(cmds), collapse = '\n')
+    paste(unlist(cmds), collapse = '\n')
   } else knit_code$get(label)
   # read external code if exists
-  if (!isFALSE(ev) && length(code) && str_detect(code, 'read_chunk\\(.+\\)')) {
+  if (!isFALSE(ev) && length(code) && grepl('read_chunk\\(.+\\)', code)) {
     eval(parse_only(unlist(str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
   }
   code = parse_chunk(code)
@@ -292,10 +292,10 @@ process_tangle.block = function(x) {
 }
 process_tangle.inline = function(x) {
   if (opts_knit$get('documentation') == 2L) {
-    return(str_c(line_prompt(x$input.src, "#' ", "#' "), collapse = '\n'))
+    return(paste(line_prompt(x$input.src, "#' ", "#' "), collapse = '\n'))
   }
   code = x$code
-  if (length(code) == 0L || !any(idx <- str_detect(code, "knit_child\\(.+\\)")))
+  if (length(code) == 0L || !any(idx <- grepl("knit_child\\(.+\\)", code)))
     return('')
   str_c(str_c(sapply(code[idx], function(z) eval(parse_only(z))),
               collapse = '\n'), '\n')
@@ -304,7 +304,7 @@ process_tangle.inline = function(x) {
 
 # add a label [and extra chunk options] to a code chunk
 label_code = function(code, label) {
-  code = str_c(c('', code, ''), collapse = '\n')
+  code = paste(c('', code, ''), collapse = '\n')
   if (opts_knit$get('documentation') == 0L) return(code)
   str_c('## ----', str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
         '----', code)

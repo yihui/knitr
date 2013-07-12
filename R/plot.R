@@ -58,7 +58,7 @@ tikz_dev = function(...) {
 ## save a recorded plot
 save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
-  path = str_c(name, ".", ext)
+  path = paste(name, ext, sep = ".")
 
   ## built-in devices
   device = switch(
@@ -116,17 +116,17 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
   ## compile tikz to pdf
   if (dev == 'tikz' && options$external) {
-    unlink(pdf.plot <- str_c(name, '.pdf'))
+    unlink(pdf.plot <- paste(name, '.pdf', sep = ''))
     owd = setwd(dirname(path))
     # add old wd to TEXINPUTS (see #188)
     oti = Sys.getenv('TEXINPUTS'); on.exit(Sys.setenv(TEXINPUTS = oti))
-    Sys.setenv(TEXINPUTS = str_c(owd, oti, sep = ':'))
-    system(str_c(switch(getOption("tikzDefaultEngine"),
+    Sys.setenv(TEXINPUTS = paste(owd, oti, sep = ':'))
+    system(paste(switch(getOption("tikzDefaultEngine"),
                         pdftex = getOption('tikzLatex'),
                         xetex = getOption("tikzXelatex"),
                         luatex = getOption("tikzLualatex"),
                         stop("a LaTeX engine must be specified for tikzDevice",
-                             call. = FALSE)), shQuote(basename(path)), sep = ' '),
+                             call. = FALSE)), shQuote(basename(path))),
            ignore.stdout = TRUE)
     setwd(owd)
     if (file.exists(pdf.plot)) ext = 'pdf' else {

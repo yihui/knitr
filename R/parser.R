@@ -12,8 +12,8 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
     set_preamble(lines, patterns)  # prepare for tikz option 'standAlone'
   }
 
-  blks = str_detect(lines, chunk.begin)
-  txts = filter_chunk_end(blks, str_detect(lines, chunk.end))
+  blks = grepl(chunk.begin, lines)
+  txts = filter_chunk_end(blks, grepl(chunk.end, lines))
   tmp = logical(n); tmp[blks | txts] = TRUE; lines[txts] = ''
 
   groups = unname(split(lines, cumsum(tmp)))
@@ -22,7 +22,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
 
   ## parse 'em all
   lapply(groups, function(g) {
-    block = str_detect(g[1], chunk.begin)
+    block = grepl(chunk.begin, g[1])
     if (!set.preamble && !parent_mode()) {
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
     }
@@ -35,7 +35,7 @@ knit_code = new_defaults()
 
 ## strip the pattern in code
 strip_block = function(x, prefix = NULL) {
-  if (!is.null(prefix) && (length(x) > 1)) x[-1L] = str_replace(x[-1L], prefix, '')
+  if (!is.null(prefix) && (length(x) > 1)) x[-1L] = sub(prefix, '', x[-1L])
   x
 }
 
@@ -78,7 +78,8 @@ parse_block = function(input, patterns) {
 }
 
 ## autoname for unnamed chunk
-unnamed_chunk = function() str_c(opts_knit$get('unnamed.chunk.label'), "-", chunk_counter())
+unnamed_chunk = function()
+  paste(opts_knit$get('unnamed.chunk.label'), chunk_counter(), sep = '-')
 
 ## parse params from chunk header
 parse_params = function(params) {
@@ -87,7 +88,7 @@ parse_params = function(params) {
   if (params == '') return(list(label = unnamed_chunk()))
 
   res = withCallingHandlers(
-    eval(parse_only(str_c('alist(', quote_label(params), ')'))),
+    eval(parse_only(paste('alist(', quote_label(params), ')'))),
     error = function(e) {
       message('(*) NOTE: I saw chunk options "', params,
               '"\n please go to http://yihui.name/knitr/options',
@@ -135,7 +136,7 @@ print.block = function(x, ...) {
     code = knit_code$get(params$label)
     if (length(code) && !is_blank(code)) {
       cat("\n  ", str_pad(" R code chunk ", getOption('width') - 10L, 'both', '~'), "\n")
-      cat(str_c('   ', code, collapse = '\n'), '\n')
+      cat(paste('  ', code, collapse = '\n'), '\n')
       cat('  ', str_dup('~', getOption('width') - 10L), '\n')
     }
     cat(paste('##------', date(), '------##'), sep = '\n')
@@ -149,11 +150,11 @@ parse_inline = function(input, patterns) {
 
   inline.code = patterns$inline.code; inline.comment = patterns$inline.comment
   if (!is.null(inline.comment)) {
-    idx = str_detect(input, inline.comment)
+    idx = grepl(inline.comment, input)
     # strip off inline code
-    input[idx] = str_replace_all(input[idx], inline.code, '\\1')
+    input[idx] = gsub(inline.code, '\\1', input[idx])
   }
-  input = str_c(input, collapse = '\n') # merge into one line
+  input = paste(input, collapse = '\n') # merge into one line
 
   loc = cbind(start = numeric(0), end = numeric(0))
   if (group_pattern(inline.code)) loc = str_locate_all(input, inline.code)[[1]]
@@ -265,10 +266,10 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
     knit_code$set(code)
     return(invisible())
   }
-  idx = cumsum(str_detect(lines, lab))
+  idx = cumsum(grepl(lab, lines))
   if (all(idx == 0)) return(invisible())
   groups = unname(split(lines[idx != 0], idx[idx != 0]))
-  labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\2'))
+  labels = str_trim(gsub(lab, '\\2', sapply(groups, `[`, 1)))
   code = lapply(groups, strip_chunk)
   idx = nzchar(labels); code = code[idx]; labels = labels[idx]
   knit_code$set(setNames(code, labels))
@@ -312,12 +313,12 @@ strip_white = function(x) {
 ## (recursively) parse chunk references inside a chunk
 parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   if (length(x) == 0L) return(x)
-  if (!group_pattern(rc) || !any(idx <- str_detect(x, rc))) return(x)
-  labels = str_replace(x[idx], rc, '\\1')
+  if (!group_pattern(rc) || !any(idx <- grepl(rc, x))) return(x)
+  labels = sub(rc, '\\1', x[idx])
   code = knit_code$get(labels)
   if (length(labels) <= 1L) code = list(code)
   x[idx] = unlist(lapply(code, function(z) {
-    str_c(parse_chunk(z, rc), collapse = '\n')
+    paste(parse_chunk(z, rc), collapse = '\n')
   }), use.names = FALSE)
   x
 }

@@ -129,7 +129,7 @@ hook_plot_custom = function(before, options, envir){
       options$fig.cur = i
       hook(c(str_c(name, i), ext), reduce_plot_opts(options))
     }), use.names = FALSE)
-    str_c(res, collapse = '')
+    paste(res, collapse = '')
   }
 }
 #' @export

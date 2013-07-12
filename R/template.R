@@ -62,7 +62,7 @@ stitch = function(script,
   out = knit(input, output, envir = envir, text = txt)
   switch(file_ext(out), tex = {
     texi2pdf(out, clean = TRUE)
-    message('PDF output at: ', str_replace(out, '\\.tex$', '.pdf'))
+    message('PDF output at: ', sub_ext(out, 'pdf'))
   }, md = {
     out.html = sub_ext(out, 'html')
     markdown::markdownToHTML(out, out.html)
@@ -110,11 +110,11 @@ knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
   delim = gsub('([.|()\\^{}+$*?]|\\[|\\])', '\\\\\\1', delim)
   delim = str_c(delim[1L], '((.|\n)+?)', delim[2L])
 
-  txt = str_c(text, collapse = '\n'); delim = perl(delim)
+  txt = paste(text, collapse = '\n'); delim = perl(delim)
   loc = str_locate_all(txt, delim)[[1L]]
   if (nrow(loc) == 0L) return(txt) # no match
   mat = str_extract_all(txt, delim)[[1L]]
-  mat = str_replace(mat, delim, '\\1')
+  mat = sub(delim, '\\1', mat)
   env = list(...)
   env = if (length(env)) list2env(env, parent = parent.frame()) else parent.frame()
   inline_exec(list(code = mat, input = txt, location = loc),
