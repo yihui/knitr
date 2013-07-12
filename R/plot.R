@@ -37,8 +37,7 @@ check_dev = function(dev) {
 quartz_dev = function(type, dpi) {
   force(type); force(dpi)
   function(file, width, height, ...) {
-    quartz(file = file, width = width, height = height, type = type, dpi = dpi,
-           ...)
+    grDevices::quartz(file = file, width = width, height = height, type = type, dpi = dpi, ...)
   }
 }
 
@@ -74,7 +73,7 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     svg = grDevices::svg,
     pictex = grDevices::pictex,
     tiff = function(...) tiff(..., res = dpi, units = "in"),
-    win.metafile = function(...) win.metafile(...),
+    win.metafile = grDevices::win.metafile,
     cairo_pdf = grDevices::cairo_pdf,
     cairo_ps = grDevices::cairo_ps,
 
