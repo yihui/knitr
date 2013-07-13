@@ -116,9 +116,12 @@ kable_html = function(x, table.attr = '') {
 #'   before the header, after the header and at the end of the table,
 #'   respectively
 #' @param sep.col the column separator
+#' @param align.fun a function to process the separator under the header
+#'   according to alignment
 #' @return A character vector of the table content.
 #' @noRd
-kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ') {
+kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
+                      align.fun = function(s, a) s) {
   l = apply(x, 2, function(z) max(nchar(z), na.rm = TRUE))
   cn = colnames(x)
   if (!is.null(cn)) {
@@ -127,7 +130,8 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ') {
   }
   if (!is.null(align <- attr(x, 'align'))) l = l + 2
   s = sapply(l, function(i) paste(rep(sep.row[2], i), collapse = ''))
-  res = rbind(if (!is.na(sep.row[1])) s, cn, s, x, if (!is.na(sep.row[3])) s)
+  res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
+              x, if (!is.na(sep.row[3])) s)
   apply(mat_pad(res, l, align), 1, paste, collapse = sep.col)
 }
 
@@ -136,7 +140,14 @@ kable_rst = kable_mark
 # actually R Markdown
 kable_markdown = function(x) {
   if (is.null(colnames(x))) stop('the table must have a header (column names)')
-  kable_mark(x, c(NA, '-', NA), ' | ')
+  kable_mark(x, c(NA, '-', NA), ' | ', align.fun = function(s, a) {
+    if (is.null(a)) return(s)
+    r = c(l = '^.', c = '^.|.$', r = '.$')
+    for (i in seq_along(s)) {
+      s[i] = gsub(r[a[i]], ':', s[i])
+    }
+    s
+  })
 }
 
 kable_pandoc = function(x) {
