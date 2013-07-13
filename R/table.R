@@ -4,9 +4,9 @@
 #' intended to replace any other R packages for making tables.
 #' @param x an R object (typically a matrix or data frame)
 #' @param format a character string; possible values are \code{latex},
-#'   \code{html}, \code{markdown} and \code{rst}; this will be automatically
-#'   determined if the function is called within \pkg{knitr}; it can also be set
-#'   in the global option \code{knitr.table.format}
+#'   \code{html}, \code{markdown}, \code{pandoc}, and \code{rst}; this will be
+#'   automatically determined if the function is called within \pkg{knitr}; it
+#'   can also be set in the global option \code{knitr.table.format}
 #' @param digits the maximum number of digits for numeric columns (passed to
 #'   \code{round()})
 #' @param row.names whether to include row names; by default, row names are
@@ -20,6 +20,9 @@
 #' @return A character vector of the table source code. When \code{output =
 #'   TRUE}, the results are also written into the console as a side-effect.
 #' @seealso Other R packages such as \pkg{xtable} and \pkg{tables}.
+#' @note The tables for \code{format = 'markdown'} also work for Pandoc when the
+#'   \code{pipe_tables} extension is enabled (this is the default behavior for
+#'   Pandoc >= 1.10).
 #' @export
 #' @examples kable(head(iris), format = 'latex')
 #' kable(head(iris), format = 'html')
@@ -140,7 +143,7 @@ kable_rst = kable_mark
 # actually R Markdown
 kable_markdown = function(x) {
   if (is.null(colnames(x))) stop('the table must have a header (column names)')
-  kable_mark(x, c(NA, '-', NA), ' | ', align.fun = function(s, a) {
+  res = kable_mark(x, c(NA, '-', NA), '|', align.fun = function(s, a) {
     if (is.null(a)) return(s)
     r = c(l = '^.', c = '^.|.$', r = '.$')
     for (i in seq_along(s)) {
@@ -148,6 +151,7 @@ kable_markdown = function(x) {
     }
     s
   })
+  sprintf('|%s|', res)
 }
 
 kable_pandoc = function(x) {
