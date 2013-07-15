@@ -84,6 +84,10 @@
 
 - the testing is done via the **testit** package now (http://cran.r-project.org/package=testit)
 
+## MISC
+
+- **knitr** becomes an affiliated project of FOAS (Foundation for Open Access Statistics): http://www.foastat.org/projects.html
+
 # CHANGES IN knitr VERSION 1.2
 
 ## NEW FEATURES
