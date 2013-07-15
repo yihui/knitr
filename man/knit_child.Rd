@@ -2,13 +2,16 @@
 \alias{knit_child}
 \title{Knit a child document}
 \usage{
-knit_child(..., eval = TRUE)
+knit_child(..., options = NULL)
 }
 \arguments{
   \item{...}{arguments passed to \code{\link{knit}}}
 
-  \item{eval}{logical: whether to evaluate the child
-  document}
+  \item{options}{a list of chunk options to be used as
+  global options inside the child document (ignored if not
+  a list); when we use the \code{child} option in a parent
+  chunk, the chunk options of the parent chunk will be
+  passed to the \code{options} argument here}
 }
 \value{
   A character string of the content of the compiled child

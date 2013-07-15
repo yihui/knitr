@@ -9,10 +9,11 @@ kable(x, format, digits = getOption("digits"), row.names = NA, align, output = T
   \item{x}{an R object (typically a matrix or data frame)}
 
   \item{format}{a character string; possible values are
-  \code{latex}, \code{html}, \code{markdown} and
-  \code{rst}; this will be automatically determined if the
-  function is called within \pkg{knitr}; it can also be set
-  in the global option \code{knitr.table.format}}
+  \code{latex}, \code{html}, \code{markdown},
+  \code{pandoc}, and \code{rst}; this will be automatically
+  determined if the function is called within \pkg{knitr};
+  it can also be set in the global option
+  \code{knitr.table.format}}
 
   \item{digits}{the maximum number of digits for numeric
   columns (passed to \code{round()})}
@@ -41,6 +42,11 @@ kable(x, format, digits = getOption("digits"), row.names = NA, align, output = T
   This is a very simple table generator. It is simply by
   design. It is not intended to replace any other R
   packages for making tables.
+}
+\note{
+  The tables for \code{format = 'markdown'} also work for
+  Pandoc when the \code{pipe_tables} extension is enabled
+  (this is the default behavior for Pandoc >= 1.10).
 }
 \examples{
 kable(head(iris), format = "latex")
