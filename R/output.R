@@ -325,6 +325,7 @@ knit_child = function(..., options = NULL) {
   opts_knit$set(child = TRUE) # yes, in child mode now
   on.exit(opts_knit$set(child = child)) # restore child status
   if (is.list(options)) {
+    options$label = options$child = NULL  # do not need to pass the parent label on
     optc = opts_chunk$get(); opts_chunk$set(options)
     on.exit(opts_chunk$restore(optc), add = TRUE)
   }
