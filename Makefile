@@ -33,7 +33,7 @@ examples:
 	Rscript knit-all.R
 
 vignettes:
-	cd inst/doc;\
+	cd vignettes;\
 	lyx -e knitr knitr-intro.lyx;\
 	lyx -e knitr knitr-refcard.lyx
 

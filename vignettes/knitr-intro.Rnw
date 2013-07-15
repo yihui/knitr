@@ -46,7 +46,7 @@ summary(lm(y~x, data=df))
 @
 
 \bibliographystyle{jss}
-\bibliography{../examples/knitr-packages}
+\bibliography{../inst/examples/knitr-packages}
 
 
 \end{document}

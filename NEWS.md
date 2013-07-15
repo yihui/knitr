@@ -82,6 +82,8 @@
 
 ## MAINTAINENCE
 
+- the package vignettes were moved to the `vignettes` directory from `inst/doc` since the former will be preferred by the future versions of R
+
 - the testing is done via the **testit** package now (http://cran.r-project.org/package=testit)
 
 ## MISC

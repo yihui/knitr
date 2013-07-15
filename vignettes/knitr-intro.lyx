@@ -202,7 +202,7 @@ summary(lm(y~x, data=df))
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
-bibfiles "../examples/knitr-packages"
+bibfiles "../inst/examples/knitr-packages"
 options "jss"
 
 \end_inset
