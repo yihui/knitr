@@ -51,8 +51,6 @@ hilight_fun = function(name) {
   getFromNamespace(name, 'highr')
 }
 
-.default.css = css.parser(.default.sty)
-
 hilight_source = function(x, format, options) {
   if (!((format %in% c('latex', 'html')) && options$highlight))
     return(if (options$prompt) line_prompt(x) else x)
