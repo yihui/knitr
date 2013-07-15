@@ -61,7 +61,7 @@ stitch = function(script,
 
   out = knit(input, output, envir = envir, text = txt)
   switch(file_ext(out), tex = {
-    texi2pdf(out, clean = TRUE)
+    tools::texi2pdf(out, clean = TRUE)
     message('PDF output at: ', sub_ext(out, 'pdf'))
   }, md = {
     out.html = sub_ext(out, 'html')

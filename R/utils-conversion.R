@@ -38,7 +38,6 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' @note The \code{output} argument specifies the output filename to be passed
 #'   to the PDF compiler (e.g. a tex document) instead of the PDF filename.
 #' @export
-#' @importFrom tools texi2pdf
 #' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}},
 #'   \code{\link{rst2pdf}}
 #' @examples #' compile with xelatex
@@ -63,7 +62,7 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
       Sys.setenv(PDFLATEX = compiler)
     }
   }
-  texi2pdf(basename(out), ...)
+  tools::texi2pdf(basename(out), ...)
   sub_ext(out, 'pdf')
 }
 
