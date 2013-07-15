@@ -303,7 +303,10 @@ auto_format = function(ext) {
 #' option \code{child} and serves as the alternative to the
 #' \command{SweaveInput} command in Sweave.
 #' @param ... arguments passed to \code{\link{knit}}
-#' @param eval logical: whether to evaluate the child document
+#' @param options a list of chunk options to be used as global options inside
+#'   the child document (ignored if not a list); when we use the \code{child}
+#'   option in a parent chunk, the chunk options of the parent chunk will be
+#'   passed to the \code{options} argument here
 #' @return A character string of the content of the compiled child document is
 #'   returned as a character string so it can be written back to the parent
 #'   document directly.
@@ -317,11 +320,14 @@ auto_format = function(ext) {
 #' @examples ## you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input results from child-doc.Rnw in main.tex
 #'
 #' ## comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
-knit_child = function(..., eval = TRUE) {
-  if (!eval) return('')
+knit_child = function(..., options = NULL) {
   child = child_mode()
   opts_knit$set(child = TRUE) # yes, in child mode now
   on.exit(opts_knit$set(child = child)) # restore child status
+  if (is.list(options)) {
+    optc = opts_chunk$get(); opts_chunk$set(options)
+    on.exit(opts_chunk$restore(optc), add = TRUE)
+  }
   res = knit(..., tangle = opts_knit$get('tangle'),
              encoding = opts_knit$get('encoding') %n% getOption('encoding'))
   paste(c('', res), collapse = '\n')

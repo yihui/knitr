@@ -28,6 +28,8 @@
 
 - the argument `format` in the `pandoc()` function was vectorized, e.g. we can call `pandoc(input, format = c('html', 'latex'))` and the input file will be converted to HTML and LaTeX, respectively (#547, thanks, Jeroen Ooms)
 
+- added an argument `options` to `knit_child()` to set global chunk options for child documents; if a parent chunk calls a child document (via the `child` option), the chunk options of the parent chunk will be used as global options for the child document, e.g. for `<<foo, child='bar.Rnw', fig.path='figure/foo-'>>=`, the figure path prefix will be `figure/foo-` in `bar.Rnw`; see http://stackoverflow.com/q/17514055/559676 for an application
+
 - `eclipse_theme()` works with font weight (bold) and font style (italic) now when parsing themes from http://eclipsecolorthemes.org
 
 - added two package options `latex.options.graphicx` and `latex.options.color` to allow customization of LaTeX package options, e.g. `opts_knit$set(latex.options.color = 'monochrome')` generates `\usepackage[monochrome]{color}` in the LaTeX output (#546)
@@ -59,6 +61,8 @@
 - syntax highlighting is done by the **highr** package if it has been installed, otherwise the old regular-expression-based syntax highlighting will still be used; the **highr** package does much better syntax highlighting than the regexp-based approach (#327)
 
 - the commands for syntax highlighting were changed for compatibility with Andre Simon's Highlight package; this will affect LaTeX and HTML users, e.g. `\hlnumber` was renamed to `\hlnum`; cached LaTeX and HTML will have to be rebuilt for the new syntax highlighting commands to work (#470)
+
+- the argument `eval` was removed in `knit_child()`; if we do not want to evaluate a child document, we can set `eval=FALSE` in its parent chunk
 
 - the script `inst/bin/knit` gains an option `-o` to specify the output filenames for `knit()` (#525, thanks, Aaron Wolen)
 

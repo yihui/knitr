@@ -27,7 +27,7 @@ call_block = function(block) {
 
   if (!is.null(params$child)) {
     if (!params$eval) return('')
-    cmds = lapply(sc_split(params$child), knit_child)
+    cmds = lapply(sc_split(params$child), knit_child, options = params)
     out = paste(unlist(cmds), collapse = '\n')
     return(out)
   }
