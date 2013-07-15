@@ -1,3 +1,173 @@
+		 CHANGES IN knitr VERSION 1.3
+
+NEW FEATURES
+
+  - added support for AsciiDoc; see example 089 at
+  https://github.com/yihui/knitr-examples/blob/master/089-minimal.Rasciidoc
+  (thanks, Richard Cotton)
+
+  - added support for reStructuredText vignettes in packages; now `*.Rrst`
+  documents are recognized as vignettes as well, and they will be compiled
+  to PDF via `rst2pdf` (#533) (thanks, Trevor L Davis)
+
+  - a new function `kable()` to produce simple tables; see
+  the vignette `datatables` in `browseVignettes(package =
+  'knitr')` for an application; also see a LaTeX example at
+  https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw
+
+  - the chunk options `fig.width` and `fig.height` are vectorized according to
+  the `dev` option, e.g. `fig.wdith = c(7, 10)` and `dev = c('pdf', 'png')`
+  (#538) (thanks, @baptiste)
+
+  - for `purl()`, code chunks with the option `purl=FALSE` will not be
+  included in the R script (#519, thanks, Sebastian)
+
+  - new `'hide'` value to the `fig.show` option; the figures are created
+  but not included in the output document (#532) (thanks, Simon)
+
+  - the `sas` engine uses the listings output now (#541) and was tweaked
+  for better LaTeX display (#562) (thanks, Nick Salkowski)
+
+  - added a quick and dirty `c` engine (via `R CMD SHLIB`); see
+  https://github.com/yihui/knitr-examples/blob/master/090-engine-c.Rmd for
+  an example
+
+  - added a new engine `asy` for Asymptote, a vector graphics
+  language (http://asymptote.sourceforge.net); see examples 093 at
+  https://github.com/yihui/knitr-examples (thanks, Thibaut Lamadon, #559)
+
+  - added a new engine `cat` to write the content of a code chunk to a file;
+  see the example 095 at https://github.com/yihui/knitr-examples (thanks,
+  Stephen Eglen)
+
+  - added a new function `knit_exit()` to allow `knit()` to exit early as
+  if it had reached the end of the document (#524, thanks, Renaud)
+
+  - the chunk option `fig.align` also works for Markdown output now, e.g.,
+  `fig.align = 'center'` will center images in HTML via the `style` attribute
+  of the `<img>` tag (#387)
+
+  - the argument `format` in the `pandoc()` function was vectorized, e.g. we
+  can call `pandoc(input, format = c('html', 'latex'))` and the input file
+  will be converted to HTML and LaTeX, respectively (#547, thanks, Jeroen Ooms)
+
+  - added an argument `options` to `knit_child()` to set global chunk options
+  for child documents; if a parent chunk calls a child document (via the
+  `child` option), the chunk options of the parent chunk will be used as
+  global options for the child document, e.g. for `<<foo, child='bar.Rnw',
+  fig.path='figure/foo-'>>=`, the figure path prefix will be `figure/foo-` in
+  `bar.Rnw`; see http://stackoverflow.com/q/17514055/559676 for an application
+
+  - `eclipse_theme()` works with font weight (bold) and font style (italic)
+  now when parsing themes from http://eclipsecolorthemes.org
+
+  - added two package options `latex.options.graphicx` and
+  `latex.options.color` to allow customization of LaTeX package options,
+  e.g. `opts_knit$set(latex.options.color = 'monochrome')` generates
+  `\usepackage[monochrome]{color}` in the LaTeX output (#546)
+
+  - added a new package option `unnamed.chunk.label` to set the chunk labels
+  for unnamed chunks, e.g. `opts_knit$set(unnamed.chunk.label = 'fig')`
+  will generate chunk labels `fig-1`, `fig-2`, ... (#555) (thanks, Noam Ross)
+
+  - when `knit()` is running, a global option `knitr.in.progress` will
+  be set to `TRUE`; this allows other package authors (e.g. `rCharts`
+  and `googleVis`) to adjust certain package options according to
+  `getOption('knitr.in.progress')` (thanks, Ramnath V, #564)
+
+BUG FIXES
+
+  - fixed #502: using `layout()` and `par()` at the same time
+  under R 3.0.0 may lead to a corrupt plot (thanks, Hong Xu
+  http://tex.stackexchange.com/q/108335/9128)
+
+  - fixed a bug in `pandoc()`: for single-lettered Pandoc arguments, the
+  values are passed to them after spaces instead of equal signs (reported
+  at http://stackoverflow.com/q/16569010/559676)
+
+  - fixed #542: when a child document has a sub-child document and also uses
+  `set_parent()`, the LaTeX header will be added to the wrong file (thanks,
+  Johan Toloe)
+
+  - `stitch_rmd()` was using a wrong R Markdown template
+
+  - fixed #537: misleading error message when the graphical device does not
+  exist (thanks, Scott Kostyshak)
+
+  - fixed a bug in `hook_rgl()` reported at http://cos.name/cn/topic/110742
+  (incorrect LaTeX code when `fig.align='center'` and `fig.show='hold'`)
+
+  - fixed #565: added the `envir` argument to `spin()` so that the code is
+  evaluated in the correct environment by default (thanks, @GillesSanMartin)
+
+MAJOR CHANGES
+
+  - `purl()` will write the chunk headers in `# ---- label, opts ----`
+  instead of `# @knitr label, opts`, i.e. `@knitr` was changed to four dashes
+  `----`; similarly, `read_chunk()` will use the pattern `# ---- label ----`
+  to read external code (the old syntax `# @knitr` is still preserved for
+  compatibility); the main reason for this change is that RStudio uses four
+  dashes in R comments as section headings, so that it is possible to fold
+  sections of R
+
+  - syntax highlighting is done by the **highr** package if it has been
+  installed, otherwise the old regular-expression-based syntax highlighting
+  will still be used; the **highr** package does much better syntax
+  highlighting than the regexp-based approach (#327)
+
+  - the commands for syntax highlighting were changed for compatibility with
+  Andre Simon's Highlight package; this will affect LaTeX and HTML users,
+  e.g. `\hlnumber` was renamed to `\hlnum`; cached LaTeX and HTML will have
+  to be rebuilt for the new syntax highlighting commands to work (#470)
+
+  - the argument `eval` was removed in `knit_child()`; if we do not want to
+  evaluate a child document, we can set `eval=FALSE` in its parent chunk
+
+  - the script `inst/bin/knit` gains an option `-o` to specify the output
+  filenames for `knit()` (#525, thanks, Aaron Wolen)
+
+  - the default video format for animations is OGG (it is open and free)
+  instead of MP4 (non-free) now; this means Internet Explorer under Windows
+  may not work with the animations (consider Firefox, Chrome and other modern
+  web browsers)
+
+  - warnings and messages in adjacent output chunks are merged, respectively
+  (#534)
+
+  - when the package option `verbose = TRUE`, the time stamp will be printed
+  after each chunk using `timestamp()`, but this will mess up with the R
+  command history, so now **knitr** uses `cat()` to write the time stamp
+  (#545) (thanks, @knokknok)
+
+  - the argument `base` in `read_rforge()` was removed and hard-coded inside
+  the function instead
+
+  - for Markdown output, the figure filenames no longer allow special
+  characters like spaces, and special characters will be automatically
+  replaced by `_`; this change will avoid problems when publishing to RPubs
+  from RStudio: if figure paths contain special characters, the figures will
+  not be uploaded (thanks, Sangsoon Woo)
+
+MINOR CHANGES
+
+  - the package vignettes uses `\VignetteEngine{knitr::knitr}` instead of
+  `\VignetteEngine{knitr}` so that the next version of R can compile the
+  vignettes out of the box (via `R CMD Sweave`) and no longer need to build
+  the whole package in order to build the vignettes
+
+MAINTAINENCE
+
+  - the package vignettes were moved to the `vignettes` directory from
+  `inst/doc` since the former will be preferred by the future versions of R
+
+  - the testing is done via the **testit** package now
+  (http://cran.r-project.org/package=testit)
+
+MISC
+
+  - **knitr** becomes an affiliated project of FOAS (Foundation for Open
+  Access Statistics): http://www.foastat.org/projects.html
+
 		 CHANGES IN knitr VERSION 1.2
 
 NEW FEATURES
