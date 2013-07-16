@@ -111,7 +111,9 @@ block_exec = function(options) {
   )
 
   # eval other options after the chunk
-  for (o in opts_knit$get('eval.after')) options[[o]] = eval_lang(options[[o]], env)
+  if (!isFALSE(ev))
+    for (o in opts_knit$get('eval.after'))
+      options[o] = list(eval_lang(options[[o]], env))
 
   # remove some components according options
   if (isFALSE(echo)) {

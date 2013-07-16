@@ -4,6 +4,10 @@
 
 - **knitr** formally depends on the **highr** package now (for syntax highlighting of LaTeX and HTML)
 
+## MINOR CHANGES
+
+- for the chunk options set in package option `opts_knit$get('eval.after')`, they will not be evaluated after a chunk if `eval=FALSE` for that chunk (#570, thanks, @knokknok)
+
 # CHANGES IN knitr VERSION 1.3
 
 ## NEW FEATURES
