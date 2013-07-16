@@ -35,3 +35,10 @@ sum((x - mean(x))^2) # df is 4 now
 
 #' Done. Call spin('knitr-spin.R') to make silk from sow's ear now and knit a
 #' lovely purse.
+
+# /* you can write comments between /* and */ like C comments (the preceding #
+# is optional)
+Sys.sleep(60)
+# */
+
+# /* there is no inline comment; you have to write block comments */

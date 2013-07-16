@@ -21,6 +21,10 @@
 #'   default it follows the roxygen convention, but it can be customized, e.g.
 #'   if you want to use \code{##} to denote documentation, you can use
 #'   \code{'^##\\\\s*'}
+#' @param comment a pair of regular expressions for the start and end delimiters
+#'   of comments; the lines between a start and an end delimiter will be
+#'   ignored; by default, the delimiters are \verb{/*} in the beginning and
+#'   \verb{*/} in the end of a line (following the convention of C comments)
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
 #'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
 #' @return If \code{text} is \code{NULL}, the path of the final output document,
@@ -37,6 +41,11 @@
 #'
 #' #+ label, opt=value
 #'
+#' # /*
+#' #' these lines are treated as comments in spin()
+#' 1+1
+#' # */
+#'
 #' (s = system.file('examples', 'knitr-spin.R', package = 'knitr'))
 #' spin(s)  # default markdown
 #' o = spin(s, knit = FALSE) # convert only; do not make a purse yet
@@ -48,10 +57,18 @@
 #' spin(s, FALSE, format='Rtex')
 #' spin(s, FALSE, format='Rrst')
 spin = function(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
-                format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'), doc = "^#+'[ ]?") {
+                format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'), doc = "^#+'[ ]?",
+                comment = c("^[# ]*/[*]", "^.*[*]/ *$")) {
 
   format = match.arg(format)
   x = if (nosrc <- is.null(text)) readLines(hair, warn = FALSE) else split_lines(text)
+  stopifnot(length(comment) == 2L)
+  c1 = grep(comment[1], x); c2 = grep(comment[2], x)
+  if (length(c1) != length(c2))
+    stop('comments must be put in pairs of start and end delimiters')
+  # remove comments
+  if (length(c1)) x = x[-unique(unlist(mapply(seq, c1, c2, SIMPLIFY = FALSE)))]
+
   r = rle(grepl(doc, x))
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
   p = .fmt.pat[[tolower(format)]]

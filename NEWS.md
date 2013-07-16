@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.4
 
+## NEW FEATURES
+
+- added an argument `comment` in `spin()` to specify comment lines that will be ignored by `spin()`; by default, the block comment `/* comment */` is recognized; thanks, Bryan Hanson http://stackoverflow.com/q/17664401/559676
+
 ## MAJOR CHANGES
 
 - **knitr** formally depends on the **highr** package now (for syntax highlighting of LaTeX and HTML)
