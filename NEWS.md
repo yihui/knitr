@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.4
+
+## MAJOR CHANGES
+
+- **knitr** formally depends on the **highr** package now (for syntax highlighting of LaTeX and HTML)
+
 # CHANGES IN knitr VERSION 1.3
 
 ## NEW FEATURES

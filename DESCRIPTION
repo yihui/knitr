@@ -67,6 +67,7 @@ Imports:
     evaluate (>= 0.4.4),
     digest,
     formatR (>= 0.7),
+    highr,
     markdown (>= 0.5.5),
     stringr (>= 0.6),
     tools
