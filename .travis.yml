@@ -15,7 +15,7 @@ install:
   - "[ ! -d ~/R ] && mkdir ~/R"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
-  - Rscript -e 'install.packages("knitr", dep = TRUE, repos = "http://rforge.net")'
+  - Rscript -e 'install.packages("knitr", dep = TRUE, repos = c("http://rforge.net", "http://cran.rstudio.org"))'
 
 # run tests
 script:
