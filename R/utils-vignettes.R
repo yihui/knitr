@@ -9,3 +9,13 @@ vweave = vtangle = function(file, driver, syntax, encoding = '', quiet = FALSE, 
 }
 
 body(vtangle)[4L] = expression(purl(file, encoding = encoding, quiet = quiet))
+
+Rversion = getRversion()
+
+register_vignette_engines = function(pkg) {
+  if (Rversion < '3.0.0') return()
+  # the default engine
+  tools::vignetteEngine(
+    'knitr', weave = vweave, tangle = vtangle,
+    pattern = '[.]([rRsS](nw|tex)|[Rr](md|html|rst))$', package = pkg
+}
