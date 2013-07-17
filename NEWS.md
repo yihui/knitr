@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- added a new vignette engine called `docco` using the Docco style (http://jashkenas.github.io/docco/); see `browseVignettes(package = 'knitr')` for an example
+
 - added an argument `comment` in `spin()` to specify comment lines that will be ignored by `spin()`; by default, the block comment `/* comment */` is recognized; thanks, Bryan Hanson http://stackoverflow.com/q/17664401/559676
 
 ## MAJOR CHANGES
