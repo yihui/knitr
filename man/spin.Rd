@@ -3,7 +3,8 @@
 \title{Spin goat's hair into wool}
 \usage{
 spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(), 
-    format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), doc = "^#+'[ ]?")
+    format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), doc = "^#+'[ ]?", 
+    comment = c("^[# ]*/[*]", "^.*[*]/ *$"))
 }
 \arguments{
   \item{hair}{the path to the R script}
@@ -30,6 +31,13 @@ spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
   convention, but it can be customized, e.g.  if you want
   to use \code{##} to denote documentation, you can use
   \code{'^##\\\\s*'}}
+
+  \item{comment}{a pair of regular expressions for the
+  start and end delimiters of comments; the lines between a
+  start and an end delimiter will be ignored; by default,
+  the delimiters are \verb{/*} in the beginning and
+  \verb{*/} in the end of a line (following the convention
+  of C comments)}
 }
 \value{
   If \code{text} is \code{NULL}, the path of the final
@@ -60,6 +68,11 @@ spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
 #' write normal text like this and chunk options like below
 
 # + label, opt=value
+
+# /*
+#' these lines are treated as comments in spin()
+1 + 1
+# */
 
 (s = system.file("examples", "knitr-spin.R", package = "knitr"))
 spin(s)  # default markdown
