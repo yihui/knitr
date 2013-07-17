@@ -29,9 +29,9 @@ Note we assigned an `id` to the table, and next we use the `DataTables` library 
 Since this is a Markdown vignette, we need to add the JavaScript libraries as well as some additional CSS files to the HTML header, and this can be done via:
 
 ```{r}
-options(markdown.HTML.header = paste(unlist(
+options(markdown.HTML.header = unlist(
   sapply(system.file('misc', c('vignette.css', 'datatables.txt'), package = 'knitr'), readLines)
-  ), collapse = '\n')
+  )
 )
 ```
 
