@@ -24,6 +24,7 @@
 \begin{document}
 
 <<setup, include=FALSE>>=
+library(knitr)
 opts_chunk$set(fig.path='figure/subfloats-')
 @
 

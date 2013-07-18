@@ -96,6 +96,11 @@ status open
 
 \begin_layout Plain Layout
 
+library(knitr)
+\end_layout
+
+\begin_layout Plain Layout
+
 ## set global chunk options
 \end_layout
 

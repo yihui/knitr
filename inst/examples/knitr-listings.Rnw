@@ -18,6 +18,7 @@
 \begin{document}
 
 <<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
 opts_chunk$set(fig.path = 'figure/listings-')
 options(replace.assign = TRUE)
 render_listings()

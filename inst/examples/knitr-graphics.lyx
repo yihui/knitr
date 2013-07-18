@@ -93,6 +93,11 @@ status open
 
 \begin_layout Plain Layout
 
+library(knitr)
+\end_layout
+
+\begin_layout Plain Layout
+
 options(replace.assign=TRUE,width=50)
 \end_layout
 

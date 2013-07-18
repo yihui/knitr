@@ -39,6 +39,7 @@
 \begin{document}
 
 <<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
 ## set global chunk options
 opts_chunk$set(fig.path='figure/manual-', cache.path='cache/manual-', fig.align='center', fig.show='hold', par=TRUE)
 ## I use = but I can replace it with <-; set code/output width to be 68

@@ -31,6 +31,7 @@
 \begin{document}
 
 <<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
 options(replace.assign=TRUE,width=50)
 opts_chunk$set(fig.path='figure/graphics-', cache.path='cache/graphics-', fig.align='center', dev='tikz', fig.width=5, fig.height=5, fig.show='hold', cache=TRUE, par=TRUE)
 knit_hooks$set(par=function(before, options, envir){

@@ -28,6 +28,7 @@
 \begin{document}
 
 <<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
 opts_chunk$set(fig.path='figure/theme-', cache.path='cache/theme-', cache=TRUE)
 options(replace.assign=TRUE,width=78)
 knit_hooks$set(par=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})

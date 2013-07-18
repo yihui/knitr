@@ -89,6 +89,11 @@ status open
 
 \begin_layout Plain Layout
 
+library(knitr)
+\end_layout
+
+\begin_layout Plain Layout
+
 opts_chunk$set(fig.path = 'figure/listings-')
 \end_layout
 

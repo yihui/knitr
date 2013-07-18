@@ -98,6 +98,11 @@ status open
 
 \begin_layout Plain Layout
 
+library(knitr)
+\end_layout
+
+\begin_layout Plain Layout
+
 opts_chunk$set(fig.path='figure/theme-', cache.path='cache/theme-', cache=TRUE)
 \end_layout
 
