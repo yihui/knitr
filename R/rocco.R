@@ -16,7 +16,7 @@ docAdjust = function(x) {
 ##' @param style path of the css file
 ##' @return The result is written into a file and the filenames is returned
 ##' @export
-##' @examples knit2rocco(system.file("examples","knitr-rocco", package='knitr'))
+##' @examples rocco(system.file("examples","knitr-rocco.Rmd", package='knitr'))
 rocco = function(input, ..., title="Knitr Rocco", style = NULL) {
     out = knit2html(input,fragment.only=TRUE, ...)
     ## Path adjustment
@@ -32,11 +32,11 @@ rocco = function(input, ..., title="Knitr Rocco", style = NULL) {
         '"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#section',
         seq_len(length(doc)), '">&para</a></div>', unlist(lapply(doc, FUN=docAdjust)), '</td>')
     y = paste0(doc, code, collapse="")
-    html = readLines(system.file("misc", "docco-classic.html",package='knitr'), collapse='\n')
+    html = readLines(system.file("misc", "docco-classic.html",package='knitr'))
     html = sub("<!-- title -->", title, html, fixed=TRUE)
     html = sub("<!-- knitr_rocco -->", y, html, fixed=TRUE)
     if(is.null(style))
         style = system.file("themes","rocco.css",package='knitr')
     html = sub("<!-- knitr_rocco_style -->", style, html, fixed=TRUE)
-    writeLines(html, file = out)
+    writeLines(html, con = out)
 }
