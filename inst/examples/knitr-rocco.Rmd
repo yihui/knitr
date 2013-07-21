@@ -1,0 +1,64 @@
+# Knitr_rocco Example
+
+Implementation of the `literate programming` for R language inspired by the [Docco](https://github.com/jashkenas/docco) project.
+
+## Explaination of the code
+
+**Note: The code chunks align with the paragraphs just before them.**
+
+This is the main function. The brief idea is:
+- Set `fragment.only` to `TRUE` to produce an
+HTML fragment without the HTML header and body tags, CSS, and
+Javascript components.
+- Find all of the code chuncks and put them to the second column of the table, 
+all contents between the code chunks to the first column of the table.
+- Finally, insert the processed content to the template.
+
+```{r core}
+knit2rocco <- function(input, title="Knitr Rocco", ...){
+    opts_chunk$set(eval=FALSE)
+    out <- knit2html(input,fragment.only=TRUE, ...)
+    ## Path adjustment
+    x = readLines(out)
+    x = paste(x, collapse = '\n')
+    m = gregexpr('<pre><code class="[[:alnum:]]+">(.|\n)*?</code></pre>', x)
+    if(m[[1]][1] == -1)
+        stop("No coding chunk is found!") else{
+            code = regmatches(x, m)[[1]]
+            code = paste0('<td class="code">', c(code, ""), '</td></tr>')
+            doc = regmatches(x, m, invert = TRUE)[[1]]
+            doc = paste0('<tr id="section', seq_len(length(doc)),
+                '"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#section',
+                seq_len(length(doc)), '">&para</a></div>', unlist(lapply(doc, FUN=docAdjust)), '</td>')
+            y = paste0(doc, code, collapse="")
+        }
+    html <- paste(readLines("template/template.html"), collapse='\n')
+  ## html <- readLines(system.file('template/template.html',package='knitr'), collapse='\n')
+    html <- sub("<!-- title -->", title, html, fixed=TRUE)
+    html <- sub("<!-- knitr_rocco -->", y, html, fixed=TRUE)
+    write(html, file = out)
+}
+```
+The `docAdjust` function picks up the last "paragraph" of the
+"document section" to align with the following "code section".
+
+```{r auxiliary} 
+docAdjust <- function(x){
+    lastp = gregexpr("(\n\n+[^\n]+)\n+$", x)[[1]]
+    # If there is only one paragraph in the "document section", just return it 
+    # Otherwise, insert some html tags before the last paragraph to make it
+    # align with the following code chunk
+    if(lastp[1] == 1)
+        x else
+    sub("(\n{2,}([^\n]+\n?[^\n]+)+\n{2,}$)", '\n</td><td class="code"></td></tr><tr><td class="docs">\\1\n', x)
+}
+```
+
+Run the test file to see the result.
+
+```{r run}
+library(knitr)
+knit2rocco("knitr_rocco.Rmd")
+```
+
+Open the `knitr_rocco.html` file in a brower. Enjoy it!
