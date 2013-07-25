@@ -29,6 +29,7 @@ Authors@R: c(person("Alastair", "Andrew", role = "ctb"),
     person("Thibaut", "Lamadon", role = "ctb"),
     person("Tom", "Torsney-Weir", role = "ctb"),
     person("Trevor", "Davis", role = "ctb"),
+    person("Weicheng", "Zhu", role = "ctb"),
     person("Wush", "Wu", role = "ctb"),
     person("Yihui", "Xie", email = "xie@yihui.name", role = c("aut", "cre")))
 Author: Yihui Xie
