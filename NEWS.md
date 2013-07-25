@@ -4,6 +4,8 @@
 
 - added a new vignette engine called `docco` using the Docco style (http://jashkenas.github.io/docco/); see `browseVignettes(package = 'knitr')` for an example
 
+- added a function `rocco()` to compile R Markdown documents to HTML using the classic Docco style, i.e. a two-column layout, with text on the left and code on the right (thanks, Weicheng Zhu, #577)
+
 - added an argument `comment` in `spin()` to specify comment lines that will be ignored by `spin()`; by default, the block comment `/* comment */` is recognized; thanks, Bryan Hanson http://stackoverflow.com/q/17664401/559676
 
 ## MAJOR CHANGES
