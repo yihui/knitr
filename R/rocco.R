@@ -19,7 +19,7 @@ docAdjust = function(x) {
 #' @param style path of the css file
 #' @return The result is written into a file and the filename is returned
 #' @export
-#' @examples rocco(system.file('examples','knitr-rocco.Rmd', package='knitr'))
+#' @examples # TODO: need a better example
 rocco = function(input, ..., title = 'Knitr Rocco', style = NULL) {
   out = knit2html(input, fragment.only = TRUE, ...)
   ## Path adjustment
