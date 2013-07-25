@@ -120,3 +120,4 @@ Collate:
     'pandoc.R'
     'hooks-asciidoc.R'
     'table.R'
+    'rocco.R'
