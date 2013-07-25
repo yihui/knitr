@@ -92,6 +92,10 @@ td.docs code{
     padding: 0 0.2em;
 }
 
+td.docs img{
+  max-width: 100%;
+}
+
 pre code{
     padding:2px 4px;
     background:#f5f5ff;
