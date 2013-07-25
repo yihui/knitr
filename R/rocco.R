@@ -14,34 +14,32 @@ docAdjust = function(x) {
 #' The classic Docco style is a two-column layout, with text in the left and
 #' code in the right column.
 #' @param input path of the input R Markdown file
-#' @param ... options passed to \code{\link{knit2html}}
-#' @param title title of the output html file
-#' @param style path of the css file
-#' @return The result is written into a file and the filename is returned
+#' @param ... arguments to be passed to \code{\link{knit2html}}
+#' @return An HTML file is written, and its name is returned.
 #' @export
 #' @examples # TODO: need a better example
-rocco = function(input, ..., title = 'Knitr Rocco', style = NULL) {
-  out = knit2html(input, fragment.only = TRUE, ...)
-  ## Path adjustment
-  x = readLines(out)
-  x = paste(x, collapse = '\n')
-  m = gregexpr('<pre><code class="[[:alnum:]]+">(.|\n)*?</code></pre>', x)
+rocco = function(input, ...) {
+  out = knit2html(
+    input, ...,
+    stylesheet = system.file('misc', 'docco-classic.css', package = 'knitr'),
+    template = system.file('misc', 'docco-classic.html', package = 'knitr')
+  )
+  txt = readLines(out)
+  i1 = which(txt == '      <table><!--table start-->')[1]
+  i2 = which(txt == '      </table><!--table end-->')[1]
+  x = paste(txt[seq(i1 + 1, i2 - 1)], collapse = '\n')
+  m = gregexpr('<pre><code( class="[[:alnum:]]+")?>(.|\n)*?</code></pre>', x)
   if(m[[1]][1] == -1) stop('No code blocks in HTML output')
   code = regmatches(x, m)[[1]]
   code = paste('<td class="code">', c(code, ''), '</td></tr>', sep = '')
   doc = regmatches(x, m, invert = TRUE)[[1]]
+  i = seq_len(length(doc))
   doc = paste(
-    '<tr id="section', seq_len(length(doc)), '"><td class="docs">',
-    '<div class="pilwrap"><a class="pilcrow" href="#section',
-    seq_len(length(doc)), '">&para</a></div>',
-    unlist(lapply(doc, FUN=docAdjust)), '</td>', sep = ''
+    '<tr id="section', i, '"><td class="docs">',
+    '<div class="pilwrap"><a class="pilcrow" href="#section', i, '">&para</a></div>',
+    sapply(doc, docAdjust), '</td>', sep = ''
   )
-  y = paste(doc, code, sep = '', collapse = '')
-  html = readLines(system.file('misc', 'docco-classic.html', package='knitr'))
-  html = sub('<!-- title -->', title, html, fixed=TRUE)
-  html = sub('<!-- knitr_rocco -->', y, html, fixed=TRUE)
-  if(is.null(style))
-    style = system.file('themes','rocco.css',package='knitr')
-  html = sub('<!-- knitr_rocco_style -->', style, html, fixed=TRUE)
-  writeLines(html, con = out)
+  html = c(txt[1:i1], paste(doc, code, sep = '', collapse = ''), txt[i2:length(txt)])
+  writeLines(html, out)
+  invisible(out)
 }
