@@ -38,7 +38,11 @@ docAdjust = function(x) {
 #' @references The Docco package by Jeremy Ashkenas:
 #'   \url{https://github.com/jashkenas/docco}
 #' @export
-#' @examples # TODO: need a better example
+#' @examples rocco_view=function(input) {o=rocco(input, header='', quiet=TRUE);
+#' if (interactive()) browseURL(o)}
+#' # knit these two vignettes using the docco style
+#' rocco_view(system.file('doc', 'docco-classic.Rmkd', package = 'knitr'))
+#' rocco_view(system.file('doc', 'knit_expand.Rmd', package = 'knitr'))
 rocco = function(input, ...) {
   out = knit2html(
     input, ...,
