@@ -27,8 +27,8 @@ rocco = function(input, ...) {
     template = system.file('misc', 'docco-classic.html', package = 'knitr')
   )
   txt = readLines(out)
-  i1 = which(txt == '      <table><!--table start-->')[1]
-  i2 = which(txt == '      </table><!--table end-->')[1]
+  i1 = min(grep('<!--table start-->$', txt))
+  i2 = max(grep('<!--table end-->$', txt))
   x = paste(txt[seq(i1 + 1, i2 - 1)], collapse = '\n')
   m = gregexpr('<pre><code( class="[[:alnum:]]+")?>(.|\n)*?</code></pre>', x)
   if(m[[1]][1] == -1) stop('No code blocks in HTML output')
