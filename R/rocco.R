@@ -1,13 +1,32 @@
-# Pick up the last 'paragraph' of the 'document section' to align with the
-# following 'code section'
+# move paragraphs of images one row above, and split the last paragraph from the
+# previous ones
 docAdjust = function(x) {
-  lastp = gregexpr('\n{2,}([^\n]+\n?[^\n]+)+\n{2,}$', x)[[1]]
-  # If there is only one paragraph in the 'document section', just return it
-  # Otherwise, insert some html tags before the last paragraph to make it align
-  # with the following code chunk
-  if (lastp[1] == 1) return(x)
-  sub('(\n{2,}([^\n]+\n?[^\n]+)+\n{2,}$)',
-      '\n</td><td class="code"></td></tr><tr><td class="docs">\\1\n', x)
+  if ((n <- length(x)) < 2) return(x)
+  m = gregexpr('^\\s*<p>(<img src="data:[^>]+/>\\s*)+</p>\\s*', x)
+  restart = '</td><td class="code"></td></tr><tr><td class="docs">'
+  for (i in 2:n) if (m[[i]] > 0) {
+    img = regmatches(x[i], m[[i]])
+    txt = unlist(regmatches(x[i], m[[i]], invert = TRUE))
+    if (grepl('^\\s*$', x[i - 1])) {
+      x[i - 1] = img
+    } else {
+      x[i - 1] = paste(x[i - 1], restart, img, sep = '\n')
+    }
+    x[i] = paste(txt, collapse = '')
+  }
+  # split a doc cell if it has mutiple paragraphs, so that the code cell on the
+  # right can match with its last paragraph
+  x[2:n - 1] = unlist(lapply(strsplit(x[2:n - 1], '\n{2,}'), function(z) {
+    n = length(z)
+    if (n <= 1) return(z)
+    if (length(idx <- grep('^\\s*$', z, invert = TRUE)) > 1) {
+      i = max(idx)
+      z[i] = paste(restart, z[i], sep = '')
+    }
+    paste(z, collapse = '\n\n')
+  }))
+  # might have produced some empty cells, so remove them
+  gsub('<td class="code">\\s*</td></tr><tr><td class="docs">\\s*</td>', '', x)
 }
 #' Knit R Markdown using the classic Docco style
 #'
@@ -38,12 +57,20 @@ rocco = function(input, ...) {
   code = gsub('<!--ReDuNdAnTpRe-->', '</pre>\n<pre>', code) # restore pre blocks
   code = paste('<td class="code">', c(code, ''), '</td></tr>', sep = '')
   doc = regmatches(x, m, invert = TRUE)[[1]]
-  i = seq_len(length(doc))
-  doc = paste(
-    '<tr id="section', i, '"><td class="docs">',
-    '<div class="pilwrap"><a class="pilcrow" href="#section', i, '">&para</a></div>',
-    sapply(doc, docAdjust), '</td>', sep = ''
-  )
+  doc = paste('<tr><td class="docs">', docAdjust(doc), '</td>', sep = '')
+
+  # write pilcrow anchors to rows
+  sec = 1
+  for (i in seq_along(doc)) {
+    while (grepl('<tr><td class="docs">', doc[i])) {
+      doc[i] = sub('<tr><td class="docs">', paste(
+        '<tr id="row', sec, '"><td class="docs">', '<div class="pilwrap">',
+        '<a class="pilcrow" href="#row', sec, '">&para;</a></div>', sep = ''
+      ),  doc[i])
+      sec = sec + 1
+    }
+  }
+
   html = c(txt[1:i1], paste(doc, code, sep = '', collapse = ''), txt[i2:length(txt)])
   writeLines(html, out)
   invisible(out)
