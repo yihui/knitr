@@ -30,9 +30,12 @@ rocco = function(input, ...) {
   i1 = min(grep('<!--table start-->$', txt))
   i2 = max(grep('<!--table end-->$', txt))
   x = paste(txt[seq(i1 + 1, i2 - 1)], collapse = '\n')
+  x = gsub('</pre>\\s*<pre>', '<!--ReDuNdAnTpRe-->', x)  # merge pre blocks
   m = gregexpr('<pre><code( class="[[:alnum:]]+")?>(.|\n)*?</code></pre>', x)
   if(m[[1]][1] == -1) stop('No code blocks in HTML output')
+
   code = regmatches(x, m)[[1]]
+  code = gsub('<!--ReDuNdAnTpRe-->', '</pre>\n<pre>', code) # restore pre blocks
   code = paste('<td class="code">', c(code, ''), '</td></tr>', sep = '')
   doc = regmatches(x, m, invert = TRUE)[[1]]
   i = seq_len(length(doc))
