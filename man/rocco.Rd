@@ -18,7 +18,14 @@ rocco(input, ...)
   in the left and code in the right column.
 }
 \examples{
-# TODO: need a better example
+rocco_view = function(input) {
+    o = rocco(input, header = "", quiet = TRUE)
+    if (interactive()) 
+        browseURL(o)
+}
+# knit these two vignettes using the docco style
+rocco_view(system.file("doc", "docco-classic.Rmkd", package = "knitr"))
+rocco_view(system.file("doc", "knit_expand.Rmd", package = "knitr"))
 }
 \references{
   The Docco package by Jeremy Ashkenas:
