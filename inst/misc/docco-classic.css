@@ -44,18 +44,6 @@ a:hover,a:focus{
 
 body > #container { height: auto; min-height: 100%; }
 
-#footer {
-    clear: both;
-    padding: 5px 0;
-    background:#fff;
-    position: relative;
-    width: 100%;
-    border-top: 1px solid #e5e5ee;
-    z-index: 10;
-    height: 1em;
-}
-
-
 table{
     width:100%;
     border: 0;
