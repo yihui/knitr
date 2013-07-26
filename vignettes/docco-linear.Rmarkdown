@@ -1,9 +1,9 @@
 <!--
-%\VignetteEngine{knitr::docco}
-%\VignetteIndexEntry{R Markdown with the Docco Style}
+%\VignetteEngine{knitr::docco_linear}
+%\VignetteIndexEntry{R Markdown with the Docco Linear Style}
 -->
 
-# R Markdown with the Docco Style
+# R Markdown with the Docco Linear Style
 
 This is an example of Markdown vignettes using the [Docco style](http://jashkenas.github.io/docco/).
 
@@ -11,9 +11,9 @@ This is an example of Markdown vignettes using the [Docco style](http://jashkena
 
 To use the Docco style for Markdown vignettes in an R package, you need to
 
-- add `*.Rmarkdown` files under the `vignettes` directory
+- add `*.Rmarkdown` files under the `vignettes` directory (in theory, we can use `*.Rmd` as well, but currently there is a bug in R 3.0.1, so we have to use a different file extension)
 - add `Suggests: knitr` and `VignetteBuilder: knitr` to the `DESCRIPTION` file
-- specify the vignette engine `\VignetteEngine{knitr::docco}` in the `Rmarkdown` files (inside HTML comments)
+- specify the vignette engine `\VignetteEngine{knitr::docco_linear}` in the `Rmarkdown` files (inside HTML comments)
 
 After building and installing the package, you can view vignettes via
 

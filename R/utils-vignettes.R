@@ -10,10 +10,15 @@ vweave = vtangle = function(file, driver, syntax, encoding = '', quiet = FALSE, 
 
 body(vtangle)[4L] = expression(purl(file, encoding = encoding, quiet = quiet))
 
-vweave_docco = vweave
-body(vweave_docco)[4L] = expression(knit2html(
+vweave_docco_linear = vweave
+body(vweave_docco_linear)[4L] = expression(knit2html(
   file, encoding = encoding, quiet = quiet, envir = globalenv(),
   template = system.file('misc', 'docco-template.html', package = 'knitr')
+))
+
+vweave_docco_classic = vweave
+body(vweave_docco_classic)[4L] = expression(rocco(
+  file, encoding = encoding, quiet = quiet, envir = globalenv()
 ))
 
 Rversion = getRversion()
@@ -26,7 +31,11 @@ register_vignette_engines = function(pkg) {
     pattern = '[.]([rRsS](nw|tex)|[Rr](md|html|rst))$', package = pkg
   )
   tools::vignetteEngine(
-    'docco', weave = vweave_docco, tangle = vtangle,
+    'docco_linear', weave = vweave_docco_linear, tangle = vtangle,
     pattern = '[.][Rr]markdown$', package = pkg
+  )
+  tools::vignetteEngine(
+    'docco_classic', weave = vweave_docco_classic, tangle = vtangle,
+    pattern = '[.][Rr]mkd$', package = pkg
   )
 }
