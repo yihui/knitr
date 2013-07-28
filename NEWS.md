@@ -16,6 +16,8 @@
 
 - for the chunk options set in package option `opts_knit$get('eval.after')`, they will not be evaluated after a chunk if `eval=FALSE` for that chunk (#570, thanks, @knokknok)
 
+- removed the global option `KNITR_PROGRESS`, which was introduced to suppress the progress bar, but now we have got `knit(..., quiet = TRUE)`, so this option is redundant
+
 # CHANGES IN knitr VERSION 1.3
 
 ## NEW FEATURES
