@@ -90,12 +90,25 @@ set_alias = function(...) {
 #'
 #' Options including whether to use a progress bar when knitting a document, and
 #' the base directory of images, etc.
+#'
+#' Besides the standard usage (\code{opts_knit$set()}), we can also set package
+#' options prior to loading \code{knitr} or calling \code{knit()} using
+#' \code{\link{options}()} in base R. A global option \code{knitr.foo} in
+#' \code{options()} will be set as an option \code{foo} in \code{opts_knit},
+#' i.e. global options in base R with the prefix \code{knitr.} correspond to
+#' options in \code{opts_knit}. This can be useful to set package options in
+#' \file{~/.Rprofile} without loading \pkg{knitr}.
 #' @references Usage: \url{http://yihui.name/knitr/objects}
 #'
-#' A list of available options:
-#' \url{http://yihui.name/knitr/options#package_options}
+#'   A list of available options:
+#'   \url{http://yihui.name/knitr/options#package_options}
 #' @export
 #' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
+#' \dontrun{
+#' # for unnamed chunks, use 'fig' as the figure prefix
+#' options(knitr.unnamed.chunk.label='fig')
+#' knit('001-minimal.Rmd') # from https://github.com/yihui/knitr-examples
+#' }
 opts_knit = new_defaults(list(
   progress = TRUE, verbose = FALSE, out.format = NULL,
   base.dir = NULL, base.url = NULL, child.path = '', upload.fun = identity,
@@ -111,6 +124,18 @@ opts_knit = new_defaults(list(
 ## tangle: whether I'm in tangle mode; child: whether I'm in child
 ## document mode; parent: whether I need to add parent preamble to the
 ## child output
+
+# adjust opts_knit according to options(), e.g. options(knitr.progress) -->
+# opts_knit$get('progress'); this makes it possible to set options in
+# ~/.Rprofile without loading knitr
+adjust_opts_knit = function() {
+  opts = options()
+  nms = names(opts)
+  if (length(nms <- grep('^knitr[.]', nms, value = TRUE)) == 0) return()
+  # strip off knitr. from option names
+  opts = setNames(opts[nms], gsub('^knitr[.]', '', nms))
+  opts_knit$set(opts)
+}
 
 #' Template for creating reusable chunk options
 #'

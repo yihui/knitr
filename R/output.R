@@ -124,6 +124,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     opts_knit$set(output.dir = getwd()) # record working directory in 1st run
     knit_log$restore()
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
+    adjust_opts_knit()
     ## turn off fancy quotes, use smaller digits/width, warn immediately
     oopts = options(
       useFancyQuotes = FALSE, digits = 4L, warn = 1L, width = getOption('KNITR_WIDTH', 75L),
