@@ -18,6 +18,8 @@
 
 - for the chunk options set in package option `opts_knit$get('eval.after')`, they will not be evaluated after a chunk if `eval=FALSE` for that chunk (#570, thanks, @knokknok)
 
+- for document formats that produce HTML output, the default graphical device is changed to `png` only if it is `pdf`; if the device has been changed to values other than `pdf`, **knitr** will no longer modify it internally; when the `png` device is not available, the `svg` device will be used instead
+
 - removed the global option `KNITR_PROGRESS`, which was introduced to suppress the progress bar, but now we have got `knit(..., quiet = TRUE)`, so this option is redundant
 
 # CHANGES IN knitr VERSION 1.3

@@ -22,7 +22,7 @@ hook_plot_rst = function(x, options) {
 #' @export
 render_rst = function(strict = FALSE) {
   knit_hooks$restore()
-  opts_chunk$set(dev = 'png', highlight = FALSE)
+  set_html_dev()
   hook.s = function(x, options) {
     str_c('\n\n::\n\n', indent_block(x), '\n')
   }

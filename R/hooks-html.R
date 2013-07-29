@@ -150,7 +150,7 @@ hook_r2swf = function(x, options) {
 #' @export
 render_html = function() {
   knit_hooks$restore()
-  opts_chunk$set(dev = 'png') # default device is png in HTML and markdown
+  set_html_dev()
   opts_knit$set(out.format = 'html')
   ## use div with different classes
   html.hook = function(name) {

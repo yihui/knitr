@@ -503,3 +503,15 @@ wrap_rmd = function(file, width = 80, text = NULL, backup) {
     writeLines(txt, file)
   } else txt
 }
+
+# change the default device to an appropriate device when the output is html
+# (e.g. markdown, reST, AsciiDoc)
+set_html_dev = function() {
+  # only change if device is pdf, because pdf does not work for html
+  if (!identical(opts_chunk$get('dev'), 'pdf')) return()
+  # in some cases, png() does not work (e.g. options('bitmapType') == 'Xlib' on
+  # headless servers); use svg then
+  opts_chunk$set(dev = if (inherits(try({
+    png(tempfile()); dev.off()
+  }, silent = TRUE), 'try-error')) 'svg' else 'png')
+}
