@@ -38,11 +38,12 @@ imgur_upload(file, key = "9f3460e67f308f6")
   associated to it.
 }
 \examples{
+\dontrun{
 f = tempfile(fileext = ".png")
 png(f)
 plot(rnorm(100), main = R.version.string)
 dev.off()
-\dontrun{
+
 res = imgur_upload(f)
 res  # link to original URL of the image
 attr(res, "XML")  # all information
