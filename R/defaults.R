@@ -123,7 +123,7 @@ opts_knit = new_defaults(list(
   concordance = FALSE, tangle = FALSE, child = FALSE,
   parent = FALSE, documentation = FALSE, aliases = NULL, root.dir = NULL,
   self.contained = TRUE,
-  header = c(highlight = '', tikz = '', framed = ''), stop_on_error = 0L,
+  header = c(highlight = '', tikz = '', framed = ''),
   unnamed.chunk.label = 'unnamed-chunk'
 ))
 ## header should not be set by hand unless you know what you are doing

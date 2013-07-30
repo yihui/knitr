@@ -101,13 +101,18 @@ block_exec = function(options) {
   if (keep != 'none' && is.null(options$fig.ext))
     options$fig.ext = dev2ext(options$dev)
 
+  if (!is.null(err.code <- opts_knit$get('stop_on_error'))) {
+    warning('the package option stop_on_error was deprecated;',
+            ' use the chunk option error = ', err.code != 2L, ' instead')
+    options$error = err.code != 2L
+  }
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
     list(structure(list(src = code), class = 'source'))
   } else in_dir(
     opts_knit$get('root.dir') %n% input_dir(),
     evaluate(code, envir = env, new_device = FALSE,
-             stop_on_error = if (options$include) opts_knit$get('stop_on_error') else 2L)
+             stop_on_error = if (options$error) 0L else 2L)
   )
 
   # eval other options after the chunk
