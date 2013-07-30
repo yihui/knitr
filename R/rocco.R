@@ -35,6 +35,7 @@ docAdjust = function(x) {
 #' @param input path of the input R Markdown file
 #' @param ... arguments to be passed to \code{\link{knit2html}}
 #' @return An HTML file is written, and its name is returned.
+#' @author Weicheng Zhu and Yihui Xie
 #' @references The Docco package by Jeremy Ashkenas:
 #'   \url{https://github.com/jashkenas/docco}
 #' @export
