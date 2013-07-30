@@ -244,7 +244,7 @@ call_inline = function(block) {
 }
 
 inline_exec = function(block, eval = opts_chunk$get('eval'), envir = knit_global(),
-                       stop_on_error = opts_knit$get('stop_on_error'),
+                       error = opts_chunk$get('error'),
                        hook = knit_hooks$get('inline')) {
 
   # run inline code and substitute original texts
@@ -254,7 +254,7 @@ inline_exec = function(block, eval = opts_chunk$get('eval'), envir = knit_global
   loc = block$location
   for (i in 1:n) {
     res = if (eval) {
-      (if (stop_on_error == 2L) identity else try)(
+      (if (error) try else identity)(
         {
           v = withVisible(eval(parse_only(code[i]), envir = envir))
           if (v$visible) v$value
