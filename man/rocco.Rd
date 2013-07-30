@@ -27,6 +27,9 @@ rocco_view = function(input) {
 rocco_view(system.file("doc", "docco-classic.Rmkd", package = "knitr"))
 rocco_view(system.file("doc", "knit_expand.Rmd", package = "knitr"))
 }
+\author{
+  Weicheng Zhu and Yihui Xie
+}
 \references{
   The Docco package by Jeremy Ashkenas:
   \url{https://github.com/jashkenas/docco}
