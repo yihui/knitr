@@ -65,7 +65,7 @@ Description: This package provides a general-purpose tool for dynamic report
 Depends:
     R (>= 2.14.1)
 Imports:
-    evaluate (>= 0.4.4),
+    evaluate (>= 0.4.5),
     digest,
     formatR (>= 0.7),
     highr (>= 0.2),
