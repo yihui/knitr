@@ -112,6 +112,7 @@ block_exec = function(options) {
   } else in_dir(
     opts_knit$get('root.dir') %n% input_dir(),
     evaluate(code, envir = env, new_device = FALSE,
+             keep_warning = options$warning, keep_message = options$message,
              stop_on_error = if (options$error) 0L else 2L)
   )
 
@@ -133,9 +134,6 @@ block_exec = function(options) {
     }
   }
   if (options$results == 'hide') res = Filter(Negate(is.character), res)
-  if (!options$warning) res = Filter(Negate(is.warning), res)
-  if (!options$error) res = Filter(Negate(is.error), res)
-  if (!options$message) res = Filter(Negate(is.message), res)
 
   # rearrange locations of figures
   figs = sapply(res, is.recordedplot)
