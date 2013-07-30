@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.4
 
+## NOTE
+
+- if you are using Windows or Linux, you need to read the news about both versions 1.3 and 1.4, because the version 1.3 did not manage to survive on CRAN
+
 ## NEW FEATURES
 
 - added two new vignette engines called `docco_linear` and `docco_classic` using the Docco styles (http://jashkenas.github.io/docco/); see `browseVignettes(package = 'knitr')` for examples
