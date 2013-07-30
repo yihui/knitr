@@ -113,7 +113,7 @@ block_exec = function(options) {
     opts_knit$get('root.dir') %n% input_dir(),
     evaluate(code, envir = env, new_device = FALSE,
              keep_warning = options$warning, keep_message = options$message,
-             stop_on_error = if (options$error) 0L else 2L)
+             stop_on_error = if (options$error && options$include) 0L else 2L)
   )
 
   # eval other options after the chunk
