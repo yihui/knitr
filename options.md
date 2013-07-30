@@ -43,9 +43,9 @@ All built-in options in **knitr** are:
   - `asis`: output as-is, i.e., write raw results from R into the output document
   - `hide` hide results; this option only applies to normal R output (not warnings, messages or errors)
   - note `markup` and `asis` are equivalent to `verbatim` and `tex` in Sweave respectively (you can still use the latter two, but they can be misleading, e.g., `verbatim` does not really mean verbatim in R, and `tex` seems to be restricted to LaTeX)
-- `warning`: (`TRUE`; logical) whether to preserve warnings (produced by `warning()`) in the output like we run R code in a terminal (if `FALSE`, all warnings will be discarded)
-- `error`: (`TRUE`; logical) whether to preserve errors (from `stop()`) (by default, the evaluation will not stop even in case of errors!!)
-- `message`: (`TRUE`; logical) whether to preserve messages emitted by `message()`
+- `warning`: (`TRUE`; logical) whether to preserve warnings (produced by `warning()`) in the output like we run R code in a terminal (if `FALSE`, all warnings will be printed in the console instead of the output document)
+- `error`: (`TRUE`; logical) whether to preserve errors (from `stop()`); by default, the evaluation will not stop even in case of errors!! if we want R to stop on errors, we need to set this option to `FALSE`
+- `message`: (`TRUE`; logical) whether to preserve messages emitted by `message()` (similar to `warning`)
 - `split`: (`FALSE`; logical) whether to split the output from R into separate files and include them into LaTeX by `\input{}` or HTML by `<iframe></iframe>`
 - `include`: (`TRUE`; logical) whether to include the chunk output in the final output document; if `include=FALSE`, nothing will be written into the output document, but the code is still evaluated and plot files are generated if there are any plots in the chunk, so you can manually insert figures; note this is the only chunk option that is not cached, i.e., changing it will not invalidate the cache
 
@@ -179,7 +179,6 @@ All package options are:
 - `progress`: (`TRUE`) whether to display a progress bar when running **knitr**; note it also depends on the R option `KNITR_PROGRESS` (it this variable is set to `FALSE` via `options(KNITR_PROGRESS = FALSE)`, the `progress` option will be set to `FALSE` when **knitr** is loaded)
 - `root.dir`: (`NULL`) the root directory when evaluating code chunks; if `NULL`, the directory of the input document will be used
 - `self.contained`: (`TRUE`) whether the output document should be self-contained (TeX styles written in the tex document, and CSS styles in HTML document)
-- `stop_on_error`: (`0L`) an integer (`0L`, `1L` or `2L`) to be passed to the **evaluate** package to decide the behavior of errors in code chunks; see `?evaluate::evaluate` for details
 - `unnamed.chunk.label`: (`unnamed-chunk`) the label prefix for unnamed chunks
 - `upload.fun`: (`identity`) a function that takes a filename as its input, processes it and returns a character string when the output format is HTML or Markdown; typically it is a function to upload a image and return the link to the image, e.g. `opts_knit$set(upload.fun = imgur_upload)` can upload a file to <http://imgur.com> (see `?imgur_upload`)
 - `verbose`: (`FALSE`) whether to show verbose information (e.g., R code in each chunk and message logs) or just show chunk labels and options
