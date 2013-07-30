@@ -23,6 +23,8 @@ You can also install the development version from
 [RForge](http://rforge.net/knitr/), which provides daily build of **knitr**:
 
 ```s
+# update all existing packages first
+update.packages(ask = FALSE, repos = 'http://cran.rstudio.org')
 install.packages('knitr', repos = c('http://rforge.net', 'http://cran.rstudio.org'),
                  type = 'source')
 ```
