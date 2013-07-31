@@ -21,13 +21,16 @@
 #' @param config the Pandoc configuration file; if missing, it is assumed to be
 #'   a file with the same base name as the \code{input} file and an extension
 #'   \code{.pandoc} (e.g. for \file{foo.md} it looks for \file{foo.pandoc})
+#' @param ext the filename extensions; by default, the extension is inferred
+#'   from the \code{format}, e.g. \code{latex} creates \code{pdf}, and
+#'   \code{dzslides} creates \code{html}, and so on
 #' @return The output filename(s) (or an error if the conversion failed).
 #' @references Pandoc: \url{http://johnmacfarlane.net/pandoc/}; Examples and
 #'   rules of the configurations: \url{http://yihui.name/knitr/demo/pandoc}
 #' @seealso \code{\link{read.dcf}}
 #' @export
 #' @examples system('pandoc -h') # see possible output formats
-pandoc = function(input, format = 'html', config = getOption('config.pandoc')) {
+pandoc = function(input, format = 'html', config = getOption('config.pandoc'), ext = NA) {
   if (Sys.which('pandoc') == '')
     stop('Please install pandoc first: http://johnmacfarlane.net/pandoc/')
   cfg = if (is.null(config)) sub_ext(input[1L], 'pandoc') else config
@@ -35,10 +38,10 @@ pandoc = function(input, format = 'html', config = getOption('config.pandoc')) {
   if (file.exists(cfg)) txt = c(txt, '', readLines(cfg, warn = FALSE))
   con = textConnection(txt); on.exit(close(con))
   cfg = read.dcf(con)
-  mapply(pandoc_one, input, format, MoreArgs = list(cfg = cfg), USE.NAMES = FALSE)
+  mapply(pandoc_one, input, format, ext, MoreArgs = list(cfg = cfg), USE.NAMES = FALSE)
 }
 # format is a scalar
-pandoc_one = function(input, format, cfg) {
+pandoc_one = function(input, format, ext, cfg) {
   cmn = NULL  # common arguments
   if (nrow(cfg) == 0L) cfg = character(0) else if (nrow(cfg) == 1L) {
     if ('format' %in% colnames(cfg)) {
@@ -58,7 +61,9 @@ pandoc_one = function(input, format, cfg) {
     }
   }
   out = unname(if (!is.na(cfg['o'])) cfg['o'] else {
-    if (!is.na(cfg['output'])) cfg['output'] else sub_ext(input, pandoc_ext(format))
+    if (!is.na(cfg['output'])) cfg['output'] else {
+      sub_ext(input, if (is.na(ext)) pandoc_ext(format) else ext)
+    }
   })
   cfg = cfg[setdiff(names(cfg), c('o', 'output', 'format'))]
   cmd = paste('pandoc', pandoc_arg(cfg), pandoc_arg(cmn), '-f markdown',

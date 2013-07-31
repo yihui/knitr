@@ -14,6 +14,8 @@
 
 - it is possible to set package options prior to loading the **knitr** package now: for a package option `foo`, we can set `options(knitr.foo = value)` so that **knitr** will `opts_knit$set(foo = value)` when calling `knit()`; see `?opts_knit` for details (thanks, Zhiguang Zhao)
 
+- added a new argument `ext` to the `pandoc()` function so that users can manually specify the output filename extensions (thanks, baptiste, http://stackoverflow.com/q/17710249/559676)
+
 ## MAJOR CHANGES
 
 - **knitr** formally depends on the **highr** package now (for syntax highlighting of LaTeX and HTML)
