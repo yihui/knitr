@@ -4,7 +4,7 @@ body {
     font-size: 16px;
     line-height: 24px;
     color: #30404f;
-    margin: 0; 
+    margin: 0;
     padding: 0;
 }
 
@@ -67,7 +67,7 @@ td.code{
 }
 
 code{
-    font-size:12px;	
+    font-size:12px;
     margin: 0;
     padding: 0;
 }
@@ -92,22 +92,22 @@ td.code pre code{
     line-height: 18px;
 }
 
-.pilwrap { 
-    position: relative; 
+.pilwrap {
+    position: relative;
 }
-.pilcrow { 
-    font: 12px Arial; 
-    text-decoration: none; 
-    color: rgb(69, 69, 69); 
-    position: absolute; 
-    top: 3px; 
-    left: -20px; 
-    padding: 1px 2px; 
-    opacity: 0; 
+.pilcrow {
+    font: 12px Arial;
+    text-decoration: none;
+    color: rgb(69, 69, 69);
+    position: absolute;
+    top: 3px;
+    left: -20px;
+    padding: 1px 2px;
+    opacity: 0;
 }
 
-td.docs:hover .pilcrow { 
-    opacity: 1; 
+td.docs:hover .pilcrow {
+    opacity: 1;
 }
 
 blockquote {
