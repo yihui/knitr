@@ -2,7 +2,7 @@
 \alias{pandoc}
 \title{A Pandoc wrapper to convert Markdown documents to other formats}
 \usage{
-pandoc(input, format = "html", config = getOption("config.pandoc"))
+pandoc(input, format = "html", config = getOption("config.pandoc"), ext = NA)
 }
 \arguments{
   \item{input}{a character vector of the Markdown
@@ -15,6 +15,11 @@ pandoc(input, format = "html", config = getOption("config.pandoc"))
   it is assumed to be a file with the same base name as the
   \code{input} file and an extension \code{.pandoc} (e.g.
   for \file{foo.md} it looks for \file{foo.pandoc})}
+
+  \item{ext}{the filename extensions; by default, the
+  extension is inferred from the \code{format}, e.g.
+  \code{latex} creates \code{pdf}, and \code{dzslides}
+  creates \code{html}, and so on}
 }
 \value{
   The output filename(s) (or an error if the conversion
