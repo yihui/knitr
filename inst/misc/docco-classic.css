@@ -59,7 +59,6 @@ td.docs{
 
 
 td.code{
-    width: 50%;
     background: #f5f5ff;
     padding: 10px 25px 1px 50px;
     overflow-x: hidden;
@@ -114,4 +113,11 @@ blockquote {
     border-left: 4px solid #DDD;
     padding: 0 15px;
     color: #777;
+}
+div.handler{
+      width: 5px;
+      padding: 0;
+      cursor: col-resize;
+      position: absolute;
+      z-index: 5;
 }

@@ -32,6 +32,12 @@ docAdjust = function(x) {
 #'
 #' The classic Docco style is a two-column layout, with text in the left and
 #' code in the right column.
+#'
+#' The output HTML page supports resizing and hiding/showing the two columns.
+#' Move the cursor to the center of the page, and it will change to a
+#' bidirectional resize cursor; drag the cursor to resize the two columns. Press
+#' the key \code{t} to hide the code column (show the text column only), and
+#' press again to hide the text column (show code).
 #' @param input path of the input R Markdown file
 #' @param ... arguments to be passed to \code{\link{knit2html}}
 #' @return An HTML file is written, and its name is returned.
