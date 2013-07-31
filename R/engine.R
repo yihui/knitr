@@ -103,7 +103,7 @@ eng_Rcpp = function(options) {
   if (!is.environment(opts$env)) opts$env = knit_global() # default env is knit_global()
   if (options$eval) {
     message('Building shared library for Rcpp code chunk...')
-    do.call(Rcpp::sourceCpp, c(list(code = code), opts))
+    do.call(getFromNamespace('sourceCpp', 'Rcpp'), c(list(code = code), opts))
   }
 
   options$engine = 'cpp' # wrap up source code in cpp syntax instead of Rcpp
