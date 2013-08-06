@@ -191,7 +191,7 @@ hljs.initHighlightingOnLoad();
 </form>
 </div>
 <script>
-$('textarea[name="x"]').attr('value', 'Start typing here...\n\n```{r test, fig.width=4, fig.height=4}\n# write R code here\npar(mar = c(4, 4, .1, .1))\nsmoothScatter(rnorm(500), rnorm(500))\n```\n\nThe value of pi is `r pi`.');
+$('textarea[name="x"]').val('Start typing here...\n\n```{r test, fig.width=4, fig.height=4}\n# write R code here\npar(mar = c(4, 4, .1, .1))\nsmoothScatter(rnorm(500), rnorm(500))\n```\n\nThe value of pi is `r pi`.');
 
 $('#knit').click(function() {
   $(this).attr('class', 'btn disabled');
