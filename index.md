@@ -49,6 +49,14 @@ Lots of efforts have been made to producing beautiful output and enhancing reada
 
 I thank the authors of Sweave, pgfSweave, cacheSweave, brew, decumar, R2HTML, tikzDevice, highlight, digest, evaluate, roxygen2 and of course, R, for the many inspiring ideas and tools. I really appreciate the [feedback](https://github.com/yihui/knitr/issues) from many early beta testers. This package was initiated based on the design of decumar.
 
+## FOAS
+
+<img src="http://www.foastat.org/images/foas.png" style="float: right;" />
+`knitr` is proudly affiliated with the [Foundation for Open Access
+Statistics](http://www.foastat.org/) (FOAS). FOAS is a nonprofit public
+benefit corporation with a worldwide mission to promote free software, open
+access publishing, and reproducible research in statistics.
+
 ## Misc
 
 Obviously the package name `knitr` was coined with `weave` in mind, and it also aims to be *neater*. I thank [Hadley](http://had.co.nz), [Di](http://dicook.public.iastate.edu) and [Andrew](http://www.stat.tamu.edu/~aredd/site/) for discussions on this neat name.
