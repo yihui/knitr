@@ -43,8 +43,8 @@ $('#knit').click(function() {
 $('#knitForm').submit(function(event) {
 
   /* stop form from submitting normally */
-  event.preventDefault(); 
-      
+  event.preventDefault();
+
   /* get some values from elements on the page: */
   var $form = $( this ),
       term = $form.find('textarea[name="x"]').val().replace(/\\/g, '\\\\').replace(/"/g, '\\"'),
