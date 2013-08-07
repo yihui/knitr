@@ -240,7 +240,10 @@ render_latex = function() {
   knit_hooks$restore()
   knit_hooks$set(
     source = function(x, options) {
-      if (options$engine == 'R' && options$highlight) x else .verb.hook(x)
+      x = hilight_source(x, 'latex', options)
+      if (options$highlight) {
+        paste(c('\\begin{alltt}', x, '\\end{alltt}', ''), collapse = '\n')
+      } else .verb.hook(x)
     },
     output = function(x, options) {
       if (output_asis(x, options)) {

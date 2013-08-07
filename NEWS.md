@@ -16,6 +16,8 @@
 
 - added a new argument `ext` to the `pandoc()` function so that users can manually specify the output filename extensions (thanks, baptiste, http://stackoverflow.com/q/17710249/559676)
 
+- for LaTeX and HTML output, syntax highlighting can be done for languages besides R (e.g. Python, Perl, ...); this is achieved by `highr::hi_andre()`, so Andre Simon's Highlight must be installed, otherwise **knitr** will fall back to verbatim output for source code; see https://github.com/yihui/knitr-examples/blob/master/098-highlight-python.Rnw for an example (#495)
+
 ## MAJOR CHANGES
 
 - **knitr** formally depends on the **highr** package now (for syntax highlighting of LaTeX and HTML)

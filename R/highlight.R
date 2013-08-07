@@ -1,9 +1,18 @@
 hilight_source = function(x, format, options) {
-  if (!((format %in% c('latex', 'html')) && options$highlight))
-    return(if (options$prompt) line_prompt(x) else x)
-  res = highr::hilight(x, format, prompt = options$prompt)
-  if (format == 'html') return(res)
-  c('\\begin{alltt}', res, '\\end{alltt}')
+  if ((format %in% c('latex', 'html')) && options$highlight) {
+    if (options$engine == 'R') {
+      highr::hilight(x, format, prompt = options$prompt)
+    } else {
+      res = try(highr::hi_andre(x, options$engine, format))
+      if (inherits(res, 'try-error')) {
+        highr:::escape_latex(x)
+      } else if (format == 'html') res else {
+        # clean up TeX results from highlight
+        res = res[-c(1:2, length(res) - 0:2)]
+        gsub('(\\\\hlstd\\{\\})?\\\\hspace[*]\\{\\\\fill\\}\\\\\\\\$', '', res)
+      }
+    }
+  } else if (options$prompt) line_prompt(x) else x
 }
 
 

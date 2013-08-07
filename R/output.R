@@ -384,8 +384,6 @@ wrap.character = function(x, options) {
 
 wrap.source = function(x, options) {
   src = sub('\n$', '', x$src)
-  src = hilight_source(src, out_format(), options)
-  src = paste(c(src, ''), collapse = '\n')
   knit_hooks$get('source')(src, options)
 }
 
