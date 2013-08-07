@@ -191,7 +191,8 @@ hook_plot_tex = function(x, options) {
   }
 }
 
-.verb.hook = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
+.verb.hook = function(x, options)
+  paste(c('\\begin{verbatim}', sub('\n$', '', x), '\\end{verbatim}', ''), collapse = '\n')
 .color.block = function(color1 = '', color2 = '') {
   function(x, options) {
     x = gsub('\n*$', '', x)
@@ -269,7 +270,9 @@ render_sweave = function() {
   set_header(framed = '', highlight = '\\usepackage{Sweave}')
   knit_hooks$restore()
   ## wrap source code in the Sinput environment, output in Soutput
-  hook.i = function(x, options) str_c('\\begin{Sinput}\n', x, '\\end{Sinput}\n')
+  hook.i = function(x, options)
+    paste(c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''),
+          collapse = '\n')
   hook.s = function(x, options) str_c('\\begin{Soutput}\n', x, '\\end{Soutput}\n')
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.s(x, options)
   hook.c = function(x, options) {

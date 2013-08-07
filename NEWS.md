@@ -26,6 +26,8 @@
 
 - the meanings of the chunk options `warning` and `message` when they take the value `FALSE` have also changed: `FALSE` means the warnings/messages will be printed in the R console and not recorded; this makes it easier to know when/where the warnings/messages were produced during `knit()`
 
+- syntax highlighting and adding prompts are done in the `source` hook now; in previous versions, they were done in `knitr:::wrap.source`; now the `source` hook receives the pure source code instead of syntax highlighted code
+
 ## MINOR CHANGES
 
 - for the chunk options set in package option `opts_knit$get('eval.after')`, they will not be evaluated after a chunk if `eval=FALSE` for that chunk (#570, thanks, @knokknok)

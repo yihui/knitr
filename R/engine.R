@@ -30,7 +30,6 @@ knit_engines = new_defaults()
 engine_output = function(options, code, out, extra = NULL) {
   if (length(code) != 1L) code = paste(code, collapse = '\n')
   if (length(out) != 1L) out = paste(out, collapse = '\n')
-  code = sub('([^\n]+)$', '\\1\n', code)
   out = sub('([^\n]+)$', '\\1\n', out)
   if (options$engine == 'Rscript') options$engine = 'r'
   txt = paste(c(

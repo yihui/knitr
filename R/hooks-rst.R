@@ -36,9 +36,13 @@ render_rst = function(strict = FALSE) {
   hook.i = function(x) {
     .inline.hook(format_sci(x, 'rst'))
   }
-  knit_hooks$set(source = if (strict) hook.s else hook.t,
-                 warning = hook.s, error = hook.s, message = hook.s,
-                 output = hook.o, inline = hook.i, plot = hook_plot_rst)
+  knit_hooks$set(
+    source = function(x, options) {
+      x = paste(c(hilight_source(x, 'rst', options), ''), collapse = '\n')
+      (if (strict) hook.s else hook.t)(x, options)
+    },
+    warning = hook.s, error = hook.s, message = hook.s,
+    output = hook.o, inline = hook.i, plot = hook_plot_rst)
 }
 
 # Insert a reStructuredText directive for sphinx
