@@ -69,8 +69,8 @@
 #'   recursively. See \code{\link{knit_child}}.
 #'
 #'   The working directory when evaluating R code chunks is the directory of the
-#'   input document by default, so if the R code involves with external files
-#'   (like \code{read.table()}), it is better to put these files under the same
+#'   input document by default, so if the R code involves external files (like
+#'   \code{read.table()}), it is better to put these files under the same
 #'   directory of the input document so that we can use relative paths. However,
 #'   it is possible to change this directory with the package option
 #'   \code{\link{opts_knit}$set(root.dir = ...)} so all paths in code chunks are
