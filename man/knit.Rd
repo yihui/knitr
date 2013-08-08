@@ -116,7 +116,7 @@ purl(..., documentation = 1L)
 
   The working directory when evaluating R code chunks is
   the directory of the input document by default, so if the
-  R code involves with external files (like
+  R code involves external files (like
   \code{read.table()}), it is better to put these files
   under the same directory of the input document so that we
   can use relative paths. However, it is possible to change
