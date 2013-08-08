@@ -73,7 +73,7 @@ new_cache = function() {
   }
 
   cache_exists = function(hash) {
-    all(file.exists(str_c(cache_path(hash), c('.rdb', '.rdx'))))
+    is.character(hash) && all(file.exists(str_c(cache_path(hash), c('.rdb', '.rdx'))))
   }
 
   ## code output is stored in .[hash], so cache=TRUE won't lose output as cacheSweave does
