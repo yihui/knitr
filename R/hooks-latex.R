@@ -196,8 +196,10 @@ hook_plot_tex = function(x, options) {
 .color.block = function(color1 = '', color2 = '') {
   function(x, options) {
     x = gsub('\n*$', '', x)
-    sprintf('\n\n{\\ttfamily\\noindent%s%s%s}',
-            color1, escape_latex(x, newlines = TRUE, spaces = TRUE), color2)
+    x = escape_latex(x, newlines = TRUE, spaces = TRUE)
+    # babel might have problems with "; see http://stackoverflow.com/q/18125539/559676
+    x = gsub('"', '"{}', x)
+    sprintf('\n\n{\\ttfamily\\noindent%s%s%s}', color1, x, color2)
   }
 }
 

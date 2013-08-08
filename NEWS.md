@@ -36,6 +36,10 @@
 
 - removed the global option `KNITR_PROGRESS`, which was introduced to suppress the progress bar, but now we have got `knit(..., quiet = TRUE)`, so this option is redundant
 
+## BUG FIXES
+
+- in LaTeX output, the double quotes `"` in the messages, errors, and warnings are replaced by `"{}` because they might cause trouble to babel: http://stackoverflow.com/q/18125539/559676 (thanks, Thierry)
+
 # CHANGES IN knitr VERSION 1.3
 
 ## NEW FEATURES
