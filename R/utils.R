@@ -203,6 +203,11 @@ fix_options = function(options) {
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
 
+  # cache=TRUE -> 3; FALSE -> 0
+  if (is.logical(options$cache)) options$cache = options$cache * 3
+  # non-R code should not use cache=1,2
+  if (options$engine != 'R') options$cache = (options$cache > 0) * 3
+
   ## deal with aliases: a1 is real option; a0 is alias
   if (length(a1 <- opts_knit$get('aliases')) && length(a0 <- names(a1))) {
     for (i in seq_along(a1)) {

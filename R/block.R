@@ -36,15 +36,18 @@ call_block = function(block) {
   params$code = parse_chunk(params$code) # parse sub-chunk references
 
   # Check cache
-  if (params$cache) {
-    content = list(params[setdiff(names(params), 'include')], getOption('width'))
+  if (params$cache > 0) {
+    content = list(
+      params[if (params$cache < 3) cache2.opts else setdiff(names(params), 'include')],
+      getOption('width')
+    )
     hash = str_c(valid_path(params$cache.path, label), '_', digest(content))
     params$hash = hash
     if (cache$exists(hash)) {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
       cache$load(hash)
       if (!params$include) return('')
-      return(cache$output(hash))
+      if (params$cache == 3) return(cache$output(hash))
     }
     if (params$engine == 'R')
       cache$library(params$cache.path, save = FALSE) # load packages
@@ -57,6 +60,9 @@ call_block = function(block) {
 
   block_exec(params)
 }
+
+# options that should affect cache when cache level = 1,2
+cache2.opts = c('eval', 'cache', 'cache.path', 'message', 'warning', 'error')
 
 block_exec = function(options) {
   # when code is not R language
@@ -107,15 +113,20 @@ block_exec = function(options) {
             ' use the chunk option error = ', err.code != 2L, ' instead')
     options$error = err.code != 2L
   }
+  cache.exists = cache$exists(options$hash)
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
     list(structure(list(src = code), class = 'source'))
+  } else if (cache.exists) {
+    fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
   } else in_dir(
     opts_knit$get('root.dir') %n% input_dir(),
     evaluate(code, envir = env, new_device = FALSE,
              keep_warning = options$warning, keep_message = options$message,
              stop_on_error = if (options$error && options$include) 0L else 2L)
   )
+  if (options$cache %in% 1:2 && !cache.exists)
+    res.orig = res  # make a copy for cache=1,2
 
   # eval other options after the chunk
   if (!isFALSE(ev))
@@ -174,13 +185,15 @@ block_exec = function(options) {
   output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
   output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
 
-  if (options$cache) {
+  if (options$cache > 0) {
     obj.new = setdiff(ls(globalenv(), all.names = TRUE), obj.before)
     copy_env(globalenv(), env, obj.new)
     objs = options$cache.vars %n% codetools::findLocalsList(parse_only(code))
     # make sure all objects to be saved exist in env
     objs = intersect(c(objs, obj.new), ls(env, all.names = TRUE))
-    block_cache(options, output, objs)
+    if (options$cache < 3) {
+      if (!cache.exists) block_cache(options, res.orig, objs)
+    } else block_cache(options, output, objs)
     if (options$autodep) cache$objects(objs, code, options$label, options$cache.path)
   }
 

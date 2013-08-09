@@ -6,6 +6,8 @@
 
 ## NEW FEATURES
 
+- the cache system is more granular now: instead of the binary option `cache = TRUE / FALSE`, we can specify `cache = 0, 1, 2, 3` (`TRUE` indicates 3, and `FALSE` indicates 0; for 1 and 2, see the documentation for `cache`: http://yihui.name/knitr/options); this means we may change the chunk options involved only with output rendering (e.g. from `echo = TRUE` to `FALSE`, or set `fig.cap = 'a new caption'`) without breaking the cache (thanks, Jeroen Ooms, Clark Kogan, and Roman Lustrik, #396, #536)
+
 - added two new vignette engines called `docco_linear` and `docco_classic` using the Docco styles (http://jashkenas.github.io/docco/); see `browseVignettes(package = 'knitr')` for examples
 
 - added a function `rocco()` to compile R Markdown documents to HTML using the classic Docco style, i.e. a two-column layout, with text on the left and code on the right (thanks, Weicheng Zhu, #577)

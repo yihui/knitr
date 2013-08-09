@@ -59,6 +59,9 @@ tikz_dev = function(...) {
 save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
   path = paste(name, ext, sep = '.')
+  # when cache=2 and plot file exists, just return the filename
+  if (options$cache == 2 && file.exists(path) && cache$exists(options$hash))
+    return(c(name, if (dev == 'tikz' && options$external) 'pdf' else ext))
 
   ## built-in devices
   device = switch(
@@ -185,4 +188,47 @@ reduce_plot_opts = function(options) {
   fig.cur = options$fig.cur
   for (i in .recyle.opts) options[[i]] = options[[i]][fig.cur]
   options
+}
+
+# the memory address of a NativeSymbolInfo object will be lost if it is saved to
+# disk; see http://markmail.org/message/zat2r2pfsvhrsfqz for the full
+# discussion; the hack below was stolen (with permission) from RStudio:
+# https://github.com/rstudio/rstudio/blob/master/src/cpp/r/R/Tools.R
+fix_recordedPlot = function(plot) {
+  # restore native symbols for R >= 3.0
+  if (Rversion >= '3.0.0') {
+    for (i in seq_along(plot[[1]])) {
+      # get the symbol then test if it's a native symbol
+      symbol = plot[[1]][[i]][[2]][[1]]
+      if (inherits(symbol, 'NativeSymbolInfo')) {
+        # determine the dll that the symbol lives in
+        name = symbol[[if (is.null(symbol$package)) 'dll' else 'package']][['name']]
+        pkgDLL = getLoadedDLLs()[[name]]
+        # reconstruct the native symbol and assign it into the plot
+        nativeSymbol = getNativeSymbolInfo(
+          name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE
+        )
+        plot[[1]][[i]][[2]][[1]] <- nativeSymbol
+      }
+    }
+  } else if (Rversion >= '2.14') {
+    # restore native symbols for R >= 2.14
+    try({
+      for(i in seq_along(plot[[1]])) {
+        if(inherits(plot[[1]][[i]][[2]][[1]], 'NativeSymbolInfo')) {
+          nativeSymbol = getNativeSymbolInfo(plot[[1]][[i]][[2]][[1]]$name)
+          plot[[1]][[i]][[2]][[1]] = nativeSymbol
+        }
+      }
+    }, silent = TRUE)
+  }
+  plot
+}
+
+# fix plots in evaluate() results
+fix_evaluate = function(list, fix = TRUE) {
+  if (!fix) return(list)
+  lapply(list, function(x) {
+    if (is.recordedplot(x)) fix_recordedPlot(x) else x
+  })
 }
