@@ -20,7 +20,7 @@
 \begin{document}
 
 
-\title{An Introduction to knitr}
+\title{Not an Introduction to knitr}
 
 
 \author{Yihui Xie}
@@ -36,8 +36,8 @@ and the graphics manual: \url{https://bitbucket.org/stat/knitr/downloads/knitr-g
 }, and remember to read the help pages of functions in this package.
 
 Anyway, here is a code chunk that shows you can compile vignettes
-with \textbf{knitr} as well by using a proper \textsf{Makefile} (see
-\url{http://yihui.name/knitr/demo/vignette/}):
+with \textbf{knitr} as well using R 3.0.x, which supports non-Sweave
+vignettes:
 
 <<show-off>>=
 rnorm(5)

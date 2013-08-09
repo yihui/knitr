@@ -72,7 +72,7 @@ knitr
 \begin_body
 
 \begin_layout Title
-An Introduction to knitr
+Not an Introduction to knitr
 \end_layout
 
 \begin_layout Author
@@ -147,22 +147,7 @@ Anyway, here is a code chunk that shows you can compile vignettes with
 \series bold
 knitr
 \series default
- as well by using a proper 
-\family sans
-Makefile
-\family default
- (see 
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://yihui.name/knitr/demo/vignette/
-\end_layout
-
-\end_inset
-
-):
+ as well using R 3.0.x, which supports non-Sweave vignettes:
 \end_layout
 
 \begin_layout Standard
