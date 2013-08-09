@@ -1,3 +1,90 @@
+		 CHANGES IN knitr VERSION 1.4
+
+NOTE
+
+  - if you are using Windows or Linux, you need to read the news about both
+  versions 1.3 and 1.4, because the version 1.3 did not manage to survive
+  on CRAN
+
+NEW FEATURES
+
+  - the cache system is more granular now: instead of the binary option `cache
+  = TRUE / FALSE`, we can specify `cache = 0, 1, 2, 3` (`TRUE` indicates 3,
+  and `FALSE` indicates 0; for 1 and 2, see the documentation for `cache`:
+  http://yihui.name/knitr/options); this means we may change the chunk
+  options involved only with output rendering (e.g. from `echo = TRUE` to
+  `FALSE`, or set `fig.cap = 'a new caption'`) without breaking the cache
+  (thanks, Jeroen Ooms, Clark Kogan, and Roman Lustrik, #396, #536)
+
+  - added two new vignette engines called `docco_linear` and `docco_classic`
+  using the Docco styles (http://jashkenas.github.io/docco/); see
+  `browseVignettes(package = 'knitr')` for examples
+
+  - added a function `rocco()` to compile R Markdown documents to HTML using
+  the classic Docco style, i.e. a two-column layout, with text on the left
+  and code on the right (thanks, Weicheng Zhu, #577)
+
+  - added an argument `comment` in `spin()` to specify comment lines that will
+  be ignored by `spin()`; by default, the block comment `/* comment */` is
+  recognized; thanks, Bryan Hanson http://stackoverflow.com/q/17664401/559676
+
+  - it is possible to set package options prior to loading the **knitr**
+  package now: for a package option `foo`, we can set `options(knitr.foo =
+  value)` so that **knitr** will `opts_knit$set(foo = value)` when calling
+  `knit()`; see `?opts_knit` for details (thanks, Zhiguang Zhao)
+
+  - added a new argument `ext` to the `pandoc()` function so that users
+  can manually specify the output filename extensions (thanks, baptiste,
+  http://stackoverflow.com/q/17710249/559676)
+
+  - for LaTeX and HTML output, syntax highlighting can be done for
+  languages besides R (e.g. Python, Perl, ...); this is achieved by
+  `highr::hi_andre()`, so Andre Simon's Highlight must be installed,
+  otherwise **knitr** will fall back to verbatim output for source code; see
+  https://github.com/yihui/knitr-examples/blob/master/098-highlight-python.Rnw
+  for an example (#495)
+
+MAJOR CHANGES
+
+  - **knitr** formally depends on the **highr** package now (for syntax
+  highlighting of LaTeX and HTML)
+
+  - the package option `stop_on_error` has been deprecated; now it is much
+  easier to specify whether you want to stop on errors or not by using the
+  existing chunk option `error`; if you want to stop, use `error=FALSE`;
+  see the documentation for details: http://yihui.name/knitr/options
+
+  - the meanings of the chunk options `warning` and `message` when they take
+  the value `FALSE` have also changed: `FALSE` means the warnings/messages
+  will be printed in the R console and not recorded; this makes it easier
+  to know when/where the warnings/messages were produced during `knit()`
+
+  - syntax highlighting and adding prompts are done in the `source` hook
+  now; in previous versions, they were done in `knitr:::wrap.source`;
+  now the `source` hook receives the pure source code instead of syntax
+  highlighted code
+
+MINOR CHANGES
+
+  - for the chunk options set in package option `opts_knit$get('eval.after')`,
+  they will not be evaluated after a chunk if `eval=FALSE` for that chunk
+  (#570, thanks, @knokknok)
+
+  - for document formats that produce HTML output, the default graphical device
+  is changed to `png` only if it is `pdf`; if the device has been changed
+  to values other than `pdf`, **knitr** will no longer modify it internally;
+  when the `png` device is not available, the `svg` device will be used instead
+
+  - removed the global option `KNITR_PROGRESS`, which was introduced to
+  suppress the progress bar, but now we have got `knit(..., quiet = TRUE)`,
+  so this option is redundant
+
+BUG FIXES
+
+  - in LaTeX output, the double quotes `"` in the messages, errors, and
+  warnings are replaced by `"{}` because they might cause trouble to babel:
+  http://stackoverflow.com/q/18125539/559676 (thanks, Thierry)
+
 		 CHANGES IN knitr VERSION 1.3
 
 NEW FEATURES
