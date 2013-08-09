@@ -76,11 +76,10 @@ new_cache = function() {
     is.character(hash) && all(file.exists(str_c(cache_path(hash), c('.rdb', '.rdx'))))
   }
 
-  ## code output is stored in .[hash], so cache=TRUE won't lose output as cacheSweave does
-  cache_output = function(hash) {
-    if (exists(str_c('.', hash), envir = knit_global(), mode = 'character')) {
-      get(str_c('.', hash), envir = knit_global(), mode = 'character')
-    } else ''
+  # when cache=3, code output is stored in .[hash], so cache=TRUE won't lose
+  # output as cacheSweave does; for cache=1,2, output is the evaluate() list
+  cache_output = function(hash, mode = 'character') {
+    get(str_c('.', hash), envir = knit_global(), mode = mode, inherits = FALSE)
   }
 
   list(purge = cache_purge, save = cache_save, load = cache_load, objects = cache_objects,
