@@ -20,7 +20,7 @@ This FAQ is compiled from the [issues](https://github.com/yihui/knitr/issues) an
 1. What is the working directory? Can I change my working directory in my code chunks?
   - You'd better not do this. Your working directory is always `getwd()` (all output files will be written here), but the code chunks are evaluated under the directory where your input document comes from. Changing working directories while running R code is a bad practice in general. See [#38](https://github.com/yihui/knitr/issues/38) for a discussion. You should also try to avoid absolute directories whenever possible (use relative directories instead), because it makes things less reproducible.
 1. The gray (shading) box is too narrow for my output.
-  - No, it is not because the box is too narrow (the box uses the current line width); it is because your output is too wide. Use a smaller `width` option to avoid text output exceeding the page margin, e.g. `options(width = 60)` (see [#44](https://github.com/yihui/knitr/issues/44)).
+  - No, it is not because the box is too narrow (the box uses the current line width); it is because your output is too wide. Use a smaller `width` option to avoid text output exceeding the page margin, e.g. `options(width = 60)` (see [example 038](https://github.com/yihui/knitr-examples/blob/master/038-output-width.Rnw)).
 1. How to comment out inline R code like in `\Sexpr{code}`?
   - see issue [#110](https://github.com/yihui/knitr/issues/110): you can destroy `\Sexpr` by `%\%Sexpr{code}` or comment out R code like `\Sexpr{#code}`, or just comment out the whole paragraph with `%` in the beginning of lines.
 1. How can I write a literal code chunk? i.e. write a code chunk which is not parsed and useful for tutorials?
