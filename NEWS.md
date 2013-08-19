@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.5
+
+## MINOR CHANGES
+
+- `knitr:::.onLoad()` no longer modifies the `PATH` variable when `/usr/texbin` is not in `PATH` under Mac OS
+
 # CHANGES IN knitr VERSION 1.4
 
 ## NOTE

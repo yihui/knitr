@@ -239,7 +239,7 @@ isFALSE = function(x) identical(x, FALSE)
 
 ## check latex packages; if not exist, copy them over to ./
 test_latex_pkg = function(name, path) {
-  res = try(system(sprintf('kpsewhich %s.sty', name), intern = TRUE), silent = TRUE)
+  res = try(system(sprintf('%s %s.sty', kpsewhich(), name), intern = TRUE), silent = TRUE)
   if (inherits(res, 'try-error') || !length(res)) {
     warning("unable to find LaTeX package '", name, "'; will use a copy from knitr")
     file.copy(path, '.')
@@ -517,4 +517,11 @@ set_html_dev = function() {
   opts_chunk$set(dev = if (inherits(try({
     png(tempfile()); dev.off()
   }, silent = TRUE), 'try-error')) 'svg' else 'png')
+}
+
+# locate kpsewhich especially for Mac OS because /usr/texbin may not be in PATH
+kpsewhich = function() {
+  if (Sys.info()['sysname'] != 'Darwin' || !file.exists(x <- '/usr/texbin/kpsewhich')
+      || nzchar(Sys.which('kpsewhich')))
+    'kpsewhich' else x
 }
