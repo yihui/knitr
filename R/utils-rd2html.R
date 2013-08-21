@@ -26,7 +26,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   library(pkg, character.only = TRUE)
   optc = opts_chunk$get(); on.exit(opts_chunk$set(optc))
   file.copy(system.file('misc', c('highlight.css', 'highlight.pack.js', 'R.css'), package = 'knitr'), './')
-  pkgRdDB = tools:::fetchRdDB(file.path(find.package(pkg), 'help', pkg))
+  pkgRdDB = getFromNamespace('fetchRdDB', 'tools')(file.path(find.package(pkg), 'help', pkg))
   force(links); topics = names(pkgRdDB)
   for (p in topics) {
     message('** knitting documentation of ', p)

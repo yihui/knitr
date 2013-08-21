@@ -25,7 +25,7 @@ new_cache = function() {
     save(list = outname, file = str_c(path, '.RData'), envir = knit_global())
     # random seed is always load()ed
     keys = setdiff(keys, '.Random.seed')
-    tools:::makeLazyLoadDB(knit_global(), path, variables = keys)
+    getFromNamespace('makeLazyLoadDB', 'tools')(knit_global(), path, variables = keys)
   }
 
   save_objects = function(objs, label, path) {
