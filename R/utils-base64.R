@@ -11,8 +11,10 @@
 #' @examples uri = image_uri(file.path(R.home('doc'), 'html', 'logo.jpg'))
 #' cat(sprintf('<img src="%s" />', uri), file = 'logo.html')
 #' if (interactive()) browseURL('logo.html') # you can check its HTML source
-image_uri = function(f) {
-  if (has_package('markdown')) return(markdown:::.b64EncodeFile(f))
+image_uri = function(f) markdown:::.b64EncodeFile(f)
+
+# alternative approaches to base64 encoding
+image_uri2 = function(f) {
   content = readBin(f, what = 'raw', n = file.info(f)$size)
   uri = if (has_package('RCurl')) {
     paste(RCurl::base64Encode(content, 'character'), collapse = '')
