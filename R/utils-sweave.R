@@ -171,7 +171,8 @@ remind_sweave = function(file) {
               'Sweave2knitr(', shQuote(file), ') to convert it to knitr')
   # throw a normal warning when R CMD check or tcltk not available
   if ('CheckExEnv' %in% search() || '_R_CHECK_TIMINGS_' %in% names(Sys.getenv()) ||
-        !capabilities('tcltk') || !capabilities('X11') || !tcltk:::.TkUp) {
+        !capabilities('tcltk') || !capabilities('X11') || !has_package('tcltk') ||
+        !getFromNamespace('.TkUp', 'tcltk')) {
     warning(msg)
   } else do.call(
     getFromNamespace('tkmessageBox', 'tcltk'),
