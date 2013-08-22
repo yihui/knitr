@@ -62,7 +62,7 @@ call_block = function(block) {
 }
 
 # options that should affect cache when cache level = 1,2
-cache2.opts = c('eval', 'cache', 'cache.path', 'message', 'warning', 'error')
+cache2.opts = c('code', 'eval', 'cache', 'cache.path', 'message', 'warning', 'error')
 
 block_exec = function(options) {
   # when code is not R language
