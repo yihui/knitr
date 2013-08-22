@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.5
 
+## BUG FIXES
+
+- code changes in chunks should invalidate the cache when the chunk option `cache < 3`; fixed by @knokknok in #587
+
 ## MINOR CHANGES
 
 - `knitr:::.onLoad()` no longer modifies the `PATH` variable when `/usr/texbin` is not in `PATH` under Mac OS
