@@ -182,14 +182,6 @@ hook_plot_tex = function(x, options) {
   }
   .inline.hook(x)
 }
-# an example of a chunk hook
-.param.hook = function(before, options, envir) {
-  if (before) {
-    'do something before the code chunk'
-  } else {
-    'do something after the code chunk'
-  }
-}
 
 .verb.hook = function(x, options)
   paste(c('\\begin{verbatim}', sub('\n$', '', x), '\\end{verbatim}', ''), collapse = '\n')
