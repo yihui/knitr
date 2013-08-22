@@ -159,8 +159,7 @@ format_sci_one = function(x, format = 'latex') {
   b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
-    s = sci_notation('%s%s10^{%s}', b, '\\times ', lx)
-    sprintf('\\ensuremath{%s}', s)
+    sci_notation('%s%s10^{%s}', b, '\\times ', lx)
   }, html = sci_notation('%s%s10<sup>%s</sup>', b, ' &times; ', lx), rst = {
     # if AsIs, use the :math: directive
     if (inherits(x, 'AsIs')) {
