@@ -6,7 +6,7 @@
 
 ## MAJOR CHANGES
 
-- when the chunk option `cache=2`, the recorded plots (i.e. display lists) will no longer be cached, and the figure files will be assumed to exist the next time the document is compiled; this will save some disk space and avoid bugs like #588 (thanks, @knokknok)
+- when the chunk option `cache=2`, the recorded plots (i.e. display lists) will no longer be cached, and the figure files will be assumed to exist the next time the document is compiled, otherwise the cache will be purged and the chunk needs to be recomputed; this will save some disk space and avoid bugs like #588 (thanks, @knokknok)
 
 ## MINOR CHANGES
 

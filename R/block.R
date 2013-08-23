@@ -206,11 +206,16 @@ block_cache = function(options, output, objects) {
   hash = options$hash
   outname = str_c('.', hash)
   assign(outname, output, envir = knit_global())
-  # purge my old cache and cache of chunks dependent on me
-  cache$purge(str_c(valid_path(options$cache.path,
-                               c(options$label, dep_list$get(options$label))), '_*'))
+  purge_cache(options)
   cache$library(options$cache.path, save = TRUE)
   cache$save(objects, outname, hash)
+}
+
+purge_cache = function(options) {
+  # purge my old cache and cache of chunks dependent on me
+  cache$purge(str_c(valid_path(
+    options$cache.path, c(options$label, dep_list$get(options$label))
+  ), '_*'))
 }
 
 # open a device for a chunk; depending on the option global.device, may or may

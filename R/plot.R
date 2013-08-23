@@ -61,7 +61,10 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
   path = paste(name, ext, sep = '.')
   # when cache=2 and plot file exists, just return the filename
   if (options$cache == 2 && cache$exists(options$hash)) {
-    if (!file.exists(path)) stop('cannot find ', path)
+    if (!file.exists(path)) {
+      purge_cache(options)
+      stop('cannot find ', path, '; the cache has been purged; please re-compile')
+    }
     return(c(name, if (dev == 'tikz' && options$external) 'pdf' else ext))
   }
 
