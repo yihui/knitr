@@ -15,3 +15,5 @@ NEWS.md
 ^\.Rproj\.user$
 ^.*\.Rproj$
 .travis.yml
+FAQ.md
+Makefile
