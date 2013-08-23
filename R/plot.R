@@ -60,8 +60,10 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
   path = paste(name, ext, sep = '.')
   # when cache=2 and plot file exists, just return the filename
-  if (options$cache == 2 && file.exists(path) && cache$exists(options$hash))
+  if (options$cache == 2 && cache$exists(options$hash)) {
+    if (!file.exists(path)) stop('cannot find ', path)
     return(c(name, if (dev == 'tikz' && options$external) 'pdf' else ext))
+  }
 
   ## built-in devices
   device = switch(
@@ -230,5 +232,12 @@ fix_evaluate = function(list, fix = TRUE) {
   if (!fix) return(list)
   lapply(list, function(x) {
     if (is.recordedplot(x)) fix_recordedPlot(x) else x
+  })
+}
+
+# remove the plots from the evaluate results for the case of cache=2
+remove_plot = function(list) {
+  lapply(list, function(x) {
+    if (is.recordedplot(x)) structure(NULL, class = 'recordedplot') else x
   })
 }

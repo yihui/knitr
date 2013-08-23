@@ -4,6 +4,10 @@
 
 - code changes in chunks should invalidate the cache when the chunk option `cache < 3`; fixed by @knokknok in #587
 
+## MAJOR CHANGES
+
+- when the chunk option `cache=2`, the recorded plots (i.e. display lists) will no longer be cached, and the figure files will be assumed to exist the next time the document is compiled; this will save some disk space and avoid bugs like #588 (thanks, @knokknok)
+
 ## MINOR CHANGES
 
 - `knitr:::.onLoad()` no longer modifies the `PATH` variable when `/usr/texbin` is not in `PATH` under Mac OS
