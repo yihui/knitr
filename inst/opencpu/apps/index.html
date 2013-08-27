@@ -7,14 +7,12 @@
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <!-- Styles for R syntax highlighter -->
   <link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
-  <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
-  <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+  <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet">
   <style type="text/css">
     textarea {
       font-size: 12px;
       font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
       width: 99%;
-      height: 200px;
     }
   </style>
 <!-- R syntax highlighter -->
@@ -26,8 +24,8 @@
 <body>
 <div class="container">
 <form action="http://public.opencpu.org/R/pub/base/identity/ascii" method="POST" id="knitForm">
-<textarea name="x"></textarea>
-<div><a class="btn" id="knit"><i class="icon-circle-arrow-right"></i> Convert</a></div>
+<textarea name="x" class="form-control" rows=10></textarea>
+<div><a class="btn btn-primary" id="knit"><i class="glyphicon-circle-arrow-right"></i> Convert</a></div>
 <!-- the knitting result will be rendered inside this div -->
 <div id="result"></div>
 </form>
@@ -57,7 +55,7 @@ $('#knitForm').submit(function(event) {
         $("#result").html(eval(data));
         $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
     })
-    .complete(function() {$('#knit').attr('class', 'btn');})
+    .complete(function() {$('#knit').attr('class', 'btn btn-primary');})
     .error(function() { alert("An error occurred!"); });
 });
 </script>
