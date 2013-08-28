@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.5
 
+## NEW FEATURES
+
+- for Sublime Text users, there is a [SublimeKnitr](https://github.com/andrewheiss/SublimeKnitr) package to support LaTeX and Markdown with **knitr**; thanks, Andrew Heiss (#449) (this is not really a new feature of knitr **itself**, though)
+
 ## BUG FIXES
 
 - code changes in chunks should invalidate the cache when the chunk option `cache < 3`; fixed by @knokknok in #587
