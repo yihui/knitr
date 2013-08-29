@@ -39,7 +39,7 @@ call_block = function(block) {
   if (params$cache > 0) {
     content = list(
       params[if (params$cache < 3) cache2.opts else setdiff(names(params), 'include')],
-      getOption('width')
+      getOption('width'), if (params$cache == 2) params$fig.keep
     )
     hash = str_c(valid_path(params$cache.path, label), '_', digest(content))
     params$hash = hash
@@ -127,7 +127,7 @@ block_exec = function(options) {
   )
   if (options$cache %in% 1:2 && !cache.exists) {
     # make a copy for cache=1,2; when cache=2, we do not really need plots
-    res.orig = if (options$cache == 2) remove_plot(res) else res
+    res.orig = if (options$cache == 2) remove_plot(res, keep == 'high') else res
   }
 
   # eval other options after the chunk
