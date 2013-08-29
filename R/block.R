@@ -37,7 +37,7 @@ call_block = function(block) {
 
   # Check cache
   if (params$cache > 0) {
-    content = list(
+    content = c(
       params[if (params$cache < 3) cache2.opts else setdiff(names(params), 'include')],
       getOption('width'), if (params$cache == 2) params$fig.keep
     )
