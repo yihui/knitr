@@ -41,6 +41,7 @@ All built-in options in **knitr** are:
 - `results`: (`'markup'`; character) takes three possible values
   - `markup`: mark up the results using the output hook, e.g. put results in a special LaTeX environment
   - `asis`: output as-is, i.e., write raw results from R into the output document
+  - `hold`: hold all the output pieces and push them to the end of a chunk
   - `hide` hide results; this option only applies to normal R output (not warnings, messages or errors)
   - note `markup` and `asis` are equivalent to `verbatim` and `tex` in Sweave respectively (you can still use the latter two, but they can be misleading, e.g., `verbatim` does not really mean verbatim in R, and `tex` seems to be restricted to LaTeX)
 - `warning`: (`TRUE`; logical) whether to preserve warnings (produced by `warning()`) in the output like we run R code in a terminal (if `FALSE`, all warnings will be printed in the console instead of the output document); it can also take numeric values as indices to select a subset of warnings to include in the output
