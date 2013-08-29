@@ -4,6 +4,8 @@
 
 - for Sublime Text users, there is a [SublimeKnitr](https://github.com/andrewheiss/SublimeKnitr) package to support LaTeX and Markdown with **knitr**; thanks, Andrew Heiss (#449) (this is not really a new feature of knitr **itself**, though)
 
+- now the chunk options `warning` and `message` can also take numeric values as indices to select which warnings/messages to include in the output (thanks, Simon Urbanek, #590)
+
 ## BUG FIXES
 
 - code changes in chunks should invalidate the cache when the chunk option `cache < 3`; fixed by @knokknok in #587

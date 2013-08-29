@@ -124,7 +124,8 @@ block_exec = function(options) {
   } else in_dir(
     opts_knit$get('root.dir') %n% input_dir(),
     evaluate(code, envir = env, new_device = FALSE,
-             keep_warning = options$warning, keep_message = options$message,
+             keep_warning = !isFALSE(options$warning),
+             keep_message = !isFALSE(options$message),
              stop_on_error = if (options$error && options$include) 0L else 2L)
   )
   if (options$cache %in% 1:2 && !cache.exists) {
@@ -142,14 +143,15 @@ block_exec = function(options) {
     res = Filter(Negate(is.source), res)
   } else if (is.numeric(echo)) {
     # choose expressions to echo using a numeric vector
-    if (isFALSE(ev)) {
-      res = list(structure(list(src = code[echo]), class = 'source'))
+    res = if (isFALSE(ev)) {
+      list(structure(list(src = code[echo]), class = 'source'))
     } else {
-      iss = which(sapply(res, is.source))
-      if (length(idx <- setdiff(iss, iss[echo]))) res = res[-idx]
+      filter_evaluate(res, echo, is.source)
     }
   }
   if (options$results == 'hide') res = Filter(Negate(is.character), res)
+  res = filter_evaluate(res, options$warning, is.warning)
+  res = filter_evaluate(res, options$message, is.message)
 
   # rearrange locations of figures
   figs = sapply(res, is.recordedplot)
@@ -234,6 +236,15 @@ chunk_device = function(width, height, record = TRUE) {
     dev.control('enable')
   }
   FALSE
+}
+
+# filter out some results based on the numeric chunk option as indices
+filter_evaluate = function(res, opt, test) {
+  if (length(res) == 0 || !is.numeric(opt) || !any(idx <- sapply(res, test)))
+    return(res)
+  idx = which(idx)
+  idx = setdiff(idx, na.omit(idx[opt]))  # indices of elements to remove
+  if (length(idx) == 0) res else res[-idx]
 }
 
 # merge neighbor elements of the same class in a list returned by evaluate()
