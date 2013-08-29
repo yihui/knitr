@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- a new option value `results='hold'` to flush all text output to the end of a chunk like `fig.show='hold'` (thanks, Harlan Harris, #593)
+
 - for Sublime Text users, there is a [SublimeKnitr](https://github.com/andrewheiss/SublimeKnitr) package to support LaTeX and Markdown with **knitr**; thanks, Andrew Heiss (#449) (this is not really a new feature of knitr **itself**, though)
 
 - now the chunk options `warning` and `message` can also take numeric values as indices to select which warnings/messages to include in the output (thanks, Simon Urbanek, #590)
