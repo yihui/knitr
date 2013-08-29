@@ -38,7 +38,7 @@ call_block = function(block) {
   # Check cache
   if (params$cache > 0) {
     content = c(
-      params[if (params$cache < 3) cache2.opts else setdiff(names(params), 'include')],
+      params[if (params$cache < 3) cache1.opts else setdiff(names(params), 'include')],
       getOption('width'), if (params$cache == 2) params$fig.keep
     )
     hash = str_c(valid_path(params$cache.path, label), '_', digest(content))
@@ -62,7 +62,7 @@ call_block = function(block) {
 }
 
 # options that should affect cache when cache level = 1,2
-cache2.opts = c('code', 'eval', 'cache', 'cache.path', 'message', 'warning', 'error')
+cache1.opts = c('code', 'eval', 'cache', 'cache.path', 'message', 'warning', 'error')
 
 block_exec = function(options) {
   # when code is not R language
