@@ -122,7 +122,8 @@ used options:
 \begin{description}
 \item [{eval}] whether to evaluate the chunk
 \item [{echo}] whether to echo source code
-\item [{results}] \texttt{'markup'}, \texttt{'asis'}, \texttt{'hide'}
+\item [{results}] \texttt{'markup'}, \texttt{'asis'}, \texttt{'hold'},
+\texttt{'hide'}
 \item [{tidy}] whether to reformat R code
 \item [{cache}] whether to cache results
 \item [{fig.width,\ fig.height,\ out.width,\ out.height}] device and
