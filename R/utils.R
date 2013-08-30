@@ -221,12 +221,6 @@ fix_options = function(options) {
 # parse but do not keep source
 parse_only = formatR:::parse_only
 
-## try eval an option (character) to its value
-eval_opt = function(x) {
-  if (!is.character(x)) return(x)
-  eval(parse_only(x), envir = knit_global())
-}
-
 ## eval options as symbol/language objects
 eval_lang = function(x, envir = knit_global()) {
   if (!is.symbol(x) && !is.language(x)) return(x)
