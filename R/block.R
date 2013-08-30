@@ -279,9 +279,10 @@ call_inline = function(block) {
   in_dir(opts_knit$get('root.dir') %n% input_dir(), inline_exec(block))
 }
 
-inline_exec = function(block, eval = opts_chunk$get('eval'), envir = knit_global(),
-                       error = opts_chunk$get('error'),
-                       hook = knit_hooks$get('inline')) {
+inline_exec = function(
+  block, eval = eval_lang(opts_chunk$get('eval')), envir = knit_global(),
+  error = eval_lang(opts_chunk$get('error')), hook = knit_hooks$get('inline')
+) {
 
   # run inline code and substitute original texts
   code = block$code; input = block$input

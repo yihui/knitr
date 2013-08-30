@@ -12,6 +12,8 @@
 
 - code changes in chunks should invalidate the cache when the chunk option `cache < 3`; fixed by @knokknok in #587
 
+- fixed the bug reported at http://stackoverflow.com/q/18302179/559676; before evaluating inline R code, the chunk options `eval` must be evaluated to a logical value
+
 ## MAJOR CHANGES
 
 - when the chunk option `cache=2`, the recorded plots (i.e. display lists) will no longer be cached, and the figure files will be assumed to exist the next time the document is compiled, otherwise the cache will be purged and the chunk needs to be recomputed; this will save some disk space and avoid bugs like #588 (thanks, @knokknok)
