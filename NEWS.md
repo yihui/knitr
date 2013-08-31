@@ -16,6 +16,8 @@
 
 - fixed the bug reported at http://stackoverflow.com/q/18544045/559676; read_chunk() no longer excludes code without chunk headers, so stitch() will include all the code as expected
 
+- fixed the bug reported under http://stackoverflow.com/a/18541083/559676; now `\ensuremath{}` can be correctly applied to numbers of the form `10^{-n}`
+
 ## MAJOR CHANGES
 
 - when the chunk option `cache=2`, the recorded plots (i.e. display lists) will no longer be cached, and the figure files will be assumed to exist the next time the document is compiled, otherwise the cache will be purged and the chunk needs to be recomputed; this will save some disk space and avoid bugs like #588 (thanks, @knokknok)
