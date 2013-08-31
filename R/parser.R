@@ -78,8 +78,8 @@ parse_block = function(input, patterns) {
 }
 
 ## autoname for unnamed chunk
-unnamed_chunk = function()
-  paste(opts_knit$get('unnamed.chunk.label'), chunk_counter(), sep = '-')
+unnamed_chunk = function(i = chunk_counter())
+  paste(opts_knit$get('unnamed.chunk.label'), i, sep = '-')
 
 ## parse params from chunk header
 parse_params = function(params) {
