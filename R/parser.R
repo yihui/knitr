@@ -267,11 +267,13 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
     return(invisible())
   }
   idx = cumsum(grepl(lab, lines))
-  if (all(idx == 0)) return(invisible())
-  groups = unname(split(lines[idx != 0], idx[idx != 0]))
+  if (idx[1] == 0) {
+    idx = c(0, idx); lines = c('', lines)  # no chunk header in the beginning
+  }
+  groups = unname(split(lines, idx))
   labels = str_trim(gsub(lab, '\\2', sapply(groups, `[`, 1)))
   code = lapply(groups, strip_chunk)
-  idx = nzchar(labels); code = code[idx]; labels = labels[idx]
+  if (any(idx <- !nzchar(labels))) labels[idx] = unnamed_chunk(seq_len(sum(idx)))
   knit_code$set(setNames(code, labels))
 }
 #' @rdname read_chunk
