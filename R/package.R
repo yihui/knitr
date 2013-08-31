@@ -20,7 +20,6 @@
 #' @importFrom evaluate evaluate is.recordedplot is.source is.warning is.error
 #'   is.message
 #' @importFrom formatR tidy.source
-#' @importFrom digest digest
 #' @import stringr
 NULL
 

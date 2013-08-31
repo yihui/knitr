@@ -41,7 +41,7 @@ call_block = function(block) {
       params[if (params$cache < 3) cache1.opts else setdiff(names(params), 'include')],
       getOption('width'), if (params$cache == 2) params[cache2.opts]
     )
-    hash = str_c(valid_path(params$cache.path, label), '_', digest(content))
+    hash = str_c(valid_path(params$cache.path, label), '_', digest::digest(content))
     params$hash = hash
     if (cache$exists(hash)) {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
