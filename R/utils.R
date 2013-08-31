@@ -194,7 +194,7 @@ is_tikz_dev = function(options) {
 }
 
 tikz_dict = function(path) {
-  str_c(sans_ext(basename(path)), '-tikzDictionary')
+  paste(sans_ext(basename(path)), 'tikzDictionary', sep = '-')
 }
 
 ## compatibility with Sweave and old beta versions of knitr
