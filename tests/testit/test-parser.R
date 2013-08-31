@@ -28,3 +28,21 @@ assert(
   identical(parse_inline('<!--rinline "<a>" -->', all_patterns$html)$code, ' "<a>" ')
 )
 rm(res)
+
+knit_code$restore()
+
+read_chunk(lines = c('1+1'))
+assert(
+  'read_chunk() does not discard code without chunk headers',
+  identical(knit_code$get(), list('unnamed-chunk-1' = '1+1'))
+)
+
+knit_code$restore()
+
+read_chunk(lines = c('# ---- foo ----', '1+1'))
+assert(
+  'read_chunk() can identify chunk labels',
+   identical(knit_code$get(), list(foo = '1+1'))
+)
+
+knit_code$restore()
