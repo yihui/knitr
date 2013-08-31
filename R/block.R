@@ -201,10 +201,13 @@ block_exec = function(options) {
     objs = options$cache.vars %n% codetools::findLocalsList(parse_only(code))
     # make sure all objects to be saved exist in env
     objs = intersect(c(objs, obj.new), ls(env, all.names = TRUE))
+    if (options$autodep) {
+      cache$objects(objs, code, options$label, options$cache.path)
+      dep_auto()
+    }
     if (options$cache < 3) {
       if (!cache.exists) block_cache(options, res.orig, objs)
     } else block_cache(options, output, objs)
-    if (options$autodep) cache$objects(objs, code, options$label, options$cache.path)
   }
 
   if (options$include) output else ''
