@@ -82,6 +82,7 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE) {
   maps = c(author = '  author = {Ray Brownrigg},'),
   Rcmdr = c(author = '  author = {John Fox},'),
   Rcpp = c(author = '  author = {Dirk Eddelbuettel and Romain Francois},'),
+  rgl = c(author = '  author = {Daniel Adler and Duncan Murdoch},'),
   rpart = c(author = '  author = {Terry M Therneau and Beth Atkinson},'),
   shiny = c(author = '  author = {{RStudio,}{ Inc.}},'),
   sm = c(author = '  author = {Adrian Bowman and Adelchi Azzalini},'),
