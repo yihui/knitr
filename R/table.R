@@ -77,11 +77,12 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
 
 kable_latex = function(
   x, booktabs = FALSE, longtable = FALSE,
+  vline = if (booktabs) '' else '|',
   toprule = if (booktabs) '\\toprule' else '\\hline',
   bottomrule = if (booktabs) '\\bottomrule' else '\\hline'
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
-    align = paste(align, collapse = if (booktabs) '' else '|')
+    align = paste(align, collapse = vline)
     align = paste('{', align, '}', sep = '')
   }
 
