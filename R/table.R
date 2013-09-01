@@ -87,7 +87,7 @@ kable_latex = function(
   }
 
   paste(c(
-    sprintf('\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
+    sprintf('\n\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
     sprintf('\n%s\n', toprule),
     paste(c(if (!is.null(cn <- colnames(x))) paste(cn, collapse = ' & '),
             apply(x, 1, paste, collapse = ' & ')),
