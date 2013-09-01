@@ -198,7 +198,8 @@ block_exec = function(options) {
   if (options$cache > 0) {
     obj.new = setdiff(ls(globalenv(), all.names = TRUE), obj.before)
     copy_env(globalenv(), env, obj.new)
-    objs = options$cache.vars %n% codetools::findLocalsList(parse_only(code))
+    objs = if (isFALSE(ev)) character(0) else
+      options$cache.vars %n% codetools::findLocalsList(parse_only(code))
     # make sure all objects to be saved exist in env
     objs = intersect(c(objs, obj.new), ls(env, all.names = TRUE))
     if (options$autodep) {
