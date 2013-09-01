@@ -75,7 +75,11 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
   invisible(res)
 }
 
-kable_latex = function(x, booktabs = FALSE, longtable = FALSE) {
+kable_latex = function(
+  x, booktabs = FALSE, longtable = FALSE,
+  toprule = if (booktabs) '\\toprule' else '\\hline',
+  bottomrule = if (booktabs) '\\bottomrule' else '\\hline'
+) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = if (booktabs) '' else '|')
     align = paste('{', align, '}', sep = '')
@@ -83,11 +87,11 @@ kable_latex = function(x, booktabs = FALSE, longtable = FALSE) {
 
   paste(c(
     sprintf('\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
-    sprintf('\n%s\n', if (booktabs) '\\toprule' else '\\hline'),
+    sprintf('\n%s\n', toprule),
     paste(c(if (!is.null(cn <- colnames(x))) paste(cn, collapse = ' & '),
             apply(x, 1, paste, collapse = ' & ')),
           collapse = sprintf('\\\\\n%s\n', if (booktabs) '\\midrule' else '\\hline')),
-    '\\\\\n', if (booktabs) '\\bottomrule' else '\\hline',
+    sprintf('\\\\\n%s', bottomrule),
     sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular')
   ), collapse = '')
 }
