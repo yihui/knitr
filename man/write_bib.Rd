@@ -2,7 +2,7 @@
 \alias{write_bib}
 \title{Generate BibTeX bibliography databases for R packages}
 \usage{
-write_bib(x = .packages(), file = "", tweak = TRUE)
+  write_bib(x = .packages(), file = "", tweak = TRUE)
 }
 \arguments{
   \item{x}{package names (packages which are not installed
@@ -55,12 +55,13 @@ write_bib(x = .packages(), file = "", tweak = TRUE)
   R packages are being updated.
 }
 \examples{
-write_bib(c("RGtk2", "gWidgets"), file = "R-GUI-pkgs.bib")
-write_bib(c("animation", "rgl", "knitr", "ggplot2"))
-write_bib(c("base", "parallel", "MASS"))  # base and parallel are identical
-write_bib(c("rpart", "survival"))
-write_bib(c("rpart", "survival"), tweak = FALSE)  # original version
+write_bib(c('RGtk2', 'gWidgets'), file = 'R-GUI-pkgs.bib')
+write_bib(c('animation', 'rgl', 'knitr', 'ggplot2'))
+write_bib(c('base', 'parallel', 'MASS'))  # base and parallel are identical
+write_bib(c('rpart', 'survival'))
+write_bib(c('rpart', 'survival'), tweak = FALSE) # original version
 
 # what tweak=TRUE does
 str(knitr:::.tweak.bib)
 }
+

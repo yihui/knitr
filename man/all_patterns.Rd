@@ -2,23 +2,23 @@
 \name{all_patterns}
 \alias{all_patterns}
 \title{All built-in patterns}
-\format{List of 7
+\format{List of 8
  $ rnw     :List of 7
  $ brew    :List of 1
  $ tex     :List of 8
  $ html    :List of 5
  $ md      :List of 4
  $ rst     :List of 5
- $ asciidoc:List of 6}
+ $ asciidoc:List of 6
+ $ textile :List of 5}
 \usage{
-all_patterns
+  all_patterns
 }
 \description{
   This object is a named list of all built-in patterns.
 }
 \examples{
-all_patterns$rnw
-all_patterns$html
+all_patterns$rnw; all_patterns$html
 
 str(all_patterns)
 }
@@ -26,3 +26,4 @@ str(all_patterns)
   Usage: \url{http://yihui.name/knitr/patterns}
 }
 \keyword{datasets}
+

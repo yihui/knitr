@@ -2,7 +2,7 @@
 \alias{eclipse_theme}
 \title{Download and convert a theme from eclipsecolorthemes.org to CSS}
 \usage{
-eclipse_theme(id)
+  eclipse_theme(id)
 }
 \arguments{
   \item{id}{id of theme to save as CSS}
@@ -21,7 +21,7 @@ eclipse_theme(id)
 \examples{
 ## http://www.eclipsecolorthemes.org/?view=theme&id=1
 \dontrun{
-opts_knit$set(out.format = "latex")
+opts_knit$set(out.format = 'latex')
 (css = eclipse_theme(1))
 thm = knit_theme$get(css)
 knit_theme$set(thm)
@@ -36,3 +36,4 @@ knit_theme$set(thm)
 \seealso{
   \code{\link{knit_theme}}
 }
+

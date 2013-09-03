@@ -7,23 +7,27 @@
 \alias{render_markdown}
 \alias{render_rst}
 \alias{render_sweave}
+\alias{render_textile}
 \title{Set output hooks for different output formats}
 \usage{
-render_latex()
+  render_latex()
 
-render_sweave()
+  render_sweave()
 
-render_listings()
+  render_listings()
 
-render_html()
+  render_html()
 
-render_markdown(strict = FALSE)
+  render_markdown(strict = FALSE)
 
-render_jekyll(highlight = c("pygments", "prettify", "none"), extra = "")
+  render_jekyll(highlight = c("pygments", "prettify", "none"),
+    extra = "")
 
-render_rst(strict = FALSE)
+  render_rst(strict = FALSE)
 
-render_asciidoc()
+  render_asciidoc()
+
+  render_textile()
 }
 \arguments{
   \item{strict}{whether to use strict markdown or reST
@@ -86,3 +90,4 @@ render_asciidoc()
   prettify.js:
   \url{http://code.google.com/p/google-code-prettify/}
 }
+

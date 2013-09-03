@@ -2,7 +2,7 @@
 \alias{knit_global}
 \title{The global environment in which code chunks are evaluated}
 \usage{
-knit_global()
+  knit_global()
 }
 \description{
   This function makes the environment of a code chunk
@@ -15,3 +15,4 @@ knit_global()
   R's global environment by default. You can call functions
   like \code{\link{ls}()} on this environment.
 }
+

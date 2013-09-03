@@ -2,7 +2,7 @@
 \alias{wrap_rmd}
 \title{Wrap long lines in Rmd files}
 \usage{
-wrap_rmd(file, width = 80, text = NULL, backup)
+  wrap_rmd(file, width = 80, text = NULL, backup)
 }
 \arguments{
   \item{file}{the input Rmd file}
@@ -34,6 +34,7 @@ wrap_rmd(file, width = 80, text = NULL, backup)
   the future.
 }
 \examples{
-wrap_rmd(text = c("```", "1+1", "```", "- a list item", "> a quote", "", 
-    paste(rep("this is a normal paragraph", 5), collapse = " ")))
+wrap_rmd(text = c('```', '1+1', '```', '- a list item', '> a quote', '',
+paste(rep('this is a normal paragraph', 5), collapse = ' ')))
 }
+

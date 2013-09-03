@@ -9,9 +9,9 @@
  $ merge  :function (values)  
  $ restore:function (target = value)}
 \usage{
-opts_chunk
+  opts_chunk
 
-opts_current
+  opts_current
 }
 \description{
   Options for R code chunks. When running R code, the
@@ -30,8 +30,7 @@ opts_current
   often need to set global options in a separate chunk.
 }
 \examples{
-opts_chunk$get("prompt")
-opts_chunk$get("fig.keep")
+opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
 }
 \references{
   Usage: \url{http://yihui.name/knitr/objects}
@@ -40,3 +39,4 @@ opts_chunk$get("fig.keep")
   \url{http://yihui.name/knitr/options#chunk_options}
 }
 \keyword{datasets}
+

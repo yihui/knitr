@@ -3,10 +3,11 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE, 
-    envir = parent.frame(), encoding = getOption("encoding"))
+  knit(input, output = NULL, tangle = FALSE, text = NULL,
+    quiet = FALSE, envir = parent.frame(),
+    encoding = getOption("encoding"))
 
-purl(..., documentation = 1L)
+  purl(..., documentation = 1L)
 }
 \arguments{
   \item{input}{path of the input file}
@@ -141,7 +142,7 @@ purl(..., documentation = 1L)
 }
 \examples{
 library(knitr)
-(f = system.file("examples", "knitr-minimal.Rnw", package = "knitr"))
+(f = system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'))
 knit(f)  # compile to tex
 
 purl(f)  # tangle R code
@@ -156,3 +157,4 @@ purl(f, documentation = 2)  # also include documentation
   See \code{citation('knitr')} for the citation
   information.
 }
+

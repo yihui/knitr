@@ -8,7 +8,7 @@
  $ merge  :function (values)  
  $ restore:function (target = value)}
 \usage{
-opts_template
+  opts_template
 }
 \description{
   Creates a template binding a label to a set of chunk
@@ -24,3 +24,4 @@ opts_template$set(myfigures = list(fig.height = 4, fig.width = 4))
 # the above is equivalent to <<foo, fig.height=4, fig.width=4>>=
 }
 \keyword{datasets}
+

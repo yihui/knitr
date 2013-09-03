@@ -2,7 +2,7 @@
 \alias{dep_prev}
 \title{Make later chunks depend on previous chunks}
 \usage{
-dep_prev()
+  dep_prev()
 }
 \value{
   \code{NULL}; the internal dependency structure is updated
@@ -21,3 +21,4 @@ dep_prev()
 \seealso{
   \code{\link{dep_auto}}
 }
+

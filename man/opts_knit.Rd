@@ -8,7 +8,7 @@
  $ merge  :function (values)  
  $ restore:function (target = value)}
 \usage{
-opts_knit
+  opts_knit
 }
 \description{
   Options including whether to use a progress bar when
@@ -28,12 +28,11 @@ opts_knit
   without loading \pkg{knitr}.
 }
 \examples{
-opts_knit$get("verbose")
-opts_knit$set(verbose = TRUE)  # change it
+opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
 \dontrun{
 # for unnamed chunks, use 'fig' as the figure prefix
-options(knitr.unnamed.chunk.label = "fig")
-knit("001-minimal.Rmd")  # from https://github.com/yihui/knitr-examples
+options(knitr.unnamed.chunk.label='fig')
+knit('001-minimal.Rmd') # from https://github.com/yihui/knitr-examples
 }
 }
 \references{
@@ -43,3 +42,4 @@ knit("001-minimal.Rmd")  # from https://github.com/yihui/knitr-examples
   \url{http://yihui.name/knitr/options#package_options}
 }
 \keyword{datasets}
+

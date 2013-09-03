@@ -2,7 +2,7 @@
 \alias{knit_exit}
 \title{Exit knitting early}
 \usage{
-knit_exit(append)
+  knit_exit(append)
 }
 \arguments{
   \item{append}{a character vector to be appended to the
@@ -26,3 +26,4 @@ knit_exit(append)
 \examples{
 # see https://github.com/yihui/knitr-examples/blob/master/096-knit-exit.Rmd
 }
+

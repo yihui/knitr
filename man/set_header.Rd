@@ -2,7 +2,7 @@
 \alias{set_header}
 \title{Set the header information}
 \usage{
-set_header(...)
+  set_header(...)
 }
 \arguments{
   \item{...}{the header components; currently possible
@@ -44,6 +44,7 @@ set_header(...)
   \pkg{listings} package.
 }
 \examples{
-set_header(tikz = "\\\\usepackage{tikz}")
-opts_knit$get("header")
+set_header(tikz = '\\\\usepackage{tikz}')
+opts_knit$get('header')
 }
+

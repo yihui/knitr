@@ -2,7 +2,7 @@
 \alias{hook_movecode}
 \title{Some potentially useful document hooks}
 \usage{
-hook_movecode(x)
+  hook_movecode(x)
 }
 \arguments{
   \item{x}{a character string (the content of the whole
@@ -35,10 +35,9 @@ hook_movecode(x)
   every figure/table environment must have a label.
 }
 \examples{
-\dontrun{
-knit_hooks$set(document = hook_movecode)
-}
+\dontrun{knit_hooks$set(document = hook_movecode)}
 }
 \references{
   \url{http://yihui.name/knitr/hooks}
 }
+

@@ -4,7 +4,7 @@
 \title{An unevaluated expression to return .Random.seed if exists}
 \format{language {  if (exists(".Random.seed", envir = globalenv())) ; get(".Random.seed", envir = globalenv()) }}
 \usage{
-rand_seed
+  rand_seed
 }
 \description{
   This expression returns \code{.Random.seed} when
@@ -18,10 +18,11 @@ rand_seed
 }
 \examples{
 eval(rand_seed)
-rnorm(1)  # .Random.seed is created (or modified)
+rnorm(1) # .Random.seed is created (or modified)
 eval(rand_seed)
 }
 \references{
   \url{http://yihui.name/knitr/demo/cache/}
 }
 \keyword{datasets}
+

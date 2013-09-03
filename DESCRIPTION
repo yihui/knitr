@@ -121,3 +121,4 @@ Collate:
     'hooks-asciidoc.R'
     'table.R'
     'rocco.R'
+    'hooks-textile.R'

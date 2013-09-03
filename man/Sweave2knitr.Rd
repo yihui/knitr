@@ -2,7 +2,8 @@
 \alias{Sweave2knitr}
 \title{Convert Sweave to knitr documents}
 \usage{
-Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file), 
+  Sweave2knitr(file,
+    output = gsub("[.]([^.]+)$", "-knitr.\\1", file),
     encoding = getOption("encoding"), text = NULL)
 }
 \arguments{
@@ -76,16 +77,16 @@ Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file),
   supported.
 }
 \examples{
-Sweave2knitr(text = "<<echo=TRUE>>=")  # this is valid
-Sweave2knitr(text = "<<png=true>>=")  # dev='png'
-Sweave2knitr(text = "<<eps=TRUE, pdf=FALSE, results=tex, width=5, prefix.string=foo>>=")
-Sweave2knitr(text = "<<,png=false,fig=TRUE>>=")
-Sweave2knitr(text = "\\\\SweaveOpts{echo=false}")
-Sweave2knitr(text = "\\\\SweaveInput{hello.Rnw}")
+Sweave2knitr(text='<<echo=TRUE>>=') # this is valid
+Sweave2knitr(text="<<png=true>>=") # dev='png'
+Sweave2knitr(text="<<eps=TRUE, pdf=FALSE, results=tex, width=5, prefix.string=foo>>=")
+Sweave2knitr(text="<<,png=false,fig=TRUE>>=")
+Sweave2knitr(text="\\\\SweaveOpts{echo=false}")
+Sweave2knitr(text="\\\\SweaveInput{hello.Rnw}")
 # Sweave example in utils
 testfile = system.file("Sweave", "Sweave-test-1.Rnw", package = "utils")
-Sweave2knitr(testfile, output = "Sweave-test-knitr.Rnw")
-knit("Sweave-test-knitr.Rnw")  # or knit2pdf() directly
+Sweave2knitr(testfile, output = 'Sweave-test-knitr.Rnw')
+knit('Sweave-test-knitr.Rnw') # or knit2pdf() directly
 }
 \references{
   The motivation of the changes in the syntax:
@@ -94,3 +95,4 @@ knit("Sweave-test-knitr.Rnw")  # or knit2pdf() directly
 \seealso{
   \code{\link{Sweave}}, \code{\link{gsub}}
 }
+
