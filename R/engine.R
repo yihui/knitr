@@ -72,8 +72,9 @@ eng_interpreted = function(options) {
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
     paste(code, options$engine.opts) else paste(options$engine.opts, code)
   cmd = paste(shQuote(options$engine.path %n% engine), code)
-  message('running: ', cmd)
-  out = if (options$eval) system(cmd, intern = TRUE) else ''
+  out = if (options$eval) {
+    message('running: ', cmd); system(cmd, intern = TRUE)
+  } else ''
   if (options$eval && engine == 'sas' && file.exists(saslst))
     out = c(readLines(saslst), out)
   engine_output(options, options$code, out)
