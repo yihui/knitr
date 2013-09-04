@@ -8,7 +8,7 @@
 #' str(all_patterns)
 all_patterns = list(
   `rnw` = list(
-    chunk.begin = '^\\s*<<(.*)>>=', chunk.end = '^\\s*@\\s*(%+.*|)$',
+    chunk.begin = '^\\s*<<(.*)>>=.*$', chunk.end = '^\\s*@\\s*(%+.*|)$',
     inline.code = '\\\\Sexpr\\{([^}]+)\\}', inline.comment = '^\\s*%.*',
     ref.chunk = '^\\s*<<(.+)>>\\s*$', header.begin = '\\s*\\\\documentclass[^}]+\\}',
     document.begin = '\\s*\\\\begin\\{document\\}'),

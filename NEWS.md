@@ -26,6 +26,8 @@
 
 ## MINOR CHANGES
 
+- the Rnw chunk syntax is more tolerant on chunk headers in the sense that any characters after `<<>>=` are discarded, e.g. `<<echo=TRUE>>===foo` will be treated as `<<echo=TRUE>>=` (thanks, Michael Friendly)
+
 - `knitr:::.onLoad()` no longer modifies the `PATH` variable when `/usr/texbin` is not in `PATH` under Mac OS
 
 # CHANGES IN knitr VERSION 1.4
