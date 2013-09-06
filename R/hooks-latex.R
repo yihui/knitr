@@ -239,7 +239,12 @@ render_latex = function() {
     source = function(x, options) {
       x = hilight_source(x, 'latex', options)
       if (options$highlight) {
-        paste(c('\\begin{alltt}', x, '\\end{alltt}', ''), collapse = '\n')
+        if (options$engine == 'R' || x[1] != '\\noindent') {
+          paste(c('\\begin{alltt}', x, '\\end{alltt}', ''), collapse = '\n')
+        } else {
+          if ((n <- length(x)) > 5) x[n - 3] = sub('\\\\\\\\$', '', x[n - 3])
+          paste(c(x, ''), collapse = '\n')
+        }
       } else .verb.hook(x)
     },
     output = function(x, options) {

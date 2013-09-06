@@ -6,11 +6,7 @@ hilight_source = function(x, format, options) {
       res = try(highr::hi_andre(x, options$engine, format))
       if (inherits(res, 'try-error')) {
         if (format == 'html') highr:::escape_html(x) else highr:::escape_latex(x)
-      } else if (format == 'html') res else {
-        # clean up TeX results from highlight
-        res = res[-c(1:2, length(res) - 0:2)]
-        gsub('(\\\\hlstd\\{\\})?\\\\hspace[*]\\{\\\\fill\\}\\\\\\\\$', '', res)
-      }
+      } else res
     }
   } else if (options$prompt) line_prompt(x) else x
 }
