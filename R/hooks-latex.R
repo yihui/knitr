@@ -319,6 +319,7 @@ render_listings = function() {
 #' @export
 #' @references \url{http://yihui.name/knitr/hooks}
 #' @examples \dontrun{knit_hooks$set(document = hook_movecode)}
+#' # see example 103 at https://github.com/yihui/knitr-examples
 hook_movecode = function(x) {
   x = split_lines(x)
   res = split(x, cumsum(grepl('^\\\\(begin|end)\\{figure\\}', x)))
