@@ -30,7 +30,8 @@ editor.commands.addCommand({
 });
 
 $(document).ready(function() {
-  var h = window.location.search;
+  // may pass a url as a query string after ? in the url
+  var h = window.location.search.substring(1);
   function setSrc(msg) {
     if (msg) {
       alert('unable to read URL ' + h + '\n\nusing default R Markdown example');
@@ -42,8 +43,6 @@ $(document).ready(function() {
   $('#notebook').width(w - 10);
   $('#nbOut').css('left', w + 10 + 'px');
   if (h) {
-    // pass a url as a query string after ? in the url
-    h = h.replace('?', '');
     $.get(h, {}, function(res) {
       var data = res.data, str = data.content;
       if (typeof(str) != 'string') return(setSrc(true));
