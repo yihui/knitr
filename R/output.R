@@ -325,8 +325,14 @@ knit_child = function(..., options = NULL) {
   on.exit(opts_knit$set(child = child)) # restore child status
   if (is.list(options)) {
     options$label = options$child = NULL  # do not need to pass the parent label on
-    optc = opts_chunk$get(); opts_chunk$set(options)
-    on.exit(opts_chunk$restore(optc), add = TRUE)
+    if (length(options)) {
+      optc = opts_chunk$get(names(options), drop = FALSE); opts_chunk$set(options)
+      # if user did not touch opts_chunk$set() in child, restore the chunk option
+      on.exit({
+        for (i in names(options)) if (identical(options[[i]], opts_chunk$get(i)))
+          opts_chunk$set(optc[i])
+      }, add = TRUE)
+    }
   }
   res = knit(..., tangle = opts_knit$get('tangle'),
              encoding = opts_knit$get('encoding') %n% getOption('encoding'))

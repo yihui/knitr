@@ -25,3 +25,22 @@ assert(
   'chunks with include=FALSE should stop on error',
   has_error(knit(text = c('<<include=F>>=', '1+"a"', '@'), quiet = TRUE))
 )
+
+# a shortcut
+k = function(text) {
+  on.exit(opts_chunk$restore())
+  knit(text = c('```{r}', text, '```'), quiet = TRUE, envir = parent.frame())
+}
+k(c(
+  'knit_child(text = "```{r}\nopts_chunk$set(echo=FALSE)\n```", options=list())',
+  'x1 = opts_chunk$get("echo")'
+))
+k(c(
+  'knit_child(text = "```{r}\nopts_chunk$set(dpi=200)\n```", options=list(dpi=100))',
+  'x2 = opts_chunk$get("dpi")'
+))
+
+assert(
+  'using knit_child() does not reset global chunk options set in child documents',
+  x1 == FALSE, x2 == 200
+)
