@@ -11,7 +11,7 @@ new_defaults = function(value = list()) {
     dots = list(...)
     if (length(dots) == 0) return()
     if (is.null(names(dots)) && length(dots) == 1 && is.list(dots[[1]]))
-      dots = dots[[1]]
+      if (length(dots <- dots[[1]]) == 0) return()
     defaults <<- merge(dots)
     invisible(NULL)
   }
