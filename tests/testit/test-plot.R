@@ -62,5 +62,4 @@ assert(
 }
 )
 
-options(op); rm(op); rm(res)
-rm(list_class)
+options(op)

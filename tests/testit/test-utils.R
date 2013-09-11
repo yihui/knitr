@@ -34,7 +34,7 @@ assert(
   has_warning(sanitize_fn('figure/a b'))
 )
 
-options(op); rm(op)
+options(op)
 
 assert(
   'fig_path() sanitizes paths',
@@ -54,7 +54,6 @@ assert(
   identical(strsplit(markdown:::.b64EncodeFile(f), 'base64,')[[1]][2],
             base64_encode(readBin(f, what = 'raw', n = file.info(f)$size)))
 )
-rm(f)
 
 assert(
   'escape_latex() escapes special LaTeX characters',

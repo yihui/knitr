@@ -27,7 +27,6 @@ assert(
   # can use > in HTML inline code
   identical(parse_inline('<!--rinline "<a>" -->', all_patterns$html)$code, ' "<a>" ')
 )
-rm(res)
 
 knit_code$restore()
 

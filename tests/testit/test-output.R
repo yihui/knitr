@@ -25,5 +25,3 @@ assert(
   'chunks with include=FALSE should stop on error',
   has_error(knit(text = c('<<include=F>>=', '1+"a"', '@'), quiet = TRUE))
 )
-
-rm(res)

@@ -24,4 +24,3 @@ assert(
   identical(grep(ce, '@ asdf'), integer()), # only spaces/comments allowed
   identical(grep(ce, ' @ a% sdf'), integer())
 )
-rm(ce)

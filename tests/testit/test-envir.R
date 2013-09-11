@@ -23,4 +23,3 @@ assert(
 )
 
 file.remove('knit-envir.md')
-rm(env); rm(z)

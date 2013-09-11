@@ -38,5 +38,3 @@ assert(
   # unnamed argument in set()
   identical({z$restore(); z$set(list(b=2, c='qwer')); z$get()}, list(b=2, c='qwer'))
 )
-
-rm(z)
