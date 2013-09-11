@@ -27,8 +27,8 @@ register_vignette_engines = function(pkg) {
   if (Rversion < '3.0.0') return()
   # the default engine
   vig_engine('knitr', vweave, '[.]([rRsS](nw|tex)|[Rr](md|html|rst))$')
-  vig_engine('docco_linear', vweave_docco_linear, '[.][Rr]markdown$')
-  vig_engine('docco_classic', vweave_docco_classic, '[.][Rr]mkd$')
+  vig_engine('docco_linear', vweave_docco_linear, '[.][Rr](md|markdown)$')
+  vig_engine('docco_classic', vweave_docco_classic, '[.][Rr]mk?d$')
 }
 # all engines use the same tangle and package arguments, so factor them out
 vig_engine = function(...) {
