@@ -121,6 +121,8 @@ pat_md = function() set_pattern('md')
 pat_rst = function() set_pattern('rst')
 #' @rdname pat_fun
 pat_asciidoc = function() set_pattern('asciidoc')
+#' @rdname pat_fun
+pat_textile = function() set_pattern('textile')
 
 ## helper functions
 
