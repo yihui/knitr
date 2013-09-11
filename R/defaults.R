@@ -1,10 +1,10 @@
 new_defaults = function(value = list()) {
   defaults = value
 
-  get = function(name, default = FALSE) {
+  get = function(name, default = FALSE, drop = TRUE) {
     if (default) defaults = value  # this is only a local version
     if (missing(name)) defaults else {
-      if (length(name) == 1) defaults[[name]] else defaults[name]
+      if (drop && length(name) == 1) defaults[[name]] else defaults[name]
     }
   }
   set = function(...) {
