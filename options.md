@@ -38,7 +38,7 @@ All built-in options in **knitr** are:
 ### Text Results
 
 - `echo`: (`TRUE`; logical or numeric) whether to include R source code in the output file; besides `TRUE`/`FALSE` which completely turns on/off the source code, we can also use a numeric vector to select which R expression(s) to echo in a chunk, e.g. `echo=2:3` means only echo the 2nd and 3rd expressions, and `echo=-4` means to exclude the 4th expression
-- `results`: (`'markup'`; character) takes three possible values
+- `results`: (`'markup'`; character) takes these possible values
   - `markup`: mark up the results using the output hook, e.g. put results in a special LaTeX environment
   - `asis`: output as-is, i.e., write raw results from R into the output document
   - `hold`: hold all the output pieces and push them to the end of a chunk
