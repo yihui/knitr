@@ -32,7 +32,7 @@ str(all_patterns)
 {% highlight text %}
 ## List of 7
 ##  $ rnw     :List of 7
-##   ..$ chunk.begin   : chr "^\\s*<<(.*)>>="
+##   ..$ chunk.begin   : chr "^\\s*<<(.*)>>=.*$"
 ##   ..$ chunk.end     : chr "^\\s*@\\s*(%+.*|)$"
 ##   ..$ inline.code   : chr "\\\\Sexpr\\{([^}]+)\\}"
 ##   ..$ inline.comment: chr "^\\s*%.*"
@@ -68,11 +68,11 @@ str(all_patterns)
 ##   ..$ ref.chunk  : chr "^\\.*\\s*<<(.+)>>\\s*$"
 ##   ..$ inline.code: chr ":r:`([^`]+)`"
 ##  $ asciidoc:List of 6
-##   ..$ chunk.begin   : chr "^//\\s*begin[.]rcode$"
-##   ..$ chunk.end     : chr "^//\\s*end[.]rcode$"
+##   ..$ chunk.begin   : chr "^//\\s*begin[.]rcode(.*)$"
+##   ..$ chunk.end     : chr "^//\\s*end[.]rcode\\s*$"
 ##   ..$ chunk.code    : chr "^//+"
 ##   ..$ ref.chunk     : chr "^\\s*<<(.+)>>\\s*$"
-##   ..$ inline.code   : chr "`r +([^`\n]+)\\s*`"
+##   ..$ inline.code   : chr "[+]r +([^+\n]+)\\s*[+]"
 ##   ..$ inline.comment: chr "^//.*"
 {% endhighlight %}
 
