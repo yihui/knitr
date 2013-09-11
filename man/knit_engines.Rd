@@ -3,7 +3,7 @@
 \alias{knit_engines}
 \title{Engines of other languages}
 \format{List of 4
- $ get    :function (name, default = FALSE)  
+ $ get    :function (name, default = FALSE, drop = TRUE)  
  $ set    :function (...)  
  $ merge  :function (values)  
  $ restore:function (target = value)}

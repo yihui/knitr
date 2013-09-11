@@ -86,7 +86,7 @@ lm(y ~ x, data = data.frame(x = 1:10, y = rnorm(10)))
 
 ## the 2nd approach
 code = c("#@a", "1+1", "#@b", "#@a", "rnorm(10)", "#@b")
-read_chunk(lines = code, labels = "foo")  # put all code into one chun named foo
+read_chunk(lines = code, labels = "foo")  # put all code into one chunk named foo
 read_chunk(lines = code, labels = "foo", from = 2, to = 2)  # line 2 into chunk foo
 read_chunk(lines = code, labels = c("foo", "bar"), from = c(1, 4), to = c(3, 6))
 # automatically figure out 'to'

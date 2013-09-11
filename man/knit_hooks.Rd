@@ -3,7 +3,7 @@
 \alias{knit_hooks}
 \title{Hooks for R code chunks, inline R code and output}
 \format{List of 4
- $ get    :function (name, default = FALSE)  
+ $ get    :function (name, default = FALSE, drop = TRUE)  
  $ set    :function (...)  
  $ merge  :function (values)  
  $ restore:function (target = value)}

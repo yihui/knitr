@@ -3,7 +3,7 @@
 \alias{opts_template}
 \title{Template for creating reusable chunk options}
 \format{List of 4
- $ get    :function (name, default = FALSE)  
+ $ get    :function (name, default = FALSE, drop = TRUE)  
  $ set    :function (...)  
  $ merge  :function (values)  
  $ restore:function (target = value)}
