@@ -77,7 +77,6 @@ Suggests:
     testit,
     rgl,
     codetools,
-    R2SWF (>= 0.4),
     XML,
     RCurl
 License: GPL
