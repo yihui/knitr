@@ -12,6 +12,13 @@ hook_plot_textile = function(x, options) {
   sprintf('!{%s}%s(%s)!\np. %s', tags, .upload.url(x), cap, cap)
 }
 
+.chunk.hook.textile = function(x, options) {
+  if (output_asis(x, options)) return(x)
+  x = sprintf('notextile. <div class="chunk" id="%s"><div class="rcode">\n%s\nnotextile. </div></div>',
+              options$label, x)
+  gsub('<div class="rcode">[[:space:]]*</div>', '', x) # rm empty rcode layers  
+}
+
 #' @rdname output_hooks
 #' @export
 render_textile = function() {
@@ -24,7 +31,7 @@ render_textile = function() {
       if (name == 'source') {
         x = paste(c(hilight_source(x, 'textile', options), ''), collapse = '\n')
       }
-      sprintf('bc(knitr %s#%s).. \n%s\np. \n', tolower(options$engine), name, x)
+      sprintf('notextile. <div class="%s">\nbc(knitr %s).. \n%s\np(knitr end). \nnotextile. </div>\n\n', name, tolower(options$engine), x)
     }
   }
   hook.output = function(x, options) {
@@ -34,12 +41,12 @@ render_textile = function() {
       sprintf(if (inherits(x, 'AsIs')) '%s' else '@(knitr inline)%s@',
               .inline.hook(format_sci(x, 'html')))
   }
-  h = opts_knit$get('header')
-  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
   z = list()
   for (i in c('source', 'warning', 'message', 'error'))
-    z[[i]] = html.hook(i)
+    z[[i]] = textile.hook(i)
   knit_hooks$set(z)
-  knit_hooks$set(inline = hook.inline, output = hook.output, 
-                 plot = hook_plot_html, chunk = .chunk.hook.html)
+  knit_hooks$set(inline = hook.inline, 
+                 output = hook.output, 
+                 plot = hook_plot_textile, 
+                 chunk = .chunk.hook.textile)
 }
