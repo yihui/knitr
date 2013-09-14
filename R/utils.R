@@ -371,13 +371,7 @@ escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
 }
 
 # escape special HTML chars
-escape_html = function(x) {
-  x = gsub('&', '&amp;', x)
-  x = gsub('<', '&lt;', x)
-  x = gsub('>', '&gt;', x)
-  x = gsub('"', '&quot;', x)
-  x
-}
+escape_html = highr:::escape_html
 
 #' Read source code from R-Forge
 #'
