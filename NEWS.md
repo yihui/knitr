@@ -32,6 +32,8 @@
 
 - `knitr:::.onLoad()` no longer modifies the `PATH` variable when `/usr/texbin` is not in `PATH` under Mac OS
 
+- when the chunk option `results='asis'`, the option `comment` is set to `NA` automatically, since output as is implies that it should not be commented out (#601, thanks, Ramnath Vaidyanathan)
+
 # CHANGES IN knitr VERSION 1.4
 
 ## NOTE
