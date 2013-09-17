@@ -7,10 +7,14 @@ env:
 
 # install dependencies
 install:
-  - sudo apt-add-repository -y 'deb http://cran.rstudio.com/bin/linux/ubuntu precise/'
+  - echo -e "deb http://cran.rstudio.com/bin/linux/ubuntu precise/\ndeb-src http://cran.rstudio.com/bin/linux/ubuntu precise/" |
+      sudo dd status=noxfer of=/etc/apt/sources.list.d/cran.list
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+  - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/cran.list"
+      -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
   - sudo apt-add-repository -y ppa:marutter/c2d4u
-  - sudo apt-get update
+  - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-c2d4u-precise.list"
+      -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
   - sudo apt-get install --no-install-recommends r-base-dev r-cran-xml r-cran-rcurl r-recommended
       qpdf texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra
   - "[ ! -d ~/R ] && mkdir ~/R"
