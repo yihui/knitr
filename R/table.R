@@ -60,6 +60,7 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
     align = ifelse(isn, 'r', 'l')
   # rounding
   x = apply(x, 2, function(z) if (is.numeric(z)) format(round(z, digits)) else z)
+  if (is.null(dim(x))) x = t(as.matrix(x))  # damn it!
   if (is.na(row.names))
     row.names = !is.null(rownames(x)) && !identical(rownames(x), as.character(seq_len(NROW(x))))
   if (row.names) {

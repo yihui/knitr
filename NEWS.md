@@ -22,6 +22,8 @@
 
 - fixes a regression bug reported by Graham Williams: https://groups.google.com/forum/#!topic/knitr/_I5rlo9tOeA the global chunk options set in child documents are no longer restored
 
+- fixed #604: `kable()` did not work on data frames/matrices of one row (thanks, Kevin Ushey)
+
 ## MAJOR CHANGES
 
 - when the chunk option `cache=2`, the recorded plots (i.e. display lists) will no longer be cached, and the figure files will be assumed to exist the next time the document is compiled, otherwise the cache will be purged and the chunk needs to be recomputed; this will save some disk space and avoid bugs like #588 (thanks, @knokknok)
