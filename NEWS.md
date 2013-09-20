@@ -38,6 +38,8 @@
 
 - when a message/warning/error contains line breaks, they are preserved and the message will not be re-wrapped (#602, thanks, Tyler Rinker)
 
+- `read_chunk()` tolerates white spaces in the end of the chunk headers now (suggested by John Maindonald, #606)
+
 # CHANGES IN knitr VERSION 1.4
 
 ## NOTE
