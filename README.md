@@ -90,13 +90,16 @@ library(knitr)
 knit(input)
 ```
 
+[<img src="http://i.imgur.com/R6DSHDE.jpg" align="right" />](http://amzn.com/1482203537)
+
 If options are not explicitly specified, **knitr** will try to guess
 reasonable default settings. A few manuals are available such as the [main
 manual](https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf), the
 [graphics
 manual](https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf), and
 the [themes
-manual](https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf).
+manual](https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf). For a
+more organized reference, see the [knitr book](http://amzn.com/1482203537).
 
 ## Contributing
 
