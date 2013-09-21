@@ -14,23 +14,19 @@ combine features in other add-on packages into one package (**knitr**
 SweaveListingUtils + more).
 
 - Transparency means that the user has full access to every piece of the
-  input and output, e.g., `1 + 2` produces `[1] 3` in an R terminal, and
-  **knitr** can let the user decide whether to put `1 + 2` between
+  input and output, e.g., `1 + 2` produces `[1] 3` in an R terminal, and **
+  knitr** can let the user decide whether to put `1 + 2` between
   `\begin{verbatim}` and `\end{verbatim}`, or `<div class="rsource">` and
-  `</div>`, and put `[1] 3` in `\begin{Routput}` and `\end{Routput}`; this
-  kind of freedom even applies to warning messages, errors and plots (e.g.
-  decorate error messages with red bold fonts); see the [hooks](hooks) page
-  for details
+  `</div>`, and put `[1] 3` in `\begin{Routput}` and `\end{Routput}`; see
+  the [hooks](hooks) page for details
 - **knitr** tries to be consistent with users' expections by running R code as
   if it were pasted in an R terminal, e.g., `qplot(x, y)` directly produces
   the plot (no need to `print()` it), and *all* the plots in a code chunk
-  will be written to the output by default; **knitr** also added options
-  like `out.width` to set the width of plots in the output document (think
-  `.8\textwidth` in LaTeX), so we no longer need to hack in LaTeX
+  will be written to the output by default
 - Packages like **pgfSweave** and **cacheSweave** have added useful features to
   Sweave (high-quality tikz graphics and cache), and **knitr** has
   simplified the implementations
-- The design of **knitr** allows any input languages (e.g. R, Python and Awk)
+- The design of **knitr** allows any input languages (e.g. R, Python and awk)
   and any output markup languages (e.g. LaTeX, HTML, Markdown, AsciiDoc, and
   reStructuredText)
 
