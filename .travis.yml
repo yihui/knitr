@@ -7,8 +7,8 @@ env:
 
 # install dependencies
 install:
-  - echo -e "deb http://cran.rstudio.com/bin/linux/ubuntu precise/\ndeb-src http://cran.rstudio.com/bin/linux/ubuntu precise/" |
-      sudo dd status=noxfer of=/etc/apt/sources.list.d/cran.list
+  - sudo echo "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
+      > /etc/apt/sources.list.d/cran.list
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
   - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/cran.list"
       -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
@@ -26,8 +26,11 @@ install:
 script:
   - make install
   - make check
+
+# run check against R-devel
+after_script:
   - sudo add-apt-repository -y ppa:marutter/rdev
   - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-rdev-precise.list"
       -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
-  - sudo apt-get dist-upgrade
+  - sudo apt-get upgrade
   - make check
