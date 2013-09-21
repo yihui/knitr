@@ -13,6 +13,8 @@ combine features in other add-on packages into one package (**knitr**
 `R2HTML::RweaveHTML` + `highlight::HighlightWeaveLatex` + 0.2 * brew + 0.1 *
 SweaveListingUtils + more).
 
+[<img src="http://i.imgur.com/R6DSHDE.jpg" align="right" />](http://amzn.com/1482203537)
+
 - Transparency means that the user has full access to every piece of the
   input and output, e.g., `1 + 2` produces `[1] 3` in an R terminal, and **
   knitr** can let the user decide whether to put `1 + 2` between
@@ -36,7 +38,8 @@ installation instructions and [FAQ's](http://bit.ly/knitr-faq), see
 full documentation of **knitr**, and you can find the [main
 manual](http://bit.ly/117OLVl), the [graphics manual](http://bit.ly/114GNdP)
 and other [demos](/knitr/demos) /
-[examples](https://github.com/yihui/knitr-examples) here.
+[examples](https://github.com/yihui/knitr-examples) here. For a more
+organized reference, see the [knitr book](http://amzn.com/1482203537).
 
 <div style="text-align: center;"><iframe src="http://www.screenr.com/embed/qcv8" width="650" height="396" frameborder="0"></iframe></div>
 
