@@ -7,8 +7,8 @@ env:
 
 # install dependencies
 install:
-  - sudo echo "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
-      > /etc/apt/sources.list.d/cran.list
+  - echo "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
+      | sudo tee /etc/apt/sources.list.d/cran.list
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
   - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/cran.list"
       -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
