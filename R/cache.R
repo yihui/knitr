@@ -140,7 +140,7 @@ parse_objects = function(path) {
   if (!file.exists(path)) {
     warning('file ', path, ' not found'); return()
   }
-  lines = str_split(readLines(path), '\t')
+  lines = strsplit(readLines(path), '\t')
   if (length(lines) < 2L) return()  # impossible for dependson
   objs = lapply(lines, `[`, -1L)
   names(objs) = lapply(lines, `[`, 1L)
