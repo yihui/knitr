@@ -21,12 +21,22 @@ These objects are visible to users in **knitr**:
 
 Except `knit_patterns`, all other objects are initialized with default values, and `knit_patterns` will be automatically determined according to the type of input document if not provided. The `knit_hooks` object is supposed to be used most frequently, and the other three are usually not to be used directly. For example, `opts_chunk` is usually set in the input document rather than using the command line directly.
 
-It is recommended to get the settings done in the first chunk with `cache = FALSE` and `include = FALSE` like this (we may call this chunk as the configuration chunk):
+Knitr's settings _must_ be set in a chunk before any chunks which rely
+on those settings to be active. It is recommended to create a **knit**
+configuration chunk as the first chunk in a script with `cache =
+FALSE` and `include = FALSE` options set. This chunk _must not_ contain
+any commands which expect the settings in the configuration chunk to
+be in effect at the time of execution. The configuration chunk could
+look something like this:
 
 {% highlight r %}
 <<setup, cache=FALSE, include=FALSE>>=
-opts_knit$set(upload.fun = imgur_upload, self.contained = FALSE)
+opts_knit$set(upload.fun = imgur_upload, self.contained = FALSE,
+root.dir = '~/R/project');
 @
 {% endhighlight %}
 
-As a technical note, these objects are similar to closures -- they consist of a list of functions returned by a function. For details, see the unexported function `knitr:::new_defaults`. The chunk options are also managed by closures.
+On a technical note, these objects are similar to closures -- they
+consist of a list of functions returned by a function. For details,
+see the unexported function `knitr:::new_defaults`. The chunk options
+are also managed by closures.
