@@ -103,7 +103,13 @@ Currently this option is only used to indent markdown output, because leading wh
 - `out.width`, `out.height`: (`NULL`; character) width and height of the plot in the final output file (can be different with its real `fig.width` and `fig.height`, i.e. plots can be scaled in the output document); depending on the output format, these two options can take flexible values, e.g. for LaTeX output, they can be `.8\\linewidth`, `3in` or `8cm` and for HTML, they may be `300px` (do not have to be in inches like `fig.width` and `fig.height`; backslashes must be escaped as `\\`); for LaTeX output, the default value for `out.width` will be changed to `\\maxwidth` which is defined [here](/knitr/demo/framed/)
 - `out.extra`: (`NULL`; character) extra options for figures, e.g. `out.extra='angle=90'` in LaTeX output will rotate the figure by 90 degrees; it can be an arbitrary string, e.g. you can write multiple figure options in this option; it also applies to HTML images (extra options will be written into the `<img />` tag, e.g. `out.extra='style="display:block;"'`)
 - `resize.width`, `resize.height`: (`NULL`; character) the width and height to be used in `\resizebox{}{}` in LaTeX; these two options are not needed unless you want to resize tikz graphics because there is no natural way to do it; however, according to **tikzDevice** authors, tikz graphics is not meant to be resized to maintain consistency in style with other texts in LaTeX; if only one of them is `NULL`, `!` will be used (read the documentation of **graphicx** if you do not understand this)
-- `fig.align`: (`'default'`; character) alignment of figures in the output document (possible values are `left`, `right` and `center`; default is not to make any alignment adjustments)
+- `fig.align`: (`'default'`; character) alignment of figures in the output
+  document (possible values are `left`, `right` and `center`; default is not
+  to make any alignment adjustments); note that for Markdown output, forcing
+  figure alignments will lead to the HTML tag `<img />` instead of the
+  original Markdown syntax `![]()`, because Markdown does not have native
+  support for figure alignments (see
+  [#611](https://github.com/yihui/knitr/issues/611))
 - `fig.env`: (`'figure'`) the LaTeX environment for figures, e.g. set `fig.env='marginfigure'` to get `\begin{marginfigure}`
 - `fig.cap`: (`NULL`; character) figure caption to be used in a figure environment in LaTeX (in `\caption{}`); if `NULL` or `NA`, it will be ignored, otherwise a figure environment will be used for the plots in the chunk (output in `\begin{figure}` and `\end{figure}`)
 - `fig.scap`: (`NULL`; character) short caption; if `NULL`, all the words before `.` or `;` or `:` will be used as a short caption; if `NA`, it will be ignored
