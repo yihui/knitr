@@ -32,7 +32,7 @@ look something like this:
 {% highlight r %}
 <<setup, cache=FALSE, include=FALSE>>=
 opts_knit$set(upload.fun = imgur_upload, self.contained = FALSE,
-root.dir = '~/R/project');
+              root.dir = '~/R/project')
 @
 {% endhighlight %}
 
