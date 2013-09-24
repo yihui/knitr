@@ -7,48 +7,100 @@ subtitle: Chunk options and package options
 - [Chunk Options](#chunk_options)
 - [Package Options](#package_options)
 
-The **knitr** package shares most options with Sweave, but some were dropped/changed and some new options were added. The default values are in the parentheses below. Note that the chunk label for each chunk is assumed to be unique, i.e., no two chunks share the same label. This is especially important for cache and plot filenames. Chunks without labels will be assigned labels like `unnamed-chunk-i` where `i` is the chunk number.
+The **knitr** package shares most options with Sweave, but some were
+dropped/changed and some new options were added. The default values are in
+the parentheses below. Note that the chunk label for each chunk is assumed
+to be unique, i.e., no two chunks share the same label. This is especially
+important for cache and plot filenames. Chunks without labels will be
+assigned labels like `unnamed-chunk-i` where `i` is the chunk number.
 
 ## Chunk Options <a id="chunk_options"></a>
 
-Take Rnw files as an example: usually we write chunk options in the form `tag=value` like this:
+Take Rnw files as an example: usually we write chunk options in the form
+`tag=value` like this:
 
 {% highlight r %}
 <<mychunk, cache=TRUE, eval=FALSE, dpi=100>>=
 @
 {% endhighlight %}
 
-And `opts_chunk$set()` can change the default global options in a document (e.g. put this in a code chunk: `opts_chunk$set(comment=NA, fig.width=6, fig.height=6)`), and `\SweaveOpts{}` will no longer be supported (it is good if you do not know what this means). A few special notes on the options:
+And `opts_chunk$set()` can change the default global options in a document
+(e.g. put this in a code chunk: `opts_chunk$set(comment=NA, fig.width=6,
+fig.height=6)`), and `\SweaveOpts{}` will no longer be supported (it is good
+if you do not know what this means). A few special notes on the options:
 
-1. Chunk options must be written in one line; no line breaks are allowed inside chunk options;
-1. Avoid spaces ` ` and periods `.` in chunk labels and directory names; if your output is a TeX document, these characters can cause troubles (in general it is recommended to use alphabetic characters with words separated by `-` or `_` and avoid other characters), e.g. `setup-options` is a good label, whereas `setup.options` and `chunk 1` are bad; `fig.path='figures/mcmc-'` is a good prefix for figure output if this project is about MCMC, and `fig.path='markov chain/monte carlo'` is bad; non-alphanumeric characters except `-` and `_` in figure filenames will be replaced with `_` automatically;
-1. All option values must be _valid R expressions_ just like how we write function arguments;
-  - for example, options that take _character_ values must be quoted as you do in R (e.g. should write `fig.path="abc"` instead of `fig.path=abc`, and `out.width='\\textwidth'` instead of `out.width=\textwidth`)
-  - in theory, the chunk label should be quoted as well but the sake of convenience it will be automatically quoted if you did not quote it (e.g. `<<2a>>=` will become `<<'2a'>>=`)
-  - for logical options, `TRUE` and `FALSE` are OK, and `true`/`false` will not work as you might have expected because `true` is not `TRUE`
-  - you can write arbitrarily complicated expressions as you want as long as they are legitimate R code
-  - if you come from the Sweave land, please read the [transition page](/knitr/demo/sweave/) carefully because the syntax is different
+1. Chunk options must be written in one line; no line breaks are allowed
+  inside chunk options;
+1. Avoid spaces ` ` and periods `.` in chunk labels and directory names; if
+  your output is a TeX document, these characters can cause troubles (in
+  general it is recommended to use alphabetic characters with words
+  separated by `-` or `_` and avoid other characters), e.g. `setup-options`
+  is a good label, whereas `setup.options` and `chunk 1` are bad;
+  `fig.path='figures/mcmc-'` is a good prefix for figure output if this
+  project is about MCMC, and `fig.path='markov chain/monte carlo'` is bad;
+  non-alphanumeric characters except `-` and `_` in figure filenames will be
+  replaced with `_` automatically;
+1. All option values must be _valid R expressions_ just like how we write
+  function arguments;
+  - for example, options that take _character_ values must be quoted as you
+    do in R (e.g. should write `fig.path="abc"` instead of `fig.path=abc`,
+    and `out.width='\\textwidth'` instead of `out.width=\textwidth`)
+  - in theory, the chunk label should be quoted as well but the sake of
+    convenience it will be automatically quoted if you did not quote it
+    (e.g. `<<2a>>=` will become `<<'2a'>>=`)
+  - for logical options, `TRUE` and `FALSE` are OK, and `true`/`false` will
+    not work as you might have expected because `true` is not `TRUE`
+  - you can write arbitrarily complicated expressions as you want as long as
+    they are legitimate R code
+  - Sweave users please read the [transition page](/knitr/demo/sweave/)
+    carefully because the syntax is different
 
 All built-in options in **knitr** are:
 
 ### Code Evaluation
 
-- `eval`: (`TRUE`; logical) whether to evaluate the code chunk; it can also be a numeric vector to select which R expression(s) to evaluate, e.g. `eval=c(1, 3, 4)` or `eval=-(4:5)`
+- `eval`: (`TRUE`; logical) whether to evaluate the code chunk; it can also
+  be a numeric vector to select which R expression(s) to evaluate, e.g.
+  `eval=c(1, 3, 4)` or `eval=-(4:5)`
 
 ### Text Results
 
-- `echo`: (`TRUE`; logical or numeric) whether to include R source code in the output file; besides `TRUE`/`FALSE` which completely turns on/off the source code, we can also use a numeric vector to select which R expression(s) to echo in a chunk, e.g. `echo=2:3` means only echo the 2nd and 3rd expressions, and `echo=-4` means to exclude the 4th expression
+- `echo`: (`TRUE`; logical or numeric) whether to include R source code in
+  the output file; besides `TRUE`/`FALSE` which completely turns on/off the
+  source code, we can also use a numeric vector to select which R
+  expression(s) to echo in a chunk, e.g. `echo=2:3` means only echo the 2nd
+  and 3rd expressions, and `echo=-4` means to exclude the 4th expression
 - `results`: (`'markup'`; character) takes these possible values
-  - `markup`: mark up the results using the output hook, e.g. put results in a special LaTeX environment
-  - `asis`: output as-is, i.e., write raw results from R into the output document
+  - `markup`: mark up the results using the output hook, e.g. put results in
+    a special LaTeX environment
+  - `asis`: output as-is, i.e., write raw results from R into the output
+    document
   - `hold`: hold all the output pieces and push them to the end of a chunk
-  - `hide` hide results; this option only applies to normal R output (not warnings, messages or errors)
-  - note `markup` and `asis` are equivalent to `verbatim` and `tex` in Sweave respectively (you can still use the latter two, but they can be misleading, e.g., `verbatim` does not really mean verbatim in R, and `tex` seems to be restricted to LaTeX)
-- `warning`: (`TRUE`; logical) whether to preserve warnings (produced by `warning()`) in the output like we run R code in a terminal (if `FALSE`, all warnings will be printed in the console instead of the output document); it can also take numeric values as indices to select a subset of warnings to include in the output
-- `error`: (`TRUE`; logical) whether to preserve errors (from `stop()`); by default, the evaluation will not stop even in case of errors!! if we want R to stop on errors, we need to set this option to `FALSE`
-- `message`: (`TRUE`; logical) whether to preserve messages emitted by `message()` (similar to `warning`)
-- `split`: (`FALSE`; logical) whether to split the output from R into separate files and include them into LaTeX by `\input{}` or HTML by `<iframe></iframe>`
-- `include`: (`TRUE`; logical) whether to include the chunk output in the final output document; if `include=FALSE`, nothing will be written into the output document, but the code is still evaluated and plot files are generated if there are any plots in the chunk, so you can manually insert figures; note this is the only chunk option that is not cached, i.e., changing it will not invalidate the cache
+  - `hide` hide results; this option only applies to normal R output (not
+    warnings, messages or errors)
+  - note `markup` and `asis` are equivalent to `verbatim` and `tex` in Sweave
+    respectively (you can still use the latter two, but they can be
+    misleading, e.g., `verbatim` does not really mean verbatim in R, and
+    `tex` seems to be restricted to LaTeX)
+- `warning`: (`TRUE`; logical) whether to preserve warnings (produced by
+  `warning()`) in the output like we run R code in a terminal (if `FALSE`,
+  all warnings will be printed in the console instead of the output
+  document); it can also take numeric values as indices to select a subset
+  of warnings to include in the output
+- `error`: (`TRUE`; logical) whether to preserve errors (from `stop()`); by
+  default, the evaluation will not stop even in case of errors!! if we want
+  R to stop on errors, we need to set this option to `FALSE`
+- `message`: (`TRUE`; logical) whether to preserve messages emitted by
+  `message()` (similar to `warning`)
+- `split`: (`FALSE`; logical) whether to split the output from R into separate
+  files and include them into LaTeX by `\input{}` or HTML by
+  `<iframe></iframe>`
+- `include`: (`TRUE`; logical) whether to include the chunk output in the final
+  output document; if `include=FALSE`, nothing will be written into the
+  output document, but the code is still evaluated and plot files are
+  generated if there are any plots in the chunk, so you can manually insert
+  figures; note this is the only chunk option that is not cached, i.e.,
+  changing it will not invalidate the cache
 
 ### Code Decoration
 
