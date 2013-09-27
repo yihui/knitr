@@ -42,6 +42,8 @@
 
 - `read_chunk()` tolerates white spaces in the end of the chunk headers now (suggested by John Maindonald, #606)
 
+- for R HTML documents, only the `highlight` component in `opts_knit$get('header')` was used in previous versions; now all components except `framed` and `tikz` are used; this makes it possible to further customize the HTML header (thanks, Wahlen Neuwirth and Erich Neuwirth)
+
 # CHANGES IN knitr VERSION 1.4
 
 ## NOTE

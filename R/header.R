@@ -47,9 +47,11 @@ insert_header_latex = function(doc, b) {
 }
 
 make_header_html = function() {
-  h = opts_knit$get('header')[['highlight']]
+  h = opts_knit$get('header')
+  h = h[setdiff(names(h), c('tikz', 'framed'))]
   if (opts_knit$get('self.contained')){
-    str_c('<style type="text/css">', h, '</style>', collapse = '\n')
+    paste(c('<style type="text/css">', h[['highlight']], '</style>',
+            unlist(h[setdiff(names(h), 'highlight')])), collapse = '\n')
   } else {
     writeLines(h, 'knitr.css')
     '<link rel="stylesheet" href="knitr.css" type="text/css" />'
@@ -90,8 +92,8 @@ insert_header_html = function(doc, b) {
 #' @param ... the header components; currently possible components are
 #'   \code{highlight}, \code{tikz} and \code{framed}, which contain the
 #'   necessary commands to be used in the HTML header or LaTeX preamble; note
-#'   HTML output only uses the \code{highlight} component (the other two are
-#'   ignored)
+#'   HTML output does not use the \code{tikz} and \code{framed} components (they
+#'   do not make sense to HTML)
 #' @return The header vector in \code{opts_knit} is set.
 #' @export
 #' @examples set_header(tikz = '\\usepackage{tikz}')
