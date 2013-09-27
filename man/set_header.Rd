@@ -9,15 +9,15 @@ set_header(...)
   components are \code{highlight}, \code{tikz} and
   \code{framed}, which contain the necessary commands to be
   used in the HTML header or LaTeX preamble; note HTML
-  output only uses the \code{highlight} component (the
-  other two are ignored)}
+  output does not use the \code{tikz} and \code{framed}
+  components (they do not make sense to HTML)}
 }
 \value{
   The header vector in \code{opts_knit} is set.
 }
 \description{
   Some output documents may need appropriate header
-  information, for example, for LaTeX output, we need to
+  information. For example, for LaTeX output, we need to
   write \samp{\\usepackage{tikz}} into the preamble if we
   use tikz graphics; this function sets the header
   information to be written into the output.

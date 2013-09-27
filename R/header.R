@@ -70,7 +70,7 @@ insert_header_html = function(doc, b) {
 
 #' Set the header information
 #'
-#' Some output documents may need appropriate header information, for example,
+#' Some output documents may need appropriate header information. For example,
 #' for LaTeX output, we need to write \samp{\\usepackage{tikz}} into the
 #' preamble if we use tikz graphics; this function sets the header information
 #' to be written into the output.
