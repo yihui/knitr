@@ -36,8 +36,6 @@
 
 - `knitr:::.onLoad()` no longer modifies the `PATH` variable when `/usr/texbin` is not in `PATH` under Mac OS
 
-- when the chunk option `results='asis'`, the option `comment` is set to `NA` automatically, since output as is implies that it should not be commented out (#601, thanks, Ramnath Vaidyanathan)
-
 - when a message/warning/error contains line breaks, they are preserved and the message will not be re-wrapped (#602, thanks, Tyler Rinker)
 
 - `read_chunk()` tolerates white spaces in the end of the chunk headers now (suggested by John Maindonald, #606)

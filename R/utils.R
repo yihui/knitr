@@ -25,7 +25,6 @@ line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('co
 
 ## add a prefix to output
 comment_out = function(x, prefix = '##', which = TRUE, newline = TRUE) {
-  if (is.na(prefix)) return(x)
   x = gsub('[\n]{2,}$', '\n', x)
   if (newline) x = gsub('([^\n])$', '\\1\n', x)  # add \n if not exists
   if (is.null(prefix) || !nzchar(prefix) || is.na(prefix)) return(x)
@@ -202,9 +201,6 @@ tikz_dict = function(path) {
 fix_options = function(options) {
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
-
-  # do not comment out results when results='asis'
-  if (options$results == 'asis') options$comment = NA
 
   # cache=TRUE -> 3; FALSE -> 0
   if (is.logical(options$cache)) options$cache = options$cache * 3
