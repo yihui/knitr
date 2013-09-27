@@ -33,7 +33,7 @@ rocco_view = function(input) {
         browseURL(o)
 }
 # knit these two vignettes using the docco style
-rocco_view(system.file("doc", "docco-classic.Rmkd", package = "knitr"))
+rocco_view(system.file("doc", "docco-classic.Rmd", package = "knitr"))
 rocco_view(system.file("doc", "knit_expand.Rmd", package = "knitr"))
 }
 \author{
