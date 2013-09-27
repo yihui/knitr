@@ -14,3 +14,7 @@ x[i] = 'head(knitr::rocco, 5)'
 library(knitr)
 cat(knit_child(text = x, quiet = TRUE), sep = '\n')
 ```
+
+You probably have noticed that you can adjust the widths of the two columns
+using your cursor. What is more, press `T` on your keyboard, and see what
+happens.
