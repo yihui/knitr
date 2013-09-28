@@ -117,7 +117,7 @@ set_alias = function(...) {
 #' knit('001-minimal.Rmd') # from https://github.com/yihui/knitr-examples
 #' }
 opts_knit = new_defaults(list(
-  progress = TRUE, verbose = FALSE, out.format = NULL,
+  progress = TRUE, verbose = FALSE, out.format = NULL, width = 75L,
   base.dir = NULL, base.url = NULL, child.path = '', upload.fun = identity,
   animation.fun = NULL, global.device = FALSE, eval.after = NULL,
   concordance = FALSE, tangle = FALSE, child = FALSE,
