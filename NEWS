@@ -1,3 +1,85 @@
+		 CHANGES IN knitr VERSION 1.5
+
+NEW FEATURES
+
+  - a new option value `results='hold'` to flush all text output to the end
+  of a chunk like `fig.show='hold'` (thanks, Harlan Harris, #593)
+
+  - when cache is enabled, automatic chunk dependencies can be truly automatic
+  now; there is no need to call `dep_auto()` explicitly, and all we need
+  to do is the chunk option `autodep=TRUE`; the chunk dependencies will be
+  rebuilt after each chunk, so when new chunks are inserted into the document,
+  **knitr** can also figure out the new dependencies automatically (thanks,
+  @knokknok, #592)
+
+  - for Sublime Text users, there is a
+  [SublimeKnitr](https://github.com/andrewheiss/SublimeKnitr) package to
+  support LaTeX and Markdown with **knitr**; thanks, Andrew Heiss (#449)
+  (this is not really a new feature of knitr **itself**, though)
+
+  - now the chunk options `warning` and `message` can also take numeric
+  values as indices to select which warnings/messages to include in the output
+  (thanks, Simon Urbanek, #590)
+
+BUG FIXES
+
+  - code changes in chunks should invalidate the cache when the chunk option
+  `cache < 3`; fixed by @knokknok in #587
+
+  - fixed the bug reported at http://stackoverflow.com/q/18302179/559676;
+  before evaluating inline R code, the chunk options `eval` must be evaluated
+  to a logical value
+
+  - fixed the bug reported at http://stackoverflow.com/q/18544045/559676;
+  read_chunk() no longer excludes code without chunk headers, so stitch()
+  will include all the code as expected
+
+  - fixed the bug reported under http://stackoverflow.com/a/18541083/559676;
+  now `\ensuremath{}` can be correctly applied to numbers of the form `10^{-n}`
+
+  - fixes a regression bug reported by Graham Williams:
+  https://groups.google.com/forum/#!topic/knitr/_I5rlo9tOeA the global chunk
+  options set in child documents are no longer restored
+
+  - fixed #604: `kable()` did not work on data frames/matrices of one row
+  (thanks, Kevin Ushey)
+
+  - fixes the bug reported at http://stackoverflow.com/q/18992260/559676;
+  `render_jekyll('prettify')` should have pasted the source code lines into
+  one character string
+
+MAJOR CHANGES
+
+  - when the chunk option `cache=2`, the recorded plots (i.e. display lists)
+  will no longer be cached, and the figure files will be assumed to exist
+  the next time the document is compiled, otherwise the cache will be purged
+  and the chunk needs to be recomputed; this will save some disk space and
+  avoid bugs like #588 (thanks, @knokknok)
+
+MINOR CHANGES
+
+  - the Rnw chunk syntax is more tolerant on chunk headers in the sense that
+  any characters after `<<>>=` are discarded, e.g. `<<echo=TRUE>>===foo`
+  will be treated as `<<echo=TRUE>>=` (thanks, Michael Friendly)
+
+  - `knitr:::.onLoad()` no longer modifies the `PATH` variable when
+  `/usr/texbin` is not in `PATH` under Mac OS
+
+  - when a message/warning/error contains line breaks, they are preserved
+  and the message will not be re-wrapped (#602, thanks, Tyler Rinker)
+
+  - `read_chunk()` tolerates white spaces in the end of the chunk headers now
+  (suggested by John Maindonald, #606)
+
+  - for R HTML documents, only the `highlight` component in
+  `opts_knit$get('header')` was used in previous versions; now all components
+  except `framed` and `tikz` are used; this makes it possible to further
+  customize the HTML header (thanks, Wahlen Neuwirth and Erich Neuwirth)
+
+  - in previous versions, the global option `KNITR_WIDTH` in R was used to
+  set `options(width)`; now this option is set from `opts_knit$get('width')`,
+  which has the same default value `75` (#597)
+
 		 CHANGES IN knitr VERSION 1.4
 
 NOTE
