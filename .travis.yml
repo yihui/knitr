@@ -32,5 +32,5 @@ after_script:
   - sudo add-apt-repository -y ppa:marutter/rdev
   - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-rdev-precise.list"
       -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
-  - sudo apt-get upgrade
+  - sudo apt-get dist-upgrade
   - make check
