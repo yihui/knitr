@@ -25,7 +25,7 @@
 knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   library(pkg, character.only = TRUE)
   optc = opts_chunk$get(); on.exit(opts_chunk$set(optc))
-  file.copy(system.file('misc', c('highlight.css', 'highlight.pack.js', 'R.css'), package = 'knitr'), './')
+  file.copy(system.file('misc', 'R.css', package = 'knitr'), './')
   pkgRdDB = getFromNamespace('fetchRdDB', 'tools')(file.path(find.package(pkg), 'help', pkg))
   force(links); topics = names(pkgRdDB)
   for (p in topics) {
@@ -48,8 +48,9 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
       }
       txt = c(txt[1:i0], res, txt[i1:length(txt)])
       txt = sub('</head>', '
-<link rel="stylesheet" href="highlight.css">
-<script src="highlight.pack.js"></script>
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 </head>', txt)
     } else message('no examples found for ', p)
