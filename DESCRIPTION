@@ -33,7 +33,6 @@ Authors@R: c(person("Alastair", "Andrew", role = "ctb"),
     person("Weicheng", "Zhu", role = "ctb"),
     person("Wush", "Wu", role = "ctb"),
     person("Yihui", "Xie", email = "xie@yihui.name", role = c("aut", "cre")))
-Author: Yihui Xie
 Maintainer: Yihui Xie <xie@yihui.name>
 Description: This package provides a general-purpose tool for dynamic report
     generation in R, which can be used to deal with any type of (plain text)
