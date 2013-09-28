@@ -53,7 +53,7 @@ parse_block = function(input, patterns) {
   params = parse_params(params.src)
   if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', block[1]))) {
     params$indent = spaces
-    block = gsub(str_c('^', spaces), '', block) # remove indent for the whole chunk
+    block = gsub(sprintf('^%s', spaces), '', block) # remove indent for the whole chunk
   }
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)

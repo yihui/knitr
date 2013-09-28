@@ -167,8 +167,8 @@ is_sweave = function(x) {
 }
 
 remind_sweave = function(file) {
-  msg = str_c('It seems you are using the Sweave-specific syntax; you may need ',
-              'Sweave2knitr(', shQuote(file), ') to convert it to knitr')
+  msg = sprintf('It seems you are using the Sweave-specific syntax; you may need
+                Sweave2knitr("%s") to convert it to knitr', file)
   # throw a normal warning when R CMD check or tcltk not available
   if ('CheckExEnv' %in% search() || '_R_CHECK_TIMINGS_' %in% names(Sys.getenv()) ||
         !capabilities('tcltk') || !capabilities('X11') || !has_package('tcltk') ||

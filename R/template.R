@@ -108,7 +108,7 @@ knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
   # check if delim is a pair, escaping regex as necessary
   if (length(delim) != 2L) stop('"delim" must be of length 2')
   delim = gsub('([.|()\\^{}+$*?]|\\[|\\])', '\\\\\\1', delim)
-  delim = str_c(delim[1L], '((.|\n)+?)', delim[2L])
+  delim = paste(delim[1L], '((.|\n)+?)', delim[2L], sep = '')
 
   txt = paste(text, collapse = '\n'); delim = perl(delim)
   loc = str_locate_all(txt, delim)[[1L]]

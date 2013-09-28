@@ -11,7 +11,7 @@ new_cache = function() {
   }
 
   cache_purge = function(hash) {
-    for (h in hash) unlink(str_c(cache_path(h), c('.rdb', '.rdx', '.RData')))
+    for (h in hash) unlink(paste(cache_path(h), c('rdb', 'rdx', 'RData'), sep = '.'))
   }
 
   cache_save = function(keys, outname, hash) {
@@ -22,7 +22,7 @@ new_cache = function() {
       copy_env(globalenv(), knit_global(), '.Random.seed')
       outname = c('.Random.seed', outname)
     }
-    save(list = outname, file = str_c(path, '.RData'), envir = knit_global())
+    save(list = outname, file = paste(path, 'RData', sep = '.'), envir = knit_global())
     # random seed is always load()ed
     keys = setdiff(keys, '.Random.seed')
     getFromNamespace('makeLazyLoadDB', 'tools')(knit_global(), path, variables = keys)
@@ -51,7 +51,7 @@ new_cache = function() {
     if (!is_abs_path(path)) path = file.path(getwd(), path)
     lazyLoad(path, envir = knit_global())
     # load output from last run if exists
-    if (file.exists(path2 <- str_c(path, '.RData'))) {
+    if (file.exists(path2 <- paste(path, 'RData', sep = '.'))) {
       load(path2, envir = knit_global())
       if (exists('.Random.seed', envir = knit_global()))
         copy_env(knit_global(), globalenv(), '.Random.seed')
@@ -73,13 +73,14 @@ new_cache = function() {
   }
 
   cache_exists = function(hash) {
-    is.character(hash) && all(file.exists(str_c(cache_path(hash), c('.rdb', '.rdx'))))
+    is.character(hash) &&
+      all(file.exists(paste(cache_path(hash), c('rdb', 'rdx'), sep = '.')))
   }
 
   # when cache=3, code output is stored in .[hash], so cache=TRUE won't lose
   # output as cacheSweave does; for cache=1,2, output is the evaluate() list
   cache_output = function(hash, mode = 'character') {
-    get(str_c('.', hash), envir = knit_global(), mode = mode, inherits = FALSE)
+    get(sprintf('.%s', hash), envir = knit_global(), mode = mode, inherits = FALSE)
   }
 
   list(purge = cache_purge, save = cache_save, load = cache_load, objects = cache_objects,

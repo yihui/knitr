@@ -36,10 +36,10 @@ insert_header_latex = function(doc, b) {
     }
     i = i[1L]; l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])
-    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, make_header_latex())
+    str_sub(doc[i], l[,1], l[,2]) = paste(tmp, make_header_latex(), sep = '')
   } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
-    doc[1L] = str_c(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
+    doc[1L] = paste(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
                       .knitEnv$tikzPackages, '\\begin{document}', doc[1L]), collapse = '\n')
     doc[length(doc)] = paste(doc[length(doc)], '\\end{document}', sep = '\n')
   }

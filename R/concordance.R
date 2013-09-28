@@ -40,8 +40,8 @@ concord_gen = function(infile, outfile) {
   vals = c(1L, as.numeric(rbind(vals$lengths, vals$values)))
   concordance = paste(strwrap(paste(vals, collapse = ' ')), collapse = ' %\n')
 
-  confile = str_c(sans_ext(outfile), '-concordance.tex')
+  confile = paste(sans_ext(outfile), 'concordance.tex', sep = '-')
   # write to file
-  cat(str_c('\\Sconcordance{concordance:', outfile, ':', infile, ':%\n',
-            concordance, '}\n'), file = confile)
+  cat('\\Sconcordance{concordance:', outfile, ':', infile, ':%\n',
+      concordance, '}\n', sep = '', file = confile)
 }

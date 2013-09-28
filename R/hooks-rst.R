@@ -11,7 +11,7 @@ hook_plot_rst = function(x, options) {
   # http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure
   make_directive(
     'figure',
-    str_c(opts_knit$get('base.url'), .upload.url(x)),
+    paste(opts_knit$get('base.url'), .upload.url(x), sep = ''),
     c(align = if (options$fig.align == 'default') NULL else options$fig.align,
       alt = cap, width = options$out.width, height = options$out.height),
     cap
@@ -24,7 +24,7 @@ render_rst = function(strict = FALSE) {
   knit_hooks$restore()
   set_html_dev()
   hook.s = function(x, options) {
-    str_c('\n\n::\n\n', indent_block(x), '\n')
+    paste(c('\n\n::\n', indent_block(x), ''), collapse = '\n')
   }
   hook.t = function(x, options) {
     make_directive('sourcecode', tolower(options$engine), '', content = x)

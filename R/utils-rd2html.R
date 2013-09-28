@@ -61,7 +61,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   toc = c(str_c('# ', pkg), '', toc, '',
           paste('Generated with [knitr](http://yihui.name/knitr) ', packageVersion('knitr')))
   markdown::markdownToHTML(text = paste(toc, collapse = '\n'), output = '00frame_toc.html',
-                           title = str_c('R Documentation of ', pkg),
+                           title = paste('R Documentation of', pkg),
                            options = NULL, extensions = NULL, stylesheet = 'R.css')
   txt = readLines(file.path(find.package(pkg), 'html', '00Index.html'))
   unlink('00Index.html')

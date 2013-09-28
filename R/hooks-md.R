@@ -32,10 +32,12 @@ render_markdown = function(strict = FALSE) {
   ## four spaces lead to <pre></pre>
   hook.t = function(x, options) {
     if (strict) {
-      str_c('\n\n', indent_block(x), '\n')
-    } else str_c('\n\n```\n', x, '```\n\n')
+      paste('\n', indent_block(x), '', sep = '\n')
+    } else paste('\n\n```\n', x, '```\n\n', sep = '')
   }
-  hook.r = function(x, options) str_c('\n\n```', tolower(options$engine), '\n', x, '```\n\n')
+  hook.r = function(x, options) {
+    paste('\n\n```', tolower(options$engine), '\n', x, '```\n\n', sep = '')
+  }
   hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
   knit_hooks$set(
     source = function(x, options) {

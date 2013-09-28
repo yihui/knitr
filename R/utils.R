@@ -20,7 +20,7 @@ chunk_counter = knit_counter(1L)
 ## a vectorized and better version than evaluate:::line_prompt
 line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('continue')) {
   # match a \n, then followed by any character (use zero width assertion)
-  str_c(prompt, gsub('(?<=\n)(?=.|\n)', continue, x, perl = TRUE))
+  paste(prompt, gsub('(?<=\n)(?=.|\n)', continue, x, perl = TRUE), sep = '')
 }
 
 ## add a prefix to output
@@ -28,7 +28,7 @@ comment_out = function(x, prefix = '##', which = TRUE, newline = TRUE) {
   x = gsub('[\n]{2,}$', '\n', x)
   if (newline) x = gsub('([^\n])$', '\\1\n', x)  # add \n if not exists
   if (is.null(prefix) || !nzchar(prefix) || is.na(prefix)) return(x)
-  prefix = str_c(prefix, ' ')
+  prefix = paste(prefix, '')
   x = gsub(' +([\n]*)$', '\\1', x)
   x[which] = line_prompt(x[which], prompt = prefix, continue = prefix)
   x
@@ -48,7 +48,7 @@ is_blank = function(x) {
 }
 valid_path = function(prefix, label) {
   if (length(prefix) == 0L || is.na(prefix) || prefix == 'NA') prefix = ''
-  str_c(prefix, label)
+  paste(prefix, label, sep = '')
 }
 
 ## define a color variable in TeX

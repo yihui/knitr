@@ -41,7 +41,7 @@ call_block = function(block) {
       params[if (params$cache < 3) cache1.opts else setdiff(names(params), 'include')],
       getOption('width'), if (params$cache == 2) params[cache2.opts]
     )
-    hash = str_c(valid_path(params$cache.path, label), '_', digest::digest(content))
+    hash = paste(valid_path(params$cache.path, label), digest::digest(content), sep = '_')
     params$hash = hash
     if (cache$exists(hash)) {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
@@ -216,7 +216,7 @@ block_exec = function(options) {
 
 block_cache = function(options, output, objects) {
   hash = options$hash
-  outname = str_c('.', hash)
+  outname = sprintf('.%s', hash)
   assign(outname, output, envir = knit_global())
   purge_cache(options)
   cache$library(options$cache.path, save = TRUE)
@@ -225,9 +225,9 @@ block_cache = function(options, output, objects) {
 
 purge_cache = function(options) {
   # purge my old cache and cache of chunks dependent on me
-  cache$purge(str_c(valid_path(
+  cache$purge(paste(valid_path(
     options$cache.path, c(options$label, dep_list$get(options$label))
-  ), '_*'))
+  ), '_*', sep = ''))
 }
 
 # open a device for a chunk; depending on the option global.device, may or may
@@ -345,8 +345,7 @@ process_tangle.inline = function(x) {
   code = x$code
   if (length(code) == 0L || !any(idx <- grepl('knit_child\\(.+\\)', code)))
     return('')
-  str_c(str_c(sapply(code[idx], function(z) eval(parse_only(z))),
-              collapse = '\n'), '\n')
+  paste(c(sapply(code[idx], function(z) eval(parse_only(z))), ''), collapse = '\n')
 }
 
 
@@ -354,6 +353,6 @@ process_tangle.inline = function(x) {
 label_code = function(code, label) {
   code = paste(c('', code, ''), collapse = '\n')
   if (opts_knit$get('documentation') == 0L) return(code)
-  str_c('## ----', str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
-        '----', code)
+  paste('## ----', str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
+        '----', code, sep = '')
 }
