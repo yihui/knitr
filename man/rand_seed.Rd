@@ -2,7 +2,11 @@
 \name{rand_seed}
 \alias{rand_seed}
 \title{An unevaluated expression to return .Random.seed if exists}
-\format{language {  if (exists(".Random.seed", envir = globalenv())) ; get(".Random.seed", envir = globalenv()) }}
+\format{length 2 {  if (exists(".Random.seed", envir = globalenv())) ; get(".Random.seed", envir = globalenv()) }
+ - attr(*, "srcref")=List of 2
+ - attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x000000000645d618> 
+ - attr(*, "wholeSrcref")=Class 'srcref'  atomic [1:8] 1 0 184 1 0 1 1 184
+  .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x000000000645d618>}
 \usage{
   rand_seed
 }

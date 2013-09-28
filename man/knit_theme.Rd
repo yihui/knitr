@@ -4,7 +4,11 @@
 \title{Syntax highlighting themes}
 \format{List of 2
  $ set:function (theme)  
- $ get:function (theme = NULL)}
+  ..- attr(*, "srcref")=Class 'srcref'  atomic [1:8] 4 13 11 1 13 1 4 11
+  .. .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x000000001250cbb0> 
+ $ get:function (theme = NULL)  
+  ..- attr(*, "srcref")=Class 'srcref'  atomic [1:8] 12 13 20 1 13 1 12 20
+  .. .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x000000001250cbb0>}
 \usage{
   knit_theme
 }

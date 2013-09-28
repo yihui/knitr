@@ -9,15 +9,15 @@ hook_plot_textile = function(x, options) {
   align = sprintf('align=%s', options$fig.align)
   tags = paste(c(width, height, align), collapse = ';')
 
-  sprintf('!{%s}%s(%s)!\np. %s', tags, .upload.url(x), cap, cap)
+  sprintf('!{%s}%s(%s)!\n\np(knitr_plot_caption#%s). %s', tags, .upload.url(x), cap, options$label, cap)
 }
 
-.chunk.hook.textile = function(x, options) {
-  if (output_asis(x, options)) return(x)
-  x = sprintf('notextile. <div class="chunk" id="%s"><div class="rcode">\n%s\nnotextile. </div></div>',
-              options$label, x)
-  gsub('<div class="rcode">[[:space:]]*</div>', '', x) # rm empty rcode layers  
-}
+#.chunk.hook.textile = function(x, options) {
+#  if (output_asis(x, options)) return(x)
+#  x = sprintf('notextile. <div class="chunk" id="%s"><div class="rcode">\n%s\nnotextile. </div></div>',
+#              options$label, x)
+#  gsub('<div class="rcode">[[:space:]]*</div>', '', x) # rm empty rcode layers  
+#}
 
 #' @rdname output_hooks
 #' @export
@@ -31,7 +31,7 @@ render_textile = function() {
       if (name == 'source') {
         x = paste(c(hilight_source(x, 'textile', options), ''), collapse = '\n')
       }
-      sprintf('notextile. <div class="%s">\nbc(knitr %s).. \n%s\np(knitr end). \nnotextile. </div>\n\n', name, tolower(options$engine), x)
+      sprintf('bc(knitr_%s_%s#%s).. \n%s\np(knitr_end). \n\n', tolower(options$engine), name, options$label, x)
     }
   }
   hook.output = function(x, options) {
@@ -47,6 +47,6 @@ render_textile = function() {
   knit_hooks$set(z)
   knit_hooks$set(inline = hook.inline, 
                  output = hook.output, 
-                 plot = hook_plot_textile, 
-                 chunk = .chunk.hook.textile)
+                 plot = hook_plot_textile)
+#		 		 chunk = .chunk.hook.textile
 }
