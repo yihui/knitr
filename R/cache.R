@@ -29,11 +29,12 @@ new_cache = function() {
   }
 
   save_objects = function(objs, label, path) {
+    if (length(objs) == 0L) objs = ''
     ## save object names
     x = paste(c(label, objs), collapse = '\t')
     if (file.exists(path)) {
       lines = readLines(path)
-      idx = substr(lines, 1L, nchar(label)) == label
+      idx = substr(lines, 1L, nchar(label) + 1L) == paste(label, '\t', sep = '')
       if (any(idx)) {
         lines[idx] = x  # update old objects
       } else lines = c(lines, x)
