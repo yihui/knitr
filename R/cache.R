@@ -130,9 +130,10 @@ dep_auto = function(path = opts_chunk$get('cache.path')) {
   }
   nms = intersect(names(knit_code$get()), names(locals)) # guarantee correct order
   for (i in 2:length(nms)) {
+    if (length(g <- globals[[nms[i]]]) == 0) next
     for (j in 1:(i - 1L)) {
       ## check if current globals are in old locals
-      if (length(globals[[nms[i]]]) && any(globals[[nms[i]]] %in% locals[[nms[j]]]))
+      if (any(g %in% locals[[nms[j]]]))
         dep_list$set(setNames(list(c(dep_list$get(nms[j]), nms[i])), nms[j]))
     }
   }
