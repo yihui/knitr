@@ -14,7 +14,7 @@ hook_plot_textile = function(x, options) {
 
 .chunk.hook.textile = function(x, options) {
   if (output_asis(x, options)) return(x)
-  sprintf('###. start of chunk "%s"\n%s\n###. end of chunk "%s"',
+  sprintf('==<!-- start of chunk "%s" -->==\n\n%s\n==<!-- end of chunk "%s" -->==\n',
               options$label, x, options$label)
 }
 
