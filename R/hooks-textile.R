@@ -12,12 +12,11 @@ hook_plot_textile = function(x, options) {
   sprintf('!{%s}%s(%s)!\n\np(knitr_plot_caption#%s). %s', tags, .upload.url(x), cap, options$label, cap)
 }
 
-#.chunk.hook.textile = function(x, options) {
-#  if (output_asis(x, options)) return(x)
-#  x = sprintf('notextile. <div class="chunk" id="%s"><div class="rcode">\n%s\nnotextile. </div></div>',
-#              options$label, x)
-#  gsub('<div class="rcode">[[:space:]]*</div>', '', x) # rm empty rcode layers  
-#}
+.chunk.hook.textile = function(x, options) {
+  if (output_asis(x, options)) return(x)
+  sprintf('###. start of chunk "%s"\n%s\n###. end of chunk "%s"',
+              options$label, x, options$label)
+}
 
 #' @rdname output_hooks
 #' @export
@@ -47,6 +46,6 @@ render_textile = function() {
   knit_hooks$set(z)
   knit_hooks$set(inline = hook.inline, 
                  output = hook.output, 
-                 plot = hook_plot_textile)
-#		 		 chunk = .chunk.hook.textile
+                 plot = hook_plot_textile,
+		 		 chunk = .chunk.hook.textile)
 }
