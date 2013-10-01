@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.6
+
+## BUG FIXES
+
+- fixed a regression bug that makes knitr fail to add `\ensuremath{}` to scientific notations of numbers of the form `10^{n}` in LaTeX output (thanks, Jeffrey Racine)
+
 # CHANGES IN knitr VERSION 1.5
 
 ## NEW FEATURES
