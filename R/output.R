@@ -368,6 +368,7 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 #' @param options list of options used to control output
 #' @noRd
 #' @S3method wrap list
+#' @S3method wrap default
 #' @S3method wrap character
 #' @S3method wrap source
 #' @S3method wrap warning
