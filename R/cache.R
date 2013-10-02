@@ -129,6 +129,8 @@ dep_auto = function(path = opts_chunk$get('cache.path')) {
     return(invisible(NULL))
   }
   nms = intersect(names(knit_code$get()), names(locals)) # guarantee correct order
+  # locals may contain old chunk names; the intersection can be of length < 2
+  if (length(nms) < 2) return(invisible(NULL))
   for (i in 2:length(nms)) {
     if (length(g <- globals[[nms[i]]]) == 0) next
     for (j in 1:(i - 1L)) {

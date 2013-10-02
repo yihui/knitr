@@ -6,6 +6,8 @@
 
 - due to the change in evaluate v0.5, evaluate() may return the raw values of expressions, but the S3 method wrap() does not know how to handle them; now these values are just ignored (thanks, Dan Tenenbaum)
 
+- fixed a bug for dep_auto() that may occur if old cache files generated from previous versions of knitr are used (thanks, Jeffrey Racine)
+
 # CHANGES IN knitr VERSION 1.5
 
 ## NEW FEATURES
