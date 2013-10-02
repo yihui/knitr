@@ -4,6 +4,8 @@
 
 - fixed a regression bug that makes knitr fail to add `\ensuremath{}` to scientific notations of numbers of the form `10^{n}` in LaTeX output (thanks, Jeffrey Racine)
 
+- due to the change in evaluate v0.5, evaluate() may return the raw values of expressions, but the S3 method wrap() does not know how to handle them; now these values are just ignored (thanks, Dan Tenenbaum)
+
 # CHANGES IN knitr VERSION 1.5
 
 ## NEW FEATURES

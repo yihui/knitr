@@ -383,6 +383,9 @@ wrap.list = function(x, options = list()) {
   lapply(x, wrap, options)
 }
 
+# ignore unknown classes
+wrap.default = function(x, options) return()
+
 wrap.character = function(x, options) {
   if (!output_asis(x, options)) x = comment_out(x, options$comment)
   knit_hooks$get('output')(x, options)
