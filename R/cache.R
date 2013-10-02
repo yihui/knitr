@@ -34,6 +34,7 @@ new_cache = function() {
     x = paste(c(label, objs), collapse = '\t')
     if (file.exists(path)) {
       lines = readLines(path)
+      lines = lines[lines != label] # knitr < 1.5 may have lines == label
       idx = substr(lines, 1L, nchar(label) + 1L) == paste(label, '\t', sep = '')
       if (any(idx)) {
         lines[idx] = x  # update old objects
