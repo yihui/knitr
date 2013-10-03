@@ -8,6 +8,8 @@
 
 - fixed a bug for dep_auto() that may occur if old cache files generated from previous versions of knitr are used (thanks, Jeffrey Racine)
 
+- fixed the bug reported at http://stackoverflow.com/q/19166724/559676: the inline hook did not work well with non-numeric values, e.g. Date (thanks, Waldir Leoncio)
+
 # CHANGES IN knitr VERSION 1.5
 
 ## NEW FEATURES

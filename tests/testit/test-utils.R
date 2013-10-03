@@ -24,6 +24,12 @@ assert(
 )
 
 assert(
+  'format_sci() coerces non-numeric and non-double values to characters',
+  format_sci(Sys.Date()) == as.character(Sys.Date()),
+  format_sci(1000000L) == '1000000'
+)
+
+assert(
   'the inline hook for Rnw applies \\ensuremath{} correctly',
   .inline.hook.tex(1e4) == '\\ensuremath{10^{4}}',
   .inline.hook.tex(c(1.2345e10,2* pnorm(-(3:4)))) ==
