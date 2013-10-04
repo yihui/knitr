@@ -2,7 +2,8 @@
 \alias{write_bib}
 \title{Generate BibTeX bibliography databases for R packages}
 \usage{
-write_bib(x = .packages(), file = "", tweak = TRUE)
+write_bib(x = .packages(), file = "", tweak = TRUE, 
+    prefix = getOption("knitr.bib.prefix", "R-"))
 }
 \arguments{
   \item{x}{package names (packages which are not installed
@@ -13,6 +14,11 @@ write_bib(x = .packages(), file = "", tweak = TRUE)
 
   \item{tweak}{whether to fix some known problems in the
   citations, especially non-standard format of authors}
+
+  \item{prefix}{a prefix string for keys in BibTeX entries;
+  by default, it is \samp{R-} unless
+  \code{\link{option}('knitr.bib.prefix')} has been set to
+  another string}
 }
 \value{
   a list containing the citations (also written to the
@@ -58,9 +64,14 @@ write_bib(x = .packages(), file = "", tweak = TRUE)
 write_bib(c("RGtk2", "gWidgets"), file = "R-GUI-pkgs.bib")
 write_bib(c("animation", "rgl", "knitr", "ggplot2"))
 write_bib(c("base", "parallel", "MASS"))  # base and parallel are identical
+write_bib("cluster", prefix = "")  # a empty prefix
+write_bib("digest", prefix = "R-pkg-")  # a new prefix
 write_bib(c("rpart", "survival"))
 write_bib(c("rpart", "survival"), tweak = FALSE)  # original version
 
 # what tweak=TRUE does
 str(knitr:::.tweak.bib)
+}
+\author{
+  Yihui Xie and Michael Friendly
 }
