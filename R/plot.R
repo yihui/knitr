@@ -259,3 +259,6 @@ digest_plot = function(x, level = 1) {
   if (!is.list(x) || level >= 3) return(digest::digest(x))
   lapply(x, digest_plot, level = level + 1)
 }
+
+# a null device
+pdf_null = function(width = 7, height = 7, ...) pdf(NULL, width, height, ...)
