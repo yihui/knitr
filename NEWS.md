@@ -4,6 +4,8 @@
 
 - added an argument `prefix` to `write_bib()` so that we can customize the prefix for bib entries; we can also set `options(knitr.bib.prefix = 'a_string')` so that `write_bib()` uses this global option as the default value for `prefix` (thanks, Michael Friendly)
 
+- the chunk option `dev.args` will be passed to the `pdf` recording device if `pdf` is also in the chunk option `dev` (note the recording device can be different with the actual drawing device); for example, you can pass a different `pointsize` to the PDF recording device (thanks, Felix Klein)
+
 ## BUG FIXES
 
 - fixed a regression bug that makes knitr fail to add `\ensuremath{}` to scientific notations of numbers of the form `10^{n}` in LaTeX output (thanks, Jeffrey Racine)

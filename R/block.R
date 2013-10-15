@@ -84,7 +84,8 @@ block_exec = function(options) {
 
   keep = options$fig.keep
   # open a device to record plots
-  if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none')) {
+  if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none',
+                   options$dev, options$dev.args)) {
     dv = dev.cur(); on.exit(dev.off(dv))
   }
 
@@ -232,15 +233,24 @@ purge_cache = function(options) {
 
 # open a device for a chunk; depending on the option global.device, may or may
 # not need to close the device on exit
-chunk_device = function(width, height, record = TRUE) {
+chunk_device = function(width, height, record = TRUE, dev, dev.args) {
+  dev_new = function() {
+    if (identical(getOption('device'), pdf_null) && ('pdf' %in% dev)) {
+      if (!is.null(dev.args)) {
+        dev.args = get_dargs(dev.args, dev, 'pdf')
+        dev.args = dev.args[intersect(names(dev.args), names(formals(pdf)))]
+      }
+      do.call(pdf_null, c(list(width = width, height = height), dev.args))
+    } else dev.new(width = width, height = height)
+  }
   if (!opts_knit$get('global.device')) {
-    dev.new(width = width, height = height)
+    dev_new()
     dev.control(displaylist = if (record) 'enable' else 'inhibit')  # enable recording
     # if returns TRUE, we need to close this device after code is evaluated
     return(TRUE)
   } else if (is.null(dev.list())) {
     # want to use a global device but not open yet
-    dev.new(width = width, height = height)
+    dev_new()
     dev.control('enable')
   }
   FALSE
