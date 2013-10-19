@@ -179,7 +179,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     if (pattern == 'rnw' && is_sweave(text)) remind_sweave(if (in.file) input)
     opts_knit$set(out.format = switch(
       pattern, rnw = 'latex', tex = 'latex', html = 'html', md = 'markdown',
-      rst = 'rst', brew = 'brew', asciidoc = 'asciidoc'
+      rst = 'rst', brew = 'brew', asciidoc = 'asciidoc', textile = 'textile'
     ))
   }
 
