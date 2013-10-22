@@ -78,6 +78,9 @@ block_exec = function(options) {
     return(output)
   }
 
+  if (options$inline %n% FALSE)
+    return(inline_exec(options))
+
   # eval chunks (in an empty envir if cache)
   env = knit_global()
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
