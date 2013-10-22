@@ -195,6 +195,7 @@ block_exec = function(options) {
 
   output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
   output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
+  output = paste(c(output, '\n'), collapse='')
 
   if (options$cache > 0) {
     obj.new = setdiff(ls(globalenv(), all.names = TRUE), obj.before)

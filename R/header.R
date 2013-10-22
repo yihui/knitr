@@ -32,7 +32,7 @@ insert_header_latex = function(doc, b) {
     # documentclass{article} because it must appear after usepackage{fontenc};
     # see this weird problem: http://stackoverflow.com/q/12448507/559676
     if (!out_format('listings') && length(j <- grep(p <- '(\\s*\\\\begin\\{document\\})', doc)[1L])) {
-      doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\\1', doc[j])
+      doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\n\\1', doc[j])
     }
     i = i[1L]; l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])
