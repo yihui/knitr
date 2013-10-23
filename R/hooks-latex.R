@@ -44,12 +44,12 @@ hook_plot_tex = function(x, options) {
   ## as needed), and an impression of their (possible) contents.
   ##
   ##     fig1,                   # \begin{...}[...]
-  ##       sub1,                 #   \subfloat{...}
+  ##       sub1,                 #   \subfloat[...]{
   ##         align1,             #     {\centering
   ##           resize1,          #       \resizebox{...}{...}{
   ##             tikz code       #         '\\input{chunkname.tikz}'
   ##             or animate code #         or '\\animategraphics[size]{1/interval}{chunkname}{1}{fig.num}'
-  ##             or plain code   #         or '\\includegraphics[size]{chunkname}}'
+  ##             or plain code   #         or '\\includegraphics[size]{chunkname}'
   ##           resize2,          #       }
   ##         align2,             #     }
   ##       sub2,                 #   }
