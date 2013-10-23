@@ -78,8 +78,10 @@ block_exec = function(options) {
     return(output)
   }
 
-  if (options$inline %n% FALSE)
+  if (options$inline %n% FALSE) {
+    options$code <- paste(options$code, collapse='\n')
     return(inline_exec(options))
+  }
 
   # eval chunks (in an empty envir if cache)
   env = knit_global()
