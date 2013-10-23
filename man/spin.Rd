@@ -4,7 +4,7 @@
 \usage{
 spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(), 
     format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), doc = "^#+'[ ]?", 
-    comment = c("^[# ]*/[*]", "^.*[*]/ *$"))
+    comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text))
 }
 \arguments{
   \item{hair}{the path to the R script}
@@ -38,6 +38,11 @@ spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
   the delimiters are \verb{/*} in the beginning and
   \verb{*/} in the end of a line (following the convention
   of C comments)}
+
+  \item{precious}{logical: whether intermediate files
+  (e.g., \code{.Rmd} files when \code{format} is
+  \code{"Rmd"}) should be removed; default \code{TRUE} if
+  \code{knit == TRUE} and input is a file}
 }
 \value{
   If \code{text} is \code{NULL}, the path of the final
