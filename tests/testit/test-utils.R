@@ -43,6 +43,14 @@ assert(
 )
 
 assert(
+  'Infinity and NaN are formatted correctly',
+  identical(format_sci(-Inf), '\\ensuremath{-\\infty}'),
+  identical(format_sci(-Inf, 'html'), '-&infin;'),
+  identical(format_sci(-Inf, 'rst'), '-Inf'),
+  identical(format_sci(NaN), 'NaN')
+)
+
+assert(
   'sanitize_fn() warns against spaces in filenames',
   has_warning(sanitize_fn('figure/a b'))
 )
