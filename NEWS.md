@@ -20,6 +20,8 @@
 
 - fixed the bug reported at http://stackoverflow.com/q/19166724/559676: the inline hook did not work well with non-numeric values, e.g. Date (thanks, Waldir Leoncio)
 
+- infinity is formatted as a symbol in inline LaTeX and HTML modes (thanks, Kirill Müller, #629)
+
 ## MINOR CHANGES
 
 - all numbers are formatted as math in inline LaTeX, for negative numbers, old-style vs. lining figures, infinity symbol, corner cases such as `10^{n}`, ... (thanks, Jeffrey Racine and Kirill Müller)
