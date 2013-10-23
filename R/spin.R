@@ -27,7 +27,7 @@
 #'   \verb{*/} in the end of a line (following the convention of C comments)
 #' @param precious logical: whether intermediate files (e.g., \code{.Rmd} files
 #'   when \code{format} is \code{"Rmd"}) should be removed; default \code{TRUE}
-#'   if knitting and input is a file
+#'   if \code{knit == TRUE} and input is a file
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
 #'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
 #' @return If \code{text} is \code{NULL}, the path of the final output document,
@@ -113,8 +113,7 @@ spin = function(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.fr
   } else {
     out = knit(outsrc, text = txt, envir = envir)
   }
-  if (!precious && !is.null(outsrc))
-    file.remove(outsrc)
+  if (!precious && !is.null(outsrc)) file.remove(outsrc)
   invisible(out)
 }
 
