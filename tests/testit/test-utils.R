@@ -32,19 +32,20 @@ assert(
 assert(
   'format_sci for Rnw doesn\'t add \\ensuremath{} at all',
   !grepl('[\\]ensuremath',
-         format_sci(c(1e4, 1.2345e10, 2*pnorm(-(3:4)))))
+         format_sci(c(1e4, 1.2345e10, 2*pnorm(-(3:4)), -Inf)))
 )
 
 assert(
   'the inline hook for Rnw applies \\ensuremath{} correctly',
   .inline.hook.tex(1e4) == '\\ensuremath{10^{4}}',
+  .inline.hook.tex(-Inf) == '\\ensuremath{-\\infty{}}',
   .inline.hook.tex(c(1.2345e10,2* pnorm(-(3:4)))) ==
     "\\ensuremath{1.2345\\times 10^{10}}, \\ensuremath{0.0027}, \\ensuremath{6.3342\\times 10^{-5}}"
 )
 
 assert(
   'Infinity and NaN are formatted correctly',
-  identical(format_sci(-Inf), '\\ensuremath{-\\infty}'),
+  identical(format_sci(-Inf), '-\\infty{}'),
   identical(format_sci(-Inf, 'html'), '-&infin;'),
   identical(format_sci(-Inf, 'rst'), '-Inf'),
   identical(format_sci(NaN), 'NaN')
