@@ -59,8 +59,9 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
   if (missing(align) || (format == 'latex' && is.null(align)))
     align = ifelse(isn, 'r', 'l')
   # rounding
-  x = apply(x, 2, function(z) if (is.numeric(z)) format(round(z, digits)) else z)
-  if (is.null(dim(x))) x = t(as.matrix(x))  # damn it!
+  for (j in seq_len(ncol(x))) {
+    if (is.numeric(x[, j])) x[, j] = format(round(x[, j], digits))
+  }
   if (is.na(row.names))
     row.names = !is.null(rownames(x)) && !identical(rownames(x), as.character(seq_len(NROW(x))))
   if (row.names) {

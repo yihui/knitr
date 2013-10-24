@@ -22,6 +22,8 @@
 
 - infinity is formatted as a symbol in inline LaTeX and HTML modes (thanks, Kirill Müller, #629)
 
+- `kable()` did not keep the row name when the data only has one row (thanks, @eev2, #636)
+
 ## MINOR CHANGES
 
 - all numbers are formatted as math in inline LaTeX, for negative numbers, old-style vs. lining figures, infinity symbol, corner cases such as `10^{n}`, ... (thanks, Jeffrey Racine and Kirill Müller)
