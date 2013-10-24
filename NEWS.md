@@ -8,6 +8,8 @@
 
 - intermediate files generated during `spin()` are deleted by default, this can be overridden by setting the new parameter `precious` to `TRUE` (thanks, Kirill Müller, #628)
 
+- added a new engine named `asis` to write the chunk content without processing it; it also respects the chunk option `echo` -- when `echo=FALSE`, the chunk will be hidden; this makes it possible to write text conditionally (thanks, Simon, #622)
+
 ## BUG FIXES
 
 - fixed a regression bug that makes knitr fail to add `\ensuremath{}` to scientific notations of numbers of the form `10^{n}` in LaTeX output (thanks, Jeffrey Racine)

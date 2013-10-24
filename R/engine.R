@@ -204,9 +204,7 @@ eng_cat = function(options) {
 
 ## output the code without processing it
 eng_asis = function(options) {
-  options$results = if (options$eval) 'asis' else 'hide'
-  options$echo = FALSE
-  engine_output(options, options$code, options$code)
+  if (options$echo) options$code
 }
 
 # set engines for interpreted languages
