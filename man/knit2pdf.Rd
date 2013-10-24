@@ -23,7 +23,9 @@ knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = 
 
   \item{output}{path of the output file for \code{knit()};
   if \code{NULL}, this function will try to guess and it
-  will be under the current working directory}
+  will be under the current working directory. Note it specifies the
+  output filename to be passed to the PDF compiler (e.g. a tex
+  document) instead of the PDF filename.}
 
   \item{envir}{the environment in which the code chunks are
   to be evaluated (can use \code{\link{new.env}()} to
@@ -41,11 +43,6 @@ knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = 
 \description{
   Knit the input Rnw or Rrst document, and compile to PDF
   using \code{texi2pdf} or \code{rst2pdf}.
-}
-\note{
-  The \code{output} argument specifies the output filename
-  to be passed to the PDF compiler (e.g. a tex document)
-  instead of the PDF filename.
 }
 \examples{
 #' compile with xelatex
