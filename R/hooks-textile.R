@@ -31,7 +31,8 @@ render_textile = function() {
       if (name == 'source') {
         x = paste(c(hilight_source(x, 'textile', options), ''), collapse = '\n')
       }
-      sprintf('bc(knitr_%s_%s#%s).. \n%s\np(knitr_end). \n\n', tolower(options$engine), name, options$label, x)
+      sprintf('bc(knitr_%s_%s#%s).. \n%s\np(knitr_end). \n\n',
+              tolower(options$engine), name, options$label, x)
     }
   }
   hook.output = function(x, options) {
@@ -45,8 +46,8 @@ render_textile = function() {
   for (i in c('source', 'warning', 'message', 'error'))
     z[[i]] = textile.hook(i)
   knit_hooks$set(z)
-  knit_hooks$set(inline = hook.inline, 
-                 output = hook.output, 
-                 plot = hook_plot_textile,
-		 		 chunk = .chunk.hook.textile)
+  knit_hooks$set(
+    inline = hook.inline, output = hook.output, plot = hook_plot_textile,
+    chunk = .chunk.hook.textile
+  )
 }
