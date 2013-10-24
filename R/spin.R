@@ -107,12 +107,15 @@ spin = function(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.fr
     txt = NULL
   } else outsrc = NULL
   if (!knit) return(txt %n% outsrc)
-  if (report) {
-    if (format == 'Rmd') out = knit2html(outsrc, text = txt, envir = envir)
-    else if (!nosrc && (format %in% c('Rnw', 'Rtex'))) out = knit2pdf(outsrc, envir = envir)
-  } else {
-    out = knit(outsrc, text = txt, envir = envir)
-  }
+
+  out = if (report) {
+    if (format == 'Rmd') {
+      knit2html(outsrc, text = txt, envir = envir)
+    } else if (!is.null(outsrc) && (format %in% c('Rnw', 'Rtex'))) {
+      knit2pdf(outsrc, envir = envir)
+    }
+  } else knit(outsrc, text = txt, envir = envir)
+
   if (!precious && !is.null(outsrc)) file.remove(outsrc)
   invisible(out)
 }
