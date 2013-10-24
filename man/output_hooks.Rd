@@ -7,6 +7,7 @@
 \alias{render_markdown}
 \alias{render_rst}
 \alias{render_sweave}
+\alias{render_textile}
 \title{Set output hooks for different output formats}
 \usage{
 render_latex()
@@ -24,6 +25,8 @@ render_jekyll(highlight = c("pygments", "prettify", "none"), extra = "")
 render_rst(strict = FALSE)
 
 render_asciidoc()
+
+render_textile()
 }
 \arguments{
   \item{strict}{whether to use strict markdown or reST

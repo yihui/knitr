@@ -4,6 +4,7 @@
 \alias{hook_plot_md}
 \alias{hook_plot_rst}
 \alias{hook_plot_tex}
+\alias{hook_plot_textile}
 \title{Default plot hooks for different output formats}
 \usage{
 hook_plot_tex(x, options)
@@ -15,6 +16,8 @@ hook_plot_md(x, options)
 hook_plot_rst(x, options)
 
 hook_plot_asciidoc(x, options)
+
+hook_plot_textile(x, options)
 }
 \arguments{
   \item{x}{a character vector of length 2 ; \code{x[1]} is
