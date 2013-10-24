@@ -5,8 +5,9 @@ assert(
   kable(data.frame(x=1, y=1), format = 'markdown') == c('|  x|  y|', '|--:|--:|', '|  1|  1|')
 )
 
+m = matrix(1:2, nrow = 1, dimnames = list('a', c('x', 'y')))
 assert(
   'kable() does not discard row names when there is only one row',
-  identical(kable(matrix(1:2, nrow = 1, dimnames = list('a', c('x', 'y')))),
-            c('|id  |  x|  y|', '|:---|--:|--:|', '|a   |  1|  2|'))
+  identical(kable(m), c('|id  |  x|  y|', '|:---|--:|--:|', '|a   |  1|  2|'))
+)
 )
