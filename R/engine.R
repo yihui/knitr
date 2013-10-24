@@ -202,6 +202,13 @@ eng_cat = function(options) {
   ''
 }
 
+## output the code without processing it
+eng_asis = function(options) {
+  options$results = if (options$eval) 'asis' else 'hide'
+  options$echo = FALSE
+  engine_output(options, options$code, options$code)
+}
+
 # set engines for interpreted languages
 for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'perl', 'python',
             'Rscript', 'ruby', 'sas', 'sed', 'sh', 'zsh')) {
@@ -212,7 +219,7 @@ rm(i)
 # additional engines
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
-  c = eng_c, asy = eng_dot, cat = eng_cat
+  c = eng_c, asy = eng_dot, cat = eng_cat, asis = eng_asis
 )
 
 # possible values for engines (for auto-completion in RStudio)
