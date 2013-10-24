@@ -30,6 +30,12 @@ assert(
 )
 
 assert(
+  'format_sci for Rnw doesn\'t add \\ensuremath{} at all',
+  !grepl('[\\]ensuremath',
+         format_sci(c(1e4, 1.2345e10, 2*pnorm(-(3:4)))))
+)
+
+assert(
   'the inline hook for Rnw applies \\ensuremath{} correctly',
   .inline.hook.tex(1e4) == '\\ensuremath{10^{4}}',
   .inline.hook.tex(c(1.2345e10,2* pnorm(-(3:4)))) ==
