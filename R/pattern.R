@@ -40,6 +40,13 @@ all_patterns = list(
     chunk.begin = '^//\\s*begin[.]rcode(.*)$', chunk.end = '^//\\s*end[.]rcode\\s*$',
     chunk.code = '^//+', ref.chunk = '^\\s*<<(.+)>>\\s*$',
     inline.code = '[+]r +([^+\n]+)\\s*[+]', inline.comment = '^//.*')
+    
+  `textile` = list(
+    chunk.begin = '^###[.]\\s+begin[.]rcode(.*)$',
+    chunk.end = '^###[.]\\s+end[.]rcode\\s*$',
+    ref.chunk = '^\\s*<<(.+)>>\\s*$',
+    inline.code = '`r +([^`\n]+)\\s*`',
+    inline.comment = '^###[.].*')    
 )
 
 .sep.label = '^#+\\s*(@knitr|----+)(.*?)-*\\s*$'  # pattern for code chunks in an R script
@@ -114,6 +121,9 @@ pat_md = function() set_pattern('md')
 pat_rst = function() set_pattern('rst')
 #' @rdname pat_fun
 pat_asciidoc = function() set_pattern('asciidoc')
+#' @rdname pat_fun
+pat_textile = function() set_pattern('textile')
+
 
 ## helper functions
 

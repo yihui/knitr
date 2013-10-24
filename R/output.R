@@ -179,7 +179,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     if (pattern == 'rnw' && is_sweave(text)) remind_sweave(if (in.file) input)
     opts_knit$set(out.format = switch(
       pattern, rnw = 'latex', tex = 'latex', html = 'html', md = 'markdown',
-      rst = 'rst', brew = 'brew', asciidoc = 'asciidoc'
+      rst = 'rst', brew = 'brew', asciidoc = 'asciidoc', textile = 'textile'
     ))
   }
 
@@ -269,7 +269,7 @@ auto_out_name = function(input, ext = tolower(file_ext(input))) {
   base = sans_ext(input)
   name = if (opts_knit$get('tangle')) c(base, '.R') else
     if (ext %in% c('rnw', 'snw')) c(base, '.tex') else
-      if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'stex', 'rrst'))
+      if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'stex', 'rrst', 'rtextile'))
         c(base, '.', substring(ext, 2L)) else
           if (grepl('_knit_', input)) sub('_knit_', '', input) else
             if (ext != 'txt') c(base, '.txt') else c(base, '-out.', ext)
