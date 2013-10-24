@@ -15,8 +15,8 @@ assert(
   identical(format_sci(1), '1'),
   identical(format_sci(0), '0'),
   identical(format_sci(c(1.84e8, 1e5, 2.34e3)),
-            c('1.84\\times 10^{8}', '10^{5}', '2340')),
-  identical(format_sci(1.23456789*10^-5), '1.2346\\times 10^{-5}'),
+            c('\\ensuremath{1.84\\times 10^{8}}', '\\ensuremath{10^{5}}', '2340')),
+  identical(format_sci(1.23456789*10^-5), '\\ensuremath{1.2346\\times 10^{-5}}'),
   identical(format_sci(9.87654e6, 'html'), '9.8765 &times; 10<sup>6</sup>'),
   identical(format_sci(9.87654e6, 'rst'), '9.8765 |times| 10 :sup:`6`'),
   identical(format_sci(letters), letters),
@@ -30,10 +30,15 @@ assert(
 )
 
 assert(
-  'the inline hook for Rnw applies \\ensuremath{} correctly',
-  .inline.hook.tex(1e4) == '\\ensuremath{10^{4}}',
-  .inline.hook.tex(c(1.2345e10,2* pnorm(-(3:4)))) ==
-    "\\ensuremath{1.2345\\times 10^{10}}, 0.0027, \\ensuremath{6.3342\\times 10^{-5}}"
+  'format_sci for Rnw doesn\'t add \\ensuremath{} at all',
+  !grepl('[\\]ensuremath',
+         format_sci(c(1e4, 1.2345e10, 2*pnorm(-(3:4)))))
+)
+assert(
+  'format_sci for Rnw applies \\ensuremath{} correctly',
+  format_sci(1e4) == '\\ensuremath{10^{4}}',
+  format_sci(c(1.2345e10, 2*pnorm(-(3:4)))) ==
+    c("\\ensuremath{1.2345\\times 10^{10}}", 0.0027, "\\ensuremath{6.3342\\times 10^{-5}}")
 )
 
 assert(
