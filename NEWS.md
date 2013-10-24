@@ -14,13 +14,15 @@
 
 ## BUG FIXES
 
-- fixed a regression bug that makes knitr fail to add `\ensuremath{}` to scientific notations of numbers of the form `10^{n}` in LaTeX output (thanks, Jeffrey Racine)
-
 - due to the change in evaluate v0.5, evaluate() may return the raw values of expressions, but the S3 method wrap() does not know how to handle them; now these values are just ignored (thanks, Dan Tenenbaum)
 
 - fixed a bug for dep_auto() that may occur if old cache files generated from previous versions of knitr are used (thanks, Jeffrey Racine)
 
 - fixed the bug reported at http://stackoverflow.com/q/19166724/559676: the inline hook did not work well with non-numeric values, e.g. Date (thanks, Waldir Leoncio)
+
+## MINOR CHANGES
+
+- all numbers are formatted as math in inline LaTeX, for negative numbers, old-style vs. lining figures, infinity symbol, corner cases such as `10^{n}`, ... (thanks, Jeffrey Racine and Kirill Müller)
 
 # CHANGES IN knitr VERSION 1.5
 
