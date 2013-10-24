@@ -152,6 +152,15 @@ format_sci_one = function(x, format = 'latex') {
 
   if (!is.numeric(x) || !is.double(x) || is.na(x) || x == 0) return(as.character(x))
 
+  if (is.infinite(x)) {
+    return(
+      switch(format, latex = {
+        sprintf("%s\\infty{}", ifelse(x < 0, "-", ""))
+      }, html = {
+        sprintf("%s&infin;", ifelse(x < 0, "-", ""))
+      }, as.character(x)))
+  }
+
   if (abs(lx <- floor(log10(abs(x)))) < getOption('scipen') + 4L)
     return(as.character(round(x, getOption('digits')))) # no need sci notation
 
