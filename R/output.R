@@ -186,7 +186,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   if (is.null(out_format())) auto_format(ext)
   ## change output hooks only if they are not set beforehand
   if (identical(knit_hooks$get(names(.default.hooks)), .default.hooks) && !child_mode()) {
-    do.call(paste('render', out_format(), sep = '_'), list(), envir = getNamespace('knitr'))
+    getFromNamespace(paste('render', out_format(), sep = '_'), 'knitr')()
     on.exit(knit_hooks$set(.default.hooks), add = TRUE)
   }
 
