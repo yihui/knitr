@@ -1,6 +1,6 @@
 #' Create tables in LaTeX, HTML, Markdown and reStructuredText
 #'
-#' This is a very simple table generator. It is simply by design. It is not
+#' This is a very simple table generator. It is simple by design. It is not
 #' intended to replace any other R packages for making tables.
 #' @param x an R object (typically a matrix or data frame)
 #' @param format a character string; possible values are \code{latex},
