@@ -24,6 +24,8 @@
 
 - `kable()` did not keep the row name when the data only has one row (thanks, @eev2, #636)
 
+- `kable()` did not recycle the `align` argument correctly (thanks, Adam Cooper, #638)
+
 ## MINOR CHANGES
 
 - all numbers are formatted as math in inline LaTeX, for negative numbers, old-style vs. lining figures, infinity symbol, corner cases such as `10^{n}`, ... (thanks, Jeffrey Racine and Kirill Müller)

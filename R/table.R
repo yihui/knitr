@@ -23,6 +23,12 @@
 #' @note The tables for \code{format = 'markdown'} also work for Pandoc when the
 #'   \code{pipe_tables} extension is enabled (this is the default behavior for
 #'   Pandoc >= 1.10).
+#'
+#'   When using this function inside a \pkg{knitr} document (e.g. R Markdown or
+#'   R LaTeX), you will need the chunk option \code{results='asis'}.
+#' @references See
+#'   \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
+#'   for some examples in LaTeX, but they also apply to other document formats.
 #' @export
 #' @examples kable(head(iris), format = 'latex')
 #' kable(head(iris), format = 'html')
@@ -64,13 +70,13 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
   }
   if (is.na(row.names))
     row.names = !is.null(rownames(x)) && !identical(rownames(x), as.character(seq_len(NROW(x))))
+  if (!is.null(align)) align = rep(align, length.out = ncol(x))
   if (row.names) {
     x = cbind(' ' = rownames(x), x)
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
   x = as.matrix(x)
   if (ncn) colnames(x) = NULL
-  if (!is.null(align)) align = rep(align, length.out = ncol(x))
   attr(x, 'align') = align
   res = do.call(paste('kable', format, sep = '_'), list(x = x, ...))
   if (output) cat(res, sep = '\n')
