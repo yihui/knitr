@@ -9,7 +9,8 @@ hook_plot_textile = function(x, options) {
   align = sprintf('align=%s', options$fig.align)
   tags = paste(c(width, height, align), collapse = ';')
 
-  sprintf('!{%s}%s(%s)!\n\np(knitr_plot_caption#%s). %s', tags, .upload.url(x), cap, options$label, cap)
+  sprintf('!{%s}%s%s(%s)!\n\np(knitr_plot_caption#%s). %s',
+          tags, base, .upload.url(x), cap, options$label, cap)
 }
 
 .chunk.hook.textile = function(x, options) {
