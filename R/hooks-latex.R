@@ -276,12 +276,11 @@ render_sweave = function() {
     paste(c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''),
           collapse = '\n')
   hook.s = function(x, options) paste('\\begin{Soutput}\n', x, '\\end{Soutput}\n', sep = '')
-  hook.o = function(x, options) if (output_asis(x, options)) x else hook.s(x, options)
   hook.c = function(x, options) {
     if (output_asis(x, options)) return(x)
     paste('\\begin{Schunk}\n', x, '\\end{Schunk}', sep = '')
   }
-  knit_hooks$set(source = hook.i, output = hook.o, warning = hook.s,
+  knit_hooks$set(source = hook.i, output = hook.s, warning = hook.s,
                  message = hook.s, error = hook.s, inline = .inline.hook.tex,
                  plot = hook_plot_tex, chunk = hook.c)
 }

@@ -38,13 +38,11 @@ render_markdown = function(strict = FALSE) {
   hook.r = function(x, options) {
     paste('\n\n```', tolower(options$engine), '\n', x, '```\n\n', sep = '')
   }
-  hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
   knit_hooks$set(
     source = function(x, options) {
       x = hilight_source(x, 'markdown', options)
       (if (strict) hook.t else hook.r)(paste(c(x, ''), collapse = '\n'), options)
-    }, output = hook.o,
-    warning = hook.t, error = hook.t, message = hook.t,
+    }, output = hook.t, warning = hook.t, error = hook.t, message = hook.t,
     inline = function(x) .inline.hook(format_sci(x, 'html')),
     plot = hook_plot_md,
     chunk = function(x, options) {
@@ -82,9 +80,8 @@ render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = 
     }
     hook.t = function(x, options) str_c('\n\n<pre><code>', escape_html(x), '</code></pre>\n\n')
   })
-  hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
   knit_hooks$set(source = function(x, options) {
     x = paste(hilight_source(x, 'markdown', options), collapse = '\n')
     hook.r(x, options)
-  }, output = hook.o, warning = hook.t, error = hook.t, message = hook.t)
+  }, output = hook.t, warning = hook.t, error = hook.t, message = hook.t)
 }

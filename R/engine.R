@@ -34,10 +34,7 @@ engine_output = function(options, code, out, extra = NULL) {
   if (options$engine == 'Rscript') options$engine = 'r'
   txt = paste(c(
     if (options$echo) knit_hooks$get('source')(code, options),
-    if (options$results != 'hide' && !is_blank(out)) {
-      if (!output_asis(out, options)) out = comment_out(out, options$comment)
-      knit_hooks$get('output')(out, options)
-    },
+    if (options$results != 'hide' && !is_blank(out)) wrap.character(out, options),
     extra
   ), collapse = '\n')
   if (options$include) knit_hooks$get('chunk')(txt, options) else ''

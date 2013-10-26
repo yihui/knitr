@@ -387,7 +387,9 @@ wrap.list = function(x, options = list()) {
 wrap.default = function(x, options) return()
 
 wrap.character = function(x, options) {
-  if (!output_asis(x, options)) x = comment_out(x, options$comment)
+  if (output_asis(x, options)) {
+    if (!out_format('latex')) return(x)  # latex output still need a tweak
+  } else x = comment_out(x, options$comment)
   knit_hooks$get('output')(x, options)
 }
 

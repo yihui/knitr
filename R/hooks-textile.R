@@ -38,9 +38,6 @@ render_textile = function() {
               tolower(options$engine), name, options$label, x)
     }
   }
-  hook.output = function(x, options) {
-    if (output_asis(x, options)) x else textile.hook('output')(x, options)
-  }
   hook.inline = function(x) {
       sprintf(if (inherits(x, 'AsIs')) '%s' else '@(knitr inline)%s@',
               .inline.hook(format_sci(x, 'html')))
@@ -50,7 +47,7 @@ render_textile = function() {
     z[[i]] = textile.hook(i)
   knit_hooks$set(z)
   knit_hooks$set(
-    inline = hook.inline, output = hook.output, plot = hook_plot_textile,
+    inline = hook.inline, output = textile.hook('output'), plot = hook_plot_textile,
     chunk = .chunk.hook.textile
   )
 }
