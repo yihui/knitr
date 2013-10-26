@@ -33,9 +33,7 @@ render_rst = function(strict = FALSE) {
     if (output_asis(x, options)) return(x)
     hook.s(x, options)
   }
-  hook.i = function(x) {
-    .inline.hook(format_sci(x, 'rst'))
-  }
+  hook.i = function(x) .inline.hook(format_sci(x, 'rst'))
   knit_hooks$set(
     source = function(x, options) {
       x = paste(c(hilight_source(x, 'rst', options), ''), collapse = '\n')
