@@ -28,6 +28,8 @@ rocco(input, ...)
 }
 \examples{
 rocco_view = function(input) {
+    if (!file.exists(input)) 
+        return()
     o = rocco(input, header = "", quiet = TRUE)
     if (interactive()) 
         browseURL(o)

@@ -39,7 +39,7 @@ kable(x, format, digits = getOption("digits"), row.names = NA, align, output = T
   the console as a side-effect.
 }
 \description{
-  This is a very simple table generator. It is simply by
+  This is a very simple table generator. It is simple by
   design. It is not intended to replace any other R
   packages for making tables.
 }
@@ -47,6 +47,10 @@ kable(x, format, digits = getOption("digits"), row.names = NA, align, output = T
   The tables for \code{format = 'markdown'} also work for
   Pandoc when the \code{pipe_tables} extension is enabled
   (this is the default behavior for Pandoc >= 1.10).
+
+  When using this function inside a \pkg{knitr} document
+  (e.g. R Markdown or R LaTeX), you will need the chunk
+  option \code{results='asis'}.
 }
 \examples{
 kable(head(iris), format = "latex")
@@ -69,6 +73,12 @@ kable(head(mtcars), format = "pandoc")
 x = kable(mtcars, format = "html", output = FALSE)
 cat(x, sep = "\\n")
 # can also set options(knitr.table.format = 'html') so that the output is HTML
+}
+\references{
+  See
+  \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
+  for some examples in LaTeX, but they also apply to other
+  document formats.
 }
 \seealso{
   Other R packages such as \pkg{xtable} and \pkg{tables}.
