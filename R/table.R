@@ -66,8 +66,9 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
     align = ifelse(isn, 'r', 'l')
   # rounding
   for (j in seq_len(ncol(x))) {
-    if (is.numeric(x[, j])) x[, j] = format(round(x[, j], digits))
+    if (is.numeric(x[, j])) x[, j] = round(x[, j], digits)
   }
+  x = format(x)
   if (is.na(row.names))
     row.names = !is.null(rownames(x)) && !identical(rownames(x), as.character(seq_len(NROW(x))))
   if (!is.null(align)) align = rep(align, length.out = ncol(x))
