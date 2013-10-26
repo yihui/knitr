@@ -28,7 +28,7 @@
 
 ## MINOR CHANGES
 
-- all numbers are formatted as math in inline LaTeX, for negative numbers, old-style vs. lining figures, infinity symbol, corner cases such as `10^{n}`, ... (thanks, Jeffrey Racine and Kirill Müller)
+- numbers containing characters other than digits 0-9, periods or commas are formatted as math in inline LaTeX, for negative numbers, infinity symbol, corner cases such as `10^{n}`, ... (thanks, Jeffrey Racine and Kirill Müller, #635)
 
 # CHANGES IN knitr VERSION 1.5
 
