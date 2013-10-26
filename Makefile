@@ -28,6 +28,10 @@ check: build
 	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
 
+travis: build
+	cd ..;\
+	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual --no-build-vignettes
+
 examples:
 	cd inst/examples;\
 	Rscript knit-all.R
