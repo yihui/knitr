@@ -32,10 +32,12 @@ examples:
 	cd inst/examples;\
 	Rscript knit-all.R
 
+# I do not want to remind Simon again and again that breakurl is missing on CRAN
 vignettes: vignettes/knitr-intro.lyx vignettes/knitr-refcard.lyx
 	cd vignettes;\
 	lyx -e knitr knitr-intro.lyx;\
-	lyx -e knitr knitr-refcard.lyx
+	lyx -e knitr knitr-refcard.lyx;\
+	sed -i '/\\usepackage{breakurl}/ d' knitr-refcard.Rnw
 
 # the svn mirror created by
 # svn checkout svn+ssh://yihui@svn.r-forge.r-project.org/svnroot/isu/pkg/knitr knitr-rforge
