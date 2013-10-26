@@ -4,7 +4,8 @@
 \begin_header
 \textclass article
 \begin_preamble
-\usepackage{multicol, upquote}
+\usepackage{multicol}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % \VignetteIndexEntry{knitr Reference Card}
 % \VignetteEngine{knitr::knitr}
 \end_preamble
