@@ -1,16 +1,19 @@
 #' @rdname hook_plot
 #' @export
 hook_plot_textile = function(x, options) {
-  base = opts_knit$get('base.url') %n% ''
-  cap = .img.cap(options)
+  cap = .img.cap(options); if (is.na(cap)) cap = ''
 
-  width = sprintf('width=%s', options$out.width)
-  height = sprintf('height=%s', options$out.height)
-  align = sprintf('align=%s', options$fig.align)
-  tags = paste(c(width, height, align), collapse = ';')
+  tags = unlist(Map(
+    sprintf, c('width: %s', 'height: %s', 'align: %s'),
+    options[c('out.width', 'out.height', 'fig.align')]
+  ))
+  tags = if (length(tags)) sprintf('{%s}', paste(tags, collapse = ';')) else ''
 
-  sprintf('!{%s}%s%s(%s)!\n\np(knitr_plot_caption#%s). %s',
-          tags, base, .upload.url(x), cap, options$label, cap)
+  paste(sep = '',
+    '!', tags, opts_knit$get('base.url'), .upload.url(x),
+    if (nzchar(cap)) sprintf('(%s)', cap), '!\n\n',
+    if (nzchar(cap)) sprintf('p(knitr_plot_caption#%s). %s', options$label, cap)
+  )
 }
 
 .chunk.hook.textile = function(x, options) {
