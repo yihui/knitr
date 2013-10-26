@@ -28,9 +28,10 @@ check: build
 	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
 
-travis: build
+travis:
 	cd ..;\
-	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual --no-build-vignettes
+	R CMD build $(PKGSRC) --no-build-vignettes;\
+	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual --no-vignettes
 
 examples:
 	cd inst/examples;\
