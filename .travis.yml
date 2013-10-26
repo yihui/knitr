@@ -23,7 +23,6 @@ install:
 
 # run tests
 script:
-  - make install
   - make travis
 
 # run check against R-devel
