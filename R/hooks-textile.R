@@ -9,10 +9,12 @@ hook_plot_textile = function(x, options) {
   ), css_align(options$fig.align)))
   tags = if (length(tags)) sprintf('{%s}', paste(tags, collapse = ';')) else ''
 
-  paste(sep = '',
+  paste(
+    sep = '',
     '!', tags, opts_knit$get('base.url'), .upload.url(x),
     if (nzchar(cap)) sprintf('(%s)', cap), '!\n\n',
-    if (nzchar(cap)) sprintf('p(knitr plot caption#%s). %s', options$label, cap)
+    if (nzchar(cap)) sprintf('p(knitr plot caption#%s). %s', options$label, cap),
+    '\n\n'
   )
 }
 
