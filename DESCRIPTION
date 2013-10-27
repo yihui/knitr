@@ -66,8 +66,8 @@ Depends:
 Imports:
     evaluate (>= 0.5.1),
     digest,
-    formatR (>= 0.9),
-    highr (>= 0.2),
+    formatR (>= 0.10),
+    highr (>= 0.3),
     markdown (>= 0.6.3),
     stringr (>= 0.6),
     tools
