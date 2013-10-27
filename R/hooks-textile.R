@@ -37,10 +37,7 @@ render_textile = function() {
               tolower(options$engine), name, options$label, x)
     }
   }
-  hook.inline = function(x) {
-      sprintf(if (inherits(x, 'AsIs')) '%s' else '@(knitr inline)%s@',
-              .inline.hook(format_sci(x, 'html')))
-  }
+  hook.inline = function(x) .inline.hook(format_sci(x, 'html'))
   z = list()
   for (i in c('source', 'warning', 'message', 'error'))
     z[[i]] = textile.hook(i)

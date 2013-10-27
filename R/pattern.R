@@ -45,7 +45,7 @@ all_patterns = list(
     chunk.begin = '^###[.]\\s+begin[.]rcode(.*)$',
     chunk.end = '^###[.]\\s+end[.]rcode\\s*$',
     ref.chunk = '^\\s*<<(.+)>>\\s*$',
-    inline.code = '`r +([^`\n]+)\\s*`',
+    inline.code = '@r +([^@\n]+)\\s*@',
     inline.comment = '^###[.].*')
 )
 
