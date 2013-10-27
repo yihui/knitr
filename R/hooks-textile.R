@@ -3,10 +3,10 @@
 hook_plot_textile = function(x, options) {
   cap = .img.cap(options); if (is.na(cap)) cap = ''
 
-  tags = unlist(Map(
-    sprintf, c('width: %s', 'height: %s', 'align: %s'),
-    options[c('out.width', 'out.height', 'fig.align')]
-  ))
+  tags = unlist(c(Map(
+    sprintf, c('width: %s', 'height: %s'),
+    options[c('out.width', 'out.height')]
+  ), css_align(options$fig.align)))
   tags = if (length(tags)) sprintf('{%s}', paste(tags, collapse = ';')) else ''
 
   paste(sep = '',
