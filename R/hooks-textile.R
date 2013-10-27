@@ -12,7 +12,7 @@ hook_plot_textile = function(x, options) {
   paste(sep = '',
     '!', tags, opts_knit$get('base.url'), .upload.url(x),
     if (nzchar(cap)) sprintf('(%s)', cap), '!\n\n',
-    if (nzchar(cap)) sprintf('p(knitr_plot_caption#%s). %s', options$label, cap)
+    if (nzchar(cap)) sprintf('p(knitr plot caption#%s). %s', options$label, cap)
   )
 }
 
