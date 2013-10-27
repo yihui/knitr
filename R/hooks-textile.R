@@ -18,12 +18,6 @@ hook_plot_textile = function(x, options) {
   )
 }
 
-.chunk.hook.textile = function(x, options) {
-  if (output_asis(x, options)) return(x)
-  sprintf('==<!-- start of chunk "%s" -->==\n\n%s\n==<!-- end of chunk "%s" -->==\n',
-              options$label, x, options$label)
-}
-
 #' @rdname output_hooks
 #' @export
 render_textile = function() {
@@ -45,7 +39,6 @@ render_textile = function() {
     z[[i]] = textile.hook(i)
   knit_hooks$set(z)
   knit_hooks$set(
-    inline = hook.inline, output = textile.hook('output'), plot = hook_plot_textile,
-    chunk = .chunk.hook.textile
+    inline = hook.inline, output = textile.hook('output'), plot = hook_plot_textile
   )
 }
