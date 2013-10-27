@@ -1,0 +1,69 @@
+# A Knitr "Polyglot" Example for Markdown
+
+This is a minimal example of using "polyglot"" **knitr** to produce an _HTML_ page from _Markdown_.
+
+```{r setup, echo=FALSE}
+opts_chunk$set(fig.width=7, fig.height=5, echo=FALSE)
+toTest <- c("R", "python", "scala", "bash")
+where <- Sys.which(toTest)
+exists <- nchar(where) > 0 # TODO: Only run chunk if runtime exists
+```
+
+## Engine runtime paths
+
+```{r list-engines, results='asis'}
+for(n in names(where)) {
+  path <- where[n]
+  if(nchar(path) <= 0) {
+    path <- "<not found>"
+  }
+  cat("* __", n, "__: `", path, "`\n", sep="")
+}
+```
+
+## Input Data
+Pass the string to transform to engine subprocess via environment variable.
+
+```{r, echo=TRUE}
+Sys.setenv(SOMETHING = "something")
+```
+
+## Compute Something in R
+
+```{r something-in-R, engine='R', comment='R>'}
+something <- Sys.getenv("SOMETHING")
+somethingmore <- strsplit(something, "")
+somethingelse <- paste(sample(somethingmore[[1]]), collapse="")
+cat(paste("'", something, "' is now '", somethingelse, "'", sep=""))
+```
+
+## Compute Something in Scala
+
+Running small fragments without caching can take some time, as the Scala compiler has to launch and compile the script to JVM bytecode. The `-savecompiled` option (passed via `engine.opts`) will result in Scala caching the compiled script outside of _knitr_.
+
+```{r something-in-Scala, engine='scala', comment='Scala>', engine.opts='-savecompiled', cache=TRUE}
+import scala.util.Random._
+val something = System.getenv("SOMETHING")
+val somethingelse = shuffle(something.toSeq).mkString
+println(s"'$something' is now '$somethingelse'")
+```
+
+## Compute Something in Python
+
+```{r something-in-Python, engine='python', comment='Python>'}
+import random, os
+something = os.getenv("SOMETHING")
+somethingmore = list(something)
+random.shuffle(somethingmore)
+somethingelse = ''.join(somethingmore)
+print("'" + something + "' is now '" + somethingelse + "'")
+```
+
+## Compute Something in Bash
+
+```{r something-in-Bash, engine='bash', comment='Bash>'}
+something=$SOMETHING
+somethingmore=$(echo $something | fold -w1)
+somethingelse=$(for c in $somethingmore; do echo "$RANDOM $c"; done | sort -n | sed -e 's/^[0-9 ]*//' | paste -s -d '\0' -)
+echo "'$something' is now '$somethingelse'"
+```
