@@ -31,9 +31,8 @@ render_textile = function() {
   textile.hook = function(name) {
     force(name)
     function (x, options) {
-      if (name == 'source') {
-        x = paste(c(hilight_source(x, 'textile', options), ''), collapse = '\n')
-      }
+      if (name == 'source') x = c(hilight_source(x, 'textile', options), '')
+      x = paste(x, collapse = '\n')
       sprintf('bc(knitr %s %s#%s).. %s\np(knitr_end). \n\n',
               tolower(options$engine), name, options$label, x)
     }
