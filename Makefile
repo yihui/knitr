@@ -59,6 +59,9 @@ downstream:
 	-e "x = reverse_dependencies_with_maintainers('knitr', c('Depends', 'Imports', 'LinkingTo', 'Suggests'))" \
 	-e "cat('\n'); cat(unique(x[, 'Maintainer']), sep = ', \n'); cat('\n')"
 
+update-knitr-examples:
+	git submodule update --remote
+
 clean:
 	cd ..;\
 	$(RM) -r $(PKGNAME).Rcheck/
