@@ -34,12 +34,7 @@ travis:
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual --no-vignettes
 
 integration: install
-	cd knitr-examples;\
-	make deps knit;\
-	git status;\
-	git diff;\
-	git checkout .;\
-	git clean -d -f
+	make deps knit clean -C knitr-examples
 
 examples:
 	cd inst/examples;\
