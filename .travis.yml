@@ -29,11 +29,11 @@ install:
   - if [ -n "${INSTALL_XPRA}" ]; then echo "deb http://winswitch.org/ `lsb_release -cs` main" | sudo tee /etc/apt/sources.list.d/winswitch.list; fi
   - if [ -n "${INSTALL_XPRA}" ]; then sudo apt-get update; fi
   - if [ -n "${INSTALL_XPRA}" ]; then sudo apt-get install xpra; fi
+  - if [ -n "${INSTALL_XPRA}" ]; then xpra start $DISPLAY; fi
   - "[ ! -d ~/R ] && mkdir ~/R"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
   - Rscript -e 'install.packages("knitr", dep = TRUE, repos = c("http://rforge.net", "http://cran.rstudio.org"))'
-  - xpra start $DISPLAY
   - sudo updatedb
   - locate dvisvgm
   - sudo apt-get install apt-file
