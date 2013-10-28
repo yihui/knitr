@@ -33,6 +33,12 @@ travis:
 	R CMD build $(PKGSRC) --no-build-vignettes;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual --no-vignettes
 
+integration: install
+	cd knitr-examples;\
+	make deps knit;\
+	git status
+	git diff
+
 examples:
 	cd inst/examples;\
 	Rscript knit-all.R
