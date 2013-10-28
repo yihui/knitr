@@ -7,7 +7,7 @@ env:
     - R_LIBS_USER=~/R
   matrix:
     - TARGET=travis
-    - TARGET=integration
+    - TARGET=integration EXTRA_INSTALL_INSTRUCTIONS="sudo apt-get install --no-install-recommends qpdf texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra"
 
 # install dependencies
 install:
@@ -20,6 +20,7 @@ install:
   - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-c2d4u-precise.list"
       -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
   - sudo apt-get install r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended
+  - ${EXTRA_INSTALL_INSTRUCTIONS}
   - "[ ! -d ~/R ] && mkdir ~/R"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
