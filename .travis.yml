@@ -28,7 +28,6 @@ install:
   - if [ -n "${INSTALL_DVISVGM}" ]; then sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/martin-gieseking-ppa-precise.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"; fi
   - if [ -n "${INSTALL_DVISVGM}" ]; then sudo apt-get install dvisvgm; fi
   - if [ -n "${INSTALL_LATEX}" ]; then sudo apt-get install --no-install-recommends qpdf texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra texlive-extra-utils; fi
-   get install --no-install-recommends qpdf texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra texlive-extra-utils; fi
   - if [ -n "${INSTALL_XPRA}" ]; then curl http://winswitch.org/gpg.asc | sudo apt-key add - ; fi
   - if [ -n "${INSTALL_XPRA}" ]; then echo "deb http://winswitch.org/ `lsb_release -cs` main" | sudo tee /etc/apt/sources.list.d/winswitch.list; fi
   - if [ -n "${INSTALL_XPRA}" ]; then sudo apt-get update; fi
