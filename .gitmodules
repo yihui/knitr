@@ -1,3 +1,4 @@
 [submodule "knitr-examples"]
 	path = knitr-examples
 	url = git://github.com/krlmlr/knitr-examples.git
+	branch = develop
