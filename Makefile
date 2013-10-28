@@ -36,7 +36,7 @@ travis:
 integration: install
 	git clone https://github.com/${TRAVIS_REPO_SLUG}-examples.git && \
 	cd knitr-examples && if git checkout ${TRAVIS_BRANCH}; then \
-	GIT_PAGER=cat make sysdeps deps knit diff clean -C knitr-examples; else \
+	GIT_PAGER=cat make sysdeps deps knit diff clean; else \
 	true; fi
 
 examples:
