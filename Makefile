@@ -34,7 +34,10 @@ travis:
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual --no-vignettes
 
 integration: install
-	GIT_PAGER=cat make sysdeps deps knit diff clean -C knitr-examples
+	git clone https://github.com/${TRAVIS_REPO_SLUG}-examples.git && \
+	cd knitr-examples && if git checkout ${TRAVIS_BRANCH}; then \
+	GIT_PAGER=cat make sysdeps deps knit diff clean -C knitr-examples; else \
+	true; fi
 
 examples:
 	cd inst/examples;\
@@ -58,12 +61,6 @@ downstream:
 	Rscript -e "source('http://developer.r-project.org/CRAN/Scripts/depends.R');" \
 	-e "x = reverse_dependencies_with_maintainers('knitr', c('Depends', 'Imports', 'LinkingTo', 'Suggests'))" \
 	-e "cat('\n'); cat(unique(x[, 'Maintainer']), sep = ', \n'); cat('\n')"
-
-update-knitr-examples:
-	[ -z "$$(git status --porcelain | tee /dev/stderr)" ] && \
-	git submodule update --remote && \
-	git add . && \
-	git commit -m "update knitr-examples submodule"
 
 clean:
 	cd ..;\
