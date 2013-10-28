@@ -7,7 +7,7 @@ env:
     - R_LIBS_USER=~/R
   matrix:
     - TARGET=travis
-    - TARGET=integration INSTALL_LATEX=T
+    - TARGET=integration INSTALL_LATEX=T INSTALL_XPRA=T
 
 # install dependencies
 install:
@@ -21,6 +21,11 @@ install:
       -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
   - sudo apt-get install r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended
   - if [ -n "${INSTALL_LATEX}" ]; then sudo apt-get install --no-install-recommends qpdf texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra texlive-extra-utils; fi
+  - if [ -n "${INSTALL_XPRA}" ]; then curl http://winswitch.org/gpg.asc | sudo apt-key add - ; fi
+  - if [ -n "${INSTALL_XPRA}" ]; then echo "deb http://winswitch.org/ `lsb_release -cs` main" | sudo tee /etc/apt/sources.list.d/winswitch.list; fi
+  - if [ -n "${INSTALL_XPRA}" ]; then sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/winswitch.list"
+      -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"; fi
+  - if [ -n "${INSTALL_XPRA}" ]; then sudo apt-get install xpra; fi
   - "[ ! -d ~/R ] && mkdir ~/R"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
