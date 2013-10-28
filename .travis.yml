@@ -7,7 +7,7 @@ env:
     - R_LIBS_USER=~/R
   matrix:
     - TARGET=travis
-    - TARGET=integration EXTRA_INSTALL_INSTRUCTIONS="sudo apt-get install --no-install-recommends qpdf texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra"
+    - TARGET=integration EXTRA_INSTALL_INSTRUCTIONS="sudo apt-get install --no-install-recommends qpdf texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra texlive-extra-utils"
 
 # install dependencies
 install:
