@@ -60,7 +60,10 @@ downstream:
 	-e "cat('\n'); cat(unique(x[, 'Maintainer']), sep = ', \n'); cat('\n')"
 
 update-knitr-examples:
-	git submodule update --remote
+	[ -z "$$(git status --porcelain | tee /dev/stderr)" ] && \
+	git submodule update --remote && \
+	git add . && \
+	git commit -m "update knitr-examples submodule"
 
 clean:
 	cd ..;\
