@@ -34,6 +34,11 @@ install:
   - R -e '.libPaths(); sessionInfo()'
   - Rscript -e 'install.packages("knitr", dep = TRUE, repos = c("http://rforge.net", "http://cran.rstudio.org"))'
   - xpra start $DISPLAY
+  - sudo updatedb
+  - locate dvisvgm
+  - sudo apt-get install apt-file
+  - sudo apt-file update
+  - apt-file search dvisvgm
 
 # run tests
 script:
