@@ -36,9 +36,9 @@ travis:
 integration: install
 	cd knitr-examples;\
 	make deps knit;\
-	git status
-	git diff
-	git checkout .
+	git status;\
+	git diff;\
+	git checkout .;\
 	git clean -d -f
 
 examples:
