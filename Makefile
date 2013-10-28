@@ -34,7 +34,7 @@ travis:
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual --no-vignettes
 
 integration: install
-	make sysdeps deps knit diff clean -C knitr-examples
+	GIT_PAGER=cat make sysdeps deps knit diff clean -C knitr-examples
 
 examples:
 	cd inst/examples;\
