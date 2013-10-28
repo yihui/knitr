@@ -12,7 +12,6 @@ env:
 # capturing state
 before_install:
   - env | sort
-  - find ~ -type f
 
 # install dependencies
 install:
