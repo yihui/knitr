@@ -7,7 +7,7 @@ env:
     - R_LIBS_USER=~/R
   matrix:
     - TARGET=travis
-    - TARGET=integration INSTALL_LATEX=T INSTALL_XPRA=T
+    - TARGET=integration INSTALL_LATEX=T INSTALL_XPRA=T DISPLAY=:8
 
 # install dependencies
 install:
@@ -30,6 +30,7 @@ install:
   - R --version
   - R -e '.libPaths(); sessionInfo()'
   - Rscript -e 'install.packages("knitr", dep = TRUE, repos = c("http://rforge.net", "http://cran.rstudio.org"))'
+  - xpra start $DISPLAY
 
 # run tests
 script:
