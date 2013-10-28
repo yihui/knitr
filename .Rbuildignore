@@ -14,7 +14,6 @@ png$
 NEWS.md
 ^\.Rproj\.user$
 ^.*\.Rproj$
-.travis.yml
+^\.travis\.yml$
 FAQ.md
 Makefile
-^knitr-examples$
