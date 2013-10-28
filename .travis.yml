@@ -15,6 +15,12 @@ before_install:
 
 # install dependencies
 install:
+  - sudo apt-get install locate
+  - sudo updatedb
+  - locate dvisvgm
+  - sudo apt-get install apt-file
+  - sudo apt-file update
+  - apt-file search dvisvgm
   - echo "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
       | sudo tee /etc/apt/sources.list.d/cran.list
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
@@ -34,11 +40,6 @@ install:
   - R --version
   - R -e '.libPaths(); sessionInfo()'
   - Rscript -e 'install.packages("knitr", dep = TRUE, repos = c("http://rforge.net", "http://cran.rstudio.org"))'
-  - sudo updatedb
-  - locate dvisvgm
-  - sudo apt-get install apt-file
-  - sudo apt-file update
-  - apt-file search dvisvgm
 
 # run tests
 script:
