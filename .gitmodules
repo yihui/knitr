@@ -1,0 +1,3 @@
+[submodule "knitr-examples"]
+	path = knitr-examples
+	url = git://github.com/yihui/knitr-examples.git
