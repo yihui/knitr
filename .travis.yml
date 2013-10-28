@@ -9,6 +9,11 @@ env:
     - TARGET=travis
     - TARGET=integration INSTALL_LATEX=T INSTALL_XPRA=T DISPLAY=:8
 
+# capturing state
+before_install:
+  - env | sort
+  - find ~ -type f
+
 # install dependencies
 install:
   - echo "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
