@@ -38,6 +38,8 @@ integration: install
 	make deps knit;\
 	git status
 	git diff
+	git checkout .
+	git clean -d -f
 
 examples:
 	cd inst/examples;\
