@@ -15,9 +15,6 @@ before_install:
 
 # install dependencies
 install:
-  - sudo apt-get install locate
-  - sudo updatedb
-  - locate dvisvgm
   - sudo apt-get install apt-file
   - sudo apt-file update
   - apt-file search dvisvgm
@@ -40,6 +37,9 @@ install:
   - R --version
   - R -e '.libPaths(); sessionInfo()'
   - Rscript -e 'install.packages("knitr", dep = TRUE, repos = c("http://rforge.net", "http://cran.rstudio.org"))'
+  - sudo apt-get install locate
+  - sudo updatedb
+  - locate dvisvgm || true
 
 # run tests
 script:
