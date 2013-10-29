@@ -38,7 +38,7 @@ integration-need:
 	cd knitr-examples && git checkout ${TRAVIS_BRANCH}
 
 integration: install
-	GIT_PAGER=cat make sysdeps deps knit -C knitr-examples
+	make sysdeps deps knit -C knitr-examples
 
 integration-verify:
 	GIT_PAGER=cat make diff clean -C knitr-examples
