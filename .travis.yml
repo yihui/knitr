@@ -24,11 +24,7 @@ install:
   - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-c2d4u-precise.list"
       -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
   - sudo apt-get install r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended
-  - if [ -n "${INSTALL_LATEX}" ]; then
-        sudo apt-get install --no-install-recommends qpdf texinfo
-          texlive-latex-recommended texlive-latex-extra lmodern
-          texlive-fonts-recommended texlive-fonts-extra texlive-extra-utils
-      fi
+  - if [ -n "${INSTALL_LATEX}" ]; then sudo apt-get install --no-install-recommends qpdf texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra texlive-extra-utils; fi
   - if [ -n "${INSTALL_DVISVGM}" ]; then sudo apt-add-repository -y ppa:martin-gieseking/ppa; fi
   - if [ -n "${INSTALL_DVISVGM}" ]; then sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/martin-gieseking-ppa-precise.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"; fi
   - if [ -n "${INSTALL_DVISVGM}" ]; then sudo apt-get install dvisvgm; fi
@@ -49,7 +45,8 @@ script:
 # run check against R-devel
 after_script:
   - if [ ${TARGET} = travis ]; then sudo add-apt-repository -y ppa:marutter/rdev; fi
-  - if [ ${TARGET} = travis ]; then
+  - if [ ${TARGET} = travis ];
+      then
         sudo apt-get update
           -o Dir::Etc::sourcelist="sources.list.d/marutter-rdev-precise.list"
           -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0";
