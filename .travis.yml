@@ -12,6 +12,9 @@ env:
 # capturing state
 before_install:
   - env | sort
+  - if [ ${TARGET} = integration ]; then
+      if ! make integration-need; then exit 0; fi;
+    fi
 
 # install dependencies
 install:
@@ -63,3 +66,6 @@ after_script:
         sudo apt-get dist-upgrade;
         make ${TARGET};
       fi
+  - if [ ${TARGET} = integration ]; then
+      make integration-verify
+    fi

@@ -33,11 +33,15 @@ travis:
 	R CMD build $(PKGSRC) --no-build-vignettes;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual --no-vignettes
 
-integration: install
+integration-need:
 	git clone https://github.com/${TRAVIS_REPO_SLUG}-examples.git && \
-	cd knitr-examples && if git checkout ${TRAVIS_BRANCH}; then \
-	GIT_PAGER=cat make sysdeps deps knit diff clean; else \
-	true; fi
+	cd knitr-examples && git checkout ${TRAVIS_BRANCH}
+
+integration: install
+	GIT_PAGER=cat make sysdeps deps knit -C knitr-examples
+
+integration-verify:
+	GIT_PAGER=cat make diff clean -C knitr-examples
 
 examples:
 	cd inst/examples;\
