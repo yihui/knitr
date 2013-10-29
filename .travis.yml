@@ -9,7 +9,7 @@ env:
     - TARGET=travis
     - TARGET=integration INSTALL_LATEX=T INSTALL_DVISVGM=T INSTALL_XPRA=T DISPLAY=:8
 
-# capturing state
+# capturing state, early exit if no integration test is needed
 before_install:
   - env | sort
   - if [ ${TARGET} = integration ]; then
