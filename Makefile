@@ -20,7 +20,11 @@ build:
 	cd ..;\
 	R CMD build $(PKGSRC)
 
-install: build
+build-no-vignettes:
+	cd ..;\
+	R CMD build $(PKGSRC) --no-build-vignettes
+
+install%: build%
 	cd ..;\
 	R CMD INSTALL $(PKGNAME)_$(PKGVERS).tar.gz
 
@@ -28,16 +32,15 @@ check: build
 	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
 
-travis:
+travis: build-no-vignettes
 	cd ..;\
-	R CMD build $(PKGSRC) --no-build-vignettes;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual --no-vignettes
 
 integration-need:
 	git clone https://github.com/${TRAVIS_REPO_SLUG}-examples.git && \
 	cd knitr-examples && git checkout ${TRAVIS_BRANCH}
 
-integration-run: install
+integration-run: install-no-vignettes
 	make sysdeps deps knit -C knitr-examples
 
 integration-verify:
