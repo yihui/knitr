@@ -7,7 +7,7 @@ env:
     - R_LIBS_USER=~/R
   matrix:
     - TARGET=travis
-    - TARGET=integration INSTALL_XPRA=T DISPLAY=:8
+    - TARGET=integration DISPLAY=:8
 
 # capturing state, early exit if no integration test is needed
 before_install:
@@ -30,11 +30,6 @@ install:
   - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-c2d4u-precise.list"
       -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
   - sudo apt-get install r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended
-  - if [ -n "${INSTALL_XPRA}" ]; then curl http://winswitch.org/gpg.asc | sudo apt-key add - ; fi
-  - if [ -n "${INSTALL_XPRA}" ]; then echo "deb http://winswitch.org/ `lsb_release -cs` main" | sudo tee /etc/apt/sources.list.d/winswitch.list; fi
-  - if [ -n "${INSTALL_XPRA}" ]; then sudo apt-get update; fi
-  - if [ -n "${INSTALL_XPRA}" ]; then sudo apt-get install xpra; fi
-  - if [ -n "${INSTALL_XPRA}" ]; then xpra start $DISPLAY; fi
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
   - R --version
   - R -e '.libPaths(); sessionInfo()'

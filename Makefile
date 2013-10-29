@@ -41,7 +41,7 @@ integration-need:
 	cd knitr-examples && git checkout ${TRAVIS_BRANCH}
 
 integration-run: install-no-vignettes
-	make sysdeps deps knit -C knitr-examples
+	make sysdeps deps xvfb-start knit xvfb-stop -C knitr-examples
 
 integration-verify:
 	GIT_PAGER=cat make diff -C knitr-examples
