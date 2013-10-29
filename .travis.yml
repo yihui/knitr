@@ -49,7 +49,7 @@ install:
   - if [ -n "${INSTALL_XPRA}" ]; then sudo apt-get update; fi
   - if [ -n "${INSTALL_XPRA}" ]; then sudo apt-get install xpra; fi
   - if [ -n "${INSTALL_XPRA}" ]; then xpra start $DISPLAY; fi
-  - "[ ! -d ~/R ] && mkdir ~/R"
+  - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
   - Rscript -e 'install.packages("knitr", dep = TRUE, repos = c("http://rforge.net", "http://cran.rstudio.org"))'
