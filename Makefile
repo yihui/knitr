@@ -37,12 +37,13 @@ integration-need:
 	git clone https://github.com/${TRAVIS_REPO_SLUG}-examples.git && \
 	cd knitr-examples && git checkout ${TRAVIS_BRANCH}
 
-integration: install
+integration-run: install
 	make sysdeps deps knit -C knitr-examples
-	make integration-verify
 
 integration-verify:
 	GIT_PAGER=cat make diff -C knitr-examples
+
+integration: integration-run integration-verify
 
 examples:
 	cd inst/examples;\
