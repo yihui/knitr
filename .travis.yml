@@ -7,7 +7,7 @@ env:
     - R_LIBS_USER=~/R
   matrix:
     - TARGET=travis
-    - TARGET=integration DISPLAY=:8
+    - TARGET=integration DISPLAY=:99.0
 
 # capturing state, early exit if no integration test is needed
 before_install:
