@@ -39,9 +39,10 @@ integration-need:
 
 integration: install
 	make sysdeps deps knit -C knitr-examples
+	make integration-verify
 
 integration-verify:
-	GIT_PAGER=cat make diff clean -C knitr-examples
+	GIT_PAGER=cat make diff -C knitr-examples
 
 examples:
 	cd inst/examples;\
