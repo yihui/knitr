@@ -14,7 +14,7 @@ before_install:
   - env | sort
   - if [ ${TARGET} = integration ]; then
       if ! make integration-need; then
-        echo "NOTE:\ Integration test skipped. To enable, create a branch named ${TRAVIS_BRANCH} in ${TRAVIS_REPO_SLUG}-examples.";
+        echo "NOTE:"" Integration test skipped. To enable, create a branch named ${TRAVIS_BRANCH} in ${TRAVIS_REPO_SLUG}-examples.";
         exit 0;
       fi;
     fi
