@@ -2,7 +2,8 @@
 \alias{pandoc}
 \title{A Pandoc wrapper to convert Markdown documents to other formats}
 \usage{
-pandoc(input, format = "html", config = getOption("config.pandoc"), ext = NA)
+  pandoc(input, format = "html",
+    config = getOption("config.pandoc"), ext = NA)
 }
 \arguments{
   \item{input}{a character vector of the Markdown
@@ -50,7 +51,7 @@ pandoc(input, format = "html", config = getOption("config.pandoc"), ext = NA)
   lines.
 }
 \examples{
-system("pandoc -h")  # see possible output formats
+system('pandoc -h') # see possible output formats
 }
 \references{
   Pandoc: \url{http://johnmacfarlane.net/pandoc/}; Examples
@@ -60,3 +61,4 @@ system("pandoc -h")  # see possible output formats
 \seealso{
   \code{\link{read.dcf}}
 }
+

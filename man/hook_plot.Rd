@@ -7,17 +7,17 @@
 \alias{hook_plot_textile}
 \title{Default plot hooks for different output formats}
 \usage{
-hook_plot_tex(x, options)
+  hook_plot_tex(x, options)
 
-hook_plot_html(x, options)
+  hook_plot_html(x, options)
 
-hook_plot_md(x, options)
+  hook_plot_md(x, options)
 
-hook_plot_rst(x, options)
+  hook_plot_rst(x, options)
 
-hook_plot_asciidoc(x, options)
+  hook_plot_asciidoc(x, options)
 
-hook_plot_textile(x, options)
+  hook_plot_textile(x, options)
 }
 \arguments{
   \item{x}{a character vector of length 2 ; \code{x[1]} is
@@ -55,16 +55,15 @@ hook_plot_textile(x, options)
 ## this is what happens for a chunk like this
 
 ## <<foo-bar-plot, dev='pdf', fig.align='right'>>=
-hook_plot_tex(c("foo-bar-plot", "pdf"), opts_chunk$merge(list(fig.align = "right")))
+hook_plot_tex(c('foo-bar-plot', 'pdf'), opts_chunk$merge(list(fig.align='right')))
 
 ## <<bar, dev='tikz'>>=
-hook_plot_tex(c("bar", "tikz"), opts_chunk$merge(list(dev = "tikz")))
+hook_plot_tex(c('bar', 'tikz'), opts_chunk$merge(list(dev='tikz')))
 
 ## <<foo, dev='pdf', fig.show='animate', interval=.1>>=
 
 ## 5 plots are generated in this chunk
-hook_plot_tex(c("foo5", "pdf"), opts_chunk$merge(list(fig.show = "animate", 
-    interval = 0.1, fig.cur = 5, fig.num = 5)))
+hook_plot_tex(c('foo5', 'pdf'), opts_chunk$merge(list(fig.show='animate',interval=.1,fig.cur=5, fig.num=5)))
 }
 \references{
   \url{http://yihui.name/knitr/hooks}
@@ -72,3 +71,4 @@ hook_plot_tex(c("foo5", "pdf"), opts_chunk$merge(list(fig.show = "animate",
 \seealso{
   \code{\link{hook_plot_custom}}
 }
+

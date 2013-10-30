@@ -6,15 +6,15 @@
 \alias{hook_webgl}
 \title{Built-in chunk hooks to extend knitr}
 \usage{
-hook_rgl(before, options, envir)
+  hook_rgl(before, options, envir)
 
-hook_pdfcrop(before, options, envir)
+  hook_pdfcrop(before, options, envir)
 
-hook_optipng(before, options, envir)
+  hook_optipng(before, options, envir)
 
-hook_plot_custom(before, options, envir)
+  hook_plot_custom(before, options, envir)
 
-hook_webgl(before, options, envir)
+  hook_webgl(before, options, envir)
 }
 \arguments{
   \item{before,options,envir}{see references}
@@ -82,3 +82,4 @@ knit_hooks$set(rgl = hook_rgl)
   \code{\link[rgl]{rgl.snapshot}},
   \code{\link[rgl]{rgl.postscript}}
 }
+

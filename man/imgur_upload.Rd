@@ -2,7 +2,7 @@
 \alias{imgur_upload}
 \title{Upload an image to imgur.com}
 \usage{
-imgur_upload(file, key = "9f3460e67f308f6")
+  imgur_upload(file, key = "9f3460e67f308f6")
 }
 \arguments{
   \item{file}{the path to the image file to be uploaded}
@@ -39,19 +39,16 @@ imgur_upload(file, key = "9f3460e67f308f6")
 }
 \examples{
 \dontrun{
-f = tempfile(fileext = ".png")
-png(f)
-plot(rnorm(100), main = R.version.string)
-dev.off()
+f = tempfile(fileext = '.png')
+png(f); plot(rnorm(100), main = R.version.string); dev.off()
 
 res = imgur_upload(f)
 res  # link to original URL of the image
-attr(res, "XML")  # all information
-if (interactive()) 
-    browseURL(res)
+attr(res, 'XML')  # all information
+if (interactive()) browseURL(res)
 
 ## to use your own key
-opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "your imgur key"))
+opts_knit$set(upload.fun = function(file) imgur_upload(file, key = 'your imgur key'))
 }
 }
 \author{
@@ -62,3 +59,4 @@ opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "your imgur k
   Imgur API version 3: \url{http://api.imgur.com/}; a demo:
   \url{http://yihui.name/knitr/demo/upload/}
 }
+

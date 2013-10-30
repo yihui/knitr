@@ -2,7 +2,7 @@
 \alias{dep_auto}
 \title{Build automatic dependencies among chunks}
 \usage{
-dep_auto(path = opts_chunk$get("cache.path"))
+  dep_auto(path = opts_chunk$get("cache.path"))
 }
 \arguments{
   \item{path}{the path to the dependency file}
@@ -37,3 +37,4 @@ dep_auto(path = opts_chunk$get("cache.path"))
 \seealso{
   \code{\link{dep_prev}}
 }
+

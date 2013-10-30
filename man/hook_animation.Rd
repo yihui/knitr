@@ -4,11 +4,11 @@
 \alias{hook_scianimator}
 \title{Hooks to create animations in HTML output}
 \usage{
-hook_ffmpeg_html(x, options)
+  hook_ffmpeg_html(x, options)
 
-hook_scianimator(x, options)
+  hook_scianimator(x, options)
 
-hook_r2swf(x, options)
+  hook_r2swf(x, options)
 }
 \arguments{
   \item{x}{a character vector of length 2 ; \code{x[1]} is
@@ -28,3 +28,4 @@ hook_r2swf(x, options)
   \code{animation.fun}, e.g. you can set
   \code{opts_knit$set(animation.fun = hook_scianimator)}.
 }
+

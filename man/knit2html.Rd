@@ -2,7 +2,8 @@
 \alias{knit2html}
 \title{Convert markdown to HTML using knit() and markdownToHTML()}
 \usage{
-knit2html(input, output = NULL, ..., envir = parent.frame(), text = NULL, quiet = FALSE, 
+  knit2html(input, output = NULL, ...,
+    envir = parent.frame(), text = NULL, quiet = FALSE,
     encoding = getOption("encoding"))
 }
 \arguments{
@@ -41,12 +42,12 @@ knit2html(input, output = NULL, ..., envir = parent.frame(), text = NULL, quiet 
 }
 \examples{
 # a minimal example
-writeLines(c("# hello markdown", "```{r hello-random, echo=TRUE}", "rnorm(5)", "```"), 
-    "test.Rmd")
-knit2html("test.Rmd")
-if (interactive()) browseURL("test.html")
+writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
+knit2html('test.Rmd')
+if (interactive()) browseURL('test.html')
 }
 \seealso{
   \code{\link{knit}},
   \code{\link[markdown]{markdownToHTML}}
 }
+

@@ -2,7 +2,7 @@
 \alias{set_parent}
 \title{Specify the parent document of child documents}
 \usage{
-set_parent(parent)
+  set_parent(parent)
 }
 \arguments{
   \item{parent}{path to the parent document (relative to
@@ -46,3 +46,4 @@ set_parent(parent)
 \references{
   \url{http://yihui.name/knitr/demo/child/}
 }
+

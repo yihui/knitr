@@ -2,7 +2,7 @@
 \alias{image_uri}
 \title{Encode an image file to a data URI}
 \usage{
-image_uri(f)
+  image_uri(f)
 }
 \arguments{
   \item{f}{the path to the image file}
@@ -17,9 +17,9 @@ image_uri(f)
   used in the \code{img} tag in HTML.
 }
 \examples{
-uri = image_uri(file.path(R.home("doc"), "html", "logo.jpg"))
-cat(sprintf("<img src=\"\%s\" />", uri), file = "logo.html")
-if (interactive()) browseURL("logo.html")  # you can check its HTML source
+uri = image_uri(file.path(R.home('doc'), 'html', 'logo.jpg'))
+cat(sprintf('<img src="\%s" />', uri), file = 'logo.html')
+if (interactive()) browseURL('logo.html') # you can check its HTML source
 }
 \author{
   Wush Wu and Yihui Xie
@@ -27,3 +27,4 @@ if (interactive()) browseURL("logo.html")  # you can check its HTML source
 \references{
   \url{http://en.wikipedia.org/wiki/Data_URI_scheme}
 }
+
