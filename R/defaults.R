@@ -4,7 +4,9 @@ new_defaults = function(value = list()) {
   get = function(name, default = FALSE, drop = TRUE) {
     if (default) defaults = value  # this is only a local version
     if (missing(name)) defaults else {
-      if (drop && length(name) == 1) defaults[[name]] else defaults[name]
+      if (drop && length(name) == 1) defaults[[name]] else {
+        setNames(defaults[name], name)
+      }
     }
   }
   set = function(...) {

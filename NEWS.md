@@ -28,6 +28,8 @@
 
 - `kable()` did not recycle the `align` argument correctly (thanks, Adam Cooper, #638)
 
+- fixed a bug related to child documents -- chunk options passed from a parent document may not be restored after the child document exits (thanks, Frank Harrell, http://bit.ly/17yitsD)
+
 ## MINOR CHANGES
 
 - numbers containing characters other than digits 0-9, periods or commas are formatted as math in inline LaTeX, for negative numbers, infinity symbol, corner cases such as `10^{n}`, ... (thanks, Jeffrey Racine and Kirill Müller, #635)
