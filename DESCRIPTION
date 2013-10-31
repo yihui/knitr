@@ -3,7 +3,8 @@ Type: Package
 Title: A general-purpose package for dynamic report generation in R
 Version: 1.5.8
 Date: 2013-09-28
-Authors@R: c(person("Alastair", "Andrew", role = "ctb"),
+Authors@R: c(person("Adam", "Vogt", role = "ctb"),
+    person("Alastair", "Andrew", role = "ctb"),
     person("Alex", "Zvoleff", role = "ctb"),
     person("Brian", "Diggs", role = "ctb"),
     person("Cassio", "Pereira", role = "ctb"),

@@ -44,23 +44,20 @@ engine_output = function(options, code, out, extra = NULL) {
 
 eng_interpreted = function(options) {
   engine = options$engine
-  code = if (engine %in% c('highlight', 'Rscript', 'sas')) {
+  code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell')) {
     f = basename(tempfile(engine, '.', switch(engine, sas = '.sas', Rscript = '.R', '.txt')))
     # SAS runs code in example.sas and creates 'listing' file example.lst and log file example.log
-    writeLines(c(
-      if (engine == 'sas')
-        "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';",
-        options$code
-    ), f)
+    writeLines(c(switch(
+      engine,
+      sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';",
+      haskell = ':set +m'
+    ), options$code), f)
     on.exit(unlink(f))
     if (engine == 'sas') {
       saslst = sub('[.]sas$', '.lst', f)
       on.exit(unlink(c(saslst, sub('[.]sas$', '.log', f))), add = TRUE)
-    }
+    } else if (engine == 'haskell') f = paste('-e', shQuote(paste(':script', f)))
     f
-  } else if (engine %in% c('haskell')) {
-    # need multiple -e because the engine does not accept \n in code
-    paste('-e', shQuote(options$code), collapse = ' ')
   } else paste(switch(
     engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
     ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
