@@ -78,23 +78,21 @@ block_exec = function(options) {
     return(output)
   }
 
-  if (options$inline %n% FALSE) {
-    options$code <- paste(options$code, collapse='\n')
-    return(inline_exec(options))
+  inl = options$inline %n% FALSE
+  if (isFALSE(inl)) {
+    # eval chunks (in an empty envir if cache)
+    env = knit_global()
+    obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
+
+    keep = options$fig.keep
+    # open a device to record plots
+    if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none',
+                     options$dev, options$dev.args)) {
+      dv = dev.cur(); on.exit(dev.off(dv))
+    }
+
+    res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
   }
-
-  # eval chunks (in an empty envir if cache)
-  env = knit_global()
-  obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
-
-  keep = options$fig.keep
-  # open a device to record plots
-  if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none',
-                   options$dev, options$dev.args)) {
-    dv = dev.cur(); on.exit(dev.off(dv))
-  }
-
-  res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
 
   code = options$code
   echo = options$echo  # tidy code if echo
@@ -112,6 +110,13 @@ block_exec = function(options) {
     iss = seq_along(code)
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
+
+  if (!isFALSE(inl)) {
+    if (isFALSE(ev)) return("")
+    options$code <- paste(options$code, collapse='\n')
+    return(inline_exec(options))
+  }
+
   # guess plot file type if it is NULL
   if (keep != 'none' && is.null(options$fig.ext))
     options$fig.ext = dev2ext(options$dev)
