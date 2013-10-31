@@ -14,7 +14,7 @@
 
 - added a new engine named `asis` to write the chunk content without processing it; it also respects the chunk options `echo` and `eval` -- when either one is `FALSE`, the chunk will be hidden; this makes it possible to write text conditionally (thanks, Simon, #622)
 
-- the Haskell engine support multiline clauses using `:set +m` now, thanks to Adam Vogt (#633)
+- the Haskell engine supports multiline clauses using `:set +m` now, thanks to Adam Vogt (#633)
 
 ## BUG FIXES
 
