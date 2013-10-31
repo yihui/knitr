@@ -2,7 +2,7 @@
 \alias{set_alias}
 \title{Set aliases for chunk options}
 \usage{
-set_alias(...)
+  set_alias(...)
 }
 \arguments{
   \item{...}{named arguments (argument names are aliases,
@@ -19,7 +19,7 @@ set_alias(...)
   elements in this vector are the real option names.
 }
 \examples{
-set_alias(w = "fig.width", h = "fig.height")
-# then we can use options w and h in chunk headers instead of fig.width and
-# fig.height
+set_alias(w = 'fig.width', h = 'fig.height')
+# then we can use options w and h in chunk headers instead of fig.width and fig.height
 }
+

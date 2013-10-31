@@ -2,8 +2,8 @@
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
-kable(x, format, digits = getOption("digits"), row.names = NA, align, output = TRUE, 
-    ...)
+  kable(x, format, digits = getOption("digits"),
+    row.names = NA, align, output = TRUE, ...)
 }
 \arguments{
   \item{x}{an R object (typically a matrix or data frame)}
@@ -53,25 +53,25 @@ kable(x, format, digits = getOption("digits"), row.names = NA, align, output = T
   option \code{results='asis'}.
 }
 \examples{
-kable(head(iris), format = "latex")
-kable(head(iris), format = "html")
+kable(head(iris), format = 'latex')
+kable(head(iris), format = 'html')
 # use the booktabs package
-kable(mtcars, format = "latex", booktabs = TRUE)
+kable(mtcars, format = 'latex', booktabs = TRUE)
 # use the longtable package
-kable(matrix(1000, ncol = 5), format = "latex", digits = 2, longtable = TRUE)
+kable(matrix(1000, ncol=5), format = 'latex', digits = 2, longtable = TRUE)
 # add some table attributes
-kable(head(iris), format = "html", table.attr = "id=\"mytable\"")
+kable(head(iris), format = 'html', table.attr = 'id="mytable"')
 # reST output
-kable(head(mtcars), format = "rst")
+kable(head(mtcars), format = 'rst')
 # no row names
-kable(head(mtcars), format = "rst", row.names = FALSE)
+kable(head(mtcars), format = 'rst', row.names = FALSE)
 # R Markdown/Github Markdown tables
-kable(head(mtcars[, 1:5]), format = "markdown")
+kable(head(mtcars[, 1:5]), format = 'markdown')
 # Pandoc tables
-kable(head(mtcars), format = "pandoc")
+kable(head(mtcars), format = 'pandoc')
 # save the value
-x = kable(mtcars, format = "html", output = FALSE)
-cat(x, sep = "\\n")
+x = kable(mtcars, format = 'html', output = FALSE)
+cat(x, sep = '\\n')
 # can also set options(knitr.table.format = 'html') so that the output is HTML
 }
 \references{
@@ -83,3 +83,4 @@ cat(x, sep = "\\n")
 \seealso{
   Other R packages such as \pkg{xtable} and \pkg{tables}.
 }
+

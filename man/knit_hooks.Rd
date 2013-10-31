@@ -8,7 +8,7 @@
  $ merge  :function (values)  
  $ restore:function (target = value)}
 \usage{
-knit_hooks
+  knit_hooks
 }
 \description{
   A hook is a function of a pre-defined form (arguments)
@@ -17,8 +17,7 @@ knit_hooks
   set hooks in this package.
 }
 \examples{
-knit_hooks$get("source")
-knit_hooks$get("inline")
+knit_hooks$get('source'); knit_hooks$get('inline')
 }
 \references{
   Usage: \url{http://yihui.name/knitr/objects}
@@ -27,3 +26,4 @@ knit_hooks$get("inline")
   \url{http://yihui.name/knitr/hooks}
 }
 \keyword{datasets}
+

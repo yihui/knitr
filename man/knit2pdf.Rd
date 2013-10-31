@@ -2,7 +2,8 @@
 \alias{knit2pdf}
 \title{Convert Rnw or Rrst files to PDF using knit() and texi2pdf() or rst2pdf()}
 \usage{
-knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = FALSE, 
+  knit2pdf(input, output = NULL, compiler = NULL,
+    envir = parent.frame(), quiet = FALSE,
     encoding = getOption("encoding"), ...)
 }
 \arguments{
@@ -61,3 +62,4 @@ knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = 
   \code{\link{knit}}, \code{\link[tools]{texi2pdf}},
   \code{\link{rst2pdf}}
 }
+

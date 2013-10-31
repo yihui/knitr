@@ -8,7 +8,7 @@
  $ merge  :function (values)  
  $ restore:function (target = value)}
 \usage{
-knit_engines
+  knit_engines
 }
 \description{
   This object controls how to execute the code from
@@ -37,11 +37,11 @@ knit_engines
   engine.opts='-v'}.
 }
 \examples{
-knit_engines$get("python")
-knit_engines$get("awk")
+knit_engines$get('python'); knit_engines$get('awk')
 names(knit_engines$get())
 }
 \references{
   Usage: \url{http://yihui.name/knitr/objects}
 }
 \keyword{datasets}
+

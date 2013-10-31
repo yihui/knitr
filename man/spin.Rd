@@ -2,9 +2,12 @@
 \alias{spin}
 \title{Spin goat's hair into wool}
 \usage{
-spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(), 
-    format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), doc = "^#+'[ ]?", 
-    comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text))
+  spin(hair, knit = TRUE, report = TRUE, text = NULL,
+    envir = parent.frame(),
+    format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"),
+    doc = "^#+'[ ]?",
+    comment = c("^[# ]*/[*]", "^.*[*]/ *$"),
+    precious = !knit && is.null(text))
 }
 \arguments{
   \item{hair}{the path to the R script}
@@ -72,23 +75,23 @@ spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
 \examples{
 #' write normal text like this and chunk options like below
 
-# + label, opt=value
+#+ label, opt=value
 
 # /*
 #' these lines are treated as comments in spin()
-1 + 1
+1+1
 # */
 
-(s = system.file("examples", "knitr-spin.R", package = "knitr"))
+(s = system.file('examples', 'knitr-spin.R', package = 'knitr'))
 spin(s)  # default markdown
-o = spin(s, knit = FALSE)  # convert only; do not make a purse yet
-knit2html(o)  # compile to HTML
+o = spin(s, knit = FALSE) # convert only; do not make a purse yet
+knit2html(o) # compile to HTML
 
 # other formats
-spin(s, FALSE, format = "Rnw")  # you need to write documentclass after #'
-spin(s, FALSE, format = "Rhtml")
-spin(s, FALSE, format = "Rtex")
-spin(s, FALSE, format = "Rrst")
+spin(s, FALSE, format='Rnw')  # you need to write documentclass after #'
+spin(s, FALSE, format='Rhtml')
+spin(s, FALSE, format='Rtex')
+spin(s, FALSE, format='Rrst')
 }
 \author{
   Yihui Xie, with the original idea from Richard FitzJohn
@@ -101,3 +104,4 @@ spin(s, FALSE, format = "Rrst")
 \seealso{
   \code{\link{stitch}} (feed a template with an R script)
 }
+

@@ -2,7 +2,7 @@
 \alias{rst2pdf}
 \title{A wrapper for rst2pdf}
 \usage{
-rst2pdf(input, command = "rst2pdf", options = "")
+  rst2pdf(input, command = "rst2pdf", options = "")
 }
 \arguments{
   \item{input}{the input rst file}
@@ -33,3 +33,4 @@ rst2pdf(input, command = "rst2pdf", options = "")
 \seealso{
   \code{\link{knit2pdf}}
 }
+

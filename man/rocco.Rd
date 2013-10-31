@@ -2,7 +2,7 @@
 \alias{rocco}
 \title{Knit R Markdown using the classic Docco style}
 \usage{
-rocco(input, ...)
+  rocco(input, ...)
 }
 \arguments{
   \item{input}{path of the input R Markdown file}
@@ -27,16 +27,12 @@ rocco(input, ...)
   (show code).
 }
 \examples{
-rocco_view = function(input) {
-    if (!file.exists(input)) 
-        return()
-    o = rocco(input, header = "", quiet = TRUE)
-    if (interactive()) 
-        browseURL(o)
-}
+rocco_view=function(input) {if (!file.exists(input)) return()
+o=rocco(input, header='', quiet=TRUE)
+if (interactive()) browseURL(o)}
 # knit these two vignettes using the docco style
-rocco_view(system.file("doc", "docco-classic.Rmd", package = "knitr"))
-rocco_view(system.file("doc", "knit_expand.Rmd", package = "knitr"))
+rocco_view(system.file('doc', 'docco-classic.Rmd', package = 'knitr'))
+rocco_view(system.file('doc', 'knit_expand.Rmd', package = 'knitr'))
 }
 \author{
   Weicheng Zhu and Yihui Xie
@@ -45,3 +41,4 @@ rocco_view(system.file("doc", "knit_expand.Rmd", package = "knitr"))
   The Docco package by Jeremy Ashkenas:
   \url{https://github.com/jashkenas/docco}
 }
+

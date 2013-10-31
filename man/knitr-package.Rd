@@ -31,3 +31,4 @@
   you are an Sweave user, see \code{\link{Sweave2knitr}} on
   how to convert Sweave files to \pkg{knitr}.
 }
+

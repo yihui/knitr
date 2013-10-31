@@ -3,9 +3,10 @@
 \alias{knit_rd_all}
 \title{Knit package documentation}
 \usage{
-knit_rd(pkg, links = tools::findHTMLlinks(), frame = TRUE)
+  knit_rd(pkg, links = tools::findHTMLlinks(),
+    frame = TRUE)
 
-knit_rd_all()
+  knit_rd_all()
 }
 \arguments{
   \item{pkg}{package name}
@@ -35,12 +36,12 @@ knit_rd_all()
   (e.g.  the link to the DESCRITION file).
 }
 \examples{
-\dontrun{
-knit_rd("maps")
-knit_rd("rpart")
-setwd(system.file("html", package = "ggplot2"))
-knit_rd("ggplot2")  # time-consuming!
+\dontrun{knit_rd('maps')
+knit_rd('rpart')
+setwd(system.file('html', package = 'ggplot2'))
+knit_rd('ggplot2') # time-consuming!
 
 knit_rd_all()  # this may take really long time if you have many packages installed
 }
 }
+

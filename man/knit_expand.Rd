@@ -2,7 +2,9 @@
 \alias{knit_expand}
 \title{A simple macro preprocessor for templating purposes}
 \usage{
-knit_expand(file, ..., text = readLines(file, warn = FALSE), delim = c("{{", "}}"))
+  knit_expand(file, ...,
+    text = readLines(file, warn = FALSE),
+    delim = c("{{", "}}"))
 }
 \arguments{
   \item{file}{the template file}
@@ -31,7 +33,7 @@ knit_expand(file, ..., text = readLines(file, warn = FALSE), delim = c("{{", "}}
 }
 \examples{
 # see the knit_expand vignette
-if (interactive()) browseVignettes(package = "knitr")
+if (interactive()) browseVignettes(package='knitr')
 }
 \references{
   This function was inspired by the pyexpander
@@ -39,3 +41,4 @@ if (interactive()) browseVignettes(package = "knitr")
   (\url{http://www.gnu.org/software/m4/}), thanks to Frank
   Harrell.
 }
+

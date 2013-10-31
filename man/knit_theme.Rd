@@ -6,7 +6,7 @@
  $ set:function (theme)  
  $ get:function (theme = NULL)}
 \usage{
-knit_theme
+  knit_theme
 }
 \description{
   This object can be used to set or get themes in
@@ -22,15 +22,14 @@ knit_theme
   examples below.
 }
 \examples{
-opts_knit$set(out.format = "latex")
-knit_theme$set("edit-vim")
+opts_knit$set(out.format='latex'); knit_theme$set('edit-vim')
 
 knit_theme$get()  # names of all available themes
 
-thm = knit_theme$get("acid")  # parse the theme to a list
+thm = knit_theme$get('acid')  # parse the theme to a list
 knit_theme$set(thm)
 
-opts_knit$set(out.format = NULL)  # restore option
+opts_knit$set(out.format=NULL) # restore option
 }
 \author{
   Ramnath Vaidyanathan and Yihui Xie
@@ -44,3 +43,4 @@ opts_knit$set(out.format = NULL)  # restore option
   \code{\link{eclipse_theme}} (use Eclipse themes)
 }
 \keyword{datasets}
+

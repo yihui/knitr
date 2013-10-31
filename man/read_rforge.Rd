@@ -2,7 +2,7 @@
 \alias{read_rforge}
 \title{Read source code from R-Forge}
 \usage{
-read_rforge(path, project, extra = "")
+  read_rforge(path, project, extra = "")
 }
 \arguments{
   \item{path}{relative path to the source script on
@@ -22,11 +22,10 @@ read_rforge(path, project, extra = "")
   on R-Forge.
 }
 \examples{
-\dontrun{
-read_rforge("rgl/R/axes.R", project = "rgl")
-read_rforge("rgl/R/axes.R", project = "rgl", extra = "&revision=519")
-}
+\dontrun{read_rforge('rgl/R/axes.R', project = 'rgl')
+read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')}
 }
 \author{
   Yihui Xie and Peter Ruckdeschel
 }
+
