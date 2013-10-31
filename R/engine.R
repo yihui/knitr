@@ -59,8 +59,16 @@ eng_interpreted = function(options) {
     }
     f
   } else if (engine %in% c('haskell')) {
-    # need multiple -e because the engine does not accept \n in code
-    paste('-e', shQuote(options$code), collapse = ' ')
+      # everything that doesn't start with a colon goes inside a pair of :{ :}
+      # while you can put things like :set inside the :{ it is better to avoid
+      # that, since they can affect the parser
+      wrap <- function(x) paste('-e', shQuote(':{'),
+                                '-e', shQuote(paste(x, collapse='\n')),
+                                '-e', shQuote(':}'), collapse=' ')
+      directives <- grep('^:', options$code)
+      n <- length(options$code)
+      segs <- split(options$code, cut(1 : n, unique(c(0, directives, n))))
+      sapply(segs, wrap)
   } else paste(switch(
     engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
     ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
