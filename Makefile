@@ -37,8 +37,10 @@ travis: build-no-vignettes
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual --no-vignettes
 
 integration-need:
-	git clone https://github.com/${TRAVIS_REPO_SLUG}-examples.git && \
-	cd knitr-examples && git checkout ${TRAVIS_BRANCH}
+	git clone https://github.com/${TRAVIS_REPO_SLUG}-examples.git
+	cd knitr-examples && \
+		git checkout ${TRAVIS_BRANCH} && \
+		GIT_PAGER=cat git show HEAD
 
 integration-run: install-no-vignettes
 	make sysdeps deps xvfb-start knit xvfb-stop -C knitr-examples
