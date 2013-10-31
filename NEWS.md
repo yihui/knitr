@@ -12,7 +12,7 @@
 
 - added a new engine `scala` for Scala thanks to Simeon Fitch (#640)
 
-- added a new engine named `asis` to write the chunk content without processing it; it also respects the chunk option `echo` -- when `echo=FALSE`, the chunk will be hidden; this makes it possible to write text conditionally (thanks, Simon, #622)
+- added a new engine named `asis` to write the chunk content without processing it; it also respects the chunk options `echo` and `eval` -- when either one is `FALSE`, the chunk will be hidden; this makes it possible to write text conditionally (thanks, Simon, #622)
 
 ## BUG FIXES
 
