@@ -10,7 +10,11 @@
 
 - intermediate files generated during `spin()` are deleted by default, this can be overridden by setting the new parameter `precious` to `TRUE` (thanks, Kirill Müller, #628)
 
-- added a new engine named `asis` to write the chunk content without processing it; it also respects the chunk option `echo` -- when `echo=FALSE`, the chunk will be hidden; this makes it possible to write text conditionally (thanks, Simon, #622)
+- added a new engine `scala` for Scala thanks to Simeon Fitch (#640)
+
+- added a new engine named `asis` to write the chunk content without processing it; it also respects the chunk options `echo` and `eval` -- when either one is `FALSE`, the chunk will be hidden; this makes it possible to write text conditionally (thanks, Simon, #622)
+
+- the Haskell engine support multiline clauses using `:set +m` now, thanks to Adam Vogt (#633)
 
 ## BUG FIXES
 
@@ -25,6 +29,8 @@
 - `kable()` did not keep the row name when the data only has one row (thanks, @eev2, #636)
 
 - `kable()` did not recycle the `align` argument correctly (thanks, Adam Cooper, #638)
+
+- fixed a bug related to child documents -- chunk options passed from a parent document may not be restored after the child document exits (thanks, Frank Harrell, http://bit.ly/17yitsD)
 
 ## MINOR CHANGES
 

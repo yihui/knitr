@@ -44,26 +44,23 @@ engine_output = function(options, code, out, extra = NULL) {
 
 eng_interpreted = function(options) {
   engine = options$engine
-  code = if (engine %in% c('highlight', 'Rscript', 'sas')) {
+  code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell')) {
     f = basename(tempfile(engine, '.', switch(engine, sas = '.sas', Rscript = '.R', '.txt')))
     # SAS runs code in example.sas and creates 'listing' file example.lst and log file example.log
-    writeLines(c(
-      if (engine == 'sas')
-        "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';",
-        options$code
-    ), f)
+    writeLines(c(switch(
+      engine,
+      sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';",
+      haskell = ':set +m'
+    ), options$code), f)
     on.exit(unlink(f))
     if (engine == 'sas') {
       saslst = sub('[.]sas$', '.lst', f)
       on.exit(unlink(c(saslst, sub('[.]sas$', '.log', f))), add = TRUE)
-    }
+    } else if (engine == 'haskell') f = paste('-e', shQuote(paste(':script', f)))
     f
-  } else if (engine %in% c('haskell')) {
-    # need multiple -e because the engine does not accept \n in code
-    paste('-e', shQuote(options$code), collapse = ' ')
   } else paste(switch(
     engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
-    ruby = '-e', sh = '-c', zsh = '-c', NULL
+    ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(paste(options$code, collapse = '\n')))
   # FIXME: for these engines, the correct order is options + code + file
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
@@ -201,12 +198,12 @@ eng_cat = function(options) {
 
 ## output the code without processing it
 eng_asis = function(options) {
-  if (options$echo) options$code
+  if (options$echo && options$eval) options$code
 }
 
 # set engines for interpreted languages
 for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'perl', 'python',
-            'Rscript', 'ruby', 'sas', 'sed', 'sh', 'zsh')) {
+            'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'zsh')) {
   knit_engines$set(setNames(list(eng_interpreted), i))
 }
 rm(i)

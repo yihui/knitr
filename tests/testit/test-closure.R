@@ -22,6 +22,13 @@ assert(
 )
 
 assert(
+  '$get(names) keeps the names if drop = FALSE and one or more names do not exist',
+  identical(z$get(c('a', 'c')), list(a = 2, c = NULL)),
+  identical(z$get('c'), NULL),
+  identical(z$get('c', drop = FALSE), list(c = NULL))
+)
+
+assert(
   '$restore() restores to the initial value',
   identical({z$restore(); z$get()}, list(a=1))
 )
