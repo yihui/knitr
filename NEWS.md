@@ -4,6 +4,8 @@
 
 - added Textile (http://txstyle.org) support thanks to Richard Cotton; see the example 105 at https://github.com/yihui/knitr-examples (#623)
 
+- added an argument `inline` to `spin()` so that some R code (by default, code of the form `((code))`) can be treated as inline expressions (thanks, Kirill Müller, #620)
+
 - added an argument `prefix` to `write_bib()` so that we can customize the prefix for bib entries; we can also set `options(knitr.bib.prefix = 'a_string')` so that `write_bib()` uses this global option as the default value for `prefix` (thanks, Michael Friendly)
 
 - the chunk option `dev.args` will be passed to the `pdf` recording device if `pdf` is also in the chunk option `dev` (note the recording device can be different with the actual drawing device); for example, you can pass a different `pointsize` to the PDF recording device (thanks, Felix Klein)

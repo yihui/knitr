@@ -15,6 +15,10 @@ set.seed(123)
 x = rnorm(5)
 mean(x)
 
+#' You can use the special syntax ((code)) to embed inline expressions, e.g.
+((mean(x)+2))
+#' is the mean of x plus 2.
+#'
 #' Now we continue writing the report. We can draw plots as well.
 
 #+ test-b, fig.width=5, fig.height=5

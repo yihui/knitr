@@ -59,9 +59,12 @@
 #' spin(s, FALSE, format='Rhtml')
 #' spin(s, FALSE, format='Rtex')
 #' spin(s, FALSE, format='Rrst')
-spin = function(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
-                format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'), doc = "^#+'[ ]?",
-                comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text)) {
+spin = function(
+  hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
+  format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
+  doc = "^#+'[ ]?", inline = '^[(][()](.+)[)][)][ ]*$',
+  comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text)
+) {
 
   format = match.arg(format)
   x = if (nosrc <- is.null(text)) readLines(hair, warn = FALSE) else split_lines(text)
@@ -72,9 +75,12 @@ spin = function(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.fr
   # remove comments
   if (length(c1)) x = x[-unique(unlist(mapply(seq, c1, c2, SIMPLIFY = FALSE)))]
 
-  r = rle(grepl(doc, x))
-  n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
   p = .fmt.pat[[tolower(format)]]
+  # turn ((expr)) into inline expressions, e.g. `r expr` or \Sexpr{expr}
+  if (any(i <- grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
+
+  r = rle(grepl(doc, x) | i)  # inline expressions are treated as doc instead of code
+  n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
   p1 = gsub('\\{', '\\\\{', str_c('^', p[1L], '.*', p[2L], '$'))
 
   for (i in seq_len(n)) {
@@ -121,7 +127,9 @@ spin = function(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.fr
 }
 
 .fmt.pat = list(
-  rmd = c('```{r ', '}', '```'), rnw = c('<<', '>>=', '@'),
-  rhtml = c('<!--begin.rcode ', '', 'end.rcode-->'),
-  rtex = c('% begin.rcode ', '', '% end.rcode'), rrst = c('.. {r ', '}', '.. ..')
+  rmd = c('```{r ', '}', '```', '`r \\1`'),
+  rnw = c('<<', '>>=', '@', '\\\\Sexpr{\\1}'),
+  rhtml = c('<!--begin.rcode ', '', 'end.rcode-->', '<!--rinline \\1 -->'),
+  rtex = c('% begin.rcode ', '', '% end.rcode', '\\\\rinline{\\1}'),
+  rrst = c('.. {r ', '}', '.. ..', ':r:`\\1`')
 )
