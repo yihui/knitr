@@ -4,7 +4,7 @@
 \usage{
 spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(), 
     format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), doc = "^#+'[ ]?", 
-    inline = "^[(][()](.+)[)][)][ ]*$", comment = c("^[# ]*/[*]", "^.*[*]/ *$"), 
+    inline = "^[(][(](.+)[)][)][ ]*$", comment = c("^[# ]*/[*]", "^.*[*]/ *$"), 
     precious = !knit && is.null(text))
 }
 \arguments{
