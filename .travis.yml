@@ -3,7 +3,21 @@ language: python
 
 # environment variables
 env:
-  - R_LIBS_USER=~/R
+  global:
+    - R_LIBS_USER=~/R
+  matrix:
+    - TARGET=travis
+    - TARGET=integration DISPLAY=:99.0
+
+# capturing state, early exit if no integration test is needed
+before_install:
+  - env | sort
+  - if [ ${TARGET} = integration ]; then
+      if ! make integration-need; then
+        echo "NOTE:"" Integration test skipped. To enable, create a branch named ${TRAVIS_BRANCH} in ${TRAVIS_REPO_SLUG}-examples.";
+        exit 0;
+      fi;
+    fi
 
 # install dependencies
 install:
@@ -16,19 +30,26 @@ install:
   - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-c2d4u-precise.list"
       -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
   - sudo apt-get install r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended
-  - "[ ! -d ~/R ] && mkdir ~/R"
+  - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
   - Rscript -e 'install.packages("knitr", dep = TRUE, repos = c("http://rforge.net", "http://cran.rstudio.org"))'
 
 # run tests
 script:
-  - make travis
+  - make ${TARGET}
 
 # run check against R-devel
 after_script:
-  - sudo add-apt-repository -y ppa:marutter/rdev
-  - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-rdev-precise.list"
-      -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
-  - sudo apt-get dist-upgrade
-  - make travis
+  - if [ ${TARGET} = travis ];
+      then
+        sudo add-apt-repository -y ppa:marutter/rdev;
+        sudo apt-get update
+          -o Dir::Etc::sourcelist="sources.list.d/marutter-rdev-precise.list"
+          -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0";
+        sudo apt-get dist-upgrade;
+        make ${TARGET};
+      fi
+  - if [ ${TARGET} = integration ]; then
+      make integration-verify;
+    fi
