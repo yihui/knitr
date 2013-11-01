@@ -4,7 +4,8 @@
 \usage{
 spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(), 
     format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), doc = "^#+'[ ]?", 
-    comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text))
+    inline = "^[(][()](.+)[)][)][ ]*$", comment = c("^[# ]*/[*]", "^.*[*]/ *$"), 
+    precious = !knit && is.null(text))
 }
 \arguments{
   \item{hair}{the path to the R script}
@@ -31,6 +32,10 @@ spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
   convention, but it can be customized, e.g.  if you want
   to use \code{##} to denote documentation, you can use
   \code{'^##\\\\s*'}}
+
+  \item{inline}{a regular expression to identify inline R
+  expressions; by default, code of the form \code{((code))}
+  on its own line is treated as an inline expression}
 
   \item{comment}{a pair of regular expressions for the
   start and end delimiters of comments; the lines between a

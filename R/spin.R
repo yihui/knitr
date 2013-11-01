@@ -21,6 +21,9 @@
 #'   default it follows the roxygen convention, but it can be customized, e.g.
 #'   if you want to use \code{##} to denote documentation, you can use
 #'   \code{'^##\\\\s*'}
+#' @param inline a regular expression to identify inline R expressions; by
+#'   default, code of the form \code{((code))} on its own line is treated as an
+#'   inline expression
 #' @param comment a pair of regular expressions for the start and end delimiters
 #'   of comments; the lines between a start and an end delimiter will be
 #'   ignored; by default, the delimiters are \verb{/*} in the beginning and
