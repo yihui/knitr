@@ -29,7 +29,7 @@ for (i in list.files(pattern = '\\.Rmd')) {
   flush.console()
 }
 
-call_knit(sprintf("Rscript -e 'library(knitr);spin(\"knitr-spin.R\")'"))
+call_knit(sprintf("Rscript -e 'library(knitr);spin(\"knitr-spin.R\", precious=TRUE)'"))
 
 setwd('child')
 for (i in c('knitr-main.Rnw', 'knitr-parent.Rnw')) {
