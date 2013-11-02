@@ -44,9 +44,9 @@ css.parse.color = function(txt, default = '#000000') {
 
   # next we try an rgb() specification
   if (grepl('rgb', txt)) {
-    p = try(parse(text = txt), silent = TRUE)
+    p = try_silent(parse(text = txt))
     if (!inherits(p, 'try-error')) {
-      res = try(eval(p), silent = TRUE)
+      res = try_silent(eval(p))
       if (!inherits(res, 'try-error')) return(res)
     }
   }

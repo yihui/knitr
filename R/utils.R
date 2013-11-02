@@ -241,7 +241,7 @@ isFALSE = function(x) identical(x, FALSE)
 
 ## check latex packages; if not exist, copy them over to ./
 test_latex_pkg = function(name, path) {
-  res = try(system(sprintf('%s %s.sty', kpsewhich(), name), intern = TRUE), silent = TRUE)
+  res = try_silent(system(sprintf('%s %s.sty', kpsewhich(), name), intern = TRUE))
   if (inherits(res, 'try-error') || !length(res)) {
     warning("unable to find LaTeX package '", name, "'; will use a copy from knitr")
     file.copy(path, '.')
@@ -511,9 +511,9 @@ set_html_dev = function() {
   if (!identical(opts_chunk$get('dev'), 'pdf')) return()
   # in some cases, png() does not work (e.g. options('bitmapType') == 'Xlib' on
   # headless servers); use svg then
-  opts_chunk$set(dev = if (inherits(try({
+  opts_chunk$set(dev = if (inherits(try_silent({
     png(tempfile()); dev.off()
-  }, silent = TRUE), 'try-error')) 'svg' else 'png')
+  }), 'try-error')) 'svg' else 'png')
 }
 
 # locate kpsewhich especially for Mac OS because /usr/texbin may not be in PATH
@@ -522,3 +522,6 @@ kpsewhich = function() {
       || nzchar(Sys.which('kpsewhich')))
     'kpsewhich' else x
 }
+
+# call try with silent = TRUE
+try_silent = function(expr) try(expr, silent = TRUE)
