@@ -15,12 +15,13 @@ set.seed(123)
 x = rnorm(5)
 mean(x)
 
-#' You can use the special syntax ((code)) to embed inline expressions, e.g.
-((mean(x)+2))
+#' You can use the special syntax {{code}} to embed inline expressions, e.g.
+{{mean(x)+2}}
 #' is the mean of x plus 2.
-#' The code must be parseable on its own, i.e.
-((2 + 3) - (4 - 5))
-#' will be rendered as a regular chunk.
+#' The code itself may contain braces, but these are not checked.  Thus,
+#' perfectly valid (though very strange) R code such as `{{2 + 3}} - {{4 - 5}}`
+#' can produce different results compared to simply running the script:
+{{2 + 3}} - {{4 - 5}}
 #'
 #' Now we continue writing the report. We can draw plots as well.
 
