@@ -2,6 +2,8 @@
 
 if (!nzchar(Sys.which('lyx')) || system('lyx -version') != 0L) q()
 
+knit_script = file.path(getwd(), "../bin/knit")
+
 call_lyx = function(file) {
   res = sapply(sprintf('lyx -e %s %s', c('knitr', 'r', 'pdf2'), file),
                system, ignore.stdout = TRUE, USE.NAMES = FALSE)
@@ -23,7 +25,7 @@ for (i in list.files(pattern = '\\.Rmd')) {
   cmd = if (i == 'knitr-minimal.Rmd') {
     sprintf("Rscript -e 'library(knitr);opts_knit$set(base.url=\"http://animation.r-forge.r-project.org/ideas/\");knit(\"%s\")'", i)
   } else {
-    sprintf('knit %s', i)
+    sprintf('"%s" "%s"', knit_script, i)
   }
   call_knit(cmd)
   flush.console()
