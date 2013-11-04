@@ -327,12 +327,13 @@ indent_block = function(block, spaces = '    ') {
 
 # print knitr logs
 print_knitlog = function() {
-  if (!opts_knit$get('verbose') || child_mode() || !length(klog <- knit_log$get()))
+  if (!opts_knit$get('verbose') || child_mode() || !length(klog <- knit_log$get(drop = FALSE)))
     return()
+
   for (i in unlist(klog, use.names = FALSE)) {
-    cat(i, '\n\n')
-    cat(knit_code$get(sub('^Chunk ([^:]+):\n.*', '\\1', i)), sep = '\n')
-    cat('\n')
+    cat(sub('\n+$', '', i), '\n\n')
+    if (length(code <- knit_code$get(sub('^Chunk ([^:]+):\n.*', '\\1', i))))
+      cat(code, sep = '\n')
   }
   cat('\nNumber of messages:\n')
   print(sapply(klog, length))
