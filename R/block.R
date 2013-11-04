@@ -94,9 +94,9 @@ block_exec = function(options) {
   code = options$code
   echo = options$echo  # tidy code if echo
   if (!isFALSE(echo) && options$tidy && length(code)) {
-    res = try(do.call(
+    res = try_silent(do.call(
       tidy.source, c(list(text = code, output = FALSE), options$tidy.opts)
-    ), silent = TRUE)
+    ))
     if (!inherits(res, 'try-error')) {
       code = native_encode(res$text.tidy)
     } else warning('failed to tidy R code in chunk <', options$label, '>\n',
