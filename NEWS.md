@@ -36,6 +36,8 @@
 
 ## MINOR CHANGES
 
+- for R Markdown/AsciiDoc, line breaks are allowed in the inline R expressions now (thanks, Andrew MacDonald, #655)
+
 - numbers containing characters other than digits 0-9, periods or commas are formatted as math in inline LaTeX, for negative numbers, infinity symbol, corner cases such as `10^{n}`, ... (thanks, Jeffrey Racine and Kirill Müller, #635)
 
 # CHANGES IN knitr VERSION 1.5

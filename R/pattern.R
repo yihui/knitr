@@ -29,7 +29,7 @@ all_patterns = list(
 
   `md` = list(
     chunk.begin = '^\\s*```+\\s*\\{r(.*)\\}\\s*$', chunk.end = '^\\s*```+\\s*$',
-    ref.chunk = '^\\s*<<(.+)>>\\s*$', inline.code = '`r +([^`\n]+)\\s*`'),
+    ref.chunk = '^\\s*<<(.+)>>\\s*$', inline.code = '`r +([^`]+)\\s*`'),
 
   `rst` = list(
     chunk.begin = '^\\s*[.][.]\\s+\\{r(.*)\\}\\s*$',
@@ -39,13 +39,13 @@ all_patterns = list(
   `asciidoc` = list(
     chunk.begin = '^//\\s*begin[.]rcode(.*)$', chunk.end = '^//\\s*end[.]rcode\\s*$',
     chunk.code = '^//+', ref.chunk = '^\\s*<<(.+)>>\\s*$',
-    inline.code = '[+]r +([^+\n]+)\\s*[+]', inline.comment = '^//.*'),
+    inline.code = '[+]r +([^+]+)\\s*[+]', inline.comment = '^//.*'),
 
   `textile` = list(
     chunk.begin = '^###[.]\\s+begin[.]rcode(.*)$',
     chunk.end = '^###[.]\\s+end[.]rcode\\s*$',
     ref.chunk = '^\\s*<<(.+)>>\\s*$',
-    inline.code = '@r +([^@\n]+)\\s*@',
+    inline.code = '@r +([^@]+)\\s*@',
     inline.comment = '^###[.].*')
 )
 
