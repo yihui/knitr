@@ -54,11 +54,11 @@ eng_interpreted = function(options) {
       haskell = ':set +m'
     ), options$code), f)
     on.exit(unlink(f))
-    if (engine == 'sas') {
+    switch(engine, sas = {
       saslst = sub('[.]sas$', '.lst', f)
       on.exit(unlink(c(saslst, sub('[.]sas$', '.log', f))), add = TRUE)
-    } else if (engine == 'haskell') f = paste('-e', shQuote(paste(':script', f)))
-    f
+      f
+    }, haskell = paste('-e', shQuote(paste(':script', f))), f)
   } else paste(switch(
     engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
     ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
