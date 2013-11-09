@@ -16,8 +16,8 @@ SweaveListingUtils + more).
 [<img src="http://i.imgur.com/R6DSHDE.jpg" align="right" />](http://amzn.com/1482203537)
 
 - Transparency means that the user has full access to every piece of the
-  input and output, e.g., `1 + 2` produces `[1] 3` in an R terminal, and **
-  knitr** can let the user decide whether to put `1 + 2` between
+  input and output, e.g., `1 + 2` produces `[1] 3` in an R terminal, and 
+  **knitr** can let the user decide whether to put `1 + 2` between
   `\begin{verbatim}` and `\end{verbatim}`, or `<div class="rsource">` and
   `</div>`, and put `[1] 3` in `\begin{Routput}` and `\end{Routput}`; see
   the [hooks](hooks) page for details
@@ -93,7 +93,7 @@ include:
   [**Cairo**](http://cran.r-project.org/package=Cairo) in a second; with
   `dev='tikz'`, the `tikz()` device in
   [**tikzDevice**](http://cran.r-project.org/package=tikzDevice) is used;
-  how things can be even easier? These built-in devices (strictly speaking,
+  Could anything be easier than that? These built-in devices (strictly speaking,
   wrappers) use inches as units, even for bitmap devices (pixels are
   converted to inches by the option `dpi`, which defaults to 72)
 - even more flexibility on graphics:
