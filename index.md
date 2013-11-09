@@ -93,7 +93,7 @@ include:
   [**Cairo**](http://cran.r-project.org/package=Cairo) in a second; with
   `dev='tikz'`, the `tikz()` device in
   [**tikzDevice**](http://cran.r-project.org/package=tikzDevice) is used;
-  how things can be even easier? These built-in devices (strictly speaking,
+  Could anything be easier than that? These built-in devices (strictly speaking,
   wrappers) use inches as units, even for bitmap devices (pixels are
   converted to inches by the option `dpi`, which defaults to 72)
 - even more flexibility on graphics:
