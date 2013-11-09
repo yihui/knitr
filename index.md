@@ -16,8 +16,8 @@ SweaveListingUtils + more).
 [<img src="http://i.imgur.com/R6DSHDE.jpg" align="right" />](http://amzn.com/1482203537)
 
 - Transparency means that the user has full access to every piece of the
-  input and output, e.g., `1 + 2` produces `[1] 3` in an R terminal, and **
-  knitr** can let the user decide whether to put `1 + 2` between
+  input and output, e.g., `1 + 2` produces `[1] 3` in an R terminal, and 
+  **knitr** can let the user decide whether to put `1 + 2` between
   `\begin{verbatim}` and `\end{verbatim}`, or `<div class="rsource">` and
   `</div>`, and put `[1] 3` in `\begin{Routput}` and `\end{Routput}`; see
   the [hooks](hooks) page for details
