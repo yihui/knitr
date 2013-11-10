@@ -19,7 +19,9 @@
 #' @param ... other arguments (see examples)
 #' @return A character vector of the table source code. When \code{output =
 #'   TRUE}, the results are also written into the console as a side-effect.
-#' @seealso Other R packages such as \pkg{xtable} and \pkg{tables}.
+#' @seealso Other R packages such as \pkg{xtable} and \pkg{tables} for HTML and
+#'   LaTeX tables, and \pkg{ascii} and \pkg{pander} for different flavors of
+#'   markdown output and some advanced features and table styles.
 #' @note The tables for \code{format = 'markdown'} also work for Pandoc when the
 #'   \code{pipe_tables} extension is enabled (this is the default behavior for
 #'   Pandoc >= 1.10).
