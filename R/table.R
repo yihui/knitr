@@ -171,7 +171,7 @@ kable_markdown = function(x) {
 }
 
 kable_pandoc = function(x) {
-  kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA), '  ')
+  kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
 }
 
 # pad a matrix
