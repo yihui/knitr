@@ -8,10 +8,10 @@ assert(
 m = matrix(1:2, nrow = 1, dimnames = list('a', c('x', 'y')))
 assert(
   'kable() does not discard row names when there is only one row',
-  identical(kable(m), c('|id  |  x|  y|', '|:---|--:|--:|', '|a   |  1|  2|'))
+  identical(kable(m), c('|   |  x|  y|', '|:--|--:|--:|', '|a  |  1|  2|'))
 )
 
 assert(
   'kable() recycles the align argument correctly',
-  identical(kable(m, align = 'c'), c('|id  | x | y |', '|:---|:-:|:-:|', '|a   | 1 | 2 |'))
+  identical(kable(m, align = 'c'), c('|   | x | y |', '|:--|:-:|:-:|', '|a  | 1 | 2 |'))
 )
