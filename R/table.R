@@ -138,11 +138,11 @@ kable_html = function(x, table.attr = '') {
 #' @return A character vector of the table content.
 #' @noRd
 kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
-                      align.fun = function(s, a) s) {
+                      align.fun = function(s, a) s, rownames.name = '') {
   l = apply(x, 2, function(z) max(nchar(z), na.rm = TRUE))
   cn = colnames(x)
   if (!is.null(cn)) {
-    if (grepl('^\\s*$', cn[1L])) cn[1L] = 'id'  # no empty cells
+    if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
     l = pmax(l, nchar(cn))
   }
   if (!is.null(align <- attr(x, 'align'))) l = l + 2
@@ -152,7 +152,9 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
   apply(mat_pad(res, l, align), 1, paste, collapse = sep.col)
 }
 
-kable_rst = kable_mark
+kable_rst = function(x, rownames.name = 'id') {
+  kable_mark(x, rownames.name = rownames.name)
+}
 
 # actually R Markdown
 kable_markdown = function(x) {

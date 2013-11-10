@@ -40,6 +40,8 @@
 
 - numbers containing characters other than digits 0-9, periods or commas are formatted as math in inline LaTeX, for negative numbers, infinity symbol, corner cases such as `10^{n}`, ... (thanks, Jeffrey Racine and Kirill Müller, #635)
 
+- the column name `id` for row names in the `kable()` output is removed when the output format is Markdown (thanks, Artem Klevtsov, http://stackoverflow.com/q/19875529/559676)
+
 # CHANGES IN knitr VERSION 1.5
 
 ## NEW FEATURES
