@@ -1,3 +1,5 @@
+#' @include defaults.R
+
 # record input/output lines numbers in Rnw/tex and filenames
 knit_concord = new_defaults(list(
   inlines = NULL, outlines = NULL, infile = NULL, outfile = NULL

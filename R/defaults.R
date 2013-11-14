@@ -1,3 +1,5 @@
+#' @include utils.R
+
 new_defaults = function(value = list()) {
   defaults = value
 
@@ -63,6 +65,8 @@ opts_chunk = new_defaults(list(
 #' @rdname opts_chunk
 #' @export
 opts_current = new_defaults()
+
+#' @include plot.R
 
 ## a list of options attributes for RStudio
 opts_chunk_attr = (function() {

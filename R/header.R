@@ -1,3 +1,6 @@
+#' @include themes.R
+#' @include highlight.R
+
 ## doc is the output of processed document
 insert_header = function(doc) {
   if (is.null(b <- knit_patterns$get('header.begin'))) return(doc)
