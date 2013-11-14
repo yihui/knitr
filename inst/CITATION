@@ -6,7 +6,7 @@ vers = paste('R package version', meta$Version)
 citEntry(
   entry = 'manual',
   title = paste('knitr:', meta$Title),
-  author = as.person(meta$Author),
+  author = Filter(function(p) 'aut' %in% p$role, as.person(meta$Author)),
   year = year,
   note = vers,
   url = meta$URL,
