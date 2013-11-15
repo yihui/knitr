@@ -196,9 +196,16 @@ There are two hidden options which are not designed to be set by the users: `fig
 - `interval`: (`1`; numeric) number of seconds to pause between animation frames
 - `aniopts`: (`'controls,loop'`) extra options for animations; see the documentation of the [animate package](http://www.ctan.org/tex-archive/macros/latex/contrib/animate)
 
-### Chunk Reference
+### Code Chunk
 
-- `ref.label`: (`NULL`; character) a character vector of labels of the chunks from which R code is borrowed (see the demo for [chunk reference](/knitr/demo/reference/))
+- `code`: (`NULL`; character) if provided, it will override the code in the
+  current chunk; this allows us to programmatically insert code into the
+  current chunk; e.g. a chunk option `code = capture.output(dump('fivenum',
+  ''))` will use the source code of the function `fivenum` to replace the
+  current chunk
+- `ref.label`: (`NULL`; character) a character vector of labels of the
+  chunks from which the code of the current chunk is inherited (see the demo
+  for [chunk reference](/knitr/demo/reference/))
 
 ### Child Documents
 
