@@ -23,7 +23,7 @@ call_block = function(block) {
 
   label = ref.label = params$label
   if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
-  params$code = unlist(knit_code$get(ref.label), use.names = FALSE)
+  params$code = params$code %n% unlist(knit_code$get(ref.label), use.names = FALSE)
   if (opts_knit$get('progress')) print(block)
 
   if (!is.null(params$child)) {
