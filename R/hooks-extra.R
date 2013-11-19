@@ -69,24 +69,8 @@ hook_pdfcrop = function(before, options, envir) {
   ext = options$fig.ext
   if (options$dev == 'tikz' && options$external) ext = 'pdf'
   if (before || (fig.num <- options$fig.num) == 0L) return()
-  if (ext == 'pdf' && !nzchar(Sys.which('pdfcrop'))) {
-    warning('pdfcrop not installed or not in PATH')
-    return()
-  }
-  if (ext != 'pdf' && !nzchar(Sys.which('convert'))) {
-    warning('ImageMagick not installed or not in PATH')
-    return()
-  }
   paths = all_figs(options, ext, fig.num)
-
-  lapply(paths, function(x) {
-    message('cropping ', x)
-    x = shQuote(x)
-    cmd = if (ext == 'pdf') paste('pdfcrop', x, x) else paste('convert', x, '-trim', x)
-    if (.Platform$OS.type == 'windows') cmd = paste(Sys.getenv('COMSPEC'), '/c', cmd)
-    system(cmd)
-  })
-  return()
+  for (f in paths) plot_crop(f)
 }
 #' @export
 #' @rdname chunk_hook

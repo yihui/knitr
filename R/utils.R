@@ -527,3 +527,13 @@ kpsewhich = function() {
 
 # call try with silent = TRUE
 try_silent = function(expr) try(expr, silent = TRUE)
+
+# check if a utility exists; if it does, save its availability in opts_knit
+has_utility = function(name, package = name) {
+  name2 = paste('util', name, sep = '_')  # e.g. util_pdfcrop
+  if (is.logical(yes <- opts_knit$get(name2))) return(yes)
+  yes = nzchar(Sys.which(name))
+  if (!yes) warning(package, ' not installed or not in PATH')
+  opts_knit$set(setNames(list(yes), name2))
+  yes
+}

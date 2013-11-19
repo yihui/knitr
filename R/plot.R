@@ -262,3 +262,18 @@ digest_plot = function(x, level = 1) {
 
 # a null device
 pdf_null = function(width = 7, height = 7, ...) pdf(NULL, width, height, ...)
+
+# remove white margin in plots: pdfcrop for pdf, and convert -trim for other plots
+plot_crop = function(x) {
+  ext = tolower(file_ext(x))
+  if (ext == 'pdf') {
+    if (!has_utility('pdfcrop')) return(x)
+  } else if (!has_utility('convert', 'ImageMagick')) return(x)
+
+  message('cropping ', x)
+  x = shQuote(x)
+  cmd = if (ext == 'pdf') paste('pdfcrop', x, x) else paste('convert', x, '-trim', x)
+  if (.Platform$OS.type == 'windows') cmd = paste(Sys.getenv('COMSPEC'), '/c', cmd)
+  system(cmd)
+  x
+}
