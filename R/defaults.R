@@ -50,7 +50,7 @@ opts_chunk = new_defaults(list(
   ref.label = NULL, child = NULL, engine = 'R',
   prompt = FALSE, comment = '##', autodep = FALSE,
   fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
-  fig.path = 'figure/', fig.ext = NULL, dev = 'pdf', dpi = 72,
+  fig.path = 'figure/', fig.ext = NULL, dev = NULL, dpi = 72,
   dev.args = NULL, fig.width = 7, fig.height = 7,
   fig.env = 'figure', fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:',
   fig.pos = '', out.width = NULL, out.height = NULL, out.extra = NULL,

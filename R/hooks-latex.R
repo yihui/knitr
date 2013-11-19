@@ -231,7 +231,7 @@ hook_plot_tex = function(x, options) {
 #'   prettify.js: \url{http://code.google.com/p/google-code-prettify/}
 render_latex = function() {
   test_latex_pkg('framed', system.file('misc', 'framed.sty', package = 'knitr'))
-  opts_chunk$set(out.width = '\\maxwidth')
+  opts_chunk$set(out.width = '\\maxwidth', dev = 'pdf')
   opts_knit$set(out.format = 'latex')
   h = opts_knit$get('header')
   if (!nzchar(h['framed'])) set_header(framed = .header.framed)

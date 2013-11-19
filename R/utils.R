@@ -210,6 +210,8 @@ tikz_dict = function(path) {
 fix_options = function(options) {
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
+  # the default device NULL is not valid; use pdf is not set
+  if (is.null(options$dev)) options$dev = 'pdf'
 
   # cache=TRUE -> 3; FALSE -> 0
   if (is.logical(options$cache)) options$cache = options$cache * 3
@@ -507,8 +509,8 @@ wrap_rmd = function(file, width = 80, text = NULL, backup) {
 # change the default device to an appropriate device when the output is html
 # (e.g. markdown, reST, AsciiDoc)
 set_html_dev = function() {
-  # only change if device is pdf, because pdf does not work for html
-  if (!identical(opts_chunk$get('dev'), 'pdf')) return()
+  # only change if device has not been set
+  if (!is.null(opts_chunk$get('dev'))) return()
   # in some cases, png() does not work (e.g. options('bitmapType') == 'Xlib' on
   # headless servers); use svg then
   opts_chunk$set(dev = if (inherits(try_silent({
