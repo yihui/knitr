@@ -150,6 +150,11 @@ opts_knit_names = c(
 # and options(knitr.chunk.tidy) --> opts_chunk$set(tidy = TRUE); this makes it
 # possible to set options in ~/.Rprofile without loading knitr
 adjust_opts_knit = function() {
+  # begin_hack: R CMD build does not evaluate .Rprofile, but I need a way to
+  # modify opts_chunk just for myself
+  if (nzchar(opts <- Sys.getenv('R_KNITR_OPTIONS')))
+    eval(parse_only(sprintf('base::options(%s)', opts)), envir = globalenv())
+  # end_hack
   opts = options()
   nms = names(opts)
   if (length(nms <- grep('^knitr[.]', nms, value = TRUE)) == 0) return()
