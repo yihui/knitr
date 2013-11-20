@@ -263,7 +263,21 @@ digest_plot = function(x, level = 1) {
 # a null device
 pdf_null = function(width = 7, height = 7, ...) pdf(NULL, width, height, ...)
 
-# remove white margin in plots: pdfcrop for pdf, and convert -trim for other plots
+#' Crop a plot (remove the edges) using PDFCrop or ImageMagick
+#'
+#' The command \command{pdfcrop x x} is executed on a PDF plot file, and
+#' \command{convert x -trim x} is executed for other types of plot files, where
+#' \code{x} is the plot filename.
+#'
+#' The utility \command{pdfcrop} is often shipped with a LaTeX distribution, and
+#' \command{convert} is a command in ImageMagick (Windows users may have to put
+#' the bin path of ImageMagick into the \var{PATH} variable).
+#' @param x the plot filename
+#' @export
+#' @references PDFCrop: \url{http://pdfcrop.sourceforge.net}; the
+#'   \command{convert} command in ImageMagick:
+#'   \url{http://www.imagemagick.org/script/convert.php}
+#' @return The original filename.
 plot_crop = function(x) {
   ext = tolower(file_ext(x))
   if (ext == 'pdf') {
