@@ -222,7 +222,7 @@ fix_recordedPlot = function(plot) {
         plot[[1]][[i]][[2]][[1]] <- nativeSymbol
       }
     }
-    attr(res, 'pid') = Sys.getpid()
+    attr(plot, 'pid') = Sys.getpid()
   } else if (Rversion >= '2.14') {
     # restore native symbols for R >= 2.14
     try({
