@@ -64,6 +64,7 @@ hook_plot_html = function(x, options) {
 #' @rdname hook_animation
 #' @export
 hook_ffmpeg_html = function(x, options) {
+  x = c(sans_ext(x), file_ext(x))
   fig.num = options$fig.num
   # set up the ffmpeg run
   ffmpeg.opts = options$aniopts
@@ -92,6 +93,7 @@ opts_knit$set(animation.fun = hook_ffmpeg_html)
 #' @rdname hook_animation
 #' @export
 hook_scianimator = function(x, options) {
+  x = c(sans_ext(x), file_ext(x))
   fig.num = options$fig.num
   base = opts_knit$get('base.url') %n% ''
 
@@ -129,6 +131,7 @@ hook_scianimator = function(x, options) {
 #' @rdname hook_animation
 #' @export
 hook_r2swf = function(x, options) {
+  x = c(sans_ext(x), file_ext(x))
   fig.num = options$fig.num
   # set up the R2SWF run
   fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
