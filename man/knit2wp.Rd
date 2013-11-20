@@ -14,10 +14,12 @@ knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE,
   \code{categories = c('R', 'Stats')} and \code{mt_keywords
   = c('knitr', 'wordpress')}, etc}
 
-  \item{shortcode}{whether to use the shortcode
-  \samp{[sourcecode lang='lang']} which can be useful to
-  WordPress.com users for syntax highlighting of source
-  code}
+  \item{shortcode}{a logical vector of length 2: whether to
+  use the shortcode \samp{[sourcecode lang='lang']} which
+  can be useful to WordPress.com users for syntax
+  highlighting of source code and output; the first element
+  applies to source code, and the second applies to text
+  output (by default, both are \code{FALSE})}
 
   \item{publish}{whether to publish the post immediately}
 
