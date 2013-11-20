@@ -50,29 +50,25 @@ spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
   \code{knit == TRUE} and input is a file}
 }
 \value{
-  If \code{text} is \code{NULL}, the path of the final
-  output document, otherwise the content of the output.
+If \code{text} is \code{NULL}, the path of the final output document,
+  otherwise the content of the output.
 }
 \description{
-  This function takes a specially formatted R script and
-  converts it to a literate programming document. By
-  default normal text (documentation) should be written
-  after the roxygen comment (\code{#'}) and code chunk
-  options are written after \code{#+} or \code{#-} or
-  \code{# ----}.
+This function takes a specially formatted R script and converts it to a
+literate programming document. By default normal text (documentation) should
+be written after the roxygen comment (\code{#'}) and code chunk options are
+written after \code{#+} or \code{#-} or \code{# ----}.
 }
 \details{
-  Obviously the goat's hair is the original R script, and
-  the wool is the literate programming document (ready to
-  be knitted).
+Obviously the goat's hair is the original R script, and the wool is the
+literate programming document (ready to be knitted).
 }
 \note{
-  If the output format is Rnw and no document class is
-  specified in roxygen comments, this function will
-  automatically add the \code{article} class to the LaTeX
-  document so that it is complete and can be compiled. You
-  can always specify the document class and other LaTeX
-  settings in roxygen comments manually.
+If the output format is Rnw and no document class is specified in
+  roxygen comments, this function will automatically add the \code{article}
+  class to the LaTeX document so that it is complete and can be compiled. You
+  can always specify the document class and other LaTeX settings in roxygen
+  comments manually.
 }
 \examples{
 #' write normal text like this and chunk options like below
@@ -96,13 +92,12 @@ spin(s, FALSE, format = "Rtex")
 spin(s, FALSE, format = "Rrst")
 }
 \author{
-  Yihui Xie, with the original idea from Richard FitzJohn
-  (who named it as \code{sowsear()} which meant to make a
-  silk purse out of a sow's ear)
+Yihui Xie, with the original idea from Richard FitzJohn (who named it
+  as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
 }
 \references{
-  \url{http://yihui.name/knitr/demo/stitch/}
+\url{http://yihui.name/knitr/demo/stitch/}
 }
 \seealso{
-  \code{\link{stitch}} (feed a template with an R script)
+\code{\link{stitch}} (feed a template with an R script)
 }

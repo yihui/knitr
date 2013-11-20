@@ -14,25 +14,22 @@ knit_child(..., options = NULL)
   passed to the \code{options} argument here}
 }
 \value{
-  A character string of the content of the compiled child
-  document is returned as a character string so it can be
-  written back to the parent document directly.
+A character string of the content of the compiled child document is
+  returned as a character string so it can be written back to the parent
+  document directly.
 }
 \description{
-  This function knits a child document and returns a
-  character string to input the result into the main
-  document. It is designed to be used in the chunk option
-  \code{child} and serves as the alternative to the
-  \command{SweaveInput} command in Sweave.
+This function knits a child document and returns a character string to input
+the result into the main document. It is designed to be used in the chunk
+option \code{child} and serves as the alternative to the
+\command{SweaveInput} command in Sweave.
 }
 \note{
-  This function is not supposed be called directly like
-  \code{\link{knit}()}; instead it must be placed in a
-  parent document to let \code{\link{knit}()} call it
-  indirectly.
+This function is not supposed be called directly like
+  \code{\link{knit}()}; instead it must be placed in a parent document to let
+  \code{\link{knit}()} call it indirectly.
 
-  The path of the child document is relative to the parent
-  document.
+  The path of the child document is relative to the parent document.
 }
 \examples{
 ## you can write \\Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw'
@@ -42,5 +39,5 @@ knit_child(..., options = NULL)
 ## FALSE)}
 }
 \references{
-  \url{http://yihui.name/knitr/demo/child/}
+\url{http://yihui.name/knitr/demo/child/}
 }

@@ -1,4 +1,4 @@
-\name{render_latex}
+\name{render_asciidoc}
 \alias{render_asciidoc}
 \alias{render_html}
 \alias{render_jekyll}
@@ -10,21 +10,21 @@
 \alias{render_textile}
 \title{Set output hooks for different output formats}
 \usage{
+render_asciidoc()
+
+render_html()
+
 render_latex()
 
 render_sweave()
 
 render_listings()
 
-render_html()
-
 render_markdown(strict = FALSE)
 
 render_jekyll(highlight = c("pygments", "prettify", "none"), extra = "")
 
 render_rst(strict = FALSE)
-
-render_asciidoc()
 
 render_textile()
 }
@@ -49,43 +49,36 @@ render_textile()
   \code{prettify}, it can be \code{'linenums'}}
 }
 \value{
-  \code{NULL}; corresponding hooks are set as a side effect
+\code{NULL}; corresponding hooks are set as a side effect
 }
 \description{
-  These functions set built-in output hooks for LaTeX,
-  HTML, Markdown, reStructuredText and AsciiDoc.
+These functions set built-in output hooks for LaTeX, HTML, Markdown,
+reStructuredText and AsciiDoc.
 }
 \details{
-  There are three variants of markdown documents: ordinary
-  markdown (\code{render_markdown(strict = TRUE)}),
-  extended markdown (e.g. GitHub Flavored Markdown and
-  pandoc; \code{render_markdown(strict = FALSE)}), and
-  Jekyll (a blogging system on GitHub;
-  \code{render_jekyll()}). For LaTeX output, there are
-  three variants as well: \pkg{knitr}'s default style
-  (\code{render_latex()}; use the LaTeX \pkg{framed}
-  package), Sweave style (\code{render_sweave()}; use
-  \file{Sweave.sty}) and listings style
-  (\code{render_listings()}; use LaTeX \pkg{listings}
-  package). Default HTML output hooks are set by
-  \code{render_html()}; \code{render_rst()} and
-  \code{render_asciidoc()} are for reStructuredText and
-  AsciiDoc respectively.
+There are three variants of markdown documents: ordinary markdown
+(\code{render_markdown(strict = TRUE)}), extended markdown (e.g. GitHub
+Flavored Markdown and pandoc; \code{render_markdown(strict = FALSE)}), and
+Jekyll (a blogging system on GitHub; \code{render_jekyll()}). For LaTeX
+output, there are three variants as well: \pkg{knitr}'s default style
+(\code{render_latex()}; use the LaTeX \pkg{framed} package), Sweave style
+(\code{render_sweave()}; use \file{Sweave.sty}) and listings style
+(\code{render_listings()}; use LaTeX \pkg{listings} package). Default HTML
+output hooks are set by \code{render_html()}; \code{render_rst()} and
+\code{render_asciidoc()} are for reStructuredText and AsciiDoc respectively.
 
-  These functions can be used before \code{knit()} or in
-  the first chunk of the input document (ideally this chunk
-  has options \code{include = FALSE} and \code{cache =
-  FALSE}) so that all the following chunks will be
-  formatted as expected.
+These functions can be used before \code{knit()} or in the first chunk of the
+input document (ideally this chunk has options \code{include = FALSE} and
+\code{cache = FALSE}) so that all the following chunks will be formatted as
+expected.
 
-  You can use \code{\link{knit_hooks}} to further customize
-  output hooks; see references.
+You can use \code{\link{knit_hooks}} to further customize output hooks; see
+references.
 }
 \references{
-  See output hooks in \url{http://yihui.name/knitr/hooks}.
+See output hooks in \url{http://yihui.name/knitr/hooks}.
 
   Jekyll and Liquid:
   \url{https://github.com/mojombo/jekyll/wiki/Liquid-Extensions};
-  prettify.js:
-  \url{http://code.google.com/p/google-code-prettify/}
+  prettify.js: \url{http://code.google.com/p/google-code-prettify/}
 }

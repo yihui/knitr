@@ -5,9 +5,8 @@
 all_labels()
 }
 \value{
-  A character vector.
+A character vector.
 }
 \description{
-  This function returns all chunk labels as a chracter
-  vector.
+This function returns all chunk labels as a chracter vector.
 }

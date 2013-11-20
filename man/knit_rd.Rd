@@ -17,22 +17,20 @@ knit_rd_all()
   the index page}
 }
 \value{
-  All HTML pages corresponding to topics in the package are
-  written under the current working directory. An
-  \file{index.html} is also written as a table of content.
+All HTML pages corresponding to topics in the package are written
+  under the current working directory. An \file{index.html} is also written
+  as a table of content.
 }
 \description{
-  Run examples in a package and insert output into the
-  examples code; \code{knit_rd_all()} is a wrapper around
-  \code{knit_rd()} to build static HTML help pages for all
-  packages under the \file{html} directory of them.
+Run examples in a package and insert output into the examples code;
+\code{knit_rd_all()} is a wrapper around \code{knit_rd()} to build static
+HTML help pages for all packages under the \file{html} directory of them.
 }
 \note{
-  Ideally the html pages should be put under the
-  \file{html} directory of an installed package which can
-  be found via \code{system.file('html', package =
-  'your_package_name')}, otherwise some links may not work
-  (e.g.  the link to the DESCRITION file).
+Ideally the html pages should be put under the \file{html} directory of
+  an installed package which can be found via \code{system.file('html',
+  package = 'your_package_name')}, otherwise some links may not work (e.g.
+  the link to the DESCRITION file).
 }
 \examples{
 \dontrun{

@@ -5,13 +5,12 @@
 knit_global()
 }
 \description{
-  This function makes the environment of a code chunk
-  accessible inside a chunk.
+This function makes the environment of a code chunk accessible inside a
+chunk.
 }
 \details{
-  It returns the \code{envir} argument of
-  \code{\link{knit}}, e.g. if we call \code{\link{knit}()}
-  in the global environment, \code{knit_global()} returns
-  R's global environment by default. You can call functions
-  like \code{\link{ls}()} on this environment.
+It returns the \code{envir} argument of \code{\link{knit}}, e.g. if we call
+\code{\link{knit}()} in the global environment, \code{knit_global()} returns
+R's global environment by default. You can call functions like
+\code{\link{ls}()} on this environment.
 }

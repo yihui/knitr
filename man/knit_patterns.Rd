@@ -11,11 +11,10 @@
 knit_patterns
 }
 \description{
-  Patterns are regular expressions and will be used in
-  functions like \code{\link[base]{grep}} to extract R code
-  and chunk options. The object \code{knit_patterns}
-  controls the patterns currently used; see the references
-  and examples for usage.
+Patterns are regular expressions and will be used in functions like
+\code{\link[base]{grep}} to extract R code and chunk options. The object
+\code{knit_patterns} controls the patterns currently used; see the references
+and examples for usage.
 }
 \examples{
 library(knitr)
@@ -36,9 +35,8 @@ str(knit_patterns$get())
 knit_patterns$set(opat)  # put the old patterns back
 }
 \references{
-  Usage: \url{http://yihui.name/knitr/objects}
+Usage: \url{http://yihui.name/knitr/objects}
 
-  Components in \code{knit_patterns}:
-  \url{http://yihui.name/knitr/patterns}
+Components in \code{knit_patterns}: \url{http://yihui.name/knitr/patterns}
 }
 \keyword{datasets}

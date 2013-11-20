@@ -41,103 +41,86 @@ purl(..., documentation = 1L)
   \code{purl()}}
 }
 \value{
-  The compiled document is written into the output file,
-  and the path of the output file is returned, but if the
-  \code{output} path is \code{NULL}, the output is returned
-  as a character vector.
+The compiled document is written into the output file, and the path
+  of the output file is returned, but if the \code{output} path is
+  \code{NULL}, the output is returned as a character vector.
 }
 \description{
-  This function takes an input file, extracts the R code in
-  it according to a list of patterns, evaluates the code
-  and writes the output in another file. It can also tangle
-  R source code from the input document (\code{purl()} is a
-  wrapper to \code{knit(..., tangle = TRUE)}).
+This function takes an input file, extracts the R code in it according to a
+list of patterns, evaluates the code and writes the output in another file.
+It can also tangle R source code from the input document (\code{purl()} is a
+wrapper to \code{knit(..., tangle = TRUE)}).
 }
 \details{
-  For most of the time, it is not necessary to set any
-  options outside the input document; in other words, a
-  single call like \code{knit('my_input.Rnw')} is usually
-  enough. This function will try to determine many internal
-  settings automatically. For the sake of reproducibility,
-  it is a better practice to include the options inside the
-  input document (to be self-contained), instead of setting
-  them before knitting the document.
+For most of the time, it is not necessary to set any options outside the
+input document; in other words, a single call like
+\code{knit('my_input.Rnw')} is usually enough. This function will try to
+determine many internal settings automatically. For the sake of
+reproducibility, it is a better practice to include the options inside the
+input document (to be self-contained), instead of setting them before
+knitting the document.
 
-  First the filename of the output document is determined
-  in this way: \file{foo.Rnw} generates \file{foo.tex}, and
-  other filename extensions like \file{.Rtex},
-  \file{.Rhtml} (\file{.Rhtm}) and \file{.Rmd}
-  (\file{.Rmarkdown}) will generate \file{.tex},
-  \file{.html} and \file{.md} respectively. For other types
-  of files, if the filename contains \samp{_knit_}, this
-  part will be removed in the output file, e.g.,
-  \file{foo_knit_.html} creates the output \file{foo.html};
-  if \samp{_knit_} is not found in the filename,
-  \file{foo.ext} will produce \file{foo.txt} if \code{ext}
-  is not \code{txt}, otherwise the output is
-  \file{foo-out.txt}. If \code{tangle = TRUE},
-  \file{foo.ext} generates an R script \file{foo.R}.
+First the filename of the output document is determined in this way:
+\file{foo.Rnw} generates \file{foo.tex}, and other filename extensions like
+\file{.Rtex}, \file{.Rhtml} (\file{.Rhtm}) and \file{.Rmd}
+(\file{.Rmarkdown}) will generate \file{.tex}, \file{.html} and \file{.md}
+respectively. For other types of files, if the filename contains
+\samp{_knit_}, this part will be removed in the output file, e.g.,
+\file{foo_knit_.html} creates the output \file{foo.html}; if \samp{_knit_} is
+not found in the filename, \file{foo.ext} will produce \file{foo.txt} if
+\code{ext} is not \code{txt}, otherwise the output is \file{foo-out.txt}. If
+\code{tangle = TRUE}, \file{foo.ext} generates an R script \file{foo.R}.
 
-  We need a set of syntax to identify special markups for R
-  code chunks and R options, etc. The syntax is defined in
-  a pattern list. All built-in pattern lists can be found
-  in \code{all_patterns} (call it \code{apat}). First
-  \pkg{knitr} will try to decide the pattern list based on
-  the filename extension of the input document, e.g.
-  \samp{Rnw} files use the list \code{apat$rnw}, \samp{tex}
-  uses the list \code{apat$tex}, \samp{brew} uses
-  \code{apat$brew} and HTML files use \code{apat$html}; for
-  unkown extensions, the content of the input document is
-  matched against all pattern lists to automatically which
-  pattern list is being used. You can also manually set the
-  pattern list using the \code{\link{knit_patterns}} object
-  or the \code{\link{pat_rnw}} series functions in advance
-  and \pkg{knitr} will respect the setting.
+We need a set of syntax to identify special markups for R code chunks and R
+options, etc. The syntax is defined in a pattern list. All built-in pattern
+lists can be found in \code{all_patterns} (call it \code{apat}). First
+\pkg{knitr} will try to decide the pattern list based on the filename
+extension of the input document, e.g. \samp{Rnw} files use the list
+\code{apat$rnw}, \samp{tex} uses the list \code{apat$tex}, \samp{brew} uses
+\code{apat$brew} and HTML files use \code{apat$html}; for unkown extensions,
+the content of the input document is matched against all pattern lists to
+automatically which pattern list is being used. You can also manually set the
+pattern list using the \code{\link{knit_patterns}} object or the
+\code{\link{pat_rnw}} series functions in advance and \pkg{knitr} will
+respect the setting.
 
-  According to the output format
-  (\code{opts_knit$get('out.format')}), a set of output
-  hooks will be set to mark up results from R (see
-  \code{\link{render_latex}}). The output format can be
-  LaTeX, Sweave and HTML, etc. The output hooks decide how
-  to mark up the results (you can customize the hooks).
+According to the output format (\code{opts_knit$get('out.format')}), a set of
+output hooks will be set to mark up results from R (see
+\code{\link{render_latex}}). The output format can be LaTeX, Sweave and HTML,
+etc. The output hooks decide how to mark up the results (you can customize
+the hooks).
 
-  See the package website and manuals in the references to
-  know more about \pkg{knitr}, including the full
-  documentation of chunk options and demos, etc.
+See the package website and manuals in the references to know more about
+\pkg{knitr}, including the full documentation of chunk options and demos,
+etc.
 }
 \note{
-  The name \code{knit} comes from its counterpart
-  \samp{weave} (as in Sweave), and the name \code{purl} (as
-  \samp{tangle} in Stangle) comes from a knitting method
-  `knit one, purl one'.
+The name \code{knit} comes from its counterpart \samp{weave} (as in
+  Sweave), and the name \code{purl} (as \samp{tangle} in Stangle) comes from
+  a knitting method `knit one, purl one'.
 
-  If the input document has child documents, they will also
-  be compiled recursively. See \code{\link{knit_child}}.
+  If the input document has child documents, they will also be compiled
+  recursively. See \code{\link{knit_child}}.
 
-  The working directory when evaluating R code chunks is
-  the directory of the input document by default, so if the
-  R code involves external files (like
-  \code{read.table()}), it is better to put these files
-  under the same directory of the input document so that we
-  can use relative paths. However, it is possible to change
-  this directory with the package option
-  \code{\link{opts_knit}$set(root.dir = ...)} so all paths
-  in code chunks are relative to this \code{root.dir}.
+  The working directory when evaluating R code chunks is the directory of the
+  input document by default, so if the R code involves external files (like
+  \code{read.table()}), it is better to put these files under the same
+  directory of the input document so that we can use relative paths. However,
+  it is possible to change this directory with the package option
+  \code{\link{opts_knit}$set(root.dir = ...)} so all paths in code chunks are
+  relative to this \code{root.dir}.
 
-  The arguments \code{input} and \code{output} do not have
-  to be restricted to files; they can be
-  \code{stdin()}/\code{stdout()} or other types of
-  connections, but the pattern list to read the input has
-  to be set in advance (see \code{\link{pat_rnw}}), and the
-  output hooks should also be set (see
-  \code{\link{render_latex}}), otherwise \pkg{knitr} will
-  try to guess the patterns and output format.
+  The arguments \code{input} and \code{output} do not have to be restricted
+  to files; they can be \code{stdin()}/\code{stdout()} or other types of
+  connections, but the pattern list to read the input has to be set in
+  advance (see \code{\link{pat_rnw}}), and the output hooks should also be
+  set (see \code{\link{render_latex}}), otherwise \pkg{knitr} will try to
+  guess the patterns and output format.
 
-  If the \code{output} argument is a file path, it is
-  strongly recommended to be in the current working
-  directory (e.g. \file{foo.tex} instead of
-  \file{somewhere/foo.tex}), especially when the output has
-  external dependencies such as figure files.
+  If the \code{output} argument is a file path, it is strongly recommended to
+  be in the current working directory (e.g. \file{foo.tex} instead of
+  \file{somewhere/foo.tex}), especially when the output has external
+  dependencies such as figure files.
 }
 \examples{
 library(knitr)
@@ -149,10 +132,9 @@ purl(f, documentation = 0)  # extract R code only
 purl(f, documentation = 2)  # also include documentation
 }
 \references{
-  Package homepage: \url{http://yihui.name/knitr/}. The
-  \pkg{knitr} \href{http://bit.ly/117OLVl}{main manual}:
-  and \href{http://bit.ly/114GNdP}{graphics manual}.
+Package homepage: \url{http://yihui.name/knitr/}. The \pkg{knitr}
+  \href{http://bit.ly/117OLVl}{main manual}: and
+  \href{http://bit.ly/114GNdP}{graphics manual}.
 
-  See \code{citation('knitr')} for the citation
-  information.
+  See \code{citation('knitr')} for the citation information.
 }

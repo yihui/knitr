@@ -15,7 +15,7 @@
 all_patterns
 }
 \description{
-  This object is a named list of all built-in patterns.
+This object is a named list of all built-in patterns.
 }
 \examples{
 all_patterns$rnw
@@ -24,6 +24,6 @@ all_patterns$html
 str(all_patterns)
 }
 \references{
-  Usage: \url{http://yihui.name/knitr/patterns}
+Usage: \url{http://yihui.name/knitr/patterns}
 }
 \keyword{datasets}

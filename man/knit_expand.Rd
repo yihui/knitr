@@ -19,23 +19,21 @@ knit_expand(file, ..., text = readLines(file, warn = FALSE), delim = c("{{", "}}
   templating tags}
 }
 \value{
-  A character vector, with the tags evaluated and replaced
-  by their values.
+A character vector, with the tags evaluated and replaced by their
+  values.
 }
 \description{
-  This function expands a template based on the R
-  expressions in \code{{{}}} (this tag can be customized by
-  the \code{delim} argument). These expressions are
-  extracted, evaluated and replaced by their values in the
-  original template.
+This function expands a template based on the R expressions in \code{{{}}}
+(this tag can be customized by the \code{delim} argument). These expressions
+are extracted, evaluated and replaced by their values in the original
+template.
 }
 \examples{
 # see the knit_expand vignette
 if (interactive()) browseVignettes(package = "knitr")
 }
 \references{
-  This function was inspired by the pyexpander
+This function was inspired by the pyexpander
   (\url{http://pyexpander.sourceforge.net}) and m4
-  (\url{http://www.gnu.org/software/m4/}), thanks to Frank
-  Harrell.
+  (\url{http://www.gnu.org/software/m4/}), thanks to Frank Harrell.
 }

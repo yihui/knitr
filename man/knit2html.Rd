@@ -29,15 +29,14 @@ knit2html(input, output = NULL, ..., envir = parent.frame(), text = NULL, quiet 
   \code{\link{file}}}
 }
 \value{
-  If the argument \code{text} is NULL, a character string
-  (HTML code) is returned; otherwise the result is written
-  into a file and the filename is returned.
+If the argument \code{text} is NULL, a character string (HTML code)
+  is returned; otherwise the result is written into a file and the filename
+  is returned.
 }
 \description{
-  This is a convenience function to knit the input markdown
-  source and call \code{\link[markdown]{markdownToHTML}()}
-  in the \pkg{markdown} package to convert the result to
-  HTML.
+This is a convenience function to knit the input markdown source and call
+\code{\link[markdown]{markdownToHTML}()} in the \pkg{markdown} package to
+convert the result to HTML.
 }
 \examples{
 # a minimal example
@@ -47,6 +46,5 @@ knit2html("test.Rmd")
 if (interactive()) browseURL("test.html")
 }
 \seealso{
-  \code{\link{knit}},
-  \code{\link[markdown]{markdownToHTML}}
+\code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}
 }

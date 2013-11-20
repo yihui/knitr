@@ -9,17 +9,15 @@
 knit_theme
 }
 \description{
-  This object can be used to set or get themes in
-  \pkg{knitr} for syntax highlighting.
+This object can be used to set or get themes in \pkg{knitr} for syntax
+highlighting.
 }
 \details{
-  We can use \code{knit_theme$set(theme)} to set the theme,
-  and \code{knit_theme$get(theme)} to get a theme. The
-  \code{theme} is a character string for both methods
-  (either the name of the theme, or the path to the CSS
-  file of a theme), and for the \code{set()} method, it can
-  also be a list returned by the \code{get()} method. See
-  examples below.
+We can use \code{knit_theme$set(theme)} to set the theme, and
+\code{knit_theme$get(theme)} to get a theme. The \code{theme} is a character
+string for both methods (either the name of the theme, or the path to the CSS
+file of a theme), and for the \code{set()} method, it can also be a list
+returned by the \code{get()} method. See examples below.
 }
 \examples{
 opts_knit$set(out.format = "latex")
@@ -33,14 +31,14 @@ knit_theme$set(thm)
 opts_knit$set(out.format = NULL)  # restore option
 }
 \author{
-  Ramnath Vaidyanathan and Yihui Xie
+Ramnath Vaidyanathan and Yihui Xie
 }
 \references{
-  \url{https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf}
-  (its Rnw source is at
-  \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw})
+\url{https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf}
+(its Rnw source is at
+\url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw})
 }
 \seealso{
-  \code{\link{eclipse_theme}} (use Eclipse themes)
+\code{\link{eclipse_theme}} (use Eclipse themes)
 }
 \keyword{datasets}

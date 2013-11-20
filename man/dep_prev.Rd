@@ -5,19 +5,17 @@
 dep_prev()
 }
 \value{
-  \code{NULL}; the internal dependency structure is updated
-  as a side effect.
+\code{NULL}; the internal dependency structure is updated as a side
+  effect.
 }
 \description{
-  This function can be used to build dependencies among
-  chunks so that all later chunks depend on previous
-  chunks, i.e. whenever the cache of a previous chunk is
-  updated, the cache of all its later chunks will be
-  updated.
+This function can be used to build dependencies among chunks so that all
+later chunks depend on previous chunks, i.e. whenever the cache of a previous
+chunk is updated, the cache of all its later chunks will be updated.
 }
 \references{
-  \url{http://yihui.name/knitr/demo/cache/}
+\url{http://yihui.name/knitr/demo/cache/}
 }
 \seealso{
-  \code{\link{dep_auto}}
+\code{\link{dep_auto}}
 }

@@ -15,21 +15,19 @@ rst2pdf(input, command = "rst2pdf", options = "")
   \code{'-v'}}
 }
 \value{
-  An input file \file{*.rst} will produce \file{*.pdf} and
-  this output filename is returned if the conversion was
-  successful.
+An input file \file{*.rst} will produce \file{*.pdf} and this output
+  filename is returned if the conversion was successful.
 }
 \description{
-  Convert reST to PDF using \command{rst2pdf} (which
-  converts from rst to PDF using the ReportLab open-source
-  library).
+Convert reST to PDF using \command{rst2pdf} (which converts from rst to PDF
+using the ReportLab open-source library).
 }
 \author{
-  Alex Zvoleff and Yihui Xie
+Alex Zvoleff and Yihui Xie
 }
 \references{
-  \url{http://rst2pdf.ralsina.com.ar/}
+\url{http://rst2pdf.ralsina.com.ar/}
 }
 \seealso{
-  \code{\link{knit2pdf}}
+\code{\link{knit2pdf}}
 }

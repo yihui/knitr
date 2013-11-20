@@ -11,20 +11,18 @@ rocco(input, ...)
   \code{\link{knit2html}}}
 }
 \value{
-  An HTML file is written, and its name is returned.
+An HTML file is written, and its name is returned.
 }
 \description{
-  The classic Docco style is a two-column layout, with text
-  in the left and code in the right column.
+The classic Docco style is a two-column layout, with text in the left and
+code in the right column.
 }
 \details{
-  The output HTML page supports resizing and hiding/showing
-  the two columns. Move the cursor to the center of the
-  page, and it will change to a bidirectional resize
-  cursor; drag the cursor to resize the two columns. Press
-  the key \code{t} to hide the code column (show the text
-  column only), and press again to hide the text column
-  (show code).
+The output HTML page supports resizing and hiding/showing the two columns.
+Move the cursor to the center of the page, and it will change to a
+bidirectional resize cursor; drag the cursor to resize the two columns. Press
+the key \code{t} to hide the code column (show the text column only), and
+press again to hide the text column (show code).
 }
 \examples{
 rocco_view = function(input) {
@@ -39,9 +37,9 @@ rocco_view(system.file("doc", "docco-classic.Rmd", package = "knitr"))
 rocco_view(system.file("doc", "knit_expand.Rmd", package = "knitr"))
 }
 \author{
-  Weicheng Zhu and Yihui Xie
+Weicheng Zhu and Yihui Xie
 }
 \references{
-  The Docco package by Jeremy Ashkenas:
+The Docco package by Jeremy Ashkenas:
   \url{https://github.com/jashkenas/docco}
 }

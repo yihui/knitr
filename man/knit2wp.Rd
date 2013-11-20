@@ -25,24 +25,22 @@ knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE,
   \code{\link{file}}}
 }
 \description{
-  This function is a wrapper around the \pkg{RWordPress}
-  package. It compiles an R Markdown document to HTML and
-  post the results to WordPress.
+This function is a wrapper around the \pkg{RWordPress} package. It compiles
+an R Markdown document to HTML and post the results to WordPress.
 }
 \note{
-  This function will convert the encoding of the post and
-  the title to UTF-8 internally. If you have additional
-  data to send to WordPress (e.g.  keywords and
-  categories), you may have to manually convert them to the
-  UTF-8 encoding with the \code{\link{iconv}(x, to =
-  'UTF-8')} function (especially when using Windows).
+This function will convert the encoding of the post and the title to
+  UTF-8 internally. If you have additional data to send to WordPress (e.g.
+  keywords and categories), you may have to manually convert them to the
+  UTF-8 encoding with the \code{\link{iconv}(x, to = 'UTF-8')} function
+  (especially when using Windows).
 }
 \examples{
 # see the reference
 }
 \author{
-  William K. Morris and Yihui Xie
+William K. Morris and Yihui Xie
 }
 \references{
-  \url{http://yihui.name/knitr/demo/wordpress/}
+\url{http://yihui.name/knitr/demo/wordpress/}
 }

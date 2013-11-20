@@ -11,31 +11,26 @@ imgur_upload(file, key = "9f3460e67f308f6")
   client id registered by Yihui Xie)}
 }
 \value{
-  A character string of the link to the image; this string
-  carries an attribute named \code{XML} which is a list
-  converted from the response XML file; see Imgur API in
-  the references.
+A character string of the link to the image; this string carries an
+  attribute named \code{XML} which is a list converted from the response XML
+  file; see Imgur API in the references.
 }
 \description{
-  This function uses the \pkg{RCurl} package to upload a
-  image to \url{imgur.com}, and parses the XML response to
-  a list with \pkg{XML} which contains information about
-  the image in the Imgur website.
+This function uses the \pkg{RCurl} package to upload a image to
+\url{imgur.com}, and parses the XML response to a list with \pkg{XML} which
+contains information about the image in the Imgur website.
 }
 \details{
-  When the output format from \code{\link{knit}()} is HTML
-  or Markdown, this function can be used to upload local
-  image files to Imgur, e.g. set the package option
-  \code{opts_knit$get(upload.fun = imgur_upload)}, so the
-  output document is completely self-contained, i.e. it
-  does not need external image files any more, and it is
-  ready to be published online.
+When the output format from \code{\link{knit}()} is HTML or Markdown, this
+function can be used to upload local image files to Imgur, e.g. set the
+package option \code{opts_knit$get(upload.fun = imgur_upload)}, so the output
+document is completely self-contained, i.e. it does not need external image
+files any more, and it is ready to be published online.
 }
 \note{
-  Please register your own Imgur application to get your
-  client id; you can certainly use mine, but this id is in
-  the public domain so everyone has access to all images
-  associated to it.
+Please register your own Imgur application to get your client id; you
+  can certainly use mine, but this id is in the public domain so everyone
+  has access to all images associated to it.
 }
 \examples{
 \dontrun{
@@ -55,10 +50,9 @@ opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "your imgur k
 }
 }
 \author{
-  Yihui Xie, adapted from the \pkg{imguR} package by Aaron
-  Statham
+Yihui Xie, adapted from the \pkg{imguR} package by Aaron Statham
 }
 \references{
-  Imgur API version 3: \url{http://api.imgur.com/}; a demo:
+Imgur API version 3: \url{http://api.imgur.com/}; a demo:
   \url{http://yihui.name/knitr/demo/upload/}
 }

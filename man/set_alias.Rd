@@ -9,14 +9,12 @@ set_alias(...)
   and argument values are real chunk options)}
 }
 \value{
-  NULL (\code{opts_knit$get('aliases')} is modified as the
-  side effect)
+NULL (\code{opts_knit$get('aliases')} is modified as the side effect)
 }
 \description{
-  We do not have to use the chunk option names given in
-  \pkg{knitr}; we can set aliases for them. The aliases is
-  a named character vector; the names are aliases and the
-  elements in this vector are the real option names.
+We do not have to use the chunk option names given in \pkg{knitr}; we can set
+aliases for them. The aliases is a named character vector; the names are
+aliases and the elements in this vector are the real option names.
 }
 \examples{
 set_alias(w = "fig.width", h = "fig.height")

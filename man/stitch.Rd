@@ -32,29 +32,23 @@ stitch_rmd(...)
   guarantee an empty new environment)}
 }
 \value{
-  path of the output document
+path of the output document
 }
 \description{
-  This is a convenience function for small-scale automatic
-  reporting based on an R script and a template. The
-  default template is an Rnw file (LaTeX);
-  \code{stitch_rhtml()} and \code{stitch_rmd()} are
-  wrappers on top of \code{stitch()} using the R HTML and R
-  Markdown templates respectively.
+This is a convenience function for small-scale automatic reporting based on
+an R script and a template. The default template is an Rnw file (LaTeX);
+\code{stitch_rhtml()} and \code{stitch_rmd()} are wrappers on top of
+\code{stitch()} using the R HTML and R Markdown templates respectively.
 }
 \details{
-  The first two lines of the R script can contain the title
-  and author of the report in comments of the form \samp{##
-  title:} and \samp{## author:}. The template must have a
-  token \samp{\%sCHUNK_LABEL_HERE}, which will be used to
-  input all the R code from the script. See the examples
-  below.
+The first two lines of the R script can contain the title and author of the
+report in comments of the form \samp{## title:} and \samp{## author:}. The
+template must have a token \samp{\%sCHUNK_LABEL_HERE}, which will be used to
+input all the R code from the script. See the examples below.
 
-  The R script may contain chunk headers of the form
-  \samp{## ---- label}, which will be copied to the
-  template; if no chunk headers are found, the whole R
-  script will be inserted into the template as one code
-  chunk.
+The R script may contain chunk headers of the form \samp{## ---- label},
+which will be copied to the template; if no chunk headers are found, the
+whole R script will be inserted into the template as one code chunk.
 }
 \examples{
 s = system.file("misc", "stitch-test.R", package = "knitr")
@@ -69,6 +63,5 @@ stitch(s, system.file("misc", "knitr-template.Rhtml", package = "knitr"))
 stitch(s, system.file("misc", "knitr-template.Rmd", package = "knitr"))
 }
 \seealso{
-  \code{\link{spin}} (turn a specially formatted R script
-  to a report)
+\code{\link{spin}} (turn a specially formatted R script to a report)
 }

@@ -36,16 +36,15 @@ knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = 
   \code{\link{file}}}
 }
 \value{
-  The filename of the PDF file.
+The filename of the PDF file.
 }
 \description{
-  Knit the input Rnw or Rrst document, and compile to PDF
-  using \code{texi2pdf} or \code{rst2pdf}.
+Knit the input Rnw or Rrst document, and compile to PDF using \code{texi2pdf}
+or \code{rst2pdf}.
 }
 \note{
-  The \code{output} argument specifies the output filename
-  to be passed to the PDF compiler (e.g. a tex document)
-  instead of the PDF filename.
+The \code{output} argument specifies the output filename to be passed
+  to the PDF compiler (e.g. a tex document) instead of the PDF filename.
 }
 \examples{
 #' compile with xelatex
@@ -55,9 +54,9 @@ knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = 
 ## knit2pdf(..., compiler = 'rst2pdf')
 }
 \author{
-  Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
+Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
 }
 \seealso{
-  \code{\link{knit}}, \code{\link[tools]{texi2pdf}},
+\code{\link{knit}}, \code{\link[tools]{texi2pdf}},
   \code{\link{rst2pdf}}
 }

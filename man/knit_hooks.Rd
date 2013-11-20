@@ -11,19 +11,17 @@
 knit_hooks
 }
 \description{
-  A hook is a function of a pre-defined form (arguments)
-  that takes values of arguments and returns desired
-  output. The object \code{knit_hooks} is used to access or
-  set hooks in this package.
+A hook is a function of a pre-defined form (arguments) that takes values of
+arguments and returns desired output. The object \code{knit_hooks} is used to
+access or set hooks in this package.
 }
 \examples{
 knit_hooks$get("source")
 knit_hooks$get("inline")
 }
 \references{
-  Usage: \url{http://yihui.name/knitr/objects}
+Usage: \url{http://yihui.name/knitr/objects}
 
-  Components in \code{knit_hooks}:
-  \url{http://yihui.name/knitr/hooks}
+Components in \code{knit_hooks}: \url{http://yihui.name/knitr/hooks}
 }
 \keyword{datasets}
