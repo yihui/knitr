@@ -160,7 +160,7 @@ eng_dot = function(options) {
 
   # generate output
   dir.create(dirname(fig), showWarnings = FALSE)
-  outf = str_c(fig, '.', ext)
+  outf = paste(fig, ext, sep = '.')
   unlink(outf)
   extra = if (options$eval) {
     message('running: ', cmd)
