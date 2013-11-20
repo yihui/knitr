@@ -71,7 +71,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   if (!frame) {
     unlink(c('00frame_toc.html', 'index.html'))
     # do not need a navigation frame, so make 00Index the real homepage
-    (if (.Platform$OS.type == 'windows') file.copy else file.symlink)('00Index.html', 'index.html')
+    (if (is_windows()) file.copy else file.symlink)('00Index.html', 'index.html')
     return(invisible())
   }
   writeLines(sprintf(

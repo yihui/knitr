@@ -193,7 +193,7 @@ format_sci = function(x, ...) {
 
 ## absolute path?
 is_abs_path = function(x) {
-  if (.Platform$OS.type == 'windows')
+  if (is_windows())
     grepl(':', x, fixed = TRUE) || grepl('^\\\\', x) else grepl('^[/~]', x)
 }
 
@@ -537,3 +537,5 @@ has_utility = function(name, package = name) {
   opts_knit$set(setNames(list(yes), name2))
   yes
 }
+
+is_windows = function() .Platform$OS.type == 'windows'
