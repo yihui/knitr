@@ -289,7 +289,6 @@ plot_crop = function(x) {
   message('cropping ', x)
   x = shQuote(x)
   cmd = if (ext == 'pdf') paste('pdfcrop', x, x) else paste('convert', x, '-trim', x)
-  if (.Platform$OS.type == 'windows') cmd = paste(Sys.getenv('COMSPEC'), '/c', cmd)
-  system(cmd)
+  (if (is_windows()) shell else system)(cmd)
   x
 }

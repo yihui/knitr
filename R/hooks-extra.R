@@ -89,8 +89,7 @@ hook_optipng = function(before, options, envir) {
     message('optimizing ', x)
     x = shQuote(x)
     cmd = paste('optipng', if (is.character(options$optipng)) options$optipng, x)
-    if (.Platform$OS.type == 'windows') cmd = paste(Sys.getenv('COMSPEC'), '/c', cmd)
-    system(cmd)
+    (if (is_windows()) shell else system)(cmd)
   })
   return()
 }
