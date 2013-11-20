@@ -81,6 +81,7 @@ opts_chunk_attr = (function() {
   opts$tidy.opts = 'list'
   opts$fig.subcap = 'character'
   opts$external = opts$sanitize = NULL  # hide these two rare options
+  opts$fig.process = 'function'
   opts
 })()
 

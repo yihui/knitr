@@ -136,7 +136,9 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     if (file.exists(pdf.plot)) ext = 'pdf' else {
       stop('failed to compile ', path, ' to PDF', call. = FALSE)
     }
+    path = pdf.plot
   }
+  if (is.function(process <- options$fig.process)) process(path)
 
   c(name, ext)
 }
