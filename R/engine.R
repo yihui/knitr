@@ -131,7 +131,7 @@ eng_tikz = function(options) {
     if (conv != 0) stop('problems with `convert`; probably not installed?')
   }
   options$fig.num = 1L; options$fig.cur = 1L
-  extra = knit_hooks$get('plot')(c(fig, ext), options)
+  extra = knit_hooks$get('plot')(paste(fig, ext, sep = '.'), options)
   options$engine = 'tex'  # for output hooks to use the correct language class
   engine_output(options, options$code, '', extra)
 }
@@ -167,7 +167,7 @@ eng_dot = function(options) {
     system(cmd)
     if (!file.exists(outf)) stop('failed to compile content');
     options$fig.num = 1L; options$fig.cur = 1L
-    knit_hooks$get('plot')(c(fig, ext), options)
+    knit_hooks$get('plot')(outf, options)
   }
 
   # wrap

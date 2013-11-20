@@ -65,7 +65,7 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
       purge_cache(options)
       stop('cannot find ', path, '; the cache has been purged; please re-compile')
     }
-    return(c(name, if (dev == 'tikz' && options$external) 'pdf' else ext))
+    return(paste(name, if (dev == 'tikz' && options$external) 'pdf' else ext, sep = '.'))
   }
 
   ## built-in devices
