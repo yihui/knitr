@@ -40,6 +40,10 @@
 
 - fixed a bug related to child documents -- chunk options passed from a parent document may not be restored after the child document exits (thanks, Frank Harrell, http://bit.ly/17yitsD)
 
+## MAJOR CHANGES
+
+- the default value for the chunk option `tidy` is `FALSE` now, which means the R source code in chunks will no longer be reformatted by `formatR::tidy.source()` by default; this feature must be explicitly turned on by `tidy=TRUE`, and it has brought a lot of confusion in the past, so it is perhaps a good idea not to reformat the source code by default
+
 ## MINOR CHANGES
 
 - for R Markdown/AsciiDoc, line breaks are allowed in the inline R expressions now (thanks, Andrew MacDonald, #655)

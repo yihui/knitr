@@ -45,7 +45,7 @@ new_defaults = function(value = list()) {
 #' @export
 #' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
 opts_chunk = new_defaults(list(
-  eval = TRUE, echo = TRUE, results = 'markup', tidy = TRUE,
+  eval = TRUE, echo = TRUE, results = 'markup', tidy = FALSE,
   cache = FALSE, dependson = NULL, cache.path = 'cache/', cache.vars = NULL,
   ref.label = NULL, child = NULL, engine = 'R',
   prompt = FALSE, comment = '##', autodep = FALSE,
