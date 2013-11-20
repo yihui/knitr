@@ -138,9 +138,8 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     }
     path = pdf.plot
   }
-  if (is.function(process <- options$fig.process)) process(path)
 
-  c(name, ext)
+  fig_process(options$fig.process, path)
 }
 
 # filter the dev.args option
@@ -265,6 +264,16 @@ digest_plot = function(x, level = 1) {
 
 # a null device
 pdf_null = function(width = 7, height = 7, ...) pdf(NULL, width, height, ...)
+
+fig_process = function(FUN, path) {
+  if (is.function(FUN)) {
+    path2 = FUN(path)
+    if (!is.character(path2) || length(path2) != 1L)
+      stop("'fig.process' must be a function that returns a character string")
+    path = path2
+  }
+  path
+}
 
 #' Crop a plot (remove the edges) using PDFCrop or ImageMagick
 #'

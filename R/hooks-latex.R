@@ -16,8 +16,7 @@
 #' plots using \code{\link[grDevices]{recordPlot}}, and we can make use of these
 #' hooks to insert graphics output in the output document; see
 #' \code{\link{hook_plot_custom}} for details.
-#' @param x a character vector of length 2 ; \code{x[1]} is the plot base
-#'   filename, and \code{x[2]} is the file extension
+#' @param x the plot filename (a character string)
 #' @param options a list of the current chunk options
 #' @rdname hook_plot
 #' @return A character string (code with plot filenames wrapped)
@@ -27,15 +26,15 @@
 #' @examples ## this is what happens for a chunk like this
 #'
 #' ## <<foo-bar-plot, dev='pdf', fig.align='right'>>=
-#' hook_plot_tex(c('foo-bar-plot', 'pdf'), opts_chunk$merge(list(fig.align='right')))
+#' hook_plot_tex('foo-bar-plot.pdf', opts_chunk$merge(list(fig.align='right')))
 #'
 #' ## <<bar, dev='tikz'>>=
-#' hook_plot_tex(c('bar', 'tikz'), opts_chunk$merge(list(dev='tikz')))
+#' hook_plot_tex('bar.tikz', opts_chunk$merge(list(dev='tikz')))
 #'
 #' ## <<foo, dev='pdf', fig.show='animate', interval=.1>>=
 #'
 #' ## 5 plots are generated in this chunk
-#' hook_plot_tex(c('foo5', 'pdf'), opts_chunk$merge(list(fig.show='animate',interval=.1,fig.cur=5, fig.num=5)))
+#' hook_plot_tex('foo5.pdf', opts_chunk$merge(list(fig.show='animate',interval=.1,fig.cur=5, fig.num=5)))
 hook_plot_tex = function(x, options) {
   ## This function produces the image inclusion code for LaTeX.
   ## optionally wrapped in code that resizes it, aligns it, handles it
@@ -132,7 +131,7 @@ hook_plot_tex = function(x, options) {
   paste(
     fig1, sub1, align1, resize1,
     if (tikz) {
-      sprintf('\\input{%s.tikz}', x[1])
+      sprintf('\\input{%s}', x)
     } else if (animate) {
       ## \animategraphics{} should be inserted only *once*!
       aniopts = options$aniopts
@@ -140,10 +139,10 @@ hook_plot_tex = function(x, options) {
       size = paste(c(size, sprintf('%s', aniopts)), collapse = ',')
       if (nzchar(size)) size = sprintf('[%s]', size)
       sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1/options$interval,
-              sub(sprintf('%d$', fig.num), '', x[1]), 1L, fig.num)
+              sub(sprintf('%d$', fig.num), '', sans_ext(x)), 1L, fig.num)
     } else {
       if (nzchar(size)) size = sprintf('[%s]', size)
-      sprintf('\\includegraphics%s{%s} ', size, x[1])
+      sprintf('\\includegraphics%s{%s} ', size, sans_ext(x))
     },
 
     resize2, align2, sub2, fig2,

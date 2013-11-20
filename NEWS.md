@@ -44,6 +44,8 @@
 
 - the default value for the chunk option `tidy` is `FALSE` now, which means the R source code in chunks will no longer be reformatted by `formatR::tidy.source()` by default; this feature must be explicitly turned on by `tidy=TRUE`, and it has brought a lot of confusion in the past, so it is perhaps a good idea not to reformat the source code by default
 
+- the first argument of the `plot` hook is the filename of the plot now; in previous versions, it was a vector of length 2 (basename and file extension); see `?hook_plot`
+
 ## MINOR CHANGES
 
 - for R Markdown/AsciiDoc, line breaks are allowed in the inline R expressions now (thanks, Andrew MacDonald, #655)

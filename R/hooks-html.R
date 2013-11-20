@@ -35,8 +35,7 @@ hook_plot_html = function(x, options) {
 
 ## a wrapper to upload an image and return the URL
 .upload.url = function(x) {
-  file = paste(x, collapse = '.')
-  opts_knit$get('upload.fun')(file)
+  opts_knit$get('upload.fun')(x)
 }
 
 .chunk.hook.html = function(x, options) {

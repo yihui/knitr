@@ -107,10 +107,10 @@ hook_plot_custom = function(before, options, envir){
 
   n = options$fig.num
   if (n == 0L) n = options$fig.num = 1L # make sure fig.num is at least 1
-  if (n <= 1L) hook(c(name, ext), options) else {
+  if (n <= 1L) hook(paste(name, ext, sep = '.'), options) else {
     res = unlist(lapply(seq_len(n), function(i) {
       options$fig.cur = i
-      hook(c(str_c(name, i), ext), reduce_plot_opts(options))
+      hook(sprintf('%s%s.%s', name, i, ext), reduce_plot_opts(options))
     }), use.names = FALSE)
     paste(res, collapse = '')
   }
