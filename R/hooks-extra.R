@@ -99,7 +99,7 @@ hook_plot_custom = function(before, options, envir){
   if(before) return() # run hook after the chunk
 
   ext = options$fig.ext %n% dev2ext(options$dev)
-  name = fig_path()
+  name = fig_path('', options)
   fmt = out_format()
   if (fmt %in% c('sweave', 'listings')) fmt = 'latex'
   hook = switch(fmt, latex = hook_plot_tex, html = hook_plot_html,
