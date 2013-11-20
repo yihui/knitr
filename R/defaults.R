@@ -107,11 +107,11 @@ set_alias = function(...) {
 #'
 #' Besides the standard usage (\code{opts_knit$set()}), we can also set package
 #' options prior to loading \code{knitr} or calling \code{knit()} using
-#' \code{\link{options}()} in base R. A global option \code{knitr.foo} in
-#' \code{options()} will be set as an option \code{foo} in \code{opts_knit},
-#' i.e. global options in base R with the prefix \code{knitr.} correspond to
-#' options in \code{opts_knit}. This can be useful to set package options in
-#' \file{~/.Rprofile} without loading \pkg{knitr}.
+#' \code{\link{options}()} in base R. A global option \code{knitr.package.foo}
+#' in \code{options()} will be set as an option \code{foo} in \code{opts_knit},
+#' i.e. global options in base R with the prefix \code{knitr.package.}
+#' correspond to options in \code{opts_knit}. This can be useful to set package
+#' options in \file{~/.Rprofile} without loading \pkg{knitr}.
 #' @references Usage: \url{http://yihui.name/knitr/objects}
 #'
 #'   A list of available options:
@@ -139,16 +139,39 @@ opts_knit = new_defaults(list(
 ## document mode; parent: whether I need to add parent preamble to the
 ## child output
 
-# adjust opts_knit according to options(), e.g. options(knitr.progress) -->
-# opts_knit$get('progress'); this makes it possible to set options in
-# ~/.Rprofile without loading knitr
+# you may modify these options in options(knitr.package.foo)
+opts_knit_names = c(
+  'progress', 'verbose', 'width', 'upload.fun', 'animation.fun', 'global.device',
+  'eval.after', 'concordance', 'documentation', 'aliases', 'self.contained',
+  'unnamed.chunk.label'
+)
+# adjust opts_chunk and opts_knit according to options(), e.g.
+# options(knitr.package.progress = FALSE) --> opts_knit$set(progress = FALSE),
+# and options(knitr.chunk.tidy) --> opts_chunk$set(tidy = TRUE); this makes it
+# possible to set options in ~/.Rprofile without loading knitr
 adjust_opts_knit = function() {
   opts = options()
   nms = names(opts)
   if (length(nms <- grep('^knitr[.]', nms, value = TRUE)) == 0) return()
-  # strip off knitr. from option names
-  opts = setNames(opts[nms], gsub('^knitr[.]', '', nms))
-  opts_knit$set(opts)
+  opts = opts[nms]
+  # for backward compatibility
+  i = grep('^knitr[.](package|chunk)[.]', nms, invert = TRUE)
+  i = intersect(i, which(nms[i] %in% paste('knitr', opts_knit_names, sep = '.')))
+  if (length(i)) {
+    nms.pkg = sub('^knitr.', 'knitr.package.', nms[i])
+    warning(
+      'These options must be renamed (from left to right):\n',
+      formatUL(sprintf('%s => %s', nms[i], nms.pkg)), call. = FALSE, immediate. = TRUE
+    )
+    Sys.sleep(10)
+    names(opts)[i] = nms[i] = nms.pkg
+  }
+  # strip off knitr.chunk from option names and set chunk options
+  i = grep('^knitr[.]chunk[.]', nms)
+  opts_chunk$set(setNames(opts[i], sub('^knitr[.]chunk[.]', '', nms[i])))
+  # similarly for knitr.package.options
+  i = grep('^knitr[.]package[.]', nms)
+  opts_knit$set(setNames(opts[i], sub('^knitr[.]package[.]', '', nms[i])))
 }
 
 #' Template for creating reusable chunk options
