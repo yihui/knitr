@@ -102,9 +102,12 @@ kable_latex = function(
   	cap,
     sprintf('\n\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
     sprintf('\n%s', toprule), '\n',
-    paste(c(if (!is.null(cn <- colnames(x))) paste(cn, collapse = ' & '),
-            apply(x, 1, paste, collapse = ' & ')),
-          collapse = sprintf('\\\\\n%s\n', if (booktabs) '\\midrule' else '\\hline')),
+    if (!is.null(cn <- colnames(x)))
+      paste(paste(cn, collapse = ' & '),
+            sprintf('\\\\\n%s\n', if (booktabs) '\\midrule' else '\\hline'),
+            sep = ''),
+    paste(apply(x, 1, paste, collapse = ' & '),
+          collapse = sprintf('\\\\\n%s', if (booktabs) '' else '\\hline\n')),
     sprintf('\\\\\n%s', bottomrule),
     sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular')
   ), collapse = '')
