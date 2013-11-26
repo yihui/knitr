@@ -151,6 +151,9 @@ leading white spaces have special meanings in markdown.
 - `cache.vars`: (`NULL`) a character vector of variable names to be saved in
   the cache database; by default all variables created in the current chunks
   are identified and saved, but we can manually set the variables to be saved
+- `cache.lazy`: (`TRUE`) whether to `lazyLoad()` or directly `load()` objects;
+  for very large objects, lazyloading may not work, so `cache.lazy=FALSE`
+  may be desirable (see [#572](https://github.com/yihui/knitr/issues/572))
 - `dependson`: (`NULL`; character or numeric) a character vector of chunk labels
   to specify which other chunks this chunk depends on; this option applies
   to cached chunks only -- sometimes the objects in a cached chunk may
