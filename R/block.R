@@ -45,7 +45,7 @@ call_block = function(block) {
     params$hash = hash
     if (cache$exists(hash)) {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
-      cache$load(hash)
+      cache$load(hash, lazy = params$cache.lazy)
       if (!params$include) return('')
       if (params$cache == 3) return(cache$output(hash))
     }
@@ -221,7 +221,7 @@ block_cache = function(options, output, objects) {
   assign(outname, output, envir = knit_global())
   purge_cache(options)
   cache$library(options$cache.path, save = TRUE)
-  cache$save(objects, outname, hash)
+  cache$save(objects, outname, hash, lazy = options$cache.lazy)
 }
 
 purge_cache = function(options) {

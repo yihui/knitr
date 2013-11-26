@@ -14,7 +14,7 @@ new_cache = function() {
     for (h in hash) unlink(paste(cache_path(h), c('rdb', 'rdx', 'RData'), sep = '.'))
   }
 
-  cache_save = function(keys, outname, hash) {
+  cache_save = function(keys, outname, hash, lazy = TRUE) {
     # keys are new variables created; outname is the text output of a chunk
     path = cache_path(hash)
     # add random seed to cache if exists
@@ -22,7 +22,9 @@ new_cache = function() {
       copy_env(globalenv(), knit_global(), '.Random.seed')
       outname = c('.Random.seed', outname)
     }
+    if (!lazy) outname = c(keys, outname)
     save(list = outname, file = paste(path, 'RData', sep = '.'), envir = knit_global())
+    if (!lazy) return()  # everything has been saved; no need to make lazy db
     # random seed is always load()ed
     keys = setdiff(keys, '.Random.seed')
     getFromNamespace('makeLazyLoadDB', 'tools')(knit_global(), path, variables = keys)
@@ -48,10 +50,10 @@ new_cache = function() {
     save_objects(find_globals(code), label, valid_path(path, '__globals'))
   }
 
-  cache_load = function(hash) {
+  cache_load = function(hash, lazy = TRUE) {
     path = cache_path(hash)
     if (!is_abs_path(path)) path = file.path(getwd(), path)
-    lazyLoad(path, envir = knit_global())
+    if (lazy) lazyLoad(path, envir = knit_global())
     # load output from last run if exists
     if (file.exists(path2 <- paste(path, 'RData', sep = '.'))) {
       load(path2, envir = knit_global())

@@ -47,7 +47,7 @@ new_defaults = function(value = list()) {
 opts_chunk = new_defaults(list(
   eval = TRUE, echo = TRUE, results = 'markup', tidy = FALSE,
   cache = FALSE, dependson = NULL, cache.path = 'cache/', cache.vars = NULL,
-  ref.label = NULL, child = NULL, engine = 'R',
+  cache.lazy = TRUE, ref.label = NULL, child = NULL, engine = 'R',
   prompt = FALSE, comment = '##', autodep = FALSE,
   fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
   fig.path = 'figure/', fig.ext = NULL, dev = NULL, dpi = 72,
