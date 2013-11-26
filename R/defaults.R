@@ -45,21 +45,23 @@ new_defaults = function(value = list()) {
 #' @export
 #' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
 opts_chunk = new_defaults(list(
-  eval = TRUE, echo = TRUE, results = 'markup', tidy = FALSE,
-  cache = FALSE, dependson = NULL, cache.path = 'cache/', cache.vars = NULL,
-  cache.lazy = TRUE, ref.label = NULL, child = NULL, engine = 'R',
-  prompt = FALSE, comment = '##', autodep = FALSE,
-  fig.keep = 'high', fig.show = 'asis', fig.align = 'default',
-  fig.path = 'figure/', fig.ext = NULL, dev = NULL, dpi = 72,
-  dev.args = NULL, fig.width = 7, fig.height = 7,
-  fig.env = 'figure', fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:',
+
+  eval = TRUE, echo = TRUE, results = 'markup', tidy = FALSE, tidy.opts = NULL,
+  prompt = FALSE, comment = '##', highlight = TRUE, size = 'normalsize', background = '#F7F7F7',
+
+  cache = FALSE, cache.path = 'cache/', cache.vars = NULL, cache.lazy = TRUE,
+  dependson = NULL, autodep = FALSE,
+
+  fig.keep = 'high', fig.show = 'asis', fig.align = 'default', fig.path = 'figure/',
+  dev = NULL, dev.args = NULL, dpi = 72, fig.ext = NULL, fig.width = 7, fig.height = 7,
+  fig.env = 'figure', fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:', fig.subcap = NULL,
   fig.pos = '', out.width = NULL, out.height = NULL, out.extra = NULL,
-  resize.width = NULL, resize.height = NULL,
-  external = TRUE, sanitize = FALSE, purl = TRUE,
-  highlight = TRUE, size = 'normalsize',
+  external = TRUE, sanitize = FALSE, interval = 1, aniopts = 'controls,loop',
+
   warning = TRUE, error = TRUE, message = TRUE,
-  background = '#F7F7F7', split = FALSE, include = TRUE,
-  interval = 1, aniopts = 'controls,loop'
+
+  ref.label = NULL, child = NULL, engine = 'R', split = FALSE, include = TRUE, purl = TRUE
+
 ))
 
 #' @rdname opts_chunk
@@ -78,8 +80,6 @@ opts_chunk_attr = (function() {
   opts$fig.align = list('default', 'left', 'right', 'center')
   opts$dev = as.list(names(auto_exts))
   opts$fig.ext = as.list(unique(auto_exts))
-  opts$tidy.opts = 'list'
-  opts$fig.subcap = 'character'
   opts$external = opts$sanitize = NULL  # hide these two rare options
   opts$fig.process = 'function'
   opts
