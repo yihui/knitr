@@ -103,7 +103,7 @@ If the output file type is LaTeX, default hooks will put most output in the `ver
 
 ### Sweave: render_sweave()
 
-Put source code in the `Sinput` environment, output in the `Soutput` enviroment and the whole chunk in the `Schunk` environment. The style file `Sweave.sty` is required to use this theme, or at least these three environments have to be defined.
+Put source code in the `Sinput` environment, output in the `Soutput` environment and the whole chunk in the `Schunk` environment. The style file `Sweave.sty` is required to use this theme, or at least these three environments have to be defined.
 
 ### Listings: render_listings()
 
@@ -119,7 +119,7 @@ The source code and output will be indented by 4 spaces. For GitHub Flavored Mar
 
 ### Jekyll: render_jekyll()
 
-I need to build this site so I also set up some hooks especially for Jekyll, and they are actually quite simple: R souce code is put in a highlight environment with the language set to `r`, and the rest of output belongs to the highlight environemnt with the `text` language (nearly no highlighting at all). Currently plots are written out according to the syntax of Markdown.
+I need to build this site so I also set up some hooks especially for Jekyll, and they are actually quite simple: R source code is put in a highlight environment with the language set to `r`, and the rest of output belongs to the highlight environment with the `text` language (nearly no highlighting at all). Currently plots are written out according to the syntax of Markdown.
 
 ### reStructuredText: render_rst()
 
