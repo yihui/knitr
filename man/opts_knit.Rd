@@ -2,11 +2,12 @@
 \name{opts_knit}
 \alias{opts_knit}
 \title{Options for the knitr package}
-\format{List of 4
+\format{\preformatted{List of 4
  $ get    :function (name, default = FALSE, drop = TRUE)  
  $ set    :function (...)  
  $ merge  :function (values)  
- $ restore:function (target = value)}
+ $ restore:function (target = value)  
+}}
 \usage{
 opts_knit
 }

@@ -2,11 +2,12 @@
 \name{opts_template}
 \alias{opts_template}
 \title{Template for creating reusable chunk options}
-\format{List of 4
+\format{\preformatted{List of 4
  $ get    :function (name, default = FALSE, drop = TRUE)  
  $ set    :function (...)  
  $ merge  :function (values)  
- $ restore:function (target = value)}
+ $ restore:function (target = value)  
+}}
 \usage{
 opts_template
 }

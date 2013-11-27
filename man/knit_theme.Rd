@@ -2,9 +2,10 @@
 \name{knit_theme}
 \alias{knit_theme}
 \title{Syntax highlighting themes}
-\format{List of 2
+\format{\preformatted{List of 2
  $ set:function (theme)  
- $ get:function (theme = NULL)}
+ $ get:function (theme = NULL)  
+}}
 \usage{
 knit_theme
 }
