@@ -32,6 +32,9 @@ through the \code{engine.path} option. For example, \code{engine='ruby',
 engine.path='/usr/bin/ruby1.9.1'}. Additional command line arguments can be
 passed through \code{options$engine.opts}, e.g. \code{engine='ruby',
 engine.opts='-v'}.
+
+Below is a list of built-in language engines:
+\Sexpr[results=verbatim]{str(knitr::knit_engines$get())}
 }
 \examples{
 knit_engines$get("python")
