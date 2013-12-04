@@ -38,6 +38,9 @@ new_defaults = function(value = list()) {
 #' use these options. Note the global options set in one chunk will not affect
 #' the options in this chunk itself, and that is why we often need to set global
 #' options in a separate chunk.
+#'
+#' Below is a list of default chunk options:
+#' \Sexpr[results=verbatim]{str(knitr::opts_chunk$get())}
 #' @references Usage: \url{http://yihui.name/knitr/objects}
 #'
 #'   A list of available options:
