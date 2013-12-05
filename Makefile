@@ -22,7 +22,7 @@ build:
 
 build-no-vignettes:
 	cd ..;\
-	R CMD build $(PKGSRC) --no-build-vignettes
+	R CMD build $(PKGSRC) --no-build-vignettes --no-manual
 
 install%: build%
 	cd ..;\
