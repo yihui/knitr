@@ -138,16 +138,16 @@ fix_sweave = function(x) {
                'prefix.string\\s*=\\s*([^,]+)', "fig.path='\\1'", x)
 
   x = gsub_msg("removing options 'print', 'term', 'stripe.white', 'prefix'",
-               '(print|term|strip.white|prefix)\\s*=\\s*(TRUE|FALSE)', '', x)
+               '(print|term|strip.white|prefix)\\s*=\\s*(TRUE|FALSE|T|F)', '', x)
 
   x = gsub_msg('quoting options engine, fig.path, cache.path, fig.keep, fig.show, dev, out.width, out.height, fig.align',
                "(engine|fig\\.path|cache\\.path|fig\\.keep|fig\\.show|dev|out\\.width|out\\.height|fig\\.align)\\s*=\\s*([^,'\"]+)",
                "\\1='\\2'", x)
 
   x = gsub_msg('changing keep.source=TRUE to tidy=FALSE',
-               'keep\\.source\\s*=\\s*TRUE', 'tidy=FALSE', x)
+               'keep\\.source\\s*=\\s*(TRUE|T)', 'tidy=FALSE', x)
   x = gsub_msg('changing keep.source=FALSE to tidy=TRUE',
-               'keep\\.source\\s*=\\s*FALSE', 'tidy=TRUE', x)
+               'keep\\.source\\s*=\\s*(FALSE|F)', 'tidy=TRUE', x)
 
   x = gsub_msg('doubling backslashes', '\\', '\\\\', x, fixed = TRUE)
   # after we remove some options, there might be , ,
