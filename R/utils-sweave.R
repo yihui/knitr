@@ -138,16 +138,16 @@ fix_sweave = function(x) {
                'prefix.string\\s*=\\s*([^,]+)', "fig.path='\\1'", x)
 
   x = gsub_msg("removing options 'print', 'term', 'stripe.white', 'prefix'",
-               '(print|term|strip.white|prefix)\\s*=\\s*(TRUE|FALSE)', '', x)
+               '(print|term|strip.white|prefix)\\s*=\\s*(TRUE|FALSE|T|F)', '', x)
 
   x = gsub_msg('quoting options engine, fig.path, cache.path, fig.keep, fig.show, dev, out.width, out.height, fig.align',
                "(engine|fig\\.path|cache\\.path|fig\\.keep|fig\\.show|dev|out\\.width|out\\.height|fig\\.align)\\s*=\\s*([^,'\"]+)",
                "\\1='\\2'", x)
 
   x = gsub_msg('changing keep.source=TRUE to tidy=FALSE',
-               'keep\\.source\\s*=\\s*TRUE', 'tidy=FALSE', x)
+               'keep\\.source\\s*=\\s*(TRUE|T)', 'tidy=FALSE', x)
   x = gsub_msg('changing keep.source=FALSE to tidy=TRUE',
-               'keep\\.source\\s*=\\s*FALSE', 'tidy=TRUE', x)
+               'keep\\.source\\s*=\\s*(FALSE|F)', 'tidy=TRUE', x)
 
   x = gsub_msg('doubling backslashes', '\\', '\\\\', x, fixed = TRUE)
   # after we remove some options, there might be , ,
@@ -157,18 +157,23 @@ fix_sweave = function(x) {
 }
 
 # check the source code to see if it is an Sweave document
-is_sweave = function(x) {
-  any(grepl('^\\s*\\\\(usepackage(\\[.*\\])?\\{Sweave|SweaveInput\\{|SweaveOpts\\{)', x)) ||
-    any(grepl('^<<.*(echo|eval|split|include)\\s*=\\s*(true|false).*>>=', x)) ||
-    any(grepl('^<<.*results\\s*=\\s*(tex|verbatim|hide)).*>>=', x)) ||
-    any(grepl('^<<.*(fig|pdf|eps|jpeg|png|tikz)\\s*=\\s*(true|false|T|F).*>>=', x)) ||
-    any(grepl('^<<.*([, ])(width|height)\\s*=\\s*(\\d+).*>>=', x)) ||
-    any(grepl('^<<.*(keep.source|print|term|strip.white|prefix)\\s*=\\s*(true|false|T|F).*>>=', x))
+which_sweave = function(x) {
+  where <- grepl('^\\s*\\\\(usepackage(\\[.*\\])?\\{Sweave|SweaveInput\\{|SweaveOpts\\{)', x) |
+    grepl('^<<.*(echo|eval|split|include)\\s*=\\s*(true|false).*>>=', x) |
+    grepl('^<<.*results\\s*=\\s*(tex|verbatim|hide)).*>>=', x) |
+    grepl('^<<.*(fig|pdf|eps|jpeg|png|tikz)\\s*=\\s*(true|false|T|F).*>>=', x) |
+    grepl('^<<.*([, ])(width|height)\\s*=\\s*(\\d+).*>>=', x) |
+    grepl('^<<.*(keep.source|print|term|strip.white|prefix)\\s*=\\s*(true|false|T|F).*>>=', x)
+  which(where)
 }
 
-remind_sweave = function(file) {
-  msg = sprintf('It seems you are using the Sweave-specific syntax; you may need
-                Sweave2knitr("%s") to convert it to knitr', file)
+remind_sweave = function(file, sweave_lines) {
+  MAX_LINES_REPORT <- 5
+  sweave_lines <- sprintf("%s%s", paste(head(sweave_lines, MAX_LINES_REPORT), collapse=", "),
+                          if (length(sweave_lines) > MAX_LINES_REPORT) " and others" else "")
+
+  msg = sprintf('It seems you are using the Sweave-specific syntax in line(s) %s; you may need Sweave2knitr("%s") to convert it to knitr',
+                paste(sweave_lines, collapse=", "), file)
   # throw a normal warning when R CMD check or tcltk not available
   if ('CheckExEnv' %in% search() || '_R_CHECK_TIMINGS_' %in% names(Sys.getenv()) ||
         !capabilities('tcltk') || !capabilities('X11') || !has_package('tcltk') ||
