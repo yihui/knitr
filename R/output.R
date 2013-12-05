@@ -176,7 +176,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
            ext, "' in built-in pattern lists; ",
            'see ?knit_patterns on how to set up customized patterns')
     set_pattern(pattern)
-    if (pattern == 'rnw' && is_sweave(text)) remind_sweave(if (in.file) input)
+    if (pattern == 'rnw' && length(sweave_lines <- which_sweave(text)) > 0)
+      remind_sweave(if (in.file) input, sweave_lines)
     opts_knit$set(out.format = switch(
       pattern, rnw = 'latex', tex = 'latex', html = 'html', md = 'markdown',
       rst = 'rst', brew = 'brew', asciidoc = 'asciidoc', textile = 'textile'
