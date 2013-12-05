@@ -23,6 +23,11 @@ in \code{options()} will be set as an option \code{foo} in \code{opts_knit},
 i.e. global options in base R with the prefix \code{knitr.package.}
 correspond to options in \code{opts_knit}. This can be useful to set package
 options in \file{~/.Rprofile} without loading \pkg{knitr}.
+
+Below is a list of default package options, retrieved via
+\code{opts_knit$get()}:
+
+\Sexpr[results=verbatim]{str(knitr::opts_knit$get())}
 }
 \examples{
 opts_knit$get("verbose")
