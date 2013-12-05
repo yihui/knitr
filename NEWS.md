@@ -28,6 +28,8 @@
 
 - the argument `shortcode` in `knit2wp()` can take a logical vector of length 2 now; the first element determines whether to highlight source code, and the second decides syntax highlighting for text output (thanks, Derek Ogle, #663)
 
+- Sweave2knitr() will report the line numbers indicating where the Sweave-specific syntax was used (thanks, Kirill Muller, #676)
+
 ## BUG FIXES
 
 - due to the change in evaluate v0.5, evaluate() may return the raw values of expressions, but the S3 method wrap() does not know how to handle them; now these values are just ignored (thanks, Dan Tenenbaum)
