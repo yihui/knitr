@@ -18,11 +18,12 @@ citEntry(
   title = 'Dynamic Documents with {R} and knitr',
   author = 'Yihui Xie',
   publisher = 'Chapman and Hall/CRC',
+  address = 'London',
   year = '2013',
   note = 'ISBN 978-1482203530',
   url = meta$URL,
   textVersion = paste('Yihui Xie (2013)', 'Dynamic Documents with R and knitr.',
-                      'Chapman and Hall/CRC. ISBN 978-1482203530')
+                      'London: Chapman and Hall/CRC. ISBN 978-1482203530')
 )
 
 citEntry(
