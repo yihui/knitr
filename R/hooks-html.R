@@ -143,7 +143,8 @@ hook_r2swf = function(x, options) {
   swf2html = getFromNamespace('swf2html', 'R2SWF')
   file2swf = getFromNamespace('file2swf', 'R2SWF')
   swfhtml = swf2html(file2swf(files = fig.name, swf.name, interval = options$interval),
-                     output = FALSE, fragment = TRUE,  width = w, height = h)
+                     output = FALSE, width = w, height = h, fragment = TRUE)
+  swfhtml = sub('src="', sprintf('src="%s/', dirname(swf.name)), swfhtml)
   if(options$fig.align == 'default') return(swfhtml)
   sprintf(paste('<div align = "%s">\n', swfhtml, '\n</div>'), options$fig.align)
 }
