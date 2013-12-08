@@ -112,21 +112,17 @@ kable_html = function(x, table.attr = '') {
   table.attr = gsub('^\\s+|\\s+$', '', table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
-  if (!is.null(align <- attr(x, 'align'))) {
-  	align <- replace(align,align=='l','left')
-  	align <- replace(align,align=='c','center')
-  	align <- replace(align,align=='r','right')
-  	align <- paste0(' align="',align,'"')
-  } else 
-  	align <- rep("", times=ncol(x))
+  align = if (is.null(align <- attr(x, 'align'))) '' else {
+    sprintf(' align="%s"', c(l = 'left', c = 'center', r = 'right')[align])
+  }
   paste(c(
     sprintf('<table%s>', table.attr),
     if (!is.null(cn <- colnames(x)))
-      c(' <thead>', '  <tr>', paste0('   <th', align, '> ', cn, ' </th>'), '  </tr>', ' </thead>'),
+      c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>'),
     '<tbody>',
     paste(
       '  <tr>',
-      apply(x, 1, function(z) paste0('   <td', align, '> ', z, ' </td>', collapse = '\n')),
+      apply(x, 1, function(z) paste(sprintf('   <td%s> %s </td>', align, z), collapse = '\n')),
       '  </tr>', sep = '\n'
     ),
     '</tbody>',
