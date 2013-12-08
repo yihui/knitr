@@ -33,7 +33,7 @@
 #'   for some examples in LaTeX, but they also apply to other document formats.
 #' @export
 #' @examples kable(head(iris), format = 'latex')
-#' kable(head(iris), format = 'html')
+#' kable(head(iris), format = 'html', caption='Title of the table')
 #' # use the booktabs package
 #' kable(mtcars, format = 'latex', booktabs = TRUE)
 #' # use the longtable package
@@ -90,13 +90,15 @@ kable_latex = function(
   x, booktabs = FALSE, longtable = FALSE,
   vline = if (booktabs) '' else '|',
   toprule = if (booktabs) '\\toprule' else '\\hline',
-  bottomrule = if (booktabs) '\\bottomrule' else '\\hline'
+  bottomrule = if (booktabs) '\\bottomrule' else '\\hline',
+  caption = NULL
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
     align = paste('{', align, '}', sep = '')
   }
-
+  if (is.null(caption)) cap <- ''
+  else cap <- sprintf('\n\\caption{%s}', caption)
   paste(c(
     sprintf('\n\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
     sprintf('\n%s', toprule), '\n',
@@ -104,16 +106,19 @@ kable_latex = function(
             apply(x, 1, paste, collapse = ' & ')),
           collapse = sprintf('\\\\\n%s\n', if (booktabs) '\\midrule' else '\\hline')),
     sprintf('\\\\\n%s', bottomrule),
-    sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular')
+    sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular'),
+    cap
   ), collapse = '')
 }
 
-kable_html = function(x, table.attr = '') {
+kable_html = function(x, table.attr = '', caption = NULL) {
   table.attr = gsub('^\\s+|\\s+$', '', table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
+  if (is.null(caption)) cap <- ''
+  else cap <- sprintf('\n<caption>%s</caption>', caption)
   paste(c(
-    sprintf('<table%s>', table.attr),
+    paste0(sprintf('<table%s>', table.attr),cap),
     if (!is.null(cn <- colnames(x)))
       c(' <thead>', '  <tr>', paste('   <th>', cn, '</th>'), '  </tr>', ' </thead>'),
     '<tbody>',
@@ -172,8 +177,15 @@ kable_markdown = function(x) {
   sprintf('|%s|', res)
 }
 
-kable_pandoc = function(x) {
-  kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
+kable_pandoc = function(x, caption = NULL) {
+  if (is.null(caption))
+    kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
+  else
+  	c(
+      paste('Table:', caption),
+      "",
+  	  kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
+    )
 }
 
 # pad a matrix
