@@ -97,17 +97,17 @@ kable_latex = function(
     align = paste(align, collapse = vline)
     align = paste('{', align, '}', sep = '')
   }
-  if (is.null(caption)) cap <- ''
-  else cap <- sprintf('\n\\caption{%s}', caption)
+  if (is.null(caption)) cap = ''
+  else cap = sprintf('\n\\caption{%s}', caption)
   paste(c(
+  	cap,
     sprintf('\n\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
     sprintf('\n%s', toprule), '\n',
     paste(c(if (!is.null(cn <- colnames(x))) paste(cn, collapse = ' & '),
             apply(x, 1, paste, collapse = ' & ')),
           collapse = sprintf('\\\\\n%s\n', if (booktabs) '\\midrule' else '\\hline')),
     sprintf('\\\\\n%s', bottomrule),
-    sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular'),
-    cap
+    sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular')
   ), collapse = '')
 }
 
@@ -115,10 +115,10 @@ kable_html = function(x, table.attr = '', caption = NULL) {
   table.attr = gsub('^\\s+|\\s+$', '', table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
-  if (is.null(caption)) cap <- ''
-  else cap <- sprintf('\n<caption>%s</caption>', caption)
+  if (is.null(caption)) cap = ''
+  else cap = sprintf('\n<caption>%s</caption>', caption)
   paste(c(
-    paste0(sprintf('<table%s>', table.attr),cap),
+    sprintf('<table%s>%s', table.attr,cap),
     if (!is.null(cn <- colnames(x)))
       c(' <thead>', '  <tr>', paste('   <th>', cn, '</th>'), '  </tr>', ' </thead>'),
     '<tbody>',
@@ -178,14 +178,9 @@ kable_markdown = function(x) {
 }
 
 kable_pandoc = function(x, caption = NULL) {
-  if (is.null(caption))
-    kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
-  else
-  	c(
-      paste('Table:', caption),
-      "",
-  	  kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
-    )
+  tab = kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
+  if (is.null(caption)) tab
+  else c(paste('Table:', caption), "", tab)
 }
 
 # pad a matrix
