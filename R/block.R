@@ -1,10 +1,10 @@
 # S3 method to deal with chunks and inline text respectively
-#' @S3method process_group block
-#' @S3method process_group inline
 process_group = function(x) {
   UseMethod('process_group', x)
 }
+#' @export
 process_group.block = function(x) call_block(x)
+#' @export
 process_group.inline = function(x) call_inline(x)
 
 
