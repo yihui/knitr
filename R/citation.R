@@ -113,7 +113,9 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE,
   Sleuth2 = c(author = '  author = {F. L. Ramsey and D. W. Schafer and Jeannie Sifneos and Berwin A. Turlach},'),
   sm = c(author = '  author = {Adrian Bowman and Adelchi Azzalini},'),
   survival = c(author = '  author = {Terry Therneau},'),
-  tuneR = c(author = '  author = {Uwe Ligges},')
+  tuneR = c(author = '  author = {Uwe Ligges},'),
+  INLA = c(year = '  year = {2013},'),
+  epiR = c(author = '  author = {Mark Stevenson and Telmo Nunes and Cord Heuer and Jonathon Marshall and Javier Sanchez and Ron Thornton and Jeno Reiczigel and Jim Robison-Cox and Paola Sebastiani and Peter Solymos},')
 )
 # no need to write bib for these packages
 .base.pkgs = setdiff(rownames(installed.packages(priority = 'base')), 'base')
