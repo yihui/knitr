@@ -42,7 +42,7 @@ integration-need:
 		git checkout ${TRAVIS_BRANCH} && \
 		GIT_PAGER=cat git show HEAD
 
-integration-run: install-no-vignettes
+integration-run:
 	make sysdeps deps xvfb-start knit xvfb-stop -C knitr-examples
 
 integration-verify:
