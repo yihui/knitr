@@ -43,6 +43,7 @@ integration-need:
 		GIT_PAGER=cat git show HEAD
 
 integration-run:
+	rm knitr-examples/cache -rf
 	make sysdeps deps xvfb-start knit xvfb-stop -C knitr-examples
 
 integration-verify:
