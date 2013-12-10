@@ -97,8 +97,7 @@ kable_latex = function(
     align = paste(align, collapse = vline)
     align = paste('{', align, '}', sep = '')
   }
-  if (is.null(caption)) cap = ''
-  else cap = sprintf('\n\\caption{%s}', caption)
+  if (is.null(caption)) cap = '' else cap = sprintf('\n\\caption{%s}', caption)
   paste(c(
   	cap,
     sprintf('\n\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
@@ -121,7 +120,7 @@ kable_html = function(x, table.attr = '', caption = NULL) {
   if (is.null(caption)) cap = ''
   else cap = sprintf('\n<caption>%s</caption>', caption)
   paste(c(
-    sprintf('<table%s>%s', table.attr,cap),
+    sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x)))
       c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>'),
     '<tbody>',
@@ -182,8 +181,7 @@ kable_markdown = function(x) {
 
 kable_pandoc = function(x, caption = NULL) {
   tab = kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
-  if (is.null(caption)) tab
-  else c(paste('Table:', caption), "", tab)
+  if (is.null(caption)) tab else c(paste('Table:', caption), "", tab)
 }
 
 # pad a matrix
