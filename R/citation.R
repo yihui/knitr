@@ -92,10 +92,12 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE,
   contrast = c(author = '  author = {Max Kuhn and Steve Weston and Jed Wing and James Forester},'),
   date = c(author = '  author = {Terry Therneau and Thomas Lumley and Kjetil Halvorsen and Kurt Hornik},'),
   digest = c(author = '  author = {Dirk Eddelbuettel},'),
+  epiR = c(author = '  author = {Mark Stevenson and Telmo Nunes and Cord Heuer and Jonathon Marshall and Javier Sanchez and Ron Thornton and Jeno Reiczigel and Jim Robison-Cox and Paola Sebastiani and Peter Solymos},')
   fortunes = c(author = '  author = {Achim Zeileis and the R community},'),
   gWidgets = c(author = '  author = {John Verzani},'),
   hexbin = c(author = '  author = {Dan Carr and Nicholas Lewin-Koh and Martin Maechler},'),
   Hmisc =  c(author = '  author = {Harrell, Jr., Frank E},'),
+  INLA = c(year = '  year = {2013},'),
   leaps = c(author = '  author = {Thomas Lumley},'),
   maps = c(author = '  author = {Ray Brownrigg},'),
   oz = c(author = '  author = {Bill Venables and Kurt Hornik},'),
@@ -113,9 +115,7 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE,
   Sleuth2 = c(author = '  author = {F. L. Ramsey and D. W. Schafer and Jeannie Sifneos and Berwin A. Turlach},'),
   sm = c(author = '  author = {Adrian Bowman and Adelchi Azzalini},'),
   survival = c(author = '  author = {Terry Therneau},'),
-  tuneR = c(author = '  author = {Uwe Ligges},'),
-  INLA = c(year = '  year = {2013},'),
-  epiR = c(author = '  author = {Mark Stevenson and Telmo Nunes and Cord Heuer and Jonathon Marshall and Javier Sanchez and Ron Thornton and Jeno Reiczigel and Jim Robison-Cox and Paola Sebastiani and Peter Solymos},')
+  tuneR = c(author = '  author = {Uwe Ligges},')
 )
 # no need to write bib for these packages
 .base.pkgs = setdiff(rownames(installed.packages(priority = 'base')), 'base')
