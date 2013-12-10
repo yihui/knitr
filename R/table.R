@@ -32,8 +32,8 @@
 #'   \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
 #'   for some examples in LaTeX, but they also apply to other document formats.
 #' @export
-#' @examples kable(head(iris), format = 'latex')
-#' kable(head(iris), format = 'html')
+#' @examples kable(head(iris), format = 'latex', caption = 'Title of the table')
+#' kable(head(iris), format = 'html', caption = 'Title of the table')
 #' # use the booktabs package
 #' kable(mtcars, format = 'latex', booktabs = TRUE)
 #' # use the longtable package
@@ -47,7 +47,7 @@
 #' # R Markdown/Github Markdown tables
 #' kable(head(mtcars[, 1:5]), format = 'markdown')
 #' # Pandoc tables
-#' kable(head(mtcars), format = 'pandoc')
+#' kable(head(mtcars), format = 'pandoc', caption = 'Title of the table')
 #' # save the value
 #' x = kable(mtcars, format = 'html', output = FALSE)
 #' cat(x, sep = '\n')
@@ -90,14 +90,16 @@ kable_latex = function(
   x, booktabs = FALSE, longtable = FALSE,
   vline = if (booktabs) '' else '|',
   toprule = if (booktabs) '\\toprule' else '\\hline',
-  bottomrule = if (booktabs) '\\bottomrule' else '\\hline'
+  bottomrule = if (booktabs) '\\bottomrule' else '\\hline',
+  caption = NULL
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
     align = paste('{', align, '}', sep = '')
   }
-
+  if (is.null(caption)) cap = '' else cap = sprintf('\n\\caption{%s}', caption)
   paste(c(
+  	cap,
     sprintf('\n\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
     sprintf('\n%s', toprule), '\n',
     paste(c(if (!is.null(cn <- colnames(x))) paste(cn, collapse = ' & '),
@@ -108,15 +110,16 @@ kable_latex = function(
   ), collapse = '')
 }
 
-kable_html = function(x, table.attr = '') {
+kable_html = function(x, table.attr = '', caption = NULL) {
   table.attr = gsub('^\\s+|\\s+$', '', table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
   align = if (is.null(align <- attr(x, 'align'))) '' else {
     sprintf(' align="%s"', c(l = 'left', c = 'center', r = 'right')[align])
   }
+  if (is.null(caption)) cap = '' else cap = sprintf('\n<caption>%s</caption>', caption)
   paste(c(
-    sprintf('<table%s>', table.attr),
+  	sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x)))
       c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>'),
     '<tbody>',
@@ -175,8 +178,9 @@ kable_markdown = function(x) {
   sprintf('|%s|', res)
 }
 
-kable_pandoc = function(x) {
-  kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
+kable_pandoc = function(x, caption = NULL) {
+  tab <- kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
+  if (is.null(caption)) tab else c(paste('Table:', caption), "", tab)
 }
 
 # pad a matrix
