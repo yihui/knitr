@@ -6,7 +6,7 @@
 #'
 #' When the output format from \code{\link{knit}()} is HTML or Markdown, this
 #' function can be used to upload local image files to Imgur, e.g. set the
-#' package option \code{opts_knit$get(upload.fun = imgur_upload)}, so the output
+#' package option \code{opts_knit$set(upload.fun = imgur_upload)}, so the output
 #' document is completely self-contained, i.e. it does not need external image
 #' files any more, and it is ready to be published online.
 #' @param file the path to the image file to be uploaded
