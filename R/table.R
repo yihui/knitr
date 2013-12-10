@@ -91,24 +91,38 @@ kable_latex = function(
   vline = if (booktabs) '' else '|',
   toprule = if (booktabs) '\\toprule' else '\\hline',
   bottomrule = if (booktabs) '\\bottomrule' else '\\hline',
+  midrule = if (booktabs) '\\midrule' else '\\hline',
+  linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
     align = paste('{', align, '}', sep = '')
   }
+
   if (is.null(caption)) cap = '' else cap = sprintf('\n\\caption{%s}', caption)
+
+  if (nrow(x) == 0) midrule = ""
+
+  linesep =
+    if (nrow(x) > 1) {
+      c(rep(linesep, length.out = nrow(x) - 2), linesep[[1L]], '')
+    } else
+      rep('', nrow(x))
+
+  linesep = ifelse(linesep == "", linesep, paste('\n', linesep, sep = ''))
+
   paste(c(
-  	cap,
+    cap,
     sprintf('\n\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x)))
       paste(paste(cn, collapse = ' & '),
-            sprintf('\\\\\n%s\n', if (booktabs) '\\midrule' else '\\hline'),
+            sprintf('\\\\\n%s\n', midrule),
             sep = ''),
-    paste(apply(x, 1, paste, collapse = ' & '),
-          collapse = sprintf('\\\\\n%s', if (booktabs) '' else '\\hline\n')),
-    sprintf('\\\\\n%s', bottomrule),
+    paste(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep),
+          sep = '', collapse = '\n'),
+    sprintf('\n%s', bottomrule),
     sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular')
   ), collapse = '')
 }
@@ -122,7 +136,7 @@ kable_html = function(x, table.attr = '', caption = NULL) {
   }
   if (is.null(caption)) cap = '' else cap = sprintf('\n<caption>%s</caption>', caption)
   paste(c(
-  	sprintf('<table%s>%s', table.attr, cap),
+    sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x)))
       c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>'),
     '<tbody>',
