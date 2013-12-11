@@ -32,7 +32,9 @@
 #'   \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
 #'   for some examples in LaTeX, but they also apply to other document formats.
 #' @export
-#' @examples kable(head(iris), format = 'latex', caption = 'Title of the table')
+#' @examples  kable(head(iris), format = 'latex')
+#' kable(head(iris), format = 'html')
+#' kable(head(iris), format = 'latex', caption = 'Title of the table')
 #' kable(head(iris), format = 'html', caption = 'Title of the table')
 #' # use the booktabs package
 #' kable(mtcars, format = 'latex', booktabs = TRUE)
