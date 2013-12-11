@@ -25,8 +25,6 @@ This FAQ is compiled from the [issues](https://github.com/yihui/knitr/issues) an
   - see issue [#110](https://github.com/yihui/knitr/issues/110): you can destroy `\Sexpr` by `%\%Sexpr{code}` or comment out R code like `\Sexpr{#code}`, or just comment out the whole paragraph with `%` in the beginning of lines.
 1. How can I write a literal code chunk? i.e. write a code chunk which is not parsed and useful for tutorials?
   - You need to destroy the chunk header, e.g. add an empty string before the chunk header: `\Sexpr{''}<<label, what=ever>>=`, or ```` `r ''` ```{r label, what=ever} ```` ([#443](https://github.com/yihui/knitr/issues/443)); see [example 065](https://github.com/yihui/knitr-examples)
-1. I have done something cool with **knitr**; could you add a link in your website?
-  - Sure! I'd love to; just let me know.
 1. What can I do for you?
   - Many things, e.g. [donate zillions to me](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ZRJDEBSEJEUJY&lc=US&item_name=Donate%20to%20Yihui%20Xie&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) (well, I'm kidding), buy me a book from my [Amazon wishlist](http://amzn.com/w/2S7M0GLEC32SB), [tweet](https://twitter.com/xieyihui) my [links](http://yihui.name/knitr), mention **knitr** on [Google+](https://plus.google.com/u/0/109653178371807724268/posts) or Facebook, or fork this repository and contribute code, or just say hello to me somewhere.
   - Cite the package and the [knitr book](http://www.crcpress.com/product/isbn/9781482203530); see `citation('knitr')` in R.
