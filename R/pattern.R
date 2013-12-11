@@ -3,6 +3,7 @@
 #' This object is a named list of all built-in patterns.
 #' @references Usage: \url{http://yihui.name/knitr/patterns}
 #' @export
+#' @seealso \link{knit_patterns}
 #' @examples all_patterns$rnw; all_patterns$html
 #'
 #' str(all_patterns)
@@ -63,8 +64,10 @@ all_patterns = list(
 #' Patterns are regular expressions and will be used in functions like
 #' \code{\link[base]{grep}} to extract R code and chunk options. The object
 #' \code{knit_patterns} controls the patterns currently used; see the references
-#' and examples for usage.
+#' and examples for usage.  All built-in patterns are available in the list
+#' \link{all_patterns}.
 #'
+#' @seealso \link{all_patterns}
 #' @references Usage: \url{http://yihui.name/knitr/objects}
 #'
 #' Components in \code{knit_patterns}: \url{http://yihui.name/knitr/patterns}

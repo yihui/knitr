@@ -68,4 +68,7 @@ str(all_patterns)
 \references{
 Usage: \url{http://yihui.name/knitr/patterns}
 }
+\seealso{
+\link{knit_patterns}
+}
 \keyword{datasets}
