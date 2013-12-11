@@ -3,7 +3,7 @@
 #' This object is a named list of all built-in patterns.
 #' @references Usage: \url{http://yihui.name/knitr/patterns}
 #' @export
-#' @seealso \link{knit_patterns}
+#' @seealso \code{\link{knit_patterns}}
 #' @examples all_patterns$rnw; all_patterns$html
 #'
 #' str(all_patterns)
@@ -67,7 +67,7 @@ all_patterns = list(
 #' and examples for usage.  All built-in patterns are available in the list
 #' \link{all_patterns}.
 #'
-#' @seealso \link{all_patterns}
+#' @seealso \code{\link{all_patterns}}
 #' @references Usage: \url{http://yihui.name/knitr/objects}
 #'
 #' Components in \code{knit_patterns}: \url{http://yihui.name/knitr/patterns}
