@@ -101,8 +101,7 @@ kable_latex = function(
     align = paste(align, collapse = vline)
     align = paste('{', align, '}', sep = '')
   }
-
-  if (is.null(caption)) cap = '' else cap = sprintf('\n\\caption{%s}', caption)
+  cap = if (is.null(caption)) '' else sprintf('\n\\caption{%s}', caption)
 
   if (nrow(x) == 0) midrule = ""
 
@@ -136,7 +135,7 @@ kable_html = function(x, table.attr = '', caption = NULL) {
   align = if (is.null(align <- attr(x, 'align'))) '' else {
     sprintf(' align="%s"', c(l = 'left', c = 'center', r = 'right')[align])
   }
-  if (is.null(caption)) cap = '' else cap = sprintf('\n<caption>%s</caption>', caption)
+  cap = if (is.null(caption)) '' else sprintf('\n<caption>%s</caption>', caption)
   paste(c(
     sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x)))
@@ -198,7 +197,7 @@ kable_markdown = function(x) {
 }
 
 kable_pandoc = function(x, caption = NULL) {
-  tab <- kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
+  tab = kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
   if (is.null(caption)) tab else c(paste('Table:', caption), "", tab)
 }
 
