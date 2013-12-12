@@ -52,6 +52,8 @@ The tables for \code{format = 'markdown'} also work for Pandoc when the
 \examples{
 kable(head(iris), format = "latex")
 kable(head(iris), format = "html")
+kable(head(iris), format = "latex", caption = "Title of the table")
+kable(head(iris), format = "html", caption = "Title of the table")
 # use the booktabs package
 kable(mtcars, format = "latex", booktabs = TRUE)
 # use the longtable package
@@ -65,7 +67,7 @@ kable(head(mtcars), format = "rst", row.names = FALSE)
 # R Markdown/Github Markdown tables
 kable(head(mtcars[, 1:5]), format = "markdown")
 # Pandoc tables
-kable(head(mtcars), format = "pandoc")
+kable(head(mtcars), format = "pandoc", caption = "Title of the table")
 # save the value
 x = kable(mtcars, format = "html", output = FALSE)
 cat(x, sep = "\\n")

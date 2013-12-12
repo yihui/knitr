@@ -69,6 +69,6 @@ str(all_patterns)
 Usage: \url{http://yihui.name/knitr/patterns}
 }
 \seealso{
-\link{knit_patterns}
+\code{\link{knit_patterns}}
 }
 \keyword{datasets}

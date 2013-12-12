@@ -42,6 +42,6 @@ Usage: \url{http://yihui.name/knitr/objects}
 Components in \code{knit_patterns}: \url{http://yihui.name/knitr/patterns}
 }
 \seealso{
-\link{all_patterns}
+\code{\link{all_patterns}}
 }
 \keyword{datasets}
