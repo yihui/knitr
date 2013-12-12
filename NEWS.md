@@ -68,6 +68,8 @@
 
 - the column name `id` for row names in the `kable()` output is removed when the output format is Markdown (thanks, Artem Klevtsov, http://stackoverflow.com/q/19875529/559676)
 
+- for R Markdown, special characters in figure filenames are no longer replaced by `_`, since RStudio v0.98.490 has fixed the base64 encoding bug; please upgrade RStudio to the latest version: http://www.rstudio.com/ide/download/
+
 # CHANGES IN knitr VERSION 1.5
 
 ## NEW FEATURES
