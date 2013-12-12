@@ -127,10 +127,11 @@ knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
     content = gsub('<pre><code class="([[:alpha:]]+)">(.+?)</code></pre>',
                    '[sourcecode language="\\1"]\\2[/sourcecode]', content)
   }
-  if (shortcode[2]) {
-    content = gsub('<pre><code( class="no-highlight"|)>(.+?)</code></pre>',
-                   '[sourcecode]\\2[/sourcecode]', content)
-  }
+  content = gsub(
+    '<pre><code( class="no-highlight"|)>(.+?)</code></pre>',
+    if (shortcode[2]) '[sourcecode]\\2[/sourcecode]' else '<pre>\\2</pre>', content
+  )
+
   content = native_encode(content, 'UTF-8')
   title = native_encode(title, 'UTF-8')
   do.call('library', list(package = 'RWordPress', character.only = TRUE))
