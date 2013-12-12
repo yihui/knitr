@@ -305,7 +305,7 @@ inline_exec = function(
   loc = block$location
   for (i in 1:n) {
     res = if (eval) {
-      (if (error) try else identity)(
+      (if (error) try_silent else identity)(
         {
           v = withVisible(eval(parse_only(code[i]), envir = envir))
           if (v$visible) v$value
@@ -316,7 +316,7 @@ inline_exec = function(
     # replace with evaluated results
     str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
       if (inherits(res, 'try-error')) {
-        knit_hooks$get('error')(str_c('\n', res, '\n'), opts_chunk$get())
+        msg_wrap(str_c('Error: ', res), 'error', list(label='<Inline code>'))
       } else hook(res)
     } else ''
     if (i < n) loc[(i + 1):n, ] = loc[(i + 1):n, ] - (d - nchar(input))

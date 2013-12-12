@@ -329,7 +329,13 @@ indent_block = function(block, spaces = '    ') {
 
 # print knitr logs
 print_knitlog = function() {
-  if (!opts_knit$get('verbose') || child_mode() || !length(klog <- knit_log$get(drop = FALSE)))
+  if (child_mode())
+    return()
+  klog <- if (opts_knit$get('verbose'))
+    knit_log$get()
+  else
+    knit_log$get('error')
+  if (!length(klog))
     return()
 
   for (i in unlist(klog, use.names = FALSE)) {

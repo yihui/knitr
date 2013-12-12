@@ -32,6 +32,8 @@
 
 - Sweave2knitr() will report the line numbers indicating where the Sweave-specific syntax was used (thanks, Kirill Muller, #676)
 
+- errors are printed after processing regardless of the `verbose` option (thanks, Kirill Müller, #651)
+
 ## BUG FIXES
 
 - due to the change in evaluate v0.5, evaluate() may return the raw values of expressions, but the S3 method wrap() does not know how to handle them; now these values are just ignored (thanks, Dan Tenenbaum)
@@ -55,6 +57,8 @@
 - the first argument of the `plot` hook is the filename of the plot now; in previous versions, it was a vector of length 2 (basename and file extension); see `?hook_plot`
 
 - in the previous version, we can set `options(knitr.foo = value)` so that **knitr** can adjust the package options `opts_knit$set(foo = value)` before knitting a document; now the prefix for package options has been changed to `knitr.package.`, i.e. we should set `options(knitr.package.foo)` to achieve `opts_knit$set(foo)`; besides, it is also possible to change the default chunk options using `options(knitr.chunk.foo)` now, but you are warned that this may bring reproducibility issues, so please use with care
+
+- errors in inline expressions are added to the knit_log instead of being printed to the console (thanks, Kirill Müller, #651)
 
 ## MINOR CHANGES
 
