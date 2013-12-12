@@ -20,8 +20,7 @@ mean(x)
 #' is the mean of x plus 2.
 #' The code itself may contain braces, but these are not checked.  Thus,
 #' perfectly valid (though very strange) R code such as `{{2 + 3}} - {{4 - 5}}`
-#' can produce different results compared to simply running the script:
-{{2 + 3}} - {{4 - 5}}
+#' can lead to errors because `2 + 3}} - {{4 - 5` will be treated as inline code.
 #'
 #' Now we continue writing the report. We can draw plots as well.
 

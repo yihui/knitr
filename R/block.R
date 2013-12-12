@@ -295,7 +295,7 @@ call_inline = function(block) {
 
 inline_exec = function(
   block, eval = eval_lang(opts_chunk$get('eval')), envir = knit_global(),
-  error = eval_lang(opts_chunk$get('error')), hook = knit_hooks$get('inline')
+  hook = knit_hooks$get('inline')
 ) {
 
   # run inline code and substitute original texts
@@ -305,19 +305,13 @@ inline_exec = function(
   loc = block$location
   for (i in 1:n) {
     res = if (eval) {
-      (if (error) try else identity)(
-        {
-          v = withVisible(eval(parse_only(code[i]), envir = envir))
-          if (v$visible) v$value
-        }
-      )
+      v = withVisible(eval(parse_only(code[i]), envir = envir))
+      if (v$visible) v$value
     } else '??'
     d = nchar(input)
     # replace with evaluated results
     str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
-      if (inherits(res, 'try-error')) {
-        knit_hooks$get('error')(str_c('\n', res, '\n'), opts_chunk$get())
-      } else hook(res)
+      paste(hook(res), collapse = '')
     } else ''
     if (i < n) loc[(i + 1):n, ] = loc[(i + 1):n, ] - (d - nchar(input))
     # may need to move back and forth because replacement may be longer or shorter
