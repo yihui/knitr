@@ -105,12 +105,9 @@ kable_latex = function(
 
   if (nrow(x) == 0) midrule = ""
 
-  linesep =
-    if (nrow(x) > 1) {
-      c(rep(linesep, length.out = nrow(x) - 2), linesep[[1L]], '')
-    } else
-      rep('', nrow(x))
-
+  linesep = if (nrow(x) > 1) {
+    c(rep(linesep, length.out = nrow(x) - 2), linesep[[1L]], '')
+  } else rep('', nrow(x))
   linesep = ifelse(linesep == "", linesep, paste('\n', linesep, sep = ''))
 
   paste(c(
@@ -118,9 +115,7 @@ kable_latex = function(
     sprintf('\n\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x)))
-      paste(paste(cn, collapse = ' & '),
-            sprintf('\\\\\n%s\n', midrule),
-            sep = ''),
+      paste(paste(cn, collapse = ' & '), sprintf('\\\\\n%s\n', midrule), sep = ''),
     paste(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep),
           sep = '', collapse = '\n'),
     sprintf('\n%s', bottomrule),
