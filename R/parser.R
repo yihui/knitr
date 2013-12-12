@@ -14,9 +14,10 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
 
   blks = grepl(chunk.begin, lines)
   txts = filter_chunk_end(blks, grepl(chunk.end, lines))
-  tmp = logical(n); tmp[blks | txts] = TRUE; lines[txts] = ''
+  lines[txts] = ''
+  txts_shift = c(FALSE, head(txts, -1))
 
-  groups = unname(split(lines, cumsum(tmp)))
+  groups = unname(split(lines, cumsum(blks | txts_shift)))
   if (set.preamble)
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
 
