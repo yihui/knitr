@@ -1,3 +1,5 @@
+#' @include concordance.R
+
 ## adapted from Hadley's decumar: https://github.com/hadley/decumar
 
 ## split input document into groups containing chunks and other texts
@@ -6,7 +8,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
   n = length(lines)
   chunk.begin = patterns$chunk.begin; chunk.end = patterns$chunk.end
   if (is.null(chunk.begin) || is.null(chunk.end))
-    return(list(parse_inline(lines, patterns)))
+    return(list(parse_inline(lines, patterns, NULL)))
 
   if (!child_mode() && set.preamble) {
     set_preamble(lines, patterns)  # prepare for tikz option 'standAlone'
@@ -21,13 +23,16 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
 
   ## parse 'em all
-  lapply(groups, function(g) {
+  ret = lapply(seq_along(groups), function(i) {
+    g = groups[[i]]
     block = grepl(chunk.begin, g[1])
     if (!set.preamble && !parent_mode()) {
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
     }
-    if (block) parse_block(g, patterns) else parse_inline(g, patterns)
+    if (block) parse_block(g, patterns, i) else parse_inline(g, patterns, i)
   })
+
+  ret
 }
 
 ## a code manager to manage R code in all chunks
@@ -44,7 +49,7 @@ strip_block = function(x, prefix = NULL) {
 dep_list = new_defaults()
 
 ## separate params and R code in code chunks
-parse_block = function(input, patterns) {
+parse_block = function(input, patterns, id) {
   block = strip_block(input, patterns$chunk.code)
   n = length(block); chunk.begin = patterns$chunk.begin
   params.src = if (group_pattern(chunk.begin)) {
@@ -74,7 +79,7 @@ parse_block = function(input, patterns) {
       dep_list$set(setNames(list(c(dep_list$get(i), label)), i))
   }
 
-  structure(list(params = params, params.src = params.src), class = 'block')
+  structure(list(params = params, params.src = params.src, id = id), class = 'block')
 }
 
 ## autoname for unnamed chunk
@@ -145,7 +150,7 @@ print.block = function(x, ...) {
 }
 
 ## extract inline R code fragments (as well as global options)
-parse_inline = function(input, patterns) {
+parse_inline = function(input, patterns, id) {
   input.src = input  # keep a copy of the source
 
   inline.code = patterns$inline.code; inline.comment = patterns$inline.comment
@@ -163,7 +168,7 @@ parse_inline = function(input, patterns) {
     code = if (NCOL(code) >= 2L) code[, NCOL(code)] else character(0)
   } else code = character(0)
 
-  structure(list(input = input, input.src = input.src, location = loc, code = code),
+  structure(list(input = input, input.src = input.src, location = loc, code = code, id = id),
             class = 'inline')
 }
 

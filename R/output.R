@@ -360,6 +360,7 @@ knit_exit = function(append) {
   invisible()
 }
 
+#' @include defaults.R
 knit_log = new_defaults()  # knitr log for errors, warnings and messages
 
 #' Wrap evaluated results for output
@@ -403,8 +404,11 @@ msg_wrap = function(message, type, options) {
   # when output format is latex, do not wrap messages (let latex deal with wrapping)
   if (!length(grep('\n', message)) && !out_format(c('latex', 'listings', 'sweave')))
     message = str_wrap(message, width = getOption('width'))
+  file = knit_concord$get('infile')
+  lines = paste(current_lines(options$id), collapse = '-')
   knit_log$set(setNames(
-    list(c(knit_log$get(type), str_c('Chunk ', options$label, ':\n  ', message))),
+    list(c(knit_log$get(type), str_c(file, ':', lines,
+                                     ': Chunk ', options$label, ':\n  ', message))),
     type
   ))
   knit_hooks$get(type)(comment_out(message, options$comment), options)

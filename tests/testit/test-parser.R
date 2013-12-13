@@ -17,15 +17,15 @@ assert(
 
 
 res = parse_inline(c('aaa \\Sexpr{x}', 'bbb \\Sexpr{NA} and \\Sexpr{1+2}',
-                     'another expression \\Sexpr{rnorm(10)}'), all_patterns$rnw)
+                     'another expression \\Sexpr{rnorm(10)}'), all_patterns$rnw, NULL)
 assert(
   'parse_inline() parses inline text',
   identical(res$code, c('x', 'NA', '1+2', 'rnorm(10)')),
   identical(nchar(res$input), 81L),
   # empty inline code is not recognized
-  identical(parse_inline('\\Sexpr{}', all_patterns$rnw)$code, character(0)),
+  identical(parse_inline('\\Sexpr{}', all_patterns$rnw, NULL)$code, character(0)),
   # can use > in HTML inline code
-  identical(parse_inline('<!--rinline "<a>" -->', all_patterns$html)$code, ' "<a>" ')
+  identical(parse_inline('<!--rinline "<a>" -->', all_patterns$html, NULL)$code, ' "<a>" ')
 )
 
 knit_code$restore()
