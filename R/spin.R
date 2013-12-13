@@ -101,7 +101,7 @@ spin = function(
       if (!grepl(p1, block[1L])) {
         block = c(str_c(p[1L], p[2L]), block)
       }
-      c('', block, p[3L], '')
+      c(block, p[3L])
     }
   }
 
