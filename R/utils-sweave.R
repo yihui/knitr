@@ -169,21 +169,16 @@ which_sweave = function(x) {
 }
 
 remind_sweave = function(file, sweave_lines) {
-  MAX_LINES_REPORT = 5
-  sweave_lines = c(
-    head(sweave_lines, MAX_LINES_REPORT),
-    if (length(sweave_lines) > MAX_LINES_REPORT) ' and others'
-  )
-
   msg = sprintf('It seems you are using the Sweave-specific syntax in line(s) %s; you may need Sweave2knitr("%s") to convert it to knitr',
                 paste(sweave_lines, collapse = ', '), file)
   # throw a normal warning when R CMD check or tcltk not available
-  if ('CheckExEnv' %in% search() || '_R_CHECK_TIMINGS_' %in% names(Sys.getenv()) ||
-        !capabilities('tcltk') || !capabilities('X11') || !has_package('tcltk') ||
-        !getFromNamespace('.TkUp', 'tcltk')) {
-    warning(msg)
-  } else do.call(
-    getFromNamespace('tkmessageBox', 'tcltk'),
-    list(title = 'Sweave Noweb syntax?', icon = 'info', message = msg)
-  )
+  warning(msg)
+  if (!('CheckExEnv' %in% search()) && !('_R_CHECK_TIMINGS_' %in% names(Sys.getenv())) &&
+        capabilities('tcltk') && capabilities('X11') && has_package('tcltk') &&
+        getFromNamespace('.TkUp', 'tcltk')) {
+    do.call(
+      getFromNamespace('tkmessageBox', 'tcltk'),
+      list(title = 'Sweave Noweb syntax?', icon = 'info', message = msg)
+    )
+  }
 }
