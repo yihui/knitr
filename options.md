@@ -164,6 +164,8 @@ leading white spaces have special meanings in markdown.
     document, and `dependson=c(-1, -2)` means it depends on the previous two
     chunks (negative indices stand for numbers of chunks before this chunk,
     and note they are always relative to the current chunk)
+  - please note this option does not work when set as a global chunk option
+    via `opts_chunk$set()`; it must be set as a local chunk option
 - `autodep`: (`FALSE`; logical) whether to figure out the dependencies among
   chunks automatically by analyzing the global variables in the code (may
   not be reliable) so that `dependson` does not need to be set explicitly
