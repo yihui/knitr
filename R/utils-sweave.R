@@ -158,13 +158,14 @@ fix_sweave = function(x) {
 
 # check the source code to see if it is an Sweave document
 which_sweave = function(x) {
-  where = grepl('^\\s*\\\\(usepackage(\\[.*\\])?\\{Sweave|SweaveInput\\{|SweaveOpts\\{)', x) |
-    grepl('^<<.*(echo|eval|split|include)\\s*=\\s*(true|false).*>>=', x) |
-    grepl('^<<.*results\\s*=\\s*(tex|verbatim|hide)).*>>=', x) |
-    grepl('^<<.*(fig|pdf|eps|jpeg|png|tikz)\\s*=\\s*(true|false|T|F).*>>=', x) |
-    grepl('^<<.*([, ])(width|height)\\s*=\\s*(\\d+).*>>=', x) |
-    grepl('^<<.*(keep.source|print|term|strip.white|prefix)\\s*=\\s*(true|false|T|F).*>>=', x)
-  which(where)
+  unique(c(
+    grep('^\\s*\\\\(usepackage(\\[.*\\])?\\{Sweave|SweaveInput\\{|SweaveOpts\\{)', x),
+    grep('^<<.*(echo|eval|split|include)\\s*=\\s*(true|false).*>>=', x),
+    grep('^<<.*results\\s*=\\s*(tex|verbatim|hide)).*>>=', x),
+    grep('^<<.*(fig|pdf|eps|jpeg|png|tikz)\\s*=\\s*(true|false|T|F).*>>=', x),
+    grep('^<<.*([, ])(width|height)\\s*=\\s*(\\d+).*>>=', x),
+    grep('^<<.*(keep.source|print|term|strip.white|prefix)\\s*=\\s*(true|false|T|F).*>>=', x)
+  ))
 }
 
 remind_sweave = function(file, sweave_lines) {
