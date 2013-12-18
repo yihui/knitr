@@ -67,10 +67,8 @@ hook_ffmpeg_html = function(x, options) {
   x = c(sans_ext(x), file_ext(x))
   fig.num = options$fig.num
   # set up the ffmpeg run
-  ffmpeg.opts = options$aniopts
   fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
   mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), '.ogg')
-  if(is.na(ffmpeg.opts)) ffmpeg.opts = NULL
 
   ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1/options$interval,
                      '-i', fig.fname, mov.fname)
