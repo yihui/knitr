@@ -108,7 +108,7 @@ All built-in options in **knitr** are:
   - `tidy.opts`: (`NULL`; list) a list of options to be passed to `tidy.source()`, e.g. `tidy.opts=list(keep.blank.line=FALSE, width.cutoff=60)`; these **formatR** options can also be set globally via `options()`
 - `prompt`: (`FALSE`; logical) whether to add the prompt characters in the R code (see `prompt` and `continue` in `?base::options`; note that adding prompts can make it difficult for readers to copy R code from the output, so `prompt=FALSE` may be a better choice
 - `comment`: (`'##'`; character) the prefix to be put before source code output; default is to comment out the output by `##`, which is good for readers to copy R source code since output is masked in comments (set `comment=NA` to disable this feature)
-- `highlight`: (`TRUE`; logical) whether to highlight the source code (it is `FALSE` by default the output is markdown or Sweave or listings)
+- `highlight`: (`TRUE`; logical) whether to highlight the source code (it is `FALSE` by default if the output is markdown or Sweave or listings)
 - `size`: (`'normalsize'`; character) font size for the default LaTeX output (see `?highlight` in the **highlight** package for a list of possible values)
 - `background`: (`'#F7F7F7'`; character or numeric) background color of chunks in LaTeX output (passed to the LaTeX package **framed**); the color model is `rgb`; it can be either a numeric vector of length 3, with each element between 0 and 1 to denote red, green and blue, or any built-in color in R like `red` or `springgreen3` (see `colors()` for a full list), or a hex string like `#FFFF00`, or an integer (all these colors will be converted to the RGB model; see `?col2rgb` for details)
 
