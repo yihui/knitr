@@ -138,7 +138,7 @@ opts_knit = new_defaults(list(
   base.dir = NULL, base.url = NULL, child.path = '', upload.fun = identity,
   animation.fun = NULL, global.device = FALSE, eval.after = NULL,
   concordance = FALSE, tangle = FALSE, child = FALSE,
-  parent = FALSE, documentation = FALSE, aliases = NULL, root.dir = NULL,
+  parent = FALSE, documentation = 1L, aliases = NULL, root.dir = NULL,
   self.contained = TRUE,
   header = c(highlight = '', tikz = '', framed = ''),
   unnamed.chunk.label = 'unnamed-chunk'
