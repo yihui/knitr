@@ -20,6 +20,8 @@
 
 - the Haskell engine supports multiline clauses using `:set +m` now, thanks to Adam Vogt (#633)
 
+- added a new hook function `hook_purl()` so that code can be more reliably extracted from input documents; see `?hook_purl` for details (#607)
+
 - exported a function `plot_crop()` which was used in `hook_pdfcrop()` in previous versions to crop the white margin of plots
 
 - added a new chunk option `cache.lazy` (TRUE/FALSE) to decide whether to save and lazy load objects when `cache` is enabled; for really large objects, you may need `cache.lazy=FALSE` (thanks, Dario Strbenac, Scott Simpkins, and Mattrition, #572)

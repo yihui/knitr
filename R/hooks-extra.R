@@ -38,6 +38,16 @@
 #' we save the plots to files manually via other functions (e.g. \pkg{rgl}
 #' plots), we can use the chunk hook \code{hook_plot_custom} to help write code
 #' for graphics output into the output document.
+#'
+#' The hook \code{hook_purl} can be used to write the code chunks to an R
+#' script. It is an alternative approach to \code{\link{purl}}, and can be more
+#' reliable when the code chunks depend on the execution of them (e.g.
+#' \code{\link{read_chunk}()}, or \code{\link{opts_chunk}$set(eval = FALSE)}).
+#' To enable this hook, it is recommended to associate it with the chunk option
+#' \code{purl}, i.e. \code{knit_hooks$set(purl = hook_purl)}. When this hook is
+#' enabled, an R script will be written while the input document is being
+#' \code{\link{knit}}. Currently the code chunks that are not R code or have the
+#' chunk option \code{purl=FALSE} are ignored.
 #' @rdname chunk_hook
 #' @param before,options,envir see references
 #' @references \url{http://yihui.name/knitr/hooks#chunk_hooks}
@@ -133,4 +143,17 @@ hook_webgl = function(before, options, envir) {
   res = readLines(name)
   res = res[!grepl('^\\s*$', res)] # remove blank lines
   paste(gsub('^\\s*<', '<', res), collapse = '\n') # no spaces before HTML tags
+}
+
+#" a hook function to write out code from chunks
+#' @export
+#' @rdname chunk_hook
+hook_purl = function(before, options, envir) {
+  # at the moment, non-R chunks are ignored; it is unclear what I should do
+  if (before || !options$purl || options$engine != 'R') return()
+  code = options$code
+  if (isFALSE(options$eval)) code = comment_out(code, '# ', newline = FALSE)
+  if (is.character(output <- .knitEnv$tangle.file)) {
+    cat(label_code(code, options$params.src), file = output, sep = '\n', append = TRUE)
+  }
 }
