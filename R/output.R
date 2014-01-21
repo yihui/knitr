@@ -156,7 +156,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
       unlink(.knitEnv$tangle.file <- normalizePath(out.purl))
       on.exit({.knitEnv$tangle.file = otangle}, add = TRUE)
     }
-    options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
+    if (is.null(getOption('tikzMetricsDictionary')))
+      options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
     knit_concord$set(infile = input, outfile = output)
   }
 

@@ -72,6 +72,8 @@
 
 - for R Markdown, special characters in figure filenames are no longer replaced by `_`, since RStudio v0.98.490 has fixed the base64 encoding bug; please upgrade RStudio to the latest version: http://www.rstudio.com/ide/download/
 
+- the `tikzMetricsDictionary` option (for the **tikzDevice** package) is no longer overridden if it has already been set in `options()` (thanks, @rmatev, #708)
+
 # CHANGES IN knitr VERSION 1.5
 
 ## NEW FEATURES
