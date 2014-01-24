@@ -79,7 +79,7 @@ pandoc_one = function(input, format, ext, cfg) {
   })
   cfg = cfg[setdiff(names(cfg), c('o', 'output', 't'))]
   cmd = paste('pandoc', pandoc_arg(cfg), pandoc_arg(cmn), '-f markdown',
-              '-t', format, '-o', out, paste(shQuote(input), collapse = ' '))
+              if ('-t' %in% names(cfg) && '-t' %in% names(cmn)) {c('-t', format)}, '-o', out, paste(shQuote(input), collapse = ' '))
   message('executing ', cmd)
   if (system(cmd) == 0L) out else stop('conversion failed')
 }
