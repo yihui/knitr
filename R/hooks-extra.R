@@ -54,7 +54,7 @@ hook_rgl = function(before, options, envir) {
   Sys.sleep(.05) # need time to respond to window size change
 
   ## support 3 formats: eps, pdf and png (default)
-  switch(options$dev,
+  for (dev in options$dev) switch(dev,
          postscript = rgl.postscript(str_c(name, '.eps'), fmt = 'eps'),
          pdf = rgl.postscript(str_c(name, '.pdf'), fmt = 'pdf'),
          rgl.snapshot(str_c(name, '.png'), fmt = 'png'))
@@ -107,7 +107,7 @@ hook_plot_custom = function(before, options, envir){
 
   n = options$fig.num
   if (n == 0L) n = options$fig.num = 1L # make sure fig.num is at least 1
-  if (n <= 1L) hook(paste(name, ext, sep = '.'), options) else {
+  if (n <= 1L) hook(paste(name[1], ext[1], sep = '.'), options) else {
     res = unlist(lapply(seq_len(n), function(i) {
       options$fig.cur = i
       hook(sprintf('%s%s.%s', name, i, ext), reduce_plot_opts(options))
