@@ -60,6 +60,8 @@
 
 - the first argument of the `plot` hook is the filename of the plot now; in previous versions, it was a vector of length 2 (basename and file extension); see `?hook_plot`
 
+- the default value for the `format` argument in `pandoc()` has changed: it defaults to the `t` field in the configuration if found, otherwise it defaults to `'html'` (thanks, Kohske Takahashi, #697)
+
 - in the previous version, we can set `options(knitr.foo = value)` so that **knitr** can adjust the package options `opts_knit$set(foo = value)` before knitting a document; now the prefix for package options has been changed to `knitr.package.`, i.e. we should set `options(knitr.package.foo)` to achieve `opts_knit$set(foo)`; besides, it is also possible to change the default chunk options using `options(knitr.chunk.foo)` now, but you are warned that this may bring reproducibility issues, so please use with care
 
 ## MINOR CHANGES
