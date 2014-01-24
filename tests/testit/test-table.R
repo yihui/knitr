@@ -15,3 +15,8 @@ assert(
   'kable() recycles the align argument correctly',
   identical(kable(m, align = 'c'), c('|   | x | y |', '|:--|:-:|:-:|', '|a  | 1 | 2 |'))
 )
+
+assert(
+  'kable() works on character data frames',
+  identical(kable(data.frame(x = 'a')), c("|x  |", "|:--|", "|a  |"))
+)

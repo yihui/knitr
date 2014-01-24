@@ -56,6 +56,8 @@
 
 - `hook_rgl()` did not work with the chunk option `fig.cap` (thanks, Kohske Takahashi, #700)
 
+- `kable()` did not work with non-numeric data frames (thanks, @talexand, #702)
+
 ## MAJOR CHANGES
 
 - the default value for the chunk option `tidy` is `FALSE` now, which means the R source code in chunks will no longer be reformatted by `formatR::tidy.source()` by default; this feature must be explicitly turned on by `tidy=TRUE`, and it has brought a lot of confusion in the past, so it is perhaps a good idea not to reformat the source code by default

@@ -72,7 +72,7 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
   for (j in seq_len(ncol(x))) {
     if (is.numeric(x[, j])) x[, j] = round(x[, j], digits)
   }
-  x[, isn] = format(x[, isn])
+  if (any(isn)) x[, isn] = format(x[, isn])
   if (is.na(row.names))
     row.names = !is.null(rownames(x)) && !identical(rownames(x), as.character(seq_len(NROW(x))))
   if (!is.null(align)) align = rep(align, length.out = ncol(x))
