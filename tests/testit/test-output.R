@@ -44,3 +44,15 @@ assert(
   'using knit_child() does not reset global chunk options set in child documents',
   x1 == FALSE, x2 == 200
 )
+
+txt = '%\\documentclass{article}
+\\documentclass{article}
+\\begin{document}
+\\Sexpr{pi}
+\\end{document}'
+res = strsplit(knit(text = txt, quiet = TRUE), '\n')[[1]]
+
+assert(
+  'insert_header_latex() finds the correct \\documentclass{}',
+  identical(res[1], '%\\documentclass{article}')
+)

@@ -58,6 +58,8 @@
 
 - `kable()` did not work with non-numeric data frames (thanks, @talexand, #702)
 
+- `%\documentclass{}` was mistakenly treated as the specification of the document class instead of a comment in a LaTeX document (thanks, Jarad Niemi, #713)
+
 ## MAJOR CHANGES
 
 - the default value for the chunk option `tidy` is `FALSE` now, which means the R source code in chunks will no longer be reformatted by `formatR::tidy.source()` by default; this feature must be explicitly turned on by `tidy=TRUE`, and it has brought a lot of confusion in the past, so it is perhaps a good idea not to reformat the source code by default
