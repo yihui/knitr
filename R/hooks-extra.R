@@ -64,10 +64,12 @@ hook_rgl = function(before, options, envir) {
   Sys.sleep(.05) # need time to respond to window size change
 
   ## support 3 formats: eps, pdf and png (default)
-  for (dev in options$dev) switch(dev,
-         postscript = rgl.postscript(str_c(name, '.eps'), fmt = 'eps'),
-         pdf = rgl.postscript(str_c(name, '.pdf'), fmt = 'pdf'),
-         rgl.snapshot(str_c(name, '.png'), fmt = 'png'))
+  for (dev in options$dev) switch(
+    dev,
+    postscript = rgl.postscript(str_c(name, '.eps'), fmt = 'eps'),
+    pdf = rgl.postscript(str_c(name, '.pdf'), fmt = 'pdf'),
+    rgl.snapshot(str_c(name, '.png'), fmt = 'png')
+  )
 
   options$fig.num = 1L  # only one figure in total
   hook_plot_custom(before, options, envir)
