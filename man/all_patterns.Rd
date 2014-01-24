@@ -9,7 +9,7 @@
   ..$ inline.code   : chr "\\\\\\\\Sexpr\\\\\{([^\}]+)\\\\\}"
   ..$ inline.comment: chr "^\\\\s*\%.*"
   ..$ ref.chunk     : chr "^\\\\s*<<(.+)>>\\\\s*$"
-  ..$ header.begin  : chr "\\\\s*\\\\\\\\documentclass[^\}]+\\\\\}"
+  ..$ header.begin  : chr "(^|\\n)[^\%]*\\\\s*\\\\\\\\documentclass[^\}]+\\\\\}"
   ..$ document.begin: chr "\\\\s*\\\\\\\\begin\\\\\{document\\\\\}"
  $ brew    :List of 1
   ..$ inline.code: chr "<\%[=]\{0,1\}\\\\s+([^\%]+)\\\\s+[-]*\%>"
@@ -20,7 +20,7 @@
   ..$ ref.chunk     : chr "^\%+\\\\s*<<(.+)>>\\\\s*$"
   ..$ inline.comment: chr "^\\\\s*\%.*"
   ..$ inline.code   : chr "\\\\\\\\rinline\\\\\{([^\}]+)\\\\\}"
-  ..$ header.begin  : chr "\\\\s*\\\\\\\\documentclass[^\}]+\\\\\}"
+  ..$ header.begin  : chr "(^|\\n)[^\%]*\\\\s*\\\\\\\\documentclass[^\}]+\\\\\}"
   ..$ document.begin: chr "\\\\s*\\\\\\\\begin\\\\\{document\\\\\}"
  $ html    :List of 5
   ..$ chunk.begin : chr "^\\\\s*<!--\\\\s*begin.rcode\\\\s*(.*)"
