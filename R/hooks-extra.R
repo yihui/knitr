@@ -151,9 +151,16 @@ hook_webgl = function(before, options, envir) {
 hook_purl = function(before, options, envir) {
   # at the moment, non-R chunks are ignored; it is unclear what I should do
   if (before || !options$purl || options$engine != 'R') return()
+
+  output = .knitEnv$tangle.file
+  if (isFALSE(.knitEnv$tangle.start)) {
+    .knitEnv$tangle.start = TRUE
+    unlink(output)
+  }
+
   code = options$code
   if (isFALSE(options$eval)) code = comment_out(code, '# ', newline = FALSE)
-  if (is.character(output <- .knitEnv$tangle.file)) {
+  if (is.character(output)) {
     cat(label_code(code, options$params.src), file = output, sep = '\n', append = TRUE)
   }
 }

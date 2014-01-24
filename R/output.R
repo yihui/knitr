@@ -153,8 +153,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
       out.purl = sub_ext(input, 'R')
       if (tangle && file_test('-nt', out.purl, input)) return(out.purl)
       otangle = .knitEnv$tangle.file  # the tangled R script
-      unlink(.knitEnv$tangle.file <- normalizePath(out.purl))
-      on.exit({.knitEnv$tangle.file = otangle}, add = TRUE)
+      .knitEnv$tangle.file = normalizePath(out.purl, mustWork = FALSE)
+      .knitEnv$tangle.start = FALSE
+      on.exit({.knitEnv$tangle.file = otangle; .knitEnv$tangle.start = NULL}, add = TRUE)
     }
     if (is.null(getOption('tikzMetricsDictionary')))
       options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
