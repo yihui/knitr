@@ -157,8 +157,10 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
       .knitEnv$tangle.start = FALSE
       on.exit({.knitEnv$tangle.file = otangle; .knitEnv$tangle.start = NULL}, add = TRUE)
     }
-    if (is.null(getOption('tikzMetricsDictionary')))
+    if (is.null(getOption('tikzMetricsDictionary'))) {
       options(tikzMetricsDictionary = tikz_dict(input)) # cache tikz dictionary
+      on.exit(options(tikzMetricsDictionary = NULL), add = TRUE)
+    }
     knit_concord$set(infile = input, outfile = output)
   }
 
