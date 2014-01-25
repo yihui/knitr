@@ -48,6 +48,10 @@
 #' kable(head(mtcars), format = 'rst', row.names = FALSE)
 #' # R Markdown/Github Markdown tables
 #' kable(head(mtcars[, 1:5]), format = 'markdown')
+#' # no inner padding
+#' kable(head(mtcars), format = 'markdown', padding = 0)
+#' # more padding
+#' kable(head(mtcars), format = 'markdown', padding = 2)
 #' # Pandoc tables
 #' kable(head(mtcars), format = 'pandoc', caption = 'Title of the table')
 #' # save the value
@@ -154,11 +158,12 @@ kable_html = function(x, table.attr = '', caption = NULL) {
 #'   before the header, after the header and at the end of the table,
 #'   respectively
 #' @param sep.col the column separator
+#' @param padding the number of spaces for the table cell padding
 #' @param align.fun a function to process the separator under the header
 #'   according to alignment
 #' @return A character vector of the table content.
 #' @noRd
-kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
+kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0,
                       align.fun = function(s, a) s, rownames.name = '') {
   l = apply(x, 2, function(z) max(nchar(z), na.rm = TRUE))
   cn = colnames(x)
@@ -166,7 +171,10 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
     if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
     l = pmax(l, nchar(cn))
   }
-  if (!is.null(align <- attr(x, 'align'))) l = l + 2
+  padding = padding * if (is.null(align <- attr(x, 'align'))) 2 else {
+    ifelse(align == 'c', 2, 1)
+  }
+  l = pmax(l + padding, 3)  # at least of width 3 for Github Markdown
   s = sapply(l, function(i) paste(rep(sep.row[2], i), collapse = ''))
   res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
               x, if (!is.na(sep.row[3])) s)
@@ -178,9 +186,9 @@ kable_rst = function(x, rownames.name = '\\') {
 }
 
 # actually R Markdown
-kable_markdown = function(x) {
+kable_markdown = function(x, padding = 1) {
   if (is.null(colnames(x))) stop('the table must have a header (column names)')
-  res = kable_mark(x, c(NA, '-', NA), '|', align.fun = function(s, a) {
+  res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
     if (is.null(a)) return(s)
     r = c(l = '^.', c = '^.|.$', r = '.$')
     for (i in seq_along(s)) {
@@ -191,8 +199,8 @@ kable_markdown = function(x) {
   sprintf('|%s|', res)
 }
 
-kable_pandoc = function(x, caption = NULL) {
-  tab = kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA))
+kable_pandoc = function(x, caption = NULL, padding = 1) {
+  tab = kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA), padding = padding)
   if (is.null(caption)) tab else c(paste('Table:', caption), "", tab)
 }
 
