@@ -539,3 +539,11 @@ has_utility = function(name, package = name) {
 }
 
 is_windows = function() .Platform$OS.type == 'windows'
+
+#' Query the current input filename
+#'
+#' Returns the name of the input file passed to \code{\link{knit}()}.
+#' @return A character string, if this function is called inside an input
+#'   document (otherwise \code{NULL}).
+#' @export
+current_input = function() knit_concord$get('infile')

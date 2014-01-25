@@ -36,6 +36,8 @@
 
 - Sweave2knitr() will report the line numbers indicating where the Sweave-specific syntax was used (thanks, Kirill Muller, #676)
 
+- added a function `current_input()` to return the filename of the input document (thanks, Kate Davis, #701)
+
 ## BUG FIXES
 
 - due to the change in evaluate v0.5, evaluate() may return the raw values of expressions, but the S3 method wrap() does not know how to handle them; now these values are just ignored (thanks, Dan Tenenbaum)
