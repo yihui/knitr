@@ -62,6 +62,8 @@
 
 - `kable()` did not work with non-numeric data frames (thanks, @talexand, #702)
 
+- for Markdown/reST tables, `kable()` should make sure there are at least one empty line before the table output (thanks, @talexand, #705)
+
 - `%\documentclass{}` was mistakenly treated as the specification of the document class instead of a comment in a LaTeX document (thanks, Jarad Niemi, #713)
 
 ## MAJOR CHANGES

@@ -88,7 +88,10 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
   if (ncn) colnames(x) = NULL
   attr(x, 'align') = align
   res = do.call(paste('kable', format, sep = '_'), list(x = x, ...))
-  if (output) cat(res, sep = '\n')
+  if (output) {
+    if (!(format %in% c('html', 'latex'))) cat('\n\n')
+    cat(res, sep = '\n')
+  }
   invisible(res)
 }
 
