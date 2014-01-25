@@ -66,6 +66,10 @@ kable(head(mtcars), format = "rst")
 kable(head(mtcars), format = "rst", row.names = FALSE)
 # R Markdown/Github Markdown tables
 kable(head(mtcars[, 1:5]), format = "markdown")
+# no inner padding
+kable(head(mtcars), format = "markdown", padding = 0)
+# more padding
+kable(head(mtcars), format = "markdown", padding = 2)
 # Pandoc tables
 kable(head(mtcars), format = "pandoc", caption = "Title of the table")
 # save the value
