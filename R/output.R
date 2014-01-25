@@ -116,7 +116,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     # in child mode, input path needs to be adjusted
     if (in.file && !is_abs_path(input)) {
       input = paste(opts_knit$get('child.path'), input, sep = '')
-      input = file.path(input_dir(), input)
+      input = input2 = file.path(input_dir(), input)
     }
   } else {
     oenvir = .knitEnv$knit_global; .knitEnv$knit_global = envir
