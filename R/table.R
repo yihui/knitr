@@ -173,7 +173,7 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
   apply(mat_pad(res, l, align), 1, paste, collapse = sep.col)
 }
 
-kable_rst = function(x, rownames.name = 'id') {
+kable_rst = function(x, rownames.name = '\\') {
   kable_mark(x, rownames.name = rownames.name)
 }
 
