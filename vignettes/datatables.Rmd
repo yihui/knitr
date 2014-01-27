@@ -14,11 +14,13 @@ kable(mtcars, 'html', table.attr='id="mtcars_table"')
 
 Note we assigned an `id` to the table, and next we use the `DataTables` library to tweak the table.
 
-    <script type="text/javascript" charset="utf-8">
-    	$(document).ready(function() {
-    		$('#mtcars_table').dataTable();
-    	} );
-    </script>
+```js
+<script type="text/javascript" charset="utf-8">
+	$(document).ready(function() {
+		$('#mtcars_table').dataTable();
+	} );
+</script>
+```
 
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() {
@@ -29,10 +31,7 @@ Note we assigned an `id` to the table, and next we use the `DataTables` library 
 Since this is a Markdown vignette, we need to add the JavaScript libraries as well as some additional CSS files to the HTML header, and this can be done via:
 
 ```{r}
-options(markdown.HTML.header = unlist(
-  sapply(system.file('misc', c('vignette.css', 'datatables.txt'), package = 'knitr'), readLines)
-  )
-)
+options(markdown.HTML.header = system.file('misc', 'datatables.txt', package = 'knitr'))
 ```
 
 Two files `vignette.css` and `datatables.txt` under the `misc` directory of **knitr** were added to the HTML output.

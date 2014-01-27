@@ -19,6 +19,8 @@ And R will load the **knitr** package to build these vignettes to HTML files, an
 
 ```{r eval=FALSE}
 help(package = 'YourPackage', help_type = 'html')
+# or see a standalone list of vignettes
+browseVignettes('YourPackage')
 ```
 
 ## Examples
@@ -26,7 +28,7 @@ help(package = 'YourPackage', help_type = 'html')
 Below are some code chunks as examples.
 
 ```{r hello, results='asis'}
-cat('_hello_ **markdown**!', '\n')
+if (TRUE) cat('_hello_ **markdown**!', '\n')
 ```
 
 Normally you do not need any chunk options.
@@ -50,10 +52,4 @@ You can use your own CSS file instead of the built-in style in the **markdown** 
 
 ```{r css, eval=FALSE}
 options(markdown.HTML.stylesheet = 'path/to/a/custom/style.css')
-```
-
-For this vignette, I use the `markdown.HTML.header` option to modify a few CSS rules in the default CSS style:
-
-```{r header}
-options(markdown.HTML.header = system.file('misc', 'vignette.css', package='knitr'))
 ```

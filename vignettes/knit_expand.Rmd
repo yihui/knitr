@@ -55,7 +55,3 @@ knit_expand(text=c("# Regression on {{i}}", '```{r lm-{{i}}}', 'lm(mpg~{{i}}, da
 # knit the source
 cat(knit(text = unlist(src), quiet = TRUE))
 ```
-
-```{r include=FALSE}
-options(markdown.HTML.header = system.file('misc', 'vignette.css', package='knitr'))
-```
