@@ -39,7 +39,7 @@ full documentation of **knitr**, and you can find the [main
 manual](http://bit.ly/117OLVl), the [graphics manual](http://bit.ly/114GNdP)
 and other [demos](/knitr/demos) /
 [examples](https://github.com/yihui/knitr-examples) here. For a more
-organized reference, see the [knitr book](http://amzn.com/1482203537).
+organized reference, see the [knitr book](https://github.com/yihui/knitr-book).
 
 <div style="text-align: center;"><iframe src="http://www.screenr.com/embed/qcv8" width="650" height="396" frameborder="0"></iframe></div>
 
