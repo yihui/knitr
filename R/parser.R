@@ -317,9 +317,13 @@ strip_white = function(x) {
 parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   if (length(x) == 0L) return(x)
   if (!group_pattern(rc) || !any(idx <- grepl(rc, x))) return(x)
+
   labels = sub(rc, '\\1', x[idx])
   code = knit_code$get(labels)
+  indent = gsub('^(\\s*).*', '\\1', x[idx])
   if (length(labels) <= 1L) code = list(code)
+  code = mapply(indent_block, code, indent, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+
   x[idx] = unlist(lapply(code, function(z) {
     paste(parse_chunk(z, rc), collapse = '\n')
   }), use.names = FALSE)
