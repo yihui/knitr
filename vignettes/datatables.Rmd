@@ -31,10 +31,10 @@ Note we assigned an `id` to the table, and next we use the `DataTables` library 
 Since this is a Markdown vignette, we need to add the JavaScript libraries as well as some additional CSS files to the HTML header, and this can be done via:
 
 ```{r}
-options(markdown.HTML.header = system.file('misc', 'datatables.txt', package = 'knitr'))
+options(markdown.HTML.header = system.file('misc', 'datatables.html', package = 'knitr'))
 ```
 
-Two files `vignette.css` and `datatables.txt` under the `misc` directory of **knitr** were added to the HTML output.
+Two files `vignette.css` and `datatables.html` under the `misc` directory of **knitr** were added to the HTML output.
 
 By comparison, below is an ordinary table:
 
