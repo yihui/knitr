@@ -324,6 +324,7 @@ knit_global = function() {
 #          qplot(wt, mpg, data  = mtcars)
 indent_block = function(block, spaces = '    ') {
   if (is.null(block) || !nzchar(block)) return(spaces)
+  if (spaces == '') return(block)
   line_prompt(block, spaces, spaces)
 }
 
