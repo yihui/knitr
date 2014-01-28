@@ -45,3 +45,19 @@ assert(
 )
 
 knit_code$restore()
+
+# chunk references with <<>> --------------------------------------------------
+
+knit_code$restore(list(
+  a = '1+1', b = '2-2', c = c('if (T)', '  <<a>>'), d = c('function() {', '  <<c>>', '}')
+))
+pc = function(x) parse_chunk(x, all_patterns$rnw$ref.chunk)
+
+assert(
+  'parse_chunk() preserves indentation',
+  identical(pc(c('3*3', '<<a>>', ' <<b>>', 'if (T)', '  <<a>>')),
+            c("3*3", "1+1", " 2-2", "if (T)", "  1+1" )),
+  identical(pc('<<d>>'), "function() {\n  if (T)\n    1+1\n}")
+)
+
+knit_code$restore()
