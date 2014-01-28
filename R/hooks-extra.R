@@ -108,7 +108,8 @@ hook_optipng = function(before, options, envir) {
 #' @export
 #' @rdname chunk_hook
 hook_plot_custom = function(before, options, envir){
-  if(before) return() # run hook after the chunk
+  if (before) return() # run hook after the chunk
+  if (options$fig.show == 'hide') return() # do not show figures
 
   ext = options$fig.ext %n% dev2ext(options$dev)
   name = fig_path('', options)
