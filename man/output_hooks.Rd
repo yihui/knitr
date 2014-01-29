@@ -20,7 +20,7 @@ render_sweave()
 
 render_listings()
 
-render_markdown(strict = FALSE)
+render_markdown(strict = FALSE, merge = FALSE)
 
 render_jekyll(highlight = c("pygments", "prettify", "none"), extra = "")
 
@@ -36,6 +36,11 @@ render_textile()
   is put under two colons and indented by 4 spaces,
   otherwise is put under the \samp{sourcecode} directive
   (e.g. it is useful for Sphinx)}
+
+  \item{merge}{whether to, if possible, merge all the
+  source and output blocks from one code chunk into a
+  single block (by default, they are written to separate
+  \code{<pre></pre>} blocks)}
 
   \item{highlight}{which code highlighting engine to use:
   for \code{pygments}, the Liquid syntax is used (default
@@ -53,7 +58,7 @@ render_textile()
 }
 \description{
 These functions set built-in output hooks for LaTeX, HTML, Markdown,
-reStructuredText and AsciiDoc.
+reStructuredText, AsciiDoc and Textile.
 }
 \details{
 There are three variants of markdown documents: ordinary markdown

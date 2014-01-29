@@ -200,7 +200,7 @@ hook_plot_tex = function(x, options) {
 #' Set output hooks for different output formats
 #'
 #' These functions set built-in output hooks for LaTeX, HTML, Markdown,
-#' reStructuredText and AsciiDoc.
+#' reStructuredText, AsciiDoc and Textile.
 #'
 #' There are three variants of markdown documents: ordinary markdown
 #' (\code{render_markdown(strict = TRUE)}), extended markdown (e.g. GitHub
