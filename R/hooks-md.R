@@ -38,7 +38,18 @@ render_markdown = function(strict = FALSE) {
   hook.t = function(x, options) {
     if (strict) {
       paste('\n', indent_block(x), '', sep = '\n')
-    } else paste('\n\n```\n', x, '```\n\n', sep = '')
+    } else {
+      x = paste(c('', x), collapse = '\n')
+      fence = '```'
+      if (grepl('\n`{3,}', x)) {
+        print(gregexpr('\n`{3,}', x))
+        l = attr(gregexpr('\n`{3,}', x)[[1]], 'match.length')
+        print(l)
+        l = max(l)
+        if (l >= 4) fence = paste(rep('`', l), collapse = '')
+      }
+      paste('\n\n', fence, x, fence, '\n\n', sep = '')
+    }
   }
   hook.r = function(x, options) {
     paste('\n\n```', tolower(options$engine), '\n', x, '```\n\n', sep = '')

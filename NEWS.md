@@ -42,6 +42,8 @@
 
 - added a function `current_input()` to return the filename of the input document (thanks, Kate Davis, #701)
 
+- for Markdown, if n (n >= 3) backticks are detected in the code output, the output will be wrapped in n+1 backticks to make sure the original backticks in the output are not interpreted as the token of fenced code blocks
+
 ## BUG FIXES
 
 - due to the change in evaluate v0.5, evaluate() may return the raw values of expressions, but the S3 method wrap() does not know how to handle them; now these values are just ignored (thanks, Dan Tenenbaum)
