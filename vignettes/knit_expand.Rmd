@@ -50,10 +50,12 @@ cat(res)
 
 Build regression models based on a template; loop through all variables in `mtcars`:
 
-```{r comment='   '}
+```{r results='hide'}
 src = lapply(names(mtcars)[-1], function(i) {
 knit_expand(text=c("# Regression on {{i}}", '```{r lm-{{i}}}', 'lm(mpg~{{i}}, data=mtcars)', '```'))
 })
 # knit the source
-cat(knit(text = unlist(src), quiet = TRUE))
+res = knit_child(text = unlist(src))
+res = paste('<pre><code>', gsub('^\\s*|\\s*$', '', res), '</code></pre>', sep = '')
 ```
+`r res`
