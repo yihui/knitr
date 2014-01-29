@@ -14,6 +14,8 @@
 
 - exposed the previously internal chunk option `code`, which is used to store the source code of a chunk; now users also have control over this option, which means we can programmatically assign source code for a code chunk, e.g. `code = capture.output(dump('fivenum', ''))`
 
+- added a new argument `merge` to `render_markdown()`; if `merge = TRUE`, **knitr** will try to merge the source and output blocks into one block; see example 039 at https://github.com/yihui/knitr-examples (thanks, Hadley Wickham)
+
 - added a new engine `scala` for Scala thanks to Simeon Fitch (#640)
 
 - added a new engine named `asis` to write the chunk content without processing it; it also respects the chunk options `echo` and `eval` -- when either one is `FALSE`, the chunk will be hidden; this makes it possible to write text conditionally (thanks, Simon, #622)
