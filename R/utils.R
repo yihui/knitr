@@ -218,6 +218,16 @@ fix_options = function(options) {
   # non-R code should not use cache=1,2
   if (options$engine != 'R') options$cache = (options$cache > 0) * 3
 
+  # for Retina displays, increase physical size, and decrease output size
+  if (is.numeric(r <- options$fig.retina)) {
+    if (is.null(options$out.width)) {
+      options$out.width = options$fig.width * options$dpi
+    } else {
+      warning('You must not set both chunk options out.width and fig.retina')
+    }
+    options$dpi = options$dpi * r
+  }
+
   ## deal with aliases: a1 is real option; a0 is alias
   if (length(a1 <- opts_knit$get('aliases')) && length(a0 <- names(a1))) {
     for (i in seq_along(a1)) {
