@@ -80,8 +80,9 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
     opts = fix_sweave(gsub(s, '\\1', x[i]))
     x[i] = gsub_msg('changing \\SweaveOpts{} to opts_chunk$set()', s, '@_@_@', x[i])
     for (j in seq_along(i))
-      x[i[j]] = gsub('@_@_@', str_c('\n<<include=FALSE>>=\nopts_chunk$set(',
-                                  opts[j], ')\n@\n'), x[i[j]])
+      x[i[j]] = gsub('@_@_@', paste(c(
+        '\n<<include=FALSE>>=', 'library(knitr)', 'opts_chunk$set(', opts[j], ')', '@\n'
+      ), collapse = '\n'), x[i[j]])
   }
   # remove the extra @
   i1 = grepl(all_patterns$rnw$chunk.begin, x)
