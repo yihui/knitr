@@ -74,8 +74,9 @@ block_exec = function(options) {
                     knit_engines$get(options$engine)(options))
     res.after = run_hooks(before = FALSE, options)
     output = paste(c(res.before, output, res.after), collapse = '')
+    output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
     if (options$cache) block_cache(options, output, character(0))
-    return(output)
+    return(if (options$include) output else '')
   }
 
   # eval chunks (in an empty envir if cache)

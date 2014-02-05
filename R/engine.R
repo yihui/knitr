@@ -38,12 +38,13 @@ engine_output = function(options, code, out, extra = NULL) {
   if (length(out) != 1L) out = paste(out, collapse = '\n')
   out = sub('([^\n]+)$', '\\1\n', out)
   if (options$engine == 'Rscript') options$engine = 'r'
-  txt = paste(c(
+  paste(c(
     if (options$echo) knit_hooks$get('source')(code, options),
-    if (options$results != 'hide' && !is_blank(out)) wrap.character(out, options),
+    if (options$results != 'hide' && !is_blank(out)) {
+      if (options$engine == 'highlight') out else wrap.character(out, options)
+    },
     extra
   ), collapse = '\n')
-  if (options$include) knit_hooks$get('chunk')(txt, options) else ''
 }
 
 ## TODO: how to emulate the console?? e.g. for Python
@@ -191,8 +192,7 @@ eng_highlight = function(options) {
     set_header(highlight.extra = paste(c(sprintf(
       '\\let\\hl%s\\hlstd', c('esc', 'pps', 'lin')
     ), '\\let\\hlslc\\hlcom'), collapse = ' '))
-    paste(color_def(options$background), '\\begin{kframe}',
-          sub('(.*)\\\\\\\\(.*)', '\\1\\2', res), '\\end{kframe}', sep = '')
+    sub('(.*)\\\\\\\\(.*)', '\\1\\2', res)
   } else res
 }
 
