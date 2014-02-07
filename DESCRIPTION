@@ -85,7 +85,6 @@ License: GPL
 URL: http://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
 VignetteBuilder: knitr
-Roxygen: list(wrap = FALSE)
 Collate:
     'block.R'
     'cache.R'
