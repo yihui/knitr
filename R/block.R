@@ -236,7 +236,7 @@ purge_cache = function(options) {
 # not need to close the device on exit
 chunk_device = function(width, height, record = TRUE, dev, dev.args) {
   dev_new = function() {
-    if (identical(getOption('device'), pdf_null) && ('pdf' %in% dev)) {
+    if (identical(getOption('device'), pdf_null)) {
       if (!is.null(dev.args)) {
         dev.args = get_dargs(dev.args, dev, 'pdf')
         dev.args = dev.args[intersect(names(dev.args), names(formals(pdf)))]
