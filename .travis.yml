@@ -21,14 +21,10 @@ before_install:
 
 # install dependencies
 install:
-  - echo "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
-      | sudo tee /etc/apt/sources.list.d/cran.list
+  - sudo apt-add-repository -y "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-  - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/cran.list"
-      -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
   - sudo apt-add-repository -y ppa:marutter/c2d4u
-  - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-c2d4u-precise.list"
-      -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
+  - sudo apt-get update
   - sudo apt-get install r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
   - R --version
@@ -44,9 +40,7 @@ after_script:
   - if [ ${TARGET} = travis ];
       then
         sudo add-apt-repository -y ppa:marutter/rdev;
-        sudo apt-get update
-          -o Dir::Etc::sourcelist="sources.list.d/marutter-rdev-precise.list"
-          -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0";
+        sudo apt-get update;
         sudo apt-get dist-upgrade;
         make ${TARGET};
       fi
