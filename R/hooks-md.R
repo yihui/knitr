@@ -30,10 +30,7 @@ css_align = function(align) {
 #'   put in fences made by three backticks; for reST, if \code{TRUE}, code is
 #'   put under two colons and indented by 4 spaces, otherwise is put under the
 #'   \samp{sourcecode} directive (e.g. it is useful for Sphinx)
-#' @param merge whether to, if possible, merge all the source and output blocks
-#'   from one code chunk into a single block (by default, they are written to
-#'   separate \code{<pre></pre>} blocks)
-render_markdown = function(strict = FALSE, merge = FALSE) {
+render_markdown = function(strict = FALSE) {
   knit_hooks$restore()
   set_html_dev()
   opts_knit$set(out.format = 'markdown')
@@ -68,7 +65,7 @@ render_markdown = function(strict = FALSE, merge = FALSE) {
       x = gsub('[\n]{2,}(```|    )', '\n\n\\1', x)
       x = gsub('[\n]+$', '', x)
       x = gsub('^[\n]+', '\n', x)
-      if (merge) {
+      if (isTRUE(options$collapse)) {
         x = gsub(paste('```\n+```(', tolower(options$engine), ')?\n', sep = ''), '', x)
       }
       if (is.null(s <- options$indent)) return(x)

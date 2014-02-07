@@ -4,7 +4,6 @@
 -->
 ```{r setup, include=FALSE}
 library(knitr)
-render_markdown(merge = TRUE) # merge source/output into a single <pre> block
 ```
 
 This is an example of Markdown vignettes in R. Before R 3.0.0, only Sweave/PDF vignettes were supported in R. Markdown is gaining popularity over the years due to its simplicity, and R 3.0.0 starts to support package vignettes written in [R Markdown](http://www.rstudio.com/ide/docs/authoring/using_markdown).
@@ -37,7 +36,7 @@ if (TRUE) cat('_hello_ **markdown**!', '\n')
 
 Normally you do not need any chunk options.
 
-```{r}
+```{r test, collapse=TRUE}
 1+1
 10:1
 rnorm(5)^2

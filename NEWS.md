@@ -14,7 +14,7 @@
 
 - exposed the previously internal chunk option `code`, which is used to store the source code of a chunk; now users also have control over this option, which means we can programmatically assign source code for a code chunk, e.g. `code = capture.output(dump('fivenum', ''))`
 
-- added a new argument `merge` to `render_markdown()`; if `merge = TRUE`, **knitr** will try to merge the source and output blocks into one block; see example 039 at https://github.com/yihui/knitr-examples (thanks, Hadley Wickham)
+- added a new chunk option `collapse` for Markdown output; if `collapse = TRUE`, **knitr** will try to merge the source and output blocks into one block; see example 039 at https://github.com/yihui/knitr-examples (thanks, Hadley Wickham)
 
 - added a new chunk option `fig.retina` for better display quality of images in HTML output; for example, the physical size of an image is doubled and its display size is halved when `fig.retina = 2`
 
