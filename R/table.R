@@ -168,9 +168,14 @@ kable_html = function(x, table.attr = '', caption = NULL) {
 #' @noRd
 kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0,
                       align.fun = function(s, a) s, rownames.name = '') {
+  # when the column separator is |, replace existing | with its HTML entity
+  if (sep.col == '|') for (j in seq_len(ncol(x))) {
+    x[, j] = gsub('\\|', '&#124;', x[, j])
+  }
   l = apply(x, 2, function(z) max(nchar(z), na.rm = TRUE))
   cn = colnames(x)
   if (!is.null(cn)) {
+    if (sep.col == '|') cn = gsub('\\|', '&#124;', cn)
     if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
     l = pmax(l, nchar(cn))
   }
