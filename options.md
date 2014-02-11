@@ -82,6 +82,10 @@ All built-in options in **knitr** are:
     respectively (you can still use the latter two, but they can be
     misleading, e.g., `verbatim` does not really mean verbatim in R, and
     `tex` seems to be restricted to LaTeX)
+- `collapse`: (`FALSE`; logical; applies to Markdown output only) whether
+  to, if possible, collapse all the source and output blocks from one code
+  chunk into a single block (by default, they are written to separate
+  `<pre></pre>` blocks)
 - `warning`: (`TRUE`; logical) whether to preserve warnings (produced by
   `warning()`) in the output like we run R code in a terminal (if `FALSE`,
   all warnings will be printed in the console instead of the output
