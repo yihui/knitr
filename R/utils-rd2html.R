@@ -42,7 +42,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
       ex = ex[-(1L:grep('### ** Examples', ex, fixed = TRUE))]
       ex = c('```{r}', ex, '```')
       opts_chunk$set(fig.path = str_c('figure/', p, '-'), tidy = FALSE)
-      res = try(knit2html(text = ex, envir = parent.frame(2), fragment.only = TRUE))
+      res = try(knit2html(text = ex, envir = parent.frame(2), fragment.only = TRUE, quiet = TRUE))
       if (inherits(res, 'try-error')) {
         res = ex; res[1] = '<pre><code class="r">'; res[length(res)] = '</code></pre>'
       }
@@ -90,8 +90,6 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
 #' @export
 knit_rd_all = function() {
   owd = getwd(); on.exit(setwd(owd))
-  optk = opts_knit$get(); on.exit(opts_knit$set(optk))
-  opts_knit$set(progress = FALSE)  # too much info to show
   links = tools::findHTMLlinks()
   for (p in .packages(TRUE)) {
     message('* Making static html help pages for ', p)
