@@ -129,6 +129,7 @@ eng_tikz = function(options) {
   unlink(texf)
 
   fig = fig_path('', options)
+  dir.create(dirname(fig), showWarnings = FALSE)
   file.rename(outf, str_c(fig, '.pdf'))
   # convert to the desired output-format, calling `convert`
   ext = tolower(options$fig.ext %n% dev2ext(options$dev))
