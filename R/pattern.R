@@ -40,7 +40,8 @@ all_patterns = list(
   `asciidoc` = list(
     chunk.begin = '^//\\s*begin[.]rcode(.*)$', chunk.end = '^//\\s*end[.]rcode\\s*$',
     chunk.code = '^//+', ref.chunk = '^\\s*<<(.+)>>\\s*$',
-    inline.code = '[+]r +([^+]+)\\s*[+]', inline.comment = '^//.*'),
+    inline.code = '`r +([^`]+)\\s*`|[+]r +([^+]+)\\s*[+]',
+    inline.comment = '^//.*'),
 
   `textile` = list(
     chunk.begin = '^###[.]\\s+begin[.]rcode(.*)$',

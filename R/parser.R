@@ -160,7 +160,9 @@ parse_inline = function(input, patterns) {
   if (group_pattern(inline.code)) loc = str_locate_all(input, inline.code)[[1]]
   if (nrow(loc)) {
     code = str_match_all(input, inline.code)[[1L]]
-    code = if (NCOL(code) >= 2L) code[, NCOL(code)] else character(0)
+    code = if (NCOL(code) >= 2L) {
+      apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
+    } else character(0)
   } else code = character(0)
 
   structure(list(input = input, input.src = input.src, location = loc, code = code),

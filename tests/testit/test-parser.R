@@ -28,6 +28,13 @@ assert(
   identical(parse_inline('<!--rinline "<a>" -->', all_patterns$html)$code, ' "<a>" ')
 )
 
+res = parse_inline('inline expressions `r pi+1`, +r cos(0)+ in AsciiDoc',
+                   all_patterns$asciidoc)
+assert(
+  'both `r expression` and +r expression+ work for AsciiDoc',
+  identical(res$code, c('pi+1', 'cos(0)'))
+)
+
 knit_code$restore()
 
 read_chunk(lines = c('1+1'))
