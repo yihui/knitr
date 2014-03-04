@@ -320,11 +320,10 @@ inline_exec = function(
   input
 }
 
-#' @S3method process_tangle block
-#' @S3method process_tangle inline
 process_tangle = function(x) {
   UseMethod('process_tangle', x)
 }
+#' @export
 process_tangle.block = function(x) {
   params = opts_chunk$merge(x$params)
   for (o in c('purl', 'eval', 'child'))
@@ -343,6 +342,7 @@ process_tangle.block = function(x) {
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
   label_code(code, x$params.src)
 }
+#' @export
 process_tangle.inline = function(x) {
   if (opts_knit$get('documentation') == 2L) {
     return(paste(line_prompt(x$input.src, "#' ", "#' "), collapse = '\n'))

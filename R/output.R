@@ -377,26 +377,21 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 #' @param x output from \code{\link[evaluate]{evaluate}}
 #' @param options list of options used to control output
 #' @noRd
-#' @S3method wrap list
-#' @S3method wrap default
-#' @S3method wrap character
-#' @S3method wrap source
-#' @S3method wrap warning
-#' @S3method wrap message
-#' @S3method wrap error
-#' @S3method wrap recordedplot
 wrap = function(x, options = list()) {
   UseMethod('wrap', x)
 }
 
+#' @export
 wrap.list = function(x, options = list()) {
   if (length(x) == 0L) return(x)
   lapply(x, wrap, options)
 }
 
 # ignore unknown classes
+#' @export
 wrap.default = function(x, options) return()
 
+#' @export
 wrap.character = function(x, options) {
   if (output_asis(x, options)) {
     if (!out_format('latex')) return(x)  # latex output still need a tweak
@@ -404,6 +399,7 @@ wrap.character = function(x, options) {
   knit_hooks$get('output')(x, options)
 }
 
+#' @export
 wrap.source = function(x, options) {
   src = sub('\n$', '', x$src)
   knit_hooks$get('source')(src, options)
@@ -420,18 +416,22 @@ msg_wrap = function(message, type, options) {
   knit_hooks$get(type)(comment_out(message, options$comment), options)
 }
 
+#' @export
 wrap.warning = function(x, options) {
   msg_wrap(paste('Warning:', x$message, collapse = '\n'), 'warning', options)
 }
 
+#' @export
 wrap.message = function(x, options) {
   msg_wrap(paste(x$message, collapse = ''), 'message', options)
 }
 
+#' @export
 wrap.error = function(x, options) {
   msg_wrap(str_c('Error: ', x$message), 'error', options)
 }
 
+#' @export
 wrap.recordedplot = function(x, options) {
   ## figure number sequence for multiple plots
   fig.cur = plot_counter()
