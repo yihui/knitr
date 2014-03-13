@@ -48,6 +48,10 @@
 
 - for Markdown, if n (n >= 3) backticks are detected in the code output, the output will be wrapped in n+1 backticks to make sure the original backticks in the output are not interpreted as the token of fenced code blocks
 
+- for a chunk hook function, we can use a fourth optional argument `name`, which takes the value of the hook name, e.g. for `knit_hooks$set(foo = hook_foo)`, `hook_foo` can be of the form `function(before, options, envir, name)`, where `name == 'foo'` (thanks, Thell Fowler, #733)
+
+- all the four arguments `before`, `options`, `envir`, and `name` for a chunk hook are optional now, e.g. you can define a hook function of the form `function(before, options)`, `function(before, name, envir)`, and so on
+
 ## BUG FIXES
 
 - due to the change in evaluate v0.5, evaluate() may return the raw values of expressions, but the S3 method wrap() does not know how to handle them; now these values are just ignored (thanks, Dan Tenenbaum)

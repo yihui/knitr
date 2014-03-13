@@ -9,7 +9,11 @@ run_hooks = function(before, options, envir = knit_global()) {
   for (i in nms) {
     if (!is.null(options[[i]])) {
       ## run only when option is not NULL
-      res = hooks.a[[i]](before = before, options = options, envir = envir)
+      if (!is.function(hook <- hooks.a[[i]]))
+        hook = get(hook, envir = envir, mode = 'function')
+      args = list(before = before, options = options, envir = envir, name = i)
+      args = args[names(formals(hook))]
+      res  = do.call(hook, args, envir = envir)
       if (is.character(res)) out = c(out, res)
     }
   }
