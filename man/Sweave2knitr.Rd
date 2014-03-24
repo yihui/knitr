@@ -6,17 +6,16 @@ Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file),
     encoding = getOption("encoding"), text = NULL)
 }
 \arguments{
-  \item{file}{the filename of the Rnw file}
+\item{file}{the filename of the Rnw file}
 
-  \item{output}{the output filename (by default
-  \file{file.Rnw} produces \file{file-knitr.Rnw}); if
-  \code{text} is not NULL, no output file will be produced}
+\item{output}{the output filename (by default \file{file.Rnw} produces
+\file{file-knitr.Rnw}); if \code{text} is not NULL, no output file will be
+produced}
 
-  \item{encoding}{the encoding of the Rnw file}
+\item{encoding}{the encoding of the Rnw file}
 
-  \item{text}{an alternative way to provide the Sweave code
-  as a character string (if provided, the \code{file} will
-  be ignored)}
+\item{text}{an alternative way to provide the Sweave code as a character
+string (if provided, the \code{file} will be ignored)}
 }
 \value{
 If \code{text} is \code{NULL}, the \code{output} file is written and

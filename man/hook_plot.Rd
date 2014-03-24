@@ -20,9 +20,9 @@ hook_plot_rst(x, options)
 hook_plot_textile(x, options)
 }
 \arguments{
-  \item{x}{the plot filename (a character string)}
+\item{x}{the plot filename (a character string)}
 
-  \item{options}{a list of the current chunk options}
+\item{options}{a list of the current chunk options}
 }
 \value{
 A character string (code with plot filenames wrapped)

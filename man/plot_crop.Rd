@@ -5,7 +5,7 @@
 plot_crop(x)
 }
 \arguments{
-  \item{x}{the plot filename}
+\item{x}{the plot filename}
 }
 \value{
 The original filename.

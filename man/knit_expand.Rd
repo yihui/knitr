@@ -5,18 +5,15 @@
 knit_expand(file, ..., text = readLines(file, warn = FALSE), delim = c("{{", "}}"))
 }
 \arguments{
-  \item{file}{the template file}
+\item{file}{the template file}
 
-  \item{...}{a list of variables to be used for the code in
-  the template; note the variables will be searched in the
-  parent frame as well}
+\item{...}{a list of variables to be used for the code in the template; note
+the variables will be searched in the parent frame as well}
 
-  \item{text}{an alternative way to \code{file} to specify
-  the template code directly (if provided, \code{file} will
-  be ignored)}
+\item{text}{an alternative way to \code{file} to specify the template code
+directly (if provided, \code{file} will be ignored)}
 
-  \item{delim}{the (opening and ending) delimiters for the
-  templating tags}
+\item{delim}{the (opening and ending) delimiters for the templating tags}
 }
 \value{
 A character vector, with the tags evaluated and replaced by their

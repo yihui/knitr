@@ -5,10 +5,9 @@
 fig_path(suffix = "", options = opts_current$get())
 }
 \arguments{
-  \item{suffix}{a suffix of the filename}
+\item{suffix}{a suffix of the filename}
 
-  \item{options}{a list of options; by default the options
-  of the current chunk}
+\item{options}{a list of options; by default the options of the current chunk}
 }
 \value{
 A character string (path)

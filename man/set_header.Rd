@@ -5,12 +5,11 @@
 set_header(...)
 }
 \arguments{
-  \item{...}{the header components; currently possible
-  components are \code{highlight}, \code{tikz} and
-  \code{framed}, which contain the necessary commands to be
-  used in the HTML header or LaTeX preamble; note HTML
-  output does not use the \code{tikz} and \code{framed}
-  components (they do not make sense to HTML)}
+\item{...}{the header components; currently possible components are
+\code{highlight}, \code{tikz} and \code{framed}, which contain the
+necessary commands to be used in the HTML header or LaTeX preamble; note
+HTML output does not use the \code{tikz} and \code{framed} components (they
+do not make sense to HTML)}
 }
 \value{
 The header vector in \code{opts_knit} is set.

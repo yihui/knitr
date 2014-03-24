@@ -5,12 +5,10 @@
 knit_exit(append)
 }
 \arguments{
-  \item{append}{a character vector to be appended to the
-  results from \code{knit()} so far; by default, it is
-  \verb{\end{document}} for LaTeX output, and
-  \verb{</body></html>} for HTML output to make the output
-  document complete; for other types of output, it is an
-  empty string}
+\item{append}{a character vector to be appended to the results from
+\code{knit()} so far; by default, it is \verb{\end{document}} for LaTeX
+output, and \verb{</body></html>} for HTML output to make the output
+document complete; for other types of output, it is an empty string}
 }
 \value{
 Invisible \code{NULL}. An internal signal is set up (as a side

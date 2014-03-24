@@ -29,24 +29,20 @@ render_rst(strict = FALSE)
 render_textile()
 }
 \arguments{
-  \item{strict}{whether to use strict markdown or reST
-  syntax; for markdown: if \code{TRUE}, code blocks will be
-  indented by 4 spaces, otherwise they are put in fences
-  made by three backticks; for reST, if \code{TRUE}, code
-  is put under two colons and indented by 4 spaces,
-  otherwise is put under the \samp{sourcecode} directive
-  (e.g. it is useful for Sphinx)}
+\item{strict}{whether to use strict markdown or reST syntax; for markdown: if
+\code{TRUE}, code blocks will be indented by 4 spaces, otherwise they are
+put in fences made by three backticks; for reST, if \code{TRUE}, code is
+put under two colons and indented by 4 spaces, otherwise is put under the
+\samp{sourcecode} directive (e.g. it is useful for Sphinx)}
 
-  \item{highlight}{which code highlighting engine to use:
-  for \code{pygments}, the Liquid syntax is used (default
-  approach Jekyll); for \code{prettify}, the output is
-  prepared for the JavaScript library \file{prettify.js};
-  for \code{none}, no highlighting engine will be used
-  (code blocks are indented by 4 spaces)}
+\item{highlight}{which code highlighting engine to use: for \code{pygments},
+the Liquid syntax is used (default approach Jekyll); for \code{prettify},
+the output is prepared for the JavaScript library \file{prettify.js}; for
+\code{none}, no highlighting engine will be used (code blocks are indented
+by 4 spaces)}
 
-  \item{extra}{extra tags for the highlighting engine; for
-  \code{pygments}, it can be \code{'linenos'}; for
-  \code{prettify}, it can be \code{'linenums'}}
+\item{extra}{extra tags for the highlighting engine; for \code{pygments}, it
+can be \code{'linenos'}; for \code{prettify}, it can be \code{'linenums'}}
 }
 \value{
 \code{NULL}; corresponding hooks are set as a side effect

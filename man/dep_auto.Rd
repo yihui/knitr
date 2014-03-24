@@ -5,7 +5,7 @@
 dep_auto(path = opts_chunk$get("cache.path"))
 }
 \arguments{
-  \item{path}{the path to the dependency file}
+\item{path}{the path to the dependency file}
 }
 \value{
 \code{NULL}. The dependencies are built as a side effect.

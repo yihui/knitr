@@ -5,17 +5,15 @@
 wrap_rmd(file, width = 80, text = NULL, backup)
 }
 \arguments{
-  \item{file}{the input Rmd file}
+\item{file}{the input Rmd file}
 
-  \item{width}{the expected line width}
+\item{width}{the expected line width}
 
-  \item{text}{an alternative to \code{file} to input the
-  text lines}
+\item{text}{an alternative to \code{file} to input the text lines}
 
-  \item{backup}{the path to back up the original file (in
-  case anything goes wrong); if \code{NULL}, it is ignored;
-  by default it is constructed from \code{file} by adding
-  \code{__} before the base filename}
+\item{backup}{the path to back up the original file (in case anything goes
+wrong); if \code{NULL}, it is ignored; by default it is constructed from
+\code{file} by adding \code{__} before the base filename}
 }
 \value{
 If \code{file} is provided, it is overwritten; if \code{text} is

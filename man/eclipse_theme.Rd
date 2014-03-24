@@ -5,7 +5,7 @@
 eclipse_theme(id)
 }
 \arguments{
-  \item{id}{id of theme to save as CSS}
+\item{id}{id of theme to save as CSS}
 }
 \value{
 Path to the CSS file converted from the website.

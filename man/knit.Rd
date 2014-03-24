@@ -9,36 +9,31 @@ knit(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
 purl(..., documentation = 1L)
 }
 \arguments{
-  \item{input}{path of the input file}
+\item{input}{path of the input file}
 
-  \item{output}{path of the output file for \code{knit()};
-  if \code{NULL}, this function will try to guess and it
-  will be under the current working directory}
+\item{output}{path of the output file for \code{knit()}; if \code{NULL}, this
+function will try to guess and it will be under the current working
+directory}
 
-  \item{tangle}{whether to tangle the R code from the input
-  file (like \code{\link[utils]{Stangle}})}
+\item{tangle}{whether to tangle the R code from the input file (like
+\code{\link[utils]{Stangle}})}
 
-  \item{text}{a character vector as an alternative way to
-  provide the input file}
+\item{text}{a character vector as an alternative way to provide the input
+file}
 
-  \item{quiet}{whether to suppress the progress bar and
-  messages}
+\item{quiet}{whether to suppress the progress bar and messages}
 
-  \item{envir}{the environment in which the code chunks are
-  to be evaluated (can use \code{\link{new.env}()} to
-  guarantee an empty new environment)}
+\item{envir}{the environment in which the code chunks are to be evaluated
+(can use \code{\link{new.env}()} to guarantee an empty new environment)}
 
-  \item{encoding}{the encoding of the input file; see
-  \code{\link{file}}}
+\item{encoding}{the encoding of the input file; see \code{\link{file}}}
 
-  \item{documentation}{an integer specifying the level of
-  documentation to go the tangled script: \code{0} means
-  pure code (discard all text chunks); \code{1} (default)
-  means add the chunk headers to code; \code{2} means add
-  all text chunks to code as roxygen comments}
+\item{documentation}{an integer specifying the level of documentation to go
+the tangled script: \code{0} means pure code (discard all text chunks);
+\code{1} (default) means add the chunk headers to code; \code{2} means add
+all text chunks to code as roxygen comments}
 
-  \item{...}{arguments passed to \code{\link{knit}()} from
-  \code{purl()}}
+\item{...}{arguments passed to \code{\link{knit}()} from \code{purl()}}
 }
 \value{
 The compiled document is written into the output file, and the path

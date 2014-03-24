@@ -5,10 +5,10 @@
 imgur_upload(file, key = "9f3460e67f308f6")
 }
 \arguments{
-  \item{file}{the path to the image file to be uploaded}
+\item{file}{the path to the image file to be uploaded}
 
-  \item{key}{the client id for Imgur (by default uses a
-  client id registered by Yihui Xie)}
+\item{key}{the client id for Imgur (by default uses a client id registered by
+Yihui Xie)}
 }
 \value{
 A character string of the link to the image; this string carries an

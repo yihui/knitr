@@ -5,25 +5,20 @@
 pandoc(input, format, config = getOption("config.pandoc"), ext = NA)
 }
 \arguments{
-  \item{input}{a character vector of the Markdown
-  filenames}
+\item{input}{a character vector of the Markdown filenames}
 
-  \item{format}{the output format (see References); it can
-  be a character vector of multiple formats; by default, it
-  is obtained from the \code{t} field in the configuration
-  (if the configuration is empty or the \code{t} field is
-  not found, the default output format will be
-  \code{'html'})}
+\item{format}{the output format (see References); it can be a character
+vector of multiple formats; by default, it is obtained from the \code{t}
+field in the configuration (if the configuration is empty or the \code{t}
+field is not found, the default output format will be \code{'html'})}
 
-  \item{config}{the Pandoc configuration file; if missing,
-  it is assumed to be a file with the same base name as the
-  \code{input} file and an extension \code{.pandoc} (e.g.
-  for \file{foo.md} it looks for \file{foo.pandoc})}
+\item{config}{the Pandoc configuration file; if missing, it is assumed to be
+a file with the same base name as the \code{input} file and an extension
+\code{.pandoc} (e.g. for \file{foo.md} it looks for \file{foo.pandoc})}
 
-  \item{ext}{the filename extensions; by default, the
-  extension is inferred from the \code{format}, e.g.
-  \code{latex} creates \code{pdf}, and \code{dzslides}
-  creates \code{html}, and so on}
+\item{ext}{the filename extensions; by default, the extension is inferred
+from the \code{format}, e.g. \code{latex} creates \code{pdf}, and
+\code{dzslides} creates \code{html}, and so on}
 }
 \value{
 The output filename(s) (or an error if the conversion failed).

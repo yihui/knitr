@@ -6,19 +6,17 @@ write_bib(x = .packages(), file = "", tweak = TRUE,
     prefix = getOption("knitr.bib.prefix", "R-"))
 }
 \arguments{
-  \item{x}{package names (packages which are not installed
-  are ignored)}
+\item{x}{package names (packages which are not installed are ignored)}
 
-  \item{file}{the (\file{.bib}) file to write (by default
-  writes to the R console; ignored if it is \code{NULL})}
+\item{file}{the (\file{.bib}) file to write (by default writes to the R
+console; ignored if it is \code{NULL})}
 
-  \item{tweak}{whether to fix some known problems in the
-  citations, especially non-standard format of authors}
+\item{tweak}{whether to fix some known problems in the citations, especially
+non-standard format of authors}
 
-  \item{prefix}{a prefix string for keys in BibTeX entries;
-  by default, it is \samp{R-} unless
-  \code{\link{option}('knitr.bib.prefix')} has been set to
-  another string}
+\item{prefix}{a prefix string for keys in BibTeX entries; by default, it is
+\samp{R-} unless \code{\link{option}('knitr.bib.prefix')} has been set to
+another string}
 }
 \value{
 a list containing the citations (also written to the \code{file} as a

@@ -5,8 +5,8 @@
 set_alias(...)
 }
 \arguments{
-  \item{...}{named arguments (argument names are aliases,
-  and argument values are real chunk options)}
+\item{...}{named arguments (argument names are aliases, and argument values
+are real chunk options)}
 }
 \value{
 NULL (\code{opts_knit$get('aliases')} is modified as the side effect)

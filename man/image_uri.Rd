@@ -5,7 +5,7 @@
 image_uri(f)
 }
 \arguments{
-  \item{f}{the path to the image file}
+\item{f}{the path to the image file}
 }
 \value{
 a character string (the data URI)

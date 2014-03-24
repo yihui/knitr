@@ -6,25 +6,22 @@ knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE,
     encoding = getOption("encoding"), publish = TRUE)
 }
 \arguments{
-  \item{input}{the filename of the Rmd document}
+\item{input}{the filename of the Rmd document}
 
-  \item{title}{the post title}
+\item{title}{the post title}
 
-  \item{...}{other meta information of the post, e.g.
-  \code{categories = c('R', 'Stats')} and \code{mt_keywords
-  = c('knitr', 'wordpress')}, etc}
+\item{...}{other meta information of the post, e.g. \code{categories = c('R',
+'Stats')} and \code{mt_keywords = c('knitr', 'wordpress')}, etc}
 
-  \item{shortcode}{a logical vector of length 2: whether to
-  use the shortcode \samp{[sourcecode lang='lang']} which
-  can be useful to WordPress.com users for syntax
-  highlighting of source code and output; the first element
-  applies to source code, and the second applies to text
-  output (by default, both are \code{FALSE})}
+\item{shortcode}{a logical vector of length 2: whether to use the shortcode
+\samp{[sourcecode lang='lang']} which can be useful to WordPress.com users
+for syntax highlighting of source code and output; the first element
+applies to source code, and the second applies to text output (by default,
+both are \code{FALSE})}
 
-  \item{publish}{whether to publish the post immediately}
+\item{publish}{whether to publish the post immediately}
 
-  \item{encoding}{the encoding of the input file; see
-  \code{\link{file}}}
+\item{encoding}{the encoding of the input file; see \code{\link{file}}}
 }
 \description{
 This function is a wrapper around the \pkg{RWordPress} package. It compiles

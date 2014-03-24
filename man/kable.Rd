@@ -6,32 +6,27 @@ kable(x, format, digits = getOption("digits"), row.names = NA, align, output = T
     ...)
 }
 \arguments{
-  \item{x}{an R object (typically a matrix or data frame)}
+\item{x}{an R object (typically a matrix or data frame)}
 
-  \item{format}{a character string; possible values are
-  \code{latex}, \code{html}, \code{markdown},
-  \code{pandoc}, and \code{rst}; this will be automatically
-  determined if the function is called within \pkg{knitr};
-  it can also be set in the global option
-  \code{knitr.table.format}}
+\item{format}{a character string; possible values are \code{latex},
+\code{html}, \code{markdown}, \code{pandoc}, and \code{rst}; this will be
+automatically determined if the function is called within \pkg{knitr}; it
+can also be set in the global option \code{knitr.table.format}}
 
-  \item{digits}{the maximum number of digits for numeric
-  columns (passed to \code{round()})}
+\item{digits}{the maximum number of digits for numeric columns (passed to
+\code{round()})}
 
-  \item{row.names}{whether to include row names; by
-  default, row names are included if they are neither
-  \code{NULL} nor identical to \code{1:nrow(x)}}
+\item{row.names}{whether to include row names; by default, row names are
+included if they are neither \code{NULL} nor identical to \code{1:nrow(x)}}
 
-  \item{align}{the alignment of columns: a character vector
-  consisting of \code{'l'} (left), \code{'c'} (center)
-  and/or \code{'r'} (right); by default, numeric columns
-  are right-aligned, and other columns are left-aligned; if
-  \code{align = NULL}, the default alignment is used}
+\item{align}{the alignment of columns: a character vector consisting of
+\code{'l'} (left), \code{'c'} (center) and/or \code{'r'} (right); by
+default, numeric columns are right-aligned, and other columns are
+left-aligned; if \code{align = NULL}, the default alignment is used}
 
-  \item{output}{whether to write out the output in the
-  console}
+\item{output}{whether to write out the output in the console}
 
-  \item{...}{other arguments (see examples)}
+\item{...}{other arguments (see examples)}
 }
 \value{
 A character vector of the table source code. When \code{output =

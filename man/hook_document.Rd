@@ -5,8 +5,7 @@
 hook_movecode(x)
 }
 \arguments{
-  \item{x}{a character string (the content of the whole
-  document output)}
+\item{x}{a character string (the content of the whole document output)}
 }
 \value{
 The post-processed document as a character string.

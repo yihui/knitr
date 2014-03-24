@@ -44,7 +44,7 @@
   ..$ chunk.end     : chr "^//\\\\s*end[.]rcode\\\\s*$"
   ..$ chunk.code    : chr "^//+"
   ..$ ref.chunk     : chr "^\\\\s*<<(.+)>>\\\\s*$"
-  ..$ inline.code   : chr "[+]r +([^+]+)\\\\s*[+]"
+  ..$ inline.code   : chr "`r +([^`]+)\\\\s*`|[+]r +([^+]+)\\\\s*[+]"
   ..$ inline.comment: chr "^//.*"
  $ textile :List of 5
   ..$ chunk.begin   : chr "^###[.]\\\\s+begin[.]rcode(.*)$"
