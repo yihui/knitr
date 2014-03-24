@@ -52,7 +52,8 @@ new_defaults = function(value = list()) {
 opts_chunk = new_defaults(list(
 
   eval = TRUE, echo = TRUE, results = 'markup', tidy = FALSE, tidy.opts = NULL,
-  prompt = FALSE, comment = '##', highlight = TRUE, size = 'normalsize', background = '#F7F7F7',
+  collapse = FALSE, prompt = FALSE, comment = '##', highlight = TRUE,
+  size = 'normalsize', background = '#F7F7F7',
 
   cache = FALSE, cache.path = 'cache/', cache.vars = NULL, cache.lazy = TRUE,
   dependson = NULL, autodep = FALSE,
@@ -80,7 +81,6 @@ opts_chunk_attr = (function() {
   opts = lapply(opts_chunk$get(), class)
   opts[opts == 'NULL'] = 'character'
   opts$results = list('markup', 'asis', 'hold', 'hide')
-  opts$collapse = 'logical'
   opts$fig.show = list('asis', 'hold', 'animate', 'hide')
   opts$fig.keep = list('high', 'none', 'all', 'first', 'last')
   opts$fig.align = list('default', 'left', 'right', 'center')
