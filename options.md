@@ -105,6 +105,8 @@ All built-in options in **knitr** are:
   generated if there are any plots in the chunk, so you can manually insert
   figures; note this is the only chunk option that is not cached, i.e.,
   changing it will not invalidate the cache
+- `strip.white`: (`TRUE`; logical) whether to remove the white lines in the
+  beginning or end of a source chunk in the output
 
 ### Code Decoration
 
