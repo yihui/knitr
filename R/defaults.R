@@ -53,7 +53,7 @@ opts_chunk = new_defaults(list(
 
   eval = TRUE, echo = TRUE, results = 'markup', tidy = FALSE, tidy.opts = NULL,
   collapse = FALSE, prompt = FALSE, comment = '##', highlight = TRUE,
-  size = 'normalsize', background = '#F7F7F7',
+  strip.white = TRUE, size = 'normalsize', background = '#F7F7F7',
 
   cache = FALSE, cache.path = 'cache/', cache.vars = NULL, cache.lazy = TRUE,
   dependson = NULL, autodep = FALSE,

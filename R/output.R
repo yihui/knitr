@@ -402,6 +402,7 @@ wrap.character = function(x, options) {
 #' @export
 wrap.source = function(x, options) {
   src = sub('\n$', '', x$src)
+  if (!options$collapse && options$strip.white) src = strip_white(src)
   knit_hooks$get('source')(src, options)
 }
 
