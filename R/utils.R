@@ -219,7 +219,7 @@ fix_options = function(options) {
   if (options$engine != 'R') options$cache = (options$cache > 0) * 3
 
   # for Retina displays, increase physical size, and decrease output size
-  if (is.numeric(r <- options$fig.retina)) {
+  if (is.numeric(r <- options$fig.retina) && r != 1) {
     if (is.null(options$out.width)) {
       options$out.width = options$fig.width * options$dpi
     } else {
