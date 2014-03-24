@@ -72,7 +72,7 @@ Imports:
     digest,
     formatR (>= 0.10),
     highr (>= 0.3),
-    markdown (>= 0.6.4),
+    markdown (>= 0.6.5),
     stringr (>= 0.6),
     tools
 Suggests:
