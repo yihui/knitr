@@ -77,7 +77,7 @@ opts_current = new_defaults()
 #' @include plot.R
 
 ## a list of options attributes for RStudio
-opts_chunk_attr = (function() {
+opts_chunk_attr = local({
   opts = lapply(opts_chunk$get(), class)
   opts[opts == 'NULL'] = 'character'
   opts$results = list('markup', 'asis', 'hold', 'hide')
@@ -89,7 +89,7 @@ opts_chunk_attr = (function() {
   opts$external = opts$sanitize = NULL  # hide these two rare options
   opts$fig.process = 'function'
   opts
-})()
+})
 
 #' Set aliases for chunk options
 #'
