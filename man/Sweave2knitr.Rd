@@ -47,10 +47,10 @@ converted to \code{dev='pdf'/'jpeg'/'png'/'postscript'/'tikz'};
 \code{results=tex/verbatim/hide} are changed to
 \code{results='asis'/'markup'/'hide'}; \code{width/height} are changed to
 \code{fig.width/fig.height}; \code{prefix.string} is changed to
-\code{fig.path}; \code{print/term/strip.white/prefix=TRUE/FALSE} are removed;
-most of the character options (e.g. \code{engine} and \code{out.width}) are
-quoted; \code{keep.source=TRUE/FALSE} is changed to \code{tidy=FALSE/TRUE}
-(note the order of values).
+\code{fig.path}; \code{print/term/prefix=TRUE/FALSE} are removed; most of the
+character options (e.g. \code{engine} and \code{out.width}) are quoted;
+\code{keep.source=TRUE/FALSE} is changed to \code{tidy=FALSE/TRUE} (note the
+order of values).
 
 If a line \code{@} (it closes a chunk) directly follows a previous
 \code{@}, it is removed; if a line \code{@} appears before a code chunk and
