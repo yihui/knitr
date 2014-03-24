@@ -403,6 +403,7 @@ wrap.character = function(x, options) {
 wrap.source = function(x, options) {
   src = sub('\n$', '', x$src)
   if (!options$collapse && options$strip.white) src = strip_white(src)
+  if (is_blank(src)) return()  # an empty chunk
   knit_hooks$get('source')(src, options)
 }
 
