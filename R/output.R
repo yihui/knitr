@@ -399,6 +399,13 @@ wrap.character = function(x, options) {
   knit_hooks$get('output')(x, options)
 }
 
+# if you provide a custom print function that returns a character object of
+# class 'knit_asis', I'll just write it as is
+#' @export
+wrap.knit_asis = function(x, options) {
+  as.character(x)
+}
+
 #' @export
 wrap.source = function(x, options) {
   src = sub('\n$', '', x$src)
@@ -449,4 +456,60 @@ wrap.recordedplot = function(x, options) {
   )[[1]]
   if (options$fig.show == 'hide') return('')
   knit_hooks$get('plot')(file, reduce_plot_opts(options))
+}
+
+#' A custom printing function
+#'
+#' The S3 generic function \code{knit_print} is the default printing function in
+#' \pkg{knitr}. The chunk option \code{render} uses this function by default.
+#' The main purpose of this S3 generic function is to customize printing of R
+#' objects in code chunks. We can fall back to the normal printing behavior by
+#' setting the chunk option \code{render = normal_print}.
+#'
+#' Users can write custom methods based on this generic function. For example,
+#' if we want to print all data frames as tables in the output, we can define a
+#' method \code{knit_print.data.frame} that turns a data frame into a table (the
+#' implementation may use other R packages or functions, e.g. \pkg{xtable} or
+#' \code{\link{kable}()}).
+#' @param x an R object to be printed
+#' @return The value returned from the print method should be a character vector
+#'   or can be converted to a character value. You can wrap the value in
+#'   \code{\link{asis_output}()} so that \pkg{knitr} writes the character value
+#'   as is in the output.
+#' @export
+#' @examples library(knitr)
+#' # write tables for data frames
+#' knit_print.data.frame = function(x) {
+#'   res = paste(c('', '', kable(x, output = FALSE)), collapse = '\n')
+#'   asis_output(res)
+#' }
+#' # after you defined the above method, data frames will be printed as tables in knitr,
+#' # which is different with the default print() behavior
+knit_print = function(x) {
+  UseMethod('knit_print', x)
+}
+
+#" the default print method is just print()/show()
+#' @export
+knit_print.default = default_handlers$value
+
+#' @rdname knit_print
+#' @export
+normal_print = knit_print.default
+
+#' Mark an R object with a special class
+#'
+#' This is a convenience function that assigns the input object a class named
+#' \code{knit_asis}, so that \pkg{knitr} will treat it as is (the effect is the
+#' same as the chunk option \code{results = 'asis'}) when it is written to the
+#' output.
+#'
+#' This function is normally used in a custom S3 method based on the printing
+#' function \code{\link{knit_print}()}.
+#' @param x an R object (typically a character string, or can be converted to a
+#'   character string via \code{\link{as.character}()})
+#' @export
+#' @examples  # see ?knit_print
+asis_output = function(x) {
+  structure(x, class = 'knit_asis')
 }

@@ -22,6 +22,8 @@
 
 - added a new chunk option `render` for custom rendering of R objects in the output; by default, the render function is `print()` (or `show()` for S4 objects) (thanks, Milan Bouchet-Valat, #484)
 
+- added a new S3 generic function `knit_print()`, which is used as the default printing function for R objects in the code output now; users can define custom S3 methods to change the printing behavior of R objects in **knitr**
+
 - added a new engine `scala` for Scala thanks to Simeon Fitch (#640)
 
 - added a new engine named `asis` to write the chunk content without processing it; it also respects the chunk options `echo` and `eval` -- when either one is `FALSE`, the chunk will be hidden; this makes it possible to write text conditionally (thanks, Simon, #622)
