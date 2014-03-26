@@ -66,7 +66,7 @@ opts_chunk = new_defaults(list(
 
   warning = TRUE, error = TRUE, message = TRUE,
 
-  render = evaluate:::render,
+  render = NULL,
 
   ref.label = NULL, child = NULL, engine = 'R', split = FALSE, include = TRUE, purl = TRUE
 

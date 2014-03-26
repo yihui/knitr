@@ -563,6 +563,7 @@ current_input = function() knit_concord$get('infile')
 default_handlers = evaluate:::default_output_handler
 # change the value handler in evaluate default handlers
 knit_handlers = function(fun) {
+  if (!is.function(fun)) fun = knit_print
   if (length(formals(fun)) < 1)
     stop("the chunk option 'render' must be a function with at least one argument")
   merge_list(default_handlers, list(value = function(x, visible) {
