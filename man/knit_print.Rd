@@ -1,0 +1,42 @@
+\name{knit_print}
+\alias{knit_print}
+\alias{normal_print}
+\title{A custom printing function}
+\usage{
+knit_print(x)
+
+normal_print(x)
+}
+\arguments{
+\item{x}{an R object to be printed}
+}
+\value{
+The value returned from the print method should be a character vector
+  or can be converted to a character value. You can wrap the value in
+  \code{\link{asis_output}()} so that \pkg{knitr} writes the character value
+  as is in the output.
+}
+\description{
+The S3 generic function \code{knit_print} is the default printing function in
+\pkg{knitr}. The chunk option \code{render} uses this function by default.
+The main purpose of this S3 generic function is to customize printing of R
+objects in code chunks. We can fall back to the normal printing behavior by
+setting the chunk option \code{render = normal_print}.
+}
+\details{
+Users can write custom methods based on this generic function. For example,
+if we want to print all data frames as tables in the output, we can define a
+method \code{knit_print.data.frame} that turns a data frame into a table (the
+implementation may use other R packages or functions, e.g. \pkg{xtable} or
+\code{\link{kable}()}).
+}
+\examples{
+library(knitr)
+# write tables for data frames
+knit_print.data.frame = function(x) {
+    res = paste(c("", "", kable(x, output = FALSE)), collapse = "\\n")
+    asis_output(res)
+}
+# after you defined the above method, data frames will be printed as tables in
+# knitr, which is different with the default print() behavior
+}
