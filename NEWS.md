@@ -20,6 +20,8 @@
 
 - added a new chunk option `strip.white` to trim the white lines in the beginning or end of a source chunk in the output (`strip.white = TRUE` by default)
 
+- added a new chunk option `render` for custom rendering of R objects in the output; by default, the render function is `print()` (or `show()` for S4 objects) (thanks, Milan Bouchet-Valat, #484)
+
 - added a new engine `scala` for Scala thanks to Simeon Fitch (#640)
 
 - added a new engine named `asis` to write the chunk content without processing it; it also respects the chunk options `echo` and `eval` -- when either one is `FALSE`, the chunk will be hidden; this makes it possible to write text conditionally (thanks, Simon, #622)

@@ -558,3 +558,14 @@ is_windows = function() .Platform$OS.type == 'windows'
 #'   document (otherwise \code{NULL}).
 #' @export
 current_input = function() knit_concord$get('infile')
+
+# import output handlers from evaluate
+default_handlers = evaluate:::default_output_handler
+# change the value handler in evaluate default handlers
+knit_handlers = function(fun) {
+  if (length(formals(fun)) < 1)
+    stop("the chunk option 'render' must be a function with at least one argument")
+  merge_list(default_handlers, list(value = function(x, visible) {
+    if (visible) fun(x)
+  }))
+}

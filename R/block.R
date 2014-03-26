@@ -128,7 +128,8 @@ block_exec = function(options) {
     evaluate(code, envir = env, new_device = FALSE,
              keep_warning = !isFALSE(options$warning),
              keep_message = !isFALSE(options$message),
-             stop_on_error = if (options$error && options$include) 0L else 2L)
+             stop_on_error = if (options$error && options$include) 0L else 2L,
+             output_handler = knit_handlers(options$render))
   )
   if (options$cache %in% 1:2 && !cache.exists) {
     # make a copy for cache=1,2; when cache=2, we do not really need plots
