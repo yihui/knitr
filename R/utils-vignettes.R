@@ -21,6 +21,11 @@ body(vweave_docco_classic)[4L] = expression(rocco(
   file, encoding = encoding, quiet = quiet, envir = globalenv()
 ))
 
+vweave_rmarkdown = vweave
+body(vweave_rmarkdown)[4L] = expression(getFromNamespace('render', 'rmarkdown')(
+  file, encoding = encoding, quiet = quiet, envir = globalenv()
+))
+
 Rversion = getRversion()
 
 register_vignette_engines = function(pkg) {
@@ -29,6 +34,9 @@ register_vignette_engines = function(pkg) {
   vig_engine('knitr', vweave, '[.]([rRsS](nw|tex)|[Rr](md|html|rst))$')
   vig_engine('docco_linear', vweave_docco_linear, '[.][Rr](md|markdown)$')
   vig_engine('docco_classic', vweave_docco_classic, '[.][Rr]mk?d$')
+  vig_engine('rmarkdown', if (has_package('rmarkdown')) {
+    vweave_rmarkdown
+  } else vweave, '[.][Rr](md|markdown)$')
 }
 # all engines use the same tangle and package arguments, so factor them out
 vig_engine = function(...) {

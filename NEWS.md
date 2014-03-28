@@ -42,6 +42,8 @@
 
 - for Markdown tables, `kable()` gained a new argument `padding` to specify the inner padding of table cells using spaces (thanks, @gavril0, #699)
 
+- added a new vignette engine called `rmarkdown`, which uses `rmarkdown::render()` to create a package vignette from an R Markdown document; see http://rmarkdown.rstudio.com for more information about the **rmarkdown** package, and the vignette `knit_print.Rmd` in **knitr** for an example (basically you specify `\VignetteEngine{knitr::rmarkdown}` in your vignette)
+
 - indentation is preserved when using chunk references `<<>>`, i.e., if `<<>>` is indented, the spaces before it will be applied to the code that it refers to (thanks, Terry Therneau)
 
 - added a chunk option `fig.process`, which can be set as a function to take the path of a plot and process it, e.g. `fig.process = function(x) knitr::plot_crop(x)`; note the `fig.process` function must return a character string, such as the path of the figure, which might have been changed inside the function
