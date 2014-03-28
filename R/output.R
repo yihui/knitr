@@ -403,6 +403,11 @@ wrap.character = function(x, options) {
 # class 'knit_asis', I'll just write it as is
 #' @export
 wrap.knit_asis = function(x, options) {
+  m = attr(x, 'knit_meta')
+  if (length(m)) {
+    n = length(.knitEnv$meta)
+    .knitEnv$meta[[n + 1]] = m
+  }
   as.character(x)
 }
 
@@ -508,8 +513,27 @@ normal_print = knit_print.default
 #' function \code{\link{knit_print}()}.
 #' @param x an R object (typically a character string, or can be converted to a
 #'   character string via \code{\link{as.character}()})
+#' @param meta additional metadata of the object to be printed (the metadata
+#'   will be collected when the object is printed, and accessible via
+#'   \code{knit_meta()})
 #' @export
 #' @examples  # see ?knit_print
-asis_output = function(x) {
-  structure(x, class = 'knit_asis')
+asis_output = function(x, meta = NULL) {
+  structure(x, class = 'knit_asis', knit_meta = meta)
+}
+
+#' Metadata about objects to be printed
+#'
+#' As an object is printed, \pkg{knitr} will collect metadata about it (if
+#' available). After knitting is done, all the metadata is accessible via this
+#' function.
+#' @param clean whether to clean the collected metadata; by default, the
+#'   metadata stored in \pkg{knitr} is cleaned up once this function is called,
+#'   because we may not want the metadata to be passed to the next \code{knit()}
+#'   call; to be defensive (i.e. not to have carryover metadata), you can call
+#'   \code{knit_meta()} before \code{knit()}
+#' @export
+knit_meta = function(clean = TRUE) {
+  if (clean) on.exit(.knitEnv$meta <- list(), add = TRUE)
+  .knitEnv$meta
 }

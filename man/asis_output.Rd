@@ -2,11 +2,15 @@
 \alias{asis_output}
 \title{Mark an R object with a special class}
 \usage{
-asis_output(x)
+asis_output(x, meta = NULL)
 }
 \arguments{
 \item{x}{an R object (typically a character string, or can be converted to a
 character string via \code{\link{as.character}()})}
+
+\item{meta}{additional metadata of the object to be printed (the metadata
+will be collected when the object is printed, and accessible via
+\code{knit_meta()})}
 }
 \description{
 This is a convenience function that assigns the input object a class named
