@@ -142,7 +142,7 @@ hook_webgl = function(before, options, envir) {
   writeWebGL(dir = dirname(name), filename = name, template = tpl, prefix = prefix)
   res = readLines(name)
   res = res[!grepl('^\\s*$', res)] # remove blank lines
-  paste(gsub('^\\s*<', '<', res), collapse = '\n') # no spaces before HTML tags
+  paste(gsub('^\\s+', '', res), collapse = '\n') # no indentation at all (for Pandoc)
 }
 
 #" a hook function to write out code from chunks
