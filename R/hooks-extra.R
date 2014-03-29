@@ -139,7 +139,8 @@ hook_webgl = function(before, options, envir) {
   prefix = sub('^([^[:alpha:]])', '_\\1', prefix) # should start with letters or _
   writeLines(sprintf(c('%%%sWebGL%%', '<script>%swebGLStart();</script>'), prefix),
              tpl <- tempfile())
-  writeWebGL(dir = dirname(name), filename = name, template = tpl, prefix = prefix)
+  writeWebGL(dir = dirname(name), filename = name, template = tpl, prefix = prefix,
+             snapshot = FALSE)
   res = readLines(name)
   res = res[!grepl('^\\s*$', res)] # remove blank lines
   paste(gsub('^\\s+', '', res), collapse = '\n') # no indentation at all (for Pandoc)
