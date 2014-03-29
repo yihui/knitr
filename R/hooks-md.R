@@ -66,7 +66,7 @@ render_markdown = function(strict = FALSE) {
       x = gsub('[\n]+$', '', x)
       x = gsub('^[\n]+', '\n', x)
       if (isTRUE(options$collapse)) {
-        x = gsub(paste('```\n+```(', tolower(options$engine), ')?\n', sep = ''), '', x)
+        x = gsub(paste('\n([`]{3,})\n+\\1(', tolower(options$engine), ')?\n', sep = ''), "\n", x)
       }
       if (is.null(s <- options$indent)) return(x)
       line_prompt(x, prompt = s, continue = s)
