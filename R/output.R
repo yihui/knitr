@@ -405,8 +405,7 @@ wrap.character = function(x, options) {
 wrap.knit_asis = function(x, options) {
   m = attr(x, 'knit_meta')
   if (length(m)) {
-    n = length(.knitEnv$meta)
-    .knitEnv$meta[[n + 1]] = m
+    .knitEnv$meta <- c(.knitEnv$meta, m)
   }
   as.character(x)
 }
@@ -527,13 +526,23 @@ asis_output = function(x, meta = NULL) {
 #' As an object is printed, \pkg{knitr} will collect metadata about it (if
 #' available). After knitting is done, all the metadata is accessible via this
 #' function.
+#' @param class optionally return only metadata entries that inherit from the
+#'   specified class; the default, \code{NULL}, returns all entries.
 #' @param clean whether to clean the collected metadata; by default, the
-#'   metadata stored in \pkg{knitr} is cleaned up once this function is called,
-#'   because we may not want the metadata to be passed to the next \code{knit()}
-#'   call; to be defensive (i.e. not to have carryover metadata), you can call
+#'   metadata stored in \pkg{knitr} is cleaned up once retrieved, because we may
+#'   not want the metadata to be passed to the next \code{knit()} call; to be
+#'   defensive (i.e. not to have carryover metadata), you can call
 #'   \code{knit_meta()} before \code{knit()}
 #' @export
-knit_meta = function(clean = TRUE) {
-  if (clean) on.exit(.knitEnv$meta <- list(), add = TRUE)
-  .knitEnv$meta
+knit_meta = function(class = NULL, clean = TRUE) {
+  matches <- if (is.null(class))
+      # if no class was specified, match the whole list
+      seq_along(.knitEnv$meta)
+    else
+      # if a class was specified, match the items belonging to the class
+      sapply(.knitEnv$meta, function(meta) { inherits(meta, class) })
+  if (length(matches) < 1)
+    return(list())
+  if (clean) on.exit(.knitEnv$meta[matches] <- NULL, add = TRUE)
+  .knitEnv$meta[matches]
 }
