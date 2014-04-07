@@ -405,7 +405,7 @@ wrap.character = function(x, options) {
 wrap.knit_asis = function(x, options) {
   m = attr(x, 'knit_meta')
   if (length(m)) {
-    .knitEnv$meta <- c(.knitEnv$meta, m)
+    .knitEnv$meta = c(.knitEnv$meta, m)
   }
   as.character(x)
 }
@@ -538,14 +538,14 @@ asis_output = function(x, meta = NULL) {
 #'   \code{knit_meta()} before \code{knit()}
 #' @export
 knit_meta = function(class = NULL, clean = TRUE) {
-  matches <- if (is.null(class))
-      # if no class was specified, match the whole list
-      seq_along(.knitEnv$meta)
-    else
-      # if a class was specified, match the items belonging to the class
-      sapply(.knitEnv$meta, function(meta) { inherits(meta, class) })
-  if (length(matches) < 1)
-    return(list())
+  matches = if (is.null(class)) {
+    # if no class was specified, match the whole list
+    seq_along(.knitEnv$meta)
+  } else {
+    # if a class was specified, match the items belonging to the class
+    which(sapply(.knitEnv$meta, inherits, what = class))
+  }
+  if (length(matches) < 1) return(list())
   if (clean) on.exit(.knitEnv$meta[matches] <- NULL, add = TRUE)
   .knitEnv$meta[matches]
 }
