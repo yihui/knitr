@@ -218,6 +218,11 @@ fix_options = function(options) {
   # non-R code should not use cache=1,2
   if (options$engine != 'R') options$cache = (options$cache > 0) * 3
 
+  # out.[width|height].px: unit in pixels for sizes
+  for (i in c('width', 'height')) {
+    options[[sprintf('out.%s.px', i)]] = options[[sprintf('out.%s', i)]] %n%
+      (options[[sprintf('fig.%s', i)]] * options$dpi)
+  }
   # for Retina displays, increase physical size, and decrease output size
   if (is.numeric(r <- options$fig.retina) && r != 1) {
     if (is.null(options$out.width)) {
