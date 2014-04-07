@@ -197,7 +197,7 @@ recycle_plot_opts = function(options) {
 reduce_plot_opts = function(options) {
   if (options$fig.show == 'animate' || options$fig.num <= 1L) return(options)
   fig.cur = options$fig.cur
-  for (i in .recyle.opts) options[[i]] = options[[i]][fig.cur]
+  for (i in .recyle.opts) options[i] = list(options[[i]][fig.cur])
   options
 }
 
