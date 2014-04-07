@@ -143,6 +143,8 @@ hook_webgl = function(before, options, envir) {
              snapshot = FALSE)
   res = readLines(name)
   res = res[!grepl('^\\s*$', res)] # remove blank lines
+  # an ugly fix: pandoc standalone mode mangles the double quotes in debug("<a href=\"url\">")
+  res = gsub('\\\\"', "", res)
   paste(gsub('^\\s+', '', res), collapse = '\n') # no indentation at all (for Pandoc)
 }
 
