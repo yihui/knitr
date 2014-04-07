@@ -3,12 +3,14 @@
 \alias{normal_print}
 \title{A custom printing function}
 \usage{
-knit_print(x)
+knit_print(x, options)
 
 normal_print(x)
 }
 \arguments{
 \item{x}{an R object to be printed}
+
+\item{options}{a list of the current chunk options}
 }
 \value{
 The value returned from the print method should be a character vector
@@ -33,7 +35,7 @@ implementation may use other R packages or functions, e.g. \pkg{xtable} or
 \examples{
 library(knitr)
 # write tables for data frames
-knit_print.data.frame = function(x) {
+knit_print.data.frame = function(x, options) {
     res = paste(c("", "", kable(x, output = FALSE)), collapse = "\\n")
     asis_output(res)
 }
