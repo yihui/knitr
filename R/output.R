@@ -476,6 +476,7 @@ wrap.recordedplot = function(x, options) {
 #' implementation may use other R packages or functions, e.g. \pkg{xtable} or
 #' \code{\link{kable}()}).
 #' @param x an R object to be printed
+#' @param options a list of the current chunk options
 #' @return The value returned from the print method should be a character vector
 #'   or can be converted to a character value. You can wrap the value in
 #'   \code{\link{asis_output}()} so that \pkg{knitr} writes the character value
@@ -483,23 +484,25 @@ wrap.recordedplot = function(x, options) {
 #' @export
 #' @examples library(knitr)
 #' # write tables for data frames
-#' knit_print.data.frame = function(x) {
+#' knit_print.data.frame = function(x, options) {
 #'   res = paste(c('', '', kable(x, output = FALSE)), collapse = '\n')
 #'   asis_output(res)
 #' }
 #' # after you defined the above method, data frames will be printed as tables in knitr,
 #' # which is different with the default print() behavior
-knit_print = function(x) {
+knit_print = function(x, options) {
   UseMethod('knit_print', x)
 }
 
 #" the default print method is just print()/show()
 #' @export
-knit_print.default = default_handlers$value
+knit_print.default = function(x, options) {
+  normal_print(x)
+}
 
 #' @rdname knit_print
 #' @export
-normal_print = knit_print.default
+normal_print = default_handlers$value
 
 #' Mark an R object with a special class
 #'

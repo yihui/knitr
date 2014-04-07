@@ -29,6 +29,7 @@ library(knitr)
 knit_print  # an S3 generic function
 methods(knit_print)
 getS3method('knit_print', 'default')  # the default method
+normal_print
 ```
 
 As we can see, `knit_print()` only has the `default` method, which is basically `print()` or `show()`, depending on whether the object is an S4 object. This means it does nothing special when printing R objects:
@@ -43,7 +44,7 @@ S3 generic functions are extensible in the sense that we can define custom metho
 ```{r}
 library(knitr)
 # define a method for objects of the class data.frame
-knit_print.data.frame = function(x) {
+knit_print.data.frame = function(x, options) {
   res = paste(c('', '', kable(x, output = FALSE)), collapse = '\n')
   asis_output(res)
 }
@@ -72,7 +73,7 @@ You can skip this section if you do not care about the low-level implementation 
 As mentioned before, the chunk option `render` is a function that defaults to `knit_print()`. We can certainly use other render functions. For example, we create a dummy function that always says "I do not know what to print" no matter what objects it receives:
 
 ```{r}
-dummy_print = function(x) {
+dummy_print = function(x, options) {
   cat("I do not know what to print!")
   # this function implicitly returns an invisible NULL
 }
@@ -100,7 +101,7 @@ One way to specify the dependencies is through the `meta` argument of `asis_outp
 
 ```{r eval=FALSE, tidy=FALSE}
 # pseudo code
-knit_print.ggvis = function(x) {
+knit_print.ggvis = function(x, options) {
   res = ggvis::print_this_object(x)
   knitr::asis_output(res, meta = list(
     ggvis = list(
@@ -118,7 +119,7 @@ Now we define a print method for `foo` objects:
 
 ```{r tidy=FALSE}
 library(knitr)
-knit_print.foo = function(x) {
+knit_print.foo = function(x, options) {
   res = paste('**This is a `foo` object**:', x)
   asis_output(res, meta = list(
     js  = system.file('www', 'shared', 'shiny.js',  package = 'shiny'),
@@ -149,7 +150,7 @@ new_foo('world')
 Similarly for `bar` objects:
 
 ```{r}
-knit_print.bar = function(x) {
+knit_print.bar = function(x, options) {
   asis_output(x, meta = list(head = '<script>console.log("bar!")</script>'))
 }
 new_bar = function(x) structure(x, class = 'bar')
