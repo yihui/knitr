@@ -6,7 +6,7 @@ hook_plot_md = function(x, options) {
   base = opts_knit$get('base.url') %n% ''
   cap = .img.cap(options)
 
-  if(is.null(w <- options$out.width) & is.null(h <- options$out.height) &
+  if (is.null(w <- options$out.width) & is.null(h <- options$out.height) &
     is.null(s <- options$out.extra) & options$fig.align == 'default') {
     return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
   }
