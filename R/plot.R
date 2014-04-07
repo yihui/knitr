@@ -24,7 +24,7 @@ dev2ext = function(x) {
          "; please use chunk option 'fig.ext' (http://yihui.name/knitr/options)",
          call. = FALSE)
   }
-  res
+  unname(res)
 }
 
 check_dev = function(dev) {
