@@ -1,4 +1,4 @@
-%% LyX 2.0.6 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.7 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[T1]{fontenc}
@@ -6,11 +6,11 @@
 \geometry{verbose,tmargin=0cm,bmargin=0cm,lmargin=1cm,rmargin=1cm}
 \setlength{\parskip}{0in}
 \setlength{\parindent}{0pt}
-\usepackage{url}
 \usepackage[unicode=true,pdfusetitle,
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
  breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
  {hyperref}
+\usepackage{breakurl}
 
 \makeatletter
 
@@ -21,8 +21,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \usepackage{multicol}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-% \VignetteIndexEntry{knitr Reference Card}
-% \VignetteEngine{knitr::knitr}
 
 \makeatother
 
@@ -80,20 +78,17 @@ for \href{http://en.wikipedia.org/wiki/Markdown}{Markdown})
 
 \subsection{Sweave ({*}.Rnw)}
 
-<<echo=FALSE>>=
-x=paste('\\Sexpr', '{', 'z}', sep = '')
-@
 \begin{verbatim}
-\document\Sexpr{'c'}lass{article}
-\be\Sexpr{'g'}in{document}
+\documentclass{article}
+\begin{document}
 
 Below is a code chunk.
-\Sexpr{''}<<foo, echo=TRUE>>=
+<<foo, echo=TRUE>>=
 z = 1+1
 plot(cars)
-\Sexpr{''}@
+@
 
-The value of z is \Sexpr{x}.
+The value of z is \Sexpr{z}.
 \end{document}
 \end{verbatim}
 
@@ -120,47 +115,8 @@ The value of pi is <% pi %>.
 
 \end{multicols}
 
+$body$
 
-\section{Chunk Options}
-
-\texttt{opts\_chunk} controls global chunk options, e.g. \texttt{opts\_chunk\$set(tidy
-= FALSE)}, which can be overridden by local chunk options. See all
-options at \url{http://yihui.name/knitr/options}; some frequently
-used options:
-\begin{description}
-\item [{eval}] whether to evaluate the chunk
-\item [{echo}] whether to echo source code
-\item [{results}] \texttt{'markup'}, \texttt{'asis'}, \texttt{'hold'},
-\texttt{'hide'}
-\item [{tidy}] whether to reformat R code
-\item [{cache}] whether to cache results
-\item [{fig.width,\ fig.height,\ out.width,\ out.height}] device and
-output size of figures
-\item [{include}] whether to include the chunk results in output
-\item [{child}] filenames of child documents
-\item [{engine}] language name (R, python, ...)
-\end{description}
-
-\section{Functions}
-\begin{description}
-\item [{knit()}] the main function in this package; knit input document
-and write output
-\item [{purl()}] extract R code from an input document
-\item [{spin()}] spin goat's hair (an R script with roxygen comments) into
-wool (a literate programming document to be passed to \texttt{knit()})
-\item [{stitch()}] insert an R script into a template and compile the document
-\item [{knit\_hooks\$set()}] set or reset chunk and output \href{http://yihui.name/knitr/hooks}{hooks}
-\end{description}
-
-\section{Resources}
-\begin{itemize}
-\item homepage: \url{http://yihui.name/knitr} 
-\item development repository: \url{https://github.com/yihui/knitr} (\href{http://cran.r-project.org/package=knitr}{CRAN},
-\href{http://rforge.net/knitr}{Rforge})
-\item examples: \url{https://github.com/yihui/knitr-examples}
-\item stackoverflow: \url{http://stackoverflow.com/questions/tagged/knitr}
-\item mailing list: \url{https://groups.google.com/group/knitr}
-\end{itemize}
 \end{multicols}
 
 \end{document}

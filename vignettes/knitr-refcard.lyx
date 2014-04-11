@@ -6,8 +6,6 @@
 \begin_preamble
 \usepackage{multicol}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-% \VignetteIndexEntry{knitr Reference Card}
-% \VignetteEngine{knitr::knitr}
 \end_preamble
 \use_default_options true
 \begin_modules
@@ -829,25 +827,6 @@ status open
 
 \begin_layout Plain Layout
 
-<<echo=FALSE>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-x=paste('
-\backslash
-
-\backslash
-Sexpr', '{', 'z}', sep = '')
-\end_layout
-
-\begin_layout Plain Layout
-
-@
-\end_layout
-
-\begin_layout Plain Layout
-
 
 \backslash
 begin{verbatim}
@@ -857,18 +836,14 @@ begin{verbatim}
 
 
 \backslash
-document
-\backslash
-Sexpr{'c'}lass{article}
+documentclass{article}
 \end_layout
 
 \begin_layout Plain Layout
 
 
 \backslash
-be
-\backslash
-Sexpr{'g'}in{document}
+begin{document}
 \end_layout
 
 \begin_layout Plain Layout
@@ -882,9 +857,7 @@ Below is a code chunk.
 
 \begin_layout Plain Layout
 
-
-\backslash
-Sexpr{''}<<foo, echo=TRUE>>=
+<<foo, echo=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -899,9 +872,7 @@ plot(cars)
 
 \begin_layout Plain Layout
 
-
-\backslash
-Sexpr{''}@
+@
 \end_layout
 
 \begin_layout Plain Layout
@@ -912,7 +883,7 @@ Sexpr{''}@
 
 The value of z is 
 \backslash
-Sexpr{x}.
+Sexpr{z}.
 \end_layout
 
 \begin_layout Plain Layout
@@ -1047,223 +1018,13 @@ end{multicols}
 
 \end_layout
 
-\begin_layout Section
-Chunk Options
-\end_layout
-
 \begin_layout Standard
-
-\family typewriter
-opts_chunk
-\family default
- controls global chunk options, e.g.
- 
-\family typewriter
-opts_chunk$set(tidy = FALSE)
-\family default
-, which can be overridden by local chunk options.
- See all options at 
-\begin_inset Flex URL
+\begin_inset ERT
 status collapsed
 
 \begin_layout Plain Layout
 
-http://yihui.name/knitr/options
-\end_layout
-
-\end_inset
-
-; some frequently used options:
-\end_layout
-
-\begin_layout Description
-eval whether to evaluate the chunk
-\end_layout
-
-\begin_layout Description
-echo whether to echo source code
-\end_layout
-
-\begin_layout Description
-results 
-\family typewriter
-'markup'
-\family default
-, 
-\family typewriter
-'asis'
-\family default
-, 
-\family typewriter
-'hold'
-\family default
-, 
-\family typewriter
-'hide'
-\end_layout
-
-\begin_layout Description
-tidy whether to reformat R code
-\end_layout
-
-\begin_layout Description
-cache whether to cache results
-\end_layout
-
-\begin_layout Description
-fig.width,
-\begin_inset space \space{}
-\end_inset
-
-fig.height,
-\begin_inset space \space{}
-\end_inset
-
-out.width,
-\begin_inset space \space{}
-\end_inset
-
-out.height device and output size of figures
-\end_layout
-
-\begin_layout Description
-include whether to include the chunk results in output
-\end_layout
-
-\begin_layout Description
-child filenames of child documents
-\end_layout
-
-\begin_layout Description
-engine language name (R, python, ...)
-\end_layout
-
-\begin_layout Section
-Functions
-\end_layout
-
-\begin_layout Description
-knit() the main function in this package; knit input document and write
- output
-\end_layout
-
-\begin_layout Description
-purl() extract R code from an input document
-\end_layout
-
-\begin_layout Description
-spin() spin goat's hair (an R script with roxygen comments) into wool (a
- literate programming document to be passed to 
-\family typewriter
-knit()
-\family default
-)
-\end_layout
-
-\begin_layout Description
-stitch() insert an R script into a template and compile the document
-\end_layout
-
-\begin_layout Description
-knit_hooks$set() set or reset chunk and output 
-\begin_inset CommandInset href
-LatexCommand href
-name "hooks"
-target "http://yihui.name/knitr/hooks"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
-Resources
-\end_layout
-
-\begin_layout Itemize
-homepage: 
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://yihui.name/knitr
-\end_layout
-
-\end_inset
-
- 
-\end_layout
-
-\begin_layout Itemize
-development repository: 
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-https://github.com/yihui/knitr
-\end_layout
-
-\end_inset
-
- (
-\begin_inset CommandInset href
-LatexCommand href
-name "CRAN"
-target "http://cran.r-project.org/package=knitr"
-
-\end_inset
-
-, 
-\begin_inset CommandInset href
-LatexCommand href
-name "Rforge"
-target "http://rforge.net/knitr"
-
-\end_inset
-
-)
-\end_layout
-
-\begin_layout Itemize
-examples: 
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-https://github.com/yihui/knitr-examples
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-stackoverflow: 
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://stackoverflow.com/questions/tagged/knitr
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-mailing list: 
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-https://groups.google.com/group/knitr
+$body$
 \end_layout
 
 \end_inset
