@@ -164,3 +164,20 @@ The final version of the metadata, and clean it up:
 str(knit_meta())
 str(knit_meta()) # empty now, because clean = TRUE by default
 ```
+
+### For package authors
+
+If you are implementing a custom print method in your own package, here are two hints:
+
+1. `knit_print()` is an S3 generic function in **knitr**, so in theory you need to import it in your namespace via `importFrom(knitr, knit_print)`, but due to the "lack of rigor" of the S3 system, you can choose not to import **knitr**, and just do `export(knit_print.foo)` in the namespace, then R will find the S3 "method" after your package is attached via `library()`, because it is essentially a normal R function;
+1. `asis_output()` is simply a function that marks an object with the class `knit_asis`, and you do not have to import this function to your package, either -- just let your print method return `structure(x, class = 'knit_asis')`, and if there are additional metadata, just put it in the `knit_meta` attribute; here is the source code of this function:
+    ```{r}
+    knitr::asis_output
+    ```
+
+If you are worried about possible future changes in `asis_output()`, you can put **knitr** in the `Suggests` field in DESCRIPTION, and use `knitr::asis_output()`, so that you can avoid the "hard" dependency on **knitr**.
+
+```{r clean-up, include=FALSE}
+# R compiles all vignettes in the same session, which can be bad
+rm(list = ls(all = TRUE))
+```
