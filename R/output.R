@@ -541,7 +541,7 @@ knit_meta = function(class = NULL, clean = TRUE) {
   matches = if (is.null(class)) {
     # if no class was specified, match the whole list
     seq_along(.knitEnv$meta)
-  } else {
+  } else if (length(.knitEnv$meta)) {
     # if a class was specified, match the items belonging to the class
     which(sapply(.knitEnv$meta, inherits, what = class))
   }
