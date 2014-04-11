@@ -53,7 +53,7 @@ examples:
 vignettes:
 	cd vignettes;\
 	lyx -e knitr knitr-refcard.lyx;\
-	mv knitr-refcard.Rnw template-refcard.tex
+	mv knitr-refcard.Rnw assets/template-refcard.tex
 
 # the svn mirror created by
 # svn checkout svn+ssh://yihui@svn.r-forge.r-project.org/svnroot/isu/pkg/knitr knitr-rforge

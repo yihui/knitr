@@ -3,7 +3,7 @@ output:
   pdf_document:
     highlight: null
     number_sections: yes
-    template: template-refcard.tex
+    template: assets/template-refcard.tex
 ---
 
 <!--
