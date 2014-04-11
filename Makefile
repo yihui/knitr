@@ -10,20 +10,16 @@ NEWS: NEWS.md
 	sed -e 's/^-/  -/' -e 's/^## *//' -e 's/^#/\t\t/' <NEWS.md | fmt -80 >NEWS
 
 deps:
-	Rscript -e 'if (!require("Rd2roxygen")) install.packages("Rd2roxygen", repos="http://cran.r-project.org")'
+	Rscript -e 'if (!require("Rd2roxygen")) install.packages("Rd2roxygen", repos="http://cran.rstudio.com")'
 
 docs:
 	R -q -e 'library(Rd2roxygen); rab(".", build = FALSE)'
 
 build:
 	cd ..;\
-	R CMD build $(PKGSRC)
+	R CMD build --no-manual $(PKGSRC)
 
-build-no-vignettes:
-	cd ..;\
-	R CMD build $(PKGSRC) --no-build-vignettes --no-manual
-
-install%: build%
+install: build
 	cd ..;\
 	R CMD INSTALL $(PKGNAME)_$(PKGVERS).tar.gz
 
@@ -31,9 +27,9 @@ check: build
 	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
 
-travis: build-no-vignettes
+travis: build
 	cd ..;\
-	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual --no-vignettes
+	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual
 
 integration-need:
 	git clone https://github.com/${TRAVIS_REPO_SLUG}-examples.git
@@ -41,7 +37,7 @@ integration-need:
 		git checkout ${TRAVIS_BRANCH} && \
 		GIT_PAGER=cat git show HEAD
 
-integration-run: install-no-vignettes
+integration-run: install
 	rm knitr-examples/cache -rf
 	make sysdeps deps xvfb-start knit xvfb-stop -C knitr-examples
 
