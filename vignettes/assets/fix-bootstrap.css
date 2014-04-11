@@ -1,0 +1,4 @@
+/* Bootstrap 2.3.2 uses 12px for code, bad for <h1><code></code></h1> */
+code {
+  font-size: 90%;
+}

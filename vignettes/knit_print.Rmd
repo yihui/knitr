@@ -4,6 +4,7 @@ author: "Yihui Xie"
 date: '`r Sys.Date()`'
 output:
   html_document:
+    css: assets/fix-bootstrap.css
     toc: yes
 ---
 
