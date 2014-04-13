@@ -2,7 +2,8 @@
 \alias{pandoc}
 \title{A Pandoc wrapper to convert Markdown documents to other formats}
 \usage{
-pandoc(input, format, config = getOption("config.pandoc"), ext = NA)
+pandoc(input, format, config = getOption("config.pandoc"), ext = NA, 
+    encoding = getOption("encoding"))
 }
 \arguments{
 \item{input}{a character vector of the Markdown filenames}
@@ -19,6 +20,8 @@ a file with the same base name as the \code{input} file and an extension
 \item{ext}{the filename extensions; by default, the extension is inferred
 from the \code{format}, e.g. \code{latex} creates \code{pdf}, and
 \code{dzslides} creates \code{html}, and so on}
+
+\item{encoding}{the encoding of the input file; see \code{\link{file}}}
 }
 \value{
 The output filename(s) (or an error if the conversion failed).
