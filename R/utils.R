@@ -451,6 +451,17 @@ correct_encode = function(encoding) {
   } else iconvlist()[idx]
 }
 
+# re-encode an input file to UTF-8
+encode_utf8 = function(input, encoding = getOption('encoding'), output = input) {
+  if (encoding == 'UTF-8') {
+    if (input != output) file.copy(input, output)
+    return()
+  }
+  con = file(input, encoding = encoding)
+  tryCatch(txt <- readLines(con), finally = close(con))
+  writeLines(enc2utf8(txt), output, useBytes = TRUE)
+}
+
 # import functions from tools
 file_ext = tools::file_ext
 sans_ext = tools::file_path_sans_ext

@@ -30,17 +30,20 @@
 #' @param ext the filename extensions; by default, the extension is inferred
 #'   from the \code{format}, e.g. \code{latex} creates \code{pdf}, and
 #'   \code{dzslides} creates \code{html}, and so on
+#' @inheritParams knit
 #' @return The output filename(s) (or an error if the conversion failed).
 #' @references Pandoc: \url{http://johnmacfarlane.net/pandoc/}; Examples and
 #'   rules of the configurations: \url{http://yihui.name/knitr/demo/pandoc}
 #' @seealso \code{\link{read.dcf}}
 #' @export
 #' @examples system('pandoc -h') # see possible output formats
-pandoc = function(input, format, config = getOption('config.pandoc'), ext = NA) {
+pandoc = function(input, format, config = getOption('config.pandoc'), ext = NA,
+                  encoding = getOption('encoding')) {
   if (Sys.which('pandoc') == '')
     stop('Please install pandoc first: http://johnmacfarlane.net/pandoc/')
   cfg = if (is.null(config)) sub_ext(input[1L], 'pandoc') else config
-  txt = pandoc_cfg(readLines(input[1L], warn = FALSE))
+  con = file(input[1L], encoding = encoding)
+  tryCatch(txt <- pandoc_cfg(readLines(con, warn = FALSE)), finally = close(con))
   if (file.exists(cfg)) txt = c(txt, '', readLines(cfg, warn = FALSE))
   con = textConnection(txt); on.exit(close(con))
   cfg = read.dcf(con)
@@ -50,6 +53,15 @@ pandoc = function(input, format, config = getOption('config.pandoc'), ext = NA) 
     colnames(cfg)[nms == 'format'] = 't'  # for backward compatibility
   }
   if (missing(format)) format = pandoc_fmt(cfg)
+  if (encoding != 'UTF-8') {
+    input_utf8 = character(length(input))
+    on.exit(unlink(input_utf8), add = TRUE)
+    for (i in seq_along(input)) {
+      input_utf8[i] = sub_ext(input[i], 'utf8md')
+      encode_utf8(input[i], encoding, input_utf8[i])
+    }
+    input = input_utf8
+  }
   mapply(pandoc_one, input, format, ext, MoreArgs = list(cfg = cfg), USE.NAMES = FALSE)
 }
 # format is a scalar

@@ -62,6 +62,8 @@
 
 - added two read-only chunk options `out.width.px` and `out.height.px`, which are the numbers of pixels calculated from `fig.width` and `fig.height` (which have units in inches), respectively, and the chunk options `out.width` and `out.height` can override the calculated natural size
 
+- added a new argument `encoding` to the `pandoc()` function to specify the character encoding of the input file(s) (fixed the problem http://stackoverflow.com/q/22198832/559676)
+
 ## BUG FIXES
 
 - due to the change in evaluate v0.5, evaluate() may return the raw values of expressions, but the S3 method wrap() does not know how to handle them; now these values are just ignored (thanks, Dan Tenenbaum)
