@@ -15,6 +15,19 @@ assert(
             alist(label='abc-function', fig.path="foo/bar-"))
 )
 
+res = split_file(
+  c('abc', '```{r foo}', '1+1', '```{r bar}', '2+2', '```', 'def'),
+  patterns = all_patterns$md
+)
+assert(
+  'split_file() treats ``` as part of code chunk instead of beginning of text chunk',
+  # the foo chunk does not have a closing mark
+  identical(knit_code$get('foo'), '1+1'),
+  identical(knit_code$get('bar'), '2+2'),
+  # before knitr v1.6, the text chunk was c('', 'def')
+  identical(res[[4]][['input']], 'def')
+)
+knit_code$restore(); knit_concord$restore()
 
 res = parse_inline(c('aaa \\Sexpr{x}', 'bbb \\Sexpr{NA} and \\Sexpr{1+2}',
                      'another expression \\Sexpr{rnorm(10)}'), all_patterns$rnw)

@@ -94,6 +94,8 @@
 
 - the default value for the chunk option `tidy` is `FALSE` now, which means the R source code in chunks will no longer be reformatted by `formatR::tidy.source()` by default; this feature must be explicitly turned on by `tidy=TRUE`, and it has brought a lot of confusion in the past, so it is perhaps a good idea not to reformat the source code by default
 
+- now we treat the closing mark (e.g. `@` in Sweave or the three backticks in R Markdown) as part of the code chunk, instead of the beginning of a text chunk, and a consequence for this change is that **knitr** no longer adds blank lines to the beginning of the text chunks (thanks, Thell 'Bo' Fowler, #752)
+
 - inline R expressions will no longer be evaluated in `try()`, which means errors in inline R code will be emitted immediately
 
 - the first argument of the `plot` hook is the filename of the plot now; in previous versions, it was a vector of length 2 (basename and file extension); see `?hook_plot`

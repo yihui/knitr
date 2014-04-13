@@ -14,7 +14,8 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
 
   blks = grepl(chunk.begin, lines)
   txts = filter_chunk_end(blks, grepl(chunk.end, lines))
-  tmp = logical(n); tmp[blks | txts] = TRUE; lines[txts] = ''
+  # tmp marks the starting lines of a code/text chunk by TRUE
+  tmp = blks | head(c(TRUE, txts), -1)
 
   groups = unname(split(lines, cumsum(tmp)))
   if (set.preamble)
@@ -45,8 +46,12 @@ dep_list = new_defaults()
 
 ## separate params and R code in code chunks
 parse_block = function(input, patterns) {
+  n = length(input)
+  # remove the optional chunk footer
+  if (n >=2 && grepl(patterns$chunk.end, input[n])) input = input[-n]
+
   block = strip_block(input, patterns$chunk.code)
-  n = length(block); chunk.begin = patterns$chunk.begin
+  chunk.begin = patterns$chunk.begin
   params.src = if (group_pattern(chunk.begin)) {
     str_trim(gsub(chunk.begin, '\\1', block[1]))
   } else ''
@@ -57,6 +62,7 @@ parse_block = function(input, patterns) {
   }
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
+  # remove the chunk header
   code = block[-1L]
   if (length(code)) {
     if (label %in% names(knit_code$get())) stop("duplicate label '", label, "'")
