@@ -143,6 +143,9 @@ hook_webgl = function(before, options, envir) {
              snapshot = FALSE)
   res = readLines(name)
   res = res[!grepl('^\\s*$', res)] # remove blank lines
+  # remove <script src="CanvasMatrix.js" type="text/javascript"></script> (bug #755)
+  res = grep('CanvasMatrix\\.js.+</script>\\s*$', res, invert = TRUE, value = TRUE)
+  unlink('CanvasMatrix.js')
   # an ugly fix: pandoc standalone mode mangles the double quotes in debug("<a href=\"url\">")
   res = gsub('\\\\"', "", res)
   paste(gsub('^\\s+', '', res), collapse = '\n') # no indentation at all (for Pandoc)
