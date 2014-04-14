@@ -118,6 +118,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
       input = paste(opts_knit$get('child.path'), input, sep = '')
       input = input2 = file.path(input_dir(), input)
     }
+    # respect the quiet argument in child mode (#741)
+    optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
+    opts_knit$set(progress = opts_knit$get('progress') && !quiet)
   } else {
     oenvir = .knitEnv$knit_global; .knitEnv$knit_global = envir
     on.exit({.knitEnv$knit_global = oenvir}, add = TRUE)
