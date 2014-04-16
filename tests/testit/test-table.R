@@ -28,4 +28,21 @@ assert(
   identical(kable(data.frame(x=c(NA, FALSE))), c('|x     |', '|:-----|', '|NA    |', '|FALSE |'))
 )
 
+assert(
+  'kable() does not add extra spaces to character columns',
+  identical(
+    kable(data.frame(x = c(1.2, 4.87), y = c('fooooo', 'bar')), 'latex'),
+    '
+\\begin{tabular}{r|l}
+\\hline
+x & y\\\\
+\\hline
+1.20 & fooooo\\\\
+\\hline
+4.87 & bar\\\\
+\\hline
+\\end{tabular}'
+  )
+)
+
 options(op)

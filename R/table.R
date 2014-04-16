@@ -84,7 +84,7 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
     x = cbind(' ' = rownames(x), x)
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
-  x = format(as.matrix(x), trim = TRUE)
+  x = format(as.matrix(x), trim = TRUE, justify = 'none')
   if (ncn) colnames(x) = NULL
   attr(x, 'align') = align
   res = do.call(paste('kable', format, sep = '_'), list(x = x, ...))
