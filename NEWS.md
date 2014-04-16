@@ -80,15 +80,15 @@
 
 - `kable()` chokes on tables with NA's (thanks, Harlan Harris and Benjamin Schiller, #720)
 
+- `kable()` did not work with non-numeric data frames (thanks, @talexand, #702)
+
+- for Markdown/reST tables, `kable()` should make sure there are at least one empty line before the table output (thanks, @talexand, #705)
+
 - fixed a bug related to child documents -- chunk options passed from a parent document may not be restored after the child document exits (thanks, Frank Harrell, http://bit.ly/17yitsD)
 
 - fixed a bug for `hook_rgl()` when the chunk option `dev` is a vector of length greater than one (thanks, Ashley Manton, #703)
 
 - `hook_rgl()` did not work with the chunk option `fig.cap` (thanks, Kohske Takahashi, #700)
-
-- `kable()` did not work with non-numeric data frames (thanks, @talexand, #702)
-
-- for Markdown/reST tables, `kable()` should make sure there are at least one empty line before the table output (thanks, @talexand, #705)
 
 - `%\documentclass{}` was mistakenly treated as the specification of the document class instead of a comment in a LaTeX document (thanks, Jarad Niemi, #713)
 
