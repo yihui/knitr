@@ -78,6 +78,8 @@
 
 - `kable()` did not recycle the `align` argument correctly (thanks, Adam Cooper, #638)
 
+- `kable()` chokes on tables with NA's (thanks, Harlan Harris and Benjamin Schiller, #720)
+
 - fixed a bug related to child documents -- chunk options passed from a parent document may not be restored after the child document exits (thanks, Frank Harrell, http://bit.ly/17yitsD)
 
 - fixed a bug for `hook_rgl()` when the chunk option `dev` is a vector of length greater than one (thanks, Ashley Manton, #703)

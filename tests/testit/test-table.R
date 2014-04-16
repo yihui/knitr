@@ -20,3 +20,8 @@ assert(
   'kable() works on character data frames',
   identical(kable(data.frame(x = 'a')), c('|x  |', '|:--|', '|a  |'))
 )
+
+assert(
+  "kable() works on NA's",
+  identical(kable(data.frame(x=c(NA, FALSE))), c('|x     |', '|:-----|', '|NA    |', '|FALSE |'))
+)
