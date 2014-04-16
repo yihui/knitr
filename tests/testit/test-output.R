@@ -23,7 +23,9 @@ assert(
 
 assert(
   'chunks with include=FALSE should stop on error',
-  has_error(knit(text = c('<<include=F>>=', '1+"a"', '@'), quiet = TRUE))
+  suppressMessages(
+    has_error(knit(text = c('<<include=F>>=', '1+"a"', '@'), quiet = TRUE))
+  )
 )
 
 # a shortcut

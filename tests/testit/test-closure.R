@@ -1,5 +1,4 @@
 library(testit)
-message('testing closures created in new_defaults()')
 
 z = new_defaults(list(a = 1))
 

@@ -1,4 +1,6 @@
 library(testit)
+# do not write output to console
+op = options(knitr.table.output = FALSE)
 
 assert(
   'kable() works on data frames/matrices of one row',
@@ -25,3 +27,5 @@ assert(
   "kable() works on NA's",
   identical(kable(data.frame(x=c(NA, FALSE))), c('|x     |', '|:-----|', '|NA    |', '|FALSE |'))
 )
+
+options(op)

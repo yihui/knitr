@@ -18,7 +18,7 @@ assert(
 
 assert(
   'undefined external objects should cause errors',
-  has_error(knit('knit-envir.Rmd', quiet = TRUE)),  # y is not found
+  suppressMessages(has_error(knit('knit-envir.Rmd', quiet = TRUE))),  # y is not found
   !has_error(with(list(y = letters), knit('knit-envir.Rmd', quiet = TRUE)))
 )
 
