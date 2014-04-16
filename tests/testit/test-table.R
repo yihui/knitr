@@ -18,5 +18,5 @@ assert(
 
 assert(
   'kable() works on character data frames',
-  identical(kable(data.frame(x = 'a')), c("|x  |", "|:--|", "|a  |"))
+  identical(kable(data.frame(x = 'a')), c('|x  |', '|:--|', '|a  |'))
 )
