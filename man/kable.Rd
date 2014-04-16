@@ -2,8 +2,8 @@
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
-kable(x, format, digits = getOption("digits"), row.names = NA, align, output = TRUE, 
-    ...)
+kable(x, format, digits = getOption("digits"), row.names = NA, align, 
+    output = getOption("knitr.table.output", TRUE), ...)
 }
 \arguments{
 \item{x}{an R object (typically a matrix or data frame)}

@@ -59,7 +59,7 @@
 #' cat(x, sep = '\n')
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
 kable = function(x, format, digits = getOption('digits'), row.names = NA,
-                 align, output = TRUE, ...) {
+                 align, output = getOption('knitr.table.output', TRUE), ...) {
   if (missing(format)) format = getOption('knitr.table.format', switch(
     out_format() %n% 'markdown', latex = 'latex', listings = 'latex', sweave = 'latex',
     html = 'html', markdown = 'markdown', rst = 'rst',
