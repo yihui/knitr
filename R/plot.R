@@ -112,7 +112,7 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     check_dev(dev)
   )
 
-  dargs = get_dargs(options$dev.args, options$dev, dev)
+  dargs = get_dargs(options$dev.args, dev)
   ## re-plot the recorded plot to an off-screen device
   do.call(device, c(list(path, width = width, height = height), dargs))
   print(plot)
@@ -143,10 +143,11 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 }
 
 # filter the dev.args option
-get_dargs = function(dargs, devs, dev) {
-  if (is.list(dargs) && length(devs) > 1L) {
+get_dargs = function(dargs, dev) {
+  if (length(dargs) == 0) return()
+  if (is.list(dargs) && all(sapply(dargs, is.list))) {
     # dev.args is list(dev1 = list(arg1 = val1, ...), dev2 = list(arg2, ...))
-    if (all(devs %in% names(dargs))) dargs = dargs[[dev]]
+    dargs = dargs[[dev]]
   }
   dargs
 }
