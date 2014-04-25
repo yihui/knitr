@@ -406,6 +406,9 @@ wrap.character = function(x, options) {
 # class 'knit_asis', I'll just write it as is
 #' @export
 wrap.knit_asis = function(x, options) {
+  if (isFALSE(attr(x, 'knit_cacheable')) && options$cache > 0)
+    stop("The code chunk '", options$label, "' is not cacheable; ",
+         "please use the chunk option cache=FALSE on this chunk")
   m = attr(x, 'knit_meta')
   if (length(m)) {
     .knitEnv$meta = c(.knitEnv$meta, m)
@@ -516,15 +519,26 @@ normal_print = default_handlers$value
 #'
 #' This function is normally used in a custom S3 method based on the printing
 #' function \code{\link{knit_print}()}.
+#'
+#' For the \code{cacheable} argument, you need to be careful when printing the
+#' object involves non-trivial side effects, in which case it is strongly
+#' recommended to use \code{cacheable = FALSE} to instruct \pkg{knitr} that this
+#' object should not be cached using the chunk option \code{cache = TRUE},
+#' otherwise the side effects will be lost the next time the chunk is knitted.
+#' For example, printing a \pkg{shiny} input element in an R Markdown document
+#' may involve registering metadata about some JavaScript libraries or
+#' stylesheets, and the metadata may be lost if we cache the code chunk, because
+#' the code evaluation will be skipped the next time.
 #' @param x an R object (typically a character string, or can be converted to a
 #'   character string via \code{\link{as.character}()})
 #' @param meta additional metadata of the object to be printed (the metadata
 #'   will be collected when the object is printed, and accessible via
 #'   \code{knit_meta()})
+#' @param cacheable a logical value indicating if this object is cacheable
 #' @export
 #' @examples  # see ?knit_print
-asis_output = function(x, meta = NULL) {
-  structure(x, class = 'knit_asis', knit_meta = meta)
+asis_output = function(x, meta = NULL, cacheable = length(meta) == 0) {
+  structure(x, class = 'knit_asis', knit_meta = meta, knit_cacheable = cacheable)
 }
 
 #' Metadata about objects to be printed
