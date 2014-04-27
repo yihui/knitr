@@ -232,7 +232,7 @@ purge_cache = function(options) {
   # purge my old cache and cache of chunks dependent on me
   cache$purge(paste(valid_path(
     options$cache.path, c(options$label, dep_list$get(options$label))
-  ), '_*', sep = ''))
+  ), '_????????????????????????????????', sep = ''))
 }
 
 # open a device for a chunk; depending on the option global.device, may or may
