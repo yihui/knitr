@@ -53,6 +53,7 @@ examples:
 vignettes:
 	cd vignettes;\
 	lyx -e knitr knitr-refcard.lyx;\
+	sed -i '/\\usepackage{breakurl}/ d' knitr-refcard.Rnw;\
 	mv knitr-refcard.Rnw assets/template-refcard.tex
 
 # the svn mirror created by
