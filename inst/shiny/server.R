@@ -7,7 +7,8 @@ shinyServer(function(input, output) {
   output$nbOut = reactive({
     src = input$nbSrc
     if (length(src) == 0L || src == '') return('Nothing to show yet...')
-    on.exit(unlink('figure/', recursive = TRUE)) # do not need the figure dir
+    owd = setwd(tempdir()); on.exit(setwd(owd))
+    opts_knit$set(root.dir = owd)
 
     paste(knit2html(text = src, fragment.only = TRUE, quiet = TRUE),
           '<script>',
