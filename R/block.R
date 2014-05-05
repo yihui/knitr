@@ -310,12 +310,15 @@ inline_exec = function(
   for (i in 1:n) {
     res = if (eval) {
       v = withVisible(eval(parse_only(code[i]), envir = envir))
-      if (v$visible) v$value
+      if (v$visible) knit_value(v$value)
     } else '??'
     d = nchar(input)
     # replace with evaluated results
     str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
-      paste(hook(res), collapse = '')
+      if (inherits(res, "knit_asis"))
+        paste(wrap.knit_asis(res), collapse = '')
+      else
+        paste(hook(res), collapse = '')
     } else ''
     if (i < n) loc[(i + 1):n, ] = loc[(i + 1):n, ] - (d - nchar(input))
     # may need to move back and forth because replacement may be longer or shorter
