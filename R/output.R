@@ -406,9 +406,12 @@ wrap.character = function(x, options) {
 # class 'knit_asis', I'll just write it as is
 #' @export
 wrap.knit_asis = function(x, options) {
-  if (isFALSE(attr(x, 'knit_cacheable')) && options$cache > 0)
-    stop("The code chunk '", options$label, "' is not cacheable; ",
-         "please use the chunk option cache=FALSE on this chunk")
+
+  if (!missing(options)) { # For inline
+    if (isFALSE(attr(x, 'knit_cacheable')) && options$cache > 0)
+      stop("The code chunk '", options$label, "' is not cacheable; ",
+           "please use the chunk option cache=FALSE on this chunk")
+  }
   m = attr(x, 'knit_meta')
   if (length(m)) {
     .knitEnv$meta = c(.knitEnv$meta, m)
@@ -504,6 +507,16 @@ knit_print = function(x, options) {
 #' @export
 knit_print.default = function(x, options) {
   normal_print(x)
+}
+
+#' @export
+knit_value = function(x) {
+  UseMethod('knit_value', x)
+}
+
+#' @export
+knit_value.default = function(x) {
+  x
 }
 
 #' @rdname knit_print
