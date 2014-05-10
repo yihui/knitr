@@ -406,7 +406,7 @@ wrap.character = function(x, options) {
 # class 'knit_asis', I'll just write it as is
 #' @export
 wrap.knit_asis = function(x, options) {
-  if (isFALSE(attr(x, 'knit_cacheable')) && options$cache > 0)
+  if (isFALSE(attr(x, 'knit_cacheable')) && (!missing(options) && options$cache > 0))
     stop("The code chunk '", options$label, "' is not cacheable; ",
          "please use the chunk option cache=FALSE on this chunk")
   m = attr(x, 'knit_meta')
@@ -496,14 +496,14 @@ wrap.recordedplot = function(x, options) {
 #' }
 #' # after you defined the above method, data frames will be printed as tables in knitr,
 #' # which is different with the default print() behavior
-knit_print = function(x, options) {
+knit_print = function(x, options, ...) {
   UseMethod('knit_print', x)
 }
 
 #" the default print method is just print()/show()
 #' @export
-knit_print.default = function(x, options) {
-  normal_print(x)
+knit_print.default = function(x, options, inline = FALSE) {
+  if (inline) x else normal_print(x)
 }
 
 #' @rdname knit_print

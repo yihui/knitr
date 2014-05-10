@@ -310,8 +310,9 @@ inline_exec = function(
   for (i in 1:n) {
     res = if (eval) {
       v = withVisible(eval(parse_only(code[i]), envir = envir))
-      if (v$visible) v$value
+      if (v$visible) knit_print(v$value, inline = TRUE)
     } else '??'
+    if (inherits(res, 'knit_asis')) res = wrap.knit_asis(res)
     d = nchar(input)
     # replace with evaluated results
     str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
