@@ -3,7 +3,7 @@
 \alias{normal_print}
 \title{A custom printing function}
 \usage{
-knit_print(x, options)
+knit_print(x, options, inline = FALSE, ...)
 
 normal_print(x)
 }
@@ -11,6 +11,11 @@ normal_print(x)
 \item{x}{an R object to be printed}
 
 \item{options}{a list of the current chunk options}
+
+\item{inline}{a logical value indicating whether this function is invoked in
+code chunks or inline R code}
+
+\item{...}{additional arguments passed to the S3 method (currently ignored)}
 }
 \value{
 The value returned from the print method should be a character vector
@@ -32,13 +37,21 @@ method \code{knit_print.data.frame} that turns a data frame into a table (the
 implementation may use other R packages or functions, e.g. \pkg{xtable} or
 \code{\link{kable}()}).
 }
+\note{
+It is recommended to leave a \code{...} argument in your method, to
+  allow future changes of the \code{knit_print()} API without breaking your
+  method.
+}
 \examples{
 library(knitr)
 # write tables for data frames
-knit_print.data.frame = function(x, options) {
+knit_print.data.frame = function(x, ...) {
     res = paste(c("", "", kable(x, output = FALSE)), collapse = "\\n")
     asis_output(res)
 }
 # after you defined the above method, data frames will be printed as tables in
 # knitr, which is different with the default print() behavior
+}
+\references{
+See \code{vignette('knit_print', package = 'knitr')}.
 }
