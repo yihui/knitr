@@ -482,10 +482,9 @@ wrap.recordedplot = function(x, options) {
 #' implementation may use other R packages or functions, e.g. \pkg{xtable} or
 #' \code{\link{kable}()}).
 #' @param x an R object to be printed
-#' @param options a list of the current chunk options
-#' @param inline a logical value indicating whether this function is invoked in
-#'   code chunks or inline R code
-#' @param ... additional arguments passed to the S3 method (currently ignored)
+#' @param ... additional arguments passed to the S3 method (currently ignored,
+#'   except two optional arguments \code{options} and \code{inline}; see
+#'   References)
 #' @return The value returned from the print method should be a character vector
 #'   or can be converted to a character value. You can wrap the value in
 #'   \code{\link{asis_output}()} so that \pkg{knitr} writes the character value
@@ -503,13 +502,13 @@ wrap.recordedplot = function(x, options) {
 #' }
 #' # after you defined the above method, data frames will be printed as tables in knitr,
 #' # which is different with the default print() behavior
-knit_print = function(x, options, inline = FALSE, ...) {
+knit_print = function(x, ...) {
   UseMethod('knit_print', x)
 }
 
 #" the default print method is just print()/show()
 #' @export
-knit_print.default = function(x, options, inline = FALSE) {
+knit_print.default = function(x, ..., inline = FALSE) {
   if (inline) x else normal_print(x)
 }
 

@@ -3,19 +3,16 @@
 \alias{normal_print}
 \title{A custom printing function}
 \usage{
-knit_print(x, options, inline = FALSE, ...)
+knit_print(x, ...)
 
 normal_print(x)
 }
 \arguments{
 \item{x}{an R object to be printed}
 
-\item{options}{a list of the current chunk options}
-
-\item{inline}{a logical value indicating whether this function is invoked in
-code chunks or inline R code}
-
-\item{...}{additional arguments passed to the S3 method (currently ignored)}
+\item{...}{additional arguments passed to the S3 method (currently ignored,
+except two optional arguments \code{options} and \code{inline}; see
+References)}
 }
 \value{
 The value returned from the print method should be a character vector
