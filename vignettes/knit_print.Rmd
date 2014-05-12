@@ -45,7 +45,7 @@ S3 generic functions are extensible in the sense that we can define custom metho
 ```{r}
 library(knitr)
 # define a method for objects of the class data.frame
-knit_print.data.frame = function(x, options) {
+knit_print.data.frame = function(x, ...) {
   res = paste(c('', '', kable(x, output = FALSE)), collapse = '\n')
   asis_output(res)
 }
@@ -65,6 +65,36 @@ We see all objects except the data frame were printed "normally"^[The two hashes
 
 In the future, I may provide a companion package with **knitr** that includes appropriate printing methods so that users only need to load this package to get attractive printed results. A major factor to consider when defining a printing method is the output format. For example, the table syntax can be entirely different when the output is LaTeX vs when it is Markdown.
 
+It is strongly recommended that your S3 method has a `...` argument, so that your method can safely ignore arguments that are passed to `knit_print()` but not defined in your method. At the moment, a `knit_print()` method can have two optional arguments:
+
+- the `options` argument takes a list of the current chunk options;
+- the `inline` argument indicates if the method is called in code chunks or inline R code;
+
+Depending on your application, you may optionally use these arguments. Here are some examples:
+
+```{r eval=FALSE, tidy=FALSE}
+knit_print.classA = function(x, ...) {
+  # ignore options and inline
+}
+knit_print.classB = function(x, options, ...) {
+  # use the chunk option out.height
+  asis_output(paste(
+    '<iframe src="http://yihui.name" height="', options$out.height, '"></iframe>',
+  ))
+}
+knit_print.classC = function(x, inline = FALSE, ...) {
+  # different output according to inline=TRUE/FALSE
+  if (inline) {
+    'inline output for classC'
+  } else {
+    'chunk output for classC'
+  }
+}
+knit_print.classD = function(x, options, inline = FALSE, ...) {
+  # use both options and inline
+}
+```
+
 ## A Low-level Explanation
 
 You can skip this section if you do not care about the low-level implementation details.
@@ -74,7 +104,7 @@ You can skip this section if you do not care about the low-level implementation 
 As mentioned before, the chunk option `render` is a function that defaults to `knit_print()`. We can certainly use other render functions. For example, we create a dummy function that always says "I do not know what to print" no matter what objects it receives:
 
 ```{r}
-dummy_print = function(x, options) {
+dummy_print = function(x, ...) {
   cat("I do not know what to print!")
   # this function implicitly returns an invisible NULL
 }
@@ -102,7 +132,7 @@ One way to specify the dependencies is through the `meta` argument of `asis_outp
 
 ```{r eval=FALSE, tidy=FALSE}
 # pseudo code
-knit_print.ggvis = function(x, options) {
+knit_print.ggvis = function(x, ...) {
   res = ggvis::print_this_object(x)
   knitr::asis_output(res, meta = list(
     ggvis = list(
@@ -120,7 +150,7 @@ Now we define a print method for `foo` objects:
 
 ```{r tidy=FALSE}
 library(knitr)
-knit_print.foo = function(x, options) {
+knit_print.foo = function(x, ...) {
   res = paste('**This is a `foo` object**:', x)
   asis_output(res, meta = list(
     js  = system.file('www', 'shared', 'shiny.js',  package = 'shiny'),
@@ -151,7 +181,7 @@ new_foo('world')
 Similarly for `bar` objects:
 
 ```{r}
-knit_print.bar = function(x, options) {
+knit_print.bar = function(x, ...) {
   asis_output(x, meta = list(head = '<script>console.log("bar!")</script>'))
 }
 new_bar = function(x) structure(x, class = 'bar')
