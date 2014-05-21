@@ -58,6 +58,11 @@ call_block = function(block) {
   params$params.src = block$params.src
   opts_current$restore(params)  # save current options
 
+  # set local options() for the current R chunk
+  if (is.list(params$R.options)) {
+    op = options(params$R.options); on.exit(options(op), add = TRUE)
+  }
+
   block_exec(params)
 }
 

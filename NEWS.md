@@ -50,6 +50,8 @@
 
 - added a chunk option `fig.process`, which can be set as a function to take the path of a plot and process it, e.g. `fig.process = function(x) knitr::plot_crop(x)`; note the `fig.process` function must return a character string, such as the path of the figure, which might have been changed inside the function
 
+- added a chunk option `R.options` so that we can temporarily set local options() for the current code chunk, and the options will be restored after the chunk (thanks, @r2evans, #764)
+
 - the argument `shortcode` in `knit2wp()` can take a logical vector of length 2 now; the first element determines whether to highlight source code, and the second decides syntax highlighting for text output (thanks, Derek Ogle, #663)
 
 - Sweave2knitr() will report the line numbers indicating where the Sweave-specific syntax was used (thanks, Kirill Muller, #676)
