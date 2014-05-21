@@ -2,27 +2,28 @@
 
 vweave = vtangle = function(file, driver, syntax, encoding = '', quiet = FALSE, ...) {
   opts_chunk$set(error = FALSE)  # should not hide errors
+  knit_hooks$set(purl = hook_purl)  # write out code while weaving
   options(markdown.HTML.header = NULL)
   (if (grepl('\\.[Rr]md$', file)) knit2html else if (grepl('\\.[Rr]rst$', file)) knit2pdf else knit)(
     file, encoding = encoding, quiet = quiet, envir = globalenv()
   )
 }
 
-body(vtangle)[4L] = expression(purl(file, encoding = encoding, quiet = quiet))
+body(vtangle)[5L] = expression(purl(file, encoding = encoding, quiet = quiet))
 
 vweave_docco_linear = vweave
-body(vweave_docco_linear)[4L] = expression(knit2html(
+body(vweave_docco_linear)[5L] = expression(knit2html(
   file, encoding = encoding, quiet = quiet, envir = globalenv(),
   template = system.file('misc', 'docco-template.html', package = 'knitr')
 ))
 
 vweave_docco_classic = vweave
-body(vweave_docco_classic)[4L] = expression(rocco(
+body(vweave_docco_classic)[5L] = expression(rocco(
   file, encoding = encoding, quiet = quiet, envir = globalenv()
 ))
 
 vweave_rmarkdown = vweave
-body(vweave_rmarkdown)[4L] = expression(getFromNamespace('render', 'rmarkdown')(
+body(vweave_rmarkdown)[5L] = expression(getFromNamespace('render', 'rmarkdown')(
   file, encoding = encoding, quiet = quiet, envir = globalenv()
 ))
 
