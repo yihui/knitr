@@ -275,6 +275,12 @@ out_format = function(x) {
   if (missing(x)) fmt else !is.null(fmt) && (fmt %in% x)
 }
 
+# rmarkdown sets an option for the Pandoc output format from markdown
+pandoc_to = function(x) {
+  fmt = opts_knit$get('rmarkdown.pandoc.to')
+  if (missing(x)) fmt else !is.null(fmt) && (fmt %in% x)
+}
+
 #' Path for figure files
 #'
 #' The filename of figure files is the combination of options \code{fig.path}
