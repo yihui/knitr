@@ -30,14 +30,14 @@ str(all_patterns)
 
 
 {% highlight text %}
-## List of 7
+## List of 8
 ##  $ rnw     :List of 7
 ##   ..$ chunk.begin   : chr "^\\s*<<(.*)>>=.*$"
 ##   ..$ chunk.end     : chr "^\\s*@\\s*(%+.*|)$"
 ##   ..$ inline.code   : chr "\\\\Sexpr\\{([^}]+)\\}"
 ##   ..$ inline.comment: chr "^\\s*%.*"
 ##   ..$ ref.chunk     : chr "^\\s*<<(.+)>>\\s*$"
-##   ..$ header.begin  : chr "\\s*\\\\documentclass[^}]+\\}"
+##   ..$ header.begin  : chr "(^|\n)[^%]*\\s*\\\\documentclass[^}]+\\}"
 ##   ..$ document.begin: chr "\\s*\\\\begin\\{document\\}"
 ##  $ brew    :List of 1
 ##   ..$ inline.code: chr "<%[=]{0,1}\\s+([^%]+)\\s+[-]*%>"
@@ -48,7 +48,7 @@ str(all_patterns)
 ##   ..$ ref.chunk     : chr "^%+\\s*<<(.+)>>\\s*$"
 ##   ..$ inline.comment: chr "^\\s*%.*"
 ##   ..$ inline.code   : chr "\\\\rinline\\{([^}]+)\\}"
-##   ..$ header.begin  : chr "\\s*\\\\documentclass[^}]+\\}"
+##   ..$ header.begin  : chr "(^|\n)[^%]*\\s*\\\\documentclass[^}]+\\}"
 ##   ..$ document.begin: chr "\\s*\\\\begin\\{document\\}"
 ##  $ html    :List of 5
 ##   ..$ chunk.begin : chr "^\\s*<!--\\s*begin.rcode\\s*(.*)"
@@ -60,7 +60,7 @@ str(all_patterns)
 ##   ..$ chunk.begin: chr "^\\s*```+\\s*\\{r(.*)\\}\\s*$"
 ##   ..$ chunk.end  : chr "^\\s*```+\\s*$"
 ##   ..$ ref.chunk  : chr "^\\s*<<(.+)>>\\s*$"
-##   ..$ inline.code: chr "`r +([^`\n]+)\\s*`"
+##   ..$ inline.code: chr "`r +([^`]+)\\s*`"
 ##  $ rst     :List of 5
 ##   ..$ chunk.begin: chr "^\\s*[.][.]\\s+\\{r(.*)\\}\\s*$"
 ##   ..$ chunk.end  : chr "^\\s*[.][.]\\s+[.][.]\\s*$"
@@ -72,8 +72,14 @@ str(all_patterns)
 ##   ..$ chunk.end     : chr "^//\\s*end[.]rcode\\s*$"
 ##   ..$ chunk.code    : chr "^//+"
 ##   ..$ ref.chunk     : chr "^\\s*<<(.+)>>\\s*$"
-##   ..$ inline.code   : chr "[+]r +([^+\n]+)\\s*[+]"
+##   ..$ inline.code   : chr "`r +([^`]+)\\s*`|[+]r +([^+]+)\\s*[+]"
 ##   ..$ inline.comment: chr "^//.*"
+##  $ textile :List of 5
+##   ..$ chunk.begin   : chr "^###[.]\\s+begin[.]rcode(.*)$"
+##   ..$ chunk.end     : chr "^###[.]\\s+end[.]rcode\\s*$"
+##   ..$ ref.chunk     : chr "^\\s*<<(.+)>>\\s*$"
+##   ..$ inline.code   : chr "@r +([^@]+)\\s*@"
+##   ..$ inline.comment: chr "^###[.].*"
 {% endhighlight %}
 
 **Knitr** will first examine the content of the input to decide an appropriate set of patterns, if this automatic detection fails, then depending on the extension of the input filename, **knitr** will automatically choose a pattern list from the above lists, e.g. `file.Rnw` will use `all_patterns$rnw`, and `file.html` will use `all_patterns$html`, etc.
