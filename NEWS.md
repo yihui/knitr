@@ -36,6 +36,8 @@
 
 - added a new chunk option `cache.lazy` (TRUE/FALSE) to decide whether to save and lazy load objects when `cache` is enabled; for really large objects, you may need `cache.lazy=FALSE` (thanks, Dario Strbenac, Scott Simpkins, and Mattrition, #572)
 
+- added a chunk option `cache.comments` (TRUE/FALSE) to decide whether updating R comments in a code chunk should invalidate the cache database (thanks, @knokknok, #718)
+
 - `kable()` supports alignment for HTML tables now (thanks, Joseph Larmarange, #656 and #683)
 
 - `kable()` supports table captions in LaTeX, HTML and Pandoc's Markdown now (thanks, Joseph Larmarange, #687)

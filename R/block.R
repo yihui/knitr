@@ -41,6 +41,9 @@ call_block = function(block) {
       params[if (params$cache < 3) cache1.opts else setdiff(names(params), cache0.opts)],
       getOption('width'), if (params$cache == 2) params[cache2.opts]
     )
+    if (params$engine == 'R' && isFALSE(params$cache.comments)) {
+      content[['code']] = formatR:::parse_only(content[['code']])
+    }
     hash = paste(valid_path(params$cache.path, label), digest::digest(content), sep = '_')
     params$hash = hash
     if (cache$exists(hash)) {

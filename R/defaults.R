@@ -91,6 +91,7 @@ opts_chunk_attr = local({
   opts$external = opts$sanitize = NULL  # hide these two rare options
   opts$fig.process = 'function'
   opts$R.options = 'list'
+  opts$cache.comments = 'logical'
   opts
 })
 
