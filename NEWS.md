@@ -40,6 +40,8 @@
 
 - `kable()` supports table captions in LaTeX, HTML and Pandoc's Markdown now (thanks, Joseph Larmarange, #687)
 
+- the `digits` argument for `kable(x)` can also be a vector of length `ncol(x)`, in which case the number of digits is set for each column separately, e.g. `kable(data.frame(x=rnorm(10), y=rnorm(10)), digits = c(1, 4))` (thanks, @nacnudus, #771)
+
 - for Markdown tables, `kable()` gained a new argument `padding` to specify the inner padding of table cells using spaces (thanks, @gavril0, #699)
 
 - added a new vignette engine called `rmarkdown`, which uses `rmarkdown::render()` to create a package vignette from an R Markdown document; see http://rmarkdown.rstudio.com for more information about the **rmarkdown** package, and the vignette `knit_print.Rmd` in **knitr** for an example (basically you specify `\VignetteEngine{knitr::rmarkdown}` in your vignette)

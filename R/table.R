@@ -8,7 +8,8 @@
 #'   automatically determined if the function is called within \pkg{knitr}; it
 #'   can also be set in the global option \code{knitr.table.format}
 #' @param digits the maximum number of digits for numeric columns (passed to
-#'   \code{round()})
+#'   \code{round()}); it can also be a vector of length \code{ncol(x)} to set
+#'   the number of digits for individual columns
 #' @param row.names whether to include row names; by default, row names are
 #'   included if they are neither \code{NULL} nor identical to \code{1:nrow(x)}
 #' @param align the alignment of columns: a character vector consisting of
@@ -30,7 +31,7 @@
 #'   R LaTeX), you will need the chunk option \code{results='asis'}.
 #' @references See
 #'   \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
-#'   for some examples in LaTeX, but they also apply to other document formats.
+#'    for some examples in LaTeX, but they also apply to other document formats.
 #' @export
 #' @examples  kable(head(iris), format = 'latex')
 #' kable(head(iris), format = 'html')
@@ -74,8 +75,9 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
   if (missing(align) || (format == 'latex' && is.null(align)))
     align = ifelse(isn, 'r', 'l')
   # rounding
+  digits = rep(digits, length.out = m)
   for (j in seq_len(m)) {
-    if (is.numeric(x[, j])) x[, j] = round(x[, j], digits)
+    if (is.numeric(x[, j])) x[, j] = round(x[, j], digits[j])
   }
   if (any(isn)) x[, isn] = format(x[, isn], trim = TRUE)
   if (is.na(row.names))
