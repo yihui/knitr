@@ -14,7 +14,8 @@ automatically determined if the function is called within \pkg{knitr}; it
 can also be set in the global option \code{knitr.table.format}}
 
 \item{digits}{the maximum number of digits for numeric columns (passed to
-\code{round()})}
+\code{round()}); it can also be a vector of length \code{ncol(x)} to set
+the number of digits for individual columns}
 
 \item{row.names}{whether to include row names; by default, row names are
 included if they are neither \code{NULL} nor identical to \code{1:nrow(x)}}
@@ -75,7 +76,7 @@ cat(x, sep = "\\n")
 \references{
 See
   \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
-  for some examples in LaTeX, but they also apply to other document formats.
+   for some examples in LaTeX, but they also apply to other document formats.
 }
 \seealso{
 Other R packages such as \pkg{xtable} and \pkg{tables} for HTML and
