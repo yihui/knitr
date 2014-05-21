@@ -3,9 +3,7 @@
 #' @author Ramnath Vaidyanathan
 set_theme = function(theme) {
   header = if (is.list(theme)) theme else theme_to_header(theme)
-  if(out_format('latex')) {
-  	opts_chunk$set(background = header$background)
-  }
+  opts_chunk$set(background = header$background)
   set_header(highlight = header$highlight)
   ## par(col = theme$foreground)
 }
