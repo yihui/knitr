@@ -68,18 +68,19 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
   # if the original object does not have colnames, we need to remove them later
   ncn = is.null(colnames(x))
   if (!is.matrix(x) && !is.data.frame(x)) x = as.data.frame(x)
+  m = ncol(x)
   # numeric columns
-  isn = if (is.matrix(x)) rep(is.numeric(x), ncol(x)) else sapply(x, is.numeric)
+  isn = if (is.matrix(x)) rep(is.numeric(x), m) else sapply(x, is.numeric)
   if (missing(align) || (format == 'latex' && is.null(align)))
     align = ifelse(isn, 'r', 'l')
   # rounding
-  for (j in seq_len(ncol(x))) {
+  for (j in seq_len(m)) {
     if (is.numeric(x[, j])) x[, j] = round(x[, j], digits)
   }
   if (any(isn)) x[, isn] = format(x[, isn], trim = TRUE)
   if (is.na(row.names))
     row.names = !is.null(rownames(x)) && !identical(rownames(x), as.character(seq_len(NROW(x))))
-  if (!is.null(align)) align = rep(align, length.out = ncol(x))
+  if (!is.null(align)) align = rep(align, length.out = m)
   if (row.names) {
     x = cbind(' ' = rownames(x), x)
     if (!is.null(align)) align = c('l', align)  # left align row names
