@@ -12,7 +12,7 @@ The [object](objects) `knit_patterns` manages patterns in **knitr**. For example
 - `inline.code`: the pattern to be used to extract the pieces of R code mixed inline with other texts (i.e. those which are not in separate code chunks); like `chunk.begin`, it must contain a group 
 - `inline.comment`: the pattern of inline comments (tokens of inline R code will be removed from lines that match with this pattern)
 - `header.begin`: the pattern to find out where the document header begins; this is used to insert some header information into the output document (e.g. commands in the preamble in LaTeX, or CSS styles in HTML)
-- `document.begin`: the pattern to find out where the body of the document begins (currently only used to externalize tikz graphics)
+- `document.begin`: the pattern to find out where the body of the document begins (it can be used, for example, to extract the LaTeX preamble so we can externalize tikz graphics, or insert code for syntax highlighting)
 
 Patterns that are `NULL` will not be matched.
 
