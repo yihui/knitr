@@ -21,7 +21,6 @@ hook_plot_textile = function(x, options) {
 #' @rdname output_hooks
 #' @export
 render_textile = function() {
-  knit_hooks$restore()
   set_html_dev()
   opts_knit$set(out.format = 'textile')
   textile.hook = function(name) {

@@ -149,7 +149,6 @@ hook_r2swf = function(x, options) {
 #' @rdname output_hooks
 #' @export
 render_html = function() {
-  knit_hooks$restore()
   set_html_dev()
   opts_knit$set(out.format = 'html')
   ## use div with different classes

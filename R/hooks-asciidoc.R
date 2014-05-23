@@ -15,7 +15,6 @@ hook_plot_asciidoc = function(x, options) {
 #' @rdname output_hooks
 #' @export
 render_asciidoc = function() {
-  knit_hooks$restore()
   set_html_dev()
   opts_knit$set(out.format = 'asciidoc')
   hook.source = function(x, options) {

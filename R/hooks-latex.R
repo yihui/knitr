@@ -235,7 +235,6 @@ render_latex = function() {
   h = opts_knit$get('header')
   if (!nzchar(h['framed'])) set_header(framed = .header.framed)
   if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
-  knit_hooks$restore()
   knit_hooks$set(
     source = function(x, options) {
       x = hilight_source(x, 'latex', options)
@@ -270,7 +269,6 @@ render_sweave = function() {
   opts_knit$set(out.format = 'sweave')
   test_latex_pkg('Sweave', file.path(R.home('share'), 'texmf', 'tex', 'latex', 'Sweave.sty'))
   set_header(framed = '', highlight = '\\usepackage{Sweave}')
-  knit_hooks$restore()
   ## wrap source code in the Sinput environment, output in Soutput
   hook.i = function(x, options)
     paste(c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''),

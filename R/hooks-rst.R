@@ -21,7 +21,6 @@ hook_plot_rst = function(x, options) {
 #' @rdname output_hooks
 #' @export
 render_rst = function(strict = FALSE) {
-  knit_hooks$restore()
   set_html_dev()
   hook.s = function(x, options) {
     paste(c('\n\n::\n', indent_block(x), ''), collapse = '\n')

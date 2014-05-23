@@ -31,7 +31,6 @@ css_align = function(align) {
 #'   put under two colons and indented by 4 spaces, otherwise is put under the
 #'   \samp{sourcecode} directive (e.g. it is useful for Sphinx)
 render_markdown = function(strict = FALSE) {
-  knit_hooks$restore()
   set_html_dev()
   opts_knit$set(out.format = 'markdown')
   ## four spaces lead to <pre></pre>
