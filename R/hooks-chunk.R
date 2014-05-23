@@ -7,15 +7,13 @@ run_hooks = function(before, options, envir = knit_global()) {
   nms = intersect(names(options), names(hooks.a))
   if (!before) nms = rev(nms)
   for (i in nms) {
-    if (!is.null(options[[i]])) {
-      ## run only when option is not NULL
-      if (!is.function(hook <- hooks.a[[i]]))
-        hook = get(hook, envir = envir, mode = 'function')
-      args = list(before = before, options = options, envir = envir, name = i)
-      args = args[names(formals(hook))]
-      res  = do.call(hook, args, envir = envir)
-      if (is.character(res)) out = c(out, res)
-    }
+    # run only when option is not NULL, and hook is not NULL
+    if (is.null(options[[i]]) || is.null(hook <- hooks.a[[i]])) next
+    if (is.character(hook)) hook = get(hook, envir = envir, mode = 'function')
+    args = list(before = before, options = options, envir = envir, name = i)
+    args = args[names(formals(hook))]
+    res  = do.call(hook, args, envir = envir)
+    if (is.character(res)) out = c(out, res)
   }
   out
 }
