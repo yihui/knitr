@@ -33,7 +33,7 @@ getS3method('knit_print', 'default')  # the default method
 normal_print
 ```
 
-As we can see, `knit_print()` only has the `default` method, which is basically `print()` or `show()`, depending on whether the object is an S4 object. This means it does nothing special when printing R objects:
+As we can see, `knit_print()` has a `default` method, which is basically `print()` or `show()`, depending on whether the object is an S4 object. This means it does nothing special when printing R objects:
 
 ```{r collapse=TRUE}
 knit_print(1:10)
