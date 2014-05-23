@@ -25,7 +25,7 @@ install: build
 
 check: build
 	cd ..;\
-	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
+	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran --no-manual
 
 travis: build
 	cd ..;\
