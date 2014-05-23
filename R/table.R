@@ -107,7 +107,7 @@ kable_latex = function(
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL
 ) {
-  if (!is.null(align <- attr(x, 'align'))) {
+  if (!is.null(align <- attr(x, 'align', exact = TRUE))) {
     align = paste(align, collapse = vline)
     align = paste('{', align, '}', sep = '')
   }
@@ -137,7 +137,7 @@ kable_html = function(x, table.attr = '', caption = NULL) {
   table.attr = gsub('^\\s+|\\s+$', '', table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
-  align = if (is.null(align <- attr(x, 'align'))) '' else {
+  align = if (is.null(align <- attr(x, 'align', exact = TRUE))) '' else {
     sprintf(' align="%s"', c(l = 'left', c = 'center', r = 'right')[align])
   }
   cap = if (is.null(caption)) '' else sprintf('\n<caption>%s</caption>', caption)
@@ -182,7 +182,7 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
     if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
     l = pmax(l, nchar(cn))
   }
-  padding = padding * if (is.null(align <- attr(x, 'align'))) 2 else {
+  padding = padding * if (is.null(align <- attr(x, 'align', exact = TRUE))) 2 else {
     ifelse(align == 'c', 2, 1)
   }
   l = pmax(l + padding, 3)  # at least of width 3 for Github Markdown
