@@ -128,9 +128,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     knit_log$restore()
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
     adjust_opts_knit()
-    ## turn off fancy quotes, use smaller digits/width, warn immediately
+    ## turn off fancy quotes, warn immediately
     oopts = options(
-      useFancyQuotes = FALSE, digits = 4L, width = opts_knit$get('width'),
+      useFancyQuotes = FALSE, width = opts_knit$get('width'),
       knitr.in.progress = TRUE, device = pdf_null
     )
     on.exit(options(oopts), add = TRUE)
