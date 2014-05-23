@@ -1,4 +1,5 @@
 S3method(knit_print,default)
+S3method(knit_print,knit_asis)
 S3method(process_group,block)
 S3method(process_group,inline)
 S3method(process_tangle,block)

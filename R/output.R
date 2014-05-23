@@ -513,6 +513,7 @@ knit_print.default = function(x, ..., inline = FALSE) {
   if (inline) x else normal_print(x)
 }
 
+#' @export
 knit_print.knit_asis = function(x, ...) x
 
 #' @rdname knit_print
