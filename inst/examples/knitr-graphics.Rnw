@@ -1,4 +1,4 @@
-%% LyX 2.0.6 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.3 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[nohyper,justified]{tufte-handout}
 \usepackage[T1]{fontenc}
@@ -9,7 +9,6 @@
  {hyperref}
 \hypersetup{
  pdfstartview=FitH}
-\usepackage{breakurl}
 
 \makeatletter
 
@@ -29,7 +28,6 @@
 \makeatother
 
 \begin{document}
-
 <<setup, include=FALSE, cache=FALSE>>=
 library(knitr)
 options(replace.assign=TRUE,width=50)
@@ -426,6 +424,5 @@ to compile. These packages are required (all of them are free software):
 on CRAN except tikzDevice which is on R-Forge for the time being)
 \item [{\LaTeX{}}] animate, hyperref and the tufte-handout class
 \item [{Other}] GGobi, pdfcrop\end{description}
-
 
 \end{document}

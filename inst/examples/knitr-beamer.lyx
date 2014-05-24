@@ -242,7 +242,16 @@ First Test
 status open
 
 \begin_layout FrameTitle
+\begin_inset Flex FragileTitle
+status open
+
+\begin_layout FrameTitle
 First Test
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -354,7 +363,16 @@ Second Test
 status open
 
 \begin_layout FrameTitle
+\begin_inset Flex FragileTitle
+status open
+
+\begin_layout Plain Layout
 Second Test
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
