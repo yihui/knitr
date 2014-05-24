@@ -271,6 +271,10 @@ There are two hidden options which are not designed to be set by the users: `fig
 
 - `purl`: (`TRUE`; logical) when running `purl()` to extract source code from a source document, whether to include or exclude a certain code chunk
 
+### Other Chunk Options
+
+- `R.options`: (`NULL`) local R options for a code chunk; these options are set temporarily via `options()` before the code chunk, and restored after the chunk
+
 ## Package Options <a id="package_options"></a>
 
 The package options can be changed using the object [`opts_knit`](objects); for example,
