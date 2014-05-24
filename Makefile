@@ -19,13 +19,17 @@ build:
 	cd ..;\
 	R CMD build --no-manual $(PKGSRC)
 
+build-cran:
+	cd ..;\
+	R CMD build $(PKGSRC)
+
 install: build
 	cd ..;\
 	R CMD INSTALL $(PKGNAME)_$(PKGVERS).tar.gz
 
-check: build
+check: build-cran
 	cd ..;\
-	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran --no-manual
+	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
 
 travis: build
 	cd ..;\
