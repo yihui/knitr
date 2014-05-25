@@ -586,8 +586,9 @@ default_handlers = evaluate:::default_output_handler
 # change the value handler in evaluate default handlers
 knit_handlers = function(fun, options) {
   if (!is.function(fun)) fun = knit_print
-  if (length(formals(fun)) < 1)
-    stop("the chunk option 'render' must be a function with at least one argument")
+  if (length(formals(fun)) < 2)
+    stop("the chunk option 'render' must be a function of the form ",
+         "function(x, options) or function(x, ...)")
   merge_list(default_handlers, list(value = function(x, visible) {
     if (visible) fun(x, options = options)
   }))
