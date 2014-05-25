@@ -23,7 +23,7 @@ The text representation of the data frame above may look very familiar with most
 
 ## Customize Printing
 
-After we evaluate each R expression in a code chunk, there is an object returned. For example, `1 + 1` returns `2`. This object is passed to the chunk option `render`, which is a function with one argument. The default value for the `render` option is `knit_print`, an S3 function in **knitr**:
+After we evaluate each R expression in a code chunk, there is an object returned. For example, `1 + 1` returns `2`. This object is passed to the chunk option `render`, which is a function with two arguments, `x` and `options`, or `x` and `...`. The default value for the `render` option is `knit_print`, an S3 function in **knitr**:
 
 ```{r}
 library(knitr)

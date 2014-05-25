@@ -5,7 +5,7 @@
 \usage{
 knit_print(x, ...)
 
-normal_print(x)
+normal_print(x, ...)
 }
 \arguments{
 \item{x}{an R object to be printed}

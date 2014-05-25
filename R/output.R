@@ -519,6 +519,7 @@ knit_print.knit_asis = function(x, ...) x
 #' @rdname knit_print
 #' @export
 normal_print = default_handlers$value
+formals(normal_print) = alist(x = , ... = )
 
 #' Mark an R object with a special class
 #'
