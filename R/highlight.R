@@ -8,7 +8,13 @@ hilight_source = function(x, format, options) {
         if (format == 'html') highr:::escape_html(x) else highr:::escape_latex(x)
       } else res
     }
-  } else if (options$prompt) line_prompt(x) else x
+  } else if (options$prompt) {
+    # if you did not reformat or evaluate the code, I have to figure out which
+    # lines belong to one complete expression first (#779)
+    if (!options$tidy && isFALSE(options$eval))
+      x = vapply(highr:::group_src(x), paste, character(1), collapse = '\n')
+    line_prompt(x)
+  } else x
 }
 
 

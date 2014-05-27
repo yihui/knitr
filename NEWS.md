@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.7
+
+## BUG FIXES
+
+- fixed #779: when the chunk options `tidy=FALSE` and `eval=FALSE`, `prompt=TRUE` did not work for R expressions of multiple lines (thanks, Qijie Zhao)
+
 # CHANGES IN knitr VERSION 1.6
 
 ## NEW FEATURES
