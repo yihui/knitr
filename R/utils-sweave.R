@@ -174,12 +174,15 @@ remind_sweave = function(file, sweave_lines) {
                 paste(sweave_lines, collapse = ', '), file)
   # throw a normal warning when R CMD check or tcltk not available
   warning(msg)
-  if (!('CheckExEnv' %in% search()) && !('_R_CHECK_TIMINGS_' %in% names(Sys.getenv())) &&
-        capabilities('tcltk') && capabilities('X11') && has_package('tcltk') &&
-        getFromNamespace('.TkUp', 'tcltk')) {
+  if (!is_R_CMD_check() && tcltk_available()) {
     do.call(
       getFromNamespace('tkmessageBox', 'tcltk'),
       list(title = 'Sweave Noweb syntax?', icon = 'info', message = msg)
     )
   }
+}
+
+tcltk_available = function() {
+  capabilities('tcltk') && capabilities('X11') && has_package('tcltk') &&
+    getFromNamespace('.TkUp', 'tcltk')
 }

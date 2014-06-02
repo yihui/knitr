@@ -593,3 +593,8 @@ knit_handlers = function(fun, options) {
     if (visible) fun(x, options = options)
   }))
 }
+
+# conditionally disable some features during R CMD check
+is_R_CMD_check = function() {
+  ('CheckExEnv' %in% search()) || ('_R_CHECK_TIMINGS_' %in% names(Sys.getenv()))
+}
