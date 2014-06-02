@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.7
 
+## NEW FEATURES
+
+- added vignette engines with the suffix `_notangle`, which have the same weave functions as those engines without this suffix but have disabled the tangle function, meaning there will not be R scripts generated from the vignettes during `R CMD build` or `R CMD check` (thanks, Carl Boettiger and Michael Koohafkan, #784)
+
 ## BUG FIXES
 
 - fixed #779: when the chunk options `tidy=FALSE` and `eval=FALSE`, `prompt=TRUE` did not work for R expressions of multiple lines (thanks, Qijie Zhao)
