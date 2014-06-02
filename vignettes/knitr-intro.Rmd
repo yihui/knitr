@@ -1,5 +1,5 @@
 ---
-title: "Not an Introduction to knitr"
+title: "Not An Introduction to knitr"
 author: "Yihui Xie"
 date: "`r Sys.Date()`"
 bibliography:
