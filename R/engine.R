@@ -75,7 +75,7 @@ eng_interpreted = function(options) {
   cmd = options$engine.path %n% engine
   out = if (options$eval) {
     message('running: ', cmd, " ", code)
-    system2(cmd, code, stdout = TRUE, stderr = TRUE)
+    system2(cmd, code, stdout = TRUE, stderr = options$engine.stderr %n% TRUE)
   } else ''
   if (options$eval && engine == 'sas' && file.exists(saslst))
     out = c(readLines(saslst), out)
