@@ -72,9 +72,10 @@ eng_interpreted = function(options) {
   # FIXME: for these engines, the correct order is options + code + file
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
     paste(code, options$engine.opts) else paste(options$engine.opts, code)
-  cmd = paste(shQuote(options$engine.path %n% engine), code)
+  cmd = options$engine.path %n% engine
   out = if (options$eval) {
-    message('running: ', cmd); system(cmd, intern = TRUE)
+    message('running: ', cmd, " ", code)
+    system2(cmd, code, stdout = TRUE, stderr = TRUE)
   } else ''
   if (options$eval && engine == 'sas' && file.exists(saslst))
     out = c(readLines(saslst), out)
