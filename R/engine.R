@@ -75,8 +75,11 @@ eng_interpreted = function(options) {
   cmd = options$engine.path %n% engine
   out = if (options$eval) {
     message('running: ', cmd, ' ', code)
-    system2(cmd, code, stdout = TRUE, stderr = options$engine.stderr %n% TRUE)
+    system2(cmd, code, stdout = TRUE, stderr = TRUE)
   } else ''
+  # chunk option error=FALSE means we need to signal the error
+  if (!options$error && !is.null(attr(out, 'status')))
+    stop(paste(out, collapse = '\n'))
   if (options$eval && engine == 'sas' && file.exists(saslst))
     out = c(readLines(saslst), out)
   engine_output(options, options$code, out)
