@@ -8,7 +8,7 @@
 #'
 #' The engine function has one argument \code{options}: the source code of the
 #' current chunk is in \code{options$code}. Usually we can call external
-#' programs to run the code via \code{\link{system}}. Other chunk options are
+#' programs to run the code via \code{\link{system2}}. Other chunk options are
 #' also contained in this argument, e.g. \code{options$echo} and
 #' \code{options$eval}, etc.
 #'
@@ -72,9 +72,10 @@ eng_interpreted = function(options) {
   # FIXME: for these engines, the correct order is options + code + file
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
     paste(code, options$engine.opts) else paste(options$engine.opts, code)
-  cmd = paste(shQuote(options$engine.path %n% engine), code)
+  cmd = options$engine.path %n% engine
   out = if (options$eval) {
-    message('running: ', cmd); system(cmd, intern = TRUE)
+    message('running: ', cmd, ' ', code)
+    system2(cmd, code, stdout = TRUE, stderr = options$engine.stderr %n% TRUE)
   } else ''
   if (options$eval && engine == 'sas' && file.exists(saslst))
     out = c(readLines(saslst), out)
