@@ -21,7 +21,7 @@ the output.
 \details{
 The engine function has one argument \code{options}: the source code of the
 current chunk is in \code{options$code}. Usually we can call external
-programs to run the code via \code{\link{system}}. Other chunk options are
+programs to run the code via \code{\link{system2}}. Other chunk options are
 also contained in this argument, e.g. \code{options$echo} and
 \code{options$eval}, etc.
 
