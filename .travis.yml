@@ -24,12 +24,12 @@ install:
   - sudo apt-add-repository -y "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
   - sudo apt-add-repository -y ppa:marutter/c2d4u
-  - sudo apt-get update
-  - sudo apt-get install r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended r-cran-knitr
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended r-cran-knitr
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
-  - Rscript -e 'install.packages("knitr", dep = TRUE, repos = c("http://rforge.net", "http://cran.rstudio.org"))'
+  - Rscript -e 'install.packages("knitr", dep = TRUE, quiet = TRUE, repos = c("http://rforge.net", "http://cran.rstudio.org"))'
 
 # run tests
 script:
