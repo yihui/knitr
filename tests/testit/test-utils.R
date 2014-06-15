@@ -81,3 +81,9 @@ assert(
   identical(escape_latex('# $ % & ~ _ ^ \\ { }'),
             '\\# \\$ \\% \\& \\textasciitilde{} \\_ \\textasciicircum{} \\textbackslash{} \\{ \\}')
 )
+
+assert(
+  'indent_block() works when the first element is empty (#790)',
+  identical(indent_block(c('', 'a')), c('    ', '    a')),
+  identical(indent_block(c('', '')),  c('    ', '    '))
+)

@@ -14,6 +14,8 @@
 
 - fixed #788: there was no increment in the chunk counter when the code chunks were read through `read_chunk()`, which may lead to clashes of chunk labels (thanks, Jason Ackman)
 
+- fixed #790: when chunk A reuses code from chunk B via `<<B>>`, and only the first line of B is empty, chunk reuse can fail because A sees B as empty (thanks, @kingaa)
+
 # CHANGES IN knitr VERSION 1.6
 
 ## NEW FEATURES
