@@ -24,7 +24,8 @@ file}
 \item{quiet}{whether to suppress the progress bar and messages}
 
 \item{envir}{the environment in which the code chunks are to be evaluated
-(can use \code{\link{new.env}()} to guarantee an empty new environment)}
+(for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\code{\link{globalenv}()})}
 
 \item{encoding}{the encoding of the input file; see \code{\link{file}}}
 

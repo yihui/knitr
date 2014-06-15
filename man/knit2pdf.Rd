@@ -24,7 +24,8 @@ function will try to guess and it will be under the current working
 directory}
 
 \item{envir}{the environment in which the code chunks are to be evaluated
-(can use \code{\link{new.env}()} to guarantee an empty new environment)}
+(for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\code{\link{globalenv}()})}
 
 \item{quiet}{whether to suppress the progress bar and messages}
 

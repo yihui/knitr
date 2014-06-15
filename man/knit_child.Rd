@@ -2,7 +2,7 @@
 \alias{knit_child}
 \title{Knit a child document}
 \usage{
-knit_child(..., options = NULL)
+knit_child(..., options = NULL, envir = knit_global())
 }
 \arguments{
 \item{...}{arguments passed to \code{\link{knit}}}
@@ -11,6 +11,10 @@ knit_child(..., options = NULL)
 the child document (ignored if not a list); when we use the \code{child}
 option in a parent chunk, the chunk options of the parent chunk will be
 passed to the \code{options} argument here}
+
+\item{envir}{the environment in which the code chunks are to be evaluated
+(for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\code{\link{globalenv}()})}
 }
 \value{
 A character string of the content of the compiled child document is

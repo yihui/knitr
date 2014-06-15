@@ -56,7 +56,8 @@
 #'   file
 #' @param quiet whether to suppress the progress bar and messages
 #' @param envir the environment in which the code chunks are to be evaluated
-#'   (can use \code{\link{new.env}()} to guarantee an empty new environment)
+#'   (for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+#'   \code{\link{globalenv}()})
 #' @param encoding the encoding of the input file; see \code{\link{file}}
 #' @return The compiled document is written into the output file, and the path
 #'   of the output file is returned, but if the \code{output} path is
