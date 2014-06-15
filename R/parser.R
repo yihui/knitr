@@ -282,7 +282,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
   labels = str_trim(gsub(lab, '\\2', sapply(groups, `[`, 1)))
   labels = gsub(',.*', '', labels)  # strip off possible chunk options
   code = lapply(groups, strip_chunk)
-  if (any(idx <- !nzchar(labels))) labels[idx] = unnamed_chunk(seq_len(sum(idx)))
+  for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()
   knit_code$set(setNames(code, labels))
 }
 #' @rdname read_chunk

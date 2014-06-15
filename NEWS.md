@@ -12,6 +12,8 @@
 
 - fixed #779: when the chunk options `tidy=FALSE` and `eval=FALSE`, `prompt=TRUE` did not work for R expressions of multiple lines (thanks, Qijie Zhao)
 
+- fixed #788: there was no increment in the chunk counter when the code chunks were read through `read_chunk()`, which may lead to clashes of chunk labels (thanks, Jason Ackman)
+
 # CHANGES IN knitr VERSION 1.6
 
 ## NEW FEATURES
