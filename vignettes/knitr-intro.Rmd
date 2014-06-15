@@ -5,7 +5,13 @@ date: "`r Sys.Date()`"
 bibliography:
   - ../inst/examples/knitr-packages.bib
   - ../inst/examples/knitr-manual.bib
-output: html_document
+output:
+  html_document:
+    theme: null
+    highlight: null
+    self_contained: no
+    includes:
+      in_header: assets/header.html
 ---
 
 <!--
