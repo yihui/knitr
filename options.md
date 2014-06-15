@@ -187,7 +187,7 @@ leading white spaces have special meanings in markdown.
   - `all`: keep all plots (low-level plot changes may produce new plots)
   - `first`: only keep the first plot
   - `last`: only keep the last plot
-- `fig.show`: (`'asis'`; character) how to show/arrange the plots; three possible values are
+- `fig.show`: (`'asis'`; character) how to show/arrange the plots; four possible values are
   - `asis`: show plots exactly in places where they were generated (as if the code were run in an R terminal);
   - `hold`: hold all plots and output them in the very end of a code chunk;
   - `animate`: wrap all plots into an animation if there are mutiple plots in a chunk;
