@@ -122,8 +122,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
     opts_knit$set(progress = opts_knit$get('progress') && !quiet)
   } else {
-    oenvir = .knitEnv$knit_global; .knitEnv$knit_global = envir
-    on.exit({.knitEnv$knit_global = oenvir}, add = TRUE)
     opts_knit$set(output.dir = getwd()) # record working directory in 1st run
     knit_log$restore()
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
@@ -142,6 +140,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
                   progress = opts_knit$get('progress') && !quiet
     )
   }
+  # store the evaluation environment and restore on exit
+  oenvir = .knitEnv$knit_global; .knitEnv$knit_global = envir
+  on.exit({.knitEnv$knit_global = oenvir}, add = TRUE)
 
   ext = 'unknown'
   if (in.file) {
@@ -319,6 +320,7 @@ auto_format = function(ext) {
 #'   the child document (ignored if not a list); when we use the \code{child}
 #'   option in a parent chunk, the chunk options of the parent chunk will be
 #'   passed to the \code{options} argument here
+#' @inheritParams knit
 #' @return A character string of the content of the compiled child document is
 #'   returned as a character string so it can be written back to the parent
 #'   document directly.
@@ -332,7 +334,7 @@ auto_format = function(ext) {
 #' @examples ## you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input results from child-doc.Rnw in main.tex
 #'
 #' ## comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
-knit_child = function(..., options = NULL) {
+knit_child = function(..., options = NULL, envir = knit_global()) {
   child = child_mode()
   opts_knit$set(child = TRUE) # yes, in child mode now
   on.exit(opts_knit$set(child = child)) # restore child status
@@ -347,7 +349,7 @@ knit_child = function(..., options = NULL) {
       }, add = TRUE)
     }
   }
-  res = knit(..., tangle = opts_knit$get('tangle'),
+  res = knit(..., tangle = opts_knit$get('tangle'), envir = envir,
              encoding = opts_knit$get('encoding') %n% getOption('encoding'))
   paste(c('', res), collapse = '\n')
 }
