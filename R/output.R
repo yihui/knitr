@@ -411,6 +411,7 @@ wrap.default = function(x, options) return()
 
 #' @export
 wrap.character = function(x, options) {
+  if (options$results == 'hide') return()
   if (output_asis(x, options)) {
     if (!out_format('latex')) return(x)  # latex output still need a tweak
   } else x = comment_out(x, options$comment)
