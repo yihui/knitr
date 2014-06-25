@@ -184,7 +184,10 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
       con = file(input2, encoding = encoding); on.exit(close(con), add = TRUE); con
     } else input2, warn = FALSE)
   } else split_lines(text) # make sure each element is one line
-  if (!length(text)) return() # a trivial case: simply and exit
+  if (!length(text)) {
+    if (is.character(output)) file.create(output)
+    return(output) # a trivial case: create an empty file and exit
+  }
   text = native_encode(text)
 
   apat = all_patterns; opat = knit_patterns$get()
