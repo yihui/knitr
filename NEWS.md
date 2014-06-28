@@ -16,6 +16,10 @@
 
 - fixed #790: when chunk A reuses code from chunk B via `<<B>>`, and only the first line of B is empty, chunk reuse can fail because A sees B as empty (thanks, @kingaa)
 
+## MAJOR CHANGES
+
+- the video format for animations (when the chunk option `fig.show='animate'`) was changed from OGG to WebM (http://www.webmproject.org), which has many benefits over other formats, especially for the web (thanks, @gaorongchao, #641)
+
 # CHANGES IN knitr VERSION 1.6
 
 ## NEW FEATURES

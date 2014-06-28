@@ -68,7 +68,7 @@ hook_ffmpeg_html = function(x, options) {
   fig.num = options$fig.num
   # set up the ffmpeg run
   fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
-  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), '.ogg')
+  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), '.webm')
 
   ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1/options$interval,
                      '-i', fig.fname, mov.fname)
