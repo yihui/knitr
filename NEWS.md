@@ -4,6 +4,8 @@
 
 - added vignette engines with the suffix `_notangle`, which have the same weave functions as those engines without this suffix but have disabled the tangle function, meaning there will not be R scripts generated from the vignettes during `R CMD build` or `R CMD check` (thanks, Carl Boettiger and Michael Koohafkan, #784)
 
+- added an argument `col.names` to `kable()`, so we can specify different column names (thanks, @jackflibb, #801)
+
 - language engines also write error messages (if there are any) in the output now (thanks, Fabian Hirschmann, #789)
 
 - added the `envir` argument to `knit_child()` so that users can specify a different environment to evaluate the child documents (thanks, Stéphane Laurent, http://stackoverflow.com/q/24009622/559676)

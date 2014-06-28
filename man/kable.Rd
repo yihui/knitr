@@ -2,8 +2,8 @@
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
-kable(x, format, digits = getOption("digits"), row.names = NA, align, 
-    output = getOption("knitr.table.output", TRUE), ...)
+kable(x, format, digits = getOption("digits"), row.names = NA, col.names = colnames(x), 
+    align, output = getOption("knitr.table.output", TRUE), ...)
 }
 \arguments{
 \item{x}{an R object (typically a matrix or data frame)}
@@ -19,6 +19,8 @@ the number of digits for individual columns}
 
 \item{row.names}{whether to include row names; by default, row names are
 included if they are neither \code{NULL} nor identical to \code{1:nrow(x)}}
+
+\item{col.names}{a character vector of column names to be used in the table}
 
 \item{align}{the alignment of columns: a character vector consisting of
 \code{'l'} (left), \code{'c'} (center) and/or \code{'r'} (right); by

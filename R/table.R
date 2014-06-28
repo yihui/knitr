@@ -12,6 +12,7 @@
 #'   the number of digits for individual columns
 #' @param row.names whether to include row names; by default, row names are
 #'   included if they are neither \code{NULL} nor identical to \code{1:nrow(x)}
+#' @param col.names a character vector of column names to be used in the table
 #' @param align the alignment of columns: a character vector consisting of
 #'   \code{'l'} (left), \code{'c'} (center) and/or \code{'r'} (right); by
 #'   default, numeric columns are right-aligned, and other columns are
@@ -59,15 +60,17 @@
 #' x = kable(mtcars, format = 'html', output = FALSE)
 #' cat(x, sep = '\n')
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
-kable = function(x, format, digits = getOption('digits'), row.names = NA,
-                 align, output = getOption('knitr.table.output', TRUE), ...) {
+kable = function(
+  x, format, digits = getOption('digits'), row.names = NA, col.names = colnames(x),
+  align, output = getOption('knitr.table.output', TRUE), ...
+) {
   if (missing(format)) format = getOption('knitr.table.format', switch(
-    out_format() %n% 'markdown', latex = 'latex', listings = 'latex', sweave = 'latex',
+    out_format() %n% 'markdown',
+    latex = 'latex', listings = 'latex', sweave = 'latex',
     html = 'html', markdown = 'markdown', rst = 'rst',
     stop('table format not implemented yet!')
   ))
-  # if the original object does not have colnames, we need to remove them later
-  ncn = is.null(colnames(x))
+  col.names # evaluate it now! no lazy evaluation because colnames(x) may change
   if (!is.matrix(x) && !is.data.frame(x)) x = as.data.frame(x)
   m = ncol(x)
   # numeric columns
@@ -85,10 +88,11 @@ kable = function(x, format, digits = getOption('digits'), row.names = NA,
   if (!is.null(align)) align = rep(align, length.out = m)
   if (row.names) {
     x = cbind(' ' = rownames(x), x)
+    if (!is.null(col.names)) col.names = c(' ', col.names)
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
   x = format(as.matrix(x), trim = TRUE, justify = 'none')
-  if (ncn) colnames(x) = NULL
+  colnames(x) = col.names
   attr(x, 'align') = align
   res = do.call(paste('kable', format, sep = '_'), list(x = x, ...))
   if (output) {
