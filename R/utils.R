@@ -150,7 +150,7 @@ input_dir = function() .knitEnv$input.dir %n% '.'
 ## scientific notation in TeX, HTML and reST
 format_sci_one = function(x, format = 'latex') {
 
-  if (!is.numeric(x) || !is.double(x) || is.na(x) || x == 0) return(as.character(x))
+  if (!(class(x)[1] == 'numeric') || is.na(x) || x == 0) return(as.character(x))
 
   if (is.infinite(x)) {
     return(
