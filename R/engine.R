@@ -85,9 +85,11 @@ eng_interpreted = function(options) {
   engine_output(options, options$code, out)
 }
 
-## C (via R CMD SHLIB)
-eng_c = function(options) {
-  writeLines(options$code, f <- basename(tempfile('c', '.', '.c')))
+## C and Fortran (via R CMD SHLIB)
+eng_shlib = function(options) {
+  n = switch(options$engine, c = 'c', fortran = 'f')
+  f = basename(tempfile(n, '.', paste('.', n, sep = '')))
+  writeLines(options$code, f)
   on.exit(unlink(c(f, sub_ext(f, c('o', 'so', 'dll')))))
   if (options$eval) {
     out = system(paste('R CMD SHLIB', f), intern = TRUE)
@@ -222,7 +224,8 @@ rm(i)
 # additional engines
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
-  c = eng_c, asy = eng_dot, cat = eng_cat, asis = eng_asis
+  c = eng_shlib, fortran = eng_shlib, asy = eng_dot, cat = eng_cat,
+  asis = eng_asis
 )
 
 # possible values for engines (for auto-completion in RStudio)
