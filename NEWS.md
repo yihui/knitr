@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- added a simple Fortran engine after sitting with John Nash for a few minutes at UseR!2012; now we can use the chunk option `engine = 'fortran'` to include Fortran code in a source document, which will be compiled and loaded via `R CMD SHILIB` and `dyn.load()`, respectively
+- added a simple Fortran engine after sitting with John Nash for a few minutes at UseR!2014; now we can use the chunk option `engine = 'fortran'` to include Fortran code in a source document, which will be compiled and loaded via `R CMD SHILIB` and `dyn.load()`, respectively
 
 - added vignette engines with the suffix `_notangle`, which have the same weave functions as those engines without this suffix but have disabled the tangle function, meaning there will not be R scripts generated from the vignettes during `R CMD build` or `R CMD check` (thanks, Carl Boettiger and Michael Koohafkan, #784)
 
