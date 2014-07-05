@@ -93,7 +93,7 @@ eng_shlib = function(options) {
   on.exit(unlink(c(f, sub_ext(f, c('o', 'so', 'dll')))))
   if (options$eval) {
     out = system(paste('R CMD SHLIB', f), intern = TRUE)
-    dyn.load(sub('[.]c$', .Platform$dynlib.ext, f))
+    dyn.load(sub(sprintf('[.]%s$', n), .Platform$dynlib.ext, f))
   } else out = ''
   engine_output(options, options$code, out)
 }
