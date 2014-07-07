@@ -117,7 +117,7 @@ nter', fig.show='hold', par=TRUE)
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE, width=68)
+options(replace.assign=TRUE, width=68, digits=4)
 \end_layout
 
 \begin_layout Plain Layout
@@ -792,7 +792,7 @@ Sexpr{123456789}
 
 \end_inset
 
-) if the result is numeric, and we will not get too many digits by default.
+) if the result is numeric.
  You may check out a number of specific manuals dedicated to specific features
  such as graphics in the website: 
 \begin_inset Flex URL

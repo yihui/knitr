@@ -5,6 +5,7 @@ Hi, there. I'm a child.
 
 
 ```r
+options(digits = 4)
 1 + 1
 ```
 

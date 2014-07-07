@@ -41,7 +41,7 @@ library(knitr)
 ## set global chunk options
 opts_chunk$set(fig.path='figure/manual-', cache.path='cache/manual-', fig.align='center', fig.show='hold', par=TRUE)
 ## I use = but I can replace it with <-; set code/output width to be 68
-options(replace.assign=TRUE, width=68)
+options(replace.assign=TRUE, width=68, digits=4)
 ## tune details of base graphics (http://yihui.name/knitr/hooks)
 knit_hooks$set(par=function(before, options, envir){
 if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
@@ -203,9 +203,8 @@ which are motivated from my everyday use of Sweave. For example, a
 progress bar is provided when knitting a file so we roughly know how
 long we still need to wait; output from inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}})
 is automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
-if the result is numeric, and we will not get too many digits by default.
-You may check out a number of specific manuals dedicated to specific
-features such as graphics in the website: \url{http://yihui.name/knitr/demos}.
+if the result is numeric. You may check out a number of specific manuals
+dedicated to specific features such as graphics in the website: \url{http://yihui.name/knitr/demos}.
 
 
 \subsection{Code Decoration}
