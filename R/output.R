@@ -126,7 +126,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     # in child mode, input path needs to be adjusted
     if (in.file && !is_abs_path(input)) {
       input = paste(opts_knit$get('child.path'), input, sep = '')
-      input = input2 = file.path(input_dir(), input)
+      input = input2 = file.path(opts_knit$get('root.dir'), input)
     }
     # respect the quiet argument in child mode (#741)
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
