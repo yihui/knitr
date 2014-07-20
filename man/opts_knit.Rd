@@ -32,10 +32,10 @@ Below is a list of default package options, retrieved via
 \examples{
 opts_knit$get("verbose")
 opts_knit$set(verbose = TRUE)  # change it
-\dontrun{
-# for unnamed chunks, use 'fig' as the figure prefix
-options(knitr.unnamed.chunk.label = "fig")
-knit("001-minimal.Rmd")  # from https://github.com/yihui/knitr-examples
+if (interactive()) {
+    # for unnamed chunks, use 'fig' as the figure prefix
+    opts_knit$set(unnamed.chunk.label = "fig")
+    knit("001-minimal.Rmd")  # from https://github.com/yihui/knitr-examples
 }
 }
 \references{

@@ -133,26 +133,24 @@ set_alias = function(...) {
 #'   \url{http://yihui.name/knitr/options#package_options}
 #' @export
 #' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
-#' \dontrun{
+#' if (interactive()) {
 #' # for unnamed chunks, use 'fig' as the figure prefix
-#' options(knitr.unnamed.chunk.label='fig')
+#' opts_knit$set(unnamed.chunk.label='fig')
 #' knit('001-minimal.Rmd') # from https://github.com/yihui/knitr-examples
 #' }
 opts_knit = new_defaults(list(
-  progress = TRUE, verbose = FALSE, out.format = NULL, width = 75L,
-  base.dir = NULL, base.url = NULL, child.path = '', upload.fun = identity,
-  animation.fun = NULL, global.device = FALSE, global.par = FALSE, eval.after = NULL,
-  concordance = FALSE, tangle = FALSE, child = FALSE,
-  parent = FALSE, documentation = 1L, aliases = NULL, root.dir = NULL,
-  self.contained = TRUE,
-  header = c(highlight = '', tikz = '', framed = ''),
-  unnamed.chunk.label = 'unnamed-chunk'
-))
-## header should not be set by hand unless you know what you are doing
+  progress = TRUE, verbose = FALSE, width = 75L, eval.after = NULL,
+  base.dir = NULL, base.url = NULL, root.dir = NULL, child.path = '',
+  upload.fun = identity, animation.fun = NULL, global.device = FALSE, global.par = FALSE,
+  concordance = FALSE, documentation = 1L, self.contained = TRUE,
+  unnamed.chunk.label = 'unnamed-chunk',
 
-## tangle: whether I'm in tangle mode; child: whether I'm in child
-## document mode; parent: whether I need to add parent preamble to the
-## child output
+  # internal options; users should not touch them
+  out.format = NULL, child = FALSE, parent = FALSE, tangle = FALSE, aliases = NULL,
+  header = c(highlight = '', tikz = '', framed = ''), global.pars = NULL
+))
+# tangle: whether I'm in tangle mode; child: whether I'm in child document mode;
+# parent: whether I need to add parent preamble to the child output
 
 # you may modify these options in options(knitr.package.foo)
 opts_knit_names = c(
