@@ -8,6 +8,8 @@
 
 - added an argument `col.names` to `kable()`, so we can specify different column names (thanks, @jackflibb, #801)
 
+- added a package option `global.par`; if we set `opts_knit$set(global.par = TRUE)` (by default it is FALSE), the `par()` settings from the last code chunk will be preserved and applied to the next code chunk (thanks, Jim Winget)
+
 - language engines also write error messages (if there are any) in the output now (thanks, Fabian Hirschmann, #789)
 
 - added the `envir` argument to `knit_child()` so that users can specify a different environment to evaluate the child documents (thanks, Stéphane Laurent, http://stackoverflow.com/q/24009622/559676)

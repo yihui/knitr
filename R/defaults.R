@@ -141,7 +141,7 @@ set_alias = function(...) {
 opts_knit = new_defaults(list(
   progress = TRUE, verbose = FALSE, out.format = NULL, width = 75L,
   base.dir = NULL, base.url = NULL, child.path = '', upload.fun = identity,
-  animation.fun = NULL, global.device = FALSE, eval.after = NULL,
+  animation.fun = NULL, global.device = FALSE, global.par = FALSE, eval.after = NULL,
   concordance = FALSE, tangle = FALSE, child = FALSE,
   parent = FALSE, documentation = 1L, aliases = NULL, root.dir = NULL,
   self.contained = TRUE,

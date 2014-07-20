@@ -97,7 +97,14 @@ block_exec = function(options) {
   # open a device to record plots
   if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none',
                    options$dev, options$dev.args)) {
-    dv = dev.cur(); on.exit(dev.off(dv))
+    # preserve par() settings from the last code chunk
+    if (keep.pars <- opts_knit$get('global.par'))
+      par(opts_knit$get('global.pars'))
+    dv = dev.cur()
+    on.exit({
+      if (keep.pars) opts_knit$set(global.pars = par(no.readonly = TRUE))
+      dev.off(dv)
+    }, add = TRUE)
   }
 
   res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
