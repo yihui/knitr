@@ -18,7 +18,7 @@ call_block = function(block) {
   params = fix_options(params)  # for compatibility
 
   # expand parameters defined via template
-  if(!is.null(params$opts.label))
+  if (!is.null(params$opts.label))
     params = merge_list(params, opts_template$get(params$opts.label))
 
   label = ref.label = params$label
