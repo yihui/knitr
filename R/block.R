@@ -257,7 +257,7 @@ chunk_device = function(width, height, record = TRUE, dev, dev.args) {
     if (identical(getOption('device'), pdf_null)) {
       if (!is.null(dev.args)) {
         dev.args = get_dargs(dev.args, 'pdf')
-        dev.args = dev.args[intersect(names(dev.args), names(formals(pdf)))]
+        dev.args = dev.args[intersect(names(dev.args), c('pointsize', 'bg'))]
       }
       do.call(pdf_null, c(list(width = width, height = height), dev.args))
     } else dev.new(width = width, height = height)
