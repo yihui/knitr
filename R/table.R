@@ -10,8 +10,9 @@
 #' @param digits the maximum number of digits for numeric columns (passed to
 #'   \code{round()}); it can also be a vector of length \code{ncol(x)} to set
 #'   the number of digits for individual columns
-#' @param row.names whether to include row names; by default, row names are
-#'   included if they are neither \code{NULL} nor identical to \code{1:nrow(x)}
+#' @param row.names a logical value indicating whether to include row names; by
+#'   default, row names are included if \code{rownames(x)} is neither
+#'   \code{NULL} nor identical to \code{1:nrow(x)}
 #' @param col.names a character vector of column names to be used in the table
 #' @param align the alignment of columns: a character vector consisting of
 #'   \code{'l'} (left), \code{'c'} (center) and/or \code{'r'} (right); by

@@ -17,8 +17,9 @@ can also be set in the global option \code{knitr.table.format}}
 \code{round()}); it can also be a vector of length \code{ncol(x)} to set
 the number of digits for individual columns}
 
-\item{row.names}{whether to include row names; by default, row names are
-included if they are neither \code{NULL} nor identical to \code{1:nrow(x)}}
+\item{row.names}{a logical value indicating whether to include row names; by
+default, row names are included if \code{rownames(x)} is neither
+\code{NULL} nor identical to \code{1:nrow(x)}}
 
 \item{col.names}{a character vector of column names to be used in the table}
 
