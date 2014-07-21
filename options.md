@@ -216,6 +216,7 @@ leading white spaces have special meanings in markdown.
 - `fig.pos`: (`''`; character) a character string for the figure position arrangement to be used in `\begin{figure}[fig.pos]`
 - `fig.subcap`: (`NULL`) captions for subfigures; when there are multiple plots in a chunk, and neither `fig.subcap` nor `fig.cap` is NULL, `\subfloat{}` will be used for individual plots (you need to add `\usepackage{subfig}` in the preamble); see [067-graphics-options.Rnw](https://github.com/yihui/knitr-examples/blob/master/067-graphics-options.Rnw) for an example
 - `fig.process`: (`NULL`) a function to post-process a figure file; it should take a filename, and return a character string as the new source of the figure to be inserted in the output
+- `fig.showtext`: (`NULL`) if `TRUE`, call `showtext::showtext.begin()` before drawing plots; see the documentation of the [**showtext**](http://cran.rstudio.com/package=showtext) package for details
 - `external`: (`TRUE`; logical) whether to externalize tikz graphics (pre-compile tikz graphics to PDF); it is only used for the `tikz()` device in the **tikzDevice** package (i.e., when `dev='tikz'`) and it can save time for LaTeX compilation
 - `sanitize`: (`FALSE`; character) whether to sanitize tikz graphics (escape special LaTeX characters); see documentation in the **tikzDevice** package
 
