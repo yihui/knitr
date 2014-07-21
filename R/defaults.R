@@ -86,6 +86,7 @@ opts_chunk_attr = local({
   opts$fig.show = list('asis', 'hold', 'animate', 'hide')
   opts$fig.keep = list('high', 'none', 'all', 'first', 'last')
   opts$fig.align = list('default', 'left', 'right', 'center')
+  opts$fig.showtext = 'logical'
   opts$dev = as.list(names(auto_exts))
   opts$fig.ext = as.list(unique(auto_exts))
   opts$external = opts$sanitize = NULL  # hide these two rare options

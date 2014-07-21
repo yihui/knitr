@@ -115,6 +115,7 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
   dargs = get_dargs(options$dev.args, dev)
   ## re-plot the recorded plot to an off-screen device
   do.call(device, c(list(path, width = width, height = height), dargs))
+  showtext(options$fig.showtext)  # showtext support
   print(plot)
   dev.off()
 
@@ -302,4 +303,9 @@ plot_crop = function(x) {
   cmd = if (ext == 'pdf') paste('pdfcrop', x, x) else paste('convert', x, '-trim', x)
   (if (is_windows()) shell else system)(cmd)
   x
+}
+
+# a wrapper of showtext::showtext.begin()
+showtext = function(show) {
+  if (isTRUE(show)) getFromNamespace('showtext.begin', 'showtext')()
 }

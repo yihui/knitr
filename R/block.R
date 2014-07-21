@@ -100,6 +100,7 @@ block_exec = function(options) {
     # preserve par() settings from the last code chunk
     if (keep.pars <- opts_knit$get('global.par'))
       par(opts_knit$get('global.pars'))
+    showtext(options$fig.showtext)  # showtext support
     dv = dev.cur()
     on.exit({
       if (keep.pars) opts_knit$set(global.pars = par(no.readonly = TRUE))
