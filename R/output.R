@@ -142,6 +142,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
       knitr.in.progress = TRUE, device = pdf_null
     )
     on.exit(options(oopts), add = TRUE)
+    # filenames for all plots
+    .knitEnv$plot.files = NULL; on.exit({.knitEnv$plot.files = NULL}, add = TRUE)
     # restore chunk options after parent exits
     optc = opts_chunk$get(); on.exit(opts_chunk$restore(optc), add = TRUE)
     ocode = knit_code$get(); on.exit(knit_code$restore(ocode), add = TRUE)
@@ -475,6 +477,13 @@ wrap.recordedplot = function(x, options) {
   name = fig_path(if(options$fig.num <= 1) '' else fig.cur, options)
   if (!file.exists(dirname(name)))
     dir.create(dirname(name), recursive = TRUE) # automatically creates dir for plots
+  # check possible conflicts of plot filenames (#704)
+  files = paste(name, options$fig.ext, sep = '.')
+  if (any(i <- files %in% .knitEnv$plot.files)) warning(
+    'You must rename the chunk "', options$label, '" because these plot(s) will ',
+    'be overwritten: ', paste(files[i], collapse = ', ')
+  )
+  .knitEnv$plot.files = c(.knitEnv$plot.files, files)
   # vectorize over dev, ext and dpi: save multiple versions of the plot
   file = mapply(
     save_plot, width = options$fig.width, height = options$fig.height,
