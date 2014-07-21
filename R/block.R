@@ -173,7 +173,7 @@ block_exec = function(options) {
   if (options$results == 'hide') res = Filter(Negate(is.character), res)
   if (options$results == 'hold') {
     i = sapply(res, is.character)
-    res = c(res[!i], res[i])
+    if (any(i)) res = c(res[!i], list(paste(unlist(res[i]), collapse = '')))
   }
   res = filter_evaluate(res, options$warning, is.warning)
   res = filter_evaluate(res, options$message, is.message)
