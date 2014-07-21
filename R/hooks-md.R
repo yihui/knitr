@@ -33,7 +33,7 @@ css_align = function(align) {
 render_markdown = function(strict = FALSE) {
   set_html_dev()
   opts_knit$set(out.format = 'markdown')
-  ## four spaces lead to <pre></pre>
+  # four spaces lead to <pre></pre>
   hook.t = function(x, options) {
     if (strict) {
       paste('\n', indent_block(x), '', sep = '\n')

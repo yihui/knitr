@@ -35,11 +35,11 @@ This function is not supposed be called directly like
   The path of the child document is relative to the parent document.
 }
 \examples{
-## you can write \\Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw'
-## to input results from child-doc.Rnw in main.tex
+# you can write \\Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw'
+# to input results from child-doc.Rnw in main.tex
 
-## comment out the child doc by \\Sexpr{knit_child('child-doc.Rnw', eval =
-## FALSE)}
+# comment out the child doc by \\Sexpr{knit_child('child-doc.Rnw', eval =
+# FALSE)}
 }
 \references{
 \url{http://yihui.name/knitr/demo/child/}

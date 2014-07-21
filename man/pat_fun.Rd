@@ -36,7 +36,7 @@ file extensions, e.g. \code{pat_rnw()} can set the Sweave syntax to read Rnw
 documents.
 }
 \examples{
-## see how knit_patterns is modified
+# see how knit_patterns is modified
 knit_patterns$get()
 pat_rnw()
 knit_patterns$get()

@@ -5,7 +5,7 @@ set_theme = function(theme) {
   header = if (is.list(theme)) theme else theme_to_header(theme)
   opts_chunk$set(background = header$background)
   set_header(highlight = header$highlight)
-  ## par(col = theme$foreground)
+  # par(col = theme$foreground)
 }
 get_theme = function(theme = NULL) {
   if (is.null(theme)) {
@@ -62,11 +62,11 @@ theme_to_header_latex = function(theme) {
   }
   css_out = css.parser(css_file)
 
-  ## get background and foreground colors
+  # get background and foreground colors
   background = css_out$background$color
   foreground = css_out$std$color
 
-  ## write latex highlight header
+  # write latex highlight header
   fgheader = color_def(foreground, 'fgcolor')
   highlight = paste(c(fgheader, styler_assistant_latex(css_out[-1])), collapse = '\n')
   list(highlight = highlight, background = background, foreground = foreground)

@@ -53,7 +53,7 @@ all_patterns = list(
 
 .sep.label = '^#+\\s*(@knitr|----+)(.*?)-*\\s*$'  # pattern for code chunks in an R script
 
-## initial pattern list
+# initial pattern list
 .pat.init = list(
   chunk.begin = NULL, chunk.end = NULL, chunk.code = NULL, inline.code = NULL,
   global.options = NULL, input.doc = NULL, ref.chunk = NULL,
@@ -82,18 +82,18 @@ all_patterns = list(
 #'
 #' knit_patterns$get(c('chunk.begin', 'chunk.end', 'inline.code'))
 #'
-#' ## a customized pattern list; has to empty the original patterns first!
+#' # a customized pattern list; has to empty the original patterns first!
 #' knit_patterns$restore()
-#' ## we may want to use this in an HTML document
+#' # we may want to use this in an HTML document
 #' knit_patterns$set(list(chunk.begin = '<!--helloR\\s+(.*)', chunk.end = '^byeR-->'))
 #' str(knit_patterns$get())
 #'
 #' knit_patterns$set(opat)  # put the old patterns back
 knit_patterns = new_defaults(.pat.init)
 
-## in LaTeX, may need to put this \newcommand{\rinline}[1]{R output}
+# in LaTeX, may need to put this \newcommand{\rinline}[1]{R output}
 
-## convenience functions
+# convenience functions
 set_pattern = function(type) {
   knit_patterns$restore(all_patterns[[type]])
 }
@@ -108,7 +108,7 @@ set_pattern = function(type) {
 #' @return The patterns object \code{\link{knit_patterns}} is modified as a side
 #'   effect.
 #' @export pat_rnw pat_brew pat_tex pat_html pat_md pat_rst pat_asciidoc pat_textile
-#' @examples ## see how knit_patterns is modified
+#' @examples # see how knit_patterns is modified
 #' knit_patterns$get(); pat_rnw(); knit_patterns$get()
 #'
 #' knit_patterns$restore()  # empty the list
@@ -129,14 +129,14 @@ pat_asciidoc = function() set_pattern('asciidoc')
 pat_textile = function() set_pattern('textile')
 
 
-## helper functions
+# helper functions
 
-## is it a group pattern?
+# is it a group pattern?
 group_pattern = function(pattern) {
   !is.null(pattern) && grepl('\\(.+\\)', pattern)
 }
 
-## automatically detect the chunk patterns
+# automatically detect the chunk patterns
 detect_pattern = function(text, ext) {
   if (!missing(ext)) {
     if (ext %in% c('rnw', 'snw', 'stex')) return('rnw')

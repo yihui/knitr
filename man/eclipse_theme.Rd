@@ -18,7 +18,7 @@ result will be ready for \code{knit_theme$set()} to set the highlighting
 theme.
 }
 \examples{
-## http://www.eclipsecolorthemes.org/?view=theme&id=1
+# http://www.eclipsecolorthemes.org/?view=theme&id=1
 \dontrun{
 opts_knit$set(out.format = "latex")
 (css = eclipse_theme(1))

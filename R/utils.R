@@ -1,4 +1,4 @@
-## copy objects in one environment to the other
+# copy objects in one environment to the other
 copy_env = function(from, to, keys = ls(envir = from, all.names = TRUE)) {
   if (identical(from, to)) return()
   for (i in keys) assign(i, get(i, envir = from, inherits = FALSE), envir = to)
@@ -17,13 +17,13 @@ knit_counter = function(init = 0L) {
 plot_counter = knit_counter(1L)
 chunk_counter = knit_counter(1L)
 
-## a vectorized and better version than evaluate:::line_prompt
+# a vectorized and better version than evaluate:::line_prompt
 line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('continue')) {
   # match a \n, then followed by any character (use zero width assertion)
   paste(prompt, gsub('(?<=\n)(?=.|\n)', continue, x, perl = TRUE), sep = '')
 }
 
-## add a prefix to output
+# add a prefix to output
 comment_out = function(x, prefix = '##', which = TRUE, newline = TRUE) {
   x = gsub('[\n]{2,}$', '\n', x)
   if (newline) x = gsub('([^\n])$', '\\1\n', x)  # add \n if not exists
@@ -34,7 +34,7 @@ comment_out = function(x, prefix = '##', which = TRUE, newline = TRUE) {
   x
 }
 
-## assign string in comments to a global variable
+# assign string in comments to a global variable
 comment_to_var = function(x, varname, pattern, envir) {
   if (grepl(pattern, x)) {
     assign(varname, sub(pattern, '', x), envir = envir)
@@ -51,7 +51,7 @@ valid_path = function(prefix, label) {
   paste(prefix, label, sep = '')
 }
 
-## define a color variable in TeX
+# define a color variable in TeX
 color_def = function(col, variable = 'shadecolor') {
   x = if (length(col) == 1L) sc_split(col) else col
   if ((n <- length(x)) != 3L) {
@@ -68,14 +68,14 @@ color_def = function(col, variable = 'shadecolor') {
   sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
 }
 
-## split by semicolon or colon
+# split by semicolon or colon
 sc_split = function(string) {
   if (is.call(string)) string = eval(string)
   if (is.numeric(string) || length(string) > 1L) return(string)
   str_trim(str_split(string, ';|,')[[1]])
 }
 
-## extract LaTeX packages for tikzDevice
+# extract LaTeX packages for tikzDevice
 set_preamble = function(input, patterns = knit_patterns$get()) {
   if (!out_format('latex')) return()
   if (length(db <- patterns$document.begin) != 1L) return()  # no \begin{document} pattern
@@ -90,17 +90,17 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   preamble = pure_preamble(split_lines(str_sub(txt, idx[, 2L] + 1L)), patterns)
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
 }
-## filter out code chunks from preamble if they exist (they do in LyX/Sweave)
+# filter out code chunks from preamble if they exist (they do in LyX/Sweave)
 pure_preamble = function(preamble, patterns) {
   res = split_file(lines = preamble, set.preamble = FALSE, patterns) # should avoid recursion
   if (!parent_mode()) {
-    ## when not in parent mode, just return normal texts and skip code
+    # when not in parent mode, just return normal texts and skip code
     return(unlist(res))
   }
   owd = setwd(input_dir()); on.exit(setwd(owd))
   progress = opts_knit$get('progress')  # suppress printing of blocks and texts
   opts_knit$set(progress = FALSE); on.exit(opts_knit$set(progress = progress), add = TRUE)
-  ## run the code in the preamble
+  # run the code in the preamble
   sapply(res, if (opts_knit$get('tangle')) process_tangle else process_group)
 }
 
@@ -139,15 +139,15 @@ set_parent = function(parent) {
   invisible(NULL)
 }
 
-## whether to write results as-is?
+# whether to write results as-is?
 output_asis = function(x, options) {
   is_blank(x) || options$results == 'asis'
 }
 
-## path relative to dir of the input file
+# path relative to dir of the input file
 input_dir = function() .knitEnv$input.dir %n% '.'
 
-## scientific notation in TeX, HTML and reST
+# scientific notation in TeX, HTML and reST
 format_sci_one = function(x, format = 'latex') {
 
   if (!(class(x)[1] == 'numeric') || is.na(x) || x == 0) return(as.character(x))
@@ -186,18 +186,18 @@ sci_notation = function(format, base, times, power) {
   sprintf(format, base, ifelse(base == '', '', times), power)
 }
 
-## vectorized version of format_sci_one()
+# vectorized version of format_sci_one()
 format_sci = function(x, ...) {
   vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 
-## absolute path?
+# absolute path?
 is_abs_path = function(x) {
   if (is_windows())
     grepl(':', x, fixed = TRUE) || grepl('^\\\\', x) else grepl('^[/~]', x)
 }
 
-## is tikz device without externalization?
+# is tikz device without externalization?
 is_tikz_dev = function(options) {
   'tikz' %in% options$dev && !options$external
 }
@@ -206,7 +206,7 @@ tikz_dict = function(path) {
   paste(sans_ext(basename(path)), 'tikzDictionary', sep = '-')
 }
 
-## compatibility with Sweave and old beta versions of knitr
+# compatibility with Sweave and old beta versions of knitr
 fix_options = function(options) {
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
@@ -233,7 +233,7 @@ fix_options = function(options) {
     options$dpi = options$dpi * r
   }
 
-  ## deal with aliases: a1 is real option; a0 is alias
+  # deal with aliases: a1 is real option; a0 is alias
   if (length(a1 <- opts_knit$get('aliases')) && length(a0 <- names(a1))) {
     for (i in seq_along(a1)) {
       # use alias only if the name exists in options
@@ -247,16 +247,16 @@ fix_options = function(options) {
 # parse but do not keep source
 parse_only = formatR:::parse_only
 
-## eval options as symbol/language objects
+# eval options as symbol/language objects
 eval_lang = function(x, envir = knit_global()) {
   if (!is.symbol(x) && !is.language(x)) return(x)
   eval(x, envir = envir)
 }
 
-## counterpart of isTRUE()
+# counterpart of isTRUE()
 isFALSE = function(x) identical(x, FALSE)
 
-## check latex packages; if not exist, copy them over to ./
+# check latex packages; if not exist, copy them over to ./
 test_latex_pkg = function(name, path) {
   res = try_silent(system(sprintf('%s %s.sty', kpsewhich(), name), intern = TRUE))
   if (inherits(res, 'try-error') || !length(res)) {
@@ -265,7 +265,7 @@ test_latex_pkg = function(name, path) {
   }
 }
 
-## get child and parent mode
+# get child and parent mode
 child_mode = function() opts_knit$get('child')
 parent_mode = function() opts_knit$get('parent')
 

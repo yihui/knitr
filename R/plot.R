@@ -1,4 +1,4 @@
-## graphics devices in base R, plus those in Cairo, cairoDevice, tikzDevice
+# graphics devices in base R, plus those in Cairo, cairoDevice, tikzDevice
 auto_exts = c(
   bmp = 'bmp', postscript = 'eps', pdf = 'pdf', png = 'png', svg = 'svg',
   jpeg = 'jpeg', pictex = 'tex', tiff = 'tiff', win.metafile = 'wmf',
@@ -33,7 +33,7 @@ check_dev = function(dev) {
       stop('the graphical device', sQuote(dev), 'does not exist (as a function)')
 }
 
-## quartiz devices under Mac
+# quartiz devices under Mac
 quartz_dev = function(type, dpi) {
   force(type); force(dpi)
   function(file, width, height, ...) {
@@ -55,7 +55,7 @@ tikz_dev = function(...) {
   )
 }
 
-## save a recorded plot
+# save a recorded plot
 save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
   path = paste(name, ext, sep = '.')
@@ -68,7 +68,7 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     return(paste(name, if (dev == 'tikz' && options$external) 'pdf' else ext, sep = '.'))
   }
 
-  ## built-in devices
+  # built-in devices
   device = switch(
     dev,
     bmp = function(...) bmp(...,  res = dpi, units = 'in'),
@@ -113,13 +113,13 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
   )
 
   dargs = get_dargs(options$dev.args, dev)
-  ## re-plot the recorded plot to an off-screen device
+  # re-plot the recorded plot to an off-screen device
   do.call(device, c(list(path, width = width, height = height), dargs))
   showtext(options$fig.showtext)  # showtext support
   print(plot)
   dev.off()
 
-  ## compile tikz to pdf
+  # compile tikz to pdf
   if (dev == 'tikz' && options$external) {
     unlink(pdf.plot <- paste(name, '.pdf', sep = ''))
     owd = setwd(dirname(path))
@@ -153,15 +153,15 @@ get_dargs = function(dargs, dev) {
   dargs
 }
 
-## this is mainly for Cairo and cairoDevice
+# this is mainly for Cairo and cairoDevice
 load_device = function(name, package, dpi = NULL) {
   dev = getFromNamespace(name, package)
-  ## dpi is for bitmap devices; units must be inches!
+  # dpi is for bitmap devices; units must be inches!
   if (is.null(dpi)) dev else function(...) dev(..., dpi = dpi, units = 'in')
 }
 
 
-## merge low-level plotting changes
+# merge low-level plotting changes
 merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
   idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
   if (n <= 1) return(x)
@@ -175,7 +175,7 @@ merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
   if (is.null(m)) x else x[-m]
 }
 
-## compare two recorded plots
+# compare two recorded plots
 is_low_change = function(p1, p2) {
   p1 = p1[[1]]; p2 = p2[[1]]  # real plot info is in [[1]]
   if ((n2 <- length(p2)) < (n1 <- length(p1))) return(FALSE)  # length must increase

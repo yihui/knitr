@@ -75,7 +75,7 @@ chunk option \code{purl=FALSE} are ignored.
 }
 \examples{
 knit_hooks$set(rgl = hook_rgl)
-## then in code chunks, use the option rgl=TRUE
+# then in code chunks, use the option rgl=TRUE
 }
 \references{
 \url{http://yihui.name/knitr/hooks#chunk_hooks}

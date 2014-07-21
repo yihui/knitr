@@ -32,7 +32,7 @@ new_cache = function() {
 
   save_objects = function(objs, label, path) {
     if (length(objs) == 0L) objs = ''
-    ## save object names
+    # save object names
     x = paste(c(label, objs), collapse = '\t')
     if (file.exists(path)) {
       lines = readLines(path)
@@ -46,7 +46,7 @@ new_cache = function() {
   }
   cache_objects = function(keys, code, label, path) {
     save_objects(keys, label, valid_path(path, '__objects'))
-    ## find globals in code; may not be reliable
+    # find globals in code; may not be reliable
     save_objects(find_globals(code), label, valid_path(path, '__globals'))
   }
 
@@ -63,7 +63,7 @@ new_cache = function() {
   }
 
   cache_library = function(path, save = TRUE) {
-    ## save or load R packages
+    # save or load R packages
     path = valid_path(path, '__packages')
     if (save) {
       x = .packages()
@@ -137,7 +137,7 @@ dep_auto = function(path = opts_chunk$get('cache.path')) {
   for (i in 2:length(nms)) {
     if (length(g <- globals[[nms[i]]]) == 0) next
     for (j in 1:(i - 1L)) {
-      ## check if current globals are in old locals
+      # check if current globals are in old locals
       if (any(g %in% locals[[nms[j]]]))
         dep_list$set(setNames(list(unique(c(dep_list$get(nms[j]), nms[i]))), nms[j]))
     }

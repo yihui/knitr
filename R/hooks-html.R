@@ -33,7 +33,7 @@ hook_plot_html = function(x, options) {
   options$fig.cap %n% sprintf('plot of chunk %s', options$label)
 }
 
-## a wrapper to upload an image and return the URL
+# a wrapper to upload an image and return the URL
 .upload.url = function(x) {
   opts_knit$get('upload.fun')(x)
 }
@@ -87,7 +87,7 @@ hook_ffmpeg_html = function(x, options) {
 
 opts_knit$set(animation.fun = hook_ffmpeg_html)
 
-## use SciAnimator to create animations
+# use SciAnimator to create animations
 #' @rdname hook_animation
 #' @export
 hook_scianimator = function(x, options) {
@@ -125,7 +125,7 @@ hook_scianimator = function(x, options) {
 }
 
 
-## use the R2SWF package to create Flash animations
+# use the R2SWF package to create Flash animations
 #' @rdname hook_animation
 #' @export
 hook_r2swf = function(x, options) {
@@ -151,7 +151,7 @@ hook_r2swf = function(x, options) {
 render_html = function() {
   set_html_dev()
   opts_knit$set(out.format = 'html')
-  ## use div with different classes
+  # use div with different classes
   html.hook = function(name) {
     force(name)
     function (x, options) {

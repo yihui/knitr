@@ -78,7 +78,7 @@ opts_current = new_defaults()
 
 #' @include plot.R
 
-## a list of options attributes for RStudio
+# a list of options attributes for RStudio
 opts_chunk_attr = local({
   opts = lapply(opts_chunk$get(), class)
   opts[opts == 'NULL'] = 'character'

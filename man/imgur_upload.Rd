@@ -45,7 +45,7 @@ attr(res, "XML")  # all information
 if (interactive()) 
     browseURL(res)
 
-## to use your own key
+# to use your own key
 opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "your imgur key"))
 }
 }

@@ -1,7 +1,7 @@
 ## adapted from Hadley's decumar: https://github.com/hadley/decumar
 
-## split input document into groups containing chunks and other texts
-## (may contain inline R code)
+# split input document into groups containing chunks and other texts
+# (may contain inline R code)
 split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()) {
   n = length(lines)
   chunk.begin = patterns$chunk.begin; chunk.end = patterns$chunk.end
@@ -21,7 +21,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
   if (set.preamble)
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
 
-  ## parse 'em all
+  # parse 'em all
   lapply(groups, function(g) {
     block = grepl(chunk.begin, g[1])
     if (!set.preamble && !parent_mode()) {
@@ -31,20 +31,20 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
   })
 }
 
-## a code manager to manage R code in all chunks
+# a code manager to manage R code in all chunks
 knit_code = new_defaults()
 
-## strip the pattern in code
+# strip the pattern in code
 strip_block = function(x, prefix = NULL) {
   if (!is.null(prefix) && (length(x) > 1)) x[-1L] = sub(prefix, '', x[-1L])
   x
 }
 
-## an object to store chunk dependencies; dep_list$get() is of the form list(foo
-## = c('chunk', 'labels', 'that', 'depend', 'on', 'chunk', 'foo'))
+# an object to store chunk dependencies; dep_list$get() is of the form list(foo
+# = c('chunk', 'labels', 'that', 'depend', 'on', 'chunk', 'foo'))
 dep_list = new_defaults()
 
-## separate params and R code in code chunks
+# separate params and R code in code chunks
 parse_block = function(input, patterns) {
   n = length(input)
   # remove the optional chunk footer
@@ -69,7 +69,7 @@ parse_block = function(input, patterns) {
     knit_code$set(setNames(list(code), label))
   }
 
-  ## store dependencies
+  # store dependencies
   if (!is.null(deps <- params$dependson)) {
     deps = sc_split(deps)
     if (is.numeric(deps)) {
@@ -83,11 +83,11 @@ parse_block = function(input, patterns) {
   structure(list(params = params, params.src = params.src), class = 'block')
 }
 
-## autoname for unnamed chunk
+# autoname for unnamed chunk
 unnamed_chunk = function(i = chunk_counter())
   paste(opts_knit$get('unnamed.chunk.label'), i, sep = '-')
 
-## parse params from chunk header
+# parse params from chunk header
 parse_params = function(params) {
 
   params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
@@ -150,7 +150,7 @@ print.block = function(x, ...) {
   cat('\n')
 }
 
-## extract inline R code fragments (as well as global options)
+# extract inline R code fragments (as well as global options)
 parse_inline = function(input, patterns) {
   input.src = input  # keep a copy of the source
 
@@ -321,7 +321,7 @@ strip_white = function(x) {
   x
 }
 
-## (recursively) parse chunk references inside a chunk
+# (recursively) parse chunk references inside a chunk
 parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   if (length(x) == 0L) return(x)
   if (!group_pattern(rc) || !any(idx <- grepl(rc, x))) return(x)
@@ -338,7 +338,7 @@ parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   x
 }
 
-## filter chunk.end lines that don't actually end a chunk
+# filter chunk.end lines that don't actually end a chunk
 filter_chunk_end = function(chunk.begin, chunk.end) {
   in.chunk = FALSE
   fun = function(is.begin, is.end) {

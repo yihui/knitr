@@ -214,7 +214,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   }
 
   if (is.null(out_format())) auto_format(ext)
-  ## change output hooks only if they are not set beforehand
+  # change output hooks only if they are not set beforehand
   if (identical(knit_hooks$get(names(.default.hooks)), .default.hooks) && !child_mode()) {
     getFromNamespace(paste('render', out_format(), sep = '_'), 'knitr')()
     on.exit(knit_hooks$set(.default.hooks), add = TRUE)
@@ -304,7 +304,7 @@ auto_out_name = function(input, ext = tolower(file_ext(input))) {
   paste(name, collapse = '')
 }
 
-## decide output format based on file extension
+# determine output format based on file extension
 ext2fmt = c(
   rnw = 'latex', snw = 'latex', tex = 'latex', rtex = 'latex', stex = 'latex',
   htm = 'html', html = 'html', rhtml = 'html', rhtm = 'html',
@@ -344,9 +344,9 @@ auto_format = function(ext) {
 #'
 #'   The path of the child document is relative to the parent document.
 #' @export
-#' @examples ## you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input results from child-doc.Rnw in main.tex
+#' @examples # you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to input results from child-doc.Rnw in main.tex
 #'
-#' ## comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
+#' # comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
 knit_child = function(..., options = NULL, envir = knit_global()) {
   child = child_mode()
   opts_knit$set(child = TRUE) # yes, in child mode now
@@ -469,13 +469,13 @@ wrap.error = function(x, options) {
 
 #' @export
 wrap.recordedplot = function(x, options) {
-  ## figure number sequence for multiple plots
+  # figure number sequence for multiple plots
   fig.cur = plot_counter()
   options$fig.cur = fig.cur # put fig num in options
   name = fig_path(if(options$fig.num <= 1) '' else fig.cur, options)
   if (!file.exists(dirname(name)))
     dir.create(dirname(name), recursive = TRUE) # automatically creates dir for plots
-  ## vectorize over dev, ext and dpi: save multiple versions of the plot
+  # vectorize over dev, ext and dpi: save multiple versions of the plot
   file = mapply(
     save_plot, width = options$fig.width, height = options$fig.height,
     dev = options$dev, ext = options$fig.ext, dpi = options$dpi,

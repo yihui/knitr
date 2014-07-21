@@ -18,7 +18,7 @@ hilight_source = function(x, format, options) {
 }
 
 
-## stolen from Romain's highlight package (v0.3.2)
+# stolen from Romain's highlight package (v0.3.2)
 
 # http://www.w3schools.com/css/css_colornames.asp
 w3c.colors = c(

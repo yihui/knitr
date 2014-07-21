@@ -34,7 +34,7 @@ stitch = function(script,
                   template = system.file('misc', 'knitr-template.Rnw', package = 'knitr'),
                   output = NULL, text = NULL, envir = parent.frame()) {
   lines = if (nosrc <- is.null(text)) readLines(script, warn = FALSE) else split_lines(text)
-  ## extract title and author from first two lines
+  # extract title and author from first two lines
   if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:', envir)) lines = lines[-1L]
   if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:', envir)) lines = lines[-1L]
   read_chunk(lines = lines)

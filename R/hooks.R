@@ -1,4 +1,4 @@
-## format a single inline object
+# format a single inline object
 .inline.hook = function(x) {
   if (is.numeric(x)) x = round(x, getOption('digits'))
   paste(as.character(x), collapse = ', ')
