@@ -36,6 +36,8 @@
 
 - the `knit()` function no longer modifies R's default `options(digits)` from 7 to 4, since it may lead to confusion especially when printing `summary()` output; for those who want the old behavior, you must set `options(digits = 4)` in the beginning of your document (thanks, John Honaker, #777)
 
+- for the engine `coffee` (CoffeeScript), the flag `-p` has been removed from the command line arguments, which means the default behavior of this engine is to evaluate the code, instead of printing JavaScript; if you want the old behavior, you need the chunk option `engine.opts = '-p'` (thanks, Jake Burkhead, #821)
+
 - when the chunk option `results = 'hold'`, the text output blocks will be collapsed into a single block (thanks, Gavin Simpson, #798)
 
 - the video format for animations (when the chunk option `fig.show='animate'`) was changed from OGG to WebM (http://www.webmproject.org), which has many benefits over other formats, especially for the web (thanks, @gaorongchao, #641)
