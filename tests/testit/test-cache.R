@@ -13,6 +13,22 @@ assert(
   identical(find_globals(c('a=1%*%1%o%2 %in% d','b=d%%10+3%/%2-z[1:3]')), c('d', 'z'))
 )
 
+knit_lazy = function(lazy = TRUE) {
+  in_dir(tempdir(), {
+    txt = c(sprintf('```{r test, cache=TRUE, cache.lazy=%s}', lazy),
+            'x1 = Sys.time()', '```')
+    knit(text = txt, quiet = TRUE)
+    x2 = x1
+    Sys.sleep(0.1)
+    knit(text = txt, quiet = TRUE)
+    x1 == x2  # x1 should not be updated
+  })
+}
+assert(
+  'cache.lazy = TRUE/FALSE works',
+  knit_lazy(TRUE), knit_lazy(FALSE)
+)
+
 knit_code$set(a=1, b=2, c=3)
 assert(
   'dep_prev() sets dependencies on previous chunks',

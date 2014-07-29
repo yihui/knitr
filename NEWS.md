@@ -26,6 +26,8 @@
 
 - fixed #791: if one has specified the chunk option `dev.args`, only `pointsize` and `bg` in it can be passed to the default recording device (the `pdf()` device) (thanks, @M-Russell and @joelgombin)
 
+- fixed #822: `cache.lazy = FALSE` did not really work (thanks, Liz Ing-Simmons)
+
 - fixed #704: **knitr** will emit a warning when a plot file from a previous chunk is to be overwritten; this may occur, for example, when two chunks are named `test` and `test1`, respectively, but the chunk `test` produces two plots (e.g. test1.png and test2.png) and `test1` produces one (e.g. test1.png) (thanks, Kevin Ushey and Kohske Takahashi)
 
 ## MAJOR CHANGES
