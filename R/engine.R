@@ -66,7 +66,7 @@ eng_interpreted = function(options) {
       f
     }, haskell = paste('-e', shQuote(paste(':script', f))), f)
   } else paste(switch(
-    engine, bash = '-c', coffee = '-p -e', perl = '-e', python = '-c',
+    engine, bash = '-c', coffee = '-e', perl = '-e', python = '-c',
     ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(paste(options$code, collapse = '\n')))
   # FIXME: for these engines, the correct order is options + code + file
