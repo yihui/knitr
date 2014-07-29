@@ -44,7 +44,9 @@ insert_header_latex = function(doc, b) {
     # in parent mode, we fill doc to be a complete document
     doc[1L] = paste(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
                       .knitEnv$tikzPackages, '\\begin{document}', doc[1L]), collapse = '\n')
-    doc[length(doc)] = paste(doc[length(doc)], '\\end{document}', sep = '\n')
+    doc[length(doc)] = paste(
+      c(doc[length(doc)], .knitEnv$bibliography, '\\end{document}'), collapse = '\n'
+    )
   }
   doc
 }
