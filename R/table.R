@@ -143,7 +143,7 @@ kable_html = function(x, table.attr = '', caption = NULL) {
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
   align = if (is.null(align <- attr(x, 'align', exact = TRUE))) '' else {
-    sprintf(' align="%s"', c(l = 'left', c = 'center', r = 'right')[align])
+    sprintf(' style="text-align:%s;"', c(l = 'left', c = 'center', r = 'right')[align])
   }
   cap = if (is.null(caption)) '' else sprintf('\n<caption>%s</caption>', caption)
   paste(c(

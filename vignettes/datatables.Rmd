@@ -15,14 +15,14 @@ kable(mtcars, 'html', table.attr='id="mtcars_table"')
 Note we assigned an `id` to the table, and next we use the `DataTables` library to tweak the table.
 
 ```js
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
 	$(document).ready(function() {
 		$('#mtcars_table').dataTable();
 	} );
 </script>
 ```
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   $(document).ready(function() {
 		$('#mtcars_table').dataTable();
 	} );
