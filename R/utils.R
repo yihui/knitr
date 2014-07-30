@@ -78,6 +78,7 @@ sc_split = function(string) {
 # extract LaTeX packages for tikzDevice
 set_preamble = function(input, patterns = knit_patterns$get()) {
   if (!out_format('latex')) return()
+  .knitEnv$tikzPackages = .knitEnv$bibliography = NULL
   if (length(db <- patterns$document.begin) != 1L) return()  # no \begin{document} pattern
   if (length(hb <- patterns$header.begin) != 1L) return()  # no \documentclass{} pattern
   idx2 = grepl(db, input)
@@ -89,6 +90,7 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   options(tikzDocumentDeclaration = str_sub(txt, idx[, 1L], idx[, 2L]))
   preamble = pure_preamble(split_lines(str_sub(txt, idx[, 2L] + 1L)), patterns)
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
+  .knitEnv$bibliography = grep('^\\\\bibliography.+', input, value = TRUE)
 }
 # filter out code chunks from preamble if they exist (they do in LyX/Sweave)
 pure_preamble = function(preamble, patterns) {

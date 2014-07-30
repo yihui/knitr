@@ -76,9 +76,11 @@ new_cache = function() {
     }
   }
 
-  cache_exists = function(hash) {
+  cache_exists = function(hash, lazy = TRUE) {
     is.character(hash) &&
-      all(file.exists(paste(cache_path(hash), c('rdb', 'rdx'), sep = '.')))
+      all(file.exists(paste(
+        cache_path(hash), if (lazy) c('rdb', 'rdx') else 'RData', sep = '.'
+      )))
   }
 
   # when cache=3, code output is stored in .[hash], so cache=TRUE won't lose

@@ -16,6 +16,8 @@
 
 - added the `envir` argument to `knit_child()` so that users can specify a different environment to evaluate the child documents (thanks, Stéphane Laurent, http://stackoverflow.com/q/24009622/559676)
 
+- for `set_parent()`, the lines in the parent document that start with `\bibliography` are matched and inserted in the child document so LaTeX bibliography also works for the child document (thanks, Mark Heckmann, #819)
+
 ## BUG FIXES
 
 - fixed #779: when the chunk options `tidy=FALSE` and `eval=FALSE`, `prompt=TRUE` did not work for R expressions of multiple lines (thanks, Qijie Zhao)
@@ -26,11 +28,15 @@
 
 - fixed #791: if one has specified the chunk option `dev.args`, only `pointsize` and `bg` in it can be passed to the default recording device (the `pdf()` device) (thanks, @M-Russell and @joelgombin)
 
+- fixed #822: `cache.lazy = FALSE` did not really work (thanks, Liz Ing-Simmons)
+
 - fixed #704: **knitr** will emit a warning when a plot file from a previous chunk is to be overwritten; this may occur, for example, when two chunks are named `test` and `test1`, respectively, but the chunk `test` produces two plots (e.g. test1.png and test2.png) and `test1` produces one (e.g. test1.png) (thanks, Kevin Ushey and Kohske Takahashi)
 
 ## MAJOR CHANGES
 
 - the `knit()` function no longer modifies R's default `options(digits)` from 7 to 4, since it may lead to confusion especially when printing `summary()` output; for those who want the old behavior, you must set `options(digits = 4)` in the beginning of your document (thanks, John Honaker, #777)
+
+- for the engine `coffee` (CoffeeScript), the flag `-p` has been removed from the command line arguments, which means the default behavior of this engine is to evaluate the code, instead of printing JavaScript; if you want the old behavior, you need the chunk option `engine.opts = '-p'` (thanks, Jake Burkhead, #821)
 
 - when the chunk option `results = 'hold'`, the text output blocks will be collapsed into a single block (thanks, Gavin Simpson, #798)
 

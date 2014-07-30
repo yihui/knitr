@@ -51,7 +51,10 @@ render_markdown = function(strict = FALSE) {
     }
   }
   hook.r = function(x, options) {
-    paste('\n\n```', tolower(options$engine), '\n', x, '```\n\n', sep = '')
+    language = tolower(options$engine)
+    if (language == 'node')
+        language = 'javascript'
+    paste('\n\n```', language, '\n', x, '```\n\n', sep = '')
   }
   knit_hooks$set(
     source = function(x, options) {

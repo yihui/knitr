@@ -47,7 +47,7 @@ call_block = function(block) {
     }
     hash = paste(valid_path(params$cache.path, label), digest::digest(content), sep = '_')
     params$hash = hash
-    if (cache$exists(hash)) {
+    if (cache$exists(hash, params$cache.lazy)) {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
       cache$load(hash, lazy = params$cache.lazy)
       if (!params$include) return('')
@@ -136,7 +136,7 @@ block_exec = function(options) {
             ' use the chunk option error = ', err.code != 2L, ' instead')
     options$error = err.code != 2L
   }
-  cache.exists = cache$exists(options$hash)
+  cache.exists = cache$exists(options$hash, options$cache.lazy)
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
     list(structure(list(src = code), class = 'source'))

@@ -88,7 +88,7 @@ spin = function(
 
   for (i in seq_len(n)) {
     block = x[seq(idx[i] + 1L, idx[i+1])]
-    txt[[i]] = if (r$value[i]) {
+    txt[[i]] = if (r$values[i]) {
       # normal text; just strip #'
       sub(doc, '', block)
     } else {
