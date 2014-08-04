@@ -90,7 +90,7 @@ library(knitr)
 knit(input)
 ```
 
-[<img src="http://i.imgur.com/R6DSHDE.jpg" align="right" />](http://amzn.com/1482203537)
+[<img src="http://i.imgur.com/R6DSHDE.jpg" align="right" alt="The book Dynamic Documents with R and knitr" />](http://amzn.com/1482203537)
 
 If options are not explicitly specified, **knitr** will try to guess
 reasonable default settings. A few manuals are available such as the [main
