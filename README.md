@@ -1,6 +1,6 @@
 # knitr
 
-[![Build Status](https://travis-ci.org/yihui/knitr.png)](https://travis-ci.org/yihui/knitr)
+[![Build Status](https://travis-ci.org/yihui/knitr.svg)](https://travis-ci.org/yihui/knitr)
 
 The R package **knitr** is a general-purpose literate programming engine,
 with lightweight API's designed to give users full control of the output
