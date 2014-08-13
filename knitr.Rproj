@@ -16,5 +16,5 @@ AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
 
 BuildType: Package
-PackageInstallArgs: -v; Rscript -e "Rd2roxygen::rab('knitr', install=TRUE)" #
+PackageInstallArgs: -v && Rscript -e "Rd2roxygen::rab('knitr', install=TRUE)" #
 PackageCheckArgs: --as-cran --no-manual
