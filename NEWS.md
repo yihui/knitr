@@ -32,6 +32,8 @@
 
 - fixed #704: **knitr** will emit a warning when a plot file from a previous chunk is to be overwritten; this may occur, for example, when two chunks are named `test` and `test1`, respectively, but the chunk `test` produces two plots (e.g. test1.png and test2.png) and `test1` produces one (e.g. test1.png) (thanks, Kevin Ushey and Kohske Takahashi)
 
+- fixed rstudio/rmarkdown#205: when R marks the encoding of the input document as latin1, `knit()` can fail to convert its encoding (thanks, @ripkrizbi)
+
 ## MAJOR CHANGES
 
 - the `knit()` function no longer modifies R's default `options(digits)` from 7 to 4, since it may lead to confusion especially when printing `summary()` output; for those who want the old behavior, you must set `options(digits = 4)` in the beginning of your document (thanks, John Honaker, #777)
