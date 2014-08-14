@@ -71,7 +71,12 @@ To enable this hook, it is recommended to associate it with the chunk option
 \code{purl}, i.e. \code{knit_hooks$set(purl = hook_purl)}. When this hook is
 enabled, an R script will be written while the input document is being
 \code{\link{knit}}. Currently the code chunks that are not R code or have the
-chunk option \code{purl=FALSE} are ignored.
+chunk option \code{purl=FALSE} are ignored. Please note when the cache is
+turned on (the chunk option \code{cache = TRUE}), no chunk hooks will be
+executed, hence \code{hook_purl()} will not work, either. To solve this
+problem, we need \code{cache = 2} instead of \code{TRUE} (see
+\url{http://yihui.name/knitr/demo/cache/} for the meaning of \code{cache =
+2}).
 }
 \examples{
 knit_hooks$set(rgl = hook_rgl)
