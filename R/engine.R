@@ -37,7 +37,11 @@ engine_output = function(options, code, out, extra = NULL) {
   if (length(code) != 1L) code = paste(code, collapse = '\n')
   if (length(out) != 1L) out = paste(out, collapse = '\n')
   out = sub('([^\n]+)$', '\\1\n', out)
-  if (options$engine == 'Rscript') options$engine = 'r'
+  # replace the engine names for markup later, e.g. ```Rscript should be ```r
+  options$engine = switch(
+    options$engine, 'Rscript' = 'r', node = 'javascript',
+    options$engine
+  )
   paste(c(
     if (options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) {
@@ -66,8 +70,8 @@ eng_interpreted = function(options) {
       f
     }, haskell = paste('-e', shQuote(paste(':script', f))), f)
   } else paste(switch(
-    engine, bash = '-c', coffee = '-e', perl = '-e', python = '-c',
-    ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', node = '-e', NULL
+    engine, bash = '-c', coffee = '-e', node = '-e', perl = '-e', python = '-c',
+    ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(paste(options$code, collapse = '\n')))
   # FIXME: for these engines, the correct order is options + code + file
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
@@ -215,8 +219,8 @@ eng_asis = function(options) {
 }
 
 # set engines for interpreted languages
-for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'perl', 'python',
-            'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'zsh', 'node')) {
+for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'node', 'perl', 'python',
+            'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'zsh')) {
   knit_engines$set(setNames(list(eng_interpreted), i))
 }
 rm(i)
