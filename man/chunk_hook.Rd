@@ -29,7 +29,7 @@ provides a few useful hooks, which can also serve as examples of how to
 define chunk hooks in \pkg{knitr}.
 }
 \details{
-The function \code{hook_rgl} can be set as a hook in \pkg{knitr} to save
+The function \code{hook_rgl()} can be set as a hook in \pkg{knitr} to save
 plots produced by the \pkg{rgl} package. According to the chunk option
 \code{dev} (graphical device), plots can be save to different formats
 (\code{postscript}: \samp{eps}; \code{pdf}: \samp{pdf}; other devices
@@ -37,11 +37,11 @@ correspond to the default PNG format). The plot window will be adjusted
 according to chunk options \code{fig.width} and \code{fig.height}. Filenames
 are derived from chunk labels and the \code{fig.path} option.
 
-The function \code{hook_webgl} is a wrapper for the
+The function \code{hook_webgl()} is a wrapper for the
 \code{\link[rgl]{writeWebGL}()} function in the \pkg{rgl} package. It writes
 WebGL code to the output to reproduce the \pkg{rgl} scene in a browser.
 
-The function \code{hook_pdfcrop} can use the program \command{pdfcrop} to
+The function \code{hook_pdfcrop()} can use the program \command{pdfcrop} to
 crop the extra white margin when the plot format is PDF to make better use of
 the space in the output document, otherwise we often have to struggle with
 \code{\link[graphics]{par}} to set appropriate margins. Note
@@ -52,7 +52,7 @@ it). Similarly, when the plot format is not PDF (e.g. PNG), the program
 \command{convert} in ImageMagick is used to trim the white margins (call
 \command{convert input -trim output}).
 
-The function \code{hook_optipng} calls the program \command{optipng} to
+The function \code{hook_optipng()} calls the program \command{optipng} to
 optimize PNG images. Note the chunk option \code{optipng} can be used to
 provide additional parameters to the program \command{optipng}, e.g.
 \code{optipng = '-o7'}. See \url{http://optipng.sourceforge.net/} for
@@ -63,7 +63,7 @@ we save the plots to files manually via other functions (e.g. \pkg{rgl}
 plots), we can use the chunk hook \code{hook_plot_custom} to help write code
 for graphics output into the output document.
 
-The hook \code{hook_purl} can be used to write the code chunks to an R
+The hook \code{hook_purl()} can be used to write the code chunks to an R
 script. It is an alternative approach to \code{\link{purl}}, and can be more
 reliable when the code chunks depend on the execution of them (e.g.
 \code{\link{read_chunk}()}, or \code{\link{opts_chunk}$set(eval = FALSE)}).
