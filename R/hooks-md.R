@@ -61,7 +61,13 @@ render_markdown = function(strict = FALSE) {
       x = hilight_source(x, 'markdown', options)
       (if (strict) hook.t else hook.r)(paste(c(x, ''), collapse = '\n'), options)
     }, output = hook.t, warning = hook.t, error = hook.t, message = hook.t,
-    inline = function(x) .inline.hook(format_sci(x, 'html')),
+    inline = function(x) {
+      fmt = pandoc_to()
+      if (length(fmt) != 1L) fmt = 'html' else {
+        fmt = switch(fmt, beamer = 'latex', latex = 'latex', 'html')
+      }
+      .inline.hook(format_sci(x, fmt))
+    },
     plot = hook_plot_md,
     chunk = function(x, options) {
       x = gsub('[\n]{2,}(```|    )', '\n\n\\1', x)
