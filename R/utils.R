@@ -171,7 +171,10 @@ format_sci_one = function(x, format = 'latex') {
 
   switch(format, latex = {
     sci_notation('%s%s10^{%s}', b, '\\times ', lx)
-  }, html = sci_notation('%s%s10<sup>%s</sup>', b, ' &times; ', lx), rst = {
+  },
+  html = sci_notation('%s%s10<sup>%s</sup>', b, ' &times; ', lx),
+  md   = sci_notation('%s%s10^%s^', b, '&times; ', lx),
+  rst  = {
     # if AsIs, use the :math: directive
     if (inherits(x, 'AsIs')) {
       s = sci_notation('%s%s10^{%s}', b, '\\times ', lx)

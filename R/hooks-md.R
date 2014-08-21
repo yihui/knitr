@@ -63,9 +63,9 @@ render_markdown = function(strict = FALSE) {
     }, output = hook.t, warning = hook.t, error = hook.t, message = hook.t,
     inline = function(x) {
       fmt = pandoc_to()
-      if (length(fmt) != 1L) fmt = 'html' else {
-        fmt = switch(fmt, beamer = 'latex', latex = 'latex', 'html')
-      }
+      fmt = if (length(fmt) != 1L) 'html' else switch(
+        fmt, beamer = 'latex', latex = 'latex', docx = 'md', markdown = 'md', 'html'
+      )
       .inline.hook(format_sci(x, fmt))
     },
     plot = hook_plot_md,
