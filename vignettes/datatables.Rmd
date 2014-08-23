@@ -17,14 +17,14 @@ Note we assigned an `id` to the table, and next we use the `DataTables` library 
 ```js
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#mtcars_table').dataTable();
+		$('#mtcars_table').DataTable();
 	} );
 </script>
 ```
 
 <script type="text/javascript">
   $(document).ready(function() {
-		$('#mtcars_table').dataTable();
+		$('#mtcars_table').DataTable();
 	} );
 </script>
 
@@ -34,7 +34,7 @@ Since this is a Markdown vignette, we need to add the JavaScript libraries as we
 options(markdown.HTML.header = system.file('misc', 'datatables.html', package = 'knitr'))
 ```
 
-Two files `vignette.css` and `datatables.html` under the `misc` directory of **knitr** were added to the HTML output.
+The file `datatables.html` under the `misc` directory of **knitr** was added to the HTML output.
 
 By comparison, below is an ordinary table:
 
