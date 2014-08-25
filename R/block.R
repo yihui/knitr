@@ -115,7 +115,7 @@ block_exec = function(options) {
   echo = options$echo  # tidy code if echo
   if (!isFALSE(echo) && options$tidy && length(code)) {
     res = try_silent(do.call(
-      tidy.source, c(list(text = code, output = FALSE), options$tidy.opts)
+      tidy_source, c(list(text = code, output = FALSE), options$tidy.opts)
     ))
     if (!inherits(res, 'try-error')) {
       code = native_encode(res$text.tidy)

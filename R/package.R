@@ -19,7 +19,7 @@
 #'   FAQ's: \url{https://github.com/yihui/knitr/blob/master/FAQ.md}
 #' @importFrom evaluate evaluate is.recordedplot is.source is.warning is.error
 #'   is.message
-#' @importFrom formatR tidy.source
+#' @importFrom formatR tidy_source
 #' @import stringr
 NULL
 
