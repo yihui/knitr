@@ -72,11 +72,11 @@ Description: This package provides a general-purpose tool for dynamic report
 Depends:
     R (>= 2.14.1)
 Imports:
-    evaluate (>= 0.5.3),
+    evaluate (>= 0.5.5),
     digest,
     formatR (>= 1.0),
     highr (>= 0.3),
-    markdown (>= 0.6.5),
+    markdown (>= 0.7.4),
     stringr (>= 0.6),
     tools
 Suggests:
