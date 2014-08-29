@@ -19,12 +19,11 @@
 #' knit_theme$set(thm)
 #' }
 eclipse_theme = function(id){
-  library(XML)
   url = 'http://www.eclipsecolorthemes.org/?view=empty&action=download&theme=%s&type=xml'
-  doc = xmlParse(sprintf(url, id))
-  docname = xmlAttrs(xmlRoot(doc), 'colorTheme[@name]')['name']
+  doc = XML::xmlParse(sprintf(url, id))
+  docname = XML::xmlAttrs(XML::xmlRoot(doc), 'colorTheme[@name]')['name']
   docname = make.names(tolower(docname))
-  lst = xmlToList(doc)
+  lst = XML::xmlToList(doc)
 
   css = character(length(css2ecl))
   for (i in seq_along(css2ecl)) {

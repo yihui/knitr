@@ -61,19 +61,18 @@
 #' @examples knit_hooks$set(rgl = hook_rgl)
 #' # then in code chunks, use the option rgl=TRUE
 hook_rgl = function(before, options, envir) {
-  library(rgl)
   # after a chunk has been evaluated
-  if (before || rgl.cur() == 0) return()  # no active device
+  if (before || rgl::rgl.cur() == 0) return()  # no active device
   name = fig_path('', options)
-  par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
+  rgl::par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
 
   # support 3 formats: eps, pdf and png (default)
   for (dev in options$dev) switch(
     dev,
-    postscript = rgl.postscript(str_c(name, '.eps'), fmt = 'eps'),
-    pdf = rgl.postscript(str_c(name, '.pdf'), fmt = 'pdf'),
-    rgl.snapshot(str_c(name, '.png'), fmt = 'png')
+    postscript = rgl::rgl.postscript(str_c(name, '.eps'), fmt = 'eps'),
+    pdf = rgl::rgl.postscript(str_c(name, '.pdf'), fmt = 'pdf'),
+    rgl::rgl.snapshot(str_c(name, '.png'), fmt = 'png')
   )
 
   options$fig.num = 1L  # only one figure in total
@@ -133,19 +132,20 @@ hook_plot_custom = function(before, options, envir){
 #' @export
 #' @rdname chunk_hook
 hook_webgl = function(before, options, envir) {
-  library(rgl)
   # after a chunk has been evaluated
-  if (before || rgl.cur() == 0) return()  # no active device
+  if (before || rgl::rgl.cur() == 0) return()  # no active device
   name = tempfile('rgl', '.', '.html'); on.exit(unlink(name))
-  par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
+  rgl::par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
 
   prefix = gsub('[^[:alnum:]]', '_', options$label) # identifier for JS, better be alnum
   prefix = sub('^([^[:alpha:]])', '_\\1', prefix) # should start with letters or _
   writeLines(sprintf(c('%%%sWebGL%%', '<script>%swebGLStart();</script>'), prefix),
              tpl <- tempfile())
-  writeWebGL(dir = dirname(name), filename = name, template = tpl, prefix = prefix,
-             snapshot = FALSE)
+  rgl::writeWebGL(
+    dir = dirname(name), filename = name, template = tpl, prefix = prefix,
+    snapshot = FALSE
+  )
   res = readLines(name)
   res = res[!grepl('^\\s*$', res)] # remove blank lines
   # remove <script src="CanvasMatrix.js" type="text/javascript"></script> (bug #755)
