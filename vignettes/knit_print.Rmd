@@ -8,7 +8,7 @@ vignette: >
 output:
   rmarkdown::html_vignette:
     includes:
-      in_header: assets/header.html
+      before_body: assets/header.html
     toc: yes
 ---
 

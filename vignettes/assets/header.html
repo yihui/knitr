@@ -1,0 +1,40 @@
+<style type="text/css">
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 20px;
+}
+code {
+  font-family: monospace;
+  font-size: 90%;
+}
+p code {
+  padding: 2px 4px;
+  color: #d14;
+  border: 1px solid #e1e1e8;
+}
+div.figure p.caption {
+  font-style: italic;
+}
+div.figure p.caption span {
+  font-style: normal;
+  font-weight: bold;
+}
+p {
+  margin: 0 0 10px;
+}
+table {
+  margin: auto auto 10px auto;
+}
+</style>
+<script type="text/javascript">
+window.onload = function() {
+  var i, fig = 1, caps = document.getElementsByClassName('caption');
+  for (i = 0; i < caps.length; i++) {
+    var cap = caps[i];
+    if (cap.parentElement.className !== 'figure' || cap.nodeName !== 'P')
+      continue;
+    cap.innerHTML = '<span>Figure ' + fig + ':</span> ' + cap.innerHTML;
+    fig++;
+  }
+}
+</script>
