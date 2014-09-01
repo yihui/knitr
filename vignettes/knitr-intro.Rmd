@@ -8,13 +8,7 @@ bibliography:
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Not an Introduction to knitr}
-output:
-  rmarkdown::html_vignette:
-    fig_width: 6
-    fig_height: 5
-    fig_caption: yes
-    includes:
-      before_body: assets/header.html
+output: knitr:::html_vignette
 ---
 
 The **knitr** package [@R-knitr] is an alternative tool to Sweave based on a

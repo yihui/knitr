@@ -6,9 +6,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Custom Print Methods}
 output:
-  rmarkdown::html_vignette:
-    includes:
-      before_body: assets/header.html
+  knitr:::html_vignette:
     toc: yes
 ---
 
