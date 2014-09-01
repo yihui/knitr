@@ -38,6 +38,8 @@
 
 - fixed #828: scientific notation for inline numbers did not work in R Markdown v2 when the output format is LaTeX (thanks, @nacnudus)
 
+- fixed #833: for the LaTeX output format, when `fig.cap` contains `.` in `{}`, the automatic short caption does not work (thanks, Roman Luštrik)
+
 ## MAJOR CHANGES
 
 - the `knit()` function no longer modifies R's default `options(digits)` from 7 to 4, since it may lead to confusion especially when printing `summary()` output; for those who want the old behavior, you must set `options(digits = 4)` in the beginning of your document (thanks, John Honaker, #777)
