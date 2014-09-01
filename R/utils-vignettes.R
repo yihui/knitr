@@ -75,3 +75,18 @@ register_vignette_engines = function(pkg) {
 vig_engine = function(..., tangle = vtangle) {
   tools::vignetteEngine(..., tangle = tangle, package = 'knitr')
 }
+
+html_vignette = function(
+  ..., fig_caption = TRUE, theme = NULL, highlight = "pygments",
+  css = system.file('misc', 'vignette.css', package = 'knitr'),
+  includes = list(
+    after_body = system.file('misc', 'vignette.html', package = 'knitr')
+  )
+) {
+  # TODO: replace this with rmarkdown::html_document when rmarkdown is on CRAN
+  html_document = getFromNamespace('html_document', 'rmarkdown')
+  html_document(
+    ..., fig_caption = fig_caption, theme = theme, hightlight = highlight,
+    css = css, includes = includes
+  )
+}
