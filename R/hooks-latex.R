@@ -115,8 +115,10 @@ hook_plot_tex = function(x, options) {
     # * place caption with label
     # * close figure environment
     if (plot2) {
-      if (is.null(scap)) scap = str_split(cap, '[:.;\\]')[[1L]][1L]
-      scap = if(is.na(scap)) '' else sprintf('[%s]', scap)
+      if (is.null(scap) && !grepl('[{].*?[:.;].*?[}]', cap)) {
+        scap = strsplit(cap, '[$:.;]')[[1L]][1L]
+      }
+      scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
       fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{%s}\n', scap, cap,
                      paste(lab, if (mcap) fig.cur, sep = ''), options$fig.env)
     }
