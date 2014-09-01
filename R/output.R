@@ -355,12 +355,6 @@ auto_format = function(ext) {
 #'
 #' # comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
 knit_child = function(..., options = NULL, envir = knit_global()) {
-  old <- remove_all_hooks()
-  on.exit(restore_hooks(old), add = TRUE)
-  knit_child_unwrapped(..., options= options, envir = envir)
-}
-
-knit_child_unwrapped = function(..., options = NULL, envir = knit_global()) {
   child = child_mode()
   opts_knit$set(child = TRUE) # yes, in child mode now
   on.exit(opts_knit$set(child = child)) # restore child status
@@ -378,26 +372,6 @@ knit_child_unwrapped = function(..., options = NULL, envir = knit_global()) {
   res = knit(..., tangle = opts_knit$get('tangle'), envir = envir,
              encoding = opts_knit$get('encoding') %n% getOption('encoding'))
   paste(c('', res), collapse = '\n')
-}
-
-get_hook_names <- function() {
-  ls(.userHooksEnv, all.names = TRUE)
-}
-
-remove_all_hooks <- function() {
-  hook_names <-  get_hook_names()
-  old <- list()
-  for (hook_name in hook_names) {
-    old[[hook_name]] <- getHook(hook_name)
-    setHook(hook_name, NULL, action = "replace")
-  }
-  old
-}
-
-restore_hooks <- function(hooks) {
-  for (hook_name in names(hooks)) {
-    setHook(hook_name, hooks[[hook_name]], action = "replace")
-  }
 }
 
 #' Exit knitting early
