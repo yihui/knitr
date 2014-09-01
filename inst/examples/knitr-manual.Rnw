@@ -209,19 +209,19 @@ dedicated to specific features such as graphics in the website: \url{http://yihu
 
 \subsection{Code Decoration}
 
-An internal syntax highlighter is used to highlight R code, and the
-\textbf{formatR} package \citep{R-formatR} is used to reformat R
-code (like \texttt{keep.source=FALSE} in Sweave but will also try
-to retain comments). For \LaTeX{} output, the \textbf{framed} package
-is used to decorate code chunks with a light gray background. If this
-\LaTeX{} package is not found in the system, a version will be copied
-directly from \textbf{knitr}. The prompt characters are removed by
-default because they mangle the R source code in the output and make
-it difficult to copy R code. The R output is masked in comments by
-default based on the same rationale. It is easy to revert to the output
-with prompts (set option \texttt{prompt=TRUE}), and you will quickly
-realize the inconvenience to the readers if they want to copy and
-run the code in the output document:
+The \textbf{highr} package \citep{R-highr} is used to highlight R
+code, and the \textbf{formatR} package \citep{R-formatR} is used
+to reformat R code (like \texttt{keep.source=FALSE} in Sweave but
+will also try to retain comments). For \LaTeX{} output, the \textbf{framed}
+package is used to decorate code chunks with a light gray background.
+If this \LaTeX{} package is not found in the system, a version will
+be copied directly from \textbf{knitr}. The prompt characters are
+removed by default because they mangle the R source code in the output
+and make it difficult to copy R code. The R output is masked in comments
+by default based on the same rationale. It is easy to revert to the
+output with prompts (set option \texttt{prompt=TRUE}), and you will
+quickly realize the inconvenience to the readers if they want to copy
+and run the code in the output document:
 
 <<stupid-prompts, prompt=TRUE, comment=NA, highlight=FALSE>>=
 x=rnorm(5)
@@ -706,7 +706,7 @@ and questions can be delivered to the \href{mailto:knitr@googlegroups.com}{maili
 % when knitr is updated, this chunk will be updated; why?
 <<auto-bib, version=packageVersion('knitr'), echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE>>=
 # write all packages in the current session to a bib file
-write_bib(c(.packages(), 'evaluate', 'formatR'), file = 'knitr-packages.bib')
+write_bib(c(.packages(), 'evaluate', 'formatR', 'highr'), file = 'knitr-packages.bib')
 @
 
 \bibliographystyle{jss}
