@@ -19,7 +19,7 @@
 library(knitr)
 # set global chunk options
 opts_chunk$set(fig.path='figure/minimal-', fig.align='center', fig.show='hold')
-options(replace.assign=TRUE,width=90)
+options(formatR.arrow=TRUE,width=90)
 @
 
 

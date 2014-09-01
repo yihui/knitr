@@ -98,7 +98,7 @@ library(knitr)
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE,width=50)
+options(formatR.arrow=TRUE,width=50)
 \end_layout
 
 \begin_layout Plain Layout

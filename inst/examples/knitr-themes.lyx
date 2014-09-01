@@ -108,7 +108,7 @@ opts_chunk$set(fig.path='figure/theme-', cache.path='cache/theme-', cache=TRUE)
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE,width=78)
+options(formatR.arrow=TRUE,width=78)
 \end_layout
 
 \begin_layout Plain Layout

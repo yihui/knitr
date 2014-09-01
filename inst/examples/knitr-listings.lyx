@@ -99,7 +99,7 @@ opts_chunk$set(fig.path = 'figure/listings-')
 
 \begin_layout Plain Layout
 
-options(replace.assign = TRUE)
+options(formatR.arrow = TRUE)
 \end_layout
 
 \begin_layout Plain Layout

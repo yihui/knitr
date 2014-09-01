@@ -103,7 +103,7 @@ opts_chunk$set(fig.path='figure/minimal-', fig.align='center', fig.show='hold')
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE,width=90)
+options(formatR.arrow=TRUE,width=90)
 \end_layout
 
 \begin_layout Plain Layout

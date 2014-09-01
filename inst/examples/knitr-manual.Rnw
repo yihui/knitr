@@ -41,7 +41,7 @@ library(knitr)
 ## set global chunk options
 opts_chunk$set(fig.path='figure/manual-', cache.path='cache/manual-', fig.align='center', fig.show='hold', par=TRUE)
 ## I use = but I can replace it with <-; set code/output width to be 68
-options(replace.assign=TRUE, width=68, digits=4)
+options(formatR.arrow=TRUE, width=68, digits=4)
 ## tune details of base graphics (http://yihui.name/knitr/hooks)
 knit_hooks$set(par=function(before, options, envir){
 if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
@@ -240,7 +240,7 @@ for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
 for(k in 1:10){j=cos(sin(k)*k^2)+3;print(j-5)}
 @
 
-Note \texttt{=} is replaced by \texttt{<-} because \texttt{options('replace.assign')}
+Note \texttt{=} is replaced by \texttt{<-} because \texttt{options('formatR.arrow')}
 was set to be \texttt{TRUE} in this document; see the documentation
 of \emph{tidy.source()} in \textbf{formatR} for details.
 
