@@ -60,7 +60,11 @@ register_vignette_engines = function(pkg) {
   vig_engine('docco_classic', vweave_docco_classic, '[.][Rr]mk?d$')
   vig_engine('rmarkdown', if (has_package('rmarkdown')) {
     vweave_rmarkdown
-  } else vweave, '[.][Rr](md|markdown)$')
+  } else {
+    warning('The vignette engine knitr::rmarkdown is not available, ',
+            'because the rmarkdown package is not installed. Please install it.')
+    vweave
+  }, '[.][Rr](md|markdown)$')
   # vignette engines that disable tangle
   vig_list = tools::vignetteEngine(package = 'knitr')
   engines  = grep('_notangle$', names(vig_list), value = TRUE, invert = TRUE)
