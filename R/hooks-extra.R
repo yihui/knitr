@@ -64,6 +64,8 @@ hook_rgl = function(before, options, envir) {
   # after a chunk has been evaluated
   if (before || rgl::rgl.cur() == 0) return()  # no active device
   name = fig_path('', options)
+  if (!file.exists(dirname(name)))
+    dir.create(dirname(name), recursive = TRUE) # automatically creates dir for plots
   rgl::par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
 
