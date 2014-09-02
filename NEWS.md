@@ -54,6 +54,8 @@
 
 - scientific formatting for inline R output is only applied to objects of which the first class is `numeric`, e.g. `chron::chron()` objects will no longer be formatted using scientific notations (thanks, @sanfordweisberg, #806)
 
+- for R Markdown v2 documents, if the inline R output is formatted using the scientific notation, the output must be put in a math environment, e.g. `` $`r 2e10`$ ``
+
 # CHANGES IN knitr VERSION 1.6
 
 ## NEW FEATURES
