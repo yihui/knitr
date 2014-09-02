@@ -479,7 +479,15 @@ wrap.recordedplot = function(x, options) {
   # figure number sequence for multiple plots
   fig.cur = plot_counter()
   options$fig.cur = fig.cur # put fig num in options
-  name = fig_path(if(options$fig.num <= 1) '' else fig.cur, options)
+
+  # plot suffix
+  suffix <- if(options$fig.num <= 1) {
+    '' # not needed
+  } else {
+      nb <- formatC(fig.cur, width = ceiling(log10(options$fig.num)), flag = '0')
+      paste0('_', nb)
+  }
+  name = fig_path(suffix, options)
   if (!file.exists(dirname(name)))
     dir.create(dirname(name), recursive = TRUE) # automatically creates dir for plots
   # check possible conflicts of plot filenames (#704)
