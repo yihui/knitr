@@ -480,7 +480,7 @@ wrap.recordedplot = function(x, options) {
   fig.cur = plot_counter()
   options$fig.cur = fig.cur # put fig num in options
   name = fig_path(if(options$fig.num <= 1) '' else fig.cur, options)
-  if (!file.exists(dirname(name)))
+  if (!file_test('-d', dirname(name)))
     dir.create(dirname(name), recursive = TRUE) # automatically creates dir for plots
   # check possible conflicts of plot filenames (#704)
   files = paste(name, options$fig.ext, sep = '.')
