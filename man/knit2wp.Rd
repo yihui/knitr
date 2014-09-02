@@ -19,9 +19,9 @@ for syntax highlighting of source code and output; the first element
 applies to source code, and the second applies to text output (by default,
 both are \code{FALSE})}
 
-\item{publish}{whether to publish the post immediately}
-
 \item{encoding}{the encoding of the input file; see \code{\link{file}}}
+
+\item{publish}{whether to publish the post immediately}
 }
 \description{
 This function is a wrapper around the \pkg{RWordPress} package. It compiles

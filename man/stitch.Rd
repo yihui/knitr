@@ -20,14 +20,14 @@ this package; there is also an HTML template in \pkg{knitr})}
 \item{output}{the output filename (passed to \code{\link{knit}}); by default
 it uses the base filename of the script}
 
-\item{...}{arguments passed to \code{stitch()}}
-
 \item{text}{a character vector as an alternative way to provide the input
 file}
 
 \item{envir}{the environment in which the code chunks are to be evaluated
 (for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 \code{\link{globalenv}()})}
+
+\item{...}{arguments passed to \code{stitch()}}
 }
 \value{
 path of the output document

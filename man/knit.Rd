@@ -29,12 +29,12 @@ file}
 
 \item{encoding}{the encoding of the input file; see \code{\link{file}}}
 
+\item{...}{arguments passed to \code{\link{knit}()} from \code{purl()}}
+
 \item{documentation}{an integer specifying the level of documentation to go
 the tangled script: \code{0} means pure code (discard all text chunks);
 \code{1} (default) means add the chunk headers to code; \code{2} means add
 all text chunks to code as roxygen comments}
-
-\item{...}{arguments passed to \code{\link{knit}()} from \code{purl()}}
 }
 \value{
 The compiled document is written into the output file, and the path
