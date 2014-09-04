@@ -15,14 +15,14 @@ frequently asked questions (including where to ask questions).
 You can install the stable version on
 [CRAN](http://cran.rstudio.com/package=knitr):
 
-```s
+```r
 install.packages('knitr', dependencies = TRUE)
 ```
 
 You can also install the development version from
 [RForge](http://rforge.net/knitr/), which provides daily build of **knitr**:
 
-```s
+```r
 # update all existing packages first
 update.packages(ask = FALSE, repos = 'http://cran.rstudio.org')
 install.packages('knitr', repos = c('http://rforge.net', 'http://cran.rstudio.org'),
@@ -84,7 +84,7 @@ Sweave).
 
 ## Usage
 
-```s
+```r
 library(knitr)
 ?knit
 knit(input)
