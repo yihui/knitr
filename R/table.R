@@ -18,7 +18,7 @@
 #'   \code{'l'} (left), \code{'c'} (center) and/or \code{'r'} (right); by
 #'   default, numeric columns are right-aligned, and other columns are
 #'   left-aligned; if \code{align = NULL}, the default alignment is used
-#' @param output whether to write out the output in the console
+#' @param caption the table caption
 #' @param ... other arguments (see examples)
 #' @return A character vector of the table source code. When \code{output =
 #'   TRUE}, the results are also written into the console as a side-effect.
@@ -58,12 +58,12 @@
 #' # Pandoc tables
 #' kable(head(mtcars), format = 'pandoc', caption = 'Title of the table')
 #' # save the value
-#' x = kable(mtcars, format = 'html', output = FALSE)
+#' x = kable(mtcars, format = 'html')
 #' cat(x, sep = '\n')
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = colnames(x),
-  align, output = getOption('knitr.table.output', TRUE), ...
+  align, caption = NULL, ...
 ) {
   if (missing(format)) format = getOption('knitr.table.format', switch(
     out_format() %n% 'markdown',
@@ -206,12 +206,12 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   apply(mat_pad(res, l, align), 1, paste, collapse = sep.col)
 }
 
-kable_rst = function(x, rownames.name = '\\') {
+kable_rst = function(x, rownames.name = '\\', ...) {
   kable_mark(x, rownames.name = rownames.name)
 }
 
 # actually R Markdown
-kable_markdown = function(x, padding = 1) {
+kable_markdown = function(x, padding = 1, ...) {
   if (is.null(colnames(x))) stop('the table must have a header (column names)')
   res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
     if (is.null(a)) return(s)
