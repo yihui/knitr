@@ -3,7 +3,7 @@
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
 kable(x, format, digits = getOption("digits"), row.names = NA, col.names = colnames(x), 
-    align, output = getOption("knitr.table.output", TRUE), ...)
+    align, caption = NULL, ...)
 }
 \arguments{
 \item{x}{an R object (typically a matrix or data frame)}
@@ -28,7 +28,7 @@ default, row names are included if \code{rownames(x)} is neither
 default, numeric columns are right-aligned, and other columns are
 left-aligned; if \code{align = NULL}, the default alignment is used}
 
-\item{output}{whether to write out the output in the console}
+\item{caption}{the table caption}
 
 \item{...}{other arguments (see examples)}
 }
@@ -72,7 +72,7 @@ kable(head(mtcars), format = "markdown", padding = 2)
 # Pandoc tables
 kable(head(mtcars), format = "pandoc", caption = "Title of the table")
 # save the value
-x = kable(mtcars, format = "html", output = FALSE)
+x = kable(mtcars, format = "html")
 cat(x, sep = "\\n")
 # can also set options(knitr.table.format = 'html') so that the output is HTML
 }
