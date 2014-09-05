@@ -29,7 +29,7 @@ rnorm(20)
 fit=lm(dist~speed, data=cars)
 b=coef(fit)
 ```{r results='asis', echo=FALSE}
-knitr::kable(summary(fit)$coefficients)
+knitr::kable(summary(fit)$coefficients, caption='Regression coefficients.')
 ```
 
 The fitted regression equation is $Y=`r b[1]`+`r b[2]`x$.
