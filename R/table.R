@@ -221,12 +221,13 @@ kable_markdown = function(x, padding = 1, ...) {
       s[i] = gsub(r[a[i]], ':', s[i])
     }
     s
-  })
+  }, ...)
   sprintf('|%s|', res)
 }
 
-kable_pandoc = function(x, caption = NULL, padding = 1) {
-  tab = kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA), padding = padding)
+kable_pandoc = function(x, caption = NULL, padding = 1, ...) {
+  tab = kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA),
+                   padding = padding, ...)
   if (is.null(caption)) tab else c(paste('Table:', caption), "", tab)
 }
 
