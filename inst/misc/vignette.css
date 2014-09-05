@@ -140,10 +140,10 @@ p > code, li > code {
 div.figure {
   text-align: center;
 }
-div.figure p.caption {
+table > caption, div.figure p.caption {
   font-style: italic;
 }
-div.figure p.caption span {
+table > caption span, div.figure p.caption span {
   font-style: normal;
   font-weight: bold;
 }
