@@ -65,12 +65,13 @@ kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = colnames(x),
   align, caption = NULL, ...
 ) {
-  if (missing(format)) format = getOption('knitr.table.format', switch(
+  if (missing(format) || is.null(format)) format = getOption('knitr.table.format')
+  if (is.null(format)) format = if (is.null(pandoc_to())) switch(
     out_format() %n% 'markdown',
     latex = 'latex', listings = 'latex', sweave = 'latex',
     html = 'html', markdown = 'markdown', rst = 'rst',
     stop('table format not implemented yet!')
-  ))
+  ) else 'pandoc'
   col.names # evaluate it now! no lazy evaluation because colnames(x) may change
   if (!is.matrix(x) && !is.data.frame(x)) x = as.data.frame(x)
   m = ncol(x)
