@@ -95,12 +95,21 @@ kable = function(
   x = format(as.matrix(x), trim = TRUE, justify = 'none')
   colnames(x) = col.names
   attr(x, 'align') = align
-  res = do.call(paste('kable', format, sep = '_'), list(x = x, ...))
-  if (output) {
-    if (!(format %in% c('html', 'latex'))) cat('\n\n')
-    cat(res, sep = '\n')
-  }
-  invisible(res)
+  res = do.call(paste('kable', format, sep = '_'), list(x = x, caption = caption, ...))
+  structure(res, format = format, class = 'knitr_kable')
+}
+
+#' @export
+print.knitr_kable = function(x, ...) {
+  if (!(attr(x, 'format') %in% c('html', 'latex'))) cat('\n\n')
+  cat(x, sep = '\n')
+}
+
+#' @export
+knit_print.knitr_kable = function(x, ...) {
+  if (!(attr(x, 'format') %in% c('html', 'latex')))
+    x = paste(c('', '', x), collapse = '\n')
+  asis_output(x)
 }
 
 kable_latex = function(
