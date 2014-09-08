@@ -16,12 +16,10 @@ body {
 
 #TOC {
   clear: both;
-  margin: 0 0 10px 10px;
+  margin: 0 0 10px 0;
   padding: 4px;
-  width: 400px;
   border: 1px solid #CCCCCC;
   border-radius: 5px;
-
   background-color: #f6f6f6;
   font-size: 13px;
   line-height: 1.3;
@@ -47,10 +45,15 @@ body {
 
 table {
   margin: auto;
+  min-width: 40%;
   border-width: 1px;
   border-color: #DDDDDD;
   border-style: outset;
   border-collapse: collapse;
+}
+table[summary="R argblock"] {
+  width: 100%;
+  border: none;
 }
 table th {
   border-width: 2px;
@@ -136,6 +139,7 @@ p > code, li > code {
   padding: 2px 4px;
   color: #d14;
   border: 1px solid #e1e1e8;
+  white-space: inherit;
 }
 div.figure {
   text-align: center;
@@ -208,6 +212,16 @@ a {
     text-decoration: underline; }
   a[href^="https:"] {
     text-decoration: underline; }
+
+div.r-help-page {
+  background-color: #f9f9f9;
+  border-bottom: #ddd 1px solid;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+div.r-help-page:hover {
+  background-color: #f4f4f4;
+}
 
 /* Class described in https://benjeffrey.com/posts/pandoc-syntax-highlighting-css
    Colours from https://gist.github.com/robsimmons/1172277 */
