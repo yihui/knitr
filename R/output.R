@@ -437,7 +437,11 @@ wrap.knit_asis = function(x, options) {
   if (length(m)) {
     .knitEnv$meta = c(.knitEnv$meta, m)
   }
-  as.character(x)
+  x = as.character(x)
+  if (!out_format('latex')) return(x)
+  # latex output need the \end{kframe} trick
+  options$results = 'asis'
+  knit_hooks$get('output')(x, options)
 }
 
 #' @export
