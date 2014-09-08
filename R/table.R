@@ -185,7 +185,7 @@ kable_html = function(x, table.attr = '', caption = NULL) {
 #' @return A character vector of the table content.
 #' @noRd
 kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0,
-                      align.fun = function(s, a) s, rownames.name = '') {
+                      align.fun = function(s, a) s, rownames.name = '', ...) {
   # when the column separator is |, replace existing | with its HTML entity
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
