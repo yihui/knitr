@@ -29,3 +29,7 @@ install:
 # run tests
 script:
   - make ${TARGET}
+
+# deploy to xran after integration tests
+after_success:
+  - "[ $TARGET = integration ] && (wget -q -O - http://yihui.name/xran/r-xran | bash)"
