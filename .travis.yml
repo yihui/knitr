@@ -3,15 +3,12 @@ language: python
 
 # environment variables
 env:
-  global:
-    - R_LIBS_USER=~/R
   matrix:
     - TARGET=travis
     - TARGET=integration DISPLAY=:99.0
 
 # capturing state, early exit if no integration test is needed
 before_install:
-  - env | sort
   - if [ ${TARGET} = integration ]; then
       if ! make integration-need; then
         echo "NOTE:"" Integration test skipped. To enable, create a branch named ${TRAVIS_BRANCH} in ${TRAVIS_REPO_SLUG}-examples.";
@@ -26,10 +23,8 @@ install:
   - sudo apt-add-repository -y ppa:marutter/c2d4u
   - sudo apt-get update -qq
   - sudo apt-get install -qq r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended r-cran-knitr
-  - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
-  - R --version
-  - R -e '.libPaths(); sessionInfo()'
-  - Rscript -e 'install.packages("knitr", dep = TRUE, quiet = TRUE, repos = c("http://rforge.net", "http://cran.rstudio.org"))'
+  - "wget -q -O - http://yihui.name/xran/r-config | bash"
+  - Rscript -e 'install.packages("knitr", dep = TRUE, quiet = TRUE)'
 
 # run tests
 script:
