@@ -50,6 +50,8 @@
 
 - the video format for animations (when the chunk option `fig.show='animate'`) was changed from OGG to WebM (http://www.webmproject.org), which has many benefits over other formats, especially for the web (thanks, @gaorongchao, #641)
 
+- the YAML metadata in Markdown child documents will be ignored (only the metadata in the top parent document is preserved)
+
 ## MINOR CHANGES
 
 - scientific formatting for inline R output is only applied to objects of which the first class is `numeric`, e.g. `chron::chron()` objects will no longer be formatted using scientific notations (thanks, @sanfordweisberg, #806)
