@@ -84,6 +84,7 @@ Suggests:
     testit,
     rgl,
     codetools,
+    rmarkdown,
     XML,
     RCurl
 License: GPL

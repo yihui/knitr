@@ -59,7 +59,10 @@ register_vignette_engines = function(pkg) {
   vig_engine('docco_linear', vweave_docco_linear, '[.][Rr](md|markdown)$')
   vig_engine('docco_classic', vweave_docco_classic, '[.][Rr]mk?d$')
   vig_engine('rmarkdown', if (has_package('rmarkdown')) {
-    vweave_rmarkdown
+    if (rmarkdown::pandoc_available()) vweave_rmarkdown else {
+      warning('Pandoc is not available. Please install Pandoc.')
+      vweave
+    }
   } else {
     warning('The vignette engine knitr::rmarkdown is not available, ',
             'because the rmarkdown package is not installed. Please install it.')
