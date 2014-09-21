@@ -209,8 +209,12 @@ eng_highlight = function(options) {
 
 ## save the code
 eng_cat = function(options) {
+  lang = options$engine.opts$lang
+  if (!is.null(lang)) options$engine.opts$lang = NULL
   do.call(cat, c(list(options$code, sep = '\n'), options$engine.opts))
-  ''
+  if (is.null(lang)) return('')
+  options$engine = lang
+  engine_output(options, options$code, NULL)
 }
 
 ## output the code without processing it

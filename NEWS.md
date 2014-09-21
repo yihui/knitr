@@ -20,6 +20,8 @@
 
 - for `set_parent()`, the lines in the parent document that start with `\bibliography` are matched and inserted in the child document so LaTeX bibliography also works for the child document (thanks, Mark Heckmann, #819)
 
+- for the chunk option `engine = 'cat'`, the code chunk can be displayed in the output if the chunk language is specified via `engine.opts`, e.g. `engine.opts = list(lang = 'makefile')`
+
 ## BUG FIXES
 
 - fixed #779: when the chunk options `tidy=FALSE` and `eval=FALSE`, `prompt=TRUE` did not work for R expressions of multiple lines (thanks, Qijie Zhao)
