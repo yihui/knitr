@@ -59,7 +59,7 @@ register_vignette_engines = function(pkg) {
   vig_engine('docco_linear', vweave_docco_linear, '[.][Rr](md|markdown)$')
   vig_engine('docco_classic', vweave_docco_classic, '[.][Rr]mk?d$')
   vig_engine('rmarkdown', if (has_package('rmarkdown')) {
-    if (rmarkdown::pandoc_available() && Sys.which('pandoc-citeproc') != '') {
+    if (pandoc_available()) {
       vweave_rmarkdown
     } else {
       if (!is_R_CMD_check())
@@ -84,6 +84,20 @@ register_vignette_engines = function(pkg) {
 # all engines use the same tangle and package arguments, so factor them out
 vig_engine = function(..., tangle = vtangle) {
   tools::vignetteEngine(..., tangle = tangle, package = 'knitr')
+}
+
+pandoc_available = function() {
+  # if you have this environment variable, chances are you are good to go
+  if (Sys.getenv("RSTUDIO_PANDOC") != '') return(TRUE)
+  if (Sys.which('pandoc-citeproc') == '') return(FALSE)
+  if ((pandoc <- Sys.which('pandoc')) == '') return(FALSE)
+  # see if pandoc is >= 1.12.3
+  res = try(system2(pandoc, '--version', stdout = TRUE))
+  !inherits(res, 'try-error') && length(res) > 1 && grepl('pandoc', res[1]) && {
+    version = gsub('pandoc\\s+([0-9]+[.][0-9]+[.][0-9]+).*$', '\\1', res[1])
+    version = try(as.numeric_version(version))
+    !inherits(version, 'try-error') && version >= '1.12.3'
+  }
 }
 
 html_vignette = function(
