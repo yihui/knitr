@@ -62,7 +62,8 @@ register_vignette_engines = function(pkg) {
     if (rmarkdown::pandoc_available() && Sys.which('pandoc-citeproc') != '') {
       vweave_rmarkdown
     } else {
-      warning('Pandoc is not available. Please install Pandoc.')
+      if (!is_R_CMD_check())
+        warning('Pandoc is not available. Please install Pandoc.')
       vweave
     }
   } else {
