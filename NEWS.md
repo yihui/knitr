@@ -8,6 +8,8 @@
 
 - added an argument `col.names` to `kable()`, so we can specify different column names (thanks, @jackflibb, #801)
 
+- added a new output hook called `text`, and its default value `knit_hooks$get('text')` is the identity function `function(x) x`; this hook is applied to the text chunks (recall `knit_hooks$get('chunk')` is applied to code chunks)
+
 - added a chunk option `fig.showtext` to support the **showtext** package; if `fig.showtext = TRUE` (which is what you should do if you use the **showtext** package), `showtext::showtext.begin()` is called before drawing plots (thanks, @yufree, #799)
 
 - added a new language engine `node` for Node.js (thanks, Jake Burkhead, #823)

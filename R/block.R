@@ -5,7 +5,10 @@ process_group = function(x) {
 #' @export
 process_group.block = function(x) call_block(x)
 #' @export
-process_group.inline = function(x) call_inline(x)
+process_group.inline = function(x) {
+  x = call_inline(x)
+  knit_hooks$get('text')(x)
+}
 
 
 call_block = function(block) {
