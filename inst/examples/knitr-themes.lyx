@@ -332,7 +332,28 @@ http://www.andre-simon.de/
 knitr
 \series default
  package comes pre-loaded with a number of themes based on this highlighter.
- Here is list of all available code themes:
+ Here is list of all available code themes
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+For a preview of all themes, see 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://gist.github.com/yihui/3422133
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard

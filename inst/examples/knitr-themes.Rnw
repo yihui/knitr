@@ -76,7 +76,9 @@ The listing on the right shows the CSS file for one of the themes,
 highlighter%
 \footnote{\url{http://www.andre-simon.de/}%
 }. The \textbf{knitr} package comes pre-loaded with a number of themes
-based on this highlighter. Here is list of all available code themes:
+based on this highlighter. Here is list of all available code themes%
+\footnote{For a preview of all themes, see \url{https://gist.github.com/yihui/3422133}%
+}:
 
 <<all-themes>>=
 knit_theme$get()
