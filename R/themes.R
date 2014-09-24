@@ -29,9 +29,12 @@ get_theme = function(theme = NULL) {
 #' returned by the \code{get()} method. See examples below.
 #' @author Ramnath Vaidyanathan and Yihui Xie
 #' @seealso \code{\link{eclipse_theme}} (use Eclipse themes)
-#' @references \url{https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf}
-#' (its Rnw source is at
-#' \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw})
+#' @references The themes manual
+#'   \url{https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf} (Rnw
+#'   source at
+#'   \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw}).
+#'    For a preview of all themes, see
+#'   \url{https://gist.github.com/yihui/3422133}.
 #' @export
 #' @examples opts_knit$set(out.format='latex'); knit_theme$set('edit-vim')
 #'
