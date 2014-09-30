@@ -547,7 +547,7 @@ set_html_dev = function() {
   # in some cases, png() does not work (e.g. options('bitmapType') == 'Xlib' on
   # headless servers); use svg then
   opts_chunk$set(dev = if (inherits(try_silent({
-    png(tempfile()); dev.off()
+    grDevices::png(tempfile()); grDevices::dev.off()
   }), 'try-error')) 'svg' else 'png')
 }
 
