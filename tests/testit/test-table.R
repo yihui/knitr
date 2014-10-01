@@ -44,3 +44,12 @@ x & y\\\\
 \\end{tabular}'
   )
 )
+
+assert(
+  'kable(digits = vector) works on numeric matrices',
+  identical(
+    kable2(matrix(c(1.1, 1.2, 2.3, 2.4), 2, dimnames = list(NULL, c('a', 'b'))),
+           digits = c(0, 1)),
+    c('|  a|   b|', '|--:|---:|', '|  1| 2.3|', '|  1| 2.4|')
+  )
+)

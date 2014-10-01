@@ -84,7 +84,11 @@ kable = function(
   for (j in seq_len(m)) {
     if (is.numeric(x[, j])) x[, j] = round(x[, j], digits[j])
   }
-  if (any(isn)) x[, isn] = format(x[, isn], trim = TRUE)
+  if (any(isn)) {
+    if (is.matrix(x)) {
+      x = format(as.data.frame(x), trim = TRUE)
+    } else x[, isn] = format(x[, isn], trim = TRUE)
+  }
   if (is.na(row.names))
     row.names = !is.null(rownames(x)) && !identical(rownames(x), as.character(seq_len(NROW(x))))
   if (!is.null(align)) align = rep(align, length.out = m)
