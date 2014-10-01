@@ -470,7 +470,11 @@ msg_wrap = function(message, type, options) {
 
 #' @export
 wrap.warning = function(x, options) {
-  msg_wrap(paste('Warning:', x$message, collapse = '\n'), 'warning', options)
+  call = if (is.null(x$call)) '' else {
+    call = deparse(x$call)[1]
+    if (call == 'eval(expr, envir, enclos)') '' else paste(' in', call)
+  }
+  msg_wrap(sprintf('Warning%s: %s', call, x$message), 'warning', options)
 }
 
 #' @export
@@ -480,7 +484,7 @@ wrap.message = function(x, options) {
 
 #' @export
 wrap.error = function(x, options) {
-  msg_wrap(str_c('Error: ', x$message), 'error', options)
+  msg_wrap(as.character(x), 'error', options)
 }
 
 #' @export

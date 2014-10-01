@@ -205,8 +205,7 @@ block_exec = function(options) {
     options$fig.num = if (length(res)) sum(sapply(res, is.recordedplot)) else 0L
 
   # merge neighbor elements of the same class into one element
-  for (cls in c('source', 'warning', 'message'))
-    res = merge_class(res, cls)
+  for (cls in c('source', 'message')) res = merge_class(res, cls)
 
   on.exit(plot_counter(reset = TRUE), add = TRUE)  # restore plot number
   if (options$fig.show != 'animate' && options$fig.num > 1) {
@@ -290,20 +289,22 @@ filter_evaluate = function(res, opt, test) {
 }
 
 # merge neighbor elements of the same class in a list returned by evaluate()
-merge_class = function(res, class = c('source', 'warning', 'message')) {
+merge_class = function(res, class) {
 
-  class = match.arg(class)
   idx = if (length(res)) which(sapply(res, inherits, what = class))
   if ((n <- length(idx)) <= 1) return(res)
 
   k1 = idx[1]; k2 = NULL
+  el = switch(
+    class, `source` = 'src', `message` = 'message',
+    stop("`class` must be either 'source' or 'message'")
+  )
   for (i in 1:(n - 1)) {
     if (idx[i + 1] - idx[i] == 1) {
-      res[[k1]] = if (class == 'source') {
-        structure(list(src = c(res[[k1]]$src, res[[idx[i + 1]]]$src)), class = class)
-      } else {
-        structure(list(message = c(res[[k1]]$message, res[[idx[i + 1]]]$message)), class = class)
-      }
+      res[[k1]] = structure(
+        list(c(res[[k1]][[el]], res[[idx[i + 1]]][[el]])),
+        class = class, .Names = el
+      )
       k2 = c(k2, idx[i + 1])
     } else k1 = idx[i + 1]
   }
