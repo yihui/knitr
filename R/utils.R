@@ -291,22 +291,24 @@ pandoc_to = function(x) {
 #' The filename of figure files is the combination of options \code{fig.path}
 #' and \code{label}. This function returns the path of figures for the current
 #' chunk by default.
-#' @param suffix a suffix of the filename
+#' @param suffix a suffix of the filename; if it is not empty, nor does it
+#'   contain a dot \code{.}, it will be treated as the filename extension (e.g.
+#'   \code{png} will be used as \code{.png})
 #' @param options a list of options; by default the options of the current chunk
-#' @return A character string (path)
-#' @note When there are multiple figures in a chunk, this function only provides
-#'   a prefix of the filenames by default, and the actual filenames are of the
-#'   form \file{prefix1}, \file{prefix2}, ... where \file{prefix} is the string
-#'   returned by this function.
-#'
-#'   When there are special characters (not alphanumeric or \samp{-} or
+#' @param number the current figure number (by default the internal chunk option
+#'   \code{fig.cur} if available)
+#' @return A character vector of the form \file{fig.path-label-i.suffix}.
+#' @note When there are special characters (not alphanumeric or \samp{-} or
 #'   \samp{_}) in the path, they will be automatically replaced with \samp{_}.
 #'   For example, \file{a b/c.d-} will be sanitized to \file{a_b/c_d-}. This
 #'   makes the filenames safe to LaTeX.
 #' @export
-#' @examples fig_path('.pdf', list(fig.path='figure/abc-', label='first-plot'))
-#' fig_path(1:10, list(fig.path='foo-', label='bar'))
-fig_path = function(suffix = '', options = opts_current$get()) {
+#' @examples fig_path('.pdf', options = list(fig.path='figure/abc-', label='first-plot'))
+#' fig_path('.png', 1:10, list(fig.path='foo-', label='bar'))
+fig_path = function(suffix = '', options = opts_current$get(), number) {
+  if (suffix != '' && !grepl('[.]', suffix)) suffix = paste('.', suffix, sep = '')
+  if (missing(number)) number = options$fig.cur %n% 1L
+  if (!is.null(number)) suffix = paste('-', number, suffix, sep = '')
   path = valid_path(options$fig.path, options$label)
   (if (out_format(c('latex', 'sweave', 'listings'))) sanitize_fn else
     str_c)(path, suffix)
@@ -385,8 +387,7 @@ merge_list = function(x, y) {
 
 # paths of all figures
 all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
-  fig_path(paste(if (num == 1L) '' else seq_len(num),
-                 '.', ext, sep = ''), options)
+  fig_path(ext, options, number = seq_len(num))
 }
 
 # evaluate an expression in a diretory and restore wd after that

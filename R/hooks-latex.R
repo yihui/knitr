@@ -162,7 +162,7 @@ hook_plot_tex = function(x, options) {
   size = if (options$size == 'normalsize') '' else sprintf('\\%s', options$size)
   if (!ai) x = sprintf('\\begin{knitrout}%s\n%s\n\\end{knitrout}', size, x)
   if (options$split) {
-    name = fig_path('.tex', options)
+    name = fig_path('.tex', options, NULL)
     if (!file.exists(dirname(name)))
       dir.create(dirname(name))
     cat(x, file = name)

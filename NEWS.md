@@ -36,8 +36,6 @@
 
 - fixed #822: `cache.lazy = FALSE` did not really work (thanks, Liz Ing-Simmons)
 
-- fixed #704: **knitr** will emit a warning when a plot file from a previous chunk is to be overwritten; this may occur, for example, when two chunks are named `test` and `test1`, respectively, but the chunk `test` produces two plots (e.g. test1.png and test2.png) and `test1` produces one (e.g. test1.png) (thanks, Kevin Ushey and Kohske Takahashi)
-
 - fixed rstudio/rmarkdown#205: when R marks the encoding of the input document as latin1, `knit()` can fail to convert its encoding (thanks, @ripkrizbi)
 
 - fixed #828: scientific notation for inline numbers did not work in R Markdown v2 when the output format is LaTeX (thanks, @nacnudus)
@@ -49,6 +47,8 @@
 ## MAJOR CHANGES
 
 - the `knit()` function no longer modifies R's default `options(digits)` from 7 to 4, since it may lead to confusion especially when printing `summary()` output; for those who want the old behavior, you must set `options(digits = 4)` in the beginning of your document (thanks, John Honaker, #777)
+
+- the figure file numbering scheme has changed: for a chunk with a label `foo`, its figure files are named as `foo-i` where `i` ranges from `1` to `n` (the total number of plots in this chunk); previously, the figure file was named as `foo` instead of `foo-1` when there was only one plot generated in this chunk, which has a potential bug: consider two chunks named `foo` and `foo2`, respectively; `foo` generates two figures `foo1.png` and `foo2.png`, and `foo2` generates one figure `foo2.png`, which will overwrite the second figure generated from the chunk `foo` (thanks, @kevinushey, @kohske, @kforner, #704, #832)
 
 - for warnings and errors from code chunks, the call that produced them will be printed as part of the message, e.g. previously an error might just be `Error: x must be positive`, and now it may be `Error in FUN(x = -1): x must be positive` (thanks, @jennybc, #846)
 

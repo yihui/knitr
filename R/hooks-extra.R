@@ -117,18 +117,15 @@ hook_plot_custom = function(before, options, envir){
   if (options$fig.show == 'hide') return() # do not show figures
 
   ext = options$fig.ext %n% dev2ext(options$dev)
-  name = fig_path('', options)
   hook = knit_hooks$get('plot')
 
   n = options$fig.num
   if (n == 0L) n = options$fig.num = 1L # make sure fig.num is at least 1
-  if (n <= 1L) hook(paste(name[1], ext[1], sep = '.'), options) else {
-    res = unlist(lapply(seq_len(n), function(i) {
-      options$fig.cur = i
-      hook(sprintf('%s%s.%s', name, i, ext), reduce_plot_opts(options))
-    }), use.names = FALSE)
-    paste(res, collapse = '')
-  }
+  res = unlist(lapply(seq_len(n), function(i) {
+    options$fig.cur = i
+    hook(fig_path(ext, options, i), reduce_plot_opts(options))
+  }), use.names = FALSE)
+  paste(res, collapse = '')
 }
 #' @export
 #' @rdname chunk_hook
