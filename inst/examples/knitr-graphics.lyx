@@ -1878,7 +1878,7 @@ for (i in 1:length(zm)) {
 
 \begin_layout Plain Layout
 
-    rgl.snapshot(paste(fig_path(i), 'png', sep = '.'))
+    rgl.snapshot(fig_path('png', number = i))
 \end_layout
 
 \begin_layout Plain Layout

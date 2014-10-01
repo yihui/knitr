@@ -391,7 +391,7 @@ zm = seq(1, 0.05, length = 20)
 par3d(zoom = 1)  # change the zoom factor gradually later
 for (i in 1:length(zm)) {
     par3d(zoom = zm[i]); Sys.sleep(.05)
-    rgl.snapshot(paste(fig_path(i), 'png', sep = '.'))
+    rgl.snapshot(fig_path('png', number = i))
 }
 @
 
