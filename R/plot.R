@@ -126,15 +126,18 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     # add old wd to TEXINPUTS (see #188)
     oti = Sys.getenv('TEXINPUTS'); on.exit(Sys.setenv(TEXINPUTS = oti))
     Sys.setenv(TEXINPUTS = paste(owd, oti, sep = ':'))
-    system(paste(switch(getOption('tikzDefaultEngine'),
-                        pdftex = getOption('tikzLatex'),
-                        xetex = getOption('tikzXelatex'),
-                        luatex = getOption('tikzLualatex'),
-                        stop('a LaTeX engine must be specified for tikzDevice',
-                             call. = FALSE)), shQuote(basename(path))),
-           ignore.stdout = TRUE)
+    latex = switch(
+      getOption('tikzDefaultEngine'),
+      pdftex = getOption('tikzLatex'),
+      xetex  = getOption('tikzXelatex'),
+      luatex = getOption('tikzLualatex'),
+      stop('a LaTeX engine must be specified for tikzDevice', call. = FALSE)
+    )
+    system2(latex, shQuote(basename(path)), stdout = NULL)
     setwd(owd)
     if (file.exists(pdf.plot)) ext = 'pdf' else {
+      if (file.exists(log <- paste(name, 'log', sep = '.')))
+        message(paste(readLines(log), collapse = '\n'))
       stop('failed to compile ', path, ' to PDF', call. = FALSE)
     }
     path = pdf.plot
