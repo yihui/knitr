@@ -2648,7 +2648,7 @@ status open
 \begin_layout Plain Layout
 
 <<fancy-rgl, rgl=TRUE, dev='png', fig.width=5, fig.height=5, out.width='2in',
- message=FALSE, cache=TRUE>>=
+ message=FALSE, warning=FALSE, cache=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout

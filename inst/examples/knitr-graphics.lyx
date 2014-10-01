@@ -1821,7 +1821,8 @@ status open
 \begin_layout Plain Layout
 
 <<rgl-animation, custom.plot=TRUE, fig.ext='png', out.width='2.5in', fig.show='animat
-e', fig.num=20, interval=.4,  aniopts='controls,autoplay', results='hide'>>=
+e', fig.num=20, interval=.4,  aniopts='controls,autoplay', results='hide',
+ warning=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout

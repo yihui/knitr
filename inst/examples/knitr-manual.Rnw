@@ -650,7 +650,7 @@ head(hook_rgl)  # the hook function is defined as this
 
 Then we only have to set the chunk option \texttt{rgl=TRUE}:
 
-<<fancy-rgl, rgl=TRUE, dev='png', fig.width=5, fig.height=5, out.width='2in', message=FALSE, cache=TRUE>>=
+<<fancy-rgl, rgl=TRUE, dev='png', fig.width=5, fig.height=5, out.width='2in', message=FALSE, warning=FALSE, cache=TRUE>>=
 library(rgl)
 demo('bivar', package='rgl', echo=FALSE) 
 par3d(zoom=.7)

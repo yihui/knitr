@@ -380,7 +380,7 @@ the figure path for the current chunk.
 We can do whatever normal R plots can do with this hook, and we give
 another example below to show how to work with animations.
 
-<<rgl-animation, custom.plot=TRUE, fig.ext='png', out.width='2.5in', fig.show='animate', fig.num=20, interval=.4,  aniopts='controls,autoplay', results='hide'>>=
+<<rgl-animation, custom.plot=TRUE, fig.ext='png', out.width='2.5in', fig.show='animate', fig.num=20, interval=.4,  aniopts='controls,autoplay', results='hide', warning=FALSE>>=
 library(animation) # adapted from demo('rgl_animation')
 data(pollen)
 uM = matrix(c(-0.37, -0.51, -0.77, 0, -0.73, 0.67, -0.1, 0, 0.57, 0.53, -0.63, 0, 0, 0, 0, 1), 4, 4)
