@@ -23,7 +23,7 @@ install:
   - sudo apt-add-repository -y ppa:marutter/c2d4u
   - sudo apt-get update -qq
   - sudo apt-get install -qq r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended r-cran-knitr > /dev/null
-  - sudo apt-get install -qq pandoc pandoc-citeproc texlive-latex-base > /dev/null
+  - sudo apt-get install -qq pandoc pandoc-citeproc texlive-latex-recommended > /dev/null
   - "wget -q -O - http://yihui.name/xran/r-config | bash"
   - Rscript -e 'install.packages("knitr", dep = TRUE, quiet = TRUE)'
 
