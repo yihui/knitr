@@ -153,7 +153,7 @@ kable_latex = function(
   ), collapse = '')
 }
 
-kable_html = function(x, table.attr = '', caption = NULL) {
+kable_html = function(x, table.attr = '', caption = NULL, ...) {
   table.attr = gsub('^\\s+|\\s+$', '', table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
