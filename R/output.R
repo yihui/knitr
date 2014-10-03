@@ -271,6 +271,7 @@ process_file = function(text, output) {
     pb = txtProgressBar(0, n, char = '.', style = 3)
     on.exit(close(pb), add = TRUE)
   }
+  wd = getwd()
   for (i in 1:n) {
     if (!is.null(.knitEnv$terminate)) {
       res[i] = paste(.knitEnv$terminate, collapse = '\n')
@@ -286,6 +287,7 @@ process_file = function(text, output) {
     res[i] = withCallingHandlers(
       if (tangle) process_tangle(group) else process_group(group),
       error = function(e) {
+        setwd(wd)
         cat(res, sep = '\n', file = output %n% '')
         message(
           'Quitting from lines ', paste(current_lines(i), collapse = '-'),
