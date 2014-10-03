@@ -30,5 +30,5 @@ When there are special characters (not alphanumeric or \samp{-} or
 }
 \examples{
 fig_path(".pdf", options = list(fig.path = "figure/abc-", label = "first-plot"))
-fig_path(".png", 1:10, list(fig.path = "foo-", label = "bar"))
+fig_path(".png", list(fig.path = "foo-", label = "bar"), 1:10)
 }
