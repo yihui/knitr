@@ -398,6 +398,11 @@ in_dir = function(dir, expr) {
   expr
 }
 
+# evaluate under the base.dir
+in_base_dir = function(expr) {
+  in_dir(opts_knit$get('base.dir'), expr)
+}
+
 # escape special LaTeX characters
 escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
   x = gsub('\\\\', '\\\\textbackslash', x)

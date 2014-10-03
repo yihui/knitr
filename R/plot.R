@@ -111,7 +111,10 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
     check_dev(dev)
   )
+  in_base_dir(plot2dev(plot, name, dev, device, path, width, height, options))
+}
 
+plot2dev = function(plot, name, dev, device, path, width, height, options) {
   dargs = get_dargs(options$dev.args, dev)
   # re-plot the recorded plot to an off-screen device
   do.call(device, c(list(path, width = width, height = height), dargs))
@@ -135,7 +138,7 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     )
     system2(latex, shQuote(basename(path)), stdout = NULL)
     setwd(owd)
-    if (file.exists(pdf.plot)) ext = 'pdf' else {
+    if (!file.exists(pdf.plot)) {
       if (file.exists(log <- paste(name, 'log', sep = '.')))
         message(paste(readLines(log), collapse = '\n'))
       stop('failed to compile ', path, ' to PDF', call. = FALSE)

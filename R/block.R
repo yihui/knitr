@@ -211,10 +211,9 @@ block_exec = function(options) {
   if (options$fig.show != 'animate' && options$fig.num > 1) {
     options = recycle_plot_opts(options)
   }
-  in_dir(opts_knit$get('base.dir'), {
-    output = unlist(wrap(res, options)) # wrap all results together
-    res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
-  })
+
+  output = unlist(wrap(res, options)) # wrap all results together
+  res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
 
   output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
   output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)

@@ -67,18 +67,23 @@ hook_rgl = function(before, options, envir) {
   rgl::par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
 
+  in_base_dir(save_rgl(name, options$dev))
+
+  options$fig.num = 1L  # only one figure in total
+  hook_plot_custom(before, options, envir)
+}
+
+save_rgl = function(name, devices) {
   if (!file_test('-d', dirname(name))) dir.create(dirname(name), recursive = TRUE)
   # support 3 formats: eps, pdf and png (default)
-  for (dev in options$dev) switch(
+  for (dev in devices) switch(
     dev,
     postscript = rgl::rgl.postscript(str_c(name, '.eps'), fmt = 'eps'),
     pdf = rgl::rgl.postscript(str_c(name, '.pdf'), fmt = 'pdf'),
     rgl::rgl.snapshot(str_c(name, '.png'), fmt = 'png')
   )
-
-  options$fig.num = 1L  # only one figure in total
-  hook_plot_custom(before, options, envir)
 }
+
 #' @export
 #' @rdname chunk_hook
 hook_pdfcrop = function(before, options, envir) {
@@ -87,7 +92,7 @@ hook_pdfcrop = function(before, options, envir) {
   if (options$dev == 'tikz' && options$external) ext = 'pdf'
   if (before || (fig.num <- options$fig.num) == 0L) return()
   paths = all_figs(options, ext, fig.num)
-  for (f in paths) plot_crop(f)
+  in_base_dir(for (f in paths) plot_crop(f))
 }
 #' @export
 #' @rdname chunk_hook
@@ -102,12 +107,14 @@ hook_optipng = function(before, options, envir) {
   }
   paths = all_figs(options, ext)
 
-  lapply(paths, function(x) {
-    message('optimizing ', x)
-    x = shQuote(x)
-    cmd = paste('optipng', if (is.character(options$optipng)) options$optipng, x)
-    (if (is_windows()) shell else system)(cmd)
-  })
+  in_base_dir(
+    lapply(paths, function(x) {
+      message('optimizing ', x)
+      x = shQuote(x)
+      cmd = paste('optipng', if (is.character(options$optipng)) options$optipng, x)
+      (if (is_windows()) shell else system)(cmd)
+    })
+  )
   return()
 }
 #' @export
