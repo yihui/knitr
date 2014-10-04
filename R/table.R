@@ -86,6 +86,7 @@ kable = function(
   }
   if (any(isn)) {
     if (is.matrix(x)) {
+      if (is.table(x) && length(dim(x)) == 2) class(x) = 'matrix'
       x = format(as.data.frame(x), trim = TRUE)
     } else x[, isn] = format(x[, isn], trim = TRUE)
   }
