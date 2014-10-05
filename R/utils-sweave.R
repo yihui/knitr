@@ -174,7 +174,7 @@ remind_sweave = function(file, sweave_lines) {
                 paste(sweave_lines, collapse = ', '), file)
   # throw a normal warning when R CMD check or tcltk not available
   warning(msg)
-  if (!is_R_CMD_check() && tcltk_available()) {
+  if (!is_R_CMD_check() && Sys.getenv('TRAVIS') != 'true' && tcltk_available()) {
     do.call(
       getFromNamespace('tkmessageBox', 'tcltk'),
       list(title = 'Sweave Noweb syntax?', icon = 'info', message = msg)
