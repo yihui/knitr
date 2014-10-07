@@ -146,8 +146,8 @@ kable_latex = function(
     sprintf('\n\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x)))
-      paste(paste(cn, collapse = ' & '), sprintf('\\\\\n%s\n', midrule), sep = ''),
-    paste(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep),
+      paste(paste(escape_latex(cn), collapse = ' & '), sprintf('\\\\\n%s\n', midrule), sep = ''),
+    paste(apply(escape_latex(x), 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep),
           sep = '', collapse = '\n'),
     sprintf('\n%s', bottomrule),
     sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular')

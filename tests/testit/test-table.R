@@ -46,6 +46,23 @@ x & y\\\\
 )
 
 assert(
+  'kable() escapes LaTeX special characters',
+  identical(
+    kable2(data.frame(x=c("10%","5%"),col_name=c("3_8","40_6")), 'latex'),
+    '
+\\begin{tabular}{l|l}
+\\hline
+x & col\\_name\\\\
+\\hline
+10\\% & 3\\_8\\\\
+\\hline
+5\\% & 40\\_6\\\\
+\\hline
+\\end{tabular}'
+  )
+)
+
+assert(
   'kable(digits = vector) works on numeric matrices',
   identical(
     kable2(matrix(c(1.1, 1.2, 2.3, 2.4), 2, dimnames = list(NULL, c('a', 'b'))),
