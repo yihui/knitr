@@ -57,8 +57,11 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
       return(sub_ext(out, 'pdf'))
     } else {
       # use the specified PDFLATEX command
-      oc = Sys.getenv('PDFLATEX')
-      on.exit(Sys.setenv(PDFLATEX = oc), add = TRUE)
+      oc = Sys.getenv('PDFLATEX', NA)
+      on.exit(
+        if (is.na(oc)) Sys.unsetenv('PDFLATEX') else Sys.setenv(PDFLATEX = oc),
+        add = TRUE
+      )
       Sys.setenv(PDFLATEX = compiler)
     }
   }
