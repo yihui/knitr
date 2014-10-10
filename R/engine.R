@@ -103,6 +103,7 @@ eng_shlib = function(options) {
 }
 
 ## Java
+#  e.g. see http://cran.rstudio.com/package=jvmr
 
 ## Rcpp
 eng_Rcpp = function(options) {
