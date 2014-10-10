@@ -52,6 +52,7 @@ engine_output = function(options, code, out, extra = NULL) {
 }
 
 ## TODO: how to emulate the console?? e.g. for Python
+#  see some experiments at https://github.com/yihui/runr
 
 eng_interpreted = function(options) {
   engine = options$engine
