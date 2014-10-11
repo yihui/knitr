@@ -73,7 +73,7 @@ kable = function(
     stop('table format not implemented yet!')
   ) else 'pandoc'
   col.names # evaluate it now! no lazy evaluation because colnames(x) may change
-  if (!is.matrix(x) && !is.data.frame(x)) x = as.data.frame(x)
+  if (!is.matrix(x)) x = as.data.frame(x)
   m = ncol(x)
   # numeric columns
   isn = if (is.matrix(x)) rep(is.numeric(x), m) else sapply(x, is.numeric)
