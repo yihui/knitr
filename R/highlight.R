@@ -6,7 +6,10 @@ hilight_source = function(x, format, options) {
       res = try(highr::hi_andre(x, options$engine, format))
       if (inherits(res, 'try-error')) {
         if (format == 'html') highr:::escape_html(x) else highr:::escape_latex(x)
-      } else res
+      } else {
+        highlight_header()
+        res
+      }
     }
   } else if (options$prompt) {
     # if you did not reformat or evaluate the code, I have to figure out which
@@ -17,6 +20,11 @@ hilight_source = function(x, format, options) {
   } else x
 }
 
+highlight_header = function() {
+  set_header(highlight.extra = paste(c(sprintf(
+    '\\let\\hl%s\\hlstd', c('esc', 'pps', 'lin')
+  ), '\\let\\hlslc\\hlcom'), collapse = ' '))
+}
 
 # stolen from Romain's highlight package (v0.3.2)
 

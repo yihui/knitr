@@ -202,9 +202,7 @@ eng_highlight = function(options) {
   options$echo = FALSE; options$results = 'asis'  # do not echo source code
   res = eng_interpreted(options)
   if (out_format('latex')) {
-    set_header(highlight.extra = paste(c(sprintf(
-      '\\let\\hl%s\\hlstd', c('esc', 'pps', 'lin')
-    ), '\\let\\hlslc\\hlcom'), collapse = ' '))
+    highlight_header()
     sub('(.*)\\\\\\\\(.*)', '\\1\\2', res)
   } else res
 }
