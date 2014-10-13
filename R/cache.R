@@ -170,6 +170,7 @@ parse_objects = function(path) {
 dep_prev = function() {
   labs = names(knit_code$get())
   if ((n <- length(labs)) < 2L) return() # one chunk or less; no sense of deps
+  opts_knit$set(warn.uncached.dep = FALSE)
   for (i in 1L:(n - 1L)) {
     dep_list$set(setNames(list(labs[(i + 1L):n]), labs[i]))
   }
