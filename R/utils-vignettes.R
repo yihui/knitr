@@ -36,7 +36,7 @@ body(vweave_docco_classic)[5L] = expression(rocco(
 ))
 
 vweave_rmarkdown = vweave
-body(vweave_rmarkdown)[5L] = expression(getFromNamespace('render', 'rmarkdown')(
+body(vweave_rmarkdown)[5L] = expression(rmarkdown::render(
   file, encoding = encoding, quiet = quiet, envir = globalenv()
 ))
 
@@ -107,9 +107,7 @@ html_vignette = function(
     after_body = system.file('misc', 'vignette.html', package = 'knitr')
   )
 ) {
-  # TODO: replace this with rmarkdown::html_document when rmarkdown is on CRAN
-  html_document = getFromNamespace('html_document', 'rmarkdown')
-  html_document(
+  rmarkdown::html_document(
     ..., fig_caption = fig_caption, theme = theme, hightlight = highlight,
     css = css, includes = includes
   )
