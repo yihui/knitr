@@ -29,9 +29,6 @@
 #' @note The tables for \code{format = 'markdown'} also work for Pandoc when the
 #'   \code{pipe_tables} extension is enabled (this is the default behavior for
 #'   Pandoc >= 1.10).
-#'
-#'   When using this function inside a \pkg{knitr} document (e.g. R Markdown or
-#'   R LaTeX), you will need the chunk option \code{results='asis'}.
 #' @references See
 #'   \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
 #'    for some examples in LaTeX, but they also apply to other document formats.
