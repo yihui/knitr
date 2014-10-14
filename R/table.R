@@ -102,7 +102,10 @@ kable = function(
   x = format(as.matrix(x), trim = TRUE, justify = 'none')
   colnames(x) = col.names
   attr(x, 'align') = align
-  res = do.call(paste('kable', format, sep = '_'), list(x = x, caption = caption, escape = escape, ...))
+  res = do.call(
+    paste('kable', format, sep = '_'),
+    list(x = x, caption = caption, escape = escape, ...)
+  )
   structure(res, format = format, class = 'knitr_kable')
 }
 
@@ -127,8 +130,7 @@ kable_latex = function(
   bottomrule = if (booktabs) '\\bottomrule' else '\\hline',
   midrule = if (booktabs) '\\midrule' else '\\hline',
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
-  caption = NULL,
-  escape = TRUE
+  caption = NULL, escape = TRUE
 ) {
   if (!is.null(align <- attr(x, 'align', exact = TRUE))) {
     align = paste(align, collapse = vline)
