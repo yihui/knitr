@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.8
+
+## NEW FEATURES
+
+- added an argument `escape = TRUE` to `kable()` to escape special characters in LaTeX and HTML tables (thanks, @juba, #852)
+
 # CHANGES IN knitr VERSION 1.7
 
 ## NEW FEATURES
