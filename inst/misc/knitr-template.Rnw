@@ -13,7 +13,6 @@
  {hyperref}
 \hypersetup{
  pdfstartview={XYZ null null 1}}
-\usepackage{breakurl}
 
 \makeatletter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
