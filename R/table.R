@@ -19,6 +19,7 @@
 #'   default, numeric columns are right-aligned, and other columns are
 #'   left-aligned; if \code{align = NULL}, the default alignment is used
 #' @param caption the table caption
+#' @param escape escape special characters when producing HTML or LaTeX tables
 #' @param ... other arguments (see examples)
 #' @return A character vector of the table source code. When \code{output =
 #'   TRUE}, the results are also written into the console as a side-effect.
@@ -63,7 +64,7 @@
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = colnames(x),
-  align, caption = NULL, ...
+  align, caption = NULL, escape = TRUE, ...
 ) {
   if (missing(format) || is.null(format)) format = getOption('knitr.table.format')
   if (is.null(format)) format = if (is.null(pandoc_to())) switch(
@@ -101,7 +102,7 @@ kable = function(
   x = format(as.matrix(x), trim = TRUE, justify = 'none')
   colnames(x) = col.names
   attr(x, 'align') = align
-  res = do.call(paste('kable', format, sep = '_'), list(x = x, caption = caption, ...))
+  res = do.call(paste('kable', format, sep = '_'), list(x = x, caption = caption, escape = escape, ...))
   structure(res, format = format, class = 'knitr_kable')
 }
 
@@ -126,7 +127,8 @@ kable_latex = function(
   bottomrule = if (booktabs) '\\bottomrule' else '\\hline',
   midrule = if (booktabs) '\\midrule' else '\\hline',
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
-  caption = NULL
+  caption = NULL,
+  escape = TRUE
 ) {
   if (!is.null(align <- attr(x, 'align', exact = TRUE))) {
     align = paste(align, collapse = vline)
@@ -141,20 +143,24 @@ kable_latex = function(
   } else rep('', nrow(x))
   linesep = ifelse(linesep == "", linesep, paste('\n', linesep, sep = ''))
 
+  if (escape) x = escape_latex(x)
+
   paste(c(
     cap,
     sprintf('\n\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
     sprintf('\n%s', toprule), '\n',
-    if (!is.null(cn <- colnames(x)))
-      paste(paste(escape_latex(cn), collapse = ' & '), sprintf('\\\\\n%s\n', midrule), sep = ''),
-    paste(apply(escape_latex(x), 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep),
+    if (!is.null(cn <- colnames(x))) {
+      if (escape) cn = escape_latex(cn)
+      paste(paste(cn, collapse = ' & '), sprintf('\\\\\n%s\n', midrule), sep = '')
+    },
+    paste(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep),
           sep = '', collapse = '\n'),
     sprintf('\n%s', bottomrule),
     sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular')
   ), collapse = '')
 }
 
-kable_html = function(x, table.attr = '', caption = NULL, ...) {
+kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
   table.attr = gsub('^\\s+|\\s+$', '', table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
@@ -162,10 +168,13 @@ kable_html = function(x, table.attr = '', caption = NULL, ...) {
     sprintf(' style="text-align:%s;"', c(l = 'left', c = 'center', r = 'right')[align])
   }
   cap = if (is.null(caption)) '' else sprintf('\n<caption>%s</caption>', caption)
+  if (escape) x = escape_html(x)
   paste(c(
     sprintf('<table%s>%s', table.attr, cap),
-    if (!is.null(cn <- colnames(x)))
-      c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>'),
+    if (!is.null(cn <- colnames(x))) {
+      if (escape) cn = escape_html(cn)
+      c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>')
+    },
     '<tbody>',
     paste(
       '  <tr>',
