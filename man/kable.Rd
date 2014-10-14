@@ -2,7 +2,7 @@
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
-kable(x, format, digits = getOption("digits"), row.names = NA, col.names = colnames(x), 
+kable(x, format, digits = getOption("digits"), row.names = NA, col.names = colnames(x),
     align, caption = NULL, ...)
 }
 \arguments{
@@ -29,6 +29,8 @@ default, numeric columns are right-aligned, and other columns are
 left-aligned; if \code{align = NULL}, the default alignment is used}
 
 \item{caption}{the table caption}
+
+\item{escape}{escape special characters when producing HTML or LaTeX tables}
 
 \item{...}{other arguments (see examples)}
 }
