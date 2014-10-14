@@ -2,8 +2,8 @@
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
-kable(x, format, digits = getOption("digits"), row.names = NA, col.names = colnames(x),
-    align, caption = NULL, ...)
+kable(x, format, digits = getOption("digits"), row.names = NA, col.names = colnames(x), 
+    align, caption = NULL, escape = TRUE, ...)
 }
 \arguments{
 \item{x}{an R object (typically a matrix or data frame)}
@@ -46,9 +46,6 @@ intended to replace any other R packages for making tables.
 The tables for \code{format = 'markdown'} also work for Pandoc when the
   \code{pipe_tables} extension is enabled (this is the default behavior for
   Pandoc >= 1.10).
-
-  When using this function inside a \pkg{knitr} document (e.g. R Markdown or
-  R LaTeX), you will need the chunk option \code{results='asis'}.
 }
 \examples{
 kable(head(iris), format = "latex")
