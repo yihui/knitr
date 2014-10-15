@@ -82,7 +82,8 @@ hook_ffmpeg_html = function(x, options) {
   opt.str = paste(sprintf('width=%s', options$out.width),
                   sprintf('height=%s', options$out.height),
                   if('controls' %in% mov.opts) 'controls="controls"',
-                  if('loop' %in% mov.opts) 'loop="loop"')
+                  if('loop' %in% mov.opts) 'loop="loop"',
+                  if('autoplay' %in% mov.opts) 'autoplay="autoplay"')
   sprintf('<video %s><source src="%s" />video of chunk %s</video>',
           opt.str, str_c(opts_knit$get('base.url'), mov.fname), options$label)
 }
