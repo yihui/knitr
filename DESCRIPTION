@@ -79,7 +79,7 @@ Imports:
     evaluate (>= 0.5.5),
     digest,
     formatR (>= 1.0),
-    highr (>= 0.3),
+    highr (>= 0.4),
     markdown (>= 0.7.4),
     stringr (>= 0.6),
     tools
