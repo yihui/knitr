@@ -4,6 +4,8 @@
 
 - added an argument `escape = TRUE` to `kable()` to escape special characters in LaTeX and HTML tables (thanks, @juba, #852)
 
+- the cache will attempt to preserve the order in which packages are stored on the search path (thanks, @dgrtwo, #867)
+
 ## BUG FIXES
 
 - fixed #862: the YAML metadata in child R Markdown documents was not correctly removed (thanks, @krlmlr)
