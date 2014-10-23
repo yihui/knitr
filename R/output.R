@@ -221,7 +221,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   if (is.null(out_format())) auto_format(ext)
   # in child mode, strip off the YAML metadata in Markdown if exists
   if (child_mode() && out_format('markdown') && grepl('^---\\s*$', text[1])) {
-    i = grepl('^---\\s*$', text)
+    i = grep('^---\\s*$', text)
     if (length(i) >= 2) text = text[-(1:i[2])]
   }
   # change output hooks only if they are not set beforehand

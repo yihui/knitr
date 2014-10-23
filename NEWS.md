@@ -4,6 +4,10 @@
 
 - added an argument `escape = TRUE` to `kable()` to escape special characters in LaTeX and HTML tables (thanks, @juba, #852)
 
+## BUG FIXES
+
+- fixed #862: the YAML metadata in child R Markdown documents was not correctly removed (thanks, @krlmlr)
+
 # CHANGES IN knitr VERSION 1.7
 
 ## NEW FEATURES
