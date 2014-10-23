@@ -6,6 +6,8 @@
 
 - the cache will attempt to preserve the order in which packages are stored on the search path (thanks, @dgrtwo, #867)
 
+- added a new argument `table.envir` to `kable()` for LaTeX tables only; if the table caption is specified (not `NULL`), the LaTeX environment `table` will be used by default (i.e. the table is generated in `\begin{table} \end{table}`), and you can specify alternative environments via `kable(..., table.envir = '???')` (thanks, @dalupus, #872)
+
 - chunk options are supported using the syntax `# ---- label, options ----` in the R script passed to `stitch()` (thanks, @wibeasley, yihui/knitr-examples#35)
 
 - syntax highlighting for .Rnw and .Rhtml documents can be further customized by setting `opts_knit$set(highr.opts = list(markup = cmd_mine))` where `cmd_mine` is a data frame for the `markup` argument of `highr::hilight()` (thanks, @lq, #869)

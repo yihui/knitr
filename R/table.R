@@ -127,12 +127,14 @@ kable_latex = function(
   bottomrule = if (booktabs) '\\bottomrule' else '\\hline',
   midrule = if (booktabs) '\\midrule' else '\\hline',
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
-  caption = NULL, escape = TRUE
+  caption = NULL, table.envir = if (!is.null(caption)) 'table', escape = TRUE
 ) {
   if (!is.null(align <- attr(x, 'align', exact = TRUE))) {
     align = paste(align, collapse = vline)
     align = paste('{', align, '}', sep = '')
   }
+  env1 = sprintf('\\begin{%s}\n', table.envir)
+  env2 = sprintf('\n\\end{%s}',   table.envir)
   cap = if (is.null(caption)) '' else sprintf('\n\\caption{%s}', caption)
 
   if (nrow(x) == 0) midrule = ""
@@ -145,6 +147,7 @@ kable_latex = function(
   if (escape) x = escape_latex(x)
 
   paste(c(
+    env1,
     cap,
     sprintf('\n\\begin{%s}', if (longtable) 'longtable' else 'tabular'), align,
     sprintf('\n%s', toprule), '\n',
@@ -155,7 +158,8 @@ kable_latex = function(
     paste(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep),
           sep = '', collapse = '\n'),
     sprintf('\n%s', bottomrule),
-    sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular')
+    sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular'),
+    env2
   ), collapse = '')
 }
 
