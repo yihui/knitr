@@ -144,7 +144,7 @@ opts_knit = new_defaults(list(
   base.dir = NULL, base.url = NULL, root.dir = NULL, child.path = '',
   upload.fun = identity, animation.fun = NULL, global.device = FALSE, global.par = FALSE,
   concordance = FALSE, documentation = 1L, self.contained = TRUE,
-  unnamed.chunk.label = 'unnamed-chunk',
+  unnamed.chunk.label = 'unnamed-chunk', highr.opts = NULL,
 
   # internal options; users should not touch them
   out.format = NULL, child = FALSE, parent = FALSE, tangle = FALSE, aliases = NULL,
