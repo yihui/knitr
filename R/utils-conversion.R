@@ -88,9 +88,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
 knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
                      quiet = FALSE, encoding = getOption('encoding')) {
   out = knit(input, text = text, envir = envir, encoding = encoding, quiet = quiet)
-  if (is.null(output))
-    output <- sub_ext(out, 'html')
   if (is.null(text)) {
+    output = sub_ext(if (is.null(output)) out else output, 'html')
     markdown::markdownToHTML(out, output, encoding = encoding, ...)
     invisible(output)
   } else markdown::markdownToHTML(text = out, ...)
