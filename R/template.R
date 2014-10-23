@@ -14,9 +14,6 @@
 #' opt1=val1, opt2=val2}, which will be copied to the template; if no chunk
 #' headers are found, the whole R script will be inserted into the template as
 #' one code chunk.
-#'
-#' Chunk options are not supported by \code{stitch()}; if they are desired, please
-#' use \code{\link{knit}} or \code{\link{spin}}.
 #' @param script path to the R script
 #' @param template path of the template to use (by default the Rnw template in
 #'   this package; there is also an HTML template in \pkg{knitr})
