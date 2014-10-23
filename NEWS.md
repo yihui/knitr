@@ -6,6 +6,8 @@
 
 - the cache will attempt to preserve the order in which packages are stored on the search path (thanks, @dgrtwo, #867)
 
+- chunk options are supported using the syntax `# ---- label, options ----` in the R script passed to `stitch()` (thanks, @wibeasley, yihui/knitr-examples#35)
+
 - syntax highlighting for .Rnw and .Rhtml documents can be further customized by setting `opts_knit$set(highr.opts = list(markup = cmd_mine))` where `cmd_mine` is a data frame for the `markup` argument of `highr::hilight()` (thanks, @lq, #869)
 
 ## BUG FIXES
