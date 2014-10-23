@@ -115,7 +115,7 @@ print.knitr_kable = function(x, ...) {
 #' @export
 knit_print.knitr_kable = function(x, ...) {
   x = paste(c(
-    if (!(attr(x, 'format') %in% c('html', 'latex'))) c('', ''), x, ''
+    if (!(attr(x, 'format') %in% c('html', 'latex'))) c('', ''), x, '\n'
   ), collapse = '\n')
   asis_output(x)
 }
