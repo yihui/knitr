@@ -66,9 +66,9 @@ new_cache = function() {
     # save or load R packages
     path = valid_path(path, '__packages')
     if (save) {
-      x = .packages()
-      if (file.exists(path)) x = setdiff(c(x, readLines(path)), .base.pkgs)
-      writeLines(sort(x), path)
+      x = rev(.packages())
+      if (file.exists(path)) x = setdiff(c(readLines(path), x), .base.pkgs)
+      writeLines(x, path)
     } else {
       if (!file.exists(path)) return()
       for (p in readLines(path))
