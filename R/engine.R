@@ -31,8 +31,21 @@
 #' names(knit_engines$get())
 knit_engines = new_defaults()
 
-# give me source code, text output and I return formatted text using the three
-# hooks: source, output and chunk
+#' An output wrapper for language engine output
+#'
+#' If you have designed a language engine, you may call this function in the end
+#' to format and return the text output from your engine.
+#' @param options a list of chunk options (usually this is just the object
+#'   \code{options} passed to the engine function; see
+#'   \code{\link{knit_engines}})
+#' @param code the source code of the chunk, to which the output hook
+#'   \code{source} is applied, unless the chunk option \code{echo == FALSE}
+#' @param out the text output from the engine, to which the hook \code{output}
+#'   is applied, unless the chunk option \code{results == 'hide'}
+#' @param extra any additional text output that you want to include
+#' @return A character string generated from the source code and output using
+#'   the appropriate output hooks.
+#' @export
 engine_output = function(options, code, out, extra = NULL) {
   if (length(code) != 1L) code = paste(code, collapse = '\n')
   if (length(out) != 1L) out = paste(out, collapse = '\n')
