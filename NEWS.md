@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- added a new function `fig_chunk()` to provide a public API to get the figure filenames produced from code chunks; since **knitr** 1.7 changed the figure file numbering scheme, it broke documents with hard-coded figure filenames, e.g. for Rnw documents, `\includegraphics{foo.pdf}` should be `\includegraphics{foo-1.pdf}` after **knitr** 1.7, and such problems can be avoided by `\includegraphics{\Sexpr{fig_chunk('foo', 'pdf')}}` (thanks, @edwardabraham, #870)
+
 - added an argument `escape = TRUE` to `kable()` to escape special characters in LaTeX and HTML tables (thanks, @juba, #852)
 
 - the cache will attempt to preserve the order in which packages are stored on the search path (thanks, @dgrtwo, #867)
