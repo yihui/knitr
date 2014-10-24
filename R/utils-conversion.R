@@ -89,7 +89,7 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
                      quiet = FALSE, encoding = getOption('encoding')) {
   out = knit(input, text = text, envir = envir, encoding = encoding, quiet = quiet)
   if (is.null(text)) {
-    output = sub_ext(if (is.null(output)) out else output, 'html')
+    output = sub_ext(if (is.null(output) || is.na(output)) out else output, 'html')
     markdown::markdownToHTML(out, output, encoding = encoding, ...)
     invisible(output)
   } else markdown::markdownToHTML(text = out, ...)
