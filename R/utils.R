@@ -147,7 +147,18 @@ output_asis = function(x, options) {
 }
 
 # path relative to dir of the input file
-input_dir = function() .knitEnv$input.dir %n% '.'
+input_dir = function() {
+  # LyX is a special case: the input file is in tempdir, and we should use
+  # root.dir as the real input dir (#809)
+  (if (is_lyx()) opts_knit$get('root.dir')) %n% .knitEnv$input.dir %n% '.'
+}
+
+is_lyx = function() {
+  args = commandArgs(TRUE)
+  if (length(args) < 4) return(FALSE)
+  grepl('[.]Rnw$', args[1]) &&
+    !is.na(Sys.getenv('LyXDir', NA)) && !is.na(Sys.getenv('LYXSOCKET', NA))
+}
 
 # scientific notation in TeX, HTML and reST
 format_sci_one = function(x, format = 'latex') {
