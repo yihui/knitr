@@ -154,7 +154,7 @@ eng_tikz = function(options) {
   unlink(texf)
 
   fig = fig_path('', options)
-  dir.create(dirname(fig), showWarnings = FALSE)
+  dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
   file.rename(outf, str_c(fig, '.pdf'))
   # convert to the desired output-format, calling `convert`
   ext = tolower(options$fig.ext %n% dev2ext(options$dev))
@@ -191,7 +191,7 @@ eng_dot = function(options) {
                 shQuote(str_c(fig <- fig_path(), '.', ext)))
 
   # generate output
-  dir.create(dirname(fig), showWarnings = FALSE)
+  dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
   outf = paste(fig, ext, sep = '.')
   unlink(outf)
   extra = if (options$eval) {

@@ -18,6 +18,8 @@
 
 - fixed #862: the YAML metadata in child R Markdown documents was not correctly removed (thanks, @krlmlr)
 
+- fixed #874: for the engines `dot` and `tikz`, the figure directory will be created recursively (thanks, @WilDoane)
+
 # CHANGES IN knitr VERSION 1.7
 
 ## NEW FEATURES
