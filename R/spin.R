@@ -136,3 +136,38 @@ spin = function(
   rtex = c('% begin.rcode ', '', '% end.rcode', '\\\\rinline{\\1}'),
   rrst = c('.. {r ', '}', '.. ..', ':r:`\\1`')
 )
+
+#' Spin a child R script
+#'
+#' This function is similar to \code{\link{knit_child}()} but is used in R
+#' scripts instead. When the main R script is not called via
+#' \code{\link{spin}()}, this function simply executes the child script via
+#' \code{\link{sys.source}()}, otherwise it calls \code{\link{spin}()} to spin
+#' the child script into a source document, and uses \code{\link{knit_child}()}
+#' to compile it. You can call this function in R code, or using the syntax of
+#' inline R expressions in \code{\link{spin}()} (e.g.
+#' \code{{{knitr::spin_child('script.R')}}}).
+#' @param input the filename of the input R script
+#' @param format to be passed to \code{format} in \code{spin()}; if not
+#'   provided, it will be guessed from the current knitting process
+#' @return A character string of the knitted R script.
+#' @export
+spin_child = function(input, format) {
+  if (!isTRUE(getOption('knitr.in.progress')))
+    return(sys.source(input, parent.frame()))
+  fmt = if (missing(format)) {
+    if (is.null(fmt <- out_format()))
+      stop('spin_child() must be called in a knitting process')
+    .spin.fmt = c(
+      'latex' = 'Rnw', 'sweave' = 'Rnw', 'listings' = 'Rnw',
+      'html' = 'Rhtml', 'markdown' = 'Rmd'
+    )
+    if (is.na(fmt <- .spin.fmt[fmt]))
+      stop('the document format ', fmt, ' is not supported yet')
+    fmt
+  } else format
+  asis_output(knit_child(
+    text = spin(text = readLines(input), knit = FALSE, report = FALSE, format = fmt),
+    quiet = TRUE
+  ))
+}
