@@ -66,11 +66,15 @@ hook_plot_html = function(x, options) {
 #' @rdname hook_animation
 #' @export
 hook_ffmpeg_html = function(x, options) {
+  hook_ffmpeg(x, options, '.webm')
+}
+
+hook_ffmpeg = function(x, options, format = '.webm') {
   x = c(sans_ext(x), file_ext(x))
   fig.num = options$fig.num
   # set up the ffmpeg run
   fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
-  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), '.webm')
+  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), format)
 
   ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1/options$interval,
                      '-i', fig.fname, mov.fname)
