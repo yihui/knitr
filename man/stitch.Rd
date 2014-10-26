@@ -51,10 +51,9 @@ one code chunk.
 }
 \examples{
 s = system.file("misc", "stitch-test.R", package = "knitr")
-\dontrun{
+\donttest{
 stitch(s)
 }
-
 # HTML report
 stitch(s, system.file("misc", "knitr-template.Rhtml", package = "knitr"))
 

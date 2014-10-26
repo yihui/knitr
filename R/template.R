@@ -24,8 +24,7 @@
 #' @export
 #' @seealso \code{\link{spin}} (turn a specially formatted R script to a report)
 #' @examples s = system.file('misc', 'stitch-test.R', package = 'knitr')
-#' \dontrun{stitch(s)}
-#'
+#' \donttest{stitch(s)}
 #' # HTML report
 #' stitch(s, system.file('misc', 'knitr-template.Rhtml', package = 'knitr'))
 #'

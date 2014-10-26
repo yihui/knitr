@@ -14,7 +14,7 @@
 #'   an installed package which can be found via \code{system.file('html',
 #'   package = 'your_package_name')}, otherwise some links may not work (e.g.
 #'   the link to the DESCRITION file).
-#' @examples \dontrun{knit_rd('maps')
+#' @examples \donttest{knit_rd('maps')
 #' knit_rd('rpart')
 #' setwd(system.file('html', package = 'ggplot2'))
 #' knit_rd('ggplot2') # time-consuming!
