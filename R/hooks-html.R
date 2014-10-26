@@ -77,15 +77,14 @@ hook_ffmpeg_html = function(x, options) {
   message('executing: ', ffmpeg.cmd)
   system(ffmpeg.cmd, ignore.stdout = TRUE)
 
-  # figure out the options for the movie itself
-  mov.opts = sc_split(options$aniopts)
-  opt.str = paste(sprintf('width=%s', options$out.width),
-                  sprintf('height=%s', options$out.height),
-                  if('controls' %in% mov.opts) 'controls="controls"',
-                  if('loop' %in% mov.opts) 'loop="loop"',
-                  if('autoplay' %in% mov.opts) 'autoplay="autoplay"')
+  # controls,loop --> controls loop
+  opts = paste(sc_split(options$aniopts), collapse = ' ')
+  opts = paste(
+    sprintf('width="%s"', options$out.width),
+    sprintf('height="%s"', options$out.height), opts
+  )
   sprintf('<video %s><source src="%s" />video of chunk %s</video>',
-          opt.str, str_c(opts_knit$get('base.url'), mov.fname), options$label)
+          opts, str_c(opts_knit$get('base.url'), mov.fname), options$label)
 }
 
 opts_knit$set(animation.fun = hook_ffmpeg_html)
