@@ -43,15 +43,15 @@ hook_plot_tex = function(x, options) {
   # as needed), and an impression of their (possible) contents.
   #
   #     fig1,                   # \begin{...}[...]
-  #       sub1,                 #   \subfloat[...]{
-  #         align1,             #     {\centering
+  #       align1,               #   {\centering
+  #         sub1,               #     \subfloat[...]{
   #           resize1,          #       \resizebox{...}{...}{
   #             tikz code       #         '\\input{chunkname.tikz}'
   #             or animate code #         or '\\animategraphics[size]{1/interval}{chunkname}{1}{fig.num}'
   #             or plain code   #         or '\\includegraphics[size]{chunkname}'
   #           resize2,          #       }
-  #         align2,             #     }
-  #       sub2,                 #   }
+  #         sub2,               #     }
+  #       align2,               #   }
   #     fig2                    #   \caption[...]{...\label{...}}
   #                             # \end{...}  % still fig2
 
@@ -82,11 +82,11 @@ hook_plot_tex = function(x, options) {
   # TRUE if this picture is standalone or last in set
   plot2 = ai || fig.cur == fig.num
 
-  # open align code if this picture is standalone/first in set/a subpic
-  align1 = if (plot1 || usesub)
+  # open align code if this picture is standalone/first in set
+  align1 = if (plot1)
     switch(a, left = '\n\n', center = '\n\n{\\centering ', right = '\n\n\\hfill{}', '\n')
-  # close align code if this picture is standalone/last in set/a subpic
-  align2 = if (plot2 || usesub)
+  # close align code if this picture is standalone/last in set
+  align2 = if (plot2)
     switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n', right = '\n\n', '')
 
   # figure environment: caption, short caption, label
@@ -131,7 +131,7 @@ hook_plot_tex = function(x, options) {
                  options$out.extra), collapse = ',')
 
   paste(
-    fig1, sub1, align1, resize1,
+    fig1, align1, sub1, resize1,
     if (tikz) {
       sprintf('\\input{%s}', x)
     } else if (animate) {
@@ -147,7 +147,7 @@ hook_plot_tex = function(x, options) {
       sprintf('\\includegraphics%s{%s} ', size, sans_ext(x))
     },
 
-    resize2, align2, sub2, fig2,
+    resize2, sub2, align2, fig2,
     sep = ''
   )
 }

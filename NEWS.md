@@ -24,6 +24,8 @@
 
 - fixed #874: for the engines `dot` and `tikz`, the figure directory will be created recursively (thanks, @WilDoane)
 
+- fixed #654: sub figures were not aligned correctly in LaTeX when the chunk option `fig.align` was specified (thanks, @lionandoil)
+
 # CHANGES IN knitr VERSION 1.7
 
 ## NEW FEATURES
