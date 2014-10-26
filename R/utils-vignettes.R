@@ -86,6 +86,41 @@ vig_engine = function(..., tangle = vtangle) {
   tools::vignetteEngine(..., tangle = tangle, package = 'knitr')
 }
 
+#' Spell check filter for source documents
+#'
+#' When performing spell checking on source documents, we may need to skip R
+#' code chunks and inline R expressions, because many R functions and symbols
+#' are likely to be identified as typos. This function is designed for the
+#' \code{filter} argument of \code{\link{aspell}()} to filter out code chunks
+#' and inline expressions.
+#' @param ifile the filename of the source document
+#' @param encoding the file encoding
+#' @return A chracter vector of the file content, excluding code chunks and
+#'   inline expressions.
+#' @export
+#' @examples library(knitr)
+#' knitr_example = function(...) system.file('examples', ..., package = 'knitr')
+#' # -t means the TeX mode
+#' utils::aspell(knitr_example('knitr-minimal.Rnw'), knit_filter, control = '-t')
+#' # -H is the HTML mode
+#' utils::aspell(knitr_example('knitr-minimal.Rmd'), knit_filter, control = '-H -t')
+knit_filter = function(ifile, encoding = 'unknown') {
+  x = readLines(ifile, encoding = encoding, warn = FALSE)
+  n = length(x); if (n == 0) return(x)
+  p = detect_pattern(x, tolower(file_ext(ifile)))
+  if (is.null(p)) return(x)
+  p = all_patterns[[p]]; p1 = p$chunk.begin; p2 = p$chunk.end
+  i1 = grepl(p1, x)
+  i2 = filter_chunk_end(i1, grepl(p2, x))
+  m = numeric(n)
+  m[i1] = 1; m[i2] = 2  # 1: code; 2: text
+  if (m[1] == 0) m[1] = 2
+  for (i in seq_len(n - 1)) if (m[i + 1] == 0) m[i + 1] = m[i]
+  x[m == 1 | i2] = ''
+  x[m == 2] = gsub(p$inline.code, '', x[m == 2])
+  x
+}
+
 pandoc_available = function() {
   # if you have this environment variable, chances are you are good to go
   if (Sys.getenv("RSTUDIO_PANDOC") != '') return(TRUE)
