@@ -18,6 +18,8 @@
 
 - syntax highlighting for .Rnw and .Rhtml documents can be further customized by setting `opts_knit$set(highr.opts = list(markup = cmd_mine))` where `cmd_mine` is a data frame for the `markup` argument of `highr::hilight()` (thanks, @lq, #869)
 
+- added a new language engine `groovy` (thanks, @vveitas, #876)
+
 ## BUG FIXES
 
 - fixed #862: the YAML metadata in child R Markdown documents was not correctly removed (thanks, @krlmlr)

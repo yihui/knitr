@@ -45,6 +45,7 @@ Authors@R: c(person("Adam", "Vogt", role = "ctb"),
     person("Thomas", "Leeper", role = "ctb"),
     person("Tom", "Torsney-Weir", role = "ctb"),
     person("Trevor", "Davis", role = "ctb"),
+    person("Viktoras", "Veitas", role = "ctb"),
     person("Weicheng", "Zhu", role = "ctb"),
     person("Wush", "Wu", role = "ctb"),
     person("Yihui", "Xie", email = "xie@yihui.name", role = c("aut", "cre")))
