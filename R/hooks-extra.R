@@ -90,7 +90,7 @@ hook_pdfcrop = function(before, options, envir) {
   # crops plots after a chunk is evaluated and plot files produced
   ext = options$fig.ext
   if (options$dev == 'tikz' && options$external) ext = 'pdf'
-  if (before || (fig.num <- options$fig.num) == 0L) return()
+  if (before || (fig.num <- options$fig.num %n% 0L) == 0L) return()
   paths = all_figs(options, ext, fig.num)
   in_base_dir(for (f in paths) plot_crop(f))
 }
