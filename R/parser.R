@@ -27,7 +27,17 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
     if (!set.preamble && !parent_mode()) {
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
     }
-    if (block) parse_block(g, patterns) else parse_inline(g, patterns)
+    if (block) {
+      n = length(g)
+      # remove the optional chunk footer
+      if (n >=2 && grepl(chunk.end, g[n])) g = g[-n]
+      # remove the optional prefix % in code in Rtex mode
+      g = strip_block(g, patterns$chunk.code)
+      params.src = if (group_pattern(chunk.begin)) {
+        str_trim(gsub(chunk.begin, '\\1', g[1]))
+      } else ''
+      parse_block(g[-1], g[1], params.src)
+    } else parse_inline(g, patterns)
   })
 }
 
@@ -45,25 +55,14 @@ strip_block = function(x, prefix = NULL) {
 dep_list = new_defaults()
 
 # separate params and R code in code chunks
-parse_block = function(input, patterns) {
-  n = length(input)
-  # remove the optional chunk footer
-  if (n >=2 && grepl(patterns$chunk.end, input[n])) input = input[-n]
-
-  block = strip_block(input, patterns$chunk.code)
-  chunk.begin = patterns$chunk.begin
-  params.src = if (group_pattern(chunk.begin)) {
-    str_trim(gsub(chunk.begin, '\\1', block[1]))
-  } else ''
+parse_block = function(code, header, params.src) {
   params = parse_params(params.src)
-  if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', block[1]))) {
+  if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', header))) {
     params$indent = spaces
-    block = gsub(sprintf('^%s', spaces), '', block) # remove indent for the whole chunk
+    code = gsub(sprintf('^%s', spaces), '', code) # remove indent for the whole chunk
   }
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
-  # remove the chunk header
-  code = block[-1L]
   if (length(code)) {
     if (label %in% names(knit_code$get())) stop("duplicate label '", label, "'")
     knit_code$set(setNames(list(code), label))
