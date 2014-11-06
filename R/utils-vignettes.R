@@ -41,8 +41,10 @@ body(vweave_rmarkdown)[5L] = expression(rmarkdown::render(
 ))
 
 # do not tangle R code from vignettes
-untangle_weave = function(weave) {
-  body(weave)[3L] = expression({})
+untangle_weave = function(vig_list, eng) {
+  weave = vig_list[[c(eng, 'weave')]]
+  if (eng != 'knitr::rmarkdown')
+    body(weave)[3L] = expression({})
   weave
 }
 vtangle_empty = function(file, ...) {
@@ -76,7 +78,7 @@ register_vignette_engines = function(pkg) {
   engines  = grep('_notangle$', names(vig_list), value = TRUE, invert = TRUE)
   for (eng in engines) vig_engine(
     paste(sub('^knitr::', '', eng), 'notangle', sep = '_'),
-    untangle_weave(vig_list[[c(eng, 'weave')]]),
+    untangle_weave(vig_list, eng),
     tangle = vtangle_empty,
     pattern = vig_list[[c(eng, 'pattern')]]
   )

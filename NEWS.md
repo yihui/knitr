@@ -28,6 +28,8 @@
 
 - fixed #654: sub figures were not aligned correctly in LaTeX when the chunk option `fig.align` was specified (thanks, @lionandoil)
 
+- the vignette engine `knitr::rmarkdown_notangle` did not really work (thanks, @bbolker, http://stackoverflow.com/q/26726388/559676)
+
 # CHANGES IN knitr VERSION 1.7
 
 ## NEW FEATURES
