@@ -102,7 +102,9 @@ hook_plot_tex = function(x, options) {
     lab = paste(options$fig.lp, options$label, sep = '')
     # If pic is standalone/first in set: open figure environment
     if (plot1) {
-      fig1 = sprintf('\\begin{%s}[%s]\n', options$fig.env, options$fig.pos)
+      pos = options$fig.pos
+      if (pos != '') pos = sprintf('[%s]', pos)
+      fig1 = sprintf('\\begin{%s}%s', options$fig.env, pos)
     }
     # Add subfloat code if needed
     if (usesub) {
