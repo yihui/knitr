@@ -46,6 +46,11 @@ intended to replace any other R packages for making tables.
 The tables for \code{format = 'markdown'} also work for Pandoc when the
   \code{pipe_tables} extension is enabled (this is the default behavior for
   Pandoc >= 1.10).
+
+  When using \code{kable()} as a \emph{top-level} expression, you do not need
+  to explicitly \code{print()} it due to R's automatic implicit printing.
+  When it is wrapped inside other expressions (such as a \code{\link{for}}
+  loop), you must explicitly \code{print(kable(...))}.
 }
 \examples{
 kable(head(iris), format = "latex")

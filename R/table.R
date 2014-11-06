@@ -29,6 +29,11 @@
 #' @note The tables for \code{format = 'markdown'} also work for Pandoc when the
 #'   \code{pipe_tables} extension is enabled (this is the default behavior for
 #'   Pandoc >= 1.10).
+#'
+#'   When using \code{kable()} as a \emph{top-level} expression, you do not need
+#'   to explicitly \code{print()} it due to R's automatic implicit printing.
+#'   When it is wrapped inside other expressions (such as a \code{\link{for}}
+#'   loop), you must explicitly \code{print(kable(...))}.
 #' @references See
 #'   \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
 #'    for some examples in LaTeX, but they also apply to other document formats.
