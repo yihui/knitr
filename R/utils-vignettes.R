@@ -148,7 +148,7 @@ html_vignette = function(
   )
 ) {
   rmarkdown::html_document(
-    ..., fig_caption = fig_caption, theme = theme, hightlight = highlight,
+    ..., fig_caption = fig_caption, theme = theme, highlight = highlight,
     css = css, includes = includes
   )
 }
