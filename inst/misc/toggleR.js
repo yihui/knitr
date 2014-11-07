@@ -9,17 +9,7 @@ function toggle_R() {
 
   for (i = 0; i < x.length; i++) {
     var y = x[i];
-    switch (y.tagName.toLowerCase()) {
-      case 'pre':
-        toggle_vis(y)
-        break;
-      case 'code':
-        var z = y.parentNode;
-        if (z.tagName.toLowerCase() == 'pre' && z.className != 'r') {
-          toggle_vis(z);
-        }
-        break;
-    }
+    if (y.tagName.toLowerCase() === 'pre') toggle_vis(y);
   }
 }
 
