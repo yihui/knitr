@@ -15,8 +15,7 @@ function toggle_R() {
         break;
       case 'code':
         var z = y.parentNode;
-        // pandoc uses the class 'sourceCode r' on both pre and code
-        if (z.tagName.toLowerCase() == 'pre' && z.className != 'sourceCode r') {
+        if (z.tagName.toLowerCase() == 'pre' && z.className != 'r') {
           toggle_vis(z);
         }
         break;
