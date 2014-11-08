@@ -13,7 +13,7 @@ shinyUI(
       tags$script(src = 'http://yandex.st/highlightjs/7.3/languages/r.min.js', type = 'text/javascript'),
       tags$link(rel = 'stylesheet', type = 'text/css',
                 href = 'http://yandex.st/highlightjs/7.3/styles/github.min.css'),
-      tags$script(src = 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
+      tags$script(src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
                   type = 'text/javascript')
     ),
     div(id = 'notebook', title = 'Compile notebook: F4\nInsert chunk: Ctrl+Alt+I',
