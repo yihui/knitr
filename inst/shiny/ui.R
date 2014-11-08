@@ -9,10 +9,10 @@ shinyUI(
       tags$script(src = 'http://ajaxorg.github.io/ace/build/src-min-noconflict/ace.js',
                   type = 'text/javascript', charset = 'utf-8'),
       tags$link(rel = 'stylesheet', type = 'text/css', href = 'ace-shiny.css'),
-      tags$script(src = 'http://yandex.st/highlightjs/7.3/highlight.min.js', type = 'text/javascript'),
-      tags$script(src = 'http://yandex.st/highlightjs/7.3/languages/r.min.js', type = 'text/javascript'),
+      tags$script(src = '//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js', type = 'text/javascript'),
+      tags$script(src = '//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js', type = 'text/javascript'),
       tags$link(rel = 'stylesheet', type = 'text/css',
-                href = 'http://yandex.st/highlightjs/7.3/styles/github.min.css'),
+                href = '//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css'),
       tags$script(src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
                   type = 'text/javascript')
     ),
