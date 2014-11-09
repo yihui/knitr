@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- when using **knitr** with the **rmarkdown** package, the internal output hook for plots will be automatically switched to the LaTeX plot hook when necessary; for example, when the chunk options fig.align, out.width, out.height, and/or out.extra are specified, raw LaTeX code will be generated to align/set the size of plots, because there is no support for figure alignment or setting the size in the native Markdown syntax; for Word output, these options are simply ignored (related issues: #626, rstudio/rmarkdown#86, rstudio/rmarkdown#148, rstudio/rmarkdown#303)
+
 - added a new function `fig_chunk()` to provide a public API to get the figure filenames produced from code chunks; since **knitr** 1.7 changed the figure file numbering scheme, it broke documents with hard-coded figure filenames, e.g. for Rnw documents, `\includegraphics{foo.pdf}` should be `\includegraphics{foo-1.pdf}` after **knitr** 1.7, and such problems can be avoided by `\includegraphics{\Sexpr{fig_chunk('foo', 'pdf')}}` (thanks, @edwardabraham, #870)
 
 - added an argument `escape = TRUE` to `kable()` to escape special characters in LaTeX and HTML tables (thanks, @juba, #852)
