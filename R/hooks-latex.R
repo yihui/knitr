@@ -124,6 +124,11 @@ hook_plot_tex = function(x, options) {
       fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{%s}\n', scap, cap,
                      paste(lab, if (mcap) fig.cur, sep = ''), options$fig.env)
     }
+  } else if (pandoc_to(c('latex', 'beamer'))) {
+    # use alignment environments for R Markdown latex output (\centering won't work)
+    align.env = switch(a, left = 'flushleft', center = 'center', right = 'flushright')
+    align1 = if (plot1) if (a == 'default') '\n' else sprintf('\n\n\\begin{%s}', align.env)
+    align2 = if (plot2) if (a == 'default') '' else sprintf('\\end{%s}\n\n', align.env)
   }
 
   # maxwidth does not work with animations
