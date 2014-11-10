@@ -12,6 +12,8 @@
 
 - added a new function `spin_child()` to spin child R scripts when we `spin()` a main script (thanks, @krlmlr, #621)
 
+- added a new function `inline_expr()` to help authors write the "source code" of the inline expression, e.g. `inline_expr('1+1')` generates `` `r 1+1` `` in R Markdown documents (#890)
+
 - the cache will attempt to preserve the order in which packages are stored on the search path (thanks, @dgrtwo, #867)
 
 - added a new argument `table.envir` to `kable()` for LaTeX tables only; if the table caption is specified (not `NULL`), the LaTeX environment `table` will be used by default (i.e. the table is generated in `\begin{table} \end{table}`), and you can specify alternative environments via `kable(..., table.envir = '???')` (thanks, @dalupus, #872)

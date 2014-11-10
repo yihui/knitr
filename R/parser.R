@@ -357,3 +357,39 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
 #' @return A character vector.
 #' @export
 all_labels = function() names(knit_code$get())
+
+#' Wrap code using the inline R expression syntax
+#'
+#' This is a convenience function to write the "source code" of inline R
+#' expressions. For example, if you want to write \samp{`r 1+1`} literally in an
+#' R Markdown document, you may write \samp{`` `r knitr::inline_expr('1+1')`
+#' ``}; for Rnw documents, this may be
+#' \samp{\verb|\Sexpr{knitr::inline_expr{'1+1'}}|}.
+#' @param code a character string of the inline R source code
+#' @param syntax a character string to specify the syntax, e.g. \code{rnw},
+#'   \code{html}, or \code{md}, etc; if not specified, it will be guessed from
+#'   the knitting context
+#' @return A character string marked up using the inline R code syntax.
+#' @export
+#' @examples library(knitr)
+#' inline_expr('1+1', 'rnw'); inline_expr('1+1', 'html'); inline_expr('1+1', 'md')
+inline_expr = function(code, syntax) {
+  if (!is.character(code) || length(code) != 1)
+    stop('The inline code must be a charater string')
+  if (!missing(syntax)) pat = syntax else {
+    inline = knit_patterns$get('inline.code')
+    if (is.null(inline)) stop('inline_expr() must be called in a knitting process')
+    pat = NULL
+      for (i in names(all_patterns)) {
+        if (inline == all_patterns[[i]][['inline.code']]) {
+          pat = i; break
+        }
+      }
+  }
+  if (is.null(pat)) stop('Unknown document format')
+  sprintf(switch(
+    pat, rnw = '\\Sexpr{%s}', tex = '\\rinline{%s}', html = '<!--rinline %s -->',
+    md = '`r %s`', rst = ':r:`%s`', asciidoc = '`r %s`', textile = '@r %s@',
+    stop('Unknown syntax ', pat)
+  ), code)
+}
