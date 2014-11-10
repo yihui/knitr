@@ -1,9 +1,9 @@
 ## Frequently Asked Questions
 
-This FAQ is compiled from the [issues](https://github.com/yihui/knitr/issues) and messages I received from blog posts and emails, etc.
+This FAQ is compiled from the [issues](https://github.com/yihui/knitr/issues) and messages I received from blog posts and emails, etc. Personally I'm not big fan of FAQ's, and I believe sometimes FAQ's are nearly bugs. Software package authors should think why users ask some questions so frequently (it is unlikely that users are always stupid). At least I'm not patient enough to read, say, 128 FAQ's one by one, so I won't let you do it, either.
 
 1. **knitr** does not work...
-  - Please first update all your R packages (use `update.packages()`) and probably R itself ([what is the current R version?](http://cran.r-project.org/)), then see if it works; if not, please file an [issue](https://github.com/yihui/knitr/issues) to me.
+  - Please first update all your R packages (use `update.packages()`) and probably R itself ([what is the current R version?](http://cran.rstudio.com)), then see if it works; if not, please file an [issue](https://github.com/yihui/knitr/issues) to me with a minimal reproducible example and the output of `library(knitr); sessionInfo()`.
 1. What is the best place to ask questions when the [package website](http://yihui.name/knitr) is not helpful?
   - Depending what you want to ask, you may use these tools (I keep track of the first three more frequently):
   - (Recommended) [StackOverflow](http://stackoverflow.com/questions/tagged/knitr): general questions (more experts and quicker answers there).
@@ -25,7 +25,7 @@ This FAQ is compiled from the [issues](https://github.com/yihui/knitr/issues) an
   - You need to destroy the chunk header, e.g. add an empty string before the chunk header: `\Sexpr{''}<<label, what=ever>>=`, or ```` `r ''` ```{r label, what=ever} ```` ([#443](https://github.com/yihui/knitr/issues/443)), or add a [zero-width space](http://en.wikipedia.org/wiki/Zero-width_space) into the chunk header; see [example 065](https://github.com/yihui/knitr-examples)
   - For inline R code, you may use the function `knitr::inline_expr()` (available in knitr >= v1.8)
 1. What can I do for you?
-  - Many things, e.g. [donate zillions to me](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ZRJDEBSEJEUJY&lc=US&item_name=Donate%20to%20Yihui%20Xie&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) (well, I'm kidding), buy me a book from my [Amazon wishlist](http://amzn.com/w/2S7M0GLEC32SB), [tweet](https://twitter.com/xieyihui) my [links](http://yihui.name/knitr), mention **knitr** on [Google+](https://plus.google.com/u/0/109653178371807724268/posts) or Facebook, or fork this repository and contribute code, or just say hello to me somewhere.
+  - Many things, e.g. [donate zillions to me](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ZRJDEBSEJEUJY&lc=US&item_name=Donate%20to%20Yihui%20Xie&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) (well, I'm kidding), buy me a gift from my [Amazon wishlist](http://amzn.com/w/2S7M0GLEC32SB), [tweet](https://twitter.com/xieyihui) funny GIF animations to me, mention **knitr** on [Google+](https://plus.google.com/u/0/109653178371807724268/posts) or Facebook, or fork this repository and contribute code, or just say hello to me somewhere.
   - Cite the package and the [knitr book](http://www.crcpress.com/product/isbn/9781482203530); see `citation('knitr')` in R.
 1. How can I submit a documentation fix or other minor change?
   - Navigate to the file within the [repo](https://github.com/yihui/knitr)
