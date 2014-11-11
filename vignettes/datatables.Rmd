@@ -1,6 +1,6 @@
 <!--
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Display Tables with the DataTables Library}
+%\VignetteIndexEntry{Display Tables with the JavaScript Library DataTables}
 -->
 
 # jQuery DataTables
