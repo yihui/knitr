@@ -181,8 +181,8 @@ dep_prev = function() {
 #' This expression returns \code{.Random.seed} when \code{eval(rand_seed)} and
 #' \code{NULL} otherwise.
 #'
-#' It is designed to work with \code{opts_knit$set(cache.extra = rand_seed)} for
-#' reproducibility of chunks that involve with random number generation. See
+#' It is designed to work with \code{opts_chunk$set(cache.extra = rand_seed)}
+#' for reproducibility of chunks that involve with random number generation. See
 #' references.
 #' @export
 #' @references \url{http://yihui.name/knitr/demo/cache/}
