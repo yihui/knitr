@@ -330,7 +330,7 @@ inline_exec = function(
   for (i in 1:n) {
     res = if (eval) {
       v = withVisible(eval(parse_only(code[i]), envir = envir))
-      if (v$visible) knit_print(v$value, inline = TRUE)
+      if (v$visible) knit_print(v$value, inline = TRUE, options = opts_chunk$get())
     } else '??'
     if (inherits(res, 'knit_asis')) res = wrap.knit_asis(res)
     d = nchar(input)
