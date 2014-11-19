@@ -16,6 +16,7 @@ Authors@R: as.person(c(
     "Gregoire Detrez [ctb]",
     "Hadley Wickham [ctb]",
     "Heewon Jeon [ctb]",
+    "Henrik Bengtsson [ctb]",
     "Jake Burkhead [ctb]",
     "James Manton [ctb]",
     "Jeff Arnold [ctb]",

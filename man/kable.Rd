@@ -35,8 +35,7 @@ left-aligned; if \code{align = NULL}, the default alignment is used}
 \item{...}{other arguments (see examples)}
 }
 \value{
-A character vector of the table source code. When \code{output =
-  TRUE}, the results are also written into the console as a side-effect.
+A character vector of the table source code.
 }
 \description{
 This is a very simple table generator. It is simple by design. It is not
