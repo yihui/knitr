@@ -12,7 +12,7 @@ frequently asked questions (including where to ask questions).
 
 ## Installation
 
-You can install the last release from github
+You can install the last release from github:
 
 ```r
 devtools::install_github("yihui/knitr")
