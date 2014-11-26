@@ -99,32 +99,6 @@ the [themes
 manual](https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf). For a
 more organized reference, see the [knitr book](http://amzn.com/1482203537).
 
-## Contributing
-
-For very simple changes such as fixing typos, you can just edit the file by
-clicking the button `Edit` after you open the file online. For more
-complicated changes, you will have to manually create a [pull
-request](https://help.github.com/articles/using-pull-requests) after
-[forking](https://help.github.com/articles/fork-a-repo) this repository.
-
-To make sure you did not break anything, you need to run tests, which are
-done through the [**testit**](http://cran.rstudio.com/package=testit)
-package. If you added any features, add your own tests in `tests/testit/`.
-You can run tests using `make`, e.g.
-
-```bash
-cd knitr
-make check
-```
-
-If you are lazy or do not understand what I said above, just forget about
-it. The simplest thing to do is to look at the `Commits` panel after you
-sent the pull request -- if you see green check marks ✔ on your commits, you
-are fine. [Travis
-CI](http://yihui.name/en/2013/04/travis-ci-general-purpose/) will run the
-tests automatically for me. If your pull request passes the tests, you see
-green check marks.
-
 ## License
 
 This package is free and open source software, licensed under GPL.
