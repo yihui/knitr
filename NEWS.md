@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.9
+
+## BUG FIXES
+
+- fixed #898: `kable()` did not work on matrices with duplicate row names (thanks, @tomaskrehlik)
+
 # CHANGES IN knitr VERSION 1.8
 
 ## NEW FEATURES

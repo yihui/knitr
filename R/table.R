@@ -89,7 +89,7 @@ kable = function(
   if (any(isn)) {
     if (is.matrix(x)) {
       if (is.table(x) && length(dim(x)) == 2) class(x) = 'matrix'
-      x = format(as.data.frame(x), trim = TRUE)
+      x = format_matrix(x)
     } else x[, isn] = format(x[, isn], trim = TRUE)
   }
   if (is.na(row.names))
@@ -108,6 +108,15 @@ kable = function(
     list(x = x, caption = caption, escape = escape, ...)
   )
   structure(res, format = format, class = 'knitr_kable')
+}
+
+# as.data.frame() does not allow duplicate row names (#898)
+format_matrix = function(x) {
+  nms = rownames(x)
+  rownames(x) = NULL
+  x = as.matrix(format(as.data.frame(x), trim = TRUE))
+  rownames(x) = nms
+  x
 }
 
 #' @export

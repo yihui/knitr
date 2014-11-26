@@ -104,3 +104,11 @@ assert(
     c('|  a|   b|', '|--:|---:|', '|  1| 2.3|', '|  1| 2.4|')
   )
 )
+
+assert(
+  'kable() works on matrices with duplciate row names',
+  identical(
+    kable2(matrix(c(1, 1, 1, 1), ncol = 2, dimnames = list(c('A', 'A'), c('B', 'B')))),
+    c('|   |  B|  B|', '|:--|--:|--:|', '|A  |  1|  1|', '|A  |  1|  1|')
+  )
+)
