@@ -12,6 +12,12 @@ frequently asked questions (including where to ask questions).
 
 ## Installation
 
+You can install the last release from github:
+
+```r
+devtools::install_github("yihui/knitr")
+```
+
 You can install the stable version on
 [CRAN](http://cran.rstudio.com/package=knitr):
 
