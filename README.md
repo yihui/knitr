@@ -12,12 +12,6 @@ frequently asked questions (including where to ask questions).
 
 ## Installation
 
-You can install the last release from github:
-
-```r
-devtools::install_github("yihui/knitr")
-```
-
 You can install the stable version on
 [CRAN](http://cran.rstudio.com/package=knitr):
 
@@ -35,12 +29,10 @@ install.packages('knitr', repos = c('http://rforge.net', 'http://cran.rstudio.or
                  type = 'source')
 ```
 
-If you know GIT and `R CMD build`, here is another way:
+Or use **devtools** to install the development version from Github:
 
-```bash
-git clone https://github.com/yihui/knitr.git
-R CMD build knitr
-R CMD INSTALL knitr_*.tar.gz
+```r
+devtools::install_github('yihui/knitr', build_vignettes = TRUE)
 ```
 
 ## Motivation
