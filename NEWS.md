@@ -4,6 +4,8 @@
 
 - for the `tikz` engine, the path to the `convert` utility of ImageMagick can be specified via the chunk option `engine.opts`, e.g. `engine.opts = list(convert = 'path/to/convert')` (thanks, @mienkoja, #897)
 
+- similarly, more command line arguments to `convert` can be specified via, for example, `engine.opts = list(convert.opts = '-density 300')` (#896)
+
 ## BUG FIXES
 
 - fixed #898: `kable()` did not work on matrices with duplicate row names (thanks, @tomaskrehlik)
