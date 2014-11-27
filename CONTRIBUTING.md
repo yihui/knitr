@@ -1,6 +1,7 @@
 You are welcome to file issues or, even better, contribute code to this repo. If
 you want to report an issue, please read [FAQ 1](https://bit.ly/knitr-faq) first.
 
+You may expedite bug fixes and new features by doing the work by yourself.
 For very simple changes such as fixing typos, you can just edit the file by
 clicking the button `Edit` after you open it here on Github. For more
 complicated changes, you will have to manually create a [pull
