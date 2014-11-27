@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.9
 
+## NEW FEATURES
+
+- for the `tikz` engine, the path to the `convert` utility of ImageMagick can be specified via the chunk option `engine.opts`, e.g. `engine.opts = list(convert = 'path/to/convert')` (thanks, @mienkoja, #897)
+
 ## BUG FIXES
 
 - fixed #898: `kable()` did not work on matrices with duplicate row names (thanks, @tomaskrehlik)

@@ -162,7 +162,9 @@ eng_tikz = function(options) {
   # convert to the desired output-format, calling `convert`
   ext = tolower(options$fig.ext %n% dev2ext(options$dev))
   if (ext != 'pdf') {
-    conv = system(sprintf('convert %s.pdf %s.%s', fig, fig, ext))
+    conv = system2(options$engine.opts$convert %n% 'convert', sprintf(
+      '%s.pdf %s.%s', fig, fig, ext
+    ))
     if (conv != 0) stop('problems with `convert`; probably not installed?')
   }
   options$fig.num = 1L; options$fig.cur = 1L
