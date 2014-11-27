@@ -130,14 +130,7 @@ pandoc_available = function() {
   # if you have this environment variable, chances are you are good to go
   if (Sys.getenv("RSTUDIO_PANDOC") != '') return(TRUE)
   if (Sys.which('pandoc-citeproc') == '') return(FALSE)
-  if ((pandoc <- Sys.which('pandoc')) == '') return(FALSE)
-  # see if pandoc is >= 1.12.3
-  res = try(system2(pandoc, '--version', stdout = TRUE))
-  !inherits(res, 'try-error') && length(res) > 1 && grepl('pandoc', res[1]) && {
-    version = gsub('pandoc\\s+([0-9]+[.][0-9]+[.][0-9]+).*$', '\\1', res[1])
-    version = try(as.numeric_version(version))
-    !inherits(version, 'try-error') && version >= '1.12.3'
-  }
+  rmarkdown::pandoc_available('1.12.3')
 }
 
 html_vignette = function(
