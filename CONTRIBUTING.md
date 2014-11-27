@@ -38,6 +38,6 @@ commits, so it will be easier for me to review your PR.
 
 For a non-trivial fix or feature implementation, please let me know before you
 start working on it, since I do not want to waste too much of your time on
-something that I do not really want.
+something that I may not really want.
 
 Thanks, and happy hacking.
