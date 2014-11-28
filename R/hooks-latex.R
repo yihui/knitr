@@ -16,28 +16,47 @@
 #' plots using \code{\link[grDevices]{recordPlot}}, and we can make use of these
 #' hooks to insert graphics output in the output document; see
 #' \code{\link{hook_plot_custom}} for details.
-#' @param x a character vector of length 2 ; \code{x[1]} is the plot base
-#'   filename, and \code{x[2]} is the file extension
+#' @param x the plot filename (a character string)
 #' @param options a list of the current chunk options
 #' @rdname hook_plot
 #' @return A character string (code with plot filenames wrapped)
 #' @references \url{http://yihui.name/knitr/hooks}
 #' @seealso \code{\link{hook_plot_custom}}
 #' @export
-#' @examples ## this is what happens for a chunk like this
+#' @examples # this is what happens for a chunk like this
 #'
-#' ## <<foo-bar-plot, dev='pdf', fig.align='right'>>=
-#' hook_plot_tex(c('foo-bar-plot', 'pdf'), opts_chunk$merge(list(fig.align='right')))
+#' # <<foo-bar-plot, dev='pdf', fig.align='right'>>=
+#' hook_plot_tex('foo-bar-plot.pdf', opts_chunk$merge(list(fig.align='right')))
 #'
-#' ## <<bar, dev='tikz'>>=
-#' hook_plot_tex(c('bar', 'tikz'), opts_chunk$merge(list(dev='tikz')))
+#' # <<bar, dev='tikz'>>=
+#' hook_plot_tex('bar.tikz', opts_chunk$merge(list(dev='tikz')))
 #'
-#' ## <<foo, dev='pdf', fig.show='animate', interval=.1>>=
+#' # <<foo, dev='pdf', fig.show='animate', interval=.1>>=
 #'
-#' ## 5 plots are generated in this chunk
-#' hook_plot_tex(c('foo5', 'pdf'), opts_chunk$merge(list(fig.show='animate',interval=.1,fig.cur=5, fig.num=5)))
+#' # 5 plots are generated in this chunk
+#' hook_plot_tex('foo5.pdf', opts_chunk$merge(list(fig.show='animate',interval=.1,fig.cur=5, fig.num=5)))
 hook_plot_tex = function(x, options) {
-  rw = options$resize.width; rh = options$resize.height
+  # This function produces the image inclusion code for LaTeX.
+  # optionally wrapped in code that resizes it, aligns it, handles it
+  # as a subfigure, and/or wraps it in a float. Here is a road map of
+  # the intermediate variables this function fills in (or leaves empty,
+  # as needed), and an impression of their (possible) contents.
+  #
+  #     fig1,                   # \begin{...}[...]
+  #       align1,               #   {\centering
+  #         sub1,               #     \subfloat[...]{
+  #           resize1,          #       \resizebox{...}{...}{
+  #             tikz code       #         '\\input{chunkname.tikz}'
+  #             or animate code #         or '\\animategraphics[size]{1/interval}{chunkname}{1}{fig.num}'
+  #             or plain code   #         or '\\includegraphics[size]{chunkname}'
+  #           resize2,          #       }
+  #         sub2,               #     }
+  #       align2,               #   }
+  #     fig2                    #   \caption[...]{...\label{...}}
+  #                             # \end{...}  % still fig2
+
+  rw = options$resize.width
+  rh = options$resize.height
   resize1 = resize2 = ''
   if (!is.null(rw) || !is.null(rh)) {
     resize1 = sprintf('\\resizebox{%s}{%s}{', rw %n% '!', rh %n% '!')
@@ -47,37 +66,69 @@ hook_plot_tex = function(x, options) {
   tikz = is_tikz_dev(options)
 
   a = options$fig.align
-  fig.cur = options$fig.cur %n% 1L; fig.num = options$fig.num %n% 1L
+  fig.cur = options$fig.cur %n% 1L
+  fig.num = options$fig.num %n% 1L
   animate = options$fig.show == 'animate'
+
+  # If this is a non-tikz animation, skip to the last fig.
   if (!tikz && animate && fig.cur < fig.num) return('')
 
   usesub = length(subcap <- options$fig.subcap) && fig.num > 1
-  ## multiple plots: begin at 1, end at fig.num
+  # multiple plots: begin at 1, end at fig.num
   ai = options$fig.show != 'hold'
-  plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == fig.num
-  align1 = if (plot1 || usesub)
+
+  # TRUE if this picture is standalone or first in set
+  plot1 = ai || fig.cur <= 1L
+  # TRUE if this picture is standalone or last in set
+  plot2 = ai || fig.cur == fig.num
+
+  # open align code if this picture is standalone/first in set
+  align1 = if (plot1)
     switch(a, left = '\n\n', center = '\n\n{\\centering ', right = '\n\n\\hfill{}', '\n')
-  align2 = if (plot2 || usesub)
+  # close align code if this picture is standalone/last in set
+  align2 = if (plot2)
     switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n', right = '\n\n', '')
 
-  ## figure environment: caption, short caption, label
-  cap = options$fig.cap; scap = options$fig.scap; fig1 = fig2 = ''
+  # figure environment: caption, short caption, label
+  cap = options$fig.cap
+  scap = options$fig.scap
+  fig1 = fig2 = ''
   mcap = fig.num > 1L && options$fig.show == 'asis' && !length(subcap)
-  # use subfloats
+  # initialize subfloat strings
   sub1 = sub2 = ''
-  if(length(cap) && !is.na(cap)) {
-    lab = str_c(options$fig.lp, options$label)
+
+  # Wrap in figure environment only if user specifies a caption
+  if (length(cap) && !is.na(cap)) {
+    lab = paste(options$fig.lp, options$label, sep = '')
+    # If pic is standalone/first in set: open figure environment
     if (plot1) {
-      fig1 = sprintf('\\begin{%s}[%s]\n', options$fig.env, options$fig.pos)
+      pos = options$fig.pos
+      if (pos != '') pos = sprintf('[%s]', pos)
+      fig1 = sprintf('\\begin{%s}%s', options$fig.env, pos)
     }
-    if (usesub) sub1 = sprintf('\\subfloat[%s\\label{%s}]{', subcap, str_c(lab, fig.cur))
+    # Add subfloat code if needed
+    if (usesub) {
+      sub1 = sprintf('\\subfloat[%s\\label{%s}]{',
+                     subcap, paste(lab, fig.cur, sep = ''))
+      sub2 = '}'
+    }
+
+    # If pic is standalone/last in set:
+    # * place caption with label
+    # * close figure environment
     if (plot2) {
-      if (is.null(scap)) scap = str_split(cap, '\\.|;|:')[[1L]][1L]
-      scap = if(is.na(scap)) '' else str_c('[', scap, ']')
+      if (is.null(scap) && !grepl('[{].*?[:.;].*?[}]', cap)) {
+        scap = strsplit(cap, '[$:.;]')[[1L]][1L]
+      }
+      scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
       fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{%s}\n', scap, cap,
-                     str_c(lab, ifelse(mcap, fig.cur, '')), options$fig.env)
+                     paste(lab, if (mcap) fig.cur, sep = ''), options$fig.env)
     }
-    if (usesub) sub2 = '}'
+  } else if (pandoc_to(c('latex', 'beamer'))) {
+    # use alignment environments for R Markdown latex output (\centering won't work)
+    align.env = switch(a, left = 'flushleft', center = 'center', right = 'flushright')
+    align1 = if (plot1) if (a == 'default') '\n' else sprintf('\n\n\\begin{%s}', align.env)
+    align2 = if (plot2) if (a == 'default') '' else sprintf('\\end{%s}\n\n', align.env)
   }
 
   # maxwidth does not work with animations
@@ -86,36 +137,39 @@ hook_plot_tex = function(x, options) {
                  sprintf('height=%s', options$out.height),
                  options$out.extra), collapse = ',')
 
-  paste(fig1, sub1, align1, resize1,
+  paste(
+    fig1, align1, sub1, resize1,
+    if (tikz) {
+      sprintf('\\input{%s}', x)
+    } else if (animate) {
+      # \animategraphics{} should be inserted only *once*!
+      aniopts = options$aniopts
+      aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
+      size = paste(c(size, sprintf('%s', aniopts)), collapse = ',')
+      if (nzchar(size)) size = sprintf('[%s]', size)
+      sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1/options$interval,
+              sub(sprintf('%d$', fig.num), '', sans_ext(x)), 1L, fig.num)
+    } else {
+      if (nzchar(size)) size = sprintf('[%s]', size)
+      sprintf('\\includegraphics%s{%s} ', size, sans_ext(x))
+    },
 
-        if (tikz) {
-          sprintf('\\input{%s.tikz}', x[1])
-        } else if (animate) {
-          ## \animategraphics{} should be inserted only *once*!
-          aniopts = options$aniopts
-          aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
-          size = paste(c(size, sprintf('%s', aniopts)), collapse = ',')
-          if (nzchar(size)) size = sprintf('[%s]', size)
-          sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1/options$interval,
-                  sub(str_c(fig.num, '$'), '', x[1]), 1L, fig.num)
-        } else {
-          if (nzchar(size)) size = sprintf('[%s]', size)
-          sprintf('\\includegraphics%s{%s} ', size, x[1])
-        },
-
-        resize2, align2, sub2, fig2, sep = '')
+    resize2, sub2, align2, fig2,
+    sep = ''
+  )
 }
 
 .chunk.hook.tex = function(x, options) {
-  col = if (ai <- output_asis(x, options)) '' else
-    str_c(color_def(options$background), ifelse(is_tikz_dev(options), '', '\\color{fgcolor}'))
-  k1 = str_c(col, '\\begin{kframe}\n')
+  ai = output_asis(x, options)
+  col = if (!ai) paste(color_def(options$background),
+                       if (!is_tikz_dev(options)) '\\color{fgcolor}', sep = '')
+  k1 = paste(col, '\\begin{kframe}\n', sep = '')
   k2 = '\\end{kframe}'
-  x = .rm.empty.envir(str_c(k1, x, k2))
-  size = if (options$size == 'normalsize') '' else str_c('\\', options$size)
-  if (!ai) x = str_c('\\begin{knitrout}', size, '\n', x, '\n\\end{knitrout}')
+  x = .rm.empty.envir(paste(k1, x, k2, sep = ''))
+  size = if (options$size == 'normalsize') '' else sprintf('\\%s', options$size)
+  if (!ai) x = sprintf('\\begin{knitrout}%s\n%s\n\\end{knitrout}', size, x)
   if (options$split) {
-    name = fig_path('.tex', options)
+    name = fig_path('.tex', options, NULL)
     if (!file.exists(dirname(name)))
       dir.create(dirname(name))
     cat(x, file = name)
@@ -123,42 +177,39 @@ hook_plot_tex = function(x, options) {
   } else x
 }
 
-## rm empty kframe and verbatim environments
+# rm empty kframe and verbatim environments
 .rm.empty.envir = function(x) {
   x = gsub('\\\\begin\\{(kframe)\\}\\s*\\\\end\\{\\1\\}', '', x)
   gsub('\\\\end\\{(verbatim|alltt)\\}\\s*\\\\begin\\{\\1\\}[\n]?', '', x)
 }
 
-## inline hook for tex
+# inline hook for tex
 .inline.hook.tex = function(x) {
-  if(is.numeric(x)) {
+  if (is.numeric(x)) {
     x = format_sci(x, 'latex')
+    i = grep('[^0-9.,]', x)
+    x[i] = sprintf('\\ensuremath{%s}', x[i])
     if (getOption('OutDec') != '.') x = sprintf('\\text{%s}', x)
   }
   .inline.hook(x)
 }
-# an example of a chunk hook
-.param.hook = function(before, options, envir) {
-  if (before) {
-    'do something before the code chunk'
-  } else {
-    'do something after the code chunk'
-  }
-}
 
-.verb.hook = function(x, options) str_c('\\begin{verbatim}\n', x, '\\end{verbatim}\n')
+.verb.hook = function(x, options)
+  paste(c('\\begin{verbatim}', sub('\n$', '', x), '\\end{verbatim}', ''), collapse = '\n')
 .color.block = function(color1 = '', color2 = '') {
   function(x, options) {
     x = gsub('\n*$', '', x)
-    sprintf('\n\n{\\ttfamily\\noindent%s%s%s}',
-            color1, escape_latex(x, newlines = TRUE), color2)
+    x = escape_latex(x, newlines = TRUE, spaces = TRUE)
+    # babel might have problems with "; see http://stackoverflow.com/q/18125539/559676
+    x = gsub('"', '"{}', x)
+    sprintf('\n\n{\\ttfamily\\noindent%s%s%s}', color1, x, color2)
   }
 }
 
 #' Set output hooks for different output formats
 #'
-#' These functions set built-in output hooks for LaTeX, HTML, Markdown and
-#' reStructuredText.
+#' These functions set built-in output hooks for LaTeX, HTML, Markdown,
+#' reStructuredText, AsciiDoc and Textile.
 #'
 #' There are three variants of markdown documents: ordinary markdown
 #' (\code{render_markdown(strict = TRUE)}), extended markdown (e.g. GitHub
@@ -168,8 +219,8 @@ hook_plot_tex = function(x, options) {
 #' (\code{render_latex()}; use the LaTeX \pkg{framed} package), Sweave style
 #' (\code{render_sweave()}; use \file{Sweave.sty}) and listings style
 #' (\code{render_listings()}; use LaTeX \pkg{listings} package). Default HTML
-#' output hooks are set by \code{render_html()}, and reStructuredText uses
-#' \code{render_rst()}.
+#' output hooks are set by \code{render_html()}; \code{render_rst()} and
+#' \code{render_asciidoc()} are for reStructuredText and AsciiDoc respectively.
 #'
 #' These functions can be used before \code{knit()} or in the first chunk of the
 #' input document (ideally this chunk has options \code{include = FALSE} and
@@ -188,27 +239,35 @@ hook_plot_tex = function(x, options) {
 #'   prettify.js: \url{http://code.google.com/p/google-code-prettify/}
 render_latex = function() {
   test_latex_pkg('framed', system.file('misc', 'framed.sty', package = 'knitr'))
-  opts_chunk$set(out.width = '\\maxwidth')
+  opts_chunk$set(out.width = '\\maxwidth', dev = 'pdf')
+  opts_knit$set(out.format = 'latex')
   h = opts_knit$get('header')
   if (!nzchar(h['framed'])) set_header(framed = .header.framed)
   if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
-  knit_hooks$restore()
   knit_hooks$set(
     source = function(x, options) {
-      if (options$engine == 'R' && options$highlight) x else .verb.hook(x)
+      x = hilight_source(x, 'latex', options)
+      if (options$highlight) {
+        if (options$engine == 'R' || x[1] != '\\noindent') {
+          paste(c('\\begin{alltt}', x, '\\end{alltt}', ''), collapse = '\n')
+        } else {
+          if ((n <- length(x)) > 5) x[n - 3] = sub('\\\\\\\\$', '', x[n - 3])
+          paste(c(x, ''), collapse = '\n')
+        }
+      } else .verb.hook(x)
     },
     output = function(x, options) {
       if (output_asis(x, options)) {
-        str_c('\\end{kframe}', x, '\\begin{kframe}')
+        paste('\\end{kframe}', x, '\\begin{kframe}', sep = '')
       } else .verb.hook(x)
     },
-    warning = .color.block('\\textcolor{warningcolor}{', '}'),
-    message = .color.block('\\itshape\\textcolor{messagecolor}{', '}'),
-    error = .color.block('\\bfseries\\textcolor{errorcolor}{', '}'),
+    warning = .color.block('\\color{warningcolor}{', '}'),
+    message = .color.block('\\itshape\\color{messagecolor}{', '}'),
+    error = .color.block('\\bfseries\\color{errorcolor}{', '}'),
     inline = .inline.hook.tex, chunk = .chunk.hook.tex,
     plot = function(x, options) {
-      ## escape plot environments from kframe
-      str_c('\\end{kframe}', hook_plot_tex(x, options), '\n\\begin{kframe}')
+      # escape plot environments from kframe
+      paste('\\end{kframe}', hook_plot_tex(x, options), '\n\\begin{kframe}', sep = '')
     }
   )
 }
@@ -219,16 +278,16 @@ render_sweave = function() {
   opts_knit$set(out.format = 'sweave')
   test_latex_pkg('Sweave', file.path(R.home('share'), 'texmf', 'tex', 'latex', 'Sweave.sty'))
   set_header(framed = '', highlight = '\\usepackage{Sweave}')
-  knit_hooks$restore()
-  ## wrap source code in the Sinput environment, output in Soutput
-  hook.i = function(x, options) str_c('\\begin{Sinput}\n', x, '\\end{Sinput}\n')
-  hook.s = function(x, options) str_c('\\begin{Soutput}\n', x, '\\end{Soutput}\n')
-  hook.o = function(x, options) if (output_asis(x, options)) x else hook.s(x, options)
+  # wrap source code in the Sinput environment, output in Soutput
+  hook.i = function(x, options)
+    paste(c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''),
+          collapse = '\n')
+  hook.s = function(x, options) paste('\\begin{Soutput}\n', x, '\\end{Soutput}\n', sep = '')
   hook.c = function(x, options) {
     if (output_asis(x, options)) return(x)
-    str_c('\\begin{Schunk}\n', x, '\\end{Schunk}')
+    paste('\\begin{Schunk}\n', x, '\\end{Schunk}', sep = '')
   }
-  knit_hooks$set(source = hook.i, output = hook.o, warning = hook.s,
+  knit_hooks$set(source = hook.i, output = hook.s, warning = hook.s,
                  message = hook.s, error = hook.s, inline = .inline.hook.tex,
                  plot = hook_plot_tex, chunk = hook.c)
 }
@@ -243,27 +302,31 @@ render_listings = function() {
   invisible(NULL)
 }
 
-## may add textile, and many other markup languages
+# may add textile, and many other markup languages
 
-#' A document hook function to move code out of floating environments
+#' Some potentially useful document hooks
 #'
-#' This is a document hook to move code chunks out of LaTeX floating
-#' environments like \samp{figure} and \samp{table} when the chunks were
-#' actually written inside the floats.
+#' A document hook is a function to post-process the output document.
 #'
-#' This function is primarily designed for LyX: we often insert code chunks into
-#' floats to generate figures or tables, but in the final output we do not want
-#' the code to float with the environments, so we use regular expressions to
-#' find out the floating environments, extract the code chunks and move them
-#' out. To disable this behavior, use a comment \code{\% knitr_do_not_move} in
-#' the floating environment.
+#' \code{hook_movecode()} is a document hook to move code chunks out of LaTeX
+#' floating environments like \samp{figure} and \samp{table} when the chunks
+#' were actually written inside the floats. This function is primarily designed
+#' for LyX: we often insert code chunks into floats to generate figures or
+#' tables, but in the final output we do not want the code to float with the
+#' environments, so we use regular expressions to find out the floating
+#' environments, extract the code chunks and move them out. To disable this
+#' behavior, use a comment \code{\% knitr_do_not_move} in the floating
+#' environment.
+#' @rdname hook_document
 #' @param x a character string (the content of the whole document output)
 #' @return The post-processed document as a character string.
-#' @note This function is hackish. It assumes you to use the default output
-#'   hooks for LaTeX (not Sweave or listings), and every figure/table
-#'   environment must have a label.
+#' @note These functions are hackish. Also note \code{hook_movecode()} assumes
+#'   you to use the default output hooks for LaTeX (not Sweave or listings), and
+#'   every figure/table environment must have a label.
 #' @export
+#' @references \url{http://yihui.name/knitr/hooks}
 #' @examples \dontrun{knit_hooks$set(document = hook_movecode)}
+#' # see example 103 at https://github.com/yihui/knitr-examples
 hook_movecode = function(x) {
   x = split_lines(x)
   res = split(x, cumsum(grepl('^\\\\(begin|end)\\{figure\\}', x)))

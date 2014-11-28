@@ -1,6 +1,7 @@
-%% LyX 2.0.5 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.3 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[10pt]{beamer}
+\usepackage[T1]{fontenc}
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
 \usepackage{url}
@@ -15,7 +16,6 @@
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
  breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false}
 \fi
-\usepackage{breakurl}
 
 \makeatletter
 
@@ -47,8 +47,8 @@
 \makeatother
 
 \begin{document}
-
 <<setup, include=FALSE>>=
+library(knitr)
 opts_chunk$set(fig.path='figure/beamer-',fig.align='center',fig.show='hold',size='footnotesize')
 @
 
@@ -91,8 +91,7 @@ demo.
 \lyxframeend{}\section{First Test}
 
 \begin{frame}
-[fragile]
-\frametitle{First Test}
+[fragile]\frametitle{First Test}
 
 OK, let's get started with just some text:
 
@@ -117,8 +116,7 @@ the use of\texttt{ \textbackslash{}Sexpr\{\}}.)
 \lyxframeend{}\section{Second Test}
 
 \begin{frame}
-[fragile]
-\frametitle{Second Test}
+[fragile]\frametitle{Second Test}
 
 Text is nice but let's see what happens if we make a couple of plots
 in our chunk:
@@ -144,5 +142,4 @@ to double-check everything...
 
 
 \lyxframeend{}
-
 \end{document}

@@ -14,7 +14,7 @@
 #'   an installed package which can be found via \code{system.file('html',
 #'   package = 'your_package_name')}, otherwise some links may not work (e.g.
 #'   the link to the DESCRITION file).
-#' @examples \dontrun{knit_rd('maps')
+#' @examples \donttest{knit_rd('maps')
 #' knit_rd('rpart')
 #' setwd(system.file('html', package = 'ggplot2'))
 #' knit_rd('ggplot2') # time-consuming!
@@ -25,8 +25,8 @@
 knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   library(pkg, character.only = TRUE)
   optc = opts_chunk$get(); on.exit(opts_chunk$set(optc))
-  file.copy(system.file('misc', c('highlight.css', 'highlight.pack.js', 'R.css'), package = 'knitr'), './')
-  pkgRdDB = tools:::fetchRdDB(file.path(find.package(pkg), 'help', pkg))
+  file.copy(system.file('misc', 'R.css', package = 'knitr'), './')
+  pkgRdDB = getFromNamespace('fetchRdDB', 'tools')(file.path(find.package(pkg), 'help', pkg))
   force(links); topics = names(pkgRdDB)
   for (p in topics) {
     message('** knitting documentation of ', p)
@@ -42,14 +42,15 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
       ex = ex[-(1L:grep('### ** Examples', ex, fixed = TRUE))]
       ex = c('```{r}', ex, '```')
       opts_chunk$set(fig.path = str_c('figure/', p, '-'), tidy = FALSE)
-      res = try(knit2html(text = ex, envir = parent.frame(2), fragment.only = TRUE))
+      res = try(knit2html(text = ex, envir = parent.frame(2), fragment.only = TRUE, quiet = TRUE))
       if (inherits(res, 'try-error')) {
         res = ex; res[1] = '<pre><code class="r">'; res[length(res)] = '</code></pre>'
       }
       txt = c(txt[1:i0], res, txt[i1:length(txt)])
       txt = sub('</head>', '
-<link rel="stylesheet" href="highlight.css">
-<script src="highlight.pack.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 </head>', txt)
     } else message('no examples found for ', p)
@@ -60,7 +61,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   toc = c(str_c('# ', pkg), '', toc, '',
           paste('Generated with [knitr](http://yihui.name/knitr) ', packageVersion('knitr')))
   markdown::markdownToHTML(text = paste(toc, collapse = '\n'), output = '00frame_toc.html',
-                           title = str_c('R Documentation of ', pkg),
+                           title = paste('R Documentation of', pkg),
                            options = NULL, extensions = NULL, stylesheet = 'R.css')
   txt = readLines(file.path(find.package(pkg), 'html', '00Index.html'))
   unlink('00Index.html')
@@ -70,7 +71,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   if (!frame) {
     unlink(c('00frame_toc.html', 'index.html'))
     # do not need a navigation frame, so make 00Index the real homepage
-    (if (.Platform$OS.type == 'windows') file.copy else file.symlink)('00Index.html', 'index.html')
+    (if (is_windows()) file.copy else file.symlink)('00Index.html', 'index.html')
     return(invisible())
   }
   writeLines(sprintf(
@@ -89,8 +90,6 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
 #' @export
 knit_rd_all = function() {
   owd = getwd(); on.exit(setwd(owd))
-  optk = opts_knit$get(); on.exit(opts_knit$set(optk))
-  opts_knit$set(progress = FALSE)  # too much info to show
   links = tools::findHTMLlinks()
   for (p in .packages(TRUE)) {
     message('* Making static html help pages for ', p)

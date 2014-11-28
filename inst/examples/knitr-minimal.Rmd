@@ -6,7 +6,8 @@ This is a minimal example of using **knitr** to produce an _HTML_ page from _Mar
 
 ```{r setup}
 # set global chunk options: images will be 7x5 inches
-opts_chunk$set(fig.width=7, fig.height=5)
+knitr::opts_chunk$set(fig.width=7, fig.height=5)
+options(digits = 4)
 ```
 
 Now we write some code chunks in this markdown file:

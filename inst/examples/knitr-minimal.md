@@ -7,9 +7,9 @@ This is a minimal example of using **knitr** to produce an _HTML_ page from _Mar
 
 ```r
 # set global chunk options: images will be 7x5 inches
-opts_chunk$set(fig.width = 7, fig.height = 5)
+knitr::opts_chunk$set(fig.width = 7, fig.height = 5)
+options(digits = 4)
 ```
-
 
 Now we write some code chunks in this markdown file:
 
@@ -24,7 +24,6 @@ rnorm(5)  # boring random numbers
 ## [1] -0.56048 -0.23018  1.55871  0.07051  0.12929
 ```
 
-
 We can also produce plots:
 
 
@@ -36,8 +35,7 @@ with(mtcars, {
 })
 ```
 
-![plot of chunk graphics](http://animation.r-forge.r-project.org/ideas/figure/graphics.png) 
-
+![plot of chunk graphics](http://animation.r-forge.r-project.org/ideas/figure/graphics-1.png) 
 
 ## Inline code
 
@@ -61,7 +59,6 @@ You can indent code chunks so they can nest within other environments such as li
     ```
     ## [1] 12.57
     ```
-
 2. OK, that is great
 
 To compile me, use
@@ -71,7 +68,6 @@ To compile me, use
 library(knitr)
 knit("knitr-minimal.Rmd")
 ```
-
 
 ## Conclusion
 

@@ -14,3 +14,8 @@ png$
 NEWS.md
 ^\.Rproj\.user$
 ^.*\.Rproj$
+^\.travis\.yml$
+FAQ.md
+Makefile
+^knitr-examples$
+^CONTRIBUTING\.md$

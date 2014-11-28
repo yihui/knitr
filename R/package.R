@@ -8,7 +8,9 @@
 #' @name knitr-package
 #' @aliases knitr
 #' @author Yihui Xie <\url{http://yihui.name}>
-#' @seealso The core function in this package: \code{\link{knit}}
+#' @seealso The core function in this package: \code{\link{knit}}. If you are an
+#'   Sweave user, see \code{\link{Sweave2knitr}} on how to convert Sweave files
+#'   to \pkg{knitr}.
 #' @note The pronunciation of \pkg{knitr} is similar to \emph{neater} (neater
 #'   than what?) or you can think of \emph{knitter} (but it is \emph{single t}).
 #'   The name comes from \code{knit} + \code{R} (while \code{Sweave} = \code{S}
@@ -17,10 +19,10 @@
 #'   FAQ's: \url{https://github.com/yihui/knitr/blob/master/FAQ.md}
 #' @importFrom evaluate evaluate is.recordedplot is.source is.warning is.error
 #'   is.message
-#' @importFrom formatR tidy.source
-#' @importFrom digest digest
+#' @importFrom formatR tidy_source
 #' @import stringr
-#' @importFrom tools file_ext file_path_sans_ext
 NULL
 
 .knitEnv = new.env()
+
+.knitEnv$meta = list()

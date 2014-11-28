@@ -1,0 +1,57 @@
+<!--
+%\VignetteEngine{knitr::docco_linear}
+%\VignetteIndexEntry{R Markdown with the Docco Linear Style}
+-->
+
+# R Markdown with the Docco Linear Style
+
+This is an example of Markdown vignettes using the [Docco style](http://jashkenas.github.io/docco/).
+
+## Docco
+
+To use the Docco style for Markdown vignettes in an R package, you need to
+
+- add `*.Rmd` files under the `vignettes` directory
+- add `Suggests: knitr` and `VignetteBuilder: knitr` to the `DESCRIPTION` file
+- specify the vignette engine `\VignetteEngine{knitr::docco_linear}` in the `Rmd` files (inside HTML comments)
+
+After building and installing the package, you can view vignettes via
+
+```r
+browseVignettes(package = 'Your_Package')
+```
+
+## Examples
+
+Below are some code chunks as examples.
+
+```{r hello, results='asis'}
+cat('_hello_ **markdown**!', '\n')
+```
+
+Normally you do not need any chunk options.
+
+```{r}
+1+1
+10:1
+rnorm(5)^2
+strsplit('hello, markdown vignettes', '')
+```
+
+Feel free to draw beautiful plots and write math $P(X>x)=\alpha/2$.
+
+```{r}
+n=300; set.seed(123)
+par(mar=c(4,4,.1,.1))
+plot(rnorm(n), rnorm(n), pch=21, cex=5*runif(n), col='white', bg='gray')
+```
+
+## How does it work
+
+The **markdown** package (>= v0.6.2) supports custom HTML templates, and the `docco` engine in **knitr** uses a custom template to compile Markdown to HTML:
+
+```{r header, eval=FALSE}
+knit2html(..., markdown.HTML.template = system.file('misc', 'docco-template.html', package='knitr'))
+```
+
+That is it.

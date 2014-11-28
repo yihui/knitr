@@ -15,6 +15,13 @@ set.seed(123)
 x = rnorm(5)
 mean(x)
 
+#' You can use the special syntax {{code}} to embed inline expressions, e.g.
+{{mean(x)+2}}
+#' is the mean of x plus 2.
+#' The code itself may contain braces, but these are not checked.  Thus,
+#' perfectly valid (though very strange) R code such as `{{2 + 3}} - {{4 - 5}}`
+#' can lead to errors because `2 + 3}} - {{4 - 5` will be treated as inline code.
+#'
 #' Now we continue writing the report. We can draw plots as well.
 
 #+ test-b, fig.width=5, fig.height=5
@@ -35,3 +42,10 @@ sum((x - mean(x))^2) # df is 4 now
 
 #' Done. Call spin('knitr-spin.R') to make silk from sow's ear now and knit a
 #' lovely purse.
+
+# /* you can write comments between /* and */ like C comments (the preceding #
+# is optional)
+Sys.sleep(60)
+# */
+
+# /* there is no inline comment; you have to write block comments */

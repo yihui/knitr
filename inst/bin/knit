@@ -2,23 +2,32 @@
 
 local({
   p = commandArgs(TRUE)
-  if (length(p) == 0L || '--help' %in% p) {
-    message('usage: knit input [output] [--no-convert]
-    --help        to print help messages
-    --no-convert  do not convert tex to pdf, markdown to html, etc')
-    q()
+  if (length(p) == 0L || any(c('-h', '--help') %in% p)) {
+    message('usage: knit input [input2 input3] [-n] [-o output output2 output3]
+    -h, --help        to print help messages
+    -n, --no-convert  do not convert tex to pdf, markdown to html, etc
+    -o                output filename(s) for knit()')
+    q('no')
   }
 
   library(knitr)
-  knit_fun = if ('--no-convert' %in% p) knit else {
+  o = match('-o', p)
+  if (is.na(o)) output = NA else {
+    output = tail(p, length(p) - o)
+    p = head(p, o - 1L)
+  }
+  nc = c('-n', '--no-convert')
+  knit_fun = if (any(nc %in% p)) {
+    p = setdiff(p, nc)
+    knit
+  } else {
     if (length(p) == 0L) stop('no input file provided')
-    if (grepl('\\.(R|S)(nw|tex)$', p[1])) knit2pdf else {
+    if (grepl('\\.(R|S)(nw|tex)$', p[1])) {
+      function(x, ...) knit2pdf(x, ..., clean = TRUE)
+    } else {
       if (grepl('\\.R(md|markdown)$', p[1])) knit2html else knit
     }
   }
 
-  if (!file.exists(p[1]))
-    stop("file '", p[1], "' does not exist!")
-
-  knit_fun(p[1], if (length(p) < 2L) NULL else p[2], envir = globalenv())
+  mapply(knit_fun, p, output = output, MoreArgs = list(envir = globalenv()))
 })

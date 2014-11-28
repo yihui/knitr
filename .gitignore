@@ -8,4 +8,6 @@ inst/examples/figure
 knitr-spin.md
 knitr-spin.html
 .Rproj.user
-knitr.Rproj
+/.Rhistory
+/inst/examples/*.tex
+/inst/examples/*.sty

@@ -1,64 +1,58 @@
 \name{imgur_upload}
 \alias{imgur_upload}
-\title{Upload a image to imgur.com}
+\title{Upload an image to imgur.com}
 \usage{
-imgur_upload(file, key = "60e9e47cff8483c6dc289a1cd674b40f")
+imgur_upload(file, key = "9f3460e67f308f6")
 }
 \arguments{
-  \item{file}{the path to the image file to be uploaded}
+\item{file}{the path to the image file to be uploaded}
 
-  \item{key}{the API key for Imgur (by default uses a key
-  created by Yihui Xie, which allows 50 uploads per hour
-  per IP address)}
+\item{key}{the client id for Imgur (by default uses a client id registered by
+Yihui Xie)}
 }
 \value{
-  A character string of the link to the image; this string
-  carries an attribute named \code{XML} which is a list
-  converted from the response XML file; see Imgur API in
-  the references.
+A character string of the link to the image; this string carries an
+  attribute named \code{XML} which is a list converted from the response XML
+  file; see Imgur API in the references.
 }
 \description{
-  This function uses the \pkg{RCurl} package to upload a
-  image to \url{imgur.com}, and parses the XML response to
-  a list with \pkg{XML} which contains information about
-  the image in the Imgur website.
+This function uses the \pkg{RCurl} package to upload a image to
+\url{imgur.com}, and parses the XML response to a list with \pkg{XML} which
+contains information about the image in the Imgur website.
 }
 \details{
-  When the output format from \code{\link{knit}()} is HTML
-  or Markdown, this function can be used to upload local
-  image files to Imgur, e.g. set the package option
-  \code{opts_knit$get(upload.fun = imgur_upload)}, so the
-  output document is completely self-contained, i.e. it
-  does not need external image files any more, and it is
-  ready to be published online.
+When the output format from \code{\link{knit}()} is HTML or Markdown, this
+function can be used to upload local image files to Imgur, e.g. set the
+package option \code{opts_knit$set(upload.fun = imgur_upload)}, so the output
+document is completely self-contained, i.e. it does not need external image
+files any more, and it is ready to be published online.
 }
 \note{
-  Please register your own Imgur application to get your
-  API key; you can certainly use mine, but this key is in
-  the public domain so everyone has access to all images
-  associated to it.
+Please register your own Imgur application to get your client id; you
+  can certainly use mine, but this id is in the public domain so everyone
+  has access to all images associated to it.
 }
 \examples{
+\dontrun{
 f = tempfile(fileext = ".png")
 png(f)
 plot(rnorm(100), main = R.version.string)
 dev.off()
-\dontrun{
+
 res = imgur_upload(f)
 res  # link to original URL of the image
 attr(res, "XML")  # all information
 if (interactive()) 
-    browseURL(res$links$imgur_page)  # imgur page
+    browseURL(res)
 
-## to use your own key
+# to use your own key
 opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "your imgur key"))
 }
 }
 \author{
-  Yihui Xie, adapted from the \pkg{imguR} package by Aaron
-  Statham
+Yihui Xie, adapted from the \pkg{imguR} package by Aaron Statham
 }
 \references{
-  Imgur API: \url{http://api.imgur.com/}; a demo:
+Imgur API version 3: \url{http://api.imgur.com/}; a demo:
   \url{http://yihui.name/knitr/demo/upload/}
 }

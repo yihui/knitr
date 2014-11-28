@@ -1,17 +1,48 @@
 #' @rdname hook_plot
 #' @export
 hook_plot_md = function(x, options) {
+  # if not using R Markdown v2 or output is HTML, just return v1 output
+  if (is.null(to <- pandoc_to()) || grepl('^markdown', to) ||
+        to %in% c('html', 'html5', 'revealjs', 's5', 'slideous', 'slidy'))
+    return(hook_plot_md_base(x, options))
+  if (!is.null(options$out.width) || !is.null(options$out.height) ||
+        !is.null(options$out.extra) || options$fig.align != 'default') {
+    if (to %in% c('beamer', 'latex')) {
+      # Pandoc < 1.13 does not support \caption[]{} so suppress short caption
+      if (is.null(options$fig.scap)) options$fig.scap = NA
+      return(hook_plot_tex(x, options))
+    }
+    if (to == 'docx') {
+      warning('Chunk options fig.align, out.width, out.height, out.extra ',
+              'are not supported for Word output')
+      options$out.width = options$out.height = options$out.extra = NULL
+      options$fig.align = 'default'
+    }
+  }
+  hook_plot_md_base(x, options)
+}
+
+hook_plot_md_base = function(x, options) {
   if (options$fig.show == 'animate') return(hook_plot_html(x, options))
 
   base = opts_knit$get('base.url') %n% ''
   cap = .img.cap(options)
 
-  if(is.null(w <- options$out.width) & is.null(h <- options$out.height) &
-    is.null(s <- options$out.extra)) {
+  if (is.null(w <- options$out.width) & is.null(h <- options$out.height) &
+    is.null(s <- options$out.extra) & options$fig.align == 'default') {
     return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
   }
   # use HTML syntax <img src=...>
-  .img.tag(.upload.url(x), options$out.width, options$out.height, cap, options$out.extra)
+  .img.tag(
+    .upload.url(x), w, h, cap,
+    c(s, sprintf('style="%s"', css_align(options$fig.align)))
+  )
+}
+
+css_align = function(align) {
+  sprintf('display: block; margin: %s;', switch(
+    align, left = 'auto auto auto 0', center = 'auto', right = 'auto 0 auto auto'
+  ))
 }
 
 #' @rdname output_hooks
@@ -22,25 +53,49 @@ hook_plot_md = function(x, options) {
 #'   put under two colons and indented by 4 spaces, otherwise is put under the
 #'   \samp{sourcecode} directive (e.g. it is useful for Sphinx)
 render_markdown = function(strict = FALSE) {
-  knit_hooks$restore()
-  opts_chunk$set(dev = 'png', highlight = FALSE)
-  ## four spaces lead to <pre></pre>
+  set_html_dev()
+  opts_knit$set(out.format = 'markdown')
+  # four spaces lead to <pre></pre>
   hook.t = function(x, options) {
     if (strict) {
-      str_c('\n\n', indent_block(x), '\n')
-    } else str_c('\n\n```\n', x, '```\n\n')
+      paste('\n', indent_block(x), '', sep = '\n')
+    } else {
+      x = paste(c('', x), collapse = '\n')
+      fence = '```'
+      if (grepl('\n`{3,}', x)) {
+        print(gregexpr('\n`{3,}', x))
+        l = attr(gregexpr('\n`{3,}', x)[[1]], 'match.length', exact = TRUE)
+        print(l)
+        l = max(l)
+        if (l >= 4) fence = paste(rep('`', l), collapse = '')
+      }
+      paste('\n\n', fence, x, fence, '\n\n', sep = '')
+    }
   }
-  hook.r = function(x, options) str_c('\n\n```', tolower(options$engine), '\n', x, '```\n\n')
-  hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
+  hook.r = function(x, options) {
+    language = tolower(options$engine)
+    if (language == 'node')
+        language = 'javascript'
+    paste('\n\n```', language, '\n', x, '```\n\n', sep = '')
+  }
   knit_hooks$set(
-    source = if (strict) hook.t else hook.r, output = hook.o,
-    warning = hook.t, error = hook.t, message = hook.t,
-    inline = function(x) .inline.hook(format_sci(x, 'html')),
+    source = function(x, options) {
+      x = hilight_source(x, 'markdown', options)
+      (if (strict) hook.t else hook.r)(paste(c(x, ''), collapse = '\n'), options)
+    }, output = hook.t, warning = hook.t, error = hook.t, message = hook.t,
+    inline = function(x) {
+      fmt = pandoc_to()
+      fmt = if (length(fmt) == 1L) 'latex' else 'html'
+      .inline.hook(format_sci(x, fmt))
+    },
     plot = hook_plot_md,
     chunk = function(x, options) {
       x = gsub('[\n]{2,}(```|    )', '\n\n\\1', x)
       x = gsub('[\n]+$', '', x)
       x = gsub('^[\n]+', '\n', x)
+      if (isTRUE(options$collapse)) {
+        x = gsub(paste('\n([`]{3,})\n+\\1(', tolower(options$engine), ')?\n', sep = ''), "\n", x)
+      }
       if (is.null(s <- options$indent)) return(x)
       line_prompt(x, prompt = s, continue = s)
     }
@@ -62,7 +117,7 @@ render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = 
   switch(hi, pygments = {
     hook.r = function(x, options) {
       str_c('\n\n{% highlight ', tolower(options$engine), if (extra != '') ' ', extra, ' %}\n',
-            x, '{% endhighlight %}\n\n')
+            x, '\n{% endhighlight %}\n\n')
     }
     hook.t = function(x, options) str_c('\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n')
   }, prettify = {
@@ -72,7 +127,8 @@ render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = 
     }
     hook.t = function(x, options) str_c('\n\n<pre><code>', escape_html(x), '</code></pre>\n\n')
   })
-  hook.o = function(x, options) if (output_asis(x, options)) x else hook.t(x, options)
-  knit_hooks$set(source = hook.r, output = hook.o, warning = hook.t,
-                 error = hook.t, message = hook.t)
+  knit_hooks$set(source = function(x, options) {
+    x = paste(hilight_source(x, 'markdown', options), collapse = '\n')
+    hook.r(x, options)
+  }, output = hook.t, warning = hook.t, error = hook.t, message = hook.t)
 }

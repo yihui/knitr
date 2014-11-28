@@ -1,4 +1,7 @@
-## doc is the output of processed document
+#' @include themes.R
+#' @include highlight.R
+
+# doc is the output of processed document
 insert_header = function(doc) {
   if (is.null(b <- knit_patterns$get('header.begin'))) return(doc)
 
@@ -9,14 +12,15 @@ insert_header = function(doc) {
   doc
 }
 
-## Makes latex header with macros required for highlighting, tikz and framed
+# Makes latex header with macros required for highlighting, tikz and framed
 make_header_latex = function() {
   h = paste(c(
-    '\\usepackage{graphicx, color}', .header.maxwidth, opts_knit$get('header'),
+    sprintf('\\usepackage[%s]{graphicx}\\usepackage[%s]{color}',
+            opts_knit$get('latex.options.graphicx') %n% '',
+            opts_knit$get('latex.options.color') %n% ''),
+    .header.maxwidth, opts_knit$get('header'),
     if (getOption('OutDec') != '.') '\\usepackage{amsmath}',
-    if (out_format('latex')) {
-      if (opts_knit$get('use.highlight')) highlight_fun('boxes_latex')() else '\\usepackage{alltt}'
-    }
+    if (out_format('latex')) '\\usepackage{alltt}'
   ), collapse = '\n')
   if (opts_knit$get('self.contained')) h else {
     writeLines(h, 'knitr.sty')
@@ -25,24 +29,34 @@ make_header_latex = function() {
 }
 
 insert_header_latex = function(doc, b) {
-  i = which(str_detect(doc, b))
+  i = grep(b, doc)
   if (length(i) >= 1L) {
+    # it is safer to add usepackage{upquote} before begin{document} than after
+    # documentclass{article} because it must appear after usepackage{fontenc};
+    # see this weird problem: http://stackoverflow.com/q/12448507/559676
+    if (!out_format('listings') && length(j <- grep(p <- '(\\s*)(\\\\begin\\{document\\})', doc)[1L])) {
+      doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\n\\2', doc[j])
+    }
     i = i[1L]; l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])
-    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, make_header_latex())
-  } else if (parent_mode()) {
+    str_sub(doc[i], l[,1], l[,2]) = paste(tmp, make_header_latex(), sep = '')
+  } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
-    doc = str_c(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
-                .knitEnv$tikzPackages, "\\begin{document}", doc, "\\end{document}"),
-                collapse = '\n')
+    doc[1L] = paste(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
+                      .knitEnv$tikzPackages, '\\begin{document}', doc[1L]), collapse = '\n')
+    doc[length(doc)] = paste(
+      c(doc[length(doc)], .knitEnv$bibliography, '\\end{document}'), collapse = '\n'
+    )
   }
   doc
 }
 
 make_header_html = function() {
-  h = opts_knit$get('header')[['highlight']]
+  h = opts_knit$get('header')
+  h = h[setdiff(names(h), c('tikz', 'framed'))]
   if (opts_knit$get('self.contained')){
-    str_c('<style type="text/css">', h, '</style>', collapse = "\n")
+    paste(c('<style type="text/css">', h[['highlight']], '</style>',
+            unlist(h[setdiff(names(h), 'highlight')])), collapse = '\n')
   } else {
     writeLines(h, 'knitr.css')
     '<link rel="stylesheet" href="knitr.css" type="text/css" />'
@@ -50,18 +64,18 @@ make_header_html = function() {
 }
 
 insert_header_html = function(doc, b) {
-  i = which(str_detect(doc, b))
+  i = grep(b, doc)
   if (length(i) == 1L) {
     l = str_locate(doc[i], b)
     tmp = str_sub(doc[i], l[, 1], l[, 2])
-    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, "\n", make_header_html())
+    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, '\n', make_header_html())
   }
   doc
 }
 
 #' Set the header information
 #'
-#' Some output documents may need appropriate header information, for example,
+#' Some output documents may need appropriate header information. For example,
 #' for LaTeX output, we need to write \samp{\\usepackage{tikz}} into the
 #' preamble if we use tikz graphics; this function sets the header information
 #' to be written into the output.
@@ -83,8 +97,8 @@ insert_header_html = function(doc, b) {
 #' @param ... the header components; currently possible components are
 #'   \code{highlight}, \code{tikz} and \code{framed}, which contain the
 #'   necessary commands to be used in the HTML header or LaTeX preamble; note
-#'   HTML output only uses the \code{highlight} component (the other two are
-#'   ignored)
+#'   HTML output does not use the \code{tikz} and \code{framed} components (they
+#'   do not make sense to HTML)
 #' @return The header vector in \code{opts_knit} is set.
 #' @export
 #' @examples set_header(tikz = '\\usepackage{tikz}')
@@ -103,15 +117,12 @@ set_header = function(...) {
 .default.sty = file.path(.inst.dir, 'themes', 'default.css')
 .default.sty = .default.sty[file.exists(.default.sty)][1L]
 # header for Latex Syntax Highlighting
-.header.hi.tex = paste(c('\\IfFileExists{upquote.sty}{\\usepackage{upquote}}{}',
-                         theme_to_header_latex(.default.sty)$highlight),
-                       collapse = '\n')
+.header.hi.tex = theme_to_header_latex(.default.sty)$highlight
 .knitr.sty = file.path(.inst.dir, 'misc', 'knitr.sty')
 .knitr.sty = .knitr.sty[file.exists(.knitr.sty)][1L]
-.header.framed = paste(readLines(.knitr.sty), collapse = "\n")
+.header.framed = paste(readLines(.knitr.sty), collapse = '\n')
 # CSS for html syntax highlighting
-.header.hi.html = paste(theme_to_header_html(.default.sty)$highlight,
-                        collapse = '\n')
+.header.hi.html = theme_to_header_html(.default.sty)$highlight
 rm(list = c('.inst.dir', '.knitr.sty')) # do not need them any more
 
 .header.sweave.cmd =

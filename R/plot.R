@@ -1,4 +1,4 @@
-## graphics devices in base R, plus those in Cairo, cairoDevice, tikzDevice
+# graphics devices in base R, plus those in Cairo, cairoDevice, tikzDevice
 auto_exts = c(
   bmp = 'bmp', postscript = 'eps', pdf = 'pdf', png = 'png', svg = 'svg',
   jpeg = 'jpeg', pictex = 'tex', tiff = 'tiff', win.metafile = 'wmf',
@@ -18,19 +18,26 @@ auto_exts = c(
 
 dev2ext = function(x) {
   res = auto_exts[x]
-  if (any(idx <- is.na(res)))
+  if (any(idx <- is.na(res))) {
+    for (i in x[idx]) check_dev(i)
     stop('cannot find appropriate filename extensions for device ', x[idx],
          "; please use chunk option 'fig.ext' (http://yihui.name/knitr/options)",
          call. = FALSE)
-  res
+  }
+  unname(res)
 }
 
-## quartiz devices under Mac
+check_dev = function(dev) {
+  if (exists(dev, mode = 'function', envir = knit_global()))
+    get(dev, mode = 'function', envir = knit_global()) else
+      stop('the graphical device', sQuote(dev), 'does not exist (as a function)')
+}
+
+# quartiz devices under Mac
 quartz_dev = function(type, dpi) {
   force(type); force(dpi)
   function(file, width, height, ...) {
-    quartz(file = file, width = width, height = height, type = type, dpi = dpi,
-           ...)
+    grDevices::quartz(file = file, width = width, height = height, type = type, dpi = dpi, ...)
   }
 }
 
@@ -43,30 +50,38 @@ tikz_dev = function(...) {
     xetex = getOption('tikzXelatexPackages'),
     luatex = getOption('tikzLualatexPackages')
   )
-  get('tikz', envir = as.environment('package:tikzDevice'))(
+  getFromNamespace('tikz', 'tikzDevice')(
     ..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages)
   )
 }
 
-## save a recorded plot
-save_plot = function(plot, name, dev, ext, dpi, options) {
+# save a recorded plot
+save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
-  path = str_c(name, ".", ext)
+  path = paste(name, ext, sep = '.')
+  # when cache=2 and plot file exists, just return the filename
+  if (options$cache == 2 && cache$exists(options$hash, options$cache.lazy)) {
+    if (!file.exists(path)) {
+      purge_cache(options)
+      stop('cannot find ', path, '; the cache has been purged; please re-compile')
+    }
+    return(paste(name, if (dev == 'tikz' && options$external) 'pdf' else ext, sep = '.'))
+  }
 
-  ## built-in devices
+  # built-in devices
   device = switch(
     dev,
-    bmp = function(...) bmp(...,  res = dpi, units = "in"),
+    bmp = function(...) bmp(...,  res = dpi, units = 'in'),
     postscript = function(...) {
-      postscript(..., onefile = FALSE, horizontal = FALSE, paper = "special")
+      postscript(..., onefile = FALSE, horizontal = FALSE, paper = 'special')
     },
-    jpeg = function(...) jpeg(..., res = dpi, units = "in"),
+    jpeg = function(...) jpeg(..., res = dpi, units = 'in'),
     pdf = grDevices::pdf,
-    png = function(...) png(..., res = dpi, units = "in"),
+    png = function(...) png(..., res = dpi, units = 'in'),
     svg = grDevices::svg,
     pictex = grDevices::pictex,
-    tiff = function(...) tiff(..., res = dpi, units = "in"),
-    win.metafile = function(...) win.metafile(...),
+    tiff = function(...) tiff(..., res = dpi, units = 'in'),
+    win.metafile = grDevices::win.metafile,
     cairo_pdf = grDevices::cairo_pdf,
     cairo_ps = grDevices::cairo_ps,
 
@@ -94,96 +109,83 @@ save_plot = function(plot, name, dev, ext, dpi, options) {
       tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)
     },
 
-    get(dev, mode = 'function')
+    check_dev(dev)
   )
+  in_base_dir(plot2dev(plot, name, dev, device, path, width, height, options))
+}
 
-  ## re-plot the recorded plot to an off-screen device
-  do.call(device, c(list(path, width = options$fig.width, height = options$fig.height),
-                    options$dev.args))
+plot2dev = function(plot, name, dev, device, path, width, height, options) {
+  dargs = get_dargs(options$dev.args, dev)
+  # re-plot the recorded plot to an off-screen device
+  do.call(device, c(list(path, width = width, height = height), dargs))
+  showtext(options$fig.showtext)  # showtext support
   print(plot)
   dev.off()
 
-  ## compile tikz to pdf
+  # compile tikz to pdf
   if (dev == 'tikz' && options$external) {
-    unlink(pdf.plot <- str_c(name, '.pdf'))
+    unlink(pdf.plot <- paste(name, '.pdf', sep = ''))
     owd = setwd(dirname(path))
     # add old wd to TEXINPUTS (see #188)
     oti = Sys.getenv('TEXINPUTS'); on.exit(Sys.setenv(TEXINPUTS = oti))
-    Sys.setenv(TEXINPUTS = str_c(owd, oti, sep = ':'))
-    system(str_c(switch(getOption("tikzDefaultEngine"),
-                        pdftex = getOption('tikzLatex'),
-                        xetex = getOption("tikzXelatex"),
-                        luatex = getOption("tikzLualatex"),
-                        stop("a LaTeX engine must be specified for tikzDevice",
-                             call. = FALSE)), shQuote(basename(path)), sep = ' '),
-           ignore.stdout = TRUE)
+    Sys.setenv(TEXINPUTS = paste(owd, oti, sep = ':'))
+    latex = switch(
+      getOption('tikzDefaultEngine'),
+      pdftex = getOption('tikzLatex'),
+      xetex  = getOption('tikzXelatex'),
+      luatex = getOption('tikzLualatex'),
+      stop('a LaTeX engine must be specified for tikzDevice', call. = FALSE)
+    )
+    system2(latex, shQuote(basename(path)), stdout = NULL)
     setwd(owd)
-    if (file.exists(pdf.plot)) ext = 'pdf' else {
+    if (!file.exists(pdf.plot)) {
+      if (file.exists(log <- paste(name, 'log', sep = '.')))
+        message(paste(readLines(log), collapse = '\n'))
       stop('failed to compile ', path, ' to PDF', call. = FALSE)
     }
+    path = pdf.plot
   }
 
-  c(name, ext)
+  fig_process(options$fig.process, path)
 }
 
-## this is mainly for Cairo and cairoDevice
+# filter the dev.args option
+get_dargs = function(dargs, dev) {
+  if (length(dargs) == 0) return()
+  if (is.list(dargs) && all(sapply(dargs, is.list))) {
+    # dev.args is list(dev1 = list(arg1 = val1, ...), dev2 = list(arg2, ...))
+    dargs = dargs[[dev]]
+  }
+  dargs
+}
+
+# this is mainly for Cairo and cairoDevice
 load_device = function(name, package, dpi = NULL) {
-  do.call('library', list(package = package))
-  dev = get(name, envir = as.environment(str_c('package:', package)))
-  ## dpi is for bitmap devices; units must be inches!
+  dev = getFromNamespace(name, package)
+  # dpi is for bitmap devices; units must be inches!
   if (is.null(dpi)) dev else function(...) dev(..., dpi = dpi, units = 'in')
 }
 
 
-## filter out plot objects purely for layout (raised by par(), layout())
-
-# layout() results in plot_calls() of length 1 under R >= 2.16; all calls are
-# par/layout for par()/layout() under R <= 2.15, and are .External2 for R >=
-# 2.16; these blank plot objects should be removed
-rm_blank_plot = function(res) {
-  Filter(function(x) {
-    !is.recordedplot(x) ||
-      identical(pc <- plot_calls(x), 'recordGraphics') ||
-      identical(pc, 'persp') ||
-      (length(pc) > 1L && !all(pc %in% c('par', 'layout', '.External2')))
-  }, res)
-}
-
-## merge low-level plotting changes
+# merge low-level plotting changes
 merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
   idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
+  if (n <= 1) return(x)
   i1 = idx[1]; i2 = idx[2]  # compare plots sequentially
   for (i in 1:(n - 1)) {
-    p1 = x[[i1]]; p2 = x[[i2]]
-    if (is_low_change(p1, p2)) {
-      # if the next plot only differs with the previous plot by par() changes,
-      # remove the next plot and keep the previous fixed, otherwise remove the
-      # previous and move its index to the next plot
-      if (is_par_change(p1, p2)) r = i2 else {
-        r = i1; i1 = idx[i + 1]
-      }
-      m = c(m, r)
-    } else i1 = idx[i + 1]
+    # remove the previous plot and move its index to the next plot
+    if (is_low_change(x[[i1]], x[[i2]])) m = c(m, i1)
+    i1 = idx[i + 1]
     i2 = idx[i + 2]
   }
   if (is.null(m)) x else x[-m]
 }
 
-## compare two recorded plots
+# compare two recorded plots
 is_low_change = function(p1, p2) {
   p1 = p1[[1]]; p2 = p2[[1]]  # real plot info is in [[1]]
   if ((n2 <- length(p2)) < (n1 <- length(p1))) return(FALSE)  # length must increase
   identical(p1[1:n1], p2[1:n1])
-}
-
-plot_calls = evaluate:::plot_calls
-
-## is the new plot identical to the old one except a few par/layout primitives in the end?
-is_par_change = function(p1, p2) {
-  n1 = length(prim1 <- plot_calls(p1))
-  n2 = length(prim2 <- plot_calls(p2))
-  if (n2 <= n1) return(TRUE)
-  all(prim2[(n1 + 1):n2] %in% c('layout', 'par', '.External2'))  # TODO: is this list exhaustive?
 }
 
 # recycle some plot options such as fig.cap, out.width/height, etc when there
@@ -192,7 +194,10 @@ is_par_change = function(p1, p2) {
                  'out.width', 'out.height', 'out.extra')
 recycle_plot_opts = function(options) {
   n = options$fig.num
-  for (i in .recyle.opts) options[[i]] = rep(options[[i]], length.out = n)
+  for (i in .recyle.opts) {
+    if (length(options[[i]]) == 0L) next
+    options[[i]] = rep(options[[i]], length.out = n)
+  }
   options
 }
 
@@ -200,6 +205,113 @@ recycle_plot_opts = function(options) {
 reduce_plot_opts = function(options) {
   if (options$fig.show == 'animate' || options$fig.num <= 1L) return(options)
   fig.cur = options$fig.cur
-  for (i in .recyle.opts) options[[i]] = options[[i]][fig.cur]
+  for (i in .recyle.opts) options[i] = list(options[[i]][fig.cur])
   options
+}
+
+# the memory address of a NativeSymbolInfo object will be lost if it is saved to
+# disk; see http://markmail.org/message/zat2r2pfsvhrsfqz for the full
+# discussion; the hack below was stolen (with permission) from RStudio:
+# https://github.com/rstudio/rstudio/blob/master/src/cpp/r/R/Tools.R
+fix_recordedPlot = function(plot) {
+  # restore native symbols for R >= 3.0
+  if (Rversion >= '3.0.0') {
+    for (i in seq_along(plot[[1]])) {
+      # get the symbol then test if it's a native symbol
+      symbol = plot[[1]][[i]][[2]][[1]]
+      if (inherits(symbol, 'NativeSymbolInfo')) {
+        # determine the dll that the symbol lives in
+        name = symbol[[if (is.null(symbol$package)) 'dll' else 'package']][['name']]
+        pkgDLL = getLoadedDLLs()[[name]]
+        # reconstruct the native symbol and assign it into the plot
+        nativeSymbol = getNativeSymbolInfo(
+          name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE
+        )
+        plot[[1]][[i]][[2]][[1]] <- nativeSymbol
+      }
+    }
+    attr(plot, 'pid') = Sys.getpid()
+  } else if (Rversion >= '2.14') {
+    # restore native symbols for R >= 2.14
+    try({
+      for(i in seq_along(plot[[1]])) {
+        if(inherits(plot[[1]][[i]][[2]][[1]], 'NativeSymbolInfo')) {
+          nativeSymbol = getNativeSymbolInfo(plot[[1]][[i]][[2]][[1]]$name)
+          plot[[1]][[i]][[2]][[1]] = nativeSymbol
+        }
+      }
+    }, silent = TRUE)
+  }
+  plot
+}
+
+# fix plots in evaluate() results
+fix_evaluate = function(list, fix = TRUE) {
+  if (!fix) return(list)
+  lapply(list, function(x) {
+    if (is.recordedplot(x)) fix_recordedPlot(x) else x
+  })
+}
+
+# remove the plots from the evaluate results for the case of cache=2; if we only
+# want to keep high-level plots, we need MD5 digests of the plot components so
+# that we will be able to filter out low-level changes later
+remove_plot = function(list, keep.high = TRUE) {
+  lapply(list, function(x) {
+    if (is.recordedplot(x)) structure(
+      if (keep.high) digest_plot(x) else NULL, class = 'recordedplot'
+    ) else x
+  })
+}
+# replace the content of the recorded plot with MD5 digests so that merge_plot()
+# will still work, and this will also save disk space for the case of cache=2
+digest_plot = function(x, level = 1) {
+  if (!is.list(x) || level >= 3) return(digest::digest(x))
+  lapply(x, digest_plot, level = level + 1)
+}
+
+# a null device
+pdf_null = function(width = 7, height = 7, ...) pdf(NULL, width, height, ...)
+
+fig_process = function(FUN, path) {
+  if (is.function(FUN)) {
+    path2 = FUN(path)
+    if (!is.character(path2) || length(path2) != 1L)
+      stop("'fig.process' must be a function that returns a character string")
+    path = path2
+  }
+  path
+}
+
+#' Crop a plot (remove the edges) using PDFCrop or ImageMagick
+#'
+#' The command \command{pdfcrop x x} is executed on a PDF plot file, and
+#' \command{convert x -trim x} is executed for other types of plot files, where
+#' \code{x} is the plot filename.
+#'
+#' The utility \command{pdfcrop} is often shipped with a LaTeX distribution, and
+#' \command{convert} is a command in ImageMagick (Windows users may have to put
+#' the bin path of ImageMagick into the \var{PATH} variable).
+#' @param x the plot filename
+#' @export
+#' @references PDFCrop: \url{http://pdfcrop.sourceforge.net}; the
+#'   \command{convert} command in ImageMagick:
+#'   \url{http://www.imagemagick.org/script/convert.php}
+#' @return The original filename.
+plot_crop = function(x) {
+  ext = tolower(file_ext(x))
+  if (ext == 'pdf') {
+    if (!has_utility('pdfcrop')) return(x)
+  } else if (!has_utility('convert', 'ImageMagick')) return(x)
+
+  message('cropping ', x)
+  x = shQuote(x)
+  cmd = if (ext == 'pdf') paste('pdfcrop', x, x) else paste('convert', x, '-trim', x)
+  (if (is_windows()) shell else system)(cmd)
+  x
+}
+
+# a wrapper of showtext::showtext.begin()
+showtext = function(show) {
+  if (isTRUE(show)) getFromNamespace('showtext.begin', 'showtext')()
 }

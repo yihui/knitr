@@ -1,7 +1,8 @@
-%% LyX 2.0.5 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.3 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[twocolumn]{article}
 \usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \setcounter{secnumdepth}{2}
@@ -15,7 +16,6 @@
  {hyperref}
 \hypersetup{
  pdfstartview={XYZ null null 1}}
-\usepackage{breakurl}
 
 \makeatletter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
@@ -27,8 +27,8 @@
 \makeatother
 
 \begin{document}
-
 <<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
 opts_chunk$set(fig.path='figure/twocolumn-', fig.align='center', fig.show='hold')
 render_listings()
 @
@@ -46,7 +46,7 @@ figures can span over two columns. Because the output hooks use the
 environment, we can either modify the output hooks or use other packages
 like \textbf{listings}. For example,
 
-<<chunk-hook, echo=2>>=
+<<chunk-hook, echo=2, tidy.opts=list(width.cutoff=30)>>=
 <<setup>>
 @
 
@@ -62,7 +62,6 @@ hist(x,main='')
 \end{figure*}
 
 
-The output PDF file will be like: \url{https://github.com/downloads/yihui/knitr/knitr-twocolumn.pdf}.
+The output PDF file will be like: \url{https://bitbucket.org/stat/knitr/downloads/knitr-twocolumn.pdf}.
 The Rnw source of this document is at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-twocolumn.Rnw}.
-
 \end{document}

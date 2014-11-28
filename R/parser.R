@@ -1,75 +1,74 @@
 ## adapted from Hadley's decumar: https://github.com/hadley/decumar
 
-## split input document into groups containing chunks and other texts
-## (may contain inline R code)
-split_file = function(lines, set.preamble = TRUE) {
+# split input document into groups containing chunks and other texts
+# (may contain inline R code)
+split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()) {
   n = length(lines)
-  chunk.begin = knit_patterns$get('chunk.begin')
-  chunk.end = knit_patterns$get('chunk.end')
-  if (is.null(chunk.begin) || is.null(chunk.end)) {
-    return(list(parse_inline(lines)))
-  }
+  chunk.begin = patterns$chunk.begin; chunk.end = patterns$chunk.end
+  if (is.null(chunk.begin) || is.null(chunk.end))
+    return(list(parse_inline(lines, patterns)))
 
   if (!child_mode() && set.preamble) {
-    set_preamble(lines)  # prepare for tikz option 'standAlone'
+    set_preamble(lines, patterns)  # prepare for tikz option 'standAlone'
   }
 
-  blks = str_detect(lines, chunk.begin)
-  txts = str_detect(lines, chunk.end)
-  if (opts_knit$get('filter.chunk.end')) txts = filter_chunk_end(blks, txts)
-
-  tmp = logical(n); tmp[blks | txts] = TRUE; lines[txts] = ''
+  blks = grepl(chunk.begin, lines)
+  txts = filter_chunk_end(blks, grepl(chunk.end, lines))
+  # tmp marks the starting lines of a code/text chunk by TRUE
+  tmp = blks | head(c(TRUE, txts), -1)
 
   groups = unname(split(lines, cumsum(tmp)))
   if (set.preamble)
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
 
-  ## parse 'em all
+  # parse 'em all
   lapply(groups, function(g) {
-    block = str_detect(g[1], chunk.begin)
+    block = grepl(chunk.begin, g[1])
     if (!set.preamble && !parent_mode()) {
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
     }
-    if (block) parse_block(g) else parse_inline(g)
+    if (block) {
+      n = length(g)
+      # remove the optional chunk footer
+      if (n >=2 && grepl(chunk.end, g[n])) g = g[-n]
+      # remove the optional prefix % in code in Rtex mode
+      g = strip_block(g, patterns$chunk.code)
+      params.src = if (group_pattern(chunk.begin)) {
+        str_trim(gsub(chunk.begin, '\\1', g[1]))
+      } else ''
+      parse_block(g[-1], g[1], params.src)
+    } else parse_inline(g, patterns)
   })
 }
 
-## a code manager to manage R code in all chunks
+# a code manager to manage R code in all chunks
 knit_code = new_defaults()
 
-## strip the pattern in code
-strip_block = function(x) {
-  if (!is.null(prefix <- knit_patterns$get('chunk.code')) && (n <- length(x)) > 1) {
-    x[-1L] = str_replace(x[-1L], prefix, "")
-  }
+# strip the pattern in code
+strip_block = function(x, prefix = NULL) {
+  if (!is.null(prefix) && (length(x) > 1)) x[-1L] = sub(prefix, '', x[-1L])
   x
 }
 
-## an object to store chunk dependencies; dep_list$get() is of the form list(foo
-## = c('chunk', 'labels', 'that', 'depend', 'on', 'chunk', 'foo'))
+# an object to store chunk dependencies; dep_list$get() is of the form list(foo
+# = c('chunk', 'labels', 'that', 'depend', 'on', 'chunk', 'foo'))
 dep_list = new_defaults()
 
-## separate params and R code in code chunks
-parse_block = function(input) {
-  block = strip_block(input)
-  n = length(block); chunk.begin = knit_patterns$get('chunk.begin')
-  params.src = if (group_pattern(chunk.begin)) {
-    str_trim(gsub(chunk.begin, '\\1', block[1]))
-  } else ''
+# separate params and R code in code chunks
+parse_block = function(code, header, params.src) {
   params = parse_params(params.src)
-  if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', block[1]))) {
+  if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', header))) {
     params$indent = spaces
-    block = gsub(str_c('^', spaces), '', block) # remove indent for the whole chunk
+    code = gsub(sprintf('^%s', spaces), '', code) # remove indent for the whole chunk
   }
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
-  code = block[-1L]
   if (length(code)) {
-    if (label %in% names(knit_code$get())) stop("duplicated label '", label, "'")
+    if (label %in% names(knit_code$get())) stop("duplicate label '", label, "'")
     knit_code$set(setNames(list(code), label))
   }
 
-  ## store dependencies
+  # store dependencies
   if (!is.null(deps <- params$dependson)) {
     deps = sc_split(deps)
     if (is.numeric(deps)) {
@@ -83,74 +82,52 @@ parse_block = function(input) {
   structure(list(params = params, params.src = params.src), class = 'block')
 }
 
-## autoname for unnamed chunk
-unnamed_chunk = function() str_c('unnamed-chunk-', chunk_counter())
+# autoname for unnamed chunk
+unnamed_chunk = function(i = chunk_counter())
+  paste(opts_knit$get('unnamed.chunk.label'), i, sep = '-')
 
-## parse params from chunk header
-parse_params = function(params, label = TRUE) {
-  # TODO: remove support for label = FALSE here
-  if (!label) {
-    reminder('it is recommended to set global chunk options via opts_chunk$set(', params, ')
-      instead of the ', knit_patterns$get('global.options'), 'syntax; the old syntax will be deprecated soon')
-  }
-  if (is_blank(params)) {
-    return(if (!label) list() else list(label = unnamed_chunk()))
-  }
-  res = try(eval(parse(text = str_c("alist(", params, ")"))))
-  if (!inherits(res, 'try-error') && valid_opts(params)) {
-    ## good, you seem to be using valid R code
-    idx = which(names(res) == '')  # which option is not named?
-    if (is.null(names(res))) idx = 1L  # empty name, must be label
-    if ((n <- length(idx)) > 1L) {
-      stop("invalid chunk options: ", params,
-           "\n(all options must be of the form 'tag=value' except the chunk label)")
-    } else if (!label && n > 0L) stop('all global options must be of the form tag=value')
-    if (n == 1L) names(res)[idx] = 'label' else if (label) {
-      if (!('label' %in% names(res))) res$label = unnamed_chunk()
-    }
-    if (label && !is.character(res$label))
-      res$label = gsub(' ', '', as.character(as.expression(res$label)))
-    if (identical(res$label, '')) res$label = unnamed_chunk()
-    return(res)
-  }
-  reminder('(*) NOTE: I saw options "', params,
-          '"\n are you using the old Sweave syntax? go http://yihui.name/knitr/options',
-          '\n (it is likely that you forgot to quote "character" options)')
+# parse params from chunk header
+parse_params = function(params) {
 
-  ## split by , (literal comma has to be escaped as \,) and then by =
-  pieces = str_split(params, perl('(?<=[^\\\\]),'))[[1]]
-  pieces = str_split(str_replace_all(pieces, fixed('\\,'), ','), '=', n = 2L)
-  n = sapply(pieces, length)
-  ## when global options are empty
-  if (length(n) == 1 && length(pieces[[1]]) == 1) {
-    return(if (label) list(label = pieces[[1]]) else list())
+  params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
+  if (params == '') return(list(label = unnamed_chunk()))
+
+  res = withCallingHandlers(
+    eval(parse_only(paste('alist(', quote_label(params), ')'))),
+    error = function(e) {
+      message('(*) NOTE: I saw chunk options "', params,
+              '"\n please go to http://yihui.name/knitr/options',
+              '\n (it is likely that you forgot to quote "character" options)')
+    })
+
+  # good, now you seem to be using valid R code
+  idx = which(names(res) == '')  # which option is not named?
+  # remove empty options
+  for (i in idx) if (identical(res[[i]], alist(,)[[1]])) res[[i]] = NULL
+  idx = if (is.null(names(res)) && length(res) == 1L) 1L else which(names(res) == '')
+  if ((n <- length(idx)) > 1L || (length(res) > 1L && is.null(names(res))))
+    stop('invalid chunk options: ', params,
+         "\n(all options must be of the form 'tag=value' except the chunk label)")
+  if (is.null(res$label)) {
+    if (n == 0L) res$label = unnamed_chunk() else names(res)[idx] = 'label'
   }
-
-  if (any(n == 1)) {
-    if (label && length(idx <- which(n == 1)) == 1) {
-      pieces[[idx]] = c('label', pieces[[idx]])
-    } else stop("illegal tags in: ", params, "\n",
-                "all options must be of the form 'tag=value' except the chunk label",
-                call. = FALSE)
-  } else if (label && !str_detect(params, '\\s*label\\s*=')) {
-    pieces[[length(pieces) + 1]] = c('label', unnamed_chunk())
-  }
-
-  values = lapply(pieces, function(x) str_trim(x[2]))
-  names(values) = str_trim(tolower(lapply(pieces, `[`, 1)))
-
-  lapply(values, type.convert, as.is = TRUE)
+  if (!is.character(res$label))
+    res$label = gsub(' ', '', as.character(as.expression(res$label)))
+  if (identical(res$label, '')) res$label = unnamed_chunk()
+  res
 }
 
-## is the options list valid with knitr's new syntax?
-.wrong.opts = c('results\\s*=\\s*(verbatim|tex|hide|asis|markup)',
-                'fig.keep\\s*=\\s*(none|all|high|last|first)',
-                'fig.show\\s*=\\s*(hold|asis|animate)',
-                sprintf('dev\\s*=\\s*(%s)', paste(names(auto_exts), collapse = '|')),
-                'fig.align\\s*=\\s*(default|left|center|right)')
-valid_opts = function(x) {
-  ## not a rigorous check; you should go to the new syntax finally!
-  !any(str_detect(x, .wrong.opts))
+# quote the chunk label if necessary
+quote_label = function(x) {
+  x = gsub('^\\s*,?', '', x)
+  if (grepl('^\\s*[^\'"](,|\\s*$)', x)){
+    # <<a,b=1>>= ---> <<'a',b=1>>=
+    x = gsub('^\\s*([^\'"])(,|\\s*$)', "'\\1'\\2", x)
+  } else if (grepl('^\\s*[^\'"](,|[^=]*(,|\\s*$))', x)) {
+    # <<abc,b=1>>= ---> <<'abc',b=1>>=
+    x = gsub('^\\s*([^\'"][^=]*)(,|\\s*$)', "'\\1'\\2", x)
+  }
+  x
 }
 
 print.block = function(x, ...) {
@@ -162,75 +139,46 @@ print.block = function(x, ...) {
   }
   if (opts_knit$get('verbose')) {
     code = knit_code$get(params$label)
-    if (length(code) && !all(is_blank(code))) {
-      cat("\n  ", str_pad(" R code chunk ", getOption('width') - 10L, 'both', '~'), "\n")
-      cat(str_c('   ', code, collapse = '\n'), '\n')
+    if (length(code) && !is_blank(code)) {
+      cat('\n  ', str_pad(' R code chunk ', getOption('width') - 10L, 'both', '~'), '\n')
+      cat(paste('  ', code, collapse = '\n'), '\n')
       cat('  ', str_dup('~', getOption('width') - 10L), '\n')
     }
-    timestamp()
+    cat(paste('##------', date(), '------##'), sep = '\n')
   }
   cat('\n')
 }
 
-## extract inline R code fragments (as well as global options)
-parse_inline = function(input) {
+# extract inline R code fragments (as well as global options)
+parse_inline = function(input, patterns) {
   input.src = input  # keep a copy of the source
-  inline.comment = knit_patterns$get('inline.comment')
+
+  inline.code = patterns$inline.code; inline.comment = patterns$inline.comment
   if (!is.null(inline.comment)) {
-    idx = str_detect(input, inline.comment)
+    idx = grepl(inline.comment, input)
     # strip off inline code
-    input[idx] = str_replace_all(input[idx], knit_patterns$get('inline.code'), '\\1')
+    input[idx] = gsub(inline.code, '\\1', input[idx])
   }
-  input = str_c(input, collapse = '\n') # merge into one line
+  input = paste(input, collapse = '\n') # merge into one line
 
-  locate_inline = function(input, pattern) {
-    x = cbind(start = numeric(0), end = numeric(0))
-    if (group_pattern(pattern))
-      x = str_locate_all(input, pattern)[[1]]
-    x
-  }
+  loc = cbind(start = numeric(0), end = numeric(0))
+  if (group_pattern(inline.code)) loc = str_locate_all(input, inline.code)[[1]]
+  if (nrow(loc)) {
+    code = str_match_all(input, inline.code)[[1L]]
+    code = if (NCOL(code) >= 2L) {
+      apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
+    } else character(0)
+  } else code = character(0)
 
-  params = list(); global.options = knit_patterns$get('global.options')
-  opts.line = locate_inline(input, global.options)
-  if (nrow(opts.line)) {
-    last = tail(opts.line, 1)
-    opts = str_match(str_sub(input, last[1, 1], last[1, 2]), global.options)[, 2]
-    params = parse_params(opts, label = FALSE)
-    ## remove texts for global options
-    text.line = t(matrix(c(1L, t(opts.line) + c(-1L, 1L), str_length(input)), nrow = 2))
-    text.line = text.line[text.line[, 1] <= text.line[, 2], , drop = FALSE]
-    input = str_c(str_sub(input, text.line[, 1], text.line[, 2]), collapse = '')
-  }
-  res1 = extract_inline(input, 'inline.code', locate_inline)
-  res2 = extract_inline(input, 'input.doc', locate_inline)
-  if (length(res2$code)) {
-    reminder('please use the chunk option to input child documents: child=',
-             sprintf('c(%s)',  str_c('"', res2$code, '"', collapse = ', ')))
-    res2$code = sprintf("knit_child('%s')", res2$code)  # input child with knit_child()
-  }
-  loc = rbind(res1$location, res2$location)
-  idx = order(loc[, 1L])
-
-  structure(list(input = input, input.src = input.src, location = loc[idx, , drop = FALSE],
-                 params = params, code = c(res1$code, res2$code)[idx]),
+  structure(list(input = input, input.src = input.src, location = loc, code = code),
             class = 'inline')
-}
-
-## locate and extract inline R code
-extract_inline = function(input, pat.name, locate.fun) {
-  pattern = knit_patterns$get(pat.name)
-  loc = locate.fun(input, pattern)
-  code = character(0)
-  if (nrow(loc)) code = str_match(str_sub(input, loc[, 1L], loc[, 2L]), pattern)
-  code = if (NCOL(code) >= 2L) code[, NCOL(code)] else character(0)
-  list(location = loc, code = code)
 }
 
 print.inline = function(x, ...) {
   if (nrow(x$location)) {
     cat('   ')
     if (opts_knit$get('verbose')) {
-      cat(str_pad(" inline R code fragments ",
+      cat(str_pad(' inline R code fragments ',
                   getOption('width') - 10L, 'both', '-'), '\n')
       cat(sprintf('    %s:%s %s', x$location[, 1], x$location[, 2], x$code),
           sep = '\n')
@@ -247,9 +195,9 @@ print.inline = function(x, ...) {
 #' to read a demo script from a package.
 #'
 #' There are two approaches to read external code into the current session: (1)
-#' Use a special separator of the from \code{## @@knitr chunk-label} in the
-#' script; (2) Manually specify the labels, starting and ending positions of
-#' code chunks in the script.
+#' Use a special separator of the from \code{## ---- chunk-label} (at least four
+#' dashes before the chunk label) in the script; (2) Manually specify the
+#' labels, starting and ending positions of code chunks in the script.
 #'
 #' The second approach will be used only when \code{labels} is not \code{NULL}.
 #' For this approach, if \code{from} is \code{NULL}, the starting position is 1;
@@ -273,7 +221,7 @@ print.inline = function(x, ...) {
 #' @param from.offset,to.offset an offset to be added to \code{from}/\code{to}
 #' @return As a side effect, code chunks are read into the current session so
 #'   that future chunks can (re)use the code by chunk label references.
-#' @references \url{http://yihui.name/knitr/demo/reference/}
+#' @references \url{http://yihui.name/knitr/demo/externalization/}
 #' @note This function can only be used in a chunk which is \emph{not} cached
 #'   (chunk option \code{cache = FALSE}), and the code is read and stored in the
 #'   current session \emph{without} being executed (to actually run the code,
@@ -283,7 +231,7 @@ print.inline = function(x, ...) {
 #' @export
 #' @examples ## put this in foo.R and read_chunk('foo.R')
 #'
-#' ## @@knitr my-label
+#' ## ---- my-label ----
 #' 1+1
 #' lm(y~x, data=data.frame(x=1:10,y=rnorm(10)))
 #'
@@ -291,10 +239,11 @@ print.inline = function(x, ...) {
 #'
 #' ## the 2nd approach
 #' code = c("#@@a", '1+1', "#@@b", "#@@a", 'rnorm(10)', "#@@b")
-#' read_chunk(lines = code, labels = 'foo') # put all code into one chun named foo
+#' read_chunk(lines = code, labels = 'foo') # put all code into one chunk named foo
 #' read_chunk(lines = code, labels = 'foo', from = 2, to = 2) # line 2 into chunk foo
 #' read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4), to = c(3, 6))
-#' read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4)) # automatically figure out 'to'
+#' # automatically figure out 'to'
+#' read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4))
 #' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a", to = "^#@@b")
 #' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a", to = "^#@@b", from.offset = 1, to.offset = -1)
 #'
@@ -324,12 +273,15 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
     knit_code$set(code)
     return(invisible())
   }
-  idx = cumsum(str_detect(lines, lab))
-  if (all(idx == 0)) return(invisible())
-  groups = unname(split(lines[idx != 0], idx[idx != 0]))
-  labels = str_trim(str_replace(sapply(groups, `[`, 1), lab, '\\1'))
+  idx = cumsum(grepl(lab, lines))
+  if (idx[1] == 0) {
+    idx = c(0, idx); lines = c('', lines)  # no chunk header in the beginning
+  }
+  groups = unname(split(lines, idx))
+  labels = str_trim(gsub(lab, '\\2', sapply(groups, `[`, 1)))
+  labels = gsub(',.*', '', labels)  # strip off possible chunk options
   code = lapply(groups, strip_chunk)
-  idx = nzchar(labels); code = code[idx]; labels = labels[idx]
+  for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()
   knit_code$set(setNames(code, labels))
 }
 #' @rdname read_chunk
@@ -338,7 +290,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
 #' @export
 read_demo = function(topic, package = NULL, ...) {
   paths = list.files(file.path(find.package(package), 'demo'), full.names = TRUE)
-  read_chunk(paths[file_path_sans_ext(basename(paths)) == topic], ...)
+  read_chunk(paths[sans_ext(basename(paths)) == topic], ...)
 }
 
 # convert patterns to numeric indices in a character vector
@@ -368,20 +320,24 @@ strip_white = function(x) {
   x
 }
 
-## (recursively) parse chunk references inside a chunk
-parse_chunk = function(x) {
-  rc = knit_patterns$get('ref.chunk')
-  if (!group_pattern(rc) || !any(idx <- str_detect(x, rc))) return(x)
-  labels = str_replace(x[idx], rc, '\\1')
+# (recursively) parse chunk references inside a chunk
+parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
+  if (length(x) == 0L) return(x)
+  if (!group_pattern(rc) || !any(idx <- grepl(rc, x))) return(x)
+
+  labels = sub(rc, '\\1', x[idx])
   code = knit_code$get(labels)
+  indent = gsub('^(\\s*).*', '\\1', x[idx])
   if (length(labels) <= 1L) code = list(code)
+  code = mapply(indent_block, code, indent, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+
   x[idx] = unlist(lapply(code, function(z) {
-    str_c(parse_chunk(z), collapse = '\n')
+    paste(parse_chunk(z, rc), collapse = '\n')
   }), use.names = FALSE)
   x
 }
 
-## filter chunk.end lines that don't actually end a chunk
+# filter chunk.end lines that don't actually end a chunk
 filter_chunk_end = function(chunk.begin, chunk.end) {
   in.chunk = FALSE
   fun = function(is.begin, is.end) {
@@ -393,4 +349,47 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
     FALSE
   }
   mapply(fun, chunk.begin, chunk.end)
+}
+
+#' Get all chunk labels in a document
+#'
+#' This function returns all chunk labels as a chracter vector.
+#' @return A character vector.
+#' @export
+all_labels = function() names(knit_code$get())
+
+#' Wrap code using the inline R expression syntax
+#'
+#' This is a convenience function to write the "source code" of inline R
+#' expressions. For example, if you want to write \samp{`r 1+1`} literally in an
+#' R Markdown document, you may write \samp{`` `r knitr::inline_expr('1+1')`
+#' ``}; for Rnw documents, this may be
+#' \samp{\verb|\Sexpr{knitr::inline_expr{'1+1'}}|}.
+#' @param code a character string of the inline R source code
+#' @param syntax a character string to specify the syntax, e.g. \code{rnw},
+#'   \code{html}, or \code{md}, etc; if not specified, it will be guessed from
+#'   the knitting context
+#' @return A character string marked up using the inline R code syntax.
+#' @export
+#' @examples library(knitr)
+#' inline_expr('1+1', 'rnw'); inline_expr('1+1', 'html'); inline_expr('1+1', 'md')
+inline_expr = function(code, syntax) {
+  if (!is.character(code) || length(code) != 1)
+    stop('The inline code must be a charater string')
+  if (!missing(syntax)) pat = syntax else {
+    inline = knit_patterns$get('inline.code')
+    if (is.null(inline)) stop('inline_expr() must be called in a knitting process')
+    pat = NULL
+      for (i in names(all_patterns)) {
+        if (inline == all_patterns[[i]][['inline.code']]) {
+          pat = i; break
+        }
+      }
+  }
+  if (is.null(pat)) stop('Unknown document format')
+  sprintf(switch(
+    pat, rnw = '\\Sexpr{%s}', tex = '\\rinline{%s}', html = '<!--rinline %s -->',
+    md = '`r %s`', rst = ':r:`%s`', asciidoc = '`r %s`', textile = '@r %s@',
+    stop('Unknown syntax ', pat)
+  ), code)
 }

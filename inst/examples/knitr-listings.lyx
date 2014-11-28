@@ -89,12 +89,17 @@ status open
 
 \begin_layout Plain Layout
 
+library(knitr)
+\end_layout
+
+\begin_layout Plain Layout
+
 opts_chunk$set(fig.path = 'figure/listings-')
 \end_layout
 
 \begin_layout Plain Layout
 
-options(replace.assign = TRUE)
+options(formatR.arrow = TRUE)
 \end_layout
 
 \begin_layout Plain Layout
@@ -488,7 +493,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://github.com/downloads/yihui/knitr/knitr-listings.pdf
+https://bitbucket.org/stat/knitr/downloads/knitr-listings.pdf
 \end_layout
 
 \end_inset

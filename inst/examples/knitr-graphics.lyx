@@ -93,7 +93,12 @@ status open
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE,width=50)
+library(knitr)
+\end_layout
+
+\begin_layout Plain Layout
+
+options(formatR.arrow=TRUE,width=50)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1816,7 +1821,8 @@ status open
 \begin_layout Plain Layout
 
 <<rgl-animation, custom.plot=TRUE, fig.ext='png', out.width='2.5in', fig.show='animat
-e', fig.num=20, interval=.4,  aniopts='controls,autoplay', results='hide'>>=
+e', fig.num=20, interval=.4,  aniopts='controls,autoplay', results='hide',
+ warning=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1872,7 +1878,7 @@ for (i in 1:length(zm)) {
 
 \begin_layout Plain Layout
 
-    rgl.snapshot(paste(fig_path(i), 'png', sep = '.'))
+    rgl.snapshot(fig_path('png', number = i))
 \end_layout
 
 \begin_layout Plain Layout

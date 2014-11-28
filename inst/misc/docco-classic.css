@@ -1,0 +1,123 @@
+body {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+    height:100%;
+    font-size: 16px;
+    line-height: 24px;
+    color: #30404f;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #112233;
+    line-height: 1em;
+    font-weight: normal;
+    margin: 0 0 15px 0;
+}
+
+p {
+    margin: 0 0 15px 0;
+    font-size:17px;
+}
+
+#footer p{
+    margin:0;
+    font-size:12px;
+    text-align: center;
+}
+
+a{
+    color:#0088cc;
+    text-decoration:none;
+}
+
+a:hover,a:focus{
+    color:#005580;
+    text-decoration:underline;
+}
+
+#container {
+    position: relative;
+    margin: 0;
+    height:100%;
+}
+
+body > #container { height: auto; min-height: 100%; }
+
+table{
+    width:100%;
+    border: 0;
+    outline: 0;
+}
+
+td.docs{
+    width: 50%;
+    text-align: left;
+    vertical-align: top;
+    padding: 10px 25px 1px 50px;
+}
+
+
+td.code{
+    background: #f5f5ff;
+    padding: 10px 25px 1px 50px;
+    overflow-x: hidden;
+    vertical-align: top;
+}
+
+code{
+    font-size:12px;
+    margin: 0;
+    padding: 0;
+}
+
+td.docs code{
+    background: #f8f8ff;
+    border: 1px solid #dedede;
+    font-size: 80%;
+    padding: 0 0.2em;
+}
+
+td.docs img{
+  max-width: 100%;
+}
+
+pre code{
+    padding:2px 4px;
+    background:#f5f5ff;
+}
+
+td.code pre code{
+    line-height: 18px;
+}
+
+.pilwrap {
+    position: relative;
+}
+.pilcrow {
+    font: 12px Arial;
+    text-decoration: none;
+    color: rgb(69, 69, 69);
+    position: absolute;
+    top: 3px;
+    left: -20px;
+    padding: 1px 2px;
+    opacity: 0;
+}
+
+td.docs:hover .pilcrow {
+    opacity: 1;
+}
+
+blockquote {
+    border-left: 4px solid #DDD;
+    padding: 0 15px;
+    color: #777;
+}
+div.handler{
+      width: 5px;
+      padding: 0;
+      cursor: col-resize;
+      position: absolute;
+      z-index: 5;
+}

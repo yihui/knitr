@@ -11,10 +11,10 @@ new_cache = function() {
   }
 
   cache_purge = function(hash) {
-    for (h in hash) unlink(str_c(cache_path(h), c('.rdb', '.rdx', '.RData')))
+    for (h in hash) unlink(paste(cache_path(h), c('rdb', 'rdx', 'RData'), sep = '.'))
   }
 
-  cache_save = function(keys, outname, hash) {
+  cache_save = function(keys, outname, hash, lazy = TRUE) {
     # keys are new variables created; outname is the text output of a chunk
     path = cache_path(hash)
     # add random seed to cache if exists
@@ -22,18 +22,22 @@ new_cache = function() {
       copy_env(globalenv(), knit_global(), '.Random.seed')
       outname = c('.Random.seed', outname)
     }
-    save(list = outname, file = str_c(path, '.RData'), envir = knit_global())
+    if (!lazy) outname = c(keys, outname)
+    save(list = outname, file = paste(path, 'RData', sep = '.'), envir = knit_global())
+    if (!lazy) return()  # everything has been saved; no need to make lazy db
     # random seed is always load()ed
     keys = setdiff(keys, '.Random.seed')
-    tools:::makeLazyLoadDB(knit_global(), path, variables = keys)
+    getFromNamespace('makeLazyLoadDB', 'tools')(knit_global(), path, variables = keys)
   }
 
   save_objects = function(objs, label, path) {
-    ## save object names
-    x = str_c(c(label, objs), collapse = '\t')
+    if (length(objs) == 0L) objs = ''
+    # save object names
+    x = paste(c(label, objs), collapse = '\t')
     if (file.exists(path)) {
       lines = readLines(path)
-      idx = substr(lines, 1L, nchar(label)) == label
+      lines = lines[lines != label] # knitr < 1.5 may have lines == label
+      idx = substr(lines, 1L, nchar(label) + 1L) == paste(label, '\t', sep = '')
       if (any(idx)) {
         lines[idx] = x  # update old objects
       } else lines = c(lines, x)
@@ -42,16 +46,16 @@ new_cache = function() {
   }
   cache_objects = function(keys, code, label, path) {
     save_objects(keys, label, valid_path(path, '__objects'))
-    ## find globals in code; may not be reliable
+    # find globals in code; may not be reliable
     save_objects(find_globals(code), label, valid_path(path, '__globals'))
   }
 
-  cache_load = function(hash) {
+  cache_load = function(hash, lazy = TRUE) {
     path = cache_path(hash)
     if (!is_abs_path(path)) path = file.path(getwd(), path)
-    lazyLoad(path, envir = knit_global())
+    if (lazy) lazyLoad(path, envir = knit_global())
     # load output from last run if exists
-    if (file.exists(path2 <- str_c(path, '.RData'))) {
+    if (file.exists(path2 <- paste(path, 'RData', sep = '.'))) {
       load(path2, envir = knit_global())
       if (exists('.Random.seed', envir = knit_global()))
         copy_env(knit_global(), globalenv(), '.Random.seed')
@@ -59,28 +63,30 @@ new_cache = function() {
   }
 
   cache_library = function(path, save = TRUE) {
-    ## save or load R packages
+    # save or load R packages
     path = valid_path(path, '__packages')
     if (save) {
-      x = .packages()
-      if (file.exists(path)) x = unique(c(x, readLines(path)))
-      cat(x, file = path, sep = '\n')
+      x = rev(.packages())
+      if (file.exists(path)) x = setdiff(c(readLines(path), x), .base.pkgs)
+      writeLines(x, path)
     } else {
       if (!file.exists(path)) return()
-      for (p in setdiff(readLines(path), .base.pkgs))
+      for (p in readLines(path))
         suppressPackageStartupMessages(library(p, character.only = TRUE))
     }
   }
 
-  cache_exists = function(hash) {
-    all(file.exists(str_c(cache_path(hash), c('.rdb', '.rdx'))))
+  cache_exists = function(hash, lazy = TRUE) {
+    is.character(hash) &&
+      all(file.exists(paste(
+        cache_path(hash), if (lazy) c('rdb', 'rdx') else 'RData', sep = '.'
+      )))
   }
 
-  ## code output is stored in .[hash], so cache=TRUE won't lose output as cacheSweave does
-  cache_output = function(hash) {
-    if (exists(str_c('.', hash), envir = knit_global(), mode = 'character')) {
-      get(str_c('.', hash), envir = knit_global(), mode = 'character')
-    } else ''
+  # when cache=3, code output is stored in .[hash], so cache=TRUE won't lose
+  # output as cacheSweave does; for cache=1,2, output is the evaluate() list
+  cache_output = function(hash, mode = 'character') {
+    get(sprintf('.%s', hash), envir = knit_global(), mode = mode, inherits = FALSE)
   }
 
   list(purge = cache_purge, save = cache_save, load = cache_load, objects = cache_objects,
@@ -88,10 +94,12 @@ new_cache = function() {
 }
 # analyze code and find out global variables
 find_globals = function(code) {
-  fun = eval(parse(text = str_c(c('function(){', code, '}'), collapse='\n')))
-  setdiff(codetools::findGlobals(fun),
-          c('{', '[', ':', '<-', '=', '+', '-', '*', '/', '%%', '%/%', '%*%', '%*%', '%o%', '%in%'))
+  fun = eval(parse_only(c('function(){', code, '}')))
+  setdiff(codetools::findGlobals(fun), known_globals)
 }
+known_globals = c(
+  '{', '[', '(', ':', '<-', '=', '+', '-', '*', '/', '%%', '%/%', '%*%', '%o%', '%in%'
+)
 
 cache = new_cache()
 
@@ -111,42 +119,38 @@ cache = new_cache()
 #'   from the working directory before calling \code{knit()}, you need to adjust
 #'   the \code{path} argument here to make sure this function can find the cache
 #'   files \file{__objects} and \file{__globals}.
-#'
-#'   \code{build_dep} is a deprecated alias for \code{dep_auto} and may be
-#'   removed in the future.
 #' @export
 #' @seealso \code{\link{dep_prev}}
 #' @references \url{http://yihui.name/knitr/demo/cache/}
 dep_auto = function(path = opts_chunk$get('cache.path')) {
+  # this function should be evaluated in the original working directory
+  owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
   paths = valid_path(path, c('__objects', '__globals'))
   locals = parse_objects(paths[1L]); globals = parse_objects(paths[2L])
   if (is.null(locals) || is.null(globals)) return(invisible(NULL))
   if (!identical(names(locals), names(globals))) {
     warning('corrupt dependency files? \ntry remove ',
-            str_c(paths, collapse = '; '))
+            paste(paths, collapse = '; '))
     return(invisible(NULL))
   }
   nms = intersect(names(knit_code$get()), names(locals)) # guarantee correct order
+  # locals may contain old chunk names; the intersection can be of length < 2
+  if (length(nms) < 2) return(invisible(NULL))
   for (i in 2:length(nms)) {
+    if (length(g <- globals[[nms[i]]]) == 0) next
     for (j in 1:(i - 1L)) {
-      ## check if current globals are in old locals
-      if (length(globals[[nms[i]]]) && any(globals[[nms[i]]] %in% locals[[nms[j]]]))
-        dep_list$set(setNames(list(c(dep_list$get(nms[j]), nms[i])), nms[j]))
+      # check if current globals are in old locals
+      if (any(g %in% locals[[nms[j]]]))
+        dep_list$set(setNames(list(unique(c(dep_list$get(nms[j]), nms[i]))), nms[j]))
     }
   }
-}
-#' @export
-#' @rdname dep_auto
-build_dep = function(path) {
-  warning('the function build_dep() is deprecated; please use dep_auto() instead')
-  dep_auto(path)
 }
 # parse objects in dependency files
 parse_objects = function(path) {
   if (!file.exists(path)) {
     warning('file ', path, ' not found'); return()
   }
-  lines = str_split(readLines(path), '\t')
+  lines = strsplit(readLines(path), '\t')
   if (length(lines) < 2L) return()  # impossible for dependson
   objs = lapply(lines, `[`, -1L)
   names(objs) = lapply(lines, `[`, 1L)
@@ -166,6 +170,7 @@ parse_objects = function(path) {
 dep_prev = function() {
   labs = names(knit_code$get())
   if ((n <- length(labs)) < 2L) return() # one chunk or less; no sense of deps
+  opts_knit$set(warn.uncached.dep = FALSE)
   for (i in 1L:(n - 1L)) {
     dep_list$set(setNames(list(labs[(i + 1L):n]), labs[i]))
   }
@@ -176,8 +181,8 @@ dep_prev = function() {
 #' This expression returns \code{.Random.seed} when \code{eval(rand_seed)} and
 #' \code{NULL} otherwise.
 #'
-#' It is designed to work with \code{opts_knit$set(cache.extra = rand_seed)} for
-#' reproducibility of chunks that involve with random number generation. See
+#' It is designed to work with \code{opts_chunk$set(cache.extra = rand_seed)}
+#' for reproducibility of chunks that involve with random number generation. See
 #' references.
 #' @export
 #' @references \url{http://yihui.name/knitr/demo/cache/}

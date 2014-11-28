@@ -1,5 +1,6 @@
-## copy objects in one environment to the other
+# copy objects in one environment to the other
 copy_env = function(from, to, keys = ls(envir = from, all.names = TRUE)) {
+  if (identical(from, to)) return()
   for (i in keys) assign(i, get(i, envir = from, inherits = FALSE), envir = to)
 }
 
@@ -16,41 +17,41 @@ knit_counter = function(init = 0L) {
 plot_counter = knit_counter(1L)
 chunk_counter = knit_counter(1L)
 
-## a vectorized and better version than evaluate:::line_prompt
+# a vectorized and better version than evaluate:::line_prompt
 line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('continue')) {
   # match a \n, then followed by any character (use zero width assertion)
-  str_c(prompt, gsub('(?<=\n)(?=.|\n)', continue, x, perl = TRUE))
+  paste(prompt, gsub('(?<=\n)(?=.|\n)', continue, x, perl = TRUE), sep = '')
 }
 
-## add a prefix to output
+# add a prefix to output
 comment_out = function(x, prefix = '##', which = TRUE, newline = TRUE) {
   x = gsub('[\n]{2,}$', '\n', x)
   if (newline) x = gsub('([^\n])$', '\\1\n', x)  # add \n if not exists
   if (is.null(prefix) || !nzchar(prefix) || is.na(prefix)) return(x)
-  prefix = str_c(prefix, ' ')
+  prefix = paste(prefix, '')
   x = gsub(' +([\n]*)$', '\\1', x)
   x[which] = line_prompt(x[which], prompt = prefix, continue = prefix)
   x
 }
 
-## assign string in comments to a global variable
+# assign string in comments to a global variable
 comment_to_var = function(x, varname, pattern, envir) {
-  if (str_detect(x, pattern)) {
-    assign(varname, str_replace(x, pattern, ''), envir = envir)
+  if (grepl(pattern, x)) {
+    assign(varname, sub(pattern, '', x), envir = envir)
     return(TRUE)
   }
   FALSE
 }
 
 is_blank = function(x) {
-  str_detect(x, '^\\s*$')
+  if (length(x)) all(grepl('^\\s*$', x)) else TRUE
 }
 valid_path = function(prefix, label) {
   if (length(prefix) == 0L || is.na(prefix) || prefix == 'NA') prefix = ''
-  str_c(prefix, label)
+  paste(prefix, label, sep = '')
 }
 
-## define a color variable in TeX
+# define a color variable in TeX
 color_def = function(col, variable = 'shadecolor') {
   x = if (length(col) == 1L) sc_split(col) else col
   if ((n <- length(x)) != 3L) {
@@ -67,39 +68,41 @@ color_def = function(col, variable = 'shadecolor') {
   sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
 }
 
-## split by semicolon or colon
+# split by semicolon or colon
 sc_split = function(string) {
   if (is.call(string)) string = eval(string)
   if (is.numeric(string) || length(string) > 1L) return(string)
   str_trim(str_split(string, ';|,')[[1]])
 }
 
-## extract LaTeX packages for tikzDevice
-set_preamble = function(input) {
+# extract LaTeX packages for tikzDevice
+set_preamble = function(input, patterns = knit_patterns$get()) {
   if (!out_format('latex')) return()
-  db = knit_patterns$get('document.begin')
-  if (length(db) != 1L) return()  # no \begin{document} pattern
-  hb = knit_patterns$get('header.begin')
-  if (length(hb) != 1L) return()  # no \documentclass{} pattern
-  idx2 = str_detect(input, db)
+  .knitEnv$tikzPackages = .knitEnv$bibliography = NULL
+  if (length(db <- patterns$document.begin) != 1L) return()  # no \begin{document} pattern
+  if (length(hb <- patterns$header.begin) != 1L) return()  # no \documentclass{} pattern
+  idx2 = grepl(db, input)
   if (!any(idx2)) return()
   if ((idx2 <- which(idx2)[1]) < 2L) return()
-  txt = str_c(input[seq_len(idx2 - 1L)], collapse = '\n')  # rough preamble
+  txt = paste(input[seq_len(idx2 - 1L)], collapse = '\n')  # rough preamble
   idx = str_locate(txt, hb)  # locate documentclass
   if (any(is.na(idx))) return()
   options(tikzDocumentDeclaration = str_sub(txt, idx[, 1L], idx[, 2L]))
-  preamble = pure_preamble(split_lines(str_sub(txt, idx[, 2L] + 1L)))
+  preamble = pure_preamble(split_lines(str_sub(txt, idx[, 2L] + 1L)), patterns)
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
+  .knitEnv$bibliography = grep('^\\\\bibliography.+', input, value = TRUE)
 }
-## filter out code chunks from preamble if they exist (they do in LyX/Sweave)
-pure_preamble = function(preamble) {
-  res = split_file(lines = preamble, set.preamble = FALSE) # should avoid recursion
+# filter out code chunks from preamble if they exist (they do in LyX/Sweave)
+pure_preamble = function(preamble, patterns) {
+  res = split_file(lines = preamble, set.preamble = FALSE, patterns) # should avoid recursion
   if (!parent_mode()) {
-    ## when not in parent mode, just return normal texts and skip code
+    # when not in parent mode, just return normal texts and skip code
     return(unlist(res))
   }
   owd = setwd(input_dir()); on.exit(setwd(owd))
-  ## run the code in the preamble
+  progress = opts_knit$get('progress')  # suppress printing of blocks and texts
+  opts_knit$set(progress = FALSE); on.exit(opts_knit$set(progress = progress), add = TRUE)
+  # run the code in the preamble
   sapply(res, if (opts_knit$get('tangle')) process_tangle else process_group)
 }
 
@@ -132,24 +135,44 @@ pure_preamble = function(preamble) {
 #'
 #' # @@
 set_parent = function(parent) {
-  if (child_mode()) return() # quit if in child mode
+  if (child_mode()) return(invisible(NULL)) # quit if in child mode
   opts_knit$set(parent = TRUE)
   set_preamble(readLines(parent, warn = FALSE))
   invisible(NULL)
 }
 
-## whether to write results as-is?
+# whether to write results as-is?
 output_asis = function(x, options) {
   is_blank(x) || options$results == 'asis'
 }
 
-## path relative to dir of the input file
-input_dir = function() .knitEnv$input.dir %n% '.'
+# path relative to dir of the input file
+input_dir = function() {
+  # LyX is a special case: the input file is in tempdir, and we should use
+  # root.dir as the real input dir (#809)
+  (if (is_lyx()) opts_knit$get('root.dir')) %n% .knitEnv$input.dir %n% '.'
+}
 
-## scientific notation in TeX, HTML and reST
+is_lyx = function() {
+  args = commandArgs(TRUE)
+  if (length(args) < 4) return(FALSE)
+  grepl('[.]Rnw$', args[1]) &&
+    !is.na(Sys.getenv('LyXDir', NA)) && !is.na(Sys.getenv('LYXSOCKET', NA))
+}
+
+# scientific notation in TeX, HTML and reST
 format_sci_one = function(x, format = 'latex') {
 
-  if (!is.double(x) || is.na(x) || x == 0) return(as.character(x))
+  if (!(class(x)[1] == 'numeric') || is.na(x) || x == 0) return(as.character(x))
+
+  if (is.infinite(x)) {
+    return(
+      switch(format, latex = {
+        sprintf("%s\\infty{}", ifelse(x < 0, "-", ""))
+      }, html = {
+        sprintf("%s&infin;", ifelse(x < 0, "-", ""))
+      }, as.character(x)))
+  }
 
   if (abs(lx <- floor(log10(abs(x)))) < getOption('scipen') + 4L)
     return(as.character(round(x, getOption('digits')))) # no need sci notation
@@ -158,9 +181,11 @@ format_sci_one = function(x, format = 'latex') {
   b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
-    s = sci_notation('%s%s10^{%s}', b, '\\times ', lx)
-    sprintf('\\ensuremath{%s}', s)
-  }, html = sci_notation('%s%s10<sup>%s</sup>', b, ' &times; ', lx), rst = {
+    sci_notation('%s%s10^{%s}', b, '\\times ', lx)
+  },
+  html = sci_notation('%s%s10<sup>%s</sup>', b, ' &times; ', lx),
+  md   = sci_notation('%s%s10^%s^', b, '&times; ', lx),
+  rst  = {
     # if AsIs, use the :math: directive
     if (inherits(x, 'AsIs')) {
       s = sci_notation('%s%s10^{%s}', b, '\\times ', lx)
@@ -177,101 +202,54 @@ sci_notation = function(format, base, times, power) {
   sprintf(format, base, ifelse(base == '', '', times), power)
 }
 
-## vectorized version of format_sci_one()
+# vectorized version of format_sci_one()
 format_sci = function(x, ...) {
   vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 
-## absolute path?
+# absolute path?
 is_abs_path = function(x) {
-  if (.Platform$OS.type == 'windows')
+  if (is_windows())
     grepl(':', x, fixed = TRUE) || grepl('^\\\\', x) else grepl('^[/~]', x)
 }
 
-## is tikz device without externalization?
+# is tikz device without externalization?
 is_tikz_dev = function(options) {
   'tikz' %in% options$dev && !options$external
 }
 
 tikz_dict = function(path) {
-  str_c(file_path_sans_ext(basename(path)), '-tikzDictionary')
+  paste(sans_ext(basename(path)), 'tikzDictionary', sep = '-')
 }
 
-## compatibility with Sweave and old beta versions of knitr
+# compatibility with Sweave and old beta versions of knitr
 fix_options = function(options) {
-  ## compatibility with Sweave
-  for (dev in c('pdf', 'eps', 'jpeg', 'png')) {
-    if (isTRUE(options[[dev]])) {
-      options$dev = dev
-      warning('chunk option ', dev,
-              "=TRUE deprecated in knitr; use new option 'dev' please")
-      break
-    }
-  }
-  if (any(idx <- options$dev == 'eps')) options$dev[idx] = 'postscript'
-  if (options$results == 'tex') {
-    warning("option 'results' was changed from 'tex' to 'asis'")
-    options$results = 'asis'
-  }
-
-  ## compatibility with old version of knitr
-  fig = options$fig
-  if (identical(fig, FALSE)) {
-    warning("option 'fig' deprecated; use fig.keep='none' please")
-    options$fig.keep = 'none'
-  } else if (identical(fig, TRUE)) {
-    if (isTRUE(options$fig.last)) {
-      warning("option 'fig.last' deprecated; use fig.keep='last' please")
-      options$fig.keep = 'last'
-    }
-    if (isTRUE(options$fig.low)) {
-      warning("option 'fig.low' deprecated; use fig.keep='all' please")
-      options$fig.keep = 'all'
-    }
-  }
-  hold = options$fig.hold
-  if (identical(hold, FALSE)) {
-    warning("option 'fig.hold' deprecated; use fig.show='asis' please")
-    options$fig.show = 'asis'
-  } else if (identical(hold, TRUE)) {
-    warning("option 'fig.hold' deprecated; use fig.show='hold' please")
-    options$fig.show = 'hold'
-  }
-  if (isTRUE(options$animate)) {
-    warning("option 'animate' deprecated; use fig.show='animate' please")
-    options$fig.show = 'animate'
-  }
-
-  align = options$align
-  if (!is.null(align)) {
-    warning("option 'align' deprecated; use fig.align instead")
-    options$fig.align = align
-  }
-  width = options$width
-  if (!is.null(width)) {
-    warning("option 'width' deprecated; use fig.width instead")
-    options$fig.width = width
-  }
-  height = options$height
-  if (!is.null(height)) {
-    warning("option 'height' deprecated; use fig.height instead")
-    options$fig.height = height
-  }
-
-  prefix = options$prefix.string
-  if (!is.null(prefix)) {
-    warning("option 'prefix.string' deprecated; use fig.path instead")
-    options$fig.path = prefix
-  }
-  prefix = options$prefix.cache
-  if (!is.null(prefix)) {
-    warning("option 'prefix.cache' deprecated; use cache.path instead")
-    options$cache.path = prefix
-  }
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
+  # the default device NULL is not valid; use pdf is not set
+  if (is.null(options$dev)) options$dev = 'pdf'
 
-  ## deal with aliases: a1 is real option; a0 is alias
+  # cache=TRUE -> 3; FALSE -> 0
+  if (is.logical(options$cache)) options$cache = options$cache * 3
+  # non-R code should not use cache=1,2
+  if (options$engine != 'R') options$cache = (options$cache > 0) * 3
+
+  # out.[width|height].px: unit in pixels for sizes
+  for (i in c('width', 'height')) {
+    options[[sprintf('out.%s.px', i)]] = options[[sprintf('out.%s', i)]] %n%
+      (options[[sprintf('fig.%s', i)]] * options$dpi)
+  }
+  # for Retina displays, increase physical size, and decrease output size
+  if (is.numeric(r <- options$fig.retina) && r != 1) {
+    if (is.null(options$out.width)) {
+      options$out.width = options$fig.width * options$dpi
+    } else {
+      warning('You must not set both chunk options out.width and fig.retina')
+    }
+    options$dpi = options$dpi * r
+  }
+
+  # deal with aliases: a1 is real option; a0 is alias
   if (length(a1 <- opts_knit$get('aliases')) && length(a0 <- names(a1))) {
     for (i in seq_along(a1)) {
       # use alias only if the name exists in options
@@ -282,31 +260,28 @@ fix_options = function(options) {
   options
 }
 
-## try eval an option (character) to its value
-eval_opt = function(x) {
-  if (!is.character(x)) return(x)
-  eval(parse(text = x), envir = knit_global())
-}
+# parse but do not keep source
+parse_only = formatR:::parse_only
 
-## eval options as symbol/language objects
+# eval options as symbol/language objects
 eval_lang = function(x, envir = knit_global()) {
   if (!is.symbol(x) && !is.language(x)) return(x)
   eval(x, envir = envir)
 }
 
-## counterpart of isTRUE()
+# counterpart of isTRUE()
 isFALSE = function(x) identical(x, FALSE)
 
-## check latex packages; if not exist, copy them over to ./
+# check latex packages; if not exist, copy them over to ./
 test_latex_pkg = function(name, path) {
-  res = try(system(sprintf('kpsewhich %s.sty', name), intern = TRUE), silent = TRUE)
+  res = try_silent(system(sprintf('%s %s.sty', kpsewhich(), name), intern = TRUE))
   if (inherits(res, 'try-error') || !length(res)) {
     warning("unable to find LaTeX package '", name, "'; will use a copy from knitr")
     file.copy(path, '.')
   }
 }
 
-## get child and parent mode
+# get child and parent mode
 child_mode = function() opts_knit$get('child')
 parent_mode = function() opts_knit$get('parent')
 
@@ -316,170 +291,100 @@ out_format = function(x) {
   if (missing(x)) fmt else !is.null(fmt) && (fmt %in% x)
 }
 
+# rmarkdown sets an option for the Pandoc output format from markdown
+pandoc_to = function(x) {
+  fmt = opts_knit$get('rmarkdown.pandoc.to')
+  if (missing(x)) fmt else !is.null(fmt) && (fmt %in% x)
+}
+
 #' Path for figure files
 #'
 #' The filename of figure files is the combination of options \code{fig.path}
 #' and \code{label}. This function returns the path of figures for the current
 #' chunk by default.
-#' @param suffix a suffix of the filename
+#' @param suffix a suffix of the filename; if it is not empty, nor does it
+#'   contain a dot \code{.}, it will be treated as the filename extension (e.g.
+#'   \code{png} will be used as \code{.png})
 #' @param options a list of options; by default the options of the current chunk
-#' @return A character string (path)
-#' @note When there are multiple figures in a chunk, this function only provides
-#'   a prefix of the filenames by default, and the actual filenames are of the
-#'   form \file{prefix1}, \file{prefix2}, ... where \file{prefix} is the string
-#'   returned by this function.
-#'
-#'   When there are special characters (not alphanumeric or \samp{-} or
+#' @param number the current figure number (by default the internal chunk option
+#'   \code{fig.cur} if available)
+#' @return A character vector of the form \file{fig.path-label-i.suffix}.
+#' @note When there are special characters (not alphanumeric or \samp{-} or
 #'   \samp{_}) in the path, they will be automatically replaced with \samp{_}.
 #'   For example, \file{a b/c.d-} will be sanitized to \file{a_b/c_d-}. This
 #'   makes the filenames safe to LaTeX.
 #' @export
-#' @examples fig_path('.pdf', list(fig.path='figure/abc-', label='first-plot'))
-#' fig_path(1:10, list(fig.path='foo-', label='bar'))
-fig_path = function(suffix = '', options = opts_current$get()) {
+#' @examples fig_path('.pdf', options = list(fig.path='figure/abc-', label='first-plot'))
+#' fig_path('.png', list(fig.path='foo-', label='bar'), 1:10)
+fig_path = function(suffix = '', options = opts_current$get(), number) {
+  if (suffix != '' && !grepl('[.]', suffix)) suffix = paste('.', suffix, sep = '')
+  if (missing(number)) number = options$fig.cur %n% 1L
+  if (!is.null(number)) suffix = paste('-', number, suffix, sep = '')
   path = valid_path(options$fig.path, options$label)
-  if (!out_format(c('latex', 'sweave', 'listings'))) return(str_c(path, suffix))
-  # sanitize filename for LaTeX
-  if (str_detect(path, '[^-_./\\[:alnum:]]')) {
+  (if (out_format(c('latex', 'sweave', 'listings'))) sanitize_fn else
+    str_c)(path, suffix)
+}
+# sanitize filename for LaTeX
+sanitize_fn = function(path, suffix = '') {
+  if (grepl('[^~:_./\\[:alnum:]-]', path)) {
     warning('replaced special characters in figure filename "', path, '" -> "',
-            path <- str_replace_all(path, '[^-_./\\[:alnum:]]', '_'), '"')
+            path <- gsub('[^~:_./\\[:alnum:]-]', '_', path), '"')
   }
   # replace . with _ except ../ and ./
   s = str_split(path, '[/\\]')[[1L]]
-  i = (s != '.') & (s != '..') & str_detect(s, '\\.')
+  i = (s != '.') & (s != '..') & grepl('\\.', s)
   if (any(i)) {
-    s[i] = str_replace_all(s[i], '\\.', '_')
-    path = str_c(s, collapse = '/')
+    s[i] = gsub('\\.', '_', s[i])
+    path = paste(s, collapse = '/')
     warning('dots in figure paths replaced with _ ("', path, '")')
   }
   str_c(path, suffix)
 }
 
-#' The environment in which a code chunk is evaluated
+#' Obtain the figure filenames for a chunk
+#'
+#' Given a chunk label, the figure file extension, the figure number(s), and the
+#' chunk option \code{fig.path}, return the filename(s).
+#'
+#' This function can be used in an inline R expression to write out the figure
+#' filenames without hard-coding them. For example, if you created a plot in a
+#' code chunk with the label \code{foo} and figure path \file{my-figure/}, you
+#' are not recommended to use hard-coded figure paths like
+#' \samp{\includegraphics{my-figure/foo-1.pdf}} (in \file{.Rnw} documents) or
+#' \samp{![](my-figure/foo-1.png)} (R Markdown) in your document. Instead, you
+#' should use \samp{\\Sexpr{fig_chunk('foo', 'pdf')}} or \samp{![](`r
+#' fig_chunk('foo', 'png')`)}.
+#'
+#' You can generate plots in a code chunk but not show them inside the code
+#' chunk by using the chunk option \code{fig.show = 'hide'}. Then you can use
+#' this function if you want to show them elsewhere.
+#' @param label the chunk label
+#' @param ext the figure file extension, e.g. \code{png} or \code{pdf}
+#' @param number the figure number (by default \code{1})
+#' @param fig.path the chunk option \code{fig.path}
+#' @return A character vector of filenames.
+#' @export
+#' @examples library(knitr)
+#' fig_chunk('foo', 'png')
+#' fig_chunk('foo', 'pdf')
+#' fig_chunk('foo', 'svg', 2)  # the second plot of the chunk foo
+#' fig_chunk('foo', 'png', 1:5)  # if the chunk foo produced 5 plots
+fig_chunk = function(label, ext = '', number, fig.path = opts_chunk$get('fig.path')) {
+  fig_path(ext, list(fig.path = fig.path, label = label), number)
+}
+
+#' The global environment in which code chunks are evaluated
 #'
 #' This function makes the environment of a code chunk accessible inside a
 #' chunk.
 #'
-#' In some special cases, we need access to the environment of the current
-#' chunk, e.g., to make sure the code is executed in the correct environment.
-#' @references \url{http://yihui.name/knitr/demo/cache/}
-#' @keywords internal
+#' It returns the \code{envir} argument of \code{\link{knit}}, e.g. if we call
+#' \code{\link{knit}()} in the global environment, \code{knit_global()} returns
+#' R's global environment by default. You can call functions like
+#' \code{\link{ls}()} on this environment.
 #' @export
-knit_env = function() {
-  .knitEnv$knit_env
-}
-# 'global' environment for knitr
 knit_global = function() {
-  .knitEnv$knit_global
-}
-
-#' A wrapper for rst2pdf
-#'
-#' Convert reST to PDF using \command{rst2pdf} (which converts from rst to PDF
-#' using the ReportLab open-source library).
-#' @param input the input rst file
-#' @param command a character string which gives the path of the
-#'   \command{rst2pdf} program (if it is not in PATH, the full path has to be
-#'   given)
-#' @param options extra command line options, e.g. \code{'-o foo.pdf -v'}
-#' @author Alex Zvoleff
-#' @export
-#' @seealso \code{\link{knit2pdf}}
-#' @references \url{http://rst2pdf.ralsina.com.ar/}
-rst2pdf = function(input, command = 'rst2pdf', options = '') {
-  system2(command, paste(input, options))
-}
-
-#' Convert Rnw or Rrst files to PDF using knit() and texi2pdf() or rst2pdf()
-#'
-#' Knit the input Rnw or Rrst document, and compile to PDF using \code{texi2pdf}
-#' or \code{rst2pdf}.
-#' @inheritParams knit
-#' @param compiler a character string which gives the LaTeX program used to
-#'   compile the tex document to PDF (by default it uses the default setting of
-#'   \code{\link[tools]{texi2pdf}}, which is often PDFLaTeX); this argument will
-#'   be used to temporarily set the environmental variable \samp{PDFLATEX}. For
-#'   an Rrst file, setting compiler to \code{'rst2pdf'} will use
-#'   \code{\link{rst2pdf}} to compiles the rst file to PDF using the ReportLab
-#'   open-source library.
-#' @param ... options to be passed to \code{\link[tools]{texi2pdf}} or
-#'   \code{\link{rst2pdf}}
-#' @author Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
-#' @export
-#' @importFrom tools texi2pdf
-#' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}},
-#'   \code{\link{rst2pdf}}
-#' @examples ## compile with xelatex
-#'
-#' ## knit2pdf(..., compiler = 'xelatex')
-#'
-#' ## compile a reST file with rst2pdf
-#'
-#' ## knit2pdf(..., compiler = 'rst2pdf')
-knit2pdf = function(input, output = NULL, compiler = NULL, ..., envir = parent.frame()) {
-  out = knit(input, output, envir = envir)
-  owd = setwd(dirname(out)); on.exit(setwd(owd))
-  if (!is.null(compiler)) {
-    if (compiler == 'rst2pdf') {
-      if (tolower(file_ext(out)) != 'rst') stop('for rst2pdf compiler input must be a .rst file')
-      return(rst2pdf(basename(out), ...))
-    } else {
-      # use the specified PDFLATEX command
-      oc = Sys.getenv('PDFLATEX')
-      on.exit(Sys.setenv(PDFLATEX = oc), add = TRUE)
-      Sys.setenv(PDFLATEX = compiler)
-    }
-  }
-  texi2pdf(basename(out), ...)
-}
-
-#' Convert markdown to HTML using knit() and markdownToHTML()
-#'
-#' This is a convenience function to knit the input markdown source and call
-#' \code{markdownToHTML()} to convert the result to HTML.
-#' @inheritParams knit
-#' @param ... options passed to \code{\link[markdown]{markdownToHTML}}
-#' @export
-#' @seealso \code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}
-#' @return If the argument \code{text} is NULL, a character string (HTML code)
-#'   is returned; otherwise the result is written into a file and \code{NULL} is
-#'   returned.
-#' @examples # a minimal example
-#' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
-#' knit2html('test.Rmd')
-#' if (interactive()) browseURL('test.html')
-knit2html = function(input, ..., text = NULL, envir = parent.frame()){
-  if (is.null(text)) {
-    out = knit(input, envir = envir)
-    markdown::markdownToHTML(out, str_c(file_path_sans_ext(out), '.html'), ...)
-  } else {
-    out = knit(text = text, envir = envir)
-    markdown::markdownToHTML(text = out, ...)
-  }
-}
-
-
-#' Run the code in a specified chunk
-#'
-#' We can specify a chunk label and use this function to evaluate the code in
-#' this chunk. It is an alternative to the chunk reference in Sweave.
-#'
-#' The difference between this type of chunk reference and the chunk option
-#' \code{ref.label} is that the latter can only be used for a chunk so that it
-#' has exactly the same code as the reference chunk, whereas this function makes
-#' it possible to collect several little chunks and run them inside another big
-#' chunk.
-#' @param label the chunk label
-#' @param envir the environment in which to evaluate the code
-#' @return Values returned by the code in the chunk.
-#' @note Recursion (must be finite, of course) of reference is allowed, e.g. we
-#'   may run the code of \samp{chunk2} in \samp{chunk1}, and \samp{chunk2} also
-#'   contains a reference to \samp{chunk3}, then if we run \samp{chunk1}, both
-#'   the code in \samp{chunk2} and \samp{chunk3} will be evaluated.
-#' @export
-#' @examples # see http://yihui.name/knitr/demo/reference/
-run_chunk = function(label, envir = parent.frame()) {
-  eval(parse(text = knit_code$get(label)), envir = envir)
+  .knitEnv$knit_global %n% globalenv()
 }
 
 # Indents a Block
@@ -489,18 +394,20 @@ run_chunk = function(label, envir = parent.frame()) {
 #          library(ggplot2)
 #          qplot(wt, mpg, data  = mtcars)
 indent_block = function(block, spaces = '    ') {
-  if (is.null(block) || !nzchar(block)) return(spaces)
+  if (is.null(block) || !any(nzchar(block))) return(rep(spaces, length(block)))
+  if (spaces == '') return(block)
   line_prompt(block, spaces, spaces)
 }
 
 # print knitr logs
 print_knitlog = function() {
-  if (!opts_knit$get('verbose') || child_mode() || !length(klog <- knit_log$get()))
+  if (!opts_knit$get('verbose') || child_mode() || !length(klog <- knit_log$get(drop = FALSE)))
     return()
+
   for (i in unlist(klog, use.names = FALSE)) {
-    cat(i, '\n\n')
-    cat(knit_code$get(sub('^Chunk ([^:]+):\n.*', '\\1', i)), sep = '\n')
-    cat('\n')
+    cat(sub('\n+$', '', i), '\n\n')
+    if (length(code <- knit_code$get(sub('^Chunk ([^:]+):\n.*', '\\1', i))))
+      cat(code, sep = '\n')
   }
   cat('\nNumber of messages:\n')
   print(sapply(klog, length))
@@ -523,41 +430,36 @@ merge_list = function(x, y) {
 
 # paths of all figures
 all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
-  fig_path(paste(if (num == 1L) '' else seq_len(num),
-                 '.', ext, sep = ''), options)
-}
-
-# remind about deprecated syntax
-reminder = function(...) {
-  warning(..., call. = FALSE)
-  Sys.sleep(opts_knit$get('sweave.penalty'))  # force you to pay attention!
+  fig_path(ext, options, number = seq_len(num))
 }
 
 # evaluate an expression in a diretory and restore wd after that
 in_dir = function(dir, expr) {
-  owd = setwd(dir); on.exit(setwd(owd))
+  if (!is.null(dir)) {
+    owd = setwd(dir); on.exit(setwd(owd))
+  }
   expr
 }
 
+# evaluate under the base.dir
+in_base_dir = function(expr) {
+  in_dir(opts_knit$get('base.dir'), expr)
+}
+
 # escape special LaTeX characters
-escape_latex = function(x, newlines = FALSE) {
+escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
   x = gsub('\\\\', '\\\\textbackslash', x)
   x = gsub('([#$%&_{}])', '\\\\\\1', x)
-  x = gsub('\\\\textbackslash([^{]|$)', '\\\\textbackslash{}\\1', x)
+  x = gsub('\\\\textbackslash', '\\\\textbackslash{}', x)
   x = gsub('~', '\\\\textasciitilde{}', x)
   x = gsub('\\^', '\\\\textasciicircum{}', x)
-  if (newlines) x = gsub('\n', '\\\\\\\\', x)
+  if (newlines) x = gsub('(?<!\n)\n(?!\n)', '\\\\\\\\', x, perl = TRUE)
+  if (spaces) x = gsub('  ', '\\\\ \\\\ ', x)
   x
 }
 
 # escape special HTML chars
-escape_html = function(x) {
-  x = gsub('&', '&amp;', x)
-  x = gsub('<', '&lt;', x)
-  x = gsub('>', '&gt;', x)
-  x = gsub('"', '&quot;', x)
-  x
-}
+escape_html = highr:::escape_html
 
 #' Read source code from R-Forge
 #'
@@ -566,14 +468,13 @@ escape_html = function(x) {
 #' @param project name of the R-Forge project
 #' @param extra extra parameters to be passed to the URL (e.g. \code{extra =
 #'   '&revision=48'} to check out the source of revision 48)
-#' @param base the base URL
 #' @return A character vector of the source code.
 #' @author Yihui Xie and Peter Ruckdeschel
 #' @export
-#' @examples \dontrun{read_rforge('rgl/R/axes.R', project = 'rgl')
+#' @examples \donttest{read_rforge('rgl/R/axes.R', project = 'rgl')
 #' read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')}
-read_rforge = function(path, project, extra = '',
-                      base = 'http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg') {
+read_rforge = function(path, project, extra = '') {
+  base = 'http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg'
   readLines(sprintf('%s/%s?root=%s%s', base, path, project, extra))
 }
 
@@ -583,4 +484,166 @@ split_lines = function(x) {
   con = textConnection(x)
   on.exit(close(con))
   readLines(con)
+}
+
+# if a string is encoded in UTF-8, convert it to native encoding
+native_encode = function(x, to = '') {
+  idx = Encoding(x) == 'UTF-8'
+  x2 = iconv(x, if (any(idx)) 'UTF-8' else '', to)
+  if (!any(is.na(x2))) return(x2)  # use conversion only if it succeeds
+  warning('some characters may not work under the current locale')
+  x
+}
+
+# make the encoding case-insensitive, e.g. LyX uses ISO-8859-15 but R uses iso-8859-15
+correct_encode = function(encoding) {
+  if (encoding == 'native.enc' || encoding == '') return('')
+  lcc = localeToCharset()[1L]
+  if (!is.na(lcc) && encoding == lcc) return('')
+  if (is.na(idx <- match(tolower(encoding), tolower(iconvlist())))) {
+    warning('encoding "', encoding, '" not supported; using the native encoding instead')
+    ''
+  } else iconvlist()[idx]
+}
+
+# re-encode an input file to UTF-8
+encode_utf8 = function(input, encoding = getOption('encoding'), output = input) {
+  if (encoding == 'UTF-8') {
+    if (input != output) file.copy(input, output)
+    return()
+  }
+  con = file(input, encoding = encoding)
+  tryCatch(txt <- readLines(con), finally = close(con))
+  writeLines(enc2utf8(txt), output, useBytes = TRUE)
+}
+
+# import functions from tools
+file_ext = tools::file_ext
+sans_ext = tools::file_path_sans_ext
+# substitute extension
+sub_ext = function(x, ext) {
+  if (grepl('\\.([[:alnum:]]+)$', x)) x = sans_ext(x)
+  paste(x, ext, sep = '.')
+}
+
+#' Wrap long lines in Rmd files
+#'
+#' This function wraps long paragraphs in an R Markdown file. Other elements are
+#' not wrapped: the YAML preamble, fenced code blocks, section headers and
+#' indented elements. The main reason for wrapping long lines is to make it
+#' easier to review differences in version control.
+#' @param file the input Rmd file
+#' @param width the expected line width
+#' @param text an alternative to \code{file} to input the text lines
+#' @param backup the path to back up the original file (in case anything goes
+#'   wrong); if \code{NULL}, it is ignored; by default it is constructed from
+#'   \code{file} by adding \code{__} before the base filename
+#' @return If \code{file} is provided, it is overwritten; if \code{text} is
+#'   provided, a character vector is returned.
+#' @note Currently it does not wrap blockquotes or lists (ordered or unordered).
+#'   This feature may or may not be added in the future.
+#' @export
+#' @examples wrap_rmd(text = c('```', '1+1', '```', '- a list item', '> a quote', '',
+#' paste(rep('this is a normal paragraph', 5), collapse = ' ')))
+wrap_rmd = function(file, width = 80, text = NULL, backup) {
+  x = if (is.null(text)) readLines(file, warn = FALSE) else split_lines(text)
+  x = strip_white(x)  # strip blank lines in the beginning and end
+  if ((n <- length(x)) <= 1L) return(x)  # are you kidding?
+  idx = NULL  # collect the lines to exclude from wrapping
+  i = grep('^---$', x)  # yaml preamble
+  if (length(i) > 1 && i[1L] == 1L) idx = c(idx, i[1L]:i[2L])
+  i = grep('^(```|\\{% (end|)highlight [a-z ]*%\\}|</?script.*>)', x)  # code blocks
+  if (length(i)) {
+    if (length(i) %% 2L != 0L) stop('markers for code blocks must be paired up')
+    idx = c(idx, unlist(apply(matrix(i, ncol = 2L, byrow = TRUE), 1L,
+                              function(z) z[1L]:z[2L])))
+  }
+  # section headers, indented code blocks and latex math
+  idx = c(idx, grep('^(#|===|---|    |\t)', x))
+  # blank lines
+  idx = c(idx, grep('^\\s*$', x))
+  # TODO: this is naive -- I treat a line as (a part of) a normal paragraph if
+  # it does not start with a space, or > (blockquotes) or -, *, 1. (lists), and
+  # only wrap paragraphs
+  idx = c(idx, grep('^\\s*( |> |- |\\* |\\d+ )', x))
+  idx = unique(idx)
+  if (length(idx) == n) return(x)  # no need to wrap anything
+
+  i = logical(n); i[idx] = TRUE; r = rle(i)
+  n = length(r$lengths); txt = vector('list', n); j = c(0L, cumsum(r$lengths))
+  for (i in seq_len(n)) {
+    block = x[seq(j[i] + 1L, j[i + 1])]
+    txt[[i]] = if (r$value[i]) {
+      # those lines not to be wrapped
+      gsub('\\s+$', '', block)  # strip pending spaces
+    } else {
+      strwrap(paste(block, collapse = '\n'), width)
+    }
+  }
+  txt = unlist(txt)
+  if (is.null(text)) {
+    if (missing(backup)) backup = file.path(dirname(file), paste0('__', basename(file)))
+    if (!is.null(backup)) file.copy(file, backup, overwrite = TRUE)
+    writeLines(txt, file)
+  } else txt
+}
+
+# change the default device to an appropriate device when the output is html
+# (e.g. markdown, reST, AsciiDoc)
+set_html_dev = function() {
+  # only change if device has not been set
+  if (!is.null(opts_chunk$get('dev'))) return()
+  # in some cases, png() does not work (e.g. options('bitmapType') == 'Xlib' on
+  # headless servers); use svg then
+  opts_chunk$set(dev = if (inherits(try_silent({
+    grDevices::png(tempfile()); grDevices::dev.off()
+  }), 'try-error')) 'svg' else 'png')
+}
+
+# locate kpsewhich especially for Mac OS because /usr/texbin may not be in PATH
+kpsewhich = function() {
+  if (Sys.info()['sysname'] != 'Darwin' || !file.exists(x <- '/usr/texbin/kpsewhich')
+      || nzchar(Sys.which('kpsewhich')))
+    'kpsewhich' else x
+}
+
+# call try with silent = TRUE
+try_silent = function(expr) try(expr, silent = TRUE)
+
+# check if a utility exists; if it does, save its availability in opts_knit
+has_utility = function(name, package = name) {
+  name2 = paste('util', name, sep = '_')  # e.g. util_pdfcrop
+  if (is.logical(yes <- opts_knit$get(name2))) return(yes)
+  yes = nzchar(Sys.which(name))
+  if (!yes) warning(package, ' not installed or not in PATH')
+  opts_knit$set(setNames(list(yes), name2))
+  yes
+}
+
+is_windows = function() .Platform$OS.type == 'windows'
+
+#' Query the current input filename
+#'
+#' Returns the name of the input file passed to \code{\link{knit}()}.
+#' @return A character string, if this function is called inside an input
+#'   document (otherwise \code{NULL}).
+#' @export
+current_input = function() knit_concord$get('infile')
+
+# import output handlers from evaluate
+default_handlers = evaluate:::default_output_handler
+# change the value handler in evaluate default handlers
+knit_handlers = function(fun, options) {
+  if (!is.function(fun)) fun = knit_print
+  if (length(formals(fun)) < 2)
+    stop("the chunk option 'render' must be a function of the form ",
+         "function(x, options) or function(x, ...)")
+  merge_list(default_handlers, list(value = function(x, visible) {
+    if (visible) fun(x, options = options)
+  }))
+}
+
+# conditionally disable some features during R CMD check
+is_R_CMD_check = function() {
+  ('CheckExEnv' %in% search()) || ('_R_CHECK_TIMINGS_' %in% names(Sys.getenv()))
 }

@@ -96,6 +96,11 @@ status open
 
 \begin_layout Plain Layout
 
+library(knitr)
+\end_layout
+
+\begin_layout Plain Layout
+
 ## set global chunk options
 \end_layout
 
@@ -112,7 +117,7 @@ nter', fig.show='hold', par=TRUE)
 
 \begin_layout Plain Layout
 
-options(replace.assign=TRUE, width=68)
+options(formatR.arrow=TRUE, width=68, digits=4)
 \end_layout
 
 \begin_layout Plain Layout
@@ -601,21 +606,14 @@ for normal texts,
 \series bold
 knitr
 \series default
- will find out if there are chunk options set among them (e.g.
- 
-\family typewriter
-
-\backslash
-SweaveOpts{}
-\family default
-), and evaluate inline R code (e.g.
- 
+ will find inline R code (e.g.
+ in 
 \family typewriter
 
 \backslash
 Sexpr{}
 \family default
-); the latter is involved with the 
+) and evaluate it; the output is wrapped by the 
 \family typewriter
 inline
 \family default
@@ -762,24 +760,10 @@ knitr
 \series bold
 pgfSweave
 \series default
- 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "R-pgfSweave"
-
-\end_inset
-
  and 
 \series bold
 cacheSweave
 \series default
- 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "R-cacheSweave"
-
-\end_inset
-
  respectively, but the implementations are different.
  New features like code reference from an external R script as well as output
  customization are also introduced.
@@ -808,7 +792,7 @@ Sexpr{123456789}
 
 \end_inset
 
-) if the result is numeric, and we will not get too many digits by default.
+) if the result is numeric.
  You may check out a number of specific manuals dedicated to specific features
  such as graphics in the website: 
 \begin_inset Flex URL
@@ -831,21 +815,20 @@ Code Decoration
 \begin_layout Standard
 The 
 \series bold
-highlight
+highr
 \series default
  package 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "R-highlight"
+key "R-highr"
 
 \end_inset
 
- will be used to highlight R code if it is installed (otherwise an internal
- naive syntax highlighter is used), and 
+ is used to highlight R code, and the 
 \series bold
 formatR
 \series default
- 
+ package 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "R-formatR"
@@ -981,7 +964,7 @@ Note
 \family default
  because 
 \family typewriter
-options('replace.assign')
+options('formatR.arrow')
 \family default
  was set to be 
 \family typewriter
@@ -1597,7 +1580,7 @@ tikz()
 \series bold
 tikzDevice
 \series default
- will be used to record plots.
+ will be used to save plots.
  Options 
 \family typewriter
 sanitize
@@ -2179,7 +2162,7 @@ knitr
  Currently the setting is like this: the R script also uses chunk labels
  (marked in the form 
 \family typewriter
-## @knitr chunk-label
+## ---- chunk-label
 \family default
  by default); if the code chunk in the input document is empty, 
 \series bold
@@ -2209,7 +2192,7 @@ status open
 
 \begin_layout Plain Layout
 
-## @knitr Q1
+## ---- Q1 ---------------------
 \end_layout
 
 \begin_layout Plain Layout
@@ -2665,7 +2648,7 @@ status open
 \begin_layout Plain Layout
 
 <<fancy-rgl, rgl=TRUE, dev='png', fig.width=5, fig.height=5, out.width='2in',
- message=FALSE, cache=TRUE>>=
+ message=FALSE, warning=FALSE, cache=TRUE>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -2960,8 +2943,8 @@ SE, warning=FALSE>>=
 
 \begin_layout Plain Layout
 
-write_bib(c(.packages(), 'cacheSweave', 'evaluate', 'formatR', 'highlight',
- 'pgfSweave'), file = 'knitr-packages.bib')
+write_bib(c(.packages(), 'evaluate', 'formatR', 'highr'), file = 'knitr-packages.b
+ib')
 \end_layout
 
 \begin_layout Plain Layout

@@ -1,0 +1,76 @@
+---
+output:
+  pdf_document:
+    highlight: null
+    number_sections: yes
+    template: assets/template-refcard.tex
+---
+
+<!--
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteIndexEntry{knitr Reference Card}
+-->
+
+# Chunk Options
+
+`opts_chunk` controls global chunk options, e.g.
+`opts_chunk$set(tidy = FALSE)`, which can be overridden by local chunk
+options. See all options at <http://yihui.name/knitr/options>; some
+frequently used options:
+
+eval
+:   whether to evaluate the chunk
+
+echo
+:   whether to echo source code
+
+results
+:   `'markup'`, `'asis'`, `'hold'`, `'hide'`
+
+tidy
+:   whether to reformat R code
+
+cache
+:   whether to cache results
+
+fig.width, fig.height, out.width, out.height
+:   device and output size of figures
+
+include
+:   whether to include the chunk results in output
+
+child
+:   filenames of child documents
+
+engine
+:   language name (R, python, ...)
+
+
+# Functions
+
+`knit()`
+:   the main function in this package; knit input document and write
+    output
+
+`purl()`
+:   extract R code from an input document
+
+`spin()`
+:   spin goat's hair (an R script with roxygen comments) into wool (a
+    literate programming document to be passed to `knit()`)
+
+`stitch()`
+:   insert an R script into a template and compile the document
+
+`knit_hooks$set()`
+:   set or reset chunk and output [hooks](http://yihui.name/knitr/hooks)
+
+# Resources
+
+-   homepage: <http://yihui.name/knitr>
+-   development repository: <https://github.com/yihui/knitr>
+    ([CRAN](http://cran.rstudio.com/package=knitr),
+    [Rforge](http://rforge.net/knitr))
+-   examples: <https://github.com/yihui/knitr-examples>
+-   stackoverflow: <http://stackoverflow.com/questions/tagged/knitr>
+-   mailing list: <https://groups.google.com/group/knitr>

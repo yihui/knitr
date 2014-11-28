@@ -1,7 +1,8 @@
-%% LyX 2.0.5 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.3 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \setcounter{secnumdepth}{2}
@@ -13,13 +14,12 @@
  {hyperref}
 \hypersetup{
  pdfstartview={XYZ null null 1}}
-\usepackage{breakurl}
 \begin{document}
-
 <<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
 # set global chunk options
 opts_chunk$set(fig.path='figure/minimal-', fig.align='center', fig.show='hold')
-options(replace.assign=TRUE,width=90)
+options(formatR.arrow=TRUE,width=90)
 @
 
 
@@ -49,7 +49,6 @@ hist(x,main='')
 @
 
 Do the above chunks work? You should be able to compile the \TeX{}
-document and get a PDF file like this one: \url{https://github.com/downloads/yihui/knitr/knitr-minimal.pdf}.
+document and get a PDF file like this one: \url{https://bitbucket.org/stat/knitr/downloads/knitr-minimal.pdf}.
 The Rnw source of this document is at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-minimal.Rnw}.
-
 \end{document}

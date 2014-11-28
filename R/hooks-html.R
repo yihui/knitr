@@ -30,21 +30,23 @@ hook_plot_html = function(x, options) {
 }
 
 .img.cap = function(options) {
-  options$fig.cap %n% sprintf('plot of chunk %s', options$label)
+  options$fig.cap %n% {
+    if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
+  }
 }
 
-## a wrapper to upload an image and return the URL
+# a wrapper to upload an image and return the URL
 .upload.url = function(x) {
-  file = paste(x, collapse = '.')
-  opts_knit$get('upload.fun')(file)
+  opts_knit$get('upload.fun')(x)
 }
 
 .chunk.hook.html = function(x, options) {
   if (output_asis(x, options)) return(x)
-  x = sprintf('<div class="chunk"><div class="rcode">%s</div></div>', x)
+  x = sprintf('<div class="chunk" id="%s"><div class="rcode">%s</div></div>',
+              options$label, x)
   x = gsub('<div class="rcode">\\s*</div>', '', x) # rm empty rcode layers
   if (options$split) {
-    name = fig_path('.html', options)
+    name = fig_path('.html', options, NULL)
     if (!file.exists(dirname(name)))
       dir.create(dirname(name))
     cat(x, file = name)
@@ -64,33 +66,38 @@ hook_plot_html = function(x, options) {
 #' @rdname hook_animation
 #' @export
 hook_ffmpeg_html = function(x, options) {
+  hook_ffmpeg(x, options, '.webm')
+}
+
+hook_ffmpeg = function(x, options, format = '.webm') {
+  x = c(sans_ext(x), file_ext(x))
   fig.num = options$fig.num
   # set up the ffmpeg run
-  ffmpeg.opts = options$aniopts
   fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
-  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), ".mp4")
-  if(is.na(ffmpeg.opts)) ffmpeg.opts = NULL
+  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), format)
 
-  ffmpeg.cmd = paste("ffmpeg", "-y", "-r", 1/options$interval,
-                     "-i", fig.fname, mov.fname)
+  ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1/options$interval,
+                     '-i', fig.fname, mov.fname)
+  message('executing: ', ffmpeg.cmd)
   system(ffmpeg.cmd, ignore.stdout = TRUE)
 
-  # figure out the options for the movie itself
-  mov.opts = sc_split(options$aniopts)
-  opt.str = paste(sprintf('width=%s', options$out.width),
-                  sprintf('height=%s', options$out.height),
-                  if('controls' %in% mov.opts) 'controls="controls"',
-                  if('loop' %in% mov.opts) 'loop="loop"')
-  sprintf('<video %s><source src="%s" type="video/mp4" />video of chunk %s</video>',
-          opt.str, mov.fname, options$label)
+  # controls,loop --> controls loop
+  opts = paste(sc_split(options$aniopts), collapse = ' ')
+  opts = paste(
+    sprintf('width="%s"', options$out.width),
+    sprintf('height="%s"', options$out.height), opts
+  )
+  sprintf('<video %s><source src="%s" />video of chunk %s</video>',
+          opts, str_c(opts_knit$get('base.url'), mov.fname), options$label)
 }
 
 opts_knit$set(animation.fun = hook_ffmpeg_html)
 
-## use SciAnimator to create animations
+# use SciAnimator to create animations
 #' @rdname hook_animation
 #' @export
 hook_scianimator = function(x, options) {
+  x = c(sans_ext(x), file_ext(x))
   fig.num = options$fig.num
   base = opts_knit$get('base.url') %n% ''
 
@@ -124,20 +131,21 @@ hook_scianimator = function(x, options) {
 }
 
 
-## use the R2SWF package to create Flash animations
+# use the R2SWF package to create Flash animations
 #' @rdname hook_animation
 #' @export
 hook_r2swf = function(x, options) {
-  library(R2SWF)
-
+  x = c(sans_ext(x), file_ext(x))
   fig.num = options$fig.num
   # set up the R2SWF run
   fig.name = str_c(sub(str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
-  swf.name = fig_path('.swf', options)
+  swf.name = fig_path('.swf', options, NULL)
 
   w = options$out.width %n% (options$fig.width * options$dpi)
   h = options$out.height %n% (options$fig.height * options$dpi)
 
+  swf2html = getFromNamespace('swf2html', 'R2SWF')
+  file2swf = getFromNamespace('file2swf', 'R2SWF')
   swfhtml = swf2html(file2swf(files = fig.name, swf.name, interval = options$interval),
                      output = FALSE, fragment = TRUE,  width = w, height = h)
   if(options$fig.align == 'default') return(swfhtml)
@@ -147,13 +155,15 @@ hook_r2swf = function(x, options) {
 #' @rdname output_hooks
 #' @export
 render_html = function() {
-  knit_hooks$restore()
-  opts_chunk$set(dev = 'png') # default device is png in HTML and markdown
-  ## use div with different classes
+  set_html_dev()
+  opts_knit$set(out.format = 'html')
+  # use div with different classes
   html.hook = function(name) {
     force(name)
     function (x, options) {
-      sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>', name, tolower(options$engine), x)
+      if (name == 'source') x = c(hilight_source(x, 'html', options), '')
+      x = paste(x, collapse = '\n')
+      sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>\n', name, tolower(options$engine), x)
     }
   }
   h = opts_knit$get('header')
@@ -165,7 +175,5 @@ render_html = function() {
   knit_hooks$set(inline = function(x) {
     sprintf(if (inherits(x, 'AsIs')) '%s' else '<code class="knitr inline">%s</code>',
             .inline.hook(format_sci(x, 'html')))
-  }, output = function(x, options) {
-    if (output_asis(x, options)) x else html.hook('output')(x, options)
-  }, plot = hook_plot_html, chunk = .chunk.hook.html)
+  }, output = html.hook('output'), plot = hook_plot_html, chunk = .chunk.hook.html)
 }

@@ -1,76 +1,142 @@
-## my extremely simple 'syntax highlighter' as a substitute for Romain's highlight()
-hi.keywords =  paste('(\\W)(', paste(c(
-  'if', 'else', 'repeat', 'while', 'function', 'for', 'in', 'next', 'break', 'repeat',
-  'LETTERS', 'letters', 'month.abb', 'month.name', 'pi',
-  'TRUE', 'FALSE', 'NULL', 'Inf', 'NaN', 'NA', 'NA_integer_', 'NA_real_', 'NA_complex_', 'NA_character_'
-), collapse = '|'), ')(\\W)', sep = '')
-
-#  at the moment, only highlight function names, strings and comments
-hi_latex = function(x) {
-  x = gsub('\\\\', '\\\\textbackslash{}', x)
-  x = gsub('([{}])', '\\\\\\1', x)
-  # yes I know this is stupid...
-  x = gsub('\\\\textbackslash\\\\\\{\\\\\\}', '\\\\textbackslash{}', x)
-  x = split_lines(x)
-  i = grepl('^\\s*#', x)  # whole lines of comments
-  x[i] = sprintf('\\hlcomment{%s}', x[i])
-  # comments: what if # inside quotes?
-  if (any(idx <- grepl('#', x) & !grepl('"', x) & !i))
-    x[idx] = gsub('(#.*)', '\\\\hlcomment{\\1}', x[idx])
-  i = which(!i)  # not comments
-  # function names
-  x[i] = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '\\\\hlfunctioncall{\\1}\\2(', x[i])
-  # character strings
-  x[i] = gsub('"([^"]*)"', '\\\\hlstring{"\\1"}', x[i])
-  x[i] = gsub("'([^']*)'", "\\\\hlstring{'\\1'}", x[i])
-  # do not highlight keywords at the moment
-  # x = gsub(hi.keywords, '\\1\\\\hlkeyword{\\2}\\3', x)
-  x
-}
-hi_html = function(x) {
-  x = gsub('&', "&amp;", x)
-  x = gsub('<', '&lt;', x)
-  x = gsub('>', '&gt;', x)
-  x = split_lines(x)
-  # character strings
-  x = gsub('"([^"]*)"', '<span class="string">"\\1"</span>', x)
-  x = gsub("'([^']*)'", "<span class=\"string\">'\\1'</span>", x)
-  # function names
-  x = gsub('([[:alnum:]_\\.]+)(\\s*)\\(', '<span class="functioncall">\\1</span>\\2(', x)
-  if (any(idx <- grepl('#', x) & !grepl('"', x)))
-    x[idx] = gsub('(#.*)', '<span class="comment">\\1</span>', x[idx])
-  gsub(hi.keywords, '\\1<span class="keyword">\\2</span>\\3', x)
-}
-
-# may require the highlight package
-highlight_fun = function(name) getFromNamespace(name, 'highlight')
-
-.default.css = css.parser(.default.sty)
-
 hilight_source = function(x, format, options) {
-  if (!(format %in% c('latex', 'html'))) return(x)
-  if (opts_knit$get('use.highlight')) {
-    highlight = highlight_fun('highlight')
-    x = split_lines(x) # remove the extra \n in code (#331)
-    con = textConnection(x)
-    on.exit(close(con))
-    r = if (format == 'latex') {
-      highlight_fun('renderer_latex')(
-        document = FALSE, styles = highlight_fun('styler_assistant_latex')(.default.css)
-      )
+  if ((format %in% c('latex', 'html')) && options$highlight) {
+    if (options$engine == 'R') {
+      opts = opts_knit$get('highr.opts')
+      highr::hilight(x, format, prompt = options$prompt, markup = opts$markup)
     } else {
-      highlight_fun('renderer_html')(document = FALSE, header = function() '', footer = function() '')
+      res = try(highr::hi_andre(x, options$engine, format))
+      if (inherits(res, 'try-error')) {
+        if (format == 'html') highr:::escape_html(x) else highr:::escape_latex(x)
+      } else {
+        highlight_header()
+        res
+      }
     }
-    enc = getOption('encoding')
-    options(encoding = 'native.enc')  # make sure parser() writes with correct enc
-    on.exit(options(encoding = enc), add = TRUE)
-    out = capture.output(highlight(con, renderer = r, showPrompts = options$prompt, size = options$size))
-    if (format == 'html') out else {
-      # gsub() makes sure " will not produce an umlaut
-      c('\\begin{flushleft}', gsub('"', '"{}', out), '\\end{flushleft}')
+  } else if (options$prompt) {
+    # if you did not reformat or evaluate the code, I have to figure out which
+    # lines belong to one complete expression first (#779)
+    if (!options$tidy && isFALSE(options$eval))
+      x = vapply(highr:::group_src(x), paste, character(1), collapse = '\n')
+    line_prompt(x)
+  } else x
+}
+
+highlight_header = function() {
+  set_header(highlight.extra = paste(c(sprintf(
+    '\\let\\hl%s\\hlstd', c('esc', 'pps', 'lin')
+  ), '\\let\\hlslc\\hlcom'), collapse = ' '))
+}
+
+# stolen from Romain's highlight package (v0.3.2)
+
+# http://www.w3schools.com/css/css_colornames.asp
+w3c.colors = c(
+  aqua = '#00FFFF', black = '#000000', blue = '#0000FF', fuchsia = '#FF00FF',
+  gray = '#808080', green = '#008000', lime = '#00FF00', maroon = '#800000',
+  navy = '#000080', olive = '#808000', purple = '#800080', red = '#FF0000',
+  silver = '#C0C0C0', teal = '#008080', white = '#FFFFFF', yellow = '#FFFF00'
+)
+
+css.parse.color = function(txt, default = '#000000') {
+  txt = gsub('\\s+', '', tolower(txt))
+  if (is.hex(txt)) return(txt)
+
+  # css specs are from 0 to 255
+  rgb = function(...) grDevices::rgb(..., maxColorValue = 255)
+
+  # first we try to match against w3c standard colors
+  if (!grepl('[^a-z]', txt) && txt %in% names(w3c.colors))
+    return(w3c.colors[txt])
+
+  # now we try R colors
+  if (!grepl('[^a-z0-9]', txt)) {
+    R.colors = colors()
+    res = R.colors %in% txt
+    if (any(res)) {
+      return(rgb(t(col2rgb(R.colors[res]))))
     }
-  } else {
-    if (options$prompt) x = line_prompt(x)
-    if (format == 'html') hi_html(x) else c('\\begin{alltt}', hi_latex(x), '\\end{alltt}')
   }
+
+  # next we try an rgb() specification
+  if (grepl('rgb', txt)) {
+    p = try_silent(parse(text = txt))
+    if (!inherits(p, 'try-error')) {
+      res = try_silent(eval(p))
+      if (!inherits(res, 'try-error')) return(res)
+    }
+  }
+
+  # fall back on the default color
+  default
+}
+
+is.hex = function(x) grepl('^#[0-9a-f]{6}$', x)
+
+# minimal css parser
+css.parser = function(file, lines = readLines(file)) {
+
+  rx = '^\\.(.*?) *\\{.*$'
+  dec.lines = grep(rx, lines)
+  dec.names = sub(rx, '\\1', lines[dec.lines])
+  if (any(grepl('[0-9]', dec.names))) warning('use of numbers in style names')
+
+  end.lines = grep('^\\s*\\}', lines)
+
+  # find the closing brace of each declaration
+  dec.close = end.lines[sapply(dec.lines, function(x) which.min(end.lines < x))]
+
+  pos = matrix(c(dec.lines, dec.close), ncol = 2)
+  styles = apply(pos, 1, function(x) {
+    data = lines[(x[1] + 1):(x[2] - 1)]
+    settings.rx = '^\\s*(.*?)\\s*:\\s*(.*?)\\s*;\\s*$'
+    settings = sub(settings.rx, '\\1', data, perl = TRUE)
+    contents = sub(settings.rx, '\\2', data, perl = TRUE)
+    out = list()
+    for (i in 1:length(settings)) {
+      setting = settings[i]
+      content = contents[i]
+      out[[setting]] = switch(
+        setting,
+        color = css.parse.color(content, '#000000'),
+        background = css.parse.color(content, '#FFFFFF'),
+        content
+      )
+    }
+    out
+  })
+  names(styles) = dec.names
+  styles
+}
+
+# styler assistant for latex
+styler_assistant_latex = function(x) {
+
+  styles = sapply(x, function(item) {
+    settings = names(item)
+    has = function(s, value) {
+      s %in% settings && grepl(value, item[[s]])
+    }
+    start = end = ''
+    if ('color' %in% settings) {
+      start = str_c(start, '\\textcolor[rgb]{', col2latexrgb(item[['color']]), '}{')
+      end = str_c(end, '}')
+    }
+    if (has('font-weight', 'bold')) {
+      start = str_c(start, '\\textbf{')
+      end = str_c('}', end)
+    }
+    if (has('font-style', 'italic')) {
+      start = str_c(start, '\\textit{')
+      end = str_c('}', end)
+    }
+    sprintf('%s#1%s', start, end)
+  })
+  sprintf('\\newcommand{\\hl%s}[1]{%s}%%', names(x), styles)
+}
+
+col2latexrgb = function(hex) {
+  # as.character(0.123) -> 0,123 when "OutDec = ,", so make sure . is used
+  outdec = options(OutDec = '.'); on.exit(options(outdec))
+  col = col2rgb(hex)[, 1]/255
+  paste(round(col, 3), collapse = ',')
 }

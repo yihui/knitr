@@ -1,22 +1,21 @@
 # prepare the package for release
-NEWS     = NEWS
 PKGNAME := $(shell sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGVERS := $(shell sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
-PKGSRC  := $(shell basename $(PWD))
+PKGSRC  := $(shell basename `pwd`)
 
-all: news check clean
-
-# convert markdown to R's NEWS format
-news: $(NEWS)
-	sed -e 's/^-/  -/' -e 's/^## *//' -e 's/^#/\t\t/' <NEWS.md | fmt -80 >$(NEWS)
+all: check clean
 
 deps:
-	Rscript -e 'if (!require("Rd2roxygen")) install.packages("Rd2roxygen", repos="http://cran.r-project.org")'
+	Rscript -e 'if (!require("Rd2roxygen")) install.packages("Rd2roxygen", repos="http://cran.rstudio.com")'
 
 docs:
 	R -q -e 'library(Rd2roxygen); rab(".", build = FALSE)'
 
-build: docs
+build:
+	cd ..;\
+	R CMD build --no-manual $(PKGSRC)
+
+build-cran:
 	cd ..;\
 	R CMD build $(PKGSRC)
 
@@ -24,27 +23,50 @@ install: build
 	cd ..;\
 	R CMD INSTALL $(PKGNAME)_$(PKGVERS).tar.gz
 
-check: build
+check: build-cran
 	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
+
+travis: build
+	cd ..;\
+	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual
+
+integration-need:
+	git clone https://github.com/${TRAVIS_REPO_SLUG}-examples.git
+	cd knitr-examples && \
+		git checkout ${TRAVIS_BRANCH} && \
+		GIT_PAGER=cat git show HEAD
+
+integration-run: install
+	rm knitr-examples/cache -rf
+	make sysdeps deps xvfb-start knit xvfb-stop -C knitr-examples
+
+integration-verify:
+	GIT_PAGER=cat make diff -C knitr-examples
+
+integration: integration-run integration-verify
 
 examples:
 	cd inst/examples;\
 	Rscript knit-all.R
 
 vignettes:
-	cd inst/doc;\
-	lyx -e knitr knitr-intro.lyx;\
-	lyx -e pdflatex knitr-refcard.lyx;\
-	mv knitr-refcard.tex knitr-refcard.Rnw
+	cd vignettes;\
+	lyx -e knitr knitr-refcard.lyx;\
+	sed -i '/\\usepackage{breakurl}/ d' knitr-refcard.Rnw;\
+	mv knitr-refcard.Rnw assets/template-refcard.tex
 
 # the svn mirror created by
-# git svn clone svn://svn.rforge.net/knitr/trunk knitr-svn
-# commit everything to RForge
+# svn checkout svn+ssh://yihui@svn.r-forge.r-project.org/svnroot/isu/pkg/knitr knitr-rforge
 svn:
-	cd ../knitr-svn;\
-	git pull -X theirs git://github.com/yihui/knitr.git;\
-	git svn dcommit
+	git archive master > ../knitr.tar;\
+	cd ../knitr-rforge && rm -r `ls` && tar -xf ../knitr.tar;\
+	svn add --force . && svn commit -m 'sync with git'
+
+downstream:
+	Rscript -e "source('http://developer.r-project.org/CRAN/Scripts/depends.R');" \
+	-e "x = reverse_dependencies_with_maintainers('knitr', c('Depends', 'Imports', 'LinkingTo', 'Suggests'))" \
+	-e "cat('\n'); cat(unique(x[, 'Maintainer']), sep = ', \n'); cat('\n')"
 
 clean:
 	cd ..;\

@@ -1,7 +1,8 @@
-%% LyX 2.0.5 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.0.3 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
 \usepackage{listings}
 \lstset{language=R}
 \usepackage{geometry}
@@ -13,12 +14,11 @@
  {hyperref}
 \hypersetup{
  pdfstartview={XYZ null null 1}}
-\usepackage{breakurl}
 \begin{document}
-
 <<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
 opts_chunk$set(fig.path = 'figure/listings-')
-options(replace.assign = TRUE)
+options(formatR.arrow = TRUE)
 render_listings()
 @
 
@@ -102,7 +102,6 @@ away from the R code to the top of this page. This should not be surprising
 to \LaTeX{} users.
 
 You should be able to compile the \TeX{} document and get a PDF file
-like this one: \url{https://github.com/downloads/yihui/knitr/knitr-listings.pdf}.
+like this one: \url{https://bitbucket.org/stat/knitr/downloads/knitr-listings.pdf}.
 For more information about out hooks, see \url{http://yihui.name/knitr/hooks}.
-
 \end{document}
