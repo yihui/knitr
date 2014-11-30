@@ -157,7 +157,7 @@ is_lyx = function() {
   args = commandArgs(TRUE)
   if (length(args) < 4) return(FALSE)
   grepl('[.]Rnw$', args[1]) &&
-    !is.na(Sys.getenv('LyXDir', NA)) && !is.na(Sys.getenv('LYXSOCKET', NA))
+    !is.na(Sys.getenv('LyXDir', NA))
 }
 
 # scientific notation in TeX, HTML and reST
