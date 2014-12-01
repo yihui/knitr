@@ -141,21 +141,16 @@ eng_Rcpp = function(options) {
 
 ## Stan
 ## Compiles Stan model in the chunk, creates a stanmodel object,
-## and assigns it to engine.opts$x.
+## and assigns it to a variable with the name of the chunk label
 eng_stan = function(options) {
   code = paste(options$code, collapse = '\n')
   opts = options$engine.opts
   if (!is.environment(opts$env)) env = knit_global()
   else env = opts$env
   opts$env = NULL
-  #' name of the modelfit object returned by stan_model
-  if (is.null(opts$x))
-    if (!is.null(opts$model_name)) x = model_name
-    else x = formals(getFromNamespace('stan_model', 'rstan'))$model_name
-  else x = as.character(opts$x)
-  opts$x = NULL
+  x = make.names(options$label)
   if (options$eval) {
-    message(sprintf('Creating the \'rstan::stanmodel\' object \'%s\' from Stan code', x))
+    message(sprintf('Creating the \'rstan::stanmodel\' object \'%s\' from code chunk.', x))
     assign(x,
            do.call(getFromNamespace('stan_model', 'rstan'),
                    c(list(model_code = code), opts)),
