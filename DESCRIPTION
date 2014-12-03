@@ -42,6 +42,7 @@ Authors@R: as.person(c(
     "Ramnath Vaidyanathan [ctb]",
     "Richard Cotton [ctb]",
     "Romain Francois [ctb]",
+    "Scott Kostyshak [ctb]",
     "Sietse Brouwer [ctb]",
     "Simon de Bernard [ctb]",
     "Taiyun Wei [ctb]",
