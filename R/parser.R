@@ -166,6 +166,7 @@ parse_inline = function(input, patterns) {
   if (nrow(loc)) {
     code = str_match_all(input, inline.code)[[1L]]
     code = if (NCOL(code) >= 2L) {
+      code[is.na(code)] = ''
       apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
     } else character(0)
   } else code = character(0)
