@@ -331,7 +331,7 @@ sanitize_fn = function(path, suffix = '') {
             path <- gsub('[^~:_./\\[:alnum:]-]', '_', path), '"')
   }
   # replace . with _ except ../ and ./
-  s = str_split(path, '[/\\]')[[1L]]
+  s = strsplit(path, '[/\\]')[[1L]]
   i = (s != '.') & (s != '..') & grepl('\\.', s)
   if (any(i)) {
     s[i] = gsub('\\.', '_', s[i])
