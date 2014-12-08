@@ -20,6 +20,7 @@ theme.
 }
 \examples{
 # http://www.eclipsecolorthemes.org/?view=theme&id=1
+library(knitr)
 \donttest{
 opts_knit$set(out.format = "latex")
 (css = eclipse_theme(1))

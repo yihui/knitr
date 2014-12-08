@@ -33,7 +33,9 @@ Ideally the html pages should be put under the \file{html} directory of
   the link to the DESCRITION file).
 }
 \examples{
-\donttest{
+library(knitr)
+\dontrun{
+
 knit_rd("maps")
 knit_rd("rpart")
 setwd(system.file("html", package = "ggplot2"))
