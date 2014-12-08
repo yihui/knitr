@@ -145,21 +145,20 @@ eng_Rcpp = function(options) {
 eng_stan = function(options) {
   code = paste(options$code, collapse = '\n')
   opts = options$engine.opts
-  if (!is.environment(opts$env)) env = knit_global()
-  else env = opts$env
-  opts$env = NULL
   ## name of the modelfit object returned by stan_model
-  if (is.null(opts$x))
-    stop(str_c("`engine.opts$x` is `NULL`; provide a ",
-               "name for the returned `stanmodel` object."))
-  x = make.names(as.character(opts$x))
+  x = opts$x
+  if (!is.character(x) || length(x) != 1L) stop(
+    "engine.opts$x must be a character string; ",
+    "provide a name for the returned `stanmodel` object."
+  )
   opts$x = NULL
   if (options$eval) {
-    message(sprintf('Creating the \'rstan::stanmodel\' object \'%s\' from code chunk.', x))
-    assign(x,
-           do.call(getFromNamespace('stan_model', 'rstan'),
-                   c(list(model_code = code), opts)),
-           envir = env)
+    message("Creating a 'stanmodel' object ", x)
+    assign(
+      x,
+      do.call(getFromNamespace('stan_model', 'rstan'), c(list(model_code = code), opts)),
+      envir = knit_global()
+    )
   }
   engine_output(options, code, '')
 }
