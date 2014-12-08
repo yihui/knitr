@@ -471,7 +471,8 @@ escape_html = highr:::escape_html
 #' @return A character vector of the source code.
 #' @author Yihui Xie and Peter Ruckdeschel
 #' @export
-#' @examples \donttest{read_rforge('rgl/R/axes.R', project = 'rgl')
+#' @examples library(knitr)
+#' \donttest{read_rforge('rgl/R/axes.R', project = 'rgl')
 #' read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')}
 read_rforge = function(path, project, extra = '') {
   base = 'http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg'
