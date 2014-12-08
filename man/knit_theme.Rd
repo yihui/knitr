@@ -1,3 +1,4 @@
+% Please edit documentation in R/themes.R
 \docType{data}
 \name{knit_theme}
 \alias{knit_theme}

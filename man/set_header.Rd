@@ -1,3 +1,4 @@
+% Please edit documentation in R/header.R
 \name{set_header}
 \alias{set_header}
 \title{Set the header information}

@@ -1,3 +1,4 @@
+% Please edit documentation in R/themes-eclipse.R
 \name{eclipse_theme}
 \alias{eclipse_theme}
 \title{Download and convert a theme from eclipsecolorthemes.org to CSS}

@@ -1,3 +1,4 @@
+% Please edit documentation in R/engine.R
 \docType{data}
 \name{knit_engines}
 \alias{knit_engines}

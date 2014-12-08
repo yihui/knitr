@@ -1,3 +1,4 @@
+% Please edit documentation in R/template.R
 \name{knit_expand}
 \alias{knit_expand}
 \title{A simple macro preprocessor for templating purposes}

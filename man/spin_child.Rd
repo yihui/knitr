@@ -1,3 +1,4 @@
+% Please edit documentation in R/spin.R
 \name{spin_child}
 \alias{spin_child}
 \title{Spin a child R script}

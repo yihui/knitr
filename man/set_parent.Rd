@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils.R
 \name{set_parent}
 \alias{set_parent}
 \title{Specify the parent document of child documents}

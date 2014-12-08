@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils-conversion.R
 \name{knit2wp}
 \alias{knit2wp}
 \title{Knit an R Markdown document and post it to WordPress}

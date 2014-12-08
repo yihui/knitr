@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils-conversion.R
 \name{rst2pdf}
 \alias{rst2pdf}
 \title{A wrapper for rst2pdf}

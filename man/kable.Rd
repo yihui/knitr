@@ -1,3 +1,4 @@
+% Please edit documentation in R/table.R
 \name{kable}
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}

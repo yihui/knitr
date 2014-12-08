@@ -1,3 +1,4 @@
+% Please edit documentation in R/cache.R
 \docType{data}
 \name{rand_seed}
 \alias{rand_seed}

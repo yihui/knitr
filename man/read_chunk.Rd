@@ -1,3 +1,4 @@
+% Please edit documentation in R/parser.R
 \name{read_chunk}
 \alias{read_chunk}
 \alias{read_demo}

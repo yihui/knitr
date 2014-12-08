@@ -1,3 +1,4 @@
+% Please edit documentation in R/cache.R
 \name{dep_auto}
 \alias{dep_auto}
 \title{Build automatic dependencies among chunks}

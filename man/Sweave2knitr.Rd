@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils-sweave.R
 \name{Sweave2knitr}
 \alias{Sweave2knitr}
 \title{Convert Sweave to knitr documents}

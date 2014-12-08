@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils-vignettes.R
 \name{knit_filter}
 \alias{knit_filter}
 \title{Spell check filter for source documents}

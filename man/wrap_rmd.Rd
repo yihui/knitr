@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils.R
 \name{wrap_rmd}
 \alias{wrap_rmd}
 \title{Wrap long lines in Rmd files}

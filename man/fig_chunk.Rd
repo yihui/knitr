@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils.R
 \name{fig_chunk}
 \alias{fig_chunk}
 \title{Obtain the figure filenames for a chunk}

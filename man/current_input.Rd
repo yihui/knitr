@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils.R
 \name{current_input}
 \alias{current_input}
 \title{Query the current input filename}

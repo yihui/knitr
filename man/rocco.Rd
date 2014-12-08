@@ -1,3 +1,4 @@
+% Please edit documentation in R/rocco.R
 \name{rocco}
 \alias{rocco}
 \title{Knit R Markdown using the classic Docco style}

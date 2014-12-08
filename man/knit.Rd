@@ -1,3 +1,4 @@
+% Please edit documentation in R/output.R
 \name{knit}
 \alias{knit}
 \alias{purl}

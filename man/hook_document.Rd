@@ -1,3 +1,4 @@
+% Please edit documentation in R/hooks-latex.R
 \name{hook_movecode}
 \alias{hook_movecode}
 \title{Some potentially useful document hooks}

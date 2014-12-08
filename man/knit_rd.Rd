@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils-rd2html.R
 \name{knit_rd}
 \alias{knit_rd}
 \alias{knit_rd_all}

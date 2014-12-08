@@ -1,3 +1,4 @@
+% Please edit documentation in R/hooks-extra.R
 \name{hook_rgl}
 \alias{hook_optipng}
 \alias{hook_pdfcrop}

@@ -1,3 +1,4 @@
+% Please edit documentation in R/parser.R
 \name{inline_expr}
 \alias{inline_expr}
 \title{Wrap code using the inline R expression syntax}

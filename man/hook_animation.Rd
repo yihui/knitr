@@ -1,3 +1,4 @@
+% Please edit documentation in R/hooks-html.R
 \name{hook_ffmpeg_html}
 \alias{hook_ffmpeg_html}
 \alias{hook_r2swf}

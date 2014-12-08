@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils-base64.R
 \name{image_uri}
 \alias{image_uri}
 \title{Encode an image file to a data URI}

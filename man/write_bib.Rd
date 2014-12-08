@@ -1,3 +1,4 @@
+% Please edit documentation in R/citation.R
 \name{write_bib}
 \alias{write_bib}
 \title{Generate BibTeX bibliography databases for R packages}

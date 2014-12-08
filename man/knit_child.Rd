@@ -1,3 +1,4 @@
+% Please edit documentation in R/output.R
 \name{knit_child}
 \alias{knit_child}
 \title{Knit a child document}

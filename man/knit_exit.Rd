@@ -1,3 +1,4 @@
+% Please edit documentation in R/output.R
 \name{knit_exit}
 \alias{knit_exit}
 \title{Exit knitting early}

@@ -1,3 +1,4 @@
+% Please edit documentation in R/pandoc.R
 \name{pandoc}
 \alias{pandoc}
 \title{A Pandoc wrapper to convert Markdown documents to other formats}

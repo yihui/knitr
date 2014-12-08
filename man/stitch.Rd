@@ -1,3 +1,4 @@
+% Please edit documentation in R/template.R
 \name{stitch}
 \alias{stitch}
 \alias{stitch_rhtml}

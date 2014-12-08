@@ -1,3 +1,4 @@
+% Please edit documentation in R/output.R
 \name{knit_print}
 \alias{knit_print}
 \alias{normal_print}

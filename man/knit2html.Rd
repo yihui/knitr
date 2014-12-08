@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils-conversion.R
 \name{knit2html}
 \alias{knit2html}
 \title{Convert markdown to HTML using knit() and markdownToHTML()}

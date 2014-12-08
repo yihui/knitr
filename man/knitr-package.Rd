@@ -1,3 +1,4 @@
+% Please edit documentation in R/package.R
 \docType{package}
 \name{knitr-package}
 \alias{knitr}
