@@ -8,6 +8,10 @@
 
 - similarly, more command line arguments to `convert` can be specified via, for example, `engine.opts = list(convert.opts = '-density 300')` (#896)
 
+## MAJOR CHANGES
+
+- currently R (3.1.2) does not really pass the vignette encoding to vignette engines (which is probably a bug), and **knitr** vignette engines will assume UTF-8 is the file encoding
+
 ## BUG FIXES
 
 - fixed #898: `kable()` did not work on matrices with duplicate row names (thanks, @tomaskrehlik)

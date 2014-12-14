@@ -13,7 +13,7 @@
 #' vig_list[['knitr::docco_classic']][c('weave', 'tangle')]
 NULL
 
-vweave = vtangle = function(file, driver, syntax, encoding = '', quiet = FALSE, ...) {
+vweave = vtangle = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
   opts_chunk$set(error = FALSE)  # should not hide errors
   knit_hooks$set(purl = hook_purl)  # write out code while weaving
   options(markdown.HTML.header = NULL)
