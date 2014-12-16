@@ -170,7 +170,7 @@ knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
   # the package is already loaded in the previous step and it offers more flexibility in specifying arguments
   # plus the help for getFromNamespace says "They should not be used in production code" so this avoids doing so
   do.call(action, args = wordPressArgs)
-  #   getFromNamespace(action, 'RWordPress')(list(
-  #     description=content, title = title, ...
-  #   ), publish = publish)
+#   getFromNamespace(action, 'RWordPress')(list(
+#     description=content, title = title, ...
+#   ), publish = publish)
 }
