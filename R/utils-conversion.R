@@ -122,7 +122,7 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
 #'   (especially when using Windows).
 #' @examples # see the reference
 knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
-                   action = c('newPost', 'editPost'), postid,
+                   action = c('newPost', 'editPost', 'newPage'), postid,
                    encoding = getOption('encoding'), publish = TRUE) {
   out = knit(input, encoding = encoding); on.exit(unlink(out))
   con = file(out, encoding = encoding); on.exit(close(con), add = TRUE)
