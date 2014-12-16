@@ -108,6 +108,8 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
 #'   for syntax highlighting of source code and output; the first element
 #'   applies to source code, and the second applies to text output (by default,
 #'   both are \code{FALSE})
+#' @param action Declare that either a new post should be created or an existing post should be overwritten.
+#' @param postid If action is 'editPost', the postid must be specified.
 #' @param publish whether to publish the post immediately
 #' @inheritParams knit
 #' @export
@@ -120,6 +122,7 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
 #'   (especially when using Windows).
 #' @examples # see the reference
 knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
+                   action = c('newPost', 'editPost'), postid,
                    encoding = getOption('encoding'), publish = TRUE) {
   out = knit(input, encoding = encoding); on.exit(unlink(out))
   con = file(out, encoding = encoding); on.exit(close(con), add = TRUE)
@@ -138,8 +141,36 @@ knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
 
   content = native_encode(content, 'UTF-8')
   title = native_encode(title, 'UTF-8')
+
+  # figure out if we are making a newPost or overwriting an existing post
+  action = match.arg(action)
+
+  # if we are editing (overwriting) an existing post make sure we specified the postid
+  if(action == "editPost" && missing(postid))
+  {
+    stop("If editing a post you must specify the postid", call. = TRUE)
+  }
+
+  # build a list of arguments to be fed into either newPost or editPost
+  # the first argument is the content, which itself is a list containing
+  #     description
+  #     title
+  #     ...
+  # then there is the publish argument
+  wordPressArgs <- list(content=list(description = content, title = title, ...), publish=publish)
+
+  # if we are editing the post, also include the argument for postid
+  if(action == "editPost")
+  {
+    wordPressArgs <- c(postid=postid, wordPressArgs)
+  }
+
   do.call('library', list(package = 'RWordPress', character.only = TRUE))
-  getFromNamespace('newPost', 'RWordPress')(list(
-    description = content, title = title, ...
-  ), publish = publish)
+  # use do.call to call the approriate RWordPress function
+  # the package is already loaded in the previous step and it offers more flexibility in specifying arguments
+  # plus the help for getFromNamespace says "They should not be used in production code" so this avoids doing so
+  do.call(action, args = wordPressArgs)
+#   getFromNamespace(action, 'RWordPress')(list(
+#     description=content, title = title, ...
+#   ), publish = publish)
 }
