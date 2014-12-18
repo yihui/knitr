@@ -122,7 +122,7 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
 #'   (especially when using Windows).
 #' @examples # see the reference
 knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
-                   action = c('newPost', 'editPost'), postid,
+                   action = c('newPost', 'editPost', 'newPage'), postid,
                    encoding = getOption('encoding'), publish = TRUE) {
   out = knit(input, encoding = encoding); on.exit(unlink(out))
   con = file(out, encoding = encoding); on.exit(close(con), add = TRUE)
@@ -170,7 +170,7 @@ knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
   # the package is already loaded in the previous step and it offers more flexibility in specifying arguments
   # plus the help for getFromNamespace says "They should not be used in production code" so this avoids doing so
   do.call(action, args = wordPressArgs)
-#   getFromNamespace(action, 'RWordPress')(list(
-#     description=content, title = title, ...
-#   ), publish = publish)
+  #   getFromNamespace(action, 'RWordPress')(list(
+  #     description=content, title = title, ...
+  #   ), publish = publish)
 }
