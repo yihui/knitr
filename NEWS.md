@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- `knit2wp()` can update an existing post or create a page now (thanks, @jaredlander, #916, #917)
+
 - added an engine `stan` to support [Stan](http://mc-stan.org) through the **rstan** package; see http://rpubs.com/jrnold/knitr-stan for an example (thanks, @jrnold, #903)
 
 - for the `tikz` engine, the path to the `convert` utility of ImageMagick can be specified via the chunk option `engine.opts`, e.g. `engine.opts = list(convert = 'path/to/convert')` (thanks, @mienkoja, #897)
