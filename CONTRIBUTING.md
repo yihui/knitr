@@ -38,7 +38,28 @@ For very simple changes such as fixing typos, you can just edit the file by
 clicking the button `Edit` after you open it here on Github. For more
 complicated changes, you will have to manually create a [pull
 request](https://help.github.com/articles/using-pull-requests) (PR) after
-[forking](https://help.github.com/articles/fork-a-repo) this repository.
+[forking](https://help.github.com/articles/fork-a-repo) this repository. In the
+latter case, you are recommended to create a new branch instead of always
+working on the `master` branch, and please always rebase against my `master`
+branch (sometimes you will need to force push, i.e. `git push -f`, after
+rebasing):
+
+```bash
+# suppose your-branch-name is your new branch name
+git pull --rebase https://github.com/yihui/knitr.git your-branch-name
+```
+
+If your PR contains commits that revert each other, or attempts that failed, you
+need to clean the GIT history (and force push). For example, you may combine all
+the last 5 commits into one:
+
+```bash
+git reset --soft HEAD~5
+# then git add/commit/push
+```
+
+Interactively rebasing a few commits is also very helpful in this case, which
+gives you granular control over the commits, e.g. `git rebase -i HEAD~5`.
 
 ## Testing
 
