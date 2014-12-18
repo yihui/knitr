@@ -114,7 +114,7 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
 #' @inheritParams knit
 #' @export
 #' @references \url{http://yihui.name/knitr/demo/wordpress/}
-#' @author William K. Morris and Yihui Xie
+#' @author William K. Morris, Yihui Xie, and Jared Lander
 #' @note This function will convert the encoding of the post and the title to
 #'   UTF-8 internally. If you have additional data to send to WordPress (e.g.
 #'   keywords and categories), you may have to manually convert them to the
