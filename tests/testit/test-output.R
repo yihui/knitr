@@ -28,6 +28,17 @@ assert(
   )
 )
 
+assert(
+  'tidy=FALSE + eval=numeric should work',
+  identical(
+    '[1] 1\n[1] 2\n',
+    knit(
+      text = c('<<tidy=FALSE, eval=1:2, echo=FALSE, results="asis">>=', '1', '1+', '1', '1', '@'),
+      quiet = TRUE
+    )
+  )
+)
+
 # a shortcut
 k = function(text) {
   on.exit(opts_chunk$restore())

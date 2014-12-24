@@ -14,6 +14,8 @@
 
 - currently R (3.1.2) does not really pass the vignette encoding to vignette engines (which is probably a bug), and **knitr** vignette engines will assume UTF-8 is the file encoding
 
+- when the chunk option `tidy=FALSE`, and `eval` takes a numeric vector, it used to mean the line numbers of the code chunk; now it means the indices of the R expressions in the code chunk, regardless of `tidy=FALSE` or `TRUE` (yihui/knitr-examples#39, thanks, @isomorphisms)
+
 ## BUG FIXES
 
 - fixed #898: `kable()` did not work on matrices with duplicate row names (thanks, @tomaskrehlik)
