@@ -35,4 +35,5 @@ script:
 
 # deploy to xran after integration tests
 after_success:
+  - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
   - "[ $TARGET = integration ] && (wget -q -O - http://yihui.name/xran/r-xran | bash)"
