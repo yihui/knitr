@@ -18,6 +18,10 @@
 
 - when the chunk option `tidy=FALSE`, and `eval` takes a numeric vector, it used to mean the line numbers of the code chunk; now it means the indices of the R expressions in the code chunk, regardless of `tidy=FALSE` or `TRUE` (yihui/knitr-examples#39, thanks, @isomorphisms)
 
+## MINOR CHANGES
+
+- you need to upgrade the **rgl** package to at least v0.95.1201 if you use the hook function `hook_webgl()` (thanks, @dmurdoch, #901)
+
 ## BUG FIXES
 
 - fixed #898: `kable()` did not work on matrices with duplicate row names (thanks, @tomaskrehlik)

@@ -11,6 +11,7 @@ Authors@R: as.person(c(
     "Brian Diggs [ctb]",
     "Cassio Pereira [ctb]",
     "David Robinson [ctb]",
+    "Duncan Murdoch [ctb]",
     "Fabian Hirschmann [ctb]",
     "Fitch Simeon [ctb]",
     "Gregoire Detrez [ctb]",
@@ -95,7 +96,7 @@ Imports:
     tools
 Suggests:
     testit,
-    rgl,
+    rgl (>= 0.95.1201),
     codetools,
     rmarkdown,
     XML,

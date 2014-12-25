@@ -136,7 +136,7 @@ hook_plot_custom = function(before, options, envir){
 }
 #' @export
 #' @rdname chunk_hook
-hook_webgl = function(before, options, envir) {
+hook_webgl = local({commonParts = TRUE; function(before, options, envir) {
   # after a chunk has been evaluated
   if (before || rgl::rgl.cur() == 0) return()  # no active device
   name = tempfile('rgl', '.', '.html'); on.exit(unlink(name))
@@ -146,19 +146,15 @@ hook_webgl = function(before, options, envir) {
 
   prefix = gsub('[^[:alnum:]]', '_', options$label) # identifier for JS, better be alnum
   prefix = sub('^([^[:alpha:]])', '_\\1', prefix) # should start with letters or _
-  writeLines(sprintf(c('%%%sWebGL%%', '<script>%swebGLStart();</script>'), prefix),
-             tpl <- tempfile())
   rgl::writeWebGL(
-    dir = dirname(name), filename = name, template = tpl, prefix = prefix,
-    snapshot = FALSE
+    dir = dirname(name), filename = name, template = NULL, prefix = prefix,
+    snapshot = FALSE, commonParts = commonParts
   )
+  commonParts <<- FALSE
   res = readLines(name)
   res = res[!grepl('^\\s*$', res)] # remove blank lines
-  # remove <script src="CanvasMatrix.js" type="text/javascript"></script> (bug #755)
-  res = grep('CanvasMatrix\\.js.+</script>\\s*$', res, invert = TRUE, value = TRUE)
-  unlink('CanvasMatrix.js')
   paste(gsub('^\\s+', '', res), collapse = '\n') # no indentation at all (for Pandoc)
-}
+}})
 
 #" a hook function to write out code from chunks
 #' @export
