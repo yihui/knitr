@@ -738,7 +738,7 @@
 
 ## DOCUMENTATION
 
-- added a simple reference card: https://bitbucket.org/stat/knitr/downloads/knitr-refcard.pdf
+- added a simple reference card: http://cran.rstudio.com/web/packages/knitr/vignettes/knitr-refcard.pdf
 
 # CHANGES IN knitr VERSION 0.7
 
