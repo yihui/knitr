@@ -140,7 +140,8 @@ hook_webgl = function(before, options, envir) {
   # after a chunk has been evaluated
   if (before || rgl::rgl.cur() == 0) return()  # no active device
   name = tempfile('rgl', '.', '.html'); on.exit(unlink(name))
-  rgl::par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
+  dpi = options$dpi / options$fig.retina  # should not consider Retina displays (#901)
+  rgl::par3d(windowRect = 100 + dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
 
   prefix = gsub('[^[:alnum:]]', '_', options$label) # identifier for JS, better be alnum
