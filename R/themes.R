@@ -30,7 +30,7 @@ get_theme = function(theme = NULL) {
 #' @author Ramnath Vaidyanathan and Yihui Xie
 #' @seealso \code{\link{eclipse_theme}} (use Eclipse themes)
 #' @references The themes manual
-#'   \url{https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf} (Rnw
+#'   \url{https://github.com/yihui/knitr/releases/download/doc/knitr-themes.pdf} (Rnw
 #'   source at
 #'   \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw}).
 #'    For a preview of all themes, see

@@ -92,11 +92,9 @@ knit(input)
 
 If options are not explicitly specified, **knitr** will try to guess
 reasonable default settings. A few manuals are available such as the [main
-manual](https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf), the
+manual](http://yihui.name/knitr/demo/manual/), and the
 [graphics
-manual](https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf), and
-the [themes
-manual](https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf). For a
+manual](http://yihui.name/knitr/demo/graphics/). For a
 more organized reference, see the [knitr book](http://amzn.com/1482203537).
 
 ## License

@@ -1044,7 +1044,7 @@
 
 - website updated as usual: http://yihui.name/knitr
 
-- added an example for subfloat environment: https://bitbucket.org/stat/knitr/downloads/knitr-subfloats.pdf
+- added an example for subfloat environment: https://github.com/yihui/knitr/releases/download/doc/knitr-subfloats.pdf
 
 - most manuals (main or graphics manuals) have been updated
 
