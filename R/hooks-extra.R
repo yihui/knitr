@@ -157,7 +157,6 @@ hook_webgl = function(before, options, envir) {
   # remove <script src="CanvasMatrix.js" type="text/javascript"></script> (bug #755)
   res = grep('CanvasMatrix\\.js.+</script>\\s*$', res, invert = TRUE, value = TRUE)
   unlink('CanvasMatrix.js')
-  # TODO: pandoc standalone mode has a bug (https://github.com/jgm/pandoc/issues/1248)
   paste(gsub('^\\s+', '', res), collapse = '\n') # no indentation at all (for Pandoc)
 }
 
