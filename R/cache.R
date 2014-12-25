@@ -129,8 +129,7 @@ dep_auto = function(path = opts_chunk$get('cache.path')) {
   locals = parse_objects(paths[1L]); globals = parse_objects(paths[2L])
   if (is.null(locals) || is.null(globals)) return(invisible(NULL))
   if (!identical(names(locals), names(globals))) {
-    warning('corrupt dependency files? \ntry remove ',
-            paste(paths, collapse = '; '))
+    warning('corrupt dependency files? \ntry remove ', paste(paths, collapse = '; '))
     return(invisible(NULL))
   }
   nms = intersect(names(knit_code$get()), names(locals)) # guarantee correct order
