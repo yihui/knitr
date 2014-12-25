@@ -1,4 +1,4 @@
-pygments:    true 
+highlighter: pygments
 permalink:   /:categories/:title/
 markdown:    redcarpet
 url:         /knitr
