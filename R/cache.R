@@ -156,6 +156,61 @@ parse_objects = function(path) {
   objs
 }
 
+#' Load the cache database of a code chunk
+#'
+#' If a code chunk has turned on the chunk option \code{cache = TRUE}, a cache
+#' database will be established after the document is compiled. You can use this
+#' function to manually load the database anywhere in the document (even before
+#' the code chunk). This makes it possible to use objects created later in the
+#' document earlier, e.g. in an inline R expression before the cached code
+#' chunk, which is normally not possible because \pkg{knitr} compiles the
+#' document in a linear fashion, and objects created later cannot be used before
+#' they are created.
+#' @param label the chunk label of the code chunk that has a cache database
+#' @param object the name of the object to be fetched from the database (if
+#'   missing, \code{NULL} is returned)
+#' @param notfound a value to use when the \code{object} cannot be found
+#' @param path the path of the cache database (normally set in the global chunk
+#'   option \code{cache.path})
+#' @param lazy whether to \code{\link{lazyLoad}} the cache database (depending
+#'   on the chunk option \code{cache.lazy = TRUE} or \code{FALSE} of that code
+#'   chunk)
+#' @note Apparently this function loads the value of the object from the
+#'   \emph{previous} run of the document, which may be problematic when the
+#'   value of the object becomes different the next time the document is
+#'   compiled. Normally you must compile the document twice to make sure the
+#'   cache database is created, and the object can be read from it. Please use
+#'   this function with caution.
+#' @references See the example #114 at
+#'   \url{https://github.com/yihui/knitr-examples}.
+#' @return Invisible \code{NULL} when \code{object} is not specified (the cache
+#'   database will be loaded as a side effect), otherwise the value of the
+#'   object if found.
+#' @export
+load_cache = function(
+  label, object, notfound = 'NOT AVAILABLE', path = opts_chunk$get('cache.path'),
+  lazy = TRUE
+) {
+  owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
+  path = valid_path(path, label)
+  p0 = dirname(path); p1 = basename(path)
+  p2 = list.files(p0, '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$')
+  if (length(p2) == 0) return(notfound)
+  p2 = p2[substr(p2, 1, nchar(p1)) == p1]
+  if (length(p2) == 0) return(notfound)
+  if (length(p2) > 3) stop(
+    'Wrong cache databases for the chunk ', label,
+    '. You need to remove redundant cache files. Found ', paste(p2, collapse = ', ')
+  )
+  p2 = unique(gsub('[.](rdb|rdx|RData)$', '', p2))
+  if (length(p2) != 1) stop('Cannot identify the cache database for chunk ', label)
+  cache$load(file.path(p0, p2), lazy)
+  if (missing(object)) return(invisible(NULL))
+  if (exists(object, envir = knit_global(), inherits = FALSE)) {
+    get(object, envir = knit_global(), inherits = FALSE)
+  } else notfound
+}
+
 #' Make later chunks depend on previous chunks
 #'
 #' This function can be used to build dependencies among chunks so that all

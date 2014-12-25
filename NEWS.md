@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- added a new function `load_cache()` so that we can read an object from a cached code chunk, even if the chunk appears later in the document and the object needs to be used earlier; see the example #114 at https://github.com/yihui/knitr-examples (related to #868)
+
 - `knit2wp()` can update an existing post or create a page now (thanks, @jaredlander, #916, #917)
 
 - added an engine `stan` to support [Stan](http://mc-stan.org) through the **rstan** package; see http://rpubs.com/jrnold/knitr-stan for an example (thanks, @jrnold, #903)
