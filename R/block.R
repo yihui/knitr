@@ -100,7 +100,7 @@ block_exec = function(options) {
   keep = options$fig.keep
   # open a device to record plots
   if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none',
-                   options$dev, options$dev.args)) {
+                   options$dev, options$dev.args, options$dpi)) {
     # preserve par() settings from the last code chunk
     if (keep.pars <- opts_knit$get('global.par'))
       par(opts_knit$get('global.pars'))
@@ -257,9 +257,15 @@ purge_cache = function(options) {
 
 # open a device for a chunk; depending on the option global.device, may or may
 # not need to close the device on exit
-chunk_device = function(width, height, record = TRUE, dev, dev.args) {
+chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi) {
   dev_new = function() {
-    if (identical(getOption('device'), pdf_null)) {
+    # actually I should adjust the recording device according to dev, but here
+    # I have only considered the png device
+    if (identical(dev, 'png')) {
+      do.call(grDevices::png, c(list(
+        filename = tempfile(), width = width, height = height, units = 'in', res = dpi
+      ), dev.args))
+    } else if (identical(getOption('device'), pdf_null)) {
       if (!is.null(dev.args)) {
         dev.args = get_dargs(dev.args, 'pdf')
         dev.args = dev.args[intersect(names(dev.args), c('pointsize', 'bg'))]
