@@ -30,11 +30,15 @@ get_theme = function(theme = NULL) {
 #' @author Ramnath Vaidyanathan and Yihui Xie
 #' @seealso \code{\link{eclipse_theme}} (use Eclipse themes)
 #' @references The themes manual
-#'   \url{https://github.com/yihui/knitr/releases/download/doc/knitr-themes.pdf} (Rnw
-#'   source at
+#'   \url{https://github.com/yihui/knitr/releases/download/doc/knitr-themes.pdf}
+#'   (Rnw source at
 #'   \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw}).
 #'    For a preview of all themes, see
 #'   \url{https://gist.github.com/yihui/3422133}.
+#' @note The syntax highlighting here only applies to \file{.Rnw} (LaTeX) and
+#'   \file{.Rhtml} (HTML) documents, and it does not work for other types of
+#'   documents, such as \file{.Rmd} (R Markdown, which has its own syntax
+#'   highlighting themes; see \url{http://rmarkdown.rstudio.com}).
 #' @export
 #' @examples opts_knit$set(out.format='latex'); knit_theme$set('edit-vim')
 #'
