@@ -161,7 +161,9 @@ render_html = function() {
   html.hook = function(name) {
     force(name)
     function (x, options) {
-      if (name == 'source') x = c(hilight_source(x, 'html', options), '')
+      x = if (name == 'source') {
+        c(hilight_source(x, 'html', options), '')
+      } else escape_html(x)
       x = paste(x, collapse = '\n')
       sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>\n', name, tolower(options$engine), x)
     }
