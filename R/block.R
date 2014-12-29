@@ -372,6 +372,7 @@ process_tangle.block = function(x) {
   }
   code = parse_chunk(code)
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
+  if (opts_knit$get('documentation') == 0L) return(paste(code, collapse = '\n'))
   label_code(code, x$params.src)
 }
 #' @export
@@ -389,7 +390,6 @@ process_tangle.inline = function(x) {
 # add a label [and extra chunk options] to a code chunk
 label_code = function(code, label) {
   code = paste(c('', code, ''), collapse = '\n')
-  if (opts_knit$get('documentation') == 0L) return(code)
   paste('## ----', str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
         '----', code, sep = '')
 }
