@@ -74,6 +74,7 @@ render_markdown = function(strict = FALSE) {
     language = tolower(options$engine)
     if (language == 'node')
         language = 'javascript'
+    if (!options$highlight) language = 'text'
     paste('\n\n```', language, '\n', x, '```\n\n', sep = '')
   }
   knit_hooks$set(
