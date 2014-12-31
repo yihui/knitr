@@ -1,6 +1,6 @@
 highlighter: pygments
 permalink:   /:categories/:title/
 markdown:    redcarpet
-url:         /knitr
+baseurl:     /knitr
 download_url: https://github.com/yihui/knitr/releases/download/doc/
 
