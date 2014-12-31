@@ -19,7 +19,7 @@ knit2wp('yourfile.Rmd', title = 'Your post title')
 
 Basically you set your login name and password as well as the url of the WordPress server (path to `xmlrpc.php`), so that **RWordPress** can send the post to the server. If you are a WordPress.com user, you may want to use the `shortcode` option, i.e. `knit2wp(..., shortcode = TRUE)`. See `?knit2wp` for details.
 
-How to upload images? There are a few possibilities. One is to [upload images to Imgur](/knitr/demo/upload/), and another is to save images to your Dropbox folder, e.g.
+How to upload images? There are a few possibilities. One is to [upload images to Imgur]({{ site.baseurl }}/demo/upload/), and another is to save images to your Dropbox folder, e.g.
 
 {% highlight r %}
 opts_knit$set(base.url = 'https://dl.dropbox.com/u/15335397/wp/',

@@ -4,10 +4,10 @@ title: Patterns
 subtitle: A list of regular expressions to extract R code and chunk options from the input document
 ---
 
-The [object](objects) `knit_patterns` manages patterns in **knitr**. For example, we can use `knit_patterns$get()` to check the current pattern list. A pattern list includes the following components:
+The [object]({{ site.baseurl }}/objects) `knit_patterns` manages patterns in **knitr**. For example, we can use `knit_patterns$get()` to check the current pattern list. A pattern list includes the following components:
 
 - `chunk.begin`: the pattern for the beginning of a code chunk; it must contain a group defined by `()`, which will be used to extract chunk options
-- `chunk.end`: the pattern for the end of a chunk (the original meaning of this pattern in literate programming is different: it used to indicate the beginning of normal text; if you want the original meaning, see the [package option](/knitr/options) `filter.chunk.end`)
+- `chunk.end`: the pattern for the end of a chunk (the original meaning of this pattern in literate programming is different: it used to indicate the beginning of normal text; if you want the original meaning, see the [package option]({{ site.baseurl }}/options) `filter.chunk.end`)
 - `chunk.code`: the pattern to be used to extract R code from a chunk by removing characters of this pattern
 - `inline.code`: the pattern to be used to extract the pieces of R code mixed inline with other texts (i.e. those which are not in separate code chunks); like `chunk.begin`, it must contain a group 
 - `inline.comment`: the pattern of inline comments (tokens of inline R code will be removed from lines that match with this pattern)
