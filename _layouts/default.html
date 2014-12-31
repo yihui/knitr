@@ -9,14 +9,14 @@
     <title>{{ page.title }}: {{ page.subtitle }} | knitr</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Yihui Xie" />
-    <link rel="stylesheet" href="{{ site.url }}/css/main.css" />
-    <link rel="stylesheet" href="{{ site.url }}/css/code_highlights.css" />
-    <link rel="stylesheet" href="{{ site.url }}/css/widescreen.css" />
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/main.css" />
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/code_highlights.css" />
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/widescreen.css" />
     <!--[if lt IE 9]>
 	    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ site.url }}/images/avatar.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ site.baseurl }}/images/avatar.png"/>
 
     <meta name="description" content="knitr: an R package for general-purpose dynamic report generation."/>
   </head>
@@ -26,39 +26,39 @@
         <a id="logo" href="http://yihui.name" rel="author">
           <div>
             <figure class="jk-logo frame">
-            <img src="{{ site.url }}/images/avatar.png" alt="Yihui Xie" title="Yihui Xie" />
+            <img src="{{ site.baseurl }}/images/avatar.png" alt="Yihui Xie" title="Yihui Xie" />
             </figure>
           </div>
         </a>
         <nav>
         <ul>
           <li class="index">
-          <a href="{{ site.url }}/">
+          <a href="{{ site.baseurl }}/">
             <span>Home</span>
           </a>
           </li>
           <li class="projects">
-          <a href="{{ site.url }}/objects">
+          <a href="{{ site.baseurl }}/objects">
             <span>Objects</span>
           </a>
           </li>
           <li class="projects">
-          <a href="{{ site.url }}/options">
+          <a href="{{ site.baseurl }}/options">
             <span>Options</span>
           </a>
           </li>
           <li class="projects">
-          <a href="{{ site.url }}/hooks">
+          <a href="{{ site.baseurl }}/hooks">
             <span>Hooks</span>
           </a>
           </li>
           <li class="projects">
-          <a href="{{ site.url }}/patterns">
+          <a href="{{ site.baseurl }}/patterns">
             <span>Patterns</span>
           </a>
           </li>
           <li class="projects">
-          <a href="{{ site.url }}/demos">
+          <a href="{{ site.baseurl }}/demos">
             <span>Demos</span>
           </a>
           </li>
@@ -71,7 +71,7 @@
 
       <header>
       <div>
-	<img style="float:right" src="{{ site.url }}/images/knit-logo.png" />
+	<img style="float:right" src="{{ site.baseurl }}/images/knit-logo.png" />
         <h1 class="entry-title">{{ page.title }}</h1>
         <p>{{ page.subtitle }}</p>
       </div>
@@ -130,6 +130,6 @@
           })();
 
         </script>
-        <script type="text/javascript" src="{{ site.url }}/js/nocomment.js"></script>
+        <script type="text/javascript" src="{{ site.baseurl }}/js/nocomment.js"></script>
        </body>
      </html>
