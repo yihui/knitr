@@ -57,7 +57,7 @@ str(all_patterns)
 ##   ..$ inline.code : chr "<!--\\s*rinline(.+?)-->"
 ##   ..$ header.begin: chr "\\s*<head>"
 ##  $ md      :List of 4
-##   ..$ chunk.begin: chr "^\\s*```+\\s*\\{r(.*)\\}\\s*$"
+##   ..$ chunk.begin: chr "^\\s*```+\\s*\\{[.]?r(.*)\\}\\s*$"
 ##   ..$ chunk.end  : chr "^\\s*```+\\s*$"
 ##   ..$ ref.chunk  : chr "^\\s*<<(.+)>>\\s*$"
 ##   ..$ inline.code: chr "`r +([^`]+)\\s*`"
