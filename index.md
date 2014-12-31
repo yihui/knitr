@@ -70,7 +70,7 @@ re-implemented in a different way (like cache). A selected list of features
 include:
 
 - *faithful* output: using
-  [**evaluate**](http://cran.r-project.org/package=evaluate) as the backend
+  [**evaluate**](http://cran.rstudio.com/package=evaluate) as the backend
   to evaluate R code, **knitr** writes everything that you see in an R
   terminal into the output by default, including printed results, plots and
   even warnings, messages as well as errors (they should not be ignored in
@@ -84,15 +84,15 @@ include:
   difference is that a cached chunk can still have output (in **cacheSweave**,
   cached chunks no longer have any output, even you explicitly `print()`
   an object; **knitr** actually caches the chunk output as well)
-- formatting R code: the [**formatR**](https://github.com/yihui/formatR/wiki)
+- formatting R code: the [**formatR**](http://yihui.name/formatR)
   package is used to reformat R code automatically (wrap long lines, add
   spaces and indent, etc), without sacrificing comments as
   `keep.source=FALSE` does
 - more than 20 graphics devices are directly supported: with `dev='CairoPNG'`
   in the chunk options, you can switch to the `CairoPNG()` device in
-  [**Cairo**](http://cran.r-project.org/package=Cairo) in a second; with
+  [**Cairo**](http://cran.rstudio.com/package=Cairo) in a second; with
   `dev='tikz'`, the `tikz()` device in
-  [**tikzDevice**](http://cran.r-project.org/package=tikzDevice) is used;
+  [**tikzDevice**](http://cran.rstudio.com/package=tikzDevice) is used;
   Could anything be easier than that? These built-in devices (strictly speaking,
   wrappers) use inches as units, even for bitmap devices (pixels are
   converted to inches by the option `dpi`, which defaults to 72)
