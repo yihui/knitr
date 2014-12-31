@@ -31,6 +31,7 @@ look something like this:
 
 {% highlight r %}
 <<setup, cache=FALSE, include=FALSE>>=
+library(knitr)
 opts_knit$set(upload.fun = imgur_upload, self.contained = FALSE,
               root.dir = '~/R/project')
 @
