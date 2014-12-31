@@ -36,8 +36,8 @@ This package is developed on  [GitHub](https://github.com/yihui/knitr); for
 installation instructions and [FAQ's](http://bit.ly/knitr-faq), see
 [README](https://github.com/yihui/knitr#readme). This website serves as the
 full documentation of **knitr**, and you can find the [main
-manual](http://bit.ly/117OLVl), the [graphics manual](http://bit.ly/114GNdP)
-and other [demos](/knitr/demos) /
+manual]({{ site.download_url }}knitr-manual.pdf), the [graphics manual]({{ site.download_url }}knitr-graphics.pdf)
+and other [demos]({{ site.baseurl }}/demos) /
 [examples](https://github.com/yihui/knitr-examples) here. For a more
 organized reference, see the [knitr book](https://github.com/yihui/knitr-book).
 

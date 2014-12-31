@@ -13,10 +13,10 @@ The **knitr** package uses a special object to control options and settings (den
 
 These objects are visible to users in **knitr**:
 
-- [`opts_chunk`](options#chunk_options) and `opts_current`: manages **opt**ions for code **chunk**s
-- [`opts_knit`](options#package_options): manages **opt**ions for the **knit**r package
-- [`knit_hooks`](hooks): manages hook functions
-- [`knit_patterns`](patterns): manages regular expressions to extract R code from the input document
+- [`opts_chunk`]({{ site.baseurl }}/options#chunk_options) and `opts_current`: manages **opt**ions for code **chunk**s
+- [`opts_knit`]({{ site.baseurl }}/options#package_options): manages **opt**ions for the **knit**r package
+- [`knit_hooks`]({{ site.baseurl }}/hooks): manages hook functions
+- [`knit_patterns`]({{ site.baseurl }}/patterns): manages regular expressions to extract R code from the input document
 - `knit_engines`: functions to deal with other languages
 
 Except `knit_patterns`, all other objects are initialized with default values, and `knit_patterns` will be automatically determined according to the type of input document if not provided. The `knit_hooks` object is supposed to be used most frequently, and the other three are usually not to be used directly. For example, `opts_chunk` is usually set in the input document rather than using the command line directly.

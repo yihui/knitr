@@ -52,7 +52,7 @@ if you do not know what this means). A few special notes on the options:
     not work as you might have expected because `true` is not `TRUE`
   - you can write arbitrarily complicated expressions as you want as long as
     they are legitimate R code
-  - Sweave users please read the [transition page](/knitr/demo/sweave/)
+  - Sweave users please read the [transition page]({{ site.baseurl }}/demo/sweave/)
     carefully because the syntax is different
 
 All built-in options in **knitr** are:
@@ -146,7 +146,7 @@ leading white spaces have special meanings in markdown.
   a chunk is cached), because **knitr** also caches the printed output of a
   code chunk as a character string
   - for advanced users, `cache` can be more granular and takes numeric
-    values `0, 1, 2, 3`; see the [cache example](/knitr/demo/cache) page
+    values `0, 1, 2, 3`; see the [cache example]({{ site.baseurl }}/demo/cache) page
     for "More granular cache"
 - `cache.path`: (`'cache/'`; character) a prefix to be used for the names of
   cache files (by default they are saved to a directory named `cache`
@@ -198,7 +198,7 @@ leading white spaces have special meanings in markdown.
 - `fig.ext`: (`NULL`; character) file extension of the figure output (if `NULL`, it will be derived from the graphical device; see `knitr:::auto_exts` for details)
 - `dpi`: (`72`; numeric) the DPI (dots per inch) for bitmap devices (`dpi * inches = pixels`)
 - `fig.width`, `fig.height`: (both are `7`; numeric) width and height of the plot, to be used in the graphics device (in inches) and have to be numeric
-- `out.width`, `out.height`: (`NULL`; character) width and height of the plot in the final output file (can be different with its real `fig.width` and `fig.height`, i.e. plots can be scaled in the output document); depending on the output format, these two options can take flexible values, e.g. for LaTeX output, they can be `.8\\linewidth`, `3in` or `8cm` and for HTML, they may be `300px` (do not have to be in inches like `fig.width` and `fig.height`; backslashes must be escaped as `\\`); for LaTeX output, the default value for `out.width` will be changed to `\\maxwidth` which is defined [here](/knitr/demo/framed/)
+- `out.width`, `out.height`: (`NULL`; character) width and height of the plot in the final output file (can be different with its real `fig.width` and `fig.height`, i.e. plots can be scaled in the output document); depending on the output format, these two options can take flexible values, e.g. for LaTeX output, they can be `.8\\linewidth`, `3in` or `8cm` and for HTML, they may be `300px` (do not have to be in inches like `fig.width` and `fig.height`; backslashes must be escaped as `\\`); for LaTeX output, the default value for `out.width` will be changed to `\\maxwidth` which is defined [here]({{ site.baseurl }}/demo/framed/)
 - `out.extra`: (`NULL`; character) extra options for figures, e.g. `out.extra='angle=90'` in LaTeX output will rotate the figure by 90 degrees; it can be an arbitrary string, e.g. you can write multiple figure options in this option; it also applies to HTML images (extra options will be written into the `<img />` tag, e.g. `out.extra='style="display:block;"'`)
 - `fig.retina`: (`1`; numeric) this option only applies to HTML output; for [Retina displays](http://en.wikipedia.org/wiki/Retina_Display), setting this option to a ratio (usually 2) will change the chunk option `dpi` to `dpi * fig.retina`, and `out.width` to `fig.width * dpi / fig.retina` internally; for example, the physical size of an image is doubled and its display size is halved when `fig.retina = 2`
 - `resize.width`, `resize.height`: (`NULL`; character) the width and height to be used in `\resizebox{}{}` in LaTeX; these two options are not needed unless you want to resize tikz graphics because there is no natural way to do it; however, according to **tikzDevice** authors, tikz graphics is not meant to be resized to maintain consistency in style with other texts in LaTeX; if only one of them is `NULL`, `!` will be used (read the documentation of **graphicx** if you do not understand this)
@@ -254,7 +254,7 @@ There are two hidden options which are not designed to be set by the users: `fig
   current chunk
 - `ref.label`: (`NULL`; character) a character vector of labels of the
   chunks from which the code of the current chunk is inherited (see the demo
-  for [chunk reference](/knitr/demo/reference/))
+  for [chunk reference]({{ site.baseurl }}/demo/reference/))
 
 ### Child Documents
 
