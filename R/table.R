@@ -221,19 +221,20 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
   }
-  l = apply(x, 2, function(z) max(nchar(z), na.rm = TRUE))
+  l = if (prod(dim(x)) > 0) apply(x, 2, function(z) max(nchar(z), na.rm = TRUE))
   cn = colnames(x)
-  cn[is.na(cn)] = "NA"
-  if (!is.null(cn)) {
+  if (length(cn) > 0) {
+    cn[is.na(cn)] = "NA"
     if (sep.col == '|') cn = gsub('\\|', '&#124;', cn)
     if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
-    l = pmax(l, nchar(cn))
+    l = pmax(if (length(l) == 0) 0 else l, nchar(cn))
   }
-  padding = padding * if (is.null(align <- attr(x, 'align', exact = TRUE))) 2 else {
+  align = attr(x, 'align', exact = TRUE)
+  padding = padding * if (length(align) == 0) 2 else {
     ifelse(align == 'c', 2, 1)
   }
   l = pmax(l + padding, 3)  # at least of width 3 for Github Markdown
-  s = sapply(l, function(i) paste(rep(sep.row[2], i), collapse = ''))
+  s = unlist(lapply(l, function(i) paste(rep(sep.row[2], i), collapse = '')))
   res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
               x, if (!is.na(sep.row[3])) s)
   apply(mat_pad(res, l, align), 1, paste, collapse = sep.col)
@@ -265,11 +266,13 @@ kable_pandoc = function(x, caption = NULL, padding = 1, ...) {
 
 # pad a matrix
 mat_pad = function(m, width, align = NULL) {
-  stopifnot((n <- ncol(m)) == length(width))
+  n = ncol(m)
   res = matrix('', nrow = nrow(m), ncol = n)
+  if (prod(dim(m)) == 0) return(res)
+  stopifnot(n == length(width))
   side = rep('both', n)
   if (!is.null(align)) side = c(l = 'right', c = 'both', r = 'left')[align]
-  for (j in 1:n) {
+  for (j in seq_len(n)) {
     res[, j] = str_pad(m[, j], width[j], side = side[j])
   }
   res

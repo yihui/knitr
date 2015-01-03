@@ -121,7 +121,18 @@ assert(
   )
 )
 
+# edge cases (should not error)
+x1 = matrix(NA, 0, 0)
+x2 = matrix(NA, 0, 1)
+x3 = matrix(NA, 1, 0)
+for (f in c('pandoc', 'html', 'latex', 'rst')) {
+  kable(x1, f)
+  kable(x2, f)
+  kable(x3, f)
+}
 
-
-
-
+colnames(x2) = 'a'
+assert(
+  'kable(, "markdown") works for a 0 zero 1 column matrix',
+  identical(kable2(x2, 'markdown'), c('|a  |', '|:--|'))
+)

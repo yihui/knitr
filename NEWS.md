@@ -28,6 +28,8 @@
 
 - fixed #898: `kable()` did not work on matrices with duplicate row names (thanks, @tomaskrehlik)
 
+- fixed #927: `kable()` did not work for matrices of zero row and/or zero column (thanks, @hadley)
+
 # CHANGES IN knitr VERSION 1.8
 
 ## NEW FEATURES
