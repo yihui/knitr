@@ -408,7 +408,7 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 #' @param x output from \code{\link[evaluate]{evaluate}}
 #' @param options list of options used to control output
 #' @noRd
-wrap = function(x, options = list()) {
+wrap = function(x, options = list(), ...) {
   UseMethod('wrap', x)
 }
 
@@ -434,7 +434,7 @@ wrap.character = function(x, options) {
 # if you provide a custom print function that returns a character object of
 # class 'knit_asis', I'll just write it as is
 #' @export
-wrap.knit_asis = function(x, options) {
+wrap.knit_asis = function(x, options, inline = FALSE) {
   if (isFALSE(attr(x, 'knit_cacheable', exact = TRUE)) &&
         (!missing(options) && options$cache > 0))
     stop("The code chunk '", options$label, "' is not cacheable; ",
@@ -444,7 +444,7 @@ wrap.knit_asis = function(x, options) {
     .knitEnv$meta = c(.knitEnv$meta, m)
   }
   x = as.character(x)
-  if (!out_format('latex')) return(x)
+  if (!out_format('latex') || inline) return(x)
   # latex output need the \end{kframe} trick
   options$results = 'asis'
   knit_hooks$get('output')(x, options)
