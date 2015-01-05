@@ -175,10 +175,10 @@ eng_tikz = function(options) {
 
   s = append(lines, options$code, i)  # insert tikz into tex-template
   writeLines(s, texf <- str_c(f <- tempfile('tikz', '.'), '.tex'))
+  on.exit(unlink(texf), add = TRUE)
   unlink(outf <- str_c(f, '.pdf'))
   tools::texi2pdf(texf, clean = TRUE)
   if (!file.exists(outf)) stop('failed to compile tikz; check the template: ', tmpl)
-  unlink(texf)
 
   fig = fig_path('', options)
   dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
