@@ -94,10 +94,7 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
     x = x[-i]
   }
   if (is.null(text)) {
-    if (encoding != 'native.enc') {
-      enc = Encoding(x); if (enc == 'unknown') enc = ''
-      x = iconv(x, from = enc, to =  encoding)
-    }
+    if (encoding != 'native.enc') x = native_encode(x, encoding)
     cat(x, sep = '\n', file = output)
   } else x
 }
