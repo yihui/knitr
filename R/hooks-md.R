@@ -30,7 +30,13 @@ hook_plot_md_base = function(x, options) {
 
   if (is.null(w <- options$out.width) & is.null(h <- options$out.height) &
     is.null(s <- options$out.extra) & options$fig.align == 'default') {
-    return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
+    markdown <- sprintf('![%s](%s%s) ', cap, base, .upload.url(x))
+    if(is.null(inl <- options$inline)){
+      markdown <- paste0(markdown, " ")
+    } else {
+      markdown <- paste0(markdown, ifelse(inl, "\\\n ", " "))
+    }
+    return(markdown)
   }
   # use HTML syntax <img src=...>
   .img.tag(
