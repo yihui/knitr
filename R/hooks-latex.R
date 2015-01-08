@@ -121,7 +121,7 @@ hook_plot_tex = function(x, options) {
         scap = strsplit(cap, '[$:.;]')[[1L]][1L]
       }
       scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
-      fig2 = sprintf('\\caption%s{%s\\label{%s}}\n\\end{%s}\n', scap, cap,
+      fig2 = sprintf('\\caption%s{%s}\\label{%s}\n\\end{%s}\n', scap, cap,
                      paste(lab, if (mcap) fig.cur, sep = ''), options$fig.env)
     }
   } else if (pandoc_to(c('latex', 'beamer'))) {

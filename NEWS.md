@@ -24,6 +24,8 @@
 
 - you need to upgrade the **rgl** package to at least v0.95.1201 if you use the hook function `hook_webgl()` (thanks, @dmurdoch, #901)
 
+- for the automatically generated figure caption and label of a figure, the label is placed _outside_ of the caption now, i.e. the format was changed from `\caption{\label{}}` to `\caption{}\label{}` (thanks, @dr-moebius, @krlmlr, @ltorgo, #746)
+
 ## BUG FIXES
 
 - fixed #898: `kable()` did not work on matrices with duplicate row names (thanks, @tomaskrehlik)
