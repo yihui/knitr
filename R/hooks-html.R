@@ -91,8 +91,6 @@ hook_ffmpeg = function(x, options, format = '.webm') {
           opts, str_c(opts_knit$get('base.url'), mov.fname), options$label)
 }
 
-opts_knit$set(animation.fun = hook_ffmpeg_html)
-
 # use SciAnimator to create animations
 #' @rdname hook_animation
 #' @export

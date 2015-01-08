@@ -32,6 +32,8 @@
 
 - fixed #927: `kable()` did not work for matrices of zero row and/or zero column (thanks, @hadley)
 
+- fixed #929: `opts_knit$restore()` does not restore the `animation.fun` option (thanks, @julian-gehring)
+
 # CHANGES IN knitr VERSION 1.8
 
 ## NEW FEATURES
