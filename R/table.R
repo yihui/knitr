@@ -135,10 +135,10 @@ knit_print.knitr_kable = function(x, ...) {
 
 kable_latex = function(
   x, booktabs = FALSE, longtable = FALSE,
-  vline = if (booktabs) '' else '|',
-  toprule = if (booktabs) '\\toprule' else '\\hline',
-  bottomrule = if (booktabs) '\\bottomrule' else '\\hline',
-  midrule = if (booktabs) '\\midrule' else '\\hline',
+  vline = getOption('knitr.table.vline', if (booktabs) '' else '|'),
+  toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule' else '\\hline'),
+  bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule' else '\\hline'),
+  midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, table.envir = if (!is.null(caption)) 'table', escape = TRUE
 ) {
@@ -158,6 +158,8 @@ kable_latex = function(
   linesep = ifelse(linesep == "", linesep, paste('\n', linesep, sep = ''))
 
   if (escape) x = escape_latex(x)
+  if (!is.character(toprule)) toprule = NULL
+  if (!is.character(bottomrule)) bottomrule = NULL
 
   paste(c(
     env1,
