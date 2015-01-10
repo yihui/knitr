@@ -55,6 +55,12 @@ system("pandoc -h")  # see possible output formats
 \references{
 Pandoc: \url{http://johnmacfarlane.net/pandoc/}; Examples and
   rules of the configurations: \url{http://yihui.name/knitr/demo/pandoc}
+
+  Also see R Markdown (v2) at \url{http://rmarkdown.rstudio.com}. The
+  \pkg{rmarkdown} package is has several convenience functions and templates
+  that make it very easy to use Pandoc. The RStudio IDE also has
+  comprehensive support for it, so I'd recommend users who are not familiar
+  with command-line tools to use the \pkg{rmarkdown} package instead.
 }
 \seealso{
 \code{\link{read.dcf}}
