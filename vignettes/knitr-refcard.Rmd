@@ -72,5 +72,5 @@ engine
     ([CRAN](http://cran.rstudio.com/package=knitr),
     [Rforge](http://rforge.net/knitr))
 -   examples: <https://github.com/yihui/knitr-examples>
--   stackoverflow: <http://stackoverflow.com/questions/tagged/knitr>
+-   stackoverflow: <http://stackoverflow.com/tags/knitr/>
 -   mailing list: <https://groups.google.com/group/knitr>
