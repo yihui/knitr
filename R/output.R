@@ -60,8 +60,10 @@
 #'   \code{\link{globalenv}()})
 #' @param encoding the encoding of the input file; see \code{\link{file}}
 #' @return The compiled document is written into the output file, and the path
-#'   of the output file is returned, but if the \code{output} path is
-#'   \code{NULL}, the output is returned as a character vector.
+#'   of the output file is returned. If the \code{text} argument is not
+#'   \code{NULL}, the compiled output is returned as a character vector. In
+#'   other words, if you provide a file input, you get an output filename; if
+#'   you provide a character vector input, you get a character vector output.
 #' @note The name \code{knit} comes from its counterpart \samp{weave} (as in
 #'   Sweave), and the name \code{purl} (as \samp{tangle} in Stangle) comes from
 #'   a knitting method `knit one, purl one'.

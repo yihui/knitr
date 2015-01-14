@@ -39,8 +39,10 @@ all text chunks to code as roxygen comments}
 }
 \value{
 The compiled document is written into the output file, and the path
-  of the output file is returned, but if the \code{output} path is
-  \code{NULL}, the output is returned as a character vector.
+  of the output file is returned. If the \code{text} argument is not
+  \code{NULL}, the compiled output is returned as a character vector. In
+  other words, if you provide a file input, you get an output filename; if
+  you provide a character vector input, you get a character vector output.
 }
 \description{
 This function takes an input file, extracts the R code in it according to a
