@@ -25,3 +25,20 @@
 knit_hooks = new_defaults(.default.hooks)
 
 render_brew = function() NULL
+
+# the chunk option out.lines = n (first n rows), -n (last n rows), or c(n1, n2)
+# (first n1 and last n2 rows)
+hook_suppress = function(x, options) {
+  n = options$out.lines
+  if (length(n) == 0 || !is.numeric(n) || length(n) > 2) return(x)
+  x = split_lines(x)
+  m = length(x)
+  if (length(n) == 1) {
+    if (m > abs(n)) {
+      x = if (n >= 0) c(head(x, n), '....') else c('....', tail(x, -n))
+    }
+  } else {
+    if (m > sum(n)) x = c(head(x, n[1]), '....', tail(x, n[2]))
+  }
+  paste(x, collapse = '\n')
+}
