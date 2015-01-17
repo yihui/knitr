@@ -274,7 +274,7 @@
 
 - when cache is enabled, automatic chunk dependencies can be truly automatic now; there is no need to call `dep_auto()` explicitly, and all we need to do is the chunk option `autodep=TRUE`; the chunk dependencies will be rebuilt after each chunk, so when new chunks are inserted into the document, **knitr** can also figure out the new dependencies automatically (thanks, @knokknok, #592)
 
-- for Sublime Text users, there is a [SublimeKnitr](https://github.com/andrewheiss/SublimeKnitr) package to support LaTeX and Markdown with **knitr**; thanks, Andrew Heiss (#449) (this is not really a new feature of knitr **itself**, though)
+- for Sublime Text users, there is a [SublimeKnitr](https://github.com/andrewheiss/SublimeKnitr) package to support LaTeX and Markdown with **knitr**; thanks, Andrew Heiss (#449) (this is not really a new feature of **knitr** itself, though)
 
 - now the chunk options `warning` and `message` can also take numeric values as indices to select which warnings/messages to include in the output (thanks, Simon Urbanek, #590)
 
