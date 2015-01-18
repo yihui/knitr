@@ -388,8 +388,8 @@ knit_child = function(..., options = NULL, envir = knit_global()) {
 #' ignore the rest of the document. This function provides a mechanism to
 #' terminate \code{\link{knit}()}.
 #' @param append a character vector to be appended to the results from
-#'   \code{knit()} so far; by default, it is \verb{\end{document}} for LaTeX
-#'   output, and \verb{</body></html>} for HTML output to make the output
+#'   \code{knit()} so far; by default, it is \samp{\end{document}} for LaTeX
+#'   output, and \samp{</body></html>} for HTML output to make the output
 #'   document complete; for other types of output, it is an empty string
 #' @return Invisible \code{NULL}. An internal signal is set up (as a side
 #'   effect) to notify \code{knit()} to quit as if it had reached the end of the
