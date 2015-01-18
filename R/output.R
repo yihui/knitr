@@ -106,8 +106,8 @@
 #'   people \href{http://bit.ly/SnLi6h}{just do not get it}.
 #' @export
 #' @references Package homepage: \url{http://yihui.name/knitr/}. The \pkg{knitr}
-#'   \href{http://bit.ly/117OLVl}{main manual}: and
-#'   \href{http://bit.ly/114GNdP}{graphics manual}.
+#'   \href{http://bit.ly/knitr-main}{main manual}: and
+#'   \href{http://bit.ly/knitr-graphics}{graphics manual}.
 #'
 #'   See \code{citation('knitr')} for the citation information.
 #' @examples library(knitr)

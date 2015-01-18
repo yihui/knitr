@@ -48,7 +48,7 @@ types of plots such as \textbf{rgl} or GGobi plots.
 Before reading this specific manual%
 \footnote{\url{http://bit.ly/knitr-graphics-src} (Rnw source)%
 }, you must have finished the main manual%
-\footnote{\url{http://bit.ly/knitr-main-pdf}%
+\footnote{\url{http://bit.ly/knitr-main}%
 }.
 
 

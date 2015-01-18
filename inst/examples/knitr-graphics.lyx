@@ -1,5 +1,5 @@
-#LyX 2.0 created this file. For more info see http://www.lyx.org/
-\lyxformat 413
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
 \begin_document
 \begin_header
 \textclass tufte-handout
@@ -24,13 +24,13 @@ knitr
 \font_roman default
 \font_sans default
 \font_typewriter default
+\font_math auto
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
-
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -51,15 +51,24 @@ knitr
 \pdf_quoted_options "pdfstartview=FitH"
 \papersize default
 \use_geometry true
-\use_amsmath 1
-\use_esint 1
-\use_mhchem 1
-\use_mathdots 1
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
 \cite_engine basic
+\cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 1
 \index Index
 \shortcut idx
@@ -200,7 +209,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-http://bit.ly/knitr-main-pdf
+http://bit.ly/knitr-main
 \end_layout
 
 \end_inset
@@ -293,7 +302,7 @@ linewidth', echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 The default PDF device.
@@ -346,7 +355,7 @@ linewidth', echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 The PNG device.
@@ -530,7 +539,7 @@ boxplot(cars$dist,xlab='dist')
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 Two high-level plots are captured.
@@ -626,7 +635,7 @@ for(i in seq(0, 2*pi,length=20)) {points(cos(i),sin(i))}
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 Two complete R expressions will produce at most two plots, as long as there
@@ -709,7 +718,7 @@ abline(lm(dist~speed, data=cars))  # a regression line
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 Low-level plot changes in base graphics can be recorded separately, and
@@ -895,7 +904,7 @@ pie + coord_polar() # the bullseye chart
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 Two plots were produced in this chunk, but only the last one is kept.
@@ -1008,7 +1017,7 @@ for (i in seq(pi/2, -4/3 * pi, length = 12)) {
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 A clock animation.
@@ -1088,7 +1097,7 @@ stars(cbind(1:16,10*(16:1)),draw.segments=TRUE)
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 A left-aligned plot adapted from 
@@ -1259,7 +1268,7 @@ mu)$'))
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 A plot created by 
@@ -1577,7 +1586,7 @@ end{kframe}
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 The original plot produced in R, with a large margin.
@@ -1645,7 +1654,7 @@ end{kframe}
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 The cropped plot; it fits better in the document.
