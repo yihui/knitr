@@ -1,5 +1,5 @@
-#LyX 2.0 created this file. For more info see http://www.lyx.org/
-\lyxformat 413
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
 \begin_document
 \begin_header
 \textclass beamer
@@ -9,7 +9,6 @@
 \use_default_options true
 \begin_modules
 knitr
-beamer-fragile
 \end_modules
 \maintain_unincluded_children false
 \language english
@@ -19,13 +18,13 @@ beamer-fragile
 \font_roman default
 \font_sans default
 \font_typewriter default
+\font_math auto
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
-
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -45,15 +44,24 @@ beamer-fragile
 \pdf_pdfusetitle true
 \papersize default
 \use_geometry true
-\use_amsmath 1
-\use_esint 1
-\use_mhchem 1
-\use_mathdots 1
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
 \cite_engine basic
+\cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 1
 \index Index
 \shortcut idx
@@ -107,7 +115,7 @@ ootnotesize')
 \end_layout
 
 \begin_layout Title
-\begin_inset Argument
+\begin_inset Argument 1
 status collapsed
 
 \begin_layout Plain Layout
@@ -134,14 +142,20 @@ I thank Richard E.
 
 \end_layout
 
-\begin_layout EndFrame
+\begin_layout Frame
+\begin_inset Argument 4
+status open
 
-\end_layout
-
-\begin_layout BeginFrame
+\begin_layout Plain Layout
 Background
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
 \begin_layout Itemize
 The 
 \series bold
@@ -200,31 +214,11 @@ If you use Sweave or
 \series bold
 knitr
 \series default
- with Beamer in LyX, you probably use the 
+ with Beamer in LyX, you must use the
 \emph on
-Beamer Fragile
+ FragileFrame
 \emph default
- module
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://www.lyx.org/trac/ticket/7273
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
- too.
+ environment for the frames that contain R code chunks.
  Let's see if 
 \series bold
 knitr
@@ -233,19 +227,16 @@ knitr
  
 \end_layout
 
+\end_deeper
 \begin_layout Section
 First Test
 \end_layout
 
-\begin_layout Standard
-\begin_inset Flex FragileFrame
+\begin_layout FragileFrame
+\begin_inset Argument 4
 status open
 
-\begin_layout FrameTitle
-\begin_inset Flex FragileTitle
-status open
-
-\begin_layout FrameTitle
+\begin_layout Plain Layout
 First Test
 \end_layout
 
@@ -254,11 +245,12 @@ First Test
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_deeper
+\begin_layout Standard
 OK, let's get started with just some text:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset ERT
 status open
 
@@ -321,7 +313,7 @@ mean(x);var(x)
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 BTW, the first element of 
 \family typewriter
 x
@@ -346,24 +338,16 @@ Sexpr{x[1]}
 \backslash
 Sexpr{}
 \family default
-.)
+?)
 \end_layout
 
-\end_inset
-
-
-\end_layout
-
+\end_deeper
 \begin_layout Section
 Second Test
 \end_layout
 
-\begin_layout Standard
-\begin_inset Flex FragileFrame
-status open
-
-\begin_layout FrameTitle
-\begin_inset Flex FragileTitle
+\begin_layout FragileFrame
+\begin_inset Argument 4
 status open
 
 \begin_layout Plain Layout
@@ -375,12 +359,13 @@ Second Test
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_deeper
+\begin_layout Standard
 Text is nice but let's see what happens if we make a couple of plots in
  our chunk:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset ERT
 status open
 
@@ -423,28 +408,31 @@ lines(density(x),col="red")
 
 \end_layout
 
+\end_deeper
+\begin_layout Section
+The Big Question
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+The Big Question
+\end_layout
+
 \end_inset
 
 
 \end_layout
 
-\begin_layout Section
-The Big Question
-\end_layout
-
-\begin_layout BeginFrame
-The Big Question
-\end_layout
-
+\begin_deeper
 \begin_layout Standard
 Do the above chunks work? You should be able to compile the LyX document
  and get a nice-looking PDF slide presentation.
  If not, time to double-check everything...
 \end_layout
 
-\begin_layout EndFrame
-
-\end_layout
-
+\end_deeper
 \end_body
 \end_document
