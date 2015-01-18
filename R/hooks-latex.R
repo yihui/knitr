@@ -235,7 +235,7 @@ hook_plot_tex = function(x, options) {
 #' @references See output hooks in \url{http://yihui.name/knitr/hooks}.
 #'
 #'   Jekyll and Liquid:
-#'   \url{https://github.com/mojombo/jekyll/wiki/Liquid-Extensions};
+#'   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions};
 #'   prettify.js: \url{http://code.google.com/p/google-code-prettify/}
 render_latex = function() {
   test_latex_pkg('framed', system.file('misc', 'framed.sty', package = 'knitr'))

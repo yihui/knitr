@@ -16,7 +16,7 @@
 #'   The name comes from \code{knit} + \code{R} (while \code{Sweave} = \code{S}
 #'   + \code{weave}).
 #' @references Full documentation and demos: \url{http://yihui.name/knitr/};
-#'   FAQ's: \url{https://github.com/yihui/knitr/blob/master/FAQ.md}
+#'   FAQ's: \url{http://bit.ly/knitr-faq}
 #' @importFrom evaluate evaluate is.recordedplot is.source is.warning is.error
 #'   is.message
 #' @importFrom formatR tidy_source

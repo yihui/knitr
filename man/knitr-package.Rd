@@ -21,7 +21,7 @@ Yihui Xie <\url{http://yihui.name}>
 }
 \references{
 Full documentation and demos: \url{http://yihui.name/knitr/};
-  FAQ's: \url{https://github.com/yihui/knitr/blob/master/FAQ.md}
+  FAQ's: \url{http://bit.ly/knitr-faq}
 }
 \seealso{
 The core function in this package: \code{\link{knit}}. If you are an
