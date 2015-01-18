@@ -41,3 +41,5 @@ By comparison, below is an ordinary table:
 ```{r boring, results='asis'}
 kable(head(mtcars), 'html')
 ```
+
+This vignette is only a toy example. I'd recommend you to use the **DT** package instead: https://github.com/rstudio/DT
