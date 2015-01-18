@@ -103,6 +103,9 @@ known_globals = c(
 
 cache = new_cache()
 
+# a regex for cache files
+cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
+
 #' Build automatic dependencies among chunks
 #'
 #' When the chunk option \code{autodep = TRUE}, all names of objects created in
@@ -194,7 +197,7 @@ load_cache = function(
   owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
   path = valid_path(path, label)
   p0 = dirname(path); p1 = basename(path)
-  p2 = list.files(p0, '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$')
+  p2 = list.files(p0, cache_rx)
   if (length(p2) == 0) return(notfound)
   p2 = p2[substr(p2, 1, nchar(p1)) == p1]
   if (length(p2) == 0) return(notfound)
@@ -247,3 +250,36 @@ rand_seed = quote({
   if (exists('.Random.seed', envir = globalenv()))
     get('.Random.seed', envir = globalenv())
 })
+
+#' Clean cache files that are probably no longer needed
+#'
+#' If you remove or rename some cached code chunks, their original cache files
+#' will not be automatically cleaned. You can use this function to identify
+#' these possible files, and clean them if you are sure they are no longer
+#' needed.
+#' @param clean whether to remove the files
+#' @param path the cache path
+#' @note  The identification is not guaranteed to be correct, especially when
+#'   multiple documents share the same cache directory. You are recommended to
+#'   call \code{clean_cache(FALSE)} and carefully check the list of files (if
+#'   any) before you really delete them (\code{clean_cache(TRUE)}).
+#' @export
+clean_cache = function(clean = FALSE, path = opts_chunk$get('cache.path')) {
+  owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
+  if (file_test('-d', path)) {
+    p0 = path; p1 = ''
+  } else {
+    p0 = dirname(path); p1 = basename(path)
+  }
+  files = list.files(p0, cache_rx, full.names = TRUE)
+  if (length(files) == 0) return()
+  base = basename(files)
+  labs = .knitEnv$labels
+  if (length(labs) == 0) return()
+  i = !(sub(cache_rx, '', base) %in% paste(p1, labs, sep = ''))
+  if (p1 != '') i = i & (substr(base, 1, nchar(p1)) == p1)
+  if (!any(i)) return()
+  if (clean) unlink(files[i]) else message(
+    'Clean these cache files?\n\n', paste(files[i], collapse = '\n'), '\n'
+  )
+}
