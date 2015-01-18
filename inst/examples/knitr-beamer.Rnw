@@ -1,4 +1,4 @@
-%% LyX 2.0.3 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.1.2 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[10pt]{beamer}
 \usepackage[T1]{fontenc}
@@ -27,19 +27,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
  % this default might be overridden by plain title style
  \newcommand\makebeamertitle{\frame{\maketitle}}%
- \AtBeginDocument{
+ % (ERT) argument for the TOC
+ \AtBeginDocument{%
    \let\origtableofcontents=\tableofcontents
    \def\tableofcontents{\@ifnextchar[{\origtableofcontents}{\gobbletableofcontents}}
    \def\gobbletableofcontents#1{\origtableofcontents}
  }
- \def\lyxframeend{} % In case there is a superfluous frame end
- \long\def\lyxframe#1{\@lyxframe#1\@lyxframestop}%
- \def\@lyxframe{\@ifnextchar<{\@@lyxframe}{\@@lyxframe<*>}}%
- \def\@@lyxframe<#1>{\@ifnextchar[{\@@@lyxframe<#1>}{\@@@lyxframe<#1>[]}}
- \def\@@@lyxframe<#1>[{\@ifnextchar<{\@@@@@lyxframe<#1>[}{\@@@@lyxframe<#1>[<*>][}}
- \def\@@@@@lyxframe<#1>[#2]{\@ifnextchar[{\@@@@lyxframe<#1>[#2]}{\@@@@lyxframe<#1>[#2][]}}
- \long\def\@@@@lyxframe<#1>[#2][#3]#4\@lyxframestop#5\lyxframeend{%
-   \frame<#1>[#2][#3]{\frametitle{#4}#5}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \usetheme{PaloAlto}
@@ -59,13 +52,9 @@ opts_chunk$set(fig.path='figure/beamer-',fig.align='center',fig.show='hold',size
 \author{Yihui Xie%
 \thanks{I thank Richard E. Goldberg for providing this demo.%
 }}
-
 \makebeamertitle
+\begin{frame}{Background}
 
-\lyxframeend{}
-
-
-\lyxframeend{}\lyxframe{Background}
 \begin{itemize}
 \item The \textbf{knitr}\textbf{\emph{ }}package allows you to embed R code
 and figures in \LaTeX{} documents
@@ -81,19 +70,19 @@ to work is trivial
 \item Install the \textbf{knitr} package in \emph{R}
 \item Read \url{http://yihui.name/knitr/demo/lyx/}
 \end{enumerate}
-\item If you use Sweave or \textbf{knitr} with Beamer in \LyX{}, you probably
-use the \emph{Beamer Fragile} module%
-\footnote{\url{http://www.lyx.org/trac/ticket/7273}%
-} too. Let's see if \textbf{knitr} works with Beamer in this small
-demo. 
+\item If you use Sweave or \textbf{knitr} with Beamer in \LyX{}, you must
+use the\emph{ FragileFrame} environment for the frames that contain
+R code chunks. Let's see if \textbf{knitr} works with Beamer in this
+small demo. 
 \end{itemize}
+\end{frame}
 
-\lyxframeend{}\section{First Test}
+\section{First Test}
+\begin{frame}[fragile]{First Test}
 
-\begin{frame}
-[fragile]\frametitle{First Test}
 
 OK, let's get started with just some text:
+
 
 <<echo=FALSE,results='hide'>>=
 # some setup
@@ -107,19 +96,19 @@ set.seed(1121)   # make the results repeatable
 mean(x);var(x)  
 @
 
+
 BTW, the first element of \texttt{x} is \Sexpr{x[1]}. (Did you notice
-the use of\texttt{ \textbackslash{}Sexpr\{\}}.)
+the use of\texttt{ \textbackslash{}Sexpr\{\}}?)
+
 \end{frame}
 
+\section{Second Test}
+\begin{frame}[fragile]{Second Test}
 
-
-\lyxframeend{}\section{Second Test}
-
-\begin{frame}
-[fragile]\frametitle{Second Test}
 
 Text is nice but let's see what happens if we make a couple of plots
 in our chunk:
+
 
 <<boring-plots,fig.width=4,fig.height=4,out.width='.45\\linewidth'>>=
 par(las=1,mar=c(4,4,.1,.1))  # tick labels direction
@@ -127,19 +116,15 @@ boxplot(x)
 hist(x,main='',col="blue",probability=TRUE) 
 lines(density(x),col="red")
 @
+
 \end{frame}
 
+\section{The Big Question}
+\begin{frame}{The Big Question}
 
-
-\lyxframeend{}\section{The Big Question}
-
-
-\lyxframeend{}\lyxframe{The Big Question}
 
 Do the above chunks work? You should be able to compile the \LyX{}
 document and get a nice-looking PDF slide presentation. If not, time
-to double-check everything...
+to double-check everything...\end{frame}
 
-
-\lyxframeend{}
 \end{document}
