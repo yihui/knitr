@@ -28,7 +28,6 @@ install:
   - sudo apt-get install -qq pandoc pandoc-citeproc texlive-latex-recommended > /dev/null
   - "wget -q -O - http://yihui.name/xran/r-config | bash"
   - Rscript -e 'devtools::install_deps(dep = TRUE)'
-  - Rscript -e 'devtools::install_github("jimhester/covr")'
 
 # run tests
 script:
@@ -40,4 +39,4 @@ after_success:
   - "[ $TARGET = integration ] && (wget -q -O - http://yihui.name/xran/r-xran | bash)"
 
   # run test coverage only for the travis build
-  - "[ $TARGET = travis ] && Rscript -e 'library(covr);coveralls()'"
+  - "[ $TARGET = travis ] && Rscript -e 'devtools::install_github(\"jimhester/covr\"); covr::coveralls()'"
