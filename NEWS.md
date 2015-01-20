@@ -1,3 +1,6 @@
+# CHANGES IN knitr VERSION 1.10
+
+
 # CHANGES IN knitr VERSION 1.9
 
 ## NEW FEATURES
