@@ -269,7 +269,10 @@ process_file = function(text, output) {
   n = length(groups); res = character(n); olines = integer(n)
   tangle = opts_knit$get('tangle')
 
-  if (opts_knit$get('progress')) {
+  # when in R CMD check, turn off the progress bar (R-exts said the progress bar
+  # was not appropriate for non-interactive mode, and I don't want to argue)
+  progress = opts_knit$get('progress') && !is_R_CMD_check()
+  if (progress) {
     pb = txtProgressBar(0, n, char = '.', style = 3)
     on.exit(close(pb), add = TRUE)
   }
@@ -280,7 +283,7 @@ process_file = function(text, output) {
       knit_exit(NULL)
       break  # must have called knit_exit(), so exit early
     }
-    if (opts_knit$get('progress')) {
+    if (progress) {
       setTxtProgressBar(pb, i)
       if (!tangle) cat('\n')  # under tangle mode, only show one progress bar
       flush.console()
