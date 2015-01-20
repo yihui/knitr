@@ -21,11 +21,13 @@ theme.
 \examples{
 # http://www.eclipsecolorthemes.org/?view=theme&id=1
 library(knitr)
-\donttest{
+\dontrun{
+# this relies on eclipsecolorthemes.org being accessible
 opts_knit$set(out.format = "latex")
 (css = eclipse_theme(1))
 thm = knit_theme$get(css)
 knit_theme$set(thm)
+opts_knit$restore()
 }
 }
 \author{

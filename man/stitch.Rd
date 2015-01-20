@@ -52,9 +52,8 @@ one code chunk.
 }
 \examples{
 s = system.file("misc", "stitch-test.R", package = "knitr")
-\donttest{
-stitch(s)
-}
+if (interactive()) stitch(s)  # compile to PDF
+
 # HTML report
 stitch(s, system.file("misc", "knitr-template.Rhtml", package = "knitr"))
 
