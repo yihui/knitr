@@ -66,29 +66,30 @@ hook_plot_html = function(x, options) {
 #' @rdname hook_animation
 #' @export
 hook_ffmpeg_html = function(x, options) {
+  hook_ffmpeg(x, options, '.webm')
+}
+
+hook_ffmpeg = function(x, options, format = '.webm') {
   x = c(sans_ext(x), file_ext(x))
   fig.num = options$fig.num
   # set up the ffmpeg run
   fig.fname = str_c(sub(str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
-  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), '.webm')
+  mov.fname = str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), format)
 
   ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1/options$interval,
                      '-i', fig.fname, mov.fname)
   message('executing: ', ffmpeg.cmd)
   system(ffmpeg.cmd, ignore.stdout = TRUE)
 
-  # figure out the options for the movie itself
-  mov.opts = sc_split(options$aniopts)
-  opt.str = paste(sprintf('width=%s', options$out.width),
-                  sprintf('height=%s', options$out.height),
-                  if('controls' %in% mov.opts) 'controls="controls"',
-                  if('loop' %in% mov.opts) 'loop="loop"',
-                  if('autoplay' %in% mov.opts) 'autoplay="autoplay"')
+  # controls,loop --> controls loop
+  opts = paste(sc_split(options$aniopts), collapse = ' ')
+  opts = paste(
+    sprintf('width="%s"', options$out.width),
+    sprintf('height="%s"', options$out.height), opts
+  )
   sprintf('<video %s><source src="%s" />video of chunk %s</video>',
-          opt.str, str_c(opts_knit$get('base.url'), mov.fname), options$label)
+          opts, str_c(opts_knit$get('base.url'), mov.fname), options$label)
 }
-
-opts_knit$set(animation.fun = hook_ffmpeg_html)
 
 # use SciAnimator to create animations
 #' @rdname hook_animation
@@ -158,7 +159,9 @@ render_html = function() {
   html.hook = function(name) {
     force(name)
     function (x, options) {
-      if (name == 'source') x = c(hilight_source(x, 'html', options), '')
+      x = if (name == 'source') {
+        c(hilight_source(x, 'html', options), '')
+      } else escape_html(x)
       x = paste(x, collapse = '\n')
       sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>\n', name, tolower(options$engine), x)
     }

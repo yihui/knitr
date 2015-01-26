@@ -1,8 +1,10 @@
+% Please edit documentation in R/utils-conversion.R
 \name{knit2wp}
 \alias{knit2wp}
 \title{Knit an R Markdown document and post it to WordPress}
 \usage{
 knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE, 
+    action = c("newPost", "editPost", "newPage"), postid, 
     encoding = getOption("encoding"), publish = TRUE)
 }
 \arguments{
@@ -18,6 +20,12 @@ knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE,
 for syntax highlighting of source code and output; the first element
 applies to source code, and the second applies to text output (by default,
 both are \code{FALSE})}
+
+\item{action}{to create a new post, update an existing post, or create a new
+page}
+
+\item{postid}{if action is \code{editPost}, the post id \code{postid} must be
+specified}
 
 \item{encoding}{the encoding of the input file; see \code{\link{file}}}
 
@@ -38,7 +46,7 @@ This function will convert the encoding of the post and the title to
 # see the reference
 }
 \author{
-William K. Morris and Yihui Xie
+William K. Morris, Yihui Xie, and Jared Lander
 }
 \references{
 \url{http://yihui.name/knitr/demo/wordpress/}

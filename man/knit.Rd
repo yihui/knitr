@@ -1,3 +1,4 @@
+% Please edit documentation in R/output.R
 \name{knit}
 \alias{knit}
 \alias{purl}
@@ -38,8 +39,10 @@ all text chunks to code as roxygen comments}
 }
 \value{
 The compiled document is written into the output file, and the path
-  of the output file is returned, but if the \code{output} path is
-  \code{NULL}, the output is returned as a character vector.
+  of the output file is returned. If the \code{text} argument is not
+  \code{NULL}, the compiled output is returned as a character vector. In
+  other words, if you provide a file input, you get an output filename; if
+  you provide a character vector input, you get a character vector output.
 }
 \description{
 This function takes an input file, extracts the R code in it according to a
@@ -143,8 +146,8 @@ purl(f, documentation = 2)  # also include documentation
 }
 \references{
 Package homepage: \url{http://yihui.name/knitr/}. The \pkg{knitr}
-  \href{http://bit.ly/117OLVl}{main manual}: and
-  \href{http://bit.ly/114GNdP}{graphics manual}.
+  \href{http://bit.ly/knitr-main}{main manual}: and
+  \href{http://bit.ly/knitr-graphics}{graphics manual}.
 
   See \code{citation('knitr')} for the citation information.
 }

@@ -13,7 +13,7 @@
 #' vig_list[['knitr::docco_classic']][c('weave', 'tangle')]
 NULL
 
-vweave = vtangle = function(file, driver, syntax, encoding = '', quiet = FALSE, ...) {
+vweave = vtangle = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
   opts_chunk$set(error = FALSE)  # should not hide errors
   knit_hooks$set(purl = hook_purl)  # write out code while weaving
   options(markdown.HTML.header = NULL)
@@ -41,8 +41,10 @@ body(vweave_rmarkdown)[5L] = expression(rmarkdown::render(
 ))
 
 # do not tangle R code from vignettes
-untangle_weave = function(weave) {
-  body(weave)[3L] = expression({})
+untangle_weave = function(vig_list, eng) {
+  weave = vig_list[[c(eng, 'weave')]]
+  if (eng != 'knitr::rmarkdown')
+    body(weave)[3L] = expression({})
   weave
 }
 vtangle_empty = function(file, ...) {
@@ -63,7 +65,7 @@ register_vignette_engines = function(pkg) {
       vweave_rmarkdown(...)
     } else {
       if (!is_R_CMD_check())
-        warning('Pandoc is not available. Please install Pandoc.')
+        warning('Pandoc (>= 1.12.3) and/or pandoc-citeproc is not available. Please install both.')
       vweave(...)
     }
   } else {
@@ -76,7 +78,7 @@ register_vignette_engines = function(pkg) {
   engines  = grep('_notangle$', names(vig_list), value = TRUE, invert = TRUE)
   for (eng in engines) vig_engine(
     paste(sub('^knitr::', '', eng), 'notangle', sep = '_'),
-    untangle_weave(vig_list[[c(eng, 'weave')]]),
+    untangle_weave(vig_list, eng),
     tangle = vtangle_empty,
     pattern = vig_list[[c(eng, 'pattern')]]
   )
@@ -86,18 +88,50 @@ vig_engine = function(..., tangle = vtangle) {
   tools::vignetteEngine(..., tangle = tangle, package = 'knitr')
 }
 
+#' Spell check filter for source documents
+#'
+#' When performing spell checking on source documents, we may need to skip R
+#' code chunks and inline R expressions, because many R functions and symbols
+#' are likely to be identified as typos. This function is designed for the
+#' \code{filter} argument of \code{\link{aspell}()} to filter out code chunks
+#' and inline expressions.
+#' @param ifile the filename of the source document
+#' @param encoding the file encoding
+#' @return A chracter vector of the file content, excluding code chunks and
+#'   inline expressions.
+#' @export
+#' @examples library(knitr)
+#' knitr_example = function(...) system.file('examples', ..., package = 'knitr')
+#' \donttest{
+#' if (Sys.which('aspell') != '') {
+#' # -t means the TeX mode
+#' utils::aspell(knitr_example('knitr-minimal.Rnw'), knit_filter, control = '-t')
+#'
+#' # -H is the HTML mode
+#' utils::aspell(knitr_example('knitr-minimal.Rmd'), knit_filter, control = '-H -t')
+#' }}
+knit_filter = function(ifile, encoding = 'unknown') {
+  x = readLines(ifile, encoding = encoding, warn = FALSE)
+  n = length(x); if (n == 0) return(x)
+  p = detect_pattern(x, tolower(file_ext(ifile)))
+  if (is.null(p)) return(x)
+  p = all_patterns[[p]]; p1 = p$chunk.begin; p2 = p$chunk.end
+  i1 = grepl(p1, x)
+  i2 = filter_chunk_end(i1, grepl(p2, x))
+  m = numeric(n)
+  m[i1] = 1; m[i2] = 2  # 1: code; 2: text
+  if (m[1] == 0) m[1] = 2
+  for (i in seq_len(n - 1)) if (m[i + 1] == 0) m[i + 1] = m[i]
+  x[m == 1 | i2] = ''
+  x[m == 2] = gsub(p$inline.code, '', x[m == 2])
+  x
+}
+
 pandoc_available = function() {
   # if you have this environment variable, chances are you are good to go
   if (Sys.getenv("RSTUDIO_PANDOC") != '') return(TRUE)
   if (Sys.which('pandoc-citeproc') == '') return(FALSE)
-  if ((pandoc <- Sys.which('pandoc')) == '') return(FALSE)
-  # see if pandoc is >= 1.12.3
-  res = try(system2(pandoc, '--version', stdout = TRUE))
-  !inherits(res, 'try-error') && length(res) > 1 && grepl('pandoc', res[1]) && {
-    version = gsub('pandoc\\s+([0-9]+[.][0-9]+[.][0-9]+).*$', '\\1', res[1])
-    version = try(as.numeric_version(version))
-    !inherits(version, 'try-error') && version >= '1.12.3'
-  }
+  rmarkdown::pandoc_available('1.12.3')
 }
 
 html_vignette = function(
@@ -108,7 +142,7 @@ html_vignette = function(
   )
 ) {
   rmarkdown::html_document(
-    ..., fig_caption = fig_caption, theme = theme, hightlight = highlight,
+    ..., fig_caption = fig_caption, theme = theme, highlight = highlight,
     css = css, includes = includes
   )
 }

@@ -1,3 +1,4 @@
+% Please edit documentation in R/defaults.R
 \docType{data}
 \name{opts_knit}
 \alias{opts_knit}

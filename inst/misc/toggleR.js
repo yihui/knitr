@@ -9,18 +9,7 @@ function toggle_R() {
 
   for (i = 0; i < x.length; i++) {
     var y = x[i];
-    switch (y.tagName.toLowerCase()) {
-      case 'pre':
-        toggle_vis(y)
-        break;
-      case 'code':
-        var z = y.parentNode;
-        // pandoc uses the class 'sourceCode r' on both pre and code
-        if (z.tagName.toLowerCase() == 'pre' && z.className != 'sourceCode r') {
-          toggle_vis(z);
-        }
-        break;
-    }
+    if (y.tagName.toLowerCase() === 'pre') toggle_vis(y);
   }
 }
 

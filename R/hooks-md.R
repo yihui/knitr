@@ -1,6 +1,28 @@
 #' @rdname hook_plot
 #' @export
 hook_plot_md = function(x, options) {
+  # if not using R Markdown v2 or output is HTML, just return v1 output
+  if (is.null(to <- pandoc_to()) || grepl('^markdown', to) ||
+        to %in% c('html', 'html5', 'revealjs', 's5', 'slideous', 'slidy'))
+    return(hook_plot_md_base(x, options))
+  if (!is.null(options$out.width) || !is.null(options$out.height) ||
+        !is.null(options$out.extra) || options$fig.align != 'default') {
+    if (to %in% c('beamer', 'latex')) {
+      # Pandoc < 1.13 does not support \caption[]{} so suppress short caption
+      if (is.null(options$fig.scap)) options$fig.scap = NA
+      return(hook_plot_tex(x, options))
+    }
+    if (to == 'docx') {
+      warning('Chunk options fig.align, out.width, out.height, out.extra ',
+              'are not supported for Word output')
+      options$out.width = options$out.height = options$out.extra = NULL
+      options$fig.align = 'default'
+    }
+  }
+  hook_plot_md_base(x, options)
+}
+
+hook_plot_md_base = function(x, options) {
   if (options$fig.show == 'animate') return(hook_plot_html(x, options))
 
   base = opts_knit$get('base.url') %n% ''
@@ -41,9 +63,7 @@ render_markdown = function(strict = FALSE) {
       x = paste(c('', x), collapse = '\n')
       fence = '```'
       if (grepl('\n`{3,}', x)) {
-        print(gregexpr('\n`{3,}', x))
         l = attr(gregexpr('\n`{3,}', x)[[1]], 'match.length', exact = TRUE)
-        print(l)
         l = max(l)
         if (l >= 4) fence = paste(rep('`', l), collapse = '')
       }
@@ -54,6 +74,7 @@ render_markdown = function(strict = FALSE) {
     language = tolower(options$engine)
     if (language == 'node')
         language = 'javascript'
+    if (!options$highlight) language = 'text'
     paste('\n\n```', language, '\n', x, '```\n\n', sep = '')
   }
   knit_hooks$set(

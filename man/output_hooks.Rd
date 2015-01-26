@@ -1,3 +1,4 @@
+% Please edit documentation in R/hooks-asciidoc.R, R/hooks-html.R, R/hooks-latex.R, R/hooks-md.R, R/hooks-rst.R, R/hooks-textile.R
 \name{render_asciidoc}
 \alias{render_asciidoc}
 \alias{render_html}
@@ -75,6 +76,6 @@ references.
 See output hooks in \url{http://yihui.name/knitr/hooks}.
 
   Jekyll and Liquid:
-  \url{https://github.com/mojombo/jekyll/wiki/Liquid-Extensions};
+  \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions};
   prettify.js: \url{http://code.google.com/p/google-code-prettify/}
 }

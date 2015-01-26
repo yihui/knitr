@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils.R
 \name{read_rforge}
 \alias{read_rforge}
 \title{Read source code from R-Forge}
@@ -19,7 +20,9 @@ A character vector of the source code.
 This function reads source code from the SVN repositories on R-Forge.
 }
 \examples{
-\dontrun{
+library(knitr)
+\donttest{
+# relies on r-forge.r-project.org being accessible
 read_rforge("rgl/R/axes.R", project = "rgl")
 read_rforge("rgl/R/axes.R", project = "rgl", extra = "&revision=519")
 }

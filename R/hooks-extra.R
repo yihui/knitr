@@ -90,7 +90,7 @@ hook_pdfcrop = function(before, options, envir) {
   # crops plots after a chunk is evaluated and plot files produced
   ext = options$fig.ext
   if (options$dev == 'tikz' && options$external) ext = 'pdf'
-  if (before || (fig.num <- options$fig.num) == 0L) return()
+  if (before || (fig.num <- options$fig.num %n% 0L) == 0L) return()
   paths = all_figs(options, ext, fig.num)
   in_base_dir(for (f in paths) plot_crop(f))
 }
@@ -136,29 +136,25 @@ hook_plot_custom = function(before, options, envir){
 }
 #' @export
 #' @rdname chunk_hook
-hook_webgl = function(before, options, envir) {
+hook_webgl = local({commonParts = TRUE; function(before, options, envir) {
   # after a chunk has been evaluated
   if (before || rgl::rgl.cur() == 0) return()  # no active device
   name = tempfile('rgl', '.', '.html'); on.exit(unlink(name))
-  rgl::par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
+  dpi = options$dpi / options$fig.retina  # should not consider Retina displays (#901)
+  rgl::par3d(windowRect = 100 + dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
 
   prefix = gsub('[^[:alnum:]]', '_', options$label) # identifier for JS, better be alnum
   prefix = sub('^([^[:alpha:]])', '_\\1', prefix) # should start with letters or _
-  writeLines(sprintf(c('%%%sWebGL%%', '<script>%swebGLStart();</script>'), prefix),
-             tpl <- tempfile())
   rgl::writeWebGL(
-    dir = dirname(name), filename = name, template = tpl, prefix = prefix,
-    snapshot = FALSE
+    dir = dirname(name), filename = name, template = NULL, prefix = prefix,
+    snapshot = FALSE, commonParts = commonParts
   )
+  commonParts <<- FALSE
   res = readLines(name)
   res = res[!grepl('^\\s*$', res)] # remove blank lines
-  # remove <script src="CanvasMatrix.js" type="text/javascript"></script> (bug #755)
-  res = grep('CanvasMatrix\\.js.+</script>\\s*$', res, invert = TRUE, value = TRUE)
-  unlink('CanvasMatrix.js')
-  # TODO: pandoc standalone mode has a bug (https://github.com/jgm/pandoc/issues/1248)
   paste(gsub('^\\s+', '', res), collapse = '\n') # no indentation at all (for Pandoc)
-}
+}})
 
 #" a hook function to write out code from chunks
 #' @export

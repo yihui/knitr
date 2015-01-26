@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils.R
 \name{knit_global}
 \alias{knit_global}
 \title{The global environment in which code chunks are evaluated}

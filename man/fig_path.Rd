@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils.R
 \name{fig_path}
 \alias{fig_path}
 \title{Path for figure files}

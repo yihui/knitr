@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils-conversion.R
 \name{knit2pdf}
 \alias{knit2pdf}
 \title{Convert Rnw or Rrst files to PDF using knit() and texi2pdf() or rst2pdf()}

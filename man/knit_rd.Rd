@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils-rd2html.R
 \name{knit_rd}
 \alias{knit_rd}
 \alias{knit_rd_all}
@@ -32,7 +33,9 @@ Ideally the html pages should be put under the \file{html} directory of
   the link to the DESCRITION file).
 }
 \examples{
+library(knitr)
 \dontrun{
+
 knit_rd("maps")
 knit_rd("rpart")
 setwd(system.file("html", package = "ggplot2"))

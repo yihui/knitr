@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils-sweave.R
 \name{Sweave2knitr}
 \alias{Sweave2knitr}
 \title{Convert Sweave to knitr documents}
@@ -35,7 +36,7 @@ FALSE}; the options are automatically fixed in the same way as local chunk
 options (explained below).
 
 The Sweave package \samp{\\usepackage{Sweave}} in the preamble is removed
-because it is not reguired.
+because it is not required.
 
 Chunk options are updated if necessary: option values \code{true} and
 \code{false} are changed to \code{TRUE} and \code{FALSE} respectively;

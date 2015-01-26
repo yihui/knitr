@@ -14,7 +14,10 @@
 #'   an installed package which can be found via \code{system.file('html',
 #'   package = 'your_package_name')}, otherwise some links may not work (e.g.
 #'   the link to the DESCRITION file).
-#' @examples \dontrun{knit_rd('maps')
+#' @examples library(knitr)
+#' \dontrun{
+#'
+#' knit_rd('maps')
 #' knit_rd('rpart')
 #' setwd(system.file('html', package = 'ggplot2'))
 #' knit_rd('ggplot2') # time-consuming!
@@ -48,9 +51,9 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
       }
       txt = c(txt[1:i0], res, txt[i1:length(txt)])
       txt = sub('</head>', '
-<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
-<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
-<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 </head>', txt)
     } else message('no examples found for ', p)

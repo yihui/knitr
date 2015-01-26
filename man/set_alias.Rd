@@ -1,3 +1,4 @@
+% Please edit documentation in R/defaults.R
 \name{set_alias}
 \alias{set_alias}
 \title{Set aliases for chunk options}

@@ -12,7 +12,7 @@
 #' options (explained below).
 #'
 #' The Sweave package \samp{\\usepackage{Sweave}} in the preamble is removed
-#' because it is not reguired.
+#' because it is not required.
 #'
 #' Chunk options are updated if necessary: option values \code{true} and
 #' \code{false} are changed to \code{TRUE} and \code{FALSE} respectively;
@@ -94,10 +94,7 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
     x = x[-i]
   }
   if (is.null(text)) {
-    if (encoding != 'native.enc') {
-      enc = Encoding(x); if (enc == 'unknown') enc = ''
-      x = iconv(x, from = enc, to =  encoding)
-    }
+    if (encoding != 'native.enc') x = native_encode(x, encoding)
     cat(x, sep = '\n', file = output)
   } else x
 }

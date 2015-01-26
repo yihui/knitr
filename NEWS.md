@@ -1,8 +1,79 @@
+# CHANGES IN knitr VERSION 1.10
+
+
+# CHANGES IN knitr VERSION 1.9
+
+## NEW FEATURES
+
+- added a new function `load_cache()` so that we can read an object from a cached code chunk, even if the chunk appears later in the document and the object needs to be used earlier; see the example #114 at https://github.com/yihui/knitr-examples (related to #868)
+
+- added a new function `clean_cache()` to clean up the cache files that are probably no longer needed, e.g. after you rename or delete cached code chunks (thanks, @sjmgarnier, #933)
+
+- `knit2wp()` can update an existing post or create a page now (thanks, @jaredlander, #916, #917)
+
+- added an engine `stan` to support [Stan](http://mc-stan.org) through the **rstan** package; see http://rpubs.com/jrnold/knitr-stan for an example (thanks, @jrnold, #903)
+
+- for the `tikz` engine, the path to the `convert` utility of ImageMagick can be specified via the chunk option `engine.opts`, e.g. `engine.opts = list(convert = 'path/to/convert')` (thanks, @mienkoja, #897)
+
+- similarly, more command line arguments to `convert` can be specified via, for example, `engine.opts = list(convert.opts = '-density 300')` (#896)
+
+## MAJOR CHANGES
+
+- when the chunk option `dev = 'png'`, `grDevices::png()` is used to record plots, instead of the default PDF null device (thanks, @yixuan, #729)
+
+- currently R (3.1.2) does not really pass the vignette encoding to vignette engines (which is probably a bug), and **knitr** vignette engines will assume UTF-8 is the file encoding
+
+- when the chunk option `tidy=FALSE`, and `eval` takes a numeric vector, it used to mean the line numbers of the code chunk; now it means the indices of the R expressions in the code chunk, regardless of `tidy=FALSE` or `TRUE` (yihui/knitr-examples#39, thanks, @isomorphisms)
+
+## MINOR CHANGES
+
+- you need to upgrade the **rgl** package to at least v0.95.1201 if you use the hook function `hook_webgl()` (thanks, @dmurdoch, #901)
+
+- for the automatically generated figure caption and label of a figure, the label is placed _outside_ of the caption now, i.e. the format was changed from `\caption{\label{}}` to `\caption{}\label{}` (thanks, @dr-moebius, @krlmlr, @ltorgo, #746)
+
+## BUG FIXES
+
+- fixed #898: `kable()` did not work on matrices with duplicate row names (thanks, @tomaskrehlik)
+
+- fixed #927: `kable()` did not work for matrices of zero row and/or zero column (thanks, @hadley)
+
+- fixed #929: `opts_knit$restore()` does not restore the `animation.fun` option (thanks, @julian-gehring)
+
 # CHANGES IN knitr VERSION 1.8
 
 ## NEW FEATURES
 
+- when using **knitr** with the **rmarkdown** package, the internal output hook for plots will be automatically switched to the LaTeX plot hook when necessary; for example, when the chunk options fig.align, out.width, out.height, and/or out.extra are specified, raw LaTeX code will be generated to align/set the size of plots, because there is no support for figure alignment or setting the size in the native Markdown syntax; for Word output, these options are simply ignored (related issues: #626, rstudio/rmarkdown#86, rstudio/rmarkdown#148, rstudio/rmarkdown#303)
+
+- added a new function `fig_chunk()` to provide a public API to get the figure filenames produced from code chunks; since **knitr** 1.7 changed the figure file numbering scheme, it broke documents with hard-coded figure filenames, e.g. for Rnw documents, `\includegraphics{foo.pdf}` should be `\includegraphics{foo-1.pdf}` after **knitr** 1.7, and such problems can be avoided by `\includegraphics{\Sexpr{fig_chunk('foo', 'pdf')}}` (thanks, @edwardabraham, #870)
+
 - added an argument `escape = TRUE` to `kable()` to escape special characters in LaTeX and HTML tables (thanks, @juba, #852)
+
+- added a new function `knit_filter()` to filter out code chunks and inline R expressions; this function can be used as the filter for the spell check function `utils::aspell()`; see `?knit_filter` for examples (#581)
+
+- added a new function `spin_child()` to spin child R scripts when we `spin()` a main script (thanks, @krlmlr, #621)
+
+- added a new function `inline_expr()` to help authors write the "source code" of the inline expression, e.g. `inline_expr('1+1')` generates `` `r 1+1` `` in R Markdown documents (#890)
+
+- the cache will attempt to preserve the order in which packages are stored on the search path (thanks, @dgrtwo, #867)
+
+- added a new argument `table.envir` to `kable()` for LaTeX tables only; if the table caption is specified (not `NULL`), the LaTeX environment `table` will be used by default (i.e. the table is generated in `\begin{table} \end{table}`), and you can specify alternative environments via `kable(..., table.envir = '???')` (thanks, @dalupus, #872)
+
+- chunk options are supported using the syntax `# ---- label, options ----` in the R script passed to `stitch()` (thanks, @wibeasley, yihui/knitr-examples#35)
+
+- syntax highlighting for .Rnw and .Rhtml documents can be further customized by setting `opts_knit$set(highr.opts = list(markup = cmd_mine))` where `cmd_mine` is a data frame for the `markup` argument of `highr::hilight()` (thanks, @lq, #869)
+
+- added a new language engine `groovy` (thanks, @vveitas, #876)
+
+## BUG FIXES
+
+- fixed #862: the YAML metadata in child R Markdown documents was not correctly removed (thanks, @krlmlr)
+
+- fixed #874: for the engines `dot` and `tikz`, the figure directory will be created recursively (thanks, @WilDoane)
+
+- fixed #654: sub figures were not aligned correctly in LaTeX when the chunk option `fig.align` was specified (thanks, @lionandoil)
+
+- the vignette engine `knitr::rmarkdown_notangle` did not really work (thanks, @bbolker, http://stackoverflow.com/q/26726388/559676)
 
 # CHANGES IN knitr VERSION 1.7
 
@@ -208,7 +279,7 @@
 
 - when cache is enabled, automatic chunk dependencies can be truly automatic now; there is no need to call `dep_auto()` explicitly, and all we need to do is the chunk option `autodep=TRUE`; the chunk dependencies will be rebuilt after each chunk, so when new chunks are inserted into the document, **knitr** can also figure out the new dependencies automatically (thanks, @knokknok, #592)
 
-- for Sublime Text users, there is a [SublimeKnitr](https://github.com/andrewheiss/SublimeKnitr) package to support LaTeX and Markdown with **knitr**; thanks, Andrew Heiss (#449) (this is not really a new feature of knitr **itself**, though)
+- for Sublime Text users, there is a [SublimeKnitr](https://github.com/andrewheiss/SublimeKnitr) package to support LaTeX and Markdown with **knitr**; thanks, Andrew Heiss (#449) (this is not really a new feature of **knitr** itself, though)
 
 - now the chunk options `warning` and `message` can also take numeric values as indices to select which warnings/messages to include in the output (thanks, Simon Urbanek, #590)
 
@@ -686,7 +757,7 @@
 
 ## DOCUMENTATION
 
-- added a simple reference card: https://bitbucket.org/stat/knitr/downloads/knitr-refcard.pdf
+- added a simple reference card: http://cran.rstudio.com/web/packages/knitr/vignettes/knitr-refcard.pdf
 
 # CHANGES IN knitr VERSION 0.7
 
@@ -992,7 +1063,7 @@
 
 - website updated as usual: http://yihui.name/knitr
 
-- added an example for subfloat environment: https://bitbucket.org/stat/knitr/downloads/knitr-subfloats.pdf
+- added an example for subfloat environment: https://github.com/yihui/knitr/releases/download/doc/knitr-subfloats.pdf
 
 - most manuals (main or graphics manuals) have been updated
 

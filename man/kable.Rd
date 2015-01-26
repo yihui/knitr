@@ -1,3 +1,4 @@
+% Please edit documentation in R/table.R
 \name{kable}
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
@@ -35,8 +36,7 @@ left-aligned; if \code{align = NULL}, the default alignment is used}
 \item{...}{other arguments (see examples)}
 }
 \value{
-A character vector of the table source code. When \code{output =
-  TRUE}, the results are also written into the console as a side-effect.
+A character vector of the table source code.
 }
 \description{
 This is a very simple table generator. It is simple by design. It is not
@@ -46,6 +46,11 @@ intended to replace any other R packages for making tables.
 The tables for \code{format = 'markdown'} also work for Pandoc when the
   \code{pipe_tables} extension is enabled (this is the default behavior for
   Pandoc >= 1.10).
+
+  When using \code{kable()} as a \emph{top-level} expression, you do not need
+  to explicitly \code{print()} it due to R's automatic implicit printing.
+  When it is wrapped inside other expressions (such as a \code{\link{for}}
+  loop), you must explicitly \code{print(kable(...))}.
 }
 \examples{
 kable(head(iris), format = "latex")

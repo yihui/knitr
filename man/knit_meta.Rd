@@ -1,3 +1,4 @@
+% Please edit documentation in R/output.R
 \name{knit_meta}
 \alias{knit_meta}
 \title{Metadata about objects to be printed}

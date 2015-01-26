@@ -1,3 +1,4 @@
+% Please edit documentation in R/cache.R
 \name{dep_prev}
 \alias{dep_prev}
 \title{Make later chunks depend on previous chunks}

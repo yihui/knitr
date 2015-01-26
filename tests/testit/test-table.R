@@ -104,3 +104,35 @@ assert(
     c('|  a|   b|', '|--:|---:|', '|  1| 2.3|', '|  1| 2.4|')
   )
 )
+
+assert(
+  'kable() works on matrices with duplicate row names',
+  identical(
+    kable2(matrix(c(1, 1, 1, 1), ncol = 2, dimnames = list(c('A', 'A'), c('B', 'B')))),
+    c('|   |  B|  B|', '|:--|--:|--:|', '|A  |  1|  1|', '|A  |  1|  1|')
+  )
+)
+
+assert(
+  'kable() works on matrices with NA colname',
+  identical(
+    kable2(matrix(c(1, 1, 1, 1), ncol = 2, dimnames = list(c('A', NA), c('B', NA)))),
+    c("|   |  B| NA|", "|:--|--:|--:|", "|A  |  1|  1|", "|NA |  1|  1|")
+  )
+)
+
+# edge cases (should not error)
+x1 = matrix(NA, 0, 0)
+x2 = matrix(NA, 0, 1)
+x3 = matrix(NA, 1, 0)
+for (f in c('pandoc', 'html', 'latex', 'rst')) {
+  kable(x1, f)
+  kable(x2, f)
+  kable(x3, f)
+}
+
+colnames(x2) = 'a'
+assert(
+  'kable(, "markdown") works for a 0 zero 1 column matrix',
+  identical(kable2(x2, 'markdown'), c('|a  |', '|:--|'))
+)

@@ -1,3 +1,4 @@
+% Please edit documentation in R/output.R
 \name{knit_exit}
 \alias{knit_exit}
 \title{Exit knitting early}
@@ -6,8 +7,8 @@ knit_exit(append)
 }
 \arguments{
 \item{append}{a character vector to be appended to the results from
-\code{knit()} so far; by default, it is \verb{\end{document}} for LaTeX
-output, and \verb{</body></html>} for HTML output to make the output
+\code{knit()} so far; by default, it is \samp{\end{document}} for LaTeX
+output, and \samp{</body></html>} for HTML output to make the output
 document complete; for other types of output, it is an empty string}
 }
 \value{

@@ -1,3 +1,4 @@
+% Please edit documentation in R/plot.R
 \name{plot_crop}
 \alias{plot_crop}
 \title{Crop a plot (remove the edges) using PDFCrop or ImageMagick}

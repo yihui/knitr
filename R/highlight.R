@@ -1,7 +1,8 @@
 hilight_source = function(x, format, options) {
   if ((format %in% c('latex', 'html')) && options$highlight) {
     if (options$engine == 'R') {
-      highr::hilight(x, format, prompt = options$prompt)
+      opts = opts_knit$get('highr.opts')
+      highr::hilight(x, format, prompt = options$prompt, markup = opts$markup)
     } else {
       res = try(highr::hi_andre(x, options$engine, format))
       if (inherits(res, 'try-error')) {

@@ -1,18 +1,18 @@
 <!--
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Display Tables with the DataTables Library}
+%\VignetteIndexEntry{Display Tables with the JavaScript Library DataTables}
 -->
 
 # jQuery DataTables
 
-We can use the JavaScript library [`DataTables`](http://www.datatables.net) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
+We can use the JavaScript library [**DataTables**](http://www.datatables.net) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
 
 ```{r cool, results='asis'}
 library(knitr)
 kable(mtcars, 'html', table.attr='id="mtcars_table"')
 ```
 
-Note we assigned an `id` to the table, and next we use the `DataTables` library to tweak the table.
+Note we assigned an `id` to the table, and next we use the **DataTables** library to tweak the table.
 
 ```js
 <script type="text/javascript">
@@ -41,3 +41,5 @@ By comparison, below is an ordinary table:
 ```{r boring, results='asis'}
 kable(head(mtcars), 'html')
 ```
+
+This vignette is only a toy example. I'd recommend you to use the **DT** package instead: https://github.com/rstudio/DT

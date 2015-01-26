@@ -27,7 +27,17 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
     if (!set.preamble && !parent_mode()) {
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
     }
-    if (block) parse_block(g, patterns) else parse_inline(g, patterns)
+    if (block) {
+      n = length(g)
+      # remove the optional chunk footer
+      if (n >=2 && grepl(chunk.end, g[n])) g = g[-n]
+      # remove the optional prefix % in code in Rtex mode
+      g = strip_block(g, patterns$chunk.code)
+      params.src = if (group_pattern(chunk.begin)) {
+        str_trim(gsub(chunk.begin, '\\1', g[1]))
+      } else ''
+      parse_block(g[-1], g[1], params.src)
+    } else parse_inline(g, patterns)
   })
 }
 
@@ -45,25 +55,14 @@ strip_block = function(x, prefix = NULL) {
 dep_list = new_defaults()
 
 # separate params and R code in code chunks
-parse_block = function(input, patterns) {
-  n = length(input)
-  # remove the optional chunk footer
-  if (n >=2 && grepl(patterns$chunk.end, input[n])) input = input[-n]
-
-  block = strip_block(input, patterns$chunk.code)
-  chunk.begin = patterns$chunk.begin
-  params.src = if (group_pattern(chunk.begin)) {
-    str_trim(gsub(chunk.begin, '\\1', block[1]))
-  } else ''
+parse_block = function(code, header, params.src) {
   params = parse_params(params.src)
-  if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', block[1]))) {
+  if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', header))) {
     params$indent = spaces
-    block = gsub(sprintf('^%s', spaces), '', block) # remove indent for the whole chunk
+    code = gsub(sprintf('^%s', spaces), '', code) # remove indent for the whole chunk
   }
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
-  # remove the chunk header
-  code = block[-1L]
   if (length(code)) {
     if (label %in% names(knit_code$get())) stop("duplicate label '", label, "'")
     knit_code$set(setNames(list(code), label))
@@ -167,6 +166,7 @@ parse_inline = function(input, patterns) {
   if (nrow(loc)) {
     code = str_match_all(input, inline.code)[[1L]]
     code = if (NCOL(code) >= 2L) {
+      code[is.na(code)] = ''
       apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
     } else character(0)
   } else code = character(0)
@@ -358,3 +358,39 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
 #' @return A character vector.
 #' @export
 all_labels = function() names(knit_code$get())
+
+#' Wrap code using the inline R expression syntax
+#'
+#' This is a convenience function to write the "source code" of inline R
+#' expressions. For example, if you want to write \samp{`r 1+1`} literally in an
+#' R Markdown document, you may write \samp{`` `r knitr::inline_expr('1+1')`
+#' ``}; for Rnw documents, this may be
+#' \samp{\verb|\Sexpr{knitr::inline_expr{'1+1'}}|}.
+#' @param code a character string of the inline R source code
+#' @param syntax a character string to specify the syntax, e.g. \code{rnw},
+#'   \code{html}, or \code{md}, etc; if not specified, it will be guessed from
+#'   the knitting context
+#' @return A character string marked up using the inline R code syntax.
+#' @export
+#' @examples library(knitr)
+#' inline_expr('1+1', 'rnw'); inline_expr('1+1', 'html'); inline_expr('1+1', 'md')
+inline_expr = function(code, syntax) {
+  if (!is.character(code) || length(code) != 1)
+    stop('The inline code must be a charater string')
+  if (!missing(syntax)) pat = syntax else {
+    inline = knit_patterns$get('inline.code')
+    if (is.null(inline)) stop('inline_expr() must be called in a knitting process')
+    pat = NULL
+      for (i in names(all_patterns)) {
+        if (inline == all_patterns[[i]][['inline.code']]) {
+          pat = i; break
+        }
+      }
+  }
+  if (is.null(pat)) stop('Unknown document format')
+  sprintf(switch(
+    pat, rnw = '\\Sexpr{%s}', tex = '\\rinline{%s}', html = '<!--rinline %s -->',
+    md = '`r %s`', rst = ':r:`%s`', asciidoc = '`r %s`', textile = '@r %s@',
+    stop('Unknown syntax ', pat)
+  ), code)
+}

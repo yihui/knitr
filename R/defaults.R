@@ -139,12 +139,14 @@ set_alias = function(...) {
 #' opts_knit$set(unnamed.chunk.label='fig')
 #' knit('001-minimal.Rmd') # from https://github.com/yihui/knitr-examples
 #' }
+#' @include hooks-html.R
 opts_knit = new_defaults(list(
   progress = TRUE, verbose = FALSE, width = 75L, eval.after = NULL,
   base.dir = NULL, base.url = NULL, root.dir = NULL, child.path = '',
-  upload.fun = identity, animation.fun = NULL, global.device = FALSE, global.par = FALSE,
+  upload.fun = identity, animation.fun = hook_ffmpeg_html,
+  global.device = FALSE, global.par = FALSE,
   concordance = FALSE, documentation = 1L, self.contained = TRUE,
-  unnamed.chunk.label = 'unnamed-chunk',
+  unnamed.chunk.label = 'unnamed-chunk', highr.opts = NULL,
 
   # internal options; users should not touch them
   out.format = NULL, child = FALSE, parent = FALSE, tangle = FALSE, aliases = NULL,

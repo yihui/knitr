@@ -1,6 +1,7 @@
 # knitr
 
 [![Build Status](https://travis-ci.org/yihui/knitr.svg)](https://travis-ci.org/yihui/knitr)
+[![Coverage Status](https://img.shields.io/coveralls/yihui/knitr.svg)](https://coveralls.io/r/yihui/knitr?branch=master)
 
 The R package **knitr** is a general-purpose literate programming engine,
 with lightweight API's designed to give users full control of the output
@@ -29,12 +30,10 @@ install.packages('knitr', repos = c('http://rforge.net', 'http://cran.rstudio.or
                  type = 'source')
 ```
 
-If you know GIT and `R CMD build`, here is another way:
+Or use **devtools** to install the development version from Github:
 
-```bash
-git clone https://github.com/yihui/knitr.git
-R CMD build knitr
-R CMD INSTALL knitr_*.tar.gz
+```r
+devtools::install_github('yihui/knitr', build_vignettes = TRUE)
 ```
 
 ## Motivation
@@ -94,38 +93,10 @@ knit(input)
 
 If options are not explicitly specified, **knitr** will try to guess
 reasonable default settings. A few manuals are available such as the [main
-manual](https://bitbucket.org/stat/knitr/downloads/knitr-manual.pdf), the
+manual](http://yihui.name/knitr/demo/manual/), and the
 [graphics
-manual](https://bitbucket.org/stat/knitr/downloads/knitr-graphics.pdf), and
-the [themes
-manual](https://bitbucket.org/stat/knitr/downloads/knitr-themes.pdf). For a
+manual](http://yihui.name/knitr/demo/graphics/). For a
 more organized reference, see the [knitr book](http://amzn.com/1482203537).
-
-## Contributing
-
-For very simple changes such as fixing typos, you can just edit the file by
-clicking the button `Edit` after you open the file online. For more
-complicated changes, you will have to manually create a [pull
-request](https://help.github.com/articles/using-pull-requests) after
-[forking](https://help.github.com/articles/fork-a-repo) this repository.
-
-To make sure you did not break anything, you need to run tests, which are
-done through the [**testit**](http://cran.rstudio.com/package=testit)
-package. If you added any features, add your own tests in `tests/testit/`.
-You can run tests using `make`, e.g.
-
-```bash
-cd knitr
-make check
-```
-
-If you are lazy or do not understand what I said above, just forget about
-it. The simplest thing to do is to look at the `Commits` panel after you
-sent the pull request -- if you see green check marks ✔ on your commits, you
-are fine. [Travis
-CI](http://yihui.name/en/2013/04/travis-ci-general-purpose/) will run the
-tests automatically for me. If your pull request passes the tests, you see
-green check marks.
 
 ## License
 

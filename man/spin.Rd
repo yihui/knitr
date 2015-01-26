@@ -1,3 +1,4 @@
+% Please edit documentation in R/spin.R
 \name{spin}
 \alias{spin}
 \title{Spin goat's hair into wool}

@@ -18,3 +18,4 @@ NEWS.md
 FAQ.md
 Makefile
 ^knitr-examples$
+^CONTRIBUTING\.md$

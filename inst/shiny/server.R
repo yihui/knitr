@@ -14,7 +14,7 @@ shinyServer(function(input, output) {
           '<script>',
           '// highlight code blocks',
           "$('#nbOut pre code').each(function(i, e) {hljs.highlightBlock(e)});",
-          'MathJax.Hub.Typeset(); // update MathJax expressions',
+          'MathJax.Hub.Queue(["Typeset", MathJax.Hub]); // update MathJax expressions',
           '</script>', sep = '\n')
   })
 })

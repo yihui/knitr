@@ -1,3 +1,4 @@
+% Please edit documentation in R/pattern.R
 \docType{data}
 \name{knit_patterns}
 \alias{knit_patterns}

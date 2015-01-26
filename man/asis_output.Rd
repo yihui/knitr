@@ -1,3 +1,4 @@
+% Please edit documentation in R/output.R
 \name{asis_output}
 \alias{asis_output}
 \title{Mark an R object with a special class}

@@ -1,3 +1,4 @@
+% Please edit documentation in R/parser.R
 \name{all_labels}
 \alias{all_labels}
 \title{Get all chunk labels in a document}

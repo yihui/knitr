@@ -31,8 +31,21 @@
 #' names(knit_engines$get())
 knit_engines = new_defaults()
 
-# give me source code, text output and I return formatted text using the three
-# hooks: source, output and chunk
+#' An output wrapper for language engine output
+#'
+#' If you have designed a language engine, you may call this function in the end
+#' to format and return the text output from your engine.
+#' @param options a list of chunk options (usually this is just the object
+#'   \code{options} passed to the engine function; see
+#'   \code{\link{knit_engines}})
+#' @param code the source code of the chunk, to which the output hook
+#'   \code{source} is applied, unless the chunk option \code{echo == FALSE}
+#' @param out the text output from the engine, to which the hook \code{output}
+#'   is applied, unless the chunk option \code{results == 'hide'}
+#' @param extra any additional text output that you want to include
+#' @return A character string generated from the source code and output using
+#'   the appropriate output hooks.
+#' @export
 engine_output = function(options, code, out, extra = NULL) {
   if (length(code) != 1L) code = paste(code, collapse = '\n')
   if (length(out) != 1L) out = paste(out, collapse = '\n')
@@ -71,8 +84,8 @@ eng_interpreted = function(options) {
       f
     }, haskell = paste('-e', shQuote(paste(':script', f))), f)
   } else paste(switch(
-    engine, bash = '-c', coffee = '-e', node = '-e', perl = '-e', python = '-c',
-    ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
+    engine, bash = '-c', coffee = '-e', groovy = '-e', node = '-e', perl = '-e',
+    python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(paste(options$code, collapse = '\n')))
   # FIXME: for these engines, the correct order is options + code + file
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
@@ -80,7 +93,10 @@ eng_interpreted = function(options) {
   cmd = options$engine.path %n% engine
   out = if (options$eval) {
     message('running: ', cmd, ' ', code)
-    system2(cmd, code, stdout = TRUE, stderr = TRUE)
+    tryCatch(system2(cmd, code, stdout = TRUE, stderr = TRUE), error = function(e) {
+      if (!options$error) stop(e)
+      paste('Error in running command', cmd)
+    })
   } else ''
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status')))
@@ -159,6 +175,30 @@ eng_RcppOctave = function(options) {
   engine_output(options, code, '')
 }
 
+## Stan
+## Compiles Stan model in the code chunk, creates a stanmodel object,
+## and assigns it to a variable with the name given in engine.opts$x.
+eng_stan = function(options) {
+  code = paste(options$code, collapse = '\n')
+  opts = options$engine.opts
+  ## name of the modelfit object returned by stan_model
+  x = opts$x
+  if (!is.character(x) || length(x) != 1L) stop(
+    "engine.opts$x must be a character string; ",
+    "provide a name for the returned `stanmodel` object."
+  )
+  opts$x = NULL
+  if (options$eval) {
+    message("Creating a 'stanmodel' object ", x)
+    assign(
+      x,
+      do.call(getFromNamespace('stan_model', 'rstan'), c(list(model_code = code), opts)),
+      envir = knit_global()
+    )
+  }
+  engine_output(options, code, '')
+}
+
 ## convert tikz string to PDF
 eng_tikz = function(options) {
   if (!options$eval) return(engine_output(options, options$code, ''))
@@ -171,18 +211,20 @@ eng_tikz = function(options) {
 
   s = append(lines, options$code, i)  # insert tikz into tex-template
   writeLines(s, texf <- str_c(f <- tempfile('tikz', '.'), '.tex'))
+  on.exit(unlink(texf), add = TRUE)
   unlink(outf <- str_c(f, '.pdf'))
   tools::texi2pdf(texf, clean = TRUE)
   if (!file.exists(outf)) stop('failed to compile tikz; check the template: ', tmpl)
-  unlink(texf)
 
   fig = fig_path('', options)
-  dir.create(dirname(fig), showWarnings = FALSE)
+  dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
   file.rename(outf, str_c(fig, '.pdf'))
   # convert to the desired output-format, calling `convert`
   ext = tolower(options$fig.ext %n% dev2ext(options$dev))
   if (ext != 'pdf') {
-    conv = system(sprintf('convert %s.pdf %s.%s', fig, fig, ext))
+    conv = system2(options$engine.opts$convert %n% 'convert', c(
+      options$engine.opts$convert.opts, sprintf('%s.pdf %s.%s', fig, fig, ext)
+    ))
     if (conv != 0) stop('problems with `convert`; probably not installed?')
   }
   options$fig.num = 1L; options$fig.cur = 1L
@@ -214,7 +256,7 @@ eng_dot = function(options) {
                 shQuote(str_c(fig <- fig_path(), '.', ext)))
 
   # generate output
-  dir.create(dirname(fig), showWarnings = FALSE)
+  dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
   outf = paste(fig, ext, sep = '.')
   unlink(outf)
   extra = if (options$eval) {
@@ -245,10 +287,12 @@ eng_highlight = function(options) {
 
 ## save the code
 eng_cat = function(options) {
-  lang = options$engine.opts$lang
-  if (!is.null(lang)) options$engine.opts$lang = NULL
-  do.call(cat, c(list(options$code, sep = '\n'), options$engine.opts))
-  if (is.null(lang)) return('')
+  cat2 = function(..., file = '', lang = NULL) {
+    # do not write to stdout like the default behavior of cat()
+    if (!identical(file, '')) cat(..., file = file)
+  }
+  do.call(cat2, c(list(options$code, sep = '\n'), options$engine.opts))
+  if (is.null(lang <- options$engine.opts$lang)) return('')
   options$engine = lang
   engine_output(options, options$code, NULL)
 }
@@ -259,10 +303,10 @@ eng_asis = function(options) {
 }
 
 # set engines for interpreted languages
-for (i in c('awk', 'bash', 'coffee', 'gawk', 'haskell', 'node', 'perl', 'python',
-            'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'zsh')) {
-  knit_engines$set(setNames(list(eng_interpreted), i))
-}
+for (i in c(
+  'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'node', 'perl', 'python',
+  'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'zsh'
+)) knit_engines$set(setNames(list(eng_interpreted), i))
 rm(i)
 
 # additional engines
@@ -270,7 +314,7 @@ knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, RcppOctave = eng_RcppOctave,
   tikz = eng_tikz, dot = eng_dot,
   c = eng_shlib, fortran = eng_shlib, asy = eng_dot, cat = eng_cat,
-  asis = eng_asis
+  asis = eng_asis, stan = eng_stan
 )
 
 # possible values for engines (for auto-completion in RStudio)

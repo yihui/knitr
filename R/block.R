@@ -100,7 +100,7 @@ block_exec = function(options) {
   keep = options$fig.keep
   # open a device to record plots
   if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none',
-                   options$dev, options$dev.args)) {
+                   options$dev, options$dev.args, options$dpi)) {
     # preserve par() settings from the last code chunk
     if (keep.pars <- opts_knit$get('global.par'))
       par(opts_knit$get('global.pars'))
@@ -127,6 +127,8 @@ block_exec = function(options) {
   }
   # only evaluate certain lines
   if (is.numeric(ev <- options$eval)) {
+    # group source code into syntactically complete expressions
+    if (!options$tidy) code = sapply(highr:::group_src(code), paste, collapse = '\n')
     iss = seq_along(code)
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
@@ -221,7 +223,7 @@ block_exec = function(options) {
   if (options$cache > 0) {
     obj.new = setdiff(ls(globalenv(), all.names = TRUE), obj.before)
     copy_env(globalenv(), env, obj.new)
-    objs = if (isFALSE(ev)) character(0) else
+    objs = if (isFALSE(ev) || length(code) == 0) character(0) else
       options$cache.vars %n% codetools::findLocalsList(parse_only(code))
     # make sure all objects to be saved exist in env
     objs = intersect(c(objs, obj.new), ls(env, all.names = TRUE))
@@ -255,9 +257,15 @@ purge_cache = function(options) {
 
 # open a device for a chunk; depending on the option global.device, may or may
 # not need to close the device on exit
-chunk_device = function(width, height, record = TRUE, dev, dev.args) {
+chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi) {
   dev_new = function() {
-    if (identical(getOption('device'), pdf_null)) {
+    # actually I should adjust the recording device according to dev, but here
+    # I have only considered the png device
+    if (identical(dev, 'png')) {
+      do.call(grDevices::png, c(list(
+        filename = tempfile(), width = width, height = height, units = 'in', res = dpi
+      ), dev.args))
+    } else if (identical(getOption('device'), pdf_null)) {
       if (!is.null(dev.args)) {
         dev.args = get_dargs(dev.args, 'pdf')
         dev.args = dev.args[intersect(names(dev.args), c('pointsize', 'bg'))]
@@ -330,9 +338,9 @@ inline_exec = function(
   for (i in 1:n) {
     res = if (eval) {
       v = withVisible(eval(parse_only(code[i]), envir = envir))
-      if (v$visible) knit_print(v$value, inline = TRUE)
+      if (v$visible) knit_print(v$value, inline = TRUE, options = opts_chunk$get())
     } else '??'
-    if (inherits(res, 'knit_asis')) res = wrap.knit_asis(res)
+    if (inherits(res, 'knit_asis')) res = wrap.knit_asis(res, inline = TRUE)
     d = nchar(input)
     # replace with evaluated results
     str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
@@ -364,6 +372,7 @@ process_tangle.block = function(x) {
   }
   code = parse_chunk(code)
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
+  if (opts_knit$get('documentation') == 0L) return(paste(code, collapse = '\n'))
   label_code(code, x$params.src)
 }
 #' @export
@@ -381,7 +390,6 @@ process_tangle.inline = function(x) {
 # add a label [and extra chunk options] to a code chunk
 label_code = function(code, label) {
   code = paste(c('', code, ''), collapse = '\n')
-  if (opts_knit$get('documentation') == 0L) return(code)
   paste('## ----', str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
         '----', code, sep = '')
 }

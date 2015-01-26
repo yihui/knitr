@@ -1,3 +1,4 @@
+% Please edit documentation in R/pattern.R
 \docType{data}
 \name{all_patterns}
 \alias{all_patterns}

@@ -1,0 +1,50 @@
+% Please edit documentation in R/cache.R
+\name{load_cache}
+\alias{load_cache}
+\title{Load the cache database of a code chunk}
+\usage{
+load_cache(label, object, notfound = "NOT AVAILABLE", 
+    path = opts_chunk$get("cache.path"), lazy = TRUE)
+}
+\arguments{
+\item{label}{the chunk label of the code chunk that has a cache database}
+
+\item{object}{the name of the object to be fetched from the database (if
+missing, \code{NULL} is returned)}
+
+\item{notfound}{a value to use when the \code{object} cannot be found}
+
+\item{path}{the path of the cache database (normally set in the global chunk
+option \code{cache.path})}
+
+\item{lazy}{whether to \code{\link{lazyLoad}} the cache database (depending
+on the chunk option \code{cache.lazy = TRUE} or \code{FALSE} of that code
+chunk)}
+}
+\value{
+Invisible \code{NULL} when \code{object} is not specified (the cache
+  database will be loaded as a side effect), otherwise the value of the
+  object if found.
+}
+\description{
+If a code chunk has turned on the chunk option \code{cache = TRUE}, a cache
+database will be established after the document is compiled. You can use this
+function to manually load the database anywhere in the document (even before
+the code chunk). This makes it possible to use objects created later in the
+document earlier, e.g. in an inline R expression before the cached code
+chunk, which is normally not possible because \pkg{knitr} compiles the
+document in a linear fashion, and objects created later cannot be used before
+they are created.
+}
+\note{
+Apparently this function loads the value of the object from the
+  \emph{previous} run of the document, which may be problematic when the
+  value of the object becomes different the next time the document is
+  compiled. Normally you must compile the document twice to make sure the
+  cache database is created, and the object can be read from it. Please use
+  this function with caution.
+}
+\references{
+See the example #114 at
+  \url{https://github.com/yihui/knitr-examples}.
+}

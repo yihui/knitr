@@ -87,10 +87,11 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
 #' if (interactive()) browseURL('test.html')
 knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
                      quiet = FALSE, encoding = getOption('encoding')) {
-  out = knit(input, output, text = text, envir = envir, encoding = encoding, quiet = quiet)
+  out = knit(input, text = text, envir = envir, encoding = encoding, quiet = quiet)
   if (is.null(text)) {
-    markdown::markdownToHTML(out, outfile <- sub_ext(out, 'html'), encoding = encoding, ...)
-    invisible(outfile)
+    output = sub_ext(if (is.null(output) || is.na(output)) out else output, 'html')
+    markdown::markdownToHTML(out, output, encoding = encoding, ...)
+    invisible(output)
   } else markdown::markdownToHTML(text = out, ...)
 }
 
@@ -107,29 +108,36 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
 #'   for syntax highlighting of source code and output; the first element
 #'   applies to source code, and the second applies to text output (by default,
 #'   both are \code{FALSE})
+#' @param action to create a new post, update an existing post, or create a new
+#'   page
+#' @param postid if action is \code{editPost}, the post id \code{postid} must be
+#'   specified
 #' @param publish whether to publish the post immediately
 #' @inheritParams knit
 #' @export
 #' @references \url{http://yihui.name/knitr/demo/wordpress/}
-#' @author William K. Morris and Yihui Xie
+#' @author William K. Morris, Yihui Xie, and Jared Lander
 #' @note This function will convert the encoding of the post and the title to
 #'   UTF-8 internally. If you have additional data to send to WordPress (e.g.
 #'   keywords and categories), you may have to manually convert them to the
 #'   UTF-8 encoding with the \code{\link{iconv}(x, to = 'UTF-8')} function
 #'   (especially when using Windows).
 #' @examples # see the reference
-knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
-                   encoding = getOption('encoding'), publish = TRUE) {
+knit2wp = function(
+  input, title = 'A post from knitr', ..., shortcode = FALSE,
+  action = c('newPost', 'editPost', 'newPage'), postid,
+  encoding = getOption('encoding'), publish = TRUE
+) {
   out = knit(input, encoding = encoding); on.exit(unlink(out))
   con = file(out, encoding = encoding); on.exit(close(con), add = TRUE)
   content = native_encode(readLines(con, warn = FALSE))
   content = paste(content, collapse = '\n')
   content = markdown::markdownToHTML(text = content, fragment.only = TRUE)
   shortcode = rep(shortcode, length.out = 2L)
-  if (shortcode[1]) {
-    content = gsub('<pre><code class="([[:alpha:]]+)">(.+?)</code></pre>',
-                   '[sourcecode language="\\1"]\\2[/sourcecode]', content)
-  }
+  if (shortcode[1]) content = gsub(
+    '<pre><code class="([[:alpha:]]+)">(.+?)</code></pre>',
+    '[sourcecode language="\\1"]\\2[/sourcecode]', content
+  )
   content = gsub(
     '<pre><code( class="no-highlight"|)>(.+?)</code></pre>',
     if (shortcode[2]) '[sourcecode]\\2[/sourcecode]' else '<pre>\\2</pre>', content
@@ -137,8 +145,21 @@ knit2wp = function(input, title = 'A post from knitr', ..., shortcode = FALSE,
 
   content = native_encode(content, 'UTF-8')
   title = native_encode(title, 'UTF-8')
+
+  # figure out if we are making a newPost or overwriting an existing post
+  action = match.arg(action)
+
+  # build a list of arguments to be fed into either newPost or editPost
+  # the first argument is the content, which itself is a list containing
+  #     description
+  #     title
+  #     ...
+  # then there is the publish argument
+  WPargs = list(content = list(description = content, title = title, ...), publish = publish)
+
+  # if we are editing the post, also include the argument for postid
+  if (action == "editPost") WPargs = c(postid = postid, WPargs)
+
   do.call('library', list(package = 'RWordPress', character.only = TRUE))
-  getFromNamespace('newPost', 'RWordPress')(list(
-    description = content, title = title, ...
-  ), publish = publish)
+  do.call(action, args = WPargs)
 }

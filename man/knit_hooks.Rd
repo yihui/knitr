@@ -1,3 +1,4 @@
+% Please edit documentation in R/hooks.R
 \docType{data}
 \name{knit_hooks}
 \alias{knit_hooks}

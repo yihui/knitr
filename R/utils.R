@@ -147,7 +147,18 @@ output_asis = function(x, options) {
 }
 
 # path relative to dir of the input file
-input_dir = function() .knitEnv$input.dir %n% '.'
+input_dir = function() {
+  # LyX is a special case: the input file is in tempdir, and we should use
+  # root.dir as the real input dir (#809)
+  (if (is_lyx()) opts_knit$get('root.dir')) %n% .knitEnv$input.dir %n% '.'
+}
+
+is_lyx = function() {
+  args = commandArgs(TRUE)
+  if (length(args) < 4) return(FALSE)
+  grepl('[.]Rnw$', args[1]) &&
+    !is.na(Sys.getenv('LyXDir', NA))
+}
 
 # scientific notation in TeX, HTML and reST
 format_sci_one = function(x, format = 'latex') {
@@ -320,7 +331,7 @@ sanitize_fn = function(path, suffix = '') {
             path <- gsub('[^~:_./\\[:alnum:]-]', '_', path), '"')
   }
   # replace . with _ except ../ and ./
-  s = str_split(path, '[/\\]')[[1L]]
+  s = strsplit(path, '[/\\\\]')[[1L]]
   i = (s != '.') & (s != '..') & grepl('\\.', s)
   if (any(i)) {
     s[i] = gsub('\\.', '_', s[i])
@@ -328,6 +339,38 @@ sanitize_fn = function(path, suffix = '') {
     warning('dots in figure paths replaced with _ ("', path, '")')
   }
   str_c(path, suffix)
+}
+
+#' Obtain the figure filenames for a chunk
+#'
+#' Given a chunk label, the figure file extension, the figure number(s), and the
+#' chunk option \code{fig.path}, return the filename(s).
+#'
+#' This function can be used in an inline R expression to write out the figure
+#' filenames without hard-coding them. For example, if you created a plot in a
+#' code chunk with the label \code{foo} and figure path \file{my-figure/}, you
+#' are not recommended to use hard-coded figure paths like
+#' \samp{\includegraphics{my-figure/foo-1.pdf}} (in \file{.Rnw} documents) or
+#' \samp{![](my-figure/foo-1.png)} (R Markdown) in your document. Instead, you
+#' should use \samp{\\Sexpr{fig_chunk('foo', 'pdf')}} or \samp{![](`r
+#' fig_chunk('foo', 'png')`)}.
+#'
+#' You can generate plots in a code chunk but not show them inside the code
+#' chunk by using the chunk option \code{fig.show = 'hide'}. Then you can use
+#' this function if you want to show them elsewhere.
+#' @param label the chunk label
+#' @param ext the figure file extension, e.g. \code{png} or \code{pdf}
+#' @param number the figure number (by default \code{1})
+#' @param fig.path the chunk option \code{fig.path}
+#' @return A character vector of filenames.
+#' @export
+#' @examples library(knitr)
+#' fig_chunk('foo', 'png')
+#' fig_chunk('foo', 'pdf')
+#' fig_chunk('foo', 'svg', 2)  # the second plot of the chunk foo
+#' fig_chunk('foo', 'png', 1:5)  # if the chunk foo produced 5 plots
+fig_chunk = function(label, ext = '', number, fig.path = opts_chunk$get('fig.path')) {
+  fig_path(ext, list(fig.path = fig.path, label = label), number)
 }
 
 #' The global environment in which code chunks are evaluated
@@ -428,7 +471,9 @@ escape_html = highr:::escape_html
 #' @return A character vector of the source code.
 #' @author Yihui Xie and Peter Ruckdeschel
 #' @export
-#' @examples \dontrun{read_rforge('rgl/R/axes.R', project = 'rgl')
+#' @examples library(knitr)
+#' \donttest{# relies on r-forge.r-project.org being accessible
+#' read_rforge('rgl/R/axes.R', project = 'rgl')
 #' read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')}
 read_rforge = function(path, project, extra = '') {
   base = 'http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg'

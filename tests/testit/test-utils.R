@@ -69,6 +69,16 @@ assert(
   identical(sanitize_fn('C:/foo/bar'), 'C:/foo/bar')
 )
 
+assert(
+  'fig_chunk() generates figure filenames for a code chunk',
+  identical(fig_chunk('foo'), 'figure/foo-1'),
+  identical(fig_chunk('foo', 'pdf'), 'figure/foo-1.pdf'),
+  identical(fig_chunk('foo', 'png', 2), 'figure/foo-2.png'),
+  identical(fig_chunk('foo', 'svg', 1:5), sprintf('figure/foo-%d.svg', 1:5)),
+  identical(fig_chunk('foo', fig.path = 'my_figure/'), 'my_figure/foo-1'),
+  identical(fig_chunk('foo', '.pdf'), 'figure/foo-1.pdf')
+)
+
 f = file.path(R.home('doc'), 'html', 'logo.jpg')
 assert(
   'base64_encode() gets the same result as markdown:::.b64EncodeFile',

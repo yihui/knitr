@@ -66,9 +66,9 @@ new_cache = function() {
     # save or load R packages
     path = valid_path(path, '__packages')
     if (save) {
-      x = .packages()
-      if (file.exists(path)) x = setdiff(c(x, readLines(path)), .base.pkgs)
-      writeLines(sort(x), path)
+      x = rev(.packages())
+      if (file.exists(path)) x = setdiff(c(readLines(path), x), .base.pkgs)
+      writeLines(x, path)
     } else {
       if (!file.exists(path)) return()
       for (p in readLines(path))
@@ -103,6 +103,9 @@ known_globals = c(
 
 cache = new_cache()
 
+# a regex for cache files
+cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
+
 #' Build automatic dependencies among chunks
 #'
 #' When the chunk option \code{autodep = TRUE}, all names of objects created in
@@ -129,8 +132,7 @@ dep_auto = function(path = opts_chunk$get('cache.path')) {
   locals = parse_objects(paths[1L]); globals = parse_objects(paths[2L])
   if (is.null(locals) || is.null(globals)) return(invisible(NULL))
   if (!identical(names(locals), names(globals))) {
-    warning('corrupt dependency files? \ntry remove ',
-            paste(paths, collapse = '; '))
+    warning('corrupt dependency files? \ntry remove ', paste(paths, collapse = '; '))
     return(invisible(NULL))
   }
   nms = intersect(names(knit_code$get()), names(locals)) # guarantee correct order
@@ -157,6 +159,61 @@ parse_objects = function(path) {
   objs
 }
 
+#' Load the cache database of a code chunk
+#'
+#' If a code chunk has turned on the chunk option \code{cache = TRUE}, a cache
+#' database will be established after the document is compiled. You can use this
+#' function to manually load the database anywhere in the document (even before
+#' the code chunk). This makes it possible to use objects created later in the
+#' document earlier, e.g. in an inline R expression before the cached code
+#' chunk, which is normally not possible because \pkg{knitr} compiles the
+#' document in a linear fashion, and objects created later cannot be used before
+#' they are created.
+#' @param label the chunk label of the code chunk that has a cache database
+#' @param object the name of the object to be fetched from the database (if
+#'   missing, \code{NULL} is returned)
+#' @param notfound a value to use when the \code{object} cannot be found
+#' @param path the path of the cache database (normally set in the global chunk
+#'   option \code{cache.path})
+#' @param lazy whether to \code{\link{lazyLoad}} the cache database (depending
+#'   on the chunk option \code{cache.lazy = TRUE} or \code{FALSE} of that code
+#'   chunk)
+#' @note Apparently this function loads the value of the object from the
+#'   \emph{previous} run of the document, which may be problematic when the
+#'   value of the object becomes different the next time the document is
+#'   compiled. Normally you must compile the document twice to make sure the
+#'   cache database is created, and the object can be read from it. Please use
+#'   this function with caution.
+#' @references See the example #114 at
+#'   \url{https://github.com/yihui/knitr-examples}.
+#' @return Invisible \code{NULL} when \code{object} is not specified (the cache
+#'   database will be loaded as a side effect), otherwise the value of the
+#'   object if found.
+#' @export
+load_cache = function(
+  label, object, notfound = 'NOT AVAILABLE', path = opts_chunk$get('cache.path'),
+  lazy = TRUE
+) {
+  owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
+  path = valid_path(path, label)
+  p0 = dirname(path); p1 = basename(path)
+  p2 = list.files(p0, cache_rx)
+  if (length(p2) == 0) return(notfound)
+  p2 = p2[substr(p2, 1, nchar(p1)) == p1]
+  if (length(p2) == 0) return(notfound)
+  if (length(p2) > 3) stop(
+    'Wrong cache databases for the chunk ', label,
+    '. You need to remove redundant cache files. Found ', paste(p2, collapse = ', ')
+  )
+  p2 = unique(gsub('[.](rdb|rdx|RData)$', '', p2))
+  if (length(p2) != 1) stop('Cannot identify the cache database for chunk ', label)
+  cache$load(file.path(p0, p2), lazy)
+  if (missing(object)) return(invisible(NULL))
+  if (exists(object, envir = knit_global(), inherits = FALSE)) {
+    get(object, envir = knit_global(), inherits = FALSE)
+  } else notfound
+}
+
 #' Make later chunks depend on previous chunks
 #'
 #' This function can be used to build dependencies among chunks so that all
@@ -181,8 +238,8 @@ dep_prev = function() {
 #' This expression returns \code{.Random.seed} when \code{eval(rand_seed)} and
 #' \code{NULL} otherwise.
 #'
-#' It is designed to work with \code{opts_knit$set(cache.extra = rand_seed)} for
-#' reproducibility of chunks that involve with random number generation. See
+#' It is designed to work with \code{opts_chunk$set(cache.extra = rand_seed)}
+#' for reproducibility of chunks that involve with random number generation. See
 #' references.
 #' @export
 #' @references \url{http://yihui.name/knitr/demo/cache/}
@@ -193,3 +250,36 @@ rand_seed = quote({
   if (exists('.Random.seed', envir = globalenv()))
     get('.Random.seed', envir = globalenv())
 })
+
+#' Clean cache files that are probably no longer needed
+#'
+#' If you remove or rename some cached code chunks, their original cache files
+#' will not be automatically cleaned. You can use this function to identify
+#' these possible files, and clean them if you are sure they are no longer
+#' needed.
+#' @param clean whether to remove the files
+#' @param path the cache path
+#' @note  The identification is not guaranteed to be correct, especially when
+#'   multiple documents share the same cache directory. You are recommended to
+#'   call \code{clean_cache(FALSE)} and carefully check the list of files (if
+#'   any) before you really delete them (\code{clean_cache(TRUE)}).
+#' @export
+clean_cache = function(clean = FALSE, path = opts_chunk$get('cache.path')) {
+  owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
+  if (file_test('-d', path)) {
+    p0 = path; p1 = ''
+  } else {
+    p0 = dirname(path); p1 = basename(path)
+  }
+  files = list.files(p0, cache_rx, full.names = TRUE)
+  if (length(files) == 0) return()
+  base = basename(files)
+  labs = .knitEnv$labels
+  if (length(labs) == 0) return()
+  i = !(sub(cache_rx, '', base) %in% paste(p1, labs, sep = ''))
+  if (p1 != '') i = i & (substr(base, 1, nchar(p1)) == p1)
+  if (!any(i)) return()
+  if (clean) unlink(files[i]) else message(
+    'Clean these cache files?\n\n', paste(files[i], collapse = '\n'), '\n'
+  )
+}

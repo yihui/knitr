@@ -1,3 +1,4 @@
+% Please edit documentation in R/utils-upload.R
 \name{imgur_upload}
 \alias{imgur_upload}
 \title{Upload an image to imgur.com}

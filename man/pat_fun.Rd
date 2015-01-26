@@ -1,3 +1,4 @@
+% Please edit documentation in R/pattern.R
 \name{pat_rnw}
 \alias{pat_asciidoc}
 \alias{pat_brew}
