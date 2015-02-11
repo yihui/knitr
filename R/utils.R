@@ -443,7 +443,9 @@ in_dir = function(dir, expr) {
 
 # evaluate under the base.dir
 in_base_dir = function(expr) {
-  in_dir(opts_knit$get('base.dir'), expr)
+  d = opts_knit$get('base.dir')
+  if (is.character(d) && !file_test('-d', d)) dir.create(d, recursive = TRUE)
+  in_dir(d, expr)
 }
 
 # escape special LaTeX characters

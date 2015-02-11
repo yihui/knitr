@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.10
 
+## BUG FIXES
+
+- fixed #942: the package option `opts_knit$get('base.dir')` does not work when the chunk option `opts_chunk$get('fig.path')` contains a directory (thanks, @daattali and @cheebingloh)
 
 # CHANGES IN knitr VERSION 1.9
 
