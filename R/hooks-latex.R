@@ -85,7 +85,7 @@ hook_plot_tex = function(x, options) {
 
   # open align code if this picture is standalone/first in set
   align1 = if (plot1)
-    switch(a, left = '\n\n', center = '\n\n{\\centering ', right = '\n\n\\hfill{}', '\n')
+    switch(a, left = '\n\n', center = '\n\n{\\centering ', right = '\n\n\\hfill{}', '%\n')
   # close align code if this picture is standalone/last in set
   align2 = if (plot2)
     switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n', right = '\n\n', '')
@@ -128,7 +128,7 @@ hook_plot_tex = function(x, options) {
   } else if (pandoc_to(c('latex', 'beamer'))) {
     # use alignment environments for R Markdown latex output (\centering won't work)
     align.env = switch(a, left = 'flushleft', center = 'center', right = 'flushright')
-    align1 = if (plot1) if (a == 'default') '\n' else sprintf('\n\n\\begin{%s}', align.env)
+    align1 = if (plot1) if (a == 'default') '%\n' else sprintf('\n\n\\begin{%s}', align.env)
     align2 = if (plot2) if (a == 'default') '' else sprintf('\\end{%s}\n\n', align.env)
   }
 
@@ -168,7 +168,7 @@ hook_plot_tex = function(x, options) {
   k2 = '\\end{kframe}'
   x = .rm.empty.envir(paste(k1, x, k2, sep = ''))
   size = if (options$size == 'normalsize') '' else sprintf('\\%s', options$size)
-  if (!ai) x = sprintf('\\begin{knitrout}%s\n%s\n\\end{knitrout}', size, x)
+  if (!ai) x = sprintf('\\begin{knitrout}%s%%\n%s%%\n\\end{knitrout}%%', size, x)
   if (options$split) {
     name = fig_path('.tex', options, NULL)
     if (!file.exists(dirname(name)))
@@ -268,7 +268,7 @@ render_latex = function() {
     inline = .inline.hook.tex, chunk = .chunk.hook.tex,
     plot = function(x, options) {
       # escape plot environments from kframe
-      paste('\\end{kframe}', hook_plot_tex(x, options), '\n\\begin{kframe}', sep = '')
+      paste('\\end{kframe}', hook_plot_tex(x, options), '%\n\\begin{kframe}', sep = '')
     }
   )
 }
