@@ -64,6 +64,7 @@ hook_plot_tex = function(x, options) {
   }
 
   tikz = is_tikz_dev(options)
+  tikzscale = test_latex_pkg('tikzscale', '', FALSE) & xor(!is.null(options$out.width), !is.null(options$out.height))
 
   a = options$fig.align
   fig.cur = options$fig.cur %n% 1L
@@ -139,9 +140,9 @@ hook_plot_tex = function(x, options) {
 
   paste(
     fig1, align1, sub1, resize1,
-    if (tikz) {
+    if (tikz && !tikzscale) {
       sprintf('\\input{%s}', x)
-    } else if (animate) {
+    } else if (!tikz && animate) {
       # \animategraphics{} should be inserted only *once*!
       aniopts = options$aniopts
       aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
@@ -151,7 +152,7 @@ hook_plot_tex = function(x, options) {
               sub(sprintf('%d$', fig.num), '', sans_ext(x)), 1L, fig.num)
     } else {
       if (nzchar(size)) size = sprintf('[%s]', size)
-      sprintf('\\includegraphics%s{%s} ', size, sans_ext(x))
+      sprintf('\\includegraphics%s{%s} ', size, x)
     },
 
     resize2, sub2, align2, fig2,
