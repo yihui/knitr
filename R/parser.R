@@ -376,7 +376,7 @@ all_labels = function() names(knit_code$get())
 #' inline_expr('1+1', 'rnw'); inline_expr('1+1', 'html'); inline_expr('1+1', 'md')
 inline_expr = function(code, syntax) {
   if (!is.character(code) || length(code) != 1)
-    stop('The inline code must be a charater string')
+    stop('The inline code must be a character string')
   if (!missing(syntax)) pat = syntax else {
     inline = knit_patterns$get('inline.code')
     if (is.null(inline)) stop('inline_expr() must be called in a knitting process')

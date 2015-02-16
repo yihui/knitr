@@ -4,7 +4,7 @@
 #' \code{knit_rd_all()} is a wrapper around \code{knit_rd()} to build static
 #' HTML help pages for all packages under the \file{html} directory of them.
 #' @param pkg package name
-#' @param links a charactor vector of links to be passed to
+#' @param links a character vector of links to be passed to
 #'   \code{\link[tools]{Rd2HTML}}
 #' @param frame whether to put a navigation frame on left of the index page
 #' @return All HTML pages corresponding to topics in the package are written
