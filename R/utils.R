@@ -234,6 +234,8 @@ fix_options = function(options) {
   # non-R code should not use cache=1,2
   if (options$engine != 'R') options$cache = (options$cache > 0) * 3
 
+  options$eval = unname(options$eval)
+
   # out.[width|height].px: unit in pixels for sizes
   for (i in c('width', 'height')) {
     options[[sprintf('out.%s.px', i)]] = options[[sprintf('out.%s', i)]] %n%
