@@ -86,7 +86,7 @@ register_vignette_engines = function(pkg) {
 # all engines use the same tangle and package arguments, so factor them out
 vig_engine = function(..., tangle = vtangle) {
   tools::vignetteEngine(..., tangle = tangle, package = 'knitr', aspell = list(
-    filter = knit_filter, control = '-H -t'
+    filter = knit_filter
   ))
 }
 
@@ -126,7 +126,7 @@ knit_filter = function(ifile, encoding = 'unknown') {
   for (i in seq_len(n - 1)) if (m[i + 1] == 0) m[i + 1] = m[i]
   x[m == 1 | i2] = ''
   x[m == 2] = gsub(p$inline.code, '', x[m == 2])
-  x
+  structure(x, control = '-H -t')
 }
 
 pandoc_available = function() {
