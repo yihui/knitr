@@ -9,7 +9,7 @@ hook_plot_asciidoc = function(x, options) {
   align = sprintf('align=%s', options$fig.align)
   tags = paste(c(cap, width, height, align), collapse = ',')
 
-  sprintf('.%s\nimage::%s[%s]', cap, .upload.url(x), tags)
+  sprintf('.%s\nimage::%s[%s]\n', cap, .upload.url(x), tags)
 }
 
 #' @rdname output_hooks
