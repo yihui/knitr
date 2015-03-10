@@ -264,7 +264,7 @@ chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi) {
     if (identical(dev, 'png')) {
       do.call(grDevices::png, c(list(
         filename = tempfile(), width = width, height = height, units = 'in', res = dpi
-      ), dev.args))
+      ), get_dargs(dev.args, 'png')))
     } else if (identical(getOption('device'), pdf_null)) {
       if (!is.null(dev.args)) {
         dev.args = get_dargs(dev.args, 'pdf')

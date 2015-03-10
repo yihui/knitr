@@ -63,3 +63,14 @@ assert(
 )
 
 options(op)
+
+# rmarkdown sets dev.args = list(pdf = list(useDingbats = FALSE)) when dev = 'pdf'
+if (!has_error({png(); dev.off()})) assert(
+  'chunk_device() correctly opens the png device with dev.args',
+  {
+    chunk_device(7, 6, TRUE, 'png', list(pdf = list(useDingbats = FALSE)), 72)
+    plot(1:10)
+    dev.off()
+    TRUE
+  }
+)

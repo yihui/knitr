@@ -4,6 +4,8 @@
 
 - fixed #942: the package option `opts_knit$get('base.dir')` does not work when the chunk option `opts_chunk$get('fig.path')` contains a directory (thanks, @daattali and @cheebingloh)
 
+- fixed the bug reported at http://stackoverflow.com/q/28954647/559676 (`dev = 'png'` failed to work with **rmarkdown** when the output format is `pdf_document`)
+
 # CHANGES IN knitr VERSION 1.9
 
 ## NEW FEATURES
