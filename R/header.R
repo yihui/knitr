@@ -15,7 +15,7 @@ insert_header = function(doc) {
 # Makes latex header with macros required for highlighting, tikz and framed
 make_header_latex = function() {
   h = paste(c(
-    sprintf('\\usepackage[%s]{graphicx}\\usepackage[%s]{color}',
+    sprintf('\n\n\\usepackage[%s]{graphicx}\\usepackage[%s]{color}',
             opts_knit$get('latex.options.graphicx') %n% '',
             opts_knit$get('latex.options.color') %n% ''),
     .header.maxwidth, opts_knit$get('header'),
