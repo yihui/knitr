@@ -440,7 +440,14 @@ in_dir = function(dir, expr) {
   if (!is.null(dir)) {
     owd = setwd(dir); on.exit(setwd(owd))
   }
-  expr
+  wd1 = getwd()
+  res = expr
+  wd2 = getwd()
+  if (wd1 != wd2) warning(
+    'You changed the working directory to ', wd2, ' (probably via setwd()). ',
+    'It will be restored to ', wd1, '. See the Note section in ?knitr::knit'
+  )
+  res
 }
 
 # evaluate under the base.dir

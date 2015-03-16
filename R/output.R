@@ -43,6 +43,13 @@
 #' etc. The output hooks decide how to mark up the results (you can customize
 #' the hooks).
 #'
+#' The name \code{knit} comes from its counterpart \samp{weave} (as in Sweave),
+#' and the name \code{purl} (as \samp{tangle} in Stangle) comes from a knitting
+#' method `knit one, purl one'.
+#'
+#' If the input document has child documents, they will also be compiled
+#' recursively. See \code{\link{knit_child}}.
+#'
 #' See the package website and manuals in the references to know more about
 #' \pkg{knitr}, including the full documentation of chunk options and demos,
 #' etc.
@@ -64,20 +71,19 @@
 #'   \code{NULL}, the compiled output is returned as a character vector. In
 #'   other words, if you provide a file input, you get an output filename; if
 #'   you provide a character vector input, you get a character vector output.
-#' @note The name \code{knit} comes from its counterpart \samp{weave} (as in
-#'   Sweave), and the name \code{purl} (as \samp{tangle} in Stangle) comes from
-#'   a knitting method `knit one, purl one'.
-#'
-#'   If the input document has child documents, they will also be compiled
-#'   recursively. See \code{\link{knit_child}}.
-#'
-#'   The working directory when evaluating R code chunks is the directory of the
-#'   input document by default, so if the R code involves external files (like
-#'   \code{read.table()}), it is better to put these files under the same
+#' @note The working directory when evaluating R code chunks is the directory of
+#'   the input document by default, so if the R code involves external files
+#'   (like \code{read.table()}), it is better to put these files under the same
 #'   directory of the input document so that we can use relative paths. However,
 #'   it is possible to change this directory with the package option
 #'   \code{\link{opts_knit}$set(root.dir = ...)} so all paths in code chunks are
-#'   relative to this \code{root.dir}.
+#'   relative to this \code{root.dir}. You are not recommended to change the
+#'   working directory via \code{\link{setwd}()} in a code chunk, because it may
+#'   lead to bad consequences (e.g. figure and cache files may be written to
+#'   wrong places). If you do use \code{setwd()}, please note that \pkg{knitr}
+#'   will always restore the working directory to the original one. Whenever you
+#'   feel confused, print \code{getwd()} in a code chunk to see what the working
+#'   directory really is.
 #'
 #'   The arguments \code{input} and \code{output} do not have to be restricted
 #'   to files; they can be \code{stdin()}/\code{stdout()} or other types of
