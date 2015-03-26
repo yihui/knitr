@@ -43,7 +43,7 @@ body {
     line-height: 16px;
   }
 
-table {
+table:not([class]) {
   margin: auto;
   min-width: 40%;
   border-width: 1px;
@@ -55,22 +55,22 @@ table[summary="R argblock"] {
   width: 100%;
   border: none;
 }
-table th {
+table:not([class]) th {
   border-width: 2px;
   padding: 5px;
   border-style: inset;
 }
-table td {
+table:not([class]) td {
   border-width: 1px;
   border-style: inset;
   line-height: 18px;
   padding: 5px 5px;
 }
-table, table th, table td {
+table:not([class]), table:not([class]) th, table:not([class]) td {
   border-left-style: none;
   border-right-style: none;
 }
-table tr.odd {
+table:not([class]) tr.odd {
   background-color: #f7f7f7;
 }
 
@@ -154,14 +154,13 @@ table > caption span, div.figure p.caption span {
 p {
   margin: 0 0 10px;
 }
-table {
+table:not([class]) {
   margin: auto auto 10px auto;
 }
 
-img {
+img:not([class]) {
   background-color: #FFFFFF;
   padding: 2px;
-  border: 1px solid #DDDDDD;
   border-radius: 3px;
   border: 1px solid #CCCCCC;
   margin: 0 5px;
