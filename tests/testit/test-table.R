@@ -136,3 +136,11 @@ assert(
   'kable(, "markdown") works for a 0 zero 1 column matrix',
   identical(kable2(x2, 'markdown'), c('|a  |', '|:--|'))
 )
+
+assert(
+  'kable() works on an irregular matrix',
+  identical(
+    kable2(matrix(list('a', 2, 3, 4), nrow = 2), col.names = c('a', 'b')),
+    c('|a  |b  |', '|:--|:--|', '|a  |3  |', '|2  |4  |')
+  )
+)

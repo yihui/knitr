@@ -100,7 +100,9 @@ kable = function(
     if (!is.null(col.names)) col.names = c(' ', col.names)
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
+  n = nrow(x)
   x = format(as.matrix(x), trim = TRUE, justify = 'none')
+  if (!is.matrix(x)) x = matrix(x, nrow = n)
   colnames(x) = col.names
   attr(x, 'align') = align
   res = do.call(
