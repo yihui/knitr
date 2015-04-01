@@ -49,8 +49,8 @@ knit_engines = new_defaults()
 engine_output = function(options, code, out, extra = NULL) {
   if (!is.logical(options$echo)) code = code[options$echo]
   if (length(code) != 1L) code = paste(code, collapse = '\n')
-  if (options$engine == 'sas' & length(out) !=1L &
-          length(grep("[[:alnum:]]", out[2]))==0) out = out[4:length(out)]
+  if (options$engine == 'sas' && length(out) > 1L && !grepl('[[:alnum:]]', out[2]))
+    out = tail(out, -3L)
   if (length(out) != 1L) out = paste(out, collapse = '\n')
   out = sub('([^\n]+)$', '\\1\n', out)
   # replace the engine names for markup later, e.g. ```Rscript should be ```r
@@ -58,15 +58,14 @@ engine_output = function(options, code, out, extra = NULL) {
     options$engine, 'Rscript' = 'r', node = 'javascript',
     options$engine
   )
+  if (options$engine == 'stata') {
+    out = gsub('\n\nrunning.*profile.do', '', out)
+    out = sub('...\n\n\n', '', out)
+    out = sub('\n. \nend of do-file\n', '', out)
+  }
   paste(c(
     if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) {
-      if (options$engine == 'stata'){
-        out = gsub("\n\nrunning.*profile.do", "", out)
-        out = sub("...\n\n\n", "", out)
-        out = sub("\n. \nend of do-file\n", "", out)
-        wrap.character(out, options)
-      }
       if (options$engine == 'highlight') out else wrap.character(out, options)
     },
     extra
@@ -87,17 +86,21 @@ eng_interpreted = function(options) {
       haskell = ':set +m'
     ), options$code), f)
     on.exit(unlink(f))
-    switch(engine, sas = {
-      saslst = sub('[.]sas$', '.lst', f)
-      on.exit(unlink(c(saslst, sub('[.]sas$', '.log', f))), add = TRUE)
-      f
-    }, haskell = paste('-e', shQuote(paste(':script', f))),
-    stata = {
-      statalog = sub('[.]do$', '.log', f)
-      on.exit(unlink(c(statalog)), add = TRUE)
-      paste('/q /e', f)
+    switch(
+      engine,
+      haskell = paste('-e', shQuote(paste(':script', f))),
+      sas = {
+        logf = sub('[.]sas$', '.lst', f)
+        on.exit(unlink(c(logf, sub('[.]sas$', '.log', f))), add = TRUE)
+        f
       },
-    f)
+      stata = {
+        logf = sub('[.]do$', '.log', f)
+        on.exit(unlink(c(logf)), add = TRUE)
+        paste('/q /e', f)
+      },
+      f
+    )
   } else paste(switch(
     engine, bash = '-c', coffee = '-e', groovy = '-e', node = '-e', perl = '-e',
     python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
@@ -116,10 +119,8 @@ eng_interpreted = function(options) {
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status')))
     stop(paste(out, collapse = '\n'))
-  if (options$eval && engine == 'sas' && file.exists(saslst))
-    out = c(readLines(saslst), out)
-  if (options$eval && engine == 'stata' && file.exists(statalog))
-    out = c(readLines(statalog), out)
+  if (options$eval && engine %in% c('sas', 'stata') && file.exists(logf))
+    out = c(readLines(logf), out)
   engine_output(options, options$code, out)
 }
 
