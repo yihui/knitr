@@ -47,7 +47,10 @@ knit_engines = new_defaults()
 #'   the appropriate output hooks.
 #' @export
 engine_output = function(options, code, out, extra = NULL) {
+  if (!is.logical(options$echo)) code = code[options$echo]
   if (length(code) != 1L) code = paste(code, collapse = '\n')
+  if (options$engine == 'sas' & length(out) !=1L &
+          length(grep("[[:alnum:]]", out[2]))==0) out = out[4:length(out)]
   if (length(out) != 1L) out = paste(out, collapse = '\n')
   out = sub('([^\n]+)$', '\\1\n', out)
   # replace the engine names for markup later, e.g. ```Rscript should be ```r
@@ -56,8 +59,14 @@ engine_output = function(options, code, out, extra = NULL) {
     options$engine
   )
   paste(c(
-    if (options$echo) knit_hooks$get('source')(code, options),
+    if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) {
+      if (options$engine == 'stata'){
+        out = gsub("\n\nrunning.*profile.do", "", out)
+        out = sub("...\n\n\n", "", out)
+        out = sub("\n. \nend of do-file\n", "", out)
+        wrap.character(out, options)
+      }
       if (options$engine == 'highlight') out else wrap.character(out, options)
     },
     extra
@@ -69,12 +78,12 @@ engine_output = function(options, code, out, extra = NULL) {
 
 eng_interpreted = function(options) {
   engine = options$engine
-  code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell')) {
-    f = basename(tempfile(engine, '.', switch(engine, sas = '.sas', Rscript = '.R', '.txt')))
+  code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')) {
+    f = basename(tempfile(engine, '.', switch(engine, sas = '.sas', Rscript = '.R', stata='.do', '.txt')))
     # SAS runs code in example.sas and creates 'listing' file example.lst and log file example.log
     writeLines(c(switch(
       engine,
-      sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';",
+      sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
       haskell = ':set +m'
     ), options$code), f)
     on.exit(unlink(f))
@@ -82,7 +91,13 @@ eng_interpreted = function(options) {
       saslst = sub('[.]sas$', '.lst', f)
       on.exit(unlink(c(saslst, sub('[.]sas$', '.log', f))), add = TRUE)
       f
-    }, haskell = paste('-e', shQuote(paste(':script', f))), f)
+    }, haskell = paste('-e', shQuote(paste(':script', f))),
+    stata = {
+      statalog = sub('[.]do$', '.log', f)
+      on.exit(unlink(c(statalog)), add = TRUE)
+      paste('/q /e', f)
+      },
+    f)
   } else paste(switch(
     engine, bash = '-c', coffee = '-e', groovy = '-e', node = '-e', perl = '-e',
     python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
@@ -103,6 +118,8 @@ eng_interpreted = function(options) {
     stop(paste(out, collapse = '\n'))
   if (options$eval && engine == 'sas' && file.exists(saslst))
     out = c(readLines(saslst), out)
+  if (options$eval && engine == 'stata' && file.exists(statalog))
+    out = c(readLines(statalog), out)
   engine_output(options, options$code, out)
 }
 
@@ -269,7 +286,7 @@ eng_asis = function(options) {
 # set engines for interpreted languages
 for (i in c(
   'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'node', 'perl', 'python',
-  'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'zsh'
+  'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'stata', 'zsh'
 )) knit_engines$set(setNames(list(eng_interpreted), i))
 rm(i)
 
