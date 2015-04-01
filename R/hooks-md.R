@@ -93,7 +93,9 @@ render_markdown = function(strict = FALSE) {
       x = gsub('[\n]+$', '', x)
       x = gsub('^[\n]+', '\n', x)
       if (isTRUE(options$collapse)) {
-        x = gsub(paste('\n([`]{3,})\n+\\1(', tolower(options$engine), ')?\n', sep = ''), "\n", x)
+        x = gsub(paste(
+          '\n([`]{3,})\n+\\1(', tolower(options$engine), ')?\n', sep = ''
+        ), "\n", x)
       }
       if (is.null(s <- options$indent)) return(x)
       line_prompt(x, prompt = s, continue = s)
@@ -115,16 +117,24 @@ render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = 
   if (hi == 'none') return()
   switch(hi, pygments = {
     hook.r = function(x, options) {
-      str_c('\n\n{% highlight ', tolower(options$engine), if (extra != '') ' ', extra, ' %}\n',
-            x, '\n{% endhighlight %}\n\n')
+      paste(
+        '\n\n{% highlight ', tolower(options$engine), if (extra != '') ' ', extra,
+        ' %}\n', x, '\n{% endhighlight %}\n\n', sep = ''
+      )
     }
-    hook.t = function(x, options) str_c('\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n')
+    hook.t = function(x, options) paste(
+      '\n\n{% highlight text %}\n', x, '{% endhighlight %}\n\n', sep = ''
+    )
   }, prettify = {
     hook.r = function(x, options) {
-      str_c('\n\n<pre><code class="prettyprint ', extra, '">',
-            escape_html(x), '</code></pre>\n\n')
+      paste(
+        '\n\n<pre><code class="prettyprint ', extra, '">', escape_html(x),
+        '</code></pre>\n\n', sep = ''
+      )
     }
-    hook.t = function(x, options) str_c('\n\n<pre><code>', escape_html(x), '</code></pre>\n\n')
+    hook.t = function(x, options) paste(
+      '\n\n<pre><code>', escape_html(x), '</code></pre>\n\n', sep = ''
+    )
   })
   knit_hooks$set(source = function(x, options) {
     x = paste(hilight_source(x, 'markdown', options), collapse = '\n')

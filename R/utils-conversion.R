@@ -52,7 +52,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
   if (is.null(compiler) && grepl('\\.rst$', out)) compiler = 'rst2pdf'
   if (!is.null(compiler)) {
     if (compiler == 'rst2pdf') {
-      if (tolower(file_ext(out)) != 'rst') stop('for rst2pdf compiler input must be a .rst file')
+      if (tolower(file_ext(out)) != 'rst')
+        stop('for rst2pdf compiler input must be a .rst file')
       rst2pdf(basename(out), ...)
       return(sub_ext(out, 'pdf'))
     } else {
