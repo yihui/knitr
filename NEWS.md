@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.10
 
+## NEW FEATURES
+
+- added a `stata` engine and improved the existing `sas` engine (thanks, @Hemken, #979)
+
 ## BUG FIXES
 
 - fixed #942: the package option `opts_knit$get('base.dir')` does not work when the chunk option `opts_chunk$get('fig.path')` contains a directory (thanks, @daattali and @cheebingloh)

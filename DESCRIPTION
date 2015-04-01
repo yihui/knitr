@@ -13,6 +13,7 @@ Authors@R: c(
     person("Cassio", "Pereira", role = "ctb"),
     person("David", "Robinson", role = "ctb"),
     person("Donald", "Arseneau", role = c("ctb", "cph"), comment = "the framed package at inst/misc/framed.sty"),
+    person("Doug", "Hemken", role = "ctb"),
     person("Duncan", "Murdoch", role = "ctb"),
     person("Fabian", "Hirschmann", role = "ctb"),
     person("Fitch", "Simeon", role = "ctb"),
