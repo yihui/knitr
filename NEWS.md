@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- added a `stata` engine and improved the existing `sas` engine (thanks, @Hemken, #979)
+- added a `stata` engine and improved the existing `sas` engine (thanks, @Hemken #979, @muschellij2 #984)
 
 ## BUG FIXES
 

@@ -32,6 +32,7 @@ Authors@R: c(
     person("Joe", "Cheng", role = "ctb"),
     person("Johannes", "Ranke", role = "ctb"),
     person("John", "Honaker", role = "ctb"),
+    person("John", "Muschelli", role = "ctb"),
     person("Jonathan", "Keane", role = "ctb"),
     person("JJ", "Allaire", role = "ctb"),
     person("Johan", "Toloe", role = "ctb"),
