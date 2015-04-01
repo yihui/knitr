@@ -120,7 +120,7 @@ pre, code {
 pre {
   overflow-x: auto;
   border-radius: 3px;
-  margin: 5px 0px 10px 0px;
+  margin: 5px 0 10px 0;
   padding: 10px;
 }
 pre:not([class]) {
