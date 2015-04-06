@@ -225,13 +225,13 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
   }
-  l = if (prod(dim(x)) > 0) apply(x, 2, function(z) max(nchar(z), na.rm = TRUE))
+  l = if (prod(dim(x)) > 0) apply(x, 2, function(z) max(nchar(z, type = 'width'), na.rm = TRUE))
   cn = colnames(x)
   if (length(cn) > 0) {
     cn[is.na(cn)] = "NA"
     if (sep.col == '|') cn = gsub('\\|', '&#124;', cn)
     if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
-    l = pmax(if (length(l) == 0) 0 else l, nchar(cn))
+    l = pmax(if (length(l) == 0) 0 else l, nchar(cn, type = 'width'))
   }
   align = attr(x, 'align', exact = TRUE)
   padding = padding * if (length(align) == 0) 2 else {
@@ -277,7 +277,9 @@ mat_pad = function(m, width, align = NULL) {
   side = rep('both', n)
   if (!is.null(align)) side = c(l = 'right', c = 'both', r = 'left')[align]
   for (j in seq_len(n)) {
-    res[, j] = str_pad(m[, j], width[j], side = side[j])
+    # adjustments for East Asian wide characters
+    adj = nchar(m[, j], type = 'width') - nchar(m[ ,j], type = 'chars')
+    res[, j] = str_pad(m[, j], width[j] - adj, side = side[j])
   }
   res
 }
