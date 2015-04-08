@@ -279,7 +279,9 @@ mat_pad = function(m, width, align = NULL) {
   for (j in seq_len(n)) {
     # adjustments for East Asian wide characters
     adj = nchar(m[, j], type = 'width') - nchar(m[ ,j], type = 'chars')
-    res[, j] = str_pad(m[, j], width[j] - adj, side = side[j])
+    # please remove sapply() when str_pad() gets able to handle multiple widths
+    res[, j] = sapply(seq_along(adj),
+                      function(x) {str_pad(m[x, j], width[j] - adj[x], side = side[j])})
   }
   res
 }
