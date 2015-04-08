@@ -79,7 +79,6 @@ eng_interpreted = function(options) {
   engine = options$engine
   code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')) {
     f = basename(tempfile(engine, '.', switch(engine, sas = '.sas', Rscript = '.R', stata='.do', '.txt')))
-    # SAS runs code in example.sas and creates 'listing' file example.lst and log file example.log
     writeLines(c(switch(
       engine,
       sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
@@ -97,7 +96,7 @@ eng_interpreted = function(options) {
       stata = {
         logf = sub('[.]do$', '.log', f)
         on.exit(unlink(c(logf)), add = TRUE)
-        paste(ifelse(.Platform$OS.type == 'windows', '/q /e', '-q -e'), f)
+        paste(ifelse(.Platform$OS.type == 'windows', '/q /e', '-q -b'), f)
       },
       f
     )
