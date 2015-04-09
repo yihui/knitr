@@ -270,18 +270,30 @@ kable_pandoc = function(x, caption = NULL, padding = 1, ...) {
 
 # pad a matrix
 mat_pad = function(m, width, align = NULL) {
-  n = ncol(m)
-  res = matrix('', nrow = nrow(m), ncol = n)
-  if (prod(dim(m)) == 0) return(res)
-  stopifnot(n == length(width))
-  side = rep('both', n)
+  n = nrow(m); p = ncol(m)
+  res = matrix('', nrow = n, ncol = p)
+  if (n * p == 0) return(res)
+  stopifnot(p == length(width))
+  side = rep('both', p)
   if (!is.null(align)) side = c(l = 'right', c = 'both', r = 'left')[align]
-  for (j in seq_len(n)) {
-    # adjustments for East Asian wide characters
-    adj = nchar(m[, j], type = 'width') - nchar(m[ ,j], type = 'chars')
-    # please remove sapply() when str_pad() gets able to handle multiple widths
-    res[, j] = sapply(seq_along(adj),
-                      function(x) {str_pad(m[x, j], width[j] - adj[x], side = side[j])})
-  }
-  res
+  apply(m, 2, function(x) max(nchar(x, 'width') - nchar(x, 'chars')))
+  matrix(pad_width(c(m), rep(width, each = n), rep(side, each = n)), ncol = p)
+}
+
+# pad a character vector to width (instead of number of chars), considering the
+# case of width > chars (e.g. CJK chars)
+pad_width = function(x, width, side) {
+  if (!all(side %in% c('left', 'right', 'both')))
+    stop("'side' must be 'left', 'right', or 'both'")
+  w = width - nchar(x, 'width')
+  i = w > 0  # only these elements needs padding
+  w1 = floor(w / 2)  # the left half of spaces when side = 'both'
+  s1 = v_spaces(w * (side == 'left') + w1 * (side == 'both'))
+  s2 = v_spaces(w * (side == 'right') + (w - w1) * (side == 'both'))
+  paste(s1, x, s2, sep = '')
+}
+
+# vectorized over n to generate sequences of spaces
+v_spaces = function(n) {
+  unlist(lapply(n, highr:::spaces))
 }
