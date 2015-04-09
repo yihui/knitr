@@ -88,24 +88,18 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE,
 
 .this.year = sprintf('  year = {%s},', format(Sys.Date(), '%Y'))
 
+#' @include utils.R
+
 # hack non-standard author fields
-if (file.exists('inst/misc/tweak_bib.csv')) {
-  # during R CMD INSTALL
-  .tweak.bib = local({
-    x = read.csv('inst/misc/tweak_bib.csv', stringsAsFactors = FALSE)
-    setNames(
-      lapply(x$author, function(a) c(author = sprintf('  author = {%s},', a))),
-      x$package
-    )
-  })
-} else if (file.exists('../inst/misc/tweak_bib.csv')) {
-  # during roxygenize()
-  local({
-    x = read.csv('../inst/misc/tweak_bib.csv', stringsAsFactors = FALSE)
-    x = x[order(x$package), , drop = FALSE]  # reorder entries by package names
-    write.csv(x, '../inst/misc/tweak_bib.csv', row.names = FALSE)
-  })
-}
+.tweak.bib = local({
+  x = read.csv(inst_dir('misc/tweak_bib.csv'), stringsAsFactors = FALSE)
+  x = x[order(x$package), , drop = FALSE]  # reorder entries by package names
+  write.csv(x, inst_dir('misc/tweak_bib.csv'), row.names = FALSE)
+  setNames(
+    lapply(x$author, function(a) c(author = sprintf('  author = {%s},', a))),
+    x$package
+  )
+})
 
 # no need to write bib for these packages
 .base.pkgs = setdiff(rownames(installed.packages(priority = 'base')), 'base')

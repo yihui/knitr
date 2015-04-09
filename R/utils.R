@@ -660,3 +660,11 @@ knit_handlers = function(fun, options) {
 is_R_CMD_check = function() {
   ('CheckExEnv' %in% search()) || ('_R_CHECK_TIMINGS_' %in% names(Sys.getenv()))
 }
+
+# is the inst dir under . or ..? differs in R CMD build/INSTALL and devtools/roxygen2
+inst_dir = function(...) {
+  dir = file.path(c('..', '.'), 'inst')
+  dir = dir[file_test('-d', dir)]
+  file.path(dir, ...)
+}
+

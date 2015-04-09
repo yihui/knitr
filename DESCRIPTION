@@ -115,8 +115,8 @@ VignetteBuilder: knitr
 Collate:
     'block.R'
     'cache.R'
-    'citation.R'
     'utils.R'
+    'citation.R'
     'plot.R'
     'hooks-html.R'
     'defaults.R'
