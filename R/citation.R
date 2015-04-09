@@ -59,7 +59,7 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE,
     cite = citation(pkg, auto = if (pkg == 'base') NULL else TRUE)
     entry = toBibtex(cite)
     entry[1] = sub('\\{,$', sprintf('{%s%s,', prefix, pkg), entry[1])
-    gsub('', '', entry)
+    entry
   }, simplify = FALSE)
   if (tweak) {
     for (i in intersect(names(.tweak.bib), x)) {
