@@ -110,20 +110,14 @@ set_header = function(...) {
   opts_knit$set(header = h)
 }
 
-# where is the inst directory?
-.inst.dir = file.path(c('..', '.'), 'inst')
-.inst.dir = .inst.dir[file.exists(.inst.dir)]
-
-.default.sty = file.path(.inst.dir, 'themes', 'default.css')
-.default.sty = .default.sty[file.exists(.default.sty)][1L]
+.default.sty = inst_dir('themes', 'default.css')
 # header for Latex Syntax Highlighting
 .header.hi.tex = theme_to_header_latex(.default.sty)$highlight
-.knitr.sty = file.path(.inst.dir, 'misc', 'knitr.sty')
-.knitr.sty = .knitr.sty[file.exists(.knitr.sty)][1L]
+.knitr.sty = inst_dir('misc', 'knitr.sty')
 .header.framed = paste(readLines(.knitr.sty), collapse = '\n')
 # CSS for html syntax highlighting
 .header.hi.html = theme_to_header_html(.default.sty)$highlight
-rm(list = c('.inst.dir', '.knitr.sty')) # do not need them any more
+rm(list = c('.default.sty', '.knitr.sty')) # do not need them any more
 
 .header.sweave.cmd =
 '\\newcommand{\\SweaveOpts}[1]{}  % do not interfere with LaTeX
