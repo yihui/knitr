@@ -59,6 +59,12 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE,
   x = setdiff(x, .base.pkgs) # remove base packages
   bib = sapply(x, function(pkg) {
     cite = citation(pkg, auto = if (pkg == 'base') NULL else TRUE)
+    if (tweak) {
+      # e.g. gpairs has "gpairs: " in the title
+      cite$title = gsub(sprintf('^(%s: )(\\1)', pkg), '\\1', cite$title)
+      # e.g. KernSmooth has & in the title
+      cite$title = gsub(' & ', ' \\\\& ', cite$title)
+    }
     entry = toBibtex(cite)
     entry[1] = sub('\\{,$', sprintf('{%s%s,', prefix, pkg), entry[1])
     entry
