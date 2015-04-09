@@ -49,7 +49,7 @@
 #' str(knitr:::.tweak.bib)
 write_bib = function(x = .packages(), file = '', tweak = TRUE,
                      prefix = getOption('knitr.bib.prefix', 'R-')) {
-  idx = mapply(system.file, package = x) == ''
+  idx = !(x %in% .packages(TRUE))
   if (any(idx)) {
     warning('package(s) ', paste(x[idx], collapse = ', '), ' not found')
     x = x[!idx]
