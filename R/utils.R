@@ -663,8 +663,6 @@ is_R_CMD_check = function() {
 
 # is the inst dir under . or ..? differs in R CMD build/INSTALL and devtools/roxygen2
 inst_dir = function(...) {
-  dir = file.path(c('..', '.'), 'inst')
-  dir = dir[file_test('-d', dir)]
-  file.path(dir, ...)
+  p = file.path(c('..', '.'), 'inst', ...)
+  p[file.exists(p)]
 }
-
