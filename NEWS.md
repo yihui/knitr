@@ -4,6 +4,8 @@
 
 - added a `stata` engine and improved the existing `sas` engine (thanks, @Hemken #979, @muschellij2 #984)
 
+- the Markdown table generated from `kable()` will use the width of characters to decide how many spaces are needed for padding, which can be useful for wide characters such as CJK characters (normally of width 2 per char) (thanks, @yutannihilation, #985)
+
 ## BUG FIXES
 
 - fixed #942: the package option `opts_knit$get('base.dir')` does not work when the chunk option `opts_chunk$get('fig.path')` contains a directory (thanks, @daattali and @cheebingloh)
