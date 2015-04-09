@@ -90,14 +90,20 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE,
 
 # hack non-standard author fields
 if (file.exists('inst/misc/tweak_bib.csv')) {
+  # during R CMD INSTALL
   .tweak.bib = local({
     x = read.csv('inst/misc/tweak_bib.csv', stringsAsFactors = FALSE)
-    x = x[order(x$package), , drop = FALSE]  # reorder entries by package names
-    write.csv(x, 'inst/misc/tweak_bib.csv', row.names = FALSE)
     setNames(
       lapply(x$author, function(a) c(author = sprintf('  author = {%s},', a))),
       x$package
     )
+  })
+} else if (file.exists('../inst/misc/tweak_bib.csv')) {
+  # during roxygenize()
+  local({
+    x = read.csv('../inst/misc/tweak_bib.csv', stringsAsFactors = FALSE)
+    x = x[order(x$package), , drop = FALSE]  # reorder entries by package names
+    write.csv(x, '../inst/misc/tweak_bib.csv', row.names = FALSE)
   })
 }
 
