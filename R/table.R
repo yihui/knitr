@@ -103,6 +103,7 @@ kable = function(
   n = nrow(x)
   x = format(as.matrix(x), trim = TRUE, justify = 'none')
   if (!is.matrix(x)) x = matrix(x, nrow = n)
+  x = gsub('^\\s*|\\s*$', '', x)
   colnames(x) = col.names
   attr(x, 'align') = align
   res = do.call(
