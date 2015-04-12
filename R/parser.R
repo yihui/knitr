@@ -64,7 +64,11 @@ parse_block = function(code, header, params.src) {
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
   if (length(code)) {
-    if (label %in% names(knit_code$get())) stop("duplicate label '", label, "'")
+    if (label %in% names(knit_code$get())) {
+      if (identical(getOption('knitr.duplicate.label'), 'allow')) {
+        params$label = label = unnamed_chunk(label)
+      } else stop("duplicate label '", label, "'")
+    }
     knit_code$set(setNames(list(code), label))
   }
 
