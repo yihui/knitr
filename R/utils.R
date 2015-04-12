@@ -646,6 +646,7 @@ is_windows = function() .Platform$OS.type == 'windows'
 current_input = function(dir = FALSE) {
   input = knit_concord$get('infile')
   outwd = opts_knit$get('output.dir')
+  if (is.null(input)) return()
   if (dir) {
     if (is.null(outwd)) {
       warning('Cannot determine the directory of the input document')
