@@ -97,3 +97,8 @@ assert(
   identical(indent_block(c('', 'a')), c('    ', '    a')),
   identical(indent_block(c('', '')),  c('    ', '    '))
 )
+
+assert(
+  'current_input() returns NULL by default',
+  is.null(current_input()), suppressWarnings(is.null(current_input(TRUE)))
+)
