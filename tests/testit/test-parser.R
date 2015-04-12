@@ -15,6 +15,19 @@ assert(
             alist(label='abc-function', fig.path="foo/bar-"))
 )
 
+opts_knit$set(out.format = 'markdown')
+assert(
+  'parse_params() parses the language engine from ```{lang}',
+  identical(
+    parse_block(NULL, '', 'r, foo, a=1,')$params,
+    alist(label = 'foo', a = 1)
+  ),
+  identical(
+    parse_block(NULL, '', 'Rcpp, foo, a=1,')$params,
+    alist(label = 'foo', a = 1, engine = 'Rcpp')
+  )
+)
+
 res = split_file(
   c('abc', '```{r foo}', '1+1', '```{r bar}', '2+2', '```', 'def'),
   patterns = all_patterns$md
@@ -27,6 +40,7 @@ assert(
   # before knitr v1.6, the text chunk was c('', 'def')
   identical(res[[4]][['input']], 'def')
 )
+opts_knit$restore()
 knit_code$restore(); knit_concord$restore()
 
 res = parse_inline(c('aaa \\Sexpr{x}', 'bbb \\Sexpr{NA} and \\Sexpr{1+2}',
