@@ -206,7 +206,8 @@ eng_tikz = function(options) {
     conv = system2(options$engine.opts$convert %n% 'convert', c(
       options$engine.opts$convert.opts, sprintf('%s.pdf %s.%s', fig, fig, ext)
     ))
-    if (conv != 0) stop('problems with `convert`; probably not installed?')
+    if (conv != 0 && !options$error)
+      stop('problems with `convert`; probably not installed?')
   }
   options$fig.num = 1L; options$fig.cur = 1L
   extra = knit_hooks$get('plot')(paste(fig, ext, sep = '.'), options)
