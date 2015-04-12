@@ -8,6 +8,25 @@ has provided a few engines to compile vignettes via \code{\link{knit}()} with
 different templates. See \url{http://yihui.name/knitr/demo/vignette/} for
 more information.
 }
+\note{
+If you use the \code{knitr::rmarkdown} engine, please make sure that
+  you put \pkg{rmarkdown} in the \samp{Suggests} field of your
+  \file{DESCRIPTION} file. Also make sure the executables \command{pandoc}
+  and \command{pandoc-citeproc} can be found by \pkg{rmarkdown} during
+  \command{R CMD build}. If you build your package from RStudio, this is
+  normally not a problem. If you build the package outside RStudio, run
+  \command{which pandoc} and \command{which pandoc-citeproc} in the terminal
+  (or \code{Sys.which('pandoc')} and \code{Sys.which('pandoc-citeproc')} in
+  R) to check if \command{pandoc} and \command{pandoc-citeproc} can be found.
+  If you use Linux, you may make symlinks to the Pandoc binaries in RStudio:
+  \url{https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md}, or
+  install \command{pandoc} and \command{pandoc-citeproc} separately.
+
+  When the \pkg{rmarkdown} package is not installed or not available, or
+  \command{pandoc} or \command{pandoc-citeproc} cannot be found, the
+  \code{knitr::rmarkdown} engine will fall back to the \code{knitr::knitr}
+  engine, which uses R Markdown v1 based on the \pkg{markdown} package.
+}
 \examples{
 library(knitr)
 vig_list = if (getRversion() > "3.0.0") tools::vignetteEngine(package = "knitr")
