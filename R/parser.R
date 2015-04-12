@@ -56,6 +56,21 @@ dep_list = new_defaults()
 
 # separate params and R code in code chunks
 parse_block = function(code, header, params.src) {
+  params = params.src
+  engine = 'r'
+  # consider the syntax ```{engine, opt=val} for chunk headers
+  if (out_format('markdown')) {
+    engine = sub('^([a-zA-Z]+).*$', '\\1', params)
+    params = sub('^([a-zA-Z]+)', '', params)
+  }
+  params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
+  # turn ```{engine} into ```{r, engine="engine"}
+  if (tolower(engine) != 'r') {
+    params = sprintf('%s, engine="%s"', params, engine)
+    params = gsub('^\\s*,\\s*', '', params)
+  }
+
+  params.src = params
   params = parse_params(params.src)
   if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', header))) {
     params$indent = spaces
@@ -95,7 +110,6 @@ unnamed_chunk = function(prefix = NULL, i = chunk_counter()) {
 # parse params from chunk header
 parse_params = function(params) {
 
-  params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
   if (params == '') return(list(label = unnamed_chunk()))
 
   res = withCallingHandlers(
