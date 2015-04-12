@@ -638,10 +638,22 @@ is_windows = function() .Platform$OS.type == 'windows'
 #' Query the current input filename
 #'
 #' Returns the name of the input file passed to \code{\link{knit}()}.
+#' @param dir whether to prepend the current working directory to the file path
+#'   (i.e. return an absolute path or a relative path)
 #' @return A character string, if this function is called inside an input
 #'   document (otherwise \code{NULL}).
 #' @export
-current_input = function() knit_concord$get('infile')
+current_input = function(dir = FALSE) {
+  input = knit_concord$get('infile')
+  outwd = opts_knit$get('output.dir')
+  if (dir) {
+    if (is.null(outwd)) {
+      warning('Cannot determine the directory of the input document')
+      dir = FALSE
+    }
+  }
+  if (dir) file.path(outwd, input) else input
+}
 
 # import output handlers from evaluate
 default_handlers = evaluate:::default_output_handler
