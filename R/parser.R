@@ -140,7 +140,7 @@ parse_params = function(params) {
 # quote the chunk label if necessary
 quote_label = function(x) {
   x = gsub('^\\s*,?', '', x)
-  if (grepl('^\\s*[^\'"](,|\\s*$)', x)){
+  if (grepl('^\\s*[^\'"](,|\\s*$)', x)) {
     # <<a,b=1>>= ---> <<'a',b=1>>=
     x = gsub('^\\s*([^\'"])(,|\\s*$)', "'\\1'\\2", x)
   } else if (grepl('^\\s*[^\'"](,|[^=]*(,|\\s*$))', x)) {
@@ -332,10 +332,10 @@ strip_chunk = function(x) strip_white(x[-1])
 # strip lines that are pure white spaces
 strip_white = function(x) {
   if (!length(x)) return(x)
-  while(is_blank(x[1])) {
+  while (is_blank(x[1])) {
     x = x[-1]; if (!length(x)) return(x)
   }
-  while(is_blank(x[(n <- length(x))])) {
+  while (is_blank(x[(n <- length(x))])) {
     x = x[-n]; if (n < 2) return(x)
   }
   x
