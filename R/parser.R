@@ -84,7 +84,7 @@ parse_block = function(code, header, params.src) {
         params$label = label = unnamed_chunk(label)
       } else stop("duplicate label '", label, "'")
     }
-    knit_code$set(setNames(list(code), label))
+    knit_code$set(setNames(list(structure(code, chunk_opts = params)), label))
   }
 
   # store dependencies
@@ -374,10 +374,50 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
 
 #' Get all chunk labels in a document
 #'
-#' This function returns all chunk labels as a chracter vector.
+#' This function returns all chunk labels as a chracter vector. Optionally, you
+#' can specify a series of conditions to filter the labels.
+#'
+#' For example, suppose the condition expression is \code{engine == 'Rcpp'}, the
+#' object \code{engine} is the local chunk option \code{engine}; if an
+#' expression fails to be evaluated (e.g. when a certain object does not exist),
+#' \code{FALSE} is returned and the label for this chunk will be filtered out.
+#' @param ... a series of R expressions, each of which should return \code{TRUE}
+#'   or \code{FALSE}; the expressions are evaluated using the local chunk
+#'   options of each code chunk as the environment
+#' @note Empty code chunks are always ignored, including those chunks that are
+#'   empty originally in the document but filled with code using chunk options
+#'   such as \code{ref.label} or \code{code}.
 #' @return A character vector.
 #' @export
-all_labels = function() names(knit_code$get())
+#' @examples # the examples below are meaningless unless you put them in a knitr document
+#' all_labels()
+#' all_labels(engine == 'Rcpp')
+#' all_labels(echo == FALSE && results != 'hide')
+#' # or separate the two conditions
+#' all_labels(echo == FALSE, results != 'hide')
+all_labels = function(...) {
+  cond = as.list(match.call())[-1]
+  code = knit_code$get()
+  labels = names(code)
+
+  if (length(cond) == 0) return(labels)
+
+  params = lapply(code, attr, 'chunk_opts', exact = TRUE)
+  idx = rep_len(TRUE, length(labels))
+  for (i in seq_along(cond)) {
+    for (j in seq_along(params)) {
+      # need tryCatch() because the expression cond[[i]] may trigger an error
+      # when any variable is not found, e.g. not all chunks have the engine
+      # option when the condition is engine == 'Rcpp'
+      if (idx[j]) idx[j] = tryCatch(
+        eval(cond[[i]], envir = params[[j]], enclos = knit_global()),
+        error = function(e) FALSE
+      )
+    }
+  }
+
+  labels[idx]
+}
 
 #' Wrap code using the inline R expression syntax
 #'
