@@ -344,6 +344,7 @@ strip_white = function(x) {
 # (recursively) parse chunk references inside a chunk
 parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   if (length(x) == 0L) return(x)
+  x = c(x)  # drop attributes of code (e.g. chunk_opts)
   if (!group_pattern(rc) || !any(idx <- grepl(rc, x))) return(x)
 
   labels = sub(rc, '\\1', x[idx])
