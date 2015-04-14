@@ -215,33 +215,21 @@ reduce_plot_opts = function(options) {
 # https://github.com/rstudio/rstudio/blob/master/src/cpp/r/R/Tools.R
 fix_recordedPlot = function(plot) {
   # restore native symbols for R >= 3.0
-  if (Rversion >= '3.0.0') {
-    for (i in seq_along(plot[[1]])) {
-      # get the symbol then test if it's a native symbol
-      symbol = plot[[1]][[i]][[2]][[1]]
-      if (inherits(symbol, 'NativeSymbolInfo')) {
-        # determine the dll that the symbol lives in
-        name = symbol[[if (is.null(symbol$package)) 'dll' else 'package']][['name']]
-        pkgDLL = getLoadedDLLs()[[name]]
-        # reconstruct the native symbol and assign it into the plot
-        nativeSymbol = getNativeSymbolInfo(
-          name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE
-        )
-        plot[[1]][[i]][[2]][[1]] <- nativeSymbol
-      }
+  for (i in seq_along(plot[[1]])) {
+    # get the symbol then test if it's a native symbol
+    symbol = plot[[1]][[i]][[2]][[1]]
+    if (inherits(symbol, 'NativeSymbolInfo')) {
+      # determine the dll that the symbol lives in
+      name = symbol[[if (is.null(symbol$package)) 'dll' else 'package']][['name']]
+      pkgDLL = getLoadedDLLs()[[name]]
+      # reconstruct the native symbol and assign it into the plot
+      nativeSymbol = getNativeSymbolInfo(
+        name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE
+      )
+      plot[[1]][[i]][[2]][[1]] <- nativeSymbol
     }
-    attr(plot, 'pid') = Sys.getpid()
-  } else if (Rversion >= '2.14') {
-    # restore native symbols for R >= 2.14
-    try({
-      for(i in seq_along(plot[[1]])) {
-        if(inherits(plot[[1]][[i]][[2]][[1]], 'NativeSymbolInfo')) {
-          nativeSymbol = getNativeSymbolInfo(plot[[1]][[i]][[2]][[1]]$name)
-          plot[[1]][[i]][[2]][[1]] = nativeSymbol
-        }
-      }
-    }, silent = TRUE)
   }
+  attr(plot, 'pid') = Sys.getpid()
   plot
 }
 

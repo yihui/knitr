@@ -23,7 +23,7 @@
 #'   \code{knitr::rmarkdown} engine will fall back to the \code{knitr::knitr}
 #'   engine, which uses R Markdown v1 based on the \pkg{markdown} package.
 #' @examples library(knitr)
-#' vig_list = if (getRversion() > '3.0.0') tools::vignetteEngine(package = 'knitr')
+#' vig_list = tools::vignetteEngine(package = 'knitr')
 #' str(vig_list)
 #' vig_list[['knitr::knitr']][c('weave', 'tangle')]
 #' vig_list[['knitr::knitr_notangle']][c('weave', 'tangle')]
@@ -69,10 +69,7 @@ vtangle_empty = function(file, ...) {
   return()
 }
 
-Rversion = getRversion()
-
 register_vignette_engines = function(pkg) {
-  if (Rversion < '3.0.0') return()
   # the default engine
   vig_engine('knitr', vweave, '[.]([rRsS](nw|tex)|[Rr](md|html|rst))$')
   vig_engine('docco_linear', vweave_docco_linear, '[.][Rr](md|markdown)$')
