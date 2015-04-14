@@ -35,8 +35,8 @@ res = split_file(
 assert(
   'split_file() treats ``` as part of code chunk instead of beginning of text chunk',
   # the foo chunk does not have a closing mark
-  identical(knit_code$get('foo'), '1+1'),
-  identical(knit_code$get('bar'), '2+2'),
+  knit_code$get('foo') == '1+1',
+  knit_code$get('bar') == '2+2',
   # before knitr v1.6, the text chunk was c('', 'def')
   identical(res[[4]][['input']], 'def')
 )
