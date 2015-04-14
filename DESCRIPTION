@@ -92,7 +92,7 @@ Description: This package provides a general-purpose tool for dynamic report
     to Python and shell scripts, etc). Many features are borrowed from or
     inspired by Sweave, cacheSweave, pgfSweave, brew and decumar.
 Depends:
-    R (>= 2.14.1)
+    R (>= 3.0.2)
 Imports:
     evaluate (>= 0.6),
     digest,
