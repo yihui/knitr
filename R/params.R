@@ -95,6 +95,7 @@ resolve_params <- function(params) {
     if (!is.list(param)) {
       param <- list(
         name = name,
+        type = class(param)[[1]],
         default = param
       )
     } else {
@@ -106,8 +107,17 @@ resolve_params <- function(params) {
         next
       }
 
+      # ensure we have a name and type
       param$name <- name
+      param$type <- class(param$default)[[1]]
     }
+
+    # normalize the order of items in the list (for nicer printing)
+    param <- list(
+      name = param$name,
+      type = param$type,
+      default = param$default
+    )
 
     # add the parameter
     full_params[[length(full_params) + 1]] <- param
@@ -124,8 +134,8 @@ lines <- c(
   "  tip: tap",
   "  sap:",
   "    default: sip",
-#  "  bad:",
-#  "    defaultt: sip",
+  "  bad:",
+  "    defaultt: sip",
   "---",
   ""
 )
