@@ -6,7 +6,9 @@ knit_params <- function(lines) {
   # read the yaml front matter and see if there is a params element in it
   yaml <- yaml_front_matter(lines)
   if (!is.null(yaml)) {
-    parsed_yaml <- yaml::yaml.load(yaml)
+    parsed_yaml <- yaml::yaml.load(yaml, handlers = list(
+      date = as.Date
+    ))
     if (is.list(parsed_yaml) && !is.null(parsed_yaml$params)) {
       # found params, return resolved version of them
       resolve_params(parsed_yaml$params)
@@ -96,27 +98,27 @@ resolve_params <- function(params) {
       param <- list(
         name = name,
         type = class(param)[[1]],
-        default = param
+        value = param
       )
     } else {
 
-      # validate that the "default" field is included
+      # validate that the "value" field is included
       # (ignore with a warning if it isn't)
-      if (!"default" %in% names(param)) {
-        warning("no 'default' field specified for yaml parameter ", name)
+      if (!"value" %in% names(param)) {
+        warning("no value field specified for yaml parameter '", name, "'")
         next
       }
 
       # ensure we have a name and type
       param$name <- name
-      param$type <- class(param$default)[[1]]
+      param$type <- class(param$value)[[1]]
     }
 
-    # normalize the order of items in the list (for nicer printing)
+    # normalize parameter values
     param <- list(
       name = param$name,
       type = param$type,
-      default = param$default
+      value = param$value
     )
 
     # add the parameter
@@ -131,14 +133,16 @@ resolve_params <- function(params) {
 lines <- c(
   "---",
   "params:",
-  "  tip: tap",
+  "  tip: !date 12/2/15",
   "  sap:",
-  "    default: sip",
+  "    value: !date 12/2/15",
   "  bad:",
-  "    defaultt: sip",
+  "    valuet: sip",
   "---",
   ""
 )
 
-str(knit_params(lines))
+p <- knit_params(lines)
+
+str(p)
 
