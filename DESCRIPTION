@@ -100,15 +100,15 @@ Imports:
     highr (>= 0.4.1),
     markdown (>= 0.7.4),
     stringr (>= 0.6),
-    tools
+    yaml (>= 2.1.5),
+    tools,
 Suggests:
     testit,
     rgl (>= 0.95.1201),
     codetools,
     rmarkdown,
     XML,
-    RCurl,
-    yaml
+    RCurl
 License: GPL
 URL: http://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
