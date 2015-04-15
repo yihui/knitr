@@ -78,18 +78,57 @@ yaml_front_matter <- function(lines) {
   }
 }
 
+# resolve the raw params list into the full params data structure
+# (with name, type, value, and other optional fields included)
 resolve_params <- function(params) {
-  params
+
+  full_params <- list()
+
+  names <- names(params)
+  for (name in names) {
+
+    # get the parameter
+    param <- params[[name]]
+
+    # if it's not a list then a plain value was specified, create
+    # the list based on the value
+    if (!is.list(param)) {
+      param <- list(
+        name = name,
+        default = param
+      )
+    } else {
+
+      # validate that the "default" field is included
+      # (ignore with a warning if it isn't)
+      if (!"default" %in% names(param)) {
+        warning("no 'default' field specified for yaml parameter ", name)
+        next
+      }
+
+      param$name <- name
+    }
+
+    # add the parameter
+    full_params[[length(full_params) + 1]] <- param
+  }
+
+  # return params
+  full_params
 }
 
 
 lines <- c(
   "---",
-  "foo: bar",
-  "snap: tap",
+  "params:",
+  "  tip: tap",
+  "  sap:",
+  "    default: sip",
+#  "  bad:",
+#  "    defaultt: sip",
   "---",
   ""
 )
 
-knit_params(lines)
+str(knit_params(lines))
 
