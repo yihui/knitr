@@ -1,5 +1,17 @@
 
-
+# ideas:
+#
+# codecs that have a name and conversion function(s)
+# codecs leave an attribute with the original type name
+# we look for this and extract it into the 'type' field
+#
+# functions:
+#
+# knit_params(lines)
+# knit_params_from_file(file)
+# knit_params_as_list
+# knit_params_as_code
+# knit_params_as_yaml
 
 knit_params <- function(lines) {
 
@@ -135,7 +147,7 @@ lines <- c(
   "params:",
   "  tip: !date 12/2/15",
   "  sap:",
-  "    value: !date 12/2/15",
+  "    value: !date 2015-2-15",
   "  bad:",
   "    valuet: sip",
   "---",
@@ -145,4 +157,5 @@ lines <- c(
 p <- knit_params(lines)
 
 str(p)
+cat(yaml::as.yaml(p))
 
