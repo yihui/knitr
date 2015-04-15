@@ -107,7 +107,8 @@ Suggests:
     codetools,
     rmarkdown,
     XML,
-    RCurl
+    RCurl,
+    yaml
 License: GPL
 URL: http://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
@@ -136,6 +137,7 @@ Collate:
     'output.R'
     'package.R'
     'pandoc.R'
+    'params.R'
     'parser.R'
     'pattern.R'
     'rocco.R'
