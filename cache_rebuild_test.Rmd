@@ -1,0 +1,17 @@
+---
+title: "Test"
+author: "Zachary Foster"
+date: "04/16/2015"
+output: html_document
+---
+
+```{r}
+rebuild = FALSE
+```
+
+
+
+```{r, cache=TRUE, cache.rebuild=rebuild}
+Sys.sleep(5)
+print("yea")
+```
