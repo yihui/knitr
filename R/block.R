@@ -50,7 +50,7 @@ call_block = function(block) {
     }
     hash = paste(valid_path(params$cache.path, label), digest::digest(content), sep = '_')
     params$hash = hash
-    if (cache$exists(hash, params$cache.lazy)) {
+    if (cache$exists(hash, params$cache.lazy) && isFALSE(params$cache.rebuild)) {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
       cache$load(hash, lazy = params$cache.lazy)
       if (!params$include) return('')
@@ -78,7 +78,7 @@ cache1.opts = c('code', 'eval', 'cache', 'cache.path', 'message', 'warning', 'er
 # more options affecting cache level 2
 cache2.opts = c('fig.keep', 'fig.path', 'fix.ext', 'dev', 'dpi', 'dev.args', 'fig.width', 'fig.height')
 # options that should not affect cache
-cache0.opts = c('include', 'out.width.px', 'out.height.px')
+cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
 block_exec = function(options) {
   # when code is not R language
@@ -144,8 +144,9 @@ block_exec = function(options) {
   cache.exists = cache$exists(options$hash, options$cache.lazy)
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
-    as.source(code)
   } else if (cache.exists) {
+    as.source(code)
+  } else if (cache.exists && isFALSE(options$cache.rebuild)) {
     fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
   } else in_dir(
     opts_knit$get('root.dir') %n% input_dir(),

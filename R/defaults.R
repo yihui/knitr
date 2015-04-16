@@ -56,7 +56,7 @@ opts_chunk = new_defaults(list(
   strip.white = TRUE, size = 'normalsize', background = '#F7F7F7',
 
   cache = FALSE, cache.path = 'cache/', cache.vars = NULL, cache.lazy = TRUE,
-  dependson = NULL, autodep = FALSE,
+  dependson = NULL, autodep = FALSE, cache.rebuild = FALSE,
 
   fig.keep = 'high', fig.show = 'asis', fig.align = 'default', fig.path = 'figure/',
   dev = NULL, dev.args = NULL, dpi = 72, fig.ext = NULL, fig.width = 7, fig.height = 7,
