@@ -145,7 +145,7 @@ resolve_params <- function(params) {
 lines <- c(
   "---",
   "params:",
-  "  tip: !date 12/2/15",
+  "  tip: !date 2015-2-15",
   "  sap:",
   "    value: !date 2015-2-15",
   "  bad:",
