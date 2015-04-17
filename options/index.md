@@ -162,6 +162,10 @@ leading white spaces have special meanings in markdown.
   may be desirable (see [#572](https://github.com/yihui/knitr/issues/572))
 - `cache.comments`: (`NULL`) if `FALSE`, changing comments in R code chunks will
   not invalidate the cache database
+- `cache.rebuild`: (`FALSE`) if `TRUE`, the chunk is evaluated even if `cache=TRUE`
+  and no changes are made. This is useful when given an R code argument. 
+  For example: `cache.rebuild=!file.exists("path/to/file.ext")`
+  (see [#238](https://github.com/yihui/knitr/issues/238)).
 - `dependson`: (`NULL`; character or numeric) a character vector of chunk labels
   to specify which other chunks this chunk depends on; this option applies
   to cached chunks only -- sometimes the objects in a cached chunk may
