@@ -10,14 +10,23 @@
 # knit_params(lines)
 # knit_params_from_file(file)
 #
-# extractors for various contexts:
-#
-# knit_params_as_list   (used by rmarkdown)
-# knit_params_as_code   (used by knitr)
-# knit_params_as_yaml   (used by rstudio / rsconnect)
-#
+
 
 knit_params <- function(lines) {
+
+  date_handler <- function(value) {
+    value <- as.Date(value)
+    attr(value, "type") <- "date"
+    value
+  }
+
+  type_handler <- function(type) {
+    function(value) {
+      attr(value, "type") <- type
+      value
+    }
+  }
+
 
   # read the yaml front matter and see if there is a params element in it
   yaml <- yaml_front_matter(lines)
@@ -173,29 +182,14 @@ resolve_params <- function(params) {
   full_params
 }
 
-
-date_handler <- function(value) {
-  value <- as.Date(value)
-  attr(value, "type") <- "date"
-  value
-}
-
-type_handler <- function(type) {
-  function(value) {
-    attr(value, "type") <- type
-    value
-  }
-}
-
-
 lines <- c(
   "---",
   "params:",
   "  tip: !date 2015-2-15",
   "  sap:",
   "    value: !date 2015-2-15",
-  "  bad:",
-  "    value: !file",
+  "  bad: !file",
+  "    value:",
   "       ship: 10.7",
   "       flip: 20",
   "---",
