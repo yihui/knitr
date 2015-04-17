@@ -1,16 +1,6 @@
 
-# ideas:
-#
-# codecs that have a name and conversion function(s)
-# codecs leave an attribute with the original type name
-# we look for this and extract it into the 'type' field
-#
-# functions:
-#
-# knit_params(lines)
-# knit_params_from_file(file)
-#
 
+#' @export
 knit_params <- function(lines) {
 
   # read the yaml front matter and see if there is a params element in it
@@ -29,10 +19,6 @@ knit_params <- function(lines) {
   } else {
     NULL
   }
-}
-
-knit_params_from_file <- function(file, encoding = "unknown") {
-  knit_params(readLines(file, encoding = encoding))
 }
 
 
