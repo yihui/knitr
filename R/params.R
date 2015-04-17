@@ -9,9 +9,13 @@
 #
 # knit_params(lines)
 # knit_params_from_file(file)
-# knit_params_as_list
-# knit_params_as_code
-# knit_params_as_yaml
+#
+# extractors for various contexts:
+#
+# knit_params_as_list   (used by rmarkdown)
+# knit_params_as_code   (used by knitr)
+# knit_params_as_yaml   (used by rstudio / rsconnect)
+#
 
 knit_params <- function(lines) {
 
