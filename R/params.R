@@ -127,6 +127,7 @@ resolve_params <- function(params) {
   }
 
   # return a parameter value with type attribute stripped
+  # and as a vector rather than list if it's unnamed
   param_value <- function(value) {
     attr(value, "type") <- NULL
     if (is.null(names(value)))
@@ -172,12 +173,8 @@ resolve_params <- function(params) {
         param$type <- param_type(param$value)
     }
 
-    # normalize parameter values
-    param <- list(
-      name = param$name,
-      type = param$type,
-      value = param_value(param$value)
-    )
+    # normalize parameter value
+    param$value <- param_value(param$value)
 
     # add the parameter
     resolved_params[[length(resolved_params) + 1]] <- param

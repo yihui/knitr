@@ -8,18 +8,96 @@ read_params <- function(src) {
 }
 
 
-## test basic parameter parsing
+## test basic parameter parsing --------------------------------------------
 
 params <- read_params('
 ---
 params:
-  x: 10
-  y: 20
+  a: 10
+  b: 20
 ---
 '
 )
-assert(params[[1]]$name == 'x')
+assert(params[[1]]$name == 'a')
 assert(params[[1]]$value == 10)
-assert(params[[2]]$name == 'y')
+assert(params[[2]]$name == 'b')
 assert(params[[2]]$value == 20)
+
+
+## test date custom type ---------------------------------------------------
+
+params <- read_params('
+---
+params:
+  start: !date 2015-01-01
+---
+'
+)
+assert(params[[1]]$name == 'start')
+assert(params[[1]]$type == 'date')
+assert(params[[1]]$value == as.Date("01/01/15", "%m/%d/%y"))
+
+
+## test file custom type ---------------------------------------------------
+
+params <- read_params('
+---
+params:
+  file: !file data.csv
+---
+'
+)
+assert(params[[1]]$name == 'file')
+assert(params[[1]]$type == 'file')
+assert(params[[1]]$value == 'data.csv')
+
+
+## test specifying value in sub-object and type at object level ------------
+
+params <- read_params('
+---
+params:
+  file1:
+    value: !file data1.csv
+  file2: !file
+    value: data2.csv
+---
+'
+)
+assert(params[[1]]$name == 'file1')
+assert(params[[1]]$type == 'file')
+assert(params[[1]]$value == 'data1.csv')
+assert(params[[2]]$name == 'file2')
+assert(params[[2]]$type == 'file')
+assert(params[[2]]$value == 'data2.csv')
+
+
+## test parameters with length(value) > 1 ----------------------------------
+
+params <- read_params('
+---
+params:
+  regions:
+    value: [North, South]
+---
+'
+)
+assert(length(params[[1]]$value) == 2)
+assert(params[[1]]$value[[2]] == 'South')
+
+
+## test including additional parameter attributes --------------------------
+
+params <- read_params('
+---
+params:
+  regions:
+    value: [North, South]
+    choices: [North, South, East, West]
+    label: "Select Regions"
+---
+'
+)
+assert(identical(params[[1]]$choices, c('North', 'South', 'East', 'West')))
+assert(params[[1]]$label == "Select Regions")
 
