@@ -11,32 +11,17 @@
 # knit_params_from_file(file)
 #
 
-
 knit_params <- function(lines) {
-
-  date_handler <- function(value) {
-    value <- as.Date(value)
-    attr(value, "type") <- "date"
-    value
-  }
-
-  type_handler <- function(type) {
-    function(value) {
-      attr(value, "type") <- type
-      value
-    }
-  }
-
 
   # read the yaml front matter and see if there is a params element in it
   yaml <- yaml_front_matter(lines)
   if (!is.null(yaml)) {
-    parsed_yaml <- yaml::yaml.load(yaml, handlers = list(
-      date = date_handler,
-      file = type_handler("file")
-    ))
+
+    # parse the yaml using our handlers
+    parsed_yaml <- yaml::yaml.load(yaml, handlers = knit_params_handlers())
+
+    # if we found paramters then resolve and return them
     if (is.list(parsed_yaml) && !is.null(parsed_yaml$params)) {
-      # found params, return resolved version of them
       resolve_params(parsed_yaml$params)
     } else {
       NULL
@@ -46,6 +31,9 @@ knit_params <- function(lines) {
   }
 }
 
+knit_params_from_file <- function(file, encoding = "unknown") {
+  knit_params(readLines(file, encoding = encoding))
+}
 
 
 # Extract the yaml front matter (if any) from the passed lines. The front
@@ -106,6 +94,34 @@ yaml_front_matter <- function(lines) {
   }
 }
 
+# define custom handlers for knitr_params
+knit_params_handlers <- function() {
+
+  # generic handler for intrinsic types that need a
+  # special 'type' designator as a hint to front-ends
+  # (e.g. 'file' to indicate a file could be uploaded)
+  type_handler <- function(type) {
+    function(value) {
+      attr(value, "type") <- type
+      value
+    }
+  }
+
+  list(
+
+    # date
+    date = function(value) {
+      value <- as.Date(value)
+      attr(value, "type") <- "date"
+      value
+    },
+
+    # file
+    file = type_handler("file")
+  )
+}
+
+
 # resolve the raw params list into the full params data structure
 # (with name, type, value, and other optional fields included)
 resolve_params <- function(params) {
@@ -124,7 +140,7 @@ resolve_params <- function(params) {
       class(value)[[1]]
   }
 
-  # function to return a parameter value without the type attribute
+  # return a parameter value with type attribute stripped
   param_value <- function(value) {
     attr(value, "type") <- NULL
     if (is.null(names(value)))
@@ -134,8 +150,9 @@ resolve_params <- function(params) {
   }
 
   # params we will return
-  full_params <- list()
+  resolved_params <- list()
 
+  # iterate over names
   names <- names(params)
   for (name in names) {
 
@@ -145,11 +162,13 @@ resolve_params <- function(params) {
     # if it's not a list then a plain value was specified, create
     # the list based on the value
     if (!is.list(param)) {
+
       param <- list(
         name = name,
         type = param_type(param),
         value = param_value(param)
       )
+
     } else {
 
       # validate that the "value" field is included
@@ -175,29 +194,11 @@ resolve_params <- function(params) {
     )
 
     # add the parameter
-    full_params[[length(full_params) + 1]] <- param
+    resolved_params[[length(resolved_params) + 1]] <- param
   }
 
   # return params
-  full_params
+  resolved_params
 }
-
-lines <- c(
-  "---",
-  "params:",
-  "  tip: !date 2015-2-15",
-  "  sap:",
-  "    value: !date 2015-2-15",
-  "  bad: !file",
-  "    value:",
-  "       ship: 10.7",
-  "       flip: 20",
-  "---",
-  ""
-)
-
-p <- knit_params(lines)
-
-str(p)
 
 
