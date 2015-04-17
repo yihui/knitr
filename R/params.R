@@ -153,6 +153,7 @@ yaml_front_matter <- function(lines) {
   }
 }
 
+
 # define custom handlers for knitr_params
 knit_params_handlers <- function() {
 
