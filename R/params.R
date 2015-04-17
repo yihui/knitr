@@ -1,10 +1,10 @@
 
 
 #' @export
-knit_params <- function(lines) {
+knit_params <- function(text) {
 
   # read the yaml front matter and see if there is a params element in it
-  yaml <- yaml_front_matter(lines)
+  yaml <- yaml_front_matter(text)
   if (!is.null(yaml)) {
 
     # parse the yaml using our handlers
