@@ -101,11 +101,16 @@ yaml_front_matter <- function(lines) {
 # (with name, type, value, and other optional fields included)
 resolve_params <- function(params) {
 
-  # function to extract type attribute (if any)
+  # get the type attribute (if any)
+  type_attr <- function(value) {
+    attr(value, "type")
+  }
+
+  # deduce type from attribute or class
   param_type <- function(value) {
-    type_attr <- attr(value, "type")
-    if (!is.null(type_attr))
-      type_attr
+    type <- type_attr(value)
+    if (!is.null(type))
+      type
     else
       class(value)[[1]]
   }
@@ -144,9 +149,13 @@ resolve_params <- function(params) {
              call. = FALSE)
       }
 
-      # ensure we have a name and type
+      # ensure we have a name
       param$name <- name
-      param$type <- param_type(param$value)
+
+      # look for type info at the object level then value level
+      param$type <- type_attr(param)
+      if (is.null(param$type))
+        param$type <- param_type(param$value)
     }
 
     # normalize parameter values
