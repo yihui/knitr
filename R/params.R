@@ -23,7 +23,8 @@ knit_params <- function(lines) {
   yaml <- yaml_front_matter(lines)
   if (!is.null(yaml)) {
     parsed_yaml <- yaml::yaml.load(yaml, handlers = list(
-      date = as.Date
+      date = date_handler,
+      file = type_handler("file")
     ))
     if (is.list(parsed_yaml) && !is.null(parsed_yaml$params)) {
       # found params, return resolved version of them
@@ -100,6 +101,25 @@ yaml_front_matter <- function(lines) {
 # (with name, type, value, and other optional fields included)
 resolve_params <- function(params) {
 
+  # function to extract type attribute (if any)
+  param_type <- function(value) {
+    type_attr <- attr(value, "type")
+    if (!is.null(type_attr))
+      type_attr
+    else
+      class(value)[[1]]
+  }
+
+  # function to return a parameter value without the type attribute
+  param_value <- function(value) {
+    attr(value, "type") <- NULL
+    if (is.null(names(value)))
+      unlist(value)
+    else
+      value
+  }
+
+  # params we will return
   full_params <- list()
 
   names <- names(params)
@@ -113,28 +133,27 @@ resolve_params <- function(params) {
     if (!is.list(param)) {
       param <- list(
         name = name,
-        type = class(param)[[1]],
-        value = param
+        type = param_type(param),
+        value = param_value(param)
       )
     } else {
 
       # validate that the "value" field is included
-      # (ignore with a warning if it isn't)
       if (!"value" %in% names(param)) {
-        warning("no value field specified for yaml parameter '", name, "'")
-        next
+        stop("no value field specified for yaml parameter '", name, "'",
+             call. = FALSE)
       }
 
       # ensure we have a name and type
       param$name <- name
-      param$type <- class(param$value)[[1]]
+      param$type <- param_type(param$value)
     }
 
     # normalize parameter values
     param <- list(
       name = param$name,
       type = param$type,
-      value = param$value
+      value = param_value(param$value)
     )
 
     # add the parameter
@@ -146,6 +165,20 @@ resolve_params <- function(params) {
 }
 
 
+date_handler <- function(value) {
+  value <- as.Date(value)
+  attr(value, "type") <- "date"
+  value
+}
+
+type_handler <- function(type) {
+  function(value) {
+    attr(value, "type") <- type
+    value
+  }
+}
+
+
 lines <- c(
   "---",
   "params:",
@@ -153,7 +186,9 @@ lines <- c(
   "  sap:",
   "    value: !date 2015-2-15",
   "  bad:",
-  "    valuet: sip",
+  "    value: !file",
+  "       ship: 10.7",
+  "       flip: 20",
   "---",
   ""
 )
@@ -161,5 +196,5 @@ lines <- c(
 p <- knit_params(lines)
 
 str(p)
-cat(yaml::as.yaml(p))
+
 
