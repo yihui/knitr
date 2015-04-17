@@ -158,7 +158,7 @@ block_exec = function(options) {
       output_handler = knit_handlers(options$render, options)
     )
   )
-  if (options$cache %in% 1:2 && !cache.exists) {
+  if (options$cache %in% 1:2 && (!cache.exists || isTRUE(options$cache.rebuild))) {
     # make a copy for cache=1,2; when cache=2, we do not really need plots
     res.orig = if (options$cache == 2) remove_plot(res, keep == 'high') else res
   }
