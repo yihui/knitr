@@ -167,6 +167,10 @@ hook_purl = function(before, options, envir) {
   if (isFALSE(.knitEnv$tangle.start)) {
     .knitEnv$tangle.start = TRUE
     unlink(output)
+    # write out knit_params() data from YAML
+    params = .knitEnv$tangle.params
+    if (length(params)) writeLines(params, output)
+    .knitEnv$tangle.params = NULL
   }
 
   code = options$code

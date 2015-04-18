@@ -228,10 +228,21 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   }
 
   if (is.null(out_format())) auto_format(ext)
-  # in child mode, strip off the YAML metadata in Markdown if exists
-  if (child_mode() && out_format('markdown') && grepl('^---\\s*$', text[1])) {
-    i = grep('^---\\s*$', text)
-    if (length(i) >= 2) text = text[-(1:i[2])]
+
+  params = NULL  # the params field from YAML
+  if (out_format('markdown')) {
+    if (child_mode()) {
+      # in child mode, strip off the YAML metadata in Markdown if exists
+      if (grepl('^---\\s*$', text[1])) {
+        i = grep('^---\\s*$', text)
+        if (length(i) >= 2) text = text[-(1:i[2])]
+      }
+    } else {
+      params = knit_params(text)
+      params = if (length(params))
+        c('params <-', capture.output(dput(params, '')), '')
+      .knitEnv$tangle.params = params  # for hook_purl()
+    }
   }
   # change output hooks only if they are not set beforehand
   if (identical(knit_hooks$get(names(.default.hooks)), .default.hooks) && !child_mode()) {
@@ -243,6 +254,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   if (in.file && !quiet) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
   res = paste(knit_hooks$get('document')(res), collapse = '\n')
+  if (tangle) res = c(params, res)
   if (!is.null(output))
     writeLines(if (encoding == '') res else native_encode(res, to = encoding),
                con = output, useBytes = encoding != '')
