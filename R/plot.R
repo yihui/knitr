@@ -184,7 +184,7 @@ merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
 # compare two recorded plots
 is_low_change = function(p1, p2) {
   p1 = p1[[1]]; p2 = p2[[1]]  # real plot info is in [[1]]
-  if ((n2 <- length(p2)) < (n1 <- length(p1))) return(FALSE)  # length must increase
+  if (length(p2) < (n1 <- length(p1))) return(FALSE)  # length must increase
   identical(p1[1:n1], p2[1:n1])
 }
 

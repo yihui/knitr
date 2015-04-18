@@ -273,7 +273,7 @@ purl = function(..., documentation = 1L) {
 
 process_file = function(text, output) {
   groups = split_file(lines = text)
-  n = length(groups); res = character(n); olines = integer(n)
+  n = length(groups); res = character(n)
   tangle = opts_knit$get('tangle')
 
   # when in R CMD check, turn off the progress bar (R-exts said the progress bar
