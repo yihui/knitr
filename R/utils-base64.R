@@ -27,25 +27,25 @@ base64_table = c(LETTERS, letters, 0:9, '+', '/')
 # base64 encode a raw string
 base64_encode = function(raw.string) {
   n = length(s <- as.integer(raw.string))
-  res = rep(NA, (n + 2)/3 * 4)
+  res = rep(NA, (n + 2) / 3 * 4)
   i = 0L  # index of res vector
   j = 1L  # index of base64_table
   while (n > 2L) {
-    res[i <- i + 1L] = base64_table[s[j]%/%4L + 1L]
-    res[i <- i + 1L] = base64_table[16 * (s[j]%%4L) + s[j + 1L]%/%16 + 1L]
-    res[i <- i + 1L] = base64_table[4L * (s[j + 1L]%%16) + s[j + 2L]%/%64L + 1L]
-    res[i <- i + 1L] = base64_table[s[j + 2L]%%64L + 1L]
+    res[i <- i + 1L] = base64_table[s[j] %/% 4L + 1L]
+    res[i <- i + 1L] = base64_table[16 * (s[j] %% 4L) + s[j + 1L] %/% 16 + 1L]
+    res[i <- i + 1L] = base64_table[4L * (s[j + 1L] %% 16) + s[j + 2L] %/% 64L + 1L]
+    res[i <- i + 1L] = base64_table[s[j + 2L] %% 64L + 1L]
     j = j + 3L
     n = n - 3L
   }
   if (n) {
-    res[i <- i + 1L] = base64_table[s[j]%/%4L + 1L]
+    res[i <- i + 1L] = base64_table[s[j] %/% 4L + 1L]
     if (n > 1L) {
-      res[i <- i + 1L] = base64_table[16 * (s[j]%%4L) + s[j + 1L]%/%16 + 1L]
-      res[i <- i + 1L] = base64_table[4L * (s[j + 1L]%%16) + 1L]
+      res[i <- i + 1L] = base64_table[16 * (s[j] %% 4L) + s[j + 1L] %/% 16 + 1L]
+      res[i <- i + 1L] = base64_table[4L * (s[j + 1L] %% 16) + 1L]
       res[i <- i + 1L] = '='
     } else {
-      res[i <- i + 1L] = base64_table[16 * (s[j]%%4L) + 1L]
+      res[i <- i + 1L] = base64_table[16 * (s[j] %% 4L) + 1L]
       res[i <- i + 1L] = '='
       res[i <- i + 1L] = '='
     }

@@ -5,9 +5,9 @@ hook_plot_html = function(x, options) {
   fig.num = options$fig.num = options$fig.num %n% 1L
   fig.cur = options$fig.cur %n% 1L
 
-  if(options$fig.show == 'animate') {
+  if (options$fig.show == 'animate') {
     # Don't print out intermediate plots if we're animating
-    return(if(fig.cur < fig.num) '' else opts_knit$get('animation.fun')(x, options))
+    return(if (fig.cur < fig.num) '' else opts_knit$get('animation.fun')(x, options))
   }
   ai = options$fig.show == 'asis'
   plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == fig.num
@@ -74,9 +74,9 @@ hook_ffmpeg = function(x, options, format = '.webm') {
   fig.num = options$fig.num
   # set up the ffmpeg run
   fig.fname = stringr::str_c(sub(stringr::str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
-  mov.fname = stringr::str_c(sub(paste(fig.num, '$',sep = ''), '', x[1]), format)
+  mov.fname = stringr::str_c(sub(paste(fig.num, '$', sep = ''), '', x[1]), format)
 
-  ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1/options$interval,
+  ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1 / options$interval,
                      '-i', fig.fname, mov.fname)
   message('executing: ', ffmpeg.cmd)
   system(ffmpeg.cmd, ignore.stdout = TRUE)
@@ -158,7 +158,7 @@ render_html = function() {
   # use div with different classes
   html.hook = function(name) {
     force(name)
-    function (x, options) {
+    function(x, options) {
       x = if (name == 'source') {
         c(hilight_source(x, 'html', options), '')
       } else escape_html(x)

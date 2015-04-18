@@ -30,7 +30,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
     if (block) {
       n = length(g)
       # remove the optional chunk footer
-      if (n >=2 && grepl(chunk.end, g[n])) g = g[-n]
+      if (n >= 2 && grepl(chunk.end, g[n])) g = g[-n]
       # remove the optional prefix % in code in Rtex mode
       g = strip_block(g, patterns$chunk.code)
       params.src = if (group_pattern(chunk.begin)) {

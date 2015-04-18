@@ -87,7 +87,7 @@ spin = function(
   p1 = gsub('\\{', '\\\\{', stringr::str_c('^', p[1L], '.*', p[2L], '$'))
 
   for (i in seq_len(n)) {
-    block = x[seq(idx[i] + 1L, idx[i+1])]
+    block = x[seq(idx[i] + 1L, idx[i + 1])]
     txt[[i]] = if (r$values[i]) {
       # normal text; just strip #'
       sub(doc, '', block)

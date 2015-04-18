@@ -90,7 +90,7 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
   i = which(i2 & !filter_chunk_end(i1, i2))
   if (length(i)) {
     message('removing extra lines (#n shows line numbers):\n',
-            paste(formatUL(sprintf('(#%d) %s',i, x[i]), offset = 4), collapse = '\n'))
+            paste(formatUL(sprintf('(#%d) %s', i, x[i]), offset = 4), collapse = '\n'))
     x = x[-i]
   }
   if (is.null(text)) {

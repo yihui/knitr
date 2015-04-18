@@ -2,17 +2,17 @@ library(testit)
 
 assert(
   'parse_params() parses chunk options to a list',
-  identical(parse_params('a-s-d,b=TRUE,c=def'), alist(label='a-s-d',b=TRUE,c=def)),
+  identical(parse_params('a-s-d,b=TRUE,c=def'), alist(label = 'a-s-d', b = TRUE, c = def)),
   has_error(parse_params('a,b')),
   has_error(parse_params('a,b,c=qwer')),
-  identical(parse_params('a,opt=c(1,3,5)'),alist(label='a',opt=c(1,3,5))),
-  identical(parse_params('label="xx",opt=zz'),alist(label='xx',opt=zz)),
-  identical(parse_params('label=foo'),alist(label='foo')),
+  identical(parse_params('a,opt=c(1,3,5)'), alist(label = 'a', opt = c(1, 3, 5))),
+  identical(parse_params('label="xx",opt=zz'), alist(label = 'xx', opt = zz)),
+  identical(parse_params('label=foo'), alist(label = 'foo')),
   identical(parse_params('a,b=2,c="qwer",asdf="efg"'),
-            alist(label='a', b=2, c='qwer',asdf='efg')),
-  identical(parse_params('2a'), alist(label='2a')),
+            alist(label = 'a', b = 2, c = 'qwer', asdf = 'efg')),
+  identical(parse_params('2a'), alist(label = '2a')),
   identical(parse_params('abc-function,fig.path="foo/bar-"'),
-            alist(label='abc-function', fig.path="foo/bar-"))
+            alist(label = 'abc-function', fig.path = "foo/bar-"))
 )
 
 opts_knit$set(out.format = 'markdown')

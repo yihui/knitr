@@ -55,7 +55,7 @@ valid_path = function(prefix, label) {
 color_def = function(col, variable = 'shadecolor') {
   x = if (length(col) == 1L) sc_split(col) else col
   if ((n <- length(x)) != 3L) {
-    if (n == 1L) x = drop(col2rgb(x)/255) else {
+    if (n == 1L) x = drop(col2rgb(x) / 255) else {
       x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
       warning("the color '", col, "' is invalid;",
               'using default color...',
@@ -177,7 +177,7 @@ format_sci_one = function(x, format = 'latex') {
   if (abs(lx <- floor(log10(abs(x)))) < getOption('scipen') + 4L)
     return(as.character(round(x, getOption('digits')))) # no need sci notation
 
-  b = round(x/10^lx, getOption('digits'))
+  b = round(x / 10^lx, getOption('digits'))
   b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {

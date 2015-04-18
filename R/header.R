@@ -54,7 +54,7 @@ insert_header_latex = function(doc, b) {
 make_header_html = function() {
   h = opts_knit$get('header')
   h = h[setdiff(names(h), c('tikz', 'framed'))]
-  if (opts_knit$get('self.contained')){
+  if (opts_knit$get('self.contained')) {
     paste(c('<style type="text/css">', h[['highlight']], '</style>',
             unlist(h[setdiff(names(h), 'highlight')])), collapse = '\n')
   } else {

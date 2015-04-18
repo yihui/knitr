@@ -11,7 +11,7 @@ assert(
     "\n\n<pre><code class=\"prettyprint \">1+1\n2-2</code></pre>\n\n"
   ),
   identical(
-    knit_hooks$get('source')(c('1+1+\n1', '2-2'), opts_chunk$merge(list(prompt=TRUE))),
+    knit_hooks$get('source')(c('1+1+\n1', '2-2'), opts_chunk$merge(list(prompt = TRUE))),
     "\n\n<pre><code class=\"prettyprint \">&gt; 1+1+\n+ 1\n&gt; 2-2</code></pre>\n\n"
   )
 )

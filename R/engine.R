@@ -78,7 +78,9 @@ engine_output = function(options, code, out, extra = NULL) {
 eng_interpreted = function(options) {
   engine = options$engine
   code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')) {
-    f = basename(tempfile(engine, '.', switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', '.txt')))
+    f = basename(tempfile(engine, '.', switch(
+      engine, sas = '.sas', Rscript = '.R', stata = '.do', '.txt'
+    )))
     writeLines(c(switch(
       engine,
       sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
@@ -191,15 +193,15 @@ eng_tikz = function(options) {
     stop("Couldn't find replacement string; or the are multiple of them.")
 
   s = append(lines, options$code, i)  # insert tikz into tex-template
-  writeLines(s, texf <- stringr::str_c(f <- tempfile('tikz', '.'), '.tex'))
+  writeLines(s, texf <- str_c(f <- tempfile('tikz', '.'), '.tex'))
   on.exit(unlink(texf), add = TRUE)
-  unlink(outf <- stringr::str_c(f, '.pdf'))
+  unlink(outf <- str_c(f, '.pdf'))
   tools::texi2pdf(texf, clean = TRUE)
   if (!file.exists(outf)) stop('failed to compile tikz; check the template: ', tmpl)
 
   fig = fig_path('', options)
   dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
-  file.rename(outf, stringr::str_c(fig, '.pdf'))
+  file.rename(outf, str_c(fig, '.pdf'))
   # convert to the desired output-format, calling `convert`
   ext = tolower(options$fig.ext %n% dev2ext(options$dev))
   if (ext != 'pdf') {
@@ -235,7 +237,7 @@ eng_dot = function(options) {
   # prepare system command
   cmd = sprintf(command_string, shQuote(options$engine %n% options$engine.path),
                 shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
-                shQuote(stringr::str_c(fig <- fig_path(), '.', ext)))
+                shQuote(str_c(fig <- fig_path(), '.', ext)))
 
   # generate output
   dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
@@ -285,12 +287,11 @@ eng_asis = function(options) {
 }
 
 # set engines for interpreted languages
-local({
-  for (i in c(
-    'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'node', 'perl', 'python',
-    'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'stata', 'zsh'
-  )) knit_engines$set(setNames(list(eng_interpreted), i))
-})
+for (i in c(
+  'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'node', 'perl', 'python',
+  'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'stata', 'zsh'
+)) knit_engines$set(setNames(list(eng_interpreted), i))
+rm(i)
 
 # additional engines
 knit_engines$set(
