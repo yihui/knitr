@@ -103,9 +103,11 @@ eng_interpreted = function(options) {
       f
     )
   } else paste(switch(
-    engine, bash = '-c', coffee = '-e', groovy = '-e', node = '-e', perl = '-e',
-    python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
+    engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -e',
+    node = '-e', perl = '-e', python = '-c', ruby = '-e', scala = '-e',
+    sh = '-c', zsh = '-c', NULL
   ), shQuote(paste(options$code, collapse = '\n')))
+
   # FIXME: for these engines, the correct order is options + code + file
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
     paste(code, options$engine.opts) else paste(options$engine.opts, code)
@@ -288,8 +290,8 @@ eng_asis = function(options) {
 
 # set engines for interpreted languages
 for (i in c(
-  'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'node', 'perl', 'python',
-  'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'stata', 'zsh'
+  'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'lein', 'node', 'perl',
+  'python', 'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'stata', 'zsh'
 )) knit_engines$set(setNames(list(eng_interpreted), i))
 rm(i)
 
