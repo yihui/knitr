@@ -127,25 +127,26 @@ cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
 #' @references \url{http://yihui.name/knitr/demo/cache/}
 dep_auto = function(path = opts_chunk$get('cache.path')) {
   # this function should be evaluated in the original working directory
-  owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
-  paths = valid_path(path, c('__objects', '__globals'))
-  locals = parse_objects(paths[1L]); globals = parse_objects(paths[2L])
-  if (is.null(locals) || is.null(globals)) return(invisible(NULL))
-  if (!identical(names(locals), names(globals))) {
-    warning('corrupt dependency files? \ntry remove ', paste(paths, collapse = '; '))
-    return(invisible(NULL))
-  }
-  nms = intersect(names(knit_code$get()), names(locals)) # guarantee correct order
-  # locals may contain old chunk names; the intersection can be of length < 2
-  if (length(nms) < 2) return(invisible(NULL))
-  for (i in 2:length(nms)) {
-    if (length(g <- globals[[nms[i]]]) == 0) next
-    for (j in 1:(i - 1L)) {
-      # check if current globals are in old locals
-      if (any(g %in% locals[[nms[j]]]))
-        dep_list$set(setNames(list(unique(c(dep_list$get(nms[j]), nms[i]))), nms[j]))
+  in_dir(opts_knit$get('output.dir'), {
+    paths = valid_path(path, c('__objects', '__globals'))
+    locals = parse_objects(paths[1L]); globals = parse_objects(paths[2L])
+    if (is.null(locals) || is.null(globals)) return(invisible(NULL))
+    if (!identical(names(locals), names(globals))) {
+      warning('corrupt dependency files? \ntry remove ', paste(paths, collapse = '; '))
+      return(invisible(NULL))
     }
-  }
+    nms = intersect(names(knit_code$get()), names(locals)) # guarantee correct order
+    # locals may contain old chunk names; the intersection can be of length < 2
+    if (length(nms) < 2) return(invisible(NULL))
+    for (i in 2:length(nms)) {
+      if (length(g <- globals[[nms[i]]]) == 0) next
+      for (j in 1:(i - 1L)) {
+        # check if current globals are in old locals
+        if (any(g %in% locals[[nms[j]]]))
+          dep_list$set(setNames(list(unique(c(dep_list$get(nms[j]), nms[i]))), nms[j]))
+      }
+    }
+  })
 }
 # parse objects in dependency files
 parse_objects = function(path) {
@@ -194,24 +195,25 @@ load_cache = function(
   label, object, notfound = 'NOT AVAILABLE', path = opts_chunk$get('cache.path'),
   lazy = TRUE
 ) {
-  owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
-  path = valid_path(path, label)
-  p0 = dirname(path); p1 = basename(path)
-  p2 = list.files(p0, cache_rx)
-  if (length(p2) == 0) return(notfound)
-  p2 = p2[substr(p2, 1, nchar(p1)) == p1]
-  if (length(p2) == 0) return(notfound)
-  if (length(p2) > 3) stop(
-    'Wrong cache databases for the chunk ', label,
-    '. You need to remove redundant cache files. Found ', paste(p2, collapse = ', ')
-  )
-  p2 = unique(gsub('[.](rdb|rdx|RData)$', '', p2))
-  if (length(p2) != 1) stop('Cannot identify the cache database for chunk ', label)
-  cache$load(file.path(p0, p2), lazy)
-  if (missing(object)) return(invisible(NULL))
-  if (exists(object, envir = knit_global(), inherits = FALSE)) {
-    get(object, envir = knit_global(), inherits = FALSE)
-  } else notfound
+  in_dir(opts_knit$get('output.dir'), {
+    path = valid_path(path, label)
+    p0 = dirname(path); p1 = basename(path)
+    p2 = list.files(p0, cache_rx)
+    if (length(p2) == 0) return(notfound)
+    p2 = p2[substr(p2, 1, nchar(p1)) == p1]
+    if (length(p2) == 0) return(notfound)
+    if (length(p2) > 3) stop(
+      'Wrong cache databases for the chunk ', label,
+      '. You need to remove redundant cache files. Found ', paste(p2, collapse = ', ')
+    )
+    p2 = unique(gsub('[.](rdb|rdx|RData)$', '', p2))
+    if (length(p2) != 1) stop('Cannot identify the cache database for chunk ', label)
+    cache$load(file.path(p0, p2), lazy)
+    if (missing(object)) return(invisible(NULL))
+    if (exists(object, envir = knit_global(), inherits = FALSE)) {
+      get(object, envir = knit_global(), inherits = FALSE)
+    } else notfound
+  })
 }
 
 #' Make later chunks depend on previous chunks
@@ -265,21 +267,22 @@ rand_seed = quote({
 #'   any) before you really delete them (\code{clean_cache(TRUE)}).
 #' @export
 clean_cache = function(clean = FALSE, path = opts_chunk$get('cache.path')) {
-  owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
-  if (file_test('-d', path)) {
-    p0 = path; p1 = ''
-  } else {
-    p0 = dirname(path); p1 = basename(path)
-  }
-  files = list.files(p0, cache_rx, full.names = TRUE)
-  if (length(files) == 0) return()
-  base = basename(files)
-  labs = .knitEnv$labels
-  if (length(labs) == 0) return()
-  i = !(sub(cache_rx, '', base) %in% paste(p1, labs, sep = ''))
-  if (p1 != '') i = i & (substr(base, 1, nchar(p1)) == p1)
-  if (!any(i)) return()
-  if (clean) unlink(files[i]) else message(
-    'Clean these cache files?\n\n', paste(files[i], collapse = '\n'), '\n'
-  )
+  in_dir(opts_knit$get('output.dir'), {
+    if (file_test('-d', path)) {
+      p0 = path; p1 = ''
+    } else {
+      p0 = dirname(path); p1 = basename(path)
+    }
+    files = list.files(p0, cache_rx, full.names = TRUE)
+    if (length(files) == 0) return()
+    base = basename(files)
+    labs = .knitEnv$labels
+    if (length(labs) == 0) return()
+    i = !(sub(cache_rx, '', base) %in% paste(p1, labs, sep = ''))
+    if (p1 != '') i = i & (substr(base, 1, nchar(p1)) == p1)
+    if (!any(i)) return()
+    if (clean) unlink(files[i]) else message(
+      'Clean these cache files?\n\n', paste(files[i], collapse = '\n'), '\n'
+    )
+  })
 }
