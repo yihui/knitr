@@ -247,8 +247,7 @@ dep_prev = function() {
 #' rnorm(1) # .Random.seed is created (or modified)
 #' eval(rand_seed)
 rand_seed = quote({
-  if (exists('.Random.seed', envir = globalenv(), inherits = FALSE))
-    get('.Random.seed', envir = globalenv())
+  .GlobalEnv$.Random.seed
 })
 
 #' Clean cache files that are probably no longer needed
