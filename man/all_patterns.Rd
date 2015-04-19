@@ -30,8 +30,8 @@
   ..$ inline.code : chr "<!--\\\\s*rinline(.+?)-->"
   ..$ header.begin: chr "\\\\s*<head>"
  $ md      :List of 4
-  ..$ chunk.begin: chr "^\\\\s*```+\\\\s*\\\\\{[.]?([a-zA-Z]+.*)\\\\\}\\\\s*$"
-  ..$ chunk.end  : chr "^\\\\s*```+\\\\s*$"
+  ..$ chunk.begin: chr "^[\\t >]*```+\\\\s*\\\\\{[.]?([a-zA-Z]+.*)\\\\\}\\\\s*$"
+  ..$ chunk.end  : chr "^[\\t >]*```+\\\\s*$"
   ..$ ref.chunk  : chr "^\\\\s*<<(.+)>>\\\\s*$"
   ..$ inline.code: chr "`r +([^`]+)\\\\s*`"
  $ rst     :List of 5
