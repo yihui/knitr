@@ -78,7 +78,7 @@ engine_output = function(options, code, out, extra = NULL) {
 eng_interpreted = function(options) {
   engine = options$engine
   code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')) {
-    f = basename(tempfile(engine, '.', switch(engine, sas = '.sas', Rscript = '.R', stata='.do', '.txt')))
+    f = basename(tempfile(engine, '.', switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', '.txt')))
     writeLines(c(switch(
       engine,
       sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
