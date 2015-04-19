@@ -150,17 +150,13 @@ yaml_front_matter = function(lines) {
 
   # find delimiters in the document
   delimiters = grep("^---\\s*$", lines)
-  # ensure that the front-matter won't cause a crash when passed to yaml::load
-  validate_front_matter <- function(front_matter) {
-
-    # trim trailing whitespace
-    front_matter <- sub("\\s+$", "", front_matter)
-
-    # look for termination with a :
-    !grepl(":$", front_matter)
-  }
 
 
+
+
+  # ensure that the front-matter doesn't terminate with ':', so it won't cause a
+  # crash when passed to yaml::load
+  if (!grepl(":\\s*$", front_matter)) front_matter
   # if it's valid then return front matter as a text block suitable
   # for passing to yaml::load
   if (has_front_matter(delimiters)) {
