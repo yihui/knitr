@@ -118,16 +118,16 @@ styler_assistant_latex = function(x) {
     }
     start = end = ''
     if ('color' %in% settings) {
-      start = stringr::str_c(start, '\\textcolor[rgb]{', col2latexrgb(item[['color']]), '}{')
-      end = stringr::str_c(end, '}')
+      start = paste0(start, '\\textcolor[rgb]{', col2latexrgb(item[['color']]), '}{')
+      end = paste0(end, '}')
     }
     if (has('font-weight', 'bold')) {
-      start = stringr::str_c(start, '\\textbf{')
-      end = stringr::str_c('}', end)
+      start = paste0(start, '\\textbf{')
+      end = paste0('}', end)
     }
     if (has('font-style', 'italic')) {
-      start = stringr::str_c(start, '\\textit{')
-      end = stringr::str_c('}', end)
+      start = paste0(start, '\\textit{')
+      end = paste0('}', end)
     }
     sprintf('%s#1%s', start, end)
   })

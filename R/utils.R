@@ -324,7 +324,7 @@ fig_path = function(suffix = '', options = opts_current$get(), number) {
   if (!is.null(number)) suffix = paste('-', number, suffix, sep = '')
   path = valid_path(options$fig.path, options$label)
   (if (out_format(c('latex', 'sweave', 'listings'))) sanitize_fn else
-    stringr::str_c)(path, suffix)
+    paste0)(path, suffix)
 }
 # sanitize filename for LaTeX
 sanitize_fn = function(path, suffix = '') {
@@ -340,7 +340,7 @@ sanitize_fn = function(path, suffix = '') {
     path = paste(s, collapse = '/')
     warning('dots in figure paths replaced with _ ("', path, '")')
   }
-  stringr::str_c(path, suffix)
+  paste0(path, suffix)
 }
 
 #' Obtain the figure filenames for a chunk

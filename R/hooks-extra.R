@@ -78,9 +78,9 @@ save_rgl = function(name, devices) {
   # support 3 formats: eps, pdf and png (default)
   for (dev in devices) switch(
     dev,
-    postscript = rgl::rgl.postscript(stringr::str_c(name, '.eps'), fmt = 'eps'),
-    pdf = rgl::rgl.postscript(stringr::str_c(name, '.pdf'), fmt = 'pdf'),
-    rgl::rgl.snapshot(stringr::str_c(name, '.png'), fmt = 'png')
+    postscript = rgl::rgl.postscript(paste0(name, '.eps'), fmt = 'eps'),
+    pdf = rgl::rgl.postscript(paste0(name, '.pdf'), fmt = 'pdf'),
+    rgl::rgl.snapshot(paste0(name, '.png'), fmt = 'png')
   )
 }
 

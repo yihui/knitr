@@ -68,7 +68,7 @@ insert_header_html = function(doc, b) {
   if (length(i) == 1L) {
     l = stringr::str_locate(doc[i], b)
     tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
-    stringr::str_sub(doc[i], l[,1], l[,2]) = stringr::str_c(tmp, '\n', make_header_html())
+    stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, '\n', make_header_html())
   }
   doc
 }

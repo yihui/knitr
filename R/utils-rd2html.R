@@ -44,7 +44,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
       ex = readLines(ef, warn = FALSE)
       ex = ex[-(1L:grep('### ** Examples', ex, fixed = TRUE))]
       ex = c('```{r}', ex, '```')
-      opts_chunk$set(fig.path = stringr::str_c('figure/', p, '-'), tidy = FALSE)
+      opts_chunk$set(fig.path = paste0('figure/', p, '-'), tidy = FALSE)
       res = try(knit2html(text = ex, envir = parent.frame(2), fragment.only = TRUE, quiet = TRUE))
       if (inherits(res, 'try-error')) {
         res = ex; res[1] = '<pre><code class="r">'; res[length(res)] = '</code></pre>'
@@ -57,11 +57,11 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
 <script>hljs.initHighlightingOnLoad();</script>
 </head>', txt)
     } else message('no examples found for ', p)
-    writeLines(txt, stringr::str_c(p, '.html'))
+    writeLines(txt, paste0(p, '.html'))
   }
   unlink('figure/', recursive = TRUE)
-  toc = sprintf('- <a href="%s" target="content">%s</a>', stringr::str_c(topics, '.html'), topics)
-  toc = c(stringr::str_c('# ', pkg), '', toc, '',
+  toc = sprintf('- <a href="%s" target="content">%s</a>', paste0(topics, '.html'), topics)
+  toc = c(paste0('# ', pkg), '', toc, '',
           paste('Generated with [knitr](http://yihui.name/knitr) ', packageVersion('knitr')))
   markdown::markdownToHTML(text = paste(toc, collapse = '\n'), output = '00frame_toc.html',
                            title = paste('R Documentation of', pkg),

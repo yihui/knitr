@@ -11,9 +11,9 @@ hook_plot_html = function(x, options) {
   }
   ai = options$fig.show == 'asis'
   plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == fig.num
-  d1 = if (plot1) stringr::str_c(if (out_format('html')) '</div>',
+  d1 = if (plot1) paste0(if (out_format('html')) '</div>',
                         sprintf('<div class="rimage %s">', options$fig.align))
-  d2 = if (plot2) stringr::str_c('</div>', if (out_format('html')) '<div class="rcode">')
+  d2 = if (plot2) paste0('</div>', if (out_format('html')) '<div class="rcode">')
   paste(
     d1, .img.tag(
       .upload.url(x), options$out.width, options$out.height, .img.cap(options),
@@ -73,8 +73,8 @@ hook_ffmpeg = function(x, options, format = '.webm') {
   x = c(sans_ext(x), file_ext(x))
   fig.num = options$fig.num
   # set up the ffmpeg run
-  fig.fname = stringr::str_c(sub(stringr::str_c(fig.num, '$'), '%d', x[1]), '.', x[2])
-  mov.fname = stringr::str_c(sub(paste(fig.num, '$', sep = ''), '', x[1]), format)
+  fig.fname = paste0(sub(paste0(fig.num, '$'), '%d', x[1]), '.', x[2])
+  mov.fname = paste0(sub(paste(fig.num, '$', sep = ''), '', x[1]), format)
 
   ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1 / options$interval,
                      '-i', fig.fname, mov.fname)
@@ -88,7 +88,7 @@ hook_ffmpeg = function(x, options, format = '.webm') {
     sprintf('height="%s"', options$out.height), opts
   )
   sprintf('<video %s><source src="%s" />video of chunk %s</video>',
-          opts, stringr::str_c(opts_knit$get('base.url'), mov.fname), options$label)
+          opts, paste0(opts_knit$get('base.url'), mov.fname), options$label)
 }
 
 # use SciAnimator to create animations
@@ -124,7 +124,7 @@ hook_scianimator = function(x, options) {
   })(jQuery);
 </script>
 ',
-          id, fig.num, base, sub(stringr::str_c(fig.num, '$'), '', x[1]), x[2], id,
+          id, fig.num, base, sub(paste0(fig.num, '$'), '', x[1]), x[2], id,
           options$interval * 1000, id)
 }
 
@@ -136,7 +136,7 @@ hook_r2swf = function(x, options) {
   x = c(sans_ext(x), file_ext(x))
   fig.num = options$fig.num
   # set up the R2SWF run
-  fig.name = stringr::str_c(sub(stringr::str_c(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
+  fig.name = paste0(sub(paste0(fig.num, '$'), '', x[1]), 1:fig.num, '.', x[2])
   swf.name = fig_path('.swf', options, NULL)
 
   w = options$out.width %n% (options$fig.width * options$dpi)
