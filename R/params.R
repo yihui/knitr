@@ -211,8 +211,8 @@ knit_params_handlers = function() {
 resolve_params = function(params) {
 
   # get the type attribute (if any)
-  type_attr <- function(value) {
-    attr(value, "type")
+  type_attr = function(value) {
+    attr(value, "type", exact = TRUE)
   }
 
   # deduce type from attribute or class
