@@ -14,7 +14,7 @@ NULL (\code{opts_knit$get('aliases')} is modified as the side effect)
 }
 \description{
 We do not have to use the chunk option names given in \pkg{knitr}; we can set
-aliases for them. The aliases is a named character vector; the names are
+aliases for them. The aliases are a named character vector; the names are
 aliases and the elements in this vector are the real option names.
 }
 \examples{
