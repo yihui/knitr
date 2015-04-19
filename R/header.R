@@ -37,9 +37,9 @@ insert_header_latex = function(doc, b) {
     if (!out_format('listings') && length(j <- grep(p <- '(\\s*)(\\\\begin\\{document\\})', doc)[1L])) {
       doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\n\\2', doc[j])
     }
-    i = i[1L]; l = str_locate(doc[i], b)
-    tmp = str_sub(doc[i], l[, 1], l[, 2])
-    str_sub(doc[i], l[,1], l[,2]) = paste(tmp, make_header_latex(), sep = '')
+    i = i[1L]; l = stringr::str_locate(doc[i], b)
+    tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
+    stringr::str_sub(doc[i], l[,1], l[,2]) = paste(tmp, make_header_latex(), sep = '')
   } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
     doc[1L] = paste(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
@@ -66,9 +66,9 @@ make_header_html = function() {
 insert_header_html = function(doc, b) {
   i = grep(b, doc)
   if (length(i) == 1L) {
-    l = str_locate(doc[i], b)
-    tmp = str_sub(doc[i], l[, 1], l[, 2])
-    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, '\n', make_header_html())
+    l = stringr::str_locate(doc[i], b)
+    tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
+    stringr::str_sub(doc[i], l[,1], l[,2]) = stringr::str_c(tmp, '\n', make_header_html())
   }
   doc
 }

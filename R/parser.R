@@ -34,7 +34,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       # remove the optional prefix % in code in Rtex mode
       g = strip_block(g, patterns$chunk.code)
       params.src = if (group_pattern(chunk.begin)) {
-        str_trim(gsub(chunk.begin, '\\1', g[1]))
+        stringr::str_trim(gsub(chunk.begin, '\\1', g[1]))
       } else ''
       parse_block(g[-1], g[1], params.src)
     } else parse_inline(g, patterns)
@@ -160,9 +160,9 @@ print.block = function(x, ...) {
   if (opts_knit$get('verbose')) {
     code = knit_code$get(params$label)
     if (length(code) && !is_blank(code)) {
-      cat('\n  ', str_pad(' R code chunk ', getOption('width') - 10L, 'both', '~'), '\n')
+      cat('\n  ', stringr::str_pad(' R code chunk ', getOption('width') - 10L, 'both', '~'), '\n')
       cat(paste('  ', code, collapse = '\n'), '\n')
-      cat('  ', str_dup('~', getOption('width') - 10L), '\n')
+      cat('  ', stringr::str_dup('~', getOption('width') - 10L), '\n')
     }
     cat(paste('##------', date(), '------##'), sep = '\n')
   }
@@ -182,9 +182,9 @@ parse_inline = function(input, patterns) {
   input = paste(input, collapse = '\n') # merge into one line
 
   loc = cbind(start = numeric(0), end = numeric(0))
-  if (group_pattern(inline.code)) loc = str_locate_all(input, inline.code)[[1]]
+  if (group_pattern(inline.code)) loc = stringr::str_locate_all(input, inline.code)[[1]]
   if (nrow(loc)) {
-    code = str_match_all(input, inline.code)[[1L]]
+    code = stringr::str_match_all(input, inline.code)[[1L]]
     code = if (NCOL(code) >= 2L) {
       code[is.na(code)] = ''
       apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
@@ -199,11 +199,11 @@ print.inline = function(x, ...) {
   if (nrow(x$location)) {
     cat('   ')
     if (opts_knit$get('verbose')) {
-      cat(str_pad(' inline R code fragments ',
+      cat(stringr::str_pad(' inline R code fragments ',
                   getOption('width') - 10L, 'both', '-'), '\n')
       cat(sprintf('    %s:%s %s', x$location[, 1], x$location[, 2], x$code),
           sep = '\n')
-      cat('  ', str_dup('-', getOption('width') - 10L), '\n')
+      cat('  ', stringr::str_dup('-', getOption('width') - 10L), '\n')
     } else cat('inline R code fragments\n')
   } else cat('  ordinary text without R code\n')
   cat('\n')
@@ -299,7 +299,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
     idx = c(0, idx); lines = c('', lines)  # no chunk header in the beginning
   }
   groups = unname(split(lines, idx))
-  labels = str_trim(gsub(lab, '\\2', sapply(groups, `[`, 1)))
+  labels = stringr::str_trim(gsub(lab, '\\2', sapply(groups, `[`, 1)))
   labels = gsub(',.*', '', labels)  # strip off possible chunk options
   code = lapply(groups, strip_chunk)
   for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()

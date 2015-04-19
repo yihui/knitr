@@ -343,7 +343,7 @@ inline_exec = function(
     if (inherits(res, 'knit_asis')) res = wrap.knit_asis(res, inline = TRUE)
     d = nchar(input)
     # replace with evaluated results
-    str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
+    stringr::str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
       paste(hook(res), collapse = '')
     } else ''
     if (i < n) loc[(i + 1):n, ] = loc[(i + 1):n, ] - (d - nchar(input))
@@ -368,7 +368,7 @@ process_tangle.block = function(x) {
   } else knit_code$get(label)
   # read external code if exists
   if (!isFALSE(ev) && length(code) && grepl('read_chunk\\(.+\\)', code)) {
-    eval(parse_only(unlist(str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
+    eval(parse_only(unlist(stringr::str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
   }
   code = parse_chunk(code)
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
@@ -390,6 +390,6 @@ process_tangle.inline = function(x) {
 # add a label [and extra chunk options] to a code chunk
 label_code = function(code, label) {
   code = paste(c('', code, ''), collapse = '\n')
-  paste('## ----', str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
+  paste('## ----', stringr::str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
         '----', code, sep = '')
 }
