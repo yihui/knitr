@@ -92,7 +92,7 @@ css.parser = function(file, lines = readLines(file)) {
     settings = sub(settings.rx, '\\1', data, perl = TRUE)
     contents = sub(settings.rx, '\\2', data, perl = TRUE)
     out = list()
-    for (i in 1:length(settings)) {
+    for (i in seq_along(settings)) {
       setting = settings[i]
       content = contents[i]
       out[[setting]] = switch(
