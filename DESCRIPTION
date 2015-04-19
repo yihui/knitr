@@ -102,6 +102,7 @@ Imports:
     highr (>= 0.4.1),
     markdown (>= 0.7.4),
     stringr (>= 0.6),
+    yaml (>= 2.1.5),
     tools
 Suggests:
     testit,
@@ -138,6 +139,7 @@ Collate:
     'output.R'
     'package.R'
     'pandoc.R'
+    'params.R'
     'parser.R'
     'pattern.R'
     'rocco.R'
