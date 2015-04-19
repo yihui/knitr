@@ -9,7 +9,7 @@ knit_child(..., options = NULL, envir = knit_global())
 \item{...}{arguments passed to \code{\link{knit}}}
 
 \item{options}{a list of chunk options to be used as global options inside
-the child document (ignored if not a list); when we use the \code{child}
+the child document (ignored if not a list); when one uses the \code{child}
 option in a parent chunk, the chunk options of the parent chunk will be
 passed to the \code{options} argument here}
 
@@ -33,7 +33,7 @@ This function is not supposed be called directly like
   \code{\link{knit}()}; instead it must be placed in a parent document to let
   \code{\link{knit}()} call it indirectly.
 
-  The path of the child document is relative to the parent document.
+  The path of the child document is determined relative to the parent document.
 }
 \examples{
 # you can write \\Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw'

@@ -33,7 +33,7 @@ R packages.
 }
 \details{
 The citation is forced to be generated from the DESCRIPTION file of the
-package, the keyword \samp{R-pkgname} is used for the bib item where
+package. The keyword \samp{R-pkgname} is used for the bib item, where
 \samp{pkgname} is the name of the package.
 }
 \note{
