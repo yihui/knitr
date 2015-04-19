@@ -104,10 +104,7 @@ insert_header_html = function(doc, b) {
 #' @examples set_header(tikz = '\\usepackage{tikz}')
 #' opts_knit$get('header')
 set_header = function(...) {
-  h = opts_knit$get('header')
-  z = c(...)
-  h[names(z)] = z
-  opts_knit$set(header = h)
+  opts_knit$set(header = merge_list(opts_knit$get('header'), c(...)))
 }
 
 .default.sty = inst_dir('themes', 'default.css')
