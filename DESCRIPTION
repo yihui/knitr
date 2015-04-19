@@ -39,6 +39,7 @@ Authors@R: c(
     person("Johan", "Toloe", role = "ctb"),
     person("Joseph", "Larmarange", role = "ctb"),
     person("Julien", "Barnier", role = "ctb"),
+    person("Kaiyin", "Zhong", role = "ctb"),
     person(c("Kevin", "K."), "Smith", role = "ctb"),
     person("Kirill", "Mueller", role = "ctb"),
     person("Kohske", "Takahashi", role = "ctb"),
