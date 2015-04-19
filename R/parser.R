@@ -72,9 +72,10 @@ parse_block = function(code, header, params.src) {
 
   params.src = params
   params = parse_params(params.src)
-  if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', header))) {
+  # remove indent (and possibly markdown blockquote >) from code
+  if (nzchar(spaces <- gsub('^([\t >]*).*', '\\1', header))) {
     params$indent = spaces
-    code = gsub(sprintf('^%s', spaces), '', code) # remove indent for the whole chunk
+    code = gsub(sprintf('^%s', spaces), '', code)
   }
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)

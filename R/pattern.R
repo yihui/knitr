@@ -29,8 +29,8 @@ all_patterns = list(
     inline.code = '<!--\\s*rinline(.+?)-->', header.begin = '\\s*<head>'),
 
   `md` = list(
-    chunk.begin = '^\\s*```+\\s*\\{[.]?([a-zA-Z]+.*)\\}\\s*$',
-    chunk.end = '^\\s*```+\\s*$',
+    chunk.begin = '^[\t >]*```+\\s*\\{[.]?([a-zA-Z]+.*)\\}\\s*$',
+    chunk.end = '^[\t >]*```+\\s*$',
     ref.chunk = '^\\s*<<(.+)>>\\s*$', inline.code = '`r +([^`]+)\\s*`'),
 
   `rst` = list(
