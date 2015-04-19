@@ -110,7 +110,7 @@ hook_scianimator = function(x, options) {
   (function($) {
     $(document).ready(function() {
       var imgs = Array(%s);
-      for (i=0; ; i++) {
+      for (i = 0; ; i++) {
         if (i == imgs.length) break;
         imgs[i] = "%s%s" + (i + 1) + ".%s";
       }
@@ -146,7 +146,7 @@ hook_r2swf = function(x, options) {
   file2swf = getFromNamespace('file2swf', 'R2SWF')
   swfhtml = swf2html(file2swf(files = fig.name, swf.name, interval = options$interval),
                      output = FALSE, fragment = TRUE,  width = w, height = h)
-  if(options$fig.align == 'default') return(swfhtml)
+  if (options$fig.align == 'default') return(swfhtml)
   sprintf(paste('<div align = "%s">\n', swfhtml, '\n</div>'), options$fig.align)
 }
 
