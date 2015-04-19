@@ -14,12 +14,12 @@
 
 - added support for code chunks inside Markdown blockquotes; see the example below (thanks, @r-gaia-cs, #1022)
 
-    > Here is a quote, followed by a code chunk:
-    >
-    > ```{r}
-    > x = 1:10
-    > rev(x^2)
-    > ```
+        > Here is a quote, followed by a code chunk:
+        >
+        > ```{r}
+        > x = 1:10
+        > rev(x^2)
+        > ```
 
 - the function `current_input()` gained a new argument `dir = FALSE`; when `dir = TRUE`, the absolute path of the input document is returned (thanks, @klmr, #950)
 
