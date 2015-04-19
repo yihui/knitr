@@ -168,7 +168,7 @@ load_device = function(name, package, dpi = NULL) {
 
 
 # merge low-level plotting changes
-merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
+merge_low_plot = function(x, idx = sapply(x, evaluate::is.recordedplot)) {
   idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
   if (n <= 1) return(x)
   i1 = idx[1]; i2 = idx[2]  # compare plots sequentially
@@ -237,7 +237,7 @@ fix_recordedPlot = function(plot) {
 fix_evaluate = function(list, fix = TRUE) {
   if (!fix) return(list)
   lapply(list, function(x) {
-    if (is.recordedplot(x)) fix_recordedPlot(x) else x
+    if (evaluate::is.recordedplot(x)) fix_recordedPlot(x) else x
   })
 }
 
@@ -246,7 +246,7 @@ fix_evaluate = function(list, fix = TRUE) {
 # that we will be able to filter out low-level changes later
 remove_plot = function(list, keep.high = TRUE) {
   lapply(list, function(x) {
-    if (is.recordedplot(x)) structure(
+    if (evaluate::is.recordedplot(x)) structure(
       if (keep.high) digest_plot(x) else NULL, class = 'recordedplot'
     ) else x
   })
