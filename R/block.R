@@ -149,12 +149,14 @@ block_exec = function(options) {
     fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
   } else in_dir(
     opts_knit$get('root.dir') %n% input_dir(),
-    evaluate::evaluate(code, envir = env, new_device = FALSE,
-                       keep_warning = !isFALSE(options$warning),
-                       keep_message = !isFALSE(options$message),
-                       stop_on_error = if (options$error && options$include) 0L else 2L,
-                       output_handler = knit_handlers(options$render, options))
+    evaluate::evaluate(
+      code, envir = env, new_device = FALSE,
+      keep_warning = !isFALSE(options$warning),
+      keep_message = !isFALSE(options$message),
+      stop_on_error = if (options$error && options$include) 0L else 2L,
+      output_handler = knit_handlers(options$render, options)
     )
+  )
   if (options$cache %in% 1:2 && !cache.exists) {
     # make a copy for cache=1,2; when cache=2, we do not really need plots
     res.orig = if (options$cache == 2) remove_plot(res, keep == 'high') else res
