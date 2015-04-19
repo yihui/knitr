@@ -206,7 +206,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
 
   apat = all_patterns; opat = knit_patterns$get()
   on.exit(knit_patterns$restore(opat), add = TRUE)
-  if (length(opat) == 0 || all(sapply(opat, is.null))) {
+  if (length(opat) == 0 || all(vapply(opat, is.null, logical(1)))) {
     # use ext if cannot auto detect pattern
     if (is.null(pattern <- detect_pattern(text, ext))) {
       # nothing to be executed; just return original input
@@ -623,7 +623,7 @@ knit_meta = function(class = NULL, clean = TRUE) {
     seq_along(.knitEnv$meta)
   } else if (length(.knitEnv$meta)) {
     # if a class was specified, match the items belonging to the class
-    which(sapply(.knitEnv$meta, inherits, what = class))
+    which(vapply(.knitEnv$meta, inherits, logical(1), what = class))
   }
   if (length(matches) < 1) return(list())
   if (clean) on.exit(.knitEnv$meta[matches] <- NULL, add = TRUE)
