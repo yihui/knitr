@@ -144,7 +144,7 @@ block_exec = function(options) {
   cache.exists = cache$exists(options$hash, options$cache.lazy)
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
-    list(structure(list(src = code), class = 'source'))
+    as.source(code)
   } else if (cache.exists) {
     fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
   } else in_dir(
@@ -171,21 +171,21 @@ block_exec = function(options) {
   } else if (is.numeric(echo)) {
     # choose expressions to echo using a numeric vector
     res = if (isFALSE(ev)) {
-      list(structure(list(src = code[echo]), class = 'source'))
+      as.source(code[echo])
     } else {
       filter_evaluate(res, echo, is.source)
     }
   }
   if (options$results == 'hide') res = Filter(Negate(is.character), res)
   if (options$results == 'hold') {
-    i = sapply(res, is.character)
+    i = vapply(res, is.character, logical(1))
     if (any(i)) res = c(res[!i], list(paste(unlist(res[i]), collapse = '')))
   }
   res = filter_evaluate(res, options$warning, is.warning)
   res = filter_evaluate(res, options$message, is.message)
 
   # rearrange locations of figures
-  figs = sapply(res, is.recordedplot)
+  figs = vapply(res, is.recordedplot, logical(1))
   if (length(figs) && any(figs)) {
     if (keep == 'none') {
       res = res[!figs] # remove all
@@ -393,3 +393,8 @@ label_code = function(code, label) {
   paste('## ----', stringr::str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
         '----', code, sep = '')
 }
+
+as.source <- function(code) {
+  list(structure(list(src = code), class = 'source'))
+}
+
