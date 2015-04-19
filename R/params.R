@@ -113,13 +113,13 @@
 #' }
 #'
 #' @export
-knit_params <- function(text) {
+knit_params = function(text) {
 
   # make sure each element is on one line
-  text <- split_lines(text)
+  text = split_lines(text)
 
   # read the yaml front matter and see if there is a params element in it
-  yaml <- yaml_front_matter(text)
+  yaml = yaml_front_matter(text)
   if (!is.null(yaml)) {
 
     # parse the yaml using our handlers
@@ -142,7 +142,7 @@ knit_params <- function(text) {
 # delimited by \n) suitable for passing to yaml::load. This code is based on
 # the partition_yaml_front_matter and parse_yaml_front_matter functions here:
 # https://github.com/rstudio/rmarkdown/blob/master/R/output_format.R
-yaml_front_matter <- function(lines) {
+yaml_front_matter = function(lines) {
 
   # verify that the first two front matter delimiters (---) are not preceded
   # by other content
@@ -157,6 +157,8 @@ yaml_front_matter <- function(lines) {
     }
   }
 
+  # find delimiters in the document
+  delimiters = grep("^---\\s*$", lines)
   # ensure that the front-matter won't cause a crash when passed to yaml::load
   validate_front_matter <- function(front_matter) {
 
@@ -167,8 +169,6 @@ yaml_front_matter <- function(lines) {
     !grepl(":$", front_matter)
   }
 
-  # find delimiters in the document
-  delimiters <- grep("^---\\s*$", lines)
 
   # if it's valid then return front matter as a text block suitable
   # for passing to yaml::load
@@ -197,14 +197,14 @@ yaml_front_matter <- function(lines) {
 
 
 # define custom handlers for knitr_params
-knit_params_handlers <- function() {
+knit_params_handlers = function() {
 
-  # generic handler for intrinsic types that need a
-  # special 'type' designator as a hint to front-ends
-  # (e.g. 'file' to indicate a file could be uploaded)
-  type_handler <- function(type) {
+  # generic handler for intrinsic types that need a special 'type' designator as
+  # a hint to front-ends (e.g. 'file' to indicate a file could be uploaded)
+  type_handler = function(type) {
+    force(type)
     function(value) {
-      attr(value, "type") <- type
+      attr(value, "type") = type
       value
     }
   }
@@ -213,15 +213,15 @@ knit_params_handlers <- function() {
 
     # date
     date = function(value) {
-      value <- as.Date(value)
-      attr(value, "type") <- "date"
+      value = as.Date(value)
+      attr(value, "type") = "date"
       value
     },
 
     # datetime
     datetime = function(value) {
-      value <- as.POSIXct(value, tz = "GMT")
-      attr(value, "type") <- "datetime"
+      value = as.POSIXct(value, tz = "GMT")
+      attr(value, "type") = "datetime"
       value
     },
 
@@ -231,9 +231,9 @@ knit_params_handlers <- function() {
 }
 
 
-# resolve the raw params list into the full params data structure
-# (with name, type, value, and other optional fields included)
-resolve_params <- function(params) {
+# resolve the raw params list into the full params data structure (with name,
+# type, value, and other optional fields included)
+resolve_params = function(params) {
 
   # get the type attribute (if any)
   type_attr <- function(value) {
@@ -249,31 +249,28 @@ resolve_params <- function(params) {
       class(value)[[1]]
   }
 
-  # return a parameter value with type attribute stripped
-  # and as a vector rather than list if it's unnamed
-  param_value <- function(value) {
-    attr(value, "type") <- NULL
-    if (is.null(names(value)))
-      unlist(value)
-    else
-      value
+  # return a parameter value with type attribute stripped and as a vector rather
+  # than list if it's unnamed
+  param_value = function(value) {
+    attr(value, "type") = NULL
+    if (is.null(names(value))) unlist(value) else value
   }
 
   # params we will return
-  resolved_params <- list()
+  resolved_params = list()
 
   # iterate over names
-  names <- names(params)
+  names = names(params)
   for (name in names) {
 
     # get the parameter
-    param <- params[[name]]
+    param = params[[name]]
 
-    # if it's not a list then a plain value was specified, create
-    # the list based on the value
+    # if it's not a list then a plain value was specified, create the list based
+    # on the value
     if (!is.list(param)) {
 
-      param <- list(
+      param = list(
         name = name,
         type = param_type(param),
         value = param_value(param)
@@ -283,31 +280,28 @@ resolve_params <- function(params) {
 
       # validate that the "value" field is included
       if (!"value" %in% names(param)) {
-        stop("no value field specified for yaml parameter '", name, "'",
+        stop("no value field specified for YAML parameter '", name, "'",
              call. = FALSE)
       }
 
       # ensure we have a name
-      param$name <- name
+      param$name = name
 
       # look for type info at the object level then value level
-      param$type <- type_attr(param)
-      if (is.null(param$type))
-        param$type <- param_type(param$value)
+      param$type = type_attr(param)
+      if (is.null(param$type)) param$type = param_type(param$value)
     }
 
     # normalize parameter value
-    param$value <- param_value(param$value)
+    param$value = param_value(param$value)
 
     # add knit_param class
-    param <- structure(param, class = "knit_param")
+    param = structure(param, class = "knit_param")
 
     # add the parameter
-    resolved_params[[length(resolved_params) + 1]] <- param
+    resolved_params[[length(resolved_params) + 1]] = param
   }
 
   # return params
   resolved_params
 }
-
-
