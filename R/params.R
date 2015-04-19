@@ -151,35 +151,23 @@ yaml_front_matter = function(lines) {
   # find delimiters in the document
   delimiters = grep("^---\\s*$", lines)
 
+  # if it's valid then return front matter as a text block suitable for passing
+  # to yaml::load
+  if (!has_front_matter(delimiters)) return()
 
+  # return the yaml as a single-element character vector if
+  # appears to be valid yaml
+  front_matter_lines = lines[(delimiters[1]):(delimiters[2])]
+  if (length(front_matter_lines) <= 2) return()
 
+  front_matter = front_matter_lines
+  front_matter = front_matter[2:(length(front_matter) - 1)]
+  front_matter = paste(front_matter, collapse = "\n")
 
   # ensure that the front-matter doesn't terminate with ':', so it won't cause a
   # crash when passed to yaml::load
   if (!grepl(":\\s*$", front_matter)) front_matter
-  # if it's valid then return front matter as a text block suitable
-  # for passing to yaml::load
-  if (has_front_matter(delimiters)) {
 
-    # return the yaml as a single-element character vector if
-    # appears to be valid yaml
-    front_matter_lines <- lines[(delimiters[1]):(delimiters[2])]
-    if (length(front_matter_lines) > 2) {
-      front_matter <- front_matter_lines
-      front_matter <- front_matter[2:(length(front_matter)-1)]
-      front_matter <- paste(front_matter, collapse="\n")
-      if (validate_front_matter(front_matter)) {
-        front_matter
-      } else {
-        NULL
-      }
-    } else {
-      NULL
-    }
-  }
-  else {
-    NULL
-  }
 }
 
 
