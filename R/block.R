@@ -183,7 +183,7 @@ block_exec = function(options) {
     i = vapply(res, is.character, logical(1))
     if (any(i)) res = c(res[!i], list(paste(unlist(res[i]), collapse = '')))
   }
-  res = filter_evaluate(res, options$warning, is.warning)
+  res = filter_evaluate(res, options$warning, evaluate::is.warning)
   res = filter_evaluate(res, options$message, evaluate::is.message)
 
   # rearrange locations of figures
