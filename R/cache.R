@@ -18,7 +18,7 @@ new_cache = function() {
     # keys are new variables created; outname is the text output of a chunk
     path = cache_path(hash)
     # add random seed to cache if exists
-    if (exists('.Random.seed', envir = globalenv())) {
+    if (exists('.Random.seed', envir = globalenv(), inherits = FALSE)) {
       copy_env(globalenv(), knit_global(), '.Random.seed')
       outname = c('.Random.seed', outname)
     }
@@ -57,7 +57,7 @@ new_cache = function() {
     # load output from last run if exists
     if (file.exists(path2 <- paste(path, 'RData', sep = '.'))) {
       load(path2, envir = knit_global())
-      if (exists('.Random.seed', envir = knit_global()))
+      if (exists('.Random.seed', envir = knit_global(), inherits = FALSE))
         copy_env(knit_global(), globalenv(), '.Random.seed')
     }
   }
@@ -247,7 +247,7 @@ dep_prev = function() {
 #' rnorm(1) # .Random.seed is created (or modified)
 #' eval(rand_seed)
 rand_seed = quote({
-  if (exists('.Random.seed', envir = globalenv()))
+  if (exists('.Random.seed', envir = globalenv(), inherits = FALSE))
     get('.Random.seed', envir = globalenv())
 })
 
