@@ -120,17 +120,14 @@ knit_params = function(text) {
 
   # read the yaml front matter and see if there is a params element in it
   yaml = yaml_front_matter(text)
-  if (!is.null(yaml)) {
+  if (is.null(yaml)) return(list())
 
-    # parse the yaml using our handlers
-    parsed_yaml <- yaml::yaml.load(yaml, handlers = knit_params_handlers())
+  # parse the yaml using our handlers
+  parsed_yaml = yaml::yaml.load(yaml, handlers = knit_params_handlers())
 
-    # if we found paramters then resolve and return them
-    if (is.list(parsed_yaml) && !is.null(parsed_yaml$params)) {
-      resolve_params(parsed_yaml$params)
-    } else {
-      list()
-    }
+  # if we found paramters then resolve and return them
+  if (is.list(parsed_yaml) && !is.null(parsed_yaml$params)) {
+    resolve_params(parsed_yaml$params)
   } else {
     list()
   }
