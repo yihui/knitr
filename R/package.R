@@ -19,7 +19,6 @@
 #'   FAQ's: \url{http://bit.ly/knitr-faq}
 #' @importFrom evaluate evaluate is.recordedplot is.source is.warning
 #'   is.message
-#' @importFrom formatR tidy_source
 #' @import stringr
 NULL
 
