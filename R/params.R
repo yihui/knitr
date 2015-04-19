@@ -143,15 +143,9 @@ yaml_front_matter = function(lines) {
 
   # verify that the first two front matter delimiters (---) are not preceded
   # by other content
-  has_front_matter <- function(delimiters) {
-    if (length(delimiters) >= 2 && (delimiters[2] - delimiters[1] > 1)) {
-      if (delimiters[1] == 1)
-        TRUE
-      else
-        is_blank(lines[1:delimiters[1]-1])
-    } else {
-      FALSE
-    }
+  has_front_matter = function(delimiters) {
+    length(delimiters) >= 2 && (delimiters[2] - delimiters[1] > 1) &&
+      (delimiters[1] == 1 || is_blank(head(lines, delimiters[1] - 1)))
   }
 
   # find delimiters in the document
