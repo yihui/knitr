@@ -191,15 +191,15 @@ eng_tikz = function(options) {
     stop("Couldn't find replacement string; or the are multiple of them.")
 
   s = append(lines, options$code, i)  # insert tikz into tex-template
-  writeLines(s, texf <- str_c(f <- tempfile('tikz', '.'), '.tex'))
+  writeLines(s, texf <- stringr::str_c(f <- tempfile('tikz', '.'), '.tex'))
   on.exit(unlink(texf), add = TRUE)
-  unlink(outf <- str_c(f, '.pdf'))
+  unlink(outf <- stringr::str_c(f, '.pdf'))
   tools::texi2pdf(texf, clean = TRUE)
   if (!file.exists(outf)) stop('failed to compile tikz; check the template: ', tmpl)
 
   fig = fig_path('', options)
   dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
-  file.rename(outf, str_c(fig, '.pdf'))
+  file.rename(outf, stringr::str_c(fig, '.pdf'))
   # convert to the desired output-format, calling `convert`
   ext = tolower(options$fig.ext %n% dev2ext(options$dev))
   if (ext != 'pdf') {
@@ -235,7 +235,7 @@ eng_dot = function(options) {
   # prepare system command
   cmd = sprintf(command_string, shQuote(options$engine %n% options$engine.path),
                 shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
-                shQuote(str_c(fig <- fig_path(), '.', ext)))
+                shQuote(stringr::str_c(fig <- fig_path(), '.', ext)))
 
   # generate output
   dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)

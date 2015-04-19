@@ -473,9 +473,9 @@ wrap.source = function(x, options) {
 msg_wrap = function(message, type, options) {
   # when output format is latex, do not wrap messages (let latex deal with wrapping)
   if (!length(grep('\n', message)) && !out_format(c('latex', 'listings', 'sweave')))
-    message = str_wrap(message, width = getOption('width'))
+    message = stringr::str_wrap(message, width = getOption('width'))
   knit_log$set(setNames(
-    list(c(knit_log$get(type), str_c('Chunk ', options$label, ':\n  ', message))),
+    list(c(knit_log$get(type), stringr::str_c('Chunk ', options$label, ':\n  ', message))),
     type
   ))
   knit_hooks$get(type)(comment_out(message, options$comment), options)

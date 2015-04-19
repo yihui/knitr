@@ -72,7 +72,7 @@ color_def = function(col, variable = 'shadecolor') {
 sc_split = function(string) {
   if (is.call(string)) string = eval(string)
   if (is.numeric(string) || length(string) > 1L) return(string)
-  str_trim(str_split(string, ';|,')[[1]])
+  stringr::str_trim(stringr::str_split(string, ';|,')[[1]])
 }
 
 # extract LaTeX packages for tikzDevice
@@ -85,10 +85,10 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   if (!any(idx2)) return()
   if ((idx2 <- which(idx2)[1]) < 2L) return()
   txt = paste(input[seq_len(idx2 - 1L)], collapse = '\n')  # rough preamble
-  idx = str_locate(txt, hb)  # locate documentclass
+  idx = stringr::str_locate(txt, hb)  # locate documentclass
   if (any(is.na(idx))) return()
-  options(tikzDocumentDeclaration = str_sub(txt, idx[, 1L], idx[, 2L]))
-  preamble = pure_preamble(split_lines(str_sub(txt, idx[, 2L] + 1L)), patterns)
+  options(tikzDocumentDeclaration = stringr::str_sub(txt, idx[, 1L], idx[, 2L]))
+  preamble = pure_preamble(split_lines(stringr::str_sub(txt, idx[, 2L] + 1L)), patterns)
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
   .knitEnv$bibliography = grep('^\\\\bibliography.+', input, value = TRUE)
 }
@@ -324,7 +324,7 @@ fig_path = function(suffix = '', options = opts_current$get(), number) {
   if (!is.null(number)) suffix = paste('-', number, suffix, sep = '')
   path = valid_path(options$fig.path, options$label)
   (if (out_format(c('latex', 'sweave', 'listings'))) sanitize_fn else
-    str_c)(path, suffix)
+    stringr::str_c)(path, suffix)
 }
 # sanitize filename for LaTeX
 sanitize_fn = function(path, suffix = '') {
@@ -340,7 +340,7 @@ sanitize_fn = function(path, suffix = '') {
     path = paste(s, collapse = '/')
     warning('dots in figure paths replaced with _ ("', path, '")')
   }
-  str_c(path, suffix)
+  stringr::str_c(path, suffix)
 }
 
 #' Obtain the figure filenames for a chunk
@@ -416,7 +416,7 @@ print_knitlog = function() {
 }
 
 # count the number of lines
-line_count = function(x) str_count(x, '\n') + 1L
+line_count = function(x) stringr::str_count(x, '\n') + 1L
 
 # faster than require() but less rigorous
 has_package = function(pkg) pkg %in% .packages(TRUE)

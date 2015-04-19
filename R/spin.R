@@ -84,7 +84,7 @@ spin = function(
 
   r = rle(grepl(doc, x) | i)  # inline expressions are treated as doc instead of code
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
-  p1 = gsub('\\{', '\\\\{', str_c('^', p[1L], '.*', p[2L], '$'))
+  p1 = gsub('\\{', '\\\\{', stringr::str_c('^', p[1L], '.*', p[2L], '$'))
 
   for (i in seq_len(n)) {
     block = x[seq(idx[i] + 1L, idx[i+1])]
@@ -96,10 +96,10 @@ spin = function(
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
       if (length(opt <- grep('^#+(\\+|-| ----+| @knitr)', block))) {
-        block[opt] = str_c(p[1L], gsub('^#+(\\+|-| ----+| @knitr)\\s*|-*\\s*$', '', block[opt]), p[2L])
+        block[opt] = stringr::str_c(p[1L], gsub('^#+(\\+|-| ----+| @knitr)\\s*|-*\\s*$', '', block[opt]), p[2L])
       }
       if (!grepl(p1, block[1L])) {
-        block = c(str_c(p[1L], p[2L]), block)
+        block = c(stringr::str_c(p[1L], p[2L]), block)
       }
       c('', block, p[3L], '')
     }
