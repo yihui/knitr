@@ -876,7 +876,7 @@
 
 - `options()` set in the main document will apply to its child documents (e.g. `options('digits')`) (#306) (thanks, Cassio Pereira)
 
-- the `...` argument in `knit2html()` is passed to `markdownToHTML()` in the **markdown** package instead of `knit()`; this allows us to pass more arguments to control the rendering of HTML output, e.g. `knit2html(input, fragment.only = TRUE)` (#333) (thanks, @Bart6114)
+- the `...` argument in `knit2html()` is passed to `markdown::markdownToHTML()` instead of `knit()`; this allows us to pass more arguments to control the rendering of HTML output, e.g. `knit2html(input, fragment.only = TRUE)` (#333) (thanks, @Bart6114)
 
 ## DOCUMENTATION
 

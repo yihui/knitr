@@ -118,7 +118,7 @@ block_exec = function(options) {
   echo = options$echo  # tidy code if echo
   if (!isFALSE(echo) && options$tidy && length(code)) {
     res = try_silent(do.call(
-      tidy_source, c(list(text = code, output = FALSE), options$tidy.opts)
+      formatR::tidy_source, c(list(text = code, output = FALSE), options$tidy.opts)
     ))
     if (!inherits(res, 'try-error')) {
       code = native_encode(res$text.tidy)
@@ -149,12 +149,12 @@ block_exec = function(options) {
     fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
   } else in_dir(
     opts_knit$get('root.dir') %n% input_dir(),
-    evaluate(code, envir = env, new_device = FALSE,
-             keep_warning = !isFALSE(options$warning),
-             keep_message = !isFALSE(options$message),
-             stop_on_error = if (options$error && options$include) 0L else 2L,
-             output_handler = knit_handlers(options$render, options))
-  )
+    evaluate::evaluate(code, envir = env, new_device = FALSE,
+                       keep_warning = !isFALSE(options$warning),
+                       keep_message = !isFALSE(options$message),
+                       stop_on_error = if (options$error && options$include) 0L else 2L,
+                       output_handler = knit_handlers(options$render, options))
+    )
   if (options$cache %in% 1:2 && !cache.exists) {
     # make a copy for cache=1,2; when cache=2, we do not really need plots
     res.orig = if (options$cache == 2) remove_plot(res, keep == 'high') else res
@@ -167,13 +167,13 @@ block_exec = function(options) {
 
   # remove some components according options
   if (isFALSE(echo)) {
-    res = Filter(Negate(is.source), res)
+    res = Filter(Negate(evaluate::is.source), res)
   } else if (is.numeric(echo)) {
     # choose expressions to echo using a numeric vector
     res = if (isFALSE(ev)) {
       as.source(code[echo])
     } else {
-      filter_evaluate(res, echo, is.source)
+      filter_evaluate(res, echo, evaluate::is.source)
     }
   }
   if (options$results == 'hide') res = Filter(Negate(is.character), res)
@@ -182,16 +182,16 @@ block_exec = function(options) {
     if (any(i)) res = c(res[!i], list(paste(unlist(res[i]), collapse = '')))
   }
   res = filter_evaluate(res, options$warning, is.warning)
-  res = filter_evaluate(res, options$message, is.message)
+  res = filter_evaluate(res, options$message, evaluate::is.message)
 
   # rearrange locations of figures
-  figs = vapply(res, is.recordedplot, logical(1))
+  figs = vapply(res, evaluate::is.recordedplot, logical(1))
   if (length(figs) && any(figs)) {
     if (keep == 'none') {
       res = res[!figs] # remove all
     } else {
       if (options$fig.show == 'hold') res = c(res[!figs], res[figs]) # move to the end
-      figs = sapply(res, is.recordedplot)
+      figs = sapply(res, evaluate::is.recordedplot)
       if (length(figs) && sum(figs) > 1) {
         if (keep %in% c('first', 'last')) {
           res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
@@ -204,7 +204,7 @@ block_exec = function(options) {
   }
   # number of plots in this chunk
   if (is.null(options$fig.num))
-    options$fig.num = if (length(res)) sum(sapply(res, is.recordedplot)) else 0L
+    options$fig.num = if (length(res)) sum(sapply(res, evaluate::is.recordedplot)) else 0L
 
   # merge neighbor elements of the same class into one element
   for (cls in c('source', 'message')) res = merge_class(res, cls)
