@@ -216,12 +216,8 @@ resolve_params = function(params) {
   }
 
   # deduce type from attribute or class
-  param_type <- function(value) {
-    type <- type_attr(value)
-    if (!is.null(type))
-      type
-    else
-      class(value)[[1]]
+  param_type = function(value) {
+    type_attr(value) %n% class(value)[[1]]
   }
 
   # return a parameter value with type attribute stripped and as a vector rather
