@@ -105,7 +105,7 @@ opts_chunk_attr = local({
 #' Set aliases for chunk options
 #'
 #' We do not have to use the chunk option names given in \pkg{knitr}; we can set
-#' aliases for them. The aliases is a named character vector; the names are
+#' aliases for them. The aliases are a named character vector; the names are
 #' aliases and the elements in this vector are the real option names.
 #' @param ... named arguments (argument names are aliases, and argument values
 #'   are real chunk options)
