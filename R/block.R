@@ -144,7 +144,6 @@ block_exec = function(options) {
   cache.exists = cache$exists(options$hash, options$cache.lazy)
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
-  } else if (cache.exists) {
     as.source(code)
   } else if (cache.exists && isFALSE(options$cache.rebuild)) {
     fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
