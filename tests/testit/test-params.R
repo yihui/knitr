@@ -30,12 +30,16 @@ params <- read_params('
 ---
 params:
   start: !date 2015-01-01
+  end: !datetime 2015-01-01 12:30:00
 ---
 '
 )
 assert(params[[1]]$name == 'start')
 assert(params[[1]]$type == 'date')
-assert(params[[1]]$value == as.Date("01/01/15", "%m/%d/%y"))
+assert(params[[1]]$value == as.Date("2015-01-01"))
+assert(params[[2]]$name == 'end')
+assert(params[[2]]$type == 'datetime')
+assert(params[[2]]$value == as.POSIXct("2015-01-01 12:30:00", tz = "GMT"))
 
 
 ## test file custom type ---------------------------------------------------
