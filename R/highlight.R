@@ -83,7 +83,7 @@ css.parser = function(file, lines = readLines(file)) {
   end.lines = grep('^\\s*\\}', lines)
 
   # find the closing brace of each declaration
-  dec.close = end.lines[sapply(dec.lines, function(x) which.min(end.lines < x))]
+  dec.close = end.lines[vapply(dec.lines, function(x) which.min(end.lines < x), integer(1))]
 
   pos = matrix(c(dec.lines, dec.close), ncol = 2)
   styles = apply(pos, 1, function(x) {
