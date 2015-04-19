@@ -104,7 +104,7 @@ known_globals = c(
 cache = new_cache()
 
 # a regex for cache files
-cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
+cache_rx = '_[[:xdigit:]]{32}[.](rdb|rdx|RData)$'
 
 #' Build automatic dependencies among chunks
 #'
