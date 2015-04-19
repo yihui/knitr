@@ -289,11 +289,12 @@ eng_asis = function(options) {
 }
 
 # set engines for interpreted languages
-for (i in c(
-  'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'lein', 'node', 'perl',
-  'python', 'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'stata', 'zsh'
-)) knit_engines$set(setNames(list(eng_interpreted), i))
-rm(i)
+local({
+  for (i in c(
+    'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'lein', 'node', 'perl',
+    'python', 'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'stata', 'zsh'
+  )) knit_engines$set(setNames(list(eng_interpreted), i))
+})
 
 # additional engines
 knit_engines$set(
