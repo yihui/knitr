@@ -99,9 +99,9 @@ Depends:
 Imports:
     evaluate (>= 0.6),
     digest,
-    formatR (>= 1.1),
-    highr (>= 0.4.1),
-    markdown (>= 0.7.4),
+    formatR,
+    highr,
+    markdown,
     stringr (>= 0.6),
     yaml (>= 2.1.5),
     tools
