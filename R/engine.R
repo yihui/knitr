@@ -303,6 +303,20 @@ knit_engines$set(
   asis = eng_asis, stan = eng_stan
 )
 
+get_engine = function(name) {
+  fun = knit_engines$get(name)
+  if (is.function(fun)) return(fun)
+  # FIXME: definitely stop() after the next version of dplyr is on CRAN
+  # https://github.com/hadley/dplyr/pull/1091
+  (if (name == 'cpp' && 'dplyr' %in% loadedNamespaces() && packageVersion('dplyr') <= '0.4.1') warning else stop)(
+    "Unknown language engine '", name,
+    "' (must be registered via knit_engines$set())."
+  )
+  function(options) {
+    engine_output(options, options$code, '')
+  }
+}
+
 # possible values for engines (for auto-completion in RStudio)
 opts_chunk_attr$engine = as.list(sort(c('R', names(knit_engines$get()))))
 opts_chunk_attr[c('engine.path', 'engine.opts')] = list('character', 'character')

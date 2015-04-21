@@ -84,8 +84,8 @@ block_exec = function(options) {
   # when code is not R language
   if (options$engine != 'R') {
     res.before = run_hooks(before = TRUE, options)
-    output = in_dir(opts_knit$get('root.dir') %n% input_dir(),
-                    knit_engines$get(options$engine)(options))
+    engine = get_engine(options$engine)
+    output = in_dir(opts_knit$get('root.dir') %n% input_dir(), engine(options))
     res.after = run_hooks(before = FALSE, options)
     output = paste(c(res.before, output, res.after), collapse = '')
     output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
