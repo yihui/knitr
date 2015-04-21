@@ -679,3 +679,10 @@ inst_dir = function(...) {
   p = file.path(c('..', '.'), 'inst', ...)
   p[file.exists(p)]
 }
+
+# normalize two paths to see if they are the same file
+same_file = function(f1, f2) {
+  f1 = normalizePath(f1, mustWork = FALSE)
+  f2 = normalizePath(f2, mustWork = FALSE)
+  f1 == f2
+}
