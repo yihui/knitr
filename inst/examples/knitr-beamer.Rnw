@@ -1,4 +1,4 @@
-%% LyX 2.1.2 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[10pt]{beamer}
 \usepackage[T1]{fontenc}
@@ -49,9 +49,7 @@ opts_chunk$set(fig.path='figure/beamer-',fig.align='center',fig.show='hold',size
 \title[knitr, Beamer, and FragileFrame]{A Minimal Demo of knitr with Beamer and Fragile Frames}
 
 
-\author{Yihui Xie%
-\thanks{I thank Richard E. Goldberg for providing this demo.%
-}}
+\author{Yihui Xie\thanks{I thank Richard E. Goldberg for providing this demo.}}
 \makebeamertitle
 \begin{frame}{Background}
 

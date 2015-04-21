@@ -1,4 +1,4 @@
-%% LyX 2.1.2 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[nohyper,justified]{tufte-handout}
 \usepackage[T1]{fontenc}
@@ -45,11 +45,8 @@ graphical devices, plot recording, plot rearrangement, control of
 plot sizes, the tikz device, figure captions, animations and other
 types of plots such as \textbf{rgl} or GGobi plots.
 \end{abstract}
-Before reading this specific manual%
-\footnote{\url{http://bit.ly/knitr-graphics-src} (Rnw source)%
-}, you must have finished the main manual%
-\footnote{\url{http://bit.ly/knitr-main}%
-}.
+Before reading this specific manual\footnote{\url{http://bit.ly/knitr-graphics-src} (Rnw source)},
+you must have finished the main manual\footnote{\url{http://bit.ly/knitr-main}}.
 
 
 \section{Graphical Devices}
@@ -96,10 +93,9 @@ below uses the \emph{CairoPNG()} device in the \textbf{Cairo} package.
 As mentioned in the main manual, \textbf{knitr} uses the \textbf{evaluate}
 package to record plots. There are two sources of plots: first, whenever
 \emph{plot.new()} or \emph{grid.newpage()} is called, \textbf{evaluate}
-will try to save a snapshot of the current plot%
-\footnote{For technical details, see \texttt{?setHook} and \texttt{?recordPlot}%
-}; second, after each complete expression is evaluated, a snapshot
-is also saved. To speed up recording, the null graphical device \texttt{pdf(file
+will try to save a snapshot of the current plot\footnote{For technical details, see \texttt{?setHook} and \texttt{?recordPlot}};
+second, after each complete expression is evaluated, a snapshot is
+also saved. To speed up recording, the null graphical device \texttt{pdf(file
 = NULL)} is used. Figure \ref{fig:two-high} shows two expressions
 producing two high-level plots.
 
@@ -155,9 +151,7 @@ plot is a ``subset'' of the next plot (= previous plot + low-level
 changes), the previous plot will be removed when \texttt{fig.keep='high'}.
 If two successive plots are identical, the second one will be removed
 by default, so it might be a little bit surprising that the following
-chunk will only produce one plot by default%
-\footnote{adapted from \url{https://github.com/yihui/knitr/issues/41}%
-}:
+chunk will only produce one plot by default\footnote{adapted from \url{https://github.com/yihui/knitr/issues/41}}:
 
 <<identical-plots,eval=FALSE>>=
 m = matrix(1:100, ncol = 10)
@@ -305,10 +299,9 @@ especially in base graphics (\textbf{ggplot2} is much better in this
 aspect). The default graphical option \texttt{mar} is about \texttt{c(5,
 4, 4, 2)} (see \texttt{?par}), which is often too big. Instead of
 endlessly setting \texttt{par(mar)}, you may consider the program
-\texttt{pdfcrop}, which can crop the white margin automatically%
-\footnote{\url{http://www.ctan.org/pkg/pdfcrop}%
-}. In \textbf{knitr}, we can set up the hook \emph{hook\_pdfcrop()}
-to work with a chunk option, say, \texttt{crop}.
+\texttt{pdfcrop}, which can crop the white margin automatically\footnote{\url{http://www.ctan.org/pkg/pdfcrop}}.
+In \textbf{knitr}, we can set up the hook \emph{hook\_pdfcrop()} to
+work with a chunk option, say, \texttt{crop}.
 
 <<crop-hook, cache=FALSE>>=
 knit_hooks$set(crop=hook_pdfcrop)
