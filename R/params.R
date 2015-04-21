@@ -162,6 +162,8 @@ yaml_front_matter = function(lines) {
 
   front_matter = front_matter_lines
   front_matter = front_matter[2:(length(front_matter) - 1)]
+  # FIXME: this is only for apex on CRAN (https://github.com/thibautjombart/apex/pull/15)
+  if (length(grep('^params:', front_matter)) == 0) return()
   front_matter = paste(front_matter, collapse = "\n")
 
   # ensure that the front-matter doesn't terminate with ':', so it won't cause a
