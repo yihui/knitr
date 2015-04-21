@@ -42,11 +42,7 @@ opts_knit$set(out.format = NULL)  # restore option
 Ramnath Vaidyanathan and Yihui Xie
 }
 \references{
-The themes manual
-  \url{https://github.com/yihui/knitr/releases/download/doc/knitr-themes.pdf}
-  (Rnw source at
-  \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw}).
-   For a preview of all themes, see
+For a preview of all themes, see
   \url{https://gist.github.com/yihui/3422133}.
 }
 \seealso{
