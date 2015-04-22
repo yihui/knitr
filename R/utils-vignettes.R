@@ -99,7 +99,11 @@ register_vignette_engines = function(pkg) {
 }
 # all engines use the same tangle and package arguments, so factor them out
 vig_engine = function(..., tangle = vtangle) {
-  if (is_R_CMD_check()) tangle = vtangle_empty
+  if (missing(tangle) && is_R_CMD_check()) tangle = function(file, ...) {
+    file = sub_ext(file, 'R')
+    file.create(file)
+    file
+  }
   vig_engine0(..., tangle = tangle, package = 'knitr', aspell = list(
     filter = knit_filter
   ))
