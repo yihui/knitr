@@ -30,7 +30,7 @@
 #' vig_list[['knitr::docco_classic']][c('weave', 'tangle')]
 NULL
 
-vweave = vtangle = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
+vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
   opts_chunk$set(error = FALSE)  # should not hide errors
   knit_hooks$set(purl = hook_purl)  # write out code while weaving
   options(markdown.HTML.header = NULL)
@@ -39,7 +39,14 @@ vweave = vtangle = function(file, driver, syntax, encoding = 'UTF-8', quiet = FA
   )
 }
 
-body(vtangle)[5L] = expression(purl(file, encoding = encoding, quiet = quiet))
+vtangle = function(file, ..., encoding = 'UTF-8', quiet = FALSE) {
+  if (is_R_CMD_check()) {
+    file = sub_ext(file, 'R')
+    file.create(file)
+    return(file)
+  }
+  purl(file, encoding = encoding, quiet = quiet)
+}
 
 vweave_docco_linear = vweave
 body(vweave_docco_linear)[5L] = expression(knit2html(
@@ -99,11 +106,6 @@ register_vignette_engines = function(pkg) {
 }
 # all engines use the same tangle and package arguments, so factor them out
 vig_engine = function(..., tangle = vtangle) {
-  if (missing(tangle) && is_R_CMD_check()) tangle = function(file, ...) {
-    file = sub_ext(file, 'R')
-    file.create(file)
-    file
-  }
   vig_engine0(..., tangle = tangle, package = 'knitr', aspell = list(
     filter = knit_filter
   ))
