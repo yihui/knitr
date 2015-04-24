@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/yihui/knitr.svg)](https://travis-ci.org/yihui/knitr)
 [![Coverage Status](https://img.shields.io/coveralls/yihui/knitr.svg)](https://coveralls.io/r/yihui/knitr?branch=master)
+[![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/knitr)](http://cran.rstudio.com/package=knitr)
 
 The R package **knitr** is a general-purpose literate programming engine,
 with lightweight API's designed to give users full control of the output
