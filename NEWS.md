@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- added a new chunk option `cache.rebuild` (default: `FALSE`) to force *knitr** to invalidate and rebuild the cache for a chunk when `cache.rebuild = TRUE` (thanks, @zachary-foster, #995)
+- added a new chunk option `cache.rebuild` (default: `FALSE`) to force **knitr** to invalidate and rebuild the cache for a chunk when `cache.rebuild = TRUE` (thanks, @zachary-foster, #995)
 
 - added a `stata` engine and improved the existing `sas` engine (thanks, @Hemken #979, @muschellij2 #984)
 
