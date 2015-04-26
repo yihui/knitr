@@ -31,9 +31,12 @@
 NULL
 
 vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
+  {
+    on.exit({opts_chunk$restore(); knit_hooks$restore()}, add = TRUE)
+    oopts = options(markdown.HTML.header = NULL); on.exit(options(oopts), add = TRUE)
+  }
   opts_chunk$set(error = FALSE)  # should not hide errors
   knit_hooks$set(purl = hook_purl)  # write out code while weaving
-  options(markdown.HTML.header = NULL)
   (if (grepl('\\.[Rr]md$', file)) knit2html else if (grepl('\\.[Rr]rst$', file)) knit2pdf else knit)(
     file, encoding = encoding, quiet = quiet, envir = globalenv()
   )
