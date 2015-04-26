@@ -22,12 +22,12 @@ install.packages('knitr', dependencies = TRUE)
 ```
 
 You can also install the development version from
-[RForge](http://rforge.net/knitr/), which provides daily build of **knitr**:
+[XRAN](http://yihui.name/xran/), which provides daily build of **knitr**:
 
 ```r
 # update all existing packages first
 update.packages(ask = FALSE, repos = 'http://cran.rstudio.org')
-install.packages('knitr', repos = c('http://rforge.net', 'http://cran.rstudio.org'),
+install.packages('knitr', repos = c('http://yihui.name/xran', 'http://cran.rstudio.org'),
                  type = 'source')
 ```
 
