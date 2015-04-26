@@ -70,8 +70,11 @@ body(vweave_rmarkdown)[5L] = expression(rmarkdown::render(
 # do not tangle R code from vignettes
 untangle_weave = function(vig_list, eng) {
   weave = vig_list[[c(eng, 'weave')]]
-  if (eng != 'knitr::rmarkdown')
-    body(weave)[3L] = expression({})
+  # remove the purl hook from the weave function, but the rmarkdown engine
+  # function is different (not vweave_rmarkdown above, but the function(...)
+  # defined below in vig_engine('rmarkdown'), and it is not straightforward to
+  # remove the purl hook there)
+  if (eng != 'knitr::rmarkdown') body(weave)[4L] = expression({})
   weave
 }
 vtangle_empty = function(file, ...) {
