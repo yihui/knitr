@@ -249,6 +249,8 @@ fix_options = function(options) {
       warning('You must not set both chunk options out.width and fig.retina')
     }
     options$dpi = options$dpi * r
+  } else {
+    options$fig.retina = 1
   }
 
   # deal with aliases: a1 is real option; a0 is alias
