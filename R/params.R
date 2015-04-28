@@ -122,6 +122,7 @@ knit_params = function(text) {
   yaml = yaml_front_matter(text)
   if (is.null(yaml)) return(list())
 
+  yaml = enc2utf8(yaml)
   # parse the yaml using our handlers
   parsed_yaml = yaml::yaml.load(yaml, handlers = knit_params_handlers())
 
