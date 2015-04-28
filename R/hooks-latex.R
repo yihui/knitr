@@ -330,7 +330,7 @@ render_listings = function() {
 hook_movecode = function(x) {
   x = split_lines(x)
   res = split(x, cumsum(grepl('^\\\\(begin|end)\\{figure\\}', x)))
-  x = split_lines(vapply(res, function(p) {
+  x = split_lines(unlist(lapply(res, function(p) {
     if (length(p) <= 4 || !grepl('^\\\\begin\\{figure\\}', p[1]) ||
           length(grep('% knitr_do_not_move', p)) ||
           !any(grepl('\\\\begin\\{(alltt|kframe)\\}', p))) return(p)
@@ -350,10 +350,10 @@ hook_movecode = function(x) {
     idx = unique(idx)
     p = paste(c(p[-idx], p[idx]), collapse = '\n')
     gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
-  }, character(1)))
+  }), use.names = FALSE))
 
   res = split(x, cumsum(grepl('^\\\\(begin|end)\\{table\\}', x)))
-  res = paste(vapply(res, function(p) {
+  res = paste(unlist(lapply(res, function(p) {
     if (length(p) <= 4 || !grepl('^\\\\begin\\{table\\}', p[1]) ||
           length(grep('% knitr_do_not_move', p)) ||
           !any(grepl('\\\\begin\\{(alltt|kframe)\\}', p))) return(p)
@@ -364,6 +364,6 @@ hook_movecode = function(x) {
     idx = sort(idx)
     p = paste(c(p[-idx], p[idx]), collapse = '\n')
     gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
-  }, character(1)), collapse = '\n')
+  }), use.names = FALSE), collapse = '\n')
   .rm.empty.envir(res)
 }
