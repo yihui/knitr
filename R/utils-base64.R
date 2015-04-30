@@ -1,8 +1,8 @@
 #' Encode an image file to a data URI
 #'
-#' This function takes an image file and uses either the \pkg{markdown} package,
-#' or \pkg{RCurl} or the built-in function to encode it as a base64 string,
-#' which can be used in the \code{img} tag in HTML.
+#' This function takes an image file and uses the \pkg{markdown} package to
+#' encode it as a base64 string, which can be used in the \code{img} tag in
+#' HTML.
 #' @param f the path to the image file
 #' @return a character string (the data URI)
 #' @author Wush Wu and Yihui Xie
