@@ -240,7 +240,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     } else {
       params = knit_params(text)
       params = if (length(params))
-        c('params <-', capture.output(dput(params, '')), '')
+        c('params <-', capture.output(dput(flatten_params(params), '')), '')
       .knitEnv$tangle.params = params  # for hook_purl()
     }
   }

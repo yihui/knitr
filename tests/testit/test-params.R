@@ -1,4 +1,3 @@
-
 library(testit)
 
 # helper function to convert raw src to params list
@@ -23,6 +22,7 @@ assert(params[[1]]$value == 10)
 assert(params[[2]]$name == 'b')
 assert(params[[2]]$value == 20)
 
+assert(identical(flatten_params(params), list(a = 10L, b = 20L)))
 
 ## test date custom type ---------------------------------------------------
 

@@ -134,6 +134,12 @@ knit_params = function(text) {
   }
 }
 
+# turn params into a named list of values
+flatten_params = function(params) {
+  res = list()
+  for (param in params) res[[param$name]] = param$value
+  res
+}
 
 # Extract the yaml front matter (if any) from the passed lines. The front
 # matter is returned as a single-element character vector (with newlines
