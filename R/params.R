@@ -147,9 +147,11 @@ mark_utf8 = function(x) {
     Encoding(x) = 'UTF-8'
     return(x)
   }
-  if (is.list(x)) {
-    lapply(x, mark_utf8)
-  } else x
+  if (!is.list(x)) return(x)
+  attrs = attributes(x)
+  res = lapply(x, mark_utf8)
+  attributes(res) = attrs
+  res
 }
 
 # Extract the yaml front matter (if any) from the passed lines. The front
