@@ -24,7 +24,7 @@ hilight_source = function(x, format, options) {
 highlight_header = function() {
   set_header(highlight.extra = paste(c(sprintf(
     '\\let\\hl%s\\hlstd', c('esc', 'pps', 'lin')
-  ), '\\let\\hlslc\\hlcom'), collapse = ' '))
+  ), sprintf('\\let\\hl%s\\hlcom', c('slc', 'ppc'))), collapse = ' '))
 }
 
 # stolen from Romain's highlight package (v0.3.2)
