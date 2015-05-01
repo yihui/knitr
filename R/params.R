@@ -208,6 +208,14 @@ knit_params_handlers = function() {
 
   list(
 
+    `bool#yes` = function(value) {
+      if (tolower(value) == "y") value else TRUE
+    },
+
+    `bool#no` = function(value) {
+      if (tolower(value) == "n") value else FALSE
+    },
+
     # date
     date = function(value) {
       value = as.Date(value)
