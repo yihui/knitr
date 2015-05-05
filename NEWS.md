@@ -1,3 +1,13 @@
+# CHANGES IN knitr VERSION 1.10.5
+
+## MAJOR CHANGES
+
+- this version is a patch release due to a few changes in handling the `params` field of the YAML metadata, including
+    - the character input passed to `yaml::yaml.load()` will always be converted to UTF-8 to make sure multibyte characters work in YAML
+    - the character output from `yaml::yaml.load()` will always be marked as UTF-8 (https://github.com/viking/r-yaml/issues/6)
+    - `y`, `Y`, `n`, and `N` will not be treated as booleans (`TRUE`/`FALSE`), although they do stand for booleans in the YAML 1.1 spec
+    - for `purl()`, the `params` field will be correctly written to the R script
+
 # CHANGES IN knitr VERSION 1.10
 
 ## NEW FEATURES
