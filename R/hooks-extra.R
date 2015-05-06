@@ -5,18 +5,6 @@
 #' provides a few useful hooks, which can also serve as examples of how to
 #' define chunk hooks in \pkg{knitr}.
 #'
-#' The function \code{hook_rgl()} can be set as a hook in \pkg{knitr} to save
-#' plots produced by the \pkg{rgl} package. According to the chunk option
-#' \code{dev} (graphical device), plots can be save to different formats
-#' (\code{postscript}: \samp{eps}; \code{pdf}: \samp{pdf}; other devices
-#' correspond to the default PNG format). The plot window will be adjusted
-#' according to chunk options \code{fig.width} and \code{fig.height}. Filenames
-#' are derived from chunk labels and the \code{fig.path} option.
-#'
-#' The function \code{hook_webgl()} is a wrapper for the
-#' \code{\link[rgl]{writeWebGL}()} function in the \pkg{rgl} package. It writes
-#' WebGL code to the output to reproduce the \pkg{rgl} scene in a browser.
-#'
 #' The function \code{hook_pdfcrop()} can use the program \command{pdfcrop} to
 #' crop the extra white margin when the plot format is PDF to make better use of
 #' the space in the output document, otherwise we often have to struggle with
@@ -56,36 +44,14 @@
 #' @rdname chunk_hook
 #' @param before,options,envir see references
 #' @references \url{http://yihui.name/knitr/hooks#chunk_hooks}
-#' @seealso \code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}}
+#' @seealso \code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}},
+#'   \code{\link[rgl]{hook_rgl}}, \code{\link[rgl]{hook_webgl}}
+#' @note The two hook functions \code{hook_rgl()} and \code{hook_webgl()} were
+#'   moved from \pkg{knitr} to the \pkg{rgl} package (>= v0.95.1247) after
+#'   \pkg{knitr} v1.10.5, and you can \code{library(rgl)} to get them.
 #' @export
-#' @examples knit_hooks$set(rgl = hook_rgl)
+#' @examples if (require('rgl')) knit_hooks$set(rgl = hook_rgl)
 #' # then in code chunks, use the option rgl=TRUE
-hook_rgl = function(before, options, envir) {
-  # after a chunk has been evaluated
-  if (before || rgl::rgl.cur() == 0) return()  # no active device
-  name = fig_path('', options)
-  rgl::par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
-  Sys.sleep(.05) # need time to respond to window size change
-
-  in_base_dir(save_rgl(name, options$dev))
-
-  options$fig.num = 1L  # only one figure in total
-  hook_plot_custom(before, options, envir)
-}
-
-save_rgl = function(name, devices) {
-  if (!file_test('-d', dirname(name))) dir.create(dirname(name), recursive = TRUE)
-  # support 3 formats: eps, pdf and png (default)
-  for (dev in devices) switch(
-    dev,
-    postscript = rgl::rgl.postscript(paste0(name, '.eps'), fmt = 'eps'),
-    pdf = rgl::rgl.postscript(paste0(name, '.pdf'), fmt = 'pdf'),
-    rgl::rgl.snapshot(paste0(name, '.png'), fmt = 'png')
-  )
-}
-
-#' @export
-#' @rdname chunk_hook
 hook_pdfcrop = function(before, options, envir) {
   # crops plots after a chunk is evaluated and plot files produced
   ext = options$fig.ext
@@ -134,27 +100,6 @@ hook_plot_custom = function(before, options, envir){
   }), use.names = FALSE)
   paste(res, collapse = '')
 }
-#' @export
-#' @rdname chunk_hook
-hook_webgl = local({commonParts = TRUE; function(before, options, envir) {
-  # after a chunk has been evaluated
-  if (before || rgl::rgl.cur() == 0) return()  # no active device
-  name = tempfile('rgl', '.', '.html'); on.exit(unlink(name))
-  dpi = options$dpi / options$fig.retina  # should not consider Retina displays (#901)
-  rgl::par3d(windowRect = 100 + dpi * c(0, 0, options$fig.width, options$fig.height))
-  Sys.sleep(.05) # need time to respond to window size change
-
-  prefix = gsub('[^[:alnum:]]', '_', options$label) # identifier for JS, better be alnum
-  prefix = sub('^([^[:alpha:]])', '_\\1', prefix) # should start with letters or _
-  rgl::writeWebGL(
-    dir = dirname(name), filename = name, template = NULL, prefix = prefix,
-    snapshot = FALSE, commonParts = commonParts
-  )
-  commonParts <<- FALSE
-  res = readLines(name)
-  res = res[!grepl('^\\s*$', res)] # remove blank lines
-  paste(gsub('^\\s+', '', res), collapse = '\n') # no indentation at all (for Pandoc)
-}})
 
 #" a hook function to write out code from chunks
 #' @export
