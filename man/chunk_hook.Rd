@@ -1,22 +1,16 @@
 % Please edit documentation in R/hooks-extra.R
-\name{hook_rgl}
+\name{hook_pdfcrop}
 \alias{hook_optipng}
 \alias{hook_pdfcrop}
 \alias{hook_plot_custom}
 \alias{hook_purl}
-\alias{hook_rgl}
-\alias{hook_webgl}
 \title{Built-in chunk hooks to extend knitr}
 \usage{
-hook_rgl(before, options, envir)
-
 hook_pdfcrop(before, options, envir)
 
 hook_optipng(before, options, envir)
 
 hook_plot_custom(before, options, envir)
-
-hook_webgl(before, options, envir)
 
 hook_purl(before, options, envir)
 }
@@ -30,18 +24,6 @@ provides a few useful hooks, which can also serve as examples of how to
 define chunk hooks in \pkg{knitr}.
 }
 \details{
-The function \code{hook_rgl()} can be set as a hook in \pkg{knitr} to save
-plots produced by the \pkg{rgl} package. According to the chunk option
-\code{dev} (graphical device), plots can be save to different formats
-(\code{postscript}: \samp{eps}; \code{pdf}: \samp{pdf}; other devices
-correspond to the default PNG format). The plot window will be adjusted
-according to chunk options \code{fig.width} and \code{fig.height}. Filenames
-are derived from chunk labels and the \code{fig.path} option.
-
-The function \code{hook_webgl()} is a wrapper for the
-\code{\link[rgl]{writeWebGL}()} function in the \pkg{rgl} package. It writes
-WebGL code to the output to reproduce the \pkg{rgl} scene in a browser.
-
 The function \code{hook_pdfcrop()} can use the program \command{pdfcrop} to
 crop the extra white margin when the plot format is PDF to make better use of
 the space in the output document, otherwise we often have to struggle with
@@ -79,13 +61,19 @@ problem, we need \code{cache = 2} instead of \code{TRUE} (see
 \url{http://yihui.name/knitr/demo/cache/} for the meaning of \code{cache =
 2}).
 }
+\note{
+The two hook functions \code{hook_rgl()} and \code{hook_webgl()} were
+  moved from \pkg{knitr} to the \pkg{rgl} package (>= v0.95.1247) after
+  \pkg{knitr} v1.10.5, and you can \code{library(rgl)} to get them.
+}
 \examples{
-knit_hooks$set(rgl = hook_rgl)
+if (require("rgl")) knit_hooks$set(rgl = hook_rgl)
 # then in code chunks, use the option rgl=TRUE
 }
 \references{
 \url{http://yihui.name/knitr/hooks#chunk_hooks}
 }
 \seealso{
-\code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}}
+\code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}},
+  \code{\link[rgl]{hook_rgl}}, \code{\link[rgl]{hook_webgl}}
 }
