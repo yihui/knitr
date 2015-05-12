@@ -27,6 +27,7 @@ install:
   - sudo apt-get install -qq r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended r-cran-devtools > /dev/null
   - sudo apt-get install -qq pandoc pandoc-citeproc texlive-latex-recommended > /dev/null
   - "wget -q -O - http://yihui.name/xran/r-config | bash"
+  - Rscript -e "install.packages('stringi')"
   - Rscript -e 'devtools::install_deps(dep = TRUE)'
 
 # run tests
