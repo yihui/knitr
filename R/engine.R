@@ -98,7 +98,7 @@ eng_interpreted = function(options) {
       stata = {
         logf = sub('[.]do$', '.log', f)
         on.exit(unlink(c(logf)), add = TRUE)
-        paste(ifelse(.Platform$OS.type == 'windows', '/q /e', '-q -b'), f)
+        paste(ifelse(.Platform$OS.type == 'windows', '/q /e do', '-q -b do'), f)
       },
       f
     )
