@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.11
 
+## NEW FEATURES
+
+- added an argument `quiet` to `plot_crop()` (thanks, @WastlM, #1034)
+
 ## MAJOR CHANGES
 
 - the two hook functions `hook_rgl()` and `hook_webgl()` have been moved from **knitr** to the **rgl** package (v0.95.1247) (thanks, @dmurdoch)
