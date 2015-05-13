@@ -281,21 +281,28 @@ fig_process = function(FUN, path) {
 #' \command{convert} is a command in ImageMagick (Windows users may have to put
 #' the bin path of ImageMagick into the \var{PATH} variable).
 #' @param x the plot filename
+#' @param quiet whether to suppress standard output from the command line utility
 #' @export
 #' @references PDFCrop: \url{http://pdfcrop.sourceforge.net}; the
 #'   \command{convert} command in ImageMagick:
 #'   \url{http://www.imagemagick.org/script/convert.php}
 #' @return The original filename.
-plot_crop = function(x) {
+plot_crop = function(x, quiet = !opts_knit$get('progress')) {
   ext = tolower(file_ext(x))
   if (ext == 'pdf') {
     if (!has_utility('pdfcrop')) return(x)
   } else if (!has_utility('convert', 'ImageMagick')) return(x)
 
-  message('cropping ', x)
+  if (!quiet) message('cropping ', x)
   x = shQuote(x)
-  cmd = if (ext == 'pdf') paste('pdfcrop', x, x) else paste('convert', x, '-trim', x)
-  (if (is_windows()) shell else system)(cmd)
+  if (ext == 'pdf') {
+    cmd = 'pdfcrop'
+    args = c(x, x)
+  } else {
+    cmd = 'convert'
+    args = c(x, '-trim', x)
+  }
+  system2(cmd, args = args, stdout = if (quiet) FALSE else "")
   x
 }
 
