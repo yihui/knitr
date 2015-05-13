@@ -5,24 +5,51 @@
 #' different templates. See \url{http://yihui.name/knitr/demo/vignette/} for
 #' more information.
 #' @name vignette_engines
+#' @note If you use the \code{knitr::rmarkdown} engine, please make sure that
+#'   you put \pkg{rmarkdown} in the \samp{Suggests} field of your
+#'   \file{DESCRIPTION} file. Also make sure the executables \command{pandoc}
+#'   and \command{pandoc-citeproc} can be found by \pkg{rmarkdown} during
+#'   \command{R CMD build}. If you build your package from RStudio, this is
+#'   normally not a problem. If you build the package outside RStudio, run
+#'   \command{which pandoc} and \command{which pandoc-citeproc} in the terminal
+#'   (or \code{Sys.which('pandoc')} and \code{Sys.which('pandoc-citeproc')} in
+#'   R) to check if \command{pandoc} and \command{pandoc-citeproc} can be found.
+#'   If you use Linux, you may make symlinks to the Pandoc binaries in RStudio:
+#'   \url{https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md}, or
+#'   install \command{pandoc} and \command{pandoc-citeproc} separately.
+#'
+#'   When the \pkg{rmarkdown} package is not installed or not available, or
+#'   \command{pandoc} or \command{pandoc-citeproc} cannot be found, the
+#'   \code{knitr::rmarkdown} engine will fall back to the \code{knitr::knitr}
+#'   engine, which uses R Markdown v1 based on the \pkg{markdown} package.
 #' @examples library(knitr)
-#' vig_list = if (getRversion() > '3.0.0') tools::vignetteEngine(package = 'knitr')
+#' vig_list = tools::vignetteEngine(package = 'knitr')
 #' str(vig_list)
 #' vig_list[['knitr::knitr']][c('weave', 'tangle')]
 #' vig_list[['knitr::knitr_notangle']][c('weave', 'tangle')]
 #' vig_list[['knitr::docco_classic']][c('weave', 'tangle')]
 NULL
 
-vweave = vtangle = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
+vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
+  {
+    on.exit({opts_chunk$restore(); knit_hooks$restore()}, add = TRUE)
+    oopts = options(markdown.HTML.header = NULL); on.exit(options(oopts), add = TRUE)
+  }
   opts_chunk$set(error = FALSE)  # should not hide errors
   knit_hooks$set(purl = hook_purl)  # write out code while weaving
-  options(markdown.HTML.header = NULL)
   (if (grepl('\\.[Rr]md$', file)) knit2html else if (grepl('\\.[Rr]rst$', file)) knit2pdf else knit)(
     file, encoding = encoding, quiet = quiet, envir = globalenv()
   )
 }
 
-body(vtangle)[5L] = expression(purl(file, encoding = encoding, quiet = quiet))
+vtangle = function(file, ..., encoding = 'UTF-8', quiet = FALSE) {
+  if (is_R_CMD_check()) {
+    file = sub_ext(file, 'R')
+    file.create(file)
+    return(file)
+  }
+  purl(file, encoding = encoding, quiet = quiet)
+}
 
 vweave_docco_linear = vweave
 body(vweave_docco_linear)[5L] = expression(knit2html(
@@ -43,8 +70,11 @@ body(vweave_rmarkdown)[5L] = expression(rmarkdown::render(
 # do not tangle R code from vignettes
 untangle_weave = function(vig_list, eng) {
   weave = vig_list[[c(eng, 'weave')]]
-  if (eng != 'knitr::rmarkdown')
-    body(weave)[3L] = expression({})
+  # remove the purl hook from the weave function, but the rmarkdown engine
+  # function is different (not vweave_rmarkdown above, but the function(...)
+  # defined below in vig_engine('rmarkdown'), and it is not straightforward to
+  # remove the purl hook there)
+  if (eng != 'knitr::rmarkdown') body(weave)[4L] = expression({})
   weave
 }
 vtangle_empty = function(file, ...) {
@@ -52,10 +82,7 @@ vtangle_empty = function(file, ...) {
   return()
 }
 
-Rversion = getRversion()
-
 register_vignette_engines = function(pkg) {
-  if (Rversion < '3.0.0') return()
   # the default engine
   vig_engine('knitr', vweave, '[.]([rRsS](nw|tex)|[Rr](md|html|rst))$')
   vig_engine('docco_linear', vweave_docco_linear, '[.][Rr](md|markdown)$')
@@ -85,9 +112,15 @@ register_vignette_engines = function(pkg) {
 }
 # all engines use the same tangle and package arguments, so factor them out
 vig_engine = function(..., tangle = vtangle) {
-  tools::vignetteEngine(..., tangle = tangle, package = 'knitr', aspell = list(
+  vig_engine0(..., tangle = tangle, package = 'knitr', aspell = list(
     filter = knit_filter
   ))
+}
+# R <= 3.0.2 does not have the aspell argument in vignetteEngine()
+vig_engine0 = if ('aspell' %in% names(formals(tools::vignetteEngine))) {
+  function(...) tools::vignetteEngine(...)
+} else {
+  function(..., aspell = list()) tools::vignetteEngine(...)
 }
 
 #' Spell check filter for source documents

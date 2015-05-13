@@ -115,10 +115,10 @@ knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
   delim = paste(delim[1L], '((.|\n)+?)', delim[2L], sep = '')
 
   txt = paste(text, collapse = '\n')
-  if (packageVersion('stringr') <= '0.9.0') delim = perl(delim)
-  loc = str_locate_all(txt, delim)[[1L]]
+  if (packageVersion('stringr') <= '0.9.0') delim = stringr::perl(delim)
+  loc = stringr::str_locate_all(txt, delim)[[1L]]
   if (nrow(loc) == 0L) return(txt) # no match
-  mat = str_extract_all(txt, delim)[[1L]]
+  mat = stringr::str_extract_all(txt, delim)[[1L]]
   mat = sub(delim, '\\1', mat)
   env = list(...)
   env = if (length(env)) list2env(env, parent = parent.frame()) else parent.frame()

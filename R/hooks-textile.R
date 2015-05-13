@@ -25,7 +25,7 @@ render_textile = function() {
   opts_knit$set(out.format = 'textile')
   textile.hook = function(name) {
     force(name)
-    function (x, options) {
+    function(x, options) {
       if (name == 'source') x = c(hilight_source(x, 'textile', options), '')
       x = paste(x, collapse = '\n')
       sprintf('bc(knitr %s %s#%s).. %s\np(knitr_end). \n\n',

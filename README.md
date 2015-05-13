@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/yihui/knitr.svg)](https://travis-ci.org/yihui/knitr)
 [![Coverage Status](https://img.shields.io/coveralls/yihui/knitr.svg)](https://coveralls.io/r/yihui/knitr?branch=master)
+[![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/knitr)](http://cran.rstudio.com/package=knitr)
 
 The R package **knitr** is a general-purpose literate programming engine,
 with lightweight API's designed to give users full control of the output
@@ -21,12 +22,12 @@ install.packages('knitr', dependencies = TRUE)
 ```
 
 You can also install the development version from
-[RForge](http://rforge.net/knitr/), which provides daily build of **knitr**:
+[XRAN](http://yihui.name/xran/), which provides daily build of **knitr**:
 
 ```r
 # update all existing packages first
 update.packages(ask = FALSE, repos = 'http://cran.rstudio.org')
-install.packages('knitr', repos = c('http://rforge.net', 'http://cran.rstudio.org'),
+install.packages('knitr', repos = c('http://yihui.name/xran', 'http://cran.rstudio.org'),
                  type = 'source')
 ```
 

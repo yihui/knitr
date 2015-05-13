@@ -55,7 +55,7 @@ valid_path = function(prefix, label) {
 color_def = function(col, variable = 'shadecolor') {
   x = if (length(col) == 1L) sc_split(col) else col
   if ((n <- length(x)) != 3L) {
-    if (n == 1L) x = drop(col2rgb(x)/255) else {
+    if (n == 1L) x = drop(col2rgb(x) / 255) else {
       x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
       warning("the color '", col, "' is invalid;",
               'using default color...',
@@ -72,7 +72,7 @@ color_def = function(col, variable = 'shadecolor') {
 sc_split = function(string) {
   if (is.call(string)) string = eval(string)
   if (is.numeric(string) || length(string) > 1L) return(string)
-  str_trim(str_split(string, ';|,')[[1]])
+  stringr::str_trim(stringr::str_split(string, ';|,')[[1]])
 }
 
 # extract LaTeX packages for tikzDevice
@@ -85,10 +85,10 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   if (!any(idx2)) return()
   if ((idx2 <- which(idx2)[1]) < 2L) return()
   txt = paste(input[seq_len(idx2 - 1L)], collapse = '\n')  # rough preamble
-  idx = str_locate(txt, hb)  # locate documentclass
+  idx = stringr::str_locate(txt, hb)  # locate documentclass
   if (any(is.na(idx))) return()
-  options(tikzDocumentDeclaration = str_sub(txt, idx[, 1L], idx[, 2L]))
-  preamble = pure_preamble(split_lines(str_sub(txt, idx[, 2L] + 1L)), patterns)
+  options(tikzDocumentDeclaration = stringr::str_sub(txt, idx[, 1L], idx[, 2L]))
+  preamble = pure_preamble(split_lines(stringr::str_sub(txt, idx[, 2L] + 1L)), patterns)
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
   .knitEnv$bibliography = grep('^\\\\bibliography.+', input, value = TRUE)
 }
@@ -156,8 +156,7 @@ input_dir = function() {
 is_lyx = function() {
   args = commandArgs(TRUE)
   if (length(args) < 4) return(FALSE)
-  grepl('[.]Rnw$', args[1]) &&
-    !is.na(Sys.getenv('LyXDir', NA))
+  grepl('[.]Rnw$', args[1]) && !is.na(Sys.getenv('LyXDir', NA))
 }
 
 # scientific notation in TeX, HTML and reST
@@ -177,7 +176,7 @@ format_sci_one = function(x, format = 'latex') {
   if (abs(lx <- floor(log10(abs(x)))) < getOption('scipen') + 4L)
     return(as.character(round(x, getOption('digits')))) # no need sci notation
 
-  b = round(x/10^lx, getOption('digits'))
+  b = round(x / 10^lx, getOption('digits'))
   b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
@@ -249,6 +248,8 @@ fix_options = function(options) {
       warning('You must not set both chunk options out.width and fig.retina')
     }
     options$dpi = options$dpi * r
+  } else {
+    options$fig.retina = 1
   }
 
   # deal with aliases: a1 is real option; a0 is alias
@@ -324,7 +325,7 @@ fig_path = function(suffix = '', options = opts_current$get(), number) {
   if (!is.null(number)) suffix = paste('-', number, suffix, sep = '')
   path = valid_path(options$fig.path, options$label)
   (if (out_format(c('latex', 'sweave', 'listings'))) sanitize_fn else
-    str_c)(path, suffix)
+    paste0)(path, suffix)
 }
 # sanitize filename for LaTeX
 sanitize_fn = function(path, suffix = '') {
@@ -340,7 +341,7 @@ sanitize_fn = function(path, suffix = '') {
     path = paste(s, collapse = '/')
     warning('dots in figure paths replaced with _ ("', path, '")')
   }
-  str_c(path, suffix)
+  paste0(path, suffix)
 }
 
 #' Obtain the figure filenames for a chunk
@@ -416,7 +417,7 @@ print_knitlog = function() {
 }
 
 # count the number of lines
-line_count = function(x) str_count(x, '\n') + 1L
+line_count = function(x) stringr::str_count(x, '\n') + 1L
 
 # faster than require() but less rigorous
 has_package = function(pkg) pkg %in% .packages(TRUE)
@@ -638,10 +639,23 @@ is_windows = function() .Platform$OS.type == 'windows'
 #' Query the current input filename
 #'
 #' Returns the name of the input file passed to \code{\link{knit}()}.
+#' @param dir whether to prepend the current working directory to the file path
+#'   (i.e. return an absolute path or a relative path)
 #' @return A character string, if this function is called inside an input
 #'   document (otherwise \code{NULL}).
 #' @export
-current_input = function() knit_concord$get('infile')
+current_input = function(dir = FALSE) {
+  input = knit_concord$get('infile')
+  outwd = opts_knit$get('output.dir')
+  if (is.null(input)) return()
+  if (dir) {
+    if (is.null(outwd)) {
+      warning('Cannot determine the directory of the input document')
+      dir = FALSE
+    }
+  }
+  if (dir) file.path(outwd, input) else input
+}
 
 # import output handlers from evaluate
 default_handlers = evaluate:::default_output_handler
@@ -658,5 +672,19 @@ knit_handlers = function(fun, options) {
 
 # conditionally disable some features during R CMD check
 is_R_CMD_check = function() {
-  ('CheckExEnv' %in% search()) || ('_R_CHECK_TIMINGS_' %in% names(Sys.getenv()))
+  ('CheckExEnv' %in% search()) ||
+    any(c('_R_CHECK_TIMINGS_', '_R_CHECK_LICENSE_') %in% names(Sys.getenv()))
+}
+
+# is the inst dir under . or ..? differs in R CMD build/INSTALL and devtools/roxygen2
+inst_dir = function(...) {
+  p = file.path(c('..', '.'), 'inst', ...)
+  p[file.exists(p)]
+}
+
+# normalize two paths to see if they are the same file
+same_file = function(f1, f2) {
+  f1 = normalizePath(f1, mustWork = FALSE)
+  f2 = normalizePath(f2, mustWork = FALSE)
+  f1 == f2
 }

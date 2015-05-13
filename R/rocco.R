@@ -63,7 +63,7 @@ rocco = function(input, ...) {
   x = paste(txt[seq(i1 + 1, i2 - 1)], collapse = '\n')
   x = gsub('</pre>\\s*<pre>', '<!--ReDuNdAnTpRe-->', x)  # merge pre blocks
   m = gregexpr('<pre><code( class="[[:alnum:]]+")?>(.|\n)*?</code></pre>', x)
-  if(m[[1]][1] == -1) stop('No code blocks in HTML output')
+  if (m[[1]][1] == -1) stop('No code blocks in HTML output')
 
   code = regmatches(x, m)[[1]]
   code = gsub('<!--ReDuNdAnTpRe-->', '</pre>\n<pre>', code) # restore pre blocks

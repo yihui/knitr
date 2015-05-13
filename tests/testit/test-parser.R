@@ -2,17 +2,30 @@ library(testit)
 
 assert(
   'parse_params() parses chunk options to a list',
-  identical(parse_params('a-s-d,b=TRUE,c=def'), alist(label='a-s-d',b=TRUE,c=def)),
+  identical(parse_params('a-s-d,b=TRUE,c=def'), alist(label = 'a-s-d', b = TRUE, c = def)),
   has_error(parse_params('a,b')),
   has_error(parse_params('a,b,c=qwer')),
-  identical(parse_params('a,opt=c(1,3,5)'),alist(label='a',opt=c(1,3,5))),
-  identical(parse_params('label="xx",opt=zz'),alist(label='xx',opt=zz)),
-  identical(parse_params('label=foo'),alist(label='foo')),
+  identical(parse_params('a,opt=c(1,3,5)'), alist(label = 'a', opt = c(1, 3, 5))),
+  identical(parse_params('label="xx",opt=zz'), alist(label = 'xx', opt = zz)),
+  identical(parse_params('label=foo'), alist(label = 'foo')),
   identical(parse_params('a,b=2,c="qwer",asdf="efg"'),
-            alist(label='a', b=2, c='qwer',asdf='efg')),
-  identical(parse_params('2a'), alist(label='2a')),
+            alist(label = 'a', b = 2, c = 'qwer', asdf = 'efg')),
+  identical(parse_params('2a'), alist(label = '2a')),
   identical(parse_params('abc-function,fig.path="foo/bar-"'),
-            alist(label='abc-function', fig.path="foo/bar-"))
+            alist(label = 'abc-function', fig.path = "foo/bar-"))
+)
+
+opts_knit$set(out.format = 'markdown')
+assert(
+  'parse_params() parses the language engine from ```{lang}',
+  identical(
+    parse_block(NULL, '', 'r, foo, a=1,')$params,
+    alist(label = 'foo', a = 1)
+  ),
+  identical(
+    parse_block(NULL, '', 'Rcpp, foo, a=1,')$params,
+    alist(label = 'foo', a = 1, engine = 'Rcpp')
+  )
 )
 
 res = split_file(
@@ -22,11 +35,12 @@ res = split_file(
 assert(
   'split_file() treats ``` as part of code chunk instead of beginning of text chunk',
   # the foo chunk does not have a closing mark
-  identical(knit_code$get('foo'), '1+1'),
-  identical(knit_code$get('bar'), '2+2'),
+  knit_code$get('foo') == '1+1',
+  knit_code$get('bar') == '2+2',
   # before knitr v1.6, the text chunk was c('', 'def')
   identical(res[[4]][['input']], 'def')
 )
+opts_knit$restore()
 knit_code$restore(); knit_concord$restore()
 
 res = parse_inline(c('aaa \\Sexpr{x}', 'bbb \\Sexpr{NA} and \\Sexpr{1+2}',

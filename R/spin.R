@@ -29,8 +29,8 @@
 #'   ignored; by default, the delimiters are \verb{/*} in the beginning and
 #'   \verb{*/} in the end of a line (following the convention of C comments)
 #' @param precious logical: whether intermediate files (e.g., \code{.Rmd} files
-#'   when \code{format} is \code{"Rmd"}) should be removed; default \code{TRUE}
-#'   if \code{knit == TRUE} and input is a file
+#'   when \code{format} is \code{"Rmd"}) should be preserved; default
+#'   \code{FALSE} if \code{knit == TRUE} and input is a file
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
 #'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
 #' @return If \code{text} is \code{NULL}, the path of the final output document,
@@ -84,10 +84,10 @@ spin = function(
 
   r = rle(grepl(doc, x) | i)  # inline expressions are treated as doc instead of code
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
-  p1 = gsub('\\{', '\\\\{', str_c('^', p[1L], '.*', p[2L], '$'))
+  p1 = gsub('\\{', '\\\\{', paste0('^', p[1L], '.*', p[2L], '$'))
 
   for (i in seq_len(n)) {
-    block = x[seq(idx[i] + 1L, idx[i+1])]
+    block = x[seq(idx[i] + 1L, idx[i + 1])]
     txt[[i]] = if (r$values[i]) {
       # normal text; just strip #'
       sub(doc, '', block)
@@ -96,10 +96,10 @@ spin = function(
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
       if (length(opt <- grep('^#+(\\+|-| ----+| @knitr)', block))) {
-        block[opt] = str_c(p[1L], gsub('^#+(\\+|-| ----+| @knitr)\\s*|-*\\s*$', '', block[opt]), p[2L])
+        block[opt] = paste0(p[1L], gsub('^#+(\\+|-| ----+| @knitr)\\s*|-*\\s*$', '', block[opt]), p[2L])
       }
       if (!grepl(p1, block[1L])) {
-        block = c(str_c(p[1L], p[2L]), block)
+        block = c(paste0(p[1L], p[2L]), block)
       }
       c('', block, p[3L], '')
     }

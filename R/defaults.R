@@ -56,7 +56,7 @@ opts_chunk = new_defaults(list(
   strip.white = TRUE, size = 'normalsize', background = '#F7F7F7',
 
   cache = FALSE, cache.path = 'cache/', cache.vars = NULL, cache.lazy = TRUE,
-  dependson = NULL, autodep = FALSE,
+  dependson = NULL, autodep = FALSE, cache.rebuild = FALSE,
 
   fig.keep = 'high', fig.show = 'asis', fig.align = 'default', fig.path = 'figure/',
   dev = NULL, dev.args = NULL, dpi = 72, fig.ext = NULL, fig.width = 7, fig.height = 7,
@@ -87,7 +87,13 @@ opts_chunk_attr = local({
   opts$fig.keep = list('high', 'none', 'all', 'first', 'last')
   opts$fig.align = list('default', 'left', 'right', 'center')
   opts$fig.showtext = 'logical'
-  opts$dev = as.list(names(auto_exts))
+  # quartz_ devices are for OS X only
+  opts$dev = names(auto_exts)
+  if (Sys.info()[['sysname']] != 'Darwin')
+    opts$dev = grep('^quartz_', opts$dev, value = TRUE, invert = TRUE)
+  if (.Platform$OS.type != 'windows')
+    opts$dev = setdiff(opts$dev, 'win.metafile')
+  opts$dev = as.list(opts$dev)
   opts$fig.ext = as.list(unique(auto_exts))
   opts$external = opts$sanitize = NULL  # hide these two rare options
   opts$fig.process = 'function'
@@ -99,7 +105,7 @@ opts_chunk_attr = local({
 #' Set aliases for chunk options
 #'
 #' We do not have to use the chunk option names given in \pkg{knitr}; we can set
-#' aliases for them. The aliases is a named character vector; the names are
+#' aliases for them. The aliases are a named character vector; the names are
 #' aliases and the elements in this vector are the real option names.
 #' @param ... named arguments (argument names are aliases, and argument values
 #'   are real chunk options)

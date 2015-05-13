@@ -3,11 +3,36 @@
 \alias{all_labels}
 \title{Get all chunk labels in a document}
 \usage{
-all_labels()
+all_labels(...)
+}
+\arguments{
+\item{...}{a series of R expressions, each of which should return \code{TRUE}
+or \code{FALSE}; the expressions are evaluated using the local chunk
+options of each code chunk as the environment}
 }
 \value{
 A character vector.
 }
 \description{
-This function returns all chunk labels as a chracter vector.
+This function returns all chunk labels as a chracter vector. Optionally, you
+can specify a series of conditions to filter the labels.
+}
+\details{
+For example, suppose the condition expression is \code{engine == 'Rcpp'}, the
+object \code{engine} is the local chunk option \code{engine}; if an
+expression fails to be evaluated (e.g. when a certain object does not exist),
+\code{FALSE} is returned and the label for this chunk will be filtered out.
+}
+\note{
+Empty code chunks are always ignored, including those chunks that are
+  empty originally in the document but filled with code using chunk options
+  such as \code{ref.label} or \code{code}.
+}
+\examples{
+# the examples below are meaningless unless you put them in a knitr document
+all_labels()
+all_labels(engine == "Rcpp")
+all_labels(echo == FALSE && results != "hide")
+# or separate the two conditions
+all_labels(echo == FALSE, results != "hide")
 }

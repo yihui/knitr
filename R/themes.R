@@ -29,11 +29,7 @@ get_theme = function(theme = NULL) {
 #' returned by the \code{get()} method. See examples below.
 #' @author Ramnath Vaidyanathan and Yihui Xie
 #' @seealso \code{\link{eclipse_theme}} (use Eclipse themes)
-#' @references The themes manual
-#'   \url{https://github.com/yihui/knitr/releases/download/doc/knitr-themes.pdf}
-#'   (Rnw source at
-#'   \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw}).
-#'    For a preview of all themes, see
+#' @references For a preview of all themes, see
 #'   \url{https://gist.github.com/yihui/3422133}.
 #' @note The syntax highlighting here only applies to \file{.Rnw} (LaTeX) and
 #'   \file{.Rhtml} (HTML) documents, and it does not work for other types of
@@ -87,7 +83,7 @@ theme_to_header_html = function(theme){
     system.file('themes', sprintf('%s.css', theme), package = 'knitr')
   }
   css = css.parser(css_file)
-  bgcolor = css$background$color; fgcolor = css$std$color
+  bgcolor = css$background$color
   css_knitr = readLines(system.file('misc', 'knitr.css', package = 'knitr'))
   css_knitr[-2] = sub('^(\\s+background-color:\\s+)(.*)$', sprintf('\\1%s;', bgcolor), css_knitr[-2])
   css = c(css_knitr, gsub('^([.][a-z]{3} )', '.hl\\1', readLines(css_file)[-(1:3)]))

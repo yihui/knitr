@@ -33,7 +33,7 @@ R packages.
 }
 \details{
 The citation is forced to be generated from the DESCRIPTION file of the
-package, the keyword \samp{R-pkgname} is used for the bib item where
+package. The keyword \samp{R-pkgname} is used for the bib item, where
 \samp{pkgname} is the name of the package.
 }
 \note{
@@ -51,7 +51,9 @@ Some packages on CRAN do not have standard bib entries, which was once
   package authors to consider the \samp{Authors@R} field (see the manual
   \emph{Writing R Extensions}) to make it easier for other people to cite R
   packages. See \code{knitr:::.tweak.bib} for details of tweaks. Also note
-  this is subject to future changes since R packages are being updated.
+  this is subject to future changes since R packages are being updated. If
+  you want to contribute more tweaks, please edit the file
+  \file{inst/misc/tweak_bib.csv} in the source package.
 }
 \examples{
 write_bib(c("RGtk2", "gWidgets"), file = "R-GUI-pkgs.bib")

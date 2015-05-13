@@ -168,7 +168,7 @@ load_device = function(name, package, dpi = NULL) {
 
 
 # merge low-level plotting changes
-merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
+merge_low_plot = function(x, idx = sapply(x, evaluate::is.recordedplot)) {
   idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
   if (n <= 1) return(x)
   i1 = idx[1]; i2 = idx[2]  # compare plots sequentially
@@ -184,7 +184,7 @@ merge_low_plot = function(x, idx = sapply(x, is.recordedplot)) {
 # compare two recorded plots
 is_low_change = function(p1, p2) {
   p1 = p1[[1]]; p2 = p2[[1]]  # real plot info is in [[1]]
-  if ((n2 <- length(p2)) < (n1 <- length(p1))) return(FALSE)  # length must increase
+  if (length(p2) < (n1 <- length(p1))) return(FALSE)  # length must increase
   identical(p1[1:n1], p2[1:n1])
 }
 
@@ -215,33 +215,21 @@ reduce_plot_opts = function(options) {
 # https://github.com/rstudio/rstudio/blob/master/src/cpp/r/R/Tools.R
 fix_recordedPlot = function(plot) {
   # restore native symbols for R >= 3.0
-  if (Rversion >= '3.0.0') {
-    for (i in seq_along(plot[[1]])) {
-      # get the symbol then test if it's a native symbol
-      symbol = plot[[1]][[i]][[2]][[1]]
-      if (inherits(symbol, 'NativeSymbolInfo')) {
-        # determine the dll that the symbol lives in
-        name = symbol[[if (is.null(symbol$package)) 'dll' else 'package']][['name']]
-        pkgDLL = getLoadedDLLs()[[name]]
-        # reconstruct the native symbol and assign it into the plot
-        nativeSymbol = getNativeSymbolInfo(
-          name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE
-        )
-        plot[[1]][[i]][[2]][[1]] <- nativeSymbol
-      }
+  for (i in seq_along(plot[[1]])) {
+    # get the symbol then test if it's a native symbol
+    symbol = plot[[1]][[i]][[2]][[1]]
+    if (inherits(symbol, 'NativeSymbolInfo')) {
+      # determine the dll that the symbol lives in
+      name = symbol[[if (is.null(symbol$package)) 'dll' else 'package']][['name']]
+      pkgDLL = getLoadedDLLs()[[name]]
+      # reconstruct the native symbol and assign it into the plot
+      nativeSymbol = getNativeSymbolInfo(
+        name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE
+      )
+      plot[[1]][[i]][[2]][[1]] <- nativeSymbol
     }
-    attr(plot, 'pid') = Sys.getpid()
-  } else if (Rversion >= '2.14') {
-    # restore native symbols for R >= 2.14
-    try({
-      for(i in seq_along(plot[[1]])) {
-        if(inherits(plot[[1]][[i]][[2]][[1]], 'NativeSymbolInfo')) {
-          nativeSymbol = getNativeSymbolInfo(plot[[1]][[i]][[2]][[1]]$name)
-          plot[[1]][[i]][[2]][[1]] = nativeSymbol
-        }
-      }
-    }, silent = TRUE)
   }
+  attr(plot, 'pid') = Sys.getpid()
   plot
 }
 
@@ -249,7 +237,7 @@ fix_recordedPlot = function(plot) {
 fix_evaluate = function(list, fix = TRUE) {
   if (!fix) return(list)
   lapply(list, function(x) {
-    if (is.recordedplot(x)) fix_recordedPlot(x) else x
+    if (evaluate::is.recordedplot(x)) fix_recordedPlot(x) else x
   })
 }
 
@@ -258,7 +246,7 @@ fix_evaluate = function(list, fix = TRUE) {
 # that we will be able to filter out low-level changes later
 remove_plot = function(list, keep.high = TRUE) {
   lapply(list, function(x) {
-    if (is.recordedplot(x)) structure(
+    if (evaluate::is.recordedplot(x)) structure(
       if (keep.high) digest_plot(x) else NULL, class = 'recordedplot'
     ) else x
   })

@@ -22,9 +22,10 @@ hilight_source = function(x, format, options) {
 }
 
 highlight_header = function() {
-  set_header(highlight.extra = paste(c(sprintf(
-    '\\let\\hl%s\\hlstd', c('esc', 'pps', 'lin')
-  ), '\\let\\hlslc\\hlcom'), collapse = ' '))
+  set_header(highlight.extra = paste(c(
+    sprintf('\\let\\hl%s\\hlstd', c('esc', 'pps', 'lin')),
+    sprintf('\\let\\hl%s\\hlcom', c('slc', 'ppc'))
+  ), collapse = ' '))
 }
 
 # stolen from Romain's highlight package (v0.3.2)
@@ -83,7 +84,7 @@ css.parser = function(file, lines = readLines(file)) {
   end.lines = grep('^\\s*\\}', lines)
 
   # find the closing brace of each declaration
-  dec.close = end.lines[sapply(dec.lines, function(x) which.min(end.lines < x))]
+  dec.close = end.lines[vapply(dec.lines, function(x) which.min(end.lines < x), integer(1))]
 
   pos = matrix(c(dec.lines, dec.close), ncol = 2)
   styles = apply(pos, 1, function(x) {
@@ -92,7 +93,7 @@ css.parser = function(file, lines = readLines(file)) {
     settings = sub(settings.rx, '\\1', data, perl = TRUE)
     contents = sub(settings.rx, '\\2', data, perl = TRUE)
     out = list()
-    for (i in 1:length(settings)) {
+    for (i in seq_along(settings)) {
       setting = settings[i]
       content = contents[i]
       out[[setting]] = switch(
@@ -118,16 +119,16 @@ styler_assistant_latex = function(x) {
     }
     start = end = ''
     if ('color' %in% settings) {
-      start = str_c(start, '\\textcolor[rgb]{', col2latexrgb(item[['color']]), '}{')
-      end = str_c(end, '}')
+      start = paste0(start, '\\textcolor[rgb]{', col2latexrgb(item[['color']]), '}{')
+      end = paste0(end, '}')
     }
     if (has('font-weight', 'bold')) {
-      start = str_c(start, '\\textbf{')
-      end = str_c('}', end)
+      start = paste0(start, '\\textbf{')
+      end = paste0('}', end)
     }
     if (has('font-style', 'italic')) {
-      start = str_c(start, '\\textit{')
-      end = str_c('}', end)
+      start = paste0(start, '\\textit{')
+      end = paste0('}', end)
     }
     sprintf('%s#1%s', start, end)
   })
@@ -137,6 +138,6 @@ styler_assistant_latex = function(x) {
 col2latexrgb = function(hex) {
   # as.character(0.123) -> 0,123 when "OutDec = ,", so make sure . is used
   outdec = options(OutDec = '.'); on.exit(options(outdec))
-  col = col2rgb(hex)[, 1]/255
+  col = col2rgb(hex)[, 1] / 255
   paste(round(col, 3), collapse = ',')
 }

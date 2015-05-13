@@ -103,7 +103,10 @@ kable = function(
   n = nrow(x)
   x = format(as.matrix(x), trim = TRUE, justify = 'none')
   if (!is.matrix(x)) x = matrix(x, nrow = n)
+  x = gsub('^\\s*|\\s*$', '', x)
   colnames(x) = col.names
+  if (length(align) && !all(align %in% c('l', 'r', 'c')))
+    stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")
   attr(x, 'align') = align
   res = do.call(
     paste('kable', format, sep = '_'),
@@ -225,13 +228,13 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
   }
-  l = if (prod(dim(x)) > 0) apply(x, 2, function(z) max(nchar(z), na.rm = TRUE))
+  l = if (prod(dim(x)) > 0) apply(x, 2, function(z) max(nchar(z, type = 'width'), na.rm = TRUE))
   cn = colnames(x)
   if (length(cn) > 0) {
     cn[is.na(cn)] = "NA"
     if (sep.col == '|') cn = gsub('\\|', '&#124;', cn)
     if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
-    l = pmax(if (length(l) == 0) 0 else l, nchar(cn))
+    l = pmax(if (length(l) == 0) 0 else l, nchar(cn, type = 'width'))
   }
   align = attr(x, 'align', exact = TRUE)
   padding = padding * if (length(align) == 0) 2 else {
@@ -270,14 +273,29 @@ kable_pandoc = function(x, caption = NULL, padding = 1, ...) {
 
 # pad a matrix
 mat_pad = function(m, width, align = NULL) {
-  n = ncol(m)
-  res = matrix('', nrow = nrow(m), ncol = n)
-  if (prod(dim(m)) == 0) return(res)
-  stopifnot(n == length(width))
-  side = rep('both', n)
+  n = nrow(m); p = ncol(m)
+  res = matrix('', nrow = n, ncol = p)
+  if (n * p == 0) return(res)
+  stopifnot(p == length(width))
+  side = rep('both', p)
   if (!is.null(align)) side = c(l = 'right', c = 'both', r = 'left')[align]
-  for (j in seq_len(n)) {
-    res[, j] = str_pad(m[, j], width[j], side = side[j])
-  }
-  res
+  apply(m, 2, function(x) max(nchar(x, 'width') - nchar(x, 'chars')))
+  matrix(pad_width(c(m), rep(width, each = n), rep(side, each = n)), ncol = p)
+}
+
+# pad a character vector to width (instead of number of chars), considering the
+# case of width > chars (e.g. CJK chars)
+pad_width = function(x, width, side) {
+  if (!all(side %in% c('left', 'right', 'both')))
+    stop("'side' must be 'left', 'right', or 'both'")
+  w = width - nchar(x, 'width')
+  w1 = floor(w / 2)  # the left half of spaces when side = 'both'
+  s1 = v_spaces(w * (side == 'left') + w1 * (side == 'both'))
+  s2 = v_spaces(w * (side == 'right') + (w - w1) * (side == 'both'))
+  paste(s1, x, s2, sep = '')
+}
+
+# vectorized over n to generate sequences of spaces
+v_spaces = function(n) {
+  unlist(lapply(n, highr:::spaces))
 }

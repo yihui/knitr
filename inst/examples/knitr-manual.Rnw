@@ -1,4 +1,4 @@
-%% LyX 2.1.2 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[sc]{mathpazo}
@@ -245,14 +245,10 @@ was set to be \texttt{TRUE} in this document; see the documentation
 of \emph{tidy.source()} in \textbf{formatR} for details.
 
 Many highlighting themes can be used in \textbf{knitr}, which are
-borrowed from the \textbf{highlight} package by \href{http://www.andre-simon.de/}{Andre Simon}%
-\footnote{not the R package mentioned before; for a preview of these themes,
-see \url{http://www.andre-simon.de/dokuwiki/doku.php?id=theme_examples}%
-}; it is also possible to use themes from \url{http://www.eclipsecolorthemes.org/}
-by providing a theme id to \textbf{knitr}%
-\footnote{many thanks to \href{https://github.com/ramnathv}{Ramnath Vaidyanathan}
-for the work on themes%
-}. See \texttt{?knit\_theme} for details.
+borrowed from the \textbf{highlight} package by \href{http://www.andre-simon.de/}{Andre Simon}\footnote{not the R package mentioned before; for a preview of these themes,
+see \url{http://www.andre-simon.de/dokuwiki/doku.php?id=theme_examples}}; it is also possible to use themes from \url{http://www.eclipsecolorthemes.org/}
+by providing a theme id to \textbf{knitr}\footnote{many thanks to \href{https://github.com/ramnathv}{Ramnath Vaidyanathan}
+for the work on themes}. See \texttt{?knit\_theme} for details.
 
 
 \subsection{Graphics}
@@ -397,9 +393,8 @@ not seen any problems so far. The assumption to make, however, is
 that you declare all the styles in the preamble; \textbf{knitr} is
 agnostic of \emph{local} style changes in the body of the document.
 
-Below is an example taken from StackOverflow%
-\footnote{\url{http://stackoverflow.com/q/8190087/559676}%
-}; we usually have to write R code like this to obtain a math expression
+Below is an example taken from StackOverflow\footnote{\url{http://stackoverflow.com/q/8190087/559676}};
+we usually have to write R code like this to obtain a math expression
 $\mathrm{d}\mathbf{x}_{t}=\alpha[(\theta-\mathbf{x}_{t})\mathrm{d}t+4]\mathrm{d}B_{t}$
 in R graphics:
 
@@ -417,11 +412,9 @@ qplot(1:10, 1:10) +
 labs(title = sprintf('$\\mathrm{d}\\mathbf{x}_{t} = \\alpha[(\\theta - \\mathbf{x}_{t})\\mathrm{d}t + %d]\\mathrm{d}B_{t}$', 4))
 @
 
-The advantage of tikz graphics is the consistency of styles%
-\footnote{Users are encouraged to read the vignette of \textbf{tikzDevice},
+The advantage of tikz graphics is the consistency of styles\footnote{Users are encouraged to read the vignette of \textbf{tikzDevice},
 which is the most beautiful vignette I have ever seen in R packages:
-\url{http://cran.r-project.org/web/packages/tikzDevice/vignettes/tikzDevice.pdf}%
-}, and one disadvantage is that \LaTeX{} may not be able to handle
+\url{http://cran.r-project.org/web/packages/tikzDevice/vignettes/tikzDevice.pdf}}, and one disadvantage is that \LaTeX{} may not be able to handle
 too large tikz files (it can run out of memory). For example, an R
 plot with tens of thousands of graphical elements may fail to compile
 in \LaTeX{} if we use the tikz device. In such cases, we can switch
@@ -459,13 +452,11 @@ relative to the current working directory, and if the option value
 contains a directory (e.g. \texttt{cache.path='cache/abc-'}), cache
 files will be stored under that directory (automatically created if
 it does not exist). The cache is invalidated and purged on any changes
-to the code chunk, including both the R code and chunk options%
-\footnote{One exception is the \texttt{include} option, which is not cached
+to the code chunk, including both the R code and chunk options\footnote{One exception is the \texttt{include} option, which is not cached
 because \texttt{include=TRUE/FALSE} does not affect code evaluation;
 meanwhile, the value \texttt{getOption('width')} is also cached, so
 if you change this option, the cache will also be invalidated (this
-option affects the width of text output)%
-}; this means previous cache files of this chunk are removed (filenames
+option affects the width of text output)}; this means previous cache files of this chunk are removed (filenames
 are identified by the chunk label). Unlike \textbf{pgfSweave}, cache
 files will never accumulate since old cache files will always be removed
 in \textbf{knitr}. Unlike \textbf{weaver} or \textbf{cacheSweave},
@@ -593,14 +584,13 @@ has given two examples to show the advantages of the new syntax. Here
 we show yet another useful application.
 
 Before \textbf{knitr} 0.3, there was a feature named ``conditional
-evaluation''%
-\footnote{request from \url{https://plus.google.com/u/0/116405544829727492615/posts/43WrRUffjzK}%
-}. The idea is, instead of setting chunk options \texttt{eval} and
-\texttt{echo} to be \texttt{TRUE} or \texttt{FALSE} (constants), their
-values can be controlled by global variables in the current R session.
-This enables \textbf{knitr} to conditionally evaluate code chunks
-according to variables. For example, here we assign \texttt{TRUE}
-to a variable \texttt{dothis}:
+evaluation''\footnote{request from \url{https://plus.google.com/u/0/116405544829727492615/posts/43WrRUffjzK}}.
+The idea is, instead of setting chunk options \texttt{eval} and \texttt{echo}
+to be \texttt{TRUE} or \texttt{FALSE} (constants), their values can
+be controlled by global variables in the current R session. This enables
+\textbf{knitr} to conditionally evaluate code chunks according to
+variables. For example, here we assign \texttt{TRUE} to a variable
+\texttt{dothis}:
 
 <<cond-variable>>=
 dothis=TRUE

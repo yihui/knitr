@@ -37,9 +37,9 @@ insert_header_latex = function(doc, b) {
     if (!out_format('listings') && length(j <- grep(p <- '(\\s*)(\\\\begin\\{document\\})', doc)[1L])) {
       doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\n\\2', doc[j])
     }
-    i = i[1L]; l = str_locate(doc[i], b)
-    tmp = str_sub(doc[i], l[, 1], l[, 2])
-    str_sub(doc[i], l[,1], l[,2]) = paste(tmp, make_header_latex(), sep = '')
+    i = i[1L]; l = stringr::str_locate(doc[i], b)
+    tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
+    stringr::str_sub(doc[i], l[,1], l[,2]) = paste(tmp, make_header_latex(), sep = '')
   } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
     doc[1L] = paste(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
@@ -54,7 +54,7 @@ insert_header_latex = function(doc, b) {
 make_header_html = function() {
   h = opts_knit$get('header')
   h = h[setdiff(names(h), c('tikz', 'framed'))]
-  if (opts_knit$get('self.contained')){
+  if (opts_knit$get('self.contained')) {
     paste(c('<style type="text/css">', h[['highlight']], '</style>',
             unlist(h[setdiff(names(h), 'highlight')])), collapse = '\n')
   } else {
@@ -66,9 +66,9 @@ make_header_html = function() {
 insert_header_html = function(doc, b) {
   i = grep(b, doc)
   if (length(i) == 1L) {
-    l = str_locate(doc[i], b)
-    tmp = str_sub(doc[i], l[, 1], l[, 2])
-    str_sub(doc[i], l[,1], l[,2]) = str_c(tmp, '\n', make_header_html())
+    l = stringr::str_locate(doc[i], b)
+    tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
+    stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, '\n', make_header_html())
   }
   doc
 }
@@ -104,26 +104,17 @@ insert_header_html = function(doc, b) {
 #' @examples set_header(tikz = '\\usepackage{tikz}')
 #' opts_knit$get('header')
 set_header = function(...) {
-  h = opts_knit$get('header')
-  z = c(...)
-  h[names(z)] = z
-  opts_knit$set(header = h)
+  opts_knit$set(header = merge_list(opts_knit$get('header'), c(...)))
 }
 
-# where is the inst directory?
-.inst.dir = file.path(c('..', '.'), 'inst')
-.inst.dir = .inst.dir[file.exists(.inst.dir)]
-
-.default.sty = file.path(.inst.dir, 'themes', 'default.css')
-.default.sty = .default.sty[file.exists(.default.sty)][1L]
+.default.sty = inst_dir('themes', 'default.css')
 # header for Latex Syntax Highlighting
 .header.hi.tex = theme_to_header_latex(.default.sty)$highlight
-.knitr.sty = file.path(.inst.dir, 'misc', 'knitr.sty')
-.knitr.sty = .knitr.sty[file.exists(.knitr.sty)][1L]
+.knitr.sty = inst_dir('misc', 'knitr.sty')
 .header.framed = paste(readLines(.knitr.sty), collapse = '\n')
 # CSS for html syntax highlighting
 .header.hi.html = theme_to_header_html(.default.sty)$highlight
-rm(list = c('.inst.dir', '.knitr.sty')) # do not need them any more
+rm(list = c('.default.sty', '.knitr.sty')) # do not need them any more
 
 .header.sweave.cmd =
 '\\newcommand{\\SweaveOpts}[1]{}  % do not interfere with LaTeX

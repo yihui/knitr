@@ -30,11 +30,11 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
     if (block) {
       n = length(g)
       # remove the optional chunk footer
-      if (n >=2 && grepl(chunk.end, g[n])) g = g[-n]
+      if (n >= 2 && grepl(chunk.end, g[n])) g = g[-n]
       # remove the optional prefix % in code in Rtex mode
       g = strip_block(g, patterns$chunk.code)
       params.src = if (group_pattern(chunk.begin)) {
-        str_trim(gsub(chunk.begin, '\\1', g[1]))
+        stringr::str_trim(gsub(chunk.begin, '\\1', g[1]))
       } else ''
       parse_block(g[-1], g[1], params.src)
     } else parse_inline(g, patterns)
@@ -56,16 +56,36 @@ dep_list = new_defaults()
 
 # separate params and R code in code chunks
 parse_block = function(code, header, params.src) {
+  params = params.src
+  engine = 'r'
+  # consider the syntax ```{engine, opt=val} for chunk headers
+  if (out_format('markdown')) {
+    engine = sub('^([a-zA-Z]+).*$', '\\1', params)
+    params = sub('^([a-zA-Z]+)', '', params)
+  }
+  params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
+  # turn ```{engine} into ```{r, engine="engine"}
+  if (tolower(engine) != 'r') {
+    params = sprintf('%s, engine="%s"', params, engine)
+    params = gsub('^\\s*,\\s*', '', params)
+  }
+
+  params.src = params
   params = parse_params(params.src)
-  if (nzchar(spaces <- gsub('^(\\s*).*', '\\1', header))) {
+  # remove indent (and possibly markdown blockquote >) from code
+  if (nzchar(spaces <- gsub('^([\t >]*).*', '\\1', header))) {
     params$indent = spaces
-    code = gsub(sprintf('^%s', spaces), '', code) # remove indent for the whole chunk
+    code = gsub(sprintf('^%s', spaces), '', code)
   }
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
   if (length(code)) {
-    if (label %in% names(knit_code$get())) stop("duplicate label '", label, "'")
-    knit_code$set(setNames(list(code), label))
+    if (label %in% names(knit_code$get())) {
+      if (identical(getOption('knitr.duplicate.label'), 'allow')) {
+        params$label = label = unnamed_chunk(label)
+      } else stop("duplicate label '", label, "'")
+    }
+    knit_code$set(setNames(list(structure(code, chunk_opts = params)), label))
   }
 
   # store dependencies
@@ -83,13 +103,14 @@ parse_block = function(code, header, params.src) {
 }
 
 # autoname for unnamed chunk
-unnamed_chunk = function(i = chunk_counter())
-  paste(opts_knit$get('unnamed.chunk.label'), i, sep = '-')
+unnamed_chunk = function(prefix = NULL, i = chunk_counter()) {
+  if (is.null(prefix)) prefix = opts_knit$get('unnamed.chunk.label')
+  paste(prefix, i, sep = '-')
+}
 
 # parse params from chunk header
 parse_params = function(params) {
 
-  params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
   if (params == '') return(list(label = unnamed_chunk()))
 
   res = withCallingHandlers(
@@ -120,7 +141,7 @@ parse_params = function(params) {
 # quote the chunk label if necessary
 quote_label = function(x) {
   x = gsub('^\\s*,?', '', x)
-  if (grepl('^\\s*[^\'"](,|\\s*$)', x)){
+  if (grepl('^\\s*[^\'"](,|\\s*$)', x)) {
     # <<a,b=1>>= ---> <<'a',b=1>>=
     x = gsub('^\\s*([^\'"])(,|\\s*$)', "'\\1'\\2", x)
   } else if (grepl('^\\s*[^\'"](,|[^=]*(,|\\s*$))', x)) {
@@ -140,9 +161,9 @@ print.block = function(x, ...) {
   if (opts_knit$get('verbose')) {
     code = knit_code$get(params$label)
     if (length(code) && !is_blank(code)) {
-      cat('\n  ', str_pad(' R code chunk ', getOption('width') - 10L, 'both', '~'), '\n')
+      cat('\n  ', stringr::str_pad(' R code chunk ', getOption('width') - 10L, 'both', '~'), '\n')
       cat(paste('  ', code, collapse = '\n'), '\n')
-      cat('  ', str_dup('~', getOption('width') - 10L), '\n')
+      cat('  ', stringr::str_dup('~', getOption('width') - 10L), '\n')
     }
     cat(paste('##------', date(), '------##'), sep = '\n')
   }
@@ -162,9 +183,9 @@ parse_inline = function(input, patterns) {
   input = paste(input, collapse = '\n') # merge into one line
 
   loc = cbind(start = numeric(0), end = numeric(0))
-  if (group_pattern(inline.code)) loc = str_locate_all(input, inline.code)[[1]]
+  if (group_pattern(inline.code)) loc = stringr::str_locate_all(input, inline.code)[[1]]
   if (nrow(loc)) {
-    code = str_match_all(input, inline.code)[[1L]]
+    code = stringr::str_match_all(input, inline.code)[[1L]]
     code = if (NCOL(code) >= 2L) {
       code[is.na(code)] = ''
       apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
@@ -179,11 +200,11 @@ print.inline = function(x, ...) {
   if (nrow(x$location)) {
     cat('   ')
     if (opts_knit$get('verbose')) {
-      cat(str_pad(' inline R code fragments ',
+      cat(stringr::str_pad(' inline R code fragments ',
                   getOption('width') - 10L, 'both', '-'), '\n')
       cat(sprintf('    %s:%s %s', x$location[, 1], x$location[, 2], x$code),
           sep = '\n')
-      cat('  ', str_dup('-', getOption('width') - 10L), '\n')
+      cat('  ', stringr::str_dup('-', getOption('width') - 10L), '\n')
     } else cat('inline R code fragments\n')
   } else cat('  ordinary text without R code\n')
   cat('\n')
@@ -279,7 +300,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
     idx = c(0, idx); lines = c('', lines)  # no chunk header in the beginning
   }
   groups = unname(split(lines, idx))
-  labels = str_trim(gsub(lab, '\\2', sapply(groups, `[`, 1)))
+  labels = stringr::str_trim(gsub(lab, '\\2', sapply(groups, `[`, 1)))
   labels = gsub(',.*', '', labels)  # strip off possible chunk options
   code = lapply(groups, strip_chunk)
   for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()
@@ -312,10 +333,10 @@ strip_chunk = function(x) strip_white(x[-1])
 # strip lines that are pure white spaces
 strip_white = function(x) {
   if (!length(x)) return(x)
-  while(is_blank(x[1])) {
+  while (is_blank(x[1])) {
     x = x[-1]; if (!length(x)) return(x)
   }
-  while(is_blank(x[(n <- length(x))])) {
+  while (is_blank(x[(n <- length(x))])) {
     x = x[-n]; if (n < 2) return(x)
   }
   x
@@ -324,6 +345,7 @@ strip_white = function(x) {
 # (recursively) parse chunk references inside a chunk
 parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   if (length(x) == 0L) return(x)
+  x = c(x)  # drop attributes of code (e.g. chunk_opts)
   if (!group_pattern(rc) || !any(idx <- grepl(rc, x))) return(x)
 
   labels = sub(rc, '\\1', x[idx])
@@ -354,10 +376,50 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
 
 #' Get all chunk labels in a document
 #'
-#' This function returns all chunk labels as a chracter vector.
+#' This function returns all chunk labels as a chracter vector. Optionally, you
+#' can specify a series of conditions to filter the labels.
+#'
+#' For example, suppose the condition expression is \code{engine == 'Rcpp'}, the
+#' object \code{engine} is the local chunk option \code{engine}; if an
+#' expression fails to be evaluated (e.g. when a certain object does not exist),
+#' \code{FALSE} is returned and the label for this chunk will be filtered out.
+#' @param ... a series of R expressions, each of which should return \code{TRUE}
+#'   or \code{FALSE}; the expressions are evaluated using the local chunk
+#'   options of each code chunk as the environment
+#' @note Empty code chunks are always ignored, including those chunks that are
+#'   empty originally in the document but filled with code using chunk options
+#'   such as \code{ref.label} or \code{code}.
 #' @return A character vector.
 #' @export
-all_labels = function() names(knit_code$get())
+#' @examples # the examples below are meaningless unless you put them in a knitr document
+#' all_labels()
+#' all_labels(engine == 'Rcpp')
+#' all_labels(echo == FALSE && results != 'hide')
+#' # or separate the two conditions
+#' all_labels(echo == FALSE, results != 'hide')
+all_labels = function(...) {
+  cond = as.list(match.call())[-1]
+  code = knit_code$get()
+  labels = names(code)
+
+  if (length(cond) == 0) return(labels)
+
+  params = lapply(code, attr, 'chunk_opts', exact = TRUE)
+  idx = rep_len(TRUE, length(labels))
+  for (i in seq_along(cond)) {
+    for (j in seq_along(params)) {
+      # need tryCatch() because the expression cond[[i]] may trigger an error
+      # when any variable is not found, e.g. not all chunks have the engine
+      # option when the condition is engine == 'Rcpp'
+      if (idx[j]) idx[j] = tryCatch(
+        eval(cond[[i]], envir = params[[j]], enclos = knit_global()),
+        error = function(e) FALSE
+      )
+    }
+  }
+
+  labels[idx]
+}
 
 #' Wrap code using the inline R expression syntax
 #'

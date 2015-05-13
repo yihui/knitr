@@ -13,7 +13,7 @@ normal_print(x, ...)
 
 \item{...}{additional arguments passed to the S3 method (currently ignored,
 except two optional arguments \code{options} and \code{inline}; see
-References)}
+the references below)}
 }
 \value{
 The value returned from the print method should be a character vector
@@ -31,7 +31,7 @@ setting the chunk option \code{render = normal_print}.
 \details{
 Users can write custom methods based on this generic function. For example,
 if we want to print all data frames as tables in the output, we can define a
-method \code{knit_print.data.frame} that turns a data frame into a table (the
+method \code{knit_print.data.frame} that turns a data.frame into a table (the
 implementation may use other R packages or functions, e.g. \pkg{xtable} or
 \code{\link{kable}()}).
 }

@@ -3,7 +3,11 @@
 \alias{current_input}
 \title{Query the current input filename}
 \usage{
-current_input()
+current_input(dir = FALSE)
+}
+\arguments{
+\item{dir}{whether to prepend the current working directory to the file path
+(i.e. return an absolute path or a relative path)}
 }
 \value{
 A character string, if this function is called inside an input

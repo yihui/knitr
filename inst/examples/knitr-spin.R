@@ -1,11 +1,11 @@
 #' This is a special R script which can be used to generate a report. You can
 #' write normal text in roxygen comments.
-#' 
+#'
 #' First we set up some options (you do not have to do this):
 
 #+ setup, include=FALSE
 library(knitr)
-opts_chunk$set(fig.path='figure/silk-')
+opts_chunk$set(fig.path = 'figure/silk-')
 
 #' The report begins here.
 
@@ -16,7 +16,7 @@ x = rnorm(5)
 mean(x)
 
 #' You can use the special syntax {{code}} to embed inline expressions, e.g.
-{{mean(x)+2}}
+{{mean(x) + 2}}
 #' is the mean of x plus 2.
 #' The code itself may contain braces, but these are not checked.  Thus,
 #' perfectly valid (though very strange) R code such as `{{2 + 3}} - {{4 - 5}}`
