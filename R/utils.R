@@ -228,6 +228,13 @@ fix_options = function(options) {
   # the default device NULL is not valid; use pdf is not set
   if (is.null(options$dev)) options$dev = 'pdf'
 
+  # the figure/cache filenames may contain UTF-8 chars, which won't work on
+  # Windows, e.g. png() fails if filename contains UTF-8 chars (must use native
+  # encoding); in rmarkdown::render(input), basename(input) may implicitly
+  # convert the encoding of the filename `input` to UTF-8
+  options$fig.path = native_encode(options$fig.path)
+  options$cache.path = native_encode(options$cache.path)
+
   # cache=TRUE -> 3; FALSE -> 0
   if (is.logical(options$cache)) options$cache = options$cache * 3
   # non-R code should not use cache=1,2
