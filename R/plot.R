@@ -281,7 +281,8 @@ fig_process = function(FUN, path) {
 #' \command{convert} is a command in ImageMagick (Windows users may have to put
 #' the bin path of ImageMagick into the \var{PATH} variable).
 #' @param x the plot filename
-#' @param quiet whether to suppress standard output from the command line utility
+#' @param quiet whether to suppress standard output from the command line
+#'   utility
 #' @export
 #' @references PDFCrop: \url{http://pdfcrop.sourceforge.net}; the
 #'   \command{convert} command in ImageMagick:
