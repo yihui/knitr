@@ -45,8 +45,7 @@
 #' write_bib(c('base', 'parallel', 'MASS'))  # base and parallel are identical
 #' write_bib('cluster', prefix = '')  # a empty prefix
 #' write_bib('digest', prefix = 'R-pkg-')  # a new prefix
-#' write_bib(c('rpart', 'survival'))
-#' write_bib(c('rpart', 'survival'), tweak = FALSE) # original version
+#' write_bib('digest', tweak = FALSE)  # original version
 #'
 #' # what tweak=TRUE does
 #' str(knitr:::.tweak.bib)
