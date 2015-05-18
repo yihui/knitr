@@ -105,7 +105,7 @@ kable = function(
   if (!is.matrix(x)) x = matrix(x, nrow = n)
   x = gsub('^\\s*|\\s*$', '', x)
   colnames(x) = col.names
-  if (length(align) && !all(align %in% c('l', 'r', 'c')))
+  if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")
   attr(x, 'align') = align
   res = do.call(
