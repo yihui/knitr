@@ -346,7 +346,7 @@ inline_exec = function(
       v = withVisible(eval(parse_only(code[i]), envir = envir))
       if (v$visible) knit_print(v$value, inline = TRUE, options = opts_chunk$get())
     } else '??'
-    if (inherits(res, 'knit_asis')) res = wrap.knit_asis(res, inline = TRUE)
+    if (inherits(res, c('knit_asis', 'knit_asis_list'))) res = wrap(res, inline = TRUE)
     d = nchar(input)
     # replace with evaluated results
     stringr::str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
