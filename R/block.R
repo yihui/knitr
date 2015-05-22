@@ -31,7 +31,7 @@ call_block = function(block) {
   if (opts_knit$get('progress')) print(block)
 
   if (!is.null(params$child)) {
-    if (length(params$code)) warning(
+    if (!is_blank(params$code)) warning(
       "The chunk '", params$label, "' has the 'child' option, ",
       "and this code chunk must be empty. Its code will be ignored."
     )
