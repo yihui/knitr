@@ -26,6 +26,7 @@ install:
   - sudo apt-add-repository -y ppa:marutter/c2d4u
   - sudo apt-get update -qq
   - sudo apt-get install -qq r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended r-cran-devtools
+  - "[ ! -d ~/bin ] && mkdir ~/bin"
   - "wget -q -O - https://github.com/yihui/crandalf/raw/master/inst/scripts/install-texlive | bash"
   - "wget -q -O - https://github.com/yihui/crandalf/raw/master/inst/scripts/install-pandoc | bash"
   - "wget -q -O - http://yihui.name/xran/r-config | bash"
