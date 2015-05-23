@@ -11,6 +11,7 @@ env:
 
 # capturing state, early exit if no integration test is needed
 before_install:
+  - export PATH=$PATH:$HOME/bin:$HOME/texlive/bin/x86_64-linux
   - if [ ${TARGET} = integration ]; then
       if ! make integration-need; then
         echo "NOTE:"" Integration test skipped. To enable, create a branch named ${TRAVIS_BRANCH} in ${TRAVIS_REPO_SLUG}-examples.";
@@ -25,7 +26,8 @@ install:
   - sudo apt-add-repository -y ppa:marutter/c2d4u
   - sudo apt-get update -qq
   - sudo apt-get install -qq r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended r-cran-devtools > /dev/null
-  - sudo apt-get install -qq pandoc pandoc-citeproc texlive-latex-recommended > /dev/null
+  - "wget -q -O - https://github.com/yihui/crandalf/raw/master/inst/scripts/install-texlive | bash"
+  - "wget -q -O - https://github.com/yihui/crandalf/raw/master/inst/scripts/install-pandoc | bash"
   - "wget -q -O - http://yihui.name/xran/r-config | bash"
   - Rscript -e "install.packages('stringi')"
   - Rscript -e 'devtools::install_deps(dep = TRUE)'
