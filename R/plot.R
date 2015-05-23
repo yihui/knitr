@@ -303,7 +303,13 @@ plot_crop = function(x, quiet = !opts_knit$get('progress')) {
     cmd = 'convert'
     args = c(x, '-trim', x)
   }
-  system2(cmd, args = args, stdout = if (quiet) FALSE else "")
+  # see this post for why use shell() on Windoz:
+  # http://comments.gmane.org/gmane.comp.lang.r.devel/38113
+  if (is_windows() && cmd == 'convert') {
+    shell(paste(cmd, args))  # no way to quiet cmd output on Windoz
+  } else {
+    system2(cmd, args = args, stdout = if (quiet) FALSE else "")
+  }
   x
 }
 
