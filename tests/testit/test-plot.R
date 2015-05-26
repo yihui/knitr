@@ -75,3 +75,9 @@ if (!has_error({png(); dev.off()})) assert(
     TRUE
   }
 )
+
+# should not error (find `pdf` correctly in grDevices, instead of the one
+# defined below)
+pdf = function() {}
+do.call(pdf_null, list(7, 7))
+dev.off()
