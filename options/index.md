@@ -55,7 +55,7 @@ if you do not know what this means). A few special notes on the options:
   - Sweave users please read the [transition page]({{ site.baseurl }}/demo/sweave/)
     carefully because the syntax is different
 
-All built-in options in **knitr** are:
+Below is a list of chunk options in **knitr**. Note the options `background` and `size` only apply to `.Rnw` documents.
 
 ### Code Evaluation
 
