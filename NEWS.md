@@ -8,6 +8,8 @@
 
 - the two hook functions `hook_rgl()` and `hook_webgl()` have been moved from **knitr** to the **rgl** package (v0.95.1247) (thanks, @dmurdoch)
 
+- inline R expressions will always be evaluated; previously, they were not be evaluated if the global chunk option `eval = FALSE`, and the inline output was `??` (thanks, @Bozh, #1046)
+
 # CHANGES IN knitr VERSION 1.10.5
 
 ## MAJOR CHANGES

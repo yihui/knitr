@@ -123,5 +123,5 @@ knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
   env = list(...)
   env = if (length(env)) list2env(env, parent = parent.frame()) else parent.frame()
   inline_exec(list(code = mat, input = txt, location = loc),
-              eval = TRUE, envir = env, hook = identity)
+              envir = env, hook = identity)
 }
