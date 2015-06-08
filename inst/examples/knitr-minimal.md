@@ -7,7 +7,7 @@ This is a minimal example of using **knitr** to produce an _HTML_ page from _Mar
 
 ```r
 # set global chunk options: images will be 7x5 inches
-knitr::opts_chunk$set(fig.width=7, fig.height=5)
+knitr::opts_chunk$set(fig.width = 7, fig.height = 5)
 options(digits = 4)
 ```
 
@@ -15,7 +15,7 @@ Now we write some code chunks in this markdown file:
 
 
 ```r
-x <- 1+1 # a simple calculator
+x <- 1 + 1  # a simple calculator
 set.seed(123)
 rnorm(5)  # boring random numbers
 ```
@@ -28,10 +28,10 @@ We can also produce plots:
 
 
 ```r
-par(mar = c(4, 4, .1, .1))
+par(mar = c(4, 4, 0.1, 0.1))
 with(mtcars, {
-  plot(mpg~hp, pch=20, col='darkgray')
-  lines(lowess(hp, mpg))
+    plot(mpg ~ hp, pch = 20, col = "darkgray")
+    lines(lowess(hp, mpg))
 })
 ```
 
@@ -40,7 +40,7 @@ with(mtcars, {
 ## Inline code
 
 Inline R code is also supported, e.g. the value of `x` is 2, and 2 &times; &pi;
-= 6.283.
+= 6.2832.
 
 ## Math
 
@@ -66,7 +66,7 @@ To compile me, use
 
 ```r
 library(knitr)
-knit('knitr-minimal.Rmd')
+knit("knitr-minimal.Rmd")
 ```
 
 ## Conclusion
