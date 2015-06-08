@@ -174,10 +174,12 @@ format_sci_one = function(x, format = 'latex') {
   }
 
   if (abs(lx <- floor(log10(abs(x)))) < getOption('scipen') + 4L)
-    return(as.character(round(x, getOption('digits')))) # no need sci notation
+    return(format(x)) # no need sci notation
 
-  b = round(x / 10^lx, getOption('digits'))
-  b[b %in% c(1, -1)] = ''
+  b = x / 10^lx
+  # format uses getOption('digits') significant digits by default
+  b = format(b)
+  b[b %in% c('1', '-1')] = ''
 
   switch(format, latex = {
     sci_notation('%s%s10^{%s}', b, '\\times ', lx)

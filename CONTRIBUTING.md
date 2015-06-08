@@ -67,6 +67,14 @@ To make sure you did not break anything, you need to run tests, which are
 done through the [**testit**](http://cran.rstudio.com/package=testit)
 package. If you added any features, add your own tests in `tests/testit/`.
 
+You can build the package and run the tests from a shell. Ensure that the root
+"knitr" project directory is in your working directory, then:
+
+```bash
+R CMD build knitr
+R CMD check knitr_<version>.tar.gz
+```
+
 ## Travis CI
 
 If you are lazy or do not understand what I said above, just push commits to

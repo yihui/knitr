@@ -8,17 +8,32 @@ assert(
   } else '/abc/def')
 )
 
+op = options(digits = 3, scipen = 0)
+
+assert(
+  'format_sci() uses correct number of significant digits',
+  identical(format_sci(1), '1'),
+  identical(format_sci(0), '0'),
+  identical(format_sci(3.1415e2), '314'),
+  identical(format_sci(3.1415), '3.14')
+)
+
+op = options(digits = 22, scipen = 0)
+
+assert(
+  'format_sci() prints numerics at maximum number of significant digits',
+  identical(format_sci(3.141592653589793115998), '3.141592653589793115998')
+)
+
 op = options(digits = 4, scipen = 0)
 
 assert(
   'format_sci() turns numbers into scientific notations',
-  identical(format_sci(1), '1'),
-  identical(format_sci(0), '0'),
   identical(format_sci(c(1.84e8, 1e5, 2.34e3)),
             c('1.84\\times 10^{8}', '10^{5}', '2340')),
-  identical(format_sci(1.23456789 * 10^-5), '1.2346\\times 10^{-5}'),
-  identical(format_sci(9.87654e6, 'html'), '9.8765 &times; 10<sup>6</sup>'),
-  identical(format_sci(9.87654e6, 'rst'), '9.8765 |times| 10 :sup:`6`'),
+  identical(format_sci(1.23456789 * 10^-5), '1.235\\times 10^{-5}'),
+  identical(format_sci(9.87654e6, 'html'), '9.877 &times; 10<sup>6</sup>'),
+  identical(format_sci(9.87654e6, 'rst'), '9.877 |times| 10 :sup:`6`'),
   identical(format_sci(letters), letters),
   identical(format_sci(NA_real_), NA_character_)
 )
@@ -38,8 +53,8 @@ assert(
   'the inline hook for Rnw applies \\ensuremath{} correctly',
   .inline.hook.tex(1e4) == '\\ensuremath{10^{4}}',
   .inline.hook.tex(-Inf) == '\\ensuremath{-\\infty{}}',
-  .inline.hook.tex(c(1.2345e10, 2 * pnorm(-(3:4)))) ==
-    "\\ensuremath{1.2345\\times 10^{10}}, 0.0027, \\ensuremath{6.3342\\times 10^{-5}}"
+  .inline.hook.tex(c(1.234e10, 2 * pnorm(-(3:4)))) ==
+    "\\ensuremath{1.234\\times 10^{10}}, 0.0027, \\ensuremath{6.334\\times 10^{-5}}"
 )
 
 assert(
