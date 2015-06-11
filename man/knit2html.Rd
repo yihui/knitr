@@ -36,6 +36,12 @@ This is a convenience function to knit the input markdown source and call
 \code{\link[markdown]{markdownToHTML}()} in the \pkg{markdown} package to
 convert the result to HTML.
 }
+\note{
+The \pkg{markdown} package is for R Markdown v1, which is much less
+  powerful than R Markdown v2, i.e. the \pkg{rmarkdown} package
+  (\url{http://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
+  HTML, please use \code{rmarkdown::render()} instead.
+}
 \examples{
 # a minimal example
 writeLines(c("# hello markdown", "```{r hello-random, echo=TRUE}", "rnorm(5)", "```"), 

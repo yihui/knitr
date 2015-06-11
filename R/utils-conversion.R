@@ -82,6 +82,10 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
 #' @return If the argument \code{text} is NULL, a character string (HTML code)
 #'   is returned; otherwise the result is written into a file and the filename
 #'   is returned.
+#' @note The \pkg{markdown} package is for R Markdown v1, which is much less
+#'   powerful than R Markdown v2, i.e. the \pkg{rmarkdown} package
+#'   (\url{http://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
+#'   HTML, please use \code{rmarkdown::render()} instead.
 #' @examples # a minimal example
 #' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' knit2html('test.Rmd')
