@@ -103,6 +103,7 @@ Collate:
     'hooks-html.R'
     'defaults.R'
     'concordance.R'
+    'engine-V8.R'
     'engine.R'
     'themes.R'
     'highlight.R'
