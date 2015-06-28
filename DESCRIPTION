@@ -82,6 +82,7 @@ Imports:
     markdown,
     stringr (>= 0.6),
     yaml (>= 2.1.5),
+    methods,
     tools
 Suggests:
     testit,
