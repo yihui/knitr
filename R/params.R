@@ -231,7 +231,14 @@ knit_params_handlers = function() {
     },
 
     # file
-    file = type_handler("file")
+    file = type_handler("file"),
+
+    # expr
+    expr = function(value) {
+      value = eval(parse(text = value))
+      attr(value, "expr") = TRUE
+      value
+    }
   )
 }
 
@@ -245,15 +252,28 @@ resolve_params = function(params) {
     attr(value, "type", exact = TRUE)
   }
 
-  # deduce type from attribute or class
-  param_type = function(value) {
-    type_attr(value) %n% class(value)[[1]]
+  # was this value a result of an expression
+  expr_attr = function(value) {
+    isTRUE(attr(value, "expr", exact = TRUE))
   }
 
-  # return a parameter value with type attribute stripped and as a vector rather
-  # than list if it's unnamed
+  # deduce type from attribute or class (also resolve date / datetime types
+  # that we may have obtained from an expression)
+  param_type = function(value) {
+    type <- type_attr(value) %n% class(value)[[1]]
+    if (type == "Date")
+      "date"
+    else if (type == "POSIXct")
+      "datetime"
+    else
+      type
+  }
+
+  # return a parameter value with type and expr attributes stripped and
+  # as a vector rather than list if it's unnamed
   param_value = function(value) {
     attr(value, "type") = NULL
+    attr(value, "expr") = NULL
     if (is.null(names(value))) unlist(value) else value
   }
 
@@ -274,6 +294,7 @@ resolve_params = function(params) {
       param = list(
         name = name,
         type = param_type(param),
+        expr = expr_attr(param),
         value = param_value(param)
       )
 

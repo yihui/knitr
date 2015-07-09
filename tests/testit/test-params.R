@@ -125,3 +125,27 @@ assert(
   'y/Y/n/N are not converted to booleans',
   identical(unlist(lapply(params, `[[`, 'name')), c('x', 'y', 'z', 'n', 'Y', 'N'))
 )
+
+
+## test handling of expressions --------------------------------------------
+
+params <- read_params('
+---
+params:
+  today: !expr Sys.Date()
+  now: !expr Sys.time()
+  datevar: !date 2015-07-09
+---
+'
+)
+assert(params[[1]]$expr)
+assert(params[[1]]$type == "date")
+assert(params[[2]]$expr)
+assert(params[[2]]$type == "datetime")
+assert(!params[[3]]$expr)
+assert(params[[1]]$type == "date")
+
+
+
+
+
