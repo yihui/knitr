@@ -4,7 +4,7 @@
 
 - added an argument `quiet` to `plot_crop()` (thanks, @WastlM, #1034)
 
-- support for !expr in knit_params (correct 'type' field for Date and POSIXct objects generated via !eval; add 'expr' field to flag when a parameter's value was the result of an R expression)
+- support for !expr in knit_params (correct 'type' field for Date and POSIXct objects generated via !expr; add 'expr' field to flag when a parameter's value was the result of an R expression)
 
 ## MAJOR CHANGES
 
