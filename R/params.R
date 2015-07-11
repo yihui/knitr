@@ -153,20 +153,18 @@ knit_params_handlers = function() {
 
   # generic handler for r expressions where we want to preserve both the original
   # code and the fact that it was an expression.
-  expr_handler = function() {
-    function(value) {
-      evaluated_value = eval(parse_only(text = value))
-      attr(evaluated_value, "expr") = value
-      evaluated_value
-    }
+  expr_handler = function(value) {
+    evaluated_value = eval(parse_only(text = value))
+    attr(evaluated_value, "expr") = value
+    evaluated_value
   }
 
   list(
 
     # r expressions where we want to preserve both the original code
     # and the fact that it was an expression.
-    r = expr_handler(),
-    expr = expr_handler(),
+    r = expr_handler,
+    expr = expr_handler,
 
     # date and datetime (for backward compatibility with previous syntax)
     date = function(value) {
