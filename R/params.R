@@ -155,9 +155,9 @@ knit_params_handlers = function() {
   # code and the fact that it was an expression.
   expr_handler = function() {
     function(value) {
-      evaulated_value = eval(parse(text = value))
-      attr(evaulated_value, "expr") = value
-      evaulated_value
+      evaluated_value = eval(parse_only(text = value))
+      attr(evaluated_value, "expr") = value
+      evaluated_value
     }
   }
 
