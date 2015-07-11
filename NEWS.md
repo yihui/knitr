@@ -10,6 +10,10 @@
 
 - inline R expressions will always be evaluated; previously, they were not be evaluated if the global chunk option `eval = FALSE`, and the inline output was `??` (thanks, @Bozh, #1046)
 
+## BUG FIXES
+
+- the HTML code generated for FFmpeg animations did not work through Pandoc conversion (thanks, @s-fiebig, #1067)
+
 # CHANGES IN knitr VERSION 1.10.5
 
 ## MAJOR CHANGES
