@@ -4,6 +4,9 @@
 
 - added an argument `quiet` to `plot_crop()` (thanks, @WastlM, #1034)
 
+- support for !expr and !r in knit_params.
+
+
 ## MAJOR CHANGES
 
 - the two hook functions `hook_rgl()` and `hook_webgl()` have been moved from **knitr** to the **rgl** package (v0.95.1247) (thanks, @dmurdoch)

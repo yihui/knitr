@@ -14,12 +14,9 @@
 #'
 #'   \describe{
 #'     \item{\code{name}}{The parameter name.}
-#'     \item{\code{type}}{The parameter type. This can be a standard R object
-#'     type such as \code{character}, \code{integer}, \code{numeric}, or
-#'     \code{logical} as well as the special \code{date}, \code{datetime}, and
-#'     \code{file} types. See the \emph{Types} section below for additional
-#'     details.}
 #'     \item{\code{value}}{The default value for the parameter.}
+#'     \item{\code{class}}{The R class names of the parameter's default value.}
+#'     \item{\code{expr}}{The R expression (if any) that yielded the default value.}
 #'   }
 #'
 #'   In addition, other fields included in the YAML may also be present
@@ -58,58 +55,16 @@
 #' This second form is useful when you need to provide additional details
 #' about the parameter (e.g. a \code{label} field as describe above).
 #'
-#' Parameter types are deduced implicitly based on the value provided. However
-#' in some cases additional type information is required (for example when
-#' a character vector needs to be interpreted as a date or as a file path).
-#' In these cases a special type designater precedes the value. For example:
+#' You can also use R code to yield the value of a parameter by prefacing the value
+#' with \code{!r}, for example:
 #'
 #' \preformatted{
 #' ---
 #' title: My Document
 #' output: html_document
 #' params:
-#'   start: !date 2015-01-01
+#'   start: !r Sys.Date()
 #' ---
-#' }
-#'
-#' @section Types:
-#'
-#' All of the standard R types that can be parsed using
-#' \code{\link[yaml]{yaml.load}} are supported. These types are used
-#' implicitly based on the \code{value} provided so no special type
-#' designater is required. Built-in types include \code{character},
-#' \code{integer}, \code{numeric}, and \code{logical}.
-#'
-#' In addition there are a number of custom types used to represent
-#' dates and times as well as to note that character values have
-#' special semantics (e.g. are the name of a file). These types are
-#' specified by prefacing the YAML \code{value} with !\emph{typename},
-#' for example:
-#'
-#' \preformatted{
-#' ---
-#' title: My Document
-#' output: html_document
-#' params:
-#'   start: !date 2015-01-01
-#'   end: !datetime 2015-01-01 12:30:00
-#'   data: !file data.csv
-#' ---
-#' }
-#'
-#' Supported custom types include:
-#'
-#' \describe{
-#'   \item{\code{date}}{A character value representing a date.
-#'   The underlying date value is parsed from the character
-#'   value using the \code{\link[base]{as.Date}} function.}
-#'   \item{\code{datetime}}{A character value representing a
-#'   date and time. The underlying datetime value is parsed from
-#'   the character value using the \code{\link[base]{as.POSIXct}}
-#'   function. Note that these values should always speicifed using
-#'   UTC (Universal Time, Coordinated).}
-#'   \item{\code{file}}{A character value representing the name
-#'   of a file.}
 #' }
 #'
 #' @export
@@ -196,42 +151,40 @@ yaml_front_matter = function(lines) {
 # define custom handlers for knitr_params
 knit_params_handlers = function() {
 
-  # generic handler for intrinsic types that need a special 'type' designator as
-  # a hint to front-ends (e.g. 'file' to indicate a file could be uploaded)
-  type_handler = function(type) {
-    force(type)
+  # generic handler for r expressions where we want to preserve both the original
+  # code and the fact that it was an expression.
+  expr_handler = function() {
     function(value) {
-      attr(value, "type") = type
-      value
+      evaulated_value = eval(parse(text = value))
+      attr(evaulated_value, "expr") = value
+      evaulated_value
     }
   }
 
   list(
 
+    # r expressions where we want to preserve both the original code
+    # and the fact that it was an expression.
+    r = expr_handler(),
+    expr = expr_handler(),
+
+    # date and datetime (for backward compatibility with previous syntax)
+    date = function(value) {
+      value = as.Date(value)
+      value
+    },
+    datetime = function(value) {
+      value = as.POSIXct(value, tz = "GMT")
+      value
+    },
+
+    # workaround default yaml parsing behavior to allow keys named 'y' and 'n'
     `bool#yes` = function(value) {
       if (tolower(value) == "y") value else TRUE
     },
-
     `bool#no` = function(value) {
       if (tolower(value) == "n") value else FALSE
-    },
-
-    # date
-    date = function(value) {
-      value = as.Date(value)
-      attr(value, "type") = "date"
-      value
-    },
-
-    # datetime
-    datetime = function(value) {
-      value = as.POSIXct(value, tz = "GMT")
-      attr(value, "type") = "datetime"
-      value
-    },
-
-    # file
-    file = type_handler("file")
+    }
   )
 }
 
@@ -240,20 +193,15 @@ knit_params_handlers = function() {
 # type, value, and other optional fields included)
 resolve_params = function(params) {
 
-  # get the type attribute (if any)
-  type_attr = function(value) {
-    attr(value, "type", exact = TRUE)
+  # get the expr attribute (if any)
+  expr_attr = function(value) {
+    attr(value, "expr", exact = TRUE)
   }
 
-  # deduce type from attribute or class
-  param_type = function(value) {
-    type_attr(value) %n% class(value)[[1]]
-  }
-
-  # return a parameter value with type attribute stripped and as a vector rather
-  # than list if it's unnamed
+  # return a parameter value with expr attribute stripped and
+  # as a vector rather than list if it's unnamed
   param_value = function(value) {
-    attr(value, "type") = NULL
+    attr(value, "expr") = NULL
     if (is.null(names(value))) unlist(value) else value
   }
 
@@ -267,14 +215,15 @@ resolve_params = function(params) {
     # get the parameter
     param = params[[name]]
 
-    # if it's not a list then a plain value was specified, create the list based
-    # on the value
+    # if it's not a list then a plain value was specified so just use the value
     if (!is.list(param)) {
+
+      value = param
 
       param = list(
         name = name,
-        type = param_type(param),
-        value = param_value(param)
+        expr = expr_attr(value),
+        value = value
       )
 
     } else {
@@ -285,16 +234,23 @@ resolve_params = function(params) {
              call. = FALSE)
       }
 
-      # ensure we have a name
+      # record name and expr (if available)
       param$name = name
-
-      # look for type info at the object level then value level
-      param$type = type_attr(param)
-      if (is.null(param$type)) param$type = param_type(param$value)
+      param$expr = expr_attr(param$value)
     }
 
-    # normalize parameter value
+    # normalize parameter value (i.e. strip attributes, list -> vector)
     param$value = param_value(param$value)
+
+    # record parameter class (must be explicit for null values)
+    if (!is.null(param$value)) {
+      param$class = class(param$value)
+    } else {
+      if (is.null(param$class))
+        stop("no class field specified for YAML parameter '", name, "'",
+             " (fields with a value of null must specify an explicit class)",
+             call. = FALSE)
+    }
 
     # add knit_param class
     param = structure(param, class = "knit_param")
