@@ -17,7 +17,7 @@ List of objects of class \code{knit_param} that correspond to the
     \item{\code{name}}{The parameter name.}
     \item{\code{value}}{The default value for the parameter.}
     \item{\code{class}}{The R class names of the parameter's default value.}
-    \item{\code{expr}}{The R expression that yielded the default value (if any).}
+    \item{\code{expr}}{The R expression (if any) that yielded the default value.}
   }
 
   In addition, other fields included in the YAML may also be present
@@ -62,7 +62,7 @@ params:
 This second form is useful when you need to provide additional details
 about the parameter (e.g. a \code{label} field as describe above).
 
-You can use R code to yield the value of a parameter by prefacing the value
+You can also use R code to yield the value of a parameter by prefacing the value
 with \code{!r}, for example:
 
 \preformatted{
