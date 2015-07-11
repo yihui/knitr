@@ -39,7 +39,7 @@ integration-need:
 
 integration-run: install
 	rm knitr-examples/cache -rf
-	make sysdeps deps xvfb-start knit xvfb-stop -C knitr-examples
+	make deps xvfb-start knit xvfb-stop -C knitr-examples
 
 integration-verify:
 	GIT_PAGER=cat make diff -C knitr-examples

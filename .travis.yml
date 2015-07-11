@@ -1,5 +1,6 @@
-# it is not really c, but there is no R support on Travis CI yet
 language: c
+
+sudo: false
 
 # environment variables
 env:
@@ -19,21 +20,39 @@ before_install:
       fi;
     fi
 
+addons:
+  apt:
+    sources:
+    - r-packages-precise
+    packages:
+    - r-base-dev
+    - r-recommended
+    - gawk
+    - ruby
+    - ghc
+    - perl
+    - highlight
+    - optipng
+    - coffeescript
+    - asymptote
+    - graphviz
+    - scala
+    - qpdf
+    - texinfo
+
 # install dependencies
 install:
-  - sudo apt-add-repository -y "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-  - sudo apt-add-repository -y ppa:marutter/c2d4u
-  - sudo apt-get update -qq
-  - wget https://github.com/yihui/ubuntu-bin/releases/download/latest/texlive-local.deb
-  - sudo dpkg -i texlive-local.deb && rm texlive-local.deb
-  - sudo apt-get install -qq r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended r-cran-devtools
   - "[ ! -d ~/bin ] && mkdir ~/bin"
   - "wget -q -O - https://github.com/yihui/crandalf/raw/master/inst/scripts/install-texlive | bash"
   - "wget -q -O - https://github.com/yihui/crandalf/raw/master/inst/scripts/install-pandoc | bash"
   - "wget -q -O - http://yihui.name/xran/r-config | bash"
-  - Rscript -e "install.packages('stringi')"
   - Rscript -e 'devtools::install_deps(dep = TRUE)'
+
+cache:
+  directories:
+  - $HOME/R
+  - $HOME/texlive
+  - $HOME/bin
 
 # run tests
 script:
