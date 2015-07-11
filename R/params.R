@@ -154,7 +154,7 @@ knit_params_handlers = function() {
   # generic handler for r expressions where we want to preserve both the original
   # code and the fact that it was an expression.
   expr_handler = function(value) {
-    evaluated_value = eval(parse_only(text = value))
+    evaluated_value = eval(parse_only(value))
     attr(evaluated_value, "expr") = value
     evaluated_value
   }
