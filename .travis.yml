@@ -27,10 +27,7 @@ addons:
     packages:
     - r-base-dev
     - r-recommended
-    - gawk
-    - ruby
     - ghc
-    - perl
     - highlight
     - optipng
     - coffeescript
