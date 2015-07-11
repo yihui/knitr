@@ -39,7 +39,7 @@ addons:
 
 # install dependencies
 install:
-  - "[ ! -d ~/bin ] && mkdir ~/bin"
+  - "[ ! -d ~/bin ] && mkdir ~/bin || true"
   - "wget -q -O - https://github.com/yihui/crandalf/raw/master/inst/scripts/install-texlive | bash"
   - "wget -q -O - https://github.com/yihui/crandalf/raw/master/inst/scripts/install-pandoc | bash"
   - "wget -q -O - http://yihui.name/xran/r-config | bash"
