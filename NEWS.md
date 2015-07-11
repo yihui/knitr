@@ -4,8 +4,7 @@
 
 - added an argument `quiet` to `plot_crop()` (thanks, @WastlM, #1034)
 
-- support for !expr and !r in knit_params.
-
+- added `!expr` and `!r` support in YAML for `knit_params()` (#1069)
 
 ## MAJOR CHANGES
 
