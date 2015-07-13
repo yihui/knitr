@@ -6,6 +6,8 @@
 
 - added a chunk option `ffmpeg.format` (default: `webm`) to control the video format of FFmpeg; this option specifies the filename extension of the video (#712)
 
+- plots drawn by `tikzDevice` are also measured and recorded with that device (thanks, @krlmlr, #1066)
+
 # CHANGES IN knitr VERSION 1.11
 
 ## NEW FEATURES
