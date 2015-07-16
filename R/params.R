@@ -213,8 +213,9 @@ resolve_params = function(params) {
     # get the parameter
     param = params[[name]]
 
-    # if it's not a list then a plain value was specified so just use the value
-    if (!is.list(param)) {
+    # if it's not a list then a plain value was specified so just use the value;
+    # if it is a list, see if it was created from an R expression
+    if (!is.list(param) || !is.null(expr_attr(param))) {
 
       value = param
 
