@@ -105,7 +105,7 @@ eng_interpreted = function(options) {
   } else paste(switch(
     engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -e',
     node = '-e', perl = '-e', python = '-c', ruby = '-e', scala = '-e',
-    sh = '-c', zsh = '-c', NULL
+    sh = '-c', zsh = '-c', mysql = '-e', psql = '-c', NULL
   ), shQuote(paste(options$code, collapse = '\n')))
 
   # FIXME: for these engines, the correct order is options + code + file
@@ -292,7 +292,7 @@ eng_asis = function(options) {
 local({
   for (i in c(
     'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'lein', 'node', 'perl',
-    'python', 'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'stata', 'zsh'
+    'python', 'Rscript', 'ruby', 'sas', 'scala', 'sed', 'sh', 'stata', 'zsh', 'mysql', 'psql'
   )) knit_engines$set(setNames(list(eng_interpreted), i))
 })
 
