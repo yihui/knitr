@@ -103,7 +103,7 @@ params:
 
 assert(
   'y/Y/n/N are not converted to booleans',
-  identical(unlist(lapply(params, `[[`, 'name')), c('x', 'y', 'z', 'n', 'Y', 'N'))
+  identical(unname(unlist(lapply(params, `[[`, 'name'))), c('x', 'y', 'z', 'n', 'Y', 'N'))
 )
 
 
