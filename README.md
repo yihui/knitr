@@ -90,14 +90,14 @@ library(knitr)
 knit(input)
 ```
 
-[<img src="http://i.imgur.com/R6DSHDE.jpg" align="right" alt="The book Dynamic Documents with R and knitr" />](http://amzn.com/1482203537)
+[<img src="http://i.imgur.com/yYw46aF.jpg" align="right" alt="The book Dynamic Documents with R and knitr" />](http://amzn.com/1498716962)
 
 If options are not explicitly specified, **knitr** will try to guess
 reasonable default settings. A few manuals are available such as the [main
 manual](http://yihui.name/knitr/demo/manual/), and the
 [graphics
 manual](http://yihui.name/knitr/demo/graphics/). For a
-more organized reference, see the [knitr book](http://amzn.com/1482203537).
+more organized reference, see the [knitr book](http://amzn.com/1498716962).
 
 ## License
 
