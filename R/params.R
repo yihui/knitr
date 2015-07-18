@@ -255,7 +255,7 @@ resolve_params = function(params) {
     param = structure(param, class = "knit_param")
 
     # add the parameter
-    resolved_params[[length(resolved_params) + 1]] = param
+    resolved_params[[name]] = param
   }
 
   # return params
