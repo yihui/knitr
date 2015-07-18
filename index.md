@@ -13,7 +13,7 @@ combine features in other add-on packages into one package (**knitr**
 `R2HTML::RweaveHTML` + `highlight::HighlightWeaveLatex` + 0.2 * brew + 0.1 *
 SweaveListingUtils + more).
 
-[<img src="http://i.imgur.com/R6DSHDE.jpg" align="right" />](http://amzn.com/1482203537)
+[<img src="http://i.imgur.com/yYw46aF.jpg" align="right" />](http://amzn.com/1498716962)
 
 - Transparency means that the user has full access to every piece of the
   input and output, e.g., `1 + 2` produces `[1] 3` in an R terminal, and 
