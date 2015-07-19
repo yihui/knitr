@@ -9,6 +9,7 @@ Authors@R: c(
     person("Alex", "Zvoleff", role = "ctb"),
     person("Andre", "Simon", role = "ctb", comment = "the CSS files under inst/themes/ were derived from the Highlight package http://www.andre-simon.de"),
     person("Ashley", "Manton", role = "ctb"),
+    person("Ben", "Baumer", role = "ctb"),
     person("Brian", "Diggs", role = "ctb"),
     person("Cassio", "Pereira", role = "ctb"),
     person("David", "Robinson", role = "ctb"),

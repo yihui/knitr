@@ -6,6 +6,8 @@
 
 - added `!expr` and `!r` support in YAML for `knit_params()` (#1069)
 
+- added two language engines `mysql` and `psql` (thanks, @beanumber, #1076)
+
 ## MAJOR CHANGES
 
 - the two hook functions `hook_rgl()` and `hook_webgl()` have been moved from **knitr** to the **rgl** package (v0.95.1247) (thanks, @dmurdoch)
