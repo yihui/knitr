@@ -82,7 +82,7 @@ knit_params = function(text, evaluate = TRUE) {
   if (is.null(yaml)) return(list())
 
   yaml = enc2utf8(yaml)
-  knit_params.yaml(yaml, evaluate = evaluate)
+  knit_params_yaml(yaml, evaluate = evaluate)
 }
 
 #' Extract knit parameters from YAML text
@@ -103,7 +103,7 @@ knit_params = function(text, evaluate = TRUE) {
 #' @seealso \code{\link{knit_params}}
 #' 
 #' @export
-knit_params.yaml = function(yaml, evaluate = TRUE) {
+knit_params_yaml = function(yaml, evaluate = TRUE) {
   # parse the yaml using our handlers
   parsed_yaml = yaml::yaml.load(yaml, handlers = knit_params_handlers(evaluate = evaluate))
 

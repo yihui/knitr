@@ -1,9 +1,9 @@
 % Please edit documentation in R/params.R
-\name{knit_params.yaml}
-\alias{knit_params.yaml}
+\name{knit_params_yaml}
+\alias{knit_params_yaml}
 \title{Extract knit parameters from YAML text}
 \usage{
-knit_params.yaml(yaml, evaluate = TRUE)
+knit_params_yaml(yaml, evaluate = TRUE)
 }
 \arguments{
 \item{yaml}{Character vector containing the YAML text}

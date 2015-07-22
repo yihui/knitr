@@ -7,8 +7,8 @@ read_params <- function(src, evaluate = TRUE) {
 }
 
 # helper function to convert raw src yaml to params list
-read_params.yaml <- function(src, evaluate = TRUE) {
-  knit_params.yaml(src, evaluate = evaluate)
+read_params_yaml <- function(src, evaluate = TRUE) {
+  knit_params_yaml(src, evaluate = evaluate)
 }
 
 
@@ -143,7 +143,7 @@ assert(identical(class(params$today$value), "expression"))
 
 ## test handling of yaml parameters --------------------------------------------
 
-params <- read_params.yaml('
+params <- read_params_yaml('
 params:
   x: 1
   today: !r Sys.Date()
@@ -156,7 +156,7 @@ assert(identical(params$today$class, class(params$today$value)))
 
 ## test handling of unevaluated yaml parameters --------------------------------------------
 
-params <- read_params.yaml('
+params <- read_params_yaml('
 params:
   today: !r Sys.Date()
 ', evaluate = FALSE)
