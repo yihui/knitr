@@ -181,14 +181,14 @@ knit_params_handlers = function(evaluate = TRUE) {
   # code and the fact that it was an expression.
   expr_handler = function(value) {
     expression = parse_only(value)
-    # When we are not evaluating, provide the parsed expression as the value.
-    evaluated_value = if (evaluate) {
+    transformed_value = if (evaluate) {
       eval(expression)
     } else {
+      # When we are not evaluating, provide the parsed expression as the transformed value
       expression
     }
-    attr(evaluated_value, "expr") = value
-    evaluated_value
+    attr(transformed_value, "expr") = value
+    transformed_value
   }
 
   list(
