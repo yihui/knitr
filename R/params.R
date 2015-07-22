@@ -7,7 +7,11 @@
 #' the default parameter values in the R code it emits.
 #'
 #' @param text Character vector containing the document text
-#'
+#' @param evaluate If TRUE, expression values embedded within the YAML will be
+#' evaluated. This is the default. When FALSE, parameters defined by an
+#' expression will have the parsed expression in its \code{value} field and
+#' \code{"expression"} in the \code{class} field.
+#' 
 #' @return List of objects of class \code{knit_param} that correspond to the
 #'   parameters declared in the \code{params} section of the YAML front matter.
 #'   These objects have the following fields:
@@ -68,7 +72,7 @@
 #' }
 #'
 #' @export
-knit_params = function(text) {
+knit_params = function(text, evaluate = TRUE) {
 
   # make sure each element is on one line
   text = split_lines(text)
@@ -78,12 +82,34 @@ knit_params = function(text) {
   if (is.null(yaml)) return(list())
 
   yaml = enc2utf8(yaml)
+  knit_params.yaml(yaml, evaluate = evaluate)
+}
+
+#' Extract knit parameters from YAML text
+#'
+#' This function reads the YAML front-matter that has already been extracted
+#' from a document and returns a list of any parameters declared there.
+#'
+#' @param yaml Character vector containing the YAML text
+#' @param evaluate If TRUE, expression values embedded within the YAML will be
+#' evaluated. This is the default. When FALSE, parameters defined by an
+#' expression will have the parsed expression in its \code{value} field and
+#' \code{"expression"} in the \code{class} field.
+#'
+#' @return List of objects of class \code{knit_param} that correspond to the
+#' parameters declared in the \code{params} section of the YAML. See
+#' \code{\link{knit_params}} for a full description of these objects.
+#'
+#' @seealso \code{\link{knit_params}}
+#' 
+#' @export
+knit_params.yaml = function(yaml, evaluate = TRUE) {
   # parse the yaml using our handlers
-  parsed_yaml = yaml::yaml.load(yaml, handlers = knit_params_handlers())
+  parsed_yaml = yaml::yaml.load(yaml, handlers = knit_params_handlers(evaluate = evaluate))
 
   # if we found paramters then resolve and return them
   if (is.list(parsed_yaml) && !is.null(parsed_yaml$params)) {
-    resolve_params(mark_utf8(parsed_yaml$params))
+    resolve_params(mark_utf8(parsed_yaml$params), evaluate = evaluate)
   } else {
     list()
   }
@@ -149,12 +175,18 @@ yaml_front_matter = function(lines) {
 
 
 # define custom handlers for knitr_params
-knit_params_handlers = function() {
+knit_params_handlers = function(evaluate = TRUE) {
 
   # generic handler for r expressions where we want to preserve both the original
   # code and the fact that it was an expression.
   expr_handler = function(value) {
-    evaluated_value = eval(parse_only(value))
+    expression = parse_only(value)
+    # When we are not evaluating, provide the parsed expression as the value.
+    evaluated_value = if (evaluate) {
+      eval(expression)
+    } else {
+      expression
+    }
     attr(evaluated_value, "expr") = value
     evaluated_value
   }
@@ -189,7 +221,7 @@ knit_params_handlers = function() {
 
 # resolve the raw params list into the full params data structure (with name,
 # type, value, and other optional fields included)
-resolve_params = function(params) {
+resolve_params = function(params, evaluate = TRUE) {
 
   # get the expr attribute (if any)
   expr_attr = function(value) {

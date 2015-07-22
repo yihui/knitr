@@ -1,9 +1,14 @@
 library(testit)
 
 # helper function to convert raw src to params list
-read_params <- function(src) {
+read_params <- function(src, evaluate = TRUE) {
   lines <- strsplit(src, "\n")[[1]]
-  knit_params(lines)
+  knit_params(lines, evaluate = evaluate)
+}
+
+# helper function to convert raw src yaml to params list
+read_params.yaml <- function(src, evaluate = TRUE) {
+  knit_params.yaml(src, evaluate = evaluate)
 }
 
 
@@ -124,8 +129,38 @@ assert(params[[2]]$expr)
 assert('POSIXct' %in% params[[2]]$class)
 assert(is.null(params[[3]]$expr))
 
+## test handling of unevaluated expressions --------------------------------------------
 
+params <- read_params('
+---
+params:
+  today: !r Sys.Date()
+---
+', evaluate = FALSE)
+assert(identical(params$today$expr, "Sys.Date()"))
+assert(identical(params$today$class, "expression"))
+assert(identical(class(params$today$value), "expression"))
 
+## test handling of yaml parameters --------------------------------------------
 
+params <- read_params.yaml('
+params:
+  x: 1
+  today: !r Sys.Date()
+')
+assert(params$x$value == 1)
+assert(identical(params$x$class, "integer"))
+assert(identical(params$today$expr, "Sys.Date()"))
+assert('Date' %in% params$today$class)
+assert(identical(params$today$class, class(params$today$value)))
 
+## test handling of unevaluated yaml parameters --------------------------------------------
+
+params <- read_params.yaml('
+params:
+  today: !r Sys.Date()
+', evaluate = FALSE)
+assert(identical(params$today$expr, "Sys.Date()"))
+assert(identical(params$today$class, "expression"))
+assert(identical(class(params$today$value), "expression"))
 

@@ -3,10 +3,15 @@
 \alias{knit_params}
 \title{Extract knit parameters from a document}
 \usage{
-knit_params(text)
+knit_params(text, evaluate = TRUE)
 }
 \arguments{
 \item{text}{Character vector containing the document text}
+
+\item{evaluate}{If TRUE, expression values embedded within the YAML will be
+evaluated. This is the default. When FALSE, parameters defined by an
+expression will have the parsed expression in its \code{value} field and
+\code{"expression"} in the \code{class} field.}
 }
 \value{
 List of objects of class \code{knit_param} that correspond to the
