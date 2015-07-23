@@ -40,10 +40,10 @@ params:
 '
 )
 assert(params[[1]]$name == 'start')
-assert('Date' %in% params[[1]]$class)
+assert('Date' %in% class(params[[1]]$value))
 assert(params[[1]]$value == as.Date("2015-01-01"))
 assert(params[[2]]$name == 'end')
-assert('POSIXct' %in% params[[2]]$class)
+assert('POSIXct' %in% class(params[[2]]$value))
 assert(params[[2]]$value == as.POSIXct("2015-01-01 12:30:00", tz = "GMT"))
 
 
@@ -124,9 +124,9 @@ params:
 '
 )
 assert(!is.null(params[[1]]$expr))
-assert('Date' %in% params[[1]]$class)
+assert('Date' %in% class(params[[1]]$value))
 assert(params[[2]]$expr)
-assert('POSIXct' %in% params[[2]]$class)
+assert('POSIXct' %in% class(params[[2]]$value))
 assert(is.null(params[[3]]$expr))
 
 ## test handling of unevaluated expressions --------------------------------------------
@@ -138,7 +138,6 @@ params:
 ---
 ', evaluate = FALSE)
 assert(identical(params$today$expr, "Sys.Date()"))
-assert(identical(params$today$class, "expression"))
 assert(identical(class(params$today$value), "expression"))
 
 ## test handling of yaml parameters --------------------------------------------
@@ -149,10 +148,9 @@ params:
   today: !r Sys.Date()
 ')
 assert(params$x$value == 1)
-assert(identical(params$x$class, "integer"))
+assert(identical(class(params$x$value), "integer"))
 assert(identical(params$today$expr, "Sys.Date()"))
-assert('Date' %in% params$today$class)
-assert(identical(params$today$class, class(params$today$value)))
+assert('Date' %in% class(params$today$value))
 
 ## test handling of unevaluated yaml parameters --------------------------------------------
 
@@ -161,6 +159,5 @@ params:
   today: !r Sys.Date()
 ', evaluate = FALSE)
 assert(identical(params$today$expr, "Sys.Date()"))
-assert(identical(params$today$class, "expression"))
 assert(identical(class(params$today$value), "expression"))
 

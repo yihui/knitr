@@ -10,8 +10,7 @@ knit_params_yaml(yaml, evaluate = TRUE)
 
 \item{evaluate}{If TRUE, expression values embedded within the YAML will be
 evaluated. This is the default. When FALSE, parameters defined by an
-expression will have the parsed expression in its \code{value} field and
-\code{"expression"} in the \code{class} field.}
+expression will have the parsed expression in its \code{value} field.}
 }
 \value{
 List of objects of class \code{knit_param} that correspond to the

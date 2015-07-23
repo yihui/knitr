@@ -9,8 +9,7 @@
 #' @param text Character vector containing the document text
 #' @param evaluate If TRUE, expression values embedded within the YAML will be
 #' evaluated. This is the default. When FALSE, parameters defined by an
-#' expression will have the parsed expression in its \code{value} field and
-#' \code{"expression"} in the \code{class} field.
+#' expression will have the parsed expression in its \code{value} field.
 #' 
 #' @return List of objects of class \code{knit_param} that correspond to the
 #'   parameters declared in the \code{params} section of the YAML front matter.
@@ -19,7 +18,6 @@
 #'   \describe{
 #'     \item{\code{name}}{The parameter name.}
 #'     \item{\code{value}}{The default value for the parameter.}
-#'     \item{\code{class}}{The R class names of the parameter's default value.}
 #'     \item{\code{expr}}{The R expression (if any) that yielded the default value.}
 #'   }
 #'
@@ -93,8 +91,7 @@ knit_params = function(text, evaluate = TRUE) {
 #' @param yaml Character vector containing the YAML text
 #' @param evaluate If TRUE, expression values embedded within the YAML will be
 #' evaluated. This is the default. When FALSE, parameters defined by an
-#' expression will have the parsed expression in its \code{value} field and
-#' \code{"expression"} in the \code{class} field.
+#' expression will have the parsed expression in its \code{value} field.
 #'
 #' @return List of objects of class \code{knit_param} that correspond to the
 #' parameters declared in the \code{params} section of the YAML. See
@@ -272,16 +269,6 @@ resolve_params = function(params, evaluate = TRUE) {
 
     # normalize parameter value (i.e. strip attributes, list -> vector)
     param$value = param_value(param$value)
-
-    # record parameter class (must be explicit for null values)
-    if (!is.null(param$value)) {
-      param$class = class(param$value)
-    } else {
-      if (is.null(param$class))
-        stop("no class field specified for YAML parameter '", name, "'",
-             " (fields with a value of null must specify an explicit class)",
-             call. = FALSE)
-    }
 
     # add knit_param class
     param = structure(param, class = "knit_param")

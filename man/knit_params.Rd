@@ -10,8 +10,7 @@ knit_params(text, evaluate = TRUE)
 
 \item{evaluate}{If TRUE, expression values embedded within the YAML will be
 evaluated. This is the default. When FALSE, parameters defined by an
-expression will have the parsed expression in its \code{value} field and
-\code{"expression"} in the \code{class} field.}
+expression will have the parsed expression in its \code{value} field.}
 }
 \value{
 List of objects of class \code{knit_param} that correspond to the
@@ -21,7 +20,6 @@ List of objects of class \code{knit_param} that correspond to the
   \describe{
     \item{\code{name}}{The parameter name.}
     \item{\code{value}}{The default value for the parameter.}
-    \item{\code{class}}{The R class names of the parameter's default value.}
     \item{\code{expr}}{The R expression (if any) that yielded the default value.}
   }
 
