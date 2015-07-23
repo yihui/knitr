@@ -1,9 +1,14 @@
 library(testit)
 
 # helper function to convert raw src to params list
-read_params <- function(src) {
+read_params <- function(src, evaluate = TRUE) {
   lines <- strsplit(src, "\n")[[1]]
-  knit_params(lines)
+  knit_params(lines, evaluate = evaluate)
+}
+
+# helper function to convert raw src yaml to params list
+read_params_yaml <- function(src, evaluate = TRUE) {
+  knit_params_yaml(src, evaluate = evaluate)
 }
 
 
@@ -35,10 +40,10 @@ params:
 '
 )
 assert(params[[1]]$name == 'start')
-assert('Date' %in% params[[1]]$class)
+assert('Date' %in% class(params[[1]]$value))
 assert(params[[1]]$value == as.Date("2015-01-01"))
 assert(params[[2]]$name == 'end')
-assert('POSIXct' %in% params[[2]]$class)
+assert('POSIXct' %in% class(params[[2]]$value))
 assert(params[[2]]$value == as.POSIXct("2015-01-01 12:30:00", tz = "GMT"))
 
 
@@ -119,13 +124,40 @@ params:
 '
 )
 assert(!is.null(params[[1]]$expr))
-assert('Date' %in% params[[1]]$class)
+assert('Date' %in% class(params[[1]]$value))
 assert(params[[2]]$expr)
-assert('POSIXct' %in% params[[2]]$class)
+assert('POSIXct' %in% class(params[[2]]$value))
 assert(is.null(params[[3]]$expr))
 
+## test handling of unevaluated expressions --------------------------------------------
 
+params <- read_params('
+---
+params:
+  today: !r Sys.Date()
+---
+', evaluate = FALSE)
+assert(identical(params$today$expr, "Sys.Date()"))
+assert(identical(class(params$today$value), "expression"))
 
+## test handling of yaml parameters --------------------------------------------
 
+params <- read_params_yaml('
+params:
+  x: 1
+  today: !r Sys.Date()
+')
+assert(params$x$value == 1)
+assert(identical(class(params$x$value), "integer"))
+assert(identical(params$today$expr, "Sys.Date()"))
+assert('Date' %in% class(params$today$value))
 
+## test handling of unevaluated yaml parameters --------------------------------------------
+
+params <- read_params_yaml('
+params:
+  today: !r Sys.Date()
+', evaluate = FALSE)
+assert(identical(params$today$expr, "Sys.Date()"))
+assert(identical(class(params$today$value), "expression"))
 
