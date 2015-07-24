@@ -184,8 +184,12 @@ knit_params_handlers = function(evaluate = TRUE) {
       # When we are not evaluating, provide the parsed expression as the transformed value
       expression
     }
-    attr(transformed_value, "expr") = value
-    transformed_value
+
+    wrapped = list(
+        value = transformed_value,
+        expr = value)
+    wrapped = structure(wrapped, class = "knit_param_expr")
+    wrapped
   }
 
   list(
@@ -220,18 +224,6 @@ knit_params_handlers = function(evaluate = TRUE) {
 # type, value, and other optional fields included)
 resolve_params = function(params, evaluate = TRUE) {
 
-  # get the expr attribute (if any)
-  expr_attr = function(value) {
-    attr(value, "expr", exact = TRUE)
-  }
-
-  # return a parameter value with expr attribute stripped and
-  # as a vector rather than list if it's unnamed
-  param_value = function(value) {
-    attr(value, "expr") = NULL
-    if (is.null(names(value))) unlist(value) else value
-  }
-
   # params we will return
   resolved_params = list()
 
@@ -242,35 +234,31 @@ resolve_params = function(params, evaluate = TRUE) {
     # get the parameter
     param = params[[name]]
 
-    # if it's not a list then a plain value was specified so just use the value;
-    # if it is a list, see if it was created from an R expression
-    if (!is.list(param) || !is.null(expr_attr(param))) {
-
-      value = param
-
+    if ("knit_param_expr" %in% class(param)) {
+      # We have a key: !r expr
       param = list(
-        name = name,
-        expr = expr_attr(value),
-        value = value
-      )
-
-    } else {
-
-      # validate that the "value" field is included
-      if (!"value" %in% names(param)) {
+          expr = param$expr,
+          value = param$value)
+    } else if (is.list(param)) {
+      if ("value" %in% names(param)) {
+        # This looks like a complex parameter configuration.
+        value = param$value
+        if ("knit_param_expr" %in% class(value)) {
+          # We have a key: { value: !r expr }
+          param$expr  = value$expr
+          param$value = value$value
+        }
+      } else {
         stop("no value field specified for YAML parameter '", name, "'",
              call. = FALSE)
       }
-
-      # record name and expr (if available)
-      param$name = name
-      param$expr = expr_attr(param$value)
+    } else {
+      # A simple key: value
+      param = list(value = param)
     }
-
-    # normalize parameter value (i.e. strip attributes, list -> vector)
-    param$value = param_value(param$value)
-
-    # add knit_param class
+      
+    # param is now always a named list. record name and add knit_param class.
+    param$name = name
     param = structure(param, class = "knit_param")
 
     # add the parameter
