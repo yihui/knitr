@@ -234,7 +234,7 @@ resolve_params = function(params, evaluate = TRUE) {
     # get the parameter
     param = params[[name]]
 
-    if ("knit_param_expr" %in% class(param)) {
+    if (inherits(param, "knit_param_expr")) {
       # We have a key: !r expr
       param = list(
           expr = param$expr,
@@ -243,7 +243,7 @@ resolve_params = function(params, evaluate = TRUE) {
       if ("value" %in% names(param)) {
         # This looks like a complex parameter configuration.
         value = param$value
-        if ("knit_param_expr" %in% class(value)) {
+        if (inherits(value, "knit_param_expr")) {
           # We have a key: { value: !r expr }
           param$expr  = value$expr
           param$value = value$value
