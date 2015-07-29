@@ -10,7 +10,7 @@
 #' @param evaluate If TRUE, expression values embedded within the YAML will be
 #' evaluated. This is the default. When FALSE, parameters defined by an
 #' expression will have the parsed expression in its \code{value} field.
-#' 
+#'
 #' @return List of objects of class \code{knit_param} that correspond to the
 #'   parameters declared in the \code{params} section of the YAML front matter.
 #'   These objects have the following fields:
@@ -98,7 +98,7 @@ knit_params = function(text, evaluate = TRUE) {
 #' \code{\link{knit_params}} for a full description of these objects.
 #'
 #' @seealso \code{\link{knit_params}}
-#' 
+#'
 #' @export
 knit_params_yaml = function(yaml, evaluate = TRUE) {
   # parse the yaml using our handlers
@@ -143,11 +143,12 @@ yaml_front_matter = function(lines) {
   # by other content
   has_front_matter = function(delimiters) {
     length(delimiters) >= 2 && (delimiters[2] - delimiters[1] > 1) &&
-      (delimiters[1] == 1 || is_blank(head(lines, delimiters[1] - 1)))
+      (delimiters[1] == 1 || is_blank(head(lines, delimiters[1] - 1))) &&
+      grepl("^---\\s*$", lines[delimiters[1]])
   }
 
   # find delimiters in the document
-  delimiters = grep("^---\\s*$", lines)
+  delimiters = grep("^(---|\\.\\.\\.)\\s*$", lines)
 
   # if it's valid then return front matter as a text block suitable for passing
   # to yaml::load
