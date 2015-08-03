@@ -146,11 +146,18 @@ params <- read_params_yaml('
 params:
   x: 1
   today: !r Sys.Date()
+  posixlt: !r strptime("2015-01-01", format = "%Y-%m-%d")
+  list: [1,2,3]
+#  map: { a: 1, b: 2 }
+  map: { value: { a: 1, b: 2 } }
 ')
+# The direct map value is not supported; an explicit value field is necessary
 assert(params$x$value == 1)
 assert(identical(class(params$x$value), "integer"))
 assert(identical(params$today$expr, "Sys.Date()"))
 assert('Date' %in% class(params$today$value))
+assert(identical(params$posixlt$expr, 'strptime("2015-01-01", format = "%Y-%m-%d")'))
+assert('POSIXlt' %in% class(params$posixlt$value))
 
 ## test handling of unevaluated yaml parameters --------------------------------------------
 
