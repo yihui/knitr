@@ -45,6 +45,7 @@ install:
   - "wget -q -O - http://yihui.name/xran/r-config | bash"
   - Rscript -e "if (!require('devtools')) install.packages('devtools')"
   - Rscript -e 'devtools::install_deps(dep = TRUE)'
+  - Rscript -e "if (!require('covr')) install.packages('covr')"
 
 cache:
   directories:
@@ -62,4 +63,4 @@ after_success:
   - "[ $TARGET = integration ] && (wget -q -O - http://yihui.name/xran/r-xran | bash)"
 
   # run test coverage only for the travis build
-  - "[ $TARGET = travis ] && Rscript -e 'devtools::install_github(\"jimhester/covr\"); covr::coveralls()'"
+  - "[ $TARGET = travis ] && Rscript -e 'covr::coveralls()'"
