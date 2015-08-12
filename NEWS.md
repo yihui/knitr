@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- added an argument `format.args` to `kable()` to pass arguments to `format()` mainly to format numeric values, e.g. you can use `,` as the thousands separator via `kable(..., format.args = list(big.mark = ','))` (thanks, @neuwirthe, #1086)
+
 - added an argument `quiet` to `plot_crop()` (thanks, @WastlM, #1034)
 
 - added `!expr` and `!r` support in YAML for `knit_params()` (#1069)

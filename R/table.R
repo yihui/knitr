@@ -19,6 +19,8 @@
 #'   default, numeric columns are right-aligned, and other columns are
 #'   left-aligned; if \code{align = NULL}, the default alignment is used
 #' @param caption the table caption
+#' @param format.args a list of arguments to be passed to \code{\link{format}()}
+#'   to format table values, e.g. \code{list(big.mark = ',')}
 #' @param escape escape special characters when producing HTML or LaTeX tables
 #' @param ... other arguments (see examples)
 #' @return A character vector of the table source code.
@@ -59,13 +61,16 @@
 #' kable(head(mtcars), format = 'markdown', padding = 2)
 #' # Pandoc tables
 #' kable(head(mtcars), format = 'pandoc', caption = 'Title of the table')
+#' # format numbers using , as decimal point, and ' as thousands separator
+#' x = as.data.frame(matrix(rnorm(60, 1e6, 1e4), 10))
+#' kable(x, format.args = list(decimal.mark = ',', big.mark = "'"))
 #' # save the value
 #' x = kable(mtcars, format = 'html')
 #' cat(x, sep = '\n')
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = colnames(x),
-  align, caption = NULL, escape = TRUE, ...
+  align, caption = NULL, format.args = list(), escape = TRUE, ...
 ) {
   if (missing(format) || is.null(format)) format = getOption('knitr.table.format')
   if (is.null(format)) format = if (is.null(pandoc_to())) switch(
@@ -89,8 +94,8 @@ kable = function(
   if (any(isn)) {
     if (is.matrix(x)) {
       if (is.table(x) && length(dim(x)) == 2) class(x) = 'matrix'
-      x = format_matrix(x)
-    } else x[, isn] = format(x[, isn], trim = TRUE)
+      x = format_matrix(x, format.args)
+    } else x[, isn] = format_args(x[, isn], format.args)
   }
   if (is.na(row.names))
     row.names = !is.null(rownames(x)) && !identical(rownames(x), as.character(seq_len(NROW(x))))
@@ -116,12 +121,18 @@ kable = function(
 }
 
 # as.data.frame() does not allow duplicate row names (#898)
-format_matrix = function(x) {
+format_matrix = function(x, args) {
   nms = rownames(x)
   rownames(x) = NULL
-  x = as.matrix(format(as.data.frame(x), trim = TRUE))
+  x = as.matrix(format_args(as.data.frame(x), args))
   rownames(x) = nms
   x
+}
+
+format_args = function(x, args = list()) {
+  args$x = x
+  args$trim = TRUE
+  do.call(format, args)
 }
 
 #' @export

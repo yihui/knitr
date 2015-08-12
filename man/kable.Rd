@@ -4,7 +4,7 @@
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
 kable(x, format, digits = getOption("digits"), row.names = NA, col.names = colnames(x), 
-    align, caption = NULL, escape = TRUE, ...)
+    align, caption = NULL, format.args = list(), escape = TRUE, ...)
 }
 \arguments{
 \item{x}{an R object (typically a matrix or data frame)}
@@ -30,6 +30,9 @@ default, numeric columns are right-aligned, and other columns are
 left-aligned; if \code{align = NULL}, the default alignment is used}
 
 \item{caption}{the table caption}
+
+\item{format.args}{a list of arguments to be passed to \code{\link{format}()}
+to format table values, e.g. \code{list(big.mark = ',')}}
 
 \item{escape}{escape special characters when producing HTML or LaTeX tables}
 
@@ -75,6 +78,9 @@ kable(head(mtcars), format = "markdown", padding = 0)
 kable(head(mtcars), format = "markdown", padding = 2)
 # Pandoc tables
 kable(head(mtcars), format = "pandoc", caption = "Title of the table")
+# format numbers using , as decimal point, and ' as thousands separator
+x = as.data.frame(matrix(rnorm(60, 1e+06, 10000), 10))
+kable(x, format.args = list(decimal.mark = ",", big.mark = "'"))
 # save the value
 x = kable(mtcars, format = "html")
 cat(x, sep = "\\n")
