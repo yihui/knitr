@@ -12,7 +12,7 @@
 #'   filename is returned if the conversion was successful.
 #' @export
 #' @seealso \code{\link{knit2pdf}}
-#' @references \url{http://rst2pdf.ralsina.com.ar/}
+#' @references \url{https://github.com/rst2pdf/rst2pdf}
 rst2pdf = function(input, command = 'rst2pdf', options = '') {
   out = sub_ext(input, 'pdf')
   system2(command, paste(shQuote(input), '-o', shQuote(out), options))

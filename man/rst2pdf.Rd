@@ -26,7 +26,7 @@ using the ReportLab open-source library).
 Alex Zvoleff and Yihui Xie
 }
 \references{
-\url{http://rst2pdf.ralsina.com.ar/}
+\url{https://github.com/rst2pdf/rst2pdf}
 }
 \seealso{
 \code{\link{knit2pdf}}
