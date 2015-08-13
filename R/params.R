@@ -143,11 +143,12 @@ yaml_front_matter = function(lines) {
   # by other content
   has_front_matter = function(delimiters) {
     length(delimiters) >= 2 && (delimiters[2] - delimiters[1] > 1) &&
-      (delimiters[1] == 1 || is_blank(head(lines, delimiters[1] - 1)))
+      (delimiters[1] == 1 || is_blank(head(lines, delimiters[1] - 1))) &&
+      grepl("^---\\s*$", lines[delimiters[1]])
   }
 
   # find delimiters in the document
-  delimiters = grep("^---\\s*$", lines)
+  delimiters = grep("^(---|\\.\\.\\.)\\s*$", lines)
 
   # if it's valid then return front matter as a text block suitable for passing
   # to yaml::load
