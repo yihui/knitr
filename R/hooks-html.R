@@ -75,9 +75,16 @@ hook_ffmpeg = function(x, options, format = '.webm') {
   # set up the ffmpeg run
   fig.fname = paste0(sub(paste0(fig.num, '$'), '%d', x[1]), '.', x[2])
   mov.fname = paste0(sub(paste(fig.num, '$', sep = ''), '', x[1]), format)
-
-  ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1 / options$interval,
+  
+  if (format == '.webm') {
+    mov.bitrate = ifelse(is.null(options$bitrate), "1M", options$bitrate)
+    ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1 / options$interval,
+                     '-i', fig.fname, '-b:v', mov.bitrate, '-crf 10', mov.fname)  
+  } else {
+    ffmpeg.cmd = paste('ffmpeg', '-y', '-r', 1 / options$interval,
                      '-i', fig.fname, mov.fname)
+  }
+  
   message('executing: ', ffmpeg.cmd)
   system(ffmpeg.cmd, ignore.stdout = TRUE)
 
