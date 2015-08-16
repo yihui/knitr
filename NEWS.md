@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- added a chunk option `ffmpeg.bitrate` (default: `1M`) to control the quality of WebM videos created from FFmpeg (thanks, @JsonPunyon, #1090)
+
 - added a chunk option `ffmpeg.format` (default: `webm`) to control the video format of FFmpeg; this option specifies the filename extension of the video (#712)
 
 # CHANGES IN knitr VERSION 1.11
