@@ -1,7 +1,7 @@
 Package: knitr
 Type: Package
 Title: A General-Purpose Package for Dynamic Report Generation in R
-Version: 1.11
+Version: 1.11.1
 Date: 2015-08-14
 Authors@R: c(
     person("Yihui", "Xie", email = "xie@yihui.name", role = c("aut", "cre")),
@@ -29,6 +29,7 @@ Authors@R: c(
     person("Jake", "Burkhead", role = "ctb"),
     person("James", "Manton", role = "ctb"),
     person("Jared", "Lander", role = "ctb"),
+    person("Jason", "Punyon", role = "ctb"),
     person("Jeff", "Arnold", role = "ctb"),
     person("Jeremy", "Ashkenas", role = c("ctb", "cph"), comment = "the CSS file at inst/misc/docco-classic.css"),
     person("Jeremy", "Stephens", role = "ctb"),
