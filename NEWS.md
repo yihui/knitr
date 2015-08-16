@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.12
+
+## NEW FEATURES
+
+- added a chunk option `ffmpeg.format` (default: `webm`) to control the video format of FFmpeg; this option specifies the filename extension of the video (#712)
+
 # CHANGES IN knitr VERSION 1.11
 
 ## NEW FEATURES
