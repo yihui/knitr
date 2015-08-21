@@ -7,9 +7,15 @@
 #' for R packages, and it is easy to regenerate all the citations after updating
 #' R packages.
 #'
-#' The citation is forced to be generated from the DESCRIPTION file of the
-#' package. The keyword \samp{R-pkgname} is used for the bib item, where
-#' \samp{pkgname} is the name of the package.
+#' The citation is forced to be generated from the \file{DESCRIPTION} file of
+#' the package (\code{citation(auto = TRUE)}). The keyword \samp{R-pkgname} is
+#' used for the bib item, where \samp{pkgname} is the name of the package. All
+#' references specified in the \file{CITATION} file of the package are ignored.
+#' The main purpose of this function is to automate the generation of the
+#' package citation information because it often changes (e.g. author, year,
+#' package version, ...). By comparison, paper/book citations don't change too
+#' often, so it is not a lot of work even if you just cut and paste such
+#' bibliography entries from \code{toBibtex(citation())}.
 #'
 #' @param x package names (packages which are not installed are ignored)
 #' @param file the (\file{.bib}) file to write (by default writes to the R
