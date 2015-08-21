@@ -98,7 +98,8 @@ Below is a list of chunk options in **knitr**. Note the options `background` and
   `message()` (similar to `warning`)
 - `split`: (`FALSE`; logical) whether to split the output from R into separate
   files and include them into LaTeX by `\input{}` or HTML by
-  `<iframe></iframe>`
+  `<iframe></iframe>`; this option only works for `.Rnw`, `.Rtex`, and `.Rhtml`
+  documents (it does not work for R Markdown)
 - `include`: (`TRUE`; logical) whether to include the chunk output in the final
   output document; if `include=FALSE`, nothing will be written into the
   output document, but the code is still evaluated and plot files are
