@@ -1,0 +1,10 @@
+
+\begin{align}
+<<results="asis">>=
+library(xtable)
+  drift <- matrix(1:4,2,2)
+  print(xtable(drift, align=rep('',1+ncol(drift))), floating=FALSE, tabular.environment="bmatrix",
+        hline.after=NULL, include.rownames=TRUE, include.colnames=TRUE,
+        sanitize.rownames.function=function(x)x, sanitize.colnames.function=function(x)x)
+@
+\end{align}
