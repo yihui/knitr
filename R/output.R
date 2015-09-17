@@ -202,7 +202,6 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     if (is.character(output)) file.create(output)
     return(output) # a trivial case: create an empty file and exit
   }
-  text = native_encode(text)
 
   apat = all_patterns; opat = knit_patterns$get()
   on.exit(knit_patterns$restore(opat), add = TRUE)

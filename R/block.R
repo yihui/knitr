@@ -125,7 +125,7 @@ block_exec = function(options) {
       formatR::tidy_source, c(list(text = code, output = FALSE), options$tidy.opts)
     ))
     if (!inherits(res, 'try-error')) {
-      code = native_encode(res$text.tidy)
+      code = res$text.tidy
     } else warning('failed to tidy R code in chunk <', options$label, '>\n',
                    'reason: ', res)
   }
