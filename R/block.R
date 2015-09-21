@@ -266,11 +266,16 @@ purge_cache = function(options) {
 chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi) {
   dev_new = function() {
     # actually I should adjust the recording device according to dev, but here
-    # I have only considered the png device
+    # I have only considered the png and tikz devices (because the measurement
+    # results can be very different especially with the latter, see #1066)
     if (identical(dev, 'png')) {
       do.call(grDevices::png, c(list(
         filename = tempfile(), width = width, height = height, units = 'in', res = dpi
       ), get_dargs(dev.args, 'png')))
+    } else if (identical(dev, 'tikz')) {
+      do.call(tikz_dev, c(list(
+        file = paste0(tempfile(), ".tex"), width = width, height = height
+      ), get_dargs(dev.args, 'tikz')))
     } else if (identical(getOption('device'), pdf_null)) {
       if (!is.null(dev.args)) {
         dev.args = get_dargs(dev.args, 'pdf')
