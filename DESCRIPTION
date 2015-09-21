@@ -78,7 +78,7 @@ Description: Provides a general-purpose tool for dynamic report generation in R
 Depends:
     R (>= 3.0.2)
 Imports:
-    evaluate (>= 0.7.2),
+    evaluate (>= 0.8),
     digest,
     formatR,
     highr,
