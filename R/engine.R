@@ -285,7 +285,7 @@ eng_cat = function(options) {
 
 ## output the code without processing it
 eng_asis = function(options) {
-  if (options$echo && options$eval) options$code
+  if (options$echo && options$eval) paste(options$code, collapse = '\n')
 }
 
 # set engines for interpreted languages

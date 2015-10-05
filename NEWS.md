@@ -8,6 +8,10 @@
 
 - plots drawn by `tikzDevice` are also measured and recorded with that device (thanks, @krlmlr, #1066)
 
+## BUG FIXES
+
+- the `asis` engine did not preserve line breaks in the code chunk
+
 # CHANGES IN knitr VERSION 1.11
 
 ## NEW FEATURES
