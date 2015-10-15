@@ -8,6 +8,8 @@
 
 - plots drawn by `tikzDevice` are also measured and recorded with that device (thanks, @krlmlr, #1066)
 
+- added a new engine `block` to wrap the chunk in a LaTeX environment or an HTML `div`, depending on the output format; the name of the environment or the class of the `div` can be specified via the chunk option `type`
+
 ## BUG FIXES
 
 - the `asis` engine did not preserve line breaks in the code chunk

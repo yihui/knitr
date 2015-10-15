@@ -2,8 +2,7 @@
 #' @export
 hook_plot_md = function(x, options) {
   # if not using R Markdown v2 or output is HTML, just return v1 output
-  if (is.null(to <- pandoc_to()) || grepl('^markdown', to) ||
-        to %in% c('html', 'html5', 'revealjs', 's5', 'slideous', 'slidy'))
+  if (is.null(to <- pandoc_to()) || is_html_output(to))
     return(hook_plot_md_base(x, options))
   if (!is.null(options$out.width) || !is.null(options$out.height) ||
         !is.null(options$out.extra) || options$fig.align != 'default') {
@@ -20,6 +19,11 @@ hook_plot_md = function(x, options) {
     }
   }
   hook_plot_md_base(x, options)
+}
+
+is_html_output = function(fmt) {
+  grepl('^markdown', fmt) ||
+    fmt %in% c('html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
 }
 
 hook_plot_md_base = function(x, options) {

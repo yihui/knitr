@@ -288,6 +288,29 @@ eng_asis = function(options) {
   if (options$echo && options$eval) paste(options$code, collapse = '\n')
 }
 
+# write a block environment according to the output format
+eng_block = function(options) {
+  if (isFALSE(options$echo)) return()
+  code = paste(options$code, collapse = '\n')
+  to = pandoc_to()
+  if (is.null(to)) {
+    # not in R Markdown v2
+    to = out_format()
+    if (!(to %in% c('latex', 'html', 'markdown'))) to = NULL
+  }
+  if (is.null(to)) return(code)
+  if (to == 'beamer') to = 'latex'
+  if (is_html_output(to)) to = 'html'
+  type = options$type
+  if (is.null(type)) return(code)
+  switch(
+    to,
+    latex = sprintf('\\begin{%s}\n%s\n\\end{%s}', type, code, type),
+    html =  sprintf('<div class="%s">\n%s\n</div>', type, code),
+    code
+  )
+}
+
 # set engines for interpreted languages
 local({
   for (i in c(
@@ -301,7 +324,7 @@ local({
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
   c = eng_shlib, fortran = eng_shlib, asy = eng_dot, cat = eng_cat,
-  asis = eng_asis, stan = eng_stan
+  asis = eng_asis, stan = eng_stan, block = eng_block
 )
 
 get_engine = function(name) {
