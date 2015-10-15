@@ -63,6 +63,11 @@ If the output format is Rnw and no document class is specified in
   class to the LaTeX document so that it is complete and can be compiled. You
   can always specify the document class and other LaTeX settings in roxygen
   comments manually.
+
+  When the output format is Rmd, it is compiled to HTML via
+  \code{\link{knit2html}()}, which uses R Markdown v1 instead of v2. If you
+  want to use the latter, you should call
+  \code{rmarkdown::\link[rmarkdown]{render}()} instead.
 }
 \examples{
 #' write normal text like this and chunk options like below
