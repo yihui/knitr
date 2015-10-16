@@ -242,6 +242,11 @@ fix_options = function(options) {
 
   options$eval = unname(options$eval)
 
+  # if aspect ratio is specified, calculate figure height
+  if (is.numeric(options$fig.asp)) {
+    options$fig.height = options$fig.width * options$fig.asp
+  }
+
   # out.[width|height].px: unit in pixels for sizes
   for (i in c('width', 'height')) {
     options[[sprintf('out.%s.px', i)]] = options[[sprintf('out.%s', i)]] %n%
