@@ -259,6 +259,9 @@ fix_options = function(options) {
     options$fig.retina = 1
   }
 
+  # turn x% to x/100\linewidth
+  if (is_latex_output()) options$out.width = percent_latex_width(options$out.width)
+
   # deal with aliases: a1 is real option; a0 is alias
   if (length(a1 <- opts_knit$get('aliases')) && length(a0 <- names(a1))) {
     for (i in seq_along(a1)) {
@@ -268,6 +271,21 @@ fix_options = function(options) {
   }
 
   options
+}
+
+is_latex_output = function() {
+  out_format('latex') || pandoc_to(c('latex', 'beamer'))
+}
+
+# turn percent width to LaTeX unit, e.g. out.width = 30% -> .3\linewidth
+percent_latex_width = function(x) {
+  if (!is.character(x)) return(x)
+  i = grep('^[0-9.]+%$', x)
+  if (length(i) == 0) return(x)
+  xi = as.numeric(sub('%$', '', x[i]))
+  if (any(is.na(xi))) return(x)
+  x[i] = paste0(xi / 100, '\\linewidth')
+  x
 }
 
 # parse but do not keep source
