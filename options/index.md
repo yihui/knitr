@@ -162,7 +162,7 @@ leading white spaces have special meanings in markdown.
 - `cache.comments`: (`NULL`) if `FALSE`, changing comments in R code chunks will
   not invalidate the cache database
 - `cache.rebuild`: (`FALSE`) if `TRUE`, the chunk is evaluated even if `cache=TRUE`
-  and no changes are made. This is useful when given an R code argument. 
+  and no changes are made. This is useful when given an R code argument.
   For example: `cache.rebuild=!file.exists("path/to/file.ext")`
   (see [#238](https://github.com/yihui/knitr/issues/238)).
 - `dependson`: (`NULL`; character or numeric) a character vector of chunk labels
@@ -201,6 +201,7 @@ leading white spaces have special meanings in markdown.
 - `fig.ext`: (`NULL`; character) file extension of the figure output (if `NULL`, it will be derived from the graphical device; see `knitr:::auto_exts` for details)
 - `dpi`: (`72`; numeric) the DPI (dots per inch) for bitmap devices (`dpi * inches = pixels`)
 - `fig.width`, `fig.height`: (both are `7`; numeric) width and height of the plot, to be used in the graphics device (in inches) and have to be numeric
+- `fig.asp`: (`NULL`; numeric) the aspect ratio of the plot, i.e. the ratio of height/width; when `fig.asp` is specified, the height of a plot (the chunk option `fig.height`) is calculated from `fig.width * fig.asp`
 - `out.width`, `out.height`: (`NULL`; character) width and height of the plot in the final output file (can be different with its real `fig.width` and `fig.height`, i.e. plots can be scaled in the output document); depending on the output format, these two options can take flexible values, e.g. for LaTeX output, they can be `.8\\linewidth`, `3in` or `8cm` and for HTML, they may be `300px` (do not have to be in inches like `fig.width` and `fig.height`; backslashes must be escaped as `\\`); for LaTeX output, the default value for `out.width` will be changed to `\\maxwidth` which is defined [here]({{ site.baseurl }}/demo/framed/)
 - `out.extra`: (`NULL`; character) extra options for figures, e.g. `out.extra='angle=90'` in LaTeX output will rotate the figure by 90 degrees; it can be an arbitrary string, e.g. you can write multiple figure options in this option; it also applies to HTML images (extra options will be written into the `<img />` tag, e.g. `out.extra='style="display:block;"'`)
 - `fig.retina`: (`1`; numeric) this option only applies to HTML output; for [Retina displays](http://en.wikipedia.org/wiki/Retina_Display), setting this option to a ratio (usually 2) will change the chunk option `dpi` to `dpi * fig.retina`, and `out.width` to `fig.width * dpi / fig.retina` internally; for example, the physical size of an image is doubled and its display size is halved when `fig.retina = 2`
@@ -247,6 +248,8 @@ There are two hidden options which are not designed to be set by the users: `fig
 
 - `interval`: (`1`; numeric) number of seconds to pause between animation frames
 - `aniopts`: (`'controls,loop'`) extra options for animations; see the documentation of the [animate package](http://www.ctan.org/tex-archive/macros/latex/contrib/animate)
+- `ffmpeg.bitrate` (`1M`; character) to be passed to the `-b:v` argument of FFmpeg to control the quality of WebM videos created from FFmpeg
+- `ffmpeg.format` (`webm`; character) the video format of FFmpeg, i.e. the filename extension of the video
 
 ### Code Chunk
 
@@ -309,4 +312,3 @@ All package options are:
 - `upload.fun`: (`identity`) a function that takes a filename as its input, processes it and returns a character string when the output format is HTML or Markdown; typically it is a function to upload a image and return the link to the image, e.g. `opts_knit$set(upload.fun = imgur_upload)` can upload a file to <http://imgur.com> (see `?imgur_upload`)
 - `verbose`: (`FALSE`) whether to show verbose information (e.g., R code in each chunk and message logs) or just show chunk labels and options
 - `width`: (`75`) it is used to set the R session option `width` that may affect the width of source code and text output
-
