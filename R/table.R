@@ -69,7 +69,7 @@
 #' cat(x, sep = '\n')
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
 kable = function(
-  x, format, digits = getOption('digits'), row.names = NA, col.names = colnames(x),
+  x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
   align, caption = NULL, format.args = list(), escape = TRUE, ...
 ) {
   if (missing(format) || is.null(format)) format = getOption('knitr.table.format')
@@ -79,7 +79,26 @@ kable = function(
     html = 'html', markdown = 'markdown', rst = 'rst',
     stop('table format not implemented yet!')
   ) else 'pandoc'
-  col.names # evaluate it now! no lazy evaluation because colnames(x) may change
+  if (inherits(x, 'list')) {
+    # if the output is for Pandoc and we want multiple tabular in one table, we
+    # should use the latex format instead, because Pandoc does not support
+    # Markdown in LaTeX yet https://github.com/jgm/pandoc/issues/2453
+    if (format == 'pandoc' && is_latex_output()) format = 'latex'
+    res = lapply(
+      x, kable, format = format, digits = digits, row.names = row.names,
+      col.names = col.names, align = align, caption = NULL,
+      format.args = format.args, escape = escape, ...
+    )
+    res = unlist(lapply(res, paste, collapse = '\n'))
+    res = if (format == 'latex') {
+      kable_latex_caption(res, caption)
+    } else if (format == 'html' || (format == 'pandoc' && is_html_output())) kable_html(
+      matrix(paste0('\n\n', res, '\n\n'), 1), caption = caption, escape = FALSE,
+      table.attr = 'class="kable wrapper"'
+    ) else paste(res, collapse = '\n\n')
+    return(structure(res, format = format, class = 'knitr_kable'))
+  }
+  if (identical(col.names, NA)) col.names = colnames(x)
   if (!is.matrix(x)) x = as.data.frame(x)
   m = ncol(x)
   # numeric columns
@@ -191,6 +210,12 @@ kable_latex = function(
     sprintf('\n%s', bottomrule),
     sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular'),
     env2
+  ), collapse = '')
+}
+
+kable_latex_caption = function(x, caption) {
+  paste(c(
+    '\\begin{table}\n', sprintf('\\caption{%s}\n', caption), '\\centering', x, '\n\\end{table}'
   ), collapse = '')
 }
 

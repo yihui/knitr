@@ -21,7 +21,7 @@ hook_plot_md = function(x, options) {
   hook_plot_md_base(x, options)
 }
 
-is_html_output = function(fmt) {
+is_html_output = function(fmt = pandoc_to()) {
   grepl('^markdown', fmt) ||
     fmt %in% c('html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
 }
