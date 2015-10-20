@@ -3,8 +3,8 @@
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
-kable(x, format, digits = getOption("digits"), row.names = NA, col.names = colnames(x), 
-    align, caption = NULL, format.args = list(), escape = TRUE, ...)
+kable(x, format, digits = getOption("digits"), row.names = NA, col.names = NA, align, 
+    caption = NULL, format.args = list(), escape = TRUE, ...)
 }
 \arguments{
 \item{x}{an R object (typically a matrix or data frame)}
