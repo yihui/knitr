@@ -1,5 +1,5 @@
-% Please edit documentation in R/hooks-asciidoc.R, R/hooks-html.R, R/hooks-latex.R, R/hooks-md.R, R/hooks-rst.R, R/hooks-textile.R
-\name{hook_plot_asciidoc}
+% Please edit documentation in R/hooks-html.R, R/hooks-asciidoc.R, R/hooks-latex.R, R/hooks-md.R, R/hooks-rst.R, R/hooks-textile.R
+\name{hook_plot_html}
 \alias{hook_plot_asciidoc}
 \alias{hook_plot_html}
 \alias{hook_plot_md}
@@ -8,9 +8,9 @@
 \alias{hook_plot_textile}
 \title{Default plot hooks for different output formats}
 \usage{
-hook_plot_asciidoc(x, options)
-
 hook_plot_html(x, options)
+
+hook_plot_asciidoc(x, options)
 
 hook_plot_tex(x, options)
 

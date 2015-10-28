@@ -4,12 +4,7 @@
 \alias{opts_chunk}
 \alias{opts_current}
 \title{Default and current chunk options}
-\format{\preformatted{List of 4
- $ get    :function (name, default = FALSE, drop = TRUE)  
- $ set    :function (...)  
- $ merge  :function (values)  
- $ restore:function (target = value)  
-}}
+\format{An object of class \code{list} of length 4.}
 \usage{
 opts_chunk
 

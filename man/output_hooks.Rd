@@ -1,5 +1,5 @@
-% Please edit documentation in R/hooks-asciidoc.R, R/hooks-html.R, R/hooks-latex.R, R/hooks-md.R, R/hooks-rst.R, R/hooks-textile.R
-\name{render_asciidoc}
+% Please edit documentation in R/hooks-html.R, R/hooks-asciidoc.R, R/hooks-latex.R, R/hooks-md.R, R/hooks-rst.R, R/hooks-textile.R
+\name{render_html}
 \alias{render_asciidoc}
 \alias{render_html}
 \alias{render_jekyll}
@@ -11,9 +11,9 @@
 \alias{render_textile}
 \title{Set output hooks for different output formats}
 \usage{
-render_asciidoc()
-
 render_html()
+
+render_asciidoc()
 
 render_latex()
 

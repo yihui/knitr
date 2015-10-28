@@ -3,12 +3,7 @@
 \name{knit_hooks}
 \alias{knit_hooks}
 \title{Hooks for R code chunks, inline R code and output}
-\format{\preformatted{List of 4
- $ get    :function (name, default = FALSE, drop = TRUE)  
- $ set    :function (...)  
- $ merge  :function (values)  
- $ restore:function (target = value)  
-}}
+\format{An object of class \code{list} of length 4.}
 \usage{
 knit_hooks
 }
