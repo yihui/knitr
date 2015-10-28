@@ -3,8 +3,6 @@
 \name{rand_seed}
 \alias{rand_seed}
 \title{An unevaluated expression to return .Random.seed if exists}
-\format{\preformatted{ language \{  .GlobalEnv$.Random.seed \}
-}}
 \usage{
 rand_seed
 }

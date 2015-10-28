@@ -242,6 +242,7 @@ dep_prev = function() {
 #' for reproducibility of chunks that involve with random number generation. See
 #' references.
 #' @export
+#' @format NULL
 #' @references \url{http://yihui.name/knitr/demo/cache/}
 #' @examples eval(rand_seed)
 #' rnorm(1) # .Random.seed is created (or modified)
