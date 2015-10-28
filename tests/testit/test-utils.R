@@ -102,3 +102,11 @@ assert(
   'current_input() returns NULL by default',
   is.null(current_input()), suppressWarnings(is.null(current_input(TRUE)))
 )
+
+assert(
+  'color_def() generates LaTeX code to define a color variable',
+  color_def(NA) == '',
+  color_def('red') == '\\definecolor{shadecolor}{rgb}{1, 0, 0}',
+  color_def('#00ff00') == '\\definecolor{shadecolor}{rgb}{0, 1, 0}',
+  color_def('.5,.6,.7', 'fgcolor') == '\\definecolor{fgcolor}{rgb}{.5, .6, .7}'
+)

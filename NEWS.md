@@ -14,6 +14,8 @@
 
 - for the chunk option `out.width`, a value of the form `xx%` will be converted to `xx/100\\linewidth` when the output format is LaTeX, so we can specify figure widths as percentages for both LaTeX and HTML output
 
+- for the chunk option `background` (to define the background color of code chunks in Rnw documents), the value `NA` means **knitr** will no longer write `\definecolor{shadecolor}` to the output of an individual code chunk (you can also enable this behavior by setting it as a global chunk option) (thanks, @friendly, #1122)
+
 - added a new engine `block` to wrap the chunk in a LaTeX environment or an HTML `div`, depending on the output format; the name of the environment or the class of the `div` can be specified via the chunk option `type`
 
 ## BUG FIXES
