@@ -20,6 +20,8 @@
 
 - the `asis` engine did not preserve line breaks in the code chunk
 
+- `kable()` could not display chron objects correctly (thanks, @liesb, #1118)
+
 # CHANGES IN knitr VERSION 1.11
 
 ## NEW FEATURES

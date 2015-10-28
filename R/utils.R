@@ -719,3 +719,10 @@ same_file = function(f1, f2) {
   f2 = normalizePath(f2, mustWork = FALSE)
   f1 == f2
 }
+
+# a restricted version of is.numeric (e.g. do not treat chron::chron() as
+# numeric since their behavior may be somewhat unpredictable, e.g. through
+# round(), #1118)
+is_numeric = function(x) {
+  class(x)[1] %in% c('numeric', 'integer')
+}

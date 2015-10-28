@@ -108,7 +108,7 @@ kable = function(
   # rounding
   digits = rep(digits, length.out = m)
   for (j in seq_len(m)) {
-    if (is.numeric(x[, j])) x[, j] = round(x[, j], digits[j])
+    if (is_numeric(x[, j])) x[, j] = round(x[, j], digits[j])
   }
   if (any(isn)) {
     if (is.matrix(x)) {
