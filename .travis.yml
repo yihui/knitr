@@ -64,3 +64,5 @@ after_success:
 
   # run test coverage only for the travis build
   - "[ $TARGET = travis ] && Rscript -e 'covr::coveralls()'"
+
+
