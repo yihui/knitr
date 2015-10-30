@@ -112,7 +112,7 @@ knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
   # check if delim is a pair, escaping regex as necessary
   if (length(delim) != 2L) stop('"delim" must be of length 2')
   delim = gsub('([.|()\\^{}+$*?]|\\[|\\])', '\\\\\\1', delim)
-  delim = paste(delim[1L], '((.|\n)+?)', delim[2L], sep = '')
+  delim = paste0(delim[1L], '((.|\n)+?)', delim[2L])
 
   txt = paste(text, collapse = '\n')
   if (packageVersion('stringr') <= '0.9.0') delim = stringr::perl(delim)

@@ -21,7 +21,7 @@ docAdjust = function(x) {
     if (n <= 1) return(z)
     if (length(idx <- grep('^\\s*$', z, invert = TRUE)) > 1) {
       i = max(idx)
-      z[i] = paste(restart, z[i], sep = '')
+      z[i] = paste0(restart, z[i])
     }
     paste(z, collapse = '\n\n')
   }))
@@ -67,23 +67,23 @@ rocco = function(input, ...) {
 
   code = regmatches(x, m)[[1]]
   code = gsub('<!--ReDuNdAnTpRe-->', '</pre>\n<pre>', code) # restore pre blocks
-  code = paste('<td class="code">', c(code, ''), '</td></tr>', sep = '')
+  code = paste0('<td class="code">', c(code, ''), '</td></tr>')
   doc = regmatches(x, m, invert = TRUE)[[1]]
-  doc = paste('<tr><td class="docs">', docAdjust(doc), '</td>', sep = '')
+  doc = paste0('<tr><td class="docs">', docAdjust(doc), '</td>')
 
   # write pilcrow anchors to rows
   sec = 1
   for (i in seq_along(doc)) {
     while (grepl('<tr><td class="docs">', doc[i])) {
-      doc[i] = sub('<tr><td class="docs">', paste(
+      doc[i] = sub('<tr><td class="docs">', paste0(
         '<tr id="row', sec, '"><td class="docs">', '<div class="pilwrap">',
-        '<a class="pilcrow" href="#row', sec, '">&para;</a></div>', sep = ''
+        '<a class="pilcrow" href="#row', sec, '">&para;</a></div>'
       ),  doc[i])
       sec = sec + 1
     }
   }
 
-  html = c(txt[1:i1], paste(doc, code, sep = '', collapse = ''), txt[i2:length(txt)])
+  html = c(txt[1:i1], paste0(doc, code, collapse = ''), txt[i2:length(txt)])
   writeLines(html, out)
   invisible(out)
 }

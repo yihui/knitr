@@ -37,7 +37,7 @@ new_cache = function() {
     if (file.exists(path)) {
       lines = readLines(path)
       lines = lines[lines != label] # knitr < 1.5 may have lines == label
-      idx = substr(lines, 1L, nchar(label) + 1L) == paste(label, '\t', sep = '')
+      idx = substr(lines, 1L, nchar(label) + 1L) == paste0(label, '\t')
       if (any(idx)) {
         lines[idx] = x  # update old objects
       } else lines = c(lines, x)
@@ -276,7 +276,7 @@ clean_cache = function(clean = FALSE, path = opts_chunk$get('cache.path')) {
   base = basename(files)
   labs = .knitEnv$labels
   if (length(labs) == 0) return()
-  i = !(sub(cache_rx, '', base) %in% paste(p1, labs, sep = ''))
+  i = !(sub(cache_rx, '', base) %in% paste0(p1, labs))
   if (p1 != '') i = i & (substr(base, 1, nchar(p1)) == p1)
   if (!any(i)) return()
   if (clean) unlink(files[i]) else message(

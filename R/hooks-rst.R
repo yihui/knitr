@@ -11,7 +11,7 @@ hook_plot_rst = function(x, options) {
   # http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure
   make_directive(
     'figure',
-    paste(opts_knit$get('base.url'), .upload.url(x), sep = ''),
+    paste0(opts_knit$get('base.url'), .upload.url(x)),
     c(align = if (options$fig.align == 'default') NULL else options$fig.align,
       alt = cap, width = options$out.width, height = options$out.height),
     cap
@@ -58,5 +58,5 @@ render_rst = function(strict = FALSE) {
 make_directive = function(name, arg, opt, content = '') {
   l1 = sprintf('\n.. %s:: %s\n', name, arg)
   l2 = paste(sprintf(':%s: %s', names(opt), opt), collapse = '\n')
-  paste(l1, indent_block(l2), '\n\n', indent_block(content), sep = '')
+  paste0(l1, indent_block(l2), '\n\n', indent_block(content))
 }

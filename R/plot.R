@@ -124,7 +124,7 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
 
   # compile tikz to pdf
   if (dev == 'tikz' && options$external) {
-    unlink(pdf.plot <- paste(name, '.pdf', sep = ''))
+    unlink(pdf.plot <- paste0(name, '.pdf'))
     owd = setwd(dirname(path))
     # add old wd to TEXINPUTS (see #188)
     oti = Sys.getenv('TEXINPUTS'); on.exit(Sys.setenv(TEXINPUTS = oti))

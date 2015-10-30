@@ -183,7 +183,7 @@ kable_latex = function(
 ) {
   if (!is.null(align <- attr(x, 'align', exact = TRUE))) {
     align = paste(align, collapse = vline)
-    align = paste('{', align, '}', sep = '')
+    align = paste0('{', align, '}')
   }
   env1 = sprintf('\\begin{%s}\n', table.envir)
   env2 = sprintf('\n\\end{%s}',   table.envir)
@@ -194,7 +194,7 @@ kable_latex = function(
   linesep = if (nrow(x) > 1) {
     c(rep(linesep, length.out = nrow(x) - 2), linesep[[1L]], '')
   } else rep('', nrow(x))
-  linesep = ifelse(linesep == "", linesep, paste('\n', linesep, sep = ''))
+  linesep = ifelse(linesep == "", linesep, paste0('\n', linesep))
 
   if (escape) x = escape_latex(x)
   if (!is.character(toprule)) toprule = NULL
@@ -207,10 +207,10 @@ kable_latex = function(
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {
       if (escape) cn = escape_latex(cn)
-      paste(paste(cn, collapse = ' & '), sprintf('\\\\\n%s\n', midrule), sep = '')
+      paste0(paste(cn, collapse = ' & '), sprintf('\\\\\n%s\n', midrule))
     },
-    paste(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep),
-          sep = '', collapse = '\n'),
+    paste0(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep),
+           collapse = '\n'),
     sprintf('\n%s', bottomrule),
     sprintf('\n\\end{%s}', if (longtable) 'longtable' else 'tabular'),
     env2
@@ -232,7 +232,7 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
   }
   cap = if (is.null(caption)) '' else sprintf('\n<caption>%s</caption>', caption)
   if (escape) x = escape_html(x)
-  paste(c(
+  paste0(c(
     sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x))) {
       if (escape) cn = escape_html(cn)
@@ -246,7 +246,7 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
     ),
     '</tbody>',
     '</table>'
-  ), sep = '', collapse = '\n')
+  ), collapse = '\n')
 }
 
 #' Generate tables for Markdown and reST
@@ -332,7 +332,7 @@ pad_width = function(x, width, side) {
   w1 = floor(w / 2)  # the left half of spaces when side = 'both'
   s1 = v_spaces(w * (side == 'left') + w1 * (side == 'both'))
   s2 = v_spaces(w * (side == 'right') + (w - w1) * (side == 'both'))
-  paste(s1, x, s2, sep = '')
+  paste0(s1, x, s2)
 }
 
 # vectorized over n to generate sequences of spaces

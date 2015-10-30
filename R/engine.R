@@ -130,7 +130,7 @@ eng_interpreted = function(options) {
 ## C and Fortran (via R CMD SHLIB)
 eng_shlib = function(options) {
   n = switch(options$engine, c = 'c', fortran = 'f')
-  f = basename(tempfile(n, '.', paste('.', n, sep = '')))
+  f = basename(tempfile(n, '.', paste0('.', n)))
   writeLines(options$code, f)
   on.exit(unlink(c(f, sub_ext(f, c('o', 'so', 'dll')))))
   if (options$eval) {

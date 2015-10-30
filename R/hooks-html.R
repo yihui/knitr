@@ -14,19 +14,19 @@ hook_plot_html = function(x, options) {
   d1 = if (plot1) paste0(if (out_format('html')) '</div>',
                         sprintf('<div class="rimage %s">', options$fig.align))
   d2 = if (plot2) paste0('</div>', if (out_format('html')) '<div class="rcode">')
-  paste(
+  paste0(
     d1, .img.tag(
       .upload.url(x), options$out.width, options$out.height, .img.cap(options),
       paste(c(options$out.extra, 'class="plot"'), collapse = ' ')
-    ), d2, '\n', sep = ''
+    ), d2, '\n'
   )
 }
 
 .img.tag = function(src, width, height, caption, extra) {
   extra = paste(c(sprintf('width="%s"', width), sprintf('height="%s"', height),
                   extra), collapse = ' ')
-  paste('<img src="', opts_knit$get('base.url'), src,
-        '" title="', caption, '" alt="', caption, '" ', extra, ' />', sep = '')
+  paste0('<img src="', opts_knit$get('base.url'), src,
+         '" title="', caption, '" alt="', caption, '" ', extra, ' />')
 }
 
 .img.cap = function(options) {
@@ -77,7 +77,7 @@ hook_ffmpeg = function(x, options, format = 'webm') {
   format = sub('^[.]', '', format)
   # set up the ffmpeg run
   fig.fname = paste0(sub(paste0(fig.num, '$'), '%d', x[1]), '.', x[2])
-  mov.fname = paste0(sub(paste(fig.num, '$', sep = ''), '', x[1]), '.', format)
+  mov.fname = paste0(sub(paste0(fig.num, '$'), '', x[1]), '.', format)
 
   extra = if (format == 'webm') {
     paste('-b:v', options$ffmpeg.bitrate %n% '1M', '-crf 10')

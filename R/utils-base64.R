@@ -19,7 +19,7 @@ image_uri2 = function(f) {
   uri = if (has_package('RCurl')) {
     paste(RCurl::base64Encode(content, 'character'), collapse = '')
   } else base64_encode(content)
-  paste('data:', mime_type(f), ';base64,', uri, sep = '')
+  paste0('data:', mime_type(f), ';base64,', uri)
 }
 
 base64_table = c(LETTERS, letters, 0:9, '+', '/')

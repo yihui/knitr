@@ -20,7 +20,7 @@ chunk_counter = knit_counter(1L)
 # a vectorized and better version than evaluate:::line_prompt
 line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('continue')) {
   # match a \n, then followed by any character (use zero width assertion)
-  paste(prompt, gsub('(?<=\n)(?=.|\n)', continue, x, perl = TRUE), sep = '')
+  paste0(prompt, gsub('(?<=\n)(?=.|\n)', continue, x, perl = TRUE))
 }
 
 # add a prefix to output
@@ -48,7 +48,7 @@ is_blank = function(x) {
 }
 valid_path = function(prefix, label) {
   if (length(prefix) == 0L || is.na(prefix) || prefix == 'NA') prefix = ''
-  paste(prefix, label, sep = '')
+  paste0(prefix, label)
 }
 
 # define a color variable in TeX
@@ -352,9 +352,9 @@ pandoc_to = function(x) {
 #' @examples fig_path('.pdf', options = list(fig.path='figure/abc-', label='first-plot'))
 #' fig_path('.png', list(fig.path='foo-', label='bar'), 1:10)
 fig_path = function(suffix = '', options = opts_current$get(), number) {
-  if (suffix != '' && !grepl('[.]', suffix)) suffix = paste('.', suffix, sep = '')
+  if (suffix != '' && !grepl('[.]', suffix)) suffix = paste0('.', suffix)
   if (missing(number)) number = options$fig.cur %n% 1L
-  if (!is.null(number)) suffix = paste('-', number, suffix, sep = '')
+  if (!is.null(number)) suffix = paste0('-', number, suffix)
   path = valid_path(options$fig.path, options$label)
   (if (out_format(c('latex', 'sweave', 'listings'))) sanitize_fn else
     paste0)(path, suffix)

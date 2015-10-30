@@ -39,7 +39,7 @@ insert_header_latex = function(doc, b) {
     }
     i = i[1L]; l = stringr::str_locate(doc[i], b)
     tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
-    stringr::str_sub(doc[i], l[,1], l[,2]) = paste(tmp, make_header_latex(), sep = '')
+    stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, make_header_latex())
   } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
     doc[1L] = paste(c(getOption('tikzDocumentDeclaration'), make_header_latex(),

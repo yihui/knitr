@@ -107,7 +107,7 @@ theme2list = function(theme.file) {
   eval(parse(text = y), envir = env)
   y = as.list(env)
   for (i in seq_along(y$Keywords)) {
-    y[[paste('Keyword', i, sep = '')]] = y$Keywords[[i]]
+    y[[paste0('Keyword', i)]] = y$Keywords[[i]]
   }
   y$Keywords = NULL
   y

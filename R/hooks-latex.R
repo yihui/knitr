@@ -99,7 +99,7 @@ hook_plot_tex = function(x, options) {
 
   # Wrap in figure environment only if user specifies a caption
   if (length(cap) && !is.na(cap)) {
-    lab = paste(options$fig.lp, options$label, sep = '')
+    lab = paste0(options$fig.lp, options$label)
     # If pic is standalone/first in set: open figure environment
     if (plot1) {
       pos = options$fig.pos
@@ -138,7 +138,7 @@ hook_plot_tex = function(x, options) {
                  sprintf('height=%s', options$out.height),
                  options$out.extra), collapse = ',')
 
-  paste(
+  paste0(
     fig1, align1, sub1, resize1,
     if (tikz) {
       sprintf('\\input{%s}', x)
@@ -155,18 +155,18 @@ hook_plot_tex = function(x, options) {
       sprintf('\\includegraphics%s{%s} ', size, sans_ext(x))
     },
 
-    resize2, sub2, align2, fig2,
-    sep = ''
+    resize2, sub2, align2, fig2
   )
 }
 
 .chunk.hook.tex = function(x, options) {
   ai = output_asis(x, options)
-  col = if (!ai) paste(color_def(options$background),
-                       if (!is_tikz_dev(options)) '\\color{fgcolor}', sep = '')
-  k1 = paste(col, '\\begin{kframe}\n', sep = '')
+  col = if (!ai) paste0(
+    color_def(options$background), if (!is_tikz_dev(options)) '\\color{fgcolor}'
+  )
+  k1 = paste0(col, '\\begin{kframe}\n')
   k2 = '\\end{kframe}'
-  x = .rm.empty.envir(paste(k1, x, k2, sep = ''))
+  x = .rm.empty.envir(paste0(k1, x, k2))
   size = if (options$size == 'normalsize') '' else sprintf('\\%s', options$size)
   if (!ai) x = sprintf('\\begin{knitrout}%s\n%s\n\\end{knitrout}', size, x)
   if (options$split) {
@@ -259,7 +259,7 @@ render_latex = function() {
     },
     output = function(x, options) {
       if (output_asis(x, options)) {
-        paste('\\end{kframe}', x, '\\begin{kframe}', sep = '')
+        paste0('\\end{kframe}', x, '\\begin{kframe}')
       } else .verb.hook(x)
     },
     warning = .color.block('\\color{warningcolor}{', '}'),
@@ -268,7 +268,7 @@ render_latex = function() {
     inline = .inline.hook.tex, chunk = .chunk.hook.tex,
     plot = function(x, options) {
       # escape plot environments from kframe
-      paste('\\end{kframe}', hook_plot_tex(x, options), '\n\\begin{kframe}', sep = '')
+      paste0('\\end{kframe}', hook_plot_tex(x, options), '\n\\begin{kframe}')
     }
   )
 }
@@ -283,10 +283,10 @@ render_sweave = function() {
   hook.i = function(x, options)
     paste(c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''),
           collapse = '\n')
-  hook.s = function(x, options) paste('\\begin{Soutput}\n', x, '\\end{Soutput}\n', sep = '')
+  hook.s = function(x, options) paste0('\\begin{Soutput}\n', x, '\\end{Soutput}\n')
   hook.c = function(x, options) {
     if (output_asis(x, options)) return(x)
-    paste('\\begin{Schunk}\n', x, '\\end{Schunk}', sep = '')
+    paste0('\\begin{Schunk}\n', x, '\\end{Schunk}')
   }
   knit_hooks$set(source = hook.i, output = hook.s, warning = hook.s,
                  message = hook.s, error = hook.s, inline = .inline.hook.tex,

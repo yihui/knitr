@@ -70,7 +70,7 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
   i = grep('^<<(.*)>>=\\s*$', x)
   if (length(i)) {
     opts = gsub('^<<(.*)>>=\\s*$', '\\1', x[i])
-    x[i] = paste('<<', fix_sweave(opts), '>>=', sep = '')
+    x[i] = paste0('<<', fix_sweave(opts), '>>=')
   }
   x = gsub_msg("replacing \\SweaveInput{...} with <<child='...'>>=",
                '^\\s*\\\\SweaveInput\\{([^}]+)\\}', "\n<<'child-\\1', child='\\1'>>=\n@\n", x)

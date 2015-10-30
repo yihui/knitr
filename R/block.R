@@ -256,9 +256,9 @@ block_cache = function(options, output, objects) {
 
 purge_cache = function(options) {
   # purge my old cache and cache of chunks dependent on me
-  cache$purge(paste(valid_path(
+  cache$purge(paste0(valid_path(
     options$cache.path, c(options$label, dep_list$get(options$label))
-  ), '_????????????????????????????????', sep = ''))
+  ), '_????????????????????????????????'))
 }
 
 # open a device for a chunk; depending on the option global.device, may or may
@@ -396,8 +396,8 @@ process_tangle.inline = function(x) {
 # add a label [and extra chunk options] to a code chunk
 label_code = function(code, label) {
   code = paste(c('', code, ''), collapse = '\n')
-  paste('## ----', stringr::str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
-        '----', code, sep = '')
+  paste0('## ----', stringr::str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
+         '----', code)
 }
 
 as.source <- function(code) {
