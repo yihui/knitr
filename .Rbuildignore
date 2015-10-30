@@ -10,6 +10,9 @@ inst/examples/figure
 inst/examples/cache
 knitr-minimal.md
 knitr-spin.md
+R/server.R
+R/ui.R
+R/InventoryBased.csv
 png$
 NEWS.md
 ^\.Rproj\.user$

@@ -8,9 +8,7 @@ env:
     - TARGET=travis
     - TARGET=integration DISPLAY=:99.0
   global:
-    secure: AwMvWbAlUxA/SNmXpfm3zL7o5ohB2Qp/qyCrYdLRc8u9v6FBQAVq0NXghsN9NVCUiNO+unSr7qXj9JDcRyx6qj67nEzTM3Pcq1iEUAoWQyhDw9gyTls8wya2K4PG86b2yUAtVFkYBYDakjuTdo786Ili+Dsw4XP0PgtnuozCxuY=
-
-# capturing state, early exit if no integration test is needed
+ # capturing state, early exit if no integration test is needed
 before_install:
   - export PATH=$HOME/bin:$HOME/texlive/bin/x86_64-linux:$PATH
   - if [ ${TARGET} = integration ]; then
@@ -36,6 +34,9 @@ addons:
     - scala
     - qpdf
     - texinfo
+    - sqldf
+    - tcltk2
+    - plyr
 
 # install dependencies
 install:
@@ -64,3 +65,5 @@ after_success:
 
   # run test coverage only for the travis build
   - "[ $TARGET = travis ] && Rscript -e 'covr::coveralls()'"
+
+
