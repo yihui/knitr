@@ -727,3 +727,15 @@ same_file = function(f1, f2) {
 is_numeric = function(x) {
   class(x)[1] %in% c('numeric', 'integer')
 }
+
+# create \label{x} or (\#x); the latter is current an internal hack for bookdown
+create_label = function(..., latex = FALSE) {
+  if (isTRUE(opts_knit$get('bookdown.internal.label'))) {
+    lab1 = '(\\#'; lab2 = ')'
+  } else if (latex) {
+    lab1 = '\\label{'; lab2 = '}'
+  } else {
+    return('')  # we don't want the label at all
+  }
+  paste0(lab1, ..., lab2)
+}

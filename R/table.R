@@ -79,6 +79,10 @@ kable = function(
     html = 'html', markdown = 'markdown', rst = 'rst',
     stop('table format not implemented yet!')
   ) else 'pandoc'
+  # create a label for bookdown if applicable
+  if (!is.null(caption)) caption = paste0(
+    caption, create_label('tab:', opts_current$get('label'))
+  )
   if (inherits(x, 'list')) {
     # if the output is for Pandoc and we want multiple tabular in one table, we
     # should use the latex format instead, because Pandoc does not support

@@ -108,8 +108,7 @@ hook_plot_tex = function(x, options) {
     }
     # Add subfloat code if needed
     if (usesub) {
-      sub1 = sprintf('\\subfloat[%s\\label{%s}]{',
-                     subcap, paste(lab, fig.cur, sep = ''))
+      sub1 = sprintf('\\subfloat[%s%s]{', subcap, create_label(lab, fig.cur, latex = TRUE))
       sub2 = '}'
     }
 
@@ -121,8 +120,10 @@ hook_plot_tex = function(x, options) {
         scap = strsplit(cap, '[$:.;]')[[1L]][1L]
       }
       scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
-      fig2 = sprintf('\\caption%s{%s}\\label{%s}\n\\end{%s}\n', scap, cap,
-                     paste(lab, if (mcap) fig.cur, sep = ''), options$fig.env)
+      fig2 = sprintf(
+        '\\caption%s{%s}%s\n\\end{%s}\n', scap, cap,
+        create_label(lab, if (mcap) fig.cur, latex = TRUE), options$fig.env
+      )
     }
   } else if (pandoc_to(c('latex', 'beamer'))) {
     # use alignment environments for R Markdown latex output (\centering won't work)

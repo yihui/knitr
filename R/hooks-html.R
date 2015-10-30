@@ -30,9 +30,11 @@ hook_plot_html = function(x, options) {
 }
 
 .img.cap = function(options) {
-  options$fig.cap %n% {
+  cap = options$fig.cap %n% {
     if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
   }
+  if (cap == '') return(cap)
+  paste0(cap, create_label(options$fig.lp, options$label))
 }
 
 # a wrapper to upload an image and return the URL
