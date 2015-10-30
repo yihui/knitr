@@ -2,15 +2,15 @@
 #install.packages("ggplot2")
 #install.packages("ggthemes")
 #install.packages("shinyExt")
-install.packages('devtools')
+#install.packages('devtools')
 library(shiny)
 library(ggplot2)
 library(ggthemes)
-library(devtools)
+#library(devtools)
 #library(shinyExt)
 
 
-Inventorybased <- read.csv("C:/PROJECT/data_po/Inventorybased.csv")
+Inventorybased <- read.csv("knitr/R/Inventorybased.csv")
 
 shinyServer(function(input, output, session) {
   
@@ -45,10 +45,10 @@ shinyServer(function(input, output, session) {
   })
 }
 )
-find_rtools()
-devtools::install_github('rstudio/shinyapps')
-shinyapps::setAccountInfo(name='bulls-eye',
-                          token='FAFF3408B4BB97AE395F2D95C7F0E0D0',
-                          secret='GjO8M60qrblYKZQpJGKhAGzNcL+XNuqswJFQ48yR')
-library(shinyapps)
-shinyapps::deployApp('C:/Users/Administrator/Documents/R')
+#find_rtools()
+#devtools::install_github('rstudio/shinyapps')
+#shinyapps::setAccountInfo(name='bulls-eye',
+#                          token='FAFF3408B4BB97AE395F2D95C7F0E0D0',
+#                          secret='GjO8M60qrblYKZQpJGKhAGzNcL+XNuqswJFQ48yR')
+#library(shinyapps)
+#shinyapps::deployApp('C:/Users/Administrator/Documents/R')
