@@ -2,7 +2,7 @@
 #install.packages("sqldf")
 #install.packages("plyr")
 #install.packages("tcltk2")
-library(shiny)
+#library(shiny)
 library(sqldf)
 library(plyr)
 library(tcltk2)
