@@ -9,8 +9,11 @@ library(ggthemes)
 #library(devtools)
 #library(shinyExt)
 
+projectDir = getwd()
 
-Inventorybased <- read.csv("knitr/R/Inventorybased.csv")
+codeDir = file.path(projectDir, 'R')
+#Inventorybased <- read.csv("knitr/R/Inventorybased.csv")
+Inventorybased <- read.csv(file.path(codeDir,'Inventorybased.csv'))
 
 shinyServer(function(input, output, session) {
   
