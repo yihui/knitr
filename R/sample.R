@@ -14,7 +14,7 @@ codeDir <- file.path(projectDir, 'R')
 
 data_po <- read.csv(file.path(codeDir,'data_po.csv'))
 
-View(data_po)
+#View(data_po)
 
 data_po$Timediff <- as.numeric(difftime(data_po$Complete.Timestamp,data_po$Start.Timestamp,units="hours"))
 
@@ -27,4 +27,4 @@ freq <- Rolebased$Frequency
 
 Rolebased$Frequency_Percentage <- freq/num
 
-View(Rolebased)
+#View(Rolebased)
