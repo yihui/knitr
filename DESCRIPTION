@@ -126,6 +126,7 @@ Collate:
     'parser.R'
     'pattern.R'
     'rocco.R'
+    'sample.R'
     'spin.R'
     'table.R'
     'template.R'
