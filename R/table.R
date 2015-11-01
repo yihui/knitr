@@ -98,7 +98,7 @@ kable = function(
       kable_latex_caption(res, caption)
     } else if (format == 'html' || (format == 'pandoc' && is_html_output())) kable_html(
       matrix(paste0('\n\n', res, '\n\n'), 1), caption = caption, escape = FALSE,
-      table.attr = 'class="kable wrapper"'
+      table.attr = 'class="kable_wrapper"'
     ) else paste(res, collapse = '\n\n')
     return(structure(res, format = format, class = 'knitr_kable'))
   }
