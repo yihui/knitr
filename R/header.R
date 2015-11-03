@@ -20,7 +20,8 @@ make_header_latex = function() {
             opts_knit$get('latex.options.color') %n% ''),
     .header.maxwidth, opts_knit$get('header'),
     if (getOption('OutDec') != '.') '\\usepackage{amsmath}',
-    if (out_format('latex')) '\\usepackage{alltt}'
+    if (out_format('latex')) '\\usepackage{alltt}',
+    if (test_latex_pkg('tikzscale', '', FALSE)) '\\usepackage{tikzscale}'
   ), collapse = '\n')
   if (opts_knit$get('self.contained')) h else {
     writeLines(h, 'knitr.sty')

@@ -308,11 +308,20 @@ eval_lang = function(x, envir = knit_global()) {
 isFALSE = function(x) identical(x, FALSE)
 
 # check latex packages; if not exist, copy them over to ./
-test_latex_pkg = function(name, path) {
+test_latex_pkg = function(name, path, copy=TRUE) {
   res = try_silent(system(sprintf('%s %s.sty', kpsewhich(), name), intern = TRUE))
   if (inherits(res, 'try-error') || !length(res)) {
-    warning("unable to find LaTeX package '", name, "'; will use a copy from knitr")
-    file.copy(path, '.')
+    args <- list("unable to find LaTeX package '", name, "'")
+    if (copy) {
+      args <- c(args, "; will use a copy from knitr")
+    }
+    do.call(warning, args)
+    if (copy) {
+      file.copy(path, '.')
+    }
+    FALSE
+  } else {
+    TRUE
   }
 }
 

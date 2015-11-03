@@ -64,6 +64,7 @@ hook_plot_tex = function(x, options) {
   }
 
   tikz = is_tikz_dev(options)
+  tikzscale = test_latex_pkg('tikzscale', '', FALSE) & xor(!is.null(options$out.width), !is.null(options$out.height))
 
   a = options$fig.align
   fig.cur = options$fig.cur %n% 1L
@@ -84,7 +85,7 @@ hook_plot_tex = function(x, options) {
 
   # open align code if this picture is standalone/first in set
   align1 = if (plot1)
-    switch(a, left = '\n\n', center = '\n\n{\\centering ', right = '\n\n\\hfill{}', '\n')
+    switch(a, left = '\n\n', center = '\n\n{\\centering ', right = '\n\n\\hfill{}', '%\n')
   # close align code if this picture is standalone/last in set
   align2 = if (plot2)
     switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n', right = '\n\n', '')
@@ -127,7 +128,7 @@ hook_plot_tex = function(x, options) {
   } else if (pandoc_to(c('latex', 'beamer'))) {
     # use alignment environments for R Markdown latex output (\centering won't work)
     align.env = switch(a, left = 'flushleft', center = 'center', right = 'flushright')
-    align1 = if (plot1) if (a == 'default') '\n' else sprintf('\n\n\\begin{%s}', align.env)
+    align1 = if (plot1) if (a == 'default') '%\n' else sprintf('\n\n\\begin{%s}', align.env)
     align2 = if (plot2) if (a == 'default') '' else sprintf('\\end{%s}\n\n', align.env)
   }
 
@@ -139,9 +140,9 @@ hook_plot_tex = function(x, options) {
 
   paste(
     fig1, align1, sub1, resize1,
-    if (tikz) {
+    if (tikz && !tikzscale) {
       sprintf('\\input{%s}', x)
-    } else if (animate) {
+    } else if (!tikz && animate) {
       # \animategraphics{} should be inserted only *once*!
       aniopts = options$aniopts
       aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
@@ -151,7 +152,7 @@ hook_plot_tex = function(x, options) {
               sub(sprintf('%d$', fig.num), '', sans_ext(x)), 1L, fig.num)
     } else {
       if (nzchar(size)) size = sprintf('[%s]', size)
-      sprintf('\\includegraphics%s{%s} ', size, sans_ext(x))
+      sprintf('\\includegraphics%s{%s} ', size, x)
     },
 
     resize2, sub2, align2, fig2,
@@ -167,7 +168,7 @@ hook_plot_tex = function(x, options) {
   k2 = '\\end{kframe}'
   x = .rm.empty.envir(paste(k1, x, k2, sep = ''))
   size = if (options$size == 'normalsize') '' else sprintf('\\%s', options$size)
-  if (!ai) x = sprintf('\\begin{knitrout}%s\n%s\n\\end{knitrout}', size, x)
+  if (!ai) x = sprintf('\\begin{knitrout}%s%%\n%s%%\n\\end{knitrout}%%', size, x)
   if (options$split) {
     name = fig_path('.tex', options, NULL)
     if (!file.exists(dirname(name)))
@@ -267,7 +268,7 @@ render_latex = function() {
     inline = .inline.hook.tex, chunk = .chunk.hook.tex,
     plot = function(x, options) {
       # escape plot environments from kframe
-      paste('\\end{kframe}', hook_plot_tex(x, options), '\n\\begin{kframe}', sep = '')
+      paste('\\end{kframe}', hook_plot_tex(x, options), '%\n\\begin{kframe}', sep = '')
     }
   )
 }
