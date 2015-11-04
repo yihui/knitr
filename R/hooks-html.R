@@ -22,11 +22,15 @@ hook_plot_html = function(x, options) {
   )
 }
 
-.img.tag = function(src, width, height, caption, extra) {
-  extra = paste(c(sprintf('width="%s"', width), sprintf('height="%s"', height),
-                  extra), collapse = ' ')
-  paste0('<img src="', opts_knit$get('base.url'), src,
-         '" title="', caption, '" alt="', caption, '" ', extra, ' />')
+.img.attr = function(w, h, extra) {
+  paste(c(sprintf('width="%s"', w), sprintf('height="%s"', h), extra), collapse = ' ')
+}
+
+.img.tag = function(src, w, h, caption, extra) {
+  paste0(
+    '<img src="', opts_knit$get('base.url'), src, '" title="', caption,
+    '" alt="', caption, '" ', .img.attr(w, h, extra), ' />'
+  )
 }
 
 .img.cap = function(options) {
