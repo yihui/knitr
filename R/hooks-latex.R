@@ -98,7 +98,7 @@ hook_plot_tex = function(x, options) {
   sub1 = sub2 = ''
 
   # Wrap in figure environment only if user specifies a caption
-  if (length(cap) && !is.na(cap)) {
+  if (length(cap) && !is.na(cap) && cap != '') {
     lab = paste0(options$fig.lp, options$label)
     # If pic is standalone/first in set: open figure environment
     if (plot1) {
