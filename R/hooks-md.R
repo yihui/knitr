@@ -22,6 +22,7 @@ hook_plot_md = function(x, options) {
 }
 
 is_html_output = function(fmt = pandoc_to()) {
+  if (length(fmt) == 0) return(FALSE)
   grepl('^markdown', fmt) ||
     fmt %in% c('html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
 }
@@ -34,13 +35,24 @@ hook_plot_md_base = function(x, options) {
 
   w = options$out.width; h = options$out.height
   s = options$out.extra; a = options$fig.align
-  if (is.null(w) && is.null(h) && is.null(s) && a == 'default') {
-    return(sprintf('![%s](%s%s) ', cap, base, .upload.url(x)))
+  ai = options$fig.show == 'asis'
+  pandoc_html = cap != '' && is_html_output()
+  if (is.null(w) && is.null(h) && is.null(s) && a == 'default' && (!pandoc_html || !ai)) {
+    return(sprintf('![%s](%s%s)%s ', cap, base, .upload.url(x), if (cap == '') '\\' else ''))
   }
   # use HTML syntax <img src=...>
-  .img.tag(
+  if (pandoc_html) {
+    plot1 = ai || options$fig.cur <= 1L
+    plot2 = ai || options$fig.cur == options$fig.num
+    d1 = if (plot1) sprintf('<div class="figure"%s>\n', css_text_align(a))
+    d2 = if (plot2) sprintf('\n<p class="caption">%s</p>\n</div>', cap)
+    paste0(d1, sprintf(
+      '<img src="%s" alt="%s" %s />',
+      paste0(opts_knit$get('base.url'), .upload.url(x)), cap, .img.attr(w, h, s)
+    ), d2)
+  } else .img.tag(
     .upload.url(x), w, h, cap,
-    c(s, sprintf('style="%s"', css_align(options$fig.align)))
+    c(s, sprintf('style="%s"', css_align(a)))
   )
 }
 
@@ -48,6 +60,10 @@ css_align = function(align) {
   sprintf('display: block; margin: %s;', switch(
     align, left = 'auto auto auto 0', center = 'auto', right = 'auto 0 auto auto'
   ))
+}
+
+css_text_align = function(align) {
+  if (align == 'default') '' else sprintf(' style="text-align: %s"', align)
 }
 
 #' @rdname output_hooks
