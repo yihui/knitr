@@ -185,7 +185,7 @@ kable_latex = function(
     align = paste(align, collapse = vline)
     align = paste0('{', align, '}')
   }
-  env1 = sprintf('\\begin{%s}\n', table.envir)
+  env1 = sprintf('\\begin{%s}\n\\centering\n', table.envir)
   env2 = sprintf('\n\\end{%s}',   table.envir)
   cap = if (is.null(caption)) '' else sprintf('\n\\caption{%s}', caption)
 
