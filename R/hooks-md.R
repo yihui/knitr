@@ -38,7 +38,10 @@ hook_plot_md_base = function(x, options) {
   ai = options$fig.show == 'asis'
   pandoc_html = cap != '' && is_html_output()
   if (is.null(w) && is.null(h) && is.null(s) && a == 'default' && (!pandoc_html || !ai)) {
-    return(sprintf('![%s](%s%s)%s ', cap, base, .upload.url(x), if (cap == '') '\\' else ''))
+    return(sprintf(
+      '![%s](%s%s)%s ', cap, base, .upload.url(x),
+      if (cap == '' && !is.null(pandoc_to())) '\\' else ''
+    ))
   }
   # use HTML syntax <img src=...>
   if (pandoc_html) {
