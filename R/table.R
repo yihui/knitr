@@ -78,7 +78,11 @@ kable = function(
     latex = 'latex', listings = 'latex', sweave = 'latex',
     html = 'html', markdown = 'markdown', rst = 'rst',
     stop('table format not implemented yet!')
-  ) else 'pandoc'
+  ) else if (isTRUE(opts_knit$get('bookdown.table.latex')) && is_latex_output()) {
+    # force LaTeX table because Pandoc's longtable may not work well with floats
+    # http://tex.stackexchange.com/q/276699/9128
+    'latex'
+  } else 'pandoc'
   # create a label for bookdown if applicable
   if (!is.null(caption)) caption = paste0(
     create_label('tab:', opts_current$get('label')), caption
