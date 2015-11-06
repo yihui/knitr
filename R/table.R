@@ -84,7 +84,7 @@ kable = function(
     'latex'
   } else 'pandoc'
   # create a label for bookdown if applicable
-  if (!is.null(caption)) caption = paste0(
+  if (!is.null(caption) && !is.na(caption)) caption = paste0(
     create_label('tab:', opts_current$get('label')), caption
   )
   if (inherits(x, 'list')) {
@@ -94,7 +94,7 @@ kable = function(
     if (format == 'pandoc' && is_latex_output()) format = 'latex'
     res = lapply(
       x, kable, format = format, digits = digits, row.names = row.names,
-      col.names = col.names, align = align, caption = NULL,
+      col.names = col.names, align = align, caption = NA,
       format.args = format.args, escape = escape, ...
     )
     res = unlist(lapply(res, paste, collapse = '\n'))
@@ -193,6 +193,7 @@ kable_latex = function(
     align = paste0('{', align, '}')
   }
   env1 = sprintf('\\begin{%s}\n\\centering\n', table.envir)
+  if (identical(caption, NA)) caption = NULL
   env2 = sprintf('\n\\end{%s}',   table.envir)
   cap = if (is.null(caption)) '' else sprintf('\n\\caption{%s}', caption)
 
@@ -237,6 +238,7 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
   align = if (is.null(align <- attr(x, 'align', exact = TRUE))) '' else {
     sprintf(' style="text-align:%s;"', c(l = 'left', c = 'center', r = 'right')[align])
   }
+  if (identical(caption, NA)) caption = NULL
   cap = if (is.null(caption)) '' else sprintf('\n<caption>%s</caption>', caption)
   if (escape) x = escape_html(x)
   paste0(c(
@@ -315,6 +317,7 @@ kable_markdown = function(x, padding = 1, ...) {
 kable_pandoc = function(x, caption = NULL, padding = 1, ...) {
   tab = kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA),
                    padding = padding, ...)
+  if (identical(caption, NA)) caption = NULL
   if (is.null(caption)) tab else c(paste('Table:', caption), "", tab)
 }
 
