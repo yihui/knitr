@@ -144,3 +144,9 @@ assert(
     c('|a  |b  |', '|:--|:--|', '|a  |3  |', '|2  |4  |')
   )
 )
+
+assert(
+  'has_rownames() works',
+  !has_rownames(matrix(1:4, 2)), !has_rownames(iris), has_rownames(mtcars),
+  !has_rownames(as.data.frame(matrix(nrow = 0, ncol = 3)))
+)

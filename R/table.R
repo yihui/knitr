@@ -124,8 +124,7 @@ kable = function(
       x = format_matrix(x, format.args)
     } else x[, isn] = format_args(x[, isn], format.args)
   }
-  if (is.na(row.names))
-    row.names = !is.null(rownames(x)) && !identical(rownames(x), as.character(seq_len(NROW(x))))
+  if (is.na(row.names)) row.names = has_rownames(x)
   if (!is.null(align)) align = rep(align, length.out = m)
   if (row.names) {
     x = cbind(' ' = rownames(x), x)
@@ -160,6 +159,10 @@ format_args = function(x, args = list()) {
   args$x = x
   args$trim = TRUE
   do.call(format, args)
+}
+
+has_rownames = function(x) {
+  !is.null(rownames(x)) && !identical(rownames(x), as.character(seq_len(NROW(x))))
 }
 
 #' @export
