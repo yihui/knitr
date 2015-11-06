@@ -180,7 +180,7 @@ knit_print.knitr_kable = function(x, ...) {
 }
 
 kable_latex = function(
-  x, booktabs = FALSE, longtable = FALSE,
+  x, booktabs = FALSE, longtable = FALSE, valign = 't', centering = TRUE,
   vline = getOption('knitr.table.vline', if (booktabs) '' else '|'),
   toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule' else '\\hline'),
   bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule' else '\\hline'),
@@ -192,8 +192,9 @@ kable_latex = function(
     align = paste(align, collapse = vline)
     align = paste0('{', align, '}')
   }
-  env1 = sprintf('\\begin{%s}\n\\centering\n', table.envir)
+  centering = if (centering && !is.null(caption)) '\n\\centering'
   if (identical(caption, NA)) caption = NULL
+  env1 = sprintf('\\begin{%s}\n', table.envir)
   env2 = sprintf('\n\\end{%s}',   table.envir)
   cap = if (is.null(caption)) '' else sprintf('\n\\caption{%s}', caption)
 
@@ -212,6 +213,7 @@ kable_latex = function(
   paste(c(
     env1,
     cap,
+    centering,
     sprintf('\n\\begin{%s}%s', tabular, valign), align,
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {
@@ -228,7 +230,7 @@ kable_latex = function(
 
 kable_latex_caption = function(x, caption) {
   paste(c(
-    '\\begin{table}\n', sprintf('\\caption{%s}\n', caption), '\\centering', x, '\n\\end{table}'
+    '\\begin{table}\n', sprintf('\\caption{%s}\n', caption), x, '\n\\end{table}'
   ), collapse = '')
 }
 
@@ -240,7 +242,7 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
     sprintf(' style="text-align:%s;"', c(l = 'left', c = 'center', r = 'right')[align])
   }
   if (identical(caption, NA)) caption = NULL
-  cap = if (is.null(caption)) '' else sprintf('\n<caption>%s</caption>', caption)
+  cap = if (length(caption)) sprintf('\n<caption>%s</caption>', caption) else ''
   if (escape) x = escape_html(x)
   paste0(c(
     sprintf('<table%s>%s', table.attr, cap),
@@ -319,7 +321,7 @@ kable_pandoc = function(x, caption = NULL, padding = 1, ...) {
   tab = kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA),
                    padding = padding, ...)
   if (identical(caption, NA)) caption = NULL
-  if (is.null(caption)) tab else c(paste('Table:', caption), "", tab)
+  if (length(caption)) c(paste('Table:', caption), "", tab) else tab
 }
 
 # pad a matrix
