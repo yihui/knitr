@@ -193,6 +193,11 @@ kable_latex = function(
     align = paste0('{', align, '}')
   }
   centering = if (centering && !is.null(caption)) '\n\\centering'
+  # vertical align only if 'caption' is not NULL (may be NA) or 'valign' has
+  # been explicitly specified
+  valign = if ((!is.null(caption) || !missing(valign)) && valign != '') {
+    sprintf('[%s]', valign)
+  } else ''
   if (identical(caption, NA)) caption = NULL
   env1 = sprintf('\\begin{%s}\n', table.envir)
   env2 = sprintf('\n\\end{%s}',   table.envir)
