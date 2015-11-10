@@ -6,6 +6,8 @@
 
 - `kable()` supports generating multiple tables from a list of data objects, and the tables will be placed side by side when the output format is HTML or LaTeX
 
+- added a new function `include_graphics()` to embed existing image files into **knitr** documents; see `?include_graphics` for details
+
 - added a chunk option `ffmpeg.bitrate` (default: `1M`) to control the quality of WebM videos created from FFmpeg (thanks, @JsonPunyon, #1090)
 
 - added a chunk option `ffmpeg.format` (default: `webm`) to control the video format of FFmpeg; this option specifies the filename extension of the video (#712)

@@ -539,6 +539,16 @@ wrap.recordedplot = function(x, options) {
   knit_hooks$get('plot')(file, reduce_plot_opts(options))
 }
 
+#' @export
+wrap.knit_image_paths = function(x, options, inline = FALSE) {
+  hook_plot = knit_hooks$get('plot')
+  options$fig.num = length(x)
+  paste(unlist(lapply(seq_along(x), function(i) {
+    options$fig.cur = i
+    hook_plot(x[i], options)
+  })), collapse = '')
+}
+
 #' A custom printing function
 #'
 #' The S3 generic function \code{knit_print} is the default printing function in

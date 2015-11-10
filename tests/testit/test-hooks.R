@@ -16,4 +16,19 @@ assert(
   )
 )
 
+render_markdown()
+
+img_output = function(path, opts = list()) {
+  opts = opts_chunk$merge(opts)
+  wrap(knit_print(include_graphics(path)), opts)
+}
+
+assert(
+  'include_graphics() includes custom images correctly',
+  identical(img_output('a.png'), '![](a.png) '),
+  identical(img_output(c('a.png', 'b.png')), '![](a.png) ![](b.png) '),
+  identical(img_output('a.png', list(fig.cap = 'foo bar')), '![foo bar](a.png) '),
+  identical(img_output('a.png', list(out.width = '50%')), '<img src="a.png" title="" alt="" width="50%" />')
+)
+
 knit_hooks$restore()
