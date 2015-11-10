@@ -568,7 +568,8 @@ file_ext = tools::file_ext
 sans_ext = tools::file_path_sans_ext
 # substitute extension
 sub_ext = function(x, ext) {
-  if (grepl('\\.([[:alnum:]]+)$', x)) x = sans_ext(x)
+  i = grep('\\.([[:alnum:]]+)$', x)
+  x[i] = sans_ext(x[i])
   paste(x, ext, sep = '.')
 }
 
