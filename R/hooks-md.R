@@ -37,7 +37,7 @@ hook_plot_md_base = function(x, options) {
   s = options$out.extra; a = options$fig.align
   ai = options$fig.show == 'asis'
   pandoc_html = cap != '' && is_html_output()
-  if (is.null(w) && is.null(h) && is.null(s) && a == 'default' && (!pandoc_html || !ai)) {
+  if (is.null(w) && is.null(h) && is.null(s) && a == 'default' && !pandoc_html) {
     return(sprintf(
       '![%s](%s%s)%s ', cap, base, .upload.url(x),
       if (cap == '' && !is.null(pandoc_to())) '\\' else ''
