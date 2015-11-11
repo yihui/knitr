@@ -26,6 +26,8 @@
 
 - `kable()` could not display chron objects correctly (thanks, @liesb, #1118)
 
+- `kable(format = 'latex', longtable = TRUE)` did not write the table caption in the correct place (should be inside the `longtable` environment)
+
 # CHANGES IN knitr VERSION 1.11
 
 ## NEW FEATURES

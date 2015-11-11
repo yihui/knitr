@@ -216,10 +216,9 @@ kable_latex = function(
   tabular = if (longtable) 'longtable' else 'tabular'
 
   paste(c(
-    env1,
-    cap,
-    centering,
+    if (!longtable) c(env1, cap, centering),
     sprintf('\n\\begin{%s}%s', tabular, valign), align,
+    if (longtable && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {
       if (escape) cn = escape_latex(cn)
@@ -229,7 +228,7 @@ kable_latex = function(
            collapse = '\n'),
     sprintf('\n%s', bottomrule),
     sprintf('\n\\end{%s}', tabular),
-    env2
+    if (!longtable) env2
   ), collapse = '')
 }
 
