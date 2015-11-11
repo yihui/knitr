@@ -7,7 +7,7 @@ For bug reports, please provide a minimal reproducible example. By "minimal", I
 mean you should reduce your example as much as possible right before the problem
 you want to report disappears. By doing this, you may be able to figure out what
 the problem really is before reporting to me. Please do not make me read your
-hundreds of lines of code (most of which are irrelevant to the bug), or
+hundreds of lines of code (most of which are perhaps irrelevant to the bug), or
 understand dozens of variables in your particular dataset (use a simple built-in
 dataset in R instead, such as `iris` or `mtcars`, or simulated data). Make your
 example self-contained in one single document, i.e. avoid reading external files
