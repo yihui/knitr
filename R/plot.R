@@ -13,6 +13,8 @@ auto_exts = c(
 
   Cairo_pdf = 'pdf', Cairo_png = 'png', Cairo_ps = 'eps', Cairo_svg = 'svg',
 
+  svglite = 'svg',
+
   tikz = 'tikz'
 )
 
@@ -104,6 +106,8 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     Cairo_png = load_device('Cairo_png', 'cairoDevice'),
     Cairo_ps = load_device('Cairo_ps', 'cairoDevice'),
     Cairo_svg = load_device('Cairo_svg', 'cairoDevice'),
+
+    svglite = load_device('svglite', 'svglite'),
 
     tikz = function(...) {
       tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)

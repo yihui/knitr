@@ -20,6 +20,8 @@
 
 - added a new engine `block` to wrap the chunk in a LaTeX environment or an HTML `div`, depending on the output format; the name of the environment or the class of the `div` can be specified via the chunk option `type`
 
+- you can use the `svglite` device in the **svglite** package (https://github.com/hadley/svglite) via the chunk option `dev = 'svglite'`
+
 ## BUG FIXES
 
 - the `asis` engine did not preserve line breaks in the code chunk
