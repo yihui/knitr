@@ -293,7 +293,8 @@ eng_block = function(options) {
   if (isFALSE(options$echo)) return()
   code = paste(options$code, collapse = '\n')
   to = pandoc_to()
-  if (is.null(to)) {
+  is_pandoc = !is.null(to)
+  if (!is_pandoc) {
     # not in R Markdown v2
     to = out_format()
     if (!(to %in% c('latex', 'html', 'markdown'))) to = NULL
@@ -303,6 +304,10 @@ eng_block = function(options) {
   if (is_html_output(to)) to = 'html'
   type = options$type
   if (is.null(type)) return(code)
+  # convert the chunk content to HTML or LaTeX (ideally I only need to specify
+  # the markdown extension, but it is not implemented yet for LaTeX:
+  # https://github.com/jgm/pandoc/issues/2453)
+  if (is_pandoc) code = pandoc_fragment(code, to)
   switch(
     to,
     latex = sprintf('\\begin{%s}\n%s\n\\end{%s}', type, code, type),

@@ -332,6 +332,20 @@ pandoc_to = function(x) {
   if (missing(x)) fmt else !is.null(fmt) && (fmt %in% x)
 }
 
+# rmarkdown's input format
+pandoc_from = function() {
+  opts_knit$get('rmarkdown.pandoc.from') %n% 'markdown'
+}
+
+pandoc_fragment = function(text, to, from = pandoc_from()) {
+  f1 = tempfile('pandoc', '.', '.md'); f2 = tempfile('pandoc', '.')
+  on.exit(unlink(c(f1, f2)))
+  writeLines(enc2utf8(text), f1, useBytes = TRUE)
+  rmarkdown::pandoc_convert(f1, to, from, f2)
+  code = readLines(f2, encoding = 'UTF-8', warn = FALSE)
+  paste(code, collapse = '\n')
+}
+
 #' Path for figure files
 #'
 #' The filename of figure files is the combination of options \code{fig.path}
