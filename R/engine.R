@@ -335,9 +335,7 @@ knit_engines$set(
 get_engine = function(name) {
   fun = knit_engines$get(name)
   if (is.function(fun)) return(fun)
-  # FIXME: definitely stop() after the next version of dplyr is on CRAN
-  # https://github.com/hadley/dplyr/pull/1091
-  (if (name == 'cpp' && 'dplyr' %in% loadedNamespaces() && packageVersion('dplyr') <= '0.4.1') warning else stop)(
+  warning(
     "Unknown language engine '", name,
     "' (must be registered via knit_engines$set())."
   )
