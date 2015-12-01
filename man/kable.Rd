@@ -12,7 +12,8 @@ kable(x, format, digits = getOption("digits"), row.names = NA, col.names = NA, a
 \item{format}{a character string; possible values are \code{latex},
 \code{html}, \code{markdown}, \code{pandoc}, and \code{rst}; this will be
 automatically determined if the function is called within \pkg{knitr}; it
-can also be set in the global option \code{knitr.table.format}}
+can also be set in the global option \code{knitr.table.format}; if
+\code{format} is a function, it must return a character string}
 
 \item{digits}{the maximum number of digits for numeric columns (passed to
 \code{round()}); it can also be a vector of length \code{ncol(x)} to set
