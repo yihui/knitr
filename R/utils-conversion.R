@@ -92,6 +92,15 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
 #' if (interactive()) browseURL('test.html')
 knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
                      quiet = FALSE, encoding = getOption('encoding')) {
+  if (is.null(text)) {
+    con = file(input, encoding = encoding)
+    on.exit(close(con), add = TRUE)
+    signal = if (is_R_CMD_check()) warning else stop
+    if (length(grep('^---\\s*$', head(readLines(con), 1)))) signal(
+      'It seems you should call rmarkdown::render() instead of knitr::knit2html() ',
+      'because ', input, ' appears to be an R Markdown v2 document.'
+    )
+  }
   out = knit(input, text = text, envir = envir, encoding = encoding, quiet = quiet)
   if (is.null(text)) {
     output = sub_ext(if (is.null(output) || is.na(output)) out else output, 'html')
