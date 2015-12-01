@@ -6,7 +6,8 @@
 #' @param format a character string; possible values are \code{latex},
 #'   \code{html}, \code{markdown}, \code{pandoc}, and \code{rst}; this will be
 #'   automatically determined if the function is called within \pkg{knitr}; it
-#'   can also be set in the global option \code{knitr.table.format}
+#'   can also be set in the global option \code{knitr.table.format}; if
+#'   \code{format} is a function, it must return a character string
 #' @param digits the maximum number of digits for numeric columns (passed to
 #'   \code{round()}); it can also be a vector of length \code{ncol(x)} to set
 #'   the number of digits for individual columns
@@ -72,6 +73,8 @@ kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
   align, caption = NULL, format.args = list(), escape = TRUE, ...
 ) {
+
+  # determine the table format
   if (missing(format) || is.null(format)) format = getOption('knitr.table.format')
   if (is.null(format)) format = if (is.null(pandoc_to())) switch(
     out_format() %n% 'markdown',
@@ -83,6 +86,8 @@ kable = function(
     # http://tex.stackexchange.com/q/276699/9128
     'latex'
   } else 'pandoc'
+  if (is.function(format)) format = format()
+
   # create a label for bookdown if applicable
   if (!is.null(caption) && !is.na(caption)) caption = paste0(
     create_label('tab:', opts_current$get('label')), caption
