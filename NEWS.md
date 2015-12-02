@@ -32,6 +32,10 @@
 
 - `kable(format = 'latex', longtable = TRUE)` did not write the table caption in the correct place (should be inside the `longtable` environment)
 
+## MINOR CHANGES
+
+- added an argument `force_v1` to `knit2html()`; when it is `TRUE`, `knit2html()` renders the input file as an R Markdown v1 document even if it is for R Markdown v2 (#1130)
+
 # CHANGES IN knitr VERSION 1.11
 
 ## NEW FEATURES

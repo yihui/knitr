@@ -77,6 +77,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
 #' convert the result to HTML.
 #' @inheritParams knit
 #' @param ... options passed to \code{\link[markdown]{markdownToHTML}}
+#' @param force_v1 whether to force rendering the input document as an R
+#'   Markdown v1 document (even if it is for v2)
 #' @export
 #' @seealso \code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}
 #' @return If the argument \code{text} is NULL, a character string (HTML code)
@@ -91,8 +93,8 @@ knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(
 #' knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')
 knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
-                     quiet = FALSE, encoding = getOption('encoding')) {
-  if (is.null(text)) {
+                     quiet = FALSE, encoding = getOption('encoding'), force_v1 = FALSE) {
+  if (!force_v1 && is.null(text)) {
     con = file(input, encoding = encoding)
     on.exit(close(con), add = TRUE)
     signal = if (is_R_CMD_check()) warning else stop

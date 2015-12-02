@@ -4,7 +4,7 @@
 \title{Convert markdown to HTML using knit() and markdownToHTML()}
 \usage{
 knit2html(input, output = NULL, ..., envir = parent.frame(), text = NULL, quiet = FALSE, 
-    encoding = getOption("encoding"))
+    encoding = getOption("encoding"), force_v1 = FALSE)
 }
 \arguments{
 \item{input}{path of the input file}
@@ -25,6 +25,9 @@ file}
 \item{quiet}{whether to suppress the progress bar and messages}
 
 \item{encoding}{the encoding of the input file; see \code{\link{file}}}
+
+\item{force_v1}{whether to force rendering the input document as an R
+Markdown v1 document (even if it is for v2)}
 }
 \value{
 If the argument \code{text} is NULL, a character string (HTML code)
