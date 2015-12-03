@@ -4,6 +4,8 @@
 
 - added a chunk option `fig.asp` to specify the aspect ratio (i.e. the ratio height/width) of figures: when `fig.asp` is specified, the height of a figure (the chunk option `fig.height`) is calculated from `fig.width * fig.asp`
 
+- added a new function `knit_watch()` to knit input files continously when any of them are updated, so you do not have to call a knitting function like `knit()`, `knit2pdf()`, or `rmarkdown::render()` repeatedly as you update an input document
+
 - `kable()` supports generating multiple tables from a list of data objects, and the tables will be placed side by side when the output format is HTML or LaTeX
 
 - the `format` argument of `kable()` can be a function that returns a character string of the table format (thanks, @haozhu233, #1132)
