@@ -27,8 +27,7 @@ You can also install the development version from
 ```r
 # update all existing packages first
 update.packages(ask = FALSE, repos = 'http://cran.rstudio.org')
-install.packages('knitr', repos = c('http://yihui.name/xran', 'http://cran.rstudio.org'),
-                 type = 'source')
+install.packages('knitr', repos = c('http://yihui.name/xran', 'http://cran.rstudio.org'))
 ```
 
 Or use **devtools** to install the development version from Github:
