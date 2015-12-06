@@ -626,6 +626,9 @@ formals(normal_print) = alist(x = , ... = )
 #'   will be collected when the object is printed, and accessible via
 #'   \code{knit_meta()})
 #' @param cacheable a logical value indicating if this object is cacheable
+#' @note This function only works in top-level R expressions, and it will not
+#'   work when it is called inside another expression, such as a for-loop. See
+#'   \url{https://github.com/yihui/knitr/issues/1137} for a discussion.
 #' @export
 #' @examples  # see ?knit_print
 asis_output = function(x, meta = NULL, cacheable = length(meta) == 0) {

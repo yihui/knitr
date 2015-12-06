@@ -35,6 +35,11 @@ may involve registering metadata about some JavaScript libraries or
 stylesheets, and the metadata may be lost if we cache the code chunk, because
 the code evaluation will be skipped the next time.
 }
+\note{
+This function only works in top-level R expressions, and it will not
+  work when it is called inside another expression, such as a for-loop. See
+  \url{https://github.com/yihui/knitr/issues/1137} for a discussion.
+}
 \examples{
 # see ?knit_print
 }
