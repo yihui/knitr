@@ -34,6 +34,10 @@
 
 - `kable(format = 'latex', longtable = TRUE)` did not write the table caption in the correct place (should be inside the `longtable` environment)
 
+## MAJOR CHANGES
+
+- local chunk options can override options set in `opts_template` now, e.g. for `opts_template$set(quiet = list(echo = FALSE))`, and a local chunk option `echo = TRUE` will override `echo = FALSE` in `opts_template` for the current code chunk (thanks, @aaronwolen, #1140)
+
 ## MINOR CHANGES
 
 - added an argument `force_v1` to `knit2html()`; when it is `TRUE`, `knit2html()` renders the input file as an R Markdown v1 document even if it is for R Markdown v2 (#1130)
