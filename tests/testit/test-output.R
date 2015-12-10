@@ -60,7 +60,7 @@ assert(
     knit(
       text = c(
         "<<include=FALSE>>=","opts_template$set(quiet = list(echo=FALSE))", "@",
-        "<<results='asis', opts.label='quiet', echo=TRUE>>=", "1+1", "@"
+        "<<results='asis', opts.label='quiet', echo=TRUE, tidy=FALSE>>=", "1+1", "@"
       ),
       quiet = TRUE
     )
