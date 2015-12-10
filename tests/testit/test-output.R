@@ -39,6 +39,34 @@ assert(
   )
 )
 
+assert(
+  'opts_template options are used',
+  identical(
+    "\n[1] 2\n",
+    knit(
+      text = c(
+        "<<include=FALSE>>=","opts_template$set(quiet = list(echo=FALSE))", "@",
+        "<<results='asis', opts.label='quiet'>>=", "1+1", "@"
+      ),
+      quiet = TRUE
+    )
+  )
+)
+
+assert(
+  'local chunk options override opts_template',
+  identical(
+    "\n\\begin{kframe}\n\\begin{alltt}\n\\hlnum{1}\\hlopt{+}\\hlnum{1}\n\\end{alltt}\n\\end{kframe}[1] 2\n",
+    knit(
+      text = c(
+        "<<include=FALSE>>=","opts_template$set(quiet = list(echo=FALSE))", "@",
+        "<<results='asis', opts.label='quiet', echo=TRUE>>=", "1+1", "@"
+      ),
+      quiet = TRUE
+    )
+  )
+)
+
 # a shortcut
 k = function(text) {
   on.exit(opts_chunk$restore())
