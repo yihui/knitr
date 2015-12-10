@@ -15,15 +15,16 @@ call_block = function(block) {
   # now try eval all options except those in eval.after and their aliases
   af = opts_knit$get('eval.after'); al = opts_knit$get('aliases')
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
+
+  # expand parameters defined via template
+  if (!is.null(block$params$opts.label)) {
+    block$params <- merge_list(opts_template$get(block$params$opts.label), block$params)
+  }
+
   params = opts_chunk$merge(block$params)
   opts_current$restore(params)
   for (o in setdiff(names(params), af)) params[o] = list(eval_lang(params[[o]]))
-
   params = fix_options(params)  # for compatibility
-
-  # expand parameters defined via template
-  if (!is.null(params$opts.label))
-    params = merge_list(params, opts_template$get(params$opts.label))
 
   label = ref.label = params$label
   if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
@@ -403,4 +404,3 @@ label_code = function(code, label) {
 as.source <- function(code) {
   list(structure(list(src = code), class = 'source'))
 }
-
