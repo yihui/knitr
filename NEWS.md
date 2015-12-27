@@ -34,6 +34,8 @@
 
 - `kable(format = 'latex', longtable = TRUE)` did not write the table caption in the correct place (should be inside the `longtable` environment)
 
+- fixed #1055: the `tikz` device may fail if there are code chunks before `\documentclass{}` in Rnw documents (thanks, @ClaudiusL)
+
 ## MAJOR CHANGES
 
 - local chunk options can override options set in `opts_template` now, e.g. for `opts_template$set(quiet = list(echo = FALSE))`, and a local chunk option `echo = TRUE` will override `echo = FALSE` in `opts_template` for the current code chunk (thanks, @aaronwolen, #1140)
