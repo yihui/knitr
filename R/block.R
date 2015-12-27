@@ -94,7 +94,10 @@ block_exec = function(options) {
     res.after = run_hooks(before = FALSE, options)
     output = paste(c(res.before, output, res.after), collapse = '')
     output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
-    if (options$cache) block_cache(options, output, character(0))
+    if (options$cache) block_cache(
+      options, output,
+      if (options$engine == 'stan') options$engine.opts$x else character(0)
+    )
     return(if (options$include) output else '')
   }
 

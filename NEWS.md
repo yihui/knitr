@@ -26,6 +26,8 @@
 
 - you can use the `svglite` device in the **svglite** package (https://github.com/hadley/svglite) via the chunk option `dev = 'svglite'`
 
+- `cache = TRUE` works better for the `stan` engine now: the Stan model object will be saved and can be loaded the next time for the cached code chunk (thanks, @dalewsteele, #1064)
+
 ## BUG FIXES
 
 - the `asis` engine did not preserve line breaks in the code chunk
