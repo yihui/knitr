@@ -98,7 +98,7 @@ hook_plot_tex = function(x, options) {
   sub1 = sub2 = ''
 
   # Wrap in figure environment only if user specifies a caption
-  if (length(cap) && !is.na(cap) && cap != '') {
+  if (length(cap) && !is.na(cap)) {
     lab = paste0(options$fig.lp, options$label)
     # If pic is standalone/first in set: open figure environment
     if (plot1) {
@@ -120,10 +120,11 @@ hook_plot_tex = function(x, options) {
         scap = strsplit(cap, '[$:.;]')[[1L]][1L]
       }
       scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
-      fig2 = sprintf(
-        '\\caption%s{%s}%s\n\\end{%s}\n', scap, cap,
-        create_label(lab, if (mcap) fig.cur, latex = TRUE), options$fig.env
+      cap = if (cap == '') '' else sprintf(
+        '\\caption%s{%s}%s\n', scap, cap,
+        create_label(lab, if (mcap) fig.cur, latex = TRUE)
       )
+      fig2 = sprintf('%s\\end{%s}\n', cap, options$fig.env)
     }
   } else if (pandoc_to(c('latex', 'beamer'))) {
     # use alignment environments for R Markdown latex output (\centering won't work)
