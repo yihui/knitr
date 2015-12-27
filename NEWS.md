@@ -38,6 +38,8 @@
 
 - fixed #1055: the `tikz` device may fail if there are code chunks before `\documentclass{}` in Rnw documents (thanks, @ClaudiusL)
 
+- fixed #1119: when the chunk option `engine != 'R'`, the `size` option does not work (thanks, @cysouw)
+
 ## MAJOR CHANGES
 
 - local chunk options can override options set in `opts_template` now, e.g. for `opts_template$set(quiet = list(echo = FALSE))`, and a local chunk option `echo = TRUE` will override `echo = FALSE` in `opts_template` for the current code chunk (thanks, @aaronwolen, #1140)

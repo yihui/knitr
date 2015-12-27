@@ -9,6 +9,9 @@ hilight_source = function(x, format, options) {
         if (format == 'html') highr:::escape_html(x) else highr:::escape_latex(x)
       } else {
         highlight_header()
+        n = length(res)
+        # do not touch font size
+        if (res[n] == '\\normalsize') res = res[-n]
         res
       }
     }

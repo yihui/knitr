@@ -252,7 +252,7 @@ render_latex = function() {
         if (options$engine == 'R' || x[1] != '\\noindent') {
           paste(c('\\begin{alltt}', x, '\\end{alltt}', ''), collapse = '\n')
         } else {
-          if ((n <- length(x)) > 5) x[n - 3] = sub('\\\\\\\\$', '', x[n - 3])
+          if ((n <- length(x)) > 4) x[n - 2] = sub('\\\\\\\\$', '', x[n - 2])
           paste(c(x, ''), collapse = '\n')
         }
       } else .verb.hook(x)
