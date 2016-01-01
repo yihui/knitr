@@ -48,6 +48,8 @@
 
 - added an argument `force_v1` to `knit2html()`; when it is `TRUE`, `knit2html()` renders the input file as an R Markdown v1 document even if it is for R Markdown v2 (#1130)
 
+- the trailing space after `![]()` (for plots) in Markdown output has been removed (#1049)
+
 # CHANGES IN knitr VERSION 1.11
 
 ## NEW FEATURES

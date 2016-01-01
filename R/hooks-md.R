@@ -37,16 +37,16 @@ hook_plot_md_base = function(x, options) {
   s = options$out.extra; a = options$fig.align
   ai = options$fig.show == 'asis'
   pandoc_html = cap != '' && is_html_output()
+  plot1 = ai || options$fig.cur <= 1L
+  plot2 = ai || options$fig.cur == options$fig.num
   if (is.null(w) && is.null(h) && is.null(s) && a == 'default' && !pandoc_html) {
     return(sprintf(
-      '![%s](%s%s)%s ', cap, base, .upload.url(x),
-      if (cap == '' && !is.null(pandoc_to())) '\\' else ''
+      '![%s](%s%s)%s%s', cap, base, .upload.url(x),
+      if (cap == '' && !is.null(pandoc_to())) '\\' else '', if (plot2) '' else ' '
     ))
   }
   # use HTML syntax <img src=...>
   if (pandoc_html) {
-    plot1 = ai || options$fig.cur <= 1L
-    plot2 = ai || options$fig.cur == options$fig.num
     d1 = if (plot1) sprintf('<div class="figure"%s>\n', css_text_align(a))
     d2 = if (plot2) sprintf('<p class="caption">%s</p>', cap)
     img = sprintf(
