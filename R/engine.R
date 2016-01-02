@@ -308,10 +308,17 @@ eng_block = function(options) {
   # the markdown extension, but it is not implemented yet for LaTeX:
   # https://github.com/jgm/pandoc/issues/2453)
   if (is_pandoc) code = pandoc_fragment(code, to)
+  l1 = options$latex.options
+  l1 = if (is.null(l1)) '' else paste0('[', l1, ']')
+  h2 = options$html.tag %n% 'div'
+  h3 = options$html.before %n% ''
+  h4 = options$html.after %n% ''
+  # e.g. type = c(latex = 'marginfigure', html = 'marginnote')
+  if (to %in% names(type)) type = type[to]
   switch(
     to,
-    latex = sprintf('\\begin{%s}\n%s\n\\end{%s}', type, code, type),
-    html =  sprintf('<div class="%s">\n%s\n</div>', type, code),
+    latex = sprintf('\\begin%s{%s}\n%s\n\\end{%s}', l1, type, code, type),
+    html =  sprintf('%s<%s class="%s">\n%s\n</%s>%s', h3, h2, type, code, h2, h4),
     code
   )
 }
