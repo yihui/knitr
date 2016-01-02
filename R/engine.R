@@ -315,10 +315,17 @@ eng_block = function(options) {
   h4 = options$html.after %n% ''
   # e.g. type = c(latex = 'marginfigure', html = 'marginnote')
   if (to %in% names(type)) type = type[to]
+  # block level tags? this is an incomplete list, but should work for most cases
+  if (to == 'html') if (h2 %in% c('div', 'p', 'blockquote')) {
+    code = paste0('\n', code, '\n')
+  } else {
+    code = gsub('<p>', '<span style="display: block;">', code)
+    code = gsub('</p>', '</span>', code)
+  }
   switch(
     to,
     latex = sprintf('\\begin%s{%s}\n%s\n\\end{%s}', l1, type, code, type),
-    html =  sprintf('%s<%s class="%s">\n%s\n</%s>%s', h3, h2, type, code, h2, h4),
+    html =  sprintf('%s<%s class="%s">%s</%s>%s', h3, h2, type, code, h2, h4),
     code
   )
 }
