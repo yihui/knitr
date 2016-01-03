@@ -217,7 +217,7 @@ block_exec = function(options) {
     options$fig.num = if (length(res)) sum(sapply(res, evaluate::is.recordedplot)) else 0L
 
   # merge neighbor elements of the same class into one element
-  for (cls in c('source', 'message')) res = merge_class(res, cls)
+  for (cls in c('source', 'message', 'warning')) res = merge_class(res, cls)
 
   on.exit(plot_counter(reset = TRUE), add = TRUE)  # restore plot number
   if (options$fig.show != 'animate' && options$fig.num > 1) {
