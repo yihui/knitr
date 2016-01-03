@@ -311,24 +311,27 @@ filter_evaluate = function(res, opt, test) {
 }
 
 # merge neighbor elements of the same class in a list returned by evaluate()
-merge_class = function(res, class) {
+merge_class = function(res, class = c('source', 'message', 'warning')) {
 
+  class = match.arg(class)
   idx = if (length(res)) which(sapply(res, inherits, what = class))
   if ((n <- length(idx)) <= 1) return(res)
 
-  k1 = idx[1]; k2 = NULL
-  el = switch(
-    class, `source` = 'src', `message` = 'message',
-    stop("`class` must be either 'source' or 'message'")
-  )
+  k1 = idx[1]; k2 = NULL; res1 = res[[k1]]
+  el = c(source = 'src', message = 'message', warning = 'message')[class]
   for (i in 1:(n - 1)) {
-    if (idx[i + 1] - idx[i] == 1) {
-      res[[k1]] = structure(
-        list(c(res[[k1]][[el]], res[[idx[i + 1]]][[el]])),
-        class = class, .Names = el
-      )
-      k2 = c(k2, idx[i + 1])
-    } else k1 = idx[i + 1]
+    idx2 = idx[i + 1]; idx1 = idx[i]
+    if (idx2 - idx1 == 1) {
+      res2 = res[[idx2]]
+      # merge warnings/messages only if next one is identical to previous one
+      if (class == 'source' || identical(res1, res2)) {
+        res[[k1]][[el]] = c(res[[k1]][[el]], res2[[el]])
+        k2 = c(k2, idx2)
+      } else {
+        k1 = idx2
+        res1 = res[[k1]]
+      }
+    } else k1 = idx2
   }
   if (length(k2)) res = res[-k2] # remove lines that have been merged back
   res
