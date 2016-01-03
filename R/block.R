@@ -219,6 +219,8 @@ block_exec = function(options) {
   # merge neighbor elements of the same class into one element
   for (cls in c('source', 'message', 'warning')) res = merge_class(res, cls)
 
+  if (isTRUE(options$fig.beforecode)) res = fig_before_code(res)
+
   on.exit(plot_counter(reset = TRUE), add = TRUE)  # restore plot number
   if (options$fig.show != 'animate' && options$fig.num > 1) {
     options = recycle_plot_opts(options)
@@ -314,6 +316,22 @@ filter_evaluate = function(res, opt, test) {
 find_recordedplot = function(x) {
   vapply(x, evaluate::is.recordedplot, logical(1))
 }
+
+# move plots before source code
+fig_before_code = function(x) {
+  s = vapply(x, evaluate::is.source, logical(1))
+  if (length(s) == 0 || !any(s)) return(x)
+  s = which(s)
+  f = which(find_recordedplot(x))
+  f = f[f >= min(s)]  # only move those plots after the first code block
+  if (length(f) == 0) return(x)
+  for (i in rev(f)) {
+    j = max(s[s < i])
+    tmp = x[i]; x[[i]] = NULL; x = append(x, tmp, j - 1)
+  }
+  x
+}
+
 # merge neighbor elements of the same class in a list returned by evaluate()
 merge_class = function(res, class = c('source', 'message', 'warning')) {
 
