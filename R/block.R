@@ -195,13 +195,13 @@ block_exec = function(options) {
   res = filter_evaluate(res, options$message, evaluate::is.message)
 
   # rearrange locations of figures
-  figs = vapply(res, evaluate::is.recordedplot, logical(1))
+  figs = find_recordedplot(res)
   if (length(figs) && any(figs)) {
     if (keep == 'none') {
       res = res[!figs] # remove all
     } else {
       if (options$fig.show == 'hold') res = c(res[!figs], res[figs]) # move to the end
-      figs = sapply(res, evaluate::is.recordedplot)
+      figs = find_recordedplot(res)
       if (length(figs) && sum(figs) > 1) {
         if (keep %in% c('first', 'last')) {
           res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
@@ -310,6 +310,10 @@ filter_evaluate = function(res, opt, test) {
   if (length(idx) == 0) res else res[-idx]
 }
 
+# find recorded plots in the output of evaluate()
+find_recordedplot = function(x) {
+  vapply(x, evaluate::is.recordedplot, logical(1))
+}
 # merge neighbor elements of the same class in a list returned by evaluate()
 merge_class = function(res, class = c('source', 'message', 'warning')) {
 
