@@ -1,11 +1,12 @@
 ---
 layout: default
 title: Hooks
-subtitle: Customizable functions to run before/after a code chunk and tweak the output of knitr
+subtitle: Customizable functions to run before/after a code chunk, tweak the output, and manipulate chunk options
 ---
 
 - [Chunk hooks](#chunk_hooks)
 - [Output hooks](#output_hooks)
+- [Option hooks](#option_hooks)
 
 The object `knit_hooks` in the **knitr** package is used to set hooks; the basic usage is `knit_hooks$set(param = FUN)` (see [objects]({{ site.baseurl }}/objects) for details) where `param` is the name of a chunk option (can be arbitrary), and `FUN` is a function. There are two types of hooks: chunk hooks and output hooks. Hook functions may have different forms, depending what they are designed to do.
 
@@ -125,3 +126,21 @@ I need to build this site so I also set up some hooks especially for Jekyll, and
 
 Code is put after `::` and indented by 4 spaces, or in the `sourcecode` directive.
 
+## Option hooks <a id="option_hooks"></a>
+
+Sometimes you may want to change certain chunk options according to the values of other chunk options, and you may use the object `opts_hooks` to set up an option hook to do it. An option hook is executed when a corresponding chunk option is not `NULL`. For example, we can tweak the `figure.width` option so that it is always no smaller than `fig.height`:
+
+{% highlight r %}
+opts_hooks$set(fig.width = function(options) {
+  if (options$fig.width < options$fig.height) {
+    options$fig.width = options$fig.height
+  }
+  options
+})
+{% endhighlight %}
+
+Because `fig.width` will never be \code{NULL}, this hook function is always executed before a code chunk to update its chunk options. For the code chunk below, the actual value of `fig.width` will be 6 instead of the initial 5 if the above option hook has been set up:
+
+    ```{r fig.width = 5, fig.height = 6}
+    plot(1:10)
+    ```
