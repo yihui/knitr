@@ -42,3 +42,26 @@ hook_suppress = function(x, options) {
   }
   paste(x, collapse = '\n')
 }
+
+#' Hooks for code chunk options
+#'
+#' Like \code{\link{knit_hooks}}, this object can be used to set hook functions
+#' to manipulate chunk options.
+#'
+#' For every code chunk, if the chunk option named, say, \code{FOO}, is not
+#' \code{NULL}, and a hook function with the same name has been set via
+#' \code{opts_hooks$set(FOO = function(options) { options })} (you can manipuate
+#' the \code{options} argument in the function and return it), the hook function
+#' will be called to update the chunk options.
+#' @references \url{http://yihui.name/knitr/hooks}
+#' @export
+#' @examples # make sure the figure width is no smaller than fig.height
+#' opts_hooks$set(fig.width = function(options) {
+#'   if (options$fig.width < options$fig.height) {
+#'     options$fig.width = options$fig.height
+#'   }
+#'   options
+#' })
+#' # remove all hooks
+#' opts_hooks$restore()
+opts_hooks = new_defaults(list())

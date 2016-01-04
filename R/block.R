@@ -44,6 +44,18 @@ call_block = function(block) {
 
   params$code = parse_chunk(params$code) # parse sub-chunk references
 
+  ohooks = opts_hooks$get()
+  for (opt in names(ohooks)) {
+    hook = ohooks[[opt]]
+    if (!is.function(hook)) {
+      warning("The option hook '", opt, "' should be a function")
+      next
+    }
+    if (!is.null(params[[opt]])) params = hook(params)
+    if (!is.list(params))
+      stop("The option hook '", opt, "' should return a list of chunk options")
+  }
+
   # Check cache
   if (params$cache > 0) {
     content = c(

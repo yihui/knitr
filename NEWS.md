@@ -12,6 +12,8 @@
 
 - added a new function `include_graphics()` to embed existing image files into **knitr** documents; see `?include_graphics` for details
 
+- added a new object \code{opts_hooks} that can be used to set up chunk option hooks to modify chunk options; see `?opts_hooks` for details (thanks, @hadley, #1096)
+
 - added a chunk option `ffmpeg.bitrate` (default: `1M`) to control the quality of WebM videos created from FFmpeg (thanks, @JsonPunyon, #1090)
 
 - added a chunk option `ffmpeg.format` (default: `webm`) to control the video format of FFmpeg; this option specifies the filename extension of the video (#712)
