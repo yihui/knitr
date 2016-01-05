@@ -336,10 +336,10 @@ fig_before_code = function(x) {
   s = which(s)
   f = which(find_recordedplot(x))
   f = f[f >= min(s)]  # only move those plots after the first code block
-  if (length(f) == 0) return(x)
-  for (i in rev(f)) {
+  for (i in f) {
     j = max(s[s < i])
     tmp = x[i]; x[[i]] = NULL; x = append(x, tmp, j - 1)
+    s = which(vapply(x, evaluate::is.source, logical(1)))
   }
   x
 }

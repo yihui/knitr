@@ -81,3 +81,16 @@ if (!has_error({png(); dev.off()})) assert(
 pdf = function() {}
 do.call(pdf_null, list(7, 7))
 dev.off()
+
+
+gen_source = function(x) structure(x, class = 'source')
+gen_plotrc = function(x) structure(factor(x), class = c('factor', 'recordedplot'))
+res = list(
+  gen_source(1), gen_plotrc('a'), gen_plotrc('b'), gen_source(2), gen_source(3),
+  gen_plotrc('c'), gen_source(4), gen_plotrc('d')
+)
+
+assert(
+  'fig_before_code() moves plots before code blocks',
+  identical(fig_before_code(res), res[c(2, 3, 1, 4, 6, 5, 8, 7)])
+)
