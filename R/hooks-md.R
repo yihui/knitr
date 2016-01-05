@@ -48,14 +48,14 @@ hook_plot_md_base = function(x, options) {
   # use HTML syntax <img src=...>
   if (pandoc_html) {
     d1 = if (plot1) sprintf('<div class="figure"%s>\n', css_text_align(a))
-    d2 = if (plot2) sprintf('<p class="caption">%s</p>', cap)
+    d2 = sprintf('<p class="caption">%s</p>', cap)
     img = sprintf(
       '<img src="%s" alt="%s" %s />',
       paste0(opts_knit$get('base.url'), .upload.url(x)), cap, .img.attr(w, h, s)
     )
     # whether to place figure caption at the top or bottom of a figure
     if (isTRUE(options$fig.topcaption)) {
-      paste0(d1, d2, img, if (plot2) '</div>')
+      paste0(d1, if (ai || options$fig.cur <= 1) d2, img, if (plot2) '</div>')
     } else {
       paste0(d1, img, if (plot2) paste0('\n', d2, '\n</div>'))
     }
