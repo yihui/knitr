@@ -631,9 +631,10 @@ The \textbf{knitr} package is ready for customization. Both the patterns
 and hooks can be customized; see the package website for details.
 Here I show an example on how to save \textbf{rgl} plots \citep{R-rgl}
 using a customized hook function. First we define a hook named \texttt{rgl}
-using the function \emph{hook\_rgl()} in \textbf{knitr}:
+using the function \emph{hook\_rgl()} in \textbf{rgl}:
 
 <<rgl-demo>>=
+library(rgl)
 knit_hooks$set(rgl = hook_rgl)
 head(hook_rgl)  # the hook function is defined as this
 @
