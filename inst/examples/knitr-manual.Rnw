@@ -1,4 +1,4 @@
-%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[sc]{mathpazo}
@@ -87,7 +87,7 @@ library(ggplot2)
 qplot(speed, dist, data=cars)+geom_smooth()
 @
 
-\protect\caption{\label{fig:cars-demo}A simple demo of possible output in \textbf{knitr}:
+\caption{\label{fig:cars-demo}A simple demo of possible output in \textbf{knitr}:
 (1) multiple plots per chunk; (2) no need to \emph{print()} objects
 in \textbf{ggplot2}; (3) device size is $4\times2.8$ (inches) but
 output size is adjusted to \texttt{.45\textbackslash{}textwidth} in

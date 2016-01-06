@@ -1,4 +1,4 @@
-%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[nohyper,justified]{tufte-handout}
 \usepackage[T1]{fontenc}
@@ -67,7 +67,7 @@ with(trees, symbols(Height, Volume, circles = Girth/16, inches = FALSE, bg = 'de
 <<pdf-dev, ref.label='test-plot', dev='pdf', out.width='\\linewidth', echo=FALSE>>=
 @
 
-\protect\caption{The default PDF device.\label{mar:pdf-dev}}
+\caption{The default PDF device.\label{mar:pdf-dev}}
 \end{marginfigure}
 
 
@@ -75,7 +75,7 @@ with(trees, symbols(Height, Volume, circles = Girth/16, inches = FALSE, bg = 'de
 <<png-dev, ref.label='test-plot', dev='png', out.width='\\linewidth', echo=FALSE>>=
 @
 
-\protect\caption{The PNG device.\label{mar:png-dev}}
+\caption{The PNG device.\label{mar:png-dev}}
 \end{marginfigure}
 
 
@@ -105,7 +105,7 @@ plot(cars)
 boxplot(cars$dist,xlab='dist')
 @
 
-\protect\caption{Two high-level plots are captured. The key to arrange two plots side
+\caption{Two high-level plots are captured. The key to arrange two plots side
 by side is to specify the \texttt{out.width} option so that each plot
 takes less than half of the line width. We do not have to use the
 \texttt{par(mfrow)} trick, and it may not work in some cases (e.g.
@@ -125,7 +125,7 @@ plot(0,0,type='n',ann=FALSE)
 for(i in seq(0, 2*pi,length=20)) {points(cos(i),sin(i))}
 @
 
-\protect\caption{Two complete R expressions will produce at most two plots, as long
+\caption{Two complete R expressions will produce at most two plots, as long
 as there are not multiple high-level plotting calls in each expression;
 option \texttt{fig.keep='all'} here.\label{fig:low-plot-loop}}
 \end{figure}
@@ -140,7 +140,7 @@ plot(cars)
 abline(lm(dist~speed, data=cars))  # a regression line
 @
 
-\protect\caption{Low-level plot changes in base graphics can be recorded separately,
+\caption{Low-level plot changes in base graphics can be recorded separately,
 and plots can be put in the places where they were produced.\label{fig:high-with-low}}
 \end{figure}
 
@@ -180,7 +180,7 @@ pie + coord_polar(theta = "y") # a pie chart
 pie + coord_polar() # the bullseye chart 
 @
 
-\protect\caption{Two plots were produced in this chunk, but only the last one is kept.
+\caption{Two plots were produced in this chunk, but only the last one is kept.
 This can be useful when we experiment with many plots, but only want
 the last result. (Adapted from the \textbf{ggplot2} website)}
 \end{figure}
@@ -204,7 +204,7 @@ for (i in seq(pi/2, -4/3 * pi, length = 12)) {
 }
 @
 
-\protect\caption{A clock animation. You have to view it in Adobe Reader: click to play/pause;
+\caption{A clock animation. You have to view it in Adobe Reader: click to play/pause;
 there are also buttons to speed up or slow down the animation.\label{fig:clock-animation}}
 \end{figure}
 
@@ -219,7 +219,7 @@ option, and we can also set plots to be left/right-aligned. Figure
 stars(cbind(1:16,10*(16:1)),draw.segments=TRUE)
 @
 
-\protect\caption{A left-aligned plot adapted from \texttt{?stars} (I call this the
+\caption{A left-aligned plot adapted from \texttt{?stars} (I call this the
 ``Maruko'' plot, and it is one of my favorites; see \protect\url{http://en.wikipedia.org/wiki/Chibi_Maruko-chan}).\label{fig:maruko-plot}}
 \end{figure}
 
@@ -251,7 +251,7 @@ plot(0:1,0:1,type='n', ylab='origin of statistics', xlab='statistical presentati
 text(.5,c(.8,.5,.2), c('\\texttt{lm(y \\textasciitilde{} x)}', '$\\hat{\\beta}=(X^{\\prime}X)^{-1}X^{\\prime}y$',  '$(\\Omega,\\mathcal{F},\\mu)$'))
 @
 
-\protect\caption{A plot created by \textbf{tikzDevice} with math expressions and typewriter
+\caption{A plot created by \textbf{tikzDevice} with math expressions and typewriter
 fonts. Note the font style consistency -- we write the same expressions
 in \protect\LaTeX{} here: $\hat{\beta}=(X^{\prime}X)^{-1}X^{\prime}y$ and
 $(\Omega,\mathcal{F},\mu)$; also \texttt{lm(y \textasciitilde{} x)}.\label{fig:math-formula-tt}}
@@ -320,7 +320,7 @@ plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
 @
 \end{kframe}
 
-\protect\caption{The original plot produced in R, with a large margin.\label{fig:pdf-nocrop}}
+\caption{The original plot produced in R, with a large margin.\label{fig:pdf-nocrop}}
 \end{figure}
 
 
@@ -330,7 +330,7 @@ plot(lat~long,data=quakes,pch=20,col=rgb(0,0,0,.2))
 @
 \end{kframe}
 
-\protect\caption{The cropped plot; it fits better in the document.\label{fig:pdf-crop}}
+\caption{The cropped plot; it fits better in the document.\label{fig:pdf-crop}}
 \end{figure}
 
 

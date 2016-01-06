@@ -35,7 +35,7 @@ with(mtcars, {
 })
 ```
 
-![plot of chunk graphics](http://animation.r-forge.r-project.org/ideas/figure/graphics-1.png) 
+![plot of chunk graphics](http://animation.r-forge.r-project.org/ideas/figure/graphics-1.png)
 
 ## Inline code
 
