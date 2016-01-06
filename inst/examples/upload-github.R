@@ -69,7 +69,7 @@ for (i in x$assets) {
 for (f in FILES) {
   message('uploading ', f)
   POST(
-    sub('{?name}', '', r_upload, fixed = TRUE),
+    sub('{?name,label}', '', r_upload, fixed = TRUE),
     query = list(name = basename(f)), body = upload_file(f, mime::guess_type(f))
   )
   Sys.sleep(1)
