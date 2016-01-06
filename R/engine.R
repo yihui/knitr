@@ -114,7 +114,7 @@ eng_interpreted = function(options) {
   cmd = options$engine.path %n% engine
   out = if (options$eval) {
     message('running: ', cmd, ' ', code)
-    tryCatch(system2(cmd, code, stdout = TRUE, stderr = TRUE), error = function(e) {
+    tryCatch(system2(cmd, code, stdout = TRUE, stderr = TRUE, env=options$engine.env), error = function(e) {
       if (!options$error) stop(e)
       paste('Error in running command', cmd)
     })
