@@ -15,10 +15,6 @@ if (file.exists('download_count.csv')) {
   counts = counts[!duplicated(counts$file), ]
 }
 rownames(counts) = FILES[match(basename(FILES), counts$file)]
-.Last = function() {
-  counts = counts[order(counts$file), , drop = FALSE]
-  write.csv(counts, 'download_count.csv', row.names = FALSE)
-}
 
 library(httr)
 token = Sys.getenv('GH_TOKEN', NA)
@@ -65,6 +61,11 @@ for (i in x$assets) {
   DELETE(i$url)
   Sys.sleep(1)
 }
+
+# update download counts
+counts = counts[order(counts$file), , drop = FALSE]
+write.csv(counts, 'download_count.csv', row.names = FALSE)
+
 # upload files
 for (f in FILES) {
   message('uploading ', f)
