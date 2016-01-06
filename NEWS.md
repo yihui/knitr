@@ -30,6 +30,8 @@
 
 - `cache = TRUE` works better for the `stan` engine now: the Stan model object will be saved and can be loaded the next time for the cached code chunk (thanks, @dalewsteele, #1064)
 
+- the chunk option `engine.env` can be used to set environment variables when running engines like `bash`; this option is passed to the `env` argument of `system2()` (thanks, @mbojan, #1032)
+
 ## BUG FIXES
 
 - the `asis` engine did not preserve line breaks in the code chunk

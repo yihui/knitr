@@ -114,10 +114,13 @@ eng_interpreted = function(options) {
   cmd = options$engine.path %n% engine
   out = if (options$eval) {
     message('running: ', cmd, ' ', code)
-    tryCatch(system2(cmd, code, stdout = TRUE, stderr = TRUE, env=options$engine.env), error = function(e) {
-      if (!options$error) stop(e)
-      paste('Error in running command', cmd)
-    })
+    tryCatch(
+      system2(cmd, code, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+      error = function(e) {
+        if (!options$error) stop(e)
+        paste('Error in running command', cmd)
+      }
+    )
   } else ''
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status')))
