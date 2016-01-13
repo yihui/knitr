@@ -45,7 +45,7 @@ hook_plot_md_base = function(x, options) {
       !grepl('-implicit_figures', pandoc_from())
     return(sprintf(
       '![%s](%s%s)%s%s', cap, base, .upload.url(x),
-      if (nocap) '<!-- -->' else '', if (plot2) '' else ' '
+      if (nocap) '<!-- -->' else '', if (is_latex_output()) ' ' else ''
     ))
   }
   # use HTML syntax <img src=...>
