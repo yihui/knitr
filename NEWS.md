@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.13
+
+## BUG FIXES
+
+- figures without captions may fail to render correctly in R Markdown v2
+
 # CHANGES IN knitr VERSION 1.12
 
 ## NEW FEATURES
