@@ -94,3 +94,9 @@ assert(
   'fig_before_code() moves plots before code blocks',
   identical(fig_before_code(res), res[c(2, 3, 1, 4, 6, 5, 8, 7)])
 )
+
+# should not error when a plot label contains special characters and sanitize=TRUE
+if (requireNamespace('tikzDevice')) {
+  knit('knit-tikzDevice.Rnw', quiet = TRUE)
+  unlink(c('*-tikzDictionary', 'figure', 'knit-tikzDevice.tex'), recursive = TRUE)
+}

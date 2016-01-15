@@ -4,6 +4,8 @@
 
 - figures without captions may fail to render correctly in R Markdown v2
 
+- fixed #1149: the `sanitize` and `external` chunk options were not passed to `tikzDevice::tikz()` when the `tikz()` device was opened to record plots in a chunk, so plots that contain special LaTeX characters would not work (thanks, @O-T)
+
 # CHANGES IN knitr VERSION 1.12
 
 ## NEW FEATURES
