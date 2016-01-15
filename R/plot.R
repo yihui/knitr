@@ -52,9 +52,7 @@ tikz_dev = function(...) {
     xetex = getOption('tikzXelatexPackages'),
     luatex = getOption('tikzLualatexPackages')
   )
-  getFromNamespace('tikz', 'tikzDevice')(
-    ..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages)
-  )
+  tikzDevice::tikz(..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages))
 }
 
 # save a recorded plot
