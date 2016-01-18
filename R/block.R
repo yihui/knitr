@@ -93,7 +93,7 @@ call_block = function(block) {
 # options that should affect cache when cache level = 1,2
 cache1.opts = c('code', 'eval', 'cache', 'cache.path', 'message', 'warning', 'error')
 # more options affecting cache level 2
-cache2.opts = c('fig.keep', 'fig.path', 'fix.ext', 'dev', 'dpi', 'dev.args', 'fig.width', 'fig.height')
+cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fig.width', 'fig.height')
 # options that should not affect cache
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
