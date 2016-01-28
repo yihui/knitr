@@ -41,8 +41,8 @@ hook_plot_md_base = function(x, options) {
   plot2 = ai || options$fig.cur == options$fig.num
   if (is.null(w) && is.null(h) && is.null(s) && a == 'default' && !pandoc_html) {
     # append \ to ![]() to prevent the figure environment in these cases
-    nocap = cap == '' && !is.null(pandoc_to()) && (options$fig.num == 1 || ai) &&
-      !grepl('-implicit_figures', pandoc_from())
+    nocap = cap == '' && !is.null(to <- pandoc_to()) && !grepl('^markdown', to) &&
+      (options$fig.num == 1 || ai) && !grepl('-implicit_figures', pandoc_from())
     return(sprintf(
       '![%s](%s%s)%s%s', cap, base, .upload.url(x),
       if (nocap) '<!-- -->' else '', if (is_latex_output()) ' ' else ''
