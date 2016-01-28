@@ -3,7 +3,7 @@
 \alias{asis_output}
 \title{Mark an R object with a special class}
 \usage{
-asis_output(x, meta = NULL, cacheable = length(meta) == 0)
+asis_output(x, meta = NULL, cacheable = NA)
 }
 \arguments{
 \item{x}{an R object (typically a character string, or can be converted to a

@@ -459,11 +459,17 @@ wrap.character = function(x, options) {
 # class 'knit_asis', it will be written as is.
 #' @export
 wrap.knit_asis = function(x, options, inline = FALSE) {
-  if (isFALSE(attr(x, 'knit_cacheable', exact = TRUE)) &&
-        (!missing(options) && options$cache > 0))
-    stop("The code chunk '", options$label, "' is not cacheable; ",
-         "please use the chunk option cache=FALSE on this chunk")
   m = attr(x, 'knit_meta', exact = TRUE)
+  if (!missing(options)) {
+    if (isFALSE(attr(x, 'knit_cacheable', exact = TRUE))) stop(
+      "The code chunk '", options$label, "' is not cacheable; ",
+      "please use the chunk option cache=FALSE on this chunk"
+    )
+    if (options$cache == 3 && length(m)) stop(
+      "cache=TRUE will not work for the code chunk '", options$label, "'; ",
+      "please use the chunk option cache=FALSE or cache=1 or 2 on this chunk"
+    )
+  }
   if (length(m)) {
     .knitEnv$meta = c(.knitEnv$meta, m)
   }
@@ -625,7 +631,7 @@ formals(normal_print) = alist(x = , ... = )
 #'   \url{https://github.com/yihui/knitr/issues/1137} for a discussion.
 #' @export
 #' @examples  # see ?knit_print
-asis_output = function(x, meta = NULL, cacheable = length(meta) == 0) {
+asis_output = function(x, meta = NULL, cacheable = NA) {
   structure(x, class = 'knit_asis', knit_meta = meta, knit_cacheable = cacheable)
 }
 
