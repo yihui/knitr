@@ -15,7 +15,7 @@ hilight_source = function(x, format, options) {
         res
       }
     }
-  } else if (options$prompt) {
+  } else if (options$engine == 'R' && options$prompt) {
     # if you did not reformat or evaluate the code, I have to figure out which
     # lines belong to one complete expression first (#779)
     if (!options$tidy && isFALSE(options$eval))
