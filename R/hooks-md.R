@@ -133,15 +133,15 @@ render_markdown = function(strict = FALSE) {
     }
   )
 }
-#'@param highlight which code highlighting engine to use: for \code{pygments},
-#'  the Liquid syntax is used (default approach Jekyll); for \code{prettify},
-#'  the output is prepared for the JavaScript library \file{prettify.js}; for
-#'  \code{none}, no highlighting engine will be used (code blocks are indented
-#'  by 4 spaces)
-#'@param extra extra tags for the highlighting engine; for \code{pygments}, it
-#'  can be \code{'linenos'}; for \code{prettify}, it can be \code{'linenums'}
-#'@rdname output_hooks
-#'@export
+#' @param highlight which code highlighting engine to use: for \code{pygments},
+#'   the Liquid syntax is used (default approach Jekyll); for \code{prettify},
+#'   the output is prepared for the JavaScript library \file{prettify.js}; for
+#'   \code{none}, no highlighting engine will be used (code blocks are indented
+#'   by 4 spaces)
+#' @param extra extra tags for the highlighting engine; for \code{pygments}, it
+#'   can be \code{'linenos'}; for \code{prettify}, it can be \code{'linenums'}
+#' @rdname output_hooks
+#' @export
 render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '') {
   hi = match.arg(highlight)
   render_markdown(TRUE)
