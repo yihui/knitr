@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.13
 
+## NEW FEATURES
+
+- `render_markdown()` gained a new argument `fence_char` to customize the character to be used as the code blocks fence, e.g. it can be a backtick, or a tilde, depending on the Markdown rendering engine (thanks, @tinyheero, #1161)
 
 # CHANGES IN knitr VERSION 1.12.3
 

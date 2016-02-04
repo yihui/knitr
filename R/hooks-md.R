@@ -85,30 +85,33 @@ css_text_align = function(align) {
 #'   put in fences made by three backticks; for reST, if \code{TRUE}, code is
 #'   put under two colons and indented by 4 spaces, otherwise is put under the
 #'   \samp{sourcecode} directive (e.g. it is useful for Sphinx)
-render_markdown = function(strict = FALSE) {
+#' @param fence_char a single character to be used in the code blocks fence
+#'   (e.g. it can be a backtick or a tilde, depending on your Markdown rendering
+#'   engine)
+render_markdown = function(strict = FALSE, fence_char = '`') {
   set_html_dev()
   opts_knit$set(out.format = 'markdown')
+  fence = paste(rep(fence_char, 3), collapse = '')
   # four spaces lead to <pre></pre>
   hook.t = function(x, options) {
     if (strict) {
       paste('\n', indent_block(x), '', sep = '\n')
     } else {
       x = paste(c('', x), collapse = '\n')
-      fence = '```'
-      if (grepl('\n`{3,}', x)) {
-        l = attr(gregexpr('\n`{3,}', x)[[1]], 'match.length', exact = TRUE)
+      r = paste0('\n', fence_char, '{3,}')
+      if (grepl(r, x)) {
+        l = attr(gregexpr(r, x)[[1]], 'match.length', exact = TRUE)
         l = max(l)
-        if (l >= 4) fence = paste(rep('`', l), collapse = '')
+        if (l >= 4) fence = paste(rep(fence_char, l), collapse = '')
       }
       paste0('\n\n', fence, x, fence, '\n\n')
     }
   }
   hook.r = function(x, options) {
     language = tolower(options$engine)
-    if (language == 'node')
-        language = 'javascript'
+    if (language == 'node') language = 'javascript'
     if (!options$highlight) language = 'text'
-    paste0('\n\n```', language, '\n', x, '```\n\n')
+    paste0('\n\n', fence, language, '\n', x, fence, '\n\n')
   }
   knit_hooks$set(
     source = function(x, options) {
@@ -122,11 +125,11 @@ render_markdown = function(strict = FALSE) {
     },
     plot = hook_plot_md,
     chunk = function(x, options) {
-      x = gsub('[\n]{2,}(```|    )', '\n\n\\1', x)
+      x = gsub(paste0('[\n]{2,}(', fence, '|    )'), '\n\n\\1', x)
       x = gsub('[\n]+$', '', x)
       x = gsub('^[\n]+', '\n', x)
       if (isTRUE(options$collapse)) {
-        x = gsub(paste0('\n([`]{3,})\n+\\1(', tolower(options$engine), ')?\n'), "\n", x)
+        x = gsub(paste0('\n([', fence_char, ']{3,})\n+\\1(', tolower(options$engine), ')?\n'), "\n", x)
       }
       if (is.null(s <- options$indent)) return(x)
       line_prompt(x, prompt = s, continue = s)
