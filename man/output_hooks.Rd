@@ -21,7 +21,7 @@ render_sweave()
 
 render_listings()
 
-render_markdown(strict = FALSE)
+render_markdown(strict = FALSE, fence_char = "`")
 
 render_jekyll(highlight = c("pygments", "prettify", "none"), extra = "")
 
@@ -35,6 +35,10 @@ render_textile()
 put in fences made by three backticks; for reST, if \code{TRUE}, code is
 put under two colons and indented by 4 spaces, otherwise is put under the
 \samp{sourcecode} directive (e.g. it is useful for Sphinx)}
+
+\item{fence_char}{a single character to be used in the code blocks fence
+(e.g. it can be a backtick or a tilde, depending on your Markdown rendering
+engine)}
 
 \item{highlight}{which code highlighting engine to use: for \code{pygments},
 the Liquid syntax is used (default approach Jekyll); for \code{prettify},

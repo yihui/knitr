@@ -29,6 +29,11 @@ Below is a list of default chunk options, retrieved via
 
 \Sexpr[results=verbatim]{str(knitr::opts_chunk$get())}
 }
+\note{
+\code{opts_current} is read-only in the sense that it does nothing if
+  you call \code{opts_current$set()}; you can only query the options via
+  \code{opts_current$get()}.
+}
 \examples{
 opts_chunk$get("prompt")
 opts_chunk$get("fig.keep")
