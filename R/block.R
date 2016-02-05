@@ -389,7 +389,7 @@ inline_exec = function(block, envir = knit_global(), hook = knit_hooks$get('inli
   for (i in 1:n) {
     v = withVisible(eval(parse_only(code[i]), envir = envir))
     res = if (v$visible) knit_print(v$value, inline = TRUE, options = opts_chunk$get())
-    if (inherits(res, c('knit_asis', 'knit_asis_list'))) res = wrap(res, inline = TRUE)
+    if (inherits(res, 'knit_asis')) res = wrap(res, inline = TRUE)
     d = nchar(input)
     # replace with evaluated results
     stringr::str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {

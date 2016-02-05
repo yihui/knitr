@@ -475,12 +475,6 @@ wrap.knit_asis = function(x, options, inline = FALSE) {
 }
 
 #' @export
-wrap.knit_asis_list = function(x, options, inline = FALSE) {
-  res = lapply(x, wrap, options = options, inline = inline)
-  paste(unlist(res), collapse = '\n')
-}
-
-#' @export
 wrap.source = function(x, options) {
   src = sub('\n$', '', x$src)
   if (!options$collapse && options$strip.white) src = strip_white(src)
