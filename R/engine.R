@@ -55,7 +55,7 @@ engine_output = function(options, code, out, extra = NULL) {
   out = sub('([^\n]+)$', '\\1\n', out)
   # replace the engine names for markup later, e.g. ```Rscript should be ```r
   options$engine = switch(
-    options$engine, 'Rscript' = 'r', node = 'javascript',
+    options$engine, mysql = 'sql', node = 'javascript', psql = 'sql', Rscript = 'r',
     options$engine
   )
   if (options$engine == 'stata') {
