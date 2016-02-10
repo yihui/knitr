@@ -45,7 +45,7 @@ quartz_dev = function(type, dpi) {
 
 # a wrapper of the tikzDevice::tikz device
 tikz_dev = function(...) {
-  suppressPackageStartupMessages(do.call('library', list('tikzDevice')))
+  loadNamespace('tikzDevice')
   packages = switch(
     getOption('tikzDefaultEngine'),
     pdftex = getOption('tikzLatexPackages'),

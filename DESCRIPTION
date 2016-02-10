@@ -94,7 +94,7 @@ Suggests:
     rgl (>= 0.95.1201),
     codetools,
     rmarkdown,
-    tikzDevice (>= 0.9),
+    tikzDevice (>= 0.10),
     XML,
     RCurl
 License: GPL
