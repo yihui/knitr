@@ -295,7 +295,7 @@ chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi, option
         file = paste0(tempfile(), ".tex"), width = width, height = height
       ), get_dargs(dev.args, 'tikz'))
       dargs$sanitize = options$sanitize; dargs$standAlone = options$external
-      if (is.null(dargs$verbose)) dargs$verbpse = FALSE
+      if (is.null(dargs$verbose)) dargs$verbose = FALSE
       do.call(tikz_dev, dargs)
     } else if (identical(getOption('device'), pdf_null)) {
       if (!is.null(dev.args)) {
