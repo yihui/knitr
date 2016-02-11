@@ -20,6 +20,9 @@ before_install:
         exit 0;
       fi;
     fi
+  - "wget -q http://yihui.name/xran/.gitconfig -O ~/.gitconfig"
+  - Rscript -e 'update.packages(.libPaths()[1], ask = FALSE)'
+  - Rscript -e "if (!require('covr')) install.packages('covr')"
 
 addons:
   apt:
@@ -36,12 +39,6 @@ addons:
 
 repos:
   XRAN: http://yihui.name/xran
-
-# install dependencies
-before_install:
-  - "wget -q http://yihui.name/xran/.gitconfig -O ~/.gitconfig"
-  - Rscript -e 'update.packages(.libPaths()[1], ask = FALSE)'
-  - Rscript -e "if (!require('covr')) install.packages('covr')"
 
 cache: packages
 
