@@ -291,11 +291,12 @@ chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi, option
         filename = tempfile(), width = width, height = height, units = 'in', res = dpi
       ), get_dargs(dev.args, 'png')))
     } else if (identical(dev, 'tikz')) {
-      do.call(tikz_dev, c(list(
+      dargs = c(list(
         file = paste0(tempfile(), ".tex"), width = width, height = height
-      ), get_dargs(dev.args, 'tikz'), list(
-        sanitize = options$sanitize, standAlone = options$external
-      )))
+      ), get_dargs(dev.args, 'tikz'))
+      dargs$sanitize = options$sanitize; dargs$standAlone = options$external
+      if (is.null(dargs$verbose)) dargs$verbpse = FALSE
+      do.call(tikz_dev, dargs)
     } else if (identical(getOption('device'), pdf_null)) {
       if (!is.null(dev.args)) {
         dev.args = get_dargs(dev.args, 'pdf')
