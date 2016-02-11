@@ -1,4 +1,4 @@
-language: c
+language: r
 
 sudo: false
 
@@ -12,7 +12,7 @@ env:
 
 # capturing state, early exit if no integration test is needed
 before_install:
-  - export PATH=$HOME/bin:$HOME/texlive/bin/x86_64-linux:$PATH
+  - export PATH=$HOME/texlive/bin/x86_64-linux:$PATH
   - if [ ${TARGET} = integration ]; then
       if ! make integration-need; then
         echo "NOTE:"" Integration test skipped. To enable, create a branch named ${TRAVIS_BRANCH} in ${TRAVIS_REPO_SLUG}-examples.";
@@ -22,11 +22,7 @@ before_install:
 
 addons:
   apt:
-    sources:
-    - r-packages-precise
     packages:
-    - r-base-dev
-    - r-recommended
     - ghc
     - highlight
     - optipng
@@ -37,21 +33,16 @@ addons:
     - qpdf
     - texinfo
 
+repos:
+  XRAN: http://yihui.name/xran
+
 # install dependencies
-install:
-  - "[ ! -d ~/bin ] && mkdir ~/bin || true"
-  - "wget -q -O - https://github.com/yihui/crandalf/raw/master/inst/scripts/install-texlive | bash"
-  - "wget -q -O - https://github.com/yihui/crandalf/raw/master/inst/scripts/install-pandoc | bash"
-  - "wget -q -O - http://yihui.name/xran/r-config | bash"
-  - Rscript -e "if (!require('devtools')) install.packages('devtools')"
-  - Rscript -e 'devtools::install_deps(dep = TRUE); update.packages(.libPaths()[1], ask = FALSE)'
+before_install:
+  - "wget -q http://yihui.name/xran/.gitconfig -O ~/.gitconfig"
+  - Rscript -e 'update.packages(.libPaths()[1], ask = FALSE)'
   - Rscript -e "if (!require('covr')) install.packages('covr')"
 
-cache:
-  directories:
-  - $HOME/R
-  - $HOME/texlive
-  - $HOME/bin
+cache: packages
 
 # run tests
 script:
