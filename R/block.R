@@ -256,7 +256,7 @@ block_exec = function(options) {
       dep_auto()
     }
     if (options$cache < 3) {
-      if (!cache.exists) block_cache(options, res.orig, objs)
+      if (options$cache.rebuild || !cache.exists) block_cache(options, res.orig, objs)
     } else block_cache(options, output, objs)
   }
 
