@@ -2,3 +2,4 @@ _site
 *.Rmd
 knit-all.R
 
+.Rproj.user
