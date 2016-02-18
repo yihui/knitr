@@ -8,6 +8,10 @@
 
 - when the chunk option `cache.rebuild = TRUE`, the cache database should be rewritten (thanks, Oleg Mayba)
 
+## MAJOR CHANGES
+
+- the default value of the package option `eval.after` is changed from `NULL` to `fig.cap`, i.e. the figure caption will always be evaluated after a code chunk is evaluated (thanks, @JoshOBrien, #1165)
+
 # CHANGES IN knitr VERSION 1.12.3
 
 ## BUG FIXES

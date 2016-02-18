@@ -151,7 +151,7 @@ set_alias = function(...) {
 #' }
 #' @include hooks-html.R
 opts_knit = new_defaults(list(
-  progress = TRUE, verbose = FALSE, width = 75L, eval.after = NULL,
+  progress = TRUE, verbose = FALSE, width = 75L, eval.after = 'fig.cap',
   base.dir = NULL, base.url = NULL, root.dir = NULL, child.path = '',
   upload.fun = identity, animation.fun = hook_ffmpeg_html,
   global.device = FALSE, global.par = FALSE,
