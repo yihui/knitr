@@ -534,7 +534,7 @@ wrap.recordedplot = function(x, options) {
 }
 
 #' @export
-wrap.knit_image_paths = function(x, options, inline = FALSE) {
+wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) {
   hook_plot = knit_hooks$get('plot')
   options$fig.num = length(x)
   paste(unlist(lapply(seq_along(x), function(i) {

@@ -8,6 +8,8 @@
 
 - when the chunk option `cache.rebuild = TRUE`, the cache database should be rewritten (thanks, Oleg Mayba)
 
+- `include_graphics()` did not work in inline R expressions (thanks, @WastlM, #1166)
+
 ## MAJOR CHANGES
 
 - the default value of the package option `eval.after` is changed from `NULL` to `fig.cap`, i.e. the figure caption will always be evaluated after a code chunk is evaluated (thanks, @JoshOBrien, #1165)

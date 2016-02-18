@@ -100,3 +100,6 @@ if (requireNamespace('tikzDevice')) {
   knit('knit-tikzDevice.Rnw', quiet = TRUE)
   unlink(c('*-tikzDictionary', 'figure', 'knit-tikzDevice.tex'), recursive = TRUE)
 }
+
+# https://github.com/yihui/knitr/issues/1166
+knit(text = "\\Sexpr{include_graphics('myfigure.pdf')}", quiet = TRUE)
