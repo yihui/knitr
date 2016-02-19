@@ -101,7 +101,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
       x = paste(c('', x), collapse = '\n')
       r = paste0('\n', fence_char, '{3,}')
       if (grepl(r, x)) {
-        l = attr(gregexpr(r, x)[[1]], 'match.length', exact = TRUE)
+        l = attr(gregexpr(r, x)[[1]], 'match.length')
         l = max(l)
         if (l >= 4) fence = paste(rep(fence_char, l), collapse = '')
       }

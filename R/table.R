@@ -193,7 +193,7 @@ kable_latex = function(
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, table.envir = if (!is.null(caption)) 'table', escape = TRUE
 ) {
-  if (!is.null(align <- attr(x, 'align', exact = TRUE))) {
+  if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
     align = paste0('{', align, '}')
   }
@@ -247,7 +247,7 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
   table.attr = gsub('^\\s+|\\s+$', '', table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
-  align = if (is.null(align <- attr(x, 'align', exact = TRUE))) '' else {
+  align = if (is.null(align <- attr(x, 'align'))) '' else {
     sprintf(' style="text-align:%s;"', c(l = 'left', c = 'center', r = 'right')[align])
   }
   if (identical(caption, NA)) caption = NULL
@@ -297,7 +297,7 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
     if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
     l = pmax(if (length(l) == 0) 0 else l, nchar(cn, type = 'width'))
   }
-  align = attr(x, 'align', exact = TRUE)
+  align = attr(x, 'align')
   padding = padding * if (length(align) == 0) 2 else {
     ifelse(align == 'c', 2, 1)
   }

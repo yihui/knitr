@@ -754,3 +754,6 @@ create_label = function(..., latex = FALSE) {
   }
   paste0(lab1, ..., lab2)
 }
+
+# yes I hate partial matching
+attr = function(...) base::attr(..., exact = TRUE)

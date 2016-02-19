@@ -459,9 +459,9 @@ wrap.character = function(x, options) {
 # class 'knit_asis', it will be written as is.
 #' @export
 wrap.knit_asis = function(x, options, inline = FALSE) {
-  m = attr(x, 'knit_meta', exact = TRUE)
+  m = attr(x, 'knit_meta')
   if (!missing(options)) {
-    if (isFALSE(attr(x, 'knit_cacheable', exact = TRUE))) stop(
+    if (isFALSE(attr(x, 'knit_cacheable'))) stop(
       "The code chunk '", options$label, "' is not cacheable; ",
       "please use the chunk option cache=FALSE on this chunk"
     )
