@@ -14,6 +14,7 @@ env:
 before_install:
   - export PATH=$HOME/texlive/bin/x86_64-linux:$PATH
   - tlmgr update --self --all; mktexlsr
+  - tlmgr conf texmf TEXMFHOME $(Rscript -e "cat(file.path(R.home('share'), 'texmf'))")
   - if [ ${TARGET} = integration ]; then
       if ! make integration-need; then
         echo "NOTE:"" Integration test skipped. To enable, create a branch named ${TRAVIS_BRANCH} in ${TRAVIS_REPO_SLUG}-examples.";
