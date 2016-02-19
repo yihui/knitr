@@ -265,7 +265,7 @@ block_exec = function(options) {
 
 block_cache = function(options, output, objects) {
   hash = options$hash
-  outname = sprintf('.%s', hash)
+  outname = cache_output_name(hash)
   assign(outname, output, envir = knit_global())
   purge_cache(options)
   cache$library(options$cache.path, save = TRUE)

@@ -15,6 +15,10 @@ new_cache = function() {
   }
 
   cache_save = function(keys, outname, hash, lazy = TRUE) {
+    meta_name = cache_meta_name(hash)
+    if (exists(meta_name, envir = knit_global())) outname = c(outname, meta_name)
+    out0 = outname
+    on.exit(rm(list = out0, envir = knit_global()), add = TRUE)
     # keys are new variables created; outname is the text output of a chunk
     path = cache_path(hash)
     # add random seed to cache if exists
@@ -59,6 +63,13 @@ new_cache = function() {
       load(path2, envir = knit_global())
       if (exists('.Random.seed', envir = knit_global(), inherits = FALSE))
         copy_env(knit_global(), globalenv(), '.Random.seed')
+      name = cache_meta_name(hash)
+      if (exists(name, envir = knit_global())) {
+        .knitEnv$meta = c(
+          .knitEnv$meta, get(name, envir = knit_global(), inherits = FALSE)
+        )
+        rm(list = name, envir = knit_global())
+      }
     }
   }
 
@@ -86,7 +97,11 @@ new_cache = function() {
   # when cache=3, code output is stored in .[hash], so cache=TRUE won't lose
   # output as cacheSweave does; for cache=1,2, output is the evaluate() list
   cache_output = function(hash, mode = 'character') {
-    get(sprintf('.%s', hash), envir = knit_global(), mode = mode, inherits = FALSE)
+    name = cache_output_name(hash)
+    res = get(name, envir = knit_global(), mode = mode, inherits = FALSE)
+    # clean up this hidden variable after we obtain its value
+    if (mode == mode(res)) rm(list = name, envir = knit_global())
+    res
   }
 
   list(purge = cache_purge, save = cache_save, load = cache_load, objects = cache_objects,
@@ -100,6 +115,11 @@ find_globals = function(code) {
 known_globals = c(
   '{', '[', '(', ':', '<-', '=', '+', '-', '*', '/', '%%', '%/%', '%*%', '%o%', '%in%'
 )
+
+# a variable name to store the metadata object from code chunks
+cache_meta_name = function(hash) sprintf('.%s_meta', hash)
+# a variable name to store the text output of code chunks
+cache_output_name = function(hash) sprintf('.%s', hash)
 
 cache = new_cache()
 

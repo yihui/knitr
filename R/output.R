@@ -465,13 +465,12 @@ wrap.knit_asis = function(x, options, inline = FALSE) {
       "The code chunk '", options$label, "' is not cacheable; ",
       "please use the chunk option cache=FALSE on this chunk"
     )
-    if (options$cache == 3 && length(m)) stop(
-      "cache=TRUE will not work for the code chunk '", options$label, "'; ",
-      "please use the chunk option cache=FALSE or cache=1 or 2 on this chunk"
-    )
-  }
-  if (length(m)) {
-    .knitEnv$meta = c(.knitEnv$meta, m)
+    if (length(m)) {
+      .knitEnv$meta = c(.knitEnv$meta, m)
+      # store metadata in an object named of the form .hash_meta when cache=TRUE
+      if (options$cache == 3)
+        assign(cache_meta_name(options$hash), m, envir = knit_global())
+    }
   }
   x = as.character(x)
   if (!out_format('latex') || inline) return(x)
