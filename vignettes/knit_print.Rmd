@@ -43,7 +43,7 @@ S3 generic functions are extensible in the sense that we can define custom metho
 library(knitr)
 # define a method for objects of the class data.frame
 knit_print.data.frame = function(x, ...) {
-  res = paste(c('', '', kable(x)), collapse = '\n')
+  res = paste(c('', '', kable(x, ...)), collapse = '\n')
   asis_output(res)
 }
 ```
