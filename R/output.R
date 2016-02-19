@@ -467,6 +467,7 @@ wrap.knit_asis = function(x, options, inline = FALSE) {
     )
     if (length(m)) {
       .knitEnv$meta = c(.knitEnv$meta, m)
+      .knitEnv$meta_id = c(.knitEnv$meta_id, rep(options$label, length(m)))
       # store metadata in an object named of the form .hash_meta when cache=TRUE
       if (options$cache == 3)
         assign(cache_meta_name(options$hash), m, envir = knit_global())
@@ -654,14 +655,21 @@ asis_output = function(x, meta = NULL, cacheable = NA) {
 #'   \code{knit_meta()} before \code{knit()}
 #' @export
 knit_meta = function(class = NULL, clean = TRUE) {
-  matches = if (is.null(class)) {
-    # if no class was specified, match the whole list
-    seq_along(.knitEnv$meta)
-  } else if (length(.knitEnv$meta)) {
-    # if a class was specified, match the items belonging to the class
-    which(vapply(.knitEnv$meta, inherits, logical(1), what = class))
+  if (is.null(class)) {
+    if (clean) on.exit({
+      .knitEnv$meta = list()
+      .knitEnv$meta_id = NULL
+    }, add = TRUE)
+    return(.knitEnv$meta)
   }
-  if (length(matches) < 1) return(list())
-  if (clean) on.exit(.knitEnv$meta[matches] <- NULL, add = TRUE)
+  # if a class was specified, match the items belonging to the class
+  matches = if (length(.knitEnv$meta)) {
+    vapply(.knitEnv$meta, inherits, logical(1), what = class)
+  }
+  if (!any(matches)) return(list())
+  if (clean) on.exit({
+    .knitEnv$meta[matches] = NULL
+    .knitEnv$meta_id = .knitEnv$meta_id[!matches]
+  }, add = TRUE)
   .knitEnv$meta[matches]
 }
