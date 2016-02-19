@@ -13,7 +13,9 @@ character string via \code{\link{as.character}()})}
 will be collected when the object is printed, and accessible via
 \code{knit_meta()})}
 
-\item{cacheable}{a logical value indicating if this object is cacheable}
+\item{cacheable}{a logical value indicating if this object is cacheable; if
+\code{FALSE}, \pkg{knitr} will stop when caching is enabled on code chunks
+that contain \code{asis_output()}}
 }
 \description{
 This is a convenience function that assigns the input object a class named
@@ -30,10 +32,14 @@ object involves non-trivial side effects, in which case it is strongly
 recommended to use \code{cacheable = FALSE} to instruct \pkg{knitr} that this
 object should not be cached using the chunk option \code{cache = TRUE},
 otherwise the side effects will be lost the next time the chunk is knitted.
-For example, printing a \pkg{shiny} input element in an R Markdown document
-may involve registering metadata about some JavaScript libraries or
-stylesheets, and the metadata may be lost if we cache the code chunk, because
-the code evaluation will be skipped the next time.
+For example, printing a \pkg{shiny} input element or an HTML widget in an R
+Markdown document may involve registering metadata about some JavaScript
+libraries or stylesheets, and the metadata may be lost if we cache the code
+chunk, because the code evaluation will be skipped the next time. This
+particular issue has been solved in \pkg{knitr} after v1.13 (the metadata
+will be saved and loaded automatically when caching is enabled), but not all
+metadata can be saved and loaded next time and still works in the new R
+session.
 }
 \note{
 This function only works in top-level R expressions, and it will not

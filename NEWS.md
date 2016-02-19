@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- code chunks that generate metadata may be cached now; it requires htmlwidgets >= v0.6 and htmltools >= 0.3.3 if you cache code chunks that contain HTML widgets or Shiny inputs/outputs (#1158)
+
 - `render_markdown()` gained a new argument `fence_char` to customize the character to be used as the code blocks fence, e.g. it can be a backtick, or a tilde, depending on the Markdown rendering engine (thanks, @tinyheero, #1161)
 
 ## BUG FIXES
