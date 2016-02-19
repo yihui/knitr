@@ -23,4 +23,3 @@ NULL
 .knitEnv = new.env()
 
 .knitEnv$meta = list()
-.knitEnv$meta_id = NULL
