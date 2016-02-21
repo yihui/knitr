@@ -24,7 +24,7 @@ hook_plot_md = function(x, options) {
 is_html_output = function(fmt = pandoc_to()) {
   if (length(fmt) == 0) return(FALSE)
   grepl('^markdown', fmt) ||
-    fmt %in% c('html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
+    fmt %in% c('epub', 'epub3', 'html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
 }
 
 hook_plot_md_base = function(x, options) {
