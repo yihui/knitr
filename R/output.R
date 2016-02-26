@@ -466,10 +466,9 @@ wrap.knit_asis = function(x, options, inline = FALSE) {
       "please use the chunk option cache=FALSE on this chunk"
     )
     if (length(m)) {
+      meta_id = attr(.knitEnv$meta, 'knit_meta_id')
       .knitEnv$meta = c(.knitEnv$meta, m)
-      attr(.knitEnv$meta, 'knit_meta_id') = c(
-        attr(.knitEnv$meta, 'knit_meta_id'), rep(options$label, length(m))
-      )
+      attr(.knitEnv$meta, 'knit_meta_id') = c(meta_id, rep(options$label, length(m)))
       # store metadata in an object named of the form .hash_meta when cache=TRUE
       if (options$cache == 3)
         assign(cache_meta_name(options$hash), m, envir = knit_global())
