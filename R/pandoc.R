@@ -1,11 +1,11 @@
-#' A Pandoc wrapper to convert Markdown documents to other formats
+#' A Pandoc wrapper to convert documents to other formats
 #'
-#' This function calls Pandoc to convert Markdown documents to other formats
-#' such as HTML, LaTeX/PDF and Word, etc, (optionally) based on a configuration
-#' file or in-file configurations which specify the options to use for Pandoc.
+#' This function calls Pandoc to convert documents to other formats such as
+#' HTML, LaTeX/PDF and Word, etc, (optionally) based on a configuration file or
+#' in-file configurations which specify the options to use for Pandoc.
 #'
 #' There are two ways to input the Pandoc configurations -- through a config
-#' file, or embed the configurations in the markdown file as special comments
+#' file, or embed the configurations in the input file as special comments
 #' between \verb{<!--pandoc} and \verb{-->}.
 #'
 #' The configuration file is a DCF file (see \code{\link{read.dcf}}). This file
@@ -63,7 +63,7 @@ pandoc = function(input, format, config = getOption('config.pandoc'), ext = NA,
     input_utf8 = character(length(input))
     on.exit(unlink(input_utf8), add = TRUE)
     for (i in seq_along(input)) {
-      input_utf8[i] = sub_ext(input[i], 'utf8md')
+      input_utf8[i] = gsub('[.]([[:alnum:]]+)$', '_utf8.\\1', input[i])
       encode_utf8(input[i], encoding, input_utf8[i])
     }
     input = input_utf8
@@ -96,7 +96,7 @@ pandoc_one = function(input, format, ext, cfg) {
     }
   })
   cfg = cfg[setdiff(names(cfg), c('o', 'output', 't'))]
-  cmd = paste('pandoc', pandoc_arg(cfg), pandoc_arg(cmn), '-f markdown',
+  cmd = paste('pandoc', pandoc_arg(cfg), pandoc_arg(cmn),
               '-t', format, '-o', out, paste(shQuote(input), collapse = ' '))
   message('executing ', cmd)
   if (system(cmd) == 0L) out else stop('conversion failed')

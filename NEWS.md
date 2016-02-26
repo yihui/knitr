@@ -6,6 +6,8 @@
 
 - `render_markdown()` gained a new argument `fence_char` to customize the character to be used as the code blocks fence, e.g. it can be a backtick, or a tilde, depending on the Markdown rendering engine (thanks, @tinyheero, #1161)
 
+- the `pandoc()` function no longer assumes Markdown input (thanks, @scls19fr, #1170)
+
 ## BUG FIXES
 
 - when the chunk option `cache.rebuild = TRUE`, the cache database should be rewritten (thanks, Oleg Mayba)
