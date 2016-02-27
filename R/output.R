@@ -550,6 +550,19 @@ wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) 
   })), collapse = '')
 }
 
+#' @export
+wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE) {
+  ext = x$extension
+  hook_plot = knit_hooks$get('plot')
+  in_base_dir({
+    i = 1
+    while(file.exists(f <- fig_path(ext, options, i))) i = i + 1
+    dir.create(dirname(f), recursive = TRUE, showWarning = FALSE)
+    writeBin(x$image, f, useBytes = TRUE)
+    hook_plot(f, options)
+  })
+}
+
 #' A custom printing function
 #'
 #' The S3 generic function \code{knit_print} is the default printing function in
@@ -585,7 +598,11 @@ wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) 
 #' # after you defined the above method, data frames will be printed as tables in knitr,
 #' # which is different with the default print() behavior
 knit_print = function(x, ...) {
-  UseMethod('knit_print', x)
+  if (need_screenshot(x)) {
+    html_screenshot(x)
+  } else {
+    UseMethod('knit_print')
+  }
 }
 
 #" the default print method is just print()/show()

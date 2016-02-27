@@ -354,3 +354,45 @@ include_graphics = function(path, auto_pdf = TRUE) {
   }
   structure(path, class = c('knit_image_paths', 'knit_asis'))
 }
+
+need_screenshot = function(x) {
+  fmt = pandoc_to()
+  # not R Markdown v2, always screenshot htmlwidgets and shiny apps
+  if (length(fmt) == 0) return(inherits(x, c('htmlwidget', 'shiny.appobj')))
+  html_format = fmt %in% c('html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
+  (inherits(x, 'htmlwidget') && !html_format) ||
+    (inherits(x, 'shiny.appobj') && !(html_format && runtime_shiny()))
+}
+
+runtime_shiny = function() {
+  identical(opts_knit$get('rmarkdown.runtime'), 'shiny')
+}
+
+html_screenshot = function(x, options = opts_current$get(), ...) {
+  i1 = inherits(x, 'htmlwidget')
+  i2 = inherits(x, 'shiny.appobj')
+  if (!(i1 || i2))
+    stop('Screenshotting for the class ', class(x)[1], ' is not supported.')
+  ext = switch(options$dev, pdf = '.pdf', jpeg = '.jpeg', '.png')
+  wargs = options$webshot.args %n% list()
+  if (is.null(wargs$vwidth)) wargs$vwidth = options$out.width.px
+  if (is.null(wargs$vheight)) wargs$vheight = options$out.height.px
+  if (is.null(wargs$delay)) wargs$delay = if (i1) 1 else 3
+  d = tempfile()
+  dir.create(d); on.exit(unlink(d, recursive = TRUE), add = TRUE)
+  f = in_dir(d, {
+    if (i1) {
+      f1 = tempfile('widget', '.', '.html')
+      htmlwidgets::saveWidget(x, f1, FALSE, knitrOptions = options)
+      f2 = tempfile('webshot', '.', ext)
+      do.call(webshot::webshot, c(list(f1, f2), wargs))
+      normalizePath(f2)
+    } else if (i2) {
+      f = tempfile('webshot', '.', ext)
+      do.call(webshot::appshot, c(list(x, f), wargs))
+      normalizePath(f)
+    }
+  })
+  res = readBin(f, 'raw', file.info(f)[, 'size'])
+  structure(list(image = res, extension = ext), class = 'html_screenshot')
+}
