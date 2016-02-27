@@ -1,7 +1,7 @@
 % Please edit documentation in R/pandoc.R
 \name{pandoc}
 \alias{pandoc}
-\title{A Pandoc wrapper to convert Markdown documents to other formats}
+\title{A Pandoc wrapper to convert documents to other formats}
 \usage{
 pandoc(input, format, config = getOption("config.pandoc"), ext = NA, 
     encoding = getOption("encoding"))
@@ -28,13 +28,13 @@ from the \code{format}, e.g. \code{latex} creates \code{pdf}, and
 The output filename(s) (or an error if the conversion failed).
 }
 \description{
-This function calls Pandoc to convert Markdown documents to other formats
-such as HTML, LaTeX/PDF and Word, etc, (optionally) based on a configuration
-file or in-file configurations which specify the options to use for Pandoc.
+This function calls Pandoc to convert documents to other formats such as
+HTML, LaTeX/PDF and Word, etc, (optionally) based on a configuration file or
+in-file configurations which specify the options to use for Pandoc.
 }
 \details{
 There are two ways to input the Pandoc configurations -- through a config
-file, or embed the configurations in the markdown file as special comments
+file, or embed the configurations in the input file as special comments
 between \verb{<!--pandoc} and \verb{-->}.
 
 The configuration file is a DCF file (see \code{\link{read.dcf}}). This file
