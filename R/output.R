@@ -461,7 +461,7 @@ wrap.character = function(x, options) {
 wrap.knit_asis = function(x, options, inline = FALSE) {
   m = attr(x, 'knit_meta')
   if (!missing(options)) {
-    if (isFALSE(attr(x, 'knit_cacheable'))) stop(
+    if (options$cache > 0 && isFALSE(attr(x, 'knit_cacheable'))) stop(
       "The code chunk '", options$label, "' is not cacheable; ",
       "please use the chunk option cache=FALSE on this chunk"
     )
