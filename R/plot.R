@@ -375,7 +375,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     stop('Screenshotting for the class ', class(x)[1], ' is not supported.')
 
   # if user has specified the screenshot image, just use it
-  if (!is.null(shots <- options$screenshot)) {
+  if (!is.null(shots <- options$alt.screenshot)) {
     i = shot_counter()
     if (length(shots) < i) stop('Not enough number of screenshots provided')
     return(include_graphics(shots[i]))
