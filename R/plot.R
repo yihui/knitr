@@ -373,6 +373,10 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   i2 = inherits(x, 'shiny.appobj')
   if (!(i1 || i2))
     stop('Screenshotting for the class ', class(x)[1], ' is not supported.')
+
+  # if user has specified the screenshot image, just use it
+  if (!is.null(options$screenshot)) return(include_graphics(options$screenshot))
+
   ext = switch(options$dev, pdf = '.pdf', jpeg = '.jpeg', '.png')
   wargs = options$webshot.args %n% list()
   if (is.null(wargs$vwidth)) wargs$vwidth = options$out.width.px
