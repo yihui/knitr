@@ -381,6 +381,11 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     return(include_graphics(shots[i]))
   }
 
+  if (!requireNamespace('webshot', quietly = TRUE)) stop(
+    'Please install the webshot package ',
+    '(if not on CRAN, try devtools::install_github("wch/webshot"))'
+  )
+
   ext = switch(options$dev, pdf = '.pdf', jpeg = '.jpeg', '.png')
   wargs = options$webshot.args %n% list()
   if (is.null(wargs$vwidth)) wargs$vwidth = options$out.width.px
