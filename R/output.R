@@ -555,8 +555,8 @@ wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE) {
   ext = x$extension
   hook_plot = knit_hooks$get('plot')
   in_base_dir({
-    i = 1
-    while(file.exists(f <- fig_path(ext, options, i))) i = i + 1
+    i = shot_counter()
+    f = fig_path(ext, options, i)
     dir.create(dirname(f), recursive = TRUE, showWarning = FALSE)
     writeBin(x$image, f, useBytes = TRUE)
     hook_plot(f, options)
