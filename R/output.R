@@ -557,7 +557,7 @@ wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE) {
   in_base_dir({
     i = shot_counter()
     f = fig_path(ext, options, i)
-    dir.create(dirname(f), recursive = TRUE, showWarning = FALSE)
+    dir.create(dirname(f), recursive = TRUE, showWarnings = FALSE)
     writeBin(x$image, f, useBytes = TRUE)
     hook_plot(f, options)
   })
