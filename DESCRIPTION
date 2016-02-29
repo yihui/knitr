@@ -94,6 +94,8 @@ Suggests:
     rgl (>= 0.95.1201),
     codetools,
     rmarkdown,
+    htmlwidgets,
+    webshot,
     tikzDevice (>= 0.10),
     XML,
     RCurl
