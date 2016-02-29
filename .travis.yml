@@ -43,6 +43,9 @@ repos:
 
 cache: packages
 
+before_script:
+  - Rscript -e "if (!require('webshot')) devtools::install_github('wch/webshot')"
+
 # run tests
 script:
   - make ${TARGET}
