@@ -233,7 +233,10 @@ block_exec = function(options) {
 
   if (isTRUE(options$fig.beforecode)) res = fig_before_code(res)
 
-  on.exit(plot_counter(reset = TRUE), add = TRUE)  # restore plot number
+  on.exit({
+    plot_counter(reset = TRUE)
+    shot_counter(reset = TRUE)
+  }, add = TRUE)  # restore plot number
   if (options$fig.show != 'animate' && options$fig.num > 1) {
     options = recycle_plot_opts(options)
   }

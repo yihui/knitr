@@ -15,6 +15,7 @@ knit_counter = function(init = 0L) {
 }
 
 plot_counter = knit_counter(1L)
+shot_counter = knit_counter(1L)
 chunk_counter = knit_counter(1L)
 
 # a vectorized and better version than evaluate:::line_prompt
