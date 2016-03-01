@@ -36,6 +36,7 @@ hook_plot_md_base = function(x, options) {
   w = options$out.width; h = options$out.height
   s = options$out.extra; a = options$fig.align
   ai = options$fig.show == 'asis'
+  lnk = options$fig.link
   pandoc_html = cap != '' && is_html_output()
   in_bookdown = isTRUE(opts_knit$get('bookdown.internal.label'))
   plot1 = ai || options$fig.cur <= 1L
@@ -44,10 +45,14 @@ hook_plot_md_base = function(x, options) {
     # append \ to ![]() to prevent the figure environment in these cases
     nocap = cap == '' && !is.null(to <- pandoc_to()) && !grepl('^markdown', to) &&
       (options$fig.num == 1 || ai) && !grepl('-implicit_figures', pandoc_from())
-    return(sprintf(
-      '![%s](%s%s)%s%s', cap, base, .upload.url(x),
-      if (nocap) '<!-- -->' else '', if (is_latex_output()) ' ' else ''
-    ))
+    res = sprintf('![%s](%s%s)', cap, base, .upload.url(x))
+    if (!is.null(lnk) && !is.na(lnk)) res = sprintf('[%s](%s)', res, lnk)
+    res = paste0(res, if (nocap) '<!-- -->' else '', if (is_latex_output()) ' ' else '')
+    return(res)
+  }
+  add_link = function(x) {
+    if (is.null(lnk) || is.na(lnk)) return(x)
+    sprintf('<a href="%s" target="_blank">%s</a>', lnk, x)
   }
   # use HTML syntax <img src=...>
   if (pandoc_html) {
@@ -57,16 +62,17 @@ hook_plot_md_base = function(x, options) {
       '<img src="%s" alt="%s" %s />',
       paste0(opts_knit$get('base.url'), .upload.url(x)), cap, .img.attr(w, h, s)
     )
+    img = add_link(img)
     # whether to place figure caption at the top or bottom of a figure
     if (isTRUE(options$fig.topcaption)) {
       paste0(d1, if (ai || options$fig.cur <= 1) d2, img, if (plot2) '</div>')
     } else {
       paste0(d1, img, if (plot2) paste0('\n', d2, '\n</div>'))
     }
-  } else .img.tag(
+  } else add_link(.img.tag(
     .upload.url(x), w, h, cap,
     c(s, sprintf('style="%s"', css_align(a)))
-  )
+  ))
 }
 
 css_align = function(align) {
