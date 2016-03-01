@@ -546,7 +546,7 @@ wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) 
   options$fig.num = length(x)
   paste(unlist(lapply(seq_along(x), function(i) {
     options$fig.cur = i
-    hook_plot(x[i], options)
+    hook_plot(x[i], reduce_plot_opts(options))
   })), collapse = '')
 }
 

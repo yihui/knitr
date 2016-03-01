@@ -237,9 +237,6 @@ block_exec = function(options) {
     plot_counter(reset = TRUE)
     shot_counter(reset = TRUE)
   }, add = TRUE)  # restore plot number
-  if (options$fig.show != 'animate' && options$fig.num > 1) {
-    options = recycle_plot_opts(options)
-  }
 
   output = unlist(wrap(res, options)) # wrap all results together
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks

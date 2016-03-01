@@ -194,20 +194,16 @@ is_low_change = function(p1, p2) {
 # are multiple plots per chunk
 .recyle.opts = c('fig.cap', 'fig.scap', 'fig.env', 'fig.pos', 'fig.subcap',
                  'out.width', 'out.height', 'out.extra')
-recycle_plot_opts = function(options) {
-  n = options$fig.num
-  for (i in .recyle.opts) {
-    if (length(options[[i]]) == 0L) next
-    options[[i]] = rep(options[[i]], length.out = n)
-  }
-  options
-}
 
 # when passing options to plot hooks, reduce the recycled options to scalars
 reduce_plot_opts = function(options) {
-  if (options$fig.show == 'animate' || options$fig.num <= 1L) return(options)
-  fig.cur = options$fig.cur
-  for (i in .recyle.opts) options[i] = list(options[[i]][fig.cur])
+  i = options$fig.cur %n% 1L
+  for (o in .recyle.opts) {
+    v = options[[o]]
+    if ((n <- length(v)) == 0) next
+    if ((j <- i %% n) == 0) j = n
+    options[o] = list(v[j])
+  }
   options
 }
 
