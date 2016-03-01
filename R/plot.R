@@ -371,7 +371,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     stop('Screenshotting for the class ', class(x)[1], ' is not supported.')
 
   # if user has specified the screenshot image, just use it
-  if (!is.null(shots <- options$alt.screenshot)) {
+  if (!is.null(shots <- options$screenshot.alt)) {
     i = shot_counter()
     if (length(shots) < i) stop('Not enough number of screenshots provided')
     return(structure(list(file = shots[i]), class = 'html_screenshot'))
@@ -383,7 +383,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   )
 
   ext = switch(options$dev, pdf = '.pdf', jpeg = '.jpeg', '.png')
-  wargs = options$webshot.args %n% list()
+  wargs = options$screenshot.opts %n% list()
   if (is.null(wargs$vwidth)) wargs$vwidth = options$out.width.px
   if (is.null(wargs$vheight)) wargs$vheight = options$out.height.px
   if (is.null(wargs$delay)) wargs$delay = if (i1) 0.2 else 1
