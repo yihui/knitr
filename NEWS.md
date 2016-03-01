@@ -4,6 +4,10 @@
 
 - code chunks that generate metadata may be cached now; it requires htmlwidgets >= v0.6 and htmltools >= 0.3.3 if you cache code chunks that contain HTML widgets or Shiny inputs/outputs (#1158)
 
+- when the output format is not HTML, HTML widgets used to fail to render; now **knitr** will try to generate static screenshots for HTML widgets automatically using the [**webshot**](https://github.com/wch/webshot) package; you can specify alternative screenshots via the chunk option `screenshot.alt` (which takes a character vector of image paths), and pass more options to `webshot::webshot()` via the chunk option `screenshot.opts`, e.g. `list(delay = 3, cliprect = 'viewport')`
+
+- added two functions `include_url()` and `include_app()` to embed URLs in the output (the latter is for Shiny app URLs); when the output format is HTML, iframe will be used; otherwise screenshots of the URLs will be used
+
 - `render_markdown()` gained a new argument `fence_char` to customize the character to be used as the code blocks fence, e.g. it can be a backtick, or a tilde, depending on the Markdown rendering engine (thanks, @tinyheero, #1161)
 
 - the `pandoc()` function no longer assumes Markdown input (thanks, @scls19fr, #1170)

@@ -351,13 +351,39 @@ include_graphics = function(path, auto_pdf = TRUE) {
   structure(path, class = c('knit_image_paths', 'knit_asis'))
 }
 
+#' Embed a URL as an HTML iframe or a screenshot in \pkg{knitr} documents
+#'
+#' When the output format is HTML, \code{include_url()} inserts an iframe in the
+#' output; otherwise it takes a screenshot of the URL and insert the image in
+#' the output. \code{include_app()} takes the URL of a Shiny app and adds
+#' \samp{?showcase=0} to it (to disable the showcase mode), then passes the URL
+#' to \code{include_url()}.
+#' @param url a character string of a URL
+#' @param height the height of the iframe
+#' @return An R object with a special class that \pkg{knitr} recognizes
+#'   internally to generate the iframe or screenshot.
+#' @seealso \code{\link{include_graphics}}
+#' @export
+include_url = function(url, height = '400px') {
+  structure(list(url = url, height = height), class = c('knit_embed_url', 'knit_asis'))
+}
+
+#' @rdname include_url
+#' @export
+include_app = function(url, height = '400px') {
+  if (!grepl('?', url, fixed = TRUE)) url = paste0(url, '?showcase=0')
+  include_url(url, height = height)
+}
+
 need_screenshot = function(x) {
   fmt = pandoc_to()
+  i1 = inherits(x, 'htmlwidget')
+  i2 = inherits(x, 'shiny.appobj')
+  i3 = inherits(x, 'knit_embed_url')
   # not R Markdown v2, always screenshot htmlwidgets and shiny apps
-  if (length(fmt) == 0) return(inherits(x, c('htmlwidget', 'shiny.appobj')))
+  if (length(fmt) == 0) return(i1 || i2 || i3)
   html_format = fmt %in% c('html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
-  (inherits(x, 'htmlwidget') && !html_format) ||
-    (inherits(x, 'shiny.appobj') && !(html_format && runtime_shiny()))
+  ((i1 || i3) && !html_format) || (i2 && !(html_format && runtime_shiny()))
 }
 
 runtime_shiny = function() {
@@ -367,7 +393,8 @@ runtime_shiny = function() {
 html_screenshot = function(x, options = opts_current$get(), ...) {
   i1 = inherits(x, 'htmlwidget')
   i2 = inherits(x, 'shiny.appobj')
-  if (!(i1 || i2))
+  i3 = inherits(x, 'knit_embed_url')
+  if (!(i1 || i2 || i3))
     stop('Screenshotting for the class ', class(x)[1], ' is not supported.')
 
   # if user has specified the screenshot image, just use it
@@ -390,9 +417,11 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   d = tempfile()
   dir.create(d); on.exit(unlink(d, recursive = TRUE), add = TRUE)
   f = in_dir(d, {
-    if (i1) {
-      f1 = tempfile('widget', '.', '.html')
-      htmlwidgets::saveWidget(x, f1, FALSE, knitrOptions = options)
+    if (i1 || i3) {
+      if (i1) {
+        f1 = tempfile('widget', '.', '.html')
+        htmlwidgets::saveWidget(x, f1, FALSE, knitrOptions = options)
+      } else f1 = x$url
       f2 = tempfile('webshot', '.', ext)
       do.call(webshot::webshot, c(list(f1, f2), wargs))
       normalizePath(f2)

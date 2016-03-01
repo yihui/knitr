@@ -566,6 +566,22 @@ wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE) {
   })
 }
 
+#' @export
+wrap.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE) {
+  options$fig.cur = plot_counter()
+  options = reduce_plot_opts(options)
+  iframe = sprintf(
+    '<iframe src="%s" width="%s" height="%s"></iframe>',
+    escape_html(x$url), options$out.width %n% '100%', x$height %n% '400px'
+  )
+  cap = .img.cap(options)
+  if (cap == '') return(iframe)
+  sprintf(
+    '<div class="figure"%s>\n%s\n<p class="caption">%s</p>\n</div>',
+    css_text_align(options$fig.align), iframe, cap
+  )
+}
+
 #' A custom printing function
 #'
 #' The S3 generic function \code{knit_print} is the default printing function in
