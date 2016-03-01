@@ -556,10 +556,13 @@ wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE) {
   hook_plot = knit_hooks$get('plot')
   in_base_dir({
     i = plot_counter()
-    f = fig_path(ext, options, i)
-    dir.create(dirname(f), recursive = TRUE, showWarnings = FALSE)
-    writeBin(x$image, f, useBytes = TRUE)
-    hook_plot(f, options)
+    if (is.null(f <- x$file)) {
+      f = fig_path(ext, options, i)
+      dir.create(dirname(f), recursive = TRUE, showWarnings = FALSE)
+      writeBin(x$image, f, useBytes = TRUE)
+    }
+    options$fig.cur = i
+    hook_plot(f, reduce_plot_opts(options))
   })
 }
 

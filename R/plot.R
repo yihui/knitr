@@ -374,7 +374,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   if (!is.null(shots <- options$alt.screenshot)) {
     i = shot_counter()
     if (length(shots) < i) stop('Not enough number of screenshots provided')
-    return(include_graphics(shots[i]))
+    return(structure(list(file = shots[i]), class = 'html_screenshot'))
   }
 
   if (!requireNamespace('webshot', quietly = TRUE)) stop(
