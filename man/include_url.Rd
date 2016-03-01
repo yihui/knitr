@@ -1,0 +1,29 @@
+% Please edit documentation in R/plot.R
+\name{include_url}
+\alias{include_app}
+\alias{include_url}
+\title{Embed a URL as an HTML iframe or a screenshot in \pkg{knitr} documents}
+\usage{
+include_url(url, height = "400px")
+
+include_app(url, height = "400px")
+}
+\arguments{
+\item{url}{a character string of a URL}
+
+\item{height}{the height of the iframe}
+}
+\value{
+An R object with a special class that \pkg{knitr} recognizes
+  internally to generate the iframe or screenshot.
+}
+\description{
+When the output format is HTML, \code{include_url()} inserts an iframe in the
+output; otherwise it takes a screenshot of the URL and insert the image in
+the output. \code{include_app()} takes the URL of a Shiny app and adds
+\samp{?showcase=0} to it (to disable the showcase mode), then passes the URL
+to \code{include_url()}.
+}
+\seealso{
+\code{\link{include_graphics}}
+}
