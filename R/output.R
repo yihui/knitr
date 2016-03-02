@@ -562,7 +562,9 @@ wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE) {
       writeBin(x$image, f, useBytes = TRUE)
     }
     options$fig.cur = i
-    hook_plot(f, reduce_plot_opts(options))
+    options = reduce_plot_opts(options)
+    if (!is.null(x$url) && is.null(options$fig.link)) options$fig.link = x$url
+    hook_plot(f, options)
   })
 }
 

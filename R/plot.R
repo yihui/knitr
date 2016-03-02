@@ -365,14 +365,22 @@ include_graphics = function(path, auto_pdf = TRUE) {
 #' @seealso \code{\link{include_graphics}}
 #' @export
 include_url = function(url, height = '400px') {
-  structure(list(url = url, height = height), class = c('knit_embed_url', 'knit_asis'))
+  include_url2(url, height)
+}
+
+include_url2 = function(url, height = '400px', orig = url) {
+  structure(
+    list(url = url, height = height, url.orig = orig),
+    class = c('knit_embed_url', 'knit_asis')
+  )
 }
 
 #' @rdname include_url
 #' @export
 include_app = function(url, height = '400px') {
+  orig = url  # store the original URL
   if (!grepl('?', url, fixed = TRUE)) url = paste0(url, '?showcase=0')
-  include_url(url, height = height)
+  include_url2(url, height, orig)
 }
 
 need_screenshot = function(x) {
@@ -432,5 +440,8 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     }
   })
   res = readBin(f, 'raw', file.info(f)[, 'size'])
-  structure(list(image = res, extension = ext), class = 'html_screenshot')
+  structure(
+    list(image = res, extension = ext, url = if (i3) x$url.orig),
+    class = 'html_screenshot'
+  )
 }
