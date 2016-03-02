@@ -383,13 +383,15 @@ include_app = function(url, height = '400px') {
   include_url2(url, height, orig)
 }
 
-need_screenshot = function(x) {
+need_screenshot = function(x, ...) {
+  options = list(...)[['options']]
+  force = is.list(options) && isTRUE(options$screenshot.force)
   fmt = pandoc_to()
   i1 = inherits(x, 'htmlwidget')
   i2 = inherits(x, 'shiny.appobj')
   i3 = inherits(x, 'knit_embed_url')
   # not R Markdown v2, always screenshot htmlwidgets and shiny apps
-  if (length(fmt) == 0) return(i1 || i2 || i3)
+  if (length(fmt) == 0 || force) return(i1 || i2 || i3)
   html_format = fmt %in% c('html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
   ((i1 || i3) && !html_format) || (i2 && !(html_format && runtime_shiny()))
 }

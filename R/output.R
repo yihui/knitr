@@ -621,7 +621,7 @@ wrap.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE) {
 #' # after you defined the above method, data frames will be printed as tables in knitr,
 #' # which is different with the default print() behavior
 knit_print = function(x, ...) {
-  if (need_screenshot(x)) {
+  if (need_screenshot(x, ...)) {
     html_screenshot(x)
   } else {
     UseMethod('knit_print')
