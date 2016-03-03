@@ -430,7 +430,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     if (i1 || i3) {
       if (i1) {
         f1 = tempfile('widget', '.', '.html')
-        htmlwidgets::saveWidget(x, f1, FALSE, knitrOptions = options)
+        save_widget(x, f1, FALSE, options = options)
       } else f1 = x$url
       f2 = tempfile('webshot', '.', ext)
       do.call(webshot::webshot, c(list(f1, f2), wargs))
@@ -446,4 +446,11 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     list(image = res, extension = ext, url = if (i3) x$url.orig),
     class = 'html_screenshot'
   )
+}
+
+save_widget = function(..., options) {
+  FUN = htmlwidgets::saveWidget
+  if ('knitrOptions' %in% names(formals(FUN))) {
+    FUN(..., knitrOptions = options)
+  } else FUN(...)
 }
