@@ -318,6 +318,21 @@ showtext = function(show) {
   if (isTRUE(show)) getFromNamespace('showtext.begin', 'showtext')()
 }
 
+# handle some special cases of par()
+par2 = function(x) {
+  if (length(x) == 0) return()
+  # this may not be correct, but there is no way to tell if the user set mfrow
+  # or mfcol in par() (either setting will change mfrow/mfcol simultaneously),
+  # and I just assume it was mfrow
+  if (!is.null(x$mfrow)) {
+    # do this before the rest of pars because setting mfrow/mfcol will reset cex
+    par(mfrow = x$mfrow)
+    x$mfrow = x$mfcol = NULL
+  }
+  x$usr = NULL  # you are unlikely to want to reset usr
+  par(x)
+}
+
 #' Embed external images in \pkg{knitr} documents
 #'
 #' When plots are not generated from R code, there is no way for \pkg{knitr} to

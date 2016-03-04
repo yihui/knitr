@@ -123,7 +123,7 @@ block_exec = function(options) {
                    options$dev, options$dev.args, options$dpi, options)) {
     # preserve par() settings from the last code chunk
     if (keep.pars <- opts_knit$get('global.par'))
-      par(opts_knit$get('global.pars'))
+      par2(opts_knit$get('global.pars'))
     showtext(options$fig.showtext)  # showtext support
     dv = dev.cur()
     on.exit({

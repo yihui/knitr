@@ -22,6 +22,8 @@
 
 - `include_graphics()` did not work in inline R expressions (thanks, @WastlM, #1166)
 
+- the `cex` parameter was not correctly restored in the case of `opts_knit$set(global.par = TRUE)` (http://stackoverflow.com/q/35606445/559676)
+
 ## MAJOR CHANGES
 
 - the default value of the package option `eval.after` is changed from `NULL` to `fig.cap`, i.e. the figure caption will always be evaluated after a code chunk is evaluated (thanks, @JoshOBrien, #1165)
