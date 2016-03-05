@@ -17,12 +17,12 @@ read_demo(topic, package = NULL, ...)
 
 \item{labels}{a character vector of chunk labels (default \code{NULL})}
 
-\item{from, to}{a numeric vector specifying the starting/ending line numbers
+\item{from,  to}{a numeric vector specifying the starting/ending line numbers
 of code chunks, or a character vector; see Details}
 
-\item{from.offset, to.offset}{an offset to be added to \code{from}/\code{to}}
+\item{from.offset,  to.offset}{an offset to be added to \code{from}/\code{to}}
 
-\item{topic, package}{name of the demo and the package see \code{\link[utils]{demo}}}
+\item{topic,  package}{name of the demo and the package see \code{\link[utils]{demo}}}
 
 \item{...}{arguments to be passed to \code{\link{read_chunk}}}
 }

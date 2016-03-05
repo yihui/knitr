@@ -3,8 +3,8 @@
 \alias{knit2wp}
 \title{Knit an R Markdown document and post it to WordPress}
 \usage{
-knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE, 
-    action = c("newPost", "editPost", "newPage"), postid, 
+knit2wp(input, title = "A post from knitr", ..., envir = parent.frame(), 
+    shortcode = FALSE, action = c("newPost", "editPost", "newPage"), postid, 
     encoding = getOption("encoding"), publish = TRUE)
 }
 \arguments{
@@ -14,6 +14,10 @@ knit2wp(input, title = "A post from knitr", ..., shortcode = FALSE,
 
 \item{...}{other meta information of the post, e.g. \code{categories = c('R',
 'Stats')} and \code{mt_keywords = c('knitr', 'wordpress')}, etc}
+
+\item{envir}{the environment in which the code chunks are to be evaluated
+(for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\code{\link{globalenv}()})}
 
 \item{shortcode}{a logical vector of length 2: whether to use the shortcode
 \samp{[sourcecode lang='lang']} which can be useful to WordPress.com users
