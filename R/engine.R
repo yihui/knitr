@@ -203,46 +203,36 @@ eng_tikz = function(options) {
 
   ext = tolower(options$fig.ext %n% dev2ext(options$dev))
 
-  if (ext=="svg") {
-    unlink(outf <- paste0(f, '.dvi'))
-    tools::texi2dvi(texf, pdf=F, clean = T) #dvisvgm uses .dvi as input not pdf
-    if (!file.exists(outf)) stop('failed to compile tikz to dvi; check the template: ', tmpl)
+  to_svg = ext == 'svg'
+  unlink(outf <- paste0(f, if (to_svg) '.dvi' else '.pdf'))
+  tools::texi2dvi(texf, pdf = !to_svg, clean = TRUE)
+  if (!file.exists(outf)) stop('Failed to compile tikz; check the template: ', tmpl)
 
-    fig = fig_path('', options)
-    dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
-    file.rename(outf, paste0(fig, '.dvi'))
+  fig = fig_path(if (to_svg) '.dvi' else '.pdf', options)
+  dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
+  file.rename(outf, fig)
 
+  fig2 = sub_ext(fig, ext)
+  if (to_svg) {
     # dvisvgm needs to be on the path
     # dvisvgm for windows needs ghostscript bin dir on the path also
-    conv = system2("dvisvgm", sprintf("%s.dvi", fig))
-    if (conv != 0 && !options$error)
-      stop('problems with `dvisvgm`; check that dvisvgm and ghostscript are installed and on path.')
-
-    # copy the svg to figure-html subdir
-    file.rename(paste0(basename(fig),".svg"), paste0(fig,".svg"))
-  }
-  else
-  {
-    unlink(outf <- paste0(f, '.pdf'))
-    tools::texi2pdf(texf, clean = TRUE)
-    if (!file.exists(outf)) stop('failed to compile tikz; check the template: ', tmpl)
-
-    fig = fig_path('', options)
-    dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
-    file.rename(outf, paste0(fig, '.pdf'))
+    conv = system2('dvisvgm', fig)
+    # copy the svg to figure subdir
+    file.rename(basename(fig2), fig2)
+  } else {
     # convert to the desired output-format, calling `convert`
-
+    conv = 0
     if (ext != 'pdf') {
       conv = system2(options$engine.opts$convert %n% 'convert', c(
-        options$engine.opts$convert.opts, sprintf('%s.pdf %s.%s', fig, fig, ext)
+        options$engine.opts$convert.opts, sprintf('%s %s', fig, fig2)
       ))
-      if (conv != 0 && !options$error)
-        stop('problems with `convert`; probably not installed?')
     }
   }
+  if (conv != 0 && !options$error) stop('Failed to compile ', fig, ' to ', fig2)
+  fig = fig2
 
   options$fig.num = 1L; options$fig.cur = 1L
-  extra = knit_hooks$get('plot')(paste(fig, ext, sep = '.'), options)
+  extra = knit_hooks$get('plot')(fig, options)
   options$engine = 'tex'  # for output hooks to use the correct language class
   engine_output(options, options$code, '', extra)
 }

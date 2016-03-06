@@ -16,6 +16,8 @@
 
 - the `pandoc()` function no longer assumes Markdown input (thanks, @scls19fr, #1170)
 
+- for the `tikz` engine, if `fig.ext = 'svg'`, `dvisvgm` will be called to convert the DVI output of TikZ to SVG; you need to install `dvisvgm`, and Windows users have to install GhostScript as well (thanks, @dkilfoyle, #1177)
+
 ## BUG FIXES
 
 - when the chunk option `cache.rebuild = TRUE`, the cache database should be rewritten (thanks, Oleg Mayba)
