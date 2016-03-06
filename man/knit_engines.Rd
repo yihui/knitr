@@ -34,6 +34,10 @@ Below is a list of built-in language engines, retrieved via
 
 \Sexpr[results=verbatim]{str(knitr::knit_engines$get())}
 }
+\note{
+The Leiningen engine \code{lein} requires lein-exec plugin; see
+  \url{https://github.com/yihui/knitr/issues/1176} for details.
+}
 \examples{
 knit_engines$get("python")
 knit_engines$get("awk")
