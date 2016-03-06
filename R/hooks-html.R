@@ -41,7 +41,7 @@ hook_plot_html = function(x, options) {
     if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
   }
   if (length(cap) == 0) cap = ''
-  if (cap == '') return(cap)
+  if (is_blank(cap)) return(cap)
   paste0(create_label(options$fig.lp, options$label), cap)
 }
 
