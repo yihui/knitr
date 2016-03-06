@@ -15,7 +15,7 @@ hook_plot_custom(before, options, envir)
 hook_purl(before, options, envir)
 }
 \arguments{
-\item{before,  options,  envir}{see references}
+\item{before, options, envir}{see references}
 }
 \description{
 Hook functions are called when the corresponding chunk options are not
