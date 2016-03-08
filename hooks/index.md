@@ -139,7 +139,7 @@ opts_hooks$set(fig.width = function(options) {
 })
 {% endhighlight %}
 
-Because `fig.width` will never be \code{NULL}, this hook function is always executed before a code chunk to update its chunk options. For the code chunk below, the actual value of `fig.width` will be 6 instead of the initial 5 if the above option hook has been set up:
+Because `fig.width` will never be `NULL`, this hook function is always executed before a code chunk to update its chunk options. For the code chunk below, the actual value of `fig.width` will be 6 instead of the initial 5 if the above option hook has been set up:
 
     ```{r fig.width = 5, fig.height = 6}
     plot(1:10)
