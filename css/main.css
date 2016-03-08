@@ -675,3 +675,7 @@ p#first_about {
     font-size: 1.125em;
   }
 }
+
+#content figure {
+  width: auto;
+}
