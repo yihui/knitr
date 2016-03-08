@@ -12,6 +12,8 @@
 
 - added a new chunk option `fig.link`, which can be used to attach hyperlinks on figures, e.g. you can add a link to a screenshot of a Shiny app so that readers can check out the actual live app after clicking on the static screenshot (this chunk option currently only works for Markdown and LaTeX output)
 
+- syntactical errors in code chunks will be allowed when the chunk option `error = TRUE` and the package version of **evaluate** is at least 0.8.4; previously **knitr** would just stop on parsing errors (https://github.com/hadley/evaluate/issues/65)
+
 - `render_markdown()` gained a new argument `fence_char` to customize the character to be used as the code blocks fence, e.g. it can be a backtick, or a tilde, depending on the Markdown rendering engine (thanks, @tinyheero, #1161)
 
 - the `pandoc()` function no longer assumes Markdown input (thanks, @scls19fr, #1170)
