@@ -16,6 +16,8 @@
 
 - the `pandoc()` function no longer assumes Markdown input (thanks, @scls19fr, #1170)
 
+- added a new function `knit_meta_add()` so that users can manually inject metadata into the current **knitr** session
+
 - for the `tikz` engine, if `fig.ext = 'svg'`, `dvisvgm` will be called to convert the DVI output of TikZ to SVG; you need to install `dvisvgm`, and Windows users have to install GhostScript as well (thanks, @dkilfoyle, #1177)
 
 ## BUG FIXES

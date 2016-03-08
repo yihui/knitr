@@ -460,21 +460,15 @@ wrap.character = function(x, options) {
 #' @export
 wrap.knit_asis = function(x, options, inline = FALSE) {
   m = attr(x, 'knit_meta')
-  if (length(m)) {
-    meta_id = attr(.knitEnv$meta, 'knit_meta_id')
-    .knitEnv$meta = c(.knitEnv$meta, m)
-  }
+  knit_meta_add(m, if (missing(options)) '' else options$label)
   if (!missing(options)) {
     if (options$cache > 0 && isFALSE(attr(x, 'knit_cacheable'))) stop(
       "The code chunk '", options$label, "' is not cacheable; ",
       "please use the chunk option cache=FALSE on this chunk"
     )
-    if (length(m)) {
-      attr(.knitEnv$meta, 'knit_meta_id') = c(meta_id, rep(options$label, length(m)))
-      # store metadata in an object named of the form .hash_meta when cache=TRUE
-      if (options$cache == 3)
-        assign(cache_meta_name(options$hash), m, envir = knit_global())
-    }
+    # store metadata in an object named of the form .hash_meta when cache=TRUE
+    if (length(m) && options$cache == 3)
+      assign(cache_meta_name(options$hash), m, envir = knit_global())
   }
   x = as.character(x)
   if (!out_format('latex') || inline) return(x)
@@ -688,7 +682,8 @@ asis_output = function(x, meta = NULL, cacheable = NA) {
 #'
 #' As an object is printed, \pkg{knitr} will collect metadata about it (if
 #' available). After knitting is done, all the metadata is accessible via this
-#' function.
+#' function. You can manually add metadata to the \pkg{knitr} session via
+#' \code{knit_meta_add()}.
 #' @param class optionally return only metadata entries that inherit from the
 #'   specified class; the default, \code{NULL}, returns all entries.
 #' @param clean whether to clean the collected metadata; by default, the
@@ -697,6 +692,8 @@ asis_output = function(x, meta = NULL, cacheable = NA) {
 #'   defensive (i.e. not to have carryover metadata), you can call
 #'   \code{knit_meta()} before \code{knit()}
 #' @export
+#' @return \code{knit_meta()} returns the matched metadata specified by
+#'   \code{class}; \code{knit_meta_add()} returns all current metadata.
 knit_meta = function(class = NULL, clean = TRUE) {
   if (is.null(class)) {
     if (clean) on.exit({.knitEnv$meta = list()}, add = TRUE)
@@ -713,4 +710,17 @@ knit_meta = function(class = NULL, clean = TRUE) {
     if (length(id)) attr(.knitEnv$meta, 'knit_meta_id') = id[!matches]
   }, add = TRUE)
   .knitEnv$meta[matches]
+}
+
+#' @param meta a metadata object to be added to the session
+#' @param label a chunk label to indicate which chunk the metadata belongs to
+#' @rdname knit_meta
+#' @export
+knit_meta_add = function(meta, label = '') {
+  if (length(meta)) {
+    meta_id = attr(.knitEnv$meta, 'knit_meta_id')
+    .knitEnv$meta = c(.knitEnv$meta, meta)
+    attr(.knitEnv$meta, 'knit_meta_id') = c(meta_id, rep(label, length(meta)))
+  }
+  .knitEnv$meta
 }
