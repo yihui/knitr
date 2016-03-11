@@ -773,15 +773,19 @@ attr = function(...) base::attr(..., exact = TRUE)
 #' @param words a character vector
 #' @param sep the separator to be inserted among words
 #' @param and a character string to be prepended to the last word
+#' @param before,after A character string to be added before/after each word
 #' @return A character string.
 #' @export
 #' @examples combine_words('a'); combine_words(c('a', 'b'))
 #' combine_words(c('a', 'b', 'c'))
 #' combine_words(c('a', 'b', 'c'), sep = ' / ', and = '')
 #' combine_words(c('a', 'b', 'c'), and = '')
-combine_words = function(words, sep = ', ', and = ' and ') {
+#' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
+combine_words = function(words, sep = ', ', and = ' and ', before = '', after = before) {
   n = length(words)
-  if (n <= 1) return(words)
+  if (n == 0) return(words)
+  words = paste0(before, words, after)
+  if (n == 1) return(words)
   if (n == 2) return(paste(words, collapse = and))
   if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
   words[n] = paste0(and, words[n])

@@ -118,5 +118,7 @@ assert(
   combine_words(c('a', 'b')) %==% 'a and b',
   combine_words(c('a', 'b', 'c')) %==% 'a, b, and c',
   combine_words(c('a', 'b', 'c'), and = '') %==% 'a, b, c',
-  combine_words(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c'
+  combine_words(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c',
+  combine_words(c('a', 'b', 'c'), before = '"') %==% '"a", "b", and "c"',
+  combine_words(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''"
 )

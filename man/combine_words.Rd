@@ -3,7 +3,7 @@
 \alias{combine_words}
 \title{Combine multiple words into a single string}
 \usage{
-combine_words(words, sep = ", ", and = " and ")
+combine_words(words, sep = ", ", and = " and ", before = "", after = before)
 }
 \arguments{
 \item{words}{a character vector}
@@ -11,6 +11,8 @@ combine_words(words, sep = ", ", and = " and ")
 \item{sep}{the separator to be inserted among words}
 
 \item{and}{a character string to be prepended to the last word}
+
+\item{before, after}{A character string to be added before/after each word}
 }
 \value{
 A character string.
@@ -33,4 +35,5 @@ combine_words(c("a", "b"))
 combine_words(c("a", "b", "c"))
 combine_words(c("a", "b", "c"), sep = " / ", and = "")
 combine_words(c("a", "b", "c"), and = "")
+combine_words(c("a", "b", "c"), before = "\"", after = "\"")
 }
