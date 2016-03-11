@@ -758,3 +758,32 @@ create_label = function(..., latex = FALSE) {
 
 # yes I hate partial matching
 attr = function(...) base::attr(..., exact = TRUE)
+
+#' Combine multiple words into a single string
+#'
+#' When a value from an inline R expression is a character vector of multiple
+#' elements, we may want to combine them into a phrase like \samp{a and b}, or
+#' \code{a, b, and c}. That is what this a helper function does.
+#'
+#' If the length of the input \code{words} is smaller than or equal to 1,
+#' \code{words} is returned. When \code{words} is of length 2, the first word
+#' and second word are combined using the \code{and} string. When the length is
+#' greater than 2, \code{sep} is used to separate all words, and the \code{and}
+#' string is prepended to the last word.
+#' @param words a character vector
+#' @param sep the separator to be inserted among words
+#' @param and a character string to be prepended to the last word
+#' @return A character string.
+#' @export
+#' @examples combine_words('a'); combine_words(c('a', 'b'))
+#' combine_words(c('a', 'b', 'c'))
+#' combine_words(c('a', 'b', 'c'), sep = ' / ', and = '')
+#' combine_words(c('a', 'b', 'c'), and = '')
+combine_words = function(words, sep = ', ', and = ' and ') {
+  n = length(words)
+  if (n <= 1) return(words)
+  if (n == 2) return(paste(words, collapse = and))
+  if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
+  words[n] = paste0(and, words[n])
+  paste(words, collapse = sep)
+}

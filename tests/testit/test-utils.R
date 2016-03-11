@@ -110,3 +110,13 @@ assert(
   color_def('#00ff00') == '\\definecolor{shadecolor}{rgb}{0, 1, 0}',
   color_def('.5,.6,.7', 'fgcolor') == '\\definecolor{fgcolor}{rgb}{.5, .6, .7}'
 )
+
+assert(
+  'combine_words() combines multiple words into a single string',
+  combine_words(NULL) %==% NULL,
+  combine_words(c('a')) %==% 'a',
+  combine_words(c('a', 'b')) %==% 'a and b',
+  combine_words(c('a', 'b', 'c')) %==% 'a, b, and c',
+  combine_words(c('a', 'b', 'c'), and = '') %==% 'a, b, c',
+  combine_words(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c'
+)
