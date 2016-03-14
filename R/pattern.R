@@ -11,7 +11,7 @@ all_patterns = list(
   `rnw` = list(
     chunk.begin = '^\\s*<<(.*)>>=.*$', chunk.end = '^\\s*@\\s*(%+.*|)$',
     inline.code = '\\\\Sexpr\\{([^}]+)\\}', inline.comment = '^\\s*%.*',
-    ref.chunk = '^\\s*<<(.+)>>\\s*$', header.begin = '(^|\n)[^%]*\\s*\\\\documentclass[^}]+\\}',
+    ref.chunk = '^\\s*<<(.+)>>\\s*$', header.begin = '(^|\n)\\s*\\\\documentclass[^}]+\\}',
     document.begin = '\\s*\\\\begin\\{document\\}'),
 
   `brew` = list(inline.code = '<%[=]{0,1}\\s+([^%]+)\\s+[-]*%>'),
@@ -20,7 +20,7 @@ all_patterns = list(
     chunk.begin = '^\\s*%+\\s*begin.rcode\\s*(.*)', chunk.end = '^\\s*%+\\s*end.rcode',
     chunk.code = '^%+', ref.chunk = '^%+\\s*<<(.+)>>\\s*$',
     inline.comment = '^\\s*%.*', inline.code = '\\\\rinline\\{([^}]+)\\}',
-    header.begin = '(^|\n)[^%]*\\s*\\\\documentclass[^}]+\\}',
+    header.begin = '(^|\n)\\s*\\\\documentclass[^}]+\\}',
     document.begin = '\\s*\\\\begin\\{document\\}'),
 
   `html` = list(

@@ -32,6 +32,8 @@
 
 - the `cex` parameter was not correctly restored in the case of `opts_knit$set(global.par = TRUE)` (http://stackoverflow.com/q/35606445/559676)
 
+- for Rnw documents, when there are two instances of `\documentclass{}`, **knitr** might mistakenly treats the second instance as the the actual command to declare the document class (thanks, #1180, @ekstroem)
+
 ## MAJOR CHANGES
 
 - the default value of the package option `eval.after` is changed from `NULL` to `fig.cap`, i.e. the figure caption will always be evaluated after a code chunk is evaluated (thanks, @JoshOBrien, #1165)

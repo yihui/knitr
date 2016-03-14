@@ -97,3 +97,17 @@ assert(
   'insert_header_latex() finds the correct \\documentclass{}',
   identical(res[1], '%\\documentclass{article}')
 )
+
+txt = '\\documentclass{article}
+\\begin{document}
+\\begin{verbatim}
+\\documentclass{article}
+\\end{verbatim}
+\\Sexpr{pi}
+\\end{document}'
+res = strsplit(knit(text = txt, quiet = TRUE), '\n')[[1]]
+
+assert(
+  'insert_header_latex() finds the correct \\documentclass{}',
+  identical(res[length(res) - 3], '\\documentclass{article}')
+)
