@@ -3,3 +3,4 @@ _site
 knit-all.R
 
 .Rproj.user
+.*.Rnb.cached
