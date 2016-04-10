@@ -24,6 +24,8 @@
 
 - for the `tikz` engine, if `fig.ext = 'svg'`, `dvisvgm` will be called to convert the DVI output of TikZ to SVG; you need to install `dvisvgm`, and Windows users have to install GhostScript as well (thanks, @dkilfoyle, #1177)
 
+- new `js` and `css` engines which surround their content with `<script>` and `<style>` tags respecitvely, and print no output when not in an HTML document
+
 ## BUG FIXES
 
 - when the chunk option `cache.rebuild = TRUE`, the cache database should be rewritten (thanks, Oleg Mayba)

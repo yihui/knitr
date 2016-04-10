@@ -350,6 +350,23 @@ eng_block = function(options) {
   )
 }
 
+# helper to create engines the wrap embedded html assets (e.g. css,js)
+eng_html_asset <- function(prefix, postfix) {
+  function(options) {
+    if (options$eval && is_html_output(allow_markdown = FALSE)) {
+      code <- c(prefix, options$code, postfix)
+      paste(code, collapse = '\n')
+    }
+  }
+}
+
+## include js in a script tag (ignore if not html output)
+eng_js = eng_html_asset('<script type="text/javascript">', '</script>')
+
+## include css in a style tag (ignore if not html output)
+eng_css = eng_html_asset('<style type="text/css">', '</style>')
+
+
 # set engines for interpreted languages
 local({
   for (i in c(
@@ -363,7 +380,7 @@ local({
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
   c = eng_shlib, fortran = eng_shlib, asy = eng_dot, cat = eng_cat,
-  asis = eng_asis, stan = eng_stan, block = eng_block
+  asis = eng_asis, stan = eng_stan, block = eng_block, js = eng_js, css = eng_css
 )
 
 get_engine = function(name) {
