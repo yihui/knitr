@@ -351,19 +351,19 @@ eng_block = function(options) {
 }
 
 # helper to create engines the wrap embedded html assets (e.g. css,js)
-eng_html_asset <- function(prefix, postfix) {
+eng_html_asset = function(prefix, postfix) {
   function(options) {
     if (options$eval && is_html_output(allow_markdown = FALSE)) {
-      code <- c(prefix, options$code, postfix)
+      code = c(prefix, options$code, postfix)
       paste(code, collapse = '\n')
     }
   }
 }
 
-## include js in a script tag (ignore if not html output)
+# include js in a script tag (ignore if not html output)
 eng_js = eng_html_asset('<script type="text/javascript">', '</script>')
 
-## include css in a style tag (ignore if not html output)
+# include css in a style tag (ignore if not html output)
 eng_css = eng_html_asset('<style type="text/css">', '</style>')
 
 
