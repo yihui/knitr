@@ -112,15 +112,9 @@ register_vignette_engines = function(pkg) {
 }
 # all engines use the same tangle and package arguments, so factor them out
 vig_engine = function(..., tangle = vtangle) {
-  vig_engine0(..., tangle = tangle, package = 'knitr', aspell = list(
+  tools::vignetteEngine(..., tangle = tangle, package = 'knitr', aspell = list(
     filter = knit_filter
   ))
-}
-# R <= 3.0.2 does not have the aspell argument in vignetteEngine()
-vig_engine0 = if ('aspell' %in% names(formals(tools::vignetteEngine))) {
-  function(...) tools::vignetteEngine(...)
-} else {
-  function(..., aspell = list()) tools::vignetteEngine(...)
 }
 
 #' Spell check filter for source documents
