@@ -493,7 +493,19 @@ msg_wrap = function(message, type, options) {
     list(c(knit_log$get(type), paste0('Chunk ', options$label, ':\n  ', message))),
     type
   ))
+  msg_sanitize(message, type)
   knit_hooks$get(type)(comment_out(message, options$comment), options)
+}
+
+# set options(knitr.sanitize.errors = TRUE) to hide error messages, etc
+msg_sanitize = function(message, type) {
+  type = match.arg(type, c('error', 'warning', 'message'))
+  opt = getOption(sprintf('knitr.sanitize.%ss', type), FALSE)
+  if (isTRUE(opt)) message = switch(
+    type, error = 'An error occurred', warning = 'A warning was emitted',
+    message = 'A message was emitted'
+  ) else if (is.character(opt)) message = opt
+  message
 }
 
 #' @export
