@@ -13,7 +13,7 @@ dataset in R instead, such as `iris` or `mtcars`, or simulated data). Make your
 example self-contained in one single document, i.e. avoid reading external files
 if possible, which you may forget to attach to your bug report.
 
-To include a verbatim chunk of arbitrary text, indent it by four spaces,
+To include a verbatim chunk of arbitrary text, indent it by four spaces (this can be done in RStudio by selecting the text and pressing the `Tab` key once or twice, depending on your settings),
 especially when it contains backticks, e.g.
 
         A sample document.
