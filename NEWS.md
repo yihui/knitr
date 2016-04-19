@@ -8,7 +8,7 @@
 
 - added two functions `include_url()` and `include_app()` to embed URLs in the output (the latter is for Shiny app URLs); when the output format is HTML, iframe will be used; otherwise screenshots of the URLs will be used
 
-- screenshotting for HTML widgets and URLs can be forced for all output formats via the chunk option `screenshot.force = TRUE`
+- screenshotting for HTML widgets and URLs can be forced for all output formats via the chunk option `screenshot.force = TRUE`; if you set the chunk option `screenshot.force = FALSE`, **knitr** will just render these content normally and not take screenshots
 
 - added a new chunk option `fig.link`, which can be used to attach hyperlinks on figures, e.g. you can add a link to a screenshot of a Shiny app so that readers can check out the actual live app after clicking on the static screenshot (this chunk option currently only works for Markdown and LaTeX output)
 
