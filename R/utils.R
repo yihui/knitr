@@ -258,8 +258,6 @@ fix_options = function(options) {
   if (is.numeric(r <- options$fig.retina) && r != 1) {
     if (is.null(options[['out.width']])) {
       options$out.width = options$fig.width * options$dpi
-    } else {
-      warning('You must not set both chunk options out.width and fig.retina')
     }
     options$dpi = options$dpi * r
   } else {
