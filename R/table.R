@@ -191,7 +191,8 @@ kable_latex = function(
   bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule' else '\\hline'),
   midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
-  caption = NULL, table.envir = if (!is.null(caption)) 'table', escape = TRUE
+  caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
+  escape = TRUE
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
@@ -206,7 +207,8 @@ kable_latex = function(
   if (identical(caption, NA)) caption = NULL
   env1 = sprintf('\\begin{%s}\n', table.envir)
   env2 = sprintf('\n\\end{%s}',   table.envir)
-  cap = if (is.null(caption)) '' else sprintf('\n\\caption{%s}', caption)
+  if (caption.short != '') caption.short = paste0('[', caption.short, ']')
+  cap = if (is.null(caption)) '' else sprintf('\n\\caption%s{%s}', caption.short, caption)
 
   if (nrow(x) == 0) midrule = ""
 
