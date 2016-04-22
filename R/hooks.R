@@ -9,7 +9,8 @@
 .default.hooks = list(
   source = .out.hook, output = .out.hook, warning = .out.hook,
   message = .out.hook, error = .out.hook, plot = .plot.hook,
-  inline = .inline.hook, chunk = .out.hook, text = identity, document = identity
+  inline = .inline.hook, chunk = .out.hook, text = identity,
+  evaluate = evaluate::evaluate, document = identity
 )
 
 #' Hooks for R code chunks, inline R code and output

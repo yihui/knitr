@@ -162,6 +162,7 @@ block_exec = function(options) {
     options$error = err.code != 2L
   }
   cache.exists = cache$exists(options$hash, options$cache.lazy)
+  evaluate = knit_hooks$get('evaluate')
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
     as.source(code)
@@ -169,7 +170,7 @@ block_exec = function(options) {
     fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
   } else in_dir(
     opts_knit$get('root.dir') %n% input_dir(),
-    evaluate::evaluate(
+    evaluate(
       code, envir = env, new_device = FALSE,
       keep_warning = !isFALSE(options$warning),
       keep_message = !isFALSE(options$message),
