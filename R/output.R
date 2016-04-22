@@ -552,6 +552,15 @@ wrap.recordedplot = function(x, options) {
 wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) {
   hook_plot = knit_hooks$get('plot')
   options$fig.num = length(x)
+  # remove the automatically set out.width when fig.retina is set, otherwise the
+  # size of external images embedded via include_graphics() will be set to
+  # fig.width * dpi in fix_options()
+  if (is.numeric(r <- options$fig.retina)) {
+    w1 = options$out.width
+    w2 = options$fig.width * options$dpi / r
+    if (length(w1) * length(w2) == 1 && is.numeric(w1) && w1 == w2)
+      options['out.width'] = list(NULL)
+  }
   paste(unlist(lapply(seq_along(x), function(i) {
     options$fig.cur = i
     hook_plot(x[i], reduce_plot_opts(options))
