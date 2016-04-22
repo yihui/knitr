@@ -36,7 +36,7 @@ hook_plot_md_base = function(x, options) {
   base = opts_knit$get('base.url') %n% ''
   cap = .img.cap(options)
 
-  w = options$out.width; h = options$out.height
+  w = options[['out.width']]; h = options[['out.height']]
   s = options$out.extra; a = options$fig.align
   ai = options$fig.show == 'asis'
   lnk = options$fig.link
