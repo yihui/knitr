@@ -366,6 +366,25 @@ include_graphics = function(path, auto_pdf = TRUE) {
   structure(path, class = c('knit_image_paths', 'knit_asis'))
 }
 
+# calculate the width in inches for PNG/JPEG images given a DPI
+raster_dpi_width = function(path, dpi) {
+  is_png = grepl('[.]png$', path, ignore.case = TRUE)
+  is_jpg = grepl('[.]jpe?g$', path, ignore.case = TRUE)
+  if (!is_png && !is_jpg) return()
+  if (is_png) {
+    if (!requireNamespace('png')) return()
+    meta = attr(png::readPNG(path, native = TRUE, info = TRUE), 'info')
+    w = meta$dim[1]
+    if (!is.numeric(dpi)) dpi = meta$dpi[1]
+    if (!is.numeric(dpi)) return()  # cannot calculate the desired width
+  } else if (is_jpg) {
+    if (!requireNamespace('jpeg')) return()
+    if (!is.numeric(dpi)) return()  # there is no dpi info in JPEG
+    w = ncol(jpeg::readJPEG(path, native = TRUE))
+  }
+  paste0(round(w / dpi, 2), 'in')
+}
+
 #' Embed a URL as an HTML iframe or a screenshot in \pkg{knitr} documents
 #'
 #' When the output format is HTML, \code{include_url()} inserts an iframe in the
