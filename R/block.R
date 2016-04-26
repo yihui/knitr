@@ -18,7 +18,7 @@ call_block = function(block) {
 
   # expand parameters defined via template
   if (!is.null(block$params$opts.label)) {
-    block$params <- merge_list(opts_template$get(block$params$opts.label), block$params)
+    block$params = merge_list(opts_template$get(block$params$opts.label), block$params)
   }
 
   params = opts_chunk$merge(block$params)
