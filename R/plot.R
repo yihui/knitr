@@ -368,6 +368,7 @@ include_graphics = function(path, auto_pdf = TRUE) {
 
 # calculate the width in inches for PNG/JPEG images given a DPI
 raster_dpi_width = function(path, dpi) {
+  if (!file.exists(path) || is.na(dpi)) return()
   is_png = grepl('[.]png$', path, ignore.case = TRUE)
   is_jpg = grepl('[.]jpe?g$', path, ignore.case = TRUE)
   if (!is_png && !is_jpg) return()

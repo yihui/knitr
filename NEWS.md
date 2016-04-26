@@ -14,7 +14,7 @@
 
 - syntactical errors in code chunks will be allowed when the chunk option `error = TRUE` and the package version of **evaluate** is at least 0.8.4; previously **knitr** would just stop on parsing errors (https://github.com/hadley/evaluate/issues/65)
 
-- PNG/JPEG images included via `include_graphics()` also respects the chunk option `dpi` now; if it is numeric and the chunk option `out.width` is not set, the output width (in inches) of an image will be automatically  calculated from the actual width (in pixels) divided by `dpi`; note this feature requires the packages **png** and/or **jpeg** to be installed (thanks, @hadley, https://github.com/rstudio/bookdown/issues/38)
+- PNG/JPEG images included via `include_graphics()` also respects the chunk option `dpi` now; if it is numeric and the chunk option `out.width` is not set, the output width (in inches) of an image will be automatically  calculated from the actual width (in pixels) divided by `dpi`; note this feature requires the packages **png** and/or **jpeg** to be installed, and you can disable the feature using `dpi = NA` (thanks, @hadley, https://github.com/rstudio/bookdown/issues/38)
 
 - added a new hook function named `evaluate` in `knit_hooks` so that users can redefine a evaluator to evaluate the code chunk; the default is `evaluate::evaluate()`, and your custom evaluator must be compatible with `evaluate::evaluate()` in terms of the argument names and the data structure of the returned value (a list of values with special classes)
 
