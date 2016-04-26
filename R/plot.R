@@ -350,20 +350,29 @@ par2 = function(x) {
 #'   \file{foo/bar.pdf} if the latter exists; this can be useful since normally
 #'   PDF images are of higher qualities than raster images like PNG when the
 #'   output is LaTeX/PDF
+#' @param dpi the DPI (dots per inch) value to be used to calculate the output
+#'   width (in inches) of the images from the actual width (in pixels) divided
+#'   by \code{dpi}; if not provided, the chunk option \code{dpi} is used; if
+#'   \code{NA}, the output width will not be calculated
 #' @note This function is supposed to be used in R code chunks or inline R code
 #'   expressions. You are recommended to use forward slashes (\verb{/}) as path
 #'   separators instead of backslashes in the image paths.
+#'
+#'   The automatic calculation of the output width requires the \pkg{png}
+#'   package (for PNG images) or the \pkg{jpeg} package (for JPEG images). The
+#'   width will not be calculated if the chunk option \code{out.width} is
+#'   already provided or \code{dpi = NA}.
 #' @return The same as the input character vector \code{path} but it is marked
 #'   with special internal S3 classes so that \pkg{knitr} will convert the file
 #'   paths to proper output code according to the output format.
 #' @export
-include_graphics = function(path, auto_pdf = TRUE) {
+include_graphics = function(path, auto_pdf = TRUE, dpi = NULL) {
   if (auto_pdf && is_latex_output()) {
     path2 = sub_ext(path, 'pdf')
     i = file.exists(path2)
     path[i] = path2[i]
   }
-  structure(path, class = c('knit_image_paths', 'knit_asis'))
+  structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
 }
 
 # calculate the width in inches for PNG/JPEG images given a DPI

@@ -561,7 +561,7 @@ wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) 
     if (length(w1) * length(w2) == 1 && is.numeric(w1) && w1 == w2)
       options['out.width'] = list(NULL)
   }
-  dpi = options$dpi
+  dpi = attr(x, 'dpi') %n% options$dpi
   paste(unlist(lapply(seq_along(x), function(i) {
     options$fig.cur = i
     if (is.null(options[['out.width']]))
