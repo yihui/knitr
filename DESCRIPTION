@@ -97,6 +97,8 @@ Suggests:
     htmlwidgets,
     webshot,
     tikzDevice (>= 0.10),
+    png,
+    jpeg,
     XML,
     RCurl
 License: GPL
