@@ -392,7 +392,11 @@ raster_dpi_width = function(path, dpi) {
     if (!is.numeric(dpi)) return()  # there is no dpi info in JPEG
     w = ncol(jpeg::readJPEG(path, native = TRUE))
   }
-  paste0(round(w / dpi, 2), 'in')
+  if (is_latex_output()) {
+    paste0(round(w / dpi, 2), 'in')
+  } else if (is_html_output()) {
+    round(w / (dpi / 96))
+  }
 }
 
 #' Embed a URL as an HTML iframe or a screenshot in \pkg{knitr} documents
