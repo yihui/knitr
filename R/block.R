@@ -105,7 +105,7 @@ block_exec = function(options) {
     output = in_dir(opts_knit$get('root.dir') %n% input_dir(), engine(options))
     res.after = run_hooks(before = FALSE, options)
     output = paste(c(res.before, output, res.after), collapse = '')
-    output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
+    output = knit_hooks$get('chunk')(output, options)
     if (options$cache) block_cache(
       options, output,
       if (options$engine == 'stan') options$engine.opts$x else character(0)
@@ -243,7 +243,7 @@ block_exec = function(options) {
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
 
   output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
-  output = if (is_blank(output)) '' else knit_hooks$get('chunk')(output, options)
+  output = knit_hooks$get('chunk')(output, options)
 
   if (options$cache > 0) {
     obj.new = setdiff(ls(globalenv(), all.names = TRUE), obj.before)
