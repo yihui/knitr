@@ -17,4 +17,4 @@ StripTrailingWhitespace: Yes
 
 BuildType: Package
 PackageInstallArgs: -v && Rscript -e "Rd2roxygen::rab(install=TRUE)"
-PackageCheckArgs: --as-cran --no-manual
+PackageCheckArgs: --as-cran
