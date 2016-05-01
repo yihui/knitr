@@ -480,7 +480,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   f = in_dir(d, {
     if (i1 || i3) {
       if (i1) {
-        f1 = tempfile('widget', '.', '.html')
+        f1 = basename(tempfile('widget', '.', '.html'))
         save_widget(x, f1, FALSE, options = options)
       } else f1 = x$url
       f2 = tempfile('webshot', '.', ext)
