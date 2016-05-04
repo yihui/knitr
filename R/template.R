@@ -77,14 +77,17 @@ stitch = function(script,
 #' @rdname stitch
 #' @param ... arguments passed to \code{stitch()}
 #' @export
-stitch_rhtml = function(...) {
-  stitch(..., template = system.file('misc', 'knitr-template.Rhtml', package = 'knitr'))
-}
+stitch_rhtml = function(..., envir = parent.frame()) stitch(
+  ..., envir = envir,
+  template = system.file('misc', 'knitr-template.Rhtml', package = 'knitr')
+)
+
 #' @rdname stitch
 #' @export
-stitch_rmd = function(...) {
-  stitch(..., template = system.file('misc', 'knitr-template.Rmd', package = 'knitr'))
-}
+stitch_rmd = function(..., envir = parent.frame()) stitch(
+  ..., envir = envir,
+  template = system.file('misc', 'knitr-template.Rmd', package = 'knitr')
+)
 
 #' A simple macro preprocessor for templating purposes
 #'

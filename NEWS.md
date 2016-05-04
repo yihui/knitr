@@ -44,6 +44,8 @@
 
 - for Rnw documents, when there are two instances of `\documentclass{}`, **knitr** might mistakenly treats the second instance as the the actual command to declare the document class (thanks, #1180, @ekstroem)
 
+- corrected the environment for evaluating R scripts in `stitch_rhtml()` and `stitch_rmd()` (thanks, @Hughan, #1207)
+
 ## MAJOR CHANGES
 
 - the default value of the package option `eval.after` is changed from `NULL` to `fig.cap`, i.e. the figure caption will always be evaluated after a code chunk is evaluated (thanks, @JoshOBrien, #1165)
