@@ -8,9 +8,9 @@
 stitch(script, template = system.file("misc", "knitr-template.Rnw", package = "knitr"), 
     output = NULL, text = NULL, envir = parent.frame())
 
-stitch_rhtml(...)
+stitch_rhtml(..., envir = parent.frame())
 
-stitch_rmd(...)
+stitch_rmd(..., envir = parent.frame())
 }
 \arguments{
 \item{script}{path to the R script}
