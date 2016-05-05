@@ -382,13 +382,13 @@ raster_dpi_width = function(path, dpi) {
   is_jpg = grepl('[.]jpe?g$', path, ignore.case = TRUE)
   if (!is_png && !is_jpg) return()
   if (is_png) {
-    if (!requireNamespace('png')) return()
+    if (!loadable('png')) return()
     meta = attr(png::readPNG(path, native = TRUE, info = TRUE), 'info')
     w = meta$dim[1]
     if (!is.numeric(dpi)) dpi = meta$dpi[1]
     if (!is.numeric(dpi)) return()  # cannot calculate the desired width
   } else if (is_jpg) {
-    if (!requireNamespace('jpeg')) return()
+    if (!loadable('jpeg')) return()
     if (!is.numeric(dpi)) return()  # there is no dpi info in JPEG
     w = ncol(jpeg::readJPEG(path, native = TRUE))
   }
@@ -465,7 +465,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     return(structure(list(file = shots[i]), class = 'html_screenshot'))
   }
 
-  if (!requireNamespace('webshot', quietly = TRUE)) stop(
+  if (!loadable('webshot')) stop(
     'Please install the webshot package ',
     '(if not on CRAN, try devtools::install_github("wch/webshot"))'
   )

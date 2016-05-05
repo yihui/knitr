@@ -789,3 +789,6 @@ combine_words = function(words, sep = ', ', and = ' and ', before = '', after = 
   words[n] = paste0(and, words[n])
   paste(words, collapse = sep)
 }
+
+# check if a package is loadable
+loadable = function(pkg) requireNamespace(pkg, quietly = TRUE)
