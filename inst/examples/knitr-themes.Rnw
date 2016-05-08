@@ -2,7 +2,6 @@
 %% Do not edit unless you really know what you are doing.
 \documentclass[nohyper,justified]{tufte-handout}
 \usepackage[T1]{fontenc}
-\usepackage{booktabs}
 \usepackage{url}
 
 \makeatletter
@@ -11,9 +10,6 @@
 
 \title{Customizing Syntax Highlighting Themes}
 \author{Yihui Xie \& Ramnath Vaidyanathan}
-\newcommand{\noun}[1]{\textsc{#1}}
-%% Because html converters don't know tabularnewline
-\providecommand{\tabularnewline}{\\}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \renewcommand{\textfraction}{0.05}
@@ -42,13 +38,12 @@ knit_theme$set(thm)
 This manual\footnote{source code at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw}}
 shows how to customize syntax highlighting of source code using themes.
 It walks the user through the basics of syntax highlighting in \textbf{knitr},
-the use of built-in themes as well as those from \url{http://www.eclipsecolorthemes.org/}.
+and the use of built-in themes.
 \end{abstract}
-The \textbf{knitr} package uses the \textbf{highlight} package by
-Romain Francois to highlight source code in a document. In short,
-the \textbf{highlight} package parses the source code using the \noun{bison}
-parser, tokenizes it into grammar symbols, and formats their appearance
-based on a CSS style file. 
+The \textbf{knitr} package uses the \textbf{highr} package to highlight
+source code in a document. In short, the \textbf{highr} package parses
+the source code, tokenizes it into grammar symbols, and formats their
+appearance using CSS or \LaTeX{} commands. 
 
 
 \section{Usage}
@@ -106,75 +101,6 @@ save_data = function(y){
 team.list  = llply(years, save_data);
 mls        = merge_recurse(team.list);
 @
-
-
-\section{Eclipse Color Themes}
-
-A rich repository of syntax highlighting themes for use with Eclipse
-IDE is available at \url{http://www.eclipsecolorthemes.org/}. In
-order to use one of these themes with \textbf{knitr}, it needs to
-be converted into a CSS file that can be parsed by \textbf{highlight}.
-This is achieved by mapping language tokens across the two formats
-(Table \ref{mar:Token-Mapping}) to create a CSS file.
-
-\begin{margintable}
-\renewcommand\arraystretch{1.3}
-
-\caption{Token mapping\label{mar:Token-Mapping}}
-
-
-\noindent %
-\begin{tabular}{ll}
-\toprule 
-\textbf{Highlight (CSS)} & \textbf{Eclipse (XML)}\tabularnewline
-\midrule
-background & background\tabularnewline
-kwa & keyword\tabularnewline
-kwb & localVariableDeclaration\tabularnewline
-kwc & parameterVariable\tabularnewline
-kwd & method\tabularnewline
-num & number\tabularnewline
-str & string\tabularnewline
-com & singleLineComment\tabularnewline
-opt & operator\tabularnewline
-std & foreground\tabularnewline
-\bottomrule
-\end{tabular}
-\end{margintable}
-
-
-If you want to use an eclipse theme that is not shipped with \textbf{knitr},
-you can use the utility function \emph{eclipse\_theme()} to automatically
-download, map and save the theme as a CSS file. For example, if you
-want to use the theme Oughsumm\footnote{\url{http://www.eclipsecolorthemes.org/?view=theme&id=1885} (theme
-id is 1885)}, you can use the code below in your first chunk:
-
-<<eclipse-theme, eval=FALSE>>=
-css = eclipse_theme(1885)
-thm = knit_theme$get(css)
-knit_theme$set(thm)
-@
-
-Note this requires Internet connection, and we can put the code to
-download the theme in a cached chunk, so it will be downloaded only
-once, then we set the theme in an uncached chunk using the parsed
-theme object. For example, download the theme:
-
-%% please use cache=TRUE and echo=FALSE for this chunk
-<<download-theme, eval=FALSE, message=FALSE>>=
-(css = eclipse_theme(1885))
-thm = knit_theme$get(css)
-@
-
-Then apply the theme:
-
-%% cache=FALSE for this chunk
-<<apply-theme, eval=FALSE>>=
-knit_theme$set(thm)
-@
-
-Even we do not have Internet connection the next time, we can still
-use the theme.
 
 
 \section{Misc}
