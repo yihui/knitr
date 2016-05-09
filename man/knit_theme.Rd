@@ -42,7 +42,4 @@ Ramnath Vaidyanathan and Yihui Xie
 For a preview of all themes, see
   \url{https://gist.github.com/yihui/3422133}.
 }
-\seealso{
-\code{\link{eclipse_theme}} (use Eclipse themes)
-}
 \keyword{datasets}

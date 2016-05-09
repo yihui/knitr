@@ -139,7 +139,6 @@ Collate:
     'spin.R'
     'table.R'
     'template.R'
-    'themes-eclipse.R'
     'utils-base64.R'
     'utils-conversion.R'
     'utils-rd2html.R'
