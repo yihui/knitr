@@ -37,13 +37,13 @@ integration-need:
 		git checkout ${TRAVIS_BRANCH} && \
 		GIT_PAGER=cat git show HEAD
 
-integration-run: install
+integration-run:
 	make deps xvfb-start knit xvfb-stop -C knitr-examples
 
 integration-verify:
 	GIT_PAGER=cat make diff -C knitr-examples
 
-integration: integration-run integration-verify
+integration: install integration-run integration-verify
 
 examples:
 	cd inst/examples;\
