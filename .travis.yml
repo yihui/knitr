@@ -41,19 +41,21 @@ addons:
 repos:
   XRAN: http://yihui.name/xran
 
-cache: packages
+cache:
+  packages: yes
+  directories:
+    - $HOME/cache
 
 before_script:
   - Rscript -e "if (!require('webshot')) devtools::install_github('wch/webshot')"
 
 # run tests
 script:
+  - rm knitr-examples/cache -rf
   - make ${TARGET}
+  - "[ $TARGET = travis ] && Rscript tools/covr.R"
 
 # deploy to xran after integration tests
 after_success:
   - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
   - "[ $TARGET = integration ] && (wget -q -O - http://yihui.name/xran/r-xran | bash)"
-
-  # run test coverage only for the travis build
-  - "[ $TARGET = travis ] && Rscript -e 'covr::coveralls()'"

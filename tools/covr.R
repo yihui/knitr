@@ -1,0 +1,6 @@
+system("make integration-need")
+if (dir.exists('~/cache'))
+  file.copy('~/cache', 'knitr-examples/', recursive = TRUE)
+covr::coveralls(code = '\nsystem("make integration-run")')
+if (dir.exists('knitr-examples/cache'))
+  file.copy('knitr-examples/cache', '~/', recursive = TRUE)
