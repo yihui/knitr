@@ -53,7 +53,7 @@ before_script:
 script:
   - rm knitr-examples/cache -rf
   - make ${TARGET}
-  - "[ $TARGET = travis ] && Rscript tools/covr.R"
+  - "[ $TARGET = travis ] && Rscript tools/covr.R || true"
 
 # deploy to xran after integration tests
 after_success:
