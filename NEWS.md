@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.14
+
+## BUG FIXES
+
+- fixed #1211: `pandoc('foo.md')` generates foo_utf8.html instead of foo.html by default
+
 # CHANGES IN knitr VERSION 1.13
 
 ## NEW FEATURES
