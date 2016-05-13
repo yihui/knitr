@@ -72,7 +72,7 @@ If the output format is Rnw and no document class is specified in
 \examples{
 #' write normal text like this and chunk options like below
 
-# + label, opt=value
+#+ label, opt=value
 
 # /*
 #' these lines are treated as comments in spin()
