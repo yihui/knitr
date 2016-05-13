@@ -53,8 +53,8 @@ the \code{format} argument is specified as one single format.
 system("pandoc -h")  # see possible output formats
 }
 \references{
-Pandoc: \url{http://johnmacfarlane.net/pandoc/}; Examples and
-  rules of the configurations: \url{http://yihui.name/knitr/demo/pandoc}
+Pandoc: \url{http://pandoc.org}; Examples and rules of the
+  configurations: \url{http://yihui.name/knitr/demo/pandoc}
 
   Also see R Markdown (v2) at \url{http://rmarkdown.rstudio.com}. The
   \pkg{rmarkdown} package has several convenience functions and templates

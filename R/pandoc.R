@@ -32,8 +32,8 @@
 #'   \code{dzslides} creates \code{html}, and so on
 #' @inheritParams knit
 #' @return The output filename(s) (or an error if the conversion failed).
-#' @references Pandoc: \url{http://johnmacfarlane.net/pandoc/}; Examples and
-#'   rules of the configurations: \url{http://yihui.name/knitr/demo/pandoc}
+#' @references Pandoc: \url{http://pandoc.org}; Examples and rules of the
+#'   configurations: \url{http://yihui.name/knitr/demo/pandoc}
 #'
 #'   Also see R Markdown (v2) at \url{http://rmarkdown.rstudio.com}. The
 #'   \pkg{rmarkdown} package has several convenience functions and templates
@@ -46,7 +46,7 @@
 pandoc = function(input, format, config = getOption('config.pandoc'), ext = NA,
                   encoding = getOption('encoding')) {
   if (Sys.which('pandoc') == '')
-    stop('Please install pandoc first: http://johnmacfarlane.net/pandoc/')
+    stop('Please install pandoc first: http://pandoc.org')
   cfg = if (is.null(config)) sub_ext(input[1L], 'pandoc') else config
   con = file(input[1L], encoding = encoding)
   tryCatch(txt <- pandoc_cfg(readLines(con, warn = FALSE)), finally = close(con))
