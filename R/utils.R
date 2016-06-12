@@ -701,7 +701,7 @@ current_input = function(dir = FALSE) {
     }
   }
   if (dir) {
-      if (substr(input, 1, 1) %in% c('/', '~')) {
+      if (is_abs_path(input)) {
           input
       } else {
           file.path(outwd, input)
