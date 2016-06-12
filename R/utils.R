@@ -703,8 +703,7 @@ current_input = function(dir = FALSE) {
   if (dir) {
       if (substr(input, 1, 1) %in% c('/', '~')) {
           input
-      }
-      else {
+      } else {
           file.path(outwd, input)
       }
   } else {
