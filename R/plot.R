@@ -465,10 +465,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     return(structure(list(file = shots[i]), class = 'html_screenshot'))
   }
 
-  if (!loadable('webshot')) stop(
-    'Please install the webshot package ',
-    '(if not on CRAN, try devtools::install_github("wch/webshot"))'
-  )
+  if (!loadable('webshot')) stop('Please install the webshot package')
 
   ext = switch(options$dev, pdf = '.pdf', jpeg = '.jpeg', '.png')
   wargs = options$screenshot.opts %n% list()
