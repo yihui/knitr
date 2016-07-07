@@ -284,9 +284,10 @@ purge_cache = function(options) {
 # not need to close the device on exit
 chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi, options) {
   dev_new = function() {
-    # actually I should adjust the recording device according to dev, but here
-    # I have only considered the png and tikz devices (because the measurement
-    # results can be very different especially with the latter, see #1066)
+    # actually I should adjust the recording device according to dev, but here I
+    # have only considered the png and tikz devices (because the measurement
+    # results can be very different especially with the latter, see #1066), and
+    # also the cairo_pdf device (#1235)
     if (identical(dev, 'png')) {
       do.call(grDevices::png, c(list(
         filename = tempfile(), width = width, height = height, units = 'in', res = dpi
@@ -298,6 +299,10 @@ chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi, option
       dargs$sanitize = options$sanitize; dargs$standAlone = options$external
       if (is.null(dargs$verbose)) dargs$verbose = FALSE
       do.call(tikz_dev, dargs)
+    } else if (identical(dev, 'cairo_pdf')) {
+      do.call(grDevices::cairo_pdf, c(list(
+        filename = tempfile(), width = width, height = height
+      ), get_dargs(dev.args, 'cairo_pdf')))
     } else if (identical(getOption('device'), pdf_null)) {
       if (!is.null(dev.args)) {
         dev.args = get_dargs(dev.args, 'pdf')

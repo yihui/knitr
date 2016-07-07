@@ -10,6 +10,10 @@
 
 - **knitr** will no longer generate screenshots automatically for HTML widgets if the **webshot** package or PhantomJS is not installed
 
+## MINOR CHANGES
+
+- if `dev = 'cairo_pdf'`, the `cairo_pdf` device will be used to record plots (previously the `pdf` device was used) (#1235)
+
 # CHANGES IN knitr VERSION 1.13
 
 ## NEW FEATURES
