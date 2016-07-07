@@ -135,7 +135,8 @@ styler_assistant_latex = function(x) {
     }
     sprintf('%s#1%s', start, end)
   })
-  sprintf('\\newcommand{\\hl%s}[1]{%s}%%', names(x), styles)
+  res = sprintf('\\newcommand{\\hl%s}[1]{%s}%%', names(x), styles)
+  c(res, '\\let\\hlipl\\hlkwb')
 }
 
 col2latexrgb = function(hex) {

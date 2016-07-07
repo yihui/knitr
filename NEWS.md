@@ -6,6 +6,8 @@
 
 - fixed #1236: `include = FALSE` for code chunks inside blockquotes did not work (should return `>` instead of a blank line) (thanks, @fmichonneau)
 
+- fixed #1217: define the command `\hlipl` for syntax highlighting for Rnw documents (thanks, @conjugateprior)
+
 ## MAJOR CHANGES
 
 - **knitr** will no longer generate screenshots automatically for HTML widgets if the **webshot** package or PhantomJS is not installed
