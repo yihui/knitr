@@ -444,12 +444,22 @@ need_screenshot = function(x, ...) {
   # not R Markdown v2, always screenshot htmlwidgets and shiny apps
   if (length(fmt) == 0 || force) return(i1 || i2 || i3)
   html_format = fmt %in% c('html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
-  ((i1 || i3) && !html_format) || (i2 && !(html_format && runtime_shiny()))
+  res = ((i1 || i3) && !html_format) || (i2 && !(html_format && runtime_shiny()))
+  res && webshot_available()
 }
 
 runtime_shiny = function() {
   identical(opts_knit$get('rmarkdown.runtime'), 'shiny')
 }
+
+webshot_available = local({
+  res = NULL  # cache the availablity of webshot/PhantomJS
+  function() {
+    if (is.null(res))
+      res <<- loadable('webshot') && !is.null(getFromNamespace('find_phantom', 'webshot')())
+    res
+  }
+})
 
 html_screenshot = function(x, options = opts_current$get(), ...) {
   i1 = inherits(x, 'htmlwidget')
@@ -464,8 +474,6 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     if (length(shots) < i) stop('Not enough number of screenshots provided')
     return(structure(list(file = shots[i]), class = 'html_screenshot'))
   }
-
-  if (!loadable('webshot')) stop('Please install the webshot package')
 
   ext = switch(options$dev, pdf = '.pdf', jpeg = '.jpeg', '.png')
   wargs = options$screenshot.opts %n% list()
