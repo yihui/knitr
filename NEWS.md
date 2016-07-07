@@ -4,6 +4,8 @@
 
 - fixed #1211: `pandoc('foo.md')` generates foo_utf8.html instead of foo.html by default
 
+- fixed #1236: `include = FALSE` for code chunks inside blockquotes did not work (should return `>` instead of a blank line) (thanks, @fmichonneau)
+
 ## MAJOR CHANGES
 
 - **knitr** will no longer generate screenshots automatically for HTML widgets if the **webshot** package or PhantomJS is not installed

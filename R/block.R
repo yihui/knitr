@@ -261,7 +261,7 @@ block_exec = function(options) {
     } else block_cache(options, output, objs)
   }
 
-  if (options$include) output else ''
+  if (options$include) output else if (is.null(s <- options$indent)) '' else s
 }
 
 block_cache = function(options, output, objects) {
