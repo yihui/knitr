@@ -328,6 +328,11 @@ par2 = function(x) {
     # do this before the rest of pars because setting mfrow/mfcol will reset cex
     par(mfrow = x$mfrow)
     x$mfrow = x$mfcol = NULL
+    # do not restore mfg (#1215); this is unlikely to make sense, e.g. for
+    # par(mfrow = c(1, 2)), mfg will be c(1, 2, 1, 2) when the second plot is
+    # completed, but when the user generate a new plot, it should typically be
+    # drawn at (1, 1) instead of (1, 2)
+    x$mfg = NULL
   }
   x$usr = NULL  # you are unlikely to want to reset usr
   par(x)

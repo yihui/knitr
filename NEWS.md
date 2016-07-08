@@ -8,6 +8,8 @@
 
 - fixed #1217: define the command `\hlipl` for syntax highlighting for Rnw documents (thanks, @conjugateprior)
 
+- fixed #1215: restoring `par()` settings might fail when the plot window is partitioned, e.g. `par(mfrow = c(1, 2))` (thanks, @jrwishart @jmichaelgilbert)
+
 ## MAJOR CHANGES
 
 - **knitr** will no longer generate screenshots automatically for HTML widgets if the **webshot** package or PhantomJS is not installed
