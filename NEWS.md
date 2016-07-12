@@ -22,6 +22,8 @@
 
 ## NEW FEATURES
 
+- `kable` now accepts a single multi-character string for alignment, so `kable(..., align=c('c','l'))` can be shortened to `kable(..., align='cl')`
+
 - code chunks that generate metadata may be cached now; it requires htmlwidgets >= v0.6 and htmltools >= 0.3.3 if you cache code chunks that contain HTML widgets or Shiny inputs/outputs (#1158)
 
 - when the output format is not HTML, HTML widgets used to fail to render; now **knitr** will try to generate static screenshots for HTML widgets automatically using the [**webshot**](https://github.com/wch/webshot) package; you can specify alternative screenshots via the chunk option `screenshot.alt` (which takes a character vector of image paths), and pass more options to `webshot::webshot()` via the chunk option `screenshot.opts`, e.g. `list(delay = 3, cliprect = 'viewport')`
