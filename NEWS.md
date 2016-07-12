@@ -1,4 +1,8 @@
-# CHANGES IN knitr VERSION 1.14
+# CHANGES IN knitr VERSION 1.14 (unreleased)
+
+## NEW FEATURES
+
+- improved caching for Rcpp code chunks: the shared library built from the C++ code will be preserved on disk and reloaded the next time if caching is enabled (chunk option `cache = TRUE`), so that the exported R functions are still usable in later R code chunks; note this feature requires Rcpp >= 0.12.5.6 (thanks, @jjallaire, #1239)
 
 ## BUG FIXES
 
