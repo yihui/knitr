@@ -92,7 +92,7 @@ kable = function(
   if (is.function(format)) format = format()
 
   # expand align if applicable
-  if (length(align) == 1L && nchar(align) > 1L) align <- strsplit(align, '')[[1]]
+  if (length(align) == 1L && nchar(align) > 1L) align = strsplit(align, '')[[1]]
 
   # create a label for bookdown if applicable
   if (!is.null(caption) && !is.na(caption)) caption = paste0(
