@@ -169,7 +169,6 @@ eng_Rcpp = function(options) {
   if (options$eval) {
     message('Building shared library for Rcpp code chunk...')
     result <- do.call(getFromNamespace('sourceCpp', 'Rcpp'), c(list(code = code), opts))
-    print(result)
     # remove old build directories from cache
     if (cache) {
       buildParent <- dirname(result$buildDirectory)
