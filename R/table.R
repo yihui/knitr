@@ -18,10 +18,10 @@
 #' @param align the alignment of columns: a character vector consisting of
 #'   \code{'l'} (left), \code{'c'} (center) and/or \code{'r'} (right); by
 #'   default, numeric columns are right-aligned, and other columns are
-#'   left-aligned; if \code{align = NULL}, the default alignment is used.
-#'   Alternatively, if \code{ncar(align) > 1L}, then the string will
-#'   be expanded to a vector of individual letters; for example,
-#'   \code{'clc'} will be converted to \code{c('c', 'l', 'c')}.
+#'   left-aligned; if \code{align = NULL}, the default alignment is used;
+#'   alternatively, if \code{length(align) == 1L}, the string will be expanded
+#'   to a vector of individual letters unless the output format is LaTeX; for
+#'   example, \code{'clc'} will be converted to \code{c('c', 'l', 'c')}
 #' @param caption the table caption
 #' @param format.args a list of arguments to be passed to \code{\link{format}()}
 #'   to format table values, e.g. \code{list(big.mark = ',')}
@@ -92,7 +92,8 @@ kable = function(
   if (is.function(format)) format = format()
 
   # expand align if applicable
-  if (! missing(align) && length(align) == 1L && nchar(align) > 1L) align = strsplit(align, '')[[1]]
+  if (format != 'latex' && !missing(align) && length(align) == 1L)
+    align = strsplit(align, '')[[1]]
 
   # create a label for bookdown if applicable
   if (!is.null(caption) && !is.na(caption)) caption = paste0(
