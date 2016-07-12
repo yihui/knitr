@@ -67,7 +67,9 @@ call_block = function(block) {
     }
     hash = paste(valid_path(params$cache.path, label), digest::digest(content), sep = '_')
     params$hash = hash
-    if (cache$exists(hash, params$cache.lazy) && isFALSE(params$cache.rebuild)) {
+    if (cache$exists(hash, params$cache.lazy) &&
+        isFALSE(params$cache.rebuild) &&
+        params$engine != 'Rcpp') {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
       cache$load(hash, lazy = params$cache.lazy)
       if (!params$include) return('')

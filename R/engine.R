@@ -155,6 +155,15 @@ eng_Rcpp = function(options) {
   # engine.opts is a list of arguments to be passed to Rcpp function, e.g.
   # engine.opts=list(plugin='RcppArmadillo')
   opts = options$engine.opts
+
+  # use custom cacheDir for sourceCpp if it's supported
+  cache <- options$cache && (packageVersion("Rcpp") >= "0.12.5.7")
+  if (cache) {
+    opts$cacheDir <- file.path(opts_chunk$get('cache.path'),
+                               paste(options$label, "sourceCpp", sep = "_"))
+    opts$cleanupCacheDir = TRUE
+  }
+
   if (!is.environment(opts$env)) opts$env = knit_global() # default env is knit_global()
   if (options$eval) {
     message('Building shared library for Rcpp code chunk...')
