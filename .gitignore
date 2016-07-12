@@ -12,3 +12,6 @@ knitr-spin.html
 /inst/examples/*.tex
 /inst/examples/*.sty
 .*.Rnb.cached
+/demo/sql.sqlite
+/demo/sql.nb.html
+/demo/sql.html

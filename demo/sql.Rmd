@@ -1,0 +1,43 @@
+---
+title: "Knit SQL Demo"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+```{r}
+library(DBI)
+conn <- dbConnect(RSQLite::SQLite(), dbname = "sql.sqlite")
+```
+
+```{sql, conn=conn}
+DROP TABLE IF EXISTS packages;
+```
+
+```{sql, conn=conn}
+CREATE TABLE packages (id INTEGER, name TEXT)
+```
+
+```{sql, conn=conn}
+INSERT INTO packages VALUES (1, 'readr'), (2, 'readxl'), (3, 'haven')
+```
+
+```{sql allPackages, conn=conn}
+SELECT * FROM packages
+```
+
+```{r}
+allPackages
+```
+
+```{r}
+packageReadR <- "readr"
+```
+
+```{sql readrPackage, conn=conn}
+SELECT * FROM packages WHERE name = ?packageReadR
+```
+
+```{r}
+readrPackage
+```
