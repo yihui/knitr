@@ -157,7 +157,7 @@ eng_Rcpp = function(options) {
   opts = options$engine.opts
 
   # use custom cacheDir for sourceCpp if it's supported
-  cache <- options$cache && (packageVersion("Rcpp") >= "0.12.5.5")
+  cache <- options$cache && (packageVersion("Rcpp") >= "0.12.5.6")
   if (cache) {
     opts$cacheDir <- file.path(opts_chunk$get('cache.path'),
                                paste(options$label, "sourceCpp", sep = "_"))
@@ -167,14 +167,19 @@ eng_Rcpp = function(options) {
 
   if (!is.environment(opts$env)) opts$env = knit_global() # default env is knit_global()
   if (options$eval) {
+    # build the library
     message('Building shared library for Rcpp code chunk...')
     result <- do.call(getFromNamespace('sourceCpp', 'Rcpp'), c(list(code = code), opts))
-    # remove old build directories from cache
+    # if we are using a cache then cleanup old entries
     if (cache) {
-      buildParent <- dirname(result$buildDirectory)
-      buildDirs <- list.dirs(path = buildParent, full.names = TRUE, recursive = FALSE)
-      oldBuildDirs <- buildDirs[buildDirs != result$buildDirectory]
-      unlink(oldBuildDirs, recursive = TRUE)
+      cpp_source_path <- normalizePath(result$cppSourcePath)
+      build_directory <- normalizePath(result$buildDirectory)
+      cache_dir <- dirname(build_directory)
+      cache_files <- list.files(cache_dir, pattern = glob2rx("*.cpp"), recursive = FALSE, full.names = TRUE)
+      cache_files <- c(cache_files, list.dirs(cache_dir, recursive = FALSE, full.names = TRUE))
+      cache_files <- normalizePath(cache_files)
+      old_cache_files <- cache_files[!cache_files %in% c(cpp_source_path, build_directory)]
+      unlink(old_cache_files, recursive = TRUE)
     }
   }
 
