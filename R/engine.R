@@ -151,23 +151,24 @@ eng_shlib = function(options) {
 ## Rcpp
 eng_Rcpp = function(options) {
 
+  sourceCpp = getFromNamespace('sourceCpp', 'Rcpp')
+
   code = paste(options$code, collapse = '\n')
   # engine.opts is a list of arguments to be passed to Rcpp function, e.g.
   # engine.opts=list(plugin='RcppArmadillo')
   opts = options$engine.opts
 
   # use custom cacheDir for sourceCpp if it's supported
-  cache <- options$cache && (packageVersion("Rcpp") >= "0.12.5.7")
+  cache = options$cache && ('cacheDir' %in% names(formals(sourceCpp)))
   if (cache) {
-    opts$cacheDir <- file.path(opts_chunk$get('cache.path'),
-                               paste(options$label, "sourceCpp", sep = "_"))
+    opts$cacheDir = paste(valid_path(options$cache.path, options$label), 'sourceCpp', sep = '_')
     opts$cleanupCacheDir = TRUE
   }
 
   if (!is.environment(opts$env)) opts$env = knit_global() # default env is knit_global()
   if (options$eval) {
     message('Building shared library for Rcpp code chunk...')
-    do.call(getFromNamespace('sourceCpp', 'Rcpp'), c(list(code = code), opts))
+    do.call(sourceCpp, c(list(code = code), opts))
   }
 
   options$engine = 'cpp' # wrap up source code in cpp syntax instead of Rcpp
