@@ -700,15 +700,8 @@ current_input = function(dir = FALSE) {
       dir = FALSE
     }
   }
-  if (dir) {
-      if (is_abs_path(input)) {
-          input
-      } else {
-          file.path(outwd, input)
-      }
-  } else {
-      basename(input)
-  }
+  if (!dir) return(basename(input))
+  if (is_abs_path(input)) input else file.path(outwd, input)
 }
 
 # import output handlers from evaluate
