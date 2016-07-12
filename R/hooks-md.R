@@ -45,7 +45,7 @@ hook_plot_md_base = function(x, options) {
   plot1 = ai || options$fig.cur <= 1L
   plot2 = ai || options$fig.cur == options$fig.num
   if (is.null(w) && is.null(h) && is.null(s) && a == 'default' && !(pandoc_html && in_bookdown)) {
-    # append \ to ![]() to prevent the figure environment in these cases
+    # append <!-- --> to ![]() to prevent the figure environment in these cases
     nocap = cap == '' && !is.null(to <- pandoc_to()) && !grepl('^markdown', to) &&
       (options$fig.num == 1 || ai) && !grepl('-implicit_figures', pandoc_from())
     res = sprintf('![%s](%s%s)', cap, base, .upload.url(x))
