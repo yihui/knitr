@@ -157,13 +157,26 @@ eng_Rcpp = function(options) {
   opts = options$engine.opts
 
   # use custom cacheDir for sourceCpp if it's supported
-  if (options$cache && (packageVersion("Rcpp") >= "0.12.5.5"))
-    opts$cacheDir <- file.path(opts_chunk$get('cache.path'))
+  cache <- options$cache && (packageVersion("Rcpp") >= "0.12.5.5")
+  if (cache) {
+    opts$cacheDir <- file.path(opts_chunk$get('cache.path'),
+                               paste(options$label, "sourceCpp", sep = "_"))
+    if(!dir.exists(opts$cacheDir))
+      dir.create(opts$cacheDir, recursive = TRUE)
+  }
 
   if (!is.environment(opts$env)) opts$env = knit_global() # default env is knit_global()
   if (options$eval) {
     message('Building shared library for Rcpp code chunk...')
-    do.call(getFromNamespace('sourceCpp', 'Rcpp'), c(list(code = code), opts))
+    result <- do.call(getFromNamespace('sourceCpp', 'Rcpp'), c(list(code = code), opts))
+    print(result)
+    # remove old build directories from cache
+    if (cache) {
+      buildParent <- dirname(result$buildDirectory)
+      buildDirs <- list.dirs(path = buildParent, full.names = TRUE, recursive = FALSE)
+      oldBuildDirs <- buildDirs[buildDirs != result$buildDirectory]
+      unlink(oldBuildDirs, recursive = TRUE)
+    }
   }
 
   options$engine = 'cpp' # wrap up source code in cpp syntax instead of Rcpp
