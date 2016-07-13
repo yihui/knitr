@@ -284,7 +284,7 @@ fig_process = function(FUN, path) {
 #' @param quiet whether to suppress standard output from the command line
 #'   utility
 #' @export
-#' @references PDFCrop: \url{http://pdfcrop.sourceforge.net}; the
+#' @references PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}; the
 #'   \command{convert} command in ImageMagick:
 #'   \url{http://www.imagemagick.org/script/convert.php}
 #' @return The original filename.

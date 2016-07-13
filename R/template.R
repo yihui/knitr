@@ -103,8 +103,7 @@ stitch_rmd = function(..., envir = parent.frame()) stitch(
 #' @param delim the (opening and ending) delimiters for the templating tags
 #' @return A character vector, with the tags evaluated and replaced by their
 #'   values.
-#' @references This function was inspired by the pyexpander
-#'   (\url{http://pyexpander.sourceforge.net}) and m4
+#' @references This function was inspired by the pyexpander and m4
 #'   (\url{http://www.gnu.org/software/m4/}), thanks to Frank Harrell.
 #' @export
 #' @examples # see the knit_expand vignette
