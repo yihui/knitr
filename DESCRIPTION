@@ -100,7 +100,8 @@ Suggests:
     png,
     jpeg,
     XML,
-    RCurl
+    RCurl,
+    DBI
 License: GPL
 URL: http://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues

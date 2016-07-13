@@ -401,19 +401,19 @@ eng_sql = function(options) {
     do.call(DBI::sqlInterpolate, c(list(conn, sql), args))
   }
 
-  conn <- options$conn
-  varname <- options$label
+  conn <- options$connection
+  varname <- options$output.var
   sql <- options$code
 
   query <- interpolate_from_env(conn, sql)
   result <- DBI::dbGetQuery(conn, query)
-  output <- capture.output(print(result))
+  output <- if (!is.null(result)) capture.output(print(result)) else NULL
 
   if (!is.null(varname)) {
     assign(varname, result, envir = knitr::knit_global())
   }
 
-  engine_output(options, options$code, NULL)
+  engine_output(options, options$code, output)
 }
 
 # set engines for interpreted languages
