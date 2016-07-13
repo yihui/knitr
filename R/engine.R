@@ -419,7 +419,7 @@ eng_sql = function(options) {
     data = DBI::dbFetch(res, n = limit)
     DBI::dbClearResult(res)
   } else data = DBI::dbGetQuery(conn, query)
-  output = if (!is.null(data)) capture.output(
+  output = if (!is.null(data) && ncol(data) > 0) capture.output(
     if (loadable('tibble')) print(tibble::as_tibble(data)) else {
       if (is.null(max.display)) print(data) else print(head(data, max.display))
     }
