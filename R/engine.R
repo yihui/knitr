@@ -182,10 +182,13 @@ eng_stan = function(options) {
   code = paste(options$code, collapse = '\n')
   opts = options$engine.opts
   ## name of the modelfit object returned by stan_model
-  x = opts$x
+  if (is.null(x <- options$output.var)) {
+    warning("the option engine.opts$x is deprecated; use the chunk option output.var instead")
+    x = opts$x
+  }
   if (!is.character(x) || length(x) != 1L) stop(
-    "engine.opts$x must be a character string; ",
-    "provide a name for the returned `stanmodel` object."
+    "the chunk option output.var must be a character string ",
+    "providing a name for the returned `stanmodel` object."
   )
   opts$x = NULL
   if (options$eval) {
