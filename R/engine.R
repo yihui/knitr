@@ -417,7 +417,12 @@ eng_sql = function(options) {
 
   query <- interpolate_from_env(conn, sql)
   result <- DBI::dbGetQuery(conn, query)
-  output <- if (!is.null(result)) capture.output(print(result)) else NULL
+  output <- if (!is.null(result))
+    capture.output(
+      if (loadable('tibble')) print(tibble::as_tibble(result)) else print(result)
+    )
+  else
+    NULL
 
   if (!is.null(varname)) {
     assign(varname, result, envir = knitr::knit_global())
