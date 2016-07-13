@@ -4,6 +4,8 @@
 
 - improved caching for Rcpp code chunks: the shared library built from the C++ code will be preserved on disk and reloaded the next time if caching is enabled (chunk option `cache = TRUE`), so that the exported R functions are still usable in later R code chunks; note this feature requires Rcpp >= 0.12.5.6 (thanks, @jjallaire, #1239)
 
+- added a helper function `all_rcpp_labels()`, which is simply `all_labels(engine == 'Rcpp')` and can be used to extract all chunk lables of Rcpp chunks
+
 ## BUG FIXES
 
 - fixed #1211: `pandoc('foo.md')` generates foo_utf8.html instead of foo.html by default

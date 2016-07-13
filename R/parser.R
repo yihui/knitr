@@ -376,8 +376,10 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
 
 #' Get all chunk labels in a document
 #'
-#' This function returns all chunk labels as a chracter vector. Optionally, you
-#' can specify a series of conditions to filter the labels.
+#' The function \code{all_labels()} returns all chunk labels as a chracter
+#' vector. Optionally, you can specify a series of conditions to filter the
+#' labels. The function `all_rcpp_labels()` is a wrapper function for
+#' \code{all_labels(engine == 'Rcpp')}.
 #'
 #' For example, suppose the condition expression is \code{engine == 'Rcpp'}, the
 #' object \code{engine} is the local chunk option \code{engine}; if an
@@ -411,15 +413,25 @@ all_labels = function(...) {
       # need tryCatch() because the expression cond[[i]] may trigger an error
       # when any variable is not found, e.g. not all chunks have the engine
       # option when the condition is engine == 'Rcpp'
-      if (idx[j]) idx[j] = tryCatch(
-        eval(cond[[i]], envir = params[[j]], enclos = knit_global()),
+      try_eval = function(expr) tryCatch(
+        eval(expr, envir = params[[j]], enclos = knit_global()),
         error = function(e) FALSE
       )
+      if (idx[j]) {
+        res = try_eval(cond[[i]])
+        # the condition could be evaluated to an expression; see all_rcpp_labels()
+        if (is.expression(res)) res = try_eval(res)
+        idx[j] = res
+      }
     }
   }
 
   labels[idx]
 }
+
+#' @rdname all_labels
+#' @export
+all_rcpp_labels = function(...) all_labels(expression(engine == 'Rcpp'), ...)
 
 #' Wrap code using the inline R expression syntax
 #'
