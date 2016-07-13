@@ -6,6 +6,8 @@
 
 - added a helper function `all_rcpp_labels()`, which is simply `all_labels(engine == 'Rcpp')` and can be used to extract all chunk lables of Rcpp chunks
 
+- added a new engine named `sql` that uses the **DBI** package to execute SQL queries, and optionally assign the result to a variable in the **knitr** session; see http://rmarkdown.rstudio.com/authoring_knitr_engines.html for details (#1241)
+
 ## BUG FIXES
 
 - fixed #1211: `pandoc('foo.md')` generates foo_utf8.html instead of foo.html by default
