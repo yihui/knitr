@@ -38,8 +38,7 @@ it). Similarly, when the plot format is not PDF (e.g. PNG), the program
 The function \code{hook_optipng()} calls the program \command{optipng} to
 optimize PNG images. Note the chunk option \code{optipng} can be used to
 provide additional parameters to the program \command{optipng}, e.g.
-\code{optipng = '-o7'}. See \url{http://optipng.sourceforge.net/} for
-details.
+\code{optipng = '-o7'}.
 
 When the plots are not recordable via \code{\link[grDevices]{recordPlot}} and
 we save the plots to files manually via other functions (e.g. \pkg{rgl}

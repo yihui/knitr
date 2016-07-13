@@ -1,9 +1,12 @@
 % Please edit documentation in R/parser.R
 \name{all_labels}
 \alias{all_labels}
+\alias{all_rcpp_labels}
 \title{Get all chunk labels in a document}
 \usage{
 all_labels(...)
+
+all_rcpp_labels(...)
 }
 \arguments{
 \item{...}{a series of R expressions, each of which should return \code{TRUE}
@@ -14,8 +17,10 @@ options of each code chunk as the environment}
 A character vector.
 }
 \description{
-This function returns all chunk labels as a chracter vector. Optionally, you
-can specify a series of conditions to filter the labels.
+The function \code{all_labels()} returns all chunk labels as a chracter
+vector. Optionally, you can specify a series of conditions to filter the
+labels. The function `all_rcpp_labels()` is a wrapper function for
+\code{all_labels(engine == 'Rcpp')}.
 }
 \details{
 For example, suppose the condition expression is \code{engine == 'Rcpp'}, the
