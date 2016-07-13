@@ -388,12 +388,12 @@ eng_sql = function(options) {
   }
 
   # Vectorized version of exists
-  mexists = function(x, env = knitr::knit_global(), inherits = TRUE) {
+  mexists = function(x, env = knit_global(), inherits = TRUE) {
     vapply(x, exists, logical(1), where = env, inherits = inherits)
   }
 
   # Interpolate a sql query based on the variables in an environment
-  interpolate_from_env = function(conn, sql, env = knitr::knit_global(), inherits = TRUE) {
+  interpolate_from_env = function(conn, sql, env = knit_global(), inherits = TRUE) {
     names = unique(varnames_from_sql(conn, sql))
     names_missing = names[!mexists(names, env, inherits)]
     if (length(names_missing) > 0) {
@@ -422,7 +422,7 @@ eng_sql = function(options) {
     if (loadable('tibble')) print(tibble::as_tibble(data)) else print(data)
   )
 
-  if (!is.null(varname)) assign(varname, data, envir = knitr::knit_global())
+  if (!is.null(varname)) assign(varname, data, envir = knit_global())
 
   engine_output(options, options$code, output)
 }
