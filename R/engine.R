@@ -410,6 +410,7 @@ eng_sql = function(options) {
   conn = options$connection
   varname = options$output.var
   limit = options$limit %n% 10  # fetch 10 records by default if varname not provided
+  max.display = options$max.display
   sql = options$code
 
   query = interpolate_from_env(conn, sql)
@@ -419,7 +420,9 @@ eng_sql = function(options) {
     DBI::dbClearResult(res)
   } else data = DBI::dbGetQuery(conn, query)
   output = if (!is.null(data)) capture.output(
-    if (loadable('tibble')) print(tibble::as_tibble(data)) else print(data)
+    if (loadable('tibble')) print(tibble::as_tibble(data)) else {
+      if (is.null(max.display)) print(data) else print(head(data, max.display))
+    }
   )
 
   if (!is.null(varname)) assign(varname, data, envir = knit_global())
