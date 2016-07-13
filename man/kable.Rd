@@ -28,7 +28,10 @@ default, row names are included if \code{rownames(x)} is neither
 \item{align}{the alignment of columns: a character vector consisting of
 \code{'l'} (left), \code{'c'} (center) and/or \code{'r'} (right); by
 default, numeric columns are right-aligned, and other columns are
-left-aligned; if \code{align = NULL}, the default alignment is used}
+left-aligned; if \code{align = NULL}, the default alignment is used;
+alternatively, if \code{length(align) == 1L}, the string will be expanded
+to a vector of individual letters unless the output format is LaTeX; for
+example, \code{'clc'} will be converted to \code{c('c', 'l', 'c')}}
 
 \item{caption}{the table caption}
 

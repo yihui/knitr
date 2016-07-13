@@ -31,7 +31,6 @@ template.
 if (interactive()) browseVignettes(package = "knitr")
 }
 \references{
-This function was inspired by the pyexpander
-  (\url{http://pyexpander.sourceforge.net}) and m4
+This function was inspired by the pyexpander and m4
   (\url{http://www.gnu.org/software/m4/}), thanks to Frank Harrell.
 }

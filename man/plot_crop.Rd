@@ -25,7 +25,7 @@ The utility \command{pdfcrop} is often shipped with a LaTeX distribution, and
 the bin path of ImageMagick into the \var{PATH} variable).
 }
 \references{
-PDFCrop: \url{http://pdfcrop.sourceforge.net}; the
+PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}; the
   \command{convert} command in ImageMagick:
   \url{http://www.imagemagick.org/script/convert.php}
 }

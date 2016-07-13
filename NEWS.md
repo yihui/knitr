@@ -1,4 +1,10 @@
-# CHANGES IN knitr VERSION 1.14
+# CHANGES IN knitr VERSION 1.14 (unreleased)
+
+## NEW FEATURES
+
+- improved caching for Rcpp code chunks: the shared library built from the C++ code will be preserved on disk and reloaded the next time if caching is enabled (chunk option `cache = TRUE`), so that the exported R functions are still usable in later R code chunks; note this feature requires Rcpp >= 0.12.5.6 (thanks, @jjallaire, #1239)
+
+- added a helper function `all_rcpp_labels()`, which is simply `all_labels(engine == 'Rcpp')` and can be used to extract all chunk lables of Rcpp chunks
 
 ## BUG FIXES
 
@@ -21,6 +27,8 @@
 # CHANGES IN knitr VERSION 1.13
 
 ## NEW FEATURES
+
+- `kable` now accepts a single multi-character string for alignment, so `kable(..., align=c('c','l'))` can be shortened to `kable(..., align='cl')`
 
 - code chunks that generate metadata may be cached now; it requires htmlwidgets >= v0.6 and htmltools >= 0.3.3 if you cache code chunks that contain HTML widgets or Shiny inputs/outputs (#1158)
 

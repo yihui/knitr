@@ -19,6 +19,11 @@ assert(
 )
 
 assert(
+  'kable() align with strings correctly',
+  identical(kable2(m, align = c('c', 'r')), kable2(m, align = 'cr'))
+)
+
+assert(
   'kable() works on character data frames',
   identical(kable2(data.frame(x = 'a')), c('|x  |', '|:--|', '|a  |'))
 )
