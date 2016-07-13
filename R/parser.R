@@ -404,7 +404,7 @@ all_labels = function(...) {
 
   if (length(cond) == 0) return(labels)
 
-  params = lapply(code, attr, 'chunk_opts', exact = TRUE)
+  params = lapply(code, attr, 'chunk_opts')
   idx = rep_len(TRUE, length(labels))
   for (i in seq_along(cond)) {
     for (j in seq_along(params)) {
