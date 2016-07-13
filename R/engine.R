@@ -409,15 +409,20 @@ eng_sql = function(options) {
 
   conn = options$connection
   varname = options$output.var
+  limit = options$limit %n% 10  # fetch 10 records by default if varname not provided
   sql = options$code
 
   query = interpolate_from_env(conn, sql)
-  result = DBI::dbGetQuery(conn, query)
-  output = if (!is.null(result)) capture.output(
-    if (loadable('tibble')) print(tibble::as_tibble(result)) else print(result)
+  if (is.null(varname) && limit > 0) {
+    res = DBI::dbSendQuery(conn, query)
+    data = DBI::dbFetch(res, n = limit)
+    DBI::dbClearResult(res)
+  } else data = DBI::dbGetQuery(conn, query)
+  output = if (!is.null(data)) capture.output(
+    if (loadable('tibble')) print(tibble::as_tibble(data)) else print(data)
   )
 
-  if (!is.null(varname)) assign(varname, result, envir = knitr::knit_global())
+  if (!is.null(varname)) assign(varname, data, envir = knitr::knit_global())
 
   engine_output(options, options$code, output)
 }
