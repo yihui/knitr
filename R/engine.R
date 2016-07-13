@@ -376,6 +376,60 @@ eng_js = eng_html_asset('<script type="text/javascript">', '</script>')
 # include css in a style tag (ignore if not html output)
 eng_css = eng_html_asset('<style type="text/css">', '</style>')
 
+# sql engine
+eng_sql = function(options) {
+  # Return char vector of sql interpolation param names
+  varnames_from_sql <- function(conn, sql) {
+    varPos <- DBI::sqlParseVariables(conn, sql)
+    if (length(varPos$start) > 0) {
+      varNames <- substring(sql, varPos$start, varPos$end)
+      sub("^\\?", "", varNames)
+    }
+  }
+
+  # Vectorized version of exists
+  mexists <- function(x, env = knitr::knit_global(), inherits = TRUE) {
+    vapply(x, exists, logical(1), where = env, inherits = inherits)
+  }
+
+  # Interpolate a sql query based on the variables in an environment
+  interpolate_from_env <- function(conn, sql, env = knitr::knit_global(), inherits = TRUE) {
+    names <- unique(varnames_from_sql(conn, sql))
+    names_missing <- names[!mexists(names, env, inherits)]
+    if (length(names_missing) > 0) {
+      stop("Object(s) not found: ",
+           paste('"', names_missing, '"', collapse = ", "))
+    }
+
+    args <- if (length(names) > 0) {
+      setNames(
+        mget(names, inherits = inherits),
+        names
+      )
+    }
+
+    do.call(DBI::sqlInterpolate, c(list(conn, sql), args))
+  }
+
+  conn <- options$connection
+  varname <- options$output.var
+  sql <- options$code
+
+  query <- interpolate_from_env(conn, sql)
+  result <- DBI::dbGetQuery(conn, query)
+  output <- if (!is.null(result))
+    capture.output(
+      if (loadable('tibble')) print(tibble::as_tibble(result)) else print(result)
+    )
+  else
+    NULL
+
+  if (!is.null(varname)) {
+    assign(varname, result, envir = knitr::knit_global())
+  }
+
+  engine_output(options, options$code, output)
+}
 
 # set engines for interpreted languages
 local({
@@ -390,7 +444,8 @@ local({
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
   c = eng_shlib, fortran = eng_shlib, asy = eng_dot, cat = eng_cat,
-  asis = eng_asis, stan = eng_stan, block = eng_block, js = eng_js, css = eng_css
+  asis = eng_asis, stan = eng_stan, block = eng_block, js = eng_js, css = eng_css,
+  sql = eng_sql
 )
 
 get_engine = function(name) {
