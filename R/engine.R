@@ -410,6 +410,7 @@ eng_sql = function(options) {
   conn = options$connection
   varname = options$output.var
   limit = options$limit %n% 10  # fetch 10 records by default if varname not provided
+  if (is.na(limit)) limit = -1
   max.display = options$max.display
   sql = options$code
 
