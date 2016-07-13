@@ -379,54 +379,45 @@ eng_css = eng_html_asset('<style type="text/css">', '</style>')
 # sql engine
 eng_sql = function(options) {
   # Return char vector of sql interpolation param names
-  varnames_from_sql <- function(conn, sql) {
-    varPos <- DBI::sqlParseVariables(conn, sql)
+  varnames_from_sql = function(conn, sql) {
+    varPos = DBI::sqlParseVariables(conn, sql)
     if (length(varPos$start) > 0) {
-      varNames <- substring(sql, varPos$start, varPos$end)
+      varNames = substring(sql, varPos$start, varPos$end)
       sub("^\\?", "", varNames)
     }
   }
 
   # Vectorized version of exists
-  mexists <- function(x, env = knitr::knit_global(), inherits = TRUE) {
+  mexists = function(x, env = knitr::knit_global(), inherits = TRUE) {
     vapply(x, exists, logical(1), where = env, inherits = inherits)
   }
 
   # Interpolate a sql query based on the variables in an environment
-  interpolate_from_env <- function(conn, sql, env = knitr::knit_global(), inherits = TRUE) {
-    names <- unique(varnames_from_sql(conn, sql))
-    names_missing <- names[!mexists(names, env, inherits)]
+  interpolate_from_env = function(conn, sql, env = knitr::knit_global(), inherits = TRUE) {
+    names = unique(varnames_from_sql(conn, sql))
+    names_missing = names[!mexists(names, env, inherits)]
     if (length(names_missing) > 0) {
-      stop("Object(s) not found: ",
-           paste('"', names_missing, '"', collapse = ", "))
+      stop("Object(s) not found: ", paste('"', names_missing, '"', collapse = ", "))
     }
 
-    args <- if (length(names) > 0) {
-      setNames(
-        mget(names, inherits = inherits),
-        names
-      )
-    }
+    args = if (length(names) > 0) setNames(
+      mget(names, envir = env, inherits = inherits), names
+    )
 
     do.call(DBI::sqlInterpolate, c(list(conn, sql), args))
   }
 
-  conn <- options$connection
-  varname <- options$output.var
-  sql <- options$code
+  conn = options$connection
+  varname = options$output.var
+  sql = options$code
 
-  query <- interpolate_from_env(conn, sql)
-  result <- DBI::dbGetQuery(conn, query)
-  output <- if (!is.null(result))
-    capture.output(
-      if (loadable('tibble')) print(tibble::as_tibble(result)) else print(result)
-    )
-  else
-    NULL
+  query = interpolate_from_env(conn, sql)
+  result = DBI::dbGetQuery(conn, query)
+  output = if (!is.null(result)) capture.output(
+    if (loadable('tibble')) print(tibble::as_tibble(result)) else print(result)
+  )
 
-  if (!is.null(varname)) {
-    assign(varname, result, envir = knitr::knit_global())
-  }
+  if (!is.null(varname)) assign(varname, result, envir = knitr::knit_global())
 
   engine_output(options, options$code, output)
 }
