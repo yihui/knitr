@@ -452,7 +452,7 @@ eng_sql = function(options) {
 
     # otherwise use tibble if it's available
     } else if (loadable('tibble')) {
-        print(tibble::as_tibble(display_data), n = max.display)
+        print(tibble::as_tibble(display_data), n = max.print)
 
     # fallback to standard print
     } else print(display_data)
