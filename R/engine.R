@@ -416,7 +416,7 @@ eng_sql = function(options) {
   max.print <- options$max.print %n% (opts_knit$get('sql.max.print') %n% 10)
   if (is.na(max.print) || is.null(max.print))
     max.print = -1
-  sql = options$code
+  sql = paste(options$code, collapse = '\n')
 
   # execute query -- when we are printing with an enforced max.print we
   # use dbFetch so as to only pull down the required number of records
