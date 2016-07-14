@@ -459,7 +459,7 @@ eng_sql = function(options) {
       }
 
       # print using kable
-      print(kable(data, caption = caption))
+      print(kable(data, caption = caption, align = "l"))
 
       # terminate div
       if (is_html_output())
