@@ -480,8 +480,7 @@ eng_sql = function(options) {
 
     # fallback to standard print
     } else print(display_data)
-    }
-  )
+  })
 
   # assign varname if requested
   if (!is.null(varname)) assign(varname, data, envir = knit_global())
