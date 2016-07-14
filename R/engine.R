@@ -442,13 +442,23 @@ eng_sql = function(options) {
       options$results = 'asis'
 
       # wrap html output in a div so special styling can be applied
-      if (is_html_output()) cat("<div class=\"knitsql-table\">\n")
+      if (is_html_output()) cat('<div class="knitsql-table">\n')
 
       # print using kable
       print(kable(data))
 
-      # terminate div
-      if (is_html_output()) cat("\n</div>\n")
+      # terminate div and include caption
+      if (is_html_output()) {
+        # determine records caption
+        rows = nrow(data)
+        rows_formatted <- formatC(rows, format="d", big.mark=',')
+        records <- if (max.print == -1 || rows < max.print)
+          paste(rows_formatted, "records")
+        else
+          paste("records 1 -", rows_formatted)
+        cat('\n\n<p>Displaying ', records,'</p>\n')
+        cat("\n</div>\n")
+      }
 
     # otherwise use tibble if it's available
     } else if (loadable('tibble')) {
