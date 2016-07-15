@@ -412,9 +412,10 @@ eng_sql = function(options) {
 
   # extract options
   conn = options$connection
-  if (is.null(conn))
-    stop("The 'connection' option (DBI connection) is required for sql chunks.",
-         call. = FALSE)
+  if (is.null(conn)) stop(
+    "The 'connection' option (DBI connection) is required for sql chunks.",
+    call. = FALSE
+  )
   varname = options$output.var
   max.print = options$max.print %n% (opts_knit$get('sql.max.print') %n% 10)
   if (is.na(max.print) || is.null(max.print))
@@ -445,41 +446,39 @@ eng_sql = function(options) {
       # we are going to output raw markdown so set results = 'asis'
       options$results = 'asis'
 
-      # force left alignment if the first column is an id column
-      first_column <- display_data[[1]]
+      # force left alignment if the first column is an incremental id column
+      first_column = display_data[[1]]
       if (is.numeric(first_column) && all(diff(first_column) == 1))
-        display_data[[1]] <- as.character(first_column)
+        display_data[[1]] = as.character(first_column)
 
       # wrap html output in a div so special styling can be applied
-      if (is_html_output())
-        cat('<div class="knitsql-table">\n')
+      if (is_html_output()) cat('<div class="knitsql-table">\n')
 
       # determine records caption
       caption = options$fig.cap
-      if (is.null(caption) || is.na(caption))
-        caption = NULL
       if (is.null(caption)) {
         rows = nrow(data)
-        rows_formatted <- formatC(rows, format="d", big.mark=',')
-        caption <- if (max.print == -1 || rows < max.print)
+        rows_formatted = formatC(rows, format = "d", big.mark = ',')
+        caption = if (max.print == -1 || rows < max.print) {
           paste(rows_formatted, "records")
-        else
+        } else {
           paste("Displaying records 1 -", rows_formatted)
+        }
       }
+      # disable caption
+      if (identical(caption, NA)) caption = NULL
 
       # print using kable
       print(kable(display_data, caption = caption))
 
       # terminate div
-      if (is_html_output())
-        cat("\n</div>\n")
+      if (is_html_output()) cat("\n</div>\n")
 
     # otherwise use tibble if it's available
     } else if (loadable('tibble')) {
-        print(tibble::as_tibble(display_data), n = max.print)
+      print(tibble::as_tibble(display_data), n = max.print)
 
-    # fallback to standard print
-    } else print(display_data)
+    } else print(display_data) # fallback to standard print
   })
 
   # assign varname if requested
