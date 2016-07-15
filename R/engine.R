@@ -444,8 +444,10 @@ eng_sql = function(options) {
       # we are going to output raw markdown so set results = 'asis'
       options$results = 'asis'
 
-      # force the first column to character so it's always left aligned
-      display_data[[1]] <- as.character(display_data[[1]])
+      # force left alignment if the first column is an id column
+      first_column <- display_data[[1]]
+      if (is.numeric(first_column) && all(diff(first_column) == 1))
+        display_data[[1]] <- as.character(first_column)
 
       # wrap html output in a div so special styling can be applied
       if (is_html_output())
