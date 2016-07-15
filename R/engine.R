@@ -441,6 +441,9 @@ eng_sql = function(options) {
       # we are going to output raw markdown so set results = 'asis'
       options$results = 'asis'
 
+      # force the first column to character so it's always left aligned
+      display_data[[1]] <- as.character(display_data[[1]])
+
       # wrap html output in a div so special styling can be applied
       if (is_html_output())
         cat('<div class="knitsql-table">\n')
@@ -459,7 +462,7 @@ eng_sql = function(options) {
       }
 
       # print using kable
-      print(kable(data, caption = caption, align = "l"))
+      print(kable(display_data, caption = caption))
 
       # terminate div
       if (is_html_output())
