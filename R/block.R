@@ -78,8 +78,7 @@ call_block = function(block) {
     if (params$engine == 'R')
       cache$library(params$cache.path, save = FALSE) # load packages
   } else if (label %in% names(dep_list$get()) && !isFALSE(opts_knit$get('warn.uncached.dep')))
-    warning('code chunks must not depend on the uncached chunk "', label, '"',
-            call. = FALSE)
+    warning2('code chunks must not depend on the uncached chunk "', label, '"')
 
   params$params.src = block$params.src
   opts_current$restore(params)  # save current options

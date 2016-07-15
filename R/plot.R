@@ -22,9 +22,10 @@ dev2ext = function(x) {
   res = auto_exts[x]
   if (any(idx <- is.na(res))) {
     for (i in x[idx]) check_dev(i)
-    stop('cannot find appropriate filename extensions for device ', x[idx],
-         "; please use chunk option 'fig.ext' (http://yihui.name/knitr/options)",
-         call. = FALSE)
+    stop2(
+      'cannot find appropriate filename extensions for device ', x[idx], '; ',
+      "please use chunk option 'fig.ext' (http://yihui.name/knitr/options)"
+    )
   }
   unname(res)
 }
@@ -136,14 +137,14 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
       pdftex = getOption('tikzLatex'),
       xetex  = getOption('tikzXelatex'),
       luatex = getOption('tikzLualatex'),
-      stop('a LaTeX engine must be specified for tikzDevice', call. = FALSE)
+      stop2('a LaTeX engine must be specified for tikzDevice')
     )
     system2(latex, shQuote(basename(path)), stdout = NULL)
     setwd(owd)
     if (!file.exists(pdf.plot)) {
       if (file.exists(log <- paste(name, 'log', sep = '.')))
         message(paste(readLines(log), collapse = '\n'))
-      stop('failed to compile ', path, ' to PDF', call. = FALSE)
+      stop2('failed to compile ', path, ' to PDF')
     }
     path = pdf.plot
   }

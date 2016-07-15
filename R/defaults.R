@@ -190,9 +190,9 @@ adjust_opts_knit = function() {
   i = intersect(i, which(nms[i] %in% paste('knitr', opts_knit_names, sep = '.')))
   if (length(i)) {
     nms.pkg = sub('^knitr.', 'knitr.package.', nms[i])
-    warning(
+    warning2(
       'These options must be renamed (from left to right):\n',
-      formatUL(sprintf('%s => %s', nms[i], nms.pkg)), call. = FALSE, immediate. = TRUE
+      formatUL(sprintf('%s => %s', nms[i], nms.pkg)), immediate. = TRUE
     )
     Sys.sleep(10)
     names(opts)[i] = nms[i] = nms.pkg

@@ -412,9 +412,8 @@ eng_sql = function(options) {
 
   # extract options
   conn = options$connection
-  if (is.null(conn)) stop(
-    "The 'connection' option (DBI connection) is required for sql chunks.",
-    call. = FALSE
+  if (is.null(conn)) stop2(
+    "The 'connection' option (DBI connection) is required for sql chunks."
   )
   varname = options$output.var
   max.print = options$max.print %n% (opts_knit$get('sql.max.print') %n% 10)

@@ -793,3 +793,6 @@ combine_words = function(words, sep = ', ', and = ' and ', before = '', after = 
 
 # check if a package is loadable
 loadable = function(pkg) requireNamespace(pkg, quietly = TRUE)
+
+warning2 = function(...) warning(..., call. = FALSE)
+stop2 = function(...) stop(..., call. = FALSE)

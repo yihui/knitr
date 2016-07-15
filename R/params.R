@@ -10,7 +10,7 @@
 #' @param evaluate If TRUE, expression values embedded within the YAML will be
 #' evaluated. This is the default. When FALSE, parameters defined by an
 #' expression will have the parsed expression in its \code{value} field.
-#' 
+#'
 #' @return List of objects of class \code{knit_param} that correspond to the
 #'   parameters declared in the \code{params} section of the YAML front matter.
 #'   These objects have the following fields:
@@ -98,7 +98,7 @@ knit_params = function(text, evaluate = TRUE) {
 #' \code{\link{knit_params}} for a full description of these objects.
 #'
 #' @seealso \code{\link{knit_params}}
-#' 
+#'
 #' @export
 knit_params_yaml = function(yaml, evaluate = TRUE) {
   # parse the yaml using our handlers
@@ -250,14 +250,13 @@ resolve_params = function(params, evaluate = TRUE) {
           param$value = value$value
         }
       } else {
-        stop("no value field specified for YAML parameter '", name, "'",
-             call. = FALSE)
+        stop2("no value field specified for YAML parameter '", name, "'")
       }
     } else {
       # A simple key: value
       param = list(value = param)
     }
-      
+
     # param is now always a named list. record name and add knit_param class.
     param$name = name
     param = structure(param, class = "knit_param")

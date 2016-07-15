@@ -94,9 +94,9 @@ hook_ffmpeg = function(x, options, format = 'webm') {
     'ffmpeg', '-y', '-r', 1 / options$interval, '-i', fig.fname, extra, mov.fname
   )
 
-  if (Sys.which('ffmpeg') == '') stop(
+  if (Sys.which('ffmpeg') == '') stop2(
     'Could not find ffmpeg command. You should either change the animation.fun ',
-    'hook option or install ffmpeg with libvpx enabled.', call. = FALSE
+    'hook option or install ffmpeg with libvpx enabled.'
   )
   message('executing: ', ffmpeg.cmd)
   system(ffmpeg.cmd, ignore.stdout = TRUE)
