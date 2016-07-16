@@ -426,7 +426,8 @@ eng_sql = function(options) {
   query = interpolate_from_env(conn, sql)
   if (is.null(varname) && max.print > 0) {
     res = DBI::dbSendQuery(conn, query)
-    data = if (!DBI::dbHasCompleted(res)) DBI::dbFetch(res, n = max.print)
+    data = if (!DBI::dbHasCompleted(res) || (DBI::dbGetRowCount(res) > 0))
+              DBI::dbFetch(res, n = max.print)
     DBI::dbClearResult(res)
   } else {
     data = DBI::dbGetQuery(conn, query)
