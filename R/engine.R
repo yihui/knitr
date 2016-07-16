@@ -454,7 +454,7 @@ eng_sql = function(options) {
       if (is_html_output()) cat('<div class="knitsql-table">\n')
 
       # determine records caption
-      caption = options$fig.cap
+      caption = options$tab.cap
       if (is.null(caption)) {
         rows = nrow(data)
         rows_formatted = formatC(rows, format = "d", big.mark = ',')
