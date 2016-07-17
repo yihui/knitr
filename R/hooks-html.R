@@ -36,12 +36,12 @@ hook_plot_html = function(x, options) {
   )
 }
 
-.img.cap = function(options) {
+.img.cap = function(options, alt = FALSE) {
   cap = options$fig.cap %n% {
     if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
   }
   if (length(cap) == 0) cap = ''
-  if (is_blank(cap)) return(cap)
+  if (is_blank(cap) || alt) return(cap)
   paste0(create_label(options$fig.lp, options$label), cap)
 }
 
