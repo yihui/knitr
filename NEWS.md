@@ -26,6 +26,8 @@
 
 - if `dev = 'cairo_pdf'`, the `cairo_pdf` device will be used to record plots (previously the `pdf` device was used) (#1235)
 
+- LaTeX short captions now go up to the first `.`, `:` or `;` character followed by a space (thanks, @knokknok, #1249)
+
 # CHANGES IN knitr VERSION 1.13
 
 ## NEW FEATURES
