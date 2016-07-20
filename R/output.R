@@ -144,6 +144,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     # respect the quiet argument in child mode (#741)
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
     opts_knit$set(progress = opts_knit$get('progress') && !quiet)
+    quiet = !opts_knit$get('progress')
   } else {
     opts_knit$set(output.dir = getwd()) # record working directory in 1st run
     knit_log$restore()

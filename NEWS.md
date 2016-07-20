@@ -18,6 +18,8 @@
 
 - fixed #1215: restoring `par()` settings might fail when the plot window is partitioned, e.g. `par(mfrow = c(1, 2))` (thanks, @jrwishart @jmichaelgilbert)
 
+- fixed #1250: in the quiet mode, `knit()` should not emit the message "processing file ..." when processing child documents (thanks, @KZARCA)
+
 ## MAJOR CHANGES
 
 - **knitr** will no longer generate screenshots automatically for HTML widgets if the **webshot** package or PhantomJS is not installed
