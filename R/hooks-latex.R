@@ -117,7 +117,7 @@ hook_plot_tex = function(x, options) {
     # * close figure environment
     if (plot2) {
       if (is.null(scap) && !grepl('[{].*?[:.;].*?[}]', cap)) {
-        scap = strsplit(cap, '[:.;] ')[[1L]][1L]
+        scap = strsplit(cap, '[:.;]( |$)')[[1L]][1L]
       }
       scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
       cap = if (cap == '') '' else sprintf(
