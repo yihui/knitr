@@ -443,9 +443,8 @@ eng_sql = function(options) {
     sql.print = opts_knit$get('sql.print')
 
     # use kable for markdown
-    if (out_format('markdown') && !is.null(sql.print)) {
+    if (!is.null(sql.print)) {
       options$results = 'asis'
-
       cat(sql.print(data))
     }
     else if (out_format('markdown')) {
