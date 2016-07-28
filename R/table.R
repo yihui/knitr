@@ -336,8 +336,10 @@ kable_markdown = function(x, padding = 1, ...) {
 }
 
 kable_pandoc = function(x, caption = NULL, padding = 1, ...) {
-  tab = kable_mark(x, c(NA, '-', if (is.null(colnames(x))) '-' else NA),
-                   padding = padding, ...)
+  tab = kable_mark(
+    x, c(NA, '-', if (is_blank(colnames(x))) '-' else NA),
+    padding = padding, ...
+  )
   if (identical(caption, NA)) caption = NULL
   if (length(caption)) c(paste('Table:', caption), "", tab) else tab
 }
