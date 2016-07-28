@@ -446,8 +446,7 @@ eng_sql = function(options) {
     if (!is.null(sql.print)) {
       options$results = 'asis'
       cat(sql.print(data))
-    }
-    else if (out_format('markdown')) {
+    } else if (out_format('markdown')) {
 
       # we are going to output raw markdown so set results = 'asis'
       options$results = 'asis'
