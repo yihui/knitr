@@ -439,8 +439,16 @@ eng_sql = function(options) {
     # apply max.print to data
     display_data = if (max.print == -1) data else head(data, n = max.print)
 
+    # get custom sql print function
+    sql.print = opts_knit$get('sql.print')
+
     # use kable for markdown
-    if (out_format('markdown')) {
+    if (out_format('markdown') && !is.null(sql.print)) {
+      options$results = 'asis'
+
+      cat(sql.print(data))
+    }
+    else if (out_format('markdown')) {
 
       # we are going to output raw markdown so set results = 'asis'
       options$results = 'asis'
