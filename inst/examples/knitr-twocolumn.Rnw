@@ -46,7 +46,7 @@ figures can span over two columns. Because the output hooks use the
 environment, we can either modify the output hooks or use other packages
 like \textbf{listings}. For example,
 
-<<chunk-hook, echo=2, tidy.opts=list(width.cutoff=30)>>=
+<<chunk-hook, echo=2, tidy=TRUE, tidy.opts=list(width.cutoff=30)>>=
 <<setup>>
 @
 
