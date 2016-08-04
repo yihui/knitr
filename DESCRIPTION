@@ -101,7 +101,7 @@ Suggests:
     jpeg,
     XML,
     RCurl,
-    DBI,
+    DBI (>= 0.4-1),
     tibble
 License: GPL
 URL: http://yihui.name/knitr/
