@@ -8,6 +8,8 @@
 
 - added a new engine named `sql` that uses the **DBI** package to execute SQL queries, and optionally assign the result to a variable in the **knitr** session; see http://rmarkdown.rstudio.com/authoring_knitr_engines.html for details (#1241)
 
+- `fig.keep` now accepts numeric values to index low-level plots to keep (#1265)
+
 ## BUG FIXES
 
 - fixed #1211: `pandoc('foo.md')` generates foo_utf8.html instead of foo.html by default
