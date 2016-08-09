@@ -184,12 +184,13 @@ leading white spaces have special meanings in markdown.
 ### Plots
 
 - `fig.path`: (`'figure/'`; character) prefix to be used for figure filenames (`fig.path` and chunk labels are concatenated to make filenames); it may contain a directory like `figure/prefix-` (will be created if it does not exist); this path is relative to the current working directory
-- `fig.keep`: (`'high'`; character) how plots in chunks should be kept; it takes five possible values (see the end of this section for an example)
+- `fig.keep`: (`'high'`; character) how plots in chunks should be kept; it takes five possible character values or a numeric vector (see the end of this section for an example)
   - `high`: only keep high-level plots (merge low-level changes into high-level plots);
   - `none`: discard all plots;
   - `all`: keep all plots (low-level plot changes may produce new plots)
   - `first`: only keep the first plot
   - `last`: only keep the last plot
+  - if set to a numeric vector: interpret value as index of (low-level) plots to keep
 - `fig.show`: (`'asis'`; character) how to show/arrange the plots; four possible values are
   - `asis`: show plots exactly in places where they were generated (as if the code were run in an R terminal);
   - `hold`: hold all plots and output them in the very end of a code chunk;
