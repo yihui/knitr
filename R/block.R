@@ -119,6 +119,11 @@ block_exec = function(options) {
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
 
   keep = options$fig.keep
+  keep.idx = NULL
+  if (is.numeric(keep)) {
+    keep.idx = keep
+    keep = "index"
+  }
   # open a device to record plots
   if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none',
                    options$dev, options$dev.args, options$dpi, options)) {
@@ -220,6 +225,8 @@ block_exec = function(options) {
         if (keep %in% c('first', 'last')) {
           res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
         } else {
+          # keep only selected
+          if (keep == 'index') res = res[which(figs)[keep.idx]]
           # merge low-level plotting changes
           if (keep == 'high') res = merge_low_plot(res, figs)
         }
