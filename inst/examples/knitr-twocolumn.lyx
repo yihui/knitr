@@ -154,7 +154,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<chunk-hook, echo=2, tidy.opts=list(width.cutoff=30)>>=
+<<chunk-hook, echo=2, tidy=TRUE, tidy.opts=list(width.cutoff=30)>>=
 \end_layout
 
 \begin_layout Plain Layout
