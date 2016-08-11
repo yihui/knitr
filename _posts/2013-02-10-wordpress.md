@@ -13,7 +13,7 @@ if (!require('RWordPress')) {
 }
 library(RWordPress)
 options(WordpressLogin = c(user = 'password'),
-        WordpressURL = 'http://user.wordpress.com/xmlrpc.php')
+        WordpressURL = 'https://user.wordpress.com/xmlrpc.php')
 library(knitr)
 knit2wp('yourfile.Rmd', title = 'Your post title')
 {% endhighlight %}
