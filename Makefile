@@ -55,18 +55,6 @@ vignettes:
 	sed -i '/\\usepackage{breakurl}/ d' knitr-refcard.Rnw;\
 	mv knitr-refcard.Rnw assets/template-refcard.tex
 
-# the svn mirror created by
-# svn checkout svn+ssh://yihui@svn.r-forge.r-project.org/svnroot/isu/pkg/knitr knitr-rforge
-svn:
-	git archive master > ../knitr.tar;\
-	cd ../knitr-rforge && rm -r `ls` && tar -xf ../knitr.tar;\
-	svn add --force . && svn commit -m 'sync with git'
-
-downstream:
-	Rscript -e "source('http://developer.r-project.org/CRAN/Scripts/depends.R');" \
-	-e "x = reverse_dependencies_with_maintainers('knitr', c('Depends', 'Imports', 'LinkingTo', 'Suggests'))" \
-	-e "cat('\n'); cat(unique(x[, 'Maintainer']), sep = ', \n'); cat('\n')"
-
 clean:
 	cd ..;\
 	$(RM) -r $(PKGNAME).Rcheck/
