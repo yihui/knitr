@@ -1,4 +1,4 @@
-# CHANGES IN knitr VERSION 1.14 (unreleased)
+# CHANGES IN knitr VERSION 1.14
 
 ## NEW FEATURES
 
