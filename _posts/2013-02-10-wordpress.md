@@ -8,8 +8,9 @@ category: demo
 The **RWordPress** package allows one to publish blog posts from R to WordPress (see the `newPost()` function in the package). A blog post is essentially an HTML fragment, and **knitr** can create such a fragment from R Markdown with the **markdown** package. Below is how to do this with the function `knit2wp()` in **knitr**:
 
 {% highlight r %}
-if (!require('RWordPress'))
-  install.packages('RWordPress', repos = 'http://www.omegahat.org/R', type = 'source')
+if (!require('RWordPress')) {
+  devtools::install_github(c("duncantl/XMLRPC", "duncantl/RWordPress"))
+}
 library(RWordPress)
 options(WordpressLogin = c(user = 'password'),
         WordpressURL = 'http://user.wordpress.com/xmlrpc.php')
