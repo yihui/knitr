@@ -1,4 +1,4 @@
-%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[sc]{mathpazo}
@@ -17,6 +17,7 @@
  {hyperref}
 \hypersetup{
  pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
 
 \makeatletter
 
@@ -48,9 +49,7 @@ if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axi
 })
 @
 
-
 \title{knitr: A General-Purpose Tool for Dynamic Report Generation in R}
-
 
 \author{Yihui Xie}
 
@@ -67,7 +66,6 @@ is following the steps of Sweave. For this manual, I assume readers
 have some background knowledge of Sweave to understand the technical
 details; for a reference of available options, hooks and demos, see
 the package homepage \url{http://yihui.name/knitr/}.
-
 
 \section{Hello World}
 
@@ -97,7 +95,6 @@ setting chunk option \texttt{dev='tikz'} (hence can write native \protect\LaTeX{
 expressions in R plots); (6) code highlighting.}
 \end{figure}
 
-
 I would have chosen to hide the R code if this were a real report,
 but here I show the code just for the sake of demonstration. If we
 type \emph{qplot()} in R, we get a plot, and the same thing happens
@@ -109,7 +106,6 @@ in chunk options, we get it in the final output document. If we say
 enhancements and new features will be introduced later. If you come
 from the Sweave land, you can take a look at the page of transition
 first: \url{http://yihui.name/knitr/demo/sweave/}.
-
 
 \section{Design}
 
@@ -190,7 +186,6 @@ output hooks make \textbf{knitr} ready for other types of output,
 and a typical one is HTML (there are built-in hooks). The website
 has provided many examples demonstrating the flexibility of the output.
 
-
 \section{Features}
 
 The \textbf{knitr} package borrowed features such as tikz graphics
@@ -205,7 +200,6 @@ long we still need to wait; output from inline R code (e.g. \texttt{\textbacksla
 is automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
 if the result is numeric. You may check out a number of specific manuals
 dedicated to specific features such as graphics in the website: \url{http://yihui.name/knitr/demos}.
-
 
 \subsection{Code Decoration}
 
@@ -250,7 +244,6 @@ see \url{http://www.andre-simon.de/dokuwiki/doku.php?id=theme_examples}}; it is 
 by providing a theme id to \textbf{knitr}\footnote{many thanks to \href{https://github.com/ramnathv}{Ramnath Vaidyanathan}
 for the work on themes}. See \texttt{?knit\_theme} for details.
 
-
 \subsection{Graphics}
 
 Graphics is an important part of reports, and several enhancements
@@ -258,7 +251,6 @@ have been made in \textbf{knitr}. For example, grid graphics may not
 need to be explicitly printed as long as the same code can produce
 plots in R (in some cases, however, they have to be printed, e.g.
 in a loop, because you have to do so in an R terminal).
-
 
 \subsubsection{Graphical Devices}
 
@@ -273,7 +265,6 @@ device in the \textbf{Cairo} package (it has to be installed first,
 of course). If none of these devices is satisfactory, you can provide
 the name of a customized device function, which must have been defined
 before it is called.
-
 
 \subsubsection{Plot Recording}
 
@@ -326,7 +317,6 @@ We can discard all previous plots and keep the last one only by \texttt{fig.keep
 or keep only the first plot by \texttt{fig.keep='first'}, or discard
 all plots by \texttt{fig.keep='none'}.
 
-
 \subsubsection{Plot Rearrangement}
 
 The option \texttt{fig.show} can decide whether to hold all plots
@@ -362,16 +352,15 @@ library(animation)
 demo('Mandelbrot', echo = FALSE, package = 'animation')
 @
 
-
 \subsubsection{Plot Size}
 
 The \texttt{fig.width} and \texttt{fig.height} options specify the
 size of plots in the graphics device, and the real size in the output
 document can be different (see \texttt{out.width} and \texttt{out.height}).
 When there are multiple plots per chunk, it is possible to arrange
-more than one plot per line in \LaTeX{} -- just specify \texttt{out.width}
-to be less than half of the current line width, e.g. \texttt{out.width='.49\textbackslash{}\textbackslash{}linewidth'}.
-
+more than one plot per line in \LaTeX{} \textendash{} just specify
+\texttt{out.width} to be less than half of the current line width,
+e.g. \texttt{out.width='.49\textbackslash{}\textbackslash{}linewidth'}.
 
 \subsubsection{The tikz Device}
 
@@ -382,16 +371,17 @@ we set the chunk option \texttt{dev='tikz'}, the \emph{tikz()} device
 in \textbf{tikzDevice} will be used to save plots. Options \texttt{sanitize}
 and \texttt{external} are related to the tikz device: see the documentation
 of \emph{tikz()} for details. Note \texttt{external=TRUE} in \textbf{knitr}
-has a different meaning with \textbf{pgfSweave} -- it means \texttt{standAlone=TRUE}
-in \emph{tikz()}, and the tikz graphics output will be compiled to
-PDF \emph{immediately} after it is created, so the ``externalization''
-does not depend on the \textbf{tikz} package; to maintain consistency
-in (font) styles, \textbf{knitr} will read the preamble of the input
-document and use it in the tikz device. At the moment, I'm not sure
-if this is a faithful way to externalize tikz graphics, but I have
-not seen any problems so far. The assumption to make, however, is
-that you declare all the styles in the preamble; \textbf{knitr} is
-agnostic of \emph{local} style changes in the body of the document.
+has a different meaning with \textbf{pgfSweave} \textendash{} it means
+\texttt{standAlone=TRUE} in \emph{tikz()}, and the tikz graphics output
+will be compiled to PDF \emph{immediately} after it is created, so
+the ``externalization'' does not depend on the \textbf{tikz} package;
+to maintain consistency in (font) styles, \textbf{knitr} will read
+the preamble of the input document and use it in the tikz device.
+At the moment, I'm not sure if this is a faithful way to externalize
+tikz graphics, but I have not seen any problems so far. The assumption
+to make, however, is that you declare all the styles in the preamble;
+\textbf{knitr} is agnostic of \emph{local} style changes in the body
+of the document.
 
 Below is an example taken from StackOverflow\footnote{\url{http://stackoverflow.com/q/8190087/559676}};
 we usually have to write R code like this to obtain a math expression
@@ -426,10 +416,9 @@ can be a better alternative (they are smaller in size).
 The graphics manual contains more detailed information and you can
 check it out in the \href{http://yihui.name/knitr/demo/graphics/}{website}.
 
-
 \subsection{Cache}
 
-The feature of cache is not a new idea -- both \textbf{cacheSweave}
+The feature of cache is not a new idea \textendash{} both \textbf{cacheSweave}
 and \textbf{weaver} have implemented it based on Sweave, with the
 former using \textbf{filehash} and the latter using \textsf{.RData}
 images; \textbf{cacheSweave} also supports lazy-loading of objects
@@ -487,16 +476,16 @@ cached to other chunks which are not cached, e.g., set all global
 options in the first chunk of a document and do not cache that chunk.
 
 Sometimes a cached chunk may need to use objects from other cached
-chunks, which can bring a serious problem -- if objects in previous
-chunks have changed, this chunk will not be aware of the changes and
-will still use old cached results, unless there is a way to detect
-such changes from other chunks. There is an option called \texttt{dependson}
-in \textbf{cacheSweave} which does this job. We can explicitly specify
-which other chunks this chunk depends on by setting an option like
-\texttt{dependson='chunkA;chunkB'} or equivalently \texttt{dependson=c('chunkA',
-'chunkB')}. Each time the cache of a chunk is rebuilt, all other chunks
-which depend on this chunk will lose cache, hence their cache will
-be rebuilt as well.
+chunks, which can bring a serious problem \textendash{} if objects
+in previous chunks have changed, this chunk will not be aware of the
+changes and will still use old cached results, unless there is a way
+to detect such changes from other chunks. There is an option called
+\texttt{dependson} in \textbf{cacheSweave} which does this job. We
+can explicitly specify which other chunks this chunk depends on by
+setting an option like \texttt{dependson='chunkA;chunkB'} or equivalently
+\texttt{dependson=c('chunkA', 'chunkB')}. Each time the cache of a
+chunk is rebuilt, all other chunks which depend on this chunk will
+lose cache, hence their cache will be rebuilt as well.
 
 Another way to specify the dependencies among chunks is to use the
 chunk option \texttt{autodep} and the function \emph{dep\_auto()}.
@@ -525,24 +514,23 @@ is a conservative approach which sets the dependencies so that a cached
 chunk will depend on all its previous chunks, i.e. whenever a previous
 chunk is updated, all later chunks will be updated accordingly.
 
-
 \subsection{Code Externalization}
 
 It can be more convenient to write R code in a separate file, rather
-than mixing it into a \LaTeX{} document; for example, we can run R
-code successively in a pure R script from one chunk to the other without
-jumping through other texts. Since I prefer using \LyX{} to write
-reports, Sweave is even more inconvenient because I have to recompile
-the whole document each time, even if I only want to know the results
-of a single chunk. Therefore \textbf{knitr} introduced the feature
-of code externalization to a separate R script. Currently the setting
-is like this: the R script also uses chunk labels (marked in the form
-\texttt{\#\# -{}-{}-{}- chunk-label} by default); if the code chunk
-in the input document is empty, \textbf{knitr} will match its label
-with the label in the R script to input external R code. For example,
-suppose this is a code chunk labelled as \texttt{Q1} in an R script
-named \textsf{homework1-xie.R} which is under the same directory as
-the Rnw document:
+than mixing it into a \LaTeX{} document; for example, we can run
+R code successively in a pure R script from one chunk to the other
+without jumping through other texts. Since I prefer using \LyX{}
+to write reports, Sweave is even more inconvenient because I have
+to recompile the whole document each time, even if I only want to
+know the results of a single chunk. Therefore \textbf{knitr} introduced
+the feature of code externalization to a separate R script. Currently
+the setting is like this: the R script also uses chunk labels (marked
+in the form \texttt{\#\# -{}-{}-{}- chunk-label} by default); if the
+code chunk in the input document is empty, \textbf{knitr} will match
+its label with the label in the R script to input external R code.
+For example, suppose this is a code chunk labelled as \texttt{Q1}
+in an R script named \textsf{homework1-xie.R} which is under the same
+directory as the Rnw document:
 
 <<ext-r-code, eval=FALSE>>=
 ## ---- Q1 ---------------------
@@ -571,8 +559,7 @@ cat('<<Q1, echo=TRUE, tidy=TRUE>>=','@',sep='\n')
 Different documents can read the same R script, so the R code can
 be reusable across different input documents.
 
-
-\subsection{Evaluation of Chunk Options\label{sub:conditional}}
+\subsection{Evaluation of Chunk Options\label{subsec:conditional}}
 
 By default \textbf{knitr} uses a new syntax to parse chunk options:
 it treats them as function arguments instead of a text string to be
@@ -624,7 +611,6 @@ will be evaluated as R expressions unless they are already constants
 which do not need to be evaluated, so this old feature has been generalized
 to all other options naturally.
 
-
 \subsection{Customization}
 
 The \textbf{knitr} package is ready for customization. Both the patterns
@@ -656,7 +642,6 @@ show this idea clearly. This manual did not cover all the features
 of \textbf{knitr}, and users are encouraged to thumb through the website
 to know more possible features.
 
-
 \section{Editors}
 
 You can use any text editors to write the source documents, but some
@@ -667,7 +652,6 @@ and \url{http://yihui.name/knitr/demo/lyx/} respectively. It is also
 possible to support other editors like \href{http://yihui.name/knitr/demo/eclipse/}{Eclipse},
 \href{http://yihui.name/knitr/demo/editors/}{Texmaker and WinEdt};
 see the demo list in the website for configuration instructions.
-
 
 \section*{About This Document}
 

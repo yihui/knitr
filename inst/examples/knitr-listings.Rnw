@@ -1,4 +1,4 @@
-%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[sc]{mathpazo}
@@ -12,6 +12,7 @@
  {hyperref}
 \hypersetup{
  pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
 \usepackage{listings}
 \lstset{language=R}
 \begin{document}
@@ -22,9 +23,7 @@ options(formatR.arrow = TRUE)
 render_listings()
 @
 
-
 \title{Using listings with knitr}
-
 
 \author{Yihui Xie}
 

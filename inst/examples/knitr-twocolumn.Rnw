@@ -1,4 +1,4 @@
-%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[twocolumn]{article}
 \usepackage[sc]{mathpazo}
@@ -16,6 +16,7 @@
  {hyperref}
 \hypersetup{
  pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
 
 \makeatletter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
@@ -33,9 +34,7 @@ opts_chunk$set(fig.path='figure/twocolumn-', fig.align='center', fig.show='hold'
 render_listings()
 @
 
-
 \title{Using knitr in A Two-column Document}
-
 
 \author{Yihui Xie}
 
@@ -60,7 +59,6 @@ hist(x,main='')
 
 \caption{Two plots spanning over two columns.}
 \end{figure*}
-
 
 The output PDF file will be like: \url{https://github.com/yihui/knitr/releases/download/doc/knitr-twocolumn.pdf}.
 The Rnw source of this document is at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-twocolumn.Rnw}.

@@ -1,4 +1,4 @@
-%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[nohyper,justified]{tufte-handout}
 \usepackage[T1]{fontenc}
@@ -32,7 +32,6 @@ knit_hooks$set(par=function(before, options, envir){if (before) par(mar=c(4,4,.1
 thm = knit_theme$get("solarized-dark")
 knit_theme$set(thm)
 @
-
 \maketitle
 \begin{abstract}
 This manual\footnote{source code at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw}}
@@ -45,7 +44,6 @@ source code in a document. In short, the \textbf{highr} package parses
 the source code, tokenizes it into grammar symbols, and formats their
 appearance using CSS or \LaTeX{} commands. 
 
-
 \section{Usage}
 
 We can use the object \texttt{knit\_theme} to set / get a theme. See
@@ -55,7 +53,6 @@ of this document to be \texttt{solarized-dark}:
 <<solarized-theme>>=
 @
 
-
 \section{Built-in Themes}
 
 \begin{margintable}
@@ -63,7 +60,6 @@ of this document to be \texttt{solarized-dark}:
 cat(c(readLines('../themes/edit-eclipse.css', n=30),'...'),sep='\n')
 @
 \end{margintable}
-
 
 The listing on the right shows the CSS file for one of the themes,
 \texttt{edit-eclipse}, which was adapted from Andre Simon's excellent
@@ -101,7 +97,6 @@ save_data = function(y){
 team.list  = llply(years, save_data);
 mls        = merge_recurse(team.list);
 @
-
 
 \section{Misc}
 

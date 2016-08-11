@@ -1,4 +1,4 @@
-%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[10pt]{beamer}
 \usepackage[T1]{fontenc}
@@ -9,13 +9,14 @@
   \AtBeginDocument{%
     \hypersetup{unicode=true,pdfusetitle,
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
- breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false}
+ breaklinks=false,pdfborder={0 0 0},pdfborderstyle={},backref=false,colorlinks=false}
   }
 \else
   \hypersetup{unicode=true,pdfusetitle,
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
- breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false}
+ breaklinks=false,pdfborder={0 0 0},pdfborderstyle={},backref=false,colorlinks=false}
 \fi
+\usepackage{breakurl}
 
 \makeatletter
 
@@ -45,9 +46,7 @@ library(knitr)
 opts_chunk$set(fig.path='figure/beamer-',fig.align='center',fig.show='hold',size='footnotesize')
 @
 
-
 \title[knitr, Beamer, and FragileFrame]{A Minimal Demo of knitr with Beamer and Fragile Frames}
-
 
 \author{Yihui Xie\thanks{I thank Richard E. Goldberg for providing this demo.}}
 \makebeamertitle
@@ -78,9 +77,7 @@ small demo.
 \section{First Test}
 \begin{frame}[fragile]{First Test}
 
-
 OK, let's get started with just some text:
-
 
 <<echo=FALSE,results='hide'>>=
 # some setup
@@ -94,19 +91,15 @@ set.seed(1121)   # make the results repeatable
 mean(x);var(x)  
 @
 
-
 BTW, the first element of \texttt{x} is \Sexpr{x[1]}. (Did you notice
 the use of\texttt{ \textbackslash{}Sexpr\{\}}?)
-
 \end{frame}
 
 \section{Second Test}
 \begin{frame}[fragile]{Second Test}
 
-
 Text is nice but let's see what happens if we make a couple of plots
 in our chunk:
-
 
 <<boring-plots,fig.width=4,fig.height=4,out.width='.45\\linewidth'>>=
 par(las=1,mar=c(4,4,.1,.1))  # tick labels direction
@@ -114,15 +107,14 @@ boxplot(x)
 hist(x,main='',col="blue",probability=TRUE) 
 lines(density(x),col="red")
 @
-
 \end{frame}
 
 \section{The Big Question}
 \begin{frame}{The Big Question}
 
-
 Do the above chunks work? You should be able to compile the \LyX{}
 document and get a nice-looking PDF slide presentation. If not, time
-to double-check everything...\end{frame}
+to double-check everything...
+\end{frame}
 
 \end{document}

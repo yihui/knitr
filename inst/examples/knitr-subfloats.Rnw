@@ -1,4 +1,4 @@
-%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \usepackage[T1]{fontenc}
@@ -27,9 +27,7 @@ library(knitr)
 opts_chunk$set(fig.path='figure/subfloats-')
 @
 
-
 \title{Using subfloats in \LyX{} with knitr}
-
 
 \author{Yihui Xie}
 
@@ -38,9 +36,9 @@ If you insert a float figure inside a float figure in \LyX{}, you
 will get subfloats. To make sure the two subfloats can stand side
 by side, you have to:
 \begin{enumerate}
-\item remove new lines between the two subfloat environments in \LyX{} (if
-you are not sure if there are blank lines between them, check the
-\LaTeX{} source);
+\item remove new lines between the two subfloat environments in \LyX{}
+(if you are not sure if there are blank lines between them, check
+the \LaTeX{} source);
 \item use the chunk option \texttt{echo=FALSE} to hide the R source code
 in the output;
 \item set \texttt{out.width} to be less than half of the linewidth if you
