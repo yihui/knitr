@@ -12,3 +12,4 @@ knitr-spin.html
 /inst/examples/*.tex
 /inst/examples/*.sty
 .*.Rnb.cached
+revdep

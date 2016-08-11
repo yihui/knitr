@@ -19,3 +19,4 @@ FAQ.md
 Makefile
 ^knitr-examples$
 ^CONTRIBUTING\.md$
+^revdep$
