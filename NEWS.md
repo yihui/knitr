@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.15 (unreleased)
+
+## MAJOR CHANGES
+
+- the minimal version of R required for **knitr** is 3.1.0 now (#1269)
+
 # CHANGES IN knitr VERSION 1.14
 
 ## NEW FEATURES
