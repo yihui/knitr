@@ -49,3 +49,7 @@ assert(identical(is_sql_update_query(paste(
   "",
   "   INSERT INTO foo values(1)",
   sep = "\n")), TRUE))
+
+assert(identical(is_sql_update_query("update foo set a=1"), TRUE))
+assert(identical(is_sql_update_query("delete from foo"), TRUE))
+assert(identical(is_sql_update_query("insert into foo values(1)"), TRUE))

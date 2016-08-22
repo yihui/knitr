@@ -389,7 +389,7 @@ is_sql_update_query = function(query) {
     query <- gsub(".*\\*\\/", "", query)
   }
 
-  grepl("^\\s*(INSERT|UPDATE|DELETE|CREATE).*", query)
+  grepl("^\\s*(INSERT|UPDATE|DELETE|CREATE).*", query, ignore.case = TRUE)
 }
 
 # sql engine
