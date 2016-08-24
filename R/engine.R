@@ -381,15 +381,12 @@ eng_css = eng_html_asset('<style type="text/css">', '</style>')
 
 # perform basic sql parsing to determine if a sql query is an update query
 is_sql_update_query = function(query) {
+  query = paste(query, collapse = '\n')
   # remove line comments
-  query <- gsub("^\\s*--.*\n", "", query)
-
+  query = gsub('^\\s*--.*\n', '', query)
   # remove multi-line comments
-  if (grepl("^\\s*\\/\\*.*", query)) {
-    query <- gsub(".*\\*\\/", "", query)
-  }
-
-  grepl("^\\s*(INSERT|UPDATE|DELETE|CREATE).*", query, ignore.case = TRUE)
+  if (grepl('^\\s*\\/\\*.*', query)) query = gsub('.*\\*\\/', '', query)
+  grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE).*', query, ignore.case = TRUE)
 }
 
 # sql engine
@@ -399,7 +396,7 @@ eng_sql = function(options) {
     varPos = DBI::sqlParseVariables(conn, sql)
     if (length(varPos$start) > 0) {
       varNames = substring(sql, varPos$start, varPos$end)
-      sub("^\\?", "", varNames)
+      sub('^\\?', '', varNames)
     }
   }
 
