@@ -379,6 +379,19 @@ eng_js = eng_html_asset('<script type="text/javascript">', '</script>')
 # include css in a style tag (ignore if not html output)
 eng_css = eng_html_asset('<style type="text/css">', '</style>')
 
+# perform basic sql parsing to determine if a sql query is an update query
+is_sql_update_query = function(query) {
+  # remove line comments
+  query <- gsub("^\\s*--.*\n", "", query)
+
+  # remove multi-line comments
+  if (grepl("^\\s*\\/\\*.*", query)) {
+    query <- gsub(".*\\*\\/", "", query)
+  }
+
+  grepl("^\\s*(INSERT|UPDATE|DELETE|CREATE).*", query, ignore.case = TRUE)
+}
+
 # sql engine
 eng_sql = function(options) {
   # Return char vector of sql interpolation param names
@@ -424,10 +437,9 @@ eng_sql = function(options) {
   # execute query -- when we are printing with an enforced max.print we
   # use dbFetch so as to only pull down the required number of records
   query = interpolate_from_env(conn, sql)
-  if (is.null(varname) && max.print > 0) {
+  if (is.null(varname) && max.print > 0 && !is_sql_update_query(query)) {
     res = DBI::dbSendQuery(conn, query)
-    data = if (!DBI::dbHasCompleted(res) || (DBI::dbGetRowCount(res) > 0))
-              DBI::dbFetch(res, n = max.print)
+    data = DBI::dbFetch(res, n = max.print)
     DBI::dbClearResult(res)
   } else {
     data = DBI::dbGetQuery(conn, query)
