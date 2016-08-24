@@ -96,7 +96,7 @@ assert(
 )
 
 # should not error when a plot label contains special characters and sanitize=TRUE
-if (requireNamespace('tikzDevice')) {
+if (requireNamespace('tikzDevice', quietly = TRUE)) {
   knit('knit-tikzDevice.Rnw', quiet = TRUE)
   unlink(c('*-tikzDictionary', 'figure', 'knit-tikzDevice.tex'), recursive = TRUE)
 }
