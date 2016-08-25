@@ -175,6 +175,42 @@ eng_Rcpp = function(options) {
   engine_output(options, code, '')
 }
 
+## RcppOctave
+eng_RcppOctave = function(options) {
+
+  code = paste(options$code, collapse = '\n')
+  # engine.opts is a list of arguments to be passed to Rcpp function, e.g.
+  # engine.opts=list(plugin='RcppArmadillo')
+  opts = options$engine.opts
+  if (!is.environment(opts$env)) opts$env = knit_global() # default env is knit_global()
+  if (!is.logical(opts$retrieve.vars)) opts$retrieve.vars <- FALSE
+  if (options$eval) {
+    # Get the octave vars existing before the call
+    prev_vars <- RcppOctave::o_get(RcppOctave::o_ls())
+    do.call(getFromNamespace('o_source', 'RcppOctave'), c(list(text = code)))
+    if (opts$retrieve.vars){
+      post_names <- RcppOctave::o_ls()
+      # New vars in octave (prev_vars), and in R (ls)
+      new_var_names <- post_names[(!post_names %in% names(prev_vars))||(!post_names %in% ls())]
+      # Deleted vars (clear in octave)
+      is_del_var <- !names(prev_vars) %in% post_names
+      del_var_names <- names(prev_vars)[is_del_var]
+      # Changed vars
+      non_del_names <- names(prev_vars)[!is_del_var]
+      is_chg_var <- sapply(non_del_names, function(.c.name) !isTRUE(all.equal(prev_vars[[.c.name]], RcppOctave::o_get(.c.name))))
+      chg_var_names <- non_del_names[is_chg_var]
+
+      # Remove deleted vars
+      remove(list=del_var_names, envir = opts$env)
+      # Create new vars, and modify changed vars
+      sapply(c(new_var_names, chg_var_names), function(.c.name) assign(.c.name, RcppOctave::o_get(.c.name), envir = opts$env))
+    }
+  }
+
+  options$engine = 'octave' # wrap up source code in octave syntax instead of RcppOctave
+  engine_output(options, code, '')
+}
+
 ## Stan
 ## Compiles Stan model in the code chunk, creates a stanmodel object,
 ## and assigns it to a variable with the name given in engine.opts$x.
@@ -516,7 +552,8 @@ local({
 
 # additional engines
 knit_engines$set(
-  highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
+  highlight = eng_highlight, Rcpp = eng_Rcpp, RcppOctave = eng_RcppOctave,
+  tikz = eng_tikz, dot = eng_dot,
   c = eng_shlib, fortran = eng_shlib, asy = eng_dot, cat = eng_cat,
   asis = eng_asis, stan = eng_stan, block = eng_block, js = eng_js, css = eng_css,
   sql = eng_sql
