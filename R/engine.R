@@ -134,7 +134,7 @@ eng_interpreted = function(options) {
 
 ## C and Fortran (via R CMD SHLIB)
 eng_shlib = function(options) {
-  n = switch(options$engine, c = 'c', fortran = 'f')
+  n = switch(options$engine, c = 'c', fortran = 'f', fortran95 = 'f95')
   f = basename(tempfile(n, '.', paste0('.', n)))
   writeLines(options$code, f)
   on.exit(unlink(c(f, sub_ext(f, c('o', 'so', 'dll')))))
@@ -517,7 +517,7 @@ local({
 # additional engines
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
-  c = eng_shlib, fortran = eng_shlib, asy = eng_dot, cat = eng_cat,
+  c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot, cat = eng_cat,
   asis = eng_asis, stan = eng_stan, block = eng_block, js = eng_js, css = eng_css,
   sql = eng_sql
 )
