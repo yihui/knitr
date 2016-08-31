@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.15 (unreleased)
 
+## NEW FEATURES
+
+- added a `fortran95` engine (thanks, @stefanedwards, #1282)
+
 ## MAJOR CHANGES
 
 - the minimal version of R required for **knitr** is 3.1.0 now (#1269)
