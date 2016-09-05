@@ -86,7 +86,7 @@ eng_interpreted = function(options) {
     writeLines(c(switch(
       engine,
       sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
-      haskell = ':set +m'
+      NULL
     ), options$code), f)
     on.exit(unlink(f))
     switch(

@@ -8,6 +8,8 @@
 
 - the minimal version of R required for **knitr** is 3.1.0 now (#1269)
 
+- `:set +m` is no longer automatically added to `haskell` code chunks (#1274)
+
 ## MINOR CHANGES
 
 - the package option `opts_knit$get('stop_on_error')` has been removed
