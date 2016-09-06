@@ -21,4 +21,9 @@ The identification is not guaranteed to be correct, especially when
   multiple documents share the same cache directory. You are recommended to
   call \code{clean_cache(FALSE)} and carefully check the list of files (if
   any) before you really delete them (\code{clean_cache(TRUE)}).
+
+  This function must be called within a code chunk in a source document,
+  since it needs to know all chunk labels of the current document to
+  determine which labels are no longer present, and delete cache
+  corresponding to these labels.
 }
