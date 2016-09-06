@@ -14,6 +14,8 @@
 
 - the package option `opts_knit$get('stop_on_error')` has been removed
 
+- the confusing warning message about `knitr::knit2html()` when buiding package vignettes using the `knitr::rmarkdown` engine without `pandoc`/`pandoc-citeproc` has been removed (#1286)
+
 ## BUG FIXES
 
 - the chunk option `cache.vars` did not really behave like what was documented (thanks, @simonkth, #1280)

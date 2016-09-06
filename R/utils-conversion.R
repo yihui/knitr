@@ -111,6 +111,8 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
   } else markdown::markdownToHTML(text = out, ...)
 }
 
+knit2html_v1 = function(...) knit2html(..., force_v1 = TRUE)
+
 #' Knit an R Markdown document and post it to WordPress
 #'
 #' This function is a wrapper around the \pkg{RWordPress} package. It compiles
