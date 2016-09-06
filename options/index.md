@@ -94,6 +94,8 @@ Below is a list of chunk options in **knitr**. Note the options `background` and
 - `error`: (`TRUE`; logical) whether to preserve errors (from `stop()`); by
   default, the evaluation will not stop even in case of errors!! if we want
   R to stop on errors, we need to set this option to `FALSE`
+  - when the chunk option `include = FALSE`, `error` **knitr** will stop on
+  error, because it is easy to overlook potential errors in this case
 - `message`: (`TRUE`; logical) whether to preserve messages emitted by
   `message()` (similar to `warning`)
 - `split`: (`FALSE`; logical) whether to split the output from R into separate
