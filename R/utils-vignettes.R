@@ -91,8 +91,10 @@ register_vignette_engines = function(pkg) {
     if (pandoc_available()) {
       vweave_rmarkdown(...)
     } else {
-      if (!is_R_CMD_check())
-        warning('Pandoc (>= 1.12.3) and/or pandoc-citeproc is not available. Please install both.')
+      warning(
+        'Pandoc (>= 1.12.3) and/or pandoc-citeproc not available. ',
+        'Falling back to R Markdown v1.'
+      )
       vweave(...)
     }
   } else {
