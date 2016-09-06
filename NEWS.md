@@ -14,6 +14,10 @@
 
 - the package option `opts_knit$get('stop_on_error')` has been removed
 
+## BUG FIXES
+
+- the chunk option `cache.vars` did not really behave like what was documented (thanks, @simonkth, #1280)
+
 # CHANGES IN knitr VERSION 1.14
 
 ## NEW FEATURES
