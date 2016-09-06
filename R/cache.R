@@ -283,9 +283,19 @@ rand_seed = quote({
 #'   multiple documents share the same cache directory. You are recommended to
 #'   call \code{clean_cache(FALSE)} and carefully check the list of files (if
 #'   any) before you really delete them (\code{clean_cache(TRUE)}).
+#'
+#'   This function must be called within a code chunk in a source document,
+#'   since it needs to know all chunk labels of the current document to
+#'   determine which labels are no longer present, and delete cache
+#'   corresponding to these labels.
 #' @export
 clean_cache = function(clean = FALSE, path = opts_chunk$get('cache.path')) {
-  owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
+  odir = opts_knit$get('output.dir')
+  if (is.null(odir)) {
+    warning('This function must be called inside a source document')
+    return()
+  }
+  owd = setwd(odir); on.exit(setwd(owd))
   if (file_test('-d', path)) {
     p0 = path; p1 = ''
   } else {
