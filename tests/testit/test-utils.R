@@ -38,6 +38,7 @@ assert(
   'the inline hook for Rnw applies \\ensuremath{} correctly',
   .inline.hook.tex(1e4) == '\\ensuremath{10^{4}}',
   .inline.hook.tex(-Inf) == '\\ensuremath{-\\infty{}}',
+  .inline.hook.tex(-1.23) == '-1.23',
   .inline.hook.tex(c(1.2345e10, 2 * pnorm(-(3:4)))) ==
     "\\ensuremath{1.2345\\times 10^{10}}, 0.0027, \\ensuremath{6.3342\\times 10^{-5}}"
 )
