@@ -49,6 +49,12 @@ A character vector of the table source code.
 This is a very simple table generator. It is simple by design. It is not
 intended to replace any other R packages for making tables.
 }
+\details{
+Missing values (\code{NA}) in the table are displayed as \code{NA} by
+default. If you want to display them with other characters, you can set the
+option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
+hide \code{NA} values.
+}
 \note{
 The tables for \code{format = 'markdown'} also work for Pandoc when the
   \code{pipe_tables} extension is enabled (this is the default behavior for
