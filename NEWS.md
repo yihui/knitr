@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- `NA` values can be displayed using different characters (including empty strings) in `kable()`; you can set the option `knitr.kable.NA`, e.g. `options(knitr.kable.NA = '')` to hide `NA` values (#1283)
+
 - added a `fortran95` engine (thanks, @stefanedwards, #1282)
 
 ## MAJOR CHANGES

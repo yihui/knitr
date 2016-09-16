@@ -2,6 +2,11 @@
 #'
 #' This is a very simple table generator. It is simple by design. It is not
 #' intended to replace any other R packages for making tables.
+#'
+#' Missing values (\code{NA}) in the table are displayed as \code{NA} by
+#' default. If you want to display them with other characters, you can set the
+#' option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
+#' hide \code{NA} values.
 #' @param x an R object (typically a matrix or data frame)
 #' @param format a character string; possible values are \code{latex},
 #'   \code{html}, \code{markdown}, \code{pandoc}, and \code{rst}; this will be
@@ -144,7 +149,7 @@ kable = function(
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
   n = nrow(x)
-  x = base::format(as.matrix(x), trim = TRUE, justify = 'none')
+  x = replace_na(base::format(as.matrix(x), trim = TRUE, justify = 'none'), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
   x = gsub('^\\s*|\\s*$', '', x)
   colnames(x) = col.names
@@ -170,7 +175,13 @@ format_matrix = function(x, args) {
 format_args = function(x, args = list()) {
   args$x = x
   args$trim = TRUE
-  do.call(format, args)
+  replace_na(do.call(format, args), is.na(x))
+}
+
+replace_na = function(x, which = is.na(x), to = getOption('knitr.kable.NA')) {
+  if (is.null(to)) return(x)
+  x[which] = to
+  x
 }
 
 has_rownames = function(x) {

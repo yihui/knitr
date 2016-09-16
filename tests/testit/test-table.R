@@ -155,3 +155,11 @@ assert(
   !has_rownames(matrix(1:4, 2)), !has_rownames(iris), has_rownames(mtcars),
   !has_rownames(as.data.frame(matrix(nrow = 0, ncol = 3)))
 )
+
+op = options(knitr.kable.NA = '')
+assert(
+  'kable() can display NA as emtpy strings',
+  kable2(matrix(c(1, NA, 3, 4), nrow = 2), col.names = c('a', 'b')) %==%
+    c('|  a|  b|', '|--:|--:|', '|  1|  3|', '|   |  4|')
+)
+options(op)
