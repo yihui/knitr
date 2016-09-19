@@ -6,6 +6,8 @@
 
 - added a `fortran95` engine (thanks, @stefanedwards, #1282)
 
+- added a `width` argument to `write_bib()` so long lines in bib entries can be wrapped
+
 ## MAJOR CHANGES
 
 - the minimal version of R required for **knitr** is 3.1.0 now (#1269)

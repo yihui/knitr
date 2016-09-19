@@ -55,8 +55,10 @@
 #'
 #' # what tweak=TRUE does
 #' str(knitr:::.tweak.bib)
-write_bib = function(x = .packages(), file = '', tweak = TRUE,
-                     prefix = getOption('knitr.bib.prefix', 'R-')) {
+write_bib = function(
+  x = .packages(), file = '', tweak = TRUE, width = NULL,
+  prefix = getOption('knitr.bib.prefix', 'R-')
+) {
   idx = mapply(system.file, package = x) == ''
   if (any(idx)) {
     warning('package(s) ', paste(x[idx], collapse = ', '), ' not found')
@@ -84,6 +86,7 @@ write_bib = function(x = .packages(), file = '', tweak = TRUE,
       b['author'] = sub('Duncan Temple Lang', 'Duncan {Temple Lang}', b['author'])
       if (!('year' %in% names(b))) b['year'] = .this.year
       idx = which(names(b) == '')
+      if (!is.null(width)) b[-idx] = stringr::str_wrap(b[-idx], width, 2, 4)
       structure(c(b[idx[1L]], b[-idx], b[idx[2L]]), class = 'Bibtex')
     })
   }
