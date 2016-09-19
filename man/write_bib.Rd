@@ -3,7 +3,7 @@
 \alias{write_bib}
 \title{Generate BibTeX bibliography databases for R packages}
 \usage{
-write_bib(x = .packages(), file = "", tweak = TRUE, 
+write_bib(x = .packages(), file = "", tweak = TRUE, width = NULL, 
     prefix = getOption("knitr.bib.prefix", "R-"))
 }
 \arguments{
@@ -14,6 +14,9 @@ console; ignored if it is \code{NULL})}
 
 \item{tweak}{whether to fix some known problems in the citations, especially
 non-standard format of authors}
+
+\item{width}{the width of lines in bibliographyb entries (if \code{NULL},
+lines will not be wrapped)}
 
 \item{prefix}{a prefix string for keys in BibTeX entries; by default, it is
 \samp{R-} unless \code{\link{option}('knitr.bib.prefix')} has been set to

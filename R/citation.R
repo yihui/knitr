@@ -22,6 +22,8 @@
 #'   console; ignored if it is \code{NULL})
 #' @param tweak whether to fix some known problems in the citations, especially
 #'   non-standard format of authors
+#' @param width the width of lines in bibliographyb entries (if \code{NULL},
+#'   lines will not be wrapped)
 #' @param prefix a prefix string for keys in BibTeX entries; by default, it is
 #'   \samp{R-} unless \code{\link{option}('knitr.bib.prefix')} has been set to
 #'   another string
