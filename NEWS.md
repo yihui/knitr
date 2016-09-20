@@ -6,7 +6,7 @@
 
 - added a `fortran95` engine (thanks, @stefanedwards, #1282)
 
-- added a `block2` engine as an alternative to the `block` engine; it should be faster and supports arbitrary Pandoc's Markdown syntax, but it is essentially a hack
+- added a `block2` engine for R Markdown documents as an alternative to the `block` engine; it should be faster and supports arbitrary Pandoc's Markdown syntax, but it is essentially a hack; note when the output format is LaTeX/PDF, you have to define `\let\BeginKnitrBlock\begin \let\EndKnitrBlock\end` in the LaTeX preamble
 
 - added a `width` argument to `write_bib()` so long lines in bib entries can be wrapped
 
