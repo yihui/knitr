@@ -342,7 +342,7 @@ eng_block = function(options) {
   # https://github.com/jgm/pandoc/issues/2453)
   if (is_pandoc) code = pandoc_fragment(code, to)
   l1 = options$latex.options
-  l1 = if (is.null(l1)) '' else paste0('[', l1, ']')
+  if (is.null(l1)) l1 = ''
   h2 = options$html.tag %n% 'div'
   h3 = options$html.before %n% ''
   h4 = options$html.after %n% ''
@@ -357,7 +357,7 @@ eng_block = function(options) {
   }
   switch(
     to,
-    latex = sprintf('\\begin%s{%s}\n%s\n\\end{%s}', l1, type, code, type),
+    latex = sprintf('\\begin{%s}%s\n%s\n\\end{%s}', type, l1, code, type),
     html =  sprintf('%s<%s class="%s">%s</%s>%s', h3, h2, type, code, h2, h4),
     code
   )
@@ -372,14 +372,14 @@ eng_block2 = function(options) {
   if (is.null(pandoc_to())) stop('The engine "block2" is for R Markdown only')
 
   l1 = options$latex.options
-  l1 = if (is.null(l1)) '' else paste0('[', l1, ']')
+  if (is.null(l1)) l1 = ''
   h2 = options$html.tag %n% 'div'
   h3 = options$html.before %n% ''
   h4 = options$html.after %n% ''
 
   sprintf(
-    '\\BeginKnitrBlock%s{%s}%s<%s class="%s">%s</%s>%s\\EndKnitrBlock{%s}',
-    l1, type, h3, h2, type, code, h2, h4, type
+    '\\BeginKnitrBlock{%s}%s%s<%s class="%s">%s</%s>%s\\EndKnitrBlock{%s}',
+    type, l1, h3, h2, type, code, h2, h4, type
   )
 }
 
