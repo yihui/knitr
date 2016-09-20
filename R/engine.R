@@ -363,6 +363,26 @@ eng_block = function(options) {
   )
 }
 
+eng_block2 = function(options) {
+  if (isFALSE(options$echo)) return()
+
+  code = paste(options$code, collapse = '\n'); type = options$type
+  if (is.null(type)) return(code)
+
+  if (is.null(pandoc_to())) stop('The engine "block2" is for R Markdown only')
+
+  l1 = options$latex.options
+  l1 = if (is.null(l1)) '' else paste0('[', l1, ']')
+  h2 = options$html.tag %n% 'div'
+  h3 = options$html.before %n% ''
+  h4 = options$html.after %n% ''
+
+  sprintf(
+    '\\BeginKnitrBlock%s{%s}%s<%s class="%s">%s</%s>%s\\EndKnitrBlock{%s}',
+    l1, type, h3, h2, type, code, h2, h4, type
+  )
+}
+
 # helper to create engines the wrap embedded html assets (e.g. css,js)
 eng_html_asset = function(prefix, postfix) {
   function(options) {
@@ -514,9 +534,9 @@ local({
 # additional engines
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
-  c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot, cat = eng_cat,
-  asis = eng_asis, stan = eng_stan, block = eng_block, js = eng_js, css = eng_css,
-  sql = eng_sql
+  c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
+  cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
+  block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql
 )
 
 get_engine = function(name) {

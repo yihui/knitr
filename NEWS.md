@@ -6,6 +6,8 @@
 
 - added a `fortran95` engine (thanks, @stefanedwards, #1282)
 
+- added a `block2` engine as an alternative to the `block` engine; it should be faster and supports arbitrary Pandoc's Markdown syntax, but it is essentially a hack
+
 - added a `width` argument to `write_bib()` so long lines in bib entries can be wrapped
 
 ## MAJOR CHANGES
