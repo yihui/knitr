@@ -373,6 +373,7 @@ eng_block2 = function(options) {
 
   l1 = options$latex.options
   if (is.null(l1)) l1 = ''
+  if (l1 != '') l1 = paste0('\\null{', utf8ToInt(enc2utf8(l1)), '}', collapse = '')
   h2 = options$html.tag %n% 'div'
   h3 = options$html.before %n% ''
   h4 = options$html.after %n% ''
