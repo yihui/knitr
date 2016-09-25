@@ -10,6 +10,8 @@
 
 - added a `width` argument to `write_bib()` so long lines in bib entries can be wrapped
 
+- the inline syntax `` `r#code` `` is also supported besides `` `r code` ``; this can make sure the inline expression is not split when the line is wrapped (thanks, Dave Jarvis)
+
 ## MAJOR CHANGES
 
 - the minimal version of R required for **knitr** is 3.1.0 now (#1269)
