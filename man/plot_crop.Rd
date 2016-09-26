@@ -3,7 +3,7 @@
 \alias{plot_crop}
 \title{Crop a plot (remove the edges) using PDFCrop or ImageMagick}
 \usage{
-plot_crop(x, quiet = !opts_knit$get("progress"))
+plot_crop(x, quiet = TRUE)
 }
 \arguments{
 \item{x}{the plot filename}

@@ -289,7 +289,7 @@ fig_process = function(FUN, path) {
 #'   \command{convert} command in ImageMagick:
 #'   \url{http://www.imagemagick.org/script/convert.php}
 #' @return The original filename.
-plot_crop = function(x, quiet = !opts_knit$get('progress')) {
+plot_crop = function(x, quiet = TRUE) {
   ext = tolower(file_ext(x))
   if (ext == 'pdf') {
     if (!has_utility('pdfcrop')) return(x)

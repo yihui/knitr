@@ -24,6 +24,8 @@
 
 - the confusing warning message about `knitr::knit2html()` when buiding package vignettes using the `knitr::rmarkdown` engine without `pandoc`/`pandoc-citeproc` has been removed (#1286)
 
+- the default value of the `quiet` argument of `plot_crop()` was changed from `!opts_knit$get('progress')` to `TRUE`, i.e., by default the messages from cropping images are suppressed
+
 ## BUG FIXES
 
 - the chunk option `cache.vars` did not really behave like what was documented (thanks, @simonkth, #1280)
