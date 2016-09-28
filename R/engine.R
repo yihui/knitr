@@ -373,7 +373,12 @@ eng_block2 = function(options) {
 
   l1 = options$latex.options
   if (is.null(l1)) l1 = ''
-  if (l1 != '') l1 = paste0('\\null{', utf8ToInt(enc2utf8(l1)), '}', collapse = '')
+  # protect environment options because Pandoc may escape the characters like
+  # {}; when encoded in integers, they won't be escaped, but will need to
+  # restore them later; see bookdown:::restore_block2
+  if (l1 != '') l1 = paste(
+    c('\\iffalse{', utf8ToInt(enc2utf8(l1)), '}\\fi'), collapse = '-'
+  )
   h2 = options$html.tag %n% 'div'
   h3 = options$html.before %n% ''
   h4 = options$html.after %n% ''
