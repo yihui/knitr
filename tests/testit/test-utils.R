@@ -123,3 +123,10 @@ assert(
   combine_words(c('a', 'b', 'c'), before = '"') %==% '"a", "b", and "c"',
   combine_words(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''"
 )
+
+opts = list(fig.cap = 'Figure "caption" <>.', fig.lp = 'Fig:', label = 'foo')
+assert(
+  '.img.cap() generates the figure caption and alt attribute',
+  .img.cap(opts, FALSE) %==% opts$fig.cap,
+  .img.cap(opts, TRUE)  %==% 'Figure &quot;caption&quot; &lt;&gt;.'
+)
