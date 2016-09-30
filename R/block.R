@@ -124,9 +124,10 @@ block_exec = function(options) {
     keep.idx = keep
     keep = "index"
   }
+  tmp.fig = tempfile(); on.exit(unlink(tmp.fig), add = TRUE)
   # open a device to record plots
   if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none',
-                   options$dev, options$dev.args, options$dpi, options)) {
+                   options$dev, options$dev.args, options$dpi, options, tmp.fig)) {
     # preserve par() settings from the last code chunk
     if (keep.pars <- opts_knit$get('global.par'))
       par2(opts_knit$get('global.pars'))
@@ -287,7 +288,7 @@ purge_cache = function(options) {
 
 # open a device for a chunk; depending on the option global.device, may or may
 # not need to close the device on exit
-chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi, options) {
+chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi, options, tmp) {
   dev_new = function() {
     # actually I should adjust the recording device according to dev, but here I
     # have only considered the png and tikz devices (because the measurement
@@ -295,18 +296,18 @@ chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi, option
     # also the cairo_pdf device (#1235)
     if (identical(dev, 'png')) {
       do.call(grDevices::png, c(list(
-        filename = tempfile(), width = width, height = height, units = 'in', res = dpi
+        filename = tmp, width = width, height = height, units = 'in', res = dpi
       ), get_dargs(dev.args, 'png')))
     } else if (identical(dev, 'tikz')) {
       dargs = c(list(
-        file = paste0(tempfile(), ".tex"), width = width, height = height
+        file = tmp, width = width, height = height
       ), get_dargs(dev.args, 'tikz'))
       dargs$sanitize = options$sanitize; dargs$standAlone = options$external
       if (is.null(dargs$verbose)) dargs$verbose = FALSE
       do.call(tikz_dev, dargs)
     } else if (identical(dev, 'cairo_pdf')) {
       do.call(grDevices::cairo_pdf, c(list(
-        filename = tempfile(), width = width, height = height
+        filename = tmp, width = width, height = height
       ), get_dargs(dev.args, 'cairo_pdf')))
     } else if (identical(getOption('device'), pdf_null)) {
       if (!is.null(dev.args)) {

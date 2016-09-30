@@ -88,7 +88,7 @@ eng_interpreted = function(options) {
       sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
       NULL
     ), options$code), f)
-    on.exit(unlink(f))
+    on.exit(unlink(f), add = TRUE)
     switch(
       engine,
       haskell = paste('-e', shQuote(paste(':script', f))),
@@ -137,7 +137,7 @@ eng_shlib = function(options) {
   n = switch(options$engine, c = 'c', fortran = 'f', fortran95 = 'f95')
   f = basename(tempfile(n, '.', paste0('.', n)))
   writeLines(options$code, f)
-  on.exit(unlink(c(f, sub_ext(f, c('o', 'so', 'dll')))))
+  on.exit(unlink(c(f, sub_ext(f, c('o', 'so', 'dll')))), add = TRUE)
   if (options$eval) {
     out = system(paste('R CMD SHLIB', f), intern = TRUE)
     dyn.load(sub(sprintf('[.]%s$', n), .Platform$dynlib.ext, f))
@@ -258,7 +258,7 @@ eng_dot = function(options) {
   # create temporary file
   f = tempfile('code', '.')
   writeLines(code <- options$code, f)
-  on.exit(unlink(f))
+  on.exit(unlink(f), add = TRUE)
 
   # adapt command to either graphviz or asymptote
   if (options$engine == 'dot') {
