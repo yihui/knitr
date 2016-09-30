@@ -288,7 +288,9 @@ purge_cache = function(options) {
 
 # open a device for a chunk; depending on the option global.device, may or may
 # not need to close the device on exit
-chunk_device = function(width, height, record = TRUE, dev, dev.args, dpi, options, tmp) {
+chunk_device = function(
+  width, height, record = TRUE, dev, dev.args, dpi, options, tmp = tempfile()
+) {
   dev_new = function() {
     # actually I should adjust the recording device according to dev, but here I
     # have only considered the png and tikz devices (because the measurement
