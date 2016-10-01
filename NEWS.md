@@ -8,6 +8,8 @@
 
 - added a `block2` engine for R Markdown documents as an alternative to the `block` engine; it should be faster and supports arbitrary Pandoc's Markdown syntax, but it is essentially a hack; note when the output format is LaTeX/PDF, you have to define `\let\BeginKnitrBlock\begin \let\EndKnitrBlock\end` in the LaTeX preamble
 
+- figure captions specified in the chunk option `fig.cap` are also applied to HTML widgets (thanks, @byzheng, https://github.com/rstudio/bookdown/issues/118)
+
 - added a `width` argument to `write_bib()` so long lines in bib entries can be wrapped
 
 - the inline syntax `` `r#code` `` is also supported besides `` `r code` ``; this can make sure the inline expression is not split when the line is wrapped (thanks, Dave Jarvis)
