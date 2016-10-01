@@ -709,11 +709,12 @@ default_handlers = evaluate:::default_output_handler
 # change the value handler in evaluate default handlers
 knit_handlers = function(fun, options) {
   if (!is.function(fun)) fun = function(x, ...) {
-    res = knit_print(x, ...)
+    res = withVisible(knit_print(x, ...))
     # indicate the htmlwidget result with a special class so we can attach
     # the figure caption to it later in wrap.knit_asis
-    if (inherits(x, 'htmlwidget')) class(res) = c(class(res), 'knit_asis_htmlwidget')
-    res
+    if (inherits(x, 'htmlwidget'))
+      class(res$value) = c(class(res$value), 'knit_asis_htmlwidget')
+    if (res$visible) res$value else invisible(res$value)
   }
   if (length(formals(fun)) < 2)
     stop("the chunk option 'render' must be a function of the form ",
