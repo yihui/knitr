@@ -382,10 +382,12 @@ eng_block2 = function(options) {
   h2 = options$html.tag %n% 'div'
   h3 = options$html.before %n% ''
   h4 = options$html.after %n% ''
+  h5 = options$html.before2 %n% ''
+  h6 = options$html.after2 %n% ''
 
   sprintf(
-    '\\BeginKnitrBlock{%s}%s%s<%s class="%s">%s</%s>%s\\EndKnitrBlock{%s}',
-    type, l1, h3, h2, type, code, h2, h4, type
+    '\\BeginKnitrBlock{%s}%s%s<%s class="%s">%s%s%s</%s>%s\\EndKnitrBlock{%s}',
+    type, l1, h3, h2, type, h5, code, h6, h2, h4, type
   )
 }
 
