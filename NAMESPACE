@@ -1,3 +1,4 @@
+S3method("$",knitr_strict_list)
 S3method(knit_print,default)
 S3method(knit_print,knit_asis)
 S3method(knit_print,knitr_kable)

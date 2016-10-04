@@ -23,3 +23,13 @@ NULL
 .knitEnv = new.env()
 
 .knitEnv$meta = list()
+
+# no partial matching for lists!!
+#' @export
+`$.knitr_strict_list` = function(x, name) x[[name]]
+
+as.strict_list = function(x) {
+  if (!is.list(x)) stop("'x' is not a list")
+  class(x) = 'knitr_strict_list'
+  x
+}

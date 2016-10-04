@@ -51,7 +51,7 @@ call_block = function(block) {
       warning("The option hook '", opt, "' should be a function")
       next
     }
-    if (!is.null(params[[opt]])) params = hook(params)
+    if (!is.null(params[[opt]])) params = as.strict_list(hook(params))
     if (!is.list(params))
       stop("The option hook '", opt, "' should return a list of chunk options")
   }

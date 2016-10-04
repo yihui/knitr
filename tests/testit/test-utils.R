@@ -130,3 +130,9 @@ assert(
   .img.cap(opts, FALSE) %==% opts$fig.cap,
   .img.cap(opts, TRUE)  %==% 'Figure &quot;caption&quot; &lt;&gt;.'
 )
+
+z = as.strict_list(list(a = 1, aa = 2, bbb = 3))
+assert(
+  'as.strict_list() does not allow partial matching',
+  z$b %==% NULL, z$bbb %==% 3
+)
