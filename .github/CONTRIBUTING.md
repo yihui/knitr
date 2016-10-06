@@ -7,7 +7,7 @@ For bug reports, please provide a minimal reproducible example. By "minimal", I
 mean you should reduce your example as much as possible right before the problem
 you want to report disappears. By doing this, you may be able to figure out what
 the problem really is before reporting to me. Please do not make me read your
-hundreds of lines of code (most of which are perhaps irrelevant to the bug), or
+hundreds of lines of code (if most of them are irrelevant to the bug), or
 understand dozens of variables in your particular dataset (use a simple built-in
 dataset in R instead, such as `iris` or `mtcars`, or simulated data). Make your
 example self-contained in one single document, i.e. avoid reading external files
@@ -40,18 +40,10 @@ complicated changes, you will have to manually create a [pull
 request](https://help.github.com/articles/using-pull-requests) (PR) after
 [forking](https://help.github.com/articles/fork-a-repo) this repository. In the
 latter case, you are recommended to create a new branch instead of always
-working on the `master` branch, and please always rebase against my `master`
-branch (sometimes you will need to force push, i.e. `git push -f`, after
-rebasing):
-
-```bash
-# suppose your-branch-name is your new branch name
-git pull --rebase https://github.com/yihui/knitr.git your-branch-name
-```
+working on the `master` branch.
 
 If your PR contains commits that revert each other, or attempts that failed, you
-need to clean the GIT history (and force push). For example, you may combine all
-the last 5 commits into one:
+are recommended to clean the GIT history (and force push). For example, you may combine all the last 5 commits into one:
 
 ```bash
 git reset --soft HEAD~5
@@ -60,6 +52,8 @@ git reset --soft HEAD~5
 
 Interactively rebasing a few commits is also very helpful in this case, which
 gives you granular control over the commits, e.g. `git rebase -i HEAD~5`.
+
+Merging/rebasing commits are not required, but they can make the history clean and it will be easier for me to understand what each commit does exactly.
 
 ## Testing
 
