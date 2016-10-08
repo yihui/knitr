@@ -14,6 +14,8 @@
 
 - the inline syntax `` `r#code` `` is also supported besides `` `r code` ``; this can make sure the inline expression is not split when the line is wrapped (thanks, Dave Jarvis)
 
+- the chunk option `engine.path` can also be a list of paths to the engine executables now, e.g., you can set `knitr::opts_chunk$set(engine.path = list(python = '/anaconda/bin/python', perl = '/usr/local/bin/perl'))`, then when a `python` code chunk is executed, `/anaconda/bin/python` will be called instead of the system default (rstudio/rmarkdown#812)
+
 ## MAJOR CHANGES
 
 - the minimal version of R required for **knitr** is 3.1.0 now (#1269)
