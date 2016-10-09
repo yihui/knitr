@@ -297,7 +297,10 @@ percent_latex_width = function(x) {
 }
 
 # parse but do not keep source
-parse_only = formatR:::parse_only
+parse_only = function(code) {
+  if (length(code) == 0) return(expression())
+  parse(text = code, keep.source = FALSE)
+}
 
 # eval options as symbol/language objects
 eval_lang = function(x, envir = knit_global()) {

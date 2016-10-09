@@ -82,7 +82,6 @@ Depends:
 Imports:
     evaluate (>= 0.8),
     digest,
-    formatR,
     highr,
     markdown,
     stringr (>= 0.6),
@@ -90,6 +89,7 @@ Imports:
     methods,
     tools
 Suggests:
+    formatR,
     testit,
     rgl (>= 0.95.1201),
     codetools,

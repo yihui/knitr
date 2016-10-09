@@ -63,7 +63,7 @@ call_block = function(block) {
       getOption('width'), if (params$cache == 2) params[cache2.opts]
     )
     if (params$engine == 'R' && isFALSE(params$cache.comments)) {
-      content[['code']] = formatR:::parse_only(content[['code']])
+      content[['code']] = parse_only(content[['code']])
     }
     hash = paste(valid_path(params$cache.path, label), digest::digest(content), sep = '_')
     params$hash = hash

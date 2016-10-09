@@ -20,6 +20,8 @@
 
 - the minimal version of R required for **knitr** is 3.1.0 now (#1269)
 
+- the **formatR** package is an optional package since the default chunk option `tidy = FALSE` has been there for a long time; if you use `tidy = TRUE`, you need to install **formatR** separately if it is not installed
+
 - `:set +m` is no longer automatically added to `haskell` code chunks (#1274)
 
 ## MINOR CHANGES
