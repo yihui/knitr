@@ -10,6 +10,8 @@
 
 - figure captions specified in the chunk option `fig.cap` are also applied to HTML widgets (thanks, @byzheng, https://github.com/rstudio/bookdown/issues/118)
 
+- when the chunk option `fig.show = 'animate'` and `ffmpeg.format = 'gif'`, a GIF animation of the plots in the chunk will be generated for HTML output (https://twitter.com/thomasp85/status/785800003436421120)
+
 - added a `width` argument to `write_bib()` so long lines in bib entries can be wrapped
 
 - the inline syntax `` `r#code` `` is also supported besides `` `r code` ``; this can make sure the inline expression is not split when the line is wrapped (thanks, Dave Jarvis)

@@ -102,6 +102,12 @@ hook_ffmpeg = function(x, options, format = 'webm') {
   message('executing: ', ffmpeg.cmd)
   system(ffmpeg.cmd, ignore.stdout = TRUE)
 
+  # use a normal plot hook if the output is GIF
+  if (format == 'gif') {
+    options$fig.show = 'hold'
+    return((if (out_format('md')) hook_plot_md else hook_plot_html)(mov.fname, options))
+  }
+
   # controls,loop --> controls loop
   opts = paste(sc_split(options$aniopts), collapse = ' ')
   opts = paste(
