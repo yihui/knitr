@@ -20,3 +20,4 @@ Makefile
 ^knitr-examples$
 ^\.github$
 ^revdep$
+^docs$
