@@ -15,3 +15,5 @@ If it is just a chunk of R code (or other languages) and you want syntax highlig
 ```r
 rnorm(10)
 ```
+
+Usually your issue will be closed after it is fixed, but sometimes it is closed only because I'm not able to offer any help. It does not mean your issue is not real or bad. You can propose a fix by yourself through a pull request. Your constructive feedback is always appreciated.
