@@ -1,6 +1,6 @@
 # format a single inline object
 .inline.hook = function(x) {
-  if (is.numeric(x)) x = round(x, getOption('digits'))
+  if (is.numeric(x)) x = round_digits(x)
   paste(as.character(x), collapse = ', ')
 }
 .out.hook = function(x, options) x

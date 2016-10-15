@@ -8,12 +8,29 @@ assert(
   } else '/abc/def')
 )
 
+op = options(digits = 3, scipen = 0, knitr.digits.signif = TRUE)
+
+assert(
+  'format_sci() uses correct number of significant digits',
+  format_sci(1) %==% '1',
+  format_sci(0) %==% '0',
+  format_sci(3.1415e2) %==% '314',
+  format_sci(3.1415) %==% '3.14'
+)
+
+options(op)
+
+op = options(digits = 22, scipen = 0, knitr.digits.signif = TRUE)
+assert(
+  'format_sci() prints numerics at maximum number of significant digits',
+  format_sci(3.141592653589793115998) %==% '3.141592653589793115998'
+)
+options(op)
+
 op = options(digits = 4, scipen = 0)
 
 assert(
   'format_sci() turns numbers into scientific notations',
-  identical(format_sci(1), '1'),
-  identical(format_sci(0), '0'),
   identical(format_sci(c(1.84e8, 1e5, 2.34e3)),
             c('1.84\\times 10^{8}', '10^{5}', '2340')),
   identical(format_sci(1.23456789 * 10^-5), '1.2346\\times 10^{-5}'),

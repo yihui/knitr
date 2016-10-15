@@ -161,6 +161,14 @@ is_lyx = function() {
   grepl('[.]Rnw$', args[1]) && !is.na(Sys.getenv('LyXDir', NA))
 }
 
+# round a number to getOption('digits') decimal places by default, and format()
+# it using significant digits if the option knitr.digits.signif = TRUE
+round_digits = function(x) {
+  if (getOption('knitr.digits.signif', FALSE)) format(x) else {
+    as.character(round(x, getOption('digits')))
+  }
+}
+
 # scientific notation in TeX, HTML and reST
 format_sci_one = function(x, format = 'latex') {
 
@@ -176,9 +184,9 @@ format_sci_one = function(x, format = 'latex') {
   }
 
   if (abs(lx <- floor(log10(abs(x)))) < getOption('scipen') + 4L)
-    return(as.character(round(x, getOption('digits')))) # no need sci notation
+    return(round_digits(x)) # no need sci notation
 
-  b = round(x / 10^lx, getOption('digits'))
+  b = round_digits(x / 10^lx)
   b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
