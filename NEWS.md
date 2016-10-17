@@ -16,6 +16,8 @@
 
 - the inline syntax `` `r#code` `` is also supported besides `` `r code` ``; this can make sure the inline expression is not split when the line is wrapped (thanks, Dave Jarvis)
 
+- provided a global R option `knitr.use.cwd` so users can choose to evaluate the R code chunks in the current working directory after setting `options(knitr.use.cwd = TRUE)`; the default is to evaluate code in the directory of the input document, unless the **knitr** option `opts_knit$set(root.dir = ...)` has been set
+
 - if `options(knitr.digits.signif = TRUE)`, numbers from inline expressions will be formatted using `getOption('digits')` as the number of significant digits, otherwise (the default behavior) `getOption('digits')` is treated as the number of decimal places (thanks, @numatt, #1053)
 
 - the chunk option `engine.path` can also be a list of paths to the engine executables now, e.g., you can set `knitr::opts_chunk$set(engine.path = list(python = '/anaconda/bin/python', perl = '/usr/local/bin/perl'))`, then when a `python` code chunk is executed, `/anaconda/bin/python` will be called instead of the system default (rstudio/rmarkdown#812)

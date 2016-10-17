@@ -103,7 +103,7 @@ block_exec = function(options) {
   if (options$engine != 'R') {
     res.before = run_hooks(before = TRUE, options)
     engine = get_engine(options$engine)
-    output = in_dir(opts_knit$get('root.dir') %n% input_dir(), engine(options))
+    output = in_dir(input_dir(), engine(options))
     res.after = run_hooks(before = FALSE, options)
     output = paste(c(res.before, output, res.after), collapse = '')
     output = knit_hooks$get('chunk')(output, options)
@@ -171,7 +171,7 @@ block_exec = function(options) {
   } else if (cache.exists && isFALSE(options$cache.rebuild)) {
     fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
   } else in_dir(
-    opts_knit$get('root.dir') %n% input_dir(),
+    input_dir(),
     evaluate(
       code, envir = env, new_device = FALSE,
       keep_warning = !isFALSE(options$warning),
@@ -391,7 +391,7 @@ merge_class = function(res, class = c('source', 'message', 'warning')) {
 
 call_inline = function(block) {
   if (opts_knit$get('progress')) print(block)
-  in_dir(opts_knit$get('root.dir') %n% input_dir(), inline_exec(block))
+  in_dir(input_dir(), inline_exec(block))
 }
 
 inline_exec = function(block, envir = knit_global(), hook = knit_hooks$get('inline')) {

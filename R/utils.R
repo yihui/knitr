@@ -149,10 +149,16 @@ output_asis = function(x, options) {
 }
 
 # path relative to dir of the input file
-input_dir = function() {
+input_dir = function(ignore_root = FALSE) {
+  root = opts_knit$get('root.dir')
   # LyX is a special case: the input file is in tempdir, and we should use
   # root.dir as the real input dir (#809)
-  (if (is_lyx()) opts_knit$get('root.dir')) %n% .knitEnv$input.dir %n% '.'
+  if (is_lyx()) return(root)
+  if (ignore_root) {
+    .knitEnv$input.dir %n% '.'
+  } else {
+    root %n% (if (!getOption('knitr.use.cwd', FALSE)) .knitEnv$input.dir) %n% '.'
+  }
 }
 
 is_lyx = function() {
