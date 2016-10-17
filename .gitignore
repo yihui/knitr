@@ -13,6 +13,6 @@ knitr-spin.html
 /inst/examples/*.sty
 .*.Rnb.cached
 revdep
-_site
-*.Rmd
-knit-all.R
+docs/_site
+docs/patterns/*.Rmd
+docs/knit-all.R

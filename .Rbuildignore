@@ -21,3 +21,4 @@ Makefile
 ^\.github$
 ^revdep$
 ^docs$
+^README-ES\.md$
