@@ -80,7 +80,7 @@ Description: Provides a general-purpose tool for dynamic report generation in R
 Depends:
     R (>= 3.1.0)
 Imports:
-    evaluate (>= 0.8),
+    evaluate (>= 0.10),
     digest,
     highr,
     markdown,
