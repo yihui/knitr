@@ -42,18 +42,8 @@ request](https://help.github.com/articles/using-pull-requests) (PR) after
 latter case, you are recommended to create a new branch instead of always
 working on the `master` branch.
 
-If your PR contains commits that revert each other, or attempts that failed, you
-are recommended to clean the GIT history (and force push). For example, you may combine all the last 5 commits into one:
-
-```bash
-git reset --soft HEAD~5
-# then git add/commit/push
-```
-
-Interactively rebasing a few commits is also very helpful in this case, which
-gives you granular control over the commits, e.g. `git rebase -i HEAD~5`.
-
-Merging/rebasing commits are not required, but they can make the history clean and it will be easier for me to understand what each commit does exactly.
+If you submit a non-trivial pull request (e.g. not just fixing a typo), you may
+add your name to the `Authors@R` field as a contributor (`ctb`) in the R package `DESCRIPTION` file.
 
 ## Testing
 
