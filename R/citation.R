@@ -101,20 +101,10 @@ write_bib = function(
 
 #' @include utils.R
 
-
-# evaluate expr in the C locale
-with_C = function(expr) {
-  loc = Sys.getlocale('LC_COLLATE')
-  if (identical(loc, 'C')) return(expr)
-  on.exit(Sys.setlocale('LC_COLLATE', loc), add = TRUE)
-  Sys.setlocale('LC_COLLATE', 'C')
-  expr
-}
-
 # hack non-standard author fields
 .tweak.bib = local({
   x = read.csv(inst_dir('misc/tweak_bib.csv'), stringsAsFactors = FALSE)
-  x = x[with_C(order(x$package)), , drop = FALSE]  # reorder entries by package names
+  x = x[order(x$package, method = 'radix'), , drop = FALSE]  # reorder entries by package names
   write.csv(x, inst_dir('misc/tweak_bib.csv'), row.names = FALSE)
   setNames(
     lapply(x$author, function(a) c(author = sprintf('  author = {%s},', a))),
