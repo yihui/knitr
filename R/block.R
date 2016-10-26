@@ -204,7 +204,7 @@ block_exec = function(options) {
   if (options$results == 'hide') res = Filter(Negate(is.character), res)
   if (options$results == 'hold') {
     i = vapply(res, is.character, logical(1))
-    if (any(i)) res = c(res[!i], list(paste(unlist(res[i]), collapse = '')))
+    if (any(i)) res = c(res[!i], merge_character(res[i]))
   }
   res = filter_evaluate(res, options$warning, evaluate::is.warning)
   res = filter_evaluate(res, options$message, evaluate::is.message)
@@ -387,6 +387,24 @@ merge_class = function(res, class = c('source', 'message', 'warning')) {
   if (length(k2)) res = res[-k2] # remove lines that have been merged back
   res
 
+}
+
+# merge character output for output='hold', if the subsequent character is of
+# the same class(es) as the previous one (e.g. should not merge normal
+# characters with asis_output())
+merge_character = function(res) {
+  if ((n <- length(res)) <= 1) return(res)
+  k = NULL
+  for (i in 1:(n - 1)) {
+    cls = class(res[[i]])
+    if (identical(cls, class(res[[i + 1]]))) {
+      res[[i + 1]] = paste0(res[[i]], res[[i + 1]])
+      class(res[[i + 1]]) = cls
+      k = c(k, i)
+    }
+  }
+  if (length(k)) res = res[-k]
+  res
 }
 
 call_inline = function(block) {

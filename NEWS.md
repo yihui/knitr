@@ -42,6 +42,8 @@
 
 - the chunk option `cache.vars` did not really behave like what was documented (thanks, @simonkth, #1280)
 
+- `asis_output()` should not be merged with normal character output when `results='hold'` (thanks, @kevinushey, #1310)
+
 # CHANGES IN knitr VERSION 1.14
 
 ## NEW FEATURES
