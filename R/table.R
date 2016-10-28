@@ -79,7 +79,7 @@
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
-  align, caption = NULL, format.args = list(), escape = TRUE, ...
+  align, caption = NULL, format.args = list(), escape = TRUE, note=NULL, ...
 ) {
 
   # determine the table format
@@ -102,8 +102,8 @@ kable = function(
 
   # create a label for bookdown if applicable
   if (!is.null(caption) && !is.na(caption)) caption = paste0(
-    create_label('tab:', opts_current$get('label'), latex = (format == 'latex')), 
-                 caption 
+    create_label('tab:', opts_current$get('label'), latex = (format == 'latex')),
+                 caption
   )
   if (inherits(x, 'list')) {
     # if the output is for Pandoc and we want multiple tabular in one table, we
@@ -113,7 +113,7 @@ kable = function(
     res = lapply(
       x, kable, format = format, digits = digits, row.names = row.names,
       col.names = col.names, align = align, caption = NA,
-      format.args = format.args, escape = escape, ...
+      format.args = format.args, escape = escape, note = note, ...
     )
     res = unlist(lapply(res, paste, collapse = '\n'))
     res = if (format == 'latex') {
@@ -159,7 +159,7 @@ kable = function(
   attr(x, 'align') = align
   res = do.call(
     paste('kable', format, sep = '_'),
-    list(x = x, caption = caption, escape = escape, ...)
+    list(x = x, caption = caption, escape = escape, note = note, ...)
   )
   structure(res, format = format, class = 'knitr_kable')
 }
@@ -211,7 +211,7 @@ kable_latex = function(
   midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
-  escape = TRUE
+  escape = TRUE, note = NULL
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
@@ -242,7 +242,12 @@ kable_latex = function(
   tabular = if (longtable) 'longtable' else 'tabular'
 
   paste(c(
-    if (!longtable) c(env1, cap, centering),
+    if (!longtable) {
+      c(env1,
+        if (!is.null(note)) sprintf('\n\\begin{threeparttable}'),
+        cap, centering)
+    },
+    if (longtable && !is.null(note)) sprintf('\n\\begin{threeparttable}'),
     sprintf('\n\\begin{%s}%s', tabular, valign), align,
     if (longtable && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
@@ -254,6 +259,7 @@ kable_latex = function(
            collapse = '\n'),
     sprintf('\n%s', bottomrule),
     sprintf('\n\\end{%s}', tabular),
+    if (!is.null(note)) sprintf('\n\\tablenotes %s \n\\end{threeparttable}', note),
     if (!longtable) env2
   ), collapse = '')
 }

@@ -4,7 +4,7 @@
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
 kable(x, format, digits = getOption("digits"), row.names = NA, col.names = NA, align, 
-    caption = NULL, format.args = list(), escape = TRUE, ...)
+    caption = NULL, format.args = list(), escape = TRUE, note = NULL, ...)
 }
 \arguments{
 \item{x}{an R object (typically a matrix or data frame)}
