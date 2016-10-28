@@ -79,7 +79,7 @@
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
-  align, caption = NULL, format.args = list(), escape = TRUE, note=NULL, ...
+  align, caption = NULL, format.args = list(), escape = TRUE, ...
 ) {
 
   # determine the table format
@@ -113,7 +113,7 @@ kable = function(
     res = lapply(
       x, kable, format = format, digits = digits, row.names = row.names,
       col.names = col.names, align = align, caption = NA,
-      format.args = format.args, escape = escape, note = note, ...
+      format.args = format.args, escape = escape, ...
     )
     res = unlist(lapply(res, paste, collapse = '\n'))
     res = if (format == 'latex') {
@@ -159,7 +159,7 @@ kable = function(
   attr(x, 'align') = align
   res = do.call(
     paste('kable', format, sep = '_'),
-    list(x = x, caption = caption, escape = escape, note = note, ...)
+    list(x = x, caption = caption, escape = escape, ...)
   )
   structure(res, format = format, class = 'knitr_kable')
 }
