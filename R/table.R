@@ -390,3 +390,22 @@ pad_width = function(x, width, side) {
 v_spaces = function(n) {
   unlist(lapply(n, highr:::spaces))
 }
+
+#' Embed external \code{.tex} file in \pkg{knitr} documents
+#'
+#' Due to the simplicity of \code{kable}, it would be useful to import external \code{.tex} file into \pkg{knitr} documents.
+#' This function will extract the partition between \code{\begin{document}} and \code{\end{document}} of \code{.tex} file.
+#'
+#' @param path a character vector of \code{.tex} file path
+#' @return Like \code{include_graphics}, \pkg{knitr} will convert the \code{.tex} file to pdf output
+#' @importFrom  readr read_file
+#' @importFrom  stringr str_locate str_sub
+#' @export
+include_latex <- function(path) {
+
+  tex <-  readr::read_file(path)
+  begin <-  stringr::str_locate(tex, "begin\\{document\\}")[2] + 1
+  end <-  stringr::str_locate(tex, "end\\{document\\}")[1] - 1
+  tex %>% str_sub(begin, end) %>% asis_output()
+}
+
