@@ -22,6 +22,8 @@
 
 - the chunk option `engine.path` can also be a list of paths to the engine executables now, e.g., you can set `knitr::opts_chunk$set(engine.path = list(python = '/anaconda/bin/python', perl = '/usr/local/bin/perl'))`, then when a `python` code chunk is executed, `/anaconda/bin/python` will be called instead of the system default (rstudio/rmarkdown#812)
 
+- introduced a mechanism to protect text output in the sense that it will not be touched by Pandoc during the conversion from R Markdown to another format; this is primarily for package developers to extend R Markdown; see `?raw_output` for details (which also shows new functions `extract_raw_output()` and `restore_raw_output()`)
+
 ## MAJOR CHANGES
 
 - the minimal version of R required for **knitr** is 3.1.0 now (#1269)

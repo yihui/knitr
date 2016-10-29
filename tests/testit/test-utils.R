@@ -153,3 +153,13 @@ assert(
   'as.strict_list() does not allow partial matching',
   z$b %==% NULL, z$bbb %==% 3
 )
+
+out = c('*hello*', raw_output('<special>content</special> *protect* me!'), '*world*')
+pre = extract_raw_output(out)
+pre$value = gsub('[*]([^*]+)[*]', '<em>\\1</em>', pre$value)  # think this as Pandoc conversion
+# raw output was protected from the conversion (e.g. *protect* was not converted)
+assert(
+  'restore_raw_output() restores raw output',
+  restore_raw_output(pre$value, pre$chunks) %==%
+    '<em>hello</em>\n<special>content</special> *protect* me!\n<em>world</em>'
+)
