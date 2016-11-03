@@ -104,7 +104,7 @@ write_bib = function(
 # hack non-standard author fields
 .tweak.bib = local({
   x = read.csv(inst_dir('misc/tweak_bib.csv'), stringsAsFactors = FALSE)
-  x = x[order(x$package, method = 'radix'), , drop = FALSE]  # reorder entries by package names
+  x = x[order(xtfrm(x$package)), , drop = FALSE]  # reorder entries by package names
   write.csv(x, inst_dir('misc/tweak_bib.csv'), row.names = FALSE)
   setNames(
     lapply(x$author, function(a) c(author = sprintf('  author = {%s},', a))),
