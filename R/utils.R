@@ -824,7 +824,7 @@ warning2 = function(...) warning(..., call. = FALSE)
 stop2 = function(...) stop(..., call. = FALSE)
 
 
-raw_markers = c('!!!!!RAW_KNITR_CONTENT', 'RAW_KNITR_CONTENT!!!!!')
+raw_markers = c('!!!!!RAW-KNITR-CONTENT', 'RAW-KNITR-CONTENT!!!!!')
 
 #' @export
 #' @rdname raw_output
