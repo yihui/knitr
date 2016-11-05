@@ -20,10 +20,10 @@ assert(
 
 options(op)
 
-op = options(digits = 22, scipen = 0, knitr.digits.signif = TRUE)
+op = options(digits = 14, scipen = 0, knitr.digits.signif = TRUE)
 assert(
   'format_sci() prints numerics at maximum number of significant digits',
-  format_sci(3.141592653589793115998) %==% '3.141592653589793115998'
+  format_sci(3.14159265358979) %==% '3.1415926535898'
 )
 options(op)
 
