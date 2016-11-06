@@ -454,84 +454,88 @@ eng_sql = function(options) {
     do.call(DBI::sqlInterpolate, c(list(conn, sql), args))
   }
 
-  # extract options
-  conn = options$connection
-  if (is.null(conn)) stop2(
-    "The 'connection' option (DBI connection) is required for sql chunks."
-  )
-  varname = options$output.var
-  max.print = options$max.print %n% (opts_knit$get('sql.max.print') %n% 10)
-  if (is.na(max.print) || is.null(max.print))
-    max.print = -1
-  sql = paste(options$code, collapse = '\n')
+  if (options$eval) {
+    # extract options
+    conn = options$connection
+    if (is.null(conn)) stop2(
+      "The 'connection' option (DBI connection) is required for sql chunks."
+    )
+    varname = options$output.var
+    max.print = options$max.print %n% (opts_knit$get('sql.max.print') %n% 10)
+    if (is.na(max.print) || is.null(max.print))
+      max.print = -1
+    sql = paste(options$code, collapse = '\n')
 
-  # execute query -- when we are printing with an enforced max.print we
-  # use dbFetch so as to only pull down the required number of records
-  query = interpolate_from_env(conn, sql)
-  if (is.null(varname) && max.print > 0 && !is_sql_update_query(query)) {
-    res = DBI::dbSendQuery(conn, query)
-    data = DBI::dbFetch(res, n = max.print)
-    DBI::dbClearResult(res)
-  } else {
-    data = DBI::dbGetQuery(conn, query)
-  }
+    # execute query -- when we are printing with an enforced max.print we
+    # use dbFetch so as to only pull down the required number of records
+    query = interpolate_from_env(conn, sql)
+    if (is.null(varname) && max.print > 0 && !is_sql_update_query(query)) {
+      res = DBI::dbSendQuery(conn, query)
+      data = DBI::dbFetch(res, n = max.print)
+      DBI::dbClearResult(res)
+    } else {
+      data = DBI::dbGetQuery(conn, query)
+    }
 
-  # create output if needed (we have data and we aren't assigning it to a variable)
-  output = if (!is.null(data) && ncol(data) > 0 && is.null(varname)) capture.output({
+    # create output if needed (we have data and we aren't assigning it to a variable)
+    output = if (!is.null(data) && ncol(data) > 0 && is.null(varname)
+                 && options$results != 'hide') capture.output({
 
-    # apply max.print to data
-    display_data = if (max.print == -1) data else head(data, n = max.print)
+      # apply max.print to data
+      display_data = if (max.print == -1) data else head(data, n = max.print)
 
-    # get custom sql print function
-    sql.print = opts_knit$get('sql.print')
+      # get custom sql print function
+      sql.print = opts_knit$get('sql.print')
 
-    # use kable for markdown
-    if (!is.null(sql.print)) {
-      options$results = 'asis'
-      cat(sql.print(data))
-    } else if (out_format('markdown')) {
+      # use kable for markdown
+      if (!is.null(sql.print)) {
+        options$results = 'asis'
+        cat(sql.print(data))
+      } else if (out_format('markdown')) {
 
-      # we are going to output raw markdown so set results = 'asis'
-      options$results = 'asis'
+        # we are going to output raw markdown so set results = 'asis'
+        options$results = 'asis'
 
-      # force left alignment if the first column is an incremental id column
-      first_column = display_data[[1]]
-      if (is.numeric(first_column) && all(diff(first_column) == 1))
-        display_data[[1]] = as.character(first_column)
+        # force left alignment if the first column is an incremental id column
+        first_column = display_data[[1]]
+        if (is.numeric(first_column) && all(diff(first_column) == 1))
+          display_data[[1]] = as.character(first_column)
 
-      # wrap html output in a div so special styling can be applied
-      if (is_html_output()) cat('<div class="knitsql-table">\n')
+        # wrap html output in a div so special styling can be applied
+        if (is_html_output()) cat('<div class="knitsql-table">\n')
 
-      # determine records caption
-      caption = options$tab.cap
-      if (is.null(caption)) {
-        rows = nrow(data)
-        rows_formatted = formatC(rows, format = "d", big.mark = ',')
-        caption = if (max.print == -1 || rows < max.print) {
-          paste(rows_formatted, "records")
-        } else {
-          paste("Displaying records 1 -", rows_formatted)
+        # determine records caption
+        caption = options$tab.cap
+        if (is.null(caption)) {
+          rows = nrow(data)
+          rows_formatted = formatC(rows, format = "d", big.mark = ',')
+          caption = if (max.print == -1 || rows < max.print) {
+            paste(rows_formatted, "records")
+          } else {
+            paste("Displaying records 1 -", rows_formatted)
+          }
         }
-      }
-      # disable caption
-      if (identical(caption, NA)) caption = NULL
+        # disable caption
+        if (identical(caption, NA)) caption = NULL
 
-      # print using kable
-      print(kable(display_data, caption = caption))
+        # print using kable
+        print(kable(display_data, caption = caption))
 
-      # terminate div
-      if (is_html_output()) cat("\n</div>\n")
+        # terminate div
+        if (is_html_output()) cat("\n</div>\n")
 
-    # otherwise use tibble if it's available
-    } else if (loadable('tibble')) {
-      print(tibble::as_tibble(display_data), n = max.print)
+      # otherwise use tibble if it's available
+      } else if (loadable('tibble')) {
+        print(tibble::as_tibble(display_data), n = max.print)
 
-    } else print(display_data) # fallback to standard print
-  })
+      } else print(display_data) # fallback to standard print
+    })
 
-  # assign varname if requested
-  if (!is.null(varname)) assign(varname, data, envir = knit_global())
+    # assign varname if requested
+    if (!is.null(varname)) assign(varname, data, envir = knit_global())
 
+  } else # no eval
+    output <- ''
   # return output
   engine_output(options, options$code, output)
 }
