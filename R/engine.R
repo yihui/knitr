@@ -425,6 +425,8 @@ is_sql_update_query = function(query) {
 
 # sql engine
 eng_sql = function(options) {
+  if (isFALSE(options$eval)) return(engine_output(options, options$code, ''))
+
   # Return char vector of sql interpolation param names
   varnames_from_sql = function(conn, sql) {
     varPos = DBI::sqlParseVariables(conn, sql)
@@ -522,12 +524,13 @@ eng_sql = function(options) {
       # terminate div
       if (is_html_output()) cat("\n</div>\n")
 
-    # otherwise use tibble if it's available
+      # otherwise use tibble if it's available
     } else if (loadable('tibble')) {
       print(tibble::as_tibble(display_data), n = max.print)
 
     } else print(display_data) # fallback to standard print
   })
+  if (options$results == 'hide') output = NULL
 
   # assign varname if requested
   if (!is.null(varname)) assign(varname, data, envir = knit_global())
