@@ -86,6 +86,7 @@ write_bib = function(
     }
     bib = lapply(bib, function(b) {
       b['author'] = sub('Duncan Temple Lang', 'Duncan {Temple Lang}', b['author'])
+      b['title'] = sub("'RStudio'", 'RStudio', b['title'])
       if (!('year' %in% names(b))) b['year'] = .this.year
       idx = which(names(b) == '')
       if (!is.null(width)) b[-idx] = stringr::str_wrap(b[-idx], width, 2, 4)
