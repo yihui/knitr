@@ -67,56 +67,45 @@ hook_pdfcrop = function(before, options, envir) {
 #' @export
 #' @rdname chunk_hook
 hook_optipng = function(before, options, envir) {
+  hook_png(before, options, envir, 'optipng')
+}
+
+hook_png = function(
+  before, options, envir, cmd = c('optipng', 'pngquant'), post_process = identity
+) {
   if (before) return()
   ext = tolower(options$fig.ext)
   if (ext != 'png') {
     warning('this hook only works with PNG at the moment'); return()
   }
-  if (!nzchar(Sys.which('optipng'))) {
-    warning('cannot find optipng; please install and put it in PATH'); return()
+  cmd = match.arg(cmd)
+  if (!nzchar(Sys.which(cmd))) {
+    warning('cannot find ', cmd, '; please install and put it in PATH'); return()
   }
   paths = all_figs(options, ext)
 
   in_base_dir(
     lapply(paths, function(x) {
       message('optimizing ', x)
-      x = shQuote(x)
-      cmd = paste('optipng', if (is.character(options$optipng)) options$optipng, x)
+      cmd = paste(cmd, if (is.character(options[[cmd]])) options[[cmd]], shQuote(x))
       (if (is_windows()) shell else system)(cmd)
+      post_process(x)
     })
   )
   return()
 }
+
 #' @export
 #' @rdname chunk_hook
 hook_pngquant = function(before, options, envir) {
-  if (before) return()
-  ext = tolower(options$fig.ext)
-  if (ext != "png") {
-    warning("this hook only works with PNG"); return()
-  }
-  if (!nzchar(Sys.which("pngquant"))) {
-    warning("cannot find pngquant; please install and put it in PATH"); return()
-  }
-  paths = all_figs(options, ext)
-
-  in_base_dir(
-    lapply(paths, function(x) {
-      message('optimizing ', x)
-      cmd = paste(
-        'pngquant --skip-if-larger',
-        if (is.character(options$pngquant)) options$pngquant,
-        shQuote(x)
-      )
-      message(cmd)
-      (if (is_windows()) shell else system)(cmd)
-      # pngquant creates an output file with '-fs8.png' as the extension.
-      x_opt = sub("\\.png$", "-fs8.png", x)
-      file.rename(x_opt, x)
-    })
-  )
-  return()
+  if (is.null(options[['pngquant']])) options$pngquant = '--skip-if-larger'
+  hook_png(before, options, envir, 'pngquant', function(x) {
+    # pngquant creates an output file with '-fs8.png' as the extension.
+    x_opt = sub("\\.png$", "-fs8.png", x)
+    file.rename(x_opt, x)
+  })
 }
+
 #' @export
 #' @rdname chunk_hook
 hook_plot_custom = function(before, options, envir){
