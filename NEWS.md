@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.16 (unreleased)
+
+## NEW FEATURES
+
+- added a new hook function `hook_pngquant()` that can call `pngquant` to optimize PNG images (thanks, @slowkow, #1320)
+
 # CHANGES IN knitr VERSION 1.15
 
 ## NEW FEATURES
