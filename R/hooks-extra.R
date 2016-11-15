@@ -99,10 +99,11 @@ hook_png = function(
 #' @rdname chunk_hook
 hook_pngquant = function(before, options, envir) {
   if (is.null(options[['pngquant']])) options$pngquant = '--skip-if-larger'
+  options[['pngquant']] = paste(options[['pngquant']], '--ext -fs8.png')
   hook_png(before, options, envir, 'pngquant', function(x) {
     # pngquant creates an output file with '-fs8.png' as the extension.
-    x_opt = sub("\\.png$", "-fs8.png", x)
-    file.rename(x_opt, x)
+    x2 = sub("\\.png$", "-fs8.png", x)
+    if (file.exists(x2)) file.rename(x2, x)
   })
 }
 
