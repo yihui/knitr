@@ -3,12 +3,15 @@
 \alias{hook_optipng}
 \alias{hook_pdfcrop}
 \alias{hook_plot_custom}
+\alias{hook_pngquant}
 \alias{hook_purl}
 \title{Built-in chunk hooks to extend knitr}
 \usage{
 hook_pdfcrop(before, options, envir)
 
 hook_optipng(before, options, envir)
+
+hook_pngquant(before, options, envir)
 
 hook_plot_custom(before, options, envir)
 
@@ -39,6 +42,11 @@ The function \code{hook_optipng()} calls the program \command{optipng} to
 optimize PNG images. Note the chunk option \code{optipng} can be used to
 provide additional parameters to the program \command{optipng}, e.g.
 \code{optipng = '-o7'}.
+
+The function \code{hook_pngquant()} calls the program \command{pngquant} to
+optimize PNG images. Note the chunk option \code{pngquant} can be used to
+provide additional parameters to the program \command{pngquant}, e.g.
+\code{pngquant = '--speed=1 --quality=0-50'}.
 
 When the plots are not recordable via \code{\link[grDevices]{recordPlot}} and
 we save the plots to files manually via other functions (e.g. \pkg{rgl}

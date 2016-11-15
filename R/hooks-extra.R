@@ -21,6 +21,11 @@
 #' provide additional parameters to the program \command{optipng}, e.g.
 #' \code{optipng = '-o7'}.
 #'
+#' The function \code{hook_pngquant()} calls the program \command{pngquant} to
+#' optimize PNG images. Note the chunk option \code{pngquant} can be used to
+#' provide additional parameters to the program \command{pngquant}, e.g.
+#' \code{pngquant = '--speed=1 --quality=0-50'}.
+#'
 #' When the plots are not recordable via \code{\link[grDevices]{recordPlot}} and
 #' we save the plots to files manually via other functions (e.g. \pkg{rgl}
 #' plots), we can use the chunk hook \code{hook_plot_custom} to help write code
@@ -78,6 +83,36 @@ hook_optipng = function(before, options, envir) {
       x = shQuote(x)
       cmd = paste('optipng', if (is.character(options$optipng)) options$optipng, x)
       (if (is_windows()) shell else system)(cmd)
+    })
+  )
+  return()
+}
+#' @export
+#' @rdname chunk_hook
+hook_pngquant = function(before, options, envir) {
+  if (before) return()
+  ext = tolower(options$fig.ext)
+  if (ext != "png") {
+    warning("this hook only works with PNG"); return()
+  }
+  if (!nzchar(Sys.which("pngquant"))) {
+    warning("cannot find pngquant; please install and put it in PATH"); return()
+  }
+  paths = all_figs(options, ext)
+
+  in_base_dir(
+    lapply(paths, function(x) {
+      message('optimizing ', x)
+      cmd = paste(
+        'pngquant --skip-if-larger',
+        if (is.character(options$pngquant)) options$pngquant,
+        shQuote(x)
+      )
+      message(cmd)
+      (if (is_windows()) shell else system)(cmd)
+      # pngquant creates an output file with '-fs8.png' as the extension.
+      x_opt = sub("\\.png$", "-fs8.png", x)
+      file.rename(x_opt, x)
     })
   )
   return()
