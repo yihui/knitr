@@ -79,7 +79,6 @@ knit_params = function(text, evaluate = TRUE) {
   yaml = yaml_front_matter(text)
   if (is.null(yaml)) return(list())
 
-  yaml = enc2utf8(yaml)
   knit_params_yaml(yaml, evaluate = evaluate)
 }
 
@@ -106,7 +105,7 @@ knit_params_yaml = function(yaml, evaluate = TRUE) {
 
   # if we found paramters then resolve and return them
   if (is.list(parsed_yaml) && !is.null(parsed_yaml$params)) {
-    resolve_params(mark_utf8(parsed_yaml$params), evaluate = evaluate)
+    resolve_params(parsed_yaml$params, evaluate = evaluate)
   } else {
     list()
   }
@@ -116,19 +115,6 @@ knit_params_yaml = function(yaml, evaluate = TRUE) {
 flatten_params = function(params) {
   res = list()
   for (param in params) res[[param$name]] = param$value
-  res
-}
-
-# copied from rmarkdown:::mark_utf8
-mark_utf8 = function(x) {
-  if (is.character(x)) {
-    Encoding(x) = 'UTF-8'
-    return(x)
-  }
-  if (!is.list(x)) return(x)
-  attrs = attributes(x)
-  res = lapply(x, mark_utf8)
-  attributes(res) = attrs
   res
 }
 
