@@ -86,7 +86,7 @@ Imports:
     highr,
     markdown,
     stringr (>= 0.6),
-    yaml (>= 2.1.14),
+    yaml,
     methods,
     tools
 Suggests:

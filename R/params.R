@@ -79,7 +79,7 @@ knit_params = function(text, evaluate = TRUE) {
   yaml = yaml_front_matter(text)
   if (is.null(yaml)) return(list())
 
-  knit_params_yaml(yaml, evaluate = evaluate)
+  knit_params_yaml(enc2utf8(yaml), evaluate = evaluate)
 }
 
 #' Extract knit parameters from YAML text
