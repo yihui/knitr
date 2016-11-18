@@ -4,6 +4,10 @@
 
 - added a new hook function `hook_pngquant()` that can call `pngquant` to optimize PNG images (thanks, @slowkow, #1320)
 
+## BUG FIXES
+
+- not really a **knitr** bug, but `knit_params()` should be better at dealing with multibyte characters now due to the bug fix in the **yaml** package https://github.com/viking/r-yaml/issues/6
+
 # CHANGES IN knitr VERSION 1.15
 
 ## NEW FEATURES
