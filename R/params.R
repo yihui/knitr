@@ -153,7 +153,6 @@ yaml_front_matter = function(lines) {
   # ensure that the front-matter doesn't terminate with ':', so it won't cause a
   # crash when passed to yaml::load
   if (!grepl(":\\s*$", front_matter)) front_matter
-
 }
 
 

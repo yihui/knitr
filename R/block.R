@@ -476,6 +476,6 @@ label_code = function(code, label) {
          '----', code)
 }
 
-as.source <- function(code) {
+as.source = function(code) {
   list(structure(list(src = code), class = 'source'))
 }
