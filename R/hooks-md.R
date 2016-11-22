@@ -18,6 +18,10 @@ hook_plot_md = function(x, options) {
       options$fig.align = 'default'
     }
   }
+  if (options$fig.show == 'hold' && to == 'docx') {
+    warning('The chunk option fig.show="hold" is not supported for Word output')
+    options$fig.show = 'asis'
+  }
   hook_plot_md_base(x, options)
 }
 

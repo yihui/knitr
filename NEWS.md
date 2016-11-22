@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.16 (unreleased)
+
+## MAJOR CHANGES
+
+- a warning will be emitted when the chunk option `fig.show='hold'` and the output format is Word (https://github.com/rstudio/bookdown/issues/249); `fig.show='hold'` will be changed to `'asis'` at the same time
+
 # CHANGES IN knitr VERSION 1.15.1
 
 ## NEW FEATURES
