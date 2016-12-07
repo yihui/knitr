@@ -4,6 +4,8 @@
 
 - a warning will be emitted when the chunk option `fig.show='hold'` and the output format is Word (https://github.com/rstudio/bookdown/issues/249); `fig.show='hold'` will be changed to `'asis'` at the same time
 
+- `purl()` no longer writes verbatim non-R code chunks to the output R script; these code chunks will be commented out in the output
+
 # CHANGES IN knitr VERSION 1.15.1
 
 ## NEW FEATURES

@@ -444,6 +444,7 @@ process_tangle.block = function(x) {
     try(params[o] <- list(eval_lang(params[[o]])))
   if (isFALSE(params$purl)) return('')
   label = params$label; ev = params$eval
+  if (params$engine != 'R') return(comment_out(knit_code$get(label)))
   code = if (!isFALSE(ev) && !is.null(params$child)) {
     cmds = lapply(sc_split(params$child), knit_child)
     paste(unlist(cmds), collapse = '\n')
