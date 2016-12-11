@@ -137,6 +137,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
         if (l >= 4) fence = paste(rep(fence_char, l), collapse = '')
       }
 
+      # this is the original bit
       if (is.null(options$class.output)){
         class_header = NULL
       } else {
@@ -144,6 +145,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
         class_header = paste0('{', class, '}')
       }
 
+      # this is new, too
       paste0('\n\n', fence, class_header, x, fence, '\n\n')
     }
   }
