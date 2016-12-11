@@ -122,6 +122,31 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
       paste0('\n\n', fence, x, fence, '\n\n')
     }
   }
+  # this feels a bit hacky, copy-pasting much of
+  # this code - maybe a better way will
+  # reveal itself
+  hook.t.output = function(x, options) {
+    if (strict) {
+      paste('\n', indent_block(x), '', sep = '\n')
+    } else {
+      x = paste(c('', x), collapse = '\n')
+      r = paste0('\n', fence_char, '{3,}')
+      if (grepl(r, x)) {
+        l = attr(gregexpr(r, x)[[1]], 'match.length')
+        l = max(l)
+        if (l >= 4) fence = paste(rep(fence_char, l), collapse = '')
+      }
+
+      if (is.null(options$class.output)){
+        class_header = NULL
+      } else {
+        class = paste0('.', options$class.output, collapse = ' ')
+        class_header = paste0('{', class, '}')
+      }
+
+      paste0('\n\n', fence, class_header, x, fence, '\n\n')
+    }
+  }
   hook.r = function(x, options) {
     language = tolower(options$engine)
     if (language == 'node') language = 'javascript'
@@ -138,7 +163,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
       x = hilight_source(x, 'markdown', options)
       (if (strict) hook.t else hook.r)(paste(c(x, ''), collapse = '\n'), options)
     },
-    output = hook.t, warning = hook.t, error = hook.t, message = hook.t,
+    output = hook.t.output, warning = hook.t, error = hook.t, message = hook.t,
     inline = function(x) {
       fmt = pandoc_to()
       fmt = if (length(fmt) == 1L) 'latex' else 'html'
