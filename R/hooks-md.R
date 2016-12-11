@@ -126,13 +126,19 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
     language = tolower(options$engine)
     if (language == 'node') language = 'javascript'
     if (!options$highlight) language = 'text'
+    if (!is.null(options$class.source)){
+      language_class =
+        paste0('.', c(language, options$class.source), collapse = ' ')
+      language = paste0('{', language_class, '}')
+    }
     paste0('\n\n', fence, language, '\n', x, fence, '\n\n')
   }
   knit_hooks$set(
     source = function(x, options) {
       x = hilight_source(x, 'markdown', options)
       (if (strict) hook.t else hook.r)(paste(c(x, ''), collapse = '\n'), options)
-    }, output = hook.t, warning = hook.t, error = hook.t, message = hook.t,
+    },
+    output = hook.t, warning = hook.t, error = hook.t, message = hook.t,
     inline = function(x) {
       fmt = pandoc_to()
       fmt = if (length(fmt) == 1L) 'latex' else 'html'
