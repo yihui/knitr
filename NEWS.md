@@ -10,6 +10,8 @@
 
 ## NEW FEATURES
 
+- adds two new options, `class.output` and `class.source` to help you manage the appearance of output and source chunks. This can be useful in the context of `rmarkdown::render()` using `rmarkdown::html_document()` (@ijlyttle) # This note is aspirational for the moment - it's here so I can start a pull request.
+
 - added a new hook function `hook_pngquant()` that can call `pngquant` to optimize PNG images (thanks, @slowkow, #1320)
 
 ## BUG FIXES
