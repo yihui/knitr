@@ -163,3 +163,10 @@ assert(
   restore_raw_output(pre$value, pre$chunks) %==%
     '<em>hello</em>\n<special>content</special> *protect* me!\n<em>world</em>'
 )
+
+assert(
+  'block_class() turns a character vector into Pandoc attributes for code block classes',
+  block_class(NULL) %==% NULL, block_class('a') %==% '{.a}',
+  block_class('a b') %==% '{.a .b}',
+  block_class(c('a', 'b')) %==% '{.a .b}'
+)

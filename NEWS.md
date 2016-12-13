@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.16 (unreleased)
 
+## NEW FEATURES
+
+- adds two new options, `class.output` and `class.source` to apply additional HTML classes to output and source chunks, which can be useful for R Markdown documents with HTML output formats since you can define custom CSS styles for these classes (thanks, @ijlyttle #1335 and @AmeliaMN #1333)
+
 ## MAJOR CHANGES
 
 - a warning will be emitted when the chunk option `fig.show='hold'` and the output format is Word (https://github.com/rstudio/bookdown/issues/249); `fig.show='hold'` will be changed to `'asis'` at the same time
@@ -9,8 +13,6 @@
 # CHANGES IN knitr VERSION 1.15.1
 
 ## NEW FEATURES
-
-- adds two new options, `class.output` and `class.source` to help you manage the appearance of output and source chunks. This can be useful in the context of `rmarkdown::render()` using `rmarkdown::html_document()` (@ijlyttle) # This note is aspirational for the moment - it's here so I can start a pull request.
 
 - added a new hook function `hook_pngquant()` that can call `pngquant` to optimize PNG images (thanks, @slowkow, #1320)
 
