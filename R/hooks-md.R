@@ -107,6 +107,15 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
   set_html_dev()
   opts_knit$set(out.format = 'markdown')
   fence = paste(rep(fence_char, 3), collapse = '')
+  # helper function to manage classes
+  block_class = function(x){
+
+    classes = unlist(strsplit(x, split = ' '))
+    str_class = paste0('.', classes, collapse = ' ')
+    block_class = paste0('{', str_class, '}')
+
+    block_class
+  }
   # four spaces lead to <pre></pre>
   hook.t = function(x, options) {
     if (strict) {
@@ -122,17 +131,43 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
       paste0('\n\n', fence, x, fence, '\n\n')
     }
   }
+  hook.t.output = function(x, options) {
+    # this code-block duplicated from hook.t()
+    if (strict) {
+      paste('\n', indent_block(x), '', sep = '\n')
+    } else {
+      x = paste(c('', x), collapse = '\n')
+      r = paste0('\n', fence_char, '{3,}')
+      if (grepl(r, x)) {
+        l = attr(gregexpr(r, x)[[1]], 'match.length')
+        l = max(l)
+        if (l >= 4) fence = paste(rep(fence_char, l), collapse = '')
+      }
+
+      # the rest is 'new'
+      class_header = NULL
+      if (!is.null(options$class.output)){
+        class_header = block_class(options$class.output)
+      }
+
+      paste0('\n\n', fence, class_header, x, fence, '\n\n')
+    }
+  }
   hook.r = function(x, options) {
     language = tolower(options$engine)
     if (language == 'node') language = 'javascript'
     if (!options$highlight) language = 'text'
+    if (!is.null(options$class.source)){
+      language = block_class(c(language, options$class.source))
+    }
     paste0('\n\n', fence, language, '\n', x, fence, '\n\n')
   }
   knit_hooks$set(
     source = function(x, options) {
       x = hilight_source(x, 'markdown', options)
       (if (strict) hook.t else hook.r)(paste(c(x, ''), collapse = '\n'), options)
-    }, output = hook.t, warning = hook.t, error = hook.t, message = hook.t,
+    },
+    output = hook.t.output, warning = hook.t, error = hook.t, message = hook.t,
     inline = function(x) {
       fmt = pandoc_to()
       fmt = if (length(fmt) == 1L) 'latex' else 'html'
