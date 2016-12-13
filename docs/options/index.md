@@ -110,6 +110,8 @@ Below is a list of chunk options in **knitr**. Note the options `background` and
   changing it will not invalidate the cache
 - `strip.white`: (`TRUE`; logical) whether to remove the white lines in the
   beginning or end of a source chunk in the output
+- `class.output`: (NULL; character) useful for HTML output, appends classes that
+  can be used in conjunction with css, so you can apply custom formatting.
 
 ### Code Decoration
 
@@ -121,6 +123,8 @@ Below is a list of chunk options in **knitr**. Note the options `background` and
 - `highlight`: (`TRUE`; logical) whether to highlight the source code (it is `FALSE` by default if the output is Sweave or listings)
 - `size`: (`'normalsize'`; character) font size for the default LaTeX output (see `?highlight` in the **highlight** package for a list of possible values)
 - `background`: (`'#F7F7F7'`; character or numeric) background color of chunks in LaTeX output (passed to the LaTeX package **framed**); the color model is `rgb`; it can be either a numeric vector of length 3, with each element between 0 and 1 to denote red, green and blue, or any built-in color in R like `red` or `springgreen3` (see `colors()` for a full list), or a hex string like `#FFFF00`, or an integer (all these colors will be converted to the RGB model; see `?col2rgb` for details)
+- `class.source`: (NULL; character) useful for HTML output, appends classes that
+  can be used in conjunction with css, so you can apply custom formatting.
 
 There is a hidden option `indent` which stores the possible leading white spaces of the chunk, e.g. for the chunk below, `indent` is a character string of two spaces:
 
