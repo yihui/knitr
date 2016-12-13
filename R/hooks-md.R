@@ -132,7 +132,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
     }
   }
   hook.t.output = function(x, options) {
-    # this code-block is duplicated from hook.t()
+    # this code-block duplicated from hook.t()
     if (strict) {
       paste('\n', indent_block(x), '', sep = '\n')
     } else {
