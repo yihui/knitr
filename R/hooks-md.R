@@ -107,6 +107,15 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
   set_html_dev()
   opts_knit$set(out.format = 'markdown')
   fence = paste(rep(fence_char, 3), collapse = '')
+  # helper function to manage classes
+  block_class = function(x){
+
+    classes = unlist(strsplit(x, split = ' '))
+    str_class = paste0('.', classes, collapse = ' ')
+    block_class = paste0('{', str_class, '}')
+
+    block_class
+  }
   # four spaces lead to <pre></pre>
   hook.t = function(x, options) {
     if (strict) {
@@ -122,10 +131,8 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
       paste0('\n\n', fence, x, fence, '\n\n')
     }
   }
-  # this feels a bit hacky, copy-pasting much of
-  # this code - maybe a better way will
-  # reveal itself
   hook.t.output = function(x, options) {
+    # this code-block is duplicated from hook.t()
     if (strict) {
       paste('\n', indent_block(x), '', sep = '\n')
     } else {
@@ -137,15 +144,12 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
         if (l >= 4) fence = paste(rep(fence_char, l), collapse = '')
       }
 
-      # this is the original bit
-      if (is.null(options$class.output)){
-        class_header = NULL
-      } else {
-        class = paste0('.', options$class.output, collapse = ' ')
-        class_header = paste0('{', class, '}')
+      # the rest is 'new'
+      class_header = NULL
+      if (!is.null(options$class.output)){
+        class_header = block_class(options$class.output)
       }
 
-      # this is new, too
       paste0('\n\n', fence, class_header, x, fence, '\n\n')
     }
   }
@@ -154,9 +158,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
     if (language == 'node') language = 'javascript'
     if (!options$highlight) language = 'text'
     if (!is.null(options$class.source)){
-      language_class =
-        paste0('.', c(language, options$class.source), collapse = ' ')
-      language = paste0('{', language_class, '}')
+      language = block_class(c(language, options$class.source))
     }
     paste0('\n\n', fence, language, '\n', x, fence, '\n\n')
   }
