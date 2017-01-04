@@ -41,7 +41,7 @@ and other [demos]({{ site.baseurl }}/demos) /
 [examples](https://github.com/yihui/knitr-examples) here. For a more
 organized reference, see the [knitr book](https://github.com/yihui/knitr-book).
 
-<div style="text-align: center;"><iframe src="http://www.screenr.com/embed/qcv8" width="650" height="396" frameborder="0"></iframe></div>
+<div style="text-align: center;"><iframe src="//www.screenr.com/embed/qcv8" width="650" height="396" frameborder="0"></iframe></div>
 
 ## Motivation
 
@@ -139,7 +139,7 @@ testers. This package was initiated based on the design of decumar.
 
 ## FOAS
 
-<img src="http://www.foastat.org/images/foas.png" style="float: right;" />
+<img src="//i.imgur.com/XmT6L3F.png" style="float: right;" />
 `knitr` is proudly affiliated with the [Foundation for Open Access
 Statistics](http://www.foastat.org/) (FOAS). FOAS is a nonprofit public
 benefit corporation with a worldwide mission to promote free software, open
