@@ -21,7 +21,7 @@ before_install:
         exit 0;
       fi;
     fi
-  - "wget -q https://yihui.name/xran/.gitconfig -O ~/.gitconfig"
+  - "wget https://yihui.name/xran/.gitconfig -O ~/.gitconfig"
   - Rscript -e 'update.packages(.libPaths()[1], ask = FALSE)'
   - Rscript -e "if (!require('covr')) install.packages('covr')"
 
