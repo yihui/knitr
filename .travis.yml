@@ -21,7 +21,7 @@ before_install:
         exit 0;
       fi;
     fi
-  - "wget --no-check-certificate https://yihui.name/xran/.gitconfig -O ~/.gitconfig"
+  - "curl -L https://yihui.name/xran/.gitconfig -o ~/.gitconfig"
   - Rscript -e 'update.packages(.libPaths()[1], ask = FALSE)'
   - Rscript -e "if (!require('covr')) install.packages('covr')"
 
@@ -58,4 +58,4 @@ script:
 # deploy to xran after integration tests
 after_success:
   - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
-  - "[ $TARGET = integration ] && (wget --no-check-certificate -q -O - https://yihui.name/xran/r-xran | bash)"
+  - "[ $TARGET = integration ] && (curl -L https://yihui.name/xran/r-xran | bash)"
