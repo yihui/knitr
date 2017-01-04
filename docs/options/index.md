@@ -190,7 +190,7 @@ leading white spaces have special meanings in markdown.
 
 ### Plots
 
-- `fig.path`: (`'figure/'`; character) prefix to be used for figure filenames (`fig.path` and chunk labels are concatenated to make filenames); it may contain a directory like `figure/prefix-` (will be created if it does not exist); this path is relative to the current working directory
+- `fig.path`: (`'figure/'`; character) prefix to be used for figure filenames (`fig.path` and chunk labels are concatenated to make filenames); it may contain a directory like `figure/prefix-` (will be created if it does not exist); this path is relative to the current working directory; if the prefix ends in a trailing slash, e.g. `output/figures/`, figures will be saved in the specified directory without any changes to filename prefix, thus providing a relative filepath alternative to the package-level option `base.dir`
 - `fig.keep`: (`'high'`; character) how plots in chunks should be kept; it takes five possible character values or a numeric vector (see the end of this section for an example)
   - `high`: only keep high-level plots (merge low-level changes into high-level plots);
   - `none`: discard all plots;
