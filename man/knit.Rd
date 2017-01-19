@@ -48,7 +48,9 @@ The compiled document is written into the output file, and the path
 This function takes an input file, extracts the R code in it according to a
 list of patterns, evaluates the code and writes the output in another file.
 It can also tangle R source code from the input document (\code{purl()} is a
-wrapper to \code{knit(..., tangle = TRUE)}).
+wrapper to \code{knit(..., tangle = TRUE)}). The \code{knitr.purl.inline}
+option can be used to also tangle the code of inline expressions (disabled
+by default).
 }
 \details{
 For most of the time, it is not necessary to set any options outside the
