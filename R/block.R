@@ -460,30 +460,23 @@ process_tangle.block = function(x) {
 }
 #' @export
 process_tangle.inline = function(x) {
-  .append <- function(x, y) {
-    if (!nzchar(y)) x else if (!nzchar(x)) y else
-      paste0(x, '\n', y)
-  }
 
-  output <- ''
+  output = if (opts_knit$get('documentation') == 2L) {
+    output = paste(line_prompt(x$input.src, "#' ", "#' "), collapse = '\n')
+  } else ''
 
-  if (opts_knit$get('documentation') == 2L) {
-    output <- paste(line_prompt(x$input.src, "#' ", "#' "), collapse = '\n')
-  }
-
-  code <- x$code
+  code = x$code
   if (length(code) == 0L) return(output)
 
-  if (getOption('knitr.purl.inline', FALSE)) output <- .append(output, code)
+  if (getOption('knitr.purl.inline', FALSE)) output = c(output, code)
 
-  idx <- grepl('knit_child\\(.+\\)', code)
+  idx = grepl('knit_child\\(.+\\)', code)
   if (any(idx)) {
-    cout <- sapply(code[idx], function(z) eval(parse_only(z)))
-    cout <- paste(c(cout, ''), collapse = '\n')
-    output <- .append(output, cout)
+    cout = sapply(code[idx], function(z) eval(parse_only(z)))
+    output = c(output, cout, '')
   }
 
-  output
+  paste(output, collapse = '\n')
 }
 
 

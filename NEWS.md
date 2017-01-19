@@ -10,7 +10,7 @@
 
 - `purl()` no longer writes verbatim non-R code chunks to the output R script; these code chunks will be commented out in the output
 
-- `purl()` can now also retrieve the code from inline expressions. It is disabled by default for compatibility, and can be enabled via the `knitr.purl.inline` option (cf purl documentation).
+- `purl()` can now also retrieve the code from inline expressions; it is disabled by default for compatibility, and can be enabled via `options(knitr.purl.inline = TRUE)` (thanks, @kforner, #1345)
 
 # CHANGES IN knitr VERSION 1.15.1
 
