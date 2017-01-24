@@ -4,6 +4,8 @@
 
 - adds two new options, `class.output` and `class.source` to apply additional HTML classes to output and source chunks, which can be useful for R Markdown documents with HTML output formats since you can define custom CSS styles for these classes (thanks, @ijlyttle #1335 and @AmeliaMN #1333)
 
+- added a `go` engine (thanks, @hodgesds, #1330)
+
 ## MAJOR CHANGES
 
 - a warning will be emitted when the chunk option `fig.show='hold'` and the output format is Word (https://github.com/rstudio/bookdown/issues/249); `fig.show='hold'` will be changed to `'asis'` at the same time

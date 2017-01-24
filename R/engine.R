@@ -542,33 +542,31 @@ eng_sql = function(options) {
   engine_output(options, options$code, output)
 }
 
-# go engine
+# go engine, added by @hodgesds https://github.com/yihui/knitr/pull/1330
 eng_go = function(options) {
   f = tempfile('code', '.', fileext = ".go")
   writeLines(code <- options$code, f)
   on.exit(unlink(f), add = TRUE)
+  cmd = get_engine_path(options$engine.path, options$engine)
 
   fmt_args = sprintf('fmt %s', f)
 
   tryCatch(
-    system2("go", fmt_args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+    system2(cmd, fmt_args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
     error = function(e) {
       if (!options$error) stop(e)
-      paste('Error in running command', command_string)
     }
   )
-  
-  code = readLines(f)
 
-  run_args = sprintf("run %s", f)
+  run_args = sprintf(" run %s", f)
 
   extra = if (options$eval) {
-    message('running: go ', run_args)
+    message('running: ', cmd, run_args)
     tryCatch(
-      system2("go", run_args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+      system2(cmd, run_args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
       error = function(e) {
         if (!options$error) stop(e)
-        paste('Error in running command', command_string)
+        'Error in executing go code'
       }
     )
   }
