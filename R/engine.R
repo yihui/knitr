@@ -100,7 +100,10 @@ eng_interpreted = function(options) {
       stata = {
         logf = sub('[.]do$', '.log', f)
         on.exit(unlink(c(logf)), add = TRUE)
-        paste(switch(Sys.info()[['sysname']], Windows='/q /e do', Darwin='-q -e do', Linux='-q -b do', '-q -b do'), f)
+        paste(switch(
+          Sys.info()[['sysname']], Windows = '/q /e do', Darwin = '-q -e do',
+          Linux = '-q -b do', '-q -b do'
+        ), f)
       },
       f
     )
@@ -541,12 +544,12 @@ eng_sql = function(options) {
 
 # go engine
 eng_go = function(options) {
-  f = tempfile('code', '.', fileext=".go")
+  f = tempfile('code', '.', fileext = ".go")
   writeLines(code <- options$code, f)
   on.exit(unlink(f), add = TRUE)
 
   fmt_args = sprintf('fmt %s', f)
-  
+
   tryCatch(
     system2("go", fmt_args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
     error = function(e) {
@@ -571,7 +574,7 @@ eng_go = function(options) {
   }
 
   if (options$results == 'hide') extra = NULL
-  
+
   engine_output(options, code, extra)
 }
 
