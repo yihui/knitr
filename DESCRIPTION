@@ -28,6 +28,7 @@ Authors@R: c(
     person("Henrik", "Bengtsson", role = "ctb"),
     person("Hiroaki", "Yutani", role = "ctb"),
     person("Ian", "Lyttle", role = "ctb"),
+    person("Hodges", "Daniel", role = "ctb"),
     person("Jake", "Burkhead", role = "ctb"),
     person("James", "Manton", role = "ctb"),
     person("Jared", "Lander", role = "ctb"),

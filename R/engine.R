@@ -539,6 +539,42 @@ eng_sql = function(options) {
   engine_output(options, options$code, output)
 }
 
+# go engine
+eng_go = function(options) {
+  f = tempfile('code', '.', fileext=".go")
+  writeLines(code <- options$code, f)
+  on.exit(unlink(f), add = TRUE)
+
+  fmt_args = sprintf('fmt %s', f)
+  
+  tryCatch(
+    system2("go", fmt_args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+    error = function(e) {
+      if (!options$error) stop(e)
+      paste('Error in running command', command_string)
+    }
+  )
+  
+  code = readLines(f)
+
+  run_args = sprintf("run %s", f)
+
+  extra = if (options$eval) {
+    message('running: go ', run_args)
+    tryCatch(
+      system2("go", run_args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+      error = function(e) {
+        if (!options$error) stop(e)
+        paste('Error in running command', command_string)
+      }
+    )
+  }
+
+  if (options$results == 'hide') extra = NULL
+  
+  engine_output(options, code, extra)
+}
+
 # set engines for interpreted languages
 local({
   for (i in c(
@@ -553,7 +589,7 @@ knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
-  block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql
+  block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go
 )
 
 get_engine = function(name) {
