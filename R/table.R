@@ -335,7 +335,10 @@ kable_rst = function(x, rownames.name = '\\', ...) {
 
 # actually R Markdown
 kable_markdown = function(x, padding = 1, ...) {
-  if (is.null(colnames(x))) stop('the table must have a header (column names)')
+  if (is.null(colnames(x))) {
+    warning('The table should have a header (column names)')
+    colnames(x) = rep('', ncol(x))
+  }
   res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
     if (is.null(a)) return(s)
     r = c(l = '^.', c = '^.|.$', r = '.$')
