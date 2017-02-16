@@ -1,7 +1,7 @@
 Package: knitr
 Type: Package
 Title: A General-Purpose Package for Dynamic Report Generation in R
-Version: 1.15.9
+Version: 1.15.10
 Date: 2016-11-22
 Authors@R: c(
     person("Yihui", "Xie", email = "xie@yihui.name", role = c("aut", "cre")),
@@ -21,6 +21,7 @@ Authors@R: c(
     person("Duncan", "Murdoch", role = "ctb"),
     person("Fabian", "Hirschmann", role = "ctb"),
     person("Fitch", "Simeon", role = "ctb"),
+    person("Forest", "Fang", role = "ctb"),
     person(c("Frank", "E", "Harrell", "Jr"), role = "ctb", comment = "the Sweavel package at inst/misc/Sweavel.sty"),
     person("Gregoire", "Detrez", role = "ctb"),
     person("Hadley", "Wickham", role = "ctb"),
@@ -76,8 +77,7 @@ Authors@R: c(
     person("Viktoras", "Veitas", role = "ctb"),
     person("Weicheng", "Zhu", role = "ctb"),
     person("Wush", "Wu", role = "ctb"),
-    person("Zachary", "Foster", role = "ctb"),
-    person("Forest", "Fang", role = "ctb")
+    person("Zachary", "Foster", role = "ctb")
     )
 Maintainer: Yihui Xie <xie@yihui.name>
 Description: Provides a general-purpose tool for dynamic report generation in R
