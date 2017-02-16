@@ -6,6 +6,8 @@
 
 - added a `go` engine (thanks, @hodgesds, #1330)
 
+- added a `sql.show_interpolated` chunk option for `sql` engine. For `{sql, sql.show_interpolated=TRUE}`, interpolated SQL query will be dispalyed in the renderred document instead (thanks, @saurfang, #1357)
+
 ## MAJOR CHANGES
 
 - a warning will be emitted when the chunk option `fig.show='hold'` and the output format is Word (https://github.com/rstudio/bookdown/issues/249); `fig.show='hold'` will be changed to `'asis'` at the same time

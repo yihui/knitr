@@ -428,7 +428,10 @@ is_sql_update_query = function(query) {
 
 # sql engine
 eng_sql = function(options) {
-  if (isFALSE(options$eval)) return(engine_output(options, options$code, ''))
+  # return chunk before interpolation eagerly to avoid connection option check
+  if (isFALSE(options$eval) && !isTRUE(options$sql.show_interpolated)) {
+    return(engine_output(options, options$code, ''))
+  }
 
   # Return char vector of sql interpolation param names
   varnames_from_sql = function(conn, sql) {
@@ -470,9 +473,11 @@ eng_sql = function(options) {
     max.print = -1
   sql = paste(options$code, collapse = '\n')
 
+  query = interpolate_from_env(conn, sql)
+  if (isFALSE(options$eval)) return(engine_output(options, query, ''))
+
   # execute query -- when we are printing with an enforced max.print we
   # use dbFetch so as to only pull down the required number of records
-  query = interpolate_from_env(conn, sql)
   if (is.null(varname) && max.print > 0 && !is_sql_update_query(query)) {
     res = DBI::dbSendQuery(conn, query)
     data = DBI::dbFetch(res, n = max.print)
@@ -538,8 +543,11 @@ eng_sql = function(options) {
   # assign varname if requested
   if (!is.null(varname)) assign(varname, data, envir = knit_global())
 
+  # reset query to pre-interpolated if not expanding
+  if (!isTRUE(options$sql.show_interpolated)) query <- options$code
+
   # return output
-  engine_output(options, options$code, output)
+  engine_output(options, query, output)
 }
 
 # go engine, added by @hodgesds https://github.com/yihui/knitr/pull/1330
