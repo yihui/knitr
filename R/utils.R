@@ -245,6 +245,8 @@ fix_options = function(options) {
   if (length(options$fig.subcap)) options$fig.show = 'hold'
   # the default device NULL is not valid; use pdf is not set
   if (is.null(options$dev)) options$dev = 'pdf'
+  # FALSE means hide for options$results
+  if (isFALSE(options$results)) options$results = 'hide'
 
   # the figure/cache filenames may contain UTF-8 chars, which won't work on
   # Windows, e.g. png() fails if filename contains UTF-8 chars (must use native
