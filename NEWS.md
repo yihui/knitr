@@ -18,6 +18,10 @@
 
 - `purl()` can now also retrieve the code from inline expressions; it is disabled by default for compatibility, and can be enabled via `options(knitr.purl.inline = TRUE)` (thanks, @kforner, #1345)
 
+## BUG FIXES
+
+- `opts_chunk$set` supports referencing a sql connection by variable name.
+
 # CHANGES IN knitr VERSION 1.15.1
 
 ## NEW FEATURES
