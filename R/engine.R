@@ -464,6 +464,8 @@ eng_sql = function(options) {
 
   # extract options
   conn = options$connection
+  if (is.character(conn))
+    conn <- get(conn, envir = globalenv())
   if (is.null(conn)) stop2(
     "The 'connection' option (DBI connection) is required for sql chunks."
   )
