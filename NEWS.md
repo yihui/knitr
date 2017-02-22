@@ -20,7 +20,7 @@
 
 ## BUG FIXES
 
-- `opts_chunk$set` supports referencing a sql connection by variable name.
+- `opts_chunk$set()` supports referencing a `sql` connection by variable name, e.g. `knitr::opts_chunk$set(connection = "db")` (thanks, @javierluraschi, #1362)
 
 # CHANGES IN knitr VERSION 1.15.1
 
