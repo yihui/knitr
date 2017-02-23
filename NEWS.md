@@ -22,6 +22,8 @@
 
 - `opts_chunk$set()` supports referencing a `sql` connection by variable name, e.g. `knitr::opts_chunk$set(connection = "db")` (thanks, @javierluraschi, #1362)
 
+- the chunk option `dev = 'CairoPS'` will lead to double filename extensions `.eps.ps` (thanks, @qifei9, #1364)
+
 # CHANGES IN knitr VERSION 1.15.1
 
 ## NEW FEATURES

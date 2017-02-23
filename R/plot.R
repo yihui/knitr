@@ -125,6 +125,13 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   print(plot)
   dev.off()
 
+  # Cairo::CairoPS always adds the extension .ps, even if you have specified an
+  # extension like .eps (https://github.com/yihui/knitr/issues/1364)
+  if (dev == 'CairoPS') {
+    path2 = paste0(path, '.ps')
+    if (file.exists(path2)) file.rename(path2, path)
+  }
+
   # compile tikz to pdf
   if (dev == 'tikz' && options$external) {
     unlink(pdf.plot <- paste0(name, '.pdf'))
