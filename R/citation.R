@@ -94,7 +94,7 @@ write_bib = function(
     })
   }
   bib = bib[sort(x)]
-  if (!is.null(file)) cat(unlist(bib), sep = '\n', file = file)
+  if (!is.null(file)) writeUTF8(unlist(bib), file)
   invisible(bib)
 }
 

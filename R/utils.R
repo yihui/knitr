@@ -935,3 +935,11 @@ json_vector = function(x, toArray = FALSE, quote = TRUE) {
   }
   if (toArray) paste0('[', paste(x, collapse = ', '), ']') else x
 }
+
+writeUTF8 = function(text, file, ...) {
+  if (identical(file, '')) {
+    cat(text, sep = '\n', file = file)
+  } else {
+    writeLines(enc2utf8(text), file, ..., useBytes = TRUE)
+  }
+}

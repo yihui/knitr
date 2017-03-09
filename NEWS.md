@@ -24,6 +24,8 @@
 
 - the chunk option `dev = 'CairoPS'` will lead to double filename extensions `.eps.ps` (thanks, @qifei9, #1364)
 
+- the output file of `write_bib()` is now encoded in UTF-8 (thanks, @arnyeinstein, #1374)
+
 # CHANGES IN knitr VERSION 1.15.1
 
 ## NEW FEATURES
