@@ -18,6 +18,8 @@
 
 - `purl()` can now also retrieve the code from inline expressions; it is disabled by default for compatibility, and can be enabled via `options(knitr.purl.inline = TRUE)` (thanks, @kforner, #1345)
 
+- the chunk option `fig.show` also applies to plots included via `include_graphics()`, e.g. `fig.show='hold'` will put all plots to the end of a chunk (thanks, @statnmap, #1382)
+
 ## BUG FIXES
 
 - `opts_chunk$set()` supports referencing a `sql` connection by variable name, e.g. `knitr::opts_chunk$set(connection = "db")` (thanks, @javierluraschi, #1362)

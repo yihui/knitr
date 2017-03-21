@@ -343,7 +343,11 @@ filter_evaluate = function(res, opt, test) {
 
 # find recorded plots in the output of evaluate()
 find_recordedplot = function(x) {
-  vapply(x, evaluate::is.recordedplot, logical(1))
+  vapply(x, is_plot_output, logical(1))
+}
+
+is_plot_output = function(x) {
+  evaluate::is.recordedplot(x) || inherits(x, 'knit_image_paths')
 }
 
 # move plots before source code
