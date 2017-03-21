@@ -33,9 +33,10 @@
 #' @param escape escape special characters when producing HTML or LaTeX tables
 #' @param ... other arguments (see examples)
 #' @return A character vector of the table source code.
-#' @seealso Other R packages such as \pkg{xtable} and \pkg{tables} for HTML and
-#'   LaTeX tables, and \pkg{ascii} and \pkg{pander} for different flavors of
-#'   markdown output and some advanced features and table styles.
+#' @seealso Other R packages such as \pkg{huxtable}, \pkg{xtable}, and
+#'   \pkg{tables} for HTML and LaTeX tables, and \pkg{ascii} and \pkg{pander}
+#'   for different flavors of markdown output and some advanced features and
+#'   table styles.
 #' @note The tables for \code{format = 'markdown'} also work for Pandoc when the
 #'   \code{pipe_tables} extension is enabled (this is the default behavior for
 #'   Pandoc >= 1.10).

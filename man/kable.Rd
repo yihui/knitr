@@ -103,7 +103,8 @@ See
    for some examples in LaTeX, but they also apply to other document formats.
 }
 \seealso{
-Other R packages such as \pkg{xtable} and \pkg{tables} for HTML and
-  LaTeX tables, and \pkg{ascii} and \pkg{pander} for different flavors of
-  markdown output and some advanced features and table styles.
+Other R packages such as \pkg{huxtable}, \pkg{xtable}, and
+  \pkg{tables} for HTML and LaTeX tables, and \pkg{ascii} and \pkg{pander}
+  for different flavors of markdown output and some advanced features and
+  table styles.
 }
