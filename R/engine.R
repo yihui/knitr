@@ -103,7 +103,7 @@ eng_interpreted = function(options) {
         paste(switch(
           Sys.info()[['sysname']], Windows = '/q /e do', Darwin = '-q -e do',
           Linux = '-q -b do', '-q -b do'
-        ), f)
+        ), shQuote(normalizePath(f)))
       },
       f
     )
