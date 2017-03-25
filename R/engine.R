@@ -386,7 +386,7 @@ eng_block2 = function(options) {
   # {}; when encoded in integers, they won't be escaped, but will need to
   # restore them later; see bookdown:::restore_block2
   if (l1 != '') l1 = paste(
-    c('\\iffalse{', utf8ToInt(enc2utf8(l1)), '}\\fi'), collapse = '-'
+    c('\\iffalse{', utf8ToInt(enc2utf8(l1)), '}\\fi{}'), collapse = '-'
   )
   h2 = options$html.tag %n% 'div'
   h3 = options$html.before %n% ''
