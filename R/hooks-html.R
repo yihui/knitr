@@ -114,8 +114,12 @@ hook_ffmpeg = function(x, options, format = 'webm') {
     sprintf('width="%s"', options$out.width),
     sprintf('height="%s"', options$out.height), opts
   )
-  sprintf('<video %s><source src="%s" /><p>video of chunk %s</p></video>',
-          opts, paste0(opts_knit$get('base.url'), mov.fname), options$label)
+  cap = .img.cap(options, alt = TRUE)
+  if (cap != '') cap = sprintf('<p>%s</p>', cap)
+  sprintf(
+    '<video %s><source src="%s" />%s</video>', trimws(opts),
+    paste0(opts_knit$get('base.url'), mov.fname), cap
+  )
 }
 
 # use SciAnimator to create animations
