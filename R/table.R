@@ -153,7 +153,7 @@ kable = function(
   n = nrow(x)
   x = replace_na(base::format(as.matrix(x), trim = TRUE, justify = 'none'), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
-  x = gsub('^\\s*|\\s*$', '', x)
+  x = trimws(x)
   colnames(x) = col.names
   if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")
@@ -266,7 +266,7 @@ kable_latex_caption = function(x, caption) {
 }
 
 kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
-  table.attr = gsub('^\\s+|\\s+$', '', table.attr)
+  table.attr = trimws(table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
   align = if (is.null(align <- attr(x, 'align'))) '' else {

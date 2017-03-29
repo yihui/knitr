@@ -943,3 +943,5 @@ writeUTF8 = function(text, file, ...) {
     writeLines(enc2utf8(text), file, ..., useBytes = TRUE)
   }
 }
+
+trimws = function(x) gsub('^\\s+|\\s+$', '', x)
