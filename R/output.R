@@ -553,7 +553,7 @@ wrap.recordedplot = function(x, options) {
     MoreArgs = list(plot = x, name = name, options = options), SIMPLIFY = FALSE
   )[[1]]
   if (options$fig.show == 'hide') return('')
-  knit_hooks$get('plot')(file, reduce_plot_opts(options))
+  in_base_dir(knit_hooks$get('plot')(file, reduce_plot_opts(options)))
 }
 
 #' @export
