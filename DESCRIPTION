@@ -114,7 +114,7 @@ URL: http://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
 VignetteBuilder: knitr
 SystemRequirements: Package vignettes based on R Markdown v2 or reStructuredText require Pandoc (http://pandoc.org). 
-    The function rst2pdf() reStructuredText require rst2pdf (https://github.com/rst2pdf/rst2pdf).
+    The function rst2pdf() require rst2pdf (https://github.com/rst2pdf/rst2pdf).
 Collate:
     'block.R'
     'cache.R'
