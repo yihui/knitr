@@ -85,8 +85,9 @@ hook_ffmpeg = function(x, options, format = 'webm') {
   fig.num = options$fig.num
   format = sub('^[.]', '', format)
   # set up the ffmpeg run
-  fig.fname = paste0(sub(paste0(fig.num, '$'), '%d', x[1]), '.', x[2])
-  mov.fname = paste0(sub(paste0(fig.num, '$'), '', x[1]), '.', format)
+  base = sub(paste0(fig.num, '$'), '', x[1])
+  fig.fname = paste0(base, '%d', '.', x[2])
+  mov.fname = paste0(sub('-$', '', base), '.', format)
 
   extra = if (format == 'webm') {
     paste('-b:v', options$ffmpeg.bitrate %n% '1M', '-crf 10')
