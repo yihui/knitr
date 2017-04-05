@@ -10,6 +10,8 @@
 
 - the chunk option `results=FALSE` is an alias of `results='hide'` now (thanks, @hadley, #1360)
 
+- added a wrapper function `knit2pandoc()`, and reStructuredText vignettes will be compiled through Pandoc instead of rst2pdf (thanks, @trevorld, #1386)
+
 ## MAJOR CHANGES
 
 - a warning will be emitted when the chunk option `fig.show='hold'` and the output format is Word (https://github.com/rstudio/bookdown/issues/249); `fig.show='hold'` will be changed to `'asis'` at the same time
