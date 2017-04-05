@@ -19,6 +19,35 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
   if (file.exists(out)) out else stop('conversion by rst2pdf failed!')
 }
 
+#' Convert various input files to various output files using knit and pandoc
+#'
+#' Knits the input file and compiles to an output format using pandoc.
+#' @inheritParams knit
+#' @param to Character string describing output format to use
+#' @param pandoc_wrapper R function used to call pandoc.  By default if rmarkdown installed uses pandoc_convert else pandoc.
+#' @param ... options to be passed to the pandoc_wrapper function
+#' @author Trevor L. Davis
+#' @return Returns the output of the pandoc_wrapper function
+#' @export
+#' @seealso \code{\link{knit}}, \code{\link{pandoc}},
+#'      \code{\link[rmarkdown]{pandoc_convert}}, \code{\link{rst2pdf}}
+knit2pandoc <- function(input, output = NULL, tangle = FALSE, text = NULL,
+                           quiet = FALSE, envir=parent.frame(), encoding=getOption("encoding"),
+                           to = "html", pandoc_wrapper = NULL, ...) {
+    knit_output <- knit(input, output, tangle, text, quiet, envir, encoding)
+    if(is.null(pandoc_wrapper)) {
+        has_r_markdown <- "rmarkdown" %in% rownames(installed.packages())
+        if(has_r_markdown) {
+            output <- gsub(paste0(file_ext(knit_output), "$"), to, knit_output)
+            rmarkdown::pandoc_convert(knit_output, to, output=output, ...)
+        } else {
+            pandoc(knit_output, to, ...)
+        }
+    } else {
+        pandoc_wrapper(knit_output, to, ...)
+    }
+}
+
 #' Convert Rnw or Rrst files to PDF using knit() and texi2pdf() or rst2pdf()
 #'
 #' Knit the input Rnw or Rrst document, and compile to PDF using \code{texi2pdf}
