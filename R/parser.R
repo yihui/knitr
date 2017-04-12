@@ -46,7 +46,11 @@ knit_code = new_defaults()
 
 # strip the pattern in code
 strip_block = function(x, prefix = NULL) {
-  if (!is.null(prefix) && (length(x) > 1)) x[-1L] = sub(prefix, '', x[-1L])
+  if (!is.null(prefix) && (length(x) > 1)) {
+    x[-1L] = sub(prefix, '', x[-1L])
+    spaces = min(attr(regexpr("^ *", x[-1L]), "match.length"))
+    if (spaces > 0) x[-1L] = substring(x[-1L], spaces + 1)
+  }
   x
 }
 
