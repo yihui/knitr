@@ -33,7 +33,7 @@
 #' @param escape escape special characters when producing HTML or LaTeX tables
 #' @param ... other arguments (see examples)
 #' @return A character vector of the table source code.
-#' @seealso Other R packages such as \pkg{huxtable}, \pkg{xtable}, and
+#' @seealso Other R packages such as \pkg{huxtable}, \pkg{xtable}, \pkg{kableExtra}, and
 #'   \pkg{tables} for HTML and LaTeX tables, and \pkg{ascii} and \pkg{pander}
 #'   for different flavors of markdown output and some advanced features and
 #'   table styles.
