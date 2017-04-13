@@ -69,6 +69,7 @@ Authors@R: c(
     person("Sebastian", "Meyer", role = "ctb"),
     person("Sietse", "Brouwer", role = "ctb"),
     person(c("Simon", "de"), "Bernard", role = "ctb"),
+    person("Sylvain", "Rousseau", role = "ctb"),
     person("Taiyun", "Wei", role = "ctb"),
     person("Thibaut", "Assus", role = "ctb"),
     person("Thibaut", "Lamadon", role = "ctb"),
