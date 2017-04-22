@@ -28,7 +28,8 @@ assert(
   identical(img_output('a.png'), '![](a.png)'),
   identical(img_output(c('a.png', 'b.png'), list(fig.show = 'hold')), '![](a.png)![](b.png)'),
   identical(img_output('a.png', list(fig.cap = 'foo bar')), '![foo bar](a.png)'),
-  identical(img_output('a.png', list(out.width = '50%')), '<img src="a.png" width="50%" />')
+  identical(img_output('a.png', list(out.width = '50%')), '<img src="a.png" width="50%" />'),
+  identical(img_output('a.pdf', list(out.width = '300px')), '<embed src="a.pdf" width="300px" type="application/pdf" />')
 )
 
 knit_hooks$restore()

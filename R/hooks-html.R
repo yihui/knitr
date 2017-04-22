@@ -30,8 +30,12 @@ hook_plot_html = function(x, options) {
   caption = if (length(caption) == 1 && caption != '') {
     paste0('title="', caption, '" alt="', caption, '" ')
   }
+  tag = if (grepl('[.]pdf$', src, ignore.case = TRUE)) {
+    extra = c(extra, 'type="application/pdf"')
+    'embed'
+  } else 'img'
   paste0(
-    '<img src="', opts_knit$get('base.url'), src, '" ', caption,
+    '<', tag, ' src="', opts_knit$get('base.url'), src, '" ', caption,
     .img.attr(w, h, extra), ' />'
   )
 }

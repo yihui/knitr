@@ -32,6 +32,8 @@
 
 - the output file of `write_bib()` is now encoded in UTF-8 (thanks, @arnyeinstein, #1374)
 
+- the `<embed>` tag should be used instead of `<img>` for PDF images in HTML output (thanks, Daijiang Li, http://stackoverflow.com/q/43549930/559676)
+
 # CHANGES IN knitr VERSION 1.15.1
 
 ## NEW FEATURES
