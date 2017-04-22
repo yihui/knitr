@@ -35,8 +35,12 @@ Inline R code is also supported, e.g. the value of `x` is `r x`, and 2 &times; &
 
 ## Math
 
-LaTeX math as usual: $f(\alpha, \beta) \propto x^{\alpha-1}(1-x)^{\beta-1}$.
+LaTeX math as usual: 
 
+$f(\alpha, \beta) \propto x^{\alpha-1}(1-x)^{\beta-1}$
+```
+$f(\alpha, \beta) \propto x^{\alpha-1}(1-x)^{\beta-1}$
+```
 ## Misc
 
 You can indent code chunks so they can nest within other environments such as lists.
