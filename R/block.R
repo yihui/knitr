@@ -444,6 +444,8 @@ process_tangle = function(x) {
 #' @export
 process_tangle.block = function(x) {
   params = opts_chunk$merge(x$params)
+  if(!is.null(params$opts.label))
+    params = merge_list(params, opts_template$get(params$opts.label))
   for (o in c('purl', 'eval', 'child'))
     try(params[o] <- list(eval_lang(params[[o]])))
   if (isFALSE(params$purl)) return('')
