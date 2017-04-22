@@ -142,7 +142,7 @@ detect_pattern = function(text, ext) {
   if (!missing(ext)) {
     if (ext %in% c('rnw', 'snw', 'stex')) return('rnw')
     if (ext == 'brew') return('brew')
-    if (ext %in% c('htm', 'html', 'rhtm', 'rhtml')) return('html')
+    if (ext %in% c('htm', 'html', 'rhtm', 'rhtml', 'rxhtml')) return('html')
     if (ext %in% c('rmd', 'rmarkdown', 'markdown', 'md')) return('md')
     if (ext %in% c('rst', 'rrst')) return('rst')
   }
