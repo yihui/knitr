@@ -196,7 +196,7 @@ format_sci_one = function(x, format = 'latex') {
   b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
-    sci_notation('%s%s10^{%s}', b, '\\times ', lx)
+    sci_notation('\\ensuremath{%s%s10^{%s}}', b, '\\times ', lx)
   },
   html = sci_notation('%s%s10<sup>%s</sup>', b, ' &times; ', lx),
   md   = sci_notation('%s%s10^%s^', b, '&times; ', lx),
