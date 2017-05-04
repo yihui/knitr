@@ -161,6 +161,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     # restore chunk options after parent exits
     optc = opts_chunk$get(); on.exit(opts_chunk$restore(optc), add = TRUE)
     ocode = knit_code$get(); on.exit(knit_code$restore(ocode), add = TRUE)
+    on.exit(opts_current$restore(), add = TRUE)
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
     opts_knit$set(tangle = tangle, encoding = encoding,
                   progress = opts_knit$get('progress') && !quiet
