@@ -320,7 +320,8 @@ eng_cat = function(options) {
     if (!identical(file, '')) cat(..., file = file)
   }
   do.call(cat2, c(list(options$code, sep = '\n'), options$engine.opts))
-  if (is.null(lang <- options$engine.opts$lang)) return('')
+  if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
+    return('')
   options$engine = lang
   engine_output(options, options$code, NULL)
 }
