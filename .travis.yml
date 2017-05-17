@@ -7,8 +7,6 @@ env:
   matrix:
     - TARGET=travis
     - TARGET=integration DISPLAY=:99.0
-  global:
-    secure: AwMvWbAlUxA/SNmXpfm3zL7o5ohB2Qp/qyCrYdLRc8u9v6FBQAVq0NXghsN9NVCUiNO+unSr7qXj9JDcRyx6qj67nEzTM3Pcq1iEUAoWQyhDw9gyTls8wya2K4PG86b2yUAtVFkYBYDakjuTdo786Ili+Dsw4XP0PgtnuozCxuY=
 
 # capturing state, early exit if no integration test is needed
 before_install:
@@ -21,7 +19,7 @@ before_install:
         exit 0;
       fi;
     fi
-  - "curl -L https://yihui.name/xran/.gitconfig -o ~/.gitconfig"
+  - "curl https://xran.yihui.name/.gitconfig -o ~/.gitconfig"
   - Rscript -e 'update.packages(.libPaths()[1], ask = FALSE)'
   - Rscript -e "if (!require('covr')) install.packages('covr')"
 
@@ -39,7 +37,7 @@ addons:
     - texinfo
 
 repos:
-  XRAN: https://yihui.name/xran
+  XRAN: https://xran.yihui.name
 
 cache:
   packages: yes
@@ -58,4 +56,4 @@ script:
 # deploy to xran after integration tests
 after_success:
   - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
-  - "[ $TARGET = integration ] && (curl -L https://yihui.name/xran/r-xran | bash)"
+  - "[ $TARGET = integration ] && (curl https://xran.yihui.name/r-xran | bash)"
