@@ -26,6 +26,8 @@
 
 ## BUG FIXES
 
+- `kable()` should not ignore the table caption if provided when the input is a list, the table format is `pandoc`, and the document output format is not HTML or LaTeX, e.g. Word output (thanks, @ugroempi, https://github.com/rstudio/bookdown/issues/368)
+
 - `opts_chunk$set()` supports referencing a `sql` connection by variable name, e.g. `knitr::opts_chunk$set(connection = "db")` (thanks, @javierluraschi, #1362)
 
 - the chunk option `dev = 'CairoPS'` will lead to double filename extensions `.eps.ps` (thanks, @qifei9, #1364)

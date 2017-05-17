@@ -122,7 +122,10 @@ kable = function(
     } else if (format == 'html' || (format == 'pandoc' && is_html_output())) kable_html(
       matrix(paste0('\n\n', res, '\n\n'), 1), caption = caption, escape = FALSE,
       table.attr = 'class="kable_wrapper"'
-    ) else paste(res, collapse = '\n\n')
+    ) else {
+      res = paste(res, collapse = '\n\n')
+      if (format == 'pandoc') kable_pandoc_caption(res, caption) else res
+    }
     return(structure(res, format = format, class = 'knitr_kable'))
   }
   if (identical(col.names, NA)) col.names = colnames(x)
@@ -356,8 +359,12 @@ kable_pandoc = function(x, caption = NULL, padding = 1, ...) {
     x, c(NA, '-', if (is_blank(colnames(x))) '-' else NA),
     padding = padding, ...
   )
+  kable_pandoc_caption(tab, caption)
+}
+
+kable_pandoc_caption = function(x, caption) {
   if (identical(caption, NA)) caption = NULL
-  if (length(caption)) c(paste('Table:', caption), "", tab) else tab
+  if (length(caption)) c(paste('Table:', caption), "", x) else x
 }
 
 # pad a matrix
