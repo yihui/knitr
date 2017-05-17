@@ -49,7 +49,7 @@
 #'   is supported.
 #' @seealso \code{\link{Sweave}}, \code{\link{gsub}}
 #' @references The motivation of the changes in the syntax:
-#'   \url{http://yihui.name/knitr/demo/sweave/}
+#'   \url{https://yihui.name/knitr/demo/sweave/}
 #' @export
 #' @examples Sweave2knitr(text='<<echo=TRUE>>=') # this is valid
 #' Sweave2knitr(text="<<png=true>>=") # dev='png'

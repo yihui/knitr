@@ -31,6 +31,6 @@ opts_hooks$set(fig.width = function(options) {
 opts_hooks$restore()
 }
 \references{
-\url{http://yihui.name/knitr/hooks}
+\url{https://yihui.name/knitr/hooks/}
 }
 \keyword{datasets}

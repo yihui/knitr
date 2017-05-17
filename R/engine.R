@@ -27,8 +27,8 @@
 #' @export
 #' @note The Leiningen engine \code{lein} requires lein-exec plugin; see
 #'   \url{https://github.com/yihui/knitr/issues/1176} for details.
-#' @references Usage: \url{http://yihui.name/knitr/objects}; examples:
-#'   \url{http://yihui.name/knitr/demo/engines/}
+#' @references Usage: \url{https://yihui.name/knitr/objects/}; examples:
+#'   \url{https://yihui.name/knitr/demo/engines/}
 #' @examples knit_engines$get('python'); knit_engines$get('awk')
 #' names(knit_engines$get())
 knit_engines = new_defaults()

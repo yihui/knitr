@@ -40,9 +40,9 @@ opts_chunk$get("prompt")
 opts_chunk$get("fig.keep")
 }
 \references{
-Usage: \url{http://yihui.name/knitr/objects}
+Usage: \url{https://yihui.name/knitr/objects/}
 
   A list of available options:
-  \url{http://yihui.name/knitr/options#chunk_options}
+  \url{https://yihui.name/knitr/options/#chunk_options}
 }
 \keyword{datasets}

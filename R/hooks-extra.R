@@ -43,11 +43,11 @@
 #' turned on (the chunk option \code{cache = TRUE}), no chunk hooks will be
 #' executed, hence \code{hook_purl()} will not work, either. To solve this
 #' problem, we need \code{cache = 2} instead of \code{TRUE} (see
-#' \url{http://yihui.name/knitr/demo/cache/} for the meaning of \code{cache =
+#' \url{https://yihui.name/knitr/demo/cache/} for the meaning of \code{cache =
 #' 2}).
 #' @rdname chunk_hook
 #' @param before,options,envir see references
-#' @references \url{http://yihui.name/knitr/hooks#chunk_hooks}
+#' @references \url{https://yihui.name/knitr/hooks/#chunk_hooks}
 #' @seealso \code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}},
 #'   \code{\link[rgl]{hook_rgl}}, \code{\link[rgl]{hook_webgl}}
 #' @note The two hook functions \code{hook_rgl()} and \code{hook_webgl()} were

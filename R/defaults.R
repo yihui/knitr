@@ -43,10 +43,10 @@ new_defaults = function(value = list()) {
 #' \code{opts_chunk$get()}:
 #'
 #' \Sexpr[results=verbatim]{str(knitr::opts_chunk$get())}
-#' @references Usage: \url{http://yihui.name/knitr/objects}
+#' @references Usage: \url{https://yihui.name/knitr/objects/}
 #'
 #'   A list of available options:
-#'   \url{http://yihui.name/knitr/options#chunk_options}
+#'   \url{https://yihui.name/knitr/options/#chunk_options}
 #' @note \code{opts_current} is read-only in the sense that it does nothing if
 #'   you call \code{opts_current$set()}; you can only query the options via
 #'   \code{opts_current$get()}.
@@ -138,10 +138,10 @@ set_alias = function(...) {
 #' \code{opts_knit$get()}:
 #'
 #' \Sexpr[results=verbatim]{str(knitr::opts_knit$get())}
-#' @references Usage: \url{http://yihui.name/knitr/objects}
+#' @references Usage: \url{https://yihui.name/knitr/objects/}
 #'
 #'   A list of available options:
-#'   \url{http://yihui.name/knitr/options#package_options}
+#'   \url{https://yihui.name/knitr/options/#package_options}
 #' @export
 #' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
 #' if (interactive()) {

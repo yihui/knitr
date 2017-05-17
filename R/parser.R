@@ -121,7 +121,7 @@ parse_params = function(params) {
     eval(parse_only(paste('alist(', quote_label(params), ')'))),
     error = function(e) {
       message('(*) NOTE: I saw chunk options "', params,
-              '"\n please go to http://yihui.name/knitr/options',
+              '"\n please go to https://yihui.name/knitr/options',
               '\n (it is likely that you forgot to quote "character" options)')
     })
 
@@ -247,7 +247,7 @@ print.inline = function(x, ...) {
 #' @param from.offset,to.offset an offset to be added to \code{from}/\code{to}
 #' @return As a side effect, code chunks are read into the current session so
 #'   that future chunks can (re)use the code by chunk label references.
-#' @references \url{http://yihui.name/knitr/demo/externalization/}
+#' @references \url{https://yihui.name/knitr/demo/externalization/}
 #' @note This function can only be used in a chunk which is \emph{not} cached
 #'   (chunk option \code{cache = FALSE}), and the code is read and stored in the
 #'   current session \emph{without} being executed (to actually run the code,

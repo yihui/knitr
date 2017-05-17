@@ -34,9 +34,9 @@ str(knit_patterns$get())
 knit_patterns$set(opat)  # put the old patterns back
 }
 \references{
-Usage: \url{http://yihui.name/knitr/objects}
+Usage: \url{https://yihui.name/knitr/objects/}
 
-Components in \code{knit_patterns}: \url{http://yihui.name/knitr/patterns}
+Components in \code{knit_patterns}: \url{https://yihui.name/knitr/patterns/}
 }
 \seealso{
 \code{\link{all_patterns}}

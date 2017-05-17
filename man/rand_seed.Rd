@@ -22,6 +22,6 @@ rnorm(1)  # .Random.seed is created (or modified)
 eval(rand_seed)
 }
 \references{
-\url{http://yihui.name/knitr/demo/cache/}
+\url{https://yihui.name/knitr/demo/cache/}
 }
 \keyword{datasets}

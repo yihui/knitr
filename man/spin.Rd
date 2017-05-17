@@ -92,7 +92,7 @@ spin(s, FALSE, format = "Rtex")
 spin(s, FALSE, format = "Rrst")
 }
 \references{
-\url{http://yihui.name/knitr/demo/stitch/}
+\url{https://yihui.name/knitr/demo/stitch/}
 }
 \seealso{
 \code{\link{stitch}} (feed a template with an R script)

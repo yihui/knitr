@@ -33,7 +33,7 @@
 #' @inheritParams knit
 #' @return The output filename(s) (or an error if the conversion failed).
 #' @references Pandoc: \url{http://pandoc.org}; Examples and rules of the
-#'   configurations: \url{http://yihui.name/knitr/demo/pandoc}
+#'   configurations: \url{https://yihui.name/knitr/demo/pandoc/}
 #'
 #'   Also see R Markdown (v2) at \url{http://rmarkdown.rstudio.com}. The
 #'   \pkg{rmarkdown} package has several convenience functions and templates

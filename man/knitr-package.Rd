@@ -18,7 +18,7 @@ The pronunciation of \pkg{knitr} is similar to \emph{neater} (neater
   + \code{weave}).
 }
 \references{
-Full documentation and demos: \url{http://yihui.name/knitr/};
+Full documentation and demos: \url{https://yihui.name/knitr/};
   FAQ's: \url{http://bit.ly/knitr-faq}
 }
 \seealso{
@@ -27,5 +27,5 @@ The core function in this package: \code{\link{knit}}. If you are an
   to \pkg{knitr}.
 }
 \author{
-Yihui Xie <\url{http://yihui.name}>
+Yihui Xie <\url{https://yihui.name}>
 }

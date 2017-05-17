@@ -29,7 +29,7 @@ Be cautious about \code{path}: because this function is used in a
   files \file{__objects} and \file{__globals}.
 }
 \references{
-\url{http://yihui.name/knitr/demo/cache/}
+\url{https://yihui.name/knitr/demo/cache/}
 }
 \seealso{
 \code{\link{dep_prev}}

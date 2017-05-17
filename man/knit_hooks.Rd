@@ -18,8 +18,8 @@ knit_hooks$get("source")
 knit_hooks$get("inline")
 }
 \references{
-Usage: \url{http://yihui.name/knitr/objects}
+Usage: \url{https://yihui.name/knitr/objects/}
 
-Components in \code{knit_hooks}: \url{http://yihui.name/knitr/hooks}
+Components in \code{knit_hooks}: \url{https://yihui.name/knitr/hooks/}
 }
 \keyword{datasets}

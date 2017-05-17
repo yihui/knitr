@@ -65,7 +65,7 @@ hook_plot_tex("foo5.pdf", opts_chunk$merge(list(fig.show = "animate", interval =
     fig.cur = 5, fig.num = 5)))
 }
 \references{
-\url{http://yihui.name/knitr/hooks}
+\url{https://yihui.name/knitr/hooks/}
 }
 \seealso{
 \code{\link{hook_plot_custom}}

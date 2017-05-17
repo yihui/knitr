@@ -20,7 +20,7 @@
 #'   can certainly use mine, but this id is in the public domain so everyone
 #'   has access to all images associated to it.
 #' @references Imgur API version 3: \url{http://api.imgur.com/}; a demo:
-#'   \url{http://yihui.name/knitr/demo/upload/}
+#'   \url{https://yihui.name/knitr/demo/upload/}
 #' @export
 #' @examples \dontrun{
 #' f = tempfile(fileext = '.png')

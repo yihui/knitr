@@ -144,7 +144,7 @@ cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
 #'   files \file{__objects} and \file{__globals}.
 #' @export
 #' @seealso \code{\link{dep_prev}}
-#' @references \url{http://yihui.name/knitr/demo/cache/}
+#' @references \url{https://yihui.name/knitr/demo/cache/}
 dep_auto = function(path = opts_chunk$get('cache.path')) {
   # this function should be evaluated in the original working directory
   owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
@@ -243,7 +243,7 @@ load_cache = function(
 #'   effect.
 #' @export
 #' @seealso \code{\link{dep_auto}}
-#' @references \url{http://yihui.name/knitr/demo/cache/}
+#' @references \url{https://yihui.name/knitr/demo/cache/}
 dep_prev = function() {
   labs = names(knit_code$get())
   if ((n <- length(labs)) < 2L) return() # one chunk or less; no sense of deps
@@ -263,7 +263,7 @@ dep_prev = function() {
 #' references.
 #' @export
 #' @format NULL
-#' @references \url{http://yihui.name/knitr/demo/cache/}
+#' @references \url{https://yihui.name/knitr/demo/cache/}
 #' @examples eval(rand_seed)
 #' rnorm(1) # .Random.seed is created (or modified)
 #' eval(rand_seed)

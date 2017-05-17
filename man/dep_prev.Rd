@@ -16,7 +16,7 @@ later chunks depend on previous chunks, i.e. whenever the cache of a previous
 chunk is updated, the cache of all its later chunks will be updated.
 }
 \references{
-\url{http://yihui.name/knitr/demo/cache/}
+\url{https://yihui.name/knitr/demo/cache/}
 }
 \seealso{
 \code{\link{dep_auto}}

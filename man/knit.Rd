@@ -154,9 +154,9 @@ purl(f, documentation = 0)  # extract R code only
 purl(f, documentation = 2)  # also include documentation
 }
 \references{
-Package homepage: \url{http://yihui.name/knitr/}. The \pkg{knitr}
-  \href{http://yihui.name/knitr/demo/manual/}{main manual}: and
-  \href{http://yihui.name/knitr/demo/graphics}{graphics manual}.
+Package homepage: \url{https://yihui.name/knitr/}. The \pkg{knitr}
+  \href{https://yihui.name/knitr/demo/manual/}{main manual}: and
+  \href{https://yihui.name/knitr/demo/graphics/}{graphics manual}.
 
   See \code{citation('knitr')} for the citation information.
 }

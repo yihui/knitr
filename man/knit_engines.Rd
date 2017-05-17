@@ -45,7 +45,7 @@ knit_engines$get("awk")
 names(knit_engines$get())
 }
 \references{
-Usage: \url{http://yihui.name/knitr/objects}; examples:
-  \url{http://yihui.name/knitr/demo/engines/}
+Usage: \url{https://yihui.name/knitr/objects/}; examples:
+  \url{https://yihui.name/knitr/demo/engines/}
 }
 \keyword{datasets}

@@ -8,7 +8,7 @@
 #' @name knitr-package
 #' @aliases knitr
 #' @import graphics grDevices methods stats utils
-#' @author Yihui Xie <\url{http://yihui.name}>
+#' @author Yihui Xie <\url{https://yihui.name}>
 #' @seealso The core function in this package: \code{\link{knit}}. If you are an
 #'   Sweave user, see \code{\link{Sweave2knitr}} on how to convert Sweave files
 #'   to \pkg{knitr}.
@@ -16,7 +16,7 @@
 #'   than what?) or you can think of \emph{knitter} (but it is \emph{single t}).
 #'   The name comes from \code{knit} + \code{R} (while \code{Sweave} = \code{S}
 #'   + \code{weave}).
-#' @references Full documentation and demos: \url{http://yihui.name/knitr/};
+#' @references Full documentation and demos: \url{https://yihui.name/knitr/};
 #'   FAQ's: \url{http://bit.ly/knitr-faq}
 NULL
 

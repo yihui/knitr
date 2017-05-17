@@ -19,9 +19,9 @@
 #' arguments and returns desired output. The object \code{knit_hooks} is used to
 #' access or set hooks in this package.
 #' @export
-#' @references Usage: \url{http://yihui.name/knitr/objects}
+#' @references Usage: \url{https://yihui.name/knitr/objects/}
 #'
-#' Components in \code{knit_hooks}: \url{http://yihui.name/knitr/hooks}
+#' Components in \code{knit_hooks}: \url{https://yihui.name/knitr/hooks/}
 #' @examples knit_hooks$get('source'); knit_hooks$get('inline')
 knit_hooks = new_defaults(.default.hooks)
 
@@ -54,7 +54,7 @@ hook_suppress = function(x, options) {
 #' \code{opts_hooks$set(FOO = function(options) { options })} (you can manipuate
 #' the \code{options} argument in the function and return it), the hook function
 #' will be called to update the chunk options.
-#' @references \url{http://yihui.name/knitr/hooks}
+#' @references \url{https://yihui.name/knitr/hooks/}
 #' @export
 #' @examples # make sure the figure width is no smaller than fig.height
 #' opts_hooks$set(fig.width = function(options) {

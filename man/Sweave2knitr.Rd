@@ -80,7 +80,7 @@ knit("Sweave-test-knitr.Rnw")  # or knit2pdf() directly
 }
 \references{
 The motivation of the changes in the syntax:
-  \url{http://yihui.name/knitr/demo/sweave/}
+  \url{https://yihui.name/knitr/demo/sweave/}
 }
 \seealso{
 \code{\link{Sweave}}, \code{\link{gsub}}

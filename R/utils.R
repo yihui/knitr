@@ -61,7 +61,7 @@ color_def = function(col, variable = 'shadecolor') {
       x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
       warning("the color '", col, "' is invalid;",
               'using default color...',
-              'see http://yihui.name/knitr/options')
+              'see https://yihui.name/knitr/options')
     }
   }
   if (length(x) != 3L) stop('invalid color:', col)
@@ -127,7 +127,7 @@ pure_preamble = function(preamble, patterns) {
 #'   standalone mode using \code{\link{knit}()} (instead of being called in
 #'   \code{\link{knit_child}()}); when the parent document is compiled, this
 #'   function in the child document will be ignored.
-#' @references \url{http://yihui.name/knitr/demo/child/}
+#' @references \url{https://yihui.name/knitr/demo/child/}
 #' @export
 #' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
 #'

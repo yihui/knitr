@@ -47,7 +47,7 @@
 #'   \code{rmarkdown::\link[rmarkdown]{render}()} instead.
 #' @export
 #' @seealso \code{\link{stitch}} (feed a template with an R script)
-#' @references \url{http://yihui.name/knitr/demo/stitch/}
+#' @references \url{https://yihui.name/knitr/demo/stitch/}
 #' @examples #' write normal text like this and chunk options like below
 #'
 #' #+ label, opt=value
