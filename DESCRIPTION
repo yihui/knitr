@@ -111,7 +111,7 @@ Suggests:
     DBI (>= 0.4-1),
     tibble
 License: GPL
-URL: http://yihui.name/knitr/
+URL: https://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
 VignetteBuilder: knitr
 SystemRequirements: Package vignettes based on R Markdown v2 or reStructuredText require Pandoc (http://pandoc.org). 
