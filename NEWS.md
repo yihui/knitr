@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.17 (unreleased)
+
+## BUG FIXES
+
+- when a table only has one column, `kable()` does not work in R Markdown documents (thanks, @expersso, https://github.com/yihui/printr/issues/31)
+
 # CHANGES IN knitr VERSION 1.16
 
 ## NEW FEATURES

@@ -156,6 +156,7 @@ kable = function(
   n = nrow(x)
   x = replace_na(base::format(as.matrix(x), trim = TRUE, justify = 'none'), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
+  if (ncol(x) == 1 && format == 'pandoc') format = 'markdown'
   x = trimws(x)
   colnames(x) = col.names
   if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
