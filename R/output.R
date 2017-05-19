@@ -502,7 +502,7 @@ msg_wrap = function(message, type, options) {
     list(c(knit_log$get(type), paste0('Chunk ', options$label, ':\n  ', message))),
     type
   ))
-  msg_sanitize(message, type)
+  message = msg_sanitize(message, type)
   knit_hooks$get(type)(comment_out(message, options$comment), options)
 }
 
