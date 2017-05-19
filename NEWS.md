@@ -4,6 +4,8 @@
 
 - when a table only has one column, `kable()` does not work in R Markdown documents (thanks, @expersso, https://github.com/yihui/printr/issues/31)
 
+- `message(..., appendLF = FALSE)` does not work (thanks, Anastasius, http://stackoverflow.com/q/44059508/559676)
+
 # CHANGES IN knitr VERSION 1.16
 
 ## NEW FEATURES
