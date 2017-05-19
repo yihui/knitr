@@ -13,6 +13,11 @@ assert(
   identical(find_globals(c('a=1%*%1%o%2 %in% d', 'b=d%%10+3%/%2-z[1:3]')), c('d', 'z'))
 )
 
+assert(
+  'find_symbols() identifies all symbols',
+  find_symbols('x = x + 1; rnorm(1, std = z)') %==% c('x', 'rnorm', 'z')
+)
+
 knit_lazy = function(lazy = TRUE) {
   in_dir(tempdir(), {
     txt = c(sprintf('```{r test, cache=TRUE, cache.lazy=%s}', lazy),

@@ -48,10 +48,9 @@ new_cache = function() {
     } else lines = x
     writeLines(lines, con = path)
   }
-  cache_objects = function(keys, code, label, path) {
+  cache_objects = function(keys, globals, label, path) {
     save_objects(keys, label, valid_path(path, '__objects'))
-    # find globals in code; may not be reliable
-    save_objects(find_globals(code), label, valid_path(path, '__globals'))
+    save_objects(globals, label, valid_path(path, '__globals'))
   }
 
   cache_load = function(hash, lazy = TRUE) {
@@ -115,6 +114,14 @@ find_globals = function(code) {
 known_globals = c(
   '{', '[', '(', ':', '<-', '=', '+', '-', '*', '/', '%%', '%/%', '%*%', '%o%', '%in%'
 )
+
+# analyze code and find out all possible variables (not necessarily global variables)
+find_symbols = function(code) {
+  if (is.null(code) || length(p <- parse(text = code, keep.source = TRUE)) == 0) return()
+  p = getParseData(p)
+  p = p[p$terminal & p$token %in% c('SYMBOL', 'SYMBOL_FUNCTION_CALL', 'SPECIAL'), ]
+  unique(p$text)
+}
 
 # a variable name to store the metadata object from code chunks
 cache_meta_name = function(hash) sprintf('.%s_meta', hash)

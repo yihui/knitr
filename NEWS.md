@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.17 (unreleased)
 
+## MAJOR CHANGES
+
+- the automatic detection of chunk dependencies (via the chunk option `autodep = TRUE`) is more conservative by default now; chunk B depends on chunk A if _any_ variables in B are created in A, no matter if these variables are local or global in B; you can use the chunk option `cache.globals` to manually provide a vector of variable names that should be considered "global" to avoid the dependency when local variables in B are also found in A (thanks, @knokknok, #1403)
+
 ## BUG FIXES
 
 - when a table only has one column, `kable()` does not work in R Markdown documents (thanks, @expersso, https://github.com/yihui/printr/issues/31)
