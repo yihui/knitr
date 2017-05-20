@@ -125,7 +125,7 @@ params:
 )
 assert(!is.null(params[[1]]$expr))
 assert('Date' %in% class(params[[1]]$value))
-assert(params[[2]]$expr)
+assert(!is.null(params[[2]]$expr))
 assert('POSIXct' %in% class(params[[2]]$value))
 assert(is.null(params[[3]]$expr))
 
