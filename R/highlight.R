@@ -74,7 +74,7 @@ css.parse.color = function(txt, default = '#000000') {
   default
 }
 
-is.hex = function(x) grepl('^#[0-9a-f]{6}$', x)
+is.hex = function(x) grepl('^#[[:xdigit]]{6}$', x)
 
 # minimal css parser
 css.parser = function(file, lines = readLines(file)) {
