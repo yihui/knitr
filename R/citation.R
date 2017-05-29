@@ -30,9 +30,8 @@
 #' @return a list containing the citations (also written to the \code{file} as a
 #'   side effect)
 #' @note Some packages on CRAN do not have standard bib entries, which was once
-#'   reported by Michael Friendly at
-#'   \url{https://stat.ethz.ch/pipermail/r-devel/2010-November/058977.html}. I
-#'   find this a real pain, and there are no easy solutions except contacting
+#'   reported by \href{https://stat.ethz.ch/pipermail/r-devel/2010-November/058977.html}{Michael Friendly}.
+#'   I find this a real pain, and there are no easy solutions except contacting
 #'   package authors to modify their DESCRIPTION files. Anyway, the argument
 #'   \code{tweak} has provided ugly hacks to deal with packages which are known
 #'   to be non-standard in terms of the format of citations; \code{tweak = TRUE}
