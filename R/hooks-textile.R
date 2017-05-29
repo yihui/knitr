@@ -32,10 +32,7 @@ render_textile = function() {
     }
   }
   hook.inline = function(x) .inline.hook(format_sci(x, 'html'))
-  z = list()
-  for (i in c('source', 'warning', 'message', 'error'))
-    z[[i]] = textile.hook(i)
-  knit_hooks$set(z)
+  knit_hooks$set(lapply(c('source', 'warning', 'message', 'error'), textile.hook))
   knit_hooks$set(
     inline = hook.inline, output = textile.hook('output'), plot = hook_plot_textile
   )
