@@ -3,13 +3,11 @@
 
 # doc is the output of processed document
 insert_header = function(doc) {
-  if (is.null(b <- knit_patterns$get('header.begin'))) return(doc)
-
-  if (out_format('html'))
-    return(insert_header_html(doc, b))
-  if (out_format(c('latex', 'listings', 'sweave')))
-    return(insert_header_latex(doc, b))
-  doc
+  if (is.null(b <- knit_patterns$get('header.begin'))) doc
+  else if (out_format('html')) insert_header_html(doc, b)
+  else if (out_format(c('latex', 'listings', 'sweave'))) 
+    insert_header_latex(doc, b)
+  else doc
 }
 
 # Makes latex header with macros required for highlighting, tikz and framed
