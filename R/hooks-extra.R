@@ -74,6 +74,8 @@ hook_png = function(
   before, options, envir, cmd = c('optipng', 'pngquant'), post_process = identity
 ) {
   if (before) return()
+  num = options$fig.num
+  if (length(num) == 0 || num == 0) return()  # no figures
   ext = tolower(options$fig.ext)
   if (ext != 'png') {
     warning('this hook only works with PNG at the moment'); return()

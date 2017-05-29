@@ -10,6 +10,8 @@
 
 - `message(..., appendLF = FALSE)` does not work (thanks, Anastasius, http://stackoverflow.com/q/44059508/559676)
 
+- `hook_optipng()` does not work correctly when a code chunk does not contain any R-generated plots (thanks, @@zevross-spatial, #1404)
+
 # CHANGES IN knitr VERSION 1.16
 
 ## NEW FEATURES
