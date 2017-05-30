@@ -171,7 +171,11 @@ hook_plot_tex = function(x, options) {
   k2 = '\\end{kframe}'
   x = .rm.empty.envir(paste0(k1, x, k2))
   size = if (options$size == 'normalsize') '' else sprintf('\\%s', options$size)
-  if (!ai) x = sprintf('\\begin{knitrout}%s\n%s\n\\end{knitrout}', size, x)
+  if (!ai) {
+    x = sprintf('\\begin{knitrout}%s\n%s\n\\end{knitrout}', size, x)
+  } else if (x != '' && size != '') {
+    x = paste0("{", size, "\n", x, "}")
+  }
   if (options$split) {
     name = fig_path('.tex', options, NULL)
     if (!file.exists(dirname(name)))
