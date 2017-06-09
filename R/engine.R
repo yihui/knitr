@@ -404,10 +404,12 @@ eng_block2 = function(options) {
 # helper to create engines the wrap embedded html assets (e.g. css,js)
 eng_html_asset = function(prefix, postfix) {
   function(options) {
-    if (options$eval && is_html_output(excludes = 'markdown')) {
+    out = if (options$eval && is_html_output(excludes = 'markdown')) {
       code = c(prefix, options$code, postfix)
       paste(code, collapse = '\n')
     }
+    options$results = 'asis'
+    engine_output(options, options$code, out)
   }
 }
 

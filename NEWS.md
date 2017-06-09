@@ -4,6 +4,8 @@
 
 - the automatic detection of chunk dependencies (via the chunk option `autodep = TRUE`) is more conservative by default now; chunk B depends on chunk A if _any_ variables in B are created in A, no matter if these variables are local or global in B; you can use the chunk option `cache.globals` to manually provide a vector of variable names that should be considered "global" to avoid the dependency when local variables in B are also found in A (thanks, @knokknok, #1403)
 
+- for engines `css` and `js`, the source code will be displayed by default just like R code chunks, and you can hide the source code using the chunk option `echo = FALSE` (thanks, @skadauke, #1408)
+
 ## BUG FIXES
 
 - when a table only has one column, `kable()` does not work in R Markdown documents (thanks, @expersso, https://github.com/yihui/printr/issues/31)
