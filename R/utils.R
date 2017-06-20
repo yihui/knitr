@@ -945,3 +945,8 @@ writeUTF8 = function(text, file, ...) {
 }
 
 trimws = function(x) gsub('^\\s+|\\s+$', '', x)
+
+optipng = function(dir = '.') {
+  files = list.files(dir, '[.]png$', recursive = TRUE, full.names = TRUE)
+  for (f in files) system2('optipng', shQuote(f))
+}
