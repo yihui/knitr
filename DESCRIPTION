@@ -54,6 +54,7 @@ Authors@R: c(
     person(c("Kevin", "K."), "Smith", role = "ctb"),
     person("Kirill", "Mueller", role = "ctb"),
     person("Kohske", "Takahashi", role = "ctb"),
+    person("Marc", "Wouts", role = "ctb"),
     person("Michael", "Friendly", role = "ctb"),
     person("Michal", "Bojanowski", role = "ctb"),
     person("Michel", "Kuhlmann", role = "ctb"),
@@ -116,7 +117,7 @@ BugReports: https://github.com/yihui/knitr/issues
 VignetteBuilder: knitr
 SystemRequirements: Package vignettes based on R Markdown v2 or reStructuredText require Pandoc (http://pandoc.org). 
     The function rst2pdf() require rst2pdf (https://github.com/rst2pdf/rst2pdf).
-Collate:
+Collate: 
     'block.R'
     'cache.R'
     'utils.R'
@@ -137,6 +138,7 @@ Collate:
     'hooks-rst.R'
     'hooks-textile.R'
     'hooks.R'
+    'ipython.R'
     'output.R'
     'package.R'
     'pandoc.R'
@@ -154,4 +156,4 @@ Collate:
     'utils-upload.R'
     'utils-vignettes.R'
     'zzz.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000

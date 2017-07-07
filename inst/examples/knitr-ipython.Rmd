@@ -1,0 +1,62 @@
+# A Minimal Example for Markdown
+
+This is a minimal example of using **knitr** to produce an _HTML_ page from _Markdown_.
+
+## Python code chunks
+
+```{r setup}
+# set global chunk options: images will be 7x5 inches
+knitr::opts_chunk$set(fig.width=7, fig.height=5)
+options(digits = 4)
+```
+
+Now we write some code chunks in this markdown file:
+
+```{ipython computing}
+x = 1+1 # a simple calculator
+print x
+from math import pi
+print pi
+import numpy as np
+np.random.seed(123)
+np.random.rand(5)  # boring random numbers
+```
+
+We can also produce plots:
+
+```{ipython graphics}
+import matplotlib.pyplot as plt
+y = np.random.rand(20)
+plt.hist(y)
+plt.show()
+```
+
+## Inline code
+
+Inline python code is also supported, e.g. the value of `x` is `ipython x`, and 2 &times; &pi;
+= `ipython 2*pi`.
+
+## Math
+
+LaTeX math as usual: $f(\alpha, \beta) \propto x^{\alpha-1}(1-x)^{\beta-1}$.
+
+## Misc
+
+You can indent code chunks so they can nest within other environments such as lists.
+
+1. the area of a circle with radius x
+    ```{ipython foo}
+    pi * x**2
+    ```
+2. OK, that is great
+
+To compile me, use
+
+```{r compile, eval=FALSE}
+library(knitr)
+knit('knitr-ipython.Rmd')
+```
+
+## Conclusion
+
+Markdown is super easy to write. Go to **knitr** [homepage](http://yihui.name/knitr) for details.
