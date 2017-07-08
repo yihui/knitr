@@ -13,6 +13,11 @@ try:
 except ImportError:
     from Queue import Empty
 
+# Filter the unicode warning on windows
+# Cf. https://stackoverflow.com/questions/21296475/python-dateutil-unicode-warning
+import warnings
+warnings.filterwarnings("ignore", category=UnicodeWarning)
+
 def parse_args(args):
     parser = ArgumentParser(description='IPython markdown + LaTeX engine for knitr')
 
