@@ -30,7 +30,7 @@ if __name__ == '__main__':
         with open(config.output, "w") as f:
             f.write(km.connection_file + '\n')
     else:
-        print 'Kernel connection file: ' + km.connection_file
+        print('Kernel connection file: ' + km.connection_file)
 
     kc = km.client()
     kc.execute("%matplotlib inline")

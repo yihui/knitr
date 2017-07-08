@@ -8,8 +8,10 @@ import re
 import sys
 from time import sleep
 from traceback import format_exc
-from Queue import Empty
-
+try:
+    from queue import Empty
+except ImportError:
+    from Queue import Empty
 
 def parse_args(args):
     parser = ArgumentParser(description='IPython markdown + LaTeX engine for knitr')
@@ -116,11 +118,11 @@ def parse_args(args):
 
 def complete(kc, code, cursor):
     msg_id = kc.complete(code, cursor_pos=cursor)
-    # print "complete msg_id=%s" % msg_id
+    # print("complete msg_id=%s" % msg_id)
 
     while True:
         m = kc.get_shell_msg()
-        # print "parent_id=%s type=%s content.keys=%s content=%s" % (m['parent_header']['msg_id'], m['msg_type'], m['content'].keys(), str(m['content'])[:80]
+        # print("parent_id=%s type=%s content.keys=%s content=%s" % (m['parent_header']['msg_id'], m['msg_type'], m['content'].keys(), str(m['content'])[:80])
 
         if m['parent_header'].get('msg_id') != msg_id:
             continue
@@ -133,11 +135,11 @@ def complete(kc, code, cursor):
 
 def inspect(kc, code, cursor, level):
     msg_id = kc.inspect(code, cursor_pos=cursor, detail_level=level)
-    # print "complete msg_id=%s" % msg_id
+    # print("complete msg_id=%s" % msg_id)
 
     while True:
         m = kc.get_shell_msg()
-        # print "parent_id=%s type=%s content.keys=%s content=%s" % (m['parent_header']['msg_id'], m['msg_type'], m['content'].keys(), str(m['content'])[:80]
+        # print("parent_id=%s type=%s content.keys=%s content=%s" % (m['parent_header']['msg_id'], m['msg_type'], m['content'].keys(), str(m['content'])[:80])
 
         if m['parent_header'].get('msg_id') != msg_id:
             continue
@@ -152,12 +154,12 @@ def inspect(kc, code, cursor, level):
 
 def execute(kc, code):
     msg_id = kc.execute(code)
-    # print "exec msg_id=%s" % msg_id
+    # print("exec msg_id=%s" % msg_id)
     result = []
 
     while True:
         m = kc.get_iopub_msg()
-        # print "parent_id=%s type=%s content.keys=%s content=%s" % (m['parent_header']['msg_id'], m['msg_type'], m['content'].keys(), str(m['content'])[:80]
+        # print("parent_id=%s type=%s content.keys=%s content=%s" % (m['parent_header']['msg_id'], m['msg_type'], m['content'].keys(), str(m['content'])[:80])
 
         if m['parent_header'].get('msg_id') != msg_id:
             continue
@@ -210,8 +212,8 @@ def format_result(r, config):
 
     for msg_type, content in r:
         if config.debug:
-            print '[DEBUG] msg_type=%s content.keys=%s content.data.keys=%s, content=%s' % (
-                msg_type, content.keys(), content.get('data', {}).keys(), str(content)[:1024])
+            print('[DEBUG] msg_type=%s content.keys=%s content.data.keys=%s, content=%s' % (
+                msg_type, content.keys(), content.get('data', {}).keys(), str(content)[:1024]))
 
         if msg_type == 'stream' and config.message and \
                 re.match('<ggplot.*>', content['text']) is None:
@@ -265,8 +267,11 @@ def format_result(r, config):
                     image_counter += 1
                     if not os.path.exists(os.path.dirname(filename)):
                         os.makedirs(os.path.dirname(filename))
-                    with open(filename, "w") as f:
+                    with open(filename, "wb") as f:
+                      try:
                         f.write(decodestring(image_data))
+                      except TypeError:
+                        f.write(decodestring(bytes(image_data, 'utf-8')))
 
                     text = data.get('text/plain', '')
                     image = format_image(filename, text, config)
@@ -318,9 +323,9 @@ def kernel_client(config):
                 raise RuntimeError('No message found in the channel. Is the kernel alive?')
 
     except Exception as e:
-        print format_text('[ERROR] ipython_exec was not able to connect to the desired jupyter kernel\n' + \
+        print(format_text('[ERROR] ipython_exec was not able to connect to the desired jupyter kernel\n' + \
                           "[HINT] Execute 'ipython_start_kernel' or 'jupyter console' first\n" + \
-                          format_exc(), config.to)
+                          format_exc(), config.to))
         exit(1)
 
     return kc
@@ -334,13 +339,13 @@ if __name__ == '__main__':
     if config.inspect:
         r = inspect(kc, config.code[0], config.cursor, config.level)
         if r:
-            print r
+            print(r)
         exit()
 
     if config.complete:
         import json
         r = complete(kc, config.code[0], config.cursor)
-        print json.dumps(r)
+        print(json.dumps(r))
         exit()
 
     # figure dimensions
@@ -359,13 +364,13 @@ set_matplotlib_formats('%s')""" % config.imageformat)
         err, result = format_result(r, config)
         if err:
             if result != "":
-                print result
+                print(result)
             exit(err)
 
     r = execute(kc, config.code[0])
     err, result = format_result(r, config)
 
     if result != "":
-        print result
+        print(result)
 
     exit(err)

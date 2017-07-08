@@ -14,9 +14,9 @@ Now we write some code chunks in this markdown file:
 
 ```{ipython computing}
 x = 1+1 # a simple calculator
-print x
+print(x)
 from math import pi
-print pi
+print(pi)
 import numpy as np
 np.random.seed(123)
 np.random.rand(5)  # boring random numbers
