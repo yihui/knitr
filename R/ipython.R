@@ -7,6 +7,24 @@ ipython$methods(
         .self$debug = debug
         .self$kill.on.exit = kill.on.exit
 
+        python <- Sys.which("python")
+        if(python == "")
+          stop("'python' not found. Please make sure python is available, and update the PATH environment variable if necessary")
+
+        jupyter <- Sys.which("jupyter")
+        if(jupyter == "")
+          stop("'jupyter' not found. Please install a recent version of python that provides jupyter, and update the PATH environment variable if necessary")
+
+        pd <- dirname(python)
+        jd <- dirname(jupyter)
+        if(substr(jd, 0, nchar(pd))!=pd)
+          warning("Please check your python installation consistency: 'python' maps to ", python, " while 'jupyter' maps to ", jupyter)
+        else if(debug)
+        {
+          message("'python' is ", python)
+          message("'jupyter' is ", jupyter)
+        }
+        
         if(!is.null(kernel))
             .self$kernel = kernel
         else
