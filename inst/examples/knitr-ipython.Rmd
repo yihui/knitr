@@ -1,62 +1,81 @@
-# A Minimal Example for Markdown
+---
+title: Markdown notebooks for Python
+author: Marc Wouts
+---
 
-This is a minimal example of using **knitr** to produce an _HTML_ page from _Markdown_.
+# Motivation
 
-## Python code chunks
+In the past years I have been a regular user of the **knitr** package, that allows the generation of high quality $\LaTeX$-based PDF or HTML reports based on simple input files, coded in either $\LaTeX$+R (Sweave) or **markdown**+R (Rmd notebooks).
 
-```{r setup}
+Jupyter notebooks offer similar functionality of PDF and HTML export, however they are not text but rather json files and require a jupyter notebook server to be edited. I was also missing **knitr**'s simplicity and efficiency for configuring code chunks, and tell which code and or output should appear in the report, choose the figure size, etc.
+
+**knitr** already had a facility for executing python code, with however no support for multi-chunk session sharing, and no support for image output. Following Yihui's [invitation](https://yihui.name/knitr/demo/engines/) to contribute new engines, I implemented one with improved support for python.
+
+# Implementation
+
+My contribution is based on the standard jupyter messaging interface - the exact same that jupyter notebook use. My code was also inspired by the [VIM plugin for ipython](https://github.com/ivanov/vim-ipython) by Paul Ivanov.
+
+Most of the engine is implemented in the python script [ipython_exec.py](https://github.com/mwouts/knitr/blob/master/inst/ipython/ipython_exec.py) that executes the desired command on the desired kernel, save plots to disk, and prints the resulting $\LaTeX$ or markdown code on the console.
+
+By default, the ipython engine will start a new (python) kernel. You may also want to start you own kernel with
+```
+jupyter kernelspec list       # list available kernels
+jupyter console [--kernel=ir] # start a new (python/R) jupyter kernel
+```
+and connect knitr to that kernel with the chunk option `kernel='existing'`. If you want to connect to other kernels than the last one started, execute 
+```
+%connect_info
+```
+in the jupyter console, and set the kernel chunk option to, for instance, `kernel='kernel-55381.json'`
+
+# Requirements
+
+A modern python installation is required. knitr must be able to find both `python` and `jupyter`. If necessary, update the PATH environment variable.
+
+# Example
+
+We start with a knitr's setup. In practical use cases, you will probably want to set the chunk option `include=FALSE` on this chunk.
+
+```{r setup, include=TRUE}
 # set global chunk options: images will be 7x5 inches
 knitr::opts_chunk$set(fig.width=7, fig.height=5)
-options(digits = 4)
+# knitr::opts_chunk$set(kernel='existing') # uncomment if you want to connect to your own jupyter console
 ```
 
-Now we write some code chunks in this markdown file:
+Now we show a few python computations. Note that only explicit calls to `print`, plus the last line, lead to some output. Again, the input or output could be removed by using knitr's options `include` and `echo`.
 
 ```{ipython computing}
-x = 1+1 # a simple calculator
+x = 1+1
 print(x)
 from math import pi
 print(pi)
 import numpy as np
 np.random.seed(123)
-np.random.rand(5)  # boring random numbers
+np.random.rand(5)
 ```
 
-We can also produce plots:
+Note that the variable `x` defined above is accessible from later chunks, even from inline chunks, with for instance: the value of `x` is `ipython x`, and 2 &times; &pi; = `ipython 2*pi`.
 
-```{ipython graphics}
+Plots are saved to disk in the directory designated by the chunk option `fig.path`. Plots can be postponed after the end of text output with the chunk option `fig.show='hold'`.
+
+```{ipython graphics, fig.show='hold'}
 import matplotlib.pyplot as plt
+y = np.random.rand(20)
+plt.hist(y)
+plt.show()
 y = np.random.rand(20)
 plt.hist(y)
 plt.show()
 ```
 
-## Inline code
+To compile this document to markdown, and then HTML, either use the **Knit** button in RStudio, or execute
 
-Inline python code is also supported, e.g. the value of `x` is `ipython x`, and 2 &times; &pi;
-= `ipython 2*pi`.
-
-## Math
-
-LaTeX math as usual: $f(\alpha, \beta) \propto x^{\alpha-1}(1-x)^{\beta-1}$.
-
-## Misc
-
-You can indent code chunks so they can nest within other environments such as lists.
-
-1. the area of a circle with radius x
-    ```{ipython foo}
-    pi * x**2
-    ```
-2. OK, that is great
-
-To compile me, use
-
-```{r compile, eval=FALSE}
-library(knitr)
-knit('knitr-ipython.Rmd')
+```{bash compile, eval=FALSE}
+Rscript -e 'library(knitr); knit("knitr-ipython.Rmd")'
+Rscript -e 'library(rmarkdown); markdownToHTML("knitr-ipython.md")'
 ```
 
-## Conclusion
+# TODO
 
-Markdown is super easy to write. Go to **knitr** [homepage](http://yihui.name/knitr) for details.
+* document $\LaTeX$ + ipython in Rnw files
+* can we fix the inline chunks?
