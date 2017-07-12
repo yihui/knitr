@@ -429,9 +429,26 @@ inline_exec = function(block, envir = knit_global(), hook = knit_hooks$get('inli
 
   loc = block$location
   for (i in 1:n) {
-    v = withVisible(eval(parse_only(code[i]), envir = envir))
-    res = if (v$visible) knit_print(v$value, inline = TRUE, options = opts_chunk$get())
-    if (inherits(res, 'knit_asis')) res = wrap(res, inline = TRUE)
+
+    options = opts_chunk$get()
+    if(!is.null(names(code)) && names(code)[i] != "")
+      options$engine = names(code)[i]
+
+    if(options$engine == "R")
+    {
+      v = withVisible(eval(parse_only(code[i]), envir = envir))
+      res = if (v$visible) knit_print(v$value, inline = TRUE, options = options)
+      if (inherits(res, 'knit_asis')) res = wrap(res, inline = TRUE)
+    }
+    else
+    {
+      options$code = code[i]
+      options$echo = FALSE
+      options$results = 'asis'
+      options$inline = TRUE
+      engine = get_engine(options$engine)
+      res = engine(options)
+    }
     d = nchar(input)
     # replace with evaluated results
     stringr::str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {

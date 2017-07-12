@@ -192,7 +192,20 @@ parse_inline = function(input, patterns) {
     code = stringr::str_match_all(input, inline.code)[[1L]]
     code = if (NCOL(code) >= 2L) {
       code[is.na(code)] = ''
-      apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
+      code = code[, -1L, drop = FALSE]
+      sapply(1:nrow(code), function(row)
+      {
+        pieces = code[row,]
+        if(length(pieces)>1L &&
+           pieces[1L] %in% c("r", "ipython", "py", "S", "P"))
+        {
+          r = paste(pieces[-1L] , collapse="")
+          if(pieces[1L] %in% c("P", "ipython", "py"))
+            names(r) <- "ipython"
+          return(r)
+        }
+        paste(pieces, collapse="")
+      })
     } else character(0)
   } else code = character(0)
 

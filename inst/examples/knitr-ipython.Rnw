@@ -23,29 +23,24 @@ opts_chunk$set(fig.path='figure/ipython-', fig.align='center', fig.show='hold', 
 #opts_chunk$set(kernel='existing') # to use an existing 'jupyter console'
 @
 
-\title{A Minimal Demo of knitr for ipython}
+\title{Scientific reports in Python and \LaTeX}
 
 \author{Marc Wouts}
 
 \maketitle
-You can test if \textbf{knitr} works with this minimal demo. OK, let's
-get started with some boring random numbers:
+The {\tt ipython} engine for \textbf{knitr} allows to execute python code in \LaTeX plus python files. In the below, we generate a few random numbers, and compute their mean and variance.
 
-<<boring-random>>=
+<<random>>=
 import numpy as np
-np.random.seed(1121)
+np.random.seed(2017)
 x = np.random.rand(20)
 np.mean(x), np.var(x)
 @
 
-The first element of \texttt{x} is
-<<first_element, results='asis', echo=FALSE>>=
-x[0]
-@
+Inline python expressions are available, for instance the first element of \texttt{x} is approximatively \Pexpr{round(x[0], 6)}.
 
-Boring boxplots and histograms recorded by the PDF device:
-
-<<boring-plots, fig.width=4, fig.height=4, out.width='.4\\linewidth'>>=
+Matplotlib plots will be recorded to PDF and inserted in the report:
+<<plots, fig.width=4, fig.height=4, out.width='.4\\linewidth'>>=
 ## two plots side by side (option fig.show='hold')
 import matplotlib.pyplot as plt
 plt.hist(x)
@@ -55,8 +50,5 @@ plt.hist(1-x)
 plt.show()
 @
 
-Do the above chunks work? You should be able to compile the \TeX{}
-document and get a PDF file like this one: \url{https://github.com/yihui/knitr/releases/download/doc/knitr-ipython.pdf}.
-The Rnw source of this document is at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-ipython.Rnw}.
 \end{document}
 

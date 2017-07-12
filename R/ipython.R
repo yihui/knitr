@@ -24,7 +24,7 @@ ipython$methods(
           message("'python' is ", python)
           message("'jupyter' is ", jupyter)
         }
-        
+
         if(!is.null(kernel))
             .self$kernel = kernel
         else
@@ -154,7 +154,10 @@ eng_ipython <- function(options)
   else if(options$results == "asis")
     options$results <- "markup"
 
-  engine_output(options, options$code, out)
+  if(is.null(options$inline) || !options$inline)
+    engine_output(options, options$code, out)
+  else
+    out
 }
 
 # set the ipython engine
