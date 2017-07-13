@@ -23,6 +23,7 @@ Authors@R: c(
     person("Fitch", "Simeon", role = "ctb"),
     person("Forest", "Fang", role = "ctb"),
     person(c("Frank", "E", "Harrell", "Jr"), role = "ctb", comment = "the Sweavel package at inst/misc/Sweavel.sty"),
+    person("Garrick", "Aden-Buie", role = "ctb"),
     person("Gregoire", "Detrez", role = "ctb"),
     person("Hadley", "Wickham", role = "ctb"),
     person("Heewon", "Jeon", role = "ctb"),
