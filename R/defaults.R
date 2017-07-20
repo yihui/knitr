@@ -22,16 +22,16 @@ new_defaults = function(value = list()) {
   merge = function(values) merge_list(defaults, values)
   restore = function(target = value) defaults <<- target
 
-append = function(...) {
+  append = function(...) {
     dots = list(...)
     if (length(dots) == 0) return()
     if (is.null(names(dots)) && length(dots) == 1 && is.list(dots[[1]]))
       if (length(dots <- dots[[1]]) == 0) return()
-    dots<-sapply(names(dots),function(x) dots[[x]]<-c(defaults[[x]],dots[[x]]),simplify = FALSE)
+    for (i in names(dots)) dots[[i]] <- c(defaults[[i]], dots[[i]])
     defaults <<- merge(dots)
     invisible(NULL)
   }
-  
+
   list(get = get, set = set, append=append, merge = merge, restore = restore)
 }
 
