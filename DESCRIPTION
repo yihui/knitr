@@ -74,6 +74,7 @@ Authors@R: c(
     person("Taiyun", "Wei", role = "ctb"),
     person("Thibaut", "Assus", role = "ctb"),
     person("Thibaut", "Lamadon", role = "ctb"),
+    person("Thierry", "Onkelinx", role = "ctb"),
     person("Thomas", "Leeper", role = "ctb"),
     person("Tom", "Torsney-Weir", role = "ctb"),
     person("Trevor", "Davis", role = "ctb"),
