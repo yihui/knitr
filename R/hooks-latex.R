@@ -90,8 +90,13 @@ hook_plot_tex = function(x, options) {
     switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n', right = '\n\n', '')
 
   # figure environment: caption, short caption, label
-  cap = escape_latex(options$fig.cap)
-  scap = escape_latex(options$fig.scap)
+  if (out_format('latex')) {
+    cap = escape_latex(options$fig.cap)
+    scap = escape_latex(options$fig.scap)
+  } else {
+    cap = options$fig.cap
+    scap = options$fig.scap
+  }
   fig1 = fig2 = ''
   mcap = fig.num > 1L && options$fig.show == 'asis' && !length(subcap)
   # initialize subfloat strings
