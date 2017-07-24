@@ -91,8 +91,16 @@ hook_plot_tex = function(x, options) {
 
   # figure environment: caption, short caption, label
   if (out_format('latex')) {
-    cap = escape_latex(options$fig.cap)
-    scap = escape_latex(options$fig.scap)
+    if (is.null(options$fig.cap)) {
+      cap = NULL
+    } else {
+      cap = escape_latex(options$fig.cap)
+    }
+    if (is.null(options$fig.scap)) {
+      scap = NULL
+    } else {
+      scap = escape_latex(options$fig.scap)
+    }
   } else {
     cap = options$fig.cap
     scap = options$fig.scap
