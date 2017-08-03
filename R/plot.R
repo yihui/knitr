@@ -138,7 +138,7 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
     owd = setwd(dirname(path))
     # add old wd to TEXINPUTS (see #188)
     oti = Sys.getenv('TEXINPUTS'); on.exit(Sys.setenv(TEXINPUTS = oti))
-    Sys.setenv(TEXINPUTS = paste(owd, oti, sep = ':'))
+    Sys.setenv(TEXINPUTS = paste(owd, oti, sep = .Platform$path.sep))
     latex = switch(
       getOption('tikzDefaultEngine'),
       pdftex = getOption('tikzLatex'),
