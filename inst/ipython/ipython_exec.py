@@ -87,9 +87,16 @@ def parse_args(args):
     parser.add_argument('-t', '--to',
                         type=str,
                         dest='to',
-                        default='markdown',
-                        choices=['markdown', 'nohtml', 'latex', 'asis'],
+                        default='asis',
+                        choices=['asis', 'markdown', 'latex'],
                         help='Output format')
+
+    parser.add_argument('-r', '--results',
+                        type=str,
+                        dest='results',
+                        default='asis',
+                        choices=['markup', 'nohtml', 'asis', 'hide'],
+                        help='Should text results be encapsulated, filtered or hidden?')
 
     parser.add_argument('--imageformat',
                         type=str,
@@ -177,14 +184,15 @@ def execute(kc, code):
         result.append((m['msg_type'], m['content']))
 
 
-def format_text(text, to='markdown', html=None):
-    if to == 'asis':
-        return text
+def format_text(text, to, html=None):
     if to == 'latex':
         return '\\begin{verbatim}\n' + text + '\n\\end{verbatim}'
-    if to == "nohtml" or html is None:
-        return '```\n' + text + '\n```'
-    return '<div class="output">\n' + html + '\n</div>'
+    if html:
+        return '<div class="output">\n' + html + '\n</div>'
+    if to == 'asis':
+        return text
+    return '```\n' + text + '\n```'
+
 
 def format_display(html, to='markdown'):
     if to == 'markdown':
@@ -199,6 +207,8 @@ def format_display(html, to='markdown'):
 def format_javascript(code, to='markdown'):
     if to == 'markdown':
         return '<script type="text/javascript">\n' + code + '\n</script>'
+    if to == 'hide':
+        return ''
     raise TypeError("javascript code is not supported in output format '%s'" % to)
 
 
@@ -226,32 +236,32 @@ def format_result(r, config):
                 result.append(format_text(content['text'][:-1], config.to))
             except Exception as e:
                 result.append(
-                    format_text('[ERROR] ipython_exec was not able to display the streamed message\n' \
+                    format_text('PyExecError: ipython_exec was not able to display the streamed message\n' \
                                 + format_exc(), config.to))
                 error = True
 
         if msg_type == 'error':
             try:
-                error = '[ERROR] {}: {}'.format(content['ename'], content['evalue'])
+                error = '{}: {}'.format(content['ename'], content['evalue'])
                 result.append(format_text(error, config.to))
                 error = True
             except Exception as e:
-                result.append(format_text('[ERROR] ipython_exec was not able to parse the error\n' \
+                result.append(format_text('PyExecError: ipython_exec was not able to parse the error\n' \
                                           + format_exc(), config.to))
                 error = True
 
-        if msg_type == 'execute_result':
+        if msg_type == 'execute_result' and config.results!='hide':
             try:
                 data = content['data']
                 plain = data.get('text/plain')
-                html = data.get('text/html')
+                html = None if config.results=="nohtml" else data.get('text/html')
 
                 if re.match('(\\[|)<matplotlib.* at 0x.*>(\\]|)', plain) is None \
                     and re.match('<ggplot.*>', plain) is None:
                     result.append(format_text(plain, config.to, html))
             except Exception as e:
                 result.append(
-                    format_text('[ERROR] ipython_exec was not able to parse the execution result\n' \
+                    format_text('PyExecError: ipython_exec was not able to parse the execution result\n' \
                                 + format_exc(), config.to))
                 error = True
 
@@ -294,7 +304,7 @@ def format_result(r, config):
                     result.append(format_display(html, config.to))
 
             except Exception as e:
-                result.append(format_text('[ERROR] ipython_exec was not able to parse the display data\n' \
+                result.append(format_text('PyExecError: ipython_exec was not able to parse the display data\n' \
                                           + format_exc(), config.to))
                 error = True
 
@@ -328,8 +338,8 @@ def kernel_client(config):
                 raise RuntimeError('No message found in the channel. Is the kernel alive?')
 
     except Exception as e:
-        print(format_text('[ERROR] ipython_exec was not able to connect to the desired jupyter kernel\n' + \
-                          "[HINT] Execute 'ipython_start_kernel' or 'jupyter console' first\n" + \
+        print(format_text('PyExecError: ipython_exec was not able to connect to the desired jupyter kernel\n' + \
+                          "Hint: execute 'ipython_start_kernel' or 'jupyter console' first\n" + \
                           format_exc(), config.to))
         exit(1)
 

@@ -65,16 +65,20 @@ ipython$methods(
 ipython$methods(
     exec = function(code, options=list(), message=.self$message, debug=.self$debug)
     {
+      latex = identical(out_format(), "latex")
         cmd = c(shQuote(paste(code, collapse = '\n')),
-                 "--kernel", .self$kernel,
-                 if(!is.null(options$results))
-                     c("--to", if(options$results=="asis") "asis" else out_format()),
-                 if(!is.null(options$message))
-                     c("--message", (if(options$message) "True" else "False")),
-                 if(!is.null(options$fig.path) && !is.null(options$label))
+                "--kernel", .self$kernel,
+                "--to", if(latex) "latex" else "markdown",
+                if(!is.null(options$results))
+                     c("--results", options$results),
+                if(!is.null(options$message))
+                  c("--message", (if(options$message) "True" else "False")),
+                if(!is.null(options$fig.path) && !is.null(options$label))
                     c("--prefix", paste(valid_path(options$fig.path, options$label), sep = '_')),
                  if(!is.null(options$fig.show))
                      c("--figshow", options$fig.show),
+                 if(!is.null(options$dev))
+                     c("--imageformat", options$dev),
                  if(!is.null(options$fig.width))
                      c("--width", options$fig.width),
                  if(!is.null(options$fig.height))
@@ -91,7 +95,8 @@ ipython$methods(
             system2("python", c(ipyexec, cmd),
                     stdout = TRUE, stderr = TRUE, env = options$engine.env),
             error = function(e) {
-                if (is.null(options$error) || !options$error) stop(e)
+                if (is.null(options$error) || !options$error)
+                  stop(e)
                 paste('Error in running command', cmd)
             }
         )
@@ -142,7 +147,13 @@ eng_ipython <- function(options)
   } else ''
 
   if (!options$error && !is.null(attr(out, 'status')))
-    stop(paste(out, collapse = '\n'))
+  {
+    out <- gsub("\\\\(begin|end)\\{verbatim\\}", "", out)
+    out <- gsub("```", "", out)
+    out <- out[out!=""]
+
+    stop(tail(out, 1))
+  }
 
   # Input language is python
   options$engine <- "python"

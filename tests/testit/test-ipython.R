@@ -26,4 +26,17 @@ if(Sys.which("jupyter")!="")
     assert(file.exists("fig_path/fig_label_1.png"))
     unlink("fig_path", recursive = TRUE)
   }
+
+  # test error catching
+  options = list(code = "not correct", eval=TRUE, error=FALSE, results = "asis", echo=FALSE)
+  assert(has_error(r = eng_ipython(options)))
+
+  if(Sys.which("py.test")!="")
+  {
+    out <- system2("py.test", system.file("ipython", "test_ipython_exec.py", package="knitr"), stdout = TRUE)
+    if(!is.null(attr(out, "status")))
+      warning(paste(out, collapse="\n"))
+    assert(is.null(attr(out, "status")))
+  }
 }
+

@@ -10,7 +10,7 @@ km.start_kernel()
 km.write_connection_file()
 kc = km.client()
 
-# set breakpoints in ipymd with
+# set breakpoints with
 # import pytest
 # pytest.set_trace()
 
@@ -28,7 +28,7 @@ def test_get_a():
     r = execute(kc, config.code[0])
     err, result = format_result(r, config)
 
-    assert result == '```\n17\n```'
+    assert result == '17'
     assert not err
 
 def test_get_a_plus_13():
@@ -36,7 +36,7 @@ def test_get_a_plus_13():
     r = execute(kc, config.code[0])
     err, result = format_result(r, config)
 
-    assert result == '```\n30\n```'
+    assert result == '30'
     assert not err
 
 def test_pandas_html():
@@ -51,7 +51,7 @@ pandas.DataFrame({'x':range(10)})"""])
 
 def test_pandas_text():
     config = parse_args(["""import pandas
-pandas.DataFrame({'x':range(10)})""", "--to", "nohtml"])
+pandas.DataFrame({'x':range(10)})""", "-r", "nohtml"])
 
     r = execute(kc, config.code[0])
     err, result = format_result(r, config)
@@ -63,14 +63,14 @@ def test_matplotlib_and_print():
     config = parse_args(["""
 import numpy as np
 import matplotlib.pyplot as plt
- 
- 
+
+
 N = 50
 x = np.random.rand(N)
 y = np.random.rand(N)
 colors = np.random.rand(N)
 area = np.pi * (15 * np.random.rand(N))**2 # 0 to 15 point radiuses
- 
+
 print("Hello")
 plt.scatter(x, y, s=area, c=colors, alpha=0.5)
 plt.show()
@@ -78,7 +78,7 @@ print("Again")
 plt.scatter(x, 1-y, s=area, c=colors, alpha=0.5)
 plt.show()
 print("Finally")
-"""])
+""", "--to", "markdown", "--results", "markup"])
     r = execute(kc, config.code[0])
     err, result = format_result(r, config)
 
@@ -115,7 +115,7 @@ print("Again")
 plt.scatter(x, 1-y, s=area, c=colors, alpha=0.5)
 plt.show()
 print("Finally")
-""", "--to", "latex"])
+""", "--to", "latex", "--results", "markup"])
     r = execute(kc, config.code[0])
     err, result = format_result(r, config)
 
