@@ -14,6 +14,8 @@
 
 - `hook_optipng()` does not work correctly when a code chunk does not contain any R-generated plots (thanks, @@zevross-spatial, #1404)
 
+- markdown lines starting with three backticks won't be considered inline code chunks (thanks, @gadenbuie, #1416)
+
 # CHANGES IN knitr VERSION 1.16
 
 ## NEW FEATURES

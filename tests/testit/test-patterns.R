@@ -7,7 +7,8 @@ assert(
   identical(detect_pattern('% begin.rcode'), 'tex'),
   identical(detect_pattern('<!--begin.rcode'), 'html'),
   identical(detect_pattern('``` {r}'), 'md'),
-  identical(detect_pattern('asdf', 'rnw'), 'rnw')
+  identical(detect_pattern('asdf', 'rnw'), 'rnw'),
+  detect_pattern('foo') %==% NULL
 )
 
 assert(
