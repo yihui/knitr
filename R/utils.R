@@ -358,6 +358,7 @@ pandoc_from = function() {
 }
 
 pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
+  if (length(text) == 0) return(text)
   f1 = tempfile('pandoc', '.', '.md'); f2 = tempfile('pandoc', '.')
   on.exit(unlink(c(f1, f2)), add = TRUE)
   writeLines(enc2utf8(text), f1, useBytes = TRUE)
