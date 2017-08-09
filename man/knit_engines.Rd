@@ -30,10 +30,8 @@ engine.path='/usr/bin/ruby1.9.1'}. Additional command line arguments can be
 passed through \code{options$engine.opts}, e.g. \code{engine='ruby',
 engine.opts='-v'}.
 
-Below is a list of built-in language engines, retrieved via
-\code{knit_engines$get()}:
-
-\Sexpr[results=verbatim]{str(knitr::knit_engines$get())}
+See \code{str(knitr::knit_engines$get())} for a list of built-in language
+engines.
 }
 \note{
 The Leiningen engine \code{lein} requires lein-exec plugin; see
