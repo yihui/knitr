@@ -766,9 +766,9 @@ same_file = function(f1, f2) {
 
 # a restricted version of is.numeric (e.g. do not treat chron::chron() as
 # numeric since their behavior may be somewhat unpredictable, e.g. through
-# round(), #1118)
+# round(), #1118); see #1396 for difftime
 is_numeric = function(x) {
-  class(x)[1] %in% c('numeric', 'integer')
+  class(x)[1] %in% c('numeric', 'integer', 'difftime')
 }
 
 # create \label{x} or (\#x); the latter is current an internal hack for bookdown

@@ -6,6 +6,8 @@
 
 - for engines `css` and `js`, the source code will be displayed by default just like R code chunks, and you can hide the source code using the chunk option `echo = FALSE` (thanks, @skadauke, #1408)
 
+- for `kable()`, the `digits` argument will be applied to columns of the class `difftime` (thanks, @RoyalTS, #1396)
+
 ## BUG FIXES
 
 - when a table only has one column, `kable()` does not work in R Markdown documents (thanks, @expersso, https://github.com/yihui/printr/issues/31)
