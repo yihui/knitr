@@ -71,4 +71,4 @@ knit("knitr-minimal.Rmd")
 
 ## Conclusion
 
-Markdown is super easy to write. Go to **knitr** [homepage](http://yihui.name/knitr) for details.
+Markdown is super easy to write. Go to **knitr** [homepage](https://yihui.name/knitr) for details.

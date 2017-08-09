@@ -8,7 +8,7 @@ The R package **knitr** is a general-purpose literate programming engine,
 with lightweight API's designed to give users full control of the output
 without heavy coding work. It combines many features into one package with
 slight tweaks motivated from my everyday use of Sweave. See the package
-[homepage](http://yihui.name/knitr) for details and examples. See
+[homepage](https://yihui.name/knitr/) for details and examples. See
 [FAQ's](https://github.com/yihui/knitr/blob/master/FAQ.md) for a list of
 frequently asked questions (including where to ask questions).
 
@@ -22,12 +22,12 @@ install.packages('knitr', dependencies = TRUE)
 ```
 
 You can also install the development version from
-[XRAN](http://yihui.name/xran/), which provides daily build of **knitr**:
+[XRAN](https://xran.yihui.name), which provides daily build of **knitr**:
 
 ```r
 # update all existing packages first
-update.packages(ask = FALSE, repos = 'http://cran.rstudio.org')
-install.packages('knitr', repos = c('http://yihui.name/xran', 'http://cran.rstudio.org'))
+update.packages(ask = FALSE, repos = 'https://cran.rstudio.org')
+install.packages('knitr', repos = c('https://xran.yihui.name', 'https://cran.rstudio.org'))
 ```
 
 Or use **devtools** to install the development version from Github:
@@ -94,9 +94,9 @@ knit(input)
 
 If options are not explicitly specified, **knitr** will try to guess
 reasonable default settings. A few manuals are available such as the [main
-manual](http://yihui.name/knitr/demo/manual/), and the
+manual](https://yihui.name/knitr/demo/manual/), and the
 [graphics
-manual](http://yihui.name/knitr/demo/graphics/). For a
+manual](https://yihui.name/knitr/demo/graphics/). For a
 more organized reference, see the [knitr book](http://amzn.com/1498716962).
 
 ## License
