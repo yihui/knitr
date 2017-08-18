@@ -196,11 +196,11 @@ parse_inline = function(input, patterns) {
       sapply(1:nrow(code), function(row)
       {
         pieces = code[row,]
-        if(length(pieces)>1L &&
-           pieces[1L] %in% c("r", "ipython", "py", "S", "P"))
+        if(length(pieces)>2L &&
+           pieces[2L] %in% c("r", "ipython", "py", "S", "P"))
         {
-          r = paste(pieces[-1L] , collapse="")
-          if(pieces[1L] %in% c("P", "ipython", "py"))
+          r = paste(tail(pieces,-2L) , collapse="")
+          if(pieces[2L] %in% c("P", "ipython", "py"))
             names(r) <- "ipython"
           return(r)
         }
