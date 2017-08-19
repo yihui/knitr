@@ -25,10 +25,7 @@ use these options. Note the global options set in one chunk will not affect
 the options in this chunk itself, and that is why we often need to set global
 options in a separate chunk.
 
-Below is a list of default chunk options, retrieved via
-\code{opts_chunk$get()}:
-
-\Sexpr[results=verbatim]{str(knitr::opts_chunk$get())}
+See \code{str(knitr::opts_chunk$get())} for a list of default chunk options.
 }
 \note{
 \code{opts_current} is read-only in the sense that it does nothing if

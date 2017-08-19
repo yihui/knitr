@@ -357,7 +357,8 @@ pandoc_from = function() {
   opts_knit$get('rmarkdown.pandoc.from') %n% 'markdown'
 }
 
-pandoc_fragment = function(text, to, from = pandoc_from()) {
+pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
+  if (length(text) == 0) return(text)
   f1 = tempfile('pandoc', '.', '.md'); f2 = tempfile('pandoc', '.')
   on.exit(unlink(c(f1, f2)), add = TRUE)
   writeLines(enc2utf8(text), f1, useBytes = TRUE)
@@ -766,9 +767,9 @@ same_file = function(f1, f2) {
 
 # a restricted version of is.numeric (e.g. do not treat chron::chron() as
 # numeric since their behavior may be somewhat unpredictable, e.g. through
-# round(), #1118)
+# round(), #1118); see #1396 for difftime
 is_numeric = function(x) {
-  class(x)[1] %in% c('numeric', 'integer')
+  class(x)[1] %in% c('numeric', 'integer', 'difftime')
 }
 
 # create \label{x} or (\#x); the latter is current an internal hack for bookdown

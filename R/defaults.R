@@ -39,10 +39,7 @@ new_defaults = function(value = list()) {
 #' the options in this chunk itself, and that is why we often need to set global
 #' options in a separate chunk.
 #'
-#' Below is a list of default chunk options, retrieved via
-#' \code{opts_chunk$get()}:
-#'
-#' \Sexpr[results=verbatim]{str(knitr::opts_chunk$get())}
+#' See \code{str(knitr::opts_chunk$get())} for a list of default chunk options.
 #' @references Usage: \url{https://yihui.name/knitr/objects/}
 #'
 #'   A list of available options:
@@ -134,10 +131,7 @@ set_alias = function(...) {
 #' correspond to options in \code{opts_knit}. This can be useful to set package
 #' options in \file{~/.Rprofile} without loading \pkg{knitr}.
 #'
-#'  Below is a list of default package options, retrieved via
-#' \code{opts_knit$get()}:
-#'
-#' \Sexpr[results=verbatim]{str(knitr::opts_knit$get())}
+#' See \code{str(knitr::opts_knit$get())} for a list of default package options.
 #' @references Usage: \url{https://yihui.name/knitr/objects/}
 #'
 #'   A list of available options:
