@@ -68,7 +68,7 @@ ipython$methods(
       latex = identical(out_format(), "latex")
         cmd = c(shQuote(paste(code, collapse = '\n')),
                 "--kernel", .self$kernel,
-                "--to", if(latex) "latex" else "markdown",
+                "--to", if(identical(options$results, "asis")) "asis" else if(latex) "latex" else "markdown",
                 if(!is.null(options$results))
                      c("--results", options$results),
                 if(!is.null(options$message))
@@ -107,8 +107,10 @@ ipython$methods(
                 message(paste(r, collapse="\n"))
             return(invisible(r))
         }
+        else if(length(r))
+          return(r)
         else
-            return(r)
+          return(invisible())
     }
 )
 

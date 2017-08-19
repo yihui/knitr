@@ -78,13 +78,32 @@ Rscript -e 'library(rmarkdown); markdownToHTML("knitr-ipython.md")'
 # How to create a Python + markdown notebooks?
 
 Starting a notebook from an empty file is possible, but you probably already have some material.
-* If you already have a markdown file: change the extension from `md` to `Rmd` and insert python chunks with
-    ```{ipython}
-	print("some python code here")
-	```
+
+* If you already have a markdown file: change the extension from `md` to `Rmd`, open the file in rstudio and insert python chunks. Change {python} to {ipython}.
 * If you were practicing jupyter notebooks: run the `ipynb2rmd.py` script in `knitr/ipython`, or, equivalently, execute
 ```
 jupyter nbconvert notebook.ipynb --to markdown --ClearOutputPreprocessor.enabled=True
 ```
 and replace `python` with `{ipython}` in the code chunks.
 * Or, open the source file for this document at `knitr/examples/knitr-ipython.Rmd`
+
+# Can I share data between python and R chunks?
+
+Not exactly. Still you can call the ipython engine from R chunks. For instance:
+
+```{r rdata_to_python}
+py_exec = function(cmd) knitr:::ipyx(cmd, options = list(kernel = knitr::opts_chunk$get("kernel"), results="asis"), message=FALSE)
+x = 17
+py_exec(sprintf("x_py=%d", x))
+```
+
+```{ipython}
+y_py = x_py + 1
+y_py
+```
+
+```{r python_data_back}
+as.integer(py_exec("y_py"))
+```
+
+
