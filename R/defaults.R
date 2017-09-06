@@ -11,28 +11,28 @@ new_defaults = function(value = list()) {
       }
     }
   }
-  set = function(...) {
+  resolve = function(...) {
     dots = list(...)
     if (length(dots) == 0) return()
     if (is.null(names(dots)) && length(dots) == 1 && is.list(dots[[1]]))
       if (length(dots <- dots[[1]]) == 0) return()
-    defaults <<- merge(dots)
+    dots
+  }
+  set = function(...) {
+    dots = resolve(...)
+    if (length(dots)) defaults <<- merge(dots)
     invisible(NULL)
   }
   merge = function(values) merge_list(defaults, values)
   restore = function(target = value) defaults <<- target
-
   append = function(...) {
-    dots = list(...)
-    if (length(dots) == 0) return()
-    if (is.null(names(dots)) && length(dots) == 1 && is.list(dots[[1]]))
-      if (length(dots <- dots[[1]]) == 0) return()
+    dots = resolve(...)
     for (i in names(dots)) dots[[i]] <- c(defaults[[i]], dots[[i]])
-    defaults <<- merge(dots)
+    if (length(dots)) defaults <<- merge(dots)
     invisible(NULL)
   }
 
-  list(get = get, set = set, append=append, merge = merge, restore = restore)
+  list(get = get, set = set, append = append, merge = merge, restore = restore)
 }
 
 #' Default and current chunk options
