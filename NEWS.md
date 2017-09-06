@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.18 (unreleased)
+
+## NEW FEATURES
+
+- added a `$append()` method to the internal function `new_defaults()` (thanks, @yonicd, #1417)
+
 # CHANGES IN knitr VERSION 1.17
 
 ## MAJOR CHANGES
