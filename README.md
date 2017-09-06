@@ -30,11 +30,7 @@ update.packages(ask = FALSE, repos = 'https://cran.rstudio.org')
 install.packages('knitr', repos = c('https://xran.yihui.name', 'https://cran.rstudio.org'))
 ```
 
-Or use **devtools** to install the development version from Github:
-
-```r
-devtools::install_github('yihui/knitr', build_vignettes = TRUE)
-```
+Note that if you want to build the source package via `R CMD INSTALL` without a previously installed version of **knitr**, you must either pre-install **knitr** from CRAN, or run `R CMD INSTALL` on this source repo, otherwise `R CMD build` will fail (which is probably a bug of base R).
 
 ## Motivation
 
