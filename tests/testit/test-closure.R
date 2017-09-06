@@ -32,6 +32,11 @@ assert(
   identical({z$restore(); z$get()}, list(a = 1))
 )
 
+assert('$append() returns appended the chunk option', {
+  z$set(d = 1)
+  z$append(d = 2)
+  identical(z$get('d'), c(1, 2))
+})
 
 z = new_defaults()
 
