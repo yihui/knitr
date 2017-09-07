@@ -106,7 +106,7 @@ write_bib = function(
 .tweak.bib = local({
   x = read.csv(inst_dir('misc/tweak_bib.csv'), stringsAsFactors = FALSE)
   x = x[order(xtfrm(x$package)), , drop = FALSE]  # reorder entries by package names
-  write.csv(x, inst_dir('misc/tweak_bib.csv'), row.names = FALSE)
+  try_silent(write.csv(x, inst_dir('misc/tweak_bib.csv'), row.names = FALSE))
   setNames(
     lapply(x$author, function(a) c(author = sprintf('  author = {%s},', a))),
     x$package
