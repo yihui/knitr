@@ -677,9 +677,13 @@ set_html_dev = function() {
   if (!is.null(opts_chunk$get('dev'))) return()
   # in some cases, png() does not work (e.g. options('bitmapType') == 'Xlib' on
   # headless servers); use svg then
-  opts_chunk$set(dev = if (inherits(try_silent({
+  opts_chunk$set(dev = if (png_available()) 'png' else 'svg')
+}
+
+png_available = function() {
+  !inherits(try_silent({
     f = tempfile(); on.exit(unlink(f)); grDevices::png(f); grDevices::dev.off()
-  }), 'try-error')) 'svg' else 'png')
+  }), 'try-error')
 }
 
 # locate kpsewhich especially for Mac OS because /usr/texbin may not be in PATH
