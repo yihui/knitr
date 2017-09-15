@@ -63,12 +63,12 @@
 #' knit('Sweave-test-knitr.Rnw') # or knit2pdf() directly
 Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file),
                         encoding = getOption('encoding'), text = NULL) {
-  if (is.null(text)) {
-    f <- file(file, encoding = encoding)
-    x <- readLines(f, warn = FALSE)
+  x = text
+  if (is.null(x)) {
+    f = file(file, encoding = encoding)
+    x = readLines(f, warn = FALSE)
     close(f)
-  } else
-    x <- text
+  }
   x = native_encode(x)
   x = gsub_msg('removing \\usepackage{Sweave}',
                '^\\s*\\\\usepackage(\\[.*\\])?\\{Sweave\\}', '', x)
