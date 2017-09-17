@@ -1,7 +1,7 @@
 #' Upload an image to imgur.com
 #'
-#' This function uses the \pkg{RCurl} package to upload a image to
-#' \url{imgur.com}, and parses the XML response to a list with \pkg{XML} which
+#' This function uses the \pkg{httr} package to upload a image to
+#' \url{imgur.com}, and parses the XML response to a list with \pkg{xml2} which
 #' contains information about the image in the Imgur website.
 #'
 #' When the output format from \code{\link{knit}()} is HTML or Markdown, this
@@ -36,12 +36,20 @@
 #' }
 imgur_upload = function(file, key = '9f3460e67f308f6') {
   if (!is.character(key)) stop('The Imgur API Key must be a character string!')
-  res = RCurl::postForm(
-    'https://api.imgur.com/3/image.xml', image = RCurl::fileUpload(file),
-    .opts = RCurl::curlOptions(httpheader = c(Authorization = paste('Client-ID', key)),
-                               cainfo = system.file("CurlSSL", "cacert.pem", package = "RCurl"))
+  resp <- httr::POST(url = "https://api.imgur.com/3/image.xml",
+                     config = httr::add_headers(Authorization = paste("Client-ID", key)),
+                     body = list(image = httr::upload_file(file)))
+  httr::stop_for_status(resp, task = "Fail to upload")
+  info_media <- httr::parse_media(resp$headers[["Content-Type"]])
+  if (info_media$complete != "text/xml") stop("Fail to upload; response is not XML")
+  if (is.null(encoding <- info_media$params$charset)) {
+    message("No encoding in response : defaulting to UTF-8")
+    encoding <- "utf-8"
+  }
+  res <- xml2::as_list(
+    xml2::read_xml(x = httr::content(resp, as = "raw"),
+                   encoding = encoding)
   )
-  res = XML::xmlToList(res)
-  if (is.null(res$link)) stop('failed to upload ', file)
-  structure(res$link, XML = res)
+  if (is.null(res$link[[1]])) stop('failed to upload ', file)
+  structure(res$link[[1]], XML = res)
 }
