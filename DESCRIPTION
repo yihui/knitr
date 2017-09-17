@@ -109,6 +109,8 @@ Suggests:
     png,
     jpeg,
     XML,
+    xml2,
+    httr,
     RCurl,
     DBI (>= 0.4-1),
     tibble
