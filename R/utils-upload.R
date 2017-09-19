@@ -36,11 +36,6 @@
 #' }
 imgur_upload = function(file, key = '9f3460e67f308f6') {
 
-  if (!has_package("xml2") || !has_package("httr")) {
-    stop("Pkg xml2 and httr needed for uploading file to imgur. Please install them or do not upload files.",
-         call. = FALSE)
-  }
-
   if (!is.character(key)) stop('The Imgur API Key must be a character string!')
   resp <- httr::POST(url = "https://api.imgur.com/3/image.xml",
                      config = httr::add_headers(Authorization = paste("Client-ID", key)),
