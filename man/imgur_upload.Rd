@@ -18,8 +18,8 @@ A character string of the link to the image; this string carries an
   file; see Imgur API in the references.
 }
 \description{
-This function uses the \pkg{httr} package to upload a image to
-\url{imgur.com}, and parses the XML response to a list with \pkg{xml2} which
+This function uses the \pkg{RCurl} package to upload a image to
+\url{imgur.com}, and parses the XML response to a list with \pkg{XML} which
 contains information about the image in the Imgur website.
 }
 \details{
@@ -36,16 +36,19 @@ Please register your own Imgur application to get your client id; you
 }
 \examples{
 \dontrun{
-f = tempfile(fileext = '.png')
-png(f); plot(rnorm(100), main = R.version.string); dev.off()
+f = tempfile(fileext = ".png")
+png(f)
+plot(rnorm(100), main = R.version.string)
+dev.off()
 
 res = imgur_upload(f)
 res  # link to original URL of the image
-attr(res, 'XML')  # all information
-if (interactive()) browseURL(res)
+attr(res, "XML")  # all information
+if (interactive()) 
+    browseURL(res)
 
 # to use your own key
-opts_knit$set(upload.fun = function(file) imgur_upload(file, key = 'your imgur key'))
+opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "your imgur key"))
 }
 }
 \references{
