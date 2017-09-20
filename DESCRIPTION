@@ -15,6 +15,7 @@ Authors@R: c(
     person("Ben", "Baumer", role = "ctb"),
     person("Brian", "Diggs", role = "ctb"),
     person("Cassio", "Pereira", role = "ctb"),
+    person("Christophe", "Dervieux", role = "ctb"),
     person("David", "Robinson", role = "ctb"),
     person("Donald", "Arseneau", role = c("ctb", "cph"), comment = "the framed package at inst/misc/framed.sty"),
     person("Doug", "Hemken", role = "ctb"),
@@ -109,6 +110,8 @@ Suggests:
     png,
     jpeg,
     XML,
+    xml2,
+    httr,
     RCurl,
     DBI (>= 0.4-1),
     tibble
