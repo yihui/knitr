@@ -37,15 +37,13 @@
 imgur_upload = function(file, key = '9f3460e67f308f6') {
 
   if (!is.character(key)) stop('The Imgur API Key must be a character string!')
-  resp <- httr::POST(url = "https://api.imgur.com/3/image.xml",
-                     config = httr::add_headers(Authorization = paste("Client-ID", key)),
-                     body = list(image = httr::upload_file(file)))
-  httr::stop_for_status(resp, task = "Fail to upload")
-  info_media <- httr::parse_media(resp$headers[["Content-Type"]])
-  if (info_media$complete != "text/xml") stop("Fail to upload; response is not XML")
-  res <- xml2::as_list(
-    xml2::read_xml(x = httr::content(resp, as = "raw"))
+  resp = httr::POST(
+    "https://api.imgur.com/3/image.xml",
+    config = httr::add_headers(Authorization = paste("Client-ID", key)),
+    body = list(image = httr::upload_file(file))
   )
+  res = httr::content(resp, as = "raw")
+  res = if (length(res)) xml2::as_list(xml2::read_xml(res))
   if (is.null(res$link[[1]])) stop('failed to upload ', file)
   structure(res$link[[1]], XML = res)
 }
