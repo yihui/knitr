@@ -4,7 +4,7 @@
 \name{opts_template}
 \alias{opts_template}
 \title{Template for creating reusable chunk options}
-\format{An object of class \code{list} of length 4.}
+\format{An object of class \code{list} of length 5.}
 \usage{
 opts_template
 }
