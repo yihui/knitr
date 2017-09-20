@@ -18,8 +18,8 @@ A character string of the link to the image; this string carries an
   file; see Imgur API in the references.
 }
 \description{
-This function uses the \pkg{RCurl} package to upload a image to
-\url{imgur.com}, and parses the XML response to a list with \pkg{XML} which
+This function uses the \pkg{httr} package to upload a image to
+\url{imgur.com}, and parses the XML response to a list with \pkg{xml2} which
 contains information about the image in the Imgur website.
 }
 \details{

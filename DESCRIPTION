@@ -109,10 +109,8 @@ Suggests:
     tikzDevice (>= 0.10),
     png,
     jpeg,
-    XML,
     xml2,
     httr,
-    RCurl,
     DBI (>= 0.4-1),
     tibble
 License: GPL
