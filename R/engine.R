@@ -106,7 +106,7 @@ eng_interpreted = function(options) {
       f
     )
   } else paste(switch(
-    engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -e',
+    engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -ep',
     mysql = '-e', node = '-e', octave = '--eval', perl = '-e', psql = '-c',
     python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(paste(options$code, collapse = '\n')))
