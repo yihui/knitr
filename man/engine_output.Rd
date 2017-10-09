@@ -27,3 +27,23 @@ A character string generated from the source code and output using
 If you have designed a language engine, you may call this function in the end
 to format and return the text output from your engine.
 }
+\details{
+For expert users, an advanced usage of this function is
+\code{engine_output(options, out = LIST)} where \code{LIST} is a list that
+has the same structure as the output of \code{evaluate::evaluate()}. In this
+case, the arguments \code{code} and \code{extra} are ignored, and the list is
+passed to an internal function \code{knitr:::wrap()} to return a character
+vector of final output.
+}
+\examples{
+library(knitr)
+engine_output(opts_chunk$merge(list(engine = "Rscript")), 
+    code = "1 + 1", out = "[1] 2")
+engine_output(opts_chunk$merge(list(echo = FALSE, engine = "Rscript")), 
+    code = "1 + 1", out = "[1] 2")
+
+# expert use only
+engine_output(opts_chunk$merge(list(engine = "python")), 
+    out = list(structure(list(src = "1 + 1"), class = "source"), 
+        "2"))
+}
