@@ -1,0 +1,54 @@
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass{article}
+\usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\usepackage{url}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{
+ pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
+\begin{document}
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+# set global chunk options
+opts_chunk$set(fig.path='figure/ipython-', fig.align='center', fig.show='hold', engine='ipython')
+#opts_chunk$set(kernel='existing') # to use an existing 'jupyter console'
+@
+
+\title{Scientific reports in Python and \LaTeX}
+
+\author{Marc Wouts}
+
+\maketitle
+The {\tt ipython} engine for \textbf{knitr} allows to execute python code in \LaTeX plus python files. In the below, we generate a few random numbers, and compute their mean and variance.
+
+<<random>>=
+import numpy as np
+np.random.seed(2017)
+x = np.random.rand(20)
+np.mean(x), np.var(x)
+@
+
+Inline python expressions are available, for instance the first element of \texttt{x} is approximatively \Pexpr{round(x[0], 6)}.
+
+Matplotlib plots will be recorded to PDF and inserted in the report:
+<<plots, fig.width=4, fig.height=4, out.width='.4\\linewidth'>>=
+## two plots side by side (option fig.show='hold')
+import matplotlib.pyplot as plt
+plt.hist(x)
+plt.show()
+
+plt.hist(1-x)
+plt.show()
+@
+
+\end{document}
+

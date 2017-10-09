@@ -10,7 +10,7 @@
 all_patterns = list(
   `rnw` = list(
     chunk.begin = '^\\s*<<(.*)>>=.*$', chunk.end = '^\\s*@\\s*(%+.*|)$',
-    inline.code = '\\\\Sexpr\\{([^}]+)\\}', inline.comment = '^\\s*%.*',
+    inline.code = '\\\\(S|P)expr\\{([^}]+)\\}', inline.comment = '^\\s*%.*',
     ref.chunk = '^\\s*<<(.+)>>\\s*$', header.begin = '(^|\n)\\s*\\\\documentclass[^}]+\\}',
     document.begin = '\\s*\\\\begin\\{document\\}'),
 
@@ -31,7 +31,7 @@ all_patterns = list(
   `md` = list(
     chunk.begin = '^[\t >]*```+\\s*\\{([a-zA-Z0-9]+.*)\\}\\s*$',
     chunk.end = '^[\t >]*```+\\s*$',
-    ref.chunk = '^\\s*<<(.+)>>\\s*$', inline.code = '(?<!(^|\n)``)`r[ #]([^`]+)\\s*`'),
+    ref.chunk = '^\\s*<<(.+)>>\\s*$', inline.code = '(?<!(^|\n)``)`(r|py|ipython)[ #]([^`]+)\\s*`'),
 
   `rst` = list(
     chunk.begin = '^\\s*[.][.]\\s+\\{r(.*)\\}\\s*$',

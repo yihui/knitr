@@ -1,0 +1,4 @@
+Name: IPyX
+Description: Execute the selected code in IPython
+Binding: ipyx
+Interactive: true
