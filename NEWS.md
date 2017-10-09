@@ -4,6 +4,8 @@
 
 - added a `$append()` method to the internal function `new_defaults()` (thanks, @yonicd, #1417)
 
+- added another usage of `engine_output()` for expert users: if you are familiar with the list structure of the `evaluate::evaluate()` output, you can let your custom engine return a similar list and call `engine_output(options, out = YOUR_LIST)` (thanks, @kevinushey, #1442)
+
 # CHANGES IN knitr VERSION 1.17
 
 ## MAJOR CHANGES
