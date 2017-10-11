@@ -69,7 +69,7 @@ hook_plot_tex = function(x, options) {
   fig.cur = options$fig.cur %n% 1L
   fig.num = options$fig.num %n% 1L
   animate = options$fig.show == 'animate'
-  ncol = options$fig.ncol %n% 1L
+  ncol = options$fig.ncol %n% .Machine$integer.max
 
   # If this is a non-tikz animation, skip to the last fig.
   if (!tikz && animate && fig.cur < fig.num) return('')
@@ -93,7 +93,7 @@ hook_plot_tex = function(x, options) {
     switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n', right = '\n\n', '')
 
   # initialize newline
-  newline = ''
+  newline = NULL
 
   # figure environment: caption, short caption, label
   cap = options$fig.cap
