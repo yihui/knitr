@@ -69,6 +69,7 @@ hook_plot_tex = function(x, options) {
   fig.cur = options$fig.cur %n% 1L
   fig.num = options$fig.num %n% 1L
   animate = options$fig.show == 'animate'
+  ncol = options$fig.ncol %n% 1L
 
   # If this is a non-tikz animation, skip to the last fig.
   if (!tikz && animate && fig.cur < fig.num) return('')
@@ -81,6 +82,8 @@ hook_plot_tex = function(x, options) {
   plot1 = ai || fig.cur <= 1L
   # TRUE if this picture is standalone or last in set
   plot2 = ai || fig.cur == fig.num
+  # TRUE if this picture is not standalone and is at the last column
+  plot3 = !ai && (fig.cur %% ncol == 0)
 
   # open align code if this picture is standalone/first in set
   align1 = if (plot1)
@@ -88,6 +91,9 @@ hook_plot_tex = function(x, options) {
   # close align code if this picture is standalone/last in set
   align2 = if (plot2)
     switch(a, left = '\\hfill{}\n\n', center = '\n\n}\n\n', right = '\n\n', '')
+
+  # initialize newline
+  newline = ''
 
   # figure environment: caption, short caption, label
   cap = options$fig.cap
@@ -110,6 +116,8 @@ hook_plot_tex = function(x, options) {
     if (usesub) {
       sub1 = sprintf('\\subfloat[%s%s]{', subcap, create_label(lab, fig.cur, latex = TRUE))
       sub2 = '}'
+      # Add newline command for floats
+      if (plot3) newline = '\\newline'
     }
 
     # If pic is standalone/last in set:
@@ -158,7 +166,7 @@ hook_plot_tex = function(x, options) {
       if (is.null(lnk) || is.na(lnk)) res else sprintf('\\href{%s}{%s}', lnk, res)
     },
 
-    resize2, sub2, align2, fig2
+    resize2, sub2, align2, newline, fig2
   )
 }
 
