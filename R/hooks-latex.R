@@ -82,8 +82,8 @@ hook_plot_tex = function(x, options) {
   plot1 = ai || fig.cur <= 1L
   # TRUE if this picture is standalone or last in set
   plot2 = ai || fig.cur == fig.num
-  # TRUE if this picture is not standalone and is at the last column
-  plot3 = !ai && (fig.cur %% ncol == 0)
+  # TRUE if this picture is not standalone, nor last in set and is at the last column
+  plot3 = !plot2 && (fig.cur %% ncol == 0)
 
   # open align code if this picture is standalone/first in set
   align1 = if (plot1)
