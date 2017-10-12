@@ -421,7 +421,10 @@ call_inline = function(block) {
   in_dir(input_dir(), inline_exec(block))
 }
 
-inline_exec = function(block, envir = knit_global(), hook = knit_hooks$get('inline')) {
+inline_exec = function(
+  block, envir = knit_global(), hook = knit_hooks$get('inline'),
+  hook_eval = knit_hooks$get('evaluate.inline')
+) {
 
   # run inline code and substitute original texts
   code = block$code; input = block$input
@@ -429,8 +432,7 @@ inline_exec = function(block, envir = knit_global(), hook = knit_hooks$get('inli
 
   loc = block$location
   for (i in 1:n) {
-    v = withVisible(eval(parse_only(code[i]), envir = envir))
-    res = if (v$visible) knit_print(v$value, inline = TRUE, options = opts_chunk$get())
+    res = hook_eval(code[i], envir)
     if (inherits(res, 'knit_asis')) res = wrap(res, inline = TRUE)
     d = nchar(input)
     # replace with evaluated results

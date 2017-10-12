@@ -6,6 +6,8 @@
 
 - added another usage of `engine_output()` for expert users: if you are familiar with the list structure of the `evaluate::evaluate()` output, you can let your custom engine return a similar list and call `engine_output(options, out = YOUR_LIST)` (thanks, @kevinushey, #1442)
 
+- added an `evaluate.inline` hook to `knit_hooks` (thanks, @kevinushey, #1443)
+
 # CHANGES IN knitr VERSION 1.17
 
 ## MAJOR CHANGES
