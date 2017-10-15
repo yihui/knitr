@@ -572,7 +572,7 @@ wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) 
   }
   dpi = attr(x, 'dpi') %n% options$dpi
   paste(unlist(lapply(seq_along(x), function(i) {
-    options$fig.cur = i
+    options$fig.cur = plot_counter()
     if (is.null(options[['out.width']]))
       options['out.width'] = list(raster_dpi_width(x[i], dpi))
     hook_plot(x[i], reduce_plot_opts(options))
