@@ -80,6 +80,9 @@ parse_block = function(code, header, params.src) {
   if (nzchar(spaces <- gsub('^([\t >]*).*', '\\1', header))) {
     params$indent = spaces
     code = gsub(sprintf('^%s', spaces), '', code)
+    # in case the trailing spaces of the indent string are trimmed on certain
+    # lines (e.g. in blockquotes https://github.com/yihui/knitr/issues/1446)
+    code = gsub(sprintf('^%s', gsub('\\s+$', '', spaces)), '', code)
   }
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)

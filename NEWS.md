@@ -8,6 +8,10 @@
 
 - added an `evaluate.inline` hook to `knit_hooks` (thanks, @kevinushey, #1443)
 
+## BUG FIXES
+
+- fixed #1446: **knitr** may fail to parse code chunks in blockquotes in Markdown (thanks, @rgaiacs)
+
 # CHANGES IN knitr VERSION 1.17
 
 ## MAJOR CHANGES
