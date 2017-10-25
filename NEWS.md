@@ -8,6 +8,8 @@
 
 - added an `evaluate.inline` hook to `knit_hooks` (thanks, @kevinushey, #1443)
 
+- exported function `is_latex_output()` and `is_html_output()` (thanks, @zeehio, rstudio/rmarkdown#649)
+
 ## BUG FIXES
 
 - fixed #1446: **knitr** may fail to parse code chunks in blockquotes in Markdown (thanks, @rgaiacs)
