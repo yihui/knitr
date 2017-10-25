@@ -297,9 +297,46 @@ fix_options = function(options) {
   options
 }
 
+#' Check if the current output type is LaTeX or HTML
+#'
+#' The function \code{is_latex_output()} returns \code{TRUE} when the output
+#' format is LaTeX; it works for both \file{.Rnw} and R Markdown documents (for
+#' the latter, the two Pandoc formats \code{latex} and \code{beamer} are
+#' considered LaTeX output). The function \code{is_html_output()} only works for
+#' R Markdown documents.
+#'
+#' These functions may be useful for conditional output that depends on the
+#' output format. For example, you may write out a LaTeX table in an R Markdown
+#' document when the output format is LaTeX, and an HTML or Markdown table when
+#' the output format is HTML.
+#'
+#' Internally, the Pandoc output format of the current R Markdown document is
+#' stored in \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.to')}. By
+#' default, these formats are considered as HTML formats: \code{c('markdown',
+#' 'epub', 'html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')}.
+#' @rdname output_type
+#' @export
+#' @examples knitr::is_latex_output()
+#' knitr::is_html_output()
+#' knitr::is_html_output(excludes = c('markdown', 'epub'))
 is_latex_output = function() {
   out_format('latex') || pandoc_to(c('latex', 'beamer'))
 }
+
+#' @param fmt A character vector of output formats to be checked. By default, it
+#'   is the current Pandoc output format.
+#' @param excludes A character vector of output formats that should not be
+#'   considered as the HTML format.
+#' @rdname output_type
+#' @export
+is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
+  if (length(fmt) == 0) return(FALSE)
+  if (grepl('^markdown', fmt)) fmt = 'markdown'
+  if (fmt == 'epub3') fmt = 'epub'
+  fmts = c('markdown', 'epub', 'html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
+  fmt %in% setdiff(fmts, excludes)
+}
+
 
 # turn percent width to LaTeX unit, e.g. out.width = 30% -> .3\linewidth
 percent_latex_width = function(x) {
