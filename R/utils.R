@@ -333,7 +333,7 @@ is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
   if (length(fmt) == 0) return(FALSE)
   if (grepl('^markdown', fmt)) fmt = 'markdown'
   if (fmt == 'epub3') fmt = 'epub'
-  fmts = c('markdown', 'epub', 'html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
+  fmts = c('markdown', 'epub', 'html', 'html4', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
   fmt %in% setdiff(fmts, excludes)
 }
 
