@@ -118,7 +118,7 @@ hook_plot_tex = function(x, options) {
       # Add separator command for floats if not last in set
       # Add separator command for floats if not last in set
       # Add separator command for floats if not last in set
-      sep.cur = sep[col.cur]
+      if (!plot2) sep.cur = sep[col.cur]
     }
 
     # If pic is standalone/last in set:
