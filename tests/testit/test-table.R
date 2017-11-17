@@ -138,7 +138,7 @@ for (f in c('pandoc', 'html', 'latex', 'rst')) {
 
 colnames(x2) = 'a'
 assert(
-  'kable(, "markdown") works for a 0 zero 1 column matrix',
+  'kable(, "markdown") works for a 0 row 1 column matrix',
   identical(kable2(x2, 'markdown'), c('|a  |', '|:--|'))
 )
 
