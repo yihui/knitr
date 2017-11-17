@@ -490,7 +490,9 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     return(structure(list(file = shots[i]), class = 'html_screenshot'))
   }
 
-  ext = switch(options$dev, pdf = '.pdf', jpeg = '.jpeg', '.png')
+  ext = if (length(options$dev)) {
+    switch(options$dev[1], pdf = '.pdf', jpeg = '.jpeg', '.png')
+  } else '.png'
   wargs = options$screenshot.opts %n% list()
   if (is.null(wargs$vwidth)) wargs$vwidth = options$out.width.px
   if (is.null(wargs$vheight)) wargs$vheight = options$out.height.px
