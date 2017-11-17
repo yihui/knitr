@@ -104,6 +104,7 @@ block_exec = function(options) {
     res.before = run_hooks(before = TRUE, options)
     engine = get_engine(options$engine)
     output = in_dir(input_dir(), engine(options))
+    if (is.list(output)) output = unlist(output)
     res.after = run_hooks(before = FALSE, options)
     output = paste(c(res.before, output, res.after), collapse = '')
     output = knit_hooks$get('chunk')(output, options)
