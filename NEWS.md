@@ -18,6 +18,8 @@
 
 - fixed #1446: **knitr** may fail to parse code chunks in blockquotes in Markdown (thanks, @rgaiacs)
 
+- fixed #1460: `kable()` does not generate the table caption when the data only has one column (thanks, @Henrik-P)
+
 # CHANGES IN knitr VERSION 1.17
 
 ## MAJOR CHANGES
