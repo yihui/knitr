@@ -86,9 +86,7 @@ engine_output = function(options, code, out, extra = NULL) {
   ), collapse = '\n')
 }
 
-## TODO: how to emulate the console?? e.g. for Python
-#  see some experiments at https://github.com/yihui/runr
-
+## command-line tools
 eng_interpreted = function(options) {
   engine = options$engine
   code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')) {
@@ -164,6 +162,20 @@ eng_shlib = function(options) {
     dyn.load(sub(sprintf('[.]%s$', n), .Platform$dynlib.ext, f))
   } else out = ''
   engine_output(options, options$code, out)
+}
+
+## Python
+eng_python = function(options) {
+  if (isFALSE(options$python.reticulate)) {
+    eng_interpreted(options)
+  } else {
+    if (!loadable('reticulate')) warning2(
+      "The 'python' engine in knitr requires the reticulate package. ",
+      "If you do not want to use the reticulate package, set the chunk option ",
+      "python.reticulate = FALSE."
+    )
+    reticulate::eng_python(options)
+  }
 }
 
 ## Java
@@ -604,7 +616,7 @@ eng_go = function(options) {
 local({
   for (i in c(
     'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'lein', 'mysql',
-    'node', 'octave', 'perl', 'psql', 'python', 'Rscript', 'ruby', 'sas',
+    'node', 'octave', 'perl', 'psql', 'Rscript', 'ruby', 'sas',
     'scala', 'sed', 'sh', 'stata', 'zsh'
   )) knit_engines$set(setNames(list(eng_interpreted), i))
 })
@@ -614,7 +626,8 @@ knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
-  block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go
+  block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
+  python = eng_python
 )
 
 get_engine = function(name) {
