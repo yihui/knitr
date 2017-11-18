@@ -10,6 +10,8 @@
 
 - exported function `is_latex_output()` and `is_html_output()` (thanks, @zeehio, rstudio/rmarkdown#649)
 
+- added a new engine `julia` based on `JuliaCall::eng_juliacall()` to support Julia code chunks (thanks, @Non-Contradiction, #1458)
+
 ## MAJOR CHANGES
 
 - the `python` engine is based on `reticulate::eng_python()` now; this means all Python code chunks are evaluated in the same Python session; if you want the old behevior (new session for each Python code chunk), you can set the chunk option `python.reticulate = FALSE` (thanks, @kevinushey, #1440)

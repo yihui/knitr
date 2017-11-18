@@ -208,6 +208,11 @@ eng_Rcpp = function(options) {
   engine_output(options, code, '')
 }
 
+## Julia
+eng_julia = function(options) {
+  JuliaCall::eng_juliacall(options)
+}
+
 ## Stan
 ## Compiles Stan model in the code chunk, creates a stanmodel object,
 ## and assigns it to a variable with the name given in engine.opts$x.
@@ -627,7 +632,7 @@ knit_engines$set(
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python
+  python = eng_python, julia = eng_julia
 )
 
 get_engine = function(name) {
