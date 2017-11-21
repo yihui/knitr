@@ -128,8 +128,8 @@ kable = function(
     }
     return(structure(res, format = format, class = 'knitr_kable'))
   }
-  if (identical(col.names, NA)) col.names = colnames(x)
   if (!is.matrix(x)) x = as.data.frame(x)
+  if (identical(col.names, NA)) col.names = colnames(x)
   m = ncol(x)
   # numeric columns
   isn = if (is.matrix(x)) rep(is.numeric(x), m) else sapply(x, is.numeric)
