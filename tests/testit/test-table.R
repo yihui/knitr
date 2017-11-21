@@ -51,6 +51,24 @@ x & y\\\\
 )
 
 assert(
+  'kable() adds endhead to repeat the header row on new pages when longtable is used',
+  identical(
+    kable2(data.frame(x = c(1.2, 4.87), y = c('fooooo', 'bar')), 'latex', longtable = TRUE),
+    '
+\\begin{longtable}{r|l}
+\\hline
+x & y\\\\
+\\hline
+\\endhead
+1.20 & fooooo\\\\
+\\hline
+4.87 & bar\\\\
+\\hline
+\\end{longtable}'
+  )
+)
+
+assert(
   'kable() escapes LaTeX special characters by default',
   identical(
     kable2(data.frame(x = c("10%", "5%"), col_name = c("3_8", "40_6")), 'latex'),

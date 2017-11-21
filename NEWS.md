@@ -20,6 +20,10 @@
 
 - the `auto_pdf` argument of `include_graphics()` defaults to `FALSE` now; you can set `options(knitr.graphics.auto_pdf = TRUE)` to change the default to `TRUE` (thanks, @mebden, #1456)
 
+## MINOR CHANGES
+
+- On LaTeX output with `longtable=TRUE`, `kable()` repeats the table header on every additional page (@zeehio, )
+
 ## BUG FIXES
 
 - fixed #1446: **knitr** may fail to parse code chunks in blockquotes in Markdown (thanks, @rgaiacs)

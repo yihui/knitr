@@ -212,7 +212,9 @@ kable_latex = function(
   vline = getOption('knitr.table.vline', if (booktabs) '' else '|'),
   toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule' else '\\hline'),
   bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule' else '\\hline'),
-  midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
+  midrule = getOption('knitr.table.midrule', paste0(c(if (booktabs) "\\midrule" else "\\hline",
+                                                      if (longtable) "\\endhead" else NULL),
+                                                    collapse = "\n")),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
   escape = TRUE
