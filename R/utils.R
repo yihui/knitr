@@ -262,9 +262,19 @@ fix_options = function(options) {
 
   options$eval = unname(options$eval)
 
+  # handle aspect ratio/figure dimensions;
+  #   give priority to fig.dim, with warning
+  #   (seems relatively more likely as user's
+  #    intention in case when both present)
   # if aspect ratio is specified, calculate figure height
-  if (is.numeric(options$fig.asp)) {
-    options$fig.height = options$fig.width * options$fig.asp
+  fix_asp = is.numeric(options$fig.asp)
+  if (length(options$fig.dim) == 2L) {
+    if (fix_asp) warning('Please specify only one of fig.dim/fig.asp.\n',
+                         'Ignoring fig.asp and proceeding with fig.dim.')
+    options$fig.width = options$fig.dim[1L]
+    options$fig.height = options$fig.dim[2L]
+  } else {
+    if (fix_asp) options$fig.height = options$fig.width * options$fig.asp
   }
 
   # out.[width|height].px: unit in pixels for sizes
