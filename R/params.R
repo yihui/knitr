@@ -213,17 +213,14 @@ resolve_params = function(params, evaluate = TRUE) {
   resolved_params = list()
 
   # iterate over names
-  names = names(params)
-  for (name in names) {
+  for (name in names(params)) {
 
     # get the parameter
     param = params[[name]]
 
     if (inherits(param, "knit_param_expr")) {
       # We have a key: !r expr
-      param = list(
-          expr = param$expr,
-          value = param$value)
+      param = list(expr = param$expr, value = param$value)
     } else if (is.list(param)) {
       if ("value" %in% names(param)) {
         # This looks like a complex parameter configuration.
