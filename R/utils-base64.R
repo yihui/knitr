@@ -16,10 +16,7 @@ image_uri = function(f) markdown:::.b64EncodeFile(f)
 # alternative approaches to base64 encoding
 image_uri2 = function(f) {
   content = readBin(f, what = 'raw', n = file.info(f)$size)
-  uri = if (has_package('RCurl')) {
-    paste(RCurl::base64Encode(content, 'character'), collapse = '')
-  } else base64_encode(content)
-  paste0('data:', mime_type(f), ';base64,', uri)
+  paste0('data:', mime_type(f), ';base64,', base64_encode(content))
 }
 
 base64_table = c(LETTERS, letters, 0:9, '+', '/')
