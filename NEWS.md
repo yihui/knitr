@@ -12,6 +12,8 @@
 
 - added a new engine `julia` based on `JuliaCall::eng_juliacall()` to support Julia code chunks (thanks, @Non-Contradiction, #1458)
 
+- added a new chunk option `fig.dim` to specify `fig.width` and `fig.height` using one option, e.g., `fig.dim = c(5, 7)` is a shorthand of `fig.width = 5, fig.height = 7` (thanks, @MichaelChirico, #1449)
+
 - for `read_chunk()`, the code chunks in the external R script can be written under lines of the form `-- ---- label ----` now (`# ---- label ----` is still supported); this makes it possible to read an external Haskell script (thanks, @brittAnderson, #1455)
 
 ## MAJOR CHANGES
