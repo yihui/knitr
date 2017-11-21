@@ -307,7 +307,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
     idx = c(0, idx); lines = c('', lines)  # no chunk header in the beginning
   }
   groups = unname(split(lines, idx))
-  labels = stringr::str_trim(gsub(lab, '\\2', sapply(groups, `[`, 1)))
+  labels = stringr::str_trim(gsub(lab, '\\3', sapply(groups, `[`, 1)))
   labels = gsub(',.*', '', labels)  # strip off possible chunk options
   code = lapply(groups, strip_chunk)
   for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()

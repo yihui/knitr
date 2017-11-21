@@ -12,6 +12,8 @@
 
 - added a new engine `julia` based on `JuliaCall::eng_juliacall()` to support Julia code chunks (thanks, @Non-Contradiction, #1458)
 
+- for `read_chunk()`, the code chunks in the external R script can be written under lines of the form `-- ---- label ----` now (`# ---- label ----` is still supported); this makes it possible to read an external Haskell script (thanks, @brittAnderson, #1455)
+
 ## MAJOR CHANGES
 
 - the `python` engine is based on `reticulate::eng_python()` now; this means all Python code chunks are evaluated in the same Python session; if you want the old behevior (new session for each Python code chunk), you can set the chunk option `python.reticulate = FALSE` (thanks, @kevinushey, #1440)

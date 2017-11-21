@@ -48,7 +48,7 @@ stitch = function(script,
   if (length(j) == 0) {
     lines = c(sprintf(h, 'auto-report'), lines)
   } else {
-    lines[j] = sprintf(h, gsub(.sep.label, '\\2', lines[j]))
+    lines[j] = sprintf(h, gsub(.sep.label, '\\3', lines[j]))
     if (j[1] != 1L) lines = c(sprintf(h, ''), lines)
   }
   txt[i] = paste(lines, collapse = '\n')
