@@ -4,7 +4,8 @@
 \alias{include_graphics}
 \title{Embed external images in \pkg{knitr} documents}
 \usage{
-include_graphics(path, auto_pdf = TRUE, dpi = NULL)
+include_graphics(path, auto_pdf = getOption("knitr.graphics.auto_pdf", FALSE), 
+    dpi = NULL)
 }
 \arguments{
 \item{path}{a character vector of image paths}

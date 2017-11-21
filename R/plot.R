@@ -381,7 +381,9 @@ par2 = function(x) {
 #'   with special internal S3 classes so that \pkg{knitr} will convert the file
 #'   paths to proper output code according to the output format.
 #' @export
-include_graphics = function(path, auto_pdf = TRUE, dpi = NULL) {
+include_graphics = function(
+  path, auto_pdf = getOption('knitr.graphics.auto_pdf', FALSE), dpi = NULL
+) {
   if (auto_pdf && is_latex_output()) {
     path2 = sub_ext(path, 'pdf')
     i = file.exists(path2)
