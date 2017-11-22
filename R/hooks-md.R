@@ -5,7 +5,8 @@ hook_plot_md = function(x, options) {
   if (is.null(to <- pandoc_to()) || is_html_output(to))
     return(hook_plot_md_base(x, options))
   if (!is.null(options$out.width) || !is.null(options$out.height) ||
-        !is.null(options$out.extra) || options$fig.align != 'default') {
+      !is.null(options$out.extra) || options$fig.align != 'default' ||
+      !is.null(options$fig.subcap)) {
     if (to %in% c('beamer', 'latex')) {
       # Pandoc < 1.13 does not support \caption[]{} so suppress short caption
       if (is.null(options$fig.scap)) options$fig.scap = NA
