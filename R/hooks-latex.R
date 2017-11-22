@@ -69,6 +69,12 @@ hook_plot_tex = function(x, options) {
   fig.cur = options$fig.cur %n% 1L
   fig.num = options$fig.num %n% 1L
   animate = options$fig.show == 'animate'
+  fig.ncol = options$fig.ncol %n% fig.num
+  if (is.null(fig.sep <- options$fig.sep)) {
+    fig.sep = character(fig.num)
+    if (fig.ncol < fig.num) fig.sep[seq(fig.ncol, fig.num - 1L, fig.ncol)] = '\\newline'
+  }
+  sep.cur = NULL
 
   # If this is a non-tikz animation, skip to the last fig.
   if (!tikz && animate && fig.cur < fig.num) return('')
@@ -110,6 +116,7 @@ hook_plot_tex = function(x, options) {
     if (usesub) {
       sub1 = sprintf('\\subfloat[%s%s]{', subcap, create_label(lab, fig.cur, latex = TRUE))
       sub2 = '}'
+      sep.cur = fig.sep[fig.cur]; if (is.na(sep.cur)) sep.cur = NULL
     }
 
     # If pic is standalone/last in set:
@@ -158,7 +165,7 @@ hook_plot_tex = function(x, options) {
       if (is.null(lnk) || is.na(lnk)) res else sprintf('\\href{%s}{%s}', lnk, res)
     },
 
-    resize2, sub2, align2, fig2
+    resize2, sub2, sep.cur, align2, fig2
   )
 }
 
