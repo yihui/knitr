@@ -76,6 +76,7 @@ hook_plot_tex = function(x, options) {
   }
   sep.cur = NULL
 
+
   # If this is a non-tikz animation, skip to the last fig.
   if (!tikz && animate && fig.cur < fig.num) return('')
 
