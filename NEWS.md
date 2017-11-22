@@ -14,6 +14,8 @@
 
 - added a new chunk option `fig.dim` to specify `fig.width` and `fig.height` using one option, e.g., `fig.dim = c(5, 7)` is a shorthand of `fig.width = 5, fig.height = 7` (thanks, @MichaelChirico, #1449)
 
+- added two chunk options `fig.ncol` and `fig.sep` to make it possible to arrange multiple subfigures in columns (thanks, @eliocamp, #1444)
+
 - for `read_chunk()`, the code chunks in the external R script can be written under lines of the form `-- ---- label ----` now (`# ---- label ----` is still supported); this makes it possible to read an external Haskell script (thanks, @brittAnderson, #1455)
 
 ## MAJOR CHANGES
