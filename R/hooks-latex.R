@@ -70,9 +70,9 @@ hook_plot_tex = function(x, options) {
   fig.num = options$fig.num %n% 1L
   animate = options$fig.show == 'animate'
   fig.ncol = options$fig.ncol %n% fig.num
-  if (is.null(sep <- options$fig.sep)) {
-    sep = character(fig.num)
-    if (fig.ncol < fig.num) sep[seq(fig.ncol, fig.num - 1L, fig.ncol)] = '\\newline'
+  if (is.null(fig.sep <- options$fig.sep)) {
+    fig.sep = character(fig.num)
+    if (fig.ncol < fig.num) fig.sep[seq(fig.ncol, fig.num - 1L, fig.ncol)] = '\\newline'
   }
   sep.cur = NULL
 
@@ -116,7 +116,7 @@ hook_plot_tex = function(x, options) {
     if (usesub) {
       sub1 = sprintf('\\subfloat[%s%s]{', subcap, create_label(lab, fig.cur, latex = TRUE))
       sub2 = '}'
-      sep.cur = sep[fig.cur]
+      sep.cur = fig.sep[fig.cur]; if (is.na(sep.cur)) sep.cur = NULL
     }
 
     # If pic is standalone/last in set:
