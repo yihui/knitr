@@ -4,13 +4,13 @@ hook_plot_md = function(x, options) {
   # if not using R Markdown v2 or output is HTML, just return v1 output
   if (is.null(to <- pandoc_to()) || is_html_output(to))
     return(hook_plot_md_base(x, options))
+  if (to %in% c('beamer', 'latex')) {
+    # Pandoc < 1.13 does not support \caption[]{} so suppress short caption
+    if (is.null(options$fig.scap)) options$fig.scap = NA
+    return(hook_plot_tex(x, options))
+  }
   if (!is.null(options$out.width) || !is.null(options$out.height) ||
         !is.null(options$out.extra) || options$fig.align != 'default') {
-    if (to %in% c('beamer', 'latex')) {
-      # Pandoc < 1.13 does not support \caption[]{} so suppress short caption
-      if (is.null(options$fig.scap)) options$fig.scap = NA
-      return(hook_plot_tex(x, options))
-    }
     if (to == 'docx') {
       warning('Chunk options fig.align, out.width, out.height, out.extra ',
               'are not supported for Word output')
