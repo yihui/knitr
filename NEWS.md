@@ -30,7 +30,7 @@
 
 - fixed #1460: `kable()` does not generate the table caption when the data only has one column (thanks, @Henrik-P)
 
-- fixed #1464: subcaptions are not rendered if `out.extra = NULL`. (thanks, @eliocamp)
+- fixed #1464: subcaptions are not rendered if the chunk option `out.extra = NULL` and the output format is LaTeX (thanks, @eliocamp)
 
 # CHANGES IN knitr VERSION 1.17
 
