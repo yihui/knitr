@@ -2,21 +2,21 @@
 
 ## NEW FEATURES
 
-- added a `$append()` method to the internal function `new_defaults()` (thanks, @yonicd, #1417)
-
-- added another usage of `engine_output()` for expert users: if you are familiar with the list structure of the `evaluate::evaluate()` output, you can let your custom engine return a similar list and call `engine_output(options, out = YOUR_LIST)` (thanks, @kevinushey, #1442)
-
-- added an `evaluate.inline` hook to `knit_hooks` (thanks, @kevinushey, #1443)
-
-- exported function `is_latex_output()` and `is_html_output()` (thanks, @zeehio, rstudio/rmarkdown#649)
-
 - added a new engine `julia` based on `JuliaCall::eng_juliacall()` to support Julia code chunks (thanks, @Non-Contradiction, #1458)
 
 - added a new chunk option `fig.dim` to specify `fig.width` and `fig.height` using one option, e.g., `fig.dim = c(5, 7)` is a shorthand of `fig.width = 5, fig.height = 7` (thanks, @MichaelChirico, #1449)
 
 - added two chunk options `fig.ncol` and `fig.sep` to make it possible to arrange multiple subfigures in columns (thanks, @eliocamp, #1444)
 
+- exported function `is_latex_output()` and `is_html_output()` (thanks, @zeehio, rstudio/rmarkdown#649)
+
 - for `read_chunk()`, the code chunks in the external R script can be written under lines of the form `-- ---- label ----` now (`# ---- label ----` is still supported); this makes it possible to read an external Haskell script (thanks, @brittAnderson, #1455)
+
+- added a `$append()` method to the internal function `new_defaults()` (thanks, @yonicd, #1417)
+
+- added another usage of `engine_output()` for expert users: if you are familiar with the list structure of the `evaluate::evaluate()` output, you can let your custom engine return a similar list and call `engine_output(options, out = YOUR_LIST)` (thanks, @kevinushey, #1442)
+
+- added an `evaluate.inline` hook to `knit_hooks` (thanks, @kevinushey, #1443)
 
 ## MAJOR CHANGES
 
