@@ -52,7 +52,7 @@ opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "your imgur k
 }
 }
 \references{
-Imgur API version 3: \url{http://api.imgur.com/}; a demo:
+Imgur API version 3: \url{https://apidocs.imgur.com}; a demo:
   \url{https://yihui.name/knitr/demo/upload/}
 }
 \author{

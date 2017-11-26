@@ -19,7 +19,7 @@
 #' @note Please register your own Imgur application to get your client id; you
 #'   can certainly use mine, but this id is in the public domain so everyone
 #'   has access to all images associated to it.
-#' @references Imgur API version 3: \url{http://api.imgur.com/}; a demo:
+#' @references Imgur API version 3: \url{https://apidocs.imgur.com}; a demo:
 #'   \url{https://yihui.name/knitr/demo/upload/}
 #' @export
 #' @examples \dontrun{
