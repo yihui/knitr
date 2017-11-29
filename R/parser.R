@@ -64,8 +64,8 @@ parse_block = function(code, header, params.src) {
   engine = 'r'
   # consider the syntax ```{engine, opt=val} for chunk headers
   if (out_format('markdown')) {
-    engine = sub('^([a-zA-Z0-9]+).*$', '\\1', params)
-    params = sub('^([a-zA-Z0-9]+)', '', params)
+    engine = sub('^([a-zA-Z0-9_]+).*$', '\\1', params)
+    params = sub('^([a-zA-Z0-9_]+)', '', params)
   }
   params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
   # turn ```{engine} into ```{r, engine="engine"}
