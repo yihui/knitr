@@ -15,7 +15,7 @@ auto_exts = c(
 
   svglite = 'svg',
 
-  tikz = 'tikz'
+  tikz = 'tex'
 )
 
 dev2ext = function(x) {
@@ -139,14 +139,7 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
     # add old wd to TEXINPUTS (see #188)
     oti = Sys.getenv('TEXINPUTS'); on.exit(Sys.setenv(TEXINPUTS = oti))
     Sys.setenv(TEXINPUTS = paste(owd, oti, sep = .Platform$path.sep))
-    latex = switch(
-      getOption('tikzDefaultEngine'),
-      pdftex = getOption('tikzLatex'),
-      xetex  = getOption('tikzXelatex'),
-      luatex = getOption('tikzLualatex'),
-      stop2('a LaTeX engine must be specified for tikzDevice')
-    )
-    system2(latex, shQuote(basename(path)), stdout = NULL)
+    tinytex::latexmk(basename(path), getOption('tikzDefaultEngine'), emulation = TRUE)
     setwd(owd)
     if (!file.exists(pdf.plot)) {
       if (file.exists(log <- paste(name, 'log', sep = '.')))
