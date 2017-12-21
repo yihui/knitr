@@ -1,4 +1,4 @@
-# CHANGES IN knitr VERSION 1.18 (unreleased)
+# CHANGES IN knitr VERSION 1.18
 
 ## NEW FEATURES
 
