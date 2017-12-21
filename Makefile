@@ -6,6 +6,7 @@ PKGSRC  := $(shell basename `pwd`)
 all: check clean
 
 deps:
+	tlmgr install pgf preview xcolor;\
 	Rscript -e 'if (!require("Rd2roxygen")) install.packages("Rd2roxygen", repos="http://cran.rstudio.com")'
 
 docs:
