@@ -11,7 +11,7 @@ env:
 # capturing state, early exit if no integration test is needed
 before_install:
   - export PATH=$HOME/texlive/bin/x86_64-linux:$PATH
-  - tlmgr update --self --all; mktexlsr
+  - tlmgr update --all
   - tlmgr conf texmf TEXMFHOME $(Rscript -e "cat(file.path(R.home('share'), 'texmf'))")
   - if [ ${TARGET} = integration ]; then
       if ! make integration-need; then
@@ -43,6 +43,7 @@ cache:
   packages: yes
   directories:
     - $HOME/cache
+    - $HOME/texlive
 
 before_script:
   - Rscript -e "if (!require('webshot')) devtools::install_github('wch/webshot')"
