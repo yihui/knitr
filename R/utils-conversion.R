@@ -45,54 +45,43 @@ knit2pandoc = function(
   rmarkdown::pandoc_convert(knit_output, to, output = output, ...)
 }
 
-#' Convert Rnw or Rrst files to PDF using knit() and texi2pdf() or rst2pdf()
+#' Convert Rnw or Rrst files to PDF
 #'
-#' Knit the input Rnw or Rrst document, and compile to PDF using \code{texi2pdf}
-#' or \code{rst2pdf}.
+#' Knit the input Rnw or Rrst document, and compile to PDF using
+#' \code{tinytex::\link[tinytex]{latexmk}()} or \code{\link{rst2pdf}()}.
 #' @inheritParams knit
-#' @param compiler a character string which gives the LaTeX program used to
-#'   compile the tex document to PDF (by default it uses the default setting of
-#'   \code{\link[tools]{texi2pdf}}, which is often PDFLaTeX); this argument will
-#'   be used to temporarily set the environmental variable \samp{PDFLATEX}. For
-#'   an Rrst file, setting compiler to \code{'rst2pdf'} will use
-#'   \code{\link{rst2pdf}} to compiles the rst file to PDF using the ReportLab
-#'   open-source library.
-#' @param ... options to be passed to \code{\link[tools]{texi2pdf}} or
+#' @param compiler a character string which gives the LaTeX engine used to
+#'   compile the tex document to PDF. For an Rrst file, setting compiler to
+#'   \code{'rst2pdf'} will use \code{\link{rst2pdf}} to compiles the rst file to
+#'   PDF using the ReportLab open-source library.
+#' @param ... options to be passed to \code{tinytex::\link[tinytex]{latexmk}} or
 #'   \code{\link{rst2pdf}}
 #' @author Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
 #' @return The filename of the PDF file.
 #' @note The \code{output} argument specifies the output filename to be passed
 #'   to the PDF compiler (e.g. a tex document) instead of the PDF filename.
 #' @export
-#' @seealso \code{\link{knit}}, \code{\link[tools]{texi2pdf}},
-#'   \code{\link{rst2pdf}}
 #' @examples #' compile with xelatex
 #' ## knit2pdf(..., compiler = 'xelatex')
 #'
 #' #' compile a reST file with rst2pdf
 #' ## knit2pdf(..., compiler = 'rst2pdf')
-knit2pdf = function(input, output = NULL, compiler = NULL, envir = parent.frame(),
-                    quiet = FALSE, encoding = getOption('encoding'), ...) {
+knit2pdf = function(
+  input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = FALSE,
+  encoding = getOption('encoding'), ...
+) {
   out = knit(input, output = output, envir = envir, quiet = quiet, encoding = encoding)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
-  if (is.null(compiler) && grepl('\\.rst$', out)) compiler = 'rst2pdf'
-  if (!is.null(compiler)) {
-    if (compiler == 'rst2pdf') {
-      if (tolower(file_ext(out)) != 'rst')
-        stop('for rst2pdf compiler input must be a .rst file')
-      rst2pdf(basename(out), ...)
-      return(sub_ext(out, 'pdf'))
-    } else {
-      # use the specified PDFLATEX command
-      oc = Sys.getenv('PDFLATEX', NA)
-      on.exit(
-        if (is.na(oc)) Sys.unsetenv('PDFLATEX') else Sys.setenv(PDFLATEX = oc),
-        add = TRUE
-      )
-      Sys.setenv(PDFLATEX = compiler)
-    }
+  if (is.null(compiler)) {
+    compiler = if (grepl('\\.rst$', out)) 'rst2pdf' else 'pdflatex'
   }
-  tools::texi2pdf(basename(out), ...)
+  if (identical(compiler, 'rst2pdf')) {
+    if (tolower(file_ext(out)) != 'rst')
+      stop('for rst2pdf compiler input must be a .rst file')
+    rst2pdf(basename(out), ...)
+  } else {
+    tinytex::latexmk(basename(out), engine = compiler, ...)
+  }
   sub_ext(out, 'pdf')
 }
 
