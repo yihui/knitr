@@ -178,6 +178,24 @@ eng_python = function(options) {
   }
 }
 
+eng_perl6 <- function(options) {
+  # create a temporary file
+  f <- basename(tempfile("perl6", '.', paste('.', "p6", sep = '')))
+  on.exit(unlink(f)) # cleanup temp file on function exit
+  writeLines(options$code, f)
+  out <- ''
+  
+  # if eval != FALSE compile/run the code, preserving output
+  if (options$eval) {
+    out <- system(sprintf('perl6 %s', paste(f, options$engine.opts)), intern=TRUE)
+  }
+  
+  # spit back stuff to the user
+  engine_output(options, options$code, out)
+}
+
+
+
 ## Java
 #  e.g. see http://cran.rstudio.com/package=jvmr
 
@@ -632,7 +650,7 @@ knit_engines$set(
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia
+  python = eng_python, julia = eng_julia, perl6=eng_perl6
 )
 
 get_engine = function(name) {
