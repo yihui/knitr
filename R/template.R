@@ -117,7 +117,6 @@ knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
   delim = paste0(delim[1L], '((.|\n)+?)', delim[2L])
 
   txt = paste(text, collapse = '\n')
-  if (packageVersion('stringr') <= '0.9.0') delim = stringr::perl(delim)
   loc = stringr::str_locate_all(txt, delim)[[1L]]
   if (nrow(loc) == 0L) return(txt) # no match
   mat = stringr::str_extract_all(txt, delim)[[1L]]
