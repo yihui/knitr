@@ -291,6 +291,7 @@ fix_options = function(options) {
   # turn x% to x/100\linewidth
   if (is_latex_output())
     options['out.width'] = list(percent_latex_width(options[['out.width']]))
+    options['out.height'] = list(percent_latex_height(options[['out.height']]))
 
   # deal with aliases: a1 is real option; a0 is alias
   if (length(a1 <- opts_knit$get('aliases')) && length(a0 <- names(a1))) {
@@ -352,6 +353,17 @@ percent_latex_width = function(x) {
   xi = as.numeric(sub('%$', '', x[i]))
   if (any(is.na(xi))) return(x)
   x[i] = paste0(xi / 100, '\\linewidth')
+  x
+}
+
+# turn percent height to LaTeX unit, e.g. out.height = 30% -> .3\textheight
+percent_latex_height = function(x) {
+  if (!is.character(x)) return(x)
+  i = grep('^[0-9.]+%$', x)
+  if (length(i) == 0) return(x)
+  xi = as.numeric(sub('%$', '', x[i]))
+  if (any(is.na(xi))) return(x)
+  x[i] = paste0(xi / 100, '\\textheight')
   x
 }
 
