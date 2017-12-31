@@ -275,8 +275,10 @@ fix_options = function(options) {
 
   # out.[width|height].px: unit in pixels for sizes
   for (i in c('width', 'height')) {
-    options[[sprintf('out.%s.px', i)]] = options[[sprintf('out.%s', i)]] %n%
+    options[[sprintf('out.%s.px', i)]] = options[[o <- sprintf('out.%s', i)]] %n%
       (options[[sprintf('fig.%s', i)]] * options$dpi)
+    # turn x% to x/100\linewidth or \textheight
+    if (is_latex_output()) options[o] = list(latex_percent_size(options[[o]], i))
   }
   # for Retina displays, increase physical size, and decrease output size
   if (is.numeric(r <- options$fig.retina) && r != 1) {
@@ -287,10 +289,6 @@ fix_options = function(options) {
   } else {
     options$fig.retina = 1
   }
-
-  # turn x% to x/100\linewidth
-  if (is_latex_output())
-    options['out.width'] = list(percent_latex_width(options[['out.width']]))
 
   # deal with aliases: a1 is real option; a0 is alias
   if (length(a1 <- opts_knit$get('aliases')) && length(a0 <- names(a1))) {
@@ -344,14 +342,15 @@ is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
 }
 
 
-# turn percent width to LaTeX unit, e.g. out.width = 30% -> .3\linewidth
-percent_latex_width = function(x) {
+# turn percent width/height to LaTeX unit, e.g. out.width = 30% -> .3\linewidth
+latex_percent_size = function(x, which = c('width', 'height')) {
   if (!is.character(x)) return(x)
   i = grep('^[0-9.]+%$', x)
   if (length(i) == 0) return(x)
   xi = as.numeric(sub('%$', '', x[i]))
   if (any(is.na(xi))) return(x)
-  x[i] = paste0(xi / 100, '\\linewidth')
+  which = match.arg(which)
+  x[i] = paste0(xi / 100, if (which == 'width') '\\linewidth' else '\\textheight')
   x
 }
 

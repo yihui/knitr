@@ -6,6 +6,10 @@
 
 - Similarly, `tinytex::latexmk()` is used in `knit2pdf()` and `stitch()`.
 
+## BUG FIXES
+
+- Fixed rstudio/bookdown#501: the chunk option `out.height` can also take a percentage value when the output format is LaTeX (similar to `out.width`), e.g., `out.height = '30%'` means `.3\textheight` (thanks, @dataopt, #1482).
+
 # CHANGES IN knitr VERSION 1.18
 
 ## NEW FEATURES
