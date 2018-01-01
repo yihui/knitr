@@ -17,18 +17,18 @@
 #' often, so it is not a lot of work even if you just cut and paste such
 #' bibliography entries from \code{toBibtex(citation())}.
 #'
-#' @param x package names (packages which are not installed are ignored)
-#' @param file the (\file{.bib}) file to write (by default writes to the R
-#'   console; ignored if it is \code{NULL})
-#' @param tweak whether to fix some known problems in the citations, especially
-#'   non-standard format of authors
-#' @param width the width of lines in bibliographyb entries (if \code{NULL},
-#'   lines will not be wrapped)
-#' @param prefix a prefix string for keys in BibTeX entries; by default, it is
+#' @param x Package names. Packages which are not installed are ignored.
+#' @param file The (\file{.bib}) file to write. By default, or if \code{NULL},
+#'   output is written to the R console.
+#' @param tweak Whether to fix some known problems in the citations, especially
+#'   non-standard format of author names.
+#' @param width Width of lines in bibliography entries. If \code{NULL},
+#'   lines will not be wrapped.
+#' @param prefix Prefix string for keys in BibTeX entries; by default, it is
 #'   \samp{R-} unless \code{\link{option}('knitr.bib.prefix')} has been set to
-#'   another string
-#' @return a list containing the citations (also written to the \code{file} as a
-#'   side effect)
+#'   another string.
+#' @return A list containing the citations. Citations are also written to the \code{file} as a
+#'   side effect.
 #' @note Some packages on CRAN do not have standard bib entries, which was once
 #'   reported by Michael Friendly at
 #'   \url{https://stat.ethz.ch/pipermail/r-devel/2010-November/058977.html}. I

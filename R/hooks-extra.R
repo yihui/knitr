@@ -46,7 +46,7 @@
 #' \url{https://yihui.name/knitr/demo/cache/} for the meaning of \code{cache =
 #' 2}).
 #' @rdname chunk_hook
-#' @param before,options,envir see references
+#' @param before,options,envir See \emph{References} below.
 #' @references \url{https://yihui.name/knitr/hooks/#chunk_hooks}
 #' @seealso \code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}},
 #'   \code{\link[rgl]{hook_rgl}}, \code{\link[rgl]{hook_webgl}}

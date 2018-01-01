@@ -14,11 +14,11 @@
 #' opt1=val1, opt2=val2}, which will be copied to the template; if no chunk
 #' headers are found, the whole R script will be inserted into the template as
 #' one code chunk.
-#' @param script path to the R script
-#' @param template path of the template to use (by default the Rnw template in
-#'   this package; there is also an HTML template in \pkg{knitr})
-#' @param output the output filename (passed to \code{\link{knit}}); by default
-#'   it uses the base filename of the script
+#' @param script Path to the R script.
+#' @param template Path of the template to use. By default, the Rnw template in
+#'   this package; there is also an HTML template in \pkg{knitr}.
+#' @param output Output filename, passed to \code{\link{knit}}). By default,
+#'   the base filename of the script is used.
 #' @inheritParams knit
 #' @return path of the output document
 #' @export
@@ -75,7 +75,7 @@ stitch = function(script,
   out
 }
 #' @rdname stitch
-#' @param ... arguments passed to \code{stitch()}
+#' @param ... Arguments passed to \code{stitch()}.
 #' @export
 stitch_rhtml = function(..., envir = parent.frame()) stitch(
   ..., envir = envir,
@@ -95,12 +95,12 @@ stitch_rmd = function(..., envir = parent.frame()) stitch(
 #' (this tag can be customized by the \code{delim} argument). These expressions
 #' are extracted, evaluated and replaced by their values in the original
 #' template.
-#' @param file the template file
-#' @param ... a list of variables to be used for the code in the template; note
-#'   the variables will be searched in the parent frame as well
-#' @param text an alternative way to \code{file} to specify the template code
-#'   directly (if provided, \code{file} will be ignored)
-#' @param delim the (opening and ending) delimiters for the templating tags
+#' @param file The template file.
+#' @param ... A list of variables to be used for the code in the template; note that
+#'   the variables will be searched for in the parent frame as well.
+#' @param text Character vector of lines of code. An alternative way to specify
+#'   the template code directly. If \code{text} is provided, \code{file} will be ignored.
+#' @param delim A pair of opening and closing delimiters for the templating tags.
 #' @return A character vector, with the tags evaluated and replaced by their
 #'   values.
 #' @references This function was inspired by the pyexpander and m4

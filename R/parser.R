@@ -241,13 +241,13 @@ print.inline = function(x, ...) {
 #' supposed to be unique so that the numeric positions returned from
 #' \code{grep()} will be of the same length of \code{from}/\code{to}. Note
 #' \code{labels} always has to match the length of \code{from} and \code{to}.
-#' @param path the path to the R script
-#' @param lines a character vector of the code lines (by default read from
-#'   \code{path})
-#' @param labels a character vector of chunk labels (default \code{NULL})
-#' @param from,to a numeric vector specifying the starting/ending line numbers
-#'   of code chunks, or a character vector; see Details
-#' @param from.offset,to.offset an offset to be added to \code{from}/\code{to}
+#' @param path Path to the R script.
+#' @param lines Character vector of lines of code. By default, this is read from
+#'   \code{path}.
+#' @param labels Character vector of chunk labels (default \code{NULL}).
+#' @param from,to Numeric vector specifying the starting/ending line numbers
+#'   of code chunks, or a character vector; see Details.
+#' @param from.offset,to.offset Offsets to be added to \code{from}/\code{to}.
 #' @return As a side effect, code chunks are read into the current session so
 #'   that future chunks can (re)use the code by chunk label references.
 #' @references \url{https://yihui.name/knitr/demo/externalization/}
@@ -314,8 +314,8 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
   knit_code$set(setNames(code, labels))
 }
 #' @rdname read_chunk
-#' @param topic,package name of the demo and the package see \code{\link[utils]{demo}}
-#' @param ... arguments to be passed to \code{\link{read_chunk}}
+#' @param topic,package Name of the demo and the package. See \code{\link[utils]{demo}}.
+#' @param ... Arguments passed to \code{\link{read_chunk}}.
 #' @export
 read_demo = function(topic, package = NULL, ...) {
   paths = list.files(file.path(find.package(package), 'demo'), full.names = TRUE)
@@ -392,11 +392,11 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
 #' object \code{engine} is the local chunk option \code{engine}; if an
 #' expression fails to be evaluated (e.g. when a certain object does not exist),
 #' \code{FALSE} is returned and the label for this chunk will be filtered out.
-#' @param ... a series of R expressions, each of which should return \code{TRUE}
+#' @param ... A vector of R expressions, each of which should return \code{TRUE}
 #'   or \code{FALSE}; the expressions are evaluated using the local chunk
-#'   options of each code chunk as the environment
+#'   options of each code chunk as the environment.
 #' @note Empty code chunks are always ignored, including those chunks that are
-#'   empty originally in the document but filled with code using chunk options
+#'   empty in the original document but filled with code using chunk options
 #'   such as \code{ref.label} or \code{code}.
 #' @return A character vector.
 #' @export
@@ -447,10 +447,10 @@ all_rcpp_labels = function(...) all_labels(expression(engine == 'Rcpp'), ...)
 #' R Markdown document, you may write \samp{`` `r knitr::inline_expr('1+1')`
 #' ``}; for Rnw documents, this may be
 #' \samp{\verb|\Sexpr{knitr::inline_expr{'1+1'}}|}.
-#' @param code a character string of the inline R source code
-#' @param syntax a character string to specify the syntax, e.g. \code{rnw},
-#'   \code{html}, or \code{md}, etc; if not specified, it will be guessed from
-#'   the knitting context
+#' @param code Character string of the inline R source code.
+#' @param syntax A character string to specify the syntax, e.g. \code{rnw},
+#'   \code{html}, or \code{md}. If not specified, this will be guessed from
+#'   the knitting context.
 #' @return A character string marked up using the inline R code syntax.
 #' @export
 #' @examples library(knitr)

@@ -34,15 +34,15 @@
 #' no chunk is before it, it is also removed, because \pkg{knitr} only uses one
 #' \samp{@@} after \samp{<<>>=} by default (which is not the original Noweb
 #' syntax but more natural).
-#' @param file the filename of the Rnw file
-#' @param output the output filename (by default \file{file.Rnw} produces
+#' @param file Path to the Rnw file.
+#' @param output Output file path. By default, \file{file.Rnw} produces
 #'   \file{file-knitr.Rnw}); if \code{text} is not NULL, no output file will be
-#'   produced
-#' @param encoding the encoding of the Rnw file
-#' @param text an alternative way to provide the Sweave code as a character
-#'   string (if provided, the \code{file} will be ignored)
+#'   produced.
+#' @param encoding The encoding of the Rnw file.
+#' @param text An alternative way to provide the Sweave code as a character
+#'   string. If \code{text} is provided, \code{file} will be ignored.
 #' @return If \code{text} is \code{NULL}, the \code{output} file is written and
-#'   \code{NULL} is returned, otherwise the converted text string is returned.
+#'   \code{NULL} is returned. Otherwise, the converted text string is returned.
 #' @note If \samp{\\SweaveOpts{}} spans across multiple lines, it will not be
 #'   fixed, and you have to fix it manually. The LaTeX-style syntax of Sweave
 #'   chunks are ignored (see \code{?SweaveSyntaxLatex}); only the Noweb syntax

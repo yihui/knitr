@@ -16,10 +16,10 @@
 #' plots using \code{\link[grDevices]{recordPlot}}, and we can make use of these
 #' hooks to insert graphics output in the output document; see
 #' \code{\link{hook_plot_custom}} for details.
-#' @param x the plot filename (a character string)
-#' @param options a list of the current chunk options
+#' @param x Filename for the plot (a character string).
+#' @param options A list of the current chunk options.
 #' @rdname hook_plot
-#' @return A character string (code with plot filenames wrapped)
+#' @return A character string of code, with plot filenames wrapped.
 #' @references \url{https://yihui.name/knitr/hooks/}
 #' @seealso \code{\link{hook_plot_custom}}
 #' @export
@@ -329,7 +329,7 @@ render_listings = function() {
 #' behavior, use a comment \code{\% knitr_do_not_move} in the floating
 #' environment.
 #' @rdname hook_document
-#' @param x a character string (the content of the whole document output)
+#' @param x A character string (the whole output document).
 #' @return The post-processed document as a character string.
 #' @note These functions are hackish. Also note \code{hook_movecode()} assumes
 #'   you to use the default output hooks for LaTeX (not Sweave or listings), and

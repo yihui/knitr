@@ -55,19 +55,19 @@
 #' See the package website and manuals in the references to know more about
 #' \pkg{knitr}, including the full documentation of chunk options and demos,
 #' etc.
-#' @param input path of the input file
-#' @param output path of the output file for \code{knit()}; if \code{NULL}, this
-#'   function will try to guess and it will be under the current working
-#'   directory
-#' @param tangle whether to tangle the R code from the input file (like
-#'   \code{\link[utils]{Stangle}})
-#' @param text a character vector as an alternative way to provide the input
-#'   file
-#' @param quiet whether to suppress the progress bar and messages
-#' @param envir the environment in which the code chunks are to be evaluated
-#'   (for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-#'   \code{\link{globalenv}()})
-#' @param encoding the encoding of the input file; see \code{\link{file}}
+#' @param input Path to the input file.
+#' @param output Path to the output file for \code{knit()}. If \code{NULL}, this
+#'   function will try to guess a default, which will be under the current working
+#'   directory.
+#' @param tangle Boolean; whether to tangle the R code from the input file (like
+#'   \code{\link[utils]{Stangle}}).
+#' @param text A character vector. This is an alternative way to provide the input
+#'   file.
+#' @param quiet Boolean; suppress the progress bar and messages?
+#' @param envir Environment in which code chunks are to be evaluated,
+#'   for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+#'   \code{\link{globalenv}()}).
+#' @param encoding Encoding of the input file; see \code{\link{file}}.
 #' @return The compiled document is written into the output file, and the path
 #'   of the output file is returned. If the \code{text} argument is not
 #'   \code{NULL}, the compiled output is returned as a character vector. In
@@ -274,10 +274,10 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   output %n% res
 }
 #' @rdname knit
-#' @param documentation an integer specifying the level of documentation to go
-#'   the tangled script: \code{0} means pure code (discard all text chunks);
-#'   \code{1} (default) means add the chunk headers to code; \code{2} means add
-#'   all text chunks to code as roxygen comments
+#' @param documentation An integer specifying the level of documentation to add to
+#'   the tangled script. \code{0} means to output pure code, discarding all text chunks);
+#'   \code{1} (the default) means to add the chunk headers to the code; \code{2} means to
+#'   add all text chunks to code as roxygen comments.
 #' @param ... arguments passed to \code{\link{knit}()} from \code{purl()}
 #' @export
 purl = function(..., documentation = 1L) {
@@ -368,11 +368,11 @@ auto_format = function(ext) {
 #' the result into the main document. It is designed to be used in the chunk
 #' option \code{child} and serves as the alternative to the
 #' \command{SweaveInput} command in Sweave.
-#' @param ... arguments passed to \code{\link{knit}}
-#' @param options a list of chunk options to be used as global options inside
-#'   the child document (ignored if not a list); when one uses the \code{child}
+#' @param ... Arguments passed to \code{\link{knit}}.
+#' @param options A list of chunk options to be used as global options inside
+#'   the child document. When one uses the \code{child}
 #'   option in a parent chunk, the chunk options of the parent chunk will be
-#'   passed to the \code{options} argument here
+#'   passed to the \code{options} argument here.  Ignored if not a list.
 #' @inheritParams knit
 #' @return A character string of the content of the compiled child document is
 #'   returned as a character string so it can be written back to the parent
@@ -413,10 +413,10 @@ knit_child = function(..., options = NULL, envir = knit_global()) {
 #' Sometimes we may want to exit the knitting process early, and completely
 #' ignore the rest of the document. This function provides a mechanism to
 #' terminate \code{\link{knit}()}.
-#' @param append a character vector to be appended to the results from
-#'   \code{knit()} so far; by default, it is \samp{\end{document}} for LaTeX
-#'   output, and \samp{</body></html>} for HTML output to make the output
-#'   document complete; for other types of output, it is an empty string
+#' @param append A character vector to be appended to the results from
+#'   \code{knit()} so far. By default, this is \samp{\end{document}} for LaTeX
+#'   output, and \samp{</body></html>} for HTML output, to make the output
+#'   document complete. For other types of output, it is an empty string.
 #' @return Invisible \code{NULL}. An internal signal is set up (as a side
 #'   effect) to notify \code{knit()} to quit as if it had reached the end of the
 #'   document.
@@ -434,7 +434,7 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 #' Wrap evaluated results for output
 #'
 #' @param x output from \code{\link[evaluate]{evaluate}}
-#' @param options list of options used to control output
+#' @param options List of options used to control output
 #' @noRd
 wrap = function(x, options = list(), ...) {
   UseMethod('wrap', x)
@@ -631,10 +631,10 @@ add_html_caption = function(options, code) {
 #' method \code{knit_print.data.frame} that turns a data.frame into a table (the
 #' implementation may use other R packages or functions, e.g. \pkg{xtable} or
 #' \code{\link{kable}()}).
-#' @param x an R object to be printed
-#' @param ... additional arguments passed to the S3 method (currently ignored,
+#' @param x An R object to be printed
+#' @param ... Additional arguments passed to the S3 method. Currently ignored,
 #'   except two optional arguments \code{options} and \code{inline}; see
-#'   the references below)
+#'   the references below.
 #' @return The value returned from the print method should be a character vector
 #'   or can be converted to a character value. You can wrap the value in
 #'   \code{\link{asis_output}()} so that \pkg{knitr} writes the character value
@@ -697,14 +697,14 @@ formals(normal_print) = alist(x = , ... = )
 #' will be saved and loaded automatically when caching is enabled), but not all
 #' metadata can be saved and loaded next time and still works in the new R
 #' session.
-#' @param x an R object (typically a character string, or can be converted to a
-#'   character string via \code{\link{as.character}()})
-#' @param meta additional metadata of the object to be printed (the metadata
+#' @param x An R object. Typically a character string, or an object which can
+#'    be converted to a character string via \code{\link{as.character}()}.
+#' @param meta Additional metadata of the object to be printed. The metadata
 #'   will be collected when the object is printed, and accessible via
-#'   \code{knit_meta()})
-#' @param cacheable a logical value indicating if this object is cacheable; if
+#'   \code{knit_meta()}.
+#' @param cacheable Boolean indicating whether this object is cacheable. If
 #'   \code{FALSE}, \pkg{knitr} will stop when caching is enabled on code chunks
-#'   that contain \code{asis_output()}
+#'   that contain \code{asis_output()}.
 #' @note This function only works in top-level R expressions, and it will not
 #'   work when it is called inside another expression, such as a for-loop. See
 #'   \url{https://github.com/yihui/knitr/issues/1137} for a discussion.
@@ -720,13 +720,13 @@ asis_output = function(x, meta = NULL, cacheable = NA) {
 #' available). After knitting is done, all the metadata is accessible via this
 #' function. You can manually add metadata to the \pkg{knitr} session via
 #' \code{knit_meta_add()}.
-#' @param class optionally return only metadata entries that inherit from the
-#'   specified class; the default, \code{NULL}, returns all entries.
-#' @param clean whether to clean the collected metadata; by default, the
+#' @param class Optionally return only metadata entries that inherit from the
+#'   specified class. The default, \code{NULL}, returns all entries.
+#' @param clean Whether to clean the collected metadata. By default, the
 #'   metadata stored in \pkg{knitr} is cleaned up once retrieved, because we may
 #'   not want the metadata to be passed to the next \code{knit()} call; to be
 #'   defensive (i.e. not to have carryover metadata), you can call
-#'   \code{knit_meta()} before \code{knit()}
+#'   \code{knit_meta()} before \code{knit()}.
 #' @export
 #' @return \code{knit_meta()} returns the matched metadata specified by
 #'   \code{class}; \code{knit_meta_add()} returns all current metadata.
@@ -748,8 +748,8 @@ knit_meta = function(class = NULL, clean = TRUE) {
   .knitEnv$meta[matches]
 }
 
-#' @param meta a metadata object to be added to the session
-#' @param label a chunk label to indicate which chunk the metadata belongs to
+#' @param meta A metadata object to be added to the session.
+#' @param label A chunk label to indicate which chunk the metadata belongs to.
 #' @rdname knit_meta
 #' @export
 knit_meta_add = function(meta, label = '') {

@@ -96,14 +96,14 @@ block_class = function(x){
 
 #' @rdname output_hooks
 #' @export
-#' @param strict whether to use strict markdown or reST syntax; for markdown: if
+#' @param strict Boolean; whether to use strict markdown or reST syntax. For markdown, if
 #'   \code{TRUE}, code blocks will be indented by 4 spaces, otherwise they are
-#'   put in fences made by three backticks; for reST, if \code{TRUE}, code is
-#'   put under two colons and indented by 4 spaces, otherwise is put under the
-#'   \samp{sourcecode} directive (e.g. it is useful for Sphinx)
-#' @param fence_char a single character to be used in the code blocks fence
-#'   (e.g. it can be a backtick or a tilde, depending on your Markdown rendering
-#'   engine)
+#'   put in fences made by three backticks. For reST, if \code{TRUE}, code is
+#'   put under two colons and indented by 4 spaces, otherwise it is put under the
+#'   \samp{sourcecode} directive (this is useful for e.g. Sphinx).
+#' @param fence_char A single character to be used in the code blocks fence.
+#'   This can be e.g. a backtick or a tilde, depending on your Markdown rendering
+#'   engine.
 render_markdown = function(strict = FALSE, fence_char = '`') {
   set_html_dev()
   opts_knit$set(out.format = 'markdown')
@@ -160,13 +160,13 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
     }
   )
 }
-#' @param highlight which code highlighting engine to use: for \code{pygments},
-#'   the Liquid syntax is used (default approach Jekyll); for \code{prettify},
-#'   the output is prepared for the JavaScript library \file{prettify.js}; for
-#'   \code{none}, no highlighting engine will be used (code blocks are indented
-#'   by 4 spaces)
-#' @param extra extra tags for the highlighting engine; for \code{pygments}, it
-#'   can be \code{'linenos'}; for \code{prettify}, it can be \code{'linenums'}
+#' @param highlight Which code highlighting engine to use: if \code{pygments},
+#'   the Liquid syntax is used (default approach Jekyll); if \code{prettify},
+#'   the output is prepared for the JavaScript library \file{prettify.js}; if
+#'   \code{none}, no highlighting engine will be used, and code blocks are simply
+#'   indented by 4 spaces).
+#' @param extra Extra tags for the highlighting engine. For \code{pygments}, this
+#'   can be \code{'linenos'}; for \code{prettify}, it can be \code{'linenums'}.
 #' @rdname output_hooks
 #' @export
 render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '') {
