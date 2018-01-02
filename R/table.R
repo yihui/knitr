@@ -7,31 +7,31 @@
 #' default. If you want to display them with other characters, you can set the
 #' option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
 #' hide \code{NA} values.
-#' @param x an R object (typically a matrix or data frame)
-#' @param format a character string; possible values are \code{latex},
+#' @param x An R object, typically a matrix or data frame.
+#' @param format A character string. Possible values are \code{latex},
 #'   \code{html}, \code{markdown}, \code{pandoc}, and \code{rst}; this will be
 #'   automatically determined if the function is called within \pkg{knitr}; it
-#'   can also be set in the global option \code{knitr.table.format}; if
-#'   \code{format} is a function, it must return a character string
-#' @param digits the maximum number of digits for numeric columns (passed to
-#'   \code{round()}); it can also be a vector of length \code{ncol(x)} to set
-#'   the number of digits for individual columns
-#' @param row.names a logical value indicating whether to include row names; by
+#'   can also be set in the global option \code{knitr.table.format}. If
+#'   \code{format} is a function, it must return a character string.
+#' @param digits Maximum number of digits for numeric columns, passed to
+#'   \code{round()}. This can also be a vector of length \code{ncol(x)}, to set
+#'   the number of digits for individual columns.
+#' @param row.names Logical: whether to include row names. By
 #'   default, row names are included if \code{rownames(x)} is neither
-#'   \code{NULL} nor identical to \code{1:nrow(x)}
-#' @param col.names a character vector of column names to be used in the table
-#' @param align the alignment of columns: a character vector consisting of
-#'   \code{'l'} (left), \code{'c'} (center) and/or \code{'r'} (right); by
-#'   default, numeric columns are right-aligned, and other columns are
-#'   left-aligned; if \code{align = NULL}, the default alignment is used;
-#'   alternatively, if \code{length(align) == 1L}, the string will be expanded
-#'   to a vector of individual letters unless the output format is LaTeX; for
-#'   example, \code{'clc'} will be converted to \code{c('c', 'l', 'c')}
-#' @param caption the table caption
-#' @param format.args a list of arguments to be passed to \code{\link{format}()}
-#'   to format table values, e.g. \code{list(big.mark = ',')}
-#' @param escape escape special characters when producing HTML or LaTeX tables
-#' @param ... other arguments (see examples)
+#'   \code{NULL} nor identical to \code{1:nrow(x)}.
+#' @param col.names A character vector of column names to be used in the table.
+#' @param align Column alignment: a character vector consisting of
+#'   \code{'l'} (left), \code{'c'} (center) and/or \code{'r'} (right). By
+#'   default or if \code{align = NULL}, numeric columns are right-aligned, and
+#'   other columns are left-aligned. If \code{length(align) == 1L}, the string will be
+#'   expanded to a vector of individual letters, e.g. \code{'clc'} becomes
+#'  \code{c('c', 'l', 'c')}, unless the output format is LaTeX.
+#' @param caption The table caption.
+#' @param format.args A list of arguments to be passed to \code{\link{format}()}
+#'   to format table values, e.g. \code{list(big.mark = ',')}.
+#' @param escape Boolean; whether to escape special characters when producing
+#'   HTML or LaTeX tables.
+#' @param ... Other arguments (see Examples).
 #' @return A character vector of the table source code.
 #' @seealso Other R packages such as \pkg{huxtable}, \pkg{xtable},
 #'   \pkg{kableExtra}, and \pkg{tables} for HTML and LaTeX tables, and
@@ -298,14 +298,13 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
 #' Generate tables for Markdown and reST
 #'
 #' This function provides the basis for Markdown and reST tables.
-#' @param x the data matrix
-#' @param sep.row a chracter vector of length 3 that specifies the separators
-#'   before the header, after the header and at the end of the table,
-#'   respectively
-#' @param sep.col the column separator
-#' @param padding the number of spaces for the table cell padding
-#' @param align.fun a function to process the separator under the header
-#'   according to alignment
+#' @param x The data matrix.
+#' @param sep.row A length-3 character vector, specifying separators to be printed
+#'   before the header, after the header, and at the end of the table respectively.
+#' @param sep.col The column separator.
+#' @param padding Number of spaces for the table cell padding.
+#' @param align.fun A function to process the separator under the header
+#'   according to the alignment.
 #' @return A character vector of the table content.
 #' @noRd
 kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0,

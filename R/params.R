@@ -6,10 +6,11 @@
 #' however is also used by the knitr \code{\link{purl}} function to include
 #' the default parameter values in the R code it emits.
 #'
-#' @param text Character vector containing the document text
-#' @param evaluate If TRUE, expression values embedded within the YAML will be
-#' evaluated. This is the default. When FALSE, parameters defined by an
-#' expression will have the parsed expression in its \code{value} field.
+#' @param text Character vector containing the document text.
+#' @param evaluate Boolean. If \code{TRUE} (the default), expression values embedded
+#' within the YAML will be evaluated. If \code{FALSE}, parameters defined with an
+#' expression will have the parsed but unevaluated expression in their \code{value}
+#' field.
 #'
 #' @return List of objects of class \code{knit_param} that correspond to the
 #'   parameters declared in the \code{params} section of the YAML front matter.
@@ -87,10 +88,11 @@ knit_params = function(text, evaluate = TRUE) {
 #' This function reads the YAML front-matter that has already been extracted
 #' from a document and returns a list of any parameters declared there.
 #'
-#' @param yaml Character vector containing the YAML text
-#' @param evaluate If TRUE, expression values embedded within the YAML will be
-#' evaluated. This is the default. When FALSE, parameters defined by an
-#' expression will have the parsed expression in its \code{value} field.
+#' @param yaml Character vector containing the YAML text.
+#' @param evaluate If \code{TRUE} (the default) expression values
+#' embedded within the YAML will be evaluated. If \code{FALSE}, parameters
+#' defined with an expression will have the parsed but unevaluated expression
+#' in their \code{value} field.
 #'
 #' @return List of objects of class \code{knit_param} that correspond to the
 #' parameters declared in the \code{params} section of the YAML. See

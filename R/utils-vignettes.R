@@ -126,9 +126,9 @@ vig_engine = function(..., tangle = vtangle) {
 #' are likely to be identified as typos. This function is designed for the
 #' \code{filter} argument of \code{\link{aspell}()} to filter out code chunks
 #' and inline expressions.
-#' @param ifile the filename of the source document
-#' @param encoding the file encoding
-#' @return A chracter vector of the file content, excluding code chunks and
+#' @param ifile Filename of the source document.
+#' @param encoding Encoding of \code{ifile}.
+#' @return A character vector of the file content, excluding code chunks and
 #'   inline expressions.
 #' @export
 #' @examples library(knitr)

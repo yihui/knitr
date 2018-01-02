@@ -281,9 +281,9 @@ fig_process = function(FUN, path) {
 #' The utility \command{pdfcrop} is often shipped with a LaTeX distribution, and
 #' \command{convert} is a command in ImageMagick (Windows users may have to put
 #' the bin path of ImageMagick into the \var{PATH} variable).
-#' @param x the plot filename
-#' @param quiet whether to suppress standard output from the command line
-#'   utility
+#' @param x Filename of the plot.
+#' @param quiet Boolean; whether to suppress standard output from the command line
+#'   utility.
 #' @export
 #' @references PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}; the
 #'   \command{convert} command in ImageMagick:
@@ -352,16 +352,16 @@ par2 = function(x) {
 #' Markdown syntax, to embed an external image. Chunk options related to
 #' graphics output that work for normal R plots also work for these images, such
 #' as \code{out.width} and \code{out.height}.
-#' @param path a character vector of image paths
-#' @param auto_pdf whether to use PDF images automatically when the output
-#'   format is LaTeX, e.g. \file{foo/bar.png} will be replaced by
-#'   \file{foo/bar.pdf} if the latter exists; this can be useful since normally
-#'   PDF images are of higher qualities than raster images like PNG when the
-#'   output is LaTeX/PDF
-#' @param dpi the DPI (dots per inch) value to be used to calculate the output
-#'   width (in inches) of the images from the actual width (in pixels) divided
-#'   by \code{dpi}; if not provided, the chunk option \code{dpi} is used; if
-#'   \code{NA}, the output width will not be calculated
+#' @param path A character vector of image paths.
+#' @param auto_pdf Boolean; whether to use PDF images automatically when the output
+#'   format is LaTeX. If \code{TRUE}, then e.g. \file{foo/bar.png} will be replaced by
+#'   \file{foo/bar.pdf} if the latter exists. This can be useful since normally
+#'   PDF images are of higher quality than raster images like PNG, when the
+#'   output is LaTeX/PDF.
+#' @param dpi DPI (dots per inch) value. Used to calculate the output
+#'   width (in inches) of the images. This will be their actual width in pixels,
+#'   divided by \code{dpi}. If not provided, the chunk option \code{dpi} is used; if
+#'   \code{NA}, the output width will not be calculated.
 #' @note This function is supposed to be used in R code chunks or inline R code
 #'   expressions. You are recommended to use forward slashes (\verb{/}) as path
 #'   separators instead of backslashes in the image paths.
@@ -416,8 +416,8 @@ raster_dpi_width = function(path, dpi) {
 #' the output. \code{include_app()} takes the URL of a Shiny app and adds
 #' \samp{?showcase=0} to it (to disable the showcase mode), then passes the URL
 #' to \code{include_url()}.
-#' @param url a character string of a URL
-#' @param height the height of the iframe
+#' @param url Character string containing a URL.
+#' @param height Character string with the height of the iframe.
 #' @return An R object with a special class that \pkg{knitr} recognizes
 #'   internally to generate the iframe or screenshot.
 #' @seealso \code{\link{include_graphics}}

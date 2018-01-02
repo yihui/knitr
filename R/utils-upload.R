@@ -9,15 +9,15 @@
 #' package option \code{opts_knit$set(upload.fun = imgur_upload)}, so the output
 #' document is completely self-contained, i.e. it does not need external image
 #' files any more, and it is ready to be published online.
-#' @param file the path to the image file to be uploaded
-#' @param key the client id for Imgur (by default uses a client id registered by
-#'   Yihui Xie)
+#' @param file Path to the image file to be uploaded.
+#' @param key Client ID for Imgur. By default, this uses a client ID registered by
+#'   Yihui Xie.
 #' @return A character string of the link to the image; this string carries an
 #'   attribute named \code{XML} which is a list converted from the response XML
 #'   file; see Imgur API in the references.
 #' @author Yihui Xie, adapted from the \pkg{imguR} package by Aaron Statham
-#' @note Please register your own Imgur application to get your client id; you
-#'   can certainly use mine, but this id is in the public domain so everyone
+#' @note Please register your own Imgur application to get your client ID; you
+#'   can certainly use mine, but this ID is in the public domain so everyone
 #'   has access to all images associated to it.
 #' @references Imgur API version 3: \url{https://apidocs.imgur.com}; a demo:
 #'   \url{https://yihui.name/knitr/demo/upload/}

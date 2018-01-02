@@ -38,8 +38,8 @@ docAdjust = function(x) {
 #' bidirectional resize cursor; drag the cursor to resize the two columns. Press
 #' the key \code{t} to hide the code column (show the text column only), and
 #' press again to hide the text column (show code).
-#' @param input path of the input R Markdown file
-#' @param ... arguments to be passed to \code{\link{knit2html}}
+#' @param input Path of the input R Markdown file.
+#' @param ... Arguments to be passed to \code{\link{knit2html}}
 #' @return An HTML file is written, and its name is returned.
 #' @author Weicheng Zhu and Yihui Xie
 #' @references The Docco package by Jeremy Ashkenas:

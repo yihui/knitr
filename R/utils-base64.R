@@ -3,8 +3,8 @@
 #' This function takes an image file and uses the \pkg{markdown} package to
 #' encode it as a base64 string, which can be used in the \code{img} tag in
 #' HTML.
-#' @param f the path to the image file
-#' @return a character string (the data URI)
+#' @param f Path to the image file.
+#' @return The data URI as a character string.
 #' @author Wush Wu and Yihui Xie
 #' @export
 #' @references \url{http://en.wikipedia.org/wiki/Data_URI_scheme}

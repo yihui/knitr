@@ -141,7 +141,7 @@ cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
 #' object names in these files to automatically build cache dependencies, which
 #' is similar to the effect of the \code{dependson} option. It is supposed to be
 #' used in the first chunk of a document and this chunk must not be cached.
-#' @param path the path to the dependency file
+#' @param path Path to the dependency file.
 #' @return \code{NULL}. The dependencies are built as a side effect.
 #' @note Be cautious about \code{path}: because this function is used in a
 #'   chunk, the working directory when the chunk is evaluated is the directory
@@ -196,15 +196,15 @@ parse_objects = function(path) {
 #' chunk, which is normally not possible because \pkg{knitr} compiles the
 #' document in a linear fashion, and objects created later cannot be used before
 #' they are created.
-#' @param label the chunk label of the code chunk that has a cache database
-#' @param object the name of the object to be fetched from the database (if
-#'   missing, \code{NULL} is returned)
-#' @param notfound a value to use when the \code{object} cannot be found
-#' @param path the path of the cache database (normally set in the global chunk
-#'   option \code{cache.path})
-#' @param lazy whether to \code{\link{lazyLoad}} the cache database (depending
+#' @param label The chunk label of the code chunk that has a cache database.
+#' @param object The name of the object to be fetched from the database. If it is
+#'   missing, \code{NULL} is returned).
+#' @param notfound A value to use when the \code{object} cannot be found.
+#' @param path Path of the cache database (normally set in the global chunk
+#'   option \code{cache.path}).
+#' @param lazy Whether to \code{\link{lazyLoad}} the cache database (depending
 #'   on the chunk option \code{cache.lazy = TRUE} or \code{FALSE} of that code
-#'   chunk)
+#'   chunk).
 #' @note Apparently this function loads the value of the object from the
 #'   \emph{previous} run of the document, which may be problematic when the
 #'   value of the object becomes different the next time the document is
@@ -284,8 +284,8 @@ rand_seed = quote({
 #' will not be automatically cleaned. You can use this function to identify
 #' these possible files, and clean them if you are sure they are no longer
 #' needed.
-#' @param clean whether to remove the files
-#' @param path the cache path
+#' @param clean Boolean; whether to remove the files.
+#' @param path Path to the cache.
 #' @note  The identification is not guaranteed to be correct, especially when
 #'   multiple documents share the same cache directory. You are recommended to
 #'   call \code{clean_cache(FALSE)} and carefully check the list of files (if

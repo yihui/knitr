@@ -118,8 +118,8 @@ pure_preamble = function(preamble, patterns) {
 #' R code, they will be evaluated as if they were in this child document. For
 #' examples, when \pkg{knitr} hooks or other options are set in the preamble of
 #' the parent document, it will apply to the child document as well.
-#' @param parent path to the parent document (relative to the current child
-#'   document)
+#' @param parent Path to the parent document, relative to the current child
+#'   document.
 #' @return The preamble is extracted and stored to be used later when the
 #'   complete output is written.
 #' @note Obviously this function is only useful when the output format is LaTeX.
@@ -327,10 +327,10 @@ is_latex_output = function() {
   out_format('latex') || pandoc_to(c('latex', 'beamer'))
 }
 
-#' @param fmt A character vector of output formats to be checked. By default, it
+#' @param fmt A character vector of output formats to be checked. By default, this
 #'   is the current Pandoc output format.
 #' @param excludes A character vector of output formats that should not be
-#'   considered as the HTML format.
+#'   considered as HTML format.
 #' @rdname output_type
 #' @export
 is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
@@ -414,12 +414,12 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
 #' The filename of figure files is the combination of options \code{fig.path}
 #' and \code{label}. This function returns the path of figures for the current
 #' chunk by default.
-#' @param suffix a suffix of the filename; if it is not empty, nor does it
+#' @param suffix A filename suffix; if it is non-empty and does not
 #'   contain a dot \code{.}, it will be treated as the filename extension (e.g.
 #'   \code{png} will be used as \code{.png})
-#' @param options a list of options; by default the options of the current chunk
-#' @param number the current figure number (by default the internal chunk option
-#'   \code{fig.cur} if available)
+#' @param options A list of options; by default the options of the current chunk.
+#' @param number The current figure number. The default is the internal chunk option
+#'   \code{fig.cur}, if this is available.
 #' @return A character vector of the form \file{fig.path-label-i.suffix}.
 #' @note When there are special characters (not alphanumeric or \samp{-} or
 #'   \samp{_}) in the path, they will be automatically replaced with \samp{_}.
@@ -470,10 +470,11 @@ sanitize_fn = function(path, suffix = '') {
 #' You can generate plots in a code chunk but not show them inside the code
 #' chunk by using the chunk option \code{fig.show = 'hide'}. Then you can use
 #' this function if you want to show them elsewhere.
-#' @param label the chunk label
-#' @param ext the figure file extension, e.g. \code{png} or \code{pdf}
-#' @param number the figure number (by default \code{1})
-#' @param fig.path the chunk option \code{fig.path}
+#' @param label The chunk label.
+#' @param ext The figure file extension, e.g. \code{png} or \code{pdf}.
+#' @param number The figure number (by default \code{1}).
+#' @param fig.path Passed to \code{\link{fig_path}}. By default, the chunk
+#'   option \code{fig.path} is used.
 #' @return A character vector of filenames.
 #' @export
 #' @examples library(knitr)
@@ -585,10 +586,10 @@ escape_html = highr:::escape_html
 #' Read source code from R-Forge
 #'
 #' This function reads source code from the SVN repositories on R-Forge.
-#' @param path relative path to the source script on R-Forge
-#' @param project name of the R-Forge project
-#' @param extra extra parameters to be passed to the URL (e.g. \code{extra =
-#'   '&revision=48'} to check out the source of revision 48)
+#' @param path Relative path to the source script on R-Forge.
+#' @param project Name of the R-Forge project.
+#' @param extra Extra parameters to be passed to the URL (e.g. \code{extra =
+#'   '&revision=48'} to check out the source of revision 48).
 #' @return A character vector of the source code.
 #' @author Yihui Xie and Peter Ruckdeschel
 #' @export
@@ -656,12 +657,13 @@ sub_ext = function(x, ext) {
 #' not wrapped: the YAML preamble, fenced code blocks, section headers and
 #' indented elements. The main reason for wrapping long lines is to make it
 #' easier to review differences in version control.
-#' @param file the input Rmd file
-#' @param width the expected line width
-#' @param text an alternative to \code{file} to input the text lines
-#' @param backup the path to back up the original file (in case anything goes
-#'   wrong); if \code{NULL}, it is ignored; by default it is constructed from
-#'   \code{file} by adding \code{__} before the base filename
+#' @param file The input Rmd file.
+#' @param width The expected line width.
+#' @param text A character vector of text lines, as an alternative to \code{file}. If
+#'   \code{text} is not \code{NULL}, \code{file} is ignored.
+#' @param backup Path to back up the original file in case anything goes
+#'   wrong. If set to \code{NULL}, no backup is made. The default value is constructed
+#'   from \code{file} by adding \code{__} before the base filename.
 #' @return If \code{file} is provided, it is overwritten; if \code{text} is
 #'   provided, a character vector is returned.
 #' @note Currently it does not wrap blockquotes or lists (ordered or unordered).
@@ -753,10 +755,10 @@ is_windows = function() .Platform$OS.type == 'windows'
 #' Query the current input filename
 #'
 #' Returns the name of the input file passed to \code{\link{knit}()}.
-#' @param dir whether to prepend the current working directory to the file path
-#'   (i.e. return an absolute path or a relative path)
+#' @param dir Boolean; whether to prepend the current working directory to the file path,
+#'   i.e. whether to return an absolute path or a relative path.
 #' @return A character string, if this function is called inside an input
-#'   document (otherwise \code{NULL}).
+#'   document. Otherwise \code{NULL}.
 #' @export
 current_input = function(dir = FALSE) {
   input = knit_concord$get('infile')
@@ -844,10 +846,10 @@ attr = function(...) base::attr(..., exact = TRUE)
 #' and second word are combined using the \code{and} string. When the length is
 #' greater than 2, \code{sep} is used to separate all words, and the \code{and}
 #' string is prepended to the last word.
-#' @param words a character vector
-#' @param sep the separator to be inserted among words
-#' @param and a character string to be prepended to the last word
-#' @param before,after A character string to be added before/after each word
+#' @param words A character vector.
+#' @param sep Separator to be inserted between words.
+#' @param and Character string to be prepended to the last word.
+#' @param before,after A character string to be added before/after each word.
 #' @return A character string.
 #' @export
 #' @examples combine_words('a'); combine_words(c('a', 'b'))
@@ -924,16 +926,16 @@ restore_raw_output = function(text, chunks, markers = raw_markers) {
 #' from Markdown so Pandoc will never see it. In the post-processor, you can
 #' read the Pandoc output (e.g., an HTML or RTF file), and restore the raw
 #' output.
-#' @param x the character vector to be protected
-#' @param markers a character vector of length 2 to be used to wrap \code{x};
-#'   see \code{knitr:::raw_markers} for the default value
-#' @param ... arguments to be passed to \code{\link{asis_output}()}
-#' @param text for \code{extract_raw_output()}, the content of the input file
+#' @param x The character vector to be protected.
+#' @param markers A length-2 character vector to be used to wrap \code{x};
+#'   see \code{knitr:::raw_markers} for the default value.
+#' @param ... Arguments to be passed to \code{\link{asis_output}()}.
+#' @param text For \code{extract_raw_output()}, the content of the input file
 #'   (e.g. Markdown); for \code{restore_raw_output()}, the content of the output
-#'   file (e.g. HTML generated by Pandoc from Markdown)
-#' @param chunks a named character vector returned from
-#'   \code{extract_raw_output()}
-#' @return For \code{extract_raw_output()}, a list of two components
+#'   file (e.g. HTML generated by Pandoc from Markdown).
+#' @param chunks A named character vector returned from
+#'   \code{extract_raw_output()}.
+#' @return For \code{extract_raw_output()}, a list of two components:
 #'   \code{value} (the \code{text} with raw output replaced by MD5 digests) and
 #'   \code{chunks} (a named character vector, of which the names are MD5 digests
 #'   and values are the raw output). For \code{restore_raw_output()}, the

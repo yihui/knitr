@@ -94,11 +94,11 @@ insert_header_html = function(doc, b) {
 #' type of output. For instance, we can change \code{highlight} to LaTeX
 #' definitions of the \pkg{listings} package (and modify the output hooks
 #' accordingly), so we can decorate R code using the \pkg{listings} package.
-#' @param ... the header components; currently possible components are
+#' @param ... Header components; currently possible components are
 #'   \code{highlight}, \code{tikz} and \code{framed}, which contain the
-#'   necessary commands to be used in the HTML header or LaTeX preamble; note
-#'   HTML output does not use the \code{tikz} and \code{framed} components (they
-#'   do not make sense to HTML)
+#'   necessary commands to be used in the HTML header or LaTeX preamble. Note that
+#'   HTML output does not use the \code{tikz} and \code{framed} components, since
+#'   they do not make sense in the context of HTML.
 #' @return The header vector in \code{opts_knit} is set.
 #' @export
 #' @examples set_header(tikz = '\\usepackage{tikz}')
