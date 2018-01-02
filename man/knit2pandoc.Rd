@@ -10,34 +10,34 @@ knit2pandoc(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
     pandoc_wrapper = NULL, ...)
 }
 \arguments{
-\item{input}{path of the input file}
+\item{input}{Path to the input file.}
 
-\item{output}{path of the output file for \code{knit()}; if \code{NULL}, this
-function will try to guess and it will be under the current working
-directory}
+\item{output}{Path to the output file for \code{knit()}. If \code{NULL}, this
+function will try to guess a default, which will be under the current working
+directory.}
 
-\item{tangle}{whether to tangle the R code from the input file (like
-\code{\link[utils]{Stangle}})}
+\item{tangle}{Boolean; whether to tangle the R code from the input file (like
+\code{\link[utils]{Stangle}}).}
 
-\item{text}{a character vector as an alternative way to provide the input
-file}
+\item{text}{A character vector. This is an alternative way to provide the input
+file.}
 
-\item{quiet}{whether to suppress the progress bar and messages}
+\item{quiet}{Boolean; suppress the progress bar and messages?}
 
-\item{envir}{the environment in which the code chunks are to be evaluated
-(for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()})}
+\item{envir}{Environment in which code chunks are to be evaluated,
+for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\code{\link{globalenv}()}).}
 
-\item{encoding}{the encoding of the input file; see \code{\link{file}}}
+\item{encoding}{Encoding of the input file; see \code{\link{file}}.}
 
-\item{to}{a character string describing the Pandoc output format to use}
+\item{to}{Character string giving the Pandoc output format to use.}
 
-\item{pandoc_wrapper}{an R function used to call Pandoc; by default, if
-\pkg{rmarkdown} installed uses
-\code{rmarkdown::\link[rmarkdown]{pandoc_convert}()} else
+\item{pandoc_wrapper}{An R function used to call Pandoc; by default, if
+\pkg{rmarkdown} is installed, this uses
+\code{rmarkdown::\link[rmarkdown]{pandoc_convert}()}, otherwise it
 \code{\link{pandoc}()}.}
 
-\item{...}{options to be passed to the \code{pandoc_wrapper} function}
+\item{...}{Options to be passed to the \code{pandoc_wrapper} function.}
 }
 \value{
 Returns the output of the \code{pandoc_wrapper} function.

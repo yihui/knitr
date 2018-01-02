@@ -7,10 +7,10 @@
 imgur_upload(file, key = "9f3460e67f308f6")
 }
 \arguments{
-\item{file}{the path to the image file to be uploaded}
+\item{file}{Path to the image file to be uploaded.}
 
-\item{key}{the client id for Imgur (by default uses a client id registered by
-Yihui Xie)}
+\item{key}{Client ID for Imgur. By default, this uses a client ID registered by
+Yihui Xie.}
 }
 \value{
 A character string of the link to the image; this string carries an
@@ -30,8 +30,8 @@ document is completely self-contained, i.e. it does not need external image
 files any more, and it is ready to be published online.
 }
 \note{
-Please register your own Imgur application to get your client id; you
-  can certainly use mine, but this id is in the public domain so everyone
+Please register your own Imgur application to get your client ID; you
+  can certainly use mine, but this ID is in the public domain so everyone
   has access to all images associated to it.
 }
 \examples{

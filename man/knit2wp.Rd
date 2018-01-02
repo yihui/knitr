@@ -9,32 +9,32 @@ knit2wp(input, title = "A post from knitr", ..., envir = parent.frame(),
     encoding = getOption("encoding"), publish = TRUE)
 }
 \arguments{
-\item{input}{the filename of the Rmd document}
+\item{input}{Filename of the Rmd document.}
 
-\item{title}{the post title}
+\item{title}{Title of the post.}
 
-\item{...}{other meta information of the post, e.g. \code{categories = c('R',
-'Stats')} and \code{mt_keywords = c('knitr', 'wordpress')}, etc}
+\item{...}{Other meta information of the post, e.g. \code{categories = c('R',
+'Stats')} and \code{mt_keywords = c('knitr', 'wordpress')}, et cetera.}
 
-\item{envir}{the environment in which the code chunks are to be evaluated
-(for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()})}
+\item{envir}{Environment in which code chunks are to be evaluated,
+for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\code{\link{globalenv}()}).}
 
-\item{shortcode}{a logical vector of length 2: whether to use the shortcode
-\samp{[sourcecode lang='lang']} which can be useful to WordPress.com users
-for syntax highlighting of source code and output; the first element
-applies to source code, and the second applies to text output (by default,
-both are \code{FALSE})}
+\item{shortcode}{A length-2 logical vector: whether to use the shortcode
+\samp{[sourcecode lang='lang']}, which can be useful to WordPress.com users
+for syntax highlighting of source code and output. The first element
+applies to source code, and the second applies to text output. By default,
+both are \code{FALSE}.}
 
-\item{action}{to create a new post, update an existing post, or create a new
-page}
+\item{action}{Whether to create a new post, update an existing post, or create a new
+page.}
 
-\item{postid}{if action is \code{editPost}, the post id \code{postid} must be
-specified}
+\item{postid}{If \code{action} is \code{editPost}, the post id \code{postid} must be
+specified.}
 
-\item{encoding}{the encoding of the input file; see \code{\link{file}}}
+\item{encoding}{Encoding of the input file; see \code{\link{file}}.}
 
-\item{publish}{whether to publish the post immediately}
+\item{publish}{Boolean: publish the post immediately?}
 }
 \description{
 This function is a wrapper around the \pkg{RWordPress} package. It compiles

@@ -23,12 +23,12 @@ hook_plot_rst(x, options)
 hook_plot_textile(x, options)
 }
 \arguments{
-\item{x}{the plot filename (a character string)}
+\item{x}{Filename for the plot (a character string).}
 
-\item{options}{a list of the current chunk options}
+\item{options}{A list of the current chunk options.}
 }
 \value{
-A character string (code with plot filenames wrapped)
+A character string of code, with plot filenames wrapped.
 }
 \description{
 These hook functions define how to mark up graphics output in different

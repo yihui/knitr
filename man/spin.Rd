@@ -10,39 +10,38 @@ spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
     precious = !knit && is.null(text))
 }
 \arguments{
-\item{hair}{the path to the R script}
+\item{hair}{Path to the R script.}
 
-\item{knit}{logical: whether to compile the document after conversion}
+\item{knit}{Logical; whether to compile the document after conversion.}
 
-\item{report}{logical: whether to generate report for \file{Rmd}, \file{Rnw}
-and \file{Rtex} output (ignored if \code{knit = FALSE})}
+\item{report}{Logical; whether to generate a report for \file{Rmd}, \file{Rnw}
+and \file{Rtex} output. Ignored if \code{knit = FALSE}.}
 
-\item{text}{a character vector as an alternative way to \code{hair} to
-provide the R source; if \code{text} is not \code{NULL}, \code{hair} will
-be ignored}
+\item{text}{A character vector of code, as an alternative way to
+provide the R source. If \code{text} is not \code{NULL}, \code{hair} will
+be ignored.}
 
-\item{envir}{the environment for \code{\link{knit}()} to evaluate the code}
+\item{envir}{Environment for \code{\link{knit}()} to evaluate the code.}
 
-\item{format}{character: the output format (it takes five possible values);
-the default is R Markdown}
+\item{format}{Character; the output format. The default is R Markdown.}
 
-\item{doc}{a regular expression to identify the documentation lines; by
+\item{doc}{A regular expression to identify the documentation lines; by
 default it follows the roxygen convention, but it can be customized, e.g.
 if you want to use \code{##} to denote documentation, you can use
-\code{'^##\\\\s*'}}
+\code{'^##\\\\s*'}.}
 
-\item{inline}{a regular expression to identify inline R expressions; by
+\item{inline}{A regular expression to identify inline R expressions; by
 default, code of the form \code{((code))} on its own line is treated as an
-inline expression}
+inline expression.}
 
-\item{comment}{a pair of regular expressions for the start and end delimiters
+\item{comment}{A pair of regular expressions for the start and end delimiters
 of comments; the lines between a start and an end delimiter will be
-ignored; by default, the delimiters are \verb{/*} in the beginning and
-\verb{*/} in the end of a line (following the convention of C comments)}
+ignored. By default, the delimiters are \verb{/*} at the beginning of a line,
+ and \verb{*/} at the end, following the convention of C comments.}
 
 \item{precious}{logical: whether intermediate files (e.g., \code{.Rmd} files
-when \code{format} is \code{"Rmd"}) should be preserved; default
-\code{FALSE} if \code{knit == TRUE} and input is a file}
+when \code{format} is \code{"Rmd"}) should be preserved. The default is
+\code{FALSE} if \code{knit} is \code{TRUE} and the input is a file.}
 }
 \value{
 If \code{text} is \code{NULL}, the path of the final output document,

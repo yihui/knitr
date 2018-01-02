@@ -8,20 +8,20 @@ Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file),
     encoding = getOption("encoding"), text = NULL)
 }
 \arguments{
-\item{file}{the filename of the Rnw file}
+\item{file}{Path to the Rnw file.}
 
-\item{output}{the output filename (by default \file{file.Rnw} produces
+\item{output}{Output file path. By default, \file{file.Rnw} produces
 \file{file-knitr.Rnw}); if \code{text} is not NULL, no output file will be
-produced}
+produced.}
 
-\item{encoding}{the encoding of the Rnw file}
+\item{encoding}{The encoding of the Rnw file.}
 
-\item{text}{an alternative way to provide the Sweave code as a character
-string (if provided, the \code{file} will be ignored)}
+\item{text}{An alternative way to provide the Sweave code as a character
+string. If \code{text} is provided, \code{file} will be ignored.}
 }
 \value{
 If \code{text} is \code{NULL}, the \code{output} file is written and
-  \code{NULL} is returned, otherwise the converted text string is returned.
+  \code{NULL} is returned. Otherwise, the converted text string is returned.
 }
 \description{
 This function converts an Sweave document to a \pkg{knitr}-compatible

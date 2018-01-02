@@ -14,22 +14,22 @@ stitch_rhtml(..., envir = parent.frame())
 stitch_rmd(..., envir = parent.frame())
 }
 \arguments{
-\item{script}{path to the R script}
+\item{script}{Path to the R script.}
 
-\item{template}{path of the template to use (by default the Rnw template in
-this package; there is also an HTML template in \pkg{knitr})}
+\item{template}{Path of the template to use. By default, the Rnw template in
+this package; there is also an HTML template in \pkg{knitr}.}
 
-\item{output}{the output filename (passed to \code{\link{knit}}); by default
-it uses the base filename of the script}
+\item{output}{Output filename, passed to \code{\link{knit}}). By default,
+the base filename of the script is used.}
 
-\item{text}{a character vector as an alternative way to provide the input
-file}
+\item{text}{A character vector. This is an alternative way to provide the input
+file.}
 
-\item{envir}{the environment in which the code chunks are to be evaluated
-(for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()})}
+\item{envir}{Environment in which code chunks are to be evaluated,
+for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\code{\link{globalenv}()}).}
 
-\item{...}{arguments passed to \code{stitch()}}
+\item{...}{Arguments passed to \code{stitch()}.}
 }
 \value{
 path of the output document

@@ -10,11 +10,11 @@ is_latex_output()
 is_html_output(fmt = pandoc_to(), excludes = NULL)
 }
 \arguments{
-\item{fmt}{A character vector of output formats to be checked. By default, it
+\item{fmt}{A character vector of output formats to be checked. By default, this
 is the current Pandoc output format.}
 
 \item{excludes}{A character vector of output formats that should not be
-considered as the HTML format.}
+considered as HTML format.}
 }
 \description{
 The function \code{is_latex_output()} returns \code{TRUE} when the output

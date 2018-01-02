@@ -13,9 +13,9 @@ hook_scianimator(x, options)
 hook_r2swf(x, options)
 }
 \arguments{
-\item{x}{the plot filename (a character string)}
+\item{x}{Filename for the plot (a character string).}
 
-\item{options}{a list of the current chunk options}
+\item{options}{A list of the current chunk options.}
 }
 \description{
 \code{hook_ffmpeg_html()} uses FFmpeg to convert images to a video;

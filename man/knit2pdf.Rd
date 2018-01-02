@@ -8,27 +8,27 @@ knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = 
     encoding = getOption("encoding"), ...)
 }
 \arguments{
-\item{input}{path of the input file}
+\item{input}{Path to the input file.}
 
-\item{output}{path of the output file for \code{knit()}; if \code{NULL}, this
-function will try to guess and it will be under the current working
-directory}
+\item{output}{Path to the output file for \code{knit()}. If \code{NULL}, this
+function will try to guess a default, which will be under the current working
+directory.}
 
-\item{compiler}{a character string which gives the LaTeX engine used to
-compile the tex document to PDF. For an Rrst file, setting compiler to
-\code{'rst2pdf'} will use \code{\link{rst2pdf}} to compiles the rst file to
+\item{compiler}{A character string giving the LaTeX engine used to
+compile the tex document to PDF. For an Rrst file, setting \code{compiler} to
+\code{'rst2pdf'} will use \code{\link{rst2pdf}} to compile the rst file to
 PDF using the ReportLab open-source library.}
 
-\item{envir}{the environment in which the code chunks are to be evaluated
-(for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()})}
+\item{envir}{Environment in which code chunks are to be evaluated,
+for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\code{\link{globalenv}()}).}
 
-\item{quiet}{whether to suppress the progress bar and messages}
+\item{quiet}{Boolean; suppress the progress bar and messages?}
 
-\item{encoding}{the encoding of the input file; see \code{\link{file}}}
+\item{encoding}{Encoding of the input file; see \code{\link{file}}.}
 
-\item{...}{options to be passed to \code{tinytex::\link[tinytex]{latexmk}} or
-\code{\link{rst2pdf}}}
+\item{...}{Options to be passed to \code{tinytex::\link[tinytex]{latexmk}} or
+\code{\link{rst2pdf}}.}
 }
 \value{
 The filename of the PDF file.

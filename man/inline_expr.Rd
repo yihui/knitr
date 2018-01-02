@@ -7,11 +7,11 @@
 inline_expr(code, syntax)
 }
 \arguments{
-\item{code}{a character string of the inline R source code}
+\item{code}{Character string of the inline R source code.}
 
-\item{syntax}{a character string to specify the syntax, e.g. \code{rnw},
-\code{html}, or \code{md}, etc; if not specified, it will be guessed from
-the knitting context}
+\item{syntax}{A character string to specify the syntax, e.g. \code{rnw},
+\code{html}, or \code{md}. If not specified, this will be guessed from
+the knitting context.}
 }
 \value{
 A character string marked up using the inline R code syntax.

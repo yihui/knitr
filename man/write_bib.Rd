@@ -8,24 +8,24 @@ write_bib(x = .packages(), file = "", tweak = TRUE, width = NULL,
     prefix = getOption("knitr.bib.prefix", "R-"))
 }
 \arguments{
-\item{x}{package names (packages which are not installed are ignored)}
+\item{x}{Package names. Packages which are not installed are ignored.}
 
-\item{file}{the (\file{.bib}) file to write (by default writes to the R
-console; ignored if it is \code{NULL})}
+\item{file}{The (\file{.bib}) file to write. By default, or if \code{NULL},
+output is written to the R console.}
 
-\item{tweak}{whether to fix some known problems in the citations, especially
-non-standard format of authors}
+\item{tweak}{Whether to fix some known problems in the citations, especially
+non-standard format of author names.}
 
-\item{width}{the width of lines in bibliographyb entries (if \code{NULL},
-lines will not be wrapped)}
+\item{width}{Width of lines in bibliography entries. If \code{NULL},
+lines will not be wrapped.}
 
-\item{prefix}{a prefix string for keys in BibTeX entries; by default, it is
+\item{prefix}{Prefix string for keys in BibTeX entries; by default, it is
 \samp{R-} unless \code{\link{option}('knitr.bib.prefix')} has been set to
-another string}
+another string.}
 }
 \value{
-a list containing the citations (also written to the \code{file} as a
-  side effect)
+A list containing the citations. Citations are also written to the \code{file} as a
+  side effect.
 }
 \description{
 This function uses \code{\link[utils]{citation}} and

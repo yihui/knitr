@@ -10,12 +10,13 @@ knit_rd(pkg, links = tools::findHTMLlinks(), frame = TRUE)
 knit_rd_all()
 }
 \arguments{
-\item{pkg}{package name}
+\item{pkg}{Package name.}
 
-\item{links}{a character vector of links to be passed to
-\code{\link[tools]{Rd2HTML}}}
+\item{links}{A character vector of links to be passed to
+\code{\link[tools]{Rd2HTML}}.}
 
-\item{frame}{whether to put a navigation frame on left of the index page}
+\item{frame}{Boolean: whether to put a navigation frame on the left of the
+index page.}
 }
 \value{
 All HTML pages corresponding to topics in the package are written

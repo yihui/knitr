@@ -7,9 +7,9 @@
 rocco(input, ...)
 }
 \arguments{
-\item{input}{path of the input R Markdown file}
+\item{input}{Path of the input R Markdown file.}
 
-\item{...}{arguments to be passed to \code{\link{knit2html}}}
+\item{...}{Arguments to be passed to \code{\link{knit2html}}}
 }
 \value{
 An HTML file is written, and its name is returned.

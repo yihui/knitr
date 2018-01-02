@@ -7,17 +7,17 @@
 engine_output(options, code, out, extra = NULL)
 }
 \arguments{
-\item{options}{a list of chunk options (usually this is just the object
+\item{options}{A list of chunk options. Usually this is just the object
 \code{options} passed to the engine function; see
-\code{\link{knit_engines}})}
+\code{\link{knit_engines}}.}
 
-\item{code}{the source code of the chunk, to which the output hook
-\code{source} is applied, unless the chunk option \code{echo == FALSE}}
+\item{code}{Source code of the chunk, to which the output hook
+\code{source} is applied, unless the chunk option \code{echo} is \code{FALSE}.}
 
-\item{out}{the text output from the engine, to which the hook \code{output}
-is applied, unless the chunk option \code{results == 'hide'}}
+\item{out}{Text output from the engine, to which the hook \code{output}
+is applied, unless the chunk option \code{results} is \code{'hide'}}
 
-\item{extra}{any additional text output that you want to include}
+\item{extra}{Any additional text output that you want to include.}
 }
 \value{
 A character string generated from the source code and output using

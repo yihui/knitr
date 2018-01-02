@@ -8,27 +8,27 @@ knit2html(input, output = NULL, ..., envir = parent.frame(), text = NULL, quiet 
     encoding = getOption("encoding"), force_v1 = FALSE)
 }
 \arguments{
-\item{input}{path of the input file}
+\item{input}{Path to the input file.}
 
-\item{output}{path of the output file for \code{knit()}; if \code{NULL}, this
-function will try to guess and it will be under the current working
-directory}
+\item{output}{Path to the output file for \code{knit()}. If \code{NULL}, this
+function will try to guess a default, which will be under the current working
+directory.}
 
-\item{...}{options passed to \code{\link[markdown]{markdownToHTML}}}
+\item{...}{Options passed to \code{\link[markdown]{markdownToHTML}}.}
 
-\item{envir}{the environment in which the code chunks are to be evaluated
-(for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()})}
+\item{envir}{Environment in which code chunks are to be evaluated,
+for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\code{\link{globalenv}()}).}
 
-\item{text}{a character vector as an alternative way to provide the input
-file}
+\item{text}{A character vector. This is an alternative way to provide the input
+file.}
 
-\item{quiet}{whether to suppress the progress bar and messages}
+\item{quiet}{Boolean; suppress the progress bar and messages?}
 
-\item{encoding}{the encoding of the input file; see \code{\link{file}}}
+\item{encoding}{Encoding of the input file; see \code{\link{file}}.}
 
-\item{force_v1}{whether to force rendering the input document as an R
-Markdown v1 document (even if it is for v2)}
+\item{force_v1}{Boolean; whether to force rendering the input document as an R
+Markdown v1 document, even if it is for v2.}
 }
 \value{
 If the argument \code{text} is NULL, a character string (HTML code)

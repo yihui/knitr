@@ -7,12 +7,12 @@
 read_rforge(path, project, extra = "")
 }
 \arguments{
-\item{path}{relative path to the source script on R-Forge}
+\item{path}{Relative path to the source script on R-Forge.}
 
-\item{project}{name of the R-Forge project}
+\item{project}{Name of the R-Forge project.}
 
-\item{extra}{extra parameters to be passed to the URL (e.g. \code{extra =
-'&revision=48'} to check out the source of revision 48)}
+\item{extra}{Extra parameters to be passed to the URL (e.g. \code{extra =
+'&revision=48'} to check out the source of revision 48).}
 }
 \value{
 A character vector of the source code.

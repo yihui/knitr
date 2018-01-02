@@ -8,19 +8,19 @@ load_cache(label, object, notfound = "NOT AVAILABLE",
     path = opts_chunk$get("cache.path"), lazy = TRUE)
 }
 \arguments{
-\item{label}{the chunk label of the code chunk that has a cache database}
+\item{label}{The chunk label of the code chunk that has a cache database.}
 
-\item{object}{the name of the object to be fetched from the database (if
-missing, \code{NULL} is returned)}
+\item{object}{The name of the object to be fetched from the database. If it is
+missing, \code{NULL} is returned).}
 
-\item{notfound}{a value to use when the \code{object} cannot be found}
+\item{notfound}{A value to use when the \code{object} cannot be found.}
 
-\item{path}{the path of the cache database (normally set in the global chunk
-option \code{cache.path})}
+\item{path}{Path of the cache database (normally set in the global chunk
+option \code{cache.path}).}
 
-\item{lazy}{whether to \code{\link{lazyLoad}} the cache database (depending
+\item{lazy}{Whether to \code{\link{lazyLoad}} the cache database (depending
 on the chunk option \code{cache.lazy = TRUE} or \code{FALSE} of that code
-chunk)}
+chunk).}
 }
 \value{
 Invisible \code{NULL} when \code{object} is not specified (the cache

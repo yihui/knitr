@@ -7,10 +7,10 @@
 spin_child(input, format)
 }
 \arguments{
-\item{input}{the filename of the input R script}
+\item{input}{Filename of the input R script.}
 
-\item{format}{to be passed to \code{format} in \code{spin()}; if not
-provided, it will be guessed from the current knitting process}
+\item{format}{Passed to \code{format} in \code{spin()}. If not
+provided, it will be guessed from the current knitting process.}
 }
 \value{
 A character string of the knitted R script.

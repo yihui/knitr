@@ -10,9 +10,9 @@ all_labels(...)
 all_rcpp_labels(...)
 }
 \arguments{
-\item{...}{a series of R expressions, each of which should return \code{TRUE}
+\item{...}{A vector of R expressions, each of which should return \code{TRUE}
 or \code{FALSE}; the expressions are evaluated using the local chunk
-options of each code chunk as the environment}
+options of each code chunk as the environment.}
 }
 \value{
 A character vector.
@@ -31,7 +31,7 @@ expression fails to be evaluated (e.g. when a certain object does not exist),
 }
 \note{
 Empty code chunks are always ignored, including those chunks that are
-  empty originally in the document but filled with code using chunk options
+  empty in the original document but filled with code using chunk options
   such as \code{ref.label} or \code{code}.
 }
 \examples{

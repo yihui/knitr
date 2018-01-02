@@ -11,21 +11,21 @@ read_chunk(path, lines = readLines(path, warn = FALSE), labels = NULL, from = NU
 read_demo(topic, package = NULL, ...)
 }
 \arguments{
-\item{path}{the path to the R script}
+\item{path}{Path to the R script.}
 
-\item{lines}{a character vector of the code lines (by default read from
-\code{path})}
+\item{lines}{Character vector of lines of code. By default, this is read from
+\code{path}.}
 
-\item{labels}{a character vector of chunk labels (default \code{NULL})}
+\item{labels}{Character vector of chunk labels (default \code{NULL}).}
 
-\item{from, to}{a numeric vector specifying the starting/ending line numbers
-of code chunks, or a character vector; see Details}
+\item{from, to}{Numeric vector specifying the starting/ending line numbers
+of code chunks, or a character vector; see Details.}
 
-\item{from.offset, to.offset}{an offset to be added to \code{from}/\code{to}}
+\item{from.offset, to.offset}{Offsets to be added to \code{from}/\code{to}.}
 
-\item{topic, package}{name of the demo and the package see \code{\link[utils]{demo}}}
+\item{topic, package}{Name of the demo and the package. See \code{\link[utils]{demo}}.}
 
-\item{...}{arguments to be passed to \code{\link{read_chunk}}}
+\item{...}{Arguments passed to \code{\link{read_chunk}}.}
 }
 \value{
 As a side effect, code chunks are read into the current session so

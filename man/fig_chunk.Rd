@@ -7,13 +7,14 @@
 fig_chunk(label, ext = "", number, fig.path = opts_chunk$get("fig.path"))
 }
 \arguments{
-\item{label}{the chunk label}
+\item{label}{The chunk label.}
 
-\item{ext}{the figure file extension, e.g. \code{png} or \code{pdf}}
+\item{ext}{The figure file extension, e.g. \code{png} or \code{pdf}.}
 
-\item{number}{the figure number (by default \code{1})}
+\item{number}{The figure number (by default \code{1}).}
 
-\item{fig.path}{the chunk option \code{fig.path}}
+\item{fig.path}{Passed to \code{\link{fig_path}}. By default, the chunk
+option \code{fig.path} is used.}
 }
 \value{
 A character vector of filenames.

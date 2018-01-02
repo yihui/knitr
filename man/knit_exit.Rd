@@ -7,10 +7,10 @@
 knit_exit(append)
 }
 \arguments{
-\item{append}{a character vector to be appended to the results from
-\code{knit()} so far; by default, it is \samp{\end{document}} for LaTeX
-output, and \samp{</body></html>} for HTML output to make the output
-document complete; for other types of output, it is an empty string}
+\item{append}{A character vector to be appended to the results from
+\code{knit()} so far. By default, this is \samp{\end{document}} for LaTeX
+output, and \samp{</body></html>} for HTML output, to make the output
+document complete. For other types of output, it is an empty string.}
 }
 \value{
 Invisible \code{NULL}. An internal signal is set up (as a side

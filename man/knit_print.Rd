@@ -10,11 +10,11 @@ knit_print(x, ...)
 normal_print(x, ...)
 }
 \arguments{
-\item{x}{an R object to be printed}
+\item{x}{An R object to be printed}
 
-\item{...}{additional arguments passed to the S3 method (currently ignored,
+\item{...}{Additional arguments passed to the S3 method. Currently ignored,
 except two optional arguments \code{options} and \code{inline}; see
-the references below)}
+the references below.}
 }
 \value{
 The value returned from the print method should be a character vector

@@ -7,12 +7,12 @@
 knit_filter(ifile, encoding = "unknown")
 }
 \arguments{
-\item{ifile}{the filename of the source document}
+\item{ifile}{Filename of the source document.}
 
-\item{encoding}{the file encoding}
+\item{encoding}{Encoding of \code{ifile}.}
 }
 \value{
-A chracter vector of the file content, excluding code chunks and
+A character vector of the file content, excluding code chunks and
   inline expressions.
 }
 \description{

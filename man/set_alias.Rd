@@ -7,11 +7,11 @@
 set_alias(...)
 }
 \arguments{
-\item{...}{named arguments (argument names are aliases, and argument values
-are real chunk options)}
+\item{...}{Named arguments. Argument names are aliases, and argument values
+are real option names.}
 }
 \value{
-NULL (\code{opts_knit$get('aliases')} is modified as the side effect)
+\code{NULL}. \code{opts_knit$get('aliases')} is modified as the side effect.
 }
 \description{
 We do not have to use the chunk option names given in \pkg{knitr}; we can set

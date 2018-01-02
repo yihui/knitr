@@ -10,9 +10,9 @@ include_url(url, height = "400px")
 include_app(url, height = "400px")
 }
 \arguments{
-\item{url}{a character string of a URL}
+\item{url}{Character string containing a URL.}
 
-\item{height}{the height of the iframe}
+\item{height}{Character string with the height of the iframe.}
 }
 \value{
 An R object with a special class that \pkg{knitr} recognizes

@@ -32,24 +32,24 @@ render_rst(strict = FALSE)
 render_textile()
 }
 \arguments{
-\item{strict}{whether to use strict markdown or reST syntax; for markdown: if
+\item{strict}{Boolean; whether to use strict markdown or reST syntax. For markdown, if
 \code{TRUE}, code blocks will be indented by 4 spaces, otherwise they are
-put in fences made by three backticks; for reST, if \code{TRUE}, code is
-put under two colons and indented by 4 spaces, otherwise is put under the
-\samp{sourcecode} directive (e.g. it is useful for Sphinx)}
+put in fences made by three backticks. For reST, if \code{TRUE}, code is
+put under two colons and indented by 4 spaces, otherwise it is put under the
+\samp{sourcecode} directive (this is useful for e.g. Sphinx).}
 
-\item{fence_char}{a single character to be used in the code blocks fence
-(e.g. it can be a backtick or a tilde, depending on your Markdown rendering
-engine)}
+\item{fence_char}{A single character to be used in the code blocks fence.
+This can be e.g. a backtick or a tilde, depending on your Markdown rendering
+engine.}
 
-\item{highlight}{which code highlighting engine to use: for \code{pygments},
-the Liquid syntax is used (default approach Jekyll); for \code{prettify},
-the output is prepared for the JavaScript library \file{prettify.js}; for
-\code{none}, no highlighting engine will be used (code blocks are indented
-by 4 spaces)}
+\item{highlight}{Which code highlighting engine to use: if \code{pygments},
+the Liquid syntax is used (default approach Jekyll); if \code{prettify},
+the output is prepared for the JavaScript library \file{prettify.js}; if
+\code{none}, no highlighting engine will be used, and code blocks are simply
+indented by 4 spaces).}
 
-\item{extra}{extra tags for the highlighting engine; for \code{pygments}, it
-can be \code{'linenos'}; for \code{prettify}, it can be \code{'linenums'}}
+\item{extra}{Extra tags for the highlighting engine. For \code{pygments}, this
+can be \code{'linenos'}; for \code{prettify}, it can be \code{'linenums'}.}
 }
 \value{
 \code{NULL}; corresponding hooks are set as a side effect

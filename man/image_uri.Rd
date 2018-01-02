@@ -7,10 +7,10 @@
 image_uri(f)
 }
 \arguments{
-\item{f}{the path to the image file}
+\item{f}{Path to the image file.}
 }
 \value{
-a character string (the data URI)
+The data URI as a character string.
 }
 \description{
 This function takes an image file and uses the \pkg{markdown} package to

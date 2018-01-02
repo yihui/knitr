@@ -7,10 +7,10 @@
 plot_crop(x, quiet = TRUE)
 }
 \arguments{
-\item{x}{the plot filename}
+\item{x}{Filename of the plot.}
 
-\item{quiet}{whether to suppress standard output from the command line
-utility}
+\item{quiet}{Boolean; whether to suppress standard output from the command line
+utility.}
 }
 \value{
 The original filename.

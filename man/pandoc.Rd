@@ -8,22 +8,22 @@ pandoc(input, format, config = getOption("config.pandoc"), ext = NA,
     encoding = getOption("encoding"))
 }
 \arguments{
-\item{input}{a character vector of the Markdown filenames}
+\item{input}{A character vector of Markdown filenames.}
 
-\item{format}{the output format (see References); it can be a character
+\item{format}{Name of the output format (see References). This can be a character
 vector of multiple formats; by default, it is obtained from the \code{t}
-field in the configuration (if the configuration is empty or the \code{t}
-field is not found, the default output format will be \code{'html'})}
+field in the configuration. If the configuration is empty or the \code{t}
+field is not found, the default output format will be \code{'html'}.}
 
-\item{config}{the Pandoc configuration file; if missing, it is assumed to be
+\item{config}{Path to the Pandoc configuration file. If missing, it is assumed to be
 a file with the same base name as the \code{input} file and an extension
 \code{.pandoc} (e.g. for \file{foo.md} it looks for \file{foo.pandoc})}
 
-\item{ext}{the filename extensions; by default, the extension is inferred
-from the \code{format}, e.g. \code{latex} creates \code{pdf}, and
+\item{ext}{Filename extensions. By default, the extension is inferred
+from the \code{format}, e.g. \code{latex} creates \code{pdf},
 \code{dzslides} creates \code{html}, and so on}
 
-\item{encoding}{the encoding of the input file; see \code{\link{file}}}
+\item{encoding}{Encoding of the input file; see \code{\link{file}}.}
 }
 \value{
 The output filename(s) (or an error if the conversion failed).

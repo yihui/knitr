@@ -7,9 +7,9 @@
 clean_cache(clean = FALSE, path = opts_chunk$get("cache.path"))
 }
 \arguments{
-\item{clean}{whether to remove the files}
+\item{clean}{Boolean; whether to remove the files.}
 
-\item{path}{the cache path}
+\item{path}{Path to the cache.}
 }
 \description{
 If you remove or rename some cached code chunks, their original cache files

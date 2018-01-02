@@ -7,8 +7,8 @@
 set_parent(parent)
 }
 \arguments{
-\item{parent}{path to the parent document (relative to the current child
-document)}
+\item{parent}{Path to the parent document, relative to the current child
+document.}
 }
 \value{
 The preamble is extracted and stored to be used later when the

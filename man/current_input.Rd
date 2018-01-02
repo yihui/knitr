@@ -7,12 +7,12 @@
 current_input(dir = FALSE)
 }
 \arguments{
-\item{dir}{whether to prepend the current working directory to the file path
-(i.e. return an absolute path or a relative path)}
+\item{dir}{Boolean; whether to prepend the current working directory to the file path,
+i.e. whether to return an absolute path or a relative path.}
 }
 \value{
 A character string, if this function is called inside an input
-  document (otherwise \code{NULL}).
+  document. Otherwise \code{NULL}.
 }
 \description{
 Returns the name of the input file passed to \code{\link{knit}()}.

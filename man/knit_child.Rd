@@ -7,16 +7,16 @@
 knit_child(..., options = NULL, envir = knit_global())
 }
 \arguments{
-\item{...}{arguments passed to \code{\link{knit}}}
+\item{...}{Arguments passed to \code{\link{knit}}.}
 
-\item{options}{a list of chunk options to be used as global options inside
-the child document (ignored if not a list); when one uses the \code{child}
+\item{options}{A list of chunk options to be used as global options inside
+the child document. When one uses the \code{child}
 option in a parent chunk, the chunk options of the parent chunk will be
-passed to the \code{options} argument here}
+passed to the \code{options} argument here.  Ignored if not a list.}
 
-\item{envir}{the environment in which the code chunks are to be evaluated
-(for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()})}
+\item{envir}{Environment in which code chunks are to be evaluated,
+for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\code{\link{globalenv}()}).}
 }
 \value{
 A character string of the content of the compiled child document is

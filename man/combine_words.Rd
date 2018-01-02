@@ -7,13 +7,13 @@
 combine_words(words, sep = ", ", and = " and ", before = "", after = before)
 }
 \arguments{
-\item{words}{a character vector}
+\item{words}{A character vector.}
 
-\item{sep}{the separator to be inserted among words}
+\item{sep}{Separator to be inserted between words.}
 
-\item{and}{a character string to be prepended to the last word}
+\item{and}{Character string to be prepended to the last word.}
 
-\item{before, after}{A character string to be added before/after each word}
+\item{before, after}{A character string to be added before/after each word.}
 }
 \value{
 A character string.

@@ -11,32 +11,32 @@ knit(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
 purl(..., documentation = 1L)
 }
 \arguments{
-\item{input}{path of the input file}
+\item{input}{Path to the input file.}
 
-\item{output}{path of the output file for \code{knit()}; if \code{NULL}, this
-function will try to guess and it will be under the current working
-directory}
+\item{output}{Path to the output file for \code{knit()}. If \code{NULL}, this
+function will try to guess a default, which will be under the current working
+directory.}
 
-\item{tangle}{whether to tangle the R code from the input file (like
-\code{\link[utils]{Stangle}})}
+\item{tangle}{Boolean; whether to tangle the R code from the input file (like
+\code{\link[utils]{Stangle}}).}
 
-\item{text}{a character vector as an alternative way to provide the input
-file}
+\item{text}{A character vector. This is an alternative way to provide the input
+file.}
 
-\item{quiet}{whether to suppress the progress bar and messages}
+\item{quiet}{Boolean; suppress the progress bar and messages?}
 
-\item{envir}{the environment in which the code chunks are to be evaluated
-(for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()})}
+\item{envir}{Environment in which code chunks are to be evaluated,
+for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\code{\link{globalenv}()}).}
 
-\item{encoding}{the encoding of the input file; see \code{\link{file}}}
+\item{encoding}{Encoding of the input file; see \code{\link{file}}.}
 
 \item{...}{arguments passed to \code{\link{knit}()} from \code{purl()}}
 
-\item{documentation}{an integer specifying the level of documentation to go
-the tangled script: \code{0} means pure code (discard all text chunks);
-\code{1} (default) means add the chunk headers to code; \code{2} means add
-all text chunks to code as roxygen comments}
+\item{documentation}{An integer specifying the level of documentation to add to
+the tangled script. \code{0} means to output pure code, discarding all text chunks);
+\code{1} (the default) means to add the chunk headers to the code; \code{2} means to
+add all text chunks to code as roxygen comments.}
 }
 \value{
 The compiled document is written into the output file, and the path

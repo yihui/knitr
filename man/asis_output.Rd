@@ -7,16 +7,16 @@
 asis_output(x, meta = NULL, cacheable = NA)
 }
 \arguments{
-\item{x}{an R object (typically a character string, or can be converted to a
-character string via \code{\link{as.character}()})}
+\item{x}{An R object. Typically a character string, or an object which can
+be converted to a character string via \code{\link{as.character}()}.}
 
-\item{meta}{additional metadata of the object to be printed (the metadata
+\item{meta}{Additional metadata of the object to be printed. The metadata
 will be collected when the object is printed, and accessible via
-\code{knit_meta()})}
+\code{knit_meta()}.}
 
-\item{cacheable}{a logical value indicating if this object is cacheable; if
+\item{cacheable}{Boolean indicating whether this object is cacheable. If
 \code{FALSE}, \pkg{knitr} will stop when caching is enabled on code chunks
-that contain \code{asis_output()}}
+that contain \code{asis_output()}.}
 }
 \description{
 This is a convenience function that assigns the input object a class named

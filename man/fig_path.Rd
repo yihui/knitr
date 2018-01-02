@@ -7,14 +7,14 @@
 fig_path(suffix = "", options = opts_current$get(), number)
 }
 \arguments{
-\item{suffix}{a suffix of the filename; if it is not empty, nor does it
+\item{suffix}{A filename suffix; if it is non-empty and does not
 contain a dot \code{.}, it will be treated as the filename extension (e.g.
 \code{png} will be used as \code{.png})}
 
-\item{options}{a list of options; by default the options of the current chunk}
+\item{options}{A list of options; by default the options of the current chunk.}
 
-\item{number}{the current figure number (by default the internal chunk option
-\code{fig.cur} if available)}
+\item{number}{The current figure number. The default is the internal chunk option
+\code{fig.cur}, if this is available.}
 }
 \value{
 A character vector of the form \file{fig.path-label-i.suffix}.
