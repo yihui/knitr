@@ -336,7 +336,18 @@ pattern_index = function(pattern, text) {
   })
 }
 
-strip_chunk = function(x) strip_white(x[-1])
+strip_chunk = function(x) {
+  x <- x[-1]
+  if (!length(x)) return(x)
+  while (is_blank(x[1]) || grepl("^#+'[ ]?", x[1])) {
+    x = x[-1]; if (!length(x)) return(x)
+  }
+  while (is_blank(x[(n <- length(x))]) || grepl("^#+'[ ]?", x[n])) {
+    x = x[-n]; if (n < 2) return(x)
+  }
+  x
+}
+
 # strip lines that are pure white spaces
 strip_white = function(x) {
   if (!length(x)) return(x)
