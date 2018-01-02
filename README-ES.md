@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/yihui/knitr/badge.svg?branch=master&service=github)](https://coveralls.io/github/yihui/knitr?branch=master)
 [![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/knitr)](https://cran.r-project.org/package=knitr)
 
-El paquete de R **knitr** es un motor de programación literaria de uso genérico, con una API ligera diseñada para dar a los usuarios control total de la salida sin un trabajo de codificación pesado. Combina muchas características dentro de un paquete con leves ajustes motivados de mi uso diario de Sweave. Observe la [página principal](https://yihui.name/knitr) del paquete para más detalles y ejemplos. Vea las [FAQ](https://github.com/yihui/knitr/blob/master/FAQ.md) para una lista de preguntas frecuentes (que incluye dónde hacer preguntas).
+El paquete de R **knitr** es un motor de programación literaria de uso genérico, con una API ligera diseñada para dar a los usuarios control total de la salida sin un trabajo de codificación pesado. Combina muchas características dentro de un paquete con leves ajustes motivados de mi uso diario de Sweave. Observe la [página principal](https://yihui.name/knitr/) del paquete para más detalles y ejemplos. Vea las [FAQ](https://yihui.name/knitr/faq/) para una lista de preguntas frecuentes (que incluye dónde hacer preguntas).
 
 
 ## Instalación
