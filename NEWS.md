@@ -32,7 +32,7 @@
 
 ## MAJOR CHANGES
 
-- the `python` engine is based on `reticulate::eng_python()` now; this means all Python code chunks are evaluated in the same Python session; if you want the old behevior (new session for each Python code chunk), you can set the chunk option `python.reticulate = FALSE` (thanks, @kevinushey, #1440)
+- the `python` engine is based on `reticulate::eng_python()` now; this means all Python code chunks are evaluated in the same Python session; if you want the old behavior (new session for each Python code chunk), you can set the chunk option `python.reticulate = FALSE` (thanks, @kevinushey, #1440)
 
 - the `auto_pdf` argument of `include_graphics()` defaults to `FALSE` now; you can set `options(knitr.graphics.auto_pdf = TRUE)` to change the default to `TRUE` (thanks, @mebden, #1456)
 
@@ -74,7 +74,7 @@
 
 - added a `go` engine (thanks, @hodgesds, #1330)
 
-- added a `sql.show_interpolated` chunk option for `sql` engine. For `{sql, sql.show_interpolated=TRUE}`, interpolated SQL query will be dispalyed in the renderred document instead (thanks, @saurfang, #1357)
+- added a `sql.show_interpolated` chunk option for `sql` engine. For `{sql, sql.show_interpolated=TRUE}`, interpolated SQL query will be displayed in the rendered document instead (thanks, @saurfang, #1357)
 
 - the chunk option `results=FALSE` is an alias of `results='hide'` now (thanks, @hadley, #1360)
 
@@ -152,7 +152,7 @@
 
 - the package option `opts_knit$get('stop_on_error')` has been removed
 
-- the confusing warning message about `knitr::knit2html()` when buiding package vignettes using the `knitr::rmarkdown` engine without `pandoc`/`pandoc-citeproc` has been removed (#1286)
+- the confusing warning message about `knitr::knit2html()` when building package vignettes using the `knitr::rmarkdown` engine without `pandoc`/`pandoc-citeproc` has been removed (#1286)
 
 - the default value of the `quiet` argument of `plot_crop()` was changed from `!opts_knit$get('progress')` to `TRUE`, i.e., by default the messages from cropping images are suppressed
 
@@ -168,7 +168,7 @@
 
 - improved caching for Rcpp code chunks: the shared library built from the C++ code will be preserved on disk and reloaded the next time if caching is enabled (chunk option `cache = TRUE`), so that the exported R functions are still usable in later R code chunks; note this feature requires Rcpp >= 0.12.5.6 (thanks, @jjallaire, #1239)
 
-- added a helper function `all_rcpp_labels()`, which is simply `all_labels(engine == 'Rcpp')` and can be used to extract all chunk lables of Rcpp chunks
+- added a helper function `all_rcpp_labels()`, which is simply `all_labels(engine == 'Rcpp')` and can be used to extract all chunk labels of Rcpp chunks
 
 - added a new engine named `sql` that uses the **DBI** package to execute SQL queries, and optionally assign the result to a variable in the **knitr** session; see http://rmarkdown.rstudio.com/authoring_knitr_engines.html for details (#1241)
 
@@ -228,7 +228,7 @@
 
 - for the `tikz` engine, if `fig.ext = 'svg'`, `dvisvgm` will be called to convert the DVI output of TikZ to SVG; you need to install `dvisvgm`, and Windows users have to install GhostScript as well (thanks, @dkilfoyle, #1177)
 
-- new `js` and `css` engines which surround their content with `<script>` and `<style>` tags respecitvely, and print no output when not in an HTML document
+- new `js` and `css` engines which surround their content with `<script>` and `<style>` tags respectively, and print no output when not in an HTML document
 
 - for LaTeX tables, `kable()` supports short captions now via the `caption.short` argument, e.g. `kable(..., caption = 'A long caption', caption.short = 'A short caption')` (thanks, @ismayc, #1199)
 
@@ -266,7 +266,7 @@
 
 - added a chunk option `fig.asp` to specify the aspect ratio (i.e. the ratio height/width) of figures: when `fig.asp` is specified, the height of a figure (the chunk option `fig.height`) is calculated from `fig.width * fig.asp`
 
-- added a new function `knit_watch()` to knit input files continously when any of them are updated, so you do not have to call a knitting function like `knit()`, `knit2pdf()`, or `rmarkdown::render()` repeatedly as you update an input document
+- added a new function `knit_watch()` to knit input files continuously when any of them are updated, so you do not have to call a knitting function like `knit()`, `knit2pdf()`, or `rmarkdown::render()` repeatedly as you update an input document
 
 - `kable()` supports generating multiple tables from a list of data objects, and the tables will be placed side by side when the output format is HTML or LaTeX
 
