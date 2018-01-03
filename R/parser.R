@@ -248,6 +248,8 @@ print.inline = function(x, ...) {
 #' @param from,to Numeric vector specifying the starting/ending line numbers
 #'   of code chunks, or a character vector; see Details.
 #' @param from.offset,to.offset Offsets to be added to \code{from}/\code{to}.
+#' @param strip_comments a logical dictating whether to strip trailing roxygen-style
+#'   comments from code chunks in addition to whitespace
 #' @return As a side effect, code chunks are read into the current session so
 #'   that future chunks can (re)use the code by chunk label references.
 #' @references \url{https://yihui.name/knitr/demo/externalization/}
@@ -280,7 +282,8 @@ print.inline = function(x, ...) {
 #' knitr:::knit_code$get() # use this to check chunks in the current session
 #' knitr:::knit_code$restore() # clean up the session
 read_chunk = function(path, lines = readLines(path, warn = FALSE),
-                      labels = NULL, from = NULL, to = NULL, from.offset = 0L, to.offset = 0L) {
+                      labels = NULL, from = NULL, to = NULL, from.offset = 0L, to.offset = 0L,
+                      strip_comments = FALSE) {
   if (!length(lines)) {
     warning('code is empty')
     return(invisible())
@@ -309,7 +312,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
   groups = unname(split(lines, idx))
   labels = stringr::str_trim(gsub(lab, '\\3', sapply(groups, `[`, 1)))
   labels = gsub(',.*', '', labels)  # strip off possible chunk options
-  code = lapply(groups, strip_chunk)
+  code = lapply(groups, strip_chunk, strip_comments)
   for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()
   knit_code$set(setNames(code, labels))
 }
@@ -336,8 +339,9 @@ pattern_index = function(pattern, text) {
   })
 }
 
-strip_chunk = function(x) {
+strip_chunk = function(x, strip_comments = FALSE) {
   x <- x[-1]
+  if (!strip_comments) return(strip_white(x))
   if (!length(x)) return(x)
   while (is_blank(x[1]) || grepl("^#+'[ ]?", x[1])) {
     x = x[-1]; if (!length(x)) return(x)
