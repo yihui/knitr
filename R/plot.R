@@ -314,10 +314,7 @@ plot_crop = function(x, quiet = TRUE) {
   x
 }
 
-# a wrapper of showtext::showtext.begin()
-showtext = function(show) {
-  if (isTRUE(show)) getFromNamespace('showtext_begin', 'showtext')()
-}
+showtext = function(show) if (isTRUE(show)) showtext::showtext_begin()
 
 # handle some special cases of par()
 par2 = function(x) {
