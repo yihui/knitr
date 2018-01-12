@@ -100,8 +100,8 @@ spin = function(
       # R code; #+/- indicates chunk options
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
-      if (length(opt <- grep('^(#|--)+(\\+|-| ----+| @knitr)', block))) {
-        block[opt] = paste0(p[1L], gsub('^(#|--)+(\\+|-| ----+| @knitr)\\s*|-*\\s*$', '', block[opt]), p[2L])
+      if (length(opt <- grep(rc <- '^(#|--)+(\\+|-| ----+| @knitr)', block))) {
+        block[opt] = paste0(p[1L], gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt]), p[2L])
       }
       if (!grepl(p1, block[1L])) {
         block = c(paste0(p[1L], p[2L]), block)
