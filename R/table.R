@@ -82,11 +82,6 @@ kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
   align, caption = NULL, format.args = list(), escape = TRUE, ...
 ) {
-  # check input
-  if (!identical(col.names, NA) && length(col.names) != ncol(x)) {
-    stop("Argument col.names is not the same length as the number of columns of x.")
-  }
-
   # determine the table format
   if (missing(format) || is.null(format)) format = getOption('knitr.table.format')
   if (is.null(format)) format = if (is.null(pandoc_to())) switch(
@@ -161,6 +156,10 @@ kable = function(
   x = replace_na(base::format(as.matrix(x), trim = TRUE, justify = 'none'), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
   x = trimws(x)
+  # check input length
+  if (!identical(col.names, NA) && length(col.names) != ncol(x)) {
+    stop("Length of col.names is not the same as the number of columns of x.")
+  }
   colnames(x) = col.names
   if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")
