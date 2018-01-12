@@ -248,7 +248,7 @@ print.inline = function(x, ...) {
 #' @param from,to Numeric vector specifying the starting/ending line numbers
 #'   of code chunks, or a character vector; see Details.
 #' @param from.offset,to.offset Offsets to be added to \code{from}/\code{to}.
-#' @param strip_comments a logical dictating whether to strip trailing roxygen-style
+#' @param strip_comments Logical dictating whether to strip trailing roxygen-style
 #'   comments from code chunks in addition to whitespace
 #' @return As a side effect, code chunks are read into the current session so
 #'   that future chunks can (re)use the code by chunk label references.
