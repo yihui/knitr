@@ -3,7 +3,8 @@
 #' This function takes a specially formatted R script and converts it to a
 #' literate programming document. By default normal text (documentation) should
 #' be written after the roxygen comment (\code{#'}) and code chunk options are
-#' written after \code{#+} or \code{#-} or \code{# ----}.
+#' written after \code{#+} or \code{#-} or \code{# ----} or any of these
+#' combinations replacing \code{#} with \code{--}.
 #'
 #' Obviously the goat's hair is the original R script, and the wool is the
 #' literate programming document (ready to be knitted).
@@ -99,8 +100,8 @@ spin = function(
       # R code; #+/- indicates chunk options
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
-      if (length(opt <- grep('^#+(\\+|-| ----+| @knitr)', block))) {
-        block[opt] = paste0(p[1L], gsub('^#+(\\+|-| ----+| @knitr)\\s*|-*\\s*$', '', block[opt]), p[2L])
+      if (length(opt <- grep('^(#|--)+(\\+|-| ----+| @knitr)', block))) {
+        block[opt] = paste0(p[1L], gsub('^(#|--)+(\\+|-| ----+| @knitr)\\s*|-*\\s*$', '', block[opt]), p[2L])
       }
       if (!grepl(p1, block[1L])) {
         block = c(paste0(p[1L], p[2L]), block)
