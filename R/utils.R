@@ -891,7 +891,7 @@ extract_raw_output = function(text, markers = raw_markers) {
   chunks = tokens = character(n)
   for (i in seq_len(n)) {
     chunks[i] = sub(r, '\\1', s[[1]][i])
-    tokens[i] = digest::digest(chunks[i])
+    tokens[i] = digest(chunks[i])
     s[[1]][i] = gsub(r, paste0(markers[1], tokens[i], markers[2]), s[[1]][i])
   }
   regmatches(x, m) = s
@@ -1002,4 +1002,11 @@ trimws = function(x) gsub('^\\s+|\\s+$', '', x)
 optipng = function(dir = '.') {
   files = list.files(dir, '[.]png$', recursive = TRUE, full.names = TRUE)
   for (f in files) system2('optipng', shQuote(f))
+}
+
+digest = function(...) {
+  if (!loadable('digest')) warning2(
+    'You used a knitr feature that depends on the digest package. Make sure it is installed.'
+  )
+  digest::digest(...)
 }

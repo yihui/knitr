@@ -253,7 +253,7 @@ remove_plot = function(list, keep.high = TRUE) {
 # replace the content of the recorded plot with MD5 digests so that merge_plot()
 # will still work, and this will also save disk space for the case of cache=2
 digest_plot = function(x, level = 1) {
-  if (!is.list(x) || level >= 3) return(digest::digest(x))
+  if (!is.list(x) || level >= 3) return(digest(x))
   lapply(x, digest_plot, level = level + 1)
 }
 
