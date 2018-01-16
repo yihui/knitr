@@ -354,7 +354,7 @@ latex_percent_size = function(x, which = c('width', 'height')) {
   x
 }
 
-# parse but do not keep source
+# TODO: use xfun::parse_only
 parse_only = function(code) {
   if (length(code) == 0) return(expression())
   parse(text = code, keep.source = FALSE)
@@ -366,7 +366,7 @@ eval_lang = function(x, envir = knit_global()) {
   eval(x, envir = envir)
 }
 
-# counterpart of isTRUE()
+# TODO: use xfun::isFALSE
 isFALSE = function(x) identical(x, FALSE)
 
 # check latex packages; if not exist, copy them over to ./
@@ -529,7 +529,7 @@ print_knitlog = function() {
 # count the number of lines
 line_count = function(x) stringr::str_count(x, '\n') + 1L
 
-# faster than require() but less rigorous
+# TODO: use xfun::loadable(pkg, FALSE)
 has_package = function(pkg) pkg %in% .packages(TRUE)
 
 # if LHS is NULL, return the RHS
@@ -641,7 +641,7 @@ encode_utf8 = function(input, encoding = getOption('encoding'), output = input) 
   writeLines(enc2utf8(txt), output, useBytes = TRUE)
 }
 
-# import functions from tools
+# TODO: use xfun::file_ext, xfun::sans_ext, xfun::with_ext
 file_ext = tools::file_ext
 sans_ext = tools::file_path_sans_ext
 # substitute extension
@@ -737,7 +737,7 @@ kpsewhich = function() {
     'kpsewhich' else x
 }
 
-# call try with silent = TRUE
+# TODO: use xfun::try_silent
 try_silent = function(expr) try(expr, silent = TRUE)
 
 # check if a utility exists; if it does, save its availability in opts_knit
@@ -750,6 +750,7 @@ has_utility = function(name, package = name) {
   yes
 }
 
+# TODO: use xfun::is_windows
 is_windows = function() .Platform$OS.type == 'windows'
 
 #' Query the current input filename
@@ -806,7 +807,7 @@ inst_dir = function(...) {
   p[file.exists(p)]
 }
 
-# normalize two paths to see if they are the same file
+# TODO: use xfun::same_path
 same_file = function(f1, f2) {
   f1 = normalizePath(f1, mustWork = FALSE)
   f2 = normalizePath(f2, mustWork = FALSE)
@@ -832,7 +833,7 @@ create_label = function(..., latex = FALSE) {
   paste0(lab1, ..., lab2)
 }
 
-# yes I hate partial matching
+# TODO: use xfun::attr
 attr = function(...) base::attr(..., exact = TRUE)
 
 #' Combine multiple words into a single string
@@ -868,7 +869,7 @@ combine_words = function(words, sep = ', ', and = ' and ', before = '', after = 
   paste(words, collapse = sep)
 }
 
-# check if a package is loadable
+# TODO: use xfun::loadable
 loadable = function(pkg) requireNamespace(pkg, quietly = TRUE)
 
 warning2 = function(...) warning(..., call. = FALSE)
@@ -953,7 +954,7 @@ raw_output = function(x, markers = raw_markers, ...) {
   asis_output(paste(c(markers[1], x, markers[2]), collapse = ''), ...)
 }
 
-# a simple JSON serializer
+# TODO: use xfun::tojson
 tojson = function(x) {
   if (is.null(x)) return('null')
   if (is.logical(x)) {
@@ -976,6 +977,7 @@ tojson = function(x) {
   stop('The class of x is not supported: ', paste(class(x), collapse = ', '))
 }
 
+# TODO: use xfun::json_vector
 json_vector = function(x, toArray = FALSE, quote = TRUE) {
   if (quote) {
     x = gsub('(["\\])', "\\\\\\1", x)
@@ -985,6 +987,7 @@ json_vector = function(x, toArray = FALSE, quote = TRUE) {
   if (toArray) paste0('[', paste(x, collapse = ', '), ']') else x
 }
 
+# TODO: use xfun::write_utf8
 writeUTF8 = function(text, file, ...) {
   if (identical(file, '')) {
     cat(text, sep = '\n', file = file)
@@ -995,6 +998,7 @@ writeUTF8 = function(text, file, ...) {
 
 trimws = function(x) gsub('^\\s+|\\s+$', '', x)
 
+# TODO: use xfun::optipng
 optipng = function(dir = '.') {
   files = list.files(dir, '[.]png$', recursive = TRUE, full.names = TRUE)
   for (f in files) system2('optipng', shQuote(f))
