@@ -44,6 +44,6 @@ imgur_upload = function(file, key = '9f3460e67f308f6') {
   )
   res = httr::content(resp, as = "raw")
   res = if (length(res)) xml2::as_list(xml2::read_xml(res))
-  if (is.null(res$link[[1]])) stop('failed to upload ', file)
-  structure(res$link[[1]], XML = res)
+  if (is.null(res$data$link[[1]])) stop('failed to upload ', file)
+  structure(res$data$link[[1]], XML = res)
 }
