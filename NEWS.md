@@ -10,6 +10,8 @@
 
 - Fixed rstudio/bookdown#501: the chunk option `out.height` can also take a percentage value when the output format is LaTeX (similar to `out.width`), e.g., `out.height = '30%'` means `.3\textheight` (thanks, @dataopt, #1482).
 
+- `imgur_upload()` starts to fail due to changes in Imgur's API (thanks, @jennybc, #1495).
+
 # CHANGES IN knitr VERSION 1.18
 
 ## NEW FEATURES
