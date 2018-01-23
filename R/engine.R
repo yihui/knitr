@@ -379,7 +379,7 @@ eng_block = function(options) {
   # convert the chunk content to HTML or LaTeX (ideally I only need to specify
   # the markdown extension, but it is not implemented yet for LaTeX:
   # https://github.com/jgm/pandoc/issues/2453)
-  if (is_pandoc) code = pandoc_fragment(code, to)
+  if (is_pandoc) code = pandoc_fragment(code, if (to == 'html') 'html4' else to)
   l1 = options$latex.options
   if (is.null(l1)) l1 = ''
   h2 = options$html.tag %n% 'div'
