@@ -404,7 +404,7 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
   f1 = tempfile('pandoc', '.', '.md'); f2 = tempfile('pandoc', '.')
   on.exit(unlink(c(f1, f2)), add = TRUE)
   writeLines(enc2utf8(text), f1, useBytes = TRUE)
-  rmarkdown::pandoc_convert(f1, to, from, f2)
+  rmarkdown::pandoc_convert(f1, to, from, f2, options = if (is_html_output(to)) '--mathjax')
   code = readLines(f2, encoding = 'UTF-8', warn = FALSE)
   paste(code, collapse = '\n')
 }
