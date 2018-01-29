@@ -1,10 +1,14 @@
+# CHANGES IN knitr VERSION 1.20 (unreleased)
+
+## NEW FEATURES
+
+- Added a `roxygen_comments` parameter to `read_chunk()` in order to control whether trailing commentary is stripped from code chunks; default behaviour is to keep roxygen comments with `roxygen_comments = TRUE` (thanks, @ruaridhw, #1484).
+
 # CHANGES IN knitr VERSION 1.19
 
 ## NEW FEATURES
 
 - `spin()` now supports code chunks of the form `-- ---- label ----` allowing external SQL and Haskell files to be spun (thanks, @ruaridhw, #1492)
-
-- added a `roxygen_comments` parameter to `read_chunk()` in order to control whether trailing commentary is stripped from code chunks; default behaviour is to keep roxygen comments with `roxygen_comments = TRUE` (thanks, @ruaridhw, #1484)
 
 ## MAJOR CHANGES
 

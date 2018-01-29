@@ -281,9 +281,10 @@ print.inline = function(x, ...) {
 #' ## later you can use, e.g., <<foo>>=
 #' knitr:::knit_code$get() # use this to check chunks in the current session
 #' knitr:::knit_code$restore() # clean up the session
-read_chunk = function(path, lines = readLines(path, warn = FALSE),
-                      labels = NULL, from = NULL, to = NULL, from.offset = 0L, to.offset = 0L,
-                      roxygen_comments = TRUE) {
+read_chunk = function(
+  path, lines = readLines(path, warn = FALSE), labels = NULL, from = NULL, to = NULL,
+  from.offset = 0L, to.offset = 0L, roxygen_comments = TRUE
+) {
   if (!length(lines)) {
     warning('code is empty')
     return(invisible())
@@ -316,6 +317,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
   for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()
   knit_code$set(setNames(code, labels))
 }
+
 #' @rdname read_chunk
 #' @param topic,package Name of the demo and the package. See \code{\link[utils]{demo}}.
 #' @param ... Arguments passed to \code{\link{read_chunk}}.
@@ -340,16 +342,15 @@ pattern_index = function(pattern, text) {
 }
 
 strip_chunk = function(x, roxygen_comments = TRUE) {
-  x <- x[-1]
-  if (roxygen_comments) return(strip_white(x))
-  strip_white(x, test_strip = function(line) {
+  x = x[-1]
+  strip_white(x, if (roxygen_comments) is_blank else function(line) {
     is_blank(line) || grepl("^#+'[ ]?", line)
   })
 }
 
 # strip lines that are pure white spaces or
 # that match the test_strip condition(s)
-strip_white = function(x, test_strip = function(line) is_blank(line)) {
+strip_white = function(x, test_strip = is_blank) {
   if (!length(x)) return(x)
   while (test_strip(x[1])) {
     x = x[-1]; if (!length(x)) return(x)
