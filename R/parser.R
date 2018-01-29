@@ -248,6 +248,8 @@ print.inline = function(x, ...) {
 #' @param from,to Numeric vector specifying the starting/ending line numbers
 #'   of code chunks, or a character vector; see Details.
 #' @param from.offset,to.offset Offsets to be added to \code{from}/\code{to}.
+#' @param roxygen_comments Logical dictating whether to keep trailing roxygen-style
+#'   comments from code chunks in addition to whitespace
 #' @return As a side effect, code chunks are read into the current session so
 #'   that future chunks can (re)use the code by chunk label references.
 #' @references \url{https://yihui.name/knitr/demo/externalization/}
@@ -280,7 +282,8 @@ print.inline = function(x, ...) {
 #' knitr:::knit_code$get() # use this to check chunks in the current session
 #' knitr:::knit_code$restore() # clean up the session
 read_chunk = function(path, lines = readLines(path, warn = FALSE),
-                      labels = NULL, from = NULL, to = NULL, from.offset = 0L, to.offset = 0L) {
+                      labels = NULL, from = NULL, to = NULL, from.offset = 0L, to.offset = 0L,
+                      roxygen_comments = TRUE) {
   if (!length(lines)) {
     warning('code is empty')
     return(invisible())
@@ -309,7 +312,7 @@ read_chunk = function(path, lines = readLines(path, warn = FALSE),
   groups = unname(split(lines, idx))
   labels = stringr::str_trim(gsub(lab, '\\3', sapply(groups, `[`, 1)))
   labels = gsub(',.*', '', labels)  # strip off possible chunk options
-  code = lapply(groups, strip_chunk)
+  code = lapply(groups, strip_chunk, roxygen_comments)
   for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()
   knit_code$set(setNames(code, labels))
 }
@@ -336,14 +339,22 @@ pattern_index = function(pattern, text) {
   })
 }
 
-strip_chunk = function(x) strip_white(x[-1])
-# strip lines that are pure white spaces
-strip_white = function(x) {
+strip_chunk = function(x, roxygen_comments = TRUE) {
+  x <- x[-1]
+  if (roxygen_comments) return(strip_white(x))
+  strip_white(x, test_strip = function(line) {
+    is_blank(line) || grepl("^#+'[ ]?", line)
+  })
+}
+
+# strip lines that are pure white spaces or
+# that match the test_strip condition(s)
+strip_white = function(x, test_strip = function(line) is_blank(line)) {
   if (!length(x)) return(x)
-  while (is_blank(x[1])) {
+  while (test_strip(x[1])) {
     x = x[-1]; if (!length(x)) return(x)
   }
-  while (is_blank(x[(n <- length(x))])) {
+  while (test_strip(x[(n <- length(x))])) {
     x = x[-n]; if (n < 2) return(x)
   }
   x
