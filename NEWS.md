@@ -1,4 +1,4 @@
-# CHANGES IN knitr VERSION 1.19 (unreleased)
+# CHANGES IN knitr VERSION 1.19
 
 ## MAJOR CHANGES
 
