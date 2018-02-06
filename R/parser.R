@@ -252,8 +252,8 @@ print.inline = function(x, ...) {
 #'   comments from code chunks in addition to whitespace
 #' @return As a side effect, code chunks are read into the current session so
 #'   that future chunks can (re)use the code by chunk label references.
-#'   If an external chunk has the same name as a chunk in the current session,
-#'   chunk label references to that name by future chunks will refer to the
+#'   If an external chunk has the same label as a chunk in the current session,
+#'   chunk label references by future chunks will refer to the
 #'   external chunk.
 #' @references \url{https://yihui.name/knitr/demo/externalization/}
 #' @note This function can only be used in a chunk which is \emph{not} cached
