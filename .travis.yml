@@ -11,7 +11,7 @@ env:
 # capturing state, early exit if no integration test is needed
 before_install:
   - export PATH=$HOME/texlive/bin/x86_64-linux:$PATH
-  - tlmgr update --all
+  - tlmgr update --all --self
   - tlmgr conf texmf TEXMFHOME $(Rscript -e "cat(file.path(R.home('share'), 'texmf'))")
   - if [ ${TARGET} = integration ]; then
       if ! make integration-need; then
