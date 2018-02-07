@@ -245,16 +245,15 @@ print.inline = function(x, ...) {
 #' @param lines Character vector of lines of code. By default, this is read from
 #'   \code{path}.
 #' @param labels Character vector of chunk labels (default \code{NULL}).
-#' @param from,to Numeric vector specifying the starting/ending line numbers
-#'   of code chunks, or a character vector; see Details.
+#' @param from,to Numeric vector specifying the starting/ending line numbers of
+#'   code chunks, or a character vector; see Details.
 #' @param from.offset,to.offset Offsets to be added to \code{from}/\code{to}.
-#' @param roxygen_comments Logical dictating whether to keep trailing roxygen-style
-#'   comments from code chunks in addition to whitespace
+#' @param roxygen_comments Logical dictating whether to keep trailing
+#'   roxygen-style comments from code chunks in addition to whitespace
 #' @return As a side effect, code chunks are read into the current session so
-#'   that future chunks can (re)use the code by chunk label references.
-#'   If an external chunk has the same label as a chunk in the current session,
-#'   chunk label references by future chunks will refer to the
-#'   external chunk.
+#'   that future chunks can (re)use the code by chunk label references. If an
+#'   external chunk has the same label as a chunk in the current session, chunk
+#'   label references by future chunks will refer to the external chunk.
 #' @references \url{https://yihui.name/knitr/demo/externalization/}
 #' @note This function can only be used in a chunk which is \emph{not} cached
 #'   (chunk option \code{cache = FALSE}), and the code is read and stored in the

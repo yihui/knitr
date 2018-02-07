@@ -6,7 +6,7 @@
 \title{Read chunks from an external script}
 \usage{
 read_chunk(path, lines = readLines(path, warn = FALSE), labels = NULL, from = NULL, 
-    to = NULL, from.offset = 0L, to.offset = 0L)
+    to = NULL, from.offset = 0L, to.offset = 0L, roxygen_comments = TRUE)
 
 read_demo(topic, package = NULL, ...)
 }
@@ -18,10 +18,13 @@ read_demo(topic, package = NULL, ...)
 
 \item{labels}{Character vector of chunk labels (default \code{NULL}).}
 
-\item{from, to}{Numeric vector specifying the starting/ending line numbers
-of code chunks, or a character vector; see Details.}
+\item{from, to}{Numeric vector specifying the starting/ending line numbers of
+code chunks, or a character vector; see Details.}
 
 \item{from.offset, to.offset}{Offsets to be added to \code{from}/\code{to}.}
+
+\item{roxygen_comments}{Logical dictating whether to keep trailing
+roxygen-style comments from code chunks in addition to whitespace}
 
 \item{topic, package}{Name of the demo and the package. See \code{\link[utils]{demo}}.}
 
@@ -29,7 +32,9 @@ of code chunks, or a character vector; see Details.}
 }
 \value{
 As a side effect, code chunks are read into the current session so
-  that future chunks can (re)use the code by chunk label references.
+  that future chunks can (re)use the code by chunk label references. If an
+  external chunk has the same label as a chunk in the current session, chunk
+  label references by future chunks will refer to the external chunk.
 }
 \description{
 Chunks can be put in an external script, and this function reads chunks into
