@@ -4,6 +4,10 @@
 
 - Added a `roxygen_comments` parameter to `read_chunk()` in order to control whether trailing commentary is stripped from code chunks; default behaviour is to keep roxygen comments with `roxygen_comments = TRUE` (thanks, @ruaridhw, #1484).
 
+## BUG FIXES
+
+- `knit_filter()` does not work for R Markdown input files (thanks, @omahdi, #1498).
+
 # CHANGES IN knitr VERSION 1.19
 
 ## NEW FEATURES
