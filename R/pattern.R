@@ -145,6 +145,7 @@ detect_pattern = function(text, ext) {
     if (ext %in% c('htm', 'html', 'rhtm', 'rhtml')) return('html')
     if (ext %in% c('rmd', 'rmarkdown', 'markdown', 'md')) return('md')
     if (ext %in% c('rst', 'rrst')) return('rst')
+    if (ext %in% c('asciidoc', 'rasciidoc', 'adoc', 'radoc')) return('asciidoc')
   }
   for (p in names(all_patterns)) {
     for (i in c('chunk.begin', 'inline.code')) {
