@@ -1004,9 +1004,24 @@ optipng = function(dir = '.') {
   for (f in files) system2('optipng', shQuote(f))
 }
 
-digest = function(...) {
-  if (!loadable('digest')) warning2(
-    'You used a knitr feature that depends on the digest package. Make sure it is installed.'
-  )
-  digest::digest(...)
+digest = function(x) {
+  if (loadable('digest')) digest::digest(x) else digest2(x)
+}
+
+# compatible with digest::digest() but definitely slower because of file I/O
+digest2 = function(x) {
+  s = serialize(x, NULL, ascii = FALSE)
+  if (length(s) > 14) s = s[-(1:14)]  # https://d.cosx.org/d/419804
+  writeBin(s, f <- tempfile())
+  on.exit(unlink(f), add = TRUE)
+  unname(tools::md5sum(f))
+}
+
+# not removing the serialize() header (first few bytes)
+digest3 = function(x) {
+  f = tempfile(); on.exit(unlink(f), add = TRUE)
+  s = file(f, open = 'wb')
+  serialize(x, s, ascii = FALSE)
+  close(s)
+  unname(tools::md5sum(f))
 }
