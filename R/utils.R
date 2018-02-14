@@ -998,10 +998,9 @@ writeUTF8 = function(text, file, ...) {
 
 trimws = function(x) gsub('^\\s+|\\s+$', '', x)
 
-# TODO: use xfun::optipng
-optipng = function(dir = '.') {
-  files = list.files(dir, '[.]png$', recursive = TRUE, full.names = TRUE)
-  for (f in files) system2('optipng', shQuote(f))
+optipng = function(...) {
+  warning2('knitr:::optipng() has been deprecated; please use xfun::optipng()')
+  xfun::optipng(...)
 }
 
 digest = function(x) {
