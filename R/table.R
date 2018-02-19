@@ -154,7 +154,7 @@ kable = function(
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
   n = nrow(x)
-  x = replace_na(matrix_to_character_matrix(as.matrix(x)), is.na(x))
+  x = replace_na(to_character(as.matrix(x)), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
   x = trimws(x)
   colnames(x) = col.names
@@ -168,18 +168,11 @@ kable = function(
   structure(res, format = format, class = 'knitr_kable')
 }
 
-matrix_to_character_matrix = function(x) {
-  if (!is.matrix(x)) {
-    stop("Argument has to be a matrix")
-  }
-  if (is.character(x)) {
-    x
-  } else {
-    converted = as.character(x)
-    dim(converted) = dim(x)
-    dimnames(converted) = dimnames(x)
-    converted
-  }
+# convert to character while preserving dim/dimnames attributes
+to_character = function(x) {
+  if (is.character(x)) return(x)
+  x2 = as.character(x); dim(x2) = dim(x); dimnames(x2) = dimnames(x)
+  x2
 }
 
 # as.data.frame() does not allow duplicate row names (#898)

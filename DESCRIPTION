@@ -59,6 +59,7 @@ Authors@R: c(
     person(c("Kevin", "K."), "Smith", role = "ctb"),
     person("Kirill", "Mueller", role = "ctb"),
     person("Kohske", "Takahashi", role = "ctb"),
+    person("Martin", "Modrák", role = "ebt"),
     person("Michael", "Chirico", role = "ctb"),
     person("Michael", "Friendly", role = "ctb"),
     person("Michal", "Bojanowski", role = "ctb"),
@@ -126,6 +127,7 @@ Suggests:
 License: GPL
 URL: https://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
+Encoding: UTF-8
 VignetteBuilder: knitr
 SystemRequirements: Package vignettes based on R Markdown v2 or reStructuredText require Pandoc (http://pandoc.org). 
     The function rst2pdf() require rst2pdf (https://github.com/rst2pdf/rst2pdf).
