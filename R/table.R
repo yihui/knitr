@@ -154,7 +154,7 @@ kable = function(
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
   n = nrow(x)
-  x = replace_na(base::format(as.matrix(x), trim = TRUE, justify = 'none'), is.na(x))
+  x = replace_na(matrix_to_character_matrix(as.matrix(x)), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
   x = trimws(x)
   colnames(x) = col.names
@@ -166,6 +166,20 @@ kable = function(
     list(x = x, caption = caption, escape = escape, ...)
   )
   structure(res, format = format, class = 'knitr_kable')
+}
+
+matrix_to_character_matrix = function(x) {
+  if (!is.matrix(x)) {
+    stop("Argument has to be a matrix")
+  }
+  if (is.character(x)) {
+    x
+  } else {
+    converted = as.character(x)
+    dim(converted) = dim(x)
+    dimnames(converted) = dimnames(x)
+    converted
+  }
 }
 
 # as.data.frame() does not allow duplicate row names (#898)
