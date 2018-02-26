@@ -32,6 +32,10 @@ roxygen-style comments from code chunks in addition to whitespace}
 }
 \value{
 As a side effect, code chunks are read into the current session so
+  that future chunks can (re)use the code by chunk label references.
+  If an external chunk has the same label as a chunk in the current session,
+  chunk label references by future chunks will refer to the
+  external chunk.
   that future chunks can (re)use the code by chunk label references. If an
   external chunk has the same label as a chunk in the current session, chunk
   label references by future chunks will refer to the external chunk.
