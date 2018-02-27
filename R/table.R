@@ -289,7 +289,7 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
     sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x))) {
       if (escape) cn = escape_html(cn)
-      c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>')
+      c(' <thead>', '  <tr class="header">', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>')
     },
     '<tbody>',
     paste(
