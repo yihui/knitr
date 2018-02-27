@@ -276,6 +276,7 @@ kable_latex_caption = function(x, caption) {
 }
 
 kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
+  trclass <- rep(c("odd", "even"), length.out = nrow(x))
   table.attr = trimws(table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
@@ -293,7 +294,7 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
     },
     '<tbody>',
     paste(
-      '  <tr>',
+        sprintf('  <tr class="%s">', trclass),
       apply(x, 1, function(z) paste(sprintf('   <td%s> %s </td>', align, z), collapse = '\n')),
       '  </tr>', sep = '\n'
     ),
