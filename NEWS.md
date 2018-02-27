@@ -1,3 +1,12 @@
+# CHANGES IN knitr VERSION 1.21 (unreleased)
+
+## NEW FEATURES
+
+## BUG FIXES
+
+- `valign` in `kable_latex()` does not put the float alignment to the correct 
+location (#1487, #1519)
+
 # CHANGES IN knitr VERSION 1.20
 
 ## NEW FEATURES

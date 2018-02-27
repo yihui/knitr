@@ -88,7 +88,8 @@ Authors@R: c(
     person("Viktoras", "Veitas", role = "ctb"),
     person("Weicheng", "Zhu", role = "ctb"),
     person("Wush", "Wu", role = "ctb"),
-    person("Zachary", "Foster", role = "ctb")
+    person("Zachary", "Foster", role = "ctb"),
+    person("Hao", "Zhu", role = "ctb")
     )
 Maintainer: Yihui Xie <xie@yihui.name>
 Description: Provides a general-purpose tool for dynamic report generation in R
