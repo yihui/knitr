@@ -121,7 +121,7 @@ kable = function(
       kable_latex_caption(res, caption)
     } else if (format == 'html' || (format == 'pandoc' && is_html_output())) kable_html(
       matrix(paste0('\n\n', res, '\n\n'), 1), caption = caption, escape = FALSE,
-      table.attr = 'class="kable_wrapper"'
+      table.attr = 'class="kable_wrapper"', ...
     ) else {
       res = paste(res, collapse = '\n\n')
       if (format == 'pandoc') kable_pandoc_caption(res, caption) else res
@@ -222,7 +222,7 @@ kable_latex = function(
   midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
-  escape = TRUE
+  escape = TRUE, ...
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
@@ -275,7 +275,9 @@ kable_latex_caption = function(x, caption) {
   ), collapse = '')
 }
 
-kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
+kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...,
+                      html_classes = getOption("knitr.table.html_classes", FALSE)) {
+  trclass <- rep(c("odd", "even"), length.out = nrow(x))
   table.attr = trimws(table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
@@ -289,11 +291,12 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
     sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x))) {
       if (escape) cn = escape_html(cn)
-      c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>')
+      c(' <thead>', ifelse(html_classes, '  <tr class="header">', '  <tr>'),
+        sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>')
     },
     '<tbody>',
     paste(
-      '  <tr>',
+        ifelse(html_classes, sprintf('  <tr class="%s">', trclass), '  <tr>'),
       apply(x, 1, function(z) paste(sprintf('   <td%s> %s </td>', align, z), collapse = '\n')),
       '  </tr>', sep = '\n'
     ),
