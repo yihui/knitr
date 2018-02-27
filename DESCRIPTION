@@ -28,6 +28,7 @@ Authors@R: c(
     person("Garrick", "Aden-Buie", role = "ctb"),
     person("Gregoire", "Detrez", role = "ctb"),
     person("Hadley", "Wickham", role = "ctb"),
+    person("Hao", "Zhu", role = "ctb"),
     person("Heewon", "Jeon", role = "ctb"),
     person("Henrik", "Bengtsson", role = "ctb"),
     person("Hiroaki", "Yutani", role = "ctb"),

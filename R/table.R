@@ -235,7 +235,7 @@ kable_latex = function(
     sprintf('[%s]', valign)
   } else ''
   if (identical(caption, NA)) caption = NULL
-  env1 = sprintf('\\begin{%s}\n', table.envir)
+  env1 = sprintf('\\begin{%s}%s\n', table.envir, valign)
   env2 = sprintf('\n\\end{%s}',   table.envir)
   if (caption.short != '') caption.short = paste0('[', caption.short, ']')
   cap = if (is.null(caption)) '' else sprintf('\n\\caption%s{%s}', caption.short, caption)
@@ -254,7 +254,7 @@ kable_latex = function(
 
   paste(c(
     if (!longtable) c(env1, cap, centering),
-    sprintf('\n\\begin{%s}%s', tabular, valign), align,
+    sprintf('\n\\begin{%s}', tabular), align,
     if (longtable && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {
