@@ -120,7 +120,7 @@ Suggests:
     JuliaCall (>= 0.11.1),
     png,
     jpeg,
-    xml2,
+    xml2 (>= 1.2.0),
     httr,
     DBI (>= 0.4-1),
     showtext,
