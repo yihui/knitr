@@ -308,7 +308,7 @@ eng_dot = function(options) {
   }
 
   # prepare system command
-  cmd = sprintf(command_string, shQuote(options$engine %n% options$engine.path),
+  cmd = sprintf(command_string, shQuote(options$engine.path %n% options$engine),
                 shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
                 shQuote(paste0(fig <- fig_path(), '.', ext)))
 
