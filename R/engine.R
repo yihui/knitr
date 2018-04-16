@@ -308,9 +308,11 @@ eng_dot = function(options) {
   }
 
   # prepare system command
-  cmd = sprintf(command_string, shQuote(options$engine.path %n% options$engine),
-                shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
-                shQuote(paste0(fig <- fig_path(), '.', ext)))
+  cmd = sprintf(
+    command_string, shQuote(get_engine_path(options$engine.path, options$engine)),
+    shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
+    shQuote(paste0(fig <- fig_path(), '.', ext))
+  )
 
   # generate output
   dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)

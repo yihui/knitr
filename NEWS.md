@@ -2,7 +2,7 @@
 
 ## BUG FIXES
 
-- `valign` in `kable_latex()` does not put the float alignment to the correct location (thanks, @haozhu233, #1487, #1519)
+- `valign` in `kable_latex()` does not put the float alignment to the correct location (thanks, @haozhu233, #1487, #1519).
 
 - `engine.path` does not work for `engine = 'dot'` (thanks, @billy34, #1534).
 
