@@ -22,7 +22,4 @@ hash, but without any file extension.
 The cache engine function should load the cache environment and should
 know the extension appropriate for the language.
 }
-\examples{
-cache_engines$set(python = reticulate::load_python_session)
-}
 \keyword{datasets}

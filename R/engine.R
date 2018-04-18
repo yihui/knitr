@@ -46,7 +46,6 @@ knit_engines = new_defaults()
 #' The cache engine function should load the cache environment and should
 #' know the extension appropriate for the language.
 #' @export
-#' @examples cache_engines$set(python = reticulate::load_python_session)
 cache_engines = new_defaults()
 
 #' An output wrapper for language engine output
@@ -196,17 +195,13 @@ eng_python = function(options) {
   }
 }
 
-eng_python_cache = function(options) {
-  if (isFALSE(options$python.reticulate)) {
-    eng_interpreted(options)
-  } else {
-    if (!loadable('reticulate')) warning2(
-      "The 'python' engine in knitr requires the reticulate package. ",
-      "If you do not want to use the reticulate package, set the chunk option ",
-      "python.reticulate = FALSE."
-    )
-    reticulate::load_python_session(options)
-  }
+cache_eng_python = function(options) {
+  if (isFALSE(options$python.reticulate)) return()
+  # TODO: change this hack to reticulate::cache_eng_python(options) after
+  # https://github.com/rstudio/reticulate/pull/167 is merged and released
+  if (!'cache_eng_python' %in% ls(asNamespace('reticulate'))) return()
+  fun = getFromNamespace('cache_eng_python', 'reticulate')
+  fun(options)
 }
 
 ## Java
@@ -668,6 +663,8 @@ knit_engines$set(
   python = eng_python, julia = eng_julia
 )
 
+cache_engines$set(python = cache_eng_python)
+
 get_engine = function(name) {
   fun = knit_engines$get(name)
   if (is.function(fun)) return(fun)
@@ -680,10 +677,10 @@ get_engine = function(name) {
   }
 }
 
-cache_engine = function(name, cache_path) {
-  cache_fun = cache_engines$get(name)
+cache_engine = function(options) {
+  cache_fun = cache_engines$get(options$engine)
   if (!is.function(cache_fun)) return()
-  cache_fun(cache_path)
+  cache_fun(options)
 }
 
 # possible values for engines (for auto-completion in RStudio)
