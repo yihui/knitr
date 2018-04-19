@@ -34,17 +34,20 @@ knit_engines = new_defaults()
 
 #' Cache engines of other languages
 #'
-#' This object controls how to load cached environments from languages
-#' other than R (when the chunk option \code{engine} is not \code{'R'}).
-#' Each component in this object is a function that takes the current path
-#' to the chunk cache and loads it into the language environment.
+#' This object controls how to load cached environments from languages other
+#' than R (when the chunk option \code{engine} is not \code{'R'}). Each
+#' component in this object is a function that takes the current path to the
+#' chunk cache and loads it into the language environment.
 #'
-#' The cache engine function has one argument \code{cache_path}. The
-#' argument is the path to the current chunk cache with the chunk's
-#' hash, but without any file extension.
+#' The cache engine function has one argument \code{options}, a list containing
+#' all chunk options. Note that \code{options$hash} is the path to the current
+#' chunk cache with the chunk's hash, but without any file extension, and the
+#' language engine may write a cache database to this path (with an extension).
 #'
-#' The cache engine function should load the cache environment and should
-#' know the extension appropriate for the language.
+#' The cache engine function should load the cache environment and should know
+#' the extension appropriate for the language.
+#' @references See \url{https://github.com/rstudio/reticulate/pull/167} for an
+#'   implementation of a cache engine for Python.
 #' @export
 cache_engines = new_defaults()
 
