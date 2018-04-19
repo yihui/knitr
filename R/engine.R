@@ -456,7 +456,7 @@ eng_block2 = function(options) {
   h6 = options$html.after2 %n% ''
 
   sprintf(
-    '\\BeginKnitrBlock{%s}%s%s<%s class="%s">%s%s%s</%s>%s\\EndKnitrBlock{%s}',
+    '\\BeginKnitrBlock{%s}%s%s<%s class="%s">%s%s%s\n</%s>%s\\EndKnitrBlock{%s}',
     type, l1, h3, h2, type, h5, code, h6, h2, h4, type
   )
 }
