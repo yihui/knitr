@@ -31,6 +31,26 @@
 #' names(knit_engines$get())
 knit_engines = new_defaults()
 
+
+#' Cache engines of other languages
+#'
+#' This object controls how to load cached environments from languages other
+#' than R (when the chunk option \code{engine} is not \code{'R'}). Each
+#' component in this object is a function that takes the current path to the
+#' chunk cache and loads it into the language environment.
+#'
+#' The cache engine function has one argument \code{options}, a list containing
+#' all chunk options. Note that \code{options$hash} is the path to the current
+#' chunk cache with the chunk's hash, but without any file extension, and the
+#' language engine may write a cache database to this path (with an extension).
+#'
+#' The cache engine function should load the cache environment and should know
+#' the extension appropriate for the language.
+#' @references See \url{https://github.com/rstudio/reticulate/pull/167} for an
+#'   implementation of a cache engine for Python.
+#' @export
+cache_engines = new_defaults()
+
 #' An output wrapper for language engine output
 #'
 #' If you have designed a language engine, you may call this function in the end
@@ -176,6 +196,15 @@ eng_python = function(options) {
     )
     reticulate::eng_python(options)
   }
+}
+
+cache_eng_python = function(options) {
+  if (isFALSE(options$python.reticulate)) return()
+  # TODO: change this hack to reticulate::cache_eng_python(options) after
+  # https://github.com/rstudio/reticulate/pull/167 is merged and released
+  if (!'cache_eng_python' %in% ls(asNamespace('reticulate'))) return()
+  fun = getFromNamespace('cache_eng_python', 'reticulate')
+  fun(options)
 }
 
 ## Java
@@ -637,6 +666,8 @@ knit_engines$set(
   python = eng_python, julia = eng_julia
 )
 
+cache_engines$set(python = cache_eng_python)
+
 get_engine = function(name) {
   fun = knit_engines$get(name)
   if (is.function(fun)) return(fun)
@@ -647,6 +678,12 @@ get_engine = function(name) {
   function(options) {
     engine_output(options, options$code, '')
   }
+}
+
+cache_engine = function(options) {
+  cache_fun = cache_engines$get(options$engine)
+  if (!is.function(cache_fun)) return()
+  cache_fun(options)
 }
 
 # possible values for engines (for auto-completion in RStudio)
