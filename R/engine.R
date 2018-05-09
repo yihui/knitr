@@ -605,13 +605,23 @@ eng_sql = function(options) {
   if (options$results == 'hide') output = NULL
 
   # assign varname if requested
-  if (!is.null(varname)) assign(varname, data, envir = knit_global())
+  if (!is.null(varname)) {
+    assign(varname, data, envir = knit_global())
+    saveRDS(data, file = paste0(options$hash, "_sql_result.rds"))
+  }
 
   # reset query to pre-interpolated if not expanding
   if (!isTRUE(options$sql.show_interpolated)) query <- options$code
 
   # return output
   engine_output(options, query, output)
+}
+
+cache_eng_sql = function(options) {
+  varname <- options$output.var
+  if (!is.null(varname)) {
+    assign(varname, readRDS(paste0(options$hash, "_sql_result.rds")), envir = knit_global())
+  }
 }
 
 # go engine, added by @hodgesds https://github.com/yihui/knitr/pull/1330
@@ -666,7 +676,8 @@ knit_engines$set(
   python = eng_python, julia = eng_julia
 )
 
-cache_engines$set(python = cache_eng_python)
+cache_engines$set(python = cache_eng_python,
+                  sql = cache_eng_sql)
 
 get_engine = function(name) {
   fun = knit_engines$get(name)
