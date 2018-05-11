@@ -109,14 +109,10 @@ block_exec = function(options) {
     res.after = run_hooks(before = FALSE, options)
     output = paste(c(res.before, output, res.after), collapse = '')
     output = knit_hooks$get('chunk')(output, options)
-    if (options$cache) block_cache(
-      options, output,
-      switch(
-        options$engine,
-        'stan' = options$engine.opts$x, 'sql' = options$output.var,
-        character(0)
-      )
-    )
+    if (options$cache) block_cache(options, output, switch(
+      options$engine,
+      'stan' = options$engine.opts$x, 'sql' = options$output.var, character(0)
+    ))
     return(if (options$include) output else '')
   }
 

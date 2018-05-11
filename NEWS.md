@@ -10,7 +10,7 @@
 
 - `engine.path` does not work for `engine = 'dot'` (thanks, @billy34, #1534).
 
-- `sql` engine now caches the result properly when `output.var` is specified (thanks, @yutannihilation, #1544).
+- The `sql` engine now caches the result properly when the chunk option `output.var` is specified (thanks, @yutannihilation, #1544).
 
 # CHANGES IN knitr VERSION 1.20
 
