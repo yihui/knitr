@@ -7,8 +7,7 @@ env:
   matrix:
     - TARGET=travis
     - TARGET=integration DISPLAY=:99.0
-      - export KNITR_USE_STRINGR="FALSE"
-      - export KNITR_USE_STRINGR="TRUE"
+    - TARGET=integration KNITR_USE_STRINGR="FALSE"
 
 # capturing state, early exit if no integration test is needed
 before_install:
