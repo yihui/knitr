@@ -233,7 +233,7 @@ stringr__str_trim <- function(x, side = c("both", "left", "right")) {
 
 str_trimws <- function(x, side) {
   # en quads
-  ans <- trimws(x)
+  ans <- trimws(x, which = side)
 
   while (side != "right" && any(has_left_ws(ans))) {
     ans[has_left_ws(ans)] <-
