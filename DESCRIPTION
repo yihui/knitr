@@ -134,6 +134,7 @@ VignetteBuilder: knitr
 SystemRequirements: Package vignettes based on R Markdown v2 or reStructuredText require Pandoc (http://pandoc.org). 
     The function rst2pdf() require rst2pdf (https://github.com/rst2pdf/rst2pdf).
 Collate:
+    '0-stringr_suggestions.R'
     'block.R'
     'cache.R'
     'utils.R'
@@ -162,7 +163,6 @@ Collate:
     'pattern.R'
     'rocco.R'
     'spin.R'
-    'stringr_suggestions.R'
     'table.R'
     'template.R'
     'utils-base64.R'
