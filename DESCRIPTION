@@ -162,6 +162,7 @@ Collate:
     'pattern.R'
     'rocco.R'
     'spin.R'
+    'stringr_suggestions.R'
     'table.R'
     'template.R'
     'utils-base64.R'
