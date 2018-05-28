@@ -34,7 +34,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       # remove the optional prefix % in code in Rtex mode
       g = strip_block(g, patterns$chunk.code)
       params.src = if (group_pattern(chunk.begin)) {
-        stringr::str_trim(gsub(chunk.begin, '\\1', g[1]))
+        stringr__str_trim(gsub(chunk.begin, '\\1', g[1]))
       } else ''
       parse_block(g[-1], g[1], params.src)
     } else parse_inline(g, patterns)
@@ -313,7 +313,7 @@ read_chunk = function(
     idx = c(0, idx); lines = c('', lines)  # no chunk header in the beginning
   }
   groups = unname(split(lines, idx))
-  labels = stringr::str_trim(gsub(lab, '\\3', sapply(groups, `[`, 1)))
+  labels = stringr__str_trim(gsub(lab, '\\3', sapply(groups, `[`, 1)))
   labels = gsub(',.*', '', labels)  # strip off possible chunk options
   code = lapply(groups, strip_chunk, roxygen_comments)
   for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()
