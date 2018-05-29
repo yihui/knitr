@@ -262,6 +262,45 @@ has_right_ws <- function(x) {
 }
 
 
+stringr__str_dup <- function(string, times) {
+  if (use_stringr()) {
+    stringr::str_dup(string, times)
+  } else {
+    out <- character(pmax.int(length(string), length(times)))
+    if (length(string) == 1L) {
+      if (length(times) == 1L) {
+        out <- paste00(rep_len(string, times))
+      } else {
+        for (i in seq_along(times)) {
+          out[i] <- paste00(rep_len(string, times[i]))
+        }
+      }
+    } else {
+      if (length(times) == 1L) {
+        for (i in seq_along(string)) {
+          out[i] <- paste00(rep_len(string[i], times))
+        }
+      } else {
+        if (length(times) > length(string)) {
+          if (length(times) %% length(string)) {
+            warning("longer object length is not a multiple of shorter object length ")
+          }
+        } else {
+          if (length(string) %% length(times)) {
+            warning("longer object length is not a multiple of shorter object length ")
+          }
+        }
+        for (i in seq_along(out)) {
+          js <- {{i - 1L} %% length(string)} + 1L
+          jt <- {{i - 1L} %% length(times)} + 1L
+          out[i] <- paste00(rep_len(string[js], times[jt]))
+        }
+      }
+    }
+    out
+  }
+}
+
 
 
 
