@@ -197,6 +197,14 @@ stringr__str_locate_all <- function(string, pattern) {
   }
 }
 
+stringr__str_locate <- function(...) {
+  if (use_stringr()) {
+    stringr::str_locate(...)
+  } else {
+    as.matrix(stringr__str_locate_all(...))
+  }
+}
+
 
 stringr__str_extract_all <- function(string, pattern, simplify = FALSE, .use_stringr = TRUE) {
   if (.use_stringr && use_stringr()) {

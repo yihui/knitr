@@ -37,7 +37,8 @@ insert_header_latex = function(doc, b) {
     if (!out_format('listings') && length(j <- grep(p <- '(\\s*)(\\\\begin\\{document\\})', doc)[1L])) {
       doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\n\\2', doc[j])
     }
-    i = i[1L]; l = stringr::str_locate(doc[i], b)
+    i = i[1L]
+    l = stringr__str_locate(doc[i], b)
     tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
     stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, make_header_latex())
   } else if (parent_mode() && !child_mode()) {
