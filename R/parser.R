@@ -207,9 +207,9 @@ print.inline = function(x, ...) {
   if (nrow(x$location)) {
     cat('   ')
     if (opts_knit$get('verbose')) {
-      cat(rep("~", {getOption('width') - 10L - nchar(' inline R code fragments ')} %/% 2),
+      cat(rep_len("~", {getOption('width') - 10L - nchar(' inline R code fragments ')} %/% 2),
           ' inline R code fragments ',
-          rep("~", {getOption('width') - 10L - nchar(' inline R code fragments ')} %/% 2),
+          rep_len("~", {getOption('width') - 10L - nchar(' inline R code fragments ')} %/% 2),
           "\n",
           sep = "")
       cat(sprintf('    %s:%s %s', x$location[, 1], x$location[, 2], x$code),
