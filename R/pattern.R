@@ -150,7 +150,7 @@ detect_pattern = function(text, ext) {
   for (p in names(all_patterns)) {
     for (i in c('chunk.begin', 'inline.code')) {
       pat = all_patterns[[p]][[i]]
-      if (length(pat) && any(stringr::str_detect(text, pat))) return(p)
+      if (length(pat) && length(grep(pat, text))) return(p)
     }
   }
   # *.Rtex indicates the tex syntax in knitr, but Rnw syntax in traditional
