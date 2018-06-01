@@ -232,6 +232,20 @@ stringr__str_trim <- function(x, side = c("both", "left", "right")) {
 }
 
 str_trimws <- function(x, side) {
+  ws = intToUtf8(c(5760L,
+                   8192:8202,
+                   8232:8233,
+                   8239L,
+                   8287L,
+                   12288L))
+
+  has_left_ws <- function(x) {
+    substr(x, 1, 1) %in% ws
+  }
+
+  has_right_ws <- function(x) {
+    stri_sub(x, -1, -1) %in% ws
+  }
   # en quads
   ans <- base::trimws(x, which = side)
 
@@ -246,20 +260,7 @@ str_trimws <- function(x, side) {
   ans
 }
 
-ws = intToUtf8(c(5760L,
-                 8192:8202,
-                 8232:8233,
-                 8239L,
-                 8287L,
-                 12288L))
 
-has_left_ws <- function(x) {
-  substr(x, 1, 1) %in% ws
-}
-
-has_right_ws <- function(x) {
-  stri_sub(x, -1, -1) %in% ws
-}
 
 
 stringr__str_dup <- function(string, times) {
