@@ -40,7 +40,7 @@ repos:
   XRAN: https://xran.yihui.name
 
 cache:
-  packages: yes
+  packages: no
   directories:
     - $HOME/cache
     - $HOME/texlive
