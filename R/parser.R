@@ -168,7 +168,11 @@ print.block = function(x, ...) {
   if (opts_knit$get('verbose')) {
     code = knit_code$get(params$label)
     if (length(code) && !is_blank(code)) {
-      cat('\n  ', sprinft(' R code chunk ', getOption('width') - 10L, 'both', '~'), '\n')
+      cat(rep_len("~", {getOption('width') - 10L - nchar(' inline R code fragments ')} %/% 2),
+          ' inline R code fragments ',
+          rep_len("~", {getOption('width') - 10L - nchar(' inline R code fragments ')} %/% 2),
+          "\n",
+          sep = "")
       cat(paste('  ', code, collapse = '\n'), '\n')
       cat('  ', stringr::str_dup('~', getOption('width') - 10L), '\n')
     }
