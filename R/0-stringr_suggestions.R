@@ -198,7 +198,7 @@ stringr__str_locate_all <- function(string, pattern) {
       list(structure(integer(0),
                      .Dim = c(0L, 2L),
                      .Dimnames = list(NULL,
-                                      c("start", "end")))))
+                                      c("start", "end"))))
     }
   }
 }
