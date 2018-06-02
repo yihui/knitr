@@ -46,6 +46,7 @@ cache:
     - $HOME/texlive
 
 before_script:
+  - export KNITR_USE_STRINGR="FALSE"
   - Rscript -e "if (!require('webshot')) devtools::install_github('wch/webshot')"
 
 # run tests
@@ -57,5 +58,4 @@ script:
 # deploy to xran after integration tests
 after_success:
   - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
-  - export KNITR_USE_STRINGR="FALSE"
   - "[ $TARGET = integration ] && (curl https://xran.yihui.name/r-xran | bash)"
