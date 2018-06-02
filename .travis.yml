@@ -1,6 +1,13 @@
 language: r
 
-sudo: false
+sudo: true
+r_binary_packages:
+- BH
+- Rcpp
+- stringi
+- dplyr
+- readr
+- tidyr
 
 # environment variables
 env:
