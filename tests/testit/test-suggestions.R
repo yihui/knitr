@@ -113,6 +113,20 @@ if (requireNamespace("stringr", quietly = TRUE)) {
   options("knitr.use.stringr" = prev_use_stringr)
 }
 
+if (requireNamespace("stringr", quietly = TRUE)) {
+  prev_use_stringr <- getOption("knitr.use.stringr")
+  options("knitr.use.stringr" = FALSE)
+  # No match:
+  with_stringr <- stringr::str_locate_all("<<echo=TRUE>>=", '(^|\n)\\s*\\\\documentclass[^}]+\\}')
+  wout_stringr <- stringr__str_locate_all("<<echo=TRUE>>=", '(^|\n)\\s*\\\\documentclass[^}]+\\}')
+
+  assert("str_locate_all returns correct null result",
+         identical(with_stringr,
+                   wout_stringr))
+
+    options("knitr.use.stringr" = prev_use_stringr)
+}
+
 
 
 

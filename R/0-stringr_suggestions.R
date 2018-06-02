@@ -183,17 +183,23 @@ stringr__str_locate_all <- function(string, pattern) {
   if (use_stringr()) {
     stringr::str_locate_all(string, pattern)
   } else {
-    if (length(pattern) == 1L) {
-      stri_locate_all_regex_no_stri(string, pattern)
-    } else if (length(string) == length(pattern)) {
-      lapply(seq_along(string), function(i) {
-        stri_locate_all_regex_no_stri(string[i], pattern[i])
-      })
+    if (length(grep(pattern, string, perl = TRUE))) {
+      if (length(pattern) == 1L) {
+        stri_locate_all_regex_no_stri(string, pattern)
+      } else if (length(string) == length(pattern)) {
+        lapply(seq_along(string), function(i) {
+          stri_locate_all_regex_no_stri(string[i], pattern[i])
+        })
+      } else {
+        stop("Internal error: string and pattern had unexpected length.")
+      }
     } else {
-      stop("Internal error: string and pattern had unexpected length.")
+      # stringr not the same as strini
+      list(structure(integer(0),
+                     .Dim = c(0L, 2L),
+                     .Dimnames = list(NULL,
+                                      c("start", "end")))))
     }
-
-
   }
 }
 
