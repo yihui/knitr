@@ -2,6 +2,9 @@ language: r
 
 sudo: true
 r_binary_packages:
+- recommended
+- htmltable
+- nnet
 - BH
 - Rcpp
 - stringi
