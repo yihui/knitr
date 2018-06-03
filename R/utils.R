@@ -88,7 +88,7 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   idx1 = grep(hb, input)[1]
   if (is.na(idx1) || idx1 >= idx2) return()
   txt = paste(input[idx1:(idx2 - 1L)], collapse = '\n')  # rough preamble
-  idx = stringr::str_locate(txt, hb)  # locate documentclass
+  idx = stringr__str_locate(txt, hb)  # locate documentclass
   options(tikzDocumentDeclaration = stringr::str_sub(txt, idx[, 1L], idx[, 2L]))
   preamble = pure_preamble(split_lines(stringr::str_sub(txt, idx[, 2L] + 1L)), patterns)
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
