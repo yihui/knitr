@@ -9,7 +9,6 @@ r_binary_packages:
 - Rcpp
 - stringi
 - devtools
-- Hmisc
 - dplyr
 - readr
 - tidyr
