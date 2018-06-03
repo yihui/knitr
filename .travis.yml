@@ -5,7 +5,6 @@ r_binary_packages:
 - survival
 - scales
 - ggplot2
-- htmltable
 - BH
 - Rcpp
 - stringi
