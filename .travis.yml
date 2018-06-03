@@ -2,8 +2,10 @@ language: r
 
 sudo: true
 r_binary_packages:
+- survival
+- scales
+- ggplot2
 - htmltable
-- nnet
 - BH
 - Rcpp
 - stringi
