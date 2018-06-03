@@ -58,7 +58,6 @@ cache:
 
 before_script:
   - export KNITR_USE_STRINGR="FALSE"
-  - Rscript -e 'knitr:::use_stringr()'
   - Rscript -e "if (!require('webshot')) devtools::install_github('wch/webshot')"
 
 # run tests
