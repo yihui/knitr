@@ -207,7 +207,7 @@ stringr__str_locate <- function(...) {
   if (use_stringr()) {
     stringr::str_locate(...)
   } else {
-    as.matrix(stringr__str_locate_all(...))
+    as.matrix(stringr__str_locate_all(...)[[1L]])
   }
 }
 
