@@ -196,7 +196,7 @@ parse_inline = function(input, patterns) {
   loc = cbind(start = numeric(0), end = numeric(0))
   if (group_pattern(inline.code)) loc = stringr__str_locate_all(input, inline.code)[[1]]
   if (nrow(loc)) {
-    code = stringr__str_match_all(input, inline.code)[[1L]]
+    code = stringr::str_match_all(input, inline.code)[[1L]]
     code = if (NCOL(code) >= 2L) {
       code[is.na(code)] = ''
       apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
@@ -218,7 +218,7 @@ print.inline = function(x, ...) {
           sep = "")
       cat(sprintf('    %s:%s %s', x$location[, 1], x$location[, 2], x$code),
           sep = '\n')
-      cat('  ', stringr::str_dup('-', getOption('width') - 10L), '\n')
+      cat('  ', stringr__str_dup('-', getOption('width') - 10L), '\n')
     } else cat('inline R code fragments\n')
   } else cat('  ordinary text without R code\n')
   cat('\n')
