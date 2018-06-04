@@ -384,6 +384,46 @@ stringr__str_match <- function(string, pattern) {
   }
 }
 
+# A single character matrix
+stringr__str_match_all_single <- function(string, pattern) {
+  stopifnot(length(string) == 1L)
+  if (use_stringr()) {
+    stringr::str_match_all(string, pattern)[[1L]]
+  } else {
+    if (grepl(pattern, string, perl = TRUE)) {
+      G <- gregexpr(pattern, string, perl = TRUE)[[1L]]
+      ncols <-
+        if (is.null(attr(G, "capture.length"))) {
+          1L
+        } else {
+          NCOL(attr(G, "capture.length")) + 1L
+        }
+      out <- matrix(NA_character_,
+                    nrow = length(G),
+                    ncol = ncols)
+
+      for (i in seq_len(length(G))) {
+        match_len <- attr(G, "match.length")[[i]]
+        for (j in seq_len(ncols)) {
+          out[i, j] <-
+            if (j == 1L) {
+              substr(string, G[[i]], G[[i]] + match_len - 1L)
+            } else {
+              start <- attr(G, "capture.start")[1L, j - 1L]
+              stop  <- start + attr(G, "capture.length")[1L, j - 1L] - 1L
+              substr(string, start, stop)
+            }
+
+        }
+      }
+    } else {
+      return(structure(character(0L), .Dim = c(0L, 2L)))
+    }
+    out
+  }
+}
+
+
 
 
 

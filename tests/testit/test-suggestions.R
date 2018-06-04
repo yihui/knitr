@@ -173,6 +173,9 @@ if (requireNamespace("stringr", quietly = TRUE)) {
   assert("str_match identical stringr:: when absent",
          identical(stringr__str_match("something", phone),
                    stringr::str_match("something", phone)))
+  assert("str_match_all identical stringr:: with single",
+         identical(stringr__str_match_all_single(strings[1], phone),
+                   stringr::str_match_all(strings[1], phone)[[1L]]))
 
   options("knitr.use.stringr" = prev_use_stringr)
 }
