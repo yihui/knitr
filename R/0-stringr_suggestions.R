@@ -176,9 +176,13 @@ stringr__str_wrap <- function(string, width = 80, indent = 0, exdent = 0) {
           wlens <- nchar(ws) + 1L
           cum_width <- cumsum(wlens)
           breaks <- which({cum_width[-length(ws)] %/% width} != {cum_width[-1] %/% width})
-          ws[breaks] <- paste0(ws[breaks], "\n")
-          ws[-breaks] <- paste0(ws[-breaks], " ")
-          paste0(ws, collapse = "")
+          if (length(breaks)) {
+            ws[breaks] <- paste0(ws[breaks], "\n")
+            ws[-breaks] <- paste0(ws[-breaks], " ")
+            paste0(ws, collapse = "")
+          } else {
+            s
+          }
         }),
       use.names = FALSE,
       recursive = TRUE)
