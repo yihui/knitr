@@ -354,16 +354,22 @@ stringr__str_match <- function(string, pattern) {
   } else {
     # str_match is first match only
     R <- regexpr(pattern, string, perl = TRUE)
+    ncols <-
+      if (is.null(attr(R, "capture.length"))) {
+        1L
+      } else {
+        NCOL(attr(R, "capture.length")) + 1L
+      }
     out <- matrix(NA_character_,
                   nrow = length(string),
-                  ncol = length(attr(gregexprs[[1L]], "capture.length")) + 1L)
+                  ncol = ncols)
     for (i in seq_along(string)) {
       if (R[[i]] > 0L) {
         len <- attr(R, "match.length")[[i]]
         if (len > 0L) {
           out[i, 1L] <- substr(string[i], R[[i]], R[[i]] + len - 1L)
-          if (!is.null(attr(G, "capture.length"))) {
-            for (j in seq_len(NCOL(attr(G, "capture.length")))) {
+          if (!is.null(attr(R, "capture.length"))) {
+            for (j in seq_len(NCOL(attr(R, "capture.length")))) {
               start <- attr(R, "capture.start")[i, j]
               if (start > 0L) {
                 stop  <- start + attr(R, "capture.length")[i, j] - 1L

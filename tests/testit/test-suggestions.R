@@ -141,6 +141,12 @@ if (requireNamespace("stringi", quietly = TRUE)) {
 if (requireNamespace("stringr", quietly = TRUE)) {
   prev_use_stringr <- getOption("knitr.use.stringr")
   options("knitr.use.stringr" = FALSE)
+
+  assert("str_match identical stringr:: when no capturing group",
+         identical(stringr__str_match("abc", "b"),
+                   stringr::str_match("abc", "b")))
+
+
   phone <- "([2-9][0-9]{2})[- .]([0-9]{3})[- .]([0-9]{4})"
   strings <- c(" 219 733 8965",
                "329-293-8753 ",
@@ -157,6 +163,17 @@ if (requireNamespace("stringr", quietly = TRUE)) {
   assert("str_match identical stringr::",
          identical(stringr__str_match(strings, phone),
                    stringr::str_match(strings, phone)))
+
+  assert("str_match identical stringr:: when absent",
+         identical(stringr__str_match(character(0), phone),
+                   stringr::str_match(character(0), phone)))
+  assert("str_match identical stringr:: when absent",
+         identical(stringr__str_match("", phone),
+                   stringr::str_match("", phone)))
+  assert("str_match identical stringr:: when absent",
+         identical(stringr__str_match("something", phone),
+                   stringr::str_match("something", phone)))
+
   options("knitr.use.stringr" = prev_use_stringr)
 }
 
