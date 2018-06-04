@@ -162,12 +162,14 @@ stri_locate_all_regex_no_stri <- function(str, pattern) {
           gregexpr(pattern = pattern,
                    text = str[i],
                    perl = TRUE)
-        nchar_pattern <- attr(gregexprs[[1L]], "match.length")[1L]
+
         out <- matrix(NA_integer_, nrow = length(gregexprs[[1L]]), ncol = 2L)
         for (j in seq_along(gregexprs[[1L]])) {
+          nchar_pattern <- attr(gregexprs[[1L]], "match.length")[j]
           out[j, 1L] <- gregexprs[[1L]][j]
+          out[j, 2L] <- out[j, 1L] + nchar_pattern - 1L
         }
-        out[, 2L] <- out[, 1L] + nchar_pattern - 1L
+
 
       } else {
         out <- matrix(NA_integer_, nrow = 1L, ncol = 2L)

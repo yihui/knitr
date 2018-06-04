@@ -127,6 +127,15 @@ if (requireNamespace("stringr", quietly = TRUE)) {
     options("knitr.use.stringr" = prev_use_stringr)
 }
 
+if (requireNamespace("stringi", quietly = TRUE)) {
+  pattern <- "AX*B"
+  string <- "AB AXXB AXXXB"
+  assert("str_locate_all matches when matches are of different length in the same line",
+         identical(stringr::str_locate_all(string, pattern),
+                   stringr__str_locate_all(string, pattern)))
+}
+
+
 
 
 
