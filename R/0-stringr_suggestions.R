@@ -1,15 +1,45 @@
+#' Use stringr functions internally
+#' @description Originally written using \code{stringr} functions throughout,
+#' \code{knitr} is now designed to work without \code{stringr}. Nonetheless,
+#' \code{stringr} is used by default. To force \code{knitr} to not use \code{stringr},
+#' you can set an environment variable:
+#'
+#' \preformatted{Sys.setenv("KNITR_USE_STRINGR" = "FALSE")}
+#'
+#' or use the package option
+#'
+#' \preformatted{options("knitr.use.stringr" = FALSE)}
+#'
+#' The environment variable has precedence over the package option
+#' if and only if it is set to \code{FALSE}. Otherwise, the package
+#' option is used, with a default value of \code{TRUE}.
+#'
+#' Our intention is to eventually switch the default, so \code{knitr} can be used
+#' without installing \code{stringr}. In the meantime, we provide this options
+#' so authors can test their scripts with and without stringr before we make
+#' a potentially breaking change.
+#'
+#' The function \code{use_stringr} returns the current use of \code{stringr}.
+#'
+#' @return \code{TRUE} or \code{FALSE}: whether or not the original \code{stringr}
+#' functions will be used.
+#'
+#' @export use_stringr
 
 
-paste00 <- function(...) paste0(..., collapse = "")
 
 use_stringr <- function() {
   if (identical(Sys.getenv("KNITR_USE_STRINGR"), "FALSE")) {
     return(FALSE)
   } else {
-    getOption("knitr.use.stringr", TRUE) &&
+    # Use as.logical in case someone uses
+    # options("knitr.use.stringr" = "FALSE") [with quotes]
+    as.logical(getOption("knitr.use.stringr", TRUE)) &&
       requireNamespace("stringr", quietly = TRUE)
   }
 }
+
+paste00 <- function(...) paste0(..., collapse = "")
 
 stri_sub_no_stringi <- function(str, from, to) {
   out <- str
@@ -322,26 +352,25 @@ stringr__str_match <- function(string, pattern) {
   if (use_stringr()) {
     stringr::str_match(string, pattern)
   } else {
-    gregexprs <- gregexpr(pattern, string, perl = TRUE)
+    # str_match is first match only
+    R <- regexpr(pattern, string, perl = TRUE)
     out <- matrix(NA_character_,
                   nrow = length(string),
                   ncol = length(attr(gregexprs[[1L]], "capture.length")) + 1L)
     for (i in seq_along(string)) {
-
-      G <- gregexprs[[i]]
-      len <- attr(G, "match.length")
-      # str_match is first match only
-      if (len > 0L) {
-        out[i, 1L] <- substr(string[i], G[[1L]], G[[1L]] + len - 1L)
-        if (!is.null(attr(G, "capture.length"))) {
-          for (j in seq_along(attr(G, "capture.length"))) {
-            start <- attr(G, "capture.start")[j]
-            if (start > 0L) {
-              stop  <- start + attr(G, "capture.length") - 1L
-              out[i, j + 1L] <- substr(string[i], start, stop)
-            } # else do nothing (already filled with NAs)
+      if (R[[i]] > 0L) {
+        len <- attr(R, "match.length")[[i]]
+        if (len > 0L) {
+          out[i, 1L] <- substr(string[i], R[[i]], R[[i]] + len - 1L)
+          if (!is.null(attr(G, "capture.length"))) {
+            for (j in seq_len(NCOL(attr(G, "capture.length")))) {
+              start <- attr(R, "capture.start")[i, j]
+              if (start > 0L) {
+                stop  <- start + attr(R, "capture.length")[i, j] - 1L
+                out[i, j + 1L] <- substr(string[i], start, stop)
+              } # else do nothing (already filled with NAs)
+            }
           }
-
         }
       }
     }
