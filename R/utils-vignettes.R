@@ -154,7 +154,8 @@ knit_filter = function(ifile, encoding = 'unknown') {
   if (m[1] == 0) m[1] = 2
   for (i in seq_len(n - 1)) if (m[i + 1] == 0) m[i + 1] = m[i]
   x[m == 1 | i2] = ''
-  x[m == 2] = stringr::str_replace_all(x[m == 2], p$inline.code, '')
+  # x[m == 2] = stringr::str_replace_all(x[m == 2], p$inline.code, '')
+  x[m == 2] = gsub(p$inline.code, '', x[m == 2])
   structure(x, control = '-H -t')
 }
 
