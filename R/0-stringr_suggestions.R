@@ -171,12 +171,16 @@ stringr__str_wrap <- function(string, width = 80, indent = 0, exdent = 0) {
       lapply(
         string,
         function(s) {
-          ss <- strsplit(s, split = " ", fixed = TRUE)[[1L]]
-          out <- .wrapper(ss, width = width)
-          c(formatC(trimws(out[1]), width = width),
-            if (length(out) > 1) {
-              out[-1]
-            })
+          ws <- strsplit(s, split = " ", fixed = TRUE)[[1L]]
+          # + 1 due to space
+          wlens <- nchar(ws) + 1L
+          cum_width <- cumsum(wlens)
+          breaks <- which({cum_width[-length(ws)] %/% width} != {cum_width[-1] %/% width})
+
+          for (b in breaks) {
+            ws[b] <- paste0(ws[b], "\n")
+          }
+          paste0(ws, collapse = " ")
         }),
       use.names = FALSE,
       recursive = TRUE)
