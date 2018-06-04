@@ -71,7 +71,7 @@ insert_header_html = function(doc, b) {
     l = stringr__str_locate(doc[i], b)
     tmp = stringr__str_sub(doc[i], l[, 1], l[, 2])
     doc[i] <-
-      stringr__str_sub(doc[i], l[,1], l[,2], value = paste0(tmp, '\n', make_header_html()))
+      stringr__str_sub_assign(doc[i], l[,1], l[,2], value = paste0(tmp, '\n', make_header_html()))
   }
   doc
 }
