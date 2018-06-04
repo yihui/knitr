@@ -177,6 +177,10 @@ if (requireNamespace("stringr", quietly = TRUE)) {
          identical(stringr__str_match_all_single(strings[1], phone),
                    stringr::str_match_all(strings[1], phone)[[1L]]))
 
+  assert("str_match_all",
+         identical(stringr__str_match_all_single("X AX AB ACDB ABBBB", "A.+?B"),
+                   stringr::str_match_all("X AX AB ACDB ABBBB", "A.+?B")[[1L]]))
+
   options("knitr.use.stringr" = prev_use_stringr)
 }
 

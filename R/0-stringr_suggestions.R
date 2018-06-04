@@ -409,8 +409,8 @@ stringr__str_match_all_single <- function(string, pattern) {
             if (j == 1L) {
               substr(string, G[[i]], G[[i]] + match_len - 1L)
             } else {
-              start <- attr(G, "capture.start")[1L, j - 1L]
-              stop  <- start + attr(G, "capture.length")[1L, j - 1L] - 1L
+              start <- attr(G, "capture.start")[i, j - 1L]
+              stop  <- start + attr(G, "capture.length")[i, j - 1L] - 1L
               substr(string, start, stop)
             }
 
