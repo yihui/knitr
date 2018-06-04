@@ -72,4 +72,5 @@ script:
 # deploy to xran after integration tests
 after_success:
   - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
+  - Rscript -e 'tryCatch(knitr::use_stringr(), error = function(e) cat("\nuse_stringr failed\n"))'
   - "[ $TARGET = integration ] && (curl https://xran.yihui.name/r-xran | bash)"
