@@ -39,9 +39,13 @@ insert_header_latex = function(doc, b) {
     }
     i = i[1L]
     l = stringr__str_locate(doc[i], b)
-    tmp = stringr__str_sub(doc[i], l[, 1], l[, 2])
-    doc[i] <-
-      stringr__str_sub_assign(doc[i], l[,1], l[,2], value = paste0(tmp, make_header_latex()))
+    for (k in seq_len(nrow(l))) {
+      tmp = stringr__str_sub(doc[i], l[k, 1], l[k, 2])
+      doc[i] <- stringr__str_sub_assign(doc[i],
+                                        l[k, 1],
+                                        l[k, 2],
+                                        value = paste0(tmp, make_header_latex()))
+    }
   } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
     doc[1L] = paste(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
@@ -69,9 +73,13 @@ insert_header_html = function(doc, b) {
   i = grep(b, doc)
   if (length(i) == 1L) {
     l = stringr__str_locate(doc[i], b)
-    tmp = stringr__str_sub(doc[i], l[, 1], l[, 2])
-    doc[i] <-
-      stringr__str_sub_assign(doc[i], l[,1], l[,2], value = paste0(tmp, '\n', make_header_html()))
+    for (k in seq_len(nrow(l))) {
+      tmp = stringr__str_sub(doc[i], l[k, 1], l[k, 2])
+      doc[i] <- stringr__str_sub_assign(doc[i],
+                                        l[k, 1],
+                                        l[k, 2],
+                                        value = paste0(tmp, make_header_html()))
+    }
   }
   doc
 }
