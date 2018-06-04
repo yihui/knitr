@@ -11,7 +11,7 @@
 #' \preformatted{options("knitr.use.stringr" = FALSE)}
 #'
 #' The environment variable has precedence over the package option
-#' if and only if it is set to \code{FALSE}. Otherwise, the package
+#' if and only if it is set to \code{"FALSE"}. Otherwise, the package
 #' option is used, with a default value of \code{TRUE}.
 #'
 #' Our intention is to eventually switch the default, so \code{knitr} can be used
