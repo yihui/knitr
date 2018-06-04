@@ -12,6 +12,9 @@ r_binary_packages:
 - dplyr
 - readr
 - tidyr
+- testthat
+- xml2
+- mapproj
 
 # environment variables
 env:
@@ -64,7 +67,7 @@ before_script:
 script:
   - rm knitr-examples/cache -rf
   - make ${TARGET}
-  - "[ $TARGET = travis ] && Rscript tools/covr.R || true"
+  #- "[ $TARGET = travis ] && Rscript tools/covr.R || true"
 
 # deploy to xran after integration tests
 after_success:
