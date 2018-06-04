@@ -124,15 +124,40 @@ if (requireNamespace("stringr", quietly = TRUE)) {
          identical(with_stringr,
                    wout_stringr))
 
-    options("knitr.use.stringr" = prev_use_stringr)
+  options("knitr.use.stringr" = prev_use_stringr)
 }
 
 if (requireNamespace("stringi", quietly = TRUE)) {
+  prev_use_stringr <- getOption("knitr.use.stringr")
+  options("knitr.use.stringr" = FALSE)
   pattern <- "AX*B"
   string <- "AB AXXB AXXXB"
   assert("str_locate_all matches when matches are of different length in the same line",
          identical(stringr::str_locate_all(string, pattern),
                    stringr__str_locate_all(string, pattern)))
+  options("knitr.use.stringr" = prev_use_stringr)
+}
+
+if (requireNamespace("stringr", quietly = TRUE)) {
+  prev_use_stringr <- getOption("knitr.use.stringr")
+  options("knitr.use.stringr" = FALSE)
+  phone <- "([2-9][0-9]{2})[- .]([0-9]{3})[- .]([0-9]{4})"
+  strings <- c(" 219 733 8965",
+               "329-293-8753 ",
+               "banana",
+               "595 794 7569",
+               "387 287 6718",
+               "apple",
+               "233.398.9187  ",
+               "482 952 3315",
+               "239 923 8115 and 842 566 4692",
+               "Work: 579-499-7527",
+               "$1000",
+               "Home: 543.355.3679")
+  assert("str_match identical stringr::",
+         identical(stringr__str_match(strings, phone),
+                   stringr::str_match(strings, phone)))
+  options("knitr.use.stringr" = prev_use_stringr)
 }
 
 

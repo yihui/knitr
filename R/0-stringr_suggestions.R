@@ -318,6 +318,37 @@ stringr__str_dup <- function(string, times) {
   }
 }
 
+stringr__str_match <- function(string, pattern) {
+  if (use_stringr()) {
+    stringr::str_match(string, pattern)
+  } else {
+    gregexprs <- gregexpr(pattern, string, perl = TRUE)
+    out <- matrix(NA_character_,
+                  nrow = length(string),
+                  ncol = length(attr(gregexprs[[1L]], "capture.length")) + 1L)
+    for (i in seq_along(string)) {
+
+      G <- gregexprs[[i]]
+      len <- attr(G, "match.length")
+      # str_match is first match only
+      if (len > 0L) {
+        out[i, 1L] <- substr(string[i], G[[1L]], G[[1L]] + len - 1L)
+        if (!is.null(attr(G, "capture.length"))) {
+          for (j in seq_along(attr(G, "capture.length"))) {
+            start <- attr(G, "capture.start")[j]
+            if (start > 0L) {
+              stop  <- start + attr(G, "capture.length") - 1L
+              out[i, j + 1L] <- substr(string[i], start, stop)
+            } # else do nothing (already filled with NAs)
+          }
+
+        }
+      }
+    }
+    out
+  }
+}
+
 
 
 
