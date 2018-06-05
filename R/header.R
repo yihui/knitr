@@ -78,7 +78,7 @@ insert_header_html = function(doc, b) {
       doc[i] <- stringr__str_sub_assign(doc[i],
                                         l[k, 1],
                                         l[k, 2],
-                                        value = paste0(tmp, make_header_html()))
+                                        value = paste0(tmp, "\n", make_header_html()))
     }
   }
   doc
