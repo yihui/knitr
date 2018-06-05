@@ -529,14 +529,14 @@ print_knitlog = function() {
 # count the number of lines
 line_count = function(x) {
   if (use_stringr()) {
+    stringr::str_count(x, '\n') + 1L
+  } else {
     out <- integer(length(x))
     for (i in grep("\n", out, fixed = TRUE)) {
       xi <- gsub("\n", "", x[i], fixed = TRUE)
       out[i] <- nchar(xi) - nchar(x[i]) + 1L
     }
     out
-  } else {
-    stringr::str_count(x, '\n') + 1L
   }
 }
 
