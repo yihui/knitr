@@ -1,21 +1,4 @@
 language: r
-
-sudo: true
-r_binary_packages:
-- survival
-- scales
-- ggplot2
-- BH
-- Rcpp
-- stringi
-- devtools
-- dplyr
-- readr
-- tidyr
-- testthat
-- xml2
-- mapproj
-
 # environment variables
 env:
   matrix:
@@ -54,7 +37,7 @@ repos:
   XRAN: https://xran.yihui.name
 
 cache:
-  packages: no
+  packages: yes
   directories:
     - $HOME/cache
     - $HOME/texlive
@@ -72,5 +55,4 @@ script:
 # deploy to xran after integration tests
 after_success:
   - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
-  - Rscript -e 'tryCatch(knitr::use_stringr(), error = function(e) cat("\nuse_stringr failed\n"))'
   - "[ $TARGET = integration ] && (curl https://xran.yihui.name/r-xran | bash)"
