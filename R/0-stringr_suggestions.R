@@ -359,6 +359,10 @@ stringr__str_match <- function(string, pattern) {
     stringr::str_match(string, pattern)
   } else {
     # str_match is first match only
+    # perl = TRUE not only satisfies the negative
+    # lookbehinds, but also returns a different value
+    # to perl = FALSE, which the rest of the function
+    # relies on.
     R <- regexpr(pattern, string, perl = TRUE)
     ncols <-
       if (is.null(attr(R, "capture.length"))) {
@@ -369,19 +373,17 @@ stringr__str_match <- function(string, pattern) {
     out <- matrix(NA_character_,
                   nrow = length(string),
                   ncol = ncols)
-    for (i in seq_along(string)) {
-      if (R[[i]] > 0L) {
-        len <- attr(R, "match.length")[[i]]
-        if (len > 0L) {
-          out[i, 1L] <- substr(string[i], R[[i]], R[[i]] + len - 1L)
-          if (!is.null(attr(R, "capture.length"))) {
-            for (j in seq_len(NCOL(attr(R, "capture.length")))) {
-              start <- attr(R, "capture.start")[i, j]
-              if (start > 0L) {
-                stop  <- start + attr(R, "capture.length")[i, j] - 1L
-                out[i, j + 1L] <- substr(string[i], start, stop)
-              } # else do nothing (already filled with NAs)
-            }
+    for (i in which(R > 0L)) {
+      len <- attr(R, "match.length")[[i]]
+      if (len > 0L) {
+        out[i, 1L] <- substr(string[i], R[[i]], R[[i]] + len - 1L)
+        if (!is.null(attr(R, "capture.length"))) {
+          for (j in seq_len(NCOL(attr(R, "capture.length")))) {
+            start <- attr(R, "capture.start")[i, j]
+            if (start > 0L) {
+              stop  <- start + attr(R, "capture.length")[i, j] - 1L
+              out[i, j + 1L] <- substr(string[i], start, stop)
+            } # else do nothing (already filled with NAs)
           }
         }
       }
