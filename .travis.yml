@@ -1,4 +1,7 @@
 language: r
+
+sudo: false
+
 # environment variables
 env:
   matrix:
