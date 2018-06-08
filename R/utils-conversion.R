@@ -36,9 +36,10 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 knit2pandoc = function(
   input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
   envir = parent.frame(), encoding = getOption('encoding'),
-  to = 'html', pandoc_wrapper = NULL, ...
+  to = 'html', pandoc_wrapper = NULL,
+  lyx_compatible = TRUE, ...
 ) {
-  knit_output = knit(input, output, tangle, text, quiet, envir, encoding)
+  knit_output = knit(input, output, tangle, text, quiet, envir, encoding, lyx_compatible)
   if (!is.null(pandoc_wrapper)) return(pandoc_wrapper(knit_output, to, ...))
   if (!has_package('rmarkdown')) return(pandoc(knit_output, to, ...))
   output = gsub(paste0(file_ext(knit_output), '$'), to, knit_output)
@@ -68,9 +69,12 @@ knit2pandoc = function(
 #' ## knit2pdf(..., compiler = 'rst2pdf')
 knit2pdf = function(
   input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = FALSE,
-  encoding = getOption('encoding'), ...
+  encoding = getOption('encoding'), lyx_compatible = TRUE
 ) {
-  out = knit(input, output = output, envir = envir, quiet = quiet, encoding = encoding)
+
+  out = knit(input, output = output, envir = envir, quiet = quiet,
+               encoding = encoding, lyx_compatible = lyx_compatible)
+
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (is.null(compiler)) {
     compiler = if (grepl('\\.rst$', out)) 'rst2pdf' else 'pdflatex'
@@ -108,7 +112,8 @@ knit2pdf = function(
 #' knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')
 knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
-                     quiet = FALSE, encoding = getOption('encoding'), force_v1 = FALSE) {
+                     quiet = FALSE, encoding = getOption('encoding'), force_v1 = FALSE,
+                     lyx_compatible = TRUE) {
   if (!force_v1 && is.null(text)) {
     con = file(input, encoding = encoding)
     on.exit(close(con), add = TRUE)
@@ -118,7 +123,7 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
       'because ', input, ' appears to be an R Markdown v2 document.'
     )
   }
-  out = knit(input, text = text, envir = envir, encoding = encoding, quiet = quiet)
+  out = knit(input, text = text, envir = envir, encoding = encoding, quiet = quiet, lyx_compatible = lyx_compatible)
   if (is.null(text)) {
     output = sub_ext(if (is.null(output) || is.na(output)) out else output, 'html')
     markdown::markdownToHTML(out, output, encoding = encoding, ...)
@@ -159,9 +164,10 @@ knit2html_v1 = function(...) knit2html(..., force_v1 = TRUE)
 knit2wp = function(
   input, title = 'A post from knitr', ..., envir = parent.frame(), shortcode = FALSE,
   action = c('newPost', 'editPost', 'newPage'), postid,
-  encoding = getOption('encoding'), publish = TRUE
+  encoding = getOption('encoding'), publish = TRUE,
+  lyx_compatible = TRUE
 ) {
-  out = knit(input, encoding = encoding, envir = envir); on.exit(unlink(out))
+  out = knit(input, encoding = encoding, envir = envir); on.exit(unlink(out), lyx_compatible = lyx_compatible)
   con = file(out, encoding = encoding); on.exit(close(con), add = TRUE)
   content = native_encode(readLines(con, warn = FALSE))
   content = paste(content, collapse = '\n')

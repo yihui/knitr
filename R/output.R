@@ -126,7 +126,8 @@
 #' purl(f, documentation = 0)  # extract R code only
 #' purl(f, documentation = 2)  # also include documentation
 knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
-                envir = parent.frame(), encoding = getOption('encoding')) {
+                envir = parent.frame(), encoding = getOption('encoding'),
+                lyx_compatible = TRUE) {
 
   # is input from a file? (or a connection on a file)
   in.file = !missing(input) &&
@@ -196,7 +197,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     knit_concord$set(infile = input, outfile = output)
   }
 
-  encoding = correct_encode(encoding)
+  if (lyx_compatible) encoding = correct_encode(encoding)
   text = if (is.null(text)) {
     readLines(if (is.character(input2)) {
       con = file(input2, encoding = encoding); on.exit(close(con), add = TRUE); con
