@@ -12,6 +12,8 @@
 
 - The `sql` engine now caches the result properly when the chunk option `output.var` is specified (thanks, @yutannihilation, #1544).
 
+- `knit_params()` mangles UTF-8 text not representable in current locale (thanks, @kevinushey, #1557).
+
 # CHANGES IN knitr VERSION 1.20
 
 ## NEW FEATURES

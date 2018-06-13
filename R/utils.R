@@ -605,9 +605,8 @@ read_rforge = function(path, project, extra = '') {
 # because I think strsplit('', 'foo') should return '' instead of character(0)
 split_lines = function(x) {
   if (length(grep('\n', x)) == 0L) return(x)
-  con = textConnection(x)
-  on.exit(close(con))
-  readLines(con)
+  x[x == ''] = '\n'
+  unlist(strsplit(x, '\n'))
 }
 
 # if a string is encoded in UTF-8, convert it to native encoding
