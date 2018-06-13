@@ -602,9 +602,11 @@ read_rforge = function(path, project, extra = '') {
   readLines(sprintf('%s/%s?root=%s%s', base, path, project, extra))
 }
 
-# because I think strsplit('', 'foo') should return '' instead of character(0)
+# strsplit('', 'foo') should return '' instead of character(0), and I also need
+# strsplit('a\n', '\n') to return c('a', '') instead of c('a')
 split_lines = function(x) {
   if (length(grep('\n', x)) == 0L) return(x)
+  x = gsub('\n$', '\n\n', x)
   x[x == ''] = '\n'
   unlist(strsplit(x, '\n'))
 }

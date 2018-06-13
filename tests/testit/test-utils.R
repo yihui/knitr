@@ -145,6 +145,8 @@ assert('split_lines() splits a character vector into lines by \\n', {
   (split_lines('') %==% '')
   (split_lines(NULL) %==% NULL)
   (split_lines('a\nb') %==% c('a', 'b'))
+  (split_lines('a\n') %==% c('a', ''))
+  (split_lines('a\nb\n\n') %==% c('a', 'b', '', ''))
   (split_lines(c('a\nb', '', ' ', 'c')) %==% c('a', 'b', '', ' ', 'c'))
 })
 
