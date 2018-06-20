@@ -84,6 +84,21 @@ x & col_name\\\\
   )
 )
 
+assert('kable(format = "latex", linesep = ...) works', {
+  kable2(data.frame(x = 1:4), 'latex', linesep  = c("", "", "\\midrule")) %==% "
+\\begin{tabular}{r}
+\\hline
+x\\\\
+\\hline
+1\\\\
+2\\\\
+3\\\\
+\\midrule
+4\\\\
+\\hline
+\\end{tabular}"
+})
+
 assert(
   'kable() escapes HTML special characters by default',
   identical(

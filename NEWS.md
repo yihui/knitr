@@ -14,6 +14,8 @@
 
 - `knit_params()` mangles UTF-8 text not representable in current locale (thanks, @kevinushey, #1557).
 
+- The `linesep` argument in `kable(format = 'latex')` does not work as expected (thanks, @tinu-schneider, #1558).
+
 # CHANGES IN knitr VERSION 1.20
 
 ## NEW FEATURES

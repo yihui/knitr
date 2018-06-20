@@ -243,7 +243,7 @@ kable_latex = function(
   if (nrow(x) == 0) midrule = ""
 
   linesep = if (nrow(x) > 1) {
-    c(rep(linesep, length.out = nrow(x) - 2), linesep[[1L]], '')
+    c(rep(linesep, length.out = nrow(x) - 1), '')
   } else rep('', nrow(x))
   linesep = ifelse(linesep == "", linesep, paste0('\n', linesep))
 
