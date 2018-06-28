@@ -103,7 +103,9 @@ knit_params = function(text, evaluate = TRUE) {
 #' @export
 knit_params_yaml = function(yaml, evaluate = TRUE) {
   # parse the yaml using our handlers
-  parsed_yaml = yaml::yaml.load(yaml, handlers = knit_params_handlers(evaluate = evaluate))
+  parsed_yaml = yaml::yaml.load(
+    yaml, handlers = knit_params_handlers(evaluate = evaluate), eval.expr = TRUE
+  )
 
   # if we found paramters then resolve and return them
   if (is.list(parsed_yaml) && !is.null(parsed_yaml$params)) {
