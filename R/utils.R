@@ -785,13 +785,6 @@ inst_dir = function(...) {
   p[file.exists(p)]
 }
 
-# TODO: use xfun::same_path
-same_file = function(f1, f2) {
-  f1 = normalizePath(f1, mustWork = FALSE)
-  f2 = normalizePath(f2, mustWork = FALSE)
-  f1 == f2
-}
-
 # a restricted version of is.numeric (e.g. do not treat chron::chron() as
 # numeric since their behavior may be somewhat unpredictable, e.g. through
 # round(), #1118); see #1396 for difftime
