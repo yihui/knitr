@@ -520,8 +520,7 @@ print_knitlog = function() {
 # count the number of lines
 line_count = function(x) stringr::str_count(x, '\n') + 1L
 
-# TODO: use xfun::loadable(pkg, FALSE)
-has_package = function(pkg) pkg %in% .packages(TRUE)
+has_package = function(pkg) xfun::loadable(pkg, FALSE)
 
 # if LHS is NULL, return the RHS
 `%n%` = function(x, y) if (is.null(x)) y else x
@@ -633,15 +632,8 @@ encode_utf8 = function(input, encoding = getOption('encoding'), output = input) 
   writeLines(enc2utf8(txt), output, useBytes = TRUE)
 }
 
-# TODO: use xfun::file_ext, xfun::sans_ext, xfun::with_ext
-file_ext = tools::file_ext
-sans_ext = tools::file_path_sans_ext
 # substitute extension
-sub_ext = function(x, ext) {
-  i = grep('\\.([[:alnum:]]+)$', x)
-  x[i] = sans_ext(x[i])
-  paste(x, ext, sep = '.')
-}
+with_ext = function(x, ext) xfun::with_ext(x, ext)
 
 #' Wrap long lines in Rmd files
 #'

@@ -14,7 +14,7 @@
 #' @seealso \code{\link{knit2pdf}}
 #' @references \url{https://github.com/rst2pdf/rst2pdf}
 rst2pdf = function(input, command = 'rst2pdf', options = '') {
-  out = sub_ext(input, 'pdf')
+  out = with_ext(input, 'pdf')
   system2(command, paste(shQuote(input), '-o', shQuote(out), options))
   if (file.exists(out)) out else stop('conversion by rst2pdf failed!')
 }
@@ -82,7 +82,7 @@ knit2pdf = function(
   } else {
     tinytex::latexmk(basename(out), engine = compiler, ...)
   }
-  sub_ext(out, 'pdf')
+  with_ext(out, 'pdf')
 }
 
 #' Convert markdown to HTML using knit() and markdownToHTML()
@@ -120,7 +120,7 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
   }
   out = knit(input, text = text, envir = envir, encoding = encoding, quiet = quiet)
   if (is.null(text)) {
-    output = sub_ext(if (is.null(output) || is.na(output)) out else output, 'html')
+    output = with_ext(if (is.null(output) || is.na(output)) out else output, 'html')
     markdown::markdownToHTML(out, output, encoding = encoding, ...)
     invisible(output)
   } else markdown::markdownToHTML(text = out, ...)

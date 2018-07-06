@@ -375,7 +375,7 @@ include_graphics = function(
   path, auto_pdf = getOption('knitr.graphics.auto_pdf', FALSE), dpi = NULL
 ) {
   if (auto_pdf && is_latex_output()) {
-    path2 = sub_ext(path, 'pdf')
+    path2 = with_ext(path, 'pdf')
     i = file.exists(path2)
     path[i] = path2[i]
   }

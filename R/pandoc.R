@@ -47,7 +47,7 @@ pandoc = function(input, format, config = getOption('config.pandoc'), ext = NA,
                   encoding = getOption('encoding')) {
   if (Sys.which('pandoc') == '')
     stop('Please install pandoc first: http://pandoc.org')
-  cfg = if (is.null(config)) sub_ext(input[1L], 'pandoc') else config
+  cfg = if (is.null(config)) with_ext(input[1L], 'pandoc') else config
   con = file(input[1L], encoding = encoding)
   tryCatch(txt <- pandoc_cfg(readLines(con, warn = FALSE)), finally = close(con))
   if (file.exists(cfg)) txt = c(txt, '', readLines(cfg, warn = FALSE))
@@ -94,7 +94,7 @@ pandoc_one = function(input, input_utf8, format, ext, cfg) {
   }
   out = unname(if (!is.na(cfg['o'])) cfg['o'] else {
     if (!is.na(cfg['output'])) cfg['output'] else {
-      sub_ext(input, if (is.na(ext)) pandoc_ext(format) else ext)
+      with_ext(input, if (is.na(ext)) pandoc_ext(format) else ext)
     }
   })
   cfg = cfg[setdiff(names(cfg), c('o', 'output', 't'))]

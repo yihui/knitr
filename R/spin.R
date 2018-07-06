@@ -97,7 +97,7 @@ spin = function(
     txt = c('\\documentclass{article}', '\\begin{document}', txt, '\\end{document}')
   }
   if (nosrc) {
-    outsrc = sub_ext(hair, format)
+    outsrc = with_ext(hair, format)
     cat(txt, file = outsrc, sep = '\n')
     txt = NULL
   } else outsrc = NULL

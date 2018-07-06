@@ -39,7 +39,7 @@ stitch = function(script,
   if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:', envir)) lines = lines[-1L]
   if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:', envir)) lines = lines[-1L]
   input = basename(template)
-  input = sub_ext(basename(if (nosrc) script else tempfile()), file_ext(input))
+  input = with_ext(basename(if (nosrc) script else tempfile()), file_ext(input))
   txt = readLines(template, warn = FALSE)
   i = grep('%sCHUNK_LABEL_HERE', txt)
   if (length(i) != 1L) stop('Wrong template for stitch: ', template)
@@ -66,9 +66,9 @@ stitch = function(script,
   out = knit(input, output, envir = envir, text = txt)
   switch(file_ext(out), tex = {
     tinytex::latexmk(out)
-    message('PDF output at: ', sub_ext(out, 'pdf'))
+    message('PDF output at: ', with_ext(out, 'pdf'))
   }, md = {
-    out.html = sub_ext(out, 'html')
+    out.html = with_ext(out, 'html')
     markdown::markdownToHTML(out, out.html)
     message('HTML output at: ', out.html)
   })

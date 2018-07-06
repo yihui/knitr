@@ -176,7 +176,7 @@ eng_shlib = function(options) {
   n = switch(options$engine, c = 'c', fortran = 'f', fortran95 = 'f95')
   f = basename(tempfile(n, '.', paste0('.', n)))
   writeLines(options$code, f)
-  on.exit(unlink(c(f, sub_ext(f, c('o', 'so', 'dll')))), add = TRUE)
+  on.exit(unlink(c(f, with_ext(f, c('o', 'so', 'dll')))), add = TRUE)
   if (options$eval) {
     out = system(paste('R CMD SHLIB', f), intern = TRUE)
     dyn.load(sub(sprintf('[.]%s$', n), .Platform$dynlib.ext, f))
@@ -294,7 +294,7 @@ eng_tikz = function(options) {
   dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
   file.rename(outf, fig)
 
-  fig2 = sub_ext(fig, ext)
+  fig2 = with_ext(fig, ext)
   if (to_svg) {
     # dvisvgm needs to be on the path
     # dvisvgm for windows needs ghostscript bin dir on the path also

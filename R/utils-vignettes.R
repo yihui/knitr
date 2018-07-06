@@ -44,7 +44,7 @@ vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) 
 
 vtangle = function(file, ..., encoding = 'UTF-8', quiet = FALSE) {
   if (is_R_CMD_check()) {
-    file = sub_ext(file, 'R')
+    file = with_ext(file, 'R')
     file.create(file)
     return(file)
   }
@@ -78,7 +78,7 @@ untangle_weave = function(vig_list, eng) {
   weave
 }
 vtangle_empty = function(file, ...) {
-  unlink(sub_ext(file, 'R'))
+  unlink(with_ext(file, 'R'))
   return()
 }
 
