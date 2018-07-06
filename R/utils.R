@@ -837,12 +837,8 @@ combine_words = function(words, sep = ', ', and = ' and ', before = '', after = 
   paste(words, collapse = sep)
 }
 
-# TODO: use xfun::loadable
-loadable = function(pkg) requireNamespace(pkg, quietly = TRUE)
-
 warning2 = function(...) warning(..., call. = FALSE)
 stop2 = function(...) stop(..., call. = FALSE)
-
 
 raw_markers = c('!!!!!RAW-KNITR-CONTENT', 'RAW-KNITR-CONTENT!!!!!')
 
