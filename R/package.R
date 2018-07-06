@@ -18,7 +18,8 @@
 #'   + \code{weave}).
 #' @references Full documentation and demos: \url{https://yihui.name/knitr/};
 #'   FAQ's: \url{https://yihui.name/knitr/faq/}
-#' @importFrom xfun attr file_ext isFALSE is_windows loadable parse_only sans_ext try_silent with_ext
+#' @importFrom xfun attr file_ext isFALSE is_windows loadable parse_only
+#'   sans_ext try_silent with_ext
 NULL
 
 .knitEnv = new.env()

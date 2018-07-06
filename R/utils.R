@@ -632,9 +632,6 @@ encode_utf8 = function(input, encoding = getOption('encoding'), output = input) 
   writeLines(enc2utf8(txt), output, useBytes = TRUE)
 }
 
-# substitute extension
-with_ext = function(x, ext) xfun::with_ext(x, ext)
-
 #' Wrap long lines in Rmd files
 #'
 #' This function wraps long paragraphs in an R Markdown file. Other elements are
