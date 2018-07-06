@@ -918,15 +918,6 @@ raw_output = function(x, markers = raw_markers, ...) {
   asis_output(paste(c(markers[1], x, markers[2]), collapse = ''), ...)
 }
 
-# TODO: use xfun::write_utf8
-writeUTF8 = function(text, file, ...) {
-  if (identical(file, '')) {
-    cat(text, sep = '\n', file = file)
-  } else {
-    writeLines(enc2utf8(text), file, ..., useBytes = TRUE)
-  }
-}
-
 trimws = function(x) gsub('^\\s+|\\s+$', '', x)
 
 optipng = function(...) {
