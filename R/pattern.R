@@ -31,7 +31,8 @@ all_patterns = list(
   `md` = list(
     chunk.begin = '^[\t >]*```+\\s*\\{([a-zA-Z0-9_]+.*)\\}\\s*$',
     chunk.end = '^[\t >]*```+\\s*$',
-    ref.chunk = '^\\s*<<(.+)>>\\s*$', inline.code = '(?<!(^|\n)``)`r[ #]([^`]+)\\s*`'),
+    ref.chunk = '^\\s*<<(.+)>>\\s*$',
+    inline.code = '(?<!(^``))(?<!(\n``))`r[ #]([^`]+)\\s*`'),
 
   `rst` = list(
     chunk.begin = '^\\s*[.][.]\\s+\\{r(.*)\\}\\s*$',
@@ -150,7 +151,7 @@ detect_pattern = function(text, ext) {
   for (p in names(all_patterns)) {
     for (i in c('chunk.begin', 'inline.code')) {
       pat = all_patterns[[p]][[i]]
-      if (length(pat) && any(stringr::str_detect(text, pat))) return(p)
+      if (length(pat) && length(grep(pat, text, perl = TRUE))) return(p)
     }
   }
   # *.Rtex indicates the tex syntax in knitr, but Rnw syntax in traditional

@@ -126,7 +126,7 @@ pandoc_arg = function(x) {
   nms = names(x)
   if (any(grepl('\n', x))) {
     # one argument used multiple times, e.g. --bibliography
-    x = stringr::str_split(x, '\n')
+    x = strsplit(x, '\n')
     nms = rep(nms, sapply(x, length))
     x = unlist(x)
   }

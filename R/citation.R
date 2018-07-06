@@ -89,7 +89,7 @@ write_bib = function(
       b['title'] = sub("'RStudio'", 'RStudio', b['title'])
       if (!('year' %in% names(b))) b['year'] = .this.year
       idx = which(names(b) == '')
-      if (!is.null(width)) b[-idx] = stringr::str_wrap(b[-idx], width, 2, 4)
+      if (!is.null(width)) b[-idx] = stringr__str_wrap(b[-idx], width, 2, 4)
       structure(c(b[idx[1L]], b[-idx], b[idx[2L]]), class = 'Bibtex')
     })
   }

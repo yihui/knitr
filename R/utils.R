@@ -74,7 +74,7 @@ color_def = function(col, variable = 'shadecolor') {
 sc_split = function(string) {
   if (is.call(string)) string = eval(string)
   if (is.numeric(string) || length(string) != 1L) return(string)
-  stringr::str_trim(stringr::str_split(string, ';|,')[[1]])
+  stringr__str_trim(strsplit(string, ';|,')[[1]])
 }
 
 # extract LaTeX packages for tikzDevice
@@ -88,9 +88,9 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   idx1 = grep(hb, input)[1]
   if (is.na(idx1) || idx1 >= idx2) return()
   txt = paste(input[idx1:(idx2 - 1L)], collapse = '\n')  # rough preamble
-  idx = stringr::str_locate(txt, hb)  # locate documentclass
-  options(tikzDocumentDeclaration = stringr::str_sub(txt, idx[, 1L], idx[, 2L]))
-  preamble = pure_preamble(split_lines(stringr::str_sub(txt, idx[, 2L] + 1L)), patterns)
+  idx = stringr__str_locate(txt, hb)  # locate documentclass
+  options(tikzDocumentDeclaration = stringr__str_sub(txt, idx[, 1L], idx[, 2L]))
+  preamble = pure_preamble(split_lines(stringr__str_sub(txt, idx[, 2L] + 1L)), patterns)
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
   .knitEnv$bibliography = grep('^\\\\bibliography.+', input, value = TRUE)
 }
@@ -518,7 +518,18 @@ print_knitlog = function() {
 }
 
 # count the number of lines
-line_count = function(x) stringr::str_count(x, '\n') + 1L
+line_count = function(x) {
+  if (use_stringr()) {
+    stringr::str_count(x, '\n') + 1L
+  } else {
+    out <- integer(length(x))
+    for (i in grep("\n", out, fixed = TRUE)) {
+      xi <- gsub("\n", "", x[i], fixed = TRUE)
+      out[i] <- nchar(xi) - nchar(x[i]) + 1L
+    }
+    out
+  }
+}
 
 has_package = function(pkg) xfun::loadable(pkg, FALSE)
 

@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.21 (unreleased)
 
+## NOTICE OF POTENTIALLY BREAKING CHANGES
+- `stringr` is now no longer a strict dependency, though it remains in the package imports, and is used by default. The intention is to make `stringr` only a suggested package in two releases' time. For now, please test your use of `knitr` with and without `stringr` and notify us if removing `stringr` would not be safe -- *i.e.* `knitr` behaves differently when `stringr` is not used. See `?use_stringr()` for instructions.
+
 ## NEW FEATURES
 
 - Added a new object `cache_engines` for other language engines to handle caching. See `?knitr::cache_engines` for details (thanks, @tmastny, #1518).
