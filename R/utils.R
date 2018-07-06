@@ -731,9 +731,6 @@ has_utility = function(name, package = name) {
   yes
 }
 
-# TODO: use xfun::is_windows
-is_windows = function() .Platform$OS.type == 'windows'
-
 #' Query the current input filename
 #'
 #' Returns the name of the input file passed to \code{\link{knit}()}.
