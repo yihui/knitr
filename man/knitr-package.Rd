@@ -19,7 +19,7 @@ The pronunciation of \pkg{knitr} is similar to \emph{neater} (neater
 }
 \references{
 Full documentation and demos: \url{https://yihui.name/knitr/};
-  FAQ's: \url{http://bit.ly/knitr-faq}
+  FAQ's: \url{https://yihui.name/knitr/faq/}
 }
 \seealso{
 The core function in this package: \code{\link{knit}}. If you are an

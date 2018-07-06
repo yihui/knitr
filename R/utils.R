@@ -354,12 +354,6 @@ latex_percent_size = function(x, which = c('width', 'height')) {
   x
 }
 
-# TODO: use xfun::parse_only
-parse_only = function(code) {
-  if (length(code) == 0) return(expression())
-  parse(text = code, keep.source = FALSE)
-}
-
 # eval options as symbol/language objects
 eval_lang = function(x, envir = knit_global()) {
   if (!is.symbol(x) && !is.language(x)) return(x)
