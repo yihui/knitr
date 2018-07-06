@@ -721,9 +721,6 @@ kpsewhich = function() {
     'kpsewhich' else x
 }
 
-# TODO: use xfun::try_silent
-try_silent = function(expr) try(expr, silent = TRUE)
-
 # check if a utility exists; if it does, save its availability in opts_knit
 has_utility = function(name, package = name) {
   name2 = paste('util', name, sep = '_')  # e.g. util_pdfcrop
