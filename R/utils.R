@@ -804,9 +804,6 @@ create_label = function(..., latex = FALSE) {
   paste0(lab1, ..., lab2)
 }
 
-# TODO: use xfun::attr
-attr = function(...) base::attr(..., exact = TRUE)
-
 #' Combine multiple words into a single string
 #'
 #' When a value from an inline R expression is a character vector of multiple
