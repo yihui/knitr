@@ -18,7 +18,7 @@
 #'   + \code{weave}).
 #' @references Full documentation and demos: \url{https://yihui.name/knitr/};
 #'   FAQ's: \url{https://yihui.name/knitr/faq/}
-#' @importFrom xfun parse_only
+#' @importFrom xfun isFALSE parse_only
 NULL
 
 .knitEnv = new.env()

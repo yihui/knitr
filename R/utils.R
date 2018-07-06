@@ -360,9 +360,6 @@ eval_lang = function(x, envir = knit_global()) {
   eval(x, envir = envir)
 }
 
-# TODO: use xfun::isFALSE
-isFALSE = function(x) identical(x, FALSE)
-
 # check latex packages; if not exist, copy them over to ./
 test_latex_pkg = function(name, path) {
   res = try_silent(system(sprintf('%s %s.sty', kpsewhich(), name), intern = TRUE))
