@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/yihui/knitr.svg)](https://travis-ci.org/yihui/knitr)
 [![Coverage Status](https://coveralls.io/repos/yihui/knitr/badge.svg?branch=master&service=github)](https://coveralls.io/github/yihui/knitr?branch=master)
-[![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/knitr)](https://cran.rstudio.org/package=knitr)
+[![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/knitr)](https://cran.r-project.org/package=knitr)
 
 The R package **knitr** is a general-purpose literate programming engine,
 with lightweight API's designed to give users full control of the output
@@ -15,7 +15,7 @@ frequently asked questions (including where to ask questions).
 ## Installation
 
 You can install the stable version on
-[CRAN](https://cran.rstudio.org/package=knitr):
+[CRAN](https://cran.r-project.org/package=knitr):
 
 ```r
 install.packages('knitr', dependencies = TRUE)
@@ -26,8 +26,8 @@ You can also install the development version from
 
 ```r
 # update all existing packages first
-update.packages(ask = FALSE, repos = 'https://cran.rstudio.org')
-install.packages('knitr', repos = c('https://xran.yihui.name', 'https://cran.rstudio.org'))
+update.packages(ask = FALSE, repos = 'https://cran.r-project.org')
+install.packages('knitr', repos = c('https://xran.yihui.name', 'https://cran.r-project.org'))
 ```
 
 Note that if you want to build the source package via `R CMD INSTALL` without a previously installed version of **knitr**, you must either pre-install **knitr** from CRAN, or run `R CMD INSTALL` on this source repo, otherwise `R CMD build` will fail (which is probably a bug of base R).
@@ -35,8 +35,8 @@ Note that if you want to build the source package via `R CMD INSTALL` without a 
 ## Motivation
 
 While Sweave and related add-on packages like
-[**cacheSweave**](https://cran.rstudio.org/package=cacheSweave) and
-[**pgfSweave**](https://cran.rstudio.org/package=pgfSweave) are fairly good
+[**cacheSweave**](https://cran.r-project.org/package=cacheSweave) and
+[**pgfSweave**](https://cran.r-project.org/package=pgfSweave) are fairly good
 engines for literate programming in R, but I often feel my hands are tied,
 for example:
 
@@ -56,15 +56,15 @@ for example:
 - I wished there was a way to round the numbers in `\Sexpr{}` other than
   writing expressions like `\Sexpr{round(x, 3)}` for *each single* `\Sexpr{}`
 - I wished I did not have to `print()` plots from
-  [**ggplot2**](https://cran.rstudio.org/package=ggplot2) and a simple
+  [**ggplot2**](https://cran.r-project.org/package=ggplot2) and a simple
   `qplot(x, y)` would just give me a plot in Sweave
 - I wished users would never need instructions on `Sweave.sty` or run into
   troubles due to the fact that LaTeX cannot find `Sweave.sty`
 - I wished **cacheSweave** could print the results of a code chunk even if
   it was cached
-- I wished [**brew**](https://cran.rstudio.org/package=brew) could support
+- I wished [**brew**](https://cran.r-project.org/package=brew) could support
   graphics
-- I wished [**R2HTML**](https://cran.rstudio.org/package=R2HTML) could
+- I wished [**R2HTML**](https://cran.r-project.org/package=R2HTML) could
   support R code syntax highlighting
 - ...
 

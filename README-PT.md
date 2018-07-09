@@ -2,13 +2,13 @@
 
 [![Status de Compilação](https://travis-ci.org/yihui/knitr.svg)](https://travis-ci.org/yihui/knitr)
 [![Status da Cobertura de Código](https://coveralls.io/repos/yihui/knitr/badge.svg?branch=master&service=github)](https://coveralls.io/github/yihui/knitr?branch=master)
-[![Downloads do espelho RStudio CRAN](http://cranlogs.r-pkg.org/badges/knitr)](https://cran.rstudio.org/package=knitr)
+[![Downloads do espelho RStudio CRAN](http://cranlogs.r-pkg.org/badges/knitr)](https://cran.r-project.org/package=knitr)
 
 O pacote R **knitr** é um motor de programação literata (o *literate programming* de Donald Knuth) de propósito geral, com API's leves desenhadas para dar aos usuários controle total das saídas, sem trabalho pesado de codificação. Ele combina muitas funcionalidades em um único pacote com pequenos ajustes motivados pelo meu uso diário do Sweave. Vejam a [homepage](https://yihui.name/knitr/) do pacote para detalhes e exemplos. Vejam os [FAQ's](https://yihui.name/knitr/faq/) para uma lista de perguntas (incluindo sobre onde levantar questões).
 
 ## Instalação
 
-Você pode instalar a versão estável em [CRAN](https://cran.rstudio.org/package=knitr):
+Você pode instalar a versão estável em [CRAN](https://cran.r-project.org/package=knitr):
 
 ```r
 install.packages('knitr', dependencies = TRUE)
@@ -18,8 +18,8 @@ Você pode instalar a versão em desenvolvimento em [XRAN](https://xran.yihui.na
 
 ```r
 # Atualizar todos os pacotes e depois instalar
-update.packages(ask = FALSE, repos = 'https://cran.rstudio.org')
-install.packages('knitr', repos = c('https://xran.yihui.name', 'https://cran.rstudio.org'))
+update.packages(ask = FALSE, repos = 'https://cran.r-project.org')
+install.packages('knitr', repos = c('https://xran.yihui.name', 'https://cran.r-project.org'))
 ```
 
 Note que para compilar o pacote fonte com o `R CMD build` em um ambiente sem a versão anterior do **knitr**, é necessário pré-instalar o **knitr** do CRAN ou rodar `R CMD INSTALL` no repositório, de outras formas `R CMD build` falhar (o que provavelmente é um bug da base do R).
@@ -27,8 +27,8 @@ Note que para compilar o pacote fonte com o `R CMD build` em um ambiente sem a v
 ## Motivação
 
 Enquanto o Sweave e seus pacotes anexos como
-[**cacheSweave**](https://cran.rstudio.org/package=cacheSweave) e
-[**pgfSweave**](https://cran.rstudio.org/package=pgfSweave) são um motor 
+[**cacheSweave**](https://cran.r-project.org/package=cacheSweave) e
+[**pgfSweave**](https://cran.r-project.org/package=pgfSweave) são um motor 
 de programação literata em R razoavelmente bom, eu freqüentemente sinto
 minhas mãos estão atadas, por exemplo:
 
@@ -49,16 +49,16 @@ minhas mãos estão atadas, por exemplo:
   sem escrever expressões como `\Sexpr{round(x, 3)}` para *cada simples*
   `\Sexpr{}`;
 - Eu desejava que eu não tivesse de escrever `print()` em gráficos do
-  [**ggplot2**](https://cran.rstudio.org/package=ggplot2) e um simples
+  [**ggplot2**](https://cran.r-project.org/package=ggplot2) e um simples
   `qplot(x, y)` apenas me desse um gráfico plotado no Sweave;
 - Eu deseje que usuários nunca precisassem de instruções sobre `Sweave.sty`
   ou entrasse em problemas devido ao fato que *LaTeX não consegue encontrar*
   `Sweave.sty`;
 - Eu desejei que**cacheSweave** pudesse imprimir os resultados de um pedaço
   de código mesmo que ele estivesse em cache;
-- Eu desejei que [**brew**](https://cran.rstudio.org/package=brew) pudesse
+- Eu desejei que [**brew**](https://cran.r-project.org/package=brew) pudesse
   suportar gráficos;
-- Eu desejei que [**R2HTML**](https://cran.rstudio.org/package=R2HTML)
+- Eu desejei que [**R2HTML**](https://cran.r-project.org/package=R2HTML)
   pudesse suportar destaque de sintaxe (*syntax highlighting*) para código
   em R;
 - ...

@@ -15,12 +15,12 @@ Puede instalar la versión estable en [CRAN](https://cran.r-project.org/package=
 install.packages('knitr', dependencies = TRUE)
 ```
 
-También puede instalar la versión en desarrollo desde [XRAN](https://yihui.name/xran/), la cual provee construcciones diarias de **knitr**:
+También puede instalar la versión en desarrollo desde [XRAN](https://xran.yihui.name), la cual provee construcciones diarias de **knitr**:
 
 ```r
 # primero actualice todos los paquetes existentes
-update.packages(ask = FALSE, repos = 'http://cran.rstudio.org')
-install.packages('knitr', repos = c('https://yihui.name/xran', 'http://cran.rstudio.org'))
+update.packages(ask = FALSE, repos = 'http://cran.r-project.org')
+install.packages('knitr', repos = c('https://xran.yihui.name', 'http://cran.r-project.org'))
 ```
 
 O usar **devtools** para instalar la versión en desarrollo desde GitHub:
@@ -41,8 +41,8 @@ Mientras Sweave y paquetes adicionales relacionados como [**cacheSweave**](https
 - deseé que no tuviera que imprimir (`print()`) gráficos desde [**ggplot2**](https://cran.r-project.org/package=ggplot2) y que un simple `qplot(x, y)` me devolviera un gráfico en Sweave
 - deseeé que los usuarios no necesitasen instrucciones sobre `Sweave.sty` o se encontraran con problemas debido al hecho de que LaTeX no encuentra `Sweave.sty`
 - deseé que **cacheSweave** pudiera imprimir los resultados de un trozo de código incluso si este estaba almacenado en caché
-- deseé que [**brew**](https://cran.rstudio.org/package=brew) soportase gráficos
-- deseeé que [**R2HTML**](https://cran.rstudio.org/package=R2HTML) soportase el resaltado de sintaxis de código R
+- deseé que [**brew**](https://cran.r-project.org/package=brew) soportase gráficos
+- deseeé que [**R2HTML**](https://cran.r-project.org/package=R2HTML) soportase el resaltado de sintaxis de código R
 - ...
 
 [<img src="http://i.imgur.com/yYw46aF.jpg" align="right" alt="The book Dynamic Documents with R and knitr" />](http://amzn.com/1498716962)
