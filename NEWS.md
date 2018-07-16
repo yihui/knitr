@@ -32,7 +32,7 @@
 
 ## NEW FEATURES
 
-- `spin()` now supports code chunks of the form `-- ---- label ----` allowing external SQL and Haskell files to be spun (thanks, @ruaridhw, #1492)
+- `spin()` now supports code chunks of the form `-- ---- label ----` allowing external SQL and Haskell files to be spun (thanks, @ruaridhw, #1492).
 
 ## MAJOR CHANGES
 
