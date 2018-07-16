@@ -12,7 +12,3 @@ knitr-spin.html
 /inst/examples/*.tex
 /inst/examples/*.sty
 .*.Rnb.cached
-revdep
-docs/_site
-docs/patterns/*.Rmd
-docs/knit-all.R
