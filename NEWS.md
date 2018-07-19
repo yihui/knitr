@@ -4,6 +4,8 @@
 
 - Added a new object `cache_engines` for other language engines to handle caching. See `?knitr::cache_engines` for details (thanks, @tmastny, #1518).
 
+- Can now pass additional arguments to knitr vignette engines if needed (@jimhester).
+
 ## BUG FIXES
 
 - `valign` in `kable_latex()` does not put the float alignment to the correct location (thanks, @haozhu233, #1487, #1519).

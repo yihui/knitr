@@ -38,7 +38,7 @@ vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) 
   opts_chunk$set(error = FALSE)  # should not hide errors
   knit_hooks$set(purl = hook_purl)  # write out code while weaving
   (if (grepl('\\.[Rr]md$', file)) knit2html_v1 else if (grepl('\\.[Rr]rst$', file)) knit2pandoc else knit)(
-    file, encoding = encoding, quiet = quiet, envir = globalenv()
+    file, encoding = encoding, quiet = quiet, envir = globalenv(), ...
   )
 }
 
@@ -48,23 +48,24 @@ vtangle = function(file, ..., encoding = 'UTF-8', quiet = FALSE) {
     file.create(file)
     return(file)
   }
-  purl(file, encoding = encoding, quiet = quiet)
+  purl(file, encoding = encoding, quiet = quiet, ...)
 }
 
 vweave_docco_linear = vweave
 body(vweave_docco_linear)[5L] = expression(knit2html(
   file, encoding = encoding, quiet = quiet, envir = globalenv(),
-  template = system.file('misc', 'docco-template.html', package = 'knitr')
+  template = system.file('misc', 'docco-template.html', package = 'knitr'),
+  ...
 ))
 
 vweave_docco_classic = vweave
 body(vweave_docco_classic)[5L] = expression(rocco(
-  file, encoding = encoding, quiet = quiet, envir = globalenv()
+  file, encoding = encoding, quiet = quiet, envir = globalenv(), ...
 ))
 
 vweave_rmarkdown = vweave
 body(vweave_rmarkdown)[5L] = expression(rmarkdown::render(
-  file, encoding = encoding, quiet = quiet, envir = globalenv()
+  file, encoding = encoding, quiet = quiet, envir = globalenv(), ...
 ))
 
 # do not tangle R code from vignettes
