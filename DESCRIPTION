@@ -127,7 +127,8 @@ Suggests:
     httr,
     DBI (>= 0.4-1),
     showtext,
-    tibble
+    tibble,
+    styler
 License: GPL
 URL: https://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
