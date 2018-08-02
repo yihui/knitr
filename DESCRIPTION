@@ -99,7 +99,7 @@ Description: Provides a general-purpose tool for dynamic report generation in R
 Depends:
     R (>= 3.1.0)
 Imports:
-    evaluate (>= 0.10),
+    evaluate (>= 0.11),
     highr,
     markdown,
     stringr (>= 0.6),
@@ -127,6 +127,8 @@ Suggests:
     DBI (>= 0.4-1),
     showtext,
     tibble
+Remotes:
+    r-lib/evaluate#86
 License: GPL
 URL: https://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
