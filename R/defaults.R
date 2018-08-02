@@ -74,7 +74,7 @@ opts_chunk = new_defaults(list(
   fig.pos = '', out.width = NULL, out.height = NULL, out.extra = NULL, fig.retina = 1,
   external = TRUE, sanitize = FALSE, interval = 1, aniopts = 'controls,loop',
 
-  warning = TRUE, error = TRUE, message = TRUE,
+  warning = TRUE, error = TRUE, message = TRUE, package.startup.message = FALSE,
 
   render = NULL,
 

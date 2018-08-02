@@ -178,6 +178,7 @@ block_exec = function(options) {
       code, envir = env, new_device = FALSE,
       keep_warning = !isFALSE(options$warning),
       keep_message = !isFALSE(options$message),
+      keep_package_startup_message = !isFALSE(options$package.startup.message),
       stop_on_error = if (options$error && options$include) 0L else 2L,
       output_handler = knit_handlers(options$render, options)
     )
