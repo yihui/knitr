@@ -95,6 +95,9 @@ hook_ffmpeg = function(x, options, format = 'webm') {
 
   extra = if (format == 'webm') {
     paste('-b:v', options$ffmpeg.bitrate %n% '1M', '-crf 10')
+  } else if (format == 'mp4') {
+    # enables Safari support of .mp4
+    paste('-pix_fmt yuv420p')
   }
   ffmpeg.cmd = paste(
     'ffmpeg', '-y', '-r', 1 / options$interval, '-i', fig.fname, extra, mov.fname
