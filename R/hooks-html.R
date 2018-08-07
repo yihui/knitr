@@ -93,12 +93,11 @@ hook_ffmpeg = function(x, options, format = 'webm') {
   fig.fname = paste0(base, '%d', '.', x[2])
   mov.fname = paste0(sub('-$', '', base), '.', format)
 
-  extra = if (format == 'webm') {
-    paste('-b:v', options$ffmpeg.bitrate %n% '1M', '-crf 10')
-  } else if (format == 'mp4') {
-    # enables Safari support of .mp4
-    paste('-pix_fmt yuv420p')
-  }
+  extra = switch(
+    format,
+    webm = paste('-b:v', options$ffmpeg.bitrate %n% '1M', '-crf 10'),
+    mp4  = '-pix_fmt yuv420p'  # enables Safari support of .mp4
+  )
   ffmpeg.cmd = paste(
     'ffmpeg', '-y', '-r', 1 / options$interval, '-i', fig.fname, extra, mov.fname
   )
