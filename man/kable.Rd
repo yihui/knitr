@@ -75,6 +75,8 @@ kable(head(iris), format = "html", caption = "Title of the table")
 kable(mtcars, format = "latex", booktabs = TRUE)
 # use the longtable package
 kable(matrix(1000, ncol = 5), format = "latex", digits = 2, longtable = TRUE)
+# change LaTeX default table environment
+kable(head(iris), format = "latex", caption = "My table", table.envir = "table*")
 # add some table attributes
 kable(head(iris), format = "html", table.attr = "id=\"mytable\"")
 # reST output
