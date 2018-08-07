@@ -130,14 +130,13 @@ eng_interpreted = function(options) {
       stata = {
         logf = sub('[.]do$', '.log', f)
         on.exit(unlink(c(logf)), add = TRUE)
-        switch(
-          Sys.info()[['sysname']], 
-          Windows = paste('/q /e do', shQuote(normalizePath(f))),
-          Darwin = paste('-q <', shQuote(normalizePath(f)), ">", 
-            shQuote(sub('[.]do$', '.log', normalizePath(f)))),
-          Linux = paste('-q -e do', shQuote(normalizePath(f))), 
-          '-q -b do'
-         ) 
+        sprintf(switch(
+          Sys.info()[['sysname']],
+          Windows = '/q /e do %s',
+          Darwin = paste('-q < %s >', shQuote(xfun::normalize_path(logf))),
+          Linux = '-q -e do %s',
+          '-q -b do %s'
+         ), shQuote(normalizePath(f)))
       },
       f
     )
