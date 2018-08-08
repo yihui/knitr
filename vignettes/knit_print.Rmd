@@ -92,6 +92,15 @@ knit_print.classD = function(x, options, inline = FALSE, ...) {
 }
 ```
 
+Notice that when *using* your (or another) `knit_print()` method *inline* (if it supports that), you must not call `knit_print()` on the object, but just have it return.
+For example, your inline code should read `` `r
+c("foo")` `` and *not*  ~~`` `r
+knit_print(c("foo"))` ``~~.
+The latter inline code would yield the methods' result for *in-chunk* (not inline), because, as set up in the above, `knit_print()` methods default to `inline = FALSE`.
+This default gets overwritten depending on the context in which `knit_print()` is called (inline or in-chunk), *only* when `knit_print()` is called *by knitr* (not you) via the `render` option (see below).
+You can, of course, always manually set the inline option `` `r
+knit_print(c("foo"), inline = TRUE)` ``, but that's a lot of typing.
+
 ## A Low-level Explanation
 
 You can skip this section if you do not care about the low-level implementation details.
