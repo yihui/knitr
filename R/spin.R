@@ -83,11 +83,16 @@ spin = function(
       if (!length(block)) next
       if (length(opt <- grep(rc <- '^(#|--)+(\\+|-| ----+| @knitr)', block))) {
         block[opt] = paste0(p[1L], gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt]), p[2L])
+        opts <- c(opt, length(block)+1)
+        blocks <- c()
+        for (j in 1:(length(opts)-1))
+            blocks <- c(blocks, block[opts[j]:(opts[j+1]-1)], p[3L])
+        block <- blocks
       }
       if (!grepl(p1, block[1L])) {
-        block = c(paste0(p[1L], p[2L]), block)
+        block = c(paste0(p[1L], p[2L]), block, p[3L])
       }
-      c('', block, p[3L], '')
+      c('', block, '')
     }
   }
 
