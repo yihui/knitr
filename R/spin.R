@@ -78,6 +78,16 @@ spin = function(
       # normal text; just strip #'
       sub(doc, '', block)
     } else {
+      ## # R code; #+/- indicates chunk options
+      ## block = strip_white(block) # rm white lines in beginning and end
+      ## if (!length(block)) next
+      ## if (length(opt <- grep(rc <- '^(#|--)+(\\+|-| ----+| @knitr)', block))) {
+      ##   block[opt] = paste0(p[1L], gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt]), p[2L])
+      ## }
+      ## if (!grepl(p1, block[1L])) {
+      ##   block = c(paste0(p[1L], p[2L]), block)
+      ## }
+      ## c('', block, p[3L], '')
       # R code; #+/- indicates chunk options
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
@@ -85,8 +95,12 @@ spin = function(
         block[opt] = paste0(p[1L], gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt]), p[2L])
         opts <- c(opt, length(block)+1)
         blocks <- c()
-        for (j in 1:(length(opts)-1))
+        if (opts[1]!=1 & !grepl(p1, block[1L])) {
+            blocks <- c(paste0(p[1L], p[2L]), block[1:(opts[1]-1)], p[3L])
+        }
+        for (j in 1:(length(opts)-1)) {
             blocks <- c(blocks, block[opts[j]:(opts[j+1]-1)], p[3L])
+        }
         block <- blocks
       }
       if (!grepl(p1, block[1L])) {
