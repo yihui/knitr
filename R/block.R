@@ -161,7 +161,7 @@ block_exec = function(options) {
   # only evaluate certain lines
   if (is.numeric(ev <- options$eval)) {
     # group source code into syntactically complete expressions
-    if (!options$tidy) code = sapply(highr:::group_src(code), paste, collapse = '\n')
+    if (isFALSE(options$tidy)) code = sapply(highr:::group_src(code), paste, collapse = '\n')
     iss = seq_along(code)
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
