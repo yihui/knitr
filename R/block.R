@@ -145,18 +145,17 @@ block_exec = function(options) {
 
   code = options$code
   echo = options$echo  # tidy code if echo
-  if (!isFALSE(echo) && options$tidy && length(code)) {
-    if (options$tidy.method == "formatR") {
-      res = try_silent(do.call(
+  if (!isFALSE(echo) && !identical(options$tidy, FALSE) && length(code)) {
+    tidy.method = if (isTRUE(options$tidy)) 'formatR' else options$tidy
+    res = switch(
+      tidy.method,
+      formatR = try_silent(do.call(
         formatR::tidy_source, c(list(text = code, output = FALSE), options$tidy.opts)
-      ))
-    } else if (options$tidy.method == "styler") {
-      bare = try_silent(do.call(
+      )),
+      styler = try_silent(list(text.tidy = do.call(
         styler::style_text, c(list(text = code), options$tidy.opts)
-      ))
-      res = list(text.tidy = unclass(bare), text.mask = unclass(bare))
-    } else {
-      stop('Invalid \'tidy.metod\'. Must be either \'formatR\' or \'styler\'')
+      ))),
+      stop("Invalid 'tidy.metod'. Must be either 'formatR' or 'styler'")
     }
 
     if (!inherits(res, 'try-error')) {
