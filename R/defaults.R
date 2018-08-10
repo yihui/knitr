@@ -62,7 +62,7 @@ new_defaults = function(value = list()) {
 opts_chunk = new_defaults(list(
 
   eval = TRUE, echo = TRUE, results = 'markup',
-  tidy = FALSE, tidy.method = 'formatR', tidy.opts = NULL,
+  tidy = FALSE, tidy.opts = NULL,
   collapse = FALSE, prompt = FALSE, comment = '##', highlight = TRUE,
   strip.white = TRUE, size = 'normalsize', background = '#F7F7F7',
 
