@@ -147,21 +147,16 @@ block_exec = function(options) {
   echo = options$echo  # tidy code if echo
   if (!isFALSE(echo) && !identical(options$tidy, FALSE) && length(code)) {
     tidy.method = if (isTRUE(options$tidy)) 'formatR' else options$tidy
-    res = switch(
+    if (is.character(tidy.method)) tidy.method = switch(
       tidy.method,
-      formatR = try_silent(do.call(
-        formatR::tidy_source, c(list(text = code, output = FALSE), options$tidy.opts)
-      )),
-      styler = try_silent(list(text.tidy = do.call(
-        styler::style_text, c(list(text = code), options$tidy.opts)
-      ))),
-      stop("Invalid 'tidy.metod'. Must be either 'formatR' or 'styler'")
-    }
+      formatR = function(code, ...) formatR::tidy_source(text = code, output = FALSE, ...)$text.tidy,
+      styler = function(code, ...) unclass(styler::style_text(text = code, ...))
+    )
+    res = try_silent(do.call(tidy.method, c(list(code), options$tidy.opts)))
 
-    if (!inherits(res, 'try-error')) {
-      code = res$text.tidy
-    } else warning('failed to tidy R code in chunk <', options$label, '>\n',
-                   'reason: ', res)
+    if (!inherits(res, 'try-error')) code = res else warning(
+      "Failed to tidy R code in chunk '", options$label, "'. Reason:\n", res
+    )
   }
   # only evaluate certain lines
   if (is.numeric(ev <- options$eval)) {
