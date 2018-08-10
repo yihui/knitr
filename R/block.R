@@ -145,7 +145,7 @@ block_exec = function(options) {
 
   code = options$code
   echo = options$echo  # tidy code if echo
-  if (!isFALSE(echo) && !identical(options$tidy, FALSE) && length(code)) {
+  if (!isFALSE(echo) && !isFALSE(options$tidy) && length(code)) {
     tidy.method = if (isTRUE(options$tidy)) 'formatR' else options$tidy
     if (is.character(tidy.method)) tidy.method = switch(
       tidy.method,
