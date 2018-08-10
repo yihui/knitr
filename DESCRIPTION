@@ -61,6 +61,7 @@ Authors@R: c(
     person(c("Kevin", "K."), "Smith", role = "ctb"),
     person("Kirill", "Mueller", role = "ctb"),
     person("Kohske", "Takahashi", role = "ctb"),
+    person("Lorenz", "Walthert", role = "ctb"),
     person("Lucas", "Gallindo", role = "ctb"),
     person("Martin", "Modrák", role = "ctb"),
     person("Michael", "Chirico", role = "ctb"),
@@ -127,7 +128,8 @@ Suggests:
     httr,
     DBI (>= 0.4-1),
     showtext,
-    tibble
+    tibble,
+    styler
 License: GPL
 URL: https://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues

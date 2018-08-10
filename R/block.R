@@ -145,19 +145,23 @@ block_exec = function(options) {
 
   code = options$code
   echo = options$echo  # tidy code if echo
-  if (!isFALSE(echo) && options$tidy && length(code)) {
-    res = try_silent(do.call(
-      formatR::tidy_source, c(list(text = code, output = FALSE), options$tidy.opts)
-    ))
-    if (!inherits(res, 'try-error')) {
-      code = res$text.tidy
-    } else warning('failed to tidy R code in chunk <', options$label, '>\n',
-                   'reason: ', res)
+  if (!isFALSE(echo) && !isFALSE(options$tidy) && length(code)) {
+    tidy.method = if (isTRUE(options$tidy)) 'formatR' else options$tidy
+    if (is.character(tidy.method)) tidy.method = switch(
+      tidy.method,
+      formatR = function(code, ...) formatR::tidy_source(text = code, output = FALSE, ...)$text.tidy,
+      styler = function(code, ...) unclass(styler::style_text(text = code, ...))
+    )
+    res = try_silent(do.call(tidy.method, c(list(code), options$tidy.opts)))
+
+    if (!inherits(res, 'try-error')) code = res else warning(
+      "Failed to tidy R code in chunk '", options$label, "'. Reason:\n", res
+    )
   }
   # only evaluate certain lines
   if (is.numeric(ev <- options$eval)) {
     # group source code into syntactically complete expressions
-    if (!options$tidy) code = sapply(highr:::group_src(code), paste, collapse = '\n')
+    if (isFALSE(options$tidy)) code = sapply(highr:::group_src(code), paste, collapse = '\n')
     iss = seq_along(code)
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
