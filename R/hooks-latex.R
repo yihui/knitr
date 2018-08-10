@@ -160,7 +160,10 @@ hook_plot_tex = function(x, options) {
               sub(sprintf('%d$', fig.num), '', sans_ext(x)), 1L, fig.num)
     } else {
       if (nzchar(size)) size = sprintf('[%s]', size)
-      res = sprintf('\\includegraphics%s{%s} ', size, sans_ext(x))
+      res = sprintf(
+        '\\includegraphics%s{%s} ', size,
+        if (getOption('knitr.include_graphics.ext', FALSE)) x else sans_ext(x)
+      )
       lnk = options$fig.link
       if (is.null(lnk) || is.na(lnk)) res else sprintf('\\href{%s}{%s}', lnk, res)
     },
