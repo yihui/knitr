@@ -2,22 +2,29 @@ library(testit)
 
 res = mapply(
   auto_out_name,
-  c('abc.Rnw', 'abc.rnw', 'abc.rtex', 'abc.Rmd', 'abc.rhtm', 'abc.Rhtml', 'foo.abc.rhtml'),
+  c('abc.Rnw', 'abc.rnw', 'abc.rtex', 'abc.Rmd', 'abc.rhtm', 'abc.Rhtml', 'foo.abc.rhtml',
+    'abc.rtextile', 'abc.rrst', 'abc.radoc', 'abc.rasciidoc'),
+  all_patterns[c('rnw', 'rnw', 'tex', 'md', 'html', 'html', 'html', 'textile', 'rst',
+                 'asciidoc', 'asciidoc')],
+  tangle = FALSE,
   USE.NAMES = FALSE
 )
 assert(
   'auto_out_name() converts .Rfoo to .foo',
-  identical(res, c('abc.tex', 'abc.tex', 'abc.tex', 'abc.md', 'abc.htm', 'abc.html', 'foo.abc.html'))
+  identical(res, c('abc.tex', 'abc.tex', 'abc.tex', 'abc.md', 'abc.htm', 'abc.html',
+                   'foo.abc.html', 'abc.textile', 'abc.rst', 'abc.adoc', 'abc.asciidoc'))
 )
 
 res = mapply(
   auto_out_name,
-  c('abc.tex', '_knit_abc.tex', '_knit_abc.md', 'foo_knit_.html'),
+  c('abc.tex', '_knit_abc.tex', '_knit_abc.md', 'foo_knit_.html', 'foo.txt'),
+  c(all_patterns[c('tex', 'tex', 'md', 'html')], list(NULL)),
+  tangle = FALSE,
   USE.NAMES = FALSE
 )
 assert(
   'auto_out_name() converts .tex/.unknown to .txt, and removes _knit_',
-  identical(res, c('abc.txt', 'abc.tex', 'abc.md', 'foo.html')),
+  identical(res, c('abc.txt', 'abc.tex', 'abc.md', 'foo.html', 'foo-out.txt')),
   identical(auto_out_name('foo.bar'), 'foo.txt')
 )
 
