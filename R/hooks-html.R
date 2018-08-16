@@ -7,7 +7,7 @@ hook_plot_html = function(x, options) {
 
   if (options$fig.show == 'animate') {
     # Don't print out intermediate plots if we're animating
-    return(if (fig.cur < fig.num) '' else opts_knit$get('animation.fun')(x, options))
+    return(if (fig.cur < fig.num) '' else hook_animation(options)(x, options))
   }
   ai = options$fig.show == 'asis'
   plot1 = ai || fig.cur <= 1L; plot2 = ai || fig.cur == fig.num
@@ -20,6 +20,17 @@ hook_plot_html = function(x, options) {
       paste(c(options$out.extra, 'class="plot"'), collapse = ' ')
     ), d2, '\n'
   )
+}
+
+hook_animation = function(options) {
+  if (is.function(fun <- options$animation.hook)) return(fun)
+  if (is.character(fun)) return(switch(
+    fun, ffmpeg = hook_ffmpeg_html, gifski = hook_gifski,
+    scianimator = hook_scianimator, r2swf = hook_r2swf,
+    stop2('Invalid value for the chunk option animation.hook: ', fun)
+  ))
+  if (is.function(fun <- opts_knit$get('animation.fun'))) return(fun)
+  hook_ffmpeg_html
 }
 
 .img.attr = function(w, h, extra) {
@@ -72,8 +83,9 @@ hook_plot_html = function(x, options) {
 #' Hooks to create animations in HTML output
 #'
 #' \code{hook_ffmpeg_html()} uses FFmpeg to convert images to a video;
-#' \code{hook_scianimator()} uses the JavaScript library SciAnimator to create
-#' animations; \code{hook_r2swf()} uses the \pkg{R2SWF} package.
+#' \code{hook_gifski()} uses the \pkg{gifski} to convert images to a GIF
+#' animation; \code{hook_scianimator()} uses the JavaScript library SciAnimator
+#' to create animations; \code{hook_r2swf()} uses the \pkg{R2SWF} package.
 #'
 #' These hooks are mainly for the package option \code{animation.fun}, e.g. you
 #' can set \code{opts_knit$set(animation.fun = hook_scianimator)}.
@@ -128,6 +140,31 @@ hook_ffmpeg = function(x, options, format = 'webm') {
     paste0(opts_knit$get('base.url'), mov.fname), cap
   )
 }
+
+# use gifski to create gif's
+#' @rdname hook_animation
+#' @export
+hook_gifski = function(x, options) {
+  x = c(sans_ext(x), file_ext(x))
+  if (tolower(x[2]) != 'png') stop(
+    "To use hook_gifski(), the code chunk must generate 'png' images instead of '", x[2], "'."
+  )
+  fig.num = options$fig.num
+  base = sub(paste0(fig.num, '$'), '', x[1])
+  frames = paste0(base, format(seq_len(fig.num), trim = TRUE), '.', x[2])
+  gif = paste0(base, '.gif')
+  dpi = options$dpi
+  gifski::gifski(
+    frames, gif, width = options$fig.width * dpi, height = options$fig.height * dpi,
+    delay = options$interval, loop = isTRUE(grepl('\\bloop\\b', options$aniopts)),
+    progress = opts_knit$get('progress')
+  )
+  unlink(frames)
+  # pretend it is a single image (gif) generated from the code chunk
+  options$fig.show = 'asis'; options$fig.cur = 1; options$fig.num = 1
+  knit_hooks$get('plot')(gif, options)
+}
+
 
 # use SciAnimator to create animations
 #' @rdname hook_animation

@@ -4,6 +4,8 @@
 
 - Added **styler** support: the chunk option `tidy = 'styler'`, the code will be reformatted using the **styler** package. The chunk option `tidy = TRUE` means `tidy = 'formatR'` and still uses `formatR::tidy_source()` to reformat the code. The chunk option `tidy` can also take a custom function to reformat the code. See the documentation for details: https://yihui.name/knitr/options/ (thanks, @lorenzwalthert, #1581).
 
+- Added a new hook function `hook_gifski()` to create a GIF animation from plots in a code chunk. To enable this hook, you may set chunk options `fig.show='animate'` and `animation.hook='gifski'`.
+
 - Added a new object `cache_engines` for other language engines to handle caching. See `?knitr::cache_engines` for details (thanks, @tmastny, #1518).
 
 - Can now pass additional arguments to knitr vignette engines if needed (thanks, @jimhester, #1577).

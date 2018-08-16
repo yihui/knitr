@@ -124,6 +124,7 @@ Suggests:
     JuliaCall (>= 0.11.1),
     png,
     jpeg,
+    gifski,
     xml2 (>= 1.2.0),
     httr,
     DBI (>= 0.4-1),
