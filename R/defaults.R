@@ -108,6 +108,7 @@ opts_chunk_attr = local({
   opts$external = opts$sanitize = NULL  # hide these two rare options
   opts$fig.process = 'function'
   opts$fig.asp = 'numeric'
+  opts$fig.dim = 'list'
   opts$R.options = 'list'
   opts$cache.comments = 'logical'
   opts
