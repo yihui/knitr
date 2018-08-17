@@ -243,6 +243,8 @@ fix_options = function(options) {
 
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
+  # if the animation hook has been set, fig.show must be 'animate'
+  if (!is.null(options$animation.hook)) options$fig.show = 'animate'
   # the default device NULL is not valid; use pdf is not set
   if (is.null(options$dev)) options$dev = 'pdf'
   # FALSE means hide for options$results
