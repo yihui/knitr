@@ -36,6 +36,7 @@ addons:
     - scala
     - qpdf
     - texinfo
+    - cargo
 
 repos:
   XRAN: https://xran.yihui.name
