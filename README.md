@@ -75,7 +75,7 @@ The package **knitr** was designed to give the user access to every part of
 the process of dealing with a literate programming document, so there is no
 need to hack at any core components if you want more freedom. I have gone
 through the source code of **pgfSweave** and **cacheSweave** for a couple of
-times, and I often feel uncomfortable with the large amount of code copied
+times and I often feel uncomfortable with a large amount of code copied
 from official R, especially when R has a new version released (I will begin
 to worry if the add-on packages are still up-to-date with the official
 Sweave).
