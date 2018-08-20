@@ -1,7 +1,7 @@
 #' Use stringr functions internally
 #' @description Originally written using \code{stringr} functions throughout,
-#' \code{knitr} is now designed to work without \code{stringr}. Nonetheless,
-#' \code{stringr} is used by default. To force \code{knitr} to not use \code{stringr},
+#' \code{knitr} is now designed to work without \code{stringr}.
+#' \code{stringr} is still used by default. To force \code{knitr} to not use \code{stringr},
 #' you can set an environment variable:
 #'
 #' \preformatted{Sys.setenv("KNITR_USE_STRINGR" = "FALSE")}
@@ -15,11 +15,11 @@
 #' option is used, with a default value of \code{TRUE}.
 #'
 #' Our intention is to eventually switch the default, so \code{knitr} can be used
-#' without installing \code{stringr}. In the meantime, we provide this options
-#' so authors can test their scripts with and without stringr before we make
+#' without installing \code{stringr}. In the meantime, we provide this option
+#' so authors can test their scripts with and without \code{stringr} before we make
 #' a potentially breaking change.
 #'
-#' The function \code{use_stringr} returns the current use of \code{stringr}.
+#' The function \code{use_stringr()} returns the current use of \code{stringr}.
 #'
 #' @return \code{TRUE} or \code{FALSE}: whether or not the original \code{stringr}
 #' functions will be used.
@@ -90,11 +90,6 @@ stringr__str_sub <- function (string, start = 1L, end = -1L) {
 }
 
 stringr__str_sub_assign <- function (string, start = 1L, end = -1L, omit_na = FALSE, value) {
-  # if (requireNamespace("stringr", quietly = TRUE)) {
-  #   stringr::str_sub(string, start, end) <- value
-  #   return(string)
-  # }
-
   out <- string
   from <- start
   to <- end
@@ -121,13 +116,17 @@ stringr__str_sub_assign <- function (string, start = 1L, end = -1L, omit_na = FA
   }
 
   # stringr::str_sub<- differs from substr()<-
-  # when the nchar(replacement) of the substr
+  # when the nchar(replacement) of the replacement
+  # is not length-1
 
-  # y <- "abc"
+  # a <- b <- "abc"
   # z <- "xyz"
-  # stringr::str_sub(y, 2, 2) <- z
-  # y
-  # => "axyzc"
+  # stringr::str_sub(a, 2, 2) <- z
+  # a
+  # ==> "axyzc"
+  # substr(b, 2, 2) <- z
+  # b
+  # ==> "axc"
 
   out_split <- strsplit(out, split = "")[[1L]]
   out <- paste00(c(if (FROM > 1) paste00(out_split[seq_len(FROM - 1L)]),
@@ -359,10 +358,10 @@ stringr__str_match <- function(string, pattern) {
     stringr::str_match(string, pattern)
   } else {
     # str_match is first match only
-    # perl = TRUE not only satisfies the negative
-    # lookbehinds, but also returns a different value
-    # to perl = FALSE, which the rest of the function
-    # relies on.
+    # Using perl = TRUE is necessary to satisfy negative
+    # lookbehinds, and rest of the function
+    # relies on the structure of regexpr, which
+    # is different than when perl = FALSE.
     R <- regexpr(pattern, string, perl = TRUE)
     ncols <-
       if (is.null(attr(R, "capture.length"))) {

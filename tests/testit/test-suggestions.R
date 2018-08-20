@@ -1,6 +1,6 @@
 library(testit)
 
-# Test that out disposal of stringr
+# Test that our disposal of stringr
 # was safe
 
 if (requireNamespace("stringr", quietly = TRUE)) {
