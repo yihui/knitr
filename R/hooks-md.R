@@ -4,6 +4,7 @@ hook_plot_md = function(x, options) {
   # if not using R Markdown v2 or output is HTML, just return v1 output
   if (is.null(to <- pandoc_to()) || is_html_output(to))
     return(hook_plot_md_base(x, options))
+  office_output = to %in% c('docx', 'pptx', 'rtf', 'odt')
   if (!is.null(options$out.width) || !is.null(options$out.height) ||
       !is.null(options$out.extra) || options$fig.align != 'default' ||
       !is.null(options$fig.subcap)) {
@@ -12,15 +13,15 @@ hook_plot_md = function(x, options) {
       if (is.null(options$fig.scap)) options$fig.scap = NA
       return(hook_plot_tex(x, options))
     }
-    if (to == 'docx') {
+    if (office_output) {
       warning('Chunk options fig.align, out.width, out.height, out.extra ',
-              'are not supported for Word output')
+              'are not supported for ', to, ' output')
       options$out.width = options$out.height = options$out.extra = NULL
       options$fig.align = 'default'
     }
   }
-  if (options$fig.show == 'hold' && to == 'docx') {
-    warning('The chunk option fig.show="hold" is not supported for Word output')
+  if (options$fig.show == 'hold' && office_output) {
+    warning('The chunk option fig.show="hold" is not supported for ', to, ' output')
     options$fig.show = 'asis'
   }
   hook_plot_md_base(x, options)
