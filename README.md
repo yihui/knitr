@@ -37,8 +37,8 @@ Note that if you want to build the source package via `R CMD INSTALL` without a 
 While Sweave and related add-on packages like
 [**cacheSweave**](https://cran.r-project.org/package=cacheSweave) and
 [**pgfSweave**](https://cran.r-project.org/package=pgfSweave) are fairly good
-engines for literate programming in R, but I often feel my hands are tied,
-for example:
+engines for literate programming in R, I often feel my hands are tied.
+For example:
 
 - I stared at the source code of Sweave and wished for hundreds of times
   that *if only I could easily insert* `[width=.8\textwidth]` *between*
