@@ -131,7 +131,7 @@ Suggests:
     showtext,
     tibble,
     styler
-License: GPL
+License: GPL (>= 3)
 URL: https://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
 Encoding: UTF-8
