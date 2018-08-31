@@ -249,6 +249,15 @@ eng_julia = function(options) {
 ## Compiles Stan model in the code chunk, creates a stanmodel object,
 ## and assigns it to a variable with the name given in engine.opts$x.
 eng_stan = function(options) {
+
+  # call rstan's engine if it exists
+  if (requireNamespace("rstan", quietly = TRUE)) {
+    rstan = asNamespace("rstan")
+    if (!is.null(rstan$eng_stan))
+      return(rstan$eng_stan(options))
+  }
+
+  # otherwise, delegate to builtin implementation
   code = paste(options$code, collapse = '\n')
   opts = options$engine.opts
   ## name of the modelfit object returned by stan_model
