@@ -4,10 +4,11 @@
 \alias{spin}
 \title{Spin goat's hair into wool}
 \usage{
-spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(), 
-    format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), doc = "^#+'[ ]?", 
-    inline = "^[{][{](.+)[}][}][ ]*$", comment = c("^[# ]*/[*]", "^.*[*]/ *$"), 
-    precious = !knit && is.null(text))
+spin(hair, knit = TRUE, report = TRUE, text = NULL,
+  envir = parent.frame(), format = c("Rmd", "Rnw", "Rhtml", "Rtex",
+  "Rrst"), doc = "^#+'[ ]?", inline = "^[{][{](.+)[}][}][ ]*$",
+  comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit &&
+  is.null(text))
 }
 \arguments{
 \item{hair}{Path to the R script.}
@@ -31,7 +32,7 @@ if you want to use \code{##} to denote documentation, you can use
 \code{'^##\\\\s*'}.}
 
 \item{inline}{A regular expression to identify inline R expressions; by
-default, code of the form \code{((code))} on its own line is treated as an
+default, code of the form \code{\{\{code\}\}} on its own line is treated as an
 inline expression.}
 
 \item{comment}{A pair of regular expressions for the start and end delimiters

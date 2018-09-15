@@ -22,7 +22,7 @@
 #'   if you want to use \code{##} to denote documentation, you can use
 #'   \code{'^##\\\\s*'}.
 #' @param inline A regular expression to identify inline R expressions; by
-#'   default, code of the form \code{((code))} on its own line is treated as an
+#'   default, code of the form \code{\{\{code\}\}} on its own line is treated as an
 #'   inline expression.
 #' @param comment A pair of regular expressions for the start and end delimiters
 #'   of comments; the lines between a start and an end delimiter will be
@@ -65,7 +65,7 @@ spin = function(
   if (length(c1)) x = x[-unique(unlist(mapply(seq, c1, c2, SIMPLIFY = FALSE)))]
 
   p = .fmt.pat[[tolower(format)]]
-  # turn ((expr)) into inline expressions, e.g. `r expr` or \Sexpr{expr}
+  # turn {{expr}} into inline expressions, e.g. `r expr` or \Sexpr{expr}
   if (any(i <- grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
 
   r = rle(grepl_doc_comment(doc, x) | i)  # inline expressions are treated as doc instead of code
