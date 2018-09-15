@@ -68,7 +68,7 @@ spin = function(
   # turn ((expr)) into inline expressions, e.g. `r expr` or \Sexpr{expr}
   if (any(i <- grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
 
-  r = rle(grepl(doc, x) | i)  # inline expressions are treated as doc instead of code
+  r = rle(grepl_doc_comment(doc, x) | i)  # inline expressions are treated as doc instead of code
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
   p1 = gsub('\\{', '\\\\{', paste0('^', p[1L], '.*', p[2L], '$'))
 
@@ -118,6 +118,12 @@ spin = function(
 
   if (!precious && !is.null(outsrc)) file.remove(outsrc)
   invisible(out)
+}
+
+grepl_doc_comment = function(doc, x) {
+  d = getParseData(parse(text = x))
+  doc_lines = d[d$col1 == 1 & d$token == "COMMENT" & grepl(doc, d$text), ]$line1
+  seq_along(x) %in% doc_lines
 }
 
 .fmt.pat = list(
