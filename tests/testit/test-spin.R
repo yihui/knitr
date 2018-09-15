@@ -23,5 +23,7 @@ assert(
   identical(spin_w_tempfile("#' test", "1 * 1", "#' test"),
             c("test", "", "```{r }", "1 * 1", "```", "", "test")),
   identical(spin_w_tempfile("code <- \"", "#' test\""),
-            c("", "```{r }", "code <- \"", "#' test\"", "```", ""))
+            c("", "```{r }", "code <- \"", "#' test\"", "```", "")),
+  identical(spin_w_tempfile("code <- \"", "{{ 1 + 1 }}", "\""),
+            c("", "```{r }", "code <- \"", "{{ 1 + 1 }}", "\"", "```", ""))
 )
