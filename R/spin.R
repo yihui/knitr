@@ -68,7 +68,12 @@ spin = function(
   parsed_data = getParseData(parse(text = x))
   is_complete = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, ]$line1)
 
-  p = .fmt.pat[[tolower(format)]]
+  if (identical(tolower(format), "rmd")) {
+    # .Rmd needs treated specially
+    p = .fmt.rmd(x)
+  } else {
+    p = .fmt.pat[[tolower(format)]]
+  }
   # turn {{expr}} into inline expressions, e.g. `r expr` or \Sexpr{expr}
   if (any(i <- is_complete & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
 
@@ -125,12 +130,28 @@ spin = function(
 }
 
 .fmt.pat = list(
-  rmd = c('```{r ', '}', '```', '`r \\1`'),
   rnw = c('<<', '>>=', '@', '\\\\Sexpr{\\1}'),
   rhtml = c('<!--begin.rcode ', '', 'end.rcode-->', '<!--rinline \\1 -->'),
   rtex = c('% begin.rcode ', '', '% end.rcode', '\\\\rinline{\\1}'),
   rrst = c('.. {r ', '}', '.. ..', ':r:`\\1`')
 )
+
+.fmt.rmd = function(x) {
+  n_backticks = nchar(unlist(stringr::str_extract_all(x, '`+')))
+  if (length(n_backticks) > 0) {
+    inline_backticks = stringr::str_dup('`', max(n_backticks + 1L))
+    block_backticks = stringr::str_dup('`', max(n_backticks + 1L, 3L))
+  } else {
+    inlike_backticks = '`'
+    block_backticks = '```'
+  }
+  c(
+    paste0(block_backticks, '{r '),
+    '}',
+    block_backticks,
+    paste0(inline_backticks, 'r \\1 ', inline_backticks)
+  )
+}
 
 #' Spin a child R script
 #'
