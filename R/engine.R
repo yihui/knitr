@@ -308,7 +308,7 @@ eng_tikz = function(options) {
     # convert to the desired output-format, calling `convert`
     conv = 0
     if (ext != 'pdf') {
-      conv = system2(options$engine.opts$convert %n% 'convert', c(
+      conv = system2(options$engine.opts[['convert']] %n% 'convert', c(
         options$engine.opts$convert.opts, sprintf('%s %s', fig, fig2)
       ))
     }
