@@ -106,7 +106,7 @@ kable = function(
   # create a label for bookdown if applicable
   if (!is.null(caption) && !is.na(caption)) caption = paste0(
     create_label('tab:', opts_current$get('label'), latex = (format == 'latex')),
-                 caption
+    ifelse(escape && format == 'latex', escape_latex(caption), caption)
   )
   if (inherits(x, 'list')) {
     # if the output is for Pandoc and we want multiple tabular in one table, we

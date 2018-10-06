@@ -53,9 +53,12 @@ x & y\\\\
 assert(
   'kable() escapes LaTeX special characters by default',
   identical(
-    kable2(data.frame(x = c("10%", "5%"), col_name = c("3_8", "40_6")), 'latex'),
-    '
-\\begin{tabular}{l|l}
+    kable2(data.frame(x = c("10%", "5%"), col_name = c("3_8", "40_6")), 'latex', caption = "Test % and _"),
+    '\\begin{table}
+
+\\caption{\\label{tab:}Test \\% and \\_}
+\\centering
+\\begin{tabular}[t]{l|l}
 \\hline
 x & col\\_name\\\\
 \\hline
@@ -63,16 +66,20 @@ x & col\\_name\\\\
 \\hline
 5\\% & 40\\_6\\\\
 \\hline
-\\end{tabular}'
+\\end{tabular}
+\\end{table}'
   )
 )
 
 assert(
   'kable() doesn\'t escape LaTeX special characters when escape = FALSE',
   identical(
-    kable2(data.frame(x = c("10%", "5%"), col_name = c("3_8", "40_6")), 'latex', escape = FALSE),
-    '
-\\begin{tabular}{l|l}
+    kable2(data.frame(x = c("10%", "5%"), col_name = c("3_8", "40_6")), 'latex', caption = "Test % and _", escape = FALSE),
+    '\\begin{table}
+
+\\caption{\\label{tab:}Test % and _}
+\\centering
+\\begin{tabular}[t]{l|l}
 \\hline
 x & col_name\\\\
 \\hline
@@ -80,7 +87,8 @@ x & col_name\\\\
 \\hline
 5% & 40_6\\\\
 \\hline
-\\end{tabular}'
+\\end{tabular}
+\\end{table}'
   )
 )
 
