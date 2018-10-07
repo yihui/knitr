@@ -382,11 +382,15 @@ eng_cat = function(options) {
     # do not write to stdout like the default behavior of cat()
     if (!identical(file, '')) cat(..., file = file)
   }
-  do.call(cat2, c(list(options$code, sep = '\n'), options$engine.opts))
+  if (options$eval == TRUE)
+    do.call(cat2, c(list(options$code, sep = '\n'), options$engine.opts))
   if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
-    return('')
+    lang = NULL
   options$engine = lang
-  engine_output(options, options$code, NULL)
+  if (options$echo == TRUE || ! is.null(lang))
+    engine_output(options, options$code, NULL)
+  else
+    return(NULL)
 }
 
 ## output the code without processing it
