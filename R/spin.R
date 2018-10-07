@@ -64,15 +64,16 @@ spin = function(
   # remove comments
   if (length(c1)) x = x[-unique(unlist(mapply(seq, c1, c2, SIMPLIFY = FALSE)))]
 
-  # remove multiline string literals and symbols
+  # remove multiline string literals and symbols (note that this ignores lines with spaces at their
+  # beginnings, assuming doc and inline regex don't match these lines anyway)
   parsed_data = getParseData(parse(text = x))
-  is_complete = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, ]$line1)
+  is_matchable = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, ]$line1)
 
   p = .fmt.pat[[tolower(format)]]
   # turn {{expr}} into inline expressions, e.g. `r expr` or \Sexpr{expr}
-  if (any(i <- is_complete & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
+  if (any(i <- is_matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
 
-  r = rle((is_complete & grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
+  r = rle((is_matchable & grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
   p1 = gsub('\\{', '\\\\{', paste0('^', p[1L], '.*', p[2L], '$'))
 
