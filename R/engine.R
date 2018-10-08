@@ -384,6 +384,7 @@ eng_cat = function(options) {
   }
   if (options$eval == TRUE)
     do.call(cat2, c(list(options$code, sep = '\n'), options$engine.opts))
+
   if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
     lang = NULL
   options$engine = lang
