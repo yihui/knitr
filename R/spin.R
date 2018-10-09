@@ -66,8 +66,8 @@ spin = function(
 
   # remove multiline string literals and symbols (note that this ignores lines with spaces at their
   # beginnings, assuming doc and inline regex don't match these lines anyway)
-  parsed_data = getParseData(parse(text = x))
-  is_matchable = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, ]$line1)
+  parsed_data = getParseData(parse(text = x, keep.source = TRUE))
+  is_matchable = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, 'line1'])
 
   if (identical(tolower(format), "rmd")) {
     # .Rmd needs treated specially
