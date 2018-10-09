@@ -69,12 +69,9 @@ spin = function(
   parsed_data = getParseData(parse(text = x, keep.source = TRUE))
   is_matchable = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, 'line1'])
 
-  if (identical(tolower(format), "rmd")) {
-    # .Rmd needs treated specially
-    p = .fmt.rmd(x)
-  } else {
-    p = .fmt.pat[[tolower(format)]]
-  }
+  # .Rmd needs to be treated specially
+  p = if (identical(tolower(format), 'rmd')) .fmt.rmd(x) else .fmt.pat[[tolower(format)]]
+
   # turn {{expr}} into inline expressions, e.g. `r expr` or \Sexpr{expr}
   if (any(i <- is_matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
 
@@ -137,21 +134,19 @@ spin = function(
   rrst = c('.. {r ', '}', '.. ..', ':r:`\\1`')
 )
 
+# determine how many backticks we need to wrap code blocks and inline code
 .fmt.rmd = function(x) {
-  n_backticks = nchar(unlist(stringr::str_extract_all(x, '`+')))
-  if (length(n_backticks) > 0) {
-    inline_backticks = stringr::str_dup('`', max(n_backticks + 1L))
-    block_backticks = stringr::str_dup('`', max(n_backticks + 1L, 3L))
+  x = paste(x, collapse = '\n')
+  l = attr(gregexpr('`+', x)[[1]], 'match.length')
+  l = max(l, 0)
+  if (length(l) > 0) {
+    i = highr:::spaces(l + 1, '`')
+    b = highr:::spaces(max(l + 1, 3), '`')
   } else {
-    inline_backticks = '`'
-    block_backticks = '```'
+    i = '`'
+    b = '```'
   }
-  c(
-    paste0(block_backticks, '{r '),
-    '}',
-    block_backticks,
-    paste0(inline_backticks, 'r \\1 ', inline_backticks)
-  )
+  c(paste0(b, '{r '), '}', b, paste0(i, 'r \\1 ', i))
 }
 
 #' Spin a child R script
