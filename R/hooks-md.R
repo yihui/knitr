@@ -9,7 +9,7 @@ hook_plot_md = function(x, options) {
   office_output = to %in% c('docx', 'pptx', 'rtf', 'odt')
   if (!is.null(options$out.width) || !is.null(options$out.height) ||
       !is.null(options$out.extra) || options$fig.align != 'default' ||
-      !is.null(options$fig.subcap)) {
+      !is.null(options$fig.subcap) || options$fig.env != 'figure') {
     if (is_latex_output()) {
       # Pandoc < 1.13 does not support \caption[]{} so suppress short caption
       if (is.null(options$fig.scap)) options$fig.scap = NA
