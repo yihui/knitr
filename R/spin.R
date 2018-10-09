@@ -143,7 +143,7 @@ spin = function(
     inline_backticks = stringr::str_dup('`', max(n_backticks + 1L))
     block_backticks = stringr::str_dup('`', max(n_backticks + 1L, 3L))
   } else {
-    inlike_backticks = '`'
+    inline_backticks = '`'
     block_backticks = '```'
   }
   c(
