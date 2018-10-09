@@ -28,6 +28,8 @@
 
 - The chunk option `fig.env` does not work for PDF output from R Markdown (thanks, @RSchwinn, #1620).
 
+- `spin()` fails to generate a proper R Markdown document when the R script contains roxygen comments as string literals or more than three backticks (thanks, @yutannihilation, #1605, #1611).
+
 ## MINOR CHANGES
 
 - `spin()` will close each individual code chunk if multiple code chunks appear consecutively (previously it only closes the last code chunk in this case) (thanks, @avehtari, #1590).
