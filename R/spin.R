@@ -8,13 +8,13 @@
 #'
 #' Obviously the goat's hair is the original R script, and the wool is the
 #' literate programming document (ready to be knitted).
-#' @param hair Path to the R script.
+#' @param hair Path to the R script. The script must be encoded in UTF-8 if it
+#'   contains multibyte characters.
 #' @param knit Logical; whether to compile the document after conversion.
-#' @param report Logical; whether to generate a report for \file{Rmd}, \file{Rnw}
-#'   and \file{Rtex} output. Ignored if \code{knit = FALSE}.
-#' @param text A character vector of code, as an alternative way to
-#'   provide the R source. If \code{text} is not \code{NULL}, \code{hair} will
-#'   be ignored.
+#' @param report Logical; whether to generate a report for \file{Rmd},
+#'   \file{Rnw} and \file{Rtex} output. Ignored if \code{knit = FALSE}.
+#' @param text A character vector of code, as an alternative way to provide the
+#'   R source. If \code{text} is not \code{NULL}, \code{hair} will be ignored.
 #' @param envir Environment for \code{\link{knit}()} to evaluate the code.
 #' @param format Character; the output format. The default is R Markdown.
 #' @param doc A regular expression to identify the documentation lines; by
@@ -22,12 +22,12 @@
 #'   if you want to use \code{##} to denote documentation, you can use
 #'   \code{'^##\\\\s*'}.
 #' @param inline A regular expression to identify inline R expressions; by
-#'   default, code of the form \code{\{\{code\}\}} on its own line is treated as an
-#'   inline expression.
+#'   default, code of the form \code{\{\{code\}\}} on its own line is treated as
+#'   an inline expression.
 #' @param comment A pair of regular expressions for the start and end delimiters
 #'   of comments; the lines between a start and an end delimiter will be
-#'   ignored. By default, the delimiters are \verb{/*} at the beginning of a line,
-#'    and \verb{*/} at the end, following the convention of C comments.
+#'   ignored. By default, the delimiters are \verb{/*} at the beginning of a
+#'   line, and \verb{*/} at the end, following the convention of C comments.
 #' @param precious logical: whether intermediate files (e.g., \code{.Rmd} files
 #'   when \code{format} is \code{"Rmd"}) should be preserved. The default is
 #'   \code{FALSE} if \code{knit} is \code{TRUE} and the input is a file.
@@ -56,7 +56,7 @@ spin = function(
 ) {
 
   format = match.arg(format)
-  x = if (nosrc <- is.null(text)) readLines(hair, warn = FALSE) else split_lines(text)
+  x = if (nosrc <- is.null(text)) xfun::read_utf8(hair) else split_lines(text)
   stopifnot(length(comment) == 2L)
   c1 = grep(comment[1], x); c2 = grep(comment[2], x)
   if (length(c1) != length(c2))

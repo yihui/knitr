@@ -30,6 +30,10 @@
 
 - `spin()` fails to generate a proper R Markdown document when the R script contains roxygen comments as string literals or more than three backticks (thanks, @yutannihilation, #1605, #1611).
 
+## MAJOR CHANGES
+
+- For R scripts passed to `spin()`, only the UTF-8 encoding is accepted (previously it assumes the native encoding of the system).
+
 ## MINOR CHANGES
 
 - `spin()` will close each individual code chunk if multiple code chunks appear consecutively (previously it only closes the last code chunk in this case) (thanks, @avehtari, #1590).
