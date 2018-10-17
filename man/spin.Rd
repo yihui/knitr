@@ -4,23 +4,22 @@
 \alias{spin}
 \title{Spin goat's hair into wool}
 \usage{
-spin(hair, knit = TRUE, report = TRUE, text = NULL,
-  envir = parent.frame(), format = c("Rmd", "Rnw", "Rhtml", "Rtex",
-  "Rrst"), doc = "^#+'[ ]?", inline = "^[{][{](.+)[}][}][ ]*$",
-  comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit &&
-  is.null(text))
+spin(hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(), 
+    format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"), doc = "^#+'[ ]?", 
+    inline = "^[{][{](.+)[}][}][ ]*$", comment = c("^[# ]*/[*]", "^.*[*]/ *$"), 
+    precious = !knit && is.null(text))
 }
 \arguments{
-\item{hair}{Path to the R script.}
+\item{hair}{Path to the R script. The script must be encoded in UTF-8 if it
+contains multibyte characters.}
 
 \item{knit}{Logical; whether to compile the document after conversion.}
 
-\item{report}{Logical; whether to generate a report for \file{Rmd}, \file{Rnw}
-and \file{Rtex} output. Ignored if \code{knit = FALSE}.}
+\item{report}{Logical; whether to generate a report for \file{Rmd},
+\file{Rnw} and \file{Rtex} output. Ignored if \code{knit = FALSE}.}
 
-\item{text}{A character vector of code, as an alternative way to
-provide the R source. If \code{text} is not \code{NULL}, \code{hair} will
-be ignored.}
+\item{text}{A character vector of code, as an alternative way to provide the
+R source. If \code{text} is not \code{NULL}, \code{hair} will be ignored.}
 
 \item{envir}{Environment for \code{\link{knit}()} to evaluate the code.}
 
@@ -32,13 +31,13 @@ if you want to use \code{##} to denote documentation, you can use
 \code{'^##\\\\s*'}.}
 
 \item{inline}{A regular expression to identify inline R expressions; by
-default, code of the form \code{\{\{code\}\}} on its own line is treated as an
-inline expression.}
+default, code of the form \code{\{\{code\}\}} on its own line is treated as
+an inline expression.}
 
 \item{comment}{A pair of regular expressions for the start and end delimiters
 of comments; the lines between a start and an end delimiter will be
-ignored. By default, the delimiters are \verb{/*} at the beginning of a line,
- and \verb{*/} at the end, following the convention of C comments.}
+ignored. By default, the delimiters are \verb{/*} at the beginning of a
+line, and \verb{*/} at the end, following the convention of C comments.}
 
 \item{precious}{logical: whether intermediate files (e.g., \code{.Rmd} files
 when \code{format} is \code{"Rmd"}) should be preserved. The default is
