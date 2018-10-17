@@ -110,18 +110,18 @@ spin = function(
   }
   if (nosrc) {
     outsrc = with_ext(hair, format)
-    cat(txt, file = outsrc, sep = '\n')
+    xfun::write_utf8(txt, outsrc)
     txt = NULL
   } else outsrc = NULL
   if (!knit) return(txt %n% outsrc)
 
   out = if (report) {
     if (format == 'Rmd') {
-      knit2html(outsrc, text = txt, envir = envir)
+      knit2html(outsrc, text = txt, envir = envir, encoding = 'UTF-8')
     } else if (!is.null(outsrc) && (format %in% c('Rnw', 'Rtex'))) {
-      knit2pdf(outsrc, envir = envir)
+      knit2pdf(outsrc, envir = envir, encoding = 'UTF-8')
     }
-  } else knit(outsrc, text = txt, envir = envir)
+  } else knit(outsrc, text = txt, envir = envir, encoding = 'UTF-8')
 
   if (!precious && !is.null(outsrc)) file.remove(outsrc)
   invisible(out)
