@@ -44,7 +44,6 @@ repos:
 cache:
   packages: yes
   directories:
-    - $HOME/cache
     - $HOME/texlive
 
 before_script:
@@ -54,9 +53,9 @@ before_script:
 script:
   - rm knitr-examples/cache -rf
   - make ${TARGET}
-  - "[ $TARGET = travis ] && Rscript tools/covr.R || true"
 
 # deploy to xran after integration tests
 after_success:
+  - "[ $TARGET = travis ] && Rscript covr::codecov() || true"
   - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
   - "[ $TARGET = integration ] && (curl https://xran.yihui.name/r-xran | bash)"
