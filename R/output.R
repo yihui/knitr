@@ -488,6 +488,7 @@ wrap.knit_asis = function(x, options, inline = FALSE) {
 
 #' @export
 wrap.source = function(x, options) {
+  if (isFALSE(options$echo)) return()
   src = sub('\n$', '', x$src)
   if (!options$collapse && options$strip.white) src = strip_white(src)
   if (is_blank(src)) return()  # an empty chunk
