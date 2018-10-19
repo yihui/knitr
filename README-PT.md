@@ -1,7 +1,7 @@
 # knitr
 
 [![Status de Compilação](https://travis-ci.org/yihui/knitr.svg)](https://travis-ci.org/yihui/knitr)
-[![Status da Cobertura de Código](https://coveralls.io/repos/yihui/knitr/badge.svg?branch=master&service=github)](https://coveralls.io/github/yihui/knitr?branch=master)
+[![Status da Cobertura de Código](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://codecov.io/github/yihui/knitr?branch=master)
 [![Downloads do espelho RStudio CRAN](http://cranlogs.r-pkg.org/badges/knitr)](https://cran.r-project.org/package=knitr)
 
 O pacote R **knitr** é um motor de programação literata (o *literate programming* de Donald Knuth) de propósito geral, com API's leves desenhadas para dar aos usuários controle total das saídas, sem trabalho pesado de codificação. Ele combina muitas funcionalidades em um único pacote com pequenos ajustes motivados pelo meu uso diário do Sweave. Vejam a [homepage](https://yihui.name/knitr/) do pacote para detalhes e exemplos. Vejam os [FAQ's](https://yihui.name/knitr/faq/) para uma lista de perguntas (incluindo sobre onde levantar questões).
