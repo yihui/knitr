@@ -41,6 +41,7 @@ imgur_upload = function(file, key = '9f3460e67f308f6') {
     config = httr::add_headers(Authorization = paste("Client-ID", key)),
     body = list(image = httr::upload_file(file))
   )
+  httr::stop_for_status(resp, "upload to imgur")
   res = httr::content(resp, as = "raw")
   res = if (length(res)) xml2::as_list(xml2::read_xml(res))
   # Breaking change in xml2 1.2.0
