@@ -21,3 +21,4 @@ Makefile
 ^docs$
 ^README-ES\.md$
 ^README-PT\.md$
+^codecov\.yml$
