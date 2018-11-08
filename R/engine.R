@@ -148,7 +148,8 @@ eng_interpreted = function(options) {
 
   # FIXME: for these engines, the correct order is options + code + file
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
-    paste(code, options$engine.opts) else paste(options$engine.opts, code)
+    paste(code, get_engine_opts(options$engine.opts, engine)) else
+      paste(get_engine_opts(options$engine.opts, engine), code)
   cmd = get_engine_path(options$engine.path, engine)
   out = if (options$eval) {
     message('running: ', cmd, ' ', code)
@@ -172,6 +173,11 @@ eng_interpreted = function(options) {
 get_engine_path = function(path, engine) {
   if (is.list(path)) path = path[[engine]]
   path %n% engine
+}
+
+get_engine_opts = function(opts, engine) {
+  if (is.list(opts)) opts = opts[[engine]]
+  opts %n% ""
 }
 
 ## C and Fortran (via R CMD SHLIB)
