@@ -905,6 +905,7 @@ restore_raw_output = function(text, chunks, markers = raw_markers) {
 #'   and values are the raw output). For \code{restore_raw_output()}, the
 #'   restored \code{text}.
 #' @export
+#' @seealso raw_latex
 #' @examples library(knitr)
 #' out = c('*hello*', raw_output('<special>content</special> *protect* me!'), '*world*')
 #' pre = extract_raw_output(out)
@@ -915,6 +916,35 @@ restore_raw_output = function(text, chunks, markers = raw_markers) {
 #' restore_raw_output(pre$value, pre$chunks)
 raw_output = function(x, markers = raw_markers, ...) {
   asis_output(paste(c(markers[1], x, markers[2]), collapse = ''), ...)
+}
+
+
+#' Mark character strings as LaTeX
+#'
+#' If possible, this function wraps content in a LaTeX raw attribute block
+#' If possible, this function wraps content in a LaTeX raw attribute block
+#' which protects it from being escaped by pandoc. See
+#' (see \url{https://pandoc.org/MANUAL.html#generic-raw-attribute}).
+#'
+#' @param x The character vector to be protected.
+#' @param ... Arguments to be passed to \code{\link{asis_output}()}.
+#'
+#' @return
+#' @export
+#'
+#' @seealso raw_output
+#' @examples
+#' raw_latex('\\emph{some text}')
+raw_latex = function(x, ...) {
+  raw_attr_available <- requireNamespace("rmarkdown", quietly = TRUE) &&
+        rmarkdown::pandoc_version() >= "2.0.0" &&
+        getOption('knitr.rmarkdown.pandoc.to', '') == 'latex'
+
+  if (raw_attr_available) {
+    x <- paste(c('\n```{=latex}\n', x, '\n```\n'), collapse = '')
+  }
+
+  asis_output(x, ...)
 }
 
 trimws = function(x) gsub('^\\s+|\\s+$', '', x)
