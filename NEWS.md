@@ -12,6 +12,8 @@
 
 - When `options(knitr.include_graphics.ext = TRUE)` is set, the full filename will be used in `\includegraphics{}` (e.g., `\includegraphics{foo.pdf}`) instead of the (default) base filename (e.g., `\includegraphics{foo}`) if a plot is embedded in the LaTeX output. This will avoid the ambiguity for LaTeX to choose the correct file (#1587).
 
+- The chunk option `engine.opts` can also take a list now, so that users can specify different options for different language engines (thanks, @kiwiroy, #1632).
+
 ## BUG FIXES
 
 - `valign` in `kable_latex()` does not put the float alignment to the correct location (thanks, @haozhu233, #1487, #1519).

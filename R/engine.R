@@ -146,9 +146,10 @@ eng_interpreted = function(options) {
     python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(paste(options$code, collapse = '\n')))
 
+  opts = get_engine_opts(options$engine.opts, engine)
   # FIXME: for these engines, the correct order is options + code + file
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
-    paste(code, options$engine.opts) else paste(options$engine.opts, code)
+    paste(code, opts) else paste(opts, code)
   cmd = get_engine_path(options$engine.path, engine)
   out = if (options$eval) {
     message('running: ', cmd, ' ', code)
@@ -168,11 +169,14 @@ eng_interpreted = function(options) {
   engine_output(options, options$code, out)
 }
 
-# options$engine.path can be list(name1 = path1, name2 = path2, ...)
-get_engine_path = function(path, engine) {
-  if (is.list(path)) path = path[[engine]]
-  path %n% engine
+# options$engine.path can be list(name1 = path1, name2 = path2, ...); similarly,
+# options$engine.opts can be list(name1 = opts1, ...)
+get_engine_opts = function(opts, engine, fallback = '') {
+  if (is.list(opts)) opts = opts[[engine]]
+  opts %n% fallback
 }
+
+get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 
 ## C and Fortran (via R CMD SHLIB)
 eng_shlib = function(options) {
