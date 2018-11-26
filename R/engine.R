@@ -549,7 +549,9 @@ eng_sql = function(options) {
 
   # execute query -- when we are printing with an enforced max.print we
   # use dbFetch so as to only pull down the required number of records
-  if (is.null(varname) && max.print > 0 && !is_sql_update_query(query)) {
+  if (is_sql_update_query(query)) {
+    data = DBI::dbExecute(conn, query)
+  } else if (is.null(varname) && max.print > 0) {
     res = DBI::dbSendQuery(conn, query)
     data = DBI::dbFetch(res, n = max.print)
     DBI::dbClearResult(res)
@@ -558,7 +560,7 @@ eng_sql = function(options) {
   }
 
   # create output if needed (we have data and we aren't assigning it to a variable)
-  output = if (!is.null(data) && ncol(data) > 0 && is.null(varname)) capture.output({
+  output = if (length(dim(data)) == 2 && is.null(varname)) capture.output({
 
     # apply max.print to data
     display_data = if (max.print == -1) data else head(data, n = max.print)
