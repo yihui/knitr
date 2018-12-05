@@ -561,7 +561,7 @@ eng_sql = function(options) {
   }
 
   # create output if needed (we have data and we aren't assigning it to a variable)
-  output = if (length(dim(data)) == 2 && is.null(varname)) capture.output({
+  output = if (length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)) capture.output({
 
     # apply max.print to data
     display_data = if (max.print == -1) data else head(data, n = max.print)
