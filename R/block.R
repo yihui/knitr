@@ -457,8 +457,11 @@ process_tangle = function(x) {
 #' @export
 process_tangle.block = function(x) {
   params = opts_chunk$merge(x$params)
-  for (o in c('purl', 'eval', 'child'))
-    try(params[o] <- list(eval_lang(params[[o]])))
+  for (o in c('purl', 'eval', 'child')) {
+    if (inherits(try(params[o] <- list(eval_lang(params[[o]]))), 'try-error')) {
+      params[['purl']] = FALSE  # if any of these options cannot be determined, don't purl
+    }
+  }
   if (isFALSE(params$purl)) return('')
   label = params$label; ev = params$eval
   if (params$engine != 'R') return(comment_out(knit_code$get(label)))
