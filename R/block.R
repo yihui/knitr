@@ -111,7 +111,7 @@ block_exec = function(options) {
     output = knit_hooks$get('chunk')(output, options)
     if (options$cache) block_cache(options, output, switch(
       options$engine,
-      'stan' = options$engine.opts$x, 'sql' = options$output.var, character(0)
+      'stan' = options$output.var, 'sql' = options$output.var, character(0)
     ))
     return(if (options$include) output else '')
   }
