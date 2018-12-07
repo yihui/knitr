@@ -32,7 +32,7 @@
 
 - `spin()` fails to generate a proper R Markdown document when the R script contains roxygen comments as string literals or more than three backticks (thanks, @yutannihilation, #1605, #1611).
 
-- Stan chunks cannot be properly cached: the bug #1064 appeared again (thanks, https://stackoverflow.com/q/53660143/559676).
+- Stan chunks cannot be properly cached: the bug #1064 appeared again (thanks, Mark, https://stackoverflow.com/q/53660143/559676).
 
 ## MAJOR CHANGES
 
