@@ -20,7 +20,7 @@
 
 - `engine.path` does not work for `engine = 'dot'` (thanks, @billy34, #1534).
 
-- The `SQL` engine now caches the result properly when the chunk option `output.var` is specified (thanks, @yutannihilation, #1544).
+- The `sql` engine now caches the result properly when the chunk option `output.var` is specified (thanks, @yutannihilation, #1544).
 
 - `knit_params()` mangles UTF-8 text not representable in current locale (thanks, @kevinushey, #1557).
 
@@ -254,7 +254,7 @@
 
 - if `dev = 'cairo_pdf'`, the `cairo_pdf` device will be used to record plots (previously the `pdf` device was used) (#1235)
 
-- LaTeX short captions now go up to the first `.`, `:` or `;` character followed by space or newline (thanks, @knokknok, #1249)
+- LaTeX short captions now go up to the first `.`, `:` or `;` character followed by a space or newline (thanks, @knokknok, #1249)
 
 # CHANGES IN knitr VERSION 1.13
 
@@ -573,7 +573,7 @@
 
 - the `knit()` function no longer modifies R's default `options(digits)` from 7 to 4, since it may lead to confusion especially when printing `summary()` output; for those who want the old behavior, you must set `options(digits = 4)` at the beginning of your document (thanks, John Honaker, #777)
 
-- the figure file numbering scheme has changed: for a chunk with a label `foo`, its figure files are named as `foo-i` where `i` range is from `1` to `n` (the total number of plots in this chunk); previously, the figure file was named as `foo` instead of `foo-1` when there was only one plot generated in this chunk, which has a potential bug: consider two chunks named `foo` and `foo2`, respectively; `foo` generates two figures `foo1.png` and `foo2.png`, and `foo2` generates one figure `foo2.png`, which will overwrite the second figure generated from the chunk `foo` (thanks, @kevinushey, @kohske, @kforner, #704, #832)
+- the figure file numbering scheme has changed: for a chunk with a label `foo`, its figure files are named as `foo-i` where `i` ranges from `1` to `n` (the total number of plots in this chunk); previously, the figure file was named as `foo` instead of `foo-1` when there was only one plot generated in this chunk, which has a potential bug: consider two chunks named `foo` and `foo2`, respectively; `foo` generates two figures `foo1.png` and `foo2.png`, and `foo2` generates one figure `foo2.png`, which will overwrite the second figure generated from the chunk `foo` (thanks, @kevinushey, @kohske, @kforner, #704, #832)
 
 - for warnings and errors from code chunks, the call that produced them will be printed as part of the message, e.g. previously an error might just be `Error: x must be positive`, and now it may be `Error in FUN(x = -1): x must be positive` (thanks, @jennybc, #846)
 
@@ -983,7 +983,7 @@
 
 - a new function `knit2wp()` which compiles R Markdown documents and publishes the results to WordPress; see https://yihui.name/knitr/demo/wordpress/ for details
 
-- a new hook `hook_webgl()` which writes the WebGL code of a **rgl** scene into the output using `rgl::writeWebGL()` so we can reproduce a 3D plot in the browser (thanks, Stephane Laurent http://stackoverflow.com/q/14879210/559676)
+- a new hook `hook_webgl()` which writes the WebGL code of an **rgl** scene into the output using `rgl::writeWebGL()` so we can reproduce a 3D plot in the browser (thanks, Stephane Laurent http://stackoverflow.com/q/14879210/559676)
 
 ## BUG FIXES
 
@@ -1049,7 +1049,7 @@
 
 ## MINOR CHANGES
 
-- for inline R code, the value is returned only if the R code prints a visible value, e.g. `\Sexpr{x <- 1}` will be empty, and `\Sexpr{pi}` will return the value of Pi
+- for inline R code, the value is returned only if the R code prints a visible value, e.g. `\Sexpr{x <- 1}` will be empty, and `\Sexpr{pi}` will return the value of `pi`
 
 ## BUG FIXES
 
@@ -1257,7 +1257,7 @@
 
 - fixed #286: messages (including warnings and errors) are guaranteed to be ended by `\n`, so even when chunk option `comment=NA`, messages will also be rendered correctly (thanks, Carl Boettiger)
 
-- fixed #273: when knitting a file under another directory with cache turned on (e.g. `knit('foo/bar.Rnw')`), `lazyLoad()` is unable to load the cache files under a relative path because the working directory has been changed to the directory of the input file during an evaluation
+- fixed #273: when knitting a file under another directory with cache turned on (e.g. `knit('foo/bar.Rnw')`), `lazyLoad()` is unable to load the cache files under a relative path because the working directory has been changed to the directory of the input file during the evaluation
 
 - fixed #292: layout() may cause the capture of unwanted plots (thanks, Austen Wallace Head)
 
