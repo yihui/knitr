@@ -82,7 +82,7 @@
 
 - exported function `is_latex_output()` and `is_html_output()` (thanks, @zeehio, rstudio/rmarkdown#649)
 
-- for `read_chunk()`, the code chunks in the external R script can be written under lines of the form `-- ---- label ----` now (`# ---- label ----` is still supported); this makes it possible to read an external Haskell script (thanks, @brittAnderson, #1455)
+- for `read_chunk()`, the code chunks in the external R script can be written under the lines of the form `-- ---- label ----` now (`# ---- label ----` is still supported); this makes it possible to read an external Haskell script (thanks, @brittAnderson, #1455)
 
 - added a `$append()` method to the internal function `new_defaults()` (thanks, @yonicd, #1417)
 
@@ -92,7 +92,7 @@
 
 ## MAJOR CHANGES
 
-- the `python` engine is based on `reticulate::eng_python()` now; this means all Python code chunks are evaluated in the same Python session; if you want the old behavior (new session for each Python code chunk), you can set the chunk option `python.reticulate = FALSE` (thanks, @kevinushey, #1440)
+- the `python` engine is based on `reticulate::eng_python()` now; this means all Python code chunks are evaluated in the same Python session; if you want the old behaviour (new session for each Python code chunk), you can set the chunk option `python.reticulate = FALSE` (thanks, @kevinushey, #1440)
 
 - the `auto_pdf` argument of `include_graphics()` defaults to `FALSE` now; you can set `options(knitr.graphics.auto_pdf = TRUE)` to change the default to `TRUE` (thanks, @mebden, #1456)
 
@@ -276,7 +276,7 @@
 
 - PNG/JPEG images included via `include_graphics()` also respects the chunk option `dpi` now; if it is numeric and the chunk option `out.width` is not set, the output width (in inches) of an image will be automatically  calculated from the actual width (in pixels) divided by `dpi`; note this feature requires the packages **png** and/or **jpeg** to be installed, and you can disable the feature using `dpi = NA` (thanks, @hadley, https://github.com/rstudio/bookdown/issues/38)
 
-- added a new hook function named `evaluate` in `knit_hooks` so that users can redefine a evaluator to evaluate the code chunk; the default is `evaluate::evaluate()`, and your custom evaluator must be compatible with `evaluate::evaluate()` in terms of the argument names and the data structure of the returned value (a list of values with special classes)
+- added a new hook function named `evaluate` in `knit_hooks` so that users can redefine an evaluator to evaluate the code chunk; the default is `evaluate::evaluate()`, and your custom evaluator must be compatible with `evaluate::evaluate()` in terms of the argument names and the data structure of the returned value (a list of values with special classes)
 
 - added a new function `combine_words()` to combine multiple words / phrases into a single string, which may be useful in inline R expressions, e.g. `combine_words(c('a', 'b', 'c'))` returns `a, b, and c`
 
@@ -302,7 +302,7 @@
 
 - the `cex` parameter was not correctly restored in the case of `opts_knit$set(global.par = TRUE)` (http://stackoverflow.com/q/35606445/559676)
 
-- for Rnw documents, when there are two instances of `\documentclass{}`, **knitr** might mistakenly treats the second instance as the the actual command to declare the document class (thanks, #1180, @ekstroem)
+- for Rnw documents, when there are two instances of `\documentclass{}`, **knitr** might mistakenly treat the second instance as the actual command to declare the document class (thanks, #1180, @ekstroem)
 
 - corrected the environment for evaluating R scripts in `stitch_rhtml()` and `stitch_rmd()` (thanks, @Hughan, #1207)
 
@@ -469,7 +469,7 @@
 
 - when the chunk option `dev = 'png'`, `grDevices::png()` is used to record plots, instead of the default PDF null device (thanks, @yixuan, #729)
 
-- currently R (3.1.2) does not really pass the vignette encoding to vignette engines (which is probably a bug), and **knitr** vignette engines will assume UTF-8 is the file encoding
+- currently, R (3.1.2) does not really pass the vignette encoding to vignette engines (which is probably a bug), and **knitr** vignette engines will assume UTF-8 is the file encoding
 
 - when the chunk option `tidy=FALSE`, and `eval` takes a numeric vector, it used to mean the line numbers of the code chunk; now it means the indices of the R expressions in the code chunk, regardless of `tidy=FALSE` or `TRUE` (yihui/knitr-examples#39, thanks, @isomorphisms)
 
@@ -571,13 +571,13 @@
 
 ## MAJOR CHANGES
 
-- the `knit()` function no longer modifies R's default `options(digits)` from 7 to 4, since it may lead to confusion especially when printing `summary()` output; for those who want the old behavior, you must set `options(digits = 4)` in the beginning of your document (thanks, John Honaker, #777)
+- the `knit()` function no longer modifies R's default `options(digits)` from 7 to 4, since it may lead to confusion especially when printing `summary()` output; for those who want the old behavior, you must set `options(digits = 4)` at the beginning of your document (thanks, John Honaker, #777)
 
 - the figure file numbering scheme has changed: for a chunk with a label `foo`, its figure files are named as `foo-i` where `i` ranges from `1` to `n` (the total number of plots in this chunk); previously, the figure file was named as `foo` instead of `foo-1` when there was only one plot generated in this chunk, which has a potential bug: consider two chunks named `foo` and `foo2`, respectively; `foo` generates two figures `foo1.png` and `foo2.png`, and `foo2` generates one figure `foo2.png`, which will overwrite the second figure generated from the chunk `foo` (thanks, @kevinushey, @kohske, @kforner, #704, #832)
 
 - for warnings and errors from code chunks, the call that produced them will be printed as part of the message, e.g. previously an error might just be `Error: x must be positive`, and now it may be `Error in FUN(x = -1): x must be positive` (thanks, @jennybc, #846)
 
-- for the engine `coffee` (CoffeeScript), the flag `-p` has been removed from the command line arguments, which means the default behavior of this engine is to evaluate the code, instead of printing JavaScript; if you want the old behavior, you need the chunk option `engine.opts = '-p'` (thanks, Jake Burkhead, #821)
+- for the engine `coffee` (CoffeeScript), the flag `-p` has been removed from the command line arguments, which means the default behaviour of this engine is to evaluate the code, instead of printing JavaScript; if you want the old behaviour, you need the chunk option `engine.opts = '-p'` (thanks, Jake Burkhead, #821)
 
 - when the chunk option `results = 'hold'`, the text output blocks will be collapsed into a single block (thanks, Gavin Simpson, #798)
 
@@ -615,7 +615,7 @@
 
 - added a new chunk option `render` for custom rendering of R objects in the output; by default, the render function is `print()` (or `show()` for S4 objects) (thanks, Milan Bouchet-Valat, #484)
 
-- added a new S3 generic function `knit_print()`, which is used as the default printing function for R objects in the code output now; users can define custom S3 methods to change the printing behavior of R objects in **knitr**
+- added a new S3 generic function `knit_print()`, which is used as the default printing function for R objects in the code output now; users can define custom S3 methods to change the printing behaviour of R objects in **knitr**
 
 - added a new engine `scala` for Scala thanks to Simeon Fitch (#640)
 
@@ -643,7 +643,7 @@
 
 - indentation is preserved when using chunk references `<<>>`, i.e., if `<<>>` is indented, the spaces before it will be applied to the code that it refers to (thanks, Terry Therneau)
 
-- added a chunk option `fig.process`, which can be set as a function to take the path of a plot and process it, e.g. `fig.process = function(x) knitr::plot_crop(x)`; note the `fig.process` function must return a character string, such as the path of the figure, which might have been changed inside the function
+- added a chunk option `fig.process`, which can be set as a function to take the path of a plot and process it, e.g. `fig.process = function(x) knitr::plot_crop(x)`; note that the `fig.process` function must return a character string, such as the path of the figure, which might have been changed inside the function
 
 - added a chunk option `R.options` so that we can temporarily set local options() for the current code chunk, and the options will be restored after the chunk (thanks, @r2evans, #764)
 
@@ -701,7 +701,7 @@
 
 - the first argument of the `plot` hook is the filename of the plot now; in previous versions, it was a vector of length 2 (basename and file extension); see `?hook_plot`
 
-- the default value for the `format` argument in `pandoc()` has changed: it defaults to the `t` field in the configuration if found, otherwise it defaults to `'html'` (thanks, Kohske Takahashi, #697)
+- the default value for the `format` argument in `pandoc()` has changed: it defaults to the `t` field in the configuration if found, otherwise, it defaults to `'html'` (thanks, Kohske Takahashi, #697)
 
 - in the previous version, we can set `options(knitr.foo = value)` so that **knitr** can adjust the package options `opts_knit$set(foo = value)` before knitting a document; now the prefix for package options has been changed to `knitr.package.`, i.e. we should set `options(knitr.package.foo)` to achieve `opts_knit$set(foo)`; besides, it is also possible to change the default chunk options using `options(knitr.chunk.foo)` now, but you are warned that this may bring reproducibility issues, so please use with care
 
@@ -759,7 +759,7 @@
 
 - when a message/warning/error contains line breaks, they are preserved and the message will not be re-wrapped (#602, thanks, Tyler Rinker)
 
-- `read_chunk()` tolerates white spaces in the end of the chunk headers now (suggested by John Maindonald, #606)
+- `read_chunk()` tolerates white spaces at the end of the chunk headers now (suggested by John Maindonald, #606)
 
 - for R HTML documents, only the `highlight` component in `opts_knit$get('header')` was used in previous versions; now all components except `framed` and `tikz` are used; this makes it possible to further customize the HTML header (thanks, Wahlen Neuwirth and Erich Neuwirth)
 
@@ -783,7 +783,7 @@
 
 - it is possible to set package options prior to loading the **knitr** package now: for a package option `foo`, we can set `options(knitr.foo = value)` so that **knitr** will `opts_knit$set(foo = value)` when calling `knit()`; see `?opts_knit` for details (thanks, Zhiguang Zhao)
 
-- added a new argument `ext` to the `pandoc()` function so that users can manually specify the output filename extensions (thanks, baptiste, http://stackoverflow.com/q/17710249/559676)
+- added a new argument `ext` to the `pandoc()` function so that users can manually specify the output filename extensions (thanks, Baptiste, http://stackoverflow.com/q/17710249/559676)
 
 - for LaTeX and HTML output, syntax highlighting can be done for languages besides R (e.g. Python, Perl, ...); this is achieved by `highr::hi_andre()`, so Andre Simon's Highlight must be installed, otherwise **knitr** will fall back to verbatim output for source code; see https://github.com/yihui/knitr-examples/blob/master/098-highlight-python.Rnw for an example (#495)
 
@@ -869,7 +869,7 @@
 
 - `purl()` will write the chunk headers in `# ---- label, opts ----` instead of `# @knitr label, opts`, i.e. `@knitr` was changed to four dashes `----`; similarly, `read_chunk()` will use the pattern `# ---- label ----` to read external code (the old syntax `# @knitr` is still preserved for compatibility); the main reason for this change is that RStudio uses four dashes in R comments as section headings, so that it is possible to fold sections of R
 
-- syntax highlighting is done by the **highr** package if it has been installed, otherwise the old regular-expression-based syntax highlighting will still be used; the **highr** package does much better syntax highlighting than the regexp-based approach (#327)
+- syntax highlighting is done by the **highr** package if it has been installed, otherwise, the old regular-expression-based syntax highlighting will still be used; the **highr** package does much better syntax highlighting than the regexp-based approach (#327)
 
 - the commands for syntax highlighting were changed for compatibility with Andre Simon's Highlight package; this will affect LaTeX and HTML users, e.g. `\hlnumber` was renamed to `\hlnum`; cached LaTeX and HTML will have to be rebuilt for the new syntax highlighting commands to work (#470)
 
@@ -891,7 +891,7 @@
 
 - the package vignettes uses `\VignetteEngine{knitr::knitr}` instead of `\VignetteEngine{knitr}` so that the next version of R can compile the vignettes out of the box (via `R CMD Sweave`) and no longer need to build the whole package in order to build the vignettes
 
-## MAINTAINENCE
+## MAINTENANCE
 
 - the package vignettes were moved to the `vignettes` directory from `inst/doc` since the former will be preferred by the future versions of R
 
@@ -907,7 +907,7 @@
 
 - added a Pandoc wrapper function `pandoc()` to convert Markdown documents to other formats that Pandoc support such as LaTeX/PDF, OpenDocument, HTML5 slides and unfortunately also Word (#206)
 
-- in the past the chunk hooks were ignored when the chunk option `engine != 'R'` (i.e. code in the chunk is not R); now they are executed regardless of the language of the code chunk (#483) (thanks, @cdrv)
+- in the past, the chunk hooks were ignored when the chunk option `engine != 'R'` (i.e. code in the chunk is not R); now they are executed regardless of the language of the code chunk (#483) (thanks, @cdrv)
 
 - multiple WebGL objects from the **rgl** package can be generated in the same web page now; each object is uniquely identified by the corresponding chunk label; see https://dl.dropbox.com/u/15335397/misc/webgl-rmd.html for an example (#494) (thanks, Carson Sievert)
 
@@ -925,7 +925,7 @@
 
 - added the `text` argument to `spin()` and `stitch()` respectively as an alternative way to provide the input like `knit()` (#509) (thanks, Craig Watson)
 
-- a new function `wrap_rmd()` to wrap long lines in Rmd files without affecting the code blocks (if there are any); this makes it easier for verson control purposes
+- a new function `wrap_rmd()` to wrap long lines in Rmd files without affecting the code blocks (if there are any); this makes it easier for version control purposes
 
 - `rst2pdf()` will pass a default output filename to `rst2pdf` (if the input is `foo.rst`, the output will be `foo.pdf`)
 
@@ -953,7 +953,7 @@
 
 - `knit2pdf()` and `knit2html()` return the output filename when the input is a file (in previous versions, `NULL` was returned in this case)
 
-- the package option `stop_on_error` is set to `2` now when building package vignettes, which means R will stop on errors in vignettes; this make it easier to find out possible problems in vignettes during `R CMD build`
+- the package option `stop_on_error` is set to `2` now when building package vignettes, which means R will stop on errors in vignettes; this makes it easier to find out possible problems in vignettes during `R CMD build`
 
 - the document hook `hook_rjournal()` was removed; it was too hackish (see https://yihui.name/en/2013/02/contribute-to-the-r-journal-with-lyx-knitr/ for how to write an article for The R Journal in a less hackish way)
 
@@ -973,7 +973,7 @@
 
 - (experimental) R 3.0.0 will support non-Sweave vignettes, e.g. Rnw documents can be compiled by **knitr** instead of Sweave; in addition, R Markdown vignettes have also become first-class citizens as R package vignettes; see https://yihui.name/knitr/demo/vignette/ for details
 
-- a new engine for coffeescript (i.e. the chunk option `engine='coffee'`); see https://github.com/yihui/knitr-examples/blob/master/080-engine-coffeescript.Rmd for an example (thanks, Nacho Caballero)
+- a new engine for CoffeeScript (i.e. the chunk option `engine='coffee'`); see https://github.com/yihui/knitr-examples/blob/master/080-engine-coffeescript.Rmd for an example (thanks, Nacho Caballero)
 
 - when the chunk option `eval=FALSE`, `purl()` will comment out the code when extracting code chunks (thanks, Randall Pruim)
 
@@ -987,7 +987,7 @@
 
 ## BUG FIXES
 
-- fixed #465: when `eval=FALSE` and `echo` is numeric, code was incorrectly filtered by the indices in `echo` (thanks, @ateucher)
+- fixed #465: when `eval=FALSE` and `echo` is numeric, the code was incorrectly filtered by the indices in `echo` (thanks, @ateucher)
 
 - `>` was not allowed in HTML inline code expressions (http://stackoverflow.com/q/14360296/559676); now the regular expression works correctly to look for `-->` instead of `>`
 
@@ -1043,13 +1043,13 @@
 
 - chunk labels can be arbitrary characters now; in the past they had to be valid R symbols, e.g. `2a` was an invalid label; this restriction has been removed, because chunk labels will be automatically quoted when necessary (`<<2a>>=` will become `<<'2a'>>=`, but `<<'3-function'>>=` will remain untouched)
 
-- if the chunk option `include=FALSE`, the evaluation will stop if errors occur (i.e. `stop_on_error=2L` for **evaluate**), because otherwise it will be very difficult for authors to notice errors in chunks which have `include=FALSE` (#453) (thanks, Joshua Pritikin)
+- if the chunk option `include=FALSE`, the evaluation will stop if errors occur (i.e. `stop_on_error=2L` for **evaluate**) because otherwise, it will be very difficult for authors to notice errors in chunks which have `include=FALSE` (#453) (thanks, Joshua Pritikin)
 
 - the function `knit_env()` is no longer available (it is not exported any more), and `knit_global()` has been exported now
 
 ## MINOR CHANGES
 
-- for inline R code, the value is returned only if the R code prints a visible value, e.g. `\Sexpr{x <- 1}` will be empty, and `\Sexpr{pi}` will return the value of pi
+- for inline R code, the value is returned only if the R code prints a visible value, e.g. `\Sexpr{x <- 1}` will be empty, and `\Sexpr{pi}` will return the value of `pi`
 
 ## BUG FIXES
 
@@ -1061,7 +1061,7 @@
 
 ## Documentation
 
-- because Github has deprecated downloads, all downloads were moved to Bitbucket, and the links in the package website as well as all examples have been updated (#438)
+- because Github has deprecated downloads, all downloads were moved to Bitbucket, and the links in the package website, as well as all examples, have been updated (#438)
 
 # CHANGES IN knitr VERSION 0.9
 
@@ -1085,7 +1085,7 @@
 
 - added a new chunk option `fig.subcap` for captions of subfigures in LaTeX; when there are multiple plots in a chunk, and neither `fig.subcap` nor `fig.cap` is NULL, `\subfloat{}` will be used for individual plots (you need to add `\usepackage{subfig}` in the preamble); also see https://github.com/yihui/knitr-examples/blob/master/067-graphics-options.Rnw for an example (#388) (thanks, @skipperhoyer)
 
-- `stitch()` accepts labeled R scripts now; if an R script contains chunk headers of the form `## @knitr label, options`, they will be used in the template (#411) (thanks, @jamiefolson)
+- `stitch()` accepts labelled R scripts now; if an R script contains chunk headers of the form `## @knitr label, options`, they will be used in the template (#411) (thanks, @jamiefolson)
 
 - the function `read_chunk()` gained a few new arguments so that we can reference external code chunks in another way, which was an idea from the **SweaveListingUtils** package (thanks, Peter Ruckdeschel)
 
@@ -1099,7 +1099,7 @@
 
 - `knit_rd()` generates a navigation frame on the left and builds links now; this is like the CHM help in old days (thanks, Michael Friendly)
 
-- a new function `knit_rd_all()` to build static html help pages for all the packages installed
+- a new function `knit_rd_all()` to build static HTML help pages for all the packages installed
 
 - we can also use `## @knitr` to write chunk options for `spin()` now (`#+` and `#-` still work)
 
@@ -1249,7 +1249,7 @@
 
 - a new chunk hook function `hook_optipng()` to optimize PNG images using `optipng` (#272) (thanks, Winston Chang)
 
-- added a new output hook named `document` in `knit_hooks` (see `knit_hooks$get('document')`); this hook function is used to process the output of the whole document; it can be useful when we want to post-process the whote output before writing it to the output file
+- added a new output hook named `document` in `knit_hooks` (see `knit_hooks$get('document')`); this hook function is used to process the output of the whole document; it can be useful when we want to post-process the whole output before writing it to the output file
 
 - a new function `rst2pdf()` which uses the program `rst2pdf` to convert reST documents to PDF; it is also supported by `knit2pdf()` when `compiler='rst2pdf'` (#300) (thanks, Alex Zvoleff)
 
@@ -1257,7 +1257,7 @@
 
 - fixed #286: messages (including warnings and errors) are guaranteed to be ended by `\n`, so even when chunk option `comment=NA`, messages will also be rendered correctly (thanks, Carl Boettiger)
 
-- fixed #273: when knitting a file under another directory with cache turned on (e.g. `knit('foo/bar.Rnw')`), `lazyLoad()` is unable to load the cache files under a relative path because the working directory has been changed to the directory of the input file during evaluation
+- fixed #273: when knitting a file under another directory with cache turned on (e.g. `knit('foo/bar.Rnw')`), `lazyLoad()` is unable to load the cache files under a relative path because the working directory has been changed to the directory of the input file during the evaluation
 
 - fixed #292: layout() may cause the capture of unwanted plots (thanks, Austen Wallace Head)
 
@@ -1277,9 +1277,9 @@
 
 - the [**highlight**](http://cran.r-project.org/package=highlight) package is not enabled by default; use `opts_knit$set(use.highlight = TRUE)` to enable it
 
-- the default LaTeX output will put messages, warnings and errors in special LaTeX environments: errors are red, warnings are magenta, and messages are italic; in previous versions they were in the `verbatim` environment (#264) (thanks, @muelleki)
+- the default LaTeX output will put messages, warnings and errors in special LaTeX environments: errors are red, warnings are magenta, and messages are italic; in previous versions, they were in the `verbatim` environment (#264) (thanks, @muelleki)
 
-- unnamed chunks are named sequentially in a single call of `knit()` according to the order of their appearance no matter where they are, e.g. if there are two unnamed chunks in two child documents respectively, they will be named as `unnamed-chunk-1` and `unnamed-chunk-2`; in previous versions, both will be named as `unnamed-chunk-1` which can cause clashes of cache and figure files
+- unnamed chunks are named sequentially in a single call of `knit()` according to the order of their appearance no matter where they are, e.g. if there are two unnamed chunks in two child documents respectively, they will be named `unnamed-chunk-1` and `unnamed-chunk-2`; in previous versions, both will be named as `unnamed-chunk-1` which can cause clashes of cache and figure files
 
 - the function `build_dep()` was renamed to `dep_auto()` which better reflects what this function really does; it is still available in this package but may be removed in future versions
 
@@ -1311,7 +1311,7 @@
 
 ## MAJOR CHANGES
 
-- this is a urgent patch version for CRAN: the dependencies on **highlight** and **parser** were removed because these two package were orphaned on CRAN; now **knitr** uses a naive syntax highlighter for LateX and HTML output if **highlight** is not available, which has a similar appearance with **highlight**; when the **parser** package is not available, users should be careful with the chunk option `tidy=TRUE`: `replace.assign` may not work as expected; see the NEWS of **formatR** for details: https://github.com/yihui/formatR/blob/master/NEWS; you are welcome to improve the naive highlighter: https://github.com/yihui/knitr/tree/master/R/highlight.R
+- this is an urgent patch version for CRAN: the dependencies on **highlight** and **parser** were removed because these two packages were orphaned on CRAN; now **knitr** uses a naive syntax highlighter for LateX and HTML output if **highlight** is not available, which has a similar appearance with **highlight**; when the **parser** package is not available, users should be careful with the chunk option `tidy=TRUE`: `replace.assign` may not work as expected; see the NEWS of **formatR** for details: https://github.com/yihui/formatR/blob/master/NEWS; you are welcome to improve the naive highlighter: https://github.com/yihui/knitr/tree/master/R/highlight.R
 
 ## NEW FEATURES
 
@@ -1369,7 +1369,7 @@
 
 - FFmpeg does not really work for HTML/Markdown output because the dot in figure filenames was omitted (thanks, Ming Kuo)
 
-- child documents can fail when they are in different sub directories (thanks, Christoph J)
+- child documents can fail when they are in different subdirectories (thanks, Christoph J)
 
 - `set_parent()` failed to work in the last version due to a bug when inserting the parent preamble into the child document (#240)
 
@@ -1377,7 +1377,7 @@
 
 ## MAJOR CHANGES
 
-- `.Random.seed` is not cached any more because of weird problems due to lazy loading (#248 and #253); users should use `set.seed()` to make sure reproducibility of random simulations; the chunk output is cached in a `.RData` database instead of a lazy load database to avoid problems in #253
+- `.Random.seed` is not cached any more because of weird problems due to lazy loading (#248 and #253); users should use `set.seed()` to make sure reproducibility of random simulations; the chunk output is cached in a `.RData` database instead of a lazy-load database to avoid problems in #253
 
 - the default graphics device is set to the null PDF device before evaluating code chunks, i.e. `pdf(file = NULL)`, so that neither `Rplots.pdf` nor plot windows will be opened during knitting
 
@@ -1423,7 +1423,7 @@
 
 - the chunk option `fig.cap` is also used in markdown output now
 
-- the random seed `.Random.seed` is also cached for the sake of reprodubibility in random simulations
+- the random seed `.Random.seed` is also cached for the sake of reproducibility in random simulations
 
 - the function call `read_chunk()` will be evaluated when tangling R code via `purl()` (#175) (thanks, Carl Boettiger)
 
@@ -1437,7 +1437,7 @@
 
 ## MAJOR CHANGES
 
-- **knitr** will completely stop when duplicated labels are found and the corresponding chunks are non-empty; in previous version, only a warning is given and R code in later chunks will override previous chunks (#185) (thanks, Randall Pruim)
+- **knitr** will completely stop when duplicated labels are found and the corresponding chunks are non-empty; in the previous version, only a warning is given and R code in later chunks will override previous chunks (#185) (thanks, Randall Pruim)
 
 - the default graphical device for HTML and markdown output is `png()` now to avoid the possible unexpected consequence that PDF plots are included in an HTML page which will not work normally in browsers
 
@@ -1447,7 +1447,7 @@
 
 - the default value for the `fig.path` option is `'figure/'` now so that plots will be put under this directory by default; the default was `'./'` in the past which makes the current directory messy when there are many plots
 
-- **knitr** will fully stop when an error is encountered in `knit()`; in the past only a message was issued in this case in an interactive R session
+- **knitr** will fully stop when an error is encountered in `knit()`; in the past, only a message was issued in this case in an interactive R session
 
 - the package option `all.patterns` has been dropped; please use the objects `all_patterns` or `knit_patterns` directly if you want to tweak the syntax
 
@@ -1495,7 +1495,7 @@
 
 - for plots in LaTeX output, centering should be done with `{\centering }` instead of `\centering{}` (#156) (thanks, Ramnath Vaidyanathan)
 
-- the recorded plot is a more precise representation of the expected plot now, because the recording device also takes the plot size into consideration (#157) (thanks, Christiaan Klijn and Frank Harrell)
+- the recorded plot is a more precise representation of the expected plot now because the recording device also takes the plot size into consideration (#157) (thanks, Christiaan Klijn and Frank Harrell)
 
 - `format_sci()` now correctly formats 0; this function is used for inline R code to format numbers in scientific notation (#161) (thanks, Kihoro J. M.)
 
@@ -1511,7 +1511,7 @@
 
 - website updated as usual: https://yihui.name/knitr
 
-- added an example for subfloat environment: https://github.com/yihui/knitr/releases/download/doc/knitr-subfloats.pdf
+- added an example for the subfloat environment: https://github.com/yihui/knitr/releases/download/doc/knitr-subfloats.pdf
 
 - most manuals (main or graphics manuals) have been updated
 
@@ -1591,7 +1591,7 @@
 
 ## NEW FEATURES
 
-- added support for including child documents in a main document (like `\SweaveInput{}` but with different implementations); see https://yihui.name/knitr/demo/child/ (#92)
+- added support for including child documents in the main document (like `\SweaveInput{}` but with different implementations); see https://yihui.name/knitr/demo/child/ (#92)
 
 - for inline R code, character results are returned as-is now (without `\texttt{}`)
 
@@ -1618,7 +1618,7 @@
 
 - for a chunk hook to run, the corresponding chunk option no longer has to be `TRUE`; it can be any non-null values; this enables us to make use of the option value directly instead of only knowing it is `TRUE` (see https://yihui.name/knitr/demo/cache/ for an example)
 
-- `knit()` will no longer writes figure or cache files in the same directory as the input document; instead, these files are written in the current working directory (see ?knit)
+- `knit()` will no longer write figure or cache files in the same directory as the input document; instead, these files are written in the current working directory (see ?knit)
 
 - a new function `knit_env()` that makes the environment of the current chunk accessible to the user
 
