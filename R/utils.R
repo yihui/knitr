@@ -917,6 +917,36 @@ raw_output = function(x, markers = raw_markers, ...) {
   asis_output(paste(c(markers[1], x, markers[2]), collapse = ''), ...)
 }
 
+
+#' Mark character strings as raw blocks in R Markdown
+#'
+#' Wraps content in a raw attribute block, which protects it from being escaped
+#' by Pandoc. See \url{https://pandoc.org/MANUAL.html#generic-raw-attribute}.
+#' Functions \code{raw_latex()} and \code{raw_html()} are shorthands of
+#' \code{raw_block(x, 'latex')} and \code{raw_block(x, 'html')}, respectively.
+#' @param x The character vector to be protected.
+#' @param type The type of raw blocks (i.e., the Pandoc output format). If you
+#'   are not sure about the Pandoc output format of your document, insert a code
+#'   chunk \code{knitr:::pandoc_to()} and see what it returns after the document
+#'   is compiled.
+#' @param ... Arguments to be passed to \code{\link{asis_output}()}.
+#' @export
+#' @examples
+#' knitr::raw_latex('\\emph{some text}')
+raw_block = function(x, type = 'latex', ...) {
+  if (rmarkdown::pandoc_version() < '2.0.0') warning('raw_block() requires Pandoc >= 2.0.0')
+  x = c(sprintf('\n```{=%s}\n', type), x, '\n```\n')
+  asis_output(paste(x, collapse = '\n'), ...)
+}
+
+#' @rdname raw_block
+#' @export
+raw_latex = function(x, ...) raw_block(x, 'latex')
+
+#' @rdname raw_block
+#' @export
+raw_html = function(x, ...) raw_block(x, 'html')
+
 trimws = function(x) gsub('^\\s+|\\s+$', '', x)
 
 optipng = function(...) {
