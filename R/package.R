@@ -35,7 +35,3 @@ as.strict_list = function(x) {
   class(x) = 'knitr_strict_list'
   x
 }
-
-# TODO: remove this after the next release of spelling:
-# https://github.com/ropensci/spelling/issues/12
-file_ext = function(...) xfun::file_ext(...)
