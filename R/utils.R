@@ -219,6 +219,7 @@ sci_notation = function(format, base, times, power) {
 
 # vectorized version of format_sci_one()
 format_sci = function(x, ...) {
+  if (inherits(x, 'roman')) return(x)
   vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 

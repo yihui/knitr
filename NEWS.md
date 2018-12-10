@@ -36,6 +36,8 @@
 
 - Stan chunks cannot be properly cached: the bug #1064 appeared again (thanks, Mark, https://stackoverflow.com/q/53660143/559676).
 
+- Roman numerals should not be converted to arabic numerals in inline R expressions (thanks, @rgaiacs, #1625).
+
 ## MAJOR CHANGES
 
 - For R scripts passed to `spin()`, only the UTF-8 encoding is accepted (previously it assumes the native encoding of the system).

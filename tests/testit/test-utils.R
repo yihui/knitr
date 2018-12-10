@@ -46,6 +46,11 @@ assert(
   format_sci(1000000L) == '1000000'
 )
 
+# https://github.com/yihui/knitr/issues/1625
+assert('format_sci() does not convert roman numerals to arabic numerals', {
+  format_sci(as.roman(c(1, 4, 7, 33, 100))) %==% c('I', 'IV', 'VII', 'XXXIII', 'C')
+})
+
 assert(
   'format_sci() for Rnw does not add \\ensuremath{} at all',
   !grepl('[\\]ensuremath', format_sci(c(1e4, 1.2345e10, 2 * pnorm(-(3:4)), -Inf)))
