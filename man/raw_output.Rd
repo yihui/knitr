@@ -63,6 +63,3 @@ pre$value
 # *protect* was not converted)
 restore_raw_output(pre$value, pre$chunks)
 }
-\seealso{
-raw_latex
-}

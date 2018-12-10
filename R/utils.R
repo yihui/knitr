@@ -905,7 +905,6 @@ restore_raw_output = function(text, chunks, markers = raw_markers) {
 #'   and values are the raw output). For \code{restore_raw_output()}, the
 #'   restored \code{text}.
 #' @export
-#' @seealso raw_latex
 #' @examples library(knitr)
 #' out = c('*hello*', raw_output('<special>content</special> *protect* me!'), '*world*')
 #' pre = extract_raw_output(out)
