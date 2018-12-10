@@ -14,6 +14,8 @@
 
 - The chunk option `engine.opts` can also take a list now, so that users can specify different options for different language engines (thanks, @kiwiroy, #1632).
 
+- Added functions `raw_block()`, `raw_latex()`, and `raw_html()` to wrap content in raw attribute blocks for Pandoc (thanks, @hughjonesd, #1633).
+
 ## BUG FIXES
 
 - `valign` in `kable_latex()` does not put the float alignment to the correct location (thanks, @haozhu233, #1487, #1519).
