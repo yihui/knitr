@@ -651,8 +651,10 @@ add_html_caption = function(options, code) {
 #'   res = paste(c('', '', kable(x, output = FALSE)), collapse = '\n')
 #'   asis_output(res)
 #' }
-#' # after you defined the above method, data frames will be printed as tables in knitr,
-#' # which is different with the default print() behavior
+#' # register the method
+#' registerS3method("knit_print", "data.frame", knit_print.data.frame)
+#' # after you define and register the above method, data frames will be printed
+#' # as tables in knitr, which is different with the default print() behavior
 knit_print = function(x, ...) {
   if (need_screenshot(x, ...)) {
     html_screenshot(x)

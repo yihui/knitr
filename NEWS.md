@@ -38,6 +38,8 @@
 
 - For R scripts passed to `spin()`, only the UTF-8 encoding is accepted (previously it assumes the native encoding of the system).
 
+- Due to changes in the S3 method dispatch mechanism since R 3.5.0, you will have to call `registerS3method()` to register `knit_print` methods _defined in code chunks_. For package authors, it no longer suffices to export a method without importing `knitr::knit_print`, but if you don't want to import it, there is still a workaround. See the package vignette `vignette('knit_print', package = 'knitr')` for details (thanks, @wch @kevinushey @skranz #1580).
+
 ## MINOR CHANGES
 
 - `spin()` will close each individual code chunk if multiple code chunks appear consecutively (previously it only closes the last code chunk in this case) (thanks, @avehtari, #1590).
