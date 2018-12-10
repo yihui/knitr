@@ -173,6 +173,11 @@ assert(
     '<em>hello</em>\n<special>content</special> *protect* me!\n<em>world</em>'
 )
 
+assert('raw_block() returns a raw attribute block for Pandoc', {
+  (raw_latex('\\emph{x}') == '\n```{=latex}\n\\emph{x}\n```\n')
+  (raw_html('<i>foo</i>') == '\n```{=html}\n<i>foo</i>\n```\n')
+})
+
 assert(
   'block_class() turns a character vector into Pandoc attributes for code block classes',
   block_class(NULL) %==% NULL, block_class('a') %==% '{.a}',
