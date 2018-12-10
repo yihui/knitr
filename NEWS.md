@@ -901,7 +901,7 @@
 
 - the package vignettes were moved to the `vignettes` directory from `inst/doc` since the former will be preferred by the future versions of R
 
-- the testing is done via the **testit** package now (http://cran.r-project.org/package=testit)
+- the testing is done via the **testit** package now (https://cran.r-project.org/package=testit)
 
 ## MISC
 
@@ -1281,7 +1281,7 @@
 
 - if the chunk label contains non-alphanumeric characters (except `-` and `_`), these characters will be replaced by `_` in the figure filenames (if there are any) and a warning will be issued; this is to guarantee the figure filenames are valid to LaTeX (#321) (thanks, (Roman Lustrik)
 
-- the [**highlight**](http://cran.r-project.org/package=highlight) package is not enabled by default; use `opts_knit$set(use.highlight = TRUE)` to enable it
+- the [**highlight**](https://cran.r-project.org/package=highlight) package is not enabled by default; use `opts_knit$set(use.highlight = TRUE)` to enable it
 
 - the default LaTeX output will put messages, warnings and errors in special LaTeX environments: errors are red, warnings are magenta, and messages are italic; in previous versions, they were in the `verbatim` environment (#264) (thanks, @muelleki)
 
