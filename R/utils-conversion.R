@@ -154,13 +154,10 @@ knit2html_v1 = function(...) knit2html(..., force_v1 = TRUE)
 #' @examples # see the reference
 knit2wp = function(
   input, title = 'A post from knitr', ..., envir = parent.frame(), shortcode = FALSE,
-  action = c('newPost', 'editPost', 'newPage'), postid,
-  encoding = getOption('encoding'), publish = TRUE
+  action = c('newPost', 'editPost', 'newPage'), postid, publish = TRUE
 ) {
-  out = knit(input, encoding = encoding, envir = envir); on.exit(unlink(out))
-  con = file(out, encoding = encoding); on.exit(close(con), add = TRUE)
-  content = native_encode(readLines(con, warn = FALSE))
-  content = paste(content, collapse = '\n')
+  out = knit(input, encoding = 'UTF-8', envir = envir); on.exit(unlink(out))
+  content = file_string(out)
   content = markdown::markdownToHTML(text = content, fragment.only = TRUE)
   shortcode = rep(shortcode, length.out = 2L)
   if (shortcode[1]) content = gsub(
@@ -172,8 +169,8 @@ knit2wp = function(
     if (shortcode[2]) '[sourcecode]\\2[/sourcecode]' else '<pre>\\2</pre>', content
   )
 
-  content = native_encode(content, 'UTF-8')
-  title = native_encode(title, 'UTF-8')
+  content = enc2utf8(content)
+  title = enc2utf8(title)
 
   # figure out if we are making a newPost or overwriting an existing post
   action = match.arg(action)

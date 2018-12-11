@@ -6,7 +6,7 @@
 \usage{
 knit2wp(input, title = "A post from knitr", ..., envir = parent.frame(), 
     shortcode = FALSE, action = c("newPost", "editPost", "newPage"), postid, 
-    encoding = getOption("encoding"), publish = TRUE)
+    publish = TRUE)
 }
 \arguments{
 \item{input}{Filename of the Rmd document.}
@@ -31,8 +31,6 @@ page.}
 
 \item{postid}{If \code{action} is \code{editPost}, the post id \code{postid} must be
 specified.}
-
-\item{encoding}{Encoding of the input file; see \code{\link{file}}.}
 
 \item{publish}{Boolean: publish the post immediately?}
 }
