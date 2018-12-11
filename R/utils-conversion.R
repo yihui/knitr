@@ -35,10 +35,9 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' @export
 knit2pandoc = function(
   input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
-  envir = parent.frame(), encoding = getOption('encoding'),
-  to = 'html', pandoc_wrapper = NULL, ...
+  envir = parent.frame(), to = 'html', pandoc_wrapper = NULL, ...
 ) {
-  knit_output = knit(input, output, tangle, text, quiet, envir, encoding)
+  knit_output = knit(input, output, tangle, text, quiet, envir, encoding = 'UTF-8')
   if (!is.null(pandoc_wrapper)) return(pandoc_wrapper(knit_output, to, ...))
   if (!has_package('rmarkdown')) return(pandoc(knit_output, to, ...))
   output = gsub(paste0(file_ext(knit_output), '$'), to, knit_output)
@@ -67,10 +66,9 @@ knit2pandoc = function(
 #' #' compile a reST file with rst2pdf
 #' ## knit2pdf(..., compiler = 'rst2pdf')
 knit2pdf = function(
-  input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = FALSE,
-  encoding = getOption('encoding'), ...
+  input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = FALSE, ...
 ) {
-  out = knit(input, output = output, envir = envir, quiet = quiet, encoding = encoding)
+  out = knit(input, output = output, envir = envir, quiet = quiet, encoding = 'UTF-8')
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (is.null(compiler)) {
     compiler = if (grepl('\\.rst$', out)) 'rst2pdf' else 'pdflatex'

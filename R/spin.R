@@ -119,7 +119,7 @@ spin = function(
     if (format == 'Rmd') {
       knit2html(outsrc, text = txt, envir = envir, encoding = 'UTF-8')
     } else if (!is.null(outsrc) && (format %in% c('Rnw', 'Rtex'))) {
-      knit2pdf(outsrc, envir = envir, encoding = 'UTF-8')
+      knit2pdf(outsrc, envir = envir)
     }
   } else knit(outsrc, text = txt, envir = envir, encoding = 'UTF-8')
 

@@ -6,8 +6,7 @@
 Pandoc}
 \usage{
 knit2pandoc(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE, 
-    envir = parent.frame(), encoding = getOption("encoding"), to = "html", 
-    pandoc_wrapper = NULL, ...)
+    envir = parent.frame(), to = "html", pandoc_wrapper = NULL, ...)
 }
 \arguments{
 \item{input}{Path to the input file.}
@@ -27,8 +26,6 @@ file.}
 \item{envir}{Environment in which code chunks are to be evaluated,
 for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 \code{\link{globalenv}()}).}
-
-\item{encoding}{Encoding of the input file; see \code{\link{file}}.}
 
 \item{to}{Character string giving the Pandoc output format to use.}
 

@@ -5,7 +5,7 @@
 \title{Convert Rnw or Rrst files to PDF}
 \usage{
 knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = FALSE, 
-    encoding = getOption("encoding"), ...)
+    ...)
 }
 \arguments{
 \item{input}{Path to the input file.}
@@ -24,8 +24,6 @@ for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 \code{\link{globalenv}()}).}
 
 \item{quiet}{Boolean; suppress the progress bar and messages?}
-
-\item{encoding}{Encoding of the input file; see \code{\link{file}}.}
 
 \item{...}{Options to be passed to \code{tinytex::\link[tinytex]{latexmk}} or
 \code{\link{rst2pdf}}.}
