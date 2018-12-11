@@ -5,7 +5,7 @@
 \title{Convert markdown to HTML using knit() and markdownToHTML()}
 \usage{
 knit2html(input, output = NULL, ..., envir = parent.frame(), text = NULL, quiet = FALSE, 
-    encoding = getOption("encoding"), force_v1 = FALSE)
+    encoding = "UTF-8", force_v1 = FALSE)
 }
 \arguments{
 \item{input}{Path to the input file.}
@@ -43,7 +43,7 @@ convert the result to HTML.
 \note{
 The \pkg{markdown} package is for R Markdown v1, which is much less
   powerful than R Markdown v2, i.e. the \pkg{rmarkdown} package
-  (\url{http://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
+  (\url{https://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
   HTML, please use \code{rmarkdown::render()} instead.
 }
 \examples{

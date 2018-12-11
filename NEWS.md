@@ -6,6 +6,8 @@
 
 - Removed the `encoding` arguments in `knitr::pandoc()`, `knitr::knit2pandoc()`, `knitr::knit2pdf()`, and `knitr::Sweave2knitr()`. The input files must be encoded in UTF-8.
 
+- `knitr::knit2html()` still has the `encoding` argument, but it only supports UTF-8 internally.
+
 # CHANGES IN knitr VERSION 1.21
 
 ## NEW FEATURES

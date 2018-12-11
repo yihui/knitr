@@ -99,27 +99,25 @@ knit2pdf = function(
 #'   is returned.
 #' @note The \pkg{markdown} package is for R Markdown v1, which is much less
 #'   powerful than R Markdown v2, i.e. the \pkg{rmarkdown} package
-#'   (\url{http://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
+#'   (\url{https://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
 #'   HTML, please use \code{rmarkdown::render()} instead.
 #' @examples # a minimal example
 #' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')
 knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
-                     quiet = FALSE, encoding = getOption('encoding'), force_v1 = FALSE) {
+                     quiet = FALSE, encoding = 'UTF-8', force_v1 = FALSE) {
   if (!force_v1 && is.null(text)) {
-    con = file(input, encoding = encoding)
-    on.exit(close(con), add = TRUE)
     signal = if (is_R_CMD_check()) warning2 else stop2
-    if (length(grep('^---\\s*$', head(readLines(con), 1)))) signal(
+    if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) signal(
       'It seems you should call rmarkdown::render() instead of knitr::knit2html() ',
       'because ', input, ' appears to be an R Markdown v2 document.'
     )
   }
-  out = knit(input, text = text, envir = envir, encoding = encoding, quiet = quiet)
+  out = knit(input, text = text, envir = envir, encoding = 'UTF-8', quiet = quiet)
   if (is.null(text)) {
     output = with_ext(if (is.null(output) || is.na(output)) out else output, 'html')
-    markdown::markdownToHTML(out, output, encoding = encoding, ...)
+    markdown::markdownToHTML(out, output, encoding = 'UTF-8', ...)
     invisible(output)
   } else markdown::markdownToHTML(text = out, ...)
 }
