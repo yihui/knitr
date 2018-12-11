@@ -4,17 +4,14 @@
 \alias{Sweave2knitr}
 \title{Convert Sweave to knitr documents}
 \usage{
-Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file), 
-    encoding = getOption("encoding"), text = NULL)
+Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file), text = NULL)
 }
 \arguments{
-\item{file}{Path to the Rnw file.}
+\item{file}{Path to the Rnw file (must be encoded in UTF-8).}
 
 \item{output}{Output file path. By default, \file{file.Rnw} produces
 \file{file-knitr.Rnw}); if \code{text} is not NULL, no output file will be
 produced.}
-
-\item{encoding}{The encoding of the Rnw file.}
 
 \item{text}{An alternative way to provide the Sweave code as a character
 string. If \code{text} is provided, \code{file} will be ignored.}
