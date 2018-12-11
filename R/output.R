@@ -134,7 +134,15 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
   # make a copy of the input path in input2 and change input to file path
   if (!missing(input)) input2 = input
-  if (in.file && !is.character(input)) input = summary(input)$description
+  if (in.file) if (is.character(input)) {
+    if (encoding != 'UTF-8') warning(
+      'The encoding ("', encoding, '") is not UTF-8. We will only support UTF-8 in',
+      ' the future. Please re-save your file "', input, '" with the UTF-8 encoding.'
+    )
+  } else {
+    warning('The input is a connection. We will only support file input in the future.')
+    input = summary(input)$description
+  }
 
   if (child_mode()) {
     setwd(opts_knit$get('output.dir')) # always restore original working dir
