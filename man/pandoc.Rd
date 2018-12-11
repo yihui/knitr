@@ -4,26 +4,26 @@
 \alias{pandoc}
 \title{A Pandoc wrapper to convert documents to other formats}
 \usage{
-pandoc(input, format, config = getOption("config.pandoc"), ext = NA, 
-    encoding = getOption("encoding"))
+pandoc(input, format, config = getOption("config.pandoc"), ext = NA)
 }
 \arguments{
-\item{input}{A character vector of Markdown filenames.}
+\item{input}{A character vector of Markdown filenames (must be encoded in
+UTF-8).}
 
-\item{format}{Name of the output format (see References). This can be a character
-vector of multiple formats; by default, it is obtained from the \code{t}
-field in the configuration. If the configuration is empty or the \code{t}
-field is not found, the default output format will be \code{'html'}.}
+\item{format}{Name of the output format (see References). This can be a
+character vector of multiple formats; by default, it is obtained from the
+\code{t} field in the configuration. If the configuration is empty or the
+\code{t} field is not found, the default output format will be
+\code{'html'}.}
 
-\item{config}{Path to the Pandoc configuration file. If missing, it is assumed to be
-a file with the same base name as the \code{input} file and an extension
-\code{.pandoc} (e.g. for \file{foo.md} it looks for \file{foo.pandoc})}
+\item{config}{Path to the Pandoc configuration file. If missing, it is
+assumed to be a file with the same base name as the \code{input} file and
+an extension \code{.pandoc} (e.g. for \file{foo.md} it looks for
+\file{foo.pandoc})}
 
-\item{ext}{Filename extensions. By default, the extension is inferred
-from the \code{format}, e.g. \code{latex} creates \code{pdf},
-\code{dzslides} creates \code{html}, and so on}
-
-\item{encoding}{Encoding of the input file; see \code{\link{file}}.}
+\item{ext}{Filename extensions. By default, the extension is inferred from
+the \code{format}, e.g. \code{latex} creates \code{pdf}, \code{dzslides}
+creates \code{html}, and so on}
 }
 \value{
 The output filename(s) (or an error if the conversion failed).
@@ -54,7 +54,7 @@ the \code{format} argument is specified as one single format.
 system("pandoc -h")  # see possible output formats
 }
 \references{
-Pandoc: \url{http://pandoc.org}; Examples and rules of the
+Pandoc: \url{https://pandoc.org}; Examples and rules of the
   configurations: \url{https://yihui.name/knitr/demo/pandoc/}
 
   Also see R Markdown (v2) at \url{http://rmarkdown.rstudio.com}. The

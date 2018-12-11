@@ -4,6 +4,8 @@
 
 - `knitr::knit()` starts to warn against non-UTF8 encodings ([Why?](https://yihui.name/en/2018/11/biggest-regret-knitr/)). In the future, we will only support UTF-8 input. If your input file is not encoded in UTF-8, we strongly recommend that you re-save it with UTF-8.
 
+- Removed the `encoding` argument in `knitr::pandoc()`. The input files must be encoded in UTF-8.
+
 # CHANGES IN knitr VERSION 1.21
 
 ## NEW FEATURES
