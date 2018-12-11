@@ -47,8 +47,9 @@
 #' @export
 #' @examples system('pandoc -h') # see possible output formats
 pandoc = function(input, format, config = getOption('config.pandoc'), ext = NA) {
-  if (Sys.which('pandoc') == '')
-    stop('Please install pandoc first: http://pandoc.org')
+  exec = tryCatch(rmarkdown::pandoc_exec(), error = function(e) Sys.which('pandoc'))
+  if (length(exec) != 1 || exec == '')
+    stop('Please install either RStudio or Pandoc (https://pandoc.org)')
   cfg = if (is.null(config)) with_ext(input[1L], 'pandoc') else config
   txt = read_utf8(input[1])
   if (file.exists(cfg)) txt = c(txt, '', read_utf8(cfg))
@@ -61,12 +62,12 @@ pandoc = function(input, format, config = getOption('config.pandoc'), ext = NA) 
   }
   if (missing(format)) format = pandoc_fmt(cfg)
   mapply(
-    pandoc_one, input, format, ext, MoreArgs = list(cfg = cfg),
+    pandoc_one, input, format, ext, exec, MoreArgs = list(cfg = cfg),
     USE.NAMES = FALSE
   )
 }
 # format is a scalar
-pandoc_one = function(input, format, ext, cfg) {
+pandoc_one = function(input, format, ext, exec, cfg) {
   cmn = NULL  # common arguments
   if (nrow(cfg) == 0L) cfg = character(0) else if (nrow(cfg) == 1L) {
     if ('t' %in% colnames(cfg)) {
@@ -91,12 +92,11 @@ pandoc_one = function(input, format, ext, cfg) {
     }
   })
   cfg = cfg[setdiff(names(cfg), c('o', 'output', 't'))]
-  cmd = paste(
-    'pandoc', pandoc_arg(cfg), pandoc_arg(cmn), '-t', format, '-o', shQuote(out),
-    paste(shQuote(input), collapse = ' ')
+  cmd = c(
+    pandoc_arg(cfg), pandoc_arg(cmn), '-t', format, '-o', shQuote(out), shQuote(input)
   )
-  message('Executing ', cmd)
-  if (system(cmd) == 0L) out else stop('conversion failed')
+  message('Executing: pandoc ', paste(cmd, collapse = ' '))
+  if (system2(exec, cmd) == 0L) out else stop('conversion failed')
 }
 
 # detect output format from config
@@ -105,6 +105,7 @@ pandoc_fmt = function(config) {
   if (prod(dim(config)) == 0 || !('t' %in% fields)) return('html')
   na.omit(config[, 't'])
 }
+
 # infer output extension from format
 pandoc_ext = function(format) {
   if (grepl('^html', format)) return('html')
@@ -114,7 +115,8 @@ pandoc_ext = function(format) {
   if (format == 'opendocument') return('xml')
   format
 }
-# give me a vector of arguments, I turn them into commandline
+
+# give me a vector of arguments, I turn them into command-line
 pandoc_arg = function(x) {
   if (length(x) == 0L || all(is.na(x))) return()
   x = x[!is.na(x)]  # options not provided
@@ -126,9 +128,9 @@ pandoc_arg = function(x) {
     x = unlist(x)
   }
   a1 = nchar(nms) == 1L
-  paste0(ifelse(a1, '-', '--'), nms,
-         ifelse(x == '', '', ifelse(a1, ' ', '=')), x, collapse = ' ')
+  paste0(ifelse(a1, '-', '--'), nms, ifelse(x == '', '', ifelse(a1, ' ', '=')), x)
 }
+
 # identify pandoc config in markdown comments
 pandoc_cfg = function(x) {
   if (length(i1 <- grep('^<!--pandoc', x)) == 0L ||
