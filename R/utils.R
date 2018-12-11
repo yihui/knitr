@@ -397,10 +397,9 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
   if (length(text) == 0) return(text)
   f1 = tempfile('pandoc', '.', '.md'); f2 = tempfile('pandoc', '.')
   on.exit(unlink(c(f1, f2)), add = TRUE)
-  writeLines(enc2utf8(text), f1, useBytes = TRUE)
+  xfun::write_utf8(text, f1)
   rmarkdown::pandoc_convert(f1, to, from, f2, options = if (is_html_output(to)) '--mathjax')
-  code = readLines(f2, encoding = 'UTF-8', warn = FALSE)
-  paste(code, collapse = '\n')
+  xfun::file_string(f2)
 }
 
 #' Path for figure files
