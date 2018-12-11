@@ -51,7 +51,7 @@ pandoc = function(input, format, config = getOption('config.pandoc'), ext = NA) 
   if (length(exec) != 1 || exec == '')
     stop('Please install either RStudio or Pandoc (https://pandoc.org)')
   cfg = if (is.null(config)) with_ext(input[1L], 'pandoc') else config
-  txt = read_utf8(input[1])
+  txt = pandoc_cfg(read_utf8(input[1]))
   if (file.exists(cfg)) txt = c(txt, '', read_utf8(cfg))
   con = textConnection(txt, encoding = 'UTF-8'); on.exit(close(con), add = TRUE)
   cfg = read.dcf(con)
