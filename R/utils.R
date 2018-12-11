@@ -923,7 +923,7 @@ raw_output = function(x, markers = raw_markers, ...) {
 #' @examples
 #' knitr::raw_latex('\\emph{some text}')
 raw_block = function(x, type = 'latex', ...) {
-  if (rmarkdown::pandoc_version() < '2.0.0') warning('raw_block() requires Pandoc >= 2.0.0')
+  if (!rmarkdown::pandoc_available('2.0.0')) warning('raw_block() requires Pandoc >= 2.0.0')
   x = c(sprintf('\n```{=%s}', type), x, '```\n')
   asis_output(paste(x, collapse = '\n'), ...)
 }
