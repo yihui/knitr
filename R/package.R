@@ -19,7 +19,7 @@
 #' @references Full documentation and demos: \url{https://yihui.name/knitr/};
 #'   FAQ's: \url{https://yihui.name/knitr/faq/}
 #' @importFrom xfun attr file_ext isFALSE is_windows loadable parse_only
-#'   sans_ext try_silent with_ext read_utf8 write_utf8
+#'   sans_ext try_silent with_ext read_utf8 write_utf8 file_string
 NULL
 
 .knitEnv = new.env()

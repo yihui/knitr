@@ -399,7 +399,7 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
   on.exit(unlink(c(f1, f2)), add = TRUE)
   xfun::write_utf8(text, f1)
   rmarkdown::pandoc_convert(f1, to, from, f2, options = if (is_html_output(to)) '--mathjax')
-  xfun::file_string(f2)
+  file_string(f2)
 }
 
 #' Path for figure files
