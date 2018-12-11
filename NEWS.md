@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.22
 
+## BUG FIXES
+
+- The output path should be quoted in `pandoc()` (thanks, @antoine-sachet, #1644).
+
 ## MAJOR CHANGES
 
 - `knitr::knit()` starts to warn against non-UTF8 encodings ([Why?](https://yihui.name/en/2018/11/biggest-regret-knitr/)). In the future, we will only support UTF-8 input. If your input file is not encoded in UTF-8, we strongly recommend that you re-save it with UTF-8.

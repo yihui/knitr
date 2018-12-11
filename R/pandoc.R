@@ -92,7 +92,7 @@ pandoc_one = function(input, format, ext, cfg) {
   })
   cfg = cfg[setdiff(names(cfg), c('o', 'output', 't'))]
   cmd = paste(
-    'pandoc', pandoc_arg(cfg), pandoc_arg(cmn), '-t', format, '-o', out,
+    'pandoc', pandoc_arg(cfg), pandoc_arg(cmn), '-t', format, '-o', shQuote(out),
     paste(shQuote(input), collapse = ' ')
   )
   message('Executing ', cmd)
