@@ -56,7 +56,7 @@ spin = function(
 ) {
 
   format = match.arg(format)
-  x = if (nosrc <- is.null(text)) xfun::read_utf8(hair) else split_lines(text)
+  x = if (nosrc <- is.null(text)) read_utf8(hair) else split_lines(text)
   stopifnot(length(comment) == 2L)
   c1 = grep(comment[1], x); c2 = grep(comment[2], x)
   if (length(c1) != length(c2))
