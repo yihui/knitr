@@ -135,7 +135,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   # make a copy of the input path in input2 and change input to file path
   if (!missing(input)) input2 = input
   if (in.file) if (is.character(input)) {
-    if (encoding != 'UTF-8') warning(
+    if (!missing(encoding) && encoding != 'UTF-8') warning(
       'The encoding ("', encoding, '") is not UTF-8. We will only support UTF-8 in',
       ' the future. Please re-save your file "', input, '" with the UTF-8 encoding.'
     )
