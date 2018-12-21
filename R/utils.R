@@ -752,6 +752,8 @@ knit_handlers = function(fun, options) {
     # the figure caption to it later in wrap.knit_asis
     if (inherits(x, 'htmlwidget'))
       class(res$value) = c(class(res$value), 'knit_asis_htmlwidget')
+    if (inherits(x, c('shiny.tag', 'shiny.tag.list')))
+      class(res$value) = c(class(res$value), 'knit_asis_shiny_tag')
     if (res$visible) res$value else invisible(res$value)
   }
   if (length(formals(fun)) < 2)
