@@ -58,7 +58,10 @@ hook_animation = function(options) {
   if (length(cap) == 0) cap = ''
   if (is_blank(cap)) return(cap)
   if (alt) return(escape_html(cap))
-  paste0(create_label(options$fig.lp, options$label), cap)
+  paste0(create_label(
+    options$fig.lp, options$label,
+    if (options$fig.num > 1L && options$fig.show == 'asis') options$fig.cur
+  ), cap)
 }
 
 # a wrapper to upload an image and return the URL
