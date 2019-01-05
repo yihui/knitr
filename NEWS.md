@@ -74,6 +74,8 @@
   
   This engine also works for other types of documents (e.g., `Rnw`) but it will not allow for nested code chunks within the `verbatim` engine.
 
+- New `calling.handlers` option for `opts_chunk()` to register calling handlers within chunks.
+
 ## BUG FIXES
 
 - The chunk option `child` also respects the package option `root.dir` now (thanks, @salim-b, https://community.rstudio.com/t/117563).
