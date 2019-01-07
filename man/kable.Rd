@@ -5,7 +5,7 @@
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
 kable(x, format, digits = getOption("digits"), row.names = NA, col.names = NA, align, 
-    caption = NULL, format.args = list(), escape = TRUE, ...)
+    caption = NULL, label = NULL, format.args = list(), escape = TRUE, ...)
 }
 \arguments{
 \item{x}{An R object, typically a matrix or data frame.}
@@ -34,6 +34,9 @@ default, row names are included if \code{rownames(x)} is neither
 \code{c('c', 'l', 'c')}, unless the output format is LaTeX.}
 
 \item{caption}{The table caption.}
+
+\item{label}{The table reference label. By default, the label is obtained from
+knitr:::opts_current. Only provide a label when using kable outside of RMarkdown.}
 
 \item{format.args}{A list of arguments to be passed to \code{\link{format}()}
 to format table values, e.g. \code{list(big.mark = ',')}.}

@@ -27,6 +27,8 @@
 #'   expanded to a vector of individual letters, e.g. \code{'clc'} becomes
 #'  \code{c('c', 'l', 'c')}, unless the output format is LaTeX.
 #' @param caption The table caption.
+#' @param label The table reference label. By default, the label is obtained from
+#' knitr:::opts_current. Only provide a label when using kable outside of RMarkdown.
 #' @param format.args A list of arguments to be passed to \code{\link{format}()}
 #'   to format table values, e.g. \code{list(big.mark = ',')}.
 #' @param escape Boolean; whether to escape special characters when producing
@@ -82,7 +84,7 @@
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
-  align, caption = NULL, format.args = list(), escape = TRUE, ...
+  align, caption = NULL, label=NULL, format.args = list(), escape = TRUE, ...
 ) {
 
   # determine the table format
@@ -104,8 +106,17 @@ kable = function(
     align = strsplit(align, '')[[1]]
 
   # create a label for bookdown if applicable
+
+  #no label from markdown, no explicit label provided
+  if(is.null(knitr::opts_current$get('label')) & is.null(label)) label = 'unlabeled'
+
+  #label from markdown, explicit labels will be ignored
+  if(!is.null(knitr::opts_current$get('label'))) label = knitr::opts_current$get('label')
+
+
+  #include label in caption
   if (!is.null(caption) && !is.na(caption)) caption = paste0(
-    create_label('tab:', opts_current$get('label'), latex = (format == 'latex')),
+    create_label('tab:', label, latex = (format == 'latex')),
                  caption
   )
   if (inherits(x, 'list')) {
