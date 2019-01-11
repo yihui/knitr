@@ -6,6 +6,8 @@
 
 - When there are multiple figures with multiple captions in a code chunk, **bookdown**'s figure numbering is incorrect (thanks, Catherine Peng, https://stackoverflow.com/q/53880195/559676).
 
+- Added an argument `label` to `kable()` so that users can manually specify a label (thanks, @Inferrator, #1655).
+
 ## MAJOR CHANGES
 
 - `knitr::knit()` starts to warn against non-UTF8 encodings ([Why?](https://yihui.name/en/2018/11/biggest-regret-knitr/)). In the future, we will only support UTF-8 input. If your input file is not encoded in UTF-8, we strongly recommend that you re-save it with UTF-8.
