@@ -964,3 +964,7 @@ digest3 = function(x) {
   close(s)
   unname(tools::md5sum(f))
 }
+
+on_travis <- function() {
+  Sys.getenv('TRAVIS') == 'true'
+}
