@@ -264,7 +264,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   progress = opts_knit$get('progress')
   if (on_travis()) {
     cat(sprintf('travis_fold:start:%s\r', input))
-    cat("processing file: %s", input)
+    cat(sprintf("processing file: %s\r", input))
   }
   if (in.file && !quiet) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
