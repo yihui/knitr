@@ -262,10 +262,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   }
 
   progress = opts_knit$get('progress')
-  if (on_travis()) {
-    cat(sprintf('travis_fold:start:%s\r', input))
-    cat(sprintf("processing file: %s\r", input))
-  }
+  travis_fold("start", input, sprintf("processing file: %s\r", input))
   if (in.file && !quiet) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
   res = paste(knit_hooks$get('document')(res), collapse = '\n')
@@ -282,9 +279,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     concord_gen(input, output)
     if (!quiet) message('output file: ', output, ifelse(progress, '\n', ''))
   }
-  if (on_travis()) {
-    cat(sprintf('travis_fold:end:%s\r', input))
-  }
+  travis_fold("end", input)
   output %n% res
 }
 #' @rdname knit

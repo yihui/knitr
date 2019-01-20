@@ -965,6 +965,12 @@ digest3 = function(x) {
   unname(tools::md5sum(f))
 }
 
-on_travis <- function() {
-  Sys.getenv('TRAVIS') == 'true'
+# if document is knit on travis, add the folding tags.
+# from functions in https://github.com/yihui/crandalf
+travis_fold <- function(type = c("start", "end"), job, msg = NULL) {
+  type = match.arg(type)
+  if (Sys.getenv('TRAVIS') == 'true') {
+    cat(sprintf('travis_fold:%s:%s\r', type, job))
+    if (!is.null(msg)) cat(msg, '\n')
+  }
 }
