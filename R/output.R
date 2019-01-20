@@ -262,7 +262,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   }
 
   progress = opts_knit$get('progress')
-  travis_fold("start", input, sprintf("processing file: %s\r", input))
+  travis_fold("start", input, sprintf("processing file: %s", input))
   if (in.file && !quiet) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
   res = paste(knit_hooks$get('document')(res), collapse = '\n')
