@@ -786,7 +786,7 @@ inst_dir = function(...) {
 # numeric since their behavior may be somewhat unpredictable, e.g. through
 # round(), #1118); see #1396 for difftime
 is_numeric = function(x) {
-  class(x)[1] %in% c('numeric', 'integer', 'difftime')
+  class(x)[1] %in% c('numeric', 'integer', 'difftime', 'complex')
 }
 
 # create \label{x} or (\#x); the latter is current an internal hack for bookdown
