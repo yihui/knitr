@@ -136,7 +136,7 @@ eng_interpreted = function(options) {
           Darwin = paste('-q < %s >', shQuote(xfun::normalize_path(logf))),
           Linux = '-q -e do %s',
           '-q -b do %s'
-         ), shQuote(normalizePath(f)))
+        ), shQuote(normalizePath(f)))
       },
       f
     )
@@ -658,6 +658,54 @@ eng_go = function(options) {
   engine_output(options, code, extra)
 }
 
+# SASS / SCSS engine
+## converts SASS / SCSS -> CSS (with same treatments as CSS engine) using either:
+## LibSass sass R package (https://github.com/rstudio/sass) if installed, or
+## dart-sass standalone executable (https://sass-lang.com/install)
+eng_sxss = function(options) {
+
+  if (!options$eval) {
+    return(engine_output(options, options$code, ''))
+  }
+
+  # create temporary file with input code
+  f = tempfile( pattern = 'code', tmpdir = '.', fileext = paste0(".",options$engine) )
+  writeLines( options$code , f )
+  on.exit( unlink(f), add = TRUE )
+
+  # convert sass/sxss -> css
+  if( loadable("sass") & !isFALSE(options$r.sass) ){
+    message("Converting sass with R package. For executable, set chunk option r.sass = FALSE")
+    out = tryCatch(
+      sass::sass( sass::sass_file(f) ),
+      error = function(e) {
+       if (!options$error) stop(e)
+       message( paste('Error in converting to CSS using sass R package:', e, sep = "\n") )
+      }
+    )
+  }
+  else{
+    cmd = get_engine_path(options$engine.path, options$engine)
+    out = tryCatch(
+      paste( system2( command = cmd, args = f, stdout = TRUE) , collapse = "\n"),
+      error = function(e) {
+        if(!openions$error) stop(e)
+        message( paste('Error in converting to CSS using executable:', e, sep = "\n") )
+      }
+    )
+  }
+
+  # wrap final output for correct rendering
+  final_out = if (options$eval && is_html_output(excludes = 'markdown')) {
+    out_tagged = c('<style type="text/css">', out, '</style>')
+    paste(out_tagged, collapse = '\n')
+  }
+
+  options$results = 'asis'
+  engine_output(options, options$code, final_out)
+
+}
+
 # set engines for interpreted languages
 local({
   for (i in c(
@@ -673,7 +721,7 @@ knit_engines$set(
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia
+  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
 )
 
 cache_engines$set(python = cache_eng_python)
