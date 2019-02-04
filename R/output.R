@@ -279,8 +279,8 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     concord_gen(input, output)
     if (!quiet) message('output file: ', output, ifelse(progress, '\n', ''))
   }
-  output %n% res
   travis_fold("end", input)
+  output %n% res
 }
 #' @rdname knit
 #' @param documentation An integer specifying the level of documentation to add to
