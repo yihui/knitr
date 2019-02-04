@@ -27,7 +27,7 @@
 
 <<setup,include=FALSE,cache=FALSE>>=
 options(width=90)
-opts_chunk$set(out.width = '.6\\linewidth')
+knitr::opts_chunk$set(out.width = '.6\\linewidth')
 .knitr.title = if (exists('.knitr.title')) paste('\\title{', .knitr.title, '}', sep = '') else ''
 .knitr.author = if (nzchar(.knitr.title) && exists('.knitr.author')) {
   paste('\\author{', .knitr.author, '%\n',
