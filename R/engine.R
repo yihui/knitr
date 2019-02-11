@@ -682,19 +682,25 @@ eng_sxss = function(options) {
     # add sass to Suggests
     sass = get("sass", asNamespace("sass"))
     sass_file = get("sass_file", asNamespace("sass"))
+    sass_options = get("sass_options", asNamespace("sass"))
+
+    style = if(isFALSE(options$sass.compressed)) "expanded" else "compressed"
 
     out = tryCatch(
-      sass( sass_file(f) ),
+      sass(sass_file(f), options = sass_options(output_style = style)),
       error = function(e) {
-       if (!options$error) stop(e)
-       message(paste('Error in converting to CSS using sass R package:', e, sep = "\n"))
+        if (!options$error) stop(e)
+        message(paste('Error in converting to CSS using sass R package:', e, sep = "\n") )
       }
     )
   }
   else{
-    cmd = get_engine_path(options$engine.path, options$engine)
+    message("Converting sass with executable.")
+    cmd = get_engine_path(options$engine.path, "sass")
+    style = if(isFALSE(options$sass.compressed)) "" else "--style=compressed"
+
     out = tryCatch(
-      paste(system2( command = cmd, args = f, stdout = TRUE) , collapse = "\n"),
+      paste(system2( command = cmd, args = c(f, style), stdout = TRUE) , collapse = "\n"),
       warning = function(w) {
         if(!options$error && !is.null(xfun::attr(w, "status"))) stop(paste(w, collapse = "\n"))
         message(paste('Error in converting to CSS using executable:', w, sep = "\n"))
