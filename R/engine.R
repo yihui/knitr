@@ -674,10 +674,17 @@ eng_sxss = function(options) {
   on.exit(unlink(f), add = TRUE)
 
   # convert sass/sxss -> css
-  if( loadable("sass") & !isFALSE(options$sass.package) ){
+  if(loadable("sass") && !isFALSE(options$sass.package)){
     message("Converting sass with R package. For executable, set chunk option sass.package = FALSE")
+
+    # TODO: after sass R package (https://github.com/rstudio/sass) is released on CRAN
+    # delete calls to get and replace sass, sass_file, sass_options with sass::function_name()
+    # add sass to Suggests
+    sass = get("sass", asNamespace("sass"))
+    sass_file = get("sass_file", asNamespace("sass"))
+
     out = tryCatch(
-      sass::sass( sass::sass_file(f) ),
+      sass( sass_file(f) ),
       error = function(e) {
        if (!options$error) stop(e)
        message(paste('Error in converting to CSS using sass R package:', e, sep = "\n"))
