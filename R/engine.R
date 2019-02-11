@@ -687,21 +687,25 @@ eng_sxss = function(options) {
   else{
     cmd = get_engine_path(options$engine.path, options$engine)
     out = tryCatch(
-      paste(system2(command = cmd, args = f, stdout = TRUE), collapse = "\n"),
+      paste(system2( command = cmd, args = f, stdout = TRUE) , collapse = "\n"),
+      warning = function(w) {
+        if(!options$error && !is.null(xfun::attr(w, "status"))) stop(paste(w, collapse = "\n"))
+        message(paste('Error in converting to CSS using executable:', w, sep = "\n"))
+      },
       error = function(e) {
-        if(!options$error) stop(e)
+        if(!options$error) stop(paste(e, collapse = "\n"))
         message(paste('Error in converting to CSS using executable:', e, sep = "\n"))
       }
     )
   }
 
   # wrap final output for correct rendering
-  final_out = if (options$eval && is_html_output(excludes = 'markdown')) {
-    out_tagged = c('<style type="text/css">', out, '</style>')
-    paste(out_tagged, collapse = '\n')
-  }
+  final_out =
+    if (!is.null(out) && is_html_output(excludes = 'markdown')) {
+      out_tagged = paste(c('<style type="text/css">', out, '</style>'), collapse = "\n")
+    }
+  else ""
 
-  options$results = 'asis'
   engine_output(options, options$code, final_out)
 
 }
