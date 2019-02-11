@@ -669,9 +669,9 @@ eng_sxss = function(options) {
   }
 
   # create temporary file with input code
-  f = tempfile( pattern = 'code', tmpdir = '.', fileext = paste0(".",options$engine) )
-  writeLines( options$code , f )
-  on.exit( unlink(f), add = TRUE )
+  f = tempfile(pattern = 'code', tmpdir = '.', fileext = paste0(".",options$engine))
+  writeLines(options$code , f)
+  on.exit(unlink(f), add = TRUE)
 
   # convert sass/sxss -> css
   if( loadable("sass") & !isFALSE(options$r.sass) ){
@@ -680,16 +680,16 @@ eng_sxss = function(options) {
       sass::sass( sass::sass_file(f) ),
       error = function(e) {
        if (!options$error) stop(e)
-       message( paste('Error in converting to CSS using sass R package:', e, sep = "\n") )
+       message(paste('Error in converting to CSS using sass R package:', e, sep = "\n"))
       }
     )
   }
   else{
     cmd = get_engine_path(options$engine.path, options$engine)
     out = tryCatch(
-      paste( system2( command = cmd, args = f, stdout = TRUE) , collapse = "\n"),
+      paste(system2(command = cmd, args = f, stdout = TRUE), collapse = "\n"),
       error = function(e) {
-        if(!openions$error) stop(e)
+        if(!options$error) stop(e)
         message( paste('Error in converting to CSS using executable:', e, sep = "\n") )
       }
     )
