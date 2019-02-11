@@ -660,7 +660,7 @@ eng_go = function(options) {
 
 # SASS / SCSS engine
 ## converts SASS / SCSS -> CSS (with same treatments as CSS engine) using either:
-## LibSass sass R package (https://github.com/rstudio/sass) if installed, or
+## LibSass sass R package (https://github.com/rstudio/sass) if installed and not sass.package = FALSE, or
 ## dart-sass standalone executable (https://sass-lang.com/install)
 eng_sxss = function(options) {
 
@@ -674,8 +674,8 @@ eng_sxss = function(options) {
   on.exit(unlink(f), add = TRUE)
 
   # convert sass/sxss -> css
-  if( loadable("sass") & !isFALSE(options$r.sass) ){
-    message("Converting sass with R package. For executable, set chunk option r.sass = FALSE")
+  if( loadable("sass") & !isFALSE(options$sass.package) ){
+    message("Converting sass with R package. For executable, set chunk option sass.package = FALSE")
     out = tryCatch(
       sass::sass( sass::sass_file(f) ),
       error = function(e) {
@@ -690,7 +690,7 @@ eng_sxss = function(options) {
       paste(system2(command = cmd, args = f, stdout = TRUE), collapse = "\n"),
       error = function(e) {
         if(!options$error) stop(e)
-        message( paste('Error in converting to CSS using executable:', e, sep = "\n") )
+        message(paste('Error in converting to CSS using executable:', e, sep = "\n"))
       }
     )
   }
