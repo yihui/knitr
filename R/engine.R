@@ -664,12 +664,12 @@ eng_go = function(options) {
 ## dart-sass standalone executable (https://sass-lang.com/install)
 eng_sxss = function(options) {
 
-  if (!options$eval) {
-    return(engine_output(options, options$code, ''))
-  }
+  # early exit if evaluated output not requested
+  options$results = 'asis'
+  if (!options$eval) return(engine_output(options, options$code, ''))
 
   # create temporary file with input code
-  f = tempfile(pattern = 'code', tmpdir = '.', fileext = paste0(".",options$engine))
+  f = tempfile(pattern = 'code', tmpdir = '.', fileext = paste0(".", options$engine))
   writeLines(options$code , f)
   on.exit(unlink(f), add = TRUE)
 
