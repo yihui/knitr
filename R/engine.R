@@ -662,6 +662,7 @@ eng_go = function(options) {
 ## converts SASS / SCSS -> CSS (with same treatments as CSS engine) using either:
 ## LibSass sass R package (https://github.com/rstudio/sass) if installed and not sass.package = FALSE, or
 ## dart-sass standalone executable (https://sass-lang.com/install)
+## CSS output is compressed by default. Pass "expanded" to engine.opts for more readable output.
 eng_sxss = function(options) {
 
   # early exit if evaluated output not requested
@@ -672,6 +673,9 @@ eng_sxss = function(options) {
   f = tempfile(pattern = 'code', tmpdir = '.', fileext = paste0(".", options$engine))
   writeLines(options$code , f)
   on.exit(unlink(f), add = TRUE)
+
+  # determine preferred styling
+  style = get_engine_opts(options$engine.opts, engine, "compressed")
 
   # convert sass/sxss -> css
   if(loadable("sass") && !isFALSE(options$sass.package)){
@@ -684,7 +688,7 @@ eng_sxss = function(options) {
     sass_file = get("sass_file", asNamespace("sass"))
     sass_options = get("sass_options", asNamespace("sass"))
 
-    style = if(isFALSE(options$sass.compressed)) "expanded" else "compressed"
+    if(!options$error) stopifnot(style %in% c("nested", "expanded", "compact", "compressed"))
 
     out = tryCatch(
       sass(sass_file(f), options = sass_options(output_style = style)),
@@ -693,11 +697,15 @@ eng_sxss = function(options) {
         message(paste('Error in converting to CSS using sass R package:', e, sep = "\n") )
       }
     )
+
+    # remove final newline chars from output
+    if(!is.null(out)) out = sub("\\n$", "", out)
   }
   else{
     message("Converting sass with executable.")
     cmd = get_engine_path(options$engine.path, "sass")
-    style = if(isFALSE(options$sass.compressed)) "" else "--style=compressed"
+    if(!options$error) stopifnot(style %in% c('expanded', 'compressed'))
+    style = paste0("--style=", style)
 
     out = tryCatch(
       paste(system2( command = cmd, args = c(f, style), stdout = TRUE) , collapse = "\n"),
