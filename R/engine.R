@@ -700,7 +700,7 @@ eng_sxss = function(options) {
 
   # convert sass/sxss -> css
   if(loadable("sass") && package && cmd == "sass"){
-    message("Converting sass with R package. For executable, set chunk option sass.package = FALSE")
+    message("Converting sass with R package. For executable, set package = FALSE in engine.opts or set explicit engine.path")
 
     # TODO: after sass R package (https://github.com/rstudio/sass) is released on CRAN
     # delete calls to get and replace sass, sass_file, sass_options with sass::function_name()
@@ -713,7 +713,8 @@ eng_sxss = function(options) {
       sass(sass_file(f), options = sass_options(output_style = style)),
       error = function(e) {
         if (!options$error) stop(e)
-        message(paste('Error in converting to CSS using sass R package:', e, sep = "\n") )
+        warning2(paste('Error in converting to CSS using sass R package:', e, sep = "\n"))
+        return(NULL)
       }
     )
 
@@ -724,17 +725,28 @@ eng_sxss = function(options) {
     message("Converting sass with executable.")
     style = paste0("--style=", style)
 
+    # attempt execution of sass
     out = tryCatch(
-      paste(system2( command = cmd, args = c(f, style), stdout = TRUE) , collapse = "\n"),
-      warning = function(w) {
-        if(!options$error && !is.null(xfun::attr(w, "status"))) stop(paste(w, collapse = "\n"))
-        message(paste('Error in converting to CSS using executable:', w, sep = "\n"))
-      },
+      suppressWarnings(system2(command = cmd, args = c(f, style), stdout = TRUE, stderr = TRUE)),
       error = function(e) {
-        if(!options$error) stop(paste(e, collapse = "\n"))
-        message(paste('Error in converting to CSS using executable:', e, sep = "\n"))
+        if(!options$error) stop(e)
+        warning2(paste('Error in converting to CSS using executable:', e, sep = "\n"))
+        return(NULL)
       }
     )
+
+    # handle execution errors (status codes) or otherwise reformat valid output
+    if (!is.null(attr(out, 'status'))) {
+      if(!options$error) stop(paste(out, collapse = '\n'))
+      else{
+        warning(paste('Error in converting to CSS using executable:',
+                      paste(out, collapse = "\n"),
+                      "No CSS from this chunk will be added to the output.",
+                      sep = "\n"))
+        out = NULL
+      }
+    }
+    else if(!is.null(out)) out = paste(out, collapse = "\n")
   }
 
   # wrap final output for correct rendering
