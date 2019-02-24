@@ -659,10 +659,18 @@ eng_go = function(options) {
 }
 
 # SASS / SCSS engine
-## converts SASS / SCSS -> CSS (with same treatments as CSS engine) using either:
-## LibSass sass R package (https://github.com/rstudio/sass) if installed and not sass.package = FALSE, or
-## dart-sass standalone executable (https://sass-lang.com/install)
-## CSS output is compressed by default. Pass "expanded" to engine.opts for more readable output.
+#
+# Converts SASS / SCSS -> CSS (with same treatments as CSS engine) using either:
+# LibSass sass R package (https://github.com/rstudio/sass) when
+#   + the package is installed
+#   + engine.opts does not set package = FALSE (e.g. engine.opts = list(package = FALSE))
+#   + an explicit path to the executable is not provided through engine.path, or
+# dart-sass standalone executable (https://sass-lang.com/install) otherwise
+#
+# CSS output is compressed by default but formatting can be set through style in engine.opts
+#  For the sass R package, valid styles are "compressed","expanded", "nested", and "compact"
+#  For the executable, valid styles are "compressed" and "expanded"
+#  Please refer to respective package / executable documentation for more details
 eng_sxss = function(options) {
 
   # early exit if evaluated output not requested
