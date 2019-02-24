@@ -688,28 +688,31 @@ eng_sxss = function(options) {
   cmd = get_engine_path(options$engine.path, "sass")
 
   # validate provided engine options
-  if(!is.logical(package)) {
-    if(!options$error) stop(paste("package option must be either TRUE or FALSE"))
+  if (!is.logical(package)) {
+    if (!options$error) stop(paste("package option must be either TRUE or FALSE"))
     package = TRUE
     warning2("package option must be either TRUE or FALSE. Defaulting to TRUE.")
   }
   use_package = loadable("sass") && package && cmd == "sass"
 
-  valid_styles =
-    if(use_package) c("compressed", "expanded", "compact", "nested")
-    else c("compressed", "expanded")
-  if(!style %in% valid_styles)
-    if(!options$error) stop(paste("style must be one of:",
-                                  paste(valid_styles, collapse = ", "), sep = "\n"))
-  else {
-    style = "compressed"
-    warning2(paste("style must be one of:",
-                  paste(valid_styles, collapse = ", "),
-                  "Defaulting to 'compressed'.", sep = "\n"))
+  valid_styles = if (use_package) {
+    c("compressed", "expanded", "compact", "nested")
+  } else {
+    c("compressed", "expanded")
   }
-
+  if (!style %in% valid_styles) {
+    if (!options$error) {
+      stop(paste("style must be one of:",
+                 paste(valid_styles, collapse = ", "), sep = "\n"))
+    } else {
+      style = "compressed"
+      warning2(paste("style must be one of:",
+                     paste(valid_styles, collapse = ", "),
+                     "Defaulting to 'compressed'.", sep = "\n"))
+    }
+  }
   # convert sass/sxss -> css
-  if(use_package){
+  if (use_package) {
     message("Converting sass with R package. For executable, set package = FALSE in engine.opts or set explicit engine.path")
 
     # TODO: after sass R package (https://github.com/rstudio/sass) is released on CRAN
@@ -729,9 +732,8 @@ eng_sxss = function(options) {
     )
 
     # remove final newline chars from output
-    if(!is.null(out)) out = sub("\\n$", "", out)
-  }
-  else{
+    if (!is.null(out)) out = sub("\\n$", "", out)
+  } else {
     message("Converting sass with executable.")
     style = paste0("--style=", style)
 
@@ -739,7 +741,7 @@ eng_sxss = function(options) {
     out = tryCatch(
       system2(command = cmd, args = c(f, style), stdout = TRUE, stderr = TRUE),
       error = function(e) {
-        if(!options$error) stop(e)
+        if (!options$error) stop(e)
         warning2(paste('Error in converting to CSS using executable:', e, sep = "\n"))
         return(NULL)
       }
@@ -747,18 +749,19 @@ eng_sxss = function(options) {
 
     # handle execution errors (status codes) or otherwise reformat valid output
     if (!is.null(attr(out, 'status'))) {
-      if(!options$error) stop(paste(out, collapse = '\n'))
+      if (!options$error) stop(paste(out, collapse = '\n'))
       out = NULL
-      }
-    else if(!is.null(out)) out = paste(out, collapse = "\n")
+    } else if (!is.null(out)) {
+      out = paste(out, collapse = "\n")
+    }
   }
 
   # wrap final output for correct rendering
-  final_out =
-    if (!is.null(out) && is_html_output(excludes = 'markdown')) {
-      out_tagged = paste(c('<style type="text/css">', out, '</style>'), collapse = "\n")
-    }
-  else ""
+  final_out = if (!is.null(out) && is_html_output(excludes = 'markdown')) {
+    out_tagged = paste(c('<style type="text/css">', out, '</style>'), collapse = "\n")
+  } else {
+    ""
+  }
 
   engine_output(options, options$code, final_out)
 
