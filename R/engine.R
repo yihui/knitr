@@ -688,26 +688,28 @@ eng_sxss = function(options) {
   cmd = get_engine_path(options$engine.path, "sass")
 
   # validate provided engine options
-  if(!is.logical(package))
+  if(!is.logical(package)) {
     if(!options$error) stop(paste("package option must be either TRUE or FALSE"))
-  else {
     package = TRUE
-    warning("package option must be either TRUE or FALSE. Defaulting to TRUE.")
+    warning2("package option must be either TRUE or FALSE. Defaulting to TRUE.")
   }
+  use_package = loadable("sass") && package && cmd == "sass"
 
   valid_styles =
-    if(package) c("compressed", "expanded", "compact", "nested")
-  else c("compressed", "expanded")
-  valid_styles_list = paste(valid_styles, collapse = ", ")
+    if(use_package) c("compressed", "expanded", "compact", "nested")
+    else c("compressed", "expanded")
   if(!style %in% valid_styles)
-    if(!options$error) stop(paste("style must be one of:", valid_styles_list, sep = "\n"))
+    if(!options$error) stop(paste("style must be one of:",
+                                  paste(valid_styles, collapse = ", "), sep = "\n"))
   else {
     style = "compressed"
-    warning(paste("style must be one of:", valid_styles_list, "Defaulting to 'compressed'.", sep = "\n"))
+    warning2(paste("style must be one of:",
+                  paste(valid_styles, collapse = ", "),
+                  "Defaulting to 'compressed'.", sep = "\n"))
   }
 
   # convert sass/sxss -> css
-  if(loadable("sass") && package && cmd == "sass"){
+  if(use_package){
     message("Converting sass with R package. For executable, set package = FALSE in engine.opts or set explicit engine.path")
 
     # TODO: after sass R package (https://github.com/rstudio/sass) is released on CRAN
@@ -735,7 +737,7 @@ eng_sxss = function(options) {
 
     # attempt execution of sass
     out = tryCatch(
-      suppressWarnings(system2(command = cmd, args = c(f, style), stdout = TRUE, stderr = TRUE)),
+      system2(command = cmd, args = c(f, style), stdout = TRUE, stderr = TRUE),
       error = function(e) {
         if(!options$error) stop(e)
         warning2(paste('Error in converting to CSS using executable:', e, sep = "\n"))
@@ -746,14 +748,8 @@ eng_sxss = function(options) {
     # handle execution errors (status codes) or otherwise reformat valid output
     if (!is.null(attr(out, 'status'))) {
       if(!options$error) stop(paste(out, collapse = '\n'))
-      else{
-        warning(paste('Error in converting to CSS using executable:',
-                      paste(out, collapse = "\n"),
-                      "No CSS from this chunk will be added to the output.",
-                      sep = "\n"))
-        out = NULL
+      out = NULL
       }
-    }
     else if(!is.null(out)) out = paste(out, collapse = "\n")
   }
 
