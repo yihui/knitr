@@ -674,11 +674,32 @@ eng_sxss = function(options) {
   writeLines(options$code , f)
   on.exit(unlink(f), add = TRUE)
 
-  # determine preferred styling
-  style = get_engine_opts(options$engine.opts, engine, "compressed")
+  # process provided engine options
+  package = options$engine.opts$package %n% TRUE
+  style = options$engine.opts$style %n% "compressed"
+  cmd = get_engine_path(options$engine.path, "sass")
+
+  # validate provided engine options
+  if(!is.logical(package))
+    if(!options$error) stop(paste("package option must be either TRUE or FALSE"))
+  else {
+    package = TRUE
+    warning("package option must be either TRUE or FALSE. Defaulting to TRUE.")
+  }
+
+  valid_styles =
+    if(package) c("compressed", "expanded", "compact", "nested")
+  else c("compressed", "expanded")
+  valid_styles_list = paste(valid_styles, collapse = ", ")
+  if(!style %in% valid_styles)
+    if(!options$error) stop(paste("style must be one of:", valid_styles_list, sep = "\n"))
+  else {
+    style = "compressed"
+    warning(paste("style must be one of:", valid_styles_list, "Defaulting to 'compressed'.", sep = "\n"))
+  }
 
   # convert sass/sxss -> css
-  if(loadable("sass") && !isFALSE(options$sass.package)){
+  if(loadable("sass") && package && cmd == "sass"){
     message("Converting sass with R package. For executable, set chunk option sass.package = FALSE")
 
     # TODO: after sass R package (https://github.com/rstudio/sass) is released on CRAN
@@ -687,8 +708,6 @@ eng_sxss = function(options) {
     sass = get("sass", asNamespace("sass"))
     sass_file = get("sass_file", asNamespace("sass"))
     sass_options = get("sass_options", asNamespace("sass"))
-
-    if(!options$error) stopifnot(style %in% c("nested", "expanded", "compact", "compressed"))
 
     out = tryCatch(
       sass(sass_file(f), options = sass_options(output_style = style)),
@@ -703,8 +722,6 @@ eng_sxss = function(options) {
   }
   else{
     message("Converting sass with executable.")
-    cmd = get_engine_path(options$engine.path, "sass")
-    if(!options$error) stopifnot(style %in% c('expanded', 'compressed'))
     style = paste0("--style=", style)
 
     out = tryCatch(
