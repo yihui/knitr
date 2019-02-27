@@ -689,7 +689,7 @@ eng_sxss = function(options) {
 
   # validate provided engine options
   if (!is.logical(package)) {
-    if (!options$error) stop(paste("package option must be either TRUE or FALSE"))
+    if (!options$error) stop2(paste("package option must be either TRUE or FALSE"))
     package = TRUE
     warning2("package option must be either TRUE or FALSE. Defaulting to TRUE.")
   }
@@ -702,7 +702,7 @@ eng_sxss = function(options) {
   }
   if (!style %in% valid_styles) {
     if (!options$error) {
-      stop(paste("style must be one of:",
+      stop2(paste("style must be one of:",
                  paste(valid_styles, collapse = ", "), sep = "\n"))
     } else {
       style = "compressed"
@@ -741,7 +741,7 @@ eng_sxss = function(options) {
     out = tryCatch(
       system2(command = cmd, args = c(f, style), stdout = TRUE, stderr = TRUE),
       error = function(e) {
-        if (!options$error) stop(e)
+        if (!options$error) stop2(e)
         warning2(paste('Error in converting to CSS using executable:', e, sep = "\n"))
         return(NULL)
       }
@@ -749,7 +749,7 @@ eng_sxss = function(options) {
 
     # handle execution errors (status codes) or otherwise reformat valid output
     if (!is.null(attr(out, 'status'))) {
-      if (!options$error) stop(paste(out, collapse = '\n'))
+      if (!options$error) stop2(paste(out, collapse = '\n'))
       out = NULL
     } else if (!is.null(out)) {
       out = paste(out, collapse = "\n")
@@ -758,7 +758,7 @@ eng_sxss = function(options) {
 
   # wrap final output for correct rendering
   final_out = if (!is.null(out) && is_html_output(excludes = 'markdown')) {
-    out_tagged = paste(c('<style type="text/css">', out, '</style>'), collapse = "\n")
+    paste(c('<style type="text/css">', out, '</style>'), collapse = "\n")
   } else {
     ""
   }
