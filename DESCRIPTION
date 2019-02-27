@@ -22,6 +22,7 @@ Authors@R: c(
     person("Doug", "Hemken", role = "ctb"),
     person("Duncan", "Murdoch", role = "ctb"),
     person("Elio", "Campitelli", role = "ctb"),
+    person("Emily", "Riederer", role = "ctb"),
     person("Fabian", "Hirschmann", role = "ctb"),
     person("Fitch", "Simeon", role = "ctb"),
     person("Forest", "Fang", role = "ctb"),
