@@ -127,8 +127,11 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
       paste0('\n\n', fence, block_class(class), x, fence, '\n\n')
     }
   }
-  hook.o = function(x, options) {
-    hook.t(x, options, options$class.output)
+  hook.o = function(class) {
+    force(class)
+    function(x, options) {
+      hook.t(x, options, options[[paste0('class.', class)]])
+    }
   }
   hook.r = function(x, options) {
     language = tolower(options$engine)
@@ -139,12 +142,14 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
     }
     paste0('\n\n', fence, language, '\n', x, fence, '\n\n')
   }
+  hooks = list()
+  for (i in c('output', 'warning', 'error', 'message')) hooks[[i]] = hook.o(i)
+  knit_hooks$set(hooks)
   knit_hooks$set(
     source = function(x, options) {
       x = hilight_source(x, 'markdown', options)
       (if (strict) hook.t else hook.r)(paste(c(x, ''), collapse = '\n'), options)
     },
-    output = hook.o, warning = hook.t, error = hook.t, message = hook.t,
     inline = function(x) {
       fmt = pandoc_to()
       fmt = if (length(fmt) == 1L) 'latex' else 'html'

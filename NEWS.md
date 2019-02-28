@@ -2,6 +2,8 @@
 
 ## NEW FEATURES 
 
+- Added chunk options `class.error`, `class.warning`, and `class.message` to customize the CSS classes for errors, warnings, and messages in R Markdown output, respectively (thanks, @gadenbuie, #1676).
+
 - Added a new engine `sass`/`scss` to convert Sass/SCSS to CSS using either the **sass** [R package](https://github.com/rstudio/sass) (LibSass) or Dart Sass [executable](https://sass-lang.com/install) (when R package not found, the engine option `engine.opts = list(package = FALSE)`, or `engine.path` to executable is provided). After conversion, resulting CSS is treated as in the CSS engine (thanks, @emilyriederer, #1666).
 
 ## BUG FIXES
