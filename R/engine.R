@@ -658,7 +658,7 @@ eng_go = function(options) {
   engine_output(options, code, extra)
 }
 
-# SASS / SCSS engine
+# SASS / SCSS engine (contributed via https://github.com/yihui/knitr/pull/1666)
 #
 # Converts SASS / SCSS -> CSS (with same treatments as CSS engine) using either:
 # LibSass sass R package (https://github.com/rstudio/sass) when
