@@ -687,12 +687,6 @@ eng_sxss = function(options) {
   style = options$engine.opts$style %n% "compressed"
   cmd = get_engine_path(options$engine.path, "sass")
 
-  # validate provided engine options
-  if (!is.logical(package)) {
-    if (!options$error) stop2(paste("package option must be either TRUE or FALSE"))
-    package = TRUE
-    warning2("package option must be either TRUE or FALSE. Defaulting to TRUE.")
-  }
   use_package = loadable("sass") && package && cmd == "sass"
 
   valid_styles = if (use_package) {
