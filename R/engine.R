@@ -689,18 +689,7 @@ eng_sxss = function(options) {
 
   use_package = loadable("sass") && package && cmd == "sass"
 
-  valid_styles = c("compressed", "expanded", if (use_package) c("compact", "nested"))
-  if (!style %in% valid_styles) {
-    if (!options$error) {
-      stop2(paste("style must be one of:",
-                 paste(valid_styles, collapse = ", "), sep = "\n"))
-    } else {
-      style = "compressed"
-      warning2(paste("style must be one of:",
-                     paste(valid_styles, collapse = ", "),
-                     "Defaulting to 'compressed'.", sep = "\n"))
-    }
-  }
+  style = match.arg(style, c("compressed", "expanded", if (use_package) c("compact", "nested")))
   # convert sass/sxss -> css
   if (use_package) {
     message("Converting sass with R package. For executable, set package = FALSE in engine.opts or set explicit engine.path")
