@@ -692,14 +692,14 @@ eng_sxss = function(options) {
   style = match.arg(style, c("compressed", "expanded", if (use_package) c("compact", "nested")))
   # convert sass/sxss -> css
   if (use_package) {
-    message("Converting sass with R package. For executable, set package = FALSE in engine.opts or set explicit engine.path")
+    message("Converting sass with R package.")
 
     # TODO: after sass R package (https://github.com/rstudio/sass) is released on CRAN
     # delete calls to get and replace sass, sass_file, sass_options with sass::function_name()
     # add sass to Suggests
-    sass = get("sass", asNamespace("sass"))
-    sass_file = get("sass_file", asNamespace("sass"))
-    sass_options = get("sass_options", asNamespace("sass"))
+    sass = getFromNamespace("sass", "sass")
+    sass_file = getFromNamespace("sass_file", "sass")
+    sass_options = getFromNamespace("sass_options", "sass")
 
     out = tryCatch(
       sass(sass_file(f), options = sass_options(output_style = style)),
