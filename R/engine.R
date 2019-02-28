@@ -136,7 +136,7 @@ eng_interpreted = function(options) {
           Darwin = paste('-q < %s >', shQuote(xfun::normalize_path(logf))),
           Linux = '-q -e do %s',
           '-q -b do %s'
-         ), shQuote(normalizePath(f)))
+        ), shQuote(normalizePath(f)))
       },
       f
     )
@@ -658,6 +658,115 @@ eng_go = function(options) {
   engine_output(options, code, extra)
 }
 
+# SASS / SCSS engine
+#
+# Converts SASS / SCSS -> CSS (with same treatments as CSS engine) using either:
+# LibSass sass R package (https://github.com/rstudio/sass) when
+#   + the package is installed
+#   + engine.opts does not set package = FALSE (e.g. engine.opts = list(package = FALSE))
+#   + an explicit path to the executable is not provided through engine.path, or
+# dart-sass standalone executable (https://sass-lang.com/install) otherwise
+#
+# CSS output is compressed by default but formatting can be set through style in engine.opts
+#  For the sass R package, valid styles are "compressed","expanded", "nested", and "compact"
+#  For the executable, valid styles are "compressed" and "expanded"
+#  Please refer to respective package / executable documentation for more details
+eng_sxss = function(options) {
+
+  # early exit if evaluated output not requested
+  options$results = 'asis'
+  if (!options$eval) return(engine_output(options, options$code, ''))
+
+  # create temporary file with input code
+  f = tempfile(pattern = 'code', tmpdir = '.', fileext = paste0(".", options$engine))
+  writeLines(options$code , f)
+  on.exit(unlink(f), add = TRUE)
+
+  # process provided engine options
+  package = options$engine.opts$package %n% TRUE
+  style = options$engine.opts$style %n% "compressed"
+  cmd = get_engine_path(options$engine.path, "sass")
+
+  # validate provided engine options
+  if (!is.logical(package)) {
+    if (!options$error) stop2(paste("package option must be either TRUE or FALSE"))
+    package = TRUE
+    warning2("package option must be either TRUE or FALSE. Defaulting to TRUE.")
+  }
+  use_package = loadable("sass") && package && cmd == "sass"
+
+  valid_styles = if (use_package) {
+    c("compressed", "expanded", "compact", "nested")
+  } else {
+    c("compressed", "expanded")
+  }
+  if (!style %in% valid_styles) {
+    if (!options$error) {
+      stop2(paste("style must be one of:",
+                 paste(valid_styles, collapse = ", "), sep = "\n"))
+    } else {
+      style = "compressed"
+      warning2(paste("style must be one of:",
+                     paste(valid_styles, collapse = ", "),
+                     "Defaulting to 'compressed'.", sep = "\n"))
+    }
+  }
+  # convert sass/sxss -> css
+  if (use_package) {
+    message("Converting sass with R package. For executable, set package = FALSE in engine.opts or set explicit engine.path")
+
+    # TODO: after sass R package (https://github.com/rstudio/sass) is released on CRAN
+    # delete calls to get and replace sass, sass_file, sass_options with sass::function_name()
+    # add sass to Suggests
+    sass = get("sass", asNamespace("sass"))
+    sass_file = get("sass_file", asNamespace("sass"))
+    sass_options = get("sass_options", asNamespace("sass"))
+
+    out = tryCatch(
+      sass(sass_file(f), options = sass_options(output_style = style)),
+      error = function(e) {
+        if (!options$error) stop(e)
+        warning2(paste('Error in converting to CSS using sass R package:', e, sep = "\n"))
+        return(NULL)
+      }
+    )
+
+    # remove final newline chars from output
+    if (!is.null(out)) out = sub("\\n$", "", out)
+  } else {
+    message("Converting sass with executable.")
+    style = paste0("--style=", style)
+
+    # attempt execution of sass
+    out = tryCatch(
+      system2(command = cmd, args = c(f, style), stdout = TRUE, stderr = TRUE),
+      error = function(e) {
+        if (!options$error) stop2(e)
+        warning2(paste('Error in converting to CSS using executable:', e, sep = "\n"))
+        return(NULL)
+      }
+    )
+
+    # handle execution errors (status codes) or otherwise reformat valid output
+    if (!is.null(attr(out, 'status'))) {
+      if (!options$error) stop2(paste(out, collapse = '\n'))
+      out = NULL
+    } else if (!is.null(out)) {
+      out = paste(out, collapse = "\n")
+    }
+  }
+
+  # wrap final output for correct rendering
+  final_out = if (!is.null(out) && is_html_output(excludes = 'markdown')) {
+    paste(c('<style type="text/css">', out, '</style>'), collapse = "\n")
+  } else {
+    ""
+  }
+
+  engine_output(options, options$code, final_out)
+
+}
+
 # set engines for interpreted languages
 local({
   for (i in c(
@@ -673,7 +782,7 @@ knit_engines$set(
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia
+  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
 )
 
 cache_engines$set(python = cache_eng_python)
