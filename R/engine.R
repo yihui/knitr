@@ -679,7 +679,7 @@ eng_sxss = function(options) {
 
   # create temporary file with input code
   f = tempfile(pattern = 'code', tmpdir = '.', fileext = paste0(".", options$engine))
-  writeLines(options$code , f)
+  xfun::write_utf8(options$code , f)
   on.exit(unlink(f), add = TRUE)
 
   # process provided engine options
