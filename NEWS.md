@@ -2,7 +2,7 @@
 
 ## NEW FEATURES 
 
-- Added a new engine `sass`/`scss` to convert Sass/SCSS to CSS using either the `sass` [R package](https://github.com/rstudio/sass) (LibSass) or Dart Sass [executable](https://sass-lang.com/install) (when R package not found, engine option `package = FALSE`, or `engine.path` to executable is provided). After conversion, resulting CSS is treated as in the CSS engine (#1666).
+- Added a new engine `sass`/`scss` to convert Sass/SCSS to CSS using either the **sass** [R package](https://github.com/rstudio/sass) (LibSass) or Dart Sass [executable](https://sass-lang.com/install) (when R package not found, the engine option `engine.opts = list(package = FALSE)`, or `engine.path` to executable is provided). After conversion, resulting CSS is treated as in the CSS engine (thanks, @emilyriederer, #1666).
 
 ## BUG FIXES
 
