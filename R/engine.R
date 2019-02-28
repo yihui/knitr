@@ -689,11 +689,7 @@ eng_sxss = function(options) {
 
   use_package = loadable("sass") && package && cmd == "sass"
 
-  valid_styles = if (use_package) {
-    c("compressed", "expanded", "compact", "nested")
-  } else {
-    c("compressed", "expanded")
-  }
+  valid_styles = c("compressed", "expanded", if (use_package) c("compact", "nested"))
   if (!style %in% valid_styles) {
     if (!options$error) {
       stop2(paste("style must be one of:",
