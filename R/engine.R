@@ -692,7 +692,7 @@ eng_sxss = function(options) {
   style = match.arg(style, c("compressed", "expanded", if (use_package) c("compact", "nested")))
   # convert sass/sxss -> css
   if (use_package) {
-    message("Converting sass with R package.")
+    message("Converting with the R package sass")
 
     # TODO: after sass R package (https://github.com/rstudio/sass) is released on CRAN
     # delete calls to get and replace sass, sass_file, sass_options with sass::function_name()
@@ -706,40 +706,37 @@ eng_sxss = function(options) {
       error = function(e) {
         if (!options$error) stop(e)
         warning2(paste('Error in converting to CSS using sass R package:', e, sep = "\n"))
-        return(NULL)
+        NULL
       }
     )
 
     # remove final newline chars from output
     if (!is.null(out)) out = sub("\\n$", "", out)
   } else {
-    message("Converting sass with executable.")
+    message("Converting sass with ", cmd)
     style = paste0("--style=", style)
 
     # attempt execution of sass
     out = tryCatch(
-      system2(command = cmd, args = c(f, style), stdout = TRUE, stderr = TRUE),
+      system2(cmd, args = c(f, style), stdout = TRUE, stderr = TRUE),
       error = function(e) {
         if (!options$error) stop2(e)
         warning2(paste('Error in converting to CSS using executable:', e, sep = "\n"))
-        return(NULL)
+        NULL
       }
     )
 
     # handle execution errors (status codes) or otherwise reformat valid output
-    if (!is.null(attr(out, 'status'))) {
+    out = if (!is.null(attr(out, 'status'))) {
       if (!options$error) stop2(paste(out, collapse = '\n'))
-      out = NULL
     } else if (!is.null(out)) {
-      out = paste(out, collapse = "\n")
+      paste(out, collapse = "\n")
     }
   }
 
   # wrap final output for correct rendering
   final_out = if (!is.null(out) && is_html_output(excludes = 'markdown')) {
     paste(c('<style type="text/css">', out, '</style>'), collapse = "\n")
-  } else {
-    ""
   }
 
   engine_output(options, options$code, final_out)
