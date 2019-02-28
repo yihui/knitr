@@ -568,6 +568,7 @@ wrap.recordedplot = function(x, options) {
 
 #' @export
 wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) {
+  if (options$fig.show == 'hide') return('')
   hook_plot = knit_hooks$get('plot')
   options$fig.num = length(x)
   # remove the automatically set out.width when fig.retina is set, otherwise the
