@@ -293,9 +293,7 @@ eng_tikz = function(options) {
   ext = tolower(options$fig.ext %n% dev2ext(options$dev))
 
   to_svg = ext == 'svg'
-  unlink(outf <- paste0(f, if (to_svg) '.dvi' else '.pdf'))
-  tools::texi2dvi(texf, pdf = !to_svg, clean = TRUE)
-  if (!file.exists(outf)) stop('Failed to compile tikz; check the template: ', tmpl)
+  outf = if (to_svg) tinytex::latexmk(texf, 'latex') else tinytex::latexmk(texf)
 
   fig = fig_path(if (to_svg) '.dvi' else '.pdf', options)
   dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
