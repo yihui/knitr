@@ -768,7 +768,7 @@ knit_meta_add = function(meta, label = '') {
   if (length(meta)) {
     meta_id = attr(.knitEnv$meta, 'knit_meta_id')
     .knitEnv$meta = c(.knitEnv$meta, meta)
-    attr(.knitEnv$meta, 'knit_meta_id') = c(meta_id, rep(label, length(meta)))
+    attr(.knitEnv$meta, 'knit_meta_id') = c(meta_id, rep_len(label, length(meta)))
   }
   .knitEnv$meta
 }

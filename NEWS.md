@@ -8,6 +8,8 @@
 
 ## BUG FIXES
 
+- `knit_meta_add()` could exhaust the system's memory because of a wrong method of vectorization (thanks, @kevinushey @nikkoc, rstudio/rmarkdown#1538).
+
 - The output path should be quoted in `pandoc()` (thanks, @antoine-sachet, #1644).
 
 - When there are multiple figures with multiple captions in a code chunk, **bookdown**'s figure numbering is incorrect (thanks, Catherine Peng, https://stackoverflow.com/q/53880195/559676).

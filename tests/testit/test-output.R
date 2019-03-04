@@ -111,3 +111,11 @@ assert(
   'insert_header_latex() finds the correct \\documentclass{}',
   identical(res[length(res) - 3], '\\documentclass{article}')
 )
+
+assert('knit_meta_add() adds meta objects with the correct number of labels', {
+  knit_meta(clean = TRUE)
+  knit_meta_add(list(1, 2))
+  m = attr(knit_meta_add(list(3, 4), label = c('a', 'b')), 'knit_meta_id')
+  knit_meta(clean = TRUE)
+  (m %==% c('', '', 'a', 'b'))
+})
