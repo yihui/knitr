@@ -632,6 +632,11 @@ is_native_enc = function(x) {
   x == 'native.enc' || x == ''
 }
 
+is_utf8_file = function(f) {
+  x = readLines(f, encoding = 'UTF-8', warn = FALSE)
+  !any(is.na(iconv(x, 'UTF-8', 'UTF-8')))
+}
+
 #' Wrap long lines in Rmd files
 #'
 #' This function wraps long paragraphs in an R Markdown file. Other elements are
