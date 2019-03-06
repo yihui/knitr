@@ -287,7 +287,7 @@ eng_tikz = function(options) {
     stop("Couldn't find replacement string; or the are multiple of them.")
 
   s = append(lines, options$code, i)  # insert tikz into tex-template
-  writeLines(s, texf <- paste0(f <- tempfile('tikz', '.'), '.tex'))
+  writeLines(s, texf <- basename(paste0(f <- tempfile('tikz', '.'), '.tex')))
   on.exit(unlink(texf), add = TRUE)
 
   ext = tolower(options$fig.ext %n% dev2ext(options$dev))
