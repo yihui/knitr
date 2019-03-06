@@ -494,14 +494,14 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   f = in_dir(d, {
     if (i1 || i3) {
       if (i1) {
-        f1 = basename(tempfile('widget', '.', '.html'))
+        f1 = wd_tempfile('widget', '.html')
         save_widget(x, f1, FALSE, options = options)
       } else f1 = x$url
-      f2 = tempfile('webshot', '.', ext)
+      f2 = wd_tempfile('webshot', ext)
       do.call(webshot::webshot, c(list(f1, f2), wargs))
       normalizePath(f2)
     } else if (i2) {
-      f = tempfile('webshot', '.', ext)
+      f = wd_tempfile('webshot', ext)
       do.call(webshot::appshot, c(list(x, f), wargs))
       normalizePath(f)
     }

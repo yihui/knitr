@@ -382,6 +382,9 @@ out_format = function(x) {
   if (missing(x)) fmt else !is.null(fmt) && (fmt %in% x)
 }
 
+# tempfile under the current working directory
+wd_tempfile = function(...) basename(tempfile(tmpdir = '.', ...))
+
 # rmarkdown sets an option for the Pandoc output format from markdown
 pandoc_to = function(x) {
   fmt = opts_knit$get('rmarkdown.pandoc.to')
@@ -395,7 +398,7 @@ pandoc_from = function() {
 
 pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
   if (length(text) == 0) return(text)
-  f1 = tempfile('pandoc', '.', '.md'); f2 = tempfile('pandoc', '.')
+  f1 = wd_tempfile('pandoc', '.md'); f2 = wd_tempfile('pandoc')
   on.exit(unlink(c(f1, f2)), add = TRUE)
   xfun::write_utf8(text, f1)
   rmarkdown::pandoc_convert(f1, to, from, f2, options = if (is_html_output(to)) '--mathjax')
