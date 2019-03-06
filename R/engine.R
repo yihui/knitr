@@ -303,6 +303,7 @@ eng_tikz = function(options) {
   if (to_svg) {
     # dvisvgm needs to be on the path
     # dvisvgm for windows needs ghostscript bin dir on the path also
+    if (Sys.which('dvisvgm') == '') tinytex::tlmgr_install('dvisvgm')
     conv = system2('dvisvgm', fig)
     # copy the svg to figure subdir
     file.rename(basename(fig2), fig2)
