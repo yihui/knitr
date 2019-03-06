@@ -280,14 +280,14 @@ eng_stan = function(options) {
 eng_tikz = function(options) {
   if (!options$eval) return(engine_output(options, options$code, ''))
 
-  lines = readLines(tmpl <- options$engine.opts$template %n%
-                      system.file('misc', 'tikz2pdf.tex', package = 'knitr'))
+  lines = readLines(options$engine.opts$template %n%
+                    system.file('misc', 'tikz2pdf.tex', package = 'knitr'))
   i = grep('%% TIKZ_CODE %%', lines)
   if (length(i) != 1L)
     stop("Couldn't find replacement string; or the are multiple of them.")
 
   s = append(lines, options$code, i)  # insert tikz into tex-template
-  writeLines(s, texf <- basename(paste0(f <- tempfile('tikz', '.'), '.tex')))
+  writeLines(s, texf <- basename(paste0(tempfile('tikz', '.'), '.tex')))
   on.exit(unlink(texf), add = TRUE)
 
   ext = tolower(options$fig.ext %n% dev2ext(options$dev))
