@@ -308,7 +308,7 @@ eng_tikz = function(options) {
   } else {
     # convert to the desired output-format using magick
     if (ext != 'pdf') magick::image_write(do.call(magick::image_convert, c(
-      list(magick::image_read(fig), ext), options$engine.opts$convert.opts
+      list(magick::image_read_pdf(fig), ext), options$engine.opts$convert.opts
     )), fig2)
   }
   fig = fig2
