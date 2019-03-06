@@ -304,7 +304,7 @@ eng_tikz = function(options) {
     # dvisvgm needs to be on the path
     # dvisvgm for windows needs ghostscript bin dir on the path also
     if (Sys.which('dvisvgm') == '') tinytex::tlmgr_install('dvisvgm')
-    conv = system2('dvisvgm', fig)
+    if (system2('dvisvgm', fig) != 0) stop('Failed to compile ', fig, ' to ', fig2)
     # copy the svg to figure subdir
     file.rename(basename(fig2), fig2)
   } else {
@@ -316,7 +316,6 @@ eng_tikz = function(options) {
       ))
     }
   }
-  if (conv != 0 && !options$error) stop('Failed to compile ', fig, ' to ', fig2)
   fig = fig2
 
   options$fig.num = 1L; options$fig.cur = 1L
