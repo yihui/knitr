@@ -308,13 +308,10 @@ eng_tikz = function(options) {
     # copy the svg to figure subdir
     file.rename(basename(fig2), fig2)
   } else {
-    # convert to the desired output-format, calling `convert`
-    conv = 0
-    if (ext != 'pdf') {
-      conv = system2(options$engine.opts[['convert']] %n% 'convert', c(
-        options$engine.opts$convert.opts, sprintf('%s %s', fig, fig2)
-      ))
-    }
+    # convert to the desired output-format using magick
+    if (ext != 'pdf') magick::image_write(do.call(magick::image_convert, c(
+      list(magick::image_read(fig), ext), options$engine.opts$convert.opts
+    )), fig2)
   }
   fig = fig2
 
