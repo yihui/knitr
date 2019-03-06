@@ -1,7 +1,5 @@
 language: r
 
-sudo: false
-
 # environment variables
 env:
   matrix:
@@ -37,6 +35,7 @@ addons:
     - qpdf
     - texinfo
     - cargo
+    - libmagick++-dev
 
 repos:
   XRAN: https://xran.yihui.name
