@@ -158,8 +158,11 @@ assert(
 )
 
 assert(
-  'kable(, "pandoc") works for a 0 row 1 column matrix',
-  identical(kable2(x2, 'pandoc'), c('|a  |', '|:--|'))
+  'kable(, "pandoc") works for a 0 row data.frame',
+  identical(
+    kable2(data.frame(x = character(0), y = integer(0)), 'pandoc'),
+    c('|x  |  y|', '|:--|--:|')
+  )
 )
 
 assert('kable(, "pandoc", caption = "Table Caption") works for a 1-column matrix', {
