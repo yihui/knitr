@@ -28,9 +28,10 @@ options in a separate chunk.
 See \code{str(knitr::opts_chunk$get())} for a list of default chunk options.
 }
 \note{
-\code{opts_current} is read-only in the sense that it does nothing if
-  you call \code{opts_current$set()}; you can only query the options via
-  \code{opts_current$get()}.
+\code{opts_current} should be treated as read-only and you are supposed
+  to only query its values via \code{opts_current$get()}. Technically you
+  could also call \code{opts_current$set()} to change the values, but you are
+  not recommended to do so unless you understand the consequences.
 }
 \examples{
 opts_chunk$get("prompt")

@@ -54,9 +54,10 @@ new_defaults = function(value = list()) {
 #'
 #'   A list of available options:
 #'   \url{https://yihui.name/knitr/options/#chunk_options}
-#' @note \code{opts_current} is read-only in the sense that it does nothing if
-#'   you call \code{opts_current$set()}; you can only query the options via
-#'   \code{opts_current$get()}.
+#' @note \code{opts_current} should be treated as read-only and you are supposed
+#'   to only query its values via \code{opts_current$get()}. Technically you
+#'   could also call \code{opts_current$set()} to change the values, but you are
+#'   not recommended to do so unless you understand the consequences.
 #' @export
 #' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
 opts_chunk = new_defaults(list(
