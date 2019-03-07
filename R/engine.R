@@ -379,7 +379,9 @@ eng_cat = function(options) {
     # do not write to stdout like the default behavior of cat()
     if (!identical(file, '')) cat(..., file = file)
   }
-  do.call(cat2, c(list(options$code, sep = '\n'), options$engine.opts))
+  if (options$eval)
+    do.call(cat2, c(list(options$code, sep = '\n'), options$engine.opts))
+
   if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
     return('')
   options$engine = lang
