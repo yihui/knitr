@@ -365,7 +365,8 @@ kable_markdown = function(x, padding = 1, ...) {
 }
 
 kable_pandoc = function(x, caption = NULL, padding = 1, ...) {
-  tab = if (ncol(x) == 1) kable_markdown(
+  # pandoc's table format cannot create 1-column or 0-row tables
+  tab = if (ncol(x) == 1 || nrow(x) == 0) kable_markdown(
     x, padding = padding, ...
   ) else kable_mark(
     x, c(NA, '-', if (is_blank(colnames(x))) '-' else NA),
