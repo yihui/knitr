@@ -20,6 +20,8 @@
 
 - The `tikz` engine doesn't work on Windows (thanks, Andry, https://stackoverflow.com/q/54839403/559676).
 
+- `kable()` now generates a table for R Markdown documents even when the data has 0 rows (thanks, @yutannihilation, #1677).
+
 ## MAJOR CHANGES
 
 - `knitr::knit()` starts to warn against non-UTF8 encodings ([Why?](https://yihui.name/en/2018/11/biggest-regret-knitr/)). In the future, we will only support UTF-8 input. If your input file is not encoded in UTF-8, we strongly recommend that you re-save it with UTF-8.
