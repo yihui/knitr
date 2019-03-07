@@ -8,6 +8,8 @@
 
 - The `cat` engine supports the chunk option `eval = FALSE` now (thanks, @HanOostdijk, #1618).
 
+- The chunk option `out.extra` can be used to include extra attributes for the `<iframe>` generated from `knitr::include_url()` or `knitr::include_app()` (thanks, @jvcasillas, #1648).
+
 ## BUG FIXES
 
 - `knit_meta_add()` could exhaust the system's memory because of a wrong method of vectorization (thanks, @kevinushey @nikkoc, rstudio/rmarkdown#1538).

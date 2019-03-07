@@ -613,9 +613,10 @@ wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE) {
 wrap.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE) {
   options$fig.cur = plot_counter()
   options = reduce_plot_opts(options)
+  if (length(extra <- options$out.extra)) extra = paste('', extra, collapse = '')
   add_html_caption(options, sprintf(
-    '<iframe src="%s" width="%s" height="%s"></iframe>',
-    escape_html(x$url), options$out.width %n% '100%', x$height %n% '400px'
+    '<iframe src="%s" width="%s" height="%s"%s></iframe>',
+    escape_html(x$url), options$out.width %n% '100%', x$height %n% '400px', extra
   ))
 }
 
