@@ -36,6 +36,7 @@ addons:
     - texinfo
     - cargo
     - libmagick++-dev
+    - libpoppler-cpp-dev
 
 repos:
   XRAN: https://xran.yihui.name
