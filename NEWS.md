@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.23 (unreleased)
+
+## BUG FIXES
+
+- `kable()` now generates a table even when the data has 0 rows (thanks, @yutannihilation, #1677).
+
 # CHANGES IN knitr VERSION 1.22
 
 ## NEW FEATURES 
