@@ -157,6 +157,11 @@ assert(
   identical(kable2(x2, 'markdown'), c('|a  |', '|:--|'))
 )
 
+assert(
+  'kable(, "pandoc") works for a 0 row 1 column matrix',
+  identical(kable2(x2, 'pandoc'), c('|a  |', '|:--|'))
+)
+
 assert('kable(, "pandoc", caption = "Table Caption") works for a 1-column matrix', {
   x4 = matrix(1:2, ncol = 1, dimnames = list(NULL, 'a'))
   kable2(x4, 'pandoc', caption = 'Table Caption') %==%
