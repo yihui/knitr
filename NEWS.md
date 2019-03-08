@@ -40,6 +40,8 @@
 
 - Changed `tools::texi2dvi()` to `tinytex::latexmk()` for the `tikz` engine to compile TikZ graphics to other foramts (e.g., `svg` or `png`). This requires the **tinytex** package >= v0.10.10: https://github.com/yihui/tinytex.
 
+- Empty lines are no longer removed in the output of `purl()` (thanks, Marius Hofert).
+
 # CHANGES IN knitr VERSION 1.21
 
 ## NEW FEATURES
