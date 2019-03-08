@@ -18,7 +18,7 @@ You can install the stable version on
 [CRAN](https://cran.r-project.org/package=knitr):
 
 ```r
-install.packages('knitr', dependencies = TRUE)
+install.packages('knitr')
 ```
 
 You can also install the development version from

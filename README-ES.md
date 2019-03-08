@@ -12,7 +12,7 @@ El paquete de R **knitr** es un motor de programación literaria de uso genéric
 Puede instalar la versión estable en [CRAN](https://cran.r-project.org/package=knitr):
 
 ```r
-install.packages('knitr', dependencies = TRUE)
+install.packages('knitr')
 ```
 
 También puede instalar la versión en desarrollo desde [XRAN](https://xran.yihui.name), la cual provee construcciones diarias de **knitr**:

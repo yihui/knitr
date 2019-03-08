@@ -11,7 +11,7 @@ O pacote R **knitr** é um motor de programação literata (o *literate programm
 Você pode instalar a versão estável em [CRAN](https://cran.r-project.org/package=knitr):
 
 ```r
-install.packages('knitr', dependencies = TRUE)
+install.packages('knitr')
 ```
 
 Você pode instalar a versão em desenvolvimento em [XRAN](https://xran.yihui.name), que fornece compilações (*builds*) diários do **knitr**:
