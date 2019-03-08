@@ -225,8 +225,7 @@ format_sci = function(x, ...) {
 
 # absolute path?
 is_abs_path = function(x) {
-  if (is_windows())
-    grepl(':', x, fixed = TRUE) || grepl('^\\\\', x) else grepl('^[/~]', x)
+  if (is_windows()) grepl('^(\\\\|[A-Za-z]:)', x) else grepl('^[/~]', x)
 }
 
 # is tikz device without externalization?
