@@ -336,6 +336,7 @@ process_file = function(text, output) {
   # output line numbers
   if (concord_mode()) knit_concord$set(outlines = line_count(res))
   print_knitlog()
+  if (tangle) res = strip_white(res)
 
   res
 }
