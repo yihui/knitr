@@ -608,8 +608,8 @@ split_lines = function(x) {
 
 # if a string is encoded in UTF-8, convert it to native encoding
 native_encode = function(x, to = '') {
-  idx = Encoding(x) == 'UTF-8'
-  x2 = iconv(x, if (any(idx)) 'UTF-8' else '', to)
+  from = if (any(Encoding(x) == 'UTF-8')) 'UTF-8' else ''
+  x2 = iconv(x, from, to)
   if (!any(is.na(x2))) return(x2)  # use conversion only if it succeeds
   warning('some characters may not work under the current locale')
   x
