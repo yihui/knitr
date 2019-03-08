@@ -4,7 +4,7 @@ hook_plot_md = function(x, options) {
   # if not using R Markdown v2 or output is HTML, just return v1 output
   if (is.null(to <- pandoc_to()) || is_html_output(to))
     return(hook_plot_md_base(x, options))
-  if ((options$fig.show == 'animate' || !options$external) && is_latex_output())
+  if ((options$fig.show == 'animate' || is_tikz_dev(options)) && is_latex_output())
     return(hook_plot_tex(x, options))
   office_output = to %in% c('docx', 'pptx', 'rtf', 'odt')
   if (!is.null(options$out.width) || !is.null(options$out.height) ||

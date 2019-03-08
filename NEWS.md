@@ -1,3 +1,7 @@
+# CHANGES IN knitr VERSION 1.23
+
+
+
 # CHANGES IN knitr VERSION 1.22
 
 ## NEW FEATURES 
