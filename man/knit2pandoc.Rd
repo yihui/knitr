@@ -6,7 +6,7 @@
 Pandoc}
 \usage{
 knit2pandoc(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE, 
-    envir = parent.frame(), to = "html", pandoc_wrapper = NULL, ...)
+    envir = parent.frame(), to = "html", pandoc_wrapper = NULL, ..., encoding = "UTF-8")
 }
 \arguments{
 \item{input}{Path to the input file.}
@@ -35,6 +35,8 @@ for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 \code{\link{pandoc}()}.}
 
 \item{...}{Options to be passed to the \code{pandoc_wrapper} function.}
+
+\item{encoding}{Ignored (always assumes UTF-8).}
 }
 \value{
 Returns the output of the \code{pandoc_wrapper} function.

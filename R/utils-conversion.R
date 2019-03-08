@@ -30,12 +30,13 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #'   \code{rmarkdown::\link[rmarkdown]{pandoc_convert}()}, otherwise it
 #'   \code{\link{pandoc}()}.
 #' @param ... Options to be passed to the \code{pandoc_wrapper} function.
+#' @param encoding Ignored (always assumes UTF-8).
 #' @author Trevor L. Davis
 #' @return Returns the output of the \code{pandoc_wrapper} function.
 #' @export
 knit2pandoc = function(
   input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
-  envir = parent.frame(), to = 'html', pandoc_wrapper = NULL, ...
+  envir = parent.frame(), to = 'html', pandoc_wrapper = NULL, ..., encoding = 'UTF-8'
 ) {
   knit_output = knit(input, output, tangle, text, quiet, envir, encoding = 'UTF-8')
   if (!is.null(pandoc_wrapper)) return(pandoc_wrapper(knit_output, to, ...))
