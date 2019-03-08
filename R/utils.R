@@ -223,11 +223,9 @@ format_sci = function(x, ...) {
   vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 
-# absolute path?
-is_abs_path = function(x) {
-  if (is_windows())
-    grepl(':', x, fixed = TRUE) || grepl('^\\\\', x) else grepl('^[/~]', x)
-}
+# if path and ./path are the same, it must be a relative path; otherwise it
+# should be an absolute path
+is_abs_path = function(x) !xfun::same_path(x, file.path('.', x))
 
 # is tikz device without externalization?
 is_tikz_dev = function(options) {
