@@ -222,8 +222,11 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     # use ext if cannot auto detect pattern
     if (is.null(pattern <- detect_pattern(text, ext))) {
       # nothing to be executed; just return original input
-      if (is.null(output)) return(paste(text, collapse = '\n')) else {
-        cat(text, sep = '\n', file = output); return(output)
+      if (is.null(output)) {
+        return(if (tangle) '' else paste(text, collapse = '\n'))
+      } else {
+        cat(if (tangle) '' else text, sep = '\n', file = output)
+        return(output)
       }
     }
     if (!(pattern %in% names(apat)))
