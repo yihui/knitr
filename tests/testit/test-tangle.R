@@ -11,5 +11,5 @@ tangle_text = function(text, out.format = 'markdown') {
 # is tangled, purl() returns an empty string rather than the original text.
 # https://github.com/yihui/knitr/pull/1660
 assert('when LP pattern not found in the input, purl() returns an empty string', {
-  (tangle_text('There is no code.')  %==% '')
+  (tangle_text('There is no code.') %==% '')
 })
