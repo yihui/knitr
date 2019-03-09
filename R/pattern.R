@@ -12,44 +12,56 @@ all_patterns = list(
     chunk.begin = '^\\s*<<(.*)>>=.*$', chunk.end = '^\\s*@\\s*(%+.*|)$',
     inline.code = '\\\\Sexpr\\{([^}]+)\\}', inline.comment = '^\\s*%.*',
     ref.chunk = '^\\s*<<(.+)>>\\s*$', header.begin = '(^|\n)\\s*\\\\documentclass[^}]+\\}',
-    document.begin = '\\s*\\\\begin\\{document\\}'),
+    document.begin = '\\s*\\\\begin\\{document\\}',
+    ext = list('rnw' = '.tex', 'snw' = '.tex', 'stex' = '.tex'),
+    out.format = 'latex'),
 
-  `brew` = list(inline.code = '<%[=]{0,1}\\s+([^%]+)\\s+[-]*%>'),
+  `brew` = list(inline.code = '<%[=]{0,1}\\s+([^%]+)\\s+[-]*%>', ext = list('brew' = NULL),
+                out.format = 'brew'),
 
   `tex` = list(
     chunk.begin = '^\\s*%+\\s*begin.rcode\\s*(.*)', chunk.end = '^\\s*%+\\s*end.rcode',
     chunk.code = '^\\s*%+', ref.chunk = '^%+\\s*<<(.+)>>\\s*$',
     inline.comment = '^\\s*%.*', inline.code = '\\\\rinline\\{([^}]+)\\}',
     header.begin = '(^|\n)\\s*\\\\documentclass[^}]+\\}',
-    document.begin = '\\s*\\\\begin\\{document\\}'),
+    document.begin = '\\s*\\\\begin\\{document\\}',
+    out.format = 'latex', ext = list('rtex' = '.tex', 'tex' = NULL)),
 
   `html` = list(
     chunk.begin = '^\\s*<!--\\s*begin.rcode\\s*(.*)',
     chunk.end = '^\\s*end.rcode\\s*-->', ref.chunk = '^\\s*<<(.+)>>\\s*$',
-    inline.code = '<!--\\s*rinline(.+?)-->', header.begin = '\\s*<head>'),
+    inline.code = '<!--\\s*rinline(.+?)-->', header.begin = '\\s*<head>',
+    ext = list('htm' = NULL, 'html' = NULL, 'rhtm' = '.htm', 'rhtml' = '.html'),
+    out.format = 'html'),
 
   `md` = list(
     chunk.begin = '^[\t >]*```+\\s*\\{([a-zA-Z0-9_]+.*)\\}\\s*$',
     chunk.end = '^[\t >]*```+\\s*$',
-    ref.chunk = '^\\s*<<(.+)>>\\s*$', inline.code = '(?<!(^|\n)``)`r[ #]([^`]+)\\s*`'),
+    ref.chunk = '^\\s*<<(.+)>>\\s*$', inline.code = '(?<!(^|\n)``)`r[ #]([^`]+)\\s*`',
+    ext = list('rmd' = '.md', 'rmarkdown' = '.markdown', 'markdown' = NULL, 'md' = NULL),
+    out.format = 'markdown'),
 
   `rst` = list(
     chunk.begin = '^\\s*[.][.]\\s+\\{r(.*)\\}\\s*$',
     chunk.end = '^\\s*[.][.]\\s+[.][.]\\s*$', chunk.code = '^\\s*[.][.]',
-    ref.chunk = '^\\.*\\s*<<(.+)>>\\s*$', inline.code = ':r:`([^`]+)`'),
+    ref.chunk = '^\\.*\\s*<<(.+)>>\\s*$', inline.code = ':r:`([^`]+)`',
+    ext = list('rst' = NULL, 'rrst' = '.rst'), out.format = 'rst'),
 
   `asciidoc` = list(
     chunk.begin = '^//\\s*begin[.]rcode(.*)$', chunk.end = '^//\\s*end[.]rcode\\s*$',
     chunk.code = '^//+', ref.chunk = '^\\s*<<(.+)>>\\s*$',
     inline.code = '`r +([^`]+)\\s*`|[+]r +([^+]+)\\s*[+]',
-    inline.comment = '^//.*'),
+    inline.comment = '^//.*',
+    ext = list('asciidoc' = NULL, 'rasciidoc' = '.asciidoc', 'adoc' = NULL, 'radoc' = '.adoc'),
+    out.format = 'asciidoc'),
 
   `textile` = list(
     chunk.begin = '^###[.]\\s+begin[.]rcode(.*)$',
     chunk.end = '^###[.]\\s+end[.]rcode\\s*$',
     ref.chunk = '^\\s*<<(.+)>>\\s*$',
     inline.code = '@r +([^@]+)\\s*@',
-    inline.comment = '^###[.].*')
+    inline.comment = '^###[.].*',
+    ext = list('textile' = NULL, 'rtextile' = '.textile'), out.format = 'textile')
 )
 
 .sep.label = '^(#|--)+\\s*(@knitr|----+)(.*?)-*\\s*$'  # pattern for code chunks in an R script
@@ -58,7 +70,8 @@ all_patterns = list(
 .pat.init = list(
   chunk.begin = NULL, chunk.end = NULL, chunk.code = NULL, inline.code = NULL,
   global.options = NULL, input.doc = NULL, ref.chunk = NULL,
-  header.begin = NULL, document.begin = NULL
+  header.begin = NULL, document.begin = NULL, out.format = 'unknown',
+  ext = list()
 )
 
 #' Patterns to match and extract R code in a document
@@ -137,24 +150,40 @@ group_pattern = function(pattern) {
   !is.null(pattern) && grepl('\\(.+\\)', pattern)
 }
 
-# automatically detect the chunk patterns
-detect_pattern = function(text, ext) {
-  if (!missing(ext)) {
-    if (ext %in% c('rnw', 'snw', 'stex')) return('rnw')
-    if (ext == 'brew') return('brew')
-    if (ext %in% c('htm', 'html', 'rhtm', 'rhtml')) return('html')
-    if (ext %in% c('rmd', 'rmarkdown', 'markdown', 'md')) return('md')
-    if (ext %in% c('rst', 'rrst')) return('rst')
-    if (ext %in% c('asciidoc', 'rasciidoc', 'adoc', 'radoc')) return('asciidoc')
-  }
-  for (p in names(all_patterns)) {
-    for (i in c('chunk.begin', 'inline.code')) {
-      pat = all_patterns[[p]][[i]]
-      if (length(pat) && any(stringr::str_detect(text, pat))) return(p)
+contains_pattern = function(text, pat) {
+  for (i in c('chunk.begin', 'inline.code')) {
+    if (length(pat[[i]]) && any(stringr::str_detect(text, pat[[i]]))) {
+      return(TRUE)
     }
   }
-  # *.Rtex indicates the tex syntax in knitr, but Rnw syntax in traditional
-  # Sweave, which should have been detected in the above loop
-  if (!missing(ext) && ext == 'rtex') return('rnw')
+  # didn't find any patterns
+  FALSE
+}
+
+# automatically detect the chunk patterns
+# returns the name of the pattern in `all_patterns`
+detect_pattern = function(text = NULL, ext = NULL) {
+  # check extensions
+  if (!is.null(ext)) {
+    ext = tolower(ext)
+    for (p in names(all_patterns)) {
+      pat = all_patterns[[p]]
+      if (!is.null(pat[['ext']]) && (ext %in% tolower(names(pat[['ext']])))) {
+        # *.Rtex indicates the tex syntax in knitr, but Rnw syntax in traditional
+        # Sweave. Disambiguate by checking whether it contains Rnw patterns
+        if ((ext == 'rtex') && !is.null(text) &&
+            contains_pattern(text, all_patterns[['rnw']]))
+            return('rnw')
+        else return(p)
+      }
+    }
+  }
+  if (!is.null(text)) {
+    # check for existence of patterns inside doc
+    for (p in names(all_patterns)) {
+      pat = all_patterns[[p]]
+      if (contains_pattern(text, pat)) return(p)
+    }
+  }
   NULL
 }
