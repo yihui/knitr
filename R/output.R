@@ -223,13 +223,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     if (is.null(pattern <- detect_pattern(text, ext))) {
       # nothing to be executed; just return original input
       if (is.null(output)) {
-        if (tangle) return("") else return(paste(text, collapse = '\n'))
+        return(if (tangle) '' else paste(text, collapse = '\n'))
       } else {
-        if (tangle) {
-          cat("", file = output)
-        } else {
-          cat(text, sep = '\n', file = output)
-        }
+        cat(if (tangle) '' else text, sep = '\n', file = output)
         return(output)
       }
     }
