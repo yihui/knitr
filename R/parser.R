@@ -278,8 +278,7 @@ print.inline = function(x, ...) {
 #' # automatically figure out 'to'
 #' read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4))
 #' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a", to = "^#@@b")
-#' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a",
-#'            to = "^#@@b", from.offset = 1, to.offset = -1)
+#' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a", to = "^#@@b", from.offset = 1, to.offset = -1)
 #'
 #' ## later you can use, e.g., <<foo>>=
 #' knitr:::knit_code$get() # use this to check chunks in the current session

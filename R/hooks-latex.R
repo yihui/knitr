@@ -34,8 +34,7 @@
 #' # <<foo, dev='pdf', fig.show='animate', interval=.1>>=
 #'
 #' # 5 plots are generated in this chunk
-#' hook_plot_tex('foo5.pdf', opts_chunk$merge(list(fig.show='animate',
-#'               interval=.1, fig.cur=5, fig.num=5)))
+#' hook_plot_tex('foo5.pdf', opts_chunk$merge(list(fig.show='animate',interval=.1,fig.cur=5, fig.num=5)))
 hook_plot_tex = function(x, options) {
   # This function produces the image inclusion code for LaTeX.
   # optionally wrapped in code that resizes it, aligns it, handles it
