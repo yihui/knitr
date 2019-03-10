@@ -618,7 +618,7 @@ is_native_enc = function(x) {
   x == 'native.enc' || x == ''
 }
 
-is_utf8 = function(f, x = readLines(f, encoding = 'UTF-8', warn = FALSE)) {
+is_utf8 = function(x) {
   !any(is.na(iconv(x, 'UTF-8', 'UTF-8')))
 }
 

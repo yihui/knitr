@@ -199,7 +199,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
 
   if (is.null(text)) {
     text = readLines(input2, encoding = 'UTF-8', warn = FALSE)
-    if (!is_utf8(x = text)) {
+    if (!is_utf8(text)) {
       warning(
         'The file "', input2, '" should be encoded in UTF-8. Now I will try to ',
         'read it with the system native encoding (which may not be correct). ',
