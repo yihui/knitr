@@ -38,7 +38,7 @@ knit2pandoc = function(
   input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
   envir = parent.frame(), to = 'html', pandoc_wrapper = NULL, ..., encoding = 'UTF-8'
 ) {
-  knit_output = knit(input, output, tangle, text, quiet, envir, encoding = 'UTF-8')
+  knit_output = knit(input, output, tangle, text, quiet, envir)
   if (!is.null(pandoc_wrapper)) return(pandoc_wrapper(knit_output, to, ...))
   if (!has_package('rmarkdown')) return(pandoc(knit_output, to, ...))
   output = gsub(paste0(file_ext(knit_output), '$'), to, knit_output)
@@ -69,7 +69,7 @@ knit2pandoc = function(
 knit2pdf = function(
   input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = FALSE, ...
 ) {
-  out = knit(input, output = output, envir = envir, quiet = quiet, encoding = 'UTF-8')
+  out = knit(input, output = output, envir = envir, quiet = quiet)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (is.null(compiler)) {
     compiler = if (grepl('\\.rst$', out)) 'rst2pdf' else 'pdflatex'
@@ -115,7 +115,7 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
       'because ', input, ' appears to be an R Markdown v2 document.'
     )
   }
-  out = knit(input, text = text, envir = envir, encoding = 'UTF-8', quiet = quiet)
+  out = knit(input, text = text, envir = envir, quiet = quiet)
   if (is.null(text)) {
     output = with_ext(if (is.null(output) || is.na(output)) out else output, 'html')
     markdown::markdownToHTML(out, output, encoding = 'UTF-8', ...)
@@ -157,7 +157,7 @@ knit2wp = function(
   input, title = 'A post from knitr', ..., envir = parent.frame(), shortcode = FALSE,
   action = c('newPost', 'editPost', 'newPage'), postid, publish = TRUE
 ) {
-  out = knit(input, encoding = 'UTF-8', envir = envir); on.exit(unlink(out))
+  out = knit(input, envir = envir); on.exit(unlink(out))
   content = file_string(out)
   content = markdown::markdownToHTML(text = content, fragment.only = TRUE)
   shortcode = rep(shortcode, length.out = 2L)

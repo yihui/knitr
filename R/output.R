@@ -126,22 +126,15 @@
 #' purl(f, documentation = 0)  # extract R code only
 #' purl(f, documentation = 2)  # also include documentation
 knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
-                envir = parent.frame(), encoding = getOption('encoding')) {
+                envir = parent.frame(), encoding = 'UTF-8') {
 
   # is input from a file? (or a connection on a file)
   in.file = !missing(input) &&
     (is.character(input) || prod(inherits(input, c('file', 'connection'), TRUE)))
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
-  if (in.file) {
-    if (!is.character(input)) {
-      warning('The input is a connection. Only the file path is used. The connection is ignored.')
-      input = summary(input)$description
-    }
-    if (!missing(encoding) && !is_utf8_enc(encoding) && !is_utf8_file(input)) warning(
-      'The encoding ("', encoding, '") is not UTF-8. We will only support UTF-8 in',
-      ' the future. Please re-save your file "', input, '" with the UTF-8 encoding.',
-      ' See https://yihui.name/en/2018/11/biggest-regret-knitr/ for more info.'
-    )
+  if (in.file && !is.character(input)) {
+    warning('The input is a connection. Only the file path is used. The connection is ignored.')
+    input = summary(input)$description
   }
   # make a copy of the input path in input2 and change input to file path
   if (!missing(input)) input2 = input
@@ -173,9 +166,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     ocode = knit_code$get(); on.exit(knit_code$restore(ocode), add = TRUE)
     on.exit(opts_current$restore(), add = TRUE)
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
-    opts_knit$set(tangle = tangle, encoding = encoding,
-                  progress = opts_knit$get('progress') && !quiet
-    )
+    opts_knit$set(tangle = tangle, progress = opts_knit$get('progress') && !quiet)
   }
   # store the evaluation environment and restore on exit
   oenvir = .knitEnv$knit_global; .knitEnv$knit_global = envir
@@ -206,12 +197,18 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     knit_concord$set(infile = input, outfile = output)
   }
 
-  encoding = correct_encode(encoding)
-  text = if (is.null(text)) {
-    readLines(if (is.character(input2)) {
-      con = file(input2, encoding = encoding); on.exit(close(con), add = TRUE); con
-    } else input2, warn = FALSE)
-  } else split_lines(text) # make sure each element is one line
+  if (is.null(text)) {
+    text = readLines(input2, encoding = 'UTF-8', warn = FALSE)
+    if (!is_utf8(x = text)) {
+      warning(
+        'The file "', input2, '" should be encoded in UTF-8. Now I will try to ',
+        'read it with the system native encoding (which may not be correct). ',
+        'We will only support UTF-8 in the near future. Please see ',
+        'https://yihui.name/en/2018/11/biggest-regret-knitr/ for more info.'
+      )
+      text = readLines(input2, warn = FALSE)
+    }
+  } else text = split_lines(text) # make sure each element is one line
   if (!length(text)) {
     if (is.character(output)) file.create(output)
     return(output) # a trivial case: create an empty file and exit
@@ -226,7 +223,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
       if (is.null(output)) {
         return(if (tangle) '' else paste(text, collapse = '\n'))
       } else {
-        cat(if (tangle) '' else text, sep = '\n', file = output)
+        xfun::write_utf8(if (tangle) '' else text, output)
         return(output)
       }
     }
@@ -271,9 +268,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   res = process_file(text, output)
   res = paste(knit_hooks$get('document')(res), collapse = '\n')
   if (tangle) res = c(params, res)
-  if (!is.null(output))
-    writeLines(if (encoding == '') res else native_encode(res, to = encoding),
-               con = output, useBytes = encoding != '')
+  if (!is.null(output)) xfun::write_utf8(res, output)
   if (!child_mode()) {
     dep_list$restore()  # empty dependency list
     .knitEnv$labels = NULL
@@ -416,8 +411,7 @@ knit_child = function(..., options = NULL, envir = knit_global()) {
       }, add = TRUE)
     }
   }
-  res = knit(..., tangle = opts_knit$get('tangle'), envir = envir,
-             encoding = opts_knit$get('encoding') %n% getOption('encoding'))
+  res = knit(..., tangle = opts_knit$get('tangle'), envir = envir)
   paste(c('', res), collapse = '\n')
 }
 

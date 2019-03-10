@@ -117,11 +117,11 @@ spin = function(
 
   out = if (report) {
     if (format == 'Rmd') {
-      knit2html(outsrc, text = txt, envir = envir, encoding = 'UTF-8')
+      knit2html(outsrc, text = txt, envir = envir)
     } else if (!is.null(outsrc) && (format %in% c('Rnw', 'Rtex'))) {
       knit2pdf(outsrc, envir = envir)
     }
-  } else knit(outsrc, text = txt, envir = envir, encoding = 'UTF-8')
+  } else knit(outsrc, text = txt, envir = envir)
 
   if (!precious && !is.null(outsrc)) file.remove(outsrc)
   invisible(out)

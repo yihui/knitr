@@ -614,28 +614,11 @@ native_encode = function(x, to = '') {
   x
 }
 
-# make the encoding case-insensitive, e.g. LyX uses ISO-8859-15 but R uses iso-8859-15
-correct_encode = function(encoding) {
-  if (is_native_enc(encoding)) return('')
-  lcc = localeToCharset()[1L]
-  if (!is.na(lcc) && encoding == lcc) return('')
-  if (is.na(idx <- match(tolower(encoding), tolower(iconvlist())))) {
-    warning('encoding "', encoding, '" not supported; using the native encoding instead')
-    ''
-  } else iconvlist()[idx]
-}
-
-# is the encoding name UTF-8 / native?
-is_utf8_enc = function(x) {
-  x == 'UTF-8' || (is_native_enc(x) && localeToCharset()[1] == 'UTF-8')
-}
-
 is_native_enc = function(x) {
   x == 'native.enc' || x == ''
 }
 
-is_utf8_file = function(f) {
-  x = readLines(f, encoding = 'UTF-8', warn = FALSE)
+is_utf8 = function(f, x = readLines(f, encoding = 'UTF-8', warn = FALSE)) {
   !any(is.na(iconv(x, 'UTF-8', 'UTF-8')))
 }
 
