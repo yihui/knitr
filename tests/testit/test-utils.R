@@ -188,9 +188,3 @@ assert(
   block_class('a b') %==% '{.a .b}',
   block_class(c('a', 'b')) %==% '{.a .b}'
 )
-
-assert('is_utf8_enc() identifies UTF-8 encodings', {
-  (is_utf8_enc('UTF-8'))
-  (!is_utf8_enc('GBK'))
-  (localeToCharset()[1] != 'UTF-8' || is_utf8_enc(''))
-})
