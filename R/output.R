@@ -132,15 +132,16 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   in.file = !missing(input) &&
     (is.character(input) || prod(inherits(input, c('file', 'connection'), TRUE)))
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
-  if (in.file) if (is.character(input)) {
+  if (in.file) {
+    if (!is.character(input)) {
+      warning('The input is a connection. Only the file path is used. The connection is ignored.')
+      input = summary(input)$description
+    }
     if (!missing(encoding) && !is_utf8_enc(encoding) && !is_utf8_file(input)) warning(
       'The encoding ("', encoding, '") is not UTF-8. We will only support UTF-8 in',
       ' the future. Please re-save your file "', input, '" with the UTF-8 encoding.',
       ' See https://yihui.name/en/2018/11/biggest-regret-knitr/ for more info.'
     )
-  } else {
-    warning('The input is a connection. We will only support file input in the future.')
-    input = summary(input)$description
   }
   # make a copy of the input path in input2 and change input to file path
   if (!missing(input)) input2 = input
