@@ -60,7 +60,7 @@ rocco = function(input, ...) {
   txt = readLines(out)
   i1 = min(grep('<!--table start-->$', txt))
   i2 = max(grep('<!--table end-->$', txt))
-  x = paste(txt[seq(i1 + 1, i2 - 1)], collapse = '\n')
+  x = one_string(txt[seq(i1 + 1, i2 - 1)])
   x = gsub('</pre>\\s*<pre>', '<!--ReDuNdAnTpRe-->', x)  # merge pre blocks
   m = gregexpr('<pre><code( class="[[:alnum:]]+")?>(.|\n)*?</code></pre>', x)
   if (m[[1]][1] == -1) stop('No code blocks in HTML output')

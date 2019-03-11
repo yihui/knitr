@@ -79,9 +79,9 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file), 
     opts = fix_sweave(gsub(s, '\\1', x[i]))
     x[i] = gsub_msg('changing \\SweaveOpts{} to opts_chunk$set()', s, '@_@_@', x[i])
     for (j in seq_along(i))
-      x[i[j]] = gsub('@_@_@', paste(c(
+      x[i[j]] = gsub('@_@_@', one_string(c(
         '\n<<include=FALSE>>=', 'library(knitr)', 'opts_chunk$set(', opts[j], ')', '@\n'
-      ), collapse = '\n'), x[i[j]])
+      )), x[i[j]])
   }
   # remove the extra @
   i1 = grepl(all_patterns$rnw$chunk.begin, x)
@@ -89,7 +89,7 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file), 
   i = which(i2 & !filter_chunk_end(i1, i2))
   if (length(i)) {
     message('removing extra lines (#n shows line numbers):\n',
-            paste(formatUL(sprintf('(#%d) %s', i, x[i]), offset = 4), collapse = '\n'))
+            one_string(formatUL(sprintf('(#%d) %s', i, x[i]), offset = 4)))
     x = x[-i]
   }
   if (is.null(text)) write_utf8(x, output) else x
@@ -97,7 +97,7 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file), 
 
 gsub_msg = function(msg, pattern, replacement, x, ...) {
   if (length(i <- grep(pattern, x, ...))) {
-    message(msg, ':\n', paste(formatUL(x[i], offset = 4), collapse = '\n'))
+    message(msg, ':\n', one_string(formatUL(x[i], offset = 4)))
     gsub(pattern, replacement, x, ...)
   } else x
 }

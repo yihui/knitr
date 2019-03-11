@@ -82,10 +82,10 @@ cache_engines = new_defaults()
 engine_output = function(options, code, out, extra = NULL) {
   if (missing(code) && is.list(out)) return(unlist(wrap(out, options)))
   if (!is.logical(options$echo)) code = code[options$echo]
-  if (length(code) != 1L) code = paste(code, collapse = '\n')
+  if (length(code) != 1L) code = one_string(code)
   if (options$engine == 'sas' && length(out) > 1L && !grepl('[[:alnum:]]', out[2]))
     out = tail(out, -3L)
-  if (length(out) != 1L) out = paste(out, collapse = '\n')
+  if (length(out) != 1L) out = one_string(out)
   out = sub('([^\n]+)$', '\\1\n', out)
   # replace the engine names for markup later, e.g. ```Rscript should be ```r
   options$engine = switch(
@@ -97,13 +97,13 @@ engine_output = function(options, code, out, extra = NULL) {
     out = sub('...\n+', '', out)
     out = sub('\n. \nend of do-file\n', '', out)
   }
-  paste(c(
+  one_string(c(
     if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) {
       if (options$engine == 'highlight') out else wrap.character(out, options)
     },
     extra
-  ), collapse = '\n')
+  ))
 }
 
 ## command-line tools
@@ -142,7 +142,7 @@ eng_interpreted = function(options) {
     engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -ep',
     mysql = '-e', node = '-e', octave = '--eval', perl = '-e', psql = '-c',
     python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
-  ), shQuote(paste(options$code, collapse = '\n')))
+  ), shQuote(one_string(options$code)))
 
   opts = get_engine_opts(options$engine.opts, engine)
   # FIXME: for these engines, the correct order is options + code + file
@@ -160,8 +160,7 @@ eng_interpreted = function(options) {
     )
   } else ''
   # chunk option error=FALSE means we need to signal the error
-  if (!options$error && !is.null(attr(out, 'status')))
-    stop(paste(out, collapse = '\n'))
+  if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
   if (options$eval && engine %in% c('sas', 'stata') && file.exists(logf))
     out = c(readLines(logf), out)
   engine_output(options, options$code, out)
@@ -220,7 +219,7 @@ eng_Rcpp = function(options) {
 
   sourceCpp = getFromNamespace('sourceCpp', 'Rcpp')
 
-  code = paste(options$code, collapse = '\n')
+  code = one_string(options$code)
   # engine.opts is a list of arguments to be passed to Rcpp function, e.g.
   # engine.opts=list(plugin='RcppArmadillo')
   opts = options$engine.opts
@@ -251,7 +250,7 @@ eng_julia = function(options) {
 ## Compiles Stan model in the code chunk, creates a stanmodel object,
 ## and assigns it to a variable with the name given in engine.opts$x.
 eng_stan = function(options) {
-  code = paste(options$code, collapse = '\n')
+  code = one_string(options$code)
   opts = options$engine.opts
   ## name of the modelfit object returned by stan_model
   if (is.null(x <- options$output.var)) {
@@ -390,13 +389,13 @@ eng_cat = function(options) {
 
 ## output the code without processing it
 eng_asis = function(options) {
-  if (options$echo && options$eval) paste(options$code, collapse = '\n')
+  if (options$echo && options$eval) one_string(options$code)
 }
 
 # write a block environment according to the output format
 eng_block = function(options) {
   if (isFALSE(options$echo)) return()
-  code = paste(options$code, collapse = '\n')
+  code = one_string(options$code)
   to = pandoc_to()
   is_pandoc = !is.null(to)
   if (!is_pandoc) {
@@ -438,7 +437,7 @@ eng_block = function(options) {
 eng_block2 = function(options) {
   if (isFALSE(options$echo)) return()
 
-  code = paste(options$code, collapse = '\n'); type = options$type
+  code = one_string(options$code); type = options$type
   if (is.null(type)) return(code)
 
   if (is.null(pandoc_to())) stop('The engine "block2" is for R Markdown only')
@@ -467,8 +466,7 @@ eng_block2 = function(options) {
 eng_html_asset = function(prefix, postfix) {
   function(options) {
     out = if (options$eval && is_html_output(excludes = 'markdown')) {
-      code = c(prefix, options$code, postfix)
-      paste(code, collapse = '\n')
+      one_string(c(prefix, options$code, postfix))
     }
     options$results = 'asis'
     engine_output(options, options$code, out)
@@ -483,7 +481,7 @@ eng_css = eng_html_asset('<style type="text/css">', '</style>')
 
 # perform basic sql parsing to determine if a sql query is an update query
 is_sql_update_query = function(query) {
-  query = paste(query, collapse = '\n')
+  query = one_string(query)
   # remove line comments
   query = gsub('^\\s*--.*\n', '', query)
   # remove multi-line comments
@@ -537,7 +535,7 @@ eng_sql = function(options) {
   max.print = options$max.print %n% (opts_knit$get('sql.max.print') %n% 10)
   if (is.na(max.print) || is.null(max.print))
     max.print = -1
-  sql = paste(options$code, collapse = '\n')
+  sql = one_string(options$code)
 
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
@@ -721,17 +719,13 @@ eng_sxss = function(options) {
       }
     )
 
-    # handle execution errors (status codes) or otherwise reformat valid output
-    out = if (!is.null(attr(out, 'status'))) {
-      if (!options$error) stop2(paste(out, collapse = '\n'))
-    } else if (!is.null(out)) {
-      paste(out, collapse = "\n")
-    }
+    # handle execution errors (status codes)
+    if (!is.null(attr(out, 'status')) && !options$error) stop2(one_string(out))
   }
 
   # wrap final output for correct rendering
   final_out = if (!is.null(out) && is_html_output(excludes = 'markdown')) {
-    paste(c('<style type="text/css">', out, '</style>'), collapse = "\n")
+    one_string(c('<style type="text/css">', out, '</style>'))
   }
 
   engine_output(options, options$code, final_out)

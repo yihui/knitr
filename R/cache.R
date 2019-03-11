@@ -317,6 +317,6 @@ clean_cache = function(clean = FALSE, path = opts_chunk$get('cache.path')) {
   if (p1 != '') i = i & (substr(base, 1, nchar(p1)) == p1)
   if (!any(i)) return()
   if (clean) unlink(files[i]) else message(
-    'Clean these cache files?\n\n', paste(files[i], collapse = '\n'), '\n'
+    'Clean these cache files?\n\n', one_string(files[i]), '\n'
   )
 }

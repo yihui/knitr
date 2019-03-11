@@ -70,7 +70,7 @@ theme_to_header_latex = function(theme) {
 
   # write latex highlight header
   fgheader = color_def(foreground, 'fgcolor')
-  highlight = paste(c(fgheader, styler_assistant_latex(css_out[-1])), collapse = '\n')
+  highlight = one_string(c(fgheader, styler_assistant_latex(css_out[-1])))
   list(highlight = highlight, background = background, foreground = foreground)
 }
 
@@ -86,7 +86,7 @@ theme_to_header_html = function(theme){
   css_knitr = readLines(system.file('misc', 'knitr.css', package = 'knitr'))
   css_knitr[-2] = sub('^(\\s+background-color:\\s+)(.*)$', sprintf('\\1%s;', bgcolor), css_knitr[-2])
   css = c(css_knitr, gsub('^([.][a-z]{3} )', '.hl\\1', readLines(css_file)[-(1:3)]))
-  list(highlight = paste(css, collapse = '\n'))
+  list(highlight = one_string(css))
 }
 
 # parse a theme file from Highlight v3.x by Andre Simon to an R list of the form
@@ -99,7 +99,7 @@ theme2list = function(theme.file) {
   y = gsub('[}]', ')', y)
   y = gsub(';', '', y)
   y = gsub('true', 'TRUE', y)
-  y = paste(y, collapse = '\n')
+  y = one_string(y)
   y = gsub(',\\s*)', ')', y)
   env = new.env()
   #cat(y, sep = '\n')
@@ -126,11 +126,11 @@ list2css = function(lst) {
     m = cls2thm[i]; l = lst[[m]]
     # if not found, use the default style
     if (!is.list(l)) l = lst[['Default']]
-    css[i] = paste(c(
+    css[i] = one_string(c(
       sprintf('.%s {', names(m)), sprintf('  color: %s;', l$Colour),
       sprintf('  font-weight: %s;', if (isTRUE(l$Bold)) 'bold'),
       sprintf('  font-style: %s;', if (isTRUE(l$Italic)) 'italic'), '}'
-    ), collapse = '\n')
+    ))
   }
   css
 }

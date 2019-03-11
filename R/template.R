@@ -51,7 +51,7 @@ stitch = function(script,
     lines[j] = sprintf(h, gsub(.sep.label, '\\3', lines[j]))
     if (j[1] != 1L) lines = c(sprintf(h, ''), lines)
   }
-  txt[i] = paste(lines, collapse = '\n')
+  txt[i] = one_string(lines)
   opts_chunk$set(
     fig.align = 'center', par = TRUE, fig.width = 6, fig.height = 6,
     fig.path = paste('figure', gsub('[^[:alnum:]]', '-', input), sep = '/')
@@ -116,7 +116,7 @@ knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
   delim = gsub('([.|()\\^{}+$*?]|\\[|\\])', '\\\\\\1', delim)
   delim = paste0(delim[1L], '((.|\n)+?)', delim[2L])
 
-  txt = paste(text, collapse = '\n')
+  txt = one_string(text)
   loc = stringr::str_locate_all(txt, delim)[[1L]]
   if (nrow(loc) == 0L) return(txt) # no match
   mat = stringr::str_extract_all(txt, delim)[[1L]]

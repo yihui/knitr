@@ -240,7 +240,7 @@ render_html = function() {
       x = if (name == 'source') {
         c(hilight_source(x, 'html', options), '')
       } else escape_html(x)
-      x = paste(x, collapse = '\n')
+      x = one_string(x)
       sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>\n', name, tolower(options$engine), x)
     }
   }

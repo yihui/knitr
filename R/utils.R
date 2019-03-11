@@ -87,7 +87,7 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   if (is.na(idx2) || idx2 < 2L) return()
   idx1 = grep(hb, input)[1]
   if (is.na(idx1) || idx1 >= idx2) return()
-  txt = paste(input[idx1:(idx2 - 1L)], collapse = '\n')  # rough preamble
+  txt = one_string(input[idx1:(idx2 - 1L)])  # rough preamble
   idx = stringr::str_locate(txt, hb)  # locate documentclass
   options(tikzDocumentDeclaration = stringr::str_sub(txt, idx[, 1L], idx[, 2L]))
   preamble = pure_preamble(split_lines(stringr::str_sub(txt, idx[, 2L] + 1L)), patterns)
@@ -674,7 +674,7 @@ wrap_rmd = function(file, width = 80, text = NULL, backup) {
       # those lines not to be wrapped
       gsub('\\s+$', '', block)  # strip pending spaces
     } else {
-      strwrap(paste(block, collapse = '\n'), width)
+      strwrap(one_string(block), width)
     }
   }
   txt = unlist(txt)
@@ -833,7 +833,7 @@ raw_markers = c('!!!!!RAW-KNITR-CONTENT', 'RAW-KNITR-CONTENT!!!!!')
 #' @rdname raw_output
 extract_raw_output = function(text, markers = raw_markers) {
   r = sprintf('%s(.*?)%s', markers[1], markers[2])
-  x = paste(text, collapse = '\n')
+  x = one_string(text)
   m = gregexpr(r, x)
   s = regmatches(x, m)
   n = length(s[[1]])
@@ -924,7 +924,7 @@ raw_output = function(x, markers = raw_markers, ...) {
 raw_block = function(x, type = 'latex', ...) {
   if (!rmarkdown::pandoc_available('2.0.0')) warning('raw_block() requires Pandoc >= 2.0.0')
   x = c(sprintf('\n```{=%s}', type), x, '```\n')
-  asis_output(paste(x, collapse = '\n'), ...)
+  asis_output(one_string(x), ...)
 }
 
 #' @rdname raw_block
@@ -963,3 +963,6 @@ digest3 = function(x) {
   close(s)
   unname(tools::md5sum(f))
 }
+
+# collapse by \n
+one_string = function(x, ...) paste(x, ..., collapse = '\n')

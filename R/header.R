@@ -14,14 +14,14 @@ insert_header = function(doc) {
 
 # Makes latex header with macros required for highlighting, tikz and framed
 make_header_latex = function() {
-  h = paste(c(
+  h = one_string(c(
     sprintf('\\usepackage[%s]{graphicx}\\usepackage[%s]{color}',
             opts_knit$get('latex.options.graphicx') %n% '',
             opts_knit$get('latex.options.color') %n% ''),
     .header.maxwidth, opts_knit$get('header'),
     if (getOption('OutDec') != '.') '\\usepackage{amsmath}',
     if (out_format('latex')) '\\usepackage{alltt}'
-  ), collapse = '\n')
+  ))
   if (opts_knit$get('self.contained')) h else {
     writeLines(h, 'knitr.sty')
     '\\usepackage{knitr}'
@@ -42,10 +42,12 @@ insert_header_latex = function(doc, b) {
     stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, make_header_latex())
   } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
-    doc[1L] = paste(c(getOption('tikzDocumentDeclaration'), make_header_latex(),
-                      .knitEnv$tikzPackages, '\\begin{document}', doc[1L]), collapse = '\n')
-    doc[length(doc)] = paste(
-      c(doc[length(doc)], .knitEnv$bibliography, '\\end{document}'), collapse = '\n'
+    doc[1L] = one_string(c(
+      getOption('tikzDocumentDeclaration'), make_header_latex(),
+      .knitEnv$tikzPackages, '\\begin{document}', doc[1L]
+    ))
+    doc[length(doc)] = one_string(
+      c(doc[length(doc)], .knitEnv$bibliography, '\\end{document}')
     )
   }
   doc
@@ -54,10 +56,10 @@ insert_header_latex = function(doc, b) {
 make_header_html = function() {
   h = opts_knit$get('header')
   h = h[setdiff(names(h), c('tikz', 'framed'))]
-  if (opts_knit$get('self.contained')) {
-    paste(c('<style type="text/css">', h[['highlight']], '</style>',
-            unlist(h[setdiff(names(h), 'highlight')])), collapse = '\n')
-  } else {
+  if (opts_knit$get('self.contained')) one_string(c(
+    '<style type="text/css">', h[['highlight']], '</style>',
+    unlist(h[setdiff(names(h), 'highlight')])
+  )) else {
     writeLines(h, 'knitr.css')
     '<link rel="stylesheet" href="knitr.css" type="text/css" />'
   }
@@ -111,7 +113,7 @@ set_header = function(...) {
 # header for Latex Syntax Highlighting
 .header.hi.tex = theme_to_header_latex(.default.sty)$highlight
 .knitr.sty = inst_dir('misc', 'knitr.sty')
-.header.framed = paste(readLines(.knitr.sty), collapse = '\n')
+.header.framed = one_string(readLines(.knitr.sty))
 # CSS for html syntax highlighting
 .header.hi.html = theme_to_header_html(.default.sty)$highlight
 rm(list = c('.default.sty', '.knitr.sty')) # do not need them any more
