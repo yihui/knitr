@@ -134,19 +134,7 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
 
   # compile tikz to pdf
   if (dev == 'tikz' && options$external) {
-    unlink(pdf.plot <- paste0(name, '.pdf'))
-    owd = setwd(dirname(path))
-    # add old wd to TEXINPUTS (see #188)
-    oti = Sys.getenv('TEXINPUTS'); on.exit(Sys.setenv(TEXINPUTS = oti))
-    Sys.setenv(TEXINPUTS = paste(owd, oti, sep = .Platform$path.sep))
-    tinytex::latexmk(basename(path), getOption('tikzDefaultEngine'))
-    setwd(owd)
-    if (!file.exists(pdf.plot)) {
-      if (file.exists(log <- paste(name, 'log', sep = '.')))
-        message(paste(readLines(log), collapse = '\n'))
-      stop2('failed to compile ', path, ' to PDF')
-    }
-    path = pdf.plot
+    path = tinytex::latexmk(path, getOption('tikzDefaultEngine'))
   }
 
   fig_process(options$fig.process, path)
