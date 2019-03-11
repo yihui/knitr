@@ -464,7 +464,7 @@ process_tangle.block = function(x) {
   }
   if (isFALSE(params$purl)) return('')
   label = params$label; ev = params$eval
-  if (params$engine != 'R') return(comment_out(knit_code$get(label)))
+  if (params$engine != 'R') return(paste(comment_out(knit_code$get(label)), collapse = '\n'))
   code = if (!isFALSE(ev) && !is.null(params$child)) {
     cmds = lapply(sc_split(params$child), knit_child)
     paste(unlist(cmds), collapse = '\n')
