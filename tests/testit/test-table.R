@@ -33,11 +33,8 @@ assert(
   identical(kable2(data.frame(x = c(NA, FALSE))), c('|x     |', '|:-----|', '|NA    |', '|FALSE |'))
 )
 
-assert(
-  'kable() does not add extra spaces to character columns',
-  identical(
-    kable2(data.frame(x = c(1.2, 4.87), y = c('fooooo', 'bar')), 'latex'),
-    '
+assert('kable() does not add extra spaces to character columns', {
+  kable2(data.frame(x = c(1.2, 4.87), y = c('fooooo', 'bar')), 'latex') %==% '
 \\begin{tabular}{r|l}
 \\hline
 x & y\\\\
@@ -47,8 +44,7 @@ x & y\\\\
 4.87 & bar\\\\
 \\hline
 \\end{tabular}'
-  )
-)
+})
 
 assert(
   'kable() escapes LaTeX special characters by default',
