@@ -139,7 +139,7 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
     # add old wd to TEXINPUTS (see #188)
     oti = Sys.getenv('TEXINPUTS'); on.exit(Sys.setenv(TEXINPUTS = oti))
     Sys.setenv(TEXINPUTS = paste(owd, oti, sep = .Platform$path.sep))
-    tinytex::latexmk(basename(path), getOption('tikzDefaultEngine'), emulation = TRUE)
+    tinytex::latexmk(basename(path), getOption('tikzDefaultEngine'))
     setwd(owd)
     if (!file.exists(pdf.plot)) {
       if (file.exists(log <- paste(name, 'log', sep = '.')))
