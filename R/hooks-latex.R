@@ -203,6 +203,7 @@ hook_plot_tex = function(x, options) {
     x = format_sci(x, 'latex')
     i = grep('[}]', x)
     x[i] = sprintf('\\ensuremath{%s}', x[i])
+    # why \text{}: https://github.com/yihui/knitr/issues/348
     if (getOption('OutDec') != '.') x = sprintf('\\text{%s}', x)
   }
   .inline.hook(x)
