@@ -176,7 +176,9 @@ round_digits = function(x) {
 }
 
 # scientific notation in TeX, HTML and reST
-format_sci_one = function(x, format = 'latex') {
+format_sci_one = function(
+  x, format = 'latex', times = getOption('knitr.inline.times', '\\times ')
+) {
 
   if (!(class(x)[1] == 'numeric') || is.na(x) || x == 0) return(as.character(x))
 
@@ -196,14 +198,14 @@ format_sci_one = function(x, format = 'latex') {
   b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
-    sci_notation('%s%s10^{%s}', b, '\\times ', lx)
+    sci_notation('%s%s10^{%s}', b, times, lx)
   },
   html = sci_notation('%s%s10<sup>%s</sup>', b, ' &times; ', lx),
   md   = sci_notation('%s%s10^%s^', b, '&times; ', lx),
   rst  = {
     # if AsIs, use the :math: directive
     if (inherits(x, 'AsIs')) {
-      s = sci_notation('%s%s10^{%s}', b, '\\times ', lx)
+      s = sci_notation('%s%s10^{%s}', b, times, lx)
       sprintf(':math:`%s`', s)
     } else {
       # This needs the following line at the top of the file to define |times|

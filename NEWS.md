@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.23
 
+## NEW FEATURES 
+
+- It is possible to customize the sign `\times` used for the scientific notation of inline numeric output via a global option, e.g., `options(knitr.inline.times = '\\cdot ')` (thanks, @wuffi @trentks, #1563).
+
 ## BUG FIXES
 
 - For an input file that contains no code chunks or inline R code expressions, `purl()` should return an empty string instead of the original text from the input (thanks, @jrnold, #1660).
