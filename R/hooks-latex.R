@@ -201,7 +201,7 @@ hook_plot_tex = function(x, options) {
 .inline.hook.tex = function(x) {
   if (is.numeric(x)) {
     x = format_sci(x, 'latex')
-    i = grep('[^-0-9.,]', x)
+    i = grep('[}]', x)
     x[i] = sprintf('\\ensuremath{%s}', x[i])
     if (getOption('OutDec') != '.') x = sprintf('\\text{%s}', x)
   }
