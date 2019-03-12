@@ -151,9 +151,9 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
       (if (strict) hook.t else hook.r)(one_string(c(x, '')), options)
     },
     inline = function(x) {
-      fmt = pandoc_to()
-      fmt = if (length(fmt) == 1L) 'latex' else 'html'
-      .inline.hook(format_sci(x, fmt))
+      if (is_latex_output()) .inline.hook.tex(x) else {
+        .inline.hook(format_sci(x, if (length(pandoc_to()) == 1L) 'latex' else 'html'))
+      }
     },
     plot = hook_plot_md,
     chunk = function(x, options) {

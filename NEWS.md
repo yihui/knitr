@@ -6,6 +6,8 @@
 
 ## BUG FIXES
 
+- For R Markdown documents, inline numeric output that is formatted with the scientific notation will be wrapped in `\ensuremath{}`. This will fix the LaTeX error `! Missing $ inserted.`. However, you are still recommended to add a pair of dollar signs around the inline output when it is formatted with the scientific notation (e.g., `` $`r 1.234e12`$``), otherwise it will not work with other R Markdown output formats such as HTML or Word (thanks, @billdenney and many who have suffered from this issue, rstudio/rmarkdown#1527).
+
 - For an input file that contains no code chunks or inline R code expressions, `purl()` should return an empty string instead of the original text from the input (thanks, @jrnold, #1660).
 
 - `purl()` might trigger a warning for non-R code chunks (thanks, @adamcagle, rstudio/rmarkdown#1528).
