@@ -392,6 +392,12 @@ eng_asis = function(options) {
   if (options$echo && options$eval) one_string(options$code)
 }
 
+## output the code, processing as though it's a markdown block
+eng_rmarkdown = function(options) {
+  if (options$echo && options$eval)
+    one_string(knit(text = options$code, envir = knit_global()))
+}
+
 # write a block environment according to the output format
 eng_block = function(options) {
   if (isFALSE(options$echo)) return()
@@ -745,9 +751,10 @@ local({
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
-  cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
-  block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
+  cat = eng_cat, asis = eng_asis, rmarkdown = eng_rmarkdown, stan = eng_stan,
+  block = eng_block, block2 = eng_block2, js = eng_js, css = eng_css,
+  sql = eng_sql, go = eng_go, python = eng_python, julia = eng_julia,
+  sass = eng_sxss, scss = eng_sxss
 )
 
 cache_engines$set(python = cache_eng_python)
