@@ -367,6 +367,7 @@ include_graphics = function(
     i = file.exists(path2)
     path[i] = path2[i]
   }
+  path = native_encode(path)
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
 }
 
