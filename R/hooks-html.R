@@ -78,7 +78,7 @@ hook_animation = function(options) {
     name = fig_path('.html', options, NULL)
     if (!file.exists(dirname(name)))
       dir.create(dirname(name))
-    cat(x, file = name)
+    write_utf8(x, name)
     sprintf('<iframe src="%s" class="knitr" width="100%%"></iframe>', name)
   } else x
 }

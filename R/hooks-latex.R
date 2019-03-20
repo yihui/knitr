@@ -186,7 +186,7 @@ hook_plot_tex = function(x, options) {
     name = fig_path('.tex', options, NULL)
     if (!file.exists(dirname(name)))
       dir.create(dirname(name))
-    cat(x, file = name)
+    write_utf8(x, name)
     sprintf('\\input{%s}', name)
   } else x
 }
