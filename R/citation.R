@@ -94,7 +94,7 @@ write_bib = function(
     })
   }
   bib = bib[sort(x)]
-  if (!is.null(file) && length(x)) xfun::write_utf8(unlist(bib), file)
+  if (!is.null(file) && length(x)) write_utf8(unlist(bib), file)
   invisible(bib)
 }
 

@@ -110,7 +110,7 @@ spin = function(
   }
   if (nosrc) {
     outsrc = with_ext(hair, format)
-    xfun::write_utf8(txt, outsrc)
+    write_utf8(txt, outsrc)
     txt = NULL
   } else outsrc = NULL
   if (!knit) return(txt %n% outsrc)

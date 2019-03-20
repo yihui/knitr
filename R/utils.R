@@ -401,7 +401,7 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
   if (length(text) == 0) return(text)
   f1 = wd_tempfile('pandoc', '.md'); f2 = wd_tempfile('pandoc')
   on.exit(unlink(c(f1, f2)), add = TRUE)
-  xfun::write_utf8(text, f1)
+  write_utf8(text, f1)
   rmarkdown::pandoc_convert(f1, to, from, f2, options = if (is_html_output(to)) '--mathjax')
   file_string(f2)
 }
@@ -526,7 +526,7 @@ print_knitlog = function() {
 # count the number of lines
 line_count = function(x) stringr::str_count(x, '\n') + 1L
 
-has_package = function(pkg) xfun::loadable(pkg, FALSE)
+has_package = function(pkg) loadable(pkg, FALSE)
 
 # if LHS is NULL, return the RHS
 `%n%` = function(x, y) if (is.null(x)) y else x

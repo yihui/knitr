@@ -223,7 +223,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
       if (is.null(output)) {
         return(if (tangle) '' else one_string(text))
       } else {
-        xfun::write_utf8(if (tangle) '' else text, output)
+        write_utf8(if (tangle) '' else text, output)
         return(output)
       }
     }
@@ -268,7 +268,7 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   res = process_file(text, output)
   res = one_string(knit_hooks$get('document')(res))
   if (tangle) res = c(params, res)
-  if (!is.null(output)) xfun::write_utf8(res, output)
+  if (!is.null(output)) write_utf8(res, output)
   if (!child_mode()) {
     dep_list$restore()  # empty dependency list
     .knitEnv$labels = NULL
