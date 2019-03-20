@@ -140,13 +140,17 @@ hook_purl = function(before, options, envir) {
     unlink(output)
     # write out knit_params() data from YAML
     params = .knitEnv$tangle.params
-    if (length(params)) writeLines(params, output)
+    if (length(params)) write_utf8(params, output)
     .knitEnv$tangle.params = NULL
   }
 
   code = options$code
   if (isFALSE(options$eval)) code = comment_out(code, '# ', newline = FALSE)
   if (is.character(output)) {
-    cat(label_code(code, options$params.src), file = output, sep = '\n', append = TRUE)
+    code = c(
+      if (file.exists(output)) read_utf8(output),
+      label_code(code, options$params.src)
+    )
+    write_utf8(code, output)
   }
 }
