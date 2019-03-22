@@ -8,5 +8,5 @@ By filing an issue to this repo, I promise that
 - [ ] I have learned the Github Markdown syntax, and formatted my issue correctly.
 
 <!--
-Pleaes keep the above portion in your issue and delete the portion below. Your issue will be closed if any of the above boxes is not checked. In certain (rare) cases, you may be exempted if you give a brief explanation (e.g., you are only making a suggestion for improvement). Thanks!
+Pleaes keep the above portion in your issue. Your issue will be closed if any of the above boxes is not checked. In certain (rare) cases, you may be exempted if you give a brief explanation (e.g., you are only making a suggestion for improvement). Thanks!
 -->
