@@ -125,8 +125,8 @@ rm(list = c('.default.sty', '.knitr.sty')) # do not need them any more
 '
 
 .header.maxwidth =
-'%% maxwidth is the original width if it is less than linewidth
-%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+'% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \\makeatletter
 \\def\\maxwidth{ %
   \\ifdim\\Gin@nat@width>\\linewidth
