@@ -615,7 +615,8 @@ wrap.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE) {
   if (length(extra <- options$out.extra)) extra = paste('', extra, collapse = '')
   add_html_caption(options, sprintf(
     '<iframe src="%s" width="%s" height="%s"%s></iframe>',
-    escape_html(x$url), options$out.width %n% '100%', x$height %n% '400px', extra
+    escape_html(x$url), options$out.width %n% '100%', x$height %n% '400px',
+    extra %n% ''
   ))
 }
 

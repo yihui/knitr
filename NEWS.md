@@ -14,6 +14,8 @@
 
 - When building package vignettes via `R CMD build`, the R scripts generated from **knitr**'s vignette (tangling) engines are not corrected encoded in UTF-8 (thanks, Kurt Hornik).
 
+- Fixed a bug introduced when fixing #1648: `include_url()` no longer works at all unless the chunk option `out.extra` is not empty (thanks, @gabrielvazdemelo, #1691).
+
 ## MAJOR CHANGES
 
 - `knitr::knit()` will try to read the input file with the UTF-8 encoding first. If UTF-8 doesn't work, it will try to read with the system native encoding instead (with a warning). The `encoding` argument of `knitr::knit()` is completely ignored. In the future, only UTF-8 will be supported, and we will stop retrying with the system native encoding. The output file from `knitr::knit()` is always encoded in UTF-8.
