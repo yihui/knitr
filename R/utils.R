@@ -139,7 +139,7 @@ pure_preamble = function(preamble, patterns) {
 set_parent = function(parent) {
   if (child_mode()) return(invisible(NULL)) # quit if in child mode
   opts_knit$set(parent = TRUE)
-  set_preamble(readLines(parent, warn = FALSE))
+  set_preamble(read_utf8(parent))
   invisible(NULL)
 }
 
@@ -595,7 +595,7 @@ escape_html = highr:::escape_html
 #' read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')}
 read_rforge = function(path, project, extra = '') {
   base = 'http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg'
-  readLines(sprintf('%s/%s?root=%s%s', base, path, project, extra))
+  read_utf8(sprintf('%s/%s?root=%s%s', base, path, project, extra))
 }
 
 # strsplit('', 'foo') should return '' instead of character(0), and I also need
@@ -645,7 +645,7 @@ is_utf8 = function(x) {
 #' @examples wrap_rmd(text = c('```', '1+1', '```', '- a list item', '> a quote', '',
 #' paste(rep('this is a normal paragraph', 5), collapse = ' ')))
 wrap_rmd = function(file, width = 80, text = NULL, backup) {
-  x = if (is.null(text)) readLines(file, warn = FALSE) else split_lines(text)
+  x = if (is.null(text)) read_utf8(file) else split_lines(text)
   x = strip_white(x)  # strip blank lines in the beginning and end
   if ((n <- length(x)) <= 1L) return(x)  # are you kidding?
   idx = NULL  # collect the lines to exclude from wrapping

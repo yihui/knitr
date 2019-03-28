@@ -128,7 +128,7 @@ vig_engine = function(..., tangle = vtangle) {
 #' \code{filter} argument of \code{\link{aspell}()} to filter out code chunks
 #' and inline expressions.
 #' @param ifile Filename of the source document.
-#' @param encoding Encoding of \code{ifile}.
+#' @param encoding Ignored (the file \code{ifile} must be encoded in UTF-8).
 #' @return A character vector of the file content, excluding code chunks and
 #'   inline expressions.
 #' @export
@@ -142,8 +142,8 @@ vig_engine = function(..., tangle = vtangle) {
 #' # -H is the HTML mode
 #' utils::aspell(knitr_example('knitr-minimal.Rmd'), knit_filter, control = '-H -t')
 #' }}
-knit_filter = function(ifile, encoding = 'unknown') {
-  x = readLines(ifile, encoding = encoding, warn = FALSE)
+knit_filter = function(ifile, encoding = 'UTF-8') {
+  x = read_utf8(ifile)
   n = length(x); if (n == 0) return(x)
   p = detect_pattern(x, tolower(file_ext(ifile)))
   if (is.null(p)) return(x)

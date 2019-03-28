@@ -162,7 +162,7 @@ eng_interpreted = function(options) {
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
   if (options$eval && engine %in% c('sas', 'stata') && file.exists(logf))
-    out = c(readLines(logf), out)
+    out = c(read_utf8(logf), out)
   engine_output(options, options$code, out)
 }
 
@@ -277,7 +277,7 @@ eng_stan = function(options) {
 eng_tikz = function(options) {
   if (!options$eval) return(engine_output(options, options$code, ''))
 
-  lines = readLines(options$engine.opts$template %n%
+  lines = read_utf8(options$engine.opts$template %n%
                     system.file('misc', 'tikz2pdf.tex', package = 'knitr'))
   i = grep('%% TIKZ_CODE %%', lines)
   if (length(i) != 1L)

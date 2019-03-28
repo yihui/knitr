@@ -36,14 +36,14 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
     message('** knitting documentation of ', p)
     tools::Rd2HTML(pkgRdDB[[p]], f <- tempfile(),
             package = pkg, Links = links, no_links = is.null(links), stages = 'render')
-    txt = readLines(f, warn = FALSE)
+    txt = read_utf8(f)
     unlink(f)
     if (length(i <- grep('<h3>Examples</h3>', txt)) == 1L &&
       length(grep('</pre>', txt[i:length(txt)]))) {
       i0 = grep('<pre>', txt); i0 = i0[i0 > i][1L] - 1L
       i1 = grep('</pre>', txt); i1 = i1[i1 > i0][1L] + 1L
       tools::Rd2ex(pkgRdDB[[p]], ef <- tempfile())
-      ex = readLines(ef, warn = FALSE)
+      ex = read_utf8(ef)
       unlink(ef)
       ex = ex[-(1L:grep('### ** Examples', ex, fixed = TRUE))]
       ex = c('```{r}', ex, '```')
@@ -69,7 +69,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   markdown::markdownToHTML(text = one_string(toc), output = '00frame_toc.html',
                            title = paste('R Documentation of', pkg),
                            options = NULL, extensions = NULL, stylesheet = 'R.css')
-  txt = readLines(file.path(find.package(pkg), 'html', '00Index.html'))
+  txt = read_utf8(file.path(find.package(pkg), 'html', '00Index.html'))
   unlink('00Index.html')
   # fix image links
   writeLines(gsub('../../../doc/html/', 'http://stat.ethz.ch/R-manual/R-devel/doc/html/',

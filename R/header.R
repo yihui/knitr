@@ -113,7 +113,7 @@ set_header = function(...) {
 # header for Latex Syntax Highlighting
 .header.hi.tex = theme_to_header_latex(.default.sty)$highlight
 .knitr.sty = inst_dir('misc', 'knitr.sty')
-.header.framed = one_string(readLines(.knitr.sty))
+.header.framed = one_string(read_utf8(.knitr.sty))
 # CSS for html syntax highlighting
 .header.hi.html = theme_to_header_html(.default.sty)$highlight
 rm(list = c('.default.sty', '.knitr.sty')) # do not need them any more

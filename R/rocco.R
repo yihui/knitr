@@ -57,7 +57,7 @@ rocco = function(input, ...) {
     stylesheet = system.file('misc', 'docco-classic.css', package = 'knitr'),
     template = system.file('misc', 'docco-classic.html', package = 'knitr')
   )
-  txt = readLines(out)
+  txt = read_utf8(out)
   i1 = min(grep('<!--table start-->$', txt))
   i2 = max(grep('<!--table end-->$', txt))
   x = one_string(txt[seq(i1 + 1, i2 - 1)])

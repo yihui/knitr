@@ -83,16 +83,16 @@ theme_to_header_html = function(theme){
   }
   css = css.parser(css_file)
   bgcolor = css$background$color
-  css_knitr = readLines(system.file('misc', 'knitr.css', package = 'knitr'))
+  css_knitr = read_utf8(system.file('misc', 'knitr.css', package = 'knitr'))
   css_knitr[-2] = sub('^(\\s+background-color:\\s+)(.*)$', sprintf('\\1%s;', bgcolor), css_knitr[-2])
-  css = c(css_knitr, gsub('^([.][a-z]{3} )', '.hl\\1', readLines(css_file)[-(1:3)]))
+  css = c(css_knitr, gsub('^([.][a-z]{3} )', '.hl\\1', read_utf8(css_file)[-(1:3)]))
   list(highlight = one_string(css))
 }
 
 # parse a theme file from Highlight v3.x by Andre Simon to an R list of the form
 # list(Colour = hex, Bold = TRUE, Italic = TRUE)
 theme2list = function(theme.file) {
-  y = readLines(theme.file, warn = FALSE)
+  y = read_utf8(theme.file)
   i = grep('^\\s*Description', y)
   if (i > 1) y = y[-seq_len(i - 1)]
   y = gsub('[{]', 'list(', y)

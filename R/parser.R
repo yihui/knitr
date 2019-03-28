@@ -284,7 +284,7 @@ print.inline = function(x, ...) {
 #' knitr:::knit_code$get() # use this to check chunks in the current session
 #' knitr:::knit_code$restore() # clean up the session
 read_chunk = function(
-  path, lines = readLines(path, warn = FALSE), labels = NULL, from = NULL, to = NULL,
+  path, lines = read_utf8(path), labels = NULL, from = NULL, to = NULL,
   from.offset = 0L, to.offset = 0L, roxygen_comments = TRUE
 ) {
   if (!length(lines)) {

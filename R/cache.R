@@ -39,7 +39,7 @@ new_cache = function() {
     # save object names
     x = paste(c(label, objs), collapse = '\t')
     if (file.exists(path)) {
-      lines = readLines(path)
+      lines = read_utf8(path)
       lines = lines[lines != label] # knitr < 1.5 may have lines == label
       idx = substr(lines, 1L, nchar(label) + 1L) == paste0(label, '\t')
       if (any(idx)) {
@@ -77,11 +77,11 @@ new_cache = function() {
     path = valid_path(path, '__packages')
     if (save) {
       x = rev(.packages())
-      if (file.exists(path)) x = setdiff(c(readLines(path), x), .base.pkgs)
+      if (file.exists(path)) x = setdiff(c(read_utf8(path), x), .base.pkgs)
       writeLines(x, path)
     } else {
       if (!file.exists(path)) return()
-      for (p in readLines(path))
+      for (p in read_utf8(path))
         suppressPackageStartupMessages(library(p, character.only = TRUE))
     }
   }
@@ -179,7 +179,7 @@ parse_objects = function(path) {
   if (!file.exists(path)) {
     warning('file ', path, ' not found'); return()
   }
-  lines = strsplit(readLines(path), '\t')
+  lines = strsplit(read_utf8(path), '\t')
   if (length(lines) < 2L) return()  # impossible for dependson
   objs = lapply(lines, `[`, -1L)
   names(objs) = lapply(lines, `[`, 1L)
