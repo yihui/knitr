@@ -46,7 +46,7 @@ new_cache = function() {
         lines[idx] = x  # update old objects
       } else lines = c(lines, x)
     } else lines = x
-    writeLines(lines, con = path)
+    write_utf8(lines, path)
   }
   cache_objects = function(keys, globals, label, path) {
     save_objects(keys, label, valid_path(path, '__objects'))
@@ -78,7 +78,7 @@ new_cache = function() {
     if (save) {
       x = rev(.packages())
       if (file.exists(path)) x = setdiff(c(read_utf8(path), x), .base.pkgs)
-      writeLines(x, path)
+      write_utf8(x, path)
     } else {
       if (!file.exists(path)) return()
       for (p in read_utf8(path))

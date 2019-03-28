@@ -60,7 +60,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
 <script>hljs.initHighlightingOnLoad();</script>
 </head>', txt)
     } else message('no examples found for ', p)
-    writeLines(txt, paste0(p, '.html'))
+    write_utf8(txt, paste0(p, '.html'))
   }
   unlink('figure/', recursive = TRUE)
   toc = sprintf('- <a href="%s" target="content">%s</a>', paste0(topics, '.html'), topics)
@@ -72,7 +72,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   txt = read_utf8(file.path(find.package(pkg), 'html', '00Index.html'))
   unlink('00Index.html')
   # fix image links
-  writeLines(gsub('../../../doc/html/', 'http://stat.ethz.ch/R-manual/R-devel/doc/html/',
+  write_utf8(gsub('../../../doc/html/', 'http://stat.ethz.ch/R-manual/R-devel/doc/html/',
                   txt, fixed = TRUE), '00Index.html')
   if (!frame) {
     unlink(c('00frame_toc.html', 'index.html'))
@@ -80,7 +80,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
     (if (is_windows()) file.copy else file.symlink)('00Index.html', 'index.html')
     return(invisible())
   }
-  writeLines(sprintf(
+  write_utf8(sprintf(
 '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
 <html>
 <head><title>Documentation of the %s package</title></head>

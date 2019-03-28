@@ -84,6 +84,6 @@ rocco = function(input, ...) {
   }
 
   html = c(txt[1:i1], paste0(doc, code, collapse = ''), txt[i2:length(txt)])
-  writeLines(html, out)
+  write_utf8(html, out)
   invisible(out)
 }

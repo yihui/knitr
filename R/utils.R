@@ -683,7 +683,7 @@ wrap_rmd = function(file, width = 80, text = NULL, backup) {
   if (is.null(text)) {
     if (missing(backup)) backup = file.path(dirname(file), paste0('__', basename(file)))
     if (!is.null(backup)) file.copy(file, backup, overwrite = TRUE)
-    writeLines(txt, file)
+    write_utf8(txt, file)
   } else txt
 }
 

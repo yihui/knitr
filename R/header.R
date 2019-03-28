@@ -23,7 +23,7 @@ make_header_latex = function() {
     if (out_format('latex')) '\\usepackage{alltt}'
   ))
   if (opts_knit$get('self.contained')) h else {
-    writeLines(h, 'knitr.sty')
+    write_utf8(h, 'knitr.sty')
     '\\usepackage{knitr}'
   }
 }
@@ -60,7 +60,7 @@ make_header_html = function() {
     '<style type="text/css">', h[['highlight']], '</style>',
     unlist(h[setdiff(names(h), 'highlight')])
   )) else {
-    writeLines(h, 'knitr.css')
+    write_utf8(h, 'knitr.css')
     '<link rel="stylesheet" href="knitr.css" type="text/css" />'
   }
 }

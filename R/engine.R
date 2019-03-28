@@ -111,7 +111,7 @@ eng_interpreted = function(options) {
   engine = options$engine
   code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')) {
     f = wd_tempfile(engine, switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', '.txt'))
-    writeLines(c(switch(
+    write_utf8(c(switch(
       engine,
       sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
       NULL
@@ -179,7 +179,7 @@ get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 eng_shlib = function(options) {
   n = switch(options$engine, c = 'c', fortran = 'f', fortran95 = 'f95')
   f = wd_tempfile(n, paste0('.', n))
-  writeLines(options$code, f)
+  write_utf8(options$code, f)
   on.exit(unlink(c(f, with_ext(f, c('o', 'so', 'dll')))), add = TRUE)
   if (options$eval) {
     out = system(paste('R CMD SHLIB', f), intern = TRUE)
@@ -284,7 +284,7 @@ eng_tikz = function(options) {
     stop("Couldn't find replacement string; or the are multiple of them.")
 
   s = append(lines, options$code, i)  # insert tikz into tex-template
-  writeLines(s, texf <- wd_tempfile('tikz', '.tex'))
+  write_utf8(s, texf <- wd_tempfile('tikz', '.tex'))
   on.exit(unlink(texf), add = TRUE)
 
   ext = tolower(options$fig.ext %n% dev2ext(options$dev))
@@ -323,7 +323,7 @@ eng_dot = function(options) {
 
   # create temporary file
   f = wd_tempfile('code')
-  writeLines(code <- options$code, f)
+  write_utf8(code <- options$code, f)
   on.exit(unlink(f), add = TRUE)
 
   # adapt command to either graphviz or asymptote
@@ -620,7 +620,7 @@ eng_sql = function(options) {
 # go engine, added by @hodgesds https://github.com/yihui/knitr/pull/1330
 eng_go = function(options) {
   f = wd_tempfile('code', '.go')
-  writeLines(code <- options$code, f)
+  write_utf8(code <- options$code, f)
   on.exit(unlink(f), add = TRUE)
   cmd = get_engine_path(options$engine.path, options$engine)
 

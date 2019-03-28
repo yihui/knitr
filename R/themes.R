@@ -141,7 +141,7 @@ themes2css = function(theme.path, css.path) {
   for (f in list.files(theme.path, pattern = '[.]theme$', full.names = TRUE)) {
     theme.name = sub('[.]theme$', '', basename(f))
     css.file = file.path(css.path, sprintf('%s.css', theme.name))
-    writeLines(list2css(theme2list(f)), css.file)
+    write_utf8(list2css(theme2list(f)), css.file)
     message('theme ', theme.name, ' saved to ', css.file)
   }
 }
