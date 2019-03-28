@@ -179,7 +179,7 @@ spin_child = function(input, format) {
     fmt
   } else format
   asis_output(knit_child(
-    text = spin(text = readLines(input), knit = FALSE, report = FALSE, format = fmt),
+    text = spin(text = read_utf8(input), knit = FALSE, report = FALSE, format = fmt),
     quiet = TRUE
   ))
 }
