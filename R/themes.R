@@ -70,7 +70,7 @@ theme_to_header_latex = function(theme) {
 
   # write latex highlight header
   fgheader = color_def(foreground, 'fgcolor')
-  highlight = paste(c(fgheader, styler_assistant_latex(css_out[-1])), collapse = '\n')
+  highlight = one_string(c(fgheader, styler_assistant_latex(css_out[-1])))
   list(highlight = highlight, background = background, foreground = foreground)
 }
 
@@ -83,23 +83,23 @@ theme_to_header_html = function(theme){
   }
   css = css.parser(css_file)
   bgcolor = css$background$color
-  css_knitr = readLines(system.file('misc', 'knitr.css', package = 'knitr'))
+  css_knitr = read_utf8(system.file('misc', 'knitr.css', package = 'knitr'))
   css_knitr[-2] = sub('^(\\s+background-color:\\s+)(.*)$', sprintf('\\1%s;', bgcolor), css_knitr[-2])
-  css = c(css_knitr, gsub('^([.][a-z]{3} )', '.hl\\1', readLines(css_file)[-(1:3)]))
-  list(highlight = paste(css, collapse = '\n'))
+  css = c(css_knitr, gsub('^([.][a-z]{3} )', '.hl\\1', read_utf8(css_file)[-(1:3)]))
+  list(highlight = one_string(css))
 }
 
 # parse a theme file from Highlight v3.x by Andre Simon to an R list of the form
 # list(Colour = hex, Bold = TRUE, Italic = TRUE)
 theme2list = function(theme.file) {
-  y = readLines(theme.file, warn = FALSE)
+  y = read_utf8(theme.file)
   i = grep('^\\s*Description', y)
   if (i > 1) y = y[-seq_len(i - 1)]
   y = gsub('[{]', 'list(', y)
   y = gsub('[}]', ')', y)
   y = gsub(';', '', y)
   y = gsub('true', 'TRUE', y)
-  y = paste(y, collapse = '\n')
+  y = one_string(y)
   y = gsub(',\\s*)', ')', y)
   env = new.env()
   #cat(y, sep = '\n')
@@ -126,11 +126,11 @@ list2css = function(lst) {
     m = cls2thm[i]; l = lst[[m]]
     # if not found, use the default style
     if (!is.list(l)) l = lst[['Default']]
-    css[i] = paste(c(
+    css[i] = one_string(c(
       sprintf('.%s {', names(m)), sprintf('  color: %s;', l$Colour),
       sprintf('  font-weight: %s;', if (isTRUE(l$Bold)) 'bold'),
       sprintf('  font-style: %s;', if (isTRUE(l$Italic)) 'italic'), '}'
-    ), collapse = '\n')
+    ))
   }
   css
 }
@@ -141,7 +141,7 @@ themes2css = function(theme.path, css.path) {
   for (f in list.files(theme.path, pattern = '[.]theme$', full.names = TRUE)) {
     theme.name = sub('[.]theme$', '', basename(f))
     css.file = file.path(css.path, sprintf('%s.css', theme.name))
-    writeLines(list2css(theme2list(f)), css.file)
+    write_utf8(list2css(theme2list(f)), css.file)
     message('theme ', theme.name, ' saved to ', css.file)
   }
 }

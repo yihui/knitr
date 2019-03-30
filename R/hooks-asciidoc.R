@@ -18,7 +18,7 @@ render_asciidoc = function() {
   set_html_dev()
   opts_knit$set(out.format = 'asciidoc')
   hook.source = function(x, options) {
-    x = paste(c(hilight_source(x, 'asciidoc', options), ''), collapse = '\n')
+    x = one_string(c(hilight_source(x, 'asciidoc', options), ''))
     sprintf('\n[source,%s]\n----\n%s----\n', tolower(options$engine), x)
   }
   hook.message = function(x, options) {

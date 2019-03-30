@@ -4,12 +4,12 @@
 \alias{knit_filter}
 \title{Spell check filter for source documents}
 \usage{
-knit_filter(ifile, encoding = "unknown")
+knit_filter(ifile, encoding = "UTF-8")
 }
 \arguments{
 \item{ifile}{Filename of the source document.}
 
-\item{encoding}{Encoding of \code{ifile}.}
+\item{encoding}{Ignored (the file \code{ifile} must be encoded in UTF-8).}
 }
 \value{
 A character vector of the file content, excluding code chunks and

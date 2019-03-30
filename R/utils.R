@@ -87,7 +87,7 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   if (is.na(idx2) || idx2 < 2L) return()
   idx1 = grep(hb, input)[1]
   if (is.na(idx1) || idx1 >= idx2) return()
-  txt = paste(input[idx1:(idx2 - 1L)], collapse = '\n')  # rough preamble
+  txt = one_string(input[idx1:(idx2 - 1L)])  # rough preamble
   idx = stringr::str_locate(txt, hb)  # locate documentclass
   options(tikzDocumentDeclaration = stringr::str_sub(txt, idx[, 1L], idx[, 2L]))
   preamble = pure_preamble(split_lines(stringr::str_sub(txt, idx[, 2L] + 1L)), patterns)
@@ -139,7 +139,7 @@ pure_preamble = function(preamble, patterns) {
 set_parent = function(parent) {
   if (child_mode()) return(invisible(NULL)) # quit if in child mode
   opts_knit$set(parent = TRUE)
-  set_preamble(readLines(parent, warn = FALSE))
+  set_preamble(read_utf8(parent))
   invisible(NULL)
 }
 
@@ -176,7 +176,9 @@ round_digits = function(x) {
 }
 
 # scientific notation in TeX, HTML and reST
-format_sci_one = function(x, format = 'latex') {
+format_sci_one = function(
+  x, format = 'latex', times = getOption('knitr.inline.times', '\\times ')
+) {
 
   if (!(class(x)[1] == 'numeric') || is.na(x) || x == 0) return(as.character(x))
 
@@ -196,14 +198,14 @@ format_sci_one = function(x, format = 'latex') {
   b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
-    sci_notation('%s%s10^{%s}', b, '\\times ', lx)
+    sci_notation('%s%s10^{%s}', b, times, lx)
   },
   html = sci_notation('%s%s10<sup>%s</sup>', b, ' &times; ', lx),
   md   = sci_notation('%s%s10^%s^', b, '&times; ', lx),
   rst  = {
     # if AsIs, use the :math: directive
     if (inherits(x, 'AsIs')) {
-      s = sci_notation('%s%s10^{%s}', b, '\\times ', lx)
+      s = sci_notation('%s%s10^{%s}', b, times, lx)
       sprintf(':math:`%s`', s)
     } else {
       # This needs the following line at the top of the file to define |times|
@@ -399,7 +401,7 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
   if (length(text) == 0) return(text)
   f1 = wd_tempfile('pandoc', '.md'); f2 = wd_tempfile('pandoc')
   on.exit(unlink(c(f1, f2)), add = TRUE)
-  xfun::write_utf8(text, f1)
+  write_utf8(text, f1)
   rmarkdown::pandoc_convert(f1, to, from, f2, options = if (is_html_output(to)) '--mathjax')
   file_string(f2)
 }
@@ -524,7 +526,7 @@ print_knitlog = function() {
 # count the number of lines
 line_count = function(x) stringr::str_count(x, '\n') + 1L
 
-has_package = function(pkg) xfun::loadable(pkg, FALSE)
+has_package = function(pkg) loadable(pkg, FALSE)
 
 # if LHS is NULL, return the RHS
 `%n%` = function(x, y) if (is.null(x)) y else x
@@ -593,7 +595,7 @@ escape_html = highr:::escape_html
 #' read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')}
 read_rforge = function(path, project, extra = '') {
   base = 'http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg'
-  readLines(sprintf('%s/%s?root=%s%s', base, path, project, extra))
+  read_utf8(sprintf('%s/%s?root=%s%s', base, path, project, extra))
 }
 
 # strsplit('', 'foo') should return '' instead of character(0), and I also need
@@ -643,7 +645,7 @@ is_utf8 = function(x) {
 #' @examples wrap_rmd(text = c('```', '1+1', '```', '- a list item', '> a quote', '',
 #' paste(rep('this is a normal paragraph', 5), collapse = ' ')))
 wrap_rmd = function(file, width = 80, text = NULL, backup) {
-  x = if (is.null(text)) readLines(file, warn = FALSE) else split_lines(text)
+  x = if (is.null(text)) read_utf8(file) else split_lines(text)
   x = strip_white(x)  # strip blank lines in the beginning and end
   if ((n <- length(x)) <= 1L) return(x)  # are you kidding?
   idx = NULL  # collect the lines to exclude from wrapping
@@ -674,14 +676,14 @@ wrap_rmd = function(file, width = 80, text = NULL, backup) {
       # those lines not to be wrapped
       gsub('\\s+$', '', block)  # strip pending spaces
     } else {
-      strwrap(paste(block, collapse = '\n'), width)
+      strwrap(one_string(block), width)
     }
   }
   txt = unlist(txt)
   if (is.null(text)) {
     if (missing(backup)) backup = file.path(dirname(file), paste0('__', basename(file)))
     if (!is.null(backup)) file.copy(file, backup, overwrite = TRUE)
-    writeLines(txt, file)
+    write_utf8(txt, file)
   } else txt
 }
 
@@ -833,7 +835,7 @@ raw_markers = c('!!!!!RAW-KNITR-CONTENT', 'RAW-KNITR-CONTENT!!!!!')
 #' @rdname raw_output
 extract_raw_output = function(text, markers = raw_markers) {
   r = sprintf('%s(.*?)%s', markers[1], markers[2])
-  x = paste(text, collapse = '\n')
+  x = one_string(text)
   m = gregexpr(r, x)
   s = regmatches(x, m)
   n = length(s[[1]])
@@ -924,7 +926,7 @@ raw_output = function(x, markers = raw_markers, ...) {
 raw_block = function(x, type = 'latex', ...) {
   if (!rmarkdown::pandoc_available('2.0.0')) warning('raw_block() requires Pandoc >= 2.0.0')
   x = c(sprintf('\n```{=%s}', type), x, '```\n')
-  asis_output(paste(x, collapse = '\n'), ...)
+  asis_output(one_string(x), ...)
 }
 
 #' @rdname raw_block
@@ -963,3 +965,6 @@ digest3 = function(x) {
   close(s)
   unname(tools::md5sum(f))
 }
+
+# collapse by \n
+one_string = function(x, ...) paste(x, ..., collapse = '\n')

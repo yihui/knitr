@@ -36,14 +36,14 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
     message('** knitting documentation of ', p)
     tools::Rd2HTML(pkgRdDB[[p]], f <- tempfile(),
             package = pkg, Links = links, no_links = is.null(links), stages = 'render')
-    txt = readLines(f, warn = FALSE)
+    txt = read_utf8(f)
     unlink(f)
     if (length(i <- grep('<h3>Examples</h3>', txt)) == 1L &&
       length(grep('</pre>', txt[i:length(txt)]))) {
       i0 = grep('<pre>', txt); i0 = i0[i0 > i][1L] - 1L
       i1 = grep('</pre>', txt); i1 = i1[i1 > i0][1L] + 1L
       tools::Rd2ex(pkgRdDB[[p]], ef <- tempfile())
-      ex = readLines(ef, warn = FALSE)
+      ex = read_utf8(ef)
       unlink(ef)
       ex = ex[-(1L:grep('### ** Examples', ex, fixed = TRUE))]
       ex = c('```{r}', ex, '```')
@@ -60,19 +60,19 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
 <script>hljs.initHighlightingOnLoad();</script>
 </head>', txt)
     } else message('no examples found for ', p)
-    writeLines(txt, paste0(p, '.html'))
+    write_utf8(txt, paste0(p, '.html'))
   }
   unlink('figure/', recursive = TRUE)
   toc = sprintf('- <a href="%s" target="content">%s</a>', paste0(topics, '.html'), topics)
   toc = c(paste0('# ', pkg), '', toc, '',
           paste('Generated with [knitr](https://yihui.name/knitr) ', packageVersion('knitr')))
-  markdown::markdownToHTML(text = paste(toc, collapse = '\n'), output = '00frame_toc.html',
+  markdown::markdownToHTML(text = one_string(toc), output = '00frame_toc.html',
                            title = paste('R Documentation of', pkg),
                            options = NULL, extensions = NULL, stylesheet = 'R.css')
-  txt = readLines(file.path(find.package(pkg), 'html', '00Index.html'))
+  txt = read_utf8(file.path(find.package(pkg), 'html', '00Index.html'))
   unlink('00Index.html')
   # fix image links
-  writeLines(gsub('../../../doc/html/', 'http://stat.ethz.ch/R-manual/R-devel/doc/html/',
+  write_utf8(gsub('../../../doc/html/', 'http://stat.ethz.ch/R-manual/R-devel/doc/html/',
                   txt, fixed = TRUE), '00Index.html')
   if (!frame) {
     unlink(c('00frame_toc.html', 'index.html'))
@@ -80,7 +80,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
     (if (is_windows()) file.copy else file.symlink)('00Index.html', 'index.html')
     return(invisible())
   }
-  writeLines(sprintf(
+  write_utf8(sprintf(
 '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
 <html>
 <head><title>Documentation of the %s package</title></head>

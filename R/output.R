@@ -221,9 +221,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
     if (is.null(pattern <- detect_pattern(text, ext))) {
       # nothing to be executed; just return original input
       if (is.null(output)) {
-        return(if (tangle) '' else paste(text, collapse = '\n'))
+        return(if (tangle) '' else one_string(text))
       } else {
-        xfun::write_utf8(if (tangle) '' else text, output)
+        write_utf8(if (tangle) '' else text, output)
         return(output)
       }
     }
@@ -266,9 +266,9 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   progress = opts_knit$get('progress')
   if (in.file && !quiet) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
   res = process_file(text, output)
-  res = paste(knit_hooks$get('document')(res), collapse = '\n')
+  res = one_string(knit_hooks$get('document')(res))
   if (tangle) res = c(params, res)
-  if (!is.null(output)) xfun::write_utf8(res, output)
+  if (!is.null(output)) write_utf8(res, output)
   if (!child_mode()) {
     dep_list$restore()  # empty dependency list
     .knitEnv$labels = NULL
@@ -309,7 +309,7 @@ process_file = function(text, output) {
   wd = getwd()
   for (i in 1:n) {
     if (!is.null(.knitEnv$terminate)) {
-      res[i] = paste(.knitEnv$terminate, collapse = '\n')
+      res[i] = one_string(.knitEnv$terminate)
       knit_exit(NULL)
       break  # must have called knit_exit(), so exit early
     }
@@ -412,7 +412,7 @@ knit_child = function(..., options = NULL, envir = knit_global()) {
     }
   }
   res = knit(..., tangle = opts_knit$get('tangle'), envir = envir)
-  paste(c('', res), collapse = '\n')
+  one_string(c('', res))
 }
 
 #' Exit knitting early
@@ -615,7 +615,8 @@ wrap.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE) {
   if (length(extra <- options$out.extra)) extra = paste('', extra, collapse = '')
   add_html_caption(options, sprintf(
     '<iframe src="%s" width="%s" height="%s"%s></iframe>',
-    escape_html(x$url), options$out.width %n% '100%', x$height %n% '400px', extra
+    escape_html(x$url), options$out.width %n% '100%', x$height %n% '400px',
+    extra %n% ''
   ))
 }
 

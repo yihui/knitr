@@ -19,7 +19,7 @@ hilight_source = function(x, format, options) {
     # if you did not reformat or evaluate the code, I have to figure out which
     # lines belong to one complete expression first (#779)
     if (options$engine == 'R' && isFALSE(options$tidy) && isFALSE(options$eval))
-      x = vapply(highr:::group_src(x), paste, character(1), collapse = '\n')
+      x = vapply(highr:::group_src(x), one_string, character(1))
     line_prompt(x)
   } else x
 }
@@ -77,7 +77,7 @@ css.parse.color = function(txt, default = '#000000') {
 is.hex = function(x) grepl('^#[0-9a-f]{6}$', x)
 
 # minimal css parser
-css.parser = function(file, lines = readLines(file)) {
+css.parser = function(file, lines = read_utf8(file)) {
 
   rx = '^\\.(.*?) *\\{.*$'
   dec.lines = grep(rx, lines)

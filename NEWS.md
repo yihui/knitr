@@ -1,12 +1,26 @@
 # CHANGES IN knitr VERSION 1.23
 
+## NEW FEATURES 
+
+- It is possible to customize the sign `\times` used for the scientific notation of inline numeric output via a global option, e.g., `options(knitr.inline.times = '\\cdot ')` (thanks, @wuffi @trentks, #1563).
+
 ## BUG FIXES
 
+- For R Markdown documents, inline numeric output that is formatted with the scientific notation will be wrapped in `\ensuremath{}`. This will fix the LaTeX error `! Missing $ inserted.`. However, you are still recommended to add a pair of dollar signs around the inline output when it is formatted with the scientific notation (e.g., `` $`r 1.234e12`$``), otherwise it will not work with other R Markdown output formats such as HTML or Word (thanks, @billdenney and many who have suffered from this issue, rstudio/rmarkdown#1527).
+
 - For an input file that contains no code chunks or inline R code expressions, `purl()` should return an empty string instead of the original text from the input (thanks, @jrnold, #1660).
+
+- `purl()` might trigger a warning for non-R code chunks (thanks, @adamcagle, rstudio/rmarkdown#1528).
+
+- When building package vignettes via `R CMD build`, the R scripts generated from **knitr**'s vignette (tangling) engines are not corrected encoded in UTF-8 (thanks, Kurt Hornik).
+
+- Fixed a bug introduced when fixing #1648: `include_url()` no longer works at all unless the chunk option `out.extra` is not empty (thanks, @gabrielvazdemelo, #1691).
 
 ## MAJOR CHANGES
 
 - `knitr::knit()` will try to read the input file with the UTF-8 encoding first. If UTF-8 doesn't work, it will try to read with the system native encoding instead (with a warning). The `encoding` argument of `knitr::knit()` is completely ignored. In the future, only UTF-8 will be supported, and we will stop retrying with the system native encoding. The output file from `knitr::knit()` is always encoded in UTF-8.
+
+- `spin_child()` will also assume the input file is encoded in UTF-8 (thanks, Henrik, https://stackoverflow.com/q/55395422/559676).
 
 # CHANGES IN knitr VERSION 1.22
 

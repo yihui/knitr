@@ -186,7 +186,7 @@ hook_plot_tex = function(x, options) {
     name = fig_path('.tex', options, NULL)
     if (!file.exists(dirname(name)))
       dir.create(dirname(name))
-    cat(x, file = name)
+    write_utf8(x, name)
     sprintf('\\input{%s}', name)
   } else x
 }
@@ -201,15 +201,16 @@ hook_plot_tex = function(x, options) {
 .inline.hook.tex = function(x) {
   if (is.numeric(x)) {
     x = format_sci(x, 'latex')
-    i = grep('[^-0-9.,]', x)
+    i = grep('[}]', x)
     x[i] = sprintf('\\ensuremath{%s}', x[i])
+    # why \text{}: https://github.com/yihui/knitr/issues/348
     if (getOption('OutDec') != '.') x = sprintf('\\text{%s}', x)
   }
   .inline.hook(x)
 }
 
 .verb.hook = function(x)
-  paste(c('\\begin{verbatim}', sub('\n$', '', x), '\\end{verbatim}', ''), collapse = '\n')
+  one_string(c('\\begin{verbatim}', sub('\n$', '', x), '\\end{verbatim}', ''))
 .color.block = function(color1 = '', color2 = '') {
   function(x, options) {
     x = gsub('\n*$', '', x)
@@ -263,10 +264,10 @@ render_latex = function() {
       x = hilight_source(x, 'latex', options)
       if (options$highlight) {
         if (options$engine == 'R' || x[1] != '\\noindent') {
-          paste(c('\\begin{alltt}', x, '\\end{alltt}', ''), collapse = '\n')
+          one_string(c('\\begin{alltt}', x, '\\end{alltt}', ''))
         } else {
           if ((n <- length(x)) > 4) x[n - 2] = sub('\\\\\\\\$', '', x[n - 2])
-          paste(c(x, ''), collapse = '\n')
+          one_string(c(x, ''))
         }
       } else .verb.hook(x)
     },
@@ -294,8 +295,7 @@ render_sweave = function() {
   set_header(framed = '', highlight = '\\usepackage{Sweave}')
   # wrap source code in the Sinput environment, output in Soutput
   hook.i = function(x, options)
-    paste(c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''),
-          collapse = '\n')
+    one_string(c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''))
   hook.s = function(x, options) paste0('\\begin{Soutput}\n', x, '\\end{Soutput}\n')
   hook.c = function(x, options) {
     if (output_asis(x, options)) return(x)
@@ -362,12 +362,12 @@ hook_movecode = function(x) {
       idx = c(idx, i - 1, i + 1)
     idx = sort(c(idx, seq(grep('\\\\caption', p), grep('\\\\label', p))))
     idx = unique(idx)
-    p = paste(c(p[-idx], p[idx]), collapse = '\n')
+    p = one_string(c(p[-idx], p[idx]))
     gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
   }), use.names = FALSE))
 
   res = split(x, cumsum(grepl('^\\\\(begin|end)\\{table\\}', x)))
-  res = paste(unlist(lapply(res, function(p) {
+  res = one_string(unlist(lapply(res, function(p) {
     if (length(p) <= 4 || !grepl('^\\\\begin\\{table\\}', p[1]) ||
           length(grep('% knitr_do_not_move', p)) ||
           !any(grepl('\\\\begin\\{(alltt|kframe)\\}', p))) return(p)
@@ -376,8 +376,8 @@ hook_movecode = function(x) {
     i0 = grep('\\\\begin\\{tabular\\}', p); i1 = grep('\\\\end\\{tabular\\}', p)
     for (i in seq_along(i0)) idx = c(idx, i0[i]:i1[i])
     idx = sort(idx)
-    p = paste(c(p[-idx], p[idx]), collapse = '\n')
+    p = one_string(c(p[-idx], p[idx]))
     gsub('\\\\end\\{(kframe)\\}\\s*\\\\begin\\{\\1\\}', '', p)
-  }), use.names = FALSE), collapse = '\n')
+  }), use.names = FALSE))
   .rm.empty.envir(res)
 }

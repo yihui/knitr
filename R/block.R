@@ -38,7 +38,7 @@ call_block = function(block) {
     )
     if (!params$eval) return('')
     cmds = lapply(sc_split(params$child), knit_child, options = block$params)
-    out = paste(unlist(cmds), collapse = '\n')
+    out = one_string(unlist(cmds))
     return(out)
   }
 
@@ -161,7 +161,7 @@ block_exec = function(options) {
   # only evaluate certain lines
   if (is.numeric(ev <- options$eval)) {
     # group source code into syntactically complete expressions
-    if (isFALSE(options$tidy)) code = sapply(highr:::group_src(code), paste, collapse = '\n')
+    if (isFALSE(options$tidy)) code = sapply(highr:::group_src(code), one_string)
     iss = seq_along(code)
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
@@ -464,10 +464,10 @@ process_tangle.block = function(x) {
   }
   if (isFALSE(params$purl)) return('')
   label = params$label; ev = params$eval
-  if (params$engine != 'R') return(comment_out(knit_code$get(label)))
+  if (params$engine != 'R') return(one_string(comment_out(knit_code$get(label))))
   code = if (!isFALSE(ev) && !is.null(params$child)) {
     cmds = lapply(sc_split(params$child), knit_child)
-    paste(unlist(cmds), collapse = '\n')
+    one_string(unlist(cmds))
   } else knit_code$get(label)
   # read external code if exists
   if (!isFALSE(ev) && length(code) && any(grepl('read_chunk\\(.+\\)', code))) {
@@ -475,14 +475,14 @@ process_tangle.block = function(x) {
   }
   code = parse_chunk(code)
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
-  if (opts_knit$get('documentation') == 0L) return(paste(code, collapse = '\n'))
+  if (opts_knit$get('documentation') == 0L) return(one_string(code))
   label_code(code, x$params.src)
 }
 #' @export
 process_tangle.inline = function(x) {
 
   output = if (opts_knit$get('documentation') == 2L) {
-    output = paste(line_prompt(x$input.src, "#' ", "#' "), collapse = '\n')
+    output = one_string(line_prompt(x$input.src, "#' ", "#' "))
   } else ''
 
   code = x$code
@@ -496,13 +496,13 @@ process_tangle.inline = function(x) {
     output = c(output, cout, '')
   }
 
-  paste(output, collapse = '\n')
+  one_string(output)
 }
 
 
 # add a label [and extra chunk options] to a code chunk
 label_code = function(code, label) {
-  code = paste(c('', code, ''), collapse = '\n')
+  code = one_string(c('', code, ''))
   paste0('## ----', stringr::str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
          '----', code)
 }

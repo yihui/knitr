@@ -110,7 +110,7 @@ spin = function(
   }
   if (nosrc) {
     outsrc = with_ext(hair, format)
-    xfun::write_utf8(txt, outsrc)
+    write_utf8(txt, outsrc)
     txt = NULL
   } else outsrc = NULL
   if (!knit) return(txt %n% outsrc)
@@ -136,7 +136,7 @@ spin = function(
 
 # determine how many backticks we need to wrap code blocks and inline code
 .fmt.rmd = function(x) {
-  x = paste(x, collapse = '\n')
+  x = one_string(x)
   l = attr(gregexpr('`+', x)[[1]], 'match.length')
   l = max(l, 0)
   if (length(l) > 0) {
@@ -179,7 +179,7 @@ spin_child = function(input, format) {
     fmt
   } else format
   asis_output(knit_child(
-    text = spin(text = readLines(input), knit = FALSE, report = FALSE, format = fmt),
+    text = spin(text = read_utf8(input), knit = FALSE, report = FALSE, format = fmt),
     quiet = TRUE
   ))
 }

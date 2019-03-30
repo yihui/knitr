@@ -169,7 +169,7 @@ print.block = function(x, ...) {
     code = knit_code$get(params$label)
     if (length(code) && !is_blank(code)) {
       cat('\n  ', stringr::str_pad(' R code chunk ', getOption('width') - 10L, 'both', '~'), '\n')
-      cat(paste('  ', code, collapse = '\n'), '\n')
+      cat(one_string('  ', code), '\n')
       cat('  ', stringr::str_dup('~', getOption('width') - 10L), '\n')
     }
     cat(paste('##------', date(), '------##'), sep = '\n')
@@ -187,7 +187,7 @@ parse_inline = function(input, patterns) {
     # strip off inline code
     input[idx] = gsub(inline.code, '\\1', input[idx])
   }
-  input = paste(input, collapse = '\n') # merge into one line
+  input = one_string(input) # merge into one line
 
   loc = cbind(start = numeric(0), end = numeric(0))
   if (group_pattern(inline.code)) loc = stringr::str_locate_all(input, inline.code)[[1]]
@@ -284,7 +284,7 @@ print.inline = function(x, ...) {
 #' knitr:::knit_code$get() # use this to check chunks in the current session
 #' knitr:::knit_code$restore() # clean up the session
 read_chunk = function(
-  path, lines = readLines(path, warn = FALSE), labels = NULL, from = NULL, to = NULL,
+  path, lines = read_utf8(path), labels = NULL, from = NULL, to = NULL,
   from.offset = 0L, to.offset = 0L, roxygen_comments = TRUE
 ) {
   if (!length(lines)) {
@@ -376,7 +376,7 @@ parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   code = mapply(indent_block, code, indent, SIMPLIFY = FALSE, USE.NAMES = FALSE)
 
   x[idx] = unlist(lapply(code, function(z) {
-    paste(parse_chunk(z, rc), collapse = '\n')
+    one_string(parse_chunk(z, rc))
   }), use.names = FALSE)
   x
 }

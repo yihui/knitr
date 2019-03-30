@@ -57,10 +57,10 @@ rocco = function(input, ...) {
     stylesheet = system.file('misc', 'docco-classic.css', package = 'knitr'),
     template = system.file('misc', 'docco-classic.html', package = 'knitr')
   )
-  txt = readLines(out)
+  txt = read_utf8(out)
   i1 = min(grep('<!--table start-->$', txt))
   i2 = max(grep('<!--table end-->$', txt))
-  x = paste(txt[seq(i1 + 1, i2 - 1)], collapse = '\n')
+  x = one_string(txt[seq(i1 + 1, i2 - 1)])
   x = gsub('</pre>\\s*<pre>', '<!--ReDuNdAnTpRe-->', x)  # merge pre blocks
   m = gregexpr('<pre><code( class="[[:alnum:]]+")?>(.|\n)*?</code></pre>', x)
   if (m[[1]][1] == -1) stop('No code blocks in HTML output')
@@ -84,6 +84,6 @@ rocco = function(input, ...) {
   }
 
   html = c(txt[1:i1], paste0(doc, code, collapse = ''), txt[i2:length(txt)])
-  writeLines(html, out)
+  write_utf8(html, out)
   invisible(out)
 }

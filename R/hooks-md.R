@@ -117,7 +117,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
     if (strict) {
       paste('\n', indent_block(x), '', sep = '\n')
     } else {
-      x = paste(c('', x), collapse = '\n')
+      x = one_string(c('', x))
       r = paste0('\n', fence_char, '{3,}')
       if (grepl(r, x)) {
         l = attr(gregexpr(r, x)[[1]], 'match.length')
@@ -148,12 +148,12 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
   knit_hooks$set(
     source = function(x, options) {
       x = hilight_source(x, 'markdown', options)
-      (if (strict) hook.t else hook.r)(paste(c(x, ''), collapse = '\n'), options)
+      (if (strict) hook.t else hook.r)(one_string(c(x, '')), options)
     },
     inline = function(x) {
-      fmt = pandoc_to()
-      fmt = if (length(fmt) == 1L) 'latex' else 'html'
-      .inline.hook(format_sci(x, fmt))
+      if (is_latex_output()) .inline.hook.tex(x) else {
+        .inline.hook(format_sci(x, if (length(pandoc_to()) == 1L) 'latex' else 'html'))
+      }
     },
     plot = hook_plot_md,
     chunk = function(x, options) {
@@ -203,7 +203,7 @@ render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = 
     )
   })
   knit_hooks$set(source = function(x, options) {
-    x = paste(hilight_source(x, 'markdown', options), collapse = '\n')
+    x = one_string(hilight_source(x, 'markdown', options))
     hook.r(x, options)
   }, output = hook.t, warning = hook.t, error = hook.t, message = hook.t)
 }

@@ -23,7 +23,7 @@ hook_plot_rst = function(x, options) {
 render_rst = function(strict = FALSE) {
   set_html_dev()
   hook.s = function(x, options) {
-    paste(c('\n\n::\n', indent_block(x), ''), collapse = '\n')
+    one_string(c('\n\n::\n', indent_block(x), ''))
   }
   hook.t = function(x, options) {
     make_directive('sourcecode', tolower(options$engine), '', content = x)
@@ -31,7 +31,7 @@ render_rst = function(strict = FALSE) {
   hook.i = function(x) .inline.hook(format_sci(x, 'rst'))
   knit_hooks$set(
     source = function(x, options) {
-      x = paste(c(hilight_source(x, 'rst', options), ''), collapse = '\n')
+      x = one_string(c(hilight_source(x, 'rst', options), ''))
       (if (strict) hook.s else hook.t)(x, options)
     },
     warning = hook.s, error = hook.s, message = hook.s,
@@ -57,6 +57,6 @@ render_rst = function(strict = FALSE) {
 #      :alt: cap
 make_directive = function(name, arg, opt, content = '') {
   l1 = sprintf('\n.. %s:: %s\n', name, arg)
-  l2 = paste(sprintf(':%s: %s', names(opt), opt), collapse = '\n')
+  l2 = one_string(sprintf(':%s: %s', names(opt), opt))
   paste0(l1, indent_block(l2), '\n\n', indent_block(content))
 }

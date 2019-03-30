@@ -120,7 +120,7 @@ kable = function(
       col.names = col.names, align = align, caption = NA,
       format.args = format.args, escape = escape, ...
     )
-    res = unlist(lapply(res, paste, collapse = '\n'))
+    res = unlist(lapply(res, one_string))
     res = if (format == 'latex') {
       kable_latex_caption(res, caption)
     } else if (format == 'html' || (format == 'pandoc' && is_html_output())) kable_html(
@@ -212,9 +212,9 @@ print.knitr_kable = function(x, ...) {
 
 #' @export
 knit_print.knitr_kable = function(x, ...) {
-  x = paste(c(
+  x = one_string(c(
     if (!(attr(x, 'format') %in% c('html', 'latex'))) c('', ''), x, '\n'
-  ), collapse = '\n')
+  ))
   asis_output(x)
 }
 
@@ -265,8 +265,7 @@ kable_latex = function(
       if (escape) cn = escape_latex(cn)
       paste0(paste(cn, collapse = ' & '), sprintf('\\\\\n%s\n', midrule))
     },
-    paste0(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep),
-           collapse = '\n'),
+    one_string(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep), sep = ''),
     sprintf('\n%s', bottomrule),
     sprintf('\n\\end{%s}', tabular),
     if (!longtable) env2
@@ -289,7 +288,7 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
   if (identical(caption, NA)) caption = NULL
   cap = if (length(caption)) sprintf('\n<caption>%s</caption>', caption) else ''
   if (escape) x = escape_html(x)
-  paste0(c(
+  one_string(c(
     sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x))) {
       if (escape) cn = escape_html(cn)
@@ -298,12 +297,12 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
     '<tbody>',
     paste(
       '  <tr>',
-      apply(x, 1, function(z) paste(sprintf('   <td%s> %s </td>', align, z), collapse = '\n')),
+      apply(x, 1, function(z) one_string(sprintf('   <td%s> %s </td>', align, z))),
       '  </tr>', sep = '\n'
     ),
     '</tbody>',
     '</table>'
-  ), collapse = '\n')
+  ))
 }
 
 #' Generate tables for Markdown and reST

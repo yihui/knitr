@@ -1,23 +1,12 @@
-For general questions, please ask them on StackOverflow first, using the tags `r` and `knitr`: http://stackoverflow.com/questions/ask Please come back here only if nobody answers your question there, and let me know the URL of your StackOverflow post. It is a better idea to use the wisdom of the community than the limited time of a single person.
+By filing an issue to this repo, I promise that
 
-For bug reports, please provide a minimal, self-contained, and reproducible example by reducing your example as much as possible right before the problem goes away. By doing this, you may be able to figure out what the problem really is before reporting to me. You can attach your example as a zip file here along with `devtools::session_info('knitr')`, and screenshots are often very helpful to illustrate your issues.
+- [ ] I have fully read the issue guide at https://yihui.name/issue/.
+- [ ] I have provided the necessary information about my issue.
+    - If I'm asking a question, I have already asked it on Stack Overflow or RStudio Community, waited for at least 24 hours, and included a link to my question there.
+    - If I'm filing a bug report, I have included a minimal, self-contained, and reproducible example, and have also included `xfun::session_info('knitr')`. I have upgraded all my packages to their latest versions (e.g., R, RStudio, and R packages), and also tried the development version: `remotes::install_github('yihui/knitr')`.
+    - If I have posted the same issue elsewhere, I have also mentioned it in this issue.
+- [ ] I have learned the Github Markdown syntax, and formatted my issue correctly.
 
-To include a verbatim chunk of arbitrary text, wrap it in a pair of three backticks. When any line of your text contains N backticks (N >= 3), use N + 1 backticks to wrap the text, e.g. use four backticks to wrap three:
-
-````
-A sample document.
-
-```{r}
-1 + 1  # a line of code
-```
-
-Another paragraph.
-````
-
-If it is just a chunk of R code (or other languages) and you want syntax highlighting, you may use three backticks to format it, e.g.
-
-```r
-rnorm(10)
-```
-
-Usually your issue will be closed after it is fixed, but sometimes it is closed only because I'm not able to offer any help. It does not mean your issue is not real or bad. You can propose a fix by yourself through a pull request. Your constructive feedback is always appreciated.
+<!--
+Please keep the above portion in your issue. Your issue will be closed if any of the above boxes is not checked. In certain (rare) cases, you may be exempted if you give a brief explanation (e.g., you are only making a suggestion for improvement). Thanks!
+-->

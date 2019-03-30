@@ -26,7 +26,7 @@ render_textile = function() {
     force(name)
     function(x, options) {
       if (name == 'source') x = c(hilight_source(x, 'textile', options), '')
-      x = paste(x, collapse = '\n')
+      x = one_string(x)
       sprintf('bc(knitr %s %s#%s).. %s\np(knitr_end). \n\n',
               tolower(options$engine), name, options$label, x)
     }

@@ -34,13 +34,13 @@
 stitch = function(script,
                   template = system.file('misc', 'knitr-template.Rnw', package = 'knitr'),
                   output = NULL, text = NULL, envir = parent.frame()) {
-  lines = if (nosrc <- is.null(text)) readLines(script, warn = FALSE) else split_lines(text)
+  lines = if (nosrc <- is.null(text)) read_utf8(script) else split_lines(text)
   # extract title and author from first two lines
   if (comment_to_var(lines[1L], '.knitr.title', '^#+ *title:', envir)) lines = lines[-1L]
   if (comment_to_var(lines[1L], '.knitr.author', '^#+ *author:', envir)) lines = lines[-1L]
   input = basename(template)
   input = with_ext(basename(if (nosrc) script else tempfile()), file_ext(input))
-  txt = readLines(template, warn = FALSE)
+  txt = read_utf8(template)
   i = grep('%sCHUNK_LABEL_HERE', txt)
   if (length(i) != 1L) stop('Wrong template for stitch: ', template)
   h = sub('CHUNK_LABEL_HERE', '', txt[i])
@@ -51,7 +51,7 @@ stitch = function(script,
     lines[j] = sprintf(h, gsub(.sep.label, '\\3', lines[j]))
     if (j[1] != 1L) lines = c(sprintf(h, ''), lines)
   }
-  txt[i] = paste(lines, collapse = '\n')
+  txt[i] = one_string(lines)
   opts_chunk$set(
     fig.align = 'center', par = TRUE, fig.width = 6, fig.height = 6,
     fig.path = paste('figure', gsub('[^[:alnum:]]', '-', input), sep = '/')
@@ -108,15 +108,14 @@ stitch_rmd = function(..., envir = parent.frame()) stitch(
 #' @export
 #' @examples # see the knit_expand vignette
 #' if (interactive()) browseVignettes(package='knitr')
-knit_expand = function(file, ..., text = readLines(file, warn = FALSE),
-                       delim = c('{{', '}}') ){
+knit_expand = function(file, ..., text = read_utf8(file), delim = c('{{', '}}') ){
 
   # check if delim is a pair, escaping regex as necessary
   if (length(delim) != 2L) stop('"delim" must be of length 2')
   delim = gsub('([.|()\\^{}+$*?]|\\[|\\])', '\\\\\\1', delim)
   delim = paste0(delim[1L], '((.|\n)+?)', delim[2L])
 
-  txt = paste(text, collapse = '\n')
+  txt = one_string(text)
   loc = stringr::str_locate_all(txt, delim)[[1L]]
   if (nrow(loc) == 0L) return(txt) # no match
   mat = stringr::str_extract_all(txt, delim)[[1L]]

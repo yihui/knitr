@@ -45,7 +45,7 @@ hook_suppress = function(x, options) {
   } else {
     if (m > sum(n)) x = c(head(x, n[1]), '....', tail(x, n[2]))
   }
-  paste(x, collapse = '\n')
+  one_string(x)
 }
 
 #' Hooks for code chunk options

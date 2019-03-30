@@ -78,7 +78,7 @@ hook_animation = function(options) {
     name = fig_path('.html', options, NULL)
     if (!file.exists(dirname(name)))
       dir.create(dirname(name))
-    cat(x, file = name)
+    write_utf8(x, name)
     sprintf('<iframe src="%s" class="knitr" width="100%%"></iframe>', name)
   } else x
 }
@@ -240,7 +240,7 @@ render_html = function() {
       x = if (name == 'source') {
         c(hilight_source(x, 'html', options), '')
       } else escape_html(x)
-      x = paste(x, collapse = '\n')
+      x = one_string(x)
       sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>\n', name, tolower(options$engine), x)
     }
   }

@@ -39,14 +39,14 @@ new_cache = function() {
     # save object names
     x = paste(c(label, objs), collapse = '\t')
     if (file.exists(path)) {
-      lines = readLines(path)
+      lines = read_utf8(path)
       lines = lines[lines != label] # knitr < 1.5 may have lines == label
       idx = substr(lines, 1L, nchar(label) + 1L) == paste0(label, '\t')
       if (any(idx)) {
         lines[idx] = x  # update old objects
       } else lines = c(lines, x)
     } else lines = x
-    writeLines(lines, con = path)
+    write_utf8(lines, path)
   }
   cache_objects = function(keys, globals, label, path) {
     save_objects(keys, label, valid_path(path, '__objects'))
@@ -77,11 +77,11 @@ new_cache = function() {
     path = valid_path(path, '__packages')
     if (save) {
       x = rev(.packages())
-      if (file.exists(path)) x = setdiff(c(readLines(path), x), .base.pkgs)
-      writeLines(x, path)
+      if (file.exists(path)) x = setdiff(c(read_utf8(path), x), .base.pkgs)
+      write_utf8(x, path)
     } else {
       if (!file.exists(path)) return()
-      for (p in readLines(path))
+      for (p in read_utf8(path))
         suppressPackageStartupMessages(library(p, character.only = TRUE))
     }
   }
@@ -179,7 +179,7 @@ parse_objects = function(path) {
   if (!file.exists(path)) {
     warning('file ', path, ' not found'); return()
   }
-  lines = strsplit(readLines(path), '\t')
+  lines = strsplit(read_utf8(path), '\t')
   if (length(lines) < 2L) return()  # impossible for dependson
   objs = lapply(lines, `[`, -1L)
   names(objs) = lapply(lines, `[`, 1L)
@@ -317,6 +317,6 @@ clean_cache = function(clean = FALSE, path = opts_chunk$get('cache.path')) {
   if (p1 != '') i = i & (substr(base, 1, nchar(p1)) == p1)
   if (!any(i)) return()
   if (clean) unlink(files[i]) else message(
-    'Clean these cache files?\n\n', paste(files[i], collapse = '\n'), '\n'
+    'Clean these cache files?\n\n', one_string(files[i]), '\n'
   )
 }
