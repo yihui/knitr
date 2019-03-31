@@ -71,7 +71,7 @@ hook_optipng = function(before, options, envir) {
 }
 
 hook_png = function(
-  before, options, envir, cmd = c('optipng', 'pngquant'), post_process = identity
+  before, options, envir, cmd = c('optipng', 'pngquant', 'mogrify'), post_process = identity
 ) {
   if (before) return()
   num = options$fig.num
@@ -107,6 +107,13 @@ hook_pngquant = function(before, options, envir) {
     x2 = sub("\\.png$", "-fs8.png", x)
     if (file.exists(x2)) file.rename(x2, x)
   })
+}
+
+#' @export
+#' @rdname chunk_hook
+hook_mogrify = function(before, options, envir) {
+    if (is.null(options[['mogrify']])) options$mogrify = '-trim'
+    hook_png(before, options, envir, cmd = 'mogrify', identity)
 }
 
 #' @export
