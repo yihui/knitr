@@ -64,6 +64,7 @@ Authors@R: c(
     person("Kohske", "Takahashi", role = "ctb"),
     person("Lorenz", "Walthert", role = "ctb"),
     person("Lucas", "Gallindo", role = "ctb"),
+    person("Marius", "Hofert", role = "ctb"),
     person("Martin", "Modrák", role = "ctb"),
     person("Michael", "Chirico", role = "ctb"),
     person("Michael", "Friendly", role = "ctb"),
@@ -139,7 +140,7 @@ URL: https://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
 Encoding: UTF-8
 VignetteBuilder: knitr
-SystemRequirements: Package vignettes based on R Markdown v2 or reStructuredText require Pandoc (http://pandoc.org). 
+SystemRequirements: Package vignettes based on R Markdown v2 or reStructuredText require Pandoc (http://pandoc.org).
     The function rst2pdf() require rst2pdf (https://github.com/rst2pdf/rst2pdf).
 Collate:
     'block.R'
