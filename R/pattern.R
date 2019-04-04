@@ -49,7 +49,16 @@ all_patterns = list(
     chunk.end = '^###[.]\\s+end[.]rcode\\s*$',
     ref.chunk = '^\\s*<<(.+)>>\\s*$',
     inline.code = '@r +([^@]+)\\s*@',
-    inline.comment = '^###[.].*')
+    inline.comment = '^###[.].*'),
+
+  `rlatex` = list(
+       chunk.begin = "^\\s*\\\\begin\\{Rcode\\}\\[(.*)?\\].*$",
+    chunk.end = "^\\s*\\\\end\\{Rcode\\}\\s*(%+.*|)$",
+    inline.code = "\\\\Sexpr\\{([^}]+)\\}",
+    inline.comment = "^\\s*%.*",
+    header.begin = "(^|\n)\\s*\\\\documentclass[^}]+\\}",
+    document.begin = "\\s*\\\\begin\\{document\\}",
+    ref.chunk = "^\\s*\\\\begin\\{Rcode\\}\\[(.*)\\].*$")
 )
 
 .sep.label = '^(#|--)+\\s*(@knitr|----+)(.*?)-*\\s*$'  # pattern for code chunks in an R script
@@ -128,6 +137,9 @@ pat_rst = function() set_pattern('rst')
 pat_asciidoc = function() set_pattern('asciidoc')
 #' @rdname pat_fun
 pat_textile = function() set_pattern('textile')
+#' @rdname pat_fun
+pat_rlatex = function() set_pattern('rlatex')
+
 
 
 # helper functions
@@ -146,6 +158,7 @@ detect_pattern = function(text, ext) {
     if (ext %in% c('rmd', 'rmarkdown', 'markdown', 'md')) return('md')
     if (ext %in% c('rst', 'rrst')) return('rst')
     if (ext %in% c('asciidoc', 'rasciidoc', 'adoc', 'radoc')) return('asciidoc')
+    if (ext %in% c('rlatex', 'Rlatex', 'RLatex')) return('rlatex')
   }
   for (p in names(all_patterns)) {
     for (i in c('chunk.begin', 'inline.code')) {
