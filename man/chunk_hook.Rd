@@ -4,6 +4,7 @@
 \alias{hook_pdfcrop}
 \alias{hook_optipng}
 \alias{hook_pngquant}
+\alias{hook_mogrify}
 \alias{hook_plot_custom}
 \alias{hook_purl}
 \title{Built-in chunk hooks to extend knitr}
@@ -13,6 +14,8 @@ hook_pdfcrop(before, options, envir)
 hook_optipng(before, options, envir)
 
 hook_pngquant(before, options, envir)
+
+hook_mogrify(before, options, envir)
 
 hook_plot_custom(before, options, envir)
 
@@ -48,6 +51,10 @@ The function \code{hook_pngquant()} calls the program \command{pngquant} to
 optimize PNG images. Note the chunk option \code{pngquant} can be used to
 provide additional parameters to the program \command{pngquant}, e.g.
 \code{pngquant = '--speed=1 --quality=0-50'}.
+
+The function \code{hook_mogrify()} calls the program \command{mogrify}.
+Note the chunk option \code{mogrify} can be used to provide additional parameters to
+the program \command{mogrify} (with default \code{-trim} to trim PNG files).
 
 When the plots are not recordable via \code{\link[grDevices]{recordPlot}} and
 we save the plots to files manually via other functions (e.g. \pkg{rgl}
