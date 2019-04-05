@@ -52,9 +52,10 @@ optimize PNG images. Note the chunk option \code{pngquant} can be used to
 provide additional parameters to the program \command{pngquant}, e.g.
 \code{pngquant = '--speed=1 --quality=0-50'}.
 
-The function \code{hook_mogrify()} calls the program \command{mogrify}.
-Note the chunk option \code{mogrify} can be used to provide additional parameters to
-the program \command{mogrify} (with default \code{-trim} to trim PNG files).
+The function \code{hook_mogrify()} calls the program \command{mogrify}.  Note
+the chunk option \code{mogrify} can be used to provide additional parameters
+to the program \command{mogrify} (with default \code{-trim} to trim PNG
+files).
 
 When the plots are not recordable via \code{\link[grDevices]{recordPlot}} and
 we save the plots to files manually via other functions (e.g. \pkg{rgl}
