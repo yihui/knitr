@@ -117,8 +117,8 @@ hook_pngquant = function(before, options, envir) {
 #' @export
 #' @rdname chunk_hook
 hook_mogrify = function(before, options, envir) {
-    if (is.null(options[['mogrify']])) options$mogrify = '-trim'
-    hook_png(before, options, envir, cmd = 'mogrify', identity)
+  if (is.null(options[['mogrify']])) options$mogrify = '-trim'
+  hook_png(before, options, envir, cmd = 'mogrify', identity)
 }
 
 #' @export

@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- `mogrify` support in `hook_png()` and `hook_mogrify()` in order to obtain trimmed .png files (thanks, Marius Hofert)
+- `mogrify` support in `hook_png()` and `hook_mogrify()` in order to obtain trimmed .png files (thanks, @mhofert, #1697)
 
 - It is possible to customize the sign `\times` used for the scientific notation of inline numeric output via a global option, e.g., `options(knitr.inline.times = '\\cdot ')` (thanks, @wuffi @trentks, #1563).
 
