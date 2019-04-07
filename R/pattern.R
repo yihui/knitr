@@ -52,7 +52,7 @@ all_patterns = list(
     inline.comment = '^###[.].*'),
 
   `rlatex` = list(
-       chunk.begin = "^\\s*\\\\begin\\{Rcode\\}\\[(.*)?\\].*$",
+       chunk.begin = "^\\s*\\\\begin\\{Rcode\\}(?:\\[(.*)?\\])?\\s*(%.*)?$",
     chunk.end = "^\\s*\\\\end\\{Rcode\\}\\s*(%+.*|)$",
     inline.code = "\\\\Sexpr\\{([^}]+)\\}",
     inline.comment = "^\\s*%.*",
