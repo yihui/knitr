@@ -4,9 +4,9 @@ assert(
   'detect_pattern() automatically detects syntax patterns',
   identical(detect_pattern('<<>>='), 'rnw'),
   identical(detect_pattern('<<foo, bar=TRUE>>='), 'rnw'),
-##  identical(detect_pattern('\begin{Rcode}'), 'rlatex'),
-##  identical(detect_pattern('\begin{Rcode}[foo, bar=TRUE]'), 'rlatex'),
-##  identical(detect_pattern('asdf', 'rlatex'), 'rlatex'),
+  identical(detect_pattern('\\begin{Rcode}'), 'rlatex'),
+  identical(detect_pattern('\\begin{Rcode}[foo, bar=TRUE]'), 'rlatex'),
+  identical(detect_pattern('asdf', 'rlatex'), 'rlatex'),
   detect_pattern('foo') %==% NULL
 )
 
