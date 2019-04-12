@@ -1,6 +1,8 @@
 # CHANGES IN knitr VERSION 1.23
 
-## NEW FEATURES 
+## NEW FEATURES
+
+- Added `mogrify` support in `hook_png()` and `hook_mogrify()` in order to obtain trimmed `.png` files (thanks, @mhofert, #1697).
 
 - It is possible to customize the sign `\times` used for the scientific notation of inline numeric output via a global option, e.g., `options(knitr.inline.times = '\\cdot ')` (thanks, @wuffi @trentks, #1563).
 
@@ -26,7 +28,7 @@
 
 # CHANGES IN knitr VERSION 1.22
 
-## NEW FEATURES 
+## NEW FEATURES
 
 - Added chunk options `class.error`, `class.warning`, and `class.message` to customize the CSS classes for errors, warnings, and messages in R Markdown output, respectively (thanks, @gadenbuie, #1676).
 
