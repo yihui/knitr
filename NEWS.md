@@ -26,7 +26,7 @@
 
 - `spin_child()` will also assume the input file is encoded in UTF-8 (thanks, Henrik, https://stackoverflow.com/q/55395422/559676).
 
-- When the chunk option `dev = 'svg'`, `grDevices::svg()` is used to record plots, instead of the default PDF null device (thanks, @trevorld, #729)
+- When the chunk option `dev = 'svg'`, `grDevices::svg()` is used to record plots, instead of the default PDF null device (thanks, @trevorld, #729).
 
 # CHANGES IN knitr VERSION 1.22
 
