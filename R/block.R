@@ -304,8 +304,8 @@ chunk_device = function(
   dev_new = function() {
     # actually I should adjust the recording device according to dev, but here I
     # have only considered the png and tikz devices (because the measurement
-    # results can be very different especially with the latter, see #1066), and
-    # also the cairo_pdf device (#1235)
+    # results can be very different especially with the latter, see #1066), the
+    # cairo_pdf device (#1235), and svg (#1705)
     if (identical(dev, 'png')) {
       do.call(grDevices::png, c(list(
         filename = tmp, width = width, height = height, units = 'in', res = dpi
