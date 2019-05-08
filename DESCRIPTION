@@ -11,6 +11,7 @@ Authors@R: c(
     person("Aron", "Atkins", role = "ctb"),
     person("Aaron", "Wolen", role = "ctb"),
     person("Ashley", "Manton", role = "ctb"),
+    person("Atsushi", "Yasumoto", role = "ctb"),
     person("Ben", "Baumer", role = "ctb"),
     person("Brian", "Diggs", role = "ctb"),
     person("Brian", "Zhang", role = "ctb"),
