@@ -32,4 +32,50 @@ assert(
   identical(img_output('a.pdf', list(out.width = '300px')), '<embed src="a.pdf" width="300px" type="application/pdf" />')
 )
 
+hook_src = knit_hooks$get("source")
+options_ = list(engine = "r", prompt = FALSE, highlight = TRUE)
+
+assert(
+  'Attributes for souce can be specified class.source and attr.source',
+  identical(
+    hook_src("1", c(options_, class.source = "a b")),
+    "\n\n```{.r .a .b}\n1\n```\n\n"
+  ),
+  identical(
+    hook_src("1", c(options_, attr.source = ".a .b")),
+    "\n\n```{.r .a .b}\n1\n```\n\n"
+  ),
+  identical(
+    hook_src("1", c(options_, class.source = "a", attr.source = "b='1'")),
+    "\n\n```{.r .a b='1'}\n1\n```\n\n"
+  ),
+  identical(
+    hook_src("1", c(options_, attr.source = ".a b='1'")),
+    "\n\n```{.r .a b='1'}\n1\n```\n\n"
+  )
+)
+
+hook_out = knit_hooks$get("output")
+
+assert(
+  'Attributes for souce can be specified class.source and attr.source',
+  identical(
+    hook_out("1\n", c(options_, class.output = "a b")),
+    "\n\n```{.a .b}\n1\n```\n\n"
+  ),
+  identical(
+    hook_out("1\n", c(options_, attr.output = ".a .b")),
+    "\n\n```{.a .b}\n1\n```\n\n"
+  ),
+  identical(
+    hook_out("1\n", c(options_, class.output = "a", attr.output = "b='1'")),
+    "\n\n```{.a b='1'}\n1\n```\n\n"
+  ),
+  identical(
+    hook_out("1\n", c(options_, attr.output = ".a b='1'")),
+    "\n\n```{.a b='1'}\n1\n```\n\n"
+  )
+)
+
+
 knit_hooks$restore()

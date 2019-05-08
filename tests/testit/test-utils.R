@@ -184,7 +184,14 @@ assert('raw_block() returns a raw attribute block for Pandoc', {
 
 assert(
   'block_class() turns a character vector into Pandoc attributes for code block classes',
-  block_class(NULL) %==% NULL, block_class('a') %==% '{.a}',
-  block_class('a b') %==% '{.a .b}',
-  block_class(c('a', 'b')) %==% '{.a .b}'
+  block_class(NULL) %==% NULL, block_class('a', prefix = '') %==% '.a',
+  block_class('a b') %==% ' .a .b',
+  block_class(c('a', 'b')) %==% ' .a .b'
+)
+
+assert(
+  'block_attr(x) turns a character vector into Pandoc attributes',
+  block_attr(NULL) %==% NULL, block_attr('.a', prefix = '') %==% '.a',
+  block_attr('.a b="11"') %==% ' .a b="11"',
+  block_attr(c('.a', 'b="11"')) %==% ' .a b="11"'
 )
