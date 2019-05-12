@@ -133,11 +133,10 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
       attrs <- block_attr(attr, prefix = if (length(classes) == 0) '' else ' ')
       open <- close <- character(0L)
       if (length(c(classes, attrs)) > 0) {
-        language <- paste0(".", language)
         open <- "{"
         close <- "}"
       }
-      paste0('\n\n', fence, '{', classes, attrs, '}', x, fence, '\n\n')
+      paste0('\n\n', fence, open, classes, attrs, close, x, fence, '\n\n')
     }
   }
   hook.o = function(class) {
