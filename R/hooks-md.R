@@ -131,6 +131,12 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
       }
       classes <- block_class(class, prefix = '')
       attrs <- block_attr(attr, prefix = if (length(classes) == 0) '' else ' ')
+      open <- close <- character(0L)
+      if (length(c(classes, attrs)) > 0) {
+        language <- paste0(".", language)
+        open <- "{"
+        close <- "}"
+      }
       paste0('\n\n', fence, '{', classes, attrs, '}', x, fence, '\n\n')
     }
   }
@@ -146,7 +152,13 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
     if (!options$highlight) language = 'text'
     classes <- block_class(options$class.source)
     attrs <- block_attr(options$attr.source)
-    paste0('\n\n', fence, '{.', language, classes, attrs, '}\n', x, fence, '\n\n')
+    open <- close <- character(0L)
+    if (length(c(classes, attrs)) > 0) {
+      language <- paste0(".", language)
+      open <- "{"
+      close <- "}"
+    }
+    paste0('\n\n', fence, open, language, classes, attrs, close, '\n', x, fence, '\n\n')
   }
   hooks = list()
   for (i in c('output', 'warning', 'error', 'message')) hooks[[i]] = hook.o(i)
