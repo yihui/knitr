@@ -30,6 +30,8 @@
 
 - When the chunk option `dev = 'svg'`, `grDevices::svg()` is used to record plots, instead of the default PDF null device (thanks, @trevorld, #729).
 
+- Partially reverted the solution for #1403 in favor of fixing the more surprising issue #1708, i.e., avoid false positive cache dependencies among chunks more than false negative dependencies when the chunk option `autodep = TRUE` (thanks, @fountainer).
+
 # CHANGES IN knitr VERSION 1.22
 
 ## NEW FEATURES

@@ -267,7 +267,7 @@ block_exec = function(options) {
     if (options$autodep) {
       # you shall manually specify global object names if find_symbols() is not reliable
       cache$objects(
-        objs, options$cache.globals %n% find_symbols(code), options$label,
+        objs, options$cache.globals %n% find_globals(code), options$label,
         options$cache.path
       )
       dep_auto()
