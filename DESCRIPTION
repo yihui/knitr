@@ -11,7 +11,7 @@ Authors@R: c(
     person("Aron", "Atkins", role = "ctb"),
     person("Aaron", "Wolen", role = "ctb"),
     person("Ashley", "Manton", role = "ctb"),
-    person("Atsushi", "Yasumoto", role = "ctb"),
+    person("Atsushi", "Yasumoto", role = "ctb", comment = c(ORCID = "0000-0002-8335-495X")),
     person("Ben", "Baumer", role = "ctb"),
     person("Brian", "Diggs", role = "ctb"),
     person("Brian", "Zhang", role = "ctb"),
