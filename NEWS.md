@@ -38,6 +38,8 @@
 
 - Partially reverted the solution for #1403 in favor of fixing the more surprising issue #1708, i.e., avoid false positive cache dependencies among chunks more than false negative dependencies when the chunk option `autodep = TRUE` (thanks, @fountainer).
 
+- The LaTeX package `framed.sty` is no longer bundled with the **knitr** package. This should only affect users who write `.Rnw` documents. If `framed.sty` is missing in your LaTeX distribution, you will have to install it by yourself. You may also consider TinyTeX (https://yihui.name/tinytex/), which has included this LaTeX package.
+
 # CHANGES IN knitr VERSION 1.22
 
 ## NEW FEATURES
