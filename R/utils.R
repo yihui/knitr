@@ -931,11 +931,11 @@ raw_block = function(x, type = 'latex', ...) {
 
 #' @rdname raw_block
 #' @export
-raw_latex = function(x, ...) raw_block(x, 'latex')
+raw_latex = function(x, ...) raw_block(x, 'latex', ...)
 
 #' @rdname raw_block
 #' @export
-raw_html = function(x, ...) raw_block(x, 'html')
+raw_html = function(x, ...) raw_block(x, 'html', ...)
 
 trimws = function(x) gsub('^\\s+|\\s+$', '', x)
 

@@ -24,6 +24,8 @@
 
 - When the chunk label of a `tikz` chunk contains periods, the `tikz` output cannot be converted to the expected `.svg` (thanks, @ucpresearch, #1706).
 
+- The `...` argument for `raw_latex()` and `raw_html()` is actually passed to `asis_output()` now (thanks, @GregorDeCillia, #1716).
+
 ## MAJOR CHANGES
 
 - `knitr::knit()` will try to read the input file with the UTF-8 encoding first. If UTF-8 doesn't work, it will try to read with the system native encoding instead (with a warning). The `encoding` argument of `knitr::knit()` is completely ignored. In the future, only UTF-8 will be supported, and we will stop retrying with the system native encoding. The output file from `knitr::knit()` is always encoded in UTF-8.
