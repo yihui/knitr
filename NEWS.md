@@ -8,6 +8,8 @@
 
 - Exported `knit_code` and documented it at `?knitr::knit_code`. Here be dragons, but I know you are brave and creative (thanks, @r-cheologist @ProQuestionAsker, #1545).
 
+- Added support for specifying fenced code block attributes in Markdown output via chunk options `attr.*`, which are similar but a generalization to the existing chunk options `class.*`. For example, `class.source = 'numberLines'` is equivalent to `attr.source = '.numberLines'`, but `attr.source` can take arbitrary attribute values, e.g., `attr.source = c('.numberLines', 'startFrom="11"')` (thanks, @atusy, #1710).
+
 ## BUG FIXES
 
 - For R Markdown documents, inline numeric output that is formatted with the scientific notation will be wrapped in `\ensuremath{}`. This will fix the LaTeX error `! Missing $ inserted.`. However, you are still recommended to add a pair of dollar signs around the inline output when it is formatted with the scientific notation (e.g., `` $`r 1.234e12`$``), otherwise it will not work with other R Markdown output formats such as HTML or Word (thanks, @billdenney and many who have suffered from this issue, rstudio/rmarkdown#1527).
