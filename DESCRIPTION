@@ -102,7 +102,7 @@ Maintainer: Yihui Xie <xie@yihui.name>
 Description: Provides a general-purpose tool for dynamic report generation in R
     using Literate Programming techniques.
 Depends:
-    R (>= 3.1.0)
+    R (>= 3.2.3)
 Imports:
     evaluate (>= 0.10),
     highr,
