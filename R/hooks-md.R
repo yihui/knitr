@@ -88,18 +88,17 @@ css_text_align = function(align) {
   if (align == 'default') '' else sprintf(' style="text-align: %s"', align)
 }
 
-# helper function to manage HTML classes; turn "a b" to ".a .b" for Pandoc
-# fenced code blocks
-block_class = function(x, prefix = ' ') {
-  if (length(x) == 0) return()
-  classes = unlist(strsplit(x, '\\s+'))
-  paste0(prefix, paste0('.', classes, collapse = ' '))
+# turn a class string "a b" to c(".a", ".b") for Pandoc fenced code blocks
+block_class = function(x) {
+  if (length(x) > 0) gsub('^[.]*', '.', unlist(strsplit(x, '\\s+')))
 }
-# helper function to manage HTML attributes;
-# turn c(a="1", b="2") to 'a="1" b="2"' for Pandoc fenced code blocks
-block_attr = function(x, prefix = " ") {
-  if (length(x) == 0) return()
-  paste0(prefix, paste0(x, collapse = ' '))
+
+# concatenate block attributes (including classes) for Pandoc fenced code blocks
+block_attr = function(attr, class = NULL, lang = NULL) {
+  x = c(block_class(class), attr)
+  if (length(x) == 0) return(lang)
+  x = c(sprintf('.%s', lang), x)
+  paste0('{', paste0(x, collapse = ' '), '}')
 }
 
 #' @rdname output_hooks
@@ -117,7 +116,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
   opts_knit$set(out.format = 'markdown')
   fence = paste(rep(fence_char, 3), collapse = '')
   # four spaces lead to <pre></pre>
-  hook.t = function(x, options, class = NULL, attr = NULL) {
+  hook.t = function(x, options, attr = NULL, class = NULL) {
     # this code-block duplicated from hook.t()
     if (strict) {
       paste('\n', indent_block(x), '', sep = '\n')
@@ -129,35 +128,21 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
         l = max(l)
         if (l >= 4) fence = paste(rep(fence_char, l), collapse = '')
       }
-      classes <- block_class(class, prefix = '')
-      attrs <- block_attr(attr, prefix = if (length(classes) == 0) '' else ' ')
-      open <- close <- character(0L)
-      if (length(c(classes, attrs)) > 0) {
-        open <- "{"
-        close <- "}"
-      }
-      paste0('\n\n', fence, open, classes, attrs, close, x, fence, '\n\n')
+      paste0('\n\n', fence, block_attr(attr, class), x, fence, '\n\n')
     }
   }
   hook.o = function(class) {
     force(class)
     function(x, options) {
-      hook.t(x, options, options[[paste0('class.', class)]], options[[paste0('attr.', class)]])
+      hook.t(x, options, options[[paste0('attr.', class)]], options[[paste0('class.', class)]])
     }
   }
   hook.r = function(x, options) {
     language = tolower(options$engine)
     if (language == 'node') language = 'javascript'
     if (!options$highlight) language = 'text'
-    classes <- block_class(options$class.source)
-    attrs <- block_attr(options$attr.source)
-    open <- close <- character(0L)
-    if (length(c(classes, attrs)) > 0) {
-      language <- paste0(".", language)
-      open <- "{"
-      close <- "}"
-    }
-    paste0('\n\n', fence, open, language, classes, attrs, close, '\n', x, fence, '\n\n')
+    attrs = block_attr(options$attr.source, options$class.source, language)
+    paste0('\n\n', fence, attrs, '\n', x, fence, '\n\n')
   }
   hooks = list()
   for (i in c('output', 'warning', 'error', 'message')) hooks[[i]] = hook.o(i)
