@@ -119,8 +119,10 @@
 #' purl(f)  # tangle R code
 #' purl(f, documentation = 0)  # extract R code only
 #' purl(f, documentation = 2)  # also include documentation
-knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
-                envir = parent.frame(), encoding = 'UTF-8') {
+knit = function(
+  input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
+  envir = parent.frame(), encoding = 'UTF-8'
+) {
 
   in.file = !missing(input)  # is input provided?
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
@@ -208,10 +210,11 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
         return(output)
       }
     }
-    if (!(pattern %in% names(apat)))
-      stop("a pattern list cannot be automatically found for the file extension '",
-           ext, "' in built-in pattern lists; ",
-           'see ?knit_patterns on how to set up customized patterns')
+    if (!(pattern %in% names(apat))) stop(
+      "a pattern list cannot be automatically found for the file extension '",
+      ext, "' in built-in pattern lists; ",
+      'see ?knit_patterns on how to set up customized patterns'
+    )
     set_pattern(pattern)
     if (pattern == 'rnw' && length(sweave_lines <- which_sweave(text)) > 0)
       remind_sweave(if (in.file) input, sweave_lines)
