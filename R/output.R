@@ -67,7 +67,8 @@
 #' @param envir Environment in which code chunks are to be evaluated,
 #'   for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 #'   \code{\link{globalenv}()}).
-#' @param encoding Encoding of the input file; see \code{\link{file}}.
+#' @param encoding Encoding of the input file; always assumed to be UTF-8 (i.e.,
+#'   this argument is effectively ignored).
 #' @return The compiled document is written into the output file, and the path
 #'   of the output file is returned. If the \code{text} argument is not
 #'   \code{NULL}, the compiled output is returned as a character vector. In
@@ -183,16 +184,11 @@ knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE
   }
 
   if (is.null(text)) {
-    text = readLines(input2, encoding = 'UTF-8', warn = FALSE)
-    if (!is_utf8(text)) {
-      warning(
-        'The file "', input2, '" should be encoded in UTF-8. Now I will try to ',
-        'read it with the system native encoding (which may not be correct). ',
-        'We will only support UTF-8 in the near future. Please see ',
-        'https://yihui.name/en/2018/11/biggest-regret-knitr/ for more info.'
-      )
-      text = readLines(input2, warn = FALSE)
-    }
+    text = readLines(input, encoding = 'UTF-8', warn = FALSE)
+    if (!is_utf8(text)) warning(
+      'The file "', input, '" must be encoded in UTF-8. Please see ',
+      'https://yihui.name/en/2018/11/biggest-regret-knitr/ for more info.'
+    )
   } else text = split_lines(text) # make sure each element is one line
   if (!length(text)) {
     if (is.character(output)) file.create(output)

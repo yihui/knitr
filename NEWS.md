@@ -4,6 +4,8 @@
 
 - The `input` argument of `knitr::knit()` must be a file path (a character string). It can no longer be connections.
 
+- The `encoding` argument of `knitr::knit()` is ignored. The encoding is always assumed to be UTF-8. Please see https://yihui.name/en/2018/11/biggest-regret-knitr/ for more info.
+
 # CHANGES IN knitr VERSION 1.23
 
 ## NEW FEATURES
