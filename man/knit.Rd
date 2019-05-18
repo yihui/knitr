@@ -29,7 +29,8 @@ file.}
 for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 \code{\link{globalenv}()}).}
 
-\item{encoding}{Encoding of the input file; see \code{\link{file}}.}
+\item{encoding}{Encoding of the input file; always assumed to be UTF-8 (i.e.,
+this argument is effectively ignored).}
 
 \item{...}{arguments passed to \code{\link{knit}()} from \code{purl()}}
 
@@ -117,13 +118,6 @@ The working directory when evaluating R code chunks is the directory of
   will always restore the working directory to the original one. Whenever you
   feel confused, print \code{getwd()} in a code chunk to see what the working
   directory really is.
-
-  The arguments \code{input} and \code{output} do not have to be restricted
-  to files; they can be \code{stdin()}/\code{stdout()} or other types of
-  connections, but the pattern list to read the input has to be set in
-  advance (see \code{\link{pat_rnw}}), and the output hooks should also be
-  set (see \code{\link{render_latex}}), otherwise \pkg{knitr} will try to
-  guess the patterns and output format.
 
   If the \code{output} argument is a file path, it is strongly recommended to
   be in the current working directory (e.g. \file{foo.tex} instead of
