@@ -1,6 +1,8 @@
 # CHANGES IN knitr VERSION 1.24
 
+## MAJOR CHANGES
 
+- The `input` argument of `knitr::knit()` must be a file path (a character string). It can no longer be connections.
 
 # CHANGES IN knitr VERSION 1.23
 

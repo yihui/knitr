@@ -87,13 +87,6 @@
 #'   feel confused, print \code{getwd()} in a code chunk to see what the working
 #'   directory really is.
 #'
-#'   The arguments \code{input} and \code{output} do not have to be restricted
-#'   to files; they can be \code{stdin()}/\code{stdout()} or other types of
-#'   connections, but the pattern list to read the input has to be set in
-#'   advance (see \code{\link{pat_rnw}}), and the output hooks should also be
-#'   set (see \code{\link{render_latex}}), otherwise \pkg{knitr} will try to
-#'   guess the patterns and output format.
-#'
 #'   If the \code{output} argument is a file path, it is strongly recommended to
 #'   be in the current working directory (e.g. \file{foo.tex} instead of
 #'   \file{somewhere/foo.tex}), especially when the output has external
@@ -128,23 +121,15 @@
 knit = function(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
                 envir = parent.frame(), encoding = 'UTF-8') {
 
-  # is input from a file? (or a connection on a file)
-  in.file = !missing(input) &&
-    (is.character(input) || prod(inherits(input, c('file', 'connection'), TRUE)))
+  in.file = !missing(input)  # is input provided?
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
-  if (in.file && !is.character(input)) {
-    warning('The input is a connection. Only the file path is used. The connection is ignored.')
-    input = summary(input)$description
-  }
-  # make a copy of the input path in input2 and change input to file path
-  if (!missing(input)) input2 = input
 
   if (child_mode()) {
     setwd(opts_knit$get('output.dir')) # always restore original working dir
     # in child mode, input path needs to be adjusted
     if (in.file && !is_abs_path(input)) {
       input = paste0(opts_knit$get('child.path'), input)
-      input = input2 = file.path(input_dir(TRUE), input)
+      input = file.path(input_dir(TRUE), input)
     }
     # respect the quiet argument in child mode (#741)
     optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
