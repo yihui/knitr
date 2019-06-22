@@ -388,10 +388,9 @@ parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   if (length(labels) <= 1L) code = list(code)
   code = mapply(indent_block, code, indent, SIMPLIFY = FALSE, USE.NAMES = FALSE)
 
-  x[idx] = unlist(lapply(code, function(z) {
-    one_string(parse_chunk(z, rc))
-  }), use.names = FALSE)
-  x
+  x = as.list(x)
+  x[idx] = lapply(code, function(z) parse_chunk(z, rc))
+  unlist(x, use.names = FALSE)
 }
 
 # filter chunk.end lines that don't actually end a chunk

@@ -6,6 +6,10 @@
 
 - The `encoding` argument of `knitr::knit()` is ignored. The encoding is always assumed to be UTF-8. Please see https://yihui.name/en/2018/11/biggest-regret-knitr/ for more info.
 
+## BUG FIXES
+
+- Inline code chunk references are parsed as character vectors instead of single character strings separated by `\n` now. This will avoid errors when a python code chunk contains a reference to a code chunk that contains multiple statements (thanks, @Atrebas, rstudio/rmarkdown#1589).
+
 # CHANGES IN knitr VERSION 1.23
 
 ## NEW FEATURES
