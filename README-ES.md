@@ -36,13 +36,13 @@ Mientras Sweave y paquetes adicionales relacionados como [**cacheSweave**](https
 
 - comencé con el código fuente de Sweave y deseé cientos de veces *si solo pudiera insertar fácilmente*  `[width=.8\textwidth]` *entre* `\includegraphics` *y* `{my-plot.pdf}` (la manera oficial en Sweave es `\setkeys{Gin}` pero se ajusta con una amplitud global, la cual no es realista dado que frecuentemente tenemos que fijar la amplitud individualmente; sí, puede usar `\setkeys{Gin}` muchas veces, pero ¿por qué no proporcionar una sola opción para cada trozo de código?)
 - deseé muchas veces *si tan solo pudiera usar dispositivos gráficos distintos a PDF y postscript*; ahora el sueño se ha vuelto realidad en el R oficial, pero lo que estaba esperando era un opción tan simple como `dev = 'png'` o `dev  = 'CairoJPEG'`
-- deseeé que pudiera grabarse múltiples gráficos en un trozo de código en lugar de solo el último de ellos
-- deseeé que hubiera una forma de redondear los números en `\Sexpr{}` diferente a escribir expresiones como `\Sexpr{round(x, 3)}` para *cada* `\Sexpr{}`
+- deseé que pudiera grabarse múltiples gráficos en un trozo de código en lugar de solo el último de ellos
+- deseé que hubiera una forma de redondear los números en `\Sexpr{}` diferente a escribir expresiones como `\Sexpr{round(x, 3)}` para *cada* `\Sexpr{}`
 - deseé que no tuviera que imprimir (`print()`) gráficos desde [**ggplot2**](https://cran.r-project.org/package=ggplot2) y que un simple `qplot(x, y)` me devolviera un gráfico en Sweave
-- deseeé que los usuarios no necesitasen instrucciones sobre `Sweave.sty` o se encontraran con problemas debido al hecho de que LaTeX no encuentra `Sweave.sty`
+- deseé que los usuarios no necesitasen instrucciones sobre `Sweave.sty` o se encontraran con problemas debido al hecho de que LaTeX no encuentra `Sweave.sty`
 - deseé que **cacheSweave** pudiera imprimir los resultados de un trozo de código incluso si este estaba almacenado en caché
 - deseé que [**brew**](https://cran.r-project.org/package=brew) soportase gráficos
-- deseeé que [**R2HTML**](https://cran.r-project.org/package=R2HTML) soportase el resaltado de sintaxis de código R
+- deseé que [**R2HTML**](https://cran.r-project.org/package=R2HTML) soportase el resaltado de sintaxis de código R
 - ...
 
 [<img src="http://i.imgur.com/yYw46aF.jpg" align="right" alt="The book Dynamic Documents with R and knitr" />](http://amzn.com/1498716962)
