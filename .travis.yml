@@ -37,6 +37,7 @@ addons:
     - cargo
     - libmagick++-dev
     - libpoppler-cpp-dev
+    - libglu1-mesa-dev
 
 repos:
   XRAN: https://xran.yihui.name
