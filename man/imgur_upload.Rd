@@ -9,8 +9,8 @@ imgur_upload(file, key = "9f3460e67f308f6")
 \arguments{
 \item{file}{Path to the image file to be uploaded.}
 
-\item{key}{Client ID for Imgur. By default, this uses a client ID registered by
-Yihui Xie.}
+\item{key}{Client ID for Imgur. By default, this uses a client ID registered
+by Yihui Xie.}
 }
 \value{
 A character string of the link to the image; this string carries an
@@ -19,8 +19,8 @@ A character string of the link to the image; this string carries an
 }
 \description{
 This function uses the \pkg{httr} package to upload a image to
-\url{imgur.com}, and parses the XML response to a list with \pkg{xml2} which
-contains information about the image in the Imgur website.
+\url{https://imgur.com}, and parses the XML response to a list with
+\pkg{xml2} which contains information about the image in the Imgur website.
 }
 \details{
 When the output format from \code{\link{knit}()} is HTML or Markdown, this
@@ -31,8 +31,8 @@ files any more, and it is ready to be published online.
 }
 \note{
 Please register your own Imgur application to get your client ID; you
-  can certainly use mine, but this ID is in the public domain so everyone
-  has access to all images associated to it.
+  can certainly use mine, but this ID is in the public domain so everyone has
+  access to all images associated to it.
 }
 \examples{
 \dontrun{
