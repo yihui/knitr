@@ -60,6 +60,8 @@ stitch(s, system.file("misc", "knitr-template.Rhtml", package = "knitr"))
 
 # or convert markdown to HTML
 stitch(s, system.file("misc", "knitr-template.Rmd", package = "knitr"))
+
+unlink(c("stitch-test.html", "stitch-test.md"))
 }
 \seealso{
 \code{\link{spin}} (turn a specially formatted R script to a report)

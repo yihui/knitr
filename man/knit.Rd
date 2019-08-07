@@ -146,6 +146,8 @@ knit(f)  # compile to tex
 purl(f)  # tangle R code
 purl(f, documentation = 0)  # extract R code only
 purl(f, documentation = 2)  # also include documentation
+
+unlink(c("knitr-minimal.tex", "knitr-minimal.R", "figure"), recursive = TRUE)
 }
 \references{
 Package homepage: \url{https://yihui.name/knitr/}. The \pkg{knitr}

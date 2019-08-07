@@ -73,7 +73,8 @@ Sweave2knitr(text = "\\\\SweaveInput{hello.Rnw}")
 # Sweave example in utils
 testfile = system.file("Sweave", "Sweave-test-1.Rnw", package = "utils")
 Sweave2knitr(testfile, output = "Sweave-test-knitr.Rnw")
-knit("Sweave-test-knitr.Rnw")  # or knit2pdf() directly
+if (interactive()) knit("Sweave-test-knitr.Rnw")  # or knit2pdf() directly
+unlink("Sweave-test-knitr.Rnw")
 }
 \references{
 The motivation of the changes in the syntax:

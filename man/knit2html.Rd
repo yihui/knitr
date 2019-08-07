@@ -53,6 +53,8 @@ writeLines(c("# hello markdown", "```{r hello-random, echo=TRUE}", "rnorm(5)", "
     "test.Rmd")
 knit2html("test.Rmd")
 if (interactive()) browseURL("test.html")
+
+unlink(c("test.Rmd", "test.html", "test.md"))
 }
 \seealso{
 \code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}

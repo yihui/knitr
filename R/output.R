@@ -119,6 +119,8 @@
 #' purl(f)  # tangle R code
 #' purl(f, documentation = 0)  # extract R code only
 #' purl(f, documentation = 2)  # also include documentation
+#'
+#' unlink(c('knitr-minimal.tex', 'knitr-minimal.R', 'figure'), recursive = TRUE)
 knit = function(
   input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
   envir = parent.frame(), encoding = 'UTF-8'
