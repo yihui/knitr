@@ -126,7 +126,7 @@ knit = function(
   envir = parent.frame(), encoding = 'UTF-8'
 ) {
 
-  in.file = !missing(input)  # is input provided?
+  in.file = !missing(input) && is.character(input)  # is input provided?
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
 
   if (child_mode()) {
