@@ -134,7 +134,6 @@ Suggests:
     DBI (>= 0.4-1),
     showtext,
     tibble,
-    sass,
     styler
 License: GPL
 URL: https://yihui.name/knitr/

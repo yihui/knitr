@@ -686,8 +686,15 @@ eng_sxss = function(options) {
   if (use_package) {
     message("Converting with the R package sass")
 
+    # TODO: after sass R package (https://github.com/rstudio/sass) is released on CRAN
+    # delete calls to get and replace sass, sass_file, sass_options with sass::function_name()
+    # add sass to Suggests
+    sass = getFromNamespace("sass", "sass")
+    sass_file = getFromNamespace("sass_file", "sass")
+    sass_options = getFromNamespace("sass_options", "sass")
+
     out = tryCatch(
-      sass::sass(sass::sass_file(f), options = sass::sass_options(output_style = style)),
+      sass(sass_file(f), options = sass_options(output_style = style)),
       error = function(e) {
         if (!options$error) stop(e)
         warning2(paste('Error in converting to CSS using sass R package:', e, sep = "\n"))
