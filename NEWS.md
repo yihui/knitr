@@ -1,3 +1,7 @@
+# CHANGES IN knitr VERSION 1.25
+
+
+
 # CHANGES IN knitr VERSION 1.24
 
 ## MAJOR CHANGES
