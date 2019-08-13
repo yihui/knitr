@@ -39,7 +39,7 @@ hook_animation = function(options) {
   if (size == "") return(extra)
   style = "(style * = *['\"])"
   if (grepl(style, extra)) return(gsub(style, paste0("\\1", size), extra))
-  paste0("style='", size, "' ", extra)
+  paste0('style="', size, '" ', extra)
 }
 
 .img.tag = function(src, w, h, caption, extra) {
