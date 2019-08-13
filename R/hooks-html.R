@@ -34,7 +34,12 @@ hook_animation = function(options) {
 }
 
 .img.attr = function(w, h, extra) {
-  paste(c(sprintf('width="%s"', w), sprintf('height="%s"', h), extra), collapse = ' ')
+  size = paste(c(sprintf('width: %s;', w), sprintf('height: %s;', h)), collapse = ' ')
+  extra = paste(extra, collapse = " ")
+  if (size == "") return(extra)
+  style = "(style * = *['\"])"
+  if (grepl(style, extra)) return(gsub(style, paste0("\\1", size), extra))
+  paste0("style='", size, "' ", extra)
 }
 
 .img.tag = function(src, w, h, caption, extra) {
