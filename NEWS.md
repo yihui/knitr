@@ -1,6 +1,6 @@
 # CHANGES IN knitr VERSION 1.25
 
-
+- When output format is html, `out.width` and `out.height` are treated as CSS's `width` and `height` properties rather than `img` tag's `width` and `height` tags. This update enables to specify output size with any valid CSS unit (thanks, @atusy).
 
 # CHANGES IN knitr VERSION 1.24
 
