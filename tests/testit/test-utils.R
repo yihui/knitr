@@ -133,17 +133,19 @@ assert(
   color_def('.5,.6,.7', 'fgcolor') == '\\definecolor{fgcolor}{rgb}{.5, .6, .7}'
 )
 
+cw = function(...) unclass(combine_words(...))
 assert(
   'combine_words() combines multiple words into a single string',
-  combine_words(NULL) %==% NULL,
-  combine_words(c('a')) %==% 'a',
-  combine_words(c('a', 'b')) %==% 'a and b',
-  combine_words(c('a', 'b', 'c')) %==% 'a, b, and c',
-  combine_words(c('a', 'b', 'c'), and = '') %==% 'a, b, c',
-  combine_words(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c',
-  combine_words(c('a', 'b', 'c'), before = '"') %==% '"a", "b", and "c"',
-  combine_words(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''"
+  cw(NULL) %==% NULL,
+  cw(c('a')) %==% 'a',
+  cw(c('a', 'b')) %==% 'a and b',
+  cw(c('a', 'b', 'c')) %==% 'a, b, and c',
+  cw(c('a', 'b', 'c'), and = '') %==% 'a, b, c',
+  cw(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c',
+  cw(c('a', 'b', 'c'), before = '"') %==% '"a", "b", and "c"',
+  cw(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''"
 )
+rm(list = 'cw')
 
 assert('split_lines() splits a character vector into lines by \\n', {
   (split_lines('') %==% '')
