@@ -1,6 +1,8 @@
 # CHANGES IN knitr VERSION 1.25
 
+## MINOR CHANGES
 
+- The returned value of `combine_words()` is wrapped in `xfun::raw_string()` for pretty printing.
 
 # CHANGES IN knitr VERSION 1.24
 
