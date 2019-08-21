@@ -78,6 +78,26 @@ hook_plot_md_base = function(x, options) {
   ))
 }
 
+hook_plot_md_pandoc = function(x, options) {
+  if (options$fig.show == 'animate') return(hook_plot_html(x, options))
+
+  base = opts_knit$get('base.url') %n% ''
+  cap = .img.cap(options)
+  at = sprintf(
+    "{%s}",
+    paste(
+      c(
+        sprintf("width=%s", options[['out.width']]),
+        sprintf("height=%s", options[['out.height']]),
+        sprintf("%s", options[['out.extra']])
+      ),
+      collapse = " "
+    )
+  )
+
+  sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at)
+}
+
 css_align = function(align) {
   sprintf('display: block; margin: %s;', switch(
     align, left = 'auto auto auto 0', center = 'auto', right = 'auto 0 auto auto'
