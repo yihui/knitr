@@ -16,10 +16,9 @@ hook_plot_md = function(x, options) {
       return(hook_plot_tex(x, options))
     }
     if (office_output) {
-      warning('Chunk options fig.align, out.width, out.height, out.extra ',
-              'are not supported for ', to, ' output')
-      options$out.width = options$out.height = options$out.extra = NULL
+      warning('Chunk options fig.align is not supported for ', to, ' output')
       options$fig.align = 'default'
+      return(hook_plot_md_pandoc(x, options))
     }
   }
   if (options$fig.show == 'hold' && office_output) {
