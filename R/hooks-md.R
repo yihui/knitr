@@ -16,8 +16,10 @@ hook_plot_md = function(x, options) {
       return(hook_plot_tex(x, options))
     }
     if (office_output) {
-      warning('Chunk options fig.align is not supported for ', to, ' output')
-      options$fig.align = 'default'
+      if (options$fig.align != 'default') {
+        warning('Chunk options fig.align is not supported for ', to, ' output')
+        options$fig.align = 'default'
+      }
       return(hook_plot_md_pandoc(x, options))
     }
   }
