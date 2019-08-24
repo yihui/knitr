@@ -1,5 +1,7 @@
 # CHANGES IN knitr VERSION 1.25
 
+- The chunk option `fig.process` can be specified by a function with the `options` argument to read chunk options (thanks, @atusy, #1749).
+
 ## MINOR CHANGES
 
 - The returned value of `combine_words()` is wrapped in `xfun::raw_string()` for pretty printing.
