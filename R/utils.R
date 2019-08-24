@@ -808,7 +808,7 @@ create_label = function(..., latex = FALSE) {
 #' @param sep Separator to be inserted between words.
 #' @param and Character string to be prepended to the last word.
 #' @param before,after A character string to be added before/after each word.
-#' @return A character string.
+#' @return A character string marked by \code{xfun::\link{raw_string}()}.
 #' @export
 #' @examples combine_words('a'); combine_words(c('a', 'b'))
 #' combine_words(c('a', 'b', 'c'))
@@ -823,7 +823,7 @@ combine_words = function(words, sep = ', ', and = ' and ', before = '', after = 
   if (n == 2) return(paste(words, collapse = and))
   if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
   words[n] = paste0(and, words[n])
-  paste(words, collapse = sep)
+  xfun::raw_string(paste(words, collapse = sep))
 }
 
 warning2 = function(...) warning(..., call. = FALSE)

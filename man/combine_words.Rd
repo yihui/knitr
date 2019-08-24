@@ -16,7 +16,7 @@ combine_words(words, sep = ", ", and = " and ", before = "", after = before)
 \item{before, after}{A character string to be added before/after each word.}
 }
 \value{
-A character string.
+A character string marked by \code{xfun::\link{raw_string}()}.
 }
 \description{
 When a value from an inline R expression is a character vector of multiple

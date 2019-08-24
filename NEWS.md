@@ -1,6 +1,12 @@
 # CHANGES IN knitr VERSION 1.25
 
+## MINOR CHANGES
 
+- The returned value of `combine_words()` is wrapped in `xfun::raw_string()` for pretty printing.
+
+## BUG FIXES
+
+- The `output` hook for `render_sweave()` failed to respect the chunk option `results='asis'` (thanks, Achim Zeileis, https://stackoverflow.com/q/57571790/559676).
 
 # CHANGES IN knitr VERSION 1.24
 
