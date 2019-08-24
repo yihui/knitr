@@ -1,5 +1,7 @@
 # CHANGES IN knitr VERSION 1.25
 
+- Office outputs (e.g., `rmarkdown::word_document`) supports the following chunk options `out.width`, `out.height`, `out.extra`. Their behavior follows the behavior of Pandoc's `link_attributes` extention (thanks, @atusy, #1746).
+
 ## MINOR CHANGES
 
 - The returned value of `combine_words()` is wrapped in `xfun::raw_string()` for pretty printing.
