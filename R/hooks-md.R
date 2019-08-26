@@ -16,10 +16,11 @@ hook_plot_md = function(x, options) {
       return(hook_plot_tex(x, options))
     }
     if (office_output) {
-      warning('Chunk options fig.align, out.width, out.height, out.extra ',
-              'are not supported for ', to, ' output')
-      options$out.width = options$out.height = options$out.extra = NULL
-      options$fig.align = 'default'
+      if (options$fig.align != 'default') {
+        warning('Chunk options fig.align is not supported for ', to, ' output')
+        options$fig.align = 'default'
+      }
+      return(hook_plot_md_pandoc(x, options))
     }
   }
   if (options$fig.show == 'hold' && office_output) {
@@ -76,6 +77,26 @@ hook_plot_md_base = function(x, options) {
     .upload.url(x), w, h, alt,
     c(s, sprintf('style="%s"', css_align(a)))
   ))
+}
+
+hook_plot_md_pandoc = function(x, options) {
+  if (options$fig.show == 'animate') return(hook_plot_html(x, options))
+
+  base = opts_knit$get('base.url') %n% ''
+  cap = .img.cap(options)
+  at = sprintf(
+    "{%s}",
+    paste(
+      c(
+        sprintf("width=%s", options[['out.width']]),
+        sprintf("height=%s", options[['out.height']]),
+        options[['out.extra']]
+      ),
+      collapse = " "
+    )
+  )
+
+  sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at)
 }
 
 css_align = function(align) {

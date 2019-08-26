@@ -1,5 +1,7 @@
 # CHANGES IN knitr VERSION 1.25
 
+- Office outputs (e.g., `rmarkdown::word_document`) supports the following chunk options `out.width`, `out.height`, `out.extra`. Their behavior follows the behavior of Pandoc's `link_attributes` extention (thanks, @atusy, #1746).
+
 - The chunk option `fig.process` can be specified by a function with the `options` argument to read chunk options (thanks, @atusy, #1749).
 
 ## MINOR CHANGES
