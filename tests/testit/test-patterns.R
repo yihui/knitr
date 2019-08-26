@@ -12,8 +12,8 @@ assert('detect_pattern() automatically detects syntax patterns', {
 
 assert('group_pattern() checks if a pattern contains a group', {
   (group_pattern('(.*)'))
-  (group_pattern('()'))
-  (group_pattern('abc'))
+  (!group_pattern('()'))
+  (!group_pattern('abc'))
   (!group_pattern(NULL))
 })
 
