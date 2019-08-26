@@ -137,7 +137,7 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
     path = tinytex::latexmk(path, getOption('tikzDefaultEngine'))
   }
 
-  fig_process(options$fig.process, path)
+  fig_process(options$fig.process, path, options)
 }
 
 # filter the dev.args option
@@ -250,9 +250,10 @@ pdf_null = function(width = 7, height = 7, ...) {
   grDevices::pdf(NULL, width, height, ...)
 }
 
-fig_process = function(FUN, path) {
+fig_process = function(FUN, path, options) {
   if (is.function(FUN)) {
-    path2 = FUN(path)
+    ARG = intersect(c("options", names(options)), names(formals(FUN)))
+    path2 = do.call(FUN, c(path, c(options = list(options), options)[ARG]))
     if (!is.character(path2) || length(path2) != 1L)
       stop("'fig.process' must be a function that returns a character string")
     path = path2
