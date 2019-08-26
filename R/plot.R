@@ -252,11 +252,8 @@ pdf_null = function(width = 7, height = 7, ...) {
 
 fig_process = function(FUN, path, options) {
   if (is.function(FUN)) {
-    path2 = if ("options" %in% names(formals(FUN))) {
-      FUN(path, options = options)
-    } else {
-      FUN(path)
-    }
+    ARG = intersect(c("options", names(options)), names(formals(FUN)))
+    path2 = do.call(FUN, c(path, c(options = list(options), options)[ARG]))
     if (!is.character(path2) || length(path2) != 1L)
       stop("'fig.process' must be a function that returns a character string")
     path = path2
