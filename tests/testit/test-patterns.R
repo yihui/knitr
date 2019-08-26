@@ -25,3 +25,19 @@ assert(
   identical(grep(ce, '@ asdf'), integer()), # only spaces/comments allowed
   identical(grep(ce, ' @ a% sdf'), integer())
 )
+
+cb_md = all_patterns$md$chunk.begin
+assert(
+  'patterns for md',
+  # Are they chunk options?
+  isTRUE(grepl(cb_md, '```{r}')),
+  isTRUE(grepl(cb_md, '```{r label}')),
+  isTRUE(grepl(cb_md, '```{r, eval=FALSE}')),
+  isTRUE(grepl(cb_md, '```{awk}')),
+  # Are they Pandoc's fenced code attributes?
+  !isTRUE(grepl(cb_md, '```{.class}')),
+  !isTRUE(grepl(cb_md, '```{#id}')),
+  !isTRUE(grepl(cb_md, '```{style="color: red"}')),
+  # Is it Pandoc's raw attribute?
+  !isTRUE(grepl(cb_md, '```{=latex}'))
+)
