@@ -90,7 +90,7 @@ hook_plot_md_pandoc = function(x, options) {
       c(
         sprintf("width=%s", options[['out.width']]),
         sprintf("height=%s", options[['out.height']]),
-        sprintf("%s", options[['out.extra']])
+        options[['out.extra']]
       ),
       collapse = " "
     )
