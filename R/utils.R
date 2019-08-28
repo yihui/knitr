@@ -816,14 +816,14 @@ create_label = function(..., latex = FALSE) {
 #' combine_words(c('a', 'b', 'c'), and = '')
 #' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
 combine_words = function(words, sep = ', ', and = ' and ', before = '', after = before) {
-  n = length(words)
-  if (n == 0) return(words)
+  n = length(words); rs = xfun::raw_string
+  if (n == 0) return(rs(words))
   words = paste0(before, words, after)
-  if (n == 1) return(words)
-  if (n == 2) return(paste(words, collapse = and))
+  if (n == 1) return(rs(words))
+  if (n == 2) return(rs(paste(words, collapse = and)))
   if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
   words[n] = paste0(and, words[n])
-  xfun::raw_string(paste(words, collapse = sep))
+  rs(paste(words, collapse = sep))
 }
 
 warning2 = function(...) warning(..., call. = FALSE)
