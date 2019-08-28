@@ -63,8 +63,9 @@ hook_plot_md_base = function(x, options) {
     d1 = if (plot1) sprintf('<div class="figure"%s>\n', css_text_align(a))
     d2 = sprintf('<p class="caption">%s</p>', cap)
     img = sprintf(
-      '<img src="%s" alt="%s" %s />',
-      paste0(opts_knit$get('base.url'), .upload.url(x)), alt, .img.attr(w, h, s)
+      '<img src="%s" alt="%s" %s %s />',
+      paste0(opts_knit$get('base.url'), .upload.url(x)), alt, .img.attr(w, h, s),
+      .img.id(options)
     )
     img = add_link(img)
     # whether to place figure caption at the top or bottom of a figure

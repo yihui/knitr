@@ -64,6 +64,16 @@ hook_animation = function(options) {
   ), cap)
 }
 
+.img.id = function(options) {
+  sprintf(
+    'id="%s"',
+    paste0(
+      options$fig.lp, options$label,
+      if (options$fig.num > 1L && options$fig.show == 'asis') options$fig.cur
+    )
+  )
+}
+
 # a wrapper to upload an image and return the URL
 .upload.url = function(x) {
   opts_knit$get('upload.fun')(x)
