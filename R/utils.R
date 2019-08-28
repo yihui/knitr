@@ -817,7 +817,7 @@ create_label = function(..., latex = FALSE) {
 #' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
 combine_words = function(words, sep = ', ', and = ' and ', before = '', after = before) {
   n = length(words); rs = xfun::raw_string
-  if (n == 0) return(rs(words))
+  if (n == 0) return(words)
   words = paste0(before, words, after)
   if (n == 1) return(rs(words))
   if (n == 2) return(rs(paste(words, collapse = and)))
