@@ -102,7 +102,7 @@ kable = function(
   if (is.function(format)) format = format()
 
   # expand align if applicable
-  if (format != 'latex' && !missing(align) && length(align) == 1L)
+  if (!missing(align) && length(align) == 1L && !grepl('[^lcr]', align))
     align = strsplit(align, '')[[1]]
 
   # create a label for bookdown if applicable
