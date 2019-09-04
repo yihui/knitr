@@ -1,27 +1,37 @@
 #' @rdname hook_plot
 #' @export
 hook_plot_md = function(x, options) {
+  add_lines = function(x) {
+    if (
+      (isTRUE(options$echo) && options$fig.show != 'hold') ||
+      is.null(options$fig.cap) || options$fig.num %in% c(1L, options$fig.cur)
+    ) {
+      return(x)
+    }
+    paste0(x, "\n\n")
+  }
   # if not using R Markdown v2 or output is HTML, just return v1 output
   if (is.null(to <- pandoc_to()) || is_html_output(to))
-    return(hook_plot_md_base(x, options))
+    return(add_lines(hook_plot_md_base(x, options)))
   if ((options$fig.show == 'animate' || is_tikz_dev(options)) && is_latex_output())
     return(hook_plot_tex(x, options))
+
   office_output = to %in% c('docx', 'pptx', 'rtf', 'odt')
   if (need_special_plot_hook(options)) {
     if (is_latex_output()) {
       # Pandoc < 1.13 does not support \caption[]{} so suppress short caption
       if (is.null(options$fig.scap)) options$fig.scap = NA
-      return(hook_plot_tex(x, options))
+      return(add_lines(hook_plot_tex(x, options)))
     }
     if (office_output) {
       if (options$fig.align != 'default') {
         warning('Chunk options fig.align is not supported for ', to, ' output')
         options$fig.align = 'default'
       }
-      return(hook_plot_md_pandoc(x, options))
+      return(add_lines(hook_plot_md_pandoc(x, options)))
     }
   }
-  hook_plot_md_base(x, options)
+  add_lines(hook_plot_md_base(x, options))
 }
 
 # decide if the markdown plot hook is not enough and needs special hooks like
