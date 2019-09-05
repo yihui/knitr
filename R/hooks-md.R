@@ -23,10 +23,6 @@ hook_plot_md = function(x, options) {
       return(hook_plot_md_pandoc(x, options))
     }
   }
-  if (options$fig.show == 'hold' && office_output) {
-    warning('The chunk option fig.show="hold" is not supported for ', to, ' output')
-    options$fig.show = 'asis'
-  }
   hook_plot_md_base(x, options)
 }
 
