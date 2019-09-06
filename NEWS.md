@@ -4,6 +4,8 @@
 
 - The chunk option `collapse = TRUE` now works as expected when the chunk option `attr.*` or `class.*` is provided. By this change, The chunk option `collapse = TRUE` forces `attr.*` and `class.*` be `NULL` except for the chunk options `attr.source` and `class.source` (thanks, @aosavi @cderv @atusy, #1902 #1906).
 
+- Captions disappeared when a chunk generates multiple figures continuously (thanks, @atusy, #1760)
+
 # CHANGES IN knitr VERSION 1.30
 
 ## NEW FEATURES
