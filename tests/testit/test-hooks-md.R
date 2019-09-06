@@ -67,8 +67,15 @@ x = "1.png"
 w = h = 1
 ex = "style='margin: 0;'"
 cap = "foo"
-opt <- function(w = NULL, h =NULL, ex = NULL, cap = NULL, show = 'asis', align = 'default', ...) {
-  list(out.width = w, out.height = h, out.extra = ex, fig.cap = cap, fig.show = show, fig.align = align, ...)
+align = 'left'
+link = 'https://example.com'
+opt <- function(
+  w = NULL, h =NULL, ex = NULL, align = 'default', cap = NULL, show = 'asis', ...
+) {
+  list(
+    out.width = w, out.height = h, out.extra = ex,
+    fig.align = align, fig.cap = cap, fig.show = show,...
+  )
 }
 
 assert("Include a plot by pandoc md", {
@@ -80,9 +87,6 @@ assert("Include a plot by pandoc md", {
   (hook_plot_md_pandoc(x, opt(w = w, cap = cap, ex = ex)) %==%
     sprintf("![%s](1.png){width=%s %s}", cap, w, ex))
 })
-
-align = 'left'
-link = 'https://example.com'
 
 hook = hook_plot_md_base
 assert("Include a plot in variety of formats with hook_plot_md_base", {
@@ -113,3 +117,37 @@ assert("Include a plot in variety of formats with hook_plot_md_base", {
   opts_knit$restore()
   (hook(x, opt(align = 'center')) %==% '<img src="1.png" style="display: block; margin: auto;" />')
 })
+
+hook <- hook_plot_md
+assert('Check if hook_plot_md passes arguments to sub-functions', {
+  opts_knit$set(rmarkdown.pandoc.to = 'html')
+  (hook(x, opt()) %==% hook_plot_md_base(x, opt()))
+
+  opts_knit$set(rmarkdown.pandoc.to = 'latex')
+  o = opt(w = w)
+  (hook(x, o) %==% hook_plot_tex(x, o))
+
+  opts_knit$set(rmarkdown.pandoc.to = 'docx')
+  (hook(x, o) %==% hook_plot_md_pandoc(x, o))
+
+  opts_knit$set(rmarkdown.pandoc.to = 'markdown')
+  (hook(x, opt()) %==% hook_plot_md_base(x, opt()))
+  (hook(x, o) %==% hook_plot_md_base(x, o))
+})
+
+assert('Conditionally append blank lines to figures so that figure captions are displayed correctly', {
+  # Append when echo is FALSE or fig.show is hold and the current figure is not the last one
+  (append_blank_lines('a', list(echo = FALSE, fig.cap = cap, fig.num = 3, fig.cur = 1)) %==% 'a\n\n')
+  (append_blank_lines('a', list(fig.show = 'hold', fig.cap = cap, fig.num = 3, fig.cur = 1)) %==% 'a\n\n')
+
+  # Do not append when
+  ## echo is not FALSE
+  (append_blank_lines('', list(echo = TRUE)) %==% '')
+  ## fig.show is not hold
+  (append_blank_lines('', list(echo = FALSE, fig.show = 'asis')) %==% '')
+  ## fig.cap is NULL
+  (append_blank_lines('', list(echo = FALSE, fig.cap = NULL)) %==% '')
+  ## fig.num is equal to fig.cur
+  (append_blank_lines('', list(echo = FALSE, fig.cap = cap, fig.num = 1, fig.cur = 1)) %==% '')
+})
+
