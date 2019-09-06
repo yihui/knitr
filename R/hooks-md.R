@@ -3,7 +3,7 @@
 hook_plot_md = function(x, options) {
   add_lines = function(x) {
     if (
-      (isTRUE(options$echo) && options$fig.show != 'hold') ||
+      (!identical(options$echo, FALSE) && options$fig.show != 'hold') ||
       is.null(options$fig.cap) || options$fig.num %in% c(1L, options$fig.cur)
     ) {
       return(x)
