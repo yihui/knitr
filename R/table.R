@@ -219,7 +219,7 @@ knit_print.knitr_kable = function(x, ...) {
 }
 
 kable_latex = function(
-  x, booktabs = FALSE, longtable = FALSE, valign = 't', centering = TRUE,
+  x, booktabs = FALSE, longtable = FALSE, valign = 't', position = '', centering = TRUE,
   vline = getOption('knitr.table.vline', if (booktabs) '' else '|'),
   toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule' else '\\hline'),
   bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule' else '\\hline'),
@@ -239,7 +239,8 @@ kable_latex = function(
     sprintf('[%s]', valign)
   } else ''
   if (identical(caption, NA)) caption = NULL
-  env1 = sprintf('\\begin{%s}%s\n', table.envir, valign)
+  if (position != '') position = paste0('[', position, ']')
+  env1 = sprintf('\\begin{%s}%s\n', table.envir, position)
   env2 = sprintf('\n\\end{%s}',   table.envir)
   if (caption.short != '') caption.short = paste0('[', caption.short, ']')
   cap = if (is.null(caption)) '' else sprintf('\n\\caption%s{%s}', caption.short, caption)
@@ -258,7 +259,7 @@ kable_latex = function(
 
   paste(c(
     if (!longtable) c(env1, cap, centering),
-    sprintf('\n\\begin{%s}', tabular), align,
+    sprintf('\n\\begin{%s}%s', tabular, valign), align,
     if (longtable && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {

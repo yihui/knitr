@@ -8,6 +8,10 @@
 
 - For `kable(format = 'latex')`, a single string consisting of `l`, `c`, and `r` for the `align` argument also works now, e.g., `knitr::kable(head(iris), 'latex', align = 'llcrr')`. Previously it has to be a character vector of individual letters.
 
+## MAJOR CHANGES
+
+- Reverted #1519 (which intended to fix #1487): the `valign` argument of `kable(format = 'latex')` meant to control the vertical alignment of the inner `tabular` environment, instead of the floating position of the outer `table` environment. A separate argument named `position` has been added to control the floating position (e.g., `position = "!b"`).
+
 ## MINOR CHANGES
 
 - The returned value of `combine_words()` is wrapped in `xfun::raw_string()` for pretty printing.
