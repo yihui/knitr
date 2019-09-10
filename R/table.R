@@ -32,7 +32,8 @@
 #' @param format.args A list of arguments to be passed to \code{\link{format}()}
 #'   to format table values, e.g. \code{list(big.mark = ',')}.
 #' @param escape Boolean; whether to escape special characters when producing
-#'   HTML or LaTeX tables.
+#'   HTML or LaTeX tables. When \code{escape = FALSE}, you have to make sure
+#'   that special characters will not trigger syntax errors in LaTeX or HTML.
 #' @param ... Other arguments (see Examples).
 #' @return A character vector of the table source code.
 #' @seealso Other R packages such as \pkg{huxtable}, \pkg{xtable},

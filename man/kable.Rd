@@ -42,7 +42,8 @@ from \code{knitr::\link{opts_current}$get('label')}.}
 to format table values, e.g. \code{list(big.mark = ',')}.}
 
 \item{escape}{Boolean; whether to escape special characters when producing
-HTML or LaTeX tables.}
+HTML or LaTeX tables. When \code{escape = FALSE}, you have to make sure
+that special characters will not trigger syntax errors in LaTeX or HTML.}
 
 \item{...}{Other arguments (see Examples).}
 }
