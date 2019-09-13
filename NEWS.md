@@ -20,6 +20,8 @@
 
 - The `output` hook for `render_sweave()` failed to respect the chunk option `results='asis'` (thanks, Achim Zeileis, https://stackoverflow.com/q/57571790/559676).
 
+- Added the unit `px` to the chunk option `out.width` if its value is numeric (thanks, @chendaniely, #1761).
+
 # CHANGES IN knitr VERSION 1.24
 
 ## MAJOR CHANGES

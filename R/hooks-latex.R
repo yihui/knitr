@@ -140,9 +140,11 @@ hook_plot_tex = function(x, options) {
     align2 = if (plot2) if (a == 'default') '' else sprintf('\\end{%s}\n\n', align.env)
   }
 
+  ow = options$out.width
   # maxwidth does not work with animations
-  if (animate && identical(options$out.width, '\\maxwidth')) options$out.width = NULL
-  size = paste(c(sprintf('width=%s', options$out.width),
+  if (animate && identical(ow, '\\maxwidth')) ow = NULL
+  if (is.numeric(ow)) ow = paste0(ow, 'px')
+  size = paste(c(sprintf('width=%s', ow),
                  sprintf('height=%s', options$out.height),
                  options$out.extra), collapse = ',')
 
