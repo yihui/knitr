@@ -22,6 +22,8 @@
 
 - Added the unit `px` to the chunk option `out.width` if its value is numeric (thanks, @chendaniely, #1761).
 
+- The chunk option `dependson` did not work for non-R engines (thanks, @nielsrhansen, #1601).
+
 # CHANGES IN knitr VERSION 1.24
 
 ## MAJOR CHANGES
