@@ -111,7 +111,7 @@ block_exec = function(options) {
     output = knit_hooks$get('chunk')(output, options)
     if (options$cache) {
       cache.exists = cache$exists(options$hash, options$cache.lazy)
-      if(options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
+      if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
         options$engine,
         'stan' = options$output.var, 'sql' = options$output.var, character(0)
         ))
