@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.26
+
+## MINOR CHANGES
+
+- `knit()` no longer adjusts the global R option `width`; previously it sets `options(width = 75)` by default.
+
 # CHANGES IN knitr VERSION 1.25
 
 ## NEW FEATURES

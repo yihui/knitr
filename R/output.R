@@ -145,10 +145,9 @@ knit = function(
     knit_log$restore()
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
     adjust_opts_knit()
-    # turn off fancy quotes, use smaller width
+    # turn off fancy quotes, use a null pdf device to record graphics
     oopts = options(
-      useFancyQuotes = FALSE, width = opts_knit$get('width'),
-      knitr.in.progress = TRUE, device = pdf_null
+      useFancyQuotes = FALSE, device = pdf_null, knitr.in.progress = TRUE
     )
     on.exit(options(oopts), add = TRUE)
     # restore chunk options after parent exits
