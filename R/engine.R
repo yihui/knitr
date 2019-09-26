@@ -109,8 +109,8 @@ engine_output = function(options, code, out, extra = NULL) {
 ## command-line tools
 eng_interpreted = function(options) {
   engine = options$engine
-  code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')) {
-    f = wd_tempfile(engine, switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', '.txt'))
+  code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata', 'rb')) {
+    f = wd_tempfile(engine, switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', rb = '.Rev', '.txt'))
     write_utf8(c(switch(
       engine,
       sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
@@ -120,6 +120,7 @@ eng_interpreted = function(options) {
     switch(
       engine,
       haskell = paste('-e', shQuote(paste(':script', f))),
+      rb = paste('-b', shQuote(paste(':script', f))),
       sas = {
         logf = sub('[.]sas$', '.lst', f)
         on.exit(unlink(c(logf, sub('[.]sas$', '.log', f))), add = TRUE)
@@ -138,10 +139,11 @@ eng_interpreted = function(options) {
       },
       f
     )
+
   } else paste(switch(
     engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -ep',
     mysql = '-e', node = '-e', octave = '--eval', perl = '-E', psql = '-c',
-    python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
+    python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', rb = '-b', NULL
   ), shQuote(one_string(options$code)))
 
   opts = get_engine_opts(options$engine.opts, engine)
@@ -729,7 +731,7 @@ local({
   for (i in c(
     'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'lein', 'mysql',
     'node', 'octave', 'perl', 'psql', 'Rscript', 'ruby', 'sas',
-    'scala', 'sed', 'sh', 'stata', 'zsh'
+    'scala', 'sed', 'sh', 'stata', 'zsh', 'rb'
   )) knit_engines$set(setNames(list(eng_interpreted), i))
 })
 
