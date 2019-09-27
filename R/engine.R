@@ -120,7 +120,7 @@ eng_interpreted = function(options) {
     switch(
       engine,
       haskell = paste('-e', shQuote(paste(':script', f))),
-      rb = paste('-b', shQuote(paste(':script', f))),
+      rb = paste('-b', f),
       sas = {
         logf = sub('[.]sas$', '.lst', f)
         on.exit(unlink(c(logf, sub('[.]sas$', '.log', f))), add = TRUE)
@@ -143,7 +143,7 @@ eng_interpreted = function(options) {
   } else paste(switch(
     engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -ep',
     mysql = '-e', node = '-e', octave = '--eval', perl = '-E', psql = '-c',
-    python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', rb = '-b', NULL
+    python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(one_string(options$code)))
 
   opts = get_engine_opts(options$engine.opts, engine)
