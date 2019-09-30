@@ -111,11 +111,14 @@ eng_interpreted = function(options) {
   engine = options$engine
   code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata', 'rb')) {
     f = wd_tempfile(engine, switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', rb = '.Rev', '.txt'))
-    write_utf8(c(switch(
-      engine,
-      sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
-      NULL
-    ), options$code), f)
+    write_utf8(
+      c(switch(engine,
+          sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;", 
+          NULL), 
+        options$code, 
+        switch(engine, rb = "q()",NULL)
+        ), 
+      f)
     on.exit(unlink(f), add = TRUE)
     switch(
       engine,
@@ -151,6 +154,7 @@ eng_interpreted = function(options) {
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
     paste(code, opts) else paste(opts, code)
   cmd = get_engine_path(options$engine.path, engine)
+  
   out = if (options$eval) {
     message('running: ', cmd, ' ', code)
     tryCatch(
@@ -161,10 +165,13 @@ eng_interpreted = function(options) {
       }
     )
   } else ''
+  
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
   if (options$eval && engine %in% c('sas', 'stata') && file.exists(logf))
     out = c(read_utf8(logf), out)
+  #clip away header and source-reading message
+  if (options$eval && engine %in% rb) out = out[-(1:13)]
   engine_output(options, options$code, out)
 }
 
