@@ -171,7 +171,7 @@ eng_interpreted = function(options) {
   if (options$eval && engine %in% c('sas', 'stata') && file.exists(logf))
     out = c(read_utf8(logf), out)
   #clip away header and source-reading message
-  if (options$eval && engine %in% rb) out = out[-(1:13)]
+  if (options$eval && engine %in% 'rb') out = out[-(1:13)]
   engine_output(options, options$code, out)
 }
 
