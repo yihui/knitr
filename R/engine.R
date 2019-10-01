@@ -109,16 +109,14 @@ engine_output = function(options, code, out, extra = NULL) {
 ## command-line tools
 eng_interpreted = function(options) {
   engine = options$engine
-  code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata', 'rb')) {
+  code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')) {
     f = wd_tempfile(engine, switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', rb = '.Rev', '.txt'))
     write_utf8(
       c(switch(engine,
           sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
           NULL),
-        options$code,
-        switch(engine, rb = "q()",NULL)
-        ),
-      f)
+        options$code), f,
+        switch(engine, rb = "q()",NULL))
     on.exit(unlink(f), add = TRUE)
     switch(
       engine,
@@ -165,7 +163,6 @@ eng_interpreted = function(options) {
       }
     )
   } else ''
-
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
   if (options$eval && engine %in% c('sas', 'stata') && file.exists(logf))
@@ -254,7 +251,7 @@ eng_julia = function(options) {
   JuliaCall::eng_juliacall(options)
 }
 
-## rb
+## RevBayes
 eng_rb = function(options) {
 # define variables from the knitr engine. Set up where to cache output, and to
 # use RevBayes as the engine
