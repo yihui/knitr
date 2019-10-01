@@ -255,15 +255,23 @@ eng_rb = function(options) {
 # use RevBayes as the engine
   options$code = one_string(c(options$code, 'q()'))
   opts = options$engine.opts
-  cache = options$cache.path
+  cache = "cache"
   cmd = get_engine_path(options$engine.path, options$engine)
 
 # Create the cache directories and gather output in them
   dir.create(cache, showWarnings = FALSE)
   opts$cleanupCacheDir = FALSE
-  f = wd_tempfile("cache/history.Rev")
-  write_utf8(con =f, options$code)
-  on.exit(unlink(f), add = TRUE)
+  f = "cache/history.Rev"
+  if (exists(normalizePath(f))){
+    print(f)
+    old_code <- readlines(f, skip = -1)
+    new_code <- c(old_code, options$code)
+    write_utf8(con = f, new_code)
+  } else {
+    write_utf8(con =f, options$code)
+  }
+#  on.exit(unlink(f), add = TRUE)
+
     cmd = get_engine_path(options$engine.path, options$engine)
 
     out <- tryCatch(
