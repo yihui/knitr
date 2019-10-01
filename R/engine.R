@@ -110,18 +110,16 @@ engine_output = function(options, code, out, extra = NULL) {
 eng_interpreted = function(options) {
   engine = options$engine
   code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')) {
-    f = wd_tempfile(engine, switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', rb = '.Rev', '.txt'))
-    write_utf8(
-      c(switch(engine,
-          sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
-          NULL),
-        options$code), f,
-        switch(engine, rb = "q()",NULL))
+    f = wd_tempfile(engine, switch(engine, sas = '.sas', Rscript = '.R', stata = '.do',  '.txt'))
+    write_utf8(c(switch(
+      engine,
+      sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
+      NULL
+    ), options$code), f)
     on.exit(unlink(f), add = TRUE)
     switch(
       engine,
       haskell = paste('-e', shQuote(paste(':script', f))),
-      rb = paste('-b', f, '&'),
       sas = {
         logf = sub('[.]sas$', '.lst', f)
         on.exit(unlink(c(logf, sub('[.]sas$', '.log', f))), add = TRUE)
@@ -255,7 +253,7 @@ eng_julia = function(options) {
 eng_rb = function(options) {
 # define variables from the knitr engine. Set up where to cache output, and to
 # use RevBayes as the engine
-  code = one_string(options$code)
+  options$code = one_string(c(options$code, 'q()'))
   opts = options$engine.opts
   cache = options$cache.path
   cmd = get_engine_path(options$engine.path, options$engine)
@@ -263,7 +261,17 @@ eng_rb = function(options) {
 # Create the cache directories and gather output in them
   dir.create(cache, showWarnings = FALSE)
   opts$cleanupCacheDir = FALSE
-  out = eng_interpreted(options)
+  f = wd_tempfile("cache/history.Rev")
+  write_utf8(con =f, options$code)
+  on.exit(unlink(f), add = TRUE)
+    cmd = get_engine_path(options$engine.path, options$engine)
+
+    out <- tryCatch(
+      system2(cmd, f, stdout = TRUE, stderr = TRUE),
+      error = function(e) {
+        if (!options$error) stop(e)
+      }
+    )
   out = out[-(1:13)]
 
 
@@ -753,7 +761,7 @@ local({
   for (i in c(
     'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'lein', 'mysql',
     'node', 'octave', 'perl', 'psql', 'Rscript', 'ruby', 'sas',
-    'scala', 'sed', 'sh', 'stata', 'zsh', 'rb'
+    'scala', 'sed', 'sh', 'stata', 'zsh'
   )) knit_engines$set(setNames(list(eng_interpreted), i))
 })
 
