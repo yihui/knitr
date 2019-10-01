@@ -259,16 +259,17 @@ eng_rb = function(options) {
   cmd = get_engine_path(options$engine.path, options$engine)
 
 # Create the cache directories and gather output in them
-  dir.create(cache, showWarnings = FALSE)
+#  dir.create(cache, showWarnings = FALSE)
   opts$cleanupCacheDir = FALSE
   f = "cache/history.Rev"
-  if (exists(normalizePath(f))){
-    print(f)
-    old_code <- readlines(f, skip = -1)
+  if (file.exists(normalizePath(f))){
+    old_code <- readLines(f, skip = -2)
+    print(old_code)
     new_code <- c(old_code, options$code)
-    write_utf8(con = f, new_code)
+    write(options$code, f, append = TRUE)
   } else {
-    write_utf8(con =f, options$code)
+    print(normalizePath(f))
+    write_utf8(con = f, options$code)
   }
 #  on.exit(unlink(f), add = TRUE)
 
