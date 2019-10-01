@@ -57,7 +57,7 @@ cache_engines = new_defaults()
 #' to format and return the text output from your engine.
 #'
 #' For expert users, an advanced usage of this function is
-#' \code{(options, out = LIST)} where \code{LIST} is a list that
+#' \code{engine_output(options, out = LIST)} where \code{LIST} is a list that
 #' has the same structure as the output of \code{evaluate::evaluate()}. In this
 #' case, the arguments \code{code} and \code{extra} are ignored, and the list is
 #' passed to an internal function \code{knitr:::wrap()} to return a character
@@ -74,7 +74,7 @@ cache_engines = new_defaults()
 #'   the appropriate output hooks.
 #' @export
 #' @examples library(knitr)
-#' (opts_chunk$merge(list(engine = 'Rscript')), code = '1 + 1', out = '[1] 2')
+#' engine_output(opts_chunk$merge(list(engine = 'Rscript')), code = '1 + 1', out = '[1] 2')
 #' engine_output(opts_chunk$merge(list(echo = FALSE, engine = 'Rscript')), code = '1 + 1', out = '[1] 2')
 #'
 #' # expert use only
@@ -113,17 +113,17 @@ eng_interpreted = function(options) {
     f = wd_tempfile(engine, switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', rb = '.Rev', '.txt'))
     write_utf8(
       c(switch(engine,
-          sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
-          NULL),
-        options$code,
+          sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;", 
+          NULL), 
+        options$code, 
         switch(engine, rb = "q()",NULL)
-        ),
+        ), 
       f)
     on.exit(unlink(f), add = TRUE)
     switch(
       engine,
       haskell = paste('-e', shQuote(paste(':script', f))),
-      rb = paste('-b', f, '&'),
+      rb = paste('-b', f),
       sas = {
         logf = sub('[.]sas$', '.lst', f)
         on.exit(unlink(c(logf, sub('[.]sas$', '.log', f))), add = TRUE)
@@ -154,7 +154,7 @@ eng_interpreted = function(options) {
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
     paste(code, opts) else paste(opts, code)
   cmd = get_engine_path(options$engine.path, engine)
-
+  
   out = if (options$eval) {
     message('running: ', cmd, ' ', code)
     tryCatch(
@@ -165,13 +165,14 @@ eng_interpreted = function(options) {
       }
     )
   } else ''
-
+  
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
   if (options$eval && engine %in% c('sas', 'stata') && file.exists(logf))
     out = c(read_utf8(logf), out)
   #clip away header and source-reading message
-
+  if (options$eval && engine %in% 'rb') out = out[-(1:13)]
+  engine_output(options, options$code, out)
 }
 
 # options$engine.path can be list(name1 = path1, name2 = path2, ...); similarly,
@@ -254,25 +255,7 @@ eng_julia = function(options) {
   JuliaCall::eng_juliacall(options)
 }
 
-## rb
-eng_rb = function(options) {
-# define variables from the knitr engine. Set up where to cache output, and to
-# use RevBayes as the engine
-  code = one_string(options$code)
-  opts = options$engine.opts
-  cache = options$cache.path
-  cmd = get_engine_path(options$engine.path, options$engine)
-
-# Create the cache directories and gather output in them
-  dir.create(cache, showWarnings = FALSE)
-  opts$cleanupCacheDir = FALSE
-  out = eng_interpreted(options)
-  out = out[-(1:13)]
-
-
-  }
-
-##
+## Stan
 ## Compiles Stan model in the code chunk, creates a stanmodel object,
 ## and assigns it to a variable with the name given in engine.opts$x.
 eng_stan = function(options) {
@@ -383,7 +366,6 @@ eng_dot = function(options) {
   options$engine = syntax
   engine_output(options, code, '', extra)
 }
-
 
 ## Andre Simon's highlight
 eng_highlight = function(options) {
@@ -766,7 +748,7 @@ knit_engines$set(
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, rb = eng_rb
+  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
 )
 
 cache_engines$set(python = cache_eng_python)
