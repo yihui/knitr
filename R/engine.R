@@ -284,14 +284,14 @@ eng_rb = function(options) {
   # controls whether previous .eng_rb.knitr.cache files should be deleted
   # if not defined, default is TRUE
   refreshHistoryRB <- opts$refreshHistoryRB
-  if(is.NULL(refreshHistoryRB){
+  if(is.NULL(refreshHistoryRB)){
     refreshHistoryRB <- TRUE
   }
   # rbHistoryDirPath 
   # string - path and name for rb history directory
   # default is ".eng_rb.knitr.cache" in working dir
   rbHistoryDirPath <- opts$rbHistoryDirPath
-  if(is.NULL(rbHistoryDirPath){
+  if(is.NULL(rbHistoryDirPath)){
     rbHistoryDirPath <- ".eng_rb.knitr.cache"
   }
   #############
@@ -314,36 +314,31 @@ eng_rb = function(options) {
     # once old files are cleared (if they exist)
     # Set up history directories 
     dir.create(rbHistoryDirPath, showWarnings = FALSE)
-    #
     # get code to run
     code_to_run <- options$code
-    # write to history file
-    rbCodePath,
-    #
   }else{    
     # if FALSE, then this isn't the first chunk in a document
-    # 
+    #
     # check to make sure history dir exists
     if(!dir.exists(rbHistoryDirPath)){
       "RevBayes code history directory not found at specified path for later rb chunks"
     }
-    #
     # get length of old out file
     prev_out <- length(readLines(rbOutPath))
     # get old code history
     old_code <- readLines(rbCodePath) 
     # april uses skip = -2   
-    # Why? Probably for skipping q() lines 
-    # nd probably print too... but that is unnecessary here
-    #
+      # Why? Probably for skipping q() lines 
+      # and probably print too... but that is unnecessary here
     # combine
     code_to_run <- c(old_code, options$code)
   }
   # write code to history file
-  write_utf8(code_to_run, con = rbCodePath)    
+  write_utf8(code_to_run, con = rbCodePath)
+  #
   # make a temporary file of rb code to execute
-  # we don't need to one-string code because
-  # batch can only call files with line-ends anyway
+     # we don't need to one-string code because
+     # batch can only call files with line-ends anyway
   tempF <- knitr:::wd_tempfile('rb', '.Rev')
   # write to file and add q() line
   write_utf8(c(options$code, "q()"), con = tempF)
