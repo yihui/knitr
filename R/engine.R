@@ -110,7 +110,7 @@ engine_output = function(options, code, out, extra = NULL) {
 eng_interpreted = function(options) {
   engine = options$engine
   code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')) {
-    f = wd_tempfile(engine, switch(engine, sas = '.sas', Rscript = '.R', stata = '.do',  '.txt'))
+    f = wd_tempfile(engine, switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', '.txt'))
     write_utf8(c(switch(
       engine,
       sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
@@ -138,19 +138,17 @@ eng_interpreted = function(options) {
       },
       f
     )
-
   } else paste(switch(
     engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -ep',
     mysql = '-e', node = '-e', octave = '--eval', perl = '-E', psql = '-c',
     python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(one_string(options$code)))
-
+  
   opts = get_engine_opts(options$engine.opts, engine)
   # FIXME: for these engines, the correct order is options + code + file
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
     paste(code, opts) else paste(opts, code)
   cmd = get_engine_path(options$engine.path, engine)
-  
   out = if (options$eval) {
     message('running: ', cmd, ' ', code)
     tryCatch(
@@ -165,8 +163,6 @@ eng_interpreted = function(options) {
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
   if (options$eval && engine %in% c('sas', 'stata') && file.exists(logf))
     out = c(read_utf8(logf), out)
-  #clip away header and source-reading message
-  if (options$eval && engine %in% 'rb') out = out[-(1:13)]
   engine_output(options, options$code, out)
 }
 
