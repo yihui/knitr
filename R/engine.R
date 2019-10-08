@@ -143,7 +143,7 @@ eng_interpreted = function(options) {
     mysql = '-e', node = '-e', octave = '--eval', perl = '-E', psql = '-c',
     python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(one_string(options$code)))
-  
+
   opts = get_engine_opts(options$engine.opts, engine)
   # FIXME: for these engines, the correct order is options + code + file
   code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
@@ -875,7 +875,7 @@ local({
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
-  cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
+  cat = eng_cat, asis = eng_asis, stan = eng_stan, rb = eng_rb, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
   python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
 )
