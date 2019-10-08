@@ -250,43 +250,142 @@ eng_julia = function(options) {
   JuliaCall::eng_juliacall(options)
 }
 
-
 ## RevBayes
 eng_rb = function(options) {
-# define variables from the knitr engine. Set up where to cache output, and to
-# use RevBayes as the engine
-  options$code = one_string(c(options$code, 'q()'))
-  opts = options$engine.opts
-  cache = "cache"
-  cmd = get_engine_path(options$engine.path, options$engine)
-
-# Create the cache directories and gather output in them
-#  dir.create(cache, showWarnings = FALSE)
-  opts$cleanupCacheDir = FALSE
-  f = "cache/history.Rev"
-  if (file.exists(normalizePath(f))){
-    old_code <- readLines(f, skip = -2)
-    print(old_code)
-    new_code <- c(old_code, options$code)
-    write(options$code, f, append = TRUE)
-  } else {
-    print(normalizePath(f))
-    write_utf8(con = f, options$code)
+  # options - variables from knitr - called herein:
+  # options$code - string, the code for that chunk
+  # options$error - logical, should it fail on an error
+  # options$eval - logical, should the code be evaluated
+  #
+  # options$engine - should be == 'rb'
+  # options$engine.path - path to rb  
+  #
+  # chunk counter
+  if(is.null(options$rb_chunk_count) | options$rb_chunk_count<1){
+    options$rb_chunk_count <- 1L
+  }else{
+    options$rb_chunk_count <- options$rb_chunk_count + 1L
   }
-#  on.exit(unlink(f), add = TRUE)
-
-    cmd = get_engine_path(options$engine.path, options$engine)
-
-    out <- tryCatch(
-      system2(cmd, f, stdout = TRUE, stderr = TRUE),
+  #
+  ############################################################
+  ## april seems to have based her function on eng_Rcpp
+  #
+  # early exit if evaluated output not requested
+  options$results = 'asis'
+  if (!options$eval){
+    return(engine_output(options, options$code, ''))
+  }
+  #
+  # set up path to rb
+  rbPath <- get_engine_path(options$engine.path, 'rb')
+  # options$engine.opts - opts for engines that should include 'rb'
+  # use get_engine_opts to pull out rb options
+  opts <- get_engine_opts(options$engine.opts, 'rb')
+  # engine specific options
+  #
+  # refreshHistoryRB 
+  # logical 
+  # controls whether previous .eng_rb.knitr.cache files should be deleted
+  # if not defined, default is TRUE
+  refreshHistoryRB <- opts$refreshHistoryRB
+  if(is.NULL(refreshHistoryRB){
+    refreshHistoryRB <- TRUE
+  }
+  # rbHistoryDirPath 
+  # string - path and name for rb history directory
+  # default is ".eng_rb.knitr.cache" in working dir
+  rbHistoryDirPath <- opts$rbHistoryDirPath
+  if(is.NULL(rbHistoryDirPath){
+    rbHistoryDirPath <- ".eng_rb.knitr.cache"
+  }
+  #############
+  rbOutPath <- paste0(rbHistoryDirPath, '/.eng_rb_out')
+  rbCodePath <- paste0(rbHistoryDirPath, '/.eng_rb_code') 
+  #
+  if(options$rb_chunk_count == 1L){
+    # this is the first time an rb code-chunk is run for this document
+    # chunk_counter() is a lot better than checking if files exist
+    # if (file.exists(normalizePath(f))){
+    # set prev_out artificially to 13
+    prev_out <- 13
+    #
+    if(dir.exists(rbHistoryDirPath) & refreshHistoryRB){
+      # DO OLD HISTORY FILES EXIST? DELETE THEM!
+      # need to get rid of old history
+      unlink(rbHistoryDirPath, recursive = TRUE)
+    }
+    #
+    # once old files are cleared (if they exist)
+    # Set up history directories 
+    dir.create(rbHistoryDirPath, showWarnings = FALSE)
+    #
+    # get code to run
+    code_to_run <- options$code
+    # write to history file
+    rbCodePath,
+    #
+  }else{    
+    # if FALSE, then this isn't the first chunk in a document
+    # 
+    # check to make sure history dir exists
+    if(!dir.exists(rbHistoryDirPath)){
+      "RevBayes code history directory not found at specified path for later rb chunks"
+    }
+    #
+    # get length of old out file
+    prev_out <- length(readLines(rbOutPath))
+    # get old code history
+    old_code <- readLines(rbCodePath) 
+    # april uses skip = -2   
+    # Why? Probably for skipping q() lines 
+    # nd probably print too... but that is unnecessary here
+    #
+    # combine
+    code_to_run <- c(old_code, options$code)
+  }
+  # write code to history file
+  write_utf8(code_to_run, con = rbCodePath)    
+  # make a temporary file of rb code to execute
+  # we don't need to one-string code because
+  # batch can only call files with line-ends anyway
+  tempF <- knitr:::wd_tempfile('rb', '.Rev')
+  # write to file and add q() line
+  write_utf8(c(options$code, "q()"), con = tempF)
+  # setup to delete temporary files for execution when done
+  on.exit(unlink(tempF), add = TRUE)
+  # correct order for rb is options + cmdArg + file
+  cmdArg = paste(opts, '-b', tempF)
+  #
+  # execute code
+  out = if (options$eval) {
+    message('running: ', 'rb', ' ', cmdArg)
+    tryCatch(
+      system2(rbPath, 
+              cmdArg, 
+              stdout = TRUE, 
+              stderr = TRUE, 
+              env = options$engine.env
+      ),
       error = function(e) {
         if (!options$error) stop(e)
+        paste('Error in running command', 'rb')
       }
     )
-  out = out[-(1:13)]
-
-
+  } else {''}
+  #
+  # chunk option error=FALSE means we need to signal the error
+  if (!options$error && !is.null(attr(out, 'status'))) {
+    stop(one_string(out))
   }
+  # write new out to .eng_rb_out
+  write_utf8(out, con = '.eng_rb_out')
+  #
+  # remove unwanted output lines
+  #clip away header and prev code
+  out = out[-(1:prev_out)]
+  # return output via engine_output
+  engine_output(options, options$code, out)  
+}
 
 ## STAN
 ##
