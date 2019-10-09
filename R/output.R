@@ -144,6 +144,7 @@ knit = function(
     opts_knit$set(output.dir = getwd()) # record working directory in 1st run
     knit_log$restore()
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
+    on.exit(rb_chunk_counter(reset = TRUE), add = TRUE) # restore revbayes counter
     adjust_opts_knit()
     # turn off fancy quotes, use a null pdf device to record graphics
     oopts = options(

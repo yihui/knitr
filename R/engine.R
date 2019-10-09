@@ -89,7 +89,7 @@ engine_output = function(options, code, out, extra = NULL) {
   out = sub('([^\n]+)$', '\\1\n', out)
   # replace the engine names for markup later, e.g. ```Rscript should be ```r
   options$engine = switch(
-    options$engine, mysql = 'sql', node = 'javascript', psql = 'sql', Rscript = 'r',
+    options$engine, mysql = 'sql', node = 'javascript', psql = 'sql', Rscript = 'r', rb = "RevBayes",
     options$engine
   )
   if (options$engine == 'stata') {
@@ -273,18 +273,17 @@ eng_rb = function(options) {
   opts <- get_engine_opts(options$engine.opts, 'rb')
   # engine specific options
   #
-  # options$freshHistoryRB 
+  # options$refreshHistoryRB 
     # logical 
-    # Controls whether previous .eng_rb.knitr.cache files should be deleted
-    # If not defined, default is TRUE - becomes FALSE once applied
-  # Should be set to TRUE or not set initially 
-    # used effectively as an indicator that this is the first rb chunk
+    # Controls whether previous .eng_rb.knitr.cache files
+       # should be deleted if this is the first rb chunk
+    # If not defined, default is TRUE
   if(options$rbDiagnosticMode){
-    message("options$freshHistoryRB =", options$freshHistoryRB)
+    message("options$refreshHistoryRB =", options$refreshHistoryRB)
     message(str(options))
     }
-  if(is.null(options$freshHistoryRB)){
-    options$freshHistoryRB <- TRUE
+  if(is.null(options$refreshHistoryRB)){
+    options$refreshHistoryRB <- TRUE
   }
   # options$rbHistoryDirPath 
     # string - path and name for rb history directory
@@ -297,39 +296,35 @@ eng_rb = function(options) {
   rbCodePath <- paste0(options$rbHistoryDirPath, '/.eng_rb_code') 
   #
   if(options$rbDiagnosticMode){
-    warning("options$freshHistoryRB = ", options$freshHistoryRB)
+    warning("options$refreshHistoryRB = ", options$refreshHistoryRB)
   }
   #
-  if(options$freshHistoryRB){
+  if(rb_chunk_counter() == 1L){
     # this is the first time an rb code-chunk is run for this document
     # set prev_out artificially to 13
     prev_out <- 13
     #
-    if(dir.exists(options$rbHistoryDirPath)){
+    if(dir.exists(options$rbHistoryDirPath) & options$refreshHistoryRB){
       # need to get rid of old history
       unlink(options$rbHistoryDirPath, recursive = TRUE)
     }
-    #
     # once old files are cleared (if they exist)
     # Set up history directories 
     dir.create(options$rbHistoryDirPath, showWarnings = FALSE)
     # get code to run
     code_to_run <- options$code
-    # change options$freshHistoryRB
-    options$freshHistoryRB <- FALSE
-    #
+    # change options$refreshHistoryRB
+    options$refreshHistoryRB <- FALSE
   }else{    
     # if FALSE, then this isn't the first chunk in a document
-    #
-    # check to make sure history dir exists
+    # error if history dir doesn't already exist (?)
     if(!dir.exists(options$rbHistoryDirPath)){
-      "RevBayes history directory not found at specified path for later rb chunks"
+      stop("RevBayes history directory not found at specified path for later rb chunks")
     }
     # get length of old out file
     prev_out <- length(readLines(rbOutPath))
     # get old code history
     old_code <- readLines(rbCodePath) 
-    # 
     # april uses skip = -2   
       # Why? Probably for skipping q() lines 
       # and probably print too... but that is unnecessary here
@@ -338,7 +333,6 @@ eng_rb = function(options) {
   }
   # write code to history file
   write_utf8(code_to_run, con = rbCodePath)
-  #
   # make a temporary file of rb code to execute
      # don't need to one-string code
   tempF <- knitr:::wd_tempfile('rb', '.Rev')
@@ -350,7 +344,6 @@ eng_rb = function(options) {
      }
   # correct order for rb is options + cmdArg + file
   cmdArg = paste(opts, '-b', tempF)
-  #
   # execute code
   out = if (options$eval) {
     message('running: ', 'rb', ' ', cmdArg)
@@ -367,16 +360,13 @@ eng_rb = function(options) {
       }
     )
   } else {''}
-  #
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out,'status'))) {
     stop(one_string(out))
   }
   # write new out to rb out
   write_utf8(out, con = rbOutPath)
-  #
-  # remove unwanted output lines
-  #clip away header and prev code
+  # remove unwanted prev header+code from out
   out = out[-(1:prev_out)]
   # return output via engine_output
   engine_output(options, options$code, out)  

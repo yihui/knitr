@@ -18,6 +18,9 @@ plot_counter = knit_counter(1L)
 shot_counter = knit_counter(1L)
 chunk_counter = knit_counter(1L)
 
+# count revbayes chunks
+rb_chunk_counter = knit_counter(1L)
+
 # a vectorized and better version than evaluate:::line_prompt
 line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('continue')) {
   # match a \n, then followed by any character (use zero width assertion)
