@@ -252,23 +252,13 @@ eng_rb = function(options) {
   # options$code - string, the code for that chunk
   # options$error - logical, should it fail on an error
   # options$eval - logical, should the code be evaluated
-  #
   # options$engine - should be == 'rb'
   # options$engine.path - path to rb  
   #
-  # chunk counter
-  if(is.null(options$rb_chunk_count)){
-    options$rb_chunk_count <- 1L
-  }else{
-    if(options$rb_chunk_count<1){
-      stop("how the heck did rb_chunk_count get less than 1")
-    }else{
-      options$rb_chunk_count <- options$rb_chunk_count + 1L
-    }
+  # set rbDiagnosticMode
+  if(is.null(options$rbDiagnosticMode)){
+    options$rbDiagnosticMode <- FALSE
   }
-  #
-  ############################################################
-  ## april seems to have based her function on eng_Rcpp
   #
   # early exit if evaluated output not requested
   options$results = 'asis'
@@ -283,54 +273,63 @@ eng_rb = function(options) {
   opts <- get_engine_opts(options$engine.opts, 'rb')
   # engine specific options
   #
-  # refreshHistoryRB 
-  # logical 
-  # controls whether previous .eng_rb.knitr.cache files should be deleted
-  # if not defined, default is TRUE
-  refreshHistoryRB <- options$refreshHistoryRB
-  if(is.null(refreshHistoryRB)){
-    refreshHistoryRB <- TRUE
+  # options$freshHistoryRB 
+    # logical 
+    # Controls whether previous .eng_rb.knitr.cache files should be deleted
+    # If not defined, default is TRUE - becomes FALSE once applied
+  # Should be set to TRUE or not set initially 
+    # used effectively as an indicator that this is the first rb chunk
+  if(options$rbDiagnosticMode){
+    message("options$freshHistoryRB =", options$freshHistoryRB)
+    message(str(options))
+    }
+  if(is.null(options$freshHistoryRB)){
+    options$freshHistoryRB <- TRUE
   }
-  # rbHistoryDirPath 
-  # string - path and name for rb history directory
-  # default is ".eng_rb.knitr.cache" in working dir
-  rbHistoryDirPath <- options$rbHistoryDirPath
-  if(is.null(rbHistoryDirPath)){
-    rbHistoryDirPath <- ".eng_rb.knitr.history"
+  # options$rbHistoryDirPath 
+    # string - path and name for rb history directory
+    # default is ".eng_rb.knitr.cache" in working dir
+  if(is.null(options$rbHistoryDirPath)){
+    options$rbHistoryDirPath <- ".eng_rb.knitr.history"
   }
   #############
-  rbOutPath <- paste0(rbHistoryDirPath, '/.eng_rb_out')
-  rbCodePath <- paste0(rbHistoryDirPath, '/.eng_rb_code') 
+  rbOutPath <- paste0(options$rbHistoryDirPath, '/.eng_rb_out')
+  rbCodePath <- paste0(options$rbHistoryDirPath, '/.eng_rb_code') 
   #
-  if(options$rb_chunk_count == 1L){
+  if(options$rbDiagnosticMode){
+    warning("options$freshHistoryRB = ", options$freshHistoryRB)
+  }
+  #
+  if(options$freshHistoryRB){
     # this is the first time an rb code-chunk is run for this document
-    # chunk_counter() is a lot better than checking if files exist
-    # if (file.exists(normalizePath(f))){
     # set prev_out artificially to 13
     prev_out <- 13
     #
-    if(dir.exists(rbHistoryDirPath) & refreshHistoryRB){
-      # DO OLD HISTORY FILES EXIST? DELETE THEM!
+    if(dir.exists(options$rbHistoryDirPath)){
       # need to get rid of old history
-      unlink(rbHistoryDirPath, recursive = TRUE)
+      unlink(options$rbHistoryDirPath, recursive = TRUE)
     }
     #
     # once old files are cleared (if they exist)
     # Set up history directories 
-    dir.create(rbHistoryDirPath, showWarnings = FALSE)
+    dir.create(options$rbHistoryDirPath, showWarnings = FALSE)
     # get code to run
     code_to_run <- options$code
+    # change options$freshHistoryRB
+    options$freshHistoryRB <- FALSE
+    #
   }else{    
     # if FALSE, then this isn't the first chunk in a document
     #
     # check to make sure history dir exists
-    if(!dir.exists(rbHistoryDirPath)){
-      "RevBayes code history directory not found at specified path for later rb chunks"
+    if(!dir.exists(options$rbHistoryDirPath)){
+      "RevBayes history directory not found at specified path for later rb chunks"
     }
     # get length of old out file
     prev_out <- length(readLines(rbOutPath))
     # get old code history
     old_code <- readLines(rbCodePath) 
+    # 
     # april uses skip = -2   
       # Why? Probably for skipping q() lines 
       # and probably print too... but that is unnecessary here
@@ -341,13 +340,14 @@ eng_rb = function(options) {
   write_utf8(code_to_run, con = rbCodePath)
   #
   # make a temporary file of rb code to execute
-     # we don't need to one-string code because
-     # batch can only call files with line-ends anyway
+     # don't need to one-string code
   tempF <- knitr:::wd_tempfile('rb', '.Rev')
   # write to file and add q() line
   write_utf8(c(options$code, "q()"), con = tempF)
   # setup to delete temporary files for execution when done
-  on.exit(unlink(tempF), add = TRUE)
+  if(!options$rbDiagnosticMode){
+     on.exit(unlink(tempF), add = TRUE)
+     }
   # correct order for rb is options + cmdArg + file
   cmdArg = paste(opts, '-b', tempF)
   #
@@ -363,13 +363,13 @@ eng_rb = function(options) {
       ),
       error = function(e) {
         if (!options$error) stop(e)
-        paste('Error in running command', 'rb')
+        paste('Error in running command rb:')
       }
     )
   } else {''}
   #
   # chunk option error=FALSE means we need to signal the error
-  if (!options$error && !is.null(attr(out, 'status'))) {
+  if (!options$error && !is.null(attr(out,'status'))) {
     stop(one_string(out))
   }
   # write new out to rb out
