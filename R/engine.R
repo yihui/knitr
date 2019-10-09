@@ -257,10 +257,14 @@ eng_rb = function(options) {
   # options$engine.path - path to rb  
   #
   # chunk counter
-  if(is.null(options$rb_chunk_count) | options$rb_chunk_count<1){
+  if(is.null(options$rb_chunk_count)){
     options$rb_chunk_count <- 1L
   }else{
-    options$rb_chunk_count <- options$rb_chunk_count + 1L
+    if(options$rb_chunk_count<1){
+      stop("how the heck did rb_chunk_count get less than 1")
+    }else{
+      options$rb_chunk_count <- options$rb_chunk_count + 1L
+    }
   }
   #
   ############################################################
@@ -273,7 +277,7 @@ eng_rb = function(options) {
   }
   #
   # set up path to rb
-  rbPath <- get_engine_path(options$engine.path, 'rb')
+  rbPath <- knitr:::get_engine_path(options$engine.path, 'rb')
   # options$engine.opts - opts for engines that should include 'rb'
   # use get_engine_opts to pull out rb options
   opts <- get_engine_opts(options$engine.opts, 'rb')
@@ -283,16 +287,16 @@ eng_rb = function(options) {
   # logical 
   # controls whether previous .eng_rb.knitr.cache files should be deleted
   # if not defined, default is TRUE
-  refreshHistoryRB <- opts$refreshHistoryRB
-  if(is.NULL(refreshHistoryRB)){
+  refreshHistoryRB <- options$refreshHistoryRB
+  if(is.null(refreshHistoryRB)){
     refreshHistoryRB <- TRUE
   }
   # rbHistoryDirPath 
   # string - path and name for rb history directory
   # default is ".eng_rb.knitr.cache" in working dir
-  rbHistoryDirPath <- opts$rbHistoryDirPath
-  if(is.NULL(rbHistoryDirPath)){
-    rbHistoryDirPath <- ".eng_rb.knitr.cache"
+  rbHistoryDirPath <- options$rbHistoryDirPath
+  if(is.null(rbHistoryDirPath)){
+    rbHistoryDirPath <- ".eng_rb.knitr.history"
   }
   #############
   rbOutPath <- paste0(rbHistoryDirPath, '/.eng_rb_out')
@@ -368,8 +372,8 @@ eng_rb = function(options) {
   if (!options$error && !is.null(attr(out, 'status'))) {
     stop(one_string(out))
   }
-  # write new out to .eng_rb_out
-  write_utf8(out, con = '.eng_rb_out')
+  # write new out to rb out
+  write_utf8(out, con = rbOutPath)
   #
   # remove unwanted output lines
   #clip away header and prev code
