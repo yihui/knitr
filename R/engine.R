@@ -291,9 +291,9 @@ eng_rb = function(options) {
   rbOutPath <- paste0(options$rbHistoryDirPath, '/.eng_rb_out')
   rbCodePath <- paste0(options$rbHistoryDirPath, '/.eng_rb_code') 
   #
-  if(options$rbDiagnosticMode){
-    warning("rb_chunk_counter = ", rb_chunk_counter(-1) )
-  }
+  #if(options$rbDiagnosticMode){
+  #message("rb_chunk_counter = ", rb_chunk_counter(-1) )
+  #}
   # check (and simultaneously update) rb_chunk_counter()
   if(rb_chunk_counter() == 1L){
     # this is the first time an rb code-chunk is run for this document
@@ -333,7 +333,7 @@ eng_rb = function(options) {
      # don't need to one-string code
   tempF <- knitr:::wd_tempfile('rb', '.Rev')
   # write to file and add q() line
-  write_utf8(c(options$code, "q()"), con = tempF)
+  write_utf8(c(code_to_run, "q()"), con = tempF)
   # setup to delete temporary files for execution when done
   if(!options$rbDiagnosticMode){
      on.exit(unlink(tempF), add = TRUE)
