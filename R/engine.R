@@ -321,9 +321,6 @@ eng_rb = function(options) {
     prev_out <- length(readLines(rbOutPath))
     # get old code history
     old_code <- readLines(rbCodePath) 
-    # april uses skip = -2   
-      # Why? Probably for skipping q() lines 
-      # and probably print too... but that is unnecessary here
     # combine
     code_to_run <- c(old_code, options$code)
   }
@@ -331,7 +328,7 @@ eng_rb = function(options) {
   write_utf8(code_to_run, con = rbCodePath)
   # make a temporary file of rb code to execute
      # don't need to one-string code
-  tempF <- knitr:::wd_tempfile('rb', '.Rev')
+  tempF <- knitr:::wd_tempfile('.rb', '.Rev')
   # write to file and add q() line
   write_utf8(c(code_to_run, "q()"), con = tempF)
   # setup to delete temporary files for execution when done
@@ -342,10 +339,9 @@ eng_rb = function(options) {
   cmdArg = paste(opts, '-b', tempF)
   # execute code
   out = if (options$eval) {
-    message('running: ', 'rb', ' ', cmdArg)
+    message(paste0('running Revbayes with cmd: rb ', cmdArg))
     tryCatch(
-      system2(rbPath, 
-              cmdArg, 
+      system2(rbPath, cmdArg, 
               stdout = TRUE, 
               stderr = TRUE, 
               env = options$engine.env
@@ -364,7 +360,6 @@ eng_rb = function(options) {
   write_utf8(out, con = rbOutPath)
   # remove unwanted prev header+code from out
   out = out[-(1:prev_out)]
-
   # return output via engine_output
   engine_output(options, options$code, out)  
 }
