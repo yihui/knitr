@@ -278,10 +278,6 @@ eng_rb = function(options) {
     # Controls whether previous .eng_rb.knitr.cache files
        # should be deleted if this is the first rb chunk
     # If not defined, default is TRUE
-  if(options$rbDiagnosticMode){
-    message("options$refreshHistoryRB =", options$refreshHistoryRB)
-    message(str(options))
-    }
   if(is.null(options$refreshHistoryRB)){
     options$refreshHistoryRB <- TRUE
   }
@@ -296,9 +292,9 @@ eng_rb = function(options) {
   rbCodePath <- paste0(options$rbHistoryDirPath, '/.eng_rb_code') 
   #
   if(options$rbDiagnosticMode){
-    warning("options$refreshHistoryRB = ", options$refreshHistoryRB)
+    warning("rb_chunk_counter = ", rb_chunk_counter(-1) )
   }
-  #
+  # check (and simultaneously update) rb_chunk_counter()
   if(rb_chunk_counter() == 1L){
     # this is the first time an rb code-chunk is run for this document
     # set prev_out artificially to 13
@@ -368,6 +364,7 @@ eng_rb = function(options) {
   write_utf8(out, con = rbOutPath)
   # remove unwanted prev header+code from out
   out = out[-(1:prev_out)]
+
   # return output via engine_output
   engine_output(options, options$code, out)  
 }
