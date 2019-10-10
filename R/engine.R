@@ -261,8 +261,8 @@ eng_rb = function(options) {
   }
   #
   # early exit if evaluated output not requested
-  options$results = 'asis'
   if (!options$eval){
+    options$results = 'asis'
     return(engine_output(options, options$code, ''))
   }
   #
@@ -362,8 +362,12 @@ eng_rb = function(options) {
   out = out[-(1:prev_out)]
   # remove unwanted leading + trailing white space 
   out = trimws(out)
-  # add numbers to each line
-  out = paste0("[",1:length(out),"] ",out)
+  # remove empty lines
+  out = out[!(out == "")]
+  if(length(out)>1){
+    # add numbers to each line
+    out = paste0("[",1:length(out),"] ",out)
+  }
   # return output via engine_output
   engine_output(options, code = options$code, out = out)  
 }
