@@ -360,8 +360,12 @@ eng_rb = function(options) {
   write_utf8(out, con = rbOutPath)
   # remove unwanted prev header+code from out
   out = out[-(1:prev_out)]
+  # remove unwanted leading + trailing white space 
+  out = trimws(out)
+  # add numbers to each line
+  out = paste0("[",1:length(out),"] ",out)
   # return output via engine_output
-  engine_output(options, options$code, out)  
+  engine_output(options, code = options$code, out = out)  
 }
 
 ## STAN
