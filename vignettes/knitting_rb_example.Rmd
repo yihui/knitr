@@ -1,0 +1,318 @@
+---
+title: "Discrete morphology - Models and Tree Inference"
+author: "April M. Wright"
+output:
+  html_document: default
+  pdf_document: default
+bibliography: ../refs.bib
+---
+
+
+```{r setup, include=FALSE}
+
+                
+```
+
+# Introduction to phylogenetic models of morphological evolution
+
+Morphological data is commonly used for estimating phylogenetic trees from fossils. This tutorial will focus on estimating phylognetic trees from _discrete_ characters, those characters which can be broken into non-overlapping character states. This type of data has been used for estimation of phylogenetic trees for many years. In the past twenty years, Bayesian methods for estimating phylogeny from this type of data have become increasingly common.
+
+This tutorial will give an overview of common models and assumptions when estimating a tree from discrete morphological data. We will use a dataset from @zamora2013. This dataset contains 23 extinct echinoderm taxa and 60 binary and multistate characters. 
+
+
+
+When using RevBayes in a notebook, please put any variables you want to echo to the screen last in the markdown cell. See the below cell for an example:
+
+```{rb}
+example <- 1.0 
+example
+```
+
+
+If you will not be printing output, please leave one blank line at the end of your cell. See below for an example:
+
+```{rb}
+trash <- 2
+ 
+```
+
+
+
+It is important to be aware that some PDF viewers may render some characters given as differently. Thus, if you copy and paste text from this PDF, you may introduce some incorrect characters. Because of this, we recommend that you type the instructions in this tutorial or copy them from the scripts provided.
+
+**Data and Files**
+
+>On your own computer, there should be a directory called **PaleoSoc_phylo_short_course_2019**. The data for this tutorial are in the subdirectory **data**
+>This directory should contain: [`Cinctans_for_RevBayes.nex`](data/Cinctans_for_RevBayes.nex).
+
+**Getting Started**
+
+>Create a new directory (in `PaleoSoc_phylo_short_course_2019`) called **scripts**.
+
+When you execute RevBayes in this exercise, you will do so within the main directory  (`PaleoSoc_phylo_short_course_2019`), thus, if you are using a Unix-based operating system, we recommend that you add the RevBayes binary to your path. Alternatively make sure that you set the  working directory to, for example, **PaleoSoc_phylo_short_course_2019** if this is the directory you stored the scripts and data in.
+
+**Creating Rev Files**
+
+In this exercise, you will work primarily in this R text editor and create a set of files that will be easily managed and interchanged. 
+
+In this section you will begin the file and write the Rev commands for loading in the taxon list and managing the data matrices. Then, starting in section Mk Model, you will move on to specifying each of the model components. Once the model specifications are complete, you will complete the script with the instructions given in section
+
+**Load Data Matrices**
+
+RevBayes uses the function `readDiscreteCharacterData()` to load a data matrix to the workspace from a formatted file. This function can be used for both molecular sequences and discrete morphological characters. Import the morphological character matrix and assign it the variable `morpho`. 
+
+
+
+```{rb, eval = TRUE}
+    morpho <- readDiscreteCharacterData("data/Cinctans.nex")
+    morpho
+```
+
+
+
+
+```{rb, eval = TRUE, freshHistoryRB =FALSE}
+morpho
+```
+
+**Create Helper Variables**
+
+We will dig into the model momentarily. But first, we will create some variables that are used in our analysis, but are not parameters. We will assign these variables with the constant node assignment operator, `<-`. Even though these values are used in our scripts, they are not parameters of the model. 
+
+We will first create a constant node called `num_taxa` that is equal to the number of species in our analysis (23). We will also create a constant node called `num_branches` representing the number of branches in the tree, and one of the taxon names. This list will be used to initialize the tree.
+
+
+
+```{rb eval = TRUE}
+    taxa <- morpho.names()
+    num_taxa <- morpho.size() 
+    num_branches <- 2 * num_taxa - 2
+    num_branches
+```
+
+
+Next, create two workspace variables called `mvi` and `mni`. These variables are iterators that will build a vector containing all of the MCMC moves used to propose new states for every stochastic node in the model graph. Each time a new move is added to the vector, `mvi` will be incremented by a
+value of `1`.
+
+
+
+```{rb eval = TRUE}
+    moves = VectorMoves()
+    monitors = VectorMonitors()
+```
+
+One important distinction here is that `mvi` is part of the RevBayes workspace and not the hierarchical model. Thus, we use the workspace assignment operator `=` instead of the constant node assignment `<-`.
+
+
+## The Mk Model 
+
+First, we will create a joint prior on the branch lengths.
+
+
+
+```{rb}
+    br_len_lambda ~ dnExp(0.2)
+    moves.append(mvScale(br_len_lambda, weight=2))
+    moves
+```
+
+This prior specifies that branch lengths will be drawns from an exponential distribution with parameter 0.2. If you're not familiar with what an exponential distribution, try setting the below code to `eval = FALSE` to run the R code and visualize the distribution. Set `eval = FALSE` when you are done. 
+
+
+```{r}
+library(ggplot2)
+draws <- rexp(10000, .2)
+hist(draws)
+```
+
+Now, we combine the branch lengths with a uniform prior on topology to make a tree. The uniform prior simply means no tree is more likely _a priori_ than any other. This can be easily changed, for example, to use a starting tree. We then specify MCMC moves on the topology, NNI and SPR. These moves propose new topologies. In this way, we propose and evaluate new sets of relationships. We perform these moves frequently because these parameters are really important. We will also move each of the branch lengths each iteration. The scale move scales the current branch legnth. Finally, we monitor the tree length. This is a quantity many biologists are interested in.
+    
+
+```{rb}
+    
+    phylogeny ~ dnUniformTopologyBranchLength(taxa, branchLengthDistribution=dnExponential(br_len_lambda))
+    moves.append(mvNNI(phylogeny, weight=num_branches/2.0))
+    moves.append(mvSPR(phylogeny, weight=num_branches/10.0))
+    moves.append(mvBranchLengthScale(phylogeny, weight=num_branches))
+    tree_length := phylogeny.treeLength()
+```
+
+
+
+We will add Gamma-distributed rate variation and specify moves on the parameter of the Gamma distribution.
+
+
+```{rb}
+    alpha_morpho ~ dnUniform( 0, 1E6 )
+    rates_morpho := fnDiscretizeGamma( alpha_morpho, alpha_morpho, 4 )
+    #Moves on the parameters of the Gamma distribution.
+    moves.append(mvScale(alpha_morpho, lambda=1, weight=2.0))
+```
+
+
+
+If you are unfamiliar with the gamma distribution, feel free to run the below code to visualize the distribution. 
+
+
+```r
+library(ggplot2)
+alpha_morpho <- runif(1, 0, 1E6 )
+
+draws <- rgamma(1000, shape = alpha_morpho, rate = alpha_morpho)
+hist(draws)
+```
+
+Next, we will create a $Q$-matrix. Recall that the Mk model is simply a generalization of the JC model. Therefore, we will create a $Q$-matrix using `fnJC`, which initializes $Q$-matrices with equal transition probabilities between all states. Since we have multistate data, we need to specify different $Q$-matrices for the different number of character states. For example, it would not make sense to model a 5-state character using a model saying there are only two character states. 
+
+To do this, we have written a loop in which we break up the data set into partitions according to the number of character states that character has. Then, we specify a $Q$-matrix in the correct dimensions. We do not retain any partitions that do not have any characters. For example, if we tried to partition the characters with 4 states, and there were none, we would not create a $Q$-matrix. 
+
+Then, we combine each partition, Gamma-distributed rate heterogeneity, and the tree together into what is called the `phyloCTMC`. This is the joint set of model paramters
+that will be used the model these data. Each partition is then clamped to its model.
+
+
+```{rb}
+n_max_states <- 7
+idx = 1
+morpho_bystate[1] <- morpho
+for (i in 2:n_max_states) {
+    # make local tmp copy of data
+    # only keep character blocks with state space equal to size i
+    morpho_bystate[i] <- morpho
+    morpho_bystate[i].setNumStatesPartition(i)
+	# get number of characters per character size wth i-sized states
+    nc = morpho_bystate[i].nchar()
+    # for non-empty character blocks
+    if (nc > 0) {
+        # make i-by-i rate matrix
+        q[idx] <- fnJC(i)
+# create model of evolution for the character block
+        m_morph[idx] ~ dnPhyloCTMC( tree=phylogeny,
+                                    Q=q[idx],
+                                    nSites=nc,
+                                    siteRates=rates_morpho,
+                                    type="Standard")
+
+        # attach the data
+	    m_morph[idx].clamp(morpho_bystate[i])
+
+        # increment counter
+        idx = idx + 1
+        idx
+    }
+}
+```
+
+
+
+
+We see some familiar pieces: tree, $Q$-matrix and `rates_morpho`.
+We also have two new keywords: data type and coding. The data type argument specifies the type of data - in our case, “Standard”, the specification for morphology.
+All of the components of the model are now specified.
+
+### Complete MCMC Analysis
+
+**Create Model Object**
+
+We can now create our workspace model variable with our fully specified model DAG. We will do this with the `model()` function and provide a single node in the graph (`phylogeny`).
+
+
+
+```{rb}
+    mymodel = model(phylogeny)
+```
+
+```
+##    Missing Variable:	Variable phylogeny does not exist
+##    Error:	Problem processing line 1 in file "rb2e6e1a5e3835.Rev"
+```
+
+The object `mymodel` is a wrapper around the entire model graph and allows us to pass the model to various functions that are specific to our MCMC analysis.
+
+
+**Specify Monitors and Output Filenames**
+
+The next important step for our Rev-script is to specify the
+monitors and output file names. For this, we create a vector called `monitors` that will each sample and record or output our MCMC.
+
+The first monitor we will create will monitor every named random variable in our model graph. This will include every stochastic and deterministic node using the `mnModel` monitor. The only parameter that is not included in the `mnModel` is the tree topology. Therefore, the parameters in the file written by this monitor are all numerical parameters written to a tab-separated text file that can be opened by accessory programs for evaluating such parameters. We will also name the
+output file for this monitor and indicate that we wish to sample our MCMC every 10 cycles.
+
+
+
+```{rb}
+    monitors.append( mnModel(filename="output/mk_gamma.log", printgen=10))
+```
+
+```
+##    Missing Variable:	Variable monitors does not exist
+##    Error:	Problem processing line 1 in file "rb2e6e2681cd20.Rev"
+```
+
+The `mnFile` monitor writes any parameter we specify to file. Thus, if we only cared about the branch lengths and nothing else (this is not a typical or recommended attitude for an analysis this complex) we wouldn't use the `mnModel` monitor above and just use the `mnFile` monitor to write a smaller and simpler output file. Since the tree topology is not included in the `mnModel` monitor (because it is not numerical), we will use `mnFile` to write the tree to file by specifying
+our `phylogeny` variable in the arguments.
+
+
+
+```{rb}
+   monitors.append( mnFile(filename="output/mk_gamma.trees", printgen=10, phylogeny))
+```
+
+
+The third monitor we will add to our analysis will print information to the screen. Like with `mnFile` we must tell `mnScreen` which parameters we'd like to see updated on the screen.
+
+
+
+```{rb}
+    monitors.append(mnScreen(printgen=100))
+```
+
+
+### Set-Up the MCMC
+
+Once we have set up our model, moves, and monitors, we can now create the workspace variable that defines our MCMC run. We do this using the `mcmc()` function that simply takes the three main analysis components as arguments.
+
+
+```{rb}
+    mymcmc = mcmc(mymodel, monitors, moves, nruns=2, combine="mixed")
+```
+
+
+
+The MCMC object that we named `mymcmc` has a member method called `.run()`. This will execute our analysis and we will set the chain length to `10000` cycles using the `generations` option.
+
+
+
+```{rb}
+    mymcmc.run(generations=10000, tuningInterval=200)
+```
+
+
+When the analysis is complete, RevBayes will quit and you will have a new directory called `output` that will contain all of the files you specified with the monitors.
+
+We can look at the log files in the software `Tracer`. We can also calculate several different types of summary trees: 
+
+```{rb}
+# Read in the tree trace and construct the maximum clade credibility (MCC) tree #
+trace = readTreeTrace("output/mk_gamma.trees")
+
+# Summarize tree trace and save MCC tree to file
+mccTree(trace, file="output/mk_gamma.mcc.tre" )
+```
+
+RevBayes can calculate MCC trees, MAP trees, and concensus trees. Have each person at your table try one, and see how they differ.
+
+
+We can also use R Packages, such as `RWTY` to look at convergence in our sample:
+
+```{r}
+library(rwty)
+my.trees <- load.trees("output/mk_gamma.trees", format="revbayes", logfile = "output/mk_gamma.log", skip = 0)
+makeplot.all.params(my.trees, burnin=0)
+```
+
+
+## References
+
+
+
+
