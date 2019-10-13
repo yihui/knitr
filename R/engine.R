@@ -253,19 +253,21 @@ eng_rb = function(options) {
   # options$error - logical, should it fail on an error
   # options$eval - logical, should the code be evaluated
   # options$engine - should be == 'rb'
-  # options$engine.path - path to rb  
+  # options$engine.path - path to rb
   #
+  # options$rbHistoryDirPath - directory to put history files
+  # options$refreshHistoryRB - remove existing history files if this is a new knitr doc
+  # options$rbDiagnosticMode - run diagnostic mode
+  ################################
   # set rbDiagnosticMode
   if(is.null(options$rbDiagnosticMode)){
     options$rbDiagnosticMode <- FALSE
   }
-  #
   # early exit if evaluated output not requested
   if (!options$eval){
     options$results = 'asis'
     return(engine_output(options, options$code, ''))
   }
-  #
   # set up path to rb
   rbPath <- knitr:::get_engine_path(options$engine.path, 'rb')
   # options$engine.opts - opts for engines that should include 'rb'
@@ -290,10 +292,9 @@ eng_rb = function(options) {
   #############
   rbOutPath <- paste0(options$rbHistoryDirPath, '/.eng_rb_out')
   rbCodePath <- paste0(options$rbHistoryDirPath, '/.eng_rb_code') 
-  #
-  #if(options$rbDiagnosticMode){
-  #message("rb_chunk_counter = ", rb_chunk_counter(-1) )
-  #}
+  rbOutPath <- normalizePath(rbOutPath, mustWork = FALSE)
+  rbCodePath <- normalizePath(rbCodePath, mustWork = FALSE)
+  #if(options$rbDiagnosticMode){ message("rb_chunk_counter = ", rb_chunk_counter(-1) )}
   # check (and simultaneously update) rb_chunk_counter()
   if(rb_chunk_counter() == 1L){
     # this is the first time an rb code-chunk is run for this document
@@ -329,6 +330,7 @@ eng_rb = function(options) {
   # make a temporary file of rb code to execute
      # don't need to one-string code
   tempF <- knitr:::wd_tempfile('.rb', '.Rev')
+  tempF <- normalizePath(tempF, mustWork = FALSE)
   # write to file and add q() line
   write_utf8(c(code_to_run, "q()"), con = tempF)
   # setup to delete temporary files for execution when done
