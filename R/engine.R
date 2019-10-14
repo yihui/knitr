@@ -275,15 +275,15 @@ eng_rb = function(options) {
   opts <- get_engine_opts(options$engine.opts, 'rb')
   # engine specific options
   #
-  # options$refreshHistoryRB 
-    # logical 
+  # options$refreshHistoryRB
+    # logical
     # Controls whether previous .eng_rb.knitr.cache files
        # should be deleted if this is the first rb chunk
     # If not defined, default is TRUE
   if(is.null(options$refreshHistoryRB)){
     options$refreshHistoryRB <- TRUE
   }
-  # options$rbHistoryDirPath 
+  # options$rbHistoryDirPath
     # string - path and name for rb history directory
     # default is ".eng_rb.knitr.cache" in working dir
   if(is.null(options$rbHistoryDirPath)){
@@ -291,7 +291,7 @@ eng_rb = function(options) {
   }
   #############
   rbOutPath <- paste0(options$rbHistoryDirPath, '/.eng_rb_out')
-  rbCodePath <- paste0(options$rbHistoryDirPath, '/.eng_rb_code') 
+  rbCodePath <- paste0(options$rbHistoryDirPath, '/.eng_rb_code')
   rbOutPath <- normalizePath(rbOutPath, mustWork = FALSE)
   rbCodePath <- normalizePath(rbCodePath, mustWork = FALSE)
   #if(options$rbDiagnosticMode){ message("rb_chunk_counter = ", rb_chunk_counter(-1) )}
@@ -306,13 +306,13 @@ eng_rb = function(options) {
       unlink(options$rbHistoryDirPath, recursive = TRUE)
     }
     # once old files are cleared (if they exist)
-    # Set up history directories 
+    # Set up history directories
     dir.create(options$rbHistoryDirPath, showWarnings = FALSE)
     # get code to run
     code_to_run <- options$code
     # change options$refreshHistoryRB
     options$refreshHistoryRB <- FALSE
-  }else{    
+  }else{
     # if FALSE, then this isn't the first chunk in a document
     # error if history dir doesn't already exist (?)
     if(!dir.exists(options$rbHistoryDirPath)){
@@ -321,7 +321,7 @@ eng_rb = function(options) {
     # get length of old out file
     prev_out <- length(readLines(rbOutPath))
     # get old code history
-    old_code <- readLines(rbCodePath) 
+    old_code <- readLines(rbCodePath)
     # combine
     code_to_run <- c(old_code, options$code)
   }
@@ -330,7 +330,11 @@ eng_rb = function(options) {
   # make a temporary file of rb code to execute
      # don't need to one-string code
   tempF <- knitr:::wd_tempfile('.rb', '.Rev')
-  tempF <- normalizePath(tempF, mustWork = FALSE)
+  tempF <- normalizePath(
+    tempF,
+    winslash = "/",
+    mustWork = FALSE
+  )
   # write to file and add q() line
   write_utf8(c(code_to_run, "q()"), con = tempF)
   # setup to delete temporary files for execution when done
@@ -343,9 +347,9 @@ eng_rb = function(options) {
   out = if (options$eval) {
     message(paste0('running Revbayes with cmd: rb ', cmdArg))
     tryCatch(
-      system2(rbPath, cmdArg, 
-              stdout = TRUE, 
-              stderr = TRUE, 
+      system2(rbPath, cmdArg,
+              stdout = TRUE,
+              stderr = TRUE,
               env = options$engine.env
       ),
       error = function(e) {
@@ -362,7 +366,7 @@ eng_rb = function(options) {
   write_utf8(out, con = rbOutPath)
   # remove unwanted prev header+code from out
   out = out[-(1:prev_out)]
-  # remove unwanted leading + trailing white space 
+  # remove unwanted leading + trailing white space
   out = trimws(out)
   # remove empty lines
   out = out[!(out == "")]
@@ -371,7 +375,7 @@ eng_rb = function(options) {
     out = paste0("[",1:length(out),"] ",out)
   }
   # return output via engine_output
-  engine_output(options, code = options$code, out = out)  
+  engine_output(options, code = options$code, out = out)
 }
 
 ## STAN
