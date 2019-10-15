@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.26
 
+## NEW FEATURES
+
+- `write_bib()` also includes all citation entries in the package's `CITATION` file if provided.
+
 ## MINOR CHANGES
 
 - `knit()` no longer adjusts the global R option `width`; previously it sets `options(width = 75)` by default.
