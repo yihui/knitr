@@ -971,6 +971,7 @@ one_string = function(x, ...) paste(x, ..., collapse = '\n')
 
 # c(1, 1, 1, 2, 3, 3) -> c(1a, 1b, 1c, 2a, 3a, 3b)
 make_unique = function(x) {
+  if (length(x) == 0) return(x)
   x2 = make.unique(x)
   if (all(i <- x2 == x)) return(x)
   x2[i] = paste0(x2[i], '.0')
