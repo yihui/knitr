@@ -5,8 +5,8 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE, 
-    envir = parent.frame(), encoding = "UTF-8")
+knit(input, output = NULL, tangle = FALSE, text = NULL,
+  quiet = FALSE, envir = parent.frame(), encoding = "UTF-8")
 
 purl(..., documentation = 1L)
 }

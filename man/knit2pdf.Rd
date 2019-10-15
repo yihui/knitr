@@ -4,8 +4,8 @@
 \alias{knit2pdf}
 \title{Convert Rnw or Rrst files to PDF}
 \usage{
-knit2pdf(input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = FALSE, 
-    ...)
+knit2pdf(input, output = NULL, compiler = NULL,
+  envir = parent.frame(), quiet = FALSE, ...)
 }
 \arguments{
 \item{input}{Path to the input file.}

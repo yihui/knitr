@@ -5,8 +5,9 @@
 \alias{read_demo}
 \title{Read chunks from an external script}
 \usage{
-read_chunk(path, lines = read_utf8(path), labels = NULL, from = NULL, to = NULL, 
-    from.offset = 0L, to.offset = 0L, roxygen_comments = TRUE)
+read_chunk(path, lines = read_utf8(path), labels = NULL, from = NULL,
+  to = NULL, from.offset = 0L, to.offset = 0L,
+  roxygen_comments = TRUE)
 
 read_demo(topic, package = NULL, ...)
 }

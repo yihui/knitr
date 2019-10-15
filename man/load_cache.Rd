@@ -4,8 +4,8 @@
 \alias{load_cache}
 \title{Load the cache database of a code chunk}
 \usage{
-load_cache(label, object, notfound = "NOT AVAILABLE", 
-    path = opts_chunk$get("cache.path"), lazy = TRUE)
+load_cache(label, object, notfound = "NOT AVAILABLE",
+  path = opts_chunk$get("cache.path"), lazy = TRUE)
 }
 \arguments{
 \item{label}{The chunk label of the code chunk that has a cache database.}

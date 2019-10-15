@@ -4,7 +4,8 @@
 \alias{Sweave2knitr}
 \title{Convert Sweave to knitr documents}
 \usage{
-Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file), text = NULL)
+Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file),
+  text = NULL)
 }
 \arguments{
 \item{file}{Path to the Rnw file (must be encoded in UTF-8).}

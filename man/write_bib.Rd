@@ -4,8 +4,8 @@
 \alias{write_bib}
 \title{Generate BibTeX bibliography databases for R packages}
 \usage{
-write_bib(x = .packages(), file = "", tweak = TRUE, width = NULL, 
-    prefix = getOption("knitr.bib.prefix", "R-"))
+write_bib(x = .packages(), file = "", tweak = TRUE, width = NULL,
+  prefix = getOption("knitr.bib.prefix", "R-"))
 }
 \arguments{
 \item{x}{Package names. Packages which are not installed are ignored.}
