@@ -4,7 +4,7 @@
 \name{knit_engines}
 \alias{knit_engines}
 \title{Engines of other languages}
-\format{An object of class \code{list} of length 5.}
+\format{An object of class \code{list} of length 6.}
 \usage{
 knit_engines
 }

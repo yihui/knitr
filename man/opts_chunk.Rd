@@ -5,7 +5,7 @@
 \alias{opts_chunk}
 \alias{opts_current}
 \title{Default and current chunk options}
-\format{An object of class \code{list} of length 5.}
+\format{An object of class \code{list} of length 6.}
 \usage{
 opts_chunk
 
