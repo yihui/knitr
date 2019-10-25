@@ -23,6 +23,9 @@ new_defaults = function(value = list()) {
     if (length(dots)) defaults <<- merge(dots)
     invisible(NULL)
   }
+  delete = function(keys) {
+    for (k in keys) defaults[[k]] <<- NULL
+  }
   merge = function(values) merge_list(defaults, values)
   restore = function(target = value) defaults <<- target
   append = function(...) {
@@ -32,7 +35,10 @@ new_defaults = function(value = list()) {
     invisible(NULL)
   }
 
-  list(get = get, set = set, append = append, merge = merge, restore = restore)
+  list(
+    get = get, set = set, delete = delete,
+    append = append, merge = merge, restore = restore
+  )
 }
 
 #' Default and current chunk options
