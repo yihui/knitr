@@ -136,7 +136,7 @@ Suggests:
     showtext,
     tibble,
     sass,
-    styler
+    styler (>= 1.2.0)
 License: GPL
 URL: https://yihui.name/knitr/
 BugReports: https://github.com/yihui/knitr/issues
