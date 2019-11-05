@@ -971,3 +971,15 @@ digest3 = function(x) {
 
 # collapse by \n
 one_string = function(x, ...) paste(x, ..., collapse = '\n')
+
+# c(1, 1, 1, 2, 3, 3) -> c(1a, 1b, 1c, 2a, 3a, 3b)
+make_unique = function(x) {
+  if (length(x) == 0) return(x)
+  x2 = make.unique(x)
+  if (all(i <- x2 == x)) return(x)
+  x2[i] = paste0(x2[i], '.0')
+  i = as.numeric(sub('.*[.]([0-9]+)$', '\\1', x2)) + 1
+  s = letters[i]
+  s = ifelse(is.na(s), i, s)
+  paste0(x, s)
+}

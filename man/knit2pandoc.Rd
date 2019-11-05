@@ -5,8 +5,9 @@
 \title{Convert various input files to various output files using \code{knit()} and
 Pandoc}
 \usage{
-knit2pandoc(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE, 
-    envir = parent.frame(), to = "html", pandoc_wrapper = NULL, ..., encoding = "UTF-8")
+knit2pandoc(input, output = NULL, tangle = FALSE, text = NULL,
+  quiet = FALSE, envir = parent.frame(), to = "html",
+  pandoc_wrapper = NULL, ..., encoding = "UTF-8")
 }
 \arguments{
 \item{input}{Path to the input file.}

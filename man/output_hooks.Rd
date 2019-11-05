@@ -25,7 +25,8 @@ render_listings()
 
 render_markdown(strict = FALSE, fence_char = "`")
 
-render_jekyll(highlight = c("pygments", "prettify", "none"), extra = "")
+render_jekyll(highlight = c("pygments", "prettify", "none"),
+  extra = "")
 
 render_rst(strict = FALSE)
 
