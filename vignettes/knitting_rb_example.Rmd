@@ -2,16 +2,10 @@
 title: "Discrete morphology - Models and Tree Inference"
 author: "April M. Wright"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 bibliography: ../refs.bib
 ---
-
-
-```{r setup, include=FALSE}
-
-                
-```
 
 # Introduction to phylogenetic models of morphological evolution
 
@@ -63,7 +57,7 @@ RevBayes uses the function `readDiscreteCharacterData()` to load a data matrix t
 
 
 
-```{rb, eval = TRUE}
+```{rb}
     morpho <- readDiscreteCharacterData("data/Cinctans.nex")
     morpho
 ```
@@ -71,7 +65,7 @@ RevBayes uses the function `readDiscreteCharacterData()` to load a data matrix t
 
 
 
-```{rb, eval = TRUE, freshHistoryRB =FALSE}
+```{rb, eval = TRUE}
 morpho
 ```
 
@@ -154,7 +148,7 @@ We will add Gamma-distributed rate variation and specify moves on the parameter 
 If you are unfamiliar with the gamma distribution, feel free to run the below code to visualize the distribution. 
 
 
-```r
+```{r}
 library(ggplot2)
 alpha_morpho <- runif(1, 0, 1E6 )
 
@@ -221,10 +215,7 @@ We can now create our workspace model variable with our fully specified model DA
     mymodel = model(phylogeny)
 ```
 
-```
-##    Missing Variable:	Variable phylogeny does not exist
-##    Error:	Problem processing line 1 in file "rb2e6e1a5e3835.Rev"
-```
+
 
 The object `mymodel` is a wrapper around the entire model graph and allows us to pass the model to various functions that are specific to our MCMC analysis.
 
@@ -243,10 +234,7 @@ output file for this monitor and indicate that we wish to sample our MCMC every 
     monitors.append( mnModel(filename="output/mk_gamma.log", printgen=10))
 ```
 
-```
-##    Missing Variable:	Variable monitors does not exist
-##    Error:	Problem processing line 1 in file "rb2e6e2681cd20.Rev"
-```
+
 
 The `mnFile` monitor writes any parameter we specify to file. Thus, if we only cared about the branch lengths and nothing else (this is not a typical or recommended attitude for an analysis this complex) we wouldn't use the `mnModel` monitor above and just use the `mnFile` monitor to write a smaller and simpler output file. Since the tree topology is not included in the `mnModel` monitor (because it is not numerical), we will use `mnFile` to write the tree to file by specifying
 our `phylogeny` variable in the arguments.
