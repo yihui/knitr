@@ -23,27 +23,15 @@ example
 ```
 
 
-If you will not be printing output, please leave one blank line at the end of your cell. See below for an example:
-
-```{rb}
-trash <- 2
- 
-```
-
-
-
-It is important to be aware that some PDF viewers may render some characters given as differently. Thus, if you copy and paste text from this PDF, you may introduce some incorrect characters. Because of this, we recommend that you type the instructions in this tutorial or copy them from the scripts provided.
-
 **Data and Files**
 
->On your own computer, there should be a directory called **PaleoSoc_phylo_short_course_2019**. The data for this tutorial are in the subdirectory **data**
+> The data for this example are in the subdirectory **data**
 >This directory should contain: [`Cinctans_for_RevBayes.nex`](data/Cinctans_for_RevBayes.nex).
 
 **Getting Started**
 
->Create a new directory (in `PaleoSoc_phylo_short_course_2019`) called **scripts**.
 
-When you execute RevBayes in this exercise, you will do so within the main directory  (`PaleoSoc_phylo_short_course_2019`), thus, if you are using a Unix-based operating system, we recommend that you add the RevBayes binary to your path. Alternatively make sure that you set the  working directory to, for example, **PaleoSoc_phylo_short_course_2019** if this is the directory you stored the scripts and data in.
+When you execute RevBayes in this exercise, you will do so within RStudio. If you are on Windows or Linux, if RevBayes is in your path, RStudio will automatically find the executeable. If you are on Mac, starting RStudio from the commandline with `open -a RStudio` is the easiest way to mimic this behavior.
 
 **Creating Rev Files**
 
