@@ -18,7 +18,7 @@ before_install:
         exit 0;
       fi;
     fi
-  - "curl https://xran.yihui.org/.gitconfig -o ~/.gitconfig"
+  - "curl -L https://xran.yihui.org/.gitconfig -o ~/.gitconfig"
   - Rscript -e 'update.packages(.libPaths()[1], ask = FALSE)'
   - Rscript -e "if (!require('covr')) install.packages('covr')"
 
@@ -59,4 +59,4 @@ script:
 after_success:
   - "[ $TARGET = travis ] && Rscript -e 'covr::codecov()' || true"
   - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
-  - "[ $TARGET = integration ] && (curl https://xran.yihui.org/r-xran | bash)"
+  - "[ $TARGET = integration ] && (curl -L https://xran.yihui.org/r-xran | bash)"
