@@ -137,7 +137,7 @@ parse_params = function(params) {
     eval(parse_only(paste('alist(', quote_label(params), ')'))),
     error = function(e) {
       message('(*) NOTE: I saw chunk options "', params,
-              '"\n please go to https://yihui.name/knitr/options',
+              '"\n please go to https://yihui.org/knitr/options',
               '\n (it is likely that you forgot to quote "character" options)')
     })
 
@@ -267,7 +267,7 @@ print.inline = function(x, ...) {
 #'   that future chunks can (re)use the code by chunk label references. If an
 #'   external chunk has the same label as a chunk in the current session, chunk
 #'   label references by future chunks will refer to the external chunk.
-#' @references \url{https://yihui.name/knitr/demo/externalization/}
+#' @references \url{https://yihui.org/knitr/demo/externalization/}
 #' @note This function can only be used in a chunk which is \emph{not} cached
 #'   (chunk option \code{cache = FALSE}), and the code is read and stored in the
 #'   current session \emph{without} being executed (to actually run the code,

@@ -20,7 +20,7 @@
 #' @param options A list of the current chunk options.
 #' @rdname hook_plot
 #' @return A character string of code, with plot filenames wrapped.
-#' @references \url{https://yihui.name/knitr/hooks/}
+#' @references \url{https://yihui.org/knitr/hooks/}
 #' @seealso \code{\link{hook_plot_custom}}
 #' @export
 #' @examples # this is what happens for a chunk like this
@@ -249,7 +249,7 @@ hook_plot_tex = function(x, options) {
 #' @rdname output_hooks
 #' @return \code{NULL}; corresponding hooks are set as a side effect
 #' @export
-#' @references See output hooks in \url{https://yihui.name/knitr/hooks/}.
+#' @references See output hooks in \url{https://yihui.org/knitr/hooks/}.
 #'
 #'   Jekyll and Liquid:
 #'   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions};
@@ -342,7 +342,7 @@ render_listings = function() {
 #'   you to use the default output hooks for LaTeX (not Sweave or listings), and
 #'   every figure/table environment must have a label.
 #' @export
-#' @references \url{https://yihui.name/knitr/hooks/}
+#' @references \url{https://yihui.org/knitr/hooks/}
 #' @examples \dontrun{knit_hooks$set(document = hook_movecode)}
 #' # see example 103 at https://github.com/yihui/knitr-examples
 hook_movecode = function(x) {

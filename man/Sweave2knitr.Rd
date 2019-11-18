@@ -79,7 +79,7 @@ unlink("Sweave-test-knitr.Rnw")
 }
 \references{
 The motivation of the changes in the syntax:
-  \url{https://yihui.name/knitr/demo/sweave/}
+  \url{https://yihui.org/knitr/demo/sweave/}
 }
 \seealso{
 \code{\link{Sweave}}, \code{\link{gsub}}

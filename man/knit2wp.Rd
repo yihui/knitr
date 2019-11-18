@@ -49,7 +49,7 @@ This function will convert the encoding of the post and the title to
 # see the reference
 }
 \references{
-\url{https://yihui.name/knitr/demo/wordpress/}
+\url{https://yihui.org/knitr/demo/wordpress/}
 }
 \author{
 William K. Morris, Yihui Xie, and Jared Lander

@@ -14,9 +14,9 @@ output: knitr:::html_vignette
 The **knitr** package [@R-knitr] is an alternative tool to Sweave based on a
 different design with more features. This document is not an introduction,
 but only serves as a placeholder to guide you to the real manuals, which are
-available on the package website <https://yihui.name/knitr/>^[e.g. the [main
-manual](https://yihui.name/knitr/demo/manual/) and the [graphics
-manual](https://yihui.name/knitr/demo/graphics/)], and remember to read the help pages of
+available on the package website <https://yihui.org/knitr/>^[e.g. the [main
+manual](https://yihui.org/knitr/demo/manual/) and the [graphics
+manual](https://yihui.org/knitr/demo/graphics/)], and remember to read the help pages of
 functions in this package. There is a book [@xie2013] for this package, but
 it may not be useful to those who prefer digging out information on the web.
 

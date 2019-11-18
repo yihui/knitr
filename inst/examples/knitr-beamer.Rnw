@@ -65,7 +65,7 @@ to work is trivial
 
 \begin{enumerate}
 \item Install the \textbf{knitr} package in \emph{R}
-\item Read \url{https://yihui.name/knitr/demo/lyx/}
+\item Read \url{https://yihui.org/knitr/demo/lyx/}
 \end{enumerate}
 \item If you use Sweave or \textbf{knitr} with Beamer in \LyX{}, you must
 use the\emph{ FragileFrame} environment for the frames that contain

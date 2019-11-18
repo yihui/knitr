@@ -44,5 +44,5 @@ This function is not supposed be called directly like
 # FALSE)}
 }
 \references{
-\url{https://yihui.name/knitr/demo/child/}
+\url{https://yihui.org/knitr/demo/child/}
 }

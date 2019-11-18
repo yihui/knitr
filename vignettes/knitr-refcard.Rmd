@@ -15,7 +15,7 @@ output:
 
 `opts_chunk` controls global chunk options, e.g.
 `opts_chunk$set(tidy = FALSE)`, which can be overridden by local chunk
-options. See all options at <https://yihui.name/knitr/options/>; some
+options. See all options at <https://yihui.org/knitr/options/>; some
 frequently used options:
 
 eval
@@ -63,11 +63,11 @@ engine
 :   insert an R script into a template and compile the document
 
 `knit_hooks$set()`
-:   set or reset chunk and output [hooks](https://yihui.name/knitr/hooks/)
+:   set or reset chunk and output [hooks](https://yihui.org/knitr/hooks/)
 
 # Resources
 
--   homepage: <https://yihui.name/knitr/>
+-   homepage: <https://yihui.org/knitr/>
 -   development repository: <https://github.com/yihui/knitr>
     ([CRAN](http://cran.rstudio.com/package=knitr),
 -   examples: <https://github.com/yihui/knitr-examples>

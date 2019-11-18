@@ -4,7 +4,7 @@
 [![Status da Cobertura de Código](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://codecov.io/github/yihui/knitr?branch=master)
 [![Downloads do espelho RStudio CRAN](http://cranlogs.r-pkg.org/badges/knitr)](https://cran.r-project.org/package=knitr)
 
-O pacote R **knitr** é um motor de programação literata (o *literate programming* de Donald Knuth) de propósito geral, com API's leves desenhadas para dar aos usuários controle total das saídas, sem trabalho pesado de codificação. Ele combina muitas funcionalidades em um único pacote com pequenos ajustes motivados pelo meu uso diário do Sweave. Vejam a [homepage](https://yihui.name/knitr/) do pacote para detalhes e exemplos. Vejam os [FAQ's](https://yihui.name/knitr/faq/) para uma lista de perguntas (incluindo sobre onde levantar questões).
+O pacote R **knitr** é um motor de programação literata (o *literate programming* de Donald Knuth) de propósito geral, com API's leves desenhadas para dar aos usuários controle total das saídas, sem trabalho pesado de codificação. Ele combina muitas funcionalidades em um único pacote com pequenos ajustes motivados pelo meu uso diário do Sweave. Vejam a [homepage](https://yihui.org/knitr/) do pacote para detalhes e exemplos. Vejam os [FAQ's](https://yihui.org/knitr/faq/) para uma lista de perguntas (incluindo sobre onde levantar questões).
 
 ## Instalação
 
@@ -84,7 +84,7 @@ knit(input)
 
 Se as opções não forem explicitadas, **knitr** vai tentar adivinhar
 configurações-padrão razoáveis. Alguns manuais estão disponíveis, como o
-[manual principal](https://yihui.name/knitr/demo/manual/), e o [manual de gráficos](https://yihui.name/knitr/demo/graphics/). Para uma referência
+[manual principal](https://yihui.org/knitr/demo/manual/), e o [manual de gráficos](https://yihui.org/knitr/demo/graphics/). Para uma referência
 organizada, ver o [livro do knitr](https://amzn.com/1498716962).
 
 ## Licença

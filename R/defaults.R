@@ -56,10 +56,10 @@ new_defaults = function(value = list()) {
 #' options in a separate chunk.
 #'
 #' See \code{str(knitr::opts_chunk$get())} for a list of default chunk options.
-#' @references Usage: \url{https://yihui.name/knitr/objects/}
+#' @references Usage: \url{https://yihui.org/knitr/objects/}
 #'
 #'   A list of available options:
-#'   \url{https://yihui.name/knitr/options/#chunk_options}
+#'   \url{https://yihui.org/knitr/options/#chunk_options}
 #' @note \code{opts_current} should be treated as read-only and you are supposed
 #'   to only query its values via \code{opts_current$get()}. Technically you
 #'   could also call \code{opts_current$set()} to change the values, but you are
@@ -151,10 +151,10 @@ set_alias = function(...) {
 #' options in \file{~/.Rprofile} without loading \pkg{knitr}.
 #'
 #' See \code{str(knitr::opts_knit$get())} for a list of default package options.
-#' @references Usage: \url{https://yihui.name/knitr/objects/}
+#' @references Usage: \url{https://yihui.org/knitr/objects/}
 #'
 #'   A list of available options:
-#'   \url{https://yihui.name/knitr/options/#package_options}
+#'   \url{https://yihui.org/knitr/options/#package_options}
 #' @export
 #' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
 #' if (interactive()) {

@@ -80,7 +80,7 @@ You can use \code{\link{knit_hooks}} to further customize output hooks; see
 references.
 }
 \references{
-See output hooks in \url{https://yihui.name/knitr/hooks/}.
+See output hooks in \url{https://yihui.org/knitr/hooks/}.
 
   Jekyll and Liquid:
   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions};

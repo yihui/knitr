@@ -43,7 +43,7 @@
 
 - The `input` argument of `knitr::knit()` must be a file path (a character string). It can no longer be connections.
 
-- The `encoding` argument of `knitr::knit()` is ignored. The encoding is always assumed to be UTF-8. Please see https://yihui.name/en/2018/11/biggest-regret-knitr/ for more info.
+- The `encoding` argument of `knitr::knit()` is ignored. The encoding is always assumed to be UTF-8. Please see https://yihui.org/en/2018/11/biggest-regret-knitr/ for more info.
 
 ## BUG FIXES
 
@@ -89,7 +89,7 @@
 
 - Partially reverted the solution for #1403 in favor of fixing the more surprising issue #1708, i.e., avoid false positive cache dependencies among chunks more than false negative dependencies when the chunk option `autodep = TRUE` (thanks, @fountainer).
 
-- The LaTeX package `framed.sty` is no longer bundled with the **knitr** package. This should only affect users who write `.Rnw` documents. If `framed.sty` is missing in your LaTeX distribution, you will have to install it by yourself. You may also consider TinyTeX (https://yihui.name/tinytex/), which has included this LaTeX package.
+- The LaTeX package `framed.sty` is no longer bundled with the **knitr** package. This should only affect users who write `.Rnw` documents. If `framed.sty` is missing in your LaTeX distribution, you will have to install it by yourself. You may also consider TinyTeX (https://yihui.org/tinytex/), which has included this LaTeX package.
 
 # CHANGES IN knitr VERSION 1.22
 
@@ -123,7 +123,7 @@
 
 ## MAJOR CHANGES
 
-- `knitr::knit()` starts to warn against non-UTF8 encodings ([Why?](https://yihui.name/en/2018/11/biggest-regret-knitr/)). In the future, we will only support UTF-8 input. If your input file is not encoded in UTF-8, we strongly recommend that you re-save it with UTF-8.
+- `knitr::knit()` starts to warn against non-UTF8 encodings ([Why?](https://yihui.org/en/2018/11/biggest-regret-knitr/)). In the future, we will only support UTF-8 input. If your input file is not encoded in UTF-8, we strongly recommend that you re-save it with UTF-8.
 
 - Removed the `encoding` arguments in `knitr::pandoc()`, `knitr::knit2pdf()`, `knitr2wp()`, and `knitr::Sweave2knitr()`. The input files must be encoded in UTF-8.
 
@@ -139,9 +139,9 @@
 
 ## NEW FEATURES
 
-- Added **styler** support: the chunk option `tidy = 'styler'`, the code will be reformatted using the **styler** package. The chunk option `tidy = TRUE` means `tidy = 'formatR'` and still uses `formatR::tidy_source()` to reformat the code. The chunk option `tidy` can also take a custom function to reformat the code. See the documentation for details: https://yihui.name/knitr/options/ (thanks, @lorenzwalthert, #1581).
+- Added **styler** support: the chunk option `tidy = 'styler'`, the code will be reformatted using the **styler** package. The chunk option `tidy = TRUE` means `tidy = 'formatR'` and still uses `formatR::tidy_source()` to reformat the code. The chunk option `tidy` can also take a custom function to reformat the code. See the documentation for details: https://yihui.org/knitr/options/ (thanks, @lorenzwalthert, #1581).
 
-- Added a new hook function `hook_gifski()` to create a GIF animation from plots in a code chunk. To enable this hook, you may `install.packages('gifski')` and set the chunk option `animation.hook='gifski'`. See https://yihui.name/en/2018/08/gifski-knitr/ for examples.
+- Added a new hook function `hook_gifski()` to create a GIF animation from plots in a code chunk. To enable this hook, you may `install.packages('gifski')` and set the chunk option `animation.hook='gifski'`. See https://yihui.org/en/2018/08/gifski-knitr/ for examples.
 
 - Added a new object `cache_engines` for other language engines to handle caching. See `?knitr::cache_engines` for details (thanks, @tmastny, #1518).
 
@@ -916,7 +916,7 @@
 
 ## NEW FEATURES
 
-- the cache system is more granular now: instead of the binary option `cache = TRUE / FALSE`, we can specify `cache = 0, 1, 2, 3` (`TRUE` indicates 3, and `FALSE` indicates 0; for 1 and 2, see the documentation for `cache`: https://yihui.name/knitr/options); this means we may change the chunk options involved only with output rendering (e.g. from `echo = TRUE` to `FALSE`, or set `fig.cap = 'a new caption'`) without breaking the cache (thanks, Jeroen Ooms, Clark Kogan, and Roman Lustrik, #396, #536)
+- the cache system is more granular now: instead of the binary option `cache = TRUE / FALSE`, we can specify `cache = 0, 1, 2, 3` (`TRUE` indicates 3, and `FALSE` indicates 0; for 1 and 2, see the documentation for `cache`: https://yihui.org/knitr/options); this means we may change the chunk options involved only with output rendering (e.g. from `echo = TRUE` to `FALSE`, or set `fig.cap = 'a new caption'`) without breaking the cache (thanks, Jeroen Ooms, Clark Kogan, and Roman Lustrik, #396, #536)
 
 - added two new vignette engines called `docco_linear` and `docco_classic` using the Docco styles (http://jashkenas.github.io/docco/); see `browseVignettes(package = 'knitr')` for examples
 
@@ -934,7 +934,7 @@
 
 - **knitr** formally depends on the **highr** package now (for syntax highlighting of LaTeX and HTML)
 
-- the package option `stop_on_error` has been deprecated; now it is much easier to specify whether you want to stop on errors or not by using the existing chunk option `error`; if you want to stop, use `error=FALSE`; see the documentation for details: https://yihui.name/knitr/options
+- the package option `stop_on_error` has been deprecated; now it is much easier to specify whether you want to stop on errors or not by using the existing chunk option `error`; if you want to stop, use `error=FALSE`; see the documentation for details: https://yihui.org/knitr/options
 
 - the meanings of the chunk options `warning` and `message` when they take the value `FALSE` have also changed: `FALSE` means the warnings/messages will be printed in the R console and not recorded; this makes it easier to know when/where the warnings/messages were produced during `knit()`
 
@@ -1054,7 +1054,7 @@
 
 - multiple WebGL objects from the **rgl** package can be generated in the same web page now; each object is uniquely identified by the corresponding chunk label; see https://dl.dropbox.com/u/15335397/misc/webgl-rmd.html for an example (#494) (thanks, Carson Sievert)
 
-- if multiple graphical devices are used (the chunk option `dev` is a vector of length greater than 1), the chunk option `dev.args` can be a named list of lists of device arguments, with each element a list of arguments to be passed to the single device; see https://yihui.name/knitr/options
+- if multiple graphical devices are used (the chunk option `dev` is a vector of length greater than 1), the chunk option `dev.args` can be a named list of lists of device arguments, with each element a list of arguments to be passed to the single device; see https://yihui.org/knitr/options
 
 - as announced in the last version, R 3.0.0 will support non-Sweave vignettes; now it is also possible to compile R HTML vignettes via **knitr** since `*.Rhtml` files are also registered by **knitr** as vignette files
 
@@ -1098,7 +1098,7 @@
 
 - the package option `stop_on_error` is set to `2` now when building package vignettes, which means R will stop on errors in vignettes; this makes it easier to find out possible problems in vignettes during `R CMD build`
 
-- the document hook `hook_rjournal()` was removed; it was too hackish (see https://yihui.name/en/2013/02/contribute-to-the-r-journal-with-lyx-knitr/ for how to write an article for The R Journal in a less hackish way)
+- the document hook `hook_rjournal()` was removed; it was too hackish (see https://yihui.org/en/2013/02/contribute-to-the-r-journal-with-lyx-knitr/ for how to write an article for The R Journal in a less hackish way)
 
 ## MINOR CHANGES
 
@@ -1114,7 +1114,7 @@
 
 ## NEW FEATURES
 
-- (experimental) R 3.0.0 will support non-Sweave vignettes, e.g. Rnw documents can be compiled by **knitr** instead of Sweave; in addition, R Markdown vignettes have also become first-class citizens as R package vignettes; see https://yihui.name/knitr/demo/vignette/ for details
+- (experimental) R 3.0.0 will support non-Sweave vignettes, e.g. Rnw documents can be compiled by **knitr** instead of Sweave; in addition, R Markdown vignettes have also become first-class citizens as R package vignettes; see https://yihui.org/knitr/demo/vignette/ for details
 
 - a new engine for CoffeeScript (i.e. the chunk option `engine='coffee'`); see https://github.com/yihui/knitr-examples/blob/master/080-engine-coffeescript.Rmd for an example (thanks, Nacho Caballero)
 
@@ -1124,7 +1124,7 @@
 
 - the global option `KNITR_WIDTH` can be use to set the R option `width` before **knitr** is called; in the past this option was hard-coded to `75`, and now it is set as `options(width = getOption('KNITR_WIDTH', 75L))`
 
-- a new function `knit2wp()` which compiles R Markdown documents and publishes the results to WordPress; see https://yihui.name/knitr/demo/wordpress/ for details
+- a new function `knit2wp()` which compiles R Markdown documents and publishes the results to WordPress; see https://yihui.org/knitr/demo/wordpress/ for details
 
 - a new hook `hook_webgl()` which writes the WebGL code of an **rgl** scene into the output using `rgl::writeWebGL()` so we can reproduce a 3D plot in the browser (thanks, Stephane Laurent http://stackoverflow.com/q/14879210/559676)
 
@@ -1272,7 +1272,7 @@
 
 - for markdown output, results from inline R code will no longer be put in a pair of backticks (#379)
 
-- the package option `opts_knit$get('cache.extra')` was removed because this option should really be a chunk option instead; see https://yihui.name/knitr/demo/cache/ for the updated documentation (#404 and #405) (thanks, Jim Hester)
+- the package option `opts_knit$get('cache.extra')` was removed because this option should really be a chunk option instead; see https://yihui.org/knitr/demo/cache/ for the updated documentation (#404 and #405) (thanks, Jim Hester)
 
 - the chunk option `highlight.opts` was deprecated and renamed to `engine.opts`; this affects users who use Andre Simon's highlight through the `highlight` engine in **knitr**
 
@@ -1300,7 +1300,7 @@
 
 ## DOCUMENTATION
 
-- an example of combining R, knitr and D3 to draw a contour plot: https://yihui.name/knitr/demo/javascript/
+- an example of combining R, knitr and D3 to draw a contour plot: https://yihui.org/knitr/demo/javascript/
 
 # CHANGES IN knitr VERSION 0.8
 
@@ -1354,11 +1354,11 @@
 
 ## NEW FEATURES
 
-- added a new chunk option `out.extra` to write extra graphics output options, e.g. `<<out.extra='angle=90'>>=` to rotate the figure by 90 degrees; see https://yihui.name/knitr/options (#301) (thanks, @knokknok)
+- added a new chunk option `out.extra` to write extra graphics output options, e.g. `<<out.extra='angle=90'>>=` to rotate the figure by 90 degrees; see https://yihui.org/knitr/options (#301) (thanks, @knokknok)
 
 - when `opts_knit$get('verbose')` is TRUE, logs (messages, warnings and errors) along with the corresponding R code will be printed after `knit()` is done; this might help users figure out possible problems in R code quickly (#276)
 
-- `.Random.seed` is cached again for the sake of reproducibility; see https://yihui.name/knitr/demo/cache/ for how to maintain reproducibility when the computation involves with random number generation (#274) (thanks, Renaud)
+- `.Random.seed` is cached again for the sake of reproducibility; see https://yihui.org/knitr/demo/cache/ for how to maintain reproducibility when the computation involves with random number generation (#274) (thanks, Renaud)
 
 - the package option `opts_knit$get('cache.extra')` can be an unevaluated R expression now, e.g. `opts_knit$set(cache.extra = quote(.Random.seed))`; see the cache page above for a concrete example
 
@@ -1472,21 +1472,21 @@
 
 ## MISC
 
-- **knitr** and RStudio had an invited talk at useR! 2012; slides at https://yihui.name/slides/2012-knitr-RStudio.html (source at https://github.com/yihui/knitr-talks)
+- **knitr** and RStudio had an invited talk at useR! 2012; slides at https://yihui.org/slides/2012-knitr-RStudio.html (source at https://github.com/yihui/knitr-talks)
 
 # CHANGES IN knitr VERSION 0.6
 
 ## NEW FEATURES
 
-- for LaTeX output, the chunk option `out.width` defaults to `'\\maxwidth'` now; see https://yihui.name/knitr/demo/framed/ for its definition; this makes sure the figures do not overflow the page margins (#221)
+- for LaTeX output, the chunk option `out.width` defaults to `'\\maxwidth'` now; see https://yihui.org/knitr/demo/framed/ for its definition; this makes sure the figures do not overflow the page margins (#221)
 
-- the chunk option `size` now defines the font size of the whole chunk instead of only some special characters in it, so that the old trick of redefining the `knitrout` environment for different font sizes is no longer necessary; see updates in the beamer examples: https://yihui.name/knitr/demo/beamer/ (thanks, Baptiste Auguie)
+- the chunk option `size` now defines the font size of the whole chunk instead of only some special characters in it, so that the old trick of redefining the `knitrout` environment for different font sizes is no longer necessary; see updates in the beamer examples: https://yihui.org/knitr/demo/beamer/ (thanks, Baptiste Auguie)
 
 - added a new chunk option `dev.args` which can be used to pass more arguments to the graphical device (#254) (thanks, knokknok)
 
 - warnings, messages and errors will be wrapped according to `options('width')`; this will make long messages stay within the page margin when the width option is appropriately small (#259) (thanks, @muelleki)
 
-- added a new function `spin()` to turn a specially formatted R script to a report; see https://yihui.name/knitr/demo/stitch/ (#223) (thanks, Rich FitzJohn)
+- added a new function `spin()` to turn a specially formatted R script to a report; see https://yihui.org/knitr/demo/stitch/ (#223) (thanks, Rich FitzJohn)
 
 - `knit()` gained a new argument `envir` to specify the environment in which to evaluate code chunks (by default in the parent frame); this will allow users to run code in a specified environment so that the global environment will not be cluttered by objects in chunks, which can hopefully make the documents more reproducible (#228)
 
@@ -1560,7 +1560,7 @@
 
 - new package option `self.contained` which decides whether to write style definitions (highlighting) in external files or put them in the output document; the highlighting definitions in LaTeX output is often too long, so `opts_knit$set(self.contained = FALSE)` can help in this case (#176) (thanks, Ramnath Vaidyanathan)
 
-- new package option `filter.chunk.end` which decides if the `chunk.end` pattern really means `chunk.end`; see https://yihui.name/knitr/options (thanks, Joe Cheng)
+- new package option `filter.chunk.end` which decides if the `chunk.end` pattern really means `chunk.end`; see https://yihui.org/knitr/options (thanks, Joe Cheng)
 
 - syntax highlighting themes are also available to HTML output now; the usage is the same as in LaTeX (#179) (thanks, Ramnath Vaidyanathan)
 
@@ -1652,7 +1652,7 @@
 
 ## DOCUMENTATION
 
-- website updated as usual: https://yihui.name/knitr
+- website updated as usual: https://yihui.org/knitr
 
 - added an example for the subfloat environment: https://github.com/yihui/knitr/releases/download/doc/knitr-subfloats.pdf
 
@@ -1666,15 +1666,15 @@
 
 ## NEW FEATURES
 
-- a fundamental and important new feature for writing chunk options: they can be written as valid R code now, just like we write function arguments (e.g. `echo=c(1, 3, 5)`, `fig.cap="my figure caption"`); all options will be parsed and evaluated as R code by default; see https://yihui.name/knitr/options for details (#142) (thanks, Baptiste Auguie)
+- a fundamental and important new feature for writing chunk options: they can be written as valid R code now, just like we write function arguments (e.g. `echo=c(1, 3, 5)`, `fig.cap="my figure caption"`); all options will be parsed and evaluated as R code by default; see https://yihui.org/knitr/options for details (#142) (thanks, Baptiste Auguie)
 
 - chunk references using `<<label>>` is supported now (#86); thanks to Kevin R. Coombe and Terry Therneau for the discussion
 
-- new function `run_chunk()` to run the code in a specified chunk, which is an alternative to the chunk reference in Sweave; see https://yihui.name/knitr/demo/reference/
+- new function `run_chunk()` to run the code in a specified chunk, which is an alternative to the chunk reference in Sweave; see https://yihui.org/knitr/demo/reference/
 
 - a executable script `knit` under `system.files('bin', package = 'knitr')` which makes it easier to call knitr via command line under *nix (call `knit input [output] [--pdf]`)
 
-- the inline hooks respect `getOption('digits')` and `getOption('scipen')` now (see `?options`); numbers returned from inline R code will be formatted according to these two options (see a demo at https://yihui.name/knitr/demo/output/)
+- the inline hooks respect `getOption('digits')` and `getOption('scipen')` now (see `?options`); numbers returned from inline R code will be formatted according to these two options (see a demo at https://yihui.org/knitr/demo/output/)
 
 - if you still use old Sweave syntax for chunk options, it is possible to write literal commas in chunk options now -- they have to be escaped by `\`, e.g. `caption=hello\, world`; this will be parsed to `'hello, world'` as a character string; of course this looks ugly and has limited power, so please please consider the new syntax!
 
@@ -1688,11 +1688,11 @@
 
 - the listings package is formally supported now (see `?render_listings`); the default style is borrowed from `Sweavel.sty` written by Frank Harrell (#101) (thanks, Frank)
 
-- new package option `cache.extra` which allows more objects to affect cache; see https://yihui.name/knitr/demo/cache/ (#134)
+- new package option `cache.extra` which allows more objects to affect cache; see https://yihui.org/knitr/demo/cache/ (#134)
 
 - new package option `child.path` to specify the search path of child documents relative to the parent document (#141)
 
-- new package option `aliases` to set aliases for chunk options; see https://yihui.name/knitr/options (#144)
+- new package option `aliases` to set aliases for chunk options; see https://yihui.org/knitr/options (#144)
 
 - new chunk options `fig.cap`, `fig.scap` and `fig.lp` to write captions, short captions, label prefix for the figure environment in LaTeX (#145) (thanks, Frank Harrell)
 
@@ -1720,7 +1720,7 @@
 
 - the default value of the argument `output` of `knit()` will be a filename under the current working directory; in previous versions, the output file will be under the same directory as the input file; this change makes it possible to completely separate the input files and output files into different places, and hopefully will give users better experience in managing a whole collection of files (including child documents): put all source files in one place and output files in another place
 
-- the package homepage is https://yihui.name/knitr now (the previous URL yihui.github.com/knitr will be automatically redirected to the new address)
+- the package homepage is https://yihui.org/knitr now (the previous URL yihui.github.com/knitr will be automatically redirected to the new address)
 
 ## BUG FIXES
 
@@ -1734,7 +1734,7 @@
 
 ## NEW FEATURES
 
-- added support for including child documents in the main document (like `\SweaveInput{}` but with different implementations); see https://yihui.name/knitr/demo/child/ (#92)
+- added support for including child documents in the main document (like `\SweaveInput{}` but with different implementations); see https://yihui.org/knitr/demo/child/ (#92)
 
 - for inline R code, character results are returned as-is now (without `\texttt{}`)
 
@@ -1750,16 +1750,16 @@
 
 - chunk option `external` defaults to `TRUE` now (was `FALSE` by default in the last version)
 
-- added a new demo to show how to build package vignettes with knitr: https://yihui.name/knitr/demo/vignette/
+- added a new demo to show how to build package vignettes with knitr: https://yihui.org/knitr/demo/vignette/
 
-- added support to the `quartz()` device under Mac (#103); now the `dev` option has more choices (see https://yihui.name/knitr/options)
+- added support to the `quartz()` device under Mac (#103); now the `dev` option has more choices (see https://yihui.org/knitr/options)
 
-- chunk option `echo` can take a numeric vector to select which R expressions to echo into the output now (#108); see https://yihui.name/knitr/options
+- chunk option `echo` can take a numeric vector to select which R expressions to echo into the output now (#108); see https://yihui.org/knitr/options
 
 - a new function `stitch()` which is a convenience function to insert an R script into a template and compile (to quickly create a report
   based on an R script)
 
-- for a chunk hook to run, the corresponding chunk option no longer has to be `TRUE`; it can be any non-null values; this enables us to make use of the option value directly instead of only knowing it is `TRUE` (see https://yihui.name/knitr/demo/cache/ for an example)
+- for a chunk hook to run, the corresponding chunk option no longer has to be `TRUE`; it can be any non-null values; this enables us to make use of the option value directly instead of only knowing it is `TRUE` (see https://yihui.org/knitr/demo/cache/ for an example)
 
 - `knit()` will no longer write figure or cache files in the same directory as the input document; instead, these files are written in the current working directory (see ?knit)
 
@@ -1776,7 +1776,7 @@
 
 ## NEW FEATURES
 
-- first version of knitr: it covers most features in Sweave, **cacheSweave** and **pgfSweave**; see package homepage for documentation and examples: https://yihui.name/knitr/
+- first version of knitr: it covers most features in Sweave, **cacheSweave** and **pgfSweave**; see package homepage for documentation and examples: https://yihui.org/knitr/
 
 ## MISC
 

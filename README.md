@@ -8,8 +8,8 @@ The R package **knitr** is a general-purpose literate programming engine,
 with lightweight API's designed to give users full control of the output
 without heavy coding work. It combines many features into one package with
 slight tweaks motivated from my everyday use of Sweave. See the package
-[homepage](https://yihui.name/knitr/) for details and examples. See
-[FAQ's](https://yihui.name/knitr/faq/) for a list of
+[homepage](https://yihui.org/knitr/) for details and examples. See
+[FAQ's](https://yihui.org/knitr/faq/) for a list of
 frequently asked questions (including where to ask questions).
 
 ## Installation
@@ -90,9 +90,9 @@ knit(input)
 
 If options are not explicitly specified, **knitr** will try to guess
 reasonable default settings. A few manuals are available such as the [main
-manual](https://yihui.name/knitr/demo/manual/), and the
+manual](https://yihui.org/knitr/demo/manual/), and the
 [graphics
-manual](https://yihui.name/knitr/demo/graphics/). For a
+manual](https://yihui.org/knitr/demo/graphics/). For a
 more organized reference, see the [knitr book](https://amzn.com/1498716962).
 
 ## License

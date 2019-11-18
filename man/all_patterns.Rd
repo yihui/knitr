@@ -18,7 +18,7 @@ all_patterns$html
 str(all_patterns)
 }
 \references{
-Usage: \url{https://yihui.name/knitr/patterns/}
+Usage: \url{https://yihui.org/knitr/patterns/}
 }
 \seealso{
 \code{\link{knit_patterns}}

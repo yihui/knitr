@@ -93,7 +93,7 @@ knitr:::knit_code$get()  # use this to check chunks in the current session
 knitr:::knit_code$restore()  # clean up the session
 }
 \references{
-\url{https://yihui.name/knitr/demo/externalization/}
+\url{https://yihui.org/knitr/demo/externalization/}
 }
 \author{
 Yihui Xie; the idea of the second approach came from Peter

@@ -99,7 +99,6 @@ Authors@R: c(
     person("Wush", "Wu", role = "ctb"),
     person("Zachary", "Foster", role = "ctb")
     )
-Maintainer: Yihui Xie <xie@yihui.name>
 Description: Provides a general-purpose tool for dynamic report generation in R
     using Literate Programming techniques.
 Depends:
@@ -138,7 +137,7 @@ Suggests:
     sass,
     styler (>= 1.2.0)
 License: GPL
-URL: https://yihui.name/knitr/
+URL: https://yihui.org/knitr/
 BugReports: https://github.com/yihui/knitr/issues
 Encoding: UTF-8
 VignetteBuilder: knitr

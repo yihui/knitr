@@ -72,7 +72,7 @@ If the output format is Rnw and no document class is specified in
   \code{rmarkdown::\link[rmarkdown]{render}()} instead.
 }
 \references{
-\url{https://yihui.name/knitr/demo/stitch/}
+\url{https://yihui.org/knitr/demo/stitch/}
 }
 \seealso{
 \code{\link{stitch}} (feed a template with an R script)
