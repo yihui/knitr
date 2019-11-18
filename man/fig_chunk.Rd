@@ -4,8 +4,7 @@
 \alias{fig_chunk}
 \title{Obtain the figure filenames for a chunk}
 \usage{
-fig_chunk(label, ext = "", number,
-  fig.path = opts_chunk$get("fig.path"))
+fig_chunk(label, ext = "", number, fig.path = opts_chunk$get("fig.path"))
 }
 \arguments{
 \item{label}{The chunk label.}

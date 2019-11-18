@@ -4,9 +4,19 @@
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
-kable(x, format, digits = getOption("digits"), row.names = NA,
-  col.names = NA, align, caption = NULL, label = NULL,
-  format.args = list(), escape = TRUE, ...)
+kable(
+  x,
+  format,
+  digits = getOption("digits"),
+  row.names = NA,
+  col.names = NA,
+  align,
+  caption = NULL,
+  label = NULL,
+  format.args = list(),
+  escape = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{An R object, typically a matrix or data frame.}

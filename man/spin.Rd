@@ -4,11 +4,18 @@
 \alias{spin}
 \title{Spin goat's hair into wool}
 \usage{
-spin(hair, knit = TRUE, report = TRUE, text = NULL,
-  envir = parent.frame(), format = c("Rmd", "Rnw", "Rhtml", "Rtex",
-  "Rrst"), doc = "^#+'[ ]?", inline = "^[{][{](.+)[}][}][ ]*$",
-  comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit &&
-  is.null(text))
+spin(
+  hair,
+  knit = TRUE,
+  report = TRUE,
+  text = NULL,
+  envir = parent.frame(),
+  format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"),
+  doc = "^#+'[ ]?",
+  inline = "^[{][{](.+)[}][}][ ]*$",
+  comment = c("^[# ]*/[*]", "^.*[*]/ *$"),
+  precious = !knit && is.null(text)
+)
 }
 \arguments{
 \item{hair}{Path to the R script. The script must be encoded in UTF-8 if it

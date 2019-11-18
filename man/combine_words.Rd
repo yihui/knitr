@@ -4,8 +4,7 @@
 \alias{combine_words}
 \title{Combine multiple words into a single string}
 \usage{
-combine_words(words, sep = ", ", and = " and ", before = "",
-  after = before)
+combine_words(words, sep = ", ", and = " and ", before = "", after = before)
 }
 \arguments{
 \item{words}{A character vector.}
