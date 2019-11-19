@@ -280,6 +280,7 @@ fig_process = function(FUN, path, options) {
 #' @return The original filename.
 plot_crop = function(x, quiet = TRUE) {
   ext = tolower(file_ext(x))
+  x = path.expand(x)
   if (ext == 'pdf') {
     if (!has_utility('pdfcrop')) return(x)
   } else if (!has_utility('convert', 'ImageMagick')) return(x)
