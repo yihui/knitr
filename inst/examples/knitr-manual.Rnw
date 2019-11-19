@@ -43,7 +43,7 @@ library(knitr)
 opts_chunk$set(fig.path='figure/manual-', cache.path='cache/manual-', fig.align='center', fig.show='hold', par=TRUE)
 ## I use = but I can replace it with <-; set code/output width to be 68
 options(formatR.arrow=TRUE, width=68, digits=4)
-## tune details of base graphics (https://yihui.name/knitr/hooks)
+## tune details of base graphics (https://yihui.org/knitr/hooks)
 knit_hooks$set(par=function(before, options, envir){
 if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
 })
@@ -65,7 +65,7 @@ and generating statistical reports. The \textbf{knitr} package \citep{R-knitr}
 is following the steps of Sweave. For this manual, I assume readers
 have some background knowledge of Sweave to understand the technical
 details; for a reference of available options, hooks and demos, see
-the package homepage \url{https://yihui.name/knitr/}.
+the package homepage \url{https://yihui.org/knitr/}.
 
 \section{Hello World}
 
@@ -105,7 +105,7 @@ in chunk options, we get it in the final output document. If we say
 \texttt{fig.align='center'}, the plots are centered. That's it. Many
 enhancements and new features will be introduced later. If you come
 from the Sweave land, you can take a look at the page of transition
-first: \url{https://yihui.name/knitr/demo/sweave/}.
+first: \url{https://yihui.org/knitr/demo/sweave/}.
 
 \section{Design}
 
@@ -116,10 +116,10 @@ such as the support to a wide range of graphics devices and cache.
 Below is a brief description of the process:
 \begin{enumerate}
 \item \textbf{knitr} takes an input file and automatically determines an
-appropriate set of \href{https://yihui.name/knitr/patterns}{patterns}
+appropriate set of \href{https://yihui.org/knitr/patterns}{patterns}
 to use if they are not provided in advance (e.g. \textsf{file.Rnw}
 will use \texttt{knit\_patterns\$get('rnw')});
-\item a set of output \href{https://yihui.name/knitr/hooks}{hooks} will
+\item a set of output \href{https://yihui.org/knitr/hooks}{hooks} will
 also be set up automatically according to the filename extension (e.g.
 use \LaTeX{} environments or HTML elements to wrap up R results);
 \item the input file is read in and split into pieces consisting of R code
@@ -138,7 +138,7 @@ really evaluating the chunk; if cached results exist and this code
 chunk has not been changed since last run (use MD5 sum to verify),
 the cached results will be (lazy-) loaded, otherwise new cache will
 be built; if a cached chunk depends on other chunks (see the \texttt{dependson}
-\href{https://yihui.name/knitr/options}{option}) and any one of these
+\href{https://yihui.org/knitr/options}{option}) and any one of these
 chunks has changed, this chunk must be forcibly updated (old cache
 will be purged)
 \item there are six types of possible output from \textbf{evaluate}, and
@@ -199,7 +199,7 @@ progress bar is provided when knitting a file so we roughly know how
 long we still need to wait; output from inline R code (e.g. \texttt{\textbackslash{}Sexpr\{x{[}1{]}\}})
 is automatically formatted in \TeX{} math notation (like \Sexpr{123456789})
 if the result is numeric. You may check out a number of specific manuals
-dedicated to specific features such as graphics in the website: \url{https://yihui.name/knitr/demos}.
+dedicated to specific features such as graphics in the website: \url{https://yihui.org/knitr/demos}.
 
 \subsection{Code Decoration}
 
@@ -414,7 +414,7 @@ to read, and a contour plot or a hexagon plot showing the 2D density
 can be a better alternative (they are smaller in size).
 
 The graphics manual contains more detailed information and you can
-check it out in the \href{https://yihui.name/knitr/demo/graphics/}{website}.
+check it out in the \href{https://yihui.org/knitr/demo/graphics/}{website}.
 
 \subsection{Cache}
 
@@ -507,7 +507,7 @@ will write out the names of objects created in a cached chunk as well
 as those global objects in two files named \textsf{\_\_objects} and
 \textsf{\_\_globals} respectively; later we can use the function \emph{dep\_auto()}
 to analyze the object names to figure out the dependencies automatically.
-See \url{https://yihui.name/knitr/demo/cache/} for examples.
+See \url{https://yihui.org/knitr/demo/cache/} for examples.
 
 Yet another way to specify dependencies is \emph{dep\_prev()}: this
 is a conservative approach which sets the dependencies so that a cached
@@ -566,7 +566,7 @@ it treats them as function arguments instead of a text string to be
 split to obtain option values. This gives the user much more power
 than the old syntax; we can pass arbitrary R objects to chunk options
 besides simple ones like \texttt{TRUE}/\texttt{FALSE}, numbers and
-character strings. The page \url{https://yihui.name/knitr/demo/sweave/}
+character strings. The page \url{https://yihui.org/knitr/demo/sweave/}
 has given two examples to show the advantages of the new syntax. Here
 we show yet another useful application.
 
@@ -637,7 +637,7 @@ Due to the flexibility of output hooks, \textbf{knitr} supports several
 different output formats. The implementation is fairly easy, e.g.,
 for \LaTeX{} we put R output in \texttt{verbatim} environments, and
 in HTML, it is only a matter of putting output in \texttt{div} layers.
-These are simply character string operations. Many demos in \url{https://yihui.name/knitr/demos}
+These are simply character string operations. Many demos in \url{https://yihui.org/knitr/demos}
 show this idea clearly. This manual did not cover all the features
 of \textbf{knitr}, and users are encouraged to thumb through the website
 to know more possible features.
@@ -647,10 +647,10 @@ to know more possible features.
 You can use any text editors to write the source documents, but some
 have built-in support for \textbf{knitr}. Both RStudio (\url{http://www.rstudio.org})
 and \LyX{} (\url{http://www.lyx.org}) have full support for \textbf{knitr},
-and you can compile the document to PDF with just one click. See \url{https://yihui.name/knitr/demo/rstudio/}
-and \url{https://yihui.name/knitr/demo/lyx/} respectively. It is also
-possible to support other editors like \href{https://yihui.name/knitr/demo/eclipse/}{Eclipse},
-\href{https://yihui.name/knitr/demo/editors/}{Texmaker and WinEdt};
+and you can compile the document to PDF with just one click. See \url{https://yihui.org/knitr/demo/rstudio/}
+and \url{https://yihui.org/knitr/demo/lyx/} respectively. It is also
+possible to support other editors like \href{https://yihui.org/knitr/demo/eclipse/}{Eclipse},
+\href{https://yihui.org/knitr/demo/editors/}{Texmaker and WinEdt};
 see the demo list in the website for configuration instructions.
 
 \section*{About This Document}

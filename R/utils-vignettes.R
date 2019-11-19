@@ -2,7 +2,7 @@
 #'
 #' Since R 3.0.0, package vignettes can use non-Sweave engines, and \pkg{knitr}
 #' has provided a few engines to compile vignettes via \code{\link{knit}()} with
-#' different templates. See \url{https://yihui.name/knitr/demo/vignette/} for
+#' different templates. See \url{https://yihui.org/knitr/demo/vignette/} for
 #' more information.
 #' @name vignette_engines
 #' @note If you use the \code{knitr::rmarkdown} engine, please make sure that

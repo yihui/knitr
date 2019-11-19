@@ -74,7 +74,7 @@ chunk option \code{purl=FALSE} are ignored. Please note when the cache is
 turned on (the chunk option \code{cache = TRUE}), no chunk hooks will be
 executed, hence \code{hook_purl()} will not work, either. To solve this
 problem, we need \code{cache = 2} instead of \code{TRUE} (see
-\url{https://yihui.name/knitr/demo/cache/} for the meaning of \code{cache =
+\url{https://yihui.org/knitr/demo/cache/} for the meaning of \code{cache =
 2}).
 }
 \note{
@@ -87,7 +87,7 @@ if (require("rgl") && exists("hook_rgl")) knit_hooks$set(rgl = hook_rgl)
 # then in code chunks, use the option rgl=TRUE
 }
 \references{
-\url{https://yihui.name/knitr/hooks/#chunk_hooks}
+\url{https://yihui.org/knitr/hooks/#chunk_hooks}
 }
 \seealso{
 \code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}},

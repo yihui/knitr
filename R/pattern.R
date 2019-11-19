@@ -1,7 +1,7 @@
 #' All built-in patterns
 #'
 #' This object is a named list of all built-in patterns.
-#' @references Usage: \url{https://yihui.name/knitr/patterns/}
+#' @references Usage: \url{https://yihui.org/knitr/patterns/}
 #' @export
 #' @seealso \code{\link{knit_patterns}}
 #' @examples all_patterns$rnw; all_patterns$html
@@ -70,9 +70,9 @@ all_patterns = list(
 #' \link{all_patterns}.
 #'
 #' @seealso \code{\link{all_patterns}}
-#' @references Usage: \url{https://yihui.name/knitr/objects/}
+#' @references Usage: \url{https://yihui.org/knitr/objects/}
 #'
-#' Components in \code{knit_patterns}: \url{https://yihui.name/knitr/patterns/}
+#' Components in \code{knit_patterns}: \url{https://yihui.org/knitr/patterns/}
 #' @export
 #' @examples library(knitr)
 #' opat = knit_patterns$get() # old pattern list (to restore later)

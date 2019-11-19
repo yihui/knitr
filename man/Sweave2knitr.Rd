@@ -4,7 +4,11 @@
 \alias{Sweave2knitr}
 \title{Convert Sweave to knitr documents}
 \usage{
-Sweave2knitr(file, output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file), text = NULL)
+Sweave2knitr(
+  file,
+  output = gsub("[.]([^.]+)$", "-knitr.\\\\1", file),
+  text = NULL
+)
 }
 \arguments{
 \item{file}{Path to the Rnw file (must be encoded in UTF-8).}
@@ -78,7 +82,7 @@ unlink("Sweave-test-knitr.Rnw")
 }
 \references{
 The motivation of the changes in the syntax:
-  \url{https://yihui.name/knitr/demo/sweave/}
+  \url{https://yihui.org/knitr/demo/sweave/}
 }
 \seealso{
 \code{\link{Sweave}}, \code{\link{gsub}}

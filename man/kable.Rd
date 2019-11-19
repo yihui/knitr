@@ -4,8 +4,19 @@
 \alias{kable}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
-kable(x, format, digits = getOption("digits"), row.names = NA, col.names = NA, align, 
-    caption = NULL, label = NULL, format.args = list(), escape = TRUE, ...)
+kable(
+  x,
+  format,
+  digits = getOption("digits"),
+  row.names = NA,
+  col.names = NA,
+  align,
+  caption = NULL,
+  label = NULL,
+  format.args = list(),
+  escape = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{An R object, typically a matrix or data frame.}
@@ -42,7 +53,8 @@ from \code{knitr::\link{opts_current}$get('label')}.}
 to format table values, e.g. \code{list(big.mark = ',')}.}
 
 \item{escape}{Boolean; whether to escape special characters when producing
-HTML or LaTeX tables.}
+HTML or LaTeX tables. When \code{escape = FALSE}, you have to make sure
+that special characters will not trigger syntax errors in LaTeX or HTML.}
 
 \item{...}{Other arguments (see Examples).}
 }

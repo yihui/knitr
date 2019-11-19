@@ -4,8 +4,13 @@
 \alias{write_bib}
 \title{Generate BibTeX bibliography databases for R packages}
 \usage{
-write_bib(x = .packages(), file = "", tweak = TRUE, width = NULL, 
-    prefix = getOption("knitr.bib.prefix", "R-"))
+write_bib(
+  x = .packages(),
+  file = "",
+  tweak = TRUE,
+  width = NULL,
+  prefix = getOption("knitr.bib.prefix", "R-")
+)
 }
 \arguments{
 \item{x}{Package names. Packages which are not installed are ignored.}
@@ -16,35 +21,31 @@ output is written to the R console.}
 \item{tweak}{Whether to fix some known problems in the citations, especially
 non-standard format of author names.}
 
-\item{width}{Width of lines in bibliography entries. If \code{NULL},
-lines will not be wrapped.}
+\item{width}{Width of lines in bibliography entries. If \code{NULL}, lines
+will not be wrapped.}
 
 \item{prefix}{Prefix string for keys in BibTeX entries; by default, it is
 \samp{R-} unless \code{\link{option}('knitr.bib.prefix')} has been set to
 another string.}
 }
 \value{
-A list containing the citations. Citations are also written to the \code{file} as a
-  side effect.
+A list containing the citations. Citations are also written to the
+  \code{file} as a side effect.
 }
 \description{
 This function uses \code{\link[utils]{citation}} and
 \code{\link[utils]{toBibtex}} to create bib entries for R packages and write
-them in a file. Only the auto-generated citations are included for a package.
-This function can facilitate the auto-generation of bibliography databases
-for R packages, and it is easy to regenerate all the citations after updating
-R packages.
+them in a file. It can facilitate the auto-generation of bibliography
+databases for R packages, and it is easy to regenerate all the citations
+after updating R packages.
 }
 \details{
-The citation is forced to be generated from the \file{DESCRIPTION} file of
-the package (\code{citation(auto = TRUE)}). The keyword \samp{R-pkgname} is
-used for the bib item, where \samp{pkgname} is the name of the package. All
-references specified in the \file{CITATION} file of the package are ignored.
-The main purpose of this function is to automate the generation of the
-package citation information because it often changes (e.g. author, year,
-package version, ...). By comparison, paper/book citations don't change too
-often, so it is not a lot of work even if you just cut and paste such
-bibliography entries from \code{toBibtex(citation())}.
+For a package, the keyword \samp{R-pkgname} is used for its bib item, where
+\samp{pkgname} is the name of the package. Citation entries specified in the
+\file{CITATION} file of the package are also included. The main purpose of
+this function is to automate the generation of the package citation
+information because it often changes (e.g. author, year, package version,
+...).
 }
 \note{
 Some packages on CRAN do not have standard bib entries, which was once

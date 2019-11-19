@@ -4,7 +4,7 @@
 [![Coverage Status](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://codecov.io/github/yihui/knitr?branch=master)
 [![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/knitr)](https://cran.r-project.org/package=knitr)
 
-El paquete de R **knitr** es un motor de programación literaria de uso genérico, con una API ligera diseñada para dar a los usuarios control total de la salida sin un trabajo de codificación pesado. Combina muchas características dentro de un paquete con leves ajustes motivados de mi uso diario de Sweave. Observe la [página principal](https://yihui.name/knitr/) del paquete para más detalles y ejemplos. Vea las [FAQ](https://yihui.name/knitr/faq/) para una lista de preguntas frecuentes (que incluye dónde hacer preguntas).
+El paquete de R **knitr** es un motor de programación literaria de uso genérico, con una API ligera diseñada para dar a los usuarios control total de la salida sin un trabajo de codificación pesado. Combina muchas características dentro de un paquete con leves ajustes motivados de mi uso diario de Sweave. Observe la [página principal](https://yihui.org/knitr/) del paquete para más detalles y ejemplos. Vea las [FAQ](https://yihui.org/knitr/faq/) para una lista de preguntas frecuentes (que incluye dónde hacer preguntas).
 
 
 ## Instalación
@@ -15,12 +15,12 @@ Puede instalar la versión estable en [CRAN](https://cran.r-project.org/package=
 install.packages('knitr')
 ```
 
-También puede instalar la versión en desarrollo desde [XRAN](https://xran.yihui.name), la cual provee construcciones diarias de **knitr**:
+También puede instalar la versión en desarrollo desde [XRAN](https://xran.yihui.org), la cual provee construcciones diarias de **knitr**:
 
 ```r
 # primero actualice todos los paquetes existentes
 update.packages(ask = FALSE, repos = 'http://cran.r-project.org')
-install.packages('knitr', repos = c('https://xran.yihui.name', 'http://cran.r-project.org'))
+install.packages('knitr', repos = c('https://xran.yihui.org', 'http://cran.r-project.org'))
 ```
 
 O usar **devtools** para instalar la versión en desarrollo desde GitHub:
@@ -60,12 +60,12 @@ knit(input)
 
 If options are not explicitly specified, **knitr** will try to guess
 reasonable default settings. A few manuals are available such as the [main
-manual](https://yihui.name/knitr/demo/manual/), and the
+manual](https://yihui.org/knitr/demo/manual/), and the
 [graphics
-manual](https://yihui.name/knitr/demo/graphics/). For a
+manual](https://yihui.org/knitr/demo/graphics/). For a
 more organized reference, see the [knitr book](http://amzn.com/1498716962).
 
-Si no se especifican opciones explícitamente, **knitr** tratará de suponer una configuración por defecto razonable. Hay disponibles unos pocos manuales, tales como el [manual principal](https://yihui.name/knitr/demo/manual/) y el [manual de gráficos](https://yihui.name/knitr/demo/graphics/). Para una referencia más organizada, vea el libro de [knitr](http://amzn.com/1498716962).
+Si no se especifican opciones explícitamente, **knitr** tratará de suponer una configuración por defecto razonable. Hay disponibles unos pocos manuales, tales como el [manual principal](https://yihui.org/knitr/demo/manual/) y el [manual de gráficos](https://yihui.org/knitr/demo/graphics/). Para una referencia más organizada, vea el libro de [knitr](http://amzn.com/1498716962).
 
 
 ## Licencia

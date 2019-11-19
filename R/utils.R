@@ -61,7 +61,7 @@ color_def = function(col, variable = 'shadecolor') {
       x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
       warning("the color '", col, "' is invalid;",
               'using default color...',
-              'see https://yihui.name/knitr/options')
+              'see https://yihui.org/knitr/options')
     }
   }
   if (length(x) != 3L) stop('invalid color:', col)
@@ -127,7 +127,7 @@ pure_preamble = function(preamble, patterns) {
 #'   standalone mode using \code{\link{knit}()} (instead of being called in
 #'   \code{\link{knit_child}()}); when the parent document is compiled, this
 #'   function in the child document will be ignored.
-#' @references \url{https://yihui.name/knitr/demo/child/}
+#' @references \url{https://yihui.org/knitr/demo/child/}
 #' @export
 #' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
 #'
@@ -968,3 +968,15 @@ digest3 = function(x) {
 
 # collapse by \n
 one_string = function(x, ...) paste(x, ..., collapse = '\n')
+
+# c(1, 1, 1, 2, 3, 3) -> c(1a, 1b, 1c, 2a, 3a, 3b)
+make_unique = function(x) {
+  if (length(x) == 0) return(x)
+  x2 = make.unique(x)
+  if (all(i <- x2 == x)) return(x)
+  x2[i] = paste0(x2[i], '.0')
+  i = as.numeric(sub('.*[.]([0-9]+)$', '\\1', x2)) + 1
+  s = letters[i]
+  s = ifelse(is.na(s), i, s)
+  paste0(x, s)
+}

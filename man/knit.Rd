@@ -5,8 +5,15 @@
 \alias{purl}
 \title{Knit a document}
 \usage{
-knit(input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE, 
-    envir = parent.frame(), encoding = "UTF-8")
+knit(
+  input,
+  output = NULL,
+  tangle = FALSE,
+  text = NULL,
+  quiet = FALSE,
+  envir = parent.frame(),
+  encoding = "UTF-8"
+)
 
 purl(..., documentation = 1L)
 }
@@ -150,9 +157,9 @@ purl(f, documentation = 2)  # also include documentation
 unlink(c("knitr-minimal.tex", "knitr-minimal.R", "figure"), recursive = TRUE)
 }
 \references{
-Package homepage: \url{https://yihui.name/knitr/}. The \pkg{knitr}
-  \href{https://yihui.name/knitr/demo/manual/}{main manual}: and
-  \href{https://yihui.name/knitr/demo/graphics/}{graphics manual}.
+Package homepage: \url{https://yihui.org/knitr/}. The \pkg{knitr}
+  \href{https://yihui.org/knitr/demo/manual/}{main manual}: and
+  \href{https://yihui.org/knitr/demo/graphics/}{graphics manual}.
 
   See \code{citation('knitr')} for the citation information.
 }

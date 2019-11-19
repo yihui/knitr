@@ -4,7 +4,7 @@
 \name{knit_patterns}
 \alias{knit_patterns}
 \title{Patterns to match and extract R code in a document}
-\format{An object of class \code{list} of length 5.}
+\format{An object of class \code{list} of length 6.}
 \usage{
 knit_patterns
 }
@@ -34,9 +34,9 @@ str(knit_patterns$get())
 knit_patterns$set(opat)  # put the old patterns back
 }
 \references{
-Usage: \url{https://yihui.name/knitr/objects/}
+Usage: \url{https://yihui.org/knitr/objects/}
 
-Components in \code{knit_patterns}: \url{https://yihui.name/knitr/patterns/}
+Components in \code{knit_patterns}: \url{https://yihui.org/knitr/patterns/}
 }
 \seealso{
 \code{\link{all_patterns}}

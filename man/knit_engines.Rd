@@ -4,7 +4,7 @@
 \name{knit_engines}
 \alias{knit_engines}
 \title{Engines of other languages}
-\format{An object of class \code{list} of length 5.}
+\format{An object of class \code{list} of length 6.}
 \usage{
 knit_engines
 }
@@ -43,7 +43,7 @@ knit_engines$get("awk")
 names(knit_engines$get())
 }
 \references{
-Usage: \url{https://yihui.name/knitr/objects/}; examples:
-  \url{https://yihui.name/knitr/demo/engines/}
+Usage: \url{https://yihui.org/knitr/objects/}; examples:
+  \url{https://yihui.org/knitr/demo/engines/}
 }
 \keyword{datasets}

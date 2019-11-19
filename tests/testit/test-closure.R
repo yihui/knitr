@@ -27,6 +27,11 @@ assert(
   identical(z$get('c', drop = FALSE), list(c = NULL))
 )
 
+assert('$delete() deletes keys from the list', {
+  z$set(b1 = TRUE, b2 = FALSE); z$delete(c('b1', 'b2'))
+  (!any(c('b1', 'b2') %in% z$get()))
+})
+
 assert(
   '$restore() restores to the initial value',
   identical({z$restore(); z$get()}, list(a = 1))

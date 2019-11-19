@@ -23,10 +23,6 @@ hook_plot_md = function(x, options) {
       return(hook_plot_md_pandoc(x, options))
     }
   }
-  if (options$fig.show == 'hold' && office_output) {
-    warning('The chunk option fig.show="hold" is not supported for ', to, ' output')
-    options$fig.show = 'asis'
-  }
   hook_plot_md_base(x, options)
 }
 
@@ -85,17 +81,16 @@ hook_plot_md_pandoc = function(x, options) {
 
   base = opts_knit$get('base.url') %n% ''
   cap = .img.cap(options)
-  at = sprintf(
-    "{%s}",
-    paste(
-      c(
-        sprintf("width=%s", options[['out.width']]),
-        sprintf("height=%s", options[['out.height']]),
-        options[['out.extra']]
-      ),
-      collapse = " "
-    )
+
+  at = paste(
+    c(
+      sprintf('width=%s', options[['out.width']]),
+      sprintf('height=%s', options[['out.height']]),
+      options[['out.extra']]
+    ),
+    collapse = ' '
   )
+  if (at != '') at = paste0('{', at, '}')
 
   sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at)
 }

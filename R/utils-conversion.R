@@ -147,7 +147,7 @@ knit2html_v1 = function(...) knit2html(..., force_v1 = TRUE)
 #' @param publish Boolean: publish the post immediately?
 #' @inheritParams knit
 #' @export
-#' @references \url{https://yihui.name/knitr/demo/wordpress/}
+#' @references \url{https://yihui.org/knitr/demo/wordpress/}
 #' @author William K. Morris, Yihui Xie, and Jared Lander
 #' @note This function will convert the encoding of the post and the title to
 #'   UTF-8 internally. If you have additional data to send to WordPress (e.g.

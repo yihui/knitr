@@ -42,5 +42,5 @@ Obviously this function is only useful when the output format is LaTeX.
 # @
 }
 \references{
-\url{https://yihui.name/knitr/demo/child/}
+\url{https://yihui.org/knitr/demo/child/}
 }

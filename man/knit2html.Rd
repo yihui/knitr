@@ -4,8 +4,16 @@
 \alias{knit2html}
 \title{Convert markdown to HTML using knit() and markdownToHTML()}
 \usage{
-knit2html(input, output = NULL, ..., envir = parent.frame(), text = NULL, quiet = FALSE, 
-    encoding = "UTF-8", force_v1 = FALSE)
+knit2html(
+  input,
+  output = NULL,
+  ...,
+  envir = parent.frame(),
+  text = NULL,
+  quiet = FALSE,
+  encoding = "UTF-8",
+  force_v1 = FALSE
+)
 }
 \arguments{
 \item{input}{Path to the input file.}

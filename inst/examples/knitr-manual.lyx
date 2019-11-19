@@ -131,7 +131,7 @@ options(formatR.arrow=TRUE, width=68, digits=4)
 
 \begin_layout Plain Layout
 
-## tune details of base graphics (https://yihui.name/knitr/hooks)
+## tune details of base graphics (https://yihui.org/knitr/hooks)
 \end_layout
 
 \begin_layout Plain Layout
@@ -218,7 +218,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://yihui.name/knitr/
+https://yihui.org/knitr/
 \end_layout
 
 \end_inset
@@ -433,7 +433,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://yihui.name/knitr/demo/sweave/
+https://yihui.org/knitr/demo/sweave/
 \end_layout
 
 \end_inset
@@ -467,7 +467,7 @@ knitr
 \begin_inset CommandInset href
 LatexCommand href
 name "patterns"
-target "https://yihui.name/knitr/patterns"
+target "https://yihui.org/knitr/patterns"
 
 \end_inset
 
@@ -488,7 +488,7 @@ a set of output
 \begin_inset CommandInset href
 LatexCommand href
 name "hooks"
-target "https://yihui.name/knitr/hooks"
+target "https://yihui.org/knitr/hooks"
 
 \end_inset
 
@@ -544,7 +544,7 @@ dependson
 \begin_inset CommandInset href
 LatexCommand href
 name "option"
-target "https://yihui.name/knitr/options"
+target "https://yihui.org/knitr/options"
 
 \end_inset
 
@@ -809,7 +809,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://yihui.name/knitr/demos
+https://yihui.org/knitr/demos
 \end_layout
 
 \end_inset
@@ -1835,7 +1835,7 @@ The graphics manual contains more detailed information and you can check
 \begin_inset CommandInset href
 LatexCommand href
 name "website"
-target "https://yihui.name/knitr/demo/graphics/"
+target "https://yihui.org/knitr/demo/graphics/"
 
 \end_inset
 
@@ -2132,7 +2132,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://yihui.name/knitr/demo/cache/
+https://yihui.org/knitr/demo/cache/
 \end_layout
 
 \end_inset
@@ -2349,7 +2349,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://yihui.name/knitr/demo/sweave/
+https://yihui.org/knitr/demo/sweave/
 \end_layout
 
 \end_inset
@@ -2712,7 +2712,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://yihui.name/knitr/demos
+https://yihui.org/knitr/demos
 \end_layout
 
 \end_inset
@@ -2770,7 +2770,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://yihui.name/knitr/demo/rstudio/
+https://yihui.org/knitr/demo/rstudio/
 \end_layout
 
 \end_inset
@@ -2781,7 +2781,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://yihui.name/knitr/demo/lyx/
+https://yihui.org/knitr/demo/lyx/
 \end_layout
 
 \end_inset
@@ -2791,7 +2791,7 @@ https://yihui.name/knitr/demo/lyx/
 \begin_inset CommandInset href
 LatexCommand href
 name "Eclipse"
-target "https://yihui.name/knitr/demo/eclipse/"
+target "https://yihui.org/knitr/demo/eclipse/"
 
 \end_inset
 
@@ -2799,7 +2799,7 @@ target "https://yihui.name/knitr/demo/eclipse/"
 \begin_inset CommandInset href
 LatexCommand href
 name "Texmaker and WinEdt"
-target "https://yihui.name/knitr/demo/editors/"
+target "https://yihui.org/knitr/demo/editors/"
 
 \end_inset
 
