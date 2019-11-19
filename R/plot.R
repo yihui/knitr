@@ -280,10 +280,11 @@ fig_process = function(FUN, path, options) {
 #' @return The original filename.
 plot_crop = function(x, quiet = TRUE) {
   ext = tolower(file_ext(x))
+  x2 = x
   x = path.expand(x)
   if (ext == 'pdf') {
-    if (!has_utility('pdfcrop')) return(x)
-  } else if (!has_utility('convert', 'ImageMagick')) return(x)
+    if (!has_utility('pdfcrop')) return(x2)
+  } else if (!has_utility('convert', 'ImageMagick')) return(x2)
 
   if (!quiet) message('cropping ', x)
   x = shQuote(x)
@@ -301,7 +302,7 @@ plot_crop = function(x, quiet = TRUE) {
   } else {
     system2(cmd, args = args, stdout = if (quiet) FALSE else "")
   }
-  x
+  x2
 }
 
 showtext = function(show) if (isTRUE(show)) showtext::showtext_begin()
