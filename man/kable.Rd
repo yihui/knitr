@@ -111,7 +111,7 @@ x = as.data.frame(matrix(rnorm(60, 1e+06, 10000), 10))
 kable(x, format.args = list(decimal.mark = ",", big.mark = "'"))
 # save the value
 x = kable(mtcars, format = "html")
-cat(x, sep = "\\n")
+cat(x, sep = "\n")
 # can also set options(knitr.table.format = 'html') so that the output is HTML
 }
 \references{
