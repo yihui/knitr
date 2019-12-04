@@ -125,6 +125,7 @@ block_exec = function(options) {
 
   keep = options$fig.keep
   keep.idx = NULL
+  if (is.logical(keep)) keep = which(keep)
   if (is.numeric(keep)) {
     keep.idx = keep
     keep = "index"
