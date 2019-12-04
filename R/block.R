@@ -231,7 +231,7 @@ block_exec = function(options) {
           res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
         } else {
           # keep only selected
-          if (keep == 'index') res = res[which(figs)[keep.idx]]
+          if (keep == 'index') res = res[-which(figs)[-keep.idx]]
           # merge low-level plotting changes
           if (keep == 'high') res = merge_low_plot(res, figs)
         }

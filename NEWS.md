@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.27
 
+## BUG FIXES
+
+- The chunk option `fig.keep` was buggy when taking a numeric vector. The bug was originally introduced in #1265 and discovered in the SO post https://stackoverflow.com/q/59180351/559676.
 
 # CHANGES IN knitr VERSION 1.26
 
