@@ -4,6 +4,10 @@
 
 - The chunk option `fig.keep` was buggy when taking a numeric vector. The bug was originally introduced in #1265 and discovered in the SO post https://stackoverflow.com/q/59180351/559676.
 
+## MINOR CHANGES
+
+- `is_html_output()` returns `TRUE` for the Pandoc output format `gfm` now (thanks, @ttimbers @cderv, rstudio/rmarkdown#1756).
+
 # CHANGES IN knitr VERSION 1.26
 
 ## NEW FEATURES
