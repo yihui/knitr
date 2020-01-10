@@ -686,8 +686,9 @@ eng_sxss = function(options) {
   if (use_package) {
     message("Converting with the R package sass")
 
+    sass_fun = options$engine.opts$sass_fun %n% sass::sass
     out = tryCatch(
-      sass::sass(sass::sass_file(f), options = sass::sass_options(output_style = style)),
+      sass_fun(sass::sass_file(f), options = sass::sass_options(output_style = style)),
       error = function(e) {
         if (!options$error) stop(e)
         warning2(paste('Error in converting to CSS using sass R package:', e, sep = "\n"))
