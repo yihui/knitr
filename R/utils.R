@@ -598,8 +598,7 @@ read_rforge = function(path, project, extra = '') {
   read_utf8(sprintf('%s/%s?root=%s%s', base, path, project, extra))
 }
 
-# strsplit('', 'foo') should return '' instead of character(0), and I also need
-# strsplit('a\n', '\n') to return c('a', '') instead of c('a')
+# TODO: just import xfun::split_lines()
 split_lines = function(x) {
   if (length(grep('\n', x)) == 0L) return(x)
   x = gsub('\n$', '\n\n', x)
