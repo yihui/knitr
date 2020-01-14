@@ -33,7 +33,7 @@ Obviously this function is only useful when the output format is LaTeX.
   function in the child document will be ignored.
 }
 \examples{
-## can use, e.g. \\Sexpr{set_parent('parent_doc.Rnw')} or
+## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
 
 # <<setup-child, include=FALSE>>=
 

@@ -45,7 +45,7 @@ It is recommended to leave a \code{...} argument in your method, to
 library(knitr)
 # write tables for data frames
 knit_print.data.frame = function(x, ...) {
-    res = paste(c("", "", kable(x, output = FALSE)), collapse = "\\n")
+    res = paste(c("", "", kable(x, output = FALSE)), collapse = "\n")
     asis_output(res)
 }
 # register the method

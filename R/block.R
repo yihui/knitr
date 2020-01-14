@@ -60,7 +60,7 @@ call_block = function(block) {
   if (params$cache > 0) {
     content = c(
       params[if (params$cache < 3) cache1.opts else setdiff(names(params), cache0.opts)],
-      getOption('width'), if (params$cache == 2) params[cache2.opts]
+      75L, if (params$cache == 2) params[cache2.opts]
     )
     if (params$engine == 'R' && isFALSE(params$cache.comments)) {
       content[['code']] = parse_only(content[['code']])
@@ -125,6 +125,7 @@ block_exec = function(options) {
 
   keep = options$fig.keep
   keep.idx = NULL
+  if (is.logical(keep)) keep = which(keep)
   if (is.numeric(keep)) {
     keep.idx = keep
     keep = "index"
@@ -231,7 +232,7 @@ block_exec = function(options) {
           res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
         } else {
           # keep only selected
-          if (keep == 'index') res = res[which(figs)[keep.idx]]
+          if (keep == 'index') res = res[-which(figs)[-keep.idx]]
           # merge low-level plotting changes
           if (keep == 'high') res = merge_low_plot(res, figs)
         }

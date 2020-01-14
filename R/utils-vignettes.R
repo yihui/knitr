@@ -65,7 +65,8 @@ body(vweave_docco_classic)[5L] = expression(rocco(
 
 vweave_rmarkdown = vweave
 body(vweave_rmarkdown)[5L] = expression(rmarkdown::render(
-  file, encoding = encoding, quiet = quiet, envir = globalenv(), ...
+  file, encoding = encoding, quiet = quiet, envir = globalenv(),
+  output_dir = getwd(), ...
 ))
 
 # do not tangle R code from vignettes
