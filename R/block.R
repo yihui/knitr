@@ -241,7 +241,11 @@ block_exec = function(options) {
   }
   # number of plots in this chunk
   if (is.null(options$fig.num))
-    options$fig.num = if (length(res)) sum(sapply(res, evaluate::is.recordedplot)) else 0L
+    options$fig.num = if (length(res)) sum(sapply(res, function(x) {
+      if (evaluate::is.recordedplot(x)) return(1)
+      if (inherits(x, 'knit_image_paths')) return(length(x))
+      0
+    })) else 0L
 
   # merge neighbor elements of the same class into one element
   for (cls in c('source', 'message', 'warning')) res = merge_class(res, cls)

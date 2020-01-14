@@ -554,7 +554,6 @@ wrap.recordedplot = function(x, options) {
 wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) {
   if (options$fig.show == 'hide') return('')
   hook_plot = knit_hooks$get('plot')
-  options$fig.num = length(x)
   # remove the automatically set out.width when fig.retina is set, otherwise the
   # size of external images embedded via include_graphics() will be set to
   # fig.width * dpi in fix_options()
