@@ -133,11 +133,31 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   }
 
   # compile tikz to pdf
-  if (dev == 'tikz' && options$external) {
-    path = tinytex::latexmk(path, getOption('tikzDefaultEngine'))
+  if (dev == 'tikz') {
+    patch_tikz_tex(path)
+    if (options$external) path = tinytex::latexmk(path, getOption('tikzDefaultEngine'))
   }
 
   fig_process(options$fig.process, path, options)
+}
+
+# the tikz plot may contain raster legends, in which case we need to adjust the
+# paths of these PNG files: https://stackoverflow.com/a/58410965/559676
+patch_tikz_tex = function(path) {
+  d = dirname(path)
+  p = list.files(d, r <- '_ras[0-9]+[.]png$')
+  b = sans_ext(basename(path)); bs = sub(r, '', p)
+  # for foo.tex, there must be foo_ras[N].png, otherwise no need to patch foo.tex
+  if (!(b %in% bs)) return()
+  x = read_utf8(path)
+  r = '^(\\s*\\\\pgfimage\\[.+?]\\{)(.+?_ras[0-9]+}};\\s*)$'
+  i = grep(r, x)
+  i = i[grep(b, x[i], fixed = TRUE)]
+  x1 = sub(r, '\\1', x[i])
+  x2 = sub(r, '\\2', x[i])
+  if (is_windows()) d = gsub('\\\\', '/', d)
+  x[i] = paste0(x1, d, '/', x2)
+  write_utf8(x, path)
 }
 
 # filter the dev.args option
