@@ -60,7 +60,7 @@ call_block = function(block) {
   if (params$cache > 0) {
     content = c(
       params[if (params$cache < 3) cache1.opts else setdiff(names(params), cache0.opts)],
-      getOption('width'), if (params$cache == 2) params[cache2.opts]
+      75L, if (params$cache == 2) params[cache2.opts]
     )
     if (params$engine == 'R' && isFALSE(params$cache.comments)) {
       content[['code']] = parse_only(content[['code']])
