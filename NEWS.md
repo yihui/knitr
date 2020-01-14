@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.27
 
+## BUG FIXES
+
+- The figure caption was placed incorrectly when there are multiple `include_graphics()` in a code chunk (thanks, @hadley #1771, @cderv #1776).
 
 # CHANGES IN knitr VERSION 1.26
 
