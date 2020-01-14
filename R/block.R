@@ -244,7 +244,7 @@ block_exec = function(options) {
       if (evaluate::is.recordedplot(x)) return(1)
       if (inherits(x, 'knit_image_paths')) return(length(x))
       0
-    }) else 0L
+    })) else 0L
 
   # merge neighbor elements of the same class into one element
   for (cls in c('source', 'message', 'warning')) res = merge_class(res, cls)
