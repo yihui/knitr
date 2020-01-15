@@ -7,9 +7,7 @@ hook_plot_md = function(x, options) {
   if ((options$fig.show == 'animate' || is_tikz_dev(options)) && is_latex_output())
     return(hook_plot_tex(x, options))
   office_output = to %in% c('docx', 'pptx', 'rtf', 'odt')
-  if (!is.null(options$out.width) || !is.null(options$out.height) ||
-      !is.null(options$out.extra) || options$fig.align != 'default' ||
-      !is.null(options$fig.subcap) || options$fig.env != 'figure') {
+  if (need_special_plot_hook(options)) {
     if (is_latex_output()) {
       # Pandoc < 1.13 does not support \caption[]{} so suppress short caption
       if (is.null(options$fig.scap)) options$fig.scap = NA
@@ -24,6 +22,16 @@ hook_plot_md = function(x, options) {
     }
   }
   hook_plot_md_base(x, options)
+}
+
+# decide if the markdown plot hook is not enough and needs special hooks like
+# hook_plot_tex() to handle chunk options like out.width
+need_special_plot_hook = function(options) {
+  opts = opts_chunk$get(default = TRUE)
+  for (i in c(
+    'out.width', 'out.height', 'out.extra', 'fig.align', 'fig.subcap', 'fig.env'
+  )) if (!identical(options[[i]], opts[[i]])) return(TRUE)
+  FALSE
 }
 
 hook_plot_md_base = function(x, options) {
