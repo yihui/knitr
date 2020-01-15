@@ -16,7 +16,7 @@ The original filename.
 }
 \description{
 The command \command{pdfcrop} (often shipped with a LaTeX distribution) is
-executed on a PDF plot file, and \codde{magick::\link[magick]{image_trim}()}
+executed on a PDF plot file, and \code{magick::\link[magick]{image_trim}()}
 is executed for other types of plot files.
 }
 \references{
