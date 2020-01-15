@@ -101,6 +101,16 @@ assert(
   identical(fig_chunk('foo', '.pdf'), 'figure/foo-1.pdf')
 )
 
+assert('all_figs() generates all figure paths for a code chunk', {
+  opts = list(fig.path = 'abc/', label = 'foo', fig.num = 3)
+  (all_figs(opts, '.svg') %==% sprintf('abc/foo-%d.svg', 1:3))
+  (all_figs(opts, c('png', 'pdf'))  %==% apply(
+    expand.grid(1:3, c('.png', '.pdf')), 1, function(x) {
+      paste0(c('abc/foo-', x), collapse = '')
+    }
+  ))
+})
+
 f = file.path(R.home('doc'), 'html', 'logo.jpg')
 assert(
   'base64_encode() gets the same result as markdown:::.b64EncodeFile',

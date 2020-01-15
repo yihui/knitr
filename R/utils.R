@@ -539,7 +539,7 @@ merge_list = function(x, y) {
 
 # paths of all figures
 all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
-  fig_path(ext, options, number = seq_len(num))
+  unlist(lapply(ext, fig_path, options = options, number = seq_len(num)))
 }
 
 # evaluate an expression in a diretory and restore wd after that
