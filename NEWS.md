@@ -40,7 +40,7 @@
 
 ## NEW FEATURES
 
-- Office outputs (e.g., `rmarkdown::word_document`) supports the following chunk options `out.width`, `out.height`, `out.extra`. Their behavior follows the behavior of Pandoc's `link_attributes` extention (thanks, @atusy, #1746).
+- Office outputs (e.g., `rmarkdown::word_document`) supports the following chunk options `out.width`, `out.height`, `out.extra`. Their behavior follows the behavior of Pandoc's `link_attributes` extension (thanks, @atusy, #1746).
 
 - The chunk option `fig.process` can be specified by a function with the `options` argument to read chunk options (thanks, @atusy, #1749).
 
@@ -156,7 +156,7 @@
 
 ## MINOR CHANGES
 
-- Changed `tools::texi2dvi()` to `tinytex::latexmk()` for the `tikz` engine to compile TikZ graphics to other foramts (e.g., `svg` or `png`). This requires the **tinytex** package >= v0.10.10: https://github.com/yihui/tinytex.
+- Changed `tools::texi2dvi()` to `tinytex::latexmk()` for the `tikz` engine to compile TikZ graphics to other formats (e.g., `svg` or `png`). This requires the **tinytex** package >= v0.10.10: https://github.com/yihui/tinytex.
 
 - Empty lines are no longer removed in the output of `purl()` (thanks, Marius Hofert).
 
