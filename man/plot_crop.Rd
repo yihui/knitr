@@ -9,24 +9,18 @@ plot_crop(x, quiet = TRUE)
 \arguments{
 \item{x}{Filename of the plot.}
 
-\item{quiet}{Boolean; whether to suppress standard output from the command line
-utility.}
+\item{quiet}{Whether to suppress standard output from the command.}
 }
 \value{
 The original filename.
 }
 \description{
-The command \command{pdfcrop x x} is executed on a PDF plot file, and
-\command{convert x -trim x} is executed for other types of plot files, where
-\code{x} is the plot filename.
-}
-\details{
-The utility \command{pdfcrop} is often shipped with a LaTeX distribution, and
-\command{convert} is a command in ImageMagick (Windows users may have to put
-the bin path of ImageMagick into the \var{PATH} variable).
+The command \command{pdfcrop} (often shipped with a LaTeX distribution) is
+executed on a PDF plot file, and \codde{magick::\link[magick]{image_trim}()}
+is executed for other types of plot files.
 }
 \references{
-PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}; the
-  \command{convert} command in ImageMagick:
-  \url{http://www.imagemagick.org/script/convert.php}
+PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}. If you use
+  TinyTeX, you may install \command{pdfcrop} with
+  \code{tinytex::tlmgr_install('pdfcrop')}.
 }

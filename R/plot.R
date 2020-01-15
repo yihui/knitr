@@ -283,44 +283,28 @@ fig_process = function(FUN, path, options) {
 
 #' Crop a plot (remove the edges) using PDFCrop or ImageMagick
 #'
-#' The command \command{pdfcrop x x} is executed on a PDF plot file, and
-#' \command{convert x -trim x} is executed for other types of plot files, where
-#' \code{x} is the plot filename.
-#'
-#' The utility \command{pdfcrop} is often shipped with a LaTeX distribution, and
-#' \command{convert} is a command in ImageMagick (Windows users may have to put
-#' the bin path of ImageMagick into the \var{PATH} variable).
+#' The command \command{pdfcrop} (often shipped with a LaTeX distribution) is
+#' executed on a PDF plot file, and \codde{magick::\link[magick]{image_trim}()}
+#' is executed for other types of plot files.
 #' @param x Filename of the plot.
-#' @param quiet Boolean; whether to suppress standard output from the command line
-#'   utility.
+#' @param quiet Whether to suppress standard output from the command.
 #' @export
-#' @references PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}; the
-#'   \command{convert} command in ImageMagick:
-#'   \url{http://www.imagemagick.org/script/convert.php}
+#' @references PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}. If you use
+#'   TinyTeX, you may install \command{pdfcrop} with
+#'   \code{tinytex::tlmgr_install('pdfcrop')}.
 #' @return The original filename.
 plot_crop = function(x, quiet = TRUE) {
-  ext = tolower(file_ext(x))
+  is_pdf = grepl('[.]pdf$', x, ignore.case = TRUE)
   x2 = x
   x = path.expand(x)
-  if (ext == 'pdf') {
-    if (!has_utility('pdfcrop')) return(x2)
-  } else if (!has_utility('convert', 'ImageMagick')) return(x2)
+  if (is_pdf && !has_utility('pdfcrop')) return(x2)
 
   if (!quiet) message('cropping ', x)
-  x = shQuote(x)
-  if (ext == 'pdf') {
-    cmd = 'pdfcrop'
-    args = c(x, x)
+  if (is_pdf) {
+    system2('pdfcrop', shQuote(c(x, x)), stdout = if (quiet) FALSE else "")
   } else {
-    cmd = 'convert'
-    args = c(x, '-trim', x)
-  }
-  # see this post for why use shell() on Windoz:
-  # http://comments.gmane.org/gmane.comp.lang.r.devel/38113
-  if (is_windows()) {
-    shell(paste(c(cmd, args), collapse = ' '))  # no way to quiet cmd output on Windoz
-  } else {
-    system2(cmd, args = args, stdout = if (quiet) FALSE else "")
+    img = magick::image_read(x)
+    magick::image_write(magick::image_trim(img), x)
   }
   x2
 }

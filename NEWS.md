@@ -20,6 +20,8 @@
 
 - `is_html_output()` returns `TRUE` for the Pandoc output format `gfm` now (thanks, @ttimbers @cderv, rstudio/rmarkdown#1756).
 
+- `plot_crop()` no longer calls the `convert` command in ImageMagick to trim non-PDF plots. Instead, the function `magick::image_trim()` is called. This means you no longer need to install ImageMagick, but should install the R package **magick** (thanks, @hpages, #1785).
+
 # CHANGES IN knitr VERSION 1.26
 
 ## NEW FEATURES
