@@ -22,6 +22,8 @@
 
 - `plot_crop()` no longer calls the `convert` command in ImageMagick to trim non-PDF plots. Instead, the function `magick::image_trim()` is called. This means you no longer need to install ImageMagick, but should install the R package **magick** (thanks, @hpages, #1785).
 
+- When the chunk option `fig.scap` is used in R Markdown and the output format is LaTeX/PDF, the plot hook `knitr::hook_plot_tex()` will be used to create the appropriate figure environment. In previous versions, `fig.scap` is silently ignored (thanks, @billdenney, #1793).
+
 # CHANGES IN knitr VERSION 1.26
 
 ## NEW FEATURES
