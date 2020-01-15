@@ -11,8 +11,13 @@ all_rcpp_labels(...)
 }
 \arguments{
 \item{...}{A vector of R expressions, each of which should return \code{TRUE}
-or \code{FALSE}; the expressions are evaluated using the local chunk
-options of each code chunk as the environment.}
+or \code{FALSE}. The expressions are evaluated using the \emph{local} chunk
+options of each code chunk as the environment, which means global chunk
+options are not considered when evaluating these expressions. For example,
+if you set the global chunk option \code{opts_chunk$set(purl = TRUE)},
+\code{all_labels(purl == TRUE)} will \emph{not} return the labels of all
+code chunks, but will only return the labels of those code chunks that have
+local chunk options \code{purl = TRUE}.}
 }
 \value{
 A character vector.
@@ -25,7 +30,7 @@ labels. The function `all_rcpp_labels()` is a wrapper function for
 }
 \details{
 For example, suppose the condition expression is \code{engine == 'Rcpp'}, the
-object \code{engine} is the local chunk option \code{engine}; if an
+object \code{engine} is the local chunk option \code{engine}. If an
 expression fails to be evaluated (e.g. when a certain object does not exist),
 \code{FALSE} is returned and the label for this chunk will be filtered out.
 }
