@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.27
 
+## NEW FEATURES
+
+- The chunk option `message = FALSE` can now be used to suppress the message "running: command ..." when the language engine is a command such as `bash`, `awk`, `perl`, `ruby`, `sas`, `sed`, and `stata`, etc. (thanks, @splaisan, #1782).
+
 ## BUG FIXES
 
 - The figure caption was placed incorrectly when there are multiple `include_graphics()` in a code chunk (thanks, @hadley #1771, @cderv #1776).

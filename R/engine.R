@@ -150,7 +150,7 @@ eng_interpreted = function(options) {
     paste(code, opts) else paste(opts, code)
   cmd = get_engine_path(options$engine.path, engine)
   out = if (options$eval) {
-    message('running: ', cmd, ' ', code)
+    if (options$message) message('running: ', cmd, ' ', code)
     tryCatch(
       system2(cmd, code, stdout = TRUE, stderr = TRUE, env = options$engine.env),
       error = function(e) {
