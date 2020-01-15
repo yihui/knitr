@@ -284,7 +284,7 @@ fig_process = function(FUN, path, options) {
 #' Crop a plot (remove the edges) using PDFCrop or ImageMagick
 #'
 #' The command \command{pdfcrop} (often shipped with a LaTeX distribution) is
-#' executed on a PDF plot file, and \codde{magick::\link[magick]{image_trim}()}
+#' executed on a PDF plot file, and \code{magick::\link[magick]{image_trim}()}
 #' is executed for other types of plot files.
 #' @param x Filename of the plot.
 #' @param quiet Whether to suppress standard output from the command.
