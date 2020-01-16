@@ -230,6 +230,11 @@ is_abs_path = function(x) {
   if (is_windows()) grepl('^(\\\\|[A-Za-z]:)', x) else grepl('^[/~]', x)
 }
 
+# paths of web resources?
+is_web_path = function(x) {
+  grepl('^(f|ht)tps?://', x)
+}
+
 # is tikz device without externalization?
 is_tikz_dev = function(options) {
   'tikz' %in% options$dev && !options$external

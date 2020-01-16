@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.28
+
+## MINOR CHANGES
+
+- `include_graphics(files)` will signal an error if any `files` do not exist and are not web resources (thanks, @hadley, #1717).
+
 # CHANGES IN knitr VERSION 1.27
 
 ## NEW FEATURES
