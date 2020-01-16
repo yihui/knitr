@@ -369,12 +369,12 @@ par2 = function(x) {
 include_graphics = function(
   path, auto_pdf = getOption('knitr.graphics.auto_pdf', FALSE), dpi = NULL
 ) {
+  path = native_encode(path)  # https://d.cosx.org/d/420524
   if (auto_pdf && is_latex_output()) {
     path2 = with_ext(path, 'pdf')
     i = file.exists(path2)
     path[i] = path2[i]
   }
-  path = native_encode(path)
   if (length(p <- path[!is_web_path(path) & !file.exists(path)])) stop(
     'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
   )
