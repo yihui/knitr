@@ -354,6 +354,8 @@ par2 = function(x) {
 #'   width (in inches) of the images. This will be their actual width in pixels,
 #'   divided by \code{dpi}. If not provided, the chunk option \code{dpi} is used; if
 #'   \code{NA}, the output width will not be calculated.
+#' @param error Whether to signal an error if any files specified in the
+#'   \code{path} argument do not exist and are not web resources.
 #' @note This function is supposed to be used in R code chunks or inline R code
 #'   expressions. You are recommended to use forward slashes (\verb{/}) as path
 #'   separators instead of backslashes in the image paths.
@@ -367,7 +369,8 @@ par2 = function(x) {
 #'   paths to proper output code according to the output format.
 #' @export
 include_graphics = function(
-  path, auto_pdf = getOption('knitr.graphics.auto_pdf', FALSE), dpi = NULL
+  path, auto_pdf = getOption('knitr.graphics.auto_pdf', FALSE), dpi = NULL,
+  error = TRUE
 ) {
   path = native_encode(path)  # https://d.cosx.org/d/420524
   if (auto_pdf && is_latex_output()) {
@@ -375,7 +378,7 @@ include_graphics = function(
     i = file.exists(path2)
     path[i] = path2[i]
   }
-  if (length(p <- path[!is_web_path(path) & !file.exists(path)])) stop(
+  if (error && length(p <- path[!is_web_path(path) & !file.exists(path)])) stop(
     'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
   )
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)

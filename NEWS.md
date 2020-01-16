@@ -2,7 +2,7 @@
 
 ## MINOR CHANGES
 
-- `include_graphics(files)` will signal an error if any `files` do not exist and are not web resources (thanks, @hadley, #1717).
+- By default, `include_graphics(files)` will signal an error if any `files` do not exist and are not web resources. To avoid the error (e.g., if you think it is a false positive), use `include_graphics(..., error = FALSE)` (thanks, @hadley, #1717).
 
 # CHANGES IN knitr VERSION 1.27
 
