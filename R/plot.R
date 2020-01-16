@@ -345,14 +345,14 @@ par2 = function(x) {
 #' graphics output that work for normal R plots also work for these images, such
 #' as \code{out.width} and \code{out.height}.
 #' @param path A character vector of image paths.
-#' @param auto_pdf Boolean; whether to use PDF images automatically when the output
-#'   format is LaTeX. If \code{TRUE}, then e.g. \file{foo/bar.png} will be replaced by
-#'   \file{foo/bar.pdf} if the latter exists. This can be useful since normally
-#'   PDF images are of higher quality than raster images like PNG, when the
-#'   output is LaTeX/PDF.
-#' @param dpi DPI (dots per inch) value. Used to calculate the output
-#'   width (in inches) of the images. This will be their actual width in pixels,
-#'   divided by \code{dpi}. If not provided, the chunk option \code{dpi} is used; if
+#' @param auto_pdf Whether to use PDF images automatically when the output
+#'   format is LaTeX. If \code{TRUE}, then e.g. \file{foo/bar.png} will be
+#'   replaced by \file{foo/bar.pdf} if the latter exists. This can be useful
+#'   since normally PDF images are of higher quality than raster images like
+#'   PNG, when the output is LaTeX/PDF.
+#' @param dpi DPI (dots per inch) value. Used to calculate the output width (in
+#'   inches) of the images. This will be their actual width in pixels, divided
+#'   by \code{dpi}. If not provided, the chunk option \code{dpi} is used; if
 #'   \code{NA}, the output width will not be calculated.
 #' @param error Whether to signal an error if any files specified in the
 #'   \code{path} argument do not exist and are not web resources.
