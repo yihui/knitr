@@ -63,9 +63,13 @@
 hook_pdfcrop = function(before, options, envir) {
   # crops plots after a chunk is evaluated and plot files produced
   if (before) return()
-  paths = opts_knit$get('plot_files')
-  in_base_dir(for (f in paths) plot_crop(f))
+  in_base_dir(for (f in get_plot_files()) plot_crop(f))
 }
+
+get_plot_files = function() {
+  unique(opts_knit$get('plot_files'))
+}
+
 #' @export
 #' @rdname chunk_hook
 hook_optipng = function(before, options, envir) {
@@ -80,7 +84,7 @@ hook_png = function(
   if (!nzchar(Sys.which(cmd))) {
     warning('cannot find ', cmd, '; please install and put it in PATH'); return()
   }
-  paths = opts_knit$get('plot_files')
+  paths = get_plot_files()
   paths = grep('[.]png$', paths, ignore.case = TRUE, value = TRUE)
 
   in_base_dir(

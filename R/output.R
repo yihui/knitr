@@ -541,13 +541,14 @@ wrap.recordedplot = function(x, options) {
       dir.create(dirname(name), recursive = TRUE)
   )
   # vectorize over dev, ext and dpi: save multiple versions of the plot
-  file = mapply(
+  files = mapply(
     save_plot, width = options$fig.width, height = options$fig.height,
     dev = options$dev, ext = options$fig.ext, dpi = options$dpi,
     MoreArgs = list(plot = x, name = name, options = options), SIMPLIFY = FALSE
-  )[[1]]
+  )
+  opts_knit$append(plot_files = unlist(files))
   if (options$fig.show == 'hide') return('')
-  in_base_dir(run_hook_plot(file, reduce_plot_opts(options)))
+  in_base_dir(run_hook_plot(files[[1]], reduce_plot_opts(options)))
 }
 
 #' @export
