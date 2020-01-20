@@ -302,10 +302,12 @@ plot_crop = function(x, quiet = TRUE) {
   if (!quiet) message('cropping ', x)
   if (is_pdf) {
     system2('pdfcrop', shQuote(c(x, x)), stdout = if (quiet) FALSE else "")
-  } else {
+  } else if (loadable('magick')) {
     img = magick::image_read(x)
     magick::image_write(magick::image_trim(img), x)
-  }
+  } else warning(
+    'The magick package is required to crop "', x2, '" but not available.'
+  )
   x2
 }
 
