@@ -12,9 +12,8 @@
 #' \command{pdfcrop} often comes with a LaTeX distribution such as MiKTeX or
 #' TeXLive, and you may not need to install it separately (use
 #' \code{Sys.which('pdfcrop')} to check it; if it not empty, you are able to use
-#' it). Similarly, when the plot format is not PDF (e.g. PNG), the program
-#' \command{convert} in ImageMagick is used to trim the white margins (call
-#' \command{convert input -trim output}).
+#' it). Similarly, when the plot format is not PDF (e.g. PNG), the \pkg{magick}
+#' package is used to crop the plot.
 #'
 #' The function \code{hook_optipng()} calls the program \command{optipng} to
 #' optimize PNG images. Note the chunk option \code{optipng} can be used to
