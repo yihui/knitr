@@ -583,8 +583,6 @@ wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE) {
       dir.create(dirname(f), recursive = TRUE, showWarnings = FALSE)
       writeBin(x$image, f, useBytes = TRUE)
     }
-    # crop white margins
-    if (isTRUE(options$crop)) in_dir(dirname(f), plot_crop(basename(f)))
     options$fig.cur = i
     options = reduce_plot_opts(options)
     if (!is.null(x$url) && is.null(options$fig.link)) options$fig.link = x$url
