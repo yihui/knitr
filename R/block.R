@@ -255,6 +255,7 @@ block_exec = function(options) {
   on.exit({
     plot_counter(reset = TRUE)
     shot_counter(reset = TRUE)
+    opts_knit$delete('plot_files')
   }, add = TRUE)  # restore plot number
 
   output = unlist(wrap(res, options)) # wrap all results together

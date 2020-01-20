@@ -547,13 +547,12 @@ wrap.recordedplot = function(x, options) {
     MoreArgs = list(plot = x, name = name, options = options), SIMPLIFY = FALSE
   )[[1]]
   if (options$fig.show == 'hide') return('')
-  in_base_dir(knit_hooks$get('plot')(file, reduce_plot_opts(options)))
+  in_base_dir(run_hook_plot(file, reduce_plot_opts(options)))
 }
 
 #' @export
 wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) {
   if (options$fig.show == 'hide') return('')
-  hook_plot = knit_hooks$get('plot')
   # remove the automatically set out.width when fig.retina is set, otherwise the
   # size of external images embedded via include_graphics() will be set to
   # fig.width * dpi in fix_options()
@@ -568,14 +567,13 @@ wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) 
     options$fig.cur = plot_counter()
     if (is.null(options[['out.width']]))
       options['out.width'] = list(raster_dpi_width(x[i], dpi))
-    hook_plot(x[i], reduce_plot_opts(options))
+    run_hook_plot(x[i], reduce_plot_opts(options))
   })), collapse = '')
 }
 
 #' @export
 wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE) {
   ext = x$extension
-  hook_plot = knit_hooks$get('plot')
   in_base_dir({
     i = plot_counter()
     if (is.null(f <- x$file)) {
@@ -586,8 +584,17 @@ wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE) {
     options$fig.cur = i
     options = reduce_plot_opts(options)
     if (!is.null(x$url) && is.null(options$fig.link)) options$fig.link = x$url
-    hook_plot(f, options)
+    run_hook_plot(f, options)
   })
+}
+
+# record plot filenames in opts_knit$get('plot_files'), including those from R
+# code, include_graphics(), and auto screenshots of HTML widgets, etc. Then run
+# the plot hook.
+run_hook_plot = function(x, options) {
+  opts_knit$append(plot_files = x)
+  hook = knit_hooks$get('plot')
+  hook(x, options)
 }
 
 #' @export

@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.28
 
+## BUG FIXES
+
+- `hook_pdfcrop()` can crop images included via `include_graphics()` now (thanks, @hpages, #1797).
+
 ## MAJOR CHANGES
 
 - If the `hook_pdfcrop()` is enabled, the non-PDF image will be cropped only if the **magick** package is available, otherwise it will signal a warning. In the previous version, it will signal an error (thanks, @trannhatanh89, #1796).
