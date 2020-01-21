@@ -428,6 +428,7 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 #' @param x output from \code{\link[evaluate]{evaluate}}
 #' @param options List of options used to control output
 #' @noRd
+#' @export
 wrap = function(x, options = list(), ...) {
   UseMethod('wrap', x)
 }
