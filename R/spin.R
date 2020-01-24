@@ -198,17 +198,17 @@ check_comments <- function(c1, c2) {
   while(length(cs)) {
     i <- 1
     if (grepl("closer", names(cs)[1])) {
-      notes <- append(notes, paste0("  * unopened comment; closed on line ", cs[1]))
+      notes <- append(notes, paste0("  * no starting delimiter; ended on line ", cs[1]))
       cs <- cs[-1]
       err <- TRUE
     } else if (all(grepl("opener", names(cs)))) {
-      notes <- append(notes, paste0("  * opened on line ", cs[1], "; unclosed"))
+      notes <- append(notes, paste0("  * started on line ", cs[1], "; no end delimiter"))
       cs <- cs[-1]
       err <- TRUE
     } else {
       while (i < length(cs)) {
         if (grepl("opener", names(cs)[i]) & grepl("closer", names(cs)[i + 1])) {
-          notes <- append(notes, paste0("  * opened on line ", cs[i], "; closed on line ", cs[i + 1]))
+          notes <- append(notes, paste0("  * started on line ", cs[i], "; ended on line ", cs[i + 1]))
           cs <- cs[-c(i, i + 1)]
           break
         } else {
