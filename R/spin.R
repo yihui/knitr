@@ -59,8 +59,7 @@ spin = function(
   x = if (nosrc <- is.null(text)) read_utf8(hair) else split_lines(text)
   stopifnot(length(comment) == 2L)
   c1 = grep(comment[1], x); c2 = grep(comment[2], x)
-  if (length(c1) != length(c2))
-    stop('comments must be put in pairs of start and end delimiters')
+  check_comments(c1, c2)
   # remove comments
   if (length(c1)) x = x[-unique(unlist(mapply(seq, c1, c2, SIMPLIFY = FALSE)))]
 
@@ -183,3 +182,48 @@ spin_child = function(input, format) {
     quiet = TRUE
   ))
 }
+
+#' Check Comments
+#'
+#' A more robust check for open/close matching sets of comments in a spin file.
+#'
+#' @param c1 index (line numbers) for the start delimiter of comments
+#' @param c1 index (line numbers) for the end delimiter of comments
+#'
+check_comments <- function(c1, c2) {
+
+  cs <- sort(c(openers = c1, closers = c2))
+  err <- FALSE
+  notes <- character()
+
+  while(length(cs)) {
+    if (grepl("closer", names(cs)[1])) {
+      notes <- append(notes, paste0("  unopened comment; closed on line ", cs[1]))
+      cs <- cs[-1]
+      err <- TRUE
+    }
+
+    i <- 1
+    while(i < length(cs)) {
+      if (grepl("opener", names(cs)[i]) & grepl("closer", names(cs)[i + 1])) {
+        notes <- append(notes, paste0("  opened on line ", cs[i], "; closed on line ", cs[i + 1]))
+        cs <- cs[-c(i, i+1)]
+      } else {
+        i <- i + 1
+      }
+    }
+
+    if (length(cs) == 1L & grepl("opener", names(cs)[1])) {
+      notes <- append(notes, paste0("  opened on line ", cs[1], "; unclosed"))
+      cs <- cs[-1]
+      err <- TRUE
+    }
+  }
+
+  if (err) {
+     stop(paste('comments must be put in pairs of start and end delimiters.\n', paste(notes, collapse = '\n'), collapse = "\n"),
+          call. = FALSE)
+  }
+  invisible(notes)
+}
+

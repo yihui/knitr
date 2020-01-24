@@ -76,6 +76,7 @@ Authors@R: c(
     person("Niels Richard", "Hansen", role = "ctb"),
     person("Noam", "Ross", role = "ctb"),
     person("Obada", "Mahdi", role = "ctb"),
+    person("Peter", "DeWitt", role = "ctb"),
     person("Qiang", "Li", role = "ctb"),
     person("Ramnath", "Vaidyanathan", role = "ctb"),
     person("Richard", "Cotton", role = "ctb"),

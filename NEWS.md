@@ -10,6 +10,10 @@
 
 - By default, `include_graphics(files)` will signal an error if any `files` do not exist and are not web resources. To avoid the error (e.g., if you think it is a false positive), use `include_graphics(..., error = FALSE)` (thanks, @hadley, #1717).
 
+## BUG FIXES
+
+- Check for the correct ordering of start/end deliminators of comments for spin files (#1801)
+
 # CHANGES IN knitr VERSION 1.27
 
 ## NEW FEATURES
