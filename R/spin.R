@@ -195,28 +195,26 @@ check_comments <- function(c1, c2) {
   cs <- sort(c(openers = c1, closers = c2))
   err <- FALSE
   notes <- character()
-
   while(length(cs)) {
-    if (grepl("closer", names(cs)[1])) {
-      notes <- append(notes, paste0("  unopened comment; closed on line ", cs[1]))
-      cs <- cs[-1]
-      err <- TRUE
-    }
-
     i <- 1
-    while(i < length(cs)) {
-      if (grepl("opener", names(cs)[i]) & grepl("closer", names(cs)[i + 1])) {
-        notes <- append(notes, paste0("  opened on line ", cs[i], "; closed on line ", cs[i + 1]))
-        cs <- cs[-c(i, i+1)]
-      } else {
-        i <- i + 1
-      }
-    }
-
-    if (length(cs) == 1L & grepl("opener", names(cs)[1])) {
-      notes <- append(notes, paste0("  opened on line ", cs[1], "; unclosed"))
+    if (grepl("closer", names(cs)[1])) {
+      notes <- append(notes, paste0("  * unopened comment; closed on line ", cs[1]))
       cs <- cs[-1]
       err <- TRUE
+    } else if (all(grepl("opener", names(cs)))) {
+      notes <- append(notes, paste0("  * opened on line ", cs[1], "; unclosed"))
+      cs <- cs[-1]
+      err <- TRUE
+    } else {
+      while (i < length(cs)) {
+        if (grepl("opener", names(cs)[i]) & grepl("closer", names(cs)[i + 1])) {
+          notes <- append(notes, paste0("  * opened on line ", cs[i], "; closed on line ", cs[i + 1]))
+          cs <- cs[-c(i, i + 1)]
+          break
+        } else {
+          i <- i + 1
+        }
+      }
     }
   }
 
