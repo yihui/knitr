@@ -564,11 +564,12 @@ wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE) 
       options['out.width'] = list(NULL)
   }
   dpi = attr(x, 'dpi') %n% options$dpi
+  hook = knit_hooks$get('plot')
   paste(unlist(lapply(seq_along(x), function(i) {
     options$fig.cur = plot_counter()
     if (is.null(options[['out.width']]))
       options['out.width'] = list(raster_dpi_width(x[i], dpi))
-    run_hook_plot(x[i], reduce_plot_opts(options))
+    hook(x[i], reduce_plot_opts(options))
   })), collapse = '')
 }
 
@@ -590,8 +591,7 @@ wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE) {
 }
 
 # record plot filenames in opts_knit$get('plot_files'), including those from R
-# code, include_graphics(), and auto screenshots of HTML widgets, etc. Then run
-# the plot hook.
+# code and auto screenshots of HTML widgets, etc. Then run the plot hook.
 run_hook_plot = function(x, options) {
   opts_knit$append(plot_files = x)
   hook = knit_hooks$get('plot')

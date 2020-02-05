@@ -2,7 +2,7 @@
 
 ## BUG FIXES
 
-- `hook_pdfcrop()` can crop images included via `include_graphics()` now (thanks, @hpages, #1797).
+- `hook_pdfcrop()` no longer crops images included via `include_graphics()` now (thanks, @hpages #1797, @salim-b #1800).
 
 ## MAJOR CHANGES
 
