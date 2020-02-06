@@ -9,7 +9,7 @@
 
 ## MAJOR CHANGES
 
-- If the `hook_pdfcrop()` is enabled, the non-PDF image will be cropped only if the **magick** package is available, otherwise it will signal a warning. In the previous version, it will signal an error (thanks, @trannhatanh89, #1796).
+- If the `hook_pdfcrop()` is enabled, the non-PDF image will be cropped only if the **magick** package is available, otherwise it will signal a message. In the previous version, it will signal an error (thanks, @trannhatanh89, #1796).
 
 - By default, `include_graphics(files)` will signal an error if any `files` do not exist and are not web resources. To avoid the error (e.g., if you think it is a false positive), use `include_graphics(..., error = FALSE)` (thanks, @hadley, #1717).
 
