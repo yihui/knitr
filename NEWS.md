@@ -1,3 +1,6 @@
+# CHANGES IN knitr VERSION 1.29
+
+
 # CHANGES IN knitr VERSION 1.28
 
 ## BUG FIXES
