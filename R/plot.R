@@ -372,7 +372,7 @@ par2 = function(x) {
 #' @export
 include_graphics = function(
   path, auto_pdf = getOption('knitr.graphics.auto_pdf', FALSE), dpi = NULL,
-  error = TRUE
+  error = getOption('knitr.graphics.error', TRUE)
 ) {
   path = native_encode(path)  # https://d.cosx.org/d/420524
   if (auto_pdf && is_latex_output()) {

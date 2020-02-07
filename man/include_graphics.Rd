@@ -8,7 +8,7 @@ include_graphics(
   path,
   auto_pdf = getOption("knitr.graphics.auto_pdf", FALSE),
   dpi = NULL,
-  error = TRUE
+  error = getOption("knitr.graphics.error", TRUE)
 )
 }
 \arguments{

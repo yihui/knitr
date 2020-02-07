@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.29
 
+## NEW FEATURES
+
+- The argument `error` of `include_graphics()` takes value from the global R option `knitr.graphics.error` by default, e.g., you may set `options(knitr.graphics.error = FALSE)` so `include_graphics()` won't signal an error if the graphics file to be included doesn't exist.
 
 # CHANGES IN knitr VERSION 1.28
 
