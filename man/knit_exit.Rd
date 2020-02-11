@@ -4,13 +4,18 @@
 \alias{knit_exit}
 \title{Exit knitting early}
 \usage{
-knit_exit(append)
+knit_exit(append, propagate = FALSE)
 }
 \arguments{
 \item{append}{A character vector to be appended to the results from
 \code{knit()} so far. By default, this is \samp{\end{document}} for LaTeX
 output, and \samp{</body></html>} for HTML output, to make the output
 document complete. For other types of output, it is an empty string.}
+
+\item{propagate}{Logical indicating whether the early termination signal
+should be propagated from child documents to the top-level document.
+The default (\code{FALSE}) will exit the child document, but continue
+to render the parent document.}
 }
 \value{
 Invisible \code{NULL}. An internal signal is set up (as a side

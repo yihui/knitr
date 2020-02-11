@@ -3,6 +3,7 @@
 ## NEW FEATURES
 
 - The argument `error` of `include_graphics()` takes value from the global R option `knitr.graphics.error` by default, e.g., you may set `options(knitr.graphics.error = FALSE)` so `include_graphics()` won't signal an error if the graphics file to be included doesn't exist.
+- Added `propagate` option to `knit_exit()`. This indicates whether the early termination signal should be propagated from child documents to the top-level document. The default value (`FALSE`) retains existing behavior.
 
 # CHANGES IN knitr VERSION 1.28
 
