@@ -4,6 +4,7 @@
 \alias{hook_pdfcrop}
 \alias{hook_optipng}
 \alias{hook_pngquant}
+\alias{hook_mogrify}
 \alias{hook_plot_custom}
 \alias{hook_purl}
 \title{Built-in chunk hooks to extend knitr}
@@ -13,6 +14,8 @@ hook_pdfcrop(before, options, envir)
 hook_optipng(before, options, envir)
 
 hook_pngquant(before, options, envir)
+
+hook_mogrify(before, options, envir)
 
 hook_plot_custom(before, options, envir)
 
@@ -35,9 +38,8 @@ the space in the output document, otherwise we often have to struggle with
 \command{pdfcrop} often comes with a LaTeX distribution such as MiKTeX or
 TeXLive, and you may not need to install it separately (use
 \code{Sys.which('pdfcrop')} to check it; if it not empty, you are able to use
-it). Similarly, when the plot format is not PDF (e.g. PNG), the program
-\command{convert} in ImageMagick is used to trim the white margins (call
-\command{convert input -trim output}).
+it). Similarly, when the plot format is not PDF (e.g. PNG), the \pkg{magick}
+package is used to crop the plot.
 
 The function \code{hook_optipng()} calls the program \command{optipng} to
 optimize PNG images. Note the chunk option \code{optipng} can be used to
@@ -48,6 +50,11 @@ The function \code{hook_pngquant()} calls the program \command{pngquant} to
 optimize PNG images. Note the chunk option \code{pngquant} can be used to
 provide additional parameters to the program \command{pngquant}, e.g.
 \code{pngquant = '--speed=1 --quality=0-50'}.
+
+The function \code{hook_mogrify()} calls the program \command{mogrify}.  Note
+the chunk option \code{mogrify} can be used to provide additional parameters
+to the program \command{mogrify} (with default \code{-trim} to trim PNG
+files).
 
 When the plots are not recordable via \code{\link[grDevices]{recordPlot}} and
 we save the plots to files manually via other functions (e.g. \pkg{rgl}
@@ -66,7 +73,7 @@ chunk option \code{purl=FALSE} are ignored. Please note when the cache is
 turned on (the chunk option \code{cache = TRUE}), no chunk hooks will be
 executed, hence \code{hook_purl()} will not work, either. To solve this
 problem, we need \code{cache = 2} instead of \code{TRUE} (see
-\url{https://yihui.name/knitr/demo/cache/} for the meaning of \code{cache =
+\url{https://yihui.org/knitr/demo/cache/} for the meaning of \code{cache =
 2}).
 }
 \note{
@@ -79,7 +86,7 @@ if (require("rgl") && exists("hook_rgl")) knit_hooks$set(rgl = hook_rgl)
 # then in code chunks, use the option rgl=TRUE
 }
 \references{
-\url{https://yihui.name/knitr/hooks/#chunk_hooks}
+\url{https://yihui.org/knitr/hooks/#chunk_hooks}
 }
 \seealso{
 \code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}},

@@ -25,8 +25,8 @@
 #' @export
 #' @note The Leiningen engine \code{lein} requires lein-exec plugin; see
 #'   \url{https://github.com/yihui/knitr/issues/1176} for details.
-#' @references Usage: \url{https://yihui.name/knitr/objects/}; examples:
-#'   \url{https://yihui.name/knitr/demo/engines/}
+#' @references Usage: \url{https://yihui.org/knitr/objects/}; examples:
+#'   \url{https://yihui.org/knitr/demo/engines/}
 #' @examples knit_engines$get('python'); knit_engines$get('awk')
 #' names(knit_engines$get())
 knit_engines = new_defaults()
@@ -140,7 +140,7 @@ eng_interpreted = function(options) {
     )
   } else paste(switch(
     engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -ep',
-    mysql = '-e', node = '-e', octave = '--eval', perl = '-e', psql = '-c',
+    mysql = '-e', node = '-e', octave = '--eval', perl = '-E', psql = '-c',
     python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
   ), shQuote(one_string(options$code)))
 
@@ -150,7 +150,7 @@ eng_interpreted = function(options) {
     paste(code, opts) else paste(opts, code)
   cmd = get_engine_path(options$engine.path, engine)
   out = if (options$eval) {
-    message('running: ', cmd, ' ', code)
+    if (options$message) message('running: ', cmd, ' ', code)
     tryCatch(
       system2(cmd, code, stdout = TRUE, stderr = TRUE, env = options$engine.env),
       error = function(e) {
@@ -301,9 +301,8 @@ eng_tikz = function(options) {
     # dvisvgm needs to be on the path
     # dvisvgm for windows needs ghostscript bin dir on the path also
     if (Sys.which('dvisvgm') == '') tinytex::tlmgr_install('dvisvgm')
-    if (system2('dvisvgm', fig) != 0) stop('Failed to compile ', fig, ' to ', fig2)
-    # copy the svg to figure subdir
-    file.rename(basename(fig2), fig2)
+    if (system2('dvisvgm', c('-o', shQuote(fig2), fig)) != 0)
+      stop('Failed to compile ', fig, ' to ', fig2)
   } else {
     # convert to the desired output-format using magick
     if (ext != 'pdf') magick::image_write(do.call(magick::image_convert, c(
@@ -687,15 +686,9 @@ eng_sxss = function(options) {
   if (use_package) {
     message("Converting with the R package sass")
 
-    # TODO: after sass R package (https://github.com/rstudio/sass) is released on CRAN
-    # delete calls to get and replace sass, sass_file, sass_options with sass::function_name()
-    # add sass to Suggests
-    sass = getFromNamespace("sass", "sass")
-    sass_file = getFromNamespace("sass_file", "sass")
-    sass_options = getFromNamespace("sass_options", "sass")
-
+    sass_fun = options$engine.opts$sass_fun %n% sass::sass
     out = tryCatch(
-      sass(sass_file(f), options = sass_options(output_style = style)),
+      sass_fun(sass::sass_file(f), options = sass::sass_options(output_style = style)),
       error = function(e) {
         if (!options$error) stop(e)
         warning2(paste('Error in converting to CSS using sass R package:', e, sep = "\n"))

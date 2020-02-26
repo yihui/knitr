@@ -41,7 +41,20 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
   })
 }
 
-# a code manager to manage R code in all chunks
+#' The code manager to manage code in all chunks
+#'
+#' This object provides methods to manage code (as character vectors) in all
+#' chunks in \pkg{knitr} source documents. For example,
+#' \code{knitr::knit_code$get()} returns a named list of all code chunks (the
+#' names are chunk labels), and \code{knitr::knit_code$get('foo')} returns the
+#' character vector of the code in the chunk with the label \code{foo}.
+#' @note The methods on this object include the \code{set()} method (i.e., you
+#'   could do something like \code{knitr::knit_code$set(foo = "'my precious new
+#'   code'")}), but we recommend that you do not use this method to modify the
+#'   content of code chunks, unless you are
+#'   \href{https://emitanaka.rbind.io/post/knitr-knitr-code/}{as creative as Emi
+#'   Tanaka} and know what you are doing.
+#' @export
 knit_code = new_defaults()
 
 # strip the pattern in code
@@ -124,7 +137,7 @@ parse_params = function(params) {
     eval(parse_only(paste('alist(', quote_label(params), ')'))),
     error = function(e) {
       message('(*) NOTE: I saw chunk options "', params,
-              '"\n please go to https://yihui.name/knitr/options',
+              '"\n please go to https://yihui.org/knitr/options',
               '\n (it is likely that you forgot to quote "character" options)')
     })
 
@@ -254,7 +267,7 @@ print.inline = function(x, ...) {
 #'   that future chunks can (re)use the code by chunk label references. If an
 #'   external chunk has the same label as a chunk in the current session, chunk
 #'   label references by future chunks will refer to the external chunk.
-#' @references \url{https://yihui.name/knitr/demo/externalization/}
+#' @references \url{https://yihui.org/knitr/demo/externalization/}
 #' @note This function can only be used in a chunk which is \emph{not} cached
 #'   (chunk option \code{cache = FALSE}), and the code is read and stored in the
 #'   current session \emph{without} being executed (to actually run the code,
@@ -375,10 +388,9 @@ parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   if (length(labels) <= 1L) code = list(code)
   code = mapply(indent_block, code, indent, SIMPLIFY = FALSE, USE.NAMES = FALSE)
 
-  x[idx] = unlist(lapply(code, function(z) {
-    one_string(parse_chunk(z, rc))
-  }), use.names = FALSE)
-  x
+  x = as.list(x)
+  x[idx] = lapply(code, function(z) parse_chunk(z, rc))
+  unlist(x, use.names = FALSE)
 }
 
 # filter chunk.end lines that don't actually end a chunk
@@ -403,12 +415,17 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
 #' \code{all_labels(engine == 'Rcpp')}.
 #'
 #' For example, suppose the condition expression is \code{engine == 'Rcpp'}, the
-#' object \code{engine} is the local chunk option \code{engine}; if an
+#' object \code{engine} is the local chunk option \code{engine}. If an
 #' expression fails to be evaluated (e.g. when a certain object does not exist),
 #' \code{FALSE} is returned and the label for this chunk will be filtered out.
 #' @param ... A vector of R expressions, each of which should return \code{TRUE}
-#'   or \code{FALSE}; the expressions are evaluated using the local chunk
-#'   options of each code chunk as the environment.
+#'   or \code{FALSE}. The expressions are evaluated using the \emph{local} chunk
+#'   options of each code chunk as the environment, which means global chunk
+#'   options are not considered when evaluating these expressions. For example,
+#'   if you set the global chunk option \code{opts_chunk$set(purl = TRUE)},
+#'   \code{all_labels(purl == TRUE)} will \emph{not} return the labels of all
+#'   code chunks, but will only return the labels of those code chunks that have
+#'   local chunk options \code{purl = TRUE}.
 #' @note Empty code chunks are always ignored, including those chunks that are
 #'   empty in the original document but filled with code using chunk options
 #'   such as \code{ref.label} or \code{code}.

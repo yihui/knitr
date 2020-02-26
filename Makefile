@@ -39,7 +39,7 @@ integration-need:
 		GIT_PAGER=cat git show HEAD
 
 integration-run:
-	make deps xvfb-start knit xvfb-stop -C knitr-examples
+	xvfb-run make deps knit -C knitr-examples
 
 integration-verify:
 	GIT_PAGER=cat make diff -C knitr-examples

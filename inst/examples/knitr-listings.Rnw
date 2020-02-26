@@ -102,5 +102,5 @@ to \LaTeX{} users.
 
 You should be able to compile the \TeX{} document and get a PDF file
 like this one: \url{https://github.com/yihui/knitr/releases/download/doc/knitr-listings.pdf}.
-For more information about out hooks, see \url{https://yihui.name/knitr/hooks}.
+For more information about out hooks, see \url{https://yihui.org/knitr/hooks}.
 \end{document}

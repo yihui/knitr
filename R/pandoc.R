@@ -33,10 +33,9 @@
 #' @param ext Filename extensions. By default, the extension is inferred from
 #'   the \code{format}, e.g. \code{latex} creates \code{pdf}, \code{dzslides}
 #'   creates \code{html}, and so on
-#' @inheritParams knit
 #' @return The output filename(s) (or an error if the conversion failed).
 #' @references Pandoc: \url{https://pandoc.org}; Examples and rules of the
-#'   configurations: \url{https://yihui.name/knitr/demo/pandoc/}
+#'   configurations: \url{https://yihui.org/knitr/demo/pandoc/}
 #'
 #'   Also see R Markdown (v2) at \url{http://rmarkdown.rstudio.com}. The
 #'   \pkg{rmarkdown} package has several convenience functions and templates

@@ -61,7 +61,7 @@ color_def = function(col, variable = 'shadecolor') {
       x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
       warning("the color '", col, "' is invalid;",
               'using default color...',
-              'see https://yihui.name/knitr/options')
+              'see https://yihui.org/knitr/options')
     }
   }
   if (length(x) != 3L) stop('invalid color:', col)
@@ -127,7 +127,7 @@ pure_preamble = function(preamble, patterns) {
 #'   standalone mode using \code{\link{knit}()} (instead of being called in
 #'   \code{\link{knit_child}()}); when the parent document is compiled, this
 #'   function in the child document will be ignored.
-#' @references \url{https://yihui.name/knitr/demo/child/}
+#' @references \url{https://yihui.org/knitr/demo/child/}
 #' @export
 #' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
 #'
@@ -228,6 +228,11 @@ format_sci = function(x, ...) {
 # absolute path?
 is_abs_path = function(x) {
   if (is_windows()) grepl('^(\\\\|[A-Za-z]:)', x) else grepl('^[/~]', x)
+}
+
+# paths of web resources?
+is_web_path = function(x) {
+  grepl('^(f|ht)tps?://', x)
 }
 
 # is tikz device without externalization?
@@ -341,7 +346,7 @@ is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
   if (length(fmt) == 0) return(FALSE)
   if (grepl('^markdown', fmt)) fmt = 'markdown'
   if (fmt == 'epub3') fmt = 'epub'
-  fmts = c('markdown', 'epub', 'html', 'html4', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
+  fmts = c('markdown', 'epub', 'html', 'html4', 'html5', 'revealjs', 's5', 'slideous', 'slidy', 'gfm')
   fmt %in% setdiff(fmts, excludes)
 }
 
@@ -539,7 +544,7 @@ merge_list = function(x, y) {
 
 # paths of all figures
 all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
-  fig_path(ext, options, number = seq_len(num))
+  unlist(lapply(ext, fig_path, options = options, number = seq_len(num)))
 }
 
 # evaluate an expression in a diretory and restore wd after that
@@ -598,8 +603,7 @@ read_rforge = function(path, project, extra = '') {
   read_utf8(sprintf('%s/%s?root=%s%s', base, path, project, extra))
 }
 
-# strsplit('', 'foo') should return '' instead of character(0), and I also need
-# strsplit('a\n', '\n') to return c('a', '') instead of c('a')
+# TODO: just import xfun::split_lines()
 split_lines = function(x) {
   if (length(grep('\n', x)) == 0L) return(x)
   x = gsub('\n$', '\n\n', x)
@@ -808,7 +812,7 @@ create_label = function(..., latex = FALSE) {
 #' @param sep Separator to be inserted between words.
 #' @param and Character string to be prepended to the last word.
 #' @param before,after A character string to be added before/after each word.
-#' @return A character string.
+#' @return A character string marked by \code{xfun::\link{raw_string}()}.
 #' @export
 #' @examples combine_words('a'); combine_words(c('a', 'b'))
 #' combine_words(c('a', 'b', 'c'))
@@ -816,14 +820,14 @@ create_label = function(..., latex = FALSE) {
 #' combine_words(c('a', 'b', 'c'), and = '')
 #' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
 combine_words = function(words, sep = ', ', and = ' and ', before = '', after = before) {
-  n = length(words)
+  n = length(words); rs = xfun::raw_string
   if (n == 0) return(words)
   words = paste0(before, words, after)
-  if (n == 1) return(words)
-  if (n == 2) return(paste(words, collapse = and))
+  if (n == 1) return(rs(words))
+  if (n == 2) return(rs(paste(words, collapse = and)))
   if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
   words[n] = paste0(and, words[n])
-  paste(words, collapse = sep)
+  rs(paste(words, collapse = sep))
 }
 
 warning2 = function(...) warning(..., call. = FALSE)
@@ -931,11 +935,11 @@ raw_block = function(x, type = 'latex', ...) {
 
 #' @rdname raw_block
 #' @export
-raw_latex = function(x, ...) raw_block(x, 'latex')
+raw_latex = function(x, ...) raw_block(x, 'latex', ...)
 
 #' @rdname raw_block
 #' @export
-raw_html = function(x, ...) raw_block(x, 'html')
+raw_html = function(x, ...) raw_block(x, 'html', ...)
 
 trimws = function(x) gsub('^\\s+|\\s+$', '', x)
 
@@ -968,3 +972,15 @@ digest3 = function(x) {
 
 # collapse by \n
 one_string = function(x, ...) paste(x, ..., collapse = '\n')
+
+# c(1, 1, 1, 2, 3, 3) -> c(1a, 1b, 1c, 2a, 3a, 3b)
+make_unique = function(x) {
+  if (length(x) == 0) return(x)
+  x2 = make.unique(x)
+  if (all(i <- x2 == x)) return(x)
+  x2[i] = paste0(x2[i], '.0')
+  i = as.numeric(sub('.*[.]([0-9]+)$', '\\1', x2)) + 1
+  s = letters[i]
+  s = ifelse(is.na(s), i, s)
+  paste0(x, s)
+}

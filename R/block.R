@@ -60,7 +60,7 @@ call_block = function(block) {
   if (params$cache > 0) {
     content = c(
       params[if (params$cache < 3) cache1.opts else setdiff(names(params), cache0.opts)],
-      getOption('width'), if (params$cache == 2) params[cache2.opts]
+      75L, if (params$cache == 2) params[cache2.opts]
     )
     if (params$engine == 'R' && isFALSE(params$cache.comments)) {
       content[['code']] = parse_only(content[['code']])
@@ -109,10 +109,13 @@ block_exec = function(options) {
     res.after = run_hooks(before = FALSE, options)
     output = paste(c(res.before, output, res.after), collapse = '')
     output = knit_hooks$get('chunk')(output, options)
-    if (options$cache) block_cache(options, output, switch(
-      options$engine,
-      'stan' = options$output.var, 'sql' = options$output.var, character(0)
-    ))
+    if (options$cache) {
+      cache.exists = cache$exists(options$hash, options$cache.lazy)
+      if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
+        options$engine,
+        'stan' = options$output.var, 'sql' = options$output.var, character(0)
+        ))
+      }
     return(if (options$include) output else '')
   }
 
@@ -122,6 +125,7 @@ block_exec = function(options) {
 
   keep = options$fig.keep
   keep.idx = NULL
+  if (is.logical(keep)) keep = which(keep)
   if (is.numeric(keep)) {
     keep.idx = keep
     keep = "index"
@@ -228,7 +232,7 @@ block_exec = function(options) {
           res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
         } else {
           # keep only selected
-          if (keep == 'index') res = res[which(figs)[keep.idx]]
+          if (keep == 'index') res = res[-which(figs)[-keep.idx]]
           # merge low-level plotting changes
           if (keep == 'high') res = merge_low_plot(res, figs)
         }
@@ -237,7 +241,11 @@ block_exec = function(options) {
   }
   # number of plots in this chunk
   if (is.null(options$fig.num))
-    options$fig.num = if (length(res)) sum(sapply(res, evaluate::is.recordedplot)) else 0L
+    options$fig.num = if (length(res)) sum(sapply(res, function(x) {
+      if (evaluate::is.recordedplot(x)) return(1)
+      if (inherits(x, 'knit_image_paths')) return(length(x))
+      0
+    })) else 0L
 
   # merge neighbor elements of the same class into one element
   for (cls in c('source', 'message', 'warning')) res = merge_class(res, cls)
@@ -247,6 +255,7 @@ block_exec = function(options) {
   on.exit({
     plot_counter(reset = TRUE)
     shot_counter(reset = TRUE)
+    opts_knit$delete('plot_files')
   }, add = TRUE)  # restore plot number
 
   output = unlist(wrap(res, options)) # wrap all results together
@@ -267,7 +276,7 @@ block_exec = function(options) {
     if (options$autodep) {
       # you shall manually specify global object names if find_symbols() is not reliable
       cache$objects(
-        objs, options$cache.globals %n% find_symbols(code), options$label,
+        objs, options$cache.globals %n% find_globals(code), options$label,
         options$cache.path
       )
       dep_auto()
@@ -304,8 +313,8 @@ chunk_device = function(
   dev_new = function() {
     # actually I should adjust the recording device according to dev, but here I
     # have only considered the png and tikz devices (because the measurement
-    # results can be very different especially with the latter, see #1066), and
-    # also the cairo_pdf device (#1235)
+    # results can be very different especially with the latter, see #1066), the
+    # cairo_pdf device (#1235), and svg (#1705)
     if (identical(dev, 'png')) {
       do.call(grDevices::png, c(list(
         filename = tmp, width = width, height = height, units = 'in', res = dpi
@@ -321,6 +330,10 @@ chunk_device = function(
       do.call(grDevices::cairo_pdf, c(list(
         filename = tmp, width = width, height = height
       ), get_dargs(dev.args, 'cairo_pdf')))
+    } else if (identical(dev, 'svg')) {
+      do.call(grDevices::svg, c(list(
+        filename = tmp, width = width, height = height
+      ), get_dargs(dev.args, 'svg')))
     } else if (identical(getOption('device'), pdf_null)) {
       if (!is.null(dev.args)) {
         dev.args = get_dargs(dev.args, 'pdf')

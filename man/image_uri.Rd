@@ -19,8 +19,10 @@ HTML.
 }
 \examples{
 uri = image_uri(file.path(R.home("doc"), "html", "logo.jpg"))
-cat(sprintf("<img src=\"\%s\" />", uri), file = "logo.html")
-if (interactive()) browseURL("logo.html")  # you can check its HTML source
+if (interactive()) {
+    cat(sprintf("<img src=\"\%s\" />", uri), file = "logo.html")
+    browseURL("logo.html")  # you can check its HTML source
+}
 }
 \references{
 \url{http://en.wikipedia.org/wiki/Data_URI_scheme}

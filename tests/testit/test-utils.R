@@ -101,6 +101,16 @@ assert(
   identical(fig_chunk('foo', '.pdf'), 'figure/foo-1.pdf')
 )
 
+assert('all_figs() generates all figure paths for a code chunk', {
+  opts = list(fig.path = 'abc/', label = 'foo', fig.num = 3)
+  (all_figs(opts, '.svg') %==% sprintf('abc/foo-%d.svg', 1:3))
+  (all_figs(opts, c('png', 'pdf'))  %==% apply(
+    expand.grid(1:3, c('.png', '.pdf')), 1, function(x) {
+      paste0(c('abc/foo-', x), collapse = '')
+    }
+  ))
+})
+
 f = file.path(R.home('doc'), 'html', 'logo.jpg')
 assert(
   'base64_encode() gets the same result as markdown:::.b64EncodeFile',
@@ -133,26 +143,19 @@ assert(
   color_def('.5,.6,.7', 'fgcolor') == '\\definecolor{fgcolor}{rgb}{.5, .6, .7}'
 )
 
+cw = function(...) unclass(combine_words(...))
 assert(
   'combine_words() combines multiple words into a single string',
-  combine_words(NULL) %==% NULL,
-  combine_words(c('a')) %==% 'a',
-  combine_words(c('a', 'b')) %==% 'a and b',
-  combine_words(c('a', 'b', 'c')) %==% 'a, b, and c',
-  combine_words(c('a', 'b', 'c'), and = '') %==% 'a, b, c',
-  combine_words(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c',
-  combine_words(c('a', 'b', 'c'), before = '"') %==% '"a", "b", and "c"',
-  combine_words(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''"
+  cw(NULL) %==% NULL,
+  cw(c('a')) %==% 'a',
+  cw(c('a', 'b')) %==% 'a and b',
+  cw(c('a', 'b', 'c')) %==% 'a, b, and c',
+  cw(c('a', 'b', 'c'), and = '') %==% 'a, b, c',
+  cw(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c',
+  cw(c('a', 'b', 'c'), before = '"') %==% '"a", "b", and "c"',
+  cw(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''"
 )
-
-assert('split_lines() splits a character vector into lines by \\n', {
-  (split_lines('') %==% '')
-  (split_lines(NULL) %==% NULL)
-  (split_lines('a\nb') %==% c('a', 'b'))
-  (split_lines('a\n') %==% c('a', ''))
-  (split_lines('a\nb\n\n') %==% c('a', 'b', '', ''))
-  (split_lines(c('a\nb', '', ' ', 'c')) %==% c('a', 'b', '', ' ', 'c'))
-})
+rm(list = 'cw')
 
 opts = list(fig.cap = 'Figure "caption" <>.', fig.lp = 'Fig:', label = 'foo')
 assert(
@@ -182,9 +185,17 @@ assert('raw_block() returns a raw attribute block for Pandoc', {
   (raw_html('<i>foo</i>') == '\n```{=html}\n<i>foo</i>\n```\n')
 })
 
-assert(
-  'block_class() turns a character vector into Pandoc attributes for code block classes',
-  block_class(NULL) %==% NULL, block_class('a') %==% '{.a}',
-  block_class('a b') %==% '{.a .b}',
-  block_class(c('a', 'b')) %==% '{.a .b}'
-)
+assert('block_class() turns a character vector into Pandoc attributes for code block classes', {
+  (block_class(NULL) %==% NULL)
+  (block_class('a') %==% '.a')
+  (block_class('a b') %==% c('.a', '.b'))
+  (block_class(c('a', 'b')) %==% c('.a', '.b'))
+})
+
+assert('block_attr(x) turns a character vector into Pandoc attributes', {
+  (block_attr(NULL) %==% NULL)
+  (block_attr(NULL, lang = 'r') %==% 'r')
+  (block_attr('.a') %==% '{.a}')
+  (block_attr('.a b="11"') %==% '{.a b="11"}')
+  (block_attr(c('.a', 'b="11"')) %==% '{.a b="11"}')
+})

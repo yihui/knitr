@@ -4,7 +4,7 @@
 \name{knit_hooks}
 \alias{knit_hooks}
 \title{Hooks for R code chunks, inline R code and output}
-\format{An object of class \code{list} of length 5.}
+\format{An object of class \code{list} of length 6.}
 \usage{
 knit_hooks
 }
@@ -18,8 +18,8 @@ knit_hooks$get("source")
 knit_hooks$get("inline")
 }
 \references{
-Usage: \url{https://yihui.name/knitr/objects/}
+Usage: \url{https://yihui.org/knitr/objects/}
 
-Components in \code{knit_hooks}: \url{https://yihui.name/knitr/hooks/}
+Components in \code{knit_hooks}: \url{https://yihui.org/knitr/hooks/}
 }
 \keyword{datasets}

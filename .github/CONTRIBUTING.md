@@ -35,6 +35,12 @@ well as the test on examples. The former is basically the unit tests, and the
 latter is to make sure your changes does not break my existing examples in the
 [knitr-examples](https://github.com/yihui/knitr-examples).
 
+If you want Travis CI to run the tests on your forked repository before 
+submitting a PR, make sure the [yihui/knitr-examples](https://github.com/yihui/) 
+repository is also forked and the forked `knitr-examples` has a branch named 
+same as the testing branch in your forked `knitr`. Otherwise, the tests on
+`knitr-examples` will be skipped.
+
 ## roxygen2 documentation
 
 If your changes involve the roxygen2 documentation, please run `Rd2roxygen::rab('.')` to generate the Rd files.

@@ -31,6 +31,8 @@
 #'
 #' # or convert markdown to HTML
 #' stitch(s, system.file('misc', 'knitr-template.Rmd', package = 'knitr'))
+#'
+#' unlink(c('stitch-test.html', 'stitch-test.md', 'figure'), recursive = TRUE)
 stitch = function(script,
                   template = system.file('misc', 'knitr-template.Rnw', package = 'knitr'),
                   output = NULL, text = NULL, envir = parent.frame()) {

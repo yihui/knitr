@@ -65,7 +65,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   unlink('figure/', recursive = TRUE)
   toc = sprintf('- <a href="%s" target="content">%s</a>', paste0(topics, '.html'), topics)
   toc = c(paste0('# ', pkg), '', toc, '',
-          paste('Generated with [knitr](https://yihui.name/knitr) ', packageVersion('knitr')))
+          paste('Generated with [knitr](https://yihui.org/knitr) ', packageVersion('knitr')))
   markdown::markdownToHTML(text = one_string(toc), output = '00frame_toc.html',
                            title = paste('R Documentation of', pkg),
                            options = NULL, extensions = NULL, stylesheet = 'R.css')

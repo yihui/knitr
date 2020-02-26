@@ -4,9 +4,16 @@
 \alias{knit2wp}
 \title{Knit an R Markdown document and post it to WordPress}
 \usage{
-knit2wp(input, title = "A post from knitr", ..., envir = parent.frame(), 
-    shortcode = FALSE, action = c("newPost", "editPost", "newPage"), postid, 
-    publish = TRUE)
+knit2wp(
+  input,
+  title = "A post from knitr",
+  ...,
+  envir = parent.frame(),
+  shortcode = FALSE,
+  action = c("newPost", "editPost", "newPage"),
+  postid,
+  publish = TRUE
+)
 }
 \arguments{
 \item{input}{Filename of the Rmd document.}
@@ -49,7 +56,7 @@ This function will convert the encoding of the post and the title to
 # see the reference
 }
 \references{
-\url{https://yihui.name/knitr/demo/wordpress/}
+\url{https://yihui.org/knitr/demo/wordpress/}
 }
 \author{
 William K. Morris, Yihui Xie, and Jared Lander

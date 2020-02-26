@@ -27,6 +27,8 @@ press again to hide the text column (show code).
 }
 \examples{
 rocco_view = function(input) {
+    owd = setwd(tempdir())
+    on.exit(setwd(owd))
     if (!file.exists(input)) 
         return()
     o = rocco(input, header = "", quiet = TRUE)

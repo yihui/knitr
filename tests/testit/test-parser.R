@@ -91,7 +91,7 @@ assert(
   'parse_chunk() preserves indentation',
   identical(pc(c('3*3', '<<a>>', ' <<b>>', 'if (T)', '  <<a>>')),
             c("3*3", "1+1", " 2-2", "if (T)", "  1+1" )),
-  identical(pc('<<d>>'), "function() {\n  if (T)\n    1+1\n}")
+  identical(pc('<<d>>'), c('function() {', '  if (T)', '    1+1', '}'))
 )
 
 knit_code$restore()

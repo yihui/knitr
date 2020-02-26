@@ -8,8 +8,8 @@ The R package **knitr** is a general-purpose literate programming engine,
 with lightweight API's designed to give users full control of the output
 without heavy coding work. It combines many features into one package with
 slight tweaks motivated from my everyday use of Sweave. See the package
-[homepage](https://yihui.name/knitr/) for details and examples. See
-[FAQ's](https://yihui.name/knitr/faq/) for a list of
+[homepage](https://yihui.org/knitr/) for details and examples. See
+[FAQ's](https://yihui.org/knitr/faq/) for a list of
 frequently asked questions (including where to ask questions).
 
 ## Installation
@@ -22,12 +22,12 @@ install.packages('knitr')
 ```
 
 You can also install the development version from
-[XRAN](https://xran.yihui.name), which provides daily build of **knitr**:
+[XRAN](https://xran.yihui.org), which provides daily build of **knitr**:
 
 ```r
 # update all existing packages first
 update.packages(ask = FALSE, repos = 'https://cran.r-project.org')
-install.packages('knitr', repos = c('https://xran.yihui.name', 'https://cran.r-project.org'))
+install.packages('knitr', repos = c('https://xran.yihui.org', 'https://cran.r-project.org'))
 ```
 
 Note that if you want to build the source package via `R CMD INSTALL` without a previously installed version of **knitr**, you must either pre-install **knitr** from CRAN, or run `R CMD INSTALL` on this source repo, otherwise `R CMD build` will fail (which is probably a bug of base R).
@@ -90,9 +90,9 @@ knit(input)
 
 If options are not explicitly specified, **knitr** will try to guess
 reasonable default settings. A few manuals are available such as the [main
-manual](https://yihui.name/knitr/demo/manual/), and the
+manual](https://yihui.org/knitr/demo/manual/), and the
 [graphics
-manual](https://yihui.name/knitr/demo/graphics/). For a
+manual](https://yihui.org/knitr/demo/graphics/). For a
 more organized reference, see the [knitr book](https://amzn.com/1498716962).
 
 ## License

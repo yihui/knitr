@@ -38,5 +38,5 @@ knit_hooks$set(document = hook_movecode)
 # see example 103 at https://github.com/yihui/knitr-examples
 }
 \references{
-\url{https://yihui.name/knitr/hooks/}
+\url{https://yihui.org/knitr/hooks/}
 }

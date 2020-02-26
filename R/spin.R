@@ -47,7 +47,7 @@
 #'   \code{rmarkdown::\link[rmarkdown]{render}()} instead.
 #' @export
 #' @seealso \code{\link{stitch}} (feed a template with an R script)
-#' @references \url{https://yihui.name/knitr/demo/stitch/}
+#' @references \url{https://yihui.org/knitr/demo/stitch/}
 spin = function(
   hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
   format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),

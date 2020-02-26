@@ -106,6 +106,8 @@ knit2pdf = function(
 #' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' knit2html('test.Rmd')
 #' if (interactive()) browseURL('test.html')
+#'
+#' unlink(c('test.Rmd', 'test.html', 'test.md'))
 knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
                      quiet = FALSE, encoding = 'UTF-8', force_v1 = FALSE) {
   if (!force_v1 && is.null(text)) {
@@ -145,7 +147,7 @@ knit2html_v1 = function(...) knit2html(..., force_v1 = TRUE)
 #' @param publish Boolean: publish the post immediately?
 #' @inheritParams knit
 #' @export
-#' @references \url{https://yihui.name/knitr/demo/wordpress/}
+#' @references \url{https://yihui.org/knitr/demo/wordpress/}
 #' @author William K. Morris, Yihui Xie, and Jared Lander
 #' @note This function will convert the encoding of the post and the title to
 #'   UTF-8 internally. If you have additional data to send to WordPress (e.g.

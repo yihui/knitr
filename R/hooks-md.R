@@ -7,26 +7,32 @@ hook_plot_md = function(x, options) {
   if ((options$fig.show == 'animate' || is_tikz_dev(options)) && is_latex_output())
     return(hook_plot_tex(x, options))
   office_output = to %in% c('docx', 'pptx', 'rtf', 'odt')
-  if (!is.null(options$out.width) || !is.null(options$out.height) ||
-      !is.null(options$out.extra) || options$fig.align != 'default' ||
-      !is.null(options$fig.subcap) || options$fig.env != 'figure') {
+  if (need_special_plot_hook(options)) {
     if (is_latex_output()) {
       # Pandoc < 1.13 does not support \caption[]{} so suppress short caption
       if (is.null(options$fig.scap)) options$fig.scap = NA
       return(hook_plot_tex(x, options))
     }
     if (office_output) {
-      warning('Chunk options fig.align, out.width, out.height, out.extra ',
-              'are not supported for ', to, ' output')
-      options$out.width = options$out.height = options$out.extra = NULL
-      options$fig.align = 'default'
+      if (options$fig.align != 'default') {
+        warning('Chunk options fig.align is not supported for ', to, ' output')
+        options$fig.align = 'default'
+      }
+      return(hook_plot_md_pandoc(x, options))
     }
   }
-  if (options$fig.show == 'hold' && office_output) {
-    warning('The chunk option fig.show="hold" is not supported for ', to, ' output')
-    options$fig.show = 'asis'
-  }
   hook_plot_md_base(x, options)
+}
+
+# decide if the markdown plot hook is not enough and needs special hooks like
+# hook_plot_tex() to handle chunk options like out.width
+need_special_plot_hook = function(options) {
+  opts = opts_chunk$get(default = TRUE)
+  for (i in c(
+    'out.width', 'out.height', 'out.extra',
+    'fig.align', 'fig.subcap', 'fig.env', 'fig.scap'
+  )) if (!identical(options[[i]], opts[[i]])) return(TRUE)
+  FALSE
 }
 
 hook_plot_md_base = function(x, options) {
@@ -78,6 +84,25 @@ hook_plot_md_base = function(x, options) {
   ))
 }
 
+hook_plot_md_pandoc = function(x, options) {
+  if (options$fig.show == 'animate') return(hook_plot_html(x, options))
+
+  base = opts_knit$get('base.url') %n% ''
+  cap = .img.cap(options)
+
+  at = paste(
+    c(
+      sprintf('width=%s', options[['out.width']]),
+      sprintf('height=%s', options[['out.height']]),
+      options[['out.extra']]
+    ),
+    collapse = ' '
+  )
+  if (at != '') at = paste0('{', at, '}')
+
+  sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at)
+}
+
 css_align = function(align) {
   sprintf('display: block; margin: %s;', switch(
     align, left = 'auto auto auto 0', center = 'auto', right = 'auto 0 auto auto'
@@ -88,13 +113,17 @@ css_text_align = function(align) {
   if (align == 'default') '' else sprintf(' style="text-align: %s"', align)
 }
 
-# helper function to manage HTML classes; turn "a b" to "{.a .b}" for Pandoc
-# fenced code blocks
-block_class = function(x){
-  if (length(x) == 0) return()
-  classes = unlist(strsplit(x, '\\s+'))
-  .classes = paste0('.', classes, collapse = ' ')
-  paste0('{', .classes, '}')
+# turn a class string "a b" to c(".a", ".b") for Pandoc fenced code blocks
+block_class = function(x) {
+  if (length(x) > 0) gsub('^[.]*', '.', unlist(strsplit(x, '\\s+')))
+}
+
+# concatenate block attributes (including classes) for Pandoc fenced code blocks
+block_attr = function(attr, class = NULL, lang = NULL) {
+  x = c(block_class(class), attr)
+  if (length(x) == 0) return(lang)
+  x = c(sprintf('.%s', lang), x)
+  paste0('{', paste0(x, collapse = ' '), '}')
 }
 
 #' @rdname output_hooks
@@ -112,7 +141,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
   opts_knit$set(out.format = 'markdown')
   fence = paste(rep(fence_char, 3), collapse = '')
   # four spaces lead to <pre></pre>
-  hook.t = function(x, options, class = NULL) {
+  hook.t = function(x, options, attr = NULL, class = NULL) {
     # this code-block duplicated from hook.t()
     if (strict) {
       paste('\n', indent_block(x), '', sep = '\n')
@@ -124,23 +153,21 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
         l = max(l)
         if (l >= 4) fence = paste(rep(fence_char, l), collapse = '')
       }
-      paste0('\n\n', fence, block_class(class), x, fence, '\n\n')
+      paste0('\n\n', fence, block_attr(attr, class), x, fence, '\n\n')
     }
   }
   hook.o = function(class) {
     force(class)
     function(x, options) {
-      hook.t(x, options, options[[paste0('class.', class)]])
+      hook.t(x, options, options[[paste0('attr.', class)]], options[[paste0('class.', class)]])
     }
   }
   hook.r = function(x, options) {
     language = tolower(options$engine)
     if (language == 'node') language = 'javascript'
     if (!options$highlight) language = 'text'
-    if (!is.null(options$class.source)) {
-      language = block_class(c(language, options$class.source))
-    }
-    paste0('\n\n', fence, language, '\n', x, fence, '\n\n')
+    attrs = block_attr(options$attr.source, options$class.source, language)
+    paste0('\n\n', fence, attrs, '\n', x, fence, '\n\n')
   }
   hooks = list()
   for (i in c('output', 'warning', 'error', 'message')) hooks[[i]] = hook.o(i)
