@@ -91,6 +91,7 @@ Authors@R: c(
     person("Thibaut", "Assus", role = "ctb"),
     person("Thibaut", "Lamadon", role = "ctb"),
     person("Thomas", "Leeper", role = "ctb"),
+    person("Tianyi", "Shi", role = "ctb", comment = c(ORCID = "0000-0002-9204-9949")),
     person("Tim", "Mastny", role = "ctb"),
     person("Tom", "Torsney-Weir", role = "ctb"),
     person("Trevor", "Davis", role = "ctb"),

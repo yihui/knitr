@@ -650,6 +650,30 @@ eng_go = function(options) {
   engine_output(options, code, extra)
 }
 
+# rust engine, added by @TianyiShi https://github.com/yihui/knitr/pull/1823
+eng_rust = function(options) {
+  src = wd_tempfile('code', '.rs')
+  bin = strsplit(src, '\\.rs')[[1]]
+  write_utf8(source <- options$code, src)
+  on.exit(unlink(c(src, bin)), add = TRUE)
+  cmd = get_engine_path(options$engine.path, "rustc")
+  args = sprintf('%s && %s', file.path(getwd(), src), file.path(getwd(), bin))
+
+  output = if (options$eval) {
+    tryCatch(
+      system2(cmd, args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+      error = function(e) {
+        if (!options$error) stop(e)
+        'Error in executing go code'
+      }
+    )
+  }
+
+  if (options$results == 'hide') output = NULL
+
+  engine_output(options, source, output)
+}
+
 # SASS / SCSS engine (contributed via https://github.com/yihui/knitr/pull/1666)
 #
 # Converts SASS / SCSS -> CSS (with same treatments as CSS engine) using either:
@@ -740,7 +764,8 @@ knit_engines$set(
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
+  rust = eng_rust, python = eng_python, julia = eng_julia, sass = eng_sxss,
+  scss = eng_sxss
 )
 
 cache_engines$set(python = cache_eng_python)
