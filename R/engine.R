@@ -652,9 +652,14 @@ eng_go = function(options) {
 
 # rust engine, added by @TianyiShi https://github.com/yihui/knitr/pull/1823
 eng_rust = function(options) {
+  # make `fn main` optional
+  source <- options$code
+  if (length(grep('fn main', source))==0) {
+    source <- paste0('fn main(){\n', source, '\n}')
+  }
   src = wd_tempfile('code', '.rs')
   bin = strsplit(src, '\\.rs')[[1]]
-  write_utf8(source <- options$code, src)
+  write_utf8(source, src)
   on.exit(unlink(c(src, bin)), add = TRUE)
   cmd = get_engine_path(options$engine.path, "rustc")
   args = sprintf('%s && %s', file.path(getwd(), src), file.path(getwd(), bin))
