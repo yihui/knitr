@@ -666,7 +666,7 @@ eng_rust = function(options) {
 
   if (options$message) message(sprintf('Running: %s %s', cmd, args))
 
-  output = if (options$eval && options$results != 'hide') {
+  output = if (options$eval) {
     tryCatch(
       system2(cmd, args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
       error = function(e) {
@@ -674,7 +674,9 @@ eng_rust = function(options) {
         sprintf('Error in executing command: %s %s', cmd, args)
       }
     )
-  } else NULL
+  }
+
+  if (options$results == 'hide') output = NULL
 
   engine_output(options, source, output)
 }
