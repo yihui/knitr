@@ -659,17 +659,17 @@ eng_rust = function(options) {
   cmd = get_engine_path(options$engine.path, "rustc")
   args = sprintf('%s && %s', file.path(getwd(), src), file.path(getwd(), bin))
 
-  output = if (options$eval) {
+  message(sprintf('Running: %s %s', cmd, args))
+
+  output = if (options$eval && options$results != 'hide') {
     tryCatch(
       system2(cmd, args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
       error = function(e) {
         if (!options$error) stop(e)
-        'Error in executing go code'
+        sprintf('Error in executing command: %s %s', cmd, args)
       }
     )
-  }
-
-  if (options$results == 'hide') output = NULL
+  } else NULL
 
   engine_output(options, source, output)
 }
