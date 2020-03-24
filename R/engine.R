@@ -655,7 +655,7 @@ eng_rust = function(options) {
   # make `fn main` optional
   source <- options$code
   if (length(grep('fn main', source))==0) {
-    source <- paste0('fn main(){\n', source, '\n}')
+    source <- paste0(c('fn main(){\n', source, '\n}'), collapse = '')
   }
   src = wd_tempfile('code', '.rs')
   bin = strsplit(src, '\\.rs')[[1]]
