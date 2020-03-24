@@ -664,7 +664,7 @@ eng_rust = function(options) {
   cmd = get_engine_path(options$engine.path, "rustc")
   args = sprintf('%s && %s', file.path(getwd(), src), file.path(getwd(), bin))
 
-  message(sprintf('Running: %s %s', cmd, args))
+  if (options$message) message(sprintf('Running: %s %s', cmd, args))
 
   output = if (options$eval && options$results != 'hide') {
     tryCatch(
