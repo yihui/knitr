@@ -373,12 +373,12 @@ eng_highlight = function(options) {
 
 ## save the code
 eng_cat = function(options) {
-  cat2 = function(..., file = '', lang = NULL) {
+  cat2 = function(..., file = '', sep = '\n', lang = NULL) {
     # do not write to stdout like the default behavior of cat()
-    if (!identical(file, '')) cat(..., file = file)
+    if (!identical(file, '')) cat(..., file = file, sep = sep)
   }
   if (options$eval)
-    do.call(cat2, c(list(options$code, sep = '\n'), options$engine.opts))
+    do.call(cat2, c(list(options$code), options$engine.opts))
 
   if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
     return('')
