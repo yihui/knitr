@@ -388,7 +388,7 @@ eng_cat = function(options) {
 
 ## output the code without processing it
 eng_asis = function(options) {
-  if (options$echo && options$eval) one_string(options$code)
+  if (options$echo) one_string(options$code)
 }
 
 # write a block environment according to the output format
