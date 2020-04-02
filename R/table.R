@@ -182,8 +182,8 @@ to_character = function(x) {
 
 # convert to chatacter, applying formatting, and maintain dim/dimnames attributes
 to_format_matrix <- function(x, args){
-  x2 <- format_matrix(x,args)
-  dimnames(x2) = dimnames(x)
+  x2 <- as.matrix(apply(x,2,format,... = args))
+  dim(x2) = dim(x)
   x2
 }
 
