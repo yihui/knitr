@@ -188,3 +188,20 @@ assert(
     c('|  a|  b|', '|--:|--:|', '|  1|  3|', '|   |  4|')
 )
 options(op)
+
+
+formatted_df <- tibble::tibble(x = structure("print_me", .to_upper = TRUE, class = "make_upper"))
+format.make_upper = function(x,...){
+  xout <- unclass(x)
+  if(isTRUE(attr(x,".to_upper"))){
+    xout <- toupper(xout)
+  }
+  as.character(xout)
+}
+
+assert(
+  'kable() can apply formatting to custom objects',
+  kable2(formatted_df) %==%
+    c('|x        |','|:--------|','|PRINT_ME |')
+)
+
