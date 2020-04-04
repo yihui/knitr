@@ -725,7 +725,11 @@ eng_sxss = function(options) {
 
 }
 
-# go engine, added by @hodgesds https://github.com/yihui/knitr/pull/1330
+# Generic engine, added by @TianyiShi2001 https://github.com/yihui/knitr/pull/1829 .
+# Any command specified in the chunk option `command`.
+# For example: ```{generic, command="gcc {}.c -o {} && ./{}"}
+# `{}` is be replaced by a temporary filename.
+# The code in the chunk is written into the first `{}.X` file with extension.
 eng_generic = function(options) {
   full_cmd <- options$command
   print(full_cmd)
