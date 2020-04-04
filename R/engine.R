@@ -90,7 +90,7 @@ engine_output = function(options, code, out, extra = NULL) {
   # replace the engine names for markup later, e.g. ```Rscript should be ```r
   options$engine = switch(
     options$engine, mysql = 'sql', node = 'javascript', psql = 'sql', Rscript = 'r',
-    options$engine
+    cargo = 'rust', options$engine
   )
   if (options$engine == 'stata') {
     out = gsub('\n+running.*profile.do', '', out)
@@ -651,6 +651,7 @@ eng_go = function(options) {
 }
 
 # rust engine, added by @TianyiShi https://github.com/yihui/knitr/pull/1823
+# unable to use external crates; for that, use eng_rust_cargo instead
 eng_rust = function(options) {
   # make `fn main` optional
   source <- options$code
@@ -674,6 +675,44 @@ eng_rust = function(options) {
         sprintf('Error in executing command: %s %s', cmd, args)
       }
     )
+  }
+
+  if (options$results == 'hide') output = NULL
+
+  engine_output(options, source, output)
+}
+
+# rust engine (cargo), added by @TianyiShi https://github.com/yihui/knitr/pull/1823
+# allows usage of external crates
+# an option "knitr.engines.crate" should be set to the cargo directory
+# (where Config.toml is located). If a relative path is used, it should
+# be relative to the Rmd document being knitted.
+eng_rust_cargo = function(options) {
+  src_dir <- if (!is.null(x <- getOption("knitr.engines.crate"))) x else {
+    stop("Please set options(knitr.engines.crate='YOUR_PATH_TO_CRATE')")
+  }
+  src <- file.path(x, "src/main.rs")
+  # make `fn main` optional
+  source <- options$code
+  if (length(grep('fn main', source))==0) {
+    source <- paste0(c('fn main(){\n', source, '\n}'), collapse = '')
+  }
+  write_utf8(source, src)
+  cmd = get_engine_path(options$engine.path, "cargo")
+  args = 'run -q'
+
+  if (options$message) message(sprintf('Running: %s %s', cmd, args))
+
+  if (options$eval) {
+    old_dir <- setwd(src_dir)
+    output <- tryCatch(
+      system2(cmd, args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+      error = function(e) {
+        if (!options$error) stop(e)
+        sprintf('Error in executing command: %s %s', cmd, args)
+      }
+    )
+    invisible(setwd(old_dir))
   }
 
   if (options$results == 'hide') output = NULL
@@ -771,8 +810,8 @@ knit_engines$set(
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  rust = eng_rust, python = eng_python, julia = eng_julia, sass = eng_sxss,
-  scss = eng_sxss
+  rust = eng_rust, cargo = eng_rust_cargo, python = eng_python, julia = eng_julia,
+  sass = eng_sxss, scss = eng_sxss
 )
 
 cache_engines$set(python = cache_eng_python)
