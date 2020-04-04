@@ -725,6 +725,49 @@ eng_sxss = function(options) {
 
 }
 
+# go engine, added by @hodgesds https://github.com/yihui/knitr/pull/1330
+eng_generic = function(options) {
+  full_cmd <- options$command
+  print(full_cmd)
+  pattern_src      <- "\\{\\}(\\.\\w+)"
+  pattern_filename <- "\\{\\}"
+  ext <- if (!is.na(match <- str_match(full_cmd, pattern_src)[1,])[1]) {
+    match[2]
+  } else NULL
+  print(ext)
+  f = wd_tempfile('code', ext)
+  bin <- str_split_fixed(f, "\\.", 2)[1,1]
+  on.exit(unlink(c(f, bin)), add = TRUE)
+  write_utf8(code <- options$code, f)
+  full_cmd <- str_replace_all(full_cmd, pattern_filename, bin)
+
+  x <- str_split_fixed(full_cmd, " ", n = 2)
+  cmd <- x[1]; args = x[2]
+  print(cmd)
+  print(args)
+
+  tryCatch(
+    system2(cmd, args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+    error = function(e) {
+      if (!options$error) stop(e)
+    }
+  )
+
+  output = if (options$eval) {
+    message('running: ', full_cmd)
+    tryCatch(
+      system2(cmd, args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+      error = function(e) {
+        if (!options$error) stop(e)
+        'Error in execution'
+      }
+    )
+  }
+
+  if (options$results == 'hide') output = NULL
+  engine_output(options, options$code, output)
+}
+
 # set engines for interpreted languages
 local({
   for (i in c(
@@ -740,7 +783,8 @@ knit_engines$set(
   c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
+  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss,
+  `generic` = eng_generic
 )
 
 cache_engines$set(python = cache_eng_python)
