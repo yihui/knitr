@@ -685,8 +685,14 @@ eng_rust = function(options) {
 # rust engine (cargo), added by @TianyiShi https://github.com/yihui/knitr/pull/1823
 # allows usage of external crates
 # an option "knitr.engines.crate" should be set to the cargo directory
-# (where Config.toml is located). If a relative path is used, it should
+# (where Cargo.toml is located). If a relative path is used, it should
 # be relative to the Rmd document being knitted.
+# It is usually easier to set an invariant cargo directory for all projects,
+# if they don't need different versions of dependencies, and set that to
+# as the default for "knitr.engines.crate", in ~/.Rprofile. You can always
+# override this by using a setup block at the beginning of the Rmd document,
+# when you require specific versions of dependencies and have created a separate
+# cargo directory for this.
 eng_rust_cargo = function(options) {
   src_dir <- if (!is.null(x <- getOption("knitr.engines.crate"))) x else {
     stop("Please set options(knitr.engines.crate='YOUR_PATH_TO_CRATE')")
