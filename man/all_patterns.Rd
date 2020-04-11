@@ -4,7 +4,9 @@
 \name{all_patterns}
 \alias{all_patterns}
 \title{All built-in patterns}
-\format{An object of class \code{list} of length 8.}
+\format{
+An object of class \code{list} of length 8.
+}
 \usage{
 all_patterns
 }

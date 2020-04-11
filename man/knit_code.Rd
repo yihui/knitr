@@ -4,7 +4,9 @@
 \name{knit_code}
 \alias{knit_code}
 \title{The code manager to manage code in all chunks}
-\format{An object of class \code{list} of length 6.}
+\format{
+An object of class \code{list} of length 6.
+}
 \usage{
 knit_code
 }
