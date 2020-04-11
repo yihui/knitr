@@ -320,10 +320,10 @@ eng_tikz = function(options) {
 ## GraphViz (dot) and Asymptote are similar
 eng_dot = function(options) {
 
-  # create temporary file
-  f = wd_tempfile('code')
+  # write code to a temp file, and output to another temp file
+  f = wd_tempfile('code'); f2 = wd_tempfile('out')
   write_utf8(code <- options$code, f)
-  on.exit(unlink(f), add = TRUE)
+  on.exit(unlink(c(f, f2)), add = TRUE)
 
   # adapt command to either graphviz or asymptote
   if (options$engine == 'dot') {
@@ -338,17 +338,18 @@ eng_dot = function(options) {
   cmd = sprintf(
     command_string, shQuote(get_engine_path(options$engine.path, options$engine)),
     shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
-    shQuote(paste0(fig <- fig_path(), '.', ext))
+    shQuote(f2 <- paste0(f2, '.', ext))
   )
 
   # generate output
-  dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
-  outf = paste(fig, ext, sep = '.')
+  outf = paste(fig_path(), ext, sep = '.')
+  dir.create(dirname(outf), recursive = TRUE, showWarnings = FALSE)
   unlink(outf)
   extra = if (options$eval) {
-    message('running: ', cmd)
+    if (options$message) message('running: ', cmd)
     system(cmd)
-    if (!file.exists(outf)) stop('failed to compile content');
+    file.rename(f2, outf)
+    if (!file.exists(outf)) stop('Failed to compile the ', options$engine, ' chunk')
     options$fig.num = 1L; options$fig.cur = 1L
     knit_hooks$get('plot')(outf, options)
   }
