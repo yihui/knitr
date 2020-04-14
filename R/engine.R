@@ -653,15 +653,20 @@ eng_go = function(options) {
 
 # typescript engine, added by @TianyiShi2001
 eng_ts = function(options) {
-
+  code <- options$code
+  f = wd_tempfile('code', '.ts')
+  write_utf8(code <- options$code, f)
+  on.exit(unlink(f), add = TRUE)
+  cmd = get_engine_path(options$engine.path, 'ts-node')
   output = if (options$eval) {
     tryCatch(
-    system2(cmd, c('-e', options$code), stdout = TRUE, stderr = TRUE, env = options$engine.env),
+    system2(cmd, f, stdout = TRUE, stderr = TRUE, env = options$engine.env),
     error = function(e) {
       if (!options$error) stop(e)
       'Error in executing typescript code'
-    }
-  }
+      }
+    )
+  } else NULL
 
   if (options$results == 'hide') output = NULL
 
