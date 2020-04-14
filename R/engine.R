@@ -175,9 +175,9 @@ get_engine_opts = function(opts, engine, fallback = '') {
 
 get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 
-## C and Fortran (via R CMD SHLIB)
+## C, C++, and Fortran (via R CMD SHLIB)
 eng_shlib = function(options) {
-  n = switch(options$engine, c = 'c', fortran = 'f', fortran95 = 'f95')
+  n = switch(options$engine, c = 'c', cc  = 'cc', fortran = 'f', fortran95 = 'f95')
   f = wd_tempfile(n, paste0('.', n))
   write_utf8(options$code, f)
   on.exit(unlink(c(f, with_ext(f, c('o', 'so', 'dll')))), add = TRUE)
