@@ -15,6 +15,8 @@ auto_exts = c(
 
   svglite = 'svg',
 
+  ragg_png = 'png',
+
   tikz = 'tex'
 )
 
@@ -107,6 +109,12 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     Cairo_svg = load_device('Cairo_svg', 'cairoDevice'),
 
     svglite = load_device('svglite', 'svglite'),
+
+    # similar to load_device(), but load_device assumes
+    # the device has a dpi argument
+    ragg_png = function(...) {
+      getFromNamespace('agg_png', 'ragg')(..., res = dpi, units = 'in')
+    },
 
     tikz = function(...) {
       tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)
