@@ -25,10 +25,9 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' Knits the input file and compiles to an output format using Pandoc.
 #' @inheritParams knit
 #' @param to Character string giving the Pandoc output format to use.
-#' @param pandoc_wrapper An R function used to call Pandoc; by default, if
-#'   \pkg{rmarkdown} is installed, this uses
-#'   \code{rmarkdown::\link[rmarkdown]{pandoc_convert}()}, otherwise it
-#'   \code{\link{pandoc}()}.
+#' @param pandoc_wrapper An R function used to call Pandoc. If \code{NULL}
+#'   (the default), \code{rmarkdown::\link[rmarkdown]{pandoc_convert}()} will
+#'   be used if \pkg{rmarkdown} is installed, otherwise \code{\link{pandoc}()}.
 #' @param ... Options to be passed to the \code{pandoc_wrapper} function.
 #' @param encoding Ignored (always assumes UTF-8).
 #' @author Trevor L. Davis
