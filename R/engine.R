@@ -175,9 +175,9 @@ get_engine_opts = function(opts, engine, fallback = '') {
 
 get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 
-## C and Fortran (via R CMD SHLIB)
+## C, C++, and Fortran (via R CMD SHLIB)
 eng_shlib = function(options) {
-  n = switch(options$engine, c = 'c', fortran = 'f', fortran95 = 'f95')
+  n = switch(options$engine, c = 'c', cc  = 'cc', fortran = 'f', fortran95 = 'f95')
   f = wd_tempfile(n, paste0('.', n))
   write_utf8(options$code, f)
   on.exit(unlink(c(f, with_ext(f, c('o', 'so', 'dll')))), add = TRUE)
@@ -738,7 +738,7 @@ local({
 # additional engines
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
-  c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
+  c = eng_shlib, cc = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
   python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
