@@ -319,6 +319,14 @@ chunk_device = function(
       do.call(grDevices::png, c(list(
         filename = tmp, width = width, height = height, units = 'in', res = dpi
       ), get_dargs(dev.args, 'png')))
+    } else if (identical(dev, 'ragg_png')) {
+      # handle bg -> background gracefully
+      args = dev.args$ragg_png %n% dev.args
+      args$background = args$background %n% args$bg
+      args$bg = NULL
+      do.call(ragg::agg_png, c(list(
+        filename = tmp, width = width, height = height, units = 'in', res = dpi
+      ), args))
     } else if (identical(dev, 'tikz')) {
       dargs = c(list(
         file = tmp, width = width, height = height
