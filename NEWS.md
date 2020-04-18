@@ -4,6 +4,8 @@
 
 - The argument `error` of `include_graphics()` takes value from the global R option `knitr.graphics.error` by default, e.g., you may set `options(knitr.graphics.error = FALSE)` so `include_graphics()` won't signal an error if the graphics file to be included doesn't exist.
 
+- Added a new engine `cc` to compile C++ code via `R CMD SHILIB` like the `c` and `fortran` engines (thanks, @kingaa, #1832).
+
 ## BUG FIXES
 
 - For non-R code chunks that generate plots and use the chunk option `fig.cap`, the `plot` hook in **knitr** stopped working in v1.27 and v1.28 (thanks, @XiangyunHuang, https://d.cosx.org/d/421249).
