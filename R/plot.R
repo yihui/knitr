@@ -110,8 +110,7 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
     svglite = load_device('svglite', 'svglite'),
 
-    # similar to load_device(), but load_device assumes
-    # the device has a dpi argument
+    # similar to load_device(), but the `dpi` argument is named `res`
     ragg_png = function(...) {
       getFromNamespace('agg_png', 'ragg')(..., res = dpi, units = 'in')
     },
