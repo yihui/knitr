@@ -135,6 +135,7 @@ Suggests:
     showtext,
     tibble,
     sass,
+    ragg,
     styler (>= 1.2.0)
 License: GPL
 URL: https://yihui.org/knitr/
