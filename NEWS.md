@@ -16,6 +16,8 @@
 
 - When a code chunk generates multiple plots to be placed in figure environments, their figure labels will be of the form `label-i` where `label` is the chunk label, and `i` is the plot number. Previously, the labels were of the form `labeli` (i.e., there was not a dash before the number). If you cross-reference the figures, you need to change the reference keys from `labeli` to `label-i`.
 
+- Deprecated the package option `global.device` in `knitr::opts_knit` (which was introduced in **knitr** v0.8), and added a chunk option `dev.close` in `knitr::opts_chunk` as a replacement. Setting the chunk option `dev.close = FALSE` is equivalent to setting the package option `global.device = TRUE` in previous versions.
+
 # CHANGES IN knitr VERSION 1.28
 
 ## BUG FIXES
