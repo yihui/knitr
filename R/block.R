@@ -149,9 +149,9 @@ block_exec = function(options) {
   if (keep.pars <- opts_knit$get('global.par')) par2(opts_knit$get('global.pars'))
   showtext(options$fig.showtext)  # showtext support
   dv = dev.cur()
-  if (!isFALSE(options$dev.close)) on.exit({
+  on.exit({
     if (keep.pars) opts_knit$set(global.pars = par(no.readonly = TRUE))
-    dev.off(dv)
+    if (!isFALSE(options$dev.close)) dev.off(dv)
   }, add = TRUE)
 
   res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
