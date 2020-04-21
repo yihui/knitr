@@ -573,7 +573,7 @@ eng_sql = function(options) {
 
       # force left alignment if the first column is an incremental id column
       first_column = display_data[[1]]
-      if (is.numeric(first_column) && all(diff(first_column) == 1))
+      if (is.numeric(first_column) && length(first_column) > 1 && all(diff(first_column) == 1))
         display_data[[1]] = as.character(first_column)
 
       # wrap html output in a div so special styling can be applied
