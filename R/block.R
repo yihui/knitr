@@ -141,7 +141,7 @@ block_exec = function(options) {
 
   tmp.fig = tempfile(); on.exit(unlink(tmp.fig), add = TRUE)
   # open a device to record plots unless a device is already open
-  if (is.null(dev.list())) chunk_device(
+  if (!isTRUE(opts_knit$get('dev.open'))) chunk_device(
     options$fig.width[1L], options$fig.height[1L], keep != 'none', options$dev,
     options$dev.args, options$dpi, options, tmp.fig
   )
@@ -151,7 +151,9 @@ block_exec = function(options) {
   dv = dev.cur()
   on.exit({
     if (keep.pars) opts_knit$set(global.pars = par(no.readonly = TRUE))
-    if (!isFALSE(options$dev.close)) dev.off(dv)
+    if (!isFALSE(options$dev.close)) {
+      dev.off(dv); opts_knit$set(dev.open = FALSE)
+    }
   }, add = TRUE)
 
   res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
@@ -356,6 +358,7 @@ chunk_device = function(
     }
     do.call(pdf_null, c(list(width = width, height = height), dev.args))
   } else dev.new(width = width, height = height)
+  opts_knit$set(dev.open = TRUE)
   dev.control(displaylist = if (record) 'enable' else 'inhibit')
 }
 
