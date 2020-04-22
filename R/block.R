@@ -134,17 +134,14 @@ block_exec = function(options) {
   tmp.fig = tempfile(); on.exit(unlink(tmp.fig), add = TRUE)
   # open a device to record plots if not using a global device or no device is
   # open, and close this device if we don't want to use a global device
-  on.exit({
-    if (!opts_knit$get('global.device')) dev.off(opts_knit$get('global.dev'))
-  }, add = TRUE)
   if (!opts_knit$get('global.device') || is.null(dev.list())) {
     chunk_device(options, keep != 'none', tmp.fig)
-    dv = opts_knit$get('global.dev'); on.exit(opts_knit$set(global.dev = dv), add = TRUE)
-    opts_knit$set(global.dev = dev.cur())
+    dv = dev.cur()
+    if (!opts_knit$get('global.device')) on.exit(dev.off(dv), add = TRUE)
+    showtext(options$fig.showtext)  # showtext support
   }
   # preserve par() settings from the last code chunk
   if (keep.pars <- opts_knit$get('global.par')) par2(opts_knit$get('global.pars'))
-  showtext(options$fig.showtext)  # showtext support
   on.exit({
     if (keep.pars) opts_knit$set(global.pars = par(no.readonly = TRUE))
   }, add = TRUE)
