@@ -141,10 +141,13 @@ block_exec = function(options) {
 
   tmp.fig = tempfile(); on.exit(unlink(tmp.fig), add = TRUE)
   # open a device to record plots unless a device is already open
-  if (!isTRUE(opts_knit$get('dev.open'))) chunk_device(
-    options$fig.width[1L], options$fig.height[1L], keep != 'none', options$dev,
-    options$dev.args, options$dpi, options, tmp.fig
-  )
+  if (!isTRUE(opts_knit$get('dev.open'))) {
+    chunk_device(
+      options$fig.width[1L], options$fig.height[1L], keep != 'none', options$dev,
+      options$dev.args, options$dpi, options, tmp.fig
+    )
+    opts_knit$set(dev.open = TRUE)
+  }
   # preserve par() settings from the last code chunk
   if (keep.pars <- opts_knit$get('global.par')) par2(opts_knit$get('global.pars'))
   showtext(options$fig.showtext)  # showtext support
@@ -358,7 +361,6 @@ chunk_device = function(
     }
     do.call(pdf_null, c(list(width = width, height = height), dev.args))
   } else dev.new(width = width, height = height)
-  opts_knit$set(dev.open = TRUE)
   dev.control(displaylist = if (record) 'enable' else 'inhibit')
 }
 
