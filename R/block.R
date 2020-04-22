@@ -130,30 +130,23 @@ block_exec = function(options) {
     keep.idx = keep
     keep = "index"
   }
-  # TODO: remove this package option
-  if (isTRUE(opts_knit$get('global.device'))) {
-    warning(
-      'The package option "global.device" has been deprecated. Please use the ',
-      'chunk option dev.close = FALSE instead.'
-    )
-    options$dev.close = FALSE
-  }
 
   tmp.fig = tempfile(); on.exit(unlink(tmp.fig), add = TRUE)
-  # open a device to record plots unless a device is already open
-  if (!isTRUE(opts_knit$get('dev.open'))) {
+  # open a device to record plots if not using a global device or no device is
+  # open, and close this device if we don't want to use a global device
+  on.exit({
+    if (!opts_knit$get('global.device')) dev.off(opts_knit$get('global.dev'))
+  }, add = TRUE)
+  if (!opts_knit$get('global.device') || is.null(dev.list())) {
     chunk_device(options, keep != 'none', tmp.fig)
-    opts_knit$set(dev.open = TRUE)
+    dv = opts_knit$get('global.dev'); on.exit(opts_knit$set(global.dev = dv), add = TRUE)
+    opts_knit$set(global.dev = dev.cur())
   }
   # preserve par() settings from the last code chunk
   if (keep.pars <- opts_knit$get('global.par')) par2(opts_knit$get('global.pars'))
   showtext(options$fig.showtext)  # showtext support
-  dv = dev.cur()
   on.exit({
     if (keep.pars) opts_knit$set(global.pars = par(no.readonly = TRUE))
-    if (!isFALSE(options$dev.close)) {
-      dev.off(dv); opts_knit$set(dev.open = FALSE)
-    }
   }, add = TRUE)
 
   res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
