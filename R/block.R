@@ -131,6 +131,10 @@ block_exec = function(options) {
     keep = "index"
   }
 
+  if (keep.pars <- opts_knit$get('global.par')) on.exit({
+    opts_knit$set(global.pars = par(no.readonly = TRUE))
+  }, add = TRUE)
+
   tmp.fig = tempfile(); on.exit(unlink(tmp.fig), add = TRUE)
   # open a device to record plots if not using a global device or no device is
   # open, and close this device if we don't want to use a global device
@@ -141,10 +145,7 @@ block_exec = function(options) {
     showtext(options$fig.showtext)  # showtext support
   }
   # preserve par() settings from the last code chunk
-  if (keep.pars <- opts_knit$get('global.par')) par2(opts_knit$get('global.pars'))
-  on.exit({
-    if (keep.pars) opts_knit$set(global.pars = par(no.readonly = TRUE))
-  }, add = TRUE)
+  if (keep.pars) par2(opts_knit$get('global.pars'))
 
   res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
 
