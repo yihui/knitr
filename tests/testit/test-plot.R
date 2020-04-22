@@ -69,7 +69,9 @@ options(op)
 if (!has_error({png(); dev.off()})) assert(
   'chunk_device() correctly opens the png device with dev.args',
   {
-    chunk_device(7, 6, TRUE, 'png', list(pdf = list(useDingbats = FALSE)), 72)
+    chunk_device(opts_chunk$merge(list(
+      dev = 'png', dev.args = list(pdf = list(useDingbats = FALSE))
+    )))
     plot(1:10)
     dev.off()
     TRUE

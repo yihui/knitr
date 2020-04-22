@@ -142,10 +142,7 @@ block_exec = function(options) {
   tmp.fig = tempfile(); on.exit(unlink(tmp.fig), add = TRUE)
   # open a device to record plots unless a device is already open
   if (!isTRUE(opts_knit$get('dev.open'))) {
-    chunk_device(
-      options$fig.width[1L], options$fig.height[1L], keep != 'none', options$dev,
-      options$dev.args, options$dpi, options, tmp.fig
-    )
+    chunk_device(options, keep != 'none', tmp.fig)
     opts_knit$set(dev.open = TRUE)
   }
   # preserve par() settings from the last code chunk
@@ -320,9 +317,13 @@ purge_cache = function(options) {
 }
 
 # open a graphical device for a chunk to record plots
-chunk_device = function(
-  width, height, record = TRUE, dev, dev.args, dpi, options, tmp = tempfile()
-) {
+chunk_device = function(options, record = TRUE, tmp = tempfile()) {
+  width = options$fig.width[1L]
+  height = options$fig.height[1L]
+  dev = options$dev
+  dev.args = options$dev.args
+  dpi = options$dpi
+
   # actually I should adjust the recording device according to dev, but here I
   # have only considered devices like png and tikz (because the measurement
   # results can be very different especially with the latter, see #1066), the
