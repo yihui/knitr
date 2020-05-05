@@ -320,8 +320,8 @@ plot_crop = function(x, quiet = TRUE) {
 
 showtext = function(options) {
   if (!isTRUE(options$fig.showtext)) return()
-  showtext::showtext_begin()
   showtext::showtext_opts(dpi = options$dpi)
+  showtext::showtext_begin()
 }
 
 # handle some special cases of par()
