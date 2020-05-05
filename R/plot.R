@@ -318,7 +318,11 @@ plot_crop = function(x, quiet = TRUE) {
   x2
 }
 
-showtext = function(show) if (isTRUE(show)) showtext::showtext_begin()
+showtext = function(options) {
+  if (!isTRUE(options$fig.showtext)) return()
+  showtext::showtext_begin()
+  showtext::showtext_opts(dpi = options$dpi)
+}
 
 # handle some special cases of par()
 par2 = function(x) {

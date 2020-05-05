@@ -142,7 +142,7 @@ block_exec = function(options) {
     chunk_device(options, keep != 'none', tmp.fig)
     dv = dev.cur()
     if (!opts_knit$get('global.device')) on.exit(dev.off(dv), add = TRUE)
-    showtext(options$fig.showtext)  # showtext support
+    showtext(options)  # showtext support
   }
   # preserve par() settings from the last code chunk
   if (keep.pars) par2(opts_knit$get('global.pars'))
