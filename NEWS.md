@@ -14,6 +14,8 @@
 
 - The chunk option `dpi` is correctly passed to `showtext::showtext_opts()` now (thanks, @cpsievert, yixuan/showtext#33).
 
+- Theorem environments in **bookdown** fail to work with Pandoc >= 2.7.3 because of an issue in the `block2` engine of **knitr** (rstudio/bookdown#883).
+
 ## MAJOR CHANGES
 
 - When a code chunk generates multiple plots to be placed in figure environments, their figure labels will be of the form `label-i` where `label` is the chunk label, and `i` is the plot number. Previously, the labels were of the form `labeli` (i.e., there was not a dash before the number). If you cross-reference the figures, you need to change the reference keys from `labeli` to `label-i`.

@@ -455,10 +455,16 @@ eng_block2 = function(options) {
   h4 = options$html.after %n% ''
   h5 = options$html.before2 %n% ''
   h6 = options$html.after2 %n% ''
+  if (is_latex_output() && rmarkdown::pandoc_available('2.7.3')) {
+    h7 = h8 = '\n'
+  } else {
+    h7 = sprintf('<%s class="%s">', h2, type)
+    h8 = sprintf('</%s>', h2)
+  }
 
   sprintf(
-    '\\BeginKnitrBlock{%s}%s%s<%s class="%s">%s%s%s</%s>%s\\EndKnitrBlock{%s}',
-    type, l1, h3, h2, type, h5, code, h6, h2, h4, type
+    '\\BeginKnitrBlock{%s}%s%s%s%s%s%s%s%s\\EndKnitrBlock{%s}',
+    type, l1, h3, h7, h5, code, h6, h8, h4, type
   )
 }
 
