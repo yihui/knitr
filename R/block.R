@@ -325,7 +325,7 @@ chunk_device = function(options, record = TRUE, tmp = tempfile()) {
     ), get_dargs(dev.args, 'png')))
   } else if (identical(dev, 'ragg_png')) {
     # handle bg -> background gracefully
-    args = dev.args$ragg_png %n% dev.args
+    args = get_dargs(dev.args, 'ragg_png')
     args$background = args$background %n% args$bg
     args$bg = NULL
     do.call(ragg::agg_png, c(list(
