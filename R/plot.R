@@ -128,7 +128,7 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   dargs = get_dargs(options$dev.args, dev)
   # re-plot the recorded plot to an off-screen device
   do.call(device, c(list(path, width = width, height = height), dargs))
-  showtext(options$fig.showtext)  # showtext support
+  showtext(options)  # maybe begin showtext and set options
   print(plot)
   dev.off()
 
