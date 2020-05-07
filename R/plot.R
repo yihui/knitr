@@ -58,6 +58,16 @@ tikz_dev = function(...) {
   tikzDevice::tikz(..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages))
 }
 
+# a wrapper of the ragg::agg_png device
+ragg_png_dev = function(...) {
+  loadNamespace('ragg')
+  args = list(...)
+  # handle bg -> background gracefully
+  args$background = args$background %n% args$bg
+  args$bg = NULL
+  do.call(ragg::agg_png, args)
+}
+
 # save a recorded plot
 save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
@@ -112,7 +122,7 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
     # similar to load_device(), but the `dpi` argument is named `res`
     ragg_png = function(...) {
-      ragg::agg_png(..., res = dpi, units = 'in')
+      ragg_png_dev(..., res = dpi, units = 'in')
     },
 
     tikz = function(...) {
