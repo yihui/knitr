@@ -77,7 +77,31 @@ if (!has_error({png(); dev.off()})) assert(
     TRUE
   }
 )
-
+if (requireNamespace("ragg", quietly = TRUE) &&
+    !has_error({ragg::agg_png(); dev.off()})) {
+  assert(
+    'chunk_device() correctly opens the ragg::agg_png device with dev.args',
+    {
+      chunk_device(opts_chunk$merge(list(
+        dev = 'ragg_png', dev.args = list(pdf = list(useDingbats = FALSE))
+      )))
+      plot(1:10)
+      dev.off()
+      TRUE
+    }
+  )
+  assert(
+    'ragg_png_dev correctly handles bg dev.arg into background arg',
+    {
+      chunk_device(opts_chunk$merge(list(
+        dev = 'ragg_png', dev.args = list(bg = "grey")
+      )))
+      plot(1:10)
+      dev.off()
+      TRUE
+    }
+  )
+}
 # should not error (find `pdf` correctly in grDevices, instead of the one
 # defined below)
 pdf = function() {}
