@@ -142,6 +142,8 @@
 
 - Added a new engine `cc` to compile C++ code via `R CMD SHILIB` like the `c` and `fortran` engines (thanks, @kingaa, #1832).
 
+- `kable()` operating in LaTeX mode now typesets numeric columns in math mode for improved rendering of minus signs; decimal and thousands separator commas are wrapped in braces (`{}`) to preserve spacing (thanks, @krivit, #1709).
+
 ## BUG FIXES
 
 - For non-R code chunks that generate plots and use the chunk option `fig.cap`, the `plot` hook in **knitr** stopped working in v1.27 and v1.28 (thanks, @XiangyunHuang, https://d.cosx.org/d/421249).
