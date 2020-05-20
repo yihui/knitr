@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.53
 
+## NEW FEATURES
+
+- `kable()` operating in LaTeX mode now typesets numeric columns in math mode for improved rendering of minus signs; decimal and thousands separator commas are wrapped in braces (`{}`) to preserve spacing (thanks, @krivit, #1709).
 
 # CHANGES IN knitr VERSION 1.52
 
