@@ -279,6 +279,15 @@ eng_tikz = function(options) {
 
   lines = read_utf8(options$engine.opts$template %n%
                     system.file('misc', 'tikz2pdf.tex', package = 'knitr'))
+
+  if (!is.null(options$engine.opts$extra_preamble)) {
+    i = grep('%% EXTRA_TIKZ_PREAMBLE_CODE %%', lines)
+    if (length(i) != 1L)
+      stop("Couldn't find replacement string; or the are multiple of them.")
+
+    lines = append(lines, options$engine.opts$extra_preamble, i)
+  }
+
   i = grep('%% TIKZ_CODE %%', lines)
   if (length(i) != 1L)
     stop("Couldn't find replacement string; or the are multiple of them.")

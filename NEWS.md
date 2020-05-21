@@ -96,6 +96,8 @@
 
 - `hook_pdfcrop()` and `plot_crop()` will work only when both programs `pdfcrop` and `ghostscript` have been installed. Previously only `pdfcrop` was checked (thanks, @dalupus, #954).
 
+- For `tikz` chunks, a new option `engine.opts$extra_preamble` allows arbitrary LaTeX to be inserted into the chunk's preamble. This allows loading of additional LaTeX and tikz libraries without having to recreate a template from scratch.
+
 # CHANGES IN knitr VERSION 1.29
 
 ## NEW FEATURES
