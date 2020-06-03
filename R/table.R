@@ -178,7 +178,7 @@ to_character = function(x) {
   if (is.character(x)) return(x)
   # format columns individually if x is not a matrix
   if (!is.matrix(x)) {
-    for (j in seq_len(ncol(x)) x[, j] = format_args(x[, j])
+    for (j in seq_len(ncol(x))) x[, j] = format_args(x[, j])
     x = as.matrix(x)
   }
   x2 = as.character(x); dim(x2) = dim(x); dimnames(x2) = dimnames(x)
