@@ -1,6 +1,6 @@
 # knitr
 
-[![Status de Compilação](https://travis-ci.org/yihui/knitr.svg)](https://travis-ci.org/yihui/knitr)
+[![Status de Compilação](https://travis-ci.com/yihui/knitr.svg)](https://travis-ci.com/yihui/knitr)
 [![Status da Cobertura de Código](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://codecov.io/github/yihui/knitr?branch=master)
 [![Downloads do espelho RStudio CRAN](http://cranlogs.r-pkg.org/badges/knitr)](https://cran.r-project.org/package=knitr)
 
