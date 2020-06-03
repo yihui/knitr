@@ -159,7 +159,7 @@ kable = function(
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
   n = nrow(x)
-  x = replace_na(to_character(as.matrix(x)), is.na(x))
+  x = replace_na(to_character(x), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
   x = trimws(x)
   colnames(x) = col.names
@@ -176,6 +176,11 @@ kable = function(
 # convert to character while preserving dim/dimnames attributes
 to_character = function(x) {
   if (is.character(x)) return(x)
+  # format columns individually if x is not a matrix
+  if (!is.matrix(x)) {
+    for (j in seq_len(ncol(x))) x[, j] = format_args(x[, j])
+    x = as.matrix(x)
+  }
   x2 = as.character(x); dim(x2) = dim(x); dimnames(x2) = dimnames(x)
   x2
 }
