@@ -159,7 +159,7 @@ kable = function(
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
   n = nrow(x)
-  x = replace_na(to_character(x, format.args), is.na(x))
+  x = replace_na(to_character(x), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
   x = trimws(x)
   colnames(x) = col.names
