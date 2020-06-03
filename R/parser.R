@@ -20,6 +20,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
   groups = unname(split(lines, cumsum(tmp)))
   if (set.preamble)
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
+  markdown_mode = identical(patterns, all_patterns$md)
 
   # parse 'em all
   lapply(groups, function(g) {
@@ -36,7 +37,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       params.src = if (group_pattern(chunk.begin)) {
         stringr::str_trim(gsub(chunk.begin, '\\1', g[1]))
       } else ''
-      parse_block(g[-1], g[1], params.src)
+      parse_block(g[-1], g[1], params.src, markdown_mode)
     } else parse_inline(g, patterns)
   })
 }
@@ -72,11 +73,11 @@ strip_block = function(x, prefix = NULL) {
 dep_list = new_defaults()
 
 # separate params and R code in code chunks
-parse_block = function(code, header, params.src) {
+parse_block = function(code, header, params.src, markdown_mode = out_format('markdown')) {
   params = params.src
   engine = 'r'
   # consider the syntax ```{engine, opt=val} for chunk headers
-  if (out_format('markdown')) {
+  if (markdown_mode) {
     engine = sub('^([a-zA-Z0-9_]+).*$', '\\1', params)
     params = sub('^([a-zA-Z0-9_]+)', '', params)
   }
