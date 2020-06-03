@@ -4,7 +4,9 @@
 \name{cache_engines}
 \alias{cache_engines}
 \title{Cache engines of other languages}
-\format{An object of class \code{list} of length 6.}
+\format{
+An object of class \code{list} of length 6.
+}
 \usage{
 cache_engines
 }

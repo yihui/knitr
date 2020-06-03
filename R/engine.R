@@ -175,9 +175,9 @@ get_engine_opts = function(opts, engine, fallback = '') {
 
 get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 
-## C and Fortran (via R CMD SHLIB)
+## C, C++, and Fortran (via R CMD SHLIB)
 eng_shlib = function(options) {
-  n = switch(options$engine, c = 'c', fortran = 'f', fortran95 = 'f95')
+  n = switch(options$engine, c = 'c', cc  = 'cc', fortran = 'f', fortran95 = 'f95')
   f = wd_tempfile(n, paste0('.', n))
   write_utf8(options$code, f)
   on.exit(unlink(c(f, with_ext(f, c('o', 'so', 'dll')))), add = TRUE)
@@ -320,10 +320,10 @@ eng_tikz = function(options) {
 ## GraphViz (dot) and Asymptote are similar
 eng_dot = function(options) {
 
-  # create temporary file
-  f = wd_tempfile('code')
+  # write code to a temp file, and output to another temp file
+  f = wd_tempfile('code'); f2 = wd_tempfile('out')
   write_utf8(code <- options$code, f)
-  on.exit(unlink(f), add = TRUE)
+  on.exit(unlink(c(f, f2)), add = TRUE)
 
   # adapt command to either graphviz or asymptote
   if (options$engine == 'dot') {
@@ -338,17 +338,18 @@ eng_dot = function(options) {
   cmd = sprintf(
     command_string, shQuote(get_engine_path(options$engine.path, options$engine)),
     shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
-    shQuote(paste0(fig <- fig_path(), '.', ext))
+    shQuote(f2 <- paste0(f2, '.', ext))
   )
 
   # generate output
-  dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
-  outf = paste(fig, ext, sep = '.')
+  outf = paste(fig_path(), ext, sep = '.')
+  dir.create(dirname(outf), recursive = TRUE, showWarnings = FALSE)
   unlink(outf)
   extra = if (options$eval) {
-    message('running: ', cmd)
+    if (options$message) message('running: ', cmd)
     system(cmd)
-    if (!file.exists(outf)) stop('failed to compile content');
+    file.rename(f2, outf)
+    if (!file.exists(outf)) stop('Failed to compile the ', options$engine, ' chunk')
     options$fig.num = 1L; options$fig.cur = 1L
     knit_hooks$get('plot')(outf, options)
   }
@@ -373,12 +374,12 @@ eng_highlight = function(options) {
 
 ## save the code
 eng_cat = function(options) {
-  cat2 = function(..., file = '', lang = NULL) {
+  cat2 = function(..., file = '', sep = '\n', lang = NULL) {
     # do not write to stdout like the default behavior of cat()
-    if (!identical(file, '')) cat(..., file = file)
+    if (!identical(file, '')) cat(..., file = file, sep = sep)
   }
   if (options$eval)
-    do.call(cat2, c(list(options$code, sep = '\n'), options$engine.opts))
+    do.call(cat2, c(list(options$code), options$engine.opts))
 
   if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
     return('')
@@ -388,7 +389,7 @@ eng_cat = function(options) {
 
 ## output the code without processing it
 eng_asis = function(options) {
-  if (options$echo && options$eval) one_string(options$code)
+  if (options$echo) one_string(options$code)
 }
 
 # write a block environment according to the output format
@@ -454,10 +455,16 @@ eng_block2 = function(options) {
   h4 = options$html.after %n% ''
   h5 = options$html.before2 %n% ''
   h6 = options$html.after2 %n% ''
+  if (is_latex_output() && rmarkdown::pandoc_available('2.7.3')) {
+    h7 = h8 = '\n'
+  } else {
+    h7 = sprintf('<%s class="%s">', h2, type)
+    h8 = sprintf('</%s>', h2)
+  }
 
   sprintf(
-    '\\BeginKnitrBlock{%s}%s%s<%s class="%s">%s%s%s</%s>%s\\EndKnitrBlock{%s}',
-    type, l1, h3, h2, type, h5, code, h6, h2, h4, type
+    '\\BeginKnitrBlock{%s}%s%s%s%s%s%s%s%s\\EndKnitrBlock{%s}',
+    type, l1, h3, h7, h5, code, h6, h8, h4, type
   )
 }
 
@@ -737,7 +744,7 @@ local({
 # additional engines
 knit_engines$set(
   highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
-  c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
+  c = eng_shlib, cc = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
   python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss

@@ -15,6 +15,8 @@ auto_exts = c(
 
   svglite = 'svg',
 
+  ragg_png = 'png',
+
   tikz = 'tex'
 )
 
@@ -54,6 +56,16 @@ tikz_dev = function(...) {
     luatex = getOption('tikzLualatexPackages')
   )
   tikzDevice::tikz(..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages))
+}
+
+# a wrapper of the ragg::agg_png device
+ragg_png_dev = function(...) {
+  loadNamespace('ragg')
+  args = list(...)
+  # handle bg -> background gracefully
+  args$background = args$background %n% args$bg
+  args$bg = NULL
+  do.call(ragg::agg_png, args)
 }
 
 # save a recorded plot
@@ -108,6 +120,11 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
     svglite = load_device('svglite', 'svglite'),
 
+    # similar to load_device(), but the `dpi` argument is named `res`
+    ragg_png = function(...) {
+      ragg_png_dev(..., res = dpi, units = 'in')
+    },
+
     tikz = function(...) {
       tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)
     },
@@ -121,7 +138,7 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   dargs = get_dargs(options$dev.args, dev)
   # re-plot the recorded plot to an off-screen device
   do.call(device, c(list(path, width = width, height = height), dargs))
-  showtext(options$fig.showtext)  # showtext support
+  showtext(options)  # maybe begin showtext and set options
   print(plot)
   dev.off()
 
@@ -311,7 +328,11 @@ plot_crop = function(x, quiet = TRUE) {
   x2
 }
 
-showtext = function(show) if (isTRUE(show)) showtext::showtext_begin()
+showtext = function(options) {
+  if (!isTRUE(options$fig.showtext)) return()
+  showtext::showtext_opts(dpi = options$dpi)
+  showtext::showtext_begin()
+}
 
 # handle some special cases of par()
 par2 = function(x) {

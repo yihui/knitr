@@ -130,20 +130,22 @@ block_exec = function(options) {
     keep.idx = keep
     keep = "index"
   }
+
+  if (keep.pars <- opts_knit$get('global.par')) on.exit({
+    opts_knit$set(global.pars = par(no.readonly = TRUE))
+  }, add = TRUE)
+
   tmp.fig = tempfile(); on.exit(unlink(tmp.fig), add = TRUE)
-  # open a device to record plots
-  if (chunk_device(options$fig.width[1L], options$fig.height[1L], keep != 'none',
-                   options$dev, options$dev.args, options$dpi, options, tmp.fig)) {
-    # preserve par() settings from the last code chunk
-    if (keep.pars <- opts_knit$get('global.par'))
-      par2(opts_knit$get('global.pars'))
-    showtext(options$fig.showtext)  # showtext support
+  # open a device to record plots if not using a global device or no device is
+  # open, and close this device if we don't want to use a global device
+  if (!opts_knit$get('global.device') || is.null(dev.list())) {
+    chunk_device(options, keep != 'none', tmp.fig)
     dv = dev.cur()
-    on.exit({
-      if (keep.pars) opts_knit$set(global.pars = par(no.readonly = TRUE))
-      dev.off(dv)
-    }, add = TRUE)
+    if (!opts_knit$get('global.device')) on.exit(dev.off(dv), add = TRUE)
+    showtext(options)  # showtext support
   }
+  # preserve par() settings from the last code chunk
+  if (keep.pars) par2(opts_knit$get('global.pars'))
 
   res.before = run_hooks(before = TRUE, options, env) # run 'before' hooks
 
@@ -305,54 +307,49 @@ purge_cache = function(options) {
   ), '_????????????????????????????????'))
 }
 
-# open a device for a chunk; depending on the option global.device, may or may
-# not need to close the device on exit
-chunk_device = function(
-  width, height, record = TRUE, dev, dev.args, dpi, options, tmp = tempfile()
-) {
-  dev_new = function() {
-    # actually I should adjust the recording device according to dev, but here I
-    # have only considered the png and tikz devices (because the measurement
-    # results can be very different especially with the latter, see #1066), the
-    # cairo_pdf device (#1235), and svg (#1705)
-    if (identical(dev, 'png')) {
-      do.call(grDevices::png, c(list(
-        filename = tmp, width = width, height = height, units = 'in', res = dpi
-      ), get_dargs(dev.args, 'png')))
-    } else if (identical(dev, 'tikz')) {
-      dargs = c(list(
-        file = tmp, width = width, height = height
-      ), get_dargs(dev.args, 'tikz'))
-      dargs$sanitize = options$sanitize; dargs$standAlone = options$external
-      if (is.null(dargs$verbose)) dargs$verbose = FALSE
-      do.call(tikz_dev, dargs)
-    } else if (identical(dev, 'cairo_pdf')) {
-      do.call(grDevices::cairo_pdf, c(list(
-        filename = tmp, width = width, height = height
-      ), get_dargs(dev.args, 'cairo_pdf')))
-    } else if (identical(dev, 'svg')) {
-      do.call(grDevices::svg, c(list(
-        filename = tmp, width = width, height = height
-      ), get_dargs(dev.args, 'svg')))
-    } else if (identical(getOption('device'), pdf_null)) {
-      if (!is.null(dev.args)) {
-        dev.args = get_dargs(dev.args, 'pdf')
-        dev.args = dev.args[intersect(names(dev.args), c('pointsize', 'bg'))]
-      }
-      do.call(pdf_null, c(list(width = width, height = height), dev.args))
-    } else dev.new(width = width, height = height)
-  }
-  if (!opts_knit$get('global.device')) {
-    dev_new()
-    dev.control(displaylist = if (record) 'enable' else 'inhibit')  # enable recording
-    # if returns TRUE, we need to close this device after code is evaluated
-    return(TRUE)
-  } else if (is.null(dev.list())) {
-    # want to use a global device but not open yet
-    dev_new()
-    dev.control('enable')
-  }
-  FALSE
+# open a graphical device for a chunk to record plots
+chunk_device = function(options, record = TRUE, tmp = tempfile()) {
+  width = options$fig.width[1L]
+  height = options$fig.height[1L]
+  dev = options$dev
+  dev.args = options$dev.args
+  dpi = options$dpi
+
+  # actually I should adjust the recording device according to dev, but here I
+  # have only considered devices like png and tikz (because the measurement
+  # results can be very different especially with the latter, see #1066), the
+  # cairo_pdf device (#1235), and svg (#1705)
+  if (identical(dev, 'png')) {
+    do.call(grDevices::png, c(list(
+      filename = tmp, width = width, height = height, units = 'in', res = dpi
+    ), get_dargs(dev.args, 'png')))
+  } else if (identical(dev, 'ragg_png')) {
+    do.call(ragg_png_dev, c(list(
+      filename = tmp, width = width, height = height, units = 'in', res = dpi
+    ), get_dargs(dev.args, 'ragg_png')))
+  } else if (identical(dev, 'tikz')) {
+    dargs = c(list(
+      file = tmp, width = width, height = height
+    ), get_dargs(dev.args, 'tikz'))
+    dargs$sanitize = options$sanitize; dargs$standAlone = options$external
+    if (is.null(dargs$verbose)) dargs$verbose = FALSE
+    do.call(tikz_dev, dargs)
+  } else if (identical(dev, 'cairo_pdf')) {
+    do.call(grDevices::cairo_pdf, c(list(
+      filename = tmp, width = width, height = height
+    ), get_dargs(dev.args, 'cairo_pdf')))
+  } else if (identical(dev, 'svg')) {
+    do.call(grDevices::svg, c(list(
+      filename = tmp, width = width, height = height
+    ), get_dargs(dev.args, 'svg')))
+  } else if (identical(getOption('device'), pdf_null)) {
+    if (!is.null(dev.args)) {
+      dev.args = get_dargs(dev.args, 'pdf')
+      dev.args = dev.args[intersect(names(dev.args), c('pointsize', 'bg'))]
+    }
+    do.call(pdf_null, c(list(width = width, height = height), dev.args))
+  } else dev.new(width = width, height = height)
+  dev.control(displaylist = if (record) 'enable' else 'inhibit')
 }
 
 # filter out some results based on the numeric chunk option as indices

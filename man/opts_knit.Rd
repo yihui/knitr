@@ -4,7 +4,9 @@
 \name{opts_knit}
 \alias{opts_knit}
 \title{Options for the knitr package}
-\format{An object of class \code{list} of length 6.}
+\format{
+An object of class \code{list} of length 6.
+}
 \usage{
 opts_knit
 }
