@@ -1,4 +1,5 @@
 language: r
+latex: false
 
 # environment variables
 env:
@@ -8,8 +9,8 @@ env:
 
 # capturing state, early exit if no integration test is needed
 before_install:
+  - export PATH=$HOME/bin:$PATH
   - export RGL_USE_NULL=TRUE
-  - tlmgr conf texmf TEXMFHOME $(Rscript -e "cat(file.path(R.home('share'), 'texmf'))")
   - if [ ${TARGET} = integration ]; then
       if ! make integration-need; then
         echo "NOTE:"" Integration test skipped. To enable, create a branch named ${TRAVIS_BRANCH} in ${TRAVIS_REPO_SLUG}-examples.";
@@ -18,7 +19,9 @@ before_install:
     fi
   - "curl -L https://xran.yihui.org/.gitconfig -o ~/.gitconfig"
   - Rscript -e 'update.packages(.libPaths()[1], ask = FALSE)'
-  - Rscript -e "if (!require('covr')) install.packages('covr')"
+  - Rscript -e "if (!require('xfun')) install.packages('xfun')"
+  - Rscript -e "xfun::pkg_load2('covr', 'tinytex')"
+  - Rscript -e "tinytex:::install_prebuilt()"
 
 addons:
   apt:
@@ -42,9 +45,6 @@ repos:
 
 cache:
   packages: yes
-
-before_script:
-  - Rscript -e "if (!require('webshot')) devtools::install_github('wch/webshot')"
 
 # run tests
 script:
