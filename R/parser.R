@@ -104,7 +104,10 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
     if (label %in% names(knit_code$get())) {
       if (identical(getOption('knitr.duplicate.label'), 'allow')) {
         params$label = label = unnamed_chunk(label)
-      } else stop("duplicate label '", label, "'")
+      } else stop(
+        "Duplicate chunk label '", label, "', which has been used for the chunk:\n",
+        one_string(knit_code$get(label))
+      )
     }
     knit_code$set(setNames(list(structure(code, chunk_opts = params)), label))
   }
