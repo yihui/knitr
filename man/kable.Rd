@@ -2,6 +2,7 @@
 % Please edit documentation in R/table.R
 \name{kable}
 \alias{kable}
+\alias{kables}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
 kable(
@@ -17,9 +18,13 @@ kable(
   escape = TRUE,
   ...
 )
+
+kables(x, format, caption = NULL, label = NULL)
 }
 \arguments{
-\item{x}{An R object, typically a matrix or data frame.}
+\item{x}{For \code{kable()}, \code{x} is an R object, which is typically a
+matrix or data frame. For \code{kables()}, a list with each element being a
+returned value from \code{kable()}.}
 
 \item{format}{A character string. Possible values are \code{latex},
 \code{html}, \code{markdown}, \code{pandoc}, and \code{rst}; this will be
@@ -62,8 +67,13 @@ that special characters will not trigger syntax errors in LaTeX or HTML.}
 A character vector of the table source code.
 }
 \description{
-This is a very simple table generator. It is simple by design. It is not
-intended to replace any other R packages for making tables.
+A very simple table generator, and it is simple by design. It is not intended
+to replace any other R packages for making tables. The \code{kable()}
+function returns a single table for a single data object, and returns a table
+that contains multiple tables if the input object is a list of data objects.
+The \code{kables()} function is similar to \code{kable(x)} when \code{x} is a
+list of data objects, but \code{kables()} accepts a list of \code{kable()}
+values directly instead of data objects (see examples below).
 }
 \details{
 Missing values (\code{NA}) in the table are displayed as \code{NA} by
@@ -82,37 +92,44 @@ The tables for \code{format = 'markdown'} also work for Pandoc when the
   loop), you must explicitly \code{print(kable(...))}.
 }
 \examples{
-kable(head(iris), format = "latex")
-kable(head(iris), format = "html")
-kable(head(iris), format = "latex", caption = "Title of the table")
-kable(head(iris), format = "html", caption = "Title of the table")
+d1 = head(iris)
+d2 = head(mtcars)
+kable(d1, format = "latex")
+kable(d1, format = "html")
+kable(d1, format = "latex", caption = "Title of the table")
+kable(d1, format = "html", caption = "Title of the table")
 # use the booktabs package
 kable(mtcars, format = "latex", booktabs = TRUE)
 # use the longtable package
 kable(matrix(1000, ncol = 5), format = "latex", digits = 2, longtable = TRUE)
 # change LaTeX default table environment
-kable(head(iris), format = "latex", caption = "My table", table.envir = "table*")
+kable(d1, format = "latex", caption = "My table", table.envir = "table*")
 # add some table attributes
-kable(head(iris), format = "html", table.attr = "id=\"mytable\"")
+kable(d1, format = "html", table.attr = "id=\"mytable\"")
 # reST output
-kable(head(mtcars), format = "rst")
+kable(d2, format = "rst")
 # no row names
-kable(head(mtcars), format = "rst", row.names = FALSE)
+kable(d2, format = "rst", row.names = FALSE)
 # R Markdown/Github Markdown tables
-kable(head(mtcars[, 1:5]), format = "markdown")
+kable(d2[, 1:5], format = "markdown")
 # no inner padding
-kable(head(mtcars), format = "markdown", padding = 0)
+kable(d2, format = "markdown", padding = 0)
 # more padding
-kable(head(mtcars), format = "markdown", padding = 2)
+kable(d2, format = "markdown", padding = 2)
 # Pandoc tables
-kable(head(mtcars), format = "pandoc", caption = "Title of the table")
+kable(d2, format = "pandoc", caption = "Title of the table")
 # format numbers using , as decimal point, and ' as thousands separator
 x = as.data.frame(matrix(rnorm(60, 1e+06, 10000), 10))
 kable(x, format.args = list(decimal.mark = ",", big.mark = "'"))
 # save the value
-x = kable(mtcars, format = "html")
+x = kable(d2, format = "html")
 cat(x, sep = "\n")
 # can also set options(knitr.table.format = 'html') so that the output is HTML
+
+# multiple tables via either kable(list(x1, x2)) or kables(list(kable(x1),
+# kable(x2)))
+kable(list(d1, d2), caption = "A tale of two tables")
+kables(list(kable(d1, align = "l"), kable(d2)), caption = "A tale of two tables")
 }
 \references{
 See

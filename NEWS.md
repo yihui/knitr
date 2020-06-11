@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- Added a new function `kables()` (the plural form of `kable()`) to create a table containing multiple tables, with each table created by `kable()`. Previously you can only create such a table from `kable(list(data1, data2))`, and now you can also do `kables(list(kable(data1), kable(data2)))`. The latter way gives you more freedom to control each table individually via the arguments of each individual `kable()` call.
+
 - The graphics device chunk option, `dev`, now supports a value of `'ragg_png'` which calls the `agg_png()` function from the **ragg** package (thanks, @cpsievert, #1834).
 
 - The argument `error` of `include_graphics()` takes value from the global R option `knitr.graphics.error` by default, e.g., you may set `options(knitr.graphics.error = FALSE)` so `include_graphics()` won't signal an error if the graphics file to be included doesn't exist.

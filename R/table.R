@@ -1,13 +1,20 @@
 #' Create tables in LaTeX, HTML, Markdown and reStructuredText
 #'
-#' This is a very simple table generator. It is simple by design. It is not
-#' intended to replace any other R packages for making tables.
+#' A very simple table generator, and it is simple by design. It is not intended
+#' to replace any other R packages for making tables. The \code{kable()}
+#' function returns a single table for a single data object, and returns a table
+#' that contains multiple tables if the input object is a list of data objects.
+#' The \code{kables()} function is similar to \code{kable(x)} when \code{x} is a
+#' list of data objects, but \code{kables()} accepts a list of \code{kable()}
+#' values directly instead of data objects (see examples below).
 #'
 #' Missing values (\code{NA}) in the table are displayed as \code{NA} by
 #' default. If you want to display them with other characters, you can set the
 #' option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
 #' hide \code{NA} values.
-#' @param x An R object, typically a matrix or data frame.
+#' @param x For \code{kable()}, \code{x} is an R object, which is typically a
+#'   matrix or data frame. For \code{kables()}, a list with each element being a
+#'   returned value from \code{kable()}.
 #' @param format A character string. Possible values are \code{latex},
 #'   \code{html}, \code{markdown}, \code{pandoc}, and \code{rst}; this will be
 #'   automatically determined if the function is called within \pkg{knitr}; it
@@ -52,87 +59,64 @@
 #'   \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
 #'    for some examples in LaTeX, but they also apply to other document formats.
 #' @export
-#' @examples  kable(head(iris), format = 'latex')
-#' kable(head(iris), format = 'html')
-#' kable(head(iris), format = 'latex', caption = 'Title of the table')
-#' kable(head(iris), format = 'html', caption = 'Title of the table')
+#' @examples d1 = head(iris); d2 = head(mtcars)
+#' kable(d1, format = 'latex')
+#' kable(d1, format = 'html')
+#' kable(d1, format = 'latex', caption = 'Title of the table')
+#' kable(d1, format = 'html', caption = 'Title of the table')
 #' # use the booktabs package
 #' kable(mtcars, format = 'latex', booktabs = TRUE)
 #' # use the longtable package
 #' kable(matrix(1000, ncol=5), format = 'latex', digits = 2, longtable = TRUE)
 #' # change LaTeX default table environment
-#' kable(head(iris), format = "latex", caption = "My table", table.envir='table*')
+#' kable(d1, format = "latex", caption = "My table", table.envir='table*')
 #' # add some table attributes
-#' kable(head(iris), format = 'html', table.attr = 'id="mytable"')
+#' kable(d1, format = 'html', table.attr = 'id="mytable"')
 #' # reST output
-#' kable(head(mtcars), format = 'rst')
+#' kable(d2, format = 'rst')
 #' # no row names
-#' kable(head(mtcars), format = 'rst', row.names = FALSE)
+#' kable(d2, format = 'rst', row.names = FALSE)
 #' # R Markdown/Github Markdown tables
-#' kable(head(mtcars[, 1:5]), format = 'markdown')
+#' kable(d2[, 1:5], format = 'markdown')
 #' # no inner padding
-#' kable(head(mtcars), format = 'markdown', padding = 0)
+#' kable(d2, format = 'markdown', padding = 0)
 #' # more padding
-#' kable(head(mtcars), format = 'markdown', padding = 2)
+#' kable(d2, format = 'markdown', padding = 2)
 #' # Pandoc tables
-#' kable(head(mtcars), format = 'pandoc', caption = 'Title of the table')
+#' kable(d2, format = 'pandoc', caption = 'Title of the table')
 #' # format numbers using , as decimal point, and ' as thousands separator
 #' x = as.data.frame(matrix(rnorm(60, 1e6, 1e4), 10))
 #' kable(x, format.args = list(decimal.mark = ',', big.mark = "'"))
 #' # save the value
-#' x = kable(mtcars, format = 'html')
+#' x = kable(d2, format = 'html')
 #' cat(x, sep = '\n')
 #' # can also set options(knitr.table.format = 'html') so that the output is HTML
+#'
+#' # multiple tables via either kable(list(x1, x2)) or kables(list(kable(x1), kable(x2)))
+#' kable(list(d1, d2), caption = 'A tale of two tables')
+#' kables(list(kable(d1, align = 'l'), kable(d2)), caption = 'A tale of two tables')
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
   align, caption = NULL, label = NULL, format.args = list(), escape = TRUE, ...
 ) {
 
-  # determine the table format
-  if (missing(format) || is.null(format)) format = getOption('knitr.table.format')
-  if (is.null(format)) format = if (is.null(pandoc_to())) switch(
-    out_format() %n% 'markdown',
-    latex = 'latex', listings = 'latex', sweave = 'latex',
-    html = 'html', markdown = 'markdown', rst = 'rst',
-    stop('table format not implemented yet!')
-  ) else if (isTRUE(opts_knit$get('kable.force.latex')) && is_latex_output()) {
-    # force LaTeX table because Pandoc's longtable may not work well with floats
-    # http://tex.stackexchange.com/q/276699/9128
-    'latex'
-  } else 'pandoc'
-  if (is.function(format)) format = format()
-
+  format = kable_format(format)
   # expand align if applicable
   if (!missing(align) && length(align) == 1L && !grepl('[^lcr]', align))
     align = strsplit(align, '')[[1]]
 
-  # create a label for bookdown if applicable
-  if (is.null(label)) label = opts_current$get('label')
-  if (!is.null(caption) && !is.na(caption)) caption = paste0(
-    create_label('tab:', label, latex = (format == 'latex')), caption
-  )
   if (inherits(x, 'list')) {
-    # if the output is for Pandoc and we want multiple tabular in one table, we
-    # should use the latex format instead, because Pandoc does not support
-    # Markdown in LaTeX yet https://github.com/jgm/pandoc/issues/2453
-    if (format == 'pandoc' && is_latex_output()) format = 'latex'
+    format = kable_format_latex(format)
     res = lapply(
       x, kable, format = format, digits = digits, row.names = row.names,
       col.names = col.names, align = align, caption = NA,
       format.args = format.args, escape = escape, ...
     )
-    res = unlist(lapply(res, one_string))
-    res = if (format == 'latex') {
-      kable_latex_caption(res, caption)
-    } else if (format == 'html' || (format == 'pandoc' && is_html_output())) kable_html(
-      matrix(paste0('\n\n', res, '\n\n'), 1), caption = caption, escape = FALSE,
-      table.attr = 'class="kable_wrapper"'
-    ) else {
-      res = paste(res, collapse = '\n\n')
-      if (format == 'pandoc') kable_pandoc_caption(res, caption) else res
-    }
-    return(structure(res, format = format, class = 'knitr_kable'))
+    return(kables(res, format, caption, label))
   }
+
+  caption = kable_caption(label, caption, format)
+
   if (!is.matrix(x)) x = as.data.frame(x)
   if (identical(col.names, NA)) col.names = colnames(x)
   m = ncol(x)
@@ -170,6 +154,61 @@ kable = function(
     paste('kable', format, sep = '_'),
     list(x = x, caption = caption, escape = escape, ...)
   )
+  structure(res, format = format, class = 'knitr_kable')
+}
+
+kable_caption = function(label, caption, format) {
+  # create a label for bookdown if applicable
+  if (is.null(label)) label = opts_current$get('label')
+  if (!is.null(caption) && !is.na(caption)) caption = paste0(
+    create_label('tab:', label, latex = (format == 'latex')), caption
+  )
+  caption
+}
+
+# determine the table format
+kable_format = function(format = NULL) {
+  if (missing(format) || is.null(format)) format = getOption('knitr.table.format')
+  if (is.null(format)) format = if (is.null(pandoc_to())) switch(
+    out_format() %n% 'markdown',
+    latex = 'latex', listings = 'latex', sweave = 'latex',
+    html = 'html', markdown = 'markdown', rst = 'rst',
+    stop('table format not implemented yet!')
+  ) else if (isTRUE(opts_knit$get('kable.force.latex')) && is_latex_output()) {
+    # force LaTeX table because Pandoc's longtable may not work well with floats
+    # http://tex.stackexchange.com/q/276699/9128
+    'latex'
+  } else 'pandoc'
+  if (is.function(format)) format = format()
+  format
+}
+
+# if the output is for Pandoc and we want multiple tabular in one table, we
+# should use the latex format instead, because Pandoc does not support Markdown
+# in LaTeX yet https://github.com/jgm/pandoc/issues/2453
+kable_format_latex = function(format) {
+  if (format == 'pandoc' && is_latex_output()) 'latex' else format
+}
+
+#' @rdname kable
+#' @export
+kables = function(x, format, caption = NULL, label = NULL) {
+  format = kable_format(format)
+  format = kable_format_latex(format)
+  caption = kable_caption(label, caption, format)
+  # in case `x` contains kable()s, make sure all kable()s use the same default format
+  opts = options(knitr.table.format = format); on.exit(options(opts), add = TRUE)
+  if (!inherits(x, 'list')) stop("'x' must be a list (of kable() values)")
+  res = unlist(lapply(x, one_string))
+  res = if (format == 'latex') {
+    kable_latex_caption(res, caption)
+  } else if (format == 'html' || (format == 'pandoc' && is_html_output())) kable_html(
+    matrix(paste0('\n\n', res, '\n\n'), 1), caption = caption, escape = FALSE,
+    table.attr = 'class="kable_wrapper"'
+  ) else {
+    res = paste(res, collapse = '\n\n')
+    if (format == 'pandoc') kable_pandoc_caption(res, caption) else res
+  }
   structure(res, format = format, class = 'knitr_kable')
 }
 
