@@ -794,7 +794,7 @@ create_label = function(..., latex = FALSE) {
   } else {
     return('')  # we don't want the label at all
   }
-  paste0(lab1, ..., lab2)
+  paste(c(lab1, ..., lab2), collapse = '')
 }
 
 #' Combine multiple words into a single string
