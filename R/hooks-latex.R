@@ -114,7 +114,7 @@ hook_plot_tex = function(x, options) {
     }
     # Add subfloat code if needed
     if (usesub) {
-      sub1 = sprintf('\\subfloat[%s%s]{', subcap, create_label(lab, fig.cur, latex = TRUE))
+      sub1 = sprintf('\\subfloat[%s%s]{', subcap, create_label(lab, '-', fig.cur, latex = TRUE))
       sub2 = '}'
       sep.cur = fig.sep[fig.cur]; if (is.na(sep.cur)) sep.cur = NULL
     }
@@ -129,7 +129,7 @@ hook_plot_tex = function(x, options) {
       scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
       cap = if (cap == '') '' else sprintf(
         '\\caption%s{%s}%s\n', scap, cap,
-        create_label(lab, if (mcap) fig.cur, latex = TRUE)
+        create_label(lab, if (mcap) c('-', fig.cur), latex = TRUE)
       )
       fig2 = sprintf('%s\\end{%s}\n', cap, options$fig.env)
     }
