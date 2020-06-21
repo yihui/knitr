@@ -26,6 +26,10 @@
 
 - For a non-matrix object passed to `kable()`, its columns are formatted individually via `format()`. Previously, the whole object is coerced via `as.matrix()` (thanks, @thebioengineer, #1827).
 
+## MINOR CHANGES
+
+- `knitr::image_uri()` calls `xfun::base64_uri()` instead of `markdown:::.b64EncodeFile()` now.
+
 # CHANGES IN knitr VERSION 1.28
 
 ## BUG FIXES
