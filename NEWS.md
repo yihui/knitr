@@ -12,6 +12,8 @@
 
 - For non-R code chunks that generate plots and use the chunk option `fig.cap`, the `plot` hook in **knitr** stopped working in v1.27 and v1.28 (thanks, @XiangyunHuang, https://d.cosx.org/d/421249).
 
+- The `sql` engine fails when the first column of the database is of the type `bit64::integer64` (thanks, @randy3k, #1837).
+
 ## MAJOR CHANGES
 
 - When a code chunk generates multiple plots to be placed in figure environments, their figure labels will be of the form `label-i` where `label` is the chunk label, and `i` is the plot number. Previously, the labels were of the form `labeli` (i.e., there was not a dash before the number). If you cross-reference the figures, you need to change the reference keys from `labeli` to `label-i`.
