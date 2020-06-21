@@ -26,6 +26,8 @@
 
 - For a non-matrix object passed to `kable()`, its columns are formatted individually via `format()`. Previously, the whole object is coerced via `as.matrix()` (thanks, @thebioengineer, #1827).
 
+- For packages that contain R Markdown vignettes using the vignette engines based on the **markdown** package (e.g., `knitr::knitr`), the **markdown** package should be declared in `Suggests` in the package `DESCRIPTION` unless it has already been declared as a dependency in other fields. For this version of **knitr**, you will see a warning in `R CMD check` in the CRAN incoming check. In the future, you may see a warning in a regular `R CMD check`, so please add **markdown** to `Suggests` at your earliest convenience. If it is not clear how to do it, please see #1864.
+
 ## MINOR CHANGES
 
 - `knitr::image_uri()` calls `xfun::base64_uri()` instead of `markdown:::.b64EncodeFile()` now.

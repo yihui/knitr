@@ -109,6 +109,21 @@ knit2pdf = function(
 #' unlink(c('test.Rmd', 'test.html', 'test.md'))
 knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
                      quiet = FALSE, encoding = 'UTF-8', force_v1 = FALSE) {
+  # packages containing vignettes using R Markdown v1 should declare dependency
+  # on 'markdown' in DESCRIPTION (typically in Suggests)
+  if (!is.na(pkg <- Sys.getenv('_R_CHECK_PACKAGE_NAME_', NA)) && pkg != 'markdown') {
+    info = packageDescription(pkg, fields = c('Depends', 'Imports', 'Suggests'))
+    if (!'markdown' %in% unlist(strsplit(unlist(info), '[[:space:],]+'))) {
+      if (is_CRAN_incoming()) stop2(
+        "The 'markdown' package should be declared as a dependency of the '", pkg,
+        "' package (e.g., in the  'Suggests' field of DESCRIPTION), because it ",
+        "contains vignette(s) built with the 'markdown' package. Please see ",
+        "https://github.com/yihui/knitr/issues/1864 for more information."
+      )
+    }
+  }
+  # TODO: remove the above hack in the future when no CRAN packages have the issue
+
   if (!force_v1 && is.null(text)) {
     signal = if (is_R_CMD_check()) warning2 else stop2
     if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) signal(

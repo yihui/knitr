@@ -772,6 +772,10 @@ is_R_CMD_check = function() {
     any(c('_R_CHECK_TIMINGS_', '_R_CHECK_LICENSE_') %in% names(Sys.getenv()))
 }
 
+is_CRAN_incoming = function() {
+  isTRUE(as.logical(Sys.getenv('_R_CHECK_CRAN_INCOMING_REMOTE_')))
+}
+
 # is the inst dir under . or ..? differs in R CMD build/INSTALL and devtools/roxygen2
 inst_dir = function(...) {
   p = file.path(c('..', '.'), 'inst', ...)
