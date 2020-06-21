@@ -455,7 +455,7 @@ eng_block2 = function(options) {
   h4 = options$html.after %n% ''
   h5 = options$html.before2 %n% ''
   h6 = options$html.after2 %n% ''
-  if (is_latex_output() && rmarkdown::pandoc_available('2.7.3')) {
+  if (is_latex_output()) {
     h7 = h8 = '\n'
   } else {
     h7 = sprintf('<%s class="%s">', h2, type)
