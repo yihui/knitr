@@ -111,13 +111,6 @@ assert('all_figs() generates all figure paths for a code chunk', {
   ))
 })
 
-f = file.path(R.home('doc'), 'html', 'logo.jpg')
-assert(
-  'base64_encode() gets the same result as markdown:::.b64EncodeFile',
-  identical(strsplit(markdown:::.b64EncodeFile(f), 'base64,')[[1]][2],
-            base64_encode(readBin(f, what = 'raw', n = file.info(f)$size)))
-)
-
 assert(
   'escape_latex() escapes special LaTeX characters',
   identical(escape_latex('# $ % & ~ _ ^ \\ { }'),
