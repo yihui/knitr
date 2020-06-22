@@ -14,6 +14,8 @@
 
 - For non-R code chunks that generate plots and use the chunk option `fig.cap`, the `plot` hook in **knitr** stopped working in v1.27 and v1.28 (thanks, @XiangyunHuang, https://d.cosx.org/d/421249).
 
+- The `sql` engine fails when the first column of the database is of the type `bit64::integer64` (thanks, @randy3k, #1837).
+
 - The chunk option `dpi` is correctly passed to `showtext::showtext_opts()` now (thanks, @cpsievert, yixuan/showtext#33).
 
 - Theorem environments in **bookdown** fail to work with Pandoc >= 2.7.3 because of an issue in the `block2` engine of **knitr** (rstudio/bookdown#883).
