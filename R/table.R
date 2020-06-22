@@ -214,6 +214,8 @@ kables = function(x, format, caption = NULL, label = NULL) {
 
 # convert to character while preserving dim/dimnames attributes
 to_character = function(x) {
+  # TODO: get rid of this hack soon https://github.com/mayoverse/arsenal/pull/299
+  if (check_old_package('arsenal', '3.4.0')) x = as.matrix(x)
   if (is.character(x)) return(x)
   # format columns individually if x is not a matrix
   if (!is.matrix(x)) {
@@ -407,6 +409,8 @@ kable_pipe = function(x, caption = NULL, padding = 1, ...) {
     s
   }, ...)
   res = sprintf('|%s|', res)
+  # TODO: get rid of this hack soon https://github.com/ropensci/skimr/pull/593
+  if (check_old_package('skimr', '2.1.1')) return(res)
   kable_pandoc_caption(res, caption)
 }
 
