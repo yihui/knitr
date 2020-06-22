@@ -34,6 +34,8 @@
 
 - `knitr::image_uri()` calls `xfun::base64_uri()` instead of `markdown:::.b64EncodeFile()` now.
 
+- `knitr::write_bib()` now adds an empty line after each BibTeX entry (#1862).
+
 # CHANGES IN knitr VERSION 1.28
 
 ## BUG FIXES
