@@ -3,25 +3,15 @@ latex: false
 
 # environment variables
 env:
-  matrix:
-    - TARGET=travis
-    - TARGET=integration DISPLAY=:99.0
+  - DISPLAY=:99.0 PATH=$HOME/bin:$PATH RGL_USE_NULL=TRUE
 
-# capturing state, early exit if no integration test is needed
 before_install:
-  - export PATH=$HOME/bin:$PATH
-  - export RGL_USE_NULL=TRUE
-  - if [ ${TARGET} = integration ]; then
-      if ! make integration-need; then
-        echo "NOTE:"" Integration test skipped. To enable, create a branch named ${TRAVIS_BRANCH} in ${TRAVIS_REPO_SLUG}-examples.";
-        exit 0;
-      fi;
-    fi
   - "curl -L https://xran.yihui.org/.gitconfig -o ~/.gitconfig"
   - Rscript -e 'update.packages(.libPaths()[1], ask = FALSE)'
   - Rscript -e "if (!require('xfun')) install.packages('xfun')"
   - Rscript -e "xfun::pkg_load2('covr', 'tinytex')"
   - Rscript -e "tinytex:::install_prebuilt()"
+  - rm TinyTeX.tar.gz
 
 addons:
   apt:
@@ -50,13 +40,17 @@ jobs:
   include:
     - r: oldrel
     - r: release
-      # run tests
-      script:
-        - rm knitr-examples/cache -rf
-        - make ${TARGET}
       # deploy to xran after integration tests
       after_success:
-        - "[ $TARGET = travis ] && Rscript -e 'covr::codecov()' || true"
+        - Rscript -e 'covr::codecov()'
+    - r: release
+      name: R release (check knitr-examples)
+      script:
+        - git clone https://github.com/yihui/knitr-examples.git
+        - rm knitr-examples/cache -rf
+        - make integration
+      # deploy to xran after integration tests
+      after_success:
         - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
-        - "[ $TARGET = integration ] && (curl -L https://xran.yihui.org/r-xran | bash)"
+        - "curl -L https://xran.yihui.org/r-xran | bash"
     - r: devel
