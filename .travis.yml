@@ -44,7 +44,7 @@ jobs:
       after_success:
         - Rscript -e 'covr::codecov()'
     - r: release
-      name: R release (check knitr-examples)
+      name: Check knitr-examples
       script:
         - git clone https://github.com/yihui/knitr-examples.git
         - rm knitr-examples/cache -rf
