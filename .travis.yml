@@ -46,13 +46,17 @@ repos:
 cache:
   packages: yes
 
-# run tests
-script:
-  - rm knitr-examples/cache -rf
-  - make ${TARGET}
-
-# deploy to xran after integration tests
-after_success:
-  - "[ $TARGET = travis ] && Rscript -e 'covr::codecov()' || true"
-  - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
-  - "[ $TARGET = integration ] && (curl -L https://xran.yihui.org/r-xran | bash)"
+jobs:
+  include:
+    - r: oldrel
+    - r: release
+      # run tests
+      script:
+        - rm knitr-examples/cache -rf
+        - make ${TARGET}
+      # deploy to xran after integration tests
+      after_success:
+        - "[ $TARGET = travis ] && Rscript -e 'covr::codecov()' || true"
+        - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
+        - "[ $TARGET = integration ] && (curl -L https://xran.yihui.org/r-xran | bash)"
+    - r: devel
