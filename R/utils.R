@@ -603,13 +603,7 @@ read_rforge = function(path, project, extra = '') {
   read_utf8(sprintf('%s/%s?root=%s%s', base, path, project, extra))
 }
 
-# TODO: just import xfun::split_lines()
-split_lines = function(x) {
-  if (length(grep('\n', x)) == 0L) return(x)
-  x = gsub('\n$', '\n\n', x)
-  x[x == ''] = '\n'
-  unlist(strsplit(x, '\n'))
-}
+split_lines = function(x) xfun::split_lines(x)
 
 # if a string is encoded in UTF-8, convert it to native encoding
 native_encode = function(x, to = '') {
