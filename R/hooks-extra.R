@@ -52,8 +52,10 @@
 #' @rdname chunk_hook
 #' @param before,options,envir See \emph{References} below.
 #' @references \url{https://yihui.org/knitr/hooks/#chunk_hooks}
-#' @seealso \code{rgl::\link{rgl.snapshot}}, \code{rgl::\link{rgl.postscript}},
-#'   \code{rgl::\link{hook_rgl}}, \code{rgl::\link{hook_webgl}}
+#' @seealso \code{rgl::\link[rgl:snapshot]{rgl.snapshot}},
+#'   \code{rgl::\link[rgl:postscript]{rgl.postscript}},
+#'   \code{rgl::\link[rgl]{hook_rgl}},
+#'   \code{rgl::\link[rgl:hook_rgl]{hook_webgl}}
 #' @note The two hook functions \code{hook_rgl()} and \code{hook_webgl()} were
 #'   moved from \pkg{knitr} to the \pkg{rgl} package (>= v0.95.1247) after
 #'   \pkg{knitr} v1.10.5, and you can \code{library(rgl)} to get them.

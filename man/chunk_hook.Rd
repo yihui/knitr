@@ -89,6 +89,8 @@ if (require("rgl") && exists("hook_rgl")) knit_hooks$set(rgl = hook_rgl)
 \url{https://yihui.org/knitr/hooks/#chunk_hooks}
 }
 \seealso{
-\code{rgl::\link{rgl.snapshot}}, \code{rgl::\link{rgl.postscript}},
-  \code{rgl::\link{hook_rgl}}, \code{rgl::\link{hook_webgl}}
+\code{rgl::\link[rgl:snapshot]{rgl.snapshot}},
+  \code{rgl::\link[rgl:postscript]{rgl.postscript}},
+  \code{rgl::\link[rgl]{hook_rgl}},
+  \code{rgl::\link[rgl:hook_rgl]{hook_webgl}}
 }

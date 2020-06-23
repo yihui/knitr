@@ -31,15 +31,15 @@ example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 
 \item{quiet}{Boolean; suppress the progress bar and messages?}
 
-\item{...}{Options to be passed to \code{tinytex::\link{latexmk}()} or
-\code{\link{rst2pdf}()}.}
+\item{...}{Options to be passed to \code{tinytex::\link[tinytex]{latexmk}()}
+or \code{\link{rst2pdf}()}.}
 }
 \value{
 The filename of the PDF file.
 }
 \description{
 Knit the input Rnw or Rrst document, and compile to PDF using
-\code{tinytex::\link{latexmk}()} or \code{\link{rst2pdf}()}.
+\code{tinytex::\link[tinytex]{latexmk}()} or \code{\link{rst2pdf}()}.
 }
 \note{
 The \code{output} argument specifies the output filename to be passed

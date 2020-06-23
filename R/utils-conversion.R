@@ -25,9 +25,9 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' Knits the input file and compiles to an output format using Pandoc.
 #' @inheritParams knit
 #' @param to Character string giving the Pandoc output format to use.
-#' @param pandoc_wrapper An R function used to call Pandoc. If \code{NULL}
-#'   (the default), \code{rmarkdown::\link{pandoc_convert}()} will
-#'   be used if \pkg{rmarkdown} is installed, otherwise \code{\link{pandoc}()}.
+#' @param pandoc_wrapper An R function used to call Pandoc. If \code{NULL} (the
+#'   default), \code{rmarkdown::\link[rmarkdown]{pandoc_convert}()} will be used
+#'   if \pkg{rmarkdown} is installed, otherwise \code{\link{pandoc}()}.
 #' @param ... Options to be passed to the \code{pandoc_wrapper} function.
 #' @param encoding Ignored (always assumes UTF-8).
 #' @author Trevor L. Davis
@@ -47,14 +47,14 @@ knit2pandoc = function(
 #' Convert Rnw or Rrst files to PDF
 #'
 #' Knit the input Rnw or Rrst document, and compile to PDF using
-#' \code{tinytex::\link{latexmk}()} or \code{\link{rst2pdf}()}.
+#' \code{tinytex::\link[tinytex]{latexmk}()} or \code{\link{rst2pdf}()}.
 #' @inheritParams knit
 #' @param compiler A character string giving the LaTeX engine used to compile
 #'   the tex document to PDF. For an Rrst file, setting \code{compiler} to
 #'   \code{'rst2pdf'} will use \code{\link{rst2pdf}} to compile the rst file to
 #'   PDF using the ReportLab open-source library.
-#' @param ... Options to be passed to \code{tinytex::\link{latexmk}()} or
-#'   \code{\link{rst2pdf}()}.
+#' @param ... Options to be passed to \code{tinytex::\link[tinytex]{latexmk}()}
+#'   or \code{\link{rst2pdf}()}.
 #' @author Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
 #' @return The filename of the PDF file.
 #' @note The \code{output} argument specifies the output filename to be passed
