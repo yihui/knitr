@@ -43,8 +43,8 @@
 #'
 #'   When the output format is Rmd, it is compiled to HTML via
 #'   \code{\link{knit2html}()}, which uses R Markdown v1 instead of v2. If you
-#'   want to use the latter, you should call
-#'   \code{rmarkdown::\link[rmarkdown]{render}()} instead.
+#'   want to use the latter, you should call \code{rmarkdown::\link{render}()}
+#'   instead.
 #' @export
 #' @seealso \code{\link{stitch}} (feed a template with an R script)
 #' @references \url{https://yihui.org/knitr/demo/stitch/}

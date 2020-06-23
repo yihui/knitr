@@ -19,25 +19,25 @@ knit2html(
 \item{input}{Path to the input file.}
 
 \item{output}{Path to the output file for \code{knit()}. If \code{NULL}, this
-function will try to guess a default, which will be under the current working
-directory.}
+function will try to guess a default, which will be under the current
+working directory.}
 
-\item{...}{Options passed to \code{\link[markdown]{markdownToHTML}}.}
+\item{...}{Options passed to \code{markdown::\link{markdownToHTML}()}.}
 
-\item{envir}{Environment in which code chunks are to be evaluated,
-for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\item{envir}{Environment in which code chunks are to be evaluated, for
+example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 \code{\link{globalenv}()}).}
 
-\item{text}{A character vector. This is an alternative way to provide the input
-file.}
+\item{text}{A character vector. This is an alternative way to provide the
+input file.}
 
 \item{quiet}{Boolean; suppress the progress bar and messages?}
 
 \item{encoding}{Encoding of the input file; always assumed to be UTF-8 (i.e.,
 this argument is effectively ignored).}
 
-\item{force_v1}{Boolean; whether to force rendering the input document as an R
-Markdown v1 document, even if it is for v2.}
+\item{force_v1}{Boolean; whether to force rendering the input document as an
+R Markdown v1 document, even if it is for v2.}
 }
 \value{
 If the argument \code{text} is NULL, a character string (HTML code)
@@ -46,7 +46,7 @@ If the argument \code{text} is NULL, a character string (HTML code)
 }
 \description{
 This is a convenience function to knit the input markdown source and call
-\code{\link[markdown]{markdownToHTML}()} in the \pkg{markdown} package to
+\code{markdown::\link{markdownToHTML}()} in the \pkg{markdown} package to
 convert the result to HTML.
 }
 \note{
@@ -65,5 +65,5 @@ if (interactive()) browseURL("test.html")
 unlink(c("test.Rmd", "test.html", "test.md"))
 }
 \seealso{
-\code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}
+\code{\link{knit}}, \code{markdown::\link{markdownToHTML}}
 }

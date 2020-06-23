@@ -17,29 +17,29 @@ knit2pdf(
 \item{input}{Path to the input file.}
 
 \item{output}{Path to the output file for \code{knit()}. If \code{NULL}, this
-function will try to guess a default, which will be under the current working
-directory.}
+function will try to guess a default, which will be under the current
+working directory.}
 
-\item{compiler}{A character string giving the LaTeX engine used to
-compile the tex document to PDF. For an Rrst file, setting \code{compiler} to
+\item{compiler}{A character string giving the LaTeX engine used to compile
+the tex document to PDF. For an Rrst file, setting \code{compiler} to
 \code{'rst2pdf'} will use \code{\link{rst2pdf}} to compile the rst file to
 PDF using the ReportLab open-source library.}
 
-\item{envir}{Environment in which code chunks are to be evaluated,
-for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\item{envir}{Environment in which code chunks are to be evaluated, for
+example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 \code{\link{globalenv}()}).}
 
 \item{quiet}{Boolean; suppress the progress bar and messages?}
 
-\item{...}{Options to be passed to \code{tinytex::\link[tinytex]{latexmk}} or
-\code{\link{rst2pdf}}.}
+\item{...}{Options to be passed to \code{tinytex::\link{latexmk}()} or
+\code{\link{rst2pdf}()}.}
 }
 \value{
 The filename of the PDF file.
 }
 \description{
 Knit the input Rnw or Rrst document, and compile to PDF using
-\code{tinytex::\link[tinytex]{latexmk}()} or \code{\link{rst2pdf}()}.
+\code{tinytex::\link{latexmk}()} or \code{\link{rst2pdf}()}.
 }
 \note{
 The \code{output} argument specifies the output filename to be passed

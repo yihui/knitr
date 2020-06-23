@@ -16,8 +16,8 @@ The original filename.
 }
 \description{
 The command \command{pdfcrop} (often shipped with a LaTeX distribution) is
-executed on a PDF plot file, and \code{magick::\link[magick]{image_trim}()}
-is executed for other types of plot files.
+executed on a PDF plot file, and \code{magick::\link{image_trim}()} is
+executed for other types of plot files.
 }
 \references{
 PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}. If you use

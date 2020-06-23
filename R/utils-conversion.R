@@ -26,7 +26,7 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' @inheritParams knit
 #' @param to Character string giving the Pandoc output format to use.
 #' @param pandoc_wrapper An R function used to call Pandoc. If \code{NULL}
-#'   (the default), \code{rmarkdown::\link[rmarkdown]{pandoc_convert}()} will
+#'   (the default), \code{rmarkdown::\link{pandoc_convert}()} will
 #'   be used if \pkg{rmarkdown} is installed, otherwise \code{\link{pandoc}()}.
 #' @param ... Options to be passed to the \code{pandoc_wrapper} function.
 #' @param encoding Ignored (always assumes UTF-8).
@@ -47,14 +47,14 @@ knit2pandoc = function(
 #' Convert Rnw or Rrst files to PDF
 #'
 #' Knit the input Rnw or Rrst document, and compile to PDF using
-#' \code{tinytex::\link[tinytex]{latexmk}()} or \code{\link{rst2pdf}()}.
+#' \code{tinytex::\link{latexmk}()} or \code{\link{rst2pdf}()}.
 #' @inheritParams knit
-#' @param compiler A character string giving the LaTeX engine used to
-#'   compile the tex document to PDF. For an Rrst file, setting \code{compiler} to
+#' @param compiler A character string giving the LaTeX engine used to compile
+#'   the tex document to PDF. For an Rrst file, setting \code{compiler} to
 #'   \code{'rst2pdf'} will use \code{\link{rst2pdf}} to compile the rst file to
 #'   PDF using the ReportLab open-source library.
-#' @param ... Options to be passed to \code{tinytex::\link[tinytex]{latexmk}} or
-#'   \code{\link{rst2pdf}}.
+#' @param ... Options to be passed to \code{tinytex::\link{latexmk}()} or
+#'   \code{\link{rst2pdf}()}.
 #' @author Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
 #' @return The filename of the PDF file.
 #' @note The \code{output} argument specifies the output filename to be passed
@@ -86,14 +86,14 @@ knit2pdf = function(
 #' Convert markdown to HTML using knit() and markdownToHTML()
 #'
 #' This is a convenience function to knit the input markdown source and call
-#' \code{\link[markdown]{markdownToHTML}()} in the \pkg{markdown} package to
+#' \code{markdown::\link{markdownToHTML}()} in the \pkg{markdown} package to
 #' convert the result to HTML.
 #' @inheritParams knit
-#' @param ... Options passed to \code{\link[markdown]{markdownToHTML}}.
-#' @param force_v1 Boolean; whether to force rendering the input document as an R
-#'   Markdown v1 document, even if it is for v2.
+#' @param ... Options passed to \code{markdown::\link{markdownToHTML}()}.
+#' @param force_v1 Boolean; whether to force rendering the input document as an
+#'   R Markdown v1 document, even if it is for v2.
 #' @export
-#' @seealso \code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}
+#' @seealso \code{\link{knit}}, \code{markdown::\link{markdownToHTML}}
 #' @return If the argument \code{text} is NULL, a character string (HTML code)
 #'   is returned; otherwise the result is written into a file and the filename
 #'   is returned.

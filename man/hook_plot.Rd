@@ -45,8 +45,8 @@ code.
 
 In most cases we do not need to call these hooks explicitly, and they were
 designed to be used internally. Sometimes we may not be able to record R
-plots using \code{\link[grDevices]{recordPlot}}, and we can make use of these
-hooks to insert graphics output in the output document; see
+plots using \code{grDevices::\link{recordPlot}()}, and we can make use of
+these hooks to insert graphics output in the output document; see
 \code{\link{hook_plot_custom}} for details.
 }
 \examples{

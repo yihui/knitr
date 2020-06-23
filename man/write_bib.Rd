@@ -33,9 +33,9 @@ A list containing the citations. Citations are also written to the
   \code{file} as a side effect.
 }
 \description{
-This function uses \code{\link[utils]{citation}} and
-\code{\link[utils]{toBibtex}} to create bib entries for R packages and write
-them in a file. It can facilitate the auto-generation of bibliography
+This function uses \code{utils::\link{citation}()} and
+\code{utils::\link{toBibtex}()} to create bib entries for R packages and
+write them in a file. It can facilitate the auto-generation of bibliography
 databases for R packages, and it is easy to regenerate all the citations
 after updating R packages.
 }

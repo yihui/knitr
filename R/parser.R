@@ -338,7 +338,8 @@ read_chunk = function(
 }
 
 #' @rdname read_chunk
-#' @param topic,package Name of the demo and the package. See \code{\link[utils]{demo}}.
+#' @param topic,package Name of the demo and the package. See
+#'   \code{utils::\link{demo}}.
 #' @param ... Arguments passed to \code{\link{read_chunk}}.
 #' @export
 read_demo = function(topic, package = NULL, ...) {

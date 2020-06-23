@@ -64,7 +64,7 @@ all_patterns = list(
 #' Patterns to match and extract R code in a document
 #'
 #' Patterns are regular expressions and will be used in functions like
-#' \code{\link[base]{grep}} to extract R code and chunk options. The object
+#' \code{base::\link{grep}()} to extract R code and chunk options. The object
 #' \code{knit_patterns} controls the patterns currently used; see the references
 #' and examples for usage.  All built-in patterns are available in the list
 #' \link{all_patterns}.
@@ -72,7 +72,7 @@ all_patterns = list(
 #' @seealso \code{\link{all_patterns}}
 #' @references Usage: \url{https://yihui.org/knitr/objects/}
 #'
-#' Components in \code{knit_patterns}: \url{https://yihui.org/knitr/patterns/}
+#'   Components in \code{knit_patterns}: \url{https://yihui.org/knitr/patterns/}
 #' @export
 #' @examples library(knitr)
 #' opat = knit_patterns$get() # old pattern list (to restore later)

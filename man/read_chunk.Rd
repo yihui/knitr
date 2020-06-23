@@ -34,7 +34,8 @@ code chunks, or a character vector; see Details.}
 \item{roxygen_comments}{Logical dictating whether to keep trailing
 roxygen-style comments from code chunks in addition to whitespace}
 
-\item{topic, package}{Name of the demo and the package. See \code{\link[utils]{demo}}.}
+\item{topic, package}{Name of the demo and the package. See
+\code{utils::\link{demo}}.}
 
 \item{...}{Arguments passed to \code{\link{read_chunk}}.}
 }

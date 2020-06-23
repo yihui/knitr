@@ -14,8 +14,8 @@ the child document. When one uses the \code{child}
 option in a parent chunk, the chunk options of the parent chunk will be
 passed to the \code{options} argument here.  Ignored if not a list.}
 
-\item{envir}{Environment in which code chunks are to be evaluated,
-for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\item{envir}{Environment in which code chunks are to be evaluated, for
+example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 \code{\link{globalenv}()}).}
 }
 \value{
