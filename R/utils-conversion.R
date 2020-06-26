@@ -25,10 +25,9 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' Knits the input file and compiles to an output format using Pandoc.
 #' @inheritParams knit
 #' @param to Character string giving the Pandoc output format to use.
-#' @param pandoc_wrapper An R function used to call Pandoc; by default, if
-#'   \pkg{rmarkdown} is installed, this uses
-#'   \code{rmarkdown::\link[rmarkdown]{pandoc_convert}()}, otherwise it
-#'   \code{\link{pandoc}()}.
+#' @param pandoc_wrapper An R function used to call Pandoc. If \code{NULL} (the
+#'   default), \code{rmarkdown::\link[rmarkdown]{pandoc_convert}()} will be used
+#'   if \pkg{rmarkdown} is installed, otherwise \code{\link{pandoc}()}.
 #' @param ... Options to be passed to the \code{pandoc_wrapper} function.
 #' @param encoding Ignored (always assumes UTF-8).
 #' @author Trevor L. Davis
@@ -50,12 +49,12 @@ knit2pandoc = function(
 #' Knit the input Rnw or Rrst document, and compile to PDF using
 #' \code{tinytex::\link[tinytex]{latexmk}()} or \code{\link{rst2pdf}()}.
 #' @inheritParams knit
-#' @param compiler A character string giving the LaTeX engine used to
-#'   compile the tex document to PDF. For an Rrst file, setting \code{compiler} to
+#' @param compiler A character string giving the LaTeX engine used to compile
+#'   the tex document to PDF. For an Rrst file, setting \code{compiler} to
 #'   \code{'rst2pdf'} will use \code{\link{rst2pdf}} to compile the rst file to
 #'   PDF using the ReportLab open-source library.
-#' @param ... Options to be passed to \code{tinytex::\link[tinytex]{latexmk}} or
-#'   \code{\link{rst2pdf}}.
+#' @param ... Options to be passed to \code{tinytex::\link[tinytex]{latexmk}()}
+#'   or \code{\link{rst2pdf}()}.
 #' @author Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
 #' @return The filename of the PDF file.
 #' @note The \code{output} argument specifies the output filename to be passed
@@ -87,14 +86,14 @@ knit2pdf = function(
 #' Convert markdown to HTML using knit() and markdownToHTML()
 #'
 #' This is a convenience function to knit the input markdown source and call
-#' \code{\link[markdown]{markdownToHTML}()} in the \pkg{markdown} package to
+#' \code{markdown::\link{markdownToHTML}()} in the \pkg{markdown} package to
 #' convert the result to HTML.
 #' @inheritParams knit
-#' @param ... Options passed to \code{\link[markdown]{markdownToHTML}}.
-#' @param force_v1 Boolean; whether to force rendering the input document as an R
-#'   Markdown v1 document, even if it is for v2.
+#' @param ... Options passed to \code{markdown::\link{markdownToHTML}()}.
+#' @param force_v1 Boolean; whether to force rendering the input document as an
+#'   R Markdown v1 document, even if it is for v2.
 #' @export
-#' @seealso \code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}
+#' @seealso \code{\link{knit}}, \code{markdown::\link{markdownToHTML}}
 #' @return If the argument \code{text} is NULL, a character string (HTML code)
 #'   is returned; otherwise the result is written into a file and the filename
 #'   is returned.
@@ -110,6 +109,21 @@ knit2pdf = function(
 #' unlink(c('test.Rmd', 'test.html', 'test.md'))
 knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
                      quiet = FALSE, encoding = 'UTF-8', force_v1 = FALSE) {
+  # packages containing vignettes using R Markdown v1 should declare dependency
+  # on 'markdown' in DESCRIPTION (typically in Suggests)
+  if (!is.na(pkg <- check_package_name()) && pkg != 'markdown') {
+    info = packageDescription(pkg, fields = c('Depends', 'Imports', 'Suggests'))
+    if (!'markdown' %in% unlist(strsplit(unlist(info), '[[:space:],]+'))) {
+      if (is_CRAN_incoming()) stop2(
+        "The 'markdown' package should be declared as a dependency of the '", pkg,
+        "' package (e.g., in the  'Suggests' field of DESCRIPTION), because it ",
+        "contains vignette(s) built with the 'markdown' package. Please see ",
+        "https://github.com/yihui/knitr/issues/1864 for more information."
+      )
+    }
+  }
+  # TODO: remove the above hack in the future when no CRAN packages have the issue
+
   if (!force_v1 && is.null(text)) {
     signal = if (is_R_CMD_check()) warning2 else stop2
     if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) signal(

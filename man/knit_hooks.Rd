@@ -4,7 +4,9 @@
 \name{knit_hooks}
 \alias{knit_hooks}
 \title{Hooks for R code chunks, inline R code and output}
-\format{An object of class \code{list} of length 6.}
+\format{
+An object of class \code{list} of length 6.
+}
 \usage{
 knit_hooks
 }

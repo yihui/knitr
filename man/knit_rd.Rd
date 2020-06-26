@@ -13,7 +13,7 @@ knit_rd_all()
 \item{pkg}{Package name.}
 
 \item{links}{A character vector of links to be passed to
-\code{\link[tools]{Rd2HTML}}.}
+\code{tools::\link{Rd2HTML}()}.}
 
 \item{frame}{Boolean: whether to put a navigation frame on the left of the
 index page.}

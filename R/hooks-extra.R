@@ -8,13 +8,12 @@
 #' The function \code{hook_pdfcrop()} can use the program \command{pdfcrop} to
 #' crop the extra white margin when the plot format is PDF to make better use of
 #' the space in the output document, otherwise we often have to struggle with
-#' \code{\link[graphics]{par}} to set appropriate margins. Note
+#' \code{graphics::\link{par}()} to set appropriate margins. Note
 #' \command{pdfcrop} often comes with a LaTeX distribution such as MiKTeX or
 #' TeXLive, and you may not need to install it separately (use
 #' \code{Sys.which('pdfcrop')} to check it; if it not empty, you are able to use
-#' it). Similarly, when the plot format is not PDF (e.g. PNG), the program
-#' \command{convert} in ImageMagick is used to trim the white margins (call
-#' \command{convert input -trim output}).
+#' it). Similarly, when the plot format is not PDF (e.g. PNG), the \pkg{magick}
+#' package is used to crop the plot.
 #'
 #' The function \code{hook_optipng()} calls the program \command{optipng} to
 #' optimize PNG images. Note the chunk option \code{optipng} can be used to
@@ -31,8 +30,8 @@
 #' to the program \command{mogrify} (with default \code{-trim} to trim PNG
 #' files).
 #'
-#' When the plots are not recordable via \code{\link[grDevices]{recordPlot}} and
-#' we save the plots to files manually via other functions (e.g. \pkg{rgl}
+#' When the plots are not recordable via \code{grDevices::\link{recordPlot}()}
+#' and we save the plots to files manually via other functions (e.g. \pkg{rgl}
 #' plots), we can use the chunk hook \code{hook_plot_custom} to help write code
 #' for graphics output into the output document.
 #'
@@ -53,8 +52,10 @@
 #' @rdname chunk_hook
 #' @param before,options,envir See \emph{References} below.
 #' @references \url{https://yihui.org/knitr/hooks/#chunk_hooks}
-#' @seealso \code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}},
-#'   \code{\link[rgl]{hook_rgl}}, \code{\link[rgl]{hook_webgl}}
+#' @seealso \code{rgl::\link[rgl:snapshot]{rgl.snapshot}},
+#'   \code{rgl::\link[rgl:postscript]{rgl.postscript}},
+#'   \code{rgl::\link[rgl]{hook_rgl}},
+#'   \code{rgl::\link[rgl:hook_rgl]{hook_webgl}}
 #' @note The two hook functions \code{hook_rgl()} and \code{hook_webgl()} were
 #'   moved from \pkg{knitr} to the \pkg{rgl} package (>= v0.95.1247) after
 #'   \pkg{knitr} v1.10.5, and you can \code{library(rgl)} to get them.
@@ -63,12 +64,14 @@
 #' # then in code chunks, use the option rgl=TRUE
 hook_pdfcrop = function(before, options, envir) {
   # crops plots after a chunk is evaluated and plot files produced
-  ext = options$fig.ext
-  if (options$dev == 'tikz' && options$external) ext = 'pdf'
-  if (before || (fig.num <- options$fig.num %n% 0L) == 0L) return()
-  paths = all_figs(options, ext, fig.num)
-  in_base_dir(for (f in paths) plot_crop(f))
+  if (before) return()
+  in_base_dir(for (f in get_plot_files()) plot_crop(f))
 }
+
+get_plot_files = function() {
+  unique(opts_knit$get('plot_files'))
+}
+
 #' @export
 #' @rdname chunk_hook
 hook_optipng = function(before, options, envir) {
@@ -79,17 +82,12 @@ hook_png = function(
   before, options, envir, cmd = c('optipng', 'pngquant', 'mogrify'), post_process = identity
 ) {
   if (before) return()
-  num = options$fig.num
-  if (length(num) == 0 || num == 0) return()  # no figures
-  ext = tolower(options$fig.ext)
-  if (ext != 'png') {
-    warning('this hook only works with PNG at the moment'); return()
-  }
   cmd = match.arg(cmd)
   if (!nzchar(Sys.which(cmd))) {
     warning('cannot find ', cmd, '; please install and put it in PATH'); return()
   }
-  paths = all_figs(options, ext)
+  paths = get_plot_files()
+  paths = grep('[.]png$', paths, ignore.case = TRUE, value = TRUE)
 
   in_base_dir(
     lapply(paths, function(x) {

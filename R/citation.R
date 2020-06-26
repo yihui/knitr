@@ -1,8 +1,8 @@
 #' Generate BibTeX bibliography databases for R packages
 #'
-#' This function uses \code{\link[utils]{citation}} and
-#' \code{\link[utils]{toBibtex}} to create bib entries for R packages and write
-#' them in a file. It can facilitate the auto-generation of bibliography
+#' This function uses \code{utils::\link{citation}()} and
+#' \code{utils::\link{toBibtex}()} to create bib entries for R packages and
+#' write them in a file. It can facilitate the auto-generation of bibliography
 #' databases for R packages, and it is easy to regenerate all the citations
 #' after updating R packages.
 #'
@@ -117,7 +117,7 @@ write_bib = function(
   bib = lapply(bib, function(b) {
     idx = which(names(b) == '')
     if (!is.null(width)) b[-idx] = stringr::str_wrap(b[-idx], width, 2, 4)
-    structure(c(b[idx[1L]], b[-idx], b[idx[2L]]), class = 'Bibtex')
+    structure(c(b[idx[1L]], b[-idx], b[idx[2L]], ''), class = 'Bibtex')
   })
   if (!is.null(file) && length(x)) write_utf8(unlist(bib), file)
   invisible(bib)

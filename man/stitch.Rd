@@ -27,11 +27,11 @@ this package; there is also an HTML template in \pkg{knitr}.}
 \item{output}{Output filename, passed to \code{\link{knit}}). By default,
 the base filename of the script is used.}
 
-\item{text}{A character vector. This is an alternative way to provide the input
-file.}
+\item{text}{A character vector. This is an alternative way to provide the
+input file.}
 
-\item{envir}{Environment in which code chunks are to be evaluated,
-for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\item{envir}{Environment in which code chunks are to be evaluated, for
+example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 \code{\link{globalenv}()}).}
 
 \item{...}{Arguments passed to \code{stitch()}.}

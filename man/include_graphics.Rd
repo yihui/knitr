@@ -7,22 +7,26 @@
 include_graphics(
   path,
   auto_pdf = getOption("knitr.graphics.auto_pdf", FALSE),
-  dpi = NULL
+  dpi = NULL,
+  error = getOption("knitr.graphics.error", TRUE)
 )
 }
 \arguments{
 \item{path}{A character vector of image paths.}
 
-\item{auto_pdf}{Boolean; whether to use PDF images automatically when the output
-format is LaTeX. If \code{TRUE}, then e.g. \file{foo/bar.png} will be replaced by
-\file{foo/bar.pdf} if the latter exists. This can be useful since normally
-PDF images are of higher quality than raster images like PNG, when the
-output is LaTeX/PDF.}
+\item{auto_pdf}{Whether to use PDF images automatically when the output
+format is LaTeX. If \code{TRUE}, then e.g. \file{foo/bar.png} will be
+replaced by \file{foo/bar.pdf} if the latter exists. This can be useful
+since normally PDF images are of higher quality than raster images like
+PNG, when the output is LaTeX/PDF.}
 
-\item{dpi}{DPI (dots per inch) value. Used to calculate the output
-width (in inches) of the images. This will be their actual width in pixels,
-divided by \code{dpi}. If not provided, the chunk option \code{dpi} is used; if
+\item{dpi}{DPI (dots per inch) value. Used to calculate the output width (in
+inches) of the images. This will be their actual width in pixels, divided
+by \code{dpi}. If not provided, the chunk option \code{dpi} is used; if
 \code{NA}, the output width will not be calculated.}
+
+\item{error}{Whether to signal an error if any files specified in the
+\code{path} argument do not exist and are not web resources.}
 }
 \value{
 The same as the input character vector \code{path} but it is marked

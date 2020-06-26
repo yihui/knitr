@@ -4,7 +4,9 @@
 \name{knit_theme}
 \alias{knit_theme}
 \title{Syntax highlighting themes}
-\format{An object of class \code{list} of length 2.}
+\format{
+An object of class \code{list} of length 2.
+}
 \usage{
 knit_theme
 }

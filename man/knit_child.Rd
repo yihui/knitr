@@ -14,8 +14,8 @@ the child document. When one uses the \code{child}
 option in a parent chunk, the chunk options of the parent chunk will be
 passed to the \code{options} argument here.  Ignored if not a list.}
 
-\item{envir}{Environment in which code chunks are to be evaluated,
-for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\item{envir}{Environment in which code chunks are to be evaluated, for
+example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 \code{\link{globalenv}()}).}
 }
 \value{
@@ -37,11 +37,10 @@ This function is not supposed be called directly like
   The path of the child document is determined relative to the parent document.
 }
 \examples{
-# you can write \\Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw'
-# to input results from child-doc.Rnw in main.tex
+# you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw' to
+# input results from child-doc.Rnw in main.tex
 
-# comment out the child doc by \\Sexpr{knit_child('child-doc.Rnw', eval =
-# FALSE)}
+# comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
 }
 \references{
 \url{https://yihui.org/knitr/demo/child/}

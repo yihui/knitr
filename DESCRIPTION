@@ -1,7 +1,7 @@
 Package: knitr
 Type: Package
 Title: A General-Purpose Package for Dynamic Report Generation in R
-Version: 1.26.1
+Version: 1.29.1
 Authors@R: c(
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666")),
     person("Adam", "Vogt", role = "ctb"),
@@ -22,6 +22,7 @@ Authors@R: c(
     person("Doug", "Hemken", role = "ctb"),
     person("Duncan", "Murdoch", role = "ctb"),
     person("Elio", "Campitelli", role = "ctb"),
+    person("Ellis", "Hughes", role = "ctb"),
     person("Emily", "Riederer", role = "ctb"),
     person("Fabian", "Hirschmann", role = "ctb"),
     person("Fitch", "Simeon", role = "ctb"),
@@ -110,7 +111,7 @@ Imports:
     stringr (>= 0.6),
     yaml (>= 2.1.19),
     methods,
-    xfun,
+    xfun (>= 0.15),
     tools
 Suggests:
     formatR,
@@ -135,6 +136,7 @@ Suggests:
     showtext,
     tibble,
     sass,
+    ragg,
     styler (>= 1.2.0)
 License: GPL
 URL: https://yihui.org/knitr/
@@ -174,11 +176,10 @@ Collate:
     'spin.R'
     'table.R'
     'template.R'
-    'utils-base64.R'
     'utils-conversion.R'
     'utils-rd2html.R'
     'utils-sweave.R'
     'utils-upload.R'
     'utils-vignettes.R'
     'zzz.R'
-RoxygenNote: 7.0.0
+RoxygenNote: 7.1.0

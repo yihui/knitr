@@ -4,13 +4,15 @@
 \name{knit_patterns}
 \alias{knit_patterns}
 \title{Patterns to match and extract R code in a document}
-\format{An object of class \code{list} of length 6.}
+\format{
+An object of class \code{list} of length 6.
+}
 \usage{
 knit_patterns
 }
 \description{
 Patterns are regular expressions and will be used in functions like
-\code{\link[base]{grep}} to extract R code and chunk options. The object
+\code{base::\link{grep}()} to extract R code and chunk options. The object
 \code{knit_patterns} controls the patterns currently used; see the references
 and examples for usage.  All built-in patterns are available in the list
 \link{all_patterns}.
@@ -36,7 +38,7 @@ knit_patterns$set(opat)  # put the old patterns back
 \references{
 Usage: \url{https://yihui.org/knitr/objects/}
 
-Components in \code{knit_patterns}: \url{https://yihui.org/knitr/patterns/}
+  Components in \code{knit_patterns}: \url{https://yihui.org/knitr/patterns/}
 }
 \seealso{
 \code{\link{all_patterns}}

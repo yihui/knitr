@@ -20,6 +20,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
   groups = unname(split(lines, cumsum(tmp)))
   if (set.preamble)
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
+  markdown_mode = identical(patterns, all_patterns$md)
 
   # parse 'em all
   lapply(groups, function(g) {
@@ -36,7 +37,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       params.src = if (group_pattern(chunk.begin)) {
         stringr::str_trim(gsub(chunk.begin, '\\1', g[1]))
       } else ''
-      parse_block(g[-1], g[1], params.src)
+      parse_block(g[-1], g[1], params.src, markdown_mode)
     } else parse_inline(g, patterns)
   })
 }
@@ -72,11 +73,11 @@ strip_block = function(x, prefix = NULL) {
 dep_list = new_defaults()
 
 # separate params and R code in code chunks
-parse_block = function(code, header, params.src) {
+parse_block = function(code, header, params.src, markdown_mode = out_format('markdown')) {
   params = params.src
   engine = 'r'
   # consider the syntax ```{engine, opt=val} for chunk headers
-  if (out_format('markdown')) {
+  if (markdown_mode) {
     engine = sub('^([a-zA-Z0-9_]+).*$', '\\1', params)
     params = sub('^([a-zA-Z0-9_]+)', '', params)
   }
@@ -103,7 +104,10 @@ parse_block = function(code, header, params.src) {
     if (label %in% names(knit_code$get())) {
       if (identical(getOption('knitr.duplicate.label'), 'allow')) {
         params$label = label = unnamed_chunk(label)
-      } else stop("duplicate label '", label, "'")
+      } else stop(
+        "Duplicate chunk label '", label, "', which has been used for the chunk:\n",
+        one_string(knit_code$get(label))
+      )
     }
     knit_code$set(setNames(list(structure(code, chunk_opts = params)), label))
   }
@@ -334,7 +338,8 @@ read_chunk = function(
 }
 
 #' @rdname read_chunk
-#' @param topic,package Name of the demo and the package. See \code{\link[utils]{demo}}.
+#' @param topic,package Name of the demo and the package. See
+#'   \code{utils::\link{demo}}.
 #' @param ... Arguments passed to \code{\link{read_chunk}}.
 #' @export
 read_demo = function(topic, package = NULL, ...) {
@@ -415,12 +420,17 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
 #' \code{all_labels(engine == 'Rcpp')}.
 #'
 #' For example, suppose the condition expression is \code{engine == 'Rcpp'}, the
-#' object \code{engine} is the local chunk option \code{engine}; if an
+#' object \code{engine} is the local chunk option \code{engine}. If an
 #' expression fails to be evaluated (e.g. when a certain object does not exist),
 #' \code{FALSE} is returned and the label for this chunk will be filtered out.
 #' @param ... A vector of R expressions, each of which should return \code{TRUE}
-#'   or \code{FALSE}; the expressions are evaluated using the local chunk
-#'   options of each code chunk as the environment.
+#'   or \code{FALSE}. The expressions are evaluated using the \emph{local} chunk
+#'   options of each code chunk as the environment, which means global chunk
+#'   options are not considered when evaluating these expressions. For example,
+#'   if you set the global chunk option \code{opts_chunk$set(purl = TRUE)},
+#'   \code{all_labels(purl == TRUE)} will \emph{not} return the labels of all
+#'   code chunks, but will only return the labels of those code chunks that have
+#'   local chunk options \code{purl = TRUE}.
 #' @note Empty code chunks are always ignored, including those chunks that are
 #'   empty in the original document but filled with code using chunk options
 #'   such as \code{ref.label} or \code{code}.

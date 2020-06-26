@@ -101,12 +101,15 @@ assert(
   identical(fig_chunk('foo', '.pdf'), 'figure/foo-1.pdf')
 )
 
-f = file.path(R.home('doc'), 'html', 'logo.jpg')
-assert(
-  'base64_encode() gets the same result as markdown:::.b64EncodeFile',
-  identical(strsplit(markdown:::.b64EncodeFile(f), 'base64,')[[1]][2],
-            base64_encode(readBin(f, what = 'raw', n = file.info(f)$size)))
-)
+assert('all_figs() generates all figure paths for a code chunk', {
+  opts = list(fig.path = 'abc/', label = 'foo', fig.num = 3)
+  (all_figs(opts, '.svg') %==% sprintf('abc/foo-%d.svg', 1:3))
+  (all_figs(opts, c('png', 'pdf'))  %==% apply(
+    expand.grid(1:3, c('.png', '.pdf')), 1, function(x) {
+      paste0(c('abc/foo-', x), collapse = '')
+    }
+  ))
+})
 
 assert(
   'escape_latex() escapes special LaTeX characters',
@@ -146,15 +149,6 @@ assert(
   cw(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''"
 )
 rm(list = 'cw')
-
-assert('split_lines() splits a character vector into lines by \\n', {
-  (split_lines('') %==% '')
-  (split_lines(NULL) %==% NULL)
-  (split_lines('a\nb') %==% c('a', 'b'))
-  (split_lines('a\n') %==% c('a', ''))
-  (split_lines('a\nb\n\n') %==% c('a', 'b', '', ''))
-  (split_lines(c('a\nb', '', ' ', 'c')) %==% c('a', 'b', '', ' ', 'c'))
-})
 
 opts = list(fig.cap = 'Figure "caption" <>.', fig.lp = 'Fig:', label = 'foo')
 assert(

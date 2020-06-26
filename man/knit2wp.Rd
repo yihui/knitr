@@ -23,8 +23,8 @@ knit2wp(
 \item{...}{Other meta information of the post, e.g. \code{categories = c('R',
 'Stats')} and \code{mt_keywords = c('knitr', 'wordpress')}, et cetera.}
 
-\item{envir}{Environment in which code chunks are to be evaluated,
-for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
+\item{envir}{Environment in which code chunks are to be evaluated, for
+example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 \code{\link{globalenv}()}).}
 
 \item{shortcode}{A length-2 logical vector: whether to use the shortcode

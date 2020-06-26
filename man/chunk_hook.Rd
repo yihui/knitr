@@ -34,13 +34,12 @@ define chunk hooks in \pkg{knitr}.
 The function \code{hook_pdfcrop()} can use the program \command{pdfcrop} to
 crop the extra white margin when the plot format is PDF to make better use of
 the space in the output document, otherwise we often have to struggle with
-\code{\link[graphics]{par}} to set appropriate margins. Note
+\code{graphics::\link{par}()} to set appropriate margins. Note
 \command{pdfcrop} often comes with a LaTeX distribution such as MiKTeX or
 TeXLive, and you may not need to install it separately (use
 \code{Sys.which('pdfcrop')} to check it; if it not empty, you are able to use
-it). Similarly, when the plot format is not PDF (e.g. PNG), the program
-\command{convert} in ImageMagick is used to trim the white margins (call
-\command{convert input -trim output}).
+it). Similarly, when the plot format is not PDF (e.g. PNG), the \pkg{magick}
+package is used to crop the plot.
 
 The function \code{hook_optipng()} calls the program \command{optipng} to
 optimize PNG images. Note the chunk option \code{optipng} can be used to
@@ -57,8 +56,8 @@ the chunk option \code{mogrify} can be used to provide additional parameters
 to the program \command{mogrify} (with default \code{-trim} to trim PNG
 files).
 
-When the plots are not recordable via \code{\link[grDevices]{recordPlot}} and
-we save the plots to files manually via other functions (e.g. \pkg{rgl}
+When the plots are not recordable via \code{grDevices::\link{recordPlot}()}
+and we save the plots to files manually via other functions (e.g. \pkg{rgl}
 plots), we can use the chunk hook \code{hook_plot_custom} to help write code
 for graphics output into the output document.
 
@@ -90,6 +89,8 @@ if (require("rgl") && exists("hook_rgl")) knit_hooks$set(rgl = hook_rgl)
 \url{https://yihui.org/knitr/hooks/#chunk_hooks}
 }
 \seealso{
-\code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}},
-  \code{\link[rgl]{hook_rgl}}, \code{\link[rgl]{hook_webgl}}
+\code{rgl::\link[rgl:snapshot]{rgl.snapshot}},
+  \code{rgl::\link[rgl:postscript]{rgl.postscript}},
+  \code{rgl::\link[rgl]{hook_rgl}},
+  \code{rgl::\link[rgl:hook_rgl]{hook_webgl}}
 }

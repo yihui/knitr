@@ -60,7 +60,7 @@ hook_animation = function(options) {
   if (alt) return(escape_html(cap))
   paste0(create_label(
     options$fig.lp, options$label,
-    if (options$fig.num > 1L && options$fig.show == 'asis') options$fig.cur
+    if (options$fig.num > 1L && options$fig.show == 'asis') c('-', options$fig.cur)
   ), cap)
 }
 
