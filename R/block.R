@@ -11,7 +11,7 @@ process_group.inline = function(x) {
 }
 
 
-block_params = function(block) {
+block_params = function(block, verbose = TRUE) {
   # now try eval all options except those in eval.after and their aliases
   af = opts_knit$get('eval.after'); al = opts_knit$get('aliases')
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
@@ -29,7 +29,7 @@ block_params = function(block) {
   label = ref.label = params$label
   if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
   params[["code"]] = params[["code"]] %n% unlist(knit_code$get(ref.label), use.names = FALSE)
-  if (opts_knit$get('progress')) print(block)
+  if (opts_knit$get('progress') && verbose > 0) print(block)
 
   if (!is.null(params$child)) {
     if (!is_blank(params$code)) warning(
@@ -93,7 +93,7 @@ block_params = function(block) {
 }
 
 call_block = function(block) {
-  params = block_params(block)
+  params = block_params(block, verbose = TRUE)
 
   block_exec(params)
 }
