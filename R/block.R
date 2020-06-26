@@ -11,7 +11,7 @@ process_group.inline = function(x) {
 }
 
 
-call_block = function(block) {
+block_params = function(block) {
   # now try eval all options except those in eval.after and their aliases
   af = opts_knit$get('eval.after'); al = opts_knit$get('aliases')
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
@@ -88,6 +88,12 @@ call_block = function(block) {
   if (is.list(params$R.options)) {
     op = options(params$R.options); on.exit(options(op), add = TRUE)
   }
+
+  return(params)
+}
+
+call_block = function(block) {
+  params = block_params(block)
 
   block_exec(params)
 }
