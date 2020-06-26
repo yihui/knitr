@@ -65,7 +65,8 @@ hook_plot_md_base = function(x, options) {
   }
   # use HTML syntax <img src=...>
   if (pandoc_html) {
-    d1 = if (plot1) sprintf('<div class="figure"%s>\n', css_text_align(a))
+    d1 = if (plot1) sprintf('<div class="figure"%s %s>\n', css_text_align(a),
+                            .img.id(options))
     d2 = sprintf('<p class="caption">%s</p>', cap)
     img = sprintf(
       '<img src="%s" alt="%s" %s />',
