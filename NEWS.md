@@ -1,6 +1,8 @@
 # CHANGES IN knitr VERSION 1.30
 
+## NEW FEATURES
 
+- Added an argument `lib.loc` to `knitr::write_bib()`.
 
 # CHANGES IN knitr VERSION 1.29
 

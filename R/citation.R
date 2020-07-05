@@ -23,6 +23,7 @@
 #' @param prefix Prefix string for keys in BibTeX entries; by default, it is
 #'   \samp{R-} unless \code{\link{option}('knitr.bib.prefix')} has been set to
 #'   another string.
+#' @param lib.loc A vector of path names of R libraries.
 #' @return A list containing the citations. Citations are also written to the
 #'   \code{file} as a side effect.
 #' @note Some packages on CRAN do not have standard bib entries, which was once
@@ -57,8 +58,10 @@
 #' str(knitr:::.tweak.bib)
 write_bib = function(
   x = .packages(), file = '', tweak = TRUE, width = NULL,
-  prefix = getOption('knitr.bib.prefix', 'R-')
+  prefix = getOption('knitr.bib.prefix', 'R-'), lib.loc = NULL
 ) {
+  system.file = function(...) base::system.file(..., lib.loc = lib.loc)
+  citation = function(...) utils::citation(..., lib.loc = lib.loc)
   idx = mapply(system.file, package = x) == ''
   if (any(idx)) {
     warning('package(s) ', paste(x[idx], collapse = ', '), ' not found')
