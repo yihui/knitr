@@ -4,6 +4,10 @@
 
 - Added an argument `lib.loc` to `knitr::write_bib()`.
 
+## MINOR CHANGES
+
+- `knitr::write_bib()` removes pairs of single quotes in the titles of citation entries now.
+
 # CHANGES IN knitr VERSION 1.29
 
 ## NEW FEATURES

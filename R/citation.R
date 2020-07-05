@@ -89,9 +89,7 @@ write_bib = function(
     bib = lapply(bib, function(b) {
       b['author'] = sub('Duncan Temple Lang', 'Duncan {Temple Lang}', b['author'])
       # remove the ugly single quotes required by CRAN policy
-      b['title'] = gsub(
-        "'(RStudio|Htmlwidgets|iframes|TeX Live|LaTeX)'", '\\1', b['title']
-      )
+      b['title'] = gsub("(^|\\W)'([^']+)'(\\W|$)", '\\1\\2\\3', b['title'])
       if (!('year' %in% names(b))) b['year'] = .this.year
       b
     })
