@@ -8,6 +8,8 @@
 
 - `knitr::write_bib()` removes pairs of single quotes in the titles of citation entries now.
 
+- `knitr::write_bib()` uses the `URL` in the package `DESCRIPTION` if it is provided, instead of the canonical CRAN URL for the package.
+
 # CHANGES IN knitr VERSION 1.29
 
 ## NEW FEATURES

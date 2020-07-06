@@ -70,7 +70,16 @@ write_bib = function(
   x = setdiff(x, .base.pkgs) # remove base packages
   x = sort(x)
   bib = sapply(x, function(pkg) {
-    cite = citation(pkg, auto = if (pkg == 'base') NULL else TRUE)
+    cite = citation(pkg, auto = if (pkg != 'base') {
+      meta = packageDescription(pkg, lib.loc = lib.loc)
+      # don't use the CRAN URL if the package has provided its own URL
+      if (identical(meta$Repository, 'CRAN') && !is.null(meta$URL)) {
+        # however, the package may have provided multiple URLs, in which case we
+        # still use the CRAN URL
+        if (!grepl('[, ]', meta$URL)) meta$Repository = NULL
+      }
+      meta
+    })
     if (tweak) {
       # e.g. gpairs has "gpairs: " in the title
       cite$title = gsub(sprintf('^(%s: )(\\1)', pkg), '\\1', cite$title)
