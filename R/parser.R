@@ -13,7 +13,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
   }
 
   blks = grepl(chunk.begin, lines)
-  txts = filter_chunk_end(blks, grepl(chunk.end, lines))
+  txts = filter_chunk_end(blks, grepl(chunk.end, lines), lines, patterns)
   # tmp marks the starting lines of a code/text chunk by TRUE
   tmp = blks | head(c(TRUE, txts), -1)
 
@@ -399,7 +399,16 @@ parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
 }
 
 # filter chunk.end lines that don't actually end a chunk
-filter_chunk_end = function(chunk.begin, chunk.end) {
+filter_chunk_end = function(chunk.begin, chunk.end, lines, patterns) {
+  keys = c('chunk.begin', 'chunk.end')
+  if (identical(patterns[keys], all_patterns[['md']][keys])) {
+    filter_chunk_end_md(chunk.begin, chunk.end, lines)
+  } else {
+    filter_chunk_end_general(chunk.begin, chunk.end)
+  }
+}
+
+filter_chunk_end_general = function(chunk.begin, chunk.end) {
   in.chunk = FALSE
   fun = function(is.begin, is.end) {
     if (in.chunk && is.end) {
@@ -410,6 +419,23 @@ filter_chunk_end = function(chunk.begin, chunk.end) {
     FALSE
   }
   mapply(fun, chunk.begin, chunk.end)
+}
+
+filter_chunk_end_md = function(chunk.begin, chunk.end, lines) {
+  in.chunk = FALSE
+  expected_end = NA_character_
+  fun = function(is.begin, is.end, line) {
+    if (in.chunk && is.end && identical(line, expected_end)) {
+      in.chunk <<- FALSE
+      return(TRUE)
+    }
+    if (!in.chunk && is.begin) {
+      in.chunk <<- TRUE
+      expected_end <<- sub('(^[\t >]*```+).*', '\\1', line)
+    }
+    FALSE
+  }
+  mapply(fun, chunk.begin, chunk.end, lines)
 }
 
 #' Get all chunk labels in a document
