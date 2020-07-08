@@ -4,6 +4,10 @@
 
 - Added an argument `lib.loc` to `knitr::write_bib()`.
 
+## BUG FIXES
+
+- The option `fig_caption = FALSE` for `rmarkdown::html_document()` was unable to suppress the figure captions in some cases.
+
 ## MINOR CHANGES
 
 - `knitr::write_bib()` removes pairs of single quotes in the titles of citation entries now.
