@@ -46,6 +46,8 @@ hook_plot_md_base = function(x, options) {
   s = options$out.extra; a = options$fig.align
   ai = options$fig.show == 'asis'
   lnk = options$fig.link
+  lnktarget = options$fig.link.target 
+  lnkid = options$fig.link.id
   pandoc_html = cap != '' && is_html_output()
   in_bookdown = isTRUE(opts_knit$get('bookdown.internal.label'))
   plot1 = ai || options$fig.cur <= 1L
@@ -62,7 +64,7 @@ hook_plot_md_base = function(x, options) {
   }
   add_link = function(x) {
     if (is.null(lnk) || is.na(lnk)) return(x)
-    sprintf('<a href="%s" target="_blank">%s</a>', lnk, x)
+    sprintf('<a href="%s" target="%s" id="%s">%s</a>', lnk, lnktarget, lnkid, x)
   }
   # use HTML syntax <img src=...>
   if (pandoc_html && !isTRUE(grepl('-implicit_figures', from))) {
