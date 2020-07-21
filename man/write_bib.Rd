@@ -9,7 +9,8 @@ write_bib(
   file = "",
   tweak = TRUE,
   width = NULL,
-  prefix = getOption("knitr.bib.prefix", "R-")
+  prefix = getOption("knitr.bib.prefix", "R-"),
+  lib.loc = NULL
 )
 }
 \arguments{
@@ -27,6 +28,8 @@ will not be wrapped.}
 \item{prefix}{Prefix string for keys in BibTeX entries; by default, it is
 \samp{R-} unless \code{\link{option}('knitr.bib.prefix')} has been set to
 another string.}
+
+\item{lib.loc}{A vector of path names of R libraries.}
 }
 \value{
 A list containing the citations. Citations are also written to the

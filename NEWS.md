@@ -1,6 +1,18 @@
 # CHANGES IN knitr VERSION 1.30
 
+## NEW FEATURES
 
+- Added an argument `lib.loc` to `knitr::write_bib()`.
+
+## BUG FIXES
+
+- The option `fig_caption = FALSE` for `rmarkdown::html_document()` was unable to suppress the figure captions in some cases.
+
+## MINOR CHANGES
+
+- `knitr::write_bib()` removes pairs of single quotes in the titles of citation entries now.
+
+- `knitr::write_bib()` uses the `URL` in the package `DESCRIPTION` if it is provided, instead of the canonical CRAN URL for the package.
 
 # CHANGES IN knitr VERSION 1.29
 

@@ -50,10 +50,11 @@ hook_plot_md_base = function(x, options) {
   in_bookdown = isTRUE(opts_knit$get('bookdown.internal.label'))
   plot1 = ai || options$fig.cur <= 1L
   plot2 = ai || options$fig.cur == options$fig.num
+  to = pandoc_to(); from = pandoc_from()
   if (is.null(w) && is.null(h) && is.null(s) && a == 'default' && !(pandoc_html && in_bookdown)) {
     # append <!-- --> to ![]() to prevent the figure environment in these cases
-    nocap = cap == '' && !is.null(to <- pandoc_to()) && !grepl('^markdown', to) &&
-      (options$fig.num == 1 || ai) && !grepl('-implicit_figures', pandoc_from())
+    nocap = cap == '' && !is.null(to) && !grepl('^markdown', to) &&
+      (options$fig.num == 1 || ai) && !grepl('-implicit_figures', from)
     res = sprintf('![%s](%s%s)', cap, base, .upload.url(x))
     if (!is.null(lnk) && !is.na(lnk)) res = sprintf('[%s](%s)', res, lnk)
     res = paste0(res, if (nocap) '<!-- -->' else '', if (is_latex_output()) ' ' else '')
@@ -64,7 +65,7 @@ hook_plot_md_base = function(x, options) {
     sprintf('<a href="%s" target="_blank">%s</a>', lnk, x)
   }
   # use HTML syntax <img src=...>
-  if (pandoc_html) {
+  if (pandoc_html && !isTRUE(grepl('-implicit_figures', from))) {
     d1 = if (plot1) sprintf('<div class="figure"%s>\n', css_text_align(a))
     d2 = sprintf('<p class="caption">%s</p>', cap)
     img = sprintf(
