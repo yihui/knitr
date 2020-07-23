@@ -73,13 +73,29 @@ block_params = function(block, verbose = TRUE) {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
       cache$load(hash, lazy = params$cache.lazy)
       cache_engine(params)
+    }
+  } else if (label %in% names(dep_list$get()) && !isFALSE(opts_knit$get('warn.uncached.dep')))
+    warning2('code chunks must not depend on the uncached chunk "', label, '"')
+
+  return(params)
+}
+
+call_block = function(block) {
+  params = block_params(block, verbose = TRUE)
+
+  # this is required here because return() in the if
+  # so that the params are returned in block_params, but
+  # the same logic execution is done below
+  if (params$cache > 0) {
+    if (cache$exists(params$hash, params$cache.lazy) &&
+        isFALSE(params$cache.rebuild) &&
+        params$engine != 'Rcpp') {
       if (!params$include) return('')
-      if (params$cache == 3) return(cache$output(hash))
+      if (params$cache == 3) return(cache$output(params$hash))
     }
     if (params$engine == 'R')
       cache$library(params$cache.path, save = FALSE) # load packages
-  } else if (label %in% names(dep_list$get()) && !isFALSE(opts_knit$get('warn.uncached.dep')))
-    warning2('code chunks must not depend on the uncached chunk "', label, '"')
+  } # warning already triggered above
 
   params$params.src = block$params.src
   opts_current$restore(params)  # save current options
@@ -88,12 +104,6 @@ block_params = function(block, verbose = TRUE) {
   if (is.list(params$R.options)) {
     op = options(params$R.options); on.exit(options(op), add = TRUE)
   }
-
-  return(params)
-}
-
-call_block = function(block) {
-  params = block_params(block, verbose = TRUE)
 
   block_exec(params)
 }
