@@ -87,6 +87,7 @@ Authors@R: c(
     person("Sebastian", "Meyer", role = "ctb"),
     person("Sietse", "Brouwer", role = "ctb"),
     person(c("Simon", "de"), "Bernard", role = "ctb"),
+    person("Steve", "Condylios", role = c("ctb"), comment = c(ORCID = "0000-0003-0599-844X")),
     person("Sylvain", "Rousseau", role = "ctb"),
     person("Taiyun", "Wei", role = "ctb"),
     person("Thibaut", "Assus", role = "ctb"),
@@ -155,6 +156,7 @@ Collate:
     'defaults.R'
     'concordance.R'
     'engine.R'
+    'extract.R'
     'highlight.R'
     'themes.R'
     'header.R'
