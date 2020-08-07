@@ -80,7 +80,7 @@ block_params = function(block, verbose = TRUE) {
   return(params)
 }
 
-call_block = function(block) {
+call_block = function(block, collapse = '') {
   params = block_params(block, verbose = TRUE)
 
   # this is required here because return() in the if
@@ -105,7 +105,7 @@ call_block = function(block) {
     op = options(params$R.options); on.exit(options(op), add = TRUE)
   }
 
-  block_exec(params)
+  block_exec(params, collapse = collapse)
 }
 
 # options that should affect cache when cache level = 1,2
@@ -115,7 +115,7 @@ cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fi
 # options that should not affect cache
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
-block_exec = function(options) {
+block_exec = function(options, collapse = '') {
   # when code is not R language
   if (options$engine != 'R') {
     res.before = run_hooks(before = TRUE, options)
@@ -123,7 +123,7 @@ block_exec = function(options) {
     output = in_dir(input_dir(), engine(options))
     if (is.list(output)) output = unlist(output)
     res.after = run_hooks(before = FALSE, options)
-    output = paste(c(res.before, output, res.after), collapse = '')
+    output = paste(c(res.before, output, res.after), collapse = collapse)
     output = knit_hooks$get('chunk')(output, options)
     if (options$cache) {
       cache.exists = cache$exists(options$hash, options$cache.lazy)
@@ -279,7 +279,7 @@ block_exec = function(options) {
   output = unlist(wrap(res, options)) # wrap all results together
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
 
-  output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
+  output = paste(c(res.before, output, res.after), collapse = collapse)  # insert hook results
   output = knit_hooks$get('chunk')(output, options)
 
   if (options$cache > 0) {
