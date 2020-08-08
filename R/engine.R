@@ -652,25 +652,25 @@ eng_go = function(options) {
 
 # rust engine, added by @TianyiShi https://github.com/yihui/knitr/pull/1823
 # unable to use external crates; for that, use eng_rust_cargo instead
-eng_rust = function(options) {
+eng_rust <- function(options) {
   # make `fn main` optional
   source <- options$code
   if (length(grep('fn main', source))==0) {
     source <- paste0(c('fn main(){\n', source, '\n}'), collapse = '')
   }
-  src = wd_tempfile('code', '.rs')
-  bin = strsplit(src, '\\.rs')[[1]]
+  src <- wd_tempfile('code', '.rs')
+  bin <- strsplit(src, '\\.rs')[[1]]
   write_utf8(source, src)
   on.exit(unlink(c(src, bin)), add = TRUE)
-  cmd = get_engine_path(options$engine.path, "rustc")
-  args = sprintf('%s && %s', file.path(getwd(), src), file.path(getwd(), bin))
+  cmd <- get_engine_path(options$engine.path, "rustc")
+  args <- sprintf('%s && %s', file.path(getwd(), src), file.path(getwd(), bin))
 
   if (options$message) message(sprintf('Running: %s %s', cmd, args))
 
-  output = if (options$eval) {
+  output <- if (options$eval) {
     tryCatch(
       system2(cmd, args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
-      error = function(e) {
+      error <- function(e) {
         if (!options$error) stop(e)
         sprintf('Error in executing command: %s %s', cmd, args)
       }
@@ -695,7 +695,7 @@ eng_rust = function(options) {
 # cargo directory for this.
 # In very rare cases when you need different cargos in the same document,
 # you can use a chunk option `cargo.path` to override the defualt option.
-eng_rust_cargo = function(options) {
+eng_rust_cargo <- function(options) {
   src_dir <- if (!is.null(x <- getOption("knitr.cargo.path"))) x else {
     if (!is.null(x <- options$cargo.path)) x else {
       stop("Please set options(knitr.cargo.path='<PATH_TO_CARGO>') or set the chunk option cargo.path='<PATH_TO_CARGO>'")
@@ -708,8 +708,8 @@ eng_rust_cargo = function(options) {
     source <- paste0(c('fn main(){\n', source, '\n}'), collapse = '')
   }
   write_utf8(source, src)
-  cmd = get_engine_path(options$engine.path, "cargo")
-  args = 'run -q'
+  cmd <- get_engine_path(options$engine.path, "cargo")
+  args <- 'run -q'
 
   if (options$message) message(sprintf('Running: %s %s', cmd, args))
 
@@ -717,7 +717,7 @@ eng_rust_cargo = function(options) {
     old_dir <- setwd(src_dir)
     output <- tryCatch(
       system2(cmd, args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
-      error = function(e) {
+      error <- function(e) {
         if (!options$error) stop(e)
         sprintf('Error in executing command: %s %s', cmd, args)
       }
@@ -725,7 +725,7 @@ eng_rust_cargo = function(options) {
     invisible(setwd(old_dir))
   }
 
-  if (options$results == 'hide') output = NULL
+  if (options$results == 'hide') output <- NULL
 
   engine_output(options, source, output)
 }
