@@ -57,9 +57,17 @@ hook_plot_tex = function(x, options) {
 
   rw = options$resize.width
   rh = options$resize.height
+  rc = options$resize.command
   resize1 = resize2 = ''
-  if (!is.null(rw) || !is.null(rh)) {
-    resize1 = sprintf('\\resizebox{%s}{%s}{', rw %n% '!', rh %n% '!')
+  if (is.null(rc)) {
+    if (!is.null(rw) || !is.null(rh)) {
+      resize1 = sprintf('\\resizebox{%s}{%s}{', rw %n% '!', rh %n% '!')
+      resize2 = '} '
+    }
+  } else {
+    # users can specify a custom "resize" command (we can use an arbitrary
+    # command, e.g., framebox)
+    resize1 = paste0('\\', rc, '{')
     resize2 = '} '
   }
 
