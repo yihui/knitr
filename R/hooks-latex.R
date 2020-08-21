@@ -296,10 +296,9 @@ hooks_latex = local({
     # escape plot environments from kframe
     paste0('\\end{kframe}', hook_plot_tex(x, options), '\n\\begin{kframe}')
   }
-  inline = .inline.hook.tex
-  chunk = .chunk.hook.tex
-  list(source = source, output = output, warning = warning, message = message,
-       error = error, plot = plot, inline = inline, chunk = chunk)
+  list(source = source, output = output, warning = warning,
+       message = message, error = error, plot = plot,
+       inline = .inline.hook.tex, chunk = .chunk.hook.tex)
 })
 
 #' @rdname output_hooks
