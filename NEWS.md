@@ -8,6 +8,8 @@
 
 - The option `fig_caption = FALSE` for `rmarkdown::html_document()` was unable to suppress the figure captions in some cases.
 
+- When the option `options(OutDec = )` is set to a value other than `"."`, percentages in the chunk options `out.width` and `out.height` do not work (thanks, @omgitsmoe, #1887).
+
 ## MINOR CHANGES
 
 - `knitr::write_bib()` removes pairs of single quotes in the titles of citation entries now.
