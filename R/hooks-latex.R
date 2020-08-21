@@ -309,9 +309,17 @@ render_sweave = function() {
   opts_knit$set(out.format = 'sweave')
   test_latex_pkg('Sweave', file.path(R.home('share'), 'texmf', 'tex', 'latex', 'Sweave.sty'))
   set_header(framed = '', highlight = '\\usepackage{Sweave}')
+  knit_hooks$set(hooks_sweave)
+}
+
+#' @export
+hooks_sweave = local({
   # wrap source code in the Sinput environment, output in Soutput
-  hook.i = function(x, options)
-    one_string(c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''))
+  hook.i = function(x, options) {
+    one_string(
+      c('\\begin{Sinput}', hilight_source(x, 'sweave', options),
+        '\\end{Sinput}', ''))
+  }
   hook.s = function(x, options) {
     if (output_asis(x, options)) return(x)
     paste0('\\begin{Soutput}\n', x, '\\end{Soutput}\n')
@@ -320,10 +328,11 @@ render_sweave = function() {
     if (output_asis(x, options)) return(x)
     paste0('\\begin{Schunk}\n', x, '\\end{Schunk}')
   }
-  knit_hooks$set(source = hook.i, output = hook.s, warning = hook.s,
-                 message = hook.s, error = hook.s, inline = .inline.hook.tex,
-                 plot = hook_plot_tex, chunk = hook.c)
-}
+  list(source = hook.i, output = hook.s, warning = hook.s,
+       message = hook.s, error = hook.s, plot = hook_plot_tex,
+       inline = .inline.hook.tex, chunk = hook.c)
+})
+
 #' @rdname output_hooks
 #' @export
 render_listings = function() {
