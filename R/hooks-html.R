@@ -233,6 +233,13 @@ hook_r2swf = function(x, options) {
 render_html = function() {
   set_html_dev()
   opts_knit$set(out.format = 'html')
+  h = opts_knit$get('header')
+  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
+  knit_hooks$set(hooks_html)
+}
+
+#' @export
+hooks_html = local({
   # use div with different classes
   html.hook = function(name) {
     force(name)
@@ -244,14 +251,12 @@ render_html = function() {
       sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>\n', name, tolower(options$engine), x)
     }
   }
-  h = opts_knit$get('header')
-  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
-  z = list()
-  for (i in c('source', 'warning', 'message', 'error'))
-    z[[i]] = html.hook(i)
-  knit_hooks$set(z)
-  knit_hooks$set(inline = function(x) {
+  inline = function(x) {
     sprintf(if (inherits(x, 'AsIs')) '%s' else '<code class="knitr inline">%s</code>',
             .inline.hook(format_sci(x, 'html')))
-  }, output = html.hook('output'), plot = hook_plot_html, chunk = .chunk.hook.html)
-}
+  }
+  list(source = html.hook('source'), output = html.hook('output'),
+       warning = html.hook('warning'), message = html.hook('message'),
+       error = html.hook('error'), plot = hook_plot_html,
+       inline = inline, chunk = .chunk.hook.html)
+})
