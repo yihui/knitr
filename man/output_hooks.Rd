@@ -102,7 +102,7 @@ For LaTeX output, there are three variants as well: \pkg{knitr}'s default
 style (\code{render_latex()} which calls \code{hooks_latex()}; use the LaTeX
 \pkg{framed} package), Sweave style (\code{render_sweave()} which calls
 \code{hooks_sweave()}; use \file{Sweave.sty}) and listings style
-(\code{render_listings() which calls \code{hooks_listings()}}; use LaTeX
+(\code{render_listings()} which calls \code{hooks_listings()}; use LaTeX
 \pkg{listings} package).\cr
 Default HTML output hooks are set by \code{render_html()} (which calls
 \code{hooks_html()}); \code{render_rst()} (which calls \code{hooks_rst()}) is
@@ -120,7 +120,9 @@ You can also use \code{\link{knit_hooks}} to set the format's hooks with the
 hooks.
 }
 \references{
-See output hooks in \url{https://yihui.org/knitr/hooks/}, and in \url
+See output hooks in \url{https://yihui.org/knitr/hooks/}, and
+  some examples in
+  \url{https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html}
 
   Jekyll and Liquid:
   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions};
