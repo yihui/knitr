@@ -231,33 +231,49 @@ hook_plot_tex = function(x, options) {
   }
 }
 
-#' Set output hooks for different output formats
+#' Set or get output hooks for different output formats
 #'
-#' These functions set built-in output hooks for LaTeX, HTML, Markdown,
-#' reStructuredText, AsciiDoc and Textile.
+#' The \code{render_*} functions set built-in output hooks for LaTeX, HTML,
+#' Markdown, reStructuredText, AsciiDoc and Textile. The \code{hooks_*}
+#' functions return a list of the output hooks for the corresponding format.
 #'
 #' There are three variants of markdown documents: ordinary markdown
-#' (\code{render_markdown(strict = TRUE)}), extended markdown (e.g. GitHub
-#' Flavored Markdown and pandoc; \code{render_markdown(strict = FALSE)}), and
-#' Jekyll (a blogging system on GitHub; \code{render_jekyll()}). For LaTeX
-#' output, there are three variants as well: \pkg{knitr}'s default style
-#' (\code{render_latex()}; use the LaTeX \pkg{framed} package), Sweave style
-#' (\code{render_sweave()}; use \file{Sweave.sty}) and listings style
-#' (\code{render_listings()}; use LaTeX \pkg{listings} package). Default HTML
-#' output hooks are set by \code{render_html()}; \code{render_rst()} and
-#' \code{render_asciidoc()} are for reStructuredText and AsciiDoc respectively.
+#' (\code{render_markdown(strict = TRUE)}which calls \code{hooks_markdown(strict
+#' = TRUE)}), extended markdown (e.g. GitHub Flavored Markdown and pandoc;
+#' \code{render_markdown(strict = FALSE)} which calls
+#' \code{hooks_markdown(strict = FALSE)}), and Jekyll (a blogging system on
+#' GitHub; \code{render_jekyll()} which calls \code{hooks_jekyll()}).\cr
+#' For LaTeX output, there are three variants as well: \pkg{knitr}'s default
+#' style (\code{render_latex()} which calls \code{hooks_latex()}; use the LaTeX
+#' \pkg{framed} package), Sweave style (\code{render_sweave()} which calls
+#' \code{hooks_sweave()}; use \file{Sweave.sty}) and listings style
+#' (\code{render_listings() which calls \code{hooks_listings()}}; use LaTeX
+#' \pkg{listings} package).\cr
+#' Default HTML output hooks are set by \code{render_html()} (which calls
+#' \code{hooks_html()}); \code{render_rst()} (which calls \code{hooks_rst()}) is
+#' for reStructuredText; \code{render_textile()} (which calls
+#' \code{hooks_textile()}) is for Textile and \code{render_asciidoc()} (which
+#' calls \code{hooks_asciidoc()}) is AsciiDoc.
 #'
-#' These functions can be used before \code{knit()} or in the first chunk of the
+#' The \code{render_*} functions can be used before \code{knit()} or in the first chunk of the
 #' input document (ideally this chunk has options \code{include = FALSE} and
 #' \code{cache = FALSE}) so that all the following chunks will be formatted as
 #' expected.
 #'
-#' You can use \code{\link{knit_hooks}} to further customize output hooks; see
-#' references.
+#' You can also use \code{\link{knit_hooks}} to set the format's hooks with the
+#' \code{hooks_*} functions; see references for more to further customize output
+#' hooks.
+#'
 #' @rdname output_hooks
-#' @return \code{NULL}; corresponding hooks are set as a side effect
+#' @return
+#' \itemize{
+#'   \item \code{NULL} for \code{render_*} functions; corresponding hooks are
+#'   set as a side effect
+#'   \item A list of output hooks for \code{hooks_*} functions; hooks are not
+#'   set in that case.
+#' }
 #' @export
-#' @references See output hooks in \url{https://yihui.org/knitr/hooks/}.
+#' @references See output hooks in \url{https://yihui.org/knitr/hooks/}, and in \url
 #'
 #'   Jekyll and Liquid:
 #'   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions};
@@ -271,6 +287,7 @@ render_latex = function() {
   knit_hooks$set(hooks_latex())
 }
 
+#' @rdname output_hooks
 #' @export
 hooks_latex = function() {
   source = function(x, options) {
@@ -311,6 +328,7 @@ render_sweave = function() {
   knit_hooks$set(hooks_sweave())
 }
 
+#' @rdname output_hooks
 #' @export
 hooks_sweave = function() {
   # wrap source code in the Sinput environment, output in Soutput
@@ -342,6 +360,7 @@ render_listings = function() {
   knit_hooks$set(hooks_listings())
 }
 
+#' @rdname output_hooks
 #' @export
 hooks_listings = hooks_sweave
 

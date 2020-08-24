@@ -143,6 +143,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
   knit_hooks$set(hooks_markdown(strict, fence_char))
 }
 
+#' @rdname output_hooks
 #' @export
 hooks_markdown = function(strict = FALSE, fence_char = '`') {
   fence = paste(rep(fence_char, 3), collapse = '')
@@ -214,6 +215,7 @@ render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = 
   knit_hooks$set(hooks_jekyll(highlight = highlight, extra = extra))
 }
 
+#' @rdname output_hooks
 #' @export
 hooks_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '') {
   hook.m = hooks_markdown(TRUE)

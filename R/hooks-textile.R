@@ -25,6 +25,7 @@ render_textile = function() {
   knit_hooks$set(hooks_textile())
 }
 
+#' @rdname output_hooks
 #' @export
 hooks_textile = function() {
   textile.hook = function(name) {

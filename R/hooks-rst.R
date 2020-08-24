@@ -25,6 +25,7 @@ render_rst = function(strict = FALSE) {
   knit_hooks$set(hooks_rst(strict))
 }
 
+#' @rdname output_hooks
 #' @export
 hooks_rst = function(strict = FALSE) {
   hook.s = function(x, options) {

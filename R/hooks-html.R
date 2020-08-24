@@ -238,6 +238,7 @@ render_html = function() {
   knit_hooks$set(hooks_html())
 }
 
+#' @rdname output_hooks
 #' @export
 hooks_html = function() {
   # use div with different classes

@@ -20,6 +20,7 @@ render_asciidoc = function() {
   knit_hooks$set(hooks_asciidoc())
 }
 
+#' @rdname output_hooks
 #' @export
 hooks_asciidoc = function() {
   hook.source = function(x, options) {
