@@ -235,11 +235,11 @@ render_html = function() {
   opts_knit$set(out.format = 'html')
   h = opts_knit$get('header')
   if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
-  knit_hooks$set(hooks_html)
+  knit_hooks$set(hooks_html())
 }
 
 #' @export
-hooks_html = local({
+hooks_html = function() {
   # use div with different classes
   html.hook = function(name) {
     force(name)
@@ -259,4 +259,4 @@ hooks_html = local({
        warning = html.hook('warning'), message = html.hook('message'),
        error = html.hook('error'), plot = hook_plot_html,
        inline = inline, chunk = .chunk.hook.html)
-})
+}

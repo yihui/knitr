@@ -22,11 +22,11 @@ hook_plot_rst = function(x, options) {
 #' @export
 render_rst = function(strict = FALSE) {
   set_html_dev()
-  knit_hooks$set(hooks_rst)
+  knit_hooks$set(hooks_rst(strict))
 }
 
 #' @export
-hooks_rst <- local({
+hooks_rst = function(strict = FALSE) {
   hook.s = function(x, options) {
     one_string(c('\n\n::\n', indent_block(x), ''))
   }
@@ -40,8 +40,7 @@ hooks_rst <- local({
   }
   list(source = source, output = hook.s, warning = hook.s, message = hook.s,
        error = hook.s, plot = hook_plot_rst, inline = hook.i)
-
-})
+}
 
 # Insert a reStructuredText directive for sphinx
 #

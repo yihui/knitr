@@ -268,11 +268,11 @@ render_latex = function() {
   h = opts_knit$get('header')
   if (!nzchar(h['framed'])) set_header(framed = .header.framed)
   if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
-  knit_hooks$set(hooks_latex)
+  knit_hooks$set(hooks_latex())
 }
 
 #' @export
-hooks_latex = local({
+hooks_latex = function() {
   source = function(x, options) {
     x = hilight_source(x, 'latex', options)
     if (options$highlight) {
@@ -299,7 +299,7 @@ hooks_latex = local({
   list(source = source, output = output, warning = warning,
        message = message, error = error, plot = plot,
        inline = .inline.hook.tex, chunk = .chunk.hook.tex)
-})
+}
 
 #' @rdname output_hooks
 #' @export
@@ -308,11 +308,11 @@ render_sweave = function() {
   opts_knit$set(out.format = 'sweave')
   test_latex_pkg('Sweave', file.path(R.home('share'), 'texmf', 'tex', 'latex', 'Sweave.sty'))
   set_header(framed = '', highlight = '\\usepackage{Sweave}')
-  knit_hooks$set(hooks_sweave)
+  knit_hooks$set(hooks_sweave())
 }
 
 #' @export
-hooks_sweave = local({
+hooks_sweave = function() {
   # wrap source code in the Sinput environment, output in Soutput
   hook.i = function(x, options) {
     one_string(
@@ -330,7 +330,7 @@ hooks_sweave = local({
   list(source = hook.i, output = hook.s, warning = hook.s,
        message = hook.s, error = hook.s, plot = hook_plot_tex,
        inline = .inline.hook.tex, chunk = hook.c)
-})
+}
 
 #' @rdname output_hooks
 #' @export
