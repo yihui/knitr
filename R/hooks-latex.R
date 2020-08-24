@@ -335,13 +335,15 @@ hooks_sweave = function() {
 #' @rdname output_hooks
 #' @export
 render_listings = function() {
-  render_sweave()
-  opts_chunk$set(prompt = FALSE)
+  opts_chunk$set(highlight = FALSE, comment = NA, prompt = FALSE) # mimic Sweave settings
   opts_knit$set(out.format = 'listings')
   test_latex_pkg('Sweavel', system.file('misc', 'Sweavel.sty', package = 'knitr'))
   set_header(framed = '', highlight = '\\usepackage{Sweavel}')
-  invisible(NULL)
+  knit_hooks$set(hooks_listings())
 }
+
+#' @export
+hooks_listings = hooks_sweave
 
 # may add textile, and many other markup languages
 
