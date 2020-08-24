@@ -209,9 +209,16 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
 #' @rdname output_hooks
 #' @export
 render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '') {
+  set_html_dev()
+  opts_knit$set(out.format = 'markdown')
+  knit_hooks$set(hooks_jekyll(highlight = highlight, extra = extra))
+}
+
+#' @export
+hooks_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '') {
+  hook.m = hooks_markdown(TRUE)
   hi = match.arg(highlight)
-  render_markdown(TRUE)
-  if (hi == 'none') return()
+  if (hi == 'none') return(hook.m)
   switch(hi, pygments = {
     hook.r = function(x, options) {
       paste0(
@@ -233,8 +240,13 @@ render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = 
       '\n\n<pre><code>', escape_html(x), '</code></pre>\n\n'
     )
   })
-  knit_hooks$set(source = function(x, options) {
+  source = function(x, options) {
     x = one_string(hilight_source(x, 'markdown', options))
     hook.r(x, options)
-  }, output = hook.t, warning = hook.t, error = hook.t, message = hook.t)
+  }
+  merge_list(
+    hook.m,
+    list(source = source, output = hook.t, warning = hook.t,
+         message = hook.t, error = hook.t)
+  )
 }
