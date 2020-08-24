@@ -140,6 +140,11 @@ block_attr = function(attr, class = NULL, lang = NULL) {
 render_markdown = function(strict = FALSE, fence_char = '`') {
   set_html_dev()
   opts_knit$set(out.format = 'markdown')
+  knit_hooks$set(hooks_markdown(strict, fence_char))
+}
+
+#' @export
+hooks_markdown = function(strict = FALSE, fence_char = '`') {
   fence = paste(rep(fence_char, 3), collapse = '')
   # four spaces lead to <pre></pre>
   hook.t = function(x, options, attr = NULL, class = NULL) {
@@ -170,32 +175,30 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
     attrs = block_attr(options$attr.source, options$class.source, language)
     paste0('\n\n', fence, attrs, '\n', x, fence, '\n\n')
   }
-  hooks = list()
-  for (i in c('output', 'warning', 'error', 'message')) hooks[[i]] = hook.o(i)
-  knit_hooks$set(hooks)
-  knit_hooks$set(
-    source = function(x, options) {
-      x = hilight_source(x, 'markdown', options)
-      (if (strict) hook.t else hook.r)(one_string(c(x, '')), options)
-    },
-    inline = function(x) {
-      if (is_latex_output()) .inline.hook.tex(x) else {
-        .inline.hook(format_sci(x, if (length(pandoc_to()) == 1L) 'latex' else 'html'))
-      }
-    },
-    plot = hook_plot_md,
-    chunk = function(x, options) {
-      x = gsub(paste0('[\n]{2,}(', fence, '|    )'), '\n\n\\1', x)
-      x = gsub('[\n]+$', '', x)
-      x = gsub('^[\n]+', '\n', x)
-      if (isTRUE(options$collapse)) {
-        x = gsub(paste0('\n([', fence_char, ']{3,})\n+\\1(', tolower(options$engine), ')?\n'), "\n", x)
-      }
-      if (is.null(s <- options$indent)) return(x)
-      line_prompt(x, prompt = s, continue = s)
+  source = function(x, options) {
+    x = hilight_source(x, 'markdown', options)
+    (if (strict) hook.t else hook.r)(one_string(c(x, '')), options)
+  }
+  inline = function(x) {
+    if (is_latex_output()) .inline.hook.tex(x) else {
+      .inline.hook(format_sci(x, if (length(pandoc_to()) == 1L) 'latex' else 'html'))
     }
-  )
+  }
+  chunk = function(x, options) {
+    x = gsub(paste0('[\n]{2,}(', fence, '|    )'), '\n\n\\1', x)
+    x = gsub('[\n]+$', '', x)
+    x = gsub('^[\n]+', '\n', x)
+    if (isTRUE(options$collapse)) {
+      x = gsub(paste0('\n([', fence_char, ']{3,})\n+\\1(', tolower(options$engine), ')?\n'), "\n", x)
+    }
+    if (is.null(s <- options$indent)) return(x)
+    line_prompt(x, prompt = s, continue = s)
+  }
+  list(source = source, output = hook.o('output'), warning = hook.o('warning'),
+       error = hook.o('error'), message = hook.o('message'),
+       plot = hook_plot_md, inline = inline, chunk = chunk)
 }
+
 #' @param highlight Which code highlighting engine to use: if \code{pygments},
 #'   the Liquid syntax is used (default approach Jekyll); if \code{prettify},
 #'   the output is prepared for the JavaScript library \file{prettify.js}; if
