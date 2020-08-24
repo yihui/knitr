@@ -22,6 +22,11 @@ hook_plot_textile = function(x, options) {
 render_textile = function() {
   set_html_dev()
   opts_knit$set(out.format = 'textile')
+  knit_hooks$set(hooks_textile())
+}
+
+#' @export
+hooks_textile = function() {
   textile.hook = function(name) {
     force(name)
     function(x, options) {
@@ -32,11 +37,8 @@ render_textile = function() {
     }
   }
   hook.inline = function(x) .inline.hook(format_sci(x, 'html'))
-  z = list()
-  for (i in c('source', 'warning', 'message', 'error'))
-    z[[i]] = textile.hook(i)
-  knit_hooks$set(z)
-  knit_hooks$set(
-    inline = hook.inline, output = textile.hook('output'), plot = hook_plot_textile
-  )
+  list(source = textile.hook('source'), output = textile.hook('output'),
+       warning = textile.hook('warning'), message = textile.hook('message'),
+       error = textile.hook('error'), plot = hook_plot_textile,
+       inline = hook.inline)
 }
