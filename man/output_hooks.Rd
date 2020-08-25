@@ -93,7 +93,7 @@ functions return a list of the output hooks for the corresponding format.
 }
 \details{
 There are three variants of markdown documents: ordinary markdown
-(\code{render_markdown(strict = TRUE)}which calls \code{hooks_markdown(strict
+(\code{render_markdown(strict = TRUE)} which calls \code{hooks_markdown(strict
 = TRUE)}), extended markdown (e.g. GitHub Flavored Markdown and pandoc;
 \code{render_markdown(strict = FALSE)} which calls
 \code{hooks_markdown(strict = FALSE)}), and Jekyll (a blogging system on
@@ -118,6 +118,14 @@ expected.
 You can also use \code{\link{knit_hooks}} to set the format's hooks with the
 \code{hooks_*} functions; see references for more to further customize output
 hooks.
+}
+\examples{
+# modify the output hooks for a format
+knitr::render_markdown()
+
+# only set some of the hooks from a format
+knitr::knit_hooks$set(knitr::hooks_markdown()["source"])
+
 }
 \references{
 See output hooks in \url{https://yihui.org/knitr/hooks/}, and

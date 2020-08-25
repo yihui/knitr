@@ -238,7 +238,7 @@ hook_plot_tex = function(x, options) {
 #' functions return a list of the output hooks for the corresponding format.
 #'
 #' There are three variants of markdown documents: ordinary markdown
-#' (\code{render_markdown(strict = TRUE)}which calls \code{hooks_markdown(strict
+#' (\code{render_markdown(strict = TRUE)} which calls \code{hooks_markdown(strict
 #' = TRUE)}), extended markdown (e.g. GitHub Flavored Markdown and pandoc;
 #' \code{render_markdown(strict = FALSE)} which calls
 #' \code{hooks_markdown(strict = FALSE)}), and Jekyll (a blogging system on
@@ -280,6 +280,13 @@ hook_plot_tex = function(x, options) {
 #'   Jekyll and Liquid:
 #'   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions};
 #'   prettify.js: \url{http://code.google.com/p/google-code-prettify/}
+#' @examples
+#' # modify the output hooks for a format
+#' knitr::render_markdown()
+#'
+#' # only set some of the hooks from a format
+#' knitr::knit_hooks$set(knitr::hooks_markdown()["source"])
+#'
 render_latex = function() {
   opts_chunk$set(out.width = '\\maxwidth', dev = 'pdf')
   opts_knit$set(out.format = 'latex')
