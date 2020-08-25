@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- Added `knitr::hooks_*()` functions to get a list of output hooks for a specific format. This complement `knitr::render_*()` functions that sets the output hooks using these. For example, use `knitr::render_markdown(TRUE)` to use markdown strict output hooks or `knitr::hooks_markdown(TRUE)` to get a list of output hooks. You can then use `knitr::knit_hooks$set(knitr::hooks_markdown(TRUE)['source'])` to only use the _source_ ouput hooks. More on output hooks in https://yihui.org/knitr/hooks/#output-hooks and https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html (#1889)
+
 - Added an argument `lib.loc` to `knitr::write_bib()`.
 
 ## BUG FIXES
