@@ -343,8 +343,7 @@ hooks_sweave = function() {
   # wrap source code in the Sinput environment, output in Soutput
   hook.i = function(x, options) {
     one_string(
-      c('\\begin{Sinput}', hilight_source(x, 'sweave', options),
-        '\\end{Sinput}', ''))
+      c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''))
   }
   hook.s = function(x, options) {
     if (output_asis(x, options)) return(x)
