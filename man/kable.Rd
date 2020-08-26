@@ -14,6 +14,7 @@ kable(
   align,
   caption = NULL,
   label = NULL,
+  label_prefix = "tab:",
   format.args = list(),
   escape = TRUE,
   ...
@@ -55,6 +56,8 @@ expanded to a vector of individual letters, e.g. \code{'clc'} becomes
 
 \item{label}{The table reference label. By default, the label is obtained
 from \code{knitr::\link{opts_current}$get('label')}.}
+
+\item{label_prefix}{The prefix for the table reference label. By default, 'tab:'}
 
 \item{format.args}{A list of arguments to be passed to \code{\link{format}()}
 to format table values, e.g. \code{list(big.mark = ',')}.}
