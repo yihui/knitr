@@ -336,25 +336,27 @@ render_sweave = function() {
   knit_hooks$set(hooks_sweave())
 }
 
+#' @param envirs Names of LaTeX environments for code input, output, and chunk.
 #' @rdname output_hooks
 #' @export
-hooks_sweave = function() {
+hooks_sweave = function(envirs = c('Sinput', 'Soutput', 'Schunk')) {
   # wrap source code in the Sinput environment, output in Soutput
-  hook.i = function(x, options) {
-    one_string(
-      c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''))
-  }
+  hook.i = function(x, options) one_string(c(
+    sprintf('\\begin{%s}', envirs[1]), hilight_source(x, 'sweave', options),
+    sprintf('\\end{%s}', envirs[1]), ''
+  ))
   hook.s = function(x, options) {
     if (output_asis(x, options)) return(x)
-    paste0('\\begin{Soutput}\n', x, '\\end{Soutput}\n')
+    sprintf('\\begin{%s}\n%s\\end{%s}\n', envirs[2], x, envirs[2])
   }
   hook.c = function(x, options) {
     if (output_asis(x, options)) return(x)
-    paste0('\\begin{Schunk}\n', x, '\\end{Schunk}')
+    sprintf('\\begin{%s}\n%s\\end{%s}', envirs[3], x, envirs[3])
   }
-  list(source = hook.i, output = hook.s, warning = hook.s,
-       message = hook.s, error = hook.s, plot = hook_plot_tex,
-       inline = .inline.hook.tex, chunk = hook.c)
+  list(
+    source = hook.i, output = hook.s, warning = hook.s, message = hook.s,
+    error = hook.s, plot = hook_plot_tex, inline = .inline.hook.tex, chunk = hook.c
+  )
 }
 
 #' @rdname output_hooks
