@@ -35,12 +35,14 @@ hooks_rst = function(strict = FALSE) {
     make_directive('sourcecode', tolower(options$engine), '', content = x)
   }
   hook.i = function(x) .inline.hook(format_sci(x, 'rst'))
-  source = function(x, options) {
-    x = one_string(c(hilight_source(x, 'rst', options), ''))
-    (if (strict) hook.s else hook.t)(x, options)
-  }
-  list(source = source, output = hook.s, warning = hook.s, message = hook.s,
-       error = hook.s, plot = hook_plot_rst, inline = hook.i)
+  list(
+    source = function(x, options) {
+      x = one_string(c(hilight_source(x, 'rst', options), ''))
+      (if (strict) hook.s else hook.t)(x, options)
+    },
+    warning = hook.s, error = hook.s, message = hook.s,
+    output = hook.s, inline = hook.i, plot = hook_plot_rst
+  )
 }
 
 # Insert a reStructuredText directive for sphinx

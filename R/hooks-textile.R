@@ -28,7 +28,7 @@ render_textile = function() {
 #' @rdname output_hooks
 #' @export
 hooks_textile = function() {
-  textile.hook = function(name) {
+  hook = function(name) {
     force(name)
     function(x, options) {
       if (name == 'source') x = c(hilight_source(x, 'textile', options), '')
@@ -37,9 +37,9 @@ hooks_textile = function() {
               tolower(options$engine), name, options$label, x)
     }
   }
-  hook.inline = function(x) .inline.hook(format_sci(x, 'html'))
-  list(source = textile.hook('source'), output = textile.hook('output'),
-       warning = textile.hook('warning'), message = textile.hook('message'),
-       error = textile.hook('error'), plot = hook_plot_textile,
-       inline = hook.inline)
+  list(
+    source = hook('source'), output = hook('output'), warning = hook('warning'),
+    message = hook('message'), error = hook('error'), plot = hook_plot_textile,
+    inline = function(x) .inline.hook(format_sci(x, 'html'))
+  )
 }

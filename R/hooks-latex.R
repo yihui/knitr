@@ -299,32 +299,32 @@ render_latex = function() {
 #' @rdname output_hooks
 #' @export
 hooks_latex = function() {
-  source = function(x, options) {
-    x = hilight_source(x, 'latex', options)
-    if (options$highlight) {
-      if (options$engine == 'R' || x[1] != '\\noindent') {
-        one_string(c('\\begin{alltt}', x, '\\end{alltt}', ''))
-      } else {
-        if ((n <- length(x)) > 4) x[n - 2] = sub('\\\\\\\\$', '', x[n - 2])
-        one_string(c(x, ''))
-      }
-    } else .verb.hook(x)
-  }
-  output = function(x, options) {
-    if (output_asis(x, options)) {
-      paste0('\\end{kframe}', x, '\\begin{kframe}')
-    } else .verb.hook(x)
-  }
-  warning = .color.block('\\color{warningcolor}{', '}')
-  message = .color.block('\\itshape\\color{messagecolor}{', '}')
-  error = .color.block('\\bfseries\\color{errorcolor}{', '}')
-  plot = function(x, options) {
-    # escape plot environments from kframe
-    paste0('\\end{kframe}', hook_plot_tex(x, options), '\n\\begin{kframe}')
-  }
-  list(source = source, output = output, warning = warning,
-       message = message, error = error, plot = plot,
-       inline = .inline.hook.tex, chunk = .chunk.hook.tex)
+  list(
+    source = function(x, options) {
+      x = hilight_source(x, 'latex', options)
+      if (options$highlight) {
+        if (options$engine == 'R' || x[1] != '\\noindent') {
+          one_string(c('\\begin{alltt}', x, '\\end{alltt}', ''))
+        } else {
+          if ((n <- length(x)) > 4) x[n - 2] = sub('\\\\\\\\$', '', x[n - 2])
+          one_string(c(x, ''))
+        }
+      } else .verb.hook(x)
+    },
+    output = function(x, options) {
+      if (output_asis(x, options)) {
+        paste0('\\end{kframe}', x, '\\begin{kframe}')
+      } else .verb.hook(x)
+    },
+    warning = .color.block('\\color{warningcolor}{', '}'),
+    message = .color.block('\\itshape\\color{messagecolor}{', '}'),
+    error = .color.block('\\bfseries\\color{errorcolor}{', '}'),
+    inline = .inline.hook.tex, chunk = .chunk.hook.tex,
+    plot = function(x, options) {
+      # escape plot environments from kframe
+      paste0('\\end{kframe}', hook_plot_tex(x, options), '\n\\begin{kframe}')
+    }
+  )
 }
 
 #' @rdname output_hooks

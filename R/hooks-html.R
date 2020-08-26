@@ -242,7 +242,7 @@ render_html = function() {
 #' @export
 hooks_html = function() {
   # use div with different classes
-  html.hook = function(name) {
+  hook = function(name) {
     force(name)
     function(x, options) {
       x = if (name == 'source') {
@@ -252,12 +252,12 @@ hooks_html = function() {
       sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>\n', name, tolower(options$engine), x)
     }
   }
-  inline = function(x) {
-    sprintf(if (inherits(x, 'AsIs')) '%s' else '<code class="knitr inline">%s</code>',
-            .inline.hook(format_sci(x, 'html')))
-  }
-  list(source = html.hook('source'), output = html.hook('output'),
-       warning = html.hook('warning'), message = html.hook('message'),
-       error = html.hook('error'), plot = hook_plot_html,
-       inline = inline, chunk = .chunk.hook.html)
+  list(
+    source = hook('source'), output = hook('output'), warning = hook('warning'),
+    message = hook('message'), error = hook('error'), plot = hook_plot_html,
+    chunk = .chunk.hook.html, inline = function(x) sprintf(
+      if (inherits(x, 'AsIs')) '%s' else '<code class="knitr inline">%s</code>',
+      .inline.hook(format_sci(x, 'html'))
+    )
+  )
 }

@@ -176,28 +176,30 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
     attrs = block_attr(options$attr.source, options$class.source, language)
     paste0('\n\n', fence, attrs, '\n', x, fence, '\n\n')
   }
-  source = function(x, options) {
-    x = hilight_source(x, 'markdown', options)
-    (if (strict) hook.t else hook.r)(one_string(c(x, '')), options)
-  }
-  inline = function(x) {
-    if (is_latex_output()) .inline.hook.tex(x) else {
-      .inline.hook(format_sci(x, if (length(pandoc_to()) == 1L) 'latex' else 'html'))
-    }
-  }
-  chunk = function(x, options) {
-    x = gsub(paste0('[\n]{2,}(', fence, '|    )'), '\n\n\\1', x)
-    x = gsub('[\n]+$', '', x)
-    x = gsub('^[\n]+', '\n', x)
-    if (isTRUE(options$collapse)) {
-      x = gsub(paste0('\n([', fence_char, ']{3,})\n+\\1(', tolower(options$engine), ')?\n'), "\n", x)
-    }
-    if (is.null(s <- options$indent)) return(x)
-    line_prompt(x, prompt = s, continue = s)
-  }
-  list(source = source, output = hook.o('output'), warning = hook.o('warning'),
-       error = hook.o('error'), message = hook.o('message'),
-       plot = hook_plot_md, inline = inline, chunk = chunk)
+  list(
+    source = function(x, options) {
+      x = hilight_source(x, 'markdown', options)
+      (if (strict) hook.t else hook.r)(one_string(c(x, '')), options)
+    },
+    inline = function(x) {
+      if (is_latex_output()) .inline.hook.tex(x) else {
+        .inline.hook(format_sci(x, if (length(pandoc_to()) == 1L) 'latex' else 'html'))
+      }
+    },
+    plot = hook_plot_md,
+    chunk = function(x, options) {
+      x = gsub(paste0('[\n]{2,}(', fence, '|    )'), '\n\n\\1', x)
+      x = gsub('[\n]+$', '', x)
+      x = gsub('^[\n]+', '\n', x)
+      if (isTRUE(options$collapse)) {
+        x = gsub(paste0('\n([', fence_char, ']{3,})\n+\\1(', tolower(options$engine), ')?\n'), "\n", x)
+      }
+      if (is.null(s <- options$indent)) return(x)
+      line_prompt(x, prompt = s, continue = s)
+    },
+    output = hook.o('output'), warning = hook.o('warning'),
+    error = hook.o('error'), message = hook.o('message')
+  )
 }
 
 #' @param highlight Which code highlighting engine to use: if \code{pygments},
@@ -246,9 +248,7 @@ hooks_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '
     x = one_string(hilight_source(x, 'markdown', options))
     hook.r(x, options)
   }
-  merge_list(
-    hook.m,
-    list(source = source, output = hook.t, warning = hook.t,
-         message = hook.t, error = hook.t)
-  )
+  merge_list(hook.m, list(
+    source = source, output = hook.t, warning = hook.t, message = hook.t, error = hook.t
+  ))
 }
