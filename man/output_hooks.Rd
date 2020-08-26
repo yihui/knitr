@@ -36,11 +36,11 @@ hooks_latex()
 
 render_sweave()
 
-hooks_sweave()
+hooks_sweave(envirs = c("Sinput", "Soutput", "Schunk"))
 
 render_listings()
 
-hooks_listings()
+hooks_listings(envirs = c("Sinput", "Soutput", "Schunk"))
 
 render_markdown(strict = FALSE, fence_char = "`")
 
@@ -59,6 +59,8 @@ render_textile()
 hooks_textile()
 }
 \arguments{
+\item{envirs}{Names of LaTeX environments for code input, output, and chunk.}
+
 \item{strict}{Boolean; whether to use strict markdown or reST syntax. For markdown, if
 \code{TRUE}, code blocks will be indented by 4 spaces, otherwise they are
 put in fences made by three backticks. For reST, if \code{TRUE}, code is
@@ -79,53 +81,53 @@ indented by 4 spaces).}
 can be \code{'linenos'}; for \code{prettify}, it can be \code{'linenums'}.}
 }
 \value{
-\itemize{
-  \item \code{NULL} for \code{render_*} functions; corresponding hooks are
-  set as a side effect
-  \item A list of output hooks for \code{hooks_*} functions; hooks are not
-  set in that case.
-}
+\code{NULL} for \code{render_*} functions; corresponding hooks are
+  set as a side effect. A list of output hooks for \code{hooks_*()}
+  functions.
 }
 \description{
-The \code{render_*} functions set built-in output hooks for LaTeX, HTML,
-Markdown, reStructuredText, AsciiDoc and Textile. The \code{hooks_*}
+The \code{render_*()} functions set built-in output hooks for LaTeX, HTML,
+Markdown, reStructuredText, AsciiDoc, and Textile. The \code{hooks_*()}
 functions return a list of the output hooks for the corresponding format.
 }
 \details{
-There are three variants of markdown documents: ordinary markdown
-(\code{render_markdown(strict = TRUE)} which calls \code{hooks_markdown(strict
-= TRUE)}), extended markdown (e.g. GitHub Flavored Markdown and pandoc;
-\code{render_markdown(strict = FALSE)} which calls
-\code{hooks_markdown(strict = FALSE)}), and Jekyll (a blogging system on
-GitHub; \code{render_jekyll()} which calls \code{hooks_jekyll()}).\cr
-For LaTeX output, there are three variants as well: \pkg{knitr}'s default
-style (\code{render_latex()} which calls \code{hooks_latex()}; use the LaTeX
-\pkg{framed} package), Sweave style (\code{render_sweave()} which calls
-\code{hooks_sweave()}; use \file{Sweave.sty}) and listings style
-(\code{render_listings()} which calls \code{hooks_listings()}; use LaTeX
-\pkg{listings} package).\cr
+There are three variants of Markdown documents: ordinary Markdown
+(\code{render_markdown(strict = TRUE)}, which calls
+\code{hooks_markdown(strict = TRUE)}), extended Markdown (e.g., GitHub
+Flavored Markdown and Pandoc; \code{render_markdown(strict = FALSE)}, which
+calls \code{hooks_markdown(strict = FALSE)}), and Jekyll (a blogging system
+on GitHub; \code{render_jekyll()}, which calls \code{hooks_jekyll()}).
+
+For LaTeX output, there are three variants: \pkg{knitr}'s default style
+(\code{render_latex()}, which calls \code{hooks_latex()} and uses the LaTeX
+\pkg{framed} package), Sweave style (\code{render_sweave()}, which calls
+\code{hooks_sweave()} and uses \file{Sweave.sty}), and listings style
+(\code{render_listings()}, which calls \code{hooks_listings()} and uses LaTeX
+\pkg{listings} package).
+
 Default HTML output hooks are set by \code{render_html()} (which calls
 \code{hooks_html()}); \code{render_rst()} (which calls \code{hooks_rst()}) is
 for reStructuredText; \code{render_textile()} (which calls
-\code{hooks_textile()}) is for Textile and \code{render_asciidoc()} (which
+\code{hooks_textile()}) is for Textile, and \code{render_asciidoc()} (which
 calls \code{hooks_asciidoc()}) is AsciiDoc.
 
-The \code{render_*} functions can be used before \code{knit()} or in the first chunk of the
-input document (ideally this chunk has options \code{include = FALSE} and
-\code{cache = FALSE}) so that all the following chunks will be formatted as
-expected.
+The \code{render_*()} functions can be used before \code{knit()} or in the
+first chunk of the input document (ideally this chunk has options
+\code{include = FALSE} and \code{cache = FALSE}) so that all the following
+chunks will be formatted as expected.
 
 You can also use \code{\link{knit_hooks}} to set the format's hooks with the
-\code{hooks_*} functions; see references for more to further customize output
-hooks.
+\code{hooks_*()} functions; see references for more info on further
+customizing output hooks.
 }
 \examples{
-# modify the output hooks for a format
-knitr::render_markdown()
+# below is pretty much what knitr::render_markdown() does:
+knitr::knit_hooks$set(knitr::hooks_markdown())
 
-# only set some of the hooks from a format
+# you can retrieve a subset of the hooks and set them, e.g.,
 knitr::knit_hooks$set(knitr::hooks_markdown()["source"])
 
+knitr::knit_hooks$restore()
 }
 \references{
 See output hooks in \url{https://yihui.org/knitr/hooks/}, and
@@ -133,6 +135,6 @@ See output hooks in \url{https://yihui.org/knitr/hooks/}, and
   \url{https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html}
 
   Jekyll and Liquid:
-  \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions};
-  prettify.js: \url{http://code.google.com/p/google-code-prettify/}
+  \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions}; prettify.js:
+  \url{http://code.google.com/p/google-code-prettify/}
 }
