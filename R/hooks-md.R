@@ -212,8 +212,7 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
 #' @rdname output_hooks
 #' @export
 render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '') {
-  set_html_dev()
-  opts_knit$set(out.format = 'markdown')
+  render_markdown(TRUE)
   knit_hooks$set(hooks_jekyll(highlight = highlight, extra = extra))
 }
 
