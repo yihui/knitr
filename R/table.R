@@ -38,6 +38,7 @@
 #' @param caption The table caption.
 #' @param label The table reference label. By default, the label is obtained
 #'   from \code{knitr::\link{opts_current}$get('label')}.
+#' @param label_prefix The prefix for the table reference label. By default, 'tab:'
 #' @param format.args A list of arguments to be passed to \code{\link{format}()}
 #'   to format table values, e.g. \code{list(big.mark = ',')}.
 #' @param escape Boolean; whether to escape special characters when producing
@@ -96,8 +97,8 @@
 #' kables(list(kable(d1, align = 'l'), kable(d2)), caption = 'A tale of two tables')
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
-  align, caption = NULL, label = NULL, format.args = list(), escape = TRUE,
-  label_prefix = 'tab:', ...
+  align, caption = NULL, label = NULL, label_prefix = 'tab:',
+  format.args = list(), escape = TRUE, ...
 ) {
 
   format = kable_format(format)
