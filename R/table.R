@@ -96,7 +96,8 @@
 #' kables(list(kable(d1, align = 'l'), kable(d2)), caption = 'A tale of two tables')
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
-  align, caption = NULL, label = NULL, format.args = list(), escape = TRUE, ...
+  align, caption = NULL, label = NULL, format.args = list(), escape = TRUE,
+  label_prefix = 'tab:', ...
 ) {
 
   format = kable_format(format)
@@ -114,7 +115,7 @@ kable = function(
     return(kables(res, format, caption, label))
   }
 
-  caption = kable_caption(label, caption, format)
+  caption = kable_caption(label, caption, format, label_prefix)
 
   if (!is.matrix(x)) x = as.data.frame(x)
   if (identical(col.names, NA)) col.names = colnames(x)
@@ -156,11 +157,11 @@ kable = function(
   structure(res, format = format, class = 'knitr_kable')
 }
 
-kable_caption = function(label, caption, format) {
+kable_caption = function(label, caption, format, prefix = 'tab:') {
   # create a label for bookdown if applicable
   if (is.null(label)) label = opts_current$get('label')
   if (!is.null(caption) && !is.na(caption)) caption = paste0(
-    create_label('tab:', label, latex = (format == 'latex')), caption
+    create_label(prefix, label, latex = (format == 'latex')), caption
   )
   caption
 }
