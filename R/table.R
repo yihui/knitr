@@ -38,7 +38,6 @@
 #' @param caption The table caption.
 #' @param label The table reference label. By default, the label is obtained
 #'   from \code{knitr::\link{opts_current}$get('label')}.
-#' @param label_prefix The prefix for the table reference label. By default, 'tab:'
 #' @param format.args A list of arguments to be passed to \code{\link{format}()}
 #'   to format table values, e.g. \code{list(big.mark = ',')}.
 #' @param escape Boolean; whether to escape special characters when producing
@@ -97,8 +96,7 @@
 #' kables(list(kable(d1, align = 'l'), kable(d2)), caption = 'A tale of two tables')
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
-  align, caption = NULL, label = NULL, label_prefix = 'tab:',
-  format.args = list(), escape = TRUE, ...
+  align, caption = NULL, label = NULL, format.args = list(), escape = TRUE, ...
 ) {
 
   format = kable_format(format)
@@ -116,7 +114,7 @@ kable = function(
     return(kables(res, format, caption, label))
   }
 
-  caption = kable_caption(label, caption, format, label_prefix)
+  caption = kable_caption(label, caption, format)
 
   if (!is.matrix(x)) x = as.data.frame(x)
   if (identical(col.names, NA)) col.names = colnames(x)
@@ -158,11 +156,12 @@ kable = function(
   structure(res, format = format, class = 'knitr_kable')
 }
 
-kable_caption = function(label, caption, format, prefix = 'tab:') {
+kable_caption = function(label, caption, format) {
   # create a label for bookdown if applicable
   if (is.null(label)) label = opts_current$get('label')
   if (!is.null(caption) && !is.na(caption)) caption = paste0(
-    create_label(prefix, label, latex = (format == 'latex')), caption
+    create_label(opts_knit$get("label_prefix")[["table"]],
+                 label, latex = (format == 'latex')), caption
   )
   caption
 }
