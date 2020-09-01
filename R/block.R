@@ -246,6 +246,7 @@ block_exec = function(options) {
     options$fig.num = if (length(res)) sum(sapply(res, function(x) {
       if (evaluate::is.recordedplot(x)) return(1)
       if (inherits(x, 'knit_image_paths')) return(length(x))
+      if (inherits(x, 'knit_other_plot')) return(1)
       0
     })) else 0L
 
@@ -367,7 +368,9 @@ find_recordedplot = function(x) {
 }
 
 is_plot_output = function(x) {
-  evaluate::is.recordedplot(x) || inherits(x, 'knit_image_paths')
+  evaluate::is.recordedplot(x) ||
+    inherits(x, 'knit_image_paths') ||
+    inherits(x, 'knit_other_plot')
 }
 
 # move plots before source code

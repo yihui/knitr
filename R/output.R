@@ -425,9 +425,15 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 
 #' Wrap evaluated results for output
 #'
+#' This function is mainly for internal use:  it is called
+#' on each part of the output of the code chunk
+#' (code, messages, output, plots, etc.) after all
+#' statements in the code chunk have been evaluated,
+#' and allows final processing.
+#'
 #' @param x output from \code{evaluate::\link{evaluate}()}
 #' @param options List of options used to control output
-#' @noRd
+#' @export
 wrap = function(x, options = list(), ...) {
   UseMethod('wrap', x)
 }
