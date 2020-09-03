@@ -211,7 +211,7 @@ merge_low_plot = function(x, idx = sapply(x, evaluate::is.recordedplot)) {
 
 #' Compare two recorded plots
 #'
-#' @param p1, p2 Plot results
+#' @param p1,p2 Plot results
 #'
 #' @return Logical value indicating whether `p2` is a low-level update of `p1`.
 #' @export

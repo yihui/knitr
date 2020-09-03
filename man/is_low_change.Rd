@@ -7,7 +7,7 @@
 is_low_change(p1, p2)
 }
 \arguments{
-\item{p1, }{p2 Plot results}
+\item{p1, p2}{Plot results}
 }
 \value{
 Logical value indicating whether `p2` is a low-level update of `p1`.
