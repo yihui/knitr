@@ -10,6 +10,8 @@ wrap(x, options = list(), ...)
 \item{x}{output from \code{evaluate::\link{evaluate}()}}
 
 \item{options}{List of options used to control output}
+
+\item{...}{Other arguments to pass to methods}
 }
 \description{
 This function is mainly for internal use:  it is called

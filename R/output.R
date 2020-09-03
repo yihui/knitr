@@ -433,6 +433,7 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 #'
 #' @param x output from \code{evaluate::\link{evaluate}()}
 #' @param options List of options used to control output
+#' @param ... Other arguments to pass to methods
 #' @export
 wrap = function(x, options = list(), ...) {
   UseMethod('wrap', x)
