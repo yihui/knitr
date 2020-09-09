@@ -31,8 +31,8 @@ provides a few useful hooks, which can also serve as examples of how to
 define chunk hooks in \pkg{knitr}.
 }
 \details{
-The function \code{hook_pdfcrop()} calls \code{\link{pdf_crop}()} to crop the
-white margins of PDF plots.
+The function \code{hook_pdfcrop()} calls \code{\link{plot_crop}()} to crop
+the white margins of PDF plots.
 
 The function \code{hook_optipng()} calls the program \command{optipng} to
 optimize PNG images. Note the chunk option \code{optipng} can be used to
