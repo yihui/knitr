@@ -5,15 +5,8 @@
 #' provides a few useful hooks, which can also serve as examples of how to
 #' define chunk hooks in \pkg{knitr}.
 #'
-#' The function \code{hook_pdfcrop()} can use the program \command{pdfcrop} to
-#' crop the extra white margin when the plot format is PDF to make better use of
-#' the space in the output document, otherwise we often have to struggle with
-#' \code{graphics::\link{par}()} to set appropriate margins. Note
-#' \command{pdfcrop} often comes with a LaTeX distribution such as MiKTeX or
-#' TeXLive, and you may not need to install it separately (use
-#' \code{Sys.which('pdfcrop')} to check it; if it not empty, you are able to use
-#' it). Similarly, when the plot format is not PDF (e.g. PNG), the \pkg{magick}
-#' package is used to crop the plot.
+#' The function \code{hook_pdfcrop()} calls \code{\link{pdf_crop}()} to crop the
+#' white margins of PDF plots.
 #'
 #' The function \code{hook_optipng()} calls the program \command{optipng} to
 #' optimize PNG images. Note the chunk option \code{optipng} can be used to

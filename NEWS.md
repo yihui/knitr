@@ -18,6 +18,8 @@
 
 - `knitr::write_bib()` uses the `URL` in the package `DESCRIPTION` if it is provided, instead of the canonical CRAN URL for the package.
 
+- `hook_pdfcrop()` and `plot_crop()` will work only when both programs `pdfcrop` and `ghostscript` have been installed. Previously only `pdfcrop` was checked (thanks, @dalupus, #954).
+
 # CHANGES IN knitr VERSION 1.29
 
 ## NEW FEATURES
