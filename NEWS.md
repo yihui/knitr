@@ -10,6 +10,8 @@
 
 - The option `fig_caption = FALSE` for `rmarkdown::html_document()` was unable to suppress the figure captions in some cases.
 
+- The internal function `fix_options()` should be called after option hooks are executed (thanks, @atusy, #1876 and #1877).
+
 - When the option `options(OutDec = )` is set to a value other than `"."`, percentages in the chunk options `out.width` and `out.height` do not work (thanks, @omgitsmoe, #1887).
 
 ## MINOR CHANGES
