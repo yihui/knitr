@@ -8,6 +8,8 @@
 
 - The option `fig_caption = FALSE` for `rmarkdown::html_document()` was unable to suppress the figure captions in some cases.
 
+- The internal function `fix_options()` should be called after option hooks are executed (thanks, @atusy, #1876 and #1877).
+
 ## MINOR CHANGES
 
 - `knitr::write_bib()` removes pairs of single quotes in the titles of citation entries now.
