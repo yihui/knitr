@@ -359,7 +359,10 @@ latex_percent_size = function(x, which = c('width', 'height')) {
   xi = as.numeric(sub('%$', '', x[i]))
   if (any(is.na(xi))) return(x)
   which = match.arg(which)
-  x[i] = paste0(xi / 100, if (which == 'width') '\\linewidth' else '\\textheight')
+  x[i] = paste0(
+    formatC(xi / 100, decimal.mark = '.'),
+    if (which == 'width') '\\linewidth' else '\\textheight'
+  )
   x
 }
 
@@ -712,6 +715,8 @@ kpsewhich = function() {
 has_utility = function(name, package = name) {
   name2 = paste('util', name, sep = '_')  # e.g. util_pdfcrop
   if (is.logical(yes <- opts_knit$get(name2))) return(yes)
+  # a special case: use tools::find_gs_cmd() to find ghostscript
+  if (name == 'ghostscript') name = tools::find_gs_cmd()
   yes = nzchar(Sys.which(name))
   if (!yes) warning(package, ' not installed or not in PATH')
   opts_knit$set(setNames(list(yes), name2))

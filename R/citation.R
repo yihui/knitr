@@ -138,10 +138,12 @@ write_bib = function(
 #' @include utils.R
 
 # hack non-standard author fields
-.tweak.bib = local(if (Sys.info()[['sysname']] == 'Darwin') {
+.tweak.bib = local({
   x = read.csv(inst_dir('misc/tweak_bib.csv'), stringsAsFactors = FALSE)
-  x = x[order(xtfrm(x$package)), , drop = FALSE]  # reorder entries by package names
-  try_silent(write.csv(x, inst_dir('misc/tweak_bib.csv'), row.names = FALSE))
+  if (Sys.getlocale('LC_COLLATE') == 'en_US.UTF-8') {
+    x = x[order(xtfrm(x$package)), , drop = FALSE]  # reorder entries by package names
+    try_silent(write.csv(x, inst_dir('misc/tweak_bib.csv'), row.names = FALSE))
+  }
   setNames(
     lapply(x$author, function(a) c(author = sprintf('  author = {%s},', a))),
     x$package
