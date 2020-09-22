@@ -100,8 +100,12 @@ register_vignette_engines = function(pkg) {
       vweave(...)
     }
   } else {
-    warning('The vignette engine knitr::rmarkdown is not available, ',
-            'because the rmarkdown package is not installed. Please install it.')
+    # TODO: no longer allow fallback to R Markdown v1
+    (if (is_CRAN_incoming()) stop2 else warning)(
+      'The vignette engine knitr::rmarkdown is not available because the rmarkdown ',
+      'package is not available. Did you forget to add it to Suggests in DESCRIPTION? ',
+      'Please see https://github.com/yihui/knitr/issues/1864 for more information.'
+    )
     vweave(...)
   }, '[.][Rr](md|markdown)$')
   # vignette engines that disable tangle
