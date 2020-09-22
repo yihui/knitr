@@ -136,5 +136,5 @@ See output hooks in \url{https://yihui.org/knitr/hooks/}, and
 
   Jekyll and Liquid:
   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions}; prettify.js:
-  \url{http://code.google.com/p/google-code-prettify/}
+  \url{https://code.google.com/archive/p/google-code-prettify}
 }

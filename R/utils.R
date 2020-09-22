@@ -1007,7 +1007,7 @@ make_unique = function(x) {
 #' @return The data URI as a character string.
 #' @author Wush Wu and Yihui Xie
 #' @export
-#' @references \url{http://en.wikipedia.org/wiki/Data_URI_scheme}
+#' @references \url{https://en.wikipedia.org/wiki/Data_URI_scheme}
 #' @examples uri = image_uri(file.path(R.home('doc'), 'html', 'logo.jpg'))
 #' if (interactive()) {cat(sprintf('<img src="%s" />', uri), file = 'logo.html')
 #' browseURL('logo.html') # you can check its HTML source

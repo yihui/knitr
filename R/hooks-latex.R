@@ -277,7 +277,7 @@ hook_plot_tex = function(x, options) {
 #'
 #'   Jekyll and Liquid:
 #'   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions}; prettify.js:
-#'   \url{http://code.google.com/p/google-code-prettify/}
+#'   \url{https://code.google.com/archive/p/google-code-prettify}
 #' @examples
 #' # below is pretty much what knitr::render_markdown() does:
 #' knitr::knit_hooks$set(knitr::hooks_markdown())
