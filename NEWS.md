@@ -472,7 +472,7 @@
 
 - added a helper function `all_rcpp_labels()`, which is simply `all_labels(engine == 'Rcpp')` and can be used to extract all chunk labels of Rcpp chunks
 
-- added a new engine named `sql` that uses the **DBI** package to execute SQL queries, and optionally assign the result to a variable in the **knitr** session; see http://rmarkdown.rstudio.com/authoring_knitr_engines.html for details (#1241)
+- added a new engine named `sql` that uses the **DBI** package to execute SQL queries, and optionally assign the result to a variable in the **knitr** session; see https://rmarkdown.rstudio.com/authoring_knitr_engines.html for details (#1241)
 
 - `fig.keep` now accepts numeric values to index low-level plots to keep (#1265)
 
@@ -881,7 +881,7 @@
 
 - for Markdown tables, `kable()` gained a new argument `padding` to specify the inner padding of table cells using spaces (thanks, @gavril0, #699)
 
-- added a new vignette engine called `rmarkdown`, which uses `rmarkdown::render()` to create a package vignette from an R Markdown document; see http://rmarkdown.rstudio.com for more information about the **rmarkdown** package, and the vignette `knit_print.Rmd` in **knitr** for an example (basically you specify `\VignetteEngine{knitr::rmarkdown}` in your vignette)
+- added a new vignette engine called `rmarkdown`, which uses `rmarkdown::render()` to create a package vignette from an R Markdown document; see https://rmarkdown.rstudio.com for more information about the **rmarkdown** package, and the vignette `knit_print.Rmd` in **knitr** for an example (basically you specify `\VignetteEngine{knitr::rmarkdown}` in your vignette)
 
 - indentation is preserved when using chunk references `<<>>`, i.e., if `<<>>` is indented, the spaces before it will be applied to the code that it refers to (thanks, Terry Therneau)
 

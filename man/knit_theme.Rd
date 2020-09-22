@@ -25,7 +25,7 @@ returned by the \code{get()} method. See examples below.
 The syntax highlighting here only applies to \file{.Rnw} (LaTeX) and
   \file{.Rhtml} (HTML) documents, and it does not work for other types of
   documents, such as \file{.Rmd} (R Markdown, which has its own syntax
-  highlighting themes; see \url{http://rmarkdown.rstudio.com}).
+  highlighting themes; see \url{https://rmarkdown.rstudio.com}).
 }
 \examples{
 opts_knit$set(out.format = "latex")
