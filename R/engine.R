@@ -575,7 +575,7 @@ eng_sql = function(options) {
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
 
-  if (is_sql_update_query(query)) {
+  if (options$sql.is_update_query || is_sql_update_query(query)) {
     DBI::dbExecute(conn, query)
     data = NULL
   } else if (is.null(varname) && max.print > 0) {
