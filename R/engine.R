@@ -492,7 +492,36 @@ is_sql_update_query = function(query) {
   query = gsub('^\\s*--.*\n', '', query)
   # remove multi-line comments
   if (grepl('^\\s*\\/\\*.*', query)) query = gsub('.*\\*\\/', '', query)
-  grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE|DROP).*', query, ignore.case = TRUE)
+  sql_update_keywords <- c(
+    # DDL
+    "CREATE",
+    "ALTER",
+    "DROP",
+    "GRANT",
+    "DENY",
+    "REVOKE",
+    "ANALYZE",
+    "AUDIT",
+    "COMMENT",
+    "RENAME",
+    "TRUNCATE",
+    # DML
+    "INSERT",
+    "UPDATE",
+    "DELETE",
+    "MERGE",
+    "CALL",
+    "EXPLAIN PLAN",
+    "LOCK",
+    "UNLOCK"
+  )
+  pattern <- paste0(
+    # comes out looking like "^\\s*(CREATE|ALTER|...).*"
+    "^\\s*(",
+    paste(sql_update_keywords, collapse = "|"),
+    ".*"
+  )
+  grepl(pattern, query, ignore.case = TRUE)
 }
 
 # sql engine
