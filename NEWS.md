@@ -1,3 +1,7 @@
+# CHANGES IN knitr VERSION 1.31
+
+
+
 # CHANGES IN knitr VERSION 1.30
 
 ## NEW FEATURES
