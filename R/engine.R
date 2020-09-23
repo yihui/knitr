@@ -519,7 +519,7 @@ is_sql_update_query = function(query) {
     # comes out looking like "^\\s*(CREATE|ALTER|...).*"
     "^\\s*(",
     paste(sql_update_keywords, collapse = "|"),
-    ".*"
+    ").*"
   )
   grepl(pattern, query, ignore.case = TRUE)
 }
