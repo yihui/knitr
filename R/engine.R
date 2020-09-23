@@ -575,7 +575,10 @@ eng_sql = function(options) {
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
 
-  if (options$sql.is_update_query || is_sql_update_query(query)) {
+  is_update <- options$sql.is_update_query
+  if (is.null(is_update)) is_update <- is_sql_update_query(query)
+  if (!is.logical(is_update)) stop2("The 'sql.is_update_query' chunk option must be TRUE or FALSE")
+  if (is_update) {
     DBI::dbExecute(conn, query)
     data = NULL
   } else if (is.null(varname) && max.print > 0) {
