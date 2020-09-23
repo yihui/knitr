@@ -3,6 +3,7 @@
 ## NEW FEATURES
 
 - Added an argument `lib.loc` to `knitr::write_bib()`.
+- Overloaded chunk option `cache.globals`. When `FALSE`, now increases sensitivity of cache invalidation; see #1403 for an example of issue when `NULL`or `TRUE`, and #1708 when `FALSE` (thanks, @knokknok).
 
 ## BUG FIXES
 

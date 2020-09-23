@@ -93,7 +93,7 @@ call_block = function(block) {
 }
 
 # options that should affect cache when cache level = 1,2
-cache1.opts = c('code', 'eval', 'cache', 'cache.path', 'message', 'warning', 'error')
+cache1.opts = c('code', 'eval', 'cache', 'cache.path', 'cache.globals', 'message', 'warning', 'error')
 # more options affecting cache level 2
 cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fig.width', 'fig.height')
 # options that should not affect cache
@@ -278,7 +278,7 @@ block_exec = function(options) {
     if (options$autodep) {
       # you shall manually specify global object names if find_symbols() is not reliable
       cache$objects(
-        objs, options$cache.globals %n% find_globals(code), options$label,
+        objs, if (is.character(options$cache.globals)) options$cache.globals else (if (isFALSE(options$cache.globals)) find_symbols else find_globals)(code), options$label,
         options$cache.path
       )
       dep_auto()
