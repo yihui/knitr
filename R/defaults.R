@@ -59,7 +59,7 @@ new_defaults = function(value = list()) {
 #' @references Usage: \url{https://yihui.org/knitr/objects/}
 #'
 #'   A list of available options:
-#'   \url{https://yihui.org/knitr/options/#chunk_options}
+#'   \url{https://yihui.org/knitr/options/#chunk-options}
 #' @note \code{opts_current} should be treated as read-only and you are supposed
 #'   to only query its values via \code{opts_current$get()}. Technically you
 #'   could also call \code{opts_current$set()} to change the values, but you are

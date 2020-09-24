@@ -57,9 +57,17 @@ hook_plot_tex = function(x, options) {
 
   rw = options$resize.width
   rh = options$resize.height
+  rc = options$resize.command
   resize1 = resize2 = ''
-  if (!is.null(rw) || !is.null(rh)) {
-    resize1 = sprintf('\\resizebox{%s}{%s}{', rw %n% '!', rh %n% '!')
+  if (is.null(rc)) {
+    if (!is.null(rw) || !is.null(rh)) {
+      resize1 = sprintf('\\resizebox{%s}{%s}{', rw %n% '!', rh %n% '!')
+      resize2 = '} '
+    }
+  } else {
+    # users can specify a custom "resize" command (we can use an arbitrary
+    # command, e.g., framebox)
+    resize1 = paste0('\\', rc, '{')
     resize2 = '} '
   }
 
@@ -223,44 +231,74 @@ hook_plot_tex = function(x, options) {
   }
 }
 
-#' Set output hooks for different output formats
+#' Set or get output hooks for different output formats
 #'
-#' These functions set built-in output hooks for LaTeX, HTML, Markdown,
-#' reStructuredText, AsciiDoc and Textile.
+#' The \code{render_*()} functions set built-in output hooks for LaTeX, HTML,
+#' Markdown, reStructuredText, AsciiDoc, and Textile. The \code{hooks_*()}
+#' functions return a list of the output hooks for the corresponding format.
 #'
-#' There are three variants of markdown documents: ordinary markdown
-#' (\code{render_markdown(strict = TRUE)}), extended markdown (e.g. GitHub
-#' Flavored Markdown and pandoc; \code{render_markdown(strict = FALSE)}), and
-#' Jekyll (a blogging system on GitHub; \code{render_jekyll()}). For LaTeX
-#' output, there are three variants as well: \pkg{knitr}'s default style
-#' (\code{render_latex()}; use the LaTeX \pkg{framed} package), Sweave style
-#' (\code{render_sweave()}; use \file{Sweave.sty}) and listings style
-#' (\code{render_listings()}; use LaTeX \pkg{listings} package). Default HTML
-#' output hooks are set by \code{render_html()}; \code{render_rst()} and
-#' \code{render_asciidoc()} are for reStructuredText and AsciiDoc respectively.
+#' There are three variants of Markdown documents: ordinary Markdown
+#' (\code{render_markdown(strict = TRUE)}, which calls
+#' \code{hooks_markdown(strict = TRUE)}), extended Markdown (e.g., GitHub
+#' Flavored Markdown and Pandoc; \code{render_markdown(strict = FALSE)}, which
+#' calls \code{hooks_markdown(strict = FALSE)}), and Jekyll (a blogging system
+#' on GitHub; \code{render_jekyll()}, which calls \code{hooks_jekyll()}).
 #'
-#' These functions can be used before \code{knit()} or in the first chunk of the
-#' input document (ideally this chunk has options \code{include = FALSE} and
-#' \code{cache = FALSE}) so that all the following chunks will be formatted as
-#' expected.
+#' For LaTeX output, there are three variants: \pkg{knitr}'s default style
+#' (\code{render_latex()}, which calls \code{hooks_latex()} and uses the LaTeX
+#' \pkg{framed} package), Sweave style (\code{render_sweave()}, which calls
+#' \code{hooks_sweave()} and uses \file{Sweave.sty}), and listings style
+#' (\code{render_listings()}, which calls \code{hooks_listings()} and uses LaTeX
+#' \pkg{listings} package).
 #'
-#' You can use \code{\link{knit_hooks}} to further customize output hooks; see
-#' references.
+#' Default HTML output hooks are set by \code{render_html()} (which calls
+#' \code{hooks_html()}); \code{render_rst()} (which calls \code{hooks_rst()}) is
+#' for reStructuredText; \code{render_textile()} (which calls
+#' \code{hooks_textile()}) is for Textile, and \code{render_asciidoc()} (which
+#' calls \code{hooks_asciidoc()}) is AsciiDoc.
+#'
+#' The \code{render_*()} functions can be used before \code{knit()} or in the
+#' first chunk of the input document (ideally this chunk has options
+#' \code{include = FALSE} and \code{cache = FALSE}) so that all the following
+#' chunks will be formatted as expected.
+#'
+#' You can also use \code{\link{knit_hooks}} to set the format's hooks with the
+#' \code{hooks_*()} functions; see references for more info on further
+#' customizing output hooks.
+#'
 #' @rdname output_hooks
-#' @return \code{NULL}; corresponding hooks are set as a side effect
+#' @return \code{NULL} for \code{render_*} functions; corresponding hooks are
+#'   set as a side effect. A list of output hooks for \code{hooks_*()}
+#'   functions.
 #' @export
-#' @references See output hooks in \url{https://yihui.org/knitr/hooks/}.
+#' @references See output hooks in \url{https://yihui.org/knitr/hooks/}, and
+#'   some examples in
+#'   \url{https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html}
 #'
 #'   Jekyll and Liquid:
-#'   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions};
-#'   prettify.js: \url{http://code.google.com/p/google-code-prettify/}
+#'   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions}; prettify.js:
+#'   \url{https://code.google.com/archive/p/google-code-prettify}
+#' @examples
+#' # below is pretty much what knitr::render_markdown() does:
+#' knitr::knit_hooks$set(knitr::hooks_markdown())
+#'
+#' # you can retrieve a subset of the hooks and set them, e.g.,
+#' knitr::knit_hooks$set(knitr::hooks_markdown()["source"])
+#'
+#' knitr::knit_hooks$restore()
 render_latex = function() {
   opts_chunk$set(out.width = '\\maxwidth', dev = 'pdf')
   opts_knit$set(out.format = 'latex')
   h = opts_knit$get('header')
   if (!nzchar(h['framed'])) set_header(framed = .header.framed)
   if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
-  knit_hooks$set(
+  knit_hooks$set(hooks_latex())
+}
+
+#' @rdname output_hooks
+#' @export
+hooks_latex = function() {
+  list(
     source = function(x, options) {
       x = hilight_source(x, 'latex', options)
       if (options$highlight) {
@@ -287,6 +325,7 @@ render_latex = function() {
     }
   )
 }
+
 #' @rdname output_hooks
 #' @export
 render_sweave = function() {
@@ -294,31 +333,45 @@ render_sweave = function() {
   opts_knit$set(out.format = 'sweave')
   test_latex_pkg('Sweave', file.path(R.home('share'), 'texmf', 'tex', 'latex', 'Sweave.sty'))
   set_header(framed = '', highlight = '\\usepackage{Sweave}')
+  knit_hooks$set(hooks_sweave())
+}
+
+#' @param envirs Names of LaTeX environments for code input, output, and chunk.
+#' @rdname output_hooks
+#' @export
+hooks_sweave = function(envirs = c('Sinput', 'Soutput', 'Schunk')) {
   # wrap source code in the Sinput environment, output in Soutput
-  hook.i = function(x, options)
-    one_string(c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''))
+  hook.i = function(x, options) one_string(c(
+    sprintf('\\begin{%s}', envirs[1]), hilight_source(x, 'sweave', options),
+    sprintf('\\end{%s}', envirs[1]), ''
+  ))
   hook.s = function(x, options) {
     if (output_asis(x, options)) return(x)
-    paste0('\\begin{Soutput}\n', x, '\\end{Soutput}\n')
+    sprintf('\\begin{%s}\n%s\\end{%s}\n', envirs[2], x, envirs[2])
   }
   hook.c = function(x, options) {
     if (output_asis(x, options)) return(x)
-    paste0('\\begin{Schunk}\n', x, '\\end{Schunk}')
+    sprintf('\\begin{%s}\n%s\\end{%s}', envirs[3], x, envirs[3])
   }
-  knit_hooks$set(source = hook.i, output = hook.s, warning = hook.s,
-                 message = hook.s, error = hook.s, inline = .inline.hook.tex,
-                 plot = hook_plot_tex, chunk = hook.c)
+  list(
+    source = hook.i, output = hook.s, warning = hook.s, message = hook.s,
+    error = hook.s, plot = hook_plot_tex, inline = .inline.hook.tex, chunk = hook.c
+  )
 }
+
 #' @rdname output_hooks
 #' @export
 render_listings = function() {
-  render_sweave()
-  opts_chunk$set(prompt = FALSE)
+  opts_chunk$set(highlight = FALSE, comment = NA, prompt = FALSE) # mimic Sweave settings
   opts_knit$set(out.format = 'listings')
   test_latex_pkg('Sweavel', system.file('misc', 'Sweavel.sty', package = 'knitr'))
   set_header(framed = '', highlight = '\\usepackage{Sweavel}')
-  invisible(NULL)
+  knit_hooks$set(hooks_listings())
 }
+
+#' @rdname output_hooks
+#' @export
+hooks_listings = hooks_sweave
 
 # may add textile, and many other markup languages
 

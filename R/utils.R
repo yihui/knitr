@@ -359,7 +359,10 @@ latex_percent_size = function(x, which = c('width', 'height')) {
   xi = as.numeric(sub('%$', '', x[i]))
   if (any(is.na(xi))) return(x)
   which = match.arg(which)
-  x[i] = paste0(xi / 100, if (which == 'width') '\\linewidth' else '\\textheight')
+  x[i] = paste0(
+    formatC(xi / 100, decimal.mark = '.'),
+    if (which == 'width') '\\linewidth' else '\\textheight'
+  )
   x
 }
 
@@ -712,6 +715,8 @@ kpsewhich = function() {
 has_utility = function(name, package = name) {
   name2 = paste('util', name, sep = '_')  # e.g. util_pdfcrop
   if (is.logical(yes <- opts_knit$get(name2))) return(yes)
+  # a special case: use tools::find_gs_cmd() to find ghostscript
+  if (name == 'ghostscript') name = tools::find_gs_cmd()
   yes = nzchar(Sys.which(name))
   if (!yes) warning(package, ' not installed or not in PATH')
   opts_knit$set(setNames(list(yes), name2))
@@ -1002,7 +1007,7 @@ make_unique = function(x) {
 #' @return The data URI as a character string.
 #' @author Wush Wu and Yihui Xie
 #' @export
-#' @references \url{http://en.wikipedia.org/wiki/Data_URI_scheme}
+#' @references \url{https://en.wikipedia.org/wiki/Data_URI_scheme}
 #' @examples uri = image_uri(file.path(R.home('doc'), 'html', 'logo.jpg'))
 #' if (interactive()) {cat(sprintf('<img src="%s" />', uri), file = 'logo.html')
 #' browseURL('logo.html') # you can check its HTML source

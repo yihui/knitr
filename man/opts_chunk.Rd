@@ -45,6 +45,6 @@ opts_chunk$get("fig.keep")
 Usage: \url{https://yihui.org/knitr/objects/}
 
   A list of available options:
-  \url{https://yihui.org/knitr/options/#chunk_options}
+  \url{https://yihui.org/knitr/options/#chunk-options}
 }
 \keyword{datasets}
