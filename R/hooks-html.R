@@ -56,8 +56,8 @@ hook_animation = function(options) {
     if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
   }
   if (length(cap) == 0) cap = ''
-  if (is_blank(cap)) return(cap)
   if (alt) return(escape_html(options$fig.alt %n% cap))
+  if (is_blank(cap)) return(cap)
   paste0(create_label(
     options$fig.lp, options$label,
     if (options$fig.num > 1L && options$fig.show == 'asis') c('-', options$fig.cur)
