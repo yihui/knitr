@@ -218,7 +218,7 @@ is_low_change = function(p1, p2) {
 
 # recycle some plot options such as fig.cap, out.width/height, etc when there
 # are multiple plots per chunk
-.recyle.opts = c('fig.cap', 'fig.scap', 'fig.env', 'fig.pos', 'fig.subcap',
+.recyle.opts = c('fig.cap', 'fig.scap', 'fig.alt', 'fig.env', 'fig.pos', 'fig.subcap',
                  'out.width', 'out.height', 'out.extra', 'fig.link')
 
 # when passing options to plot hooks, reduce the recycled options to scalars

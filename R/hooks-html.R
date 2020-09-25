@@ -37,9 +37,9 @@ hook_animation = function(options) {
   paste(c(sprintf('width="%s"', w), sprintf('height="%s"', h), extra), collapse = ' ')
 }
 
-.img.tag = function(src, w, h, caption, extra) {
+.img.tag = function(src, w, h, caption, extra, alt = caption) {
   caption = if (length(caption) == 1 && caption != '') {
-    paste0('title="', caption, '" alt="', caption, '" ')
+    paste0('title="', caption, '" alt="', alt, '" ')
   }
   tag = if (grepl('[.]pdf$', src, ignore.case = TRUE)) {
     extra = c(extra, 'type="application/pdf"')
@@ -57,7 +57,7 @@ hook_animation = function(options) {
   }
   if (length(cap) == 0) cap = ''
   if (is_blank(cap)) return(cap)
-  if (alt) return(escape_html(cap))
+  if (alt) return(escape_html(options$fig.alt %n% cap))
   paste0(create_label(
     options$fig.lp, options$label,
     if (options$fig.num > 1L && options$fig.show == 'asis') c('-', options$fig.cur)
