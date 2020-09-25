@@ -51,7 +51,8 @@ hook_plot_md_base = function(x, options) {
   plot1 = ai || options$fig.cur <= 1L
   plot2 = ai || options$fig.cur == options$fig.num
   to = pandoc_to(); from = pandoc_from()
-  if (is.null(w) && is.null(h) && is.null(s) && a == 'default' && !(pandoc_html && in_bookdown)) {
+  if (is.null(w) && is.null(h) && is.null(s) && is.null(options$fig.alt) &&
+      a == 'default' && !(pandoc_html && in_bookdown)) {
     # append <!-- --> to ![]() to prevent the figure environment in these cases
     nocap = cap == '' && !is.null(to) && !grepl('^markdown', to) &&
       (options$fig.num == 1 || ai) && !grepl('-implicit_figures', from)
