@@ -1,6 +1,6 @@
 # CHANGES IN knitr VERSION 1.31
 
-
+- Added a new `fig.alt` option that will be used for alternative text in `alt` HTML attribute instead of `fig.cap`, if provided. It will be evaluated after a chunk has been evaluated and recycled if multiple plots / images are in the chunk, as with `fig.cap` (#1900)
 
 # CHANGES IN knitr VERSION 1.30
 
