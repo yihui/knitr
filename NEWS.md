@@ -1,6 +1,6 @@
 # CHANGES IN knitr VERSION 1.31
 
-- `collapse = TRUE` now works as expected if `attr.source` or `class.source` is provided (thanks, @aosavi, #1902)
+- The chunk option `collapse = TRUE` now works as expected when the chunk option `attr.source` or `class.source` is provided (thanks, @aosavi @cderv, #1902).
 
 # CHANGES IN knitr VERSION 1.30
 
