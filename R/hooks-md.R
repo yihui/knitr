@@ -192,8 +192,8 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
       x = gsub('[\n]+$', '', x)
       x = gsub('^[\n]+', '\n', x)
       if (isTRUE(options$collapse)) {
-        reg_chunk = sprintf('\n([%s]{3,})\n+\\1((\\{\\.)?%s[^\n]*)?\n', fence_char, tolower(options$engine))
-        x = gsub(reg_chunk, "\n", x)
+        r = sprintf('\n([%s]{3,})\n+\\1((\\{[.])?%s[^\n]*)?\n', fence_char, tolower(options$engine))
+        x = gsub(r, '\n', x)
       }
       if (is.null(s <- options$indent)) return(x)
       line_prompt(x, prompt = s, continue = s)
