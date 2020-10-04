@@ -9,6 +9,8 @@ load_cache(
   object,
   notfound = "NOT AVAILABLE",
   path = opts_chunk$get("cache.path"),
+  dir = opts_knit$get("output.dir"),
+  envir = NULL,
   lazy = TRUE
 )
 }
@@ -22,6 +24,14 @@ missing, \code{NULL} is returned).}
 
 \item{path}{Path of the cache database (normally set in the global chunk
 option \code{cache.path}).}
+
+\item{dir}{Path to use as the working directory. Defaults to the output
+directory if run inside a \pkg{knitr} context and to the current working 
+directory otherwise. Any relative \code{path} is defined from \code{dir}.}
+
+\item{envir}{Environment to use for cache loading, into which all objects 
+in the cache for the specified chunk (not just that in \code{object}) will 
+be loaded. Defaults to the value in \code{\link{knit_global}}.}
 
 \item{lazy}{Whether to \code{\link{lazyLoad}} the cache database (depending
 on the chunk option \code{cache.lazy = TRUE} or \code{FALSE} of that code

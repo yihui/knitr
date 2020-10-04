@@ -202,6 +202,12 @@ parse_objects = function(path) {
 #' @param notfound A value to use when the \code{object} cannot be found.
 #' @param path Path of the cache database (normally set in the global chunk
 #'   option \code{cache.path}).
+#' @param dir Path to use as the working directory. Defaults to the output
+#'   directory if run inside a \pkg{knitr} context and to the current working 
+#'   directory otherwise. Any relative \code{path} is defined from \code{dir}.
+#' @param envir Environment to use for cache loading, into which all objects 
+#'   in the cache for the specified chunk (not just that in \code{object}) will 
+#'   be loaded. Defaults to the value in \code{\link{knit_global}}.
 #' @param lazy Whether to \code{\link{lazyLoad}} the cache database (depending
 #'   on the chunk option \code{cache.lazy = TRUE} or \code{FALSE} of that code
 #'   chunk).
@@ -219,9 +225,16 @@ parse_objects = function(path) {
 #' @export
 load_cache = function(
   label, object, notfound = 'NOT AVAILABLE', path = opts_chunk$get('cache.path'),
-  lazy = TRUE
+  dir = opts_knit$get('output.dir'), envir = NULL, lazy = TRUE
 ) {
-  owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
+  if (is.null(dir)) dir = "."
+  owd = setwd(dir); on.exit(setwd(owd))
+  if (!is.null(envir)) {
+    oldenv = .knitEnv$knit_global
+    .knitEnv$knit_global = envir
+    on.exit(.knitEnv$knit_global <- oldenv, add=TRUE)
+  }
+
   path = valid_path(path, label)
   p0 = dirname(path); p1 = basename(path)
   p2 = list.files(p0, cache_rx)
