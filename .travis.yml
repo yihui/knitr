@@ -29,6 +29,8 @@ addons:
     - libmagick++-dev
     - libpoppler-cpp-dev
     - libglu1-mesa-dev
+    - libharfbuzz-dev
+    - libfribidi-dev
 
 repos:
   XRAN: https://xran.yihui.org
