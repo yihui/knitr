@@ -188,13 +188,7 @@ knit = function(
     knit_concord$set(infile = input, outfile = output)
   }
 
-  if (is.null(text)) {
-    text = readLines(input, encoding = 'UTF-8', warn = FALSE)
-    if (!is_utf8(text)) warning(
-      'The file "', input, '" must be encoded in UTF-8. Please see ',
-      'https://yihui.org/en/2018/11/biggest-regret-knitr/ for more info.'
-    )
-  } else text = split_lines(text) # make sure each element is one line
+  text = if (is.null(text)) xfun::read_utf8(input) else split_lines(text)
   if (!length(text)) {
     if (is.character(output)) file.create(output)
     return(output) # a trivial case: create an empty file and exit
