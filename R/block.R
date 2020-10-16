@@ -248,6 +248,7 @@ block_exec = function(options) {
       if (evaluate::is.recordedplot(x)) return(1)
       if (inherits(x, 'knit_image_paths')) return(length(x))
       if (inherits(x, 'knit_other_plot')) return(1)
+      if (inherits(x, 'html_screenshot')) return(1)
       0
     })) else 0L
 
