@@ -1,3 +1,7 @@
+# CHANGES IN knitr VERSION 1.31
+
+- The chunk option `collapse = TRUE` now works as expected when the chunk option `attr.source` or `class.source` is provided (thanks, @aosavi @cderv, #1902).
+
 # CHANGES IN knitr VERSION 1.30
 
 ## NEW FEATURES
@@ -10,6 +14,8 @@
 
 - The option `fig_caption = FALSE` for `rmarkdown::html_document()` was unable to suppress the figure captions in some cases.
 
+- The internal function `fix_options()` should be called after option hooks are executed (thanks, @atusy, #1876 and #1877).
+
 - When the option `options(OutDec = )` is set to a value other than `"."`, percentages in the chunk options `out.width` and `out.height` do not work (thanks, @omgitsmoe, #1887).
 
 ## MINOR CHANGES
@@ -17,6 +23,8 @@
 - `knitr::write_bib()` removes pairs of single quotes in the titles of citation entries now.
 
 - `knitr::write_bib()` uses the `URL` in the package `DESCRIPTION` if it is provided, instead of the canonical CRAN URL for the package.
+
+- `hook_pdfcrop()` and `plot_crop()` will work only when both programs `pdfcrop` and `ghostscript` have been installed. Previously only `pdfcrop` was checked (thanks, @dalupus, #954).
 
 # CHANGES IN knitr VERSION 1.29
 
@@ -468,7 +476,7 @@
 
 - added a helper function `all_rcpp_labels()`, which is simply `all_labels(engine == 'Rcpp')` and can be used to extract all chunk labels of Rcpp chunks
 
-- added a new engine named `sql` that uses the **DBI** package to execute SQL queries, and optionally assign the result to a variable in the **knitr** session; see http://rmarkdown.rstudio.com/authoring_knitr_engines.html for details (#1241)
+- added a new engine named `sql` that uses the **DBI** package to execute SQL queries, and optionally assign the result to a variable in the **knitr** session; see https://rmarkdown.rstudio.com/authoring_knitr_engines.html for details (#1241)
 
 - `fig.keep` now accepts numeric values to index low-level plots to keep (#1265)
 
@@ -877,7 +885,7 @@
 
 - for Markdown tables, `kable()` gained a new argument `padding` to specify the inner padding of table cells using spaces (thanks, @gavril0, #699)
 
-- added a new vignette engine called `rmarkdown`, which uses `rmarkdown::render()` to create a package vignette from an R Markdown document; see http://rmarkdown.rstudio.com for more information about the **rmarkdown** package, and the vignette `knit_print.Rmd` in **knitr** for an example (basically you specify `\VignetteEngine{knitr::rmarkdown}` in your vignette)
+- added a new vignette engine called `rmarkdown`, which uses `rmarkdown::render()` to create a package vignette from an R Markdown document; see https://rmarkdown.rstudio.com for more information about the **rmarkdown** package, and the vignette `knit_print.Rmd` in **knitr** for an example (basically you specify `\VignetteEngine{knitr::rmarkdown}` in your vignette)
 
 - indentation is preserved when using chunk references `<<>>`, i.e., if `<<>>` is indented, the spaces before it will be applied to the code that it refers to (thanks, Terry Therneau)
 

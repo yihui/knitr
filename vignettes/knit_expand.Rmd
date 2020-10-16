@@ -40,7 +40,7 @@ res = knit_expand(text = c(' x | x^2', '{{x=1:5;paste(sprintf("%2d | %3d", x, x^
 cat(res)
 ```
 
-The m4 example: <http://en.wikipedia.org/wiki/M4_(computer_language)>
+The m4 example: <https://en.wikipedia.org/wiki/M4_(computer_language)>
 
 ```{r}
 res = knit_expand(text = c('{{i=0;h2=function(x){i<<-i+1;sprintf("<h2>%d. %s</h2>", i, x)} }}<html>',

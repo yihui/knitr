@@ -64,7 +64,7 @@ minhas mãos estão atadas, por exemplo:
 - ...
 
 
-[<img src="http://i.imgur.com/yYw46aF.jpg" align="right" alt="Livro Dynamic Documents with R and knitr" />](https://amzn.com/1498716962)
+[<img src="http://i.imgur.com/yYw46aF.jpg" align="right" alt="Livro Dynamic Documents with R and knitr" />](https://www.amazon.com/dp/1498716962/)
 
 O pacote  **knitr** foi desenhado para dar ao usuário acesso à todas as partes do processo de lidar com um documento de programação literata, então não há
 necessidade de hackear nenhum componente do núcleo se você quiser mais liberdade.
@@ -85,7 +85,7 @@ knit(input)
 Se as opções não forem explicitadas, **knitr** vai tentar adivinhar
 configurações-padrão razoáveis. Alguns manuais estão disponíveis, como o
 [manual principal](https://yihui.org/knitr/demo/manual/), e o [manual de gráficos](https://yihui.org/knitr/demo/graphics/). Para uma referência
-organizada, ver o [livro do knitr](https://amzn.com/1498716962).
+organizada, ver o [livro do knitr](https://www.amazon.com/dp/1498716962/).
 
 ## Licença
 

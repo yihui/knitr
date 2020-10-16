@@ -24,7 +24,6 @@ call_block = function(block) {
   params = opts_chunk$merge(block$params)
   opts_current$restore(params)
   for (o in setdiff(names(params), af)) params[o] = list(eval_lang(params[[o]]))
-  params = fix_options(params)  # for compatibility
 
   label = ref.label = params$label
   if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
@@ -55,6 +54,8 @@ call_block = function(block) {
     if (!is.list(params))
       stop("The option hook '", opt, "' should return a list of chunk options")
   }
+
+  params = fix_options(params)  # for compatibility
 
   # Check cache
   if (params$cache > 0) {

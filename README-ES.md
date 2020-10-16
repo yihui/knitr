@@ -45,7 +45,7 @@ Mientras Sweave y paquetes adicionales relacionados como [**cacheSweave**](https
 - deseé que [**R2HTML**](https://cran.r-project.org/package=R2HTML) soportase el resaltado de sintaxis de código R
 - ...
 
-[<img src="http://i.imgur.com/yYw46aF.jpg" align="right" alt="The book Dynamic Documents with R and knitr" />](http://amzn.com/1498716962)
+[<img src="http://i.imgur.com/yYw46aF.jpg" align="right" alt="The book Dynamic Documents with R and knitr" />](https://www.amazon.com/dp/1498716962/)
 
 El paquete **knitr** se diseñó para dar al usuario acceso a todas las partes del proceso de lidiar con un documento de programación literaria, de forma que no haya necesidad de modificar cualquiera de los componentes centrales si quiere mayor libertad. He estudiado el código fuente de **pgfSweave** y **cacheSweave** un par de veces, y frecuentemente me siento incómodo con la gran cantidad de código copiado del R oficial, especialmente cuando R tiene una nueva versión liberada (empezaré a preocuparme si los paquetes adicionales todavía están actualizados respecto al Sweave ocifial).
 
@@ -63,9 +63,9 @@ reasonable default settings. A few manuals are available such as the [main
 manual](https://yihui.org/knitr/demo/manual/), and the
 [graphics
 manual](https://yihui.org/knitr/demo/graphics/). For a
-more organized reference, see the [knitr book](http://amzn.com/1498716962).
+more organized reference, see the [knitr book](https://www.amazon.com/dp/1498716962/).
 
-Si no se especifican opciones explícitamente, **knitr** tratará de suponer una configuración por defecto razonable. Hay disponibles unos pocos manuales, tales como el [manual principal](https://yihui.org/knitr/demo/manual/) y el [manual de gráficos](https://yihui.org/knitr/demo/graphics/). Para una referencia más organizada, vea el libro de [knitr](http://amzn.com/1498716962).
+Si no se especifican opciones explícitamente, **knitr** tratará de suponer una configuración por defecto razonable. Hay disponibles unos pocos manuales, tales como el [manual principal](https://yihui.org/knitr/demo/manual/) y el [manual de gráficos](https://yihui.org/knitr/demo/graphics/). Para una referencia más organizada, vea el libro de [knitr](https://www.amazon.com/dp/1498716962/).
 
 
 ## Licencia

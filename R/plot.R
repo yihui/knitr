@@ -310,10 +310,20 @@ fig_process = function(FUN, path, options) {
 
 #' Crop a plot (remove the edges) using PDFCrop or ImageMagick
 #'
-#' The command \command{pdfcrop} (often shipped with a LaTeX distribution) is
+#' The program \command{pdfcrop} (often shipped with a LaTeX distribution) is
 #' executed on a PDF plot file, and
 #' \code{magick::\link[magick:transform]{image_trim}()} is executed for other
 #' types of plot files.
+#'
+#' The program \command{pdfcrop} can crop the extra white margins when the plot
+#' format is PDF, to make better use of the space in the output document,
+#' otherwise we often have to struggle with \code{graphics::\link{par}()} to set
+#' appropriate margins. Note \command{pdfcrop} often comes with a LaTeX
+#' distribution such as TinyTeX, MiKTeX, or TeX Live, and you may not need to
+#' install it separately (use \code{Sys.which('pdfcrop')} to check it; if it not
+#' empty, you are able to use it). Note that \command{pdfcrop} depends on
+#' GhostScript. You can check if GhostScript is installed via
+#' \code{tools::find_gs_cmd()}.
 #' @param x Filename of the plot.
 #' @param quiet Whether to suppress standard output from the command.
 #' @export
@@ -325,7 +335,7 @@ plot_crop = function(x, quiet = TRUE) {
   is_pdf = grepl('[.]pdf$', x, ignore.case = TRUE)
   x2 = x
   x = path.expand(x)
-  if (is_pdf && !has_utility('pdfcrop')) return(x2)
+  if (is_pdf && !has_utility('pdfcrop') && !has_utility('ghostscript')) return(x2)
 
   if (!quiet) message('cropping ', x)
   if (is_pdf) {

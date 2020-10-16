@@ -7,7 +7,7 @@
 #' @docType package
 #' @name knitr-package
 #' @aliases knitr
-#' @import graphics grDevices methods stats utils
+#' @import graphics grDevices stats utils
 #' @author Yihui Xie <\url{https://yihui.org}>
 #' @seealso The core function in this package: \code{\link{knit}}. If you are an
 #'   Sweave user, see \code{\link{Sweave2knitr}} on how to convert Sweave files
