@@ -309,7 +309,7 @@ fix_options = function(options) {
 
   if (options$collapse) {
     options[unlist(lapply(
-      c("class.", "attr."), paste0, c("output", "message", "warning", "error")
+      c('class.', 'attr.'), paste0, c('output', 'message', 'warning', 'error')
     ))] = NULL
   }
 
