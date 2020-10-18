@@ -194,14 +194,12 @@ assert('block_attr(x) turns a character vector into Pandoc attributes', {
 })
 
 
-keys = unlist(lapply(c('class.', 'attr.'),
-                     paste0,
-                     c('source', 'output', 'message', 'warning', 'error')))
+keys = unlist(lapply(
+  c('class.', 'attr.'), paste0, c('source', 'output', 'message', 'warning', 'error')
+))
 keys_source = c('class.source', 'attr.source')
-opts = fix_options(c(setNames(as.list(keys), keys), list(
-  fig.path = '.', cache.path = '.', cache = 0, engine = 'R', collapse = TRUE
-)))
-assert('When collapse is TRUE, class.* and attr.* becomes NULL except for class.source and attr.source', {
-  (opts[keys_source] %==% as.list(keys_source))
-  (any(names(opts) %in% setdiff(keys, keys_source)) %==% FALSE)
+opts = fix_options(opts_chunk$merge(c(setNames(as.list(keys), keys), list(collapse = TRUE))))
+assert('when collapse is TRUE, class.* and attr.* become NULL except for class.source and attr.source', {
+  (opts[keys_source] %==% as.list(setNames(keys_source, keys_source)))
+  (!any(names(opts) %in% setdiff(keys, keys_source)))
 })
