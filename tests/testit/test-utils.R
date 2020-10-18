@@ -202,6 +202,6 @@ opts = fix_options(c(setNames(as.list(keys), keys), list(
   fig.path = '.', cache.path = '.', cache = 0, engine = 'R', collapse = TRUE
 )))
 assert('When collapse is TRUE, class.* and attr.* becomes NULL except for class.source and attr.source', {
-  opts[keys_source] %==% as.list(keys_source)
-  any(names(opts) %in% setdiff(keys, keys_source)) %==% FALSE
+  (opts[keys_source] %==% as.list(keys_source))
+  (any(names(opts) %in% setdiff(keys, keys_source)) %==% FALSE)
 })
