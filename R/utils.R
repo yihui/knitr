@@ -771,10 +771,10 @@ knit_handlers = function(fun, options) {
   }))
 }
 
+# TODO: the following functions have been moved to xfun
 # conditionally disable some features during R CMD check
 is_R_CMD_check = function() {
-  ('CheckExEnv' %in% search()) ||
-    any(c('_R_CHECK_TIMINGS_', '_R_CHECK_LICENSE_') %in% names(Sys.getenv()))
+  !is.na(check_package_name())
 }
 
 is_CRAN_incoming = function() {
