@@ -263,6 +263,7 @@ block_exec = function(options, collapse = '') {
     options$fig.num = if (length(res)) sum(sapply(res, function(x) {
       if (evaluate::is.recordedplot(x)) return(1)
       if (inherits(x, 'knit_image_paths')) return(length(x))
+      if (inherits(x, 'html_screenshot')) return(1)
       0
     })) else 0L
 
