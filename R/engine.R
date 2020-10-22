@@ -492,7 +492,36 @@ is_sql_update_query = function(query) {
   query = gsub('^\\s*--.*\n', '', query)
   # remove multi-line comments
   if (grepl('^\\s*\\/\\*.*', query)) query = gsub('.*\\*\\/', '', query)
-  grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE|DROP).*', query, ignore.case = TRUE)
+  sql_update_keywords <- c(
+    # DDL
+    "CREATE",
+    "ALTER",
+    "DROP",
+    "GRANT",
+    "DENY",
+    "REVOKE",
+    "ANALYZE",
+    "AUDIT",
+    "COMMENT",
+    "RENAME",
+    "TRUNCATE",
+    # DML
+    "INSERT",
+    "UPDATE",
+    "DELETE",
+    "MERGE",
+    "CALL",
+    "EXPLAIN PLAN",
+    "LOCK",
+    "UNLOCK"
+  )
+  pattern <- paste0(
+    # comes out looking like "^\\s*(CREATE|ALTER|...).*"
+    "^\\s*(",
+    paste(sql_update_keywords, collapse = "|"),
+    ").*"
+  )
+  grepl(pattern, query, ignore.case = TRUE)
 }
 
 # sql engine
@@ -546,7 +575,10 @@ eng_sql = function(options) {
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
 
-  if (is_sql_update_query(query)) {
+  is_update <- options$sql.is_update_query
+  if (is.null(is_update)) is_update <- is_sql_update_query(query)
+  if (!is.logical(is_update)) stop2("The 'sql.is_update_query' chunk option must be TRUE or FALSE")
+  if (is_update) {
     DBI::dbExecute(conn, query)
     data = NULL
   } else if (is.null(varname) && max.print > 0) {
