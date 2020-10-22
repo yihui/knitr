@@ -1,6 +1,6 @@
 # CHANGES IN knitr VERSION 1.31
 
-- `eng_sql` now correctly captures error if `error = TRUE` in chunk options. (thanks, @colearendt, rstudio/rmarkdown#1208)
+- The `sql` engine now correctly captures error with the chunk option `error = TRUE` (thanks, @colearendt, rstudio/rmarkdown#1208).
 
 - The chunk option `collapse = TRUE` now works as expected when the chunk option `attr.*` or `class.*` is provided. By this change, The chunk option `collapse = TRUE` forces `attr.*` and `class.*` be `NULL` except for the chunk options `attr.source` and `class.source` (thanks, @aosavi @cderv @atusy, #1902 #1906).
 
