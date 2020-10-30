@@ -111,7 +111,7 @@ Imports:
     markdown,
     stringr (>= 0.6),
     yaml (>= 2.1.19),
-    xfun (>= 0.15),
+    xfun (>= 0.18),
     tools
 Suggests:
     formatR,
