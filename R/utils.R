@@ -225,16 +225,6 @@ format_sci = function(x, ...) {
   vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 
-# absolute path?
-is_abs_path = function(x) {
-  if (is_windows()) grepl('^(\\\\|[A-Za-z]:)', x) else grepl('^[/~]', x)
-}
-
-# paths of web resources?
-is_web_path = function(x) {
-  grepl('^(f|ht)tps?://', x)
-}
-
 # is tikz device without externalization?
 is_tikz_dev = function(options) {
   'tikz' %in% options$dev && !options$external
@@ -769,26 +759,6 @@ knit_handlers = function(fun, options) {
   merge_list(default_handlers, list(value = function(x, visible) {
     if (visible) fun(x, options = options)
   }))
-}
-
-# TODO: the following functions have been moved to xfun
-# conditionally disable some features during R CMD check
-is_R_CMD_check = function() {
-  !is.na(check_package_name())
-}
-
-is_CRAN_incoming = function() {
-  isTRUE(as.logical(Sys.getenv('_R_CHECK_CRAN_INCOMING_REMOTE_')))
-}
-
-check_package_name = function() {
-  Sys.getenv('_R_CHECK_PACKAGE_NAME_', NA)
-}
-
-# is R CMD check running on a package that has a version lower or equal to `version`?
-check_old_package = function(name, version) {
-  if (is.na(pkg <- check_package_name()) || pkg != name) return(FALSE)
-  tryCatch(packageVersion(name) <= version, error = function(e) FALSE)
 }
 
 # is the inst dir under . or ..? differs in R CMD build/INSTALL and devtools/roxygen2

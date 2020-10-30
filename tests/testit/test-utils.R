@@ -1,12 +1,5 @@
 library(testit)
 
-assert('abs_path() recognizes absolute paths under Windows and *nix', {
-  (!is_abs_path('abc/def'))
-  (is_abs_path(if (.Platform$OS.type == 'windows') {
-    c('D:\\abc', '\\\\netdrive\\somewhere')
-  } else '/abc/def'))
-})
-
 op = options(digits = 3, scipen = 0, knitr.digits.signif = TRUE)
 
 assert(

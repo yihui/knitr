@@ -111,10 +111,10 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
                      quiet = FALSE, encoding = 'UTF-8', force_v1 = FALSE) {
   # packages containing vignettes using R Markdown v1 should declare dependency
   # on 'markdown' in DESCRIPTION (typically in Suggests)
-  if (!is.na(pkg <- check_package_name()) && pkg != 'markdown') {
+  if (!is.na(pkg <- xfun::check_package_name()) && pkg != 'markdown') {
     info = packageDescription(pkg, fields = c('Depends', 'Imports', 'Suggests'))
     if (!'markdown' %in% unlist(strsplit(unlist(info), '[[:space:],]+'))) {
-      if (is_CRAN_incoming()) stop2(
+      if (xfun::is_CRAN_incoming()) stop2(
         "The 'markdown' package should be declared as a dependency of the '", pkg,
         "' package (e.g., in the  'Suggests' field of DESCRIPTION), because it ",
         "contains vignette(s) built with the 'markdown' package. Please see ",
