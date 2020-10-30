@@ -33,20 +33,20 @@ for syntax highlighting of source code and output. The first element
 applies to source code, and the second applies to text output. By default,
 both are \code{FALSE}.}
 
-\item{action}{Whether to create a new post, update an existing post, or create a new
-page.}
+\item{action}{Whether to create a new post, update an existing post, or
+create a new page.}
 
-\item{postid}{If \code{action} is \code{editPost}, the post id \code{postid} must be
-specified.}
+\item{postid}{If \code{action} is \code{editPost}, the post id \code{postid}
+must be specified.}
 
 \item{publish}{Boolean: publish the post immediately?}
 }
 \description{
-This function is a wrapper around the \pkg{RWordPress} package, whihch
-compiles an R Markdown document to HTML and post the results to WordPress.
-Please note that this package has not been updated for many years, which is
+This function is a wrapper around the \pkg{RWordPress} package. It compiles
+an R Markdown document to HTML and post the results to WordPress. Please note
+that \pkg{RWordPress} has not been updated for several years, which is
 \href{https://github.com/yihui/knitr/issues/1866}{not a good sign}. For
-blogging with R, \pkg{blogdown} now is advised.
+blogging with R, you may want to try the \pkg{blogdown} package instead.
 }
 \note{
 This function will convert the encoding of the post and the title to

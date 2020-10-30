@@ -143,12 +143,11 @@ knit2html_v1 = function(...) knit2html(..., force_v1 = TRUE)
 
 #' Knit an R Markdown document and post it to WordPress
 #'
-#' This function is a wrapper around the \pkg{RWordPress} package, whihch
-#' compiles an R Markdown document to HTML and post the results to WordPress.
-#' Please note that this package has not been updated for many years, which is
+#' This function is a wrapper around the \pkg{RWordPress} package. It compiles
+#' an R Markdown document to HTML and post the results to WordPress. Please note
+#' that \pkg{RWordPress} has not been updated for several years, which is
 #' \href{https://github.com/yihui/knitr/issues/1866}{not a good sign}. For
-#' blogging with R, \pkg{blogdown} now is advised.
-#'
+#' blogging with R, you may want to try the \pkg{blogdown} package instead.
 #' @param input Filename of the Rmd document.
 #' @param title Title of the post.
 #' @param ... Other meta information of the post, e.g. \code{categories = c('R',
@@ -158,10 +157,10 @@ knit2html_v1 = function(...) knit2html(..., force_v1 = TRUE)
 #'   for syntax highlighting of source code and output. The first element
 #'   applies to source code, and the second applies to text output. By default,
 #'   both are \code{FALSE}.
-#' @param action Whether to create a new post, update an existing post, or create a new
-#'   page.
-#' @param postid If \code{action} is \code{editPost}, the post id \code{postid} must be
-#'   specified.
+#' @param action Whether to create a new post, update an existing post, or
+#'   create a new page.
+#' @param postid If \code{action} is \code{editPost}, the post id \code{postid}
+#'   must be specified.
 #' @param publish Boolean: publish the post immediately?
 #' @inheritParams knit
 #' @export
@@ -177,17 +176,14 @@ knit2wp = function(
   input, title = 'A post from knitr', ..., envir = parent.frame(), shortcode = FALSE,
   action = c('newPost', 'editPost', 'newPage'), postid, publish = TRUE
 ) {
+  do.call('library', list(package = 'RWordPress', character.only = TRUE))
   xfun::do_once(
-    warning2("This function is based on RWordPress package which is ",
-            "no more actively maintain and may have security risk ",
-            "(https://github.com/yihui/knitr/issues/1866). ",
-            "For blogging with R, there is now the blogdown package."),
-    "knitr.knit2wp.warning",
-    hint = ""
+    warning2(
+      'This function is based on the RWordPress package, which is no longer actively ',
+      'maintained (https://github.com/yihui/knitr/issues/1866). For blogging with R, ',
+      'you may try the blogdown package instead.'
+    ), 'knitr.knit2wp.warning'
   )
-  if (!xfun::loadable("RWordPress"))
-    stop2("You need to install the package RWordPress for this function.",
-         "See https://yihui.org/knitr/demo/wordpress/")
   out = knit(input, envir = envir); on.exit(unlink(out))
   content = file_string(out)
   content = markdown::markdownToHTML(text = content, fragment.only = TRUE)
@@ -218,7 +214,6 @@ knit2wp = function(
   # if we are editing the post, also include the argument for postid
   if (action == "editPost") WPargs = c(postid = postid, WPargs)
 
-  do.call('library', list(package = 'RWordPress', character.only = TRUE))
   do.call(action, args = WPargs)
 }
 
