@@ -177,6 +177,14 @@ knit2wp = function(
   input, title = 'A post from knitr', ..., envir = parent.frame(), shortcode = FALSE,
   action = c('newPost', 'editPost', 'newPage'), postid, publish = TRUE
 ) {
+  xfun::do_once(
+    warning2("This function is based on RWordPress package which is ",
+            "no more actively maintain and may have security risk ",
+            "(https://github.com/yihui/knitr/issues/1866). ",
+            "For blogging with R, there is now the blogdown package."),
+    "knitr.knit2wp.warning",
+    hint = ""
+  )
   if (!xfun::loadable("RWordPress"))
     stop2("You need to install the package RWordPress for this function.",
          "See https://yihui.org/knitr/demo/wordpress/")
