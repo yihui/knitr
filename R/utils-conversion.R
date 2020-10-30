@@ -173,6 +173,9 @@ knit2wp = function(
   input, title = 'A post from knitr', ..., envir = parent.frame(), shortcode = FALSE,
   action = c('newPost', 'editPost', 'newPage'), postid, publish = TRUE
 ) {
+  if (!xfun::loadable("RWordPress"))
+    stop2("You need to install the package RWordPress for this function.",
+         "See https://yihui.org/knitr/demo/wordpress/")
   out = knit(input, envir = envir); on.exit(unlink(out))
   content = file_string(out)
   content = markdown::markdownToHTML(text = content, fragment.only = TRUE)
