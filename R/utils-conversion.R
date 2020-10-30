@@ -143,8 +143,12 @@ knit2html_v1 = function(...) knit2html(..., force_v1 = TRUE)
 
 #' Knit an R Markdown document and post it to WordPress
 #'
-#' This function is a wrapper around the \pkg{RWordPress} package. It compiles
-#' an R Markdown document to HTML and post the results to WordPress.
+#' This function is a wrapper around the \pkg{RWordPress} package, whihch
+#' compiles an R Markdown document to HTML and post the results to WordPress.
+#' Please note that this package has not been updated for many years, which is
+#' \href{https://github.com/yihui/knitr/issues/1866}{not a good sign}. For
+#' blogging with R, \pkg{blogdown} now is advised.
+#'
 #' @param input Filename of the Rmd document.
 #' @param title Title of the post.
 #' @param ... Other meta information of the post, e.g. \code{categories = c('R',

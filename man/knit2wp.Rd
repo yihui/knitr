@@ -42,8 +42,11 @@ specified.}
 \item{publish}{Boolean: publish the post immediately?}
 }
 \description{
-This function is a wrapper around the \pkg{RWordPress} package. It compiles
-an R Markdown document to HTML and post the results to WordPress.
+This function is a wrapper around the \pkg{RWordPress} package, whihch
+compiles an R Markdown document to HTML and post the results to WordPress.
+Please note that this package has not been updated for many years, which is
+\href{https://github.com/yihui/knitr/issues/1866}{not a good sign}. For
+blogging with R, \pkg{blogdown} now is advised.
 }
 \note{
 This function will convert the encoding of the post and the title to
