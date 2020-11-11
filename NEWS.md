@@ -4,6 +4,8 @@
 
 - The chunk option `collapse = TRUE` now works as expected when the chunk option `attr.*` or `class.*` is provided. By this change, The chunk option `collapse = TRUE` forces `attr.*` and `class.*` be `NULL` except for the chunk options `attr.source` and `class.source` (thanks, @aosavi @cderv @atusy, #1902 #1906).
 
+- The internal `html_screenshot` prefers the **webshot2** package to the **webshot** package. This is because backend of the **webshot** package is phantom.js, which is the archived project since 2018 (<https://github.com/ariya/phantomjs/issues/15344>). If **webshot** is preferred, run `opts_chunk$set(webshot = "webshot")` (thanks, @atusy, #1918).
+
 # CHANGES IN knitr VERSION 1.30
 
 ## NEW FEATURES
