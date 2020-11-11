@@ -2,8 +2,9 @@
 name: 'Lock threads'
 
 on:
+  # each week on Wed at 5:10 AM
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '10 5 * * 3' 
 
 jobs:
   lock:
