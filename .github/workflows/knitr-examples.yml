@@ -8,7 +8,7 @@ on:
       - main
       - master
 
-name: R-CMD-check
+name: Check with knitr examples
 
 jobs:
   R-CMD-check:
