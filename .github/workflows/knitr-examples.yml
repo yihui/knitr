@@ -8,18 +8,32 @@ on:
       - main
       - master
 
-name: test-coverage
+name: R-CMD-check
 
 jobs:
-  test-coverage:
-    if: ${{ false() }}
-    runs-on: macOS-latest
+  R-CMD-check:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: ubuntu-18.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
+
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      RSPM: ${{ matrix.config.rspm }}
+      DISPLAY: ':99.0'
+      RGL_USE_NULL: TRUE
+
     steps:
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@v1
 
@@ -37,19 +51,36 @@ jobs:
         shell: Rscript {0}
 
       - name: Cache R packages
+        if: runner.os != 'Windows'
         uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          while read -r cmd
+          do
+            eval sudo $cmd
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "18.04"))')
+
       - name: Install dependencies
         run: |
-          install.packages(c("remotes"))
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("covr")
+          remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
-      - name: Test coverage
-        run: covr::codecov()
-        shell: Rscript {0}
+      - name: Retrieve knitr-examples
+        uses: actions/checkout@v2
+        with:
+          repository: yihui/knitr-examples
+          path: knitr-examples
+          clean: false
+
+      - name: Check knitr-examples
+        run: |
+          rm knitr-examples/cache -rf
+          make integration
+        shell: bash
