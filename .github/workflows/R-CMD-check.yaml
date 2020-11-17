@@ -43,6 +43,12 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
 
+      # TODO: Use next tag once this commit is in a release
+      - uses: r-lib/actions/setup-tinytex@5f1c134
+        env:
+          # install full prebuilt version
+          TINYTEX_INSTALLER: TinyTeX
+
       - name: Query dependencies
         run: |
           install.packages('remotes')
@@ -57,12 +63,6 @@ jobs:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-
-      - name: Install TinyTeX
-        run: |
-          remotes::install_cran("tinytex")
-          tinytex:::install_prebuilt()
-        shell: Rscript {0}
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
