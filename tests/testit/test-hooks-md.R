@@ -67,8 +67,15 @@ x = "1.png"
 w = h = 1
 ex = "style='margin: 0;'"
 cap = "foo"
-opt <- function(w = NULL, h =NULL, ex = NULL, cap = NULL, show = 'asis', ...) {
-  list(out.width = w, out.height = h, out.extra = ex, fig.cap = cap, fig.show = show, ...)
+align = 'left'
+link = 'https://example.com'
+opt <- function(
+  w = NULL, h =NULL, ex = NULL, align = 'default', cap = NULL, show = 'asis', ...
+) {
+  list(
+    out.width = w, out.height = h, out.extra = ex,
+    fig.align = align, fig.cap = cap, fig.show = show,...
+  )
 }
 
 assert("Include a plot by pandoc md", {
@@ -80,3 +87,67 @@ assert("Include a plot by pandoc md", {
   (hook_plot_md_pandoc(x, opt(w = w, cap = cap, ex = ex)) %==%
     sprintf("![%s](1.png){width=%s %s}", cap, w, ex))
 })
+
+hook = hook_plot_md_base
+assert("Include a plot in variety of formats with hook_plot_md_base", {
+  # width, height, and extra are null, and align is default
+  (hook(x, opt()) %==% "![](1.png)")
+  (hook(x, opt(cap = cap)) %==% sprintf("![%s](1.png)", cap))
+  (hook(x, opt(fig.link = link)) %==% sprintf("[![](1.png)](%s)", link))
+  opts_knit$set(rmarkdown.pandoc.to = 'latex')
+  (hook(x, opt(cap = '')) %==% "![](1.png)<!-- --> ")
+  opts_knit$set(rmarkdown.pandoc.to = 'html')
+  (hook(x, opt(cap = '')) %==% "![](1.png)<!-- -->")
+  # html output with caption or width
+  (hook(x, opt(align = align, cap = cap)) %==%
+      sprintf('<div class="figure" style="text-align: %s">\n<img src="1.png" alt="%s"  />\n<p class="caption">%s</p>\n</div>', align, cap, cap))
+  ## add link
+  (hook(x, opt(w = w, cap = cap, fig.link = link)) %==%
+      sprintf('<div class="figure">\n<a href="%s" target="_blank"><img src="1.png" alt="%s" width="%s" /></a>\n<p class="caption">%s</p>\n</div>', link, cap, w, cap))
+  ## fig.caption is TRUE
+  (hook(x, opt(w = w, cap = cap, fig.topcaption = TRUE)) %==%
+      sprintf('<div class="figure">\n<p class="caption">%s</p><img src="1.png" alt="%s" width="%s" /></div>', cap, cap, w))
+  ## plot1 is FALSE
+  (hook(x, opt(w = w, cap = cap, show = 'hold', fig.cur = 2, fig.num = 2)) %==%
+      sprintf('<img src="1.png" alt="%s" width="%s" />\n<p class="caption">%s</p>\n</div>', cap, w, cap))
+  ## plot2 is FALSE
+  (hook(x, opt(w = w, cap = cap, show = 'hold', fig.cur = 1, fig.num = 2)) %==%
+      sprintf('<div class="figure">\n<img src="1.png" alt="%s" width="%s" />', cap, w, cap))
+  # else
+  opts_knit$restore()
+  (hook(x, opt(align = 'center')) %==% '<img src="1.png" style="display: block; margin: auto;" />')
+})
+
+hook <- hook_plot_md
+assert('Check if hook_plot_md passes arguments to sub-functions', {
+  opts_knit$set(rmarkdown.pandoc.to = 'html')
+  (hook(x, opt()) %==% hook_plot_md_base(x, opt()))
+
+  opts_knit$set(rmarkdown.pandoc.to = 'latex')
+  o = opt(w = w)
+  (hook(x, o) %==% hook_plot_tex(x, o))
+
+  opts_knit$set(rmarkdown.pandoc.to = 'docx')
+  (hook(x, o) %==% hook_plot_md_pandoc(x, o))
+
+  opts_knit$set(rmarkdown.pandoc.to = 'markdown')
+  (hook(x, opt()) %==% hook_plot_md_base(x, opt()))
+  (hook(x, o) %==% hook_plot_md_base(x, o))
+})
+
+assert('Conditionally append blank lines to figures so that figure captions are displayed correctly', {
+  # Append when echo is FALSE or fig.show is hold and the current figure is not the last one
+  (append_blank_lines('a', list(echo = FALSE, fig.cap = cap, fig.num = 3, fig.cur = 1)) %==% 'a\n\n')
+  (append_blank_lines('a', list(fig.show = 'hold', fig.cap = cap, fig.num = 3, fig.cur = 1)) %==% 'a\n\n')
+
+  # Do not append when
+  ## echo is not FALSE
+  (append_blank_lines('', list(echo = TRUE)) %==% '')
+  ## fig.show is not hold
+  (append_blank_lines('', list(echo = FALSE, fig.show = 'asis')) %==% '')
+  ## fig.cap is NULL
+  (append_blank_lines('', list(echo = FALSE, fig.cap = NULL)) %==% '')
+  ## fig.num is equal to fig.cur
+  (append_blank_lines('', list(echo = FALSE, fig.cap = cap, fig.num = 1, fig.cur = 1)) %==% '')
+})
+

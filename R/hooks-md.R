@@ -3,25 +3,26 @@
 hook_plot_md = function(x, options) {
   # if not using R Markdown v2 or output is HTML, just return v1 output
   if (is.null(to <- pandoc_to()) || is_html_output(to))
-    return(hook_plot_md_base(x, options))
+    return(append_blank_lines(hook_plot_md_base(x, options), options))
   if ((options$fig.show == 'animate' || is_tikz_dev(options)) && is_latex_output())
     return(hook_plot_tex(x, options))
+
   office_output = to %in% c('docx', 'pptx', 'rtf', 'odt')
   if (need_special_plot_hook(options)) {
     if (is_latex_output()) {
       # Pandoc < 1.13 does not support \caption[]{} so suppress short caption
       if (is.null(options$fig.scap)) options$fig.scap = NA
-      return(hook_plot_tex(x, options))
+      return(append_blank_lines(hook_plot_tex(x, options), options))
     }
     if (office_output) {
       if (options$fig.align != 'default') {
         warning('Chunk options fig.align is not supported for ', to, ' output')
         options$fig.align = 'default'
       }
-      return(hook_plot_md_pandoc(x, options))
+      return(append_blank_lines(hook_plot_md_pandoc(x, options), options))
     }
   }
-  hook_plot_md_base(x, options)
+  append_blank_lines(hook_plot_md_base(x, options), options)
 }
 
 # decide if the markdown plot hook is not enough and needs special hooks like
@@ -112,6 +113,16 @@ css_align = function(align) {
 
 css_text_align = function(align) {
   if (align == 'default') '' else sprintf(' style="text-align: %s"', align)
+}
+
+append_blank_lines = function(x, options) {
+  if (
+    (!identical(options$echo, FALSE) && options$fig.show != 'hold') ||
+    is.null(options$fig.cap) || options$fig.num == options$fig.cur
+  ) {
+    return(x)
+  }
+  paste0(x, "\n\n")
 }
 
 # turn a class string "a b" to c(".a", ".b") for Pandoc fenced code blocks
