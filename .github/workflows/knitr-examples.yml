@@ -81,6 +81,8 @@ jobs:
           clean: false
 
       - name: Check knitr-examples
+        env:
+          TRAVIS: 'true'
         run: |
           rm knitr-examples/cache -rf
           make integration
