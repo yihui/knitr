@@ -12,7 +12,7 @@ name: test-coverage
 
 jobs:
   test-coverage:
-    if: ${{ false() }}
+    if: ${{ false }}
     runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

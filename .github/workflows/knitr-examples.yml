@@ -65,6 +65,7 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "18.04"))')
+          sudo apt-get -y libpoppler-cpp-dev graphviz asymptote highlight coffeescript scala optipng
 
       - name: Install dependencies
         run: |
