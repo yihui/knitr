@@ -91,3 +91,10 @@ jobs:
           rm knitr-examples/cache -rf
           make integration
         shell: bash
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: knitr-examples
+          path: knitr-examples/
+          retention-days: 7
