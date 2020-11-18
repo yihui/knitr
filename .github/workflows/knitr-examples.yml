@@ -3,10 +3,16 @@ on:
     branches:
       - main
       - master
+    paths:
+      - '!.github/**'
+      - '.github/workflows/knitr-examples.yaml'
   pull_request:
     branches:
       - main
       - master
+    paths:
+      - '!.github/**'
+      - '.github/workflows/knitr-examples.yaml'
 
 name: Check with knitr examples
 

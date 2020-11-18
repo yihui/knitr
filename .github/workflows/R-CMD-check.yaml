@@ -5,10 +5,16 @@ on:
     branches:
       - main
       - master
+    paths:
+      - '!.github/**'
+      - '.github/workflows/R-CMD-check.yaml'
   pull_request:
     branches:
       - main
       - master
+    paths:
+      - '!.github/**'
+      - '.github/workflows/R-CMD-check.yaml'
 
 name: R-CMD-check
 

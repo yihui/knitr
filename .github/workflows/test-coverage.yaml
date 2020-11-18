@@ -3,10 +3,16 @@ on:
     branches:
       - main
       - master
+    paths:
+      - '!.github/**'
+      - '.github/workflows/test-coverage.yaml'
   pull_request:
     branches:
       - main
       - master
+    paths:
+      - '!.github/**'
+      - '.github/workflows/test-coverage.yaml'
 
 name: test-coverage
 
