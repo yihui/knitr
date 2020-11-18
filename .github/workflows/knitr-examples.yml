@@ -50,13 +50,21 @@ jobs:
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
 
+      - name: Retrieve knitr-examples
+        uses: actions/checkout@v2
+        with:
+          repository: cderv/knitr-examples
+          path: knitr-examples
+          clean: false
+          ref: for-gha
+
       - name: Cache R packages
         if: runner.os != 'Windows'
         uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-${{ hashFiles('knitr-examples/R-packages') }}-1-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-${{ hashFiles('knitr-examples/R-packages') }}-1-
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -75,14 +83,6 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
-
-      - name: Retrieve knitr-examples
-        uses: actions/checkout@v2
-        with:
-          repository: cderv/knitr-examples
-          path: knitr-examples
-          clean: false
-          ref: for-gha
 
       - name: Check knitr-examples
         run: |
