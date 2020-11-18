@@ -66,6 +66,9 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "18.04"))')
           sudo apt-get install -y libpoppler-cpp-dev graphviz asymptote highlight coffeescript scala optipng
+          # downgrade ruby to remove deprecated
+          # https://github.com/rubygems/rubygems/issues/3068
+          sudo gem update --system 3.0.8
 
       - name: Install dependencies
         run: |
@@ -76,9 +79,10 @@ jobs:
       - name: Retrieve knitr-examples
         uses: actions/checkout@v2
         with:
-          repository: yihui/knitr-examples
+          repository: cderv/knitr-examples
           path: knitr-examples
           clean: false
+          ref: gha
 
       - name: Check knitr-examples
         env:
