@@ -85,5 +85,6 @@ jobs:
           TRAVIS: 'true'
         run: |
           rm knitr-examples/cache -rf
-          make integration
+          # make integration
+          ./knitr-examples/k 093-knitr-asy.Rmd
         shell: bash
