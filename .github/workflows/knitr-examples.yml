@@ -82,7 +82,7 @@ jobs:
           repository: cderv/knitr-examples
           path: knitr-examples
           clean: false
-          ref: gha
+          ref: for-gha
 
       - name: Check knitr-examples
         env:
