@@ -27,6 +27,7 @@ jobs:
       RSPM: ${{ matrix.config.rspm }}
       DISPLAY: ':99.0'
       RGL_USE_NULL: TRUE
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v2
