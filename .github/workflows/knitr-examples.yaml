@@ -54,10 +54,9 @@ jobs:
       - name: Retrieve knitr-examples
         uses: actions/checkout@v2
         with:
-          repository: cderv/knitr-examples
+          repository: yihui/knitr-examples
           path: knitr-examples
           clean: false
-          ref: for-gha
 
       - name: Cache R packages
         if: runner.os != 'Windows'
