@@ -73,8 +73,9 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "18.04"))')
 
       - name: Install dependencies
+        env:
+          _R_CHECK_FORCE_SUGGESTS_: FALSE
         run: |
-          options(install.packages.check.source = "no")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
           remotes::install_cran("sessioninfo")
