@@ -6,6 +6,8 @@
 
 - New links added in `?knitr::kable()` help page to the Rmarkdown Cookbook relevant pages. 
 
+- Add an option `knitr.table.html.attr` to set globally `table.attr` argument in `kable(.., format = 'html')` (#1922).
+
 # CHANGES IN knitr VERSION 1.30
 
 ## NEW FEATURES
