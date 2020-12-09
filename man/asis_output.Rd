@@ -48,5 +48,5 @@ This function only works in top-level R expressions, and it will not
   \url{https://github.com/yihui/knitr/issues/1137} for a discussion.
 }
 \examples{
-# see ?knit_print
+ # see ?knit_print
 }

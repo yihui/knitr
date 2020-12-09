@@ -75,7 +75,7 @@ The two hook functions \code{hook_rgl()} and \code{hook_webgl()} were
   \pkg{knitr} v1.10.5, and you can \code{library(rgl)} to get them.
 }
 \examples{
-if (require("rgl") && exists("hook_rgl")) knit_hooks$set(rgl = hook_rgl)
+if (require('rgl') && exists('hook_rgl')) knit_hooks$set(rgl = hook_rgl)
 # then in code chunks, use the option rgl=TRUE
 }
 \references{

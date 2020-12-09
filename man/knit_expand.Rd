@@ -29,7 +29,7 @@ template.
 }
 \examples{
 # see the knit_expand vignette
-if (interactive()) browseVignettes(package = "knitr")
+if (interactive()) browseVignettes(package='knitr')
 }
 \references{
 This function was inspired by the pyexpander and m4

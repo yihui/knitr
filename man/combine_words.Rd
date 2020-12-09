@@ -31,10 +31,9 @@ greater than 2, \code{sep} is used to separate all words, and the \code{and}
 string is prepended to the last word.
 }
 \examples{
-combine_words("a")
-combine_words(c("a", "b"))
-combine_words(c("a", "b", "c"))
-combine_words(c("a", "b", "c"), sep = " / ", and = "")
-combine_words(c("a", "b", "c"), and = "")
-combine_words(c("a", "b", "c"), before = "\"", after = "\"")
+combine_words('a'); combine_words(c('a', 'b'))
+combine_words(c('a', 'b', 'c'))
+combine_words(c('a', 'b', 'c'), sep = ' / ', and = '')
+combine_words(c('a', 'b', 'c'), and = '')
+combine_words(c('a', 'b', 'c'), before = '"', after = '"')
 }

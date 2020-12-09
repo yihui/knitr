@@ -45,13 +45,13 @@ It is recommended to leave a \code{...} argument in your method, to
 library(knitr)
 # write tables for data frames
 knit_print.data.frame = function(x, ...) {
-    res = paste(c("", "", kable(x, output = FALSE)), collapse = "\n")
-    asis_output(res)
+  res = paste(c('', '', kable(x, output = FALSE)), collapse = '\n')
+  asis_output(res)
 }
 # register the method
 registerS3method("knit_print", "data.frame", knit_print.data.frame)
-# after you define and register the above method, data frames will be printed as
-# tables in knitr, which is different with the default print() behavior
+# after you define and register the above method, data frames will be printed
+# as tables in knitr, which is different with the default print() behavior
 }
 \references{
 See \code{vignette('knit_print', package = 'knitr')}.

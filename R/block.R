@@ -100,6 +100,7 @@ cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fi
 # options that should not affect cache
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
+#' @export
 block_exec = function(options) {
   # when code is not R language
   if (options$engine != 'R') {
@@ -118,8 +119,13 @@ block_exec = function(options) {
         ))
       }
     return(if (options$include) output else '')
+  } else if (options$engine == "R") {
+    block_exec_R(options)
   }
+}
 
+#' @export
+block_exec_R = function(options) {
   # eval chunks (in an empty envir if cache)
   env = knit_global()
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk

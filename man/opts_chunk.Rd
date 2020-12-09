@@ -38,8 +38,7 @@ See \code{str(knitr::opts_chunk$get())} for a list of default chunk options.
   not recommended to do so unless you understand the consequences.
 }
 \examples{
-opts_chunk$get("prompt")
-opts_chunk$get("fig.keep")
+opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
 }
 \references{
 Usage: \url{https://yihui.org/knitr/objects/}
