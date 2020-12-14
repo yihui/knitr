@@ -167,7 +167,6 @@ knit_filter = function(ifile, encoding = 'UTF-8') {
 pandoc_available = function() {
   # if you have this environment variable, chances are you are good to go
   if (Sys.getenv("RSTUDIO_PANDOC") != '') return(TRUE)
-  if (Sys.which('pandoc-citeproc') == '') return(FALSE)
   rmarkdown::pandoc_available('1.12.3')
 }
 

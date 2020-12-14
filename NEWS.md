@@ -1,10 +1,16 @@
 # CHANGES IN knitr VERSION 1.31
 
+## NEW FEATURES
+
 - The `sql` engine now correctly captures error with the chunk option `error = TRUE` (thanks, @colearendt, rstudio/rmarkdown#1208).
 
 - The chunk option `collapse = TRUE` now works as expected when the chunk option `attr.*` or `class.*` is provided. By this change, The chunk option `collapse = TRUE` forces `attr.*` and `class.*` be `NULL` except for the chunk options `attr.source` and `class.source` (thanks, @aosavi @cderv @atusy, #1902 #1906).
 
 - New links added in `?knitr::kable()` help page to the Rmarkdown Cookbook relevant pages. 
+
+## MINOR CHANGES
+
+- Vignette engines for R Markdown vignettes no longer check for availability of `pandoc-citeproc` since it has gone since Pandoc 2.11.
 
 # CHANGES IN knitr VERSION 1.30
 
