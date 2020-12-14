@@ -82,6 +82,7 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
+          tinytex::tlmgr_install("dvisvgm")
         shell: Rscript {0}
 
       - name: Check knitr-examples
