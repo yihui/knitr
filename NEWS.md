@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- Added a new `fig.alt` option that will be used for alternative text in `alt` HTML attribute instead of `fig.cap`, if provided. It will be evaluated after a chunk has been evaluated and recycled if multiple plots / images are in the chunk, as with `fig.cap` (#1900)
+- Added a new `fig.alt` option that will be used for alternative text in `alt` HTML attribute instead of `fig.cap`, if provided. It will be evaluated after a chunk has been evaluated as with `fig.cap`. Also, if multiple plots / images are in the chunks, you can pass a vector or it will be recycled (#1900).
 
 - The `sql` engine now correctly captures error with the chunk option `error = TRUE` (thanks, @colearendt, rstudio/rmarkdown#1208).
 
