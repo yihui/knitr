@@ -1,12 +1,5 @@
 library(testit)
 
-assert('abs_path() recognizes absolute paths under Windows and *nix', {
-  (!is_abs_path('abc/def'))
-  (is_abs_path(if (.Platform$OS.type == 'windows') {
-    c('D:\\abc', '\\\\netdrive\\somewhere')
-  } else '/abc/def'))
-})
-
 op = options(digits = 3, scipen = 0, knitr.digits.signif = TRUE)
 
 assert(
@@ -197,4 +190,15 @@ assert('block_attr(x) turns a character vector into Pandoc attributes', {
   (block_attr('.a') %==% '{.a}')
   (block_attr('.a b="11"') %==% '{.a b="11"}')
   (block_attr(c('.a', 'b="11"')) %==% '{.a b="11"}')
+})
+
+
+keys = unlist(lapply(
+  c('class.', 'attr.'), paste0, c('source', 'output', 'message', 'warning', 'error')
+))
+keys_source = c('class.source', 'attr.source')
+opts = fix_options(opts_chunk$merge(c(setNames(as.list(keys), keys), list(collapse = TRUE))))
+assert('when collapse is TRUE, class.* and attr.* become NULL except for class.source and attr.source', {
+  (opts[keys_source] %==% as.list(setNames(keys_source, keys_source)))
+  (!any(names(opts) %in% setdiff(keys, keys_source)))
 })

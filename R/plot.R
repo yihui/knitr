@@ -412,7 +412,7 @@ include_graphics = function(
     i = file.exists(path2)
     path[i] = path2[i]
   }
-  if (error && length(p <- path[!is_web_path(path) & !file.exists(path)])) stop(
+  if (error && length(p <- path[!xfun::is_web_path(path) & !file.exists(path)])) stop(
     'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
   )
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)

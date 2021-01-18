@@ -20,6 +20,7 @@
 #'   FAQ's: \url{https://yihui.org/knitr/faq/}
 #' @importFrom xfun attr file_ext isFALSE is_windows loadable parse_only
 #'   sans_ext try_silent with_ext read_utf8 write_utf8 file_string
+#'   is_R_CMD_check is_abs_path
 NULL
 
 .knitEnv = new.env()

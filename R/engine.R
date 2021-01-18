@@ -546,18 +546,27 @@ eng_sql = function(options) {
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
 
-  if (is_sql_update_query(query)) {
-    DBI::dbExecute(conn, query)
-    data = NULL
-  } else if (is.null(varname) && max.print > 0) {
-    # execute query -- when we are printing with an enforced max.print we
-    # use dbFetch so as to only pull down the required number of records
-    res = DBI::dbSendQuery(conn, query)
-    data = DBI::dbFetch(res, n = max.print)
-    DBI::dbClearResult(res)
-  } else {
-    data = DBI::dbGetQuery(conn, query)
-  }
+  data = tryCatch({
+    if (is_sql_update_query(query)) {
+      DBI::dbExecute(conn, query)
+      NULL
+    } else if (is.null(varname) && max.print > 0) {
+      # execute query -- when we are printing with an enforced max.print we
+      # use dbFetch so as to only pull down the required number of records
+      res = DBI::dbSendQuery(conn, query)
+      data = DBI::dbFetch(res, n = max.print)
+      DBI::dbClearResult(res)
+      data
+    } else {
+      DBI::dbGetQuery(conn, query)
+    }
+  }, error = function(e) {
+    if (!options$error) stop(e)
+    e
+  })
+
+  if (inherits(data, "error"))
+    return(engine_output(options, query, one_string(data)))
 
   # create output if needed (we have data and we aren't assigning it to a variable)
   output = if (length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)) capture.output({
