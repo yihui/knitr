@@ -819,7 +819,7 @@ combine_words = function(
   words = paste0(before, words, after)
   if (n == 1) return(rs(words))
   if (n == 2) return(rs(paste(words, collapse = and)))
-  if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
+  if (oxford_comma && grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
   words[n] = paste0(and, words[n])
   # combine the last two words directly without the comma
   if (oxford_comma) {
