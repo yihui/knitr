@@ -808,7 +808,7 @@ create_label = function(..., latex = FALSE) {
 #' combine_words(c('a', 'b', 'c'), sep = ' / ', and = '')
 #' combine_words(c('a', 'b', 'c'), and = '')
 #' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
-combine_words = function(words, sep = ', ', and = ' and ', before = '', after = before) {
+combine_words = function(words, sep = ', ', and = ' and ', before = '', after = before, oxford_comma = TRUE) {
   n = length(words); rs = xfun::raw_string
   if (n == 0) return(words)
   words = paste0(before, words, after)
@@ -816,7 +816,8 @@ combine_words = function(words, sep = ', ', and = ' and ', before = '', after = 
   if (n == 2) return(rs(paste(words, collapse = and)))
   if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
   words[n] = paste0(and, words[n])
-  rs(paste(words, collapse = sep))
+  if(oxford_comma)  return(rs(paste(words, collapse = sep)))
+  return(rs(paste(paste(words[1:(length(words)-1)], collapse=sep), words[length(words)])))
 }
 
 warning2 = function(...) warning(..., call. = FALSE)
