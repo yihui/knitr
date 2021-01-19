@@ -139,7 +139,7 @@ assert(
   cw(c('a', 'b', 'c'), and = '') %==% 'a, b, c',
   cw(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c',
   cw(c('a', 'b', 'c'), before = '"') %==% '"a", "b", and "c"',
-  cw(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''"
+  cw(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''",
   cw(c('a', 'b', 'c'), before = '``', after = "''", oxford_comma = FALSE) %==% "``a'', ``b'' and ``c''"
 )
 rm(list = 'cw')
