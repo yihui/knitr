@@ -22,7 +22,8 @@ combine_words(
 
 \item{before, after}{A character string to be added before/after each word.}
 
-\item{oxford_comma}{If false, removes the comma separating the last two elements in the list.}
+\item{oxford_comma}{Whether to insert the separator between the last two
+elements in the list.}
 }
 \value{
 A character string marked by \code{xfun::\link{raw_string}()}.
