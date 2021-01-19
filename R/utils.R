@@ -818,8 +818,12 @@ combine_words = function(words, sep = ', ', and = ' and ', before = '', after = 
   if (n == 2) return(rs(paste(words, collapse = and)))
   if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
   words[n] = paste0(and, words[n])
-  if(oxford_comma)  return(rs(paste(words, collapse = sep)))
-  return(rs(paste(paste(words[1:(length(words)-1)], collapse=sep), words[length(words)])))
+  # combine the last two words directly without the comma
+  if (oxford_comma) {
+    words[n - 1] = paste0(words[n - 1:0], collapse = '')
+    words = words[-n]
+  }
+  rs(paste(words, collapse = sep))
 }
 
 warning2 = function(...) warning(..., call. = FALSE)
