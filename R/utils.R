@@ -801,6 +801,7 @@ create_label = function(..., latex = FALSE) {
 #' @param sep Separator to be inserted between words.
 #' @param and Character string to be prepended to the last word.
 #' @param before,after A character string to be added before/after each word.
+#' @param oxford_comma If false, removes the comma separating the last two elements in the list.
 #' @return A character string marked by \code{xfun::\link{raw_string}()}.
 #' @export
 #' @examples combine_words('a'); combine_words(c('a', 'b'))
@@ -808,6 +809,7 @@ create_label = function(..., latex = FALSE) {
 #' combine_words(c('a', 'b', 'c'), sep = ' / ', and = '')
 #' combine_words(c('a', 'b', 'c'), and = '')
 #' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
+#' combine_words(c('a', 'b', 'c'), before = '"', after = '"', oxford_comma=FALSE)
 combine_words = function(words, sep = ', ', and = ' and ', before = '', after = before, oxford_comma = TRUE) {
   n = length(words); rs = xfun::raw_string
   if (n == 0) return(words)

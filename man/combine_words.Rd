@@ -21,6 +21,8 @@ combine_words(
 \item{and}{Character string to be prepended to the last word.}
 
 \item{before, after}{A character string to be added before/after each word.}
+
+\item{oxford_comma}{If false, removes the comma separating the last two elements in the list.}
 }
 \value{
 A character string marked by \code{xfun::\link{raw_string}()}.
@@ -44,4 +46,5 @@ combine_words(c("a", "b", "c"))
 combine_words(c("a", "b", "c"), sep = " / ", and = "")
 combine_words(c("a", "b", "c"), and = "")
 combine_words(c("a", "b", "c"), before = "\"", after = "\"")
+combine_words(c("a", "b", "c"), before = "\"", after = "\"", oxford_comma = FALSE)
 }
