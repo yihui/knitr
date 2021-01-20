@@ -822,7 +822,7 @@ combine_words = function(
   if (oxford_comma && grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
   words[n] = paste0(and, words[n])
   # combine the last two words directly without the comma
-  if (oxford_comma) {
+  if (!oxford_comma) {
     words[n - 1] = paste0(words[n - 1:0], collapse = '')
     words = words[-n]
   }
