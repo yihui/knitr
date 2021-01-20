@@ -449,8 +449,8 @@ raster_dpi_width = function(path, dpi) {
 #' the output. \code{include_app()} takes the URL of a Shiny app and adds
 #' \samp{?showcase=0} to it (to disable the showcase mode), then passes the URL
 #' to \code{include_url()}.
-#' @param url Character string containing a URL.
-#' @param height Character string with the height of the iframe.
+#' @param url Character vector containing one or several URL.
+#' @param height Character string with the height of the iframe. If you need different
 #' @return An R object with a special class that \pkg{knitr} recognizes
 #'   internally to generate the iframe or screenshot.
 #' @seealso \code{\link{include_graphics}}
