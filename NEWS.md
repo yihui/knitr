@@ -8,6 +8,8 @@
 
 - New links added in `?knitr::kable()` help page to the Rmarkdown Cookbook relevant pages. 
 
+- Added a new argument `oxford_comma` to the function `combine_words()` (thanks, @thompsonsed, #1946).
+
 ## MINOR CHANGES
 
 - Vignette engines for R Markdown vignettes no longer check for availability of `pandoc-citeproc` since it has gone since Pandoc 2.11.
