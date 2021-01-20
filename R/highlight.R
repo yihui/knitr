@@ -19,7 +19,7 @@ hilight_source = function(x, format, options) {
     # if you did not reformat or evaluate the code, I have to figure out which
     # lines belong to one complete expression first (#779)
     if (options$engine == 'R' && isFALSE(options$tidy) && isFALSE(options$eval))
-      x = vapply(highr:::group_src(x), one_string, character(1))
+      x = vapply(xfun::split_source(x), one_string, character(1))
     line_prompt(x)
   } else x
 }
