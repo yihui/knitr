@@ -470,7 +470,8 @@ include_url2 = function(url, height = '400px', orig = url) {
 #' @export
 include_app = function(url, height = '400px') {
   orig = url  # store the original URL
-  if (!grepl('?', url, fixed = TRUE)) url = paste0(url, '?showcase=0')
+  i = !grepl('?', url, fixed = TRUE)
+  if (any(i)) url[i] = paste0(url[i], '?showcase=0')
   include_url2(url, height, orig)
 }
 
@@ -534,19 +535,22 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
         save_widget(x, f1, FALSE, options = options)
       } else f1 = x$url
       f2 = wd_tempfile('webshot', ext)
-      do.call(webshot::webshot, c(list(f1, f2), wargs))
-      normalizePath(f2)
+      f3 = do.call(webshot::webshot, c(list(f1, f2), wargs))
+      normalizePath(f3)
     } else if (i2) {
-      f = wd_tempfile('webshot', ext)
-      do.call(webshot::appshot, c(list(x, f), wargs))
-      normalizePath(f)
+      f1 = wd_tempfile('webshot', ext)
+      f2 = do.call(webshot::appshot, c(list(x, f1), wargs))
+      normalizePath(f2)
     }
   })
-  res = readBin(f, 'raw', file.info(f)[, 'size'])
-  structure(
-    list(image = res, extension = ext, url = if (i3) x$url.orig),
-    class = 'html_screenshot'
-  )
+  lapply(f, function(filename) {
+    i = which(filename == f)
+    res = readBin(filename, 'raw', file.info(filename)[, 'size'])
+    structure(
+      list(image = res, extension = ext, url = if (i3) x$url.orig[i]),
+      class = 'html_screenshot'
+    )
+  })
 }
 
 save_widget = function(..., options) {
