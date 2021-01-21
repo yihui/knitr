@@ -449,10 +449,10 @@ raster_dpi_width = function(path, dpi) {
 #' the output. \code{include_app()} takes the URL of a Shiny app and adds
 #' \samp{?showcase=0} to it (to disable the showcase mode), then passes the URL
 #' to \code{include_url()}.
-#' @param url Character vector containing one or several URL.
-#' @param height Character string with the height of the iframe. If you need different
+#' @param url A character vector of URLs.
+#' @param height A character vector to specify the height of iframes.
 #' @return An R object with a special class that \pkg{knitr} recognizes
-#'   internally to generate the iframe or screenshot.
+#'   internally to generate the iframes or screenshots.
 #' @seealso \code{\link{include_graphics}}
 #' @export
 include_url = function(url, height = '400px') {
@@ -471,7 +471,7 @@ include_url2 = function(url, height = '400px', orig = url) {
 include_app = function(url, height = '400px') {
   orig = url  # store the original URL
   i = !grepl('?', url, fixed = TRUE)
-  if (any(i)) url[i] = paste0(url[i], '?showcase=0')
+  url[i] = paste0(url[i], '?showcase=0')
   include_url2(url, height, orig)
 }
 
@@ -544,10 +544,10 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     }
   })
   lapply(f, function(filename) {
-    i = which(filename == f)
+    # TODO: use xfun::read_bin()
     res = readBin(filename, 'raw', file.info(filename)[, 'size'])
     structure(
-      list(image = res, extension = ext, url = if (i3) x$url.orig[i]),
+      list(image = res, extension = ext, url = if (i3) x$url.orig[filename == f]),
       class = 'html_screenshot'
     )
   })

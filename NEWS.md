@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- `include_url()` and `include_app()` can now take several urls as argument. (#1948)
+- `include_url()` and `include_app()` can now take a vector of URLs (thanks, @cderv, #1948).
 
 - The `sql` engine now correctly captures error with the chunk option `error = TRUE` (thanks, @colearendt, rstudio/rmarkdown#1208).
 
