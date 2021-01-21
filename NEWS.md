@@ -4,11 +4,15 @@
 
 - Added a new chunk option `fig.alt` for users to specify the alternative text in the `alt` attribute of the `<img>` tag  (images). Previously, the `alt` attribute takes value from the chunk option `fig.cap` (it still does so if `fig.alt` is `NULL`). If there are multiple plots/images in a chunk, you can pass a character vector to `fig.alt`, and it will be applied to individual images (thanks, @cderv, #1900).
 
+- `include_url()` and `include_app()` can now take a vector of URLs (thanks, @cderv, #1948).
+
 - The `sql` engine now correctly captures error with the chunk option `error = TRUE` (thanks, @colearendt, rstudio/rmarkdown#1208).
 
 - The chunk option `collapse = TRUE` now works as expected when the chunk option `attr.*` or `class.*` is provided. By this change, The chunk option `collapse = TRUE` forces `attr.*` and `class.*` be `NULL` except for the chunk options `attr.source` and `class.source` (thanks, @aosavi @cderv @atusy, #1902 #1906).
 
 - New links added in `?knitr::kable()` help page to the Rmarkdown Cookbook relevant pages. 
+
+- Added a new argument `oxford_comma` to the function `combine_words()` (thanks, @thompsonsed, #1946).
 
 ## MINOR CHANGES
 
