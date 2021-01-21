@@ -115,6 +115,7 @@ opts_chunk_attr = local({
   opts$external = opts$sanitize = NULL  # hide these two rare options
   opts$fig.process = 'function'
   opts$fig.asp = 'numeric'
+  opts$fig.alt = 'character'
   opts$fig.dim = 'list'
   opts$R.options = 'list'
   opts$cache.comments = 'logical'
@@ -164,7 +165,7 @@ set_alias = function(...) {
 #' }
 #' @include hooks-html.R
 opts_knit = new_defaults(list(
-  progress = TRUE, verbose = FALSE, eval.after = 'fig.cap',
+  progress = TRUE, verbose = FALSE, eval.after = c('fig.cap', 'fig.alt'),
   base.dir = NULL, base.url = NULL, root.dir = NULL, child.path = '',
   upload.fun = identity, global.device = FALSE, global.par = FALSE,
   concordance = FALSE, documentation = 1L, self.contained = TRUE,
