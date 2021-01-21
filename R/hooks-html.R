@@ -37,9 +37,9 @@ hook_animation = function(options) {
   paste(c(sprintf('width="%s"', w), sprintf('height="%s"', h), extra), collapse = ' ')
 }
 
-.img.tag = function(src, w, h, caption, extra, alt = caption) {
+.img.tag = function(src, w, h, caption, extra) {
   caption = if (length(caption) == 1 && caption != '') {
-    paste0('title="', caption, '" alt="', alt, '" ')
+    paste0('title="', caption, '" alt="', caption, '" ')
   }
   tag = if (grepl('[.]pdf$', src, ignore.case = TRUE)) {
     extra = c(extra, 'type="application/pdf"')
