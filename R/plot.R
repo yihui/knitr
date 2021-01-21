@@ -449,10 +449,10 @@ raster_dpi_width = function(path, dpi) {
 #' the output. \code{include_app()} takes the URL of a Shiny app and adds
 #' \samp{?showcase=0} to it (to disable the showcase mode), then passes the URL
 #' to \code{include_url()}.
-#' @param url Character string containing a URL.
-#' @param height Character string with the height of the iframe.
+#' @param url A character vector of URLs.
+#' @param height A character vector to specify the height of iframes.
 #' @return An R object with a special class that \pkg{knitr} recognizes
-#'   internally to generate the iframe or screenshot.
+#'   internally to generate the iframes or screenshots.
 #' @seealso \code{\link{include_graphics}}
 #' @export
 include_url = function(url, height = '400px') {
@@ -470,7 +470,8 @@ include_url2 = function(url, height = '400px', orig = url) {
 #' @export
 include_app = function(url, height = '400px') {
   orig = url  # store the original URL
-  if (!grepl('?', url, fixed = TRUE)) url = paste0(url, '?showcase=0')
+  i = !grepl('?', url, fixed = TRUE)
+  url[i] = paste0(url[i], '?showcase=0')
   include_url2(url, height, orig)
 }
 
@@ -534,19 +535,22 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
         save_widget(x, f1, FALSE, options = options)
       } else f1 = x$url
       f2 = wd_tempfile('webshot', ext)
-      do.call(webshot::webshot, c(list(f1, f2), wargs))
-      normalizePath(f2)
+      f3 = do.call(webshot::webshot, c(list(f1, f2), wargs))
+      normalizePath(f3)
     } else if (i2) {
-      f = wd_tempfile('webshot', ext)
-      do.call(webshot::appshot, c(list(x, f), wargs))
-      normalizePath(f)
+      f1 = wd_tempfile('webshot', ext)
+      f2 = do.call(webshot::appshot, c(list(x, f1), wargs))
+      normalizePath(f2)
     }
   })
-  res = readBin(f, 'raw', file.info(f)[, 'size'])
-  structure(
-    list(image = res, extension = ext, url = if (i3) x$url.orig),
-    class = 'html_screenshot'
-  )
+  lapply(f, function(filename) {
+    # TODO: use xfun::read_bin()
+    res = readBin(filename, 'raw', file.info(filename)[, 'size'])
+    structure(
+      list(image = res, extension = ext, url = if (i3) x$url.orig[filename == f]),
+      class = 'html_screenshot'
+    )
+  })
 }
 
 save_widget = function(..., options) {
