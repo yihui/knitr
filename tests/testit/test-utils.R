@@ -143,15 +143,17 @@ assert(
 )
 rm(list = 'cw')
 
-opts = list(fig.cap = 'Figure "caption" <>.', fig.lp = 'Fig:', label = 'foo')
-opts_alt = c(opts, list(fig.alt = 'Figure "alternative text" <>.'))
+opts = list(
+  fig.cap = 'Figure "caption" <>.', fig.lp = 'Fig:', label = 'foo',
+  fig.alt = 'Figure "alternative text" <>.'
+)
 assert(
   '.img.cap() generates the figure caption and alt attribute',
   .img.cap(list(fig.cap = NULL), FALSE) %==% "",
   .img.cap(opts, FALSE) %==% opts$fig.cap,
   .img.cap(opts, TRUE)  %==% 'Figure &quot;caption&quot; &lt;&gt;.',
-  .img.cap(opts_alt, TRUE)  %==% 'Figure &quot;alternative text&quot; &lt;&gt;.',
-  .img.cap(opts_alt, FALSE)  %==% opts$fig.cap,
+  .img.cap(opts, TRUE)  %==% 'Figure &quot;alternative text&quot; &lt;&gt;.',
+  .img.cap(opts, FALSE)  %==% opts$fig.cap,
   .img.cap(list(fig.cap = '', fig.alt = "alt"), FALSE) %==% "",
   .img.cap(list(fig.cap = '', fig.alt = "alt"), TRUE) %==% "alt"
 )
