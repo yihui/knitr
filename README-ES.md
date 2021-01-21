@@ -20,20 +20,16 @@ Puede instalar la versión estable en [CRAN](https://cran.r-project.org/package=
 install.packages('knitr')
 ```
 
-También puede instalar la versión en desarrollo desde [XRAN](https://xran.yihui.org), la cual provee construcciones diarias de **knitr**:
+También puede instalar la versión en desarrollo desde <https://yihui.r-universe.dev>, la cual provee construcciones diarias de **knitr**:
 
 ```r
-# primero actualice todos los paquetes existentes
-update.packages(ask = FALSE, repos = 'http://cran.r-project.org')
-install.packages('knitr', repos = c('https://xran.yihui.org', 'http://cran.r-project.org'))
+options(repos = c(
+  yihui = 'https://yihui.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'
+))
+
+install.packages('knitr')
 ```
-
-O usar **devtools** para instalar la versión en desarrollo desde GitHub:
-
-```r
-devtools::install_github('yihui/knitr', build_vignettes = TRUE)
-```
-
 
 ## Motivación
 

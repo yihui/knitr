@@ -25,16 +25,19 @@ You can install the stable version on
 install.packages('knitr')
 ```
 
-You can also install the development version from
-[XRAN](https://xran.yihui.org), which provides daily build of **knitr**:
+You can also install the development version (hourly build) from
+<https://yihui.r-universe.dev>:
 
 ```r
-# update all existing packages first
-update.packages(ask = FALSE, repos = 'https://cran.r-project.org')
-install.packages('knitr', repos = c('https://xran.yihui.org', 'https://cran.r-project.org'))
+options(repos = c(
+  yihui = 'https://yihui.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'
+))
+
+install.packages('knitr')
 ```
 
-Note that if you want to build the source package via `R CMD INSTALL` without a previously installed version of **knitr**, you must either pre-install **knitr** from CRAN, or run `R CMD INSTALL` on this source repo, otherwise `R CMD build` will fail (which is probably a bug of base R).
+Note that if you want to build the source package via `R CMD INSTALL` without a previously installed version of **knitr**, you must either pre-install **knitr** from CRAN, or run `R CMD INSTALL` on this source repo, otherwise `R CMD build` will fail.
 
 ## Motivation
 

@@ -19,15 +19,18 @@ Você pode instalar a versão estável em [CRAN](https://cran.r-project.org/pack
 install.packages('knitr')
 ```
 
-Você pode instalar a versão em desenvolvimento em [XRAN](https://xran.yihui.org), que fornece compilações (*builds*) diários do **knitr**:
+Você pode instalar a versão em desenvolvimento em <https://yihui.r-universe.dev>, que fornece compilações (*builds*) diários do **knitr**:
 
 ```r
-# Atualizar todos os pacotes e depois instalar
-update.packages(ask = FALSE, repos = 'https://cran.r-project.org')
-install.packages('knitr', repos = c('https://xran.yihui.org', 'https://cran.r-project.org'))
+options(repos = c(
+  yihui = 'https://yihui.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'
+))
+
+install.packages('knitr')
 ```
 
-Note que para compilar o pacote fonte com o `R CMD build` em um ambiente sem a versão anterior do **knitr**, é necessário pré-instalar o **knitr** do CRAN ou rodar `R CMD INSTALL` no repositório, de outras formas `R CMD build` falhar (o que provavelmente é um bug da base do R).
+Note que para compilar o pacote fonte com o `R CMD build` em um ambiente sem a versão anterior do **knitr**, é necessário pré-instalar o **knitr** do CRAN ou rodar `R CMD INSTALL` no repositório, de outras formas `R CMD build` falhar.
 
 ## Motivação
 
