@@ -12,6 +12,8 @@
 
 - New links added in `?knitr::kable()` help page to the Rmarkdown Cookbook relevant pages. 
 
+- The `table.attr` argument in `kable(.., format = 'html')` can take the value from the global option `knitr.table.html.attr` now (thanks, @cderv, #1922).
+
 - Added a new argument `oxford_comma` to the function `combine_words()` (thanks, @thompsonsed, #1946).
 
 - The global option `options(knitr.device.fallback = TRUE)` can be used to allow the graphical device specified in the chunk option `dev` to fall back to other usable devices if the specified device is not operational. Users can provide a list of fallback devices via the global option, e.g., `options(knitr.device.choices = list(png = c('jpeg', 'svg'), jpeg = c('tiff')))`, which means the `png` device can fall back to `jpeg` and `svg` (the first operational device in the list is used) and `jpeg` can fall back to `tiff`.
