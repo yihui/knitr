@@ -44,7 +44,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v1
 
       # TODO: Use next tag once this commit is in a release
-      - uses: r-lib/actions/setup-tinytex@5f1c134
+      - uses: r-lib/actions/setup-tinytex@5f1c1346f28a05c35128f89c766079a0bca8d786
         env:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
