@@ -40,7 +40,10 @@ dev_available = local({
   function(name, fun = dev_get(name)) {
     if (!is.null(res[[name]])) return(res[[name]])
     res[[name]] <<- tryCatch({
-      f = tempfile(); on.exit(unlink(f)); fun(f); grDevices::dev.off(); TRUE
+      f = tempfile(); on.exit(unlink(f))
+      fun(f, width = 5, height = 5)
+      grDevices::dev.off()
+      TRUE
     }, error = function(e) FALSE)
   }
 })
