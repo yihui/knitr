@@ -327,7 +327,9 @@ kable_latex_caption = function(x, caption) {
   ), collapse = '')
 }
 
-kable_html = function(x, table.attr = getOption('knitr.table.html.attr', ''), caption = NULL, escape = TRUE, ...) {
+kable_html = function(
+  x, table.attr = getOption('knitr.table.html.attr', ''), caption = NULL, escape = TRUE, ...
+) {
   table.attr = trimws(table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
