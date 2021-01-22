@@ -41,7 +41,7 @@ dev_available = local({
     if (!is.null(res[[name]])) return(res[[name]])
     res[[name]] <<- tryCatch({
       f = tempfile(); on.exit(unlink(f)); fun(f); grDevices::dev.off(); TRUE
-    }, error = function(e) FALSE)
+    }, error = function(e) {print(e);FALSE})
   }
 })
 
