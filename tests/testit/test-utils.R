@@ -1,12 +1,5 @@
 library(testit)
 
-assert('abs_path() recognizes absolute paths under Windows and *nix', {
-  (!is_abs_path('abc/def'))
-  (is_abs_path(if (.Platform$OS.type == 'windows') {
-    c('D:\\abc', '\\\\netdrive\\somewhere')
-  } else '/abc/def'))
-})
-
 op = options(digits = 3, scipen = 0, knitr.digits.signif = TRUE)
 
 assert(
@@ -146,16 +139,27 @@ assert(
   cw(c('a', 'b', 'c'), and = '') %==% 'a, b, c',
   cw(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c',
   cw(c('a', 'b', 'c'), before = '"') %==% '"a", "b", and "c"',
-  cw(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''"
+  cw(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''",
+  cw(c('a', 'b', 'c'), before = '``', after = "''", oxford_comma = FALSE) %==% "``a'', ``b'' and ``c''"
 )
 rm(list = 'cw')
 
-opts = list(fig.cap = 'Figure "caption" <>.', fig.lp = 'Fig:', label = 'foo')
-assert(
-  '.img.cap() generates the figure caption and alt attribute',
-  .img.cap(opts, FALSE) %==% opts$fig.cap,
-  .img.cap(opts, TRUE)  %==% 'Figure &quot;caption&quot; &lt;&gt;.'
+opts = list(
+  fig.cap = 'Figure "caption" <>.', fig.lp = 'Fig:', label = 'foo'
 )
+assert('.img.cap() generates the figure caption and alt attribute', {
+  (.img.cap(list(fig.cap = NULL), FALSE) %==% "")
+  (.img.cap(opts, FALSE) %==% opts$fig.cap)
+  (.img.cap(opts, TRUE)  %==% 'Figure &quot;caption&quot; &lt;&gt;.')
+
+  opts$fig.alt = 'Figure "alternative text" <>.'
+
+  (.img.cap(opts, TRUE)  %==% 'Figure &quot;alternative text&quot; &lt;&gt;.')
+  (.img.cap(opts, FALSE)  %==% opts$fig.cap)
+
+  (.img.cap(list(fig.cap = '', fig.alt = "alt"), FALSE) %==% "")
+  (.img.cap(list(fig.cap = '', fig.alt = "alt"), TRUE) %==% "alt")
+})
 
 z = as.strict_list(list(a = 1, aa = 2, bbb = 3))
 assert(

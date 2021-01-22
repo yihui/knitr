@@ -5,7 +5,7 @@
 hook_plot_rst = function(x, options) {
   if (options$fig.show == 'animate') return(hook_plot_html(x, options))
 
-  cap = .img.cap(options)
+  cap = .img.cap(options, alt = TRUE)
   # TODO: add all options for figure
   # See http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
   # http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure

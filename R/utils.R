@@ -225,16 +225,6 @@ format_sci = function(x, ...) {
   vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 
-# absolute path?
-is_abs_path = function(x) {
-  if (is_windows()) grepl('^(\\\\|[A-Za-z]:)', x) else grepl('^[/~]', x)
-}
-
-# paths of web resources?
-is_web_path = function(x) {
-  grepl('^(f|ht)tps?://', x)
-}
-
 # is tikz device without externalization?
 is_tikz_dev = function(options) {
   'tikz' %in% options$dev && !options$external
@@ -701,13 +691,7 @@ set_html_dev = function() {
   if (!is.null(opts_chunk$get('dev'))) return()
   # in some cases, png() does not work (e.g. options('bitmapType') == 'Xlib' on
   # headless servers); use svg then
-  opts_chunk$set(dev = if (png_available()) 'png' else 'svg')
-}
-
-png_available = function() {
-  !inherits(try_silent({
-    f = tempfile(); on.exit(unlink(f)); grDevices::png(f); grDevices::dev.off()
-  }), 'try-error')
+  opts_chunk$set(dev = if (dev_available('png')) 'png' else 'svg')
 }
 
 # locate kpsewhich especially for Mac OS because /usr/texbin may not be in PATH
@@ -771,26 +755,6 @@ knit_handlers = function(fun, options) {
   }))
 }
 
-# TODO: the following functions have been moved to xfun
-# conditionally disable some features during R CMD check
-is_R_CMD_check = function() {
-  !is.na(check_package_name())
-}
-
-is_CRAN_incoming = function() {
-  isTRUE(as.logical(Sys.getenv('_R_CHECK_CRAN_INCOMING_REMOTE_')))
-}
-
-check_package_name = function() {
-  Sys.getenv('_R_CHECK_PACKAGE_NAME_', NA)
-}
-
-# is R CMD check running on a package that has a version lower or equal to `version`?
-check_old_package = function(name, version) {
-  if (is.na(pkg <- check_package_name()) || pkg != name) return(FALSE)
-  tryCatch(packageVersion(name) <= version, error = function(e) FALSE)
-}
-
 # is the inst dir under . or ..? differs in R CMD build/INSTALL and devtools/roxygen2
 inst_dir = function(...) {
   p = file.path(c('..', '.'), 'inst', ...)
@@ -831,6 +795,8 @@ create_label = function(..., latex = FALSE) {
 #' @param sep Separator to be inserted between words.
 #' @param and Character string to be prepended to the last word.
 #' @param before,after A character string to be added before/after each word.
+#' @param oxford_comma Whether to insert the separator between the last two
+#'   elements in the list.
 #' @return A character string marked by \code{xfun::\link{raw_string}()}.
 #' @export
 #' @examples combine_words('a'); combine_words(c('a', 'b'))
@@ -838,14 +804,22 @@ create_label = function(..., latex = FALSE) {
 #' combine_words(c('a', 'b', 'c'), sep = ' / ', and = '')
 #' combine_words(c('a', 'b', 'c'), and = '')
 #' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
-combine_words = function(words, sep = ', ', and = ' and ', before = '', after = before) {
+#' combine_words(c('a', 'b', 'c'), before = '"', after = '"', oxford_comma=FALSE)
+combine_words = function(
+  words, sep = ', ', and = ' and ', before = '', after = before, oxford_comma = TRUE
+) {
   n = length(words); rs = xfun::raw_string
   if (n == 0) return(words)
   words = paste0(before, words, after)
   if (n == 1) return(rs(words))
   if (n == 2) return(rs(paste(words, collapse = and)))
-  if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
+  if (oxford_comma && grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
   words[n] = paste0(and, words[n])
+  # combine the last two words directly without the comma
+  if (!oxford_comma) {
+    words[n - 1] = paste0(words[n - 1:0], collapse = '')
+    words = words[-n]
+  }
   rs(paste(words, collapse = sep))
 }
 

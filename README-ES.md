@@ -5,7 +5,7 @@
 [![Check with knitr examples](https://github.com/yihui/knitr/workflows/Check%20with%20knitr%20examples/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3A%22Check+with+knitr+examples%22)
 [![test-coverage](https://github.com/yihui/knitr/workflows/test-coverage/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3Atest-coverage)
 [![Coverage status](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://codecov.io/github/yihui/knitr?branch=master)
-[![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/knitr)](https://cran.r-project.org/package=knitr)
+[![CRAN release](https://www.r-pkg.org/badges/version/knitr)](https://cran.r-project.org/package=knitr)
 [![Lock threads](https://github.com/yihui/knitr/workflows/Lock%20threads/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3A%22Lock+threads%22)
 <!-- badges: end -->
 
@@ -20,20 +20,16 @@ Puede instalar la versión estable en [CRAN](https://cran.r-project.org/package=
 install.packages('knitr')
 ```
 
-También puede instalar la versión en desarrollo desde [XRAN](https://xran.yihui.org), la cual provee construcciones diarias de **knitr**:
+También puede instalar la versión en desarrollo desde <https://yihui.r-universe.dev>, la cual provee construcciones diarias de **knitr**:
 
 ```r
-# primero actualice todos los paquetes existentes
-update.packages(ask = FALSE, repos = 'http://cran.r-project.org')
-install.packages('knitr', repos = c('https://xran.yihui.org', 'http://cran.r-project.org'))
+options(repos = c(
+  yihui = 'https://yihui.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'
+))
+
+install.packages('knitr')
 ```
-
-O usar **devtools** para instalar la versión en desarrollo desde GitHub:
-
-```r
-devtools::install_github('yihui/knitr', build_vignettes = TRUE)
-```
-
 
 ## Motivación
 

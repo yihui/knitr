@@ -10,7 +10,7 @@ on:
       - main
       - master
 
-name: R-CMD-check
+name: Check & Coverage
 
 jobs:
   R-CMD-check:
@@ -44,7 +44,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v1
 
       # TODO: Use next tag once this commit is in a release
-      - uses: r-lib/actions/setup-tinytex@5f1c134
+      - uses: r-lib/actions/setup-tinytex@5f1c1346f28a05c35128f89c766079a0bca8d786
         env:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
@@ -73,8 +73,6 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "18.04"))')
 
       - name: Install dependencies
-        env:
-          _R_CHECK_FORCE_SUGGESTS_: FALSE
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
@@ -91,6 +89,7 @@ jobs:
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_: false
+          _R_CHECK_FORCE_SUGGESTS_: FALSE
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
@@ -100,3 +99,10 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
+
+      - name: Test coverage
+        if: success() && runner.os == 'Linux' && matrix.config.r == 'release'
+        run: |
+          remotes::install_cran("covr")
+          covr::codecov()
+        shell: Rscript {0}
