@@ -92,6 +92,7 @@ opts_chunk = new_defaults(list(
 #' @rdname opts_chunk
 #' @export
 opts_current = new_defaults()
+opts_current$restore(opts_chunk$get())
 
 #' @include plot.R
 
