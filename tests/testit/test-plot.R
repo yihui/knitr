@@ -123,7 +123,7 @@ assert(
 
 # should not error when a plot label contains special characters and sanitize=TRUE
 if (xfun::loadable('tikzDevice') &&
-    (!is.na(Sys.getenv('CI', NA)) || Sys.getenv('USER') == 'yihui') || !xfun::is_macos()) {
+    (!is.na(Sys.getenv('CI', NA)) || Sys.getenv('USER') == 'yihui' || !xfun::is_macos())) {
   knit('knit-tikzDevice.Rnw', quiet = TRUE)
   unlink(c('*-tikzDictionary', 'figure', 'knit-tikzDevice.tex'), recursive = TRUE)
 }
