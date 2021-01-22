@@ -46,6 +46,7 @@ dev_available = local({
 })
 
 dev_get = function(dev, options = opts_current$get(), dpi = options$dpi[1]) {
+  if (is.null(dpi) || is.na(dpi)) dpi = 72
   device = switch(
     dev,
     bmp = function(...) bmp(...,  res = dpi, units = 'in'),
