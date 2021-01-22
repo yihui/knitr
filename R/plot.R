@@ -32,13 +32,26 @@ dev2ext = function(x) {
   unname(res)
 }
 
+# test if a device is available (and remember it), e.g., dev_available('png',
+# png); capabilities() gives similar results for some devices but this function
+# is more general
+dev_available = local({
+  res = list()
+  function(name, fun = check_dev(name)) {
+    if (!is.null(res[[name]])) return(res[[name]])
+    res[[name]] <<- tryCatch({
+      f = tempfile(); on.exit(unlink(f)); fun(f); grDevices::dev.off(); TRUE
+    }, error = function(e) FALSE)
+  }
+})
+
 check_dev = function(dev) {
   if (exists(dev, mode = 'function', envir = knit_global()))
     get(dev, mode = 'function', envir = knit_global()) else
       stop('the graphical device', sQuote(dev), 'does not exist (as a function)')
 }
 
-# quartiz devices under Mac
+# quartz devices under Mac
 quartz_dev = function(type, dpi) {
   force(type); force(dpi)
   function(file, width, height, ...) {
