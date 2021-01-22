@@ -23,7 +23,7 @@ auto_exts = c(
 dev2ext = function(x) {
   res = auto_exts[x]
   if (any(idx <- is.na(res))) {
-    for (i in x[idx]) check_dev(i)
+    for (i in x[idx]) dev_get(i)
     stop2(
       'cannot find appropriate filename extensions for device ', x[idx], '; ',
       "please use chunk option 'fig.ext' (https://yihui.org/knitr/options)"
@@ -37,7 +37,7 @@ dev2ext = function(x) {
 # is more general
 dev_available = local({
   res = list()
-  function(name, fun = check_dev(name)) {
+  function(name, fun = dev_get(name)) {
     if (!is.null(res[[name]])) return(res[[name]])
     res[[name]] <<- tryCatch({
       f = tempfile(); on.exit(unlink(f)); fun(f); grDevices::dev.off(); TRUE
@@ -45,56 +45,7 @@ dev_available = local({
   }
 })
 
-check_dev = function(dev) {
-  if (exists(dev, mode = 'function', envir = knit_global()))
-    get(dev, mode = 'function', envir = knit_global()) else
-      stop('the graphical device', sQuote(dev), 'does not exist (as a function)')
-}
-
-# quartz devices under Mac
-quartz_dev = function(type, dpi) {
-  force(type); force(dpi)
-  function(file, width, height, ...) {
-    grDevices::quartz(file = file, width = width, height = height, type = type, dpi = dpi, ...)
-  }
-}
-
-# a wrapper of the tikzDevice::tikz device
-tikz_dev = function(...) {
-  loadNamespace('tikzDevice')
-  packages = switch(
-    getOption('tikzDefaultEngine'),
-    pdftex = getOption('tikzLatexPackages'),
-    xetex = getOption('tikzXelatexPackages'),
-    luatex = getOption('tikzLualatexPackages')
-  )
-  tikzDevice::tikz(..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages))
-}
-
-# a wrapper of the ragg::agg_png device
-ragg_png_dev = function(...) {
-  loadNamespace('ragg')
-  args = list(...)
-  # handle bg -> background gracefully
-  args$background = args$background %n% args$bg
-  args$bg = NULL
-  do.call(ragg::agg_png, args)
-}
-
-# save a recorded plot
-save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
-
-  path = paste(name, ext, sep = '.')
-  # when cache=2 and plot file exists, just return the filename
-  if (options$cache == 2 && cache$exists(options$hash, options$cache.lazy)) {
-    if (in_base_dir(!file.exists(path))) {
-      purge_cache(options)
-      stop('cannot find ', path, '; the cache has been purged; please re-compile')
-    }
-    return(paste(name, if (dev == 'tikz' && options$external) 'pdf' else ext, sep = '.'))
-  }
-
-  # built-in devices
+dev_get = function(dev, options = opts_current$get(), dpi = options$dpi[1]) {
   device = switch(
     dev,
     bmp = function(...) bmp(...,  res = dpi, units = 'in'),
@@ -140,10 +91,58 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
     tikz = function(...) {
       tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)
-    },
-
-    check_dev(dev)
+    }
   )
+  if (!is.null(device)) return(device)
+  # custom device provided by user as a character string
+  if (!exists(dev, mode = 'function', envir = knit_global()))
+    stop('The graphical device ', sQuote(dev), ' was not found (as a function).')
+  get(dev, mode = 'function', envir = knit_global())
+}
+
+# quartz devices under Mac
+quartz_dev = function(type, dpi) {
+  force(type); force(dpi)
+  function(file, width, height, ...) {
+    grDevices::quartz(file = file, width = width, height = height, type = type, dpi = dpi, ...)
+  }
+}
+
+# a wrapper of the tikzDevice::tikz device
+tikz_dev = function(...) {
+  loadNamespace('tikzDevice')
+  packages = switch(
+    getOption('tikzDefaultEngine'),
+    pdftex = getOption('tikzLatexPackages'),
+    xetex = getOption('tikzXelatexPackages'),
+    luatex = getOption('tikzLualatexPackages')
+  )
+  tikzDevice::tikz(..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages))
+}
+
+# a wrapper of the ragg::agg_png device
+ragg_png_dev = function(...) {
+  loadNamespace('ragg')
+  args = list(...)
+  # handle bg -> background gracefully
+  args$background = args$background %n% args$bg
+  args$bg = NULL
+  do.call(ragg::agg_png, args)
+}
+
+# save a recorded plot
+save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
+
+  path = paste(name, ext, sep = '.')
+  # when cache=2 and plot file exists, just return the filename
+  if (options$cache == 2 && cache$exists(options$hash, options$cache.lazy)) {
+    if (in_base_dir(!file.exists(path))) {
+      purge_cache(options)
+      stop('cannot find ', path, '; the cache has been purged; please re-compile')
+    }
+    return(paste(name, if (dev == 'tikz' && options$external) 'pdf' else ext, sep = '.'))
+  }
+  device = dev_get(dev, options, dpi)
   in_base_dir(plot2dev(plot, name, dev, device, path, width, height, options))
 }
 
