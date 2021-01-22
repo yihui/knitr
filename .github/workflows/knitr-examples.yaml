@@ -11,7 +11,7 @@ on:
 name: Check knitr examples
 
 jobs:
-  R-CMD-check:
+  run-examples:
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
