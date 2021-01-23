@@ -171,6 +171,7 @@ opts_knit = new_defaults(list(
   upload.fun = identity, global.device = FALSE, global.par = FALSE,
   concordance = FALSE, documentation = 1L, self.contained = TRUE,
   unnamed.chunk.label = 'unnamed-chunk', highr.opts = NULL,
+  label.prefix = c(table = 'tab:'),
 
   # internal options; users should not touch them
   out.format = NULL, child = FALSE, parent = FALSE, tangle = FALSE, aliases = NULL,
@@ -183,7 +184,7 @@ opts_knit = new_defaults(list(
 opts_knit_names = c(
   'progress', 'verbose', 'upload.fun', 'animation.fun', 'global.device',
   'eval.after', 'concordance', 'documentation', 'aliases', 'self.contained',
-  'unnamed.chunk.label'
+  'unnamed.chunk.label', 'label.prefix'
 )
 # adjust opts_chunk and opts_knit according to options(), e.g.
 # options(knitr.package.progress = FALSE) --> opts_knit$set(progress = FALSE),
