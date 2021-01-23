@@ -171,7 +171,7 @@ opts_knit = new_defaults(list(
   upload.fun = identity, global.device = FALSE, global.par = FALSE,
   concordance = FALSE, documentation = 1L, self.contained = TRUE,
   unnamed.chunk.label = 'unnamed-chunk', highr.opts = NULL,
-  label.prefix = c(table = 'tab:', figure = 'fig:'),
+  label.prefix = c(table = 'tab:'),
 
   # internal options; users should not touch them
   out.format = NULL, child = FALSE, parent = FALSE, tangle = FALSE, aliases = NULL,
