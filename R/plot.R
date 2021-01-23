@@ -23,7 +23,7 @@ auto_exts = c(
 dev2ext = function(x) {
   res = auto_exts[x]
   if (any(idx <- is.na(res))) {
-    for (i in x[idx]) check_dev(i)
+    for (i in x[idx]) dev_get(i)
     stop2(
       'cannot find appropriate filename extensions for device ', x[idx], '; ',
       "please use chunk option 'fig.ext' (https://yihui.org/knitr/options)"
@@ -32,56 +32,24 @@ dev2ext = function(x) {
   unname(res)
 }
 
-check_dev = function(dev) {
-  if (exists(dev, mode = 'function', envir = knit_global()))
-    get(dev, mode = 'function', envir = knit_global()) else
-      stop('the graphical device', sQuote(dev), 'does not exist (as a function)')
-}
-
-# quartiz devices under Mac
-quartz_dev = function(type, dpi) {
-  force(type); force(dpi)
-  function(file, width, height, ...) {
-    grDevices::quartz(file = file, width = width, height = height, type = type, dpi = dpi, ...)
+# test if a device is available (and remember it), e.g., dev_available('png',
+# png); capabilities() gives similar results for some devices but this function
+# is more general
+dev_available = local({
+  res = list()
+  function(name, fun = dev_get(name)) {
+    if (!is.null(res[[name]])) return(res[[name]])
+    res[[name]] <<- tryCatch({
+      f = tempfile(); on.exit(unlink(f))
+      fun(f, width = 5, height = 5)
+      grDevices::dev.off()
+      TRUE
+    }, error = function(e) FALSE)
   }
-}
+})
 
-# a wrapper of the tikzDevice::tikz device
-tikz_dev = function(...) {
-  loadNamespace('tikzDevice')
-  packages = switch(
-    getOption('tikzDefaultEngine'),
-    pdftex = getOption('tikzLatexPackages'),
-    xetex = getOption('tikzXelatexPackages'),
-    luatex = getOption('tikzLualatexPackages')
-  )
-  tikzDevice::tikz(..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages))
-}
-
-# a wrapper of the ragg::agg_png device
-ragg_png_dev = function(...) {
-  loadNamespace('ragg')
-  args = list(...)
-  # handle bg -> background gracefully
-  args$background = args$background %n% args$bg
-  args$bg = NULL
-  do.call(ragg::agg_png, args)
-}
-
-# save a recorded plot
-save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
-
-  path = paste(name, ext, sep = '.')
-  # when cache=2 and plot file exists, just return the filename
-  if (options$cache == 2 && cache$exists(options$hash, options$cache.lazy)) {
-    if (in_base_dir(!file.exists(path))) {
-      purge_cache(options)
-      stop('cannot find ', path, '; the cache has been purged; please re-compile')
-    }
-    return(paste(name, if (dev == 'tikz' && options$external) 'pdf' else ext, sep = '.'))
-  }
-
-  # built-in devices
+dev_get = function(dev, options = opts_current$get(), dpi = options$dpi[1]) {
+  if (is.null(dpi) || is.na(dpi)) dpi = 72
   device = switch(
     dev,
     bmp = function(...) bmp(...,  res = dpi, units = 'in'),
@@ -127,10 +95,58 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 
     tikz = function(...) {
       tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)
-    },
-
-    check_dev(dev)
+    }
   )
+  if (!is.null(device)) return(device)
+  # custom device provided by user as a character string
+  if (!exists(dev, mode = 'function', envir = knit_global()))
+    stop('The graphical device ', sQuote(dev), ' was not found (as a function).')
+  get(dev, mode = 'function', envir = knit_global())
+}
+
+# quartz devices under Mac
+quartz_dev = function(type, dpi) {
+  force(type); force(dpi)
+  function(file, width, height, ...) {
+    grDevices::quartz(file = file, width = width, height = height, type = type, dpi = dpi, ...)
+  }
+}
+
+# a wrapper of the tikzDevice::tikz device
+tikz_dev = function(...) {
+  loadNamespace('tikzDevice')
+  packages = switch(
+    getOption('tikzDefaultEngine'),
+    pdftex = getOption('tikzLatexPackages'),
+    xetex = getOption('tikzXelatexPackages'),
+    luatex = getOption('tikzLualatexPackages')
+  )
+  tikzDevice::tikz(..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages))
+}
+
+# a wrapper of the ragg::agg_png device
+ragg_png_dev = function(...) {
+  loadNamespace('ragg')
+  args = list(...)
+  # handle bg -> background gracefully
+  args$background = args$background %n% args$bg
+  args$bg = NULL
+  do.call(ragg::agg_png, args)
+}
+
+# save a recorded plot
+save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
+
+  path = paste(name, ext, sep = '.')
+  # when cache=2 and plot file exists, just return the filename
+  if (options$cache == 2 && cache$exists(options$hash, options$cache.lazy)) {
+    if (in_base_dir(!file.exists(path))) {
+      purge_cache(options)
+      stop('cannot find ', path, '; the cache has been purged; please re-compile')
+    }
+    return(paste(name, if (dev == 'tikz' && options$external) 'pdf' else ext, sep = '.'))
+  }
+  device = dev_get(dev, options, dpi)
   in_base_dir(plot2dev(plot, name, dev, device, path, width, height, options))
 }
 
@@ -218,7 +234,7 @@ is_low_change = function(p1, p2) {
 
 # recycle some plot options such as fig.cap, out.width/height, etc when there
 # are multiple plots per chunk
-.recyle.opts = c('fig.cap', 'fig.scap', 'fig.env', 'fig.pos', 'fig.subcap',
+.recyle.opts = c('fig.cap', 'fig.scap', 'fig.alt', 'fig.env', 'fig.pos', 'fig.subcap',
                  'out.width', 'out.height', 'out.extra', 'fig.link')
 
 # when passing options to plot hooks, reduce the recycled options to scalars
@@ -300,10 +316,20 @@ fig_process = function(FUN, path, options) {
 
 #' Crop a plot (remove the edges) using PDFCrop or ImageMagick
 #'
-#' The command \command{pdfcrop} (often shipped with a LaTeX distribution) is
+#' The program \command{pdfcrop} (often shipped with a LaTeX distribution) is
 #' executed on a PDF plot file, and
 #' \code{magick::\link[magick:transform]{image_trim}()} is executed for other
 #' types of plot files.
+#'
+#' The program \command{pdfcrop} can crop the extra white margins when the plot
+#' format is PDF, to make better use of the space in the output document,
+#' otherwise we often have to struggle with \code{graphics::\link{par}()} to set
+#' appropriate margins. Note \command{pdfcrop} often comes with a LaTeX
+#' distribution such as TinyTeX, MiKTeX, or TeX Live, and you may not need to
+#' install it separately (use \code{Sys.which('pdfcrop')} to check it; if it not
+#' empty, you are able to use it). Note that \command{pdfcrop} depends on
+#' GhostScript. You can check if GhostScript is installed via
+#' \code{tools::find_gs_cmd()}.
 #' @param x Filename of the plot.
 #' @param quiet Whether to suppress standard output from the command.
 #' @export
@@ -315,7 +341,7 @@ plot_crop = function(x, quiet = TRUE) {
   is_pdf = grepl('[.]pdf$', x, ignore.case = TRUE)
   x2 = x
   x = path.expand(x)
-  if (is_pdf && !has_utility('pdfcrop')) return(x2)
+  if (is_pdf && !has_utility('pdfcrop') && !has_utility('ghostscript')) return(x2)
 
   if (!quiet) message('cropping ', x)
   if (is_pdf) {
@@ -402,7 +428,7 @@ include_graphics = function(
     i = file.exists(path2)
     path[i] = path2[i]
   }
-  if (error && length(p <- path[!is_web_path(path) & !file.exists(path)])) stop(
+  if (error && length(p <- path[!xfun::is_web_path(path) & !file.exists(path)])) stop(
     'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
   )
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
@@ -439,10 +465,10 @@ raster_dpi_width = function(path, dpi) {
 #' the output. \code{include_app()} takes the URL of a Shiny app and adds
 #' \samp{?showcase=0} to it (to disable the showcase mode), then passes the URL
 #' to \code{include_url()}.
-#' @param url Character string containing a URL.
-#' @param height Character string with the height of the iframe.
+#' @param url A character vector of URLs.
+#' @param height A character vector to specify the height of iframes.
 #' @return An R object with a special class that \pkg{knitr} recognizes
-#'   internally to generate the iframe or screenshot.
+#'   internally to generate the iframes or screenshots.
 #' @seealso \code{\link{include_graphics}}
 #' @export
 include_url = function(url, height = '400px') {
@@ -460,7 +486,8 @@ include_url2 = function(url, height = '400px', orig = url) {
 #' @export
 include_app = function(url, height = '400px') {
   orig = url  # store the original URL
-  if (!grepl('?', url, fixed = TRUE)) url = paste0(url, '?showcase=0')
+  i = !grepl('?', url, fixed = TRUE)
+  url[i] = paste0(url[i], '?showcase=0')
   include_url2(url, height, orig)
 }
 
@@ -524,19 +551,22 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
         save_widget(x, f1, FALSE, options = options)
       } else f1 = x$url
       f2 = wd_tempfile('webshot', ext)
-      do.call(webshot::webshot, c(list(f1, f2), wargs))
-      normalizePath(f2)
+      f3 = do.call(webshot::webshot, c(list(f1, f2), wargs))
+      normalizePath(f3)
     } else if (i2) {
-      f = wd_tempfile('webshot', ext)
-      do.call(webshot::appshot, c(list(x, f), wargs))
-      normalizePath(f)
+      f1 = wd_tempfile('webshot', ext)
+      f2 = do.call(webshot::appshot, c(list(x, f1), wargs))
+      normalizePath(f2)
     }
   })
-  res = readBin(f, 'raw', file.info(f)[, 'size'])
-  structure(
-    list(image = res, extension = ext, url = if (i3) x$url.orig),
-    class = 'html_screenshot'
-  )
+  lapply(f, function(filename) {
+    # TODO: use xfun::read_bin()
+    res = readBin(filename, 'raw', file.info(filename)[, 'size'])
+    structure(
+      list(image = res, extension = ext, url = if (i3) x$url.orig[filename == f]),
+      class = 'html_screenshot'
+    )
+  })
 }
 
 save_widget = function(..., options) {

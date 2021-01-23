@@ -43,19 +43,22 @@
 #' @param escape Boolean; whether to escape special characters when producing
 #'   HTML or LaTeX tables. When \code{escape = FALSE}, you have to make sure
 #'   that special characters will not trigger syntax errors in LaTeX or HTML.
-#' @param ... Other arguments (see Examples).
+#' @param ... Other arguments (see Examples and References).
 #' @return A character vector of the table source code.
 #' @seealso Other R packages such as \pkg{huxtable}, \pkg{xtable},
-#'   \pkg{kableExtra}, and \pkg{tables} for HTML and LaTeX tables, and
+#'   \pkg{kableExtra}, \pkg{gt} and \pkg{tables} for HTML and LaTeX tables, and
 #'   \pkg{ascii} and \pkg{pander} for different flavors of markdown output and
-#'   some advanced features and table styles.
+#'   some advanced features and table styles. For more on other packages for
+#'   creating tables, see
+#'   \url{https://bookdown.org/yihui/rmarkdown-cookbook/table-other.html}.
 #' @note When using \code{kable()} as a \emph{top-level} expression, you do not
 #'   need to explicitly \code{print()} it due to R's automatic implicit
 #'   printing. When it is wrapped inside other expressions (such as a
 #'   \code{\link{for}} loop), you must explicitly \code{print(kable(...))}.
 #' @references See
-#'   \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
-#'    for some examples in LaTeX, but they also apply to other document formats.
+#'   \url{https://bookdown.org/yihui/rmarkdown-cookbook/kable.html} for some
+#'   examples about this function, including specific arguments according to the
+#'   \code{format} selected.
 #' @export
 #' @examples d1 = head(iris); d2 = head(mtcars)
 #' # pipe tables by default
@@ -327,7 +330,9 @@ kable_latex_caption = function(x, caption) {
   ), collapse = '')
 }
 
-kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
+kable_html = function(
+  x, table.attr = getOption('knitr.table.html.attr', ''), caption = NULL, escape = TRUE, ...
+) {
   table.attr = trimws(table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)

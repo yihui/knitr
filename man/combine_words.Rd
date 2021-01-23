@@ -4,7 +4,14 @@
 \alias{combine_words}
 \title{Combine multiple words into a single string}
 \usage{
-combine_words(words, sep = ", ", and = " and ", before = "", after = before)
+combine_words(
+  words,
+  sep = ", ",
+  and = " and ",
+  before = "",
+  after = before,
+  oxford_comma = TRUE
+)
 }
 \arguments{
 \item{words}{A character vector.}
@@ -14,6 +21,9 @@ combine_words(words, sep = ", ", and = " and ", before = "", after = before)
 \item{and}{Character string to be prepended to the last word.}
 
 \item{before, after}{A character string to be added before/after each word.}
+
+\item{oxford_comma}{Whether to insert the separator between the last two
+elements in the list.}
 }
 \value{
 A character string marked by \code{xfun::\link{raw_string}()}.
@@ -37,4 +47,5 @@ combine_words(c("a", "b", "c"))
 combine_words(c("a", "b", "c"), sep = " / ", and = "")
 combine_words(c("a", "b", "c"), and = "")
 combine_words(c("a", "b", "c"), before = "\"", after = "\"")
+combine_words(c("a", "b", "c"), before = "\"", after = "\"", oxford_comma = FALSE)
 }

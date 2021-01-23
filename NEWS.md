@@ -1,12 +1,40 @@
+# CHANGES IN knitr VERSION 1.31
+
+## NEW FEATURES
+
+- Added a new chunk option `fig.alt` for users to specify the alternative text in the `alt` attribute of the `<img>` tag  (images). Previously, the `alt` attribute takes value from the chunk option `fig.cap` (it still does so if `fig.alt` is `NULL`). If there are multiple plots/images in a chunk, you can pass a character vector to `fig.alt`, and it will be applied to individual images (thanks, @cderv, #1900).
+
+- `include_url()` and `include_app()` can now take a vector of URLs (thanks, @cderv, #1948).
+
+- The `sql` engine now correctly captures error with the chunk option `error = TRUE` (thanks, @colearendt, rstudio/rmarkdown#1208).
+
+- The chunk option `collapse = TRUE` now works as expected when the chunk option `attr.*` or `class.*` is provided. By this change, The chunk option `collapse = TRUE` forces `attr.*` and `class.*` be `NULL` except for the chunk options `attr.source` and `class.source` (thanks, @aosavi @cderv @atusy, #1902 #1906).
+
+- New links added in `?knitr::kable()` help page to the Rmarkdown Cookbook relevant pages. 
+
+- The `table.attr` argument in `kable(.., format = 'html')` can take the value from the global option `knitr.table.html.attr` now (thanks, @cderv, #1922).
+
+- Added a new argument `oxford_comma` to the function `combine_words()` (thanks, @thompsonsed, #1946).
+
+- The global option `options(knitr.device.fallback = TRUE)` can be used to allow the graphical device specified in the chunk option `dev` to fall back to other usable devices if the specified device is not operational. Users can provide a list of fallback devices via the global option, e.g., `options(knitr.device.choices = list(png = c('jpeg', 'svg'), jpeg = c('tiff')))`, which means the `png` device can fall back to `jpeg` and `svg` (the first operational device in the list is used) and `jpeg` can fall back to `tiff`.
+
+## MINOR CHANGES
+
+- Vignette engines for R Markdown vignettes no longer check for availability of `pandoc-citeproc` since it has gone since Pandoc 2.11.
+
 # CHANGES IN knitr VERSION 1.30
 
 ## NEW FEATURES
+
+- Added `knitr::hooks_*()` functions to get a list of output hooks for a specific format. Previously, these hooks only exist inside the `knitr::render_*()` functions, and users do not have direct access to them. Now they can be accessed directly, e.g., via `knitr::hooks_markdown()` to get a list of output hooks for R Markdown documents. You can also set the output hooks individually, e.g., `knitr::knit_hooks$set(knitr::hooks_markdown()['source'])` only sets the _source_ ouput hook. See more on output hooks at https://yihui.org/knitr/hooks/#output-hooks and https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html (thanks, @cderv, #1889).
 
 - Added an argument `lib.loc` to `knitr::write_bib()`.
 
 ## BUG FIXES
 
 - The option `fig_caption = FALSE` for `rmarkdown::html_document()` was unable to suppress the figure captions in some cases.
+
+- The internal function `fix_options()` should be called after option hooks are executed (thanks, @atusy, #1876 and #1877).
 
 - When the option `options(OutDec = )` is set to a value other than `"."`, percentages in the chunk options `out.width` and `out.height` do not work (thanks, @omgitsmoe, #1887).
 
@@ -15,6 +43,8 @@
 - `knitr::write_bib()` removes pairs of single quotes in the titles of citation entries now.
 
 - `knitr::write_bib()` uses the `URL` in the package `DESCRIPTION` if it is provided, instead of the canonical CRAN URL for the package.
+
+- `hook_pdfcrop()` and `plot_crop()` will work only when both programs `pdfcrop` and `ghostscript` have been installed. Previously only `pdfcrop` was checked (thanks, @dalupus, #954).
 
 # CHANGES IN knitr VERSION 1.29
 
@@ -466,7 +496,7 @@
 
 - added a helper function `all_rcpp_labels()`, which is simply `all_labels(engine == 'Rcpp')` and can be used to extract all chunk labels of Rcpp chunks
 
-- added a new engine named `sql` that uses the **DBI** package to execute SQL queries, and optionally assign the result to a variable in the **knitr** session; see http://rmarkdown.rstudio.com/authoring_knitr_engines.html for details (#1241)
+- added a new engine named `sql` that uses the **DBI** package to execute SQL queries, and optionally assign the result to a variable in the **knitr** session; see https://rmarkdown.rstudio.com/authoring_knitr_engines.html for details (#1241)
 
 - `fig.keep` now accepts numeric values to index low-level plots to keep (#1265)
 
@@ -875,7 +905,7 @@
 
 - for Markdown tables, `kable()` gained a new argument `padding` to specify the inner padding of table cells using spaces (thanks, @gavril0, #699)
 
-- added a new vignette engine called `rmarkdown`, which uses `rmarkdown::render()` to create a package vignette from an R Markdown document; see http://rmarkdown.rstudio.com for more information about the **rmarkdown** package, and the vignette `knit_print.Rmd` in **knitr** for an example (basically you specify `\VignetteEngine{knitr::rmarkdown}` in your vignette)
+- added a new vignette engine called `rmarkdown`, which uses `rmarkdown::render()` to create a package vignette from an R Markdown document; see https://rmarkdown.rstudio.com for more information about the **rmarkdown** package, and the vignette `knit_print.Rmd` in **knitr** for an example (basically you specify `\VignetteEngine{knitr::rmarkdown}` in your vignette)
 
 - indentation is preserved when using chunk references `<<>>`, i.e., if `<<>>` is indented, the spaces before it will be applied to the code that it refers to (thanks, Terry Therneau)
 

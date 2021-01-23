@@ -59,7 +59,7 @@ new_defaults = function(value = list()) {
 #' @references Usage: \url{https://yihui.org/knitr/objects/}
 #'
 #'   A list of available options:
-#'   \url{https://yihui.org/knitr/options/#chunk_options}
+#'   \url{https://yihui.org/knitr/options/#chunk-options}
 #' @note \code{opts_current} should be treated as read-only and you are supposed
 #'   to only query its values via \code{opts_current$get()}. Technically you
 #'   could also call \code{opts_current$set()} to change the values, but you are
@@ -92,6 +92,7 @@ opts_chunk = new_defaults(list(
 #' @rdname opts_chunk
 #' @export
 opts_current = new_defaults()
+opts_current$restore(opts_chunk$get())
 
 #' @include plot.R
 
@@ -115,6 +116,7 @@ opts_chunk_attr = local({
   opts$external = opts$sanitize = NULL  # hide these two rare options
   opts$fig.process = 'function'
   opts$fig.asp = 'numeric'
+  opts$fig.alt = 'character'
   opts$fig.dim = 'list'
   opts$R.options = 'list'
   opts$cache.comments = 'logical'
@@ -164,7 +166,7 @@ set_alias = function(...) {
 #' }
 #' @include hooks-html.R
 opts_knit = new_defaults(list(
-  progress = TRUE, verbose = FALSE, eval.after = 'fig.cap',
+  progress = TRUE, verbose = FALSE, eval.after = c('fig.cap', 'fig.alt'),
   base.dir = NULL, base.url = NULL, root.dir = NULL, child.path = '',
   upload.fun = identity, global.device = FALSE, global.par = FALSE,
   concordance = FALSE, documentation = 1L, self.contained = TRUE,

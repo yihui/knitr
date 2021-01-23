@@ -51,7 +51,8 @@ hook_plot_md_base = function(x, options) {
   plot1 = ai || options$fig.cur <= 1L
   plot2 = ai || options$fig.cur == options$fig.num
   to = pandoc_to(); from = pandoc_from()
-  if (is.null(w) && is.null(h) && is.null(s) && a == 'default' && !(pandoc_html && in_bookdown)) {
+  if (is.null(w) && is.null(h) && is.null(s) && is.null(options$fig.alt) &&
+      a == 'default' && !(pandoc_html && in_bookdown)) {
     # append <!-- --> to ![]() to prevent the figure environment in these cases
     nocap = cap == '' && !is.null(to) && !grepl('^markdown', to) &&
       (options$fig.num == 1 || ai) && !grepl('-implicit_figures', from)
@@ -140,6 +141,12 @@ block_attr = function(attr, class = NULL, lang = NULL) {
 render_markdown = function(strict = FALSE, fence_char = '`') {
   set_html_dev()
   opts_knit$set(out.format = 'markdown')
+  knit_hooks$set(hooks_markdown(strict, fence_char))
+}
+
+#' @rdname output_hooks
+#' @export
+hooks_markdown = function(strict = FALSE, fence_char = '`') {
   fence = paste(rep(fence_char, 3), collapse = '')
   # four spaces lead to <pre></pre>
   hook.t = function(x, options, attr = NULL, class = NULL) {
@@ -170,10 +177,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
     attrs = block_attr(options$attr.source, options$class.source, language)
     paste0('\n\n', fence, attrs, '\n', x, fence, '\n\n')
   }
-  hooks = list()
-  for (i in c('output', 'warning', 'error', 'message')) hooks[[i]] = hook.o(i)
-  knit_hooks$set(hooks)
-  knit_hooks$set(
+  list(
     source = function(x, options) {
       x = hilight_source(x, 'markdown', options)
       (if (strict) hook.t else hook.r)(one_string(c(x, '')), options)
@@ -189,13 +193,17 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
       x = gsub('[\n]+$', '', x)
       x = gsub('^[\n]+', '\n', x)
       if (isTRUE(options$collapse)) {
-        x = gsub(paste0('\n([', fence_char, ']{3,})\n+\\1(', tolower(options$engine), ')?\n'), "\n", x)
+        r = sprintf('\n([%s]{3,})\n+\\1((\\{[.])?%s[^\n]*)?\n', fence_char, tolower(options$engine))
+        x = gsub(r, '\n', x)
       }
       if (is.null(s <- options$indent)) return(x)
       line_prompt(x, prompt = s, continue = s)
-    }
+    },
+    output = hook.o('output'), warning = hook.o('warning'),
+    error = hook.o('error'), message = hook.o('message')
   )
 }
+
 #' @param highlight Which code highlighting engine to use: if \code{pygments},
 #'   the Liquid syntax is used (default approach Jekyll); if \code{prettify},
 #'   the output is prepared for the JavaScript library \file{prettify.js}; if
@@ -206,9 +214,16 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
 #' @rdname output_hooks
 #' @export
 render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '') {
-  hi = match.arg(highlight)
   render_markdown(TRUE)
-  if (hi == 'none') return()
+  knit_hooks$set(hooks_jekyll(highlight = highlight, extra = extra))
+}
+
+#' @rdname output_hooks
+#' @export
+hooks_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '') {
+  hook.m = hooks_markdown(TRUE)
+  hi = match.arg(highlight)
+  if (hi == 'none') return(hook.m)
   switch(hi, pygments = {
     hook.r = function(x, options) {
       paste0(
@@ -230,8 +245,11 @@ render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = 
       '\n\n<pre><code>', escape_html(x), '</code></pre>\n\n'
     )
   })
-  knit_hooks$set(source = function(x, options) {
+  source = function(x, options) {
     x = one_string(hilight_source(x, 'markdown', options))
     hook.r(x, options)
-  }, output = hook.t, warning = hook.t, error = hook.t, message = hook.t)
+  }
+  merge_list(hook.m, list(
+    source = source, output = hook.t, warning = hook.t, message = hook.t, error = hook.t
+  ))
 }
