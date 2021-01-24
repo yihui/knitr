@@ -20,6 +20,10 @@
 
 - The global option `options(knitr.device.fallback = TRUE)` can be used to allow the graphical device specified in the chunk option `dev` to fall back to other usable devices if the specified device is not operational. Users can provide a list of fallback devices via the global option, e.g., `options(knitr.device.choices = list(png = c('jpeg', 'svg'), jpeg = c('tiff')))`, which means the `png` device can fall back to `jpeg` and `svg` (the first operational device in the list is used) and `jpeg` can fall back to `tiff`.
 
+## BUG FIXES
+
+- Line numbers in error messages are incorrect when the error occurs in a child Rmd document (thanks, @cderv @khughitt, #1945).
+
 ## MINOR CHANGES
 
 - Vignette engines for R Markdown vignettes no longer check for availability of `pandoc-citeproc` since it has gone since Pandoc 2.11.

@@ -229,7 +229,7 @@ knit = function(
       # in child mode, strip off the YAML metadata in Markdown if exists
       if (grepl('^---\\s*$', text[1])) {
         i = grep('^---\\s*$', text)
-        if (length(i) >= 2) text = text[-(1:i[2])]
+        if (length(i) >= 2) text[1:i[2]] = ''
       }
     } else {
       params = knit_params(text)
