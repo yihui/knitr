@@ -30,8 +30,6 @@ options(repos = c(
 install.packages('knitr')
 ```
 
-Note que para compilar o pacote fonte com o `R CMD build` em um ambiente sem a versão anterior do **knitr**, é necessário pré-instalar o **knitr** do CRAN ou rodar `R CMD INSTALL` no repositório, de outras formas `R CMD build` falhar.
-
 ## Motivação
 
 Enquanto o Sweave e seus pacotes anexos como

@@ -37,8 +37,6 @@ options(repos = c(
 install.packages('knitr')
 ```
 
-Note that if you want to build the source package via `R CMD INSTALL` without a previously installed version of **knitr**, you must either pre-install **knitr** from CRAN, or run `R CMD INSTALL` on this source repo, otherwise `R CMD build` will fail.
-
 ## Motivation
 
 While Sweave and related add-on packages like
