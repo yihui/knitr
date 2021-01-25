@@ -163,6 +163,7 @@ kable = function(
 kable_caption = function(label, caption, format) {
   # create a label for bookdown if applicable
   if (is.null(label)) label = opts_current$get('label')
+  if (is.null(label)) label = NA
   if (!is.null(caption) && !is.na(caption) && !is.na(label)) caption = paste0(
     create_label(
       opts_knit$get('label.prefix')[['table']],
