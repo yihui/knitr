@@ -37,7 +37,8 @@
 #'   \code{c('c', 'l', 'c')}, unless the output format is LaTeX.
 #' @param caption The table caption.
 #' @param label The table reference label. By default, the label is obtained
-#'   from \code{knitr::\link{opts_current}$get('label')}.
+#'   from \code{knitr::\link{opts_current}$get('label')}. To disable the label,
+#'   use \code{label = NA}.
 #' @param format.args A list of arguments to be passed to \code{\link{format}()}
 #'   to format table values, e.g. \code{list(big.mark = ',')}.
 #' @param escape Boolean; whether to escape special characters when producing
@@ -162,7 +163,7 @@ kable = function(
 kable_caption = function(label, caption, format) {
   # create a label for bookdown if applicable
   if (is.null(label)) label = opts_current$get('label')
-  if (!is.null(caption) && !is.na(caption)) caption = paste0(
+  if (!is.null(caption) && !is.na(caption) && !is.na(label)) caption = paste0(
     create_label(
       opts_knit$get('label.prefix')[['table']],
       label, latex = (format == 'latex')

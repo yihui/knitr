@@ -54,7 +54,8 @@ expanded to a vector of individual letters, e.g. \code{'clc'} becomes
 \item{caption}{The table caption.}
 
 \item{label}{The table reference label. By default, the label is obtained
-from \code{knitr::\link{opts_current}$get('label')}.}
+from \code{knitr::\link{opts_current}$get('label')}. To disable the label,
+use \code{label = NA}.}
 
 \item{format.args}{A list of arguments to be passed to \code{\link{format}()}
 to format table values, e.g. \code{list(big.mark = ',')}.}

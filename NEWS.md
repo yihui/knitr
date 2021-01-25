@@ -12,6 +12,8 @@
 
 - New links added in `?knitr::kable()` help page to the Rmarkdown Cookbook relevant pages. 
 
+- The table label can be disabled via `kable(label = NA)` now (thanks, @NickCH-K, #1937).
+
 - The `table.attr` argument in `kable(.., format = 'html')` can take the value from the global option `knitr.table.html.attr` now (thanks, @cderv, #1922).
 
 - Added a new argument `oxford_comma` to the function `combine_words()` (thanks, @thompsonsed, #1946).
