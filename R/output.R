@@ -290,8 +290,11 @@ process_file = function(text, output) {
   wd = getwd()
   for (i in 1:n) {
     if (!is.null(.knitEnv$terminate)) {
-      res[i] = one_string(.knitEnv$terminate)
-      knit_exit(NULL)
+      if (!child_mode()) {
+        # reset the internal variable `terminate` in the top parent
+        res[i] = one_string(.knitEnv$terminate)
+        knit_exit(NULL)
+      }
       break  # must have called knit_exit(), so exit early
     }
     if (progress) {

@@ -26,6 +26,10 @@
 
 - Line numbers in error messages are incorrect when the error occurs in a child Rmd document (thanks, @cderv @khughitt, #1945).
 
+## MAJOR CHANGES
+
+- Previously `knit_exit()` in a child document would not terminate the processing of its parent document. Now it will (thanks, @davidchall, #1810).
+
 ## MINOR CHANGES
 
 - Vignette engines for R Markdown vignettes no longer check for availability of `pandoc-citeproc` since it has gone since Pandoc 2.11.

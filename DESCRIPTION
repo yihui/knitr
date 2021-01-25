@@ -17,6 +17,7 @@ Authors@R: c(
     person("Brian", "Zhang", role = "ctb"),
     person("Cassio", "Pereira", role = "ctb"),
     person("Christophe", "Dervieux", role = "ctb"),
+    person("David", "Hall", role = "ctb"),
     person("David", "Hugh-Jones", role = "ctb"),
     person("David", "Robinson", role = "ctb"),
     person("Doug", "Hemken", role = "ctb"),
