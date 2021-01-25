@@ -34,7 +34,8 @@ code chunks, or a character vector; see Details.}
 \item{roxygen_comments}{Logical dictating whether to keep trailing
 roxygen-style comments from code chunks in addition to whitespace}
 
-\item{topic, package}{Name of the demo and the package. See \code{\link[utils]{demo}}.}
+\item{topic, package}{Name of the demo and the package. See
+\code{utils::\link{demo}}.}
 
 \item{...}{Arguments passed to \code{\link{read_chunk}}.}
 }
@@ -96,8 +97,8 @@ read_chunk(lines = code, labels = c("foo", "bar"), from = "^#@a", to = "^#@b",
     from.offset = 1, to.offset = -1)
 
 ## later you can use, e.g., <<foo>>=
-knitr:::knit_code$get()  # use this to check chunks in the current session
-knitr:::knit_code$restore()  # clean up the session
+knitr::knit_code$get()  # use this to check chunks in the current session
+knitr::knit_code$restore()  # clean up the session
 }
 \references{
 \url{https://yihui.org/knitr/demo/externalization/}

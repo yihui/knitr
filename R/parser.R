@@ -20,6 +20,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
   groups = unname(split(lines, cumsum(tmp)))
   if (set.preamble)
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
+  markdown_mode = identical(patterns, all_patterns$md)
 
   # parse 'em all
   lapply(groups, function(g) {
@@ -36,7 +37,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       params.src = if (group_pattern(chunk.begin)) {
         stringr::str_trim(gsub(chunk.begin, '\\1', g[1]))
       } else ''
-      parse_block(g[-1], g[1], params.src)
+      parse_block(g[-1], g[1], params.src, markdown_mode)
     } else parse_inline(g, patterns)
   })
 }
@@ -72,11 +73,11 @@ strip_block = function(x, prefix = NULL) {
 dep_list = new_defaults()
 
 # separate params and R code in code chunks
-parse_block = function(code, header, params.src) {
+parse_block = function(code, header, params.src, markdown_mode = out_format('markdown')) {
   params = params.src
   engine = 'r'
   # consider the syntax ```{engine, opt=val} for chunk headers
-  if (out_format('markdown')) {
+  if (markdown_mode) {
     engine = sub('^([a-zA-Z0-9_]+).*$', '\\1', params)
     params = sub('^([a-zA-Z0-9_]+)', '', params)
   }
@@ -103,7 +104,10 @@ parse_block = function(code, header, params.src) {
     if (label %in% names(knit_code$get())) {
       if (identical(getOption('knitr.duplicate.label'), 'allow')) {
         params$label = label = unnamed_chunk(label)
-      } else stop("duplicate label '", label, "'")
+      } else stop(
+        "Duplicate chunk label '", label, "', which has been used for the chunk:\n",
+        one_string(knit_code$get(label))
+      )
     }
     knit_code$set(setNames(list(structure(code, chunk_opts = params)), label))
   }
@@ -294,8 +298,8 @@ print.inline = function(x, ...) {
 #' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a", to = "^#@@b", from.offset = 1, to.offset = -1)
 #'
 #' ## later you can use, e.g., <<foo>>=
-#' knitr:::knit_code$get() # use this to check chunks in the current session
-#' knitr:::knit_code$restore() # clean up the session
+#' knitr::knit_code$get() # use this to check chunks in the current session
+#' knitr::knit_code$restore() # clean up the session
 read_chunk = function(
   path, lines = read_utf8(path), labels = NULL, from = NULL, to = NULL,
   from.offset = 0L, to.offset = 0L, roxygen_comments = TRUE
@@ -334,7 +338,8 @@ read_chunk = function(
 }
 
 #' @rdname read_chunk
-#' @param topic,package Name of the demo and the package. See \code{\link[utils]{demo}}.
+#' @param topic,package Name of the demo and the package. See
+#'   \code{utils::\link{demo}}.
 #' @param ... Arguments passed to \code{\link{read_chunk}}.
 #' @export
 read_demo = function(topic, package = NULL, ...) {

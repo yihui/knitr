@@ -69,13 +69,39 @@ options(op)
 if (!has_error({png(); dev.off()})) assert(
   'chunk_device() correctly opens the png device with dev.args',
   {
-    chunk_device(7, 6, TRUE, 'png', list(pdf = list(useDingbats = FALSE)), 72)
+    chunk_device(opts_chunk$merge(list(
+      dev = 'png', dev.args = list(pdf = list(useDingbats = FALSE))
+    )))
     plot(1:10)
     dev.off()
     TRUE
   }
 )
-
+if (requireNamespace("ragg", quietly = TRUE) &&
+    !has_error({ragg::agg_png(); dev.off()})) {
+  assert(
+    'chunk_device() correctly opens the ragg::agg_png device with dev.args',
+    {
+      chunk_device(opts_chunk$merge(list(
+        dev = 'ragg_png', dev.args = list(pdf = list(useDingbats = FALSE))
+      )))
+      plot(1:10)
+      dev.off()
+      TRUE
+    }
+  )
+  assert(
+    'ragg_png_dev correctly handles bg dev.arg into background arg',
+    {
+      chunk_device(opts_chunk$merge(list(
+        dev = 'ragg_png', dev.args = list(bg = "grey")
+      )))
+      plot(1:10)
+      dev.off()
+      TRUE
+    }
+  )
+}
 # should not error (find `pdf` correctly in grDevices, instead of the one
 # defined below)
 pdf = function() {}
@@ -96,8 +122,8 @@ assert(
 )
 
 # should not error when a plot label contains special characters and sanitize=TRUE
-if (requireNamespace('tikzDevice', quietly = TRUE) &&
-    (!is.na(Sys.getenv('CI', NA)) || Sys.getenv('USER') == 'yihui') || Sys.info()[['sysname']] != 'Darwin') {
+if (xfun::loadable('tikzDevice') &&
+    (!is.na(Sys.getenv('CI', NA)) || Sys.getenv('USER') == 'yihui' || !xfun::is_macos())) {
   knit('knit-tikzDevice.Rnw', quiet = TRUE)
   unlink(c('*-tikzDictionary', 'figure', 'knit-tikzDevice.tex'), recursive = TRUE)
 }

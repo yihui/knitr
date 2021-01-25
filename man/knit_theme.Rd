@@ -4,7 +4,9 @@
 \name{knit_theme}
 \alias{knit_theme}
 \title{Syntax highlighting themes}
-\format{An object of class \code{list} of length 2.}
+\format{
+An object of class \code{list} of length 2.
+}
 \usage{
 knit_theme
 }
@@ -23,7 +25,7 @@ returned by the \code{get()} method. See examples below.
 The syntax highlighting here only applies to \file{.Rnw} (LaTeX) and
   \file{.Rhtml} (HTML) documents, and it does not work for other types of
   documents, such as \file{.Rmd} (R Markdown, which has its own syntax
-  highlighting themes; see \url{http://rmarkdown.rstudio.com}).
+  highlighting themes; see \url{https://rmarkdown.rstudio.com}).
 }
 \examples{
 opts_knit$set(out.format = "latex")

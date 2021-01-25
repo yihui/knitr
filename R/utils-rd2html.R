@@ -5,7 +5,7 @@
 #' HTML help pages for all packages under the \file{html} directory of them.
 #' @param pkg Package name.
 #' @param links A character vector of links to be passed to
-#'   \code{\link[tools]{Rd2HTML}}.
+#'   \code{tools::\link{Rd2HTML}()}.
 #' @param frame Boolean: whether to put a navigation frame on the left of the
 #'   index page.
 #' @return All HTML pages corresponding to topics in the package are written

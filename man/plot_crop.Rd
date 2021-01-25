@@ -15,9 +15,21 @@ plot_crop(x, quiet = TRUE)
 The original filename.
 }
 \description{
-The command \command{pdfcrop} (often shipped with a LaTeX distribution) is
-executed on a PDF plot file, and \code{magick::\link[magick]{image_trim}()}
-is executed for other types of plot files.
+The program \command{pdfcrop} (often shipped with a LaTeX distribution) is
+executed on a PDF plot file, and
+\code{magick::\link[magick:transform]{image_trim}()} is executed for other
+types of plot files.
+}
+\details{
+The program \command{pdfcrop} can crop the extra white margins when the plot
+format is PDF, to make better use of the space in the output document,
+otherwise we often have to struggle with \code{graphics::\link{par}()} to set
+appropriate margins. Note \command{pdfcrop} often comes with a LaTeX
+distribution such as TinyTeX, MiKTeX, or TeX Live, and you may not need to
+install it separately (use \code{Sys.which('pdfcrop')} to check it; if it not
+empty, you are able to use it). Note that \command{pdfcrop} depends on
+GhostScript. You can check if GhostScript is installed via
+\code{tools::find_gs_cmd()}.
 }
 \references{
 PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}. If you use
