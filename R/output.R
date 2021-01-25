@@ -290,13 +290,12 @@ process_file = function(text, output) {
   wd = getwd()
   for (i in 1:n) {
     if (!is.null(.knitEnv$terminate)) {
-      if (child_mode() && .knitEnv$terminate_propagate) {
-        break  # propagate terminate signal to parent document
-      } else {
+      if (!child_mode()) {
+        # reset the internal variable `terminate` in the top parent
         res[i] = one_string(.knitEnv$terminate)
-        knit_exit(NULL, NULL)
-        break  # must have called knit_exit(), so exit early
+        knit_exit(NULL)
       }
+      break  # must have called knit_exit(), so exit early
     }
     if (progress) {
       setTxtProgressBar(pb, i)
@@ -409,20 +408,15 @@ knit_child = function(..., options = NULL, envir = knit_global()) {
 #'   \code{knit()} so far. By default, this is \samp{\end{document}} for LaTeX
 #'   output, and \samp{</body></html>} for HTML output, to make the output
 #'   document complete. For other types of output, it is an empty string.
-#' @param propagate Logical indicating whether the early termination signal
-#'   should be propagated from child documents to the top-level document.
-#'   The default (\code{FALSE}) will exit the child document, but continue
-#'   to render the parent document.
 #' @return Invisible \code{NULL}. An internal signal is set up (as a side
 #'   effect) to notify \code{knit()} to quit as if it had reached the end of the
 #'   document.
 #' @export
 #' @examples # see https://github.com/yihui/knitr-examples/blob/master/096-knit-exit.Rmd
-knit_exit = function(append, propagate = FALSE) {
+knit_exit = function(append) {
   if (missing(append)) append = if (out_format(c('latex', 'sweave', 'listings')))
     '\\end{document}' else if (out_format('html')) '</body>\n</html>' else ''
   .knitEnv$terminate = append # use this terminate variable to notify knit()
-  .knitEnv$terminate_propagate = propagate
   invisible()
 }
 
