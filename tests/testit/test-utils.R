@@ -207,3 +207,17 @@ assert('when collapse is TRUE, class.* and attr.* become NULL except for class.s
   (opts[keys_source] %==% as.list(setNames(keys_source, keys_source)))
   (!any(names(opts) %in% setdiff(keys, keys_source)))
 })
+
+assert('pandoc_to gets the current Pandoc format', {
+  opts = opts_knit$get(c('rmarkdown.pandoc.to', 'rmarkdown.pandoc.from'))
+  opts_knit$delete(c("rmarkdown.pandoc.from", "rmarkdown.pandoc.to"))
+  (pandoc_from() %==% 'markdown')
+  (pandoc_to() %==% NULL)
+  opts_knit$set(rmarkdown.pandoc.from = 'gfm', rmarkdown.pandoc.to = 'docx')
+  (pandoc_from() %==% 'gfm')
+  (pandoc_to() %==% 'docx')
+  (pandoc_to('docx'))
+  (!pandoc_to('pptx'))
+  (pandoc_to(c('docx', 'pptx')))
+  opts_knit$set(opts)
+})
