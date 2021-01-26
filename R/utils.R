@@ -306,7 +306,7 @@ fix_options = function(options) {
   options
 }
 
-#' Check if the current output type is LaTeX or HTML
+#' Check the current input and output type
 #'
 #' The function \code{is_latex_output()} returns \code{TRUE} when the output
 #' format is LaTeX; it works for both \file{.Rnw} and R Markdown documents (for
@@ -315,21 +315,36 @@ fix_options = function(options) {
 #' R Markdown documents and will test for several Pandoc HTML based output
 #' formats (by default, these formats are considered as HTML formats:
 #' \code{c('markdown', 'epub', 'html', 'html4', 'html5', 'revealjs', 's5',
-#' 'slideous', 'slidy', 'gfm')}).
+#' 'slideous', 'slidy', 'gfm')}). \code{pandoc_to()} returns
+#' the Pandoc output format and \code{pandoc_from()} returns Pandoc input
+#' format. \code{pandoc_to(to)} allows to check the current output format
+#' against a set of format names. Both are to be used with R Markdown documents.
 #'
 #' These functions may be useful for conditional output that depends on the
 #' output format. For example, you may write out a LaTeX table in an R Markdown
 #' document when the output format is LaTeX, and an HTML or Markdown table when
-#' the output format is HTML.
-#' @seealso \code{knitr::\link{pandoc_to()}} to get the current output format.
+#' the output format is HTML. Use \code{pandoc_to(to)} to test a more specific
+#' Pandoc format.
+#'
+#' Internally, the Pandoc output format of the current R Markdown document is
+#' stored in \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.to')}, and the
+#' Pandoc input format in
+#' \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.from')}
+#'
 #' @note See available Pandoc formats, in
 #'   \href{https://pandoc.org/MANUAL.html}{Pandoc's Manual}
 #' @rdname output_type
 #' @export
 #' @examples
+#' # check for output formats type
 #' knitr::is_latex_output()
 #' knitr::is_html_output()
 #' knitr::is_html_output(excludes = c('markdown', 'epub'))
+#' # Get current formats
+#' knitr::pandoc_from()
+#' knitr::pandoc_to()
+#' # Test if current output format is 'docx'
+#' knitr::pandoc_to('docx')
 is_latex_output = function() {
   out_format('latex') || pandoc_to(c('latex', 'beamer'))
 }
@@ -348,38 +363,10 @@ is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
   fmt %in% setdiff(fmts, excludes)
 }
 
-#' Get current Pandoc input and output formats for a Rmarkdown document
-#'
-#' These functions are to be used with R Markdown documents. \code{pandoc_to()} returns
-#' the Pandoc output format and \code{pandoc_from()} returns Pandoc input
-#' format. \code{pandoc_to(to)} allows to check the current output format
-#' against a set of format names.
-#'
-#' In addition to \code{knitr::\link{is_latex_output}} and
-#' \code{knitr::\link{is_htmlt_output}}, these functions may be useful for
-#' conditional output of more specific output formats.
-#'
-#' Internally, the Pandoc output format of the current R Markdown document is
-#' stored in \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.to')}, and the
-#' Pandoc input format in
-#' \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.from')}
-#'
-#' @rdname current_format
-#' @seealso \code{knitr::\link{is_latex_output}},
-#'   \code{knitr::\link{is_htmlt_output}}
 #' @param to A character vector of output formats to be checked against the
 #'   current Pandoc output format. If provided, \code{pandoc_to()} will check
 #'   the current output format against the provided \code{to}.
-#' @note See available Pandoc formats, in
-#'   \href{https://pandoc.org/MANUAL.html}{Pandoc's Manual}
-#' @return The current input or output Pandoc format used. Or \code{TRUE} for
-#'   \code{pandoc_to(to)} if the current output format is one of \code{to}
-#' @examples
-#' # Get current formats
-#' knitr::pandoc_from()
-#' knitr::pandoc_to()
-#' # Test if current output format is 'docx'
-#' knitr::pandoc_to('docx')
+#' @rdname output_type
 #' @export
 pandoc_to = function(to) {
   # rmarkdown sets an option for the Pandoc output format from markdown
@@ -387,7 +374,7 @@ pandoc_to = function(to) {
   if (missing(to)) fmt else !is.null(fmt) && (fmt %in% to)
 }
 
-#' @rdname current_format
+#' @rdname output_type
 #' @export
 pandoc_from = function() {
   # rmarkdown's input format
