@@ -1016,3 +1016,6 @@ make_unique = function(x) {
 #' browseURL('logo.html') # you can check its HTML source
 #' }
 image_uri = function(f) xfun::base64_uri(f)
+
+# TODO: remove this function after the next version of bookdown is on CRAN
+is_abs_path = function(...) xfun::is_abs_path(...)
