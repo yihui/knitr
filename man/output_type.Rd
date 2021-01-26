@@ -21,21 +21,26 @@ The function \code{is_latex_output()} returns \code{TRUE} when the output
 format is LaTeX; it works for both \file{.Rnw} and R Markdown documents (for
 the latter, the two Pandoc formats \code{latex} and \code{beamer} are
 considered LaTeX output). The function \code{is_html_output()} only works for
-R Markdown documents.
+R Markdown documents and will test for several Pandoc HTML based output
+formats (by default, these formats are considered as HTML formats:
+\code{c('markdown', 'epub', 'html', 'html4', 'html5', 'revealjs', 's5',
+'slideous', 'slidy', 'gfm')}).
 }
 \details{
 These functions may be useful for conditional output that depends on the
 output format. For example, you may write out a LaTeX table in an R Markdown
 document when the output format is LaTeX, and an HTML or Markdown table when
 the output format is HTML.
-
-Internally, the Pandoc output format of the current R Markdown document is
-stored in \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.to')}. By
-default, these formats are considered as HTML formats: \code{c('markdown',
-'epub', 'html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')}.
+}
+\note{
+See available Pandoc formats, in
+  \href{https://pandoc.org/MANUAL.html}{Pandoc's Manual}
 }
 \examples{
 knitr::is_latex_output()
 knitr::is_html_output()
 knitr::is_html_output(excludes = c("markdown", "epub"))
+}
+\seealso{
+\code{knitr::\link{pandoc_to()}} to get the current output format.
 }
