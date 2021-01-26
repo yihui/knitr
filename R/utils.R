@@ -315,15 +315,17 @@ fix_options = function(options) {
 #' R Markdown documents and will test for several Pandoc HTML based output
 #' formats (by default, these formats are considered as HTML formats:
 #' \code{c('markdown', 'epub', 'html', 'html4', 'html5', 'revealjs', 's5',
-#' 'slideous', 'slidy', 'gfm')}). \code{pandoc_to()} returns
-#' the Pandoc output format and \code{pandoc_from()} returns Pandoc input
-#' format. \code{pandoc_to(to)} allows to check the current output format
-#' against a set of format names. Both are to be used with R Markdown documents.
+#' 'slideous', 'slidy', 'gfm')}).
+#'
+#' The function \code{pandoc_to()} returns the Pandoc output format, and
+#' \code{pandoc_from()} returns Pandoc input format. \code{pandoc_to(fmt)}
+#' allows to check the current output format against a set of format names. Both
+#' are to be used with R Markdown documents.
 #'
 #' These functions may be useful for conditional output that depends on the
 #' output format. For example, you may write out a LaTeX table in an R Markdown
 #' document when the output format is LaTeX, and an HTML or Markdown table when
-#' the output format is HTML. Use \code{pandoc_to(to)} to test a more specific
+#' the output format is HTML. Use \code{pandoc_to(fmt)} to test a more specific
 #' Pandoc format.
 #'
 #' Internally, the Pandoc output format of the current R Markdown document is
@@ -349,8 +351,9 @@ is_latex_output = function() {
   out_format('latex') || pandoc_to(c('latex', 'beamer'))
 }
 
-#' @param fmt A character vector of output formats to be checked. By default, this
-#'   is the current Pandoc output format.
+#' @param fmt A character vector of output formats to be checked against. If not
+#'   provided, \code{is_html_output()} uses \code{pandoc_to()}, and
+#'   \code{pandoc_to()} returns the output format name.
 #' @param excludes A character vector of output formats that should not be
 #'   considered as HTML format.
 #' @rdname output_type
@@ -363,22 +366,18 @@ is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
   fmt %in% setdiff(fmts, excludes)
 }
 
-#' @param to A character vector of output formats to be checked against the
-#'   current Pandoc output format. If provided, \code{pandoc_to()} will check
-#'   the current output format against the provided \code{to}.
 #' @rdname output_type
 #' @export
-pandoc_to = function(to) {
+pandoc_to = function(fmt) {
   # rmarkdown sets an option for the Pandoc output format from markdown
-  fmt = opts_knit$get('rmarkdown.pandoc.to')
-  if (missing(to)) fmt else !is.null(fmt) && (fmt %in% to)
+  to = opts_knit$get('rmarkdown.pandoc.to')
+  if (missing(fmt)) to else !is.null(to) && (to %in% fmt)
 }
 
 #' @rdname output_type
 #' @export
 pandoc_from = function() {
-  # rmarkdown's input format
-  # rmarkdown sets an option for the Pandoc input format to convert from
+  # rmarkdown's input format, obtained from a package option set by rmarkdown
   opts_knit$get('rmarkdown.pandoc.from') %n% 'markdown'
 }
 

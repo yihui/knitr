@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- Exported `pandoc_to()` and `pandoc_from()` to get respectively the output and input Pandoc format when using R Markdown documents (#1951)
+- Exported the functions `pandoc_to()` and `pandoc_from()` to get the output and input Pandoc format respectively when knitting R Markdown documents (thanks, @cderv, #1951).
 
 - Added a new chunk option `fig.alt` for users to specify the alternative text in the `alt` attribute of the `<img>` tag  (images). Previously, the `alt` attribute takes value from the chunk option `fig.cap` (it still does so if `fig.alt` is `NULL`). If there are multiple plots/images in a chunk, you can pass a character vector to `fig.alt`, and it will be applied to individual images (thanks, @cderv, #1900).
 
