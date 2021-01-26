@@ -28,7 +28,7 @@
 
 ## MAJOR CHANGES
 
-- Previously `knit_exit()` in a child document would not terminate the processing of its parent document. Now it will (thanks, @davidchall, #1810).
+- Previously `knit_exit()` in a child document would not terminate the knitting process of its parent document. Now it will terminate the whole process by default. You can use `knit_exit(fully = FALSE)` to exit the child document only (thanks, @davidchall, #1810).
 
 ## MINOR CHANGES
 
