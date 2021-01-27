@@ -15,8 +15,8 @@
 #'   (or \code{Sys.which('pandoc')} and \code{Sys.which('pandoc-citeproc')} in
 #'   R) to check if \command{pandoc} and \command{pandoc-citeproc} can be found.
 #'   If you use Linux, you may make symlinks to the Pandoc binaries in RStudio:
-#'   \url{https://rmarkdown.rstudio.com/docs/articles/pandoc.html}, or
-#'   install \command{pandoc} and \command{pandoc-citeproc} separately.
+#'   \url{https://pandoc.org/installing.html}, or install \command{pandoc} and
+#'   \command{pandoc-citeproc} separately.
 #'
 #'   When the \pkg{rmarkdown} package is not installed or not available, or
 #'   \command{pandoc} or \command{pandoc-citeproc} cannot be found, the
