@@ -377,6 +377,12 @@ par2 = function(x) {
     # drawn at (1, 1) instead of (1, 2)
     x$mfg = NULL
   }
+  if (!is.null(x$fg)) {
+    # set fg before the rest of the par because
+    # it resets col to the same value #1603
+    par(fg = x$fg)
+    x$fg = NULL
+  }
   # you are unlikely to want to reset these pars
   x$fig = x$fin = x$pin = x$plt = x$usr = NULL
   x$ask = NULL  # does not make sense for typical non-interactive R sessions
