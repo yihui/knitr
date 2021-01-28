@@ -131,7 +131,7 @@ if (xfun::loadable('tikzDevice') &&
 # https://github.com/yihui/knitr/issues/1166
 knit(text = "\\Sexpr{include_graphics('myfigure.pdf', error = FALSE)}", quiet = TRUE)
 
-with_par <- function(expr, ...) {
+with_par = function(expr, ...) {
   # set par
   op = graphics::par(...)
   # reset on exit
