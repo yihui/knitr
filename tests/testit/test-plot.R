@@ -121,6 +121,24 @@ assert(
   identical(fig_before_code(res), res[c(2, 3, 1, 4, 6, 5, 8, 7)])
 )
 
+assert('plots are rearrange based on fig.keep & fig.show options', {
+  res = list(gen_source(1), gen_source(2))
+  (rearrange_figs(res, 'high', NULL, 'asis') %==% res)
+  res = c(list(gen_source(1)), evaluate('plot(1)\npoints(1.1, 1.1)'),
+          list(gen_plotrc('b'), gen_source(2)))
+  (rearrange_figs(res, 'high', NULL, 'asis') %==% res[-3])
+  (rearrange_figs(res, 'all', NULL, 'asis') %==% res)
+  (rearrange_figs(res, 'all', NULL, 'hold') %==% res[c(1:2, 4, 7, 3, 5, 6)])
+  (rearrange_figs(res, 'last', NULL, 'asis') %==% res[c(-3, -5)])
+  (rearrange_figs(res, 'first', NULL, 'asis') %==% res[c(-5, -6)])
+  (rearrange_figs(res, 'none', NULL, 'asis') %==% res[c(-3, -5, -6)])
+  # correspond to options$fig.keep with numeric vector
+  (rearrange_figs(res, 'index', 1, 'asis') %==% res[c(-5, -6)])
+  (rearrange_figs(res, 'index', c(2, 3), 'asis') %==% res[c(-3)])
+  (rearrange_figs(res, 'index', c(2, 3), 'hold') %==% res[c(1:2, 4, 7, 5, 6)])
+  (rearrange_figs(res, 'index', c(1, 2, 3), 'asis') %==% res)
+})
+
 # should not error when a plot label contains special characters and sanitize=TRUE
 if (xfun::loadable('tikzDevice') &&
     (!is.na(Sys.getenv('CI', NA)) || Sys.getenv('USER') == 'yihui' || !xfun::is_macos())) {
