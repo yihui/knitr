@@ -2,6 +2,8 @@
 
 ## BUG FIXES
 
+- Fixed an issue where code source and results would not show when using a numeric vector in `fig.keep` to select all plots (thanks, @dongzhuoer, @ajrgodfrey, #1579)
+
 - Graphical parameter `par(col =)` is now preserved as expected in following chunks when `knitr::opts_knit$set(global.par = TRUE)` (thanks, @ArnonL, @RolandASc, #1603).
 
 - Fixed an issue with `kable(format = "latex", booktabs = TRUE)` when the first cell of the table stats with `[` (thanks, @jonnypenarth, #1595).
