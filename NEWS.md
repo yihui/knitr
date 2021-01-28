@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.32
 
+## BUG FIXES
+
+- Graphical parameter `par(col =)` is now preserved as expected in following chunks when `knitr::opts_knit$set(global.par = TRUE)` (thanks, @ArnonL, @RolandASc, #1603).
 
 # CHANGES IN knitr VERSION 1.31
 
