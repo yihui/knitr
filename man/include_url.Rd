@@ -10,13 +10,13 @@ include_url(url, height = "400px")
 include_app(url, height = "400px")
 }
 \arguments{
-\item{url}{Character string containing a URL.}
+\item{url}{A character vector of URLs.}
 
-\item{height}{Character string with the height of the iframe.}
+\item{height}{A character vector to specify the height of iframes.}
 }
 \value{
 An R object with a special class that \pkg{knitr} recognizes
-  internally to generate the iframe or screenshot.
+  internally to generate the iframes or screenshots.
 }
 \description{
 When the output format is HTML, \code{include_url()} inserts an iframe in the

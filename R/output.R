@@ -188,13 +188,7 @@ knit = function(
     knit_concord$set(infile = input, outfile = output)
   }
 
-  if (is.null(text)) {
-    text = readLines(input, encoding = 'UTF-8', warn = FALSE)
-    if (!is_utf8(text)) warning(
-      'The file "', input, '" must be encoded in UTF-8. Please see ',
-      'https://yihui.org/en/2018/11/biggest-regret-knitr/ for more info.'
-    )
-  } else text = split_lines(text) # make sure each element is one line
+  text = if (is.null(text)) xfun::read_utf8(input) else split_lines(text)
   if (!length(text)) {
     if (is.character(output)) file.create(output)
     return(output) # a trivial case: create an empty file and exit
@@ -235,7 +229,7 @@ knit = function(
       # in child mode, strip off the YAML metadata in Markdown if exists
       if (grepl('^---\\s*$', text[1])) {
         i = grep('^---\\s*$', text)
-        if (length(i) >= 2) text = text[-(1:i[2])]
+        if (length(i) >= 2) text[1:i[2]] = ''
       }
     } else {
       params = knit_params(text)
@@ -296,8 +290,11 @@ process_file = function(text, output) {
   wd = getwd()
   for (i in 1:n) {
     if (!is.null(.knitEnv$terminate)) {
-      res[i] = one_string(.knitEnv$terminate)
-      knit_exit(NULL)
+      if (!child_mode() || !.knitEnv$terminate_fully) {
+        # reset the internal variable `terminate` in the top parent
+        res[i] = one_string(.knitEnv$terminate)
+        knit_exit(NULL, NULL)
+      }
       break  # must have called knit_exit(), so exit early
     }
     if (progress) {
@@ -411,15 +408,19 @@ knit_child = function(..., options = NULL, envir = knit_global()) {
 #'   \code{knit()} so far. By default, this is \samp{\end{document}} for LaTeX
 #'   output, and \samp{</body></html>} for HTML output, to make the output
 #'   document complete. For other types of output, it is an empty string.
+#' @param fully Whether to fully exit the knitting process if \code{knit_exit()}
+#'   is called from a child document. If \code{FALSE}, only exit the knitting
+#'   process of the child document.
 #' @return Invisible \code{NULL}. An internal signal is set up (as a side
 #'   effect) to notify \code{knit()} to quit as if it had reached the end of the
 #'   document.
 #' @export
 #' @examples # see https://github.com/yihui/knitr-examples/blob/master/096-knit-exit.Rmd
-knit_exit = function(append) {
+knit_exit = function(append, fully = TRUE) {
   if (missing(append)) append = if (out_format(c('latex', 'sweave', 'listings')))
     '\\end{document}' else if (out_format('html')) '</body>\n</html>' else ''
   .knitEnv$terminate = append # use this terminate variable to notify knit()
+  .knitEnv$terminate_fully = fully
   invisible()
 }
 

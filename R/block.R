@@ -168,7 +168,7 @@ block_exec = function(options) {
   # only evaluate certain lines
   if (is.numeric(ev <- options$eval)) {
     # group source code into syntactically complete expressions
-    if (isFALSE(options$tidy)) code = sapply(highr:::group_src(code), one_string)
+    if (isFALSE(options$tidy)) code = sapply(xfun::split_source(code), one_string)
     iss = seq_along(code)
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
@@ -247,6 +247,7 @@ block_exec = function(options) {
     options$fig.num = if (length(res)) sum(sapply(res, function(x) {
       if (evaluate::is.recordedplot(x)) return(1)
       if (inherits(x, 'knit_image_paths')) return(length(x))
+      if (inherits(x, 'html_screenshot')) return(1)
       0
     })) else 0L
 
@@ -312,7 +313,7 @@ purge_cache = function(options) {
 chunk_device = function(options, record = TRUE, tmp = tempfile()) {
   width = options$fig.width[1L]
   height = options$fig.height[1L]
-  dev = options$dev
+  dev = fallback_dev(options$dev)
   dev.args = options$dev.args
   dpi = options$dpi
 
@@ -351,6 +352,26 @@ chunk_device = function(options, record = TRUE, tmp = tempfile()) {
     do.call(pdf_null, c(list(width = width, height = height), dev.args))
   } else dev.new(width = width, height = height)
   dev.control(displaylist = if (record) 'enable' else 'inhibit')
+}
+
+# fall back to a usable device (e.g., during R CMD check)
+fallback_dev = function(dev) {
+  if (length(dev) != 1 || !getOption('knitr.device.fallback', xfun::is_R_CMD_check()))
+    return(dev)
+  choices = list(
+    svg = c('png', 'jpeg', 'bmp'), cairo_pdf = c('pdf'), cairo_ps = c('postscript'),
+    png = c('jpeg', 'svg', 'bmp'), jpeg = c('png', 'svg', 'bmp')
+  )
+  # add choices provided by users
+  choices = merge_list(choices, getOption('knitr.device.choices'))
+  if (!dev %in% names(choices)) return(dev)  # no fallback devices available
+  # first test if the specified device actually works
+  if (dev_available(dev)) return(dev)
+  for (d in choices[[dev]]) if (dev_available(d)) {
+    warning2("The device '", dev, "' is not operational; falling back to '", d, "'.")
+    return(d)
+  }
+  dev  # no fallback device found; you'll to run into an error soon
 }
 
 # filter out some results based on the numeric chunk option as indices
