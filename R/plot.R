@@ -500,7 +500,13 @@ webshot_available = local({
   function() {
     if (is.null(res))
       res <<- c(
-        webshot2 = loadable('webshot2'),
+        webshot2 = (
+          loadable('webshot2') &&
+          tryCatch(
+            file.exists(getFromNamespace('find_chrome', 'chromote')()),
+            error = function(e) FALSE
+          )
+        ),
         webshot = loadable('webshot') && !is.null(getFromNamespace('find_phantom', 'webshot')())
       )
     res
