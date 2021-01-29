@@ -231,8 +231,8 @@ load_cache = function(
   owd = setwd(dir); on.exit(setwd(owd), add = TRUE)
   if (!is.null(envir)) {
     oldenv = .knitEnv$knit_global
-    .knitEnv$knit_global = envir
     on.exit(.knitEnv$knit_global <- oldenv, add = TRUE)
+    .knitEnv$knit_global = envir
   }
 
   path = valid_path(path, label)
