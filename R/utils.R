@@ -225,16 +225,6 @@ format_sci = function(x, ...) {
   vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 
-# absolute path?
-is_abs_path = function(x) {
-  if (is_windows()) grepl('^(\\\\|[A-Za-z]:)', x) else grepl('^[/~]', x)
-}
-
-# paths of web resources?
-is_web_path = function(x) {
-  grepl('^(f|ht)tps?://', x)
-}
-
 # is tikz device without externalization?
 is_tikz_dev = function(options) {
   'tikz' %in% options$dev && !options$external
@@ -316,34 +306,54 @@ fix_options = function(options) {
   options
 }
 
-#' Check if the current output type is LaTeX or HTML
+#' Check the current input and output type
 #'
 #' The function \code{is_latex_output()} returns \code{TRUE} when the output
 #' format is LaTeX; it works for both \file{.Rnw} and R Markdown documents (for
 #' the latter, the two Pandoc formats \code{latex} and \code{beamer} are
 #' considered LaTeX output). The function \code{is_html_output()} only works for
-#' R Markdown documents.
+#' R Markdown documents and will test for several Pandoc HTML based output
+#' formats (by default, these formats are considered as HTML formats:
+#' \code{c('markdown', 'epub', 'html', 'html4', 'html5', 'revealjs', 's5',
+#' 'slideous', 'slidy', 'gfm')}).
+#'
+#' The function \code{pandoc_to()} returns the Pandoc output format, and
+#' \code{pandoc_from()} returns Pandoc input format. \code{pandoc_to(fmt)}
+#' allows to check the current output format against a set of format names. Both
+#' are to be used with R Markdown documents.
 #'
 #' These functions may be useful for conditional output that depends on the
 #' output format. For example, you may write out a LaTeX table in an R Markdown
 #' document when the output format is LaTeX, and an HTML or Markdown table when
-#' the output format is HTML.
+#' the output format is HTML. Use \code{pandoc_to(fmt)} to test a more specific
+#' Pandoc format.
 #'
 #' Internally, the Pandoc output format of the current R Markdown document is
-#' stored in \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.to')}. By
-#' default, these formats are considered as HTML formats: \code{c('markdown',
-#' 'epub', 'html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')}.
+#' stored in \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.to')}, and the
+#' Pandoc input format in
+#' \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.from')}
+#'
+#' @note See available Pandoc formats, in
+#'   \href{https://pandoc.org/MANUAL.html}{Pandoc's Manual}
 #' @rdname output_type
 #' @export
-#' @examples knitr::is_latex_output()
+#' @examples
+#' # check for output formats type
+#' knitr::is_latex_output()
 #' knitr::is_html_output()
 #' knitr::is_html_output(excludes = c('markdown', 'epub'))
+#' # Get current formats
+#' knitr::pandoc_from()
+#' knitr::pandoc_to()
+#' # Test if current output format is 'docx'
+#' knitr::pandoc_to('docx')
 is_latex_output = function() {
   out_format('latex') || pandoc_to(c('latex', 'beamer'))
 }
 
-#' @param fmt A character vector of output formats to be checked. By default, this
-#'   is the current Pandoc output format.
+#' @param fmt A character vector of output formats to be checked against. If not
+#'   provided, \code{is_html_output()} uses \code{pandoc_to()}, and
+#'   \code{pandoc_to()} returns the output format name.
 #' @param excludes A character vector of output formats that should not be
 #'   considered as HTML format.
 #' @rdname output_type
@@ -356,6 +366,20 @@ is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
   fmt %in% setdiff(fmts, excludes)
 }
 
+#' @rdname output_type
+#' @export
+pandoc_to = function(fmt) {
+  # rmarkdown sets an option for the Pandoc output format from markdown
+  to = opts_knit$get('rmarkdown.pandoc.to')
+  if (missing(fmt)) to else !is.null(to) && (to %in% fmt)
+}
+
+#' @rdname output_type
+#' @export
+pandoc_from = function() {
+  # rmarkdown's input format, obtained from a package option set by rmarkdown
+  opts_knit$get('rmarkdown.pandoc.from') %n% 'markdown'
+}
 
 # turn percent width/height to LaTeX unit, e.g. out.width = 30% -> .3\linewidth
 latex_percent_size = function(x, which = c('width', 'height')) {
@@ -399,17 +423,6 @@ out_format = function(x) {
 
 # tempfile under the current working directory
 wd_tempfile = function(...) basename(tempfile(tmpdir = '.', ...))
-
-# rmarkdown sets an option for the Pandoc output format from markdown
-pandoc_to = function(x) {
-  fmt = opts_knit$get('rmarkdown.pandoc.to')
-  if (missing(x)) fmt else !is.null(fmt) && (fmt %in% x)
-}
-
-# rmarkdown's input format
-pandoc_from = function() {
-  opts_knit$get('rmarkdown.pandoc.from') %n% 'markdown'
-}
 
 pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
   if (length(text) == 0) return(text)
@@ -701,13 +714,7 @@ set_html_dev = function() {
   if (!is.null(opts_chunk$get('dev'))) return()
   # in some cases, png() does not work (e.g. options('bitmapType') == 'Xlib' on
   # headless servers); use svg then
-  opts_chunk$set(dev = if (png_available()) 'png' else 'svg')
-}
-
-png_available = function() {
-  !inherits(try_silent({
-    f = tempfile(); on.exit(unlink(f)); grDevices::png(f); grDevices::dev.off()
-  }), 'try-error')
+  opts_chunk$set(dev = if (dev_available('png')) 'png' else 'svg')
 }
 
 # locate kpsewhich especially for Mac OS because /usr/texbin may not be in PATH
@@ -771,26 +778,6 @@ knit_handlers = function(fun, options) {
   }))
 }
 
-# TODO: the following functions have been moved to xfun
-# conditionally disable some features during R CMD check
-is_R_CMD_check = function() {
-  !is.na(check_package_name())
-}
-
-is_CRAN_incoming = function() {
-  isTRUE(as.logical(Sys.getenv('_R_CHECK_CRAN_INCOMING_REMOTE_')))
-}
-
-check_package_name = function() {
-  Sys.getenv('_R_CHECK_PACKAGE_NAME_', NA)
-}
-
-# is R CMD check running on a package that has a version lower or equal to `version`?
-check_old_package = function(name, version) {
-  if (is.na(pkg <- check_package_name()) || pkg != name) return(FALSE)
-  tryCatch(packageVersion(name) <= version, error = function(e) FALSE)
-}
-
 # is the inst dir under . or ..? differs in R CMD build/INSTALL and devtools/roxygen2
 inst_dir = function(...) {
   p = file.path(c('..', '.'), 'inst', ...)
@@ -831,6 +818,8 @@ create_label = function(..., latex = FALSE) {
 #' @param sep Separator to be inserted between words.
 #' @param and Character string to be prepended to the last word.
 #' @param before,after A character string to be added before/after each word.
+#' @param oxford_comma Whether to insert the separator between the last two
+#'   elements in the list.
 #' @return A character string marked by \code{xfun::\link{raw_string}()}.
 #' @export
 #' @examples combine_words('a'); combine_words(c('a', 'b'))
@@ -838,14 +827,22 @@ create_label = function(..., latex = FALSE) {
 #' combine_words(c('a', 'b', 'c'), sep = ' / ', and = '')
 #' combine_words(c('a', 'b', 'c'), and = '')
 #' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
-combine_words = function(words, sep = ', ', and = ' and ', before = '', after = before) {
+#' combine_words(c('a', 'b', 'c'), before = '"', after = '"', oxford_comma=FALSE)
+combine_words = function(
+  words, sep = ', ', and = ' and ', before = '', after = before, oxford_comma = TRUE
+) {
   n = length(words); rs = xfun::raw_string
   if (n == 0) return(words)
   words = paste0(before, words, after)
   if (n == 1) return(rs(words))
   if (n == 2) return(rs(paste(words, collapse = and)))
-  if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
+  if (oxford_comma && grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
   words[n] = paste0(and, words[n])
+  # combine the last two words directly without the comma
+  if (!oxford_comma) {
+    words[n - 1] = paste0(words[n - 1:0], collapse = '')
+    words = words[-n]
+  }
   rs(paste(words, collapse = sep))
 }
 
@@ -1019,3 +1016,6 @@ make_unique = function(x) {
 #' browseURL('logo.html') # you can check its HTML source
 #' }
 image_uri = function(f) xfun::base64_uri(f)
+
+# TODO: remove this function after the next version of bookdown is on CRAN
+is_abs_path = function(...) xfun::is_abs_path(...)

@@ -122,11 +122,47 @@ assert(
 )
 
 # should not error when a plot label contains special characters and sanitize=TRUE
-if (requireNamespace('tikzDevice', quietly = TRUE) &&
-    (!is.na(Sys.getenv('CI', NA)) || Sys.getenv('USER') == 'yihui') || Sys.info()[['sysname']] != 'Darwin') {
+if (xfun::loadable('tikzDevice') &&
+    (!is.na(Sys.getenv('CI', NA)) || Sys.getenv('USER') == 'yihui' || !xfun::is_macos())) {
   knit('knit-tikzDevice.Rnw', quiet = TRUE)
   unlink(c('*-tikzDictionary', 'figure', 'knit-tikzDevice.tex'), recursive = TRUE)
 }
 
 # https://github.com/yihui/knitr/issues/1166
 knit(text = "\\Sexpr{include_graphics('myfigure.pdf', error = FALSE)}", quiet = TRUE)
+
+with_par = function(expr, ...) {
+  # set par
+  op = graphics::par(...)
+  # reset on exit
+  on.exit(graphics::par(op))
+  # save changed state
+  global.pars = par(no.readonly = TRUE)
+  # reset par
+  graphics::par(op)
+  # simulate what happens when global.par = TRUE by restoring pars
+  par2(global.pars)
+  # evaluate in this state
+  force(expr)
+}
+
+assert("par2 correctly handles specific pars", {
+  (par2(NULL) %==% NULL)
+  # correctly changed
+  (with_par(par("col") %==% "red", col = "red"))
+  (with_par(par("cex") %==% 2, cex = 2))
+  # unchanged
+  old = par("fig")
+  (with_par(par("fig") %==% old, fig = old / 2))
+  old = par("fin")
+  (with_par(par("fin") %==% old, fin = old / 2))
+  old = par("pin")
+  (with_par(par("pin") %==% old, pin = old / 2))
+  old = par("usr")
+  (with_par(par("usr") %==% old, usr = old / 2))
+  old = par("ask")
+  (with_par(par("ask") %==% old, ask = !old))
+  # Does not work - something else is changing plt when setting everything
+  # old = par("plt")
+  # (with_par(par("plt") %==% old, plt = old / 2))
+})
