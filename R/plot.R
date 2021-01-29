@@ -520,18 +520,17 @@ runtime_shiny = function() {
 
 webshot_available = local({
   res = NULL  # cache the availability of webshot2/Chrome and webshot/PhantomJS
+  test = function(pkg, fun) {
+    tryCatch(
+      file.exists(getFromNamespace(fun, pkg)()),
+      error = function(e) FALSE
+    )
+  }
   function() {
-    if (is.null(res))
-      res <<- c(
-        webshot2 = (
-          loadable('webshot2') &&
-          tryCatch(
-            file.exists(getFromNamespace('find_chrome', 'chromote')()),
-            error = function(e) FALSE
-          )
-        ),
-        webshot = loadable('webshot') && !is.null(getFromNamespace('find_phantom', 'webshot')())
-      )
+    if (is.null(res)) res <<- c(
+      webshot2 = test('webshot2', 'find_chrome'),
+      webshot  = test('webshot',  'find_phantom')
+    )
     res
   }
 })
