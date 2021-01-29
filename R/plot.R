@@ -511,7 +511,7 @@ need_screenshot = function(x, ...) {
   if (length(fmt) == 0 || force) return(i1 || i2 || i3)
   html_format = fmt %in% c('html', 'html4', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
   res = ((i1 || i3) && !html_format) || (i2 && !(html_format && runtime_shiny()))
-  res && webshot_available()
+  res && any(webshot_available())
 }
 
 runtime_shiny = function() {
@@ -519,10 +519,19 @@ runtime_shiny = function() {
 }
 
 webshot_available = local({
-  res = NULL  # cache the availablity of webshot/PhantomJS
+  res = NULL  # cache the availability of webshot2/Chrome and webshot/PhantomJS
   function() {
     if (is.null(res))
-      res <<- loadable('webshot') && !is.null(getFromNamespace('find_phantom', 'webshot')())
+      res <<- c(
+        webshot2 = (
+          loadable('webshot2') &&
+          tryCatch(
+            file.exists(getFromNamespace('find_chrome', 'chromote')()),
+            error = function(e) FALSE
+          )
+        ),
+        webshot = loadable('webshot') && !is.null(getFromNamespace('find_phantom', 'webshot')())
+      )
     res
   }
 })
@@ -550,6 +559,8 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   if (is.null(wargs$delay)) wargs$delay = if (i1) 0.2 else 1
   d = tempfile()
   dir.create(d); on.exit(unlink(d, recursive = TRUE), add = TRUE)
+  w = webshot_available()
+  webshot = c(options$webshot, names(w)[w])[[1L]]
   f = in_dir(d, {
     if (i1 || i3) {
       if (i1) {
@@ -557,11 +568,11 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
         save_widget(x, f1, FALSE, options = options)
       } else f1 = x$url
       f2 = wd_tempfile('webshot', ext)
-      f3 = do.call(webshot::webshot, c(list(f1, f2), wargs))
+      f3 = do.call(getFromNamespace('webshot', webshot), c(list(f1, f2), wargs))
       normalizePath(f3)
     } else if (i2) {
       f1 = wd_tempfile('webshot', ext)
-      f2 = do.call(webshot::appshot, c(list(x, f1), wargs))
+      f2 = do.call(getFromNamespace('appshot', webshot), c(list(x, f1), wargs))
       normalizePath(f2)
     }
   })
