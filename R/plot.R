@@ -519,7 +519,7 @@ runtime_shiny = function() {
 }
 
 webshot_available = local({
-  res = NULL  # cache the availablity of webshot2 and webshot/PhantomJS
+  res = NULL  # cache the availability of webshot2/Chrome and webshot/PhantomJS
   function() {
     if (is.null(res))
       res <<- c(
