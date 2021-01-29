@@ -17,8 +17,8 @@ load_cache(
 \arguments{
 \item{label}{The chunk label of the code chunk that has a cache database.}
 
-\item{object}{The name of the object to be fetched from the database. If it is
-missing, \code{NULL} is returned).}
+\item{object}{The name of the object to be fetched from the database. If it
+is missing, \code{NULL} is returned).}
 
 \item{notfound}{A value to use when the \code{object} cannot be found.}
 
@@ -26,12 +26,12 @@ missing, \code{NULL} is returned).}
 option \code{cache.path}).}
 
 \item{dir}{Path to use as the working directory. Defaults to the output
-directory if run inside a \pkg{knitr} context and to the current working 
+directory if run inside a \pkg{knitr} context and to the current working
 directory otherwise. Any relative \code{path} is defined from \code{dir}.}
 
-\item{envir}{Environment to use for cache loading, into which all objects 
-in the cache for the specified chunk (not just that in \code{object}) will 
-be loaded. Defaults to the value in \code{\link{knit_global}}.}
+\item{envir}{Environment to use for cache loading, into which all objects in
+the cache for the specified chunk (not just that in \code{object}) will be
+loaded. Defaults to the value in \code{\link{knit_global}}.}
 
 \item{lazy}{Whether to \code{\link{lazyLoad}} the cache database (depending
 on the chunk option \code{cache.lazy = TRUE} or \code{FALSE} of that code

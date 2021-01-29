@@ -197,17 +197,17 @@ parse_objects = function(path) {
 #' document in a linear fashion, and objects created later cannot be used before
 #' they are created.
 #' @param label The chunk label of the code chunk that has a cache database.
-#' @param object The name of the object to be fetched from the database. If it is
-#'   missing, \code{NULL} is returned).
+#' @param object The name of the object to be fetched from the database. If it
+#'   is missing, \code{NULL} is returned).
 #' @param notfound A value to use when the \code{object} cannot be found.
 #' @param path Path of the cache database (normally set in the global chunk
 #'   option \code{cache.path}).
 #' @param dir Path to use as the working directory. Defaults to the output
-#'   directory if run inside a \pkg{knitr} context and to the current working 
+#'   directory if run inside a \pkg{knitr} context and to the current working
 #'   directory otherwise. Any relative \code{path} is defined from \code{dir}.
-#' @param envir Environment to use for cache loading, into which all objects 
-#'   in the cache for the specified chunk (not just that in \code{object}) will 
-#'   be loaded. Defaults to the value in \code{\link{knit_global}}.
+#' @param envir Environment to use for cache loading, into which all objects in
+#'   the cache for the specified chunk (not just that in \code{object}) will be
+#'   loaded. Defaults to the value in \code{\link{knit_global}}.
 #' @param lazy Whether to \code{\link{lazyLoad}} the cache database (depending
 #'   on the chunk option \code{cache.lazy = TRUE} or \code{FALSE} of that code
 #'   chunk).
@@ -228,11 +228,11 @@ load_cache = function(
   dir = opts_knit$get('output.dir'), envir = NULL, lazy = TRUE
 ) {
   if (is.null(dir)) dir = "."
-  owd = setwd(dir); on.exit(setwd(owd))
+  owd = setwd(dir); on.exit(setwd(owd), add = TRUE)
   if (!is.null(envir)) {
     oldenv = .knitEnv$knit_global
     .knitEnv$knit_global = envir
-    on.exit(.knitEnv$knit_global <- oldenv, add=TRUE)
+    on.exit(.knitEnv$knit_global <- oldenv, add = TRUE)
   }
 
   path = valid_path(path, label)
