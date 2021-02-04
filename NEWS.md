@@ -14,6 +14,8 @@
 
 - For child documents, `include_graphics(error = FALSE)` is the default now (#1957).
 
+- For Rnw documents, the commented `%\begin{document}` will no longer cause trouble (thanks, @NewbieKnitter @shrektan, #1819).
+
 # CHANGES IN knitr VERSION 1.31
 
 ## NEW FEATURES
