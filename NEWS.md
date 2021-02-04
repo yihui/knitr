@@ -12,6 +12,8 @@
 
 - Fixed an issue with `kable(format = "latex", booktabs = TRUE)` when the first cell of the table stats with `[` (thanks, @jonnypenarth, #1595).
 
+- For child documents, `include_graphics(error = FALSE)` is the default now (#1957).
+
 # CHANGES IN knitr VERSION 1.31
 
 ## NEW FEATURES
