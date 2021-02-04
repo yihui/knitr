@@ -191,7 +191,13 @@ hook_plot_tex = function(x, options) {
   k2 = '\\end{kframe}'
   x = .rm.empty.envir(paste0(k1, x, k2))
   size = if (options$size == 'normalsize') '' else sprintf('\\%s', options$size)
-  if (!ai) x = sprintf('\\begin{knitrout}%s\n%s%s\n\\end{knitrout}', size, x, if (options$end.paragraph %n% TRUE) '' else '%')
+  if (!ai) {
+    # if the chunk content starts with \n, don't add \n; similarly, if it ends with \n, don't append \n
+    n1 = n2 = '\n'
+    if (grepl('^\\s*\n', x)) n1 = ''
+    if (grepl('\n\\s*$', x)) n2 = ''
+    x = sprintf('\\begin{knitrout}%s%s%s%s\\end{knitrout}', size, n1, x, n2)
+  }
   if (options$split) {
     name = fig_path('.tex', options, NULL)
     if (!file.exists(dirname(name)))
