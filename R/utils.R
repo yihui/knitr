@@ -1017,5 +1017,14 @@ make_unique = function(x) {
 #' }
 image_uri = function(f) xfun::base64_uri(f)
 
+#' Reference label with chunk options
+#'
+#' When the `ref.label` chunk option is specified with this function,
+#' the chunk inherits chunk options from the reference chunk.
+#'
+#' @param ref.label A string to be passed to the `ref.label` chunk option.
+#' @export
+with_opts = function(ref.label) structure(ref.label, with_opts = TRUE)
+
 # TODO: remove this function after the next version of bookdown is on CRAN
 is_abs_path = function(...) xfun::is_abs_path(...)
