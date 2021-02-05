@@ -25,7 +25,18 @@ assert(
   identical(
     parse_block(NULL, '', 'Rcpp, foo, a=1,')$params,
     alist(label = 'foo', a = 1, engine = 'Rcpp')
-  )
+  ),
+  local({
+    knit_code$set(
+      ref = structure("", chunk_opts = list(foo = "foo", bar = "bar"))
+    )
+    res = identical(
+      parse_block(NULL, '', 'r, label, ref.label=with_opts("ref"), foo="FOO"')$params,
+      alist(label = "label", ref.label = with_opts("ref"), foo = "FOO", bar = "bar")
+    )
+    knit_code$delete("ref")
+    res
+  })
 )
 
 res = split_file(
