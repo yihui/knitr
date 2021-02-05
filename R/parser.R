@@ -92,9 +92,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   params = parse_params(params.src)
   ref.label = eval(params$ref.label)
   if (inherits(ref.label, 'with_opts')) {
-    template = attr(knit_code$get(ref.label), 'chunk_opts')
-    targets = setdiff(names(template), names(params))
-    params[targets] = template[targets]
+    params = merge_list(attr(knit_code$get(ref.label), 'chunk_opts'), params)
   }
   # remove indent (and possibly markdown blockquote >) from code
   if (nzchar(spaces <- gsub('^([\t >]*).*', '\\1', header))) {
