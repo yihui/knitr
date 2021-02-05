@@ -28,13 +28,13 @@ assert(
   ),
   local({
     knit_code$set(
-      ref = structure("", chunk_opts = list(foo = "foo", bar = "bar"))
+      ref = structure('', chunk_opts = list(foo = 'foo', bar = 'bar'))
     )
     res = identical(
       parse_block(NULL, '', 'r, label, ref.label=with_opts("ref"), foo="FOO"')$params,
-      alist(label = "label", ref.label = with_opts("ref"), foo = "FOO", bar = "bar")
+      alist(label = 'label', ref.label = with_opts('ref'), foo = 'FOO', bar = 'bar')
     )
-    knit_code$delete("ref")
+    knit_code$delete('ref')
     res
   })
 )
