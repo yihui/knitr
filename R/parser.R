@@ -162,7 +162,9 @@ parse_params = function(params) {
 
   ref.label = eval(res$ref.label)
   if (inherits(ref.label, 'with_opts')) {
-    res = merge_list(attr(knit_code$get(ref.label), 'chunk_opts'), res)
+    template = attr(knit_code$get(ref.label), 'chunk_opts')
+    targets = setdiff(names(template), names(res))
+    res[targets] = template[targets]
   }
 
   res
