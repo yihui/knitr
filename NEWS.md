@@ -16,6 +16,10 @@
 
 - For Rnw documents, the commented `%\begin{document}` will no longer cause trouble (thanks, @NewbieKnitter @shrektan, #1819).
 
+## MINOR CHANGES
+
+- For Rnw documents, if a chunk's output ends with `\n`, **knitr** will no longer add another `\n` to it (thanks, @krivit #1958, @jpritikin 1092).
+
 # CHANGES IN knitr VERSION 1.31
 
 ## NEW FEATURES
