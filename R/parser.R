@@ -90,10 +90,6 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
 
   params.src = params
   params = parse_params(params.src)
-  ref.label = eval(params$ref.label)
-  if (inherits(ref.label, 'with_opts')) {
-    params = merge_list(attr(knit_code$get(ref.label), 'chunk_opts'), params)
-  }
   # remove indent (and possibly markdown blockquote >) from code
   if (nzchar(spaces <- gsub('^([\t >]*).*', '\\1', header))) {
     params$indent = spaces
@@ -163,6 +159,12 @@ parse_params = function(params) {
   if (!is.character(res$label))
     res$label = gsub(' ', '', as.character(as.expression(res$label)))
   if (identical(res$label, '')) res$label = unnamed_chunk()
+
+  ref.label = eval(res$ref.label)
+  if (inherits(ref.label, 'with_opts')) {
+    res = merge_list(attr(knit_code$get(ref.label), 'chunk_opts'), res)
+  }
+
   res
 }
 
