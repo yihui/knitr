@@ -434,6 +434,8 @@ include_graphics = function(
     i = file.exists(path2)
     path[i] = path2[i]
   }
+  # relative paths can be tricky in child documents, so don't error (#1957)
+  if (child_mode()) error = FALSE
   if (error && length(p <- path[!xfun::is_web_path(path) & !file.exists(path)])) stop(
     'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
   )
