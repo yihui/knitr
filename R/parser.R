@@ -91,7 +91,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   params.src = params
   params = parse_params(params.src)
   ref.label = eval(params$ref.label)
-  if (isTRUE(attr(ref.label, "with_opts"))) {
+  if (inherits(ref.label, "with_opts")) {
     template = attr(knit_code$get(ref.label), "chunk_opts")
     targets = setdiff(names(template), names(params))
     params[targets] = template[targets]
