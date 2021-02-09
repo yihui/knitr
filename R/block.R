@@ -392,7 +392,7 @@ fig_before_code = function(x) {
 
 rearrange_figs = function(res, keep, keep.idx, show) {
   figs = find_recordedplot(res)
-  if (length(figs) && any(figs)) {
+  if (any(figs)) {
     if (keep == 'none') {
       res = res[!figs] # remove all
     } else {
