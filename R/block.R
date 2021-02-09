@@ -223,25 +223,8 @@ block_exec = function(options) {
   res = filter_evaluate(res, options$message, evaluate::is.message)
 
   # rearrange locations of figures
-  figs = find_recordedplot(res)
-  if (length(figs) && any(figs)) {
-    if (keep == 'none') {
-      res = res[!figs] # remove all
-    } else {
-      if (options$fig.show == 'hold') res = c(res[!figs], res[figs]) # move to the end
-      figs = find_recordedplot(res)
-      if (length(figs) && sum(figs) > 1) {
-        if (keep %in% c('first', 'last')) {
-          res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
-        } else {
-          # keep only selected
-          if (keep == 'index') res = res[-which(figs)[-keep.idx]]
-          # merge low-level plotting changes
-          if (keep == 'high') res = merge_low_plot(res, figs)
-        }
-      }
-    }
-  }
+  res = rearrange_figs(res, keep, keep.idx, options$fig.show)
+
   # number of plots in this chunk
   if (is.null(options$fig.num))
     options$fig.num = if (length(res)) sum(sapply(res, function(x) {
@@ -405,6 +388,28 @@ fig_before_code = function(x) {
     s = which(vapply(x, evaluate::is.source, logical(1)))
   }
   x
+}
+
+rearrange_figs = function(res, keep, idx, show) {
+  figs = find_recordedplot(res)
+  if (!any(figs)) return(res)
+  if (keep == 'none') return(res[!figs]) # remove all
+
+  if (show == 'hold') {
+    res = c(res[!figs], res[figs]) # move to the end
+    figs = find_recordedplot(res)
+  }
+  switch(
+    keep,
+    first = res[-tail(which(figs), -1L)],
+    last  = res[-head(which(figs), -1L)],
+    high  = merge_low_plot(res, figs),  # merge low-level plotting changes
+    index = {
+      i = which(figs)[-idx]
+      if (length(i) > 0) res[-i] else res  # keep only selected
+    },
+    res
+  )
 }
 
 # merge neighbor elements of the same class in a list returned by evaluate()
