@@ -123,6 +123,7 @@ block_exec = function(options) {
   }
 }
 
+
 #' Engine for R
 #'
 #' This function handles the execution of R code blocks (when the chunk option \code{engine} is  \code{'R'})
@@ -135,7 +136,7 @@ block_exec = function(options) {
 #'
 #' @param options A list of chunk options. Usually this is just the object
 #'   \code{options} associated with the current code chunk.
-#'
+
 #' @export
 eng_r = function(options) {
   # eval chunks (in an empty envir if cache)
