@@ -100,7 +100,6 @@ cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fi
 # options that should not affect cache
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
-#' @export
 block_exec = function(options) {
   # when code is not R language
   if (options$engine != 'R') {
@@ -119,13 +118,26 @@ block_exec = function(options) {
         ))
       }
     return(if (options$include) output else '')
-  } else if (options$engine == "R") {
-    block_exec_R(options)
+  } else {
+    eng_r(options)
   }
 }
 
+#' Engine for R
+#'
+#' This function handles the execution of R code blocks (when the chunk option \code{engine} is  \code{'R'})
+#' and generates the R output for each code block.
+#'
+#' This engine function has one argument \code{options}: the source code of the current chunk  is in \code{options$code}.
+#' It returns a processed output which can consist of data frames (as tables), graphs or character output.
+#' This function is intended for advanced use to allow developers to extend R,
+#' and customise the pipeline with which R code is executed and processed within knitr.
+#'
+#' @param options A list of chunk options. Usually this is just the object
+#'   \code{options} associated with the current code chunk.
+#'
 #' @export
-block_exec_R = function(options) {
+eng_r = function(options) {
   # eval chunks (in an empty envir if cache)
   env = knit_global()
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
