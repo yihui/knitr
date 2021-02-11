@@ -86,7 +86,7 @@ assert("Include a plot by pandoc md", {
 assert("fig.alt does not break office document", {
   old = opts_knit$get('rmarkdown.pandoc.to')
   opts_knit$set('rmarkdown.pandoc.to' = "docx")
-  on.exit(opts_knit$set('rmarkdown.pandoc.to' = old))
   (suppressWarnings(hook_plot_md(x, opt())) %==% "![](1.png)")
   (suppressWarnings(hook_plot_md(x, opt(fig.alt = "bar"))) %==% "![](1.png)")
+  opts_knit$set('rmarkdown.pandoc.to' = old)
 })
