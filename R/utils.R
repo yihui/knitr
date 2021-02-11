@@ -849,6 +849,10 @@ combine_words = function(
 warning2 = function(...) warning(..., call. = FALSE)
 stop2 = function(...) stop(..., call. = FALSE)
 
+warn_options_unsupported = function(option, to) {
+  warning2('Chunk option ', option, ' is not supported for ', to, ' output')
+}
+
 raw_markers = c('!!!!!RAW-KNITR-CONTENT', 'RAW-KNITR-CONTENT!!!!!')
 
 #' @export

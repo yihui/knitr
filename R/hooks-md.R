@@ -15,8 +15,12 @@ hook_plot_md = function(x, options) {
     }
     if (office_output) {
       if (options$fig.align != 'default') {
-        warning('Chunk options fig.align is not supported for ', to, ' output')
+        warn_options_unsupported('fig.align', to)
         options$fig.align = 'default'
+      }
+      if (!is.null(options$fig.alt)) {
+        warn_options_unsupported('fig.alt', to)
+        options$fig.alt = NULL
       }
       return(hook_plot_md_pandoc(x, options))
     }
@@ -29,8 +33,8 @@ hook_plot_md = function(x, options) {
 need_special_plot_hook = function(options) {
   opts = opts_chunk$get(default = TRUE)
   for (i in c(
-    'out.width', 'out.height', 'out.extra',
-    'fig.align', 'fig.subcap', 'fig.env', 'fig.scap'
+    'out.width', 'out.height', 'out.extra', 'fig.align', 'fig.subcap',
+    'fig.env', 'fig.scap', 'fig.alt'
   )) if (!identical(options[[i]], opts[[i]])) return(TRUE)
   FALSE
 }

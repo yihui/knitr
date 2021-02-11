@@ -18,6 +18,8 @@
 
 - For Rnw documents, the commented `%\begin{document}` will no longer cause trouble (thanks, @NewbieKnitter @shrektan, #1819).
 
+- Fixed an issue with the chunk option `fig.alt` causing figures to disappear in `rmarkdownn::word_document()` output. This option is currently supported for HTML output only. If provided for office output in **rmarkdown**, it will emit a warning and be ignored (#1966).
+
 ## MINOR CHANGES
 
 - For Rnw documents, if a chunk's output ends with `\n`, **knitr** will no longer add another `\n` to it (thanks, @krivit #1958, @jpritikin 1092).
@@ -1944,4 +1946,3 @@
 - **knitr** won an Honorable Mention prize (before it was formally released to CRAN) in the Applications of R in Business Contest hosted by Revolution Analytics: http://bit.ly/wP1Dii http://bit.ly/wDRCPV
 
 - in this NEWS file, #n means the issue number on GitHub, e.g. #142 is https://github.com/yihui/knitr/issues/142
-
