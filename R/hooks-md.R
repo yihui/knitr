@@ -15,13 +15,21 @@ hook_plot_md = function(x, options) {
     }
     if (office_output) {
       if (options$fig.align != 'default') {
-        warning('Chunk options fig.align is not supported for ', to, ' output')
+        warn_options_unsupported('fig.align', to)
         options$fig.align = 'default'
+      }
+      if (!is.null(options$fig.alt)) {
+        warn_options_unsupported('fig.alt', to)
+        options$fig.alt = NULL
       }
       return(hook_plot_md_pandoc(x, options))
     }
   }
   hook_plot_md_base(x, options)
+}
+
+warn_options_unsupported = function(option, to) {
+  warning2('Chunk options ', option, ' is not supported for ', to, ' output')
 }
 
 # decide if the markdown plot hook is not enough and needs special hooks like
