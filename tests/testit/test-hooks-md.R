@@ -67,7 +67,6 @@ x = "1.png"
 w = h = 1
 ex = "style='margin: 0;'"
 cap = "foo"
-```suggestion
 opt = function(
   w = NULL, h = NULL, ex = NULL, cap = NULL, show = 'asis',
   fig.align = 'default', ...
