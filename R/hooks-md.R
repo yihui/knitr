@@ -29,8 +29,8 @@ hook_plot_md = function(x, options) {
 need_special_plot_hook = function(options) {
   opts = opts_chunk$get(default = TRUE)
   for (i in c(
-    'out.width', 'out.height', 'out.extra',
-    'fig.align', 'fig.subcap', 'fig.env', 'fig.scap'
+    'out.width', 'out.height', 'out.extra', 'fig.align', 'fig.subcap',
+    'fig.env', 'fig.scap', 'fig.alt'
   )) if (!identical(options[[i]], opts[[i]])) return(TRUE)
   FALSE
 }
