@@ -28,10 +28,6 @@ hook_plot_md = function(x, options) {
   hook_plot_md_base(x, options)
 }
 
-warn_options_unsupported = function(option, to) {
-  warning2('Chunk options ', option, ' is not supported for ', to, ' output')
-}
-
 # decide if the markdown plot hook is not enough and needs special hooks like
 # hook_plot_tex() to handle chunk options like out.width
 need_special_plot_hook = function(options) {
