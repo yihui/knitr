@@ -122,13 +122,7 @@ block_exec = function(options) {
     eng_r(options)
   }
 }
-<<<<<<< HEAD
 
-
-=======
-
-
->>>>>>> 2792e6e821bd2c86c2d7b847a4a9c0adbf7a6dc8
 #' Engine for R
 #'
 #' This function handles the execution of R code blocks (when the chunk option \code{engine} is  \code{'R'})
