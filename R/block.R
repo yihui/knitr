@@ -136,8 +136,7 @@ block_exec = function(options) {
 #'
 #' @param options A list of chunk options. Usually this is just the object
 #'   \code{options} associated with the current code chunk.
-
-#' @export
+#'
 eng_r = function(options) {
   # eval chunks (in an empty envir if cache)
   env = knit_global()
