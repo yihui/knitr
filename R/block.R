@@ -115,15 +115,20 @@ block_exec = function(options) {
       if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
         options$engine,
         'stan' = options$output.var, 'sql' = options$output.var, character(0)
-        ))
-      }
+      ))
+    }
     return(if (options$include) output else '')
   } else {
     eng_r(options)
   }
 }
+<<<<<<< HEAD
 
 
+=======
+
+
+>>>>>>> 2792e6e821bd2c86c2d7b847a4a9c0adbf7a6dc8
 #' Engine for R
 #'
 #' This function handles the execution of R code blocks (when the chunk option \code{engine} is  \code{'R'})
