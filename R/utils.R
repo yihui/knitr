@@ -1019,7 +1019,7 @@ image_uri = function(f) xfun::base64_uri(f)
 
 #' Reference label with chunk options
 #'
-#' When the `ref.label` chunk option is specified with this function,
+#' When the \code{ref.label} chunk option is specified with this function,
 #' the chunk inherits chunk options from the reference chunk.
 #'
 #' @param ref.label A string to be passed to the `ref.label` chunk option.
