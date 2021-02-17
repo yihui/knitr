@@ -27,17 +27,20 @@ assert(
     alist(label = 'foo', a = 1, engine = 'Rcpp')
   ),
   local({
-    knit_code$set(
-      ref = structure('', chunk_opts = list(foo = 'foo', bar = 'bar'))
-    )
-    res = identical(
-      parse_block(NULL, '', 'r, label, ref.label=with_opts("ref"), foo="FOO"')$params,
-      alist(foo = 'FOO', bar = 'bar', label = 'label', ref.label = with_opts('ref'))
-    )
-    knit_code$delete('ref')
-    res
   })
 )
+
+knit_code$set(
+  ref = structure('', chunk_opts = list(foo = 'foo', bar = 'bar'))
+)
+assert(
+  'chunk options can be inherited via the ref.label chunk option',
+  identical(
+    parse_block(NULL, '', 'r, label, ref.label=with_opts("ref"), foo="FOO"')$params,
+    alist(foo = 'FOO', bar = 'bar', label = 'label', ref.label = with_opts('ref'))
+  )
+)
+knit_code$delete('ref')
 
 res = split_file(
   c('abc', '```{r foo}', '1+1', '```{r bar}', '2+2', '```', 'def'),
