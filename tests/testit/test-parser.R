@@ -25,9 +25,7 @@ assert(
   identical(
     parse_block(NULL, '', 'Rcpp, foo, a=1,')$params,
     alist(label = 'foo', a = 1, engine = 'Rcpp')
-  ),
-  local({
-  })
+  )
 )
 
 knit_code$set(
