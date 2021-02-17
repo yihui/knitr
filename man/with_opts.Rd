@@ -10,6 +10,8 @@ with_opts(ref.label)
 \item{ref.label}{A string to be passed to the `ref.label` chunk option.}
 }
 \description{
-When the `ref.label` chunk option is specified with this function,
-the chunk inherits chunk options from the reference chunk.
+When the \code{ref.label} chunk option is specified with this function,
+the chunk inherits chunk options from the reference chunk. Note that
+explicitly specified chunk options have priority over the inherited chunk
+options.
 }
