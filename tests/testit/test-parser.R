@@ -32,7 +32,7 @@ assert(
     )
     res = identical(
       parse_block(NULL, '', 'r, label, ref.label=with_opts("ref"), foo="FOO"')$params,
-      alist(label = 'label', ref.label = with_opts('ref'), foo = 'FOO', bar = 'bar')
+      alist(foo = 'FOO', bar = 'bar', label = 'label', ref.label = with_opts('ref'))
     )
     knit_code$delete('ref')
     res
