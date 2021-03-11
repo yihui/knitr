@@ -185,7 +185,7 @@ eng_r = function(options) {
   # only evaluate certain lines
   if (is.numeric(ev <- options$eval)) {
     # group source code into syntactically complete expressions
-    if (isFALSE(options$tidy)) code = sapply(highr:::group_src(code), one_string)
+    if (isFALSE(options$tidy)) code = sapply(xfun::split_source(code), one_string)
     iss = seq_along(code)
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
@@ -240,25 +240,8 @@ eng_r = function(options) {
   res = filter_evaluate(res, options$message, evaluate::is.message)
 
   # rearrange locations of figures
-  figs = find_recordedplot(res)
-  if (length(figs) && any(figs)) {
-    if (keep == 'none') {
-      res = res[!figs] # remove all
-    } else {
-      if (options$fig.show == 'hold') res = c(res[!figs], res[figs]) # move to the end
-      figs = find_recordedplot(res)
-      if (length(figs) && sum(figs) > 1) {
-        if (keep %in% c('first', 'last')) {
-          res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
-        } else {
-          # keep only selected
-          if (keep == 'index') res = res[-which(figs)[-keep.idx]]
-          # merge low-level plotting changes
-          if (keep == 'high') res = merge_low_plot(res, figs)
-        }
-      }
-    }
-  }
+  res = rearrange_figs(res, keep, keep.idx, options$fig.show)
+
   # number of plots in this chunk
   if (is.null(options$fig.num))
     options$fig.num = if (length(res)) sum(sapply(res, function(x) {
@@ -330,7 +313,7 @@ purge_cache = function(options) {
 chunk_device = function(options, record = TRUE, tmp = tempfile()) {
   width = options$fig.width[1L]
   height = options$fig.height[1L]
-  dev = options$dev
+  dev = fallback_dev(options$dev)
   dev.args = options$dev.args
   dpi = options$dpi
 
@@ -371,6 +354,26 @@ chunk_device = function(options, record = TRUE, tmp = tempfile()) {
   dev.control(displaylist = if (record) 'enable' else 'inhibit')
 }
 
+# fall back to a usable device (e.g., during R CMD check)
+fallback_dev = function(dev) {
+  if (length(dev) != 1 || !getOption('knitr.device.fallback', xfun::is_R_CMD_check()))
+    return(dev)
+  choices = list(
+    svg = c('png', 'jpeg', 'bmp'), cairo_pdf = c('pdf'), cairo_ps = c('postscript'),
+    png = c('jpeg', 'svg', 'bmp'), jpeg = c('png', 'svg', 'bmp')
+  )
+  # add choices provided by users
+  choices = merge_list(choices, getOption('knitr.device.choices'))
+  if (!dev %in% names(choices)) return(dev)  # no fallback devices available
+  # first test if the specified device actually works
+  if (dev_available(dev)) return(dev)
+  for (d in choices[[dev]]) if (dev_available(d)) {
+    warning2("The device '", dev, "' is not operational; falling back to '", d, "'.")
+    return(d)
+  }
+  dev  # no fallback device found; you'll to run into an error soon
+}
+
 # filter out some results based on the numeric chunk option as indices
 filter_evaluate = function(res, opt, test) {
   if (length(res) == 0 || !is.numeric(opt) || !any(idx <- sapply(res, test)))
@@ -402,6 +405,28 @@ fig_before_code = function(x) {
     s = which(vapply(x, evaluate::is.source, logical(1)))
   }
   x
+}
+
+rearrange_figs = function(res, keep, idx, show) {
+  figs = find_recordedplot(res)
+  if (!any(figs)) return(res)
+  if (keep == 'none') return(res[!figs]) # remove all
+
+  if (show == 'hold') {
+    res = c(res[!figs], res[figs]) # move to the end
+    figs = find_recordedplot(res)
+  }
+  switch(
+    keep,
+    first = res[-tail(which(figs), -1L)],
+    last  = res[-head(which(figs), -1L)],
+    high  = merge_low_plot(res, figs),  # merge low-level plotting changes
+    index = {
+      i = which(figs)[-idx]
+      if (length(i) > 0) res[-i] else res  # keep only selected
+    },
+    res
+  )
 }
 
 # merge neighbor elements of the same class in a list returned by evaluate()

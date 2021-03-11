@@ -37,7 +37,8 @@
 #'   \code{c('c', 'l', 'c')}, unless the output format is LaTeX.
 #' @param caption The table caption.
 #' @param label The table reference label. By default, the label is obtained
-#'   from \code{knitr::\link{opts_current}$get('label')}.
+#'   from \code{knitr::\link{opts_current}$get('label')}. To disable the label,
+#'   use \code{label = NA}.
 #' @param format.args A list of arguments to be passed to \code{\link{format}()}
 #'   to format table values, e.g. \code{list(big.mark = ',')}.
 #' @param escape Boolean; whether to escape special characters when producing
@@ -162,8 +163,12 @@ kable = function(
 kable_caption = function(label, caption, format) {
   # create a label for bookdown if applicable
   if (is.null(label)) label = opts_current$get('label')
-  if (!is.null(caption) && !is.na(caption)) caption = paste0(
-    create_label('tab:', label, latex = (format == 'latex')), caption
+  if (is.null(label)) label = NA
+  if (!is.null(caption) && !is.na(caption) && !is.na(label)) caption = paste0(
+    create_label(
+      opts_knit$get('label.prefix')[['table']],
+      label, latex = (format == 'latex')
+    ), caption
   )
   caption
 }
@@ -269,9 +274,9 @@ knit_print.knitr_kable = function(x, ...) {
 kable_latex = function(
   x, booktabs = FALSE, longtable = FALSE, valign = 't', position = '', centering = TRUE,
   vline = getOption('knitr.table.vline', if (booktabs) '' else '|'),
-  toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule' else '\\hline'),
-  bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule' else '\\hline'),
-  midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
+  toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule{}' else '\\hline'),
+  bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule{}' else '\\hline'),
+  midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule{}' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
   escape = TRUE
@@ -327,7 +332,9 @@ kable_latex_caption = function(x, caption) {
   ), collapse = '')
 }
 
-kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
+kable_html = function(
+  x, table.attr = getOption('knitr.table.html.attr', ''), caption = NULL, escape = TRUE, ...
+) {
   table.attr = trimws(table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)

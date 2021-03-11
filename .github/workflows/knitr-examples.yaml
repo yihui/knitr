@@ -8,10 +8,10 @@ on:
       - main
       - master
 
-name: Check with knitr examples
+name: Check knitr examples
 
 jobs:
-  R-CMD-check:
+  run-examples:
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
@@ -39,7 +39,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v1
 
       # TODO: Use next tag once this commit is in a release
-      - uses: r-lib/actions/setup-tinytex@5f1c134
+      - uses: r-lib/actions/setup-tinytex@5f1c1346f28a05c35128f89c766079a0bca8d786
         env:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
@@ -73,7 +73,7 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "18.04"))')
-          sudo apt-get install -y libpoppler-cpp-dev graphviz asymptote highlight coffeescript scala optipng
+          sudo apt-get install -y libpoppler-cpp-dev graphviz asymptote highlight coffeescript scala optipng ghostscript
           # downgrade ruby to remove deprecated
           # https://github.com/rubygems/rubygems/issues/3068
           sudo gem update --system 3.0.8
@@ -82,6 +82,7 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
+          tinytex::tlmgr_install("dvisvgm")
         shell: Rscript {0}
 
       - name: Check knitr-examples
