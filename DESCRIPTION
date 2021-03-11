@@ -4,6 +4,7 @@ Title: A General-Purpose Package for Dynamic Report Generation in R
 Version: 1.31.5
 Authors@R: c(
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666")),
+    person("Abhraneel", "Sarma", role = "ctb"),
     person("Adam", "Vogt", role = "ctb"),
     person("Alastair", "Andrew", role = "ctb"),
     person("Alex", "Zvoleff", role = "ctb"),
