@@ -101,26 +101,24 @@ cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fi
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
 block_exec = function(options) {
+  if (options$engine == 'R') return(eng_r(options))
+
   # when code is not R language
-  if (options$engine != 'R') {
-    res.before = run_hooks(before = TRUE, options)
-    engine = get_engine(options$engine)
-    output = in_dir(input_dir(), engine(options))
-    if (is.list(output)) output = unlist(output)
-    res.after = run_hooks(before = FALSE, options)
-    output = paste(c(res.before, output, res.after), collapse = '')
-    output = knit_hooks$get('chunk')(output, options)
-    if (options$cache) {
-      cache.exists = cache$exists(options$hash, options$cache.lazy)
-      if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
-        options$engine,
-        'stan' = options$output.var, 'sql' = options$output.var, character(0)
-      ))
-    }
-    return(if (options$include) output else '')
-  } else {
-    eng_r(options)
+  res.before = run_hooks(before = TRUE, options)
+  engine = get_engine(options$engine)
+  output = in_dir(input_dir(), engine(options))
+  if (is.list(output)) output = unlist(output)
+  res.after = run_hooks(before = FALSE, options)
+  output = paste(c(res.before, output, res.after), collapse = '')
+  output = knit_hooks$get('chunk')(output, options)
+  if (options$cache) {
+    cache.exists = cache$exists(options$hash, options$cache.lazy)
+    if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
+      options$engine,
+      'stan' = options$output.var, 'sql' = options$output.var, character(0)
+    ))
   }
+  if (options$include) output else ''
 }
 
 #' Engine for R
