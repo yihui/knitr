@@ -37,5 +37,5 @@ default, these formats are considered as HTML formats: \code{c('markdown',
 \examples{
 knitr::is_latex_output()
 knitr::is_html_output()
-knitr::is_html_output(excludes = c('markdown', 'epub'))
+knitr::is_html_output(excludes = c("markdown", "epub"))
 }

@@ -26,14 +26,18 @@ the key \code{t} to hide the code column (show the text column only), and
 press again to hide the text column (show code).
 }
 \examples{
-rocco_view=function(input) {
-owd = setwd(tempdir()); on.exit(setwd(owd))
-if (!file.exists(input)) return()
-o=rocco(input, header='', quiet=TRUE)
-if (interactive()) browseURL(o)}
+rocco_view = function(input) {
+    owd = setwd(tempdir())
+    on.exit(setwd(owd))
+    if (!file.exists(input)) 
+        return()
+    o = rocco(input, header = "", quiet = TRUE)
+    if (interactive()) 
+        browseURL(o)
+}
 # knit these two vignettes using the docco style
-rocco_view(system.file('doc', 'docco-classic.Rmd', package = 'knitr'))
-rocco_view(system.file('doc', 'knit_expand.Rmd', package = 'knitr'))
+rocco_view(system.file("doc", "docco-classic.Rmd", package = "knitr"))
+rocco_view(system.file("doc", "knit_expand.Rmd", package = "knitr"))
 }
 \references{
 The Docco package by Jeremy Ashkenas:

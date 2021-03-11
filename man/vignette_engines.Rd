@@ -30,9 +30,9 @@ If you use the \code{knitr::rmarkdown} engine, please make sure that
 }
 \examples{
 library(knitr)
-vig_list = tools::vignetteEngine(package = 'knitr')
+vig_list = tools::vignetteEngine(package = "knitr")
 str(vig_list)
-vig_list[['knitr::knitr']][c('weave', 'tangle')]
-vig_list[['knitr::knitr_notangle']][c('weave', 'tangle')]
-vig_list[['knitr::docco_classic']][c('weave', 'tangle')]
+vig_list[["knitr::knitr"]][c("weave", "tangle")]
+vig_list[["knitr::knitr_notangle"]][c("weave", "tangle")]
+vig_list[["knitr::docco_classic"]][c("weave", "tangle")]
 }

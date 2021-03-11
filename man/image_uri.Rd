@@ -18,9 +18,10 @@ different function name). It can encode an image file as a base64 string,
 which can be used in the \code{img} tag in HTML.
 }
 \examples{
-uri = image_uri(file.path(R.home('doc'), 'html', 'logo.jpg'))
-if (interactive()) {cat(sprintf('<img src="\%s" />', uri), file = 'logo.html')
-browseURL('logo.html') # you can check its HTML source
+uri = image_uri(file.path(R.home("doc"), "html", "logo.jpg"))
+if (interactive()) {
+    cat(sprintf("<img src=\"\%s\" />", uri), file = "logo.html")
+    browseURL("logo.html")  # you can check its HTML source
 }
 }
 \references{

@@ -53,15 +53,16 @@ these hooks to insert graphics output in the output document; see
 # this is what happens for a chunk like this
 
 # <<foo-bar-plot, dev='pdf', fig.align='right'>>=
-hook_plot_tex('foo-bar-plot.pdf', opts_chunk$merge(list(fig.align='right')))
+hook_plot_tex("foo-bar-plot.pdf", opts_chunk$merge(list(fig.align = "right")))
 
 # <<bar, dev='tikz'>>=
-hook_plot_tex('bar.tikz', opts_chunk$merge(list(dev='tikz')))
+hook_plot_tex("bar.tikz", opts_chunk$merge(list(dev = "tikz")))
 
 # <<foo, dev='pdf', fig.show='animate', interval=.1>>=
 
 # 5 plots are generated in this chunk
-hook_plot_tex('foo5.pdf', opts_chunk$merge(list(fig.show='animate',interval=.1,fig.cur=5, fig.num=5)))
+hook_plot_tex("foo5.pdf", opts_chunk$merge(list(fig.show = "animate", interval = 0.1, 
+    fig.cur = 5, fig.num = 5)))
 }
 \references{
 \url{https://yihui.org/knitr/hooks/}

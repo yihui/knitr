@@ -19,6 +19,7 @@ aliases for them. The aliases are a named character vector; the names are
 aliases and the elements in this vector are the real option names.
 }
 \examples{
-set_alias(w = 'fig.width', h = 'fig.height')
-# then we can use options w and h in chunk headers instead of fig.width and fig.height
+set_alias(w = "fig.width", h = "fig.height")
+# then we can use options w and h in chunk headers instead of fig.width and
+# fig.height
 }
