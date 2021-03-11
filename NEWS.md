@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- The internal code to process R code chunks was factored out into the language engine `R`, which can be obtained via `knit_engines$get('R')` now (thanks, @abhsarma, #1963).
+
 - Added arguments `dir` and `envir` to `load_cache()` to specify the working directory and environment into which the cached objects are loaded. By default, all cached objects are loaded into the global environment, which may not be desirable (thanks, @LTLA, #1905).
 
 - The internal function `html_screenshot()`, which takes screenshots of HTML widgets and Shiny apps in **knitr** documents, now prefers the **webshot2** package over the **webshot** package. This is because the backend of the **webshot** package is PhantomJS, which [has been archived since 2018](https://github.com/ariya/phantomjs/issues/15344). If **webshot** is still preferred, use the chunk option `opts_chunk$set(webshot = "webshot")` (thanks, @atusy #1918, @LouisStAmour #1858).
