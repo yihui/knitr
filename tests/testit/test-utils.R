@@ -97,6 +97,8 @@ assert('escape_latex() escapes special LaTeX characters', {
   (escape_latex('# $ % & ~ _ ^ \\ { }') %==%
      '\\# \\$ \\% \\& \\textasciitilde{} \\_ \\textasciicircum{} \\textbackslash{} \\{ \\}'
   )
+  (escape_latex('a b', spaces = TRUE) %==% 'a b')
+  (escape_latex('a   b', spaces = TRUE) %==% 'a \\ \\ b')
 })
 
 assert('indent_block() works when the first element is empty (#790)', {

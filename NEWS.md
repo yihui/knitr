@@ -22,6 +22,8 @@
 
 - Fixed an issue with the chunk option `fig.alt` causing figures to disappear in `rmarkdownn::word_document()` output. This option is currently supported for HTML output only. If provided for office output in **rmarkdown**, it will emit a warning and be ignored (#1966).
 
+- Spaces in messages were not properly escaped in `.Rnw` documents (thanks, @elbersb, #1978).
+
 ## MINOR CHANGES
 
 - For Rnw documents, if a chunk's output ends with `\n`, **knitr** will no longer add another `\n` to it (thanks, @krivit #1958, @jpritikin 1092).
