@@ -4,13 +4,17 @@
 \alias{knit_exit}
 \title{Exit knitting early}
 \usage{
-knit_exit(append)
+knit_exit(append, fully = TRUE)
 }
 \arguments{
 \item{append}{A character vector to be appended to the results from
 \code{knit()} so far. By default, this is \samp{\end{document}} for LaTeX
 output, and \samp{</body></html>} for HTML output, to make the output
 document complete. For other types of output, it is an empty string.}
+
+\item{fully}{Whether to fully exit the knitting process if \code{knit_exit()}
+is called from a child document. If \code{FALSE}, only exit the knitting
+process of the child document.}
 }
 \value{
 Invisible \code{NULL}. An internal signal is set up (as a side

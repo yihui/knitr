@@ -546,18 +546,27 @@ eng_sql = function(options) {
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
 
-  if (is_sql_update_query(query)) {
-    DBI::dbExecute(conn, query)
-    data = NULL
-  } else if (is.null(varname) && max.print > 0) {
-    # execute query -- when we are printing with an enforced max.print we
-    # use dbFetch so as to only pull down the required number of records
-    res = DBI::dbSendQuery(conn, query)
-    data = DBI::dbFetch(res, n = max.print)
-    DBI::dbClearResult(res)
-  } else {
-    data = DBI::dbGetQuery(conn, query)
-  }
+  data = tryCatch({
+    if (is_sql_update_query(query)) {
+      DBI::dbExecute(conn, query)
+      NULL
+    } else if (is.null(varname) && max.print > 0) {
+      # execute query -- when we are printing with an enforced max.print we
+      # use dbFetch so as to only pull down the required number of records
+      res = DBI::dbSendQuery(conn, query)
+      data = DBI::dbFetch(res, n = max.print)
+      DBI::dbClearResult(res)
+      data
+    } else {
+      DBI::dbGetQuery(conn, query)
+    }
+  }, error = function(e) {
+    if (!options$error) stop(e)
+    e
+  })
+
+  if (inherits(data, "error"))
+    return(engine_output(options, query, one_string(data)))
 
   # create output if needed (we have data and we aren't assigning it to a variable)
   output = if (length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)) capture.output({
@@ -747,7 +756,7 @@ knit_engines$set(
   c = eng_shlib, cc = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
+  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, R = eng_r
 )
 
 cache_engines$set(python = cache_eng_python)

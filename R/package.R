@@ -7,7 +7,7 @@
 #' @docType package
 #' @name knitr-package
 #' @aliases knitr
-#' @import graphics grDevices methods stats utils
+#' @import graphics grDevices stats utils
 #' @author Yihui Xie <\url{https://yihui.org}>
 #' @seealso The core function in this package: \code{\link{knit}}. If you are an
 #'   Sweave user, see \code{\link{Sweave2knitr}} on how to convert Sweave files
@@ -20,6 +20,7 @@
 #'   FAQ's: \url{https://yihui.org/knitr/faq/}
 #' @importFrom xfun attr file_ext isFALSE is_windows loadable parse_only
 #'   sans_ext try_silent with_ext read_utf8 write_utf8 file_string
+#'   is_R_CMD_check is_abs_path
 NULL
 
 .knitEnv = new.env()

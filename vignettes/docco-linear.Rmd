@@ -5,7 +5,7 @@
 
 # R Markdown with the Docco Linear Style
 
-This is an example of Markdown vignettes using the [Docco style](http://jashkenas.github.io/docco/).
+This is an example of Markdown vignettes using the [Docco style](http://ashkenas.com/docco/).
 
 ## Docco
 

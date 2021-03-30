@@ -22,7 +22,13 @@ hook_plot_textile = function(x, options) {
 render_textile = function() {
   set_html_dev()
   opts_knit$set(out.format = 'textile')
-  textile.hook = function(name) {
+  knit_hooks$set(hooks_textile())
+}
+
+#' @rdname output_hooks
+#' @export
+hooks_textile = function() {
+  hook = function(name) {
     force(name)
     function(x, options) {
       if (name == 'source') x = c(hilight_source(x, 'textile', options), '')
@@ -31,12 +37,9 @@ render_textile = function() {
               tolower(options$engine), name, options$label, x)
     }
   }
-  hook.inline = function(x) .inline.hook(format_sci(x, 'html'))
-  z = list()
-  for (i in c('source', 'warning', 'message', 'error'))
-    z[[i]] = textile.hook(i)
-  knit_hooks$set(z)
-  knit_hooks$set(
-    inline = hook.inline, output = textile.hook('output'), plot = hook_plot_textile
+  list(
+    source = hook('source'), output = hook('output'), warning = hook('warning'),
+    message = hook('message'), error = hook('error'), plot = hook_plot_textile,
+    inline = function(x) .inline.hook(format_sci(x, 'html'))
   )
 }

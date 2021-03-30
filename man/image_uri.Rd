@@ -25,7 +25,7 @@ if (interactive()) {
 }
 }
 \references{
-\url{http://en.wikipedia.org/wiki/Data_URI_scheme}
+\url{https://en.wikipedia.org/wiki/Data_URI_scheme}
 }
 \author{
 Wush Wu and Yihui Xie

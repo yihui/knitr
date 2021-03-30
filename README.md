@@ -1,8 +1,12 @@
 # knitr
 
-[![Build Status](https://travis-ci.com/yihui/knitr.svg)](https://travis-ci.com/yihui/knitr)
+<!-- badges: start -->
+![Check & Coverage](https://github.com/yihui/knitr/workflows/Check%20&%20Coverage/badge.svg)
+[![Check with knitr examples](https://github.com/yihui/knitr/workflows/Check%20with%20knitr%20examples/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3A%22Check+with+knitr+examples%22)
 [![Coverage status](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://codecov.io/github/yihui/knitr?branch=master)
-[![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/knitr)](https://cran.r-project.org/package=knitr)
+[![CRAN release](https://www.r-pkg.org/badges/version/knitr)](https://cran.r-project.org/package=knitr)
+[![Lock threads](https://github.com/yihui/knitr/workflows/Lock%20threads/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3A%22Lock+threads%22)
+<!-- badges: end -->
 
 The R package **knitr** is a general-purpose literate programming engine,
 with lightweight API's designed to give users full control of the output
@@ -21,16 +25,17 @@ You can install the stable version on
 install.packages('knitr')
 ```
 
-You can also install the development version from
-[XRAN](https://xran.yihui.org), which provides daily build of **knitr**:
+You can also install the development version (hourly build) from
+<https://yihui.r-universe.dev>:
 
 ```r
-# update all existing packages first
-update.packages(ask = FALSE, repos = 'https://cran.r-project.org')
-install.packages('knitr', repos = c('https://xran.yihui.org', 'https://cran.r-project.org'))
-```
+options(repos = c(
+  yihui = 'https://yihui.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'
+))
 
-Note that if you want to build the source package via `R CMD INSTALL` without a previously installed version of **knitr**, you must either pre-install **knitr** from CRAN, or run `R CMD INSTALL` on this source repo, otherwise `R CMD build` will fail (which is probably a bug of base R).
+install.packages('knitr')
+```
 
 ## Motivation
 
@@ -69,7 +74,7 @@ For example:
 - ...
 
 
-[<img src="http://i.imgur.com/yYw46aF.jpg" align="right" alt="The book Dynamic Documents with R and knitr" />](https://amzn.com/1498716962)
+[<img src="http://i.imgur.com/yYw46aF.jpg" align="right" alt="The book Dynamic Documents with R and knitr" />](https://www.amazon.com/dp/1498716962/)
 
 The package **knitr** was designed to give the user access to every part of
 the process of dealing with a literate programming document, so there is no
@@ -93,7 +98,7 @@ reasonable default settings. A few manuals are available such as the [main
 manual](https://yihui.org/knitr/demo/manual/), and the
 [graphics
 manual](https://yihui.org/knitr/demo/graphics/). For a
-more organized reference, see the [knitr book](https://amzn.com/1498716962).
+more organized reference, see the [knitr book](https://www.amazon.com/dp/1498716962/).
 
 ## License
 

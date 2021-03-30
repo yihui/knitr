@@ -29,13 +29,22 @@ assert('include_graphics() includes custom images correctly', {
 hook_src = knit_hooks$get("source")
 options_ = list(engine = "r", prompt = FALSE, highlight = TRUE)
 
-assert('Attributes for souce can be specified class.source and attr.source', {
+assert('Attributes for source can be specified class.source and attr.source', {
   (hook_src("1", c(options_, class.source = "a b")) %==% "\n\n```{.r .a .b}\n1\n```\n\n")
   (hook_src("1", c(options_, attr.source = ".a .b")) %==% "\n\n```{.r .a .b}\n1\n```\n\n")
   (hook_src("1", c(options_, class.source = "a", attr.source = "b='1'")) %==%
     "\n\n```{.r .a b='1'}\n1\n```\n\n")
   (hook_src("1", c(options_, attr.source = ".a b='1'")) %==%
     "\n\n```{.r .a b='1'}\n1\n```\n\n")
+})
+
+assert('class.source and attr.source works also with collapse = TRUE', {
+  hook_chunk = hooks_markdown()$chunk
+  (hook_chunk("```{.r .a b=1}\n1\n```", c(options_, collapse = TRUE)) %==%
+      "```{.r .a b=1}\n1\n```")
+  (hook_chunk("```{.r .a b=1}\n1\n```\n```{.r .a b=1}\n1\n```",
+              c(options_, collapse = TRUE)) %==%
+      "```{.r .a b=1}\n1\n1\n```")
 })
 
 hook_out = knit_hooks$get("output")
@@ -58,8 +67,14 @@ x = "1.png"
 w = h = 1
 ex = "style='margin: 0;'"
 cap = "foo"
-opt <- function(w = NULL, h =NULL, ex = NULL, cap = NULL, show = 'asis', ...) {
-  list(out.width = w, out.height = h, out.extra = ex, fig.cap = cap, fig.show = show, ...)
+opt = function(
+  w = NULL, h = NULL, ex = NULL, cap = NULL, show = 'asis',
+  fig.align = 'default', ...
+) {
+  list(
+    out.width = w, out.height = h, out.extra = ex,
+    fig.cap = cap, fig.show = show, fig.align = fig.align, ...
+  )
 }
 
 assert("Include a plot by pandoc md", {
@@ -70,4 +85,12 @@ assert("Include a plot by pandoc md", {
   (hook_plot_md_pandoc(x, opt(ex = ex)) %==% sprintf("![](1.png){%s}", ex))
   (hook_plot_md_pandoc(x, opt(w = w, cap = cap, ex = ex)) %==%
     sprintf("![%s](1.png){width=%s %s}", cap, w, ex))
+})
+
+assert("fig.alt does not break office document", {
+  old = opts_knit$get('rmarkdown.pandoc.to')
+  opts_knit$set(rmarkdown.pandoc.to = "docx")
+  (suppressWarnings(hook_plot_md(x, opt())) %==% "![](1.png)")
+  (suppressWarnings(hook_plot_md(x, opt(fig.alt = "bar"))) %==% "![](1.png)")
+  opts_knit$set('rmarkdown.pandoc.to' = old)
 })

@@ -56,8 +56,8 @@ hook_animation = function(options) {
     if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
   }
   if (length(cap) == 0) cap = ''
+  if (alt) return(escape_html(options$fig.alt %n% cap))
   if (is_blank(cap)) return(cap)
-  if (alt) return(escape_html(cap))
   paste0(create_label(
     options$fig.lp, options$label,
     if (options$fig.num > 1L && options$fig.show == 'asis') c('-', options$fig.cur)
@@ -243,8 +243,16 @@ hook_r2swf = function(x, options) {
 render_html = function() {
   set_html_dev()
   opts_knit$set(out.format = 'html')
+  h = opts_knit$get('header')
+  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
+  knit_hooks$set(hooks_html())
+}
+
+#' @rdname output_hooks
+#' @export
+hooks_html = function() {
   # use div with different classes
-  html.hook = function(name) {
+  hook = function(name) {
     force(name)
     function(x, options) {
       x = if (name == 'source') {
@@ -254,14 +262,12 @@ render_html = function() {
       sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>\n', name, tolower(options$engine), x)
     }
   }
-  h = opts_knit$get('header')
-  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
-  z = list()
-  for (i in c('source', 'warning', 'message', 'error'))
-    z[[i]] = html.hook(i)
-  knit_hooks$set(z)
-  knit_hooks$set(inline = function(x) {
-    sprintf(if (inherits(x, 'AsIs')) '%s' else '<code class="knitr inline">%s</code>',
-            .inline.hook(format_sci(x, 'html')))
-  }, output = html.hook('output'), plot = hook_plot_html, chunk = .chunk.hook.html)
+  list(
+    source = hook('source'), output = hook('output'), warning = hook('warning'),
+    message = hook('message'), error = hook('error'), plot = hook_plot_html,
+    chunk = .chunk.hook.html, inline = function(x) sprintf(
+      if (inherits(x, 'AsIs')) '%s' else '<code class="knitr inline">%s</code>',
+      .inline.hook(format_sci(x, 'html'))
+    )
+  )
 }
