@@ -34,8 +34,10 @@ insert_header_latex = function(doc, b) {
     # it is safer to add usepackage{upquote} before begin{document} than after
     # documentclass{article} because it must appear after usepackage{fontenc};
     # see this weird problem: http://stackoverflow.com/q/12448507/559676
-    if (!out_format('listings') && length(j <- grep(p <- '(\\s*)(\\\\begin\\{document\\})', doc)[1L])) {
-      doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\n\\2', doc[j])
+    p = '(?<!%)(\\s*)(\\\\begin\\{document\\})'
+    if (!out_format('listings') && length(j <- grep(p, doc, perl = TRUE))) {
+      j = j[1]
+      doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\n\\2', doc[j], perl = TRUE)
     }
     i = i[1L]; l = stringr::str_locate(doc[i], b)
     tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
