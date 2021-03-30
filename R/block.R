@@ -152,6 +152,7 @@ block_exec = function(options, collapse = '') {
 #'
 #' @param options A list of chunk options. Usually this is just the object
 #'   \code{options} associated with the current code chunk.
+#' @param collapse string to collapse output on, passed to \code{\link{paste}}
 #' @noRd
 eng_r = function(options, collapse = '') {
   # eval chunks (in an empty envir if cache)
