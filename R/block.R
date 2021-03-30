@@ -118,7 +118,7 @@ cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
 
 block_exec = function(options, collapse = '') {
-  if (options$engine == 'R') return(eng_r(options))
+  if (options$engine == 'R') return(eng_r(options, collapse = collapse))
 
   # when code is not R language
   res.before = run_hooks(before = TRUE, options)
@@ -153,7 +153,7 @@ block_exec = function(options, collapse = '') {
 #' @param options A list of chunk options. Usually this is just the object
 #'   \code{options} associated with the current code chunk.
 #' @noRd
-eng_r = function(options) {
+eng_r = function(options, collapse = '') {
   # eval chunks (in an empty envir if cache)
   env = knit_global()
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
