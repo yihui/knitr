@@ -742,14 +742,14 @@ eng_sxss = function(options) {
 
 eng_bslib = function(options) {
   if (!loadable("bslib")) {
-    stop("The {bslib} package must be installed in order for the {bslib} knitr engine to work.")
+    stop2("The 'bslib' package must be installed in order for the knitr engine 'bslib' to work.")
   }
   if (!is.null(options$engine.opts$sass_fun)) {
-    stop("The {bslib} knitr engine does not allow for customization of the Sass compilation function.", call. = FALSE)
+    stop2("The 'bslib' knitr engine does not allow for customization of the Sass compilation function.")
   }
-  func <- sass::sass_partial
-  formals(func)$bundle <- quote(bslib::bs_global_get())
-  options$engine.opts$sass_fun <- func
+  func = sass::sass_partial
+  formals(func)$bundle = quote(bslib::bs_global_get())
+  options$engine.opts$sass_fun = func
   eng_sxss(options)
 }
 
