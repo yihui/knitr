@@ -138,6 +138,7 @@ Suggests:
     showtext,
     tibble,
     sass,
+    bslib,
     ragg,
     styler (>= 1.2.0)
 License: GPL

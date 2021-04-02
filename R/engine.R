@@ -738,7 +738,19 @@ eng_sxss = function(options) {
   }
 
   engine_output(options, options$code, final_out)
+}
 
+eng_bslib = function(options) {
+  if (!loadable("bslib")) {
+    stop2("The 'bslib' package must be installed in order for the knitr engine 'bslib' to work.")
+  }
+  if (!is.null(options$engine.opts$sass_fun)) {
+    stop2("The 'bslib' knitr engine does not allow for customization of the Sass compilation function.")
+  }
+  func = sass::sass_partial
+  formals(func)$bundle = quote(bslib::bs_global_get())
+  options$engine.opts$sass_fun = func
+  eng_sxss(options)
 }
 
 # set engines for interpreted languages
@@ -756,7 +768,8 @@ knit_engines$set(
   c = eng_shlib, cc = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, R = eng_r
+  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, R = eng_r,
+  bslib = eng_bslib
 )
 
 cache_engines$set(python = cache_eng_python)

@@ -8,6 +8,8 @@
 
 - The internal function `html_screenshot()`, which takes screenshots of HTML widgets and Shiny apps in **knitr** documents, now prefers the **webshot2** package over the **webshot** package. This is because the backend of the **webshot** package is PhantomJS, which [has been archived since 2018](https://github.com/ariya/phantomjs/issues/15344). If **webshot** is still preferred, use the chunk option `opts_chunk$set(webshot = "webshot")` (thanks, @atusy #1918, @LouisStAmour #1858).
 
+- Added a new engine, `bslib`, which is a special `scss`/`sass` engine for writing [Sass](https://sass-lang.com) code that wants to leverage [Bootstrap Sass](https://getbootstrap.com/docs/4.6/getting-started/theming/). It's primarily designed to work with `rmarkdown::html_document_base`'s `theme` parameter (when it represents a `bslib::bs_theme()`), but the engine can be used anywhere a `bslib::bs_theme()` is set globally with `bslib::bs_global_set()` (thanks, @cpsievert, #1666).
+
 ## BUG FIXES
 
 - Fixed an issue where code source and results would not show when using a numeric vector in `fig.keep` to select all plots (thanks, @dongzhuoer @ajrgodfrey #1579, @cderv #1955).
