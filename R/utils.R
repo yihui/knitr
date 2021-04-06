@@ -256,8 +256,12 @@ fix_options = function(options) {
 
   # cache=TRUE -> 3; FALSE -> 0
   if (is.logical(options$cache)) options$cache = options$cache * 3
-  # non-R code should not use cache=1,2
-  if (options$engine != 'R') options$cache = (options$cache > 0) * 3
+  if (options$engine != 'R') {
+    # non-R code should not use cache = 1, 2
+    options$cache = (options$cache > 0) * 3
+    # error numbers only make sense to R engine, so 0 -> TRUE; 1, 2 -> FALSE
+    if (is.numeric(options$error)) options$error = options$error == 0
+  }
 
   options$eval = unname(options$eval)
 

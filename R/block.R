@@ -206,7 +206,9 @@ eng_r = function(options) {
       code, envir = env, new_device = FALSE,
       keep_warning = !isFALSE(options$warning),
       keep_message = !isFALSE(options$message),
-      stop_on_error = if (options$error && options$include) 0L else 2L,
+      stop_on_error = if (is.numeric(options$error)) options$error else {
+        if (options$error && options$include) 0L else 2L
+      },
       output_handler = knit_handlers(options$render, options)
     )
   )

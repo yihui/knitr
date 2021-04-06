@@ -10,6 +10,8 @@
 
 - Added a new engine, `bslib`, which is a special `scss`/`sass` engine for writing [Sass](https://sass-lang.com) code that wants to leverage [Bootstrap Sass](https://getbootstrap.com/docs/4.6/getting-started/theming/). It's primarily designed to work with `rmarkdown::html_document_base`'s `theme` parameter (when it represents a `bslib::bs_theme()`), but the engine can be used anywhere a `bslib::bs_theme()` is set globally with `bslib::bs_global_set()` (thanks, @cpsievert, #1666).
 
+- When the chunk option `include = FALSE`, `error = TRUE` used to be ignored, i.e., errors are signaled nonetheless (causing the knitting process to fail). To avoid this problem, you can now use the numeric value `error = 0` so that **knitr** will not check the `include` option, i.e., knitting will not fail even if `include = FALSE` and an error has occurred in a code chunk, which you wouldn't notice (thanks, @rundel, #1914).
+
 ## BUG FIXES
 
 - Fixed an issue where code source and results would not show when using a numeric vector in `fig.keep` to select all plots (thanks, @dongzhuoer @ajrgodfrey #1579, @cderv #1955).
