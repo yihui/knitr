@@ -312,7 +312,7 @@ eng_tikz = function(options) {
   fig = fig2
 
   options$fig.num = 1L; options$fig.cur = 1L
-  extra = knit_hooks$get('plot')(fig, options)
+  extra = run_hook_plot(fig, options)
   options$engine = 'tex'  # for output hooks to use the correct language class
   engine_output(options, options$code, '', extra)
 }
@@ -351,7 +351,7 @@ eng_dot = function(options) {
     file.rename(f2, outf)
     if (!file.exists(outf)) stop('Failed to compile the ', options$engine, ' chunk')
     options$fig.num = 1L; options$fig.cur = 1L
-    knit_hooks$get('plot')(outf, options)
+    run_hook_plot(outf, options)
   }
 
   # wrap
