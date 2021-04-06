@@ -89,15 +89,17 @@ register_vignette_engines = function(pkg) {
   vig_engine('knitr', vweave, '[.]([rRsS](nw|tex)|[Rr](md|html|rst))$')
   vig_engine('docco_linear', vweave_docco_linear, '[.][Rr](md|markdown)$')
   vig_engine('docco_classic', vweave_docco_classic, '[.][Rr]mk?d$')
-  vig_engine('rmarkdown', function(...) if (has_package('rmarkdown')) {
+  vig_engine('rmarkdown', function(file, ...) if (has_package('rmarkdown')) {
+    if (!desc::desc_has_dep("rmarkdown", file = dirname(file)))
+      stop("Package 'rmarkdown' not found as a package dependency.")
     if (pandoc_available()) {
-      vweave_rmarkdown(...)
+      vweave_rmarkdown(file, ...)
     } else {
       warning(
         'Pandoc (>= 1.12.3) and/or pandoc-citeproc not available. ',
         'Falling back to R Markdown v1.'
       )
-      vweave(...)
+      vweave(file, ...)
     }
   } else {
     # TODO: no longer allow fallback to R Markdown v1
@@ -106,7 +108,7 @@ register_vignette_engines = function(pkg) {
       'package is not available. Did you forget to add it to Suggests in DESCRIPTION? ',
       'Please see https://github.com/yihui/knitr/issues/1864 for more information.'
     )
-    vweave(...)
+    vweave(file, ...)
   }, '[.][Rr](md|markdown)$')
   # vignette engines that disable tangle
   vig_list = tools::vignetteEngine(package = 'knitr')
