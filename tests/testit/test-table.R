@@ -4,7 +4,7 @@ kable2 = function(...) as.character(kable(...))
 
 assert(
   'kable() works on data frames/matrices of one row',
-  kable(data.frame(x = 1, y = 1), format = 'markdown') == c('|  x|  y|', '|--:|--:|', '|  1|  1|')
+  kable(data.frame(x = 1, y = 1), format = 'pipe') == c('|  x|  y|', '|--:|--:|', '|  1|  1|')
 )
 
 m = matrix(1:2, nrow = 1, dimnames = list('a', c('x', 'y')))
@@ -141,7 +141,7 @@ assert(
 x1 = matrix(NA, 0, 0)
 x2 = matrix(NA, 0, 1)
 x3 = matrix(NA, 1, 0)
-for (f in c('pandoc', 'html', 'latex', 'rst')) {
+for (f in c('simple', 'html', 'latex', 'rst')) {
   kable(x1, f)
   kable(x2, f)
   kable(x3, f)
@@ -149,21 +149,21 @@ for (f in c('pandoc', 'html', 'latex', 'rst')) {
 
 colnames(x2) = 'a'
 assert(
-  'kable(, "markdown") works for a 0 row 1 column matrix',
-  identical(kable2(x2, 'markdown'), c('|a  |', '|:--|'))
+  'kable(, "pipe") works for a 0 row 1 column matrix',
+  identical(kable2(x2, 'pipe'), c('|a  |', '|:--|'))
 )
 
 assert(
-  'kable(, "pandoc") works for a 0 row data.frame',
+  'kable(, "simple") works for a 0 row data.frame',
   identical(
-    kable2(data.frame(x = character(0), y = integer(0)), 'pandoc'),
+    kable2(data.frame(x = character(0), y = integer(0)), 'simple'),
     c('|x  |  y|', '|:--|--:|')
   )
 )
 
-assert('kable(, "pandoc", caption = "Table Caption") works for a 1-column matrix', {
+assert('kable(, "simple", caption = "Table Caption") works for a 1-column matrix', {
   x4 = matrix(1:2, ncol = 1, dimnames = list(NULL, 'a'))
-  kable2(x4, 'pandoc', caption = 'Table Caption') %==%
+  kable2(x4, 'simple', caption = 'Table Caption') %==%
     c('Table: Table Caption', '', '|  a|', '|--:|', '|  1|', '|  2|')
 })
 
@@ -193,7 +193,7 @@ assert('kable() can apply formatting to custom objects', {
     d = tibble::tibble(x = structure(
       'print_me', .to_upper = TRUE, class = 'make_upper'
     ))
-    
+
     format.make_upper = function(x, ...) {
       xout = unclass(x)
       if (isTRUE(attr(x, '.to_upper'))) {
@@ -202,6 +202,6 @@ assert('kable() can apply formatting to custom objects', {
       as.character(xout)
     }
     registerS3method('format', 'make_upper', format.make_upper, environment(format))
-    
+
     (kable2(d) %==% c('|x        |', '|:--------|', '|PRINT_ME |'))
 })
