@@ -7,21 +7,16 @@
 #' @name vignette_engines
 #' @note If you use the \code{knitr::rmarkdown} engine, please make sure that
 #'   you put \pkg{rmarkdown} in the \samp{Suggests} field of your
-#'   \file{DESCRIPTION} file. Also make sure the executables \command{pandoc}
-#'   and \command{pandoc-citeproc} can be found by \pkg{rmarkdown} during
-#'   \command{R CMD build}. If you build your package from RStudio, this is
-#'   normally not a problem. If you build the package outside RStudio, run
-#'   \command{which pandoc} and \command{which pandoc-citeproc} in the terminal
-#'   (or \code{Sys.which('pandoc')} and \code{Sys.which('pandoc-citeproc')} in
-#'   R) to check if \command{pandoc} and \command{pandoc-citeproc} can be found.
-#'   If you use Linux, you may make symlinks to the Pandoc binaries in RStudio:
-#'   \url{https://rmarkdown.rstudio.com/docs/articles/pandoc.html}, or
-#'   install \command{pandoc} and \command{pandoc-citeproc} separately.
+#'   \file{DESCRIPTION} file. Also make sure \command{pandoc} is available
+#'   during \command{R CMD build}. If you build your package from RStudio, this
+#'   is normally not a problem. If you build the package outside RStudio, run
+#'   \code{rmarkdown::find_pandoc()} in an R session to check if Pandoc can be
+#'   found.
 #'
 #'   When the \pkg{rmarkdown} package is not installed or not available, or
-#'   \command{pandoc} or \command{pandoc-citeproc} cannot be found, the
-#'   \code{knitr::rmarkdown} engine will fall back to the \code{knitr::knitr}
-#'   engine, which uses R Markdown v1 based on the \pkg{markdown} package.
+#'   \command{pandoc} cannot be found, the \code{knitr::rmarkdown} engine will
+#'   fall back to the \code{knitr::knitr} engine, which uses R Markdown v1 based
+#'   on the \pkg{markdown} package.
 #' @examples library(knitr)
 #' vig_list = tools::vignetteEngine(package = 'knitr')
 #' str(vig_list)
@@ -101,7 +96,7 @@ register_vignette_engines = function(pkg) {
     }
   } else {
     # TODO: no longer allow fallback to R Markdown v1
-    (if (is_CRAN_incoming()) stop2 else warning)(
+    (if (xfun::is_CRAN_incoming()) stop2 else warning)(
       'The vignette engine knitr::rmarkdown is not available because the rmarkdown ',
       'package is not available. Did you forget to add it to Suggests in DESCRIPTION? ',
       'Please see https://github.com/yihui/knitr/issues/1864 for more information.'
@@ -165,9 +160,6 @@ knit_filter = function(ifile, encoding = 'UTF-8') {
 }
 
 pandoc_available = function() {
-  # if you have this environment variable, chances are you are good to go
-  if (Sys.getenv("RSTUDIO_PANDOC") != '') return(TRUE)
-  if (Sys.which('pandoc-citeproc') == '') return(FALSE)
   rmarkdown::pandoc_available('1.12.3')
 }
 

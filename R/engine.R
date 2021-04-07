@@ -312,7 +312,7 @@ eng_tikz = function(options) {
   fig = fig2
 
   options$fig.num = 1L; options$fig.cur = 1L
-  extra = knit_hooks$get('plot')(fig, options)
+  extra = run_hook_plot(fig, options)
   options$engine = 'tex'  # for output hooks to use the correct language class
   engine_output(options, options$code, '', extra)
 }
@@ -351,7 +351,7 @@ eng_dot = function(options) {
     file.rename(f2, outf)
     if (!file.exists(outf)) stop('Failed to compile the ', options$engine, ' chunk')
     options$fig.num = 1L; options$fig.cur = 1L
-    knit_hooks$get('plot')(outf, options)
+    run_hook_plot(outf, options)
   }
 
   # wrap
@@ -546,18 +546,27 @@ eng_sql = function(options) {
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
 
-  if (is_sql_update_query(query)) {
-    DBI::dbExecute(conn, query)
-    data = NULL
-  } else if (is.null(varname) && max.print > 0) {
-    # execute query -- when we are printing with an enforced max.print we
-    # use dbFetch so as to only pull down the required number of records
-    res = DBI::dbSendQuery(conn, query)
-    data = DBI::dbFetch(res, n = max.print)
-    DBI::dbClearResult(res)
-  } else {
-    data = DBI::dbGetQuery(conn, query)
-  }
+  data = tryCatch({
+    if (is_sql_update_query(query)) {
+      DBI::dbExecute(conn, query)
+      NULL
+    } else if (is.null(varname) && max.print > 0) {
+      # execute query -- when we are printing with an enforced max.print we
+      # use dbFetch so as to only pull down the required number of records
+      res = DBI::dbSendQuery(conn, query)
+      data = DBI::dbFetch(res, n = max.print)
+      DBI::dbClearResult(res)
+      data
+    } else {
+      DBI::dbGetQuery(conn, query)
+    }
+  }, error = function(e) {
+    if (!options$error) stop(e)
+    e
+  })
+
+  if (inherits(data, "error"))
+    return(engine_output(options, query, one_string(data)))
 
   # create output if needed (we have data and we aren't assigning it to a variable)
   output = if (length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)) capture.output({
@@ -729,7 +738,19 @@ eng_sxss = function(options) {
   }
 
   engine_output(options, options$code, final_out)
+}
 
+eng_bslib = function(options) {
+  if (!loadable("bslib")) {
+    stop2("The 'bslib' package must be installed in order for the knitr engine 'bslib' to work.")
+  }
+  if (!is.null(options$engine.opts$sass_fun)) {
+    stop2("The 'bslib' knitr engine does not allow for customization of the Sass compilation function.")
+  }
+  func = sass::sass_partial
+  formals(func)$bundle = quote(bslib::bs_global_get())
+  options$engine.opts$sass_fun = func
+  eng_sxss(options)
 }
 
 # set engines for interpreted languages
@@ -747,7 +768,8 @@ knit_engines$set(
   c = eng_shlib, cc = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
+  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, R = eng_r,
+  bslib = eng_bslib
 )
 
 cache_engines$set(python = cache_eng_python)

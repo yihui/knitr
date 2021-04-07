@@ -1,9 +1,10 @@
 Package: knitr
 Type: Package
 Title: A General-Purpose Package for Dynamic Report Generation in R
-Version: 1.30.2
+Version: 1.31.9
 Authors@R: c(
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666")),
+    person("Abhraneel", "Sarma", role = "ctb"),
     person("Adam", "Vogt", role = "ctb"),
     person("Alastair", "Andrew", role = "ctb"),
     person("Alex", "Zvoleff", role = "ctb"),
@@ -17,6 +18,7 @@ Authors@R: c(
     person("Brian", "Zhang", role = "ctb"),
     person("Cassio", "Pereira", role = "ctb"),
     person("Christophe", "Dervieux", role = "ctb"),
+    person("David", "Hall", role = "ctb"),
     person("David", "Hugh-Jones", role = "ctb"),
     person("David", "Robinson", role = "ctb"),
     person("Doug", "Hemken", role = "ctb"),
@@ -111,7 +113,7 @@ Imports:
     markdown,
     stringr (>= 0.6),
     yaml (>= 2.1.19),
-    xfun (>= 0.15),
+    xfun (>= 0.19),
     tools
 Suggests:
     formatR,
@@ -136,6 +138,7 @@ Suggests:
     showtext,
     tibble,
     sass,
+    bslib,
     ragg,
     styler (>= 1.2.0)
 License: GPL
