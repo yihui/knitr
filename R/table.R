@@ -153,6 +153,8 @@ kable = function(
   if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")
   attr(x, 'align') = align
+  # simple tables do not 0-row tables (--- will be treated as an hr line)
+  if (format == 'simple' && nrow(x) == 0) format = 'pipe'
   res = do.call(
     paste('kable', format, sep = '_'),
     list(x = x, caption = caption, escape = escape, ...)
@@ -404,10 +406,7 @@ kable_rst = function(x, rownames.name = '\\', ...) {
 
 # Pandoc's pipe table
 kable_pipe = function(x, caption = NULL, padding = 1, ...) {
-  if (is.null(colnames(x))) {
-    warning('The table should have a header (column names)')
-    colnames(x) = rep('', ncol(x))
-  }
+  if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
   res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
     if (is.null(a)) return(s)
     r = c(l = '^.', c = '^.|.$', r = '.$')
@@ -422,13 +421,13 @@ kable_pipe = function(x, caption = NULL, padding = 1, ...) {
 
 # Pandoc's simple table
 kable_simple = function(x, caption = NULL, padding = 1, ...) {
-  # simple tables do not support 1-column or 0-row tables
-  tab = if (ncol(x) == 1 || nrow(x) == 0) kable_pipe(
-    x, padding = padding, ...
-  ) else kable_mark(
+  tab = kable_mark(
     x, c(NA, '-', if (is_blank(colnames(x))) '-' else NA),
     padding = padding, ...
   )
+  # when x has only one column with name, indent by one space so --- won't be
+  # treated as an hr line
+  if (ncol(x) == 1 && !is.null(colnames(x))) tab = paste0(' ', tab)
   kable_pandoc_caption(tab, caption)
 }
 

@@ -125,15 +125,26 @@ assert('kable(, "pipe") works for a 0 row 1 column matrix', {
   (kable2(x2, 'pipe') %==% c('|a  |', '|:--|'))
 })
 
-assert('kable(, "simple") works for a 0 row data.frame', {
+assert('kable(, "pipe") works for a 1-column matrix without column names', {
+  (kable2(matrix(1), 'pipe') %==% c('|   |', '|--:|', '|  1|'))
+})
+
+assert('kable(, "simple") generates a pipe table for a 0 row data.frame', {
   (kable2(data.frame(x = character(0), y = integer(0)), 'simple') %==%
      c('|x  |  y|', '|:--|--:|'))
+})
+
+assert('kable(, "simple") generates a simple table for a 1-column object', {
+  # if the object has column names, indent the table by one space
+  (kable2(data.frame(x = 1), 'simple') %==% c('   x', ' ---', '   1'))
+  # if it doesn't have column names, generate the usual table (without indent)
+  (kable2(matrix(1), 'simple') %==% c('---', '  1', '---'))
 })
 
 assert('kable(, "simple", caption = "Table Caption") works for a 1-column matrix', {
   x4 = matrix(1:2, ncol = 1, dimnames = list(NULL, 'a'))
   (kable2(x4, 'simple', caption = 'Table Caption') %==%
-    c('Table: Table Caption', '', '|  a|', '|--:|', '|  1|', '|  2|'))
+    c('Table: Table Caption', '', '   a', ' ---', '   1', '   2'))
 })
 
 assert('kable() works on an irregular matrix', {
