@@ -79,6 +79,7 @@ Authors@R: c(
     person("Niels Richard", "Hansen", role = "ctb"),
     person("Noam", "Ross", role = "ctb"),
     person("Obada", "Mahdi", role = "ctb"),
+    person("Pavel N.", "Krivitsky", role = "ctb", comment=c(ORCID = "0000-0002-9101-3362")),
     person("Qiang", "Li", role = "ctb"),
     person("Ramnath", "Vaidyanathan", role = "ctb"),
     person("Richard", "Cotton", role = "ctb"),
