@@ -568,6 +568,18 @@ merge_list = function(x, y) {
   x
 }
 
+# find a token in a template, and replace it with a value
+insert_template = function(text, token, value, ignore = FALSE) {
+  if (is.null(value)) return(text)
+  i = grep(token, text); n = length(i)
+  if (n > 1) stop("There are multiple tokens in the template: '", token, "'")
+  if (n == 0) {
+    if (ignore) return(text)
+    stop("Couldn't find the token '", token, "' in the template.")
+  }
+  append(text, value, i)
+}
+
 # paths of all figures
 all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
   unlist(lapply(ext, fig_path, options = options, number = seq_len(num)))
