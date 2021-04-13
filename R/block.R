@@ -18,7 +18,9 @@ call_block = function(block) {
 
   # expand parameters defined via template
   if (!is.null(block$params$opts.label) && !is.logical(block$params$opts.label)) {
-    block$params = merge_list(opts_template$get(block$params$opts.label), block$params)
+    for (opts.label in block$params$opts.label) {
+      block$params = merge_list(opts_template$get(opts.label), block$params)
+    }
   }
 
   params = opts_chunk$merge(block$params)
