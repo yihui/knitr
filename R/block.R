@@ -103,25 +103,42 @@ cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fi
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
 block_exec = function(options) {
-  # when code is not R language
-  if (options$engine != 'R') {
-    res.before = run_hooks(before = TRUE, options)
-    engine = get_engine(options$engine)
-    output = in_dir(input_dir(), engine(options))
-    if (is.list(output)) output = unlist(output)
-    res.after = run_hooks(before = FALSE, options)
-    output = paste(c(res.before, output, res.after), collapse = '')
-    output = knit_hooks$get('chunk')(output, options)
-    if (options$cache) {
-      cache.exists = cache$exists(options$hash, options$cache.lazy)
-      if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
-        options$engine,
-        'stan' = options$output.var, 'sql' = options$output.var, character(0)
-        ))
-      }
-    return(if (options$include) output else '')
-  }
+  if (options$engine == 'R') return(eng_r(options))
 
+  # when code is not R language
+  res.before = run_hooks(before = TRUE, options)
+  engine = get_engine(options$engine)
+  output = in_dir(input_dir(), engine(options))
+  if (is.list(output)) output = unlist(output)
+  res.after = run_hooks(before = FALSE, options)
+  output = paste(c(res.before, output, res.after), collapse = '')
+  output = knit_hooks$get('chunk')(output, options)
+  if (options$cache) {
+    cache.exists = cache$exists(options$hash, options$cache.lazy)
+    if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
+      options$engine,
+      'stan' = options$output.var, 'sql' = options$output.var, character(0)
+    ))
+  }
+  if (options$include) output else ''
+}
+
+#' Engine for R
+#'
+#' This function handles the execution of R code blocks (when the chunk option
+#' \code{engine} is \code{'R'}) and generates the R output for each code block.
+#'
+#' This engine function has one argument \code{options}: the source code of the
+#' current chunk is in \code{options$code}. It returns a processed output that
+#' can consist of data frames (as tables), graphs, or character output. This
+#' function is intended for advanced use to allow developers to extend R, and
+#' customize the pipeline with which R code is executed and processed within
+#' knitr.
+#'
+#' @param options A list of chunk options. Usually this is just the object
+#'   \code{options} associated with the current code chunk.
+#' @noRd
+eng_r = function(options) {
   # eval chunks (in an empty envir if cache)
   env = knit_global()
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
@@ -158,7 +175,13 @@ block_exec = function(options) {
     tidy.method = if (isTRUE(options$tidy)) 'formatR' else options$tidy
     if (is.character(tidy.method)) tidy.method = switch(
       tidy.method,
-      formatR = function(code, ...) formatR::tidy_source(text = code, output = FALSE, ...)$text.tidy,
+      formatR = function(code, ...) {
+        if (!loadable('formatR')) stop2(
+          'The formatR package is required by the chunk option tidy = TRUE but ',
+          'not installed; tidy = TRUE will be ignored.'
+        )
+        formatR::tidy_source(text = code, output = FALSE, ...)$text.tidy
+      },
       styler = function(code, ...) unclass(styler::style_text(text = code, ...))
     )
     res = try_silent(do.call(tidy.method, c(list(code), options$tidy.opts)))
@@ -191,7 +214,9 @@ block_exec = function(options) {
       code, envir = env, new_device = FALSE,
       keep_warning = !isFALSE(options$warning),
       keep_message = !isFALSE(options$message),
-      stop_on_error = if (options$error && options$include) 0L else 2L,
+      stop_on_error = if (is.numeric(options$error)) options$error else {
+        if (options$error && options$include) 0L else 2L
+      },
       output_handler = knit_handlers(options$render, options)
     )
   )
@@ -225,25 +250,8 @@ block_exec = function(options) {
   res = filter_evaluate(res, options$message, evaluate::is.message)
 
   # rearrange locations of figures
-  figs = find_recordedplot(res)
-  if (length(figs) && any(figs)) {
-    if (keep == 'none') {
-      res = res[!figs] # remove all
-    } else {
-      if (options$fig.show == 'hold') res = c(res[!figs], res[figs]) # move to the end
-      figs = find_recordedplot(res)
-      if (length(figs) && sum(figs) > 1) {
-        if (keep %in% c('first', 'last')) {
-          res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
-        } else {
-          # keep only selected
-          if (keep == 'index') res = res[-which(figs)[-keep.idx]]
-          # merge low-level plotting changes
-          if (keep == 'high') res = merge_low_plot(res, figs)
-        }
-      }
-    }
-  }
+  res = rearrange_figs(res, keep, keep.idx, options$fig.show)
+
   # number of plots in this chunk
   if (is.null(options$fig.num))
     options$fig.num = if (length(res)) sum(sapply(res, function(x) {
@@ -407,6 +415,28 @@ fig_before_code = function(x) {
     s = which(vapply(x, evaluate::is.source, logical(1)))
   }
   x
+}
+
+rearrange_figs = function(res, keep, idx, show) {
+  figs = find_recordedplot(res)
+  if (!any(figs)) return(res)
+  if (keep == 'none') return(res[!figs]) # remove all
+
+  if (show == 'hold') {
+    res = c(res[!figs], res[figs]) # move to the end
+    figs = find_recordedplot(res)
+  }
+  switch(
+    keep,
+    first = res[-tail(which(figs), -1L)],
+    last  = res[-head(which(figs), -1L)],
+    high  = merge_low_plot(res, figs),  # merge low-level plotting changes
+    index = {
+      i = which(figs)[-idx]
+      if (length(i) > 0) res[-i] else res  # keep only selected
+    },
+    res
+  )
 }
 
 # merge neighbor elements of the same class in a list returned by evaluate()

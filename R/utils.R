@@ -256,8 +256,12 @@ fix_options = function(options) {
 
   # cache=TRUE -> 3; FALSE -> 0
   if (is.logical(options$cache)) options$cache = options$cache * 3
-  # non-R code should not use cache=1,2
-  if (options$engine != 'R') options$cache = (options$cache > 0) * 3
+  if (options$engine != 'R') {
+    # non-R code should not use cache = 1, 2
+    options$cache = (options$cache > 0) * 3
+    # error numbers only make sense to R engine, so 0 -> TRUE; 1, 2 -> FALSE
+    if (is.numeric(options$error)) options$error = options$error == 0
+  }
 
   options$eval = unname(options$eval)
 
@@ -564,6 +568,18 @@ merge_list = function(x, y) {
   x
 }
 
+# find a token in a template, and replace it with a value
+insert_template = function(text, token, value, ignore = FALSE) {
+  if (is.null(value)) return(text)
+  i = grep(token, text); n = length(i)
+  if (n > 1) stop("There are multiple tokens in the template: '", token, "'")
+  if (n == 0) {
+    if (ignore) return(text)
+    stop("Couldn't find the token '", token, "' in the template.")
+  }
+  append(text, value, i)
+}
+
 # paths of all figures
 all_figs = function(options, ext = options$fig.ext, num = options$fig.num) {
   unlist(lapply(ext, fig_path, options = options, number = seq_len(num)))
@@ -599,7 +615,8 @@ escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
   x = gsub('~', '\\\\textasciitilde{}', x)
   x = gsub('\\^', '\\\\textasciicircum{}', x)
   if (newlines) x = gsub('(?<!\n)\n(?!\n)', '\\\\\\\\', x, perl = TRUE)
-  if (spaces) x = gsub('  ', '\\\\ \\\\ ', x)
+  # when there are consecutive spaces, escape each of them except the first one
+  if (spaces) x = gsub('(?<= ) ', '\\\\ ', x, perl = TRUE)
   x
 }
 
@@ -849,6 +866,10 @@ combine_words = function(
 warning2 = function(...) warning(..., call. = FALSE)
 stop2 = function(...) stop(..., call. = FALSE)
 
+warn_options_unsupported = function(option, to) {
+  warning2('Chunk option ', option, ' is not supported for ', to, ' output')
+}
+
 raw_markers = c('!!!!!RAW-KNITR-CONTENT', 'RAW-KNITR-CONTENT!!!!!')
 
 #' @export
@@ -1019,3 +1040,28 @@ image_uri = function(f) xfun::base64_uri(f)
 
 # TODO: remove this function after the next version of bookdown is on CRAN
 is_abs_path = function(...) xfun::is_abs_path(...)
+
+# check if DESCRIPTION has dependencies on certain packages
+desc_has_dep = function(pkg, dir = '.') {
+  if (!file.exists(f <- file.path(dir, 'DESCRIPTION'))) return(rep(NA, length(pkg)))
+  info = read.dcf(f, fields = c('Package', 'Depends', 'Imports', 'Suggests'))
+  pkg %in% unlist(strsplit(unlist(info), '[[:space:],]+'))
+}
+
+# return TRUE if DESCRIPTION doesn't exist or pkg has been declared as dependency
+test_desc_dep = function(pkg, dir = '.') {
+  res = desc_has_dep(pkg, dir)
+  all(is.na(res)) || all(res)
+}
+
+# TODO: remove this hack in the future when no CRAN packages have the issue
+test_vig_dep = function(pkg) {
+  if (xfun::is_R_CMD_check() || test_desc_dep(pkg, '..')) return()
+  p = read.dcf(file.path('..', 'DESCRIPTION'), fields = 'Package')[1, 1]
+  stop2(
+    "The '", pkg, "' package should be declared as a dependency of the '", p,
+    "' package (e.g., in the  'Suggests' field of DESCRIPTION), because the ",
+    "latter contains vignette(s) built with the '", pkg, "' package. Please see ",
+    "https://github.com/yihui/knitr/issues/1864 for more information."
+  )
+}

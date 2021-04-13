@@ -277,13 +277,15 @@ eng_stan = function(options) {
 eng_tikz = function(options) {
   if (!options$eval) return(engine_output(options, options$code, ''))
 
-  lines = read_utf8(options$engine.opts$template %n%
-                    system.file('misc', 'tikz2pdf.tex', package = 'knitr'))
-  i = grep('%% TIKZ_CODE %%', lines)
-  if (length(i) != 1L)
-    stop("Couldn't find replacement string; or the are multiple of them.")
-
-  s = append(lines, options$code, i)  # insert tikz into tex-template
+  lines = read_utf8(
+    options$engine.opts$template %n% system.file('misc', 'tikz2pdf.tex', package = 'knitr')
+  )
+  # insert code into preamble
+  lines = insert_template(
+    lines, '%% EXTRA_TIKZ_PREAMBLE_CODE %%', options$engine.opts$extra.preamble, TRUE
+  )
+  # insert tikz code into the tex template
+  s = insert_template(lines, '%% TIKZ_CODE %%', options$code)
   write_utf8(s, texf <- wd_tempfile('tikz', '.tex'))
   on.exit(unlink(texf), add = TRUE)
 
@@ -312,7 +314,7 @@ eng_tikz = function(options) {
   fig = fig2
 
   options$fig.num = 1L; options$fig.cur = 1L
-  extra = knit_hooks$get('plot')(fig, options)
+  extra = run_hook_plot(fig, options)
   options$engine = 'tex'  # for output hooks to use the correct language class
   engine_output(options, options$code, '', extra)
 }
@@ -351,7 +353,7 @@ eng_dot = function(options) {
     file.rename(f2, outf)
     if (!file.exists(outf)) stop('Failed to compile the ', options$engine, ' chunk')
     options$fig.num = 1L; options$fig.cur = 1L
-    knit_hooks$get('plot')(outf, options)
+    run_hook_plot(outf, options)
   }
 
   # wrap
@@ -738,7 +740,19 @@ eng_sxss = function(options) {
   }
 
   engine_output(options, options$code, final_out)
+}
 
+eng_bslib = function(options) {
+  if (!loadable("bslib")) {
+    stop2("The 'bslib' package must be installed in order for the knitr engine 'bslib' to work.")
+  }
+  if (!is.null(options$engine.opts$sass_fun)) {
+    stop2("The 'bslib' knitr engine does not allow for customization of the Sass compilation function.")
+  }
+  func = sass::sass_partial
+  formals(func)$bundle = quote(bslib::bs_global_get())
+  options$engine.opts$sass_fun = func
+  eng_sxss(options)
 }
 
 # set engines for interpreted languages
@@ -756,7 +770,8 @@ knit_engines$set(
   c = eng_shlib, cc = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
+  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, R = eng_r,
+  bslib = eng_bslib
 )
 
 cache_engines$set(python = cache_eng_python)
