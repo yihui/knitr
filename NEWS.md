@@ -38,6 +38,8 @@
 
 - For `kable(x, format = 'simple')`, it no longer generates a `pipe` table but a `simple` table instead when `x` has only one column (thanks, @alusiani, #1968). For `kable(x, format = 'pipe')`, it no longer warns when `x` has no column names, but just generate an empty table header.
 
+- For `tikz` code chunks, the default LaTeX template uses `\documentclass[tikz]{standalone}` instead of `\documentclass{article}` and \usepackage{preview}` now (thanks, @XiangyunHuang, #1985).
+
 # CHANGES IN knitr VERSION 1.31
 
 ## NEW FEATURES
