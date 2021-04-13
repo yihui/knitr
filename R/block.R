@@ -17,7 +17,7 @@ call_block = function(block) {
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
 
   # expand parameters defined via template
-  if (!is.null(block$params$opts.label)) {
+  if (!is.null(block$params$opts.label) && !is.logical(block$params$opts.label)) {
     block$params = merge_list(opts_template$get(block$params$opts.label), block$params)
   }
 
