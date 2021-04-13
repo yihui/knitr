@@ -11,7 +11,7 @@ process_group.inline = function(x) {
 }
 
 
-call_block = function(block) {
+block_params = function(block, verbose = TRUE) {
   # now try eval all options except those in eval.after and their aliases
   af = opts_knit$get('eval.after'); al = opts_knit$get('aliases')
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
@@ -28,7 +28,7 @@ call_block = function(block) {
   label = ref.label = params$label
   if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
   params[["code"]] = params[["code"]] %n% unlist(knit_code$get(ref.label), use.names = FALSE)
-  if (opts_knit$get('progress')) print(block)
+  if (opts_knit$get('progress') && verbose > 0) print(block)
 
   if (!is.null(params$child)) {
     if (!is_blank(params$code)) warning(
@@ -74,13 +74,29 @@ call_block = function(block) {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
       cache$load(hash, lazy = params$cache.lazy)
       cache_engine(params)
+    }
+  } else if (label %in% names(dep_list$get()) && !isFALSE(opts_knit$get('warn.uncached.dep')))
+    warning2('code chunks must not depend on the uncached chunk "', label, '"')
+
+  return(params)
+}
+
+call_block = function(block, collapse = '') {
+  params = block_params(block, verbose = TRUE)
+
+  # this is required here because return() in the if
+  # so that the params are returned in block_params, but
+  # the same logic execution is done below
+  if (params$cache > 0) {
+    if (cache$exists(params$hash, params$cache.lazy) &&
+        isFALSE(params$cache.rebuild) &&
+        params$engine != 'Rcpp') {
       if (!params$include) return('')
-      if (params$cache == 3) return(cache$output(hash))
+      if (params$cache == 3) return(cache$output(params$hash))
     }
     if (params$engine == 'R')
       cache$library(params$cache.path, save = FALSE) # load packages
-  } else if (label %in% names(dep_list$get()) && !isFALSE(opts_knit$get('warn.uncached.dep')))
-    warning2('code chunks must not depend on the uncached chunk "', label, '"')
+  } # warning already triggered above
 
   params$params.src = block$params.src
   opts_current$restore(params)  # save current options
@@ -90,7 +106,7 @@ call_block = function(block) {
     op = options(params$R.options); on.exit(options(op), add = TRUE)
   }
 
-  block_exec(params)
+  block_exec(params, collapse = collapse)
 }
 
 # options that should affect cache when cache level = 1,2
@@ -100,7 +116,8 @@ cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fi
 # options that should not affect cache
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
-block_exec = function(options) {
+
+block_exec = function(options, collapse = '') {
   if (options$engine == 'R') return(eng_r(options))
 
   # when code is not R language
@@ -109,7 +126,7 @@ block_exec = function(options) {
   output = in_dir(input_dir(), engine(options))
   if (is.list(output)) output = unlist(output)
   res.after = run_hooks(before = FALSE, options)
-  output = paste(c(res.before, output, res.after), collapse = '')
+  output = paste(c(res.before, output, res.after), collapse = collapse)
   output = knit_hooks$get('chunk')(output, options)
   if (options$cache) {
     cache.exists = cache$exists(options$hash, options$cache.lazy)
@@ -273,7 +290,7 @@ eng_r = function(options) {
   output = unlist(wrap(res, options)) # wrap all results together
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
 
-  output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
+  output = paste(c(res.before, output, res.after), collapse = collapse)  # insert hook results
   output = knit_hooks$get('chunk')(output, options)
 
   if (options$cache > 0) {
