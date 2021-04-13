@@ -34,8 +34,8 @@ knit_code$set(
 assert(
   'chunk options can be inherited via the ref.label chunk option',
   identical(
-    parse_block(NULL, '', 'r, label, ref.label=with_opts("ref"), foo="FOO"')$params,
-    alist(foo = 'FOO', bar = 'bar', label = 'label', ref.label = with_opts('ref'))
+    parse_block(NULL, '', 'r, label, ref.label=I("ref"), foo="FOO"')$params,
+    alist(foo = 'FOO', bar = 'bar', label = 'label', ref.label = I('ref'))
   )
 )
 knit_code$delete('ref')
