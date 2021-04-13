@@ -16,20 +16,43 @@ call_block = function(block) {
   af = opts_knit$get('eval.after'); al = opts_knit$get('aliases')
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
 
-  # expand parameters defined via template
-  if (!is.null(block$params$opts.label) && !is.logical(block$params$opts.label)) {
-    for (opts.label in block$params$opts.label) {
-      block$params = merge_list(opts_template$get(opts.label), block$params)
-    }
+  params = opts_chunk$merge(block$params)
+  for (o in setdiff(names(params), af)) {
+    params[o] = list(eval_lang(params[[o]]))
+    # also update original options before being merged with opts_chunk
+    if (o %in% names(block$params)) block$params[o] = params[o]
   }
 
-  params = opts_chunk$merge(block$params)
-  opts_current$restore(params)
-  for (o in setdiff(names(params), af)) params[o] = list(eval_lang(params[[o]]))
-
   label = ref.label = params$label
-  if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
+  if (!is.null(params$ref.label)) {
+    ref.label = sc_split(params$ref.label)
+    # ref.label = I() implies opts.label = ref.label
+    if (inherits(params$ref.label, 'AsIs') && is.null(params$opts.label))
+      params$opts.label = ref.label
+  }
   params[["code"]] = params[["code"]] %n% unlist(knit_code$get(ref.label), use.names = FALSE)
+
+  # opts.label = TRUE means inheriting chunk options from ref.label
+  if (isTRUE(params$opts.label)) params$opts.label = ref.label
+  # expand chunk options defined via opts_template and reference chunks
+  params2 = NULL
+  for (lab in params$opts.label) {
+    # referenced chunk options (if any) override template options
+    params3 = merge_list(opts_template$get(lab), attr(knit_code$get(lab), 'chunk_opts'))
+    params2 = merge_list(params2, params3)
+  }
+  if (length(params2)) {
+    # local options override referenced options
+    params2 = merge_list(params2, block$params)
+    # then override previously merged opts_chunk options
+    params  = merge_list(params, params2)
+    # in case any options are not evaluated
+    for (o in setdiff(names(params), af)) params[o] = list(eval_lang(params[[o]]))
+  }
+
+  # save current chunk options in opts_current
+  opts_current$restore(params)
+
   if (opts_knit$get('progress')) print(block)
 
   if (!is.null(params$child)) {

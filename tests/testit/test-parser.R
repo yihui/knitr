@@ -28,18 +28,6 @@ assert(
   )
 )
 
-knit_code$set(
-  ref = structure('', chunk_opts = list(foo = 'foo', bar = 'bar'))
-)
-assert(
-  'chunk options can be inherited via the ref.label chunk option',
-  identical(
-    parse_block(NULL, '', 'r, label, ref.label=I("ref"), foo="FOO"')$params,
-    alist(foo = 'FOO', bar = 'bar', label = 'label', ref.label = I('ref'))
-  )
-)
-knit_code$delete('ref')
-
 res = split_file(
   c('abc', '```{r foo}', '1+1', '```{r bar}', '2+2', '```', 'def'),
   patterns = all_patterns$md

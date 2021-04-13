@@ -159,21 +159,6 @@ parse_params = function(params) {
   if (!is.character(res$label))
     res$label = gsub(' ', '', as.character(as.expression(res$label)))
   if (identical(res$label, '')) res$label = unnamed_chunk()
-
-  ref.label = eval(res$ref.label)
-  isTRUE_opts.label = isTRUE(eval(res$opts.label))
-  if (inherits(ref.label, 'AsIs') || isTRUE_opts.label) {
-    if (isTRUE_opts.label) {
-      res$opts.label = NULL
-    }
-    for (.ref.label in ref.label) {
-      res = merge_list(
-        attr(knit_code$get(.ref.label), 'chunk_opts'),
-        res
-      )
-    }
-  }
-
   res
 }
 
