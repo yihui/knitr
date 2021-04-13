@@ -2,6 +2,10 @@
 
 ## NEW FEATURES
 
+- The chunk option `ref.label` can be used to reuse code from other code chunks in the current code chunk. Now it can also accept a character vector of chunk labels wrapped in `I()` so that the chunk options of other code chunks can also be applied to the current chunk. For example, if we have a chunk ```` ```{r, chunk-a, echo=FALSE, results='asis'}````, the chunk ```` ```{r, chunk-b, ref.label=I('chunk-a')}```` will inherit both the code and chunk options from `chunk-a` (e.g., `echo=FALSE` and `results='asis'`), but `chunk-b` can still override these chunk options, e.g., the actual chunk options of ```` ```{r, chunk-b, echo=TRUE}```` will be `echo=TRUE` and `results='asis'`. If you want to use one code chunk with several chunk options for multiple times, and each time you want to change a small subset of the chunk options, you may use this approach `ref.label = I()` to avoid typing most chunk options over and over again (thanks, @atusy, #1960).
+
+- The chunk option `opts.label` gained a new usage. It used to mean labels in `knitr::opts_template` (see the help page if you are not familiar with this object). Now it can also be used to specify the labels of other code chunks, from which the chunk options are to be inherited to the current chunk. For example, ```` ```{r, chunk-b, opts.label='chunk-a'}```` means that `chunk-b` will inherit chunk options from `chunk-a`. Local chunk options in a chunk (if exist) will override inherited options. For the new features about both chunk options `ref.label` and `opts.label`, see the detailed documentation and examples at https://yihui.org/knitr/options/ (thanks, @atusy, #1960).
+
 - The internal code to process R code chunks was factored out into the language engine `R`, which can be obtained via `knit_engines$get('R')` now (thanks, @abhsarma, #1963).
 
 - Added arguments `dir` and `envir` to `load_cache()` to specify the working directory and environment into which the cached objects are loaded. By default, all cached objects are loaded into the global environment, which may not be desirable (thanks, @LTLA, #1905).
