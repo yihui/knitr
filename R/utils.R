@@ -1040,3 +1040,28 @@ image_uri = function(f) xfun::base64_uri(f)
 
 # TODO: remove this function after the next version of bookdown is on CRAN
 is_abs_path = function(...) xfun::is_abs_path(...)
+
+# check if DESCRIPTION has dependencies on certain packages
+desc_has_dep = function(pkg, dir = '.') {
+  if (!file.exists(f <- file.path(dir, 'DESCRIPTION'))) return(rep(NA, length(pkg)))
+  info = read.dcf(f, fields = c('Package', 'Depends', 'Imports', 'Suggests'))
+  pkg %in% unlist(strsplit(unlist(info), '[[:space:],]+'))
+}
+
+# return TRUE if DESCRIPTION doesn't exist or pkg has been declared as dependency
+test_desc_dep = function(pkg, dir = '.') {
+  res = desc_has_dep(pkg, dir)
+  all(is.na(res)) || all(res)
+}
+
+# TODO: remove this hack in the future when no CRAN packages have the issue
+test_vig_dep = function(pkg) {
+  if (xfun::is_R_CMD_check() || test_desc_dep(pkg, '..')) return()
+  p = read.dcf(file.path('..', 'DESCRIPTION'), fields = 'Package')[1, 1]
+  stop2(
+    "The '", pkg, "' package should be declared as a dependency of the '", p,
+    "' package (e.g., in the  'Suggests' field of DESCRIPTION), because the ",
+    "latter contains vignette(s) built with the '", pkg, "' package. Please see ",
+    "https://github.com/yihui/knitr/issues/1864 for more information."
+  )
+}
