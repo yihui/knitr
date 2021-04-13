@@ -161,7 +161,7 @@ parse_params = function(params) {
   if (identical(res$label, '')) res$label = unnamed_chunk()
 
   ref.label = eval(res$ref.label)
-  if (inherits(ref.label, 'with_opts')) {
+  if (inherits(ref.label, 'AsIs') || isTRUE(eval(res$opts.label))) {
     res = merge_list(
       attr(knit_code$get(ref.label), 'chunk_opts'),
       res
