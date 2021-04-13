@@ -14,6 +14,8 @@
 
 - When processing package vignettes that require **rmarkdown**, we now check that it is declared as a package dependency in the `DESCRIPTION` file (thanks, @dmurdoch, #1919).
 
+- For `tikz` code chunks, a new option `engine.opts$extra.preamble` allows arbitrary LaTeX code to be inserted into the preamble of the template. This allows loading of additional LaTeX and tikz libraries without having to recreate a template from scratch (thanks, @krivit, #1886).
+
 ## BUG FIXES
 
 - Fixed an issue where code source and results would not show when using a numeric vector in `fig.keep` to select all plots (thanks, @dongzhuoer @ajrgodfrey #1579, @cderv #1955).
@@ -35,6 +37,8 @@
 ## MINOR CHANGES
 
 - For Rnw documents, if a chunk's output ends with `\n`, **knitr** will no longer add another `\n` to it (thanks, @krivit #1958, @jpritikin 1092).
+
+- For `kable(x, format = 'simple')`, it no longer generates a `pipe` table but a `simple` table instead when `x` has only one column (thanks, @alusiani, #1968). For `kable(x, format = 'pipe')`, it no longer warns when `x` has no column names, but just generate an empty table header.
 
 # CHANGES IN knitr VERSION 1.31
 

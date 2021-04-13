@@ -277,13 +277,15 @@ eng_stan = function(options) {
 eng_tikz = function(options) {
   if (!options$eval) return(engine_output(options, options$code, ''))
 
-  lines = read_utf8(options$engine.opts$template %n%
-                    system.file('misc', 'tikz2pdf.tex', package = 'knitr'))
-  i = grep('%% TIKZ_CODE %%', lines)
-  if (length(i) != 1L)
-    stop("Couldn't find replacement string; or the are multiple of them.")
-
-  s = append(lines, options$code, i)  # insert tikz into tex-template
+  lines = read_utf8(
+    options$engine.opts$template %n% system.file('misc', 'tikz2pdf.tex', package = 'knitr')
+  )
+  # insert code into preamble
+  lines = insert_template(
+    lines, '%% EXTRA_TIKZ_PREAMBLE_CODE %%', options$engine.opts$extra.preamble, TRUE
+  )
+  # insert tikz code into the tex template
+  s = insert_template(lines, '%% TIKZ_CODE %%', options$code)
   write_utf8(s, texf <- wd_tempfile('tikz', '.tex'))
   on.exit(unlink(texf), add = TRUE)
 

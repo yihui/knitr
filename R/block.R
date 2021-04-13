@@ -173,7 +173,13 @@ eng_r = function(options) {
     tidy.method = if (isTRUE(options$tidy)) 'formatR' else options$tidy
     if (is.character(tidy.method)) tidy.method = switch(
       tidy.method,
-      formatR = function(code, ...) formatR::tidy_source(text = code, output = FALSE, ...)$text.tidy,
+      formatR = function(code, ...) {
+        if (!loadable('formatR')) stop2(
+          'The formatR package is required by the chunk option tidy = TRUE but ',
+          'not installed; tidy = TRUE will be ignored.'
+        )
+        formatR::tidy_source(text = code, output = FALSE, ...)$text.tidy
+      },
       styler = function(code, ...) unclass(styler::style_text(text = code, ...))
     )
     res = try_silent(do.call(tidy.method, c(list(code), options$tidy.opts)))
