@@ -19,7 +19,6 @@ Makefile
 ^knitr-examples$
 ^\.github$
 ^docs$
-^README-ES\.md$
-^README-PT\.md$
+^README.*\.md$
 ^codecov\.yml$
 ^NEWS\.md$
