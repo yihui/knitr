@@ -578,8 +578,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     }
   })
   lapply(f, function(filename) {
-    # TODO: use xfun::read_bin()
-    res = readBin(filename, 'raw', file.info(filename)[, 'size'])
+    res = xfun::read_bin(filename)
     structure(
       list(image = res, extension = ext, url = if (i3) x$url.orig[filename == f]),
       class = 'html_screenshot'

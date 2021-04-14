@@ -1038,7 +1038,7 @@ make_unique = function(x) {
 #' }
 image_uri = function(f) xfun::base64_uri(f)
 
-# TODO: remove this function after the next version of bookdown is on CRAN
+# TODO: remove this function after bookdown > 0.21 is on CRAN
 is_abs_path = function(...) xfun::is_abs_path(...)
 
 # check if DESCRIPTION has dependencies on certain packages
