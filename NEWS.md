@@ -35,7 +35,7 @@
 
 - For Rnw documents, the commented `%\begin{document}` will no longer cause trouble (thanks, @NewbieKnitter @shrektan, #1819).
 
-- Fixed an issue with the chunk option `fig.alt` causing figures to disappear in `rmarkdownn::word_document()` output. This option is currently supported for HTML output only. If provided for office output in **rmarkdown**, it will emit a warning and be ignored (#1966).
+- Fixed an issue with the chunk option `fig.alt` causing figures to disappear in `rmarkdown::word_document()` output. This option is currently supported for HTML output only. If provided for office output in **rmarkdown**, it will emit a warning and be ignored (#1966).
 
 - Spaces in messages were not properly escaped in `.Rnw` documents (thanks, @elbersb, #1978).
 
