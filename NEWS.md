@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.33
 
+## MINOR CHANGES
+
+- For package vignettes that use the vignette engine `knitr::docco_linear` or `knitr::docco_classic`, **knitr** will signal an error during `R CMD build` if the **markdown** package is not declared as a soft dependency in the `Suggests` field in `DESCRIPTION`. The same treatment has been applied in the previous version of **knitr** for the vignette engine `knitr::knitr`.
 
 # CHANGES IN knitr VERSION 1.32
 

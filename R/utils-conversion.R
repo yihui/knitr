@@ -109,6 +109,9 @@ knit2pdf = function(
 #' unlink(c('test.Rmd', 'test.html', 'test.md'))
 knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
                      quiet = FALSE, encoding = 'UTF-8', force_v1 = FALSE) {
+  # packages containing vignettes using R Markdown v1 should declare dependency
+  # on 'markdown' in DESCRIPTION (typically in Suggests)
+  test_vig_dep('markdown')
   if (!force_v1 && is.null(text)) {
     signal = if (is_R_CMD_check()) warning2 else stop2
     if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) signal(
@@ -122,13 +125,6 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
     markdown::markdownToHTML(out, output, encoding = 'UTF-8', ...)
     invisible(output)
   } else markdown::markdownToHTML(text = out, ...)
-}
-
-knit2html_v1 = function(...) {
-  # packages containing vignettes using R Markdown v1 should declare dependency
-  # on 'markdown' in DESCRIPTION (typically in Suggests)
-  test_vig_dep('markdown')
-  knit2html(..., force_v1 = TRUE)
 }
 
 #' Knit an R Markdown document and post it to WordPress
