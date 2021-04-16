@@ -94,6 +94,7 @@ register_vignette_engines = function(pkg) {
     }
   } else {
     # TODO: no longer allow fallback to R Markdown v1
+    test_vig_dep('rmarkdown')
     vweave(...)
   }, '[.][Rr](md|markdown)$')
   # vignette engines that disable tangle
