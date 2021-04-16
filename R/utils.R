@@ -1045,7 +1045,7 @@ is_abs_path = function(...) xfun::is_abs_path(...)
 desc_has_dep = function(pkg, dir = '.') {
   if (!file.exists(f <- file.path(dir, 'DESCRIPTION'))) return(rep(NA, length(pkg)))
   info = read.dcf(f, fields = c('Package', 'Depends', 'Imports', 'Suggests'))
-  pkg %in% unlist(strsplit(unlist(info), '[[:space:],]+'))
+  pkg %in% unlist(strsplit(info, '[[:space:],]+'))
 }
 
 # return TRUE if DESCRIPTION doesn't exist or pkg has been declared as dependency
