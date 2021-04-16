@@ -1043,8 +1043,10 @@ is_abs_path = function(...) xfun::is_abs_path(...)
 
 # check if DESCRIPTION has dependencies on certain packages
 desc_has_dep = function(pkg, dir = '.') {
-  if (!file.exists(f <- file.path(dir, 'DESCRIPTION'))) return(rep(NA, length(pkg)))
+  res = rep(NA, length(pkg))
+  if (!file.exists(f <- file.path(dir, 'DESCRIPTION'))) return(res)
   info = read.dcf(f, fields = c('Package', 'Depends', 'Imports', 'Suggests'))
+  if (nrow(info) < 1 || is.na(info[1, 'Package'])) return(res)
   pkg %in% unlist(strsplit(info, '[[:space:],]+'))
 }
 
