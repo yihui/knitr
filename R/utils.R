@@ -1060,13 +1060,13 @@ test_desc_dep = function(pkg, dir = '.') {
   all(is.na(res)) || (all(res) && has_packages(pkg))
 }
 
-# TODO: remove this hack in the future when no CRAN packages have the issue
+# TODO: remove this hack in the future when no CRAN/BioC packages have the issue
 test_vig_dep = function(pkg) {
-  if (xfun::is_R_CMD_check() || test_desc_dep(pkg, '..')) return()
+  if (xfun::is_R_CMD_check() || Sys.getenv('BBS_HOME') != '' || test_desc_dep(pkg, '..')) return()
   p = read.dcf(file.path('..', 'DESCRIPTION'), fields = 'Package')[1, 1]
   stop2(
     "The '", pkg, "' package should be installed and declared as a dependency of the '", p,
-    "' package (e.g., in the  'Suggests' field of DESCRIPTION), because the ",
+    "' package (e.g., in the 'Suggests' field of DESCRIPTION), because the ",
     "latter contains vignette(s) built with the '", pkg, "' package. Please see ",
     "https://github.com/yihui/knitr/issues/1864 for more information."
   )
