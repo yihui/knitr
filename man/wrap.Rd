@@ -7,16 +7,14 @@
 wrap(x, options = list(), ...)
 }
 \arguments{
-\item{x}{output from \code{evaluate::\link{evaluate}()}}
+\item{x}{Output from \code{evaluate::\link{evaluate}()}.}
 
-\item{options}{List of options used to control output}
+\item{options}{A list of chunk options used to control output.}
 
-\item{...}{Other arguments to pass to methods}
+\item{...}{Other arguments to pass to methods.}
 }
 \description{
-This function is mainly for internal use:  it is called
-on each part of the output of the code chunk
-(code, messages, output, plots, etc.) after all
-statements in the code chunk have been evaluated,
-and allows final processing.
+This function is mainly for internal use: it is called on each part of the
+output of the code chunk (code, messages, text output, and plots, etc.) after
+all statements in the code chunk have been evaluated.
 }

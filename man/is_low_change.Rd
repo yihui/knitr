@@ -7,11 +7,25 @@
 is_low_change(p1, p2)
 }
 \arguments{
-\item{p1, p2}{Plot results}
+\item{p1, p2}{Plot objects.}
 }
 \value{
-Logical value indicating whether `p2` is a low-level update of `p1`.
+Logical value indicating whether \code{p2} is a low-level update of
+  \code{p1}.
 }
 \description{
-Compare two recorded plots
+Check if one plot only contains a low-level update of another plot.
+}
+\examples{
+pdf(NULL)
+dev.control("enable")  # enable plot recording
+plot(1:10)
+p1 = recordPlot()
+abline(0, 1)  # add a line (a low-level change)
+p2 = recordPlot()
+plot(rnorm(100))
+p3 = recordPlot()  # draw a completely new plot
+dev.off()
+knitr::is_low_change(p1, p2)  # true
+knitr::is_low_change(p1, p3)  # false
 }
