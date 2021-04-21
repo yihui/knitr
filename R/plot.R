@@ -225,8 +225,31 @@ merge_low_plot = function(x, idx = sapply(x, evaluate::is.recordedplot)) {
   if (is.null(m)) x else x[-m]
 }
 
-# compare two recorded plots
+#' Compare two recorded plots
+#'
+#' Check if one plot only contains a low-level update of another plot.
+#' @param p1,p2 Plot objects.
+#' @return Logical value indicating whether \code{p2} is a low-level update of
+#'   \code{p1}.
+#' @export
+#' @examples
+#' pdf(NULL)
+#' dev.control('enable')  # enable plot recording
+#' plot(1:10)
+#' p1 = recordPlot()
+#' abline(0, 1)  # add a line (a low-level change)
+#' p2 = recordPlot()
+#' plot(rnorm(100))
+#' p3 = recordPlot()  # draw a completely new plot
+#' dev.off()
+#' knitr::is_low_change(p1, p2)  # true
+#' knitr::is_low_change(p1, p3)  # false
 is_low_change = function(p1, p2) {
+  UseMethod('is_low_change')
+}
+
+#' @export
+is_low_change.default = function(p1, p2) {
   p1 = p1[[1]]; p2 = p2[[1]]  # real plot info is in [[1]]
   if (length(p2) < (n1 <- length(p1))) return(FALSE)  # length must increase
   identical(p1[1:n1], p2[1:n1])
