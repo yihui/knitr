@@ -280,7 +280,6 @@ eng_r = function(options) {
     options$fig.num = if (length(res)) sum(sapply(res, function(x) {
       if (inherits(x, 'knit_image_paths')) return(length(x))
       if (is_plot_output(x)) return(1)
-      if (inherits(x, 'html_screenshot')) return(1)
       0
     })) else 0L
 
@@ -422,7 +421,8 @@ find_recordedplot = function(x) {
 }
 
 is_plot_output = function(x) {
-  evaluate::is.recordedplot(x) || inherits(x, c('knit_image_paths', 'knit_other_plot'))
+  evaluate::is.recordedplot(x) ||
+    inherits(x, c('knit_image_paths', 'html_screenshot', 'knit_other_plot'))
 }
 
 # move plots before source code
