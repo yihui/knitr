@@ -423,9 +423,7 @@ find_recordedplot = function(x) {
 }
 
 is_plot_output = function(x) {
-  evaluate::is.recordedplot(x) ||
-    inherits(x, 'knit_image_paths') ||
-    inherits(x, 'knit_other_plot')
+  evaluate::is.recordedplot(x) || inherits(x, c('knit_image_paths', 'knit_other_plot'))
 }
 
 # move plots before source code
