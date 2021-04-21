@@ -70,6 +70,19 @@ x & col_name\\\\
   )
 })
 
+assert('kable() adds {} before [] when booktabs = TRUE', {
+  (kable2(data.frame(x = c('[0, 1]', '(1, 2]'), y = c(35, 62)), 'latex', booktabs = TRUE) %==% '
+\\begin{tabular}{lr}
+\\toprule
+x & y\\\\
+\\midrule
+{}[0, 1] & 35\\\\
+(1, 2] & 62\\\\
+\\bottomrule
+\\end{tabular}'
+   )
+})
+
 assert('kable(format = "latex", linesep = ...) works', {
   (kable2(data.frame(x = 1:4), 'latex', linesep  = c('', '', '\\midrule')) %==% '
 \\begin{tabular}{r}

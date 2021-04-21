@@ -2,7 +2,7 @@
 
 ## BUG FIXES
 
-- Reverted the fix for #1595 since it caused problems in kableExtra (thanks, @bttomio, haozhu233/kableExtra#607).
+- Reverted the fix for #1595 since it caused problems in **kableExtra** (thanks, @bttomio, haozhu233/kableExtra#607), and applied a different fix to the original problem (i.e., add `{}` before `[`).
 
 ## MINOR CHANGES
 
