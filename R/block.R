@@ -388,7 +388,7 @@ chunk_device = function(options, record = TRUE, tmp = tempfile()) {
 
 # fall back to a usable device (e.g., during R CMD check)
 fallback_dev = function(dev) {
-  if (length(dev) != 1 || !getOption('knitr.device.fallback', xfun::is_R_CMD_check()))
+  if (length(dev) != 1 || !getOption('knitr.device.fallback', is_R_CMD_check()))
     return(dev)
   choices = list(
     svg = c('png', 'jpeg', 'bmp'), cairo_pdf = c('pdf'), cairo_ps = c('postscript'),

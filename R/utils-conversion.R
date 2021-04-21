@@ -113,7 +113,7 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
   # on 'markdown' in DESCRIPTION (typically in Suggests)
   test_vig_dep('markdown')
   if (!force_v1 && is.null(text)) {
-    signal = if (is_R_CMD_check()) warning2 else stop2
+    signal = if (skip_cran_bioc()) warning2 else stop2
     if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) signal(
       'It seems you should call rmarkdown::render() instead of knitr::knit2html() ',
       'because ', input, ' appears to be an R Markdown v2 document.'
