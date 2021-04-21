@@ -153,6 +153,8 @@ kable = function(
   if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")
   attr(x, 'align') = align
+  # simple tables do not 0-row tables (--- will be treated as an hr line)
+  if (format == 'simple' && nrow(x) == 0) format = 'pipe'
   res = do.call(
     paste('kable', format, sep = '_'),
     list(x = x, caption = caption, escape = escape, ...)
@@ -274,9 +276,9 @@ knit_print.knitr_kable = function(x, ...) {
 kable_latex = function(
   x, booktabs = FALSE, longtable = FALSE, valign = 't', position = '', centering = TRUE,
   vline = getOption('knitr.table.vline', if (booktabs) '' else '|'),
-  toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule{}' else '\\hline'),
-  bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule{}' else '\\hline'),
-  midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule{}' else '\\hline'),
+  toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule' else '\\hline'),
+  bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule' else '\\hline'),
+  midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
   escape = TRUE
@@ -305,7 +307,7 @@ kable_latex = function(
   } else rep('', nrow(x))
   linesep = ifelse(linesep == "", linesep, paste0('\n', linesep))
 
-  if (escape) x = escape_latex(x)
+  x = escape_latex_table(x, escape, booktabs)
   if (!is.character(toprule)) toprule = NULL
   if (!is.character(bottomrule)) bottomrule = NULL
   tabular = if (longtable) 'longtable' else 'tabular'
@@ -316,7 +318,7 @@ kable_latex = function(
     if (longtable && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {
-      if (escape) cn = escape_latex(cn)
+      cn = escape_latex_table(cn, escape, booktabs)
       paste0(paste(cn, collapse = ' & '), sprintf('\\\\\n%s\n', midrule))
     },
     one_string(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep), sep = ''),
@@ -324,6 +326,15 @@ kable_latex = function(
     sprintf('\n\\end{%s}', tabular),
     if (!longtable) env2
   ), collapse = '')
+}
+
+# when using booktabs, add {} before [ so that the content in [] won't be
+# treated as parameters of booktabs commands like \midrule:
+# https://github.com/yihui/knitr/issues/1595
+escape_latex_table = function(x, escape = TRUE, brackets = TRUE) {
+  if (escape) x = escape_latex(x)
+  if (brackets) x = gsub('^(\\s*)(\\[)', '\\1{}\\2', x)
+  x
 }
 
 kable_latex_caption = function(x, caption) {
@@ -404,10 +415,7 @@ kable_rst = function(x, rownames.name = '\\', ...) {
 
 # Pandoc's pipe table
 kable_pipe = function(x, caption = NULL, padding = 1, ...) {
-  if (is.null(colnames(x))) {
-    warning('The table should have a header (column names)')
-    colnames(x) = rep('', ncol(x))
-  }
+  if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
   res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
     if (is.null(a)) return(s)
     r = c(l = '^.', c = '^.|.$', r = '.$')
@@ -422,13 +430,13 @@ kable_pipe = function(x, caption = NULL, padding = 1, ...) {
 
 # Pandoc's simple table
 kable_simple = function(x, caption = NULL, padding = 1, ...) {
-  # simple tables do not support 1-column or 0-row tables
-  tab = if (ncol(x) == 1 || nrow(x) == 0) kable_pipe(
-    x, padding = padding, ...
-  ) else kable_mark(
+  tab = kable_mark(
     x, c(NA, '-', if (is_blank(colnames(x))) '-' else NA),
     padding = padding, ...
   )
+  # when x has only one column with name, indent by one space so --- won't be
+  # treated as an hr line
+  if (ncol(x) == 1 && !is.null(colnames(x))) tab = paste0(' ', tab)
   kable_pandoc_caption(tab, caption)
 }
 

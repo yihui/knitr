@@ -558,6 +558,10 @@ print_knitlog = function() {
 line_count = function(x) stringr::str_count(x, '\n') + 1L
 
 has_package = function(pkg) loadable(pkg, FALSE)
+has_packages = function(pkgs) {
+  for (p in pkgs) if (!has_package(p)) return(FALSE)
+  TRUE
+}
 
 # if LHS is NULL, return the RHS
 `%n%` = function(x, y) if (is.null(x)) y else x
@@ -566,6 +570,18 @@ has_package = function(pkg) loadable(pkg, FALSE)
 merge_list = function(x, y) {
   x[names(y)] = y
   x
+}
+
+# find a token in a template, and replace it with a value
+insert_template = function(text, token, value, ignore = FALSE) {
+  if (is.null(value)) return(text)
+  i = grep(token, text); n = length(i)
+  if (n > 1) stop("There are multiple tokens in the template: '", token, "'")
+  if (n == 0) {
+    if (ignore) return(text)
+    stop("Couldn't find the token '", token, "' in the template.")
+  }
+  append(text, value, i)
 }
 
 # paths of all figures
@@ -1026,5 +1042,32 @@ make_unique = function(x) {
 #' }
 image_uri = function(f) xfun::base64_uri(f)
 
-# TODO: remove this function after the next version of bookdown is on CRAN
+# TODO: remove this function after bookdown > 0.21 is on CRAN
 is_abs_path = function(...) xfun::is_abs_path(...)
+
+# check if DESCRIPTION has dependencies on certain packages
+desc_has_dep = function(pkg, dir = '.') {
+  res = rep(NA, length(pkg))
+  if (!file.exists(f <- file.path(dir, 'DESCRIPTION'))) return(res)
+  info = read.dcf(f, fields = c('Package', 'Depends', 'Imports', 'Suggests'))
+  if (nrow(info) < 1 || is.na(info[1, 'Package'])) return(res)
+  pkg %in% unlist(strsplit(info, '[[:space:],]+'))
+}
+
+# return TRUE if DESCRIPTION doesn't exist or pkg has been declared as dependency
+test_desc_dep = function(pkg, dir = '.') {
+  res = desc_has_dep(pkg, dir)
+  all(is.na(res)) || (all(res) && has_packages(pkg))
+}
+
+# TODO: remove this hack in the future when no CRAN/BioC packages have the issue
+test_vig_dep = function(pkg) {
+  if (xfun::is_R_CMD_check() || Sys.getenv('BBS_HOME') != '' || test_desc_dep(pkg, '..')) return()
+  p = read.dcf(file.path('..', 'DESCRIPTION'), fields = 'Package')[1, 1]
+  stop2(
+    "The '", pkg, "' package should be installed and declared as a dependency of the '", p,
+    "' package (e.g., in the 'Suggests' field of DESCRIPTION), because the ",
+    "latter contains vignette(s) built with the '", pkg, "' package. Please see ",
+    "https://github.com/yihui/knitr/issues/1864 for more information."
+  )
+}

@@ -223,7 +223,7 @@ adjust_opts_knit = function() {
 #' Template for creating reusable chunk options
 #'
 #' Creates a template binding a label to a set of chunk options. Every chunk
-#' that references the template label will have the specificed set of options
+#' that references the template label will have the specified set of options
 #' applied to it.
 #' @export
 #' @examples opts_template$set(myfigures = list(fig.height = 4, fig.width = 4))
