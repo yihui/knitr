@@ -1,6 +1,30 @@
+# CHANGES IN knitr VERSION 1.33
+
+## NEW FEATURES
+
+- Exported the internal functions `sew()` (previously named `wrap()`) and `is_low_change()` to make it possible for other graphics systems such as **rgl** to work in **knitr** like base and grid graphics in base R (thanks, @dmurdoch, #1892 #1853).
+
+## BUG FIXES
+
+- Reverted the fix for #1595 since it caused problems in **kableExtra** (thanks, @bttomio, haozhu233/kableExtra#607), and applied a different fix to the original problem (i.e., add `{}` before `[`).
+
+## MAJOR CHANGES
+
+- The internal S3 generic function `wrap()` has been renamed to `sew()`.
+
+## MINOR CHANGES
+
+- For package vignettes that use the vignette engine `knitr::docco_linear` or `knitr::docco_classic`, **knitr** will signal an error during `R CMD build` if the **markdown** package is not declared as a soft dependency in the `Suggests` field in `DESCRIPTION`. The same treatment has been applied in the previous version of **knitr** for the vignette engine `knitr::knitr` (#1864).
+
+- `R CMD build` will signal an error when a package uses R Markdown vignettes to be build with the **rmarkdown** package but the **rmarkdown** package is not installed (thanks, @nsheff, #1864).
+
 # CHANGES IN knitr VERSION 1.32
 
 ## NEW FEATURES
+
+- The chunk option `ref.label` can be used to reuse code from other code chunks in the current code chunk. Now it can also accept a character vector of chunk labels wrapped in `I()` so that the chunk options of other code chunks can also be applied to the current chunk. For example, if we have a chunk ```` ```{r, chunk-a, echo=FALSE, results='asis'}````, the chunk ```` ```{r, chunk-b, ref.label=I('chunk-a')}```` will inherit both the code and chunk options from `chunk-a` (e.g., `echo=FALSE` and `results='asis'`), but `chunk-b` can still override these chunk options, e.g., the actual chunk options of ```` ```{r, chunk-b, echo=TRUE}```` will be `echo=TRUE` and `results='asis'`. If you want to use one code chunk with several chunk options for multiple times, and each time you want to change a small subset of the chunk options, you may use this approach `ref.label = I()` to avoid typing most chunk options over and over again (thanks, @atusy, #1960).
+
+- The chunk option `opts.label` gained a new usage. It used to mean labels in `knitr::opts_template` (see the help page if you are not familiar with this object). Now it can also be used to specify the labels of other code chunks, from which the chunk options are to be inherited to the current chunk. For example, ```` ```{r, chunk-b, opts.label='chunk-a'}```` means that `chunk-b` will inherit chunk options from `chunk-a`. Local chunk options in a chunk (if exist) will override inherited options. For the new features about both chunk options `ref.label` and `opts.label`, see the detailed documentation and examples at https://yihui.org/knitr/options/ (thanks, @atusy, #1960).
 
 - The internal code to process R code chunks was factored out into the language engine `R`, which can be obtained via `knit_engines$get('R')` now (thanks, @abhsarma, #1963).
 
@@ -11,6 +35,8 @@
 - Added a new engine, `bslib`, which is a special `scss`/`sass` engine for writing [Sass](https://sass-lang.com) code that wants to leverage [Bootstrap Sass](https://getbootstrap.com/docs/4.6/getting-started/theming/). It's primarily designed to work with `rmarkdown::html_document_base`'s `theme` parameter (when it represents a `bslib::bs_theme()`), but the engine can be used anywhere a `bslib::bs_theme()` is set globally with `bslib::bs_global_set()` (thanks, @cpsievert, #1666).
 
 - When the chunk option `include = FALSE`, `error = TRUE` used to be ignored, i.e., errors are signaled nonetheless (causing the knitting process to fail). To avoid this problem, you can now use the numeric value `error = 0` so that **knitr** will not check the `include` option, i.e., knitting will not fail even if `include = FALSE` and an error has occurred in a code chunk, which you wouldn't notice (thanks, @rundel, #1914).
+
+- When processing package vignettes that require **rmarkdown** or **markdown**, we now check that it is declared as a package dependency in the `DESCRIPTION` file (thanks, @dmurdoch, #1919).
 
 - For `tikz` code chunks, a new option `engine.opts$extra.preamble` allows arbitrary LaTeX code to be inserted into the preamble of the template. This allows loading of additional LaTeX and tikz libraries without having to recreate a template from scratch (thanks, @krivit, #1886).
 
@@ -28,7 +54,7 @@
 
 - For Rnw documents, the commented `%\begin{document}` will no longer cause trouble (thanks, @NewbieKnitter @shrektan, #1819).
 
-- Fixed an issue with the chunk option `fig.alt` causing figures to disappear in `rmarkdownn::word_document()` output. This option is currently supported for HTML output only. If provided for office output in **rmarkdown**, it will emit a warning and be ignored (#1966).
+- Fixed an issue with the chunk option `fig.alt` causing figures to disappear in `rmarkdown::word_document()` output. This option is currently supported for HTML output only. If provided for office output in **rmarkdown**, it will emit a warning and be ignored (#1966).
 
 - Spaces in messages were not properly escaped in `.Rnw` documents (thanks, @elbersb, #1978).
 
@@ -39,6 +65,8 @@
 - For Rnw documents, if a chunk's output ends with `\n`, **knitr** will no longer add another `\n` to it (thanks, @krivit #1958, @jpritikin 1092).
 
 - For `kable(x, format = 'simple')`, it no longer generates a `pipe` table but a `simple` table instead when `x` has only one column (thanks, @alusiani, #1968). For `kable(x, format = 'pipe')`, it no longer warns when `x` has no column names, but just generate an empty table header.
+
+- For `tikz` code chunks, the default LaTeX template uses `\documentclass[tikz]{standalone}` instead of `\documentclass{article}` and `\usepackage{preview}` now (thanks, @XiangyunHuang, #1985).
 
 # CHANGES IN knitr VERSION 1.31
 

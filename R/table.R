@@ -276,9 +276,9 @@ knit_print.knitr_kable = function(x, ...) {
 kable_latex = function(
   x, booktabs = FALSE, longtable = FALSE, valign = 't', position = '', centering = TRUE,
   vline = getOption('knitr.table.vline', if (booktabs) '' else '|'),
-  toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule{}' else '\\hline'),
-  bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule{}' else '\\hline'),
-  midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule{}' else '\\hline'),
+  toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule' else '\\hline'),
+  bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule' else '\\hline'),
+  midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
   escape = TRUE
@@ -307,7 +307,7 @@ kable_latex = function(
   } else rep('', nrow(x))
   linesep = ifelse(linesep == "", linesep, paste0('\n', linesep))
 
-  if (escape) x = escape_latex(x)
+  x = escape_latex_table(x, escape, booktabs)
   if (!is.character(toprule)) toprule = NULL
   if (!is.character(bottomrule)) bottomrule = NULL
   tabular = if (longtable) 'longtable' else 'tabular'
@@ -318,7 +318,7 @@ kable_latex = function(
     if (longtable && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {
-      if (escape) cn = escape_latex(cn)
+      cn = escape_latex_table(cn, escape, booktabs)
       paste0(paste(cn, collapse = ' & '), sprintf('\\\\\n%s\n', midrule))
     },
     one_string(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep), sep = ''),
@@ -326,6 +326,15 @@ kable_latex = function(
     sprintf('\n\\end{%s}', tabular),
     if (!longtable) env2
   ), collapse = '')
+}
+
+# when using booktabs, add {} before [ so that the content in [] won't be
+# treated as parameters of booktabs commands like \midrule:
+# https://github.com/yihui/knitr/issues/1595
+escape_latex_table = function(x, escape = TRUE, brackets = TRUE) {
+  if (escape) x = escape_latex(x)
+  if (brackets) x = gsub('^(\\s*)(\\[)', '\\1{}\\2', x)
+  x
 }
 
 kable_latex_caption = function(x, caption) {

@@ -12,7 +12,7 @@ opts_template
 }
 \description{
 Creates a template binding a label to a set of chunk options. Every chunk
-that references the template label will have the specificed set of options
+that references the template label will have the specified set of options
 applied to it.
 }
 \examples{

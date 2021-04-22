@@ -111,21 +111,9 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
                      quiet = FALSE, encoding = 'UTF-8', force_v1 = FALSE) {
   # packages containing vignettes using R Markdown v1 should declare dependency
   # on 'markdown' in DESCRIPTION (typically in Suggests)
-  if (!is.na(pkg <- xfun::check_package_name()) && pkg != 'markdown') {
-    info = packageDescription(pkg, fields = c('Depends', 'Imports', 'Suggests'))
-    if (!'markdown' %in% unlist(strsplit(unlist(info), '[[:space:],]+'))) {
-      if (xfun::is_CRAN_incoming()) stop2(
-        "The 'markdown' package should be declared as a dependency of the '", pkg,
-        "' package (e.g., in the  'Suggests' field of DESCRIPTION), because it ",
-        "contains vignette(s) built with the 'markdown' package. Please see ",
-        "https://github.com/yihui/knitr/issues/1864 for more information."
-      )
-    }
-  }
-  # TODO: remove the above hack in the future when no CRAN packages have the issue
-
+  test_vig_dep('markdown')
   if (!force_v1 && is.null(text)) {
-    signal = if (is_R_CMD_check()) warning2 else stop2
+    signal = if (skip_cran_bioc()) warning2 else stop2
     if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) signal(
       'It seems you should call rmarkdown::render() instead of knitr::knit2html() ',
       'because ', input, ' appears to be an R Markdown v2 document.'
@@ -138,8 +126,6 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
     invisible(output)
   } else markdown::markdownToHTML(text = out, ...)
 }
-
-knit2html_v1 = function(...) knit2html(..., force_v1 = TRUE)
 
 #' Knit an R Markdown document and post it to WordPress
 #'
