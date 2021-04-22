@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- Exported the previously internal functions `wrap()` and `is_low_change()` to make it possible for other graphics systems such as **rgl** to work in **knitr** like base and grid graphics in base R (thanks, @dmurdoch, #1892 #1853).
+- Exported the internal functions `sew()` (previously named `wrap()`) and `is_low_change()` to make it possible for other graphics systems such as **rgl** to work in **knitr** like base and grid graphics in base R (thanks, @dmurdoch, #1892 #1853).
 
 ## BUG FIXES
 

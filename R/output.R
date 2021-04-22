@@ -430,27 +430,35 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 #'
 #' This function is mainly for internal use: it is called on each part of the
 #' output of the code chunk (code, messages, text output, and plots, etc.) after
-#' all statements in the code chunk have been evaluated.
+#' all statements in the code chunk have been evaluated, and will sew these
+#' pieces of output together into a character vector.
 #' @param x Output from \code{evaluate::\link{evaluate}()}.
 #' @param options A list of chunk options used to control output.
 #' @param ... Other arguments to pass to methods.
 #' @export
-wrap = function(x, options = list(), ...) {
-  UseMethod('wrap', x)
+sew = function(x, options = list(), ...) {
+  UseMethod('sew', x)
+}
+wrap = function(...) {
+  warning2(
+    'The internal function knitr:::wrap() has been deprecated. Please use the ',
+    'exported function knitr::sew() instead.'
+  )
+  sew(...)
 }
 
 #' @export
-wrap.list = function(x, options = list(), ...) {
+sew.list = function(x, options = list(), ...) {
   if (length(x) == 0L) return(x)
-  lapply(x, wrap, options)
+  lapply(x, sew, options, ...)
 }
 
 # ignore unknown classes
 #' @export
-wrap.default = function(x, options, ...) return()
+sew.default = function(x, options, ...) return()
 
 #' @export
-wrap.character = function(x, options, ...) {
+sew.character = function(x, options, ...) {
   if (options$results == 'hide') return()
   if (output_asis(x, options)) {
     if (!out_format('latex')) return(x)  # latex output still need a tweak
@@ -461,7 +469,7 @@ wrap.character = function(x, options, ...) {
 # If you provide a custom print function that returns a character object of
 # class 'knit_asis', it will be written as is.
 #' @export
-wrap.knit_asis = function(x, options, inline = FALSE, ...) {
+sew.knit_asis = function(x, options, inline = FALSE, ...) {
   m = attr(x, 'knit_meta')
   knit_meta_add(m, if (missing(options)) '' else options$label)
   if (!missing(options)) {
@@ -486,7 +494,7 @@ wrap.knit_asis = function(x, options, inline = FALSE, ...) {
 }
 
 #' @export
-wrap.source = function(x, options, ...) {
+sew.source = function(x, options, ...) {
   if (isFALSE(options$echo)) return()
   src = sub('\n$', '', x$src)
   if (!options$collapse && options$strip.white) src = strip_white(src)
@@ -518,7 +526,7 @@ msg_sanitize = function(message, type) {
 }
 
 #' @export
-wrap.warning = function(x, options, ...) {
+sew.warning = function(x, options, ...) {
   call = if (is.null(x$call)) '' else {
     call = deparse(x$call)[1]
     if (call == 'eval(expr, envir, enclos)') '' else paste(' in', call)
@@ -527,17 +535,17 @@ wrap.warning = function(x, options, ...) {
 }
 
 #' @export
-wrap.message = function(x, options, ...) {
+sew.message = function(x, options, ...) {
   msg_wrap(paste(x$message, collapse = ''), 'message', options)
 }
 
 #' @export
-wrap.error = function(x, options, ...) {
+sew.error = function(x, options, ...) {
   msg_wrap(as.character(x), 'error', options)
 }
 
 #' @export
-wrap.recordedplot = function(x, options, ...) {
+sew.recordedplot = function(x, options, ...) {
   # figure number sequence for multiple plots
   fig.cur = plot_counter()
   options$fig.cur = fig.cur # put fig num in options
@@ -559,7 +567,7 @@ wrap.recordedplot = function(x, options, ...) {
 }
 
 #' @export
-wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE, ...) {
+sew.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE, ...) {
   if (options$fig.show == 'hide') return('')
   # remove the automatically set out.width when fig.retina is set, otherwise the
   # size of external images embedded via include_graphics() will be set to
@@ -582,7 +590,7 @@ wrap.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE, 
 }
 
 #' @export
-wrap.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE, ...) {
+sew.html_screenshot = function(x, options = opts_chunk$get(), inline = FALSE, ...) {
   ext = x$extension
   in_base_dir({
     i = plot_counter()
@@ -607,7 +615,7 @@ run_hook_plot = function(x, options) {
 }
 
 #' @export
-wrap.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE, ...) {
+sew.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE, ...) {
   options$fig.cur = plot_counter()
   options = reduce_plot_opts(options)
   if (length(extra <- options$out.extra)) extra = paste('', extra, collapse = '')

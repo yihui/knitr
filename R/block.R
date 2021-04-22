@@ -294,7 +294,7 @@ eng_r = function(options) {
     opts_knit$delete('plot_files')
   }, add = TRUE)  # restore plot number
 
-  output = unlist(wrap(res, options)) # wrap all results together
+  output = unlist(sew(res, options)) # wrap all results together
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
 
   output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
@@ -526,7 +526,7 @@ inline_exec = function(
   loc = block$location
   for (i in 1:n) {
     res = hook_eval(code[i], envir)
-    if (inherits(res, 'knit_asis')) res = wrap(res, inline = TRUE)
+    if (inherits(res, 'knit_asis')) res = sew(res, inline = TRUE)
     d = nchar(input)
     # replace with evaluated results
     stringr::str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {

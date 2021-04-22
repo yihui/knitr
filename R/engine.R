@@ -60,15 +60,14 @@ cache_engines = new_defaults()
 #' \code{engine_output(options, out = LIST)} where \code{LIST} is a list that
 #' has the same structure as the output of \code{evaluate::evaluate()}. In this
 #' case, the arguments \code{code} and \code{extra} are ignored, and the list is
-#' passed to an internal function \code{knitr:::wrap()} to return a character
-#' vector of final output.
+#' passed to \code{knitr::sew()} to return a character vector of final output.
 #' @param options A list of chunk options. Usually this is just the object
 #'   \code{options} passed to the engine function; see
 #'   \code{\link{knit_engines}}.
-#' @param code Source code of the chunk, to which the output hook
-#'   \code{source} is applied, unless the chunk option \code{echo} is \code{FALSE}.
-#' @param out Text output from the engine, to which the hook \code{output}
-#'   is applied, unless the chunk option \code{results} is \code{'hide'}
+#' @param code Source code of the chunk, to which the output hook \code{source}
+#'   is applied, unless the chunk option \code{echo} is \code{FALSE}.
+#' @param out Text output from the engine, to which the hook \code{output} is
+#'   applied, unless the chunk option \code{results} is \code{'hide'}
 #' @param extra Any additional text output that you want to include.
 #' @return A character string generated from the source code and output using
 #'   the appropriate output hooks.
@@ -80,7 +79,7 @@ cache_engines = new_defaults()
 #' # expert use only
 #' engine_output(opts_chunk$merge(list(engine = 'python')), out = list(structure(list(src = '1 + 1'), class = 'source'), '2'))
 engine_output = function(options, code, out, extra = NULL) {
-  if (missing(code) && is.list(out)) return(unlist(wrap(out, options)))
+  if (missing(code) && is.list(out)) return(unlist(sew(out, options)))
   if (!is.logical(options$echo)) code = code[options$echo]
   if (length(code) != 1L) code = one_string(code)
   if (options$engine == 'sas' && length(out) > 1L && !grepl('[[:alnum:]]', out[2]))
@@ -100,7 +99,7 @@ engine_output = function(options, code, out, extra = NULL) {
   one_string(c(
     if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) {
-      if (options$engine == 'highlight') out else wrap.character(out, options)
+      if (options$engine == 'highlight') out else sew.character(out, options)
     },
     extra
   ))

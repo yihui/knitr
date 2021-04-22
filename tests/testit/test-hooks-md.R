@@ -15,7 +15,7 @@ render_markdown()
 
 img_output = function(path, opts = list()) {
   opts = opts_chunk$merge(opts)
-  wrap(knit_print(include_graphics(path, error = FALSE)), opts)
+  sew(knit_print(include_graphics(path, error = FALSE)), opts)
 }
 
 assert('include_graphics() includes custom images correctly', {

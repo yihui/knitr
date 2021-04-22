@@ -786,7 +786,7 @@ knit_handlers = function(fun, options) {
   if (!is.function(fun)) fun = function(x, ...) {
     res = withVisible(knit_print(x, ...))
     # indicate the htmlwidget result with a special class so we can attach
-    # the figure caption to it later in wrap.knit_asis
+    # the figure caption to it later in sew.knit_asis
     if (inherits(x, 'htmlwidget'))
       class(res$value) = c(class(res$value), 'knit_asis_htmlwidget')
     if (res$visible) res$value else invisible(res$value)

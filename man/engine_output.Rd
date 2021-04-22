@@ -11,11 +11,11 @@ engine_output(options, code, out, extra = NULL)
 \code{options} passed to the engine function; see
 \code{\link{knit_engines}}.}
 
-\item{code}{Source code of the chunk, to which the output hook
-\code{source} is applied, unless the chunk option \code{echo} is \code{FALSE}.}
+\item{code}{Source code of the chunk, to which the output hook \code{source}
+is applied, unless the chunk option \code{echo} is \code{FALSE}.}
 
-\item{out}{Text output from the engine, to which the hook \code{output}
-is applied, unless the chunk option \code{results} is \code{'hide'}}
+\item{out}{Text output from the engine, to which the hook \code{output} is
+applied, unless the chunk option \code{results} is \code{'hide'}}
 
 \item{extra}{Any additional text output that you want to include.}
 }
@@ -32,8 +32,7 @@ For expert users, an advanced usage of this function is
 \code{engine_output(options, out = LIST)} where \code{LIST} is a list that
 has the same structure as the output of \code{evaluate::evaluate()}. In this
 case, the arguments \code{code} and \code{extra} are ignored, and the list is
-passed to an internal function \code{knitr:::wrap()} to return a character
-vector of final output.
+passed to \code{knitr::sew()} to return a character vector of final output.
 }
 \examples{
 library(knitr)
