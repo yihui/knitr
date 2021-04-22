@@ -16,6 +16,7 @@ Authors@R: c(
     person("Ben", "Baumer", role = "ctb"),
     person("Brian", "Diggs", role = "ctb"),
     person("Brian", "Zhang", role = "ctb"),
+    person("Bulat", "Yapparov", role = "ctb"),
     person("Cassio", "Pereira", role = "ctb"),
     person("Christophe", "Dervieux", role = "ctb"),
     person("David", "Hall", role = "ctb"),
@@ -101,8 +102,7 @@ Authors@R: c(
     person("Viktoras", "Veitas", role = "ctb"),
     person("Weicheng", "Zhu", role = "ctb"),
     person("Wush", "Wu", role = "ctb"),
-    person("Zachary", "Foster", role = "ctb"),
-    person("Bulat", "Yapparov", role = "ctb")
+    person("Zachary", "Foster", role = "ctb")
     )
 Description: Provides a general-purpose tool for dynamic report generation in R
     using Literate Programming techniques.
