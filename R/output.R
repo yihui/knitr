@@ -439,6 +439,8 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 sew = function(x, options = list(), ...) {
   UseMethod('sew', x)
 }
+
+# TODO: see if we can remove this function in the future
 wrap = function(...) {
   warning2(
     'The internal function knitr:::wrap() has been deprecated. Please use the ',
@@ -587,6 +589,15 @@ sew.knit_image_paths = function(x, options = opts_chunk$get(), inline = FALSE, .
       options['out.width'] = list(raster_dpi_width(x[i], dpi))
     hook(x[i], reduce_plot_opts(options))
   })), collapse = '')
+}
+
+# TODO: remove this in the future
+wrap.knit_image_paths = function(...) {
+  warning2(
+    "The internal function knitr:::wrap.knit_image_paths has been deprecated. ",
+    "Please use knitr::sew() on an object of the class 'knit_image_paths' instead."
+  )
+  sew.knit_image_paths(...)
 }
 
 #' @export
