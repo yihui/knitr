@@ -543,6 +543,7 @@ eng_sql = function(options) {
   if (is.na(max.print) || is.null(max.print))
     max.print = -1
   sql = one_string(options$code)
+  params = options$params
 
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
@@ -558,8 +559,14 @@ eng_sql = function(options) {
       data = DBI::dbFetch(res, n = max.print)
       DBI::dbClearResult(res)
       data
+
     } else {
-      DBI::dbGetQuery(conn, query)
+      if (length(params) == 0) {
+        DBI::dbGetQuery(conn, query)
+      } else {
+        # If params option is provided, parameters are not interplolated
+        DBI::dbGetQuery(conn, sql, params = params)
+      }
     }
   }, error = function(e) {
     if (!options$error) stop(e)

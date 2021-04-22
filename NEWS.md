@@ -4,6 +4,8 @@
 
 - Exported the internal functions `sew()` (previously named `wrap()`) and `is_low_change()` to make it possible for other graphics systems such as **rgl** to work in **knitr** like base and grid graphics in base R (thanks, @dmurdoch, #1892 #1853).
 
+- For `sql` code chunks, parameterized queries will be executed through native database api if the chunk option `params` is provided (thanks, @byapparov, #1987).
+
 ## BUG FIXES
 
 - Reverted the fix for #1595 since it caused problems in **kableExtra** (thanks, @bttomio, haozhu233/kableExtra#607), and applied a different fix to the original problem (i.e., add `{}` before `[`).
