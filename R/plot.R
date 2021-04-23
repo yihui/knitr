@@ -524,7 +524,7 @@ include_app = function(url, height = '400px') {
 
 need_screenshot = function(x, ...) {
   options = list(...)[['options']]
-  # user may say 'I know the consequence; just let me render HTML'
+  # if users specify screenshot.force = FALSE, skip screenshot and render HTML
   if (isFALSE(options$screenshot.force)) return(FALSE)
   # force screenshotting even if the output format support HTML
   force = is.list(options) && isTRUE(options$screenshot.force)
@@ -584,7 +584,8 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   d = tempfile()
   dir.create(d); on.exit(unlink(d, recursive = TRUE), add = TRUE)
   w = webshot_available()
-  webshot = c(options$webshot, names(w)[w])[[1L]]
+  webshot = c(options$webshot, names(w)[w])
+  webshot = if (length(webshot) == 0) 'webshot' else webshot[[1L]]
   f = in_dir(d, {
     if (i1 || i3) {
       if (i1) {
