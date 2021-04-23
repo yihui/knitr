@@ -107,14 +107,15 @@ knit2pdf = function(
 #' if (interactive()) browseURL('test.html')
 #'
 #' unlink(c('test.Rmd', 'test.html', 'test.md'))
-knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
-                     quiet = FALSE, encoding = 'UTF-8', force_v1 = FALSE) {
+knit2html = function(
+  input, output = NULL, ..., envir = parent.frame(), text = NULL,
+  quiet = FALSE, encoding = 'UTF-8', force_v1 = getOption('knitr.knit2html.force_v1', FALSE)
+) {
   # packages containing vignettes using R Markdown v1 should declare dependency
   # on 'markdown' in DESCRIPTION (typically in Suggests)
   test_vig_dep('markdown')
   if (!force_v1 && is.null(text)) {
-    signal = if (skip_cran_bioc()) warning2 else stop2
-    if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) signal(
+    if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) warning2(
       'It seems you should call rmarkdown::render() instead of knitr::knit2html() ',
       'because ', input, ' appears to be an R Markdown v2 document.'
     )

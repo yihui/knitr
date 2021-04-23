@@ -12,7 +12,7 @@ knit2html(
   text = NULL,
   quiet = FALSE,
   encoding = "UTF-8",
-  force_v1 = FALSE
+  force_v1 = getOption("knitr.knit2html.force_v1", FALSE)
 )
 }
 \arguments{

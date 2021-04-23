@@ -20,6 +20,8 @@
 
 - `R CMD build` will signal an error when a package uses R Markdown vignettes to be build with the **rmarkdown** package but the **rmarkdown** package is not installed (thanks, @nsheff, #1864).
 
+- The `force_v1` argument of `knit2html()` defaults to `getOption('knitr.knit2html.force_v1', FALSE)` now, which means its value can be configured via a global option.
+
 # CHANGES IN knitr VERSION 1.32
 
 ## NEW FEATURES
