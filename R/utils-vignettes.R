@@ -90,7 +90,10 @@ register_vignette_engines = function(pkg) {
     if (pandoc_available()) {
       vweave_rmarkdown(...)
     } else {
-      warning('Pandoc (>= 1.12.3) not available. Falling back to R Markdown v1.')
+      (if (is.na(Sys.getenv('CI', NA))) warning2 else stop2)(
+        'Pandoc is required to build R Markdown vignettes but not available. ',
+        'Please make sure it is installed.'
+      )
       vweave(...)
     }
   } else {
