@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.34
 
+## NEW FEATURES
+
+- For the `tikz` engine, the class options of the `standalone` document classs can be specified via the chunk option `engine.opts$classoption` (thanks, @XiangyunHuang, #1985). The default value is `tikz`, i.e., `\documentclass[tikz]{standalone}` is used by default.
 
 # CHANGES IN knitr VERSION 1.33
 

@@ -279,6 +279,10 @@ eng_tikz = function(options) {
   lines = read_utf8(
     options$engine.opts$template %n% system.file('misc', 'tikz2pdf.tex', package = 'knitr')
   )
+  # add class options to template
+  lines = insert_template(
+    lines, '%% TIKZ_CLASSOPTION %%', options$engine.opts$classoption %n% 'tikz', TRUE
+  )
   # insert code into preamble
   lines = insert_template(
     lines, '%% EXTRA_TIKZ_PREAMBLE_CODE %%', options$engine.opts$extra.preamble, TRUE
