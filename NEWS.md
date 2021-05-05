@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- Added a package option `latex.tilde` so that users can customize the tilde symbol, e.g., you can set `knitr::opts_knit$set(latex.tilde = "\\hlopt{\\scriptsize{\\ensuremath{\\sim}}}")`. This is because the default tilde is too high in the PDF output, and it's often more desirable to use a middle tilde instead (thanks, @brry #1992, @jaredlander #492).
+
 - For the `tikz` engine, the class options of the `standalone` document classs can be specified via the chunk option `engine.opts$classoption` (thanks, @XiangyunHuang, #1985). The default value is `tikz`, i.e., `\documentclass[tikz]{standalone}` is used by default.
 
 # CHANGES IN knitr VERSION 1.33

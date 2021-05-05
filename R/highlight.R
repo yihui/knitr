@@ -1,6 +1,6 @@
 hilight_source = function(x, format, options) {
   if ((format %in% c('latex', 'html')) && options$highlight) {
-    if (options$engine == 'R') {
+    res = if (options$engine == 'R') {
       opts = opts_knit$get('highr.opts')
       highr::hilight(x, format, prompt = options$prompt, markup = opts$markup)
     } else {
@@ -15,6 +15,10 @@ hilight_source = function(x, format, options) {
         res
       }
     }
+    if (format == 'latex' && is.character(tld <- opts_knit$get('latex.tilde'))) {
+      res = gsub('\\hlopt{~}', tld, res, fixed = TRUE)
+    }
+    res
   } else if (options$prompt) {
     # if you did not reformat or evaluate the code, I have to figure out which
     # lines belong to one complete expression first (#779)
