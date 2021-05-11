@@ -6,6 +6,10 @@
 
 - For the `tikz` engine, the class options of the `standalone` document classs can be specified via the chunk option `engine.opts$classoption` (thanks, @XiangyunHuang, #1985). The default value is `tikz`, i.e., `\documentclass[tikz]{standalone}` is used by default.
 
+## BUG FIXES
+
+- Fix a regression with `fig.keep` chunk option used in chunks with only one figure where the figure was not showing in output (thanks, @fmichonneau, #1993).
+
 # CHANGES IN knitr VERSION 1.33
 
 ## NEW FEATURES
