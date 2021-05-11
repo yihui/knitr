@@ -631,7 +631,7 @@ sew.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE, ...
   options = reduce_plot_opts(options)
   if (length(extra <- options$out.extra)) extra = paste('', extra, collapse = '')
   add_html_caption(options, sprintf(
-    '<iframe src="%s" width="%s" height="%s"%s></iframe>',
+    '<iframe src="%s" width="%s" height="%s" data-external="1"%s></iframe>',
     escape_html(x$url), options$out.width %n% '100%', x$height %n% '400px',
     extra %n% ''
   ))
