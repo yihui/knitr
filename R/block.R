@@ -442,13 +442,14 @@ fig_before_code = function(x) {
 
 rearrange_figs = function(res, keep, idx, show) {
   figs = find_recordedplot(res)
-  if (!any(figs)) return(res)
+  if (!any(figs)) return(res) # no figures
   if (keep == 'none') return(res[!figs]) # remove all
 
   if (show == 'hold') {
     res = c(res[!figs], res[figs]) # move to the end
     figs = find_recordedplot(res)
   }
+  if (sum(figs) <= 1) return(res) # return early if only 1 figure to keep
   switch(
     keep,
     first = res[-tail(which(figs), -1L)],

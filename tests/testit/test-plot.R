@@ -106,6 +106,14 @@ assert('fig_before_code() moves plots before code blocks', {
 assert('plots are rearrange based on fig.keep & fig.show options', {
   res = list(gen_source(1), gen_source(2))
   (rearrange_figs(res, 'high', NULL, 'asis') %==% res)
+  # only one plot to keep
+  res = c(evaluate('plot(1)'), list(gen_source(1)))
+  (rearrange_figs(res, 'high', NULL, 'asis') %==% res)
+  (rearrange_figs(res, 'all', NULL, 'asis') %==% res)
+  (rearrange_figs(res, 'last', NULL, 'asis') %==% res)
+  (rearrange_figs(res, 'first', NULL, 'asis') %==% res)
+  (rearrange_figs(res, 'index', 2, 'asis') %==% res)
+  # several plots
   res = c(list(gen_source(1)), evaluate('plot(1)\npoints(1.1, 1.1)'),
           list(gen_plotrc('b'), gen_source(2)))
   (rearrange_figs(res, 'high', NULL, 'asis') %==% res[-3])
