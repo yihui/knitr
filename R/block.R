@@ -528,10 +528,9 @@ inline_exec = function(
   for (i in 1:n) {
     res = hook_eval(code[i], envir)
     if (inherits(res, 'knit_asis')) res = sew(res, inline = TRUE)
-    res = xfun::try_silent(as.character(res))
-    if (inherits(res, 'try-error')) {
-      stop("Result is not coercible to character in this inline code: ", sQuote(code[i]), call. = FALSE)
-    }
+    tryCatch(as.character(res), error = function(e) {
+      stop2("The inline value cannot be coerced to character: ", code[i])
+    })
     d = nchar(input)
     # replace with evaluated results
     stringr::str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
