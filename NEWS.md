@@ -8,7 +8,7 @@
 
 ## MAJOR CHANGES
 
-- An error is now thrown when an inline code result is not coercible to character. This has always been the assumed behavior but it happens to be different in certain formats with unknown automatic coercion. This is now enforce to prevent any unexpected output. An inline code expression must evaluate to a character vector or an object coercible to it by `as.character()` (#2006).
+- An error is now thrown when an inline code result is not coercible to character. This has always been the assumed behavior but it happens to be different in certain formats with unknown automatic coercion. This is now enforced to prevent any unexpected output. An inline code expression must evaluate to a character vector or an object coercible by `as.character()` (#2006).
 
 ## MINOR CHANGES
 
