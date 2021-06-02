@@ -1062,7 +1062,7 @@ test_desc_dep = function(pkg, dir = '.') {
 
 # TODO: remove this hack in the future when no CRAN/BioC packages have the issue
 test_vig_dep = function(pkg) {
-  if (skip_cran_bioc() || test_desc_dep(pkg, '..')) return()
+  if (no_test_vig_dep() || test_desc_dep(pkg, '..')) return()
   p = read.dcf(file.path('..', 'DESCRIPTION'), fields = 'Package')[1, 1]
   stop2(
     "The '", pkg, "' package should be installed and declared as a dependency of the '", p,
@@ -1072,4 +1072,6 @@ test_vig_dep = function(pkg) {
   )
 }
 
-skip_cran_bioc = function() is_R_CMD_check() || Sys.getenv('BBS_HOME') != ''
+no_test_vig_dep = function() {
+  is_R_CMD_check() || tolower(Sys.getenv('KNITR_NO_TEST_VIGNETTE_DEP')) == 'true'
+}
