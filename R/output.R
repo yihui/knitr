@@ -499,7 +499,7 @@ sew.knit_asis = function(x, options, inline = FALSE, ...) {
 sew.source = function(x, options, ...) {
   if (isFALSE(options$echo)) return()
   src = sub('\n$', '', x$src)
-  if (!options$collapse && options$strip.white) src = strip_white(src)
+  if (options$strip.white) src = strip_white(src)
   if (is_blank(src)) return()  # an empty chunk
   knit_hooks$get('source')(src, options)
 }
