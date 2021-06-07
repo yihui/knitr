@@ -52,7 +52,8 @@ spin = function(
   hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
   format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
   doc = "^#+'[ ]?", inline = '^[{][{](.+)[}][}][ ]*$',
-  comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text)
+  comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text),
+  language = "R"
 ) {
 
   format = match.arg(format)
@@ -66,16 +67,23 @@ spin = function(
 
   # remove multiline string literals and symbols (note that this ignores lines with spaces at their
   # beginnings, assuming doc and inline regex don't match these lines anyway)
-  parsed_data = getParseData(parse(text = x, keep.source = TRUE))
-  is_matchable = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, 'line1'])
+  if (language == "R"){
+    parsed_data = utils::getParseData(parse(text = x, keep.source = TRUE))
+    is_matchable = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, 'line1'])
+  }
 
   # .Rmd needs to be treated specially
   p = if (identical(tolower(format), 'rmd')) .fmt.rmd(x) else .fmt.pat[[tolower(format)]]
 
   # turn {{expr}} into inline expressions, e.g. `r expr` or \Sexpr{expr}
-  if (any(i <- is_matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
+  if (language == "R") {
+    if (any(i <- is_matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
+    r = rle((is_matchable & grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
+  } else {
+    if (any(i <- grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
+    r = rle((grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
+  }
 
-  r = rle((is_matchable & grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
   p1 = gsub('\\{', '\\\\{', paste0('^', p[1L], '.*', p[2L], '$'))
 
@@ -179,7 +187,7 @@ spin_child = function(input, format) {
     fmt
   } else format
   asis_output(knit_child(
-    text = spin(text = read_utf8(input), knit = FALSE, report = FALSE, format = fmt),
+    text = spin(text = readLines(input), knit = FALSE, report = FALSE, format = fmt),
     quiet = TRUE
   ))
 }
