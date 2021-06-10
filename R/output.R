@@ -699,6 +699,9 @@ knit_print.default = function(x, ..., inline = FALSE) {
 #' @export
 knit_print.knit_asis = function(x, ...) x
 
+#' @export
+knit_print.knit_asis_url = function(x, ...) x
+
 #' @rdname knit_print
 #' @export
 normal_print = default_handlers$value

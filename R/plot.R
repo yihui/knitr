@@ -509,7 +509,7 @@ include_url = function(url, height = '400px') {
 include_url2 = function(url, height = '400px', orig = url) {
   structure(
     list(url = url, height = height, url.orig = orig),
-    class = c('knit_embed_url', 'knit_asis')
+    class = c('knit_embed_url', 'knit_asis_url')
   )
 }
 
