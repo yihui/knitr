@@ -18,6 +18,8 @@
 
 ## BUG FIXES
 
+- Fix an issue with the RStudio IDE when using `knitr::include_url()` or `knitr::include_app()` in interactive Notebook mode. This will no more cause an error but print the list object as is (thanks, @systemnova, #2015).
+
 - Fix a regression with `fig.keep` chunk option used in chunks with only one figure where the figure was not showing in output (thanks, @fmichonneau, #1993).
 
 # CHANGES IN knitr VERSION 1.33
