@@ -533,12 +533,12 @@ sew.warning = function(x, options, ...) {
     call = deparse(x$call)[1]
     if (call == 'eval(expr, envir, enclos)') '' else paste(' in', call)
   }
-  msg_wrap(sprintf('Warning%s: %s', call, x$message), 'warning', options)
+  msg_wrap(sprintf('Warning%s: %s', call, conditionMessage(x)), 'warning', options)
 }
 
 #' @export
 sew.message = function(x, options, ...) {
-  msg_wrap(paste(x$message, collapse = ''), 'message', options)
+  msg_wrap(paste(conditionMessage(x), collapse = ''), 'message', options)
 }
 
 #' @export
