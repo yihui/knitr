@@ -538,7 +538,7 @@ sew.warning = function(x, options, ...) {
 
 #' @export
 sew.message = function(x, options, ...) {
-  msg_wrap(paste(x$message, collapse = ''), 'message', options)
+  msg_wrap(paste(conditionMessage(x), collapse = ''), 'message', options)
 }
 
 #' @export
