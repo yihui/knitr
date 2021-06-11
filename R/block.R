@@ -527,7 +527,7 @@ inline_exec = function(
   loc = block$location
   for (i in 1:n) {
     res = hook_eval(code[i], envir)
-    if (inherits(res, 'knit_asis')) res = sew(res, inline = TRUE)
+    if (inherits(res, c('knit_asis', 'knit_asis_url'))) res = sew(res, inline = TRUE)
     tryCatch(as.character(res), error = function(e) {
       stop2("The inline value cannot be coerced to character: ", code[i])
     })
