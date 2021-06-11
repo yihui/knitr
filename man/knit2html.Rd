@@ -57,7 +57,7 @@ The \pkg{markdown} package is for R Markdown v1, which is much less
 }
 \examples{
 # a minimal example
-writeLines(c("# hello markdown", "```{r hello-random, echo=TRUE}", "rnorm(5)", "```"), 
+writeLines(c("# hello markdown", "```{r hello-random, echo=TRUE}", "rnorm(5)", "```"),
     "test.Rmd")
 knit2html("test.Rmd")
 if (interactive()) browseURL("test.html")

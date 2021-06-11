@@ -33,6 +33,6 @@ Currently it does not wrap blockquotes or lists (ordered or unordered).
   This feature may or may not be added in the future.
 }
 \examples{
-wrap_rmd(text = c("```", "1+1", "```", "- a list item", "> a quote", "", 
+wrap_rmd(text = c("```", "1+1", "```", "- a list item", "> a quote", "",
     paste(rep("this is a normal paragraph", 5), collapse = " ")))
 }

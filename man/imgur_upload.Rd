@@ -44,7 +44,7 @@ dev.off()
 res = imgur_upload(f)
 res  # link to original URL of the image
 attr(res, "XML")  # all information
-if (interactive()) 
+if (interactive())
     browseURL(res)
 
 # to use your own key
