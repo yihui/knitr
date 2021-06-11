@@ -16,6 +16,8 @@
 
 - The chunk option `strip.white = TRUE` used to work only when the chunk option `collapse = FALSE`. Now the two options are independent, i.e., `strip.white` also works when `collapse = TRUE` (thanks, @kbvernon, #2011).
 
+- When building R Markdown vignettes but Pandoc is not available, the vignette engine will emit a message instead of a warning before falling back to using the **markdown** package.
+
 ## BUG FIXES
 
 - Fix an issue with the RStudio IDE when using `knitr::include_url()` or `knitr::include_app()` in interactive Notebook mode. This will no more cause an error but print the list object as is (thanks, @systemnova, #2015).

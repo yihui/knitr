@@ -80,6 +80,13 @@ vtangle_empty = function(file, ...) {
   return()
 }
 
+# when neither Pandoc nor markdown is available, just silently skip the vignette
+vweave_empty = function(file, ...) {
+  out = with_ext(file, 'html')
+  writeLines('The vignette could not be built because Pandoc is not available.', out)
+  out
+}
+
 register_vignette_engines = function(pkg) {
   # the default engine
   vig_engine('knitr', vweave, '[.]([rRsS](nw|tex)|[Rr](md|html|rst))$')
@@ -90,11 +97,11 @@ register_vignette_engines = function(pkg) {
     if (pandoc_available()) {
       vweave_rmarkdown(...)
     } else {
-      (if (is.na(Sys.getenv('CI', NA))) warning2 else stop2)(
+      (if (is.na(Sys.getenv('CI', NA))) message else stop2)(
         'Pandoc is required to build R Markdown vignettes but not available. ',
         'Please make sure it is installed.'
       )
-      vweave(...)
+      if (has_package('markdown')) vweave(...) else vweave_empty(...)
     }
   } else {
     # TODO: no longer allow fallback to R Markdown v1
