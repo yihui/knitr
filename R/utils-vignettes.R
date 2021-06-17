@@ -39,7 +39,11 @@ vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) 
 }
 
 vtangle = function(file, ..., encoding = 'UTF-8', quiet = FALSE) {
-  if (is_R_CMD_check()) {
+  if (is_R_CMD_check() && !file.exists(with_ext(file, 'Rout.save'))) {
+    # Inside CMD check, and no .Rout.save file to compare with, so return an
+    # empty script to avoid errors from vignettes that won't tangle correctly.
+    # NB: This is ~equivalent to setting _R_CHECK_VIGNETTES_SKIP_RUN_MAYBE_=TRUE
+    # and if that becomes the default this is redundant.
     file = with_ext(file, 'R')
     file.create(file)
     return(file)

@@ -24,6 +24,8 @@
 
 - Fix a regression with `fig.keep` chunk option used in chunks with only one figure where the figure was not showing in output (thanks, @fmichonneau, #1993).
 
+- Allow vignettes to be tangled (and output compared) in `R CMD check` if they have a corresponding `.Rout.save` (thanks, @lentinj, #2018).
+
 # CHANGES IN knitr VERSION 1.33
 
 ## NEW FEATURES
