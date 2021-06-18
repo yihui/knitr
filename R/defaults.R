@@ -181,12 +181,6 @@ opts_knit = new_defaults(list(
 # tangle: whether I'm in tangle mode; child: whether I'm in child document mode;
 # parent: whether I need to add parent preamble to the child output
 
-# you may modify these options in options(knitr.package.foo)
-opts_knit_names = c(
-  'progress', 'verbose', 'upload.fun', 'animation.fun', 'global.device',
-  'eval.after', 'concordance', 'documentation', 'aliases', 'self.contained',
-  'unnamed.chunk.label', 'label.prefix'
-)
 # adjust opts_chunk and opts_knit according to options(), e.g.
 # options(knitr.package.progress = FALSE) --> opts_knit$set(progress = FALSE),
 # and options(knitr.chunk.tidy) --> opts_chunk$set(tidy = TRUE); this makes it
@@ -201,18 +195,6 @@ adjust_opts_knit = function() {
   nms = names(opts)
   if (length(nms <- grep('^knitr[.]', nms, value = TRUE)) == 0) return()
   opts = opts[nms]
-  # for backward compatibility
-  i = grep('^knitr[.](package|chunk)[.]', nms, invert = TRUE)
-  i = intersect(i, which(nms[i] %in% paste('knitr', opts_knit_names, sep = '.')))
-  if (length(i)) {
-    nms.pkg = sub('^knitr.', 'knitr.package.', nms[i])
-    warning2(
-      'These options must be renamed (from left to right):\n',
-      formatUL(sprintf('%s => %s', nms[i], nms.pkg)), immediate. = TRUE
-    )
-    Sys.sleep(10)
-    names(opts)[i] = nms[i] = nms.pkg
-  }
   # strip off knitr.chunk from option names and set chunk options
   i = grep('^knitr[.]chunk[.]', nms)
   opts_chunk$set(setNames(opts[i], sub('^knitr[.]chunk[.]', '', nms[i])))
