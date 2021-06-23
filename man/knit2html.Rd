@@ -22,7 +22,8 @@ knit2html(
 function will try to guess a default, which will be under the current
 working directory.}
 
-\item{...}{Options passed to \code{markdown::\link{markdownToHTML}()}.}
+\item{...}{Options passed to
+\code{markdown::\link[markdown]{markdownToHTML}()}.}
 
 \item{envir}{Environment in which code chunks are to be evaluated, for
 example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
@@ -46,8 +47,8 @@ If the argument \code{text} is NULL, a character string (HTML code)
 }
 \description{
 This is a convenience function to knit the input markdown source and call
-\code{markdown::\link{markdownToHTML}()} in the \pkg{markdown} package to
-convert the result to HTML.
+\code{markdown::\link[markdown]{markdownToHTML}()} in the \pkg{markdown}
+package to convert the result to HTML.
 }
 \note{
 The \pkg{markdown} package is for R Markdown v1, which is much less
@@ -65,5 +66,5 @@ if (interactive()) browseURL("test.html")
 unlink(c("test.Rmd", "test.html", "test.md"))
 }
 \seealso{
-\code{\link{knit}}, \code{markdown::\link{markdownToHTML}}
+\code{\link{knit}}, \code{markdown::\link[markdown]{markdownToHTML}}
 }

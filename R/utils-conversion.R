@@ -86,14 +86,15 @@ knit2pdf = function(
 #' Convert markdown to HTML using knit() and markdownToHTML()
 #'
 #' This is a convenience function to knit the input markdown source and call
-#' \code{markdown::\link{markdownToHTML}()} in the \pkg{markdown} package to
-#' convert the result to HTML.
+#' \code{markdown::\link[markdown]{markdownToHTML}()} in the \pkg{markdown}
+#' package to convert the result to HTML.
 #' @inheritParams knit
-#' @param ... Options passed to \code{markdown::\link{markdownToHTML}()}.
+#' @param ... Options passed to
+#'   \code{markdown::\link[markdown]{markdownToHTML}()}.
 #' @param force_v1 Boolean; whether to force rendering the input document as an
 #'   R Markdown v1 document, even if it is for v2.
 #' @export
-#' @seealso \code{\link{knit}}, \code{markdown::\link{markdownToHTML}}
+#' @seealso \code{\link{knit}}, \code{markdown::\link[markdown]{markdownToHTML}}
 #' @return If the argument \code{text} is NULL, a character string (HTML code)
 #'   is returned; otherwise the result is written into a file and the filename
 #'   is returned.
