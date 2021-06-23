@@ -96,8 +96,7 @@ register_vignette_engines = function(pkg) {
   vig_engine('knitr', vweave, '[.]([rRsS](nw|tex)|[Rr](md|html|rst))$')
   vig_engine('docco_linear', vweave_docco_linear, '[.][Rr](md|markdown)$')
   vig_engine('docco_classic', vweave_docco_classic, '[.][Rr]mk?d$')
-  vig_engine('rmarkdown', function(...) if (has_package('rmarkdown')) {
-    test_vig_dep('rmarkdown')
+  vig_engine('rmarkdown', function(...) {
     if (pandoc_available()) {
       vweave_rmarkdown(...)
     } else {
@@ -107,10 +106,6 @@ register_vignette_engines = function(pkg) {
       )
       if (has_package('markdown')) vweave(...) else vweave_empty(...)
     }
-  } else {
-    # TODO: no longer allow fallback to R Markdown v1
-    test_vig_dep('rmarkdown')
-    vweave(...)
   }, '[.][Rr](md|markdown)$')
   # vignette engines that disable tangle
   vig_list = tools::vignetteEngine(package = 'knitr')

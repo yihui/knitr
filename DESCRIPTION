@@ -112,12 +112,12 @@ Imports:
     evaluate (>= 0.10),
     highr,
     methods,
-    markdown,
     stringr (>= 0.6),
     yaml (>= 2.1.19),
     xfun (>= 0.21),
     tools
 Suggests:
+    markdown,
     formatR,
     testit,
     digest,
