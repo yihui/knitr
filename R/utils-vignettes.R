@@ -101,7 +101,7 @@ register_vignette_engines = function(pkg) {
     if (pandoc_available()) {
       vweave_rmarkdown(...)
     } else {
-      (if (is.na(Sys.getenv('CI', NA))) message else stop2)(
+      (if (is_R_CMD_check()) message else stop2)(
         'Pandoc is required to build R Markdown vignettes but not available. ',
         'Please make sure it is installed.'
       )
