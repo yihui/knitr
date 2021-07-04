@@ -36,9 +36,22 @@ assert('kable() does not add extra spaces to character columns', {
 \\hline
 x & y\\\\
 \\hline
-1.20 & fooooo\\\\
+\\(1.20\\) & fooooo\\\\
 \\hline
-4.87 & bar\\\\
+\\(4.87\\) & bar\\\\
+\\hline
+\\end{tabular}'
+})
+
+assert('kable() in LaTeX mode formats minus signs and decimal and thousands separators correctly', {
+  kable2(data.frame(x = c(-1111, 2222), y = c(1111, -0.5), z = c('text,comma', '-0.5')), 'latex', format.arg=list(big.mark = ',')) %==% '
+\\begin{tabular}{r|r|l}
+\\hline
+x & y & z\\\\
+\\hline
+\\(-1{,}111\\) & \\(1{,}111.0\\) & text,comma\\\\
+\\hline
+\\(2{,}222\\) & \\(-0.5\\) & -0.5\\\\
 \\hline
 \\end{tabular}')
 })
@@ -89,11 +102,11 @@ assert('kable(format = "latex", linesep = ...) works', {
 \\hline
 x\\\\
 \\hline
-1\\\\
-2\\\\
-3\\\\
+\\(1\\)\\\\
+\\(2\\)\\\\
+\\(3\\)\\\\
 \\midrule
-4\\\\
+\\(4\\)\\\\
 \\hline
 \\end{tabular}')
 })

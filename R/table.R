@@ -144,6 +144,7 @@ kable = function(
     x = cbind(' ' = rownames(x), x)
     if (!is.null(col.names)) col.names = c(' ', col.names)
     if (!is.null(align)) align = c('l', align)  # left align row names
+    isn = c(FALSE, isn)
   }
   n = nrow(x)
   x = replace_na(to_character(x), is.na(x))
@@ -157,7 +158,7 @@ kable = function(
   if (format == 'simple' && nrow(x) == 0) format = 'pipe'
   res = do.call(
     paste('kable', format, sep = '_'),
-    list(x = x, caption = caption, escape = escape, ...)
+    list(x = x, caption = caption, escape = escape, isn = isn,...)
   )
   structure(res, format = format, class = 'knitr_kable')
 }
@@ -281,7 +282,7 @@ kable_latex = function(
   midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
-  escape = TRUE
+  escape = TRUE, isn = logical(ncol(x))
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
@@ -308,6 +309,7 @@ kable_latex = function(
   linesep = ifelse(linesep == "", linesep, paste0('\n', linesep))
 
   x = escape_latex_table(x, escape, booktabs)
+  x[, isn] = paste0('\\(', gsub(',', '{,}', x[, isn], fixed=TRUE), '\\)')
   if (!is.character(toprule)) toprule = NULL
   if (!is.character(bottomrule)) bottomrule = NULL
   tabular = if (longtable) 'longtable' else 'tabular'
