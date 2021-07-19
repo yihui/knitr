@@ -99,6 +99,10 @@ write_bib = function(
       b['author'] = sub('Duncan Temple Lang', 'Duncan {Temple Lang}', b['author'])
       # remove the ugly single quotes required by CRAN policy
       b['title'] = gsub("(^|\\W)'([^']+)'(\\W|$)", '\\1\\2\\3', b['title'])
+      # keep the first URL if multiple are provided
+      if (!is.na(b['note'])) b['note'] = gsub(
+        '(^.*?https?://.*?),\\s+https?://.*?(},\\s*)$', '\\1\\2', b['note']
+      )
       if (!('year' %in% names(b))) b['year'] = .this.year
       b
     })
