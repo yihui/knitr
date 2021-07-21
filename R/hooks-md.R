@@ -43,8 +43,8 @@ hook_plot_md_base = function(x, options) {
   if (options$fig.show == 'animate') return(hook_plot_html(x, options))
 
   base = opts_knit$get('base.url') %n% ''
-  cap = .img.cap(options)
-  alt = .img.cap(options, alt = TRUE)
+  cap = .img.cap(options, alt = TRUE)
+  alt = .img.alt(options)
 
   w = options[['out.width']]; h = options[['out.height']]
   s = options$out.extra; a = options$fig.align
@@ -84,10 +84,12 @@ hook_plot_md_base = function(x, options) {
     } else {
       paste0(d1, img, if (plot2) paste0('\n', d2, '\n</div>'))
     }
-  } else add_link(.img.tag(
-    .upload.url(x), w, h, alt,
-    c(s, sprintf('style="%s"', css_align(a)))
-  ))
+  } else {
+    add_link(.img.tag(
+      .upload.url(x), w, h, cap, alt,
+      c(s, sprintf('style="%s"', css_align(a)))
+    ))
+  }
 }
 
 hook_plot_md_pandoc = function(x, options) {
