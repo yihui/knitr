@@ -6,6 +6,8 @@
 
 - For the `tikz` engine, the class options of the `standalone` document classs can be specified via the chunk option `engine.opts$classoption` (thanks, @XiangyunHuang, #1985). The default value is `tikz`, i.e., `\documentclass[tikz]{standalone}` is used by default.
 
+- Added a new `targets` engine (https://github.com/ropensci/targets/issues/503, @wlandau). Details: https://books.ropensci.org/targets/markdown.html.
+
 ## MAJOR CHANGES
 
 - An error is now thrown when an inline code result is not coercible to character. This has always been the assumed behavior but it happens to be different in certain formats with unknown automatic coercion. This is now enforced to prevent any unexpected output. An inline code expression must evaluate to a character vector or an object coercible by `as.character()` (#2006).

@@ -142,7 +142,8 @@ Suggests:
     sass,
     bslib,
     ragg,
-    styler (>= 1.2.0)
+    styler (>= 1.2.0),
+    targets (>= 0.6.0)
 License: GPL
 URL: https://yihui.org/knitr/
 BugReports: https://github.com/yihui/knitr/issues
