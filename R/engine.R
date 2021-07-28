@@ -765,6 +765,14 @@ eng_bslib = function(options) {
   eng_sxss(options)
 }
 
+# Target Markdown engine contributed by @wlandau
+# Thread: https://github.com/ropensci/targets/issues/503
+# Usage: https://books.ropensci.org/targets/markdown.html
+# Docs: https://docs.ropensci.org/targets/reference/tar_engine_knitr.html
+eng_targets = function(options) {
+  targets::tar_engine_knitr(options = options)
+}
+
 # set engines for interpreted languages
 local({
   for (i in c(
@@ -781,7 +789,7 @@ knit_engines$set(
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
   python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, R = eng_r,
-  bslib = eng_bslib
+  bslib = eng_bslib, targets = eng_targets
 )
 
 cache_engines$set(python = cache_eng_python)
