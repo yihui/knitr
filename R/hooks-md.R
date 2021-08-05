@@ -63,7 +63,7 @@ hook_plot_md_base = function(x, options) {
     res = sprintf('![%s](%s%s)', cap, base, .upload.url(x))
     if (!is.null(lnk) && !is.na(lnk)) res = sprintf('[%s](%s)', res, lnk)
     res = paste0(res, if (nocap) '<!-- -->' else '', if (is_latex_output()) ' ' else '')
-    return(res)
+    return(add_linebreak(res, options))
   }
   add_link = function(x) {
     if (is.null(lnk) || is.na(lnk)) return(x)
@@ -84,10 +84,10 @@ hook_plot_md_base = function(x, options) {
     } else {
       paste0(d1, img, if (plot2) paste0('\n', d2, '\n</div>'))
     }
-  } else add_link(.img.tag(
+  } else add_linebreak(add_link(.img.tag(
     .upload.url(x), w, h, alt,
     c(s, sprintf('style="%s"', css_align(a)))
-  ))
+  )), options)
 }
 
 hook_plot_md_pandoc = function(x, options) {
@@ -106,7 +106,22 @@ hook_plot_md_pandoc = function(x, options) {
   )
   if (at != '') at = paste0('{', at, '}')
 
-  sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at)
+  add_linebreak(sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at), options)
+}
+
+# Add linebreaks so to treat images as independent blocks
+add_linebreak <- function(x, options) {
+  fig.show = options$fig.show
+  fig.cur = options$fig.cur
+  fig.num = options$fig.num
+  print(c(fig.cur, fig.num))
+  if (fig.cur == 1 || fig.show != "hold") {
+    x = paste0("\n\n", x)
+  }
+  if (fig.cur == fig.num) {
+    x = paste0(x, "\n\n")
+  }
+  x
 }
 
 css_align = function(align) {
