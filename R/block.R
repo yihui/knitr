@@ -53,13 +53,14 @@ call_block = function(block) {
   # save current chunk options in opts_current
   opts_current$restore(params)
 
-  if (opts_knit$get("progress")) {
+  if (opts_knit$get("progress") && !is_R_CMD_check()) {
     set_knit_progress("chunk: ", label)
     if (opts_knit$get('verbose')) {
       code = knit_code$get(params$label)
-      if(is_blank(code)) break
-      for (i in seq_along(code)) {
-        set_knit_progress(code[[i]])
+      if(!is_blank(code)) {
+        for (i in seq_along(code)) {
+          set_knit_progress(code[[i]])
+        }
       }
     }
   }
@@ -520,7 +521,7 @@ merge_character = function(res) {
 }
 
 call_inline = function(block) {
-  if (opts_knit$get('progress')) print(block)
+  if (opts_knit$get('progress') && !is_R_CMD_check()) print(block)
   in_dir(input_dir(), inline_exec(block))
 }
 
