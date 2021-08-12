@@ -333,6 +333,8 @@ process_file = function(text, output) {
 
     if(inherits(res[[i]], "try-error")) {
       cat("\n")
+      setwd(wd)
+      cat(unlist(res[seq_len(i - 1L)]), sep = '\n', file = output %n% '')
       stop(
         "Quitting from lines ",
         paste(current_lines(i), collapse = '-'),
