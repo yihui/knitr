@@ -315,8 +315,20 @@ process_file = function(text, output) {
       , type = "message"
     )
 
+    if(length(messages) > 0L) {
+      message(
+        if (!opts_knit$get("verbose")) "\r" else "\n", strrep(" ", getOption("width")),
+        "\rMessages from lines ",
+        paste(current_lines(i), collapse = '-'),
+        " in ",
+        encodeString(knit_concord$get('infile'), quote = "'"),
+        ":",
+        appendLF = TRUE
+      )
+    }
+
     for (j in seq_along(messages)) {
-      message(if (!opts_knit$get("verbose")) "\r" else "\n", strrep(" ", getOption("width")), "\r", messages[[j]], appendLF = TRUE)
+      message("  ", messages[[j]], appendLF = TRUE)
     }
 
     if(inherits(res[[i]], "try-error")) {
