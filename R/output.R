@@ -245,7 +245,7 @@ knit = function(
   }
 
   progress = opts_knit$get('progress')
-  if (in.file && !quiet) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
+  if (in.file && !quiet) cat("processing file: ", input)
   res = process_file(text, output)
   res = one_string(knit_hooks$get('document')(res))
   if (tangle) res = c(params, res)
@@ -257,7 +257,7 @@ knit = function(
 
   if (in.file && is.character(output) && file.exists(output)) {
     concord_gen(input, output)
-    if (!quiet) message('output file: ', output, ifelse(progress, '\n', ''))
+    if (!quiet) cat("output file: ", output, "\n\n")
   }
 
   output %n% res
@@ -277,18 +277,20 @@ purl = function(..., documentation = 1L) {
 
 process_file = function(text, output) {
   groups = split_file(lines = text)
-  n = length(groups); res = character(n)
-  tangle = opts_knit$get('tangle')
+  n <- length(groups)
+  res <- character(n)
+  tangle <- opts_knit$get('tangle')
 
   # when in R CMD check, turn off the progress bar (R-exts said the progress bar
   # was not appropriate for non-interactive mode, and I don't want to argue)
-  progress = opts_knit$get('progress') && !is_R_CMD_check()
+  progress <- opts_knit$get('progress') && !is_R_CMD_check()
   if (progress) {
-    pb = txtProgressBar(0, n, char = '.', style = 3)
-    on.exit(close(pb), add = TRUE)
+    options(knitr.knit_progress = knit_progress(max = n))
+    on.exit(close(getOption("knitr.knit_progress")), add = TRUE)
   }
   wd = getwd()
-  for (i in 1:n) {
+
+  for (i in seq_len(n)) {
     if (!is.null(.knitEnv$terminate)) {
       if (!child_mode() || !.knitEnv$terminate_fully) {
         # reset the internal variable `terminate` in the top parent
@@ -298,9 +300,7 @@ process_file = function(text, output) {
       break  # must have called knit_exit(), so exit early
     }
     if (progress) {
-      setTxtProgressBar(pb, i)
-      if (!tangle) cat('\n')  # under tangle mode, only show one progress bar
-      flush.console()
+      set_knit_progress(i)
     }
     group = groups[[i]]
     res[i] = withCallingHandlers(

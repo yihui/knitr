@@ -53,7 +53,16 @@ call_block = function(block) {
   # save current chunk options in opts_current
   opts_current$restore(params)
 
-  if (opts_knit$get('progress')) print(block)
+  if (opts_knit$get("progress")) {
+    set_knit_progress("chunk: ", label)
+    if (opts_knit$get('verbose')) {
+      code = knit_code$get(params$label)
+      if(is_blank(code)) break
+      for (i in seq_along(code)) {
+        set_knit_progress(code[[i]])
+      }
+    }
+  }
 
   if (!is.null(params$child)) {
     if (!is_blank(params$code)) warning(
@@ -96,7 +105,7 @@ call_block = function(block) {
     if (cache$exists(hash, params$cache.lazy) &&
         isFALSE(params$cache.rebuild) &&
         params$engine != 'Rcpp') {
-      if (opts_knit$get('verbose')) message('  loading cache from ', hash)
+      if (opts_knit$get('verbose')) set_knit_progress(paste0("Loading cache from ", hash))
       cache$load(hash, lazy = params$cache.lazy)
       cache_engine(params)
       if (!params$include) return('')

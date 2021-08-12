@@ -222,16 +222,10 @@ parse_inline = function(input, patterns) {
 
 print.inline = function(x, ...) {
   if (nrow(x$location)) {
-    cat('   ')
     if (opts_knit$get('verbose')) {
-      cat(stringr::str_pad(' inline R code fragments ',
-                  getOption('width') - 10L, 'both', '-'), '\n')
-      cat(sprintf('    %s:%s %s', x$location[, 1], x$location[, 2], x$code),
-          sep = '\n')
-      cat('  ', stringr::str_dup('-', getOption('width') - 10L), '\n')
-    } else cat('inline R code fragments\n')
-  } else cat('  ordinary text without R code\n')
-  cat('\n')
+      set_knit_progress("inline code: ", sprintf("%s:%s %s", x$location[, 1], x$location[, 2], x$code))
+    } else  set_knit_progress('inline code')
+  } else set_knit_progress('text')
 }
 
 #' Read chunks from an external script
