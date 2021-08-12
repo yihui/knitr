@@ -278,7 +278,7 @@ purl = function(..., documentation = 1L) {
 process_file = function(text, output) {
   groups = split_file(lines = text)
   n <- length(groups)
-  res <- character(n)
+  res <- vector(mode = "list", length = n)
   tangle <- opts_knit$get('tangle')
 
   # when in R CMD check, turn off the progress bar (R-exts said the progress bar
@@ -289,12 +289,13 @@ process_file = function(text, output) {
     on.exit(close(getOption("knitr.knit_progress")), add = TRUE)
   }
   wd = getwd()
+  on.exit(setwd(wd))
 
   for (i in seq_len(n)) {
     if (!is.null(.knitEnv$terminate)) {
       if (!child_mode() || !.knitEnv$terminate_fully) {
         # reset the internal variable `terminate` in the top parent
-        res[i] = one_string(.knitEnv$terminate)
+        res[[i]] = one_string(.knitEnv$terminate)
         knit_exit(NULL, NULL)
       }
       break  # must have called knit_exit(), so exit early
@@ -302,29 +303,36 @@ process_file = function(text, output) {
     if (progress && !child_mode()) {
       set_knit_progress(i)
     }
-    group = groups[[i]]
 
+    # first capture messages, then output them
     messages <- capture.output(
       {
-      res[i] = withCallingHandlers(
-        if (tangle) process_tangle(group) else process_group(group),
-        error = function(e) {
-          setwd(wd)
-          cat(res, sep = '\n', file = output %n% '')
-          message(
-            'Quitting from lines ', paste(current_lines(i), collapse = '-'),
-            ' (', knit_concord$get('infile'), ') '
-          )
-        }
-      )
+        res[[i]] = try(
+          expr = if (tangle) process_tangle(groups[[i]]) else process_group(groups[[i]]),
+          silent = TRUE
+        )
       }
       , type = "message"
     )
-    if(length(messages)) {
-      cat("\r", strrep(" ", getOption("width")))
-      cat("\r", messages, sep = "\n")
+
+    for (j in seq_along(messages)) {
+      message(if (!opts_knit$get("verbose")) "\r" else "\n", strrep(" ", getOption("width")), "\r", messages[[j]], appendLF = TRUE)
+    }
+
+    if(inherits(res[[i]], "try-error")) {
+      cat("\n")
+      stop(
+        "Quitting from lines ",
+        paste(current_lines(i), collapse = '-'),
+        " in ",
+        encodeString(knit_concord$get('infile'), quote = "'"),
+        ":\n",
+        attr(res[[i]], "condition")$message,
+        call. = FALSE
+      )
     }
   }
+  res <- unlist(res)
 
   if (!tangle) res = insert_header(res)  # insert header
   # output line numbers
