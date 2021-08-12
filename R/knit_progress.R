@@ -1,4 +1,7 @@
 
+# Functions in this file are derived from utils::txtProgressBar(),
+# author: R Core Team and contributors worldwide
+
 knit_progress <- function (
   max = 1
   , title
