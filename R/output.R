@@ -289,7 +289,6 @@ process_file = function(text, output) {
     on.exit(close(getOption("knitr.knit_progress")), add = TRUE)
   }
   wd = getwd()
-  on.exit(setwd(wd))
 
   for (i in seq_len(n)) {
     if (!is.null(.knitEnv$terminate)) {
