@@ -68,6 +68,7 @@ set_knit_progress.character <- function(x, ...) {
   x <- paste0(x, ..., collapse = "")
 
   pb <- getOption("knitr.knit_progress")
+  if(is.null(pb)) return()
   oldval <- pb$getVal()
   oldtext <- pb$getText()
   pb$up(value = oldval, text = x)
@@ -76,6 +77,7 @@ set_knit_progress.character <- function(x, ...) {
 
 set_knit_progress.numeric <- function(x, ...) {
   pb <- getOption("knitr.knit_progress")
+  if(is.null(pb)) return()
   oldval <- pb$getVal()
   oldtext <- pb$getText()
   pb$up(value = x, text = oldtext)
