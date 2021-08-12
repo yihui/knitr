@@ -319,6 +319,7 @@ process_file = function(text, output) {
   if (!tangle) res = insert_header(res)  # insert header
   # output line numbers
   if (concord_mode()) knit_concord$set(outlines = line_count(res))
+  close(getOption("knitr.knit_progress")) # ensures that cat('\n') is executed before `print_knitlog()`
   print_knitlog()
   if (tangle) res = strip_white(res)
 
