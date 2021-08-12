@@ -17,7 +17,7 @@ knit_progress <- function (
   char = "."
 
   width <- floor(getOption("width") * 2/5)
-  text_width <- getOption("width") - width - 6
+  text_width <- getOption("width") - width - 7
 
 
   up <- function(value, text, carriage_return = "\r ") {

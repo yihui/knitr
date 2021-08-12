@@ -73,6 +73,7 @@ call_block = function(block) {
     if (!params$eval) return('')
     cmds = lapply(sc_split(params$child), knit_child, options = block$params)
     out = one_string(unlist(cmds))
+    set_knit_progress("child: ", params$child)
     return(out)
   }
 

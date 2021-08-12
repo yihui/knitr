@@ -245,7 +245,7 @@ knit = function(
   }
 
   progress = opts_knit$get('progress')
-  if (in.file && !quiet) cat("processing file: ", input)
+  if (in.file && !quiet && !child_mode()) cat("processing file: ", input)
   res = process_file(text, output)
   res = one_string(knit_hooks$get('document')(res))
   if (tangle) res = c(params, res)
@@ -284,7 +284,7 @@ process_file = function(text, output) {
   # when in R CMD check, turn off the progress bar (R-exts said the progress bar
   # was not appropriate for non-interactive mode, and I don't want to argue)
   progress <- opts_knit$get('progress') && !is_R_CMD_check()
-  if (progress) {
+  if (progress && !child_mode()) {
     options(knitr.knit_progress = knit_progress(max = n))
     on.exit(close(getOption("knitr.knit_progress")), add = TRUE)
   }
@@ -299,27 +299,37 @@ process_file = function(text, output) {
       }
       break  # must have called knit_exit(), so exit early
     }
-    if (progress) {
+    if (progress && !child_mode()) {
       set_knit_progress(i)
     }
     group = groups[[i]]
-    res[i] = withCallingHandlers(
-      if (tangle) process_tangle(group) else process_group(group),
-      error = function(e) {
-        setwd(wd)
-        cat(res, sep = '\n', file = output %n% '')
-        message(
-          'Quitting from lines ', paste(current_lines(i), collapse = '-'),
-          ' (', knit_concord$get('infile'), ') '
-        )
+
+    messages <- capture.output(
+      {
+      res[i] = withCallingHandlers(
+        if (tangle) process_tangle(group) else process_group(group),
+        error = function(e) {
+          setwd(wd)
+          cat(res, sep = '\n', file = output %n% '')
+          message(
+            'Quitting from lines ', paste(current_lines(i), collapse = '-'),
+            ' (', knit_concord$get('infile'), ') '
+          )
+        }
+      )
       }
+      , type = "message"
     )
+    if(length(messages)) {
+      cat("\r", strrep(" ", getOption("width")))
+      cat("\r", messages, sep = "\n")
+    }
   }
 
   if (!tangle) res = insert_header(res)  # insert header
   # output line numbers
   if (concord_mode()) knit_concord$set(outlines = line_count(res))
-  if(progress) close(getOption("knitr.knit_progress")) # ensures that cat('\n') is executed before `print_knitlog()`
+  if(progress && !child_mode()) close(getOption("knitr.knit_progress")) # ensures that cat('\n') is executed before `print_knitlog()`
   print_knitlog()
   if (tangle) res = strip_white(res)
 
