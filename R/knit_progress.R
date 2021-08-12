@@ -36,7 +36,7 @@ knit_progress <- function (
 
     cat(
       carriage_return
-      , encodeString(stringr::str_trunc(text, width = text_width), width = text_width)
+      , stringr::str_trunc(encodeString(text, width = text_width), width = text_width)
       , "|"
       , rep.int(char, nb)
       , rep.int(" ", width - nb)
