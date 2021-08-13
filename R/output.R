@@ -278,7 +278,7 @@ purl = function(..., documentation = 1L) {
 process_file = function(text, output) {
   groups = split_file(lines = text)
   n <- length(groups)
-  res <- vector(mode = "list", length = n)
+  res <- character(n)
   tangle <- opts_knit$get('tangle')
 
   # when in R CMD check, turn off the progress bar (R-exts said the progress bar
@@ -303,16 +303,36 @@ process_file = function(text, output) {
       set_knit_progress(i)
     }
 
+    e.handler <- function(e) {
+      setwd(wd)
+      cat(res, sep = '\n', file = output %n% '')
+      message(
+        'Quitting from lines ', paste(current_lines(i), collapse = '-'),
+        ' (', knit_concord$get('infile'), ') '
+      )
+    }
+    message_env <- new.env()
+    message_env$messages <- character()
+    # message_env$warnings <- character()
+
+    # w.handler <- function(w){ # warning handler, courtesy of Martin Maechler
+    #   message_env$warnings <<- c(evalq(warnings, message_env), w$message)
+    #   invokeRestart("muffleWarning")
+    # }
+    m.handler <- function(m){ # warning handler, courtesy of Martin Maechler
+      message_env$messages <<- c(evalq(messages, message_env), m$message)
+      invokeRestart("muffleMessage")
+    }
+
     # first capture messages, then output them
-    messages <- capture.output(
-      {
-        res[[i]] = try(
-          expr = if (tangle) process_tangle(groups[[i]]) else process_group(groups[[i]]),
-          silent = TRUE
-        )
-      }
-      , type = "message"
+    res[i] = withCallingHandlers(
+      if (tangle) process_tangle(groups[[i]]) else process_group(groups[[i]]),
+      error   = e.handler,
+      # warning = w.handler,
+      message = m.handler
     )
+
+    messages <- message_env$messages
 
     if(length(messages) > 0L) {
       message(
@@ -327,25 +347,9 @@ process_file = function(text, output) {
     }
 
     for (j in seq_along(messages)) {
-      message("  ", messages[[j]], appendLF = TRUE)
-    }
-
-    if(inherits(res[[i]], "try-error")) {
-      cat("\n")
-      setwd(wd)
-      cat(unlist(res[seq_len(i - 1L)]), sep = '\n', file = output %n% '')
-      stop(
-        "Quitting from lines ",
-        paste(current_lines(i), collapse = '-'),
-        " in ",
-        encodeString(knit_concord$get('infile'), quote = "'"),
-        ":\n",
-        attr(res[[i]], "condition")$message,
-        call. = FALSE
-      )
+      message("  ", messages[[j]], appendLF = FALSE)
     }
   }
-  res <- unlist(res)
 
   if (!tangle) res = insert_header(res)  # insert header
   # output line numbers
@@ -825,3 +829,26 @@ knit_meta_add = function(meta, label = '') {
   }
   .knitEnv$meta
 }
+
+# tryCatch.M.W.E <- function(expr) {
+#   w.handler <- function(w){ # warning handler
+#     cat(w$message, "\n")
+#     invokeRestart("muffleWarning")
+#   }
+#   m.handler <- function(m) {
+#     cat(m$message, "\n")
+#     invokeRestart("muffleMessage")
+#   }
+#   list(value = withCallingHandlers(
+#     tryCatch(expr, error = function(e) e),
+#       warning = w.handler,
+#       message = m.handler
+#     )
+#   )
+# }
+#
+# res <- tryCatch.M.W.E(expr = {
+#   warning("first warning")
+#   warning("second warning")
+#   message("first message")
+# })
