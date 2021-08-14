@@ -333,6 +333,7 @@ process_file = function(text, output) {
     )
 
     messages <- message_env$messages
+    # warnings <- message_env$warnings
 
     if(length(messages) > 0L) {
       message(
@@ -349,6 +350,23 @@ process_file = function(text, output) {
     for (j in seq_along(messages)) {
       message("  ", messages[[j]], appendLF = FALSE)
     }
+
+    # if(length(warnings) > 0L) {
+    #   warning(
+    #     if (!opts_knit$get("verbose")) "\r" else "\n", strrep(" ", getOption("width")),
+    #     "\rWarnings from lines ",
+    #     paste(current_lines(i), collapse = '-'),
+    #     " in ",
+    #     encodeString(knit_concord$get('infile'), quote = "'"),
+    #     ":",
+    #     immediate. = TRUE,
+    #     call. = FALSE
+    #   )
+    # }
+
+    # for (j in seq_along(warnings)) {
+    #   message("  ", warnings[[j]])
+    # }
   }
 
   if (!tangle) res = insert_header(res)  # insert header
@@ -830,25 +848,3 @@ knit_meta_add = function(meta, label = '') {
   .knitEnv$meta
 }
 
-# tryCatch.M.W.E <- function(expr) {
-#   w.handler <- function(w){ # warning handler
-#     cat(w$message, "\n")
-#     invokeRestart("muffleWarning")
-#   }
-#   m.handler <- function(m) {
-#     cat(m$message, "\n")
-#     invokeRestart("muffleMessage")
-#   }
-#   list(value = withCallingHandlers(
-#     tryCatch(expr, error = function(e) e),
-#       warning = w.handler,
-#       message = m.handler
-#     )
-#   )
-# }
-#
-# res <- tryCatch.M.W.E(expr = {
-#   warning("first warning")
-#   warning("second warning")
-#   message("first message")
-# })
