@@ -20,7 +20,7 @@ knit_progress <- function (
   text_width <- getOption("width") - width - 8
 
 
-  up <- function(value, text, carriage_return = "\r ") {
+  up <- function(value, text, carriage_return = "\r") {
 
     nb <- round(width * value/max)
     pc <- round(100 * value/max)
@@ -28,7 +28,7 @@ knit_progress <- function (
     if (nb == .nb && pc == .pc && text == .text) return()
     if (!is.finite(value) || value > max) stop("knitr::knit_progress() 'value' is ", value)
 
-    if(isTRUE(knitr::opts_knit$get("verbose")) && text != .text) carriage_return <- "\n "
+    if(isTRUE(knitr::opts_knit$get("verbose")) && text != .text) carriage_return <- "\n"
 
     .text <<- text
     .val <<- value
