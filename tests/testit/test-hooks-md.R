@@ -19,7 +19,8 @@ img_output = function(path, opts = list()) {
 }
 
 assert('include_graphics() includes custom images correctly', {
-  (img_output('a.png') %==% '![](a.png)')
+  (img_output('a.png', list(fig.cur = 1L, fig.num = 1L)) %==% '\n\n![](a.png)\n\n')
+  (img_output(c('a.png', 'b.png'), list(fig.cur = 1L, fig.num = 2L)) %==% '\n\n![](a.png)\n\n![](b.png)\n\n')
   (img_output(c('a.png', 'b.png'), list(fig.show = 'hold')) %==% '![](a.png)![](b.png)')
   (img_output('a.png', list(fig.cap = 'foo bar')) %==% '![foo bar](a.png)')
   (img_output('a.png', list(out.width = '50%')) %==% '<img src="a.png" width="50%" />')
