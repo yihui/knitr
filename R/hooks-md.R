@@ -114,7 +114,6 @@ add_linebreak <- function(x, options) {
   fig.show = options$fig.show
   fig.cur = options$fig.cur
   fig.num = options$fig.num
-  print(c(fig.cur, fig.num))
   if (fig.cur == 1 || fig.show != "hold") {
     x = paste0("\n\n", x)
   }
