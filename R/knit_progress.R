@@ -55,7 +55,7 @@ knit_progress <- function (
     .killed <<- TRUE
   }
 
-  up(value = 0, text = "Knitting...", carriage_return = "\n ")
+  up(value = 0, text = "Knitting...", carriage_return = "\n")
   structure(list(getVal = getVal, getText = getText, up = up, kill = kill), class = "txtProgressBar")
 }
 
