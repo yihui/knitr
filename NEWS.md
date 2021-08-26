@@ -10,6 +10,8 @@
 
 - An error is now thrown when an inline code result is not coercible to character. This has always been the assumed behavior but it happens to be different in certain formats with unknown automatic coercion. This is now enforced to prevent any unexpected output. An inline code expression must evaluate to a character vector or an object coercible by `as.character()` (#2006).
 
+- The **markdown** package has been moved from `Imports` to `Suggests` in **knitr**'s `DESCRIPTION`, which means it is no longer a hard dependency but has become a soft dependency of **knitr** (#1864).
+
 - For R packages that use the `knitr::rmarkdown` engine to build their vignettes, `rmarkdown` must be declared as a dependency in the package `DESCRIPTION` (e.g., in `Suggests`). Previously, **knitr** would fall back to using the **markdown** package to build vignettes if **rmarkdown** is not declared (#1864, #2020).
 
 - `write_bib()` only uses the first URL if multiple are found in a package (#2028).
