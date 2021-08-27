@@ -8,6 +8,8 @@
 
 - Added a new `targets` engine (https://github.com/ropensci/targets/issues/503, @wlandau). Details: https://books.ropensci.org/targets/markdown.html.
 
+- The [chunk option `cache.globals`](https://yihui.org/knitr/options/) can take values `TRUE` and `FALSE` now (in addition to a character vector). When `FALSE`, it tries to find all symbols in the code chunk, no matter if they are local or global variables. When `NULL` or `TRUE`, it tries to find all global variables (thanks, @knokknok, #1898).
+
 ## MAJOR CHANGES
 
 - An error is now thrown when an inline code result is not coercible to character. This has always been the assumed behavior but it happens to be different in certain formats with unknown automatic coercion. This is now enforced to prevent any unexpected output. An inline code expression must evaluate to a character vector or an object coercible by `as.character()` (#2006).
@@ -153,7 +155,6 @@
 - Added `knitr::hooks_*()` functions to get a list of output hooks for a specific format. Previously, these hooks only exist inside the `knitr::render_*()` functions, and users do not have direct access to them. Now they can be accessed directly, e.g., via `knitr::hooks_markdown()` to get a list of output hooks for R Markdown documents. You can also set the output hooks individually, e.g., `knitr::knit_hooks$set(knitr::hooks_markdown()['source'])` only sets the _source_ ouput hook. See more on output hooks at https://yihui.org/knitr/hooks/#output-hooks and https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html (thanks, @cderv, #1889).
 
 - Added an argument `lib.loc` to `knitr::write_bib()`.
-- Overloaded chunk option `cache.globals`. When `FALSE`, now increases sensitivity of cache invalidation; see #1403 for an example of issue when `NULL`or `TRUE`, and #1708 when `FALSE` (thanks, @knokknok).
 
 ## BUG FIXES
 
