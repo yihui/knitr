@@ -225,16 +225,6 @@ format_sci = function(x, ...) {
   vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 
-# absolute path?
-is_abs_path = function(x) {
-  if (is_windows()) grepl('^(\\\\|[A-Za-z]:)', x) else grepl('^[/~]', x)
-}
-
-# paths of web resources?
-is_web_path = function(x) {
-  grepl('^(f|ht)tps?://', x)
-}
-
 # is tikz device without externalization?
 is_tikz_dev = function(options) {
   'tikz' %in% options$dev && !options$external
@@ -266,8 +256,12 @@ fix_options = function(options) {
 
   # cache=TRUE -> 3; FALSE -> 0
   if (is.logical(options$cache)) options$cache = options$cache * 3
-  # non-R code should not use cache=1,2
-  if (options$engine != 'R') options$cache = (options$cache > 0) * 3
+  if (options$engine != 'R') {
+    # non-R code should not use cache = 1, 2
+    options$cache = (options$cache > 0) * 3
+    # error numbers only make sense to R engine, so 0 -> TRUE; 1, 2 -> FALSE
+    if (is.numeric(options$error)) options$error = options$error == 0
+  }
 
   options$eval = unname(options$eval)
 
@@ -307,37 +301,63 @@ fix_options = function(options) {
     }
   }
 
+  if (options$collapse) {
+    options[unlist(lapply(
+      c('class.', 'attr.'), paste0, c('output', 'message', 'warning', 'error')
+    ))] = NULL
+  }
+
   options
 }
 
-#' Check if the current output type is LaTeX or HTML
+#' Check the current input and output type
 #'
 #' The function \code{is_latex_output()} returns \code{TRUE} when the output
 #' format is LaTeX; it works for both \file{.Rnw} and R Markdown documents (for
 #' the latter, the two Pandoc formats \code{latex} and \code{beamer} are
 #' considered LaTeX output). The function \code{is_html_output()} only works for
-#' R Markdown documents.
+#' R Markdown documents and will test for several Pandoc HTML based output
+#' formats (by default, these formats are considered as HTML formats:
+#' \code{c('markdown', 'epub', 'html', 'html4', 'html5', 'revealjs', 's5',
+#' 'slideous', 'slidy', 'gfm')}).
+#'
+#' The function \code{pandoc_to()} returns the Pandoc output format, and
+#' \code{pandoc_from()} returns Pandoc input format. \code{pandoc_to(fmt)}
+#' allows to check the current output format against a set of format names. Both
+#' are to be used with R Markdown documents.
 #'
 #' These functions may be useful for conditional output that depends on the
 #' output format. For example, you may write out a LaTeX table in an R Markdown
 #' document when the output format is LaTeX, and an HTML or Markdown table when
-#' the output format is HTML.
+#' the output format is HTML. Use \code{pandoc_to(fmt)} to test a more specific
+#' Pandoc format.
 #'
 #' Internally, the Pandoc output format of the current R Markdown document is
-#' stored in \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.to')}. By
-#' default, these formats are considered as HTML formats: \code{c('markdown',
-#' 'epub', 'html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')}.
+#' stored in \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.to')}, and the
+#' Pandoc input format in
+#' \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.from')}
+#'
+#' @note See available Pandoc formats, in
+#'   \href{https://pandoc.org/MANUAL.html}{Pandoc's Manual}
 #' @rdname output_type
 #' @export
-#' @examples knitr::is_latex_output()
+#' @examples
+#' # check for output formats type
+#' knitr::is_latex_output()
 #' knitr::is_html_output()
 #' knitr::is_html_output(excludes = c('markdown', 'epub'))
+#' # Get current formats
+#' knitr::pandoc_from()
+#' knitr::pandoc_to()
+#' # Test if current output format is 'docx'
+#' knitr::pandoc_to('docx')
 is_latex_output = function() {
   out_format('latex') || pandoc_to(c('latex', 'beamer'))
 }
 
-#' @param fmt A character vector of output formats to be checked. By default, this
-#'   is the current Pandoc output format.
+#' @param fmt A character vector of output formats to be checked against. If not
+#'   provided, \code{is_html_output()} uses \code{pandoc_to()}, and
+#'   \code{pandoc_to()} returns the output format name.
 #' @param excludes A character vector of output formats that should not be
 #'   considered as HTML format.
 #' @rdname output_type
@@ -350,6 +370,20 @@ is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
   fmt %in% setdiff(fmts, excludes)
 }
 
+#' @rdname output_type
+#' @export
+pandoc_to = function(fmt) {
+  # rmarkdown sets an option for the Pandoc output format from markdown
+  to = opts_knit$get('rmarkdown.pandoc.to')
+  if (missing(fmt)) to else !is.null(to) && (to %in% fmt)
+}
+
+#' @rdname output_type
+#' @export
+pandoc_from = function() {
+  # rmarkdown's input format, obtained from a package option set by rmarkdown
+  opts_knit$get('rmarkdown.pandoc.from') %n% 'markdown'
+}
 
 # turn percent width/height to LaTeX unit, e.g. out.width = 30% -> .3\linewidth
 latex_percent_size = function(x, which = c('width', 'height')) {
@@ -359,7 +393,10 @@ latex_percent_size = function(x, which = c('width', 'height')) {
   xi = as.numeric(sub('%$', '', x[i]))
   if (any(is.na(xi))) return(x)
   which = match.arg(which)
-  x[i] = paste0(xi / 100, if (which == 'width') '\\linewidth' else '\\textheight')
+  x[i] = paste0(
+    formatC(xi / 100, decimal.mark = '.'),
+    if (which == 'width') '\\linewidth' else '\\textheight'
+  )
   x
 }
 
@@ -390,17 +427,6 @@ out_format = function(x) {
 
 # tempfile under the current working directory
 wd_tempfile = function(...) basename(tempfile(tmpdir = '.', ...))
-
-# rmarkdown sets an option for the Pandoc output format from markdown
-pandoc_to = function(x) {
-  fmt = opts_knit$get('rmarkdown.pandoc.to')
-  if (missing(x)) fmt else !is.null(fmt) && (fmt %in% x)
-}
-
-# rmarkdown's input format
-pandoc_from = function() {
-  opts_knit$get('rmarkdown.pandoc.from') %n% 'markdown'
-}
 
 pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
   if (length(text) == 0) return(text)
@@ -532,6 +558,10 @@ print_knitlog = function() {
 line_count = function(x) stringr::str_count(x, '\n') + 1L
 
 has_package = function(pkg) loadable(pkg, FALSE)
+has_packages = function(pkgs) {
+  for (p in pkgs) if (!has_package(p)) return(FALSE)
+  TRUE
+}
 
 # if LHS is NULL, return the RHS
 `%n%` = function(x, y) if (is.null(x)) y else x
@@ -540,6 +570,18 @@ has_package = function(pkg) loadable(pkg, FALSE)
 merge_list = function(x, y) {
   x[names(y)] = y
   x
+}
+
+# find a token in a template, and replace it with a value
+insert_template = function(text, token, value, ignore = FALSE) {
+  if (is.null(value)) return(text)
+  i = grep(token, text); n = length(i)
+  if (n > 1) stop("There are multiple tokens in the template: '", token, "'")
+  if (n == 0) {
+    if (ignore) return(text)
+    stop("Couldn't find the token '", token, "' in the template.")
+  }
+  append(text, value, i)
 }
 
 # paths of all figures
@@ -577,7 +619,8 @@ escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
   x = gsub('~', '\\\\textasciitilde{}', x)
   x = gsub('\\^', '\\\\textasciicircum{}', x)
   if (newlines) x = gsub('(?<!\n)\n(?!\n)', '\\\\\\\\', x, perl = TRUE)
-  if (spaces) x = gsub('  ', '\\\\ \\\\ ', x)
+  # when there are consecutive spaces, escape each of them except the first one
+  if (spaces) x = gsub('(?<= ) ', '\\\\ ', x, perl = TRUE)
   x
 }
 
@@ -692,13 +735,7 @@ set_html_dev = function() {
   if (!is.null(opts_chunk$get('dev'))) return()
   # in some cases, png() does not work (e.g. options('bitmapType') == 'Xlib' on
   # headless servers); use svg then
-  opts_chunk$set(dev = if (png_available()) 'png' else 'svg')
-}
-
-png_available = function() {
-  !inherits(try_silent({
-    f = tempfile(); on.exit(unlink(f)); grDevices::png(f); grDevices::dev.off()
-  }), 'try-error')
+  opts_chunk$set(dev = if (dev_available('png')) 'png' else 'svg')
 }
 
 # locate kpsewhich especially for Mac OS because /usr/texbin may not be in PATH
@@ -712,6 +749,8 @@ kpsewhich = function() {
 has_utility = function(name, package = name) {
   name2 = paste('util', name, sep = '_')  # e.g. util_pdfcrop
   if (is.logical(yes <- opts_knit$get(name2))) return(yes)
+  # a special case: use tools::find_gs_cmd() to find ghostscript
+  if (name == 'ghostscript') name = tools::find_gs_cmd()
   yes = nzchar(Sys.which(name))
   if (!yes) warning(package, ' not installed or not in PATH')
   opts_knit$set(setNames(list(yes), name2))
@@ -747,7 +786,7 @@ knit_handlers = function(fun, options) {
   if (!is.function(fun)) fun = function(x, ...) {
     res = withVisible(knit_print(x, ...))
     # indicate the htmlwidget result with a special class so we can attach
-    # the figure caption to it later in wrap.knit_asis
+    # the figure caption to it later in sew.knit_asis
     if (inherits(x, 'htmlwidget'))
       class(res$value) = c(class(res$value), 'knit_asis_htmlwidget')
     if (res$visible) res$value else invisible(res$value)
@@ -758,26 +797,6 @@ knit_handlers = function(fun, options) {
   merge_list(default_handlers, list(value = function(x, visible) {
     if (visible) fun(x, options = options)
   }))
-}
-
-# conditionally disable some features during R CMD check
-is_R_CMD_check = function() {
-  ('CheckExEnv' %in% search()) ||
-    any(c('_R_CHECK_TIMINGS_', '_R_CHECK_LICENSE_') %in% names(Sys.getenv()))
-}
-
-is_CRAN_incoming = function() {
-  isTRUE(as.logical(Sys.getenv('_R_CHECK_CRAN_INCOMING_REMOTE_')))
-}
-
-check_package_name = function() {
-  Sys.getenv('_R_CHECK_PACKAGE_NAME_', NA)
-}
-
-# is R CMD check running on a package that has a version lower or equal to `version`?
-check_old_package = function(name, version) {
-  if (is.na(pkg <- check_package_name()) || pkg != name) return(FALSE)
-  tryCatch(packageVersion(name) <= version, error = function(e) FALSE)
 }
 
 # is the inst dir under . or ..? differs in R CMD build/INSTALL and devtools/roxygen2
@@ -820,6 +839,8 @@ create_label = function(..., latex = FALSE) {
 #' @param sep Separator to be inserted between words.
 #' @param and Character string to be prepended to the last word.
 #' @param before,after A character string to be added before/after each word.
+#' @param oxford_comma Whether to insert the separator between the last two
+#'   elements in the list.
 #' @return A character string marked by \code{xfun::\link{raw_string}()}.
 #' @export
 #' @examples combine_words('a'); combine_words(c('a', 'b'))
@@ -827,19 +848,31 @@ create_label = function(..., latex = FALSE) {
 #' combine_words(c('a', 'b', 'c'), sep = ' / ', and = '')
 #' combine_words(c('a', 'b', 'c'), and = '')
 #' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
-combine_words = function(words, sep = ', ', and = ' and ', before = '', after = before) {
+#' combine_words(c('a', 'b', 'c'), before = '"', after = '"', oxford_comma=FALSE)
+combine_words = function(
+  words, sep = ', ', and = ' and ', before = '', after = before, oxford_comma = TRUE
+) {
   n = length(words); rs = xfun::raw_string
   if (n == 0) return(words)
   words = paste0(before, words, after)
   if (n == 1) return(rs(words))
   if (n == 2) return(rs(paste(words, collapse = and)))
-  if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
+  if (oxford_comma && grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
   words[n] = paste0(and, words[n])
+  # combine the last two words directly without the comma
+  if (!oxford_comma) {
+    words[n - 1] = paste0(words[n - 1:0], collapse = '')
+    words = words[-n]
+  }
   rs(paste(words, collapse = sep))
 }
 
 warning2 = function(...) warning(..., call. = FALSE)
 stop2 = function(...) stop(..., call. = FALSE)
+
+warn_options_unsupported = function(option, to) {
+  warning2('Chunk option ', option, ' is not supported for ', to, ' output')
+}
 
 raw_markers = c('!!!!!RAW-KNITR-CONTENT', 'RAW-KNITR-CONTENT!!!!!')
 
@@ -1002,9 +1035,40 @@ make_unique = function(x) {
 #' @return The data URI as a character string.
 #' @author Wush Wu and Yihui Xie
 #' @export
-#' @references \url{http://en.wikipedia.org/wiki/Data_URI_scheme}
+#' @references \url{https://en.wikipedia.org/wiki/Data_URI_scheme}
 #' @examples uri = image_uri(file.path(R.home('doc'), 'html', 'logo.jpg'))
 #' if (interactive()) {cat(sprintf('<img src="%s" />', uri), file = 'logo.html')
 #' browseURL('logo.html') # you can check its HTML source
 #' }
 image_uri = function(f) xfun::base64_uri(f)
+
+# check if DESCRIPTION has dependencies on certain packages
+desc_has_dep = function(pkg, dir = '.') {
+  res = rep(NA, length(pkg))
+  if (!file.exists(f <- file.path(dir, 'DESCRIPTION'))) return(res)
+  info = read.dcf(f, fields = c('Package', 'Depends', 'Imports', 'Suggests'))
+  if (nrow(info) < 1 || is.na(info[1, 'Package'])) return(res)
+  pkg %in% unlist(strsplit(info, '[[:space:],]+'))
+}
+
+# return TRUE if DESCRIPTION doesn't exist or pkg has been declared as dependency
+test_desc_dep = function(pkg, dir = '.') {
+  res = desc_has_dep(pkg, dir)
+  all(is.na(res)) || (all(res) && has_packages(pkg))
+}
+
+# TODO: remove this hack in the future when no CRAN/BioC packages have the issue
+test_vig_dep = function(pkg) {
+  if (no_test_vig_dep() || test_desc_dep(pkg, '..')) return()
+  p = read.dcf(file.path('..', 'DESCRIPTION'), fields = 'Package')[1, 1]
+  stop2(
+    "The '", pkg, "' package should be installed and declared as a dependency of the '", p,
+    "' package (e.g., in the 'Suggests' field of DESCRIPTION), because the ",
+    "latter contains vignette(s) built with the '", pkg, "' package. Please see ",
+    "https://github.com/yihui/knitr/issues/1864 for more information."
+  )
+}
+
+no_test_vig_dep = function() {
+  is_R_CMD_check() || tolower(Sys.getenv('KNITR_NO_TEST_VIGNETTE_DEP')) == 'true'
+}

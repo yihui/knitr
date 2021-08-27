@@ -59,7 +59,7 @@ new_defaults = function(value = list()) {
 #' @references Usage: \url{https://yihui.org/knitr/objects/}
 #'
 #'   A list of available options:
-#'   \url{https://yihui.org/knitr/options/#chunk_options}
+#'   \url{https://yihui.org/knitr/options/#chunk-options}
 #' @note \code{opts_current} should be treated as read-only and you are supposed
 #'   to only query its values via \code{opts_current$get()}. Technically you
 #'   could also call \code{opts_current$set()} to change the values, but you are
@@ -90,8 +90,10 @@ opts_chunk = new_defaults(list(
 ))
 
 #' @rdname opts_chunk
+#' @format
 #' @export
 opts_current = new_defaults()
+opts_current$restore(opts_chunk$get())
 
 #' @include plot.R
 
@@ -115,6 +117,7 @@ opts_chunk_attr = local({
   opts$external = opts$sanitize = NULL  # hide these two rare options
   opts$fig.process = 'function'
   opts$fig.asp = 'numeric'
+  opts$fig.alt = 'character'
   opts$fig.dim = 'list'
   opts$R.options = 'list'
   opts$cache.comments = 'logical'
@@ -164,11 +167,12 @@ set_alias = function(...) {
 #' }
 #' @include hooks-html.R
 opts_knit = new_defaults(list(
-  progress = TRUE, verbose = FALSE, eval.after = 'fig.cap',
+  progress = TRUE, verbose = FALSE, eval.after = c('fig.cap', 'fig.alt'),
   base.dir = NULL, base.url = NULL, root.dir = NULL, child.path = '',
   upload.fun = identity, global.device = FALSE, global.par = FALSE,
   concordance = FALSE, documentation = 1L, self.contained = TRUE,
   unnamed.chunk.label = 'unnamed-chunk', highr.opts = NULL,
+  label.prefix = c(table = 'tab:'), latex.tilde = NULL,
 
   # internal options; users should not touch them
   out.format = NULL, child = FALSE, parent = FALSE, tangle = FALSE, aliases = NULL,
@@ -177,12 +181,6 @@ opts_knit = new_defaults(list(
 # tangle: whether I'm in tangle mode; child: whether I'm in child document mode;
 # parent: whether I need to add parent preamble to the child output
 
-# you may modify these options in options(knitr.package.foo)
-opts_knit_names = c(
-  'progress', 'verbose', 'upload.fun', 'animation.fun', 'global.device',
-  'eval.after', 'concordance', 'documentation', 'aliases', 'self.contained',
-  'unnamed.chunk.label'
-)
 # adjust opts_chunk and opts_knit according to options(), e.g.
 # options(knitr.package.progress = FALSE) --> opts_knit$set(progress = FALSE),
 # and options(knitr.chunk.tidy) --> opts_chunk$set(tidy = TRUE); this makes it
@@ -197,18 +195,6 @@ adjust_opts_knit = function() {
   nms = names(opts)
   if (length(nms <- grep('^knitr[.]', nms, value = TRUE)) == 0) return()
   opts = opts[nms]
-  # for backward compatibility
-  i = grep('^knitr[.](package|chunk)[.]', nms, invert = TRUE)
-  i = intersect(i, which(nms[i] %in% paste('knitr', opts_knit_names, sep = '.')))
-  if (length(i)) {
-    nms.pkg = sub('^knitr.', 'knitr.package.', nms[i])
-    warning2(
-      'These options must be renamed (from left to right):\n',
-      formatUL(sprintf('%s => %s', nms[i], nms.pkg)), immediate. = TRUE
-    )
-    Sys.sleep(10)
-    names(opts)[i] = nms[i] = nms.pkg
-  }
   # strip off knitr.chunk from option names and set chunk options
   i = grep('^knitr[.]chunk[.]', nms)
   opts_chunk$set(setNames(opts[i], sub('^knitr[.]chunk[.]', '', nms[i])))
@@ -220,7 +206,7 @@ adjust_opts_knit = function() {
 #' Template for creating reusable chunk options
 #'
 #' Creates a template binding a label to a set of chunk options. Every chunk
-#' that references the template label will have the specificed set of options
+#' that references the template label will have the specified set of options
 #' applied to it.
 #' @export
 #' @examples opts_template$set(myfigures = list(fig.height = 4, fig.width = 4))

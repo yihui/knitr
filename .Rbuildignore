@@ -13,13 +13,10 @@ knitr-spin.md
 png$
 ^\.Rproj\.user$
 ^.*\.Rproj$
-^\.travis\.yml$
 FAQ.md
 Makefile
-^knitr-examples$
 ^\.github$
 ^docs$
-^README-ES\.md$
-^README-PT\.md$
+^README.*\.md$
 ^codecov\.yml$
 ^NEWS\.md$

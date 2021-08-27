@@ -50,8 +50,8 @@ knit_print.data.frame = function(x, ...) {
 }
 # register the method
 registerS3method("knit_print", "data.frame", knit_print.data.frame)
-# after you define and register the above method, data frames will be printed as
-# tables in knitr, which is different with the default print() behavior
+# after you define and register the above method, data frames will be printed
+# as tables in knitr, which is different with the default print() behavior
 }
 \references{
 See \code{vignette('knit_print', package = 'knitr')}.

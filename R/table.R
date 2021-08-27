@@ -37,25 +37,29 @@
 #'   \code{c('c', 'l', 'c')}, unless the output format is LaTeX.
 #' @param caption The table caption.
 #' @param label The table reference label. By default, the label is obtained
-#'   from \code{knitr::\link{opts_current}$get('label')}.
+#'   from \code{knitr::\link{opts_current}$get('label')}. To disable the label,
+#'   use \code{label = NA}.
 #' @param format.args A list of arguments to be passed to \code{\link{format}()}
 #'   to format table values, e.g. \code{list(big.mark = ',')}.
 #' @param escape Boolean; whether to escape special characters when producing
 #'   HTML or LaTeX tables. When \code{escape = FALSE}, you have to make sure
 #'   that special characters will not trigger syntax errors in LaTeX or HTML.
-#' @param ... Other arguments (see Examples).
+#' @param ... Other arguments (see Examples and References).
 #' @return A character vector of the table source code.
 #' @seealso Other R packages such as \pkg{huxtable}, \pkg{xtable},
-#'   \pkg{kableExtra}, and \pkg{tables} for HTML and LaTeX tables, and
+#'   \pkg{kableExtra}, \pkg{gt} and \pkg{tables} for HTML and LaTeX tables, and
 #'   \pkg{ascii} and \pkg{pander} for different flavors of markdown output and
-#'   some advanced features and table styles.
+#'   some advanced features and table styles. For more on other packages for
+#'   creating tables, see
+#'   \url{https://bookdown.org/yihui/rmarkdown-cookbook/table-other.html}.
 #' @note When using \code{kable()} as a \emph{top-level} expression, you do not
 #'   need to explicitly \code{print()} it due to R's automatic implicit
 #'   printing. When it is wrapped inside other expressions (such as a
 #'   \code{\link{for}} loop), you must explicitly \code{print(kable(...))}.
 #' @references See
-#'   \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
-#'    for some examples in LaTeX, but they also apply to other document formats.
+#'   \url{https://bookdown.org/yihui/rmarkdown-cookbook/kable.html} for some
+#'   examples about this function, including specific arguments according to the
+#'   \code{format} selected.
 #' @export
 #' @examples d1 = head(iris); d2 = head(mtcars)
 #' # pipe tables by default
@@ -149,6 +153,8 @@ kable = function(
   if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")
   attr(x, 'align') = align
+  # simple tables do not 0-row tables (--- will be treated as an hr line)
+  if (format == 'simple' && nrow(x) == 0) format = 'pipe'
   res = do.call(
     paste('kable', format, sep = '_'),
     list(x = x, caption = caption, escape = escape, ...)
@@ -159,8 +165,12 @@ kable = function(
 kable_caption = function(label, caption, format) {
   # create a label for bookdown if applicable
   if (is.null(label)) label = opts_current$get('label')
-  if (!is.null(caption) && !is.na(caption)) caption = paste0(
-    create_label('tab:', label, latex = (format == 'latex')), caption
+  if (is.null(label)) label = NA
+  if (!is.null(caption) && !is.na(caption) && !is.na(label)) caption = paste0(
+    create_label(
+      opts_knit$get('label.prefix')[['table']],
+      label, latex = (format == 'latex')
+    ), caption
   )
   caption
 }
@@ -297,7 +307,7 @@ kable_latex = function(
   } else rep('', nrow(x))
   linesep = ifelse(linesep == "", linesep, paste0('\n', linesep))
 
-  if (escape) x = escape_latex(x)
+  x = escape_latex_table(x, escape, booktabs)
   if (!is.character(toprule)) toprule = NULL
   if (!is.character(bottomrule)) bottomrule = NULL
   tabular = if (longtable) 'longtable' else 'tabular'
@@ -308,7 +318,7 @@ kable_latex = function(
     if (longtable && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {
-      if (escape) cn = escape_latex(cn)
+      cn = escape_latex_table(cn, escape, booktabs)
       paste0(paste(cn, collapse = ' & '), sprintf('\\\\\n%s\n', midrule))
     },
     one_string(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep), sep = ''),
@@ -318,13 +328,24 @@ kable_latex = function(
   ), collapse = '')
 }
 
+# when using booktabs, add {} before [ so that the content in [] won't be
+# treated as parameters of booktabs commands like \midrule:
+# https://github.com/yihui/knitr/issues/1595
+escape_latex_table = function(x, escape = TRUE, brackets = TRUE) {
+  if (escape) x = escape_latex(x)
+  if (brackets) x = gsub('^(\\s*)(\\[)', '\\1{}\\2', x)
+  x
+}
+
 kable_latex_caption = function(x, caption) {
   paste(c(
     '\\begin{table}\n', sprintf('\\caption{%s}\n', caption), x, '\n\\end{table}'
   ), collapse = '')
 }
 
-kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
+kable_html = function(
+  x, table.attr = getOption('knitr.table.html.attr', ''), caption = NULL, escape = TRUE, ...
+) {
   table.attr = trimws(table.attr)
   # need a space between <table and attributes
   if (nzchar(table.attr)) table.attr = paste('', table.attr)
@@ -394,10 +415,7 @@ kable_rst = function(x, rownames.name = '\\', ...) {
 
 # Pandoc's pipe table
 kable_pipe = function(x, caption = NULL, padding = 1, ...) {
-  if (is.null(colnames(x))) {
-    warning('The table should have a header (column names)')
-    colnames(x) = rep('', ncol(x))
-  }
+  if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
   res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
     if (is.null(a)) return(s)
     r = c(l = '^.', c = '^.|.$', r = '.$')
@@ -412,13 +430,13 @@ kable_pipe = function(x, caption = NULL, padding = 1, ...) {
 
 # Pandoc's simple table
 kable_simple = function(x, caption = NULL, padding = 1, ...) {
-  # simple tables do not support 1-column or 0-row tables
-  tab = if (ncol(x) == 1 || nrow(x) == 0) kable_pipe(
-    x, padding = padding, ...
-  ) else kable_mark(
+  tab = kable_mark(
     x, c(NA, '-', if (is_blank(colnames(x))) '-' else NA),
     padding = padding, ...
   )
+  # when x has only one column with name, indent by one space so --- won't be
+  # treated as an hr line
+  if (ncol(x) == 1 && !is.null(colnames(x))) tab = paste0(' ', tab)
   kable_pandoc_caption(tab, caption)
 }
 

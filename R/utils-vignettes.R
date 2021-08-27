@@ -7,21 +7,16 @@
 #' @name vignette_engines
 #' @note If you use the \code{knitr::rmarkdown} engine, please make sure that
 #'   you put \pkg{rmarkdown} in the \samp{Suggests} field of your
-#'   \file{DESCRIPTION} file. Also make sure the executables \command{pandoc}
-#'   and \command{pandoc-citeproc} can be found by \pkg{rmarkdown} during
-#'   \command{R CMD build}. If you build your package from RStudio, this is
-#'   normally not a problem. If you build the package outside RStudio, run
-#'   \command{which pandoc} and \command{which pandoc-citeproc} in the terminal
-#'   (or \code{Sys.which('pandoc')} and \code{Sys.which('pandoc-citeproc')} in
-#'   R) to check if \command{pandoc} and \command{pandoc-citeproc} can be found.
-#'   If you use Linux, you may make symlinks to the Pandoc binaries in RStudio:
-#'   \url{https://rmarkdown.rstudio.com/docs/articles/pandoc.html}, or
-#'   install \command{pandoc} and \command{pandoc-citeproc} separately.
+#'   \file{DESCRIPTION} file. Also make sure \command{pandoc} is available
+#'   during \command{R CMD build}. If you build your package from RStudio, this
+#'   is normally not a problem. If you build the package outside RStudio, run
+#'   \code{rmarkdown::find_pandoc()} in an R session to check if Pandoc can be
+#'   found.
 #'
 #'   When the \pkg{rmarkdown} package is not installed or not available, or
-#'   \command{pandoc} or \command{pandoc-citeproc} cannot be found, the
-#'   \code{knitr::rmarkdown} engine will fall back to the \code{knitr::knitr}
-#'   engine, which uses R Markdown v1 based on the \pkg{markdown} package.
+#'   \command{pandoc} cannot be found, the \code{knitr::rmarkdown} engine will
+#'   fall back to the \code{knitr::knitr} engine, which uses R Markdown v1 based
+#'   on the \pkg{markdown} package.
 #' @examples library(knitr)
 #' vig_list = tools::vignetteEngine(package = 'knitr')
 #' str(vig_list)
@@ -33,17 +28,22 @@ NULL
 vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
   {
     on.exit({opts_chunk$restore(); knit_hooks$restore()}, add = TRUE)
-    oopts = options(markdown.HTML.header = NULL); on.exit(options(oopts), add = TRUE)
+    oopts = options(markdown.HTML.header = NULL, knitr.knit2html.force_v1 = TRUE)
+    on.exit(options(oopts), add = TRUE)
   }
   opts_chunk$set(error = FALSE)  # should not hide errors
   knit_hooks$set(purl = hook_purl)  # write out code while weaving
-  (if (grepl('\\.[Rr]md$', file)) knit2html_v1 else if (grepl('\\.[Rr]rst$', file)) knit2pandoc else knit)(
+  (if (grepl('\\.[Rr]md$', file)) knit2html else if (grepl('\\.[Rr]rst$', file)) knit2pandoc else knit)(
     file, encoding = encoding, quiet = quiet, envir = globalenv(), ...
   )
 }
 
 vtangle = function(file, ..., encoding = 'UTF-8', quiet = FALSE) {
-  if (is_R_CMD_check()) {
+  if (is_R_CMD_check() && !file.exists(with_ext(file, 'Rout.save'))) {
+    # Inside CMD check, and no .Rout.save file to compare with, so return an
+    # empty script to avoid errors from vignettes that won't tangle correctly.
+    # NB: This is ~equivalent to setting _R_CHECK_VIGNETTES_SKIP_RUN_MAYBE_=TRUE
+    # and if that becomes the default this is redundant.
     file = with_ext(file, 'R')
     file.create(file)
     return(file)
@@ -84,25 +84,28 @@ vtangle_empty = function(file, ...) {
   return()
 }
 
+# when neither Pandoc nor markdown is available, just silently skip the vignette
+vweave_empty = function(file, ...) {
+  out = with_ext(file, 'html')
+  writeLines('The vignette could not be built because Pandoc is not available.', out)
+  out
+}
+
 register_vignette_engines = function(pkg) {
   # the default engine
   vig_engine('knitr', vweave, '[.]([rRsS](nw|tex)|[Rr](md|html|rst))$')
   vig_engine('docco_linear', vweave_docco_linear, '[.][Rr](md|markdown)$')
   vig_engine('docco_classic', vweave_docco_classic, '[.][Rr]mk?d$')
-  vig_engine('rmarkdown', function(...) if (has_package('rmarkdown')) {
+  vig_engine('rmarkdown', function(...) {
     if (pandoc_available()) {
       vweave_rmarkdown(...)
     } else {
-      warning(
-        'Pandoc (>= 1.12.3) and/or pandoc-citeproc not available. ',
-        'Falling back to R Markdown v1.'
+      (if (is_R_CMD_check()) message else stop2)(
+        'Pandoc is required to build R Markdown vignettes but not available. ',
+        'Please make sure it is installed.'
       )
-      vweave(...)
+      if (has_package('markdown')) vweave(...) else vweave_empty(...)
     }
-  } else {
-    warning('The vignette engine knitr::rmarkdown is not available, ',
-            'because the rmarkdown package is not installed. Please install it.')
-    vweave(...)
   }, '[.][Rr](md|markdown)$')
   # vignette engines that disable tangle
   vig_list = tools::vignetteEngine(package = 'knitr')
@@ -161,9 +164,6 @@ knit_filter = function(ifile, encoding = 'UTF-8') {
 }
 
 pandoc_available = function() {
-  # if you have this environment variable, chances are you are good to go
-  if (Sys.getenv("RSTUDIO_PANDOC") != '') return(TRUE)
-  if (Sys.which('pandoc-citeproc') == '') return(FALSE)
   rmarkdown::pandoc_available('1.12.3')
 }
 

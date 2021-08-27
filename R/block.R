@@ -16,19 +16,43 @@ call_block = function(block) {
   af = opts_knit$get('eval.after'); al = opts_knit$get('aliases')
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
 
-  # expand parameters defined via template
-  if (!is.null(block$params$opts.label)) {
-    block$params = merge_list(opts_template$get(block$params$opts.label), block$params)
+  params = opts_chunk$merge(block$params)
+  for (o in setdiff(names(params), af)) {
+    params[o] = list(eval_lang(params[[o]]))
+    # also update original options before being merged with opts_chunk
+    if (o %in% names(block$params)) block$params[o] = params[o]
   }
 
-  params = opts_chunk$merge(block$params)
-  opts_current$restore(params)
-  for (o in setdiff(names(params), af)) params[o] = list(eval_lang(params[[o]]))
-  params = fix_options(params)  # for compatibility
-
   label = ref.label = params$label
-  if (!is.null(params$ref.label)) ref.label = sc_split(params$ref.label)
+  if (!is.null(params$ref.label)) {
+    ref.label = sc_split(params$ref.label)
+    # ref.label = I() implies opts.label = ref.label
+    if (inherits(params$ref.label, 'AsIs') && is.null(params$opts.label))
+      params$opts.label = ref.label
+  }
   params[["code"]] = params[["code"]] %n% unlist(knit_code$get(ref.label), use.names = FALSE)
+
+  # opts.label = TRUE means inheriting chunk options from ref.label
+  if (isTRUE(params$opts.label)) params$opts.label = ref.label
+  # expand chunk options defined via opts_template and reference chunks
+  params2 = NULL
+  for (lab in params$opts.label) {
+    # referenced chunk options (if any) override template options
+    params3 = merge_list(opts_template$get(lab), attr(knit_code$get(lab), 'chunk_opts'))
+    params2 = merge_list(params2, params3)
+  }
+  if (length(params2)) {
+    # local options override referenced options
+    params2 = merge_list(params2, block$params)
+    # then override previously merged opts_chunk options
+    params  = merge_list(params, params2)
+    # in case any options are not evaluated
+    for (o in setdiff(names(params), af)) params[o] = list(eval_lang(params[[o]]))
+  }
+
+  # save current chunk options in opts_current
+  opts_current$restore(params)
+
   if (opts_knit$get('progress')) print(block)
 
   if (!is.null(params$child)) {
@@ -55,6 +79,8 @@ call_block = function(block) {
     if (!is.list(params))
       stop("The option hook '", opt, "' should return a list of chunk options")
   }
+
+  params = fix_options(params)  # for compatibility
 
   # Check cache
   if (params$cache > 0) {
@@ -100,25 +126,42 @@ cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fi
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
 block_exec = function(options) {
-  # when code is not R language
-  if (options$engine != 'R') {
-    res.before = run_hooks(before = TRUE, options)
-    engine = get_engine(options$engine)
-    output = in_dir(input_dir(), engine(options))
-    if (is.list(output)) output = unlist(output)
-    res.after = run_hooks(before = FALSE, options)
-    output = paste(c(res.before, output, res.after), collapse = '')
-    output = knit_hooks$get('chunk')(output, options)
-    if (options$cache) {
-      cache.exists = cache$exists(options$hash, options$cache.lazy)
-      if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
-        options$engine,
-        'stan' = options$output.var, 'sql' = options$output.var, character(0)
-        ))
-      }
-    return(if (options$include) output else '')
-  }
+  if (options$engine == 'R') return(eng_r(options))
 
+  # when code is not R language
+  res.before = run_hooks(before = TRUE, options)
+  engine = get_engine(options$engine)
+  output = in_dir(input_dir(), engine(options))
+  if (is.list(output)) output = unlist(output)
+  res.after = run_hooks(before = FALSE, options)
+  output = paste(c(res.before, output, res.after), collapse = '')
+  output = knit_hooks$get('chunk')(output, options)
+  if (options$cache) {
+    cache.exists = cache$exists(options$hash, options$cache.lazy)
+    if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
+      options$engine,
+      'stan' = options$output.var, 'sql' = options$output.var, character(0)
+    ))
+  }
+  if (options$include) output else ''
+}
+
+#' Engine for R
+#'
+#' This function handles the execution of R code blocks (when the chunk option
+#' \code{engine} is \code{'R'}) and generates the R output for each code block.
+#'
+#' This engine function has one argument \code{options}: the source code of the
+#' current chunk is in \code{options$code}. It returns a processed output that
+#' can consist of data frames (as tables), graphs, or character output. This
+#' function is intended for advanced use to allow developers to extend R, and
+#' customize the pipeline with which R code is executed and processed within
+#' knitr.
+#'
+#' @param options A list of chunk options. Usually this is just the object
+#'   \code{options} associated with the current code chunk.
+#' @noRd
+eng_r = function(options) {
   # eval chunks (in an empty envir if cache)
   env = knit_global()
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
@@ -155,7 +198,13 @@ block_exec = function(options) {
     tidy.method = if (isTRUE(options$tidy)) 'formatR' else options$tidy
     if (is.character(tidy.method)) tidy.method = switch(
       tidy.method,
-      formatR = function(code, ...) formatR::tidy_source(text = code, output = FALSE, ...)$text.tidy,
+      formatR = function(code, ...) {
+        if (!loadable('formatR')) stop2(
+          'The formatR package is required by the chunk option tidy = TRUE but ',
+          'not installed; tidy = TRUE will be ignored.'
+        )
+        formatR::tidy_source(text = code, output = FALSE, ...)$text.tidy
+      },
       styler = function(code, ...) unclass(styler::style_text(text = code, ...))
     )
     res = try_silent(do.call(tidy.method, c(list(code), options$tidy.opts)))
@@ -167,7 +216,7 @@ block_exec = function(options) {
   # only evaluate certain lines
   if (is.numeric(ev <- options$eval)) {
     # group source code into syntactically complete expressions
-    if (isFALSE(options$tidy)) code = sapply(highr:::group_src(code), one_string)
+    if (isFALSE(options$tidy)) code = sapply(xfun::split_source(code), one_string)
     iss = seq_along(code)
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
@@ -188,7 +237,9 @@ block_exec = function(options) {
       code, envir = env, new_device = FALSE,
       keep_warning = !isFALSE(options$warning),
       keep_message = !isFALSE(options$message),
-      stop_on_error = if (options$error && options$include) 0L else 2L,
+      stop_on_error = if (is.numeric(options$error)) options$error else {
+        if (options$error && options$include) 0L else 2L
+      },
       output_handler = knit_handlers(options$render, options)
     )
   )
@@ -222,30 +273,13 @@ block_exec = function(options) {
   res = filter_evaluate(res, options$message, evaluate::is.message)
 
   # rearrange locations of figures
-  figs = find_recordedplot(res)
-  if (length(figs) && any(figs)) {
-    if (keep == 'none') {
-      res = res[!figs] # remove all
-    } else {
-      if (options$fig.show == 'hold') res = c(res[!figs], res[figs]) # move to the end
-      figs = find_recordedplot(res)
-      if (length(figs) && sum(figs) > 1) {
-        if (keep %in% c('first', 'last')) {
-          res = res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
-        } else {
-          # keep only selected
-          if (keep == 'index') res = res[-which(figs)[-keep.idx]]
-          # merge low-level plotting changes
-          if (keep == 'high') res = merge_low_plot(res, figs)
-        }
-      }
-    }
-  }
+  res = rearrange_figs(res, keep, keep.idx, options$fig.show)
+
   # number of plots in this chunk
   if (is.null(options$fig.num))
     options$fig.num = if (length(res)) sum(sapply(res, function(x) {
-      if (evaluate::is.recordedplot(x)) return(1)
       if (inherits(x, 'knit_image_paths')) return(length(x))
+      if (is_plot_output(x)) return(1)
       0
     })) else 0L
 
@@ -260,7 +294,7 @@ block_exec = function(options) {
     opts_knit$delete('plot_files')
   }, add = TRUE)  # restore plot number
 
-  output = unlist(wrap(res, options)) # wrap all results together
+  output = unlist(sew(res, options)) # wrap all results together
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
 
   output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
@@ -311,7 +345,7 @@ purge_cache = function(options) {
 chunk_device = function(options, record = TRUE, tmp = tempfile()) {
   width = options$fig.width[1L]
   height = options$fig.height[1L]
-  dev = options$dev
+  dev = fallback_dev(options$dev)
   dev.args = options$dev.args
   dpi = options$dpi
 
@@ -352,6 +386,26 @@ chunk_device = function(options, record = TRUE, tmp = tempfile()) {
   dev.control(displaylist = if (record) 'enable' else 'inhibit')
 }
 
+# fall back to a usable device (e.g., during R CMD check)
+fallback_dev = function(dev) {
+  if (length(dev) != 1 || !getOption('knitr.device.fallback', is_R_CMD_check()))
+    return(dev)
+  choices = list(
+    svg = c('png', 'jpeg', 'bmp'), cairo_pdf = c('pdf'), cairo_ps = c('postscript'),
+    png = c('jpeg', 'svg', 'bmp'), jpeg = c('png', 'svg', 'bmp')
+  )
+  # add choices provided by users
+  choices = merge_list(choices, getOption('knitr.device.choices'))
+  if (!dev %in% names(choices)) return(dev)  # no fallback devices available
+  # first test if the specified device actually works
+  if (dev_available(dev)) return(dev)
+  for (d in choices[[dev]]) if (dev_available(d)) {
+    warning2("The device '", dev, "' is not operational; falling back to '", d, "'.")
+    return(d)
+  }
+  dev  # no fallback device found; you'll to run into an error soon
+}
+
 # filter out some results based on the numeric chunk option as indices
 filter_evaluate = function(res, opt, test) {
   if (length(res) == 0 || !is.numeric(opt) || !any(idx <- sapply(res, test)))
@@ -367,7 +421,8 @@ find_recordedplot = function(x) {
 }
 
 is_plot_output = function(x) {
-  evaluate::is.recordedplot(x) || inherits(x, 'knit_image_paths')
+  evaluate::is.recordedplot(x) ||
+    inherits(x, c('knit_image_paths', 'html_screenshot', 'knit_other_plot'))
 }
 
 # move plots before source code
@@ -383,6 +438,29 @@ fig_before_code = function(x) {
     s = which(vapply(x, evaluate::is.source, logical(1)))
   }
   x
+}
+
+rearrange_figs = function(res, keep, idx, show) {
+  figs = find_recordedplot(res)
+  if (!any(figs)) return(res) # no figures
+  if (keep == 'none') return(res[!figs]) # remove all
+
+  if (show == 'hold') {
+    res = c(res[!figs], res[figs]) # move to the end
+    figs = find_recordedplot(res)
+  }
+  if (sum(figs) <= 1) return(res) # return early if only 1 figure to keep
+  switch(
+    keep,
+    first = res[-tail(which(figs), -1L)],
+    last  = res[-head(which(figs), -1L)],
+    high  = merge_low_plot(res, figs),  # merge low-level plotting changes
+    index = {
+      i = which(figs)[-idx]
+      if (length(i) > 0) res[-i] else res  # keep only selected
+    },
+    res
+  )
 }
 
 # merge neighbor elements of the same class in a list returned by evaluate()
@@ -449,7 +527,10 @@ inline_exec = function(
   loc = block$location
   for (i in 1:n) {
     res = hook_eval(code[i], envir)
-    if (inherits(res, 'knit_asis')) res = wrap(res, inline = TRUE)
+    if (inherits(res, c('knit_asis', 'knit_asis_url'))) res = sew(res, inline = TRUE)
+    tryCatch(as.character(res), error = function(e) {
+      stop2("The inline value cannot be coerced to character: ", code[i])
+    })
     d = nchar(input)
     # replace with evaluated results
     stringr::str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {

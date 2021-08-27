@@ -60,15 +60,14 @@ cache_engines = new_defaults()
 #' \code{engine_output(options, out = LIST)} where \code{LIST} is a list that
 #' has the same structure as the output of \code{evaluate::evaluate()}. In this
 #' case, the arguments \code{code} and \code{extra} are ignored, and the list is
-#' passed to an internal function \code{knitr:::wrap()} to return a character
-#' vector of final output.
+#' passed to \code{knitr::sew()} to return a character vector of final output.
 #' @param options A list of chunk options. Usually this is just the object
 #'   \code{options} passed to the engine function; see
 #'   \code{\link{knit_engines}}.
-#' @param code Source code of the chunk, to which the output hook
-#'   \code{source} is applied, unless the chunk option \code{echo} is \code{FALSE}.
-#' @param out Text output from the engine, to which the hook \code{output}
-#'   is applied, unless the chunk option \code{results} is \code{'hide'}
+#' @param code Source code of the chunk, to which the output hook \code{source}
+#'   is applied, unless the chunk option \code{echo} is \code{FALSE}.
+#' @param out Text output from the engine, to which the hook \code{output} is
+#'   applied, unless the chunk option \code{results} is \code{'hide'}
 #' @param extra Any additional text output that you want to include.
 #' @return A character string generated from the source code and output using
 #'   the appropriate output hooks.
@@ -80,7 +79,7 @@ cache_engines = new_defaults()
 #' # expert use only
 #' engine_output(opts_chunk$merge(list(engine = 'python')), out = list(structure(list(src = '1 + 1'), class = 'source'), '2'))
 engine_output = function(options, code, out, extra = NULL) {
-  if (missing(code) && is.list(out)) return(unlist(wrap(out, options)))
+  if (missing(code) && is.list(out)) return(unlist(sew(out, options)))
   if (!is.logical(options$echo)) code = code[options$echo]
   if (length(code) != 1L) code = one_string(code)
   if (options$engine == 'sas' && length(out) > 1L && !grepl('[[:alnum:]]', out[2]))
@@ -100,7 +99,7 @@ engine_output = function(options, code, out, extra = NULL) {
   one_string(c(
     if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) {
-      if (options$engine == 'highlight') out else wrap.character(out, options)
+      if (options$engine == 'highlight') out else sew.character(out, options)
     },
     extra
   ))
@@ -277,13 +276,19 @@ eng_stan = function(options) {
 eng_tikz = function(options) {
   if (!options$eval) return(engine_output(options, options$code, ''))
 
-  lines = read_utf8(options$engine.opts$template %n%
-                    system.file('misc', 'tikz2pdf.tex', package = 'knitr'))
-  i = grep('%% TIKZ_CODE %%', lines)
-  if (length(i) != 1L)
-    stop("Couldn't find replacement string; or the are multiple of them.")
-
-  s = append(lines, options$code, i)  # insert tikz into tex-template
+  lines = read_utf8(
+    options$engine.opts$template %n% system.file('misc', 'tikz2pdf.tex', package = 'knitr')
+  )
+  # add class options to template
+  lines = insert_template(
+    lines, '%% TIKZ_CLASSOPTION %%', options$engine.opts$classoption %n% 'tikz', TRUE
+  )
+  # insert code into preamble
+  lines = insert_template(
+    lines, '%% EXTRA_TIKZ_PREAMBLE_CODE %%', options$engine.opts$extra.preamble, TRUE
+  )
+  # insert tikz code into the tex template
+  s = insert_template(lines, '%% TIKZ_CODE %%', options$code)
   write_utf8(s, texf <- wd_tempfile('tikz', '.tex'))
   on.exit(unlink(texf), add = TRUE)
 
@@ -312,7 +317,7 @@ eng_tikz = function(options) {
   fig = fig2
 
   options$fig.num = 1L; options$fig.cur = 1L
-  extra = knit_hooks$get('plot')(fig, options)
+  extra = run_hook_plot(fig, options)
   options$engine = 'tex'  # for output hooks to use the correct language class
   engine_output(options, options$code, '', extra)
 }
@@ -351,7 +356,7 @@ eng_dot = function(options) {
     file.rename(f2, outf)
     if (!file.exists(outf)) stop('Failed to compile the ', options$engine, ' chunk')
     options$fig.num = 1L; options$fig.cur = 1L
-    knit_hooks$get('plot')(outf, options)
+    run_hook_plot(outf, options)
   }
 
   # wrap
@@ -542,22 +547,38 @@ eng_sql = function(options) {
   if (is.na(max.print) || is.null(max.print))
     max.print = -1
   sql = one_string(options$code)
+  params = options$params
 
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
 
-  if (is_sql_update_query(query)) {
-    DBI::dbExecute(conn, query)
-    data = NULL
-  } else if (is.null(varname) && max.print > 0) {
-    # execute query -- when we are printing with an enforced max.print we
-    # use dbFetch so as to only pull down the required number of records
-    res = DBI::dbSendQuery(conn, query)
-    data = DBI::dbFetch(res, n = max.print)
-    DBI::dbClearResult(res)
-  } else {
-    data = DBI::dbGetQuery(conn, query)
-  }
+  data = tryCatch({
+    if (is_sql_update_query(query)) {
+      DBI::dbExecute(conn, query)
+      NULL
+    } else if (is.null(varname) && max.print > 0) {
+      # execute query -- when we are printing with an enforced max.print we
+      # use dbFetch so as to only pull down the required number of records
+      res = DBI::dbSendQuery(conn, query)
+      data = DBI::dbFetch(res, n = max.print)
+      DBI::dbClearResult(res)
+      data
+
+    } else {
+      if (length(params) == 0) {
+        DBI::dbGetQuery(conn, query)
+      } else {
+        # If params option is provided, parameters are not interplolated
+        DBI::dbGetQuery(conn, sql, params = params)
+      }
+    }
+  }, error = function(e) {
+    if (!options$error) stop(e)
+    e
+  })
+
+  if (inherits(data, "error"))
+    return(engine_output(options, query, one_string(data)))
 
   # create output if needed (we have data and we aren't assigning it to a variable)
   output = if (length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)) capture.output({
@@ -729,7 +750,27 @@ eng_sxss = function(options) {
   }
 
   engine_output(options, options$code, final_out)
+}
 
+eng_bslib = function(options) {
+  if (!loadable("bslib")) {
+    stop2("The 'bslib' package must be installed in order for the knitr engine 'bslib' to work.")
+  }
+  if (!is.null(options$engine.opts$sass_fun)) {
+    stop2("The 'bslib' knitr engine does not allow for customization of the Sass compilation function.")
+  }
+  func = sass::sass_partial
+  formals(func)$bundle = quote(bslib::bs_global_get())
+  options$engine.opts$sass_fun = func
+  eng_sxss(options)
+}
+
+# Target Markdown engine contributed by @wlandau
+# Thread: https://github.com/ropensci/targets/issues/503
+# Usage: https://books.ropensci.org/targets/markdown.html
+# Docs: https://docs.ropensci.org/targets/reference/tar_engine_knitr.html
+eng_targets = function(options) {
+  targets::tar_engine_knitr(options = options)
 }
 
 # set engines for interpreted languages
@@ -747,7 +788,8 @@ knit_engines$set(
   c = eng_shlib, cc = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
+  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, R = eng_r,
+  bslib = eng_bslib, targets = eng_targets
 )
 
 cache_engines$set(python = cache_eng_python)

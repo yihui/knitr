@@ -99,6 +99,10 @@ write_bib = function(
       b['author'] = sub('Duncan Temple Lang', 'Duncan {Temple Lang}', b['author'])
       # remove the ugly single quotes required by CRAN policy
       b['title'] = gsub("(^|\\W)'([^']+)'(\\W|$)", '\\1\\2\\3', b['title'])
+      # keep the first URL if multiple are provided
+      if (!is.na(b['note'])) b['note'] = gsub(
+        '(^.*?https?://.*?),\\s+https?://.*?(},\\s*)$', '\\1\\2', b['note']
+      )
       if (!('year' %in% names(b))) b['year'] = .this.year
       b
     })
@@ -138,10 +142,12 @@ write_bib = function(
 #' @include utils.R
 
 # hack non-standard author fields
-.tweak.bib = local(if (Sys.info()[['sysname']] == 'Darwin') {
+.tweak.bib = local({
   x = read.csv(inst_dir('misc/tweak_bib.csv'), stringsAsFactors = FALSE)
-  x = x[order(xtfrm(x$package)), , drop = FALSE]  # reorder entries by package names
-  try_silent(write.csv(x, inst_dir('misc/tweak_bib.csv'), row.names = FALSE))
+  if (Sys.getlocale('LC_COLLATE') == 'en_US.UTF-8') {
+    x = x[order(xtfrm(x$package)), , drop = FALSE]  # reorder entries by package names
+    try_silent(write.csv(x, inst_dir('misc/tweak_bib.csv'), row.names = FALSE))
+  }
   setNames(
     lapply(x$author, function(a) c(author = sprintf('  author = {%s},', a))),
     x$package

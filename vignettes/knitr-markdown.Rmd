@@ -8,7 +8,7 @@ library(knitr)
 
 This is an example of Markdown vignettes in R. Before R 3.0.0, only Sweave/PDF vignettes were supported in R. Markdown is gaining popularity over the years due to its simplicity, and R 3.0.0 starts to support package vignettes written in R Markdown.
 
-> Please note this example is for [R Markdown v1](http://rmarkdown.rstudio.com/authoring_migrating_from_v1.html) only. If you use [R Markdown v2](http://rmarkdown.rstudio.com/), you should use the vignette engine `knitr::rmarkdown` instead of `knitr::knitr`.
+> Please note this example is for [R Markdown v1](https://rmarkdown.rstudio.com/authoring_migrating_from_v1.html) only. If you use [R Markdown v2](https://rmarkdown.rstudio.com/), you should use the vignette engine `knitr::rmarkdown` instead of `knitr::knitr`.
 
 ## Package vignettes
 

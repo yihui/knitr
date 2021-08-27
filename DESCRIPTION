@@ -1,9 +1,10 @@
 Package: knitr
 Type: Package
 Title: A General-Purpose Package for Dynamic Report Generation in R
-Version: 1.29.3
+Version: 1.33.8
 Authors@R: c(
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666")),
+    person("Abhraneel", "Sarma", role = "ctb"),
     person("Adam", "Vogt", role = "ctb"),
     person("Alastair", "Andrew", role = "ctb"),
     person("Alex", "Zvoleff", role = "ctb"),
@@ -15,8 +16,10 @@ Authors@R: c(
     person("Ben", "Baumer", role = "ctb"),
     person("Brian", "Diggs", role = "ctb"),
     person("Brian", "Zhang", role = "ctb"),
+    person("Bulat", "Yapparov", role = "ctb"),
     person("Cassio", "Pereira", role = "ctb"),
     person("Christophe", "Dervieux", role = "ctb"),
+    person("David", "Hall", role = "ctb"),
     person("David", "Hugh-Jones", role = "ctb"),
     person("David", "Robinson", role = "ctb"),
     person("Doug", "Hemken", role = "ctb"),
@@ -77,6 +80,7 @@ Authors@R: c(
     person("Niels Richard", "Hansen", role = "ctb"),
     person("Noam", "Ross", role = "ctb"),
     person("Obada", "Mahdi", role = "ctb"),
+    person("Pavel N.", "Krivitsky", role = "ctb", comment=c(ORCID = "0000-0002-9101-3362")),
     person("Qiang", "Li", role = "ctb"),
     person("Ramnath", "Vaidyanathan", role = "ctb"),
     person("Richard", "Cotton", role = "ctb"),
@@ -107,13 +111,13 @@ Depends:
 Imports:
     evaluate (>= 0.10),
     highr,
-    markdown,
+    methods,
     stringr (>= 0.6),
     yaml (>= 2.1.19),
-    methods,
-    xfun (>= 0.15),
+    xfun (>= 0.21),
     tools
 Suggests:
+    markdown,
     formatR,
     testit,
     digest,
@@ -136,8 +140,10 @@ Suggests:
     showtext,
     tibble,
     sass,
+    bslib,
     ragg,
-    styler (>= 1.2.0)
+    styler (>= 1.2.0),
+    targets (>= 0.6.0)
 License: GPL
 URL: https://yihui.org/knitr/
 BugReports: https://github.com/yihui/knitr/issues
@@ -182,4 +188,4 @@ Collate:
     'utils-upload.R'
     'utils-vignettes.R'
     'zzz.R'
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

@@ -86,14 +86,15 @@ knit2pdf = function(
 #' Convert markdown to HTML using knit() and markdownToHTML()
 #'
 #' This is a convenience function to knit the input markdown source and call
-#' \code{markdown::\link{markdownToHTML}()} in the \pkg{markdown} package to
-#' convert the result to HTML.
+#' \code{markdown::\link[markdown]{markdownToHTML}()} in the \pkg{markdown}
+#' package to convert the result to HTML.
 #' @inheritParams knit
-#' @param ... Options passed to \code{markdown::\link{markdownToHTML}()}.
+#' @param ... Options passed to
+#'   \code{markdown::\link[markdown]{markdownToHTML}()}.
 #' @param force_v1 Boolean; whether to force rendering the input document as an
 #'   R Markdown v1 document, even if it is for v2.
 #' @export
-#' @seealso \code{\link{knit}}, \code{markdown::\link{markdownToHTML}}
+#' @seealso \code{\link{knit}}, \code{markdown::\link[markdown]{markdownToHTML}}
 #' @return If the argument \code{text} is NULL, a character string (HTML code)
 #'   is returned; otherwise the result is written into a file and the filename
 #'   is returned.
@@ -107,26 +108,15 @@ knit2pdf = function(
 #' if (interactive()) browseURL('test.html')
 #'
 #' unlink(c('test.Rmd', 'test.html', 'test.md'))
-knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = NULL,
-                     quiet = FALSE, encoding = 'UTF-8', force_v1 = FALSE) {
+knit2html = function(
+  input, output = NULL, ..., envir = parent.frame(), text = NULL,
+  quiet = FALSE, encoding = 'UTF-8', force_v1 = getOption('knitr.knit2html.force_v1', FALSE)
+) {
   # packages containing vignettes using R Markdown v1 should declare dependency
   # on 'markdown' in DESCRIPTION (typically in Suggests)
-  if (!is.na(pkg <- check_package_name()) && pkg != 'markdown') {
-    info = packageDescription(pkg, fields = c('Depends', 'Imports', 'Suggests'))
-    if (!'markdown' %in% unlist(strsplit(unlist(info), '[[:space:],]+'))) {
-      if (is_CRAN_incoming()) stop2(
-        "The 'markdown' package should be declared as a dependency of the '", pkg,
-        "' package (e.g., in the  'Suggests' field of DESCRIPTION), because it ",
-        "contains vignette(s) built with the 'markdown' package. Please see ",
-        "https://github.com/yihui/knitr/issues/1864 for more information."
-      )
-    }
-  }
-  # TODO: remove the above hack in the future when no CRAN packages have the issue
-
+  test_vig_dep('markdown')
   if (!force_v1 && is.null(text)) {
-    signal = if (is_R_CMD_check()) warning2 else stop2
-    if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) signal(
+    if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) warning2(
       'It seems you should call rmarkdown::render() instead of knitr::knit2html() ',
       'because ', input, ' appears to be an R Markdown v2 document.'
     )
@@ -139,12 +129,13 @@ knit2html = function(input, output = NULL, ..., envir = parent.frame(), text = N
   } else markdown::markdownToHTML(text = out, ...)
 }
 
-knit2html_v1 = function(...) knit2html(..., force_v1 = TRUE)
-
 #' Knit an R Markdown document and post it to WordPress
 #'
 #' This function is a wrapper around the \pkg{RWordPress} package. It compiles
-#' an R Markdown document to HTML and post the results to WordPress.
+#' an R Markdown document to HTML and post the results to WordPress. Please note
+#' that \pkg{RWordPress} has not been updated for several years, which is
+#' \href{https://github.com/yihui/knitr/issues/1866}{not a good sign}. For
+#' blogging with R, you may want to try the \pkg{blogdown} package instead.
 #' @param input Filename of the Rmd document.
 #' @param title Title of the post.
 #' @param ... Other meta information of the post, e.g. \code{categories = c('R',
@@ -154,10 +145,10 @@ knit2html_v1 = function(...) knit2html(..., force_v1 = TRUE)
 #'   for syntax highlighting of source code and output. The first element
 #'   applies to source code, and the second applies to text output. By default,
 #'   both are \code{FALSE}.
-#' @param action Whether to create a new post, update an existing post, or create a new
-#'   page.
-#' @param postid If \code{action} is \code{editPost}, the post id \code{postid} must be
-#'   specified.
+#' @param action Whether to create a new post, update an existing post, or
+#'   create a new page.
+#' @param postid If \code{action} is \code{editPost}, the post id \code{postid}
+#'   must be specified.
 #' @param publish Boolean: publish the post immediately?
 #' @inheritParams knit
 #' @export
@@ -173,6 +164,14 @@ knit2wp = function(
   input, title = 'A post from knitr', ..., envir = parent.frame(), shortcode = FALSE,
   action = c('newPost', 'editPost', 'newPage'), postid, publish = TRUE
 ) {
+  do.call('library', list(package = 'RWordPress', character.only = TRUE))
+  xfun::do_once(
+    warning2(
+      'This function is based on the RWordPress package, which is no longer actively ',
+      'maintained (https://github.com/yihui/knitr/issues/1866). For blogging with R, ',
+      'you may try the blogdown package instead.'
+    ), 'knitr.knit2wp.warning'
+  )
   out = knit(input, envir = envir); on.exit(unlink(out))
   content = file_string(out)
   content = markdown::markdownToHTML(text = content, fragment.only = TRUE)
@@ -203,7 +202,6 @@ knit2wp = function(
   # if we are editing the post, also include the argument for postid
   if (action == "editPost") WPargs = c(postid = postid, WPargs)
 
-  do.call('library', list(package = 'RWordPress', character.only = TRUE))
   do.call(action, args = WPargs)
 }
 
