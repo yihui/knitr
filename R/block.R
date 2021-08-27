@@ -119,7 +119,7 @@ call_block = function(block) {
 }
 
 # options that should affect cache when cache level = 1,2
-cache1.opts = c('code', 'eval', 'cache', 'cache.path', 'message', 'warning', 'error')
+cache1.opts = c('code', 'eval', 'cache', 'cache.path', 'cache.globals', 'message', 'warning', 'error')
 # more options affecting cache level 2
 cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fig.width', 'fig.height')
 # options that should not affect cache
@@ -312,7 +312,7 @@ eng_r = function(options) {
     if (options$autodep) {
       # you shall manually specify global object names if find_symbols() is not reliable
       cache$objects(
-        objs, options$cache.globals %n% find_globals(code), options$label,
+        objs, cache_globals(options$cache.globals, code), options$label,
         options$cache.path
       )
       dep_auto()
@@ -339,6 +339,12 @@ purge_cache = function(options) {
   cache$purge(paste0(valid_path(
     options$cache.path, c(options$label, dep_list$get(options$label))
   ), '_????????????????????????????????'))
+}
+
+cache_globals = function(option, code) {
+  if (is.character(option)) option else {
+    (if (xfun::isFALSE(option)) find_symbols else find_globals)(code)
+  }
 }
 
 # open a graphical device for a chunk to record plots

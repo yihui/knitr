@@ -8,6 +8,8 @@
 
 - Added a new `targets` engine (https://github.com/ropensci/targets/issues/503, @wlandau). Details: https://books.ropensci.org/targets/markdown.html.
 
+- The [chunk option `cache.globals`](https://yihui.org/knitr/options/) can take values `TRUE` and `FALSE` now (in addition to a character vector). When `FALSE`, it tries to find all symbols in the code chunk, no matter if they are local or global variables. When `NULL` or `TRUE`, it tries to find all global variables (thanks, @knokknok, #1898).
+
 ## MAJOR CHANGES
 
 - An error is now thrown when an inline code result is not coercible to character. This has always been the assumed behavior but it happens to be different in certain formats with unknown automatic coercion. This is now enforced to prevent any unexpected output. An inline code expression must evaluate to a character vector or an object coercible by `as.character()` (#2006).
