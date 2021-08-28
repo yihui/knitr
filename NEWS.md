@@ -6,7 +6,7 @@
 
 - For the `tikz` engine, the class options of the `standalone` document classs can be specified via the chunk option `engine.opts$classoption` (thanks, @XiangyunHuang, #1985). The default value is `tikz`, i.e., `\documentclass[tikz]{standalone}` is used by default.
 
-- Added the ability to pass additional arguments to `dvisvgm` when using the `tikz` engine with `fig.ext="svg"` by using `dvisvgm.opts` in `engine.opts` (@andrewheiss, #2039). Recent versions of `dvisvgm` now allow you to embed fonts into SVG files as base64-encoded WOFF files, so `tikz` chunks can embed fonts using like so: ```` ```{tikz, fig.ext="svg", engine.opts=list(dvisvgm.opts = "--font-format=woff")}````.
+- Added the ability to pass additional arguments to `dvisvgm` when using the `tikz` engine with `fig.ext = "svg"` by using `dvisvgm.opts` in `engine.opts` (thanks, @andrewheiss, #2039). Recent versions of `dvisvgm` now allow you to embed fonts into SVG files as base64-encoded WOFF files, so `tikz` chunks can embed fonts using like so: ```` ```{tikz, fig.ext="svg", engine.opts=list(dvisvgm.opts = "--font-format=woff")}````.
 
 - Added a new `targets` engine (https://github.com/ropensci/targets/issues/503, @wlandau). Details: https://books.ropensci.org/targets/markdown.html.
 

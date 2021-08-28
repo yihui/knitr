@@ -306,9 +306,9 @@ eng_tikz = function(options) {
     # dvisvgm needs to be on the path
     # dvisvgm for windows needs ghostscript bin dir on the path also
     if (Sys.which('dvisvgm') == '') tinytex::tlmgr_install('dvisvgm')
-    if (system2('dvisvgm', c(options$engine.opts$dvisvgm.opts,
-                             '-o', shQuote(fig2), fig)) != 0)
-      stop('Failed to compile ', fig, ' to ', fig2)
+    if (system2('dvisvgm', c(
+      options$engine.opts$dvisvgm.opts, '-o', shQuote(fig2), fig
+    )) != 0) stop('Failed to compile ', fig, ' to ', fig2)
   } else {
     # convert to the desired output-format using magick
     if (ext != 'pdf') magick::image_write(do.call(magick::image_convert, c(
