@@ -1041,34 +1041,3 @@ make_unique = function(x) {
 #' browseURL('logo.html') # you can check its HTML source
 #' }
 image_uri = function(f) xfun::base64_uri(f)
-
-# check if DESCRIPTION has dependencies on certain packages
-desc_has_dep = function(pkg, dir = '.') {
-  res = rep(NA, length(pkg))
-  if (!file.exists(f <- file.path(dir, 'DESCRIPTION'))) return(res)
-  info = read.dcf(f, fields = c('Package', 'Depends', 'Imports', 'Suggests'))
-  if (nrow(info) < 1 || is.na(info[1, 'Package'])) return(res)
-  pkg %in% unlist(strsplit(info, '[[:space:],]+'))
-}
-
-# return TRUE if DESCRIPTION doesn't exist or pkg has been declared as dependency
-test_desc_dep = function(pkg, dir = '.') {
-  res = desc_has_dep(pkg, dir)
-  all(is.na(res)) || (all(res) && has_packages(pkg))
-}
-
-# TODO: remove this hack in the future when no CRAN/BioC packages have the issue
-test_vig_dep = function(pkg) {
-  if (no_test_vig_dep() || test_desc_dep(pkg, '..')) return()
-  p = read.dcf(file.path('..', 'DESCRIPTION'), fields = 'Package')[1, 1]
-  stop2(
-    "The '", pkg, "' package should be installed and declared as a dependency of the '", p,
-    "' package (e.g., in the 'Suggests' field of DESCRIPTION), because the ",
-    "latter contains vignette(s) built with the '", pkg, "' package. Please see ",
-    "https://github.com/yihui/knitr/issues/1864 for more information."
-  )
-}
-
-no_test_vig_dep = function() {
-  is_R_CMD_check() || tolower(Sys.getenv('KNITR_NO_TEST_VIGNETTE_DEP')) == 'true'
-}
