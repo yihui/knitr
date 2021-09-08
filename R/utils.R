@@ -169,7 +169,8 @@ is_lyx = function() {
 
 # detect if running on CRAN (assuming that CRAN does not set CI or NOT_CRAN=true)
 is_cran = function() {
-  !any(tolower(Sys.getenv(c('CI', 'NOT_CRAN'))) == 'true')
+  tolower(Sys.getenv('R_CRANDALF')) == 'true' ||
+    !any(tolower(Sys.getenv(c('CI', 'NOT_CRAN'))) == 'true')
 }
 
 is_cran_check = function() {
