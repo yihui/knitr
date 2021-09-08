@@ -85,9 +85,9 @@ vtangle_empty = function(file, ...) {
 }
 
 # when neither Pandoc nor markdown is available, just silently skip the vignette
-vweave_empty = function(file, ...) {
+vweave_empty = function(file, ..., .reason = 'Pandoc') {
   out = with_ext(file, 'html')
-  writeLines('The vignette could not be built because Pandoc is not available.', out)
+  writeLines(sprintf('The vignette could not be built because %s is not available.', .reason), out)
   out
 }
 
@@ -97,6 +97,8 @@ register_vignette_engines = function(pkg) {
   vig_engine('docco_linear', vweave_docco_linear, '[.][Rr](md|markdown)$')
   vig_engine('docco_classic', vweave_docco_classic, '[.][Rr]mk?d$')
   vig_engine('rmarkdown', function(...) {
+    if (is_cran_check() && !has_package('rmarkdown'))
+      return(vweave_empty(..., .reason = 'rmarkdown'))
     if (pandoc_available()) {
       vweave_rmarkdown(...)
     } else {

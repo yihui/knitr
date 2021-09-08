@@ -167,6 +167,15 @@ is_lyx = function() {
   grepl('[.]Rnw$', args[1]) && !is.na(Sys.getenv('LyXDir', NA))
 }
 
+# detect if running on CRAN (assuming that CRAN does not set CI or NOT_CRAN=true)
+is_cran = function() {
+  !any(tolower(Sys.getenv(c('CI', 'NOT_CRAN'))) == 'true')
+}
+
+is_cran_check = function() {
+  is_cran() && is_R_CMD_check()
+}
+
 # round a number to getOption('digits') decimal places by default, and format()
 # it using significant digits if the option knitr.digits.signif = TRUE
 round_digits = function(x) {

@@ -112,6 +112,9 @@ knit2html = function(
   input, output = NULL, ..., envir = parent.frame(), text = NULL,
   quiet = FALSE, encoding = 'UTF-8', force_v1 = getOption('knitr.knit2html.force_v1', FALSE)
 ) {
+  if (is_cran_check() && !has_package('markdown'))
+    return(vweave_empty(input, .reason = 'markdown'))
+
   if (!force_v1 && is.null(text)) {
     if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) warning2(
       'It seems you should call rmarkdown::render() instead of knitr::knit2html() ',
