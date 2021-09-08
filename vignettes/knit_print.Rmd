@@ -132,7 +132,7 @@ x = 1:10  # invisibly returns 1:10
 
 ### Metadata
 
-The print function can have a side effect of passing "metadata" about objects to **knitr**, and **knitr** will collect this information as it prints objects. The motivation of collecting metadata is to store external dependencies of the objects to be printed. Normally we print an object only to obtain a text representation, but there are cases that can be more complicated. For example, a [**ggvis** ](http://ggvis.rstudio.com/) graph requires external JavaScript and CSS dependencies such as `ggvis.js`. The graph itself is basically a fragment of JavaScript code, which will not work unless the required libraries are loaded (in the HTML header). Therefore we need to collect the dependencies of an object beside printing the object itself.
+The print function can have a side effect of passing "metadata" about objects to **knitr**, and **knitr** will collect this information as it prints objects. The motivation of collecting metadata is to store external dependencies of the objects to be printed. Normally we print an object only to obtain a text representation, but there are cases that can be more complicated. For example, a [**ggvis** ](https://ggvis.rstudio.com/) graph requires external JavaScript and CSS dependencies such as `ggvis.js`. The graph itself is basically a fragment of JavaScript code, which will not work unless the required libraries are loaded (in the HTML header). Therefore we need to collect the dependencies of an object beside printing the object itself.
 
 One way to specify the dependencies is through the `meta` argument of `asis_output()`. Here is a pseudo example:
 
