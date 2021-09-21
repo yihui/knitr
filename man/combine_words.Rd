@@ -36,9 +36,10 @@ elements, we may want to combine them into a phrase like \samp{a and b}, or
 \details{
 If the length of the input \code{words} is smaller than or equal to 1,
 \code{words} is returned. When \code{words} is of length 2, the first word
-and second word are combined using the \code{and} string. When the length is
-greater than 2, \code{sep} is used to separate all words, and the \code{and}
-string is prepended to the last word.
+and second word are combined using the \code{and} string, or if blank,
+\code{sep} if is used. When the length is greater than 2, \code{sep} is used
+to separate all words, and the \code{and} string is prepended to the last
+word.
 }
 \examples{
 combine_words("a")
