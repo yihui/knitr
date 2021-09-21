@@ -1,5 +1,6 @@
 # CHANGES IN knitr VERSION 1.35
 
+- In `knitr::combine_words()`, when `words` is length 2 and `and = ""`, `sep` will now be used (thanks, @eitsupi, #2044).
 
 # CHANGES IN knitr VERSION 1.34
 
