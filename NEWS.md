@@ -2,6 +2,8 @@
 
 - In `knitr::combine_words()`, when `words` is length 2 and `and = ""`, `sep` will now be used (thanks, @eitsupi, #2044).
 
+- When `knit()` Rmd file, chunks output sources with satisfying length of fences (thanks, @atusy, #2047).
+
 # CHANGES IN knitr VERSION 1.34
 
 ## NEW FEATURES
