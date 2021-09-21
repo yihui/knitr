@@ -153,7 +153,6 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
 hooks_markdown = function(strict = FALSE, fence_char = '`') {
   fence = paste(rep(fence_char, 3), collapse = '')
   update_fence <- function(x) {
-    x = one_string(c('', x))
     r = paste0('\n', fence_char, '{3,}')
     if (grepl(r, x)) {
       l = attr(gregexpr(r, x)[[1]], 'match.length')
@@ -168,6 +167,7 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
     if (strict) {
       paste('\n', indent_block(x), '', sep = '\n')
     } else {
+      x = one_string(c('', x))
       fence = update_fence(x)
       paste0('\n\n', fence, block_attr(attr, class), x, fence, '\n\n')
     }
@@ -183,7 +183,7 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
     if (language == 'node') language = 'javascript'
     if (!options$highlight) language = 'text'
     attrs = block_attr(options$attr.source, options$class.source, language)
-    fence = update_fence(x)
+    fence = update_fence(one_string(c('', x)))
     paste0('\n\n', fence, attrs, '\n', x, fence, '\n\n')
   }
   list(
