@@ -123,6 +123,7 @@ assert('combine_words() combines multiple words into a single string', {
   (cw(NULL) %==% NULL)
   (cw(c('a')) %==% 'a')
   (cw(c('a', 'b')) %==% 'a and b')
+  (cw(c('a', 'b'), and = "") %==% 'a, b')
   (cw(c('a', 'b', 'c')) %==% 'a, b, and c')
   (cw(c('a', 'b', 'c'), and = '') %==% 'a, b, c')
   (cw(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c')
