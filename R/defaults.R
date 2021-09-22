@@ -67,10 +67,12 @@ new_defaults = function(value = list()) {
 #' @export
 #' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
 opts_chunk = new_defaults(list(
-
   eval = TRUE, echo = TRUE, results = 'markup', tidy = FALSE, tidy.opts = NULL,
   collapse = FALSE, prompt = FALSE, comment = '##', highlight = TRUE,
-  strip.white = TRUE, size = 'normalsize', background = '#F7F7F7',
+  size = 'normalsize', background = '#F7F7F7',
+
+  # NA value means will set the default option later (e.g in fix_options)
+  strip.white = NA,
 
   cache = FALSE, cache.path = 'cache/', cache.vars = NULL, cache.lazy = TRUE,
   dependson = NULL, autodep = FALSE, cache.rebuild = FALSE,

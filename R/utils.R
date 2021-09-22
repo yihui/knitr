@@ -311,11 +311,15 @@ fix_options = function(options) {
     }
   }
 
+  # Adjust some options when collapse is TRUE
   if (options$collapse) {
     options[unlist(lapply(
       c('class.', 'attr.'), paste0, c('output', 'message', 'warning', 'error')
     ))] = NULL
   }
+
+  # Change default of value conditionally
+  if (is.na(options$strip.white)) options$strip.white = !options$collapse
 
   options
 }
