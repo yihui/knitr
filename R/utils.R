@@ -244,7 +244,8 @@ tikz_dict = function(path) {
   paste(sans_ext(basename(path)), 'tikzDictionary', sep = '-')
 }
 
-# compatibility with Sweave and old beta versions of knitr
+# Initially for compatibility with Sweave and old beta versions of knitr
+# but now also place to tweak default options
 fix_options = function(options) {
   options = as.strict_list(options)
 
