@@ -1,5 +1,31 @@
 # CHANGES IN knitr VERSION 1.35
 
+## NEW FEATURES
+
+- Chunk options can also be written *inside* a code chunk now after the special comment `#|`, e.g.,
+
+  ```{r}
+  #| echo = FALSE, fig.width = 10,
+  #| fig.cap = "This is a long caption."
+  
+  plot(cars)
+  ```
+  
+  The main differences between this new syntax and traditional syntax (i.e., chunk options in the chunk header) are: 1) the chunk options can be freely wrapped, i.e., you can write then on as many lines as you want; 2) you can also use the YAML syntax instead of the comma-separated syntax if you like, e.g.,
+  
+  ```{r}
+  #| echo: false
+  #| fig.width: 10
+  ```
+  
+  Chunk options provided inside a code chunk will override options with the same names in the chunk header if chunk options are provided in both places, e.g.,
+    
+  ```{r, echo = TRUE}
+  #| echo = FALSE, fig.width = 10
+  ```
+  
+  The effective chunk options for the above chunk are `echo = FALSE` and `fig.width = 10`.
+
 ## BUG FIXES
 
 - Fixed a regression in v1.34: now blank lines in code chunks are stripped only when `collapse = FALSE` but no longer stripped by default when `collapse = TRUE`. If you prefer blank lines to be always stripped, set `strip.white = TRUE` globally or on the per chunk basis (thanks, @IndrajeetPatil, rstudio/rmarkdown#2220, #2046).

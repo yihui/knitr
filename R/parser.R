@@ -90,6 +90,13 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
 
   params.src = params
   params = parse_params(params.src)
+
+  # merge with possible chunk options written as (YAML or CSV) metadata in
+  # chunk, and remove metadata from code body
+  parts = partition_chunk(engine, code)
+  params = merge_list(params, parts$options)
+  code = parts$code
+
   # remove indent (and possibly markdown blockquote >) from code
   if (nzchar(spaces <- gsub('^([\t >]*).*', '\\1', header))) {
     params$indent = spaces
@@ -123,6 +130,17 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
       dep_list$set(setNames(list(c(dep_list$get(i), label)), i))
   }
 
+  # for quarto only
+  if (!is.null(opts_knit$get('quarto.version'))) {
+    params$original.params.src = params.src
+    params$chunk.echo = isTRUE(params[['echo']])
+    params$yaml.code = parts$src
+    # alias 'warning' explicitly set in chunk metadata to the 'message' option
+    if (!is.null(parts$options[['warning']])) {
+      params$message = parts$options[['warning']]
+    }
+  }
+
   structure(list(params = params, params.src = params.src), class = 'block')
 }
 
@@ -133,9 +151,9 @@ unnamed_chunk = function(prefix = NULL, i = chunk_counter()) {
 }
 
 # parse params from chunk header
-parse_params = function(params) {
+parse_params = function(params, label = TRUE) {
 
-  if (params == '') return(list(label = unnamed_chunk()))
+  if (params == '') return(if (label) list(label = unnamed_chunk()))
 
   res = withCallingHandlers(
     eval(parse_only(paste('alist(', quote_label(params), ')'))),
@@ -154,11 +172,11 @@ parse_params = function(params) {
     stop('invalid chunk options: ', params,
          "\n(all options must be of the form 'tag=value' except the chunk label)")
   if (is.null(res$label)) {
-    if (n == 0L) res$label = unnamed_chunk() else names(res)[idx] = 'label'
+    if (n == 0L) res$label = '' else names(res)[idx] = 'label'
   }
   if (!is.character(res$label))
     res$label = gsub(' ', '', as.character(as.expression(res$label)))
-  if (identical(res$label, '')) res$label = unnamed_chunk()
+  if (identical(res$label, '')) res$label = if (label) unnamed_chunk()
   res
 }
 
@@ -173,6 +191,93 @@ quote_label = function(x) {
     x = gsub('^\\s*([^\'"][^=]*)(,|\\s*$)', "'\\1'\\2", x)
   }
   x
+}
+
+# comment characters for various languages
+comment_chars = list(
+  `#` = c('awk', 'bash', 'coffee', 'gawk', 'julia', 'octave', 'perl', 'powershell', 'python', 'r', 'ruby', 'sed', 'stan'),
+  '//' = c('asy', 'cc', 'csharp', 'd3', 'dot', 'fsharp', 'go', 'groovy', 'java', 'js', 'node', 'Rcpp', 'sass', 'scala'),
+  `%` = c('matlab', 'tikz'),
+  `/* */` = c('c', 'css'),
+  `* ;` = c('sas'),
+  `--` = c('haskell', 'lua', 'mysql', 'psql', 'sql'),
+  `!` = c('fortran', 'fortran95'),
+  `*` = c('stata')
+)
+# reshape it using the language name as the index, i.e., from list(char = lang)
+# to list(lang = char)
+comment_chars = local({
+  res = list()
+  for (i in names(comment_chars)) {
+    chars = comment_chars[[i]]
+    res = c(res, setNames(rep(list(strsplit(i, ' ')[[1]]), length(chars)), chars))
+  }
+  res[order(names(res))]
+})
+
+# partition YAML (chunk options) from a code chunk of the following form:
+# #| echo: true
+# #| foo: bar
+# 1 + 1
+#
+# we also allow for traditional CSV syntax, e.g.,
+# #| echo = TRUE, fig.width = 8
+partition_chunk = function(engine, code) {
+
+  res = list(yaml = NULL, src = NULL, code = code)
+  # mask out empty blocks
+  if (length(code) == 0) return(res)
+
+  char = comment_chars[[engine]] %n% '#'
+  s1 = paste0(char[[1]], '| ')
+  s2 = ifelse(length(char) > 1, char[[2]], '')
+
+  # check for option comments
+  i1 = startsWith(code, s1)  # [start|end]sWith() requires R >= 3.3.0
+  i2 = endsWith(trimws(code, 'right'), s2)
+  m = i1 & i2
+
+  # has to have at least one matched line at the beginning
+  if (!m[[1]]) return(res)
+
+  # divide into yaml and code
+  if (all(m)) {
+    src = code
+    code = NULL
+  } else {
+    src = head(code, which.min(m) - 1)
+    code = tail(code, -length(src))
+  }
+
+  # trim right
+  if (any(i2)) src = trimws(src, 'right')
+
+  # extract meta from comments, then parse it
+  meta = substr(src, nchar(s1) + 1, nchar(src) - nchar(s2))
+  # see if the metadata looks like YAML or CSV
+  if (grepl('^[^ :]+:($|\\s)', meta[1])) {
+    meta = yaml::yaml.load(meta, eval.expr = TRUE)
+    if (!is.list(meta) || length(names(meta)) == 0) {
+      warning('Invalid YAML option format in chunk: \n', one_string(meta), '\n')
+      meta = list()
+    }
+  } else {
+    meta = parse_params(paste(meta, collapse = ''), label = FALSE)
+  }
+
+  # normalize field name 'id' to 'label' if provided
+  meta$label = unlist(meta[c('label', 'id')])[1]
+  meta$id = NULL
+  # convert any option with fig- into fig. and out- to out.
+  names(meta) = sub('^(fig|out)-', '\\1.', names(meta))
+
+  # extract code
+  if (length(code) > 0 && is_blank(code[[1]])) {
+    code = code[-1]
+    src = c(src, '')
+  }
+
+  list(options = meta, src = src, code = code)
 }
 
 print.block = function(x, ...) {

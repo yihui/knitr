@@ -999,8 +999,6 @@ raw_latex = function(x, ...) raw_block(x, 'latex', ...)
 #' @export
 raw_html = function(x, ...) raw_block(x, 'html', ...)
 
-trimws = function(x) gsub('^\\s+|\\s+$', '', x)
-
 optipng = function(...) {
   warning2('knitr:::optipng() has been deprecated; please use xfun::optipng()')
   xfun::optipng(...)
