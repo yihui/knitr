@@ -1,15 +1,6 @@
 name: 'Checkout knitr-example'
 author: Christophe Dervieux
 description: 'Checkout knitr-example project on the right branch, i.e same branch name as the current PR main branch'
-# inputs:
-#   who-to-greet:  # id of input
-#     description: 'Who to greet'
-#     required: true
-#     default: 'World'
-# outputs:
-#   random-number:
-#     description: "Random number"
-#     value: ${{ steps.random-number-generator.outputs.random-id }}
 runs:
   using: "composite"
   steps:
