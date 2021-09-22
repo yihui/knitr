@@ -320,7 +320,8 @@ fix_options = function(options) {
   }
 
   # Change default of value conditionally
-  if (is.na(options$strip.white)) options$strip.white = !options$collapse
+  if (inherits(options$strip.white, 'AsIs'))
+    options$strip.white = !options$collapse
 
   options
 }

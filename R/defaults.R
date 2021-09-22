@@ -71,8 +71,9 @@ opts_chunk = new_defaults(list(
   collapse = FALSE, prompt = FALSE, comment = '##', highlight = TRUE,
   size = 'normalsize', background = '#F7F7F7',
 
-  # NA value means will set the default option later (e.g in fix_options)
-  strip.white = NA,
+  # value wrapped in I() means a change in default option later
+  # (e.g in fix_options, conditionally to other argument)
+  strip.white = I(TRUE),
 
   cache = FALSE, cache.path = 'cache/', cache.vars = NULL, cache.lazy = TRUE,
   dependson = NULL, autodep = FALSE, cache.rebuild = FALSE,
