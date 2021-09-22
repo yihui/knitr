@@ -244,7 +244,8 @@ tikz_dict = function(path) {
   paste(sans_ext(basename(path)), 'tikzDictionary', sep = '-')
 }
 
-# compatibility with Sweave and old beta versions of knitr
+# Initially for compatibility with Sweave and old beta versions of knitr
+# but now also place to tweak default options
 fix_options = function(options) {
   options = as.strict_list(options)
 
@@ -311,11 +312,16 @@ fix_options = function(options) {
     }
   }
 
+  # Adjust some options when collapse is TRUE
   if (options$collapse) {
     options[unlist(lapply(
       c('class.', 'attr.'), paste0, c('output', 'message', 'warning', 'error')
     ))] = NULL
   }
+
+  # Change default of value conditionally
+  if (inherits(options$strip.white, 'AsIs'))
+    options$strip.white = !options$collapse
 
   options
 }

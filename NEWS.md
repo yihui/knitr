@@ -1,5 +1,7 @@
 # CHANGES IN knitr VERSION 1.35
 
+- Fix a regression in 1.34: Blank lines are now more stripped by default when `collapse = TRUE`, only when `collapse = FALSE`. If you liked the new behavior, set `strip.white = TRUE` globally or on per chunk basis (thanks, @IndrajeetPatil, rstudio/rmarkdown#2220, #2046).
+
 - In `knitr::combine_words()`, when `words` is length 2 and `and = ""`, `sep` will now be used (thanks, @eitsupi, #2044).
 
 # CHANGES IN knitr VERSION 1.34
