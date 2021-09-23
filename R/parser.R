@@ -425,13 +425,13 @@ filter_chunk_end_md = function(chunk.begin, chunk.end, lines) {
   in.chunk = FALSE
   expected_end = NA_character_
   fun = function(is.begin, is.end, line) {
-    if (in.chunk && is.end && identical(line, expected_end)) {
+    if (in.chunk && is.end && grepl(expected_end, line)) {
       in.chunk <<- FALSE
       return(TRUE)
     }
     if (!in.chunk && is.begin) {
       in.chunk <<- TRUE
-      expected_end <<- sub('(^[\t >]*```+).*', '\\1', line)
+      expected_end <<- paste0(sub('(^[\t >]*```+).*', '\\1', line), "\\s*$")
     }
     FALSE
   }
