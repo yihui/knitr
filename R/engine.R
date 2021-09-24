@@ -555,8 +555,8 @@ eng_sql = function(options) {
 
   data = tryCatch({
     if (is_sql_update_query(query)) {
-      DBI::dbExecute(conn, query)
-      NULL
+      data = DBI::dbExecute(conn, query)
+      data
     } else if (is.null(varname) && max.print > 0) {
       # execute query -- when we are printing with an enforced max.print we
       # use dbFetch so as to only pull down the required number of records
