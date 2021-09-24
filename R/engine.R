@@ -633,6 +633,11 @@ eng_sql = function(options) {
 
     } else print(display_data) # fallback to standard print
   })
+  if (is.numeric(data) && length(data) == 1 && is.null(varname)) {
+    options$results = 'asis'
+    # format = "fg" instead of "d". Row counts on DB may be greater than integer max value
+    output = paste0("Number of affected rows: ", formatC(data, format = "fg", big.mark = ','))
+  }
   if (options$results == 'hide') output = NULL
 
   # assign varname if requested
