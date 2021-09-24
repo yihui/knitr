@@ -13,7 +13,7 @@
   ```
   ````
   
-  The main differences between this new syntax and traditional syntax (i.e., chunk options in the chunk header) are: 1) the chunk options can be freely wrapped, i.e., you can write then on as many lines as you want; 2) you can also use the YAML syntax instead of the comma-separated syntax if you like, e.g.,
+  The main differences between this new syntax and traditional syntax (i.e., chunk options in the chunk header) are: 1) the chunk options can be freely wrapped, i.e., you can write them on as many lines as you prefer; 2) you can also use the YAML syntax instead of the comma-separated syntax if you like, e.g.,
   
   ````
   ```{r}
