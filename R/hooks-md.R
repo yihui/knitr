@@ -152,7 +152,7 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
 #' @export
 hooks_markdown = function(strict = FALSE, fence_char = '`') {
   fence = paste(rep(fence_char, 3), collapse = '')
-  update_fence <- function(x) {
+  update_fence = function(x) {
     r = paste0('\n', fence_char, '{3,}')
     if (grepl(r, x)) {
       l = attr(gregexpr(r, x)[[1]], 'match.length')
