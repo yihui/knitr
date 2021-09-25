@@ -1,3 +1,7 @@
+- The `sql` engine now produces an output for update-like SQL queries, indicating the number of rows affected (as returned by DBI::dbExecute). So far, `knitr` produces a nicely formatted output for queries returning a result set (typically SELECT...), but gives no feedback at all for queries making changes to the DB (e.g. INSERT|UPDATE|DELETE|CREATE|DROP; see not exported function knitr:::is_sql_update_query). For such queries, `knitr` now shows the number of affected rows. You can also set the chunk option `output.var` to assign the number of affected rows to a variable.
+
+
+
 # CHANGES IN knitr VERSION 1.35
 
 ## BUG FIXES
