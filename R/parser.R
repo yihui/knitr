@@ -505,10 +505,10 @@ parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
 }
 
 # filter chunk.end lines that don't actually end a chunk
-filter_chunk_end = function(chunk.begin, chunk.end, lines = NA_character_, patterns = NA_character_) {
+filter_chunk_end = function(chunk.begin, chunk.end, lines = NA, patterns = list()) {
   in.chunk = FALSE
   is.md = identical(patterns, all_patterns[['md']])
-  pattern.end = NA_character_
+  pattern.end = NA
   fun = function(is.begin, is.end, line) {
     if (in.chunk && is.end && (is.na(pattern.end) || grepl(pattern.end, line))) {
       in.chunk <<- FALSE
@@ -516,7 +516,7 @@ filter_chunk_end = function(chunk.begin, chunk.end, lines = NA_character_, patte
     }
     if (!in.chunk && is.begin) {
       in.chunk <<- TRUE
-      if (is.md) pattern.end <<- paste0(sub('(^[\t >]*```+).*', '\\1', line), "\\s*$")
+      if (is.md) pattern.end <<- sub('(^[\t >]*```+).*', '\\1\\\\s*$', line)
     }
     FALSE
   }
