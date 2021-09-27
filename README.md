@@ -1,11 +1,10 @@
 # knitr
 
 <!-- badges: start -->
-![Check & Coverage](https://github.com/yihui/knitr/workflows/Check%20&%20Coverage/badge.svg)
-[![Check with knitr examples](https://github.com/yihui/knitr/workflows/Check%20with%20knitr%20examples/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3A%22Check+with+knitr+examples%22)
+[![Check & Coverage](https://github.com/yihui/knitr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yihui/knitr/actions/workflows/R-CMD-check.yaml)
+[![Check knitr examples](https://github.com/yihui/knitr/actions/workflows/knitr-examples.yaml/badge.svg)](https://github.com/yihui/knitr/actions/workflows/knitr-examples.yaml)
 [![Coverage status](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://codecov.io/github/yihui/knitr?branch=master)
 [![CRAN release](https://www.r-pkg.org/badges/version/knitr)](https://cran.r-project.org/package=knitr)
-[![Lock threads](https://github.com/yihui/knitr/workflows/Lock%20threads/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3A%22Lock+threads%22)
 <!-- badges: end -->
 
 The R package **knitr** is a general-purpose literate programming engine,

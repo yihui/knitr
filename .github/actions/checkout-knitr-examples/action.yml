@@ -1,0 +1,29 @@
+name: 'Checkout knitr-example'
+author: Christophe Dervieux
+description: 'Checkout knitr-example project on the right branch, i.e same branch name as the current PR main branch'
+runs:
+  using: "composite"
+  steps:
+      - name: Determine branch name
+        id: check-branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          headref="${{ github.head_ref }}"
+          if [ -z "$headref" ]
+          then
+            echo '::debug::Not on pull request - using main ref branch'
+            branch=''
+          else
+            echo '::debug::On pull request'
+            branch=$(gh api repos/yihui/knitr-examples/branches | jq -cr '.[] | select(.name == '\"$headref\"') | .name')
+          fi
+          echo ::set-output name=ref::$(echo $branch)
+        shell: bash
+      - name: Retrieve knitr-examples
+        uses: actions/checkout@v2
+        with:
+          repository: yihui/knitr-examples
+          path: knitr-examples
+          ref: ${{ steps.check-branch.outputs.ref }}
+          clean: false
