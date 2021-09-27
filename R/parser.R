@@ -90,7 +90,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
 
   # for quarto, preserve the actual original params.src and do not remove the engine
   if (!(is_quarto <- !is.null(opts_knit$get('quarto.version')))) params.src = params
-  params = parse_params(params.src)
+  params = parse_params(params)
 
   # merge with possible chunk options written as (YAML or CSV) metadata in
   # chunk, and remove metadata from code body
