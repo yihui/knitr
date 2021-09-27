@@ -29,6 +29,11 @@ assert('include_graphics() includes custom images correctly', {
 hook_src = knit_hooks$get("source")
 options_ = list(engine = "r", prompt = FALSE, highlight = TRUE)
 
+assert('Lengh of fences are satisfied', {
+  (hook_src("", options_) %==% "\n\n```r\n\n```\n\n")
+  (hook_src("```", options_) %==% "\n\n````r\n```\n````\n\n")
+})
+
 assert('Attributes for source can be specified class.source and attr.source', {
   (hook_src("1", c(options_, class.source = "a b")) %==% "\n\n```{.r .a .b}\n1\n```\n\n")
   (hook_src("1", c(options_, attr.source = ".a .b")) %==% "\n\n```{.r .a .b}\n1\n```\n\n")

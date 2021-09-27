@@ -38,6 +38,8 @@
 
 - In `knitr::combine_words()`, when `words` is length 2 and `and = ""`, `sep` will now be used (thanks, @eitsupi, #2044).
 
+- For R Markdown documents, if the chunk output contains N backticks, the `output` hook will use N + 1 backticks to wrap the output, so that the N verbatim backticks can be correctly preserved (thanks, @atusy, #2047).
+
 # CHANGES IN knitr VERSION 1.34
 
 ## NEW FEATURES
