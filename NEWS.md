@@ -32,6 +32,16 @@
   
   The effective chunk options for the above chunk are `echo = FALSE` and `fig.width = 10`.
 
+## MAJOR CHANGES
+
+- For R Markdown documents, if the chunk header is indented, the closing backticks (usually ```` ``` ````) of the chunk must be indented with the same amount of spaces (thanks, @atusy, #2047). For example, the following is no longer a valid code chunk because the chunk header is indented but the closing backticks are not:
+
+  ````
+   ```{r}
+  1 + 1
+  ```
+  ````
+
 ## BUG FIXES
 
 - Fixed a regression in v1.34: now blank lines in code chunks are stripped only when `collapse = FALSE` but no longer stripped by default when `collapse = TRUE`. If you prefer blank lines to be always stripped, set `strip.white = TRUE` globally or on the per chunk basis (thanks, @IndrajeetPatil, rstudio/rmarkdown#2220, #2046).

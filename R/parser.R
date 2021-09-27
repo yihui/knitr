@@ -521,7 +521,7 @@ filter_chunk_end = function(chunk.begin, chunk.end, lines = NA, patterns = list(
     }
     if (!in.chunk && is.begin) {
       in.chunk <<- TRUE
-      if (is.md) pattern.end <<- sub('(^[\t >]*```+).*', '\\1\\\\s*$', line)
+      if (is.md) pattern.end <<- sub('(^[\t >]*```+).*', '^\\1\\\\s*$', line)
     }
     FALSE
   }
