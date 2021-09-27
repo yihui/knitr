@@ -555,8 +555,8 @@ eng_sql = function(options) {
 
   data = tryCatch({
     if (is_sql_update_query(query)) {
-      DBI::dbExecute(conn, query)
-      NULL
+      data = DBI::dbExecute(conn, query)
+      data
     } else if (is.null(varname) && max.print > 0) {
       # execute query -- when we are printing with an enforced max.print we
       # use dbFetch so as to only pull down the required number of records
@@ -633,6 +633,11 @@ eng_sql = function(options) {
 
     } else print(display_data) # fallback to standard print
   })
+  if (is.numeric(data) && length(data) == 1 && is.null(varname)) {
+    options$results = 'asis'
+    # format = "fg" instead of "d". Row counts on DB may be greater than integer max value
+    output = paste0("Number of affected rows: ", formatC(data, format = "fg", big.mark = ','))
+  }
   if (options$results == 'hide') output = NULL
 
   # assign varname if requested
