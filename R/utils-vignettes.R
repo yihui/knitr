@@ -39,6 +39,12 @@ vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) 
 }
 
 vtangle = function(file, ..., encoding = 'UTF-8', quiet = FALSE) {
+  # a hack for R <= 3.4.4: https://github.com/yihui/knitr/issues/2052
+  if (Sys.getenv('_R_CHECK_LICENSE_') != '' && getRversion() <= '3.4.4') {
+    file = with_ext(file, '.R')
+    file.create(file)
+    return(file)
+  }
   purl(file, encoding = encoding, quiet = quiet, ...)
 }
 
