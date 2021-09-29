@@ -2,7 +2,7 @@
 
 ## BUG FIXES
 
-- Fixed a regression in **knitr** 1.31 that caused package vignettes to generate (tangle) invalid R scripts with R <= v3.4.4 (thanks, @t-kalinowski, #2052).
+- Fixed a regression in **knitr** 1.31 that caused package vignettes to generate (tangle) invalid R scripts (thanks, @t-kalinowski @halldc, #2052).
 
 # CHANGES IN knitr VERSION 1.35
 
