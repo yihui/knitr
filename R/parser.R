@@ -522,6 +522,9 @@ filter_chunk_end = function(chunk.begin, chunk.end, lines = NA, patterns = list(
     if (!in.chunk && is.begin) {
       in.chunk <<- TRUE
       if (is.md) pattern.end <<- sub('(^[\t >]*```+).*', '^\\1\\\\s*$', line)
+      # TODO: remove this hack after these packages have fixed their problems of unmatched chunk start and end
+      if (is.md && (xfun::check_old_package('microsamplingDesign', '1.0.7') || xfun::check_old_package('stationery', '0.98.30')))
+        pattern.end <<- gsub('\\^\\s+', '', pattern.end)
     }
     FALSE
   }
