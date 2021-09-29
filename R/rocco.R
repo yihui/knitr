@@ -64,7 +64,7 @@ rocco = function(input, ...) {
   i2 = max(grep('<!--table end-->$', txt))
   x = one_string(txt[seq(i1 + 1, i2 - 1)])
   x = gsub('</pre>\\s*<pre>', '<!--ReDuNdAnTpRe-->', x)  # merge pre blocks
-  m = gregexpr('<pre><code( class="[[:alnum:]]+")?>(.|\n)*?</code></pre>', x)
+  m = gregexpr('<pre><code( class="[[:alnum:]-]+")?>(.|\n)*?</code></pre>', x)
   if (m[[1]][1] == -1) stop('No code blocks in HTML output')
 
   code = regmatches(x, m)[[1]]
