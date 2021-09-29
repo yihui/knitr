@@ -514,21 +514,31 @@ filter_chunk_end = function(chunk.begin, chunk.end, lines = NA, patterns = list(
   in.chunk = FALSE
   is.md = identical(patterns, all_patterns[['md']])
   pattern.end = NA
-  fun = function(is.begin, is.end, line) {
-    if (in.chunk && is.end && (is.na(pattern.end) || grepl(pattern.end, line))) {
+  fun = function(is.begin, is.end, line, i) {
+    if (in.chunk && is.end && (is.na(pattern.end) || match_chunk_end(pattern.end, line, i))) {
       in.chunk <<- FALSE
       return(TRUE)
     }
     if (!in.chunk && is.begin) {
       in.chunk <<- TRUE
       if (is.md) pattern.end <<- sub('(^[\t >]*```+).*', '^\\1\\\\s*$', line)
-      # TODO: remove this hack after these packages have fixed their problems of unmatched chunk start and end
-      if (is.md && (xfun::check_old_package('microsamplingDesign', '1.0.7') || xfun::check_old_package('stationery', '0.98.30')))
-        pattern.end <<- gsub('\\^\\s+', '', pattern.end)
     }
     FALSE
   }
-  mapply(fun, chunk.begin, chunk.end, lines)
+  mapply(fun, chunk.begin, chunk.end, lines, seq_along(lines))
+}
+
+match_chunk_end = function(pattern, line, i) {
+  if (grepl(pattern, line)) return(TRUE)
+  p = gsub('\\^\\s+', '', pattern)
+  if (!grepl(p, line)) return(FALSE)
+  # TODO: should we tolerate unmatched indentation? (we do for now)
+  warning2(
+    'Line ', i, ' ("', line, '") was not properly indented to match the ',
+    'indentation of the chunk header. You are recommended to change this line to "',
+    gsub('\\^(\\s+`+).*', '\\1', pattern), '".'
+  )
+  TRUE
 }
 
 #' Get all chunk labels in a document

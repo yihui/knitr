@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.36
 
+## MAJOR CHANGES
+
+- In **knitr** 1.35, if the indentation of the closing backticks does not match the indentation of the chunk header in an Rmd document, the closing backticks would not be treated as closing fence of a code chunk. This behavior has been reverted because we have discovered several cases in which the indentation was accidental. A warning message will be issued instead, and you are still recommended to fix the improper indentation if discovered.
+
 ## BUG FIXES
 
 - Fixed a regression in **knitr** 1.31 that caused package vignettes to generate (tangle) invalid R scripts (thanks, @t-kalinowski @halldc, #2052).
