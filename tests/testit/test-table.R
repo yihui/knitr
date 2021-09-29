@@ -173,7 +173,7 @@ assert('has_rownames() works', {
 })
 
 op = options(knitr.kable.NA = '')
-assert('kable() can display NA as emtpy strings', {
+assert('kable() can display NA as empty strings', {
   (kable2(matrix(c(1, NA, 3, 4), nrow = 2), col.names = c('a', 'b')) %==%
      c('|  a|  b|', '|--:|--:|', '|  1|  3|', '|   |  4|'))
 })
