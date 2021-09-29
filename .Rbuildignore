@@ -20,3 +20,4 @@ Makefile
 ^README.*\.md$
 ^codecov\.yml$
 ^NEWS\.md$
+^cran-comments\.md$
