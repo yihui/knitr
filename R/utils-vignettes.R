@@ -153,14 +153,10 @@ knit_filter = function(ifile, encoding = 'UTF-8') {
   p = detect_pattern(x, tolower(file_ext(ifile)))
   if (is.null(p)) return(x)
   p = all_patterns[[p]]; p1 = p$chunk.begin; p2 = p$chunk.end
-  i1 = grepl(p1, x)
-  i2 = filter_chunk_end(i1, grepl(p2, x))
-  m = numeric(n)
-  m[i1] = 1; m[i2] = 2  # 1: code; 2: text
-  if (m[1] == 0) m[1] = 2
-  for (i in seq_len(n - 1)) if (m[i + 1] == 0) m[i + 1] = m[i]
-  x[m == 1 | i2] = ''
-  x[m == 2] = stringr::str_replace_all(x[m == 2], p$inline.code, '')
+  m = group_indices(grepl(p1, x), grepl(p2, x))
+  i = m %% 2 == 0
+  x[i] = ''  # remove code chunks
+  x[!i] = stringr::str_replace_all(x[!i], p$inline.code, '')  # remove inline code
   structure(x, control = '-H -t')
 }
 

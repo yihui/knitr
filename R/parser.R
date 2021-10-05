@@ -13,12 +13,9 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
   }
 
   markdown_mode = identical(patterns, all_patterns$md)
-  blks = grepl(chunk.begin, lines)
-  txts = filter_chunk_end(blks, grepl(chunk.end, lines), lines, markdown_mode)
-  # tmp marks the starting lines of a code/text chunk by TRUE
-  tmp = blks | head(c(TRUE, txts), -1)
+  i = group_indices(grepl(chunk.begin, lines), grepl(chunk.end, lines), lines, markdown_mode)
+  groups = unname(split(lines, i))
 
-  groups = unname(split(lines, cumsum(tmp)))
   if (set.preamble)
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
 
@@ -509,20 +506,37 @@ parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   unlist(x, use.names = FALSE)
 }
 
-# filter chunk.end lines that don't actually end a chunk
-filter_chunk_end = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
+# split text lines into groups of code and text chunks
+group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
   in.chunk = FALSE
   pattern.end = NA
+  g = NA  # group index: odd - text; even - chunk
   fun = function(is.begin, is.end, line, i) {
+    if (i == 1) {
+      g <<- if (is.begin) {
+        in.chunk <<- TRUE
+        0
+      } else 1
+      return(g)
+    }
+    # begin of another chunk is found while the previous chunk is not complete yet
+    if (in.chunk && is.begin && is.md) {
+      if (grepl(gsub('^([^`]*`+).*', '^\\1\\\\{', pattern.end), line)) {
+        g <<- g + 2  # same amount of ` as previous chunk, so should be a new chunk
+      }  # otherwise ignore the chunk header
+      return(g)
+    }
     if (in.chunk && is.end && (is.na(pattern.end) || match_chunk_end(pattern.end, line, i))) {
       in.chunk <<- FALSE
-      return(TRUE)
+      g <<- g + 1
+      return(g - 1)  # don't use incremented g yet; use it in the next step
     }
     if (!in.chunk && is.begin) {
       in.chunk <<- TRUE
       if (is.md) pattern.end <<- sub('(^[\t >]*```+).*', '^\\1\\\\s*$', line)
+      g <<- g + 2 - g%%2  # make sure g is even
     }
-    FALSE
+    g
   }
   mapply(fun, chunk.begin, chunk.end, lines, seq_along(lines))
 }

@@ -1,5 +1,22 @@
 # CHANGES IN knitr VERSION 1.37
 
+## NEW FEATURES
+
+- For R Markdown documents, code chunks can be embedded in a parent code chunk with more backticks now. For example, a code chunk with four backticks can contain code chunks with three backticks. One application is to conditionally include some verbatim content that contains code chunks via the `asis` engine, e.g.,
+
+  `````md
+  ````{asis, echo=FALSE}
+  Some conditional contnet.
+  
+  ```{r}
+  1 + 1
+  ```
+  
+  More content.
+  ````
+  `````
+  
+  Note that the embedded child code chunks (e.g., in the `asis` chunk above) are not parsed or evaluated by **knitr**, and only the top-level code chunk is parsed and evaluated.
 
 # CHANGES IN knitr VERSION 1.36
 
