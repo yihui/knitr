@@ -12,15 +12,15 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
     set_preamble(lines, patterns)  # prepare for tikz option 'standAlone'
   }
 
+  markdown_mode = identical(patterns, all_patterns$md)
   blks = grepl(chunk.begin, lines)
-  txts = filter_chunk_end(blks, grepl(chunk.end, lines), lines, patterns)
+  txts = filter_chunk_end(blks, grepl(chunk.end, lines), lines, markdown_mode)
   # tmp marks the starting lines of a code/text chunk by TRUE
   tmp = blks | head(c(TRUE, txts), -1)
 
   groups = unname(split(lines, cumsum(tmp)))
   if (set.preamble)
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
-  markdown_mode = identical(patterns, all_patterns$md)
 
   # parse 'em all
   lapply(groups, function(g) {
@@ -510,9 +510,8 @@ parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
 }
 
 # filter chunk.end lines that don't actually end a chunk
-filter_chunk_end = function(chunk.begin, chunk.end, lines = NA, patterns = list()) {
+filter_chunk_end = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
   in.chunk = FALSE
-  is.md = identical(patterns, all_patterns[['md']])
   pattern.end = NA
   fun = function(is.begin, is.end, line, i) {
     if (in.chunk && is.end && (is.na(pattern.end) || match_chunk_end(pattern.end, line, i))) {
