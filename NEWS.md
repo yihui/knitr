@@ -90,6 +90,24 @@
   ````
   
   If you see an error "attempt to use zero-length variable name" when knitting an Rmd document, it may be because of this change, and you may have indented the chunk header by accident. If that is the case, you need to remove the extra white spaces before the chunk header.
+  
+  The same problem applies to blockquotes, i.e., `>` before ```` ``` ````. If you quote the chunk header, you have to quote the footer as well, e.g.,
+  
+  ````
+  > ```{r}
+  1 + 1
+  ```
+  ````
+  
+  The above unbalanced code chunk needs to be corrected to:
+  
+  ````
+  > ```{r}
+  > 1 + 1
+  > ```
+  ````
+  
+  Quoting the chunk body is optional but recommended.
 
 ## BUG FIXES
 
