@@ -520,8 +520,8 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
       return(g)
     }
     # begin of another chunk is found while the previous chunk is not complete yet
-    if (in.chunk && is.begin && is.md) {
-      if (grepl(gsub('^([^`]*`+).*', '^\\1\\\\{', pattern.end), line)) {
+    if (in.chunk && is.begin) {
+      if (!is.md || grepl(gsub('^([^`]*`+).*', '^\\1\\\\{', pattern.end), line)) {
         g <<- g + 2  # same amount of ` as previous chunk, so should be a new chunk
       }  # otherwise ignore the chunk header
       return(g)
