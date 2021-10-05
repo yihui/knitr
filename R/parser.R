@@ -510,6 +510,7 @@ parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
 group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
   in.chunk = FALSE
   pattern.end = NA
+  signal = if (is_cran_check()) warning2 else stop2
   g = NA  # group index: odd - text; even - chunk
   fun = function(is.begin, is.end, line, i) {
     if (i == 1) {
@@ -526,7 +527,7 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
       }  # otherwise ignore the chunk header
       return(g)
     }
-    if (in.chunk && is.end && (is.na(pattern.end) || match_chunk_end(pattern.end, line, i))) {
+    if (in.chunk && is.end && match_chunk_end(pattern.end, line, i, signal)) {
       in.chunk <<- FALSE
       g <<- g + 1
       return(g - 1)  # don't use incremented g yet; use it in the next step
@@ -541,17 +542,20 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
   mapply(fun, chunk.begin, chunk.end, lines, seq_along(lines))
 }
 
-match_chunk_end = function(pattern, line, i) {
+match_chunk_end = function(pattern, line, i, signal = stop) {
+  if (is.na(pattern)) return(TRUE)
   if (grepl(pattern, line)) return(TRUE)
   p = gsub('\\^\\s+', '', pattern)
-  if (!grepl(p, line)) return(FALSE)
-  # TODO: should we tolerate unmatched indentation? (we do for now)
-  warning2(
-    'Line ', i, ' ("', line, '") was not properly indented to match the ',
-    'indentation of the chunk header. You are recommended to change this line to "',
-    gsub('\\^(\\s+`+).*', '\\1', pattern), '".'
-  )
-  TRUE
+  if (grepl(p, line)) {
+    signal(
+      'The indentation of line ', i, ' ("', line, '") in ', current_input(),
+      ' does not match the corresponding chunk header, which starts with "',
+      gsub('\\^(\\s+`+).*', '\\1', pattern), '". You are recommended to fix ',
+      'the indentation of either the chunk header or footer to make them match.'
+    )
+    return(TRUE)
+  }
+  FALSE
 }
 
 #' Get all chunk labels in a document
