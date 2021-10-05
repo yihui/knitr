@@ -18,6 +18,23 @@
   
   Note that the embedded child code chunks (e.g., in the `asis` chunk above) are not parsed or evaluated by **knitr**, and only the top-level code chunk is parsed and evaluated.
 
+- Added a new engine named `comment` to comment out content, e.g.,
+
+  `````md
+  ````{comment}
+  Arbitrary content to be commented out.
+  
+  ```{r}
+  1 + 1
+  ```
+  
+  The above code chunk will not be executed.
+  Inline code like `r pi * 5^2` will be ignored, too.
+  ````
+  `````
+  
+  Note that if any line of the content to be commented out contains `N` backticks, you will have to use at least `N + 1` backticks in the chunk header and footer of the `comment` chunk.
+
 # CHANGES IN knitr VERSION 1.36
 
 ## MAJOR CHANGES

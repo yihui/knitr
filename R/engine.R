@@ -774,6 +774,9 @@ eng_targets = function(options) {
   targets::tar_engine_knitr(options = options)
 }
 
+# a comment engine to return nothing
+eng_comment = function(options) {}
+
 # set engines for interpreted languages
 local({
   for (i in c(
@@ -790,7 +793,7 @@ knit_engines$set(
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
   python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, R = eng_r,
-  bslib = eng_bslib, targets = eng_targets
+  bslib = eng_bslib, targets = eng_targets, comment = eng_comment
 )
 
 cache_engines$set(python = cache_eng_python)
