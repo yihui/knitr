@@ -508,33 +508,41 @@ parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
 
 # split text lines into groups of code and text chunks
 group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
-  in.chunk = FALSE
-  pattern.end = NA
-  signal = if (is_cran_check()) warning2 else stop2
+  in.chunk = FALSE  # whether inside a chunk now
+  pattern.end = NA  # the expected chunk end pattern (derived from header)
+  b = NA  # the last found chunk header
+  # TODO: simply stop() instead of warning() in the future (for now, stop() for
+  # R CMD check, but only warn other users)
+  signal = if (is_R_CMD_check()) stop2 else warning2
   g = NA  # group index: odd - text; even - chunk
   fun = function(is.begin, is.end, line, i) {
     if (i == 1) {
       g <<- if (is.begin) {
         in.chunk <<- TRUE
+        b <<- i
         0
       } else 1
       return(g)
     }
     # begin of another chunk is found while the previous chunk is not complete yet
     if (in.chunk && is.begin) {
-      if (!is.md || grepl(gsub('^([^`]*`+).*', '^\\1\\\\{', pattern.end), line)) {
+      if (!is.md || match_chunk_begin(pattern.end, line)) {
         g <<- g + 2  # same amount of ` as previous chunk, so should be a new chunk
+        if (is.md) b <<- i
       }  # otherwise ignore the chunk header
       return(g)
     }
-    if (in.chunk && is.end && match_chunk_end(pattern.end, line, i, signal)) {
+    if (in.chunk && is.end && match_chunk_end(pattern.end, line, i, b, lines, signal)) {
       in.chunk <<- FALSE
       g <<- g + 1
       return(g - 1)  # don't use incremented g yet; use it in the next step
     }
     if (!in.chunk && is.begin) {
       in.chunk <<- TRUE
-      if (is.md) pattern.end <<- sub('(^[\t >]*```+).*', '^\\1\\\\s*$', line)
+      if (is.md) {
+        pattern.end <<- sub('(^[\t >]*```+).*', '^\\1\\\\s*$', line)
+        b <<- i
+      }
       g <<- g + 2 - g%%2  # make sure g is even
     }
     g
@@ -542,20 +550,30 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
   mapply(fun, chunk.begin, chunk.end, lines, seq_along(lines))
 }
 
-match_chunk_end = function(pattern, line, i, signal = stop) {
-  if (is.na(pattern)) return(TRUE)
-  if (grepl(pattern, line)) return(TRUE)
-  p = gsub('\\^\\s+', '', pattern)
-  if (grepl(p, line)) {
-    signal(
-      'The indentation of line ', i, ' ("', line, '") in ', current_input(),
-      ' does not match the corresponding chunk header, which starts with "',
-      gsub('\\^(\\s+`+).*', '\\1', pattern), '". You are recommended to fix ',
-      'the indentation of either the chunk header or footer to make them match.'
-    )
-    return(TRUE)
+match_chunk_begin = function(pattern.end, x, pattern = '^\\1\\\\{') {
+  grepl(gsub('^([^`]*`+).*', pattern, pattern.end), x)
+}
+
+match_chunk_end = function(pattern, line, i, b, lines, signal = stop) {
+  if (is.na(pattern) || grepl(pattern, line)) return(TRUE)
+  n = length(lines)
+  # if the exact match was not found, look ahead to see if there is another
+  # chunk end that is an exact match before the next chunk begin
+  if (i < n && length(k <- grep(pattern, lines[(i + 1):n]))) {
+    k = k[1]
+    if (k == 1) return(FALSE)  # the next line is real chunk end
+    # no other chunk headers before the new next exact chunk end
+    if (!any(match_chunk_begin(pattern, lines[i + 1:(k - 1)], '^\\1`*\\\\{')))
+      return(FALSE)
   }
-  FALSE
+  signal(
+    'The starting backticks on line ', i, ' ("', line, '") in ', current_input(),
+    ' do not match the chunk header, which starts with "',
+    gsub('\\^(\\s*`+).*', '\\1', pattern), '" on line ', b, '. You are recommended to ',
+    'fix either the opening or closing fence of the code chunk to use exactly ',
+    'the same numbers of backticks and same level of indentation (or blockquote).'
+  )
+  TRUE
 }
 
 #' Get all chunk labels in a document
