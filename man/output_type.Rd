@@ -21,7 +21,8 @@ provided, \code{is_html_output()} uses \code{pandoc_to()}, and
 \code{pandoc_to()} returns the output format name.}
 
 \item{excludes}{A character vector of output formats that should not be
-considered as HTML format.}
+considered as HTML format. Options are: markdown, epub, html, html4, html5,
+revealjs, s5, slideous, slidy, and gfm.}
 }
 \description{
 The function \code{is_latex_output()} returns \code{TRUE} when the output
