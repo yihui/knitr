@@ -375,7 +375,8 @@ is_latex_output = function() {
 #'   provided, \code{is_html_output()} uses \code{pandoc_to()}, and
 #'   \code{pandoc_to()} returns the output format name.
 #' @param excludes A character vector of output formats that should not be
-#'   considered as HTML format.
+#'   considered as HTML format. Options are: markdown, epub, html, html4, html5,
+#'   revealjs, s5, slideous, slidy, and gfm.
 #' @rdname output_type
 #' @export
 is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
