@@ -133,6 +133,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
     params$original.params.src = params.src
     params$chunk.echo = isTRUE(params[['echo']])
     params$yaml.code = parts$src
+    attr(params, 'quarto_options') = c('original.params.src', 'chunk.echo', 'yaml.code')
     # alias 'warning' explicitly set in chunk metadata to the 'message' option
     if (!is.null(parts$options[['warning']])) {
       params$message = parts$options[['warning']]
@@ -285,6 +286,8 @@ partition_chunk = function(engine, code) {
 
 print.block = function(x, ...) {
   params = x$params
+  # don't show internal options for quarto
+  for (i in attr(params, 'quarto_options')) params[[i]] = NULL
   cat('label:', params$label)
   if (length(params) > 1L) {
     cat(' (with options) \n')
