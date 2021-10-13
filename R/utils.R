@@ -167,10 +167,13 @@ is_lyx = function() {
   grepl('[.]Rnw$', args[1]) && !is.na(Sys.getenv('LyXDir', NA))
 }
 
-# detect if running on CRAN (assuming that CRAN does not set CI or NOT_CRAN=true)
+# detect if running on CRAN (assuming that CRAN does not set CI or
+# NOT_CRAN=true); or set R_CRANDALF=true (is cran) or false (not cran)
 is_cran = function() {
-  tolower(Sys.getenv('R_CRANDALF')) == 'true' ||
-    !any(tolower(Sys.getenv(c('CI', 'NOT_CRAN'))) == 'true')
+  x = Sys.getenv('R_CRANDALF', NA)
+  if (!is.na(x)) tolower(x) == 'true' else {
+    !any(tolower(Sys.getenv(c('CI', 'NOT_CRAN')))) == 'true'
+  }
 }
 
 is_cran_check = function() {
