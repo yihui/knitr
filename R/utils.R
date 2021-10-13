@@ -177,6 +177,8 @@ is_cran_check = function() {
   is_cran() && is_R_CMD_check()
 }
 
+is_bioc = function() Sys.getenv('BBS_HOME') != ''
+
 # round a number to getOption('digits') decimal places by default, and format()
 # it using significant digits if the option knitr.digits.signif = TRUE
 round_digits = function(x) {

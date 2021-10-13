@@ -566,6 +566,12 @@ match_chunk_end = function(pattern, line, i, b, lines, signal = stop) {
     if (!any(match_chunk_begin(pattern, lines[i + 1:(k - 1)], '^\\1`*\\\\{')))
       return(FALSE)
   }
+  # TODO: for now we only disallow unmatched indentation during R CMD check
+  # that's not running on CRAN; we will fully disallow it in the future (#2057)
+  p = gsub('\\^\\s+', '', pattern)
+  if (grepl(p, line) && (is_cran() || is_bioc()) && identical(signal, stop2)) {
+    signal = warning2
+  }
   signal(
     'The starting backticks on line ', i, ' ("', line, '") in ', current_input(),
     ' do not match the chunk header, which starts with "',
