@@ -571,7 +571,7 @@ match_chunk_end = function(pattern, line, i, b, lines, signal = stop) {
   }
   # TODO: for now we only disallow unmatched indentation during R CMD check
   # that's not running on CRAN; we will fully disallow it in the future (#2057)
-  p = gsub('\\^\\s+', '', pattern)
+  p = gsub('\\^\\s*', '', pattern)
   if (grepl(p, line) && (is_cran() || is_bioc()) && identical(signal, stop2)) {
     signal = warning2
   }
