@@ -514,9 +514,9 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
   in.chunk = FALSE  # whether inside a chunk now
   pattern.end = NA  # the expected chunk end pattern (derived from header)
   b = NA  # the last found chunk header
-  # TODO: simply stop() instead of warning() in the future (for now, stop() for
-  # R CMD check, but only warn other users)
-  signal = if (is_R_CMD_check()) stop2 else warning2
+  # TODO: for now we only disallow unmatched delimiters during R CMD check
+  # that's not running on CRAN; we will fully disallow it in the future (#2057)
+  signal = if (is_R_CMD_check() && !(is_cran() || is_bioc())) stop2 else warning2
   g = NA  # group index: odd - text; even - chunk
   fun = function(is.begin, is.end, line, i) {
     if (i == 1) {
@@ -568,12 +568,6 @@ match_chunk_end = function(pattern, line, i, b, lines, signal = stop) {
     # no other chunk headers before the new next exact chunk end
     if (!any(match_chunk_begin(pattern, lines[i + 1:(k - 1)], '^\\1`*\\\\{')))
       return(FALSE)
-  }
-  # TODO: for now we only disallow unmatched indentation during R CMD check
-  # that's not running on CRAN; we will fully disallow it in the future (#2057)
-  p = gsub('\\^\\s*', '', pattern)
-  if (grepl(p, line) && (is_cran() || is_bioc()) && identical(signal, stop2)) {
-    signal = warning2
   }
   signal(
     'The starting backticks on line ', i, ' ("', line, '") in ', current_input(),
