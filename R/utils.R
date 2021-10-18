@@ -148,23 +148,11 @@ output_asis = function(x, options) {
   is_blank(x) || options$results == 'asis'
 }
 
-# path relative to dir of the input file
-input_dir = function(ignore_root = FALSE) {
+# the working directory: use root.dir if specified, otherwise the dir of the
+# input file unless knitr.use.cwd = TRUE
+input_dir = function() {
   root = opts_knit$get('root.dir')
-  # LyX is a special case: the input file is in tempdir, and we should use
-  # root.dir as the real input dir (#809)
-  if (is_lyx()) return(root)
-  if (ignore_root) {
-    .knitEnv$input.dir %n% '.'
-  } else {
-    root %n% (if (!getOption('knitr.use.cwd', FALSE)) .knitEnv$input.dir) %n% '.'
-  }
-}
-
-is_lyx = function() {
-  args = commandArgs(TRUE)
-  if (length(args) < 4) return(FALSE)
-  grepl('[.]Rnw$', args[1]) && !is.na(Sys.getenv('LyXDir', NA))
+  root %n% (if (!getOption('knitr.use.cwd', FALSE)) .knitEnv$input.dir) %n% '.'
 }
 
 # detect if running on CRAN (assuming that CRAN does not set CI or

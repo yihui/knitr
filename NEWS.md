@@ -35,6 +35,10 @@
   
   Note that if any line of the content to be commented out contains `N` backticks, you will have to use at least `N + 1` backticks in the chunk header and footer of the `comment` chunk.
 
+## BUG FIXES
+
+- The chunk option `child` also respects the package option `root.dir` now (thanks, @salim-b, https://community.rstudio.com/t/117563).
+
 ## MINOR CHANGES
 
 - Improved the (warning) message when unbalanced chunk delimiters are detected in R Markdown documents, to make it easier for users to fix the problem. The message now contains the line numbers of the opening fence and closing fence, as well as the opening and closing backticks. For example, the opening fence may be `````"````{r}"````` (four backticks) but the closing fence is ````"```"```` (three backticks---should also be four to match the opening fence), or the opening fence is indented ````"  ```{r}"```` but the closing fence is not ````"```"````. Note that this warning message may become an error in the future, i.e., unbalanced chunk delimiters will no longer be allowed.
