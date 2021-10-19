@@ -570,10 +570,10 @@ match_chunk_end = function(pattern, line, i, b, lines, signal = stop) {
       return(FALSE)
   }
   signal(
-    'The starting backticks on line ', i, ' ("', line, '") in ', current_input(),
-    ' do not match the chunk header, which starts with "',
+    'The closing backticks on line ', i, ' ("', line, '") in ', current_input(),
+    ' do not match the opening backticks "',
     gsub('\\^(\\s*`+).*', '\\1', pattern), '" on line ', b, '. You are recommended to ',
-    'fix either the opening or closing fence of the code chunk to use exactly ',
+    'fix either the opening or closing delimiter of the code chunk to use exactly ',
     'the same numbers of backticks and same level of indentation (or blockquote).'
   )
   TRUE
