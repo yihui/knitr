@@ -77,7 +77,7 @@ new_cache = function() {
     path = valid_path(path, '__packages')
     if (save) {
       x = rev(.packages())
-      if (file.exists(path)) x = setdiff(c(read_utf8(path), x), .base.pkgs)
+      if (file.exists(path)) x = setdiff(c(read_utf8(path), x), xfun::base_pkgs())
       write_utf8(x, path)
     } else {
       if (!file.exists(path)) return()
