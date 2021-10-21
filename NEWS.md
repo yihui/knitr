@@ -35,6 +35,41 @@
   
   Note that if any line of the content to be commented out contains `N` backticks, you will have to use at least `N + 1` backticks in the chunk header and footer of the `comment` chunk.
 
+- Added a new engine named `verbatim` for R Markdown documents to output verbatim content that contains code chunks and/or inline expressions, e.g.,
+
+  `````md
+  ````{verbatim}
+  We can output arbitrary content verbatim.
+  
+  ```{r}
+  1 + 1
+  ```
+  
+  The content can contain inline code like
+  `r pi * 5^2`, too.
+  ````
+  `````
+  
+  By default, the verbatim content is placed in a fenced `md` (markdown) code block:
+  
+  ````md
+  We can output arbitrary content verbatim.
+  
+  ...
+  
+  ````
+  
+  You can change the language name of the block via the chunk option `class.output`, e.g., `class.output = 'html'` will output a code block like this:
+  
+  ````html
+  We can output arbitrary content verbatim.
+  
+  ...
+  
+  ````
+  
+  To disable the language name on the block, use `class.output = NA`.
+
 ## BUG FIXES
 
 - The chunk option `child` also respects the package option `root.dir` now (thanks, @salim-b, https://community.rstudio.com/t/117563).

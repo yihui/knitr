@@ -777,6 +777,20 @@ eng_targets = function(options) {
 # a comment engine to return nothing
 eng_comment = function(options) {}
 
+# a verbatim engine that returns its chunk content verbatim
+eng_verbatim = function(options) {
+  if (!out_format('markdown')) {
+    warning("The 'verbatim' engine only works for Markdown output at the moment.")
+    return(one_string(options$code))
+  }
+
+  # use the 'output' hook to wrap the chunk content (inside ````md by default)
+  lang = options$class.output %n% 'md'
+  if (is.na(lang)) lang = NULL  # set class.output = NA to disable output class
+  options = merge_list(options, list(class.output = lang, echo = FALSE, comment = ''))
+  engine_output(options, '', options$code)
+}
+
 # set engines for interpreted languages
 local({
   for (i in c(
@@ -793,7 +807,7 @@ knit_engines$set(
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
   python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, R = eng_r,
-  bslib = eng_bslib, targets = eng_targets, comment = eng_comment
+  bslib = eng_bslib, targets = eng_targets, comment = eng_comment, verbatim = eng_verbatim
 )
 
 cache_engines$set(python = cache_eng_python)
