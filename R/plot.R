@@ -466,7 +466,8 @@ include_graphics = function(
       'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
     )
     if (length(p <- path[grepl('^~', path)])) warning(
-      'pathnames starting with tilde (~) can be problematic for knitr::include_graphics; use path.expand().'
+      'pathnames starting with tilde (~) can be problematic for ',
+      'knitr::include_graphics; use a relative path or path.expand().'
     )
   }
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
