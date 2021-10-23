@@ -437,7 +437,9 @@ par2 = function(x) {
 #'   \code{path} argument do not exist and are not web resources.
 #' @note This function is supposed to be used in R code chunks or inline R code
 #'   expressions. You are recommended to use forward slashes (\verb{/}) as path
-#'   separators instead of backslashes in the image paths.
+#'   separators instead of backslashes in the image paths. This function does
+#'   not expand path names; if you cannot avoid absolute paths, you should use
+#'   \link{path.expand}.
 #'
 #'   The automatic calculation of the output width requires the \pkg{png}
 #'   package (for PNG images) or the \pkg{jpeg} package (for JPEG images). The
@@ -459,9 +461,14 @@ include_graphics = function(
   }
   # relative paths can be tricky in child documents, so don't error (#1957)
   if (child_mode()) error = FALSE
-  if (error && length(p <- path[!xfun::is_web_path(path) & !file.exists(path)])) stop(
-    'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
-  )
+  if (error) {
+    if (length(p <- path[!xfun::is_web_path(path) & !file.exists(path)])) stop(
+      'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
+    )
+    if (length(p <- path[grepl('^~', path)])) warning(
+      'pathnames starting with tilde (~) can be problematic for knitr::include_graphics; use path.expand().'
+    )
+  }
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
 }
 
