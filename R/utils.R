@@ -160,7 +160,7 @@ input_dir = function() {
 is_cran = function() {
   x = Sys.getenv('R_CRANDALF', NA)
   if (!is.na(x)) tolower(x) == 'true' else {
-    !any(tolower(Sys.getenv(c('CI', 'NOT_CRAN')))) == 'true'
+    !any(tolower(Sys.getenv(c('CI', 'NOT_CRAN'))) == 'true')
   }
 }
 
