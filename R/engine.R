@@ -791,7 +791,7 @@ eng_verbatim = function(options) {
   if (!is.null(options$lang)) {
     options$engine.opts$lang = options$lang
   } else if (is.null(options$engine.opts$lang) && is.null(options$class.source)) {
-    options$class.source = "md"
+    options$engine.opts$lang = ''
   }
 
   eng_cat(options)
