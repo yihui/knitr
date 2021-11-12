@@ -788,8 +788,8 @@ eng_verbatim = function(options) {
 
   # change default for the cat engine
   options$eval = FALSE
-  if (!is.null(options$lang)) {
-    options$engine.opts$lang = options$lang
+  if (!is.null(options$language)) {
+    options$engine.opts$lang = options$language
   } else if (is.null(options$engine.opts$lang) && is.null(options$class.source)) {
     options$engine.opts$lang = ''
   }
