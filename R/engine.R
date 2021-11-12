@@ -390,8 +390,8 @@ eng_cat = function(options) {
   if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
     return('')
   # Use engine to set the attribute
-  options$engine = lang
-  options$class.source = setdiff(options$class.source, lang)
+  options$engine = lang[1]
+  options$class.source = setdiff(options$class.source, lang[1])
   engine_output(options, options$code, NULL)
 }
 
