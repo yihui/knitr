@@ -395,20 +395,6 @@ eng_cat = function(options) {
   engine_output(options, options$code, NULL)
 }
 
-## a verbatim engine that returns its chunk content verbatim
-eng_verbatim = function(options) {
-  if (!out_format('markdown')) {
-    warning("The 'verbatim' engine only works for Markdown output at the moment.")
-    return(one_string(options$code))
-  }
-
-  # change default for the cat engine
-  options$eval = FALSE
-  if (is.null(options$engine.opts$lang) && is.null(options$class.source))
-    options$class.source = "md"
-  eng_cat(options)
-}
-
 ## output the code without processing it
 eng_asis = function(options) {
   if (options$echo) one_string(options$code)
@@ -792,6 +778,20 @@ eng_targets = function(options) {
 
 # a comment engine to return nothing
 eng_comment = function(options) {}
+
+## a verbatim engine that returns its chunk content verbatim
+eng_verbatim = function(options) {
+  if (!out_format('markdown')) {
+    warning("The 'verbatim' engine only works for Markdown output at the moment.")
+    return(one_string(options$code))
+  }
+
+  # change default for the cat engine
+  options$eval = FALSE
+  if (is.null(options$engine.opts$lang) && is.null(options$class.source))
+    options$class.source = "md"
+  eng_cat(options)
+}
 
 # set engines for interpreted languages
 local({
