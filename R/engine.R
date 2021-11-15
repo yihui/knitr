@@ -790,7 +790,7 @@ eng_verbatim = function(options) {
   options$eval = FALSE
   # specify the lang name in engine.opts = list(lang = ), or lang/language,
   # or class.source; if all are empty, use 'default'
-  options$engine.opts$lang = options$engine.opts$lang %in%
+  options$engine.opts$lang = options$engine.opts$lang %n%
     unlist(options[c('lang', 'language')])[1] %n%
     options$class.source %n% 'default'
 
