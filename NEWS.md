@@ -6,7 +6,7 @@
 
   `````md
   ````{asis, echo=FALSE}
-  Some conditional contnet.
+  Some conditional content.
   
   ```{r}
   1 + 1
@@ -34,6 +34,43 @@
   `````
   
   Note that if any line of the content to be commented out contains `N` backticks, you will have to use at least `N + 1` backticks in the chunk header and footer of the `comment` chunk.
+
+- Added a new engine named `verbatim` for R Markdown documents to output verbatim content that contains code chunks and/or inline expressions, e.g.,
+
+  `````md
+  ````{verbatim}
+  We can output arbitrary content verbatim.
+  
+  ```{r}
+  1 + 1
+  ```
+  
+  The content can contain inline code like
+  `r pi * 5^2`, too.
+  ````
+  `````
+  
+  By default, the verbatim content is placed in a fenced `default` code block:
+  
+  ````default
+  We can output arbitrary content verbatim.
+  
+  ...
+  
+  ````
+  
+  You can change the `default` language name of the block via the chunk option `lang`, e.g., `lang = 'html'` will output a code block like this:
+  
+  ````html
+  We can output arbitrary content verbatim.
+  
+  ...
+  
+  ````
+  
+  To disable the language name on the block, use an empty string `lang = ''`.
+  
+  The difference between the `verbatim` and `asis` engine is that the former will put the content in a fenced code blocked, and the latter just output the content as-is.
 
 ## BUG FIXES
 

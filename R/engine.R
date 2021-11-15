@@ -389,7 +389,9 @@ eng_cat = function(options) {
 
   if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
     return('')
-  options$engine = lang
+  # Use engine to set the attribute
+  options$engine = lang[1]
+  options$class.source = setdiff(options$class.source, lang[1])
   engine_output(options, options$code, NULL)
 }
 
@@ -777,6 +779,24 @@ eng_targets = function(options) {
 # a comment engine to return nothing
 eng_comment = function(options) {}
 
+## a verbatim engine that returns its chunk content verbatim
+eng_verbatim = function(options) {
+  if (!out_format('markdown')) {
+    warning("The 'verbatim' engine only works for Markdown output at the moment.")
+    return(one_string(options$code))
+  }
+
+  # change default for the cat engine
+  options$eval = FALSE
+  # specify the lang name in engine.opts = list(lang = ), or lang/language,
+  # or class.source; if all are empty, use 'default'
+  options$engine.opts$lang = options$engine.opts$lang %n%
+    unlist(options[c('lang', 'language')])[1] %n%
+    options$class.source %n% 'default'
+
+  eng_cat(options)
+}
+
 # set engines for interpreted languages
 local({
   for (i in c(
@@ -793,7 +813,7 @@ knit_engines$set(
   cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
   block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
   python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, R = eng_r,
-  bslib = eng_bslib, targets = eng_targets, comment = eng_comment
+  bslib = eng_bslib, targets = eng_targets, comment = eng_comment, verbatim = eng_verbatim
 )
 
 cache_engines$set(python = cache_eng_python)
