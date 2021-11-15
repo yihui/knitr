@@ -174,6 +174,55 @@ get_engine_opts = function(opts, engine, fallback = '') {
 
 get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 
+# engine.opts = list(command, file, args, args1, args2)
+eng_exec = function(options) {
+  opts = options$engine.opts %n% options[c('command', 'file', 'ext', 'args', 'args1', 'args2')]
+  if (!is.character(cmd <- opts$command)) stop(
+    "The command of the 'exec' engine was not specified."
+  )
+
+  # default options
+  opts2 = list(
+    ext = identity, file = function(code, file) {
+      write_utf8(options$code, file)
+      file
+    }, args = function(code, file) {
+      file
+    }, clean = function(file) {
+      unlink(file)
+    }
+  )
+
+  opts = merge_list(opts2, opts)
+  cmd2 = basename(cmd)  # in case command is a full path
+  ext = opts$ext(cmd2)  # file extension
+  f = if (is.function(opts$file)) {
+    f = wd_tempfile(cmd2, paste0('.', ext))
+    if (is.function(opts$clean)) on.exit(opts$clean(f), add = TRUE)
+    opts$file(options$code, f)
+  }
+  a = c(opts$args1, if (is.function(opts$args)) opts$args(options$code, f), opts$args2)
+
+  out = if (options$eval) {
+    if (options$message) message('running: ', paste(c(cmd, a), collapse = ' '))
+    f2 = wd_tempfile(cmd2)  # capture stderr
+    tryCatch({
+      res = system2(cmd, shQuote(a), stdout = TRUE, stderr = f2, env = options$engine.env)
+      if (!options$error && file.exists(f2) && file.size(f2) > 0) {
+        stop(file_string(f2))
+      }
+      res
+    }, error = function(e) {
+        if (!options$error) stop(e)
+        paste('Error in running command', cmd)
+      }
+    )
+  } else ''
+  # chunk option error=FALSE means we need to signal the error
+  if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
+  engine_output(options, options$code, out)
+}
+
 ## C, C++, and Fortran (via R CMD SHLIB)
 eng_shlib = function(options) {
   n = switch(options$engine, c = 'c', cc  = 'cc', fortran = 'f', fortran95 = 'f95')
@@ -810,11 +859,11 @@ local({
 knit_engines$set(
   asis = eng_asis, asy = eng_dot, block = eng_block, block2 = eng_block2,
   bslib = eng_bslib, c = eng_shlib, cat = eng_cat, cc = eng_shlib,
-  comment = eng_comment, css = eng_css, dot = eng_dot, fortran = eng_shlib,
-  fortran95 = eng_shlib, go = eng_go, highlight = eng_highlight, js = eng_js,
-  julia = eng_julia, python = eng_python, R = eng_r, Rcpp = eng_Rcpp,
-  sass = eng_sxss, scss = eng_sxss, sql = eng_sql, stan = eng_stan,
-  targets = eng_targets, tikz = eng_tikz, verbatim = eng_verbatim
+  comment = eng_comment, css = eng_css, dot = eng_dot, exec = eng_exec,
+  fortran = eng_shlib, fortran95 = eng_shlib, go = eng_go,
+  highlight = eng_highlight, js = eng_js, julia = eng_julia, python = eng_python,
+  R = eng_r, Rcpp = eng_Rcpp, sass = eng_sxss, scss = eng_sxss, sql = eng_sql,
+  stan = eng_stan, targets = eng_targets, tikz = eng_tikz, verbatim = eng_verbatim
 )
 
 cache_engines$set(python = cache_eng_python)
