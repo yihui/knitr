@@ -808,12 +808,13 @@ local({
 
 # additional engines
 knit_engines$set(
-  highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
-  c = eng_shlib, cc = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
-  cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
-  block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss, R = eng_r,
-  bslib = eng_bslib, targets = eng_targets, comment = eng_comment, verbatim = eng_verbatim
+  asis = eng_asis, asy = eng_dot, block = eng_block, block2 = eng_block2,
+  bslib = eng_bslib, c = eng_shlib, cat = eng_cat, cc = eng_shlib,
+  comment = eng_comment, css = eng_css, dot = eng_dot, fortran = eng_shlib,
+  fortran95 = eng_shlib, go = eng_go, highlight = eng_highlight, js = eng_js,
+  julia = eng_julia, python = eng_python, R = eng_r, Rcpp = eng_Rcpp,
+  sass = eng_sxss, scss = eng_sxss, sql = eng_sql, stan = eng_stan,
+  targets = eng_targets, tikz = eng_tikz, verbatim = eng_verbatim
 )
 
 cache_engines$set(python = cache_eng_python)
