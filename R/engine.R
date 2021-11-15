@@ -389,7 +389,9 @@ eng_cat = function(options) {
 
   if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
     return('')
-  options$engine = lang
+  # Use engine to set the attribute
+  options$engine = lang[1]
+  options$class.source = setdiff(options$class.source, lang[1])
   engine_output(options, options$code, NULL)
 }
 
@@ -777,18 +779,22 @@ eng_targets = function(options) {
 # a comment engine to return nothing
 eng_comment = function(options) {}
 
-# a verbatim engine that returns its chunk content verbatim
+## a verbatim engine that returns its chunk content verbatim
 eng_verbatim = function(options) {
   if (!out_format('markdown')) {
     warning("The 'verbatim' engine only works for Markdown output at the moment.")
     return(one_string(options$code))
   }
 
-  # use the 'output' hook to wrap the chunk content (inside ````md by default)
-  lang = options$class.output %n% 'md'
-  if (is.na(lang)) lang = NULL  # set class.output = NA to disable output class
-  options = merge_list(options, list(class.output = lang, echo = FALSE, comment = ''))
-  engine_output(options, '', options$code)
+  # change default for the cat engine
+  options$eval = FALSE
+  # specify the lang name in engine.opts = list(lang = ), or lang/language,
+  # or class.source; if all are empty, use 'default'
+  options$engine.opts$lang = options$engine.opts$lang %n%
+    unlist(options[c('lang', 'language')])[1] %n%
+    options$class.source %n% 'default'
+
+  eng_cat(options)
 }
 
 # set engines for interpreted languages
