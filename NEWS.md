@@ -6,7 +6,7 @@
 
   `````md
   ````{asis, echo=FALSE}
-  Some conditional contnet.
+  Some conditional content.
   
   ```{r}
   1 + 1
@@ -50,16 +50,16 @@
   ````
   `````
   
-  By default, the verbatim content is placed in a fenced `md` (markdown) code block:
+  By default, the verbatim content is placed in a fenced `default` code block:
   
-  ````md
+  ````default
   We can output arbitrary content verbatim.
   
   ...
   
   ````
   
-  You can change the language name of the block via the chunk option `class.output`, e.g., `class.output = 'html'` will output a code block like this:
+  You can change the `default` language name of the block via the chunk option `lang`, e.g., `lang = 'html'` will output a code block like this:
   
   ````html
   We can output arbitrary content verbatim.
@@ -68,7 +68,9 @@
   
   ````
   
-  To disable the language name on the block, use `class.output = NA`.
+  To disable the language name on the block, use an empty string `lang = ''`.
+  
+  The difference between the `verbatim` and `asis` engine is that the former will put the content in a fenced code blocked, and the latter just output the content as-is.
 
 ## BUG FIXES
 
