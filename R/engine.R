@@ -788,11 +788,11 @@ eng_verbatim = function(options) {
 
   # change default for the cat engine
   options$eval = FALSE
-  if (!is.null(options$language)) {
-    options$engine.opts$lang = options$language
-  } else if (is.null(options$engine.opts$lang) && is.null(options$class.source)) {
-    options$engine.opts$lang = 'default'
-  }
+  # specify the lang name in engine.opts = list(lang = ), or lang/language,
+  # or class.source; if all are empty, use 'default'
+  options$engine.opts$lang = options$engine.opts$lang %in%
+    unlist(options[c('lang', 'language')])[1] %n%
+    options$class.source %n% 'default'
 
   eng_cat(options)
 }
