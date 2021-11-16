@@ -184,7 +184,7 @@ eng_exec = function(options) {
   # default options
   opts2 = list(
     ext = identity, file = function(code, file) {
-      write_utf8(options$code, file)
+      write_utf8(code, file)
       file
     }, args = function(code, file) {
       file
@@ -206,6 +206,7 @@ eng_exec = function(options) {
   out = if (options$eval) {
     if (options$message) message('running: ', paste(c(cmd, a), collapse = ' '))
     f2 = wd_tempfile(cmd2)  # capture stderr
+    on.exit(unlink(f2), add = TRUE)
     tryCatch({
       res = system2(cmd, shQuote(a), stdout = TRUE, stderr = f2, env = options$engine.env)
       if (!options$error && file.exists(f2) && file.size(f2) > 0) {
