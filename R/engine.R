@@ -200,7 +200,11 @@ eng_exec = function(options) {
     f = wd_tempfile(cmd2, paste0('.', ext))
     if (is.function(opts$clean)) on.exit(opts$clean(f), add = TRUE)
     opts$file(options$code, f)
-  }
+  } else if (is.character(opts$file) {
+    opts$file
+   } else {
+     stop("file should be a character or a function")
+   }
   a = c(opts$args1, if (is.function(opts$args)) opts$args(options$code, f), opts$args2)
 
   out = if (options$eval) {
