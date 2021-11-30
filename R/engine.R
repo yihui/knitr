@@ -792,6 +792,23 @@ eng_verbatim = function(options) {
   eng_cat(options)
 }
 
+# embed a file verbatim
+eng_embed = function(options) {
+  # if `file` is empty, use `code` as the list of files
+  f = options$file %n% options$code
+  f = gsub('^["\']|["\']$', '', f)  # in case paths are quoted
+  if (length(f) == 0) return()
+  # TODO: use xfun::read_all() so we can read multiple files at once
+  options$code = xfun::read_utf8(f)
+  # use the filename extension as the default language name
+  if (nchar(lang <- file_ext(f[1])) > 1) {
+    lang = sub('^R', '', lang)  # Rmd -> md, Rhtml -> html, etc.
+    if (lang == 'nw') lang = 'tex'
+  }
+  options$class.source = options$class.source %n% tolower(lang)
+  eng_verbatim(options)
+}
+
 # set engines for interpreted languages
 local({
   for (i in c(
@@ -814,6 +831,7 @@ knit_engines$set(
   comment = eng_comment,
   css = eng_css,
   dot = eng_dot,
+  embed = eng_embed,
   fortran = eng_shlib,
   fortran95 = eng_shlib,
   go = eng_go,
