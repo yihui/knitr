@@ -781,11 +781,6 @@ eng_comment = function(options) {}
 
 ## a verbatim engine that returns its chunk content verbatim
 eng_verbatim = function(options) {
-  if (!out_format('markdown')) {
-    warning("The 'verbatim' engine only works for Markdown output at the moment.")
-    return(one_string(options$code))
-  }
-
   # change default for the cat engine
   options$eval = FALSE
   # specify the lang name in engine.opts = list(lang = ), or lang/language,

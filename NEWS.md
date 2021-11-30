@@ -35,7 +35,7 @@
   
   Note that if any line of the content to be commented out contains `N` backticks, you will have to use at least `N + 1` backticks in the chunk header and footer of the `comment` chunk.
 
-- Added a new engine named `verbatim` for R Markdown documents to output verbatim content that contains code chunks and/or inline expressions, e.g.,
+- Added a new engine named `verbatim` mainly for R Markdown documents to output verbatim content that contains code chunks and/or inline expressions, e.g.,
 
   `````md
   ````{verbatim}
@@ -70,7 +70,9 @@
   
   To disable the language name on the block, use an empty string `lang = ''`.
   
-  The difference between the `verbatim` and `asis` engine is that the former will put the content in a fenced code blocked, and the latter just output the content as-is.
+  The difference between the `verbatim` and `asis` engine is that the former will put the content in a fenced code block, and the latter just output the content as-is.
+  
+  This engine also works for other types of documents (e.g., `Rnw`) but it will not allow for nested code chunks within the `verbatim` engine.
 
 ## BUG FIXES
 
