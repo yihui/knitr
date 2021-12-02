@@ -74,6 +74,8 @@
   
   This engine also works for other types of documents (e.g., `Rnw`) but it will not allow for nested code chunks within the `verbatim` engine.
 
+* New `knit_cnd_format()` generic. It is called by the condition methods for `sew()`. Methods should return a full condition message, including the prefix (e.g. `Error:` or `Warning:`, including a call if the condition includes one).
+
 ## BUG FIXES
 
 - The chunk option `child` also respects the package option `root.dir` now (thanks, @salim-b, https://community.rstudio.com/t/117563).

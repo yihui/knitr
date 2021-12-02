@@ -119,3 +119,76 @@ assert('knit_meta_add() adds meta objects with the correct number of labels', {
   knit_meta(clean = TRUE)
   (m %==% c('', '', 'a', 'b'))
 })
+
+assert('sew() handles conditions',
+  identical(
+    sew(simpleError('msg', call = call('foo')), list()),
+    'Error in foo(): msg\n'
+  ),
+  identical(
+    sew(simpleWarning('msg', call = call('foo')), list()),
+    'Warning in foo(): msg\n'
+  ),
+  identical(
+    sew(simpleMessage('msg', call = call('foo')), list()),
+    'msg\n'
+  )
+)
+
+local({
+  assert('sew() strips `eval()` calls stored in warnings', {
+    cnd = tryCatch(
+      warning = identity,
+      eval(quote(warning("foo")))
+    )
+    identical(
+      sew(cnd, list()),
+      'Warning: foo\n'
+    )
+  })
+})
+
+local({
+  assert('knit_cnd_format() formats conditions', {
+    cnd = simpleMessage('msg', call = quote(foo()))
+    identical(
+      knit_cnd_format(cnd),
+      'msg'
+    )
+  }, {
+    cnd = simpleWarning('msg', call = quote(foo()))
+    identical(
+      knit_cnd_format(cnd),
+      'Warning in foo(): msg'
+    )
+  }, {
+    cnd = simpleWarning('msg', call = quote({ foo; bar; baz }))
+    identical(
+      knit_cnd_format(cnd),
+      'Warning in {: msg'
+    )
+  }, {
+    cnd = simpleMessage('msg', call = quote(foo()))
+    identical(
+      knit_cnd_format(cnd),
+      'msg'
+    )
+  })
+})
+
+local({
+  rlang::local_bindings(
+    .env = globalenv(),
+    knit_cnd_format.knitr_foobar = function(cnd) 'dispatched!'
+  )
+  assert('sew() dispatches on knit_cnd_format() with condition objects', {
+    cnd = structure(
+      list(message = 'foo'),
+      class = c('knitr_foobar', 'error', 'condition')
+    )
+    identical(
+      sew(cnd, list()),
+      'dispatched!\n'
+    )
+  })
+})
