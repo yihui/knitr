@@ -563,7 +563,9 @@ knit_cnd_format = function(cnd) {
 
 #' @export
 knit_cnd_format.message = function(cnd) {
-  conditionMessage(cnd)
+  # Character vectors are created by `merge_class()` to support
+  # https://github.com/yihui/knitr-examples/blob/master/117-messages.Rmd
+  paste(conditionMessage(cnd), collapse = '')
 }
 
 #' @export

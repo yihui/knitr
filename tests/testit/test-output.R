@@ -192,3 +192,12 @@ local({
     )
   })
 })
+
+# Character vectors are created by `merge_class()` to support
+# https://github.com/yihui/knitr-examples/blob/master/117-messages.Rmd
+assert('knit_cnd_format.message() supports character vectors',
+  identical(
+    knit_cnd_format(simpleMessage(c("foo", "bar"))),
+    "foobar"
+  )
+)
