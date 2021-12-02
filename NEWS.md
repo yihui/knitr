@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- Added a new chunk option named `file` so that the chunk content can be read from an external file. Setting the chunk option `file = "test.R"` is equivalent to using the chunk option `code = xfun::read_utf8("test.R")`.
+
 - For R Markdown documents, code chunks can be embedded in a parent code chunk with more backticks now. For example, a code chunk with four backticks can contain code chunks with three backticks. One application is to conditionally include some verbatim content that contains code chunks via the `asis` engine, e.g.,
 
   `````md

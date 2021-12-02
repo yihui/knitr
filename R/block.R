@@ -30,7 +30,15 @@ call_block = function(block) {
     if (inherits(params$ref.label, 'AsIs') && is.null(params$opts.label))
       params$opts.label = ref.label
   }
-  params[["code"]] = params[["code"]] %n% unlist(knit_code$get(ref.label), use.names = FALSE)
+  # if chunk option 'file' is provided, read the file(s) as the chunk body;
+  # otherwise if 'code' is provided, use it; if neither 'file' nor 'code' is
+  # provided, use the chunk body
+  params[["code"]] = if (is.null(code_file <- params[['file']])) {
+    params[["code"]] %n% unlist(knit_code$get(ref.label), use.names = FALSE)
+  } else {
+    # TODO: use xfun::read_all() so we can read multiple files at once
+    xfun::read_utf8(code_file)
+  }
 
   # opts.label = TRUE means inheriting chunk options from ref.label
   if (isTRUE(params$opts.label)) params$opts.label = ref.label
