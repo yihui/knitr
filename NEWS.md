@@ -86,7 +86,14 @@
   
   The difference between the `verbatim` and `asis` engine is that the former will put the content in a fenced code block, and the latter just output the content as-is.
   
-  This engine also works for other types of documents (e.g., `Rnw`) but it will not allow for nested code chunks within the `verbatim` engine.
+  You can also display a file verbatim by using the chunk option `file`, e.g.,
+  
+  ````
+  ```{verbatim, file="test.Rmd"}
+  ```
+  ````
+  
+  This engine also works for other types of documents (e.g., `Rnw`) but it will not allow for nested code chunks within the `verbatim` code chunk.
 
 - Added a new engine named `embed` to embed external plain-text files. It is essentially a simple wrapper based on the `verbatim` engine, with the chunk content read from an external file and default language guessed from file extension. That is,
 
@@ -98,11 +105,11 @@
   is equivalent to
   
   ````
-  ```{verbatim, file = "foo.R", lang = "r"}
+  ```{verbatim, file="foo.R", lang="r"}
   ```
   ````
   
- If you provide the chunk option `file` to the `embed` engine, it will read the file and show its content verbatim in the output document. Alternatively, you can specify the file path in the chunk body, e.g.,
+  If you provide the chunk option `file` to the `embed` engine, it will read the file and show its content verbatim in the output document. Alternatively, you can specify the file path in the chunk body, e.g.,
   
   ````
   ```{embed}
