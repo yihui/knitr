@@ -783,13 +783,34 @@ eng_comment = function(options) {}
 eng_verbatim = function(options) {
   # change default for the cat engine
   options$eval = FALSE
+  options = set_lang(options)
+  eng_cat(options)
+}
+
+set_lang = function(options, default = 'default') {
   # specify the lang name in engine.opts = list(lang = ), or lang/language,
   # or class.source; if all are empty, use 'default'
   options$engine.opts$lang = options$engine.opts$lang %n%
     unlist(options[c('lang', 'language')])[1] %n%
-    options$class.source %n% 'default'
+    options$class.source %n% default
+  options
+}
 
-  eng_cat(options)
+# embed a file verbatim
+eng_embed = function(options) {
+  # if `file` is empty, use `code` as the list of files
+  if (is.null(f <- options$file)) {
+    f = gsub('^["\']|["\']$', '', options$code)  # in case paths are quoted
+    if (length(f) == 0) return()
+    options$code = xfun::read_utf8(f)  # TODO: use xfun::read_all()
+  }
+  # use the filename extension as the default language name
+  if (nchar(lang <- file_ext(f[1])) > 1) {
+    lang = sub('^R', '', lang)  # Rmd -> md, Rhtml -> html, etc.
+    if (lang == 'nw') lang = 'tex'
+  }
+  options = set_lang(options, tolower(lang))
+  eng_verbatim(options)
 }
 
 # set engines for interpreted languages
@@ -814,6 +835,7 @@ knit_engines$set(
   comment = eng_comment,
   css = eng_css,
   dot = eng_dot,
+  embed = eng_embed,
   fortran = eng_shlib,
   fortran95 = eng_shlib,
   go = eng_go,
