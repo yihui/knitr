@@ -76,7 +76,7 @@
   
   This engine also works for other types of documents (e.g., `Rnw`) but it will not allow for nested code chunks within the `verbatim` engine.
 
-- Added a new engine named `embed` to embed external plain-text files. It is essentially a simple wrapper based on the `verbatim` engine, with the chunk content read from an external file. That is,
+- Added a new engine named `embed` to embed external plain-text files. It is essentially a simple wrapper based on the `verbatim` engine, with the chunk content read from an external file and default language guessed from file extension. That is,
 
   ````
   ```{embed, file="foo.R"}
@@ -86,11 +86,11 @@
   is equivalent to
   
   ````
-  ```{verbatim, code=xfun::read_utf8("foo.R")}
+  ```{verbatim, file = "foo.R", lang = "r"}
   ```
   ````
   
-  If you provide the chunk option `file` to the `embed` engine, it will read the file and show its content verbatim in the output document. Alternatively, you can specify the file path in the chunk body, e.g.,
+ If you provide the chunk option `file` to the `embed` engine, it will read the file and show its content verbatim in the output document. Alternatively, you can specify the file path in the chunk body, e.g.,
   
   ````
   ```{embed}
@@ -100,7 +100,7 @@
   
   The quotes are optional but can be helpful for editors (e.g., RStudio IDE) to autocomplete the file paths.
   
-  The syntax highlighting language name is from the filename extension by default, and you can override it with the chunk option `lang` (e.g., `file = "foo.sh", lang = "bash"`).
+  The syntax highlighting language name is from the filename extension by default, and you can override it with the chunk option `lang` (e.g., `file = "foo.sh", lang = "bash"`) which is then identical to the `verbatim` engine.
 
 ## BUG FIXES
 

@@ -799,7 +799,7 @@ set_lang = function(options, default = 'default') {
 # embed a file verbatim
 eng_embed = function(options) {
   # if `file` is empty, use `code` as the list of files
-  if (is.null(options$file)) {
+  if (is.null(f <- options$file)) {
     f = gsub('^["\']|["\']$', '', options$code)  # in case paths are quoted
     if (length(f) == 0) return()
     options$code = xfun::read_utf8(f)  # TODO: use xfun::read_all()
