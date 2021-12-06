@@ -54,21 +54,33 @@
   
   By default, the verbatim content is placed in a fenced `default` code block:
   
+  `````markdown
   ````default
   We can output arbitrary content verbatim.
   
-  ...
+  ```{r}
+  1 + 1
+  ```
   
+  The content can contain inline code like
+  `r pi * 5^2`, too.
   ````
+  `````
   
-  You can change the `default` language name of the block via the chunk option `lang`, e.g., `lang = 'html'` will output a code block like this:
+  You can change the `default` language name of the block via the chunk option `lang`, e.g., `lang = 'markdown'` will output a code block like this:
   
-  ````html
+  `````markdown
+  ````markdown
   We can output arbitrary content verbatim.
   
-  ...
+  ```{r}
+  1 + 1
+  ```
   
+  The content can contain inline code like
+  `r pi * 5^2`, too.
   ````
+  `````
   
   To disable the language name on the block, use an empty string `lang = ''`.
   
