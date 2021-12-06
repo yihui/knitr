@@ -7,14 +7,14 @@
 - For R Markdown documents, code chunks can be embedded in a parent code chunk with more backticks now. For example, a code chunk with four backticks can contain code chunks with three backticks. One application is to conditionally include some verbatim content that contains code chunks via the `asis` engine, e.g.,
 
   `````md
-  ````{asis, echo=FALSE}
-  Some conditional content.
+  ````{asis, echo= format.Date(Sys.Date(), "%w") == 1}
+  Some conditional content only included when report is built on a Monday
   
   ```{r}
   1 + 1
   ```
   
-  More content.
+  On another day, this content won't be included.
   ````
   `````
   
@@ -54,27 +54,46 @@
   
   By default, the verbatim content is placed in a fenced `default` code block:
   
+  `````markdown
   ````default
   We can output arbitrary content verbatim.
   
-  ...
+  ```{r}
+  1 + 1
+  ```
   
+  The content can contain inline code like
+  `r pi * 5^2`, too.
   ````
+  `````
   
-  You can change the `default` language name of the block via the chunk option `lang`, e.g., `lang = 'html'` will output a code block like this:
+  You can change the `default` language name of the block via the chunk option `lang`, e.g., `lang = 'markdown'` will output a code block like this:
   
-  ````html
+  `````markdown
+  ````markdown
   We can output arbitrary content verbatim.
   
-  ...
+  ```{r}
+  1 + 1
+  ```
   
+  The content can contain inline code like
+  `r pi * 5^2`, too.
   ````
+  `````
   
   To disable the language name on the block, use an empty string `lang = ''`.
   
   The difference between the `verbatim` and `asis` engine is that the former will put the content in a fenced code block, and the latter just output the content as-is.
   
-  This engine also works for other types of documents (e.g., `Rnw`) but it will not allow for nested code chunks within the `verbatim` engine.
+  You can also display a file verbatim by using the chunk option `file`, e.g.,
+  
+  ````
+  ```{verbatim, file="test.Rmd"}
+  ```
+  ````
+  
+  This engine also works for other types of documents (e.g., `Rnw`) but it will not allow for nested code chunks within the `verbatim` code chunk.
 
 - Added a new engine named `embed` to embed external plain-text files. It is essentially a simple wrapper based on the `verbatim` engine, with the chunk content read from an external file and default language guessed from file extension. That is,
 
@@ -86,11 +105,11 @@
   is equivalent to
   
   ````
-  ```{verbatim, file = "foo.R", lang = "r"}
+  ```{verbatim, file="foo.R", lang="r"}
   ```
   ````
   
- If you provide the chunk option `file` to the `embed` engine, it will read the file and show its content verbatim in the output document. Alternatively, you can specify the file path in the chunk body, e.g.,
+  If you provide the chunk option `file` to the `embed` engine, it will read the file and show its content verbatim in the output document. Alternatively, you can specify the file path in the chunk body, e.g.,
   
   ````
   ```{embed}
