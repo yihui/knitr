@@ -125,6 +125,8 @@
 
 - The chunk option `child` also respects the package option `root.dir` now (thanks, @salim-b, https://community.rstudio.com/t/117563).
 
+- Fixed a LaTeX error ``"Package xcolor Error: Undefined color `fgcolor'"`` with `.Rnw` documents (thanks, Kurt Hornik).
+
 ## MINOR CHANGES
 
 - Improved the (warning) message when unbalanced chunk delimiters are detected in R Markdown documents, to make it easier for users to fix the problem. The message now contains the line numbers of the opening fence and closing fence, as well as the opening and closing backticks. For example, the opening fence may be `````"````{r}"````` (four backticks) but the closing fence is ````"```"```` (three backticks---should also be four to match the opening fence), or the opening fence is indented ````"  ```{r}"```` but the closing fence is not ````"```"````. Note that this warning message may become an error in the future, i.e., unbalanced chunk delimiters will no longer be allowed.
