@@ -237,13 +237,6 @@ comment_chars = local({
 #' csv_like <- c("#| mine, echo = TRUE, fig.width = 8, foo = 'bar'", "1 + 1")
 #' writeLines(csv_like)
 #' partition_chunk("r", csv_like)
-# partition YAML (chunk options) from a code chunk of the following form:
-# #| echo: true
-# #| foo: bar
-# 1 + 1
-#
-# we also allow for traditional CSV syntax, e.g.,
-# #| echo = TRUE, fig.width = 8
 partition_chunk = function(engine, code) {
 
   res = list(yaml = NULL, src = NULL, code = code)
