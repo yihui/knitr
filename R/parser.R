@@ -214,6 +214,29 @@ comment_chars = local({
   res[order(names(res))]
 })
 
+#' Partition YAML options from a code chunk
+#'
+#' @param engine the lower-case name of the knitr engine to run (to determine 
+#'   the appropriate comment character).
+#' @param code a character vector where each element represents one line of code.
+#' @keywords internal
+#' @return a list with the following items:
+#'   \describe{
+#'     \item{\code{options}}{The parsed options (if any) as a list}
+#'     \item{\code{src}}{The part of the input that contains the options}
+#'     \item{\code{code}}{The part of the input that contains the code}
+#'   }
+#' @export
+#' @examples
+#' # parse yaml-like items
+#' yaml_like <- c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar", "1 + 1")
+#' writeLines(yaml_like)
+#' partition_chunk("r", yaml_like)
+#' 
+#' # parse CSV syntax
+#' csv_like <- c("#| mine, echo = TRUE, fig.width = 8, foo = 'bar'", "1 + 1")
+#' writeLines(csv_like)
+#' partition_chunk("r", csv_like)
 # partition YAML (chunk options) from a code chunk of the following form:
 # #| echo: true
 # #| foo: bar
