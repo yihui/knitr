@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.38
+
+## NEW FEATURES
+
+- The chunk option `file` can take a vector of file paths now, i.e., this option can be used to read more than one file (e.g., `file = c("foo.R", "bar.R")`.
+
 # CHANGES IN knitr VERSION 1.37
 
 ## NEW FEATURES

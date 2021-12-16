@@ -802,7 +802,7 @@ eng_embed = function(options) {
   if (is.null(f <- options$file)) {
     f = gsub('^["\']|["\']$', '', options$code)  # in case paths are quoted
     if (length(f) == 0) return()
-    options$code = xfun::read_utf8(f)  # TODO: use xfun::read_all()
+    options$code = xfun::read_all(f)
   }
   # use the filename extension as the default language name
   if (nchar(lang <- file_ext(f[1])) > 1) {

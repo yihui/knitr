@@ -36,8 +36,7 @@ call_block = function(block) {
   params[["code"]] = if (is.null(code_file <- params[['file']])) {
     params[["code"]] %n% unlist(knit_code$get(ref.label), use.names = FALSE)
   } else {
-    # TODO: use xfun::read_all() so we can read multiple files at once
-    xfun::read_utf8(code_file)
+    xfun::read_all(code_file)
   }
 
   # opts.label = TRUE means inheriting chunk options from ref.label
