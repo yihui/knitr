@@ -13,7 +13,7 @@
 - For R Markdown documents, code chunks can be embedded in a parent code chunk with more backticks now. For example, a code chunk with four backticks can contain code chunks with three backticks. One application is to conditionally include some verbatim content that contains code chunks via the `asis` engine, e.g.,
 
   `````md
-  ````{asis, echo= format.Date(Sys.Date(), "%w") == 1}
+  ````{asis, echo=format(Sys.Date(), "%w") == 1}
   Some conditional content only included when report is built on a Monday
   
   ```{r}
