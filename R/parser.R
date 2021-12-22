@@ -89,12 +89,6 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   if (!(is_quarto <- !is.null(opts_knit$get('quarto.version')))) params.src = params
   params = parse_params(params)
 
-  # merge with possible chunk options written as (YAML or CSV) metadata in
-  # chunk, and remove metadata from code body
-  parts = partition_chunk(engine, code)
-  params = merge_list(params, parts$options)
-  code = parts$code
-
   # remove indent (and possibly markdown blockquote >) from code
   if (nzchar(spaces <- gsub('^([\t >]*).*', '\\1', header))) {
     params$indent = spaces
@@ -103,6 +97,12 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
     # lines (e.g. in blockquotes https://github.com/yihui/knitr/issues/1446)
     code = gsub(sprintf('^%s', gsub('\\s+$', '', spaces)), '', code)
   }
+
+  # merge with possible chunk options written as (YAML or CSV) metadata in
+  # chunk, and remove metadata from code body
+  parts = partition_chunk(engine, code)
+  params = merge_list(params, parts$options)
+  code = parts$code
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
   if (length(code)) {
