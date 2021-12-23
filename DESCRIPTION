@@ -102,7 +102,8 @@ Authors@R: c(
     person("Viktoras", "Veitas", role = "ctb"),
     person("Weicheng", "Zhu", role = "ctb"),
     person("Wush", "Wu", role = "ctb"),
-    person("Zachary", "Foster", role = "ctb")
+    person("Zachary", "Foster", role = "ctb"),
+    person("Zhian N.", "Kamvar", role = "ctb", comment = c(ORCID = "0000-0003-1458-7108"))
     )
 Description: Provides a general-purpose tool for dynamic report generation in R
     using Literate Programming techniques.
