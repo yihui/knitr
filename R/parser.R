@@ -214,13 +214,29 @@ comment_chars = local({
   res[order(names(res))]
 })
 
-# partition YAML (chunk options) from a code chunk of the following form:
-# #| echo: true
-# #| foo: bar
-# 1 + 1
-#
-# we also allow for traditional CSV syntax, e.g.,
-# #| echo = TRUE, fig.width = 8
+#' Partition chunk options from the code chunk body
+#'
+#' Chunk options can be written in special comments (e.g., after \verb{#|} for R
+#' code chunks) inside a code chunk. This function partitions these options from
+#' the chunk body.
+#' @param engine The name of the language engine (to determine the appropriate
+#'   comment character).
+#' @param code A character vector (lines of code).
+#' @return A list with the following items: \describe{\item{\code{options}}{The
+#'   parsed options (if any) as a list.} \item{\code{src}}{The part of the input
+#'   that contains the options.} \item{\code{code}}{The part of the input that
+#'   contains the code.}}
+#' @export
+#' @examples
+#' # parse yaml-like items
+#' yaml_like = c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar", "1 + 1")
+#' writeLines(yaml_like)
+#' knitr::partition_chunk("r", yaml_like)
+#'
+#' # parse CSV syntax
+#' csv_like = c("#| mine, echo = TRUE, fig.width = 8, foo = 'bar'", "1 + 1")
+#' writeLines(csv_like)
+#' knitr::partition_chunk("r", csv_like)
 partition_chunk = function(engine, code) {
 
   res = list(yaml = NULL, src = NULL, code = code)
