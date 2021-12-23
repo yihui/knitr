@@ -2,36 +2,36 @@
 % Please edit documentation in R/parser.R
 \name{partition_chunk}
 \alias{partition_chunk}
-\title{Partition YAML options from a code chunk}
+\title{Partition chunk options from the code chunk body}
 \usage{
 partition_chunk(engine, code)
 }
 \arguments{
-\item{engine}{the lower-case name of the knitr engine to run (to determine 
-the appropriate comment character).}
+\item{engine}{The name of the language engine (to determine the appropriate
+comment character).}
 
-\item{code}{a character vector where each element represents one line of code.}
+\item{code}{A character vector (lines of code).}
 }
 \value{
-a list with the following items:
-  \describe{
-    \item{\code{options}}{The parsed options (if any) as a list}
-    \item{\code{src}}{The part of the input that contains the options}
-    \item{\code{code}}{The part of the input that contains the code}
-  }
+A list with the following items: \describe{\item{\code{options}}{The
+  parsed options (if any) as a list.} \item{\code{src}}{The part of the input
+  that contains the options.} \item{\code{code}}{The part of the input that
+  contains the code.}}
 }
 \description{
-Partition YAML options from a code chunk
+Chunk options can be written in special comments (e.g., after \verb{#|} for R
+code chunks) inside a code chunk. This function partitions these options from
+the chunk body.
 }
 \examples{
 # parse yaml-like items
-yaml_like <- c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar", "1 + 1")
+yaml_like = c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar",
+    "1 + 1")
 writeLines(yaml_like)
-partition_chunk("r", yaml_like)
+knitr::partition_chunk("r", yaml_like)
 
 # parse CSV syntax
-csv_like <- c("#| mine, echo = TRUE, fig.width = 8, foo = 'bar'", "1 + 1")
+csv_like = c("#| mine, echo = TRUE, fig.width = 8, foo = 'bar'", "1 + 1")
 writeLines(csv_like)
-partition_chunk("r", csv_like)
+knitr::partition_chunk("r", csv_like)
 }
-\keyword{internal}
