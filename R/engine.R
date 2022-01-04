@@ -200,7 +200,7 @@ eng_exec = function(options) {
     f = wd_tempfile(cmd2, paste0('.', ext))
     if (is.function(opts$clean)) on.exit(opts$clean(f), add = TRUE)
     opts$file(options$code, f)
-  } else if (is.character(opts$file) {
+  } else if (is.character(opts$file)) {
     opts$file
    } else {
      stop("file should be a character or a function")
@@ -213,10 +213,19 @@ eng_exec = function(options) {
     on.exit(unlink(f2), add = TRUE)
     tryCatch({
       res = system2(cmd, shQuote(a), stdout = TRUE, stderr = f2, env = options$engine.env)
-      if (!options$error && file.exists(f2) && file.size(f2) > 0) {
-        stop(file_string(f2))
+      # check error in the content run
+      if (!is.null(attr(out, 'status')) && file.exists(f2) && file.size(f2) > 0) {
+         e <- readLines(f2)
+         if (!options$error) stop(paste(e, collapse = '\n')) else e # f2 may not be UTF-8
+      } else {
+        res
       }
-      res
+    }, error = function(e) {
+        # Error in the command run
+        if (!options$error) stop(e)
+        paste('Error in running command', cmd)
+      }
+    )
     }, error = function(e) {
         if (!options$error) stop(e)
         paste('Error in running command', cmd)
