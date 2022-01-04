@@ -221,12 +221,7 @@ eng_exec = function(options) {
         res
       }
     }, error = function(e) {
-        # Error in the command run
-        if (!options$error) stop(e)
-        paste('Error in running command', cmd)
-      }
-    )
-    }, error = function(e) {
+        # error in the command run
         if (!options$error) stop(e)
         paste('Error in running command', cmd)
       }
