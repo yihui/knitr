@@ -176,10 +176,14 @@ get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 
 # engine.opts = list(command, file, args, args1, args2)
 eng_exec = function(options) {
-  opts = options$engine.opts %n% options[c('command', 'file', 'ext', 'args', 'args1', 'args2')]
+  opts = options$engine.opts %n% options[c(
+    'command', 'file', 'ext', 'clean', 'args', 'args1', 'args2'
+  )]
   if (!is.character(cmd <- opts$command)) stop(
     "The command of the 'exec' engine must be a character string."
   )
+  # turn all chunk options into function except 'command'
+  opts = list_fun(opts, setdiff(names(opts), 'command'))
 
   # default options
   opts2 = list(
@@ -196,16 +200,10 @@ eng_exec = function(options) {
   opts = merge_list(opts2, opts)
   cmd2 = basename(cmd)  # in case command is a full path
   ext = opts$ext(cmd2)  # file extension
-  f = if (is.function(opts$file)) {
-    f = wd_tempfile(cmd2, paste0('.', ext))
-    if (is.function(opts$clean)) on.exit(opts$clean(f), add = TRUE)
-    opts$file(options$code, f)
-  } else if (is.character(opts$file)) {
-    opts$file
-   } else {
-     stop("file should be a character or a function")
-   }
-  a = c(opts$args1, if (is.function(opts$args)) opts$args(options$code, f), opts$args2)
+  f = wd_tempfile(cmd2, paste0('.', ext))
+  if (is.function(opts$clean)) on.exit(opts$clean(f), add = TRUE)
+  f = opts$file(options$code, f)
+  a = c(opts$args1(), opts$args(options$code, f), opts$args2())
 
   out = if (options$eval) {
     if (options$message) message('running: ', paste(c(cmd, a), collapse = ' '))
@@ -215,8 +213,8 @@ eng_exec = function(options) {
       res = system2(cmd, shQuote(a), stdout = TRUE, stderr = f2, env = options$engine.env)
       # check error in the content run
       if (!is.null(attr(out, 'status')) && file.exists(f2) && file.size(f2) > 0) {
-         e = readLines(f2) # f2 may not be UTF-8
-         if (!options$error) stop(one_string(e)) else e
+        e = readLines(f2) # f2 may not be UTF-8
+        if (!options$error) stop(one_string(e)) else e
       } else {
         res
       }
@@ -230,6 +228,18 @@ eng_exec = function(options) {
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
   engine_output(options, options$code, out)
+}
+
+# turn elements of a list into functions: if an element is not a function, make
+# it a function that returns the non-function value
+list_fun = function(x, which = names(x)) {
+  for (i in which) {
+    if (!is.function(v <- x[[i]])) x[[i]] = local({
+      # a trick to avoid R's lazy evaluation (make a copy of v)
+      v2 = v; function(...) v2
+    })
+  }
+  x
 }
 
 ## C, C++, and Fortran (via R CMD SHLIB)
