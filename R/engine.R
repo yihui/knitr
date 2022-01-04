@@ -178,7 +178,7 @@ get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 eng_exec = function(options) {
   opts = options$engine.opts %n% options[c('command', 'file', 'ext', 'args', 'args1', 'args2')]
   if (!is.character(cmd <- opts$command)) stop(
-    "The command of the 'exec' engine was not specified."
+    "The command of the 'exec' engine must be a character string."
   )
 
   # default options
