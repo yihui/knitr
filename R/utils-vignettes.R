@@ -41,8 +41,7 @@ vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) 
 vtangle = function(file, ..., encoding = 'UTF-8', quiet = FALSE) {
   # a hack to generate an empty R script to cheat R CMD check because purl() is
   # not reliable (#2052, #2036)
-  # TODO: use is_R_CMD_check() after xfun >= 0.27 is on CRAN
-  if (Sys.getenv('_R_CHECK_LICENSE_') != '' && !file.exists(with_ext(file, 'Rout.save'))) {
+  if (xfun::is_R_CMD_check() && !file.exists(with_ext(file, 'Rout.save'))) {
     file = with_ext(file, '.R')
     file.create(file)
     return(file)

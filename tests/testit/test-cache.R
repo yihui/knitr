@@ -35,12 +35,12 @@ assert(
 )
 
 knit_code$set(a = 1, b = 2, c = 3)
-assert(
-  'dep_prev() sets dependencies on previous chunks',
+assert('dep_prev() sets dependencies on previous chunks', {
   # dependency is empty now
-  identical(dep_list$get(), list()),
+  (dep_list$get() %==% list())
   # b/c depend on a, c depends on b
-  identical({dep_prev(); dep_list$get()}, list(a = c('b', 'c'), b = 'c'))
-)
+  dep_prev()
+  (dep_list$get() %==% list(a = c('b', 'c'), b = 'c'))
+})
 dep_list$restore()
 knit_code$restore()

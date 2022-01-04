@@ -844,20 +844,36 @@ eng_comment = function(options) {}
 
 ## a verbatim engine that returns its chunk content verbatim
 eng_verbatim = function(options) {
-  if (!out_format('markdown')) {
-    warning("The 'verbatim' engine only works for Markdown output at the moment.")
-    return(one_string(options$code))
-  }
-
   # change default for the cat engine
   options$eval = FALSE
+  options = set_lang(options)
+  eng_cat(options)
+}
+
+set_lang = function(options, default = 'default') {
   # specify the lang name in engine.opts = list(lang = ), or lang/language,
   # or class.source; if all are empty, use 'default'
   options$engine.opts$lang = options$engine.opts$lang %n%
     unlist(options[c('lang', 'language')])[1] %n%
-    options$class.source %n% 'default'
+    options$class.source %n% default
+  options
+}
 
-  eng_cat(options)
+# embed a file verbatim
+eng_embed = function(options) {
+  # if `file` is empty, use `code` as the list of files
+  if (is.null(f <- options$file)) {
+    f = gsub('^["\']|["\']$', '', options$code)  # in case paths are quoted
+    if (length(f) == 0) return()
+    options$code = xfun::read_all(f)
+  }
+  # use the filename extension as the default language name
+  if (nchar(lang <- file_ext(f[1])) > 1) {
+    lang = sub('^R', '', lang)  # Rmd -> md, Rhtml -> html, etc.
+    if (lang == 'nw') lang = 'tex'
+  }
+  options = set_lang(options, tolower(lang))
+  eng_verbatim(options)
 }
 
 # set engines for interpreted languages
@@ -871,13 +887,35 @@ local({
 
 # additional engines
 knit_engines$set(
-  asis = eng_asis, asy = eng_dot, block = eng_block, block2 = eng_block2,
-  bslib = eng_bslib, c = eng_shlib, cat = eng_cat, cc = eng_shlib,
-  comment = eng_comment, css = eng_css, dot = eng_dot, exec = eng_exec,
-  fortran = eng_shlib, fortran95 = eng_shlib, go = eng_go,
-  highlight = eng_highlight, js = eng_js, julia = eng_julia, python = eng_python,
-  R = eng_r, Rcpp = eng_Rcpp, sass = eng_sxss, scss = eng_sxss, sql = eng_sql,
-  stan = eng_stan, targets = eng_targets, tikz = eng_tikz, verbatim = eng_verbatim
+  asis = eng_asis,
+  asy = eng_dot,
+  block = eng_block,
+  block2 = eng_block2,
+  bslib = eng_bslib,
+  c = eng_shlib,
+  cat = eng_cat,
+  cc = eng_shlib,
+  comment = eng_comment,
+  css = eng_css,
+  dot = eng_dot,
+  embed = eng_embed,
+  exec = eng_exec,
+  fortran = eng_shlib,
+  fortran95 = eng_shlib,
+  go = eng_go,
+  highlight = eng_highlight,
+  js = eng_js,
+  julia = eng_julia,
+  python = eng_python,
+  R = eng_r,
+  Rcpp = eng_Rcpp,
+  sass = eng_sxss,
+  scss = eng_sxss,
+  sql = eng_sql,
+  stan = eng_stan,
+  targets = eng_targets,
+  tikz = eng_tikz,
+  verbatim = eng_verbatim
 )
 
 cache_engines$set(python = cache_eng_python)

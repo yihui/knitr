@@ -1,18 +1,30 @@
+# CHANGES IN knitr VERSION 1.38
+
+## NEW FEATURES
+
+- The chunk option `file` can take a vector of file paths now, i.e., this option can be used to read more than one file (e.g., `file = c("foo.R", "bar.R")`.
+
+## BUG FIXES
+
+- Chunk options defined in the `#|` style are not recognized when the code chunk is indented or quoted (thanks, @mine-cetinkaya-rundel, #2086).
+
 # CHANGES IN knitr VERSION 1.37
 
 ## NEW FEATURES
 
+- Added a new chunk option named `file` so that the chunk content can be read from an external file. Setting the chunk option `file = "test.R"` is equivalent to using the chunk option `code = xfun::read_utf8("test.R")`.
+
 - For R Markdown documents, code chunks can be embedded in a parent code chunk with more backticks now. For example, a code chunk with four backticks can contain code chunks with three backticks. One application is to conditionally include some verbatim content that contains code chunks via the `asis` engine, e.g.,
 
   `````md
-  ````{asis, echo=FALSE}
-  Some conditional content.
+  ````{asis, echo=format(Sys.Date(), "%w") == 1}
+  Some conditional content only included when report is built on a Monday
   
   ```{r}
   1 + 1
   ```
   
-  More content.
+  On another day, this content won't be included.
   ````
   `````
   
@@ -35,7 +47,7 @@
   
   Note that if any line of the content to be commented out contains `N` backticks, you will have to use at least `N + 1` backticks in the chunk header and footer of the `comment` chunk.
 
-- Added a new engine named `verbatim` for R Markdown documents to output verbatim content that contains code chunks and/or inline expressions, e.g.,
+- Added a new engine named `verbatim` mainly for R Markdown documents to output verbatim content that contains code chunks and/or inline expressions, e.g.,
 
   `````md
   ````{verbatim}
@@ -52,29 +64,78 @@
   
   By default, the verbatim content is placed in a fenced `default` code block:
   
+  `````markdown
   ````default
   We can output arbitrary content verbatim.
   
-  ...
+  ```{r}
+  1 + 1
+  ```
   
+  The content can contain inline code like
+  `r pi * 5^2`, too.
   ````
+  `````
   
-  You can change the `default` language name of the block via the chunk option `lang`, e.g., `lang = 'html'` will output a code block like this:
+  You can change the `default` language name of the block via the chunk option `lang`, e.g., `lang = 'markdown'` will output a code block like this:
   
-  ````html
+  `````markdown
+  ````markdown
   We can output arbitrary content verbatim.
   
-  ...
+  ```{r}
+  1 + 1
+  ```
   
+  The content can contain inline code like
+  `r pi * 5^2`, too.
   ````
+  `````
   
   To disable the language name on the block, use an empty string `lang = ''`.
   
-  The difference between the `verbatim` and `asis` engine is that the former will put the content in a fenced code blocked, and the latter just output the content as-is.
+  The difference between the `verbatim` and `asis` engine is that the former will put the content in a fenced code block, and the latter just output the content as-is.
+  
+  You can also display a file verbatim by using the chunk option `file`, e.g.,
+  
+  ````
+  ```{verbatim, file="test.Rmd"}
+  ```
+  ````
+  
+  This engine also works for other types of documents (e.g., `Rnw`) but it will not allow for nested code chunks within the `verbatim` code chunk.
+
+- Added a new engine named `embed` to embed external plain-text files. It is essentially a simple wrapper based on the `verbatim` engine, with the chunk content read from an external file and default language guessed from file extension. That is,
+
+  ````
+  ```{embed, file="foo.R"}
+  ```
+  ````
+  
+  is equivalent to
+  
+  ````
+  ```{verbatim, file="foo.R", lang="r"}
+  ```
+  ````
+  
+  If you provide the chunk option `file` to the `embed` engine, it will read the file and show its content verbatim in the output document. Alternatively, you can specify the file path in the chunk body, e.g.,
+  
+  ````
+  ```{embed}
+  "foo.txt"
+  ```
+  ````
+  
+  The quotes are optional but can be helpful for editors (e.g., RStudio IDE) to autocomplete the file paths.
+  
+  The syntax highlighting language name is from the filename extension by default, and you can override it with the chunk option `lang` (e.g., `file = "foo.sh", lang = "bash"`) which is then identical to the `verbatim` engine.
 
 ## BUG FIXES
 
 - The chunk option `child` also respects the package option `root.dir` now (thanks, @salim-b, https://community.rstudio.com/t/117563).
+
+- Fixed a LaTeX error ``"Package xcolor Error: Undefined color `fgcolor'"`` with `.Rnw` documents (thanks, Kurt Hornik).
 
 ## MINOR CHANGES
 
