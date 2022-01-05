@@ -177,10 +177,8 @@ get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 # execute an arbitrary command (optionally with arguments)
 # engine.opts = list(command, file, args, args1, args2)
 eng_exec = function(options) {
-  opts = options$engine.opts %n% options[c(
-    'command', 'file', 'ext', 'clean', 'args', 'args1', 'args2'
-  )]
-  if (!is.character(cmd <- opts$command)) stop(
+  opts = options$engine.opts
+  if (!is.character(cmd <- opts$command %n% options$command)) stop(
     "The command of the 'exec' engine must be a character string."
   )
   # turn all chunk options into function except 'command'
