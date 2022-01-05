@@ -174,6 +174,7 @@ get_engine_opts = function(opts, engine, fallback = '') {
 
 get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 
+# execute an arbitrary command (optionally with arguments)
 # engine.opts = list(command, file, args, args1, args2)
 eng_exec = function(options) {
   opts = options$engine.opts %n% options[c(
@@ -194,7 +195,7 @@ eng_exec = function(options) {
       file
     }, clean = function(file) {
       unlink(file)
-    }
+    }, args1 = function() NULL, args2 = function() NULL
   )
 
   opts = merge_list(opts2, opts)
