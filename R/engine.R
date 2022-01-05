@@ -213,7 +213,7 @@ eng_exec = function(options) {
     tryCatch({
       res = system2(cmd, shQuote(a), stdout = TRUE, stderr = f2, env = options$engine.env)
       # check error in the content run
-      if (!is.null(attr(out, 'status')) && file.exists(f2) && file.size(f2) > 0) {
+      if (!is.null(attr(res, 'status')) && file.exists(f2) && file.size(f2) > 0) {
         e = readLines(f2) # f2 may not be UTF-8
         if (!options$error) stop(one_string(e)) else e
       } else {
