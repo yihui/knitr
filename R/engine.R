@@ -175,7 +175,7 @@ get_engine_opts = function(opts, engine, fallback = '') {
 get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 
 # execute an arbitrary command (optionally with arguments)
-# engine.opts = list(command, file, args, args1, args2)
+# engine.opts = list(command, file, ext, clean, args, args1, args2)
 eng_exec = function(options) {
   opts = options$engine.opts
   if (!is.character(cmd <- opts$command %n% options$command)) stop(
@@ -228,6 +228,8 @@ eng_exec = function(options) {
   } else ''
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
+  # TODO: allow users to set the language name
+  options$engine = cmd2
   engine_output(options, options$code, out)
 }
 
