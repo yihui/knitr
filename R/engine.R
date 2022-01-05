@@ -209,7 +209,9 @@ eng_exec = function(options) {
     f2 = wd_tempfile(cmd2)  # capture stderr
     on.exit(unlink(f2), add = TRUE)
     tryCatch({
-      res = system2(cmd, shQuote(a), stdout = TRUE, stderr = f2, env = options$engine.env)
+      res = (if (options$error) suppressWarnings else identity)(
+        system2(cmd, shQuote(a), stdout = TRUE, stderr = f2, env = options$engine.env)
+      )
       # check error in the content run
       if (!is.null(attr(res, 'status')) && file.exists(f2) && file.size(f2) > 0) {
         e = readLines(f2) # f2 may not be UTF-8
