@@ -229,7 +229,7 @@ eng_exec = function(options) {
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
   # TODO: allow users to set the language name
-  options$engine = cmd2
+  options$engine = xfun::sans_ext(cmd2)
   engine_output(options, options$code, out)
 }
 
