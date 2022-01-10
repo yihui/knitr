@@ -175,7 +175,7 @@ get_engine_opts = function(opts, engine, fallback = '') {
 get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 
 # execute an arbitrary command (optionally with arguments)
-# engine.opts = list(command, file, ext, clean, args, args1, args2)
+# engine.opts = list(command, input, ext, clean, args, args1, args2)
 eng_exec = function(options) {
   opts = options$engine.opts
   if (!is.character(cmd <- opts$command %n% options$command)) stop(
@@ -186,7 +186,7 @@ eng_exec = function(options) {
 
   # default options
   opts2 = list(
-    ext = identity, file = function(code, file) {
+    ext = identity, input = function(code, file) {
       write_utf8(code, file)
       file
     }, args = function(code, file) {
@@ -201,7 +201,7 @@ eng_exec = function(options) {
   ext = opts$ext(cmd2)  # file extension
   f = wd_tempfile(cmd2, paste0('.', ext))
   if (is.function(opts$clean)) on.exit(opts$clean(f), add = TRUE)
-  f = opts$file(options$code, f)
+  f = opts$input(options$code, f)
   a = c(opts$args1(), opts$args(options$code, f), opts$args2())
 
   out = if (options$eval) {
