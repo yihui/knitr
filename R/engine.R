@@ -181,15 +181,18 @@ eng_exec = function(options) {
   if (!is.character(cmd <- opts$command %n% options$command)) stop(
     "The command of the 'exec' engine must be a character string."
   )
+  input = function(code, file) {
+    write_utf8(code, file)
+    file
+  }
+  if (is.character(i0 <- opts$input))
+    opts$input = function(code, file) input(code, i0)
   # turn all chunk options into function except 'command'
   opts = list_fun(opts, setdiff(names(opts), 'command'))
 
   # default options
   opts2 = list(
-    ext = identity, input = function(code, file) {
-      write_utf8(code, file)
-      file
-    }, args = function(code, file) {
+    ext = identity, input = input, args = function(code, file) {
       file
     }, clean = function(file) {
       unlink(file)
