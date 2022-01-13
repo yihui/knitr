@@ -566,7 +566,7 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
     }
     g
   }
-  mapply(fun, chunk.begin, chunk.end, lines, seq_along(lines))
+  mapply(fun, chunk.begin, chunk.end, lines, seq_along(chunk.begin))
 }
 
 match_chunk_begin = function(pattern.end, x, pattern = '^\\1\\\\{') {

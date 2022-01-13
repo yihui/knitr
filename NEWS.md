@@ -40,6 +40,8 @@
 
 - Chunk options defined in the `#|` style are not recognized when the code chunk is indented or quoted (thanks, @mine-cetinkaya-rundel, #2086).
 
+- Fixed a bug in `Sweave2knitr()` #2097 (thanks, @chroetz).
+
 # CHANGES IN knitr VERSION 1.37
 
 ## NEW FEATURES
