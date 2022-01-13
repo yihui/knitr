@@ -196,7 +196,10 @@ eng_exec = function(options) {
       file
     }, clean = function(file) {
       unlink(file)
-    }, args1 = function() NULL, args2 = function() NULL
+    }, args1 = function() NULL, args2 = function() NULL,
+    output = function(options, code, output, file) {
+      engine_output(options, code, output)
+    }
   )
 
   opts = merge_list(opts2, opts)
@@ -233,7 +236,7 @@ eng_exec = function(options) {
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
   # TODO: allow users to set the language name
   options$engine = xfun::sans_ext(cmd2)
-  engine_output(options, options$code, out)
+  opts$output(options, options$code, out, f)
 }
 
 # turn elements of a list into functions: if an element is not a function, make
