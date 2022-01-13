@@ -4,7 +4,7 @@
 
 - The chunk option `file` can take a vector of file paths now, i.e., this option can be used to read more than one file (e.g., `file = c("foo.R", "bar.R")`.
 
-- Added a new engine named `exec` to execute an arbitrary command on the code chunk, e.g.,
+- Added a new engine named `exec` (#2073) to execute an arbitrary command on the code chunk, e.g.,
 
   ````md
   ```{exec, command='Rscript'}
@@ -33,6 +33,8 @@
   With this new engine, we no longer need to provide or maintain other simple command-based engines. For example, to support TypeScript (https://github.com/yihui/knitr/pull/1833), we only need to specify `command = 'ts-node'` with the `exec` engine.
   
   If the command has significant side-effects (e.g., compile source code to an executable and run the executable, or generate plots to be included in the output), it is also possible to create a new engine based on the `exec` engine. The example #124 in the `knitr-examples` repo has provided a `gcc` example.
+  
+  We'd like to thank @TianyiShi2001 for the inspiration (#1829 #1823 #1833).
 
 ## BUG FIXES
 
