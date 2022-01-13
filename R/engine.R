@@ -174,6 +174,83 @@ get_engine_opts = function(opts, engine, fallback = '') {
 
 get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
 
+# execute an arbitrary command (optionally with arguments)
+# engine.opts = list(command, input, ext, clean, args, args1, args2)
+eng_exec = function(options) {
+  opts = options$engine.opts
+  if (!is.character(cmd <- opts$command %n% options$command)) stop(
+    "The command of the 'exec' engine must be a character string."
+  )
+  input = function(code, file) {
+    write_utf8(code, file)
+    file
+  }
+  if (is.character(i0 <- opts$input))
+    opts$input = function(code, file) input(code, i0)
+  # turn all chunk options into function except 'command'
+  opts = list_fun(opts, setdiff(names(opts), 'command'))
+
+  # default options
+  opts2 = list(
+    ext = identity, input = input, args = function(code, file) {
+      file
+    }, clean = function(file) {
+      unlink(file)
+    }, args1 = function() NULL, args2 = function() NULL,
+    output = function(options, code, output, file) {
+      engine_output(options, code, output)
+    }
+  )
+
+  opts = merge_list(opts2, opts)
+  cmd2 = basename(cmd)  # in case command is a full path
+  ext = opts$ext(cmd2)  # file extension
+  f = wd_tempfile(cmd2, paste0('.', ext))
+  if (is.function(opts$clean)) on.exit(opts$clean(f), add = TRUE)
+  f = opts$input(options$code, f)
+  a = c(opts$args1(), opts$args(options$code, f), opts$args2())
+
+  out = if (options$eval) {
+    if (options$message) message('running: ', paste(c(cmd, a), collapse = ' '))
+    f2 = wd_tempfile(cmd2)  # capture stderr
+    on.exit(unlink(f2), add = TRUE)
+    tryCatch({
+      res = (if (options$error) suppressWarnings else identity)(
+        system2(cmd, shQuote(a), stdout = TRUE, stderr = f2, env = options$engine.env)
+      )
+      # check error in the content run
+      if (!is.null(attr(res, 'status')) && file.exists(f2) && file.size(f2) > 0) {
+        e = readLines(f2) # f2 may not be UTF-8
+        if (!options$error) stop(one_string(e)) else e
+      } else {
+        res
+      }
+    }, error = function(e) {
+        # error in the command run
+        if (!options$error) stop(e)
+        paste('Error in running command', cmd)
+      }
+    )
+  } else ''
+  # chunk option error=FALSE means we need to signal the error
+  if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
+  # TODO: allow users to set the language name
+  options$engine = xfun::sans_ext(cmd2)
+  opts$output(options, options$code, out, f)
+}
+
+# turn elements of a list into functions: if an element is not a function, make
+# it a function that returns the non-function value
+list_fun = function(x, which = names(x)) {
+  for (i in which) {
+    if (!is.function(v <- x[[i]])) x[[i]] = local({
+      # a trick to avoid R's lazy evaluation (make a copy of v)
+      v2 = v; function(...) v2
+    })
+  }
+  x
+}
+
 ## C, C++, and Fortran (via R CMD SHLIB)
 eng_shlib = function(options) {
   n = switch(options$engine, c = 'c', cc  = 'cc', fortran = 'f', fortran95 = 'f95')
@@ -836,6 +913,7 @@ knit_engines$set(
   css = eng_css,
   dot = eng_dot,
   embed = eng_embed,
+  exec = eng_exec,
   fortran = eng_shlib,
   fortran95 = eng_shlib,
   go = eng_go,
