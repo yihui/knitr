@@ -228,8 +228,7 @@ eng_r = function(options) {
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
   # guess plot file type if it is NULL
-  if (keep != 'none' && is.null(options$fig.ext))
-    options$fig.ext = dev2ext(options$dev)
+  if (keep != 'none') options$fig.ext = dev2ext(options)
 
   cache.exists = cache$exists(options$hash, options$cache.lazy)
   evaluate = knit_hooks$get('evaluate')

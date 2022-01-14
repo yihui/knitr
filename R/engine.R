@@ -369,7 +369,7 @@ eng_tikz = function(options) {
   write_utf8(s, texf <- wd_tempfile('tikz', '.tex'))
   on.exit(unlink(texf), add = TRUE)
 
-  ext = tolower(options$fig.ext %n% dev2ext(options$dev))
+  ext = dev2ext(options)
 
   to_svg = ext == 'svg'
   outf = if (to_svg) tinytex::latexmk(texf, 'latex') else tinytex::latexmk(texf)
