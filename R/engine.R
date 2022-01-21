@@ -172,7 +172,9 @@ get_engine_opts = function(opts, engine, fallback = '') {
   opts %n% fallback
 }
 
-get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
+get_engine_path = function(path, engine, fallback = engine) {
+  get_engine_opts(path, engine, fallback)
+}
 
 # execute an arbitrary command (optionally with arguments)
 # engine.opts = list(command, input, ext, clean, args, args1, args2)
@@ -181,6 +183,7 @@ eng_exec = function(options) {
   if (!is.character(cmd <- opts$command %n% options$command)) stop(
     "The command of the 'exec' engine must be a character string."
   )
+  cmd = get_engine_path(options$engine.path, options$engine, cmd)
   input = function(code, file) {
     write_utf8(code, file)
     file
