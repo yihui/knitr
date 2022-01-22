@@ -36,6 +36,8 @@
   
   We'd like to thank @TianyiShi2001 for the inspiration (#1829 #1823 #1833).
 
+- Markdown output allows new chunk options, `class.chunk` and `attr.chunk`, which encloses whole chunk including sources and results. Their syntax follows other chunk options with the similar names `class.*` and `attr.*` (e.g., `class.source` and `attr.source`).
+
 ## BUG FIXES
 
 - Chunk options defined in the `#|` style are not recognized when the code chunk is indented or quoted (thanks, @mine-cetinkaya-rundel, #2086).
