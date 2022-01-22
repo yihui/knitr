@@ -65,6 +65,15 @@ assert('Attributes for souce can be specified class.source and attr.source', {
     "\n\n```{.a b='1'}\n1\n```\n\n")
 })
 
+hook_chunk = knit_hooks$get("chunk")
+
+assert('Chunks are enclosed by fenced divs when needed.', {
+  hook_chunk('', list(class.chunk=NULL)) %==% ''
+  hook_chunk('', list(class.chunk="")) %==% '::: \n\n\n\n:::'
+  hook_chunk('', list(class.chunk="foo")) %==% '::: {.foo}\n\n\n\n:::'
+  hook_chunk(':::', list(class.chunk="foo")) %==% ':::: {.foo}\n\n:::\n\n::::'
+})
+
 knit_hooks$restore()
 
 
