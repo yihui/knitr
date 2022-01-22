@@ -132,16 +132,6 @@ cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fi
 # options that should not affect cache
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
-block_wrap = function(output, options) {
-  if (is.null(options$class.chunk)) return(output)
-  cls = paste(options$class.chunk, collapse = ' ')
-  paste0(
-    '<div', if (cls != '') sprintf(' class="%s"', cls), '>\n\n',
-    output,
-    '</div>\n\n'
-  )
-}
-
 block_exec = function(options) {
   if (options$engine == 'R') return(eng_r(options))
 
@@ -152,7 +142,6 @@ block_exec = function(options) {
   if (is.list(output)) output = unlist(output)
   res.after = run_hooks(before = FALSE, options)
   output = paste(c(res.before, output, res.after), collapse = '')
-  output = block_wrap(output, options)
   output = knit_hooks$get('chunk')(output, options)
   if (options$cache) {
     cache.exists = cache$exists(options$hash, options$cache.lazy)
@@ -316,7 +305,6 @@ eng_r = function(options) {
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
 
   output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
-  output = block_wrap(output, options)
   output = knit_hooks$get('chunk')(output, options)
 
   if (options$cache > 0) {
