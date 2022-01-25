@@ -86,11 +86,6 @@ engine_output = function(options, code, out, extra = NULL) {
     out = tail(out, -3L)
   if (length(out) != 1L) out = one_string(out)
   out = sub('([^\n]+)$', '\\1\n', out)
-  # replace the engine names for markup later, e.g. ```Rscript should be ```r
-  options$engine = switch(
-    options$engine, mysql = 'sql', node = 'javascript', psql = 'sql', Rscript = 'r',
-    options$engine
-  )
   if (options$engine == 'stata') {
     out = gsub('\n+running.*profile.do', '', out)
     out = sub('...\n+', '', out)
@@ -237,8 +232,7 @@ eng_exec = function(options) {
   } else ''
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
-  # TODO: allow users to set the language name
-  options$engine = xfun::sans_ext(cmd2)
+  options = set_lang(options, xfun::sans_ext(cmd2))
   opts$output(options, options$code, out, f)
 }
 
@@ -316,7 +310,7 @@ eng_Rcpp = function(options) {
     do.call(sourceCpp, c(list(code = code), opts))
   }
 
-  options$engine = 'cpp' # wrap up source code in cpp syntax instead of Rcpp
+  options = set_lang(options, 'cpp') # wrap up source code in cpp syntax instead of Rcpp
   engine_output(options, code, '')
 }
 
@@ -399,7 +393,7 @@ eng_tikz = function(options) {
 
   options$fig.num = 1L; options$fig.cur = 1L
   extra = run_hook_plot(fig, options)
-  options$engine = 'tex'  # for output hooks to use the correct language class
+  options = set_lang(options, 'tex')  # for output hooks to use the correct language class
   engine_output(options, options$code, '', extra)
 }
 
