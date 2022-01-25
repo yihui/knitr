@@ -179,7 +179,7 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
     }
   }
   hook.r = function(x, options) {
-    language = tolower(options$engine)
+    language = tolower(options$lang %n% options$engine)
     if (language == 'node') language = 'javascript'
     if (!options$highlight) language = 'text'
     attrs = block_attr(options$attr.source, options$class.source, language)

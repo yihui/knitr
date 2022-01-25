@@ -467,11 +467,8 @@ eng_cat = function(options) {
   if (options$eval)
     do.call(cat2, c(list(options$code), options$engine.opts))
 
-  if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
-    return('')
-  # Use engine to set the attribute
-  options$engine = lang[1]
-  options$class.source = setdiff(options$class.source, lang[1])
+  options = set_lang(options, options$class.source)
+  if (is.null(options$lang)) return('')
   engine_output(options, options$code, NULL)
 }
 
@@ -870,9 +867,7 @@ eng_verbatim = function(options) {
 set_lang = function(options, default = 'default') {
   # specify the lang name in engine.opts = list(lang = ), or lang/language,
   # or class.source; if all are empty, use 'default'
-  options$engine.opts$lang = options$engine.opts$lang %n%
-    unlist(options[c('lang', 'language')])[1] %n%
-    options$class.source %n% default
+  if (is.null(options$lang)) options$lang = options$engine.opts$lang %n% default
   options
 }
 
