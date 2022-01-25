@@ -179,10 +179,10 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
     }
   }
   hook.r = function(x, options) {
-    language = tolower(options$lang %n% options$engine)
-    if (language == 'node') language = 'javascript'
-    if (!options$highlight) language = 'text'
-    attrs = block_attr(options$attr.source, options$class.source, language)
+    lang = tolower(options$lang %n% options$engine)
+    if (lang == 'node') lang = 'javascript'
+    if (!options$highlight) lang = 'text'
+    attrs = block_attr(options$attr.source, options$class.source, lang)
     fence = update_fence(one_string(c('', x)))
     paste0('\n\n', fence, attrs, '\n', x, fence, '\n\n')
   }
