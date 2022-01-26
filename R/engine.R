@@ -422,6 +422,7 @@ eng_dot = function(options) {
     f2 = with_ext(file, ext)
     c(file, c(dot = '-T', asy = '-f')[cmd], ext, '-o', f2)
   }
+  if (cmd == 'asy') options = set_lang(options, 'cpp')
   eng_plot(options)
 }
 
