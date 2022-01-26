@@ -27,7 +27,7 @@ line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('co
 # add a prefix to output
 comment_out = function(x, prefix = '##', which = TRUE, newline = TRUE) {
   x = gsub('[\n]{2,}$', '\n', x)
-  if (newline) x = gsub('([^\n])$', '\\1\n', x)  # add \n if not exists
+  if (newline) x = gsub('([^\n]|^)$', '\\1\n', x)  # add \n if not exists
   if (is.null(prefix) || !nzchar(prefix) || is.na(prefix)) return(x)
   prefix = paste(prefix, '')
   x = gsub(' +([\n]*)$', '\\1', x)

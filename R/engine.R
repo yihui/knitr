@@ -86,11 +86,6 @@ engine_output = function(options, code, out, extra = NULL) {
     out = tail(out, -3L)
   if (length(out) != 1L) out = one_string(out)
   out = sub('([^\n]+)$', '\\1\n', out)
-  # replace the engine names for markup later, e.g. ```Rscript should be ```r
-  options$engine = switch(
-    options$engine, mysql = 'sql', node = 'javascript', psql = 'sql', Rscript = 'r',
-    options$engine
-  )
   if (options$engine == 'stata') {
     out = gsub('\n+running.*profile.do', '', out)
     out = sub('...\n+', '', out)
@@ -172,7 +167,86 @@ get_engine_opts = function(opts, engine, fallback = '') {
   opts %n% fallback
 }
 
-get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
+get_engine_path = function(path, engine, fallback = engine) {
+  get_engine_opts(path, engine, fallback)
+}
+
+# execute an arbitrary command (optionally with arguments)
+# engine.opts = list(command, input, ext, clean, args, args1, args2)
+eng_exec = function(options) {
+  opts = options$engine.opts
+  if (!is.character(cmd <- opts$command %n% options$command)) stop(
+    "The command of the 'exec' engine must be a character string."
+  )
+  cmd = get_engine_path(options$engine.path, options$engine, cmd)
+  input = function(code, file) {
+    write_utf8(code, file)
+    file
+  }
+  if (is.character(i0 <- opts$input))
+    opts$input = function(code, file) input(code, i0)
+  # turn all chunk options into function except 'command'
+  opts = list_fun(opts, setdiff(names(opts), 'command'))
+
+  # default options
+  opts2 = list(
+    ext = identity, input = input, args = function(code, file) {
+      file
+    }, clean = function(file) {
+      unlink(file)
+    }, args1 = function() NULL, args2 = function() NULL,
+    output = function(options, code, output, file) {
+      engine_output(options, code, output)
+    }
+  )
+
+  opts = merge_list(opts2, opts)
+  cmd2 = basename(cmd)  # in case command is a full path
+  ext = opts$ext(cmd2)  # file extension
+  f = wd_tempfile(cmd2, paste0('.', ext))
+  if (is.function(opts$clean)) on.exit(opts$clean(f), add = TRUE)
+  f = opts$input(options$code, f)
+  a = c(opts$args1(), opts$args(options$code, f), opts$args2())
+
+  out = if (options$eval) {
+    if (options$message) message('running: ', paste(c(cmd, a), collapse = ' '))
+    f2 = wd_tempfile(cmd2)  # capture stderr
+    on.exit(unlink(f2), add = TRUE)
+    tryCatch({
+      res = (if (options$error) suppressWarnings else identity)(
+        system2(cmd, shQuote(a), stdout = TRUE, stderr = f2, env = options$engine.env)
+      )
+      # check error in the content run
+      if (!is.null(attr(res, 'status')) && file.exists(f2) && file.size(f2) > 0) {
+        e = readLines(f2) # f2 may not be UTF-8
+        if (!options$error) stop(one_string(e)) else e
+      } else {
+        res
+      }
+    }, error = function(e) {
+        # error in the command run
+        if (!options$error) stop(e)
+        paste('Error in running command', cmd)
+      }
+    )
+  } else ''
+  # chunk option error=FALSE means we need to signal the error
+  if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
+  options = set_lang(options, eng2lang(xfun::sans_ext(cmd2)))
+  opts$output(options, options$code, out, f)
+}
+
+# turn elements of a list into functions: if an element is not a function, make
+# it a function that returns the non-function value
+list_fun = function(x, which = names(x)) {
+  for (i in which) {
+    if (!is.function(v <- x[[i]])) x[[i]] = local({
+      # a trick to avoid R's lazy evaluation (make a copy of v)
+      v2 = v; function(...) v2
+    })
+  }
+  x
+}
 
 ## C, C++, and Fortran (via R CMD SHLIB)
 eng_shlib = function(options) {
@@ -215,7 +289,6 @@ cache_eng_python = function(options) {
 
 ## Rcpp
 eng_Rcpp = function(options) {
-
   sourceCpp = getFromNamespace('sourceCpp', 'Rcpp')
 
   code = one_string(options$code)
@@ -236,7 +309,6 @@ eng_Rcpp = function(options) {
     do.call(sourceCpp, c(list(code = code), opts))
   }
 
-  options$engine = 'cpp' # wrap up source code in cpp syntax instead of Rcpp
   engine_output(options, code, '')
 }
 
@@ -292,7 +364,7 @@ eng_tikz = function(options) {
   write_utf8(s, texf <- wd_tempfile('tikz', '.tex'))
   on.exit(unlink(texf), add = TRUE)
 
-  ext = tolower(options$fig.ext %n% dev2ext(options$dev))
+  ext = dev2ext(options)
 
   to_svg = ext == 'svg'
   outf = if (to_svg) tinytex::latexmk(texf, 'latex') else tinytex::latexmk(texf)
@@ -319,50 +391,35 @@ eng_tikz = function(options) {
 
   options$fig.num = 1L; options$fig.cur = 1L
   extra = run_hook_plot(fig, options)
-  options$engine = 'tex'  # for output hooks to use the correct language class
   engine_output(options, options$code, '', extra)
 }
 
-## GraphViz (dot) and Asymptote are similar
-eng_dot = function(options) {
-
-  # write code to a temp file, and output to another temp file
-  f = wd_tempfile('code'); f2 = wd_tempfile('out')
-  write_utf8(code <- options$code, f)
-  on.exit(unlink(c(f, f2)), add = TRUE)
-
-  # adapt command to either graphviz or asymptote
-  if (options$engine == 'dot') {
-    command_string = '%s %s -T%s -o%s'
-    syntax         = 'dot'
-  } else if (options$engine == 'asy') {
-    command_string = '%s %s -f %s -o %s'
-    syntax         = 'cpp'  # use cpp syntax for syntax highlighting
-  }
-
-  # prepare system command
-  cmd = sprintf(
-    command_string, shQuote(get_engine_path(options$engine.path, options$engine)),
-    shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
-    shQuote(f2 <- paste0(f2, '.', ext))
-  )
-
-  # generate output
-  outf = paste(fig_path(), ext, sep = '.')
-  dir.create(dirname(outf), recursive = TRUE, showWarnings = FALSE)
-  unlink(outf)
-  extra = if (options$eval) {
-    if (options$message) message('running: ', cmd)
-    system(cmd)
-    file.rename(f2, outf)
-    if (!file.exists(outf)) stop('Failed to compile the ', options$engine, ' chunk')
-    options$fig.num = 1L; options$fig.cur = 1L
-    run_hook_plot(outf, options)
-  }
-
-  # wrap
-  options$engine = syntax
-  engine_output(options, code, '', extra)
+## Commands that generate plots, e.g., GraphViz (dot) and Asymptote
+eng_plot = function(options) {
+  options$command = cmd = options$engine
+  options$fig.ext = ext = dev2ext(options)
+  opts = list(
+    output = function(options, code, output, file) {
+      extra = if (options$eval) {
+        # move the generated plot (with a temp filename) to fig.path
+        f1 = with_ext(file, ext)
+        f2 = paste(fig_path(), ext, sep = '.')
+        xfun::dir_create(dirname(f2))
+        unlink(f2)
+        file.rename(f1, f2)
+        options$fig.num = 1L; options$fig.cur = 1L
+        run_hook_plot(f2, options)
+      }
+      engine_output(options, code, '', extra)
+    },
+    args = function(code, file) {
+      f2 = with_ext(file, ext)
+      if (cmd %in% c('dot', 'asy')) {
+        c(file, c(dot = '-T', asy = '-f')[cmd], ext, '-o', f2)
+      }
+    })
+  options$engine.opts = merge_list(opts, options$engine.opts)
+  eng_exec(options)
 }
 
 ## Ditaa text diagrams
@@ -373,14 +430,14 @@ eng_ditaa = function(options) {
   image_tempfile = wd_tempfile('out')
   write_utf8(code <- options$code, code_tempfile)
   on.exit(unlink(c(code_tempfile, image_tempfile)), add = TRUE)
- 
+
   # Figure out output extension
   image_extension <- options$fig.ext %n% dev2ext(options$dev)
   image_tempfile <- paste0(image_tempfile, '.', image_extension)
 
   # prepare system command string
   cmd = sprintf(
-    '%s %s -scale %i %s %s %s %s %s %s -o %s', 
+    '%s %s -scale %i %s %s %s %s %s %s -o %s',
     shQuote(get_engine_path(options$engine.path, options$engine)),                                   # path to ditaa
     ifelse(is.null(options$encoding), '', paste0('--encoding ', options$encoding)),                  # encoding (none by default)
     ifelse(is.null(options$scale), 2, as.integer(options$scale)),                                    # scale (2 by default)
@@ -389,8 +446,8 @@ eng_ditaa = function(options) {
     ifelse(is.null(options$separation) || options$separation == FALSE, '--no-separation', ''),       # separation on/off (off by default)
     ifelse(is.null(options$antialias) || options$antialias == TRUE, '', '--no-antialias'),           # anti-alias on/off (on by default)
     ifelse(is.null(options$round.corners) || options$round.corners == FALSE, '', '--round-corners'), # round corners on/off (off by default)
-    shQuote(code_tempfile),                                                                          # input file    
-    shQuote(image_tempfile)                                                                          # output file 
+    shQuote(code_tempfile),                                                                          # input file
+    shQuote(image_tempfile)                                                                          # output file
   )
 
   # generate output
@@ -433,11 +490,8 @@ eng_cat = function(options) {
   if (options$eval)
     do.call(cat2, c(list(options$code), options$engine.opts))
 
-  if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
-    return('')
-  # Use engine to set the attribute
-  options$engine = lang[1]
-  options$class.source = setdiff(options$class.source, lang[1])
+  options = set_lang(options, options$class.source)
+  if (is.null(options$lang)) return('')
   engine_output(options, options$code, NULL)
 }
 
@@ -836,9 +890,7 @@ eng_verbatim = function(options) {
 set_lang = function(options, default = 'default') {
   # specify the lang name in engine.opts = list(lang = ), or lang/language,
   # or class.source; if all are empty, use 'default'
-  options$engine.opts$lang = options$engine.opts$lang %n%
-    unlist(options[c('lang', 'language')])[1] %n%
-    options$class.source %n% default
+  if (is.null(options$lang)) options$lang = options$engine.opts$lang %n% default
   options
 }
 
@@ -871,7 +923,7 @@ local({
 # additional engines
 knit_engines$set(
   asis = eng_asis,
-  asy = eng_dot,
+  asy = eng_plot,
   block = eng_block,
   block2 = eng_block2,
   bslib = eng_bslib,
@@ -880,9 +932,10 @@ knit_engines$set(
   cc = eng_shlib,
   comment = eng_comment,
   css = eng_css,
-  dot = eng_dot,
   ditaa = eng_ditaa,
+  dot = eng_plot,
   embed = eng_embed,
+  exec = eng_exec,
   fortran = eng_shlib,
   fortran95 = eng_shlib,
   go = eng_go,
