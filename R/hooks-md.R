@@ -218,6 +218,7 @@ eng2lang = function(x) {
     asy = 'cpp', mysql = 'sql', node = 'javascript', psql = 'sql',
     rscript = 'r', rcpp = 'cpp', tikz = 'tex'
   )
+  x = tolower(x)
   if (x %in% names(d)) d[x] else x
 }
 
