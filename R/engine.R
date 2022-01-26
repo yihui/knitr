@@ -394,7 +394,7 @@ eng_tikz = function(options) {
   engine_output(options, options$code, '', extra)
 }
 
-## Commands that generate plots, e.g., GraphViz (dot) and Asymptote
+## Commands that generate plots, e.g., GraphViz (dot), Asymptote, and Ditaa
 eng_plot = function(options) {
   options$command = cmd = options$engine
   options$fig.ext = ext = dev2ext(options)
@@ -414,58 +414,13 @@ eng_plot = function(options) {
     },
     args = function(code, file) {
       f2 = with_ext(file, ext)
+      if (cmd == 'ditaa') return(c(file, f2))
       if (cmd %in% c('dot', 'asy')) {
         c(file, c(dot = '-T', asy = '-f')[cmd], ext, '-o', f2)
       }
     })
   options$engine.opts = merge_list(opts, options$engine.opts)
   eng_exec(options)
-}
-
-## Ditaa text diagrams
-eng_ditaa = function(options) {
-
-  # write code to a temp file, and output to another temp file
-  code_tempfile = wd_tempfile('code')
-  image_tempfile = wd_tempfile('out')
-  write_utf8(code <- options$code, code_tempfile)
-  on.exit(unlink(c(code_tempfile, image_tempfile)), add = TRUE)
-
-  # Figure out output extension
-  image_extension <- options$fig.ext %n% dev2ext(options$dev)
-  image_tempfile <- paste0(image_tempfile, '.', image_extension)
-
-  # prepare system command string
-  cmd = sprintf(
-    '%s %s -scale %i %s %s %s %s %s %s -o %s',
-    shQuote(get_engine_path(options$engine.path, options$engine)),                                   # path to ditaa
-    ifelse(is.null(options$encoding), '', paste0('--encoding ', options$encoding)),                  # encoding (none by default)
-    ifelse(is.null(options$scale), 2, as.integer(options$scale)),                                    # scale (2 by default)
-    ifelse(is.null(options$transparent) || options$transparent == TRUE, '-T', ''),                   # transparent background on/off (on by default)
-    ifelse(is.null(options$shadows) || options$shadows == FALSE, '--no-shadows', ''),                # shadows on/off (off by default)
-    ifelse(is.null(options$separation) || options$separation == FALSE, '--no-separation', ''),       # separation on/off (off by default)
-    ifelse(is.null(options$antialias) || options$antialias == TRUE, '', '--no-antialias'),           # anti-alias on/off (on by default)
-    ifelse(is.null(options$round.corners) || options$round.corners == FALSE, '', '--round-corners'), # round corners on/off (off by default)
-    shQuote(code_tempfile),                                                                          # input file
-    shQuote(image_tempfile)                                                                          # output file
-  )
-
-  # generate output
-  outf = paste(fig_path(), image_extension, sep = '.')
-  dir.create(dirname(outf), recursive = TRUE, showWarnings = FALSE)
-  unlink(outf)
-  extra = if (options$eval) {
-    if (options$message) message('running: ', cmd)
-    system(cmd)
-    file.rename(image_tempfile, outf)
-    if (!file.exists(outf)) stop('Failed to compile the ', options$engine, ' chunk')
-    options$fig.num = 1L; options$fig.cur = 1L
-    run_hook_plot(outf, options)
-  }
-
-  # wrap
-  options$engine = 'ditaa'
-  engine_output(options, code, '', extra)
 }
 
 ## Andre Simon's highlight
@@ -932,7 +887,7 @@ knit_engines$set(
   cc = eng_shlib,
   comment = eng_comment,
   css = eng_css,
-  ditaa = eng_ditaa,
+  ditaa = eng_plot,
   dot = eng_plot,
   embed = eng_embed,
   exec = eng_exec,
