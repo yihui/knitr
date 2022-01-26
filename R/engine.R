@@ -394,35 +394,32 @@ eng_tikz = function(options) {
   engine_output(options, options$code, '', extra)
 }
 
-## commands that generate plots
+## Commands that generate plots, e.g., GraphViz (dot) and Asymptote
 eng_plot = function(options) {
-  ext = dev2ext(options)
-  opts = list(output = function(options, code, output, file) {
-    extra = if (options$eval) {
-      # move the generated plot (with a temp filename) to fig.path
-      f1 = with_ext(file, ext)
-      f2 = paste(fig_path(), ext, sep = '.')
-      xfun::dir_create(dirname(f2))
-      unlink(f2)
-      file.rename(f1, f2)
-      options$fig.num = 1L; options$fig.cur = 1L
-      run_hook_plot(f2, options)
-    }
-    engine_output(options, code, '', extra)
-  })
-  options$engine.opts = merge_list(opts, options$engine.opts)
-  eng_exec(options)
-}
-
-## GraphViz (dot) and Asymptote are similar
-eng_dot = function(options) {
   options$command = cmd = options$engine
   options$fig.ext = ext = dev2ext(options)
-  options$engine.opts$args = function(code, file) {
-    f2 = with_ext(file, ext)
-    c(file, c(dot = '-T', asy = '-f')[cmd], ext, '-o', f2)
-  }
-  eng_plot(options)
+  opts = list(
+    output = function(options, code, output, file) {
+      extra = if (options$eval) {
+        # move the generated plot (with a temp filename) to fig.path
+        f1 = with_ext(file, ext)
+        f2 = paste(fig_path(), ext, sep = '.')
+        xfun::dir_create(dirname(f2))
+        unlink(f2)
+        file.rename(f1, f2)
+        options$fig.num = 1L; options$fig.cur = 1L
+        run_hook_plot(f2, options)
+      }
+      engine_output(options, code, '', extra)
+    },
+    args = function(code, file) {
+      f2 = with_ext(file, ext)
+      if (cmd %in% c('dot', 'asy')) {
+        c(file, c(dot = '-T', asy = '-f')[cmd], ext, '-o', f2)
+      }
+    })
+  options$engine.opts = merge_list(opts, options$engine.opts)
+  eng_exec(options)
 }
 
 ## Andre Simon's highlight
@@ -880,7 +877,7 @@ local({
 # additional engines
 knit_engines$set(
   asis = eng_asis,
-  asy = eng_dot,
+  asy = eng_plot,
   block = eng_block,
   block2 = eng_block2,
   bslib = eng_bslib,
@@ -889,7 +886,7 @@ knit_engines$set(
   cc = eng_shlib,
   comment = eng_comment,
   css = eng_css,
-  dot = eng_dot,
+  dot = eng_plot,
   embed = eng_embed,
   exec = eng_exec,
   fortran = eng_shlib,
