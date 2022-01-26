@@ -214,7 +214,10 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
 
 # convert some engine names to language names
 eng2lang = function(x) {
-  d = c(mysql = 'sql', node = 'javascript', psql = 'sql', rscript = 'r')
+  d = c(
+    asy = 'cpp', mysql = 'sql', node = 'javascript', psql = 'sql',
+    rscript = 'r', rcpp = 'cpp', tikz = 'tex'
+  )
   if (x %in% names(d)) d[x] else x
 }
 

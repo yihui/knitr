@@ -289,7 +289,6 @@ cache_eng_python = function(options) {
 
 ## Rcpp
 eng_Rcpp = function(options) {
-
   sourceCpp = getFromNamespace('sourceCpp', 'Rcpp')
 
   code = one_string(options$code)
@@ -310,7 +309,6 @@ eng_Rcpp = function(options) {
     do.call(sourceCpp, c(list(code = code), opts))
   }
 
-  options = set_lang(options, 'cpp') # wrap up source code in cpp syntax instead of Rcpp
   engine_output(options, code, '')
 }
 
@@ -393,7 +391,6 @@ eng_tikz = function(options) {
 
   options$fig.num = 1L; options$fig.cur = 1L
   extra = run_hook_plot(fig, options)
-  options = set_lang(options, 'tex')  # for output hooks to use the correct language class
   engine_output(options, options$code, '', extra)
 }
 
