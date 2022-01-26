@@ -232,7 +232,7 @@ eng_exec = function(options) {
   } else ''
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
-  options = set_lang(options, xfun::sans_ext(cmd2))
+  options = set_lang(options, eng2lang(xfun::sans_ext(cmd2)))
   opts$output(options, options$code, out, f)
 }
 
@@ -422,7 +422,6 @@ eng_dot = function(options) {
     f2 = with_ext(file, ext)
     c(file, c(dot = '-T', asy = '-f')[cmd], ext, '-o', f2)
   }
-  if (cmd == 'asy') options = set_lang(options, 'cpp')
   eng_plot(options)
 }
 
