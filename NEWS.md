@@ -38,6 +38,10 @@
 
 - Added a new chunk option `lang` to set the language name of a code chunk. By default, the language name is the engine name. This is primarily useful for syntax highlighting the source chunks in Markdown-based output. Previously the `lang` option was only available to a few engines such as `verbatim` and `embed`. Now it is available to all engines.
 
+## MAJOR CHANGES
+
+- The minimal required version of R was bumped from 3.2.3 to 3.3.0 (thanks, @essemenoff, #2100).
+
 ## BUG FIXES
 
 - Chunk options defined in the `#|` style are not recognized when the code chunk is indented or quoted (thanks, @mine-cetinkaya-rundel, #2086).
