@@ -397,46 +397,35 @@ eng_tikz = function(options) {
   engine_output(options, options$code, '', extra)
 }
 
+## commands that generate plots
+eng_plot = function(options) {
+  ext = dev2ext(options)
+  opts = list(output = function(options, code, output, file) {
+    extra = if (options$eval) {
+      # move the generated plot (with a temp filename) to fig.path
+      f1 = with_ext(file, ext)
+      f2 = paste(fig_path(), ext, sep = '.')
+      xfun::dir_create(dirname(f2))
+      unlink(f2)
+      file.rename(f1, f2)
+      options$fig.num = 1L; options$fig.cur = 1L
+      run_hook_plot(f2, options)
+    }
+    engine_output(options, code, '', extra)
+  })
+  options$engine.opts = merge_list(opts, options$engine.opts)
+  eng_exec(options)
+}
+
 ## GraphViz (dot) and Asymptote are similar
 eng_dot = function(options) {
-
-  # write code to a temp file, and output to another temp file
-  f = wd_tempfile('code'); f2 = wd_tempfile('out')
-  write_utf8(code <- options$code, f)
-  on.exit(unlink(c(f, f2)), add = TRUE)
-
-  # adapt command to either graphviz or asymptote
-  if (options$engine == 'dot') {
-    command_string = '%s %s -T%s -o%s'
-    syntax         = 'dot'
-  } else if (options$engine == 'asy') {
-    command_string = '%s %s -f %s -o %s'
-    syntax         = 'cpp'  # use cpp syntax for syntax highlighting
+  options$command = cmd = options$engine
+  options$fig.ext = ext = dev2ext(options)
+  options$engine.opts$args = function(code, file) {
+    f2 = with_ext(file, ext)
+    c(file, c(dot = '-T', asy = '-f')[cmd], ext, '-o', f2)
   }
-
-  # prepare system command
-  cmd = sprintf(
-    command_string, shQuote(get_engine_path(options$engine.path, options$engine)),
-    shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
-    shQuote(f2 <- paste0(f2, '.', ext))
-  )
-
-  # generate output
-  outf = paste(fig_path(), ext, sep = '.')
-  dir.create(dirname(outf), recursive = TRUE, showWarnings = FALSE)
-  unlink(outf)
-  extra = if (options$eval) {
-    if (options$message) message('running: ', cmd)
-    system(cmd)
-    file.rename(f2, outf)
-    if (!file.exists(outf)) stop('Failed to compile the ', options$engine, ' chunk')
-    options$fig.num = 1L; options$fig.cur = 1L
-    run_hook_plot(outf, options)
-  }
-
-  # wrap
-  options$engine = syntax
-  engine_output(options, code, '', extra)
+  eng_plot(options)
 }
 
 ## Andre Simon's highlight
