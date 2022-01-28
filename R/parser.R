@@ -248,7 +248,7 @@ partition_chunk = function(engine, code) {
   s2 = ifelse(length(char) > 1, char[[2]], '')
 
   # check for option comments
-  i1 = startsWith(code, s1)  # [start|end]sWith() requires R >= 3.3.0
+  i1 = startsWith(code, s1)
   i2 = endsWith(trimws(code, 'right'), s2)
   # if "commentChar| " is not found, try "#| " instead
   if (!i1[1] && !identical(char, '#')) {

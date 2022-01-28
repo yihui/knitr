@@ -20,7 +20,10 @@ auto_exts = c(
   tikz = 'tex'
 )
 
-dev2ext = function(x) {
+# choose a file extension according to the device, unless fig.ext is provided
+dev2ext = function(options) {
+  if (length(ext <- options$fig.ext)) return(ext)
+  x = options$dev
   res = auto_exts[x]
   if (any(idx <- is.na(res))) {
     for (i in x[idx]) dev_get(i)

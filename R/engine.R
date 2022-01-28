@@ -86,11 +86,6 @@ engine_output = function(options, code, out, extra = NULL) {
     out = tail(out, -3L)
   if (length(out) != 1L) out = one_string(out)
   out = sub('([^\n]+)$', '\\1\n', out)
-  # replace the engine names for markup later, e.g. ```Rscript should be ```r
-  options$engine = switch(
-    options$engine, mysql = 'sql', node = 'javascript', psql = 'sql', Rscript = 'r',
-    options$engine
-  )
   if (options$engine == 'stata') {
     out = gsub('\n+running.*profile.do', '', out)
     out = sub('...\n+', '', out)
@@ -172,7 +167,9 @@ get_engine_opts = function(opts, engine, fallback = '') {
   opts %n% fallback
 }
 
-get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
+get_engine_path = function(path, engine, fallback = engine) {
+  get_engine_opts(path, engine, fallback)
+}
 
 # execute an arbitrary command (optionally with arguments)
 # engine.opts = list(command, input, ext, clean, args, args1, args2)
@@ -181,6 +178,7 @@ eng_exec = function(options) {
   if (!is.character(cmd <- opts$command %n% options$command)) stop(
     "The command of the 'exec' engine must be a character string."
   )
+  cmd = get_engine_path(options$engine.path, options$engine, cmd)
   input = function(code, file) {
     write_utf8(code, file)
     file
@@ -234,8 +232,7 @@ eng_exec = function(options) {
   } else ''
   # chunk option error=FALSE means we need to signal the error
   if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
-  # TODO: allow users to set the language name
-  options$engine = xfun::sans_ext(cmd2)
+  options = set_lang(options, eng2lang(xfun::sans_ext(cmd2)))
   opts$output(options, options$code, out, f)
 }
 
@@ -292,7 +289,6 @@ cache_eng_python = function(options) {
 
 ## Rcpp
 eng_Rcpp = function(options) {
-
   sourceCpp = getFromNamespace('sourceCpp', 'Rcpp')
 
   code = one_string(options$code)
@@ -313,7 +309,6 @@ eng_Rcpp = function(options) {
     do.call(sourceCpp, c(list(code = code), opts))
   }
 
-  options$engine = 'cpp' # wrap up source code in cpp syntax instead of Rcpp
   engine_output(options, code, '')
 }
 
@@ -369,7 +364,7 @@ eng_tikz = function(options) {
   write_utf8(s, texf <- wd_tempfile('tikz', '.tex'))
   on.exit(unlink(texf), add = TRUE)
 
-  ext = tolower(options$fig.ext %n% dev2ext(options$dev))
+  ext = dev2ext(options)
 
   to_svg = ext == 'svg'
   outf = if (to_svg) tinytex::latexmk(texf, 'latex') else tinytex::latexmk(texf)
@@ -396,50 +391,35 @@ eng_tikz = function(options) {
 
   options$fig.num = 1L; options$fig.cur = 1L
   extra = run_hook_plot(fig, options)
-  options$engine = 'tex'  # for output hooks to use the correct language class
   engine_output(options, options$code, '', extra)
 }
 
-## GraphViz (dot) and Asymptote are similar
-eng_dot = function(options) {
-
-  # write code to a temp file, and output to another temp file
-  f = wd_tempfile('code'); f2 = wd_tempfile('out')
-  write_utf8(code <- options$code, f)
-  on.exit(unlink(c(f, f2)), add = TRUE)
-
-  # adapt command to either graphviz or asymptote
-  if (options$engine == 'dot') {
-    command_string = '%s %s -T%s -o%s'
-    syntax         = 'dot'
-  } else if (options$engine == 'asy') {
-    command_string = '%s %s -f %s -o %s'
-    syntax         = 'cpp'  # use cpp syntax for syntax highlighting
-  }
-
-  # prepare system command
-  cmd = sprintf(
-    command_string, shQuote(get_engine_path(options$engine.path, options$engine)),
-    shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
-    shQuote(f2 <- paste0(f2, '.', ext))
-  )
-
-  # generate output
-  outf = paste(fig_path(), ext, sep = '.')
-  dir.create(dirname(outf), recursive = TRUE, showWarnings = FALSE)
-  unlink(outf)
-  extra = if (options$eval) {
-    if (options$message) message('running: ', cmd)
-    system(cmd)
-    file.rename(f2, outf)
-    if (!file.exists(outf)) stop('Failed to compile the ', options$engine, ' chunk')
-    options$fig.num = 1L; options$fig.cur = 1L
-    run_hook_plot(outf, options)
-  }
-
-  # wrap
-  options$engine = syntax
-  engine_output(options, code, '', extra)
+## Commands that generate plots, e.g., GraphViz (dot) and Asymptote
+eng_plot = function(options) {
+  options$command = cmd = options$engine
+  options$fig.ext = ext = dev2ext(options)
+  opts = list(
+    output = function(options, code, output, file) {
+      extra = if (options$eval) {
+        # move the generated plot (with a temp filename) to fig.path
+        f1 = with_ext(file, ext)
+        f2 = paste(fig_path(), ext, sep = '.')
+        xfun::dir_create(dirname(f2))
+        unlink(f2)
+        file.rename(f1, f2)
+        options$fig.num = 1L; options$fig.cur = 1L
+        run_hook_plot(f2, options)
+      }
+      engine_output(options, code, '', extra)
+    },
+    args = function(code, file) {
+      f2 = with_ext(file, ext)
+      if (cmd %in% c('dot', 'asy')) {
+        c(file, c(dot = '-T', asy = '-f')[cmd], ext, '-o', f2)
+      }
+    })
+  options$engine.opts = merge_list(opts, options$engine.opts)
+  eng_exec(options)
 }
 
 ## Andre Simon's highlight
@@ -464,11 +444,8 @@ eng_cat = function(options) {
   if (options$eval)
     do.call(cat2, c(list(options$code), options$engine.opts))
 
-  if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
-    return('')
-  # Use engine to set the attribute
-  options$engine = lang[1]
-  options$class.source = setdiff(options$class.source, lang[1])
+  options = set_lang(options, options$class.source)
+  if (is.null(options$lang)) return('')
   engine_output(options, options$code, NULL)
 }
 
@@ -867,9 +844,7 @@ eng_verbatim = function(options) {
 set_lang = function(options, default = 'default') {
   # specify the lang name in engine.opts = list(lang = ), or lang/language,
   # or class.source; if all are empty, use 'default'
-  options$engine.opts$lang = options$engine.opts$lang %n%
-    unlist(options[c('lang', 'language')])[1] %n%
-    options$class.source %n% default
+  if (is.null(options$lang)) options$lang = options$engine.opts$lang %n% default
   options
 }
 
@@ -902,7 +877,7 @@ local({
 # additional engines
 knit_engines$set(
   asis = eng_asis,
-  asy = eng_dot,
+  asy = eng_plot,
   block = eng_block,
   block2 = eng_block2,
   bslib = eng_bslib,
@@ -911,7 +886,7 @@ knit_engines$set(
   cc = eng_shlib,
   comment = eng_comment,
   css = eng_css,
-  dot = eng_dot,
+  dot = eng_plot,
   embed = eng_embed,
   exec = eng_exec,
   fortran = eng_shlib,

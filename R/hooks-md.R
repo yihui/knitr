@@ -179,10 +179,9 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
     }
   }
   hook.r = function(x, options) {
-    language = tolower(options$engine)
-    if (language == 'node') language = 'javascript'
-    if (!options$highlight) language = 'text'
-    attrs = block_attr(options$attr.source, options$class.source, language)
+    lang = tolower(options$lang %n% eng2lang(options$engine))
+    if (!options$highlight) lang = 'text'
+    attrs = block_attr(options$attr.source, options$class.source, lang)
     fence = update_fence(one_string(c('', x)))
     paste0('\n\n', fence, attrs, '\n', x, fence, '\n\n')
   }
@@ -235,6 +234,16 @@ pandoc_div = function(x, .attr = NULL, .class = NULL) {
     '\n\n',
     div
   )
+}
+                     
+# convert some engine names to language names
+eng2lang = function(x) {
+  d = c(
+    asy = 'cpp', mysql = 'sql', node = 'javascript', psql = 'sql',
+    rscript = 'r', rcpp = 'cpp', tikz = 'tex'
+  )
+  x = tolower(x)
+  if (x %in% names(d)) d[x] else x
 }
 
 #' @param highlight Which code highlighting engine to use: if \code{pygments},

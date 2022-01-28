@@ -36,7 +36,13 @@
   
   We'd like to thank @TianyiShi2001 for the inspiration (#1829 #1823 #1833).
 
-- Markdown output allows new chunk options, `class.chunk` and `attr.chunk`, which encloses whole chunk including sources and results. Their syntax follows other chunk options with the similar names `class.*` and `attr.*` (e.g., `class.source` and `attr.source`).
+- Added two new chunk options, `class.chunk` and `attr.chunk`, for R Markdown output. These options can enclose the whole chunk output (source and results) in a fenced Div. Their syntax follows other chunk options with the similar names `class.*` and `attr.*` (e.g., `class.source` and `attr.source`). For example, `class.chunk = "foo"` would wrap the chunk output inside `::: {.foo}` and `:::` (thanks, @atusy, #2099).
+
+- Added a new chunk option `lang` to set the language name of a code chunk. By default, the language name is the engine name. This is primarily useful for syntax highlighting the source chunks in Markdown-based output. Previously the `lang` option was only available to a few engines such as `verbatim` and `embed`. Now it is available to all engines.
+
+## MAJOR CHANGES
+
+- The minimal required version of R was bumped from 3.2.3 to 3.3.0 (thanks, @essemenoff, #2100).
 
 ## BUG FIXES
 

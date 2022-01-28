@@ -122,6 +122,7 @@ opts_chunk_attr = local({
   opts$fig.asp = 'numeric'
   opts$fig.alt = 'character'
   opts$fig.dim = 'list'
+  opts$lang = 'list'
   opts$R.options = 'list'
   opts$cache.comments = 'logical'
   opts$animation.hook = list('ffmpeg', 'gifski')
