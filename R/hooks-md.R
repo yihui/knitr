@@ -229,13 +229,13 @@ pandoc_div = function(x, .attr = NULL, .class = NULL) {
   div = paste(rep(':', n), collapse = '')
   paste0(
     paste(div, block_attr(.attr, .class), sep = " "),
-    '\n\n',
+    '\n',
     x,
-    '\n\n',
+    '\n',
     div
   )
 }
-                     
+
 # convert some engine names to language names
 eng2lang = function(x) {
   d = c(
