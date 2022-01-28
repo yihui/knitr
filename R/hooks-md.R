@@ -204,11 +204,35 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
         r = sprintf('\n([%s]{3,})\n+\\1((\\{[.])?%s[^\n]*)?\n', fence_char, tolower(options$engine))
         x = gsub(r, '\n', x)
       }
+      x = pandoc_div(x, options[['attr.chunk']], options[['class.chunk']])
       if (is.null(s <- options$indent)) return(x)
       line_prompt(x, prompt = s, continue = s)
     },
     output = hook.o('output'), warning = hook.o('warning'),
     error = hook.o('error'), message = hook.o('message')
+  )
+}
+
+pandoc_div = function(x, .attr = NULL, .class = NULL) {
+  if (is.null(.attr) && is.null(.class)) return(x)
+  if (!is.character(x) || length(x) != 1L) {
+    warning('x is unprocessed because x is not a character vector of length 1.')
+    return(x)
+  }
+  n = 1L + max(
+    2L,
+    vapply(
+      gregexpr('^:{3,}', strsplit(x, '\n')[[1L]]),
+      attr, NA_integer_, 'match.length'
+    )
+  )
+  div = paste(rep(':', n), collapse = '')
+  paste0(
+    paste(div, block_attr(.attr, .class), sep = " "),
+    '\n',
+    x,
+    '\n',
+    div
   )
 }
 
