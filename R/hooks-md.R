@@ -152,43 +152,29 @@ render_markdown = function(strict = FALSE, fence_char = '`') {
 #' @export
 hooks_markdown = function(strict = FALSE, fence_char = '`') {
   fence = paste(rep(fence_char, 3), collapse = '')
-  update_fence = function(x) {
-    r = paste0('\n', fence_char, '{3,}')
-    if (grepl(r, x)) {
-      l = attr(gregexpr(r, x)[[1]], 'match.length')
-      l = max(l)
-      if (l >= 4) fence = paste(rep(fence_char, l), collapse = '')
-    }
-    fence
-  }
-  # four spaces lead to <pre></pre>
-  hook.t = function(x, options, attr = NULL, class = NULL) {
-    # this code-block duplicated from hook.t()
+  # four spaces will generate a <pre> block
+  hook.t = function(x, attr = NULL, class = NULL) {
     if (strict) {
-      paste('\n', indent_block(x), '', sep = '\n')
+      paste('\n', indent_block(x), '\n', sep = '\n')
     } else {
-      x = one_string(c('', x))
-      fence = update_fence(x)
-      paste0('\n\n', fence, block_attr(attr, class), x, fence, '\n\n')
+      fenced_block(x, attr, class, .char = fence_char)
     }
   }
   hook.o = function(class) {
     force(class)
     function(x, options) {
-      hook.t(x, options, options[[paste0('attr.', class)]], options[[paste0('class.', class)]])
+      hook.t(x, options[[paste0('attr.', class)]], options[[paste0('class.', class)]])
     }
   }
   hook.r = function(x, options) {
     lang = tolower(options$lang %n% eng2lang(options$engine))
     if (!options$highlight) lang = 'text'
-    attrs = block_attr(options$attr.source, options$class.source, lang)
-    fence = update_fence(one_string(c('', x)))
-    paste0('\n\n', fence, attrs, '\n', x, fence, '\n\n')
+    fenced_block(x, options$attr.source, options$class.source, lang, .char = fence_char)
   }
   list(
     source = function(x, options) {
       x = hilight_source(x, 'markdown', options)
-      (if (strict) hook.t else hook.r)(one_string(c(x, '')), options)
+      if (strict) hook.t(x) else hook.r(c(x, ''), options)
     },
     inline = function(x) {
       if (is_latex_output()) .inline.hook.tex(x) else {
@@ -215,25 +201,20 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
 
 pandoc_div = function(x, .attr = NULL, .class = NULL) {
   if (is.null(.attr) && is.null(.class)) return(x)
-  if (!is.character(x) || length(x) != 1L) {
-    warning('x is unprocessed because x is not a character vector of length 1.')
-    return(x)
-  }
-  n = 1L + max(
-    2L,
-    vapply(
-      gregexpr('^:{3,}', strsplit(x, '\n')[[1L]]),
-      attr, NA_integer_, 'match.length'
-    )
-  )
-  div = paste(rep(':', n), collapse = '')
-  paste0(
-    paste(div, block_attr(.attr, .class), sep = " "),
-    '\n',
-    x,
-    '\n',
-    div
-  )
+  fenced_block(c(x, ''), .attr, .class, .char = ':', .sep = ' ', .outer = '')
+}
+
+# add a fence around content (either fenced code block ``` or Div :::)
+fenced_block = function(x, ..., .char = '`', .sep = '', .outer = '\n\n') {
+  x = one_string(c('', x))
+  f = create_fence(x, .char)
+  paste0(.outer, paste(f, block_attr(...), sep = .sep), x, f, .outer)
+}
+
+create_fence = function(x, char = '`') {
+  r = paste0('\n', char, '{3,}')
+  l = max(if (grepl(r, x)) attr(gregexpr(r, x)[[1]], 'match.length'), 3)
+  paste(rep(char, l), collapse = '')
 }
 
 # convert some engine names to language names
