@@ -529,22 +529,61 @@ msg_sanitize = function(message, type) {
 
 #' @export
 sew.warning = function(x, options, ...) {
-  call = if (is.null(x$call)) '' else {
-    call = deparse(x$call)[1]
-    if (call == 'eval(expr, envir, enclos)') '' else paste(' in', call)
+  if (is_eval_call(x$call)) {
+    x$call = NULL
   }
-  msg_wrap(sprintf('Warning%s: %s', call, conditionMessage(x)), 'warning', options)
+  msg_wrap(knit_cnd_format(x), 'warning', options)
+}
+is_eval_call = function(x) {
+  is.call(x) && identical(x[1], quote(eval()))
 }
 
 #' @export
 sew.message = function(x, options, ...) {
-  msg_wrap(paste(conditionMessage(x), collapse = ''), 'message', options)
+  msg_wrap(knit_cnd_format(x), 'message', options)
 }
 
 #' @export
 sew.error = function(x, options, ...) {
-  msg_wrap(as.character(x), 'error', options)
+  msg_wrap(knit_cnd_format(x), 'error', options)
 }
+
+#' Format a condition prior to sewing
+#'
+#' This generic is called by condition methods for
+#' \code{\link{sew}()}. Methods should return a full condition
+#' message, including the prefix (e.g. `Error:` or `Warning:`,
+#' including a call if the condition includes one).
+#'
+#' @keywords internal
+#' @export
+knit_cnd_format = function(cnd) {
+  UseMethod('knit_cnd_format')
+}
+
+#' @export
+knit_cnd_format.message = function(cnd) {
+  # Character vectors are created by `merge_class()` to support
+  # https://github.com/yihui/knitr-examples/blob/master/117-messages.Rmd
+  paste(conditionMessage(cnd), collapse = '')
+}
+
+#' @export
+knit_cnd_format.warning = function(cnd) {
+  call = conditionCall(cnd)
+  if (is.null(call)) {
+    call = ''
+  } else {
+    call = paste(' in', deparse(call))[1]
+  }
+  sprintf('Warning%s: %s', call, conditionMessage(cnd))
+}
+
+#' @export
+knit_cnd_format.error = function(cnd) {
+  as.character(cnd)
+}
+
 
 #' @export
 sew.recordedplot = function(x, options, ...) {
