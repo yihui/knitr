@@ -36,6 +36,8 @@
   
   We'd like to thank @TianyiShi2001 for the inspiration (#1829 #1823 #1833).
 
+- Added a new engine `ditaa` based on the `exec` engine to convert ASCII art diagrams to bitmaps (thanks, @kondziu, #2092).
+
 - Added two new chunk options, `class.chunk` and `attr.chunk`, for R Markdown output. These options can enclose the whole chunk output (source and results) in a fenced Div. Their syntax follows other chunk options with the similar names `class.*` and `attr.*` (e.g., `class.source` and `attr.source`). For example, `class.chunk = "foo"` would wrap the chunk output inside `::: {.foo}` and `:::` (thanks, @atusy, #2099).
 
 - Added a new chunk option `lang` to set the language name of a code chunk. By default, the language name is the engine name. This is primarily useful for syntax highlighting the source chunks in Markdown-based output. Previously the `lang` option was only available to a few engines such as `verbatim` and `embed`. Now it is available to all engines.

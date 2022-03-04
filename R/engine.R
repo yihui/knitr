@@ -412,6 +412,8 @@ eng_plot = function(options) {
       }
       engine_output(options, code, '', extra)
     },
+    # better default for ditaa: https://github.com/yihui/knitr/pull/2092
+    args1 = if (cmd == 'ditta') c('-s', 2, '-T', '-S', '-E'),
     args = function(code, file) {
       f2 = with_ext(file, ext)
       if (cmd == 'ditaa') return(c(file, f2))
