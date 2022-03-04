@@ -394,7 +394,7 @@ eng_tikz = function(options) {
   engine_output(options, options$code, '', extra)
 }
 
-## Commands that generate plots, e.g., GraphViz (dot) and Asymptote
+## Commands that generate plots, e.g., GraphViz (dot), Asymptote, and Ditaa
 eng_plot = function(options) {
   options$command = cmd = options$engine
   options$fig.ext = ext = dev2ext(options)
@@ -412,8 +412,11 @@ eng_plot = function(options) {
       }
       engine_output(options, code, '', extra)
     },
+    # better default for ditaa: https://github.com/yihui/knitr/pull/2092
+    args1 = if (cmd == 'ditta') c('-s', 2, '-T', '-S', '-E'),
     args = function(code, file) {
       f2 = with_ext(file, ext)
+      if (cmd == 'ditaa') return(c(file, f2))
       if (cmd %in% c('dot', 'asy')) {
         c(file, c(dot = '-T', asy = '-f')[cmd], ext, '-o', f2)
       }
@@ -886,6 +889,7 @@ knit_engines$set(
   cc = eng_shlib,
   comment = eng_comment,
   css = eng_css,
+  ditaa = eng_plot,
   dot = eng_plot,
   embed = eng_embed,
   exec = eng_exec,
