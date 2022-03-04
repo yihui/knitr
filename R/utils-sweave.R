@@ -88,9 +88,9 @@ Sweave2knitr = function(file, output = gsub('[.]([^.]+)$', '-knitr.\\1', file), 
   i1 = grepl(all_patterns$rnw$chunk.begin, x)
   i2 = grepl(all_patterns$rnw$chunk.end, x)
   i3 = group_indices(i1, i2)
-  # if the group index of a chunk end is the same as previous chunk end, this
+  # if a chunk end is not part of a chunk (odd group index), this
   # chunk end is unnecessary
-  i = which(i2)[i3[i2] == c(head(i3, 1), head(i3, -1))[i2]]
+  i = which(i2 & i3 %% 2 == 1)
   if (length(i)) {
     message('removing extra lines (#n shows line numbers):\n',
             one_string(formatUL(sprintf('(#%d) %s', i, x[i]), offset = 4)))
