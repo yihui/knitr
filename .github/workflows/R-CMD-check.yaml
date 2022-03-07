@@ -56,7 +56,10 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, targets=?ignore-before-r=3.5.0
+          extra-packages: |
+            any::rcmdcheck
+            targets=?ignore-before-r=3.5.0
+            rstudio/rmarkdown
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
