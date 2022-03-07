@@ -44,23 +44,17 @@ jobs:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
 
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: deps::.
+
       - name: Retrieve knitr-examples
         # On PR, it will checkout same branch if it exists there
         uses: ./.github/actions/checkout-knitr-examples
 
-      - name: List knitr-examples dependencies
-        # On PR, it will checkout same branch if it exists there
-        id: knitr-example-deps
-        working-directory: knitr-examples
-        run: |
-         readarray -t ARRAY < R-packages
-         IFS=', '
-         echo "::set-output name=deps::${ARRAY[*]}"
-
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          packages: deps::.
-          extra-packages: ${{ steps.knitr-example-deps.outputs.deps }}
+      - name: Install knitr-example dev
+        run: pak::pak(readLines("knitr-examples/R-packages"))
+        shell: Rscript {0}
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
