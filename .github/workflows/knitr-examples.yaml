@@ -21,11 +21,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-18.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
+          - {os: ubuntu-18.04, r: 'release'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: ${{ matrix.config.rspm }}
       DISPLAY: ':99.0'
       RGL_USE_NULL: TRUE
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -36,49 +35,43 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.config.r }}
+          use-public-rspm: true
 
-      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-pandoc@v2
 
-      - uses: r-lib/actions/setup-tinytex@v1
+      - uses: r-lib/actions/setup-tinytex@v2
         env:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
-
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
 
       - name: Retrieve knitr-examples
         # On PR, it will checkout same branch if it exists there
         uses: ./.github/actions/checkout-knitr-examples
 
-      - name: Cache R packages
-        if: runner.os != 'Windows'
-        uses: actions/cache@v2
+      - name: List knitr-examples dependencies
+        # On PR, it will checkout same branch if it exists there
+        id: knitr-example-deps
+        working-directory: knitr-examples
+        run: |
+         readarray -t ARRAY < R-packages
+         IFS=', '
+         echo "::set-output name=deps::${ARRAY[*]}"
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-${{ hashFiles('knitr-examples/R-packages') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-${{ hashFiles('knitr-examples/R-packages') }}-1-
+          packages: deps::.
+          extra-packages: ${{ steps.knitr-example-deps.outputs.deps }}
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
-          while read -r cmd
-          do
-            eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "18.04"))')
           sudo apt-get install -y libpoppler-cpp-dev graphviz asymptote highlight coffeescript scala optipng ghostscript
           # downgrade ruby to remove deprecated
           # https://github.com/rubygems/rubygems/issues/3068
           sudo gem update --system 3.0.8
 
-      - name: Install dependencies
+      - name: Install CTAN dependencies
         run: |
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("rcmdcheck")
           tinytex::tlmgr_install("dvisvgm")
         shell: Rscript {0}
 
