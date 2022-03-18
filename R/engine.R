@@ -664,7 +664,8 @@ eng_sql = function(options) {
         display_data[[1]] = as.character(first_column)
 
       # wrap html output in a div so special styling can be applied
-      if (is_html_output()) cat('<div class="knitsql-table">\n')
+      add_div = is_html_output() && is.null(getOption('xaringan.format'))
+      if (add_div) cat('<div class="knitsql-table">\n')
 
       # determine records caption
       caption = options$tab.cap
@@ -684,7 +685,7 @@ eng_sql = function(options) {
       print(kable(display_data, caption = caption))
 
       # terminate div
-      if (is_html_output()) cat("\n</div>\n")
+      if (add_div) cat("\n</div>\n")
 
       # otherwise use tibble if it's available
     } else if (loadable('tibble')) {
