@@ -83,6 +83,55 @@ knit2pdf = function(
   with_ext(out, 'pdf')
 }
 
+#' Convert Rnw to PDF
+#'
+#' This is a wrapper of \code{\link{knit2pdf}()}, with differences that:
+#'
+#' @inheritParams knit
+#' @param output Path of the output file. By default, it uses the same name as the
+#'   \code{input}, but changes the file extension to ".pdf".
+#' @param compiler The LaTeX engine that be passed to \code{tinytex::\link{latexmk}()}.
+#'   The default engine is \code{xelatex}.
+#' @param clean When \code{TRUE}, the intermediate files would be removed
+#' @param error When \code{FALSE}, it stops when any error happens in knitting
+#' @param ... Options to be passed to \code{tinytex::\link[tinytex]{latexmk}()}
+#' @export
+rnw2pdf = function(
+  input, output = with_ext(input, "pdf"), compiler = "xelatex",
+  envir = parent.frame(), quiet = FALSE, clean = TRUE, error = FALSE, ...
+) {
+  # On Windows, when tweaking the content, the user may forget to close
+  # the pdf file (thus can't be removed). Since the knitting process may
+  # take quite some time, it's better to check the removable status of the
+  # output file in the beginning.
+  if (file.exists(output) && !file.remove(output)) {
+    stop("file ", output, " can't be removed")
+  }
+
+  # By default, knitr sets the error = TRUE, which allows the report being
+  # generated in the code. However, for automatic reports delivery, the user
+  # usually want the report failed if any error happens.
+  error_old = opts_chunk$get("error")
+  if (!identical(error_old, error)) {
+    opts_chunk$set(error = error)
+    on.exit(opts_chunk$set(error = error_old), add = TRUE)
+  }
+
+  file_tex = with_ext(input, "tex")
+  if (clean) on.exit({
+    if (file.exists(file_tex)) file.remove(file_tex)
+  }, add = TRUE)
+  knit(input, output = file_tex, envir = envir, quiet = quiet)
+  file_pdf = with_ext(input, "pdf")
+  tinytex::latexmk(basename(file_tex), engine = compiler, clean = clean, pdf_file = file_pdf, ...)
+  need_rename = !identical(
+    normalizePath(output, mustWork = FALSE),
+    normalizePath(file_pdf, mustWork = FALSE)
+  )
+  if (need_rename) file.rename(file_pdf, output)
+  output
+}
+
 #' Convert markdown to HTML using knit() and markdownToHTML()
 #'
 #' This is a convenience function to knit the input markdown source and call
