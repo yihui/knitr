@@ -42,6 +42,8 @@
 
 - Added a new chunk option `lang` to set the language name of a code chunk. By default, the language name is the engine name. This is primarily useful for syntax highlighting the source chunks in Markdown-based output. Previously the `lang` option was only available to a few engines such as `verbatim` and `embed`. Now it is available to all engines.
 
+- Added a new wrapper function `rnw2pdf()`. It allows the user to set an output file other than the working directory, clean the intermediate files and stop when any error occurs in knitting (thanks, @shrektan, #2113).
+
 ## MAJOR CHANGES
 
 - The minimal required version of R was bumped from 3.2.3 to 3.3.0 (thanks, @essemenoff, #2100).
