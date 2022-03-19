@@ -21,7 +21,7 @@ rnw2pdf(
 \item{output}{Path of the output file. By default, it uses the same name as the
 \code{input}, but changes the file extension to ".pdf".}
 
-\item{compiler}{The LaTeX engine that be passed to \code{tinytex::\link{latexmk}()}.
+\item{compiler}{The LaTeX engine that be passed to \code{tinytex::\link[tinytex]{latexmk}()} .
 The default engine is \code{xelatex}.}
 
 \item{envir}{Environment in which code chunks are to be evaluated, for

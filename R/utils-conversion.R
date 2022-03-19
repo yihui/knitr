@@ -90,7 +90,7 @@ knit2pdf = function(
 #' @inheritParams knit
 #' @param output Path of the output file. By default, it uses the same name as the
 #'   \code{input}, but changes the file extension to ".pdf".
-#' @param compiler The LaTeX engine that be passed to \code{tinytex::\link{latexmk}()}.
+#' @param compiler The LaTeX engine that be passed to \code{tinytex::\link[tinytex]{latexmk}()} .
 #'   The default engine is \code{xelatex}.
 #' @param clean When \code{TRUE}, the intermediate files would be removed
 #' @param error When \code{FALSE}, it stops when any error happens in knitting
