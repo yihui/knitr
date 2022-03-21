@@ -123,7 +123,7 @@ rnw2pdf = function(
   }, add = TRUE)
   knit(input, output = file_tex, envir = envir, quiet = quiet)
   file_pdf = with_ext(input, "pdf")
-  tinytex::latexmk(basename(file_tex), engine = compiler, clean = clean, pdf_file = file_pdf, ...)
+  tinytex::latexmk(file_tex, engine = compiler, clean = clean, pdf_file = file_pdf, ...)
   need_rename = !identical(
     normalizePath(output, mustWork = FALSE),
     normalizePath(file_pdf, mustWork = FALSE)
