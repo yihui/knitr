@@ -664,7 +664,7 @@ eng_sql = function(options) {
         display_data[[1]] = as.character(first_column)
 
       # wrap html output in a div so special styling can be applied
-      add_div = is_html_output() && is.null(getOption('xaringan.format'))
+      add_div = is_html_output() && getOption('knitr.sql.html_div', TRUE)
       if (add_div) cat('<div class="knitsql-table">\n')
 
       # determine records caption
