@@ -85,7 +85,15 @@ knit2pdf = function(
 
 #' Convert Rnw to PDF
 #'
-#' This is a wrapper of \code{\link{knit2pdf}()}, with differences that:
+#' This is similar to \code{\link{knit2pdf}()}, with differences that:
+#'   \enumerate{
+#'     \item The default compiler is "xelatex"
+#'     \item \code{output} use "pdf" file extension
+#'     \item Throws clear error if \code{output} file is locked, before knitting
+#'     \item \code{output} path could be any dir, not necessarily be in the same diretory as \code{input}
+#'     \item Allows to clean the intermediate files, e.g., "xxx.tex"
+#'     \item Stops the knitting process when any error happens.
+#'   }
 #'
 #' @inheritParams knit
 #' @param output Path of the output file. By default, it uses the same name as the
