@@ -1023,6 +1023,9 @@ digest3 = function(x) {
 # collapse by \n
 one_string = function(x, ...) paste(x, ..., collapse = '\n')
 
+# double quote a vector and combine by "; "
+quote_vec = function(x, sep = '; ') paste0(sprintf('"%s"', x), collapse = sep)
+
 # c(1, 1, 1, 2, 3, 3) -> c(1a, 1b, 1c, 2a, 3a, 3b)
 make_unique = function(x) {
   if (length(x) == 0) return(x)

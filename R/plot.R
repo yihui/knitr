@@ -426,7 +426,9 @@ par2 = function(x) {
 #' Markdown syntax, to embed an external image. Chunk options related to
 #' graphics output that work for normal R plots also work for these images, such
 #' as \code{out.width} and \code{out.height}.
-#' @param path A character vector of image paths.
+#' @param path A character vector of image paths. Both local file paths and web
+#'   paths are supported. Note that the \code{auto_pdf} and \code{dpi} arguments
+#'   are not supported for web paths.
 #' @param auto_pdf Whether to use PDF images automatically when the output
 #'   format is LaTeX. If \code{TRUE}, then e.g. \file{foo/bar.png} will be
 #'   replaced by \file{foo/bar.pdf} if the latter exists. This can be useful
@@ -439,8 +441,9 @@ par2 = function(x) {
 #' @param error Whether to signal an error if any files specified in the
 #'   \code{path} argument do not exist and are not web resources.
 #' @note This function is supposed to be used in R code chunks or inline R code
-#'   expressions. You are recommended to use forward slashes (\verb{/}) as path
-#'   separators instead of backslashes in the image paths.
+#'   expressions. For local images, you are recommended to use relative paths
+#'   with forward slashes instead of backslashes (e.g., \file{images/fig1.png}
+#'   instead of \file{/Users/me/code/images/fig1.png}).
 #'
 #'   The automatic calculation of the output width requires the \pkg{png}
 #'   package (for PNG images) or the \pkg{jpeg} package (for JPEG images). The
@@ -455,6 +458,11 @@ include_graphics = function(
   error = getOption('knitr.graphics.error', TRUE)
 ) {
   path = native_encode(path)  # https://d.cosx.org/d/420524
+  if (any(i <- xfun::is_abs_path(path))) warning(
+    'It is highly recommended to use relative paths for images. ',
+    'You had absolute paths: ', quote_vec(path[i])
+  )
+  path = path.expand(path) # https://github.com/rstudio/rmarkdown/issues/1053
   if (auto_pdf && is_latex_output()) {
     path2 = with_ext(path, 'pdf')
     i = file.exists(path2)
@@ -463,7 +471,7 @@ include_graphics = function(
   # relative paths can be tricky in child documents, so don't error (#1957)
   if (child_mode()) error = FALSE
   if (error && length(p <- path[!xfun::is_web_path(path) & !file.exists(path)])) stop(
-    'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
+    'Cannot find the file(s): ', quote_vec(p)
   )
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
 }
