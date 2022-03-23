@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils-conversion.R
 \name{rnw2pdf}
 \alias{rnw2pdf}
-\title{Convert Rnw to PDF}
+\title{Convert an \file{Rnw} document to PDF}
 \usage{
 rnw2pdf(
   input,
@@ -18,11 +18,12 @@ rnw2pdf(
 \arguments{
 \item{input}{Path to the input file.}
 
-\item{output}{Path of the output file. By default, it uses the same name as the
-\code{input}, but changes the file extension to ".pdf".}
+\item{output}{Path of the PDF output file. By default, it uses the same name
+as the \code{input}, but changes the file extension to ".pdf".}
 
-\item{compiler}{The LaTeX engine that be passed to \code{tinytex::\link[tinytex]{latexmk}()} .
-The default engine is \code{xelatex}.}
+\item{compiler, ...}{The LaTeX engine and other arguments to be passed to
+\code{tinytex::\link[tinytex]{latexmk}()}. The default compiler is
+\code{xelatex}.}
 
 \item{envir}{Environment in which code chunks are to be evaluated, for
 example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
@@ -30,20 +31,26 @@ example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 
 \item{quiet}{Boolean; suppress the progress bar and messages?}
 
-\item{clean}{When \code{TRUE}, the intermediate files would be removed}
+\item{clean}{If \code{TRUE}, the intermediate files will be removed.}
 
-\item{error}{When \code{FALSE}, it stops when any error happens in knitting}
-
-\item{...}{Options to be passed to \code{tinytex::\link[tinytex]{latexmk}()}}
+\item{error}{If \code{FALSE}, knitting stops when any error occurs.}
+}
+\value{
+The \code{output} file path.
 }
 \description{
-This is similar to \code{\link{knit2pdf}()}, with differences that:
-  \enumerate{
-    \item The default compiler is "xelatex"
-    \item \code{output} use "pdf" file extension
-    \item Throws clear error if \code{output} file is locked, before knitting
-    \item \code{output} path could be any dir, not necessarily be in the same diretory as \code{input}
-    \item Allows to clean the intermediate files, e.g., "xxx.tex"
-    \item Stops the knitting process when any error happens.
-  }
+Call \code{\link{knit}()} to compile the \file{.Rnw} input to \file{.tex},
+and then \code{tinytex::\link[tinytex]{latexmk}()} to convert \file{.tex} to
+\file{.pdf}.
+}
+\details{
+This function is similar to \code{\link{knit2pdf}()}, with the following differences:
+\enumerate{
+  \item The default compiler is "xelatex" instead of "pdflatex".
+  \item \code{output} uses the file extension ".pdf" instead of ".tex".
+  \item Before knitting, it throws a clear error if \code{output} file is not writable.
+  \item \code{output} could be under any dir, not necessarily the same directory as \code{input}.
+  \item It cleans up intermediate files by default, including the ".tex" file.
+  \item It stops knitting when any error occurs (by setting the chunk option \code{error = FALSE}).
+}
 }

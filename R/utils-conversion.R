@@ -83,60 +83,47 @@ knit2pdf = function(
   with_ext(out, 'pdf')
 }
 
-#' Convert Rnw to PDF
+#' Convert an \file{Rnw} document to PDF
 #'
-#' This is similar to \code{\link{knit2pdf}()}, with differences that:
-#'   \enumerate{
-#'     \item The default compiler is "xelatex"
-#'     \item \code{output} use "pdf" file extension
-#'     \item Throws clear error if \code{output} file is locked, before knitting
-#'     \item \code{output} path could be any dir, not necessarily be in the same diretory as \code{input}
-#'     \item Allows to clean the intermediate files, e.g., "xxx.tex"
-#'     \item Stops the knitting process when any error happens.
-#'   }
+#' Call \code{\link{knit}()} to compile the \file{.Rnw} input to \file{.tex},
+#' and then \code{tinytex::\link[tinytex]{latexmk}()} to convert \file{.tex} to
+#' \file{.pdf}.
 #'
+#' This function is similar to \code{\link{knit2pdf}()}, with the following differences:
+#' \enumerate{
+#'   \item The default compiler is "xelatex" instead of "pdflatex".
+#'   \item \code{output} uses the file extension ".pdf" instead of ".tex".
+#'   \item Before knitting, it throws a clear error if \code{output} file is not writable.
+#'   \item \code{output} could be under any dir, not necessarily the same directory as \code{input}.
+#'   \item It cleans up intermediate files by default, including the ".tex" file.
+#'   \item It stops knitting when any error occurs (by setting the chunk option \code{error = FALSE}).
+#' }
 #' @inheritParams knit
-#' @param output Path of the output file. By default, it uses the same name as the
-#'   \code{input}, but changes the file extension to ".pdf".
-#' @param compiler The LaTeX engine that be passed to \code{tinytex::\link[tinytex]{latexmk}()} .
-#'   The default engine is \code{xelatex}.
-#' @param clean When \code{TRUE}, the intermediate files would be removed
-#' @param error When \code{FALSE}, it stops when any error happens in knitting
-#' @param ... Options to be passed to \code{tinytex::\link[tinytex]{latexmk}()}
+#' @param output Path of the PDF output file. By default, it uses the same name
+#'   as the \code{input}, but changes the file extension to ".pdf".
+#' @param compiler,... The LaTeX engine and other arguments to be passed to
+#'   \code{tinytex::\link[tinytex]{latexmk}()}. The default compiler is
+#'   \code{xelatex}.
+#' @param clean If \code{TRUE}, the intermediate files will be removed.
+#' @param error If \code{FALSE}, knitting stops when any error occurs.
+#' @return The \code{output} file path.
 #' @export
 rnw2pdf = function(
-  input, output = with_ext(input, "pdf"), compiler = "xelatex",
+  input, output = with_ext(input, 'pdf'), compiler = 'xelatex',
   envir = parent.frame(), quiet = FALSE, clean = TRUE, error = FALSE, ...
 ) {
-  # On Windows, when tweaking the content, the user may forget to close
-  # the pdf file (thus can't be removed). Since the knitting process may
-  # take quite some time, it's better to check the removable status of the
-  # output file in the beginning.
-  if (file.exists(output) && !file.remove(output)) {
-    stop("file ", output, " can't be removed")
+  # On Windows, when tweaking the content, users may forget to close the PDF
+  # file (thus can't be written). Since knitting may take quite some time, it's
+  # better to check the write permission of the output file in advance.
+  if (xfun::file_exists(output) && !file.access(output, 2)) {
+    stop("The file '", output, "' is not writable (may be locked by a PDF reader).")
   }
-
-  # By default, knitr sets the error = TRUE, which allows the report being
-  # generated in the code. However, for automatic reports delivery, the user
-  # usually want the report failed if any error happens.
-  error_old = opts_chunk$get("error")
-  if (!identical(error_old, error)) {
-    opts_chunk$set(error = error)
-    on.exit(opts_chunk$set(error = error_old), add = TRUE)
-  }
-
-  file_tex = with_ext(input, "tex")
-  if (clean) on.exit({
-    if (file.exists(file_tex)) file.remove(file_tex)
-  }, add = TRUE)
-  knit(input, output = file_tex, envir = envir, quiet = quiet)
-  file_pdf = with_ext(input, "pdf")
-  tinytex::latexmk(file_tex, engine = compiler, clean = clean, pdf_file = file_pdf, ...)
-  need_rename = !identical(
-    normalizePath(output, mustWork = FALSE),
-    normalizePath(file_pdf, mustWork = FALSE)
-  )
-  if (need_rename) file.rename(file_pdf, output)
+  old = opts_chunk$set(error = error)
+  on.exit(opts_chunk$set(old), add = TRUE)
+  file_tex = knit(input, envir = envir, quiet = quiet)
+  if (clean) on.exit(file.remove(file_tex), add = TRUE)
+  file_pdf = tinytex::latexmk(file_tex, engine = compiler, clean = clean, ...)
+  if (!xfun::same_path(output, file_pdf)) file.rename(file_pdf, output)
   output
 }
 
