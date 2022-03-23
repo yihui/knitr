@@ -426,7 +426,9 @@ par2 = function(x) {
 #' Markdown syntax, to embed an external image. Chunk options related to
 #' graphics output that work for normal R plots also work for these images, such
 #' as \code{out.width} and \code{out.height}.
-#' @param path A character vector of image paths.
+#' @param path A character vector of image paths. Both local file paths and web
+#'   paths are supported. Note that the \code{auto_pdf} and \code{dpi} arguments
+#'   are not supported for web paths.
 #' @param auto_pdf Whether to use PDF images automatically when the output
 #'   format is LaTeX. If \code{TRUE}, then e.g. \file{foo/bar.png} will be
 #'   replaced by \file{foo/bar.pdf} if the latter exists. This can be useful

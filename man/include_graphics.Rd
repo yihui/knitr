@@ -12,7 +12,9 @@ include_graphics(
 )
 }
 \arguments{
-\item{path}{A character vector of image paths.}
+\item{path}{A character vector of image paths. Both local file paths and web
+paths are supported. Note that the \code{auto_pdf} and \code{dpi} arguments
+are not supported for web paths.}
 
 \item{auto_pdf}{Whether to use PDF images automatically when the output
 format is LaTeX. If \code{TRUE}, then e.g. \file{foo/bar.png} will be
@@ -46,8 +48,9 @@ as \code{out.width} and \code{out.height}.
 }
 \note{
 This function is supposed to be used in R code chunks or inline R code
-  expressions. You are recommended to use forward slashes (\verb{/}) as path
-  separators instead of backslashes in the image paths.
+  expressions. For local images, you are recommended to use relative paths
+  with forward slashes instead of backslashes (e.g., \file{images/fig1.png}
+  instead of \file{/Users/me/code/images/fig1.png}).
 
   The automatic calculation of the output width requires the \pkg{png}
   package (for PNG images) or the \pkg{jpeg} package (for JPEG images). The
