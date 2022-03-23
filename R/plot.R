@@ -470,11 +470,9 @@ include_graphics = function(
   }
   # relative paths can be tricky in child documents, so don't error (#1957)
   if (child_mode()) error = FALSE
-  if (error) {
-    if (length(p <- path[!xfun::is_web_path(path) & !file.exists(path)])) stop(
-      'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
-    )
-  }
+  if (error && length(p <- path[!xfun::is_web_path(path) & !file.exists(path)])) stop(
+    'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
+  )
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
 }
 
