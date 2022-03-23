@@ -456,13 +456,11 @@ include_graphics = function(
   error = getOption('knitr.graphics.error', TRUE)
 ) {
   path = native_encode(path)  # https://d.cosx.org/d/420524
-  if (any(is_abs <- xfun::is_abs_path(path))) {
-    warning("It is highly recommended to use relative paths for images. ",
-            "Absolute paths were used for ",
-            path[is_abs][1])
-    path = path.expand(path) # https://github.com/rstudio/rmarkdown/issues/1053
-  }
-  path = path.expand(path) #
+  if (any(i <- xfun::is_abs_path(path))) warning(
+    'It is highly recommended to use relative paths for images. ',
+    'You had absolute paths: ', quote_vec(path[i])
+  )
+  path = path.expand(path) # https://github.com/rstudio/rmarkdown/issues/1053
   if (auto_pdf && is_latex_output()) {
     path2 = with_ext(path, 'pdf')
     i = file.exists(path2)
@@ -471,7 +469,7 @@ include_graphics = function(
   # relative paths can be tricky in child documents, so don't error (#1957)
   if (child_mode()) error = FALSE
   if (error && length(p <- path[!xfun::is_web_path(path) & !file.exists(path)])) stop(
-    'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
+    'Cannot find the file(s): ', quote_vec(p)
   )
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
 }
