@@ -48,7 +48,7 @@ This function is similar to \code{\link{knit2pdf}()}, with the following differe
 \enumerate{
   \item The default compiler is "xelatex" instead of "pdflatex".
   \item \code{output} uses the file extension ".pdf" instead of ".tex".
-  \item Before knitting, it throws a clear error if \code{output} file is not writable.
+  \item Before knitting, it tries to remove the \code{output} file and will throw a clear error if the file cannot be removed.
   \item \code{output} could be under any dir, not necessarily the same directory as \code{input}.
   \item It cleans up intermediate files by default, including the ".tex" file.
   \item It stops knitting when any error occurs (by setting the chunk option \code{error = FALSE}).

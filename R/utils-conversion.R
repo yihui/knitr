@@ -93,7 +93,7 @@ knit2pdf = function(
 #' \enumerate{
 #'   \item The default compiler is "xelatex" instead of "pdflatex".
 #'   \item \code{output} uses the file extension ".pdf" instead of ".tex".
-#'   \item Before knitting, it throws a clear error if \code{output} file is not writable.
+#'   \item Before knitting, it tries to remove the \code{output} file and will throw a clear error if the file cannot be removed.
 #'   \item \code{output} could be under any dir, not necessarily the same directory as \code{input}.
 #'   \item It cleans up intermediate files by default, including the ".tex" file.
 #'   \item It stops knitting when any error occurs (by setting the chunk option \code{error = FALSE}).
@@ -115,9 +115,10 @@ rnw2pdf = function(
   # On Windows, when tweaking the content, users may forget to close the PDF
   # file (thus can't be written). Since knitting may take quite some time, it's
   # better to check the write permission of the output file in advance.
-  if (xfun::file_exists(output) && !file.access(output, 2)) {
-    stop("The file '", output, "' is not writable (may be locked by a PDF reader).")
-  }
+  file.remove(output)
+  if (xfun::file_exists(output)) stop(
+    "The file '", output, "' cannot be removed (may be locked by a PDF reader)."
+  )
   old = opts_chunk$set(error = error)
   on.exit(opts_chunk$set(old), add = TRUE)
   file_tex = knit(input, envir = envir, quiet = quiet)
