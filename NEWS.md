@@ -48,6 +48,8 @@
 
 - The minimal required version of R was bumped from 3.2.3 to 3.3.0 (thanks, @essemenoff, #2100).
 
+- `opts_chunk$set()` returns values of old chunk options after setting new chunk options now, instead of returning `NULL`, which can make it a little simpler to reset chunk options, e.g., you can temporarily change a few chunk options and save them with `old = opts_chunk$set(error = FALSE, fig.height = 3)`, and reset them later with `opts_chunk$set(old)`. This works for any other objects in **knitr** that have the `$set()` methods, such as `opts_knit`, `opts_hooks`, `knit_hooks`, `knit_engines`, and so on.
+
 ## BUG FIXES
 
 - Chunk options defined in the `#|` style are not recognized when the code chunk is indented or quoted (thanks, @mine-cetinkaya-rundel, #2086).
