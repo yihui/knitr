@@ -21,3 +21,4 @@ Makefile
 ^codecov\.yml$
 ^NEWS\.md$
 ^cran-comments\.md$
+vignettes/knitr-refcard.lyx

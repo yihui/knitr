@@ -18,10 +18,13 @@ new_defaults = function(value = list()) {
       if (length(dots <- dots[[1]]) == 0) return()
     dots
   }
+  set2 = function(values) {
+    old = get(names(values), drop = FALSE)
+    if (length(values)) defaults <<- merge(values)
+    invisible(old)
+  }
   set = function(...) {
-    dots = resolve(...)
-    if (length(dots)) defaults <<- merge(dots)
-    invisible(NULL)
+    set2(resolve(...))
   }
   delete = function(keys) {
     for (k in keys) defaults[[k]] <<- NULL
@@ -31,8 +34,7 @@ new_defaults = function(value = list()) {
   append = function(...) {
     dots = resolve(...)
     for (i in names(dots)) dots[[i]] <- c(defaults[[i]], dots[[i]])
-    if (length(dots)) defaults <<- merge(dots)
-    invisible(NULL)
+    set2(dots)
   }
 
   list(
@@ -122,6 +124,7 @@ opts_chunk_attr = local({
   opts$fig.asp = 'numeric'
   opts$fig.alt = 'character'
   opts$fig.dim = 'list'
+  opts$lang = 'list'
   opts$R.options = 'list'
   opts$cache.comments = 'logical'
   opts$animation.hook = list('ffmpeg', 'gifski')

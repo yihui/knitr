@@ -83,6 +83,51 @@ knit2pdf = function(
   with_ext(out, 'pdf')
 }
 
+#' Convert an \file{Rnw} document to PDF
+#'
+#' Call \code{\link{knit}()} to compile the \file{.Rnw} input to \file{.tex},
+#' and then \code{tinytex::\link[tinytex]{latexmk}()} to convert \file{.tex} to
+#' \file{.pdf}.
+#'
+#' This function is similar to \code{\link{knit2pdf}()}, with the following differences:
+#' \enumerate{
+#'   \item The default compiler is "xelatex" instead of "pdflatex".
+#'   \item \code{output} uses the file extension ".pdf" instead of ".tex".
+#'   \item Before knitting, it tries to remove the \code{output} file and will throw a clear error if the file cannot be removed.
+#'   \item \code{output} could be under any dir, not necessarily the same directory as \code{input}.
+#'   \item It cleans up intermediate files by default, including the ".tex" file.
+#'   \item It stops knitting when any error occurs (by setting the chunk option \code{error = FALSE}).
+#' }
+#' @inheritParams knit
+#' @param output Path of the PDF output file. By default, it uses the same name
+#'   as the \code{input}, but changes the file extension to ".pdf".
+#' @param compiler,... The LaTeX engine and other arguments to be passed to
+#'   \code{tinytex::\link[tinytex]{latexmk}()}. The default compiler is
+#'   \code{xelatex}.
+#' @param clean If \code{TRUE}, the intermediate files will be removed.
+#' @param error If \code{FALSE}, knitting stops when any error occurs.
+#' @return The \code{output} file path.
+#' @export
+rnw2pdf = function(
+  input, output = with_ext(input, 'pdf'), compiler = 'xelatex',
+  envir = parent.frame(), quiet = FALSE, clean = TRUE, error = FALSE, ...
+) {
+  # On Windows, when tweaking the content, users may forget to close the PDF
+  # file (thus can't be written). Since knitting may take quite some time, it's
+  # better to check the write permission of the output file in advance.
+  file.remove(output)
+  if (xfun::file_exists(output)) stop(
+    "The file '", output, "' cannot be removed (may be locked by a PDF reader)."
+  )
+  old = opts_chunk$set(error = error)
+  on.exit(opts_chunk$set(old), add = TRUE)
+  file_tex = knit(input, envir = envir, quiet = quiet)
+  if (clean) on.exit(file.remove(file_tex), add = TRUE)
+  file_pdf = tinytex::latexmk(file_tex, engine = compiler, clean = clean, ...)
+  if (!xfun::same_path(output, file_pdf)) file.rename(file_pdf, output)
+  output
+}
+
 #' Convert markdown to HTML using knit() and markdownToHTML()
 #'
 #' This is a convenience function to knit the input markdown source and call
