@@ -155,6 +155,9 @@ input_dir = function() {
   root %n% (if (!getOption('knitr.use.cwd', FALSE)) .knitEnv$input.dir) %n% '.'
 }
 
+# eval expr under the input dir
+in_input_dir = function(expr) in_dir(input_dir(), expr)
+
 # detect if running on CRAN (assuming that CRAN does not set CI or
 # NOT_CRAN=true); or set R_CRANDALF=true (is cran) or false (not cran)
 is_cran = function() {
