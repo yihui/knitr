@@ -121,14 +121,13 @@ assert('knit_meta_add() adds meta objects with the correct number of labels', {
 })
 
 local({
-  out <- NULL
-  hnd <- function(cnd) out <<- cnd
+  out = NULL
+  hnd = function(cnd) out <<- cnd
 
   on.exit(file.remove('knit-handlers.md'))
   knit('knit-handlers.Rmd', quiet = TRUE)
 
-  assert(
-    'knit() passes calling handlers to evaluate()',
-    inherits(out, "error")
-  )
+  assert('knit() passes calling handlers to evaluate()', {
+    (inherits(out, 'error'))
+  })
 })

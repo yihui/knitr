@@ -1,7 +1,7 @@
 Test the `calling.handlers` option.
 
 ```{r}
-opts_chunk$set(
+knitr::opts_chunk$set(
   calling.handlers = list(error = hnd)
 )
 ```
