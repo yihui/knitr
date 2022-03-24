@@ -70,6 +70,9 @@ theme_to_header_latex = function(theme) {
 
   # write latex highlight header
   fgheader = color_def(foreground, 'fgcolor')
+  fgheader = c(fgheader, '\\makeatletter', sprintf(
+    '\\@ifundefined{AddToHook}{}{\\AddToHook{package/xcolor/after}{%s}}', fgheader
+  ), '\\makeatother')
   highlight = one_string(c(fgheader, styler_assistant_latex(css_out[-1])))
   list(highlight = highlight, background = background, foreground = foreground)
 }

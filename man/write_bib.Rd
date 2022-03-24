@@ -69,7 +69,7 @@ Some packages on CRAN do not have standard bib entries, which was once
   you want to contribute more tweaks, please edit the file
   \file{inst/misc/tweak_bib.csv} in the source package.
 }
-\examples{
+\examples{\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 write_bib(c("RGtk2", "gWidgets"), file = "R-GUI-pkgs.bib")
 unlink("R-GUI-pkgs.bib")
 
@@ -81,6 +81,7 @@ write_bib("digest", tweak = FALSE)  # original version
 
 # what tweak=TRUE does
 str(knitr:::.tweak.bib)
+\dontshow{\}) # examplesIf}
 }
 \author{
 Yihui Xie and Michael Friendly

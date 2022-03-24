@@ -30,7 +30,14 @@ call_block = function(block) {
     if (inherits(params$ref.label, 'AsIs') && is.null(params$opts.label))
       params$opts.label = ref.label
   }
-  params[["code"]] = params[["code"]] %n% unlist(knit_code$get(ref.label), use.names = FALSE)
+  # if chunk option 'file' is provided, read the file(s) as the chunk body;
+  # otherwise if 'code' is provided, use it; if neither 'file' nor 'code' is
+  # provided, use the chunk body
+  params[["code"]] = if (is.null(code_file <- params[['file']])) {
+    params[["code"]] %n% unlist(knit_code$get(ref.label), use.names = FALSE)
+  } else {
+    in_input_dir(xfun::read_all(code_file))
+  }
 
   # opts.label = TRUE means inheriting chunk options from ref.label
   if (isTRUE(params$opts.label)) params$opts.label = ref.label
@@ -131,7 +138,7 @@ block_exec = function(options) {
   # when code is not R language
   res.before = run_hooks(before = TRUE, options)
   engine = get_engine(options$engine)
-  output = in_dir(input_dir(), engine(options))
+  output = in_input_dir(engine(options))
   if (is.list(output)) output = unlist(output)
   res.after = run_hooks(before = FALSE, options)
   output = paste(c(res.before, output, res.after), collapse = '')
@@ -221,8 +228,7 @@ eng_r = function(options) {
     code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
   }
   # guess plot file type if it is NULL
-  if (keep != 'none' && is.null(options$fig.ext))
-    options$fig.ext = dev2ext(options$dev)
+  if (keep != 'none') options$fig.ext = dev2ext(options)
 
   cache.exists = cache$exists(options$hash, options$cache.lazy)
   evaluate = knit_hooks$get('evaluate')
@@ -231,8 +237,7 @@ eng_r = function(options) {
     as.source(code)
   } else if (cache.exists && isFALSE(options$cache.rebuild)) {
     fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
-  } else in_dir(
-    input_dir(),
+  } else in_input_dir(
     evaluate(
       code, envir = env, new_device = FALSE,
       keep_warning = !isFALSE(options$warning),
@@ -518,7 +523,7 @@ merge_character = function(res) {
 
 call_inline = function(block) {
   if (opts_knit$get('progress')) print(block)
-  in_dir(input_dir(), inline_exec(block))
+  in_input_dir(inline_exec(block))
 }
 
 inline_exec = function(
