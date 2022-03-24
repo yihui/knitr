@@ -807,9 +807,12 @@ knit_handlers = function(fun, options) {
   if (length(formals(fun)) < 2)
     stop("the chunk option 'render' must be a function of the form ",
          "function(x, options) or function(x, ...)")
-  merge_list(default_handlers, list(value = function(x, visible) {
-    if (visible) fun(x, options = options)
-  }))
+  merge_list(default_handlers, list(
+    value = function(x, visible) {
+      if (visible) fun(x, options = options)
+    },
+    calling_handlers = options$calling.handlers
+  ))
 }
 
 # is the inst dir under . or ..? differs in R CMD build/INSTALL and devtools/roxygen2
