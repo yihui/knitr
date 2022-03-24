@@ -44,6 +44,8 @@
 
 - Added a new wrapper function `rnw2pdf()`. It allows users to specify an arbitrary output file path, clean the intermediate files, and stop when any error occurs in knitting (thanks, @shrektan, #2113).
 
+- New `calling.handlers` option for `opts_chunk$set()` to register calling handlers within chunks. See `?evaluate::new_output_handler` for details.
+
 ## MAJOR CHANGES
 
 - The minimal required version of R was bumped from 3.2.3 to 3.3.0 (thanks, @essemenoff, #2100).
@@ -186,8 +188,6 @@
   The quotes are optional but can be helpful for editors (e.g., RStudio IDE) to autocomplete the file paths.
   
   The syntax highlighting language name is from the filename extension by default, and you can override it with the chunk option `lang` (e.g., `file = "foo.sh", lang = "bash"`) which is then identical to the `verbatim` engine.
-
-- New `calling.handlers` option for `opts_chunk()` to register calling handlers within chunks.
 
 ## BUG FIXES
 
