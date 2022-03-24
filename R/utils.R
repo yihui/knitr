@@ -416,7 +416,7 @@ latex_percent_size = function(x, which = c('width', 'height')) {
 # eval options as symbol/language objects
 eval_lang = function(x, envir = knit_global()) {
   if (!is.symbol(x) && !is.language(x)) return(x)
-  eval(x, envir = envir)
+  in_input_dir(eval(x, envir = envir))
 }
 
 # check latex packages; if not exist, copy them over to ./
