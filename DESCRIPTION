@@ -109,7 +109,7 @@ Description: Provides a general-purpose tool for dynamic report generation in R
 Depends:
     R (>= 3.2.3)
 Imports:
-    evaluate (>= 0.14.2),
+    evaluate (>= 0.15),
     highr,
     methods,
     stringr (>= 0.6),
@@ -144,8 +144,6 @@ Suggests:
     ragg,
     styler (>= 1.2.0),
     targets (>= 0.6.0)
-Remotes:
-    lionel-/evaluate@add-calling-handlers
 License: GPL
 URL: https://yihui.org/knitr/
 BugReports: https://github.com/yihui/knitr/issues
