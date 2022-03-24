@@ -173,7 +173,7 @@ set_alias = function(...) {
 #' }
 #' @include hooks-html.R
 opts_knit = new_defaults(list(
-  progress = TRUE, verbose = FALSE, eval.after = c('fig.cap', 'fig.alt'),
+  progress = TRUE, verbose = FALSE, eval.after = c('fig.cap', 'fig.scap', 'fig.alt'),
   base.dir = NULL, base.url = NULL, root.dir = NULL, child.path = '',
   upload.fun = identity, global.device = FALSE, global.par = FALSE,
   concordance = FALSE, documentation = 1L, self.contained = TRUE,
