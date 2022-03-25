@@ -15,9 +15,7 @@ insert_header = function(doc) {
 # Makes latex header with macros required for highlighting, tikz and framed
 make_header_latex = function() {
   h = one_string(c(
-    sprintf('\\usepackage[%s]{graphicx}\\usepackage[%s]{color}',
-            opts_knit$get('latex.options.graphicx') %n% '',
-            opts_knit$get('latex.options.color') %n% ''),
+    header_latex_packages(),
     .header.maxwidth, opts_knit$get('header'),
     if (getOption('OutDec') != '.') '\\usepackage{amsmath}',
     if (out_format('latex')) '\\usepackage{alltt}'
@@ -26,6 +24,20 @@ make_header_latex = function() {
     write_utf8(h, 'knitr.sty')
     '\\usepackage{knitr}'
   }
+}
+
+use_package = function(pkg) {
+  opts = opts_knit$get(paste0('latex.options.', pkg)) %n% ''
+  sprintf('\\usepackage[%s]{%s}', opts, pkg)
+}
+
+# for backward-compatibility, use xcolor package unless the latex.options.color
+# has been set; xcolor is preferred: https://github.com/latex3/latex2e/pull/719
+header_latex_packages = function() {
+  paste(c(
+    use_package('graphicx'),
+    use_package(if (is.null(opts_knit$get('latex.options.color'))) 'xcolor' else 'color')
+  ), collapse = '')
 }
 
 insert_header_latex = function(doc, b) {
