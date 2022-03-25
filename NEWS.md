@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.39
 
+## MINOR CHANGES
+
+- For **knitr** source documents that generate `.tex` output documents (such as `.Rnw` and `.Rtex`), the LaTeX package **xcolor** will be used instead of **color** (#2085). This may cause option clashes if **xcolor** is already loaded by users with options, e.g., `\usepackage[dvipsnames]{xcolor}`. If this happens, you may set the package option `knitr::opts_knit$set(latex.options.xcolor = 'OPTIONS')` where `OPTIONS` is the options you used for **xcolor**, e.g., `dvipsnames`.
 
 # CHANGES IN knitr VERSION 1.38
 
