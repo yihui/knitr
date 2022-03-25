@@ -1,3 +1,74 @@
+# CHANGES IN knitr VERSION 1.39
+
+
+# CHANGES IN knitr VERSION 1.38
+
+## NEW FEATURES
+
+- The chunk option `file` can take a vector of file paths now, i.e., this option can be used to read more than one file (e.g., `file = c("foo.R", "bar.R")`.
+
+- Added a new engine named `exec` (#2073) to execute an arbitrary command on the code chunk, e.g.,
+
+  ````md
+  ```{exec, command='Rscript'}
+  1 + 1
+  ```
+  ````
+  
+  The above code chunk executes the `Rscript` command with the chunk body as its input (which basically means executing the R code in a new R session). See the example #124 in the repo https://github.com/yihui/knitr-examples for more info.
+  
+  There exists several command-based engines in **knitr**, such as `awk`, `bash`, `perl`, `go`, and `dot`, etc. This new `exec` engine provides a general mechanism to execute any command that users provide. For example, the code chunk
+  
+  ````md
+  ```{bash}
+  echo 'Hello world!'
+  ```
+  ````
+  
+  is equivalent to the chunk using the `exec` engine and the `bash` command:
+  
+  ````md
+  ```{exec, command='bash'}
+  echo 'Hello world!'
+  ```
+  ````
+  
+  With this new engine, we no longer need to provide or maintain other simple command-based engines. For example, to support TypeScript (https://github.com/yihui/knitr/pull/1833), we only need to specify `command = 'ts-node'` with the `exec` engine.
+  
+  If the command has significant side-effects (e.g., compile source code to an executable and run the executable, or generate plots to be included in the output), it is also possible to create a new engine based on the `exec` engine. The example #124 in the `knitr-examples` repo has provided a `gcc` example.
+  
+  We'd like to thank @TianyiShi2001 for the inspiration (#1829 #1823 #1833).
+
+- Added a new engine `ditaa` based on the `exec` engine to convert ASCII art diagrams to bitmaps via [the `ditaa` command](https://github.com/stathissideris/ditaa) (thanks, @kondziu, #2092).
+
+- Added two new chunk options, `class.chunk` and `attr.chunk`, for R Markdown output. These options can enclose the whole chunk output (source and results) in a fenced Div. Their syntax follows other chunk options with the similar names `class.*` and `attr.*` (e.g., `class.source` and `attr.source`). For example, `class.chunk = "foo"` would wrap the chunk output inside `::: {.foo}` and `:::` (thanks, @atusy, #2099).
+
+- Added a new chunk option `lang` to set the language name of a code chunk. By default, the language name is the engine name. This is primarily useful for syntax highlighting the source chunks in Markdown-based output. Previously the `lang` option was only available to a few engines such as `verbatim` and `embed`. Now it is available to all engines.
+
+- Added a new wrapper function `rnw2pdf()`. It allows users to specify an arbitrary output file path, clean the intermediate files, and stop when any error occurs in knitting (thanks, @shrektan, #2113).
+
+- New `calling.handlers` option for `opts_chunk$set()` to register calling handlers within chunks. See `?evaluate::new_output_handler` for details.
+
+## MAJOR CHANGES
+
+- The minimal required version of R was bumped from 3.2.3 to 3.3.0 (thanks, @essemenoff, #2100).
+
+- The working directory under which chunk options are evaluated has been changed to the directory of the source document by default. If the package option `root.dir` is set to a different directory, that directory will be used as the working directory (#2081).
+
+- `include_graphics()` will expand `~` in the image paths now and also warn against absolute paths (thanks, @kcarnold, #2063).
+
+- `opts_chunk$set()` returns values of old chunk options after setting new chunk options now, instead of returning `NULL`, which can make it a little simpler to reset chunk options, e.g., you can temporarily change a few chunk options and save them with `old = opts_chunk$set(error = FALSE, fig.height = 3)`, and reset them later with `opts_chunk$set(old)`. This works for any other objects in **knitr** that have the `$set()` methods, such as `opts_knit`, `opts_hooks`, `knit_hooks`, `knit_engines`, and so on.
+
+## MINOR CHANGES
+
+- The chunk option `fig.scap` has been added to `eval.after` in `opts_knit` (thanks, @knokknok, #2061).
+
+## BUG FIXES
+
+- Chunk options defined in the `#|` style are not recognized when the code chunk is indented or quoted (thanks, @mine-cetinkaya-rundel, #2086).
+
+- Fixed a bug in `Sweave2knitr()` #2097 (thanks, @chroetz).
+
 # CHANGES IN knitr VERSION 1.37
 
 ## NEW FEATURES
@@ -7,7 +78,7 @@
 - For R Markdown documents, code chunks can be embedded in a parent code chunk with more backticks now. For example, a code chunk with four backticks can contain code chunks with three backticks. One application is to conditionally include some verbatim content that contains code chunks via the `asis` engine, e.g.,
 
   `````md
-  ````{asis, echo= format.Date(Sys.Date(), "%w") == 1}
+  ````{asis, echo=format(Sys.Date(), "%w") == 1}
   Some conditional content only included when report is built on a Monday
   
   ```{r}

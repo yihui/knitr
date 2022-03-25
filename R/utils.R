@@ -27,7 +27,7 @@ line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('co
 # add a prefix to output
 comment_out = function(x, prefix = '##', which = TRUE, newline = TRUE) {
   x = gsub('[\n]{2,}$', '\n', x)
-  if (newline) x = gsub('([^\n])$', '\\1\n', x)  # add \n if not exists
+  if (newline) x = gsub('([^\n]|^)$', '\\1\n', x)  # add \n if not exists
   if (is.null(prefix) || !nzchar(prefix) || is.na(prefix)) return(x)
   prefix = paste(prefix, '')
   x = gsub(' +([\n]*)$', '\\1', x)
@@ -154,6 +154,9 @@ input_dir = function() {
   root = opts_knit$get('root.dir')
   root %n% (if (!getOption('knitr.use.cwd', FALSE)) .knitEnv$input.dir) %n% '.'
 }
+
+# eval expr under the input dir
+in_input_dir = function(expr) in_dir(input_dir(), expr)
 
 # detect if running on CRAN (assuming that CRAN does not set CI or
 # NOT_CRAN=true); or set R_CRANDALF=true (is cran) or false (not cran)
@@ -413,7 +416,7 @@ latex_percent_size = function(x, which = c('width', 'height')) {
 # eval options as symbol/language objects
 eval_lang = function(x, envir = knit_global()) {
   if (!is.symbol(x) && !is.language(x)) return(x)
-  eval(x, envir = envir)
+  in_input_dir(eval(x, envir = envir))
 }
 
 # check latex packages; if not exist, copy them over to ./
@@ -804,9 +807,12 @@ knit_handlers = function(fun, options) {
   if (length(formals(fun)) < 2)
     stop("the chunk option 'render' must be a function of the form ",
          "function(x, options) or function(x, ...)")
-  merge_list(default_handlers, list(value = function(x, visible) {
-    if (visible) fun(x, options = options)
-  }))
+  merge_list(default_handlers, list(
+    value = function(x, visible) {
+      if (visible) fun(x, options = options)
+    },
+    calling_handlers = options$calling.handlers
+  ))
 }
 
 # is the inst dir under . or ..? differs in R CMD build/INSTALL and devtools/roxygen2
@@ -1022,6 +1028,9 @@ digest3 = function(x) {
 
 # collapse by \n
 one_string = function(x, ...) paste(x, ..., collapse = '\n')
+
+# double quote a vector and combine by "; "
+quote_vec = function(x, sep = '; ') paste0(sprintf('"%s"', x), collapse = sep)
 
 # c(1, 1, 1, 2, 3, 3) -> c(1a, 1b, 1c, 2a, 3a, 3b)
 make_unique = function(x) {

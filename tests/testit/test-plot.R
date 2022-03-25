@@ -139,6 +139,13 @@ if (xfun::loadable('tikzDevice') &&
 # https://github.com/yihui/knitr/issues/1166
 knit(text = "\\Sexpr{include_graphics('myfigure.pdf', error = FALSE)}", quiet = TRUE)
 
+assert('include_graphics() warns on absolute paths and expands ~', {
+  path1 = "~/test.png"
+  (has_warning(include_graphics(path1, error = FALSE)))
+  (!has_warning(include_graphics("img/test.png", error = FALSE)))
+  (unclass(suppressWarnings(include_graphics(path1, error = FALSE))) %==% path.expand(path1))
+})
+
 with_par = function(expr, ...) {
   # set par
   op = graphics::par(...)
