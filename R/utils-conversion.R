@@ -115,8 +115,7 @@ rnw2pdf = function(
   # On Windows, when tweaking the content, users may forget to close the PDF
   # file (thus can't be written). Since knitting may take quite some time, it's
   # better to check the write permission of the output file in advance.
-  file.remove(output)
-  if (xfun::file_exists(output)) stop(
+  if (xfun::file_exists(output) && !file.remove(output)) stop(
     "The file '", output, "' cannot be removed (may be locked by a PDF reader)."
   )
   old = opts_chunk$set(error = error)
