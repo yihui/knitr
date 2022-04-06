@@ -276,7 +276,7 @@ partition_chunk = function(engine, code) {
   meta = substr(src, nchar(s1) + 1, nchar(src) - nchar(s2))
   # see if the metadata looks like YAML or CSV
   if (grepl('^[^ :]+:($|\\s)', meta[1])) {
-    meta = yaml::yaml.load(meta, eval.expr = TRUE)
+    meta = yaml::yaml.load(meta, handlers = list(expr = function(x) parse(text = x)))
     if (!is.list(meta) || length(names(meta)) == 0) {
       warning('Invalid YAML option format in chunk: \n', one_string(meta), '\n')
       meta = list()
