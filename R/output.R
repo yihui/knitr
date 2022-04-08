@@ -139,11 +139,10 @@ knit = function(
       input = file.path(input_dir(), input)
     }
     # respect the quiet argument in child mode (#741)
-    optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
+    optk = opts_knit$get(); on.exit(opts_knit$restore(optk), add = TRUE)
     opts_knit$set(progress = opts_knit$get('progress') && !quiet)
     quiet = !opts_knit$get('progress')
   } else {
-    opts_knit$set(output.dir = getwd()) # record working directory in 1st run
     knit_log$restore()
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
     adjust_opts_knit()
@@ -156,8 +155,11 @@ knit = function(
     optc = opts_chunk$get(); on.exit(opts_chunk$restore(optc), add = TRUE)
     ocode = knit_code$get(); on.exit(knit_code$restore(ocode), add = TRUE)
     on.exit(opts_current$restore(), add = TRUE)
-    optk = opts_knit$get(); on.exit(opts_knit$set(optk), add = TRUE)
-    opts_knit$set(tangle = tangle, progress = opts_knit$get('progress') && !quiet)
+    optk = opts_knit$get(); on.exit(opts_knit$restore(optk), add = TRUE)
+    opts_knit$set(
+      output.dir = getwd(),  # record working directory in 1st run
+      tangle = tangle, progress = opts_knit$get('progress') && !quiet
+    )
   }
   # store the evaluation environment and restore on exit
   oenvir = .knitEnv$knit_global; .knitEnv$knit_global = envir
