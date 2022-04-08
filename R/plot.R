@@ -438,6 +438,10 @@ par2 = function(x) {
 #'   inches) of the images. This will be their actual width in pixels, divided
 #'   by \code{dpi}. If not provided, the chunk option \code{dpi} is used; if
 #'   \code{NA}, the output width will not be calculated.
+#' @param rel_path Whether to automatically convert absolute paths to relative
+#'   paths. If you know for sure that absolute paths work, you may set this
+#'   argument or the global option \code{knitr.graphics.rel_path} to
+#'   \code{FALSE}.
 #' @param error Whether to signal an error if any files specified in the
 #'   \code{path} argument do not exist and are not web resources.
 #' @note This function is supposed to be used in R code chunks or inline R code
@@ -455,13 +459,17 @@ par2 = function(x) {
 #' @export
 include_graphics = function(
   path, auto_pdf = getOption('knitr.graphics.auto_pdf', FALSE), dpi = NULL,
+  rel_path = getOption('knitr.graphics.rel_path', TRUE),
   error = getOption('knitr.graphics.error', TRUE)
 ) {
   path = native_encode(path)  # https://d.cosx.org/d/420524
-  if (any(i <- xfun::is_abs_path(path))) warning(
-    'It is highly recommended to use relative paths for images. ',
-    'You had absolute paths: ', quote_vec(path[i])
-  )
+  if (any(i <- xfun::is_abs_path(path)) && rel_path && !is.null(d <- opts_knit$get('output.dir'))) {
+    path[i] = xfun::relative_path(path[i], d, error = FALSE)
+    if (any(j <- xfun::is_abs_path(path[i]))) warning(
+      'It is highly recommended to use relative paths for images. ',
+      'You had absolute paths: ', quote_vec(path[i][j])
+    )
+  }
   path = path.expand(path) # https://github.com/rstudio/rmarkdown/issues/1053
   if (auto_pdf && is_latex_output()) {
     path2 = with_ext(path, 'pdf')

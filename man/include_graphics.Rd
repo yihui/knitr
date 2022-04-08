@@ -8,6 +8,7 @@ include_graphics(
   path,
   auto_pdf = getOption("knitr.graphics.auto_pdf", FALSE),
   dpi = NULL,
+  rel_path = getOption("knitr.graphics.rel_path", TRUE),
   error = getOption("knitr.graphics.error", TRUE)
 )
 }
@@ -26,6 +27,11 @@ PNG, when the output is LaTeX/PDF.}
 inches) of the images. This will be their actual width in pixels, divided
 by \code{dpi}. If not provided, the chunk option \code{dpi} is used; if
 \code{NA}, the output width will not be calculated.}
+
+\item{rel_path}{Whether to automatically convert absolute paths to relative
+paths. If you know for sure that absolute paths work, you may set this
+argument or the global option \code{knitr.graphics.rel_path} to
+\code{FALSE}.}
 
 \item{error}{Whether to signal an error if any files specified in the
 \code{path} argument do not exist and are not web resources.}
