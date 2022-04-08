@@ -4,6 +4,8 @@
 
 - For **knitr** source documents that generate `.tex` output documents (such as `.Rnw` and `.Rtex`), the LaTeX package **xcolor** will be used instead of **color** (#2085). This may cause option clashes if **xcolor** is already loaded by users with options, e.g., `\usepackage[dvipsnames]{xcolor}`. If this happens, you may set the package option `knitr::opts_knit$set(latex.options.xcolor = 'OPTIONS')` where `OPTIONS` is the options you used for **xcolor**, e.g., `dvipsnames`.
 
+- The evaluation of chunk options written after `#|` using the YAML `!expr` syntax will be delayed until before the chunk is to be evaluated (#2120).
+
 # CHANGES IN knitr VERSION 1.38
 
 ## NEW FEATURES
