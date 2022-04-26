@@ -13,9 +13,9 @@ insert_header = function(doc) {
 }
 
 # Makes latex header with macros required for highlighting, tikz and framed
-make_header_latex = function() {
+make_header_latex = function(doc) {
   h = one_string(c(
-    header_latex_packages(),
+    header_latex_packages(doc),
     .header.maxwidth, opts_knit$get('header'),
     if (getOption('OutDec') != '.') '\\usepackage{amsmath}',
     if (out_format('latex')) '\\usepackage{alltt}'
@@ -26,18 +26,22 @@ make_header_latex = function() {
   }
 }
 
-use_package = function(pkg) {
-  opts = opts_knit$get(paste0('latex.options.', pkg)) %n% ''
+# if the document already contains \usepackage[options]{pkg}, use the same
+# options to avoid the option clash error in LaTeX
+use_package = function(pkg, doc) {
+  opts = sapply(pkg, function(p) {
+    r = sprintf('.*?\\\\usepackage\\[(.+?)]\\{%s}.*', p)
+    o = xfun::grep_sub(r, '\\1', doc)
+    if (length(o)) return(o[1])
+    opts_knit$get(paste0('latex.options.', p)) %n% ''
+  })
   sprintf('\\usepackage[%s]{%s}', opts, pkg)
 }
 
 # for backward-compatibility, use xcolor package unless the latex.options.color
 # has been set; xcolor is preferred: https://github.com/latex3/latex2e/pull/719
-header_latex_packages = function() {
-  paste(c(
-    use_package('graphicx'),
-    use_package(if (is.null(opts_knit$get('latex.options.color'))) 'xcolor' else 'color')
-  ), collapse = '')
+header_latex_packages = function(doc) {
+  paste(use_package(c('graphicx', 'xcolor'), doc), collapse = '')
 }
 
 insert_header_latex = function(doc, b) {
@@ -53,11 +57,11 @@ insert_header_latex = function(doc, b) {
     }
     i = i[1L]; l = stringr::str_locate(doc[i], b)
     tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
-    stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, make_header_latex())
+    stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, make_header_latex(doc))
   } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
     doc[1L] = one_string(c(
-      getOption('tikzDocumentDeclaration'), make_header_latex(),
+      getOption('tikzDocumentDeclaration'), make_header_latex(doc),
       .knitEnv$tikzPackages, '\\begin{document}', doc[1L]
     ))
     doc[length(doc)] = one_string(
