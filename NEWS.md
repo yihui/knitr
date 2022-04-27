@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.40
+
+## MINOR CHANGES
+
+- The internal function `knitr:::wrap()` has been removed from this package. If you rely on this function, you will have to use the exported function `knitr::sew()` instead.
+
 # CHANGES IN knitr VERSION 1.39
 
 ## MAJOR CHANGES
