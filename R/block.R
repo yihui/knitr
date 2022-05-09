@@ -168,10 +168,9 @@ block_exec = function(options) {
 #' @param options A list of chunk options. Usually this is just the object
 #'   \code{options} associated with the current code chunk.
 #' @noRd
-eng_r = function(options) {
+eng_r = function(options, env = knit_global()) {
   # eval chunks (in an empty envir if cache)
-  env = knit_global()
-  obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
+  obj.before = ls(env, all.names = TRUE)  # global objects before chunk
 
   keep = options$fig.keep
   keep.idx = NULL
@@ -288,16 +287,16 @@ eng_r = function(options) {
       0
     })) else 0L
 
-  # merge neighbor elements of the same class into one element
+  # # merge neighbor elements of the same class into one element
   for (cls in c('source', 'message', 'warning')) res = merge_class(res, cls)
 
   if (isTRUE(options$fig.beforecode)) res = fig_before_code(res)
 
-  on.exit({
-    plot_counter(reset = TRUE)
-    shot_counter(reset = TRUE)
-    opts_knit$delete('plot_files')
-  }, add = TRUE)  # restore plot number
+  # on.exit({
+  #   plot_counter(reset = TRUE)
+  #   shot_counter(reset = TRUE)
+  #   opts_knit$delete('plot_files')
+  # }, add = TRUE)  # restore plot number
 
   output = unlist(sew(res, options)) # wrap all results together
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
