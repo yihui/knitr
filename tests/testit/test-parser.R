@@ -95,3 +95,16 @@ assert(
 )
 
 knit_code$restore()
+
+# duplication of labels
+
+knit_code$restore(list(a = '1+1'))
+
+assert(
+  !has_error(parse_block(NULL, '', 'label = "a"')),
+  has_error(parse_block('2+2', '', 'label = "a"')),
+  has_error(parse_block(NULL, '','label = "a", code = "2+2"')),
+  has_error(parse_block(NULL, '','label = "a", file = "dummy.R"'))
+)
+
+knit_code$restore()
