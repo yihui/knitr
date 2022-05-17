@@ -114,8 +114,8 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
         one_string(knit_code$get(label))
       )
     }
-    if (length(code))
-      knit_code$set(setNames(list(structure(code, chunk_opts = params)), label))
+    code = as.character(code)
+    knit_code$set(setNames(list(structure(code, chunk_opts = params)), label))
   }
 
   # store dependencies
