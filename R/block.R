@@ -38,6 +38,7 @@ call_block = function(block) {
   } else {
     in_input_dir(xfun::read_all(code_file))
   }
+  set_code(label, params[['code']])
 
   # opts.label = TRUE means inheriting chunk options from ref.label
   if (isTRUE(params$opts.label)) params$opts.label = ref.label
@@ -123,6 +124,13 @@ call_block = function(block) {
   }
 
   block_exec(params)
+}
+
+# replace code in knit_code but preserve attributes
+set_code = function(label, code) {
+  res = knit_code$get(label)
+  attributes(code) = attributes(res)
+  knit_code$set(setNames(list(code), label))
 }
 
 # options that should affect cache when cache level = 1,2
