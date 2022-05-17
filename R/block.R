@@ -30,14 +30,7 @@ call_block = function(block) {
     if (inherits(params$ref.label, 'AsIs') && is.null(params$opts.label))
       params$opts.label = ref.label
   }
-  # if chunk option 'file' is provided, read the file(s) as the chunk body;
-  # otherwise if 'code' is provided, use it; if neither 'file' nor 'code' is
-  # provided, use the chunk body
-  params[["code"]] = if (is.null(code_file <- params[['file']])) {
-    params[["code"]] %n% unlist(knit_code$get(ref.label), use.names = FALSE)
-  } else {
-    in_input_dir(xfun::read_all(code_file))
-  }
+  params[['code']] = get_code(params, label, ref.label)
 
   # opts.label = TRUE means inheriting chunk options from ref.label
   if (isTRUE(params$opts.label)) params$opts.label = ref.label
@@ -123,6 +116,24 @@ call_block = function(block) {
   }
 
   block_exec(params)
+}
+
+# if chunk option 'file' is provided, read the file(s) as the chunk body;
+# otherwise if 'code' is provided, use it; if neither 'file' nor 'code' is
+# provided, use the chunk body
+get_code = function(params, label, ref.label) {
+  if (is.null(code <- params[['code']]) && is.null(file <- params[['file']]))
+    return(unlist(knit_code$get(ref.label), use.names = FALSE))
+  if (!is.null(file)) code = in_input_dir(xfun::read_all(file))
+  set_code(label, code)
+  code
+}
+
+# replace code in knit_code but preserve attributes
+set_code = function(label, code) {
+  res = knit_code$get(label)
+  attributes(code) = attributes(res)
+  knit_code$set(setNames(list(code), label))
 }
 
 # options that should affect cache when cache level = 1,2

@@ -4,6 +4,8 @@
 
 - The internal function `knitr:::wrap()` has been removed from this package. If you rely on this function, you will have to use the exported function `knitr::sew()` instead.
 
+- Duplicate chunk label error will now be thrown with code chunks using `code` or `file` chunk options (thanks, @mine-cetinkaya-rundel, #2126).
+
 # CHANGES IN knitr VERSION 1.39
 
 ## MAJOR CHANGES
