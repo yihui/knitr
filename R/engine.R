@@ -615,7 +615,7 @@ eng_sql = function(options) {
     replace=  F
     if(isTRUE(options$replace)) {
         replace= T
-        reptable =  gsub('(^.*into [[:space:]]+)(.+)([[:space:]]+from.*$)', '\\2', tolower(code))
+        reptable =  gsub('(^.*into[[:space:]]+)(#.+)([[:space:]]+from.*$)', '\\2', sql, ignore.case = T)
         if(sub('(.).*.$', '\\1', reptable) != '#') stop2(
           "To replace a table, the table has to be a temporary table (tablename staring with # or ##)."
         )
