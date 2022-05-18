@@ -609,14 +609,26 @@ eng_sql = function(options) {
     max.print = -1
   sql = one_string(options$code)
   params = options$params
-  imm = options$immediate
+  immediate=  F
+  if(isTRUE(options$immediate)) {
+    immediate= T
+    replace=  F
+    if(isTRUE(options$replace)) {
+        replace= T
+        reptable =  gsub('(^.*into [[:space:]]+)(.+)([[:space:]]+from.*$)', '\\2', tolower(code))
+        if(sub('(.).*.$', '\\1', reptable) != '#') stop2(
+          "To replace a table, the table has to be a temporary table (tablename staring with # or ##)."
+        )
+        sql <- paste0("if object_id('tempdb.dbo.", reptable, "') is not null drop table ", reptable, " ;", sql)
+    }
+  }
   
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
   
   data = tryCatch({
     if (is_sql_update_query(query)) {
-      DBI::dbExecute(conn, query, immediate = imm)
+      DBI::dbExecute(conn, query, immediate = immediate)
       NULL
     } else if (is.null(varname) && max.print > 0) {
       # execute query -- when we are printing with an enforced max.print we
@@ -628,10 +640,10 @@ eng_sql = function(options) {
       
     } else {
       if (length(params) == 0) {
-        DBI::dbGetQuery(conn, query, immediate = imm)
+        DBI::dbGetQuery(conn, query, immediate = immediate)
       } else {
         # If params option is provided, parameters are not interplolated
-        DBI::dbGetQuery(conn, sql, immediate = imm, params = params)
+        DBI::dbGetQuery(conn, sql, immediate = immediate, params = params)
       }
     }
   }, error = function(e) {
