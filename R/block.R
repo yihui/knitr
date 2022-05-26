@@ -546,6 +546,10 @@ inline_exec = function(
   code = block$code; input = block$input
   if ((n <- length(code)) == 0) return(input) # untouched if no code is found
 
+  # shouldn't use ```{=html} to output inline HTML widgets
+  opts = options(htmltools.preserve.raw = FALSE)
+  on.exit(options(opts), add = TRUE)
+
   loc = block$location
   for (i in 1:n) {
     res = hook_eval(code[i], envir)

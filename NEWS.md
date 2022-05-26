@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.40
 
+## BUG FIXES
+
+- Set `options(htmltools.preserve.raw = FALSE)` when evaluating inline R expressions, to preserve inline HTML widgets correctly (thanks, @earfanfan, https://d.cosx.org/d/423180).
+
 ## MINOR CHANGES
 
 - The internal function `knitr:::wrap()` has been removed from this package. If you rely on this function, you will have to use the exported function `knitr::sew()` instead.
