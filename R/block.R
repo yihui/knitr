@@ -122,7 +122,8 @@ call_block = function(block) {
 # otherwise if 'code' is provided, use it; if neither 'file' nor 'code' is
 # provided, use the chunk body
 get_code = function(params, label, ref.label) {
-  if (is.null(code <- params[['code']]) && is.null(file <- params[['file']]))
+  code = params[['code']]; file = params[['file']]
+  if (is.null(code) && is.null(file))
     return(unlist(knit_code$get(ref.label), use.names = FALSE))
   if (!is.null(file)) code = in_input_dir(xfun::read_all(file))
   set_code(label, code)
