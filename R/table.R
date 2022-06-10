@@ -274,7 +274,7 @@ knit_print.knitr_kable = function(x, ...) {
 }
 
 kable_latex = function(
-  x, booktabs = FALSE, longtable = FALSE, tabularx = FALSE, xltabular = FALSE, valign = 't', position = '', table.length = '', centering = TRUE,
+  x, booktabs = FALSE, longtable = FALSE, tabularx = FALSE, xltabular = FALSE, valign = 't', position = '', table.length = '', header = '', centering = TRUE,
   vline = getOption('knitr.table.vline', if (booktabs) '' else '|'),
   toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule' else '\\hline'),
   bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule' else '\\hline'),
@@ -321,7 +321,9 @@ kable_latex = function(
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {
       cn = escape_latex_table(cn, escape, booktabs)
-      paste0(paste(cn, collapse = ' & '), sprintf('\\\\\n%s\n', midrule))
+      paste0(paste(cn, collapse = ' & '),
+      if (header != '') sprintf('\\\\\n%s\n%s\n', header, midrule) else sprintf('\\\\\n%s\n', midrule))
+
     },
     one_string(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep), sep = ''),
     sprintf('\n%s', bottomrule),
