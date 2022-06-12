@@ -51,7 +51,7 @@ input markdown file will be converted to all these formats by default, unless
 the \code{format} argument is specified as one single format.
 }
 \examples{
-system("pandoc -h")  # see possible output formats
+system('pandoc -h') # see possible output formats
 }
 \references{
 Pandoc: \url{https://pandoc.org}; Examples and rules of the

@@ -25,7 +25,5 @@ R Markdown document, you may write \samp{`` `r knitr::inline_expr('1+1')`
 }
 \examples{
 library(knitr)
-inline_expr("1+1", "rnw")
-inline_expr("1+1", "html")
-inline_expr("1+1", "md")
+inline_expr('1+1', 'rnw'); inline_expr('1+1', 'html'); inline_expr('1+1', 'md')
 }

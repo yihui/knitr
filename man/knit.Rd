@@ -149,14 +149,14 @@ The working directory when evaluating R code chunks is the directory of
 }
 \examples{
 library(knitr)
-(f = system.file("examples", "knitr-minimal.Rnw", package = "knitr"))
+(f = system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'))
 knit(f)  # compile to tex
 
 purl(f)  # tangle R code
 purl(f, documentation = 0)  # extract R code only
 purl(f, documentation = 2)  # also include documentation
 
-unlink(c("knitr-minimal.tex", "knitr-minimal.R", "figure"), recursive = TRUE)
+unlink(c('knitr-minimal.tex', 'knitr-minimal.R', 'figure'), recursive = TRUE)
 }
 \references{
 Package homepage: \url{https://yihui.org/knitr/}. The \pkg{knitr}

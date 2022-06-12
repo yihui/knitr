@@ -22,11 +22,9 @@ This function reads source code from the SVN repositories on R-Forge.
 }
 \examples{
 library(knitr)
-\donttest{
-# relies on r-forge.r-project.org being accessible
-read_rforge("rgl/R/axes.R", project = "rgl")
-read_rforge("rgl/R/axes.R", project = "rgl", extra = "&revision=519")
-}
+\donttest{# relies on r-forge.r-project.org being accessible
+read_rforge('rgl/R/axes.R', project = 'rgl')
+read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')}
 }
 \author{
 Yihui Xie and Peter Ruckdeschel

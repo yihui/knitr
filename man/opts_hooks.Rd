@@ -24,10 +24,10 @@ will be called to update the chunk options.
 \examples{
 # make sure the figure width is no smaller than fig.height
 opts_hooks$set(fig.width = function(options) {
-    if (options$fig.width < options$fig.height) {
-        options$fig.width = options$fig.height
-    }
-    options
+  if (options$fig.width < options$fig.height) {
+    options$fig.width = options$fig.height
+  }
+  options
 })
 # remove all hooks
 opts_hooks$restore()
