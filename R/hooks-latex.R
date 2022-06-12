@@ -156,6 +156,14 @@ hook_plot_tex = function(x, options) {
                  sprintf('height=%s', options$out.height),
                  options$out.extra), collapse = ',')
 
+  ## If chunk have sub-figures, check if we need to add a subfloat separator
+  ## between each sub-figure.
+  subfigsep = options$fig.subfigsep
+  ## Separator will be added to the plot, if, he is not the first plot
+  if (usesub && !is.null(subfigsep) && !is.na(subfigsep) && !plot1) {
+    sub1 = paste0(subfigsep, "\n", sub1)
+  }
+
   paste0(
     fig1, align1, sub1, resize1,
     if (tikz) {
@@ -236,6 +244,8 @@ hook_plot_tex = function(x, options) {
     sprintf('\n\n{\\ttfamily\\noindent%s%s%s}', color1, x, color2)
   }
 }
+
+
 
 #' Set or get output hooks for different output formats
 #'
