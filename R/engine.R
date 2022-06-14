@@ -560,14 +560,13 @@ is_sql_update_query = function(query) {
   grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE|DROP).*', query, ignore.case = TRUE)
 }
 
-
 # sql engine
 eng_sql = function(options) {
   # return chunk before interpolation eagerly to avoid connection option check
   if (isFALSE(options$eval) && !isTRUE(options$sql.show_interpolated)) {
     return(engine_output(options, options$code, ''))
   }
-  
+
   # Return char vector of sql interpolation param names
   varnames_from_sql = function(conn, sql) {
     varPos = DBI::sqlParseVariables(conn, sql)
@@ -576,12 +575,12 @@ eng_sql = function(options) {
       sub('^\\?', '', varNames)
     }
   }
-  
+
   # Vectorized version of exists
   mexists = function(x, env = knit_global(), inherits = TRUE) {
     vapply(x, exists, logical(1), where = env, inherits = inherits)
   }
-  
+
   # Interpolate a sql query based on the variables in an environment
   interpolate_from_env = function(conn, sql, env = knit_global(), inherits = TRUE) {
     names = unique(varnames_from_sql(conn, sql))
@@ -589,14 +588,14 @@ eng_sql = function(options) {
     if (length(names_missing) > 0) {
       stop("Object(s) not found: ", paste('"', names_missing, '"', collapse = ", "))
     }
-    
+
     args = if (length(names) > 0) setNames(
       mget(names, envir = env, inherits = inherits), names
     )
-    
+
     do.call(DBI::sqlInterpolate, c(list(conn, sql), args))
   }
-  
+
   # extract options
   conn = options$connection
   if (is.character(conn)) conn = get(conn, envir = knit_global())
@@ -609,23 +608,23 @@ eng_sql = function(options) {
     max.print = -1
   sql = one_string(options$code)
   params = options$params
-  immediate=  F
-  if(isTRUE(options$immediate)) {
-    immediate= T
-    replace=  F
-    if(isTRUE(options$replace)) {
-        replace= T
-        reptable =  gsub('(^.*into[[:space:]]+)(#.+)([[:space:]]+from.*$)', '\\2', sql, ignore.case = T)
-        if(sub('(.).*.$', '\\1', reptable) != '#') stop2(
-          "To replace a table, the table has to be a temporary table (tablename staring with # or ##)."
-        )
-        sql <- paste0("if object_id('tempdb.dbo.", reptable, "') is not null drop table ", reptable, " ;", sql)
+  immediate = NULL
+  if(exists("sql.immediate", where = options) ) { immediate = options$sql.immediate }
+  if(exists('sql.replace', where = options) ) {
+    if(!isTRUE(immediate)) knitr:::stop2("To replace a temprary table, option sql.immediate has to be set to TRUE).")
+    replace = options$sql.replace
+    if (isTRUE(immediate) && isTRUE(replace)) {
+      reptable =  gsub('(^.*into[[:space:]]+)(#.+)([[:space:]]+from.*$)', '\\2', sql, ignore.case = T)
+      if(!sub('(.).*.$', '\\1', reptable) == '#') knitr:::stop2(
+        "To replace a table, the table has to be a temporary table (tablename staring with # or ##)."
+      )
+      sql <- paste0("if object_id('tempdb.dbo.", reptable, "') is not null drop table ", reptable, " ;", sql)
     }
   }
-  
+
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
-  
+
   data = tryCatch({
     if (is_sql_update_query(query)) {
       DBI::dbExecute(conn, query, immediate = immediate)
@@ -637,7 +636,6 @@ eng_sql = function(options) {
       data = DBI::dbFetch(res, n = max.print)
       DBI::dbClearResult(res)
       data
-      
     } else {
       if (length(params) == 0) {
         DBI::dbGetQuery(conn, query, immediate = immediate)
@@ -650,37 +648,37 @@ eng_sql = function(options) {
     if (!options$error) stop(e)
     e
   })
-  
+
   if (inherits(data, "error"))
     return(engine_output(options, query, one_string(data)))
-  
+
   # create output if needed (we have data and we aren't assigning it to a variable)
   output = if (length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)) capture.output({
-    
+
     # apply max.print to data
     display_data = if (max.print == -1) data else head(data, n = max.print)
-    
+
     # get custom sql print function
     sql.print = opts_knit$get('sql.print')
-    
+
     # use kable for markdown
     if (!is.null(sql.print)) {
       options$results = 'asis'
       cat(sql.print(data))
     } else if (out_format('markdown')) {
-      
+
       # we are going to output raw markdown so set results = 'asis'
       options$results = 'asis'
-      
+
       # force left alignment if the first column is an incremental id column
       first_column = display_data[[1]]
       if (is.numeric(first_column) && length(first_column) > 1 && all(diff(first_column) == 1))
         display_data[[1]] = as.character(first_column)
-      
+
       # wrap html output in a div so special styling can be applied
       add_div = is_html_output() && getOption('knitr.sql.html_div', TRUE)
       if (add_div) cat('<div class="knitsql-table">\n')
-      
+
       # determine records caption
       caption = options$tab.cap
       if (is.null(caption)) {
@@ -694,27 +692,27 @@ eng_sql = function(options) {
       }
       # disable caption
       if (identical(caption, NA)) caption = NULL
-      
+
       # print using kable
       print(kable(display_data, caption = caption))
-      
+
       # terminate div
       if (add_div) cat("\n</div>\n")
-      
+
       # otherwise use tibble if it's available
     } else if (loadable('tibble')) {
       print(tibble::as_tibble(display_data), n = max.print)
-      
+
     } else print(display_data) # fallback to standard print
   })
   if (options$results == 'hide') output = NULL
-  
+
   # assign varname if requested
   if (!is.null(varname)) assign(varname, data, envir = knit_global())
-  
+
   # reset query to pre-interpolated if not expanding
   if (!isTRUE(options$sql.show_interpolated)) query <- options$code
-  
+
   # return output
   engine_output(options, query, output)
 }
