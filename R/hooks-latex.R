@@ -156,12 +156,12 @@ hook_plot_tex = function(x, options) {
                  sprintf('height=%s', options$out.height),
                  options$out.extra), collapse = ',')
 
-  ## If the chunk have sub-figures, check if we need to add a subfloat separator
-  ## between each sub-figure.
-  subfigsep = options$fig.subfigsep
-  ## Separator will be added to all the plots, except the first in the set.
-  if (usesub && !is.null(subfigsep) && !is.na(subfigsep) && !plot1) {
-    sub1 = paste0(subfigsep, "\n", sub1)
+  # If the chunk have sub-figures, check if we need to add a subfloat separator
+  # between each sub-figure.
+  subsep = options$fig.subsep
+  # Separator will be added to all the plots, except the first in the set.
+  if (usesub && !is.null(subsep) && !is.na(subsep) && !plot1) {
+    sub1 = paste0(subsep, "\n", sub1)
   }
 
   paste0(
