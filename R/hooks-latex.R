@@ -167,9 +167,9 @@ hook_plot_tex = function(x, options) {
 
   if (usesub && !is.null(subsep)) {
     n_subsep = length(subsep)
-
+    # For more simple solution, limit `fig.subsep` to 1 or 3 elements vector
     if (!n_subsep %in% c(1L, 3L)) {
-      message = sprintf("Currently, `fig.subsep` have %d elements`", n_subsep)
+      message = sprintf("But currently, `fig.subsep` have %d elements.`", n_subsep)
       message = paste("`fig.subsep` should be a single character value, or, a 3 elements character vector.", message)
       stop(message)
     }
@@ -178,28 +178,34 @@ hook_plot_tex = function(x, options) {
     if (n_subsep == 1L && !plot1) {
       sub1 = paste0(subsep, '\n', sub1)
     }
-
-    if (fig.num == 2L) {
+    # If the chunk have two plots, and, three separators, then, use special treatment:
+    if (n_subsep == 3L && fig.num == 2L) {
       if (plot1) {
+        # If is the first plot in the set, prefix-it with first subsep.
         sub1 = paste0(subsep[1], "\n", sub1)
       } else {
+        # Otherwise, this is the last plot in the set, and
+        # we will prefix-it with the "middle" subsep, and, postfix-it
+        # with the last subsep.
         sub1 = paste0(subsep[2], "\n", sub1)
-        sub2 = paste0(sub2, subsep[3])
+        sub2 = paste0(sub2, "\n", subsep[3], "\n")
       }
-    } else {
-      index = c(1L, 2L, 3L)[c(plot1, !plot1 && !plot2, plot2)]
-      switch (index,
-        { sub1 <- paste(subsep[1], sub1, sep = "\n") },
+    }
+    # If chunk have more than 2 two plots, then, use the general case:
+    if (n_subsep == 3L && fig.num > 2) {
+      # `case_index` decides which of the three cases in the
+      # switch statement below is executed.
+      case_index = c(1L, 2L, 3L)[c(plot1, plot2, !plot1 && !plot2)]
 
+      switch (case_index,
+        { sub1 <- paste(subsep[1], sub1, sep = "\n") },    # Executed if current plot is the first on the set
+        { sub2 <- paste0(sub2, "\n", subsep[3], "\n") },   # Executed if current plot is the last on the set
         {
-          sub1 <- paste(subsep[2], sub1, sep = "\n")
+          sub1 <- paste(subsep[2], sub1, sep = "\n")       # Executed if current plot is neither the first or the last on the set
           sub2 <- paste(sub2, subsep[2], sep = "\n")
-        },
-
-        { sub2 <- paste(sub2, subsep[3], sep = "\n") }
+        }
       )
     }
-
   }
 
   paste0(
