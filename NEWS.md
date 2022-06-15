@@ -6,6 +6,8 @@
 
 - Duplicate chunk label error will now be thrown with code chunks using `code` or `file` chunk options (thanks, @mine-cetinkaya-rundel, #2126).
 
+- A new chunk option called `fig.subsep` was added. This option is focused on improving Latex sub-figures arrangement (see Latex [sub-figures section in RMarkdow cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/latex-subfigure.html)). This option is available only for PDF output (and, will be ignored in other output formats). With this option, you can add Latex commands between (and around) each sub-figure.
+
 # CHANGES IN knitr VERSION 1.39
 
 ## MAJOR CHANGES
