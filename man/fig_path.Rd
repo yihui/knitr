@@ -31,6 +31,6 @@ When there are special characters (not alphanumeric or \samp{-} or
   makes the filenames safe to LaTeX.
 }
 \examples{
-fig_path('.pdf', options = list(fig.path='figure/abc-', label='first-plot'))
-fig_path('.png', list(fig.path='foo-', label='bar'), 1:10)
+fig_path(".pdf", options = list(fig.path = "figure/abc-", label = "first-plot"))
+fig_path(".png", list(fig.path = "foo-", label = "bar"), 1:10)
 }

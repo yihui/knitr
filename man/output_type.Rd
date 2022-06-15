@@ -59,10 +59,10 @@ See available Pandoc formats, in
 # check for output formats type
 knitr::is_latex_output()
 knitr::is_html_output()
-knitr::is_html_output(excludes = c('markdown', 'epub'))
+knitr::is_html_output(excludes = c("markdown", "epub"))
 # Get current formats
 knitr::pandoc_from()
 knitr::pandoc_to()
 # Test if current output format is 'docx'
-knitr::pandoc_to('docx')
+knitr::pandoc_to("docx")
 }

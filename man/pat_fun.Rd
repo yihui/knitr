@@ -39,7 +39,9 @@ documents.
 }
 \examples{
 # see how knit_patterns is modified
-knit_patterns$get(); pat_rnw(); knit_patterns$get()
+knit_patterns$get()
+pat_rnw()
+knit_patterns$get()
 
 knit_patterns$restore()  # empty the list
 }
