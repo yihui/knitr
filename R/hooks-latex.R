@@ -180,13 +180,23 @@ hook_plot_tex = function(x, options) {
     }
 
     if (fig.num == 2L) {
-      sub1 = if (plot1) paste(subsep[1], sub1, sep = "\n") else paste(subsep[2], sub1, subsep[3], sep = "\n")
+      if (plot1) {
+        sub1 = paste0(subsep[1], "\n", sub1)
+      } else {
+        sub1 = paste0(subsep[2], "\n", sub1)
+        sub2 = paste0(sub2, subsep[3])
+      }
     } else {
       index = c(1L, 2L, 3L)[c(plot1, !plot1 && !plot2, plot2)]
-      sub1 = switch (index,
-        paste(subsep[1], sub1, sep = "\n"),
-        paste(subsep[2], sub1, subsep[2], sep = "\n"),
-        paste(sub1, subsep[3], sep = "\n")
+      switch (index,
+        { sub1 <- paste(subsep[1], sub1, sep = "\n") },
+
+        {
+          sub1 <- paste(subsep[2], sub1, sep = "\n")
+          sub2 <- paste(sub2, subsep[2], sep = "\n")
+        },
+
+        { sub2 <- paste(sub2, subsep[3], sep = "\n") }
       )
     }
 
