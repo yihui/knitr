@@ -159,9 +159,32 @@ hook_plot_tex = function(x, options) {
   # If the chunk have sub-figures, check if we need to add a subfloat separator
   # between each sub-figure.
   subsep = options$fig.subsep
-  # Separator will be added to all the plots, except the first in the set.
-  if (usesub && !is.null(subsep) && !is.na(subsep) && !plot1) {
-    sub1 = paste0(subsep, "\n", sub1)
+
+  if (usesub && !is.null(subsep) && !is.na(subsep)) {
+    n_subsep = length(subsep)
+
+    if (!n_subsep %in% c(1L, 3L)) {
+      message = sprintf("Currently, `fig.subsep have %d elements`", n_subsep)
+      message = paste("`fig.subsep` should be a single character value, or, a 3 elements character vector.", message)
+      stop(message)
+    }
+    # If `fig.subsep` is a single separator, this separator will be added
+    # to all the plots, except the first in the set.
+    if (n_subsep == 1L && !plot1) {
+      sub1 = paste0(subsep, '\n', sub1)
+    }
+
+    if (fig.num == 2L) {
+      sub1 = if (plot1) paste(subsep[1], sub1, sep = "\n") else paste(subsep[2], sub1, subsep[3], sep = "\n")
+    } else {
+      index = c(1L, 2L, 3L)[c(plot1, !plot1 && !plot2, plot2)]
+      sub1 = switch (index,
+        paste(subsep[1], sub1, sep = "\n"),
+        paste(subsep[2], sub1, subsep[2], sep = "\n"),
+        paste(sub1, subsep[3], sep = "\n")
+      )
+    }
+
   }
 
   paste0(
