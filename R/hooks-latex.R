@@ -245,8 +245,6 @@ hook_plot_tex = function(x, options) {
   }
 }
 
-
-
 #' Set or get output hooks for different output formats
 #'
 #' The \code{render_*()} functions set built-in output hooks for LaTeX, HTML,
