@@ -8,7 +8,7 @@
 
 - Duplicate chunk label error will now be thrown with code chunks using `code` or `file` chunk options (thanks, @mine-cetinkaya-rundel, #2126).
 
-- Simplified R Markdown's inline code parser (thanks, @atusy, #2143)
+- Simplified R Markdown's inline code parser (thanks, @atusy, #2143).
 
 # CHANGES IN knitr VERSION 1.39
 
