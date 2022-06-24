@@ -274,7 +274,7 @@ knit_print.knitr_kable = function(x, ...) {
 }
 
 kable_latex = function(
-  x, booktabs = FALSE, longtable = FALSE, tabularx = FALSE, xltabular = FALSE, valign = 't', position = '', table.length = '', header = '', centering = TRUE,
+  x, booktabs = FALSE, longtable = FALSE, tabular = if (longtable) 'longtable' else 'tabular', valign = 't', position = '', table.length = '', header = '', centering = TRUE,
   vline = getOption('knitr.table.vline', if (booktabs) '' else '|'),
   toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule' else '\\hline'),
   bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule' else '\\hline'),
