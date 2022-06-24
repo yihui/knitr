@@ -327,7 +327,7 @@ kable_latex = function(
     one_string(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep), sep = ''),
     sprintf('\n%s', bottomrule),
     sprintf('\n\\end{%s}', tabular),
-    if (!longtable & !xltabular) env2
+    if (!tabular %in% c('longtable', 'xltabular')) env2
   ), collapse = '')
 }
 
