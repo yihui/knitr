@@ -314,7 +314,7 @@ kable_latex = function(
 
   paste(c(
     if (!tabular %in% c('longtable', 'xltabular')) c(env1, cap, centering),
-    if (tabularx | xltabular) sprintf('\n\\begin{%s}{%s}', tabular, table.length) else sprintf('\n\\begin{%s}%s', tabular, valign),
+    if (tabular %in% c('tabularx', 'xltabular')) sprintf('\n\\begin{%s}{%s}', tabular, table.length) else sprintf('\n\\begin{%s}%s', tabular, valign),
     align,
     if (longtable | xltabular && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
