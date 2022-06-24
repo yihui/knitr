@@ -196,7 +196,7 @@ hook_plot_tex = function(x, options) {
       sub1 = paste(subsep[fig.cur], sub1, sep = '\n')
     }
     if (n_subsep > fig.num && plot2) {
-      # If is the last plot in set, them, prefix the current subfloat envir with
+      # If is the last plot in set, then, prefix the current subfloat envir with
       # the current separator, and, postfix-it with the next/last separator.
       sub1 = paste(subsep[fig.cur], sub1, sep = '\n')
       sub2 = paste(sub2, subsep[fig.cur + 1L], sep = "\n")
