@@ -316,7 +316,7 @@ kable_latex = function(
     if (!tabular %in% c('longtable', 'xltabular')) c(env1, cap, centering),
     if (tabular %in% c('tabularx', 'xltabular')) sprintf('\n\\begin{%s}{%s}', tabular, table.length) else sprintf('\n\\begin{%s}%s', tabular, valign),
     align,
-    if (longtable | xltabular && cap != '') c(cap, '\\\\'),
+    if ((tabular %in% c('longtable', 'xltabular')) && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {
       cn = escape_latex_table(cn, escape, booktabs)
