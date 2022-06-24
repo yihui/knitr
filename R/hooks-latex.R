@@ -166,45 +166,40 @@ hook_plot_tex = function(x, options) {
   }
 
   if (usesub && !is.null(subsep)) {
+    # User can provide a single separator, or, a vector of multiple separators.
+    # Number of elements in this vector can vary from `fig.num - 1` to `fig.num + 1`.
     n_subsep = length(subsep)
-    # For more simple solution, limit `fig.subsep` to 1 or 3 elements vector
-    if (!n_subsep %in% c(1L, 3L)) {
-      message = sprintf("But currently, `fig.subsep` have %d elements.`", n_subsep)
-      message = paste("`fig.subsep` should be a single character value, or, a 3 elements character vector.", message)
+    subsep_out_of_boundaries = !( n_subsep == 1L || n_subsep %in% (-1:1 + fig.num) )
+    # If the length of `fig.subsep` does not comply with these boundaries, stop the user.
+    if (subsep_out_of_boundaries) {
+      message = paste0(
+        "`fig.subsep` should be a single character value",
+        ", or, a character vector with number of elements ranging from ",
+        sprintf("%d to %d", fig.num - 1, fig.num + 1)
+      )
+      message = sprintf("%s. But currently, `fig.subsep` have %d elements.`", message, n_subsep)
       stop(message)
     }
     # If `fig.subsep` is a single separator, this separator will be added
     # to all the plots, except the first in the set.
     if (n_subsep == 1L && !plot1) {
-      sub1 = paste0(subsep, '\n', sub1)
+      sub1 = paste(subsep, sub1, sep = '\n')
     }
-    # If the chunk have two plots, and, three separators, then, use special treatment:
-    if (n_subsep == 3L && fig.num == 2L) {
-      if (plot1) {
-        # If is the first plot in the set, prefix-it with first subsep.
-        sub1 = paste0(subsep[1], "\n", sub1)
-      } else {
-        # Otherwise, this is the last plot in the set, and
-        # we will prefix-it with the "middle" subsep, and, postfix-it
-        # with the last subsep.
-        sub1 = paste0(subsep[2], "\n", sub1)
-        sub2 = paste0(sub2, "\n", subsep[3], "\n")
-      }
-    }
-    # If chunk have more than 2 two plots, then, use the general case:
-    if (n_subsep == 3L && fig.num > 2) {
-      # `case_index` decides which of the three cases in the
-      # switch statement below is executed.
-      case_index = c(1L, 2L, 3L)[c(plot1, plot2, !plot1 && !plot2)]
 
-      switch (case_index,
-        { sub1 <- paste(subsep[1], sub1, sep = "\n") },    # Executed if current plot is the first on the set
-        { sub2 <- paste0(sub2, "\n", subsep[3], "\n") },   # Executed if current plot is the last on the set
-        {
-          sub1 <- paste(subsep[2], sub1, sep = "\n")       # Executed if current plot is neither the first or the last on the set
-          sub2 <- paste(sub2, subsep[2], sep = "\n")
-        }
-      )
+    # If user provides a vector with `fig.num - 1` or `fig.num` elements, use this case:
+    if (n_subsep %in% (fig.num + -1:0)) {
+      sub1 = paste(subsep[fig.cur], sub1, sep = '\n')
+    }
+
+    # If user provides a vector with more than `fig.num` elements, use the two cases below:
+    if (n_subsep > fig.num && !plot2) {
+      sub1 = paste(subsep[fig.cur], sub1, sep = '\n')
+    }
+    if (n_subsep > fig.num && plot2) {
+      # If is the last plot in set, them, prefix the current subfloat envir with
+      # the current separator, and, postfix-it with the next/last separator.
+      sub1 = paste(subsep[fig.cur], sub1, sep = '\n')
+      sub2 = paste(sub2, subsep[fig.cur + 1L], sep = "\n")
     }
   }
 
