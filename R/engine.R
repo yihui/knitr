@@ -614,7 +614,7 @@ eng_sql = function(options) {
     if(!isTRUE(immediate)) knitr:::stop2("To replace a temprary table, option sql.immediate has to be set to TRUE).")
     replace = options$sql.replace
     if (isTRUE(immediate) && isTRUE(replace)) {
-      reptable =  gsub('(^.*into[[:space:]]+)(#.+)([[:space:]]+from.*$)', '\\2', sql, ignore.case = T)
+      reptable = gsub('(^.*into[[:space:]]+)(#[0-9A-Za-z]+)(.+from.*$)', '\\2', sql, ignore.case = T)
       if(!sub('(.).*.$', '\\1', reptable) == '#') knitr:::stop2(
         "To replace a table, the table has to be a temporary table (tablename staring with # or ##)."
       )
@@ -641,7 +641,7 @@ eng_sql = function(options) {
         DBI::dbGetQuery(conn, query, immediate = immediate)
       } else {
         # If params option is provided, parameters are not interplolated
-        DBI::dbGetQuery(conn, sql, immediate = immediate, params = params)
+        DBI::dbGetQuery(conn, query, immediate = immediate, params = params)
       }
     }
   }, error = function(e) {
