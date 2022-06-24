@@ -310,7 +310,6 @@ kable_latex = function(
   x = escape_latex_table(x, escape, booktabs)
   if (!is.character(toprule)) toprule = NULL
   if (!is.character(bottomrule)) bottomrule = NULL
-  tabular = if (longtable) 'longtable' else if (tabularx) 'tabularx' else if (xltabular) 'xltabular' else 'tabular'
   if (table.length == '') table.length = '\\linewidth'
 
   paste(c(
