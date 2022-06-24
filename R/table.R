@@ -313,7 +313,7 @@ kable_latex = function(
   if (table.length == '') table.length = '\\linewidth'
 
   paste(c(
-    if (!longtable & !xltabular) c(env1, cap, centering),
+    if (!tabular %in% c('longtable', 'xltabular')) c(env1, cap, centering),
     if (tabularx | xltabular) sprintf('\n\\begin{%s}{%s}', tabular, table.length) else sprintf('\n\\begin{%s}%s', tabular, valign),
     align,
     if (longtable | xltabular && cap != '') c(cap, '\\\\'),
