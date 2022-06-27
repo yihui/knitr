@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.40
 
+## NEW FEATURES
+
+- Add support for a `php` engine like other engine for interpreted language. It will call `php -r <code>`, with `<code>` being the chunk content (thanks, @ralmond, #2144).
+
 ## MINOR CHANGES
 
 - When the inline R code cannot be correctly parsed, the error message will show the original code in addition to the parsing error, which can make it easier to identify the code error in the source document (thanks, @AlbertLei, #2141).
