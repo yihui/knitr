@@ -162,17 +162,12 @@ hook_plot_tex = function(x, options) {
     # User can provide a single separator, or, a vector of multiple separators.
     # Number of elements in this vector can vary from `fig.num - 1` to `fig.num + 1`.
     n_subsep = length(subsep)
-    subsep_out_of_boundaries = !( n_subsep == 1L || n_subsep %in% (-1:1 + fig.num) )
     # If the length of `fig.subsep` does not comply with these boundaries, stop the user.
-    if (subsep_out_of_boundaries) {
-      message = paste0(
-        "`fig.subsep` should be a single character value",
-        ", or, a character vector with number of elements ranging from ",
-        sprintf("%d to %d", fig.num - 1, fig.num + 1)
-      )
-      message = sprintf("%s. But currently, `fig.subsep` have %d elements.`", message, n_subsep)
-      stop(message)
-    }
+    if (!n_subsep %in% (c(1L, -1:1 + fig.num))) stop2(
+      "'fig.subsep' should be a single character value, or a character vector ",
+      "with number of elements ranging from ", fig.num - 1, " to ", fig.num + 1,
+      ". But currently 'fig.subsep' has ", n_subsep, " elements.`"
+    )
     # If `fig.subsep` is a single separator, this separator will be added
     # to all the plots, except the first in the set.
     if (n_subsep == 1L && !plot1) {
