@@ -180,14 +180,13 @@ hook_plot_tex = function(x, options) {
     }
 
     # If user provides a vector with more than `fig.num` elements, use the two cases below:
-    if (n_subsep > fig.num && !plot2) {
-      sub1 = paste(subsep[fig.cur], sub1, sep = '\n')
-    }
-    if (n_subsep > fig.num && plot2) {
+    if (n_subsep > fig.num) if (plot2) {
       # If is the last plot in set, then, prefix the current subfloat envir with
       # the current separator, and, postfix-it with the next/last separator.
       sub1 = paste(subsep[fig.cur], sub1, sep = '\n')
-      sub2 = paste(sub2, subsep[fig.cur + 1L], sep = "\n")
+      sub2 = paste(sub2, subsep[fig.cur + 1L], sep = '\n')
+    } else {
+      sub1 = paste(subsep[fig.cur], sub1, sep = '\n')
     }
   }
 
