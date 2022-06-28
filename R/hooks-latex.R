@@ -158,14 +158,7 @@ hook_plot_tex = function(x, options) {
 
   # If the chunk have sub-figures, check if we need to add a subfloat separator
   # between each sub-figure.
-  subsep = options$fig.subsep
-  if (any(is.na(subsep))) {
-    # Considering the intention of `fig.subsep`, NA values should not be found.
-    # If they are, we should warn the user about this mistake.
-    stop("Found `NA` values in `fig.subsep` chunk option!")
-  }
-
-  if (usesub && !is.null(subsep)) {
+  if (usesub && !is.null(subsep <- options$fig.subsep)) {
     # User can provide a single separator, or, a vector of multiple separators.
     # Number of elements in this vector can vary from `fig.num - 1` to `fig.num + 1`.
     n_subsep = length(subsep)
