@@ -168,26 +168,20 @@ hook_plot_tex = function(x, options) {
       "with number of elements ranging from ", fig.num - 1, " to ", fig.num + 1,
       ". But currently 'fig.subsep' has ", n_subsep, " elements.`"
     )
-    # If `fig.subsep` is a single separator, this separator will be added
-    # to all the plots, except the first in the set.
-    if (n_subsep == 1L && !plot1) {
-      sub1 = paste(subsep, sub1, sep = '\n')
-    }
-
-    # If user provides a vector with `fig.num - 1` or `fig.num` elements, use this case:
-    if (n_subsep %in% (fig.num + -1:0)) {
-      sub1 = paste(subsep[fig.cur], sub1, sep = '\n')
-    }
-
-    # If user provides a vector with more than `fig.num` elements, use the two cases below:
-    if (n_subsep > fig.num) if (plot2) {
-      # If is the last plot in set, then, prefix the current subfloat envir with
-      # the current separator, and, postfix-it with the next/last separator.
-      sub1 = paste(subsep[fig.cur], sub1, sep = '\n')
-      sub2 = paste(sub2, subsep[fig.cur + 1L], sep = '\n')
+    sub11 = sub21 = ''  # strings from subsep to prepend sub1, or append sub2
+    # If `fig.subsep` is a single separator, add it before all plots except first
+    if (n_subsep == 1L) {
+      if (!plot1) sub11 = subsep
+    } else if (n_subsep < fig.num) {
+      # If `fig.num - 1` separators, add i-th separator before (i+1)-th plot:
+      if (!plot1) sub11 = subsep[fig.cur - 1]
     } else {
-      sub1 = paste(subsep[fig.cur], sub1, sep = '\n')
+      sub11 = subsep[fig.cur]
+      # If is the last plot in set, add the last separator after it.
+      if (n_subsep > fig.num && plot2) sub21 = subsep[fig.cur + 1L]
     }
+    if (sub11 != '') sub1 = paste(sub11, sub1, sep = '\n')
+    if (sub21 != '') sub2 = paste(sub2, sub21, sep = '\n')
   }
 
   paste0(
