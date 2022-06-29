@@ -1,10 +1,18 @@
 # CHANGES IN knitr VERSION 1.40
 
+## NEW FEATURES
+
+- Per suggestion of @jakubkaczor (#2116) and discussion with @pedropark99 (#2140), the chunk option `fig.sep` can also be used to add LaTeX code before the first sub-figure now. Previously this option can only be used for adding LaTeX code *after* each sub-figure.
+
 ## MINOR CHANGES
+
+- When the inline R code cannot be correctly parsed, the error message will show the original code in addition to the parsing error, which can make it easier to identify the code error in the source document (thanks, @AlbertLei, #2141).
 
 - The internal function `knitr:::wrap()` has been removed from this package. If you rely on this function, you will have to use the exported function `knitr::sew()` instead.
 
 - Duplicate chunk label error will now be thrown with code chunks using `code` or `file` chunk options (thanks, @mine-cetinkaya-rundel, #2126).
+
+- Simplified R Markdown's inline code parser (thanks, @atusy, #2143).
 
 # CHANGES IN knitr VERSION 1.39
 
