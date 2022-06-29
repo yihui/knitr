@@ -274,7 +274,9 @@ knit_print.knitr_kable = function(x, ...) {
 }
 
 kable_latex = function(
-  x, booktabs = FALSE, longtable = FALSE, valign = 't', position = '', centering = TRUE,
+  x, booktabs = FALSE, longtable = FALSE, tabular = if (longtable) 'longtable' else 'tabular',
+  valign = if (tabular %in% c('tabularx', 'xltabular')) '{\\linewidth}' else '[t]',
+  position = '', centering = TRUE,
   vline = getOption('knitr.table.vline', if (booktabs) '' else '|'),
   toprule = getOption('knitr.table.toprule', if (booktabs) '\\toprule' else '\\hline'),
   bottomrule = getOption('knitr.table.bottomrule', if (booktabs) '\\bottomrule' else '\\hline'),
@@ -291,7 +293,7 @@ kable_latex = function(
   # vertical align only if 'caption' is not NULL (may be NA) or 'valign' has
   # been explicitly specified
   valign = if ((!is.null(caption) || !missing(valign)) && valign != '') {
-    sprintf('[%s]', valign)
+    if (grepl('^[[{]', valign)) valign else sprintf('[%s]', valign)
   } else ''
   if (identical(caption, NA)) caption = NULL
   if (position != '') position = paste0('[', position, ']')
@@ -310,12 +312,11 @@ kable_latex = function(
   x = escape_latex_table(x, escape, booktabs)
   if (!is.character(toprule)) toprule = NULL
   if (!is.character(bottomrule)) bottomrule = NULL
-  tabular = if (longtable) 'longtable' else 'tabular'
 
   paste(c(
-    if (!longtable) c(env1, cap, centering),
+    if (cap_env <- !tabular %in% c('longtable', 'xltabular')) c(env1, cap, centering),
     sprintf('\n\\begin{%s}%s', tabular, valign), align,
-    if (longtable && cap != '') c(cap, '\\\\'),
+    if (!cap_env && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {
       cn = escape_latex_table(cn, escape, booktabs)
@@ -324,7 +325,7 @@ kable_latex = function(
     one_string(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep), sep = ''),
     sprintf('\n%s', bottomrule),
     sprintf('\n\\end{%s}', tabular),
-    if (!longtable) env2
+    if (cap_env) env2
   ), collapse = '')
 }
 
