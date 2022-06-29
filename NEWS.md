@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- Per suggestion of @jakubkaczor, a new chunk option called `fig.subsep` was added (thanks, @pedropark99, #2140). This option is focused on improving LaTeX sub-figures arrangement (see LaTeX [sub-figures section in _R Markdown Cookbook_](https://bookdown.org/yihui/rmarkdown-cookbook/latex-subfigure.html)). This option is available only for PDF output and will be ignored in other output formats. With this option, you can add LaTeX commands between (and around) sub-figures.
+- Per suggestion of @jakubkaczor (#2116) and discussion with @pedropark99 (#2140), the chunk option `fig.sep` can also be used to add LaTeX code before the first sub-figure now. Previously this option can only be used for adding LaTeX code *after* each sub-figure.
 
 ## MINOR CHANGES
 

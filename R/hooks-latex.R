@@ -124,7 +124,14 @@ hook_plot_tex = function(x, options) {
     if (usesub) {
       sub1 = sprintf('\\subfloat[%s%s]{', subcap, create_label(lab, '-', fig.cur, latex = TRUE))
       sub2 = '}'
-      sep.cur = fig.sep[fig.cur]; if (is.na(sep.cur)) sep.cur = NULL
+      sep.cur = fig.sep[fig.cur]
+      # when there are more separators than plots, add the first separator
+      # before the first plot, then the (i+1)th separator to the i-th plot
+      if (length(fig.sep) > fig.num) {
+        if (plot1) sub1 = paste0(fig.sep[1], sub1)
+        sep.cur = fig.sep[fig.cur + 1]
+      }
+      if (is.na(sep.cur)) sep.cur = NULL
     }
 
     # If pic is standalone/last in set:
@@ -155,34 +162,6 @@ hook_plot_tex = function(x, options) {
   size = paste(c(sprintf('width=%s', ow),
                  sprintf('height=%s', options$out.height),
                  options$out.extra), collapse = ',')
-
-  # If the chunk have sub-figures, check if we need to add a subfloat separator
-  # between each sub-figure.
-  if (usesub && !is.null(subsep <- options$fig.subsep)) {
-    # User can provide a single separator, or, a vector of multiple separators.
-    # Number of elements in this vector can vary from `fig.num - 1` to `fig.num + 1`.
-    n_subsep = length(subsep)
-    # If the length of `fig.subsep` does not comply with these boundaries, stop the user.
-    if (!n_subsep %in% (c(1L, -1:1 + fig.num))) stop2(
-      "'fig.subsep' should be a single character value, or a character vector ",
-      "with number of elements ranging from ", fig.num - 1, " to ", fig.num + 1,
-      ". But currently 'fig.subsep' has ", n_subsep, " elements.`"
-    )
-    sub11 = sub21 = ''  # strings from subsep to prepend sub1, or append sub2
-    # If `fig.subsep` is a single separator, add it before all plots except first
-    if (n_subsep == 1L) {
-      if (!plot1) sub11 = subsep
-    } else if (n_subsep < fig.num) {
-      # If `fig.num - 1` separators, add i-th separator before (i+1)-th plot:
-      if (!plot1) sub11 = subsep[fig.cur - 1]
-    } else {
-      sub11 = subsep[fig.cur]
-      # If is the last plot in set, add the last separator after it.
-      if (n_subsep > fig.num && plot2) sub21 = subsep[fig.cur + 1L]
-    }
-    if (sub11 != '') sub1 = paste(sub11, sub1, sep = '\n')
-    if (sub21 != '') sub2 = paste(sub2, sub21, sep = '\n')
-  }
 
   paste0(
     fig1, align1, sub1, resize1,
