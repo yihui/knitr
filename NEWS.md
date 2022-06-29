@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.40
 
+## NEW FEATURES
+
+- Per suggestion of @jakubkaczor, a new chunk option called `fig.subsep` was added (thanks, @pedropark99, #2140). This option is focused on improving LaTeX sub-figures arrangement (see LaTeX [sub-figures section in _R Markdown Cookbook_](https://bookdown.org/yihui/rmarkdown-cookbook/latex-subfigure.html)). This option is available only for PDF output and will be ignored in other output formats. With this option, you can add LaTeX commands between (and around) sub-figures.
+
 ## MINOR CHANGES
 
 - When the inline R code cannot be correctly parsed, the error message will show the original code in addition to the parsing error, which can make it easier to identify the code error in the source document (thanks, @AlbertLei, #2141).
