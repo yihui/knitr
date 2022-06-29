@@ -315,15 +315,12 @@ kable_latex = function(
 
   paste(c(
     if (cap_env <- !tabular %in% c('longtable', 'xltabular')) c(env1, cap, centering),
-    sprintf('\n\\begin{%s}%s', tabular, valign),
-    align,
+    sprintf('\n\\begin{%s}%s', tabular, valign), align,
     if (!cap_env && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
     if (!is.null(cn <- colnames(x))) {
       cn = escape_latex_table(cn, escape, booktabs)
-      paste0(paste(cn, collapse = ' & '),
-      if (header != '') sprintf('\\\\\n%s\n%s\n', header, midrule) else sprintf('\\\\\n%s\n', midrule))
-
+      paste0(paste(cn, collapse = ' & '), '\\\\\n', header, if (header != '') '\n', midrule, '\n')
     },
     one_string(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep), sep = ''),
     sprintf('\n%s', bottomrule),
