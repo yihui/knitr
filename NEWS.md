@@ -16,6 +16,8 @@
 
 - Simplified R Markdown's inline code parser (thanks, @atusy, #2143).
 
+- Fixed epub2 output not being considered as HTML format (thanks, @flipacholas, #2145).
+
 # CHANGES IN knitr VERSION 1.39
 
 ## MAJOR CHANGES
