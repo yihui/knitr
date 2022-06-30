@@ -86,6 +86,7 @@ Authors@R: c(
     person("Ramnath", "Vaidyanathan", role = "ctb"),
     person("Richard", "Cotton", role = "ctb"),
     person("Robert", "Krzyzanowski", role = "ctb"),
+    person("Rodrigo", "Copetti", role = "ctb"),
     person("Romain", "Francois", role = "ctb"),
     person("Ruaridh", "Williamson", role = "ctb"),
     person("Scott", "Kostyshak", role = "ctb"),
