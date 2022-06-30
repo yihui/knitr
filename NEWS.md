@@ -6,6 +6,10 @@
 
 - `knitr::kable()` supports `tabularx` and `xltabular` environments now for LaTeX tables, e.g., `knitr::kable(head(iris), format = 'latex', tabular = 'tabularx')` (thanks, @amarakon, #2138).
 
+## BUG FIXES
+
+- Fixed `epub2` output not being considered as HTML format (thanks, @flipacholas, #2145).
+
 ## MINOR CHANGES
 
 - When the inline R code cannot be correctly parsed, the error message will show the original code in addition to the parsing error, which can make it easier to identify the code error in the source document (thanks, @AlbertLei, #2141).
@@ -15,10 +19,6 @@
 - Duplicate chunk label error will now be thrown with code chunks using `code` or `file` chunk options (thanks, @mine-cetinkaya-rundel, #2126).
 
 - Simplified R Markdown's inline code parser (thanks, @atusy, #2143).
-
-## BUG FIXES
-
-- Fixed epub2 output not being considered as HTML format (thanks, @flipacholas, #2145).
 
 # CHANGES IN knitr VERSION 1.39
 
