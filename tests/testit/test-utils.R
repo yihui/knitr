@@ -233,3 +233,9 @@ assert('comment_out() add prefix and newlines if asked', {
   (comment_out("a", prefix = "$") %==% "$ a\n")
   (comment_out("a", prefix = NULL) %==% "a\n")
 })
+
+assert('remove_urls() removes the link', {
+  (remove_urls(c('[a](b)', '[a b](c)')) %==% c('a', 'a b'))
+  (remove_urls('a [b](c) d.') %==% 'a b d.')
+  (remove_urls('a [b](c) d [e f+g](h) i.') %==% 'a b d e f+g i.')
+})
