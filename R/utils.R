@@ -1061,7 +1061,7 @@ make_unique = function(x) {
 image_uri = function(f) xfun::base64_uri(f)
 
 # Change all "[label](url)" to "label"
-remove_urls <- function(x) {
+remove_urls = function(x) {
   # regex adapted from https://dev.to/mattkenefick/regex-convert-markdown-links-to-html-anchors-f7j
   gsub("\\[([^\\]]+)\\]\\(([^\\)]+)\\)", "\\1", x, perl = TRUE)
 }
