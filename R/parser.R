@@ -32,11 +32,15 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       # remove the optional prefix % in code in Rtex mode
       g = strip_block(g, patterns$chunk.code)
       params.src = if (group_pattern(chunk.begin)) {
-        stringr::str_trim(gsub(chunk.begin, '\\1', g[1]))
+        extract_params_src(chunk.begin, g[1])
       } else ''
       parse_block(g[-1], g[1], params.src, markdown_mode)
     } else parse_inline(g, patterns)
   })
+}
+
+extract_params_src = function(chunk.begin, line) {
+  trimws(gsub(chunk.begin, '\\1', line))
 }
 
 #' The code manager to manage code in all chunks
@@ -75,10 +79,10 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   engine = 'r'
   # consider the syntax ```{engine, opt=val} for chunk headers
   if (markdown_mode) {
-    engine = sub('^([a-zA-Z0-9_]+).*$', '\\1', params)
-    params = sub('^([a-zA-Z0-9_]+)', '', params)
+    engine = get_chunk_engine(params)
+    params = get_chunk_params(params)
   }
-  params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
+  params = clean_empty_params(params) # rm empty options
   # turn ```{engine} into ```{r, engine="engine"}
   if (tolower(engine) != 'r') {
     params = sprintf('%s, engine="%s"', params, engine)
@@ -142,6 +146,18 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   }
 
   structure(list(params = params, params.src = params.src), class = 'block')
+}
+
+get_chunk_engine = function(params) {
+  sub('^([a-zA-Z0-9_]+).*$', '\\1', params)
+}
+
+get_chunk_params = function(params) {
+  sub('^([a-zA-Z0-9_]+)', '', params)
+}
+
+clean_empty_params = function(params) {
+  gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
 }
 
 # autoname for unnamed chunk
@@ -694,4 +710,57 @@ inline_expr = function(code, syntax) {
     md = '`r %s`', rst = ':r:`%s`', asciidoc = '`r %s`', textile = '@r %s@',
     stop('Unknown syntax ', pat)
   ), code)
+}
+
+convert_chunk_header = function(input, overwrite = FALSE, type = c("multiline", "yaml")) {
+
+  if (!tolower(xfun::file_ext(input)) %in% c("rmd", "qmd"))
+    stop("Conversion can only be done for .Rmd or .qmd files.")
+
+  type = match.arg(type)
+
+  if (type == "yaml") stop("Convertion to YAML chunk header not implemented yet")
+
+  # extract fenced header information
+  text = xfun::read_utf8(input)
+  md_pattern = all_patterns[["md"]]
+  chunk.begin = md_pattern$chunk.begin
+  chunk_start = grep(chunk.begin, text)
+  params.src = extract_params_src(chunk.begin, text[chunk_start])
+  engine = get_chunk_engine(params.src)
+  params.src = get_chunk_params(params.src)
+  params.src = clean_empty_params(params.src)
+  params.src = trimws(clean_empty_params(params.src))
+  params.parsed = lapply(params.src, parse_params, label = FALSE)
+
+  # Clean old chunk keeping only engine
+  fences = regexpr("`{3,}\\{", text[chunk_start])
+  new_fences = paste0(
+    regmatches(text[chunk_start], fences), engine, rep_len("}", length(chunk_start))
+  )
+  text[chunk_start] = new_fences
+
+  # format new chunk header
+  params_formatted = lapply(params.parsed, function(x) sprintf("#| %s = %s,", names(x), x))
+  # remove trailing for last element
+  params_formatted = lapply(params_formatted, function(p) {
+    p[length(p)] = gsub(",$", "", p[length(p)])
+    p
+  })
+
+  # Insert new chunk header
+  new_text = text
+  nb_added = 0
+  for (i in seq_along(chunk_start)) {
+    chunk_header = params_formatted[[i]]
+    new_text = append(new_text, chunk_header, after = chunk_start[i] + nb_added)
+    nb_added = nb_added + length(chunk_header)
+  }
+
+  if (overwrite)
+    output = input
+  else
+    output = xfun::with_ext(paste(xfun::sans_ext(input), "new", sep = "_"), xfun::file_ext(input))
+
+  xfun::write_utf8(new_text, output)
 }
