@@ -741,7 +741,13 @@ convert_chunk_header = function(input, overwrite = FALSE, type = c("multiline", 
   text[chunk_start] = new_fences
 
   # format new chunk header
-  params_formatted = lapply(params.parsed, function(x) sprintf("#| %s = %s,", names(x), x))
+  params_formatted = lapply(params.parsed, function(x) {
+    res = c()
+    for (i in seq_along(x)) {
+      res[i] = sprintf("#| %s = %s,", names(x[i]), deparse(x[[i]], nlines = 1))
+    }
+    res
+  })
   # remove trailing for last element
   params_formatted = lapply(params_formatted, function(p) {
     p[length(p)] = gsub(",$", "", p[length(p)])
@@ -763,4 +769,6 @@ convert_chunk_header = function(input, overwrite = FALSE, type = c("multiline", 
     output = xfun::with_ext(paste(xfun::sans_ext(input), "new", sep = "_"), xfun::file_ext(input))
 
   xfun::write_utf8(new_text, output)
+
+  output
 }
