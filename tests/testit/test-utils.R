@@ -238,4 +238,5 @@ assert('remove_urls() removes the link', {
   (remove_urls(c('[a](b)', '[a b](c)')) %==% c('a', 'a b'))
   (remove_urls('a [b](c) d.') %==% 'a b d.')
   (remove_urls('a [b](c) d [e f+g](h) i.') %==% 'a b d e f+g i.')
+  (remove_urls('a [b](c) `[d](e)` f.') %==% 'a b `[d](e)` f.')
 })
