@@ -260,15 +260,15 @@ partition_chunk = function(engine, code) {
   # mask out empty blocks
   if (length(code) == 0) return(res)
 
-  char = comment_chars[[engine]] %n% '#'
-  s1 = paste0(char[[1]], '| ')
-  s2 = ifelse(length(char) > 1, char[[2]], '')
+  opt_comment = get_option_comment(engine)
+  s1 = opt_comment$start
+  s2 = opt_comment$end
 
   # check for option comments
   i1 = startsWith(code, s1)
   i2 = endsWith(trimws(code, 'right'), s2)
   # if "commentChar| " is not found, try "#| " instead
-  if (!i1[1] && !identical(char, '#')) {
+  if (!i1[1] && !identical(s1, '#|')) {
     s1 = '#| '; s2 = ''
     i1 = startsWith(code, s1); i2 = TRUE
   }
@@ -315,6 +315,13 @@ partition_chunk = function(engine, code) {
   }
 
   list(options = meta, src = src, code = code)
+}
+
+get_option_comment = function(engine) {
+  char = comment_chars[[engine]] %n% '#'
+  s1 = paste0(char[[1]], '| ')
+  s2 = ifelse(length(char) > 1, char[[2]], '')
+  list(start = s1, end = s2)
 }
 
 print.block = function(x, ...) {
@@ -712,10 +719,7 @@ inline_expr = function(code, syntax) {
   ), code)
 }
 
-convert_chunk_header = function(input, overwrite = FALSE, type = c("multiline", "yaml")) {
-
-  if (!tolower(xfun::file_ext(input)) %in% c("rmd", "qmd"))
-    stop("Conversion can only be done for .Rmd or .qmd files.")
+convert_chunk_header = function(input, output = NULL, type = c("multiline", "yaml")) {
 
   type = match.arg(type)
 
@@ -723,52 +727,44 @@ convert_chunk_header = function(input, overwrite = FALSE, type = c("multiline", 
 
   # extract fenced header information
   text = xfun::read_utf8(input)
-  md_pattern = all_patterns[["md"]]
-  chunk.begin = md_pattern$chunk.begin
-  chunk_start = grep(chunk.begin, text)
-  params.src = extract_params_src(chunk.begin, text[chunk_start])
-  engine = get_chunk_engine(params.src)
-  params.src = get_chunk_params(params.src)
-  params.src = clean_empty_params(params.src)
-  params.src = trimws(clean_empty_params(params.src))
-  params.parsed = lapply(params.src, parse_params, label = FALSE)
+  pattern = detect_pattern(text, tolower(xfun::file_ext(input)))
+  chunk_begin = all_patterns[[pattern]]$chunk.begin
+  chunk_start = grep(chunk_begin, text)
 
-  # Clean old chunk keeping only engine
-  fences = regexpr("`{3,}\\{", text[chunk_start])
-  new_fences = paste0(
-    regmatches(text[chunk_start], fences), engine, rep_len("}", length(chunk_start))
-  )
-  text[chunk_start] = new_fences
-
-  # format new chunk header
-  params_formatted = lapply(params.parsed, function(x) {
-    res = c()
-    for (i in seq_along(x)) {
-      res[i] = sprintf("#| %s = %s,", names(x[i]), deparse(x[[i]], nlines = 1))
-    }
-    res
-  })
-  # remove trailing for last element
-  params_formatted = lapply(params_formatted, function(p) {
-    p[length(p)] = gsub(",$", "", p[length(p)])
-    p
-  })
-
-  # Insert new chunk header
+  nb_added = 0L
   new_text = text
-  nb_added = 0
-  for (i in seq_along(chunk_start)) {
-    chunk_header = params_formatted[[i]]
-    new_text = append(new_text, chunk_header, after = chunk_start[i] + nb_added)
-    nb_added = nb_added + length(chunk_header)
+  for (i in chunk_start) {
+    chunk_head_src = extract_params_src(chunk_begin, text[i])
+    engine = get_chunk_engine(chunk_head_src)
+    params_src = get_chunk_params(chunk_head_src)
+    # if no params nothing to format
+    if (params_src == '') next
+    params_string = clean_empty_params(params_src)
+    params_string = trimws(clean_empty_params(params_string))
+
+    # Clean old chunk keeping only engine
+    new_text[i + nb_added] = gsub(params_src, '', text[i], fixed = TRUE)
+
+    # format new chunk header
+    opt_chars = get_option_comment(engine)
+    params_formatted = strwrap(params_string,
+                               prefix = opt_chars$start,
+                               width = 0.5 * getOption("width"))
+    if (nzchar(opt_chars$end))
+      params_formatted = paste0(params_formatted, opt_chars$end)
+
+    # Insert new chunk header
+    new_text = append(new_text, params_formatted, after = i + nb_added)
+    nb_added = nb_added + length(params_formatted)
   }
 
-  if (overwrite)
-    output = input
-  else
-    output = xfun::with_ext(paste(xfun::sans_ext(input), "new", sep = "_"), xfun::file_ext(input))
-
+  if (is.null(output)) return(new_text)
+  # otherwise write to file
+  if (is.function(output))
+    output = output(input)
+  else if (!is.character(output))
+    stop("'output' should be NULL, a function taking input as argument or a filename")
   xfun::write_utf8(new_text, output)
-
   output
+
 }
