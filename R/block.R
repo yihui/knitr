@@ -91,6 +91,7 @@ call_block = function(block) {
     if (params$engine == 'R' && isFALSE(params$cache.comments)) {
       content[['code']] = parse_only(content[['code']])
     }
+    saveRDS(content, paste0('cache_', Sys.time(), '.rds'))
     hash = paste(valid_path(params$cache.path, label), digest(content), sep = '_')
     params$hash = hash
     if (cache$exists(hash, params$cache.lazy) &&
