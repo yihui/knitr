@@ -124,7 +124,14 @@ hook_plot_tex = function(x, options) {
     if (usesub) {
       sub1 = sprintf('\\subfloat[%s%s]{', subcap, create_label(lab, '-', fig.cur, latex = TRUE))
       sub2 = '}'
-      sep.cur = fig.sep[fig.cur]; if (is.na(sep.cur)) sep.cur = NULL
+      sep.cur = fig.sep[fig.cur]
+      # when there are more separators than plots, add the first separator
+      # before the first plot, then the (i+1)th separator to the i-th plot
+      if (length(fig.sep) > fig.num) {
+        if (plot1) sub1 = paste0(fig.sep[1], sub1)
+        sep.cur = fig.sep[fig.cur + 1]
+      }
+      if (is.na(sep.cur)) sep.cur = NULL
     }
 
     # If pic is standalone/last in set:

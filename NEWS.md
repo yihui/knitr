@@ -2,7 +2,17 @@
 
 ## NEW FEATURES
 
-- Add support for a `php` engine like other engine for interpreted language. It will call `php -r <code>`, with `<code>` being the chunk content (thanks, @ralmond, #2144).
+- Added support for a `php` engine like other engines for interpreted languages. It will call `php -r <code>`, with `<code>` being the chunk content (thanks, @ralmond, #2144).
+
+- Per suggestion of @jakubkaczor (#2116) and discussion with @pedropark99 (#2140), the chunk option `fig.sep` can also be used to add LaTeX code before the first sub-figure now. Previously this option can only be used for adding LaTeX code *after* each sub-figure.
+
+- `knitr::kable()` supports `tabularx` and `xltabular` environments now for LaTeX tables, e.g., `knitr::kable(head(iris), format = 'latex', tabular = 'tabularx')` (thanks, @amarakon, #2138).
+
+## BUG FIXES
+
+- Fixed `epub2` output not being considered as HTML format (thanks, @flipacholas, #2145).
+
+- `kable(format = 'pipe')` calculates column widths correctly now if any text columns contain Markdown hyperlinks (thanks, @jacobbien, #2148).
 
 ## MINOR CHANGES
 
