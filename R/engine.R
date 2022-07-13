@@ -134,8 +134,9 @@ eng_interpreted = function(options) {
     )
   } else paste(switch(
     engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -ep',
-    mysql = '-e', node = '-e', octave = '--eval', perl = '-E', psql = '-c',
-    python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
+    mysql = '-e', node = '-e', octave = '--eval', perl = '-E', php = '-r',
+    psql = '-c', python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c',
+    NULL
   ), shQuote(one_string(options$code)))
 
   opts = get_engine_opts(options$engine.opts, engine)
@@ -873,7 +874,7 @@ eng_embed = function(options) {
 local({
   for (i in c(
     'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'lein', 'mysql',
-    'node', 'octave', 'perl', 'psql', 'Rscript', 'ruby', 'sas',
+    'node', 'octave', 'perl', 'php', 'psql', 'Rscript', 'ruby', 'sas',
     'scala', 'sed', 'sh', 'stata', 'zsh'
   )) knit_engines$set(setNames(list(eng_interpreted), i))
 })
