@@ -760,27 +760,18 @@ convert_chunk_header = function(input, output = NULL, type = c("multiline", "wra
 
     } else if (type == "multiline") {
 
-      # format new chunk header
-      parse_data = getParseData(parse(text = paste('alist(', quote_label(params_src), ')')))
-      parse_data = subset(parse_data, terminal)
-      # remove alist part
-      parse_data = parse_data[-c(1:2, nrow(parse_data)), ]
+      params_parsed = parse_params(params_string, label = FALSE)
 
-      commas = parse_data[parse_data$token == "','", ]$col1
+      params_formatted = mapply(
+        function(x, y) {
+          sprintf("%s%s = %s,", comment_prefix, x, deparsed_string(y))
+        },
+        x = names(params_parsed), y = params_parsed,
+        USE.NAMES = FALSE)
 
-      lines = c()
-      for (j in commas) {
-        # process parsed data in blocks split by comma
-        lines = c(lines, paste0(getParseText(parse_data, subset(parse_data, col2 <= j)$id), collapse = ""))
-        parse_data = parse_data[parse_data$col2 > j, ]
-      }
-      # handle the last block
-      params_formatted = c(lines, paste0(parse_data$text, collapse = ""))
-
-      # add space around =
-      params_formatted = gsub("^([^\\s]+)\\s?=\\s?(.*)$", "\\1 = \\2", params_formatted)
-      # add comment prefix
-      params_formatted = paste0(comment_prefix, params_formatted)
+      # remove trailing for last element
+      last = length(params_formatted)
+      params_formatted[last] = gsub(",$", "", params_formatted[last])
 
     } else {
       # YAML
@@ -803,4 +794,9 @@ convert_chunk_header = function(input, output = NULL, type = c("multiline", "wra
   xfun::write_utf8(new_text, output)
   output
 
+}
+
+# TODO: when R 4.0.0 is minimal version, switch to deparse1()
+deparsed_string = function(expr) {
+  paste(deparse(expr, 500), collapse = " ")
 }
