@@ -740,6 +740,7 @@ convert_chunk_header = function(input,
   nb_added = 0L
   new_text = text
   for (i in chunk_start) {
+    indent = get_chunk_indent(text[i])
     chunk_head_src = extract_params_src(chunk_begin, text[i])
     engine = get_chunk_engine(chunk_head_src)
     params_src = get_chunk_params(chunk_head_src)
@@ -749,7 +750,6 @@ convert_chunk_header = function(input,
     params_string = trimws(clean_empty_params(params_string))
 
     opt_chars = get_option_comment(engine)
-    indent = get_chunk_indent(chunk_head_src)
     comment_prefix = paste0(indent, opt_chars$start)
 
     # Clean old chunk keeping only engine
