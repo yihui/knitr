@@ -391,13 +391,13 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
   }
-  l = if (prod(dim(x)) > 0) apply(x, 2, function(z) max(nchar(z, type = 'width'), na.rm = TRUE))
+  l = if (prod(dim(x)) > 0) apply(x, 2, function(z) max(nchar(remove_urls(z), type = 'width'), na.rm = TRUE))
   cn = colnames(x)
   if (length(cn) > 0) {
     cn[is.na(cn)] = "NA"
     if (sep.col == '|') cn = gsub('\\|', '&#124;', cn)
     if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
-    l = pmax(if (length(l) == 0) 0 else l, nchar(cn, type = 'width'))
+    l = pmax(if (length(l) == 0) 0 else l, nchar(remove_urls(cn), type = 'width'))
   }
   align = attr(x, 'align')
   padding = padding * if (length(align) == 0) 2 else {
