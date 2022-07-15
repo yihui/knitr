@@ -719,7 +719,7 @@ inline_expr = function(code, syntax) {
   ), code)
 }
 
-convert_chunk_header = function(input, output = NULL, type = c("multiline", "yaml")) {
+convert_chunk_header = function(input, output = NULL, type = c("multiline", "wrap", "yaml")) {
 
   type = match.arg(type)
 
@@ -730,6 +730,8 @@ convert_chunk_header = function(input, output = NULL, type = c("multiline", "yam
   pattern = detect_pattern(text, xfun::file_ext(input))
   chunk_begin = all_patterns[[pattern]]$chunk.begin
   chunk_start = grep(chunk_begin, text)
+  nb_added = 0L
+  new_text = text
 
   nb_added = 0L
   new_text = text
@@ -742,14 +744,36 @@ convert_chunk_header = function(input, output = NULL, type = c("multiline", "yam
     params_string = clean_empty_params(params_src)
     params_string = trimws(clean_empty_params(params_string))
 
-    # Clean old chunk keeping only engine
-    new_text[i + nb_added] = gsub(params_src, '', text[i], fixed = TRUE)
+    if (type == "wrap") {
+      params_formatted = strwrap(params_string, prefix = opt_chars$start)
 
-    # format new chunk header
-    opt_chars = get_option_comment(engine)
-    params_formatted = strwrap(params_string,
-                               prefix = opt_chars$start,
-                               width = 0.5 * getOption("width"))
+    } else if (type == "multiline") {
+
+      # Clean old chunk keeping only engine
+      new_text[i + nb_added] = gsub(params_src, '', text[i], fixed = TRUE)
+      # format new chunk header
+      opt_chars = get_option_comment(engine)
+
+      parse_data = getParseData(parse(text = paste('alist(', quote_label(params_src), ')')))
+      parse_data = subset(parse_data, terminal)
+      # remove alist part
+      parse_data = parse_data[-c(1:2, nrow(parse_data)), ]
+
+      commas = parse_data[parse_data$token == "','", ]$col1
+
+      lines = c()
+      for (j in commas) {
+        # process parsed data in blocks split by comma
+        lines = c(lines, paste0(getParseText(parse_data, subset(parse_data, col2 <= j)$id), collapse = ""))
+        parse_data = parse_data[parse_data$col2 > j, ]
+      }
+      # handle the last block
+      params_formatted = c(lines, paste0(parse_data$text, collapse = ""))
+
+    } else {
+      # YAML
+    }
+
     if (nzchar(opt_chars$end))
       params_formatted = paste0(params_formatted, opt_chars$end)
 
