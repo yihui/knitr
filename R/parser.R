@@ -730,8 +730,6 @@ convert_chunk_header = function(input, output = NULL, type = c("multiline", "wra
   pattern = detect_pattern(text, xfun::file_ext(input))
   chunk_begin = all_patterns[[pattern]]$chunk.begin
   chunk_start = grep(chunk_begin, text)
-  nb_added = 0L
-  new_text = text
 
   nb_added = 0L
   new_text = text
