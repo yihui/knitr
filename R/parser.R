@@ -727,7 +727,7 @@ convert_chunk_header = function(input, output = NULL, type = c("multiline", "yam
 
   # extract fenced header information
   text = xfun::read_utf8(input)
-  pattern = detect_pattern(text, tolower(xfun::file_ext(input)))
+  pattern = detect_pattern(text, xfun::file_ext(input))
   chunk_begin = all_patterns[[pattern]]$chunk.begin
   chunk_start = grep(chunk_begin, text)
 
