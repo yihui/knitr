@@ -94,7 +94,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   params = parse_params(params)
 
   # remove indent (and possibly markdown blockquote >) from code
-  if (nzchar(spaces <- gsub('^([\t >]*).*', '\\1', header))) {
+  if (nzchar(spaces <- get_chunk_indent(header))) {
     params$indent = spaces
     code = gsub(sprintf('^%s', spaces), '', code)
     # in case the trailing spaces of the indent string are trimmed on certain
@@ -146,6 +146,10 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   }
 
   structure(list(params = params, params.src = params.src), class = 'block')
+}
+
+get_chunk_indent = function(header) {
+  gsub('^([\t >]*).*', '\\1', header)
 }
 
 get_chunk_engine = function(params) {
@@ -742,16 +746,21 @@ convert_chunk_header = function(input, output = NULL, type = c("multiline", "wra
     params_string = clean_empty_params(params_src)
     params_string = trimws(clean_empty_params(params_string))
 
+    opt_chars = get_option_comment(engine)
+    indent = get_chunk_indent(chunk_head_src)
+    comment_prefix = paste0(indent, opt_chars$start)
+
+    # Clean old chunk keeping only engine
+    new_text[i + nb_added] = gsub(params_src, '', text[i], fixed = TRUE)
+
+    # format new chunk
+
     if (type == "wrap") {
-      params_formatted = strwrap(params_string, prefix = opt_chars$start)
+      params_formatted = strwrap(params_string, prefix = comment_prefix)
 
     } else if (type == "multiline") {
 
-      # Clean old chunk keeping only engine
-      new_text[i + nb_added] = gsub(params_src, '', text[i], fixed = TRUE)
       # format new chunk header
-      opt_chars = get_option_comment(engine)
-
       parse_data = getParseData(parse(text = paste('alist(', quote_label(params_src), ')')))
       parse_data = subset(parse_data, terminal)
       # remove alist part
@@ -767,6 +776,11 @@ convert_chunk_header = function(input, output = NULL, type = c("multiline", "wra
       }
       # handle the last block
       params_formatted = c(lines, paste0(parse_data$text, collapse = ""))
+
+      # add space around =
+      params_formatted = gsub("^([^\\s]+)\\s?=\\s?(.*)$", "\\1 = \\2", params_formatted)
+      # add comment prefix
+      params_formatted = paste0(comment_prefix, params_formatted)
 
     } else {
       # YAML
