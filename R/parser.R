@@ -724,7 +724,7 @@ inline_expr = function(code, syntax) {
 }
 
 convert_chunk_header = function(input,
-                                output = NULL, type = c("multiline", "wrap", "yaml")
+                                output = NULL, type = c("multiline", "wrap", "yaml"),
                                 width = 0.9 * getOption("width")) {
 
   type = match.arg(type)
