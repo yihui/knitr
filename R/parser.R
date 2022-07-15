@@ -723,7 +723,9 @@ inline_expr = function(code, syntax) {
   ), code)
 }
 
-convert_chunk_header = function(input, output = NULL, type = c("multiline", "wrap", "yaml")) {
+convert_chunk_header = function(input,
+                                output = NULL, type = c("multiline", "wrap", "yaml")
+                                width = 0.9 * getOption("width")) {
 
   type = match.arg(type)
 
@@ -756,7 +758,9 @@ convert_chunk_header = function(input, output = NULL, type = c("multiline", "wra
     # format new chunk
 
     if (type == "wrap") {
-      params_formatted = strwrap(params_string, prefix = comment_prefix)
+      params_formatted = strwrap(params_string,
+                                 prefix = comment_prefix,
+                                 width = width)
 
     } else if (type == "multiline") {
 
