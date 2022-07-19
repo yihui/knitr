@@ -321,27 +321,11 @@ partition_chunk = function(engine, code) {
   list(options = meta, src = src, code = code)
 }
 
-get_option_comment = function(engine, pattern = "md") {
-  if (engine == '') {
-    s2 = ''
-    # use pattern as fallback
-    s1 = switch(
-      pattern,
-      tex = ,
-      rnw = '%',
-      brew = {s2 <<- '%>'; '<%\\#'},
-      html = {s2 <<- '-->'; '<!--'},
-      rst = '..',
-      asciidoc = '//',
-      textile = '###.',
-      md = '#'
-    )
-  } else {
-    char = comment_chars[[engine]] %n% '#'
-    s1 = char[[1]]
-    s2 = ifelse(length(char) > 1, char[[2]], '')
-  }
-  list(start = paste0(s1, '| '), end = s2)
+get_option_comment = function(engine) {
+  char = comment_chars[[engine]] %n% '#'
+  s1 = paste0(char[[1]], '| ')
+  s2 = ifelse(length(char) > 1, char[[2]], '')
+  list(start = s1, end = s2)
 }
 
 print.block = function(x, ...) {
@@ -830,7 +814,6 @@ convert_chunk_header = function(input,
   # extract fenced header information
   text = xfun::read_utf8(input)
   pattern = detect_pattern(text, xfun::file_ext(input))
-  markdown_mode = pattern == 'md'
   chunk_begin = all_patterns[[pattern]]$chunk.begin
   chunk_start = grep(chunk_begin, text)
 
@@ -841,21 +824,15 @@ convert_chunk_header = function(input,
     # Transform each chunk one by one
     indent = get_chunk_indent(text[i])
     chunk_head_src = extract_params_src(chunk_begin, text[i])
-    engine = if (markdown_mode)
-      get_chunk_engine(chunk_head_src)
-    else
-      ''
-    params_src = if (markdown_mode)
-      get_chunk_params(chunk_head_src)
-    else
-      chunk_head_src
+    engine = get_chunk_engine(chunk_head_src)
+    params_src = get_chunk_params(chunk_head_src)
     # if no params nothing to format
     if (params_src == '') next
     params_string = clean_empty_params(params_src)
     params_string = trimws(clean_empty_params(params_string))
 
     # Select the correct prefix char (e.g `#|`)
-    opt_chars = get_option_comment(engine, pattern)
+    opt_chars = get_option_comment(engine)
     comment_prefix = paste0(indent, opt_chars$start)
 
     # Clean old chunk keeping only engine
