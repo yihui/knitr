@@ -742,7 +742,7 @@ inline_expr = function(code, syntax) {
 #'   \code{\link[base:strwrap]{base::strwrap()}}. \code{"yaml"} is currently not
 #'   implemented and here as a placeholder for future support of YAML in-chunk
 #'   syntax for options.
-#' @param wrap_width Integer value passed to
+#' @param wrap_width Numeric value passed to
 #'   \code{\link[base:strwrap]{base::strwrap()}} used in \code{type = "wrap"}
 #'   and \code{type = "multiline"}. If set to \code{FALSE} deactivate the
 #'   wrapping (for \code{type = "multiline"} only).
@@ -770,22 +770,38 @@ inline_expr = function(code, syntax) {
 #' ```
 #' }
 #'
-#'\item Passing option part from header in-chunk with several line if wrapping is
-#'needed. This corresponds to \code{convert_chunk_header(type = "wrap")}
-#'\preformatted{
-#'```\{r\}
-#'#| echo = FALSE, fig.width = 10
-#'```
-#'}
-#'\item Passing options key value pairs in-chunk using YAML syntax. Values are no
-#'more R expression but valid YAML syntax. This corresponds to
-#'\code{convert_chunk_header(type = "yaml")} (not implement yet).
-#'\preformatted{```\{r\}
-#'#| echo: false,
-#'#| fig.width: 10
-#'```
-#'}
-#'}
+#' \item Passing option part from header in-chunk with several line if wrapping is
+#' needed. This corresponds to \code{convert_chunk_header(type = "wrap")}
+#' \preformatted{
+#' ```\{r\}
+#' #| echo = FALSE, fig.width = 10
+#' ```
+#' }
+#' \item Passing options key value pairs in-chunk using YAML syntax. Values are no
+#' more R expression but valid YAML syntax. This corresponds to
+#' \code{convert_chunk_header(type = "yaml")} (not implement yet).
+#' \preformatted{```\{r\}
+#' #| echo: false,
+#' #| fig.width: 10
+#' ```
+#' }
+#' }
+#' @examples
+#' knitr_example = function(...) system.file('examples', ..., package = 'knitr')
+#' # Convert a document for multiline type
+#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'))
+#' # Convert a document for wrap type
+#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap")
+#' # Reduce default wrapping width
+#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap", wrap_width = 0.6 * getOption('width'))
+#' \dontrun{
+#' # Explicitly name the output
+#' convert_chunk_header('test.Rmd', output = 'test2.Rmd')
+#' # Overwrite the input
+#' convert_chunk_header('test.Rmd', output = identity)
+#' # Use a custom function to name the output
+#' convert_chunk_header('test.Rmd', output = \(f) sprintf('%s-new.%s', xfun::sans_ext(f), xfun::file_ext(f)))
+#' }
 #' @export
 convert_chunk_header = function(input,
                                 output = NULL, type = c("multiline", "wrap", "yaml"),
@@ -824,7 +840,7 @@ convert_chunk_header = function(input,
 
     # format new chunk
     if (type == "wrap") {
-      if (!is.integer(wrap_width))
+      if (!is.numeric(wrap_width))
         stop('With `type = "wrap"`, `width` needs to be an integer.')
 
       # Simple line wrapping of R code

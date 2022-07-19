@@ -28,7 +28,7 @@ header options on several line using
 implemented and here as a placeholder for future support of YAML in-chunk
 syntax for options.}
 
-\item{wrap_width}{Integer value passed to
+\item{wrap_width}{Numeric value passed to
 \code{\link[base:strwrap]{base::strwrap()}} used in \code{type = "wrap"}
 and \code{type = "multiline"}. If set to \code{FALSE} deactivate the
 wrapping (for \code{type = "multiline"} only).}
@@ -79,5 +79,25 @@ more R expression but valid YAML syntax. This corresponds to
 #| fig.width: 10
 ```
 }
+}
+}
+
+\examples{
+knitr_example = function(...) system.file("examples", ..., package = "knitr")
+# Convert a document for multiline type
+convert_chunk_header(knitr_example("knitr-minimal.Rmd"))
+# Convert a document for wrap type
+convert_chunk_header(knitr_example("knitr-minimal.Rmd"), type = "wrap")
+# Reduce default wrapping width
+convert_chunk_header(knitr_example("knitr-minimal.Rmd"), type = "wrap",
+    wrap_width = 0.6 * getOption("width"))
+\dontrun{
+# Explicitly name the output
+convert_chunk_header("test.Rmd", output = "test2.Rmd")
+# Overwrite the input
+convert_chunk_header("test.Rmd", output = identity)
+# Use a custom function to name the output
+convert_chunk_header("test.Rmd", output = function(f) sprintf("\%s-new.\%s",
+    xfun::sans_ext(f), xfun::file_ext(f)))
 }
 }
