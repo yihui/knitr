@@ -814,6 +814,7 @@ convert_chunk_header = function(input,
   # extract fenced header information
   text = xfun::read_utf8(input)
   pattern = detect_pattern(text, xfun::file_ext(input))
+  markdown_mode = pattern == 'md'
   chunk_begin = all_patterns[[pattern]]$chunk.begin
   chunk_start = grep(chunk_begin, text)
 
@@ -824,8 +825,14 @@ convert_chunk_header = function(input,
     # Transform each chunk one by one
     indent = get_chunk_indent(text[i])
     chunk_head_src = extract_params_src(chunk_begin, text[i])
-    engine = get_chunk_engine(chunk_head_src)
-    params_src = get_chunk_params(chunk_head_src)
+    engine = if (markdown_mode)
+      get_chunk_engine(chunk_head_src)
+    else
+      'r'
+    params_src = if (markdown_mode)
+      get_chunk_params(chunk_head_src)
+    else
+      chunk_head_src
     # if no params nothing to format
     if (params_src == '') next
     params_string = clean_empty_params(params_src)
