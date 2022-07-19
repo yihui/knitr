@@ -814,6 +814,8 @@ convert_chunk_header = function(input,
   # extract fenced header information
   text = xfun::read_utf8(input)
   pattern = detect_pattern(text, xfun::file_ext(input))
+  # no code chunk in brew file
+  if (pattern == 'brew') return()
   markdown_mode = pattern == 'md'
   chunk_begin = all_patterns[[pattern]]$chunk.begin
   chunk_start = grep(chunk_begin, text)
