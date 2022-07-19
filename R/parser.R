@@ -725,11 +725,11 @@ inline_expr = function(code, syntax) {
 
 convert_chunk_header = function(input,
                                 output = NULL, type = c("multiline", "wrap", "yaml"),
-                                width = 0.9 * getOption("width")) {
+                                wrap_width = 0.9 * getOption("width")) {
 
   type = match.arg(type)
 
-  if (type == "yaml") stop("Convertion to YAML chunk header not implemented yet")
+  if (type == "yaml") stop("Convertion to YAML chunk header not implemented yet.")
 
   # extract fenced header information
   text = xfun::read_utf8(input)
@@ -737,9 +737,11 @@ convert_chunk_header = function(input,
   chunk_begin = all_patterns[[pattern]]$chunk.begin
   chunk_start = grep(chunk_begin, text)
 
+  # counter for inserted lines
   nb_added = 0L
   new_text = text
   for (i in chunk_start) {
+    # Transform each chunk one by one
     indent = get_chunk_indent(text[i])
     chunk_head_src = extract_params_src(chunk_begin, text[i])
     engine = get_chunk_engine(chunk_head_src)
@@ -749,6 +751,7 @@ convert_chunk_header = function(input,
     params_string = clean_empty_params(params_src)
     params_string = trimws(clean_empty_params(params_string))
 
+    # Select the correct prefix char (e.g `#|`)
     opt_chars = get_option_comment(engine)
     comment_prefix = paste0(indent, opt_chars$start)
 
@@ -756,19 +759,22 @@ convert_chunk_header = function(input,
     new_text[i + nb_added] = gsub(params_src, '', text[i], fixed = TRUE)
 
     # format new chunk
-
     if (type == "wrap") {
+      if (!is.integer(wrap_width))
+        stop('With `type = "wrap"`, `width` needs to be an integer.')
+
+      # Simple line wrapping of R code
       params_formatted = strwrap(params_string,
                                  prefix = comment_prefix,
-                                 width = width)
+                                 width = wrap_width)
 
     } else if (type == "multiline") {
+      # One option per line of the form `key = value,`
 
       params_parsed = parse_params(params_string, label = FALSE)
-
       params_formatted = mapply(
         function(x, y) {
-          sprintf("%s%s = %s,", comment_prefix, x, deparsed_string(y))
+          sprintf("%s = %s,", x, deparsed_string(y))
         },
         x = names(params_parsed), y = params_parsed,
         USE.NAMES = FALSE)
@@ -777,6 +783,12 @@ convert_chunk_header = function(input,
       last = length(params_formatted)
       params_formatted[last] = gsub(",$", "", params_formatted[last])
 
+      # wrap long single line and add prefix
+      if (isFALSE(wrap_width))
+        params_formatted = paste0(comment_prefix, params_formatted)
+      else
+        params_formatted = strwrap(params_formatted, prefix = comment_prefix,
+                                   width = wrap_width)
     } else {
       # YAML
     }
