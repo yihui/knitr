@@ -723,6 +723,70 @@ inline_expr = function(code, syntax) {
   ), code)
 }
 
+
+#' Convert old chunk option syntax to new in-chunk syntax
+#'
+#' This function is a helper function for user to simplify the conversion of
+#' existing documents using usual \pkg{knitr} chunk option syntax to new syntax.
+#'
+#' @param input File path to the document with code chunks to convert.
+#' @param output The default \code{NULL} will output to console. Other values
+#'   can be a file path to write the converted content into or a function which
+#'   takes \code{input} as argument and return a file path to write into (e.g
+#'   \code{output = identity} to overwrite the input file.)
+#' @param type This determine how the in-chunk options will be formatted.
+#'   \code{"mutiline"}, the default, will write each chunk option on a separate
+#'   line. Long chunk option value can be on several line, use \code{wrap_with =
+#'   FALSE} to keep one line per option only.  \code{"wrap"} will wrap the chunk
+#'   header options on several line using
+#'   \code{\link[base:strwrap]{base::strwrap()}}. \code{"yaml"} is currently not
+#'   implemented and here as a placeholder for future support of YAML in-chunk
+#'   syntax for options.
+#' @param wrap_width Integer value passed to
+#'   \code{\link[base:strwrap]{base::strwrap()}} used in \code{type = "wrap"}
+#'   and \code{type = "multiline"}. If set to \code{FALSE} deactivate the
+#'   wrapping (for \code{type = "multiline"} only).
+#'
+#' @return A character vector of converted \code{input} when \code{output =
+#'   NULL}. The output file path with converted content otherwise.
+#' @note Learn more about the new chunk option syntax in \url{https://yihui.org/en/2022/01/knitr-news/}
+#'
+#' @section About \pkg{knitr} option syntax:
+#'
+#' Historical chunk option syntax have chunk option in the chunk header using
+#' valid R syntax. This is an example for \verb{.Rmd} document
+#' \preformatted{
+#' ```\{r, echo = FALSE, fig.width: 10\}
+#' ```
+#' }
+#'
+#' New syntax allows to pass option inside the chunk using several variants
+#' \itemize{
+#' \item Passing options one per line using valid R syntax. This corresponds to \code{convert_chunk_header(type = "multiline")}.
+#' \preformatted{
+#' ```\{r\}
+#' #| echo = FALSE,
+#' #| fig.width = 10
+#' ```
+#' }
+#'
+#'\item Passing option part from header in-chunk with several line if wrapping is
+#'needed. This corresponds to \code{convert_chunk_header(type = "wrap")}
+#'\preformatted{
+#'```\{r\}
+#'#| echo = FALSE, fig.width = 10
+#'```
+#'}
+#'\item Passing options key value pairs in-chunk using YAML syntax. Values are no
+#'more R expression but valid YAML syntax. This corresponds to
+#'\code{convert_chunk_header(type = "yaml")} (not implement yet).
+#'\preformatted{```\{r\}
+#'#| echo: false,
+#'#| fig.width: 10
+#'```
+#'}
+#'}
+#' @export
 convert_chunk_header = function(input,
                                 output = NULL, type = c("multiline", "wrap", "yaml"),
                                 wrap_width = 0.9 * getOption("width")) {
