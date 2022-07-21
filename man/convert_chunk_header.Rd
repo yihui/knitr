@@ -2,13 +2,13 @@
 % Please edit documentation in R/parser.R
 \name{convert_chunk_header}
 \alias{convert_chunk_header}
-\title{Convert old chunk option syntax to new in-chunk syntax}
+\title{Convert the in-header chunk option syntax to the in-body syntax}
 \usage{
 convert_chunk_header(
   input,
   output = NULL,
   type = c("multiline", "wrap", "yaml"),
-  wrap_width = 0.9 * getOption("width")
+  width = 0.9 * getOption("width")
 )
 }
 \arguments{
@@ -16,21 +16,21 @@ convert_chunk_header(
 
 \item{output}{The default \code{NULL} will output to console. Other values
 can be a file path to write the converted content into or a function which
-takes \code{input} as argument and return a file path to write into (e.g
-\code{output = identity} to overwrite the input file.)}
+takes \code{input} as argument and returns a file path to write into (e.g.,
+\code{output = identity} to overwrite the input file).}
 
-\item{type}{This determine how the in-chunk options will be formatted.
-\code{"mutiline"}, the default, will write each chunk option on a separate
-line. Long chunk option value can be on several line, use \code{wrap_with =
-FALSE} to keep one line per option only.  \code{"wrap"} will wrap the chunk
-header options on several line using
-\code{\link[base:strwrap]{base::strwrap()}}. \code{"yaml"} is currently not
+\item{type}{This determines how the in-body options will be formatted.
+\code{"mutiline"} (the default, except for \file{qmd} documents, for which
+the default is \code{"yaml"}) will write each chunk option on a separate
+line. Long chunk option values will be wrapped onto several lines, and you
+can use \code{width = 0} to keep one line per option only. \code{"wrap"}
+will wrap all chunk options together using
+\code{\link[base:strwrap]{base::strwrap}()}. \code{"yaml"} is currently not
 implemented and here as a placeholder for future support of YAML in-chunk
 syntax for options.}
 
-\item{wrap_width}{Numeric value passed to
-\code{\link[base:strwrap]{base::strwrap()}} used in \code{type = "wrap"}
-and \code{type = "multiline"}. If set to \code{FALSE} deactivate the
+\item{width}{An integer passed to \code{base::strwrap()} for \code{type =
+"wrap"} and \code{type = "multiline"}. If set to \code{0}, deactivate the
 wrapping (for \code{type = "multiline"} only).}
 }
 \value{
@@ -38,11 +38,12 @@ A character vector of converted \code{input} when \code{output =
   NULL}. The output file path with converted content otherwise.
 }
 \description{
-This function is a helper function for user to simplify the conversion of
-existing documents using usual \pkg{knitr} chunk option syntax to new syntax.
+This is a helper function for moving chunk options from the chunk header to
+the chunk body using the new syntax.
 }
 \note{
-Learn more about the new chunk option syntax in \url{https://yihui.org/en/2022/01/knitr-news/}
+Learn more about the new chunk option syntax in
+  \url{https://yihui.org/en/2022/01/knitr-news/}
 }
 \section{About \pkg{knitr} option syntax}{
 
@@ -89,8 +90,8 @@ convert_chunk_header(knitr_example("knitr-minimal.Rmd"))
 # Convert a document for wrap type
 convert_chunk_header(knitr_example("knitr-minimal.Rmd"), type = "wrap")
 # Reduce default wrapping width
-convert_chunk_header(knitr_example("knitr-minimal.Rmd"), type = "wrap",
-    wrap_width = 0.6 * getOption("width"))
+convert_chunk_header(knitr_example("knitr-minimal.Rmd"), type = "wrap", width = 0.6 *
+    getOption("width"))
 \dontrun{
 # Explicitly name the output
 convert_chunk_header("test.Rmd", output = "test2.Rmd")

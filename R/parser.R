@@ -724,33 +724,31 @@ inline_expr = function(code, syntax) {
 }
 
 
-#' Convert old chunk option syntax to new in-chunk syntax
+#' Convert the in-header chunk option syntax to the in-body syntax
 #'
-#' This function is a helper function for user to simplify the conversion of
-#' existing documents using usual \pkg{knitr} chunk option syntax to new syntax.
-#'
+#' This is a helper function for moving chunk options from the chunk header to
+#' the chunk body using the new syntax.
 #' @param input File path to the document with code chunks to convert.
 #' @param output The default \code{NULL} will output to console. Other values
 #'   can be a file path to write the converted content into or a function which
-#'   takes \code{input} as argument and return a file path to write into (e.g
-#'   \code{output = identity} to overwrite the input file.)
-#' @param type This determine how the in-chunk options will be formatted.
-#'   \code{"mutiline"}, the default, will write each chunk option on a separate
-#'   line. Long chunk option value can be on several line, use \code{wrap_with =
-#'   FALSE} to keep one line per option only.  \code{"wrap"} will wrap the chunk
-#'   header options on several line using
-#'   \code{\link[base:strwrap]{base::strwrap()}}. \code{"yaml"} is currently not
+#'   takes \code{input} as argument and returns a file path to write into (e.g.,
+#'   \code{output = identity} to overwrite the input file).
+#' @param type This determines how the in-body options will be formatted.
+#'   \code{"mutiline"} (the default, except for \file{qmd} documents, for which
+#'   the default is \code{"yaml"}) will write each chunk option on a separate
+#'   line. Long chunk option values will be wrapped onto several lines, and you
+#'   can use \code{width = 0} to keep one line per option only. \code{"wrap"}
+#'   will wrap all chunk options together using
+#'   \code{\link[base:strwrap]{base::strwrap}()}. \code{"yaml"} is currently not
 #'   implemented and here as a placeholder for future support of YAML in-chunk
 #'   syntax for options.
-#' @param wrap_width Numeric value passed to
-#'   \code{\link[base:strwrap]{base::strwrap()}} used in \code{type = "wrap"}
-#'   and \code{type = "multiline"}. If set to \code{FALSE} deactivate the
+#' @param width An integer passed to \code{base::strwrap()} for \code{type =
+#'   "wrap"} and \code{type = "multiline"}. If set to \code{0}, deactivate the
 #'   wrapping (for \code{type = "multiline"} only).
-#'
 #' @return A character vector of converted \code{input} when \code{output =
 #'   NULL}. The output file path with converted content otherwise.
-#' @note Learn more about the new chunk option syntax in \url{https://yihui.org/en/2022/01/knitr-news/}
-#'
+#' @note Learn more about the new chunk option syntax in
+#'   \url{https://yihui.org/en/2022/01/knitr-news/}
 #' @section About \pkg{knitr} option syntax:
 #'
 #' Historical chunk option syntax have chunk option in the chunk header using
@@ -793,7 +791,7 @@ inline_expr = function(code, syntax) {
 #' # Convert a document for wrap type
 #' convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap")
 #' # Reduce default wrapping width
-#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap", wrap_width = 0.6 * getOption('width'))
+#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap", width = 0.6 * getOption('width'))
 #' \dontrun{
 #' # Explicitly name the output
 #' convert_chunk_header('test.Rmd', output = 'test2.Rmd')
@@ -803,13 +801,13 @@ inline_expr = function(code, syntax) {
 #' convert_chunk_header('test.Rmd', output = \(f) sprintf('%s-new.%s', xfun::sans_ext(f), xfun::file_ext(f)))
 #' }
 #' @export
-convert_chunk_header = function(input,
-                                output = NULL, type = c("multiline", "wrap", "yaml"),
-                                wrap_width = 0.9 * getOption("width")) {
+convert_chunk_header = function(
+  input, output = NULL, type = c('multiline', 'wrap', 'yaml'),
+  width = 0.9 * getOption('width')
+) {
 
   type = match.arg(type)
-
-  if (type == "yaml") stop("Convertion to YAML chunk header not implemented yet.")
+  if (type == 'yaml') stop('Convertion to YAML chunk header not implemented yet.')
 
   # extract fenced header information
   text = xfun::read_utf8(input)
@@ -820,90 +818,64 @@ convert_chunk_header = function(input,
   if (pattern == 'brew') return()
   markdown_mode = pattern == 'md'
   chunk_begin = all_patterns[[pattern]]$chunk.begin
-  chunk_start = grep(chunk_begin, text)
 
   # counter for inserted lines
   nb_added = 0L
   new_text = text
-  for (i in chunk_start) {
-    # Transform each chunk one by one
+  for (i in grep(chunk_begin, text)) {
+    # transform each chunk one by one
     indent = get_chunk_indent(text[i])
-    chunk_head_src = extract_params_src(chunk_begin, text[i])
-    engine = if (markdown_mode)
-      get_chunk_engine(chunk_head_src)
-    else
-      'r'
-    params_src = if (markdown_mode)
-      get_chunk_params(chunk_head_src)
-    else
-      chunk_head_src
+    header = extract_params_src(chunk_begin, text[i])
+    engine = if (markdown_mode) get_chunk_engine(header) else 'r'
+    params = if (markdown_mode) get_chunk_params(header) else header
     # if no params nothing to format
-    if (params_src == '') next
-    params_string = clean_empty_params(params_src)
-    params_string = trimws(clean_empty_params(params_string))
+    if (params == '') next
+    params2 = clean_empty_params(params)
+    params2 = trimws(clean_empty_params(params2))
 
-    # Select the correct prefix char (e.g `#|`)
+    # select the correct prefix char (e.g `#|`)
     opt_chars = get_option_comment(engine)
-    comment_prefix = paste0(indent, opt_chars$start)
+    prefix = paste0(indent, opt_chars$start)
 
-    # Clean old chunk keeping only engine
-    new_text[i + nb_added] = gsub(params_src, '', text[i], fixed = TRUE)
+    # clean old chunk keeping only engine
+    new_text[i + nb_added] = gsub(params, '', text[i], fixed = TRUE)
 
     # format new chunk
-    if (type == "wrap") {
-      if (!is.numeric(wrap_width))
-        stop('With `type = "wrap"`, `width` needs to be an integer.')
-
-      # Simple line wrapping of R code
-      params_formatted = strwrap(params_string,
-                                 prefix = comment_prefix,
-                                 width = wrap_width)
-
-    } else if (type == "multiline") {
-      # One option per line of the form `key = value,`
-
-      params_parsed = parse_params(params_string, label = FALSE)
-      params_formatted = mapply(
-        function(x, y) {
-          sprintf("%s = %s,", x, deparsed_string(y))
-        },
-        x = names(params_parsed), y = params_parsed,
-        USE.NAMES = FALSE)
+    if (type == 'wrap') {
+      # simple line wrapping of R code
+      params3 = strwrap(params2, width, prefix = prefix)
+    } else if (type == 'multiline') {
+      # one option per line of the form `key = value,`
+      res = parse_params(params2, label = FALSE)
+      params3 = sprintf('%s = %s,', names(res), deparsed_string(res))
 
       # remove trailing for last element
-      last = length(params_formatted)
-      params_formatted[last] = gsub(",$", "", params_formatted[last])
+      last = length(params3)
+      params3[last] = gsub(',$', '', params3[last])
 
       # wrap long single line and add prefix
-      if (isFALSE(wrap_width))
-        params_formatted = paste0(comment_prefix, params_formatted)
-      else
-        params_formatted = strwrap(params_formatted, prefix = comment_prefix,
-                                   width = wrap_width)
+      params3 = if (width <= 0) paste0(prefix, params3) else {
+        strwrap(params3, width, prefix = prefix)
+      }
     } else {
       # YAML
     }
 
-    if (nzchar(opt_chars$end))
-      params_formatted = paste0(params_formatted, opt_chars$end)
+    if (nzchar(opt_chars$end)) params3 = paste0(params3, opt_chars$end)
 
-    # Insert new chunk header
-    new_text = append(new_text, params_formatted, after = i + nb_added)
-    nb_added = nb_added + length(params_formatted)
+    # insert new chunk header
+    new_text = append(new_text, params3, after = i + nb_added)
+    nb_added = nb_added + length(params3)
   }
 
   if (is.null(output)) return(new_text)
   # otherwise write to file
-  if (is.function(output))
-    output = output(input)
-  else if (!is.character(output))
-    stop("'output' should be NULL, a function taking input as argument or a filename")
+  if (is.function(output)) output = output(input)
   xfun::write_utf8(new_text, output)
-  output
-
+  invisible(output)
 }
 
 # TODO: when R 4.0.0 is minimal version, switch to deparse1()
-deparsed_string = function(expr) {
-  paste(deparse(expr, 500), collapse = " ")
+deparsed_string = function(exprs) {
+  unlist(lapply(exprs, function(x) paste(deparse(x, 500), collapse = ' ')))
 }
