@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- Added a function `convert_chunk_header()` to convert the old in-header chunk options to the new in-body chunk options (#2149).
+
 - Added support for a `php` engine like other engines for interpreted languages. It will call `php -r <code>`, with `<code>` being the chunk content (thanks, @ralmond, #2144).
 
 - Per suggestion of @jakubkaczor (#2116) and discussion with @pedropark99 (#2140), the chunk option `fig.sep` can also be used to add LaTeX code before the first sub-figure now. Previously this option can only be used for adding LaTeX code *after* each sub-figure.

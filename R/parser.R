@@ -32,11 +32,15 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       # remove the optional prefix % in code in Rtex mode
       g = strip_block(g, patterns$chunk.code)
       params.src = if (group_pattern(chunk.begin)) {
-        stringr::str_trim(gsub(chunk.begin, '\\1', g[1]))
+        extract_params_src(chunk.begin, g[1])
       } else ''
       parse_block(g[-1], g[1], params.src, markdown_mode)
     } else parse_inline(g, patterns)
   })
+}
+
+extract_params_src = function(chunk.begin, line) {
+  trimws(gsub(chunk.begin, '\\1', line))
 }
 
 #' The code manager to manage code in all chunks
@@ -75,10 +79,10 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   engine = 'r'
   # consider the syntax ```{engine, opt=val} for chunk headers
   if (markdown_mode) {
-    engine = sub('^([a-zA-Z0-9_]+).*$', '\\1', params)
-    params = sub('^([a-zA-Z0-9_]+)', '', params)
+    engine = get_chunk_engine(params)
+    params = get_chunk_params(params)
   }
-  params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
+  params = clean_empty_params(params) # rm empty options
   # turn ```{engine} into ```{r, engine="engine"}
   if (tolower(engine) != 'r') {
     params = sprintf('%s, engine="%s"', params, engine)
@@ -90,7 +94,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   params = parse_params(params)
 
   # remove indent (and possibly markdown blockquote >) from code
-  if (nzchar(spaces <- gsub('^([\t >]*).*', '\\1', header))) {
+  if (nzchar(spaces <- get_chunk_indent(header))) {
     params$indent = spaces
     code = gsub(sprintf('^%s', spaces), '', code)
     # in case the trailing spaces of the indent string are trimmed on certain
@@ -142,6 +146,22 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   }
 
   structure(list(params = params, params.src = params.src), class = 'block')
+}
+
+get_chunk_indent = function(header) {
+  gsub('^([\t >]*).*', '\\1', header)
+}
+
+get_chunk_engine = function(params) {
+  sub('^([a-zA-Z0-9_]+).*$', '\\1', params)
+}
+
+get_chunk_params = function(params) {
+  sub('^([a-zA-Z0-9_]+)', '', params)
+}
+
+clean_empty_params = function(params) {
+  gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
 }
 
 # autoname for unnamed chunk
@@ -244,15 +264,15 @@ partition_chunk = function(engine, code) {
   # mask out empty blocks
   if (length(code) == 0) return(res)
 
-  char = comment_chars[[engine]] %n% '#'
-  s1 = paste0(char[[1]], '| ')
-  s2 = ifelse(length(char) > 1, char[[2]], '')
+  opt_comment = get_option_comment(engine)
+  s1 = opt_comment$start
+  s2 = opt_comment$end
 
   # check for option comments
   i1 = startsWith(code, s1)
   i2 = endsWith(trimws(code, 'right'), s2)
   # if "commentChar| " is not found, try "#| " instead
-  if (!i1[1] && !identical(char, '#')) {
+  if (!i1[1] && !identical(s1, '#|')) {
     s1 = '#| '; s2 = ''
     i1 = startsWith(code, s1); i2 = TRUE
   }
@@ -299,6 +319,13 @@ partition_chunk = function(engine, code) {
   }
 
   list(options = meta, src = src, code = code)
+}
+
+get_option_comment = function(engine) {
+  char = comment_chars[[engine]] %n% '#'
+  s1 = paste0(char[[1]], '| ')
+  s2 = ifelse(length(char) > 1, char[[2]], '')
+  list(start = s1, end = s2)
 }
 
 print.block = function(x, ...) {
@@ -694,4 +721,161 @@ inline_expr = function(code, syntax) {
     md = '`r %s`', rst = ':r:`%s`', asciidoc = '`r %s`', textile = '@r %s@',
     stop('Unknown syntax ', pat)
   ), code)
+}
+
+
+#' Convert the in-header chunk option syntax to the in-body syntax
+#'
+#' This is a helper function for moving chunk options from the chunk header to
+#' the chunk body using the new syntax.
+#' @param input File path to the document with code chunks to convert.
+#' @param output The default \code{NULL} will output to console. Other values
+#'   can be a file path to write the converted content into or a function which
+#'   takes \code{input} as argument and returns a file path to write into (e.g.,
+#'   \code{output = identity} to overwrite the input file).
+#' @param type This determines how the in-body options will be formatted.
+#'   \code{"mutiline"} (the default, except for \file{qmd} documents, for which
+#'   the default is \code{"yaml"}) will write each chunk option on a separate
+#'   line. Long chunk option values will be wrapped onto several lines, and you
+#'   can use \code{width = 0} to keep one line per option only. \code{"wrap"}
+#'   will wrap all chunk options together using
+#'   \code{\link[base:strwrap]{base::strwrap}()}. \code{"yaml"} is currently not
+#'   implemented and here as a placeholder for future support of YAML in-chunk
+#'   syntax for options.
+#' @param width An integer passed to \code{base::strwrap()} for \code{type =
+#'   "wrap"} and \code{type = "multiline"}. If set to \code{0}, deactivate the
+#'   wrapping (for \code{type = "multiline"} only).
+#' @return A character vector of converted \code{input} when \code{output =
+#'   NULL}. The output file path with converted content otherwise.
+#' @note Learn more about the new chunk option syntax in
+#'   \url{https://yihui.org/en/2022/01/knitr-news/}
+#' @section About \pkg{knitr} option syntax:
+#'
+#' Historical chunk option syntax have chunk option in the chunk header using
+#' valid R syntax. This is an example for \verb{.Rmd} document
+#' \preformatted{
+#' ```\{r, echo = FALSE, fig.width: 10\}
+#' ```
+#' }
+#'
+#' New syntax allows to pass option inside the chunk using several variants
+#' \itemize{
+#' \item Passing options one per line using valid R syntax. This corresponds to \code{convert_chunk_header(type = "multiline")}.
+#' \preformatted{
+#' ```\{r\}
+#' #| echo = FALSE,
+#' #| fig.width = 10
+#' ```
+#' }
+#'
+#' \item Passing option part from header in-chunk with several line if wrapping is
+#' needed. This corresponds to \code{convert_chunk_header(type = "wrap")}
+#' \preformatted{
+#' ```\{r\}
+#' #| echo = FALSE, fig.width = 10
+#' ```
+#' }
+#' \item Passing options key value pairs in-chunk using YAML syntax. Values are no
+#' more R expression but valid YAML syntax. This corresponds to
+#' \code{convert_chunk_header(type = "yaml")} (not implement yet).
+#' \preformatted{```\{r\}
+#' #| echo: false,
+#' #| fig.width: 10
+#' ```
+#' }
+#' }
+#' @examples
+#' knitr_example = function(...) system.file('examples', ..., package = 'knitr')
+#' # Convert a document for multiline type
+#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'))
+#' # Convert a document for wrap type
+#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap")
+#' # Reduce default wrapping width
+#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap", width = 0.6 * getOption('width'))
+#' \dontrun{
+#' # Explicitly name the output
+#' convert_chunk_header('test.Rmd', output = 'test2.Rmd')
+#' # Overwrite the input
+#' convert_chunk_header('test.Rmd', output = identity)
+#' # Use a custom function to name the output
+#' convert_chunk_header('test.Rmd', output = \(f) sprintf('%s-new.%s', xfun::sans_ext(f), xfun::file_ext(f)))
+#' }
+#' @export
+convert_chunk_header = function(
+  input, output = NULL, type = c('multiline', 'wrap', 'yaml'),
+  width = 0.9 * getOption('width')
+) {
+
+  type = match.arg(type)
+  if (type == 'yaml') stop('Convertion to YAML chunk header not implemented yet.')
+
+  # extract fenced header information
+  text = xfun::read_utf8(input)
+  ext  = xfun::file_ext(input)
+  if (missing(type) && ext == 'qmd') type = 'yaml'  # default to yaml for Quarto
+  pattern = detect_pattern(text, ext)
+  # no code chunk in brew file
+  if (pattern == 'brew') return()
+  markdown_mode = pattern == 'md'
+  chunk_begin = all_patterns[[pattern]]$chunk.begin
+
+  # counter for inserted lines
+  nb_added = 0L
+  new_text = text
+  for (i in grep(chunk_begin, text)) {
+    # transform each chunk one by one
+    indent = get_chunk_indent(text[i])
+    header = extract_params_src(chunk_begin, text[i])
+    engine = if (markdown_mode) get_chunk_engine(header) else 'r'
+    params = if (markdown_mode) get_chunk_params(header) else header
+    # if no params nothing to format
+    if (params == '') next
+    params2 = clean_empty_params(params)
+    params2 = trimws(clean_empty_params(params2))
+
+    # select the correct prefix char (e.g `#|`)
+    opt_chars = get_option_comment(engine)
+    prefix = paste0(indent, opt_chars$start)
+
+    # clean old chunk keeping only engine
+    new_text[i + nb_added] = gsub(params, '', text[i], fixed = TRUE)
+
+    # format new chunk
+    if (type == 'wrap') {
+      # simple line wrapping of R code
+      params3 = strwrap(params2, width, prefix = prefix)
+    } else if (type == 'multiline') {
+      # one option per line of the form `key = value,`
+      res = parse_params(params2, label = FALSE)
+      params3 = sprintf('%s = %s,', names(res), deparsed_string(res))
+
+      # remove trailing for last element
+      last = length(params3)
+      params3[last] = gsub(',$', '', params3[last])
+
+      # wrap long single line and add prefix
+      params3 = if (width <= 0) paste0(prefix, params3) else {
+        strwrap(params3, width, prefix = prefix)
+      }
+    } else {
+      # YAML
+    }
+
+    if (nzchar(opt_chars$end)) params3 = paste0(params3, opt_chars$end)
+
+    # insert new chunk header
+    new_text = append(new_text, params3, after = i + nb_added)
+    nb_added = nb_added + length(params3)
+  }
+
+  if (is.null(output)) return(new_text)
+  # otherwise write to file
+  if (is.function(output)) output = output(input)
+  xfun::write_utf8(new_text, output)
+  invisible(output)
+}
+
+# TODO: when R 4.0.0 is minimal version, switch to deparse1()
+deparsed_string = function(exprs) {
+  unlist(lapply(exprs, function(x) paste(deparse(x, 500), collapse = ' ')))
 }
