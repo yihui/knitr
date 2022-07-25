@@ -807,6 +807,8 @@ convert_chunk_header = function(
 ) {
 
   type = match.arg(type)
+  if (type == "yaml" && !xfun::pkg_available("yaml"))
+    stop("Converting to yaml format require the yaml R package.")
 
   # extract fenced header information
   text = xfun::read_utf8(input)
