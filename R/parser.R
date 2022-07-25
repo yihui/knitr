@@ -876,8 +876,7 @@ convert_chunk_header = function(
             result <- ifelse(x, "true", "false")
             class(result) <- "verbatim"
             return(result)
-          })), "\n")[[1]]
-
+          }), line.sep = "\n"), "\n")[[1]]
       params3 = paste0(prefix, params3)
     }
 
