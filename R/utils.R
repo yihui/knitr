@@ -651,7 +651,7 @@ escape_html = highr:::escape_html
 #' @author Yihui Xie and Peter Ruckdeschel
 #' @export
 #' @examples library(knitr)
-#' \donttest{# relies on r-forge.r-project.org being accessible
+#' \dontrun{# relies on r-forge.r-project.org being accessible
 #' read_rforge('rgl/R/axes.R', project = 'rgl')
 #' read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')}
 read_rforge = function(path, project, extra = '') {
