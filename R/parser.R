@@ -858,12 +858,11 @@ convert_chunk_header = function(
     } else {
       params3 = parse_params(params2, label = FALSE)
 
-      # fix un-evaluated options for yaml
-      # by transforming to !expr val
+      # fix un-evaluated options for yaml by transforming to !expr val
       params3 = lapply(params3, function(x) {
         if (is.symbol(x) || is.language(x)) {
           x = deparse(x, 500L)
-          attr(x, "tag") <- "!expr"
+          attr(x, 'tag') = '!expr'
         }
         x
       })
@@ -872,10 +871,10 @@ convert_chunk_header = function(
         params3, handlers = list(
           # true / false instead of no
           logical = function(x) {
-            result <- ifelse(x, "true", "false")
-            class(result) <- "verbatim"
-            return(result)
-          }), line.sep = "\n"), "\n")[[1]]
+            x = tolower(x)
+            class(x) = 'verbatim'
+            x
+          }), line.sep = '\n'), '\n')[[1]]
       params3 = paste0(prefix, params3)
     }
 
