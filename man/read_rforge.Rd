@@ -20,13 +20,12 @@ A character vector of the source code.
 \description{
 This function reads source code from the SVN repositories on R-Forge.
 }
-\examples{
+\examples{\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(knitr)
-\donttest{
 # relies on r-forge.r-project.org being accessible
 read_rforge("rgl/R/axes.R", project = "rgl")
 read_rforge("rgl/R/axes.R", project = "rgl", extra = "&revision=519")
-}
+\dontshow{\}) # examplesIf}
 }
 \author{
 Yihui Xie and Peter Ruckdeschel

@@ -739,9 +739,8 @@ inline_expr = function(code, syntax) {
 #'   line. Long chunk option values will be wrapped onto several lines, and you
 #'   can use \code{width = 0} to keep one line per option only. \code{"wrap"}
 #'   will wrap all chunk options together using
-#'   \code{\link[base:strwrap]{base::strwrap}()}. \code{"yaml"} is currently not
-#'   implemented and here as a placeholder for future support of YAML in-chunk
-#'   syntax for options.
+#'   \code{\link[base:strwrap]{base::strwrap}()}. \code{"yaml"} will convert
+#'   chunk options to YAML.
 #' @param width An integer passed to \code{base::strwrap()} for \code{type =
 #'   "wrap"} and \code{type = "multiline"}. If set to \code{0}, deactivate the
 #'   wrapping (for \code{type = "multiline"} only).
@@ -807,8 +806,6 @@ convert_chunk_header = function(
 ) {
 
   type = match.arg(type)
-  if (type == 'yaml') stop('Convertion to YAML chunk header not implemented yet.')
-
   # extract fenced header information
   text = xfun::read_utf8(input)
   ext  = xfun::file_ext(input)
@@ -858,7 +855,26 @@ convert_chunk_header = function(
         strwrap(params3, width, prefix = prefix)
       }
     } else {
-      # YAML
+      params3 = parse_params(params2, label = FALSE)
+
+      # fix un-evaluated options for yaml by transforming to !expr val
+      params3 = lapply(params3, function(x) {
+        if (is.symbol(x) || is.language(x)) {
+          x = deparse(x, 500L)
+          attr(x, 'tag') = '!expr'
+        }
+        x
+      })
+      # convert to yaml and add prefix
+      params3 = strsplit(yaml::as.yaml(
+        params3, handlers = list(
+          # true / false instead of no
+          logical = function(x) {
+            x = tolower(x)
+            class(x) = 'verbatim'
+            x
+          }), line.sep = '\n'), '\n')[[1]]
+      params3 = paste0(prefix, params3)
     }
 
     if (nzchar(opt_chars$end)) params3 = paste0(params3, opt_chars$end)
