@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- Added a function `convert_chunk_header()` to convert the old in-header chunk options to the new in-body chunk options (#2149).
+- Added a function `convert_chunk_header()` to convert the old in-header chunk options to the new in-body chunk options (#2149 #2151).
 
 - Added support for a `php` engine like other engines for interpreted languages. It will call `php -r <code>`, with `<code>` being the chunk content (thanks, @ralmond, #2144).
 
