@@ -739,9 +739,8 @@ inline_expr = function(code, syntax) {
 #'   line. Long chunk option values will be wrapped onto several lines, and you
 #'   can use \code{width = 0} to keep one line per option only. \code{"wrap"}
 #'   will wrap all chunk options together using
-#'   \code{\link[base:strwrap]{base::strwrap}()}. \code{"yaml"} is currently not
-#'   implemented and here as a placeholder for future support of YAML in-chunk
-#'   syntax for options.
+#'   \code{\link[base:strwrap]{base::strwrap}()}. \code{"yaml"} will convert
+#'   chunk options to YAML.
 #' @param width An integer passed to \code{base::strwrap()} for \code{type =
 #'   "wrap"} and \code{type = "multiline"}. If set to \code{0}, deactivate the
 #'   wrapping (for \code{type = "multiline"} only).
