@@ -16,7 +16,9 @@ hook_plot_html = function(x, options) {
   d2 = if (plot2) paste0('</div>', if (out_format('html')) '<div class="rcode">')
   paste0(
     d1, .img.tag(
-      .upload.url(x), options$out.width, options$out.height, .img.cap(options),
+      .upload.url(x), options$out.width, options$out.height,
+      .img.cap(options),
+      .img.alt(options),
       paste(c(options$out.extra, 'class="plot"'), collapse = ' ')
     ), d2, '\n'
   )
@@ -37,9 +39,9 @@ hook_animation = function(options) {
   paste(c(sprintf('width="%s"', w), sprintf('height="%s"', h), extra), collapse = ' ')
 }
 
-.img.tag = function(src, w, h, caption, extra) {
+.img.tag = function(src, w, h, caption, alt, extra) {
   caption = if (length(caption) == 1 && caption != '') {
-    paste0('title="', caption, '" alt="', caption, '" ')
+    paste0('title="', caption, '" alt="', alt, '" ')
   }
   tag = if (grepl('[.]pdf$', src, ignore.case = TRUE)) {
     extra = c(extra, 'type="application/pdf"')
@@ -52,16 +54,32 @@ hook_animation = function(options) {
 }
 
 .img.cap = function(options, alt = FALSE) {
-  cap = options$fig.cap %n% {
+  if (alt) {
+    cap = escape_html(options$fig.cap %n% options$fig.alt)
+  }
+  cap = cap %n% {
     if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
   }
   if (length(cap) == 0) cap = ''
-  if (alt) return(escape_html(options$fig.alt %n% cap))
   if (is_blank(cap)) return(cap)
   paste0(create_label(
     options$fig.lp, options$label,
     if (options$fig.num > 1L && options$fig.show == 'asis') c('-', options$fig.cur)
   ), cap)
+}
+
+.img.alt <- function(options) {
+  alt <- options$fig.alt %n% {
+    if (is.null(pandoc_to())) sprintf("plot of chunk %s", options$label) else ""
+  }
+  if (length(alt) == 0) alt <- ""
+  if (is_blank(alt)) {
+    return(alt)
+  }
+  paste0(create_label(
+    options$fig.lp, options$label,
+    if (options$fig.num > 1L && options$fig.show == "asis") c("-", options$fig.cur)
+  ), alt)
 }
 
 # a wrapper to upload an image and return the URL
