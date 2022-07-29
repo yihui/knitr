@@ -805,11 +805,11 @@ convert_chunk_header = function(
   width = 0.9 * getOption('width')
 ) {
 
-  type = match.arg(type)
   # extract fenced header information
   text = xfun::read_utf8(input)
   ext  = xfun::file_ext(input)
   if (missing(type) && ext == 'qmd') type = 'yaml'  # default to yaml for Quarto
+  type = match.arg(type)
   pattern = detect_pattern(text, ext)
   # no code chunk in brew file
   if (pattern == 'brew') return()
