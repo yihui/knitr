@@ -247,6 +247,9 @@ comment_chars = local({
 #'   parsed options (if any) as a list.} \item{\code{src}}{The part of the input
 #'   that contains the options.} \item{\code{code}}{The part of the input that
 #'   contains the code.}}
+#' @note Chunk options must be written on \emph{continuous} lines (i.e., all
+#'   lines must start with the special comment prefix such as \verb{#|}) at the
+#'   beginning of the chunk body.
 #' @export
 #' @examples
 #' # parse yaml-like items

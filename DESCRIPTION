@@ -192,4 +192,4 @@ Collate:
     'utils-upload.R'
     'utils-vignettes.R'
     'zzz.R'
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1

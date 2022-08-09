@@ -23,6 +23,11 @@ Chunk options can be written in special comments (e.g., after \verb{#|} for R
 code chunks) inside a code chunk. This function partitions these options from
 the chunk body.
 }
+\note{
+Chunk options must be written on \emph{continuous} lines (i.e., all
+  lines must start with the special comment prefix such as \verb{#|}) at the
+  beginning of the chunk body.
+}
 \examples{
 # parse yaml-like items
 yaml_like = c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar",
