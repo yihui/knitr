@@ -116,10 +116,10 @@ quartz_dev = function(type, dpi) {
 }
 
 # a wrapper of the tikzDevice::tikz device
-tikz_dev = function(...) {
+tikz_dev = function(..., engine = getOption('tikzDefaultEngine')) {
   loadNamespace('tikzDevice')
   packages = switch(
-    getOption('tikzDefaultEngine'),
+    engine,
     pdftex = getOption('tikzLatexPackages'),
     xetex = getOption('tikzXelatexPackages'),
     luatex = getOption('tikzLualatexPackages')
@@ -171,7 +171,9 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   # compile tikz to pdf
   if (dev == 'tikz') {
     patch_tikz_tex(path)
-    if (options$external) path = tinytex::latexmk(path, getOption('tikzDefaultEngine'))
+    if (options$external) path = tinytex::latexmk(
+      path, dargs$engine %n% getOption('tikzDefaultEngine')
+    )
   }
 
   fig_process(options$fig.process, path, options)

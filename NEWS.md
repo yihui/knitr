@@ -16,6 +16,8 @@
 
 - `kable(format = 'pipe')` calculates column widths correctly now if any text columns contain Markdown hyperlinks (thanks, @jacobbien, #2148).
 
+- `dev.args = list(engine = ...)` was ignored by `dev = 'tikz'` when the tikz plot is compiled to PDF (thanks, @fkohrt, #2150).
+
 ## MINOR CHANGES
 
 - When the inline R code cannot be correctly parsed, the error message will show the original code in addition to the parsing error, which can make it easier to identify the code error in the source document (thanks, @AlbertLei, #2141).
