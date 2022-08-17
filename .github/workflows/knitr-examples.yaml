@@ -53,6 +53,7 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           packages: deps::.
+          extra-packages: package=XML?ignore
 
       - name: Retrieve knitr-examples
         # On PR, it will checkout same branch if it exists there
