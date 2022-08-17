@@ -894,6 +894,7 @@ knit_engines$set(
   ditaa = eng_plot,
   dot = eng_plot,
   embed = eng_embed,
+  eviews = eng_eviews,
   exec = eng_exec,
   fortran = eng_shlib,
   fortran95 = eng_shlib,
