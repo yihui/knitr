@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- Added `eviews` as new knit-engine. You need to load EviewsR package to execute EViews codes. (thanks, @sagirumati, #2158) 
+
 - Added a function `convert_chunk_header()` to convert the old in-header chunk options to the new in-body chunk options (#2149 #2151).
 
 - Added a new "graphics device", `dev = "gridSVG"`, which uses `gridSVG::grid.export()` to export grid graphics to SVG (thanks, @jooyoungseo, #2152).
