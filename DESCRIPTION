@@ -149,8 +149,7 @@ Suggests:
     ragg,
     gridSVG,
     styler (>= 1.2.0),
-    targets (>= 0.6.0),
-    EviewsR (>= 0.1.3)
+    targets (>= 0.6.0)
 License: GPL
 URL: https://yihui.org/knitr/
 BugReports: https://github.com/yihui/knitr/issues

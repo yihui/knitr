@@ -837,7 +837,10 @@ eng_targets = function(options) {
 
 # an Eviews engine based on EviewsR
 eng_eviews = function(options) {
-  EviewsR::eng_eviews(options)
+  # EviewsR can't be installed in lower versions of R, hence I can't declare
+  # Suggests dependency in DESCRIPTION
+  f = getFromNamespace('eng_eviews', 'EviewsR')
+  f(options)
 }
 
 # a comment engine to return nothing
