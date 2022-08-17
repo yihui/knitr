@@ -832,13 +832,21 @@ eng_bslib = function(options) {
 # Usage: https://books.ropensci.org/targets/markdown.html
 # Docs: https://docs.ropensci.org/targets/reference/tar_engine_knitr.html
 eng_targets = function(options) {
-  targets::tar_engine_knitr(options = options)
+  targets::tar_engine_knitr(options)
+}
+
+# an Eviews engine based on EviewsR
+eng_eviews = function(options) {
+  # EviewsR can't be installed in lower versions of R, hence I can't declare
+  # Suggests dependency in DESCRIPTION
+  f = getFromNamespace('eng_eviews', 'EviewsR')
+  f(options)
 }
 
 # a comment engine to return nothing
 eng_comment = function(options) {}
 
-## a verbatim engine that returns its chunk content verbatim
+# a verbatim engine that returns its chunk content verbatim
 eng_verbatim = function(options) {
   # change default for the cat engine
   options$eval = FALSE
@@ -894,6 +902,7 @@ knit_engines$set(
   ditaa = eng_plot,
   dot = eng_plot,
   embed = eng_embed,
+  eviews = eng_eviews,
   exec = eng_exec,
   fortran = eng_shlib,
   fortran95 = eng_shlib,

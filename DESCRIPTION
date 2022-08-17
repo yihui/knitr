@@ -90,6 +90,7 @@ Authors@R: c(
     person("Rodrigo", "Copetti", role = "ctb"),
     person("Romain", "Francois", role = "ctb"),
     person("Ruaridh", "Williamson", role = "ctb"),
+    person("Sagiru", "Mati", role = "ctb", comment = c(ORCID = "0000-0003-1413-3974")),
     person("Scott", "Kostyshak", role = "ctb"),
     person("Sebastian", "Meyer", role = "ctb"),
     person("Sietse", "Brouwer", role = "ctb"),
