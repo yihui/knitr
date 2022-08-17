@@ -832,13 +832,18 @@ eng_bslib = function(options) {
 # Usage: https://books.ropensci.org/targets/markdown.html
 # Docs: https://docs.ropensci.org/targets/reference/tar_engine_knitr.html
 eng_targets = function(options) {
-  targets::tar_engine_knitr(options = options)
+  targets::tar_engine_knitr(options)
+}
+
+# an Eviews engine based on EviewsR
+eng_eviews = function(options) {
+  EviewsR::eng_eviews(options)
 }
 
 # a comment engine to return nothing
 eng_comment = function(options) {}
 
-## a verbatim engine that returns its chunk content verbatim
+# a verbatim engine that returns its chunk content verbatim
 eng_verbatim = function(options) {
   # change default for the cat engine
   options$eval = FALSE
