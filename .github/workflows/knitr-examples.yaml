@@ -44,6 +44,12 @@ jobs:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
 
+      - name: Install XML
+        # for some reason, XML can't be installed on Ubuntu
+        run: |
+          sudo apt-get install -y libxml2-dev
+          Rscript -e 'install.packages("XML", repos = "https://cran.rstudio.com")'
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           packages: deps::.
