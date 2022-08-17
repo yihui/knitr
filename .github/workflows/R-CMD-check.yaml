@@ -24,12 +24,12 @@ jobs:
         config:
           - {os: windows-latest, r: 'release'}
           - {os: macOS-latest,   r: 'release'}
-          - {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-18.04,   r: 'release'}
-          - {os: ubuntu-18.04,   r: 'oldrel-1'}
-          - {os: ubuntu-18.04,   r: 'oldrel-2'}
-          - {os: ubuntu-18.04,   r: 'oldrel-3'}
-          - {os: ubuntu-18.04,   r: 'oldrel-4'}
+          - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest,  r: 'release'}
+          - {os: ubuntu-latest,  r: 'oldrel-1'}
+          - {os: ubuntu-latest,  r: 'oldrel-2'}
+          - {os: ubuntu-latest,  r: 'oldrel-3'}
+          - {os: ubuntu-latest,  r: 'oldrel-4'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
