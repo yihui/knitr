@@ -827,6 +827,17 @@ eng_bslib = function(options) {
   eng_sxss(options)
 }
 
+ 
+## EViews                             
+# EViews engine contributed by @sagirumati
+# Thread: https://github.com/yihui/knitr/issues/2158
+# Usage: https://github.com/sagirumati/eviewsr
+# Docs: https://github.com/sagirumati/EviewsR/blob/master/inst/examples/EviewsR.pdf
+eng_eviews = function(options) {
+  EviewsR::eng_eviews(options = options)
+}
+                            
+                           
 # Target Markdown engine contributed by @wlandau
 # Thread: https://github.com/ropensci/targets/issues/503
 # Usage: https://books.ropensci.org/targets/markdown.html
