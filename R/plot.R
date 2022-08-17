@@ -165,7 +165,7 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   print(plot)
   # hack: if the device is gridSVG, save the plot to a temp path (with suffix ~)
   path2 = if (dev == 'gridSVG') paste0(path, '~')
-  if (!is.null(path2)) do.call(gridSVG::grid.export, c(list(name = path), dargs))
+  if (!is.null(path2)) do.call(gridSVG::grid.export, c(list(name = path2), dargs))
   dev.off()
   # move the temp svg file to `path`
   if (!is.null(path2)) file.rename(path2, path)
