@@ -22,6 +22,10 @@
 
 - `dev.args = list(engine = ...)` was ignored by `dev = 'tikz'` when the tikz plot is compiled to PDF (thanks, @fkohrt, #2150).
 
+## MAJOR CHANGES
+
+- For HTML output formats of R Markdown, SVG plots (e.g., in case of chunk option `dev = 'svg'` or `dev = 'gridSVG'`) are embedded differently now: if the HTML output is self-contained, the raw SVG code will be embedded directly in HTML, otherwise the `.svg` file is embedded in the `<object>` tag. Previously the `<img>` tag was used for SVG plots like other plot formats. This change will make assistive technology agents, such as screen readers, interact with SVG plots (thanks, @jooyoungseo, #2152).
+
 ## MINOR CHANGES
 
 - When the inline R code cannot be correctly parsed, the error message will show the original code in addition to the parsing error, which can make it easier to identify the code error in the source document (thanks, @AlbertLei, #2141).

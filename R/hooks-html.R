@@ -16,7 +16,7 @@ hook_plot_html = function(x, options) {
   d2 = if (plot2) paste0('</div>', if (out_format('html')) '<div class="rcode">')
   paste0(
     d1, .img.tag(
-      .upload.url(x), options$out.width, options$out.height, .img.cap(options),
+      x, options$out.width, options$out.height, .img.cap(options),
       paste(c(options$out.extra, 'class="plot"'), collapse = ' ')
     ), d2, '\n'
   )
@@ -38,17 +38,25 @@ hook_animation = function(options) {
 }
 
 .img.tag = function(src, w, h, caption, extra) {
+  ext = tolower(file_ext(src))
   caption = if (length(caption) == 1 && caption != '') {
-    paste0('title="', caption, '" alt="', caption, '" ')
+    c(
+      sprintf('title="%s"', caption),
+      if (!ext %in% c('pdf', 'svg')) sprintf('alt="%s"', caption)
+    )
   }
-  tag = if (grepl('[.]pdf$', src, ignore.case = TRUE)) {
-    extra = c(extra, 'type="application/pdf"')
-    'embed'
-  } else 'img'
-  paste0(
-    '<', tag, ' src="', opts_knit$get('base.url'), src, '" ', caption,
-    .img.attr(w, h, extra), ' />'
-  )
+  tag = 'img'; extra2 = NULL; att = 'src'
+  if (ext == 'pdf') {
+    extra2 = 'type="application/pdf"'; tag = 'embed'
+  } else if (ext == 'svg') {
+    extra2 = 'type="image/svg+xml"'; tag = 'object'; att = 'data'
+  }
+  res = paste0(c(
+    paste0('<', tag),
+    sprintf('%s="%s%s"', att, opts_knit$get('base.url') %n% '', .upload.url(src)),
+    caption, .img.attr(w, h, c(extra, extra2))
+  ), collapse = ' ')
+  paste0(res, if (tag == 'object') '></object>' else ' />')
 }
 
 .img.cap = function(options, alt = FALSE) {
