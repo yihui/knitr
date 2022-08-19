@@ -14,6 +14,8 @@
 
 - `knitr::kable()` supports `tabularx` and `xltabular` environments now for LaTeX tables, e.g., `knitr::kable(head(iris), format = 'latex', tabular = 'tabularx')` (thanks, @amarakon, #2138).
 
+- For HTML output formats of R Markdown, SVG plots (e.g., in case of chunk option `dev = 'svg'` or `dev = 'gridSVG'`) can be embedded differently now when `options(knitr.svg.object = TRUE)`: if the HTML output is self-contained, the raw SVG code will be embedded directly in HTML, otherwise the `.svg` file is embedded in the `<object>` tag. By default, this feature is not enabled, i.e., the default is `options(knitr.svg.object = FALSE)` for backward-compatibility, which means the `<img>` tag is used for SVG plots just like other plot formats. This new feature will make assistive technology agents, such as screen readers, interact with SVG plots (thanks, @jooyoungseo, #2152).
+
 ## BUG FIXES
 
 - Fixed `epub2` output not being considered as HTML format (thanks, @flipacholas, #2145).
@@ -21,10 +23,6 @@
 - `kable(format = 'pipe')` calculates column widths correctly now if any text columns contain Markdown hyperlinks (thanks, @jacobbien, #2148).
 
 - `dev.args = list(engine = ...)` was ignored by `dev = 'tikz'` when the tikz plot is compiled to PDF (thanks, @fkohrt, #2150).
-
-## MAJOR CHANGES
-
-- For HTML output formats of R Markdown, SVG plots (e.g., in case of chunk option `dev = 'svg'` or `dev = 'gridSVG'`) are embedded differently now: if the HTML output is self-contained, the raw SVG code will be embedded directly in HTML, otherwise the `.svg` file is embedded in the `<object>` tag. Previously the `<img>` tag was used for SVG plots like other plot formats. This change will make assistive technology agents, such as screen readers, interact with SVG plots (thanks, @jooyoungseo, #2152).
 
 ## MINOR CHANGES
 

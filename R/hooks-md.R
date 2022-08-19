@@ -48,8 +48,8 @@ hook_plot_md_base = function(x, options) {
   w = options[['out.width']]; h = options[['out.height']]
   s = options$out.extra; a = options$fig.align
   ai = options$fig.show == 'asis'
-  # need special treatment for SVG graphics
-  is_svg = grepl('[.]svg$', x, ignore.case = TRUE)
+  # whether to use <object> to embed SVG graphics
+  is_svg = grepl('[.]svg$', x, ignore.case = TRUE) && getOption('knitr.svg.object', FALSE)
   # self-contained mode?
   sc = any(c('--embed-resources', '--self-contained') %in% opts_knit$get('rmarkdown.pandoc.args'))
   lnk = options$fig.link
