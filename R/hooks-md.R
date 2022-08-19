@@ -74,7 +74,7 @@ hook_plot_md_base = function(x, options) {
     sprintf('<a href="%s" target="_blank">%s</a>', lnk, x)
   }
   img_code = function(s2 = NULL) {
-    img = if (is_svg && sc) svg_code(x) else .img.tag(x, w, h, alt, c(s, s2))
+    img = if (is_svg && sc) svg_code(x, s) else .img.tag(x, w, h, alt, c(s, s2))
     add_link(img)
   }
   # use HTML syntax <img src=...>
@@ -94,9 +94,13 @@ hook_plot_md_base = function(x, options) {
 }
 
 # read svg, remove the xml declaration, and put the code in a raw html block
-svg_code = function(file) {
+svg_code = function(file, extra = NULL) {
   x = read_utf8(file)
   if (length(x) > 0 && grepl('^\\s*<[?]xml .+[?]>\\s*$', x[1])) x = x[-1]
+  if (length(x) > 0 && grepl('^\\s*<svg .+>\\s*$', x[1]) && length(extra) == 1) {
+    x[1] = gsub('\\s*>\\s*$', ' ', x[1])
+    x[1] = paste0(x[1], extra, '>')
+  }
   raw_html(x)
 }
 
