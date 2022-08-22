@@ -93,13 +93,16 @@ hook_plot_md_base = function(x, options) {
   }
 }
 
-# read svg, remove the xml declaration, and put the code in a raw html block
+# read svg, remove the xml/doctype declaration, and put the code in a raw html block
 svg_code = function(file, extra = NULL) {
   x = read_utf8(file)
-  if (length(x) > 0 && grepl('^\\s*<[?]xml .+[?]>\\s*$', x[1])) x = x[-1]
-  if (length(x) > 0 && grepl('^\\s*<svg .+>\\s*$', x[1]) && length(extra) == 1) {
-    x[1] = gsub('\\s*>\\s*$', ' ', x[1])
-    x[1] = paste0(x[1], extra, '>')
+  while (length(x) > 0 && !grepl('^\\s*<svg .+', x[1])) x = x[-1]
+  if (length(x) > 0 && length(extra) == 1) {
+    if (grepl(r <- '\\s*>\\s*$', x[1])) {
+      x[1] = paste0(gsub(r, ' ', x[1]), extra, '>')
+    } else {
+      x[1] = paste(x[1], extra)
+    }
   }
   raw_html(x)
 }
