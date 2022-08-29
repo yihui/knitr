@@ -222,6 +222,7 @@ comment_chars = list(
   `* ;` = c('sas'),
   `--` = c('haskell', 'lua', 'mysql', 'psql', 'sql'),
   `!` = c('fortran', 'fortran95'),
+  '\u235D' = c('apl'),
   `*` = c('stata')
 )
 # reshape it using the language name as the index, i.e., from list(char = lang)
