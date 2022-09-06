@@ -54,7 +54,7 @@ valid_path = function(prefix, label) {
 
 # define a color variable in TeX
 color_def = function(col, variable = 'shadecolor') {
-  if (is.na(col)) return('')  # no LaTeX code when color is NA
+  if (all(is.na(col))) return('')  # no LaTeX code when color is NA
   x = if (length(col) == 1L) sc_split(col) else col
   if ((n <- length(x)) != 3L) {
     if (n == 1L) x = drop(col2rgb(x) / 255) else {
