@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.41
 
+## BUG FIXES
+
+- User-provided background colors for code chunks in `.Rnw` documents may fail (thanks, @nielsrhansen, #2167).
 
 # CHANGES IN knitr VERSION 1.40
 
