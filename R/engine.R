@@ -51,6 +51,18 @@ knit_engines = new_defaults()
 #' @export
 cache_engines = new_defaults()
 
+# NOTE: these assignments don't change the closures namespace.
+cache_engines$.get = cache_engines$get
+cache_engines$get = function(name, ...) {
+  if (missing(name)) {
+    cache_engines$.get(...)
+  } else if (!identical(name, 'python') || !isFALSE(options$python.reticulate)) {
+    cache_engines$.get(name, ...)
+  } else {
+    NULL
+  }
+}
+
 #' An output wrapper for language engine output
 #'
 #' If you have designed a language engine, you may call this function in the end
@@ -274,15 +286,6 @@ eng_python = function(options) {
     )
     reticulate::eng_python(options)
   }
-}
-
-cache_eng_python = function(options) {
-  if (isFALSE(options$python.reticulate)) return()
-  # TODO: change this hack to reticulate::cache_eng_python(options) after
-  # https://github.com/rstudio/reticulate/pull/167 is merged and released
-  if (!'cache_eng_python' %in% ls(asNamespace('reticulate'))) return()
-  fun = getFromNamespace('cache_eng_python', 'reticulate')
-  fun(options)
 }
 
 ## Java
@@ -922,7 +925,11 @@ knit_engines$set(
   verbatim = eng_verbatim
 )
 
-cache_engines$set(python = cache_eng_python)
+# TODO: change this hack to reticulate::cache_eng_python after
+# https://github.com/rstudio/reticulate/pull/1210 is merged and released
+if ('cache_eng_python' %in% ls(asNamespace('reticulate'))) {
+  cache_engines$set(python = getFromNamespace('cache_eng_python', 'reticulate'))
+}
 
 get_engine = function(name) {
   fun = knit_engines$get(name)
@@ -934,12 +941,6 @@ get_engine = function(name) {
   function(options) {
     engine_output(options, options$code, '')
   }
-}
-
-cache_engine = function(options) {
-  cache_fun = cache_engines$get(options$engine)
-  if (!is.function(cache_fun)) return()
-  cache_fun(options)
 }
 
 # possible values for engines (for auto-completion in RStudio)

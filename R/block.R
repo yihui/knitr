@@ -93,12 +93,15 @@ call_block = function(block) {
     }
     hash = paste(valid_path(params$cache.path, label), digest(content), sep = '_')
     params$hash = hash
-    if (cache$exists(hash, params$cache.lazy) &&
+    if (cache_exists(params) &&
         isFALSE(params$cache.rebuild) &&
         params$engine != 'Rcpp') {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
       cache$load(hash, lazy = params$cache.lazy)
-      cache_engine(params)
+      if (params$engine != 'R' &&
+          !is.null(engine_cache <- cache_engines$get(params$engine))) {
+        engine_cache$load(hash)
+      }
       if (!params$include) return('')
       if (params$cache == 3) return(cache$output(hash))
     }
@@ -156,11 +159,16 @@ block_exec = function(options) {
   output = paste(c(res.before, output, res.after), collapse = '')
   output = knit_hooks$get('chunk')(output, options)
   if (options$cache) {
-    cache.exists = cache$exists(options$hash, options$cache.lazy)
-    if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
-      options$engine,
-      'stan' = options$output.var, 'sql' = options$output.var, character(0)
-    ))
+    cache.exists = cache_exists(options)
+    if (options$cache.rebuild || !cache.exists) {
+      block_cache(options, output, switch(
+        options$engine,
+        'stan' = options$output.var, 'sql' = options$output.var, character(0)
+      ))
+      if (!is.null(engine_cache <- cache_engines$get(options$engine))) {
+        engine_cache$save(hash)
+      }
+    }
   }
   if (options$include) output else ''
 }
@@ -242,7 +250,7 @@ eng_r = function(options) {
   # guess plot file type if it is NULL
   if (keep != 'none') options$fig.ext = dev2ext(options)
 
-  cache.exists = cache$exists(options$hash, options$cache.lazy)
+  cache.exists = cache_exists(options)
   evaluate = knit_hooks$get('evaluate')
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
@@ -351,11 +359,25 @@ block_cache = function(options, output, objects) {
   cache$save(objects, outname, hash, lazy = options$cache.lazy)
 }
 
+cache_exists = function(options) {
+  R_cache_exists = cache$exists(options$hash, options$cache.lazy)
+  if (options$engine != 'R' &&
+      !is.null(engine_cache <- cache_engines$get(options$engine))) {
+    R_cache_exists && engine_cache$exists(hash)
+  } else {
+    R_cache_exists
+  }
+}
+
 purge_cache = function(options) {
   # purge my old cache and cache of chunks dependent on me
-  cache$purge(paste0(valid_path(
-    options$cache.path, c(options$label, dep_list$get(options$label))
-  ), '_????????????????????????????????'))
+  path = valid_path(options$cache.path, c(options$label, dep_list$get(options$label)))
+  path = paste0(path, '_', stringr::str_dup('?', 32))  # length of the MD5 hash
+  cache$purge(path)
+  if (options$engine != 'R' &&
+      !is.null(engine_cache <- cache_engines$get(options$engine))) {
+    engine_cache$purge(path)
+  }
 }
 
 cache_globals = function(option, code) {
