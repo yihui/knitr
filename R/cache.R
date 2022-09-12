@@ -89,7 +89,7 @@ new_cache = function() {
   cache_exists = function(hash, lazy = TRUE) {
     is.character(hash) &&
       all(file.exists(paste(
-        cache_path(hash), if (lazy) c('rdb', 'rdx') else 'RData', sep = '.'
+        cache_path(hash), c('RData', 'rdb', 'rdx')[if (lazy) 1:3 else 1], sep = '.'
       )))
   }
 
