@@ -56,8 +56,8 @@ cache_engines$.get = cache_engines$get
 cache_engines$get = function(name, ...) {
   if (missing(name)) {
     cache_engines$.get(...)
-  } else if (!identical(name, 'python') || !isFALSE(options$python.reticulate)) {
-    cache_engines$.get(name, ...)
+  } else if (!is.null(cache_importer <- cache_engines$.get(name, ...))) {
+    cache_importer()
   } else {
     NULL
   }
@@ -285,6 +285,17 @@ eng_python = function(options) {
       "python.reticulate = FALSE."
     )
     reticulate::eng_python(options)
+  }
+}
+
+cache_eng_python = function() {
+  # TODO: change this hack to reticulate::cache_eng_python after
+  # https://github.com/rstudio/reticulate/pull/1210 is merged and released
+  if (!isFALSE(options$python.reticulate) &&
+      'cache_eng_python' %in% ls(asNamespace('reticulate'))) {
+    getFromNamespace('cache_eng_python', 'reticulate')
+  } else {
+    NULL
   }
 }
 
@@ -925,11 +936,7 @@ knit_engines$set(
   verbatim = eng_verbatim
 )
 
-# TODO: change this hack to reticulate::cache_eng_python after
-# https://github.com/rstudio/reticulate/pull/1210 is merged and released
-if ('cache_eng_python' %in% ls(asNamespace('reticulate'))) {
-  cache_engines$set(python = getFromNamespace('cache_eng_python', 'reticulate'))
-}
+cache_engines$set(python = cache_eng_python)
 
 get_engine = function(name) {
   fun = knit_engines$get(name)
