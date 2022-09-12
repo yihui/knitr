@@ -101,7 +101,7 @@ call_block = function(block) {
       cache$load(hash, lazy = params$cache.lazy)
       if (params$engine != 'R' &&
           !is.null(engine_cache <- cache_engines$get(params$engine))) {
-        engine_cache$load(hash)
+        engine_cache$load(options)
       }
       if (!params$include) return('')
       if (params$cache == 3) return(cache$output(hash))
@@ -167,7 +167,7 @@ block_exec = function(options) {
         'stan' = options$output.var, 'sql' = options$output.var, character(0)
       ))
       if (!is.null(engine_cache <- cache_engines$get(options$engine))) {
-        engine_cache$save(hash)
+        engine_cache$save(options)
       }
     }
   }
@@ -364,7 +364,7 @@ cache_exists = function(options) {
   R_cache_exists = cache$exists(options$hash, options$cache.lazy)
   if (options$engine != 'R' &&
       !is.null(engine_cache <- cache_engines$get(options$engine))) {
-    R_cache_exists && engine_cache$exists(hash)
+    R_cache_exists && engine_cache$exists(options)
   } else {
     R_cache_exists
   }
@@ -372,12 +372,12 @@ cache_exists = function(options) {
 
 purge_cache = function(options) {
   # purge my old cache and cache of chunks dependent on me
-  path = valid_path(options$cache.path, c(options$label, dep_list$get(options$label)))
-  path = paste0(path, '_', stringr::str_dup('?', 32))  # length of the MD5 hash
-  cache$purge(path)
+  glob_prefix = valid_path(options$cache.path, c(options$label, dep_list$get(options$label)))
+  glob_path = paste0(glob_prefix, '_', stringr::str_dup('?', 32))  # length of the MD5 hash
+  cache$purge(glob_path)
   if (options$engine != 'R' &&
       !is.null(engine_cache <- cache_engines$get(options$engine))) {
-    engine_cache$purge(path)
+    engine_cache$purge(glob_path)
   }
 }
 
