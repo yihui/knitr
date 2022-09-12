@@ -93,6 +93,7 @@ call_block = function(block) {
     }
     hash = paste(valid_path(params$cache.path, label), digest(content), sep = '_')
     params$hash = hash
+    xfun::dir_create(dirname(hash), showWarnings = FALSE)
     if (cache_exists(params) &&
         isFALSE(params$cache.rebuild) &&
         params$engine != 'Rcpp') {
