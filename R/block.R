@@ -100,8 +100,8 @@ call_block = function(block) {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
       cache$load(hash, lazy = params$cache.lazy)
       if (params$engine != 'R' &&
-          !is.null(engine_cache <- cache_engines$get(params$engine))) {
-        engine_cache$load(options)
+          !is.null(engine_cache <- cache_engines$get(params))) {
+        engine_cache$load(params)
       }
       if (!params$include) return('')
       if (params$cache == 3) return(cache$output(hash))
@@ -166,7 +166,7 @@ block_exec = function(options) {
         options$engine,
         'stan' = options$output.var, 'sql' = options$output.var, character(0)
       ))
-      if (!is.null(engine_cache <- cache_engines$get(options$engine))) {
+      if (!is.null(engine_cache <- cache_engines$get(options))) {
         engine_cache$save(options)
       }
     }
@@ -363,7 +363,7 @@ block_cache = function(options, output, objects) {
 cache_exists = function(options) {
   R_cache_exists = cache$exists(options$hash, options$cache.lazy)
   if (options$engine != 'R' &&
-      !is.null(engine_cache <- cache_engines$get(options$engine))) {
+      !is.null(engine_cache <- cache_engines$get(options))) {
     R_cache_exists && engine_cache$exists(options)
   } else {
     R_cache_exists
@@ -376,7 +376,7 @@ purge_cache = function(options) {
   glob_path = paste0(glob_prefix, '_', stringr::str_dup('?', 32))  # length of the MD5 hash
   cache$purge(glob_path)
   if (options$engine != 'R' &&
-      !is.null(engine_cache <- cache_engines$get(options$engine))) {
+      !is.null(engine_cache <- cache_engines$get(options))) {
     engine_cache$purge(glob_path)
   }
 }

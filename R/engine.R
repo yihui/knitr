@@ -53,13 +53,13 @@ cache_engines = new_defaults()
 
 # NOTE: these assignments don't change the closures namespace.
 cache_engines$.get = cache_engines$get
-cache_engines$get = function(name, ...) {
-  if (missing(name)) {
+cache_engines$get = function(options, ...) {
+  if (missing(options)) {
     cache_engines$.get(...)
-  } else if (!is.null(cache_importer <- cache_engines$.get(name, ...))) {
-    cache_importer()
+  } else if (is.function(cache_importer <- cache_engines$.get(options$engine, ...))) {
+    cache_importer(options)
   } else {
-    NULL
+    cache_importer
   }
 }
 
@@ -288,7 +288,7 @@ eng_python = function(options) {
   }
 }
 
-cache_eng_python = function() {
+cache_eng_python = function(options) {
   # TODO: change this hack to reticulate::cache_eng_python after
   # https://github.com/rstudio/reticulate/pull/1210 is merged and released
   if (!isFALSE(options$python.reticulate) &&
