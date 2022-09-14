@@ -56,10 +56,10 @@ cache_engines$.get = cache_engines$get
 cache_engines$get = function(options, ...) {
   if (missing(options)) {
     cache_engines$.get(...)
-  } else if (is.function(cache_importer <- cache_engines$.get(options$engine, ...))) {
+  } else if (!is.null(cache_importer <- cache_engines$.get(options$engine, ...))) {
     cache_importer(options)
   } else {
-    cache_importer
+    NULL
   }
 }
 
@@ -293,10 +293,10 @@ cache_eng_python = function(options) {
   # https://github.com/rstudio/reticulate/pull/1210 is merged and released
   if (!isFALSE(options$python.reticulate) &&
       'cache_eng_python' %in% ls(asNamespace('reticulate'))) {
-    getFromNamespace('cache_eng_python', 'reticulate')
-  } else {
-    NULL
+    engine_cache = getFromNamespace('cache_eng_python', 'reticulate')
+    if (engine_cache$available(options)) return(engine_cache)
   }
+  NULL
 }
 
 ## Java
