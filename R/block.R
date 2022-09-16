@@ -105,6 +105,8 @@ call_block = function(block) {
       }
       if (!params$include) return('')
       if (params$cache == 3) return(cache$output(hash))
+    } else {
+      purge_cache(params)  # purge any invalid cache files
     }
     if (params$engine == 'R')
       cache$library(params$cache.path, save = FALSE) # load packages
@@ -355,7 +357,6 @@ block_cache = function(options, output, objects) {
   hash = options$hash
   outname = cache_output_name(hash)
   assign(outname, output, envir = knit_global())
-  purge_cache(options)
   cache$library(options$cache.path, save = TRUE)
   cache$save(objects, outname, hash, lazy = options$cache.lazy)
 }
