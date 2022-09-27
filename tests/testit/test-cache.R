@@ -73,3 +73,5 @@ knit_engine_cache = function() {
 assert("missing external engine's cache invalidates R cache", {
   (knit_engine_cache())
 })
+knit_engines$delete('mock')
+cache_engines$delete('mock')
