@@ -62,9 +62,7 @@ new_cache = function() {
         rm(list = name, envir = knit_global())
       }
     }
-    if (length(engine_cache <- cache_engines$get(options$engine))) {
-      engine_cache$load(options)
-    }
+    cache_action(options, 'load', options)
   }
 
   cache_library = function(path, save = TRUE) {

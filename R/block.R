@@ -348,18 +348,14 @@ block_cache = function(options, output, objects) {
   assign(outname, output, envir = knit_global())
   cache$library(options$cache.path, save = TRUE)
   cache$save(objects, outname, hash, lazy = options$cache.lazy)
-  if (length(engine_cache <- cache_engines$get(options$engine))) {
-    engine_cache$save(options)
-  }
+  cache_action(options, 'save', options)
 }
 
 # test if cache exists: first R cache must exist, then if a custom cache engine
 # exists, use the engine to check its cache exists
 cache_exists = function(options) {
-  cache$exists(options$hash, options$cache.lazy) && (
-    !length(engine_cache <- cache_engines$get(options$engine)) ||
-      engine_cache$exists(options)
-  )
+  cache$exists(options$hash, options$cache.lazy) &&
+    cache_action(options, 'exists', options)
 }
 
 purge_cache = function(options) {
@@ -367,9 +363,16 @@ purge_cache = function(options) {
   prefix = valid_path(options$cache.path, c(options$label, dep_list$get(options$label)))
   glob_path = paste0(prefix, '_', paste(rep('?', 32), collapse = ''))  # length of the MD5 hash
   cache$purge(glob_path)
-  if (length(engine_cache <- cache_engines$get(options$engine))) {
-    engine_cache$purge(glob_path)
+  cache_action(options, 'purge', glob_path)
+}
+
+cache_action = function(options, method, ...) {
+  res = if (method == 'exists') TRUE
+  if (length(eng <- cache_engines$get(options$engine))) {
+    obj = eng(options)
+    if (is.function(action <- obj[[method]])) res = action(...)
   }
+  res
 }
 
 cache_globals = function(option, code) {
