@@ -364,8 +364,8 @@ cache_exists = function(options) {
 
 purge_cache = function(options) {
   # purge my old cache and cache of chunks dependent on me
-  glob_prefix = valid_path(options$cache.path, c(options$label, dep_list$get(options$label)))
-  glob_path = paste0(glob_prefix, '_', stringr::str_dup('?', 32))  # length of the MD5 hash
+  prefix = valid_path(options$cache.path, c(options$label, dep_list$get(options$label)))
+  glob_path = paste0(prefix, '_', paste(rep('?', 32), collapse = ''))  # length of the MD5 hash
   cache$purge(glob_path)
   if (length(engine_cache <- cache_engines$get(options$engine))) {
     engine_cache$purge(glob_path)
