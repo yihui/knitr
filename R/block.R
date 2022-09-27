@@ -98,11 +98,7 @@ call_block = function(block) {
         isFALSE(params$cache.rebuild) &&
         params$engine != 'Rcpp') {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
-      cache$load(hash, lazy = params$cache.lazy)
-      if (params$engine != 'R' &&
-          !is.null(engine_cache <- cache_engines$get(params))) {
-        engine_cache$load(params)
-      }
+      cache$load(hash, options = params)
       if (!params$include) return('')
       if (params$cache == 3) return(cache$output(hash))
     } else {

@@ -46,7 +46,7 @@ new_cache = function() {
     save_objects(globals, label, valid_path(path, '__globals'))
   }
 
-  cache_load = function(hash, lazy = TRUE) {
+  cache_load = function(hash, lazy = options$cache.lazy, options = list()) {
     if (!is_abs_path(hash)) path = file.path(getwd(), hash)
     if (lazy) lazyLoad(hash, envir = knit_global())
     # load output from last run if exists
@@ -61,6 +61,9 @@ new_cache = function() {
         )
         rm(list = name, envir = knit_global())
       }
+    }
+    if (length(engine_cache <- cache_engines$get(options$engine))) {
+      engine_cache$load(options)
     }
   }
 
