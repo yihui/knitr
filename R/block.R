@@ -94,9 +94,7 @@ call_block = function(block) {
     hash = paste(valid_path(params$cache.path, label), digest(content), sep = '_')
     params$hash = hash
     xfun::dir_create(dirname(hash))
-    if (cache_exists(params) &&
-        isFALSE(params$cache.rebuild) &&
-        params$engine != 'Rcpp') {
+    if (cache_exists(params) && isFALSE(params$cache.rebuild) && params$engine != 'Rcpp') {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
       cache$load(hash, options = params)
       if (!params$include) return('')
