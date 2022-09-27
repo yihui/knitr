@@ -353,14 +353,13 @@ block_cache = function(options, output, objects) {
   }
 }
 
+# test if cache exists: first R cache must exist, then if a custom cache engine
+# exists, use the engine to check its cache exists
 cache_exists = function(options) {
-  R_cache_exists = cache$exists(options$hash, options$cache.lazy)
-  if (options$engine != 'R' &&
-      !is.null(engine_cache <- cache_engines$get(options))) {
-    R_cache_exists && engine_cache$exists(options)
-  } else {
-    R_cache_exists
-  }
+  cache$exists(options$hash, options$cache.lazy) && (
+    !length(engine_cache <- cache_engines$get(options$engine)) ||
+      engine_cache$exists(options)
+  )
 }
 
 purge_cache = function(options) {
@@ -368,8 +367,7 @@ purge_cache = function(options) {
   glob_prefix = valid_path(options$cache.path, c(options$label, dep_list$get(options$label)))
   glob_path = paste0(glob_prefix, '_', stringr::str_dup('?', 32))  # length of the MD5 hash
   cache$purge(glob_path)
-  if (options$engine != 'R' &&
-      !is.null(engine_cache <- cache_engines$get(options))) {
+  if (length(engine_cache <- cache_engines$get(options$engine))) {
     engine_cache$purge(glob_path)
   }
 }

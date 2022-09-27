@@ -51,18 +51,6 @@ knit_engines = new_defaults()
 #' @export
 cache_engines = new_defaults()
 
-# NOTE: these assignments don't change the closures namespace.
-cache_engines$.get = cache_engines$get
-cache_engines$get = function(options, ...) {
-  if (missing(options)) {
-    cache_engines$.get(...)
-  } else if (!is.null(cache_importer <- cache_engines$.get(options$engine, ...))) {
-    cache_importer(options)
-  } else {
-    NULL
-  }
-}
-
 #' An output wrapper for language engine output
 #'
 #' If you have designed a language engine, you may call this function in the end
