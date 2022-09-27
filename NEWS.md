@@ -4,6 +4,10 @@
 
 - For `python` code chunks, objects can be cached using the Python package **dill**. This currently requires the patch in **reticulate** https://github.com/rstudio/reticulate/pull/1210, and should be considered experimental before the patch is accepted and a new version of **reticulate** is released (thanks, @leogama, #2170).
 
+## BUG FIXES
+
+- User-provided background colors for code chunks in `.Rnw` documents may fail (thanks, @nielsrhansen, #2167).
+
 # CHANGES IN knitr VERSION 1.40
 
 ## NEW FEATURES

@@ -227,7 +227,7 @@ comment_chars = list(
 # reshape it using the language name as the index, i.e., from list(char = lang)
 # to list(lang = char)
 comment_chars = local({
-  res = list()
+  res = list(apl = '\u235D')
   for (i in names(comment_chars)) {
     chars = comment_chars[[i]]
     res = c(res, setNames(rep(list(strsplit(i, ' ')[[1]]), length(chars)), chars))
