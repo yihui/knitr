@@ -277,14 +277,12 @@ eng_python = function(options) {
 }
 
 cache_eng_python = function(options) {
+  if (isFALSE(options$python.reticulate)) return()
   # TODO: change this hack to reticulate::cache_eng_python after
   # https://github.com/rstudio/reticulate/pull/1210 is merged and released
-  if (!isFALSE(options$python.reticulate) &&
-      'cache_eng_python' %in% ls(asNamespace('reticulate'))) {
-    engine_cache = getFromNamespace('cache_eng_python', 'reticulate')
-    if (engine_cache$available(options)) return(engine_cache)
-  }
-  NULL
+  if (!'cache_eng_python' %in% ls(asNamespace('reticulate'))) return()
+  eng = getFromNamespace('cache_eng_python', 'reticulate')
+  if (eng$available(options)) eng
 }
 
 ## Java

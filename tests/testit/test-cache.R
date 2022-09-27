@@ -46,10 +46,12 @@ dep_list$restore()
 knit_code$restore()
 
 mock_cache = (function() {
-    noop_false = function(...) FALSE
-    noop_true = function(...) TRUE
-    list(available = noop_true, exists = noop_false,
-         load = noop_false, save = noop_false, purge = noop_false)  # may return anything
+  noop_false = function(...) FALSE
+  noop_true = function(...) TRUE
+  list(
+    available = noop_true, exists = noop_false, load = noop_false,
+    save = noop_false, purge = noop_false
+  )  # may return anything
 })()
 knit_engines$set(mock = function(...) "\n\nmock result\n\n")
 cache_engines$set(mock = function(...) mock_cache)
@@ -68,4 +70,6 @@ knit_engine_cache = function() {
     t1 != t2  # missing "mock" cache should invalidate R cache
   })
 }
-assert("missing external engine's cache invalidates R cache", knit_engine_cache())
+assert("missing external engine's cache invalidates R cache", {
+  (knit_engine_cache())
+})
