@@ -155,9 +155,7 @@ knit_filter = function(ifile, encoding = 'UTF-8') {
   m = group_indices(grepl(p1, x), grepl(p2, x))
   i = m %% 2 == 0
   x[i] = ''  # remove code chunks
-  for (j in seq_along(x[!i])) {
-    x[!i][j] = str_complete_replace(x[!i][j], p$inline.code, '')  # remove inline code
-  }
+  x[!i] = str_complete_replace(x[!i], p$inline.code, '', perl = TRUE)  # remove inline code
   structure(x, control = '-H -t')
 }
 
