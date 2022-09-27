@@ -157,15 +157,10 @@ block_exec = function(options) {
   output = knit_hooks$get('chunk')(output, options)
   if (options$cache) {
     cache.exists = cache_exists(options)
-    if (options$cache.rebuild || !cache.exists) {
-      block_cache(options, output, switch(
-        options$engine,
-        'stan' = options$output.var, 'sql' = options$output.var, character(0)
-      ))
-      if (!is.null(engine_cache <- cache_engines$get(options))) {
-        engine_cache$save(options)
-      }
-    }
+    if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
+      options$engine,
+      'stan' = options$output.var, 'sql' = options$output.var, character(0)
+    ))
   }
   if (options$include) output else ''
 }
@@ -353,6 +348,9 @@ block_cache = function(options, output, objects) {
   assign(outname, output, envir = knit_global())
   cache$library(options$cache.path, save = TRUE)
   cache$save(objects, outname, hash, lazy = options$cache.lazy)
+  if (length(engine_cache <- cache_engines$get(options$engine))) {
+    engine_cache$save(options)
+  }
 }
 
 cache_exists = function(options) {
