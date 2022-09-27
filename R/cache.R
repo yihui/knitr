@@ -4,8 +4,8 @@
 ## but it is using .rdb and .rdx as 'hard cache' (instead of cache in memory)
 new_cache = function() {
 
-  cache_purge = function(glob_path) {
-    unlink(paste(glob_path, c('rdb', 'rdx', 'RData'), sep = '.'))
+  cache_purge = function(path) {
+    for (p in path) unlink(paste(p, c('rdb', 'rdx', 'RData'), sep = '.'))
   }
 
   cache_save = function(keys, outname, hash, lazy = TRUE) {
