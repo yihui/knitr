@@ -190,7 +190,6 @@ Collate:
     'template.R'
     'utils-conversion.R'
     'utils-rd2html.R'
-    'utils-string_formatting.R'
     'utils-sweave.R'
     'utils-upload.R'
     'utils-vignettes.R'
