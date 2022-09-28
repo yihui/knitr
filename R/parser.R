@@ -488,7 +488,7 @@ read_chunk = function(
     idx = c(0, idx); lines = c('', lines)  # no chunk header in the beginning
   }
   groups = unname(split(lines, idx))
-  labels = stringr::str_trim(gsub(lab, '\\3', sapply(groups, `[`, 1)))
+  labels = trimws(gsub(lab, '\\3', sapply(groups, `[`, 1)))
   labels = gsub(',.*', '', labels)  # strip off possible chunk options
   code = lapply(groups, strip_chunk, roxygen_comments)
   for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()
