@@ -56,10 +56,12 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          pak-version: devel
           extra-packages: |
             any::XML
             any::rcmdcheck
             targets=?ignore-before-r=3.5.0
+            JuliaCall=?ignore-before-r=4.0.0
             rstudio/rmarkdown
           needs: check
 
