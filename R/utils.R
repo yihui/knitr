@@ -74,7 +74,7 @@ color_def = function(col, variable = 'shadecolor') {
 sc_split = function(string) {
   if (is.call(string)) string = eval(string)
   if (is.numeric(string) || length(string) != 1L) return(string)
-  str_trim_sides(stringr::str_split(string, ';|,')[[1]])
+  trimws(stringr::str_split(string, ';|,')[[1]])
 }
 
 # extract LaTeX packages for tikzDevice
