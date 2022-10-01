@@ -443,18 +443,19 @@ kable_rst = function(x, rownames.name = '\\', ...) {
 # Pandoc's pipe table
 kable_pipe = function(x, caption = NULL, padding = 1, ...) {
   if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
-  res = kable_mark(x,
-                   sep.row = c(NA, '-', NA),
-                   sep.col = '|',
-                   padding = padding,
-                   align.fun = function(s, a) {
-    if (is.null(a)) return(s)
-    r = c(l = '^.', c = '^.|.$', r = '.$')
-    for (i in seq_along(s)) {
-      s[i] = gsub(r[a[i]], ':', s[i])
-    }
-    s
-  }, ...)
+  res = kable_mark(
+    x, sep.row = c(NA, '-', NA),
+    sep.col = '|', padding = padding,
+    align.fun = function(s, a) {
+      if (is.null(a)) return(s)
+      r = c(l = '^.', c = '^.|.$', r = '.$')
+      for (i in seq_along(s)) {
+        s[i] = gsub(r[a[i]], ':', s[i])
+      }
+      return(s)
+    },
+    ...
+  )
   kable_pandoc_caption(res, caption)
 }
 
