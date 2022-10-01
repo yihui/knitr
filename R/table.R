@@ -478,8 +478,10 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
     sep.col = '|', sep.head.col = '||',
     padding = padding, ...
   )
-  # Remove the line that separates the table header from the table body
-  tab = tab[-2]
+  if (length(tab) >= 2) {
+    # Remove the line that separates the table header from the table body
+    tab = tab[-2]
+  }
   kable_pandoc_caption(tab, caption)
 }
 
