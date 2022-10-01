@@ -412,15 +412,19 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
   res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
               x, if (!is.na(sep.row[3])) s)
   res = mat_pad(res, l, align)
-  mark_add_col_sep(res, sep.col, sep.head.col)
+  add_mark_col_sep(res, sep.col, sep.head.col)
 }
 
-mark_add_col_sep = function(table, sep.col, sep.head.col) {
+add_mark_col_sep = function(table, sep.col, sep.head.col) {
   header = table[1, ]
   table_body = table[-1, ]
 
   header = paste(header, collapse = sep.head.col)
-  table_body = apply(table_body, 1, paste, collapse = sep.col)
+  if (is.null(dim(table_body))) {
+    table_body = paste(table_body, collapse = sep.col)
+  } else {
+    table_body = apply(table_body, 1, paste, collapse = sep.col)
+  }
 
   header = paste0(sep.head.col, header, sep.head.col)
   table_body = paste0(sep.col, table_body, sep.col)
@@ -472,6 +476,7 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
     sep.col = '|', sep.head.col = '||',
     padding = padding, ...
   )
+  tab = tab[-2]
   kable_pandoc_caption(tab, caption)
 }
 
