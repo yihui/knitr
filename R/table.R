@@ -389,7 +389,6 @@ kable_html = function(
 kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
                       sep.head.col = NULL, padding = 0,
                       align.fun = function(s, a) s, rownames.name = '', ...) {
-
   # If user does not provide a value for `sep.head.col`, use `sep.col` value
   if (is.null(sep.head.col) || is.na(sep.head.col)) sep.head.col = sep.col
   # when the column separator is |, replace existing | with its HTML entity
@@ -417,18 +416,22 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
 }
 
 add_mark_col_sep = function(table, sep.col, sep.head.col) {
+  table_dim = dim(table)
+  if (0L %in% table_dim) {
+    return(as.character(table))
+  }
   header = table[1, ]
-  table_body = table[-1, ]
-
   header = paste(header, collapse = sep.head.col)
-  if (is.null(dim(table_body))) {
+  table_body = table[-1, ]
+  if (is.null(dim(table_body)) && table_dim[2] > 1) {
+    # When `table_dim[2] == 1`, when we extract table_body = table[-1, ]
+    # `table_body` becomes a vector of rows, and we do not want to collapse
+    # all rows together (we want to collapse a vector of cols);
     table_body = paste(table_body, collapse = sep.col)
-  } else {
+  }
+  if (!is.null(dim(table_body))) {
     table_body = apply(table_body, 1, paste, collapse = sep.col)
   }
-
-  header = paste0(sep.head.col, header, sep.head.col)
-  table_body = paste0(sep.col, table_body, sep.col)
 
   return(c(header, table_body))
 }
@@ -456,6 +459,7 @@ kable_pipe = function(x, caption = NULL, padding = 1, ...) {
     },
     ...
   )
+  res = sprintf('|%s|', res)
   kable_pandoc_caption(res, caption)
 }
 
@@ -482,6 +486,8 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
     # Remove the line that separates the table header from the table body
     tab = tab[-2]
   }
+  tab[1] = sprintf('||%s||', tab[1])
+  tab[-1] = sprintf('|%s|', tab[-1])
   kable_pandoc_caption(tab, caption)
 }
 
