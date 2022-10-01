@@ -385,8 +385,12 @@ kable_html = function(
 #'   according to the alignment.
 #' @return A character vector of the table content.
 #' @noRd
-kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0,
+kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
+                      sep.head.col = NULL, padding = 0,
                       align.fun = function(s, a) s, rownames.name = '', ...) {
+
+  # If user does not provide a value for `sep.head.col`, use `sep.col` value
+  if (is.null(sep.head.col)) sep.head.col = sep.col
   # when the column separator is |, replace existing | with its HTML entity
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
@@ -395,7 +399,7 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   cn = colnames(x)
   if (length(cn) > 0) {
     cn[is.na(cn)] = "NA"
-    if (sep.col == '|') cn = gsub('\\|', '&#124;', cn)
+    if (sep.head.col == '|') cn = gsub('\\|', '&#124;', cn)
     if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
     l = pmax(if (length(l) == 0) 0 else l, nchar(remove_urls(cn), type = 'width'))
   }
@@ -407,8 +411,23 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   s = unlist(lapply(l, function(i) paste(rep(sep.row[2], i), collapse = '')))
   res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
               x, if (!is.na(sep.row[3])) s)
-  apply(mat_pad(res, l, align), 1, paste, collapse = sep.col)
+  res = mat_pad(res, l, align)
+  mark_add_col_sep(res, sep.col, sep.head.col)
 }
+
+mark_add_col_sep = function(table, sep.col, sep.head.col) {
+  header = table[1, ]
+  table_body = table[-1, ]
+
+  header = base::paste(header, collapse = sep.head.col)
+  table_body = apply(table_body, 1, paste, collapse = sep.col)
+
+  header = paste0(sep.head.col, header, sep.head.col)
+  table_body = paste0(sep.col, table_body, sep.col)
+
+  return(c(header, table_body))
+}
+
 
 kable_rst = function(x, rownames.name = '\\', ...) {
   kable_mark(x, rownames.name = rownames.name)
@@ -440,6 +459,16 @@ kable_simple = function(x, caption = NULL, padding = 1, ...) {
   if (ncol(x) == 1 && !is.null(colnames(x))) tab = paste0(' ', tab)
   kable_pandoc_caption(tab, caption)
 }
+
+
+kable_jira = function(x) {
+  col.names = colnames(x)
+  header = build_jira_header(col.names)
+  return(header)
+}
+
+
+
 
 kable_pandoc_caption = function(x, caption) {
   if (identical(caption, NA)) caption = NULL
