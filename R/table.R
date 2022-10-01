@@ -390,7 +390,7 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
                       align.fun = function(s, a) s, rownames.name = '', ...) {
 
   # If user does not provide a value for `sep.head.col`, use `sep.col` value
-  if (is.null(sep.head.col)) sep.head.col = sep.col
+  if (is.null(sep.head.col) || is.na(sep.head.col)) sep.head.col = sep.col
   # when the column separator is |, replace existing | with its HTML entity
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
@@ -419,7 +419,7 @@ mark_add_col_sep = function(table, sep.col, sep.head.col) {
   header = table[1, ]
   table_body = table[-1, ]
 
-  header = base::paste(header, collapse = sep.head.col)
+  header = paste(header, collapse = sep.head.col)
   table_body = apply(table_body, 1, paste, collapse = sep.col)
 
   header = paste0(sep.head.col, header, sep.head.col)
@@ -429,6 +429,8 @@ mark_add_col_sep = function(table, sep.col, sep.head.col) {
 }
 
 
+
+
 kable_rst = function(x, rownames.name = '\\', ...) {
   kable_mark(x, rownames.name = rownames.name)
 }
@@ -436,7 +438,11 @@ kable_rst = function(x, rownames.name = '\\', ...) {
 # Pandoc's pipe table
 kable_pipe = function(x, caption = NULL, padding = 1, ...) {
   if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
-  res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
+  res = kable_mark(x,
+                   sep.row = c(NA, '-', NA),
+                   sep.col = '|',
+                   padding = padding,
+                   align.fun = function(s, a) {
     if (is.null(a)) return(s)
     r = c(l = '^.', c = '^.|.$', r = '.$')
     for (i in seq_along(s)) {
@@ -444,7 +450,6 @@ kable_pipe = function(x, caption = NULL, padding = 1, ...) {
     }
     s
   }, ...)
-  res = sprintf('|%s|', res)
   kable_pandoc_caption(res, caption)
 }
 
@@ -461,10 +466,13 @@ kable_simple = function(x, caption = NULL, padding = 1, ...) {
 }
 
 
-kable_jira = function(x) {
-  col.names = colnames(x)
-  header = build_jira_header(col.names)
-  return(header)
+kable_jira = function(x, caption = NULL, padding = 1, ...) {
+  tab = kable_mark(
+    x, c(NA, NA, NA),
+    sep.col = '|', sep.head.col = '||',
+    padding = padding, ...
+  )
+  kable_pandoc_caption(tab, caption)
 }
 
 
