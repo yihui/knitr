@@ -380,6 +380,7 @@ kable_html = function(
 #' @param sep.row A length-3 character vector, specifying separators to be printed
 #'   before the header, after the header, and at the end of the table respectively.
 #' @param sep.col The column separator.
+#' @param sep.head.col The column separator for the header of the table (i.e. the line with the column names).
 #' @param padding Number of spaces for the table cell padding.
 #' @param align.fun A function to process the separator under the header
 #'   according to the alignment.
@@ -476,6 +477,7 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
     sep.col = '|', sep.head.col = '||',
     padding = padding, ...
   )
+  # Remove the line that separates the table header from the table body
   tab = tab[-2]
   kable_pandoc_caption(tab, caption)
 }
