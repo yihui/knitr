@@ -201,6 +201,7 @@ eng_r = function(options) {
   # open a device to record plots if not using a global device or no device is
   # open, and close this device if we don't want to use a global device
   if (!opts_knit$get('global.device') || is.null(dev.list())) {
+    dv0 = dev.cur(); on.exit(dev.set(dv0), add = TRUE)  # reset current device (#2166)
     chunk_device(options, keep != 'none', tmp.fig)
     dv = dev.cur()
     if (!opts_knit$get('global.device')) on.exit(dev.off(dv), add = TRUE)
