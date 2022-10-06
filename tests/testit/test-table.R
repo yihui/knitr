@@ -30,6 +30,10 @@ assert("kable() works on NA's", {
      c('|x     |', '|:-----|', '|NA    |', '|FALSE |'))
 })
 
+assert('kable() works with the jira format', {
+  (kable2(m, 'jira') %==% c('||   ||  x||  y||', '|a  |  1|  2|'))
+})
+
 assert('kable() does not add extra spaces to character columns', {
   (kable2(data.frame(x = c(1.2, 4.87), y = c('fooooo', 'bar')), 'latex') %==% '
 \\begin{tabular}{r|l}
@@ -127,7 +131,7 @@ assert('kable() works on matrices with NA colname', {
 x1 = matrix(NA, 0, 0)
 x2 = matrix(NA, 0, 1)
 x3 = matrix(NA, 1, 0)
-for (f in c('simple', 'html', 'latex', 'rst')) {
+for (f in c('simple', 'html', 'latex', 'rst', 'jira')) {
   kable(x1, f)
   kable(x2, f)
   kable(x3, f)
