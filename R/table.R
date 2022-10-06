@@ -455,24 +455,15 @@ kable_simple = function(x, caption = NULL, padding = 1, ...) {
   kable_pandoc_caption(tab, caption)
 }
 
-
+# Jira table
 kable_jira = function(x, caption = NULL, padding = 1, ...) {
-  tab = kable_mark(
-    x, c(NA, NA, NA),
-    sep.col = '|', sep.head = '||',
-    padding = padding, ...
-  )
-  if (length(tab) >= 2) {
-    # Remove the line that separates the table header from the table body
-    tab = tab[-2]
-  }
+  tab = kable_mark(x, c(NA, NA, NA), '|', padding, sep.head = '||', ...)
+  # remove the line that separates the table header from the table body
+  if (length(tab) >= 2) tab = tab[-2]
   tab[1] = sprintf('||%s||', tab[1])
   tab[-1] = sprintf('|%s|', tab[-1])
   kable_pandoc_caption(tab, caption)
 }
-
-
-
 
 kable_pandoc_caption = function(x, caption) {
   if (identical(caption, NA)) caption = NULL
