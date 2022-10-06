@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.41
 
+## NEW FEATURES
+
+- Added support for generating Jira tables via `kable(, format = 'jira')` (thanks, @pedropark99 #2180, @mruessler #2024).
+
 ## BUG FIXES
 
 - Plot created outside of `knit()` could sneak into `knit_child()` results (thanks, @niklaswillrich, #2166).
