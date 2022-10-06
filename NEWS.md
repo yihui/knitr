@@ -2,6 +2,8 @@
 
 ## BUG FIXES
 
+- Plot created outside of `knit()` could sneak into `knit_child()` results (thanks, @niklaswillrich, #2166).
+
 - User-provided background colors for code chunks in `.Rnw` documents may fail (thanks, @nielsrhansen, #2167).
 
 # CHANGES IN knitr VERSION 1.40
