@@ -377,20 +377,20 @@ kable_html = function(
 #'
 #' This function provides the basis for Markdown and reST tables.
 #' @param x The data matrix.
-#' @param sep.row A length-3 character vector, specifying separators to be printed
-#'   before the header, after the header, and at the end of the table respectively.
+#' @param sep.row A length-3 character vector, specifying separators to be
+#'   printed before the header, after the header, and at the end of the table
+#'   respectively.
 #' @param sep.col The column separator.
-#' @param sep.head The column separator for the header of the table (i.e. the line with the column names).
+#' @param sep.head The column separator for the header of the table (i.e., the
+#'   line with the column names).
 #' @param padding Number of spaces for the table cell padding.
 #' @param align.fun A function to process the separator under the header
 #'   according to the alignment.
 #' @return A character vector of the table content.
 #' @noRd
 kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
-                      sep.head = NULL, padding = 0,
+                      sep.head = sep.col, padding = 0,
                       align.fun = function(s, a) s, rownames.name = '', ...) {
-  # If user does not provide a value for `sep.head`, use `sep.col` value
-  if (is.null(sep.head) || is.na(sep.head)) sep.head = sep.col
   # when the column separator is |, replace existing | with its HTML entity
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
