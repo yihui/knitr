@@ -458,8 +458,9 @@ kable_simple = function(x, caption = NULL, padding = 1, ...) {
 # Jira table
 kable_jira = function(x, caption = NULL, padding = 1, ...) {
   tab = kable_mark(x, c(NA, NA, NA), '|', padding, sep.head = '||', ...)
+  if ((n <- length(tab)) == 0) return(tab)
   # remove the line that separates the table header from the table body
-  if (length(tab) >= 2) tab = tab[-2]
+  if (n >= 2) tab = tab[-2]
   tab[1] = sprintf('||%s||', tab[1])
   tab[-1] = sprintf('|%s|', tab[-1])
   kable_pandoc_caption(tab, caption)
