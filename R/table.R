@@ -388,9 +388,9 @@ kable_html = function(
 #'   according to the alignment.
 #' @return A character vector of the table content.
 #' @noRd
-kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
-                      sep.head = sep.col, padding = 0,
-                      align.fun = function(s, a) s, rownames.name = '', ...) {
+kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0,
+                      align.fun = function(s, a) s, rownames.name = '',
+                      sep.head = sep.col, ...) {
   # when the column separator is |, replace existing | with its HTML entity
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
@@ -431,19 +431,14 @@ kable_rst = function(x, rownames.name = '\\', ...) {
 # Pandoc's pipe table
 kable_pipe = function(x, caption = NULL, padding = 1, ...) {
   if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
-  res = kable_mark(
-    x, sep.row = c(NA, '-', NA),
-    sep.col = '|', padding = padding,
-    align.fun = function(s, a) {
-      if (is.null(a)) return(s)
-      r = c(l = '^.', c = '^.|.$', r = '.$')
-      for (i in seq_along(s)) {
-        s[i] = gsub(r[a[i]], ':', s[i])
-      }
-      return(s)
-    },
-    ...
-  )
+  res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
+    if (is.null(a)) return(s)
+    r = c(l = '^.', c = '^.|.$', r = '.$')
+    for (i in seq_along(s)) {
+      s[i] = gsub(r[a[i]], ':', s[i])
+    }
+    s
+  }, ...)
   res = sprintf('|%s|', res)
   kable_pandoc_caption(res, caption)
 }
