@@ -415,29 +415,14 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
   add_mark_col_sep(res, sep.col, sep.head)
 }
 
+# add column separators to header and body separately
 add_mark_col_sep = function(table, sep.col, sep.head) {
-  table_dim = dim(table)
-  if (0L %in% table_dim) {
-    return(as.character(table))
-  }
-  header = table[1, ]
-  header = paste(header, collapse = sep.head)
-  table_body = table[-1, ]
-  if (is.null(dim(table_body)) && table_dim[2] > 1) {
-    # When `table_dim[2] == 1`, when we extract table_body = table[-1, ]
-    # `table_body` becomes a vector of rows, and we do not want to collapse
-    # all rows together (we want to collapse a vector of cols);
-    table_body = paste(table_body, collapse = sep.col)
-  }
-  if (!is.null(dim(table_body))) {
-    table_body = apply(table_body, 1, paste, collapse = sep.col)
-  }
-
-  return(c(header, table_body))
+  if (any(dim(table) == 0)) return(table)
+  h = paste(table[1, ], collapse = sep.head)  # header
+  b = table[-1, , drop = FALSE]
+  b = apply(b, 1, paste, collapse = sep.col)  # body
+  c(h, b)
 }
-
-
-
 
 kable_rst = function(x, rownames.name = '\\', ...) {
   kable_mark(x, rownames.name = rownames.name)
