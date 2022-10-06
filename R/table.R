@@ -380,17 +380,17 @@ kable_html = function(
 #' @param sep.row A length-3 character vector, specifying separators to be printed
 #'   before the header, after the header, and at the end of the table respectively.
 #' @param sep.col The column separator.
-#' @param sep.head.col The column separator for the header of the table (i.e. the line with the column names).
+#' @param sep.head The column separator for the header of the table (i.e. the line with the column names).
 #' @param padding Number of spaces for the table cell padding.
 #' @param align.fun A function to process the separator under the header
 #'   according to the alignment.
 #' @return A character vector of the table content.
 #' @noRd
 kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
-                      sep.head.col = NULL, padding = 0,
+                      sep.head = NULL, padding = 0,
                       align.fun = function(s, a) s, rownames.name = '', ...) {
-  # If user does not provide a value for `sep.head.col`, use `sep.col` value
-  if (is.null(sep.head.col) || is.na(sep.head.col)) sep.head.col = sep.col
+  # If user does not provide a value for `sep.head`, use `sep.col` value
+  if (is.null(sep.head) || is.na(sep.head)) sep.head = sep.col
   # when the column separator is |, replace existing | with its HTML entity
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
@@ -399,7 +399,7 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
   cn = colnames(x)
   if (length(cn) > 0) {
     cn[is.na(cn)] = "NA"
-    if (sep.head.col == '|') cn = gsub('\\|', '&#124;', cn)
+    if (sep.head == '|') cn = gsub('\\|', '&#124;', cn)
     if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
     l = pmax(if (length(l) == 0) 0 else l, nchar(remove_urls(cn), type = 'width'))
   }
@@ -412,16 +412,16 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ',
   res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
               x, if (!is.na(sep.row[3])) s)
   res = mat_pad(res, l, align)
-  add_mark_col_sep(res, sep.col, sep.head.col)
+  add_mark_col_sep(res, sep.col, sep.head)
 }
 
-add_mark_col_sep = function(table, sep.col, sep.head.col) {
+add_mark_col_sep = function(table, sep.col, sep.head) {
   table_dim = dim(table)
   if (0L %in% table_dim) {
     return(as.character(table))
   }
   header = table[1, ]
-  header = paste(header, collapse = sep.head.col)
+  header = paste(header, collapse = sep.head)
   table_body = table[-1, ]
   if (is.null(dim(table_body)) && table_dim[2] > 1) {
     # When `table_dim[2] == 1`, when we extract table_body = table[-1, ]
@@ -479,7 +479,7 @@ kable_simple = function(x, caption = NULL, padding = 1, ...) {
 kable_jira = function(x, caption = NULL, padding = 1, ...) {
   tab = kable_mark(
     x, c(NA, NA, NA),
-    sep.col = '|', sep.head.col = '||',
+    sep.col = '|', sep.head = '||',
     padding = padding, ...
   )
   if (length(tab) >= 2) {
