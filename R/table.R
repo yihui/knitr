@@ -377,16 +377,20 @@ kable_html = function(
 #'
 #' This function provides the basis for Markdown and reST tables.
 #' @param x The data matrix.
-#' @param sep.row A length-3 character vector, specifying separators to be printed
-#'   before the header, after the header, and at the end of the table respectively.
+#' @param sep.row A length-3 character vector, specifying separators to be
+#'   printed before the header, after the header, and at the end of the table
+#'   respectively.
 #' @param sep.col The column separator.
+#' @param sep.head The column separator for the header of the table (i.e., the
+#'   line with the column names).
 #' @param padding Number of spaces for the table cell padding.
 #' @param align.fun A function to process the separator under the header
 #'   according to the alignment.
 #' @return A character vector of the table content.
 #' @noRd
 kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0,
-                      align.fun = function(s, a) s, rownames.name = '', ...) {
+                      align.fun = function(s, a) s, rownames.name = '',
+                      sep.head = sep.col, ...) {
   # when the column separator is |, replace existing | with its HTML entity
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
@@ -395,7 +399,7 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   cn = colnames(x)
   if (length(cn) > 0) {
     cn[is.na(cn)] = "NA"
-    if (sep.col == '|') cn = gsub('\\|', '&#124;', cn)
+    if (sep.head == '|') cn = gsub('\\|', '&#124;', cn)
     if (grepl('^\\s*$', cn[1L])) cn[1L] = rownames.name  # no empty cells for reST
     l = pmax(if (length(l) == 0) 0 else l, nchar(remove_urls(cn), type = 'width'))
   }
@@ -407,7 +411,17 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   s = unlist(lapply(l, function(i) paste(rep(sep.row[2], i), collapse = '')))
   res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
               x, if (!is.na(sep.row[3])) s)
-  apply(mat_pad(res, l, align), 1, paste, collapse = sep.col)
+  res = mat_pad(res, l, align)
+  add_mark_col_sep(res, sep.col, sep.head)
+}
+
+# add column separators to header and body separately
+add_mark_col_sep = function(table, sep.col, sep.head) {
+  if (any(dim(table) == 0)) return(table)
+  h = paste(table[1, ], collapse = sep.head)  # header
+  b = table[-1, , drop = FALSE]
+  b = apply(b, 1, paste, collapse = sep.col)  # body
+  c(h, b)
 }
 
 kable_rst = function(x, rownames.name = '\\', ...) {
@@ -438,6 +452,17 @@ kable_simple = function(x, caption = NULL, padding = 1, ...) {
   # when x has only one column with name, indent by one space so --- won't be
   # treated as an hr line
   if (ncol(x) == 1 && !is.null(colnames(x))) tab = paste0(' ', tab)
+  kable_pandoc_caption(tab, caption)
+}
+
+# Jira table
+kable_jira = function(x, caption = NULL, padding = 1, ...) {
+  tab = kable_mark(x, c(NA, NA, NA), '|', padding, sep.head = '||', ...)
+  if ((n <- length(tab)) == 0) return(tab)
+  # remove the line that separates the table header from the table body
+  if (n >= 2) tab = tab[-2]
+  tab[1] = sprintf('||%s||', tab[1])
+  tab[-1] = sprintf('|%s|', tab[-1])
   kable_pandoc_caption(tab, caption)
 }
 
