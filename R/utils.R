@@ -383,19 +383,28 @@ is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
   fmt %in% setdiff(fmts, excludes)
 }
 
+#' @param exact Whether to return or use the exact format name. If not, Pandoc
+#'   extensions will be removed from the format name, e.g., \samp{latex-smart}
+#'   will be treated as \samp{latex}.
 #' @rdname output_type
 #' @export
-pandoc_to = function(fmt) {
+pandoc_to = function(fmt, exact = FALSE) {
   # rmarkdown sets an option for the Pandoc output format from markdown
-  to = opts_knit$get('rmarkdown.pandoc.to')
+  to = fmt_name(opts_knit$get('rmarkdown.pandoc.to'), exact)
   if (missing(fmt)) to else !is.null(to) && (to %in% fmt)
 }
 
 #' @rdname output_type
 #' @export
-pandoc_from = function() {
+pandoc_from = function(exact = FALSE) {
   # rmarkdown's input format, obtained from a package option set by rmarkdown
-  opts_knit$get('rmarkdown.pandoc.from') %n% 'markdown'
+  fmt_name(opts_knit$get('rmarkdown.pandoc.from'), exact) %n% 'markdown'
+}
+
+# pandoc format name: if not exact, return base name (remove extensions), e.g.,
+# latex-smart -> latex
+fmt_name = function(x, exact = FALSE) {
+  if (exact || is.null(x)) x else gsub('[-+].*', '', x)
 }
 
 # turn percent width/height to LaTeX unit, e.g. out.width = 30% -> .3\linewidth

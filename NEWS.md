@@ -4,6 +4,8 @@
 
 - Added support for generating Jira tables via `kable(, format = 'jira')` (thanks, @pedropark99 #2180, @mruessler #2024).
 
+- Added an argument `exact` to `pandoc_to()` and `pandoc_from()` to decide whether to use/return the exact Pandoc output/input format name. If not (default), Pandoc extensions will be removed from the format name, e.g., `latex-smart` will be treated as `latex`.
+
 ## BUG FIXES
 
 - Plot created outside of `knit()` could sneak into `knit_child()` results (thanks, @niklaswillrich, #2166).
