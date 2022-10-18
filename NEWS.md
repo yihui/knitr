@@ -4,6 +4,8 @@
 
 - Added support for generating Jira tables via `kable(, format = 'jira')` (thanks, @pedropark99 #2180, @mruessler #2024).
 
+- Added a new chunk option `fig.id`. When it is `TRUE`, the chunk option `out.extra` will gain an `id` attribute for each image from a code chunk in R Markdown (thanks, @jooyoungseo, #2169). By default, the attribute consists of a prefix, the chunk label, and the figure number. See <https://yihui.org/knitr/options/> for detailed documentation of `fig.id`.
+
 - Added an argument `exact` to `pandoc_to()` and `pandoc_from()` to decide whether to use/return the exact Pandoc output/input format name. If not (default), Pandoc extensions will be removed from the format name, e.g., `latex-smart` will be treated as `latex`.
 
 ## BUG FIXES

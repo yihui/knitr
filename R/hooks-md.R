@@ -40,6 +40,14 @@ need_special_plot_hook = function(options) {
 }
 
 hook_plot_md_base = function(x, options) {
+  # when fig.id = TRUE, add an `id` attribute to images of the form fig:label-i
+  if (isTRUE(options$fig.id)) options$fig.id = function(options) {
+    id = sprintf('%s%s-%s', options$fig.lp, options$label, options$fig.cur)
+    sprintf('id="%s"', xfun::alnum_id(id))
+  }
+  if (is.function(options$fig.id)) options$out.extra = c(
+    options$out.extra, options$fig.id(options)
+  )
   if (options$fig.show == 'animate') return(hook_plot_html(x, options))
 
   cap = .img.cap(options)

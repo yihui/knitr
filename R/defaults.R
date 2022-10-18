@@ -123,6 +123,7 @@ opts_chunk_attr = local({
   opts$fig.asp = 'numeric'
   opts$fig.alt = 'character'
   opts$fig.dim = 'list'
+  opts$fig.id = 'logical'
   opts$lang = 'list'
   opts$R.options = 'list'
   opts$cache.comments = 'logical'
