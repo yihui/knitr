@@ -74,7 +74,7 @@ color_def = function(col, variable = 'shadecolor') {
 sc_split = function(string) {
   if (is.call(string)) string = eval(string)
   if (is.numeric(string) || length(string) != 1L) return(string)
-  trimws(stringr::str_split(string, ';|,')[[1]])
+  trimws(strsplit(string, ';|,')[[1]])
 }
 
 # extract LaTeX packages for tikzDevice
@@ -1078,3 +1078,10 @@ remove_urls = function(x) {
 
 # repeat a string for n times
 rep_str = function(x, n, sep = '') paste(rep(x, n), collapse = sep)
+
+# patch strsplit() to split '' into '' instead of character(0)
+str_split = function(x, split, ...) {
+  y = strsplit(x, split, ...)
+  y[x == ''] = list('')
+  y
+}
