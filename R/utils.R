@@ -1075,3 +1075,6 @@ remove_urls = function(x) {
   # regex adapted from https://dev.to/mattkenefick/regex-convert-markdown-links-to-html-anchors-f7j
   gsub("(?<!`)\\[([^]]+)\\]\\(([^)]+)\\)(?!`)", "\\1", x, perl = TRUE)
 }
+
+# repeat a string for n times
+rep_str = function(x, n, sep = '') paste(rep(x, n), collapse = sep)
