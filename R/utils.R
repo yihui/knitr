@@ -1078,3 +1078,10 @@ remove_urls = function(x) {
 
 # repeat a string for n times
 rep_str = function(x, n, sep = '') paste(rep(x, n), collapse = sep)
+
+# patch strsplit() to split '' into '' instead of character(0)
+str_split = function(x, split, ...) {
+  y = strsplit(x, split, ...)
+  y[x == ''] = list('')
+  y
+}
