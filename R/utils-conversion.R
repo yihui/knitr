@@ -168,7 +168,7 @@ knit2html = function(
   out = knit(input, text = text, envir = envir, quiet = quiet)
   if (is.null(text)) {
     output = with_ext(if (is.null(output) || is.na(output)) out else output, 'html')
-    markdown::markdownToHTML(out, output, encoding = 'UTF-8', ...)
+    markdown::markdownToHTML(out, output, ...)
     invisible(output)
   } else markdown::markdownToHTML(text = out, ...)
 }
