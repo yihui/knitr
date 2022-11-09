@@ -291,8 +291,8 @@ kable_latex = function(
   }
   centering = if (centering && !is.null(caption)) '\n\\centering'
   # vertical align only if 'caption' is not NULL (may be NA) or 'valign' has
-  # been explicitly specified
-  valign = if ((!is.null(caption) || !missing(valign)) && valign != '') {
+  # been explicitly specified; tabularx and xltabular always use 'valign'
+  valign = if ((!is.null(caption) || !missing(valign) || tabular %in% c('tabularx', 'xltabular')) && valign != '') {
     if (grepl('^[[{]', valign)) valign else sprintf('[%s]', valign)
   } else ''
   if (identical(caption, NA)) caption = NULL

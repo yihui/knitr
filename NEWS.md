@@ -14,6 +14,8 @@
 
 - User-provided background colors for code chunks in `.Rnw` documents may fail (thanks, @nielsrhansen, #2167).
 
+- `tabularx` and `xltabular` tables should work without captions (thanks, @amarakon, #2188).
+
 # CHANGES IN knitr VERSION 1.40
 
 ## NEW FEATURES
