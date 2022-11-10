@@ -56,7 +56,7 @@ docAdjust = function(x) {
 rocco = function(input, ...) {
   out = knit2html(
     input, ...,
-    stylesheet = system.file('misc', 'docco-classic.css', package = 'knitr'),
+    meta = list(css = system.file('misc', 'docco-classic.css', package = 'knitr')),
     template = system.file('misc', 'docco-classic.html', package = 'knitr')
   )
   txt = read_utf8(out)

@@ -53,8 +53,8 @@ par(mar=c(4,4,.1,.1))
 plot(rnorm(n), rnorm(n), pch=21, cex=5*runif(n), col='white', bg='gray')
 ```
 
-You can use your own CSS file instead of the built-in style in the **markdown** package -- just set the option `markdown.HTML.stylesheet`, e.g.
+You can use your own CSS file instead of the built-in style in the **markdown** package -- just set the option `markdown.html.css`, e.g.
 
 ```{r css, eval=FALSE}
-options(markdown.HTML.stylesheet = 'path/to/a/custom/style.css')
+options(markdown.html.css = 'path/to/a/custom/style.css')
 ```
