@@ -31,7 +31,7 @@ rocco_view = function(input) {
     on.exit(setwd(owd))
     if (!file.exists(input))
         return()
-    o = rocco(input, header = "", quiet = TRUE)
+    o = rocco(input, quiet = TRUE)
     if (interactive())
         browseURL(o)
 }
