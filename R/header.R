@@ -56,8 +56,8 @@ insert_header_latex = function(doc, b) {
       doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\n\\2', doc[j], perl = TRUE)
     }
     i = i[1L]; l = stringr::str_locate(doc[i], b)
-    tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
-    stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, make_header_latex(doc))
+    tmp = str_substitute(doc[i], l[, 1], l[, 2])
+    str_substitute(doc[i], l[,1], l[,2]) = paste0(tmp, make_header_latex(doc))
   } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
     doc[1L] = one_string(c(
@@ -87,8 +87,8 @@ insert_header_html = function(doc, b) {
   i = grep(b, doc)
   if (length(i) == 1L) {
     l = stringr::str_locate(doc[i], b)
-    tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
-    stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, '\n', make_header_html())
+    tmp = str_substitute(doc[i], l[, 1], l[, 2])
+    str_substitute(doc[i], l[,1], l[,2]) = paste0(tmp, '\n', make_header_html())
   }
   doc
 }

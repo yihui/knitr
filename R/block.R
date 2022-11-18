@@ -560,7 +560,7 @@ inline_exec = function(
     })
     d = nchar(input)
     # replace with evaluated results
-    stringr::str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
+    str_substitute(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
       paste(hook(res), collapse = '')
     } else ''
     if (i < n) loc[(i + 1):n, ] = loc[(i + 1):n, ] - (d - nchar(input))
