@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.42
+
+## MAJOR CHANGES
+
+- `knit()` no longer prints out chunk options beneath the text progress bar while knitting a document (thanks, @hadley, #1880).
+
 # CHANGES IN knitr VERSION 1.41
 
 ## NEW FEATURES

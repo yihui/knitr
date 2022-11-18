@@ -333,13 +333,7 @@ get_option_comment = function(engine) {
 
 print.block = function(x, ...) {
   params = x$params
-  # don't show internal options for quarto
-  for (i in attr(params, 'quarto_options')) params[[i]] = NULL
-  cat('label:', params$label)
-  if (length(params) > 1L) {
-    cat(' (with options) \n')
-    str(params[setdiff(names(params), 'label')])
-  }
+  cat(' chunk:', params$label, '\n')
   if (opts_knit$get('verbose')) {
     code = knit_code$get(params$label)
     if (length(code) && !is_blank(code)) {
