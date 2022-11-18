@@ -302,11 +302,7 @@ process_file = function(text, output) {
       }
       break  # must have called knit_exit(), so exit early
     }
-    if (progress) {
-      setTxtProgressBar(pb, i)
-      if (!tangle) cat('\n')  # under tangle mode, only show one progress bar
-      flush.console()
-    }
+    if (progress) setTxtProgressBar(pb, i)
     group = groups[[i]]
     res[i] = withCallingHandlers(
       if (tangle) process_tangle(group) else process_group(group),
