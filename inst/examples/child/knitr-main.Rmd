@@ -1,4 +1,4 @@
-You can also use the `child` option to include child documents in markdown. 
+You can also use the `child` option to include child documents in markdown.
 
 ```{r test-main, child='knitr-child.Rmd'}
 ```
