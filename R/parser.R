@@ -343,13 +343,10 @@ print.block = function(x, ...) {
   if (opts_knit$get('verbose')) {
     code = knit_code$get(params$label)
     if (length(code) && !is_blank(code)) {
-      cat('\n  ', stringr::str_pad(' R code chunk ', getOption('width') - 10L, 'both', '~'), '\n')
-      cat(one_string('  ', code), '\n')
-      cat('  ', rep_str('~', getOption('width') - 10L), '\n')
+      cat('\n')
+      cat(one_string('  |  ', code), '\n')
     }
-    cat(paste('##------', date(), '------##'), sep = '\n')
   }
-  cat('\n')
 }
 
 # extract inline R code fragments (as well as global options)
