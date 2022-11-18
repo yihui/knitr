@@ -286,6 +286,9 @@ process_file = function(text, output) {
   # was not appropriate for non-interactive mode, and I don't want to argue)
   progress = opts_knit$get('progress') && !is_R_CMD_check()
   if (progress) {
+    labels = unlist(lapply(groups, function(g) {
+      if (is.list(g$params)) g[[c('params', 'label')]] else ''
+    }))
     pb = txtProgressBar(0, n, char = '.', style = 3)
     on.exit(close(pb), add = TRUE)
   }
