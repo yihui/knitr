@@ -1,3 +1,9 @@
+# CHANGES IN knitr VERSION 1.42
+
+## MINOR CHANGES
+
+- If you refer to a child document in a chunk with `child='bar.Rmd'` and still have other code in the chunk block, you can now silence the warning that indicates that this other code will not be executed when you `render` the document by specifying `options(knitr.child.warning = FALSE)`. See #2191.
+
 # CHANGES IN knitr VERSION 1.41
 
 ## NEW FEATURES
