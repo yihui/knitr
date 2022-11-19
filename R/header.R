@@ -57,7 +57,7 @@ insert_header_latex = function(doc, b) {
     }
     i = i[1L]; l = stringr::str_locate(doc[i], b)
     tmp = substr(doc[i], l[, 1], l[, 2])
-    stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, make_header_latex(doc))
+    doc[i] = str_replace(doc[i], l, paste0(tmp, make_header_latex(doc)))
   } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
     doc[1L] = one_string(c(
@@ -88,7 +88,7 @@ insert_header_html = function(doc, b) {
   if (length(i) == 1L) {
     l = stringr::str_locate(doc[i], b)
     tmp = substr(doc[i], l[, 1], l[, 2])
-    stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, '\n', make_header_html())
+    doc[i] = str_replace(doc[i], l, paste0(tmp, '\n', make_header_html()))
   }
   doc
 }
