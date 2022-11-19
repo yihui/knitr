@@ -289,8 +289,9 @@ process_file = function(text, output) {
     labels = unlist(lapply(groups, function(g) {
       if (is.list(g$params)) g[[c('params', 'label')]] else ''
     }))
-    pb = txtProgressBar(0, n, char = '.', style = 3)
-    on.exit(close(pb), add = TRUE)
+    pb_fun = getOption('knitr.progress.fun', txt_pb)
+    pb = pb_fun(n, labels)
+    on.exit(pb$done(), add = TRUE)
   }
   wd = getwd()
   for (i in 1:n) {
@@ -302,7 +303,7 @@ process_file = function(text, output) {
       }
       break  # must have called knit_exit(), so exit early
     }
-    if (progress) setTxtProgressBar(pb, i)
+    if (progress) pb$update(i)
     group = groups[[i]]
     res[i] = withCallingHandlers(
       if (tangle) process_tangle(group) else process_group(group),
