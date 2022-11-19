@@ -89,8 +89,8 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   if (is.na(idx1) || idx1 >= idx2) return()
   txt = one_string(input[idx1:(idx2 - 1L)])  # rough preamble
   idx = stringr::str_locate(txt, hb)  # locate documentclass
-  options(tikzDocumentDeclaration = str_substitute(txt, idx[, 1L], idx[, 2L]))
-  preamble = pure_preamble(split_lines(str_substitute(txt, idx[, 2L] + 1L)), patterns)
+  options(tikzDocumentDeclaration = stringr::str_sub(txt, idx[, 1L], idx[, 2L]))
+  preamble = pure_preamble(split_lines(stringr::str_sub(txt, idx[, 2L] + 1L)), patterns)
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
   .knitEnv$bibliography = grep('^\\\\bibliography.+', input, value = TRUE)
 }
@@ -1085,34 +1085,3 @@ str_split = function(x, split, ...) {
   y[x == ''] = list('')
   y
 }
-
-str_substitute = function(string, start = 1L, end = -1L) {
-
-  if (is.matrix(start)) {
-    end = start[, 2]
-    start = start[, 1]
-  }
-
-  start = recycler(start, string)
-  end = recycler(end, string)
-
-  n = nchar(string)
-  start = ifelse(start < 0, start + n + 1, start)
-  end = ifelse(end < 0, end + n + 1, end)
-
-  substr(string, start, end)
-}
-
-recycler = function(x, to, arg = deparse(substitute(x))) {
-
-  if (length(x) == length(to)) {
-    return(x)
-  }
-
-  if (length(x) != 1) {
-    stop("Can't recycle `", arg, "` to length ", length(to), call. = FALSE)
-  }
-
-  rep(x, length(to))
-}
-
