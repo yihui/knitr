@@ -286,6 +286,9 @@ process_file = function(text, output) {
   # was not appropriate for non-interactive mode, and I don't want to argue)
   progress = opts_knit$get('progress') && !is_R_CMD_check()
   if (progress) {
+    labels = unlist(lapply(groups, function(g) {
+      if (is.list(g$params)) g[[c('params', 'label')]] else ''
+    }))
     pb = txtProgressBar(0, n, char = '.', style = 3)
     on.exit(close(pb), add = TRUE)
   }
@@ -299,11 +302,7 @@ process_file = function(text, output) {
       }
       break  # must have called knit_exit(), so exit early
     }
-    if (progress) {
-      setTxtProgressBar(pb, i)
-      if (!tangle) cat('\n')  # under tangle mode, only show one progress bar
-      flush.console()
-    }
+    if (progress) setTxtProgressBar(pb, i)
     group = groups[[i]]
     res[i] = withCallingHandlers(
       if (tangle) process_tangle(group) else process_group(group),

@@ -333,23 +333,14 @@ get_option_comment = function(engine) {
 
 print.block = function(x, ...) {
   params = x$params
-  # don't show internal options for quarto
-  for (i in attr(params, 'quarto_options')) params[[i]] = NULL
-  cat('label:', params$label)
-  if (length(params) > 1L) {
-    cat(' (with options) \n')
-    str(params[setdiff(names(params), 'label')])
-  }
+  cat(' chunk:', params$label, '\n')
   if (opts_knit$get('verbose')) {
     code = knit_code$get(params$label)
     if (length(code) && !is_blank(code)) {
-      cat('\n  ', stringr::str_pad(' R code chunk ', getOption('width') - 10L, 'both', '~'), '\n')
-      cat(one_string('  ', code), '\n')
-      cat('  ', rep_str('~', getOption('width') - 10L), '\n')
+      cat('\n')
+      cat(one_string('  |  ', code), '\n')
     }
-    cat(paste('##------', date(), '------##'), sep = '\n')
   }
-  cat('\n')
 }
 
 # extract inline R code fragments (as well as global options)
@@ -379,17 +370,12 @@ parse_inline = function(input, patterns) {
 }
 
 print.inline = function(x, ...) {
-  if (nrow(x$location)) {
-    cat('   ')
-    if (opts_knit$get('verbose')) {
-      cat(stringr::str_pad(' inline R code fragments ',
-                  getOption('width') - 10L, 'both', '-'), '\n')
-      cat(sprintf('    %s:%s %s', x$location[, 1], x$location[, 2], x$code),
-          sep = '\n')
-      cat('  ', rep_str('-', getOption('width') - 10L), '\n')
-    } else cat('inline R code fragments\n')
-  } else cat('  ordinary text without R code\n')
-  cat('\n')
+  if (opts_knit$get('verbose')) {
+    cat('\n')
+    if (nrow(x$location)) {
+      cat(sprintf('  |  %s  #%s:%s', x$code, x$location[, 1], x$location[, 2]), sep = '\n')
+    }
+  }
 }
 
 #' Read chunks from an external script

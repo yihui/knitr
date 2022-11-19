@@ -1,7 +1,7 @@
 Package: knitr
 Type: Package
 Title: A General-Purpose Package for Dynamic Report Generation in R
-Version: 1.40.4
+Version: 1.41.1
 Authors@R: c(
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666")),
     person("Abhraneel", "Sarma", role = "ctb"),
@@ -195,4 +195,4 @@ Collate:
     'utils-upload.R'
     'utils-vignettes.R'
     'zzz.R'
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
