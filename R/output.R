@@ -309,10 +309,6 @@ process_file = function(text, output) {
       error = function(e) {
         setwd(wd)
         cat(res, sep = '\n', file = output %n% '')
-        message(
-          'Quitting from lines ', paste(current_lines(i), collapse = '-'),
-          ' (', knit_concord$get('infile'), ') '
-        )
       }
     )
   }
