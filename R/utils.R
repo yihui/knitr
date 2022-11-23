@@ -1096,15 +1096,18 @@ txt_pb = function(total, labels) {
   # progress bar in a previous step could be completely wiped (by spaces)
   s = paste0(s, strrep(' ', n - w))
   w2 = getOption('width')
-  pb = txtProgressBar(0, total, 0, '.', width = max(w2 - 10 - n, 10), style = 3)
+  con = getOption('knitr.progress.output', '')
+  pb = txtProgressBar(
+    0, total, 0, '.', width = max(w2 - 10 - n, 10), style = 3, file = con
+  )
   list(
     update = function(i) {
       setTxtProgressBar(pb, i)
-      cat(s[i])  # append chunk label to the progress bar
+      cat(s[i], file = con)  # append chunk label to the progress bar
     },
     done = function() {
       # wipe the progress bar
-      cat(paste0('\r', strrep(' ', max(w2, 10) + 10 + n)))
+      cat(paste0('\r', strrep(' ', max(w2, 10) + 10 + n)), file = con)
       close(pb)
     }
   )
