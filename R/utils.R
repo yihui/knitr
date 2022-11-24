@@ -1085,3 +1085,30 @@ str_split = function(x, split, ...) {
   y[x == ''] = list('')
   y
 }
+
+# default progress bar function in knitr: create a text progress bar, and return
+# methods to update/close it
+txt_pb = function(total, labels) {
+  s = ifelse(labels == '', '', sprintf(' (%s)', labels))  # chunk labels in ()
+  w = nchar(s)  # widths of labels
+  n = max(w)
+  # right-pad spaces for same width of all labels so a wider label of the
+  # progress bar in a previous step could be completely wiped (by spaces)
+  s = paste0(s, strrep(' ', n - w))
+  w2 = getOption('width')
+  con = getOption('knitr.progress.output', '')
+  pb = txtProgressBar(
+    0, total, 0, '.', width = max(w2 - 10 - n, 10), style = 3, file = con
+  )
+  list(
+    update = function(i) {
+      setTxtProgressBar(pb, i)
+      cat(s[i], file = con)  # append chunk label to the progress bar
+    },
+    done = function() {
+      # wipe the progress bar
+      cat(paste0('\r', strrep(' ', max(w2, 10) + 10 + n)), file = con)
+      close(pb)
+    }
+  )
+}
