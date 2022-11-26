@@ -8,8 +8,7 @@ knit_concord = new_defaults(list(
 # do not consider child mode for concordance
 concord_mode = function() {
   opts_knit$get('concordance') && !child_mode() &&
-    (out_format(c('latex', 'sweave', 'listings')) ||
-     out_format('markdown') && is_html_output())
+    out_format(c('latex', 'sweave', 'listings', 'markdown'))
 }
 
 current_lines = function(i) {
@@ -45,7 +44,7 @@ concord_gen = function(infile, outfile) {
 
   confile = paste(sans_ext(outfile), 'concordance.tex', sep = '-')
   # write to file
-  if (out_format('markdown') && is_html_output())
+  if (is_html_output())
     cat('<!-- concordance:', outfile, ':', infile, ':',
       concordance, ' -->\n', sep = '', file = outfile, append = TRUE)
   else
