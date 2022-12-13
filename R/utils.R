@@ -580,7 +580,14 @@ print_knitlog = function() {
 }
 
 # count the number of lines
-line_count = function(x) stringr::str_count(x, '\n') + 1L
+line_count = function(x) {
+  res = gregexpr('\n', x, fixed = TRUE)
+  unlist(lapply(res, function(x) {
+    n = length(x)
+    if (n == 1 && x == -1) n = 0
+    n + 1
+  }))
+}
 
 has_package = function(pkg) loadable(pkg, FALSE)
 has_packages = function(pkgs) {
