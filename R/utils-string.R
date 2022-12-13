@@ -8,3 +8,11 @@ str_replace = function(x, pos, value) {
   y = substring(x, m[1, ], m[2, ])
   paste(rbind(y, c(value, '')), collapse = '')
 }
+
+# a wrapper function to make strwrap() return a character vector of the same
+# length as the input vector; each element of the output vector is a string
+# formed by concatenating wrapped strings by \n
+str_wrap = function(...) {
+  res = strwrap(..., simplify = FALSE)
+  unlist(lapply(res, one_string))
+}
