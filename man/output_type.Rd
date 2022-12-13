@@ -11,9 +11,9 @@ is_latex_output()
 
 is_html_output(fmt = pandoc_to(), excludes = NULL)
 
-pandoc_to(fmt)
+pandoc_to(fmt, exact = FALSE)
 
-pandoc_from()
+pandoc_from(exact = FALSE)
 }
 \arguments{
 \item{fmt}{A character vector of output formats to be checked against. If not
@@ -23,6 +23,10 @@ provided, \code{is_html_output()} uses \code{pandoc_to()}, and
 \item{excludes}{A character vector of output formats that should not be
 considered as HTML format. Options are: markdown, epub, epub2, html, html4, html5,
 revealjs, s5, slideous, slidy, and gfm.}
+
+\item{exact}{Whether to return or use the exact format name. If not, Pandoc
+extensions will be removed from the format name, e.g., \samp{latex-smart}
+will be treated as \samp{latex}.}
 }
 \description{
 The function \code{is_latex_output()} returns \code{TRUE} when the output

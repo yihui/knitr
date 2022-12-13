@@ -48,7 +48,7 @@ docAdjust = function(x) {
 #' @examples rocco_view=function(input) {
 #' owd = setwd(tempdir()); on.exit(setwd(owd))
 #' if (!file.exists(input)) return()
-#' o=rocco(input, header='', quiet=TRUE)
+#' o=rocco(input, quiet=TRUE)
 #' if (interactive()) browseURL(o)}
 #' # knit these two vignettes using the docco style
 #' rocco_view(system.file('doc', 'docco-classic.Rmd', package = 'knitr'))
@@ -56,7 +56,7 @@ docAdjust = function(x) {
 rocco = function(input, ...) {
   out = knit2html(
     input, ...,
-    stylesheet = system.file('misc', 'docco-classic.css', package = 'knitr'),
+    meta = list(css = system.file('misc', 'docco-classic.css', package = 'knitr')),
     template = system.file('misc', 'docco-classic.html', package = 'knitr')
   )
   txt = read_utf8(out)

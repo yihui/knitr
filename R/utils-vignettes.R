@@ -28,7 +28,7 @@ NULL
 vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
   {
     on.exit({opts_chunk$restore(); knit_hooks$restore()}, add = TRUE)
-    oopts = options(markdown.HTML.header = NULL, knitr.knit2html.force_v1 = TRUE)
+    oopts = options(markdown.html.header = NULL, knitr.knit2html.force_v1 = TRUE)
     on.exit(options(oopts), add = TRUE)
   }
   opts_chunk$set(error = FALSE)  # should not hide errors
@@ -155,7 +155,7 @@ knit_filter = function(ifile, encoding = 'UTF-8') {
   m = group_indices(grepl(p1, x), grepl(p2, x))
   i = m %% 2 == 0
   x[i] = ''  # remove code chunks
-  x[!i] = stringr::str_replace_all(x[!i], p$inline.code, '')  # remove inline code
+  x[!i] = gsub(p$inline.code, '', x[!i], perl = TRUE)  # remove inline code
   structure(x, control = '-H -t')
 }
 

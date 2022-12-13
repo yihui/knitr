@@ -1,7 +1,7 @@
 Package: knitr
 Type: Package
 Title: A General-Purpose Package for Dynamic Report Generation in R
-Version: 1.40.1
+Version: 1.41.2
 Authors@R: c(
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666")),
     person("Abhraneel", "Sarma", role = "ctb"),
@@ -84,6 +84,7 @@ Authors@R: c(
     person("Noam", "Ross", role = "ctb"),
     person("Obada", "Mahdi", role = "ctb"),
     person("Pavel N.", "Krivitsky", role = "ctb", comment=c(ORCID = "0000-0002-9101-3362")),
+    person("Pedro", "Faria", role = "ctb"),
     person("Qiang", "Li", role = "ctb"),
     person("Ramnath", "Vaidyanathan", role = "ctb"),
     person("Richard", "Cotton", role = "ctb"),
@@ -120,10 +121,10 @@ Imports:
     methods,
     stringr (>= 0.6),
     yaml (>= 2.1.19),
-    xfun (>= 0.29),
+    xfun (>= 0.34),
     tools
 Suggests:
-    markdown,
+    markdown (>= 1.3),
     formatR,
     testit,
     digest,
@@ -191,8 +192,9 @@ Collate:
     'template.R'
     'utils-conversion.R'
     'utils-rd2html.R'
+    'utils-string.R'
     'utils-sweave.R'
     'utils-upload.R'
     'utils-vignettes.R'
     'zzz.R'
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2

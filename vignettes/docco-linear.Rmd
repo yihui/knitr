@@ -51,7 +51,7 @@ plot(rnorm(n), rnorm(n), pch=21, cex=5*runif(n), col='white', bg='gray')
 The **markdown** package (>= v0.6.2) supports custom HTML templates, and the `docco` engine in **knitr** uses a custom template to compile Markdown to HTML:
 
 ```{r header, eval=FALSE}
-knit2html(..., markdown.HTML.template = system.file('misc', 'docco-template.html', package='knitr'))
+knit2html(..., template = system.file('misc', 'docco-template.html', package='knitr'))
 ```
 
 That is it.

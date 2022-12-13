@@ -44,6 +44,9 @@ comment_to_var = function(x, varname, pattern, envir) {
   FALSE
 }
 
+# TODO: remove this when we don't support R < 3.5.0
+if (getRversion() < '3.5.0') isFALSE = function(x) identical(x, FALSE)
+
 is_blank = function(x) {
   if (length(x)) all(grepl('^\\s*$', x)) else TRUE
 }
@@ -74,7 +77,7 @@ color_def = function(col, variable = 'shadecolor') {
 sc_split = function(string) {
   if (is.call(string)) string = eval(string)
   if (is.numeric(string) || length(string) != 1L) return(string)
-  stringr::str_trim(stringr::str_split(string, ';|,')[[1]])
+  trimws(strsplit(string, ';|,')[[1]])
 }
 
 # extract LaTeX packages for tikzDevice
@@ -89,8 +92,8 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   if (is.na(idx1) || idx1 >= idx2) return()
   txt = one_string(input[idx1:(idx2 - 1L)])  # rough preamble
   idx = stringr::str_locate(txt, hb)  # locate documentclass
-  options(tikzDocumentDeclaration = stringr::str_sub(txt, idx[, 1L], idx[, 2L]))
-  preamble = pure_preamble(split_lines(stringr::str_sub(txt, idx[, 2L] + 1L)), patterns)
+  options(tikzDocumentDeclaration = substr(txt, idx[, 1L], idx[, 2L]))
+  preamble = pure_preamble(split_lines(substr(txt, idx[, 2L] + 1L, nchar(txt))), patterns)
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
   .knitEnv$bibliography = grep('^\\\\bibliography.+', input, value = TRUE)
 }
@@ -383,19 +386,28 @@ is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
   fmt %in% setdiff(fmts, excludes)
 }
 
+#' @param exact Whether to return or use the exact format name. If not, Pandoc
+#'   extensions will be removed from the format name, e.g., \samp{latex-smart}
+#'   will be treated as \samp{latex}.
 #' @rdname output_type
 #' @export
-pandoc_to = function(fmt) {
+pandoc_to = function(fmt, exact = FALSE) {
   # rmarkdown sets an option for the Pandoc output format from markdown
-  to = opts_knit$get('rmarkdown.pandoc.to')
+  to = fmt_name(opts_knit$get('rmarkdown.pandoc.to'), exact)
   if (missing(fmt)) to else !is.null(to) && (to %in% fmt)
 }
 
 #' @rdname output_type
 #' @export
-pandoc_from = function() {
+pandoc_from = function(exact = FALSE) {
   # rmarkdown's input format, obtained from a package option set by rmarkdown
-  opts_knit$get('rmarkdown.pandoc.from') %n% 'markdown'
+  fmt_name(opts_knit$get('rmarkdown.pandoc.from'), exact) %n% 'markdown'
+}
+
+# pandoc format name: if not exact, return base name (remove extensions), e.g.,
+# latex-smart -> latex
+fmt_name = function(x, exact = FALSE) {
+  if (exact || is.null(x)) x else gsub('[-+].*', '', x)
 }
 
 # turn percent width/height to LaTeX unit, e.g. out.width = 30% -> .3\linewidth
@@ -1065,4 +1077,41 @@ image_uri = function(f) xfun::base64_uri(f)
 remove_urls = function(x) {
   # regex adapted from https://dev.to/mattkenefick/regex-convert-markdown-links-to-html-anchors-f7j
   gsub("(?<!`)\\[([^]]+)\\]\\(([^)]+)\\)(?!`)", "\\1", x, perl = TRUE)
+}
+
+# repeat a string for n times
+rep_str = function(x, n, sep = '') paste(rep(x, n), collapse = sep)
+
+# patch strsplit() to split '' into '' instead of character(0)
+str_split = function(x, split, ...) {
+  y = strsplit(x, split, ...)
+  y[x == ''] = list('')
+  y
+}
+
+# default progress bar function in knitr: create a text progress bar, and return
+# methods to update/close it
+txt_pb = function(total, labels) {
+  s = ifelse(labels == '', '', sprintf(' (%s)', labels))  # chunk labels in ()
+  w = nchar(s)  # widths of labels
+  n = max(w)
+  # right-pad spaces for same width of all labels so a wider label of the
+  # progress bar in a previous step could be completely wiped (by spaces)
+  s = paste0(s, strrep(' ', n - w))
+  w2 = getOption('width')
+  con = getOption('knitr.progress.output', '')
+  pb = txtProgressBar(
+    0, total, 0, '.', width = max(w2 - 10 - n, 10), style = 3, file = con
+  )
+  list(
+    update = function(i) {
+      setTxtProgressBar(pb, i)
+      cat(s[i], file = con)  # append chunk label to the progress bar
+    },
+    done = function() {
+      # wipe the progress bar
+      cat(paste0('\r', strrep(' ', max(w2, 10) + 10 + n)), file = con)
+      close(pb)
+    }
+  )
 }

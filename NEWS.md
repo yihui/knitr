@@ -1,12 +1,38 @@
+# CHANGES IN knitr VERSION 1.42
+
+## NEW FEATURES
+
+- Users can specify a custom progress bar for `knit()` now. The default is still a text progress bar created from `utils::txtProgressBar()`. To specify a custom progress bar, set `options(knitr.progress.fun = function(total, labels) {})`. This function should take arguments `total` (the total number of chunks) and `labels` (the vector of chunk labels), create a progress bar, and return a list of two methods: `list(update = function(i) {}, done = function() {})`. The `update()` method takes `i` (index of the current chunk) as the input and updates the progress bar. The `done()` method closes the progress bar. See https://yihui.org/knitr/options/#global-r-options for documentation and examples.
+
+- The default text progress bar is still written to `stdout()` by default, but can also be written to other connections or `stderr()` now. To do so, set `options(knitr.progress.output = )` to a connection or `stderr()`.
+
+## MAJOR CHANGES
+
+- `knit()` no longer prints out chunk options beneath the text progress bar while knitting a document (thanks, @hadley, #1880).
+
+## MINOR CHANGES
+
+- If the chunk option `child` is used for a code chunk but the chunk is not empty, you will get a warning indicating that this non-empty code will not be executed when you knit the document. Now this warning can be silenced by `options(knitr.child.warning = FALSE)` (thanks, @jwijffels, #2191).
+
 # CHANGES IN knitr VERSION 1.41
 
 ## NEW FEATURES
+
+- Added support for generating Jira tables via `kable(, format = 'jira')` (thanks, @pedropark99 #2180, @mruessler #2024).
+
+- Added a new chunk option `fig.id`. When it is `TRUE`, the chunk option `out.extra` will gain an `id` attribute for each image from a code chunk in R Markdown (thanks, @jooyoungseo, #2169). By default, the attribute consists of a prefix, the chunk label, and the figure number. See <https://yihui.org/knitr/options/> for detailed documentation of `fig.id`.
+
+- Added an argument `exact` to `pandoc_to()` and `pandoc_from()` to decide whether to use/return the exact Pandoc output/input format name. If not (default), Pandoc extensions will be removed from the format name, e.g., `latex-smart` will be treated as `latex`.
 
 - For `python` code chunks, objects can be cached using the Python package **dill**. This currently requires the patch in **reticulate** https://github.com/rstudio/reticulate/pull/1210, and should be considered experimental before the patch is accepted and a new version of **reticulate** is released (thanks, @leogama, #2170).
 
 ## BUG FIXES
 
+- Plot created outside of `knit()` could sneak into `knit_child()` results (thanks, @niklaswillrich, #2166).
+
 - User-provided background colors for code chunks in `.Rnw` documents may fail (thanks, @nielsrhansen, #2167).
+
+- `tabularx` and `xltabular` tables should work without captions (thanks, @amarakon, #2188).
 
 # CHANGES IN knitr VERSION 1.40
 

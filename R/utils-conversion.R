@@ -127,18 +127,18 @@ rnw2pdf = function(
   output
 }
 
-#' Convert markdown to HTML using knit() and markdownToHTML()
+#' Convert markdown to HTML using knit() and mark_html()
 #'
 #' This is a convenience function to knit the input markdown source and call
-#' \code{markdown::\link[markdown]{markdownToHTML}()} in the \pkg{markdown}
+#' \code{markdown::\link[markdown]{mark_html}()} in the \pkg{markdown}
 #' package to convert the result to HTML.
 #' @inheritParams knit
 #' @param ... Options passed to
-#'   \code{markdown::\link[markdown]{markdownToHTML}()}.
+#'   \code{markdown::\link[markdown]{mark_html}()}.
 #' @param force_v1 Boolean; whether to force rendering the input document as an
 #'   R Markdown v1 document, even if it is for v2.
 #' @export
-#' @seealso \code{\link{knit}}, \code{markdown::\link[markdown]{markdownToHTML}}
+#' @seealso \code{\link{knit}}, \code{markdown::\link[markdown]{mark_html}}
 #' @return If the argument \code{text} is NULL, a character string (HTML code)
 #'   is returned; otherwise the result is written into a file and the filename
 #'   is returned.
@@ -168,9 +168,9 @@ knit2html = function(
   out = knit(input, text = text, envir = envir, quiet = quiet)
   if (is.null(text)) {
     output = with_ext(if (is.null(output) || is.na(output)) out else output, 'html')
-    markdown::markdownToHTML(out, output, encoding = 'UTF-8', ...)
+    markdown::mark_html(out, output, ...)
     invisible(output)
-  } else markdown::markdownToHTML(text = out, ...)
+  } else markdown::mark_html(text = out, ...)
 }
 
 #' Knit an R Markdown document and post it to WordPress
@@ -218,7 +218,7 @@ knit2wp = function(
   )
   out = knit(input, envir = envir); on.exit(unlink(out))
   content = file_string(out)
-  content = markdown::markdownToHTML(text = content, fragment.only = TRUE)
+  content = markdown::mark(text = content)
   shortcode = rep(shortcode, length.out = 2L)
   if (shortcode[1]) content = gsub(
     '<pre><code class="([[:alpha:]]+)">(.+?)</code></pre>',

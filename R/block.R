@@ -56,7 +56,7 @@ call_block = function(block) {
   if (opts_knit$get('progress')) print(block)
 
   if (!is.null(params$child)) {
-    if (!is_blank(params[['code']])) warning(
+    if (!is_blank(params[['code']]) && getOption('knitr.child.warning', TRUE)) warning(
       "The chunk '", params$label, "' has the 'child' option, ",
       "and this code chunk must be empty. Its code will be ignored."
     )
@@ -201,6 +201,10 @@ eng_r = function(options) {
   # open a device to record plots if not using a global device or no device is
   # open, and close this device if we don't want to use a global device
   if (!opts_knit$get('global.device') || is.null(dev.list())) {
+    # reset current device if any is open (#2166)
+    if (!is.null(dev.list())) {
+      dv0 = dev.cur(); on.exit(dev.set(dv0), add = TRUE)
+    }
     chunk_device(options, keep != 'none', tmp.fig)
     dv = dev.cur()
     if (!opts_knit$get('global.device')) on.exit(dev.off(dv), add = TRUE)
@@ -377,7 +381,7 @@ cache_action = function(options, method, ...) {
 
 cache_globals = function(option, code) {
   if (is.character(option)) option else {
-    (if (xfun::isFALSE(option)) find_symbols else find_globals)(code)
+    (if (isFALSE(option)) find_symbols else find_globals)(code)
   }
 }
 
@@ -564,22 +568,17 @@ inline_exec = function(
   code = block$code; input = block$input
   if ((n <- length(code)) == 0) return(input) # untouched if no code is found
 
-  loc = block$location
+  ans = character(n)
   for (i in 1:n) {
     res = hook_eval(code[i], envir)
     if (inherits(res, c('knit_asis', 'knit_asis_url'))) res = sew(res, inline = TRUE)
     tryCatch(as.character(res), error = function(e) {
       stop2("The inline value cannot be coerced to character: ", code[i])
     })
-    d = nchar(input)
-    # replace with evaluated results
-    stringr::str_sub(input, loc[i, 1], loc[i, 2]) = if (length(res)) {
-      paste(hook(res), collapse = '')
-    } else ''
-    if (i < n) loc[(i + 1):n, ] = loc[(i + 1):n, ] - (d - nchar(input))
-    # may need to move back and forth because replacement may be longer or shorter
+    if (length(res)) ans[i] = paste(hook(res), collapse = '')
   }
-  input
+  # replace with evaluated results
+  str_replace(input, block$location, ans)
 }
 
 process_tangle = function(x) {

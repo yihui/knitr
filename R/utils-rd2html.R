@@ -66,9 +66,9 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   toc = sprintf('- <a href="%s" target="content">%s</a>', paste0(topics, '.html'), topics)
   toc = c(paste0('# ', pkg), '', toc, '',
           paste('Generated with [knitr](https://yihui.org/knitr) ', packageVersion('knitr')))
-  markdown::markdownToHTML(text = one_string(toc), output = '00frame_toc.html',
-                           title = paste('R Documentation of', pkg),
-                           options = NULL, extensions = NULL, stylesheet = 'R.css')
+  markdown::mark_html(text = toc, output = '00frame_toc.html', meta = list(
+    title = paste('R Documentation of', pkg), css = 'R.css'
+  ))
   txt = read_utf8(file.path(find.package(pkg), 'html', '00Index.html'))
   unlink('00Index.html')
   # fix image links
