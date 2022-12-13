@@ -132,7 +132,7 @@ write_bib = function(
   bib = c(bib, unlist(bib2, recursive = FALSE))
   bib = lapply(bib, function(b) {
     idx = which(names(b) == '')
-    if (!is.null(width)) b[-idx] = stringr::str_wrap(b[-idx], width, 2, 4)
+    if (!is.null(width)) b[-idx] = strwrap(b[-idx], width, 2, 4)
     structure(c(b[idx[1L]], b[-idx], b[idx[2L]], ''), class = 'Bibtex')
   })
   if (!is.null(file) && length(x)) write_utf8(unlist(bib), file)
