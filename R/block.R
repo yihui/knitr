@@ -364,7 +364,7 @@ purge_cache = function(options) {
 
 cache_globals = function(option, code) {
   if (is.character(option)) option else {
-    (if (xfun::isFALSE(option)) find_symbols else find_globals)(code)
+    (if (isFALSE(option)) find_symbols else find_globals)(code)
   }
 }
 

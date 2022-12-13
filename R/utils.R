@@ -44,6 +44,9 @@ comment_to_var = function(x, varname, pattern, envir) {
   FALSE
 }
 
+# TODO: remove this when we don't support R < 3.5.0
+if (getRversion() < '3.5.0') isFALSE = function(x) identical(x, FALSE)
+
 is_blank = function(x) {
   if (length(x)) all(grepl('^\\s*$', x)) else TRUE
 }
