@@ -61,9 +61,6 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get install -y libpoppler-cpp-dev graphviz asymptote highlight coffeescript scala optipng ghostscript
-          # downgrade ruby to remove deprecated
-          # https://github.com/rubygems/rubygems/issues/3068
-          sudo gem update --system 3.0.8
 
       - name: Install CTAN dependencies
         run: |

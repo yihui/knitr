@@ -1,5 +1,11 @@
 # CHANGES IN knitr VERSION 1.42
 
+## NEW FEATURES
+
+- Users can specify a custom progress bar for `knit()` now. The default is still a text progress bar created from `utils::txtProgressBar()`. To specify a custom progress bar, set `options(knitr.progress.fun = function(total, labels) {})`. This function should take arguments `total` (the total number of chunks) and `labels` (the vector of chunk labels), create a progress bar, and return a list of two methods: `list(update = function(i) {}, done = function() {})`. The `update()` method takes `i` (index of the current chunk) as the input and updates the progress bar. The `done()` method closes the progress bar. See https://yihui.org/knitr/options/#global-r-options for documentation and examples.
+
+- The default text progress bar is still written to `stdout()` by default, but can also be written to other connections or `stderr()` now. To do so, set `options(knitr.progress.output = )` to a connection or `stderr()`.
+
 ## MAJOR CHANGES
 
 - `knit()` no longer prints out chunk options beneath the text progress bar while knitting a document (thanks, @hadley, #1880).

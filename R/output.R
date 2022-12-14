@@ -289,8 +289,9 @@ process_file = function(text, output) {
     labels = unlist(lapply(groups, function(g) {
       if (is.list(g$params)) g[[c('params', 'label')]] else ''
     }))
-    pb = txtProgressBar(0, n, char = '.', style = 3)
-    on.exit(close(pb), add = TRUE)
+    pb_fun = getOption('knitr.progress.fun', txt_pb)
+    pb = if (is.function(pb_fun)) pb_fun(n, labels)
+    on.exit(if (!is.null(pb)) pb$done(), add = TRUE)
   }
   wd = getwd()
   for (i in 1:n) {
@@ -302,7 +303,7 @@ process_file = function(text, output) {
       }
       break  # must have called knit_exit(), so exit early
     }
-    if (progress) setTxtProgressBar(pb, i)
+    if (progress && !is.null(pb)) pb$update(i)
     group = groups[[i]]
     res[i] = withCallingHandlers(
       if (tangle) process_tangle(group) else process_group(group),
@@ -499,7 +500,7 @@ sew.source = function(x, options, ...) {
 msg_wrap = function(message, type, options) {
   # when the output format is LaTeX, do not wrap messages (let LaTeX deal with wrapping)
   if (!length(grep('\n', message)) && !out_format(c('latex', 'listings', 'sweave')))
-    message = stringr::str_wrap(message, width = getOption('width'))
+    message = str_wrap(message, width = getOption('width'))
   knit_log$set(setNames(
     list(c(knit_log$get(type), paste0('Chunk ', options$label, ':\n  ', message))),
     type
