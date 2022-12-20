@@ -14,6 +14,8 @@
 
 - If the chunk option `child` is used for a code chunk but the chunk is not empty, you will get a warning indicating that this non-empty code will not be executed when you knit the document. Now this warning can be silenced by `options(knitr.child.warning = FALSE)` (thanks, @jwijffels, #2191).
 
+- Devices from the package **cairoDevice** (`Cairo_pdf`, `Cairo_png`, `Cairo_ps`, `Cairo_svg`) are no longer supported since the package has been archived on CRAN for more than a year (thanks, @jessekps, #2204).
+
 # CHANGES IN knitr VERSION 1.41
 
 ## NEW FEATURES
