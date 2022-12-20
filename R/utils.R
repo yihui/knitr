@@ -581,12 +581,11 @@ print_knitlog = function() {
 
 # count the number of lines
 line_count = function(x) {
-  res = gregexpr('\n', x, fixed = TRUE)
-  unlist(lapply(res, function(x) {
-    n = length(x)
-    if (n == 1 && x == -1) n = 0
-    n + 1
-  }))
+  n = lengths(strsplit(x, '\n', fixed = TRUE))
+  i = grep('\n$', x)
+  n[i] = n[i] + 1L  # add an extra count for lines ending with \n
+  n[n == 0] = 1L  # should be at least one line
+  n
 }
 
 has_package = function(pkg) loadable(pkg, FALSE)
