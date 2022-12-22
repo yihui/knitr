@@ -357,7 +357,7 @@ parse_inline = function(input, patterns) {
   loc = cbind(start = numeric(0), end = numeric(0))
   if (group_pattern(inline.code)) loc = str_complete_locate(input, inline.code)[[1]]
   if (nrow(loc)) {
-    code = stringr::str_match_all(input, inline.code)[[1L]]
+    code = str_get_all_matches(input, inline.code)[[1L]]
     code = if (NCOL(code) >= 2L) {
       code[is.na(code)] = ''
       apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
