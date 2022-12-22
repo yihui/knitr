@@ -12,7 +12,7 @@
   inline = .inline.hook, chunk = .out.hook, text = identity,
   evaluate.inline = function(code, envir = knit_global()) {
     v = withVisible(eval(tryCatch(parse_only(code), error = function(e) {
-      stop2('Failed to parse the inline R code: ', code, ' (Reason: ', e$message, ')')
+      stop2('Failed to parse the inline R code: ', inline_expr(code), '\nReason: ', e$message)
     }), envir = envir))
     if (v$visible) knit_print(v$value, inline = TRUE, options = opts_chunk$get())
   },
