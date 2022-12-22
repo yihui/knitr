@@ -490,7 +490,7 @@ pad_width = function(x, width, side) {
     stop("'side' must be 'left', 'right', or 'both'")
   w = width - nchar(x, 'width')
   w1 = floor(w / 2)  # the left half of spaces when side = 'both'
-  s1 = strrep(' ', w * (side == 'left') + w1 * (side == 'both'))
-  s2 = strrep(' ', w * (side == 'right') + (w - w1) * (side == 'both'))
+  s1 = strrep(' ', pmax(0, w * (side == 'left') + w1 * (side == 'both')))
+  s2 = strrep(' ', pmax(0, w * (side == 'right') + (w - w1) * (side == 'both')))
   paste0(s1, x, s2)
 }
