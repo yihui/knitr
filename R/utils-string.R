@@ -159,16 +159,10 @@ str_substitute = function(string, start = 1L, end = -1L) {
   substr(string, start, end)
 }
 
-location = function(x, all = FALSE) {
-  start = as.vector(x)
-  if (all && identical(start, -1L)) {
-    return(cbind(start = integer(), end = integer()))
-  }
-  end = as.vector(x) + attr(x, "match.length") - 1
-  no_match = start == -1L
-  start[no_match] = NA
-  end[no_match] = NA
-  cbind(start = start, end = end)
+location = function(x) {
+  len = attr(x, 'match.length')
+  if (length(x) == 1 && x == -1) x = integer()
+  cbind(start = x, end = x + len - 1L)
 }
 
 recycler = function(x, to, arg = deparse(substitute(x))) {
