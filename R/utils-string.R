@@ -45,17 +45,6 @@ str_complete_extract = function(string, pattern) {
   })
 }
 
-# replacement for stringr::str_match()
-str_get_match = function(string, pattern) {
-  loc = regexec(pattern, string, perl = TRUE)
-  loc = lapply(loc, location)
-  out = lapply(seq_along(string), function(i) {
-    loc = loc[[i]]
-    str_substitute(rep(string[[i]], nrow(loc)), loc)
-  })
-  do.call("rbind", out)
-}
-
 # replacement for stringr::str_match_all()
 str_get_all_matches = function(string, pattern) {
   res = gregexec(pattern, string, perl = TRUE)
