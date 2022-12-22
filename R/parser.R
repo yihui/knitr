@@ -333,7 +333,6 @@ get_option_comment = function(engine) {
 
 print.block = function(x, ...) {
   params = x$params
-  cat(' chunk:', params$label, '\n')
   if (opts_knit$get('verbose')) {
     code = knit_code$get(params$label)
     if (length(code) && !is_blank(code)) {

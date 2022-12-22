@@ -256,8 +256,8 @@ eng_r = function(options) {
   } else in_input_dir(
     evaluate(
       code, envir = env, new_device = FALSE,
-      keep_warning = !isFALSE(options$warning),
-      keep_message = !isFALSE(options$message),
+      keep_warning = if (is.numeric(options$warning)) TRUE else options$warning,
+      keep_message = if (is.numeric(options$message)) TRUE else options$message,
       stop_on_error = if (is.numeric(options$error)) options$error else {
         if (options$error && options$include) 0L else 2L
       },
@@ -364,7 +364,7 @@ purge_cache = function(options) {
 
 cache_globals = function(option, code) {
   if (is.character(option)) option else {
-    (if (xfun::isFALSE(option)) find_symbols else find_globals)(code)
+    (if (isFALSE(option)) find_symbols else find_globals)(code)
   }
 }
 
@@ -616,7 +616,7 @@ process_tangle.inline = function(x) {
 # add a label [and extra chunk options] to a code chunk
 label_code = function(code, label) {
   code = one_string(c('', code, ''))
-  paste0('## ----', stringr::str_pad(label, max(getOption('width') - 11L, 0L), 'right', '-'),
+  paste0('## ----', label, strrep('-', max(getOption('width') - 11L - nchar(label), 0L)),
          '----', code)
 }
 
