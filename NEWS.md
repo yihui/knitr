@@ -10,6 +10,8 @@
 
 - `knit()` no longer prints out chunk options beneath the text progress bar while knitting a document (thanks, @hadley, #1880).
 
+- Due to a change in the **evaluate** package, the chunk options `message = FALSE` and `warning = FALSE` will completely suppress the messages/warnings now, instead of sending them to the console. To get back to the old behavior, you can use `NA` instead of `FALSE` (thanks, @gadenbuie, https://github.com/yihui/yihui.org/discussions/1458).
+
 ## MINOR CHANGES
 
 - If the chunk option `child` is used for a code chunk but the chunk is not empty, you will get a warning indicating that this non-empty code will not be executed when you knit the document. Now this warning can be silenced by `options(knitr.child.warning = FALSE)` (thanks, @jwijffels, #2191).

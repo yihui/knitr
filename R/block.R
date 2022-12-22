@@ -256,8 +256,8 @@ eng_r = function(options) {
   } else in_input_dir(
     evaluate(
       code, envir = env, new_device = FALSE,
-      keep_warning = !isFALSE(options$warning),
-      keep_message = !isFALSE(options$message),
+      keep_warning = if (is.numeric(options$warning)) TRUE else options$warning,
+      keep_message = if (is.numeric(options$message)) TRUE else options$message,
       stop_on_error = if (is.numeric(options$error)) options$error else {
         if (options$error && options$include) 0L else 2L
       },
