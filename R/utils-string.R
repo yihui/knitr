@@ -56,6 +56,57 @@ str_get_match = function(string, pattern) {
   do.call("rbind", out)
 }
 
+# replacement for stringr::str_match_all()
+str_get_all_matches = function(string, pattern) {
+  res = gregexec(pattern, string, perl = TRUE)
+  loc = lapply(res, FUN = function(x) {
+
+    if (all(is.na(x))) return(list(NA_character_))
+    match_attr = attr(x, "match.length")
+    if (!is.matrix(match_attr) && match_attr == -1) return(list())
+    matches = list()
+    if (!is.null(ncol(x))) {
+      for (i in seq_len(ncol(x))) {
+        start_mat = x[, i, drop = FALSE]
+        end_mat = attr(x, "match.length")[, i, drop = FALSE] + start_mat - 1
+        matches = c(matches, list(cbind(start_mat, end_mat)))
+      }
+    }
+    matches
+  })
+  out = lapply(seq_along(loc), function(i) {
+    loc = loc[[i]]
+    mat_missing = matrix(rep(NA_character_, 2), nrow = 1)
+    mat_empty = matrix(rep(NA_character_, 2), nrow = 1)[-1, ]
+    if (is.list(loc) && length(loc) > 0 && !is.matrix(loc[[1]]) && is.na(loc[[1]])) {
+      return(mat_missing)
+    }
+    if (length(loc) < 1) return(mat_empty)
+    for (j in seq_along(loc)) {
+      loc_j = loc[[j]]
+      subst = str_substitute(rep(string[[i]], nrow(loc_j)), loc_j)
+      if (!all(is.na(subst))) {
+        if (j == 1) {
+          mat = matrix(rep(NA_character_, nrow(loc_j)), nrow = 1)[-1, ]
+        }
+        mat_j = t(as.matrix(subst))
+        mat = rbind(mat, mat_j)
+      }
+    }
+    mat
+  })
+  cols_mat = vapply(out, FUN.VALUE = integer(1), USE.NAMES = FALSE, FUN = NCOL)
+  max_cols_mat = max(cols_mat, na.rm = TRUE)
+  out = lapply(seq_along(loc), function(i) {
+    elem = out[[i]]
+    if (ncol(elem) < max_cols_mat) {
+      return(matrix(rep(NA_character_, max_cols_mat), nrow = 1)[-1, ])
+    }
+    elem
+  })
+  out
+}
+
 # replacement for stringr::str_sub() and used internally in other string
 # functions provided here
 str_substitute = function(string, start = 1L, end = -1L) {
