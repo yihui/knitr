@@ -120,7 +120,7 @@ knit_expand = function(file, ..., text = read_utf8(file), delim = c('{{', '}}') 
   txt = one_string(text)
   loc = stringr::str_locate_all(txt, delim)[[1L]]
   if (nrow(loc) == 0L) return(txt) # no match
-  mat = stringr::str_extract_all(txt, delim)[[1L]]
+  mat = str_complete_extract(txt, delim)[[1L]]
   mat = sub(delim, '\\1', mat)
   env = list(...)
   env = if (length(env)) list2env(env, parent = parent.frame()) else parent.frame()
