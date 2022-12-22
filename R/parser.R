@@ -355,11 +355,10 @@ parse_inline = function(input, patterns) {
   input = one_string(input) # merge into one line
 
   loc = cbind(start = numeric(0), end = numeric(0))
-  if (group_pattern(inline.code)) loc = stringr::str_locate_all(input, inline.code)[[1]]
+  if (group_pattern(inline.code)) loc = str_locate(input, inline.code)[[1]]
   if (nrow(loc)) {
-    code = stringr::str_match_all(input, inline.code)[[1L]]
+    code = t(str_match(input, inline.code))
     code = if (NCOL(code) >= 2L) {
-      code[is.na(code)] = ''
       apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
     } else character(0)
   } else code = character(0)

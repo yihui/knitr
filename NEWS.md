@@ -12,6 +12,8 @@
 
 - Due to a change in the **evaluate** package, the chunk options `message = FALSE` and `warning = FALSE` will completely suppress the messages/warnings now, instead of sending them to the console. To get back to the old behavior, you can use `NA` instead of `FALSE` (thanks, @gadenbuie, https://github.com/yihui/yihui.org/discussions/1458).
 
+- The **stringr** dependency has been removed. All string operations are done with base R now (thanks, @HughParsonage #1549 #1552, @rich-iannone #2174 #2177 #2186 #2187 #2195 #2202 #2205).
+
 ## MINOR CHANGES
 
 - Improved the error message when inline R code cannot be parsed (thanks, @hadley #2173, @rich-iannone #2198).

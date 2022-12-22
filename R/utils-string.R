@@ -16,3 +16,34 @@ str_wrap = function(...) {
   res = strwrap(..., simplify = FALSE)
   unlist(lapply(res, one_string))
 }
+
+# a simplified replacement for stringr::str_locate_all() that returns a list
+# having an element for every element of 'string'; every list element is an
+# integer matrix having a row per match, and two columns: 'start' and 'end'.
+str_locate = function(x, pattern, all = TRUE) {
+  out = (if (all) gregexpr else regexpr)(pattern, x, perl = TRUE)
+  if (all) lapply(out, location) else location(out)
+}
+
+location = function(x) {
+  len = attr(x, 'match.length')
+  if (length(x) == 1 && x == -1) x = integer()
+  cbind(start = x, end = x + len - 1L)
+}
+
+# a replacement for stringr::str_extract_all()
+str_extract = function(x, pattern) {
+  m = gregexpr(pattern, x, perl = TRUE)
+  regmatches(x, m)
+}
+
+str_match = function(x, pattern) {
+  # gregexec() was added in R 4.1.0; for lower versions of R, use fallback
+  if (is.function(gregexec <- baseenv()[['gregexec']])) {
+    m = gregexec(pattern, x, perl = TRUE)
+  } else {
+    x = unlist(str_extract(x, pattern))
+    m = regexec(pattern, x, perl = TRUE)
+  }
+  do.call(cbind, regmatches(x, m))
+}

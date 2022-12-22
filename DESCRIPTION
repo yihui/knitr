@@ -118,7 +118,6 @@ Imports:
     evaluate (>= 0.15),
     highr,
     methods,
-    stringr (>= 0.6),
     yaml (>= 2.1.19),
     xfun (>= 0.34),
     tools
