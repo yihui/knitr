@@ -60,7 +60,6 @@ str_get_match = function(string, pattern) {
 str_get_all_matches = function(string, pattern) {
   res = gregexec(pattern, string, perl = TRUE)
   loc = lapply(res, FUN = function(x) {
-
     if (all(is.na(x))) return(list(NA_character_))
     match_attr = attr(x, "match.length")
     if (!is.matrix(match_attr) && match_attr == -1) return(list())
@@ -84,6 +83,7 @@ str_get_all_matches = function(string, pattern) {
     if (length(loc) < 1) return(mat_empty)
     for (j in seq_along(loc)) {
       loc_j = loc[[j]]
+      loc_j[loc_j < 0] = NA_real_
       subst = str_substitute(rep(string[[i]], nrow(loc_j)), loc_j)
       if (!all(is.na(subst))) {
         if (j == 1) {
