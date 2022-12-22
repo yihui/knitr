@@ -140,8 +140,8 @@ spin = function(
   l = attr(gregexpr('`+', x)[[1]], 'match.length')
   l = max(l, 0)
   if (length(l) > 0) {
-    i = highr:::spaces(l + 1, '`')
-    b = highr:::spaces(max(l + 1, 3), '`')
+    i = strrep('`', l + 1)
+    b = strrep('`', max(l + 1, 3))
   } else {
     i = '`'
     b = '```'
