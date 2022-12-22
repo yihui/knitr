@@ -20,8 +20,8 @@ str_wrap = function(...) {
 # a simplified replacement for stringr::str_locate_all() that returns a list
 # having an element for every element of 'string'; every list element is an
 # integer matrix having a row per match, and two columns: 'start' and 'end'.
-str_locate = function(string, pattern, all = TRUE) {
-  out = (if (all) gregexpr else regexpr)(pattern, string, perl = TRUE)
+str_locate = function(x, pattern, all = TRUE) {
+  out = (if (all) gregexpr else regexpr)(pattern, x, perl = TRUE)
   if (all) lapply(out, location) else location(out)
 }
 
@@ -32,18 +32,18 @@ location = function(x) {
 }
 
 # a replacement for stringr::str_extract_all()
-str_extract = function(string, pattern) {
-  m = gregexpr(pattern, string, perl = TRUE)
-  regmatches(string, m)
+str_extract = function(x, pattern) {
+  m = gregexpr(pattern, x, perl = TRUE)
+  regmatches(x, m)
 }
 
-str_match = function(string, pattern) {
+str_match = function(x, pattern) {
   # gregexec() was added in R 4.1.0; for lower versions of R, use fallback
   if (is.function(gregexec <- baseenv()[['gregexec']])) {
-    m = gregexec(pattern, string, perl = TRUE)
+    m = gregexec(pattern, x, perl = TRUE)
   } else {
-    string = unlist(str_extract(string, pattern))
-    m = regexec(pattern, string, perl = TRUE)
+    x = unlist(str_extract(x, pattern))
+    m = regexec(pattern, x, perl = TRUE)
   }
-  do.call(cbind, regmatches(string, m))
+  do.call(cbind, regmatches(x, m))
 }
