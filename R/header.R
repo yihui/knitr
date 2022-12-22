@@ -55,7 +55,7 @@ insert_header_latex = function(doc, b) {
       j = j[1]
       doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\n\\2', doc[j], perl = TRUE)
     }
-    i = i[1L]; l = str_single_locate(doc[i], b)
+    i = i[1L]; l = str_locate(doc[i], b, FALSE)
     tmp = substr(doc[i], l[, 1], l[, 2])
     doc[i] = str_replace(doc[i], l, paste0(tmp, make_header_latex(doc)))
   } else if (parent_mode() && !child_mode()) {
@@ -86,7 +86,7 @@ make_header_html = function() {
 insert_header_html = function(doc, b) {
   i = grep(b, doc)
   if (length(i) == 1L) {
-    l = str_single_locate(doc[i], b)
+    l = str_locate(doc[i], b, FALSE)
     tmp = substr(doc[i], l[, 1], l[, 2])
     doc[i] = str_replace(doc[i], l, paste0(tmp, '\n', make_header_html()))
   }

@@ -17,28 +17,17 @@ str_wrap = function(...) {
   unlist(lapply(res, one_string))
 }
 
-# a simplified replacement for stringr::str_locate() that returns an integer
-# matrix having a row for each element of the input `string`, and two columns:
-# 'start' and 'end'. If the match is of length 0, 'end' will have one character
-# less than 'start'. Depends on the `location()` util function, also defined
-# in this file.
-str_single_locate = function(string, pattern) {
-  out = regexpr(pattern, string, perl = TRUE)
-  location(out)
-}
-
 # a simplified replacement for stringr::str_locate_all() that returns a list
 # having an element for every element of 'string'; every list element is an
 # integer matrix having a row per match, and two columns: 'start' and 'end'.
-# Depends on the location() util function, also defined in this file.
-str_complete_locate = function(string, pattern) {
-  out = gregexpr(pattern, string, perl = TRUE)
-  lapply(out, location, all = TRUE)
+str_locate = function(string, pattern, all = TRUE) {
+  out = (if (all) gregexpr else regexpr)(pattern, string, perl = TRUE)
+  if (all) lapply(out, location) else location(out)
 }
 
 # a replacement for stringr::str_extract_all()
 str_complete_extract = function(string, pattern) {
-  loc = str_complete_locate(string, pattern)
+  loc = str_locate(string, pattern)
   lapply(seq_along(string), function(i) {
     loc = loc[[i]]
     str_substitute(rep(string[[i]], nrow(loc)), loc)
