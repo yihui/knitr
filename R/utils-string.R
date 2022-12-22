@@ -26,12 +26,9 @@ str_locate = function(string, pattern, all = TRUE) {
 }
 
 # a replacement for stringr::str_extract_all()
-str_complete_extract = function(string, pattern) {
-  loc = str_locate(string, pattern)
-  lapply(seq_along(string), function(i) {
-    loc = loc[[i]]
-    str_substitute(rep(string[[i]], nrow(loc)), loc)
-  })
+str_extract = function(string, pattern) {
+  m = gregexpr(pattern, string, perl = TRUE)
+  regmatches(string, m)
 }
 
 # replacement for stringr::str_match_all()
