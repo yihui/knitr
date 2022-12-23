@@ -9,6 +9,14 @@ str_replace = function(x, pos, value) {
   paste(rbind(y, c(value, '')), collapse = '')
 }
 
+# insert a value after i-th character in the string x
+str_insert = function(x, i, value) {
+  if (i <= 0) return(paste0(value, x))
+  n = nchar(x)
+  if (n == 0 || i >= n) return(paste0(x, value))
+  paste0(substr(x, 1, i), value, substr(x, i + 1, n))
+}
+
 # a wrapper function to make strwrap() return a character vector of the same
 # length as the input vector; each element of the output vector is a string
 # formed by concatenating wrapped strings by \n
