@@ -595,7 +595,7 @@ process_tangle.block = function(x) {
 process_tangle.inline = function(x) {
 
   output = if (opts_knit$get('documentation') == 2L) {
-    output = one_string(line_prompt(x$input.src, "#' ", "#' "))
+    output = paste("#'", gsub('\n', "\n#' ", x$input, fixed = TRUE))
   } else ''
 
   code = x$code

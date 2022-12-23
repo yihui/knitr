@@ -344,8 +344,6 @@ print.block = function(x, ...) {
 
 # extract inline R code fragments (as well as global options)
 parse_inline = function(input, patterns) {
-  input.src = input  # keep a copy of the source
-
   inline.code = patterns$inline.code; inline.comment = patterns$inline.comment
   if (!is.null(inline.comment)) {
     idx = grepl(inline.comment, input)
@@ -363,8 +361,10 @@ parse_inline = function(input, patterns) {
     } else character(0)
   } else code = character(0)
 
-  structure(list(input = input, input.src = input.src, location = loc, code = code),
-            class = 'inline')
+  structure(
+    list(input = input, location = loc, code = code),
+    class = 'inline'
+  )
 }
 
 print.inline = function(x, ...) {
