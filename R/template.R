@@ -121,9 +121,9 @@ knit_expand = function(file, ..., text = read_utf8(file), delim = c('{{', '}}') 
   loc = str_locate(txt, delim)[[1L]]
   if (nrow(loc) == 0L) return(txt) # no match
   mat = str_extract(txt, delim)[[1L]]
-  mat = sub(delim, '\\1', mat)
   env = list(...)
   env = if (length(env)) list2env(env, parent = parent.frame()) else parent.frame()
-  inline_exec(list(code = mat, input = txt, location = loc),
-              envir = env, hook = identity)
+  inline_exec(list(
+    code = sub(delim, '\\1', mat), code.src = mat, input = txt, location = loc
+  ), envir = env, hook = identity)
 }

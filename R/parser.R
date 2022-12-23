@@ -354,15 +354,17 @@ parse_inline = function(input, patterns) {
 
   loc = cbind(start = numeric(0), end = numeric(0))
   if (group_pattern(inline.code)) loc = str_locate(input, inline.code)[[1]]
+  code1 = code2 = character()
   if (nrow(loc)) {
     code = t(str_match(input, inline.code))
-    code = if (NCOL(code) >= 2L) {
-      apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
-    } else character(0)
-  } else code = character(0)
+    if (NCOL(code) >= 2L) {
+      code1 = code[, 1L]
+      code2 = apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
+    }
+  }
 
   structure(
-    list(input = input, location = loc, code = code),
+    list(input = input, location = loc, code = code2, code.src = code1),
     class = 'inline'
   )
 }

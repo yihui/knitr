@@ -550,9 +550,13 @@ inline_exec = function(
   # run inline code and substitute original texts
   code = block$code; input = block$input
   if ((n <- length(code)) == 0) return(input) # untouched if no code is found
+  code.src = block$code.src
 
   ans = character(n)
   for (i in 1:n) {
+    tryCatch(parse_only(code[i]), error = function(e) {
+      stop2('Failed to parse the inline R code: ', code.src[i], '\nReason: ', e$message)
+    })
     res = hook_eval(code[i], envir)
     if (inherits(res, c('knit_asis', 'knit_asis_url'))) res = sew(res, inline = TRUE)
     tryCatch(as.character(res), error = function(e) {
