@@ -72,6 +72,7 @@ Authors@R: c(
     person("Lucas", "Gallindo", role = "ctb"),
     person("Marius", "Hofert", role = "ctb"),
     person("Martin", "Modrák", role = "ctb"),
+    person("Michael", "Braun", role = "ctb"),
     person("Michael", "Chirico", role = "ctb"),
     person("Michael", "Friendly", role = "ctb"),
     person("Michal", "Bojanowski", role = "ctb"),

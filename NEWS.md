@@ -679,6 +679,8 @@
 
 - Added `mogrify` support in `hook_png()` and `hook_mogrify()` in order to obtain trimmed `.png` files (thanks, @mhofert, #1697).
 
+- Added a pattern and file type (.RLatex), so R code chunks in a LaTeX document can be defined within an Rcode environment.
+
 - It is possible to customize the sign `\times` used for the scientific notation of inline numeric output via a global option, e.g., `options(knitr.inline.times = '\\cdot ')` (thanks, @wuffi @trentks, #1563).
 
 - Exported `knit_code` and documented it at `?knitr::knit_code`. Here be dragons, but I know you are brave and creative (thanks, @r-cheologist @ProQuestionAsker, #1545).

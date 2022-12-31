@@ -215,10 +215,11 @@ knit = function(
       'see ?knit_patterns on how to set up customized patterns'
     )
     set_pattern(pattern)
-    if (pattern == 'rnw' && length(sweave_lines <- which_sweave(text)) > 0)
+    if (pattern %in% c('rnw','rlatex') && length(sweave_lines <- which_sweave(text)) > 0)
       remind_sweave(if (in.file) input, sweave_lines)
     opts_knit$set(out.format = switch(
-      pattern, rnw = 'latex', tex = 'latex', html = 'html', md = 'markdown',
+                      pattern, rnw = 'latex', tex = 'latex', html = 'html', md = 'markdown',
+                      rlatex = 'latex',
       rst = 'rst', brew = 'brew', asciidoc = 'asciidoc', textile = 'textile'
     ))
   }
@@ -330,7 +331,7 @@ process_file = function(text, output) {
 auto_out_name = function(input, ext = tolower(file_ext(input))) {
   base = sans_ext(input)
   name = if (opts_knit$get('tangle')) c(base, '.R') else
-    if (ext %in% c('rnw', 'snw')) c(base, '.tex') else
+    if (ext %in% c('rnw', 'snw', 'rlatex')) c(base, '.tex') else
       if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'stex', 'rrst', 'rtextile'))
         c(base, '.', substring(ext, 2L)) else
           if (grepl('_knit_', input)) sub('_knit_', '', input) else
@@ -341,6 +342,7 @@ auto_out_name = function(input, ext = tolower(file_ext(input))) {
 # determine output format based on file extension
 ext2fmt = c(
   rnw = 'latex', snw = 'latex', tex = 'latex', rtex = 'latex', stex = 'latex',
+  rlatex = 'latex',
   htm = 'html', html = 'html', rhtml = 'html', rhtm = 'html',
   md = 'markdown', markdown = 'markdown', rmd = 'markdown', rmarkdown = 'markdown',
   brew = 'brew', rst = 'rst', rrst = 'rst'
