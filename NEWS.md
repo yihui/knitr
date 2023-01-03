@@ -22,6 +22,10 @@
 
 - Devices from the package **cairoDevice** (`Cairo_pdf`, `Cairo_png`, `Cairo_ps`, `Cairo_svg`) are no longer supported since the package has been archived on CRAN for more than a year (thanks, @jessekps, #2204).
 
+## BUG FIXES
+
+- sql engine now correctly prints table with `NA` in first column (thanks, @mariusbommert, #2207)
+
 # CHANGES IN knitr VERSION 1.41
 
 ## NEW FEATURES
