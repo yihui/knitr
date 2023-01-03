@@ -660,9 +660,10 @@ eng_sql = function(options) {
       options$results = 'asis'
 
       # force left alignment if the first column is an incremental id column
-      first_column = display_data[[1]]
-      if (is.numeric(first_column) && length(first_column) > 1 && all(identical(diff(first_column), 1)))
-        display_data[[1]] = as.character(first_column)
+      is_id = function(x) {
+        is.numeric(x) && length(x) > 1 && !anyNA(x) && all(diff(x) == 1)
+      }
+      if (is_id(display_data[[1]])) display_data[[1]] = as.character(display_data[[1]])
 
       # wrap html output in a div so special styling can be applied
       add_div = is_html_output() && getOption('knitr.sql.html_div', TRUE)

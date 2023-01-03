@@ -24,7 +24,7 @@
 
 ## BUG FIXES
 
-- sql engine now correctly prints table with `NA` in first column (thanks, @mariusbommert, #2207)
+- The `sql` engine now correctly prints tables with `NA` in the first column (thanks, @mariusbommert, #2207).
 
 # CHANGES IN knitr VERSION 1.41
 
