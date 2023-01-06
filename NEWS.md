@@ -2,9 +2,9 @@
 
 ## NEW FEATURES
 
-- Better `.qmd` file support: 
+- Better `.qmd` (Quarto) file support:
   - `purl()` will keep the in-chunk YAML syntax for options in the tangled R file
-  - `knit()` will produce a `.md` file 
+  - `knit()` will produce a `.md` file instead of `.txt`
 
 - Users can specify a custom progress bar for `knit()` now. The default is still a text progress bar created from `utils::txtProgressBar()`. To specify a custom progress bar, set `options(knitr.progress.fun = function(total, labels) {})`. This function should take arguments `total` (the total number of chunks) and `labels` (the vector of chunk labels), create a progress bar, and return a list of two methods: `list(update = function(i) {}, done = function() {})`. The `update()` method takes `i` (index of the current chunk) as the input and updates the progress bar. The `done()` method closes the progress bar. See https://yihui.org/knitr/options/#global-r-options for documentation and examples.
 

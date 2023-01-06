@@ -25,4 +25,5 @@ assert('label_code correct adds comment on code for yaml block or parsed param',
   (label_code("1+1",
               list(params = list(yaml.code = c("#| label: test", "#| eval: true")))
               ) %==% "#| label: test\n#| eval: true\n1+1\n")
+  .knitEnv$is_quarto = NULL
 })

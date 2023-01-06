@@ -621,12 +621,11 @@ process_tangle.inline = function(x) {
 # add a label [and extra chunk options] to a code chunk
 label_code = function(code, options) {
   code = one_string(c('', code, ''))
-  comments = if (is_quarto())
-    one_string(options$params$yaml.code)
-  else
-    paste0('## ----', options$params.src,
-           strrep('-', max(getOption('width') - 11L - nchar(options$params.src), 0L)),
-           '----')
+  comments = if (is_quarto()) one_string(options$params$yaml.code) else paste0(
+    '## ----', options$params.src,
+    strrep('-', max(getOption('width') - 11L - nchar(options$params.src), 0L)),
+    '----'
+  )
   paste0(comments, code)
 }
 

@@ -191,7 +191,7 @@ knit = function(
   }
 
   # we need some special treatment for chunks in Quarto document
-  .knitEnv$is_quarto = !is.null(opts_knit$get('quarto.version')) || tolower(ext) == "qmd"
+  .knitEnv$is_quarto = !is.null(opts_knit$get('quarto.version')) || ext == 'qmd'
 
   text = if (is.null(text)) xfun::read_utf8(input) else split_lines(text)
   if (!length(text)) {
