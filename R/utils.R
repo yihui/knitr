@@ -1118,3 +1118,5 @@ txt_pb = function(total, labels) {
     }
   )
 }
+
+is_quarto = function() isTRUE(.knitEnv$is_quarto)
