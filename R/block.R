@@ -594,8 +594,7 @@ process_tangle.block = function(x) {
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
   # e.g when documentation 1 or 2 with purl()
-  if (is_quarto()) return(one_string(options$params$yaml.code, code, ''))
-  label_code(code, x$params.src)
+  label_code(code, x)
 }
 #' @export
 process_tangle.inline = function(x) {
@@ -620,10 +619,15 @@ process_tangle.inline = function(x) {
 
 
 # add a label [and extra chunk options] to a code chunk
-label_code = function(code, label) {
+label_code = function(code, options) {
   code = one_string(c('', code, ''))
-  paste0('## ----', label, strrep('-', max(getOption('width') - 11L - nchar(label), 0L)),
-         '----', code)
+  comments = if (is_quarto())
+    one_string(options$params$yaml.code)
+  else
+    paste0('## ----', options$params.src,
+           strrep('-', max(getOption('width') - 11L - nchar(options$params.src), 0L)),
+           '----')
+  paste0(comments, code)
 }
 
 as.source = function(code) {

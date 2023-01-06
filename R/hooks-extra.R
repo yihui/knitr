@@ -152,7 +152,7 @@ hook_purl = function(before, options, envir) {
   if (is.character(output)) {
     code = c(
       if (file.exists(output)) read_utf8(output),
-      label_code(code, options$params.src)
+      label_code(code, options)
     )
     write_utf8(code, output)
   }

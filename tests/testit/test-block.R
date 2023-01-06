@@ -14,3 +14,15 @@ assert('inline_exec only accept character result', {
   (res %==% "no inline")
 })
 
+assert('label_code correct adds comment on code for yaml block or parsed param', {
+  oldW = getOption('width')
+  options(width = 20)
+  old = .knitEnv$is_quarto
+  .knitEnv$is_quarto = FALSE
+  (label_code("1+1", list(params.src = "test, eval=TRUE")) %==% "## ----test, eval=TRUE----\n1+1\n")
+  options(width = oldW)
+  .knitEnv$is_quarto = TRUE
+  (label_code("1+1",
+              list(params = list(yaml.code = c("#| label: test", "#| eval: true")))
+              ) %==% "#| label: test\n#| eval: true\n1+1\n")
+})
