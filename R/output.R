@@ -334,7 +334,7 @@ auto_out_name = function(input, ext = tolower(file_ext(input))) {
   base = sans_ext(input)
   name = if (opts_knit$get('tangle')) c(base, '.R') else
     if (ext %in% c('rnw', 'snw')) c(base, '.tex') else
-      if (ext %in% c('rmd', 'rmarkdown', 'rhtml', 'rhtm', 'rtex', 'stex', 'rrst', 'rtextile'))
+      if (ext %in% c('rmd', 'rmarkdown', 'qmd', 'rhtml', 'rhtm', 'rtex', 'stex', 'rrst', 'rtextile'))
         c(base, '.', substring(ext, 2L)) else
           if (grepl('_knit_', input)) sub('_knit_', '', input) else
             if (ext != 'txt') c(base, '.txt') else c(base, '-out.', ext)
@@ -346,7 +346,7 @@ ext2fmt = c(
   rnw = 'latex', snw = 'latex', tex = 'latex', rtex = 'latex', stex = 'latex',
   htm = 'html', html = 'html', rhtml = 'html', rhtm = 'html',
   md = 'markdown', markdown = 'markdown', rmd = 'markdown', rmarkdown = 'markdown',
-  brew = 'brew', rst = 'rst', rrst = 'rst'
+  qmd = 'markdown', brew = 'brew', rst = 'rst', rrst = 'rst'
 )
 
 auto_format = function(ext) {
