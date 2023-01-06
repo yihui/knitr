@@ -594,7 +594,7 @@ process_tangle.block = function(x) {
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
   # e.g when documentation 1 or 2 with purl()
-  if (.knitEnv$is_quarto) return(one_string(options$params$yaml.code, code, ''))
+  if (is_quarto()) return(one_string(options$params$yaml.code, code, ''))
   label_code(code, x$params.src)
 }
 #' @export
