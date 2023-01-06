@@ -90,7 +90,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   }
 
   # for quarto, preserve the actual original params.src and do not remove the engine
-  if (!(is_quarto <- !is.null(opts_knit$get('quarto.version')))) params.src = params
+  if ( !.knitEnv$is_quarto ) params.src = params
   params = parse_params(params)
 
   # remove indent (and possibly markdown blockquote >) from code
@@ -134,7 +134,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   }
 
   # for quarto only
-  if (is_quarto) {
+  if (.knitEnv$is_quarto) {
     params$original.params.src = params.src
     params$chunk.echo = isTRUE(params[['echo']])
     params$yaml.code = parts$src

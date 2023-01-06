@@ -190,6 +190,9 @@ knit = function(
     knit_concord$set(infile = input, outfile = output)
   }
 
+  # we need some special treatment for chunks in Quarto document
+  .knitEnv$is_quarto = !is.null(opts_knit$get('quarto.version')) || tolower(ext) == "qmd"
+
   text = if (is.null(text)) xfun::read_utf8(input) else split_lines(text)
   if (!length(text)) {
     if (is.character(output)) file.create(output)
