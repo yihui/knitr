@@ -10,6 +10,8 @@
 
 - The default text progress bar is still written to `stdout()` by default, but can also be written to other connections or `stderr()` now. To do so, set `options(knitr.progress.output = )` to a connection or `stderr()`.
 
+- Allow concordances to be embedded in HTML output (thanks, @dmurdoch, #2200).
+
 ## MAJOR CHANGES
 
 - `knit()` no longer prints out chunk options beneath the text progress bar while knitting a document (thanks, @hadley, #1880).
