@@ -256,8 +256,8 @@ eng_r = function(options) {
   } else in_input_dir(
     evaluate(
       code, envir = env, new_device = FALSE,
-      keep_warning = !isFALSE(options$warning),
-      keep_message = !isFALSE(options$message),
+      keep_warning = if (is.numeric(options$warning)) TRUE else options$warning,
+      keep_message = if (is.numeric(options$message)) TRUE else options$message,
       stop_on_error = if (is.numeric(options$error)) options$error else {
         if (options$error && options$include) 0L else 2L
       },
@@ -550,9 +550,13 @@ inline_exec = function(
   # run inline code and substitute original texts
   code = block$code; input = block$input
   if ((n <- length(code)) == 0) return(input) # untouched if no code is found
+  code.src = block$code.src
 
   ans = character(n)
   for (i in 1:n) {
+    tryCatch(parse_only(code[i]), error = function(e) {
+      stop2('Failed to parse the inline R code: ', code.src[i], '\nReason: ', e$message)
+    })
     res = hook_eval(code[i], envir)
     if (inherits(res, c('knit_asis', 'knit_asis_url'))) res = sew(res, inline = TRUE)
     tryCatch(as.character(res), error = function(e) {
@@ -584,18 +588,19 @@ process_tangle.block = function(x) {
   } else knit_code$get(label)
   # read external code if exists
   if (!isFALSE(ev) && length(code) && any(grepl('read_chunk\\(.+\\)', code))) {
-    eval(parse_only(unlist(stringr::str_extract_all(code, 'read_chunk\\(([^)]+)\\)'))))
+    eval(parse_only(unlist(str_extract(code, 'read_chunk\\(([^)]+)\\)'))))
   }
   code = parse_chunk(code)
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
-  label_code(code, x$params.src)
+  # e.g when documentation 1 or 2 with purl()
+  label_code(code, x)
 }
 #' @export
 process_tangle.inline = function(x) {
 
   output = if (opts_knit$get('documentation') == 2L) {
-    output = one_string(line_prompt(x$input.src, "#' ", "#' "))
+    output = paste("#'", gsub('\n', "\n#' ", x$input, fixed = TRUE))
   } else ''
 
   code = x$code
@@ -614,10 +619,14 @@ process_tangle.inline = function(x) {
 
 
 # add a label [and extra chunk options] to a code chunk
-label_code = function(code, label) {
+label_code = function(code, options) {
   code = one_string(c('', code, ''))
-  paste0('## ----', label, strrep('-', max(getOption('width') - 11L - nchar(label), 0L)),
-         '----', code)
+  comments = if (is_quarto()) one_string(options$params$yaml.code) else paste0(
+    '## ----', options$params.src,
+    strrep('-', max(getOption('width') - 11L - nchar(options$params.src), 0L)),
+    '----'
+  )
+  paste0(comments, code)
 }
 
 as.source = function(code) {

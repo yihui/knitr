@@ -91,7 +91,7 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   idx1 = grep(hb, input)[1]
   if (is.na(idx1) || idx1 >= idx2) return()
   txt = one_string(input[idx1:(idx2 - 1L)])  # rough preamble
-  idx = stringr::str_locate(txt, hb)  # locate documentclass
+  idx = str_locate(txt, hb, FALSE)  # locate documentclass
   options(tikzDocumentDeclaration = substr(txt, idx[, 1L], idx[, 2L]))
   preamble = pure_preamble(split_lines(substr(txt, idx[, 2L] + 1L, nchar(txt))), patterns)
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
@@ -581,12 +581,11 @@ print_knitlog = function() {
 
 # count the number of lines
 line_count = function(x) {
-  res = gregexpr('\n', x, fixed = TRUE)
-  unlist(lapply(res, function(x) {
-    n = length(x)
-    if (n == 1 && x == -1) n = 0
-    n + 1
-  }))
+  n = lengths(strsplit(x, '\n', fixed = TRUE))
+  i = grep('\n$', x)
+  n[i] = n[i] + 1L  # add an extra count for lines ending with \n
+  n[n == 0] = 1L  # should be at least one line
+  n
 }
 
 has_package = function(pkg) loadable(pkg, FALSE)
@@ -1086,9 +1085,6 @@ remove_urls = function(x) {
   gsub("(?<!`)\\[([^]]+)\\]\\(([^)]+)\\)(?!`)", "\\1", x, perl = TRUE)
 }
 
-# repeat a string for n times
-rep_str = function(x, n, sep = '') paste(rep(x, n), collapse = sep)
-
 # patch strsplit() to split '' into '' instead of character(0)
 str_split = function(x, split, ...) {
   y = strsplit(x, split, ...)
@@ -1122,3 +1118,5 @@ txt_pb = function(total, labels) {
     }
   )
 }
+
+is_quarto = function() isTRUE(.knitEnv$is_quarto)

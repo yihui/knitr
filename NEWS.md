@@ -2,6 +2,10 @@
 
 ## NEW FEATURES
 
+- Better `.qmd` (Quarto) file support:
+  - `purl()` will keep the in-chunk YAML syntax for options in the tangled R file
+  - `knit()` will produce a `.md` file instead of `.txt`
+
 - Users can specify a custom progress bar for `knit()` now. The default is still a text progress bar created from `utils::txtProgressBar()`. To specify a custom progress bar, set `options(knitr.progress.fun = function(total, labels) {})`. This function should take arguments `total` (the total number of chunks) and `labels` (the vector of chunk labels), create a progress bar, and return a list of two methods: `list(update = function(i) {}, done = function() {})`. The `update()` method takes `i` (index of the current chunk) as the input and updates the progress bar. The `done()` method closes the progress bar. See https://yihui.org/knitr/options/#global-r-options for documentation and examples.
 
 - The default text progress bar is still written to `stdout()` by default, but can also be written to other connections or `stderr()` now. To do so, set `options(knitr.progress.output = )` to a connection or `stderr()`.
@@ -10,9 +14,21 @@
 
 - `knit()` no longer prints out chunk options beneath the text progress bar while knitting a document (thanks, @hadley, #1880).
 
+- Due to a change in the **evaluate** package, the chunk options `message = FALSE` and `warning = FALSE` will completely suppress the messages/warnings now, instead of sending them to the console. To get back to the old behavior, you can use `NA` instead of `FALSE` (thanks, @gadenbuie, https://github.com/yihui/yihui.org/discussions/1458).
+
+- The **stringr** dependency has been removed. All string operations are done with base R now (thanks, @HughParsonage #1549 #1552, @rich-iannone #2174 #2177 #2186 #2187 #2195 #2202 #2205).
+
 ## MINOR CHANGES
 
+- Improved the error message when inline R code cannot be parsed (thanks, @hadley #2173, @rich-iannone #2198).
+
 - If the chunk option `child` is used for a code chunk but the chunk is not empty, you will get a warning indicating that this non-empty code will not be executed when you knit the document. Now this warning can be silenced by `options(knitr.child.warning = FALSE)` (thanks, @jwijffels, #2191).
+
+- Devices from the package **cairoDevice** (`Cairo_pdf`, `Cairo_png`, `Cairo_ps`, `Cairo_svg`) are no longer supported since the package has been archived on CRAN for more than a year (thanks, @jessekps, #2204).
+
+## BUG FIXES
+
+- The `sql` engine now correctly prints tables with `NA` in the first column (thanks, @mariusbommert, #2207).
 
 # CHANGES IN knitr VERSION 1.41
 

@@ -1,4 +1,4 @@
-# graphics devices in base R, plus those in Cairo, cairoDevice, tikzDevice
+# graphics devices in base R, plus those in Cairo, tikzDevice
 auto_exts = c(
   bmp = 'bmp', postscript = 'eps', pdf = 'pdf', png = 'png', svg = 'svg',
   jpeg = 'jpeg', pictex = 'tex', tiff = 'tiff', win.metafile = 'wmf',
@@ -10,8 +10,6 @@ auto_exts = c(
 
   CairoJPEG = 'jpeg', CairoPNG = 'png', CairoPS = 'eps', CairoPDF = 'pdf',
   CairoSVG = 'svg', CairoTIFF = 'tiff',
-
-  Cairo_pdf = 'pdf', Cairo_png = 'png', Cairo_ps = 'eps', Cairo_svg = 'svg',
 
   svglite = 'svg', gridSVG = 'svg',
 
@@ -87,11 +85,6 @@ dev_get = function(dev, options = opts_current$get(), dpi = options$dpi[1]) {
     CairoPS = load_device('CairoPS', 'Cairo'),
     CairoPDF = load_device('CairoPDF', 'Cairo'),
     CairoSVG = load_device('CairoSVG', 'Cairo'),
-
-    Cairo_pdf = load_device('Cairo_pdf', 'cairoDevice'),
-    Cairo_png = load_device('Cairo_png', 'cairoDevice'),
-    Cairo_ps = load_device('Cairo_ps', 'cairoDevice'),
-    Cairo_svg = load_device('Cairo_svg', 'cairoDevice'),
 
     svglite = load_device('svglite', 'svglite'),
 
@@ -217,7 +210,7 @@ get_dargs = function(dargs, dev) {
   dargs
 }
 
-# this is mainly for Cairo and cairoDevice
+# this is mainly for Cairo
 load_device = function(name, package, dpi = NULL) {
   dev = getFromNamespace(name, package)
   # dpi is for bitmap devices; units must be inches!
