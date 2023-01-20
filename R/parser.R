@@ -375,6 +375,9 @@ print.inline = function(x, ...) {
     if (nrow(x$location)) {
       cat(sprintf('  |  %s  #%s:%s', x$code, x$location[, 1], x$location[, 2]), sep = '\n')
     }
+  } else if (nrow(x$location) == 0 && xfun::check_old_package('autonewsmd', '0.0.4')) {
+    # TODO: remove this hack after https://github.com/kapsner/autonewsmd/pull/6
+    cat('  ordinary text without R code\n')
   }
 }
 

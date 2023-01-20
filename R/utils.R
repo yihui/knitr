@@ -322,6 +322,10 @@ fix_options = function(options) {
   if (identical(options$strip.white, I(TRUE)))
     options$strip.white = !options$collapse
 
+  # TODO: remove this after https://github.com/DeclareDesign/randomizr/pull/95
+  if (xfun::check_old_package('randomizr', '0.22.0') && identical(options$message, 'hide'))
+    options$message = FALSE
+
   options
 }
 
