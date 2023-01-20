@@ -19,8 +19,7 @@
 #' @note Please register your own Imgur application to get your client ID; you
 #'   can certainly use mine, but this ID is in the public domain so everyone has
 #'   access to all images associated to it.
-#' @references Imgur API version 3: \url{https://apidocs.imgur.com}; a demo:
-#'   \url{https://yihui.org/knitr/demo/upload/}
+#' @references A demo: \url{https://yihui.org/knitr/demo/upload/}
 #' @export
 #' @examples \dontrun{
 #' f = tempfile(fileext = '.png')
