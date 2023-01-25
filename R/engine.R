@@ -87,9 +87,9 @@ engine_output = function(options, code, out, extra = NULL) {
   if (length(out) != 1L) out = one_string(out)
   out = sub('([^\n]+)$', '\\1\n', out)
   if (options$engine == 'stata') {
-    out = gsub('\n+running.*profile.do', '', out)
-    out = sub('...\n+', '', out)
-    out = sub('\n. \nend of do-file\n', '', out)
+    out = gsub('\n+running.*profile\\.do', '', out)
+    out = sub('\\.\\.\\.\n+', '', out)
+    out = sub('\n\\. \nend of do-file\n', '', out)
   }
   one_string(c(
     if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
