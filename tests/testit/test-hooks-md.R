@@ -54,9 +54,11 @@ assert('class.source and attr.source works also with collapse = TRUE', {
 
 assert('collapse = TRUE does not collapse htmlwidgets', {
   hook_chunk = hooks_markdown()$chunk
-  (hook_chunk("\n```{=html}\n1\n```\n\n```r\n1\n```\n",
-              c(options_, collapse = TRUE)) %==%
-      "\n```{=html}\n1\n```\n\n```r\n1\n```")
+  md <- structure("\n```{=html}\n1\n```\n\n```r\n1\n```\n\n```\n[1] 1\n```\n",
+                  specialfirst = 1,
+                  speciallast = 18)
+  (hook_chunk(md, c(options_, collapse = TRUE)) %==%
+      "\n```{=html}\n1\n```\n```r\n1\n[1] 1\n```")
 })
 
 hook_out = knit_hooks$get("output")

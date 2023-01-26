@@ -208,30 +208,33 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
     },
     plot = hook_plot_md,
     chunk = function(x, options) {
-      x = gsub(paste0('[\n]{2,}(', fence, '|    )'), '\n\n\\1', x)
-      x = gsub('[\n]+$', '', x)
-      x = gsub('^[\n]+', '\n', x)
+      cleanup <- function(x) {
+        x = gsub(paste0('[\n]{2,}(', fence, '|    )'), '\n\n\\1', x)
+        x = gsub('[\n]+$', '', x)
+        x = gsub('^[\n]+', '\n', x)
+        x
+      }
+      # Need to split up x if options$collapse is TRUE, but it contains raw HTML
+      # coming from htmlwidgets or something else that
+      # isn't just R code or output.
+      specialfirst <- attr(x, "specialfirst")
+      if (!is.null(specialfirst)) {
+        origx <- x
+        speciallast <- attr(x, "speciallast")
+        regfirst <- c(1, speciallast + 1)
+        reglast  <- c(specialfirst - 1, nchar(origx))
+        x <- substring(origx, regfirst, reglast)
+        special <- substring(origx, specialfirst, speciallast)
+        special <- cleanup(special)
+      }
+      x <- cleanup(x)
       if (isTRUE(options$collapse)) {
         r = sprintf('\n([%s]{3,})\n+\\1((\\{[.])?%s[^\n]*)?\n', fence_char, tolower(options$engine))
-        # Need to split up x if it contains raw HTML
-        # coming from htmlwidgets or something else that
-        # isn't just R code or output.
-        r2 = sprintf('(.*?\n)([%s]{3,})([^r\n].*?\n\\2\n)', fence_char)
-        xout = ""
-        repeat {
-          # Use stri_match_first_regex here because
-          # stringr::str_match doesn't match \n to .,
-          # and base::regexpr has a bug in R 4.2.2 that
-          # stops .*? from working properly
-          m = stringi::stri_match_first_regex(x, r2, opts_regex = list(dotall = TRUE))
-          if (is.na(m[1,1]))
-            break
-          xout = paste0(xout,                  # previous
-                        gsub(r, '\n', m[1,2]), # R block
-                        m[1,3], m[1,4])        # html block
-          x = substring(x, nchar(m[1,1]) + 1)
-        }
-        x = paste0(xout, gsub(r, '\n', x))
+        x = gsub(r, '\n', x)
+      }
+      if (!is.null(specialfirst)) {
+        # Glue it all back together
+        x = paste(x, c(special, ""), collapse = "", sep = "")
       }
       x = pandoc_div(x, options[['attr.chunk']], options[['class.chunk']])
       if (is.null(s <- options$indent)) return(x)

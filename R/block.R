@@ -315,10 +315,26 @@ eng_r = function(options) {
     opts_knit$delete('plot_files')
   }, add = TRUE)  # restore plot number
 
-  output = unlist(sew(res, options)) # wrap all results together
+  sewn <- sew(res, options)
+  output = unlist(sewn) # wrap all results together
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
-
+  specials <- logical()
+  if (isTRUE(options$collapse)) {
+    specials <- vapply(sewn, function(s) !identical(class(s), "character"), FALSE)
+    if (any(specials)) {
+      blocksize <- nchar(output)
+      blocklast <- sum(nchar(res.before)) + cumsum(blocksize)
+      blockfirst <- blocklast - blocksize + 1
+    }
+  }
   output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
+
+  # Mark the "do not touch" sections
+  if (any(specials)) {
+    attr(output, "specialfirst") <- blockfirst[specials]
+    attr(output, "speciallast") <- blocklast[specials]
+  }
+
   output = knit_hooks$get('chunk')(output, options)
 
   if (options$cache > 0) {
