@@ -288,10 +288,10 @@ process_file = function(text, output) {
   # when in R CMD check, turn off the progress bar (R-exts said the progress bar
   # was not appropriate for non-interactive mode, and I don't want to argue)
   progress = opts_knit$get('progress') && !is_R_CMD_check()
+  labels = unlist(lapply(groups, function(g) {
+    if (is.list(g$params)) g[[c('params', 'label')]] else ''
+  }))
   if (progress) {
-    labels = unlist(lapply(groups, function(g) {
-      if (is.list(g$params)) g[[c('params', 'label')]] else ''
-    }))
     pb_fun = getOption('knitr.progress.fun', txt_pb)
     pb = if (is.function(pb_fun)) pb_fun(n, labels)
     on.exit(if (!is.null(pb)) pb$done(), add = TRUE)
@@ -318,7 +318,8 @@ process_file = function(text, output) {
         setwd(wd)
         cat(res, sep = '\n', file = output %n% '')
         message(
-          'Quitting from lines ', paste(current_lines(i), collapse = '-'),
+          '\nQuitting from lines ', paste(current_lines(i), collapse = '-'),
+          ' [', labels[i], ']',
           ' (', knit_concord$get('infile'), ') '
         )
       }
