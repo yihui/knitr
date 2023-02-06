@@ -299,7 +299,7 @@ process_file = function(text, output) {
   wd = getwd()
   if (xfun::pkg_available("rlang", "1.0.0")) {
     rlang::global_entrace(TRUE)
-    on.exit(rlang::global_entrace(FALSE))
+    on.exit(rlang::global_entrace(FALSE), add = TRUE)
   }
   for (i in 1:n) {
     if (!is.null(.knitEnv$terminate)) {
