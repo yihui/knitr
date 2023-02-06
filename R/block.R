@@ -593,7 +593,7 @@ process_tangle.block = function(x) {
   code = parse_chunk(code)
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
-  # e.g when documentation 1 or 2 with purl()
+  # e.g. when documentation 1 or 2 with purl()
   label_code(code, x)
 }
 #' @export
