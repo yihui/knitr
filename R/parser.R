@@ -278,7 +278,7 @@ partition_chunk = function(engine, code) {
   if (!i1[1] && !identical(s1, '#|')) {
     s1 = '#| '; s2 = ''
     i1 = startsWith(code, s1); i2 = TRUE
-    # if in quarto, stop and advice to use language option
+    # if found in quarto, stop and advice to use language comment
     if (is_quarto() && i1 && i2) {
       stop2(c(
         "Non R chunk should prefix pipe `|` with the comment character from the language for YAML options. ",
