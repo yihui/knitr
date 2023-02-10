@@ -275,7 +275,8 @@ partition_chunk = function(engine, code) {
   i1 = startsWith(code, s1)
   i2 = endsWith(trimws(code, 'right'), s2)
   # if "commentChar| " is not found, try "#| " instead
-  if (!i1[1] && !identical(s1, '#|')) {
+  # except in Quarto which expect language comment
+  if (!is_quarto() && !i1[1] && !identical(s1, '#|')) {
     s1 = '#| '; s2 = ''
     i1 = startsWith(code, s1); i2 = TRUE
   }
