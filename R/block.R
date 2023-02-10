@@ -322,7 +322,10 @@ eng_r = function(options) {
   # regexp.
 
   if (isTRUE(options$collapse))
-    specials = vapply(sewn, function(s) !identical(class(s), 'character'), FALSE)
+    specials = vapply(sewn, function(s) {
+        !identical(class(s), 'character') ||
+        grepl("^\n(.)\\1{2,}\\{=html\\}\n", s[1])
+      }, FALSE)
   else
     specials = FALSE
 
