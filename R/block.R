@@ -315,27 +315,33 @@ eng_r = function(options) {
     opts_knit$delete('plot_files')
   }, add = TRUE)  # restore plot number
 
-  sewn <- sew(res, options)
+  sewn = sew(res, options)
+
+  # The markdown chunk hook messes up htmlwidgets output when it collapses a
+  # chunk, so wrap it in special markers that won't be matched by the chunk hook
+  # regexp.
+
+  if (isTRUE(options$collapse))
+    specials = vapply(sewn, function(s) !identical(class(s), 'character'), FALSE)
+  else
+    specials = FALSE
+
+  if (any(specials)) {
+    specialSeparator = paste('KNITR SPECIAL OBJECT', format(Sys.time(), '%OS6'))
+    for (i in which(specials))
+      sewn[[i]] = c(specialSeparator, sewn[[i]],
+                    specialSeparator)
+  } else
+    specialSeparator = ''
+
   output = unlist(sewn) # wrap all results together
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
-  specials <- logical()
-  if (isTRUE(options$collapse)) {
-    specials <- vapply(sewn, function(s) !identical(class(s), "character"), FALSE)
-    if (any(specials)) {
-      blocksize <- nchar(output)
-      blocklast <- sum(nchar(res.before)) + cumsum(blocksize)
-      blockfirst <- blocklast - blocksize + 1
-    }
-  }
+
   output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
-
-  # Mark the "do not touch" sections
-  if (any(specials)) {
-    attr(output, "specialfirst") <- blockfirst[specials]
-    attr(output, "speciallast") <- blocklast[specials]
-  }
-
   output = knit_hooks$get('chunk')(output, options)
+
+  if (any(specials))
+    output = gsub(specialSeparator, '', output, fixed = TRUE)
 
   if (options$cache > 0) {
     # if cache.vars has been specifically provided, only cache these vars and no

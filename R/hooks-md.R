@@ -208,33 +208,12 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
     },
     plot = hook_plot_md,
     chunk = function(x, options) {
-      cleanup <- function(x) {
-        x = gsub(paste0('[\n]{2,}(', fence, '|    )'), '\n\n\\1', x)
-        x = gsub('[\n]+$', '', x)
-        x = gsub('^[\n]+', '\n', x)
-        x
-      }
-      # Need to split up x if options$collapse is TRUE, but it contains raw HTML
-      # coming from htmlwidgets or something else that
-      # isn't just R code or output.
-      specialfirst <- attr(x, "specialfirst")
-      if (!is.null(specialfirst)) {
-        origx <- x
-        speciallast <- attr(x, "speciallast")
-        regfirst <- c(1, speciallast + 1)
-        reglast  <- c(specialfirst - 1, nchar(origx))
-        x <- substring(origx, regfirst, reglast)
-        special <- substring(origx, specialfirst, speciallast)
-        special <- cleanup(special)
-      }
-      x <- cleanup(x)
+      x = gsub(paste0('[\n]{2,}(', fence, '|    )'), '\n\n\\1', x)
+      x = gsub('[\n]+$', '', x)
+      x = gsub('^[\n]+', '\n', x)
       if (isTRUE(options$collapse)) {
         r = sprintf('\n([%s]{3,})\n+\\1((\\{[.])?%s[^\n]*)?\n', fence_char, tolower(options$engine))
         x = gsub(r, '\n', x)
-      }
-      if (!is.null(specialfirst)) {
-        # Glue it all back together
-        x = paste(x, c(special, ""), collapse = "", sep = "")
       }
       x = pandoc_div(x, options[['attr.chunk']], options[['class.chunk']])
       if (is.null(s <- options$indent)) return(x)
