@@ -276,8 +276,10 @@ partition_chunk = function(engine, code) {
   i2 = endsWith(trimws(code, 'right'), s2)
   # if "commentChar| " is not found, try "#| " instead
   if (!i1[1] && !identical(s1, '#|')) {
+    s1 = '#| '; s2 = ''
+    i1 = startsWith(code, s1); i2 = TRUE
     # if in quarto, stop and advice to use language option
-    if (is_quarto()) {
+    if (is_quarto() && i1 && i2) {
       stop2(c(
         "Non R chunk should prefix pipe `|` with the comment character from the language for YAML options. ",
         sprintf("You are using %s:\n", sQuote(engine)),
@@ -286,8 +288,6 @@ partition_chunk = function(engine, code) {
         "\n"
       ))
     }
-    s1 = '#| '; s2 = ''
-    i1 = startsWith(code, s1); i2 = TRUE
   }
   m = i1 & i2
 
