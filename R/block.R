@@ -315,36 +315,11 @@ eng_r = function(options) {
     opts_knit$delete('plot_files')
   }, add = TRUE)  # restore plot number
 
-  sewn = sew(res, options)
-
-  # The markdown chunk hook messes up htmlwidgets output when it collapses a
-  # chunk, so wrap it in special markers that won't be matched by the chunk hook
-  # regexp.
-
-  if (isTRUE(options$collapse))
-    specials = vapply(sewn, function(s) {
-        !identical(class(s), 'character') ||
-        grepl("^\n(.)\\1{2,}\\{=html\\}\n", s[1])
-      }, FALSE)
-  else
-    specials = FALSE
-
-  if (any(specials)) {
-    specialSeparator = paste('KNITR SPECIAL OBJECT', format(Sys.time(), '%OS6'))
-    for (i in which(specials))
-      sewn[[i]] = c(specialSeparator, sewn[[i]],
-                    specialSeparator)
-  } else
-    specialSeparator = ''
-
-  output = unlist(sewn) # wrap all results together
+  output = unlist(sew(res, options)) # wrap all results together
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
 
   output = paste(c(res.before, output, res.after), collapse = '')  # insert hook results
   output = knit_hooks$get('chunk')(output, options)
-
-  if (any(specials))
-    output = gsub(specialSeparator, '', output, fixed = TRUE)
 
   if (options$cache > 0) {
     # if cache.vars has been specifically provided, only cache these vars and no
@@ -618,7 +593,7 @@ process_tangle.block = function(x) {
   code = parse_chunk(code)
   if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
-  # e.g when documentation 1 or 2 with purl()
+  # e.g. when documentation 1 or 2 with purl()
   label_code(code, x)
 }
 #' @export

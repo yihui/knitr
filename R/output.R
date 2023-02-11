@@ -481,10 +481,10 @@ sew.knit_asis = function(x, options, inline = FALSE, ...) {
     if (inherits(x, 'knit_asis_htmlwidget')) {
       options$fig.cur = plot_counter()
       options = reduce_plot_opts(options)
-      return(add_html_caption(options, x))
+      return(add_html_caption(options, c("::: {.htmlwidget}\n", x, ":::\n")))
     }
   }
-  x = as.character(x)
+  x = c("::: {.knitr_asis}\n", as.character(x), ":::\n")
   if (!out_format('latex') || inline) return(x)
   # latex output need the \end{kframe} trick
   options$results = 'asis'
