@@ -464,6 +464,15 @@ sew.character = function(x, options, ...) {
   knit_hooks$get('output')(x, options)
 }
 
+wrap_asis <- function(x, divclass = class(x)[1]) {
+  lastline = x[length(x)]
+  nch = nchar(lastline)
+  lastchar = substr(lastline, nch, nch)
+  c(sprintf("::: {.%s}\n", divclass),
+    x, if (lastchar != "\n") "\n",
+    ":::\n")
+}
+
 # If you provide a custom print function that returns a character object of
 # class 'knit_asis', it will be written as is.
 #' @export
@@ -481,10 +490,10 @@ sew.knit_asis = function(x, options, inline = FALSE, ...) {
     if (inherits(x, 'knit_asis_htmlwidget')) {
       options$fig.cur = plot_counter()
       options = reduce_plot_opts(options)
-      return(add_html_caption(options, c("::: {.htmlwidget}\n", x, ":::\n")))
+      return(add_html_caption(options, wrap_asis(x)))
     }
   }
-  x = c("::: {.knitr_asis}\n", as.character(x), ":::\n")
+  x = wrap_asis(x)
   if (!out_format('latex') || inline) return(x)
   # latex output need the \end{kframe} trick
   options$results = 'asis'
