@@ -64,14 +64,12 @@ assert('sanitize_fn() warns against spaces in filenames', {
 options(op)
 
 assert('fig_path() sanitizes paths', {
-  (identical(sanitize_fn('fig/foo', '.png'), 'fig/foo.png'))
-  (suppressWarnings(c(
-    identical(sanitize_fn('figure/a b'), 'figure/a_b'),
-    identical(sanitize_fn('fig space/a.b'), 'fig_space/a_b'),
-    identical(sanitize_fn('../c.d'), '../c_d'),
-    identical(sanitize_fn('./../c..d'), './../c__d')
-  )))
-  (identical(sanitize_fn('C:/foo/bar'), 'C:/foo/bar'))
+  (sanitize_fn('fig/foo') %==% 'fig/foo')
+  (sanitize_fn('figure/a b  c', FALSE) %==% 'figure/a_b__c')
+  (sanitize_fn('fig space/a.b') %==% 'fig_space/a.b')
+  (sanitize_fn('../c.d') %==% '../c.d')
+  (sanitize_fn('./../c..d') %==% './../c..d')
+  (sanitize_fn('C:/foo/bar') %==% 'C:/foo/bar')
 })
 
 assert('fig_chunk() generates figure filenames for a code chunk', {
