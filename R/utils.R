@@ -490,24 +490,17 @@ fig_path = function(suffix = '', options = opts_current$get(), number) {
   if (missing(number)) number = options$fig.cur %n% 1L
   if (!is.null(number)) suffix = paste0('-', number, suffix)
   path = valid_path(options$fig.path, options$label)
-  (if (out_format(c('latex', 'sweave', 'listings'))) sanitize_fn else
-    paste0)(path, suffix)
+  if (getOption('knitr.sanitize.paths', out_format(c('latex', 'sweave', 'listings'))))
+    path = sanitize_fn(path)
+  paste0(path, suffix)
 }
 # sanitize filename for LaTeX
-sanitize_fn = function(path, suffix = '') {
-  if (grepl('[^~:_./\\[:alnum:]-]', path)) {
-    warning('replaced special characters in figure filename "', path, '" -> "',
-            path <- gsub('[^~:_./\\[:alnum:]-]', '_', path), '"')
-  }
-  # replace . with _ except ../ and ./
-  s = strsplit(path, '[/\\\\]')[[1L]]
-  i = (s != '.') & (s != '..') & grepl('\\.', s)
-  if (any(i)) {
-    s[i] = gsub('\\.', '_', s[i])
-    path = paste(s, collapse = '/')
-    warning('dots in figure paths replaced with _ ("', path, '")')
-  }
-  paste0(path, suffix)
+sanitize_fn = function(path, warn = TRUE) {
+  p = gsub('[^~:_./\\[:alnum:]-]', '_', path)
+  if (warn && (p != path)) warning(
+    "Replaced special characters in figure filename '", path, "' -> '", p, "'"
+  )
+  p
 }
 
 #' Obtain the figure filenames for a chunk
