@@ -29,7 +29,7 @@ assert('include_graphics() includes custom images correctly', {
 hook_src = knit_hooks$get("source")
 options_ = list(engine = "r", prompt = FALSE, highlight = TRUE)
 
-assert('Lengh of fences are satisfied', {
+assert('Length of fences are satisfied', {
   (hook_src("", options_) %==% "\n\n```r\n\n```\n\n")
   (hook_src("```", options_) %==% "\n\n````r\n```\n````\n\n")
 })
@@ -54,7 +54,7 @@ assert('class.source and attr.source works also with collapse = TRUE', {
 
 hook_out = knit_hooks$get("output")
 
-assert('Attributes for souce can be specified class.source and attr.source', {
+assert('Attributes for source can be specified class.source and attr.source', {
   (hook_out("1\n", c(options_, class.output = "a b")) %==%
     "\n\n```{.a .b}\n1\n```\n\n")
   (hook_out("1\n", c(options_, attr.output = ".a .b")) %==%

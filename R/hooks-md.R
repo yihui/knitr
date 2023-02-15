@@ -214,6 +214,7 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
       if (isTRUE(options$collapse)) {
         r = sprintf('\n([%s]{3,})\n+\\1((\\{[.])?%s[^\n]*)?\n', fence_char, tolower(options$engine))
         x = gsub(r, '\n', x)
+        x = gsub(asis_token, '', x, fixed = TRUE)
       }
       x = pandoc_div(x, options[['attr.chunk']], options[['class.chunk']])
       if (is.null(s <- options$indent)) return(x)

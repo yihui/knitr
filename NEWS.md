@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.43
 
+## BUG FIXES
+
+- The chunk option `collapse = TRUE` works with HTML widgets now (thanks, @dmurdoch, #2212).
+
 ## MINOR CHANGES
 
 - For `.Rnw` documents, dots in figure file paths are no longer sanitized to underscores (thanks, @otoomet, #2213). Other special characters are still sanitized, but this feature can be turned off via `options(knitr.sanitize.paths = FALSE)`.
