@@ -546,7 +546,7 @@ eng_html_asset = function(prefix, postfix) {
 }
 
 # include js in a script tag (ignore if not html output)
-eng_js = eng_html_asset('<script type="text/javascript">', '</script>')
+eng_js = eng_html_asset('<script>', '</script>')
 
 # include css in a style tag (ignore if not html output)
 eng_css = eng_html_asset('<style type="text/css">', '</style>')
