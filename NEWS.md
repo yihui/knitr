@@ -6,6 +6,8 @@
 
 ## MINOR CHANGES
 
+- The `css` and `js` engines work for the `markdown` output format now. Previous these engines will not output anything when the output format is `markdown`. If you still want to disable them for `markdown` output, you may use the chunk option `eval = FALSE` or `eval = knitr::is_html_output(excludes = 'markdown')`.
+
 - `is_html_output()` recognizes R Markdown v1 documents now (`.Rmd` documents compiled via the **markdown** package).
 
 - For `.Rnw` documents, dots in figure file paths are no longer sanitized to underscores (thanks, @otoomet, #2213). Other special characters are still sanitized, but this feature can be turned off via `options(knitr.sanitize.paths = FALSE)`.
