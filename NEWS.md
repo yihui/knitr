@@ -12,6 +12,8 @@
 
 - For `.Rnw` documents, dots in figure file paths are no longer sanitized to underscores (thanks, @otoomet, #2213). Other special characters are still sanitized, but this feature can be turned off via `options(knitr.sanitize.paths = FALSE)`.
 
+- `imgur_upload()` now recognizes a `"knitr.imgur.key"` option or a `"R_KNITR_IMGUR_KEY"` environment variable for a custom client ID (@jonthegeek, #2233).
+
 # CHANGES IN knitr VERSION 1.42
 
 ## NEW FEATURES
