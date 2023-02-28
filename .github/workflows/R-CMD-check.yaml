@@ -61,8 +61,6 @@ jobs:
             any::rcmdcheck
             targets=?ignore-before-r=3.5.0
             JuliaCall=?ignore-before-r=4.0.0
-            xts=?ignore-before-r=3.6.0
-            rstudio/rmarkdown
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
