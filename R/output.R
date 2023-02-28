@@ -316,9 +316,9 @@ process_file = function(text, output) {
       if (tangle) process_tangle(group) else process_group(group),
       error = function(e) {
         setwd(wd)
-        cat(res, sep = '\n', file = output %n% '')
+        write_utf8(res, output %n% stdout())
         message(
-          '\nQuitting from lines ', paste(current_lines(i), collapse = '-'),
+          'Quitting from lines ', paste(current_lines(i), collapse = '-'),
           ' [', labels[i], ']',
           ' (', knit_concord$get('infile'), ') '
         )
