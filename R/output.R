@@ -288,10 +288,10 @@ process_file = function(text, output) {
   # when in R CMD check, turn off the progress bar (R-exts said the progress bar
   # was not appropriate for non-interactive mode, and I don't want to argue)
   progress = opts_knit$get('progress') && !is_R_CMD_check()
+  labels = unlist(lapply(groups, function(g) {
+    if (is.list(g$params)) g[[c('params', 'label')]] else ''
+  }))
   if (progress) {
-    labels = unlist(lapply(groups, function(g) {
-      if (is.list(g$params)) g[[c('params', 'label')]] else ''
-    }))
     pb_fun = getOption('knitr.progress.fun', txt_pb)
     pb = if (is.function(pb_fun)) pb_fun(n, labels)
     on.exit(if (!is.null(pb)) pb$done(), add = TRUE)
@@ -309,15 +309,20 @@ process_file = function(text, output) {
     if (progress && !is.null(pb)) pb$update(i)
     group = groups[[i]]
     res[i] = withCallingHandlers(
-      if (tangle) process_tangle(group) else process_group(group),
       error = function(e) {
         setwd(wd)
-        cat(res, sep = '\n', file = output %n% '')
+        write_utf8(res, output %n% stdout())
         message(
+          '\n', # start always on a new line
           'Quitting from lines ', paste(current_lines(i), collapse = '-'),
+          ' [', labels[i], ']',
           ' (', knit_concord$get('infile'), ') '
         )
-      }
+      },
+      withCallingHandlers(
+        error = function(e) if (xfun::pkg_available("rlang", "1.0.0")) rlang::entrace(e),
+        if (tangle) process_tangle(group) else process_group(group)
+      )
     )
   }
 
