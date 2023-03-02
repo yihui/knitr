@@ -472,7 +472,7 @@ sew.character = function(x, options, ...) {
 asis_token = '<!-- KNITR_ASIS_OUTPUT_TOKEN -->'
 wrap_asis = function(x, options) {
   x = as.character(x)
-  if ((n <- length(x)) == 0 || !out_format('markdown') || !isTRUE(options$collapse))
+  if ((n <- length(x)) == 0 || !out_format('markdown') || missing(options) || !isTRUE(options$collapse))
     return(x)
   x[1] = paste0(asis_token, x[1])
   x[n] = paste0(x[n], asis_token)
