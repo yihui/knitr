@@ -313,10 +313,9 @@ process_file = function(text, output) {
         setwd(wd)
         write_utf8(res, output %n% stdout())
         message(
-          '\n', # start always on a new line
-          'Quitting from lines ', paste(current_lines(i), collapse = '-'),
-          ' [', labels[i], ']',
-          ' (', knit_concord$get('infile'), ') '
+          '\nQuitting from lines ', paste(current_lines(i), collapse = '-'),
+          if (labels[i] != '') sprintf(' [%s]', labels[i]),
+          sprintf(' (%s)', knit_concord$get('infile'))
         )
       },
       withCallingHandlers(
