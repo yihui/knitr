@@ -309,6 +309,10 @@ process_file = function(text, output) {
     if (progress && !is.null(pb)) pb$update(i)
     group = groups[[i]]
     res[i] = withCallingHandlers(
+      withCallingHandlers(
+        if (tangle) process_tangle(group) else process_group(group),
+        error = function(e) if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
+      ),
       error = function(e) {
         setwd(wd)
         write_utf8(res, output %n% stdout())
@@ -317,11 +321,7 @@ process_file = function(text, output) {
           if (labels[i] != '') sprintf(' [%s]', labels[i]),
           sprintf(' (%s)', knit_concord$get('infile'))
         )
-      },
-      withCallingHandlers(
-        error = function(e) if (xfun::pkg_available("rlang", "1.0.0")) rlang::entrace(e),
-        if (tangle) process_tangle(group) else process_group(group)
-      )
+      }
     )
   }
 
