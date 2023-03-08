@@ -371,7 +371,7 @@ fix_options = function(options) {
 #' # Test if current output format is 'docx'
 #' knitr::pandoc_to('docx')
 is_latex_output = function() {
-  out_format('latex') || pandoc_to(c('latex', 'beamer'))
+  out_format(c('latex', 'sweave', 'listings')) || pandoc_to(c('latex', 'beamer'))
 }
 
 #' @param fmt A character vector of output formats to be checked against. If not
