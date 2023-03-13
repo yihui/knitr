@@ -63,6 +63,7 @@ write_bib = function(
 ) {
   system.file = function(...) base::system.file(..., lib.loc = lib.loc)
   citation = function(...) utils::citation(..., lib.loc = lib.loc)
+  x = x[nzchar(x)] # remove possible empty string
   idx = mapply(system.file, package = x) == ''
   if (any(idx)) {
     warning('package(s) ', paste(x[idx], collapse = ', '), ' not found')
