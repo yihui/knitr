@@ -1089,6 +1089,8 @@
 
 - added three global R options `knitr.sanitize.errors`, `knitr.sanitize.warnings`, and `knitr.sanitize.messages` to mask or change the messages, e.g. if `options(knitr.sanitize.errors = TRUE)` and the chunk option `error = TRUE`, the actual error message will be replaced by a character string like `"An error occurred"`; these options can also accept character values so you can customize the messages to be displayed, e.g. `options(knitr.sanitize.warnings = 'You had a warning from the code')`; see https://github.com/rstudio/shiny/issues/1123 for the motivation of these options
 
+- htmlwidgets can now support alt text by specifying an attribute `aria-labelledby="<label>"` in their first HTML tag. The text will be obtained from the `fig.alt` or `fig.cap` chunk option in the usual way.
+
 ## BUG FIXES
 
 - when the chunk option `cache.rebuild = TRUE`, the cache database should be rewritten (thanks, Oleg Mayba)

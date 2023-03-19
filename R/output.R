@@ -478,6 +478,17 @@ wrap_asis = function(x, options) {
   x
 }
 
+# This looks for attribute 'aria-labelledby = "label"' in the first
+# HTML tag in the string, and returns the label, or NULL if
+# none is found.
+
+get_alt_id <- function(s) {
+  repr = '^[^<]*<[^>]+aria-labelledby[ ]*=[ ]*"([^"]+)".*$'
+  id = sub(repr, "\\1", s)
+  if (id == s) id = NULL
+  id
+}
+
 # If you provide a custom print function that returns a character object of
 # class 'knit_asis', it will be written as is.
 #' @export
@@ -495,7 +506,9 @@ sew.knit_asis = function(x, options, inline = FALSE, ...) {
     if (inherits(x, 'knit_asis_htmlwidget')) {
       options$fig.cur = plot_counter()
       options = reduce_plot_opts(options)
-      return(add_html_caption(options, wrap_asis(x, options)))
+      return(add_html_caption(options,
+                              wrap_asis(x, options),
+                              id = get_alt_id(x)))
     }
   }
   x = wrap_asis(x, options)
@@ -638,13 +651,16 @@ sew.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE, ...
   ))
 }
 
-add_html_caption = function(options, code) {
+add_html_caption = function(options, code, id = NULL) {
   cap = .img.cap(options)
-  if (cap == '') return(code)
-  sprintf(
-    '<div class="figure"%s>\n%s\n<p class="caption">%s</p>\n</div>',
-    css_text_align(options$fig.align), code, cap
-  )
+  if (cap == '' && is.null(id)) return(code)
+  if (!is.null(id))
+    alt = .img.cap(options, alt = TRUE)
+  paste0(sprintf(
+    '<div class="figure"%s>\n%s\n', css_text_align(options$fig.align), code),
+    if (cap != '') sprintf('<p class="caption">%s</p>\n', cap),
+    if (!is.null(id)) sprintf('<p id="%s" hidden>%s</p>\n', id, alt),
+    '</div>')
 }
 
 #' A custom printing function
