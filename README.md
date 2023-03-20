@@ -1,4 +1,4 @@
-# knitr
+# knitr <img src="man/figures/logo.png" align="right" height="138" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/yihui/knitr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yihui/knitr/actions/workflows/R-CMD-check.yaml)
