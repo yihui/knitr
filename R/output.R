@@ -653,14 +653,29 @@ sew.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE, ...
 
 add_html_caption = function(options, code, id = NULL) {
   cap = .img.cap(options)
+
   if (cap == '' && is.null(id)) return(code)
-  if (!is.null(id))
+
+  if (!is.null(id)) {
     alt = .img.cap(options, alt = TRUE)
-  paste0(sprintf(
-    '<div class="figure"%s>\n%s\n', css_text_align(options$fig.align), code),
-    if (cap != '') sprintf('<p class="caption">%s</p>\n', cap),
-    if (!is.null(id)) sprintf('<p id="%s" hidden>%s</p>\n', id, alt),
-    '</div>')
+    if (cap == alt) {
+      # Both are the same, so insert cap with id
+      alttext <- sprintf('<p class="caption" id="%s">%s</p>\n', id, cap)
+      # Prevent a second insertion
+      cap = ''
+    } else
+      alttext = sprintf('<p id="%s" hidden>%s</p>\n', id, alt)
+  } else
+    alttext = ''
+
+  if (cap != '')
+    captext = sprintf('<p class="caption">%s</p>\n', cap)
+  else
+    captext = ''
+
+  sprintf('<div class="figure"%s>\n%s\n%s%s</div>',
+          css_text_align(options$fig.align), code,
+          captext, alttext)
 }
 
 #' A custom printing function
