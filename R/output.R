@@ -658,7 +658,7 @@ add_html_caption = function(options, code, id = NULL) {
 
   if (!is.null(id)) {
     alt = .img.cap(options, alt = TRUE)
-    if (cap == alt) {
+    if (cap == alt && cap != '') {
       # Both are the same, so insert cap with id
       alttext <- sprintf('<p class="caption" id="%s">%s</p>\n', id, cap)
       # Prevent a second insertion
