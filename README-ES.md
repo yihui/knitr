@@ -1,12 +1,10 @@
 # knitr <img src="man/figures/logo.png" align="right" height="138" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/yihui/knitr/workflows/R-CMD-check/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3AR-CMD-check)
-[![Check with knitr examples](https://github.com/yihui/knitr/workflows/Check%20with%20knitr%20examples/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3A%22Check+with+knitr+examples%22)
-[![test-coverage](https://github.com/yihui/knitr/workflows/test-coverage/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3Atest-coverage)
-[![Coverage status](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://codecov.io/github/yihui/knitr?branch=master)
+[![R-CMD-check](https://github.com/yihui/knitr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yihui/knitr/actions/workflows/R-CMD-check.yaml)
+[![Check knitr examples](https://github.com/yihui/knitr/actions/workflows/knitr-examples.yaml/badge.svg)](https://github.com/yihui/knitr/actions/workflows/knitr-examples.yaml)
+[![Codecov test coverage](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/yihui/knitr?branch=master)
 [![CRAN release](https://www.r-pkg.org/badges/version/knitr)](https://cran.r-project.org/package=knitr)
-[![Lock threads](https://github.com/yihui/knitr/workflows/Lock%20threads/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3A%22Lock+threads%22)
 <!-- badges: end -->
 
 El paquete de R **knitr** es un motor de programación literaria de uso genérico, con una API ligera diseñada para dar a los usuarios control total de la salida sin un trabajo de codificación pesado. Combina muchas características dentro de un paquete con leves ajustes motivados de mi uso diario de Sweave. Observe la [página principal](https://yihui.org/knitr/) del paquete para más detalles y ejemplos. Vea las [FAQ](https://yihui.org/knitr/faq/) para una lista de preguntas frecuentes (que incluye dónde hacer preguntas).
