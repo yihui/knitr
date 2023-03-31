@@ -470,6 +470,10 @@ sew.character = function(x, options, ...) {
 
 asis_token = '<!-- KNITR_ASIS_OUTPUT_TOKEN -->'
 wrap_asis = function(x, options) {
+  # do nothing when inside quarto as it is not needed
+  # https://github.com/yihui/knitr/pull/2212#pullrequestreview-1292924523
+  if (is_quarto()) return (x)
+
   x = as.character(x)
   if ((n <- length(x)) == 0 || !out_format('markdown') || missing(options) || !isTRUE(options$collapse))
     return(x)
