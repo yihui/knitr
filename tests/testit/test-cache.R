@@ -44,3 +44,34 @@ assert('dep_prev() sets dependencies on previous chunks', {
 })
 dep_list$restore()
 knit_code$restore()
+
+mock_cache = (function() {
+  noop_false = function(...) FALSE
+  noop_true = function(...) TRUE
+  list(
+    available = noop_true, exists = noop_false, load = noop_false,
+    save = noop_false, purge = noop_false
+  )  # may return anything
+})()
+knit_engines$set(mock = function(...) "\n\nmock result\n\n")
+cache_engines$set(mock = function(...) mock_cache)
+knit_engine_cache = function() {
+  in_dir(tempdir(), {
+    txt = c(
+      '```{mock test, cache=TRUE, cache.path=""}',
+      'mock code',
+      '```'
+    )
+    knit(text = txt, quiet = TRUE)
+    R_cache_file = list.files(pattern = "RData$")
+    t1 = file.mtime(R_cache_file)
+    knit(text = txt, quiet = TRUE)
+    t2 = file.mtime(R_cache_file)
+    t1 != t2  # missing "mock" cache should invalidate R cache
+  })
+}
+assert("missing external engine's cache invalidates R cache", {
+  (knit_engine_cache())
+})
+knit_engines$delete('mock')
+cache_engines$delete('mock')

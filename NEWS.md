@@ -60,6 +60,8 @@
 
 - Added an argument `exact` to `pandoc_to()` and `pandoc_from()` to decide whether to use/return the exact Pandoc output/input format name. If not (default), Pandoc extensions will be removed from the format name, e.g., `latex-smart` will be treated as `latex`.
 
+- For `python` code chunks, objects can be cached using the Python package **dill**. This currently requires the patch in **reticulate** https://github.com/rstudio/reticulate/pull/1210, and should be considered experimental before the patch is accepted and a new version of **reticulate** is released (thanks, @leogama, #2170).
+
 ## BUG FIXES
 
 - Plot created outside of `knit()` could sneak into `knit_child()` results (thanks, @niklaswillrich, #2166).

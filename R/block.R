@@ -93,14 +93,14 @@ call_block = function(block) {
     }
     hash = paste(valid_path(params$cache.path, label), digest(content), sep = '_')
     params$hash = hash
-    if (cache$exists(hash, params$cache.lazy) &&
-        isFALSE(params$cache.rebuild) &&
-        params$engine != 'Rcpp') {
+    xfun::dir_create(dirname(hash))
+    if (cache_exists(params) && isFALSE(params$cache.rebuild) && params$engine != 'Rcpp') {
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
-      cache$load(hash, lazy = params$cache.lazy)
-      cache_engine(params)
+      cache$load(hash, options = params)
       if (!params$include) return('')
       if (params$cache == 3) return(cache$output(hash))
+    } else {
+      purge_cache(params)  # purge any invalid cache files
     }
     if (params$engine == 'R')
       cache$library(params$cache.path, save = FALSE) # load packages
@@ -156,7 +156,7 @@ block_exec = function(options) {
   output = paste(c(res.before, output, res.after), collapse = '')
   output = knit_hooks$get('chunk')(output, options)
   if (options$cache) {
-    cache.exists = cache$exists(options$hash, options$cache.lazy)
+    cache.exists = cache_exists(options)
     if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
       options$engine,
       'stan' = options$output.var, 'sql' = options$output.var, character(0)
@@ -246,7 +246,7 @@ eng_r = function(options) {
   # guess plot file type if it is NULL
   if (keep != 'none') options$fig.ext = dev2ext(options)
 
-  cache.exists = cache$exists(options$hash, options$cache.lazy)
+  cache.exists = cache_exists(options)
   evaluate = knit_hooks$get('evaluate')
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
@@ -350,16 +350,33 @@ block_cache = function(options, output, objects) {
   hash = options$hash
   outname = cache_output_name(hash)
   assign(outname, output, envir = knit_global())
-  purge_cache(options)
   cache$library(options$cache.path, save = TRUE)
   cache$save(objects, outname, hash, lazy = options$cache.lazy)
+  cache_action(options, 'save', options)
+}
+
+# test if cache exists: first R cache must exist, then if a custom cache engine
+# exists, use the engine to check its cache exists
+cache_exists = function(options) {
+  cache$exists(options$hash, options$cache.lazy) &&
+    cache_action(options, 'exists', options)
 }
 
 purge_cache = function(options) {
   # purge my old cache and cache of chunks dependent on me
-  cache$purge(paste0(valid_path(
-    options$cache.path, c(options$label, dep_list$get(options$label))
-  ), '_????????????????????????????????'))
+  prefix = valid_path(options$cache.path, c(options$label, dep_list$get(options$label)))
+  glob_path = paste0(prefix, '_', paste(rep('?', 32), collapse = ''))  # length of the MD5 hash
+  cache$purge(glob_path)
+  cache_action(options, 'purge', glob_path)
+}
+
+cache_action = function(options, method, ...) {
+  res = if (method == 'exists') TRUE
+  if (length(eng <- cache_engines$get(options$engine))) {
+    obj = eng(options)
+    if (is.function(action <- obj[[method]])) res = action(...)
+  }
+  res
 }
 
 cache_globals = function(option, code) {
