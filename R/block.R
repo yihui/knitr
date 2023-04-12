@@ -159,8 +159,7 @@ block_exec = function(options) {
     cache.exists = cache$exists(options$hash, options$cache.lazy)
     if (options$cache.rebuild || !cache.exists) block_cache(options, output, switch(
       options$engine,
-      'stan' = , 'sql' = options$output.var %n% character(0),
-      character(0)
+      'stan' = options$output.var, 'sql' = options$output.var, character(0)
     ))
   }
   if (options$include) output else ''
