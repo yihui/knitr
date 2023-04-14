@@ -30,8 +30,8 @@ new_cache = function() {
     save(list = outname, file = paste(path, 'RData', sep = '.'), envir = knit_global())
     if (!lazy) return()  # everything has been saved; no need to make lazy db
     # random seed is always load()ed
-    keys = setdiff(keys, '.Random.seed')
-    getFromNamespace('makeLazyLoadDB', 'tools')(knit_global(), path, variables = as.character(keys))
+    keys = as.character(setdiff(keys, '.Random.seed'))
+    getFromNamespace('makeLazyLoadDB', 'tools')(knit_global(), path, variables = keys)
   }
 
   save_objects = function(objs, label, path) {
