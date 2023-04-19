@@ -36,10 +36,11 @@
 #' # to use your own key
 #' options(knitr.imgur.key = 'your imgur key')
 #' }
-imgur_upload = function(file,
-                        key = getOption("knitr.imgur.key",
-                                        Sys.getenv("R_KNITR_IMGUR_KEY",
-                                                   '9f3460e67f308f6'))) {
+imgur_upload = function(
+  file, key = getOption(
+    'knitr.imgur.key', Sys.getenv('R_KNITR_IMGUR_KEY', '9f3460e67f308f6')
+  )
+) {
   if (!is.character(key)) stop('The Imgur API Key must be a character string!')
   resp = httr::POST(
     "https://api.imgur.com/3/image.xml",
