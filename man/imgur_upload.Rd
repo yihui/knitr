@@ -4,13 +4,19 @@
 \alias{imgur_upload}
 \title{Upload an image to imgur.com}
 \usage{
-imgur_upload(file, key = "9f3460e67f308f6")
+imgur_upload(
+  file,
+  key = getOption("knitr.imgur.key", Sys.getenv("R_KNITR_IMGUR_KEY", "9f3460e67f308f6"))
+)
 }
 \arguments{
 \item{file}{Path to the image file to be uploaded.}
 
-\item{key}{Client ID for Imgur. By default, this uses a client ID registered
-by Yihui Xie.}
+\item{key}{Client ID for Imgur. It can be set via either the global option
+\code{knitr.imgur.key} (you may set it in \file{~/.Rprofile}) or the
+environment variable \code{R_KNITR_IMGUR_KEY} (you may set it in
+\file{~/.Renviron}). If neither is set, this uses a client ID registered by
+Yihui Xie.}
 }
 \value{
 A character string of the link to the image; this string carries an
@@ -48,7 +54,7 @@ if (interactive())
     browseURL(res)
 
 # to use your own key
-opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "your imgur key"))
+options(knitr.imgur.key = "your imgur key")
 }
 }
 \references{
