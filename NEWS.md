@@ -4,6 +4,12 @@
 
 - The chunk option `collapse = TRUE` works with HTML widgets now (thanks, @dmurdoch, #2212).
 
+- For `.Rnw` documents, `is_latex_output()` returns `TRUE` for output formats `sweave` (`render_sweave()`) and `listings` (`render_listings()`) now (thanks, @DavisVaughan, #2231).
+
+- `write_bib()` does not fail anymore if an empty string is passed as package name (thanks, @phargarten2, #2240).
+
+- Fix an issue with using `cache = TRUE` on `sql` engine chunk not defining a `output.var` (thanks, @mfherman, @eitsupi, #1842).
+
 ## MINOR CHANGES
 
 - The `css` and `js` engines work for the `markdown` output format now. Previous these engines will not output anything when the output format is `markdown`. If you still want to disable them for `markdown` output, you may use the chunk option `eval = FALSE` or `eval = knitr::is_html_output(excludes = 'markdown')`.

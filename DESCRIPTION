@@ -1,7 +1,7 @@
 Package: knitr
 Type: Package
 Title: A General-Purpose Package for Dynamic Report Generation in R
-Version: 1.42.3
+Version: 1.42.5
 Authors@R: c(
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666")),
     person("Abhraneel", "Sarma", role = "ctb"),
@@ -108,7 +108,8 @@ Authors@R: c(
     person("Weicheng", "Zhu", role = "ctb"),
     person("Wush", "Wu", role = "ctb"),
     person("Zachary", "Foster", role = "ctb"),
-    person("Zhian N.", "Kamvar", role = "ctb", comment = c(ORCID = "0000-0003-1458-7108"))
+    person("Zhian N.", "Kamvar", role = "ctb", comment = c(ORCID = "0000-0003-1458-7108")),
+    person(given = "Posit Software, PBC", role = c("cph", "fnd"))
     )
 Description: Provides a general-purpose tool for dynamic report generation in R
     using Literate Programming techniques.
@@ -118,38 +119,39 @@ Imports:
     evaluate (>= 0.15),
     highr,
     methods,
-    yaml (>= 2.1.19),
+    tools,
     xfun (>= 0.34),
-    tools
+    yaml (>= 2.1.19)
 Suggests:
-    markdown (>= 1.3),
-    formatR,
-    testit,
-    digest,
-    rgl (>= 0.95.1201),
+    bslib,
     codetools,
-    rmarkdown,
+    DBI (>= 0.4-1),
+    digest,
+    formatR,
+    gifski,
+    gridSVG,
     htmlwidgets (>= 0.7),
-    webshot,
-    tikzDevice (>= 0.10),
-    tinytex,
-    reticulate (>= 1.4),
+    httr,
+    jpeg,
     JuliaCall (>= 0.11.1),
     magick,
+    markdown (>= 1.3),
     png,
-    jpeg,
-    gifski,
-    xml2 (>= 1.2.0),
-    httr,
-    DBI (>= 0.4-1),
-    showtext,
-    tibble,
-    sass,
-    bslib,
     ragg,
-    gridSVG,
+    reticulate (>= 1.4),
+    rgl (>= 0.95.1201),
+    rlang,
+    rmarkdown,
+    sass,
+    showtext,
     styler (>= 1.2.0),
-    targets (>= 0.6.0)
+    targets (>= 0.6.0),
+    testit,
+    tibble,
+    tikzDevice (>= 0.10),
+    tinytex,
+    webshot,
+    xml2 (>= 1.2.0)
 License: GPL
 URL: https://yihui.org/knitr/
 BugReports: https://github.com/yihui/knitr/issues

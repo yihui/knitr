@@ -288,10 +288,10 @@ process_file = function(text, output) {
   # when in R CMD check, turn off the progress bar (R-exts said the progress bar
   # was not appropriate for non-interactive mode, and I don't want to argue)
   progress = opts_knit$get('progress') && !is_R_CMD_check()
+  labels = unlist(lapply(groups, function(g) {
+    if (is.list(g$params)) g[[c('params', 'label')]] else ''
+  }))
   if (progress) {
-    labels = unlist(lapply(groups, function(g) {
-      if (is.list(g$params)) g[[c('params', 'label')]] else ''
-    }))
     pb_fun = getOption('knitr.progress.fun', txt_pb)
     pb = if (is.function(pb_fun)) pb_fun(n, labels)
     on.exit(if (!is.null(pb)) pb$done(), add = TRUE)
@@ -309,13 +309,17 @@ process_file = function(text, output) {
     if (progress && !is.null(pb)) pb$update(i)
     group = groups[[i]]
     res[i] = withCallingHandlers(
-      if (tangle) process_tangle(group) else process_group(group),
+      withCallingHandlers(
+        if (tangle) process_tangle(group) else process_group(group),
+        error = function(e) if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
+      ),
       error = function(e) {
         setwd(wd)
-        cat(res, sep = '\n', file = output %n% '')
+        write_utf8(res, output %n% stdout())
         message(
-          'Quitting from lines ', paste(current_lines(i), collapse = '-'),
-          ' (', knit_concord$get('infile'), ') '
+          '\nQuitting from lines ', paste(current_lines(i), collapse = '-'),
+          if (labels[i] != '') sprintf(' [%s]', labels[i]),
+          sprintf(' (%s)', knit_concord$get('infile'))
         )
       }
     )
@@ -466,8 +470,12 @@ sew.character = function(x, options, ...) {
 
 asis_token = '<!-- KNITR_ASIS_OUTPUT_TOKEN -->'
 wrap_asis = function(x, options) {
+  # do nothing when inside quarto as it is not needed
+  # https://github.com/yihui/knitr/pull/2212#pullrequestreview-1292924523
+  if (is_quarto()) return (x)
+
   x = as.character(x)
-  if ((n <- length(x)) == 0 || !out_format('markdown') || !isTRUE(options$collapse))
+  if ((n <- length(x)) == 0 || !out_format('markdown') || missing(options) || !isTRUE(options$collapse))
     return(x)
   x[1] = paste0(asis_token, x[1])
   x[n] = paste0(x[n], asis_token)

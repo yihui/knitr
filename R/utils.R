@@ -371,7 +371,7 @@ fix_options = function(options) {
 #' # Test if current output format is 'docx'
 #' knitr::pandoc_to('docx')
 is_latex_output = function() {
-  out_format('latex') || pandoc_to(c('latex', 'beamer'))
+  out_format(c('latex', 'sweave', 'listings')) || pandoc_to(c('latex', 'beamer'))
 }
 
 #' @param fmt A character vector of output formats to be checked against. If not
@@ -1093,7 +1093,7 @@ str_split = function(x, split, ...) {
 # default progress bar function in knitr: create a text progress bar, and return
 # methods to update/close it
 txt_pb = function(total, labels) {
-  s = ifelse(labels == '', '', sprintf(' (%s)', labels))  # chunk labels in ()
+  s = ifelse(labels == '', '', sprintf(' [%s]', labels))  # chunk labels in []
   w = nchar(s)  # widths of labels
   n = max(w)
   # right-pad spaces for same width of all labels so a wider label of the
