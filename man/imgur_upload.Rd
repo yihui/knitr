@@ -23,9 +23,9 @@ A character string of the link to the image; this string carries an
   file; see Imgur API in the references.
 }
 \description{
-This function uses the \pkg{httr} package to upload a image to
+This function uses the \pkg{curl} package to upload a image to
 \url{https://imgur.com}, and parses the XML response to a list with
-\pkg{xml2} which contains information about the image in the Imgur website.
+\pkg{xml2}, which contains information about the image on Imgur.
 }
 \details{
 When the output format from \code{\link{knit}()} is HTML or Markdown, this
