@@ -11,10 +11,9 @@
 #' files any more, and it is ready to be published online.
 #' @param file Path to the image file to be uploaded.
 #' @param key Client ID for Imgur. It can be set via either the global option
-#'   \code{knitr.imgur.key} (you may set it in \file{~/.Rprofile}) or the
-#'   environment variable \code{R_KNITR_IMGUR_KEY} (you may set it in
-#'   \file{~/.Renviron}). If neither is set, this uses a client ID registered by
-#'   Yihui Xie.
+#'   \code{knitr.imgur.key} or the environment variable \code{R_KNITR_IMGUR_KEY}
+#'   (see [xfun::env_option()]). If neither is set, this uses a client ID
+#'   registered by Yihui Xie.
 #' @return A character string of the link to the image; this string carries an
 #'   attribute named \code{XML} which is a list converted from the response XML
 #'   file; see Imgur API in the references.
@@ -36,11 +35,7 @@
 #' # to use your own key
 #' options(knitr.imgur.key = 'your imgur key')
 #' }
-imgur_upload = function(
-  file, key = getOption(
-    'knitr.imgur.key', Sys.getenv('R_KNITR_IMGUR_KEY', '9f3460e67f308f6')
-  )
-) {
+imgur_upload = function(file, key = xfun::env_option('knitr.imgur.key', '9f3460e67f308f6')) {
   if (!is.character(key)) stop('The Imgur API Key must be a character string!')
   resp = httr::POST(
     "https://api.imgur.com/3/image.xml",

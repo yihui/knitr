@@ -6,17 +6,16 @@
 \usage{
 imgur_upload(
   file,
-  key = getOption("knitr.imgur.key", Sys.getenv("R_KNITR_IMGUR_KEY", "9f3460e67f308f6"))
+  key = xfun::env_option("knitr.imgur.key", "9f3460e67f308f6")
 )
 }
 \arguments{
 \item{file}{Path to the image file to be uploaded.}
 
 \item{key}{Client ID for Imgur. It can be set via either the global option
-\code{knitr.imgur.key} (you may set it in \file{~/.Rprofile}) or the
-environment variable \code{R_KNITR_IMGUR_KEY} (you may set it in
-\file{~/.Renviron}). If neither is set, this uses a client ID registered by
-Yihui Xie.}
+\code{knitr.imgur.key} or the environment variable \code{R_KNITR_IMGUR_KEY}
+(see [xfun::env_option()]). If neither is set, this uses a client ID
+registered by Yihui Xie.}
 }
 \value{
 A character string of the link to the image; this string carries an
