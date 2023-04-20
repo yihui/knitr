@@ -291,9 +291,19 @@ process_file = function(text, output) {
   labels = unlist(lapply(groups, function(g) {
     if (is.list(g$params)) g[[c('params', 'label')]] else ''
   }))
+  linenums <- unlist(lapply(seq_along(groups), function(i) {
+    curr_lines <- current_lines(i)
+    sprintf(
+      "%s:%d-%d",
+      knit_concord$get('infile'),
+      curr_lines[1],
+      curr_lines[2]
+    )
+  }))
+  labels_linenums <- paste(labels, linenums, sep = " @ ")
   if (progress) {
     pb_fun = getOption('knitr.progress.fun', txt_pb)
-    pb = if (is.function(pb_fun)) pb_fun(n, labels)
+    pb = if (is.function(pb_fun)) pb_fun(n, labels_linenums)
     on.exit(if (!is.null(pb)) pb$done(), add = TRUE)
   }
   wd = getwd()
