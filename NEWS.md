@@ -4,6 +4,8 @@
 
 - The chunk option `collapse = TRUE` works with HTML widgets now (thanks, @dmurdoch, #2212).
 
+- Option hooks should be run before child documents are processed (thanks, @richarddmorey, #2247).
+
 - For `.Rnw` documents, `is_latex_output()` returns `TRUE` for output formats `sweave` (`render_sweave()`) and `listings` (`render_listings()`) now (thanks, @DavisVaughan, #2231).
 
 - `write_bib()` does not fail anymore if an empty string is passed as package name (thanks, @phargarten2, #2240).

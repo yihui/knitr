@@ -55,17 +55,6 @@ call_block = function(block) {
 
   if (opts_knit$get('progress')) print(block)
 
-  if (!is.null(params$child)) {
-    if (!is_blank(params[['code']]) && getOption('knitr.child.warning', TRUE)) warning(
-      "The chunk '", params$label, "' has the 'child' option, ",
-      "and this code chunk must be empty. Its code will be ignored."
-    )
-    if (!params$eval) return('')
-    cmds = lapply(sc_split(params$child), knit_child, options = block$params)
-    out = one_string(unlist(cmds))
-    return(out)
-  }
-
   params$code = parse_chunk(params$code) # parse sub-chunk references
 
   ohooks = opts_hooks$get()
@@ -81,6 +70,17 @@ call_block = function(block) {
   }
 
   params = fix_options(params)  # for compatibility
+
+  if (!is.null(params$child)) {
+    if (!is_blank(params[['code']]) && getOption('knitr.child.warning', TRUE)) warning(
+      "The chunk '", params$label, "' has the 'child' option, ",
+      "and this code chunk must be empty. Its code will be ignored."
+    )
+    if (!params$eval) return('')
+    cmds = lapply(sc_split(params$child), knit_child, options = block$params)
+    out = one_string(unlist(cmds))
+    return(out)
+  }
 
   # Check cache
   if (params$cache > 0) {
