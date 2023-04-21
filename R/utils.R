@@ -777,14 +777,36 @@ kpsewhich = function() {
 
 # check if a utility exists; if it does, save its availability in opts_knit
 has_utility = function(name, package = name) {
-  name2 = paste('util', name, sep = '_')  # e.g. util_pdfcrop
+  name2 = paste0('util_', name)  # e.g. util_pdfcrop
   if (is.logical(yes <- opts_knit$get(name2))) return(yes)
   # a special case: use tools::find_gs_cmd() to find ghostscript
-  if (name == 'ghostscript') name = tools::find_gs_cmd()
-  yes = nzchar(Sys.which(name))
-  if (!yes) warning(package, ' not installed or not in PATH')
+  if (name == 'pdfcrop') yes = has_crop_tools() else {
+    yes = nzchar(Sys.which(name))
+    if (!yes) warning(package, ' not installed or not in PATH')
+  }
   opts_knit$set(setNames(list(yes), name2))
   yes
+}
+
+# check if pdfcrop and ghostscript are available
+has_crop_tools = function(warn = TRUE) {
+  if (Sys.which('pdfcrop') == '') {
+    if (warn) warning("'pdfcrop' is required but not found")
+    return(FALSE)
+  }
+  if (is_windows() && Sys.which('tlmgr') != '') {
+    # assuming users know what this env var means (rstudio/tinytex#391)
+    if (Sys.getenv('TEXLIVE_WINDOWS_EXTERNAL_GS') != '') return(TRUE)
+    # TODO: use tinytex::tlmgr_version('list')$year
+    year = as.integer(xfun::grep_sub('^TeX Live.* version (\\d+).*$', '\\1', tinytex::tlmgr_version())[1])
+    if (year < 2023 && warn) warning(
+      'TeX Live version too low. Please consider upgrading, e.g., via tinytex::reinstall_tinytex().'
+    )
+    return(year >= 2023)
+  }
+  gs = tools::find_gs_cmd() != ''
+  if (warn && !gs) warning("'ghostscript' is required but not found")
+  gs
 }
 
 #' Query the current input filename

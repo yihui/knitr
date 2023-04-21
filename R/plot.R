@@ -371,7 +371,7 @@ plot_crop = function(x, quiet = TRUE) {
   is_pdf = grepl('[.]pdf$', x, ignore.case = TRUE)
   x2 = x
   x = path.expand(x)
-  if (is_pdf && !has_utility('pdfcrop') && !has_utility('ghostscript')) return(x2)
+  if (is_pdf && !has_utility('pdfcrop')) return(x2)
 
   if (!quiet) message('cropping ', x)
   if (is_pdf) {
