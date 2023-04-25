@@ -1115,6 +1115,15 @@ str_split = function(x, split, ...) {
 # default progress bar function in knitr: create a text progress bar, and return
 # methods to update/close it
 txt_pb = function(total, labels) {
+  if (getOption('knitr.progress.linenums', FALSE)) {
+    nums = sapply(seq_along(labels), function(i) {
+      paste(current_lines(i), collapse = '-')
+    })
+    labels = sprintf(
+      '%s%s%s:%s', labels, ifelse(labels == '', '', ' @ '),
+      knit_concord$get('infile'), nums
+    )
+  }
   s = ifelse(labels == '', '', sprintf(' [%s]', labels))  # chunk labels in []
   w = nchar(s)  # widths of labels
   n = max(w)

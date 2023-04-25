@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.43
 
+## NEW FEATURES
+
+- Progress bar includes the chunk location (`chunk-name @ file:line`) when `options(knitr.progress.linenums = TRUE)` is set (thanks, @zeehio, #2232).
+
 ## BUG FIXES
 
 - The chunk option `collapse = TRUE` works with HTML widgets now (thanks, @dmurdoch, #2212).
@@ -25,8 +29,6 @@
 - `imgur_upload()` now recognizes a global option `knitr.imgur.key` or an environment variable `R_KNITR_IMGUR_KEY` for a custom client ID (thanks, @jonthegeek, #2233).
 
 - `imgur_upload()` requires fewer package dependencies now. It only requires the **curl** package; **httr** is no longer required, and **xml2** has become optional.
-
-- Progress bar includes the chunk location (`chunk-name @ file:line`) when `options(knitr.progress.linenums = TRUE)` is set. (@zeehio, #2232)
 
 # CHANGES IN knitr VERSION 1.42
 
