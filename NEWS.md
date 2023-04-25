@@ -26,7 +26,7 @@
 
 - `imgur_upload()` requires fewer package dependencies now. It only requires the **curl** package; **httr** is no longer required, and **xml2** has become optional.
 
-- Progress bar includes the chunk location (`chunk-name @ file:line`) (@zeehio, #2232)
+- Progress bar includes the chunk location (`chunk-name @ file:line`) when `options(knitr.progress.linenums = TRUE)` is set. (@zeehio, #2232)
 
 # CHANGES IN knitr VERSION 1.42
 
