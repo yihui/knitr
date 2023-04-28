@@ -141,7 +141,7 @@ eng_interpreted = function(options) {
 
   opts = get_engine_opts(options$engine.opts, engine)
   # FIXME: for these engines, the correct order is options + code + file
-  code = if (engine %in% c('awk', 'gawk', 'sed', 'sas', 'psql'))
+  code = if (engine %in% c('awk', 'gawk', 'sed', 'sas', 'psql', 'mysql'))
     paste(code, opts) else paste(opts, code)
   cmd = get_engine_path(options$engine.path, engine)
   out = if (options$eval) {
