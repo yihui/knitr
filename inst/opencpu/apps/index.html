@@ -48,7 +48,7 @@ $('#knitForm').submit(function(event) {
       term = $form.find('textarea[name="x"]').val().replace(/\\/g, '\\\\').replace(/"/g, '\\"'),
       url = $form.attr('action'),
       rcode = 'library(knitr)\n' +
-              'knit2html(text = "' + term + '", fragment.only = TRUE)';
+              'knit2html(text = "' + term + '", template = FALSE)';
   /* Send the data using post and put the results in a div */
   $.post(url, { x: rcode },
     function( data ) {
