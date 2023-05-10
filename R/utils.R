@@ -1133,6 +1133,20 @@ txt_pb = function(total, labels) {
   w2 = getOption('width')
   con = getOption('knitr.progress.output', '')
   cat_line = function(...) cat(..., sep = '', file = con)
+  # test if it is a "terminal" connection (whether \r is supported)
+  simple = (function() {
+    # a global option to decide whether to use the simple progress output
+    if (!is.null(res <- getOption('knitr.progress.simple'))) return(res)
+    if (identical(con, '')) con = stdout()
+    if (!inherits(con, 'connection')) return(TRUE)
+    if (isatty(con)) return(FALSE)
+    # when RStudio is available, return FALSE
+    is.null(tryCatch(rstudioapi::versionInfo(), error = function(e) NULL))
+  })()
+  # use simple progress output without the bar but only progress and labels
+  if (simple) return(list(
+    update = function(i) cat_line(i, '/', total, s[i], '\n')
+  ))
   pb = txtProgressBar(
     0, total, 0, '.', width = max(w2 - 10 - n, 10), style = 3, file = con
   )

@@ -4,6 +4,8 @@
 
 - Progress bar includes the chunk location (`chunk-name @ file:line`) when `options(knitr.progress.linenums = TRUE)` is set (thanks, @zeehio, #2232).
 
+- The global option `knitr.progress.simple` can be used to decide whether to output the bar in the progress. When set to `FALSE`, only the step numbers and chunk labels will be printed, and the progress bar is omitted. This can be more useful for logging purposes since the bar itself is not useful (thanks, @hadley, #2221). By default, the simple progress output is used when the progress is not written to a connection such as `stdout` or `stderr` (e.g., written to a file instead), or the output connection is not a "terminal".
+
 ## BUG FIXES
 
 - The chunk option `collapse = TRUE` works with HTML widgets now (thanks, @dmurdoch, #2212).
