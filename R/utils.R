@@ -1132,17 +1132,18 @@ txt_pb = function(total, labels) {
   s = paste0(s, strrep(' ', n - w))
   w2 = getOption('width')
   con = getOption('knitr.progress.output', '')
+  cat_line = function(...) cat(..., sep = '', file = con)
   pb = txtProgressBar(
     0, total, 0, '.', width = max(w2 - 10 - n, 10), style = 3, file = con
   )
   list(
     update = function(i) {
       setTxtProgressBar(pb, i)
-      cat(s[i], file = con)  # append chunk label to the progress bar
+      cat_line(s[i])  # append chunk label to the progress bar
     },
     done = function() {
       # wipe the progress bar
-      cat(paste0('\r', strrep(' ', max(w2, 10) + 10 + n)), file = con)
+      cat_line('\r', strrep(' ', max(w2, 10) + 10 + n))
       close(pb)
     }
   )
