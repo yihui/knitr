@@ -151,6 +151,7 @@ Suggests:
     tikzDevice (>= 0.10),
     tinytex,
     webshot,
+    rstudioapi,
     xml2 (>= 1.2.0)
 License: GPL
 URL: https://yihui.org/knitr/
