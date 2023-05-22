@@ -777,14 +777,36 @@ kpsewhich = function() {
 
 # check if a utility exists; if it does, save its availability in opts_knit
 has_utility = function(name, package = name) {
-  name2 = paste('util', name, sep = '_')  # e.g. util_pdfcrop
+  name2 = paste0('util_', name)  # e.g. util_pdfcrop
   if (is.logical(yes <- opts_knit$get(name2))) return(yes)
   # a special case: use tools::find_gs_cmd() to find ghostscript
-  if (name == 'ghostscript') name = tools::find_gs_cmd()
-  yes = nzchar(Sys.which(name))
-  if (!yes) warning(package, ' not installed or not in PATH')
+  if (name == 'pdfcrop') yes = has_crop_tools() else {
+    yes = nzchar(Sys.which(name))
+    if (!yes) warning(package, ' not installed or not in PATH')
+  }
   opts_knit$set(setNames(list(yes), name2))
   yes
+}
+
+# check if pdfcrop and ghostscript are available
+has_crop_tools = function(warn = TRUE) {
+  if (Sys.which('pdfcrop') == '') {
+    if (warn) warning("'pdfcrop' is required but not found")
+    return(FALSE)
+  }
+  if (is_windows() && Sys.which('tlmgr') != '') {
+    # assuming users know what this env var means (rstudio/tinytex#391)
+    if (Sys.getenv('TEXLIVE_WINDOWS_EXTERNAL_GS') != '') return(TRUE)
+    # TODO: use tinytex::tlmgr_version('list')$year
+    year = as.integer(xfun::grep_sub('^TeX Live.* version (\\d+).*$', '\\1', tinytex::tlmgr_version())[1])
+    if (year < 2023 && warn) warning(
+      'TeX Live version too low. Please consider upgrading, e.g., via tinytex::reinstall_tinytex().'
+    )
+    return(year >= 2023)
+  }
+  gs = tools::find_gs_cmd() != ''
+  if (warn && !gs) warning("'ghostscript' is required but not found")
+  gs
 }
 
 #' Query the current input filename
@@ -1093,6 +1115,15 @@ str_split = function(x, split, ...) {
 # default progress bar function in knitr: create a text progress bar, and return
 # methods to update/close it
 txt_pb = function(total, labels) {
+  if (getOption('knitr.progress.linenums', FALSE)) {
+    nums = sapply(seq_along(labels), function(i) {
+      paste(current_lines(i), collapse = '-')
+    })
+    labels = sprintf(
+      '%s%s%s:%s', labels, ifelse(labels == '', '', ' @ '),
+      knit_concord$get('infile'), nums
+    )
+  }
   s = ifelse(labels == '', '', sprintf(' [%s]', labels))  # chunk labels in []
   w = nchar(s)  # widths of labels
   n = max(w)
@@ -1101,17 +1132,32 @@ txt_pb = function(total, labels) {
   s = paste0(s, strrep(' ', n - w))
   w2 = getOption('width')
   con = getOption('knitr.progress.output', '')
+  cat_line = function(...) cat(..., sep = '', file = con)
+  # test if it is a "terminal" connection (whether \r is supported)
+  simple = (function() {
+    # a global option to decide whether to use the simple progress output
+    if (!is.null(res <- getOption('knitr.progress.simple'))) return(res)
+    if (identical(con, '')) con = stdout()
+    if (!inherits(con, 'connection')) return(TRUE)
+    if (isatty(con)) return(FALSE)
+    # when RStudio is available, return FALSE
+    is.null(tryCatch(rstudioapi::versionInfo(), error = function(e) NULL))
+  })()
+  # use simple progress output without the bar but only progress and labels
+  if (simple) return(list(
+    update = function(i) cat_line(i, '/', total, s[i], '\n')
+  ))
   pb = txtProgressBar(
     0, total, 0, '.', width = max(w2 - 10 - n, 10), style = 3, file = con
   )
   list(
     update = function(i) {
       setTxtProgressBar(pb, i)
-      cat(s[i], file = con)  # append chunk label to the progress bar
+      cat_line(s[i])  # append chunk label to the progress bar
     },
     done = function() {
       # wipe the progress bar
-      cat(paste0('\r', strrep(' ', max(w2, 10) + 10 + n)), file = con)
+      cat_line('\r', strrep(' ', max(w2, 10) + 10 + n))
       close(pb)
     }
   )

@@ -5,7 +5,7 @@ g = gframe('An R Notebook based on knitr', use.scrollwindow = TRUE,
            horizontal = FALSE, container = w)
 gbutton('Knit', container = g, handler = function(h, ...) {
   library(knitr)
-  svalue(g3) = try(knit2html(text = svalue(g1), fragment.only = TRUE))
+  svalue(g3) = try(knit2html(text = svalue(g1), template = FALSE))
 })
 g0 = ggroup(container = g)
 code = readLines(system.file('examples', 'knitr-minimal.Rmd', package = 'knitr'))

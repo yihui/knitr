@@ -4,13 +4,18 @@
 \alias{imgur_upload}
 \title{Upload an image to imgur.com}
 \usage{
-imgur_upload(file, key = "9f3460e67f308f6")
+imgur_upload(
+  file,
+  key = xfun::env_option("knitr.imgur.key", "9f3460e67f308f6")
+)
 }
 \arguments{
 \item{file}{Path to the image file to be uploaded.}
 
-\item{key}{Client ID for Imgur. By default, this uses a client ID registered
-by Yihui Xie.}
+\item{key}{Client ID for Imgur. It can be set via either the global option
+\code{knitr.imgur.key} or the environment variable \code{R_KNITR_IMGUR_KEY}
+(see [xfun::env_option()]). If neither is set, this uses a client ID
+registered by Yihui Xie.}
 }
 \value{
 A character string of the link to the image; this string carries an
@@ -18,9 +23,9 @@ A character string of the link to the image; this string carries an
   file; see Imgur API in the references.
 }
 \description{
-This function uses the \pkg{httr} package to upload a image to
+This function uses the \pkg{curl} package to upload a image to
 \url{https://imgur.com}, and parses the XML response to a list with
-\pkg{xml2} which contains information about the image in the Imgur website.
+\pkg{xml2}, which contains information about the image on Imgur.
 }
 \details{
 When the output format from \code{\link{knit}()} is HTML or Markdown, this
@@ -48,7 +53,7 @@ if (interactive())
     browseURL(res)
 
 # to use your own key
-opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "your imgur key"))
+options(knitr.imgur.key = "your imgur key")
 }
 }
 \references{

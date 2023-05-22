@@ -2,15 +2,25 @@
 
 ## NEW FEATURES
 
+- Progress bar includes the chunk location (`chunk-name @ file:line`) when `options(knitr.progress.linenums = TRUE)` is set (thanks, @zeehio, #2232).
+
+- The global option `knitr.progress.simple` can be used to decide whether to output the bar in the progress. When set to `FALSE`, only the step numbers and chunk labels will be printed, and the progress bar is omitted. This can be more useful for logging purposes since the bar itself is not useful (thanks, @hadley, #2221). By default, the simple progress output is used when the progress is not written to a connection such as `stdout` or `stderr` (e.g., written to a file instead), or the output connection is not a "terminal".
+
 - HTML Widgets can now support alt text by specifying an attribute `aria-labelledby="<label>"` in their first HTML tag. The text will be obtained from the `fig.alt` or `fig.cap` chunk option in the usual way (thanks, @dmurdoch, #2243).
 
 ## BUG FIXES
 
 - The chunk option `collapse = TRUE` works with HTML widgets now (thanks, @dmurdoch, #2212).
 
+- Option hooks should be run before child documents are processed (thanks, @richarddmorey, #2247).
+
 - For `.Rnw` documents, `is_latex_output()` returns `TRUE` for output formats `sweave` (`render_sweave()`) and `listings` (`render_listings()`) now (thanks, @DavisVaughan, #2231).
 
 - `write_bib()` does not fail anymore if an empty string is passed as package name (thanks, @phargarten2, #2240).
+
+- Fix an issue with using `cache = TRUE` on `sql` engine chunk not defining a `output.var` (thanks, @mfherman, @eitsupi, #1842).
+
+- `plot_crop()` correctly checks the required tools (`pdfcrop` and `ghostscript`) on Windows when the LaTeX is distribution is TeX Live or TinyTeX (thanks, @remlapmot, #2246). An external installation of `ghostscript` is no longer required on Windows, since TeX Live's built-in `ghostscript` will be used.
 
 ## MINOR CHANGES
 
@@ -19,6 +29,10 @@
 - `is_html_output()` recognizes R Markdown v1 documents now (`.Rmd` documents compiled via the **markdown** package).
 
 - For `.Rnw` documents, dots in figure file paths are no longer sanitized to underscores (thanks, @otoomet, #2213). Other special characters are still sanitized, but this feature can be turned off via `options(knitr.sanitize.paths = FALSE)`.
+
+- `imgur_upload()` now recognizes a global option `knitr.imgur.key` or an environment variable `R_KNITR_IMGUR_KEY` for a custom client ID (thanks, @jonthegeek, #2233).
+
+- `imgur_upload()` requires fewer package dependencies now. It only requires the **curl** package; **httr** is no longer required, and **xml2** has become optional.
 
 # CHANGES IN knitr VERSION 1.42
 

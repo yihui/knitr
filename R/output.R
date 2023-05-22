@@ -294,7 +294,7 @@ process_file = function(text, output) {
   if (progress) {
     pb_fun = getOption('knitr.progress.fun', txt_pb)
     pb = if (is.function(pb_fun)) pb_fun(n, labels)
-    on.exit(if (!is.null(pb)) pb$done(), add = TRUE)
+    on.exit(if (is.function(pb$done)) pb$done(), add = TRUE)
   }
   wd = getwd()
   for (i in 1:n) {
@@ -306,7 +306,7 @@ process_file = function(text, output) {
       }
       break  # must have called knit_exit(), so exit early
     }
-    if (progress && !is.null(pb)) pb$update(i)
+    if (progress && is.function(pb$update)) pb$update(i)
     group = groups[[i]]
     res[i] = withCallingHandlers(
       withCallingHandlers(
@@ -470,6 +470,10 @@ sew.character = function(x, options, ...) {
 
 asis_token = '<!-- KNITR_ASIS_OUTPUT_TOKEN -->'
 wrap_asis = function(x, options) {
+  # do nothing when inside quarto as it is not needed
+  # https://github.com/yihui/knitr/pull/2212#pullrequestreview-1292924523
+  if (is_quarto()) return(x)
+
   x = as.character(x)
   if ((n <- length(x)) == 0 || !out_format('markdown') || missing(options) || !isTRUE(options$collapse))
     return(x)
