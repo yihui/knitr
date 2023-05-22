@@ -22,6 +22,8 @@
 
 - `plot_crop()` correctly checks the required tools (`pdfcrop` and `ghostscript`) on Windows when the LaTeX is distribution is TeX Live or TinyTeX (thanks, @remlapmot, #2246). An external installation of `ghostscript` is no longer required on Windows, since TeX Live's built-in `ghostscript` will be used.
 
+- The chunk option `dev.args` was not recognized in certain cases (thanks, @petrbouchal, #2238).
+
 ## MINOR CHANGES
 
 - The `css` and `js` engines work for the `markdown` output format now. Previous these engines will not output anything when the output format is `markdown`. If you still want to disable them for `markdown` output, you may use the chunk option `eval = FALSE` or `eval = knitr::is_html_output(excludes = 'markdown')`.
