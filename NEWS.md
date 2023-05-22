@@ -6,6 +6,8 @@
 
 - The global option `knitr.progress.simple` can be used to decide whether to output the bar in the progress. When set to `FALSE`, only the step numbers and chunk labels will be printed, and the progress bar is omitted. This can be more useful for logging purposes since the bar itself is not useful (thanks, @hadley, #2221). By default, the simple progress output is used when the progress is not written to a connection such as `stdout` or `stderr` (e.g., written to a file instead), or the output connection is not a "terminal".
 
+- HTML Widgets can now support alt text by specifying an attribute `aria-labelledby="<label>"` in their first HTML tag. The text will be obtained from the `fig.alt` or `fig.cap` chunk option in the usual way (thanks, @dmurdoch, #2243).
+
 ## BUG FIXES
 
 - The chunk option `collapse = TRUE` works with HTML widgets now (thanks, @dmurdoch, #2212).

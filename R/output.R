@@ -499,7 +499,12 @@ sew.knit_asis = function(x, options, inline = FALSE, ...) {
     if (inherits(x, 'knit_asis_htmlwidget')) {
       options$fig.cur = plot_counter()
       options = reduce_plot_opts(options)
-      return(add_html_caption(options, wrap_asis(x, options)))
+      # look for attribute 'aria-labelledby="label"' in the first HTML tag and
+      # use the label to provide alt text if found
+      return(add_html_caption(
+        options, wrap_asis(x, options),
+        xfun::grep_sub('^[^<]*<[^>]+aria-labelledby[ ]*=[ ]*"([^"]+)".*$', '\\1', x)
+      ))
     }
   }
   x = wrap_asis(x, options)
@@ -642,12 +647,27 @@ sew.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE, ...
   ))
 }
 
-add_html_caption = function(options, code) {
+add_html_caption = function(options, code, id = NULL) {
   cap = .img.cap(options)
-  if (cap == '') return(code)
+  if (cap == '' && !length(id)) return(code)
+
+  if (length(id)) {
+    alt = .img.cap(options, alt = TRUE)
+    if (cap == alt && cap != '') {
+      # both are the same, so insert cap with id
+      alttext = sprintf('<p class="caption" id="%s">%s</p>\n', id, cap)
+      # prevent a second insertion
+      cap = ''
+    } else {
+      alttext = sprintf('<p id="%s" hidden>%s</p>\n', id, alt)
+    }
+  } else alttext = ''
+
+  captext = if (cap == '') '' else sprintf('<p class="caption">%s</p>\n', cap)
+
   sprintf(
-    '<div class="figure"%s>\n%s\n<p class="caption">%s</p>\n</div>',
-    css_text_align(options$fig.align), code, cap
+    '<div class="figure"%s>\n%s\n%s%s</div>',
+    css_text_align(options$fig.align), code, captext, alttext
   )
 }
 
