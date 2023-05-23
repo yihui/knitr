@@ -8,6 +8,8 @@
 
 - HTML Widgets can now support alt text by specifying an attribute `aria-labelledby="<label>"` in their first HTML tag. The text will be obtained from the `fig.alt` or `fig.cap` chunk option in the usual way (thanks, @dmurdoch, #2243).
 
+- Added a new argument `newline` to `kable()` to handle newlines in data when the table output format is Markdown-based (`simple`, `pipe`, `rst`, or `jira`). By default, newlines are not processed, which can result in broken tables. To substitute newlines with spaces, use `kable(..., newline = ' ')`. To remove newlines, use `kable(..., newline = '')` (thanks, @aronatkins, #2255).
+
 ## BUG FIXES
 
 - The chunk option `collapse = TRUE` works with HTML widgets now (thanks, @dmurdoch, #2212).

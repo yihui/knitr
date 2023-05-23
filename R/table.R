@@ -390,7 +390,7 @@ kable_html = function(
 #' @noRd
 kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0,
                       align.fun = function(s, a) s, rownames.name = '',
-                      sep.head = sep.col, ...) {
+                      sep.head = sep.col, newline = NULL, ...) {
   # when the column separator is |, replace existing | with its HTML entity
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
@@ -412,7 +412,9 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
               x, if (!is.na(sep.row[3])) s)
   res = mat_pad(res, l, align)
-  add_mark_col_sep(res, sep.col, sep.head)
+  res = add_mark_col_sep(res, sep.col, sep.head)
+  if (is.character(newline)) res = gsub('\n', newline, res, fixed = TRUE)
+  res
 }
 
 # add column separators to header and body separately
