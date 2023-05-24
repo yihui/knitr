@@ -181,7 +181,7 @@ kable_format = function(format = NULL) {
   if (is.null(format)) format = if (is.null(pandoc_to())) switch(
     out_format() %n% 'markdown',
     latex = 'latex', listings = 'latex', sweave = 'latex',
-    html = 'html', markdown = 'pipe', rst = 'rst',
+    html = 'html', markdown = 'pipe', rst = 'rst', org = 'org',
     stop('table format not implemented yet!')
   ) else if (isTRUE(opts_knit$get('kable.force.latex')) && is_latex_output()) {
     # force LaTeX table because Pandoc's longtable may not work well with floats
@@ -468,9 +468,27 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
   kable_pandoc_caption(tab, caption)
 }
 
+# Emacs Org-mode table
+kable_org = function(x, caption = NULL, padding = 1, ...) {
+    if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
+    res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
+        if (is.null(a)) return(s)
+        r = c(l = '^.', c = '^.|.$', r = '.$')
+        s
+    }, ...)
+    res = sprintf('|%s|', res)
+    res = gsub("\\-\\|\\-", "-+-", x = res)
+    kable_org_caption(res, caption)
+}
+
 kable_pandoc_caption = function(x, caption) {
   if (identical(caption, NA)) caption = NULL
   if (length(caption)) c(paste('Table:', caption), "", x) else x
+}
+
+kable_org_caption = function(x, caption) {
+  if (identical(caption, NA)) caption = NULL
+  if (length(caption)) c(paste('#+CAPTION:', caption), x) else x
 }
 
 # pad a matrix
