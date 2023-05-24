@@ -311,7 +311,8 @@ process_file = function(text, output) {
     res[i] = withCallingHandlers(
       withCallingHandlers(
         if (tangle) process_tangle(group) else process_group(group),
-        error = function(e) if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
+        # TODO: remove the learnr hack https://github.com/rstudio/learnr/pull/781
+        error = function(e) if (xfun::pkg_available('rlang', '1.0.0') && !xfun::check_old_package('learnr', '0.11.3')) rlang::entrace(e)
       ),
       error = function(e) {
         setwd(wd)
