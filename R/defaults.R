@@ -83,7 +83,7 @@ opts_chunk = new_defaults(list(
   fig.keep = 'high', fig.show = 'asis', fig.align = 'default', fig.path = 'figure/',
   dev = NULL, dev.args = NULL, dpi = 72, fig.ext = NULL, fig.width = 7, fig.height = 7,
   fig.env = 'figure', fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:', fig.subcap = NULL,
-  fig.pos = '', out.width = NULL, out.height = NULL, out.extra = NULL, fig.retina = 1,
+  fig.pos = '', fig.asp = NULL, out.width = NULL, out.height = NULL, out.extra = NULL, fig.retina = 1,
   external = TRUE, sanitize = FALSE, interval = 1, aniopts = 'controls,loop',
 
   warning = TRUE, error = TRUE, message = TRUE,
