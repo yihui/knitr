@@ -17,11 +17,11 @@
 #'   returned value from \code{kable()}.
 #' @param format A character string. Possible values are \code{latex},
 #'   \code{html}, \code{pipe} (Pandoc's pipe tables), \code{simple} (Pandoc's
-#'   simple tables), \code{rst}, and \code{jira}. The value of this argument
-#'   will be automatically determined if the function is called within a
-#'   \pkg{knitr} document. The \code{format} value can also be set in the global
-#'   option \code{knitr.table.format}. If \code{format} is a function, it must
-#'   return a character string.
+#'   simple tables), \code{rst}, \code{jira}, and \code{org} (Emacs Org-mode).
+#'   The value of this argument will be automatically determined if the function
+#'   is called within a \pkg{knitr} document. The \code{format} value can also
+#'   be set in the global option \code{knitr.table.format}. If \code{format} is
+#'   a function, it must return a character string.
 #' @param digits Maximum number of digits for numeric columns, passed to
 #'   \code{round()}. This can also be a vector of length \code{ncol(x)}, to set
 #'   the number of digits for individual columns.
