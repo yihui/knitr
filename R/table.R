@@ -181,7 +181,7 @@ kable_format = function(format = NULL) {
   if (is.null(format)) format = if (is.null(pandoc_to())) switch(
     out_format() %n% 'markdown',
     latex = 'latex', listings = 'latex', sweave = 'latex',
-    html = 'html', markdown = 'pipe', rst = 'rst', org = 'org',
+    html = 'html', markdown = 'pipe', rst = 'rst',
     stop('table format not implemented yet!')
   ) else if (isTRUE(opts_knit$get('kable.force.latex')) && is_latex_output()) {
     # force LaTeX table because Pandoc's longtable may not work well with floats
