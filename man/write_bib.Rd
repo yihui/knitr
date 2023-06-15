@@ -10,7 +10,8 @@ write_bib(
   tweak = TRUE,
   width = NULL,
   prefix = getOption("knitr.bib.prefix", "R-"),
-  lib.loc = NULL
+  lib.loc = NULL,
+  packageURL = TRUE
 )
 }
 \arguments{
@@ -30,6 +31,9 @@ will not be wrapped.}
 another string.}
 
 \item{lib.loc}{A vector of path names of R libraries.}
+
+\item{packageURL}{Use the \code{URL} field from the \file{DESCRIPTION} file.
+See Details below.}
 }
 \value{
 A list containing the citations. Citations are also written to the
@@ -49,6 +53,16 @@ For a package, the keyword \samp{R-pkgname} is used for its bib item, where
 this function is to automate the generation of the package citation
 information because it often changes (e.g. author, year, package version,
 ...).
+
+There are at least two different uses for the URL in a reference list.  You
+might want to tell users where to go for more information; in that case, use
+the default \code{packageURL = TRUE}, and the first URL listed in the
+\file{DESCRIPTION} file will be used. Be careful:  some authors don't put the
+most relevant URL first. Alternatively, you might want to identify exactly
+which version of the package was used in the document.  If it was installed
+from CRAN or some other repositories, the version number identifies it, and
+\code{packageURL = FALSE} will use the repository URL (as used by
+\code{utils::\link{citation}()}).
 }
 \note{
 Some packages on CRAN do not have standard bib entries, which was once

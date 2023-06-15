@@ -13,6 +13,16 @@
 #' information because it often changes (e.g. author, year, package version,
 #' ...).
 #'
+#' There are at least two different uses for the URL in a reference list.  You
+#' might want to tell users where to go for more information; in that case, use
+#' the default \code{packageURL = TRUE}, and the first URL listed in the
+#' \file{DESCRIPTION} file will be used. Be careful:  some authors don't put the
+#' most relevant URL first. Alternatively, you might want to identify exactly
+#' which version of the package was used in the document.  If it was installed
+#' from CRAN or some other repositories, the version number identifies it, and
+#' \code{packageURL = FALSE} will use the repository URL (as used by
+#' \code{utils::\link{citation}()}).
+#'
 #' @param x Package names. Packages which are not installed are ignored.
 #' @param file The (\file{.bib}) file to write. By default, or if \code{NULL},
 #'   output is written to the R console.
@@ -24,6 +34,8 @@
 #'   \samp{R-} unless \code{\link{option}('knitr.bib.prefix')} has been set to
 #'   another string.
 #' @param lib.loc A vector of path names of R libraries.
+#' @param packageURL Use the \code{URL} field from the \file{DESCRIPTION} file.
+#'   See Details below.
 #' @return A list containing the citations. Citations are also written to the
 #'   \code{file} as a side effect.
 #' @note Some packages on CRAN do not have standard bib entries, which was once
@@ -59,7 +71,8 @@
 #' str(knitr:::.tweak.bib)
 write_bib = function(
   x = .packages(), file = '', tweak = TRUE, width = NULL,
-  prefix = getOption('knitr.bib.prefix', 'R-'), lib.loc = NULL
+  prefix = getOption('knitr.bib.prefix', 'R-'), lib.loc = NULL,
+  packageURL = TRUE
 ) {
   system.file = function(...) base::system.file(..., lib.loc = lib.loc)
   citation = function(...) utils::citation(..., lib.loc = lib.loc)
@@ -75,11 +88,21 @@ write_bib = function(
   bib = sapply(x, function(pkg) {
     cite = citation(pkg, auto = if (pkg != 'base') {
       meta = packageDescription(pkg, lib.loc = lib.loc)
-      # don't use the CRAN URL if the package has provided its own URL
-      if (identical(meta$Repository, 'CRAN') && !is.null(meta$URL)) {
-        # however, the package may have provided multiple URLs, in which case we
-        # still use the CRAN URL
-        if (!grepl('[, ]', meta$URL)) meta$Repository = NULL
+      # don't use the citation() URL if the package has provided its own URL
+      if (!is.null(meta$URL)) {
+        if (packageURL)
+          meta$Repository = NULL
+
+        # the package may have provided multiple URLs, in which case we
+        # use the first.  We also work around a bug in citation() up to
+        # R 4.3.1.  The grepl pattern here is problematic, but it's what
+        # citation() was using.
+
+        if (getRversion() < '4.3.2' && grepl('[, ]', meta$URL))
+          meta$URL = sub('[, ].*', '', meta$URL)
+
+        # Always remove URLs after the first one
+        meta$URL = sub(',? .*', '', meta$URL)
       }
       meta
     })
