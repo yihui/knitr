@@ -55,7 +55,7 @@ call_block = function(block) {
 
   if (opts_knit$get('progress')) print(block)
 
-  params$code = parse_chunk(params$code) # parse sub-chunk references
+  params[['code']] = parse_chunk(params[['code']]) # parse sub-chunk references
 
   ohooks = opts_hooks$get()
   for (opt in names(ohooks)) {
