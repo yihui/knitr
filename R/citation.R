@@ -90,8 +90,10 @@ write_bib = function(
       meta = packageDescription(pkg, lib.loc = lib.loc)
       # don't use the citation() URL if the package has provided its own URL
       if (!is.null(meta$URL)) {
-        if (packageURL)
+        if (packageURL) {
           meta$Repository = NULL
+          meta$RemoteType = NULL
+        }
 
         # the package may have provided multiple URLs, in which case we
         # use the first.  We also work around a bug in citation() up to
