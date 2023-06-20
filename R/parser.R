@@ -109,7 +109,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   code = parts$code
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
-  if (length(code) || length(params$file) || length(params$code)) {
+  if (length(code) || length(params[['file']]) || length(params[['code']])) {
     if (label %in% names(knit_code$get())) {
       if (identical(getOption('knitr.duplicate.label'), 'allow')) {
         params$label = label = unnamed_chunk(label)
