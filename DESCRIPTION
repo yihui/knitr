@@ -152,7 +152,8 @@ Suggests:
     tinytex,
     webshot,
     rstudioapi,
-    xml2 (>= 1.2.0)
+    xml2 (>= 1.2.0),
+    svglite
 License: GPL
 URL: https://yihui.org/knitr/
 BugReports: https://github.com/yihui/knitr/issues
