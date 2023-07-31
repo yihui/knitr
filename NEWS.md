@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.44
 
+## BUG FIXES
+
+- Fixed a bug in `spin(format = 'Rnw')` reported by @Tarious14 at https://github.com/yihui/yihui.org/discussions/769#discussioncomment-6587927
 
 # CHANGES IN knitr VERSION 1.43
 
