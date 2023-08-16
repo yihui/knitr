@@ -403,6 +403,10 @@ chunk_device = function(options, record = TRUE, tmp = tempfile()) {
     do.call(grDevices::svg, c(list(
       filename = tmp, width = width, height = height
     ), get_dargs(dev.args, 'svg')))
+  } else if (identical(dev, 'svglite')) {
+    do.call(svglite::svglite, c(list(
+      filename = tmp, width = width, height = height
+    ), get_dargs(dev.args, 'svglite')))
   } else if (identical(getOption('device'), pdf_null)) {
     if (!is.null(dev.args)) {
       dev.args = get_dargs(dev.args, 'pdf')
