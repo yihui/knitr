@@ -4,6 +4,8 @@
 
 - Fixed a bug in `spin(format = 'Rnw')` reported by @Tarious14 at https://github.com/yihui/yihui.org/discussions/769#discussioncomment-6587927
 
+- When the chunk option `dev = 'svglite'`, the `svglite` device should be used to record plots (thanks, @Darxor, #2272).
+
 # CHANGES IN knitr VERSION 1.43
 
 ## NEW FEATURES
