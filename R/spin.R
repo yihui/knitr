@@ -105,7 +105,7 @@ spin = function(
 
   txt = unlist(txt)
   # make it a complete TeX document if document class not specified
-  if (report && format %in% c('Rnw', 'Rtex') && !grepl('^\\s*\\\\documentclass', txt)) {
+  if (report && format %in% c('Rnw', 'Rtex') && !any(grepl('^\\s*\\\\documentclass', txt))) {
     txt = c('\\documentclass{article}', '\\begin{document}', txt, '\\end{document}')
   }
   if (nosrc) {
