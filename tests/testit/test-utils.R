@@ -137,11 +137,11 @@ opts = list(
 assert('.img.cap() generates the figure caption and alt attribute', {
   (.img.cap(list(fig.cap = NULL), FALSE) %==% "")
   (.img.cap(opts, FALSE) %==% opts$fig.cap)
-  (.img.cap(opts, TRUE)  %==% 'Figure &quot;caption&quot; &lt;&gt;.')
+  (.img.cap(opts, TRUE, TRUE)  %==% 'Figure &quot;caption&quot; &lt;&gt;.')
 
   opts$fig.alt = 'Figure "alternative text" <>.'
 
-  (.img.cap(opts, TRUE)  %==% 'Figure &quot;alternative text&quot; &lt;&gt;.')
+  (.img.cap(opts, TRUE, TRUE)  %==% 'Figure &quot;alternative text&quot; &lt;&gt;.')
   (.img.cap(opts, FALSE)  %==% opts$fig.cap)
 
   (.img.cap(list(fig.cap = '', fig.alt = "alt"), FALSE) %==% "")
