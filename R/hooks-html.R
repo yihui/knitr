@@ -55,12 +55,15 @@ hook_animation = function(options) {
   paste0(res, if (tag == 'object') '></object>' else ' />')
 }
 
-.img.cap = function(options, alt = FALSE) {
+.img.cap = function(options, alt = FALSE, escape = FALSE) {
   cap = options$fig.cap %n% {
     if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
   }
   if (length(cap) == 0) cap = ''
-  if (alt) return(escape_html(options$fig.alt %n% cap))
+  if (alt) {
+    alt = options$fig.alt %n% cap
+    return(if (escape) escape_html(alt) else alt)
+  }
   if (is_blank(cap)) return(cap)
   paste0(create_label(
     options$fig.lp, options$label,
@@ -140,7 +143,7 @@ hook_ffmpeg = function(x, options, format = 'webm') {
     sprintf('width="%s"', options$out.width),
     sprintf('height="%s"', options$out.height), opts
   )
-  cap = .img.cap(options, alt = TRUE)
+  cap = .img.cap(options, alt = TRUE, escape = TRUE)
   if (cap != '') cap = sprintf('<p>%s</p>', cap)
   sprintf(
     '<video %s><source src="%s" />%s</video>', trimws(opts),

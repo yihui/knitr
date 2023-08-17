@@ -653,7 +653,7 @@ add_html_caption = function(options, code, id = NULL) {
   if (cap == '' && !length(id)) return(code)
 
   if (length(id)) {
-    alt = .img.cap(options, alt = TRUE)
+    alt = .img.cap(options, alt = TRUE, escape = TRUE)
     if (cap == alt && cap != '') {
       # both are the same, so insert cap with id
       alttext = sprintf('<p class="caption" id="%s">%s</p>\n', id, cap)
