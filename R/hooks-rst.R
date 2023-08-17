@@ -14,9 +14,7 @@ hook_plot_rst = function(x, options) {
     'figure',
     paste0(opts_knit$get('base.url'), .upload.url(x)),
     c(align = if (options$fig.align == 'default') NULL else options$fig.align,
-      alt = alt,
-      width = options$out.width,
-      height = options$out.height),
+      alt = alt, width = options$out.width, height = options$out.height),
     cap
   )
 }
