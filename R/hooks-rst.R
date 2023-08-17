@@ -5,8 +5,8 @@
 hook_plot_rst = function(x, options) {
   if (options$fig.show == 'animate') return(hook_plot_html(x, options))
 
-  cap = .img.cap.rst(options)
-  alt = .img.cap.rst(options, alt = TRUE)
+  cap = .img.cap(options)
+  alt = .img.cap(options, alt = TRUE)
   # TODO: add all options for figure
   # See http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
   # http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure
@@ -19,15 +19,6 @@ hook_plot_rst = function(x, options) {
       height = options$out.height),
     cap
   )
-}
-
-.img.cap.rst = function(options, alt = FALSE) {
-  cap = options$fig.cap %n% {
-    if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
-  }
-  if (length(cap) == 0) cap = ''
-  if (alt) return(options$fig.alt %n% cap)
-  cap
 }
 
 #' @rdname output_hooks
