@@ -10,6 +10,8 @@
 
 - When the chunk option `dev = 'svglite'`, the `svglite` device should be used to record plots (thanks, @Darxor, #2272).
 
+- Figure captions are no longer escaped for reStructuredText output, and the alt text can also be specified via the `fig.alt` chunk option now (thanks, @trevorld, #2023).
+
 # CHANGES IN knitr VERSION 1.43
 
 ## NEW FEATURES
