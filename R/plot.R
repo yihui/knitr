@@ -615,7 +615,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     if (i1 || i3) {
       if (i1) {
         f1 = wd_tempfile('widget', '.html')
-        save_widget(x, f1, FALSE, options = options)
+        htmlwidgets::saveWidget(x, f1, FALSE, knitrOptions = options)
       } else f1 = x$url
       f2 = wd_tempfile('webshot', ext)
       f3 = do.call(getFromNamespace('webshot', webshot), c(list(f1, f2), wargs))
@@ -633,11 +633,4 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
       class = 'html_screenshot'
     )
   })
-}
-
-save_widget = function(..., options) {
-  FUN = htmlwidgets::saveWidget
-  if ('knitrOptions' %in% names(formals(FUN))) {
-    FUN(..., knitrOptions = options)
-  } else FUN(...)
 }
