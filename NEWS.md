@@ -12,6 +12,8 @@
 
 - Figure captions are no longer escaped for reStructuredText output, and the alt text can also be specified via the `fig.alt` chunk option now (thanks, @trevorld, #2023).
 
+- Use the correct type of progress bar when rendering Quarto documents in RStudio, which takes place in RStudio's background jobs pane (thanks, @hadley, #2271).
+
 # CHANGES IN knitr VERSION 1.43
 
 ## NEW FEATURES

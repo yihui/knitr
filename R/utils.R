@@ -1140,6 +1140,8 @@ txt_pb = function(total, labels) {
     if (identical(con, '')) con = stdout()
     if (!inherits(con, 'connection')) return(TRUE)
     if (isatty(con)) return(FALSE)
+    # RStudio's background jobs
+    if (Sys.getenv('RSTUDIO_CHILD_PROCESS_PANE') == 'job') return(FALSE)
     # when RStudio is available, return FALSE
     is.null(tryCatch(rstudioapi::versionInfo(), error = function(e) NULL))
   })()
