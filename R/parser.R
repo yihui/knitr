@@ -161,7 +161,7 @@ get_chunk_params = function(params) {
 }
 
 clean_empty_params = function(params) {
-  gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
+  gsub('^\\s*,*\\s*|\\s*,*\\s*$', '', params) # rm empty options
 }
 
 # autoname for unnamed chunk
