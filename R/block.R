@@ -585,7 +585,9 @@ process_tangle.block = function(x) {
   }
   if (isFALSE(params$purl)) return('')
   label = params$label; ev = params$eval
-  if (params$engine != 'R') return(one_string(comment_out(knit_code$get(label))))
+  if (params$engine != 'R') return(
+    one_string(comment_out(knit_code$get(label), params$comment, newline = FALSE))
+  )
   code = if (!isFALSE(ev) && !is.null(params$child)) {
     cmds = lapply(sc_split(params$child), knit_child)
     one_string(unlist(cmds))
