@@ -14,6 +14,10 @@
 
 - Use the correct type of progress bar when rendering Quarto documents in RStudio, which takes place in RStudio's background jobs pane (thanks, @hadley, #2271).
 
+## MINOR CHANGES
+
+- In-body chunk options (`#|`) are now preserved when extracting code from a document via `purl()` (thanks, @LuisLauM, #2268).
+
 # CHANGES IN knitr VERSION 1.43
 
 ## NEW FEATURES

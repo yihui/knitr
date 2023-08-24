@@ -145,7 +145,9 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
     }
   }
 
-  structure(list(params = params, params.src = params.src), class = 'block')
+  structure(class = 'block', list(
+    params = params, params.src = params.src, params.chunk = parts$src)
+  )
 }
 
 get_chunk_indent = function(header) {
