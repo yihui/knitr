@@ -252,6 +252,13 @@ fix_options = function(options) {
   options[gsub('-', '.', dashes)] = options[dashes]
   options[dashes] = NULL
 
+  # normalize aliases
+  aliases = c(fig.dev = 'dev', fig.dpi = 'dpi')
+  for (j in intersect(names(options), names(aliases))) {
+    options[[aliases[j]]] = options[[j]]
+    options[[j]] = NULL
+  }
+
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
   # if the animation hook has been set, fig.show must be 'animate'
