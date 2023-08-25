@@ -149,7 +149,7 @@ Suggests:
     testit,
     tibble,
     tikzDevice (>= 0.10),
-    tinytex,
+    tinytex (>= 0.46),
     webshot,
     rstudioapi,
     svglite,
