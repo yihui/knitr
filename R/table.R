@@ -283,7 +283,7 @@ kable_latex = function(
   midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
-  escape = TRUE
+  escape = TRUE, ...
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
