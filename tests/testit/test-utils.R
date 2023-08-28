@@ -238,3 +238,19 @@ assert('remove_urls() removes the link', {
   (remove_urls('a [b](c) d [e f+g](h) i.') %==% 'a b d e f+g i.')
   (remove_urls('a [b](c) `[d](e)` f.') %==% 'a b `[d](e)` f.')
 })
+
+assert('options using `-` are converted to `.` and default value replaced', {
+  opts = opts_chunk$merge(list('fig-cap' = 'caption'))
+  (is.null(fix_options(opts)[['fig-cap']]))
+  (fix_options(opts)[['fig.cap']] == 'caption')
+  rm(opts)
+})
+
+assert('fig.format and fig.dpi', {
+  opts = opts_chunk$merge(list('fig-format' = 'svg', 'fig-dpi' = 750))
+  (is.null(fix_options(opts)[['fig-format']]))
+  (is.null(fix_options(opts)[['fig-dpi']]))
+  (fix_options(opts)[['dev']] == 'svg')
+  (fix_options(opts)[['dpi']] == 750)
+  rm(opts)
+})
