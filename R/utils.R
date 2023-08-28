@@ -253,7 +253,7 @@ fix_options = function(options) {
   options[dashes] = NULL
 
   # normalize aliases
-  aliases = c(fig.dev = 'dev', fig.dpi = 'dpi')
+  aliases = c(fig.format = 'dev', fig.dpi = 'dpi')
   for (j in intersect(names(options), names(aliases))) {
     options[[aliases[j]]] = options[[j]]
     options[[j]] = NULL
