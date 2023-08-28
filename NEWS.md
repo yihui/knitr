@@ -22,6 +22,8 @@
 
 - In-body chunk options (`#|`) are now preserved when extracting code from a document via `purl()` (thanks, @LuisLauM, #2268).
 
+- A warning message will be issued when taking screenshots for HTML widgets in PDF with the **webshot2** package, because **webshot2** doesn't use the correct figure size at the moment (thanks, @icejean, #2276).
+
 # CHANGES IN knitr VERSION 1.43
 
 ## NEW FEATURES
