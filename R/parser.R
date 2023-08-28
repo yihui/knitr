@@ -314,8 +314,6 @@ partition_chunk = function(engine, code) {
   # normalize field name 'id' to 'label' if provided
   meta$label = unlist(meta[c('label', 'id')])[[1]]
   meta$id = NULL
-  # convert any option with fig- into fig. and out- to out.
-  names(meta) = sub('^(fig|out)-', '\\1.', names(meta))
 
   # extract code
   if (length(code) > 0 && is_blank(code[[1]])) {

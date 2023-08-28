@@ -14,6 +14,10 @@
 
 - Use the correct type of progress bar when rendering Quarto documents in RStudio, which takes place in RStudio's background jobs pane or build pane (thanks, @hadley, #2271).
 
+## MAJOR CHANGES
+
+- Dashes (`-`) in the names of all chunk options are normalized to dots (`.`) now, e.g., `fig-height` will be converted to `fig.height`. This is to make **knitr** more compatible with Quarto since Quarto always use dashes in chunk option names (#2282).
+
 ## MINOR CHANGES
 
 - In-body chunk options (`#|`) are now preserved when extracting code from a document via `purl()` (thanks, @LuisLauM, #2268).
