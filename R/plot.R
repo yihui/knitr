@@ -613,7 +613,8 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   webshot = if (length(webshot) == 0) 'webshot' else webshot[[1L]]
   if (webshot == 'webshot2' && ext == 'pdf' && getOption('knitr.warn.webshot2', TRUE)) warning(
     "webshot2 may take the PDF screenshot with the wrong size. You are recommended ",
-    "to use the 'png' format instead (i.e., set the chunk option dev = 'png'). ",
+    "to use the 'png' format instead (i.e., set the chunk option '",
+    if (is_quarto()) "fig-format" else "dev", "' to 'png'). ",
     "See https://github.com/yihui/knitr/issues/2276 for more information."
   )
   f = in_dir(d, {
