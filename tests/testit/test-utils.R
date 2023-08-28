@@ -240,9 +240,11 @@ assert('remove_urls() removes the link', {
 })
 
 assert('options using `-` are converted to `.` and default value replaced', {
-  opts = opts_chunk$merge(list('fig-cap' = 'caption'))
+  opts = opts_chunk$merge(list('fig-cap' = 'caption', 'out-width' = 300))
   (is.null(fix_options(opts)[['fig-cap']]))
+  (is.null(fix_options(opts)[['out-width']]))
   (fix_options(opts)[['fig.cap']] == 'caption')
+  (fix_options(opts)[['out.width']] == 300)
   rm(opts)
 })
 
