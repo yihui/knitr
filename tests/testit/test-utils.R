@@ -241,18 +241,18 @@ assert('remove_urls() removes the link', {
 
 assert('options using `-` are converted to `.` and default value replaced', {
   opts = opts_chunk$merge(list('fig-cap' = 'caption', 'out-width' = 300))
-  (is.null(fix_options(opts)[['fig-cap']]))
-  (is.null(fix_options(opts)[['out-width']]))
-  (fix_options(opts)[['fig.cap']] %==% 'caption')
-  (fix_options(opts)[['out.width']] %==% 300)
+  (is.null(dot_names(opts)[['fig-cap']]))
+  (is.null(dot_names(opts)[['out-width']]))
+  (dot_names(opts)[['fig.cap']] %==% 'caption')
+  (dot_names(opts)[['out.width']] %==% 300)
   rm(opts)
 })
 
 assert('fig.format and fig.dpi', {
   opts = opts_chunk$merge(list('fig-format' = 'svg', 'fig-dpi' = 750))
-  (is.null(fix_options(opts)[['fig-format']]))
-  (is.null(fix_options(opts)[['fig-dpi']]))
-  (fix_options(opts)[['dev']] %==% 'svg')
-  (fix_options(opts)[['dpi']] %==% 750)
+  (is.null(dot_names(opts)[['fig-format']]))
+  (is.null(dot_names(opts)[['fig-dpi']]))
+  (dot_names(opts)[['dev']] %==% 'svg')
+  (dot_names(opts)[['dpi']] %==% 750)
   rm(opts)
 })
