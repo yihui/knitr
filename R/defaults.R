@@ -116,7 +116,8 @@ opts_chunk_attr = local({
     opts$dev = grep('^quartz_', opts$dev, value = TRUE, invert = TRUE)
   if (.Platform$OS.type != 'windows')
     opts$dev = setdiff(opts$dev, 'win.metafile')
-  opts$dev = as.list(opts$dev)
+  opts$dev = opts$fig.format = as.list(opts$dev)
+  opts$fig.dpi = 'numeric'
   opts$fig.ext = as.list(unique(auto_exts))
   opts$external = opts$sanitize = NULL  # hide these two rare options
   opts$fig.process = 'function'

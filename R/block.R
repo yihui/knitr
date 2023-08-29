@@ -17,6 +17,7 @@ call_block = function(block) {
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
 
   params = opts_chunk$merge(block$params)
+  params = dot_names(params)
   for (o in setdiff(names(params), af)) {
     params[o] = list(eval_lang(params[[o]]))
     # also update original options before being merged with opts_chunk

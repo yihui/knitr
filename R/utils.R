@@ -243,21 +243,30 @@ tikz_dict = function(path) {
   paste(sans_ext(basename(path)), 'tikzDictionary', sep = '-')
 }
 
+# convert dashes in option names with dots (e.g., `fig-height` to `fig.height`)
+dot_names = function(x) {
+  dashes = grep('-', names(x), value = TRUE)
+  dots   = gsub('-', '.', dashes)
+  # only convert names that are known to knitr
+  i = dots %in% c(names(opts_chunk_attr), names(opts_chunk$get()))
+  if (any(i)) {
+    x[dots[i]] = x[dashes[i]]
+    x[dashes[i]] = NULL
+  }
+
+  # normalize aliases (introduced by Quarto)
+  aliases = c(fig.format = 'dev', fig.dpi = 'dpi')
+  for (j in intersect(names(x), names(aliases))) {
+    x[[aliases[j]]] = x[[j]]
+    x[[j]] = NULL
+  }
+  x
+}
+
 # initially for compatibility with Sweave and old beta versions of knitr
 # but now also place to tweak default options
 fix_options = function(options) {
   options = as.strict_list(options)
-  # convert dashes in option names with dots
-  dashes = grep('-', names(options), value = TRUE)
-  options[gsub('-', '.', dashes)] = options[dashes]
-  options[dashes] = NULL
-
-  # normalize aliases
-  aliases = c(fig.format = 'dev', fig.dpi = 'dpi')
-  for (j in intersect(names(options), names(aliases))) {
-    options[[aliases[j]]] = options[[j]]
-    options[[j]] = NULL
-  }
 
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
