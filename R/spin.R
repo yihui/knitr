@@ -91,7 +91,9 @@ spin = function(
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
       if (length(opt <- grep(rc <- '^(#|--)+(\\+|-| ----+| @knitr)', block))) {
-        block[opt] = paste0(p[1L], gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt]), p[2L])
+        opts = gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt])
+        opts = paste0(ifelse(opts == '', '', ' '), opts)
+        block[opt] = paste0(p[1L], opts, p[2L])
         # close each chunk if there are multiple chunks in this block
         if (any(opt > 1)) {
           j = opt[opt > 1]
@@ -132,9 +134,9 @@ spin = function(
 
 .fmt.pat = list(
   rnw = c('<<', '>>=', '@', '\\\\Sexpr{\\1}'),
-  rhtml = c('<!--begin.rcode ', '', 'end.rcode-->', '<!--rinline \\1 -->'),
-  rtex = c('% begin.rcode ', '', '% end.rcode', '\\\\rinline{\\1}'),
-  rrst = c('.. {r ', '}', '.. ..', ':r:`\\1`')
+  rhtml = c('<!--begin.rcode', '', 'end.rcode-->', '<!--rinline \\1 -->'),
+  rtex = c('% begin.rcode', '', '% end.rcode', '\\\\rinline{\\1}'),
+  rrst = c('.. {r', '}', '.. ..', ':r:`\\1`')
 )
 
 # determine how many backticks we need to wrap code blocks and inline code
@@ -149,7 +151,7 @@ spin = function(
     i = '`'
     b = '```'
   }
-  c(paste0(b, '{r '), '}', b, paste0(i, 'r \\1 ', i))
+  c(paste0(b, '{r'), '}', b, paste0(i, 'r \\1 ', i))
 }
 
 #' Spin a child R script
