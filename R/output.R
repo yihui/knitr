@@ -152,10 +152,13 @@ knit = function(
     )
     on.exit(options(oopts), add = TRUE)
     # restore chunk options after parent exits
-    optc = opts_chunk$get(); on.exit(opts_chunk$restore(optc), add = TRUE)
-    ocode = knit_code$get(); on.exit(knit_code$restore(ocode), add = TRUE)
-    on.exit(opts_current$restore(), add = TRUE)
-    optk = opts_knit$get(); on.exit(opts_knit$restore(optk), add = TRUE)
+    optc = opts_chunk$get(); ocode = knit_code$get(); optk = opts_knit$get()
+    on.exit({
+      opts_chunk$restore(optc)
+      knit_code$restore(ocode)
+      opts_current$unlock(); opts_current$restore()
+      opts_knit$restore(optk)
+    }, add = TRUE)
     opts_knit$set(
       output.dir = getwd(),  # record working directory in 1st run
       tangle = tangle, progress = opts_knit$get('progress') && !quiet
