@@ -110,6 +110,8 @@ call_block = function(block) {
 
   params$params.src = block$params.src
   opts_current$restore(params)  # save current options
+  # prevent users from modifying opts_current (#1798)
+  opts_current$lock(); on.exit(opts_current$unlock(), add = TRUE)
 
   # set local options() for the current R chunk
   if (is.list(params$R.options)) {
