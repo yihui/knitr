@@ -35,22 +35,23 @@
 #'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
 #' @return If \code{text} is \code{NULL}, the path of the final output document,
 #'   otherwise the content of the output.
-#' @note If the output format is Rnw and no document class is specified in
-#'   roxygen comments, this function will automatically add the \code{article}
-#'   class to the LaTeX document so that it is complete and can be compiled. You
-#'   can always specify the document class and other LaTeX settings in roxygen
-#'   comments manually.
+#' @note If the output format is \code{Rnw} and no document class is specified
+#'   in roxygen comments, this function will automatically add the
+#'   \code{article} class to the LaTeX document so that it is complete and can
+#'   be compiled. You can always specify the document class and other LaTeX
+#'   settings in roxygen comments manually.
 #'
-#'   When the output format is Rmd, it is compiled to HTML via
+#'   When the output format is \code{Rmd}, it is compiled to HTML via
 #'   \code{\link{knit2html}()}, which uses R Markdown v1 instead of v2. If you
 #'   want to use the latter, you should call
-#'   \code{rmarkdown::\link[rmarkdown]{render}()} instead.
+#'   \code{rmarkdown::\link[rmarkdown]{render}()} instead. Similarly, if the
+#'   output format is \code{qmd}, you need to render the output with Quarto.
 #' @export
 #' @seealso \code{\link{stitch}} (feed a template with an R script)
 #' @references \url{https://yihui.org/knitr/demo/stitch/}
 spin = function(
   hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
-  format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
+  format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst', 'qmd'),
   doc = "^#+'[ ]?", inline = '^[{][{](.+)[}][}][ ]*$',
   comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text)
 ) {
@@ -69,8 +70,9 @@ spin = function(
   parsed_data = getParseData(parse(text = x, keep.source = TRUE))
   is_matchable = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, 'line1'])
 
-  # .Rmd needs to be treated specially
-  p = if (identical(tolower(format), 'rmd')) .fmt.rmd(x) else .fmt.pat[[tolower(format)]]
+  # .Rmd/.qmd need to be treated specially
+  is_md = grepl('^[Rq]md$', format)
+  p = if (is_md) .fmt.rmd(x) else .fmt.pat[[tolower(format)]]
 
   # turn {{expr}} into inline expressions, e.g. `r expr` or \Sexpr{expr}
   if (any(i <- is_matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
@@ -117,7 +119,7 @@ spin = function(
   if (!knit) return(txt %n% outsrc)
 
   out = if (report) {
-    if (format == 'Rmd') {
+    if (is_md) {
       knit2html(outsrc, text = txt, envir = envir)
     } else if (!is.null(outsrc) && is_tex) {
       knit2pdf(outsrc, envir = envir)
