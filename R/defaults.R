@@ -36,10 +36,13 @@ new_defaults = function(value = list()) {
     for (i in names(dots)) dots[[i]] <- c(defaults[[i]], dots[[i]])
     set2(dots)
   }
+  env = environment()
+  lock = function() lockBinding('defaults', env)
+  unlock = function() unlockBinding('defaults', env)
 
   list(
-    get = get, set = set, delete = delete,
-    append = append, merge = merge, restore = restore
+    get = get, set = set, delete = delete, append = append, merge = merge,
+    restore = restore, lock = lock, unlock = unlock
   )
 }
 
