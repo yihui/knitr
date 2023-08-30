@@ -104,8 +104,9 @@ spin = function(
   }
 
   txt = unlist(txt)
+  is_tex = grepl('^R(nw|tex)$', format)
   # make it a complete TeX document if document class not specified
-  if (report && format %in% c('Rnw', 'Rtex') && !any(grepl('^\\s*\\\\documentclass', txt))) {
+  if (report && is_tex && !any(grepl('^\\s*\\\\documentclass', txt))) {
     txt = c('\\documentclass{article}', '\\begin{document}', txt, '\\end{document}')
   }
   if (nosrc) {
@@ -118,7 +119,7 @@ spin = function(
   out = if (report) {
     if (format == 'Rmd') {
       knit2html(outsrc, text = txt, envir = envir)
-    } else if (!is.null(outsrc) && (format %in% c('Rnw', 'Rtex'))) {
+    } else if (!is.null(outsrc) && is_tex) {
       knit2pdf(outsrc, envir = envir)
     }
   } else knit(outsrc, text = txt, envir = envir)
