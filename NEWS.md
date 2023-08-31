@@ -28,6 +28,8 @@
 
 - A warning message will be issued when taking screenshots for HTML widgets in PDF with the **webshot2** package, because **webshot2** doesn't use the correct figure size at the moment (thanks, @icejean, #2276).
 
+- If the `title` argument of `knit2wp()` is omitted and a `title` field is specified in the YAML metadata of the input document, the YAML `title` will be used (thanks, @arencambre, #1924).
+
 # CHANGES IN knitr VERSION 1.43
 
 ## NEW FEATURES

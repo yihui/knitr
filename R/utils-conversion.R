@@ -217,7 +217,9 @@ knit2wp = function(
     ), 'knitr.knit2wp.warning'
   )
   out = knit(input, envir = envir); on.exit(unlink(out))
-  content = file_string(out)
+  content = read_utf8(out)
+  if (missing(title) && length(title2 <- xfun::yaml_body(content)$yaml$title) == 1)
+    title = title2
   content = markdown::mark(text = content)
   shortcode = rep(shortcode, length.out = 2L)
   if (shortcode[1]) content = gsub(
