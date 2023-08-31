@@ -12,6 +12,11 @@ assert('kable() does not discard row names when there is only one row', {
   (kable2(m) %==% c('|   |  x|  y|', '|:--|--:|--:|', '|a  |  1|  2|'))
 })
 
+assert('kable() can assign a column name for row names', {
+  (kable2(m, col.names = c('z', colnames(m))) %==%
+     c('|z  |  x|  y|', '|:--|--:|--:|', '|a  |  1|  2|'))
+})
+
 assert('kable() recycles the align argument correctly', {
   (kable2(m, align = 'c') %==%
      c('|   | x | y |', '|:--|:-:|:-:|', '|a  | 1 | 2 |'))

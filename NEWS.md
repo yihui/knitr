@@ -18,6 +18,8 @@
 
 - The `opts_current` object can no longer be modified within code chunks via its `$set()` method (thanks, @AshesITR, #1798).
 
+- The argument `col.names` of `kable()` can be used to specify the column name of row names now, e.g., `kable(head(mtcars), col.names = c("car", names(mtcars)))` (`"car"` will be the column name of row names in the first column) (thanks, @iago-pssjd, #1933).
+
 ## MAJOR CHANGES
 
 - Dashes (`-`) in the names of all chunk options are normalized to dots (`.`) now, e.g., `fig-height` will be converted to `fig.height`. This is to make **knitr** more compatible with Quarto since Quarto always use dashes in chunk option names (#2282).
