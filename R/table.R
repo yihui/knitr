@@ -431,7 +431,7 @@ kable_rst = function(x, rownames.name = '\\', ...) {
 }
 
 # Pandoc's pipe table
-kable_pipe = function(x, caption = NULL, padding = 1, ...) {
+kable_pipe = function(x, caption = NULL, padding = 1, caption.label = 'Table:', ...) {
   if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
   res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
     if (is.null(a)) return(s)
@@ -442,7 +442,7 @@ kable_pipe = function(x, caption = NULL, padding = 1, ...) {
     s
   }, ...)
   res = sprintf('|%s|', res)
-  kable_pandoc_caption(res, caption)
+  kable_pandoc_caption(res, caption, caption.label)
 }
 
 # Pandoc's simple table
@@ -469,26 +469,19 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
 }
 
 # Emacs Org-mode table
-kable_org = function(x, caption = NULL, padding = 1, ...) {
-    if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
-    res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
-        if (is.null(a)) return(s)
-        r = c(l = '^.', c = '^.|.$', r = '.$')
-        s
-    }, ...)
-    res = sprintf('|%s|', res)
-    res = gsub("\\-\\|\\-", "-+-", x = res)
-    kable_org_caption(res, caption)
+kable_org = function(...) {
+  res = kable_pipe(..., caption.label = '#+CAPTION:')
+  i = grep('^[-:|]+$', res)  # find the line like |--:|---| under header
+  if (length(i)) {
+    i = i[1]
+    res[i] = gsub('(-|:)[|](-|:)', '\\1+\\2', res[i])  # use + as separator
+  }
+  res
 }
 
-kable_pandoc_caption = function(x, caption) {
+kable_pandoc_caption = function(x, caption, label = 'Table:') {
   if (identical(caption, NA)) caption = NULL
-  if (length(caption)) c(paste('Table:', caption), "", x) else x
-}
-
-kable_org_caption = function(x, caption) {
-  if (identical(caption, NA)) caption = NULL
-  if (length(caption)) c(paste('#+CAPTION:', caption), x) else x
+  if (length(caption)) c(paste(label, caption), '', x) else x
 }
 
 # pad a matrix
