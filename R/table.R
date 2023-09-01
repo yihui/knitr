@@ -408,7 +408,7 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
     ifelse(align == 'c', 2, 1)
   }
   l = pmax(l + padding, 3)  # at least of width 3 for Github Markdown
-  s = unlist(lapply(l, function(i) paste(rep(sep.row[2], i), collapse = '')))
+  s = strrep(sep.row[2], l)
   res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
               x, if (!is.na(sep.row[3])) s)
   res = mat_pad(res, l, align)
