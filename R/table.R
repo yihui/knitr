@@ -17,11 +17,11 @@
 #'   returned value from \code{kable()}.
 #' @param format A character string. Possible values are \code{latex},
 #'   \code{html}, \code{pipe} (Pandoc's pipe tables), \code{simple} (Pandoc's
-#'   simple tables), \code{rst}, and \code{jira}. The value of this argument
-#'   will be automatically determined if the function is called within a
-#'   \pkg{knitr} document. The \code{format} value can also be set in the global
-#'   option \code{knitr.table.format}. If \code{format} is a function, it must
-#'   return a character string.
+#'   simple tables), \code{rst}, \code{jira}, and \code{org} (Emacs Org-mode).
+#'   The value of this argument will be automatically determined if the function
+#'   is called within a \pkg{knitr} document. The \code{format} value can also
+#'   be set in the global option \code{knitr.table.format}. If \code{format} is
+#'   a function, it must return a character string.
 #' @param digits Maximum number of digits for numeric columns, passed to
 #'   \code{round()}. This can also be a vector of length \code{ncol(x)}, to set
 #'   the number of digits for individual columns.
@@ -408,7 +408,7 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
     ifelse(align == 'c', 2, 1)
   }
   l = pmax(l + padding, 3)  # at least of width 3 for Github Markdown
-  s = unlist(lapply(l, function(i) paste(rep(sep.row[2], i), collapse = '')))
+  s = strrep(sep.row[2], l)
   res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
               x, if (!is.na(sep.row[3])) s)
   res = mat_pad(res, l, align)
@@ -431,7 +431,7 @@ kable_rst = function(x, rownames.name = '\\', ...) {
 }
 
 # Pandoc's pipe table
-kable_pipe = function(x, caption = NULL, padding = 1, ...) {
+kable_pipe = function(x, caption = NULL, padding = 1, caption.label = 'Table:', ...) {
   if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
   res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
     if (is.null(a)) return(s)
@@ -442,7 +442,7 @@ kable_pipe = function(x, caption = NULL, padding = 1, ...) {
     s
   }, ...)
   res = sprintf('|%s|', res)
-  kable_pandoc_caption(res, caption)
+  kable_pandoc_caption(res, caption, caption.label)
 }
 
 # Pandoc's simple table
@@ -468,9 +468,20 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
   kable_pandoc_caption(tab, caption)
 }
 
-kable_pandoc_caption = function(x, caption) {
+# Emacs Org-mode table
+kable_org = function(...) {
+  res = kable_pipe(..., caption.label = '#+CAPTION:')
+  i = grep('^[-:|]+$', res)  # find the line like |--:|---| under header
+  if (length(i)) {
+    i = i[1]
+    res[i] = gsub('(-|:)[|](-|:)', '\\1+\\2', res[i])  # use + as separator
+  }
+  res
+}
+
+kable_pandoc_caption = function(x, caption, label = 'Table:') {
   if (identical(caption, NA)) caption = NULL
-  if (length(caption)) c(paste('Table:', caption), "", x) else x
+  if (length(caption)) c(paste(label, caption), '', x) else x
 }
 
 # pad a matrix
