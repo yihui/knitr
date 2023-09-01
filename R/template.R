@@ -71,7 +71,7 @@ stitch = function(script,
     message('PDF output at: ', with_ext(out, 'pdf'))
   }, md = {
     out.html = with_ext(out, 'html')
-    mark_html(out, out.html)
+    markdown::mark_html(out, out.html)
     message('HTML output at: ', out.html)
   })
   out

@@ -90,7 +90,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   }
 
   # for quarto, preserve the actual original params.src and do not remove the engine
-  if (!is_quarto()) params.src = params
+  if (!is_quarto() || opts_knit$get('tangle')) params.src = params
   params = parse_params(params)
 
   # remove indent (and possibly markdown blockquote >) from code
@@ -109,7 +109,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   code = parts$code
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
-  if (length(code) || length(params$file) || length(params$code)) {
+  if (length(code) || length(params[['file']]) || length(params[['code']])) {
     if (label %in% names(knit_code$get())) {
       if (identical(getOption('knitr.duplicate.label'), 'allow')) {
         params$label = label = unnamed_chunk(label)
@@ -145,7 +145,9 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
     }
   }
 
-  structure(list(params = params, params.src = params.src), class = 'block')
+  structure(class = 'block', list(
+    params = params, params.src = params.src, params.chunk = parts$src)
+  )
 }
 
 get_chunk_indent = function(header) {
@@ -161,7 +163,7 @@ get_chunk_params = function(params) {
 }
 
 clean_empty_params = function(params) {
-  gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
+  gsub('^\\s*,*\\s*|\\s*,*\\s*$', '', params) # rm empty options
 }
 
 # autoname for unnamed chunk
@@ -310,10 +312,8 @@ partition_chunk = function(engine, code) {
   }
 
   # normalize field name 'id' to 'label' if provided
-  meta$label = unlist(meta[c('label', 'id')])[1]
+  meta$label = unlist(meta[c('label', 'id')])[[1]]
   meta$id = NULL
-  # convert any option with fig- into fig. and out- to out.
-  names(meta) = sub('^(fig|out)-', '\\1.', names(meta))
 
   # extract code
   if (length(code) > 0 && is_blank(code[[1]])) {

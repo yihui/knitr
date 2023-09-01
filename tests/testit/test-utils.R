@@ -137,11 +137,11 @@ opts = list(
 assert('.img.cap() generates the figure caption and alt attribute', {
   (.img.cap(list(fig.cap = NULL), FALSE) %==% "")
   (.img.cap(opts, FALSE) %==% opts$fig.cap)
-  (.img.cap(opts, TRUE)  %==% 'Figure &quot;caption&quot; &lt;&gt;.')
+  (.img.cap(opts, TRUE, TRUE)  %==% 'Figure &quot;caption&quot; &lt;&gt;.')
 
   opts$fig.alt = 'Figure "alternative text" <>.'
 
-  (.img.cap(opts, TRUE)  %==% 'Figure &quot;alternative text&quot; &lt;&gt;.')
+  (.img.cap(opts, TRUE, TRUE)  %==% 'Figure &quot;alternative text&quot; &lt;&gt;.')
   (.img.cap(opts, FALSE)  %==% opts$fig.cap)
 
   (.img.cap(list(fig.cap = '', fig.alt = "alt"), FALSE) %==% "")
@@ -237,4 +237,22 @@ assert('remove_urls() removes the link', {
   (remove_urls('a [b](c) d.') %==% 'a b d.')
   (remove_urls('a [b](c) d [e f+g](h) i.') %==% 'a b d e f+g i.')
   (remove_urls('a [b](c) `[d](e)` f.') %==% 'a b `[d](e)` f.')
+})
+
+assert('options using `-` are converted to `.` and default value replaced', {
+  opts = opts_chunk$merge(list('fig-cap' = 'caption', 'out-width' = 300))
+  (is.null(dot_names(opts)[['fig-cap']]))
+  (is.null(dot_names(opts)[['out-width']]))
+  (dot_names(opts)[['fig.cap']] %==% 'caption')
+  (dot_names(opts)[['out.width']] %==% 300)
+  rm(opts)
+})
+
+assert('fig.format and fig.dpi', {
+  opts = opts_chunk$merge(list('fig-format' = 'svg', 'fig-dpi' = 750))
+  (is.null(dot_names(opts)[['fig-format']]))
+  (is.null(dot_names(opts)[['fig-dpi']]))
+  (dot_names(opts)[['dev']] %==% 'svg')
+  (dot_names(opts)[['dpi']] %==% 750)
+  rm(opts)
 })

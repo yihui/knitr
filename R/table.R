@@ -142,7 +142,7 @@ kable = function(
   if (!is.null(align)) align = rep(align, length.out = m)
   if (row.names) {
     x = cbind(' ' = rownames(x), x)
-    if (!is.null(col.names)) col.names = c(' ', col.names)
+    if (!is.null(col.names)) col.names = tail(c(' ', col.names), ncol(x))
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
   n = nrow(x)
@@ -283,7 +283,7 @@ kable_latex = function(
   midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
-  escape = TRUE
+  escape = TRUE, ...
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)

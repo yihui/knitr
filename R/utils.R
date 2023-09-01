@@ -243,6 +243,26 @@ tikz_dict = function(path) {
   paste(sans_ext(basename(path)), 'tikzDictionary', sep = '-')
 }
 
+# convert dashes in option names with dots (e.g., `fig-height` to `fig.height`)
+dot_names = function(x) {
+  dashes = grep('-', names(x), value = TRUE)
+  dots   = gsub('-', '.', dashes)
+  # only convert names that are known to knitr
+  i = dots %in% c(names(opts_chunk_attr), names(opts_chunk$get()))
+  if (any(i)) {
+    x[dots[i]] = x[dashes[i]]
+    x[dashes[i]] = NULL
+  }
+
+  # normalize aliases (introduced by Quarto)
+  aliases = c(fig.format = 'dev', fig.dpi = 'dpi')
+  for (j in intersect(names(x), names(aliases))) {
+    x[[aliases[j]]] = x[[j]]
+    x[[j]] = NULL
+  }
+  x
+}
+
 # initially for compatibility with Sweave and old beta versions of knitr
 # but now also place to tweak default options
 fix_options = function(options) {
@@ -321,10 +341,6 @@ fix_options = function(options) {
   # change default of value conditionally
   if (identical(options$strip.white, I(TRUE)))
     options$strip.white = !options$collapse
-
-  # TODO: remove this after https://github.com/DeclareDesign/randomizr/pull/95
-  if (xfun::check_old_package('randomizr', '0.22.0') && identical(options$message, 'hide'))
-    options$message = FALSE
 
   options
 }
@@ -797,8 +813,7 @@ has_crop_tools = function(warn = TRUE) {
   if (is_windows() && Sys.which('tlmgr') != '') {
     # assuming users know what this env var means (rstudio/tinytex#391)
     if (Sys.getenv('TEXLIVE_WINDOWS_EXTERNAL_GS') != '') return(TRUE)
-    # TODO: use tinytex::tlmgr_version('list')$year
-    year = as.integer(xfun::grep_sub('^TeX Live.* version (\\d+).*$', '\\1', tinytex::tlmgr_version())[1])
+    year = tinytex::tlmgr_version('list')$texlive
     if (year < 2023 && warn) warning(
       'TeX Live version too low. Please consider upgrading, e.g., via tinytex::reinstall_tinytex().'
     )
@@ -1140,6 +1155,8 @@ txt_pb = function(total, labels) {
     if (identical(con, '')) con = stdout()
     if (!inherits(con, 'connection')) return(TRUE)
     if (isatty(con)) return(FALSE)
+    # RStudio's background jobs
+    if (Sys.getenv('RSTUDIO_CHILD_PROCESS_PANE') %in% c('job', 'build')) return(FALSE)
     # when RStudio is available, return FALSE
     is.null(tryCatch(rstudioapi::versionInfo(), error = function(e) NULL))
   })()

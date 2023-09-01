@@ -9,28 +9,24 @@ spin_w_tempfile = function(..., format = "Rmd") {
   result
 }
 
-assert(
-  "spin() detects lines for documentation",
-  identical(spin_w_tempfile("#' test", "1 * 1", "#' test"),
-            c("test", "", "```{r }", "1 * 1", "```", "", "test")),
+assert("spin() detects lines for documentation", {
+  (spin_w_tempfile("#' test", "1 * 1", "#' test") %==%
+     c("test", "", "```{r}", "1 * 1", "```", "", "test"))
   # a multiline string literal contains the pattern of doc or inline
-  identical(spin_w_tempfile("code <- \"", "#' test\""),
-            c("", "```{r }", "code <- \"", "#' test\"", "```", "")),
-  identical(spin_w_tempfile("code <- \"", "{{ 1 + 1 }}", "\""),
-            c("", "```{r }", "code <- \"", "{{ 1 + 1 }}", "\"", "```", "")),
+  (spin_w_tempfile("code <- \"", "#' test\"") %==%
+    c("", "```{r}", "code <- \"", "#' test\"", "```", ""))
+  (spin_w_tempfile("code <- \"", "{{ 1 + 1 }}", "\"") %==%
+    c("", "```{r}", "code <- \"", "{{ 1 + 1 }}", "\"", "```", ""))
   # a multiline symbol contains the pattern of doc or inline
-  identical(spin_w_tempfile("`", "#' test", "`"),
-            c("", "```{r }", "`", "#' test", "`", "```", "")),
-  identical(spin_w_tempfile("`", "{{ 1 + 1 }}", "`"),
-            c("", "```{r }", "`", "{{ 1 + 1 }}", "`", "```", ""))
-)
+  (spin_w_tempfile("`", "#' test", "`") %==%
+    c("", "```{r}", "`", "#' test", "`", "```", ""))
+  (spin_w_tempfile("`", "{{ 1 + 1 }}", "`") %==%
+    c("", "```{r}", "`", "{{ 1 + 1 }}", "`", "```", ""))
+})
 
-assert(
-  "spin() uses proper number of backticks",
-  identical(spin_w_tempfile("{{ '`' }}"),
-            c("``r  '`'  ``")),
-  identical(spin_w_tempfile("{{`x`}}"),
-            c("``r `x` ``")),
-  identical(spin_w_tempfile("x <- '", "```", "'"),
-            c("", "````{r }", "x <- '", "```", "'", "````", ""))
-)
+assert("spin() uses proper number of backticks", {
+  (spin_w_tempfile("{{ '`' }}") %==% c("``r  '`'  ``"))
+  (spin_w_tempfile("{{`x`}}") %==% c("``r `x` ``"))
+  (spin_w_tempfile("x <- '", "```", "'") %==%
+    c("", "````{r}", "x <- '", "```", "'", "````", ""))
+})

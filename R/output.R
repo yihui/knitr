@@ -152,10 +152,13 @@ knit = function(
     )
     on.exit(options(oopts), add = TRUE)
     # restore chunk options after parent exits
-    optc = opts_chunk$get(); on.exit(opts_chunk$restore(optc), add = TRUE)
-    ocode = knit_code$get(); on.exit(knit_code$restore(ocode), add = TRUE)
-    on.exit(opts_current$restore(), add = TRUE)
-    optk = opts_knit$get(); on.exit(opts_knit$restore(optk), add = TRUE)
+    optc = opts_chunk$get(); ocode = knit_code$get(); optk = opts_knit$get()
+    on.exit({
+      opts_chunk$restore(optc)
+      knit_code$restore(ocode)
+      opts_current$unlock(); opts_current$restore()
+      opts_knit$restore(optk)
+    }, add = TRUE)
     opts_knit$set(
       output.dir = getwd(),  # record working directory in 1st run
       tangle = tangle, progress = opts_knit$get('progress') && !quiet
@@ -311,8 +314,7 @@ process_file = function(text, output) {
     res[i] = withCallingHandlers(
       withCallingHandlers(
         if (tangle) process_tangle(group) else process_group(group),
-        # TODO: remove the learnr hack https://github.com/rstudio/learnr/pull/781
-        error = function(e) if (xfun::pkg_available('rlang', '1.0.0') && !xfun::check_old_package('learnr', '0.11.3')) rlang::entrace(e)
+        error = function(e) if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
       ),
       error = function(e) {
         setwd(wd)
@@ -653,7 +655,7 @@ add_html_caption = function(options, code, id = NULL) {
   if (cap == '' && !length(id)) return(code)
 
   if (length(id)) {
-    alt = .img.cap(options, alt = TRUE)
+    alt = .img.cap(options, alt = TRUE, escape = TRUE)
     if (cap == alt && cap != '') {
       # both are the same, so insert cap with id
       alttext = sprintf('<p class="caption" id="%s">%s</p>\n', id, cap)

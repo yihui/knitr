@@ -59,7 +59,7 @@ jobs:
           extra-packages: |
             any::XML
             any::rcmdcheck
-            targets=?ignore-before-r=3.5.0
+            targets=?ignore-before-r=4.0.0
             JuliaCall=?ignore-before-r=4.0.0
           needs: check
 

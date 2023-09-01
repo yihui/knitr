@@ -17,6 +17,7 @@ call_block = function(block) {
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
 
   params = opts_chunk$merge(block$params)
+  params = dot_names(params)
   for (o in setdiff(names(params), af)) {
     params[o] = list(eval_lang(params[[o]]))
     # also update original options before being merged with opts_chunk
@@ -51,11 +52,11 @@ call_block = function(block) {
   }
 
   # save current chunk options in opts_current
-  opts_current$restore(params)
+  opts_current$unlock(); opts_current$restore(params)
 
   if (opts_knit$get('progress')) print(block)
 
-  params$code = parse_chunk(params$code) # parse sub-chunk references
+  params[['code']] = parse_chunk(params[['code']]) # parse sub-chunk references
 
   ohooks = opts_hooks$get()
   for (opt in names(ohooks)) {
@@ -109,6 +110,8 @@ call_block = function(block) {
 
   params$params.src = block$params.src
   opts_current$restore(params)  # save current options
+  # prevent users from modifying opts_current (#1798)
+  opts_current$lock(); on.exit(opts_current$unlock(), add = TRUE)
 
   # set local options() for the current R chunk
   if (is.list(params$R.options)) {
@@ -403,6 +406,10 @@ chunk_device = function(options, record = TRUE, tmp = tempfile()) {
     do.call(grDevices::svg, c(list(
       filename = tmp, width = width, height = height
     ), get_dargs(dev.args, 'svg')))
+  } else if (identical(dev, 'svglite')) {
+    do.call(svglite::svglite, c(list(
+      filename = tmp, width = width, height = height
+    ), get_dargs(dev.args, 'svglite')))
   } else if (identical(getOption('device'), pdf_null)) {
     if (!is.null(dev.args)) {
       dev.args = get_dargs(dev.args, 'pdf')
@@ -581,7 +588,9 @@ process_tangle.block = function(x) {
   }
   if (isFALSE(params$purl)) return('')
   label = params$label; ev = params$eval
-  if (params$engine != 'R') return(one_string(comment_out(knit_code$get(label))))
+  if (params$engine != 'R') return(
+    one_string(comment_out(knit_code$get(label), params$comment, newline = FALSE))
+  )
   code = if (!isFALSE(ev) && !is.null(params$child)) {
     cmds = lapply(sc_split(params$child), knit_child)
     one_string(unlist(cmds))
@@ -620,13 +629,12 @@ process_tangle.inline = function(x) {
 
 # add a label [and extra chunk options] to a code chunk
 label_code = function(code, options) {
-  code = one_string(c('', code, ''))
-  comments = if (is_quarto()) one_string(options$params$yaml.code) else paste0(
+  comments = paste0(
     '## ----', options$params.src,
     strrep('-', max(getOption('width') - 11L - nchar(options$params.src), 0L)),
     '----'
   )
-  paste0(comments, code)
+  one_string(c(comments, options$params.chunk, code, ''))
 }
 
 as.source = function(code) {

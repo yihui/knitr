@@ -168,16 +168,9 @@ knit2html = function(
   out = knit(input, text = text, envir = envir, quiet = quiet)
   if (is.null(text)) {
     output = with_ext(if (is.null(output) || is.na(output)) out else output, 'html')
-    mark_html(out, output, ...)
+    markdown::mark_html(out, output, ...)
     invisible(output)
-  } else mark_html(text = out, ...)
-}
-
-mark_html = function(...) {
-  if (packageVersion('markdown') < '1.3') stop(
-    "The 'markdown' package version >= 1.3 is required."
-  )
-  markdown::mark_html(...)
+  } else markdown::mark_html(text = out, ...)
 }
 
 #' Knit an R Markdown document and post it to WordPress
@@ -224,8 +217,10 @@ knit2wp = function(
     ), 'knitr.knit2wp.warning'
   )
   out = knit(input, envir = envir); on.exit(unlink(out))
-  content = file_string(out)
-  content = mark_html(text = content)
+  content = read_utf8(out)
+  if (missing(title) && length(title2 <- xfun::yaml_body(content)$yaml$title) == 1)
+    title = title2
+  content = markdown::mark(text = content)
   shortcode = rep(shortcode, length.out = 2L)
   if (shortcode[1]) content = gsub(
     '<pre><code class="([[:alpha:]]+)">(.+?)</code></pre>',

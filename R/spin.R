@@ -35,22 +35,23 @@
 #'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
 #' @return If \code{text} is \code{NULL}, the path of the final output document,
 #'   otherwise the content of the output.
-#' @note If the output format is Rnw and no document class is specified in
-#'   roxygen comments, this function will automatically add the \code{article}
-#'   class to the LaTeX document so that it is complete and can be compiled. You
-#'   can always specify the document class and other LaTeX settings in roxygen
-#'   comments manually.
+#' @note If the output format is \code{Rnw} and no document class is specified
+#'   in roxygen comments, this function will automatically add the
+#'   \code{article} class to the LaTeX document so that it is complete and can
+#'   be compiled. You can always specify the document class and other LaTeX
+#'   settings in roxygen comments manually.
 #'
-#'   When the output format is Rmd, it is compiled to HTML via
+#'   When the output format is \code{Rmd}, it is compiled to HTML via
 #'   \code{\link{knit2html}()}, which uses R Markdown v1 instead of v2. If you
 #'   want to use the latter, you should call
-#'   \code{rmarkdown::\link[rmarkdown]{render}()} instead.
+#'   \code{rmarkdown::\link[rmarkdown]{render}()} instead. Similarly, if the
+#'   output format is \code{qmd}, you need to render the output with Quarto.
 #' @export
 #' @seealso \code{\link{stitch}} (feed a template with an R script)
 #' @references \url{https://yihui.org/knitr/demo/stitch/}
 spin = function(
   hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
-  format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
+  format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst', 'qmd'),
   doc = "^#+'[ ]?", inline = '^[{][{](.+)[}][}][ ]*$',
   comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text)
 ) {
@@ -69,8 +70,9 @@ spin = function(
   parsed_data = getParseData(parse(text = x, keep.source = TRUE))
   is_matchable = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, 'line1'])
 
-  # .Rmd needs to be treated specially
-  p = if (identical(tolower(format), 'rmd')) .fmt.rmd(x) else .fmt.pat[[tolower(format)]]
+  # .Rmd/.qmd need to be treated specially
+  is_md = grepl('^[Rq]md$', format)
+  p = if (is_md) .fmt.rmd(x) else .fmt.pat[[tolower(format)]]
 
   # turn {{expr}} into inline expressions, e.g. `r expr` or \Sexpr{expr}
   if (any(i <- is_matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
@@ -89,7 +91,9 @@ spin = function(
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
       if (length(opt <- grep(rc <- '^(#|--)+(\\+|-| ----+| @knitr)', block))) {
-        block[opt] = paste0(p[1L], gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt]), p[2L])
+        opts = gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt])
+        opts = paste0(ifelse(opts == '', '', ' '), opts)
+        block[opt] = paste0(p[1L], opts, p[2L])
         # close each chunk if there are multiple chunks in this block
         if (any(opt > 1)) {
           j = opt[opt > 1]
@@ -104,8 +108,9 @@ spin = function(
   }
 
   txt = unlist(txt)
+  is_tex = grepl('^R(nw|tex)$', format)
   # make it a complete TeX document if document class not specified
-  if (report && format %in% c('Rnw', 'Rtex') && !grepl('^\\s*\\\\documentclass', txt)) {
+  if (report && is_tex && !any(grepl('^\\s*\\\\documentclass', txt))) {
     txt = c('\\documentclass{article}', '\\begin{document}', txt, '\\end{document}')
   }
   if (nosrc) {
@@ -116,9 +121,9 @@ spin = function(
   if (!knit) return(txt %n% outsrc)
 
   out = if (report) {
-    if (format == 'Rmd') {
+    if (is_md) {
       knit2html(outsrc, text = txt, envir = envir)
-    } else if (!is.null(outsrc) && (format %in% c('Rnw', 'Rtex'))) {
+    } else if (!is.null(outsrc) && is_tex) {
       knit2pdf(outsrc, envir = envir)
     }
   } else knit(outsrc, text = txt, envir = envir)
@@ -129,9 +134,9 @@ spin = function(
 
 .fmt.pat = list(
   rnw = c('<<', '>>=', '@', '\\\\Sexpr{\\1}'),
-  rhtml = c('<!--begin.rcode ', '', 'end.rcode-->', '<!--rinline \\1 -->'),
-  rtex = c('% begin.rcode ', '', '% end.rcode', '\\\\rinline{\\1}'),
-  rrst = c('.. {r ', '}', '.. ..', ':r:`\\1`')
+  rhtml = c('<!--begin.rcode', '', 'end.rcode-->', '<!--rinline \\1 -->'),
+  rtex = c('% begin.rcode', '', '% end.rcode', '\\\\rinline{\\1}'),
+  rrst = c('.. {r', '}', '.. ..', ':r:`\\1`')
 )
 
 # determine how many backticks we need to wrap code blocks and inline code
@@ -146,7 +151,7 @@ spin = function(
     i = '`'
     b = '```'
   }
-  c(paste0(b, '{r '), '}', b, paste0(i, 'r \\1 ', i))
+  c(paste0(b, '{r'), '}', b, paste0(i, 'r \\1 ', i))
 }
 
 #' Spin a child R script

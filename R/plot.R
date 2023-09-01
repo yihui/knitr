@@ -611,11 +611,17 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   w = webshot_available()
   webshot = c(options$webshot, names(w)[w])
   webshot = if (length(webshot) == 0) 'webshot' else webshot[[1L]]
+  if (webshot == 'webshot2' && ext == 'pdf' && getOption('knitr.warn.webshot2', TRUE)) warning(
+    "webshot2 may take the PDF screenshot with the wrong size. You are recommended ",
+    "to use the 'png' format instead (i.e., set the chunk option '",
+    if (is_quarto()) "fig-format" else "dev", "' to 'png'). ",
+    "See https://github.com/yihui/knitr/issues/2276 for more information."
+  )
   f = in_dir(d, {
     if (i1 || i3) {
       if (i1) {
         f1 = wd_tempfile('widget', '.html')
-        save_widget(x, f1, FALSE, options = options)
+        htmlwidgets::saveWidget(x, f1, FALSE, knitrOptions = options)
       } else f1 = x$url
       f2 = wd_tempfile('webshot', ext)
       f3 = do.call(getFromNamespace('webshot', webshot), c(list(f1, f2), wargs))
@@ -633,11 +639,4 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
       class = 'html_screenshot'
     )
   })
-}
-
-save_widget = function(..., options) {
-  FUN = htmlwidgets::saveWidget
-  if ('knitrOptions' %in% names(formals(FUN))) {
-    FUN(..., knitrOptions = options)
-  } else FUN(...)
 }
