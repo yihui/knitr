@@ -33,9 +33,8 @@ See \code{str(knitr::opts_chunk$get())} for a list of default chunk options.
 }
 \note{
 \code{opts_current} should be treated as read-only and you are supposed
-  to only query its values via \code{opts_current$get()}. Technically you
-  could also call \code{opts_current$set()} to change the values, but you are
-  not recommended to do so unless you understand the consequences.
+  to only query its values via \code{opts_current$get()}. Calling
+  \code{opts_current$set()} will throw an error.
 }
 \examples{
 opts_chunk$get("prompt")
