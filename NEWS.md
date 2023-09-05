@@ -12,6 +12,8 @@
 
 ## BUG FIXES
 
+- Make the internal function `add_html_caption()` work with Quarto <= v1.3.353 (thanks, @giabaio, #2261).
+
 - Fixed a bug in `spin(format = 'Rnw')` reported by @Tarious14 at https://github.com/yihui/yihui.org/discussions/769#discussioncomment-6587927
 
 - When the chunk option `dev = 'svglite'`, the `svglite` device should be used to record plots (thanks, @Darxor, #2272).

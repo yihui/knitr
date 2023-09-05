@@ -502,6 +502,8 @@ sew.knit_asis = function(x, options, inline = FALSE, ...) {
     if (inherits(x, 'knit_asis_htmlwidget')) {
       options$fig.cur = plot_counter()
       options = reduce_plot_opts(options)
+      # TODO: remove this when quarto > 1.3.353 is widely used
+      if (is_quarto()) return(add_html_caption(options, wrap_asis(x, options)))
       # look for attribute 'aria-labelledby="label"' in the first HTML tag and
       # use the label to provide alt text if found
       return(add_html_caption(
