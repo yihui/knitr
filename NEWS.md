@@ -10,6 +10,8 @@
 
 - Updated the package vignette `vignette('knit_print', 'knitr')` to mention that package authors no longer have to make **knitr** a hard dependency if they want to define S3 methods for `knitr::knit_print` with R >= 3.6.0 (thanks, @cderv, #1929).
 
+- Added a new function `download_image()` to download an image from a URL and include it via `include_graphics()`. This is mainly for including online images when the output format is not HTML (e.g., LaTeX), because the URL will not work as the image path, and it has to be downloaded beforehand (thanks, @bayeslearner, #2274).
+
 ## BUG FIXES
 
 - Make the internal function `add_html_caption()` work with Quarto <= v1.3.353 (thanks, @giabaio, #2261).
