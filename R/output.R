@@ -156,7 +156,7 @@ knit = function(
     on.exit({
       opts_chunk$restore(optc)
       knit_code$restore(ocode)
-      opts_current$unlock(); opts_current$restore()
+      opts_current$restore()
       opts_knit$restore(optk)
     }, add = TRUE)
     opts_knit$set(

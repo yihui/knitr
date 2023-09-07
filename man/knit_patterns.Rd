@@ -5,7 +5,7 @@
 \alias{knit_patterns}
 \title{Patterns to match and extract R code in a document}
 \format{
-An object of class \code{list} of length 8.
+An object of class \code{list} of length 7.
 }
 \usage{
 knit_patterns

@@ -52,7 +52,7 @@ call_block = function(block) {
   }
 
   # save current chunk options in opts_current
-  opts_current$unlock(); opts_current$restore(params)
+  opts_current$restore(params)
 
   if (opts_knit$get('progress')) print(block)
 
@@ -112,7 +112,7 @@ call_block = function(block) {
   opts_current$restore(params)  # save current options
   # prevent users from modifying opts_current (#1798)
   if (!xfun::check_old_package('lingglosses', '0.0.6'))  # TODO: remove this hack https://github.com/agricolamz/lingglosses/issues/22
-  opts_current$lock(); on.exit(opts_current$unlock(), add = TRUE)
+  opts_current$lock(); on.exit(opts_current$lock(FALSE), add = TRUE)
 
   # set local options() for the current R chunk
   if (is.list(params$R.options)) {
