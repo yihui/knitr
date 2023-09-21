@@ -5,7 +5,7 @@
 \alias{opts_hooks}
 \title{Hooks for code chunk options}
 \format{
-An object of class \code{list} of length 8.
+An object of class \code{list} of length 7.
 }
 \usage{
 opts_hooks

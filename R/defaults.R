@@ -2,6 +2,7 @@
 
 new_defaults = function(value = list()) {
   defaults = value
+  locked = FALSE
 
   get = function(name, default = FALSE, drop = TRUE) {
     if (default) defaults = value  # this is only a local version
@@ -20,7 +21,13 @@ new_defaults = function(value = list()) {
   }
   set2 = function(values) {
     old = get(names(values), drop = FALSE)
-    if (length(values)) defaults <<- merge(values)
+    if (length(values)) {
+      if (locked) stop(
+        'The object is read-only and cannot be modified. If you have to modify it ',
+        'for a legitimate reason, call the method $lock(FALSE) on the object before $set().'
+      )
+      defaults <<- merge(values)
+    }
     invisible(old)
   }
   set = function(...) {
@@ -36,13 +43,11 @@ new_defaults = function(value = list()) {
     for (i in names(dots)) dots[[i]] <- c(defaults[[i]], dots[[i]])
     set2(dots)
   }
-  env = environment()
-  lock = function() lockBinding('defaults', env)
-  unlock = function() unlockBinding('defaults', env)
+  lock = function(status = TRUE) locked <<- status
 
   list(
     get = get, set = set, delete = delete, append = append, merge = merge,
-    restore = restore, lock = lock, unlock = unlock
+    restore = restore, lock = lock
   )
 }
 
