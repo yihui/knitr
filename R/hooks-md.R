@@ -51,7 +51,7 @@ hook_plot_md_base = function(x, options) {
   if (options$fig.show == 'animate') return(hook_plot_html(x, options))
 
   cap = .img.cap(options)
-  alt = .img.cap(options, alt = TRUE)
+  alt = .img.cap(options, alt = TRUE, escape = TRUE)
 
   w = options[['out.width']]; h = options[['out.height']]
   s = options$out.extra; a = options$fig.align
