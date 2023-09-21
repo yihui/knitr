@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.45
 
+## MAJOR CHANGES
+
+- The object `opts_current` will be restored after each code chunk has finished executing. Previously, it would not be restored, which means even for inline R expressions, `opts_current$get()` will inherit chunk options from a previous code chunk (thanks, @rundel, #1988).
+
 ## BUG FIXES
 
 - Special characters in the chunk option `fig.alt` are properly escaped now (thanks, @jay-sf, #2290).

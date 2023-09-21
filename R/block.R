@@ -52,6 +52,7 @@ call_block = function(block) {
   }
 
   # save current chunk options in opts_current
+  optc = opts_current$get(); on.exit(opts_current$restore(optc), add = TRUE)
   opts_current$restore(params)
 
   if (opts_knit$get('progress')) print(block)
