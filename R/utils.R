@@ -472,7 +472,7 @@ out_format = function(x) {
 }
 
 # tempfile under the current working directory
-wd_tempfile = function(...) basename(tempfile(tmpdir = '.', ...))
+wd_tempfile = function(...) basename(tmpmd5file(tmpdir = '.', ...))
 
 pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
   if (length(text) == 0) return(text)
@@ -1066,14 +1066,14 @@ digest = function(x) {
 digest2 = function(x) {
   s = serialize(x, NULL, ascii = FALSE)
   if (length(s) > 14) s = s[-(1:14)]  # https://d.cosx.org/d/419804
-  writeBin(s, f <- tempfile())
+  writeBin(s, f <- tmpmd5file())
   on.exit(unlink(f), add = TRUE)
   unname(tools::md5sum(f))
 }
 
 # not removing the serialize() header (first few bytes)
 digest3 = function(x) {
-  f = tempfile(); on.exit(unlink(f), add = TRUE)
+  f = tmpmd5file(); on.exit(unlink(f), add = TRUE)
   s = file(f, open = 'wb')
   serialize(x, s, ascii = FALSE)
   close(s)
