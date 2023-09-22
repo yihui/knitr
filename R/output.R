@@ -713,17 +713,17 @@ add_html_caption = function(options, code, id = NULL) {
 #' # after you define and register the above method, data frames will be printed
 #' # as tables in knitr, which is different with the default print() behavior
 knit_print = function(x, ...) {
-  if (need_screenshot(x, ...)) {
-    html_screenshot(x)
-  } else {
-    UseMethod('knit_print')
-  }
+  UseMethod('knit_print')
 }
 
 #" the default print method is just print()/show()
 #' @export
 knit_print.default = function(x, ..., inline = FALSE) {
-  if (inline) x else normal_print(x)
+  if (need_screenshot(x, ...)) {
+    html_screenshot(x)
+  } else {
+    if (inline) x else normal_print(x)
+  }
 }
 
 #' @export
