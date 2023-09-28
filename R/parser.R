@@ -302,7 +302,35 @@ partition_chunk = function(engine, code) {
   meta = substr(src, nchar(s1) + 1, nchar(src) - nchar(s2))
   # see if the metadata looks like YAML or CSV
   if (grepl('^[^ :]+:($|\\s)', meta[1])) {
-    meta = yaml::yaml.load(meta, handlers = list(expr = parse_only))
+    meta = tryCatch(
+      yaml::yaml.load(meta, handlers = list(expr = parse_only)),
+      error = function(e) {
+        message = e$message
+        regex = "line (?<line>\\d+), column (?<column>\\d+)"
+        regex_result = regexpr(regex, message, perl = TRUE)
+        starts = attr(regex_result, "capture.start")
+        lengths = attr(regex_result, "capture.length")
+
+        line_index = substr(message, starts[,"line"], starts[,"line"] + lengths[,"line"] - 1)
+        column_index = substr(message, starts[,"column"], starts[,"column"] + lengths[,"column"] - 1)
+
+        line_index = as.integer(line_index)
+        column_index = as.integer(column_index)
+
+        spaces = paste(rep(" ", column_index), collapse = "")
+        cursor = paste(spaces, "^~~~~~", collapse = "")
+
+        split_indexes = seq_along(meta) <= line_index
+        before_cursor = meta[split_indexes]
+        after_cursor = meta[!split_indexes]
+        error_message = c(
+          e$message,
+          before_cursor, cursor, after_cursor
+        )
+
+        return(paste(error_message, sep = "\n"))
+      }
+    )
     if (!is.list(meta) || length(names(meta)) == 0) {
       warning('Invalid YAML option format in chunk: \n', one_string(meta), '\n')
       meta = list()
