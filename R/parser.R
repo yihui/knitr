@@ -324,8 +324,10 @@ partition_chunk = function(engine, code) {
         before_cursor = meta[split_indexes]
         after_cursor = meta[!split_indexes]
         error_message = c(
-          e$message,
-          before_cursor, cursor, after_cursor
+          "Failed to parse YAML: ", e$message, "\n",
+          before_cursor,
+          cursor,
+          after_cursor
         )
 
         return(paste(error_message, sep = "\n"))
