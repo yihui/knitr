@@ -22,7 +22,7 @@ new_defaults = function(value = list()) {
   set2 = function(values) {
     old = get(names(values), drop = FALSE)
     if (length(values)) {
-      if (locked) stop(
+      if (locked) warning(
         'The object is read-only and cannot be modified. If you have to modify it ',
         'for a legitimate reason, call the method $lock(FALSE) on the object before $set().'
       )
