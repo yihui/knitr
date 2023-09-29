@@ -24,7 +24,8 @@ new_defaults = function(value = list()) {
     if (length(values)) {
       if (locked) warning(
         'The object is read-only and cannot be modified. If you have to modify it ',
-        'for a legitimate reason, call the method $lock(FALSE) on the object before $set().'
+        'for a legitimate reason, call the method $lock(FALSE) on the object before $set().',
+        immediate. = TRUE
       )
       defaults <<- merge(values)
     }
