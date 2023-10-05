@@ -204,7 +204,6 @@ format_sci_one = function(
     return(round_digits(x)) # no need sci notation
 
   b = round_digits(x / 10^lx)
-  b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
     sci_notation('%s%s10^{%s}', b, times, lx)
@@ -225,7 +224,11 @@ format_sci_one = function(
 }
 
 sci_notation = function(format, base, times, power) {
-  sprintf(format, base, ifelse(base == '', '', times), power)
+  if (base %in% c('1', '-1')) {
+    times = ''
+    base = if (base == '1') '' else '-'
+  }
+  sprintf(format, base, times, power)
 }
 
 # vectorized version of format_sci_one()
