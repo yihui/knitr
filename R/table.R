@@ -285,9 +285,6 @@ kable_latex = function(
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
   escape = TRUE, ...
 ) {
-  # TODO: remove this hack
-  if (xfun::check_old_package('papaja', '0.1.1') && 'added_colnames' %in% names(list(...)))
-    stop('Throw an error for https://github.com/crsh/papaja/issues/563')
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
     align = paste0('{', align, '}')
