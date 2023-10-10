@@ -6,6 +6,10 @@
 
 - Negative numbers returned from inline R expressions lost their minus signs when formatted in the scientific notation (thanks, @fkohrt, #2288).
 
+## MAJOR CHANGES
+
+- `opts_current$set()` without `opts_current$lock(FALSE)` will trigger a warning instead of an error for now and it will become an error in future (#2296).
+
 # CHANGES IN knitr VERSION 1.44
 
 ## NEW FEATURES
