@@ -306,16 +306,10 @@ partition_chunk = function(engine, code) {
       yaml::yaml.load(meta, handlers = list(expr = parse_only)),
       error = function(e) {
         x = e$message
-        r = "line (?<line>\\d+), column (?<column>\\d+)"
-        m = regexpr(r, x, perl = TRUE)
-        starts = attr(m, "capture.start")
-        lengths = attr(m, "capture.length")
-
-        row = substr(x, starts[,"line"], starts[,"line"] + lengths[,"line"] - 1)
-        col = substr(x, starts[,"column"], starts[,"column"] + lengths[,"column"] - 1)
-
-        row = as.integer(row)
-        col = as.integer(col)
+        r = "line (?<row>\\d+), column (?<col>\\d+)"
+        m = regmatches(x, regexec(r, x, perl = TRUE))[[1]][-1]
+        row = as.integer(m['row'])
+        col = as.integer(m['col'])
 
         cursor = paste0(strrep(" ", col), "^~~~~~")
 
