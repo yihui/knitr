@@ -317,8 +317,7 @@ partition_chunk = function(engine, code) {
         line_index = as.integer(line_index)
         column_index = as.integer(column_index)
 
-        spaces = paste(rep(" ", column_index), collapse = "")
-        cursor = paste(spaces, "^~~~~~", collapse = "")
+        cursor = paste0(strrep(" ", column_index), "^~~~~~")
 
         split_indexes = seq_along(meta) <= line_index
         before_cursor = meta[split_indexes]
