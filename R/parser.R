@@ -312,18 +312,9 @@ partition_chunk = function(engine, code) {
         col = as.integer(m['col'])
 
         cursor = paste0(strrep(" ", col), "^~~~~~")
+        x = c("Failed to parse YAML: ", x, "\n", append(meta, cursor, row))
 
-        split_indexes = seq_along(meta) <= row
-        before_cursor = meta[split_indexes]
-        after_cursor = meta[!split_indexes]
-        error_message = c(
-          "Failed to parse YAML: ", x, "\n",
-          before_cursor,
-          cursor,
-          after_cursor
-        )
-
-        return(paste(error_message, collapse = "\n"))
+        return(paste(x, collapse = "\n"))
       }
     )
     if (!is.list(meta) || length(names(meta)) == 0) {
