@@ -330,7 +330,7 @@ partition_chunk = function(engine, code) {
           after_cursor
         )
 
-        return(paste(error_message, sep = "\n"))
+        return(paste(error_message, collapse = "\n"))
       }
     )
     if (!is.list(meta) || length(names(meta)) == 0) {
