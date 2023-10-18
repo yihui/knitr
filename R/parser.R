@@ -305,25 +305,25 @@ partition_chunk = function(engine, code) {
     meta = tryCatch(
       yaml::yaml.load(meta, handlers = list(expr = parse_only)),
       error = function(e) {
-        message = e$message
-        regex = "line (?<line>\\d+), column (?<column>\\d+)"
-        regex_result = regexpr(regex, message, perl = TRUE)
-        starts = attr(regex_result, "capture.start")
-        lengths = attr(regex_result, "capture.length")
+        x = e$message
+        r = "line (?<line>\\d+), column (?<column>\\d+)"
+        m = regexpr(r, x, perl = TRUE)
+        starts = attr(m, "capture.start")
+        lengths = attr(m, "capture.length")
 
-        line_index = substr(message, starts[,"line"], starts[,"line"] + lengths[,"line"] - 1)
-        column_index = substr(message, starts[,"column"], starts[,"column"] + lengths[,"column"] - 1)
+        row = substr(x, starts[,"line"], starts[,"line"] + lengths[,"line"] - 1)
+        col = substr(x, starts[,"column"], starts[,"column"] + lengths[,"column"] - 1)
 
-        line_index = as.integer(line_index)
-        column_index = as.integer(column_index)
+        row = as.integer(row)
+        col = as.integer(col)
 
-        cursor = paste0(strrep(" ", column_index), "^~~~~~")
+        cursor = paste0(strrep(" ", col), "^~~~~~")
 
-        split_indexes = seq_along(meta) <= line_index
+        split_indexes = seq_along(meta) <= row
         before_cursor = meta[split_indexes]
         after_cursor = meta[!split_indexes]
         error_message = c(
-          "Failed to parse YAML: ", e$message, "\n",
+          "Failed to parse YAML: ", x, "\n",
           before_cursor,
           cursor,
           after_cursor
