@@ -20,7 +20,8 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
 
   # parse 'em all
-  lapply(groups, function(g) {
+  lapply(seq_along(groups), function(i) {
+    g = groups[[i]]
     block = grepl(chunk.begin, g[1])
     if (!set.preamble && !parent_mode()) {
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
@@ -34,7 +35,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       params.src = if (group_pattern(chunk.begin)) {
         extract_params_src(chunk.begin, g[1])
       } else ''
-      parse_block(g[-1], g[1], params.src, markdown_mode)
+      parse_block(g[-1], g[1], params.src, markdown_mode, i)
     } else parse_inline(g, patterns)
   })
 }
@@ -74,7 +75,11 @@ strip_block = function(x, prefix = NULL) {
 dep_list = new_defaults()
 
 # separate params and R code in code chunks
-parse_block = function(code, header, params.src, markdown_mode = out_format('markdown')) {
+parse_block = function(code,
+                       header,
+                       params.src,
+                       markdown_mode = out_format('markdown'),
+                       block_index) {
   params = params.src
   engine = 'r'
   # consider the syntax ```{engine, opt=val} for chunk headers
@@ -104,7 +109,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
 
   # merge with possible chunk options written as (YAML or CSV) metadata in
   # chunk, and remove metadata from code body
-  parts = partition_chunk(engine, code)
+  parts = partition_chunk(engine, code, block_index)
   params = merge_list(params, parts$options)
   code = parts$code
 
@@ -263,7 +268,7 @@ comment_chars = local({
 #' csv_like = c("#| mine, echo = TRUE, fig.width = 8, foo = 'bar'", "1 + 1")
 #' writeLines(csv_like)
 #' knitr::partition_chunk("r", csv_like)
-partition_chunk = function(engine, code) {
+partition_chunk = function(engine, code, block_index) {
 
   res = list(yaml = NULL, src = NULL, code = code)
   # mask out empty blocks
@@ -311,8 +316,13 @@ partition_chunk = function(engine, code) {
         row = as.integer(m['row'])
         col = as.integer(m['col'])
 
+        line_index = current_lines(block_index)
+        x = sprintf(
+          "Failed to parse YAML inside code chunk at lines %d-%d. %s",
+          line_index[1], line_index[2], x
+        )
         cursor = paste0(strrep(" ", col), "^~~~~~")
-        x = c("Failed to parse YAML: ", x, "\n", append(meta, cursor, row))
+        x = c(x, "\n", append(meta, cursor, row))
 
         return(paste(x, collapse = "\n"))
       }
