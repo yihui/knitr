@@ -250,6 +250,7 @@ comment_chars = local({
 #' @param engine The name of the language engine (to determine the appropriate
 #'   comment character).
 #' @param code A character vector (lines of code).
+#' @param block_index The current block index (only used for reporting error messages).
 #' @return A list with the following items: \describe{\item{\code{options}}{The
 #'   parsed options (if any) as a list.} \item{\code{src}}{The part of the input
 #'   that contains the options.} \item{\code{code}}{The part of the input that
@@ -262,12 +263,12 @@ comment_chars = local({
 #' # parse yaml-like items
 #' yaml_like = c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar", "1 + 1")
 #' writeLines(yaml_like)
-#' knitr::partition_chunk("r", yaml_like)
+#' knitr::partition_chunk("r", yaml_like, 1)
 #'
 #' # parse CSV syntax
 #' csv_like = c("#| mine, echo = TRUE, fig.width = 8, foo = 'bar'", "1 + 1")
 #' writeLines(csv_like)
-#' knitr::partition_chunk("r", csv_like)
+#' knitr::partition_chunk("r", csv_like, 1)
 partition_chunk = function(engine, code, block_index) {
 
   res = list(yaml = NULL, src = NULL, code = code)
