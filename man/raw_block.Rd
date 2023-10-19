@@ -29,5 +29,5 @@ Functions \code{raw_latex()} and \code{raw_html()} are shorthands of
 \code{raw_block(x, 'latex')} and \code{raw_block(x, 'html')}, respectively.
 }
 \examples{
-knitr::raw_latex("\\\\emph{some text}")
+knitr::raw_latex('\\\\emph{some text}')
 }

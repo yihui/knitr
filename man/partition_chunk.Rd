@@ -4,13 +4,15 @@
 \alias{partition_chunk}
 \title{Partition chunk options from the code chunk body}
 \usage{
-partition_chunk(engine, code)
+partition_chunk(engine, code, block_index)
 }
 \arguments{
 \item{engine}{The name of the language engine (to determine the appropriate
 comment character).}
 
 \item{code}{A character vector (lines of code).}
+
+\item{block_index}{The current block index (only used for reporting error messages).}
 }
 \value{
 A list with the following items: \describe{\item{\code{options}}{The
@@ -30,13 +32,12 @@ Chunk options must be written on \emph{continuous} lines (i.e., all
 }
 \examples{
 # parse yaml-like items
-yaml_like = c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar",
-    "1 + 1")
+yaml_like = c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar", "1 + 1")
 writeLines(yaml_like)
-knitr::partition_chunk("r", yaml_like)
+knitr::partition_chunk("r", yaml_like, 1)
 
 # parse CSV syntax
 csv_like = c("#| mine, echo = TRUE, fig.width = 8, foo = 'bar'", "1 + 1")
 writeLines(csv_like)
-knitr::partition_chunk("r", csv_like)
+knitr::partition_chunk("r", csv_like, 1)
 }

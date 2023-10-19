@@ -32,9 +32,7 @@ These functions are hackish. Also note \code{hook_movecode()} assumes
   every figure/table environment must have a label.
 }
 \examples{
-\dontrun{
-knit_hooks$set(document = hook_movecode)
-}
+\dontrun{knit_hooks$set(document = hook_movecode)}
 # see example 103 at https://github.com/yihui/knitr-examples
 }
 \references{

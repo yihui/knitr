@@ -16,8 +16,7 @@ arguments and returns desired output. The object \code{knit_hooks} is used to
 access or set hooks in this package.
 }
 \examples{
-knit_hooks$get("source")
-knit_hooks$get("inline")
+knit_hooks$get('source'); knit_hooks$get('inline')
 }
 \references{
 Usage: \url{https://yihui.org/knitr/objects/}

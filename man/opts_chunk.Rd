@@ -37,8 +37,7 @@ See \code{str(knitr::opts_chunk$get())} for a list of default chunk options.
   \code{opts_current$set()} will throw an error.
 }
 \examples{
-opts_chunk$get("prompt")
-opts_chunk$get("fig.keep")
+opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
 }
 \references{
 Usage: \url{https://yihui.org/knitr/objects/}

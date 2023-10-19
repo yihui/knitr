@@ -40,8 +40,7 @@ The Leiningen engine \code{lein} requires lein-exec plugin; see
   \url{https://github.com/yihui/knitr/issues/1176} for details.
 }
 \examples{
-knit_engines$get("python")
-knit_engines$get("awk")
+knit_engines$get('python'); knit_engines$get('awk')
 names(knit_engines$get())
 }
 \references{

@@ -26,12 +26,11 @@ options in \file{~/.Rprofile} without loading \pkg{knitr}.
 See \code{str(knitr::opts_knit$get())} for a list of default package options.
 }
 \examples{
-opts_knit$get("verbose")
-opts_knit$set(verbose = TRUE)  # change it
+opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
 if (interactive()) {
-    # for unnamed chunks, use 'fig' as the figure prefix
-    opts_knit$set(unnamed.chunk.label = "fig")
-    knit("001-minimal.Rmd")  # from https://github.com/yihui/knitr-examples
+# for unnamed chunks, use 'fig' as the figure prefix
+opts_knit$set(unnamed.chunk.label='fig')
+knit('001-minimal.Rmd') # from https://github.com/yihui/knitr-examples
 }
 }
 \references{
