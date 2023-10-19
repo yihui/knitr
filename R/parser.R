@@ -35,7 +35,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       params.src = if (group_pattern(chunk.begin)) {
         extract_params_src(chunk.begin, g[1])
       } else ''
-      parse_block(g[-1], g[1], params.src, markdown_mode, i)
+      parse_block(g[-1], g[1], params.src, i, markdown_mode)
     } else parse_inline(g, patterns)
   })
 }
@@ -78,8 +78,8 @@ dep_list = new_defaults()
 parse_block = function(code,
                        header,
                        params.src,
-                       markdown_mode = out_format('markdown'),
-                       block_index) {
+                       block_index,
+                       markdown_mode = out_format('markdown')) {
   params = params.src
   engine = 'r'
   # consider the syntax ```{engine, opt=val} for chunk headers
