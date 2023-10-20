@@ -260,3 +260,21 @@ assert('fig.format and fig.dpi', {
   (dot_names(opts)[['dpi']] %==% 750)
   rm(opts)
 })
+
+assert('options using `.` are converted to `-` and default value replaced', {
+  opts = opts_chunk$merge(list('fig.cap' = 'caption', 'out.width' = 300))
+  (is.null(dash_names(opts)[['fig.cap']]))
+  (is.null(dash_names(opts)[['out.width']]))
+  (dash_names(opts)[['fig-cap']] %==% 'caption')
+  (dash_names(opts)[['out-width']] %==% 300)
+  rm(opts)
+})
+
+assert('dev and dpi are convert to fig-format and fig-dpi', {
+  opts = opts_chunk$merge(list('dev' = 'svg', 'dpi' = 750))
+  (is.null(dash_names(opts)[['dev']]))
+  (is.null(dash_names(opts)[['dpi']]))
+  (dash_names(opts)[['fig-format']] %==% 'svg')
+  (dash_names(opts)[['fig-dpi']] %==% 750)
+  rm(opts)
+})

@@ -57,8 +57,8 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
-            any::XML
             any::rcmdcheck
+            XML=?ignore-before-r=4.0.0
             targets=?ignore-before-r=4.0.0
             JuliaCall=?ignore-before-r=4.0.0
           needs: check

@@ -6,6 +6,8 @@
 
 - Negative numbers returned from inline R expressions lost their minus signs when formatted in the scientific notation (thanks, @fkohrt, #2288).
 
+- `convert_chunk_header(type = 'yaml')` will now use dash option name for known knitr options, and numeric option are kept with same significant digits, e.g `fig.width = 10` is converted to `fig-width: 10`.
+
 - Add the necessary `\newline` to the last subfigure (thanks, @slrellison, rstudio/rmarkdown#2518).
 
 ## MAJOR CHANGES
