@@ -854,6 +854,8 @@ convert_chunk_header = function(
         }
         x
       })
+      # transform dot option to dash option
+      params3 = dash_names(params3)
       # convert to yaml and add prefix
       params3 = strsplit(yaml::as.yaml(
         params3, handlers = list(

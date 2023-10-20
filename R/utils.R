@@ -266,6 +266,24 @@ dot_names = function(x) {
   x
 }
 
+dash_names = function(x) {
+  dots = grep('[.]', names(x), value = TRUE)
+  dashes = gsub('[.]', '-', dots)
+  # only convert names that are known to knitr
+  i = dots %in% c(names(opts_chunk_attr), names(opts_chunk$get()))
+  if (any(i)) {
+    x[dashes[i]] = x[dots[i]]
+    x[dots[i]] = NULL
+  }
+  # Convert to specific Quarto options name
+  aliases = c(dev = 'fig-format', dpi = 'fig-dpi')
+  for (j in intersect(names(x), names(aliases))) {
+    x[[aliases[j]]] = x[[j]]
+    x[j] = NULL
+  }
+  x
+}
+
 # initially for compatibility with Sweave and old beta versions of knitr
 # but now also place to tweak default options
 fix_options = function(options) {
