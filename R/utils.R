@@ -251,8 +251,9 @@ tikz_dict = function(path) {
 fix_names = function(x, char1, char2, aliases) {
   name1 = grep(char1, names(x), value = TRUE, fixed = TRUE)
   name2 = gsub(char1, char2, name1, fixed = TRUE)
+  name3 = c(names(opts_chunk_attr), names(opts_chunk$get()))
   # only convert names that are known to knitr
-  i = name2 %in% c(names(opts_chunk_attr), names(opts_chunk$get()))
+  i = (if (char1 == '.') name1 else name2) %in% name3
   if (any(i)) {
     x[name2[i]] = x[name1[i]]  # move values to to new names
     x[name1[i]] = NULL  # delete old names
