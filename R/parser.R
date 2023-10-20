@@ -864,6 +864,14 @@ convert_chunk_header = function(
             x = tolower(x)
             class(x) = 'verbatim'
             x
+          },
+          # use character with verbatim for no quotes
+          # so that numeric as kept unchanged (without changing precision)
+          # fig.width = 10, should not be fig-width: 10.0
+          numeric = function(x) {
+            x = as.character(x)
+            class(x) = 'verbatim'
+            x
           }), line.sep = '\n'), '\n')[[1]]
       params3 = paste0(prefix, params3)
     }
