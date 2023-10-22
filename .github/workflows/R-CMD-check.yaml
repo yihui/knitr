@@ -58,7 +58,7 @@ jobs:
         with:
           extra-packages: |
             any::rcmdcheck
-            XML=?ignore-before-r=4.0.0
+            gridSVG=?ignore-before-r=4.0.0
             targets=?ignore-before-r=4.0.0
             JuliaCall=?ignore-before-r=4.0.0
           needs: check
