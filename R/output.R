@@ -312,20 +312,17 @@ process_file = function(text, output) {
     if (progress && is.function(pb$update)) pb$update(i)
     group = groups[[i]]
     knit_concord$set(block = i)
-    res[i] = withCallingHandlers(
+    res[i] = handle_error(
       withCallingHandlers(
         if (tangle) process_tangle(group) else process_group(group),
         error = function(e) if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
       ),
-      error = function(e) {
+      function(e, loc) {
         setwd(wd)
         write_utf8(res, output %n% stdout())
-        message(
-          '\nQuitting from lines ', paste(current_lines(i), collapse = '-'),
-          if (labels[i] != '') sprintf(' [%s]', labels[i]),
-          sprintf(' (%s)', knit_concord$get('infile'))
-        )
-      }
+        paste0('\nQuitting from lines ', loc)
+      },
+      if (labels[i] != '') sprintf(' [%s]', labels[i])
     )
   }
 
@@ -336,6 +333,15 @@ process_file = function(text, output) {
   if (tangle) res = strip_white(res)
 
   res
+}
+
+# if an expr throws an an error, message the location of the error if possible
+handle_error = function(expr, handler, label = '') {
+  withCallingHandlers(expr, error = function(e) {
+    # return a string to point out the error location
+    loc = paste0(current_lines(), label, sprintf(' (%s)', knit_concord$get('infile')))
+    message(one_string(handler(e, loc)))
+  })
 }
 
 auto_out_name = function(input, ext = tolower(file_ext(input))) {

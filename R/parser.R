@@ -304,24 +304,18 @@ partition_chunk = function(engine, code) {
   meta = substr(src, nchar(s1) + 1, nchar(src) - nchar(s2))
   # see if the metadata looks like YAML or CSV
   if (grepl('^[^ :]+:($|\\s)', meta[1])) {
-    meta = tryCatch(
+    meta = handle_error(
       yaml::yaml.load(meta, handlers = list(expr = parse_only)),
-      error = function(e) {
+      function(e, loc) {
         x = e$message
-        r = "line (?<row>\\d+), column (?<col>\\d+)"
-        m = regmatches(x, regexec(r, x, perl = TRUE))[[1]][-1]
-        row = as.integer(m['row'])
-        col = as.integer(m['col'])
-
-        line_index = current_lines()
-        x = sprintf(
-          "Failed to parse YAML inside code chunk at lines %d-%d. %s",
-          line_index[1], line_index[2], x
+        r = 'line (\\d+), column (\\d+)'
+        m = regmatches(x, regexec(r, x, perl = TRUE))[[1]]
+        if (length(m) < 3) return()
+        m = as.integer(m[-1])  # c(row, col)
+        c(
+          sprintf('Failed to parse YAML inside code chunk at lines %s:', loc), '',
+          append(meta, paste0(strrep(' ', m[2]), '^~~~~~'), m[1]), ''
         )
-        cursor = paste0(strrep(" ", col), "^~~~~~")
-        x = c(x, "\n", append(meta, cursor, row))
-
-        return(paste(x, collapse = "\n"))
       }
     )
     if (!is.list(meta) || length(names(meta)) == 0) {
