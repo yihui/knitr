@@ -259,12 +259,12 @@ comment_chars = local({
 #' # parse yaml-like items
 #' yaml_like = c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar", "1 + 1")
 #' writeLines(yaml_like)
-#' knitr::partition_chunk("r", yaml_like, 1)
+#' knitr::partition_chunk("r", yaml_like)
 #'
 #' # parse CSV syntax
 #' csv_like = c("#| mine, echo = TRUE, fig.width = 8, foo = 'bar'", "1 + 1")
 #' writeLines(csv_like)
-#' knitr::partition_chunk("r", csv_like, 1)
+#' knitr::partition_chunk("r", csv_like)
 partition_chunk = function(engine, code) {
 
   res = list(yaml = NULL, src = NULL, code = code)
