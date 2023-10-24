@@ -14,7 +14,7 @@ current_lines = function(i = knit_concord$get('block')) {
   # a helpr function to return line numbers for block i
   n = knit_concord$get('inlines')
   n1 = sum(head(n, i)); n0 = n1 - n[i] + 2
-  c(min(n0, n1), n1)
+  paste(c(min(n0, n1), n1), collapse = '-')
 }
 
 # generate concordance for RStudio
