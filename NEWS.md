@@ -4,6 +4,16 @@
 
 - Special characters in the chunk option `fig.alt` are properly escaped now (thanks, @jay-sf, #2290).
 
+- Negative numbers returned from inline R expressions lost their minus signs when formatted in the scientific notation (thanks, @fkohrt, #2288).
+
+- `convert_chunk_header(type = 'yaml')` will now use dash option name for known knitr options, and numeric option are kept with same significant digits, e.g `fig.width = 10` is converted to `fig-width: 10`.
+
+- Add the necessary `\newline` to the last subfigure (thanks, @slrellison, rstudio/rmarkdown#2518).
+
+## MAJOR CHANGES
+
+- `opts_current$set()` without `opts_current$lock(FALSE)` will trigger a warning instead of an error for now and it will become an error in future (#2296).
+
 # CHANGES IN knitr VERSION 1.44
 
 ## NEW FEATURES

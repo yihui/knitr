@@ -204,7 +204,6 @@ format_sci_one = function(
     return(round_digits(x)) # no need sci notation
 
   b = round_digits(x / 10^lx)
-  b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
     sci_notation('%s%s10^{%s}', b, times, lx)
@@ -225,7 +224,11 @@ format_sci_one = function(
 }
 
 sci_notation = function(format, base, times, power) {
-  sprintf(format, base, ifelse(base == '', '', times), power)
+  if (base %in% c('1', '-1')) {
+    times = ''
+    base = if (base == '1') '' else '-'
+  }
+  sprintf(format, base, times, power)
 }
 
 # vectorized version of format_sci_one()
@@ -243,24 +246,31 @@ tikz_dict = function(path) {
   paste(sans_ext(basename(path)), 'tikzDictionary', sep = '-')
 }
 
-# convert dashes in option names with dots (e.g., `fig-height` to `fig.height`)
-dot_names = function(x) {
-  dashes = grep('-', names(x), value = TRUE)
-  dots   = gsub('-', '.', dashes)
+# convert dashes in option names with dots (e.g., `fig-height` to `fig.height`),
+# and vice versa (dots work for knitr, and dashes for Quarto)
+fix_names = function(x, char1, char2, aliases) {
+  name1 = grep(char1, names(x), value = TRUE, fixed = TRUE)
+  name2 = gsub(char1, char2, name1, fixed = TRUE)
+  name3 = c(names(opts_chunk_attr), names(opts_chunk$get()))
   # only convert names that are known to knitr
-  i = dots %in% c(names(opts_chunk_attr), names(opts_chunk$get()))
+  i = (if (char1 == '.') name1 else name2) %in% name3
   if (any(i)) {
-    x[dots[i]] = x[dashes[i]]
-    x[dashes[i]] = NULL
+    x[name2[i]] = x[name1[i]]  # move values to to new names
+    x[name1[i]] = NULL  # delete old names
   }
-
-  # normalize aliases (introduced by Quarto)
-  aliases = c(fig.format = 'dev', fig.dpi = 'dpi')
   for (j in intersect(names(x), names(aliases))) {
     x[[aliases[j]]] = x[[j]]
     x[[j]] = NULL
   }
   x
+}
+
+dot_names = function(x) {
+  fix_names(x, '-', '.', c(fig.format = 'dev', fig.dpi = 'dpi'))
+}
+
+dash_names = function(x) {
+  fix_names(x, '.', '-', c(dev = 'fig-format', dpi = 'fig-dpi'))
 }
 
 # initially for compatibility with Sweave and old beta versions of knitr
@@ -1155,10 +1165,8 @@ txt_pb = function(total, labels) {
     if (identical(con, '')) con = stdout()
     if (!inherits(con, 'connection')) return(TRUE)
     if (isatty(con)) return(FALSE)
-    # RStudio's background jobs
-    if (Sys.getenv('RSTUDIO_CHILD_PROCESS_PANE') %in% c('job', 'build')) return(FALSE)
-    # when RStudio is available, return FALSE
-    is.null(tryCatch(rstudioapi::versionInfo(), error = function(e) NULL))
+    # when in RStudio, return FALSE
+    Sys.getenv('RSTUDIO') != '1'
   })()
   # use simple progress output without the bar but only progress and labels
   if (simple) return(list(

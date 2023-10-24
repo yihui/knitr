@@ -879,6 +879,8 @@ convert_chunk_header = function(
         }
         x
       })
+      # transform dot option to dash option
+      params3 = dash_names(params3)
       # convert to yaml and add prefix
       params3 = strsplit(yaml::as.yaml(
         params3, handlers = list(
@@ -887,6 +889,14 @@ convert_chunk_header = function(
             x = tolower(x)
             class(x) = 'verbatim'
             x
+          },
+          # use character with verbatim for no quotes
+          # so that integers as kept unchanged (without changing precision)
+          # fig.width = 10, should not be fig-width: 10.0
+          numeric = function(x) {
+            if (length(x) != 1) return(x)
+            x2 = as.integer(x)
+            if (x2 == x) x2 else x
           }), line.sep = '\n'), '\n')[[1]]
       params3 = paste0(prefix, params3)
     }
