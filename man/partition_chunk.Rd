@@ -4,15 +4,13 @@
 \alias{partition_chunk}
 \title{Partition chunk options from the code chunk body}
 \usage{
-partition_chunk(engine, code, block_index)
+partition_chunk(engine, code)
 }
 \arguments{
 \item{engine}{The name of the language engine (to determine the appropriate
 comment character).}
 
 \item{code}{A character vector (lines of code).}
-
-\item{block_index}{The current block index (only used for reporting error messages).}
 }
 \value{
 A list with the following items: \describe{\item{\code{options}}{The

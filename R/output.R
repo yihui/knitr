@@ -311,6 +311,7 @@ process_file = function(text, output) {
     }
     if (progress && is.function(pb$update)) pb$update(i)
     group = groups[[i]]
+    knit_concord$set(block = i)
     res[i] = withCallingHandlers(
       withCallingHandlers(
         if (tangle) process_tangle(group) else process_group(group),

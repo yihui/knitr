@@ -19,11 +19,11 @@ opts_knit$set(out.format = 'markdown')
 assert(
   'parse_params() parses the language engine from ```{lang}',
   identical(
-    parse_block(NULL, '', 'r, foo, a=1,', 1)$params,
+    parse_block(NULL, '', 'r, foo, a=1,')$params,
     alist(label = 'foo', a = 1)
   ),
   identical(
-    parse_block(NULL, '', 'Rcpp, foo, a=1,', 1)$params,
+    parse_block(NULL, '', 'Rcpp, foo, a=1,')$params,
     alist(label = 'foo', a = 1, engine = 'Rcpp')
   )
 )
@@ -101,16 +101,16 @@ knit_code$restore()
 knit_code$restore(list(a = '1+1'))
 
 assert(
-  !has_error(parse_block(NULL, '', 'label = "a"', 1)),
-  has_error(parse_block('2+2', '', 'label = "a"', 1)),
-  has_error(parse_block(NULL, '','label = "a", code = "2+2"', 1)),
-  has_error(parse_block(NULL, '','label = "a", file = "dummy.R"', 1))
+  !has_error(parse_block(NULL, '', 'label = "a"')),
+  has_error(parse_block('2+2', '', 'label = "a"')),
+  has_error(parse_block(NULL, '','label = "a", code = "2+2"')),
+  has_error(parse_block(NULL, '','label = "a", file = "dummy.R"'))
 )
 op = options(knitr.duplicate.label = 'allow')
 assert(
-  !has_error(parse_block('2+2', '', 'label = "a"', 1)),
-  !has_error(parse_block(NULL, '','label = "a", code = "2+2"', 1)),
-  !has_error(parse_block(NULL, '','label = "a", file = "dummy.R"', 1))
+  !has_error(parse_block('2+2', '', 'label = "a"')),
+  !has_error(parse_block(NULL, '','label = "a", code = "2+2"')),
+  !has_error(parse_block(NULL, '','label = "a", file = "dummy.R"'))
 )
 options(op)
 
