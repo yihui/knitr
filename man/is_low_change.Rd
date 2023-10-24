@@ -18,7 +18,7 @@ Check if one plot only contains a low-level update of another plot.
 }
 \examples{
 pdf(NULL)
-dev.control('enable')  # enable plot recording
+dev.control("enable")  # enable plot recording
 plot(1:10)
 p1 = recordPlot()
 abline(0, 1)  # add a line (a low-level change)

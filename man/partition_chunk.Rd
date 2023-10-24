@@ -32,7 +32,8 @@ Chunk options must be written on \emph{continuous} lines (i.e., all
 }
 \examples{
 # parse yaml-like items
-yaml_like = c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar", "1 + 1")
+yaml_like = c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar",
+    "1 + 1")
 writeLines(yaml_like)
 knitr::partition_chunk("r", yaml_like, 1)
 

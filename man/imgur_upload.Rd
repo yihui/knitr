@@ -41,16 +41,19 @@ Please register your own Imgur application to get your client ID; you
 }
 \examples{
 \dontrun{
-f = tempfile(fileext = '.png')
-png(f); plot(rnorm(100), main = R.version.string); dev.off()
+f = tempfile(fileext = ".png")
+png(f)
+plot(rnorm(100), main = R.version.string)
+dev.off()
 
 res = imgur_upload(f)
 res  # link to original URL of the image
-attr(res, 'XML')  # all information
-if (interactive()) browseURL(res)
+attr(res, "XML")  # all information
+if (interactive())
+    browseURL(res)
 
 # to use your own key
-options(knitr.imgur.key = 'your imgur key')
+options(knitr.imgur.key = "your imgur key")
 }
 }
 \references{
