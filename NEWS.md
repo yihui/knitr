@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.45
 
+## NEW FEATURES
+
+- Improved the error message to contain more specific information when YAML chunk options could not be parsed (thanks, @pedropark99, #2294).
+
 ## BUG FIXES
 
 - Special characters in the chunk option `fig.alt` are properly escaped now (thanks, @jay-sf, #2290).
