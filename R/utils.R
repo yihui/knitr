@@ -1141,9 +1141,7 @@ str_split = function(x, split, ...) {
 # methods to update/close it
 txt_pb = function(total, labels) {
   if (getOption('knitr.progress.linenums', FALSE)) {
-    nums = sapply(seq_along(labels), function(i) {
-      paste(current_lines(i), collapse = '-')
-    })
+    nums = sapply(seq_along(labels), current_lines)
     labels = sprintf(
       '%s%s%s:%s', labels, ifelse(labels == '', '', ' @ '),
       knit_concord$get('infile'), nums

@@ -20,7 +20,9 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
 
   # parse 'em all
-  lapply(groups, function(g) {
+  lapply(seq_along(groups), function(i) {
+    knit_concord$set(block = i)
+    g = groups[[i]]
     block = grepl(chunk.begin, g[1])
     if (!set.preamble && !parent_mode()) {
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
@@ -302,7 +304,20 @@ partition_chunk = function(engine, code) {
   meta = substr(src, nchar(s1) + 1, nchar(src) - nchar(s2))
   # see if the metadata looks like YAML or CSV
   if (grepl('^[^ :]+:($|\\s)', meta[1])) {
-    meta = yaml::yaml.load(meta, handlers = list(expr = parse_only))
+    meta = handle_error(
+      yaml::yaml.load(meta, handlers = list(expr = parse_only)),
+      function(e, loc) {
+        x = e$message
+        r = 'line (\\d+), column (\\d+)'
+        m = regmatches(x, regexec(r, x, perl = TRUE))[[1]]
+        if (length(m) < 3) return()
+        m = as.integer(m[-1])  # c(row, col)
+        c(
+          sprintf('Failed to parse YAML inside code chunk at lines %s:', loc), '',
+          append(meta, paste0(strrep(' ', m[2]), '^~~~~~'), m[1]), ''
+        )
+      }
+    )
     if (!is.list(meta) || length(names(meta)) == 0) {
       warning('Invalid YAML option format in chunk: \n', one_string(meta), '\n')
       meta = list()
