@@ -80,7 +80,10 @@ hook_plot_tex = function(x, options) {
   fig.ncol = options$fig.ncol %n% fig.num
   if (is.null(fig.sep <- options$fig.sep)) {
     fig.sep = character(fig.num)
-    if (fig.ncol < fig.num) fig.sep[seq(fig.ncol, fig.num - 1L, fig.ncol)] = '\\newline'
+    # add \newline after every fig.ncol figures; if the last figure is not the
+    # last on its row, skip adding \newline (not necessary, but may be harmless)
+    if (fig.ncol < fig.num)
+      fig.sep[seq(fig.ncol, fig.num - (fig.num %% fig.ncol > 0), fig.ncol)] = '\\newline'
   }
   sep.cur = NULL
 
