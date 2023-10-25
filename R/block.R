@@ -546,6 +546,9 @@ merge_character = function(res) {
 }
 
 call_inline = function(block) {
+  optc = opts_current$get(); on.exit(opts_current$restore(optc), add = TRUE)
+  params = opts_chunk$merge(list(label = unnamed_chunk()))
+  opts_current$restore(params)
   if (opts_knit$get('progress')) print(block)
   in_input_dir(inline_exec(block))
 }
