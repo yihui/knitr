@@ -8,6 +8,8 @@
 
 - The object `opts_current` will be restored after each code chunk has finished executing. Previously, it would not be restored, which means even for inline R expressions, `opts_current$get()` will inherit chunk options from a previous code chunk (thanks, @rundel, #1988). Besides, `opts_current$get('label')` will return a unique label for inline expressions. One possible application is to construct unique figure paths via `fig_path()` (e.g., ropensci/magick#310).
 
+- The naming scheme for unnamed chunks has changed: previously, the number `i` in the label `unnamed-chunk-i` denotes the i-th *unnamed* chunk; now it denotes the i-th chunk. Note that the "chunk" here includes both code chunks and prose (text) chunks, which means, for example, the 3rd code chunk could be the 5th chunk in the document, and its index will be 5. For child documents, the naming scheme will be `unnamed-chunk-i-j`, where `i` is the chunk index, and `j` is the index of the unnamed chunk. The suffix `j` is to make sure the label is unique. In general, you are recommended to label your code chunks explicitly and not to rely on this naming scheme when a code chunk has side-effects such as plots or cache.
+
 ## BUG FIXES
 
 - Special characters in the chunk option `fig.alt` are properly escaped now (thanks, @jay-sf, #2290).

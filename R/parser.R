@@ -171,7 +171,7 @@ clean_empty_params = function(params) {
 # autoname for unnamed chunk
 unnamed_chunk = function(prefix = NULL, i = chunk_counter()) {
   if (is.null(prefix)) prefix = opts_knit$get('unnamed.chunk.label')
-  paste(prefix, i, sep = '-')
+  paste(c(prefix, knit_concord$get('block'), if (child_mode()) i), collapse = '-')
 }
 
 # parse params from chunk header
