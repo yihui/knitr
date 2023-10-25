@@ -169,9 +169,9 @@ clean_empty_params = function(params) {
 }
 
 # autoname for unnamed chunk
-unnamed_chunk = function(prefix = NULL, i = chunk_counter()) {
+unnamed_chunk = function(prefix = NULL, suffix = child_mode()) {
   if (is.null(prefix)) prefix = opts_knit$get('unnamed.chunk.label')
-  paste(c(prefix, knit_concord$get('block'), if (child_mode()) i), collapse = '-')
+  paste(c(prefix, knit_concord$get('block'), if (suffix) chunk_counter()), collapse = '-')
 }
 
 # parse params from chunk header
@@ -492,7 +492,7 @@ read_chunk = function(
   labels = trimws(gsub(lab, '\\3', sapply(groups, `[`, 1)))
   labels = gsub(',.*', '', labels)  # strip off possible chunk options
   code = lapply(groups, strip_chunk, roxygen_comments)
-  for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()
+  for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk(suffix = TRUE)
   knit_code$set(setNames(code, labels))
 }
 
