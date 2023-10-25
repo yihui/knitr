@@ -4,6 +4,10 @@
 
 - Improved the error message to contain more specific information when YAML chunk options could not be parsed (thanks, @pedropark99, #2294).
 
+## MAJOR CHANGES
+
+- The object `opts_current` will be restored after each code chunk has finished executing. Previously, it would not be restored, which means even for inline R expressions, `opts_current$get()` will inherit chunk options from a previous code chunk (thanks, @rundel, #1988). Besides, `opts_current$get('label')` will return a unique label for inline expressions. One possible application is to construct unique figure paths via `fig_path()` (e.g., ropensci/magick#310).
+
 ## BUG FIXES
 
 - Special characters in the chunk option `fig.alt` are properly escaped now (thanks, @jay-sf, #2290).

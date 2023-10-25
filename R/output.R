@@ -151,14 +151,10 @@ knit = function(
       useFancyQuotes = FALSE, device = pdf_null, knitr.in.progress = TRUE
     )
     on.exit(options(oopts), add = TRUE)
-    # restore chunk options after parent exits
-    optc = opts_chunk$get(); ocode = knit_code$get(); optk = opts_knit$get()
-    on.exit({
-      opts_chunk$restore(optc)
-      knit_code$restore(ocode)
-      opts_current$restore()
-      opts_knit$restore(optk)
-    }, add = TRUE)
+    # restore objects like chunk options after parent exits
+    opta = list(opts_chunk, opts_current, knit_code, opts_knit)
+    optv = lapply(opta, function(o) o$get())
+    on.exit(for (i in seq_along(opta)) opta[[i]]$restore(optv[[i]]), add = TRUE)
     opts_knit$set(
       output.dir = getwd(),  # record working directory in 1st run
       tangle = tangle, progress = opts_knit$get('progress') && !quiet
