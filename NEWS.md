@@ -22,7 +22,7 @@
 
 ## MINOR CHANGES
 
-- For R Markdown documents, figure output is wrapped in raw `latex` blocks when the output is LaTeX code (thanks, @s-u, #2302).
+- For R Markdown documents, figure output is now wrapped in raw `latex` blocks when the output is LaTeX code (thanks, @s-u, #2302).
 
 # CHANGES IN knitr VERSION 1.44
 
