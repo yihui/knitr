@@ -4,6 +4,10 @@
 
 - Improved the error message to contain more specific information when YAML chunk options could not be parsed (thanks, @pedropark99, #2294).
 
+## MAJOR CHANGES
+
+- The object `opts_current` will be restored after each code chunk has finished executing. Previously, it would not be restored, which means even for inline R expressions, `opts_current$get()` will inherit chunk options from a previous code chunk (thanks, @rundel, #1988). Besides, `opts_current$get('label')` will return a unique label for inline expressions. One possible application is to construct unique figure paths via `fig_path()` (e.g., ropensci/magick#310).
+
 ## BUG FIXES
 
 - Special characters in the chunk option `fig.alt` are properly escaped now (thanks, @jay-sf, #2290).
@@ -14,15 +18,11 @@
 
 - Add the necessary `\newline` to the last subfigure (thanks, @slrellison, rstudio/rmarkdown#2518).
 
+- Percent signs (`%`) in LaTeX figure captions and short captions are properly escaped now (thanks, @s-u, #2302).
+
 ## MAJOR CHANGES
 
 - `opts_current$set()` without `opts_current$lock(FALSE)` will trigger a warning instead of an error for now and it will become an error in future (#2296).
-
-- The object `opts_current` will be restored after each code chunk has finished executing. Previously, it would not be restored, which means even for inline R expressions, `opts_current$get()` will inherit chunk options from a previous code chunk (thanks, @rundel, #1988). Besides, `opts_current$get('label')` will return a unique label for inline expressions. One possible application is to construct unique figure paths via `fig_path()` (e.g., ropensci/magick#310).
-
-## MINOR CHANGES
-
-- For R Markdown documents, figure output is now wrapped in raw `latex` blocks when the output is LaTeX code (thanks, @s-u, #2302).
 
 # CHANGES IN knitr VERSION 1.44
 

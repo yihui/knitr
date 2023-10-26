@@ -146,7 +146,7 @@ hook_plot_tex = function(x, options) {
       }
       scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
       cap = if (cap == '') '' else sprintf(
-        '\\caption%s{%s}%s\n', scap, cap,
+        '\\caption%s{%s}%s\n', escape_percent(scap), escape_percent(cap),
         create_label(lab, if (mcap) c('-', fig.cur), latex = TRUE)
       )
       fig2 = sprintf('%s\\end{%s}\n', cap, options$fig.env)
@@ -191,6 +191,9 @@ hook_plot_tex = function(x, options) {
     resize2, sub2, sep.cur, align2, fig2
   )
 }
+
+# % -> \%, but do not touch \%
+escape_percent = function(x) gsub('(?<!\\\\)%', '\\\\%', x, perl = TRUE)
 
 .chunk.hook.tex = function(x, options) {
   ai = output_asis(x, options)

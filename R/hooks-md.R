@@ -5,13 +5,13 @@ hook_plot_md = function(x, options) {
   if (is.null(to <- pandoc_to()) || is_html_output(to))
     return(hook_plot_md_base(x, options))
   if ((options$fig.show == 'animate' || is_tikz_dev(options)) && is_latex_output())
-    return(raw_latex(hook_plot_tex(x, options)))
+    return(hook_plot_tex(x, options))
   office_output = to %in% c('docx', 'pptx', 'rtf', 'odt')
   if (need_special_plot_hook(options)) {
     if (is_latex_output()) {
       # Pandoc < 1.13 does not support \caption[]{} so suppress short caption
       if (is.null(options$fig.scap)) options$fig.scap = NA
-      return(raw_latex(hook_plot_tex(x, options)))
+      return(hook_plot_tex(x, options))
     }
     if (office_output) {
       if (options$fig.align != 'default') {
