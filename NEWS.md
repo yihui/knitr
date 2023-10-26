@@ -22,6 +22,10 @@
 
 - `opts_current$set()` without `opts_current$lock(FALSE)` will trigger a warning instead of an error for now and it will become an error in future (#2296).
 
+## MINOR CHANGES
+
+- For R Markdown documents, figure output is wrapped in raw `latex` blocks when the output is LaTeX code (thanks, @s-u, #2302).
+
 # CHANGES IN knitr VERSION 1.44
 
 ## NEW FEATURES
