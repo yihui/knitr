@@ -86,10 +86,9 @@ write_bib = function(
   x = setdiff(x, setdiff(xfun::base_pkgs(), 'base'))
   x = sort(x)
   bib = sapply(x, function(pkg) {
-    cite = citation(pkg, auto = if (pkg != 'base') {
-      meta = packageDescription(pkg, lib.loc = lib.loc)
-      # don't use the citation() URL if the package has provided its own URL
-      if (is.null(meta$URL)) return(meta)
+    meta = packageDescription(pkg, lib.loc = lib.loc)
+    # don't use the citation() URL if the package has provided its own URL
+    cite = citation(pkg, auto = if (is.null(meta$URL)) meta else {
       if (packageURL) meta$Repository = meta$RemoteType = NULL
       # the package may have provided multiple URLs, in which case we use the
       # first. We also work around a bug in citation() up to R 4.3.1. The grep

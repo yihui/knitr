@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.46
 
+## BUG FIXES
+
+- `write_bib()` generated empty entries for packages without URLs (thanks, @bastistician, #2304).
 
 # CHANGES IN knitr VERSION 1.45
 
