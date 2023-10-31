@@ -4,6 +4,8 @@
 
 - `write_bib()` generated empty entries for packages without URLs (thanks, @bastistician, #2304).
 
+- The `family` argument was not passed to the `pdf` device (thanks, @sebkopf, rstudio/rmarkdown#2526).
+
 # CHANGES IN knitr VERSION 1.45
 
 ## NEW FEATURES
