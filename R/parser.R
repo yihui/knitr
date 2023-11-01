@@ -562,9 +562,6 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
   in.chunk = FALSE  # whether inside a chunk now
   pattern.end = NA  # the expected chunk end pattern (derived from header)
   b = NA  # the last found chunk header
-  # TODO: for now we only disallow unmatched delimiters during R CMD check
-  # that's not running on CRAN; we will fully disallow it in the future (#2057)
-  signal = if (is_R_CMD_check() && !(is_cran() || is_bioc())) stop2 else warning2
   g = NA  # group index: odd - text; even - chunk
   fun = function(is.begin, is.end, line, i) {
     if (i == 1) {
@@ -583,7 +580,7 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
       }  # otherwise ignore the chunk header
       return(g)
     }
-    if (in.chunk && is.end && match_chunk_end(pattern.end, line, i, b, lines, signal)) {
+    if (in.chunk && is.end && match_chunk_end(pattern.end, line, i, b, lines)) {
       in.chunk <<- FALSE
       g <<- g + 1
       return(g - 1)  # don't use incremented g yet; use it in the next step
@@ -605,7 +602,7 @@ match_chunk_begin = function(pattern.end, x, pattern = '^\\1\\\\{') {
   grepl(gsub('^([^`]*`+).*', pattern, pattern.end), x)
 }
 
-match_chunk_end = function(pattern, line, i, b, lines, signal = stop) {
+match_chunk_end = function(pattern, line, i, b, lines) {
   if (is.na(pattern) || grepl(pattern, line)) return(TRUE)
   n = length(lines)
   # if the exact match was not found, look ahead to see if there is another
@@ -617,14 +614,13 @@ match_chunk_end = function(pattern, line, i, b, lines, signal = stop) {
     if (!any(match_chunk_begin(pattern, lines[i + 1:(k - 1)], '^\\1`*\\\\{')))
       return(FALSE)
   }
-  signal(
+  stop2(
     'The closing backticks on line ', i, ' ("', line, '") in ', current_input(),
     ' do not match the opening backticks "',
     gsub('\\^(\\s*`+).*', '\\1', pattern), '" on line ', b, '. You are recommended to ',
     'fix either the opening or closing delimiter of the code chunk to use exactly ',
     'the same numbers of backticks and same level of indentation (or blockquote).'
   )
-  TRUE
 }
 
 #' Get all chunk labels in a document
