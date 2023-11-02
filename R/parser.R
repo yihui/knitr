@@ -614,13 +614,25 @@ match_chunk_end = function(pattern, line, i, b, lines) {
     if (!any(match_chunk_begin(pattern, lines[i + 1:(k - 1)], '^\\1`*\\\\{')))
       return(FALSE)
   }
-  stop2(
+  signal = if (check_old(
+    c('abbyyR', 'data.table', 'ensembleR', 'FSinR', 'funmediation', 'leiden', 'liger', 'loo', 'microsamplingDesign', 'mmpf', 'rSEA', 'StructFDR', 'TRMF'),
+    c('0.5.5', '1.14.8', '0.1.0', '2.0.5', '1.0.1', '0.4.3', '2.0.1', '2.6.0', '1.0.8', '0.0.5', '2.1.1', '1.3', '0.1.5')
+  )) warning2 else stop2
+  signal(
     'The closing backticks on line ', i, ' ("', line, '") in ', current_input(),
     ' do not match the opening backticks "',
     gsub('\\^(\\s*`+).*', '\\1', pattern), '" on line ', b, '. You are recommended to ',
     'fix either the opening or closing delimiter of the code chunk to use exactly ',
     'the same numbers of backticks and same level of indentation (or blockquote).'
   )
+  TRUE
+}
+
+# TODO: just use check_old_package() in xfun >= 0.42
+check_old = function(name, version) {
+  for (i in seq_along(name))
+    if (xfun::check_old_package(name[i], version[i])) return(TRUE)
+  FALSE
 }
 
 #' Get all chunk labels in a document
