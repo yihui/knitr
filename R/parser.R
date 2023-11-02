@@ -614,16 +614,18 @@ match_chunk_end = function(pattern, line, i, b, lines) {
     if (!any(match_chunk_begin(pattern, lines[i + 1:(k - 1)], '^\\1`*\\\\{')))
       return(FALSE)
   }
-  signal = if (check_old(
+  # TODO: clean up the exceptions here (although perhaps some may never update again)
+  signal = if (getOption('knitr.unbalanced.chunk', check_old(
     c('abbyyR', 'data.table', 'ensembleR', 'FSinR', 'funmediation', 'leiden', 'liger', 'loo', 'microsamplingDesign', 'mmpf', 'rSEA', 'StructFDR', 'TRMF'),
     c('0.5.5', '1.14.8', '0.1.0', '2.0.5', '1.0.1', '0.4.3', '2.0.1', '2.6.0', '1.0.8', '0.0.5', '2.1.1', '1.3', '0.1.5')
-  )) warning2 else stop2
+  ))) warning2 else stop2
   signal(
-    'The closing backticks on line ', i, ' ("', line, '") in ', current_input(),
-    ' do not match the opening backticks "',
+    'The closing fence on line ', i, ' ("', line, '") in ', current_input(),
+    ' does not match the opening fence "',
     gsub('\\^(\\s*`+).*', '\\1', pattern), '" on line ', b, '. You are recommended to ',
-    'fix either the opening or closing delimiter of the code chunk to use exactly ',
-    'the same numbers of backticks and same level of indentation (or blockquote).'
+    'fix either the opening or closing fence of the code chunk to use exactly ',
+    'the same numbers of backticks and same level of indentation (or blockquote). ',
+    'See https://yihui.org/en/2021/10/unbalanced-delimiters/ for more info.'
   )
   TRUE
 }
