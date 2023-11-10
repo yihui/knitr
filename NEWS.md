@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.46
 
+## NEW FEATURES
+
+- Added a new chunk option `tab.cap` to specify the table caption for `kable()` (thanks, @ulyngs, #1679). Previously, the caption could only be specified via the `caption` argument of `kable()`. Now you can set it in the chunk header if you want. Please note that this chunk option only works with a single `kable()` in each code chunk, and its value must be of length 1.
+
 ## BUG FIXES
 
 - `write_bib()` generated empty entries for packages without URLs (thanks, @bastistician, #2304).

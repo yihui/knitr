@@ -137,7 +137,7 @@ opts_chunk_attr = local({
   opts$fig.id = 'logical'
   opts[c(
     'opts.label', 'resize.width', 'resize.height', 'fig.alt', 'fig.link', 'fig.sep',
-    'ffmpeg.bitrate', 'ffmpeg.format'
+    'tab.cap', 'ffmpeg.bitrate', 'ffmpeg.format'
   )] = 'character'
   opts$lang = 'list'
   opts$R.options = 'list'
