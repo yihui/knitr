@@ -562,9 +562,6 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
   in.chunk = FALSE  # whether inside a chunk now
   pattern.end = NA  # the expected chunk end pattern (derived from header)
   b = NA  # the last found chunk header
-  # TODO: for now we only disallow unmatched delimiters during R CMD check
-  # that's not running on CRAN; we will fully disallow it in the future (#2057)
-  signal = if (is_R_CMD_check() && !(is_cran() || is_bioc())) stop2 else warning2
   g = NA  # group index: odd - text; even - chunk
   fun = function(is.begin, is.end, line, i) {
     if (i == 1) {
@@ -583,7 +580,7 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
       }  # otherwise ignore the chunk header
       return(g)
     }
-    if (in.chunk && is.end && match_chunk_end(pattern.end, line, i, b, lines, signal)) {
+    if (in.chunk && is.end && match_chunk_end(pattern.end, line, i, b, lines)) {
       in.chunk <<- FALSE
       g <<- g + 1
       return(g - 1)  # don't use incremented g yet; use it in the next step
@@ -605,7 +602,7 @@ match_chunk_begin = function(pattern.end, x, pattern = '^\\1\\\\{') {
   grepl(gsub('^([^`]*`+).*', pattern, pattern.end), x)
 }
 
-match_chunk_end = function(pattern, line, i, b, lines, signal = stop) {
+match_chunk_end = function(pattern, line, i, b, lines) {
   if (is.na(pattern) || grepl(pattern, line)) return(TRUE)
   n = length(lines)
   # if the exact match was not found, look ahead to see if there is another
@@ -617,14 +614,27 @@ match_chunk_end = function(pattern, line, i, b, lines, signal = stop) {
     if (!any(match_chunk_begin(pattern, lines[i + 1:(k - 1)], '^\\1`*\\\\{')))
       return(FALSE)
   }
+  # TODO: clean up the exceptions here (although perhaps some may never update again)
+  signal = if (getOption('knitr.unbalanced.chunk', check_old(
+    c('ensembleR', 'FSinR', 'funmediation', 'liger', 'loo', 'microsamplingDesign', 'mmpf', 'rSEA', 'StructFDR', 'TRMF'),
+    c('0.1.0', '2.0.5', '1.0.1', '2.0.1', '2.6.0', '1.0.8', '0.0.5', '2.1.1', '1.3', '0.1.5')
+  ))) warning2 else stop2
   signal(
-    'The closing backticks on line ', i, ' ("', line, '") in ', current_input(),
-    ' do not match the opening backticks "',
+    'The closing fence on line ', i, ' ("', line, '") in ', current_input(),
+    ' does not match the opening fence "',
     gsub('\\^(\\s*`+).*', '\\1', pattern), '" on line ', b, '. You are recommended to ',
-    'fix either the opening or closing delimiter of the code chunk to use exactly ',
-    'the same numbers of backticks and same level of indentation (or blockquote).'
+    'fix either the opening or closing fence of the code chunk to use exactly ',
+    'the same numbers of backticks and same level of indentation (or blockquote). ',
+    'See https://yihui.org/en/2021/10/unbalanced-delimiters/ for more info.'
   )
   TRUE
+}
+
+# TODO: just use check_old_package() in xfun >= 0.42
+check_old = function(name, version) {
+  for (i in seq_along(name))
+    if (xfun::check_old_package(name[i], version[i])) return(TRUE)
+  FALSE
 }
 
 #' Get all chunk labels in a document
