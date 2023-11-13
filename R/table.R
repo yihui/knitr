@@ -110,6 +110,9 @@ kable = function(
   if (!missing(align) && length(align) == 1L && !grepl('[^lcr]', align))
     align = strsplit(align, '')[[1]]
 
+  # Quarto uses the option name tbl-cap instead of tab-cap
+  if (missing(caption) && is.null(caption)) caption = opts_current$get('tbl.cap')
+
   if (inherits(x, 'list')) {
     format = kable_format_latex(format)
     res = lapply(
