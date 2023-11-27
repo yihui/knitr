@@ -28,6 +28,7 @@ options(digits=4)
 rnorm(20)
 fit=lm(dist~speed, data=cars)
 b=coef(fit)
+```
 ```{r results='asis', echo=FALSE}
 knitr::kable(summary(fit)$coefficients, caption='Regression coefficients.')
 ```

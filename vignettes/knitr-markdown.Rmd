@@ -1,14 +1,17 @@
+---
+title: An R Markdown (v1) Vignette with knitr
+author: Yihui Xie
+date: "`r Sys.Date()`"
+---
+
 <!--
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{An R Markdown Vignette with knitr}
 -->
-```{r setup, include=FALSE}
-library(knitr)
-```
 
 This is an example of Markdown vignettes in R. Before R 3.0.0, only Sweave/PDF vignettes were supported in R. Markdown is gaining popularity over the years due to its simplicity, and R 3.0.0 starts to support package vignettes written in R Markdown.
 
-> Please note this example is for [R Markdown v1](https://rmarkdown.rstudio.com/authoring_migrating_from_v1.html) only. If you use [R Markdown v2](https://rmarkdown.rstudio.com/), you should use the vignette engine `knitr::rmarkdown` instead of `knitr::knitr`.
+> Please note this example is for [R Markdown v1](https://cran.r-project.org/package=markdown) only. If you use [R Markdown v2](https://rmarkdown.rstudio.com), you should use the vignette engine `knitr::rmarkdown` instead of `knitr::knitr`.
 
 ## Package vignettes
 
@@ -51,10 +54,4 @@ Feel free to draw beautiful plots and write math $P(X>x)=\alpha/2$.
 n=300; set.seed(123)
 par(mar=c(4,4,.1,.1))
 plot(rnorm(n), rnorm(n), pch=21, cex=5*runif(n), col='white', bg='gray')
-```
-
-You can use your own CSS file instead of the built-in style in the **markdown** package -- just set the option `markdown.html.css`, e.g.
-
-```{r css, eval=FALSE}
-options(markdown.html.css = 'path/to/a/custom/style.css')
 ```

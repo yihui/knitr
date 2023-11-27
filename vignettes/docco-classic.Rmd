@@ -1,16 +1,20 @@
+---
+title: R Markdown with the Docco Classic Style
+author: Yihui Xie
+date: "`r Sys.Date()`"
+---
+
 <!--
 %\VignetteEngine{knitr::docco_classic}
 %\VignetteIndexEntry{R Markdown with the Docco Classic Style}
 -->
 
-# R Markdown with the Docco Classic Style
-
 ```{r setup, echo=FALSE, results='asis'}
-x = readLines('docco-linear.Rmd')[-(1:7)]
+x = readLines('docco-linear.Rmd')[-(1:11)]
 x = gsub('linear', 'classic', x)
-i = grep('^knit2html[(][.]{3}', x)
+i = grep('^knitr:::docco_classic', x)
 x[i - 1] = '```{r}'
-x[i] = 'head(knitr::rocco, 5)'
+x[i] = 'knitr::rocco'
 library(knitr)
 cat(knit_child(text = x, quiet = TRUE), sep = '\n')
 ```

@@ -1,9 +1,20 @@
+---
+title: Display Tables with the JavaScript Library DataTables
+author: Yihui Xie
+date: "`r Sys.Date()`"
+output:
+  markdown::html_format:
+    meta:
+      css: ["@default", "@prism-xcode", "https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"]
+      js: ["@npm/jquery@3.7.1/dist/jquery.min.js", "https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"]
+---
+
 <!--
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{Display Tables with the JavaScript Library DataTables}
 -->
 
-# jQuery DataTables
+## jQuery DataTables
 
 We can use the JavaScript library [**DataTables**](https://www.datatables.net) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
 
@@ -12,29 +23,13 @@ library(knitr)
 kable(mtcars, 'html', table.attr='id="mtcars_table"')
 ```
 
-Note we assigned an `id` to the table, and next we use the **DataTables** library to tweak the table.
+Note we assigned an `id` to the table, and next we use the **DataTables** library to initialize the table and you will get an interactive table.
 
-```js
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#mtcars_table').DataTable();
-	} );
-</script>
+```{js}
+window.addEventListener('load', () => {
+  $('#mtcars_table').DataTable();
+});
 ```
-
-<script type="text/javascript">
-  $(document).ready(function() {
-		$('#mtcars_table').DataTable();
-	} );
-</script>
-
-Since this is a Markdown vignette, we need to add the JavaScript libraries as well as some additional CSS files to the HTML header, and this can be done via:
-
-```{r}
-options(markdown.html.header = system.file('misc', 'datatables.html', package = 'knitr'))
-```
-
-The file `datatables.html` under the `misc` directory of **knitr** was added to the HTML output.
 
 By comparison, below is an ordinary table:
 

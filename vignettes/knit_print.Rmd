@@ -2,12 +2,15 @@
 title: "Custom Print Methods"
 author: "Yihui Xie"
 date: '`r Sys.Date()`'
-vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Custom Print Methods}
 output:
-  knitr:::html_vignette:
-    toc: yes
+  markdown::html_format:
+    options:
+      toc: true
+    meta:
+      css: [@default, @prism-xcode]
+vignette: >
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{Custom Print Methods}
 ---
 
 Before **knitr** v1.6, printing objects in R code chunks basically emulates the R console. For example, a data frame is printed like this^[Note R prints an object without an explicit `print()` call when it is _visible_; see `?invisible`]:
