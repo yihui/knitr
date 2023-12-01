@@ -8,6 +8,8 @@
 
 - Chunk hooks can have the `...` argument now. Previously, only arguments `before`, `options`, `envir`, and `name` are accepted. If a chunk hook function has the `...` argument, all the aforementioned four arguments are passed to the hook. This means the hook function no longer has to have the four arguments explicitly in its signature, e.g., `function(before, ...)` is also valid if only the `before` argument is used inside the hook. See <https://yihui.org/knitr/hooks/#chunk-hooks> for more information.
 
+- For package vignettes, PNG plots will be optimized by `optipng` and `pngquant` if they are installed and can be found from the system `PATH` variable. This can help reduce the package size if vignettes contain PNG plots (thanks, @nanxstats, <https://nanx.me/blog/post/rpkgs-pngquant-ragg/>).
+
 ## BUG FIXES
 
 - `write_bib()` generated empty entries for packages without URLs (thanks, @bastistician, #2304).

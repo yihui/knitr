@@ -78,10 +78,10 @@ hook_png = function(
     warning('cannot find ', cmd, '; please install and put it in PATH'); return()
   }
   opts = options[[cmd]]
+  if (isFALSE(opts)) return()
   if (is.null(opts) || isTRUE(opts)) opts = switch(
     cmd, pngquant = '--skip-if-larger', mogrify = '-trim'
   )
-  if (!is.character(opts)) opts = NULL
   if (cmd == 'pngquant') opts = paste(opts, '--ext -fs8.png')
 
   paths = get_plot_files()

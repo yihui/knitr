@@ -32,7 +32,15 @@ vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) 
     on.exit(options(oopts), add = TRUE)
   }
   opts_chunk$set(error = FALSE)  # should not hide errors
-  knit_hooks$set(purl = hook_purl)  # write out code while weaving
+  knit_hooks$set(purl = function(...) {
+    # run some hooks for vignettes
+    hook_purl(...)  # write out code while weaving
+    # optimize PNG images if tools exist and hooks not set
+    for (i in c('optipng', 'pngquant'))
+      if (!is.function(knit_hooks$get(i)) && Sys.which(i) != '') {
+        switch(i, optipng = hook_optipng(...), pngquant = hook_pngquant(...))
+      }
+  })
   (if (grepl('\\.[Rr]md$', file)) knit2html else if (grepl('\\.[Rr]rst$', file)) knit2pandoc else knit)(
     file, encoding = encoding, quiet = quiet, envir = globalenv(), ...
   )
