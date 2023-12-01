@@ -38,6 +38,6 @@ if (interactive()) {
 Usage: \url{https://yihui.org/knitr/objects/}
 
   A list of available options:
-  \url{https://yihui.org/knitr/options/#package_options}
+  \url{https://yihui.org/knitr/options/#package-options}
 }
 \keyword{datasets}

@@ -43,8 +43,8 @@
 #' \url{https://yihui.org/knitr/demo/cache/} for the meaning of \code{cache =
 #' 2}).
 #' @rdname chunk_hook
-#' @param before,options,envir See \emph{References} below.
-#' @references \url{https://yihui.org/knitr/hooks/#chunk_hooks}
+#' @param before,options,envir,... See \emph{References} below.
+#' @references \url{https://yihui.org/knitr/hooks/#chunk-hooks}
 #' @seealso \code{rgl::\link[rgl:snapshot]{rgl.snapshot}},
 #'   \code{rgl::\link[rgl:postscript]{rgl.postscript}},
 #'   \code{rgl::\link[rgl]{hook_rgl}},
@@ -55,7 +55,7 @@
 #' @export
 #' @examples if (require('rgl') && exists('hook_rgl')) knit_hooks$set(rgl = hook_rgl)
 #' # then in code chunks, use the option rgl=TRUE
-hook_pdfcrop = function(before, options, envir) {
+hook_pdfcrop = function(before, ...) {
   # crops plots after a chunk is evaluated and plot files produced
   if (before) return()
   in_base_dir(for (f in get_plot_files()) plot_crop(f))
@@ -67,24 +67,28 @@ get_plot_files = function() {
 
 #' @export
 #' @rdname chunk_hook
-hook_optipng = function(before, options, envir) {
-  hook_png(before, options, envir, 'optipng')
-}
+hook_optipng = function(...) hook_png(..., cmd = 'optipng')
 
 hook_png = function(
-  before, options, envir, cmd = c('optipng', 'pngquant', 'mogrify'), post_process = identity
+  before, options, ..., cmd = c('optipng', 'pngquant', 'mogrify'), post_process = identity
 ) {
   if (before) return()
   cmd = match.arg(cmd)
   if (!nzchar(Sys.which(cmd))) {
     warning('cannot find ', cmd, '; please install and put it in PATH'); return()
   }
+  opts = options[[cmd]]
+  if (is.null(opts) || isTRUE(opts)) opts = switch(
+    cmd, pngquant = '--skip-if-larger', mogrify = '-trim'
+  )
+  if (!is.character(opts)) opts = NULL
+  if (cmd == 'pngquant') opts = paste(opts, '--ext -fs8.png')
+
   paths = get_plot_files()
   paths = grep('[.]png$', paths, ignore.case = TRUE, value = TRUE)
 
   in_base_dir(
     lapply(paths, function(x) {
-      message('optimizing ', x)
       cmd = paste(cmd, if (is.character(options[[cmd]])) options[[cmd]], shQuote(x))
       (if (is_windows()) shell else system)(cmd)
       post_process(x)
@@ -95,10 +99,8 @@ hook_png = function(
 
 #' @export
 #' @rdname chunk_hook
-hook_pngquant = function(before, options, envir) {
-  if (is.null(options[['pngquant']])) options$pngquant = '--skip-if-larger'
-  options[['pngquant']] = paste(options[['pngquant']], '--ext -fs8.png')
-  hook_png(before, options, envir, 'pngquant', function(x) {
+hook_pngquant = function(...) {
+  hook_png(..., cmd = 'pngquant', post_process = function(x) {
     # pngquant creates an output file with '-fs8.png' as the extension.
     x2 = sub("\\.png$", "-fs8.png", x)
     if (file.exists(x2)) file.rename(x2, x)
@@ -107,10 +109,7 @@ hook_pngquant = function(before, options, envir) {
 
 #' @export
 #' @rdname chunk_hook
-hook_mogrify = function(before, options, envir) {
-  if (is.null(options[['mogrify']])) options$mogrify = '-trim'
-  hook_png(before, options, envir, cmd = 'mogrify', identity)
-}
+hook_mogrify = function(...) hook_png(..., cmd = 'mogrify')
 
 #' @export
 #' @rdname chunk_hook
@@ -133,7 +132,7 @@ hook_plot_custom = function(before, options, envir){
 #" a hook function to write out code from chunks
 #' @export
 #' @rdname chunk_hook
-hook_purl = function(before, options, envir) {
+hook_purl = function(before, options, ...) {
   # at the moment, non-R chunks are ignored; it is unclear what I should do
   if (before || !options$purl || options$engine != 'R') return()
 
