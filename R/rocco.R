@@ -36,3 +36,17 @@ rocco = function(input, ...) {
     )
   )
 }
+
+# the Docco linear style
+docco_linear = function(...) {
+  knit2html(..., meta = list(
+    css = c(
+      'https://ashkenas.com/docco/resources/linear/public/stylesheets/normalize.css',
+      'https://ashkenas.com/docco/resources/linear/docco.css', '@prism-xcode'
+    ),
+    js = '@npm/@xiee/utils/js/center-img.min.js',
+    `header-includes` = '<style type="text/css">.container{width:auto;max-width:920px;}.page{width:auto;max-width:800px;}.page pre{width:100%;max-width:768px;}pre, code{font-size:90%;}</style>',
+    `include-before` = '<div class="container"><div class="page">',
+    `include-after` = '<div class="fleur">h</div></div></div>'
+  ))
+}

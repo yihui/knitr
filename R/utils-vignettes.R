@@ -50,10 +50,8 @@ vtangle = function(file, ..., encoding = 'UTF-8', quiet = FALSE) {
 }
 
 vweave_docco_linear = vweave
-body(vweave_docco_linear)[5L] = expression(knit2html(
-  file, encoding = encoding, quiet = quiet, envir = globalenv(),
-  template = system.file('misc', 'docco-template.html', package = 'knitr'),
-  ...
+body(vweave_docco_linear)[5L] = expression(docco_linear(
+  file, encoding = encoding, quiet = quiet, envir = globalenv(), ...
 ))
 
 vweave_docco_classic = vweave
