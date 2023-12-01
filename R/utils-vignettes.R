@@ -164,14 +164,13 @@ pandoc_available = function() {
 }
 
 html_vignette = function(
-  ..., fig_caption = TRUE, theme = NULL, highlight = "pygments",
-  css = system.file('misc', 'vignette.css', package = 'knitr'),
+  ..., fig_caption = TRUE, theme = NULL, highlight = NULL,
   includes = list(
-    after_body = system.file('misc', 'vignette.html', package = 'knitr')
+    in_header = system.file('misc', 'vignette.html', package = 'knitr')
   )
 ) {
   rmarkdown::html_document(
     ..., fig_caption = fig_caption, theme = theme, highlight = highlight,
-    css = css, includes = includes
+    includes = includes
   )
 }
