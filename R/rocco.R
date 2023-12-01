@@ -1,33 +1,3 @@
-# move paragraphs of images one row above, and split the last paragraph from the
-# previous ones
-docAdjust = function(x) {
-  if ((n <- length(x)) < 2) return(x)
-  m = gregexpr('^\\s*<p>(<img src="data:[^>]+/>\\s*)+</p>\\s*', x)
-  restart = '</td><td class="code"></td></tr><tr><td class="docs">'
-  for (i in 2:n) if (m[[i]] > 0) {
-    img = regmatches(x[i], m[[i]])
-    txt = unlist(regmatches(x[i], m[[i]], invert = TRUE))
-    if (grepl('^\\s*$', x[i - 1])) {
-      x[i - 1] = img
-    } else {
-      x[i - 1] = paste(x[i - 1], restart, img, sep = '\n')
-    }
-    x[i] = paste(txt, collapse = '')
-  }
-  # split a doc cell if it has mutiple paragraphs, so that the code cell on the
-  # right can match with its last paragraph
-  x[2:n - 1] = unlist(lapply(strsplit(x[2:n - 1], '\n{2,}'), function(z) {
-    n = length(z)
-    if (n <= 1) return(z)
-    if (length(idx <- grep('^\\s*$', z, invert = TRUE)) > 1) {
-      i = max(idx)
-      z[i] = paste0(restart, z[i])
-    }
-    paste(z, collapse = '\n\n')
-  }))
-  # might have produced some empty cells, so remove them
-  gsub('<td class="code">\\s*</td></tr><tr><td class="docs">\\s*</td>', '', x)
-}
 #' Knit R Markdown using the classic Docco style
 #'
 #' The classic Docco style is a two-column layout, with text in the left and
@@ -54,38 +24,15 @@ docAdjust = function(x) {
 #' rocco_view(system.file('doc', 'docco-classic.Rmd', package = 'knitr'))
 #' rocco_view(system.file('doc', 'knit_expand.Rmd', package = 'knitr'))
 rocco = function(input, ...) {
-  out = knit2html(
+  knit2html(
     input, ...,
-    meta = list(css = system.file('misc', 'docco-classic.css', package = 'knitr')),
-    template = system.file('misc', 'docco-classic.html', package = 'knitr')
+    meta = list(
+      css = c('@npm/@xiee/utils/css/docco-classic.min.css', '@prism-xcode'),
+      js = c(
+        '@npm/jquery@3.7.1/dist/jquery.min.js',
+        '@npm/@xiee/utils/js/docco-classic.min.js,docco-resize.js',
+        '@npm/@xiee/utils/js/center-img.min.js'
+      )
+    )
   )
-  txt = read_utf8(out)
-  i1 = min(grep('<!--table start-->$', txt))
-  i2 = max(grep('<!--table end-->$', txt))
-  x = one_string(txt[seq(i1 + 1, i2 - 1)])
-  x = gsub('</pre>\\s*<pre>', '<!--ReDuNdAnTpRe-->', x)  # merge pre blocks
-  m = gregexpr('<pre><code( class="[[:alnum:]-]+")?>(.|\n)*?</code></pre>', x)
-  if (m[[1]][1] == -1) stop('No code blocks in HTML output')
-
-  code = regmatches(x, m)[[1]]
-  code = gsub('<!--ReDuNdAnTpRe-->', '</pre>\n<pre>', code) # restore pre blocks
-  code = paste0('<td class="code">', c(code, ''), '</td></tr>')
-  doc = regmatches(x, m, invert = TRUE)[[1]]
-  doc = paste0('<tr><td class="docs">', docAdjust(doc), '</td>')
-
-  # write pilcrow anchors to rows
-  sec = 1
-  for (i in seq_along(doc)) {
-    while (grepl('<tr><td class="docs">', doc[i])) {
-      doc[i] = sub('<tr><td class="docs">', paste0(
-        '<tr id="row', sec, '"><td class="docs">', '<div class="pilwrap">',
-        '<a class="pilcrow" href="#row', sec, '">&para;</a></div>'
-      ),  doc[i])
-      sec = sec + 1
-    }
-  }
-
-  html = c(txt[1:i1], paste0(doc, code, collapse = ''), txt[i2:length(txt)])
-  write_utf8(html, out)
-  invisible(out)
 }
