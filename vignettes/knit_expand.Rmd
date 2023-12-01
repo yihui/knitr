@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output:
   markdown::html_format:
     meta:
-      css: [@default, @prism-xcode]
+      css: ["@default", "@prism-xcode"]
 ---
 
 <!--

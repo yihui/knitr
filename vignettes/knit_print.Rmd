@@ -7,7 +7,7 @@ output:
     options:
       toc: true
     meta:
-      css: [@default, @prism-xcode]
+      css: ["@default", "@prism-xcode"]
 vignette: >
   %\VignetteEngine{knitr::knitr}
   %\VignetteIndexEntry{Custom Print Methods}
