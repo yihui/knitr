@@ -69,7 +69,6 @@ engine
 
 -   homepage: <https://yihui.org/knitr/>
 -   development repository: <https://github.com/yihui/knitr>
-    ([CRAN](http://cran.rstudio.com/package=knitr),
+    ([CRAN](https://cran.r-project.org/package=knitr),
 -   examples: <https://github.com/yihui/knitr-examples>
--   stackoverflow: <http://stackoverflow.com/tags/knitr/>
--   mailing list: <https://groups.google.com/group/knitr>
+-   stackoverflow: <https://stackoverflow.com/tags/knitr/>
