@@ -220,7 +220,8 @@ quote_label = function(x) {
 # comment characters for various languages
 comment_chars = list(
   `#` = c('awk', 'bash', 'coffee', 'gawk', 'julia', 'octave', 'perl', 'powershell', 'python', 'r', 'ruby', 'sed', 'stan'),
-  '//' = c('asy', 'cc', 'csharp', 'd3', 'dot', 'fsharp', 'go', 'groovy', 'java', 'js', 'node', 'Rcpp', 'sass', 'scss', 'scala'),
+  '//' = c('asy', 'cc', 'csharp', 'd3', 'dot', 'fsharp', 'go', 'groovy', 'java', 'js', 'node', 'ojs', 'Rcpp', 'sass', 'scss', 'scala'),
+  `%%` = c('mermaid'),
   `%` = c('matlab', 'tikz'),
   `/* */` = c('c', 'css'),
   `* ;` = c('sas'),
