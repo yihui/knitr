@@ -153,7 +153,8 @@ kable = function(
   n = nrow(x)
   x = replace_na(to_character(x), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
-  x = trimws(x)
+  # trim white spaces except those escaped by \ at the end (#2308)
+  x = gsub('^\\s+|(?<!\\\\)\\s+$', '', x, perl = TRUE)
   colnames(x) = col.names
   if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")

@@ -111,6 +111,17 @@ x\\\\
 \\end{tabular}')
 })
 
+assert('kable() does not trim escaped spaces at the end', {
+  (kable2(data.frame(x = '\\ '), 'latex', escape =FALSE ) %==% '
+\\begin{tabular}{l}
+\\hline
+x\\\\
+\\hline
+\\ \\\\
+\\hline
+\\end{tabular}')
+})
+
 assert('kable() escapes HTML special characters by default', {
   (kable2(data.frame(x = c('10<>', '5&2'), y = c('3>8', '"40"')), 'html') %==%
      '<table>\n <thead>\n  <tr>\n   <th style="text-align:left;"> x </th>\n   <th style="text-align:left;"> y </th>\n  </tr>\n </thead>\n<tbody>\n  <tr>\n   <td style="text-align:left;"> 10&lt;&gt; </td>\n   <td style="text-align:left;"> 3&gt;8 </td>\n  </tr>\n  <tr>\n   <td style="text-align:left;"> 5&amp;2 </td>\n   <td style="text-align:left;"> &quot;40&quot; </td>\n  </tr>\n</tbody>\n</table>')
