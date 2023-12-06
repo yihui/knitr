@@ -154,6 +154,11 @@ block_exec = function(options) {
   # when code is not R language
   res.before = run_hooks(before = TRUE, options)
   engine = get_engine(options$engine)
+  # special case: quarto-dev/quarto-cli#5994
+  if (is_quarto() && options$engine %in% c('dot', 'mermaid', 'ojs')) {
+    options$code = c(options$yaml.code, options$code)
+    options$yaml.code = NULL
+  }
   output = in_input_dir(engine(options))
   if (is.list(output)) output = unlist(output)
   res.after = run_hooks(before = FALSE, options)
