@@ -64,7 +64,7 @@ color_def = function(col, variable = 'shadecolor') {
       x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
       warning("the color '", col, "' is invalid;",
               'using default color...',
-              'see https://yihui.org/knitr/options')
+              'see https://yihui.org/knitr/options/')
     }
   }
   if (length(x) != 3L) stop('invalid color:', col)

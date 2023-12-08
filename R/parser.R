@@ -183,7 +183,7 @@ parse_params = function(params, label = TRUE) {
     eval(parse_only(paste('alist(', quote_label(params), ')'))),
     error = function(e) {
       message('(*) NOTE: I saw chunk options "', params,
-              '"\n please go to https://yihui.org/knitr/options',
+              '"\n please go to https://yihui.org/knitr/options/',
               '\n (it is likely that you forgot to quote "character" options)')
     })
 

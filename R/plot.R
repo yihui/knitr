@@ -27,7 +27,7 @@ dev2ext = function(options) {
     for (i in x[idx]) dev_get(i)
     stop2(
       'cannot find appropriate filename extensions for device ', x[idx], '; ',
-      "please use chunk option 'fig.ext' (https://yihui.org/knitr/options)"
+      "please use chunk option 'fig.ext' (https://yihui.org/knitr/options/)"
     )
   }
   unname(res)
