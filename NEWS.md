@@ -18,6 +18,8 @@
 
 - Trailing spaces escaped by `\` should not be trimmed in `kable()` (thanks, @mjsmith037, #2308).
 
+- `kable()` fails when the value of the `caption` argument is of length > 1 (thanks, @LeeMendelowitz, #2312).
+
 ## MAJOR CHANGES
 
 - Unbalanced chunk delimiters (fences) in R Markdown documents are no longer allowed, as announced two years ago at <https://yihui.org/en/2021/10/unbalanced-delimiters/> (#2306). This means the opening delimiter must strictly match the closing delimiter, e.g., if a code chunk starts with four backticks, it must also end with four; or if a chunk header is indented by two spaces, the closing fence must be indented by exactly two spaces. For authors who cannot update their R Markdown documents for any reason at the moment, setting `options(knitr.unbalanced.chunk = TRUE)` (e.g., in `.Rprofile`) can temporarily prevent **knitr** from throwing an error, but it is strongly recommended that you fix the problems as soon as possible, because this workaround will be removed in future.
