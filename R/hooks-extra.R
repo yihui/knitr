@@ -58,6 +58,9 @@
 hook_pdfcrop = function(before, ...) {
   # crops plots after a chunk is evaluated and plot files produced
   if (before) return()
+  # crop = hook_pdfcrop is used in R Markdown and Quarto to set this hook
+  # Quarto does not have a fig_crop flag to opt out
+  if (is_quarto() && isFALSE(options$crop)) return()
   in_base_dir(for (f in get_plot_files()) plot_crop(f))
 }
 
