@@ -175,7 +175,7 @@ kable_caption = function(label, caption, format) {
   is_na = function(v) {
     length(v) == 0 || (length(v) == 1 && is.na(v))
   }
-  if (!is.null(caption) && !is_na(caption) && !is_na(label)) caption = paste0(
+  if (!is_na(caption) && !is_na(label)) caption = paste0(
     create_label(
       opts_knit$get('label.prefix')[['table']],
       label, latex = (format == 'latex')
