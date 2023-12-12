@@ -39,7 +39,7 @@ assert('format_sci() coerces non-numeric and non-double values to characters', {
 
 # https://github.com/yihui/knitr/issues/1625
 assert('format_sci() does not convert roman numerals to arabic numerals', {
-  format_sci(as.roman(c(1, 4, 7, 33, 100))) %==% c('I', 'IV', 'VII', 'XXXIII', 'C')
+  (format_sci(as.roman(c(1, 4, 7, 33, 100))) %==% c('I', 'IV', 'VII', 'XXXIII', 'C'))
 })
 
 assert('format_sci() for Rnw does not add \\ensuremath{} at all', {
