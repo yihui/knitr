@@ -266,11 +266,11 @@ fix_names = function(x, char1, char2, aliases) {
 }
 
 dot_names = function(x) {
-  fix_names(x, '-', '.', c(fig.format = 'dev', fig.dpi = 'dpi'))
+  fix_names(x, '-', '.', c(fig.format = 'dev', fig.dpi = 'dpi', tbl.cap = 'tab.cap'))
 }
 
 dash_names = function(x) {
-  fix_names(x, '.', '-', c(dev = 'fig-format', dpi = 'fig-dpi'))
+  fix_names(x, '.', '-', c(dev = 'fig-format', dpi = 'fig-dpi', tab.cap = 'tbl-cap'))
 }
 
 # initially for compatibility with Sweave and old beta versions of knitr
