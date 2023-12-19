@@ -266,7 +266,7 @@ fix_names = function(x, char1, char2, aliases) {
 }
 
 dot_names = function(x) {
-  fix_names(x, '-', '.', c(fig.format = 'dev', fig.dpi = 'dpi', tbl.cap = 'tab.cap'))
+  fix_names(x, '-', '.', c(fig.format = 'dev', fig.dpi = 'dpi'))
 }
 
 dash_names = function(x) {
