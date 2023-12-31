@@ -279,12 +279,24 @@ partition_chunk = function(engine, code) {
   # check for option comments
   i1 = startsWith(code, s1)
   i2 = endsWith(trimws(code, 'right'), s2)
+  m = i1 & i2
+
   # if "commentChar| " is not found, try "#| " instead
   if (!i1[1] && !identical(s1, '#|')) {
     s1 = '#| '; s2 = ''
     i1 = startsWith(code, s1); i2 = TRUE
+    m = i1 & i2
+    # if found in quarto, stop and advice to use language comment
+    if (is_quarto() && m[[1]]) {
+      stop2(c(
+        "Non R chunk should prefix pipe `|` with the comment character from the language for YAML options. ",
+        sprintf("You are using %s:\n", sQuote(engine)),
+        sprintf("  you probably should start your comment with %s", dQuote(s1)),
+        if (nzchar(s2)) sprintf(" and use %s at end of each comment line.", dQuote(s2)),
+        "\n"
+      ))
+    }
   }
-  m = i1 & i2
 
   # has to have at least one matched line at the beginning
   if (!m[[1]]) return(res)
