@@ -90,6 +90,10 @@ spin = function(
       # R code; #+/- indicates chunk options
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
+
+      # Working with #|
+      if (format == "qmd") block = process_block_for_qmd(block)
+
       rc <- '^(#|--)+(\\+|-|\\s+%%| ----+| @knitr)'
       if (length(opt <- grep(rc, block))) {
         opts = gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt])
@@ -153,6 +157,48 @@ spin = function(
     b = '```'
   }
   c(paste0(b, '{r'), '}', b, paste0(i, 'r \\1 ', i))
+}
+
+
+process_block_for_qmd <- function(block) {
+  rc <- '^(#|--)+(\\+|-|\\s+%%| ----+| @knitr|\\|)'
+  opt <- grep(rc, block)
+  
+  if (length(opt)) {
+    # Execution options #|
+    exe_opt <- grep('^(#)+(\\|)', block)
+    
+    if (length(exe_opt)) {
+      chunk_start <- c()
+      prev_i = NULL
+      # Loop through and add `# %%` to block if needed
+      for (i in opt) { 
+        if (is.null(prev_i)) {
+          chunk_start = c(chunk_start, i)
+          prev_i = i
+        } else {
+          if (i - prev_i == 1 & i %in% exe_opt) {
+            prev_i = i
+          } else {
+            prev_i = i
+            chunk_start = c(chunk_start, i)
+          }
+        }
+      }
+    } else {
+      chunk_start <- opt
+    }
+  }
+  need_chunk_start = intersect(exe_opt, chunk_start)
+  if (length(need_chunk_start)) {
+    for (i in seq_along(need_chunk_start)) { 
+      # insert position (keeping track of the additional elements we are adding)
+      j = need_chunk_start[i] + (i - 1)
+      block <- c(block[1:j-1], "# %%", block[j:length(block)])
+    }
+  }
+
+  return(block)
 }
 
 #' Spin a child R script

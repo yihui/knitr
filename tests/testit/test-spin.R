@@ -30,3 +30,15 @@ assert("spin() uses proper number of backticks", {
   (spin_w_tempfile("x <- '", "```", "'") %==%
     c("", "````{r}", "x <- '", "```", "'", "````", ""))
 })
+
+assert("spin() works properly with quarto `#|`", {
+  (spin_w_tempfile("", "#| echo: false", "#| message: false", "#| include: false", "1+1", "#| eval: false", "2 + 2", "", "#' Text", format = "qmd") %==% 
+    c('', '```{r}', '#| echo: false', '#| message: false', '#| include: false', '1+1', '```', '```{r}', '#| eval: false', '2 + 2', '```', '', 'Text')) 
+
+  # https://github.com/yihui/knitr/issues/2314
+  (spin_w_tempfile('#| echo: false', '1+1', '#| label: test', '1+1', format = "qmd") %==% 
+    c('', '```{r}', '#| echo: false', '1+1', '```', '```{r}', '#| label: test', '1+1', '```', '')) 
+  
+  (spin_w_tempfile('# %%', '#| echo: false', '1+1', '#| label: test', '1+1', format = "qmd") %==% 
+    c('', '```{r}', '#| echo: false', '1+1', '```', '```{r}', '#| label: test', '1+1', '```', '')) 
+})
