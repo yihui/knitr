@@ -4,10 +4,12 @@
 \alias{dep_auto}
 \title{Build automatic dependencies among chunks}
 \usage{
-dep_auto(path = opts_chunk$get("cache.path"))
+dep_auto(path = opts_chunk$get("cache.path"), chunk_label = NULL)
 }
 \arguments{
 \item{path}{Path to the dependency file.}
+
+\item{chunk_label}{The chunk label of the current code chunk.}
 }
 \value{
 \code{NULL}. The dependencies are built as a side effect.
