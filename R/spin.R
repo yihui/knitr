@@ -159,42 +159,41 @@ spin = function(
   c(paste0(b, '{r'), '}', b, paste0(i, 'r \\1 ', i))
 }
 
-
+# find the position of the starting `#|` in a consecutive block of `#|` comments
+comment_start = function(x) {
+  i = startsWith(x, '#| ')
+  r = rle(i)
+  l = r$lengths
+  j = cumsum(l) - l + 1
+  j[r$values]
+}
 process_block_for_qmd <- function(block) {
-  rc <- '^(#|--)+(\\+|-|\\s+%%| ----+| @knitr|\\|)'
-  opt <- grep(rc, block)
+  rc <- '^(#|--)+(\\+|-|\\s+%%| ----+| @knitr)'
   
-  if (length(opt)) {
+  opt <- grep(rc, block)
+  exe_opt <- grep('^(#)+(\\|)', block)
+  
+  if (length(exe_opt) > 0) {
     # Execution options #|
-    exe_opt <- grep('^(#)+(\\|)', block)
-    
-    if (length(exe_opt)) {
-      chunk_start <- c()
-      prev_i = NULL
-      # Loop through and add `# %%` to block if needed
-      for (i in opt) { 
-        if (is.null(prev_i)) {
-          chunk_start = c(chunk_start, i)
-          prev_i = i
-        } else {
-          if (i - prev_i == 1 & i %in% exe_opt) {
-            prev_i = i
-          } else {
-            prev_i = i
-            chunk_start = c(chunk_start, i)
-          }
+    idx = comment_start(block)
+    if (length(idx)) {
+      need_chunk_start = c()
+      # Check if opt exists before i
+      for (i in seq_along(idx)) {
+        if (idx[i] == 1) {
+          need_chunk_start = c(idx[i])
+        } else if (!((idx[i] - 1) %in% opt)) {
+          need_chunk_start = c(need_chunk_start, idx[i])
         }
       }
-    } else {
-      chunk_start <- opt
-    }
+    } 
   }
-  need_chunk_start = intersect(exe_opt, chunk_start)
+  
   if (length(need_chunk_start)) {
     for (i in seq_along(need_chunk_start)) { 
       # insert position (keeping track of the additional elements we are adding)
       j = need_chunk_start[i] + (i - 1)
-      block <- c(block[1:j-1], "# %%", block[j:length(block)])
+      block <- append(block, "# %%", after = j-1)
     }
   }
 
