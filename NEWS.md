@@ -28,6 +28,8 @@
 
 - Fixed broken vignettes, improved CSS for HTML vignettes, and reduced the file sizes.
 
+- Faster processing of cache dependencies (thanks, @knokknok, #2318)
+
 # CHANGES IN knitr VERSION 1.45
 
 ## NEW FEATURES
