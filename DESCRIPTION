@@ -120,7 +120,7 @@ Imports:
     highr,
     methods,
     tools,
-    xfun (>= 0.39),
+    xfun (>= 0.41),
     yaml (>= 2.1.19)
 Suggests:
     bslib,
@@ -200,3 +200,4 @@ Collate:
     'utils-vignettes.R'
     'zzz.R'
 RoxygenNote: 7.2.3
+Remotes: yihui/xfun
