@@ -93,7 +93,8 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
 
   # for quarto, preserve the actual original params.src and do not remove the engine
   if (!is_quarto() || opts_knit$get('tangle')) params.src = params
-  params = parse_params(params)
+  params = xfun::csv_options(params)
+  if (is.null(params$label)) params$label = unnamed_chunk()
 
   # remove indent (and possibly markdown blockquote >) from code
   if (nzchar(spaces <- get_chunk_indent(header))) {
@@ -174,178 +175,19 @@ unnamed_chunk = function(prefix = NULL, i = chunk_counter()) {
   paste(prefix, i, sep = '-')
 }
 
-# parse params from chunk header
-parse_params = function(params, label = TRUE) {
-
-  if (params == '') return(if (label) list(label = unnamed_chunk()))
-
-  res = withCallingHandlers(
-    eval(parse_only(paste('alist(', quote_label(params), ')'))),
-    error = function(e) {
-      message('(*) NOTE: I saw chunk options "', params,
-              '"\n please go to https://yihui.org/knitr/options/',
-              '\n (it is likely that you forgot to quote "character" options)')
-    })
-
-  # good, now you seem to be using valid R code
-  idx = which(names(res) == '')  # which option is not named?
-  # remove empty options
-  for (i in idx) if (identical(res[[i]], alist(,)[[1]])) res[[i]] = NULL
-  idx = if (is.null(names(res)) && length(res) == 1L) 1L else which(names(res) == '')
-  if ((n <- length(idx)) > 1L || (length(res) > 1L && is.null(names(res))))
-    stop('invalid chunk options: ', params,
-         "\n(all options must be of the form 'tag=value' except the chunk label)")
-  if (is.null(res$label)) {
-    if (n == 0L) res$label = '' else names(res)[idx] = 'label'
-  }
-  if (!is.character(res$label))
-    res$label = gsub(' ', '', as.character(as.expression(res$label)))
-  if (identical(res$label, '')) res$label = if (label) unnamed_chunk()
-  res
-}
-
-# quote the chunk label if necessary
-quote_label = function(x) {
-  x = gsub('^\\s*,?', '', x)
-  if (grepl('^\\s*[^\'"](,|\\s*$)', x)) {
-    # <<a,b=1>>= ---> <<'a',b=1>>=
-    x = gsub('^\\s*([^\'"])(,|\\s*$)', "'\\1'\\2", x)
-  } else if (grepl('^\\s*[^\'"](,|[^=]*(,|\\s*$))', x)) {
-    # <<abc,b=1>>= ---> <<'abc',b=1>>=
-    x = gsub('^\\s*([^\'"][^=]*)(,|\\s*$)', "'\\1'\\2", x)
-  }
-  x
-}
-
-# comment characters for various languages
-comment_chars = list(
-  `#` = c('awk', 'bash', 'coffee', 'gawk', 'julia', 'octave', 'perl', 'powershell', 'python', 'r', 'ruby', 'sed', 'stan'),
-  '//' = c('asy', 'cc', 'csharp', 'd3', 'dot', 'fsharp', 'go', 'groovy', 'java', 'js', 'node', 'ojs', 'Rcpp', 'sass', 'scss', 'scala'),
-  `%%` = c('mermaid'),
-  `%` = c('matlab', 'tikz'),
-  `/* */` = c('c', 'css'),
-  `* ;` = c('sas'),
-  `--` = c('haskell', 'lua', 'mysql', 'psql', 'sql'),
-  `!` = c('fortran', 'fortran95'),
-  `*` = c('stata')
-)
-# reshape it using the language name as the index, i.e., from list(char = lang)
-# to list(lang = char)
-comment_chars = local({
-  res = list(apl = '\u235D')
-  for (i in names(comment_chars)) {
-    chars = comment_chars[[i]]
-    res = c(res, setNames(rep(list(strsplit(i, ' ')[[1]]), length(chars)), chars))
-  }
-  res[order(names(res))]
-})
-
 #' Partition chunk options from the code chunk body
 #'
-#' Chunk options can be written in special comments (e.g., after \verb{#|} for R
-#' code chunks) inside a code chunk. This function partitions these options from
-#' the chunk body.
-#' @param engine The name of the language engine (to determine the appropriate
-#'   comment character).
-#' @param code A character vector (lines of code).
-#' @return A list with the following items: \describe{\item{\code{options}}{The
-#'   parsed options (if any) as a list.} \item{\code{src}}{The part of the input
-#'   that contains the options.} \item{\code{code}}{The part of the input that
-#'   contains the code.}}
-#' @note Chunk options must be written on \emph{continuous} lines (i.e., all
-#'   lines must start with the special comment prefix such as \verb{#|}) at the
-#'   beginning of the chunk body.
+#' This is a wrapper function calling \code{xfun::\link[xfun]{divide_chunk}()}
+#' under the hood.
 #' @export
-#' @examples
-#' # parse yaml-like items
-#' yaml_like = c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar", "1 + 1")
-#' writeLines(yaml_like)
-#' knitr::partition_chunk("r", yaml_like)
-#'
-#' # parse CSV syntax
-#' csv_like = c("#| mine, echo = TRUE, fig.width = 8, foo = 'bar'", "1 + 1")
-#' writeLines(csv_like)
-#' knitr::partition_chunk("r", csv_like)
+#' @keywords internal
 partition_chunk = function(engine, code) {
-
-  res = list(yaml = NULL, src = NULL, code = code)
-  # mask out empty blocks
-  if (length(code) == 0) return(res)
-
-  opt_comment = get_option_comment(engine)
-  s1 = opt_comment$start
-  s2 = opt_comment$end
-
-  # check for option comments
-  i1 = startsWith(code, s1)
-  i2 = endsWith(trimws(code, 'right'), s2)
-  # if "commentChar| " is not found, try "#| " instead
-  if (!i1[1] && !identical(s1, '#|')) {
-    s1 = '#| '; s2 = ''
-    i1 = startsWith(code, s1); i2 = TRUE
-  }
-  m = i1 & i2
-
-  # has to have at least one matched line at the beginning
-  if (!m[[1]]) return(res)
-
-  # divide into yaml and code
-  if (all(m)) {
-    src = code
-    code = NULL
-  } else {
-    src = head(code, which.min(m) - 1)
-    code = tail(code, -length(src))
-  }
-
-  # trim right
-  if (any(i2)) src = trimws(src, 'right')
-
-  # extract meta from comments, then parse it
-  meta = substr(src, nchar(s1) + 1, nchar(src) - nchar(s2))
-  # see if the metadata looks like YAML or CSV
-  if (grepl('^[^ :]+:($|\\s)', meta[1])) {
-    meta = handle_error(
-      yaml::yaml.load(meta, handlers = list(expr = parse_only)),
-      function(e, loc) {
-        x = e$message
-        r = 'line (\\d+), column (\\d+)'
-        m = regmatches(x, regexec(r, x, perl = TRUE))[[1]]
-        if (length(m) < 3) return()
-        m = as.integer(m[-1])  # c(row, col)
-        c(
-          sprintf('Failed to parse YAML inside code chunk at lines %s:', loc), '',
-          append(meta, paste0(strrep(' ', m[2]), '^~~~~~'), m[1]), ''
-        )
-      }
-    )
-    if (!is.list(meta) || length(names(meta)) == 0) {
-      warning('Invalid YAML option format in chunk: \n', one_string(meta), '\n')
-      meta = list()
-    }
-  } else {
-    meta = parse_params(paste(meta, collapse = ''), label = FALSE)
-  }
-
-  # normalize field name 'id' to 'label' if provided
-  meta$label = unlist(meta[c('label', 'id')])[[1]]
-  meta$id = NULL
-
-  # extract code
-  if (length(code) > 0 && is_blank(code[[1]])) {
-    code = code[-1]
-    src = c(src, '')
-  }
-
-  list(options = meta, src = src, code = code)
+  opts = options(xfun.handle_error.loc_fun = get_loc)
+  on.exit(options(opts))
+  # the code has been moved to the xfun package
+  xfun::divide_chunk(engine, code)
 }
 
-get_option_comment = function(engine) {
-  char = comment_chars[[engine]] %n% '#'
-  s1 = paste0(char[[1]], '| ')
-  s2 = ifelse(length(char) > 1, char[[2]], '')
-  list(start = s1, end = s2)
-}
 
 print.block = function(x, ...) {
   params = x$params
@@ -858,7 +700,7 @@ convert_chunk_header = function(
       params3 = strwrap(params2, width, prefix = prefix)
     } else if (type == 'multiline') {
       # one option per line of the form `key = value,`
-      res = parse_params(params2, label = FALSE)
+      res = xfun::csv_options(params2)
       params3 = sprintf('%s = %s,', names(res), deparsed_string(res))
 
       # remove trailing for last element
@@ -870,7 +712,7 @@ convert_chunk_header = function(
         strwrap(params3, width, prefix = prefix)
       }
     } else {
-      params3 = parse_params(params2, label = FALSE)
+      params3 = xfun::csv_options(params2)
 
       # fix un-evaluated options for yaml by transforming to !expr val
       params3 = lapply(params3, function(x) {
