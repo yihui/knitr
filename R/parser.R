@@ -688,7 +688,7 @@ convert_chunk_header = function(
     params2 = trimws(clean_empty_params(params2))
 
     # select the correct prefix char (e.g `#|`)
-    opt_chars = get_option_comment(engine)
+    opt_chars = xfun:::get_option_comment(engine)
     prefix = paste0(indent, opt_chars$start)
 
     # clean old chunk keeping only engine
