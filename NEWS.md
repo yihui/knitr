@@ -32,6 +32,8 @@
 
 - Fixed broken vignettes, improved CSS for HTML vignettes, and reduced the file sizes.
 
+- SQL code chunks that run `ALTER` statements are only executed and not tried to fecth a result (thanks, @maxschmi, #2330).
+
 # CHANGES IN knitr VERSION 1.45
 
 ## NEW FEATURES
