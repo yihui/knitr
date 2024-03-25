@@ -144,19 +144,6 @@ css_text_align = function(align) {
   if (align == 'default') '' else sprintf(' style="text-align: %s"', align)
 }
 
-# turn a class string "a b" to c(".a", ".b") for Pandoc fenced code blocks
-block_class = function(x) {
-  if (length(x) > 0) gsub('^[.]*', '.', unlist(strsplit(x, '\\s+')))
-}
-
-# concatenate block attributes (including classes) for Pandoc fenced code blocks
-block_attr = function(attr, class = NULL, lang = NULL) {
-  x = c(block_class(class), attr)
-  if (length(x) == 0) return(lang)
-  x = c(sprintf('.%s', lang), x)
-  paste0('{', paste0(x, collapse = ' '), '}')
-}
-
 #' @rdname output_hooks
 #' @export
 #' @param strict Boolean; whether to use strict markdown or reST syntax. For markdown, if
@@ -194,12 +181,12 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
   hook.r = function(x, options) {
     lang = tolower(options$lang %n% eng2lang(options$engine))
     if (!options$highlight) lang = 'text'
-    fenced_block(x, options$attr.source, options$class.source, lang, .char = fence_char)
+    fenced_block(x, options$attr.source, c(lang, options$class.source), .char = fence_char)
   }
   list(
     source = function(x, options) {
       x = hilight_source(x, 'markdown', options)
-      if (strict) hook.t(x) else hook.r(c(x, ''), options)
+      if (strict) hook.t(x) else hook.r(x, options)
     },
     inline = function(x) {
       if (is_latex_output()) .inline.hook.tex(x) else {
@@ -225,22 +212,26 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
   )
 }
 
-pandoc_div = function(x, .attr = NULL, .class = NULL) {
-  if (is.null(.attr) && is.null(.class)) return(x)
-  fenced_block(c(x, ''), .attr, .class, .char = ':', .sep = ' ', .outer = '')
+pandoc_div = function(x, attr = NULL, class = NULL) {
+  if (is.null(attr) && is.null(class)) return(x)
+  x = fenced_block(x, attr, class, .char = ':')
+  x = gsub('^\n\n|\n\n$', '', x)
+  gsub('^(:::+) *', '\\1 ', x)  # add a space if necessary
+}
+
+# turn a class string "a b" to c(".a", ".b") for Pandoc fenced code blocks
+block_class = function(x, attr = NULL) {
+  if (length(x)) x = unlist(strsplit(x, '\\s+'))
+  if (length(x) > 1 || length(attr)) gsub('^[.]*', '.', x) else x
 }
 
 # add a fence around content (either fenced code block ``` or Div :::)
-fenced_block = function(x, ..., .char = '`', .sep = '', .outer = '\n\n') {
-  x = one_string(c('', x))
-  f = create_fence(x, .char)
-  paste0(.outer, paste(f, block_attr(...), sep = .sep), x, f, .outer)
-}
-
-create_fence = function(x, char = '`') {
-  r = paste0('\n', char, '{3,}')
-  l = max(if (grepl(r, x)) attr(gregexpr(r, x)[[1]], 'match.length'), 3)
-  paste(rep(char, l), collapse = '')
+fenced_block = function(x, attr = NULL, class = NULL, .char = '`') {
+  x = sub('\n$', '', x)
+  x = xfun::fenced_block(x, c(block_class(class, attr), attr), char = .char)
+  x = one_string(c('', x, '', ''))
+  # remove the space between ``` and { for backward-compatibility
+  sub('``` {', '```{', x, fixed = TRUE)
 }
 
 # convert some engine names to language names
