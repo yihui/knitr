@@ -90,6 +90,10 @@ spin = function(
       # R code; #+/- indicates chunk options
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
+
+      # Working with #|
+      if (format == "qmd") block = process_block_for_qmd(block)
+
       rc <- '^(#|--)+(\\+|-|\\s+%%| ----+| @knitr)'
       if (length(opt <- grep(rc, block))) {
         opts = gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt])
@@ -153,6 +157,47 @@ spin = function(
     b = '```'
   }
   c(paste0(b, '{r'), '}', b, paste0(i, 'r \\1 ', i))
+}
+
+# find the position of the starting `#|` in a consecutive block of `#|` comments
+comment_start = function(x) {
+  i = startsWith(x, '#| ')
+  r = rle(i)
+  l = r$lengths
+  j = cumsum(l) - l + 1
+  j[r$values]
+}
+process_block_for_qmd <- function(block) {
+  rc <- '^(#|--)+(\\+|-|\\s+%%| ----+| @knitr)'
+  
+  opt <- grep(rc, block)
+  exe_opt <- grep('^(#)+(\\|)', block)
+  
+  if (length(exe_opt) > 0) {
+    # Execution options #|
+    idx = comment_start(block)
+    if (length(idx)) {
+      need_chunk_start = c()
+      # Check if opt exists before i
+      for (i in seq_along(idx)) {
+        if (idx[i] == 1) {
+          need_chunk_start = c(idx[i])
+        } else if (!((idx[i] - 1) %in% opt)) {
+          need_chunk_start = c(need_chunk_start, idx[i])
+        }
+      }
+    } 
+  }
+  
+  if (length(need_chunk_start)) {
+    for (i in seq_along(need_chunk_start)) { 
+      # insert position (keeping track of the additional elements we are adding)
+      j = need_chunk_start[i] + (i - 1)
+      block <- append(block, "# %%", after = j-1)
+    }
+  }
+
+  return(block)
 }
 
 #' Spin a child R script
