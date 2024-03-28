@@ -89,27 +89,20 @@ spin = function(
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
 
-      rc = '^(#|--)+(\\+|-|\\s+%%| ----+| @knitr)'
-      opt = grep(rc, block)
+      rc = '^(#|--)+(\\+|-| %%| ----+| @knitr)(.*?)\\s*-*\\s*$'
+      j1 = grep(rc, block)
       # pipe comments (#|) should start a code chunk if they are not preceded by
       # chunk opening tokens
-      j = setdiff(pipe_comment_start(block), opt + 1)
-      # add the token '# %%' before the starting pipe comment
-      block[j] = paste0('# %%\n', block[j])
-      opt = c(opt, j)
+      j2 = setdiff(pipe_comment_start(block), j1 + 1)
 
-      if (length(opt)) {
-        opts = gsub(paste0(rc, '(-*\\s*$|\n.*)'), '', block[opt])
-        opts = paste0(ifelse(opts == '', '', ' '), opts)
-        # add chunk headers with options (special case: '# %%\n#| ...')
-        block[opt] = paste0(
-          p[1L], opts, p[2L],
-          ifelse(grepl('\n', block[opt]), gsub('.*?(\n.+)', '\\1', block[opt]), '')
-        )
+      if (length(j3 <- c(j1, j2))) {
+        block[j1] = paste0(p[1], gsub(rc, '\\3', block[j1]), p[2])
+        block[j2] = paste0(p[1], p[2], '\n', block[j2])
+
         # close each chunk if there are multiple chunks in this block
-        if (any(opt > 1)) {
-          j = opt[opt > 1]
-          block[j] = paste(p[3L], block[j], sep = '\n')
+        if (any(j3 > 1)) {
+          j = j3[j3 > 1]
+          block[j] = paste0(p[3], '\n', block[j])
         }
       }
       if (!startsWith(block[1L], p[1L])) {
