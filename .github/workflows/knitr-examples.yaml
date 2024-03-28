@@ -54,7 +54,7 @@ jobs:
         uses: ./.github/actions/checkout-knitr-examples
 
       - name: Install knitr-example dev
-        run: pak::pak(readLines("knitr-examples/R-packages"))
+        run: install.packages(readLines("knitr-examples/R-packages"))
         shell: Rscript {0}
 
       - name: Install system dependencies

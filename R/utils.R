@@ -1052,8 +1052,9 @@ raw_output = function(x, markers = raw_markers, ...) {
 #' knitr::raw_latex('\\emph{some text}')
 raw_block = function(x, type = 'latex', ...) {
   if (!rmarkdown::pandoc_available('2.0.0')) warning('raw_block() requires Pandoc >= 2.0.0')
-  x = c(sprintf('\n```{=%s}', type), x, '```\n')
-  asis_output(one_string(x), ...)
+  x = fenced_block(x, attr = paste0('=', type))
+  x = gsub('^\n|\n$', '', x)
+  asis_output(x, ...)
 }
 
 #' @rdname raw_block

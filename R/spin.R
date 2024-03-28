@@ -3,8 +3,7 @@
 #' This function takes a specially formatted R script and converts it to a
 #' literate programming document. By default normal text (documentation) should
 #' be written after the roxygen comment (\code{#'}) and code chunk options are
-#' written after \code{#+} or \code{# \%\%} or \code{#-} or \code{# ----} or
-#' any of these combinations replacing \code{#} with \code{--}.
+#' written after \code{#|} or \code{#+} or \code{# \%\%} or \code{# ----}.
 #'
 #' Obviously the goat's hair is the original R script, and the wool is the
 #' literate programming document (ready to be knitted).
@@ -79,7 +78,6 @@ spin = function(
 
   r = rle((is_matchable & grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
-  p1 = gsub('\\{', '\\\\{', paste0('^', p[1L], '.*', p[2L], '$'))
 
   for (i in seq_len(n)) {
     block = x[seq(idx[i] + 1L, idx[i + 1])]
@@ -90,18 +88,24 @@ spin = function(
       # R code; #+/- indicates chunk options
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
-      rc <- '^(#|--)+(\\+|-|\\s+%%| ----+| @knitr)'
-      if (length(opt <- grep(rc, block))) {
-        opts = gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt])
-        opts = paste0(ifelse(opts == '', '', ' '), opts)
-        block[opt] = paste0(p[1L], opts, p[2L])
+
+      rc = '^(#|--)+(\\+|-| %%| ----+| @knitr)(.*?)\\s*-*\\s*$'
+      j1 = grep(rc, block)
+      # pipe comments (#|) should start a code chunk if they are not preceded by
+      # chunk opening tokens
+      j2 = setdiff(pipe_comment_start(block), j1 + 1)
+
+      if (length(j3 <- c(j1, j2))) {
+        block[j1] = paste0(p[1], gsub(rc, '\\3', block[j1]), p[2])
+        block[j2] = paste0(p[1], p[2], '\n', block[j2])
+
         # close each chunk if there are multiple chunks in this block
-        if (any(opt > 1)) {
-          j = opt[opt > 1]
-          block[j] = paste(p[3L], block[j], sep = '\n')
+        if (any(j3 > 1)) {
+          j = j3[j3 > 1]
+          block[j] = paste0(p[3], '\n', block[j])
         }
       }
-      if (!grepl(p1, block[1L])) {
+      if (!startsWith(block[1L], p[1L])) {
         block = c(paste0(p[1L], p[2L]), block)
       }
       c('', block, p[3L], '')
@@ -153,6 +157,15 @@ spin = function(
     b = '```'
   }
   c(paste0(b, '{r'), '}', b, paste0(i, 'r \\1 ', i))
+}
+
+# find the position of the starting `#|` in a consecutive block of `#|` comments
+pipe_comment_start = function(x) {
+  i = startsWith(x, '#| ')
+  r = rle(i)
+  l = r$lengths
+  j = cumsum(l) - l + 1
+  j[r$values]
 }
 
 #' Spin a child R script

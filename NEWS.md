@@ -6,6 +6,8 @@
 
 - `knitr::spin()` now recognizes `# %%` as a valid code chunk delimiter (thanks, @kylebutts, #2307).
 
+- `knitr::spin()` also recognizes `#|` comments as code chunks now (thanks, @kylebutts, #2320).
+
 - Chunk hooks can have the `...` argument now. Previously, only arguments `before`, `options`, `envir`, and `name` are accepted. If a chunk hook function has the `...` argument, all the aforementioned four arguments are passed to the hook. This means the hook function no longer has to have the four arguments explicitly in its signature, e.g., `function(before, ...)` is also valid if only the `before` argument is used inside the hook. See <https://yihui.org/knitr/hooks/#chunk-hooks> for more information.
 
 - For package vignettes, PNG plots will be optimized by `optipng` and `pngquant` if they are installed and can be found from the system `PATH` variable. This can help reduce the package size if vignettes contain PNG plots (thanks, @nanxstats, <https://nanx.me/blog/post/rpkgs-pngquant-ragg/>).
@@ -22,6 +24,8 @@
 
 - `include_graphics()` may provide an incorrect plot width to LaTeX when the locale setting for `LC_NUMERIC` is not `C` because the decimal separator may not be a dot (thanks, @tdhock, rstudio/rmarkdown#2525).
 
+- When TinyTeX and the LaTeX package **pdfcrop** are installed, `knitr::pdf_crop()` is unable to find `pdfcrop` (thanks, @dmkaplan2000, rstudio/tinytex#435).
+
 ## MAJOR CHANGES
 
 - Unbalanced chunk delimiters (fences) in R Markdown documents are no longer allowed, as announced two years ago at <https://yihui.org/en/2021/10/unbalanced-delimiters/> (#2306). This means the opening delimiter must strictly match the closing delimiter, e.g., if a code chunk starts with four backticks, it must also end with four; or if a chunk header is indented by two spaces, the closing fence must be indented by exactly two spaces. For authors who cannot update their R Markdown documents for any reason at the moment, setting `options(knitr.unbalanced.chunk = TRUE)` (e.g., in `.Rprofile`) can temporarily prevent **knitr** from throwing an error, but it is strongly recommended that you fix the problems as soon as possible, because this workaround will be removed in future.
@@ -29,6 +33,8 @@
 ## MINOR CHANGES
 
 - Fixed broken vignettes, improved CSS for HTML vignettes, and reduced the file sizes.
+
+- SQL code chunks that run `ALTER` statements are only executed and not tried to fecth a result (thanks, @maxschmi, #2330).
 
 # CHANGES IN knitr VERSION 1.45
 

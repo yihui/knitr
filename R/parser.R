@@ -175,6 +175,14 @@ unnamed_chunk = function(prefix = NULL, i = chunk_counter()) {
   paste(prefix, i, sep = '-')
 }
 
+# this internal function is still used in RStudio IDE, otherwise can be removed
+parse_params = function(params, label = TRUE) {
+  res = xfun::csv_options(params)
+  if (label && (!is.character(res$label) || identical(res$label, '')))
+    res$label = unnamed_chunk()
+  res
+}
+
 #' Partition chunk options from the code chunk body
 #'
 #' This is a wrapper function calling \code{xfun::\link[xfun]{divide_chunk}()}

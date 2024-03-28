@@ -168,25 +168,17 @@ assert('restore_raw_output() restores raw output', {
 })
 
 assert('raw_block() returns a raw attribute block for Pandoc', {
-  (raw_latex('\\emph{x}') == '\n```{=latex}\n\\emph{x}\n```\n')
-  (raw_html('<i>foo</i>') == '\n```{=html}\n<i>foo</i>\n```\n')
+  (c(raw_latex('\\emph{x}')) %==% '\n```{=latex}\n\\emph{x}\n```\n')
+  (c(raw_html('<i>foo</i>')) %==% '\n```{=html}\n<i>foo</i>\n```\n')
 })
 
 assert('block_class() turns a character vector into Pandoc attributes for code block classes', {
   (block_class(NULL) %==% NULL)
-  (block_class('a') %==% '.a')
+  (block_class('a') %==% 'a')
+  (block_class('a', '.b') %==% '.a')
   (block_class('a b') %==% c('.a', '.b'))
   (block_class(c('a', 'b')) %==% c('.a', '.b'))
 })
-
-assert('block_attr(x) turns a character vector into Pandoc attributes', {
-  (block_attr(NULL) %==% NULL)
-  (block_attr(NULL, lang = 'r') %==% 'r')
-  (block_attr('.a') %==% '{.a}')
-  (block_attr('.a b="11"') %==% '{.a b="11"}')
-  (block_attr(c('.a', 'b="11"')) %==% '{.a b="11"}')
-})
-
 
 assert('when collapse is TRUE, class.* and attr.* become NULL except for class.source and attr.source', {
   keys = unlist(lapply(

@@ -45,6 +45,6 @@ abline(fit, col = 'red')
 
 ## References
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, results='asis', warning=FALSE}
 print(citation('knitr'), style = 'html')
 ```
