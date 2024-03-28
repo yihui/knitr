@@ -79,7 +79,6 @@ spin = function(
 
   r = rle((is_matchable & grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
-  p1 = gsub('\\{', '\\\\{', paste0('^', p[1L], '.*', p[2L], '$'))
 
   for (i in seq_len(n)) {
     block = x[seq(idx[i] + 1L, idx[i + 1])]
@@ -91,21 +90,32 @@ spin = function(
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
 
-      # Working with #|
-      if (format == "qmd") block = process_block_for_qmd(block)
-
       rc <- '^(#|--)+(\\+|-|\\s+%%| ----+| @knitr)'
-      if (length(opt <- grep(rc, block))) {
-        opts = gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt])
+      opt = grep(rc, block)
+      # pipe comments (#|) should start a code chunk if they are not preceded by
+      # chunk opening tokens
+      if (format == 'qmd') {
+        j = setdiff(pipe_comment_start(block), opt + 1)
+        # add the token '# %%' before the starting pipe comment
+        block[j] = paste0('# %%\n', block[j])
+        opt = c(opt, j)
+      }
+
+      if (length(opt)) {
+        opts = gsub(paste0(rc, '(-*\\s*$|\n.*)'), '', block[opt])
         opts = paste0(ifelse(opts == '', '', ' '), opts)
-        block[opt] = paste0(p[1L], opts, p[2L])
+        # add chunk headers with options (special case: '# %%\n#| ...')
+        block[opt] = paste0(
+          p[1L], opts, p[2L],
+          ifelse(grepl('\n', block[opt]), gsub('.*?(\n.+)', '\\1', block[opt]), '')
+        )
         # close each chunk if there are multiple chunks in this block
         if (any(opt > 1)) {
           j = opt[opt > 1]
           block[j] = paste(p[3L], block[j], sep = '\n')
         }
       }
-      if (!grepl(p1, block[1L])) {
+      if (!startsWith(block[1L], p[1L])) {
         block = c(paste0(p[1L], p[2L]), block)
       }
       c('', block, p[3L], '')
@@ -160,44 +170,12 @@ spin = function(
 }
 
 # find the position of the starting `#|` in a consecutive block of `#|` comments
-comment_start = function(x) {
+pipe_comment_start = function(x) {
   i = startsWith(x, '#| ')
   r = rle(i)
   l = r$lengths
   j = cumsum(l) - l + 1
   j[r$values]
-}
-process_block_for_qmd <- function(block) {
-  rc <- '^(#|--)+(\\+|-|\\s+%%| ----+| @knitr)'
-  
-  opt <- grep(rc, block)
-  exe_opt <- grep('^(#)+(\\|)', block)
-  
-  if (length(exe_opt) > 0) {
-    # Execution options #|
-    idx = comment_start(block)
-    if (length(idx)) {
-      need_chunk_start = c()
-      # Check if opt exists before i
-      for (i in seq_along(idx)) {
-        if (idx[i] == 1) {
-          need_chunk_start = c(idx[i])
-        } else if (!((idx[i] - 1) %in% opt)) {
-          need_chunk_start = c(need_chunk_start, idx[i])
-        }
-      }
-    } 
-  }
-  
-  if (length(need_chunk_start)) {
-    for (i in seq_along(need_chunk_start)) { 
-      # insert position (keeping track of the additional elements we are adding)
-      j = need_chunk_start[i] + (i - 1)
-      block <- append(block, "# %%", after = j-1)
-    }
-  }
-
-  return(block)
 }
 
 #' Spin a child R script
