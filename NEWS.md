@@ -4,9 +4,9 @@
 
 - Added a new chunk option `tab.cap` to specify the table caption for `kable()` (thanks, @ulyngs, #1679). Previously, the caption could only be specified via the `caption` argument of `kable()`. Now you can set it in the chunk header if you want. Please note that this chunk option only works with a single `kable()` in each code chunk, and its value must be of length 1.
 
-- `knitr::spin()` now recognizes `# %%` as a valid code chunk delimiter (thanks, @kylebutts, #2307).
+- `spin()` now recognizes `# %%` as a valid code chunk delimiter (thanks, @kylebutts, #2307).
 
-- `knitr::spin()` also recognizes `#|` comments as code chunks now (thanks, @kylebutts, #2320).
+- `spin()` also recognizes `#|` comments as code chunks now (thanks, @kylebutts, #2320).
 
 - Chunk hooks can have the `...` argument now. Previously, only arguments `before`, `options`, `envir`, and `name` are accepted. If a chunk hook function has the `...` argument, all the aforementioned four arguments are passed to the hook. This means the hook function no longer has to have the four arguments explicitly in its signature, e.g., `function(before, ...)` is also valid if only the `before` argument is used inside the hook. See <https://yihui.org/knitr/hooks/#chunk-hooks> for more information.
 
@@ -35,6 +35,8 @@
 - Fixed broken vignettes, improved CSS for HTML vignettes, and reduced the file sizes.
 
 - SQL code chunks that run `ALTER` statements are only executed and not tried to fecth a result (thanks, @maxschmi, #2330).
+
+- The function `imgur_upload()` has been moved to (and enhanced in) the **xfun** package as `xfun::upload_imgur()` so it is no longer tied to **knitr** and can be reused by other pakages. Now `knitr::imgur_upload()` is only a wrapper function of `xfun::upload_imgur()`. You are recommended to use the latter (#2325).
 
 # CHANGES IN knitr VERSION 1.45
 
