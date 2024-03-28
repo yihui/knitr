@@ -66,17 +66,24 @@ spin = function(
 
   # remove multiline string literals and symbols (note that this ignores lines with spaces at their
   # beginnings, assuming doc and inline regex don't match these lines anyway)
-  parsed_data = getParseData(parse(text = x, keep.source = TRUE))
-  is_matchable = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, 'line1'])
+  is_matchable = function(x) {
+    # if code can't be parsed, assume all lines are matchable
+    p = tryCatch(parse(text = x, keep.source = TRUE), error = function(e) NULL)
+    n = length(x)
+    if (is.null(p)) return(rep(TRUE, n))
+    d = getParseData(p)
+    seq_len(n) %in% d[d$col1 == 1, 'line1']
+  }
+  matchable = is_matchable(x)
 
   # .Rmd/.qmd need to be treated specially
   is_md = grepl('^[Rq]md$', format)
   p = if (is_md) .fmt.rmd(x) else .fmt.pat[[tolower(format)]]
 
   # turn {{expr}} into inline expressions, e.g. `r expr` or \Sexpr{expr}
-  if (any(i <- is_matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
+  if (any(i <- matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
 
-  r = rle((is_matchable & grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
+  r = rle((matchable & grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
 
   for (i in seq_len(n)) {

@@ -14,6 +14,8 @@
 
 ## BUG FIXES
 
+- `spin()` stopped working with input that cannot be parsed as R code due to #1605. Now it works again (thanks, @Hemken, #1773).
+
 - `write_bib()` generated empty entries for packages without URLs (thanks, @bastistician, #2304).
 
 - The `family` argument was not passed to the `pdf` device (thanks, @sebkopf, rstudio/rmarkdown#2526).
