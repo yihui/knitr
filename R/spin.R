@@ -89,7 +89,7 @@ spin = function(
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
 
-      rc = '^(#|--)+(\\+|-| %%| ----+| @knitr)(.*?)\\s*-*\\s*$'
+      rc = '^(#|--)+(\\+| %%| ----+| @knitr)(.*?)\\s*-*\\s*$'
       j1 = grep(rc, block)
       # pipe comments (#|) should start a code chunk if they are not preceded by
       # chunk opening tokens

@@ -38,6 +38,8 @@
 
 - The function `imgur_upload()` has been moved to (and enhanced in) the **xfun** package as `xfun::upload_imgur()` so it is no longer tied to **knitr** and can be reused by other pakages. Now `knitr::imgur_upload()` is only a wrapper function of `xfun::upload_imgur()`. You are recommended to use the latter (#2325).
 
+- `spin()` dropped support for `#-` as the chunk delimiter token. Please use `#+` or `# %%` or `#|` instead.
+
 # CHANGES IN knitr VERSION 1.45
 
 ## NEW FEATURES
