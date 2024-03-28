@@ -131,7 +131,6 @@ Suggests:
     gifski,
     gridSVG,
     htmlwidgets (>= 0.7),
-    curl,
     jpeg,
     JuliaCall (>= 0.11.1),
     magick,
@@ -152,8 +151,7 @@ Suggests:
     tinytex (>= 0.46),
     webshot,
     rstudioapi,
-    svglite,
-    xml2 (>= 1.2.0)
+    svglite
 License: GPL
 URL: https://yihui.org/knitr/
 BugReports: https://github.com/yihui/knitr/issues
