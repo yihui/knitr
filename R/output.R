@@ -308,7 +308,7 @@ process_file = function(text, output) {
     if (progress && is.function(pb$update)) pb$update(i)
     group = groups[[i]]
     knit_concord$set(block = i)
-    res[i] = handle_error(
+    res[i] = xfun:::handle_error(
       withCallingHandlers(
         if (tangle) process_tangle(group) else process_group(group),
         error = function(e) if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
@@ -318,7 +318,7 @@ process_file = function(text, output) {
         write_utf8(res, output %n% stdout())
         paste0('\nQuitting from lines ', loc)
       },
-      if (labels[i] != '') sprintf(' [%s]', labels[i])
+      if (labels[i] != '') sprintf(' [%s]', labels[i]), get_loc
     )
   }
 
@@ -331,13 +331,9 @@ process_file = function(text, output) {
   res
 }
 
-# if an expr throws an an error, message the location of the error if possible
-handle_error = function(expr, handler, label = '') {
-  withCallingHandlers(expr, error = function(e) {
-    # return a string to point out the error location
-    loc = paste0(current_lines(), label, sprintf(' (%s)', knit_concord$get('infile')))
-    message(one_string(handler(e, loc)))
-  })
+# return a string to point out the current location in the doc
+get_loc = function(label = '') {
+  paste0(current_lines(), label, sprintf(' (%s)', knit_concord$get('infile')))
 }
 
 auto_out_name = function(input, ext = tolower(file_ext(input))) {

@@ -70,8 +70,8 @@ hook_chunk = knit_hooks$get("chunk")
 assert('Chunks are enclosed by fenced divs when needed.', {
   (hook_chunk('', list(class.chunk=NULL)) %==% '')
   (hook_chunk('', list(class.chunk="")) %==% '::: \n\n:::')
-  (hook_chunk('', list(class.chunk="foo")) %==% '::: {.foo}\n\n:::')
-  (hook_chunk(':::', list(class.chunk="foo")) %==% ':::: {.foo}\n:::\n::::')
+  (hook_chunk('', list(class.chunk="foo")) %==% '::: foo\n\n:::')
+  (hook_chunk(':::', list(class.chunk="foo")) %==% ':::: foo\n:::\n::::')
 })
 
 knit_hooks$restore()

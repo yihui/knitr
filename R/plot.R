@@ -373,6 +373,7 @@ plot_crop = function(x, quiet = TRUE) {
   is_pdf = grepl('[.]pdf$', x, ignore.case = TRUE)
   x2 = x
   x = path.expand(x)
+  tinytex:::tweak_path()  # in case TinyTeX is installed but not on PATH
   if (is_pdf && !has_utility('pdfcrop')) return(x2)
 
   if (!quiet) message('cropping ', x)
@@ -531,7 +532,7 @@ raster_dpi_width = function(path, dpi) {
     w = ncol(jpeg::readJPEG(path, native = TRUE))
   }
   if (is_latex_output()) {
-    paste0(round(w / dpi, 2), 'in')
+    xfun::decimal_dot(paste0(round(w / dpi, 2), 'in'))
   } else if (is_html_output()) {
     round(w / (dpi / 96))
   }

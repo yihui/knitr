@@ -69,8 +69,9 @@ color_def = function(col, variable = 'shadecolor') {
   }
   if (length(x) != 3L) stop('invalid color:', col)
   if (is.numeric(x)) x = round(x, 3L)
-  outdec = options(OutDec = '.'); on.exit(options(outdec))
-  sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
+  xfun::decimal_dot(
+    sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
+  )
 }
 
 # split by semicolon or colon
@@ -1051,8 +1052,9 @@ raw_output = function(x, markers = raw_markers, ...) {
 #' knitr::raw_latex('\\emph{some text}')
 raw_block = function(x, type = 'latex', ...) {
   if (!rmarkdown::pandoc_available('2.0.0')) warning('raw_block() requires Pandoc >= 2.0.0')
-  x = c(sprintf('\n```{=%s}', type), x, '```\n')
-  asis_output(one_string(x), ...)
+  x = fenced_block(x, attr = paste0('=', type))
+  x = gsub('^\n|\n$', '', x)
+  asis_output(x, ...)
 }
 
 #' @rdname raw_block
