@@ -94,12 +94,10 @@ spin = function(
       opt = grep(rc, block)
       # pipe comments (#|) should start a code chunk if they are not preceded by
       # chunk opening tokens
-      if (format == 'qmd') {
-        j = setdiff(pipe_comment_start(block), opt + 1)
-        # add the token '# %%' before the starting pipe comment
-        block[j] = paste0('# %%\n', block[j])
-        opt = c(opt, j)
-      }
+      j = setdiff(pipe_comment_start(block), opt + 1)
+      # add the token '# %%' before the starting pipe comment
+      block[j] = paste0('# %%\n', block[j])
+      opt = c(opt, j)
 
       if (length(opt)) {
         opts = gsub(paste0(rc, '(-*\\s*$|\n.*)'), '', block[opt])

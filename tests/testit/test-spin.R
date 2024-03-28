@@ -27,21 +27,21 @@ assert("spin() uses proper number of backticks", {
     c("", "````{r}", "x <- '", "```", "'", "````", ""))
 })
 
-assert("spin() works properly with quarto `#|`", {
+assert("spin() generates code chunks with pipe comments `#|`", {
   (
-    spin_text("", "#| echo: false", "#| message: false", "#| include: false", "1+1", "#| eval: false", "2 + 2", "", "#' Text", format = "qmd") %==%
+    spin_text("", "#| echo: false", "#| message: false", "#| include: false", "1+1", "#| eval: false", "2 + 2", "", "#' Text") %==%
     c('', '```{r}', '#| echo: false', '#| message: false', '#| include: false', '1+1', '```', '```{r}', '#| eval: false', '2 + 2', '```', '', 'Text')
   )
 
   # https://github.com/yihui/knitr/issues/2314
   (
-    spin_text('#| echo: false', '1+1', '#| label: test', '1+1', format = "qmd") %==%
+    spin_text('#| echo: false', '1+1', '#| label: test', '1+1') %==%
     c('', '```{r}', '#| echo: false', '1+1', '```', '```{r}', '#| label: test', '1+1', '```', '')
   )
 
   # Has a `# %%` already
   (
-    spin_text('# %%', '#| echo: false', '1+1', '#| label: test', '1+1', format = "qmd") %==%
+    spin_text('# %%', '#| echo: false', '1+1', '#| label: test', '1+1') %==%
     c('', '```{r}', '#| echo: false', '1+1', '```', '```{r}', '#| label: test', '1+1', '```', '')
   )
 })
