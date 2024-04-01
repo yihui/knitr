@@ -1,7 +1,7 @@
 Package: knitr
 Type: Package
 Title: A General-Purpose Package for Dynamic Report Generation in R
-Version: 1.45.10
+Version: 1.45.17
 Authors@R: c(
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666")),
     person("Abhraneel", "Sarma", role = "ctb"),
@@ -120,7 +120,7 @@ Imports:
     highr,
     methods,
     tools,
-    xfun (>= 0.39),
+    xfun (>= 0.43),
     yaml (>= 2.1.19)
 Suggests:
     bslib,
@@ -131,7 +131,6 @@ Suggests:
     gifski,
     gridSVG,
     htmlwidgets (>= 0.7),
-    curl,
     jpeg,
     JuliaCall (>= 0.11.1),
     magick,
@@ -152,8 +151,7 @@ Suggests:
     tinytex (>= 0.46),
     webshot,
     rstudioapi,
-    svglite,
-    xml2 (>= 1.2.0)
+    svglite
 License: GPL
 URL: https://yihui.org/knitr/
 BugReports: https://github.com/yihui/knitr/issues
@@ -199,4 +197,4 @@ Collate:
     'utils-upload.R'
     'utils-vignettes.R'
     'zzz.R'
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1

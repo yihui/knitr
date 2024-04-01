@@ -6,59 +6,16 @@
 \usage{
 imgur_upload(
   file,
-  key = xfun::env_option("knitr.imgur.key", "9f3460e67f308f6")
+  key = xfun::env_option("knitr.imgur.key", "9f3460e67f308f6"),
+  ...
 )
 }
 \arguments{
-\item{file}{Path to the image file to be uploaded.}
-
-\item{key}{Client ID for Imgur. It can be set via either the global option
-\code{knitr.imgur.key} or the environment variable \code{R_KNITR_IMGUR_KEY}
-(see [xfun::env_option()]). If neither is set, this uses a client ID
-registered by Yihui Xie.}
-}
-\value{
-A character string of the link to the image; this string carries an
-  attribute named \code{XML} which is a list converted from the response XML
-  file; see Imgur API in the references.
+\item{file, key, ...}{See \code{xfun::\link[xfun]{upload_imgur}()}.}
 }
 \description{
-This function uses the \pkg{curl} package to upload a image to
-\url{https://imgur.com}, and parses the XML response to a list with
-\pkg{xml2}, which contains information about the image on Imgur.
+This function is an alias to \code{xfun::upload_imgur()}. It is kept in
+\pkg{knitr} only for backward-compatibility reasons. You are recommended to
+use \code{xfun::upload_imgur()} directly instead.
 }
-\details{
-When the output format from \code{\link{knit}()} is HTML or Markdown, this
-function can be used to upload local image files to Imgur, e.g. set the
-package option \code{opts_knit$set(upload.fun = imgur_upload)}, so the output
-document is completely self-contained, i.e. it does not need external image
-files any more, and it is ready to be published online.
-}
-\note{
-Please register your own Imgur application to get your client ID; you
-  can certainly use mine, but this ID is in the public domain so everyone has
-  access to all images associated to it.
-}
-\examples{
-\dontrun{
-f = tempfile(fileext = ".png")
-png(f)
-plot(rnorm(100), main = R.version.string)
-dev.off()
-
-res = imgur_upload(f)
-res  # link to original URL of the image
-attr(res, "XML")  # all information
-if (interactive())
-    browseURL(res)
-
-# to use your own key
-options(knitr.imgur.key = "your imgur key")
-}
-}
-\references{
-A demo: \url{https://yihui.org/knitr/demo/upload/}
-}
-\author{
-Yihui Xie, adapted from the \pkg{imguR} package by Aaron Statham
-}
+\keyword{internal}
