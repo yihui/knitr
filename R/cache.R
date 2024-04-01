@@ -153,7 +153,7 @@ cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
 #' @export
 #' @seealso \code{\link{dep_prev}}
 #' @references \url{https://yihui.org/knitr/demo/cache/}
-dep_auto = function(path = opts_chunk$get('cache.path'), chunk_label=NULL) {
+dep_auto = function(path = opts_chunk$get('cache.path'), chunk_label = NULL) {
   # this function should be evaluated in the original working directory
   owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
   paths = valid_path(path, c('__objects', '__globals'))
@@ -167,9 +167,9 @@ dep_auto = function(path = opts_chunk$get('cache.path'), chunk_label=NULL) {
   # locals may contain old chunk names; the intersection can be of length < 2
   if (is.null(chunk_label)) {
     if (length(nms) < 2) return(invisible(NULL))
-    chunk_ids <- 2:length(nms)
+    chunk_ids = 2:length(nms)
   } else {
-    chunk_ids <- match(chunk_label, nms)
+    chunk_ids = match(chunk_label, nms)
     if (is.na(chunk_ids) || chunk_ids < 2) return(invisible(NULL))
   }
   for (i in chunk_ids) {
