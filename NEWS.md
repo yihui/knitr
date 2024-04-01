@@ -42,6 +42,8 @@
 
 - `spin()` dropped support for `#-` as the chunk delimiter token. Please use `#+` or `# %%` or `#|` instead.
 
+- Faster processing of cache dependencies in `dep_auto()` (thanks, @knokknok, #2318).
+
 # CHANGES IN knitr VERSION 1.45
 
 ## NEW FEATURES

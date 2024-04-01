@@ -345,7 +345,7 @@ eng_r = function(options) {
         objs, cache_globals(options$cache.globals, code), options$label,
         options$cache.path
       )
-      dep_auto()
+      dep_auto(labels = options$label)
     }
     if (options$cache < 3) {
       if (options$cache.rebuild || !cache.exists) block_cache(options, res.orig, objs)
