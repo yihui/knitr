@@ -142,7 +142,8 @@ cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
 #' is similar to the effect of the \code{dependson} option. It is supposed to be
 #' used in the first chunk of a document and this chunk must not be cached.
 #' @param path Path to the dependency file.
-#' @param chunk_label The chunk label of the current code chunk.
+#' @param labels A vector of labels of chunks for which the dependencies will be
+#'   built. By default, dependencies for all chunks will be built.
 #' @return \code{NULL}. The dependencies are built as a side effect.
 #' @note Be cautious about \code{path}: because this function is used in a
 #'   chunk, the working directory when the chunk is evaluated is the directory
@@ -153,7 +154,7 @@ cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
 #' @export
 #' @seealso \code{\link{dep_prev}}
 #' @references \url{https://yihui.org/knitr/demo/cache/}
-dep_auto = function(path = opts_chunk$get('cache.path'), chunk_label = NULL) {
+dep_auto = function(path = opts_chunk$get('cache.path'), labels = all_labels()) {
   # this function should be evaluated in the original working directory
   owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
   paths = valid_path(path, c('__objects', '__globals'))
@@ -163,17 +164,10 @@ dep_auto = function(path = opts_chunk$get('cache.path'), chunk_label = NULL) {
     warning('corrupt dependency files? \ntry remove ', paste(paths, collapse = '; '))
     return(invisible(NULL))
   }
-  nms = intersect(names(knit_code$get()), names(locals)) # guarantee correct order
-  # locals may contain old chunk names; the intersection can be of length < 2
-  if (is.null(chunk_label)) {
-    if (length(nms) < 2) return(invisible(NULL))
-    chunk_ids = 2:length(nms)
-  } else {
-    chunk_ids = match(chunk_label, nms)
-    if (is.na(chunk_ids) || chunk_ids < 2) return(invisible(NULL))
-  }
-  for (i in chunk_ids) {
-    if (length(g <- globals[[nms[i]]]) == 0) next
+  nms = intersect(all_labels(), names(locals)) # guarantee correct order
+  for (i in match(labels, nms)) {
+    # ignore first chunk (i < 2); locals may contain old chunk names (i will be NA)
+    if (is.na(i) || i < 2 || length(g <- globals[[nms[i]]]) == 0) next
     for (j in 1:(i - 1L)) {
       # check if current globals are in old locals
       if (any(g %in% locals[[nms[j]]]))
