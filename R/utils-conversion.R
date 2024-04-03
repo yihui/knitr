@@ -177,7 +177,7 @@ knit2html = function(
 is_rmd_v2 = function(input, text = read_utf8(input)) {
   res = xfun::yaml_body(text)$yaml[['output']]
   if (is.list(res)) res = names(res)
-  length(res) > 0 && is.character(res) && !any(grepl('(mark|lite)down::', res))
+  length(res) > 0 && is.character(res) && !any(grepl('^(mark|lite)down::', res))
 }
 
 #' Knit an R Markdown document and post it to WordPress
