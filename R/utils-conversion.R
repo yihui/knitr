@@ -159,8 +159,8 @@ knit2html = function(
   if (is_cran_check() && !has_package('markdown'))
     return(vweave_empty(input, .reason = 'markdown'))
 
-  if (!force_v1 && is.null(text)) {
-    if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) warning2(
+  if (!force_v1 && is.null(text) && is_rmd_v2(input)) {
+    warning2(
       'It seems you should call rmarkdown::render() instead of knitr::knit2html() ',
       'because ', input, ' appears to be an R Markdown v2 document.'
     )
@@ -171,6 +171,13 @@ knit2html = function(
     markdown::mark_html(out, output, ...)
     invisible(output)
   } else markdown::mark_html(text = out, ...)
+}
+
+# test if an Rmd input should be rendered via rmarkdown::render() or (mark|lite)down::mark()
+is_rmd_v2 = function(input, text = read_utf8(input)) {
+  res = xfun::yaml_body(text)$yaml[['output']]
+  if (is.list(res)) res = names(res)
+  length(res) > 0 && is.character(res) && !any(grepl('(mark|lite)down::', res))
 }
 
 #' Knit an R Markdown document and post it to WordPress
