@@ -466,7 +466,7 @@ match_chunk_end = function(pattern, line, i, b, lines) {
       return(FALSE)
   }
   # TODO: clean up the exceptions here (although perhaps some may never update again)
-  signal = if (getOption('knitr.unbalanced.chunk', check_old(
+  signal = if (getOption('knitr.unbalanced.chunk', xfun::check_old_package(
     c('ensembleR', 'FSinR', 'liger', 'loo', 'microsamplingDesign', 'mmpf', 'rSEA', 'StructFDR', 'TRMF'),
     c('0.1.0', '2.0.5', '2.0.1', '2.6.0', '1.0.8', '0.0.5', '2.1.1', '1.3', '0.1.5')
   ))) warning2 else stop2
@@ -479,13 +479,6 @@ match_chunk_end = function(pattern, line, i, b, lines) {
     'See https://yihui.org/en/2021/10/unbalanced-delimiters/ for more info.'
   )
   TRUE
-}
-
-# TODO: just use check_old_package() in xfun >= 0.42
-check_old = function(name, version) {
-  for (i in seq_along(name))
-    if (xfun::check_old_package(name[i], version[i])) return(TRUE)
-  FALSE
 }
 
 #' Get all chunk labels in a document
