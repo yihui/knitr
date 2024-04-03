@@ -28,7 +28,7 @@ NULL
 vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
   {
     on.exit({opts_chunk$restore(); knit_hooks$restore()}, add = TRUE)
-    oopts = options(markdown.html.header = NULL, knitr.knit2html.force_v1 = TRUE)
+    oopts = options(knitr.knit2html.force_v1 = TRUE)
     on.exit(options(oopts), add = TRUE)
   }
   opts_chunk$set(error = FALSE)  # should not hide errors
