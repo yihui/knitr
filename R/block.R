@@ -3,9 +3,9 @@ process_group = function(x) {
   UseMethod('process_group', x)
 }
 #' @export
-process_group.block = function(x) call_block(x)
+process_group.knitr_block = function(x) call_block(x)
 #' @export
-process_group.inline = function(x) {
+process_group.knitr_inline = function(x) {
   x = call_inline(x)
   knit_hooks$get('text')(x)
 }
@@ -588,7 +588,7 @@ process_tangle = function(x) {
   UseMethod('process_tangle', x)
 }
 #' @export
-process_tangle.block = function(x) {
+process_tangle.knitr_block = function(x) {
   params = opts_chunk$merge(x$params)
   for (o in c('purl', 'eval', 'child')) {
     if (inherits(try(params[o] <- list(eval_lang(params[[o]]))), 'try-error')) {
@@ -615,7 +615,7 @@ process_tangle.block = function(x) {
   label_code(code, x)
 }
 #' @export
-process_tangle.inline = function(x) {
+process_tangle.knitr_inline = function(x) {
 
   output = if (opts_knit$get('documentation') == 2L) {
     output = paste("#'", gsub('\n', "\n#' ", x$input, fixed = TRUE))
