@@ -186,7 +186,7 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
   list(
     source = function(x, options) {
       x = hilight_source(x, 'markdown', options)
-      if (strict) hook.t(x) else hook.r(x, options)
+      if (strict) hook.t(x) else hook.r(sub('\n$', '\n\n', x), options)
     },
     inline = function(x) {
       if (is_latex_output()) .inline.hook.tex(x) else {
