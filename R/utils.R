@@ -1054,6 +1054,11 @@ raw_block = function(x, type = 'latex', ...) {
   if (!rmarkdown::pandoc_available('2.0.0')) warning('raw_block() requires Pandoc >= 2.0.0')
   x = fenced_block(x, attr = paste0('=', type))
   x = gsub('^\n|\n$', '', x)
+  # TODO: get rid of this hack for davidgohel/flextable#621
+  if ('flextable' %in% xfun:::sys.packages() && packageVersion('flextable') <= '0.9.5') {
+    x = gsub('^(\\s*)```+', '\\1```', x)
+    x = gsub('```+(\\s*)$', '```\\1', x)
+  }
   asis_output(x, ...)
 }
 
