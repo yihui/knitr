@@ -469,7 +469,7 @@ match_chunk_end = function(pattern, line, i, b, lines) {
   # TODO: clean up the exceptions here (although perhaps some may never update again)
   signal = if (getOption('knitr.unbalanced.chunk', xfun::check_old_package(
     c('ensembleR', 'FSinR', 'liger', 'microsamplingDesign', 'mmpf', 'rSEA', 'StructFDR', 'TRMF'),
-    c('0.1.0', '2.0.5', '2.0.1', '1.0.8', '0.0.5', '2.1.1', '1.3', '0.1.5')
+    c('0.1.0', '2.0.5', '2.0.1', '1.0.8', '0.0.5', '2.1.1', '1.4', '0.1.5')
   ))) warning2 else stop2
   signal(
     'The closing fence on line ', i, ' ("', line, '") in ', current_input(),
