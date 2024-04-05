@@ -148,7 +148,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
     }
   }
 
-  structure(class = 'knitr_block', list(
+  structure(class = 'block', list(
     params = params, params.src = params.src, params.chunk = parts$src)
   )
 }
@@ -196,8 +196,7 @@ partition_chunk = function(engine, code) {
   xfun::divide_chunk(engine, code)
 }
 
-#' @export
-print.knitr_block = function(x, ...) {
+print_block = function(x) {
   params = x$params
   if (opts_knit$get('verbose')) {
     code = knit_code$get(params$label)
@@ -231,12 +230,11 @@ parse_inline = function(input, patterns) {
 
   structure(
     list(input = input, location = loc, code = code2, code.src = code1),
-    class = 'knitr_inline'
+    class = 'inline'
   )
 }
 
-#' @export
-print.knitr_inline = function(x, ...) {
+print_inline = function(x) {
   if (opts_knit$get('verbose')) {
     cat('\n')
     if (nrow(x$location)) {

@@ -44,6 +44,8 @@
 
 - Faster processing of cache dependencies in `dep_auto()` (thanks, @knokknok, #2318).
 
+- Removed some S3 methods that are used internally and changed them to normal functions: `print.block -> print_block`, `print.inline -> print_inline`, `process_group.block/process_group.inline -> process_group`, and `process_tangle.block/process_tangle.inline -> process_tangle`.
+
 # CHANGES IN knitr VERSION 1.45
 
 ## NEW FEATURES

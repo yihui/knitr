@@ -1,15 +1,10 @@
-# S3 method to deal with chunks and inline text respectively
+# process chunks and inline text
 process_group = function(x) {
-  UseMethod('process_group', x)
+  if (inherits(x, 'block')) call_block(x) else {
+    x = call_inline(x)
+    knit_hooks$get('text')(x)
+  }
 }
-#' @export
-process_group.knitr_block = function(x) call_block(x)
-#' @export
-process_group.knitr_inline = function(x) {
-  x = call_inline(x)
-  knit_hooks$get('text')(x)
-}
-
 
 call_block = function(block) {
   # now try eval all options except those in eval.after and their aliases
@@ -55,7 +50,7 @@ call_block = function(block) {
   optc = opts_current$get(); on.exit(opts_current$restore(optc), add = TRUE)
   opts_current$restore(params)
 
-  if (opts_knit$get('progress')) print(block)
+  if (opts_knit$get('progress')) print_block(block)
 
   params[['code']] = parse_chunk(params[['code']]) # parse sub-chunk references
 
@@ -554,7 +549,7 @@ call_inline = function(block) {
   optc = opts_current$get(); on.exit(opts_current$restore(optc), add = TRUE)
   params = opts_chunk$merge(list(label = unnamed_chunk()))
   opts_current$restore(params)
-  if (opts_knit$get('progress')) print(block)
+  if (opts_knit$get('progress')) print_inline(block)
   in_input_dir(inline_exec(block))
 }
 
@@ -585,10 +580,10 @@ inline_exec = function(
 }
 
 process_tangle = function(x) {
-  UseMethod('process_tangle', x)
+  if (inherits(x, 'block')) tangle_block(x) else tangle_inline(x)
 }
-#' @export
-process_tangle.knitr_block = function(x) {
+
+tangle_block = function(x) {
   params = opts_chunk$merge(x$params)
   for (o in c('purl', 'eval', 'child')) {
     if (inherits(try(params[o] <- list(eval_lang(params[[o]]))), 'try-error')) {
@@ -614,9 +609,8 @@ process_tangle.knitr_block = function(x) {
   # e.g. when documentation 1 or 2 with purl()
   label_code(code, x)
 }
-#' @export
-process_tangle.knitr_inline = function(x) {
 
+tangle_inline = function(x) {
   output = if (opts_knit$get('documentation') == 2L) {
     output = paste("#'", gsub('\n', "\n#' ", x$input, fixed = TRUE))
   } else ''
