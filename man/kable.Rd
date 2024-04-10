@@ -84,6 +84,9 @@ Missing values (\code{NA}) in the table are displayed as \code{NA} by
 default. If you want to display them with other characters, you can set the
 option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
 hide \code{NA} values.
+
+You can set the option \code{knitr.kable.max_rows} to limit the number of
+rows to show in the table, e.g., \code{options(knitr.kable.max_rows = 30)}.
 }
 \note{
 When using \code{kable()} as a \emph{top-level} expression, you do not

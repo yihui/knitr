@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.47
 
+## NEW FEATURES
+
+- For `kable()`, you can set the global option `knitr.kable.max_rows` to limit the number of rows to show in the table, e.g., `options(knitr.kable.max_rows = 30)`. This is a way to prevent `kable()` from generating a huge table from a large data object by accident.
 
 # CHANGES IN knitr VERSION 1.46
 

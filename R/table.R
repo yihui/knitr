@@ -12,6 +12,9 @@
 #' default. If you want to display them with other characters, you can set the
 #' option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
 #' hide \code{NA} values.
+#'
+#' You can set the option \code{knitr.kable.max_rows} to limit the number of
+#' rows to show in the table, e.g., \code{options(knitr.kable.max_rows = 30)}.
 #' @param x For \code{kable()}, \code{x} is an R object, which is typically a
 #'   matrix or data frame. For \code{kables()}, a list with each element being a
 #'   returned value from \code{kable()}.
@@ -123,6 +126,8 @@ kable = function(
   caption = kable_caption(label, caption, format)
 
   if (!is.matrix(x)) x = as.data.frame(x)
+  # show the maximum number of rows if set
+  if (is.numeric(nr <- getOption('knitr.kable.max_rows'))) x = head(x, nr)
   if (identical(col.names, NA)) col.names = colnames(x)
   m = ncol(x)
   # numeric columns
