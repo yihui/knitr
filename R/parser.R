@@ -13,8 +13,7 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
   }
 
   markdown_mode = identical(patterns, all_patterns$md)
-  i = group_indices(grepl(chunk.begin, lines), grepl(chunk.end, lines), lines, markdown_mode)
-  groups = unname(split(lines, i))
+  groups = divide_chunks(lines, chunk.begin, chunk.end, markdown_mode)
 
   if (set.preamble)
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
@@ -39,6 +38,12 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       parse_block(g[-1], g[1], params.src, markdown_mode)
     } else parse_inline(g, patterns)
   })
+}
+
+# divide lines of input into code/text chunks
+divide_chunks = function(x, begin, end, md = TRUE) {
+  i = group_indices(grepl(begin, x), grepl(end, x), x, md)
+  unname(split(x, i))
 }
 
 extract_params_src = function(chunk.begin, line) {
