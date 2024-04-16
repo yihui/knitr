@@ -40,6 +40,8 @@
 
 - Unbalanced chunk delimiters (fences) in R Markdown documents are no longer allowed, as announced two years ago at <https://yihui.org/en/2021/10/unbalanced-delimiters/> (#2306). This means the opening delimiter must strictly match the closing delimiter, e.g., if a code chunk starts with four backticks, it must also end with four; or if a chunk header is indented by two spaces, the closing fence must be indented by exactly two spaces. For authors who cannot update their R Markdown documents for any reason at the moment, setting `options(knitr.unbalanced.chunk = TRUE)` (e.g., in `.Rprofile`) can temporarily prevent **knitr** from throwing an error, but it is strongly recommended that you fix the problems as soon as possible, because this workaround will be removed in future.
 
+- Package vignettes are tangled by default during `R CMD check`, per request from CRAN maintainers (d0d1b47). The consequence is that `R CMD check` will check R scripts tangled from vignettes by default, unless you set the environment variable `_R_CHECK_VIGNETTES_SKIP_RUN_MAYBE_=true`. Previously, **knitr** would skip tangling vignettes during `R CMD check`, because R scripts tangled from vignettes are not guaranteed to valid. With the skip undone, `R CMD check` may fail in places other than CRAN (because CRAN has set the environment variable).
+
 ## MINOR CHANGES
 
 - Fixed broken vignettes, improved CSS for HTML vignettes, and reduced the file sizes.
