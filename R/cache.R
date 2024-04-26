@@ -32,7 +32,7 @@ new_cache = function() {
     # random seed is always load()ed
     keys = as.character(setdiff(keys, '.Random.seed'))
     envir = knit_global()
-    saveRDS(setNames(lapply(keys, function(k) envir[[k]]), keys), paste(path, 'rds', sep = '.'))
+    saveRDS(setNames(lapply(keys, function(k) knit_cache_preprocess(envir[[k]])), keys), paste(path, 'rds', sep = '.'))
     unlink(paste(path, c('rdb', 'rdx'), sep = '.')) # migrate from former implementation
   }
 
@@ -65,7 +65,7 @@ new_cache = function() {
         envir = knit_global()
         obj = readRDS(paste(path, 'rds', sep = '.'))
         for (nm in names(obj)) {
-          assign(nm, obj[[nm]], envir = envir)
+          assign(nm, knit_cache_postprocess(obj[[nm]]), envir = envir)
         }
       }
     }
@@ -141,6 +141,12 @@ find_symbols = function(code) {
 cache_meta_name = function(hash) sprintf('.%s_meta', hash)
 # a variable name to store the text output of code chunks
 cache_output_name = function(hash) sprintf('.%s', hash)
+
+# process cached objects before save and after read
+knit_cache_preprocess = function(x, ...) UseMethod('knit_cache_preprocess')
+knit_cache_preprocess.default = function(x, ...) x
+knit_cache_postprocess = function(x, ...) UseMethod('knit_cache_postprocess')
+knit_cache_postprocess.default = function(x, ...) x
 
 cache = new_cache()
 
