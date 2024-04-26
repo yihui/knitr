@@ -11,7 +11,7 @@ new_cache = function() {
   }
 
   cache_purge = function(hash) {
-    for (h in hash) unlink(paste(cache_path(h), c('rdb', 'rdx', 'RData'), sep = '.'))
+    for (h in hash) unlink(paste(cache_path(h), c('rds', 'rdb', 'rdx', 'RData'), sep = '.'))
   }
 
   cache_save = function(keys, outname, hash, lazy = TRUE) {
@@ -31,7 +31,9 @@ new_cache = function() {
     if (!lazy) return()  # everything has been saved; no need to make lazy db
     # random seed is always load()ed
     keys = as.character(setdiff(keys, '.Random.seed'))
-    getFromNamespace('makeLazyLoadDB', 'tools')(knit_global(), path, variables = keys)
+    envir = knit_global()
+    saveRDS(setNames(lapply(keys, function(k) envir[[k]]), keys), paste(path, 'rds', sep = '.'))
+    unlink(paste(path, c('rdb', 'rdx'), sep = '.')) # migrate from former implementation
   }
 
   save_objects = function(objs, label, path) {
@@ -56,7 +58,17 @@ new_cache = function() {
   cache_load = function(hash, lazy = TRUE) {
     path = cache_path(hash)
     if (!is_abs_path(path)) path = file.path(getwd(), path)
-    if (lazy) lazyLoad(path, envir = knit_global())
+    if (lazy) {
+      if (file.exists(paste(path, 'rdb', sep = '.'))) {
+        lazyLoad(path, envir = knit_global()) # backward compatibility
+      } else {
+        envir = knit_global()
+        obj = readRDS(paste(path, 'rds', sep = '.'))
+        for (nm in names(obj)) {
+          assign(nm, obj[[nm]], envir = envir)
+        }
+      }
+    }
     # load output from last run if exists
     if (file.exists(path2 <- paste(path, 'RData', sep = '.'))) {
       load(path2, envir = knit_global())
@@ -87,10 +99,12 @@ new_cache = function() {
   }
 
   cache_exists = function(hash, lazy = TRUE) {
-    is.character(hash) &&
-      all(file.exists(paste(
-        cache_path(hash), if (lazy) c('rdb', 'rdx') else 'RData', sep = '.'
-      )))
+    if (!is.character(hash)) return(FALSE)
+    path = cache_path(hash)
+    if (!lazy) return(file.exists(paste(path, 'RData', sep = '.')))
+
+    # for backward compatibility, allow rdb/rdx
+    file.exists(paste(path, 'rds', sep = '.')) || all(file.exists(paste(path, c('rdb', 'rdx'), sep = '.')))
   }
 
   # when cache=3, code output is stored in .[hash], so cache=TRUE won't lose
@@ -131,7 +145,7 @@ cache_output_name = function(hash) sprintf('.%s', hash)
 cache = new_cache()
 
 # a regex for cache files
-cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
+cache_rx = '_[abcdef0123456789]{32}[.](rds|rdb|rdx|RData)$'
 
 #' Build automatic dependencies among chunks
 #'
@@ -246,7 +260,7 @@ load_cache = function(
     'Wrong cache databases for the chunk ', label,
     '. You need to remove redundant cache files. Found ', paste(p2, collapse = ', ')
   )
-  p2 = unique(gsub('[.](rdb|rdx|RData)$', '', p2))
+  p2 = unique(gsub('[.](rds|rdb|rdx|RData)$', '', p2))
   if (length(p2) != 1) stop('Cannot identify the cache database for chunk ', label)
   cache$load(file.path(p0, p2), lazy)
   if (missing(object)) return(invisible(NULL))
