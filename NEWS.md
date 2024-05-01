@@ -3,6 +3,7 @@
 ## NEW FEATURES
 
 - For `kable()`, you can set the global option `knitr.kable.max_rows` to limit the number of rows to show in the table, e.g., `options(knitr.kable.max_rows = 30)`. This is a way to prevent `kable()` from generating a huge table from a large data object by accident.
+- `write_bib()` now escapes all non-escaped "&" in the bibliography by default. Formerly, it only escaped the title field of the package citation. Disable the escape by specifying `tweak = FALSE` (thanks, @atusy #2335)
 
 # CHANGES IN knitr VERSION 1.46
 
