@@ -102,8 +102,6 @@ write_bib = function(
     if (tweak) {
       # e.g. gpairs has "gpairs: " in the title
       cite$title = gsub(sprintf('^(%s: )(\\1)', pkg), '\\1', cite$title)
-      # e.g. KernSmooth has & in the title
-      cite$title = gsub(' & ', ' \\\\& ', cite$title)
     }
     entry = toBibtex(cite)
     entry[1] = sub('\\{,$', sprintf('{%s%s,', prefix, pkg), entry[1])
@@ -150,7 +148,12 @@ write_bib = function(
   bib = lapply(bib, function(b) {
     idx = which(names(b) == '')
     if (!is.null(width)) b[-idx] = str_wrap(b[-idx], width, 2, 4)
-    structure(c(b[idx[1L]], b[-idx], b[idx[2L]], ''), class = 'Bibtex')
+    lines = c(b[idx[1L]], b[-idx], b[idx[2L]], '')
+    if (tweak) {
+      # e.g. KernSmooth and spam has & in the title and the journal, respectively
+      lines = gsub('(?<!\\\\)&', '\\\\&', lines, perl = TRUE)
+    }
+    structure(lines, class = 'Bibtex')
   })
   if (!is.null(file) && length(x)) write_utf8(unlist(bib), file)
   invisible(bib)
