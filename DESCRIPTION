@@ -120,7 +120,7 @@ Imports:
     highr,
     methods,
     tools,
-    xfun (>= 0.43),
+    xfun (>= 0.44),
     yaml (>= 2.1.19)
 Suggests:
     bslib,

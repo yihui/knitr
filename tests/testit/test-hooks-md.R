@@ -30,8 +30,8 @@ hook_src = knit_hooks$get("source")
 options_ = list(engine = "r", prompt = FALSE, highlight = TRUE)
 
 assert('Length of fences are satisfied', {
-  (hook_src("", options_) %==% "\n\n```r\n\n```\n\n")
-  (hook_src("```", options_) %==% "\n\n````r\n```\n````\n\n")
+  (hook_src("", options_) %==% "\n\n``` r\n\n```\n\n")
+  (hook_src("```", options_) %==% "\n\n```` r\n```\n````\n\n")
 })
 
 assert('Attributes for source can be specified class.source and attr.source', {
