@@ -313,7 +313,7 @@ process_file = function(text, output) {
         if (tangle) process_tangle(group) else process_group(group),
         error = function(e) if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
       ),
-      function(e, loc) {
+      function(loc) {
         setwd(wd)
         write_utf8(res, output %n% stdout())
         paste0('\nQuitting from lines ', loc)
