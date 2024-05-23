@@ -198,3 +198,4 @@ Collate:
     'utils-vignettes.R'
     'zzz.R'
 RoxygenNote: 7.3.1
+Remotes: yihui/highr
