@@ -331,7 +331,7 @@ eng_r = function(options) {
     obj.new = if (is.null(options$cache.vars)) setdiff(ls(globalenv(), all.names = TRUE), obj.before)
     copy_env(globalenv(), env, obj.new)
     objs = if (isFALSE(ev) || length(code) == 0) character(0) else
-      options$cache.vars %n% codetools::findLocalsList(parse_only(code))
+      options$cache.vars %n% xfun:::find_locals(code)
     # make sure all objects to be saved exist in env
     objs = intersect(c(objs, obj.new), ls(env, all.names = TRUE))
     if (options$autodep) {
@@ -368,7 +368,7 @@ purge_cache = function(options) {
 
 cache_globals = function(option, code) {
   if (is.character(option)) option else {
-    (if (isFALSE(option)) find_symbols else find_globals)(code)
+    if (isFALSE(option)) find_symbols(code) else xfun:::find_globals(code, knit_global())
   }
 }
 

@@ -106,14 +106,6 @@ new_cache = function() {
   list(purge = cache_purge, save = cache_save, load = cache_load, objects = cache_objects,
        exists = cache_exists, output = cache_output, library = cache_library)
 }
-# analyze code and find out global variables
-find_globals = function(code) {
-  fun = eval(parse_only(c('function(){', code, '}')))
-  setdiff(codetools::findGlobals(fun), known_globals)
-}
-known_globals = c(
-  '{', '[', '(', ':', '<-', '=', '+', '-', '*', '/', '%%', '%/%', '%*%', '%o%', '%in%'
-)
 
 # analyze code and find out all possible variables (not necessarily global variables)
 find_symbols = function(code) {

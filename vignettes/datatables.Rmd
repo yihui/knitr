@@ -16,7 +16,7 @@ output:
 
 ## jQuery DataTables
 
-We can use the JavaScript library [**DataTables**](https://www.datatables.net) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
+We can use the JavaScript library [**DataTables**](https://datatables.net) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
 
 ```{r cool, results='asis'}
 library(knitr)
