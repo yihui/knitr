@@ -6,6 +6,10 @@
 
 - `write_bib()` now escapes all non-escaped "&" in the bibliography by default. Previously, it only escaped the title field of the package citation. You can disable the escape with the argument `tweak = FALSE` (thanks, @HedvigS #2335, @atusy #2342).
 
+## MINOR CHANGES
+
+- The syntax highlighting LaTeX commands for Rnw documents, `\hlstr` and `\hlstd`, were renamed to `\hlsng` and `\hldef`, respectively, to maintain consistency with Andrew Simon's highlight package (thanks, @dcser123, #2341).
+
 # CHANGES IN knitr VERSION 1.46
 
 ## NEW FEATURES
