@@ -6,6 +6,10 @@
 
 - `write_bib()` now escapes all non-escaped "&" in the bibliography by default. Previously, it only escaped the title field of the package citation. You can disable the escape with the argument `tweak = FALSE` (thanks, @HedvigS #2335, @atusy #2342).
 
+## BUG FIXES
+
+- Fixed a bug that `write_bib()` fails to use the first URL of a package when multiple URLs are provided in DESCRIPTION and separated by `\n` (thanks, @bastistician, #2343).
+
 ## MINOR CHANGES
 
 - The syntax highlighting LaTeX commands for Rnw documents, `\hlstr` and `\hlstd`, were renamed to `\hlsng` and `\hldef`, respectively, to maintain consistency with Andrew Simon's highlight package (thanks, @dcser123, #2341).

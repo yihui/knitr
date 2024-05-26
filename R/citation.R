@@ -90,13 +90,8 @@ write_bib = function(
     # don't use the citation() URL if the package has provided its own URL
     cite = citation(pkg, auto = if (is.null(meta$URL)) meta else {
       if (packageURL) meta$Repository = meta$RemoteType = NULL
-      # the package may have provided multiple URLs, in which case we use the
-      # first. We also work around a bug in citation() up to R 4.3.1. The grep
-      # pattern here is problematic, but it's what citation() was using.
-      if (getRversion() < '4.3.2' && grepl('[, ]', meta$URL))
-        meta$URL = sub('[, ].*', '', meta$URL)
-      # always remove URLs after the first one
-      meta$URL = sub(',? .*', '', meta$URL)
+      # use the first URL in case the package provided multiple URLs
+      meta$URL = sub('[, \t\n].*', '', meta$URL)
       meta
     })
     if (tweak) {
