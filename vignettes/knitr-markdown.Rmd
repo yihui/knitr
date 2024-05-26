@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 ---
 
 <!--
-%\VignetteEngine{knitr::knitr}
+%\VignetteEngine{knitr::knitr_notangle}
 %\VignetteIndexEntry{An R Markdown Vignette with knitr}
 -->
 

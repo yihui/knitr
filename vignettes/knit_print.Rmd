@@ -9,7 +9,7 @@ output:
     meta:
       css: ["@default", "@prism-xcode"]
 vignette: >
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::knitr_notangle}
   %\VignetteIndexEntry{Custom Print Methods}
 ---
 

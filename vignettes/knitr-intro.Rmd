@@ -8,7 +8,7 @@ output:
       css: ["@default", "@prism-xcode"]
       js: ["@npm/@xiee/utils/js/center-img.min.js"]
 vignette: >
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::knitr_notangle}
   %\VignetteIndexEntry{Not an Introduction to knitr}
 ---
 

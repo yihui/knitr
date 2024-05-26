@@ -3,7 +3,7 @@ title: R Markdown with the Docco Linear Style
 ---
 
 <!--
-%\VignetteEngine{knitr::docco_linear}
+%\VignetteEngine{knitr::docco_linear_notangle}
 %\VignetteIndexEntry{R Markdown with the Docco Linear Style}
 -->
 

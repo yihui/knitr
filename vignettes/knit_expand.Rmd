@@ -9,7 +9,7 @@ output:
 ---
 
 <!--
-%\VignetteEngine{knitr::knitr}
+%\VignetteEngine{knitr::knitr_notangle}
 %\VignetteIndexEntry{Templating with knit_expand()}
 -->
 

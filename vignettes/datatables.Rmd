@@ -10,7 +10,7 @@ output:
 ---
 
 <!--
-%\VignetteEngine{knitr::knitr}
+%\VignetteEngine{knitr::knitr_notangle}
 %\VignetteIndexEntry{Display Tables with the JavaScript Library DataTables}
 -->
 

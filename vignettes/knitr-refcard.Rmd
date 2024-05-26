@@ -7,7 +7,7 @@ output:
 ---
 
 <!--
-%\VignetteEngine{knitr::rmarkdown}
+%\VignetteEngine{knitr::rmarkdown_notangle}
 %\VignetteIndexEntry{knitr Reference Card}
 -->
 
