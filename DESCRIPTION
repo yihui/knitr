@@ -117,7 +117,7 @@ Depends:
     R (>= 3.3.0)
 Imports:
     evaluate (>= 0.15),
-    highr,
+    highr (>= 0.11),
     methods,
     tools,
     xfun (>= 0.44),
@@ -198,4 +198,3 @@ Collate:
     'utils-vignettes.R'
     'zzz.R'
 RoxygenNote: 7.3.1
-Remotes: yihui/highr
