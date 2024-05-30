@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.48
 
+## BUG FIXES
+
+- Fix regression from 1.46 with `collapse = TRUE` option not correctly collapsing source code and output into one when code chunk returns multiple outputs (thanks, @jennybc, @florisvdh, tidyverse/reprex#463).
 
 # CHANGES IN knitr VERSION 1.47
 
