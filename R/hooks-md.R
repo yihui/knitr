@@ -199,7 +199,7 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
       x = gsub('[\n]+$', '', x)
       x = gsub('^[\n]+', '\n', x)
       if (isTRUE(options$collapse)) {
-        r = sprintf('\n([%s]{3,})\n+\\1((\\{[.])?%s[^\n]*)?\n', fence_char, tolower(options$engine))
+        r = sprintf('\n([%s]{3,})\n+\\1((\\{[.]| )?%s[^\n]*)?\n', fence_char, tolower(options$engine))
         x = gsub(r, '\n', x)
         x = gsub(asis_token, '', x, fixed = TRUE)
       }
