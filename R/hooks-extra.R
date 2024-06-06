@@ -155,4 +155,5 @@ hook_purl = function(before, options, ...) {
     )
     write_utf8(code, output)
   }
+  invisible()
 }

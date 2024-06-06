@@ -4,6 +4,8 @@
 
 - Fix regression from 1.46 with `collapse = TRUE` option not correctly collapsing source code and output into one when code chunk returns multiple outputs (thanks, @jennybc, @florisvdh, tidyverse/reprex#463).
 
+- `hook_purl()` should not write the path of the R script to the output document (thanks, @fenguoerbian, #2348).
+
 # CHANGES IN knitr VERSION 1.47
 
 ## NEW FEATURES
