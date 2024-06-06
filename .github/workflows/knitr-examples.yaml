@@ -11,6 +11,10 @@ on:
 
 name: Check knitr examples
 
+concurrency:
+  group: ${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   run-examples:
     runs-on: ${{ matrix.config.os }}
