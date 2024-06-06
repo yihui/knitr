@@ -8,25 +8,30 @@ on:
       - main
       - master
   workflow_dispatch:
+    inputs:
+      extra-packages:
+        description: 'extra package to install for the runs (like a dev version of one of the deps) - comma separated'
+        required: false
+        type: string
+
 
 name: Check knitr examples
 
 concurrency:
-  group: ${{ github.event.pull_request.number || github.run_id }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 jobs:
   run-examples:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})${{ matrix.config.extra-package && ' - with dev evaluate'|| ''}}
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})${{ github.event.inputs.extra-packages && ' - with some extra packages'|| ''}}
 
     strategy:
       fail-fast: false
       matrix:
         config:
           - {os: ubuntu-latest, r: 'release'}
-          - {os: ubuntu-latest,  r: 'release', extra-package: 'github::r-lib/evaluate'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -49,12 +54,18 @@ jobs:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
 
+      - name: Is this workflow running with extra package
+        if: github.event.inputs.extra-packages
+        run: |
+          echo "::notice::Running with the following extra packages for pak: ${{ github.event.inputs.extra-packages }}"
+        shell: bash
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           packages: deps::.
-          extra-packages: |
-            XML
-            ${{ matrix.config.extra-package }}
+          extra-packages: >
+            XML,
+            ${{ github.event.inputs.extra-packages }}
 
       - name: Retrieve knitr-examples
         # On PR, it will checkout same branch if it exists there

@@ -9,18 +9,24 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      extra-packages:
+        description: 'extra package to install for the runs (like a dev version of one of the deps) - comma separated'
+        required: false
+        type: string
 
 name: R-CMD-check
 
 concurrency:
-  group: ${{ github.event.pull_request.number || github.run_id }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})${{ matrix.config.extra-package && ' - with dev evaluate'|| ''}}
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})${{ github.event.inputs.extra-packages && ' - with some extra packages'|| ''}}
     strategy:
       fail-fast: false
       matrix:
@@ -29,7 +35,6 @@ jobs:
           - {os: macOS-latest,   r: 'release'}
           - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,  r: 'release'}
-          - {os: ubuntu-latest,  r: 'release', extra-package: 'github::r-lib/evaluate'}
           - {os: ubuntu-latest,  r: 'oldrel-1'}
           - {os: ubuntu-latest,  r: 'oldrel-2'}
           - {os: ubuntu-latest,  r: 'oldrel-3'}
@@ -58,14 +63,20 @@ jobs:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
 
+      - name: Is this workflow running with extra package
+        if: github.event.inputs.extra-packages
+        run: |
+          echo "::notice::Running with the following extra packages for pak: ${{ github.event.inputs.extra-packages }}"
+        shell: bash
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: |
-            any::rcmdcheck
-            gridSVG=?ignore-before-r=4.0.0
-            targets=?ignore-before-r=4.0.0
-            JuliaCall=?ignore-before-r=4.0.0
-            ${{ matrix.config.extra-package }}
+          extra-packages: >
+            any::rcmdcheck,
+            gridSVG=?ignore-before-r=4.0.0,
+            targets=?ignore-before-r=4.0.0,
+            JuliaCall=?ignore-before-r=4.0.0,
+            ${{ github.event.inputs.extra-packages }}
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
