@@ -15,13 +15,14 @@ jobs:
   run-examples:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})${{ matrix.config.extra-package && ' - with dev evaluate'|| ''}}
 
     strategy:
       fail-fast: false
       matrix:
         config:
           - {os: ubuntu-latest, r: 'release'}
+          - {os: ubuntu-latest,  r: 'release', extra-package: 'github::r-lib/evaluate'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -47,7 +48,9 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           packages: deps::.
-          extra-packages: XML
+          extra-packages: |
+            XML
+            ${{ matrix.config.extra-package }}
 
       - name: Retrieve knitr-examples
         # On PR, it will checkout same branch if it exists there

@@ -16,8 +16,7 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})${{ matrix.config.extra-package && ' - with dev evaluate'|| ''}}
     strategy:
       fail-fast: false
       matrix:
@@ -26,6 +25,7 @@ jobs:
           - {os: macOS-latest,   r: 'release'}
           - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,  r: 'release'}
+          - {os: ubuntu-latest,  r: 'release', extra-package: 'github::r-lib/evaluate'}
           - {os: ubuntu-latest,  r: 'oldrel-1'}
           - {os: ubuntu-latest,  r: 'oldrel-2'}
           - {os: ubuntu-latest,  r: 'oldrel-3'}
@@ -61,6 +61,7 @@ jobs:
             gridSVG=?ignore-before-r=4.0.0
             targets=?ignore-before-r=4.0.0
             JuliaCall=?ignore-before-r=4.0.0
+            ${{ matrix.config.extra-package }}
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
