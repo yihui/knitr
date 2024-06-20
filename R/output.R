@@ -554,8 +554,7 @@ msg_sanitize = function(message, type) {
 sew.warning = function(x, options, ...) {
   call = if (is.null(x$call)) '' else {
     call = deparse(x$call)[1]
-    # TODO: evaluate > 0.24.0 do not set `enclos` anymore. So when updating requirement we can remove the double check
-    if (call %in% c('eval(expr, envir, enclos)', 'eval(expr, envir)')) '' else paste(' in', call)
+    if (call == 'eval(expr, envir, enclos)') '' else paste(' in', call)
   }
   msg_wrap(sprintf('Warning%s: %s', call, conditionMessage(x)), 'warning', options)
 }
