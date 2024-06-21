@@ -867,7 +867,7 @@ knit_handlers = function(fun, options) {
     # the figure caption to it later in sew.knit_asis
     if (inherits(x, 'htmlwidget'))
       class(res$value) = c(class(res$value), 'knit_asis_htmlwidget')
-    if (res$visible) res$value else invisible(res$value)
+    if (res$visible) print(res$value)
   }
   if (length(formals(fun)) < 2)
     stop("the chunk option 'render' must be a function of the form ",
