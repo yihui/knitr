@@ -7,7 +7,7 @@
 sew(x, options = list(), ...)
 }
 \arguments{
-\item{x}{Output from \code{evaluate::\link{evaluate}()}.}
+\item{x}{Output from \code{evaluate::\link[evaluate]{evaluate}()}.}
 
 \item{options}{A list of chunk options used to control output.}
 

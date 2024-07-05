@@ -443,7 +443,7 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 #' output of the code chunk (code, messages, text output, and plots, etc.) after
 #' all statements in the code chunk have been evaluated, and will sew these
 #' pieces of output together into a character vector.
-#' @param x Output from \code{evaluate::\link{evaluate}()}.
+#' @param x Output from \code{evaluate::\link[evaluate]{evaluate}()}.
 #' @param options A list of chunk options used to control output.
 #' @param ... Other arguments to pass to methods.
 #' @export

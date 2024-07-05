@@ -923,7 +923,7 @@ create_label = function(..., latex = FALSE) {
 #' @param before,after A character string to be added before/after each word.
 #' @param oxford_comma Whether to insert the separator between the last two
 #'   elements in the list.
-#' @return A character string marked by \code{xfun::\link{raw_string}()}.
+#' @return A character string marked by \code{xfun::\link[xfun]{raw_string}()}.
 #' @export
 #' @examples combine_words('a'); combine_words(c('a', 'b'))
 #' combine_words(c('a', 'b', 'c'))
@@ -1112,7 +1112,7 @@ make_unique = function(x) {
 
 #' Encode an image file to a data URI
 #'
-#' This function is the same as \code{xfun::\link{base64_uri}()} (only with a
+#' This function is the same as \code{xfun::\link[xfun]{base64_uri}()} (only with a
 #' different function name). It can encode an image file as a base64 string,
 #' which can be used in the \code{img} tag in HTML.
 #' @param f Path to the image file.

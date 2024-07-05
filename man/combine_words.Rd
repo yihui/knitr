@@ -26,7 +26,7 @@ combine_words(
 elements in the list.}
 }
 \value{
-A character string marked by \code{xfun::\link{raw_string}()}.
+A character string marked by \code{xfun::\link[xfun]{raw_string}()}.
 }
 \description{
 When a value from an inline R expression is a character vector of multiple

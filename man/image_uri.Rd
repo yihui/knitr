@@ -13,7 +13,7 @@ image_uri(f)
 The data URI as a character string.
 }
 \description{
-This function is the same as \code{xfun::\link{base64_uri}()} (only with a
+This function is the same as \code{xfun::\link[xfun]{base64_uri}()} (only with a
 different function name). It can encode an image file as a base64 string,
 which can be used in the \code{img} tag in HTML.
 }
