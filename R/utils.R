@@ -857,8 +857,8 @@ current_input = function(dir = FALSE) {
   if (is_abs_path(input)) input else file.path(outwd, input)
 }
 
-# import output handlers from evaluate
-default_handlers = evaluate:::default_output_handler
+# cache output handlers from evaluate; see .onLoad
+default_handlers = NULL
 # change the value handler in evaluate default handlers
 knit_handlers = function(fun, options) {
   if (!is.function(fun)) fun = function(x, ...) {
