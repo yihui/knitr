@@ -733,8 +733,9 @@ knit_print.knit_asis_url = function(x, ...) x
 
 #' @rdname knit_print
 #' @export
-normal_print = default_handlers$value
-formals(normal_print) = alist(x = , ... = )
+normal_print = function(x, ...) {
+  if (isS4(x)) methods::show(x) else print(x)
+}
 
 #' Mark an R object with a special class
 #'
