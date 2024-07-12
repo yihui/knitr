@@ -114,7 +114,7 @@ Authors@R: c(
 Description: Provides a general-purpose tool for dynamic report generation in R
     using Literate Programming techniques.
 Depends:
-    R (>= 3.3.0)
+    R (>= 4.0.0)
 Imports:
     evaluate (>= 0.15),
     highr (>= 0.11),
