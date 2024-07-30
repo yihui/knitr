@@ -87,9 +87,9 @@ engine_output = function(options, code, out, extra = NULL) {
   if (length(out) != 1L) out = one_string(out)
   out = sub('([^\n]+)$', '\\1\n', out)
   if (options$engine == 'stata') {
-    out = gsub('\n+running.*profile.do', '', out)
-    out = sub('...\n+', '', out)
-    out = sub('\n. \nend of do-file\n', '', out)
+    out = gsub('\n+running.*profile\\.do', '', out)
+    out = sub('\\.\\.\\.\n+', '', out)
+    out = sub('\n\\. \nend of do-file\n', '', out)
   }
   one_string(c(
     if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
@@ -134,13 +134,14 @@ eng_interpreted = function(options) {
     )
   } else paste(switch(
     engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -ep',
-    mysql = '-e', node = '-e', octave = '--eval', perl = '-E', psql = '-c',
-    python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
+    mysql = '-e', node = '-e', octave = '--eval', perl = '-E', php = '-r',
+    psql = '-c', python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c',
+    NULL
   ), shQuote(one_string(options$code)))
 
   opts = get_engine_opts(options$engine.opts, engine)
   # FIXME: for these engines, the correct order is options + code + file
-  code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
+  code = if (engine %in% c('awk', 'gawk', 'sed', 'sas', 'psql', 'mysql'))
     paste(code, opts) else paste(opts, code)
   cmd = get_engine_path(options$engine.path, engine)
   out = if (options$eval) {
@@ -536,7 +537,7 @@ eng_block2 = function(options) {
 # helper to create engines the wrap embedded html assets (e.g. css,js)
 eng_html_asset = function(prefix, postfix) {
   function(options) {
-    out = if (options$eval && is_html_output(excludes = 'markdown')) {
+    out = if (options$eval && is_html_output()) {
       one_string(c(prefix, options$code, postfix))
     }
     options$results = 'asis'
@@ -545,7 +546,7 @@ eng_html_asset = function(prefix, postfix) {
 }
 
 # include js in a script tag (ignore if not html output)
-eng_js = eng_html_asset('<script type="text/javascript">', '</script>')
+eng_js = eng_html_asset('<script>', '</script>')
 
 # include css in a style tag (ignore if not html output)
 eng_css = eng_html_asset('<style type="text/css">', '</style>')
@@ -557,7 +558,7 @@ is_sql_update_query = function(query) {
   query = gsub('^\\s*--.*\n', '', query)
   # remove multi-line comments
   if (grepl('^\\s*\\/\\*.*', query)) query = gsub('.*\\*\\/', '', query)
-  grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE|DROP).*', query, ignore.case = TRUE)
+  grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE|DROP|ALTER).*', query, ignore.case = TRUE)
 }
 
 # sql engine
@@ -659,9 +660,10 @@ eng_sql = function(options) {
       options$results = 'asis'
 
       # force left alignment if the first column is an incremental id column
-      first_column = display_data[[1]]
-      if (is.numeric(first_column) && length(first_column) > 1 && all(diff(first_column) == 1))
-        display_data[[1]] = as.character(first_column)
+      is_id = function(x) {
+        is.numeric(x) && length(x) > 1 && !anyNA(x) && all(diff(x) == 1)
+      }
+      if (is_id(display_data[[1]])) display_data[[1]] = as.character(display_data[[1]])
 
       # wrap html output in a div so special styling can be applied
       add_div = is_html_output() && getOption('knitr.sql.html_div', TRUE)
@@ -831,13 +833,21 @@ eng_bslib = function(options) {
 # Usage: https://books.ropensci.org/targets/markdown.html
 # Docs: https://docs.ropensci.org/targets/reference/tar_engine_knitr.html
 eng_targets = function(options) {
-  targets::tar_engine_knitr(options = options)
+  targets::tar_engine_knitr(options)
+}
+
+# an Eviews engine based on EviewsR
+eng_eviews = function(options) {
+  # EviewsR can't be installed in lower versions of R, hence I can't declare
+  # Suggests dependency in DESCRIPTION
+  f = getFromNamespace('eng_eviews', 'EviewsR')
+  f(options)
 }
 
 # a comment engine to return nothing
 eng_comment = function(options) {}
 
-## a verbatim engine that returns its chunk content verbatim
+# a verbatim engine that returns its chunk content verbatim
 eng_verbatim = function(options) {
   # change default for the cat engine
   options$eval = FALSE
@@ -873,7 +883,7 @@ eng_embed = function(options) {
 local({
   for (i in c(
     'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'lein', 'mysql',
-    'node', 'octave', 'perl', 'psql', 'Rscript', 'ruby', 'sas',
+    'node', 'octave', 'perl', 'php', 'psql', 'Rscript', 'ruby', 'sas',
     'scala', 'sed', 'sh', 'stata', 'zsh'
   )) knit_engines$set(setNames(list(eng_interpreted), i))
 })
@@ -893,6 +903,7 @@ knit_engines$set(
   ditaa = eng_plot,
   dot = eng_plot,
   embed = eng_embed,
+  eviews = eng_eviews,
   exec = eng_exec,
   fortran = eng_shlib,
   fortran95 = eng_shlib,

@@ -10,7 +10,7 @@ spin(
   report = TRUE,
   text = NULL,
   envir = parent.frame(),
-  format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst"),
+  format = c("Rmd", "Rnw", "Rhtml", "Rtex", "Rrst", "qmd"),
   doc = "^#+'[ ]?",
   inline = "^[{][{](.+)[}][}][ ]*$",
   comment = c("^[# ]*/[*]", "^.*[*]/ *$"),
@@ -59,24 +59,24 @@ If \code{text} is \code{NULL}, the path of the final output document,
 This function takes a specially formatted R script and converts it to a
 literate programming document. By default normal text (documentation) should
 be written after the roxygen comment (\code{#'}) and code chunk options are
-written after \code{#+} or \code{#-} or \code{# ----} or any of these
-combinations replacing \code{#} with \code{--}.
+written after \code{#|} or \code{#+} or \code{# \%\%} or \code{# ----}.
 }
 \details{
 Obviously the goat's hair is the original R script, and the wool is the
 literate programming document (ready to be knitted).
 }
 \note{
-If the output format is Rnw and no document class is specified in
-  roxygen comments, this function will automatically add the \code{article}
-  class to the LaTeX document so that it is complete and can be compiled. You
-  can always specify the document class and other LaTeX settings in roxygen
-  comments manually.
+If the output format is \code{Rnw} and no document class is specified
+  in roxygen comments, this function will automatically add the
+  \code{article} class to the LaTeX document so that it is complete and can
+  be compiled. You can always specify the document class and other LaTeX
+  settings in roxygen comments manually.
 
-  When the output format is Rmd, it is compiled to HTML via
+  When the output format is \code{Rmd}, it is compiled to HTML via
   \code{\link{knit2html}()}, which uses R Markdown v1 instead of v2. If you
   want to use the latter, you should call
-  \code{rmarkdown::\link[rmarkdown]{render}()} instead.
+  \code{rmarkdown::\link[rmarkdown]{render}()} instead. Similarly, if the
+  output format is \code{qmd}, you need to render the output with Quarto.
 }
 \references{
 \url{https://yihui.org/knitr/demo/stitch/}

@@ -2,15 +2,11 @@ body {
   background-color: #fff;
   margin: 1em auto;
   max-width: 800px;
-  overflow: visible;
-  padding-left: 2em;
-  padding-right: 2em;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 20px;
+  padding: 0 2em;
+  line-height: 1.5;
 }
 
-#header {
+.title, .author, .date {
   text-align: center;
 }
 
@@ -21,8 +17,6 @@ body {
   border: 1px solid #CCCCCC;
   border-radius: 5px;
   background-color: #f6f6f6;
-  font-size: 13px;
-  line-height: 1.3;
 }
   #TOC .toctitle {
     font-weight: bold;
@@ -74,18 +68,12 @@ table:not([class]) tr.odd {
   background-color: #f7f7f7;
 }
 
-p {
-  margin: 0.5em 0;
-}
-
 blockquote {
   background-color: #f6f6f6;
-  padding: 13px;
-  padding-bottom: 1px;
+  padding: 1em;
 }
 
 hr {
-  border-style: solid;
   border: none;
   border-top: 1px solid #777;
   margin: 28px 0;
@@ -123,6 +111,9 @@ pre {
   margin: 5px 0 10px 0;
   padding: 10px;
 }
+pre code {
+  display: block;
+}
 pre:not([class]) {
   background-color: white;
   border: #f5f5f5 1px solid;
@@ -151,12 +142,6 @@ table > caption span, div.figure p.caption span {
   font-style: normal;
   font-weight: bold;
 }
-p {
-  margin: 0 0 10px;
-}
-table:not([class]) {
-  margin: auto auto 10px auto;
-}
 
 img:not([class]) {
   background-color: #FFFFFF;
@@ -170,7 +155,6 @@ img:not([class]) {
 h1 {
   margin-top: 0;
   font-size: 35px;
-  line-height: 40px;
 }
 
 h2 {
@@ -221,20 +205,3 @@ div.r-help-page {
 div.r-help-page:hover {
   background-color: #f4f4f4;
 }
-
-/* Class described in https://benjeffrey.com/posts/pandoc-syntax-highlighting-css
-   Colours from https://gist.github.com/robsimmons/1172277 */
-
-code > span.kw { color: #555; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal (decimal values) */
-code > span.bn { color: #d14; } /* BaseN */
-code > span.fl { color: #d14; } /* Float */
-code > span.ch { color: #d14; } /* Char */
-code > span.st { color: #d14; } /* String */
-code > span.co { color: #888888; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* OtherToken */
-code > span.al { color: #ff0000; font-weight: bold; } /* AlertToken */
-code > span.fu { color: #900; font-weight: bold; } /* Function calls */
-code > span.er { color: #a61717; background-color: #e3d2d2; } /* ErrorTok */
-

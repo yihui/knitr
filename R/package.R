@@ -12,7 +12,6 @@
 #' new features like caching and finer control of graphics. It is not limited to
 #' LaTeX and is ready to be customized to process other file formats. See the
 #' package website in the references for more information and examples.
-#' @docType package
 #' @name knitr-package
 #' @aliases knitr
 #' @import graphics grDevices stats utils
@@ -25,10 +24,10 @@
 #'   \code{knit} + \code{R} (while \code{Sweave} = \code{S} + \code{weave}).
 #' @references Full documentation and demos: \url{https://yihui.org/knitr/};
 #'   FAQ's: \url{https://yihui.org/knitr/faq/}
-#' @importFrom xfun attr file_ext isFALSE is_windows loadable parse_only
+#' @importFrom xfun attr file_ext is_windows loadable parse_only
 #'   sans_ext try_silent with_ext read_utf8 write_utf8 file_string
 #'   is_R_CMD_check is_abs_path
-NULL
+'_PACKAGE'
 
 .knitEnv = new.env()
 

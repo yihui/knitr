@@ -14,3 +14,11 @@ assert('inline_exec only accept character result', {
   (res %==% "no inline")
 })
 
+assert('label_code correct adds comment on code for yaml block or parsed param', {
+  oldW = getOption('width')
+  options(width = 20)
+  (label_code("1+1", list(params.src = "test, eval=TRUE")) %==% "## ----test, eval=TRUE----\n1+1\n")
+  options(width = oldW)
+  (label_code("1+1", list(params.chunk = c("#| label: test", "#| eval: true"))) %==%
+      "## --------\n#| label: test\n#| eval: true\n1+1\n")
+})

@@ -5,7 +5,7 @@
 \alias{opts_knit}
 \title{Options for the knitr package}
 \format{
-An object of class \code{list} of length 6.
+An object of class \code{list} of length 7.
 }
 \usage{
 opts_knit
@@ -38,6 +38,6 @@ if (interactive()) {
 Usage: \url{https://yihui.org/knitr/objects/}
 
   A list of available options:
-  \url{https://yihui.org/knitr/options/#package_options}
+  \url{https://yihui.org/knitr/options/#package-options}
 }
 \keyword{datasets}

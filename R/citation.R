@@ -13,6 +13,16 @@
 #' information because it often changes (e.g. author, year, package version,
 #' ...).
 #'
+#' There are at least two different uses for the URL in a reference list.  You
+#' might want to tell users where to go for more information; in that case, use
+#' the default \code{packageURL = TRUE}, and the first URL listed in the
+#' \file{DESCRIPTION} file will be used. Be careful:  some authors don't put the
+#' most relevant URL first. Alternatively, you might want to identify exactly
+#' which version of the package was used in the document.  If it was installed
+#' from CRAN or some other repositories, the version number identifies it, and
+#' \code{packageURL = FALSE} will use the repository URL (as used by
+#' \code{utils::\link{citation}()}).
+#'
 #' @param x Package names. Packages which are not installed are ignored.
 #' @param file The (\file{.bib}) file to write. By default, or if \code{NULL},
 #'   output is written to the R console.
@@ -24,6 +34,8 @@
 #'   \samp{R-} unless \code{\link{option}('knitr.bib.prefix')} has been set to
 #'   another string.
 #' @param lib.loc A vector of path names of R libraries.
+#' @param packageURL Use the \code{URL} field from the \file{DESCRIPTION} file.
+#'   See Details below.
 #' @return A list containing the citations. Citations are also written to the
 #'   \code{file} as a side effect.
 #' @note Some packages on CRAN do not have standard bib entries, which was once
@@ -59,10 +71,12 @@
 #' str(knitr:::.tweak.bib)
 write_bib = function(
   x = .packages(), file = '', tweak = TRUE, width = NULL,
-  prefix = getOption('knitr.bib.prefix', 'R-'), lib.loc = NULL
+  prefix = getOption('knitr.bib.prefix', 'R-'), lib.loc = NULL,
+  packageURL = TRUE
 ) {
   system.file = function(...) base::system.file(..., lib.loc = lib.loc)
   citation = function(...) utils::citation(..., lib.loc = lib.loc)
+  x = x[nzchar(x)] # remove possible empty string
   idx = mapply(system.file, package = x) == ''
   if (any(idx)) {
     warning('package(s) ', paste(x[idx], collapse = ', '), ' not found')
@@ -72,21 +86,17 @@ write_bib = function(
   x = setdiff(x, setdiff(xfun::base_pkgs(), 'base'))
   x = sort(x)
   bib = sapply(x, function(pkg) {
-    cite = citation(pkg, auto = if (pkg != 'base') {
-      meta = packageDescription(pkg, lib.loc = lib.loc)
-      # don't use the CRAN URL if the package has provided its own URL
-      if (identical(meta$Repository, 'CRAN') && !is.null(meta$URL)) {
-        # however, the package may have provided multiple URLs, in which case we
-        # still use the CRAN URL
-        if (!grepl('[, ]', meta$URL)) meta$Repository = NULL
-      }
+    meta = packageDescription(pkg, lib.loc = lib.loc)
+    # don't use the citation() URL if the package has provided its own URL
+    cite = citation(pkg, auto = if (is.null(meta$URL)) meta else {
+      if (packageURL) meta$Repository = meta$RemoteType = NULL
+      # use the first URL in case the package provided multiple URLs
+      meta$URL = sub('[, \t\n].*', '', meta$URL)
       meta
     })
     if (tweak) {
       # e.g. gpairs has "gpairs: " in the title
       cite$title = gsub(sprintf('^(%s: )(\\1)', pkg), '\\1', cite$title)
-      # e.g. KernSmooth has & in the title
-      cite$title = gsub(' & ', ' \\\\& ', cite$title)
     }
     entry = toBibtex(cite)
     entry[1] = sub('\\{,$', sprintf('{%s%s,', prefix, pkg), entry[1])
@@ -132,8 +142,13 @@ write_bib = function(
   bib = c(bib, unlist(bib2, recursive = FALSE))
   bib = lapply(bib, function(b) {
     idx = which(names(b) == '')
-    if (!is.null(width)) b[-idx] = stringr::str_wrap(b[-idx], width, 2, 4)
-    structure(c(b[idx[1L]], b[-idx], b[idx[2L]], ''), class = 'Bibtex')
+    if (!is.null(width)) b[-idx] = str_wrap(b[-idx], width, 2, 4)
+    lines = c(b[idx[1L]], b[-idx], b[idx[2L]], '')
+    if (tweak) {
+      # e.g. KernSmooth and spam has & in the title and the journal, respectively
+      lines = gsub('(?<!\\\\)&', '\\\\&', lines, perl = TRUE)
+    }
+    structure(lines, class = 'Bibtex')
   })
   if (!is.null(file) && length(x)) write_utf8(unlist(bib), file)
   invisible(bib)

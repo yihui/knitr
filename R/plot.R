@@ -1,4 +1,4 @@
-# graphics devices in base R, plus those in Cairo, cairoDevice, tikzDevice
+# graphics devices in base R, plus those in Cairo, tikzDevice
 auto_exts = c(
   bmp = 'bmp', postscript = 'eps', pdf = 'pdf', png = 'png', svg = 'svg',
   jpeg = 'jpeg', pictex = 'tex', tiff = 'tiff', win.metafile = 'wmf',
@@ -11,9 +11,7 @@ auto_exts = c(
   CairoJPEG = 'jpeg', CairoPNG = 'png', CairoPS = 'eps', CairoPDF = 'pdf',
   CairoSVG = 'svg', CairoTIFF = 'tiff',
 
-  Cairo_pdf = 'pdf', Cairo_png = 'png', Cairo_ps = 'eps', Cairo_svg = 'svg',
-
-  svglite = 'svg',
+  svglite = 'svg', gridSVG = 'svg',
 
   ragg_png = 'png',
 
@@ -29,7 +27,7 @@ dev2ext = function(options) {
     for (i in x[idx]) dev_get(i)
     stop2(
       'cannot find appropriate filename extensions for device ', x[idx], '; ',
-      "please use chunk option 'fig.ext' (https://yihui.org/knitr/options)"
+      "please use chunk option 'fig.ext' (https://yihui.org/knitr/options/)"
     )
   }
   unname(res)
@@ -63,6 +61,10 @@ dev_get = function(dev, options = opts_current$get(), dpi = options$dpi[1]) {
     pdf = grDevices::pdf,
     png = function(...) png(..., res = dpi, units = 'in'),
     svg = grDevices::svg,
+    gridSVG = function(filename, width, height, ...) {
+      # use svg() only for redrawing the plot, and will use gridSVG::grid.export() later
+      grDevices::svg(filename, width, height)
+    },
     pictex = grDevices::pictex,
     tiff = function(...) tiff(..., res = dpi, units = 'in'),
     win.metafile = grDevices::win.metafile,
@@ -83,11 +85,6 @@ dev_get = function(dev, options = opts_current$get(), dpi = options$dpi[1]) {
     CairoPS = load_device('CairoPS', 'Cairo'),
     CairoPDF = load_device('CairoPDF', 'Cairo'),
     CairoSVG = load_device('CairoSVG', 'Cairo'),
-
-    Cairo_pdf = load_device('Cairo_pdf', 'cairoDevice'),
-    Cairo_png = load_device('Cairo_png', 'cairoDevice'),
-    Cairo_ps = load_device('Cairo_ps', 'cairoDevice'),
-    Cairo_svg = load_device('Cairo_svg', 'cairoDevice'),
 
     svglite = load_device('svglite', 'svglite'),
 
@@ -116,10 +113,10 @@ quartz_dev = function(type, dpi) {
 }
 
 # a wrapper of the tikzDevice::tikz device
-tikz_dev = function(...) {
+tikz_dev = function(..., engine = getOption('tikzDefaultEngine')) {
   loadNamespace('tikzDevice')
   packages = switch(
-    getOption('tikzDefaultEngine'),
+    engine,
     pdftex = getOption('tikzLatexPackages'),
     xetex = getOption('tikzXelatexPackages'),
     luatex = getOption('tikzLualatexPackages')
@@ -159,7 +156,12 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   do.call(device, c(list(path, width = width, height = height), dargs))
   showtext(options)  # maybe begin showtext and set options
   print(plot)
+  # hack: if the device is gridSVG, save the plot to a temp path (with suffix ~)
+  path2 = if (dev == 'gridSVG') paste0(path, '~')
+  if (!is.null(path2)) do.call(gridSVG::grid.export, c(list(name = path2), dargs))
   dev.off()
+  # move the temp svg file to `path`
+  if (!is.null(path2)) file.rename(path2, path)
 
   # Cairo::CairoPS always adds the extension .ps, even if you have specified an
   # extension like .eps (https://github.com/yihui/knitr/issues/1364)
@@ -171,7 +173,9 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   # compile tikz to pdf
   if (dev == 'tikz') {
     patch_tikz_tex(path)
-    if (options$external) path = tinytex::latexmk(path, getOption('tikzDefaultEngine'))
+    if (options$external) path = tinytex::latexmk(
+      path, dargs$engine %n% getOption('tikzDefaultEngine')
+    )
   }
 
   fig_process(options$fig.process, path, options)
@@ -199,14 +203,16 @@ patch_tikz_tex = function(path) {
 # filter the dev.args option
 get_dargs = function(dargs, dev) {
   if (length(dargs) == 0) return()
-  if (is.list(dargs) && all(sapply(dargs, is.list))) {
+  nms = names(dargs)
+  if (is.list(dargs) && all(sapply(dargs, is.list)) && length(nms) &&
+      (dev %in% nms || all(nms %in% names(auto_exts)))) {
     # dev.args is list(dev1 = list(arg1 = val1, ...), dev2 = list(arg2, ...))
     dargs = dargs[[dev]]
   }
   dargs
 }
 
-# this is mainly for Cairo and cairoDevice
+# this is mainly for Cairo
 load_device = function(name, package, dpi = NULL) {
   dev = getFromNamespace(name, package)
   # dpi is for bitmap devices; units must be inches!
@@ -367,7 +373,8 @@ plot_crop = function(x, quiet = TRUE) {
   is_pdf = grepl('[.]pdf$', x, ignore.case = TRUE)
   x2 = x
   x = path.expand(x)
-  if (is_pdf && !has_utility('pdfcrop') && !has_utility('ghostscript')) return(x2)
+  tinytex:::tweak_path()  # in case TinyTeX is installed but not on PATH
+  if (is_pdf && !has_utility('pdfcrop')) return(x2)
 
   if (!quiet) message('cropping ', x)
   if (is_pdf) {
@@ -484,6 +491,29 @@ include_graphics = function(
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
 }
 
+#' Download an image from the web and include it in a document
+#'
+#' When including images in non-HTML output formats such as LaTeX/PDF, URLs will
+#' not work as image paths. In this case, we have to download the images. This
+#' function is a wrapper of \code{xfun::\link[xfun]{download_file}()} and
+#' \code{\link{include_graphics}()}.
+#' @param url The URL of an image.
+#' @param path The download path (inferred from the URL by default). If the file
+#'   exists, it will not be downloaded (downloading can take time and requires
+#'   Internet connection). If you are sure the file needs to be downloaded
+#'   again, delete it beforehand.
+#' @param use_file Whether to use the URL or the download path to include the
+#'   image. By default, the URL is used for HTML output formats, and the file
+#'   path is used for other output formats.
+#' @param ... Other arguments to be passed to \code{\link{include_graphics}()}.
+#' @export
+#' @examplesIf interactive()
+#' knitr::download_image('https://www.r-project.org/Rlogo.png')
+download_image = function(url, path = xfun::url_filename(url), use_file = !pandoc_to('html'), ...) {
+  if (!file.exists(path) && use_file) xfun::download_file(url, path)
+  include_graphics(if (use_file) path else url, ...)
+}
+
 # calculate the width in inches for PNG/JPEG images given a DPI
 raster_dpi_width = function(path, dpi) {
   if (!file.exists(path) || is.na(dpi)) return()
@@ -502,7 +532,7 @@ raster_dpi_width = function(path, dpi) {
     w = ncol(jpeg::readJPEG(path, native = TRUE))
   }
   if (is_latex_output()) {
-    paste0(round(w / dpi, 2), 'in')
+    xfun::decimal_dot(paste0(round(w / dpi, 2), 'in'))
   } else if (is_html_output()) {
     round(w / (dpi / 96))
   }
@@ -605,11 +635,17 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   w = webshot_available()
   webshot = c(options$webshot, names(w)[w])
   webshot = if (length(webshot) == 0) 'webshot' else webshot[[1L]]
+  if (webshot == 'webshot2' && ext == 'pdf' && getOption('knitr.warn.webshot2', TRUE)) warning(
+    "webshot2 may take the PDF screenshot with the wrong size. You are recommended ",
+    "to use the 'png' format instead (i.e., set the chunk option '",
+    if (is_quarto()) "fig-format" else "dev", "' to 'png'). ",
+    "See https://github.com/yihui/knitr/issues/2276 for more information."
+  )
   f = in_dir(d, {
     if (i1 || i3) {
       if (i1) {
         f1 = wd_tempfile('widget', '.html')
-        save_widget(x, f1, FALSE, options = options)
+        htmlwidgets::saveWidget(x, f1, FALSE, knitrOptions = options)
       } else f1 = x$url
       f2 = wd_tempfile('webshot', ext)
       f3 = do.call(getFromNamespace('webshot', webshot), c(list(f1, f2), wargs))
@@ -627,11 +663,4 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
       class = 'html_screenshot'
     )
   })
-}
-
-save_widget = function(..., options) {
-  FUN = htmlwidgets::saveWidget
-  if ('knitrOptions' %in% names(formals(FUN))) {
-    FUN(..., knitrOptions = options)
-  } else FUN(...)
 }

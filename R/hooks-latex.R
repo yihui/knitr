@@ -80,7 +80,10 @@ hook_plot_tex = function(x, options) {
   fig.ncol = options$fig.ncol %n% fig.num
   if (is.null(fig.sep <- options$fig.sep)) {
     fig.sep = character(fig.num)
-    if (fig.ncol < fig.num) fig.sep[seq(fig.ncol, fig.num - 1L, fig.ncol)] = '\\newline'
+    # add \newline after every fig.ncol figures; if the last figure is not the
+    # last on its row, skip adding \newline (not necessary, but may be harmless)
+    if (fig.ncol < fig.num)
+      fig.sep[seq(fig.ncol, fig.num - (fig.num %% fig.ncol > 0), fig.ncol)] = '\\newline'
   }
   sep.cur = NULL
 
@@ -124,7 +127,14 @@ hook_plot_tex = function(x, options) {
     if (usesub) {
       sub1 = sprintf('\\subfloat[%s%s]{', subcap, create_label(lab, '-', fig.cur, latex = TRUE))
       sub2 = '}'
-      sep.cur = fig.sep[fig.cur]; if (is.na(sep.cur)) sep.cur = NULL
+      sep.cur = fig.sep[fig.cur]
+      # when there are more separators than plots, add the first separator
+      # before the first plot, then the (i+1)th separator to the i-th plot
+      if (length(fig.sep) > fig.num) {
+        if (plot1) sub1 = paste0(fig.sep[1], sub1)
+        sep.cur = fig.sep[fig.cur + 1]
+      }
+      if (is.na(sep.cur)) sep.cur = NULL
     }
 
     # If pic is standalone/last in set:
@@ -136,7 +146,7 @@ hook_plot_tex = function(x, options) {
       }
       scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
       cap = if (cap == '') '' else sprintf(
-        '\\caption%s{%s}%s\n', scap, cap,
+        '\\caption%s{%s}%s\n', escape_percent(scap), escape_percent(cap),
         create_label(lab, if (mcap) c('-', fig.cur), latex = TRUE)
       )
       fig2 = sprintf('%s\\end{%s}\n', cap, options$fig.env)
@@ -181,6 +191,9 @@ hook_plot_tex = function(x, options) {
     resize2, sub2, sep.cur, align2, fig2
   )
 }
+
+# % -> \%, but do not touch \%
+escape_percent = function(x) gsub('(?<!\\\\)%', '\\\\%', x, perl = TRUE)
 
 .chunk.hook.tex = function(x, options) {
   ai = output_asis(x, options)

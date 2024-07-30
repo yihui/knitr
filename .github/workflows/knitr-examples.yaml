@@ -8,20 +8,30 @@ on:
       - main
       - master
   workflow_dispatch:
+    inputs:
+      extra-packages:
+        description: 'extra package to install for the runs (like a dev version of one of the deps) - comma separated'
+        required: false
+        type: string
+
 
 name: Check knitr examples
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   run-examples:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})${{ github.event.inputs.extra-packages && ' - with some extra packages'|| ''}}
 
     strategy:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-18.04, r: 'release'}
+          - {os: ubuntu-latest, r: 'release'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -30,39 +40,45 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-pandoc@v2
 
-      - uses: r-lib/actions/setup-tinytex@v2
+      - uses: r-lib/actions/setup-tinytex@v2-branch
         env:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
 
+      - name: Is this workflow running with extra package
+        if: github.event.inputs.extra-packages
+        run: |
+          echo "::notice::Running with the following extra packages for pak: ${{ github.event.inputs.extra-packages }}"
+        shell: bash
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           packages: deps::.
+          extra-packages: >
+            XML,
+            ${{ github.event.inputs.extra-packages }}
 
       - name: Retrieve knitr-examples
         # On PR, it will checkout same branch if it exists there
         uses: ./.github/actions/checkout-knitr-examples
 
       - name: Install knitr-example dev
-        run: pak::pak(readLines("knitr-examples/R-packages"))
+        run: install.packages(readLines("knitr-examples/R-packages"))
         shell: Rscript {0}
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
           sudo apt-get install -y libpoppler-cpp-dev graphviz asymptote highlight coffeescript scala optipng ghostscript
-          # downgrade ruby to remove deprecated
-          # https://github.com/rubygems/rubygems/issues/3068
-          sudo gem update --system 3.0.8
 
       - name: Install CTAN dependencies
         run: |

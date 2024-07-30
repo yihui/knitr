@@ -467,7 +467,7 @@ knitr
 \begin_inset CommandInset href
 LatexCommand href
 name "patterns"
-target "https://yihui.org/knitr/patterns"
+target "https://yihui.org/knitr/patterns/"
 
 \end_inset
 
@@ -488,7 +488,7 @@ a set of output
 \begin_inset CommandInset href
 LatexCommand href
 name "hooks"
-target "https://yihui.org/knitr/hooks"
+target "https://yihui.org/knitr/hooks/"
 
 \end_inset
 
@@ -544,7 +544,7 @@ dependson
 \begin_inset CommandInset href
 LatexCommand href
 name "option"
-target "https://yihui.org/knitr/options"
+target "https://yihui.org/knitr/options/"
 
 \end_inset
 
@@ -809,7 +809,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://yihui.org/knitr/demos
+https://yihui.org/knitr/demo/
 \end_layout
 
 \end_inset
@@ -2712,7 +2712,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://yihui.org/knitr/demos
+https://yihui.org/knitr/demo/
 \end_layout
 
 \end_inset

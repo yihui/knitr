@@ -6,9 +6,9 @@
 \alias{opts_current}
 \title{Default and current chunk options}
 \format{
-An object of class \code{list} of length 6.
+An object of class \code{list} of length 7.
 
-
+An object of class \code{list} of length 7.
 }
 \usage{
 opts_chunk
@@ -33,9 +33,8 @@ See \code{str(knitr::opts_chunk$get())} for a list of default chunk options.
 }
 \note{
 \code{opts_current} should be treated as read-only and you are supposed
-  to only query its values via \code{opts_current$get()}. Technically you
-  could also call \code{opts_current$set()} to change the values, but you are
-  not recommended to do so unless you understand the consequences.
+  to only query its values via \code{opts_current$get()}. Calling
+  \code{opts_current$set()} will throw an error.
 }
 \examples{
 opts_chunk$get("prompt")

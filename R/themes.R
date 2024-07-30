@@ -66,7 +66,7 @@ theme_to_header_latex = function(theme) {
 
   # get background and foreground colors
   background = css_out$background$color
-  foreground = css_out$std$color
+  foreground = css_out$def$color
 
   # write latex highlight header
   fgheader = color_def(foreground, 'fgcolor')
@@ -114,8 +114,8 @@ theme2list = function(theme.file) {
 
 # mapping between CSS class and Highlight theme elements
 cls2thm = c(
-  background = 'Canvas', num = 'Number', str = 'String', com = 'BlockComment',
-  opt = 'Operator', std = 'Default',
+  background = 'Canvas', num = 'Number', sng = 'String', com = 'BlockComment',
+  opt = 'Operator', def = 'Default',
   kwa = 'Keyword1', kwb = 'Keyword2', kwc = 'Keyword3', kwd = 'Keyword4'
 )
 

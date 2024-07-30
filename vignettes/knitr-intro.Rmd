@@ -2,34 +2,37 @@
 title: "Not An Introduction to knitr"
 author: "Yihui Xie"
 date: "`r Sys.Date()`"
-bibliography:
-  - ../inst/examples/knitr-packages.bib
-  - ../inst/examples/knitr-manual.bib
+output:
+  markdown::html_format:
+    meta:
+      css: ["@default", "@prism-xcode"]
+      js: ["@npm/@xiee/utils/js/center-img.min.js"]
 vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr_notangle}
   %\VignetteIndexEntry{Not an Introduction to knitr}
-output: knitr:::html_vignette
 ---
 
-The **knitr** package [@R-knitr] is an alternative tool to Sweave based on a
-different design with more features. This document is not an introduction,
-but only serves as a placeholder to guide you to the real manuals, which are
-available on the package website <https://yihui.org/knitr/>^[e.g. the [main
+The **knitr** package is an alternative tool to Sweave based on a different
+design with more features. This document is not an introduction, but only serves
+as a placeholder to guide you to the real manuals, which are available on the
+package website <https://yihui.org/knitr/> (e.g. the [main
 manual](https://yihui.org/knitr/demo/manual/) and the [graphics
-manual](https://yihui.org/knitr/demo/graphics/)], and remember to read the help pages of
-functions in this package. There is a book [@xie2013] for this package, but
-it may not be useful to those who prefer digging out information on the web.
+manual](https://yihui.org/knitr/demo/graphics/) ), and remember to read the help
+pages of functions in this package. There is a book "Dynamic Docuemnts with R
+and knitr" for this package, too.
 
-Anyway, here is a code chunk that shows you can compile vignettes with
-**knitr** as well using R 3.0.x, which supports non-Sweave vignettes:
+Anyway, here is a code chunk that shows you can compile vignettes with **knitr**
+as well using R 3.0.x, which supports non-Sweave vignettes:
 
 ```{r show-off, tidy=TRUE}
 options(digits=4)
 rnorm(20)
 fit=lm(dist~speed, data=cars)
 b=coef(fit)
-```{r results='asis', echo=FALSE}
-knitr::kable(summary(fit)$coefficients, caption='Regression coefficients.')
+```
+
+```{r echo=FALSE}
+knitr::kable(summary(fit)$coefficients)
 ```
 
 The fitted regression equation is $Y=`r b[1]`+`r b[2]`x$.
@@ -41,3 +44,7 @@ abline(fit, col = 'red')
 ```
 
 ## References
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+print(citation('knitr'), style = 'html')
+```

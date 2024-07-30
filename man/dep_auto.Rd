@@ -4,10 +4,13 @@
 \alias{dep_auto}
 \title{Build automatic dependencies among chunks}
 \usage{
-dep_auto(path = opts_chunk$get("cache.path"))
+dep_auto(path = opts_chunk$get("cache.path"), labels = all_labels())
 }
 \arguments{
 \item{path}{Path to the dependency file.}
+
+\item{labels}{A vector of labels of chunks for which the dependencies will be
+built. By default, dependencies for all chunks will be built.}
 }
 \value{
 \code{NULL}. The dependencies are built as a side effect.

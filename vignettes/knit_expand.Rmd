@@ -1,9 +1,17 @@
+---
+title: Templating with knit_expand()
+author: Yihui Xie
+date: "`r Sys.Date()`"
+output:
+  markdown::html_format:
+    meta:
+      css: ["@default", "@prism-xcode"]
+---
+
 <!--
-%\VignetteEngine{knitr::knitr}
+%\VignetteEngine{knitr::knitr_notangle}
 %\VignetteIndexEntry{Templating with knit_expand()}
 -->
-
-# Demos of `knit_expand()`
 
 A few simple examples:
 

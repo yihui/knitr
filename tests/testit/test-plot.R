@@ -6,7 +6,7 @@ op = options(device = function(file = NULL, ...) {
 })
 
 evaluate = evaluate::evaluate
-classes = evaluate:::classes
+classes = function(x) vapply(x, function(x) class(x)[1], character(1))
 
 # remove the blank plot
 assert('blank plots are removed', {

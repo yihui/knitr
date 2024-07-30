@@ -31,7 +31,8 @@ all_patterns = list(
   `md` = list(
     chunk.begin = '^[\t >]*```+\\s*\\{([a-zA-Z0-9_]+( *[ ,].*)?)\\}\\s*$',
     chunk.end = '^[\t >]*```+\\s*$',
-    ref.chunk = '^\\s*<<(.+)>>\\s*$', inline.code = '(?<!(^|\n)``)`r[ #]([^`]+)\\s*`'),
+    ref.chunk = '^\\s*<<(.+)>>\\s*$',
+    inline.code = '(?<!(^``))(?<!(\n``))`r[ #]([^`]+)\\s*`'),
 
   `rst` = list(
     chunk.begin = '^\\s*[.][.]\\s+\\{r(.*)\\}\\s*$',
@@ -140,17 +141,18 @@ group_pattern = function(pattern) {
 # automatically detect the chunk patterns
 detect_pattern = function(text, ext) {
   if (!missing(ext)) {
+    ext = tolower(ext)
     if (ext %in% c('rnw', 'snw', 'stex')) return('rnw')
     if (ext == 'brew') return('brew')
     if (ext %in% c('htm', 'html', 'rhtm', 'rhtml')) return('html')
-    if (ext %in% c('rmd', 'rmarkdown', 'markdown', 'md')) return('md')
+    if (ext %in% c('rmd', 'rmarkdown', 'markdown', 'md', 'qmd')) return('md')
     if (ext %in% c('rst', 'rrst')) return('rst')
     if (ext %in% c('asciidoc', 'rasciidoc', 'adoc', 'radoc')) return('asciidoc')
   }
   for (p in names(all_patterns)) {
     for (i in c('chunk.begin', 'inline.code')) {
       pat = all_patterns[[p]][[i]]
-      if (length(pat) && any(stringr::str_detect(text, pat))) return(p)
+      if (length(pat) && any(grepl(pat, text, perl = TRUE))) return(p)
     }
   }
   # *.Rtex indicates the tex syntax in knitr, but Rnw syntax in traditional

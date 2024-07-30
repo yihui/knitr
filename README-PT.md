@@ -1,12 +1,10 @@
 # knitr
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/yihui/knitr/workflows/R-CMD-check/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3AR-CMD-check)
-[![Check with knitr examples](https://github.com/yihui/knitr/workflows/Check%20with%20knitr%20examples/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3A%22Check+with+knitr+examples%22)
-[![test-coverage](https://github.com/yihui/knitr/workflows/test-coverage/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3Atest-coverage)
-[![Coverage status](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://codecov.io/github/yihui/knitr?branch=master)
+[![R-CMD-check](https://github.com/yihui/knitr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yihui/knitr/actions/workflows/R-CMD-check.yaml)
+[![Check knitr examples](https://github.com/yihui/knitr/actions/workflows/knitr-examples.yaml/badge.svg)](https://github.com/yihui/knitr/actions/workflows/knitr-examples.yaml)
+[![Codecov test coverage](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/yihui/knitr?branch=master)
 [![CRAN release](https://www.r-pkg.org/badges/version/knitr)](https://cran.r-project.org/package=knitr)
-[![Lock threads](https://github.com/yihui/knitr/workflows/Lock%20threads/badge.svg)](https://github.com/yihui/knitr/actions?query=workflow%3A%22Lock+threads%22)
 <!-- badges: end -->
 
 O pacote R **knitr** é um motor de programação literata (o *literate programming* de Donald Knuth) de propósito geral, com API's leves desenhadas para dar aos usuários controle total das saídas, sem trabalho pesado de codificação. Ele combina muitas funcionalidades em um único pacote com pequenos ajustes motivados pelo meu uso diário do Sweave. Vejam a [homepage](https://yihui.org/knitr/) do pacote para detalhes e exemplos. Vejam os [FAQ's](https://yihui.org/knitr/faq/) para uma lista de perguntas (incluindo sobre onde levantar questões).

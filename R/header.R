@@ -17,6 +17,8 @@ make_header_latex = function(doc) {
   h = one_string(c(
     header_latex_packages(doc),
     .header.maxwidth, opts_knit$get('header'),
+    if (length(grep('\\hlstd', doc, fixed = TRUE))) '\\let\\hlstd\\hldef',
+    if (length(grep('\\hlstr', doc, fixed = TRUE))) '\\let\\hlstr\\hlsng',
     if (getOption('OutDec') != '.') '\\usepackage{amsmath}',
     if (out_format('latex')) '\\usepackage{alltt}'
   ))
@@ -55,9 +57,8 @@ insert_header_latex = function(doc, b) {
       j = j[1]
       doc[j] = sub(p, '\n\\\\IfFileExists{upquote.sty}{\\\\usepackage{upquote}}{}\n\\2', doc[j], perl = TRUE)
     }
-    i = i[1L]; l = stringr::str_locate(doc[i], b)
-    tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
-    stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, make_header_latex(doc))
+    i = i[1L]; l = str_locate(doc[i], b, FALSE)
+    doc[i] = str_insert(doc[i], l[, 2], make_header_latex(doc))
   } else if (parent_mode() && !child_mode()) {
     # in parent mode, we fill doc to be a complete document
     doc[1L] = one_string(c(
@@ -86,9 +87,8 @@ make_header_html = function() {
 insert_header_html = function(doc, b) {
   i = grep(b, doc)
   if (length(i) == 1L) {
-    l = stringr::str_locate(doc[i], b)
-    tmp = stringr::str_sub(doc[i], l[, 1], l[, 2])
-    stringr::str_sub(doc[i], l[,1], l[,2]) = paste0(tmp, '\n', make_header_html())
+    l = str_locate(doc[i], b, FALSE)
+    doc[i] = str_insert(doc[i], l[, 2], paste0('\n', make_header_html()))
   }
   doc
 }

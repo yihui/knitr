@@ -13,14 +13,15 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
   }
 
   markdown_mode = identical(patterns, all_patterns$md)
-  i = group_indices(grepl(chunk.begin, lines), grepl(chunk.end, lines), lines, markdown_mode)
-  groups = unname(split(lines, i))
+  groups = divide_chunks(lines, chunk.begin, chunk.end, markdown_mode)
 
   if (set.preamble)
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
 
   # parse 'em all
-  lapply(groups, function(g) {
+  lapply(seq_along(groups), function(i) {
+    knit_concord$set(block = i)
+    g = groups[[i]]
     block = grepl(chunk.begin, g[1])
     if (!set.preamble && !parent_mode()) {
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
@@ -32,11 +33,21 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       # remove the optional prefix % in code in Rtex mode
       g = strip_block(g, patterns$chunk.code)
       params.src = if (group_pattern(chunk.begin)) {
-        stringr::str_trim(gsub(chunk.begin, '\\1', g[1]))
+        extract_params_src(chunk.begin, g[1])
       } else ''
       parse_block(g[-1], g[1], params.src, markdown_mode)
     } else parse_inline(g, patterns)
   })
+}
+
+# divide lines of input into code/text chunks
+divide_chunks = function(x, begin, end, md = TRUE) {
+  i = group_indices(grepl(begin, x), grepl(end, x), x, md)
+  unname(split(x, i))
+}
+
+extract_params_src = function(chunk.begin, line) {
+  trimws(gsub(chunk.begin, '\\1', line))
 }
 
 #' The code manager to manage code in all chunks
@@ -75,10 +86,10 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   engine = 'r'
   # consider the syntax ```{engine, opt=val} for chunk headers
   if (markdown_mode) {
-    engine = sub('^([a-zA-Z0-9_]+).*$', '\\1', params)
-    params = sub('^([a-zA-Z0-9_]+)', '', params)
+    engine = get_chunk_engine(params)
+    params = get_chunk_params(params)
   }
-  params = gsub('^\\s*,*|,*\\s*$', '', params) # rm empty options
+  params = clean_empty_params(params) # rm empty options
   # turn ```{engine} into ```{r, engine="engine"}
   if (tolower(engine) != 'r') {
     params = sprintf('%s, engine="%s"', params, engine)
@@ -86,11 +97,12 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   }
 
   # for quarto, preserve the actual original params.src and do not remove the engine
-  if (!(is_quarto <- !is.null(opts_knit$get('quarto.version')))) params.src = params
-  params = parse_params(params)
+  if (!is_quarto() || opts_knit$get('tangle')) params.src = params
+  params = xfun::csv_options(params)
+  if (is.null(params$label)) params$label = unnamed_chunk()
 
   # remove indent (and possibly markdown blockquote >) from code
-  if (nzchar(spaces <- gsub('^([\t >]*).*', '\\1', header))) {
+  if (nzchar(spaces <- get_chunk_indent(header))) {
     params$indent = spaces
     code = gsub(sprintf('^%s', spaces), '', code)
     # in case the trailing spaces of the indent string are trimmed on certain
@@ -105,7 +117,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   code = parts$code
 
   label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
-  if (length(code)) {
+  if (length(code) || length(params[['file']]) || length(params[['code']])) {
     if (label %in% names(knit_code$get())) {
       if (identical(getOption('knitr.duplicate.label'), 'allow')) {
         params$label = label = unnamed_chunk(label)
@@ -114,6 +126,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
         one_string(knit_code$get(label))
       )
     }
+    code = as.character(code)
     knit_code$set(setNames(list(structure(code, chunk_opts = params)), label))
   }
 
@@ -129,7 +142,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   }
 
   # for quarto only
-  if (is_quarto) {
+  if (is_quarto()) {
     params$original.params.src = params.src
     params$chunk.echo = isTRUE(params[['echo']])
     params$yaml.code = parts$src
@@ -140,7 +153,25 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
     }
   }
 
-  structure(list(params = params, params.src = params.src), class = 'block')
+  structure(class = 'block', list(
+    params = params, params.src = params.src, params.chunk = parts$src)
+  )
+}
+
+get_chunk_indent = function(header) {
+  gsub('^([\t >]*).*', '\\1', header)
+}
+
+get_chunk_engine = function(params) {
+  sub('^([a-zA-Z0-9_]+).*$', '\\1', params)
+}
+
+get_chunk_params = function(params) {
+  sub('^([a-zA-Z0-9_]+)', '', params)
+}
+
+clean_empty_params = function(params) {
+  gsub('^\\s*,*\\s*|\\s*,*\\s*$', '', params) # rm empty options
 }
 
 # autoname for unnamed chunk
@@ -149,182 +180,40 @@ unnamed_chunk = function(prefix = NULL, i = chunk_counter()) {
   paste(prefix, i, sep = '-')
 }
 
-# parse params from chunk header
+# this internal function is still used in RStudio IDE, otherwise can be removed
 parse_params = function(params, label = TRUE) {
-
-  if (params == '') return(if (label) list(label = unnamed_chunk()))
-
-  res = withCallingHandlers(
-    eval(parse_only(paste('alist(', quote_label(params), ')'))),
-    error = function(e) {
-      message('(*) NOTE: I saw chunk options "', params,
-              '"\n please go to https://yihui.org/knitr/options',
-              '\n (it is likely that you forgot to quote "character" options)')
-    })
-
-  # good, now you seem to be using valid R code
-  idx = which(names(res) == '')  # which option is not named?
-  # remove empty options
-  for (i in idx) if (identical(res[[i]], alist(,)[[1]])) res[[i]] = NULL
-  idx = if (is.null(names(res)) && length(res) == 1L) 1L else which(names(res) == '')
-  if ((n <- length(idx)) > 1L || (length(res) > 1L && is.null(names(res))))
-    stop('invalid chunk options: ', params,
-         "\n(all options must be of the form 'tag=value' except the chunk label)")
-  if (is.null(res$label)) {
-    if (n == 0L) res$label = '' else names(res)[idx] = 'label'
-  }
-  if (!is.character(res$label))
-    res$label = gsub(' ', '', as.character(as.expression(res$label)))
-  if (identical(res$label, '')) res$label = if (label) unnamed_chunk()
+  res = xfun::csv_options(params)
+  if (label && (!is.character(res$label) || identical(res$label, '')))
+    res$label = unnamed_chunk()
   res
 }
 
-# quote the chunk label if necessary
-quote_label = function(x) {
-  x = gsub('^\\s*,?', '', x)
-  if (grepl('^\\s*[^\'"](,|\\s*$)', x)) {
-    # <<a,b=1>>= ---> <<'a',b=1>>=
-    x = gsub('^\\s*([^\'"])(,|\\s*$)', "'\\1'\\2", x)
-  } else if (grepl('^\\s*[^\'"](,|[^=]*(,|\\s*$))', x)) {
-    # <<abc,b=1>>= ---> <<'abc',b=1>>=
-    x = gsub('^\\s*([^\'"][^=]*)(,|\\s*$)', "'\\1'\\2", x)
-  }
-  x
-}
-
-# comment characters for various languages
-comment_chars = list(
-  `#` = c('awk', 'bash', 'coffee', 'gawk', 'julia', 'octave', 'perl', 'powershell', 'python', 'r', 'ruby', 'sed', 'stan'),
-  '//' = c('asy', 'cc', 'csharp', 'd3', 'dot', 'fsharp', 'go', 'groovy', 'java', 'js', 'node', 'Rcpp', 'sass', 'scala'),
-  `%` = c('matlab', 'tikz'),
-  `/* */` = c('c', 'css'),
-  `* ;` = c('sas'),
-  `--` = c('haskell', 'lua', 'mysql', 'psql', 'sql'),
-  `!` = c('fortran', 'fortran95'),
-  `*` = c('stata')
-)
-# reshape it using the language name as the index, i.e., from list(char = lang)
-# to list(lang = char)
-comment_chars = local({
-  res = list()
-  for (i in names(comment_chars)) {
-    chars = comment_chars[[i]]
-    res = c(res, setNames(rep(list(strsplit(i, ' ')[[1]]), length(chars)), chars))
-  }
-  res[order(names(res))]
-})
-
 #' Partition chunk options from the code chunk body
 #'
-#' Chunk options can be written in special comments (e.g., after \verb{#|} for R
-#' code chunks) inside a code chunk. This function partitions these options from
-#' the chunk body.
-#' @param engine The name of the language engine (to determine the appropriate
-#'   comment character).
-#' @param code A character vector (lines of code).
-#' @return A list with the following items: \describe{\item{\code{options}}{The
-#'   parsed options (if any) as a list.} \item{\code{src}}{The part of the input
-#'   that contains the options.} \item{\code{code}}{The part of the input that
-#'   contains the code.}}
+#' This is a wrapper function calling \code{xfun::\link[xfun]{divide_chunk}()}
+#' under the hood.
 #' @export
-#' @examples
-#' # parse yaml-like items
-#' yaml_like = c("#| label: mine", "#| echo: true", "#| fig.width: 8", "#| foo: bar", "1 + 1")
-#' writeLines(yaml_like)
-#' knitr::partition_chunk("r", yaml_like)
-#'
-#' # parse CSV syntax
-#' csv_like = c("#| mine, echo = TRUE, fig.width = 8, foo = 'bar'", "1 + 1")
-#' writeLines(csv_like)
-#' knitr::partition_chunk("r", csv_like)
+#' @keywords internal
 partition_chunk = function(engine, code) {
-
-  res = list(yaml = NULL, src = NULL, code = code)
-  # mask out empty blocks
-  if (length(code) == 0) return(res)
-
-  char = comment_chars[[engine]] %n% '#'
-  s1 = paste0(char[[1]], '| ')
-  s2 = ifelse(length(char) > 1, char[[2]], '')
-
-  # check for option comments
-  i1 = startsWith(code, s1)
-  i2 = endsWith(trimws(code, 'right'), s2)
-  # if "commentChar| " is not found, try "#| " instead
-  if (!i1[1] && !identical(char, '#')) {
-    s1 = '#| '; s2 = ''
-    i1 = startsWith(code, s1); i2 = TRUE
-  }
-  m = i1 & i2
-
-  # has to have at least one matched line at the beginning
-  if (!m[[1]]) return(res)
-
-  # divide into yaml and code
-  if (all(m)) {
-    src = code
-    code = NULL
-  } else {
-    src = head(code, which.min(m) - 1)
-    code = tail(code, -length(src))
-  }
-
-  # trim right
-  if (any(i2)) src = trimws(src, 'right')
-
-  # extract meta from comments, then parse it
-  meta = substr(src, nchar(s1) + 1, nchar(src) - nchar(s2))
-  # see if the metadata looks like YAML or CSV
-  if (grepl('^[^ :]+:($|\\s)', meta[1])) {
-    meta = yaml::yaml.load(meta, handlers = list(expr = parse_only))
-    if (!is.list(meta) || length(names(meta)) == 0) {
-      warning('Invalid YAML option format in chunk: \n', one_string(meta), '\n')
-      meta = list()
-    }
-  } else {
-    meta = parse_params(paste(meta, collapse = ''), label = FALSE)
-  }
-
-  # normalize field name 'id' to 'label' if provided
-  meta$label = unlist(meta[c('label', 'id')])[1]
-  meta$id = NULL
-  # convert any option with fig- into fig. and out- to out.
-  names(meta) = sub('^(fig|out)-', '\\1.', names(meta))
-
-  # extract code
-  if (length(code) > 0 && is_blank(code[[1]])) {
-    code = code[-1]
-    src = c(src, '')
-  }
-
-  list(options = meta, src = src, code = code)
+  opts = options(xfun.handle_error.loc_fun = get_loc)
+  on.exit(options(opts))
+  # the code has been moved to the xfun package
+  xfun::divide_chunk(engine, code)
 }
 
-print.block = function(x, ...) {
+print_block = function(x) {
   params = x$params
-  # don't show internal options for quarto
-  for (i in attr(params, 'quarto_options')) params[[i]] = NULL
-  cat('label:', params$label)
-  if (length(params) > 1L) {
-    cat(' (with options) \n')
-    str(params[setdiff(names(params), 'label')])
-  }
   if (opts_knit$get('verbose')) {
     code = knit_code$get(params$label)
     if (length(code) && !is_blank(code)) {
-      cat('\n  ', stringr::str_pad(' R code chunk ', getOption('width') - 10L, 'both', '~'), '\n')
-      cat(one_string('  ', code), '\n')
-      cat('  ', stringr::str_dup('~', getOption('width') - 10L), '\n')
+      cat('\n')
+      cat(one_string('  |  ', code), '\n')
     }
-    cat(paste('##------', date(), '------##'), sep = '\n')
   }
-  cat('\n')
 }
 
 # extract inline R code fragments (as well as global options)
 parse_inline = function(input, patterns) {
-  input.src = input  # keep a copy of the source
-
   inline.code = patterns$inline.code; inline.comment = patterns$inline.comment
   if (!is.null(inline.comment)) {
     idx = grepl(inline.comment, input)
@@ -334,31 +223,29 @@ parse_inline = function(input, patterns) {
   input = one_string(input) # merge into one line
 
   loc = cbind(start = numeric(0), end = numeric(0))
-  if (group_pattern(inline.code)) loc = stringr::str_locate_all(input, inline.code)[[1]]
+  if (group_pattern(inline.code)) loc = str_locate(input, inline.code)[[1]]
+  code1 = code2 = character()
   if (nrow(loc)) {
-    code = stringr::str_match_all(input, inline.code)[[1L]]
-    code = if (NCOL(code) >= 2L) {
-      code[is.na(code)] = ''
-      apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
-    } else character(0)
-  } else code = character(0)
+    code = t(str_match(input, inline.code))
+    if (NCOL(code) >= 2L) {
+      code1 = code[, 1L]
+      code2 = apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
+    }
+  }
 
-  structure(list(input = input, input.src = input.src, location = loc, code = code),
-            class = 'inline')
+  structure(
+    list(input = input, location = loc, code = code2, code.src = code1),
+    class = 'inline'
+  )
 }
 
-print.inline = function(x, ...) {
-  if (nrow(x$location)) {
-    cat('   ')
-    if (opts_knit$get('verbose')) {
-      cat(stringr::str_pad(' inline R code fragments ',
-                  getOption('width') - 10L, 'both', '-'), '\n')
-      cat(sprintf('    %s:%s %s', x$location[, 1], x$location[, 2], x$code),
-          sep = '\n')
-      cat('  ', stringr::str_dup('-', getOption('width') - 10L), '\n')
-    } else cat('inline R code fragments\n')
-  } else cat('  ordinary text without R code\n')
-  cat('\n')
+print_inline = function(x) {
+  if (opts_knit$get('verbose')) {
+    cat('\n')
+    if (nrow(x$location)) {
+      cat(sprintf('  |  %s  #%s:%s', x$code, x$location[, 1], x$location[, 2]), sep = '\n')
+    }
+  }
 }
 
 #' Read chunks from an external script
@@ -457,7 +344,7 @@ read_chunk = function(
     idx = c(0, idx); lines = c('', lines)  # no chunk header in the beginning
   }
   groups = unname(split(lines, idx))
-  labels = stringr::str_trim(gsub(lab, '\\3', sapply(groups, `[`, 1)))
+  labels = trimws(gsub(lab, '\\3', sapply(groups, `[`, 1)))
   labels = gsub(',.*', '', labels)  # strip off possible chunk options
   code = lapply(groups, strip_chunk, roxygen_comments)
   for (i in which(!nzchar(labels))) labels[i] = unnamed_chunk()
@@ -530,9 +417,6 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
   in.chunk = FALSE  # whether inside a chunk now
   pattern.end = NA  # the expected chunk end pattern (derived from header)
   b = NA  # the last found chunk header
-  # TODO: for now we only disallow unmatched delimiters during R CMD check
-  # that's not running on CRAN; we will fully disallow it in the future (#2057)
-  signal = if (is_R_CMD_check() && !(is_cran() || is_bioc())) stop2 else warning2
   g = NA  # group index: odd - text; even - chunk
   fun = function(is.begin, is.end, line, i) {
     if (i == 1) {
@@ -551,7 +435,7 @@ group_indices = function(chunk.begin, chunk.end, lines = NA, is.md = FALSE) {
       }  # otherwise ignore the chunk header
       return(g)
     }
-    if (in.chunk && is.end && match_chunk_end(pattern.end, line, i, b, lines, signal)) {
+    if (in.chunk && is.end && match_chunk_end(pattern.end, line, i, b, lines)) {
       in.chunk <<- FALSE
       g <<- g + 1
       return(g - 1)  # don't use incremented g yet; use it in the next step
@@ -573,7 +457,7 @@ match_chunk_begin = function(pattern.end, x, pattern = '^\\1\\\\{') {
   grepl(gsub('^([^`]*`+).*', pattern, pattern.end), x)
 }
 
-match_chunk_end = function(pattern, line, i, b, lines, signal = stop) {
+match_chunk_end = function(pattern, line, i, b, lines) {
   if (is.na(pattern) || grepl(pattern, line)) return(TRUE)
   n = length(lines)
   # if the exact match was not found, look ahead to see if there is another
@@ -585,12 +469,15 @@ match_chunk_end = function(pattern, line, i, b, lines, signal = stop) {
     if (!any(match_chunk_begin(pattern, lines[i + 1:(k - 1)], '^\\1`*\\\\{')))
       return(FALSE)
   }
+  # TODO: clean up the exceptions here (although perhaps some may never update again)
+  signal = if (getOption('knitr.unbalanced.chunk', FALSE)) warning2 else stop2
   signal(
-    'The closing backticks on line ', i, ' ("', line, '") in ', current_input(),
-    ' do not match the opening backticks "',
+    'The closing fence on line ', i, ' ("', line, '") in ', current_input(),
+    ' does not match the opening fence "',
     gsub('\\^(\\s*`+).*', '\\1', pattern), '" on line ', b, '. You are recommended to ',
-    'fix either the opening or closing delimiter of the code chunk to use exactly ',
-    'the same numbers of backticks and same level of indentation (or blockquote).'
+    'fix either the opening or closing fence of the code chunk to use exactly ',
+    'the same numbers of backticks and same level of indentation (or blockquote). ',
+    'See https://yihui.org/en/2021/10/unbalanced-delimiters/ for more info.'
   )
   TRUE
 }
@@ -693,4 +580,187 @@ inline_expr = function(code, syntax) {
     md = '`r %s`', rst = ':r:`%s`', asciidoc = '`r %s`', textile = '@r %s@',
     stop('Unknown syntax ', pat)
   ), code)
+}
+
+
+#' Convert the in-header chunk option syntax to the in-body syntax
+#'
+#' This is a helper function for moving chunk options from the chunk header to
+#' the chunk body using the new syntax.
+#' @param input File path to the document with code chunks to convert.
+#' @param output The default \code{NULL} will output to console. Other values
+#'   can be a file path to write the converted content into or a function which
+#'   takes \code{input} as argument and returns a file path to write into (e.g.,
+#'   \code{output = identity} to overwrite the input file).
+#' @param type This determines how the in-body options will be formatted.
+#'   \code{"mutiline"} (the default, except for \file{qmd} documents, for which
+#'   the default is \code{"yaml"}) will write each chunk option on a separate
+#'   line. Long chunk option values will be wrapped onto several lines, and you
+#'   can use \code{width = 0} to keep one line per option only. \code{"wrap"}
+#'   will wrap all chunk options together using
+#'   \code{\link[base:strwrap]{base::strwrap}()}. \code{"yaml"} will convert
+#'   chunk options to YAML.
+#' @param width An integer passed to \code{base::strwrap()} for \code{type =
+#'   "wrap"} and \code{type = "multiline"}. If set to \code{0}, deactivate the
+#'   wrapping (for \code{type = "multiline"} only).
+#' @return A character vector of converted \code{input} when \code{output =
+#'   NULL}. The output file path with converted content otherwise.
+#' @note Learn more about the new chunk option syntax in
+#'   \url{https://yihui.org/en/2022/01/knitr-news/}
+#' @section About \pkg{knitr} option syntax:
+#'
+#' Historical chunk option syntax have chunk option in the chunk header using
+#' valid R syntax. This is an example for \verb{.Rmd} document
+#' \preformatted{
+#' ```\{r, echo = FALSE, fig.width: 10\}
+#' ```
+#' }
+#'
+#' New syntax allows to pass option inside the chunk using several variants
+#' \itemize{
+#' \item Passing options one per line using valid R syntax. This corresponds to \code{convert_chunk_header(type = "multiline")}.
+#' \preformatted{
+#' ```\{r\}
+#' #| echo = FALSE,
+#' #| fig.width = 10
+#' ```
+#' }
+#'
+#' \item Passing option part from header in-chunk with several line if wrapping is
+#' needed. This corresponds to \code{convert_chunk_header(type = "wrap")}
+#' \preformatted{
+#' ```\{r\}
+#' #| echo = FALSE, fig.width = 10
+#' ```
+#' }
+#' \item Passing options key value pairs in-chunk using YAML syntax. Values are no
+#' more R expression but valid YAML syntax. This corresponds to
+#' \code{convert_chunk_header(type = "yaml")} (not implement yet).
+#' \preformatted{```\{r\}
+#' #| echo: false,
+#' #| fig.width: 10
+#' ```
+#' }
+#' }
+#' @examples
+#' knitr_example = function(...) system.file('examples', ..., package = 'knitr')
+#' # Convert a document for multiline type
+#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'))
+#' # Convert a document for wrap type
+#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap")
+#' # Reduce default wrapping width
+#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap", width = 0.6 * getOption('width'))
+#' \dontrun{
+#' # Explicitly name the output
+#' convert_chunk_header('test.Rmd', output = 'test2.Rmd')
+#' # Overwrite the input
+#' convert_chunk_header('test.Rmd', output = identity)
+#' # Use a custom function to name the output
+#' convert_chunk_header('test.Rmd', output = \(f) sprintf('%s-new.%s', xfun::sans_ext(f), xfun::file_ext(f)))
+#' }
+#' @export
+convert_chunk_header = function(
+  input, output = NULL, type = c('multiline', 'wrap', 'yaml'),
+  width = 0.9 * getOption('width')
+) {
+
+  # extract fenced header information
+  text = xfun::read_utf8(input)
+  ext  = xfun::file_ext(input)
+  if (missing(type) && ext == 'qmd') type = 'yaml'  # default to yaml for Quarto
+  type = match.arg(type)
+  pattern = detect_pattern(text, ext)
+  # no code chunk in brew file
+  if (pattern == 'brew') return()
+  markdown_mode = pattern == 'md'
+  chunk_begin = all_patterns[[pattern]]$chunk.begin
+
+  # counter for inserted lines
+  nb_added = 0L
+  new_text = text
+  for (i in grep(chunk_begin, text)) {
+    # transform each chunk one by one
+    indent = get_chunk_indent(text[i])
+    header = extract_params_src(chunk_begin, text[i])
+    engine = if (markdown_mode) get_chunk_engine(header) else 'r'
+    params = if (markdown_mode) get_chunk_params(header) else header
+    # if no params nothing to format
+    if (params == '') next
+    params2 = clean_empty_params(params)
+    params2 = trimws(clean_empty_params(params2))
+
+    # select the correct prefix char (e.g `#|`)
+    opt_chars = xfun:::get_option_comment(engine)
+    prefix = paste0(indent, opt_chars$start)
+
+    # clean old chunk keeping only engine
+    new_text[i + nb_added] = gsub(params, '', text[i], fixed = TRUE)
+
+    # format new chunk
+    if (type == 'wrap') {
+      # simple line wrapping of R code
+      params3 = strwrap(params2, width, prefix = prefix)
+    } else if (type == 'multiline') {
+      # one option per line of the form `key = value,`
+      res = xfun::csv_options(params2)
+      params3 = sprintf('%s = %s,', names(res), deparsed_string(res))
+
+      # remove trailing for last element
+      last = length(params3)
+      params3[last] = gsub(',$', '', params3[last])
+
+      # wrap long single line and add prefix
+      params3 = if (width <= 0) paste0(prefix, params3) else {
+        strwrap(params3, width, prefix = prefix)
+      }
+    } else {
+      params3 = xfun::csv_options(params2)
+
+      # fix un-evaluated options for yaml by transforming to !expr val
+      params3 = lapply(params3, function(x) {
+        if (is.symbol(x) || is.language(x)) {
+          x = deparse(x, 500L)
+          attr(x, 'tag') = '!expr'
+        }
+        x
+      })
+      # transform dot option to dash option
+      params3 = dash_names(params3)
+      # convert to yaml and add prefix
+      params3 = strsplit(yaml::as.yaml(
+        params3, handlers = list(
+          # true / false instead of no
+          logical = function(x) {
+            x = tolower(x)
+            class(x) = 'verbatim'
+            x
+          },
+          # use character with verbatim for no quotes
+          # so that integers as kept unchanged (without changing precision)
+          # fig.width = 10, should not be fig-width: 10.0
+          numeric = function(x) {
+            if (length(x) != 1) return(x)
+            x2 = as.integer(x)
+            if (x2 == x) x2 else x
+          }), line.sep = '\n'), '\n')[[1]]
+      params3 = paste0(prefix, params3)
+    }
+
+    if (nzchar(opt_chars$end)) params3 = paste0(params3, opt_chars$end)
+
+    # insert new chunk header
+    new_text = append(new_text, params3, after = i + nb_added)
+    nb_added = nb_added + length(params3)
+  }
+
+  if (is.null(output)) return(new_text)
+  # otherwise write to file
+  if (is.function(output)) output = output(input)
+  xfun::write_utf8(new_text, output)
+  invisible(output)
+}
+
+# TODO: when R 4.0.0 is minimal version, switch to deparse1()
+deparsed_string = function(exprs) {
+  unlist(lapply(exprs, function(x) paste(deparse(x, 500), collapse = ' ')))
 }

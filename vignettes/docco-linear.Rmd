@@ -1,9 +1,11 @@
+---
+title: R Markdown with the Docco Linear Style
+---
+
 <!--
-%\VignetteEngine{knitr::docco_linear}
+%\VignetteEngine{knitr::docco_linear_notangle}
 %\VignetteIndexEntry{R Markdown with the Docco Linear Style}
 -->
-
-# R Markdown with the Docco Linear Style
 
 This is an example of Markdown vignettes using the [Docco style](http://ashkenas.com/docco/).
 
@@ -48,10 +50,10 @@ plot(rnorm(n), rnorm(n), pch=21, cex=5*runif(n), col='white', bg='gray')
 
 ## How does it work
 
-The **markdown** package (>= v0.6.2) supports custom HTML templates, and the `docco` engine in **knitr** uses a custom template to compile Markdown to HTML:
+Custom CSS and JS files are passed to `markdown::mark_html()` to style the HTML page:
 
-```{r header, eval=FALSE}
-knit2html(..., markdown.HTML.template = system.file('misc', 'docco-template.html', package='knitr'))
+```r
+knitr:::docco_linear
 ```
 
 That is it.

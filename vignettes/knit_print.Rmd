@@ -2,12 +2,15 @@
 title: "Custom Print Methods"
 author: "Yihui Xie"
 date: '`r Sys.Date()`'
-vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Custom Print Methods}
 output:
-  knitr:::html_vignette:
-    toc: yes
+  markdown::html_format:
+    options:
+      toc: true
+    meta:
+      css: ["@default", "@prism-xcode"]
+vignette: >
+  %\VignetteEngine{knitr::knitr_notangle}
+  %\VignetteIndexEntry{Custom Print Methods}
 ---
 
 Before **knitr** v1.6, printing objects in R code chunks basically emulates the R console. For example, a data frame is printed like this^[Note R prints an object without an explicit `print()` call when it is _visible_; see `?invisible`]:
@@ -206,13 +209,24 @@ str(knit_meta()) # empty now, because clean = TRUE by default
 
 If you are implementing a custom print method in your own package, here are two tips:
 
-1. Normally you need to import `knit_print` in your package namespace via `importFrom(knitr, knit_print)` (or roxygen: `#' @importFrom knitr knit_print`) (see [the **printr** package](https://github.com/yihui/printr) for an example). If you don't want to import **knitr**, you can call `registerS3method()` in your `.onLoad()` hook (see [rstudio/htmltools#108](https://github.com/rstudio/htmltools/pull/108/files) for an example);
-1. `asis_output()` is simply a function that marks an object with the class `knit_asis`, and you do not have to import this function to your package, either -- just let your print method return `structure(x, class = 'knit_asis')`, and if there are additional metadata, just put it in the `knit_meta` attribute; here is the source code of this function:
+1. With R >= 3.6.0 (2019-04-26), you can declare the S3 method in the package `NAMESPACE` with `S3method(knitr::knit_print, class)`. If you use **roxygen2** package, that means a roxygen comment like this:
+
+    ```r
+    #' @exportS3Method knitr::knit_print
+    knit_print.class <- 
+    ```
+
+    With this method, you do not need to import **knitr** to your package, i.e., **knitr** can be listed in `Suggests` and not necessarily `Imports` in the package `DESCRIPTION`. The S3 methods will be automatically registered when **knitr** is actually loaded.
+
+    For R < 3.6.0, you need to import `knit_print` in your package namespace via `importFrom(knitr, knit_print)` (or roxygen: `#' @importFrom knitr knit_print`) (see [the **printr** package](https://github.com/yihui/printr) for an example).
+
+1. `asis_output()` is simply a function that marks an object with the class `knit_asis`, and you do not have to import this function to your package, either---just let your print method return `structure(x, class = 'knit_asis')`, and if there are additional metadata, just put it in the `knit_meta` attribute; here is the source code of this function:
+
     ```{r}
     knitr::asis_output
     ```
 
-    Note that you can actually put **knitr** in the `Suggests` field in DESCRIPTION, and use `knitr::asis_output()`, so that you can avoid the "hard" dependency on **knitr**.
+    You may put **knitr** in the `Suggests` field in `DESCRIPTION`, and use `knitr::asis_output()`, so that you can avoid the "hard" dependency on **knitr**.
 
 ```{r clean-up, include=FALSE}
 # R compiles all vignettes in the same session, which can be bad

@@ -71,7 +71,7 @@ stitch = function(script,
     message('PDF output at: ', with_ext(out, 'pdf'))
   }, md = {
     out.html = with_ext(out, 'html')
-    markdown::markdownToHTML(out, out.html)
+    markdown::mark_html(out, out.html)
     message('HTML output at: ', out.html)
   })
   out
@@ -118,12 +118,12 @@ knit_expand = function(file, ..., text = read_utf8(file), delim = c('{{', '}}') 
   delim = paste0(delim[1L], '((.|\n)+?)', delim[2L])
 
   txt = one_string(text)
-  loc = stringr::str_locate_all(txt, delim)[[1L]]
+  loc = str_locate(txt, delim)[[1L]]
   if (nrow(loc) == 0L) return(txt) # no match
-  mat = stringr::str_extract_all(txt, delim)[[1L]]
-  mat = sub(delim, '\\1', mat)
+  mat = str_extract(txt, delim)[[1L]]
   env = list(...)
   env = if (length(env)) list2env(env, parent = parent.frame()) else parent.frame()
-  inline_exec(list(code = mat, input = txt, location = loc),
-              envir = env, hook = identity)
+  inline_exec(list(
+    code = sub(delim, '\\1', mat), code.src = mat, input = txt, location = loc
+  ), envir = env, hook = identity)
 }

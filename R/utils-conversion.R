@@ -127,18 +127,18 @@ rnw2pdf = function(
   output
 }
 
-#' Convert markdown to HTML using knit() and markdownToHTML()
+#' Convert markdown to HTML using knit() and mark_html()
 #'
 #' This is a convenience function to knit the input markdown source and call
-#' \code{markdown::\link[markdown]{markdownToHTML}()} in the \pkg{markdown}
+#' \code{markdown::\link[markdown]{mark_html}()} in the \pkg{markdown}
 #' package to convert the result to HTML.
 #' @inheritParams knit
 #' @param ... Options passed to
-#'   \code{markdown::\link[markdown]{markdownToHTML}()}.
+#'   \code{markdown::\link[markdown]{mark_html}()}.
 #' @param force_v1 Boolean; whether to force rendering the input document as an
 #'   R Markdown v1 document, even if it is for v2.
 #' @export
-#' @seealso \code{\link{knit}}, \code{markdown::\link[markdown]{markdownToHTML}}
+#' @seealso \code{\link{knit}}, \code{markdown::\link[markdown]{mark_html}}
 #' @return If the argument \code{text} is NULL, a character string (HTML code)
 #'   is returned; otherwise the result is written into a file and the filename
 #'   is returned.
@@ -159,8 +159,8 @@ knit2html = function(
   if (is_cran_check() && !has_package('markdown'))
     return(vweave_empty(input, .reason = 'markdown'))
 
-  if (!force_v1 && is.null(text)) {
-    if (length(grep('^---\\s*$', head(read_utf8(input), 1)))) warning2(
+  if (!force_v1 && is.null(text) && is_rmd_v2(input)) {
+    warning2(
       'It seems you should call rmarkdown::render() instead of knitr::knit2html() ',
       'because ', input, ' appears to be an R Markdown v2 document.'
     )
@@ -168,9 +168,16 @@ knit2html = function(
   out = knit(input, text = text, envir = envir, quiet = quiet)
   if (is.null(text)) {
     output = with_ext(if (is.null(output) || is.na(output)) out else output, 'html')
-    markdown::markdownToHTML(out, output, encoding = 'UTF-8', ...)
+    markdown::mark_html(out, output, ...)
     invisible(output)
-  } else markdown::markdownToHTML(text = out, ...)
+  } else markdown::mark_html(text = out, ...)
+}
+
+# test if an Rmd input should be rendered via rmarkdown::render() or (mark|lite)down::mark()
+is_rmd_v2 = function(input, text = read_utf8(input)) {
+  res = xfun::yaml_body(text)$yaml[['output']]
+  if (is.list(res)) res = names(res)
+  length(res) > 0 && is.character(res) && !any(grepl('^(mark|lite)down::', res))
 }
 
 #' Knit an R Markdown document and post it to WordPress
@@ -217,8 +224,10 @@ knit2wp = function(
     ), 'knitr.knit2wp.warning'
   )
   out = knit(input, envir = envir); on.exit(unlink(out))
-  content = file_string(out)
-  content = markdown::markdownToHTML(text = content, fragment.only = TRUE)
+  content = read_utf8(out)
+  if (missing(title) && length(title2 <- xfun::yaml_body(content)$yaml$title) == 1)
+    title = title2
+  content = markdown::mark(text = content)
   shortcode = rep(shortcode, length.out = 2L)
   if (shortcode[1]) content = gsub(
     '<pre><code class="([[:alpha:]]+)">(.+?)</code></pre>',
