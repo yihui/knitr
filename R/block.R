@@ -307,16 +307,16 @@ eng_r = function(options, env = knit_global()) {
       0
     })) else 0L
 
-  # # merge neighbor elements of the same class into one element
+  # merge neighbor elements of the same class into one element
   for (cls in c('source', 'message', 'warning')) res = merge_class(res, cls)
 
   if (isTRUE(options$fig.beforecode)) res = fig_before_code(res)
 
-  # on.exit({
-  #   plot_counter(reset = TRUE)
-  #   shot_counter(reset = TRUE)
-  #   opts_knit$delete('plot_files')
-  # }, add = TRUE)  # restore plot number
+  on.exit({
+    plot_counter(reset = TRUE)
+    shot_counter(reset = TRUE)
+    opts_knit$delete('plot_files')
+  }, add = TRUE)  # restore plot number
 
   output = unlist(sew(res, options)) # wrap all results together
   res.after = run_hooks(before = FALSE, options, env) # run 'after' hooks
