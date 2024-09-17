@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.49
 
+## BUG FIXES
+
+- In-chunk references of the form `<<label>>` should not be resolved if `label` is not found in the document (thanks, @jennybc @gadenbuie, #2360).
 
 # CHANGES IN knitr VERSION 1.48
 
