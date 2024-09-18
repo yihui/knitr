@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.49
 
+## NEW FEATURES
+
+- In-chunk references of the form `<<label>>` can be disabled via the chunk option `ref.chunk = FALSE` now (thanks, @jennybc @gadenbuie, #2360).
+
 ## BUG FIXES
 
 - In-chunk references of the form `<<label>>` should not be resolved if `label` is not found in the document (thanks, @jennybc @gadenbuie, #2360).
