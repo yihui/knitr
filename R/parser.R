@@ -470,9 +470,7 @@ match_chunk_end = function(pattern, line, i, b, lines) {
     if (!any(match_chunk_begin(pattern, lines[i + 1:(k - 1)], '^\\1`*\\\\{')))
       return(FALSE)
   }
-  # TODO: clean up the exceptions here (although perhaps some may never update again)
-  signal = if (getOption('knitr.unbalanced.chunk', FALSE)) warning2 else stop2
-  signal(
+  stop2(
     'The closing fence on line ', i, ' ("', line, '") in ', current_input(),
     ' does not match the opening fence "',
     gsub('\\^(\\s*`+).*', '\\1', pattern), '" on line ', b, '. You are recommended to ',
@@ -480,7 +478,6 @@ match_chunk_end = function(pattern, line, i, b, lines) {
     'the same numbers of backticks and same level of indentation (or blockquote). ',
     'See https://yihui.org/en/2021/10/unbalanced-delimiters/ for more info.'
   )
-  TRUE
 }
 
 #' Get all chunk labels in a document

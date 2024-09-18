@@ -8,6 +8,10 @@
 
 - In-chunk references of the form `<<label>>` should not be resolved if `label` is not found in the document (thanks, @jennybc @gadenbuie, #2360).
 
+## MAJOR CHANGES
+
+- Unbalanced chunk delimiters (fences) in R Markdown documents are strictly prohibited now.
+
 # CHANGES IN knitr VERSION 1.48
 
 ## BUG FIXES
