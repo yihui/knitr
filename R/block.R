@@ -256,7 +256,7 @@ eng_r = function(options) {
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
     as.source(code)
   } else if (cache.exists && isFALSE(options$cache.rebuild)) {
-    fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
+    cache$output(options$hash, 'list')
   } else in_input_dir(
     evaluate(
       code, envir = env, new_device = FALSE,
