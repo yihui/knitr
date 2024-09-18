@@ -220,20 +220,6 @@ load_device = function(name, package, dpi = NULL) {
 }
 
 
-# merge low-level plotting changes
-merge_low_plot = function(x, idx = sapply(x, evaluate::is.recordedplot)) {
-  idx = which(idx); n = length(idx); m = NULL # store indices that will be removed
-  if (n <= 1) return(x)
-  i1 = idx[1]; i2 = idx[2]  # compare plots sequentially
-  for (i in 1:(n - 1)) {
-    # remove the previous plot and move its index to the next plot
-    if (is_low_change(x[[i1]], x[[i2]])) m = c(m, i1)
-    i1 = idx[i + 1]
-    i2 = idx[i + 2]
-  }
-  if (is.null(m)) x else x[-m]
-}
-
 #' Compare two recorded plots
 #'
 #' Check if one plot only contains a low-level update of another plot.

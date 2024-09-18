@@ -495,7 +495,7 @@ rearrange_figs = function(res, keep, idx, show) {
     keep,
     first = res[-tail(which(figs), -1L)],
     last  = res[-head(which(figs), -1L)],
-    high  = merge_low_plot(res, figs),  # merge low-level plotting changes
+    high  = evaluate::trim_intermediate_plots(res),  # merge low-level plotting changes
     index = {
       i = which(figs)[-idx]
       if (length(i) > 0) res[-i] else res  # keep only selected
