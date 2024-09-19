@@ -146,7 +146,7 @@ set_parent = function(parent) {
 
 # whether to write results as-is?
 output_asis = function(x, options) {
-  is_blank(x) || options$results == 'asis'
+  is_blank(x) || identical(options$results, 'asis')
 }
 
 # the working directory: use root.dir if specified, otherwise the dir of the
