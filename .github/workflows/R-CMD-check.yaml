@@ -56,8 +56,6 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-pandoc@v2
-
       - uses: r-lib/actions/setup-tinytex@v2-branch
         env:
           # install full prebuilt version
