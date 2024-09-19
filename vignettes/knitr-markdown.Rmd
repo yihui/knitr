@@ -1,15 +1,19 @@
 ---
-title: An R Markdown (v1) Vignette with knitr
+title: R Markdown (v1) Vignettes with knitr
 author: Yihui Xie
-date: "`r Sys.Date()`"
+date: "`{r} Sys.Date()`"
+output:
+  litedown::html_format:
+    meta:
+      css: ["@default"]
 ---
 
 <!--
-%\VignetteEngine{knitr::knitr_notangle}
+%\VignetteEngine{litedown::vignette}
 %\VignetteIndexEntry{An R Markdown Vignette with knitr}
 -->
 
-This is an example of Markdown vignettes in R. Before R 3.0.0, only Sweave/PDF vignettes were supported in R. Markdown is gaining popularity over the years due to its simplicity, and R 3.0.0 starts to support package vignettes written in R Markdown.
+Before R 3.0.0, only Sweave/PDF vignettes were supported in R. Markdown is gaining popularity over the years due to its simplicity, and R 3.0.0 starts to support package vignettes written in R Markdown.
 
 > Please note this example is for [R Markdown v1](https://cran.r-project.org/package=markdown) only. If you use [R Markdown v2](https://rmarkdown.rstudio.com), you should use the vignette engine `knitr::rmarkdown` instead of `knitr::knitr`.
 

@@ -16,6 +16,8 @@
 
 - Changed the format of the reference card from PDF to HTML so building this package will not require LaTeX. See `vignette('knitr-refcard', package = 'knitr')`.
 
+- Switched the vignette engine from **knitr** to `litedown::vignette` for some package vignettes.
+
 # CHANGES IN knitr VERSION 1.48
 
 ## BUG FIXES

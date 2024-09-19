@@ -132,7 +132,7 @@ knit = function(
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
 
   if (child_mode()) {
-    setwd(opts_knit$get('output.dir')) # always restore original working dir
+    setwd(opts_knit$get('output.dir') %n% '.') # always restore original working dir
     # in child mode, input path needs to be adjusted
     if (in.file && !is_abs_path(input)) {
       input = paste0(opts_knit$get('child.path'), input)

@@ -1,14 +1,13 @@
 ---
 title: "Not An Introduction to knitr"
 author: "Yihui Xie"
-date: "`r Sys.Date()`"
+date: "`{r} Sys.Date()`"
 output:
-  markdown::html_format:
+  litedown::html_format:
     meta:
-      css: ["@default", "@prism-xcode"]
-      js: ["@npm/@xiee/utils/js/center-img.min.js"]
+      css: ["@default"]
 vignette: >
-  %\VignetteEngine{knitr::knitr_notangle}
+  %\VignetteEngine{litedown::vignette}
   %\VignetteIndexEntry{Not an Introduction to knitr}
 ---
 
@@ -24,18 +23,18 @@ and knitr" for this package, too.
 Anyway, here is a code chunk that shows you can compile vignettes with **knitr**
 as well using R 3.0.x, which supports non-Sweave vignettes:
 
-```{r show-off, tidy=TRUE}
-options(digits=4)
+```{r show-off}
+options(digits = 4)
 rnorm(20)
-fit=lm(dist~speed, data=cars)
-b=coef(fit)
+fit = lm(dist ~ speed, data = cars)
+b = coef(fit)
 ```
 
 ```{r echo=FALSE}
-knitr::kable(summary(fit)$coefficients)
+summary(fit)$coefficients
 ```
 
-The fitted regression equation is $Y=`r b[1]`+`r b[2]`x$.
+The fitted regression equation is $Y=`{r} b[1]`+`{r} b[2]`x$.
 
 ```{r graphics, fig.cap='A scatterplot with a regression line.'}
 par(mar=c(4, 4, 1, .1))
