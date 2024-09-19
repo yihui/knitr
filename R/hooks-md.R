@@ -175,6 +175,7 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
   hook.o = function(class) {
     force(class)
     function(x, options) {
+      if (class == 'output' && output_asis(x, options)) return(x)
       hook.t(x, options[[paste0('attr.', class)]], options[[paste0('class.', class)]])
     }
   }
@@ -290,6 +291,9 @@ hooks_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '
     hook.r(x, options)
   }
   merge_list(hook.m, list(
-    source = source, output = hook.t, warning = hook.t, message = hook.t, error = hook.t
+    source = source, warning = hook.t, message = hook.t, error = hook.t,
+    output = function(x, options) {
+      if (output_asis(x, options)) x else hook.t(x, options)
+    }
   ))
 }

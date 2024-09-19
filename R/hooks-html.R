@@ -252,6 +252,7 @@ hooks_html = function() {
   hook = function(name) {
     force(name)
     function(x, options) {
+      if (name == 'output' && output_asis(x, options)) return(x)
       x = if (name == 'source') {
         c(hilight_source(x, 'html', options), '')
       } else escape_html(x)

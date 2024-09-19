@@ -512,8 +512,7 @@ sew.knit_asis = function(x, options, inline = FALSE, ...) {
     }
   }
   x = wrap_asis(x, options)
-  if (!out_format('latex') || inline) return(x)
-  # latex output need the \end{kframe} trick
+  if (inline) return(x)
   options$results = 'asis'
   knit_hooks$get('output')(x, options)
 }
