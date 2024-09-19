@@ -12,6 +12,10 @@
 
 - Unbalanced chunk delimiters (fences) in R Markdown documents are strictly prohibited now.
 
+## MINOR CHANGES
+
+- Changed the format of the reference card from PDF to HTML so building this package will not require LaTeX. See `vignette('knitr-refcard', package = 'knitr')`.
+
 # CHANGES IN knitr VERSION 1.48
 
 ## BUG FIXES
@@ -2176,7 +2180,7 @@
 
 ## DOCUMENTATION
 
-- added a simple reference card: http://cran.rstudio.com/web/packages/knitr/vignettes/knitr-refcard.pdf
+- added a simple reference card: `vignette('knitr-refcard', package = 'knitr')`
 
 # CHANGES IN knitr VERSION 0.7
 
