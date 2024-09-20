@@ -10,6 +10,8 @@
 
 - `asis_output()` was not passed to the `output` hook (thanks, @cderv, #2332).
 
+- Avoid partial matching of the `Date/Publication` field when generating `citation('knitr')`, otherwise R will emit a warning when `options(warnPartialMatchDollar = TRUE)` (thanks, @fkohrt, #2361).
+
 ## MAJOR CHANGES
 
 - Unbalanced chunk delimiters (fences) in R Markdown documents are strictly prohibited now.
