@@ -8,6 +8,8 @@
 
 - In-chunk references of the form `<<label>>` should not be resolved if `label` is not found in the document (thanks, @jennybc @gadenbuie, #2360).
 
+- `asis_output()` was not passed to the `output` hook (thanks, @cderv, #2332).
+
 ## MAJOR CHANGES
 
 - Unbalanced chunk delimiters (fences) in R Markdown documents are strictly prohibited now.
