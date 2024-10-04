@@ -6,7 +6,7 @@ hilight_source = function(x, format, options) {
     } else {
       res = try(highr::hi_andre(x, options$engine, format))
       if (inherits(res, 'try-error')) {
-        if (format == 'html') highr:::escape_html(x) else highr:::escape_latex(x)
+        if (format == 'html') html_escape(x) else highr:::escape_latex(x)
       } else {
         highlight_header()
         n = length(res)

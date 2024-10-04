@@ -278,12 +278,12 @@ hooks_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '
   }, prettify = {
     hook.r = function(x, options) {
       paste0(
-        '\n\n<pre><code class="prettyprint ', extra, '">', escape_html(x),
+        '\n\n<pre><code class="prettyprint ', extra, '">', html_escape(x),
         '</code></pre>\n\n'
       )
     }
     hook.t = function(x, options) paste0(
-      '\n\n<pre><code>', escape_html(x), '</code></pre>\n\n'
+      '\n\n<pre><code>', html_escape(x), '</code></pre>\n\n'
     )
   })
   source = function(x, options) {

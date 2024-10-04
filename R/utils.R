@@ -677,9 +677,6 @@ escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
   x
 }
 
-# escape special HTML chars
-escape_html = highr:::escape_html
-
 #' Read source code from R-Forge
 #'
 #' This function reads source code from the SVN repositories on R-Forge.
