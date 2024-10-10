@@ -259,14 +259,24 @@ eng_r = function(options) {
   } else if (cache.exists && isFALSE(options$cache.rebuild)) {
     cache$output(options$hash, 'list')
   } else in_input_dir(
-    evaluate(
-      code, envir = env, new_device = FALSE,
-      keep_warning = if (is.numeric(options$warning)) TRUE else options$warning,
-      keep_message = if (is.numeric(options$message)) TRUE else options$message,
-      stop_on_error = if (is.numeric(options$error)) options$error else {
-        if (options$error && options$include) 0L else 2L
-      },
-      output_handler = knit_handlers(options$render, options)
+    withCallingHandlers(
+      evaluate(
+        code, envir = env, new_device = FALSE,
+        keep_warning = if (is.numeric(options$warning)) TRUE else options$warning,
+        keep_message = if (is.numeric(options$message)) TRUE else options$message,
+        stop_on_error = if (is.numeric(options$error)) options$error else {
+          if (options$error && options$include) 0L else 2L
+        },
+        output_handler = knit_handlers(options$render, options)
+      ),
+      error = function (cnd) {
+        if (xfun::pkg_available('rlang', '1.0.0')) {
+          rlang::abort(paste0("Error in chunk ", options$label), parent = cnd)
+        } else {
+          signalCondition(cnd)
+          stop(cnd)
+        }
+      }
     )
   )
   if (options$cache %in% 1:2 && (!cache.exists || isTRUE(options$cache.rebuild))) {
