@@ -308,17 +308,14 @@ process_file = function(text, output) {
     if (progress && is.function(pb$update)) pb$update(i)
     group = groups[[i]]
     knit_concord$set(block = i)
-    res[i] = xfun:::handle_error(
-      withCallingHandlers(
-        if (tangle) process_tangle(group) else process_group(group),
-        error = function(e) if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
-      ),
-      function(loc) {
+    res[i] = withCallingHandlers(
+      if (tangle) process_tangle(group) else process_group(group),
+      error = function(cnd) {
         setwd(wd)
         write_utf8(res, output %n% stdout())
-        paste0('\nQuitting from lines ', loc)
-      },
-      if (labels[i] != '') sprintf(' [%s]', labels[i]), get_loc
+        loc <- if (labels[i] != '') get_loc(sprintf(' [%s]', labels[i])) else ''
+        rlang::abort(paste0('Quitting from lines ', loc), parent = cnd)
+      }
     )
   }
 
