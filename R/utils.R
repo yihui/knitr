@@ -511,7 +511,7 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
 #' @examples fig_path('.pdf', options = list(fig.path='figure/abc-', label='first-plot'))
 #' fig_path('.png', list(fig.path='foo-', label='bar'), 1:10)
 fig_path = function(suffix = '', options = opts_current$get(), number) {
-  if (suffix != '' && !grepl('[.]', suffix)) suffix = paste0('.', suffix)
+  if (all(suffix != '') && all(!grepl('[.]', suffix))) suffix = paste0('.', suffix)
   if (missing(number)) number = options$fig.cur %n% 1L
   if (!is.null(number)) suffix = paste0('-', number, suffix)
   path = valid_path(options$fig.path, options$label)
