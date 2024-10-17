@@ -111,3 +111,43 @@ assert('dep_auto() solves dependencies of child documents', {
 dep_list$restore()
 knit_code$restore()
 
+assert('dep_auto() solves dependencies of parent and child documents', {
+  # dependency is empty now
+  (dep_list$get() %==% list())
+
+  # base rmd text
+  parent = c(
+    '```{r, autodep=TRUE, cache=TRUE}',
+    'x = runif(1)',
+    '```',
+    '```{r, child="child.Rmd"}',
+    '```',
+    '```{r, autodep=TRUE, cache=TRUE}',
+    'print(x)',
+    '```'
+  )
+  child = c(
+    '```{r, autodep=TRUE, cache=TRUE}',
+    'x = %s',
+    '```'
+  )
+
+  td = tempfile()
+  dir.create(td, showWarnings = FALSE, recursive = TRUE)
+
+  # with child document
+  in_dir(td, {
+    # with cache, the result should reproduce
+    writeLines(sprintf(child, 'runif(1)'), 'child.Rmd')
+    knit1 = knit(text = parent, quiet = TRUE)
+    (knit(text = parent, quiet = TRUE) %==% knit1)
+
+    # on updating `x`, the printed result should change
+    writeLines(sprintf(child, '"a"'), "child.Rmd")
+    knit2 = knit(text = parent, quiet = TRUE)
+    print2 = gsub("\n.*", "", gsub(".*\n##", "##", knit2))
+    (print2 %==% '## [1] "a"')
+  })
+})
+dep_list$restore()
+knit_code$restore()
