@@ -180,7 +180,7 @@ hook_plot_tex = function(x, options) {
       sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1 / options$interval,
               sub(sprintf('%d$', fig.num), '', sans_ext(x)), 1L, fig.num)
     } else {
-      if (!is.null(fig.alt) && getOption('knitr.include_graphics.alt', TRUE)) {
+      if (!is.null(fig.alt)) {
         size = paste(c(size, sprintf('alt={%s}', escape_percent(fig.alt))),
                      collapse = ',')
       }
