@@ -76,6 +76,7 @@ hook_plot_tex = function(x, options) {
   a = options$fig.align
   fig.cur = options$fig.cur %n% 1L
   fig.num = options$fig.num %n% 1L
+  fig.alt = options$fig.alt
   animate = options$fig.show == 'animate'
   fig.ncol = options$fig.ncol %n% fig.num
   if (is.null(fig.sep <- options$fig.sep)) {
@@ -179,6 +180,11 @@ hook_plot_tex = function(x, options) {
       sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1 / options$interval,
               sub(sprintf('%d$', fig.num), '', sans_ext(x)), 1L, fig.num)
     } else {
+      if (!is.null(fig.alt) && getOption('knitr.include_graphics.alt', TRUE)) {
+        size = paste(c(size, sprintf('alt={%s}', escape_percent(fig.alt))),
+                     collapse = ',')
+      }
+
       if (nzchar(size)) size = sprintf('[%s]', size)
       res = sprintf(
         '\\includegraphics%s{%s} ', size,
