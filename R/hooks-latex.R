@@ -76,7 +76,6 @@ hook_plot_tex = function(x, options) {
   a = options$fig.align
   fig.cur = options$fig.cur %n% 1L
   fig.num = options$fig.num %n% 1L
-  fig.alt = options$fig.alt
   animate = options$fig.show == 'animate'
   fig.ncol = options$fig.ncol %n% fig.num
   if (is.null(fig.sep <- options$fig.sep)) {
@@ -163,9 +162,10 @@ hook_plot_tex = function(x, options) {
   # maxwidth does not work with animations
   if (animate && identical(ow, '\\maxwidth')) ow = NULL
   if (is.numeric(ow)) ow = paste0(ow, 'px')
-  size = paste(c(sprintf('width=%s', ow),
-                 sprintf('height=%s', options$out.height),
-                 options$out.extra), collapse = ',')
+  size = paste(c(
+    sprintf('width=%s', ow), sprintf('height=%s', options$out.height),
+    sprintf('alt={%s}', escape_percent(options$fig.alt)), options$out.extra
+  ), collapse = ',')
 
   paste0(
     fig1, align1, sub1, resize1,
@@ -180,11 +180,6 @@ hook_plot_tex = function(x, options) {
       sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1 / options$interval,
               sub(sprintf('%d$', fig.num), '', sans_ext(x)), 1L, fig.num)
     } else {
-      if (!is.null(fig.alt)) {
-        size = paste(c(size, sprintf('alt={%s}', escape_percent(fig.alt))),
-                     collapse = ',')
-      }
-
       if (nzchar(size)) size = sprintf('[%s]', size)
       res = sprintf(
         '\\includegraphics%s{%s} ', size,

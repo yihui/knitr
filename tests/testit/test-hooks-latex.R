@@ -8,7 +8,7 @@ assert("alt text is included in LaTeX output", {
   # alt text
   (hook_plot_tex('foo.pdf', list(fig.alt = 'Alt', fig.align = 'center',
                                  fig.show = 'asis')) %==%
-     '\n\n{\\centering \\includegraphics[,alt={Alt}]{foo} \n\n}\n\n')
+     '\n\n{\\centering \\includegraphics[alt={Alt}]{foo} \n\n}\n\n')
 
   # with width
   (hook_plot_tex('foo.pdf', list(fig.alt = 'Alt', fig.align = 'center',
