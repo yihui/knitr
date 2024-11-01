@@ -564,18 +564,19 @@ fig_chunk = function(label, ext = '', number, fig.path = opts_chunk$get('fig.pat
   fig_path(ext, list(fig.path = fig.path, label = label), number)
 }
 
-#' The global environment in which code chunks are evaluated
+#' The global environment for evaluating code
 #'
-#' This function makes the environment of a code chunk accessible inside a
-#' chunk.
+#' Get or set the environment in which code chunks are evaluated.
 #'
-#' It returns the \code{envir} argument of \code{\link{knit}}, e.g. if we call
-#' \code{\link{knit}()} in the global environment, \code{knit_global()} returns
-#' R's global environment by default. You can call functions like
-#' \code{\link{ls}()} on this environment.
+#' @param envir If \code{NULL}, the function returns the \code{envir} argument
+#'   of \code{\link{knit}}, otherwise it should be a new environment for
+#'   evaluating code, in which case the function returns the old environment
+#'   after setting the new environment.
 #' @export
-knit_global = function() {
-  .knitEnv$knit_global %n% globalenv()
+knit_global = function(envir = NULL) {
+  old = .knitEnv$knit_global %n% globalenv()
+  if (!is.null(envir)) .knitEnv$knit_global = envir
+  old
 }
 
 # Indents a Block
