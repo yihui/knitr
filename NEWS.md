@@ -18,7 +18,7 @@
 
 - Unbalanced chunk delimiters (fences) in R Markdown documents are strictly prohibited now.
 
-- For code chunks with `error = TRUE`, `purl()` and `hook_purl()` will wrap the code in `try({...})` (thanks, @jeroen, #2368).
+- For code chunks with `error = TRUE`, `purl()` and `hook_purl()` will wrap the code in `try({...})` (thanks, @bastistician #2338, @jeroen #2368).
 
 ## MINOR CHANGES
 
