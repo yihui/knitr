@@ -187,7 +187,8 @@ block_exec = function(options) {
 #' @noRd
 eng_r = function(options) {
   # eval chunks (in an empty envir if cache)
-  obj.before = ls(knit_global(), all.names = TRUE)  # global objects before chunk
+  env = knit_global()
+  obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
 
   keep = options$fig.keep
   keep.idx = NULL
