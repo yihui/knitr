@@ -1,16 +1,16 @@
 ---
 title: Display Tables with the JavaScript Library DataTables
 author: Yihui Xie
-date: "`r Sys.Date()`"
+date: "`{r} Sys.Date()`"
 output:
-  markdown::html_format:
+  litedown::html_format:
     meta:
-      css: ["@default", "@prism-xcode", "https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"]
+      css: ["@default", "https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"]
       js: ["@npm/jquery@3.7.1/dist/jquery.min.js", "https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"]
 ---
 
 <!--
-%\VignetteEngine{knitr::knitr_notangle}
+%\VignetteEngine{litedown::vignette}
 %\VignetteIndexEntry{Display Tables with the JavaScript Library DataTables}
 -->
 
@@ -18,23 +18,24 @@ output:
 
 We can use the JavaScript library [**DataTables**](https://datatables.net) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
 
-```{r cool, results='asis'}
-library(knitr)
-kable(mtcars, 'html', table.attr='id="mtcars_table"')
+::: {#mtcars-table}
+```{r cool, print.args=list(data.frame=list(limit=NULL))}
+mtcars
 ```
+:::
 
 Note we assigned an `id` to the table, and next we use the **DataTables** library to initialize the table and you will get an interactive table.
 
 ```{js}
 window.addEventListener('load', () => {
-  $('#mtcars_table').DataTable();
+  $('#mtcars-table > table').DataTable();
 });
 ```
 
 By comparison, below is an ordinary table:
 
-```{r boring, results='asis'}
-kable(head(mtcars), 'html')
+```{r boring}
+mtcars
 ```
 
 This vignette is only a toy example. I'd recommend you to use the **DT** package instead: https://github.com/rstudio/DT

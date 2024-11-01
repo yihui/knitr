@@ -33,6 +33,7 @@ hooks_textile = function() {
     function(x, options) {
       if (name == 'source') x = c(hilight_source(x, 'textile', options), '')
       x = one_string(x)
+      if (name == 'output' && output_asis(x, options)) return(x)
       sprintf('bc(knitr %s %s#%s).. %s\np(knitr_end). \n\n',
               tolower(options$engine), name, options$label, x)
     }

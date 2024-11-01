@@ -44,9 +44,6 @@ comment_to_var = function(x, varname, pattern, envir) {
   FALSE
 }
 
-# TODO: remove this when we don't support R < 3.5.0
-if (getRversion() < '3.5.0') isFALSE = function(x) identical(x, FALSE)
-
 is_blank = function(x) {
   if (length(x)) all(grepl('^\\s*$', x)) else TRUE
 }
@@ -149,7 +146,7 @@ set_parent = function(parent) {
 
 # whether to write results as-is?
 output_asis = function(x, options) {
-  is_blank(x) || options$results == 'asis'
+  is_blank(x) || identical(options$results, 'asis')
 }
 
 # the working directory: use root.dir if specified, otherwise the dir of the
@@ -514,7 +511,7 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
 #' @examples fig_path('.pdf', options = list(fig.path='figure/abc-', label='first-plot'))
 #' fig_path('.png', list(fig.path='foo-', label='bar'), 1:10)
 fig_path = function(suffix = '', options = opts_current$get(), number) {
-  if (suffix != '' && !grepl('[.]', suffix)) suffix = paste0('.', suffix)
+  suffix = sub('^([^.])', '.\\1', suffix)
   if (missing(number)) number = options$fig.cur %n% 1L
   if (!is.null(number)) suffix = paste0('-', number, suffix)
   path = valid_path(options$fig.path, options$label)
@@ -680,9 +677,6 @@ escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
   if (spaces) x = gsub('(?<= ) ', '\\\\ ', x, perl = TRUE)
   x
 }
-
-# escape special HTML chars
-escape_html = highr:::escape_html
 
 #' Read source code from R-Forge
 #'

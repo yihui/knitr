@@ -399,12 +399,13 @@ strip_white = function(x, test_strip = is_blank) {
 parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   if (length(x) == 0L) return(x)
   x = c(x)  # drop attributes of code (e.g. chunk_opts)
-  if (!group_pattern(rc) || !any(idx <- grepl(rc, x))) return(x)
+  if (!group_pattern(rc) || length(idx <- grep(rc, x)) == 0) return(x)
 
   labels = sub(rc, '\\1', x[idx])
-  code = knit_code$get(labels)
+  code = knit_code$get()
+  i = labels %in% names(code)
+  idx = idx[i]; code = code[labels[i]]
   indent = gsub('^(\\s*).*', '\\1', x[idx])
-  if (length(labels) <= 1L) code = list(code)
   code = mapply(indent_block, code, indent, SIMPLIFY = FALSE, USE.NAMES = FALSE)
 
   x = as.list(x)
@@ -469,9 +470,7 @@ match_chunk_end = function(pattern, line, i, b, lines) {
     if (!any(match_chunk_begin(pattern, lines[i + 1:(k - 1)], '^\\1`*\\\\{')))
       return(FALSE)
   }
-  # TODO: clean up the exceptions here (although perhaps some may never update again)
-  signal = if (getOption('knitr.unbalanced.chunk', FALSE)) warning2 else stop2
-  signal(
+  stop2(
     'The closing fence on line ', i, ' ("', line, '") in ', current_input(),
     ' does not match the opening fence "',
     gsub('\\^(\\s*`+).*', '\\1', pattern), '" on line ', b, '. You are recommended to ',
@@ -479,7 +478,6 @@ match_chunk_end = function(pattern, line, i, b, lines) {
     'the same numbers of backticks and same level of indentation (or blockquote). ',
     'See https://yihui.org/en/2021/10/unbalanced-delimiters/ for more info.'
   )
-  TRUE
 }
 
 #' Get all chunk labels in a document

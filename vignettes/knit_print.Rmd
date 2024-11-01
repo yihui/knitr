@@ -3,11 +3,11 @@ title: "Custom Print Methods"
 author: "Yihui Xie"
 date: '`r Sys.Date()`'
 output:
-  markdown::html_format:
+  litedown::html_format:
     options:
       toc: true
     meta:
-      css: ["@default", "@prism-xcode"]
+      css: ["@default"]
 vignette: >
   %\VignetteEngine{knitr::knitr_notangle}
   %\VignetteIndexEntry{Custom Print Methods}

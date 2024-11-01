@@ -44,12 +44,6 @@ examples:
 	cd inst/examples;\
 	Rscript knit-all.R
 
-vignettes:
-	cd vignettes;\
-	lyx -e knitr knitr-refcard.lyx;\
-	sed -i '/\\usepackage{breakurl}/ d' knitr-refcard.Rnw;\
-	mv knitr-refcard.Rnw assets/template-refcard.tex
-
 clean:
 	cd ..;\
 	$(RM) -r $(PKGNAME).Rcheck/

@@ -52,7 +52,8 @@ call_block = function(block) {
 
   if (opts_knit$get('progress')) print_block(block)
 
-  params[['code']] = parse_chunk(params[['code']]) # parse sub-chunk references
+  if (!isFALSE(params$ref.chunk))
+    params[['code']] = parse_chunk(params[['code']]) # parse sub-chunk references
 
   ohooks = opts_hooks$get()
   for (opt in names(ohooks)) {
@@ -255,7 +256,7 @@ eng_r = function(options) {
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
     as.source(code)
   } else if (cache.exists && isFALSE(options$cache.rebuild)) {
-    fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
+    cache$output(options$hash, 'list')
   } else in_input_dir(
     evaluate(
       code, envir = env, new_device = FALSE,
@@ -603,10 +604,16 @@ tangle_block = function(x) {
     eval(parse_only(unlist(str_extract(code, 'read_chunk\\(([^)]+)\\)'))))
   }
   code = parse_chunk(code)
-  if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
+  code = tangle_mask(code, ev, x$params$error)
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
   # e.g. when documentation 1 or 2 with purl()
   label_code(code, x)
+}
+
+tangle_mask = function(code, eval, error) {
+  if (isFALSE(eval)) code = comment_out(code, '#', newline = FALSE)
+  if (isTRUE(error)) code = c('try({', code, '})')
+  code
 }
 
 tangle_inline = function(x) {

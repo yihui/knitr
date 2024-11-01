@@ -1,4 +1,4 @@
-year = sub('.*(2[[:digit:]]{3})-.*', '\\1', meta$Date, perl = TRUE)
+year = sub('.*(2[[:digit:]]{3})-.*', '\\1', meta[['Date/Publication']], perl = TRUE)
 vers = paste('R package version', meta$Version)
 if (length(year) == 0) year = format(Sys.Date(), '%Y')
 

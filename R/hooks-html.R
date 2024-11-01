@@ -62,7 +62,7 @@ hook_animation = function(options) {
   if (length(cap) == 0) cap = ''
   if (alt) {
     alt = options$fig.alt %n% cap
-    return(if (escape) escape_html(alt) else alt)
+    return(if (escape) html_escape(alt) else alt)
   }
   if (is_blank(cap)) return(cap)
   paste0(create_label(
@@ -252,9 +252,10 @@ hooks_html = function() {
   hook = function(name) {
     force(name)
     function(x, options) {
+      if (name == 'output' && output_asis(x, options)) return(x)
       x = if (name == 'source') {
         c(hilight_source(x, 'html', options), '')
-      } else escape_html(x)
+      } else html_escape(x)
       x = one_string(x)
       sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>\n', name, tolower(options$engine), x)
     }

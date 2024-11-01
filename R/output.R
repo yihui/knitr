@@ -132,7 +132,7 @@ knit = function(
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
 
   if (child_mode()) {
-    setwd(opts_knit$get('output.dir')) # always restore original working dir
+    setwd(opts_knit$get('output.dir') %n% '.') # always restore original working dir
     # in child mode, input path needs to be adjusted
     if (in.file && !is_abs_path(input)) {
       input = paste0(opts_knit$get('child.path'), input)
@@ -512,8 +512,7 @@ sew.knit_asis = function(x, options, inline = FALSE, ...) {
     }
   }
   x = wrap_asis(x, options)
-  if (!out_format('latex') || inline) return(x)
-  # latex output need the \end{kframe} trick
+  if (inline) return(x)
   options$results = 'asis'
   knit_hooks$get('output')(x, options)
 }
@@ -646,7 +645,7 @@ sew.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE, ...
   if (length(extra <- options$out.extra)) extra = paste('', extra, collapse = '')
   add_html_caption(options, sprintf(
     '<iframe src="%s" width="%s" height="%s" data-external="1"%s></iframe>',
-    escape_html(x$url), options$out.width %n% '100%', x$height %n% '400px',
+    html_escape(x$url), options$out.width %n% '100%', x$height %n% '400px',
     extra %n% ''
   ))
 }

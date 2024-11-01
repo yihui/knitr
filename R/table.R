@@ -363,11 +363,11 @@ kable_html = function(
   }
   if (identical(caption, NA)) caption = NULL
   cap = if (length(caption)) sprintf('\n<caption>%s</caption>', caption) else ''
-  if (escape) x = escape_html(x)
+  if (escape) x = html_escape(x)
   one_string(c(
     sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x))) {
-      if (escape) cn = escape_html(cn)
+      if (escape) cn = html_escape(cn)
       c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>')
     },
     '<tbody>',

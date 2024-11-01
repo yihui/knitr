@@ -281,38 +281,6 @@ reduce_plot_opts = function(options) {
   options
 }
 
-# the memory address of a NativeSymbolInfo object will be lost if it is saved to
-# disk; see http://markmail.org/message/zat2r2pfsvhrsfqz for the full
-# discussion; the hack below was stolen (with permission) from RStudio:
-# https://github.com/rstudio/rstudio/blob/master/src/cpp/r/R/Tools.R
-fix_recordedPlot = function(plot) {
-  # restore native symbols for R >= 3.0
-  for (i in seq_along(plot[[1]])) {
-    # get the symbol then test if it's a native symbol
-    symbol = plot[[1]][[i]][[2]][[1]]
-    if (inherits(symbol, 'NativeSymbolInfo')) {
-      # determine the dll that the symbol lives in
-      name = symbol[[if (is.null(symbol$package)) 'dll' else 'package']][['name']]
-      pkgDLL = getLoadedDLLs()[[name]]
-      # reconstruct the native symbol and assign it into the plot
-      nativeSymbol = getNativeSymbolInfo(
-        name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE
-      )
-      plot[[1]][[i]][[2]][[1]] <- nativeSymbol
-    }
-  }
-  attr(plot, 'pid') = Sys.getpid()
-  plot
-}
-
-# fix plots in evaluate() results
-fix_evaluate = function(list, fix = TRUE) {
-  if (!fix) return(list)
-  lapply(list, function(x) {
-    if (evaluate::is.recordedplot(x)) fix_recordedPlot(x) else x
-  })
-}
-
 # remove the plots from the evaluate results for the case of cache=2; if we only
 # want to keep high-level plots, we need MD5 digests of the plot components so
 # that we will be able to filter out low-level changes later

@@ -1,5 +1,30 @@
 # CHANGES IN knitr VERSION 1.49
 
+## NEW FEATURES
+
+- In-chunk references of the form `<<label>>` can be disabled via the chunk option `ref.chunk = FALSE` now (thanks, @jennybc @gadenbuie, #2360).
+
+- Added support for `fig.alt` for LaTeX output, i.e., using `\includegraphics[alt={alt text}]` (thanks, @capnrefsmmat, #2378).
+
+## BUG FIXES
+
+- In-chunk references of the form `<<label>>` should not be resolved if `label` is not found in the document (thanks, @jennybc @gadenbuie, #2360).
+
+- `asis_output()` was not passed to the `output` hook (thanks, @cderv, #2332).
+
+- Avoid partial matching of the `Date/Publication` field when generating `citation('knitr')`, otherwise R will emit a warning when `options(warnPartialMatchDollar = TRUE)` (thanks, @fkohrt, #2361).
+
+## MAJOR CHANGES
+
+- Unbalanced chunk delimiters (fences) in R Markdown documents are strictly prohibited now.
+
+- For code chunks with `error = TRUE`, `purl()` and `hook_purl()` will wrap the code in `try({...})` (thanks, @bastistician #2338, @jeroen #2368).
+
+## MINOR CHANGES
+
+- Changed the format of the reference card from PDF to HTML so building this package will not require LaTeX. See `vignette('knitr-refcard', package = 'knitr')`.
+
+- Switched the vignette engine from **knitr** to `litedown::vignette` for some package vignettes.
 
 # CHANGES IN knitr VERSION 1.48
 
@@ -2165,7 +2190,7 @@
 
 ## DOCUMENTATION
 
-- added a simple reference card: http://cran.rstudio.com/web/packages/knitr/vignettes/knitr-refcard.pdf
+- added a simple reference card: `vignette('knitr-refcard', package = 'knitr')`
 
 # CHANGES IN knitr VERSION 0.7
 
