@@ -146,8 +146,7 @@ hook_purl = function(before, options, ...) {
     .knitEnv$tangle.params = NULL
   }
 
-  code = options$code
-  if (isFALSE(options$eval)) code = comment_out(code, '# ', newline = FALSE)
+  code = tangle_mask(options$code, options$eval, options$error)
   if (is.character(output)) {
     code = c(
       if (file.exists(output)) read_utf8(output),

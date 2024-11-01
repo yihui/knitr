@@ -18,6 +18,8 @@
 
 - Unbalanced chunk delimiters (fences) in R Markdown documents are strictly prohibited now.
 
+- For code chunks with `error = TRUE`, `purl()` and `hook_purl()` will wrap the code in `try({...})` (thanks, @jeroen, #2368).
+
 ## MINOR CHANGES
 
 - Changed the format of the reference card from PDF to HTML so building this package will not require LaTeX. See `vignette('knitr-refcard', package = 'knitr')`.
