@@ -612,7 +612,7 @@ tangle_block = function(x) {
 }
 
 tangle_mask = function(code, eval, error) {
-  if (isFALSE(eval)) code = comment_out(code, '# ', newline = FALSE)
+  if (isFALSE(eval)) code = comment_out(code, '#', newline = FALSE)
   if (isTRUE(error)) code = c('try({', code, '})')
   code
 }
