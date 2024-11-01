@@ -184,9 +184,9 @@ block_exec = function(options) {
 #' @param options A list of chunk options. Usually this is just the object
 #'   \code{options} associated with the current code chunk.
 #' @noRd
-eng_r = function(options, env = knit_global()) {
+eng_r = function(options) {
   # eval chunks (in an empty envir if cache)
-  obj.before = ls(env, all.names = TRUE)  # global objects before chunk
+  obj.before = ls(knit_global(), all.names = TRUE)  # global objects before chunk
 
   keep = options$fig.keep
   keep.idx = NULL
