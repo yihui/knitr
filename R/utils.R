@@ -276,6 +276,10 @@ dash_names = function(x) {
 fix_options = function(options) {
   options = as.strict_list(options)
 
+  # message/warning take logical or numeric values; if character, convert to logical
+  for (i in c('message', 'warning')) {
+    if (is.character(options[[i]])) options[[i]] = as.logical(options[[i]])
+  }
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
   # if the animation hook has been set, fig.show must be 'animate'

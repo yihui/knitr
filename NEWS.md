@@ -24,6 +24,8 @@
 
 ## MINOR CHANGES
 
+- If a character value is passed to the chunk option `message` or `warning`, it will be coerced by `as.logical()`, e.g., a character string `"NA"` will be coerced to `NA` (thanks, @cderv, #2375).
+
 - Changed the format of the reference card from PDF to HTML so building this package will not require LaTeX. See `vignette('knitr-refcard', package = 'knitr')`.
 
 - Switched the vignette engine from **knitr** to `litedown::vignette` for some package vignettes.
