@@ -682,6 +682,9 @@ escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
   x
 }
 
+# TODO: remove this after https://github.com/mgondan/mathml/pull/18
+escape_html = xfun::html_escape
+
 #' Read source code from R-Forge
 #'
 #' This function reads source code from the SVN repositories on R-Forge.
