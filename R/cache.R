@@ -169,9 +169,7 @@ dep_auto = function(path = opts_chunk$get('cache.path'), labels = all_labels()) 
 }
 # parse objects in dependency files
 parse_objects = function(path) {
-  if (!file.exists(path)) {
-    warning('file ', path, ' not found'); return()
-  }
+  if (!file.exists(path)) return()
   lines = strsplit(read_utf8(path), '\t')
   if (length(lines) < 2L) return()  # impossible for dependson
   objs = lapply(lines, `[`, -1L)
