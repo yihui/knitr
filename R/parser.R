@@ -137,8 +137,9 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
       deps[deps < 0] = length(.knitEnv$labels) + deps[deps < 0]
       deps = .knitEnv$labels[deps[deps > 0]]
     }
-    for (i in deps)
-      dep_list$set(setNames(list(c(dep_list$get(i), label)), i))
+    if (is.character(deps)) {
+      for (i in deps) dep_list$set(setNames(list(c(dep_list$get(i), label)), i))
+    } else warning2("Invalid chunk option 'dependson' (must be character or numeric)")
   }
 
   # for quarto only

@@ -4,6 +4,10 @@
 
 - In-chunk references of the form `<<label>>` can be disabled via the chunk option `ref.chunk = FALSE` now (thanks, @jennybc @gadenbuie, #2360).
 
+- Added support for `fig.alt` for LaTeX output, i.e., using `\includegraphics[alt={alt text}]` (thanks, @capnrefsmmat, #2378).
+
+- The environment in which code chunks are evaluated can be changed by passing a custom environment to `knit_glbal()` now (thanks, @abhsarma, #2358).
+
 ## BUG FIXES
 
 - In-chunk references of the form `<<label>>` should not be resolved if `label` is not found in the document (thanks, @jennybc @gadenbuie, #2360).
@@ -16,7 +20,13 @@
 
 - Unbalanced chunk delimiters (fences) in R Markdown documents are strictly prohibited now.
 
+- For code chunks with `error = TRUE`, `purl()` and `hook_purl()` will wrap the code in `try({...})` (thanks, @bastistician #2338, @jeroen #2368).
+
 ## MINOR CHANGES
+
+- If a character value is passed to the chunk option `message` or `warning`, it will be coerced by `as.logical()`, e.g., a character string `"NA"` will be coerced to `NA` (thanks, @cderv, #2375).
+
+- Issue a warning when the chunk option `dependson` receives an invalid value (thanks, @otoomet, #2376).
 
 - Changed the format of the reference card from PDF to HTML so building this package will not require LaTeX. See `vignette('knitr-refcard', package = 'knitr')`.
 

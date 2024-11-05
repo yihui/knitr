@@ -2,17 +2,16 @@
 % Please edit documentation in R/utils.R
 \name{knit_global}
 \alias{knit_global}
-\title{The global environment in which code chunks are evaluated}
+\title{The global environment for evaluating code}
 \usage{
-knit_global()
+knit_global(envir = NULL)
+}
+\arguments{
+\item{envir}{If \code{NULL}, the function returns the \code{envir} argument
+of \code{\link{knit}}, otherwise it should be a new environment for
+evaluating code, in which case the function returns the old environment
+after setting the new environment.}
 }
 \description{
-This function makes the environment of a code chunk accessible inside a
-chunk.
-}
-\details{
-It returns the \code{envir} argument of \code{\link{knit}}, e.g. if we call
-\code{\link{knit}()} in the global environment, \code{knit_global()} returns
-R's global environment by default. You can call functions like
-\code{\link{ls}()} on this environment.
+Get or set the environment in which code chunks are evaluated.
 }

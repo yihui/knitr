@@ -276,6 +276,10 @@ dash_names = function(x) {
 fix_options = function(options) {
   options = as.strict_list(options)
 
+  # message/warning take logical or numeric values; if character, convert to logical
+  for (i in c('message', 'warning')) {
+    if (is.character(options[[i]])) options[[i]] = as.logical(options[[i]])
+  }
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
   # if the animation hook has been set, fig.show must be 'animate'
@@ -511,7 +515,7 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
 #' @examples fig_path('.pdf', options = list(fig.path='figure/abc-', label='first-plot'))
 #' fig_path('.png', list(fig.path='foo-', label='bar'), 1:10)
 fig_path = function(suffix = '', options = opts_current$get(), number) {
-  if (suffix != '' && !grepl('[.]', suffix)) suffix = paste0('.', suffix)
+  suffix = sub('^([^.])', '.\\1', suffix)
   if (missing(number)) number = options$fig.cur %n% 1L
   if (!is.null(number)) suffix = paste0('-', number, suffix)
   path = valid_path(options$fig.path, options$label)
@@ -561,18 +565,19 @@ fig_chunk = function(label, ext = '', number, fig.path = opts_chunk$get('fig.pat
   fig_path(ext, list(fig.path = fig.path, label = label), number)
 }
 
-#' The global environment in which code chunks are evaluated
+#' The global environment for evaluating code
 #'
-#' This function makes the environment of a code chunk accessible inside a
-#' chunk.
+#' Get or set the environment in which code chunks are evaluated.
 #'
-#' It returns the \code{envir} argument of \code{\link{knit}}, e.g. if we call
-#' \code{\link{knit}()} in the global environment, \code{knit_global()} returns
-#' R's global environment by default. You can call functions like
-#' \code{\link{ls}()} on this environment.
+#' @param envir If \code{NULL}, the function returns the \code{envir} argument
+#'   of \code{\link{knit}}, otherwise it should be a new environment for
+#'   evaluating code, in which case the function returns the old environment
+#'   after setting the new environment.
 #' @export
-knit_global = function() {
-  .knitEnv$knit_global %n% globalenv()
+knit_global = function(envir = NULL) {
+  old = .knitEnv$knit_global %n% globalenv()
+  if (!is.null(envir)) .knitEnv$knit_global = envir
+  old
 }
 
 # Indents a Block
@@ -676,6 +681,9 @@ escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
   if (spaces) x = gsub('(?<= ) ', '\\\\ ', x, perl = TRUE)
   x
 }
+
+# TODO: remove this after https://github.com/mgondan/mathml/pull/18
+escape_html = xfun::html_escape
 
 #' Read source code from R-Forge
 #'

@@ -610,10 +610,16 @@ tangle_block = function(x) {
     eval(parse_only(unlist(str_extract(code, 'read_chunk\\(([^)]+)\\)'))))
   }
   code = parse_chunk(code)
-  if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
+  code = tangle_mask(code, ev, x$params$error)
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
   # e.g. when documentation 1 or 2 with purl()
   label_code(code, x)
+}
+
+tangle_mask = function(code, eval, error) {
+  if (isFALSE(eval)) code = comment_out(code, '#', newline = FALSE)
+  if (isTRUE(error)) code = c('try({', code, '})')
+  code
 }
 
 tangle_inline = function(x) {
