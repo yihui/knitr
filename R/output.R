@@ -127,7 +127,6 @@ knit = function(
   input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
   envir = parent.frame(), encoding = 'UTF-8'
 ) {
-  knit_state$restore()
 
   in.file = !missing(input) && is.character(input)  # is input provided?
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
@@ -437,11 +436,6 @@ knit_exit = function(append, fully = TRUE) {
 }
 
 knit_log = new_defaults()  # knitr log for errors, warnings and messages
-
-# miscellaneous states on knitting. gets resetted on every call to knit()
-knit_state = new_defaults(list(
-  autodep = FALSE
-))
 
 #' Wrap evaluated results for output
 #'

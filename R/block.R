@@ -341,11 +341,11 @@ eng_r = function(options) {
         objs, cache_globals(options$cache.globals, code), options$label,
         options$cache.path
       )
-      if (knit_state$get("autodep")) {
+      if (isTRUE(opts_knit$get('autodep.initialized'))) {
         dep_auto(labels = options$label)
       } else {
         dep_auto(labels = all_labels())
-        knit_state$set("autodep", TRUE)
+        opts_knit$set(autodep.initialized = TRUE)
       }
     }
     if (options$cache < 3) {
