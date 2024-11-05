@@ -12,6 +12,8 @@
 
 - In-chunk references of the form `<<label>>` should not be resolved if `label` is not found in the document (thanks, @jennybc @gadenbuie, #2360).
 
+- The chunk option `autodep = TRUE` stopped working due to a regression from #2321 (thanks, @heavywatal #2344, @atusy #2377).
+
 - `asis_output()` was not passed to the `output` hook (thanks, @cderv, #2332).
 
 - Avoid partial matching of the `Date/Publication` field when generating `citation('knitr')`, otherwise R will emit a warning when `options(warnPartialMatchDollar = TRUE)` (thanks, @fkohrt, #2361).
