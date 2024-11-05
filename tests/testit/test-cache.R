@@ -9,7 +9,6 @@ assert('find_symbols() identifies all symbols', {
 })
 
 knit_lazy = function(lazy = TRUE) {
-  if (TRUE) return(TRUE)
   in_dir(tempdir(), {
     txt = c(sprintf('```{r test, cache=TRUE, cache.lazy=%s}', lazy),
             'x1 = Sys.time()', '```')
