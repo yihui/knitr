@@ -20,8 +20,7 @@ manual](https://yihui.org/knitr/demo/graphics/) ), and remember to read the help
 pages of functions in this package. There is a book "Dynamic Docuemnts with R
 and knitr" for this package, too.
 
-Anyway, here is a code chunk that shows you can compile vignettes with **knitr**
-as well using R 3.0.x, which supports non-Sweave vignettes:
+Below are code chunk examples:
 
 ```{r show-off}
 options(digits = 4)

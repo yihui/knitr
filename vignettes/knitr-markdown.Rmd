@@ -1,5 +1,5 @@
 ---
-title: R Markdown (v1) Vignettes with knitr
+title: R Markdown Vignettes with litedown
 author: Yihui Xie
 date: "`{r} Sys.Date()`"
 output:
@@ -10,24 +10,24 @@ output:
 
 <!--
 %\VignetteEngine{litedown::vignette}
-%\VignetteIndexEntry{An R Markdown Vignette with knitr}
+%\VignetteIndexEntry{R Markdown Vignettes with litedown}
 -->
 
 Before R 3.0.0, only Sweave/PDF vignettes were supported in R. Markdown is gaining popularity over the years due to its simplicity, and R 3.0.0 starts to support package vignettes written in R Markdown.
 
-> Please note this example is for [R Markdown v1](https://cran.r-project.org/package=markdown) only. If you use [R Markdown v2](https://rmarkdown.rstudio.com), you should use the vignette engine `knitr::rmarkdown` instead of `knitr::knitr`.
+> Please note this example is for [litedown](https://cran.r-project.org/package=litedown). If you use [R Markdown v2](https://rmarkdown.rstudio.com), you should use the vignette engine `knitr::rmarkdown` instead of `litedown::vignette`.
 
 ## Package vignettes
 
 To enable Markdown vignettes in an R package, you need to
 
 - add `*.Rmd` files under the `vignettes` directory
-- add `VignetteBuilder: knitr` to the `DESCRIPTION` file
-- specify the vignette engine `\VignetteEngine{knitr::knitr}` in the `Rmd` files (inside HTML comments)
+- add `VignetteBuilder: litedown` to the `DESCRIPTION` file
+- specify the vignette engine `\VignetteEngine{litedown::vignette}` in the `Rmd` files (inside HTML comments)
 
 ## View vignettes
 
-And R will load the **knitr** package to build these vignettes to HTML files, and you can see them when you open the HTML help:
+And R will load the **litedown** package to build these vignettes to HTML files, and you can see them when you open the HTML help:
 
 ```{r eval=FALSE}
 help(package = 'YourPackage', help_type = 'html')
