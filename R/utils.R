@@ -909,47 +909,10 @@ create_label = function(..., latex = FALSE) {
 
 #' Combine multiple words into a single string
 #'
-#' When a value from an inline R expression is a character vector of multiple
-#' elements, we may want to combine them into a phrase like \samp{a and b}, or
-#' \code{a, b, and c}. That is what this a helper function does.
-#'
-#' If the length of the input \code{words} is smaller than or equal to 1,
-#' \code{words} is returned. When \code{words} is of length 2, the first word
-#' and second word are combined using the \code{and} string, or if blank,
-#' \code{sep} if is used. When the length is greater than 2, \code{sep} is used
-#' to separate all words, and the \code{and} string is prepended to the last
-#' word.
-#' @param words A character vector.
-#' @param sep Separator to be inserted between words.
-#' @param and Character string to be prepended to the last word.
-#' @param before,after A character string to be added before/after each word.
-#' @param oxford_comma Whether to insert the separator between the last two
-#'   elements in the list.
-#' @return A character string marked by \code{xfun::\link[xfun]{raw_string}()}.
+#' This is a wrapper function of \code{xfun::join_words()}.
+#' @param ... Arguments passed to \code{xfun::\link[xfun]{join_words}()}.
 #' @export
-#' @examples combine_words('a'); combine_words(c('a', 'b'))
-#' combine_words(c('a', 'b', 'c'))
-#' combine_words(c('a', 'b', 'c'), sep = ' / ', and = '')
-#' combine_words(c('a', 'b', 'c'), and = '')
-#' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
-#' combine_words(c('a', 'b', 'c'), before = '"', after = '"', oxford_comma=FALSE)
-combine_words = function(
-  words, sep = ', ', and = ' and ', before = '', after = before, oxford_comma = TRUE
-) {
-  n = length(words); rs = xfun::raw_string
-  if (n == 0) return(words)
-  words = paste0(before, words, after)
-  if (n == 1) return(rs(words))
-  if (n == 2) return(rs(paste(words, collapse = if (is_blank(and)) sep else and)))
-  if (oxford_comma && grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
-  words[n] = paste0(and, words[n])
-  # combine the last two words directly without the comma
-  if (!oxford_comma) {
-    words[n - 1] = paste0(words[n - 1:0], collapse = '')
-    words = words[-n]
-  }
-  rs(paste(words, collapse = sep))
-}
+combine_words = function(...) xfun::join_words(...)
 
 warning2 = function(...) warning(..., call. = FALSE)
 stop2 = function(...) stop(..., call. = FALSE)
@@ -1099,18 +1062,6 @@ one_string = function(x, ...) paste(x, ..., collapse = '\n')
 
 # double quote a vector and combine by "; "
 quote_vec = function(x, sep = '; ') paste0(sprintf('"%s"', x), collapse = sep)
-
-# c(1, 1, 1, 2, 3, 3) -> c(1a, 1b, 1c, 2a, 3a, 3b)
-make_unique = function(x) {
-  if (length(x) == 0) return(x)
-  x2 = make.unique(x)
-  if (all(i <- x2 == x)) return(x)
-  x2[i] = paste0(x2[i], '.0')
-  i = as.numeric(sub('.*[.]([0-9]+)$', '\\1', x2)) + 1
-  s = letters[i]
-  s = ifelse(is.na(s), i, s)
-  paste0(x, s)
-}
 
 #' Encode an image file to a data URI
 #'

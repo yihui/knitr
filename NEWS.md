@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.50
 
+## MINOR CHANGES
+
+- Moved implementations of `combine_words()` and `write_bib()` to the **xfun** package as `xfun::join_words()` and `xfun::pkg_bib()`, respectively, since they are not directly relevant to **knitr**. The functions `combine_words()` and `write_bib()` are still kept in **knitr**, and can continue to be used in the future.
+
 # CHANGES IN knitr VERSION 1.49
 
 ## NEW FEATURES
