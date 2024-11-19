@@ -120,21 +120,6 @@ assert('color_def() generates LaTeX code to define a color variable', {
   (color_def('.5,.6,.7', 'fgcolor') %==% '\\definecolor{fgcolor}{rgb}{.5, .6, .7}')
 })
 
-cw = function(...) unclass(combine_words(...))
-assert('combine_words() combines multiple words into a single string', {
-  (cw(NULL) %==% NULL)
-  (cw(c('a')) %==% 'a')
-  (cw(c('a', 'b')) %==% 'a and b')
-  (cw(c('a', 'b'), and = "") %==% 'a, b')
-  (cw(c('a', 'b', 'c')) %==% 'a, b, and c')
-  (cw(c('a', 'b', 'c'), and = '') %==% 'a, b, c')
-  (cw(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c')
-  (cw(c('a', 'b', 'c'), before = '"') %==% '"a", "b", and "c"')
-  (cw(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''")
-  (cw(c('a', 'b', 'c'), before = '``', after = "''", oxford_comma = FALSE) %==% "``a'', ``b'' and ``c''")
-})
-rm(list = 'cw')
-
 opts = list(
   fig.cap = 'Figure "caption" <>.', fig.lp = 'Fig:', label = 'foo'
 )
