@@ -10,6 +10,8 @@
 
 - A warning will be issued when chunk options are duplicated in both the chunk header and pipe comments (thanks, @cderv, #2386). A chunk option should appear in only one of these places.
 
+- Fix issue with error traceback not correctly showing when **rlang** is available.
+
 # CHANGES IN knitr VERSION 1.49
 
 ## NEW FEATURES
