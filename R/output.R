@@ -314,14 +314,7 @@ process_file = function(text, output) {
         if (tangle) process_tangle(group) else process_group(group),
         error = function(e) {
           if (progress && is.function(pb$interrupt)) pb$interrupt()
-          if (xfun::pkg_available('rlang', '1.0.0')) {
-            if (is_R_CMD_build() || is_R_CMD_check()) {
-              cnd = tryCatch(rlang::entrace(e), error = identity)
-              error <<- format(cnd)
-            } else {
-              rlang::entrace(e)
-            }
-          }
+          if (is_R_CMD_build() || is_R_CMD_check()) error <<- format(e)
         }
       ),
       function(loc) {
