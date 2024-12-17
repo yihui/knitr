@@ -309,10 +309,7 @@ process_file = function(text, output) {
     group = groups[[i]]
     knit_concord$set(block = i)
     res[i] = xfun:::handle_error(
-      withCallingHandlers(
-        if (tangle) process_tangle(group) else process_group(group),
-        error = function(e) if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
-      ),
+      if (tangle) process_tangle(group) else process_group(group),
       function(loc) {
         setwd(wd)
         write_utf8(res, output %n% stdout())
