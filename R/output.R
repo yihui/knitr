@@ -310,12 +310,15 @@ process_file = function(text, output) {
     knit_concord$set(block = i)
     error = NULL
     res[i] = xfun:::handle_error(
-      withCallingHandlers(
-        if (tangle) process_tangle(group) else process_group(group),
-        error = function(e) {
-          if (progress && is.function(pb$interrupt)) pb$interrupt()
-          if (is_R_CMD_build() || is_R_CMD_check()) error <<- format(e)
-        }
+      with_options(
+  	    withCallingHandlers(
+          if (tangle) process_tangle(group) else process_group(group),
+          error = function(e) {
+            if (progress && is.function(pb$interrupt)) pb$interrupt()
+            if (is_R_CMD_build() || is_R_CMD_check()) error <<- format(e)
+          }
+        ),
+        list(rlang_trace_top_env = knit_global())
       ),
       function(loc) {
         setwd(wd)
