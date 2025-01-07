@@ -199,4 +199,3 @@ Collate:
     'utils-vignettes.R'
     'zzz.R'
 RoxygenNote: 7.3.2
-Remotes: yihui/xfun
