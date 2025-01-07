@@ -3,7 +3,7 @@ title: Templating with knit_expand()
 author: Yihui Xie
 date: "`{r} Sys.Date()`"
 output:
-  litedown::html_format:
+  html:
     meta:
       css: ["@default"]
 ---

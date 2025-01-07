@@ -3,7 +3,7 @@ title: "Not An Introduction to knitr"
 author: "Yihui Xie"
 date: "`{r} Sys.Date()`"
 output:
-  litedown::html_format:
+  html:
     meta:
       css: ["@default"]
 vignette: >

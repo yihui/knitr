@@ -47,6 +47,9 @@ comment_to_var = function(x, varname, pattern, envir) {
 is_blank = function(x) {
   if (length(x)) all(grepl('^\\s*$', x)) else TRUE
 }
+
+attr = function(...) base::attr(..., exact = TRUE)
+
 valid_path = function(prefix, label) {
   if (length(prefix) == 0L || is.na(prefix) || prefix == 'NA') prefix = ''
   paste0(prefix, label)

@@ -113,10 +113,16 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   # merge with possible chunk options written as (YAML or CSV) metadata in
   # chunk, and remove metadata from code body
   parts = partition_chunk(engine, code)
+  dup = intersect(names(params), names(parts$options))
   params = merge_list(params, parts$options)
-  code = parts$code
+  label = params$label
+  if (length(dup)) warning(
+    "Duplicated chunk option(s) ", paste0("'", dup, "'", collapse = ', '),
+    " in both chunk header and pipe comments of the chunk '", label, "'.", call. = FALSE
+  )
 
-  label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
+  code = parts$code
+  .knitEnv$labels = c(.knitEnv$labels, label)
   if (length(code) || length(params[['file']]) || length(params[['code']])) {
     if (label %in% names(knit_code$get())) {
       if (identical(getOption('knitr.duplicate.label'), 'allow')) {
