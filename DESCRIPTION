@@ -163,10 +163,10 @@ SystemRequirements: Package vignettes based on R Markdown v2 or reStructuredText
 Collate:
     'block.R'
     'cache.R'
-    'utils.R'
     'citation.R'
     'hooks-html.R'
     'plot.R'
+    'utils.R'
     'defaults.R'
     'concordance.R'
     'engine.R'

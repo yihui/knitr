@@ -529,7 +529,7 @@ sew.source = function(x, options, ...) {
 msg_wrap = function(message, type, options) {
   # when the output format is LaTeX, do not wrap messages (let LaTeX deal with wrapping)
   if (!length(grep('\n', message)) && !out_format(c('latex', 'listings', 'sweave')))
-    message = str_wrap(message, width = getOption('width'))
+    message = xfun::str_wrap(message, width = getOption('width'))
   knit_log$set(setNames(
     list(c(knit_log$get(type), paste0('Chunk ', options$label, ':\n  ', message))),
     type

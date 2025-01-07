@@ -2,6 +2,8 @@
 
 ## MINOR CHANGES
 
+- Moved implementations of `combine_words()` and `write_bib()` to the **xfun** package as `xfun::join_words()` and `xfun::pkg_bib()`, respectively, since they are not directly relevant to **knitr**. The functions `combine_words()` and `write_bib()` are still kept in **knitr**, and can continue to be used in the future.
+
 - A warning will be issued when chunk options are duplicated in both the chunk header and pipe comments (thanks, @cderv, #2386). A chunk option should appear in only one of these places.
 
 # CHANGES IN knitr VERSION 1.49
