@@ -1,22 +1,20 @@
 ---
-title: Display Tables with the JavaScript Library DataTables
+title: Display Tables with the JavaScript Library simple-datatables
 author: Yihui Xie
 date: "`{r} Sys.Date()`"
 output:
-  litedown::html_format:
+  html:
     meta:
-      css: ["@default", "https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"]
-      js: ["@npm/jquery@3.7.1/dist/jquery.min.js", "https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"]
+      css: ["@default", "@npm/simple-datatables/dist/style.min.css"]
+      js: ["@npm/simple-datatables/dist/umd/simple-datatables.min.js"]
 ---
 
 <!--
 %\VignetteEngine{litedown::vignette}
-%\VignetteIndexEntry{Display Tables with the JavaScript Library DataTables}
+%\VignetteIndexEntry{Display Tables with the JavaScript Library simple-datatables}
 -->
 
-## jQuery DataTables
-
-We can use the JavaScript library [**DataTables**](https://datatables.net) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
+We can use the JavaScript library [**simple-datatables**](https://github.com/fiduswriter/simple-datatables/) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
 
 ::: {#mtcars-table}
 ```{r cool, print.args=list(data.frame=list(limit=NULL))}
@@ -28,7 +26,7 @@ Note we assigned an `id` to the table, and next we use the **DataTables** librar
 
 ```{js}
 window.addEventListener('load', () => {
-  $('#mtcars-table > table').DataTable();
+  new simpleDatatables.DataTable('#mtcars-table > table');
 });
 ```
 
@@ -37,5 +35,3 @@ By comparison, below is an ordinary table:
 ```{r boring}
 mtcars
 ```
-
-This vignette is only a toy example. I'd recommend you to use the **DT** package instead: https://github.com/rstudio/DT
