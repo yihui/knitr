@@ -3,7 +3,7 @@ title: R Markdown Vignettes with litedown
 author: Yihui Xie
 date: "`{r} Sys.Date()`"
 output:
-  litedown::html_format:
+  html:
     meta:
       css: ["@default"]
 ---

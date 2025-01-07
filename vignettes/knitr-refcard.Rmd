@@ -3,7 +3,7 @@ title: "knitr Reference Card"
 author: "Yihui Xie"
 date: "`{r} Sys.Date()`"
 output:
-  litedown::html_format:
+  html:
     meta:
       css: ["@default"]
     options:
@@ -16,6 +16,7 @@ output:
 %\VignetteIndexEntry{knitr Reference Card}
 -->
 ```
+
 ## Syntax
 
 | format    | start               | end             | inline             | output   |
