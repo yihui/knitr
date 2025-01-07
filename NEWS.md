@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.50
 
+## MINOR CHANGES
+
+- A warning will be issued when chunk options are duplicated in both the chunk header and pipe comments (thanks, @cderv, #2386). A chunk option should appear in only one of these places.
+
 # CHANGES IN knitr VERSION 1.49
 
 ## NEW FEATURES
