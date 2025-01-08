@@ -99,7 +99,6 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   # for quarto, preserve the actual original params.src and do not remove the engine
   if (!is_quarto() || opts_knit$get('tangle')) params.src = params
   params = xfun::csv_options(params)
-  if (is.null(params$label)) params$label = unnamed_chunk()
 
   # remove indent (and possibly markdown blockquote >) from code
   if (nzchar(spaces <- get_chunk_indent(header))) {
@@ -115,6 +114,7 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   parts = partition_chunk(engine, code)
   dup = intersect(names(params), names(parts$options))
   params = merge_list(params, parts$options)
+  if (is.null(params$label)) params$label = unnamed_chunk()
   label = params$label
   if (length(dup)) warning(
     "Duplicated chunk option(s) ", paste0("'", dup, "'", collapse = ', '),
