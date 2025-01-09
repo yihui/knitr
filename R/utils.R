@@ -1136,6 +1136,7 @@ txt_pb = function(total, labels) {
       setTxtProgressBar(pb, i)
       cat_line(s[i])  # append chunk label to the progress bar
     },
+    interrupt = function() message('\n'),
     done = function() {
       # wipe the progress bar
       cat_line('\r', strrep(' ', max(w2, 10) + 10 + n))
