@@ -568,9 +568,11 @@ inline_exec = function(
   code = block$code; input = block$input
   if ((n <- length(code)) == 0) return(input) # untouched if no code is found
   code.src = block$code.src
+  lines = block$lines
 
   ans = character(n)
   for (i in 1:n) {
+    knit_concord$set(offset = lines[i, ])
     tryCatch(parse_only(code[i]), error = function(e) {
       stop2('Failed to parse the inline R code: ', code.src[i], '\nReason: ', e$message)
     })

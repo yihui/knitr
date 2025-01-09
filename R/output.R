@@ -323,6 +323,7 @@ process_file = function(text, output) {
       },
       if (labels[i] != '') sprintf(' [%s]', labels[i]), get_loc
     )
+    knit_concord$set(offset = NULL)
   }
 
   if (!tangle) res = insert_header(res)  # insert header

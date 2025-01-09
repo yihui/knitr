@@ -232,18 +232,21 @@ parse_inline = function(input, patterns) {
   loc = cbind(start = numeric(0), end = numeric(0))
   if (group_pattern(inline.code)) loc = str_locate(input, inline.code)[[1]]
   code1 = code2 = character()
+  lines = integer()
   if (nrow(loc)) {
     code = t(str_match(input, inline.code))
     if (NCOL(code) >= 2L) {
       code1 = code[, 1L]
       code2 = apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
+      nl = gregexpr('\n', input, fixed = TRUE)[[1]]
+      lines = if (length(nl) > 1 || nl > -1) findInterval(loc, nl) else c(0L, 0L)
     }
   }
 
-  structure(
-    list(input = input, location = loc, code = code2, code.src = code1),
-    class = 'inline'
-  )
+  structure(list(
+    input = input, location = loc, code = code2, code.src = code1,
+    lines = matrix(lines, ncol = 2)
+  ), class = 'inline')
 }
 
 print_inline = function(x) {
