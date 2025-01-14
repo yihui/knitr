@@ -4,11 +4,7 @@
 \alias{imgur_upload}
 \title{Upload an image to imgur.com}
 \usage{
-imgur_upload(
-  file,
-  key = xfun::env_option("knitr.imgur.key", "9f3460e67f308f6"),
-  ...
-)
+imgur_upload(file, key = xfun::env_option("knitr.imgur.key"), ...)
 }
 \arguments{
 \item{file, key, ...}{See \code{xfun::\link[xfun]{upload_imgur}()}.}

@@ -6,6 +6,6 @@
 #' @param file,key,... See \code{xfun::\link[xfun]{upload_imgur}()}.
 #' @export
 #' @keywords internal
-imgur_upload = function(file, key = xfun::env_option('knitr.imgur.key', '9f3460e67f308f6'), ...) {
+imgur_upload = function(file, key = xfun::env_option('knitr.imgur.key'), ...) {
   xfun::upload_imgur(file, key, ..., include_xml = TRUE)
 }
