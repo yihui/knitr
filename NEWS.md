@@ -10,6 +10,8 @@
 
 - A warning will be issued when chunk options are duplicated in both the chunk header and pipe comments (thanks, @cderv, #2386). A chunk option should appear in only one of these places.
 
+- Removed the function `read_rforge()` since it has stopped working for a long time.
+
 # CHANGES IN knitr VERSION 1.49
 
 ## NEW FEATURES

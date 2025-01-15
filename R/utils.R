@@ -688,26 +688,6 @@ escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
 # TODO: remove this after https://github.com/mgondan/mathml/pull/18
 escape_html = xfun::html_escape
 
-#' Read source code from R-Forge
-#'
-#' This function reads source code from the SVN repositories on R-Forge.
-#' @param path Relative path to the source script on R-Forge.
-#' @param project Name of the R-Forge project.
-#' @param extra Extra parameters to be passed to the URL (e.g. \code{extra =
-#'   '&revision=48'} to check out the source of revision 48).
-#' @return A character vector of the source code.
-#' @author Yihui Xie and Peter Ruckdeschel
-#' @export
-#' @examplesIf interactive()
-#' library(knitr)
-#' # relies on r-forge.r-project.org being accessible
-#' read_rforge('rgl/R/axes.R', project = 'rgl')
-#' read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')
-read_rforge = function(path, project, extra = '') {
-  base = 'http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg'
-  read_utf8(sprintf('%s/%s?root=%s%s', base, path, project, extra))
-}
-
 split_lines = function(x) xfun::split_lines(x)
 
 # if a string is encoded in UTF-8, convert it to native encoding
