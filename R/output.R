@@ -727,6 +727,10 @@ add_html_caption = function(options, code, id = NULL) {
 #' # after you define and register the above method, data frames will be printed
 #' # as tables in knitr, which is different with the default print() behavior
 knit_print = function(x, ...) {
+  if (getOption('knitr.in.progress', FALSE)) {
+    current_env = parent.frame()
+    local_options(list(rlang_trace_top_env = current_env))
+  }
   if (need_screenshot(x, ...)) {
     html_screenshot(x)
   } else {
