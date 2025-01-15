@@ -7,5 +7,7 @@
 #' @export
 #' @keywords internal
 imgur_upload = function(file, key = xfun::env_option('knitr.imgur.key'), ...) {
+  # TODO: remove this after xfun 0.51
+  if (is.null(key)) key = paste(rev(strsplit('01a236c49e09142','')[[1]]), collapse = '')
   xfun::upload_imgur(file, key, ..., include_xml = TRUE)
 }
