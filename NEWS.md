@@ -1,6 +1,7 @@
 # CHANGES IN knitr VERSION 1.51
 
 - Fix issue with error traceback not correctly showing when **rlang** is available.
+- Improve error traceback when **rlang** is available and **evaluate** > 1.0.3 is used.
 
 # CHANGES IN knitr VERSION 1.50
 
