@@ -1133,7 +1133,13 @@ is_quarto = function() isTRUE(.knitEnv$is_quarto)
 with_options = function(expr, opts_list) {
   old <- options(opts_list)
   defer(options(old))
+  local_options(opts_list)
   expr
+}
+
+local_options <- function(opts_list, .local_envir = parent.frame()) {
+  old <- options(opts_list)
+  defer(options(old), .local_envir)
 }
 
 defer = function(expr, frame = parent.frame(), after = FALSE) {
