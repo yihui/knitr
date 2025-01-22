@@ -308,20 +308,36 @@ process_file = function(text, output) {
     if (progress && is.function(pb$update)) pb$update(i)
     group = groups[[i]]
     knit_concord$set(block = i)
+
+    extra <- NULL
+
     res[i] = xfun:::handle_error(
       withCallingHandlers(
         if (tangle) process_tangle(group) else process_group(group),
         error = function(e) {
           if (progress && is.function(pb$interrupt)) pb$interrupt()
-          if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
+
+          if (xfun::pkg_available('rlang', '1.0.0')) {
+            if (Sys.getenv("_R_CHECK_LICENSE_") == "") {
+              cnd <- tryCatch(rlang::entrace(e), error = identity)
+              extra <<- paste(capture.output(print(cnd)), "\n", collapse = "")
+            } else {
+              rlang::entrace(e)
+            }
+          }
         }
       ),
       function(loc) {
         setwd(wd)
         write_utf8(res, output %n% stdout())
-        paste0('\nQuitting from lines ', loc)
+
+        message <- paste0('\nQuitting from lines ', loc)
+        if (!is.null(extra)) {
+          message <- paste0(message, "\n", rule(), extra, rule())
+        }
       },
-      if (labels[i] != '') sprintf(' [%s]', labels[i]), get_loc
+      if (labels[i] != '') sprintf(' [%s]', labels[i]),
+      get_loc
     )
     knit_concord$set(offset = NULL)
   }
@@ -335,9 +351,13 @@ process_file = function(text, output) {
   res
 }
 
+rule <- function() {
+  paste0(strrep("~", getOption("width")), "\n")
+}
+
 # return a string to point out the current location in the doc
 get_loc = function(label = '') {
-  paste0(current_lines(), label, sprintf(' (%s)', knit_concord$get('infile')))
+  paste0(knit_concord$get('infile'), ":", current_lines(), label)
 }
 
 auto_out_name = function(input, ext = tolower(file_ext(input))) {
