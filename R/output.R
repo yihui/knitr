@@ -318,9 +318,9 @@ process_file = function(text, output) {
           if (progress && is.function(pb$interrupt)) pb$interrupt()
 
           if (xfun::pkg_available('rlang', '1.0.0')) {
-            if (Sys.getenv("_R_CHECK_LICENSE_") == "") {
+            if (Sys.getenv("R_BUILD_TEMPLIB") != "") {
               cnd <- tryCatch(rlang::entrace(e), error = identity)
-              extra <<- paste(capture.output(print(cnd)), "\n", collapse = "")
+              extra <<- paste(format(cnd), "\n", collapse = "")
             } else {
               rlang::entrace(e)
             }
@@ -333,7 +333,7 @@ process_file = function(text, output) {
 
         message <- paste0('\nQuitting from lines ', loc)
         if (!is.null(extra)) {
-          message <- paste0(message, "\n", rule(), extra, rule())
+          message <- paste0(message, "\n", rule(), extra, "\n", rule())
         }
       },
       if (labels[i] != '') sprintf(' [%s]', labels[i]),
