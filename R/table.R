@@ -482,7 +482,26 @@ kable_org = function(...) {
   i = grep('^[-:|]+$', res)  # find the line like |--:|---| under header
   if (length(i)) {
     i = i[1]
-    res[i] = gsub('(-|:)[|](-|:)', '\\1+\\2', res[i])  # use + as separator
+    # column alignment
+    alignment = rep("", length(gregexpr("[|]", res[i])[[1]])-1)
+    replace = function(alignment, row, pattern, value) {
+        vertical_bars = gregexpr("[|]", row)[[1]]
+        index = gregexpr(pattern, row)[[1]]
+        if (all(index != -1))
+            alignment[match(index,vertical_bars)] = value
+        alignment
+    }
+    alignment = replace(alignment, res[i], "[|]:[-]*[|]",  "<l>")
+    alignment = replace(alignment, res[i], "[|][-]*:[|]",  "<r>")
+    alignment = replace(alignment, res[i], "[|]:[-]*:[|]", "<c>")
+    # replace : and use + as separator
+    res[i] = gsub('[:-][|][:-]', '-+-', res[i])
+    res[i] = gsub('[|]:', '|-', res[i])
+    res[i] = gsub(':[|]', '-|', res[i])
+    # prepend the description of the column alignment
+    res = c(if (i>1) res[1:(i-1)] else NULL,
+            sprintf("|%s|", paste0(alignment,collapse="|")),
+            res[i:length(res)])
   }
   res
 }
