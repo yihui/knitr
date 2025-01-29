@@ -484,14 +484,11 @@ kable_org = function(...) {
     i = i[1]
     # column alignment
     vb = gregexpr("[|]", res[i])[[1]] # location of the vertical bars
-    alignment = rep("", length(vb)-1)
-    for (j in 1:length(alignment)) {
-        left = substring(res[i],vb[j]+1,vb[j]+1)==":"
-        right = substring(res[i],vb[j+1]-1,vb[j+1]-1)==":"
-        if (left && right) alignment[j] = "<c>"
-        else if (left) alignment[j] = "<l>"
-        else if (right) alignment[j] = "<r>"
-    }
+    left = substring(res[i],head(vb,-1)+1,head(vb,-1)+1)==":"
+    right = substring(res[i],tail(vb,-1)-1,tail(vb,-1)-1)==":"
+    alignment = ifelse(left & right, "<c>",
+                ifelse(left, "<l>",
+                ifelse(right, "<r>", "")))
     # replace : and use + as separator
     res[i] = gsub('[:-][|][:-]', '-+-', res[i])
     res[i] = gsub('[|]:', '|-', res[i])
