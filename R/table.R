@@ -497,9 +497,10 @@ kable_org = function(...) {
     res[i] = gsub('[|]:', '|-', res[i])
     res[i] = gsub(':[|]', '-|', res[i])
     # prepend the description of the column alignment
-    res = c(if (i>1) res[1:(i-1)] else NULL,
-            sprintf("|%s|", paste0(alignment,collapse="|")),
-            res[i:length(res)])
+    if (any(alignment != ""))
+        res = c(if (i>1) res[1:(i-1)] else NULL,
+                sprintf("|%s|", paste0(alignment,collapse="|")),
+                res[i:length(res)])
   }
   res
 }
