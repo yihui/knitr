@@ -477,14 +477,19 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
 }
 
 # Emacs Org-mode table
-kable_org = function(...) {
-  res = kable_pipe(..., caption.label = '#+CAPTION:')
-  i = grep('^[-:|]+$', res)  # find the line like |--:|---| under header
-  if (length(i)) {
-    i = i[1]
-    res[i] = gsub('(-|:)[|](-|:)', '\\1+\\2', res[i])  # use + as separator
-  }
-  res
+kable_org = function(x, caption = NULL, padding = 1, caption.label = '#+CAPTION:', ...) {
+  if (length(x)==0) return("")
+  is_null_colnames = is.null(colnames(x))
+  if (is_null_colnames) colnames(x) = rep('', ncol(x))
+  res = kable_mark(x, c(NA, "-", NA), '|', padding, align.fun = function(s, a) {
+    if (is.null(a)) return(s)
+    r = c(l = '<l>', c = '<c>', r = '<r>')
+    rbind(r[a], rep("---",length(a)))
+  }, ...)
+  res = sprintf('|%s|', res)
+  res = gsub('[-][-][|][-]', '--+-', res)
+  if (is_null_colnames) res = res[-c(1,3)]
+  kable_pandoc_caption(res, caption, caption.label)
 }
 
 kable_pandoc_caption = function(x, caption, label = 'Table:') {
