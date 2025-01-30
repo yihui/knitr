@@ -477,29 +477,18 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
 }
 
 # Emacs Org-mode table
-kable_org = function(...) {
-  res = kable_pipe(..., caption.label = '#+CAPTION:')
-  i = grep('^[-:|]+$', res)  # find the line like |--:|---| under header
-  if (length(i)) {
-    i = i[1]
-    # column alignment
-    vb = gregexpr("[|]", res[i])[[1]] # location of the vertical bars
-    left = substring(res[i],head(vb,-1)+1,head(vb,-1)+1)==":"
-    right = substring(res[i],tail(vb,-1)-1,tail(vb,-1)-1)==":"
-    alignment = ifelse(left & right, "<c>",
-                ifelse(left, "<l>",
-                ifelse(right, "<r>", "")))
-    # replace : and use + as separator
-    res[i] = gsub('[:-][|][:-]', '-+-', res[i])
-    res[i] = gsub('[|]:', '|-', res[i])
-    res[i] = gsub(':[|]', '-|', res[i])
-    # prepend the description of the column alignment
-    if (any(alignment != ""))
-        res = c(if (i>1) res[1:(i-1)] else NULL,
-                sprintf("|%s|", paste0(alignment,collapse="|")),
-                res[i:length(res)])
-  }
-  res
+kable_org = function(x, caption = NULL, padding = 1, caption.label = '#+CAPTION:', ...) {
+  is_null_colnames = is.null(colnames(x))
+  if (is_null_colnames) colnames(x) = rep('', ncol(x))
+  res = kable_mark(x, c(NA, "-", NA), '|', padding, align.fun = function(s, a) {
+    if (is.null(a)) return(s)
+    r = c(l = '<l>', c = '<c>', r = '<r>')
+    rbind(r[a],"---")
+  }, ...)
+  res = sprintf('|%s|', res)
+  res = gsub('[-][-][|][-]', '--+-', res)
+  if (is_null_colnames) res = res[-c(1,3)]
+  kable_pandoc_caption(res, caption, caption.label)
 }
 
 kable_pandoc_caption = function(x, caption, label = 'Table:') {
