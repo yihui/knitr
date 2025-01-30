@@ -478,12 +478,13 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
 
 # Emacs Org-mode table
 kable_org = function(x, caption = NULL, padding = 1, caption.label = '#+CAPTION:', ...) {
+  if (length(x)==0) return("")
   is_null_colnames = is.null(colnames(x))
   if (is_null_colnames) colnames(x) = rep('', ncol(x))
   res = kable_mark(x, c(NA, "-", NA), '|', padding, align.fun = function(s, a) {
     if (is.null(a)) return(s)
     r = c(l = '<l>', c = '<c>', r = '<r>')
-    rbind(r[a],"---")
+    rbind(r[a], rep("---",length(a)))
   }, ...)
   res = sprintf('|%s|', res)
   res = gsub('[-][-][|][-]', '--+-', res)
