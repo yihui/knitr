@@ -309,7 +309,7 @@ process_file = function(text, output) {
     group = groups[[i]]
     knit_concord$set(block = i)
 
-    extra <- NULL
+    error <- NULL
 
     res[i] = xfun:::handle_error(
       withCallingHandlers(
@@ -318,9 +318,9 @@ process_file = function(text, output) {
           if (progress && is.function(pb$interrupt)) pb$interrupt()
 
           if (xfun::pkg_available('rlang', '1.0.0')) {
-            if (Sys.getenv("R_BUILD_TEMPLIB") != "") {
+            if (is_R_CMD_build()) {
               cnd <- tryCatch(rlang::entrace(e), error = identity)
-              extra <<- paste(format(cnd), "\n", collapse = "")
+              error <<- format(cnd)
             } else {
               rlang::entrace(e)
             }
@@ -331,10 +331,11 @@ process_file = function(text, output) {
         setwd(wd)
         write_utf8(res, output %n% stdout())
 
-        message <- paste0('\nQuitting from lines ', loc)
-        if (!is.null(extra)) {
-          message <- paste0(message, "\n", rule(), extra, "\n", rule())
+        message <- paste0('\nQuitting from ', loc)
+        if (!is.null(error)) {
+          message <- paste0(message, "\n", rule(), error, "\n", rule())
         }
+        message
       },
       if (labels[i] != '') sprintf(' [%s]', labels[i]),
       get_loc
