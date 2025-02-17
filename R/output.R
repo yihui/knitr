@@ -353,6 +353,7 @@ process_file = function(text, output) {
 }
 
 rule <- function() {
+  # Used by pkgbuild
   paste0(strrep("~", getOption("width")), "\n")
 }
 
