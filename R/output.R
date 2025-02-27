@@ -318,7 +318,7 @@ process_file = function(text, output) {
           if (progress && is.function(pb$interrupt)) pb$interrupt()
 
           if (xfun::pkg_available('rlang', '1.0.0')) {
-            if (is_R_CMD_build()) {
+            if (is_R_CMD_build() || is_R_CMD_check()) {
               cnd <- tryCatch(rlang::entrace(e), error = identity)
               error <<- format(cnd)
             } else {
@@ -353,7 +353,7 @@ process_file = function(text, output) {
 }
 
 rule <- function() {
-  # Used by pkgbuild
+  # Used by pkgbuild; please don't change without letting us know
   paste0(strrep("~", getOption("width")), "\n")
 }
 
