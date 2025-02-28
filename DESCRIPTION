@@ -149,7 +149,7 @@ Suggests:
     testit,
     tibble,
     tikzDevice (>= 0.10),
-    tinytex (>= 0.46),
+    tinytex (>= 0.56),
     webshot,
     rstudioapi,
     svglite
@@ -199,4 +199,3 @@ Collate:
     'utils-vignettes.R'
     'zzz.R'
 RoxygenNote: 7.3.2
-Remotes: rstudio/tinytex
