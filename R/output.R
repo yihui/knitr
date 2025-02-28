@@ -327,11 +327,10 @@ process_file = function(text, output) {
       function(loc) {
         setwd(wd)
         write_utf8(res, output %n% stdout())
-        message = paste0('\nQuitting from ', loc)
-        if (!is.null(error)) {
-          message <- paste0(message, '\n', rule(), error, '\n', rule())
-        }
-        message
+        paste0(
+          '\nQuitting from ', loc,
+          if (!is.null(error)) paste0('\n', rule(), error, '\n', rule())
+        )
       },
       if (labels[i] != '') sprintf(' [%s]', labels[i]), get_loc
     )
