@@ -175,10 +175,7 @@ is_cran_check = function() {
   is_cran() && is_R_CMD_check()
 }
 
-is_R_CMD_build = function() {
-  Sys.getenv("R_BUILD_TEMPLIB") != ""
-}
-
+is_R_CMD_build = function() Sys.getenv('R_BUILD_TEMPLIB') != ''
 is_bioc = function() Sys.getenv('BBS_HOME') != ''
 
 # round a number to getOption('digits') decimal places by default, and format()
