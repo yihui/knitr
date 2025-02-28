@@ -308,18 +308,29 @@ process_file = function(text, output) {
     if (progress && is.function(pb$update)) pb$update(i)
     group = groups[[i]]
     knit_concord$set(block = i)
+    error = NULL
     res[i] = xfun:::handle_error(
       withCallingHandlers(
         if (tangle) process_tangle(group) else process_group(group),
         error = function(e) {
           if (progress && is.function(pb$interrupt)) pb$interrupt()
-          if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
+          if (xfun::pkg_available('rlang', '1.0.0')) {
+            if (is_R_CMD_build() || is_R_CMD_check()) {
+              cnd = tryCatch(rlang::entrace(e), error = identity)
+              error <<- format(cnd)
+            } else {
+              rlang::entrace(e)
+            }
+          }
         }
       ),
       function(loc) {
         setwd(wd)
         write_utf8(res, output %n% stdout())
-        paste0('\nQuitting from lines ', loc)
+        paste0(
+          '\nQuitting from ', loc,
+          if (!is.null(error)) paste0('\n', rule(), error, '\n', rule())
+        )
       },
       if (labels[i] != '') sprintf(' [%s]', labels[i]), get_loc
     )
@@ -335,9 +346,14 @@ process_file = function(text, output) {
   res
 }
 
+rule = function() {
+  # Used by pkgbuild; please don't change without letting us know
+  paste0(strrep('~', getOption('width')), '\n')
+}
+
 # return a string to point out the current location in the doc
 get_loc = function(label = '') {
-  paste0(current_lines(), label, sprintf(' (%s)', knit_concord$get('infile')))
+  paste0(knit_concord$get('infile'), ':', current_lines(), label)
 }
 
 auto_out_name = function(input, ext = tolower(file_ext(input))) {
