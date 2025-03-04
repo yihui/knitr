@@ -1,20 +1,18 @@
-citHeader("To cite the 'knitr' package in publications use:")
-
-year = sub('.*(2[[:digit:]]{3})-.*', '\\1', meta$Date, perl = TRUE)
+year = sub('.*(2[[:digit:]]{3})-.*', '\\1', meta[['Date/Publication']], perl = TRUE)
 vers = paste('R package version', meta$Version)
+if (length(year) == 0) year = format(Sys.Date(), '%Y')
 
-citEntry(
-  entry = 'manual',
-  title = paste('knitr:', meta$Title),
+bibentry(
+  'manual',
+  title = paste('knitr:', gsub('\\bR\\b', '{R}', meta$Title)),
   author = Filter(function(p) 'aut' %in% p$role, as.person(meta$Author)),
   year = year,
   note = vers,
-  url = meta$URL,
-  textVersion = paste('Yihui Xie (', year, '). knitr: ', meta$Title, '. ', vers, '.', sep = '')
+  url = meta$URL
 )
 
-citEntry(
-  entry = 'book',
+bibentry(
+  'book',
   title = 'Dynamic Documents with {R} and knitr',
   author = 'Yihui Xie',
   publisher = 'Chapman and Hall/CRC',
@@ -27,8 +25,8 @@ citEntry(
                       '2nd edition. Chapman and Hall/CRC. ISBN 978-1498716963')
 )
 
-citEntry(
-  entry = 'incollection',
+bibentry(
+  'incollection',
   booktitle = 'Implementing Reproducible Computational Research',
   editor = 'Victoria Stodden and Friedrich Leisch and Roger D. Peng',
   title = 'knitr: A Comprehensive Tool for Reproducible Research in {R}',

@@ -6,7 +6,7 @@ hilight_source = function(x, format, options) {
     } else {
       res = try(highr::hi_andre(x, options$engine, format))
       if (inherits(res, 'try-error')) {
-        if (format == 'html') highr:::escape_html(x) else highr:::escape_latex(x)
+        if (format == 'html') html_escape(x) else highr:::escape_latex(x)
       } else {
         highlight_header()
         n = length(res)
@@ -30,7 +30,7 @@ hilight_source = function(x, format, options) {
 
 highlight_header = function() {
   set_header(highlight.extra = paste(c(
-    sprintf('\\let\\hl%s\\hlstd', c('esc', 'pps', 'lin')),
+    sprintf('\\let\\hl%s\\hldef', c('esc', 'pps', 'lin')),
     sprintf('\\let\\hl%s\\hlcom', c('slc', 'ppc'))
   ), collapse = ' '))
 }
@@ -145,7 +145,6 @@ styler_assistant_latex = function(x) {
 
 col2latexrgb = function(hex) {
   # as.character(0.123) -> 0,123 when "OutDec = ,", so make sure . is used
-  outdec = options(OutDec = '.'); on.exit(options(outdec))
   col = col2rgb(hex)[, 1] / 255
-  paste(round(col, 3), collapse = ',')
+  xfun::decimal_dot(paste(round(col, 3), collapse = ','))
 }

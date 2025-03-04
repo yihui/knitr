@@ -17,6 +17,8 @@ make_header_latex = function(doc) {
   h = one_string(c(
     header_latex_packages(doc),
     .header.maxwidth, opts_knit$get('header'),
+    if (length(grep('\\hlstd', doc, fixed = TRUE))) '\\let\\hlstd\\hldef',
+    if (length(grep('\\hlstr', doc, fixed = TRUE))) '\\let\\hlstr\\hlsng',
     if (getOption('OutDec') != '.') '\\usepackage{amsmath}',
     if (out_format('latex')) '\\usepackage{alltt}'
   ))

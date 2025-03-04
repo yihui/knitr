@@ -3,8 +3,7 @@
 #' This function takes a specially formatted R script and converts it to a
 #' literate programming document. By default normal text (documentation) should
 #' be written after the roxygen comment (\code{#'}) and code chunk options are
-#' written after \code{#+} or \code{#-} or \code{# ----} or any of these
-#' combinations replacing \code{#} with \code{--}.
+#' written after \code{#|} or \code{#+} or \code{# \%\%} or \code{# ----}.
 #'
 #' Obviously the goat's hair is the original R script, and the wool is the
 #' literate programming document (ready to be knitted).
@@ -35,22 +34,23 @@
 #'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
 #' @return If \code{text} is \code{NULL}, the path of the final output document,
 #'   otherwise the content of the output.
-#' @note If the output format is Rnw and no document class is specified in
-#'   roxygen comments, this function will automatically add the \code{article}
-#'   class to the LaTeX document so that it is complete and can be compiled. You
-#'   can always specify the document class and other LaTeX settings in roxygen
-#'   comments manually.
+#' @note If the output format is \code{Rnw} and no document class is specified
+#'   in roxygen comments, this function will automatically add the
+#'   \code{article} class to the LaTeX document so that it is complete and can
+#'   be compiled. You can always specify the document class and other LaTeX
+#'   settings in roxygen comments manually.
 #'
-#'   When the output format is Rmd, it is compiled to HTML via
+#'   When the output format is \code{Rmd}, it is compiled to HTML via
 #'   \code{\link{knit2html}()}, which uses R Markdown v1 instead of v2. If you
 #'   want to use the latter, you should call
-#'   \code{rmarkdown::\link[rmarkdown]{render}()} instead.
+#'   \code{rmarkdown::\link[rmarkdown]{render}()} instead. Similarly, if the
+#'   output format is \code{qmd}, you need to render the output with Quarto.
 #' @export
 #' @seealso \code{\link{stitch}} (feed a template with an R script)
 #' @references \url{https://yihui.org/knitr/demo/stitch/}
 spin = function(
   hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
-  format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst'),
+  format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst', 'qmd'),
   doc = "^#+'[ ]?", inline = '^[{][{](.+)[}][}][ ]*$',
   comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text)
 ) {
@@ -66,18 +66,25 @@ spin = function(
 
   # remove multiline string literals and symbols (note that this ignores lines with spaces at their
   # beginnings, assuming doc and inline regex don't match these lines anyway)
-  parsed_data = getParseData(parse(text = x, keep.source = TRUE))
-  is_matchable = seq_along(x) %in% unique(parsed_data[parsed_data$col1 == 1, 'line1'])
+  is_matchable = function(x) {
+    # if code can't be parsed, assume all lines are matchable
+    p = tryCatch(parse(text = x, keep.source = TRUE), error = function(e) NULL)
+    n = length(x)
+    if (is.null(p)) return(rep(TRUE, n))
+    d = getParseData(p)
+    seq_len(n) %in% d[d$col1 == 1, 'line1']
+  }
+  matchable = is_matchable(x)
 
-  # .Rmd needs to be treated specially
-  p = if (identical(tolower(format), 'rmd')) .fmt.rmd(x) else .fmt.pat[[tolower(format)]]
+  # .Rmd/.qmd need to be treated specially
+  is_md = grepl('^[Rq]md$', format)
+  p = if (is_md) .fmt.rmd(x) else .fmt.pat[[tolower(format)]]
 
   # turn {{expr}} into inline expressions, e.g. `r expr` or \Sexpr{expr}
-  if (any(i <- is_matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
+  if (any(i <- matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
 
-  r = rle((is_matchable & grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
+  r = rle((matchable & grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
-  p1 = gsub('\\{', '\\\\{', paste0('^', p[1L], '.*', p[2L], '$'))
 
   for (i in seq_len(n)) {
     block = x[seq(idx[i] + 1L, idx[i + 1])]
@@ -88,15 +95,24 @@ spin = function(
       # R code; #+/- indicates chunk options
       block = strip_white(block) # rm white lines in beginning and end
       if (!length(block)) next
-      if (length(opt <- grep(rc <- '^(#|--)+(\\+|-| ----+| @knitr)', block))) {
-        block[opt] = paste0(p[1L], gsub(paste0(rc, '\\s*|-*\\s*$'), '', block[opt]), p[2L])
+
+      rc = '^(#|--)+(\\+| %%| ----+| @knitr)(.*?)\\s*-*\\s*$'
+      j1 = grep(rc, block)
+      # pipe comments (#|) should start a code chunk if they are not preceded by
+      # chunk opening tokens
+      j2 = setdiff(pipe_comment_start(block), j1 + 1)
+
+      if (length(j3 <- c(j1, j2))) {
+        block[j1] = paste0(p[1], gsub(rc, '\\3', block[j1]), p[2])
+        block[j2] = paste0(p[1], p[2], '\n', block[j2])
+
         # close each chunk if there are multiple chunks in this block
-        if (any(opt > 1)) {
-          j = opt[opt > 1]
-          block[j] = paste(p[3L], block[j], sep = '\n')
+        if (any(j3 > 1)) {
+          j = j3[j3 > 1]
+          block[j] = paste0(p[3], '\n', block[j])
         }
       }
-      if (!grepl(p1, block[1L])) {
+      if (!startsWith(block[1L], p[1L])) {
         block = c(paste0(p[1L], p[2L]), block)
       }
       c('', block, p[3L], '')
@@ -104,8 +120,9 @@ spin = function(
   }
 
   txt = unlist(txt)
+  is_tex = grepl('^R(nw|tex)$', format)
   # make it a complete TeX document if document class not specified
-  if (report && format %in% c('Rnw', 'Rtex') && !grepl('^\\s*\\\\documentclass', txt)) {
+  if (report && is_tex && !any(grepl('^\\s*\\\\documentclass', txt))) {
     txt = c('\\documentclass{article}', '\\begin{document}', txt, '\\end{document}')
   }
   if (nosrc) {
@@ -116,9 +133,9 @@ spin = function(
   if (!knit) return(txt %n% outsrc)
 
   out = if (report) {
-    if (format == 'Rmd') {
+    if (is_md) {
       knit2html(outsrc, text = txt, envir = envir)
-    } else if (!is.null(outsrc) && (format %in% c('Rnw', 'Rtex'))) {
+    } else if (!is.null(outsrc) && is_tex) {
       knit2pdf(outsrc, envir = envir)
     }
   } else knit(outsrc, text = txt, envir = envir)
@@ -129,9 +146,9 @@ spin = function(
 
 .fmt.pat = list(
   rnw = c('<<', '>>=', '@', '\\\\Sexpr{\\1}'),
-  rhtml = c('<!--begin.rcode ', '', 'end.rcode-->', '<!--rinline \\1 -->'),
-  rtex = c('% begin.rcode ', '', '% end.rcode', '\\\\rinline{\\1}'),
-  rrst = c('.. {r ', '}', '.. ..', ':r:`\\1`')
+  rhtml = c('<!--begin.rcode', '', 'end.rcode-->', '<!--rinline \\1 -->'),
+  rtex = c('% begin.rcode', '', '% end.rcode', '\\\\rinline{\\1}'),
+  rrst = c('.. {r', '}', '.. ..', ':r:`\\1`')
 )
 
 # determine how many backticks we need to wrap code blocks and inline code
@@ -146,7 +163,16 @@ spin = function(
     i = '`'
     b = '```'
   }
-  c(paste0(b, '{r '), '}', b, paste0(i, 'r \\1 ', i))
+  c(paste0(b, '{r'), '}', b, paste0(i, 'r \\1 ', i))
+}
+
+# find the position of the starting `#|` in a consecutive block of `#|` comments
+pipe_comment_start = function(x) {
+  i = startsWith(x, '#| ')
+  r = rle(i)
+  l = r$lengths
+  j = cumsum(l) - l + 1
+  j[r$values]
 }
 
 #' Spin a child R script

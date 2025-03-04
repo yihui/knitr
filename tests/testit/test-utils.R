@@ -22,6 +22,10 @@ op = options(digits = 4, scipen = 0)
 assert('format_sci() turns numbers into scientific notations', {
   (format_sci(c(1.84e8, 1e5, 2.34e3)) %==% c('1.84\\times 10^{8}', '10^{5}', '2340'))
   (format_sci(1.23456789 * 10^-5) %==% '1.2346\\times 10^{-5}')
+  (format_sci(10^-5) %==% '10^{-5}')
+  (format_sci(10^5) %==% '10^{5}')
+  (format_sci(-10^-5) %==% '-10^{-5}')
+  (format_sci(-10^5) %==% '-10^{5}')
   (format_sci(9.87654e6, 'html') %==% '9.8765 &times; 10<sup>6</sup>')
   (format_sci(9.87654e6, 'rst') %==% '9.8765 |times| 10 :sup:`6`')
   (format_sci(letters) %==% letters)
@@ -35,7 +39,7 @@ assert('format_sci() coerces non-numeric and non-double values to characters', {
 
 # https://github.com/yihui/knitr/issues/1625
 assert('format_sci() does not convert roman numerals to arabic numerals', {
-  format_sci(as.roman(c(1, 4, 7, 33, 100))) %==% c('I', 'IV', 'VII', 'XXXIII', 'C')
+  (format_sci(as.roman(c(1, 4, 7, 33, 100))) %==% c('I', 'IV', 'VII', 'XXXIII', 'C'))
 })
 
 assert('format_sci() for Rnw does not add \\ensuremath{} at all', {
@@ -64,14 +68,12 @@ assert('sanitize_fn() warns against spaces in filenames', {
 options(op)
 
 assert('fig_path() sanitizes paths', {
-  (identical(sanitize_fn('fig/foo', '.png'), 'fig/foo.png'))
-  (suppressWarnings(c(
-    identical(sanitize_fn('figure/a b'), 'figure/a_b'),
-    identical(sanitize_fn('fig space/a.b'), 'fig_space/a_b'),
-    identical(sanitize_fn('../c.d'), '../c_d'),
-    identical(sanitize_fn('./../c..d'), './../c__d')
-  )))
-  (identical(sanitize_fn('C:/foo/bar'), 'C:/foo/bar'))
+  (sanitize_fn('fig/foo') %==% 'fig/foo')
+  (sanitize_fn('figure/a b  c', FALSE) %==% 'figure/a_b__c')
+  (sanitize_fn('fig space/a.b') %==% 'fig_space/a.b')
+  (sanitize_fn('../c.d') %==% '../c.d')
+  (sanitize_fn('./../c..d') %==% './../c..d')
+  (sanitize_fn('C:/foo/bar') %==% 'C:/foo/bar')
 })
 
 assert('fig_chunk() generates figure filenames for a code chunk', {
@@ -118,32 +120,17 @@ assert('color_def() generates LaTeX code to define a color variable', {
   (color_def('.5,.6,.7', 'fgcolor') %==% '\\definecolor{fgcolor}{rgb}{.5, .6, .7}')
 })
 
-cw = function(...) unclass(combine_words(...))
-assert('combine_words() combines multiple words into a single string', {
-  (cw(NULL) %==% NULL)
-  (cw(c('a')) %==% 'a')
-  (cw(c('a', 'b')) %==% 'a and b')
-  (cw(c('a', 'b'), and = "") %==% 'a, b')
-  (cw(c('a', 'b', 'c')) %==% 'a, b, and c')
-  (cw(c('a', 'b', 'c'), and = '') %==% 'a, b, c')
-  (cw(c('a', 'b', 'c'), ' / ', '') %==% 'a / b / c')
-  (cw(c('a', 'b', 'c'), before = '"') %==% '"a", "b", and "c"')
-  (cw(c('a', 'b', 'c'), before = '``', after = "''") %==% "``a'', ``b'', and ``c''")
-  (cw(c('a', 'b', 'c'), before = '``', after = "''", oxford_comma = FALSE) %==% "``a'', ``b'' and ``c''")
-})
-rm(list = 'cw')
-
 opts = list(
   fig.cap = 'Figure "caption" <>.', fig.lp = 'Fig:', label = 'foo'
 )
 assert('.img.cap() generates the figure caption and alt attribute', {
   (.img.cap(list(fig.cap = NULL), FALSE) %==% "")
   (.img.cap(opts, FALSE) %==% opts$fig.cap)
-  (.img.cap(opts, TRUE)  %==% 'Figure &quot;caption&quot; &lt;&gt;.')
+  (.img.cap(opts, TRUE, TRUE)  %==% 'Figure "caption" &lt;&gt;.')
 
   opts$fig.alt = 'Figure "alternative text" <>.'
 
-  (.img.cap(opts, TRUE)  %==% 'Figure &quot;alternative text&quot; &lt;&gt;.')
+  (.img.cap(opts, TRUE, TRUE)  %==% 'Figure "alternative text" &lt;&gt;.')
   (.img.cap(opts, FALSE)  %==% opts$fig.cap)
 
   (.img.cap(list(fig.cap = '', fig.alt = "alt"), FALSE) %==% "")
@@ -166,25 +153,17 @@ assert('restore_raw_output() restores raw output', {
 })
 
 assert('raw_block() returns a raw attribute block for Pandoc', {
-  (raw_latex('\\emph{x}') == '\n```{=latex}\n\\emph{x}\n```\n')
-  (raw_html('<i>foo</i>') == '\n```{=html}\n<i>foo</i>\n```\n')
+  (c(raw_latex('\\emph{x}')) %==% '\n```{=latex}\n\\emph{x}\n```\n')
+  (c(raw_html('<i>foo</i>')) %==% '\n```{=html}\n<i>foo</i>\n```\n')
 })
 
 assert('block_class() turns a character vector into Pandoc attributes for code block classes', {
   (block_class(NULL) %==% NULL)
-  (block_class('a') %==% '.a')
+  (block_class('a') %==% 'a')
+  (block_class('a', '.b') %==% '.a')
   (block_class('a b') %==% c('.a', '.b'))
   (block_class(c('a', 'b')) %==% c('.a', '.b'))
 })
-
-assert('block_attr(x) turns a character vector into Pandoc attributes', {
-  (block_attr(NULL) %==% NULL)
-  (block_attr(NULL, lang = 'r') %==% 'r')
-  (block_attr('.a') %==% '{.a}')
-  (block_attr('.a b="11"') %==% '{.a b="11"}')
-  (block_attr(c('.a', 'b="11"')) %==% '{.a b="11"}')
-})
-
 
 assert('when collapse is TRUE, class.* and attr.* become NULL except for class.source and attr.source', {
   keys = unlist(lapply(
@@ -239,4 +218,40 @@ assert('remove_urls() removes the link', {
   (remove_urls('a [b](c) d.') %==% 'a b d.')
   (remove_urls('a [b](c) d [e f+g](h) i.') %==% 'a b d e f+g i.')
   (remove_urls('a [b](c) `[d](e)` f.') %==% 'a b `[d](e)` f.')
+})
+
+assert('options using `-` are converted to `.` and default value replaced', {
+  opts = opts_chunk$merge(list('fig-cap' = 'caption', 'out-width' = 300))
+  (is.null(dot_names(opts)[['fig-cap']]))
+  (is.null(dot_names(opts)[['out-width']]))
+  (dot_names(opts)[['fig.cap']] %==% 'caption')
+  (dot_names(opts)[['out.width']] %==% 300)
+  rm(opts)
+})
+
+assert('fig.format and fig.dpi', {
+  opts = opts_chunk$merge(list('fig-format' = 'svg', 'fig-dpi' = 750))
+  (is.null(dot_names(opts)[['fig-format']]))
+  (is.null(dot_names(opts)[['fig-dpi']]))
+  (dot_names(opts)[['dev']] %==% 'svg')
+  (dot_names(opts)[['dpi']] %==% 750)
+  rm(opts)
+})
+
+assert('options using `.` are converted to `-` and default value replaced', {
+  opts = opts_chunk$merge(list('fig.cap' = 'caption', 'out.width' = 300))
+  (is.null(dash_names(opts)[['fig.cap']]))
+  (is.null(dash_names(opts)[['out.width']]))
+  (dash_names(opts)[['fig-cap']] %==% 'caption')
+  (dash_names(opts)[['out-width']] %==% 300)
+  rm(opts)
+})
+
+assert('dev and dpi are convert to fig-format and fig-dpi', {
+  opts = opts_chunk$merge(list('dev' = 'svg', 'dpi' = 750))
+  (is.null(dash_names(opts)[['dev']]))
+  (is.null(dash_names(opts)[['dpi']]))
+  (dash_names(opts)[['fig-format']] %==% 'svg')
+  (dash_names(opts)[['fig-dpi']] %==% 750)
+  rm(opts)
 })

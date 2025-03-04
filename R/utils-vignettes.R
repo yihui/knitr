@@ -28,32 +28,31 @@ NULL
 vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
   {
     on.exit({opts_chunk$restore(); knit_hooks$restore()}, add = TRUE)
-    oopts = options(markdown.html.header = NULL, knitr.knit2html.force_v1 = TRUE)
+    oopts = options(knitr.knit2html.force_v1 = TRUE)
     on.exit(options(oopts), add = TRUE)
   }
   opts_chunk$set(error = FALSE)  # should not hide errors
-  knit_hooks$set(purl = hook_purl)  # write out code while weaving
+  knit_hooks$set(purl = function(...) {
+    # run some hooks for vignettes
+    hook_purl(...)  # write out code while weaving
+    # optimize PNG images if tools exist and hooks not set
+    for (i in c('optipng', 'pngquant'))
+      if (!is.function(knit_hooks$get(i)) && Sys.which(i) != '') {
+        switch(i, optipng = hook_optipng(...), pngquant = hook_pngquant(...))
+      }
+  })
   (if (grepl('\\.[Rr]md$', file)) knit2html else if (grepl('\\.[Rr]rst$', file)) knit2pandoc else knit)(
     file, encoding = encoding, quiet = quiet, envir = globalenv(), ...
   )
 }
 
 vtangle = function(file, ..., encoding = 'UTF-8', quiet = FALSE) {
-  # a hack to generate an empty R script to cheat R CMD check because purl() is
-  # not reliable (#2052, #2036)
-  if (xfun::is_R_CMD_check() && !file.exists(with_ext(file, 'Rout.save'))) {
-    file = with_ext(file, '.R')
-    file.create(file)
-    return(file)
-  }
   purl(file, encoding = encoding, quiet = quiet, ...)
 }
 
 vweave_docco_linear = vweave
-body(vweave_docco_linear)[5L] = expression(knit2html(
-  file, encoding = encoding, quiet = quiet, envir = globalenv(),
-  template = system.file('misc', 'docco-template.html', package = 'knitr'),
-  ...
+body(vweave_docco_linear)[5L] = expression(docco_linear(
+  file, encoding = encoding, quiet = quiet, envir = globalenv(), ...
 ))
 
 vweave_docco_classic = vweave
@@ -164,14 +163,13 @@ pandoc_available = function() {
 }
 
 html_vignette = function(
-  ..., fig_caption = TRUE, theme = NULL, highlight = "pygments",
-  css = system.file('misc', 'vignette.css', package = 'knitr'),
+  ..., fig_caption = TRUE, theme = NULL, highlight = NULL,
   includes = list(
-    after_body = system.file('misc', 'vignette.html', package = 'knitr')
+    in_header = system.file('misc', 'vignette.html', package = 'knitr')
   )
 ) {
   rmarkdown::html_document(
     ..., fig_caption = fig_caption, theme = theme, highlight = highlight,
-    css = css, includes = includes
+    includes = includes
   )
 }

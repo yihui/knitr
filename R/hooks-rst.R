@@ -5,7 +5,8 @@
 hook_plot_rst = function(x, options) {
   if (options$fig.show == 'animate') return(hook_plot_html(x, options))
 
-  cap = .img.cap(options, alt = TRUE)
+  cap = .img.cap(options)
+  alt = .img.cap(options, alt = TRUE)
   # TODO: add all options for figure
   # See http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
   # http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure
@@ -13,7 +14,7 @@ hook_plot_rst = function(x, options) {
     'figure',
     paste0(opts_knit$get('base.url'), .upload.url(x)),
     c(align = if (options$fig.align == 'default') NULL else options$fig.align,
-      alt = cap, width = options$out.width, height = options$out.height),
+      alt = alt, width = options$out.width, height = options$out.height),
     cap
   )
 }
@@ -41,7 +42,9 @@ hooks_rst = function(strict = FALSE) {
       (if (strict) hook.s else hook.t)(x, options)
     },
     warning = hook.s, error = hook.s, message = hook.s,
-    output = hook.s, inline = hook.i, plot = hook_plot_rst
+    inline = hook.i, plot = hook_plot_rst, output = function(x, options) {
+      if (output_asis(x, options)) x else hook.s(x, options)
+    }
   )
 }
 

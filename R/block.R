@@ -1,15 +1,10 @@
-# S3 method to deal with chunks and inline text respectively
+# process chunks and inline text
 process_group = function(x) {
-  UseMethod('process_group', x)
+  if (inherits(x, 'block')) call_block(x) else {
+    x = call_inline(x)
+    knit_hooks$get('text')(x)
+  }
 }
-#' @export
-process_group.block = function(x) call_block(x)
-#' @export
-process_group.inline = function(x) {
-  x = call_inline(x)
-  knit_hooks$get('text')(x)
-}
-
 
 call_block = function(block) {
   # now try eval all options except those in eval.after and their aliases
@@ -17,6 +12,7 @@ call_block = function(block) {
   if (!is.null(al) && !is.null(af)) af = c(af, names(al[af %in% al]))
 
   params = opts_chunk$merge(block$params)
+  params = dot_names(params)
   for (o in setdiff(names(params), af)) {
     params[o] = list(eval_lang(params[[o]]))
     # also update original options before being merged with opts_chunk
@@ -51,22 +47,13 @@ call_block = function(block) {
   }
 
   # save current chunk options in opts_current
+  optc = opts_current$get(); on.exit(opts_current$restore(optc), add = TRUE)
   opts_current$restore(params)
 
-  if (opts_knit$get('progress')) print(block)
+  if (opts_knit$get('progress')) print_block(block)
 
-  if (!is.null(params$child)) {
-    if (!is_blank(params[['code']]) && getOption('knitr.child.warning', TRUE)) warning(
-      "The chunk '", params$label, "' has the 'child' option, ",
-      "and this code chunk must be empty. Its code will be ignored."
-    )
-    if (!params$eval) return('')
-    cmds = lapply(sc_split(params$child), knit_child, options = block$params)
-    out = one_string(unlist(cmds))
-    return(out)
-  }
-
-  params$code = parse_chunk(params$code) # parse sub-chunk references
+  if (!isFALSE(params$ref.chunk))
+    params[['code']] = parse_chunk(params[['code']]) # parse sub-chunk references
 
   ohooks = opts_hooks$get()
   for (opt in names(ohooks)) {
@@ -81,6 +68,17 @@ call_block = function(block) {
   }
 
   params = fix_options(params)  # for compatibility
+
+  if (!is.null(params$child)) {
+    if (!is_blank(params[['code']]) && getOption('knitr.child.warning', TRUE)) warning(
+      "The chunk '", params$label, "' has the 'child' option, ",
+      "and this code chunk must be empty. Its code will be ignored."
+    )
+    if (!params$eval) return('')
+    cmds = lapply(sc_split(params$child), knit_child, options = block$params)
+    out = one_string(unlist(cmds))
+    return(out)
+  }
 
   # Check cache
   if (params$cache > 0) {
@@ -109,6 +107,8 @@ call_block = function(block) {
 
   params$params.src = block$params.src
   opts_current$restore(params)  # save current options
+  # prevent users from modifying opts_current (#1798)
+  opts_current$lock(); on.exit(opts_current$lock(FALSE), add = TRUE)
 
   # set local options() for the current R chunk
   if (is.list(params$R.options)) {
@@ -150,6 +150,11 @@ block_exec = function(options) {
   # when code is not R language
   res.before = run_hooks(before = TRUE, options)
   engine = get_engine(options$engine)
+  # special case: quarto-dev/quarto-cli#5994
+  if (is_quarto() && options$engine %in% c('dot', 'mermaid', 'ojs')) {
+    options$code = c(options$yaml.code, options$code)
+    options$yaml.code = NULL
+  }
   output = in_input_dir(engine(options))
   if (is.list(output)) output = unlist(output)
   res.after = run_hooks(before = FALSE, options)
@@ -252,7 +257,7 @@ eng_r = function(options) {
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
     as.source(code)
   } else if (cache.exists && isFALSE(options$cache.rebuild)) {
-    fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
+    cache$output(options$hash, 'list')
   } else in_input_dir(
     evaluate(
       code, envir = env, new_device = FALSE,
@@ -327,7 +332,7 @@ eng_r = function(options) {
     obj.new = if (is.null(options$cache.vars)) setdiff(ls(globalenv(), all.names = TRUE), obj.before)
     copy_env(globalenv(), env, obj.new)
     objs = if (isFALSE(ev) || length(code) == 0) character(0) else
-      options$cache.vars %n% codetools::findLocalsList(parse_only(code))
+      options$cache.vars %n% xfun::find_locals(code)
     # make sure all objects to be saved exist in env
     objs = intersect(c(objs, obj.new), ls(env, all.names = TRUE))
     if (options$autodep) {
@@ -336,7 +341,12 @@ eng_r = function(options) {
         objs, cache_globals(options$cache.globals, code), options$label,
         options$cache.path
       )
-      dep_auto()
+      if (isTRUE(opts_knit$get('autodep.initialized'))) {
+        dep_auto(labels = options$label)
+      } else {
+        dep_auto(labels = all_labels())
+        opts_knit$set(autodep.initialized = TRUE)
+      }
     }
     if (options$cache < 3) {
       if (options$cache.rebuild || !cache.exists) block_cache(options, res.orig, objs)
@@ -364,7 +374,7 @@ purge_cache = function(options) {
 
 cache_globals = function(option, code) {
   if (is.character(option)) option else {
-    (if (isFALSE(option)) find_symbols else find_globals)(code)
+    if (isFALSE(option)) find_symbols(code) else xfun::find_globals(code, knit_global())
   }
 }
 
@@ -403,10 +413,14 @@ chunk_device = function(options, record = TRUE, tmp = tempfile()) {
     do.call(grDevices::svg, c(list(
       filename = tmp, width = width, height = height
     ), get_dargs(dev.args, 'svg')))
+  } else if (identical(dev, 'svglite')) {
+    do.call(svglite::svglite, c(list(
+      filename = tmp, width = width, height = height
+    ), get_dargs(dev.args, 'svglite')))
   } else if (identical(getOption('device'), pdf_null)) {
     if (!is.null(dev.args)) {
       dev.args = get_dargs(dev.args, 'pdf')
-      dev.args = dev.args[intersect(names(dev.args), c('pointsize', 'bg'))]
+      dev.args = dev.args[intersect(names(dev.args), names(formals(pdf)))]
     }
     do.call(pdf_null, c(list(width = width, height = height), dev.args))
   } else dev.new(width = width, height = height)
@@ -538,7 +552,10 @@ merge_character = function(res) {
 }
 
 call_inline = function(block) {
-  if (opts_knit$get('progress')) print(block)
+  optc = opts_current$get(); on.exit(opts_current$restore(optc), add = TRUE)
+  params = opts_chunk$merge(list(label = unnamed_chunk()))
+  opts_current$restore(params)
+  if (opts_knit$get('progress')) print_inline(block)
   in_input_dir(inline_exec(block))
 }
 
@@ -551,9 +568,11 @@ inline_exec = function(
   code = block$code; input = block$input
   if ((n <- length(code)) == 0) return(input) # untouched if no code is found
   code.src = block$code.src
+  lines = block$lines
 
   ans = character(n)
   for (i in 1:n) {
+    knit_concord$set(offset = lines[i, ])
     tryCatch(parse_only(code[i]), error = function(e) {
       stop2('Failed to parse the inline R code: ', code.src[i], '\nReason: ', e$message)
     })
@@ -569,10 +588,10 @@ inline_exec = function(
 }
 
 process_tangle = function(x) {
-  UseMethod('process_tangle', x)
+  if (inherits(x, 'block')) tangle_block(x) else tangle_inline(x)
 }
-#' @export
-process_tangle.block = function(x) {
+
+tangle_block = function(x) {
   params = opts_chunk$merge(x$params)
   for (o in c('purl', 'eval', 'child')) {
     if (inherits(try(params[o] <- list(eval_lang(params[[o]]))), 'try-error')) {
@@ -581,7 +600,9 @@ process_tangle.block = function(x) {
   }
   if (isFALSE(params$purl)) return('')
   label = params$label; ev = params$eval
-  if (params$engine != 'R') return(one_string(comment_out(knit_code$get(label))))
+  if (params$engine != 'R') return(
+    one_string(comment_out(knit_code$get(label), params$comment, newline = FALSE))
+  )
   code = if (!isFALSE(ev) && !is.null(params$child)) {
     cmds = lapply(sc_split(params$child), knit_child)
     one_string(unlist(cmds))
@@ -591,14 +612,19 @@ process_tangle.block = function(x) {
     eval(parse_only(unlist(str_extract(code, 'read_chunk\\(([^)]+)\\)'))))
   }
   code = parse_chunk(code)
-  if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
+  code = tangle_mask(code, ev, x$params$error)
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
   # e.g. when documentation 1 or 2 with purl()
   label_code(code, x)
 }
-#' @export
-process_tangle.inline = function(x) {
 
+tangle_mask = function(code, eval, error) {
+  if (isFALSE(eval)) code = comment_out(code, '#', newline = FALSE)
+  if (isTRUE(error)) code = c('try({', code, '})')
+  code
+}
+
+tangle_inline = function(x) {
   output = if (opts_knit$get('documentation') == 2L) {
     output = paste("#'", gsub('\n', "\n#' ", x$input, fixed = TRUE))
   } else ''
@@ -620,13 +646,12 @@ process_tangle.inline = function(x) {
 
 # add a label [and extra chunk options] to a code chunk
 label_code = function(code, options) {
-  code = one_string(c('', code, ''))
-  comments = if (is_quarto()) one_string(options$params$yaml.code) else paste0(
+  comments = paste0(
     '## ----', options$params.src,
     strrep('-', max(getOption('width') - 11L - nchar(options$params.src), 0L)),
     '----'
   )
-  paste0(comments, code)
+  one_string(c(comments, options$params.chunk, code, ''))
 }
 
 as.source = function(code) {

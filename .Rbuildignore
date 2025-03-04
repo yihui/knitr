@@ -4,6 +4,8 @@ aux$
 log$
 out$
 inst/examples/knitr-.*.pdf
+inst/examples/Sweavel.sty
+inst/examples/.*\.bib
 inst/examples/child/knitr-.*.pdf
 inst/examples/child/knitr-.*\.md
 inst/examples/figure
@@ -21,4 +23,3 @@ Makefile
 ^codecov\.yml$
 ^NEWS\.md$
 ^cran-comments\.md$
-vignettes/knitr-refcard.lyx

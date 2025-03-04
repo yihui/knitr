@@ -48,7 +48,7 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
       ex = ex[-(1L:grep('### ** Examples', ex, fixed = TRUE))]
       ex = c('```{r}', ex, '```')
       opts_chunk$set(fig.path = paste0('figure/', p, '-'), tidy = FALSE)
-      res = try(knit2html(text = ex, envir = parent.frame(2), fragment.only = TRUE, quiet = TRUE))
+      res = try(knit2html(text = ex, envir = parent.frame(2), template = FALSE, quiet = TRUE))
       if (inherits(res, 'try-error')) {
         res = ex; res[1] = '<pre><code class="r">'; res[length(res)] = '</code></pre>'
       }
@@ -65,8 +65,8 @@ knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {
   unlink('figure/', recursive = TRUE)
   toc = sprintf('- <a href="%s" target="content">%s</a>', paste0(topics, '.html'), topics)
   toc = c(paste0('# ', pkg), '', toc, '',
-          paste('Generated with [knitr](https://yihui.org/knitr) ', packageVersion('knitr')))
-  mark_html(text = toc, output = '00frame_toc.html', meta = list(
+          paste('Generated with [knitr](https://yihui.org/knitr/) ', packageVersion('knitr')))
+  markdown::mark_html(text = toc, output = '00frame_toc.html', meta = list(
     title = paste('R Documentation of', pkg), css = 'R.css'
   ))
   txt = read_utf8(file.path(find.package(pkg), 'html', '00Index.html'))

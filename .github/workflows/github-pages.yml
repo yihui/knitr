@@ -1,0 +1,34 @@
+name: Build and deploy package site
+
+on:
+  push:
+    branches: ["master"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: r-lib/actions/setup-r@HEAD
+        with:
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-r-dependencies@HEAD
+      - uses: yihui/litedown/site@HEAD
+        with:
+          site-dir: 'site'
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'site'
+      - id: deployment
+        uses: actions/deploy-pages@v4

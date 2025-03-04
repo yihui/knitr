@@ -2,7 +2,7 @@
 
 # record input/output lines numbers in Rnw/tex and filenames
 knit_concord = new_defaults(list(
-  inlines = NULL, outlines = NULL, infile = NULL, outfile = NULL
+  inlines = NULL, outlines = NULL, infile = NULL, outfile = NULL, block = NULL, offset = NULL
 ))
 
 # do not consider child mode for concordance
@@ -10,11 +10,15 @@ concord_mode = function() {
   opts_knit$get('concordance') && !child_mode()
 }
 
-current_lines = function(i) {
+current_lines = function(i = knit_concord$get('block')) {
   # a helpr function to return line numbers for block i
   n = knit_concord$get('inlines')
-  n1 = sum(head(n, i)); n0 = n1 - n[i] + 2
-  c(min(n0, n1), n1)
+  n1 = sum(head(n, i)); n0 = min(n1, n1 - n[i] + 1)
+  # adjust line numbers for inline code expressions
+  if (length(o <- knit_concord$get('offset')) == 2) {
+    n1 = n0 + o[2]; n0 = n0 + o[1]
+  }
+  paste(c(n0, n1), collapse = '-')
 }
 
 # generate concordance for RStudio

@@ -27,7 +27,7 @@ dev2ext = function(options) {
     for (i in x[idx]) dev_get(i)
     stop2(
       'cannot find appropriate filename extensions for device ', x[idx], '; ',
-      "please use chunk option 'fig.ext' (https://yihui.org/knitr/options)"
+      "please use chunk option 'fig.ext' (https://yihui.org/knitr/options/)"
     )
   }
   unname(res)
@@ -203,7 +203,9 @@ patch_tikz_tex = function(path) {
 # filter the dev.args option
 get_dargs = function(dargs, dev) {
   if (length(dargs) == 0) return()
-  if (is.list(dargs) && all(sapply(dargs, is.list))) {
+  nms = names(dargs)
+  if (is.list(dargs) && all(sapply(dargs, is.list)) && length(nms) &&
+      (dev %in% nms || all(nms %in% names(auto_exts)))) {
     # dev.args is list(dev1 = list(arg1 = val1, ...), dev2 = list(arg2, ...))
     dargs = dargs[[dev]]
   }
@@ -279,38 +281,6 @@ reduce_plot_opts = function(options) {
   options
 }
 
-# the memory address of a NativeSymbolInfo object will be lost if it is saved to
-# disk; see http://markmail.org/message/zat2r2pfsvhrsfqz for the full
-# discussion; the hack below was stolen (with permission) from RStudio:
-# https://github.com/rstudio/rstudio/blob/master/src/cpp/r/R/Tools.R
-fix_recordedPlot = function(plot) {
-  # restore native symbols for R >= 3.0
-  for (i in seq_along(plot[[1]])) {
-    # get the symbol then test if it's a native symbol
-    symbol = plot[[1]][[i]][[2]][[1]]
-    if (inherits(symbol, 'NativeSymbolInfo')) {
-      # determine the dll that the symbol lives in
-      name = symbol[[if (is.null(symbol$package)) 'dll' else 'package']][['name']]
-      pkgDLL = getLoadedDLLs()[[name]]
-      # reconstruct the native symbol and assign it into the plot
-      nativeSymbol = getNativeSymbolInfo(
-        name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE
-      )
-      plot[[1]][[i]][[2]][[1]] <- nativeSymbol
-    }
-  }
-  attr(plot, 'pid') = Sys.getpid()
-  plot
-}
-
-# fix plots in evaluate() results
-fix_evaluate = function(list, fix = TRUE) {
-  if (!fix) return(list)
-  lapply(list, function(x) {
-    if (evaluate::is.recordedplot(x)) fix_recordedPlot(x) else x
-  })
-}
-
 # remove the plots from the evaluate results for the case of cache=2; if we only
 # want to keep high-level plots, we need MD5 digests of the plot components so
 # that we will be able to filter out low-level changes later
@@ -371,7 +341,8 @@ plot_crop = function(x, quiet = TRUE) {
   is_pdf = grepl('[.]pdf$', x, ignore.case = TRUE)
   x2 = x
   x = path.expand(x)
-  if (is_pdf && !has_utility('pdfcrop') && !has_utility('ghostscript')) return(x2)
+  tinytex:::tweak_path()  # in case TinyTeX is installed but not on PATH
+  if (is_pdf && !has_utility('pdfcrop')) return(x2)
 
   if (!quiet) message('cropping ', x)
   if (is_pdf) {
@@ -488,6 +459,29 @@ include_graphics = function(
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
 }
 
+#' Download an image from the web and include it in a document
+#'
+#' When including images in non-HTML output formats such as LaTeX/PDF, URLs will
+#' not work as image paths. In this case, we have to download the images. This
+#' function is a wrapper of \code{xfun::\link[xfun]{download_file}()} and
+#' \code{\link{include_graphics}()}.
+#' @param url The URL of an image.
+#' @param path The download path (inferred from the URL by default). If the file
+#'   exists, it will not be downloaded (downloading can take time and requires
+#'   Internet connection). If you are sure the file needs to be downloaded
+#'   again, delete it beforehand.
+#' @param use_file Whether to use the URL or the download path to include the
+#'   image. By default, the URL is used for HTML output formats, and the file
+#'   path is used for other output formats.
+#' @param ... Other arguments to be passed to \code{\link{include_graphics}()}.
+#' @export
+#' @examplesIf interactive()
+#' knitr::download_image('https://www.r-project.org/Rlogo.png')
+download_image = function(url, path = xfun::url_filename(url), use_file = !pandoc_to('html'), ...) {
+  if (!file.exists(path) && use_file) xfun::download_file(url, path)
+  include_graphics(if (use_file) path else url, ...)
+}
+
 # calculate the width in inches for PNG/JPEG images given a DPI
 raster_dpi_width = function(path, dpi) {
   if (!file.exists(path) || is.na(dpi)) return()
@@ -506,7 +500,7 @@ raster_dpi_width = function(path, dpi) {
     w = ncol(jpeg::readJPEG(path, native = TRUE))
   }
   if (is_latex_output()) {
-    paste0(round(w / dpi, 2), 'in')
+    xfun::decimal_dot(paste0(round(w / dpi, 2), 'in'))
   } else if (is_html_output()) {
     round(w / (dpi / 96))
   }
@@ -609,11 +603,17 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   w = webshot_available()
   webshot = c(options$webshot, names(w)[w])
   webshot = if (length(webshot) == 0) 'webshot' else webshot[[1L]]
+  if (webshot == 'webshot2' && ext == 'pdf' && getOption('knitr.warn.webshot2', TRUE)) warning(
+    "webshot2 may take the PDF screenshot with the wrong size. You are recommended ",
+    "to use the 'png' format instead (i.e., set the chunk option '",
+    if (is_quarto()) "fig-format" else "dev", "' to 'png'). ",
+    "See https://github.com/yihui/knitr/issues/2276 for more information."
+  )
   f = in_dir(d, {
     if (i1 || i3) {
       if (i1) {
         f1 = wd_tempfile('widget', '.html')
-        save_widget(x, f1, FALSE, options = options)
+        htmlwidgets::saveWidget(x, f1, FALSE, knitrOptions = options)
       } else f1 = x$url
       f2 = wd_tempfile('webshot', ext)
       f3 = do.call(getFromNamespace('webshot', webshot), c(list(f1, f2), wargs))
@@ -631,11 +631,4 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
       class = 'html_screenshot'
     )
   })
-}
-
-save_widget = function(..., options) {
-  FUN = htmlwidgets::saveWidget
-  if ('knitrOptions' %in% names(formals(FUN))) {
-    FUN(..., knitrOptions = options)
-  } else FUN(...)
 }

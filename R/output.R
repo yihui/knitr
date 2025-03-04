@@ -132,7 +132,7 @@ knit = function(
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
 
   if (child_mode()) {
-    setwd(opts_knit$get('output.dir')) # always restore original working dir
+    setwd(opts_knit$get('output.dir') %n% '.') # always restore original working dir
     # in child mode, input path needs to be adjusted
     if (in.file && !is_abs_path(input)) {
       input = paste0(opts_knit$get('child.path'), input)
@@ -151,11 +151,10 @@ knit = function(
       useFancyQuotes = FALSE, device = pdf_null, knitr.in.progress = TRUE
     )
     on.exit(options(oopts), add = TRUE)
-    # restore chunk options after parent exits
-    optc = opts_chunk$get(); on.exit(opts_chunk$restore(optc), add = TRUE)
-    ocode = knit_code$get(); on.exit(knit_code$restore(ocode), add = TRUE)
-    on.exit(opts_current$restore(), add = TRUE)
-    optk = opts_knit$get(); on.exit(opts_knit$restore(optk), add = TRUE)
+    # restore objects like chunk options after parent exits
+    opta = list(opts_chunk, opts_current, knit_code, opts_knit)
+    optv = lapply(opta, function(o) o$get())
+    on.exit(for (i in seq_along(opta)) opta[[i]]$restore(optv[[i]]), add = TRUE)
     opts_knit$set(
       output.dir = getwd(),  # record working directory in 1st run
       tangle = tangle, progress = opts_knit$get('progress') && !quiet
@@ -288,13 +287,13 @@ process_file = function(text, output) {
   # when in R CMD check, turn off the progress bar (R-exts said the progress bar
   # was not appropriate for non-interactive mode, and I don't want to argue)
   progress = opts_knit$get('progress') && !is_R_CMD_check()
+  labels = unlist(lapply(groups, function(g) {
+    if (is.list(g$params)) g[[c('params', 'label')]] else ''
+  }))
   if (progress) {
-    labels = unlist(lapply(groups, function(g) {
-      if (is.list(g$params)) g[[c('params', 'label')]] else ''
-    }))
     pb_fun = getOption('knitr.progress.fun', txt_pb)
     pb = if (is.function(pb_fun)) pb_fun(n, labels)
-    on.exit(if (!is.null(pb)) pb$done(), add = TRUE)
+    on.exit(if (is.function(pb$done)) pb$done(), add = TRUE)
   }
   wd = getwd()
   for (i in 1:n) {
@@ -306,19 +305,36 @@ process_file = function(text, output) {
       }
       break  # must have called knit_exit(), so exit early
     }
-    if (progress && !is.null(pb)) pb$update(i)
+    if (progress && is.function(pb$update)) pb$update(i)
     group = groups[[i]]
-    res[i] = withCallingHandlers(
-      if (tangle) process_tangle(group) else process_group(group),
-      error = function(e) {
+    knit_concord$set(block = i)
+    error = NULL
+    res[i] = xfun:::handle_error(
+      withCallingHandlers(
+        if (tangle) process_tangle(group) else process_group(group),
+        error = function(e) {
+          if (progress && is.function(pb$interrupt)) pb$interrupt()
+          if (xfun::pkg_available('rlang', '1.0.0')) {
+            if (is_R_CMD_build() || is_R_CMD_check()) {
+              cnd = tryCatch(rlang::entrace(e), error = identity)
+              error <<- format(cnd)
+            } else {
+              rlang::entrace(e)
+            }
+          }
+        }
+      ),
+      function(loc) {
         setwd(wd)
-        cat(res, sep = '\n', file = output %n% '')
-        message(
-          'Quitting from lines ', paste(current_lines(i), collapse = '-'),
-          ' (', knit_concord$get('infile'), ') '
+        write_utf8(res, output %n% stdout())
+        paste0(
+          '\nQuitting from ', loc,
+          if (!is.null(error)) paste0('\n', rule(), error, '\n', rule())
         )
-      }
+      },
+      if (labels[i] != '') sprintf(' [%s]', labels[i]), get_loc
     )
+    knit_concord$set(offset = NULL)
   }
 
   if (!tangle) res = insert_header(res)  # insert header
@@ -328,6 +344,16 @@ process_file = function(text, output) {
   if (tangle) res = strip_white(res)
 
   res
+}
+
+rule = function() {
+  # Used by pkgbuild; please don't change without letting us know
+  paste0(strrep('~', getOption('width')), '\n')
+}
+
+# return a string to point out the current location in the doc
+get_loc = function(label = '') {
+  paste0(knit_concord$get('infile'), ':', current_lines(), label)
 }
 
 auto_out_name = function(input, ext = tolower(file_ext(input))) {
@@ -437,7 +463,7 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 #' output of the code chunk (code, messages, text output, and plots, etc.) after
 #' all statements in the code chunk have been evaluated, and will sew these
 #' pieces of output together into a character vector.
-#' @param x Output from \code{evaluate::\link{evaluate}()}.
+#' @param x Output from \code{evaluate::\link[evaluate]{evaluate}()}.
 #' @param options A list of chunk options used to control output.
 #' @param ... Other arguments to pass to methods.
 #' @export
@@ -464,6 +490,20 @@ sew.character = function(x, options, ...) {
   knit_hooks$get('output')(x, options)
 }
 
+asis_token = '<!-- KNITR_ASIS_OUTPUT_TOKEN -->'
+wrap_asis = function(x, options) {
+  # do nothing when inside quarto as it is not needed
+  # https://github.com/yihui/knitr/pull/2212#pullrequestreview-1292924523
+  if (is_quarto()) return(x)
+
+  x = as.character(x)
+  if ((n <- length(x)) == 0 || !out_format('markdown') || missing(options) || !isTRUE(options$collapse))
+    return(x)
+  x[1] = paste0(asis_token, x[1])
+  x[n] = paste0(x[n], asis_token)
+  x
+}
+
 # If you provide a custom print function that returns a character object of
 # class 'knit_asis', it will be written as is.
 #' @export
@@ -481,12 +521,18 @@ sew.knit_asis = function(x, options, inline = FALSE, ...) {
     if (inherits(x, 'knit_asis_htmlwidget')) {
       options$fig.cur = plot_counter()
       options = reduce_plot_opts(options)
-      return(add_html_caption(options, x))
+      # TODO: remove this when quarto > 1.3.353 is widely used
+      if (is_quarto()) return(add_html_caption(options, wrap_asis(x, options)))
+      # look for attribute 'aria-labelledby="label"' in the first HTML tag and
+      # use the label to provide alt text if found
+      return(add_html_caption(
+        options, wrap_asis(x, options),
+        xfun::grep_sub('^[^<]*<[^>]+aria-labelledby[ ]*=[ ]*"([^"]+)".*$', '\\1', x)
+      ))
     }
   }
-  x = as.character(x)
-  if (!out_format('latex') || inline) return(x)
-  # latex output need the \end{kframe} trick
+  x = wrap_asis(x, options)
+  if (inline) return(x)
   options$results = 'asis'
   knit_hooks$get('output')(x, options)
 }
@@ -503,7 +549,7 @@ sew.source = function(x, options, ...) {
 msg_wrap = function(message, type, options) {
   # when the output format is LaTeX, do not wrap messages (let LaTeX deal with wrapping)
   if (!length(grep('\n', message)) && !out_format(c('latex', 'listings', 'sweave')))
-    message = str_wrap(message, width = getOption('width'))
+    message = xfun::str_wrap(message, width = getOption('width'))
   knit_log$set(setNames(
     list(c(knit_log$get(type), paste0('Chunk ', options$label, ':\n  ', message))),
     type
@@ -619,17 +665,32 @@ sew.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE, ...
   if (length(extra <- options$out.extra)) extra = paste('', extra, collapse = '')
   add_html_caption(options, sprintf(
     '<iframe src="%s" width="%s" height="%s" data-external="1"%s></iframe>',
-    escape_html(x$url), options$out.width %n% '100%', x$height %n% '400px',
+    html_escape(x$url), options$out.width %n% '100%', x$height %n% '400px',
     extra %n% ''
   ))
 }
 
-add_html_caption = function(options, code) {
+add_html_caption = function(options, code, id = NULL) {
   cap = .img.cap(options)
-  if (cap == '') return(code)
+  if (cap == '' && !length(id)) return(code)
+
+  if (length(id)) {
+    alt = .img.cap(options, alt = TRUE, escape = TRUE)
+    if (cap == alt && cap != '') {
+      # both are the same, so insert cap with id
+      alttext = sprintf('<p class="caption" id="%s">%s</p>\n', id, cap)
+      # prevent a second insertion
+      cap = ''
+    } else {
+      alttext = sprintf('<p id="%s" hidden>%s</p>\n', id, alt)
+    }
+  } else alttext = ''
+
+  captext = if (cap == '') '' else sprintf('<p class="caption">%s</p>\n', cap)
+
   sprintf(
-    '<div class="figure"%s>\n%s\n<p class="caption">%s</p>\n</div>',
-    css_text_align(options$fig.align), code, cap
+    '<div class="figure"%s>\n%s\n%s%s</div>',
+    css_text_align(options$fig.align), code, captext, alttext
   )
 }
 
@@ -691,8 +752,9 @@ knit_print.knit_asis_url = function(x, ...) x
 
 #' @rdname knit_print
 #' @export
-normal_print = default_handlers$value
-formals(normal_print) = alist(x = , ... = )
+normal_print = function(x, ...) {
+  if (isS4(x)) methods::show(x) else print(x)
+}
 
 #' Mark an R object with a special class
 #'

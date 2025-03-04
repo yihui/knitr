@@ -10,7 +10,7 @@ shinyServer(function(input, output) {
     owd = setwd(tempdir()); on.exit(setwd(owd))
     opts_knit$set(root.dir = owd)
 
-    paste(knit2html(text = src, fragment.only = TRUE, quiet = TRUE),
+    paste(knit2html(text = src, template = FALSE, quiet = TRUE),
           '<script>',
           '// highlight code blocks',
           "$('#nbOut pre code').each(function(i, e) {hljs.highlightBlock(e)});",

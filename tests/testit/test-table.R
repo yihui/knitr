@@ -12,6 +12,11 @@ assert('kable() does not discard row names when there is only one row', {
   (kable2(m) %==% c('|   |  x|  y|', '|:--|--:|--:|', '|a  |  1|  2|'))
 })
 
+assert('kable() can assign a column name for row names', {
+  (kable2(m, col.names = c('z', colnames(m))) %==%
+     c('|z  |  x|  y|', '|:--|--:|--:|', '|a  |  1|  2|'))
+})
+
 assert('kable() recycles the align argument correctly', {
   (kable2(m, align = 'c') %==%
      c('|   | x | y |', '|:--|:-:|:-:|', '|a  | 1 | 2 |'))
@@ -32,6 +37,10 @@ assert("kable() works on NA's", {
 
 assert('kable() works with the jira format', {
   (kable2(m, 'jira') %==% c('||   ||  x||  y||', '|a  |  1|  2|'))
+})
+
+assert('kable() works with the org format', {
+  (kable2(m, 'org') %==% c('|   |  x|  y|', '|:--+--:+--:|', '|a  |  1|  2|'))
 })
 
 assert('kable() does not add extra spaces to character columns', {
@@ -102,9 +111,20 @@ x\\\\
 \\end{tabular}')
 })
 
+assert('kable() does not trim escaped spaces at the end', {
+  (kable2(data.frame(x = '\\ '), 'latex', escape =FALSE ) %==% '
+\\begin{tabular}{l}
+\\hline
+x\\\\
+\\hline
+\\ \\\\
+\\hline
+\\end{tabular}')
+})
+
 assert('kable() escapes HTML special characters by default', {
   (kable2(data.frame(x = c('10<>', '5&2'), y = c('3>8', '"40"')), 'html') %==%
-     '<table>\n <thead>\n  <tr>\n   <th style="text-align:left;"> x </th>\n   <th style="text-align:left;"> y </th>\n  </tr>\n </thead>\n<tbody>\n  <tr>\n   <td style="text-align:left;"> 10&lt;&gt; </td>\n   <td style="text-align:left;"> 3&gt;8 </td>\n  </tr>\n  <tr>\n   <td style="text-align:left;"> 5&amp;2 </td>\n   <td style="text-align:left;"> &quot;40&quot; </td>\n  </tr>\n</tbody>\n</table>')
+     '<table>\n <thead>\n  <tr>\n   <th style="text-align:left;"> x </th>\n   <th style="text-align:left;"> y </th>\n  </tr>\n </thead>\n<tbody>\n  <tr>\n   <td style="text-align:left;"> 10&lt;&gt; </td>\n   <td style="text-align:left;"> 3&gt;8 </td>\n  </tr>\n  <tr>\n   <td style="text-align:left;"> 5&amp;2 </td>\n   <td style="text-align:left;"> "40" </td>\n  </tr>\n</tbody>\n</table>')
 })
 
 assert('kable() doesn\'t escape HTML special characters when escape = FALSE', {
@@ -131,7 +151,7 @@ assert('kable() works on matrices with NA colname', {
 x1 = matrix(NA, 0, 0)
 x2 = matrix(NA, 0, 1)
 x3 = matrix(NA, 1, 0)
-for (f in c('simple', 'html', 'latex', 'rst', 'jira')) {
+for (f in c('simple', 'html', 'latex', 'rst', 'jira', 'org')) {
   kable(x1, f)
   kable(x2, f)
   kable(x3, f)

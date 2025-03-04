@@ -141,7 +141,7 @@ eng_interpreted = function(options) {
 
   opts = get_engine_opts(options$engine.opts, engine)
   # FIXME: for these engines, the correct order is options + code + file
-  code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
+  code = if (engine %in% c('awk', 'gawk', 'sed', 'sas', 'psql', 'mysql'))
     paste(code, opts) else paste(opts, code)
   cmd = get_engine_path(options$engine.path, engine)
   out = if (options$eval) {
@@ -537,7 +537,7 @@ eng_block2 = function(options) {
 # helper to create engines the wrap embedded html assets (e.g. css,js)
 eng_html_asset = function(prefix, postfix) {
   function(options) {
-    out = if (options$eval && is_html_output(excludes = 'markdown')) {
+    out = if (options$eval && is_html_output()) {
       one_string(c(prefix, options$code, postfix))
     }
     options$results = 'asis'
@@ -546,7 +546,7 @@ eng_html_asset = function(prefix, postfix) {
 }
 
 # include js in a script tag (ignore if not html output)
-eng_js = eng_html_asset('<script type="text/javascript">', '</script>')
+eng_js = eng_html_asset('<script>', '</script>')
 
 # include css in a style tag (ignore if not html output)
 eng_css = eng_html_asset('<style type="text/css">', '</style>')
@@ -558,7 +558,7 @@ is_sql_update_query = function(query) {
   query = gsub('^\\s*--.*\n', '', query)
   # remove multi-line comments
   if (grepl('^\\s*\\/\\*.*', query)) query = gsub('.*\\*\\/', '', query)
-  grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE|DROP).*', query, ignore.case = TRUE)
+  grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE|DROP|ALTER).*', query, ignore.case = TRUE)
 }
 
 # sql engine

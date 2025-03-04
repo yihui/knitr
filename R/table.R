@@ -12,16 +12,19 @@
 #' default. If you want to display them with other characters, you can set the
 #' option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
 #' hide \code{NA} values.
+#'
+#' You can set the option \code{knitr.kable.max_rows} to limit the number of
+#' rows to show in the table, e.g., \code{options(knitr.kable.max_rows = 30)}.
 #' @param x For \code{kable()}, \code{x} is an R object, which is typically a
 #'   matrix or data frame. For \code{kables()}, a list with each element being a
 #'   returned value from \code{kable()}.
 #' @param format A character string. Possible values are \code{latex},
 #'   \code{html}, \code{pipe} (Pandoc's pipe tables), \code{simple} (Pandoc's
-#'   simple tables), and \code{rst}. The value of this argument will be
-#'   automatically determined if the function is called within a \pkg{knitr}
-#'   document. The \code{format} value can also be set in the global option
-#'   \code{knitr.table.format}. If \code{format} is a function, it must return a
-#'   character string.
+#'   simple tables), \code{rst}, \code{jira}, and \code{org} (Emacs Org-mode).
+#'   The value of this argument will be automatically determined if the function
+#'   is called within a \pkg{knitr} document. The \code{format} value can also
+#'   be set in the global option \code{knitr.table.format}. If \code{format} is
+#'   a function, it must return a character string.
 #' @param digits Maximum number of digits for numeric columns, passed to
 #'   \code{round()}. This can also be a vector of length \code{ncol(x)}, to set
 #'   the number of digits for individual columns.
@@ -35,10 +38,11 @@
 #'   are left-aligned. If \code{length(align) == 1L}, the string will be
 #'   expanded to a vector of individual letters, e.g. \code{'clc'} becomes
 #'   \code{c('c', 'l', 'c')}, unless the output format is LaTeX.
-#' @param caption The table caption.
+#' @param caption The table caption. By default, it is retrieved from the chunk
+#'   option \code{tab.cap}.
 #' @param label The table reference label. By default, the label is obtained
-#'   from \code{knitr::\link{opts_current}$get('label')}. To disable the label,
-#'   use \code{label = NA}.
+#'   from \code{knitr::\link{opts_current}$get('label')} (i.e., the current
+#'   chunk label). To disable the label, use \code{label = NA}.
 #' @param format.args A list of arguments to be passed to \code{\link{format}()}
 #'   to format table values, e.g. \code{list(big.mark = ',')}.
 #' @param escape Boolean; whether to escape special characters when producing
@@ -100,7 +104,8 @@
 #' kables(list(kable(d1, align = 'l'), kable(d2)), caption = 'A tale of two tables')
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
-  align, caption = NULL, label = NULL, format.args = list(), escape = TRUE, ...
+  align, caption = opts_current$get('tab.cap'), label = NULL, format.args = list(),
+  escape = TRUE, ...
 ) {
 
   format = kable_format(format)
@@ -121,6 +126,8 @@ kable = function(
   caption = kable_caption(label, caption, format)
 
   if (!is.matrix(x)) x = as.data.frame(x)
+  # show the maximum number of rows if set
+  if (is.numeric(nr <- getOption('knitr.kable.max_rows'))) x = head(x, nr)
   if (identical(col.names, NA)) col.names = colnames(x)
   m = ncol(x)
   # numeric columns
@@ -142,13 +149,14 @@ kable = function(
   if (!is.null(align)) align = rep(align, length.out = m)
   if (row.names) {
     x = cbind(' ' = rownames(x), x)
-    if (!is.null(col.names)) col.names = c(' ', col.names)
+    if (!is.null(col.names)) col.names = tail(c(' ', col.names), ncol(x))
     if (!is.null(align)) align = c('l', align)  # left align row names
   }
   n = nrow(x)
   x = replace_na(to_character(x), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
-  x = trimws(x)
+  # trim white spaces except those escaped by \ at the end (#2308)
+  x = gsub('^\\s+|(?<!\\\\)\\s+$', '', x, perl = TRUE)
   colnames(x) = col.names
   if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")
@@ -166,7 +174,7 @@ kable_caption = function(label, caption, format) {
   # create a label for bookdown if applicable
   if (is.null(label)) label = opts_current$get('label')
   if (is.null(label)) label = NA
-  if (!is.null(caption) && !is.na(caption) && !is.na(label)) caption = paste0(
+  if (!is.null(caption) && !anyNA(caption) && !anyNA(label)) caption = paste0(
     create_label(
       opts_knit$get('label.prefix')[['table']],
       label, latex = (format == 'latex')
@@ -283,7 +291,7 @@ kable_latex = function(
   midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
-  escape = TRUE
+  escape = TRUE, ...
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
@@ -355,11 +363,11 @@ kable_html = function(
   }
   if (identical(caption, NA)) caption = NULL
   cap = if (length(caption)) sprintf('\n<caption>%s</caption>', caption) else ''
-  if (escape) x = escape_html(x)
+  if (escape) x = html_escape(x)
   one_string(c(
     sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x))) {
-      if (escape) cn = escape_html(cn)
+      if (escape) cn = html_escape(cn)
       c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>')
     },
     '<tbody>',
@@ -390,7 +398,7 @@ kable_html = function(
 #' @noRd
 kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0,
                       align.fun = function(s, a) s, rownames.name = '',
-                      sep.head = sep.col, ...) {
+                      sep.head = sep.col, newline = NULL, ...) {
   # when the column separator is |, replace existing | with its HTML entity
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
@@ -408,11 +416,13 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
     ifelse(align == 'c', 2, 1)
   }
   l = pmax(l + padding, 3)  # at least of width 3 for Github Markdown
-  s = unlist(lapply(l, function(i) paste(rep(sep.row[2], i), collapse = '')))
+  s = strrep(sep.row[2], l)
   res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
               x, if (!is.na(sep.row[3])) s)
   res = mat_pad(res, l, align)
-  add_mark_col_sep(res, sep.col, sep.head)
+  res = add_mark_col_sep(res, sep.col, sep.head)
+  if (is.character(newline)) res = gsub('\n', newline, res, fixed = TRUE)
+  res
 }
 
 # add column separators to header and body separately
@@ -429,7 +439,7 @@ kable_rst = function(x, rownames.name = '\\', ...) {
 }
 
 # Pandoc's pipe table
-kable_pipe = function(x, caption = NULL, padding = 1, ...) {
+kable_pipe = function(x, caption = NULL, padding = 1, caption.label = 'Table:', ...) {
   if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
   res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
     if (is.null(a)) return(s)
@@ -440,7 +450,7 @@ kable_pipe = function(x, caption = NULL, padding = 1, ...) {
     s
   }, ...)
   res = sprintf('|%s|', res)
-  kable_pandoc_caption(res, caption)
+  kable_pandoc_caption(res, caption, caption.label)
 }
 
 # Pandoc's simple table
@@ -466,9 +476,20 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
   kable_pandoc_caption(tab, caption)
 }
 
-kable_pandoc_caption = function(x, caption) {
+# Emacs Org-mode table
+kable_org = function(...) {
+  res = kable_pipe(..., caption.label = '#+CAPTION:')
+  i = grep('^[-:|]+$', res)  # find the line like |--:|---| under header
+  if (length(i)) {
+    i = i[1]
+    res[i] = gsub('(-|:)[|](-|:)', '\\1+\\2', res[i])  # use + as separator
+  }
+  res
+}
+
+kable_pandoc_caption = function(x, caption, label = 'Table:') {
   if (identical(caption, NA)) caption = NULL
-  if (length(caption)) c(paste('Table:', caption), "", x) else x
+  if (length(caption)) c(paste(label, caption), '', x) else x
 }
 
 # pad a matrix

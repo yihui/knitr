@@ -51,7 +51,7 @@ hook_plot_md_base = function(x, options) {
   if (options$fig.show == 'animate') return(hook_plot_html(x, options))
 
   cap = .img.cap(options)
-  alt = .img.cap(options, alt = TRUE)
+  alt = .img.cap(options, alt = TRUE, escape = TRUE)
 
   w = options[['out.width']]; h = options[['out.height']]
   s = options$out.extra; a = options$fig.align
@@ -144,19 +144,6 @@ css_text_align = function(align) {
   if (align == 'default') '' else sprintf(' style="text-align: %s"', align)
 }
 
-# turn a class string "a b" to c(".a", ".b") for Pandoc fenced code blocks
-block_class = function(x) {
-  if (length(x) > 0) gsub('^[.]*', '.', unlist(strsplit(x, '\\s+')))
-}
-
-# concatenate block attributes (including classes) for Pandoc fenced code blocks
-block_attr = function(attr, class = NULL, lang = NULL) {
-  x = c(block_class(class), attr)
-  if (length(x) == 0) return(lang)
-  x = c(sprintf('.%s', lang), x)
-  paste0('{', paste0(x, collapse = ' '), '}')
-}
-
 #' @rdname output_hooks
 #' @export
 #' @param strict Boolean; whether to use strict markdown or reST syntax. For markdown, if
@@ -188,18 +175,19 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
   hook.o = function(class) {
     force(class)
     function(x, options) {
+      if (class == 'output' && output_asis(x, options)) return(x)
       hook.t(x, options[[paste0('attr.', class)]], options[[paste0('class.', class)]])
     }
   }
   hook.r = function(x, options) {
     lang = tolower(options$lang %n% eng2lang(options$engine))
     if (!options$highlight) lang = 'text'
-    fenced_block(x, options$attr.source, options$class.source, lang, .char = fence_char)
+    fenced_block(x, options$attr.source, c(lang, options$class.source), .char = fence_char)
   }
   list(
     source = function(x, options) {
       x = hilight_source(x, 'markdown', options)
-      if (strict) hook.t(x) else hook.r(c(x, ''), options)
+      if (strict) hook.t(x) else hook.r(sub('\n$', '\n\n', x), options)
     },
     inline = function(x) {
       if (is_latex_output()) .inline.hook.tex(x) else {
@@ -212,8 +200,9 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
       x = gsub('[\n]+$', '', x)
       x = gsub('^[\n]+', '\n', x)
       if (isTRUE(options$collapse)) {
-        r = sprintf('\n([%s]{3,})\n+\\1((\\{[.])?%s[^\n]*)?\n', fence_char, tolower(options$engine))
+        r = sprintf('\n([%s]{3,})\n+\\1((\\{[.]| )?%s[^\n]*)?\n', fence_char, tolower(options$engine))
         x = gsub(r, '\n', x)
+        x = gsub(asis_token, '', x, fixed = TRUE)
       }
       x = pandoc_div(x, options[['attr.chunk']], options[['class.chunk']])
       if (is.null(s <- options$indent)) return(x)
@@ -224,22 +213,26 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
   )
 }
 
-pandoc_div = function(x, .attr = NULL, .class = NULL) {
-  if (is.null(.attr) && is.null(.class)) return(x)
-  fenced_block(c(x, ''), .attr, .class, .char = ':', .sep = ' ', .outer = '')
+pandoc_div = function(x, attr = NULL, class = NULL) {
+  if (is.null(attr) && is.null(class)) return(x)
+  x = fenced_block(x, attr, class, .char = ':')
+  x = gsub('^\n\n|\n\n$', '', x)
+  gsub('^(:::+) *', '\\1 ', x)  # add a space if necessary
+}
+
+# turn a class string "a b" to c(".a", ".b") for Pandoc fenced code blocks
+block_class = function(x, attr = NULL) {
+  if (length(x)) x = unlist(strsplit(x, '\\s+'))
+  if (length(x) > 1 || length(attr)) gsub('^[.]*', '.', x) else x
 }
 
 # add a fence around content (either fenced code block ``` or Div :::)
-fenced_block = function(x, ..., .char = '`', .sep = '', .outer = '\n\n') {
-  x = one_string(c('', x))
-  f = create_fence(x, .char)
-  paste0(.outer, paste(f, block_attr(...), sep = .sep), x, f, .outer)
-}
-
-create_fence = function(x, char = '`') {
-  r = paste0('\n', char, '{3,}')
-  l = max(if (grepl(r, x)) attr(gregexpr(r, x)[[1]], 'match.length'), 3)
-  paste(rep(char, l), collapse = '')
+fenced_block = function(x, attr = NULL, class = NULL, .char = '`') {
+  x = sub('\n$', '', x)
+  x = xfun::fenced_block(x, c(block_class(class, attr), attr), char = .char)
+  x = one_string(c('', x, '', ''))
+  # remove the space between ``` and { for backward-compatibility
+  sub('``` {', '```{', x, fixed = TRUE)
 }
 
 # convert some engine names to language names
@@ -285,12 +278,12 @@ hooks_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '
   }, prettify = {
     hook.r = function(x, options) {
       paste0(
-        '\n\n<pre><code class="prettyprint ', extra, '">', escape_html(x),
+        '\n\n<pre><code class="prettyprint ', extra, '">', html_escape(x),
         '</code></pre>\n\n'
       )
     }
     hook.t = function(x, options) paste0(
-      '\n\n<pre><code>', escape_html(x), '</code></pre>\n\n'
+      '\n\n<pre><code>', html_escape(x), '</code></pre>\n\n'
     )
   })
   source = function(x, options) {
@@ -298,6 +291,9 @@ hooks_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '
     hook.r(x, options)
   }
   merge_list(hook.m, list(
-    source = source, output = hook.t, warning = hook.t, message = hook.t, error = hook.t
+    source = source, warning = hook.t, message = hook.t, error = hook.t,
+    output = function(x, options) {
+      if (output_asis(x, options)) x else hook.t(x, options)
+    }
   ))
 }
