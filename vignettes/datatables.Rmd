@@ -1,45 +1,37 @@
+---
+title: Display Tables with the JavaScript Library simple-datatables
+author: Yihui Xie
+date: "`{r} Sys.Date()`"
+output:
+  html:
+    meta:
+      css: ["@default", "@npm/simple-datatables/dist/style.min.css"]
+      js: ["@npm/simple-datatables/dist/umd/simple-datatables.min.js"]
+---
+
 <!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Display Tables with the JavaScript Library DataTables}
+%\VignetteEngine{litedown::vignette}
+%\VignetteIndexEntry{Display Tables with the JavaScript Library simple-datatables}
 -->
 
-# jQuery DataTables
+We can use the JavaScript library [**simple-datatables**](https://github.com/fiduswriter/simple-datatables/) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
 
-We can use the JavaScript library [**DataTables**](https://www.datatables.net) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
-
-```{r cool, results='asis'}
-library(knitr)
-kable(mtcars, 'html', table.attr='id="mtcars_table"')
+::: {#mtcars-table}
+```{r cool, print.args=list(data.frame=list(limit=NULL))}
+mtcars
 ```
+:::
 
-Note we assigned an `id` to the table, and next we use the **DataTables** library to tweak the table.
+Note we assigned an `id` to the table, and next we use the **DataTables** library to initialize the table and you will get an interactive table.
 
-```js
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#mtcars_table').DataTable();
-	} );
-</script>
+```{js}
+window.addEventListener('load', () => {
+  new simpleDatatables.DataTable('#mtcars-table > table');
+});
 ```
-
-<script type="text/javascript">
-  $(document).ready(function() {
-		$('#mtcars_table').DataTable();
-	} );
-</script>
-
-Since this is a Markdown vignette, we need to add the JavaScript libraries as well as some additional CSS files to the HTML header, and this can be done via:
-
-```{r}
-options(markdown.html.header = system.file('misc', 'datatables.html', package = 'knitr'))
-```
-
-The file `datatables.html` under the `misc` directory of **knitr** was added to the HTML output.
 
 By comparison, below is an ordinary table:
 
-```{r boring, results='asis'}
-kable(head(mtcars), 'html')
+```{r boring}
+mtcars
 ```
-
-This vignette is only a toy example. I'd recommend you to use the **DT** package instead: https://github.com/rstudio/DT

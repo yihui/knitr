@@ -12,7 +12,7 @@ kable(
   row.names = NA,
   col.names = NA,
   align,
-  caption = NULL,
+  caption = opts_current$get("tab.cap"),
   label = NULL,
   format.args = list(),
   escape = TRUE,
@@ -51,11 +51,12 @@ are left-aligned. If \code{length(align) == 1L}, the string will be
 expanded to a vector of individual letters, e.g. \code{'clc'} becomes
 \code{c('c', 'l', 'c')}, unless the output format is LaTeX.}
 
-\item{caption}{The table caption.}
+\item{caption}{The table caption. By default, it is retrieved from the chunk
+option \code{tab.cap}.}
 
 \item{label}{The table reference label. By default, the label is obtained
-from \code{knitr::\link{opts_current}$get('label')}. To disable the label,
-use \code{label = NA}.}
+from \code{knitr::\link{opts_current}$get('label')} (i.e., the current
+chunk label). To disable the label, use \code{label = NA}.}
 
 \item{format.args}{A list of arguments to be passed to \code{\link{format}()}
 to format table values, e.g. \code{list(big.mark = ',')}.}
@@ -83,6 +84,9 @@ Missing values (\code{NA}) in the table are displayed as \code{NA} by
 default. If you want to display them with other characters, you can set the
 option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
 hide \code{NA} values.
+
+You can set the option \code{knitr.kable.max_rows} to limit the number of
+rows to show in the table, e.g., \code{options(knitr.kable.max_rows = 30)}.
 }
 \note{
 When using \code{kable()} as a \emph{top-level} expression, you do not

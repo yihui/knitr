@@ -80,7 +80,10 @@ hook_plot_tex = function(x, options) {
   fig.ncol = options$fig.ncol %n% fig.num
   if (is.null(fig.sep <- options$fig.sep)) {
     fig.sep = character(fig.num)
-    if (fig.ncol < fig.num) fig.sep[seq(fig.ncol, fig.num - 1L, fig.ncol)] = '\\newline'
+    # add \newline after every fig.ncol figures; if the last figure is not the
+    # last on its row, skip adding \newline (not necessary, but may be harmless)
+    if (fig.ncol < fig.num)
+      fig.sep[seq(fig.ncol, fig.num - (fig.num %% fig.ncol > 0), fig.ncol)] = '\\newline'
   }
   sep.cur = NULL
 
@@ -143,7 +146,7 @@ hook_plot_tex = function(x, options) {
       }
       scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
       cap = if (cap == '') '' else sprintf(
-        '\\caption%s{%s}%s\n', scap, cap,
+        '\\caption%s{%s}%s\n', escape_percent(scap), escape_percent(cap),
         create_label(lab, if (mcap) c('-', fig.cur), latex = TRUE)
       )
       fig2 = sprintf('%s\\end{%s}\n', cap, options$fig.env)
@@ -159,9 +162,10 @@ hook_plot_tex = function(x, options) {
   # maxwidth does not work with animations
   if (animate && identical(ow, '\\maxwidth')) ow = NULL
   if (is.numeric(ow)) ow = paste0(ow, 'px')
-  size = paste(c(sprintf('width=%s', ow),
-                 sprintf('height=%s', options$out.height),
-                 options$out.extra), collapse = ',')
+  size = paste(c(
+    sprintf('width=%s', ow), sprintf('height=%s', options$out.height),
+    sprintf('alt={%s}', escape_percent(options$fig.alt)), options$out.extra
+  ), collapse = ',')
 
   paste0(
     fig1, align1, sub1, resize1,
@@ -188,6 +192,9 @@ hook_plot_tex = function(x, options) {
     resize2, sub2, sep.cur, align2, fig2
   )
 }
+
+# % -> \%, but do not touch \%
+escape_percent = function(x) gsub('(?<!\\\\)%', '\\\\%', x, perl = TRUE)
 
 .chunk.hook.tex = function(x, options) {
   ai = output_asis(x, options)

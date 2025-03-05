@@ -4,7 +4,7 @@
 .num {
   color: #0099CC;
 }
-.str {
+.sng {
   color: #FFCC00;
   font-weight: bold;
 }
@@ -15,7 +15,7 @@
   color: #ff0099;
   font-weight: bold;
 }
-.std {
+.def {
   color: #FFFF66;
   font-weight: bold;
 }

@@ -44,12 +44,12 @@ comment_to_var = function(x, varname, pattern, envir) {
   FALSE
 }
 
-# TODO: remove this when we don't support R < 3.5.0
-if (getRversion() < '3.5.0') isFALSE = function(x) identical(x, FALSE)
-
 is_blank = function(x) {
   if (length(x)) all(grepl('^\\s*$', x)) else TRUE
 }
+
+attr = function(...) base::attr(..., exact = TRUE)
+
 valid_path = function(prefix, label) {
   if (length(prefix) == 0L || is.na(prefix) || prefix == 'NA') prefix = ''
   paste0(prefix, label)
@@ -64,13 +64,14 @@ color_def = function(col, variable = 'shadecolor') {
       x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
       warning("the color '", col, "' is invalid;",
               'using default color...',
-              'see https://yihui.org/knitr/options')
+              'see https://yihui.org/knitr/options/')
     }
   }
   if (length(x) != 3L) stop('invalid color:', col)
   if (is.numeric(x)) x = round(x, 3L)
-  outdec = options(OutDec = '.'); on.exit(options(outdec))
-  sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
+  xfun::decimal_dot(
+    sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
+  )
 }
 
 # split by semicolon or colon
@@ -148,7 +149,7 @@ set_parent = function(parent) {
 
 # whether to write results as-is?
 output_asis = function(x, options) {
-  is_blank(x) || options$results == 'asis'
+  is_blank(x) || identical(options$results, 'asis')
 }
 
 # the working directory: use root.dir if specified, otherwise the dir of the
@@ -174,6 +175,7 @@ is_cran_check = function() {
   is_cran() && is_R_CMD_check()
 }
 
+is_R_CMD_build = function() Sys.getenv('R_BUILD_TEMPLIB') != ''
 is_bioc = function() Sys.getenv('BBS_HOME') != ''
 
 # round a number to getOption('digits') decimal places by default, and format()
@@ -204,7 +206,6 @@ format_sci_one = function(
     return(round_digits(x)) # no need sci notation
 
   b = round_digits(x / 10^lx)
-  b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
     sci_notation('%s%s10^{%s}', b, times, lx)
@@ -225,7 +226,11 @@ format_sci_one = function(
 }
 
 sci_notation = function(format, base, times, power) {
-  sprintf(format, base, ifelse(base == '', '', times), power)
+  if (base %in% c('1', '-1')) {
+    times = ''
+    base = if (base == '1') '' else '-'
+  }
+  sprintf(format, base, times, power)
 }
 
 # vectorized version of format_sci_one()
@@ -243,19 +248,18 @@ tikz_dict = function(path) {
   paste(sans_ext(basename(path)), 'tikzDictionary', sep = '-')
 }
 
-# convert dashes in option names with dots (e.g., `fig-height` to `fig.height`)
-dot_names = function(x) {
-  dashes = grep('-', names(x), value = TRUE)
-  dots   = gsub('-', '.', dashes)
+# convert dashes in option names with dots (e.g., `fig-height` to `fig.height`),
+# and vice versa (dots work for knitr, and dashes for Quarto)
+fix_names = function(x, char1, char2, aliases) {
+  name1 = grep(char1, names(x), value = TRUE, fixed = TRUE)
+  name2 = gsub(char1, char2, name1, fixed = TRUE)
+  name3 = c(names(opts_chunk_attr), names(opts_chunk$get()))
   # only convert names that are known to knitr
-  i = dots %in% c(names(opts_chunk_attr), names(opts_chunk$get()))
+  i = (if (char1 == '.') name1 else name2) %in% name3
   if (any(i)) {
-    x[dots[i]] = x[dashes[i]]
-    x[dashes[i]] = NULL
+    x[name2[i]] = x[name1[i]]  # move values to to new names
+    x[name1[i]] = NULL  # delete old names
   }
-
-  # normalize aliases (introduced by Quarto)
-  aliases = c(fig.format = 'dev', fig.dpi = 'dpi')
   for (j in intersect(names(x), names(aliases))) {
     x[[aliases[j]]] = x[[j]]
     x[[j]] = NULL
@@ -263,11 +267,23 @@ dot_names = function(x) {
   x
 }
 
+dot_names = function(x) {
+  fix_names(x, '-', '.', c(fig.format = 'dev', fig.dpi = 'dpi'))
+}
+
+dash_names = function(x) {
+  fix_names(x, '.', '-', c(dev = 'fig-format', dpi = 'fig-dpi', tab.cap = 'tbl-cap'))
+}
+
 # initially for compatibility with Sweave and old beta versions of knitr
 # but now also place to tweak default options
 fix_options = function(options) {
   options = as.strict_list(options)
 
+  # message/warning take logical or numeric values; if character, convert to logical
+  for (i in c('message', 'warning')) {
+    if (is.character(options[[i]])) options[[i]] = as.logical(options[[i]])
+  }
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
   # if the animation hook has been set, fig.show must be 'animate'
@@ -503,7 +519,7 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
 #' @examples fig_path('.pdf', options = list(fig.path='figure/abc-', label='first-plot'))
 #' fig_path('.png', list(fig.path='foo-', label='bar'), 1:10)
 fig_path = function(suffix = '', options = opts_current$get(), number) {
-  if (suffix != '' && !grepl('[.]', suffix)) suffix = paste0('.', suffix)
+  suffix = sub('^([^.])', '.\\1', suffix)
   if (missing(number)) number = options$fig.cur %n% 1L
   if (!is.null(number)) suffix = paste0('-', number, suffix)
   path = valid_path(options$fig.path, options$label)
@@ -553,18 +569,19 @@ fig_chunk = function(label, ext = '', number, fig.path = opts_chunk$get('fig.pat
   fig_path(ext, list(fig.path = fig.path, label = label), number)
 }
 
-#' The global environment in which code chunks are evaluated
+#' The global environment for evaluating code
 #'
-#' This function makes the environment of a code chunk accessible inside a
-#' chunk.
+#' Get or set the environment in which code chunks are evaluated.
 #'
-#' It returns the \code{envir} argument of \code{\link{knit}}, e.g. if we call
-#' \code{\link{knit}()} in the global environment, \code{knit_global()} returns
-#' R's global environment by default. You can call functions like
-#' \code{\link{ls}()} on this environment.
+#' @param envir If \code{NULL}, the function returns the \code{envir} argument
+#'   of \code{\link{knit}}, otherwise it should be a new environment for
+#'   evaluating code, in which case the function returns the old environment
+#'   after setting the new environment.
 #' @export
-knit_global = function() {
-  .knitEnv$knit_global %n% globalenv()
+knit_global = function(envir = NULL) {
+  old = .knitEnv$knit_global %n% globalenv()
+  if (!is.null(envir)) .knitEnv$knit_global = envir
+  old
 }
 
 # Indents a Block
@@ -669,28 +686,8 @@ escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
   x
 }
 
-# escape special HTML chars
-escape_html = highr:::escape_html
-
-#' Read source code from R-Forge
-#'
-#' This function reads source code from the SVN repositories on R-Forge.
-#' @param path Relative path to the source script on R-Forge.
-#' @param project Name of the R-Forge project.
-#' @param extra Extra parameters to be passed to the URL (e.g. \code{extra =
-#'   '&revision=48'} to check out the source of revision 48).
-#' @return A character vector of the source code.
-#' @author Yihui Xie and Peter Ruckdeschel
-#' @export
-#' @examplesIf interactive()
-#' library(knitr)
-#' # relies on r-forge.r-project.org being accessible
-#' read_rforge('rgl/R/axes.R', project = 'rgl')
-#' read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')
-read_rforge = function(path, project, extra = '') {
-  base = 'http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg'
-  read_utf8(sprintf('%s/%s?root=%s%s', base, path, project, extra))
-}
+# TODO: remove this after https://github.com/mgondan/mathml/pull/18
+escape_html = xfun::html_escape
 
 split_lines = function(x) xfun::split_lines(x)
 
@@ -846,8 +843,8 @@ current_input = function(dir = FALSE) {
   if (is_abs_path(input)) input else file.path(outwd, input)
 }
 
-# import output handlers from evaluate
-default_handlers = evaluate:::default_output_handler
+# cache output handlers from evaluate; see .onLoad
+default_handlers = NULL
 # change the value handler in evaluate default handlers
 knit_handlers = function(fun, options) {
   if (!is.function(fun)) fun = function(x, ...) {
@@ -896,47 +893,10 @@ create_label = function(..., latex = FALSE) {
 
 #' Combine multiple words into a single string
 #'
-#' When a value from an inline R expression is a character vector of multiple
-#' elements, we may want to combine them into a phrase like \samp{a and b}, or
-#' \code{a, b, and c}. That is what this a helper function does.
-#'
-#' If the length of the input \code{words} is smaller than or equal to 1,
-#' \code{words} is returned. When \code{words} is of length 2, the first word
-#' and second word are combined using the \code{and} string, or if blank,
-#' \code{sep} if is used. When the length is greater than 2, \code{sep} is used
-#' to separate all words, and the \code{and} string is prepended to the last
-#' word.
-#' @param words A character vector.
-#' @param sep Separator to be inserted between words.
-#' @param and Character string to be prepended to the last word.
-#' @param before,after A character string to be added before/after each word.
-#' @param oxford_comma Whether to insert the separator between the last two
-#'   elements in the list.
-#' @return A character string marked by \code{xfun::\link{raw_string}()}.
+#' This is a wrapper function of \code{xfun::join_words()}.
+#' @param ... Arguments passed to \code{xfun::\link[xfun]{join_words}()}.
 #' @export
-#' @examples combine_words('a'); combine_words(c('a', 'b'))
-#' combine_words(c('a', 'b', 'c'))
-#' combine_words(c('a', 'b', 'c'), sep = ' / ', and = '')
-#' combine_words(c('a', 'b', 'c'), and = '')
-#' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
-#' combine_words(c('a', 'b', 'c'), before = '"', after = '"', oxford_comma=FALSE)
-combine_words = function(
-  words, sep = ', ', and = ' and ', before = '', after = before, oxford_comma = TRUE
-) {
-  n = length(words); rs = xfun::raw_string
-  if (n == 0) return(words)
-  words = paste0(before, words, after)
-  if (n == 1) return(rs(words))
-  if (n == 2) return(rs(paste(words, collapse = if (is_blank(and)) sep else and)))
-  if (oxford_comma && grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
-  words[n] = paste0(and, words[n])
-  # combine the last two words directly without the comma
-  if (!oxford_comma) {
-    words[n - 1] = paste0(words[n - 1:0], collapse = '')
-    words = words[-n]
-  }
-  rs(paste(words, collapse = sep))
-}
+combine_words = function(...) xfun::join_words(...)
 
 warning2 = function(...) warning(..., call. = FALSE)
 stop2 = function(...) stop(..., call. = FALSE)
@@ -1041,8 +1001,9 @@ raw_output = function(x, markers = raw_markers, ...) {
 #' knitr::raw_latex('\\emph{some text}')
 raw_block = function(x, type = 'latex', ...) {
   if (!rmarkdown::pandoc_available('2.0.0')) warning('raw_block() requires Pandoc >= 2.0.0')
-  x = c(sprintf('\n```{=%s}', type), x, '```\n')
-  asis_output(one_string(x), ...)
+  x = fenced_block(x, attr = paste0('=', type))
+  x = gsub('^\n|\n$', '', x)
+  asis_output(x, ...)
 }
 
 #' @rdname raw_block
@@ -1086,21 +1047,9 @@ one_string = function(x, ...) paste(x, ..., collapse = '\n')
 # double quote a vector and combine by "; "
 quote_vec = function(x, sep = '; ') paste0(sprintf('"%s"', x), collapse = sep)
 
-# c(1, 1, 1, 2, 3, 3) -> c(1a, 1b, 1c, 2a, 3a, 3b)
-make_unique = function(x) {
-  if (length(x) == 0) return(x)
-  x2 = make.unique(x)
-  if (all(i <- x2 == x)) return(x)
-  x2[i] = paste0(x2[i], '.0')
-  i = as.numeric(sub('.*[.]([0-9]+)$', '\\1', x2)) + 1
-  s = letters[i]
-  s = ifelse(is.na(s), i, s)
-  paste0(x, s)
-}
-
 #' Encode an image file to a data URI
 #'
-#' This function is the same as \code{xfun::\link{base64_uri}()} (only with a
+#' This function is the same as \code{xfun::\link[xfun]{base64_uri}()} (only with a
 #' different function name). It can encode an image file as a base64 string,
 #' which can be used in the \code{img} tag in HTML.
 #' @param f Path to the image file.
@@ -1131,9 +1080,7 @@ str_split = function(x, split, ...) {
 # methods to update/close it
 txt_pb = function(total, labels) {
   if (getOption('knitr.progress.linenums', FALSE)) {
-    nums = sapply(seq_along(labels), function(i) {
-      paste(current_lines(i), collapse = '-')
-    })
+    nums = sapply(seq_along(labels), current_lines)
     labels = sprintf(
       '%s%s%s:%s', labels, ifelse(labels == '', '', ' @ '),
       knit_concord$get('infile'), nums
@@ -1155,10 +1102,8 @@ txt_pb = function(total, labels) {
     if (identical(con, '')) con = stdout()
     if (!inherits(con, 'connection')) return(TRUE)
     if (isatty(con)) return(FALSE)
-    # RStudio's background jobs
-    if (Sys.getenv('RSTUDIO_CHILD_PROCESS_PANE') %in% c('job', 'build')) return(FALSE)
-    # when RStudio is available, return FALSE
-    is.null(tryCatch(rstudioapi::versionInfo(), error = function(e) NULL))
+    # when in RStudio, return FALSE
+    Sys.getenv('RSTUDIO') != '1'
   })()
   # use simple progress output without the bar but only progress and labels
   if (simple) return(list(
@@ -1172,6 +1117,7 @@ txt_pb = function(total, labels) {
       setTxtProgressBar(pb, i)
       cat_line(s[i])  # append chunk label to the progress bar
     },
+    interrupt = function() message('\n'),
     done = function() {
       # wipe the progress bar
       cat_line('\r', strrep(' ', max(w2, 10) + 10 + n))

@@ -18,7 +18,7 @@ runs:
             echo '::debug::On pull request'
             branch=$(gh api repos/yihui/knitr-examples/branches | jq -cr '.[] | select(.name == '\"$headref\"') | .name')
           fi
-          echo ::set-output name=ref::$(echo $branch)
+          echo "ref=$(echo $branch)" >> "$GITHUB_OUTPUT"
         shell: bash
       - name: Retrieve knitr-examples
         uses: actions/checkout@v2

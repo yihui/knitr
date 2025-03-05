@@ -22,9 +22,13 @@ new_defaults = function(value = list()) {
   set2 = function(values) {
     old = get(names(values), drop = FALSE)
     if (length(values)) {
-      if (locked) stop(
+      # TODO: change warning() to stop() and no longer whitelist JuliaCall
+      if (locked && !identical(names(values), 'Jfig.cur')) warning(
         'The object is read-only and cannot be modified. If you have to modify it ',
-        'for a legitimate reason, call the method $lock(FALSE) on the object before $set().'
+        'for a legitimate reason, call the method $lock(FALSE) on the object before $set(). ',
+        'Using $lock(FALSE) to modify the object will be enforced in future versions of knitr ',
+        'and this warning will become an error.',
+        immediate. = TRUE
       )
       defaults <<- merge(values)
     }
@@ -133,7 +137,7 @@ opts_chunk_attr = local({
   opts$fig.id = 'logical'
   opts[c(
     'opts.label', 'resize.width', 'resize.height', 'fig.alt', 'fig.link', 'fig.sep',
-    'ffmpeg.bitrate', 'ffmpeg.format'
+    'tab.cap', 'ffmpeg.bitrate', 'ffmpeg.format'
   )] = 'character'
   opts$lang = 'list'
   opts$R.options = 'list'
@@ -184,7 +188,7 @@ set_alias = function(...) {
 #' @references Usage: \url{https://yihui.org/knitr/objects/}
 #'
 #'   A list of available options:
-#'   \url{https://yihui.org/knitr/options/#package_options}
+#'   \url{https://yihui.org/knitr/options/#package-options}
 #' @export
 #' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
 #' if (interactive()) {

@@ -1,9 +1,17 @@
+---
+title: Templating with knit_expand()
+author: Yihui Xie
+date: "`{r} Sys.Date()`"
+output:
+  html:
+    meta:
+      css: ["@default"]
+---
+
 <!--
-%\VignetteEngine{knitr::knitr}
+%\VignetteEngine{litedown::vignette}
 %\VignetteIndexEntry{Templating with knit_expand()}
 -->
-
-# Demos of `knit_expand()`
 
 A few simple examples:
 
@@ -48,14 +56,12 @@ res = knit_expand(text = c('{{i=0;h2=function(x){i<<-i+1;sprintf("<h2>%d. %s</h2
 cat(res)
 ```
 
-Build regression models based on a template; loop through all variables in `mtcars`:
+Build regression models based on a template; loop through some variables in `mtcars`:
 
-```{r results='hide'}
-src = lapply(names(mtcars)[-1], function(i) {
-knit_expand(text=c("# Regression on {{i}}", '```{r lm-{{i}}}', 'lm(mpg~{{i}}, data=mtcars)', '```'))
+```{r, comment=''}
+src = lapply(names(mtcars)[2:5], function(i) {
+knit_expand(text=c("# Regression on {{i}}", '```{r lm-{{i}}}', 'lm(mpg~{{i}}, data=mtcars)', '```', ''))
 })
 # knit the source
-res = knit_child(text = unlist(src))
-res = paste('<pre><code>', gsub('^\\s*|\\s*$', '', res), '</code></pre>', sep = '')
+litedown::fuse(unlist(src), 'markdown')
 ```
-`r res`

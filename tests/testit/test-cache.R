@@ -1,22 +1,12 @@
 library(testit)
 
-assert(
-  'find_globals() identifies global variables',
-  # nothing from outside environment
-  identical(find_globals('x=1'), character(0)),
-  # qwer must be created outside somewhere
-  identical(find_globals('a=1; b=a; d=qwer'), 'qwer'),
-  identical(find_globals('a=function(){f=2;g}'), 'g'),
-  # y was assigned locally in z, but there is another y outside from nowhere
-  identical(find_globals('z=function(){y=1};y'), 'y'),
-  # more complicated cases: operators, subscripts, ...
-  identical(find_globals(c('a=1%*%1%o%2 %in% d', 'b=d%%10+3%/%2-z[1:3]')), c('d', 'z'))
-)
+dep_list$restore()
+knit_code$restore()
 
-assert(
-  'find_symbols() identifies all symbols',
-  find_symbols('x = x + 1; rnorm(1, std = z)') %==% c('x', 'rnorm', 'z')
-)
+
+assert('find_symbols() identifies all symbols', {
+  (find_symbols('x = x + 1; rnorm(1, std = z)') %==% c('x', 'rnorm', 'z'))
+})
 
 knit_lazy = function(lazy = TRUE) {
   in_dir(tempdir(), {
@@ -29,10 +19,10 @@ knit_lazy = function(lazy = TRUE) {
     x1 == x2  # x1 should not be updated
   })
 }
-assert(
-  'cache.lazy = TRUE/FALSE works',
-  knit_lazy(TRUE), knit_lazy(FALSE)
-)
+assert('cache.lazy = TRUE/FALSE works', {
+  (knit_lazy(TRUE))
+  (knit_lazy(FALSE))
+})
 
 knit_code$set(a = 1, b = 2, c = 3)
 assert('dep_prev() sets dependencies on previous chunks', {
@@ -41,6 +31,81 @@ assert('dep_prev() sets dependencies on previous chunks', {
   # b/c depend on a, c depends on b
   dep_prev()
   (dep_list$get() %==% list(a = c('b', 'c'), b = 'c'))
+})
+dep_list$restore()
+knit_code$restore()
+
+assert('dep_auto() solves dependencies', {
+  # dependency is empty now
+  (dep_list$get() %==% list())
+
+  # base rmd text
+  rmd0 = c(
+    '```{r, autodep=TRUE, cache=TRUE}',
+    'x = %s',
+    '```',
+    '```{r, autodep=TRUE, cache=TRUE}',
+    'print(x)',
+    '```'
+  )
+
+  td = tempfile()
+  dir.create(td, showWarnings = FALSE, recursive = TRUE)
+
+  rmd1 = sprintf(rmd0, 'runif(1)')
+  rmd2 = sprintf(rmd0, '"a"')
+
+  # without child document
+  in_dir(td, {
+    # with cache, the result should reproduce
+    knit1 = knit(text = rmd1, quiet = TRUE)
+    (knit(text = rmd1, quiet = TRUE) %==% knit1)
+
+    # on updating `x`, the printed result should change
+    knit2 = knit(text = rmd2, quiet = TRUE)
+    print2 = gsub('\n.*', '', gsub('.*\n##', '##', knit2))
+    (print2 %==% '## [1] "a"')
+  })
+})
+dep_list$restore()
+knit_code$restore()
+
+assert('dep_auto() solves dependencies of child documents', {
+  # dependency is empty now
+  (dep_list$get() %==% list())
+
+  # base rmd text
+  rmd0 = c(
+    '```{r, autodep=TRUE, cache=TRUE}',
+    'x = %s',
+    '```',
+    '```{r, autodep=TRUE, cache=TRUE}',
+    'print(x)',
+    '```'
+  )
+  rmd1 = sprintf(rmd0, 'runif(1)')
+  rmd2 = sprintf(rmd0, '"a"')
+
+  td = tempfile()
+  dir.create(td, showWarnings = FALSE, recursive = TRUE)
+
+  # with child document
+  parent = c(
+    '```{r, child="child.Rmd"}',
+    '```'
+  )
+  in_dir(td, {
+    # with cache, the result should reproduce
+    writeLines(rmd1, 'child.Rmd')
+    knit1 = knit(text = parent, quiet = TRUE)
+    (knit(text = parent, quiet = TRUE) %==% knit1)
+
+    # on updating `x`, the printed result should change
+    writeLines(rmd2, 'child.Rmd')
+    knit2 = knit(text = parent, quiet = TRUE)
+    print2 = gsub('\n.*', '', gsub('.*\n##', '##', knit2))
+    (print2 %==% '## [1] "a"')
+  })
 })
 dep_list$restore()
 knit_code$restore()

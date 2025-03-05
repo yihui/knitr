@@ -9,20 +9,20 @@
 \alias{hook_purl}
 \title{Built-in chunk hooks to extend knitr}
 \usage{
-hook_pdfcrop(before, options, envir)
+hook_pdfcrop(before, ...)
 
-hook_optipng(before, options, envir)
+hook_optipng(...)
 
-hook_pngquant(before, options, envir)
+hook_pngquant(...)
 
-hook_mogrify(before, options, envir)
+hook_mogrify(...)
 
 hook_plot_custom(before, options, envir)
 
-hook_purl(before, options, envir)
+hook_purl(before, options, ...)
 }
 \arguments{
-\item{before, options, envir}{See \emph{References} below.}
+\item{before, options, envir, ...}{See \emph{References} below.}
 }
 \description{
 Hook functions are called when the corresponding chunk options are not
@@ -79,7 +79,7 @@ if (require("rgl") && exists("hook_rgl")) knit_hooks$set(rgl = hook_rgl)
 # then in code chunks, use the option rgl=TRUE
 }
 \references{
-\url{https://yihui.org/knitr/hooks/#chunk_hooks}
+\url{https://yihui.org/knitr/hooks/#chunk-hooks}
 }
 \seealso{
 \code{rgl::\link[rgl:snapshot]{rgl.snapshot}},

@@ -59,8 +59,7 @@ If \code{text} is \code{NULL}, the path of the final output document,
 This function takes a specially formatted R script and converts it to a
 literate programming document. By default normal text (documentation) should
 be written after the roxygen comment (\code{#'}) and code chunk options are
-written after \code{#+} or \code{#-} or \code{# ----} or any of these
-combinations replacing \code{#} with \code{--}.
+written after \code{#|} or \code{#+} or \code{# \%\%} or \code{# ----}.
 }
 \details{
 Obviously the goat's hair is the original R script, and the wool is the

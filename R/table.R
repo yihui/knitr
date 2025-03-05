@@ -12,6 +12,9 @@
 #' default. If you want to display them with other characters, you can set the
 #' option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
 #' hide \code{NA} values.
+#'
+#' You can set the option \code{knitr.kable.max_rows} to limit the number of
+#' rows to show in the table, e.g., \code{options(knitr.kable.max_rows = 30)}.
 #' @param x For \code{kable()}, \code{x} is an R object, which is typically a
 #'   matrix or data frame. For \code{kables()}, a list with each element being a
 #'   returned value from \code{kable()}.
@@ -35,10 +38,11 @@
 #'   are left-aligned. If \code{length(align) == 1L}, the string will be
 #'   expanded to a vector of individual letters, e.g. \code{'clc'} becomes
 #'   \code{c('c', 'l', 'c')}, unless the output format is LaTeX.
-#' @param caption The table caption.
+#' @param caption The table caption. By default, it is retrieved from the chunk
+#'   option \code{tab.cap}.
 #' @param label The table reference label. By default, the label is obtained
-#'   from \code{knitr::\link{opts_current}$get('label')}. To disable the label,
-#'   use \code{label = NA}.
+#'   from \code{knitr::\link{opts_current}$get('label')} (i.e., the current
+#'   chunk label). To disable the label, use \code{label = NA}.
 #' @param format.args A list of arguments to be passed to \code{\link{format}()}
 #'   to format table values, e.g. \code{list(big.mark = ',')}.
 #' @param escape Boolean; whether to escape special characters when producing
@@ -100,7 +104,8 @@
 #' kables(list(kable(d1, align = 'l'), kable(d2)), caption = 'A tale of two tables')
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
-  align, caption = NULL, label = NULL, format.args = list(), escape = TRUE, ...
+  align, caption = opts_current$get('tab.cap'), label = NULL, format.args = list(),
+  escape = TRUE, ...
 ) {
 
   format = kable_format(format)
@@ -121,6 +126,8 @@ kable = function(
   caption = kable_caption(label, caption, format)
 
   if (!is.matrix(x)) x = as.data.frame(x)
+  # show the maximum number of rows if set
+  if (is.numeric(nr <- getOption('knitr.kable.max_rows'))) x = head(x, nr)
   if (identical(col.names, NA)) col.names = colnames(x)
   m = ncol(x)
   # numeric columns
@@ -148,7 +155,8 @@ kable = function(
   n = nrow(x)
   x = replace_na(to_character(x), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
-  x = trimws(x)
+  # trim white spaces except those escaped by \ at the end (#2308)
+  x = gsub('^\\s+|(?<!\\\\)\\s+$', '', x, perl = TRUE)
   colnames(x) = col.names
   if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")
@@ -166,7 +174,7 @@ kable_caption = function(label, caption, format) {
   # create a label for bookdown if applicable
   if (is.null(label)) label = opts_current$get('label')
   if (is.null(label)) label = NA
-  if (!is.null(caption) && !is.na(caption) && !is.na(label)) caption = paste0(
+  if (!is.null(caption) && !anyNA(caption) && !anyNA(label)) caption = paste0(
     create_label(
       opts_knit$get('label.prefix')[['table']],
       label, latex = (format == 'latex')
@@ -285,9 +293,6 @@ kable_latex = function(
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
   escape = TRUE, ...
 ) {
-  # TODO: remove this hack
-  if (xfun::check_old_package('papaja', '0.1.1') && 'added_colnames' %in% names(list(...)))
-    stop('Throw an error for https://github.com/crsh/papaja/issues/563')
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
     align = paste0('{', align, '}')
@@ -358,11 +363,11 @@ kable_html = function(
   }
   if (identical(caption, NA)) caption = NULL
   cap = if (length(caption)) sprintf('\n<caption>%s</caption>', caption) else ''
-  if (escape) x = escape_html(x)
+  if (escape) x = html_escape(x)
   one_string(c(
     sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x))) {
-      if (escape) cn = escape_html(cn)
+      if (escape) cn = html_escape(cn)
       c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>')
     },
     '<tbody>',

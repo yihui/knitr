@@ -27,7 +27,7 @@ dev2ext = function(options) {
     for (i in x[idx]) dev_get(i)
     stop2(
       'cannot find appropriate filename extensions for device ', x[idx], '; ',
-      "please use chunk option 'fig.ext' (https://yihui.org/knitr/options)"
+      "please use chunk option 'fig.ext' (https://yihui.org/knitr/options/)"
     )
   }
   unname(res)
@@ -281,38 +281,6 @@ reduce_plot_opts = function(options) {
   options
 }
 
-# the memory address of a NativeSymbolInfo object will be lost if it is saved to
-# disk; see http://markmail.org/message/zat2r2pfsvhrsfqz for the full
-# discussion; the hack below was stolen (with permission) from RStudio:
-# https://github.com/rstudio/rstudio/blob/master/src/cpp/r/R/Tools.R
-fix_recordedPlot = function(plot) {
-  # restore native symbols for R >= 3.0
-  for (i in seq_along(plot[[1]])) {
-    # get the symbol then test if it's a native symbol
-    symbol = plot[[1]][[i]][[2]][[1]]
-    if (inherits(symbol, 'NativeSymbolInfo')) {
-      # determine the dll that the symbol lives in
-      name = symbol[[if (is.null(symbol$package)) 'dll' else 'package']][['name']]
-      pkgDLL = getLoadedDLLs()[[name]]
-      # reconstruct the native symbol and assign it into the plot
-      nativeSymbol = getNativeSymbolInfo(
-        name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE
-      )
-      plot[[1]][[i]][[2]][[1]] <- nativeSymbol
-    }
-  }
-  attr(plot, 'pid') = Sys.getpid()
-  plot
-}
-
-# fix plots in evaluate() results
-fix_evaluate = function(list, fix = TRUE) {
-  if (!fix) return(list)
-  lapply(list, function(x) {
-    if (evaluate::is.recordedplot(x)) fix_recordedPlot(x) else x
-  })
-}
-
 # remove the plots from the evaluate results for the case of cache=2; if we only
 # want to keep high-level plots, we need MD5 digests of the plot components so
 # that we will be able to filter out low-level changes later
@@ -373,6 +341,7 @@ plot_crop = function(x, quiet = TRUE) {
   is_pdf = grepl('[.]pdf$', x, ignore.case = TRUE)
   x2 = x
   x = path.expand(x)
+  tinytex:::tweak_path()  # in case TinyTeX is installed but not on PATH
   if (is_pdf && !has_utility('pdfcrop')) return(x2)
 
   if (!quiet) message('cropping ', x)
@@ -531,7 +500,7 @@ raster_dpi_width = function(path, dpi) {
     w = ncol(jpeg::readJPEG(path, native = TRUE))
   }
   if (is_latex_output()) {
-    paste0(round(w / dpi, 2), 'in')
+    xfun::decimal_dot(paste0(round(w / dpi, 2), 'in'))
   } else if (is_html_output()) {
     round(w / (dpi / 96))
   }

@@ -9,15 +9,24 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      extra-packages:
+        description: 'extra package to install for the runs (like a dev version of one of the deps) - comma separated'
+        required: false
+        type: string
 
 name: R-CMD-check
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})${{ github.event.inputs.extra-packages && ' - with some extra packages'|| ''}}
     strategy:
       fail-fast: false
       matrix:
@@ -39,7 +48,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -47,20 +56,24 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-pandoc@v2
-
       - uses: r-lib/actions/setup-tinytex@v2-branch
         env:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
 
+      - if: github.event.inputs.extra-packages
+        run: |
+          echo "::notice::Running with the following extra packages for pak: ${{ github.event.inputs.extra-packages }}"
+        shell: bash
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: |
-            any::XML
-            any::rcmdcheck
-            targets=?ignore-before-r=4.0.0
-            JuliaCall=?ignore-before-r=4.0.0
+          extra-packages: >
+            any::rcmdcheck,
+            gridSVG=?ignore-before-r=4.0.0,
+            targets=?ignore-before-r=4.0.0,
+            JuliaCall=?ignore-before-r=4.0.0,
+            ${{ github.event.inputs.extra-packages }}
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2

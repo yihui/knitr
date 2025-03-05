@@ -132,7 +132,7 @@ knit = function(
   oconc = knit_concord$get(); on.exit(knit_concord$set(oconc), add = TRUE)
 
   if (child_mode()) {
-    setwd(opts_knit$get('output.dir')) # always restore original working dir
+    setwd(opts_knit$get('output.dir') %n% '.') # always restore original working dir
     # in child mode, input path needs to be adjusted
     if (in.file && !is_abs_path(input)) {
       input = paste0(opts_knit$get('child.path'), input)
@@ -151,14 +151,10 @@ knit = function(
       useFancyQuotes = FALSE, device = pdf_null, knitr.in.progress = TRUE
     )
     on.exit(options(oopts), add = TRUE)
-    # restore chunk options after parent exits
-    optc = opts_chunk$get(); ocode = knit_code$get(); optk = opts_knit$get()
-    on.exit({
-      opts_chunk$restore(optc)
-      knit_code$restore(ocode)
-      opts_current$restore()
-      opts_knit$restore(optk)
-    }, add = TRUE)
+    # restore objects like chunk options after parent exits
+    opta = list(opts_chunk, opts_current, knit_code, opts_knit)
+    optv = lapply(opta, function(o) o$get())
+    on.exit(for (i in seq_along(opta)) opta[[i]]$restore(optv[[i]]), add = TRUE)
     opts_knit$set(
       output.dir = getwd(),  # record working directory in 1st run
       tangle = tangle, progress = opts_knit$get('progress') && !quiet
@@ -311,21 +307,34 @@ process_file = function(text, output) {
     }
     if (progress && is.function(pb$update)) pb$update(i)
     group = groups[[i]]
-    res[i] = withCallingHandlers(
+    knit_concord$set(block = i)
+    error = NULL
+    res[i] = xfun:::handle_error(
       withCallingHandlers(
         if (tangle) process_tangle(group) else process_group(group),
-        error = function(e) if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
+        error = function(e) {
+          if (progress && is.function(pb$interrupt)) pb$interrupt()
+          if (xfun::pkg_available('rlang', '1.0.0')) {
+            if (is_R_CMD_build() || is_R_CMD_check()) {
+              cnd = tryCatch(rlang::entrace(e), error = identity)
+              error <<- format(cnd)
+            } else {
+              rlang::entrace(e)
+            }
+          }
+        }
       ),
-      error = function(e) {
+      function(loc) {
         setwd(wd)
         write_utf8(res, output %n% stdout())
-        message(
-          '\nQuitting from lines ', paste(current_lines(i), collapse = '-'),
-          if (labels[i] != '') sprintf(' [%s]', labels[i]),
-          sprintf(' (%s)', knit_concord$get('infile'))
+        paste0(
+          '\nQuitting from ', loc,
+          if (!is.null(error)) paste0('\n', rule(), error, '\n', rule())
         )
-      }
+      },
+      if (labels[i] != '') sprintf(' [%s]', labels[i]), get_loc
     )
+    knit_concord$set(offset = NULL)
   }
 
   if (!tangle) res = insert_header(res)  # insert header
@@ -335,6 +344,16 @@ process_file = function(text, output) {
   if (tangle) res = strip_white(res)
 
   res
+}
+
+rule = function() {
+  # Used by pkgbuild; please don't change without letting us know
+  paste0(strrep('~', getOption('width')), '\n')
+}
+
+# return a string to point out the current location in the doc
+get_loc = function(label = '') {
+  paste0(knit_concord$get('infile'), ':', current_lines(), label)
 }
 
 auto_out_name = function(input, ext = tolower(file_ext(input))) {
@@ -444,7 +463,7 @@ knit_log = new_defaults()  # knitr log for errors, warnings and messages
 #' output of the code chunk (code, messages, text output, and plots, etc.) after
 #' all statements in the code chunk have been evaluated, and will sew these
 #' pieces of output together into a character vector.
-#' @param x Output from \code{evaluate::\link{evaluate}()}.
+#' @param x Output from \code{evaluate::\link[evaluate]{evaluate}()}.
 #' @param options A list of chunk options used to control output.
 #' @param ... Other arguments to pass to methods.
 #' @export
@@ -513,8 +532,7 @@ sew.knit_asis = function(x, options, inline = FALSE, ...) {
     }
   }
   x = wrap_asis(x, options)
-  if (!out_format('latex') || inline) return(x)
-  # latex output need the \end{kframe} trick
+  if (inline) return(x)
   options$results = 'asis'
   knit_hooks$get('output')(x, options)
 }
@@ -531,7 +549,7 @@ sew.source = function(x, options, ...) {
 msg_wrap = function(message, type, options) {
   # when the output format is LaTeX, do not wrap messages (let LaTeX deal with wrapping)
   if (!length(grep('\n', message)) && !out_format(c('latex', 'listings', 'sweave')))
-    message = str_wrap(message, width = getOption('width'))
+    message = xfun::str_wrap(message, width = getOption('width'))
   knit_log$set(setNames(
     list(c(knit_log$get(type), paste0('Chunk ', options$label, ':\n  ', message))),
     type
@@ -647,7 +665,7 @@ sew.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE, ...
   if (length(extra <- options$out.extra)) extra = paste('', extra, collapse = '')
   add_html_caption(options, sprintf(
     '<iframe src="%s" width="%s" height="%s" data-external="1"%s></iframe>',
-    escape_html(x$url), options$out.width %n% '100%', x$height %n% '400px',
+    html_escape(x$url), options$out.width %n% '100%', x$height %n% '400px',
     extra %n% ''
   ))
 }
@@ -734,8 +752,9 @@ knit_print.knit_asis_url = function(x, ...) x
 
 #' @rdname knit_print
 #' @export
-normal_print = default_handlers$value
-formals(normal_print) = alist(x = , ... = )
+normal_print = function(x, ...) {
+  if (isS4(x)) methods::show(x) else print(x)
+}
 
 #' Mark an R object with a special class
 #'

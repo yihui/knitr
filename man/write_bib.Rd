@@ -4,99 +4,11 @@
 \alias{write_bib}
 \title{Generate BibTeX bibliography databases for R packages}
 \usage{
-write_bib(
-  x = .packages(),
-  file = "",
-  tweak = TRUE,
-  width = NULL,
-  prefix = getOption("knitr.bib.prefix", "R-"),
-  lib.loc = NULL,
-  packageURL = TRUE
-)
+write_bib(..., prefix = getOption("knitr.bib.prefix", "R-"))
 }
 \arguments{
-\item{x}{Package names. Packages which are not installed are ignored.}
-
-\item{file}{The (\file{.bib}) file to write. By default, or if \code{NULL},
-output is written to the R console.}
-
-\item{tweak}{Whether to fix some known problems in the citations, especially
-non-standard format of author names.}
-
-\item{width}{Width of lines in bibliography entries. If \code{NULL}, lines
-will not be wrapped.}
-
-\item{prefix}{Prefix string for keys in BibTeX entries; by default, it is
-\samp{R-} unless \code{\link{option}('knitr.bib.prefix')} has been set to
-another string.}
-
-\item{lib.loc}{A vector of path names of R libraries.}
-
-\item{packageURL}{Use the \code{URL} field from the \file{DESCRIPTION} file.
-See Details below.}
-}
-\value{
-A list containing the citations. Citations are also written to the
-  \code{file} as a side effect.
+\item{..., prefix}{Arguments passed to \code{xfun::\link[xfun]{pkg_bib}()}.}
 }
 \description{
-This function uses \code{utils::\link{citation}()} and
-\code{utils::\link{toBibtex}()} to create bib entries for R packages and
-write them in a file. It can facilitate the auto-generation of bibliography
-databases for R packages, and it is easy to regenerate all the citations
-after updating R packages.
-}
-\details{
-For a package, the keyword \samp{R-pkgname} is used for its bib item, where
-\samp{pkgname} is the name of the package. Citation entries specified in the
-\file{CITATION} file of the package are also included. The main purpose of
-this function is to automate the generation of the package citation
-information because it often changes (e.g. author, year, package version,
-...).
-
-There are at least two different uses for the URL in a reference list.  You
-might want to tell users where to go for more information; in that case, use
-the default \code{packageURL = TRUE}, and the first URL listed in the
-\file{DESCRIPTION} file will be used. Be careful:  some authors don't put the
-most relevant URL first. Alternatively, you might want to identify exactly
-which version of the package was used in the document.  If it was installed
-from CRAN or some other repositories, the version number identifies it, and
-\code{packageURL = FALSE} will use the repository URL (as used by
-\code{utils::\link{citation}()}).
-}
-\note{
-Some packages on CRAN do not have standard bib entries, which was once
-  reported by Michael Friendly at
-  \url{https://stat.ethz.ch/pipermail/r-devel/2010-November/058977.html}. I
-  find this a real pain, and there are no easy solutions except contacting
-  package authors to modify their DESCRIPTION files. Anyway, the argument
-  \code{tweak} has provided ugly hacks to deal with packages which are known
-  to be non-standard in terms of the format of citations; \code{tweak = TRUE}
-  is by no means intended to hide or modify the original citation
-  information. It is just due to the loose requirements on package authors
-  for the DESCRIPTION file. On one hand, I apologize if it really mangles the
-  information about certain packages; on the other, I strongly recommend
-  package authors to consider the \samp{Authors@R} field (see the manual
-  \emph{Writing R Extensions}) to make it easier for other people to cite R
-  packages. See \code{knitr:::.tweak.bib} for details of tweaks. Also note
-  this is subject to future changes since R packages are being updated. If
-  you want to contribute more tweaks, please edit the file
-  \file{inst/misc/tweak_bib.csv} in the source package.
-}
-\examples{\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-write_bib(c("RGtk2", "gWidgets"), file = "R-GUI-pkgs.bib")
-unlink("R-GUI-pkgs.bib")
-
-write_bib(c("animation", "rgl", "knitr", "ggplot2"))
-write_bib(c("base", "parallel", "MASS"))  # base and parallel are identical
-write_bib("cluster", prefix = "")  # a empty prefix
-write_bib("digest", prefix = "R-pkg-")  # a new prefix
-write_bib("digest", tweak = FALSE)  # original version
-
-# what tweak=TRUE does
-str(knitr:::.tweak.bib)
-\dontshow{\}) # examplesIf}
-}
-\author{
-Yihui Xie and Michael Friendly
+A wrapper function of \code{xfun::pkg_bib()}.
 }
