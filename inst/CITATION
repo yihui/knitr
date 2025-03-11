@@ -4,7 +4,7 @@ if (length(year) == 0) year = format(Sys.Date(), '%Y')
 
 bibentry(
   'manual',
-  title = paste('knitr:', meta$Title),
+  title = paste('knitr:', gsub('\\bR\\b', '{R}', meta$Title)),
   author = Filter(function(p) 'aut' %in% p$role, as.person(meta$Author)),
   year = year,
   note = vers,
