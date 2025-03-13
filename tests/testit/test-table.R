@@ -40,8 +40,13 @@ assert('kable() works with the jira format', {
 })
 
 assert('kable() works with the org format', {
-    (kable2(m, 'org') %==% c('|   |  x|  y|', '|<l>|<r>|<r>|', '|---+---+---|',
-                             '|a  |  1|  2|'))
+  (kable2(m, 'org') %==%
+    c('|   |  x|  y|', '|<l>|<r>|<r>|', '|---+---+---|', '|a  |  1|  2|'))
+  m2 = m; colnames(m2) = NULL  # no column names
+  (kable2(m2, 'org') %==% c('|<l>|<r>|<r>|', '|a  |  1|  2|'))
+  # the case of only one column
+  (kable2(m[, 1, drop = FALSE], 'org', row.names = FALSE) %==%
+    c('|  x|', '|<r>|', '|---|', '|  1|'))
 })
 
 assert('kable() does not add extra spaces to character columns', {

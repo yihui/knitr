@@ -481,14 +481,14 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
 
 # Emacs Org-mode table
 kable_org = function(x, caption = NULL, padding = 1, caption.label = '#+CAPTION:', ...) {
-  if (no_header <- is.null(colnames(x))) colnames(x) = rep('', ncol(x))
+  has_header = !is.null(colnames(x))
   res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
     r = c(l = '<l>', c = '<c>', r = '<r>')
-    rbind(r[a], '---')
+    rbind(r[a], if (has_header) s)
   }, ...)
+  if (!is.na(i <- grep('^(---+[|])+---+$', res)[1]))
+    res[i] = gsub('|', '+', res[i], fixed = TRUE)
   res = sprintf('|%s|', res)
-  res = gsub('[-][-][|][-]', '--+-', res)
-  if (no_header) res = res[-c(1,3)]
   kable_pandoc_caption(res, caption, caption.label)
 }
 
