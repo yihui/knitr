@@ -403,7 +403,9 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
   }
-  l = if (prod(dim(x)) > 0) apply(x, 2, function(z) max(nchar(remove_urls(z), type = 'width'), na.rm = TRUE))
+  l = if (prod(dim(x)) > 0) apply(x, 2, function(z) {
+    max(nchar(remove_urls(z), type = 'width'), na.rm = TRUE)
+  }) else integer(ncol(x))
   cn = colnames(x)
   if (length(cn) > 0) {
     cn[is.na(cn)] = "NA"
