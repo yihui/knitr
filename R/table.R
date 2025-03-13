@@ -403,7 +403,9 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   if (sep.col == '|') for (j in seq_len(ncol(x))) {
     x[, j] = gsub('\\|', '&#124;', x[, j])
   }
-  l = if (prod(dim(x)) > 0) apply(x, 2, function(z) max(nchar(remove_urls(z), type = 'width'), na.rm = TRUE))
+  l = if (prod(dim(x)) > 0) apply(x, 2, function(z) {
+    max(nchar(remove_urls(z), type = 'width'), na.rm = TRUE)
+  }) else integer(ncol(x))
   cn = colnames(x)
   if (length(cn) > 0) {
     cn[is.na(cn)] = "NA"
@@ -417,8 +419,10 @@ kable_mark = function(x, sep.row = c('=', '=', '='), sep.col = '  ', padding = 0
   }
   l = pmax(l + padding, 3)  # at least of width 3 for Github Markdown
   s = strrep(sep.row[2], l)
-  res = rbind(if (!is.na(sep.row[1])) s, cn, align.fun(s, align),
-              x, if (!is.na(sep.row[3])) s)
+  res = rbind(
+    if (!is.na(sep.row[1])) s, cn, if (is.null(align)) s else align.fun(s, align),
+    x, if (!is.na(sep.row[3])) s
+  )
   res = mat_pad(res, l, align)
   res = add_mark_col_sep(res, sep.col, sep.head)
   if (is.character(newline)) res = gsub('\n', newline, res, fixed = TRUE)
@@ -442,7 +446,6 @@ kable_rst = function(x, rownames.name = '\\', ...) {
 kable_pipe = function(x, caption = NULL, padding = 1, caption.label = 'Table:', ...) {
   if (is.null(colnames(x))) colnames(x) = rep('', ncol(x))
   res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
-    if (is.null(a)) return(s)
     r = c(l = '^.', c = '^.|.$', r = '.$')
     for (i in seq_along(s)) {
       s[i] = gsub(r[a[i]], ':', s[i])
@@ -477,14 +480,16 @@ kable_jira = function(x, caption = NULL, padding = 1, ...) {
 }
 
 # Emacs Org-mode table
-kable_org = function(...) {
-  res = kable_pipe(..., caption.label = '#+CAPTION:')
-  i = grep('^[-:|]+$', res)  # find the line like |--:|---| under header
-  if (length(i)) {
-    i = i[1]
-    res[i] = gsub('(-|:)[|](-|:)', '\\1+\\2', res[i])  # use + as separator
-  }
-  res
+kable_org = function(x, caption = NULL, padding = 1, caption.label = '#+CAPTION:', ...) {
+  has_header = !is.null(colnames(x))
+  res = kable_mark(x, c(NA, '-', NA), '|', padding, align.fun = function(s, a) {
+    r = c(l = '<l>', c = '<c>', r = '<r>')
+    rbind(r[a], if (has_header) s)
+  }, ...)
+  if (!is.na(i <- grep('^(---+[|])+---+$', res)[1]))
+    res[i] = gsub('|', '+', res[i], fixed = TRUE)
+  res = sprintf('|%s|', res)
+  kable_pandoc_caption(res, caption, caption.label)
 }
 
 kable_pandoc_caption = function(x, caption, label = 'Table:') {

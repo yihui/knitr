@@ -6,6 +6,8 @@
 
 - Display error traceback when vignettes fail in `R CMD build` (thanks, @hadley, #2390).
 
+- `kable()` properly supports column alignment for Org Mode tables now (thanks, @mclements, #2391).
+
 ## MINOR CHANGES
 
 - Moved implementations of `combine_words()` and `write_bib()` to the **xfun** package as `xfun::join_words()` and `xfun::pkg_bib()`, respectively, since they are not directly relevant to **knitr**. The functions `combine_words()` and `write_bib()` are still kept in **knitr**, and can continue to be used in the future.
