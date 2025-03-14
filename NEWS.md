@@ -16,6 +16,8 @@
 
 - Removed the function `read_rforge()` since it has stopped working for a long time.
 
+- Removed demos from the package (which were early experiments from several years ago).
+
 # CHANGES IN knitr VERSION 1.49
 
 ## NEW FEATURES
