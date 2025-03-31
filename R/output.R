@@ -316,10 +316,11 @@ process_file = function(text, output) {
           if (progress && is.function(pb$interrupt)) pb$interrupt()
           if (xfun::pkg_available('rlang', '1.0.0')) {
             if (is_R_CMD_build() || is_R_CMD_check()) {
-              cnd = tryCatch(rlang::entrace(e), error = identity)
+              # entrace returns NULL if error is already entraced
+              cnd = e %||% tryCatch(rlang::entrace(e), error = identity)
               error <<- format(cnd)
             } else {
-              rlang::entrace(e)
+              e %||% rlang::entrace(e)
             }
           }
         }
