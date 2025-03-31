@@ -38,7 +38,7 @@ jobs:
           - {os: ubuntu-latest,  r: 'oldrel-1'}
           - {os: ubuntu-latest,  r: 'oldrel-2'}
           - {os: ubuntu-latest,  r: 'oldrel-3'}
-          - {os: ubuntu-latest,  r: 'oldrel-4'}
+          - {os: ubuntu-latest,  r: 'oldrel-4', extra-packages: 'magick@2.8.5'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -73,6 +73,8 @@ jobs:
             gridSVG=?ignore-before-r=4.0.0,
             targets=?ignore-before-r=4.0.0,
             JuliaCall=?ignore-before-r=4.0.0,
+            magick=?ignore-before-r=4.0.0,
+            ${{ matrix.config.extra-packages && format('{0},', join(matrix.config.extra-packages, ',')) }}
             ${{ github.event.inputs.extra-packages }}
           needs: check
 
