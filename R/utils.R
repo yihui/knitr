@@ -1131,8 +1131,6 @@ txt_pb = function(total, labels) {
 is_quarto = function() isTRUE(.knitEnv$is_quarto)
 
 with_options = function(expr, opts_list) {
-  old <- options(opts_list)
-  defer(options(old))
   local_options(opts_list)
   expr
 }
