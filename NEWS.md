@@ -1,5 +1,7 @@
 # CHANGES IN knitr VERSION 1.51
 
+- For Quarto, chunk options written in pipe comments must use the comment character of the chunk's language (#2225). Previously, comments written in `#|` will be parsed even if `#` is not the comment character of the chunk.
+
 - `hook_optipng()` now uses the `-quiet` argument of `optipng` to suppress the messages by default.
 
 # CHANGES IN knitr VERSION 1.50
