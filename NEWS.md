@@ -1,5 +1,6 @@
 # CHANGES IN knitr VERSION 1.51
 
+- `hook_optipng()` now uses the `-quiet` argument of `optipng` to suppress the messages by default.
 
 # CHANGES IN knitr VERSION 1.50
 

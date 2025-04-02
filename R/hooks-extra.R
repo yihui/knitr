@@ -80,7 +80,7 @@ hook_png = function(
   opts = options[[cmd]]
   if (isFALSE(opts)) return()
   if (is.null(opts) || isTRUE(opts)) opts = switch(
-    cmd, pngquant = '--skip-if-larger', mogrify = '-trim'
+    cmd, optipng = '-quiet', pngquant = '--skip-if-larger', mogrify = '-trim'
   )
   if (cmd == 'pngquant') opts = c(opts, '--ext', '-fs8.png')
 
