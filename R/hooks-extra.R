@@ -80,17 +80,16 @@ hook_png = function(
   opts = options[[cmd]]
   if (isFALSE(opts)) return()
   if (is.null(opts) || isTRUE(opts)) opts = switch(
-    cmd, pngquant = '--skip-if-larger', mogrify = '-trim'
+    cmd, optipng = '-quiet', pngquant = '--skip-if-larger', mogrify = '-trim'
   )
-  if (cmd == 'pngquant') opts = paste(opts, '--ext -fs8.png')
+  if (cmd == 'pngquant') opts = c(opts, '--ext', '-fs8.png')
 
   paths = get_plot_files()
   paths = grep('[.]png$', paths, ignore.case = TRUE, value = TRUE)
 
   in_base_dir(
     lapply(paths, function(x) {
-      cmd = paste(cmd, if (is.character(options[[cmd]])) options[[cmd]], shQuote(x))
-      (if (is_windows()) shell else system)(cmd)
+      system2(cmd, c(opts, shQuote(x)))
       post_process(x)
     })
   )

@@ -1,3 +1,7 @@
+# CHANGES IN knitr VERSION 1.51
+
+- `hook_optipng()` now uses the `-quiet` argument of `optipng` to suppress the messages by default.
+
 # CHANGES IN knitr VERSION 1.50
 
 ## NEW FEATURES
@@ -6,6 +10,8 @@
 
 - Display error traceback when vignettes fail in `R CMD build` (thanks, @hadley, #2390).
 
+- `kable()` properly supports column alignment for Org Mode tables now (thanks, @mclements, #2391).
+
 ## MINOR CHANGES
 
 - Moved implementations of `combine_words()` and `write_bib()` to the **xfun** package as `xfun::join_words()` and `xfun::pkg_bib()`, respectively, since they are not directly relevant to **knitr**. The functions `combine_words()` and `write_bib()` are still kept in **knitr**, and can continue to be used in the future.
@@ -13,6 +19,8 @@
 - A warning will be issued when chunk options are duplicated in both the chunk header and pipe comments (thanks, @cderv, #2386). A chunk option should appear in only one of these places.
 
 - Removed the function `read_rforge()` since it has stopped working for a long time.
+
+- Removed demos from the package (which were early experiments from several years ago).
 
 # CHANGES IN knitr VERSION 1.49
 

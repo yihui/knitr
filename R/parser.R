@@ -239,13 +239,13 @@ parse_inline = function(input, patterns) {
       code1 = code[, 1L]
       code2 = apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
       nl = gregexpr('\n', input, fixed = TRUE)[[1]]
-      lines = if (length(nl) > 1 || nl > -1) findInterval(loc, nl) else c(0L, 0L)
+      lines = if (length(nl) > 1 || nl > -1) findInterval(loc, nl) else 0L
     }
   }
 
   structure(list(
     input = input, location = loc, code = code2, code.src = code1,
-    lines = matrix(lines, ncol = 2)
+    lines = matrix(lines, ncol = 2, nrow = nrow(loc))
   ), class = 'inline')
 }
 
