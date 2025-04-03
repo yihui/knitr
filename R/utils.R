@@ -686,8 +686,10 @@ escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
   x
 }
 
-# TODO: remove this after https://github.com/mgondan/mathml/pull/18
-escape_html = xfun::html_escape
+escape_html = function(x) {
+  .Deprecated('xfun::html_escape()', old = 'knitr:::escape_html()')
+  xfun::html_escape(x)
+}
 
 split_lines = function(x) xfun::split_lines(x)
 
