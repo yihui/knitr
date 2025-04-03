@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.51
 
+- Fix issue with error traceback not correctly showing when **rlang** is available.
+
+- Improve error traceback when **rlang** is available and **evaluate** > 1.0.3 is used (thanks, @cderv, #2388).
+
 - For Quarto, chunk options written in pipe comments must use the comment character of the chunk's language (#2225). Previously, comments written in `#|` will be parsed even if `#` is not the comment character of the chunk.
 
 - `hook_optipng()` now uses the `-quiet` argument of `optipng` to suppress the messages by default.

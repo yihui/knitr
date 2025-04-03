@@ -845,6 +845,8 @@ current_input = function(dir = FALSE) {
 
 # cache output handlers from evaluate; see .onLoad
 default_handlers = NULL
+# use rlang handler for error only if available; see .onLoad
+rlang_entrace_handler = NULL
 # change the value handler in evaluate default handlers
 knit_handlers = function(fun, options) {
   if (!is.function(fun)) fun = function(x, ...) {
@@ -862,7 +864,7 @@ knit_handlers = function(fun, options) {
     value = function(x, visible) {
       if (visible) fun(x, options = options)
     },
-    calling_handlers = options$calling.handlers
+    calling_handlers = c(options$calling.handlers, rlang_entrace_handler)
   ))
 }
 
@@ -1127,3 +1129,18 @@ txt_pb = function(total, labels) {
 }
 
 is_quarto = function() isTRUE(.knitEnv$is_quarto)
+
+with_options = function(expr, opts_list) {
+  local_options(opts_list)
+  expr
+}
+
+local_options <- function(opts_list, .local_envir = parent.frame()) {
+  old = options(opts_list)
+  defer(options(old), .local_envir)
+}
+
+defer = function(expr, frame = parent.frame(), after = FALSE) {
+  thunk = as.call(list(function() expr))
+  do.call(on.exit, list(thunk, add = TRUE, after = after), envir = frame)
+}

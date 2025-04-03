@@ -310,19 +310,15 @@ process_file = function(text, output) {
     knit_concord$set(block = i)
     error = NULL
     res[i] = xfun:::handle_error(
-      withCallingHandlers(
-        if (tangle) process_tangle(group) else process_group(group),
-        error = function(e) {
-          if (progress && is.function(pb$interrupt)) pb$interrupt()
-          if (xfun::pkg_available('rlang', '1.0.0')) {
-            if (is_R_CMD_build() || is_R_CMD_check()) {
-              cnd = tryCatch(rlang::entrace(e), error = identity)
-              error <<- format(cnd)
-            } else {
-              rlang::entrace(e)
-            }
+      with_options(
+        withCallingHandlers(
+          if (tangle) process_tangle(group) else process_group(group),
+          error = function(e) {
+            if (progress && is.function(pb$interrupt)) pb$interrupt()
+            if (is_R_CMD_build() || is_R_CMD_check()) error <<- format(e)
           }
-        }
+        ),
+        list(rlang_trace_top_env = knit_global())
       ),
       function(loc) {
         setwd(wd)
@@ -731,6 +727,10 @@ add_html_caption = function(options, code, id = NULL) {
 #' # after you define and register the above method, data frames will be printed
 #' # as tables in knitr, which is different with the default print() behavior
 knit_print = function(x, ...) {
+  if (getOption('knitr.in.progress', FALSE)) {
+    current_env = parent.frame()
+    local_options(list(rlang_trace_top_env = current_env))
+  }
   if (need_screenshot(x, ...)) {
     html_screenshot(x)
   } else {
