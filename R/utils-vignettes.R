@@ -36,7 +36,7 @@ vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) 
     # run some hooks for vignettes
     hook_purl(...)  # write out code while weaving
     # optimize PNG images if tools exist and hooks not set
-    for (i in c('optipng', 'pngquant'))
+    if (!is_R_CMD_check()) for (i in c('optipng', 'pngquant'))
       if (!is.function(knit_hooks$get(i)) && Sys.which(i) != '') {
         switch(i, optipng = hook_optipng(...), pngquant = hook_pngquant(...))
       }
