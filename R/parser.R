@@ -205,7 +205,7 @@ partition_chunk = function(engine, code) {
   opts = options(xfun.handle_error.loc_fun = get_loc)
   on.exit(options(opts))
   # the code has been moved to the xfun package
-  xfun::divide_chunk(engine, code)
+  xfun::divide_chunk(engine, code, strict = is_quarto())
 }
 
 print_block = function(x) {

@@ -311,7 +311,7 @@ process_file = function(text, output) {
     error = NULL
     res[i] = xfun:::handle_error(
       with_options(
-  	    withCallingHandlers(
+        withCallingHandlers(
           if (tangle) process_tangle(group) else process_group(group),
           error = function(e) {
             if (progress && is.function(pb$interrupt)) pb$interrupt()
