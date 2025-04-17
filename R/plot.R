@@ -595,7 +595,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     switch(options$dev[1], pdf = '.pdf', jpeg = '.jpeg', '.png')
   } else '.png'
   wargs = options$screenshot.opts %n% list()
-  if (is.null(wargs$vwidth)) wargs$vwidth = options$out.width.px
+  if (is.null(wargs$vwidth) && !grepl("%$", options$out.width.px)) wargs$vwidth = options$out.width.px
   if (is.null(wargs$vheight) && !grepl("%$", options$out.height.px)) wargs$vheight = options$out.height.px
   if (is.null(wargs$delay)) wargs$delay = if (i1) 0.2 else 1
   d = tempfile()
