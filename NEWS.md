@@ -8,6 +8,8 @@
 
 - `hook_optipng()` now uses the `-quiet` argument of `optipng` to suppress the messages by default.
 
+- Don't set `vheight` or `vwidth` for `webshot2::webshot()` when the chunk option `out.height` or `out.width` is a percentage (%). Setting `screenshot.opts` chunk option is still a way to specify `vheight` or `vwidth` specifically for `webshot()`, e.g., `screenshot.opts = list(vwidth = 6 * 72, vheight = 6 * 72 * 0.618)` for the width of 6 inches size with 72 dpi and 0.618 of aspect ratio.
+
 # CHANGES IN knitr VERSION 1.50
 
 ## NEW FEATURES
