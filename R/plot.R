@@ -596,7 +596,7 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   } else '.png'
   wargs = options$screenshot.opts %n% list()
   if (is.null(wargs$vwidth)) wargs$vwidth = options$out.width.px
-  if (is.null(wargs$vheight)) wargs$vheight = options$out.height.px
+  if (is.null(wargs$vheight) && !grepl("%$", options$out.height.px)) wargs$vheight = options$out.height.px
   if (is.null(wargs$delay)) wargs$delay = if (i1) 0.2 else 1
   d = tempfile()
   dir.create(d); on.exit(unlink(d, recursive = TRUE), add = TRUE)
