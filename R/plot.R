@@ -609,6 +609,10 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     if (is_quarto()) "fig-format" else "dev", "' to 'png'). ",
     "See https://github.com/yihui/knitr/issues/2276 for more information."
   )
+  # set quiet opions for webshot2::webshot()
+  local_options(list(
+    webshot.quiet = getOption("webshot.quiet", TRUE)
+  ))
   f = in_dir(d, {
     if (i1 || i3) {
       if (i1) {
