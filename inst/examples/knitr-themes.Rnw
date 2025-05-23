@@ -76,7 +76,6 @@ applied to R code:
 
 <<demo-code, eval = FALSE>>=
 library(XML)
-library(plyr)
 library(reshape)
 # SCRAPE THE DATA FROM WEB 
 
@@ -94,7 +93,7 @@ save_data = function(y){
   return(tab)            
 }
 	
-team.list  = llply(years, save_data);
+team.list  = lapply(years, save_data);
 mls        = merge_recurse(team.list);
 @
 
