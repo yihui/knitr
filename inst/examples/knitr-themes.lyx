@@ -398,11 +398,6 @@ library(XML)
 
 \begin_layout Plain Layout
 
-library(plyr)
-\end_layout
-
-\begin_layout Plain Layout
-
 library(reshape)
 \end_layout
 
@@ -486,7 +481,7 @@ save_data = function(y){
 
 \begin_layout Plain Layout
 
-team.list  = llply(years, save_data);
+team.list  = lapply(years, save_data);
 \end_layout
 
 \begin_layout Plain Layout
