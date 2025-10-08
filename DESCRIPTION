@@ -124,7 +124,6 @@ Imports:
     yaml (>= 2.1.19)
 Suggests:
     bslib,
-    codetools,
     DBI (>= 0.4-1),
     digest,
     formatR,
