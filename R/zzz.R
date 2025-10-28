@@ -2,8 +2,10 @@ has_rlang = FALSE
 
 .onLoad = function(lib, pkg) {
   register_vignette_engines(pkg)
-  
+
   default_handlers <<- evaluate::new_output_handler()
+
+  cache_otel_tracer()
 
   has_rlang <<- requireNamespace("rlang", quietly = TRUE)
 
