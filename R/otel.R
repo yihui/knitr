@@ -32,7 +32,8 @@ otel_local_active_span = function(options, scope = parent.frame()) {
         knitr.chunk.device = options$dev,
         knitr.chunk.echo = options$echo,
         knitr.chunk.engine = options$engine,
-        knitr.chunk.eval = options$eval
+        knitr.chunk.eval = options$eval,
+        knitr.chunk.label = options$label
       )
     ),
     tracer = otel_tracer,
