@@ -5,7 +5,7 @@ has_rlang = FALSE
 
   default_handlers <<- evaluate::new_output_handler()
 
-  cache_otel_tracer()
+  otel_cache_tracer()
 
   has_rlang <<- requireNamespace("rlang", quietly = TRUE)
 
