@@ -29,7 +29,7 @@ otel_local_active_span = function(options, scope = parent.frame()) {
     name = sprintf("knit %s", options$label),
     attributes = otel::as_attributes(
       list(
-        kintr.device = options$dev,
+        knitr.device = options$dev,
         knitr.echo = options$echo,
         knitr.engine = options$engine,
         knitr.eval = options$eval
@@ -49,3 +49,16 @@ otel_cache_tracer = function() {
 tracer_enabled = function(tracer) {
   .subset2(tracer, "is_enabled")()
 }
+
+otel_refresh_tracer <- function(pkgname) {
+  requireNamespace("otel", quietly = TRUE) || return()
+  ns <- getNamespace(pkgname)
+  do.call(unlockBinding, list("otel_is_tracing", ns))
+  do.call(unlockBinding, list("otel_tracer", ns))
+  otel_tracer <- otel::get_tracer()
+  `[[<-`(ns, "otel_is_tracing", tracer_enabled(otel_tracer))
+  `[[<-`(ns, "otel_tracer", otel_tracer)
+  lockBinding("otel_is_tracing", ns)
+  lockBinding("otel_tracer", ns)
+}
+
