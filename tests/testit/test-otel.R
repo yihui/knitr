@@ -3,7 +3,7 @@ library(testit)
 if (requireNamespace("otelsdk", quietly = TRUE)) {
 
   record = otelsdk::with_otel_record({
-    knitr:::otel_refresh_tracer("knitr")
+    otel_refresh_tracer("knitr")
 
     knit(
       text = c('<<tidy=FALSE, eval=1:2, echo=FALSE, results="asis">>=', '1', '1+', '1', '1', '@'),
@@ -32,7 +32,7 @@ if (requireNamespace("otelsdk", quietly = TRUE)) {
   })
 
   record = otelsdk::with_otel_record({
-    knitr:::otel_refresh_tracer("knitr")
+    otel_refresh_tracer("knitr")
 
     local({
       env = new.env()
