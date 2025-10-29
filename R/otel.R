@@ -29,10 +29,10 @@ otel_local_active_span = function(options, scope = parent.frame()) {
     name = sprintf("knit %s", options$label),
     attributes = otel::as_attributes(
       list(
-        knitr.device = options$dev,
-        knitr.echo = options$echo,
-        knitr.engine = options$engine,
-        knitr.eval = options$eval
+        knitr.chunk.device = options$dev,
+        knitr.chunk.echo = options$echo,
+        knitr.chunk.engine = options$engine,
+        knitr.chunk.eval = options$eval
       )
     ),
     tracer = otel_tracer,
