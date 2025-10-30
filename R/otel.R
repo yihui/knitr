@@ -2,40 +2,19 @@ otel_tracer_name = "org.yihui.knitr"
 otel_tracer = NULL
 otel_is_tracing = FALSE
 
-otel_knitr_span = function(input, output, format, starting = TRUE) {
-  otel_is_tracing || return()
-  if (is.null(input)) input = ""
-  if (is.null(output)) output = ""
-  otel::start_local_active_span(
-    name = if (starting) {
-      sprintf("knitr processing %s", input)
-    } else {
-      sprintf("knitr output %s", output)
-    },
-    attributes = otel::as_attributes(
-      list(
-        knitr.format = format,
-        knitr.input = input,
-        knitr.output = output
-      )
-    ),
-    tracer = otel_tracer
-  )
-}
+# generic otel helpers:
 
-otel_local_active_span = function(options, scope = parent.frame()) {
+# arguments remain unevaluated on early return
+otel_local_active_span = function(
+  name,
+  label,
+  attributes = list(),
+  scope = environment()
+) {
   otel_is_tracing || return()
   otel::start_local_active_span(
-    name = sprintf("knit %s", options$label),
-    attributes = otel::as_attributes(
-      list(
-        knitr.chunk.device = options$dev,
-        knitr.chunk.echo = options$echo,
-        knitr.chunk.engine = options$engine,
-        knitr.chunk.eval = options$eval,
-        knitr.chunk.label = options$label
-      )
-    ),
+    name = sprintf("%s %s", name, label),
+    attributes = otel::as_attributes(attributes),
     tracer = otel_tracer,
     activation_scope = scope
   )
@@ -63,3 +42,29 @@ otel_refresh_tracer <- function(pkgname) {
   lockBinding("otel_tracer", ns)
 }
 
+# knitr-specific helpers:
+
+make_chunk_attributes <- function(options) {
+  list(
+    knitr.chunk.device = options$dev,
+    knitr.chunk.echo = options$echo,
+    knitr.chunk.engine = options$engine,
+    knitr.chunk.eval = options$eval,
+    knitr.chunk.label = options$label
+  )
+}
+
+make_knitr_attributes <- function() {
+  list(
+    knitr.format = out_format(),
+    knitr.input = get_knitr_concord("infile"),
+    knitr.output = get_knitr_concord("outfile")
+  )
+}
+
+# safe version that always returns a string
+get_knitr_concord <- function(name) {
+  item = knit_concord$get(name)
+  is.null(item) && return("")
+  item
+}

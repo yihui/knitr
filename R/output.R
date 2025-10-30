@@ -227,11 +227,10 @@ knit = function(
 
   if (is.null(out_format())) auto_format(ext)
 
-  otel_knitr_span(
-    knit_concord$get("infile"),
-    knit_concord$get("outfile"),
-    out_format(),
-    starting = TRUE
+  otel_local_active_span(
+    name = "knitr processing",
+    label = get_knitr_concord("infile"),
+    attributes = make_knitr_attributes()
   )
 
   params = NULL  # the params field from YAML
@@ -270,11 +269,11 @@ knit = function(
     concord_gen(input, output)
     if (!quiet) message('output file: ', output, ifelse(progress, '\n', ''))
   }
-  otel_knitr_span(
-    knit_concord$get("infile"),
-    knit_concord$get("outfile"),
-    out_format(),
-    starting = FALSE
+
+  otel_local_active_span(
+    name = "knitr output",
+    label = get_knitr_concord("outfile"),
+    attributes = make_knitr_attributes()
   )
 
   output %n% res

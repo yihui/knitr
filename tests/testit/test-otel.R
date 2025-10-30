@@ -3,6 +3,7 @@ library(testit)
 if (requireNamespace("otelsdk", quietly = TRUE)) {
 
   record = otelsdk::with_otel_record({
+    # refresh tracer within the `with_otel_record()` scope
     otel_refresh_tracer("knitr")
 
     knit(
@@ -62,5 +63,8 @@ if (requireNamespace("otelsdk", quietly = TRUE)) {
     (traces[[3L]]$attributes$knitr.input %==% 'knit-envir.Rmd')
     (traces[[3L]]$attributes$knitr.output %==% 'knit-envir.md')
   })
+
+  # reset tracer after tests
+  otel_refresh_tracer("knitr")
 
 }
