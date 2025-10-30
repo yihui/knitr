@@ -145,7 +145,7 @@ cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fi
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
 block_exec = function(options) {
-  otel_local_active_span(
+  otel_active_span(
     name = 'knit',
     label = options$label,
     attributes = make_chunk_attributes(options),

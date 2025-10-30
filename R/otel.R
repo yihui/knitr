@@ -4,8 +4,11 @@ otel_is_tracing = FALSE
 
 # generic otel helpers:
 
-# arguments remain unevaluated on early return
-otel_local_active_span = function(
+# - without specifying `scope`, the span ends when this function returns;
+#   to make this a local span (last as long as the function it is called from),
+#   specify `scope = environment()`
+# - arguments remain unevaluated on early return
+otel_active_span = function(
   name,
   label,
   attributes = list(),

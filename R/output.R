@@ -227,7 +227,7 @@ knit = function(
 
   if (is.null(out_format())) auto_format(ext)
 
-  otel_local_active_span(
+  otel_active_span(
     name = 'knitr processing',
     label = get_knitr_concord('infile'),
     attributes = make_knitr_attributes()
@@ -270,7 +270,7 @@ knit = function(
     if (!quiet) message('output file: ', output, ifelse(progress, '\n', ''))
   }
 
-  otel_local_active_span(
+  otel_active_span(
     name = 'knitr output',
     label = get_knitr_concord('outfile'),
     attributes = make_knitr_attributes()
