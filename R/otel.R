@@ -16,7 +16,7 @@ otel_active_span = function(
 ) {
   otel_is_tracing || return()
   otel::start_local_active_span(
-    name = sprintf("%s %s", name, label),
+    name = sprintf('%s %s', name, label),
     attributes = otel::as_attributes(attributes),
     tracer = otel_tracer,
     activation_scope = scope
@@ -33,21 +33,21 @@ tracer_enabled = function(tracer) {
   .subset2(tracer, 'is_enabled')()
 }
 
-otel_refresh_tracer <- function(pkgname) {
+otel_refresh_tracer = function(pkgname) {
   requireNamespace('otel', quietly = TRUE) || return()
-  ns <- getNamespace(pkgname)
+  ns = getNamespace(pkgname)
   do.call(unlockBinding, list('otel_is_tracing', ns)) # do.call for R CMD Check
   do.call(unlockBinding, list('otel_tracer', ns))
-  otel_tracer <- otel::get_tracer()
-  ns[['otel_is_tracing']] <- tracer_enabled(otel_tracer)
-  ns[['otel_tracer']] <- otel_tracer
+  otel_tracer = otel::get_tracer()
+  ns[['otel_is_tracing']] = tracer_enabled(otel_tracer)
+  ns[['otel_tracer']] = otel_tracer
   lockBinding('otel_is_tracing', ns)
   lockBinding('otel_tracer', ns)
 }
 
 # knitr-specific helpers:
 
-make_chunk_attributes <- function(options) {
+make_chunk_attributes = function(options) {
   list(
     knitr.chunk.device = options$dev,
     knitr.chunk.echo = options$echo,
@@ -57,7 +57,7 @@ make_chunk_attributes <- function(options) {
   )
 }
 
-make_knitr_attributes <- function() {
+make_knitr_attributes = function() {
   list(
     knitr.format = out_format(),
     knitr.input = get_knitr_concord('infile'),
@@ -66,7 +66,7 @@ make_knitr_attributes <- function() {
 }
 
 # safe version that always returns a string
-get_knitr_concord <- function(name) {
+get_knitr_concord = function(name) {
   item = knit_concord$get(name)
   is.null(item) && return('')
   item
