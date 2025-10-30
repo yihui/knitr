@@ -149,7 +149,7 @@ block_exec = function(options) {
     name = 'knit',
     label = options$label,
     attributes = make_chunk_attributes(options),
-    scope = parent.frame()
+    scope = environment()
   )
 
   if (options$engine == 'R') return(eng_r(options))
