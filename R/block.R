@@ -146,7 +146,7 @@ cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
 block_exec = function(options) {
   otel_local_active_span(
-    name = "knit",
+    name = 'knit',
     label = options$label,
     attributes = make_chunk_attributes(options),
     scope = parent.frame()
