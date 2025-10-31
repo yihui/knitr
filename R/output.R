@@ -227,6 +227,12 @@ knit = function(
 
   if (is.null(out_format())) auto_format(ext)
 
+  otel_active_span(
+    name = 'knitr processing',
+    label = get_knitr_concord('infile'),
+    attributes = make_knitr_attributes()
+  )
+
   params = NULL  # the params field from YAML
   if (out_format('markdown')) {
     if (child_mode()) {
@@ -263,6 +269,12 @@ knit = function(
     concord_gen(input, output)
     if (!quiet) message('output file: ', output, ifelse(progress, '\n', ''))
   }
+
+  otel_active_span(
+    name = 'knitr output',
+    label = get_knitr_concord('outfile'),
+    attributes = make_knitr_attributes()
+  )
 
   output %n% res
 }

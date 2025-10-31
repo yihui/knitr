@@ -1,5 +1,13 @@
 # CHANGES IN knitr VERSION 1.51
 
+## NEW FEATURES
+
+- Added support for [OpenTelemetry](https://opentelemetry.io/) observability. When the **otel** and **otelsdk** packages are installed and tracing is enabled, spans are automatically created for all knit operations. See [`otelsdk`'s Collecting Telemetry Data](https://otelsdk.r-lib.org/reference/collecting.html) for more details on configuring OpenTelemetry (thanks, @shikokuchuo, #2422).
+  - `knit()` produces 'knitr processing' and 'knitr output' spans when starting and finishing an operation
+  - `knit()` produces 'knit' spans for each chunk, recording attributes such as the label and knit engine
+
+## BUG FIXES
+
 - Fix issue with error traceback not correctly showing when **rlang** is available.
 
 - Improve error traceback when **rlang** is available and **evaluate** > 1.0.3 is used (thanks, @cderv, #2388).

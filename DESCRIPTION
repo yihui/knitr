@@ -135,6 +135,8 @@ Suggests:
     magick,
     litedown,
     markdown (>= 1.3),
+    otel,
+    otelsdk,
     png,
     ragg,
     reticulate (>= 1.4),
@@ -180,6 +182,7 @@ Collate:
     'hooks-rst.R'
     'hooks-textile.R'
     'hooks.R'
+    'otel.R'
     'output.R'
     'package.R'
     'pandoc.R'
