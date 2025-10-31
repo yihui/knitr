@@ -67,7 +67,5 @@ make_knitr_attributes = function() {
 
 # safe version that always returns a string
 get_knitr_concord = function(name) {
-  item = knit_concord$get(name)
-  is.null(item) && return('')
-  item
+  knit_concord$get(name) %n% ''
 }
