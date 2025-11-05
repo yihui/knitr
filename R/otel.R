@@ -35,14 +35,17 @@ tracer_enabled = function(tracer) {
 
 otel_refresh_tracer = function(pkgname) {
   requireNamespace('otel', quietly = TRUE) || return()
-  ns = getNamespace(pkgname)
-  do.call(unlockBinding, list('otel_is_tracing', ns)) # do.call for R CMD Check
-  do.call(unlockBinding, list('otel_tracer', ns))
-  otel_tracer = otel::get_tracer()
-  ns[['otel_is_tracing']] = tracer_enabled(otel_tracer)
-  ns[['otel_tracer']] = otel_tracer
-  lockBinding('otel_is_tracing', ns)
-  lockBinding('otel_tracer', ns)
+  tracer = otel::get_tracer()
+  modify_binding(
+    getNamespace(pkgname),
+    list(otel_tracer = tracer, otel_is_tracing = tracer_enabled(tracer))
+  )
+}
+
+modify_binding = function(env, lst) {
+  lapply(names(lst), unlockBinding, env)
+  list2env(lst, envir = env)
+  lapply(names(lst), lockBinding, env)
 }
 
 # knitr-specific helpers:
