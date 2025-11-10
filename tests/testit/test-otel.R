@@ -2,10 +2,7 @@ library(testit)
 
 if (requireNamespace('otelsdk', quietly = TRUE)) {
 
-  record = otelsdk::with_otel_record({
-    # refresh tracer within the `with_otel_record()` scope
-    otel_refresh_tracer('knitr')
-
+  record = with_otel_record({
     knit(
       text = c('<<tidy=FALSE, eval=1:2, echo=FALSE, results="asis">>=', '1', '1+', '1', '1', '@'),
       quiet = TRUE
@@ -32,9 +29,7 @@ if (requireNamespace('otelsdk', quietly = TRUE)) {
     (traces[[3L]]$attributes$knitr.output %==% '')
   })
 
-  record = otelsdk::with_otel_record({
-    otel_refresh_tracer('knitr')
-
+  record = with_otel_record({
     local({
       env = new.env()
       env$y = 1:3
@@ -63,8 +58,5 @@ if (requireNamespace('otelsdk', quietly = TRUE)) {
     (traces[[3L]]$attributes$knitr.input %==% 'knit-envir.Rmd')
     (traces[[3L]]$attributes$knitr.output %==% 'knit-envir.md')
   })
-
-  # reset tracer after tests
-  otel_refresh_tracer('knitr')
 
 }
