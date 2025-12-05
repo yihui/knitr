@@ -209,7 +209,7 @@ eng_r = function(options) {
     opts_knit$set(global.pars = par(no.readonly = TRUE))
   }, add = TRUE)
 
-  tmp.fig = tempfile(); on.exit(unlink(tmp.fig), add = TRUE)
+  tmp.fig = tmpmd5file(); on.exit(unlink(tmp.fig), add = TRUE)
   # open a device to record plots if not using a global device or no device is
   # open, and close this device if we don't want to use a global device
   if (!opts_knit$get('global.device') || is.null(dev.list())) {
@@ -386,7 +386,7 @@ cache_globals = function(option, code) {
 }
 
 # open a graphical device for a chunk to record plots
-chunk_device = function(options, record = TRUE, tmp = tempfile()) {
+chunk_device = function(options, record = TRUE, tmp = tmpmd5file()) {
   width = options$fig.width[1L]
   height = options$fig.height[1L]
   dev = fallback_dev(options$dev)
@@ -663,4 +663,33 @@ label_code = function(code, options) {
 
 as.source = function(code) {
   list(structure(list(src = code), class = 'source'))
+}
+
+#' A hopefully more robust version of tempfile().
+#'
+#' @param pattern Filename prefix.
+#' @param suffix Filename suffix.
+#' @param digits Currently I use Sys.time() with this number of digits.
+#' @param body No implemented, intended to use other sources of digest()
+#' @param fileext Filename extension as per tempfile().
+#' @return md5 based tempfilename.
+#' @export
+tmpmd5file <- function(pattern = "", suffix = "", digits = 6, tmpdir = NULL,
+                       body = NULL, fileext = "", check = FALSE) {
+  if (!grepl(pattern = "^\\.", x = fileext)) {
+    pattern <- paste0(".", pattern)
+  }
+  op <- options(digits.secs = digits)
+  body_string <- digest::digest(Sys.time())
+  new <- options(op)
+  outdir <- tmpdir
+  if (is.null(outdir)) {
+    outdir <- tempdir(check = check)
+  }
+  if (!file.exists(outdir)) {
+    created <- dir.create(outdir, recursive = TRUE)
+  }
+  file_string <- paste0(pattern, body_string, suffix, fileext)
+  file_path <- file.path(outdir, file_string)
+  return(file_path)
 }
