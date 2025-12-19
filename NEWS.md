@@ -18,6 +18,8 @@
 
 - Don't set `vheight` or `vwidth` for `webshot2::webshot()` when the chunk option `out.height` or `out.width` is a percentage (%). Setting `screenshot.opts` chunk option is still a way to specify `vheight` or `vwidth` specifically for `webshot()`, e.g., `screenshot.opts = list(vwidth = 6 * 72, vheight = 6 * 72 * 0.618)` for the width of 6 inches size with 72 dpi and 0.618 of aspect ratio.
 
+- HTML screenshots are taken inside the current working directory by default if it is writable, instead of `tempdir()`, which may not be accessible to certain browsers (thanks, @markschl, #2416). The directory can be customized via the global R option `knitr.html_screenshot.tmpdir`, e.g., if you want the old behavior, you may set `options(knitr.html_screenshot.tmpdir = tempdir())`.
+
 # CHANGES IN knitr VERSION 1.50
 
 ## NEW FEATURES

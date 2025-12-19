@@ -598,7 +598,9 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
   if (is.null(wargs$vwidth) && !grepl("%$", W <- options$out.width.px)) wargs$vwidth = W
   if (is.null(wargs$vheight) && !grepl("%$", H <- options$out.height.px)) wargs$vheight = H
   if (is.null(wargs$delay)) wargs$delay = if (i1) 0.2 else 1
-  d = tempfile()
+  d = tempfile(tmpdir = getOption(
+    'knitr.html_screenshot.tmpdir', if (file.access('.', 2) == 0) '.' else tempdir()
+  ))
   dir.create(d); on.exit(unlink(d, recursive = TRUE), add = TRUE)
   w = webshot_available()
   webshot = c(options$webshot, names(w)[w])
