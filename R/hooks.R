@@ -29,6 +29,11 @@
 #' @examples knit_hooks$get('source'); knit_hooks$get('inline')
 knit_hooks = new_defaults(.default.hooks)
 
+run_hook = function(.name, ...) {
+  fun = knit_hooks$get(.name)
+  if (is.function(fun)) fun(...)
+}
+
 render_brew = function() NULL
 
 # the chunk option out.lines = n (first n rows), -n (last n rows), or c(n1, n2)

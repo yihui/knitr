@@ -256,6 +256,8 @@ knit = function(
 
   progress = opts_knit$get('progress')
   if (in.file && !quiet) message(ifelse(progress, '\n\n', ''), 'processing file: ', input)
+  on.exit(run_hook('after.knit'), add = TRUE)
+  run_hook('before.knit')
   res = process_file(text, output)
   res = one_string(knit_hooks$get('document')(res))
   if (tangle) res = c(params, res)

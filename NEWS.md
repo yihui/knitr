@@ -6,6 +6,8 @@
   - `knit()` produces 'knitr processing' and 'knitr output' spans when starting and finishing an operation
   - `knit()` produces 'knit' spans for each chunk, recording attributes such as the label and knit engine
 
+- Added support for hooks that get executed before and after knitting. To register a hook before knitting starts, use `knitr::knit_hooks$set(before.knit = function() {})`. Similarly, the hook `after.knit` can be registered and will be executed after knitting is finished.
+
 ## BUG FIXES
 
 - Fix issue with error traceback not correctly showing when **rlang** is available.
