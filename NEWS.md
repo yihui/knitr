@@ -22,6 +22,10 @@
 
 - HTML screenshots are taken inside the current working directory by default if it is writable, instead of `tempdir()`, which may not be accessible to certain browsers (thanks, @markschl, #2416). The directory can be customized via the global R option `knitr.html_screenshot.tmpdir`, e.g., if you want the old behavior, you may set `options(knitr.html_screenshot.tmpdir = tempdir())`.
 
+## MINOR CHANGES
+
+- Empty alt text for images is allowed now (thanks, @Olivia-Box-Power, #2415). With the chunk option `fig.alt = ''`, the HTML output will be `<img alt = "" ... />`. Previously, the `alt` attribute was omitted in this case. If you still want to omit the `alt` attribute, you may use `fig.alt = NA`.
+
 # CHANGES IN knitr VERSION 1.50
 
 ## NEW FEATURES

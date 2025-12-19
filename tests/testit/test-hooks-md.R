@@ -22,7 +22,7 @@ assert('include_graphics() includes custom images correctly', {
   (img_output('a.png') %==% '![](a.png)')
   (img_output(c('a.png', 'b.png'), list(fig.show = 'hold')) %==% '![](a.png)![](b.png)')
   (img_output('a.png', list(fig.cap = 'foo bar')) %==% '![foo bar](a.png)')
-  (img_output('a.png', list(out.width = '50%')) %==% '<img src="a.png" width="50%" />')
+  (img_output('a.png', list(out.width = '50%')) %==% '<img src="a.png" alt="" width="50%" />')
   (img_output('a.pdf', list(out.width = '300px')) %==% '<embed src="a.pdf" width="300px" type="application/pdf" />')
 })
 
@@ -99,6 +99,11 @@ assert("Include a plot by pandoc md", {
   (hook_plot_md_pandoc(x, opt(ex = ex)) %==% sprintf("![](1.png){%s}", ex))
   (hook_plot_md_pandoc(x, opt(w = w, cap = cap, ex = ex)) %==%
     sprintf("![%s](1.png){width=%s %s}", cap, w, ex))
+})
+
+assert('empty alt text is preserved and NA alt is discarded', {
+  (hook_plot_md(x, opts_chunk$merge(list(fig.alt = ''))) %==% '<img src="1.png" alt=""  />')
+  (hook_plot_md(x, opts_chunk$merge(list(fig.alt = NA, out.width = '100'))) %==% '<img src="1.png" width="100" />')
 })
 
 assert("fig.alt does not break office document", {
