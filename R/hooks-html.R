@@ -39,17 +39,18 @@ hook_animation = function(options) {
 
 .img.tag = function(src, w, h, caption, extra) {
   ext = tolower(file_ext(src))
-  if (length(caption) != 1 || caption == '') caption = NULL
   tag = 'img'; extra2 = NULL; att = 'src'
   if (ext == 'pdf') {
     extra2 = 'type="application/pdf"'; tag = 'embed'
   } else if (ext == 'svg' && getOption('knitr.svg.object', FALSE)) {
     extra2 = 'type="image/svg+xml"'; tag = 'object'; att = 'data'
   }
+  if (length(caption) != 1 || is.na(caption) || (tag != 'img' && caption == ''))
+    caption = NULL
   res = paste0(c(
     paste0('<', tag),
     sprintf('%s="%s%s"', att, opts_knit$get('base.url') %n% '', .upload.url(src)),
-    sprintf('%s="%s"', if (tag %in% c('embed', 'object')) 'title' else 'alt', caption),
+    sprintf('%s="%s"', if (tag == 'img') 'alt' else 'title', caption),
     .img.attr(w, h, c(extra, extra2))
   ), collapse = ' ')
   paste0(res, if (tag == 'object') '></object>' else ' />')
@@ -59,7 +60,7 @@ hook_animation = function(options) {
   cap = options$fig.cap %n% {
     if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
   }
-  if (length(cap) == 0) cap = ''
+  if (length(cap) == 0 || is.na(cap)) cap = ''
   if (alt) {
     alt = options$fig.alt %n% cap
     return(if (escape) html_escape(alt) else alt)
