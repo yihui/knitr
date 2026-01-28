@@ -11,7 +11,7 @@ new_cache = function() {
   }
 
   cache_purge = function(hash) {
-    for (h in hash) unlink(paste(cache_path(h), c('rdb', 'rdx', 'RData'), sep = '.'))
+    for (h in hash) unlink(paste0(cache_path(h), c('.rds', '.rdb', '.rdx', '.RData', '__extra')), recursive = TRUE)
   }
 
   cache_save = function(keys, outname, hash, lazy = TRUE) {
@@ -31,7 +31,9 @@ new_cache = function() {
     if (!lazy) return()  # everything has been saved; no need to make lazy db
     # random seed is always load()ed
     keys = as.character(setdiff(keys, '.Random.seed'))
-    getFromNamespace('makeLazyLoadDB', 'tools')(knit_global(), path, variables = keys)
+    envir = knit_global()
+    saveRDS(lapply(setNames(keys, keys), function(k) knit_cache_hook(envir[[k]], k, path)), paste(path, 'rds', sep = '.'))
+    unlink(paste(path, c('rdb', 'rdx'), sep = '.')) # migrate from former implementation
   }
 
   save_objects = function(objs, label, path) {
@@ -56,7 +58,22 @@ new_cache = function() {
   cache_load = function(hash, lazy = TRUE) {
     path = cache_path(hash)
     if (!is_abs_path(path)) path = file.path(getwd(), path)
-    if (lazy) lazyLoad(path, envir = knit_global())
+    if (lazy) {
+      if (file.exists(paste(path, 'rdb', sep = '.'))) {
+        lazyLoad(path, envir = knit_global()) # backward compatibility
+      } else {
+        envir = knit_global()
+        obj = readRDS(paste(path, 'rds', sep = '.'))
+        for (nm in names(obj)) {
+          o = obj[[nm]]
+          assign(
+            nm,
+            if (is.function(o) && inherits(o, 'knit_cache_loader') && !inherits(o, 'AsIs')) o() else o,
+            envir = envir
+          )
+        }
+      }
+    }
     # load output from last run if exists
     if (file.exists(path2 <- paste(path, 'RData', sep = '.'))) {
       load(path2, envir = knit_global())
@@ -87,10 +104,12 @@ new_cache = function() {
   }
 
   cache_exists = function(hash, lazy = TRUE) {
-    is.character(hash) &&
-      all(file.exists(paste(
-        cache_path(hash), if (lazy) c('rdb', 'rdx') else 'RData', sep = '.'
-      )))
+    if (!is.character(hash)) return(FALSE)
+    path = cache_path(hash)
+    if (!lazy) return(file.exists(paste(path, 'RData', sep = '.')))
+
+    # for backward compatibility, allow rdb/rdx
+    file.exists(paste(path, 'rds', sep = '.')) || all(file.exists(paste(path, c('rdb', 'rdx'), sep = '.')))
   }
 
   # when cache=3, code output is stored in .[hash], so cache=TRUE won't lose
@@ -120,10 +139,59 @@ cache_meta_name = function(hash) sprintf('.%s_meta', hash)
 # a variable name to store the text output of code chunks
 cache_output_name = function(hash) sprintf('.%s', hash)
 
+#' Hook cache behavior
+#'
+#' By default, a named list of objects in a chunk is cached as is in a rds
+#' file. If certain classes of objects need custom cache behaviors, register
+#' S3 methods to \code{knit_cache_hook}. The return value of the method
+#' is cached to the rds file. If custom loader is needed, the method should
+#' return a function with \code{knit_cache_loader} class which will be called.
+#'
+#' @param x a value of object to be cached.
+#' @param nm a name of the object to be cached. If a hook creates an external file based on \code{nm}, then apply \code{\link{URLencode}} to \code{nm} in order to avoid invalid file names.
+#' @param path
+#'   a common path of the cache files of a chunk. If the hook creates extra
+#'   files which needs be cleaned up by knitr, then create a directory whose
+#'   name is `\code{path}` suffixed by "__extra", and save the files in it.
+#' @param ... Reserved for future extensions 
+#'
+#' @return
+#' A value to be cached. If the value is the \code{knitr_cache_loader}-classed
+#' function, then the function is called and the returned value is treated as
+#' the loaded value. The loader should receive ellipsis as an argument for the
+#' future extentions.
+#'
+#' @examples
+#' registerS3method(
+#'   "knit_cache_hook",
+#'   "character",
+#'   function(x, nm, path, ...) {
+#'     # Cache x as is if it extends character class
+#'     if (!identical(class(x), "character")) {
+#'       return(x)
+#'     }
+#'
+#'     # Preprocess data (e.g., save data to an external file)
+#'     # Create external files under the directory of `paste0(path, "__extra")`
+#'     # if knitr should cleanup them on refreshing/cleaning cache.
+#'     d <- paste0(path, "__extra")
+#'     dir.create(d, showWarnings = FALSE, recursive = TRUE)
+#'     f <- file.path(d, paste0(URLencode(nm, reserved = TRUE), '.txt'))
+#'     writeLines(x, f)
+#'
+#'     # Return loader function
+#'     # which receives ellipsis for future extentions and has knit_cache_loader class
+#'     structure(function(...) readLines(f), class = 'knit_cache_loader')
+#'   },
+#'   envir = asNamespace("knitr")
+#' )
+knit_cache_hook = function(x, nm, path, ...) UseMethod('knit_cache_hook')
+registerS3method("knit_cache_hook", "default", function(x, nm, path, ...) x)
+
 cache = new_cache()
 
 # a regex for cache files
-cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
+cache_rx = '_[abcdef0123456789]{32}([.](rds|rdb|rdx|RData)|__extra)$'
 
 #' Build automatic dependencies among chunks
 #'
@@ -236,7 +304,7 @@ load_cache = function(
     'Wrong cache databases for the chunk ', label,
     '. You need to remove redundant cache files. Found ', paste(p2, collapse = ', ')
   )
-  p2 = unique(gsub('[.](rdb|rdx|RData)$', '', p2))
+  p2 = unique(gsub('[.](rds|rdb|rdx|RData)$', '', p2))
   if (length(p2) != 1) stop('Cannot identify the cache database for chunk ', label)
   cache$load(file.path(p0, p2), lazy)
   if (missing(object)) return(invisible(NULL))
@@ -320,7 +388,7 @@ clean_cache = function(clean = FALSE, path = opts_chunk$get('cache.path')) {
   i = !(sub(cache_rx, '', base) %in% paste0(p1, labs))
   if (p1 != '') i = i & (substr(base, 1, nchar(p1)) == p1)
   if (!any(i)) return()
-  if (clean) unlink(files[i]) else message(
+  if (clean) unlink(files[i], recursive = TRUE) else message(
     'Clean these cache files?\n\n', one_string(files[i]), '\n'
   )
 }
