@@ -528,7 +528,7 @@ sew.knit_asis = function(x, options, inline = FALSE, ...) {
     # store metadata in an object named of the form .hash_meta when cache=TRUE
     if (length(m) && options$cache == 3)
       assign(cache_meta_name(options$hash), m, envir = knit_global())
-    if (inherits(x, 'knit_asis_htmlwidget')) {
+    if (inherits(x, c('knit_asis_htmlwidget', 'knit_asis_shiny_tag'))) {
       options$fig.cur = plot_counter()
       options = reduce_plot_opts(options)
       # TODO: remove this when quarto > 1.3.353 is widely used
