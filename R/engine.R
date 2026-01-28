@@ -403,7 +403,13 @@ eng_plot = function(options) {
     output = function(options, code, output, file) {
       extra = if (options$eval) {
         # move the generated plot (with a temp filename) to fig.path
-        f1 = with_ext(file, ext)
+        if (!file_exists(f1 <- with_ext(file, ext))) {
+          # asymptote may geneate file.ext.ext (see #2025)
+          if (cmd == 'asy') f1 = paste0(f1, '.', ext)
+        }
+        if (!file_exists(f1)) stop(
+          'The command did not generate the expected plot file: ', f1
+        )
         f2 = paste(fig_path(), ext, sep = '.')
         xfun::dir_create(dirname(f2))
         unlink(f2)

@@ -16,25 +16,6 @@ To make sure you did not break anything, you need to run tests, which are
 done through the [**testit**](http://cran.rstudio.com/package=testit)
 package. If you added any features, add your own tests in `tests/testit/`.
 
-## Travis CI
-
-If you are lazy or do not understand what I said above, just push commits to
-your repo, submit a PR, and wait for a few minutes.
-[Travis CI](http://yihui.name/en/2013/04/travis-ci-general-purpose/) will run
-the tests automatically. If your pull request passes the tests, you see
-green check marks, otherwise you see red crosses, and you will probably get
-email notifications as well.
-
-- [An example PR that passed the
-  check](https://github.com/yihui/knitr/pull/852/commits)
-- [An example PR that failed](https://github.com/yihui/knitr/pull/832/commits)
-
-When your PR does not pass the check, you need to click on the red cross to see
-details. There are two sets of tests: `R CMD check` on the package source, as
-well as the test on examples. The former is basically the unit tests, and the
-latter is to make sure your changes does not break my existing examples in the
-[knitr-examples](https://github.com/yihui/knitr-examples).
-
 ## roxygen2 documentation
 
 If your changes involve the roxygen2 documentation, please run `Rd2roxygen::rab('.')` to generate the Rd files.

@@ -26,7 +26,7 @@
 #'   FAQ's: \url{https://yihui.org/knitr/faq/}
 #' @importFrom xfun file_ext html_escape is_windows loadable parse_only
 #'   sans_ext try_silent with_ext read_utf8 write_utf8 file_string
-#'   is_R_CMD_check is_abs_path
+#'   is_R_CMD_check is_abs_path file_exists
 '_PACKAGE'
 
 .knitEnv = new.env()

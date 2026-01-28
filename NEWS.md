@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.52
 
+## BUG FIXES
+
+- Due to a change in Asymptote, the output file may not be recognized or included correctly (thanks, @DeliciousRoastPotato @shangeconnew, #2025).
 
 # CHANGES IN knitr VERSION 1.51
 
@@ -9,7 +12,7 @@
   - `knit()` produces 'knitr processing' and 'knitr output' spans when starting and finishing an operation
   - `knit()` produces 'knit' spans for each chunk, recording attributes such as the label and knit engine
 
-- Added support for hooks that get executed before and after knitting. To register a hook before knitting starts, use `knitr::knit_hooks$set(before.knit = function() {})`. Similarly, the hook `after.knit` can be registered and will be executed after knitting is finished.
+- Added support for hooks that get executed before and after knitting (thanks, @cderv #2223, @arnaudgallou #2419). To register a hook before knitting starts, use `knitr::knit_hooks$set(before.knit = function() {})`. Similarly, the hook `after.knit` can be registered and will be executed after knitting is finished.
 
 ## BUG FIXES
 
