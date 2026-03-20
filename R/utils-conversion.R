@@ -34,8 +34,11 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
 #' @references \url{https://typst.app}
 typst_compile = function(input, command = 'typst', ...) {
   out = with_ext(input, 'pdf')
-  system2(command, c('compile', shQuote(input), shQuote(out)), ...)
-  if (file.exists(out)) invisible(out) else stop('compilation by typst failed!')
+  status = system2(command, c('compile', shQuote(input), shQuote(out)), ...)
+  if (file.exists(out)) invisible(out) else stop(
+    'compilation by typst failed (exit status ', status, '); ',
+    'make sure typst is installed and available in your PATH'
+  )
 }
 
 #' Convert various input files to various output files using \code{knit()} and

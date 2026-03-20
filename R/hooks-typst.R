@@ -11,8 +11,8 @@ hook_plot_typst = function(x, options) {
 
   # build named arguments for #image()
   args = c(
-    sprintf('width: %s', w)[!is.null(w)],
-    sprintf('height: %s', h)[!is.null(h)],
+    if (!is.null(w)) sprintf('width: %s', w),
+    if (!is.null(h)) sprintf('height: %s', h),
     s
   )
   img_path = paste0(opts_knit$get('base.url'), .upload.url(x))
