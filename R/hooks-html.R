@@ -63,7 +63,7 @@ hook_animation = function(options) {
   if (length(cap) == 0 || is.na(cap)) cap = ''
   if (alt) {
     alt = options$fig.alt %n% cap
-    return(if (escape) html_escape(alt) else alt)
+    return(if (escape) html_escape(strip_html(alt), attr = TRUE) else alt)
   }
   if (is_blank(cap)) return(cap)
   paste0(create_label(
