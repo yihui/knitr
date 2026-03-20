@@ -126,15 +126,23 @@ opts = list(
 assert('.img.cap() generates the figure caption and alt attribute', {
   (.img.cap(list(fig.cap = NULL), FALSE) %==% "")
   (.img.cap(opts, FALSE) %==% opts$fig.cap)
-  (.img.cap(opts, TRUE, TRUE)  %==% 'Figure "caption" &lt;&gt;.')
+  (.img.cap(opts, TRUE, TRUE)  %==% 'Figure &quot;caption&quot; &lt;&gt;.')
 
   opts$fig.alt = 'Figure "alternative text" <>.'
 
-  (.img.cap(opts, TRUE, TRUE)  %==% 'Figure "alternative text" &lt;&gt;.')
+  (.img.cap(opts, TRUE, TRUE)  %==% 'Figure &quot;alternative text&quot; &lt;&gt;.')
   (.img.cap(opts, FALSE)  %==% opts$fig.cap)
 
   (.img.cap(list(fig.cap = '', fig.alt = "alt"), FALSE) %==% "")
   (.img.cap(list(fig.cap = '', fig.alt = "alt"), TRUE) %==% "alt")
+
+  # HTML tags in fig.cap should be stripped from alt text
+  opts2 = list(fig.cap = 'here is a <a href="https://example.org/">Link</a>', fig.lp = 'Fig:', label = 'foo')
+  (.img.cap(opts2, TRUE, TRUE) %==% 'here is a Link')
+
+  # double quotes in fig.cap should be escaped in alt attribute
+  opts3 = list(fig.cap = 'times for the "up" and "down" races', fig.lp = 'Fig:', label = 'foo')
+  (.img.cap(opts3, TRUE, TRUE) %==% 'times for the &quot;up&quot; and &quot;down&quot; races')
 })
 
 z = as.strict_list(list(a = 1, aa = 2, bbb = 3))
