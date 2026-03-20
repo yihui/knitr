@@ -2,7 +2,7 @@
 
 ## BUG FIXES
 
-- The `alt` attribute of figure images now has HTML tags stripped (via `xfun::strip_html()`) and is properly escaped for use in HTML attributes (via `xfun::html_escape(attr = TRUE)`). Previously, HTML in `fig.cap` (e.g., a link) could appear verbatim in `alt`, and double quotes in captions could break the `alt` attribute value (thanks, @cderv, #2430).
+- The `alt` attribute of figure images now has HTML tags stripped (via `xfun::strip_html()`) and is properly escaped for use in HTML attributes (via `xfun::html_escape(attr = TRUE)`). Previously, HTML in `fig.cap` (e.g., a link) could appear verbatim in `alt`, and double quotes in captions could break the `alt` attribute value (thanks, @cderv, #2004).
 
 - Due to a change in Asymptote, the output file may not be recognized or included correctly (thanks, @DeliciousRoastPotato @shangeconnew, #2025).
 
