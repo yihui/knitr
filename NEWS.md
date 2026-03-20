@@ -4,6 +4,8 @@
 
 - Due to a change in Asymptote, the output file may not be recognized or included correctly (thanks, @DeliciousRoastPotato @shangeconnew, #2025).
 
+- `has_crop_tools()` should not throw an error when `tlmgr` exists but cannot be executed (thanks, @lsandig, rstudio/rmarkdown#2612). It returns `FALSE` now.
+
 # CHANGES IN knitr VERSION 1.51
 
 ## NEW FEATURES

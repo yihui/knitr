@@ -813,6 +813,7 @@ has_crop_tools = function(warn = TRUE) {
     # assuming users know what this env var means (rstudio/tinytex#391)
     if (Sys.getenv('TEXLIVE_WINDOWS_EXTERNAL_GS') != '') return(TRUE)
     year = tinytex::tlmgr_version('list')$texlive
+    if (is.na(year)) return(FALSE)  # rstudio/rmarkdown#2612
     if (year < 2023 && warn) warning(
       'TeX Live version too low. Please consider upgrading, e.g., via tinytex::reinstall_tinytex().'
     )
