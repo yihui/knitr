@@ -50,7 +50,13 @@ all_patterns = list(
     chunk.end = '^###[.]\\s+end[.]rcode\\s*$',
     ref.chunk = '^\\s*<<(.+)>>\\s*$',
     inline.code = '@r +([^@]+)\\s*@',
-    inline.comment = '^###[.].*')
+    inline.comment = '^###[.].*'),
+
+  `typst` = list(
+    chunk.begin = '^[\t >]*```+\\s*\\{([a-zA-Z0-9_]+( *[ ,].*)?)\\}\\s*$',
+    chunk.end = '^[\t >]*```+\\s*$',
+    ref.chunk = '^\\s*<<(.+)>>\\s*$',
+    inline.code = '(?<!(^``))(?<!(\n``))`r[ #]([^`]+)\\s*`')
 )
 
 .sep.label = '^(#|--)+\\s*(@knitr|----+)(.*?)-*\\s*$'  # pattern for code chunks in an R script
@@ -109,7 +115,7 @@ set_pattern = function(type) {
 #' @rdname pat_fun
 #' @return The patterns object \code{\link{knit_patterns}} is modified as a side
 #'   effect.
-#' @export pat_rnw pat_brew pat_tex pat_html pat_md pat_rst pat_asciidoc pat_textile
+#' @export pat_rnw pat_brew pat_tex pat_html pat_md pat_rst pat_asciidoc pat_textile pat_typst
 #' @examples # see how knit_patterns is modified
 #' knit_patterns$get(); pat_rnw(); knit_patterns$get()
 #'
@@ -129,6 +135,8 @@ pat_rst = function() set_pattern('rst')
 pat_asciidoc = function() set_pattern('asciidoc')
 #' @rdname pat_fun
 pat_textile = function() set_pattern('textile')
+#' @rdname pat_fun
+pat_typst = function() set_pattern('typst')
 
 
 # helper functions
@@ -148,6 +156,7 @@ detect_pattern = function(text, ext) {
     if (ext %in% c('rmd', 'rmarkdown', 'markdown', 'md', 'qmd')) return('md')
     if (ext %in% c('rst', 'rrst')) return('rst')
     if (ext %in% c('asciidoc', 'rasciidoc', 'adoc', 'radoc')) return('asciidoc')
+    if (ext %in% c('rtyp')) return('typst')
   }
   for (p in names(all_patterns)) {
     for (i in c('chunk.begin', 'inline.code')) {

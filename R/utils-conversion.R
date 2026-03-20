@@ -19,6 +19,25 @@ rst2pdf = function(input, command = 'rst2pdf', options = '') {
   if (file.exists(out)) out else stop('conversion by rst2pdf failed!')
 }
 
+#' Compile a Typst file to PDF
+#'
+#' A wrapper function to compile a \file{.typ} file to PDF using the
+#' \command{typst} command-line tool.
+#' @param input The input \file{.typ} file.
+#' @param command Character string giving the path of the \command{typst}
+#'   program. If the program is not in your PATH, the full path has to be given
+#'   here.
+#' @param ... Additional arguments passed to \code{\link[base]{system2}()}.
+#' @return The output PDF filename (invisibly).
+#' @export
+#' @seealso \code{\link{knit2pdf}}
+#' @references \url{https://typst.app}
+typst_compile = function(input, command = 'typst', ...) {
+  out = with_ext(input, 'pdf')
+  system2(command, c('compile', shQuote(input), shQuote(out)), ...)
+  if (file.exists(out)) invisible(out) else stop('compilation by typst failed!')
+}
+
 #' Convert various input files to various output files using \code{knit()} and
 #' Pandoc
 #'
@@ -71,12 +90,17 @@ knit2pdf = function(
   out = knit(input, output = output, envir = envir, quiet = quiet)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (is.null(compiler)) {
-    compiler = if (grepl('\\.rst$', out)) 'rst2pdf' else 'pdflatex'
+    compiler = if (grepl('\\.rst$', out)) 'rst2pdf' else
+      if (grepl('\\.typ$', out)) 'typst' else 'pdflatex'
   }
   if (identical(compiler, 'rst2pdf')) {
     if (tolower(file_ext(out)) != 'rst')
       stop('for rst2pdf compiler input must be a .rst file')
     rst2pdf(basename(out), ...)
+  } else if (identical(compiler, 'typst')) {
+    if (tolower(file_ext(out)) != 'typ')
+      stop('for typst compiler input must be a .typ file')
+    typst_compile(basename(out), ...)
   } else {
     tinytex::latexmk(basename(out), engine = compiler, ...)
   }
