@@ -1,0 +1,11 @@
+Test the `calling.handlers` option.
+
+```{r}
+knitr::opts_chunk$set(
+  calling.handlers = list(error = hnd)
+)
+```
+
+```{r test, error = TRUE}
+1 + ""
+```

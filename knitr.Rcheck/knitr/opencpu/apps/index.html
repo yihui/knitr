@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>R Notebook: A knitr app on OpenCPU</title>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <!-- Styles for R syntax highlighter -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <style type="text/css">
+    textarea {
+      font-size: 12px;
+      font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+      width: 99%;
+    }
+  </style>
+<!-- R syntax highlighter -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</head>
+<body>
+<div class="container">
+<form action="https://public.opencpu.org/ocpu/library/base/R/identity/json" method="POST" id="knitForm">
+<textarea name="x" class="form-control" rows=10></textarea>
+<div><button type="button" class="btn btn-primary" id="knit"><span class="glyphicon glyphicon-play"></span> Convert</button></div>
+<!-- the knitting result will be rendered inside this div -->
+<div id="result"></div>
+</form>
+</div>
+<script>
+$('textarea[name="x"]').val('Start typing here...\n\n```{r test, fig.width=4, fig.height=4}\n# write R code here\npar(mar = c(4, 4, .1, .1))\nsmoothScatter(rnorm(500), rnorm(500))\n```\n\nThe value of pi is `r pi`.');
+
+$('#knit').click(function() {
+  $(this).attr('class', 'btn disabled');
+  $('#knitForm').submit();
+});
+/* attach a submit handler to the form */
+$('#knitForm').submit(function(event) {
+
+  /* stop form from submitting normally */
+  event.preventDefault();
+
+  /* get some values from elements on the page: */
+  var $form = $( this ),
+      term = $form.find('textarea[name="x"]').val().replace(/\\/g, '\\\\').replace(/"/g, '\\"'),
+      url = $form.attr('action'),
+      rcode = 'library(knitr)\n' +
+              'knit2html(text = "' + term + '", template = FALSE)';
+  /* Send the data using post and put the results in a div */
+  $.post(url, { x: rcode },
+    function( data ) {
+        $("#result").html(data[0]);
+        $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+    })
+    .complete(function() {$('#knit').attr('class', 'btn btn-primary');})
+    .error(function() { alert("An error occurred!"); });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2740 @@
+
+R version 4.5.3 (2026-03-11) -- "Reassured Reassurer"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "knitr"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('knitr')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("Sweave2knitr")
+> ### * Sweave2knitr
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Sweave2knitr
+> ### Title: Convert Sweave to knitr documents
+> ### Aliases: Sweave2knitr
+> 
+> ### ** Examples
+> 
+> Sweave2knitr(text='<<echo=TRUE>>=') # this is valid
+[1] "<<echo=TRUE>>="
+> Sweave2knitr(text="<<png=true>>=") # dev='png'
+capitalizing true/false to TRUE/FALSE:
+    * png=true
+replacing pdf/jpeg/png/tikz=TRUE with dev='pdf'/'jpeg'/'png'/'tikz':
+    * png=TRUE
+[1] "<<dev='png'>>="
+> Sweave2knitr(text="<<eps=TRUE, pdf=FALSE, results=tex, width=5, prefix.string=foo>>=")
+removing pdf/jpeg/png/eps/tikz=FALSE:
+    * eps=TRUE, pdf=FALSE, results=tex, width=5, prefix.string=foo
+replacing eps=TRUE with dev='postscript':
+    * eps=TRUE, , results=tex, width=5, prefix.string=foo
+replacing results=tex with results=asis:
+    * dev='postscript', , results=tex, width=5, prefix.string=foo
+quoting the results option:
+    * dev='postscript', , results=asis, width=5, prefix.string=foo
+replacing width/height with fig.width/fig.height:
+    * dev='postscript', , results='asis', width=5, prefix.string=foo
+replacing prefix.string=foo with fig.path='foo':
+    * dev='postscript', , results='asis', fig.width=5,
+      prefix.string=foo
+[1] "<<dev='postscript', results='asis', fig.width=5, fig.path='foo'>>="
+> Sweave2knitr(text="<<,png=false,fig=TRUE>>=")
+capitalizing true/false to TRUE/FALSE:
+    * ,png=false,fig=TRUE
+removing the unnecessary option fig=TRUE:
+    * ,png=FALSE,fig=TRUE
+removing pdf/jpeg/png/eps/tikz=FALSE:
+    * ,png=FALSE,
+[1] "<<>>="
+> Sweave2knitr(text="\\SweaveOpts{echo=false}")
+capitalizing true/false to TRUE/FALSE:
+    * echo=false
+changing \SweaveOpts{} to opts_chunk$set():
+    * \SweaveOpts{echo=false}
+[1] "\n<<include=FALSE>>=\nlibrary(knitr)\nopts_chunk$set(\necho=FALSE\n)\n@\n"
+> Sweave2knitr(text="\\SweaveInput{hello.Rnw}")
+replacing \SweaveInput{...} with <<child='...'>>=:
+    * \SweaveInput{hello.Rnw}
+[1] "\n<<'child-hello.Rnw', child='hello.Rnw'>>=\n@\n"
+> # Sweave example in utils
+> testfile = system.file("Sweave", "Sweave-test-1.Rnw", package = "utils")
+> Sweave2knitr(testfile, output = 'Sweave-test-knitr.Rnw')
+capitalizing true/false to TRUE/FALSE:
+    * fig=true
+removing the unnecessary option fig=TRUE:
+    * fig=TRUE
+    * fig=TRUE
+quoting the results option:
+    * results=hide
+removing options 'print', 'term', 'prefix':
+    * print=TRUE
+    * echo=TRUE,print=TRUE
+capitalizing true/false to TRUE/FALSE:
+    * echo=true
+changing \SweaveOpts{} to opts_chunk$set():
+    * \SweaveOpts{echo=FALSE}
+    * \SweaveOpts{echo=true}
+removing extra lines (#n shows line numbers):
+    * (#69) @
+> if (interactive()) knit('Sweave-test-knitr.Rnw') # or knit2pdf() directly
+> unlink('Sweave-test-knitr.Rnw')
+> 
+> 
+> 
+> cleanEx()
+> nameEx("all_labels")
+> ### * all_labels
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: all_labels
+> ### Title: Get all chunk labels in a document
+> ### Aliases: all_labels all_rcpp_labels
+> 
+> ### ** Examples
+> 
+> # the examples below are meaningless unless you put them in a knitr document
+> all_labels()
+NULL
+> all_labels(engine == 'Rcpp')
+NULL
+> all_labels(echo == FALSE && results != 'hide')
+NULL
+> # or separate the two conditions
+> all_labels(echo == FALSE, results != 'hide')
+NULL
+> 
+> 
+> 
+> cleanEx()
+> nameEx("all_patterns")
+> ### * all_patterns
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: all_patterns
+> ### Title: All built-in patterns
+> ### Aliases: all_patterns
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> all_patterns$rnw; all_patterns$html
+$chunk.begin
+[1] "^\\s*<<(.*)>>=.*$"
+
+$chunk.end
+[1] "^\\s*@\\s*(%+.*|)$"
+
+$inline.code
+[1] "\\\\Sexpr\\{([^}]+)\\}"
+
+$inline.comment
+[1] "^\\s*%.*"
+
+$ref.chunk
+[1] "^\\s*<<(.+)>>\\s*$"
+
+$header.begin
+[1] "(^|\n)\\s*\\\\documentclass[^}]+\\}"
+
+$document.begin
+[1] "\\s*\\\\begin\\{document\\}"
+
+$chunk.begin
+[1] "^\\s*<!--\\s*begin.rcode\\s*(.*)"
+
+$chunk.end
+[1] "^\\s*end.rcode\\s*-->"
+
+$ref.chunk
+[1] "^\\s*<<(.+)>>\\s*$"
+
+$inline.code
+[1] "<!--\\s*rinline(.+?)-->"
+
+$header.begin
+[1] "\\s*<head>"
+
+> 
+> str(all_patterns)
+List of 9
+ $ rnw     :List of 7
+  ..$ chunk.begin   : chr "^\\s*<<(.*)>>=.*$"
+  ..$ chunk.end     : chr "^\\s*@\\s*(%+.*|)$"
+  ..$ inline.code   : chr "\\\\Sexpr\\{([^}]+)\\}"
+  ..$ inline.comment: chr "^\\s*%.*"
+  ..$ ref.chunk     : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ header.begin  : chr "(^|\n)\\s*\\\\documentclass[^}]+\\}"
+  ..$ document.begin: chr "\\s*\\\\begin\\{document\\}"
+ $ brew    :List of 1
+  ..$ inline.code: chr "<%[=]{0,1}\\s+([^%]+)\\s+[-]*%>"
+ $ tex     :List of 8
+  ..$ chunk.begin   : chr "^\\s*%+\\s*begin.rcode\\s*(.*)"
+  ..$ chunk.end     : chr "^\\s*%+\\s*end.rcode"
+  ..$ chunk.code    : chr "^\\s*%+"
+  ..$ ref.chunk     : chr "^%+\\s*<<(.+)>>\\s*$"
+  ..$ inline.comment: chr "^\\s*%.*"
+  ..$ inline.code   : chr "\\\\rinline\\{([^}]+)\\}"
+  ..$ header.begin  : chr "(^|\n)\\s*\\\\documentclass[^}]+\\}"
+  ..$ document.begin: chr "\\s*\\\\begin\\{document\\}"
+ $ html    :List of 5
+  ..$ chunk.begin : chr "^\\s*<!--\\s*begin.rcode\\s*(.*)"
+  ..$ chunk.end   : chr "^\\s*end.rcode\\s*-->"
+  ..$ ref.chunk   : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ inline.code : chr "<!--\\s*rinline(.+?)-->"
+  ..$ header.begin: chr "\\s*<head>"
+ $ md      :List of 4
+  ..$ chunk.begin: chr "^[\t >]*```+\\s*\\{([a-zA-Z0-9_]+( *[ ,].*)?)\\}\\s*$"
+  ..$ chunk.end  : chr "^[\t >]*```+\\s*$"
+  ..$ ref.chunk  : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ inline.code: chr "(?<!(^``))(?<!(\n``))`r[ #]([^`]+)\\s*`"
+ $ rst     :List of 5
+  ..$ chunk.begin: chr "^\\s*[.][.]\\s+\\{r(.*)\\}\\s*$"
+  ..$ chunk.end  : chr "^\\s*[.][.]\\s+[.][.]\\s*$"
+  ..$ chunk.code : chr "^\\s*[.][.]"
+  ..$ ref.chunk  : chr "^\\.*\\s*<<(.+)>>\\s*$"
+  ..$ inline.code: chr ":r:`([^`]+)`"
+ $ asciidoc:List of 6
+  ..$ chunk.begin   : chr "^//\\s*begin[.]rcode(.*)$"
+  ..$ chunk.end     : chr "^//\\s*end[.]rcode\\s*$"
+  ..$ chunk.code    : chr "^//+"
+  ..$ ref.chunk     : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ inline.code   : chr "`r +([^`]+)\\s*`|[+]r +([^+]+)\\s*[+]"
+  ..$ inline.comment: chr "^//.*"
+ $ textile :List of 5
+  ..$ chunk.begin   : chr "^###[.]\\s+begin[.]rcode(.*)$"
+  ..$ chunk.end     : chr "^###[.]\\s+end[.]rcode\\s*$"
+  ..$ ref.chunk     : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ inline.code   : chr "@r +([^@]+)\\s*@"
+  ..$ inline.comment: chr "^###[.].*"
+ $ typst   :List of 4
+  ..$ chunk.begin: chr "^[\t >]*```+\\s*\\{([a-zA-Z0-9_]+( *[ ,].*)?)\\}\\s*$"
+  ..$ chunk.end  : chr "^[\t >]*```+\\s*$"
+  ..$ ref.chunk  : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ inline.code: chr "(?<!(^``))(?<!(\n``))`r[ #]([^`]+)\\s*`"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("asis_output")
+> ### * asis_output
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: asis_output
+> ### Title: Mark an R object with a special class
+> ### Aliases: asis_output
+> 
+> ### ** Examples
+> 
+>  # see ?knit_print
+> 
+> 
+> 
+> cleanEx()
+> nameEx("chunk_hook")
+> ### * chunk_hook
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: hook_pdfcrop
+> ### Title: Built-in chunk hooks to extend knitr
+> ### Aliases: hook_pdfcrop hook_optipng hook_pngquant hook_mogrify
+> ###   hook_plot_custom hook_purl
+> 
+> ### ** Examples
+> 
+> if (require('rgl') && exists('hook_rgl')) knit_hooks$set(rgl = hook_rgl)
+Loading required package: rgl
+Warning in library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE,  :
+  there is no package called ‘rgl’
+> # then in code chunks, use the option rgl=TRUE
+> 
+> 
+> 
+> cleanEx()
+> nameEx("convert_chunk_header")
+> ### * convert_chunk_header
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: convert_chunk_header
+> ### Title: Convert the in-header chunk option syntax to the in-body syntax
+> ### Aliases: convert_chunk_header
+> 
+> ### ** Examples
+> 
+> knitr_example = function(...) system.file('examples', ..., package = 'knitr')
+> # Convert a document for multiline type
+> convert_chunk_header(knitr_example('knitr-minimal.Rmd'))
+ [1] "# A Minimal Example for Markdown"                                                                  
+ [2] ""                                                                                                  
+ [3] "This is a minimal example of using **knitr** to produce an _HTML_ page from _Markdown_."           
+ [4] ""                                                                                                  
+ [5] "## R code chunks"                                                                                  
+ [6] ""                                                                                                  
+ [7] "```{r}"                                                                                            
+ [8] "#| label = \"setup\""                                                                              
+ [9] "# set global chunk options: images will be 7x5 inches"                                             
+[10] "knitr::opts_chunk$set(fig.width=7, fig.height=5)"                                                  
+[11] "options(digits = 4)"                                                                               
+[12] "```"                                                                                               
+[13] ""                                                                                                  
+[14] "Now we write some code chunks in this markdown file:"                                              
+[15] ""                                                                                                  
+[16] "```{r}"                                                                                            
+[17] "#| label = \"computing\""                                                                          
+[18] "x <- 1+1 # a simple calculator"                                                                    
+[19] "set.seed(123)"                                                                                     
+[20] "rnorm(5)  # boring random numbers"                                                                 
+[21] "```"                                                                                               
+[22] ""                                                                                                  
+[23] "We can also produce plots:"                                                                        
+[24] ""                                                                                                  
+[25] "```{r}"                                                                                            
+[26] "#| label = \"graphics\""                                                                           
+[27] "par(mar = c(4, 4, .1, .1))"                                                                        
+[28] "with(mtcars, {"                                                                                    
+[29] "  plot(mpg~hp, pch=20, col='darkgray')"                                                            
+[30] "  lines(lowess(hp, mpg))"                                                                          
+[31] "})"                                                                                                
+[32] "```"                                                                                               
+[33] ""                                                                                                  
+[34] "## Inline code"                                                                                    
+[35] ""                                                                                                  
+[36] "Inline R code is also supported, e.g. the value of `x` is `r x`, and 2 &times; &pi;"               
+[37] "= `r 2*pi`."                                                                                       
+[38] ""                                                                                                  
+[39] "## Math"                                                                                           
+[40] ""                                                                                                  
+[41] "LaTeX math as usual: $f(\\alpha, \\beta) \\propto x^{\\alpha-1}(1-x)^{\\beta-1}$."                 
+[42] ""                                                                                                  
+[43] "## Misc"                                                                                           
+[44] ""                                                                                                  
+[45] "You can indent code chunks so they can nest within other environments such as lists."              
+[46] ""                                                                                                  
+[47] "1. the area of a circle with radius x"                                                             
+[48] "    ```{r}"                                                                                        
+[49] "    #| label = \"foo\""                                                                            
+[50] "    pi * x^2"                                                                                      
+[51] "    ```"                                                                                           
+[52] "2. OK, that is great"                                                                              
+[53] ""                                                                                                  
+[54] "To compile me, use"                                                                                
+[55] ""                                                                                                  
+[56] "```{r}"                                                                                            
+[57] "#| label = \"compile\","                                                                           
+[58] "#| eval = FALSE"                                                                                   
+[59] "library(knitr)"                                                                                    
+[60] "knit('knitr-minimal.Rmd')"                                                                         
+[61] "```"                                                                                               
+[62] ""                                                                                                  
+[63] "## Conclusion"                                                                                     
+[64] ""                                                                                                  
+[65] "Markdown is super easy to write. Go to **knitr** [homepage](https://yihui.org/knitr/) for details."
+> # Convert a document for wrap type
+> convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap")
+ [1] "# A Minimal Example for Markdown"                                                                  
+ [2] ""                                                                                                  
+ [3] "This is a minimal example of using **knitr** to produce an _HTML_ page from _Markdown_."           
+ [4] ""                                                                                                  
+ [5] "## R code chunks"                                                                                  
+ [6] ""                                                                                                  
+ [7] "```{r}"                                                                                            
+ [8] "#| setup"                                                                                          
+ [9] "# set global chunk options: images will be 7x5 inches"                                             
+[10] "knitr::opts_chunk$set(fig.width=7, fig.height=5)"                                                  
+[11] "options(digits = 4)"                                                                               
+[12] "```"                                                                                               
+[13] ""                                                                                                  
+[14] "Now we write some code chunks in this markdown file:"                                              
+[15] ""                                                                                                  
+[16] "```{r}"                                                                                            
+[17] "#| computing"                                                                                      
+[18] "x <- 1+1 # a simple calculator"                                                                    
+[19] "set.seed(123)"                                                                                     
+[20] "rnorm(5)  # boring random numbers"                                                                 
+[21] "```"                                                                                               
+[22] ""                                                                                                  
+[23] "We can also produce plots:"                                                                        
+[24] ""                                                                                                  
+[25] "```{r}"                                                                                            
+[26] "#| graphics"                                                                                       
+[27] "par(mar = c(4, 4, .1, .1))"                                                                        
+[28] "with(mtcars, {"                                                                                    
+[29] "  plot(mpg~hp, pch=20, col='darkgray')"                                                            
+[30] "  lines(lowess(hp, mpg))"                                                                          
+[31] "})"                                                                                                
+[32] "```"                                                                                               
+[33] ""                                                                                                  
+[34] "## Inline code"                                                                                    
+[35] ""                                                                                                  
+[36] "Inline R code is also supported, e.g. the value of `x` is `r x`, and 2 &times; &pi;"               
+[37] "= `r 2*pi`."                                                                                       
+[38] ""                                                                                                  
+[39] "## Math"                                                                                           
+[40] ""                                                                                                  
+[41] "LaTeX math as usual: $f(\\alpha, \\beta) \\propto x^{\\alpha-1}(1-x)^{\\beta-1}$."                 
+[42] ""                                                                                                  
+[43] "## Misc"                                                                                           
+[44] ""                                                                                                  
+[45] "You can indent code chunks so they can nest within other environments such as lists."              
+[46] ""                                                                                                  
+[47] "1. the area of a circle with radius x"                                                             
+[48] "    ```{r}"                                                                                        
+[49] "    #| foo"                                                                                        
+[50] "    pi * x^2"                                                                                      
+[51] "    ```"                                                                                           
+[52] "2. OK, that is great"                                                                              
+[53] ""                                                                                                  
+[54] "To compile me, use"                                                                                
+[55] ""                                                                                                  
+[56] "```{r}"                                                                                            
+[57] "#| compile, eval=FALSE"                                                                            
+[58] "library(knitr)"                                                                                    
+[59] "knit('knitr-minimal.Rmd')"                                                                         
+[60] "```"                                                                                               
+[61] ""                                                                                                  
+[62] "## Conclusion"                                                                                     
+[63] ""                                                                                                  
+[64] "Markdown is super easy to write. Go to **knitr** [homepage](https://yihui.org/knitr/) for details."
+> # Reduce default wrapping width
+> convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap", width = 0.6 * getOption('width'))
+ [1] "# A Minimal Example for Markdown"                                                                  
+ [2] ""                                                                                                  
+ [3] "This is a minimal example of using **knitr** to produce an _HTML_ page from _Markdown_."           
+ [4] ""                                                                                                  
+ [5] "## R code chunks"                                                                                  
+ [6] ""                                                                                                  
+ [7] "```{r}"                                                                                            
+ [8] "#| setup"                                                                                          
+ [9] "# set global chunk options: images will be 7x5 inches"                                             
+[10] "knitr::opts_chunk$set(fig.width=7, fig.height=5)"                                                  
+[11] "options(digits = 4)"                                                                               
+[12] "```"                                                                                               
+[13] ""                                                                                                  
+[14] "Now we write some code chunks in this markdown file:"                                              
+[15] ""                                                                                                  
+[16] "```{r}"                                                                                            
+[17] "#| computing"                                                                                      
+[18] "x <- 1+1 # a simple calculator"                                                                    
+[19] "set.seed(123)"                                                                                     
+[20] "rnorm(5)  # boring random numbers"                                                                 
+[21] "```"                                                                                               
+[22] ""                                                                                                  
+[23] "We can also produce plots:"                                                                        
+[24] ""                                                                                                  
+[25] "```{r}"                                                                                            
+[26] "#| graphics"                                                                                       
+[27] "par(mar = c(4, 4, .1, .1))"                                                                        
+[28] "with(mtcars, {"                                                                                    
+[29] "  plot(mpg~hp, pch=20, col='darkgray')"                                                            
+[30] "  lines(lowess(hp, mpg))"                                                                          
+[31] "})"                                                                                                
+[32] "```"                                                                                               
+[33] ""                                                                                                  
+[34] "## Inline code"                                                                                    
+[35] ""                                                                                                  
+[36] "Inline R code is also supported, e.g. the value of `x` is `r x`, and 2 &times; &pi;"               
+[37] "= `r 2*pi`."                                                                                       
+[38] ""                                                                                                  
+[39] "## Math"                                                                                           
+[40] ""                                                                                                  
+[41] "LaTeX math as usual: $f(\\alpha, \\beta) \\propto x^{\\alpha-1}(1-x)^{\\beta-1}$."                 
+[42] ""                                                                                                  
+[43] "## Misc"                                                                                           
+[44] ""                                                                                                  
+[45] "You can indent code chunks so they can nest within other environments such as lists."              
+[46] ""                                                                                                  
+[47] "1. the area of a circle with radius x"                                                             
+[48] "    ```{r}"                                                                                        
+[49] "    #| foo"                                                                                        
+[50] "    pi * x^2"                                                                                      
+[51] "    ```"                                                                                           
+[52] "2. OK, that is great"                                                                              
+[53] ""                                                                                                  
+[54] "To compile me, use"                                                                                
+[55] ""                                                                                                  
+[56] "```{r}"                                                                                            
+[57] "#| compile, eval=FALSE"                                                                            
+[58] "library(knitr)"                                                                                    
+[59] "knit('knitr-minimal.Rmd')"                                                                         
+[60] "```"                                                                                               
+[61] ""                                                                                                  
+[62] "## Conclusion"                                                                                     
+[63] ""                                                                                                  
+[64] "Markdown is super easy to write. Go to **knitr** [homepage](https://yihui.org/knitr/) for details."
+> ## Not run: 
+> ##D # Explicitly name the output
+> ##D convert_chunk_header('test.Rmd', output = 'test2.Rmd')
+> ##D # Overwrite the input
+> ##D convert_chunk_header('test.Rmd', output = identity)
+> ##D # Use a custom function to name the output
+> ##D convert_chunk_header('test.Rmd', output = \(f) sprintf('%s-new.%s', xfun::sans_ext(f), xfun::file_ext(f)))
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("download_image")
+> ### * download_image
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: download_image
+> ### Title: Download an image from the web and include it in a document
+> ### Aliases: download_image
+> 
+> ### ** Examples
+> 
+> ## Don't show: 
+> if (interactive()) withAutoprint({ # examplesIf
++ ## End(Don't show)
++ knitr::download_image('https://www.r-project.org/Rlogo.png')
++ ## Don't show: 
++ }) # examplesIf
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("engine_output")
+> ### * engine_output
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: engine_output
+> ### Title: An output wrapper for language engine output
+> ### Aliases: engine_output
+> 
+> ### ** Examples
+> 
+> library(knitr)
+> engine_output(opts_chunk$merge(list(engine = 'Rscript')), code = '1 + 1', out = '[1] 2')
+[1] "1 + 1\n## [1] 2\n"
+> engine_output(opts_chunk$merge(list(echo = FALSE, engine = 'Rscript')), code = '1 + 1', out = '[1] 2')
+[1] "## [1] 2\n"
+> 
+> # expert use only
+> engine_output(opts_chunk$merge(list(engine = 'python')), out = list(structure(list(src = '1 + 1'), class = 'source'), '2'))
+[1] "1 + 1"  "## 2\n"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("fig_chunk")
+> ### * fig_chunk
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: fig_chunk
+> ### Title: Obtain the figure filenames for a chunk
+> ### Aliases: fig_chunk
+> 
+> ### ** Examples
+> 
+> library(knitr)
+> fig_chunk('foo', 'png')
+[1] "figure/foo-1.png"
+> fig_chunk('foo', 'pdf')
+[1] "figure/foo-1.pdf"
+> fig_chunk('foo', 'svg', 2)  # the second plot of the chunk foo
+[1] "figure/foo-2.svg"
+> fig_chunk('foo', 'png', 1:5)  # if the chunk foo produced 5 plots
+[1] "figure/foo-1.png" "figure/foo-2.png" "figure/foo-3.png" "figure/foo-4.png"
+[5] "figure/foo-5.png"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("fig_path")
+> ### * fig_path
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: fig_path
+> ### Title: Path for figure files
+> ### Aliases: fig_path
+> 
+> ### ** Examples
+> 
+> fig_path('.pdf', options = list(fig.path='figure/abc-', label='first-plot'))
+[1] "figure/abc-first-plot-1.pdf"
+> fig_path('.png', list(fig.path='foo-', label='bar'), 1:10)
+ [1] "foo-bar-1.png"  "foo-bar-2.png"  "foo-bar-3.png"  "foo-bar-4.png" 
+ [5] "foo-bar-5.png"  "foo-bar-6.png"  "foo-bar-7.png"  "foo-bar-8.png" 
+ [9] "foo-bar-9.png"  "foo-bar-10.png"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("hook_document")
+> ### * hook_document
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: hook_movecode
+> ### Title: Some potentially useful document hooks
+> ### Aliases: hook_movecode
+> 
+> ### ** Examples
+> 
+> ## Not run: knit_hooks$set(document = hook_movecode)
+> # see example 103 at https://github.com/yihui/knitr-examples
+> 
+> 
+> 
+> cleanEx()
+> nameEx("hook_plot")
+> ### * hook_plot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: hook_plot_html
+> ### Title: Default plot hooks for different output formats
+> ### Aliases: hook_plot_html hook_plot_asciidoc hook_plot_tex hook_plot_md
+> ###   hook_plot_rst hook_plot_textile hook_plot_typst
+> 
+> ### ** Examples
+> 
+> # this is what happens for a chunk like this
+> 
+> # <<foo-bar-plot, dev='pdf', fig.align='right'>>=
+> hook_plot_tex('foo-bar-plot.pdf', opts_chunk$merge(list(fig.align='right')))
+[1] "\n\n\\hfill{}\\includegraphics{foo-bar-plot} \n\n"
+> 
+> # <<bar, dev='tikz'>>=
+> hook_plot_tex('bar.tikz', opts_chunk$merge(list(dev='tikz')))
+[1] "\n\\includegraphics{bar} "
+> 
+> # <<foo, dev='pdf', fig.show='animate', interval=.1>>=
+> 
+> # 5 plots are generated in this chunk
+> hook_plot_tex('foo5.pdf', opts_chunk$merge(list(fig.show='animate',interval=.1,fig.cur=5, fig.num=5)))
+[1] "\n\\animategraphics[,controls,loop]{10}{foo}{1}{5}"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("image_uri")
+> ### * image_uri
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: image_uri
+> ### Title: Encode an image file to a data URI
+> ### Aliases: image_uri
+> 
+> ### ** Examples
+> 
+> uri = image_uri(file.path(R.home('doc'), 'html', 'logo.jpg'))
+> if (interactive()) {cat(sprintf('<img src="%s" />', uri), file = 'logo.html')
++ browseURL('logo.html') # you can check its HTML source
++ }
+> 
+> 
+> 
+> cleanEx()
+> nameEx("inline_expr")
+> ### * inline_expr
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: inline_expr
+> ### Title: Wrap code using the inline R expression syntax
+> ### Aliases: inline_expr
+> 
+> ### ** Examples
+> 
+> library(knitr)
+> inline_expr('1+1', 'rnw'); inline_expr('1+1', 'html'); inline_expr('1+1', 'md')
+[1] "\\Sexpr{1+1}"
+[1] "<!--rinline 1+1 -->"
+[1] "`r 1+1`"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("is_low_change")
+> ### * is_low_change
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: is_low_change
+> ### Title: Compare two recorded plots
+> ### Aliases: is_low_change
+> 
+> ### ** Examples
+> 
+> pdf(NULL)
+> dev.control('enable')  # enable plot recording
+> plot(1:10)
+> p1 = recordPlot()
+> abline(0, 1)  # add a line (a low-level change)
+> p2 = recordPlot()
+> plot(rnorm(100))
+> p3 = recordPlot()  # draw a completely new plot
+> dev.off()
+pdf 
+  2 
+> knitr::is_low_change(p1, p2)  # true
+[1] TRUE
+> knitr::is_low_change(p1, p3)  # false
+[1] FALSE
+> 
+> 
+> 
+> cleanEx()
+> nameEx("kable")
+> ### * kable
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: kable
+> ### Title: Create tables in LaTeX, HTML, Markdown and reStructuredText
+> ### Aliases: kable kables
+> 
+> ### ** Examples
+> 
+> d1 = head(iris); d2 = head(mtcars)
+> # pipe tables by default
+> kable(d1)
+
+
+| Sepal.Length| Sepal.Width| Petal.Length| Petal.Width|Species |
+|------------:|-----------:|------------:|-----------:|:-------|
+|          5.1|         3.5|          1.4|         0.2|setosa  |
+|          4.9|         3.0|          1.4|         0.2|setosa  |
+|          4.7|         3.2|          1.3|         0.2|setosa  |
+|          4.6|         3.1|          1.5|         0.2|setosa  |
+|          5.0|         3.6|          1.4|         0.2|setosa  |
+|          5.4|         3.9|          1.7|         0.4|setosa  |
+> kable(d2[, 1:5])
+
+
+|                  |  mpg| cyl| disp|  hp| drat|
+|:-----------------|----:|---:|----:|---:|----:|
+|Mazda RX4         | 21.0|   6|  160| 110| 3.90|
+|Mazda RX4 Wag     | 21.0|   6|  160| 110| 3.90|
+|Datsun 710        | 22.8|   4|  108|  93| 3.85|
+|Hornet 4 Drive    | 21.4|   6|  258| 110| 3.08|
+|Hornet Sportabout | 18.7|   8|  360| 175| 3.15|
+|Valiant           | 18.1|   6|  225| 105| 2.76|
+> # no inner padding
+> kable(d2, format = 'pipe', padding = 0)
+
+
+|                 | mpg|cyl|disp| hp|drat|   wt| qsec| vs| am|gear|carb|
+|:----------------|---:|--:|---:|--:|---:|----:|----:|--:|--:|---:|---:|
+|Mazda RX4        |21.0|  6| 160|110|3.90|2.620|16.46|  0|  1|   4|   4|
+|Mazda RX4 Wag    |21.0|  6| 160|110|3.90|2.875|17.02|  0|  1|   4|   4|
+|Datsun 710       |22.8|  4| 108| 93|3.85|2.320|18.61|  1|  1|   4|   1|
+|Hornet 4 Drive   |21.4|  6| 258|110|3.08|3.215|19.44|  1|  0|   3|   1|
+|Hornet Sportabout|18.7|  8| 360|175|3.15|3.440|17.02|  0|  0|   3|   2|
+|Valiant          |18.1|  6| 225|105|2.76|3.460|20.22|  1|  0|   3|   1|
+> # more padding
+> kable(d2, format = 'pipe', padding = 2)
+
+
+|                   |   mpg|  cyl|  disp|   hp|  drat|     wt|   qsec|  vs|  am|  gear|  carb|
+|:------------------|-----:|----:|-----:|----:|-----:|------:|------:|---:|---:|-----:|-----:|
+|Mazda RX4          |  21.0|    6|   160|  110|  3.90|  2.620|  16.46|   0|   1|     4|     4|
+|Mazda RX4 Wag      |  21.0|    6|   160|  110|  3.90|  2.875|  17.02|   0|   1|     4|     4|
+|Datsun 710         |  22.8|    4|   108|   93|  3.85|  2.320|  18.61|   1|   1|     4|     1|
+|Hornet 4 Drive     |  21.4|    6|   258|  110|  3.08|  3.215|  19.44|   1|   0|     3|     1|
+|Hornet Sportabout  |  18.7|    8|   360|  175|  3.15|  3.440|  17.02|   0|   0|     3|     2|
+|Valiant            |  18.1|    6|   225|  105|  2.76|  3.460|  20.22|   1|   0|     3|     1|
+> kable(d1, format = 'latex')
+
+\begin{tabular}{r|r|r|r|l}
+\hline
+Sepal.Length & Sepal.Width & Petal.Length & Petal.Width & Species\\
+\hline
+5.1 & 3.5 & 1.4 & 0.2 & setosa\\
+\hline
+4.9 & 3.0 & 1.4 & 0.2 & setosa\\
+\hline
+4.7 & 3.2 & 1.3 & 0.2 & setosa\\
+\hline
+4.6 & 3.1 & 1.5 & 0.2 & setosa\\
+\hline
+5.0 & 3.6 & 1.4 & 0.2 & setosa\\
+\hline
+5.4 & 3.9 & 1.7 & 0.4 & setosa\\
+\hline
+\end{tabular}
+> kable(d1, format = 'html')
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> Sepal.Length </th>
+   <th style="text-align:right;"> Sepal.Width </th>
+   <th style="text-align:right;"> Petal.Length </th>
+   <th style="text-align:right;"> Petal.Width </th>
+   <th style="text-align:left;"> Species </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 5.1 </td>
+   <td style="text-align:right;"> 3.5 </td>
+   <td style="text-align:right;"> 1.4 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 4.9 </td>
+   <td style="text-align:right;"> 3.0 </td>
+   <td style="text-align:right;"> 1.4 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 4.7 </td>
+   <td style="text-align:right;"> 3.2 </td>
+   <td style="text-align:right;"> 1.3 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 4.6 </td>
+   <td style="text-align:right;"> 3.1 </td>
+   <td style="text-align:right;"> 1.5 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 5.0 </td>
+   <td style="text-align:right;"> 3.6 </td>
+   <td style="text-align:right;"> 1.4 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 5.4 </td>
+   <td style="text-align:right;"> 3.9 </td>
+   <td style="text-align:right;"> 1.7 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+</tbody>
+</table>
+> kable(d1, format = 'latex', caption = 'Title of the table')
+\begin{table}
+
+\caption{Title of the table}
+\centering
+\begin{tabular}[t]{r|r|r|r|l}
+\hline
+Sepal.Length & Sepal.Width & Petal.Length & Petal.Width & Species\\
+\hline
+5.1 & 3.5 & 1.4 & 0.2 & setosa\\
+\hline
+4.9 & 3.0 & 1.4 & 0.2 & setosa\\
+\hline
+4.7 & 3.2 & 1.3 & 0.2 & setosa\\
+\hline
+4.6 & 3.1 & 1.5 & 0.2 & setosa\\
+\hline
+5.0 & 3.6 & 1.4 & 0.2 & setosa\\
+\hline
+5.4 & 3.9 & 1.7 & 0.4 & setosa\\
+\hline
+\end{tabular}
+\end{table}
+> kable(d1, format = 'html', caption = 'Title of the table')
+<table>
+<caption>Title of the table</caption>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> Sepal.Length </th>
+   <th style="text-align:right;"> Sepal.Width </th>
+   <th style="text-align:right;"> Petal.Length </th>
+   <th style="text-align:right;"> Petal.Width </th>
+   <th style="text-align:left;"> Species </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 5.1 </td>
+   <td style="text-align:right;"> 3.5 </td>
+   <td style="text-align:right;"> 1.4 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 4.9 </td>
+   <td style="text-align:right;"> 3.0 </td>
+   <td style="text-align:right;"> 1.4 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 4.7 </td>
+   <td style="text-align:right;"> 3.2 </td>
+   <td style="text-align:right;"> 1.3 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 4.6 </td>
+   <td style="text-align:right;"> 3.1 </td>
+   <td style="text-align:right;"> 1.5 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 5.0 </td>
+   <td style="text-align:right;"> 3.6 </td>
+   <td style="text-align:right;"> 1.4 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 5.4 </td>
+   <td style="text-align:right;"> 3.9 </td>
+   <td style="text-align:right;"> 1.7 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+</tbody>
+</table>
+> # use the booktabs package
+> kable(mtcars, format = 'latex', booktabs = TRUE)
+
+\begin{tabular}{lrrrrrrrrrrr}
+\toprule
+  & mpg & cyl & disp & hp & drat & wt & qsec & vs & am & gear & carb\\
+\midrule
+Mazda RX4 & 21.0 & 6 & 160.0 & 110 & 3.90 & 2.620 & 16.46 & 0 & 1 & 4 & 4\\
+Mazda RX4 Wag & 21.0 & 6 & 160.0 & 110 & 3.90 & 2.875 & 17.02 & 0 & 1 & 4 & 4\\
+Datsun 710 & 22.8 & 4 & 108.0 & 93 & 3.85 & 2.320 & 18.61 & 1 & 1 & 4 & 1\\
+Hornet 4 Drive & 21.4 & 6 & 258.0 & 110 & 3.08 & 3.215 & 19.44 & 1 & 0 & 3 & 1\\
+Hornet Sportabout & 18.7 & 8 & 360.0 & 175 & 3.15 & 3.440 & 17.02 & 0 & 0 & 3 & 2\\
+\addlinespace
+Valiant & 18.1 & 6 & 225.0 & 105 & 2.76 & 3.460 & 20.22 & 1 & 0 & 3 & 1\\
+Duster 360 & 14.3 & 8 & 360.0 & 245 & 3.21 & 3.570 & 15.84 & 0 & 0 & 3 & 4\\
+Merc 240D & 24.4 & 4 & 146.7 & 62 & 3.69 & 3.190 & 20.00 & 1 & 0 & 4 & 2\\
+Merc 230 & 22.8 & 4 & 140.8 & 95 & 3.92 & 3.150 & 22.90 & 1 & 0 & 4 & 2\\
+Merc 280 & 19.2 & 6 & 167.6 & 123 & 3.92 & 3.440 & 18.30 & 1 & 0 & 4 & 4\\
+\addlinespace
+Merc 280C & 17.8 & 6 & 167.6 & 123 & 3.92 & 3.440 & 18.90 & 1 & 0 & 4 & 4\\
+Merc 450SE & 16.4 & 8 & 275.8 & 180 & 3.07 & 4.070 & 17.40 & 0 & 0 & 3 & 3\\
+Merc 450SL & 17.3 & 8 & 275.8 & 180 & 3.07 & 3.730 & 17.60 & 0 & 0 & 3 & 3\\
+Merc 450SLC & 15.2 & 8 & 275.8 & 180 & 3.07 & 3.780 & 18.00 & 0 & 0 & 3 & 3\\
+Cadillac Fleetwood & 10.4 & 8 & 472.0 & 205 & 2.93 & 5.250 & 17.98 & 0 & 0 & 3 & 4\\
+\addlinespace
+Lincoln Continental & 10.4 & 8 & 460.0 & 215 & 3.00 & 5.424 & 17.82 & 0 & 0 & 3 & 4\\
+Chrysler Imperial & 14.7 & 8 & 440.0 & 230 & 3.23 & 5.345 & 17.42 & 0 & 0 & 3 & 4\\
+Fiat 128 & 32.4 & 4 & 78.7 & 66 & 4.08 & 2.200 & 19.47 & 1 & 1 & 4 & 1\\
+Honda Civic & 30.4 & 4 & 75.7 & 52 & 4.93 & 1.615 & 18.52 & 1 & 1 & 4 & 2\\
+Toyota Corolla & 33.9 & 4 & 71.1 & 65 & 4.22 & 1.835 & 19.90 & 1 & 1 & 4 & 1\\
+\addlinespace
+Toyota Corona & 21.5 & 4 & 120.1 & 97 & 3.70 & 2.465 & 20.01 & 1 & 0 & 3 & 1\\
+Dodge Challenger & 15.5 & 8 & 318.0 & 150 & 2.76 & 3.520 & 16.87 & 0 & 0 & 3 & 2\\
+AMC Javelin & 15.2 & 8 & 304.0 & 150 & 3.15 & 3.435 & 17.30 & 0 & 0 & 3 & 2\\
+Camaro Z28 & 13.3 & 8 & 350.0 & 245 & 3.73 & 3.840 & 15.41 & 0 & 0 & 3 & 4\\
+Pontiac Firebird & 19.2 & 8 & 400.0 & 175 & 3.08 & 3.845 & 17.05 & 0 & 0 & 3 & 2\\
+\addlinespace
+Fiat X1-9 & 27.3 & 4 & 79.0 & 66 & 4.08 & 1.935 & 18.90 & 1 & 1 & 4 & 1\\
+Porsche 914-2 & 26.0 & 4 & 120.3 & 91 & 4.43 & 2.140 & 16.70 & 0 & 1 & 5 & 2\\
+Lotus Europa & 30.4 & 4 & 95.1 & 113 & 3.77 & 1.513 & 16.90 & 1 & 1 & 5 & 2\\
+Ford Pantera L & 15.8 & 8 & 351.0 & 264 & 4.22 & 3.170 & 14.50 & 0 & 1 & 5 & 4\\
+Ferrari Dino & 19.7 & 6 & 145.0 & 175 & 3.62 & 2.770 & 15.50 & 0 & 1 & 5 & 6\\
+\addlinespace
+Maserati Bora & 15.0 & 8 & 301.0 & 335 & 3.54 & 3.570 & 14.60 & 0 & 1 & 5 & 8\\
+Volvo 142E & 21.4 & 4 & 121.0 & 109 & 4.11 & 2.780 & 18.60 & 1 & 1 & 4 & 2\\
+\bottomrule
+\end{tabular}
+> # use the longtable package
+> kable(matrix(1000, ncol=5), format = 'latex', digits = 2, longtable = TRUE)
+
+\begin{longtable}{r|r|r|r|r}
+\hline
+1000 & 1000 & 1000 & 1000 & 1000\\
+\hline
+\end{longtable}
+> # change LaTeX default table environment
+> kable(d1, format = "latex", caption = "My table", table.envir='table*')
+\begin{table*}
+
+\caption{My table}
+\centering
+\begin{tabular}[t]{r|r|r|r|l}
+\hline
+Sepal.Length & Sepal.Width & Petal.Length & Petal.Width & Species\\
+\hline
+5.1 & 3.5 & 1.4 & 0.2 & setosa\\
+\hline
+4.9 & 3.0 & 1.4 & 0.2 & setosa\\
+\hline
+4.7 & 3.2 & 1.3 & 0.2 & setosa\\
+\hline
+4.6 & 3.1 & 1.5 & 0.2 & setosa\\
+\hline
+5.0 & 3.6 & 1.4 & 0.2 & setosa\\
+\hline
+5.4 & 3.9 & 1.7 & 0.4 & setosa\\
+\hline
+\end{tabular}
+\end{table*}
+> # add some table attributes
+> kable(d1, format = 'html', table.attr = 'id="mytable"')
+<table id="mytable">
+ <thead>
+  <tr>
+   <th style="text-align:right;"> Sepal.Length </th>
+   <th style="text-align:right;"> Sepal.Width </th>
+   <th style="text-align:right;"> Petal.Length </th>
+   <th style="text-align:right;"> Petal.Width </th>
+   <th style="text-align:left;"> Species </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 5.1 </td>
+   <td style="text-align:right;"> 3.5 </td>
+   <td style="text-align:right;"> 1.4 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 4.9 </td>
+   <td style="text-align:right;"> 3.0 </td>
+   <td style="text-align:right;"> 1.4 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 4.7 </td>
+   <td style="text-align:right;"> 3.2 </td>
+   <td style="text-align:right;"> 1.3 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 4.6 </td>
+   <td style="text-align:right;"> 3.1 </td>
+   <td style="text-align:right;"> 1.5 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 5.0 </td>
+   <td style="text-align:right;"> 3.6 </td>
+   <td style="text-align:right;"> 1.4 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 5.4 </td>
+   <td style="text-align:right;"> 3.9 </td>
+   <td style="text-align:right;"> 1.7 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:left;"> setosa </td>
+  </tr>
+</tbody>
+</table>
+> # reST output
+> kable(d2, format = 'rst')
+
+
+=================  ====  ===  ====  ===  ====  =====  =====  ===  ===  ====  ====
+\                   mpg  cyl  disp   hp  drat     wt   qsec   vs   am  gear  carb
+=================  ====  ===  ====  ===  ====  =====  =====  ===  ===  ====  ====
+Mazda RX4          21.0    6   160  110  3.90  2.620  16.46    0    1     4     4
+Mazda RX4 Wag      21.0    6   160  110  3.90  2.875  17.02    0    1     4     4
+Datsun 710         22.8    4   108   93  3.85  2.320  18.61    1    1     4     1
+Hornet 4 Drive     21.4    6   258  110  3.08  3.215  19.44    1    0     3     1
+Hornet Sportabout  18.7    8   360  175  3.15  3.440  17.02    0    0     3     2
+Valiant            18.1    6   225  105  2.76  3.460  20.22    1    0     3     1
+=================  ====  ===  ====  ===  ====  =====  =====  ===  ===  ====  ====
+> # no row names
+> kable(d2, format = 'rst', row.names = FALSE)
+
+
+====  ===  ====  ===  ====  =====  =====  ===  ===  ====  ====
+ mpg  cyl  disp   hp  drat     wt   qsec   vs   am  gear  carb
+====  ===  ====  ===  ====  =====  =====  ===  ===  ====  ====
+21.0    6   160  110  3.90  2.620  16.46    0    1     4     4
+21.0    6   160  110  3.90  2.875  17.02    0    1     4     4
+22.8    4   108   93  3.85  2.320  18.61    1    1     4     1
+21.4    6   258  110  3.08  3.215  19.44    1    0     3     1
+18.7    8   360  175  3.15  3.440  17.02    0    0     3     2
+18.1    6   225  105  2.76  3.460  20.22    1    0     3     1
+====  ===  ====  ===  ====  =====  =====  ===  ===  ====  ====
+> # Pandoc simple tables
+> kable(d2, format = 'simple', caption = 'Title of the table')
+
+
+Table: Title of the table
+
+                      mpg   cyl   disp    hp   drat      wt    qsec   vs   am   gear   carb
+------------------  -----  ----  -----  ----  -----  ------  ------  ---  ---  -----  -----
+Mazda RX4            21.0     6    160   110   3.90   2.620   16.46    0    1      4      4
+Mazda RX4 Wag        21.0     6    160   110   3.90   2.875   17.02    0    1      4      4
+Datsun 710           22.8     4    108    93   3.85   2.320   18.61    1    1      4      1
+Hornet 4 Drive       21.4     6    258   110   3.08   3.215   19.44    1    0      3      1
+Hornet Sportabout    18.7     8    360   175   3.15   3.440   17.02    0    0      3      2
+Valiant              18.1     6    225   105   2.76   3.460   20.22    1    0      3      1
+> # format numbers using , as decimal point, and ' as thousands separator
+> x = as.data.frame(matrix(rnorm(60, 1e6, 1e4), 10))
+> kable(x, format.args = list(decimal.mark = ',', big.mark = "'"))
+
+
+|          V1|          V2|          V3|          V4|          V5|          V6|
+|-----------:|-----------:|-----------:|-----------:|-----------:|-----------:|
+|   993'735,5| 1'015'117,8| 1'009'189,8| 1'013'586,8|   998'354,8| 1'003'981,1|
+| 1'001'836,4| 1'003'898,4| 1'007'821,4|   998'972,1|   997'466,4|   993'879,7|
+|   991'643,7|   993'787,6| 1'000'745,6| 1'003'876,7| 1'006'969,6| 1'003'411,2|
+| 1'015'952,8|   977'853,0|   980'106,5|   999'461,9| 1'005'566,6|   988'706,4|
+| 1'003'295,1| 1'011'249,3| 1'006'198,3|   986'229,4|   993'112,4| 1'014'330,2|
+|   991'795,3|   999'550,7|   999'438,7|   995'850,1|   992'925,0| 1'019'804,0|
+| 1'004'874,3|   999'838,1|   998'442,0|   996'057,1| 1'003'645,8|   996'327,8|
+| 1'007'383,2| 1'009'438,4|   985'292,5|   999'406,9| 1'007'685,3|   989'558,7|
+| 1'005'757,8| 1'008'212,2|   995'218,5| 1'011'000,3|   998'876,5| 1'005'697,2|
+|   996'946,1| 1'005'939,0| 1'004'179,4| 1'007'631,8| 1'008'811,1|   998'649,5|
+> # save the value
+> x = kable(d2, format = 'html')
+> cat(x, sep = '\n')
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mpg </th>
+   <th style="text-align:right;"> cyl </th>
+   <th style="text-align:right;"> disp </th>
+   <th style="text-align:right;"> hp </th>
+   <th style="text-align:right;"> drat </th>
+   <th style="text-align:right;"> wt </th>
+   <th style="text-align:right;"> qsec </th>
+   <th style="text-align:right;"> vs </th>
+   <th style="text-align:right;"> am </th>
+   <th style="text-align:right;"> gear </th>
+   <th style="text-align:right;"> carb </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Mazda RX4 </td>
+   <td style="text-align:right;"> 21.0 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 160 </td>
+   <td style="text-align:right;"> 110 </td>
+   <td style="text-align:right;"> 3.90 </td>
+   <td style="text-align:right;"> 2.620 </td>
+   <td style="text-align:right;"> 16.46 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Mazda RX4 Wag </td>
+   <td style="text-align:right;"> 21.0 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 160 </td>
+   <td style="text-align:right;"> 110 </td>
+   <td style="text-align:right;"> 3.90 </td>
+   <td style="text-align:right;"> 2.875 </td>
+   <td style="text-align:right;"> 17.02 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Datsun 710 </td>
+   <td style="text-align:right;"> 22.8 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 108 </td>
+   <td style="text-align:right;"> 93 </td>
+   <td style="text-align:right;"> 3.85 </td>
+   <td style="text-align:right;"> 2.320 </td>
+   <td style="text-align:right;"> 18.61 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Hornet 4 Drive </td>
+   <td style="text-align:right;"> 21.4 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 258 </td>
+   <td style="text-align:right;"> 110 </td>
+   <td style="text-align:right;"> 3.08 </td>
+   <td style="text-align:right;"> 3.215 </td>
+   <td style="text-align:right;"> 19.44 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Hornet Sportabout </td>
+   <td style="text-align:right;"> 18.7 </td>
+   <td style="text-align:right;"> 8 </td>
+   <td style="text-align:right;"> 360 </td>
+   <td style="text-align:right;"> 175 </td>
+   <td style="text-align:right;"> 3.15 </td>
+   <td style="text-align:right;"> 3.440 </td>
+   <td style="text-align:right;"> 17.02 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Valiant </td>
+   <td style="text-align:right;"> 18.1 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 225 </td>
+   <td style="text-align:right;"> 105 </td>
+   <td style="text-align:right;"> 2.76 </td>
+   <td style="text-align:right;"> 3.460 </td>
+   <td style="text-align:right;"> 20.22 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+</tbody>
+</table>
+> # can also set options(knitr.table.format = 'html') so that the output is HTML
+> 
+> # multiple tables via either kable(list(x1, x2)) or kables(list(kable(x1), kable(x2)))
+> kable(list(d1, d2), caption = 'A tale of two tables')
+
+
+Table: A tale of two tables
+
+| Sepal.Length| Sepal.Width| Petal.Length| Petal.Width|Species |
+|------------:|-----------:|------------:|-----------:|:-------|
+|          5.1|         3.5|          1.4|         0.2|setosa  |
+|          4.9|         3.0|          1.4|         0.2|setosa  |
+|          4.7|         3.2|          1.3|         0.2|setosa  |
+|          4.6|         3.1|          1.5|         0.2|setosa  |
+|          5.0|         3.6|          1.4|         0.2|setosa  |
+|          5.4|         3.9|          1.7|         0.4|setosa  |
+
+|                  |  mpg| cyl| disp|  hp| drat|    wt|  qsec| vs| am| gear| carb|
+|:-----------------|----:|---:|----:|---:|----:|-----:|-----:|--:|--:|----:|----:|
+|Mazda RX4         | 21.0|   6|  160| 110| 3.90| 2.620| 16.46|  0|  1|    4|    4|
+|Mazda RX4 Wag     | 21.0|   6|  160| 110| 3.90| 2.875| 17.02|  0|  1|    4|    4|
+|Datsun 710        | 22.8|   4|  108|  93| 3.85| 2.320| 18.61|  1|  1|    4|    1|
+|Hornet 4 Drive    | 21.4|   6|  258| 110| 3.08| 3.215| 19.44|  1|  0|    3|    1|
+|Hornet Sportabout | 18.7|   8|  360| 175| 3.15| 3.440| 17.02|  0|  0|    3|    2|
+|Valiant           | 18.1|   6|  225| 105| 2.76| 3.460| 20.22|  1|  0|    3|    1|
+> kables(list(kable(d1, align = 'l'), kable(d2)), caption = 'A tale of two tables')
+
+
+Table: A tale of two tables
+
+|Sepal.Length |Sepal.Width |Petal.Length |Petal.Width |Species |
+|:------------|:-----------|:------------|:-----------|:-------|
+|5.1          |3.5         |1.4          |0.2         |setosa  |
+|4.9          |3.0         |1.4          |0.2         |setosa  |
+|4.7          |3.2         |1.3          |0.2         |setosa  |
+|4.6          |3.1         |1.5          |0.2         |setosa  |
+|5.0          |3.6         |1.4          |0.2         |setosa  |
+|5.4          |3.9         |1.7          |0.4         |setosa  |
+
+|                  |  mpg| cyl| disp|  hp| drat|    wt|  qsec| vs| am| gear| carb|
+|:-----------------|----:|---:|----:|---:|----:|-----:|-----:|--:|--:|----:|----:|
+|Mazda RX4         | 21.0|   6|  160| 110| 3.90| 2.620| 16.46|  0|  1|    4|    4|
+|Mazda RX4 Wag     | 21.0|   6|  160| 110| 3.90| 2.875| 17.02|  0|  1|    4|    4|
+|Datsun 710        | 22.8|   4|  108|  93| 3.85| 2.320| 18.61|  1|  1|    4|    1|
+|Hornet 4 Drive    | 21.4|   6|  258| 110| 3.08| 3.215| 19.44|  1|  0|    3|    1|
+|Hornet Sportabout | 18.7|   8|  360| 175| 3.15| 3.440| 17.02|  0|  0|    3|    2|
+|Valiant           | 18.1|   6|  225| 105| 2.76| 3.460| 20.22|  1|  0|    3|    1|
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit")
+> ### * knit
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit
+> ### Title: Knit a document
+> ### Aliases: knit purl
+> 
+> ### ** Examples
+> 
+> library(knitr)
+> (f = system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'))
+[1] "/home/runner/work/knitr/knitr/knitr.Rcheck/knitr/examples/knitr-minimal.Rnw"
+> knit(f)  # compile to tex
+
+
+processing file: /home/runner/work/knitr/knitr/knitr.Rcheck/knitr/examples/knitr-minimal.Rnw
+output file: knitr-minimal.tex
+
+[1] "knitr-minimal.tex"
+> 
+> purl(f)  # tangle R code
+
+
+processing file: /home/runner/work/knitr/knitr/knitr.Rcheck/knitr/examples/knitr-minimal.Rnw
+output file: knitr-minimal.R
+
+[1] "knitr-minimal.R"
+> purl(f, documentation = 0)  # extract R code only
+
+
+processing file: /home/runner/work/knitr/knitr/knitr.Rcheck/knitr/examples/knitr-minimal.Rnw
+output file: knitr-minimal.R
+
+[1] "knitr-minimal.R"
+> purl(f, documentation = 2)  # also include documentation
+
+
+processing file: /home/runner/work/knitr/knitr/knitr.Rcheck/knitr/examples/knitr-minimal.Rnw
+output file: knitr-minimal.R
+
+[1] "knitr-minimal.R"
+> 
+> unlink(c('knitr-minimal.tex', 'knitr-minimal.R', 'figure'), recursive = TRUE)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit2html")
+> ### * knit2html
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit2html
+> ### Title: Convert markdown to HTML using knit() and mark_html()
+> ### Aliases: knit2html
+> 
+> ### ** Examples
+> 
+> # a minimal example
+> writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
+> knit2html('test.Rmd')
+
+
+processing file: test.Rmd
+output file: test.md
+
+> if (interactive()) browseURL('test.html')
+> 
+> unlink(c('test.Rmd', 'test.html', 'test.md'))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit2pdf")
+> ### * knit2pdf
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit2pdf
+> ### Title: Convert Rnw or Rrst files to PDF
+> ### Aliases: knit2pdf
+> 
+> ### ** Examples
+> 
+> #' compile with xelatex
+> ## knit2pdf(..., compiler = 'xelatex')
+> 
+> #' compile a reST file with rst2pdf
+> ## knit2pdf(..., compiler = 'rst2pdf')
+> 
+> #' compile an Rtyp file with typst
+> ## knit2pdf(..., compiler = 'typst')
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit2wp")
+> ### * knit2wp
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit2wp
+> ### Title: Knit an R Markdown document and post it to WordPress
+> ### Aliases: knit2wp
+> 
+> ### ** Examples
+> 
+> # see the reference
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_child")
+> ### * knit_child
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_child
+> ### Title: Knit a child document
+> ### Aliases: knit_child
+> 
+> ### ** Examples
+> 
+> # you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw'
+> # to input results from child-doc.Rnw in main.tex
+> 
+> # comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_engines")
+> ### * knit_engines
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_engines
+> ### Title: Engines of other languages
+> ### Aliases: knit_engines
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> knit_engines$get('python'); knit_engines$get('awk')
+function (options) 
+{
+    if (isFALSE(options$python.reticulate)) {
+        eng_interpreted(options)
+    }
+    else {
+        if (!loadable("reticulate")) 
+            warning2("The 'python' engine in knitr requires the reticulate package. ", 
+                "If you do not want to use the reticulate package, set the chunk option ", 
+                "python.reticulate = FALSE.")
+        reticulate::eng_python(options)
+    }
+}
+<environment: namespace:knitr>
+function (options) 
+{
+    engine = options$engine
+    code = if (engine %in% c("highlight", "Rscript", "sas", "haskell", 
+        "stata")) {
+        f = wd_tempfile(engine, switch(engine, sas = ".sas", 
+            Rscript = ".R", stata = ".do", ".txt"))
+        write_utf8(c(switch(engine, sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;", 
+            NULL), options$code), f)
+        on.exit(unlink(f), add = TRUE)
+        switch(engine, haskell = paste("-e", shQuote(paste(":script", 
+            f))), sas = {
+            logf = sub("[.]sas$", ".lst", f)
+            on.exit(unlink(c(logf, sub("[.]sas$", ".log", f))), 
+                add = TRUE)
+            f
+        }, stata = {
+            logf = sub("[.]do$", ".log", f)
+            on.exit(unlink(c(logf)), add = TRUE)
+            sprintf(switch(Sys.info()[["sysname"]], Windows = "/q /e do %s", 
+                Darwin = paste("-q < %s >", shQuote(xfun::normalize_path(logf))), 
+                Linux = "-q -e do %s", "-q -b do %s"), shQuote(normalizePath(f)))
+        }, f)
+    }
+    else paste(switch(engine, bash = "-c", coffee = "-e", groovy = "-e", 
+        lein = "exec -ep", mysql = "-e", node = "-e", octave = "--eval", 
+        perl = "-E", php = "-r", psql = "-c", python = "-c", 
+        ruby = "-e", scala = "-e", sh = "-c", zsh = "-c", NULL), 
+        shQuote(one_string(options$code)))
+    opts = get_engine_opts(options$engine.opts, engine)
+    code = if (engine %in% c("awk", "gawk", "sed", "sas", "psql", 
+        "mysql")) 
+        paste(code, opts)
+    else paste(opts, code)
+    cmd = get_engine_path(options$engine.path, engine)
+    out = if (options$eval) {
+        if (options$message) 
+            message("running: ", cmd, " ", code)
+        tryCatch(system2(cmd, code, stdout = TRUE, stderr = TRUE, 
+            env = options$engine.env), error = function(e) {
+            if (!options$error) 
+                stop(e)
+            paste("Error in running command", cmd)
+        })
+    }
+    else ""
+    if (!options$error && !is.null(attr(out, "status"))) 
+        stop(one_string(out))
+    if (options$eval && engine %in% c("sas", "stata") && file.exists(logf)) 
+        out = c(read_utf8(logf), out)
+    engine_output(options, options$code, out)
+}
+<environment: namespace:knitr>
+> names(knit_engines$get())
+ [1] "awk"       "bash"      "coffee"    "gawk"      "groovy"    "haskell"   "lein"     
+ [8] "mysql"     "node"      "octave"    "perl"      "php"       "psql"      "Rscript"  
+[15] "ruby"      "sas"       "scala"     "sed"       "sh"        "stata"     "zsh"      
+[22] "asis"      "asy"       "block"     "block2"    "bslib"     "c"         "cat"      
+[29] "cc"        "comment"   "css"       "ditaa"     "dot"       "embed"     "eviews"   
+[36] "exec"      "fortran"   "fortran95" "go"        "highlight" "js"        "julia"    
+[43] "python"    "R"         "Rcpp"      "sass"      "scss"      "sql"       "stan"     
+[50] "targets"   "tikz"      "verbatim" 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_exit")
+> ### * knit_exit
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_exit
+> ### Title: Exit knitting early
+> ### Aliases: knit_exit
+> 
+> ### ** Examples
+> 
+> # see https://github.com/yihui/knitr-examples/blob/master/096-knit-exit.Rmd
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_expand")
+> ### * knit_expand
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_expand
+> ### Title: A simple macro preprocessor for templating purposes
+> ### Aliases: knit_expand
+> 
+> ### ** Examples
+> 
+> # see the knit_expand vignette
+> if (interactive()) browseVignettes(package='knitr')
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_filter")
+> ### * knit_filter
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_filter
+> ### Title: Spell check filter for source documents
+> ### Aliases: knit_filter
+> 
+> ### ** Examples
+> 
+> library(knitr)
+> knitr_example = function(...) system.file('examples', ..., package = 'knitr')
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_hooks")
+> ### * knit_hooks
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_hooks
+> ### Title: Hooks for R code chunks, inline R code and output
+> ### Aliases: knit_hooks
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> knit_hooks$get('source'); knit_hooks$get('inline')
+function (x, options) 
+x
+<bytecode: 0x564eda471ad0>
+<environment: namespace:knitr>
+function (x) 
+{
+    if (is.numeric(x)) 
+        x = round_digits(x)
+    paste(as.character(x), collapse = ", ")
+}
+<bytecode: 0x564eda475190>
+<environment: namespace:knitr>
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_patterns")
+> ### * knit_patterns
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_patterns
+> ### Title: Patterns to match and extract R code in a document
+> ### Aliases: knit_patterns
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> library(knitr)
+> opat = knit_patterns$get() # old pattern list (to restore later)
+> 
+> apats = all_patterns  # a list of all built-in patterns
+> str(apats)
+List of 9
+ $ rnw     :List of 7
+  ..$ chunk.begin   : chr "^\\s*<<(.*)>>=.*$"
+  ..$ chunk.end     : chr "^\\s*@\\s*(%+.*|)$"
+  ..$ inline.code   : chr "\\\\Sexpr\\{([^}]+)\\}"
+  ..$ inline.comment: chr "^\\s*%.*"
+  ..$ ref.chunk     : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ header.begin  : chr "(^|\n)\\s*\\\\documentclass[^}]+\\}"
+  ..$ document.begin: chr "\\s*\\\\begin\\{document\\}"
+ $ brew    :List of 1
+  ..$ inline.code: chr "<%[=]{0,1}\\s+([^%]+)\\s+[-]*%>"
+ $ tex     :List of 8
+  ..$ chunk.begin   : chr "^\\s*%+\\s*begin.rcode\\s*(.*)"
+  ..$ chunk.end     : chr "^\\s*%+\\s*end.rcode"
+  ..$ chunk.code    : chr "^\\s*%+"
+  ..$ ref.chunk     : chr "^%+\\s*<<(.+)>>\\s*$"
+  ..$ inline.comment: chr "^\\s*%.*"
+  ..$ inline.code   : chr "\\\\rinline\\{([^}]+)\\}"
+  ..$ header.begin  : chr "(^|\n)\\s*\\\\documentclass[^}]+\\}"
+  ..$ document.begin: chr "\\s*\\\\begin\\{document\\}"
+ $ html    :List of 5
+  ..$ chunk.begin : chr "^\\s*<!--\\s*begin.rcode\\s*(.*)"
+  ..$ chunk.end   : chr "^\\s*end.rcode\\s*-->"
+  ..$ ref.chunk   : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ inline.code : chr "<!--\\s*rinline(.+?)-->"
+  ..$ header.begin: chr "\\s*<head>"
+ $ md      :List of 4
+  ..$ chunk.begin: chr "^[\t >]*```+\\s*\\{([a-zA-Z0-9_]+( *[ ,].*)?)\\}\\s*$"
+  ..$ chunk.end  : chr "^[\t >]*```+\\s*$"
+  ..$ ref.chunk  : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ inline.code: chr "(?<!(^``))(?<!(\n``))`r[ #]([^`]+)\\s*`"
+ $ rst     :List of 5
+  ..$ chunk.begin: chr "^\\s*[.][.]\\s+\\{r(.*)\\}\\s*$"
+  ..$ chunk.end  : chr "^\\s*[.][.]\\s+[.][.]\\s*$"
+  ..$ chunk.code : chr "^\\s*[.][.]"
+  ..$ ref.chunk  : chr "^\\.*\\s*<<(.+)>>\\s*$"
+  ..$ inline.code: chr ":r:`([^`]+)`"
+ $ asciidoc:List of 6
+  ..$ chunk.begin   : chr "^//\\s*begin[.]rcode(.*)$"
+  ..$ chunk.end     : chr "^//\\s*end[.]rcode\\s*$"
+  ..$ chunk.code    : chr "^//+"
+  ..$ ref.chunk     : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ inline.code   : chr "`r +([^`]+)\\s*`|[+]r +([^+]+)\\s*[+]"
+  ..$ inline.comment: chr "^//.*"
+ $ textile :List of 5
+  ..$ chunk.begin   : chr "^###[.]\\s+begin[.]rcode(.*)$"
+  ..$ chunk.end     : chr "^###[.]\\s+end[.]rcode\\s*$"
+  ..$ ref.chunk     : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ inline.code   : chr "@r +([^@]+)\\s*@"
+  ..$ inline.comment: chr "^###[.].*"
+ $ typst   :List of 4
+  ..$ chunk.begin: chr "^[\t >]*```+\\s*\\{([a-zA-Z0-9_]+( *[ ,].*)?)\\}\\s*$"
+  ..$ chunk.end  : chr "^[\t >]*```+\\s*$"
+  ..$ ref.chunk  : chr "^\\s*<<(.+)>>\\s*$"
+  ..$ inline.code: chr "(?<!(^``))(?<!(\n``))`r[ #]([^`]+)\\s*`"
+> knit_patterns$set(apats[['rnw']]) # set pattern list from apats
+> 
+> knit_patterns$get(c('chunk.begin', 'chunk.end', 'inline.code'))
+$chunk.begin
+[1] "^\\s*<<(.*)>>=.*$"
+
+$chunk.end
+[1] "^\\s*@\\s*(%+.*|)$"
+
+$inline.code
+[1] "\\\\Sexpr\\{([^}]+)\\}"
+
+> 
+> # a customized pattern list; has to empty the original patterns first!
+> knit_patterns$restore()
+> # we may want to use this in an HTML document
+> knit_patterns$set(list(chunk.begin = '<!--helloR\\s+(.*)', chunk.end = '^byeR-->'))
+> str(knit_patterns$get())
+List of 9
+ $ chunk.begin   : chr "<!--helloR\\s+(.*)"
+ $ chunk.end     : chr "^byeR-->"
+ $ chunk.code    : NULL
+ $ inline.code   : NULL
+ $ global.options: NULL
+ $ input.doc     : NULL
+ $ ref.chunk     : NULL
+ $ header.begin  : NULL
+ $ document.begin: NULL
+> 
+> knit_patterns$set(opat)  # put the old patterns back
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_print")
+> ### * knit_print
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_print
+> ### Title: A custom printing function
+> ### Aliases: knit_print normal_print
+> 
+> ### ** Examples
+> 
+> library(knitr)
+> # write tables for data frames
+> knit_print.data.frame = function(x, ...) {
++   res = paste(c('', '', kable(x, output = FALSE)), collapse = '\n')
++   asis_output(res)
++ }
+> # register the method
+> registerS3method("knit_print", "data.frame", knit_print.data.frame)
+> # after you define and register the above method, data frames will be printed
+> # as tables in knitr, which is different with the default print() behavior
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_rd")
+> ### * knit_rd
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_rd
+> ### Title: Knit package documentation
+> ### Aliases: knit_rd knit_rd_all
+> 
+> ### ** Examples
+> 
+> library(knitr)
+> ## Not run: 
+> ##D 
+> ##D knit_rd('maps')
+> ##D knit_rd('rpart')
+> ##D setwd(system.file('html', package = 'ggplot2'))
+> ##D knit_rd('ggplot2') # time-consuming!
+> ##D 
+> ##D knit_rd_all()  # this may take really long time if you have many packages installed
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_theme")
+> ### * knit_theme
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_theme
+> ### Title: Syntax highlighting themes
+> ### Aliases: knit_theme
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> opts_knit$set(out.format='latex'); knit_theme$set('edit-vim')
+> 
+> knit_theme$get()  # names of all available themes
+ [1] "acid"              "aiseered"          "andes"             "anotherdark"      
+ [5] "autumn"            "baycomb"           "bclear"            "biogoo"           
+ [9] "bipolar"           "blacknblue"        "bluegreen"         "breeze"           
+[13] "bright"            "camo"              "candy"             "clarity"          
+[17] "dante"             "darkblue"          "darkbone"          "darkness"         
+[21] "darkslategray"     "darkspectrum"      "default"           "denim"            
+[25] "dusk"              "earendel"          "easter"            "edit-anjuta"      
+[29] "edit-eclipse"      "edit-emacs"        "edit-flashdevelop" "edit-gedit"       
+[33] "edit-jedit"        "edit-kwrite"       "edit-matlab"       "edit-msvs2008"    
+[37] "edit-nedit"        "edit-vim-dark"     "edit-vim"          "edit-xcode"       
+[41] "ekvoli"            "fine_blue"         "freya"             "fruit"            
+[45] "golden"            "greenlcd"          "greyscale0"        "greyscale1"       
+[49] "greyscale2"        "kellys"            "leo"               "lucretia"         
+[53] "manxome"           "maroloccio"        "matrix"            "moe"              
+[57] "molokai"           "moria"             "navajo-night"      "navy"             
+[61] "neon"              "night"             "nightshimmer"      "nuvola"           
+[65] "olive"             "orion"             "oxygenated"        "pablo"            
+[69] "peaksea"           "print"             "rand01"            "rdark"            
+[73] "relaxedgreen"      "rootwater"         "seashell"          "solarized-dark"   
+[77] "solarized-light"   "tabula"            "tcsoft"            "vampire"          
+[81] "whitengrey"        "xoria256"          "zellner"           "zenburn"          
+[85] "zmrok"            
+> 
+> thm = knit_theme$get('acid')  # parse the theme to a list
+> knit_theme$set(thm)
+> 
+> opts_knit$set(out.format=NULL) # restore option
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_watch")
+> ### * knit_watch
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_watch
+> ### Title: Watch an input file continuously and knit it when it is updated
+> ### Aliases: knit_watch
+> 
+> ### ** Examples
+> 
+> # knit_watch('foo.Rnw', knit2pdf)
+> 
+> # knit_watch('foo.Rmd', rmarkdown::render)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("opts_chunk")
+> ### * opts_chunk
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: opts_chunk
+> ### Title: Default and current chunk options
+> ### Aliases: opts_chunk opts_current
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
+[1] FALSE
+[1] "high"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("opts_hooks")
+> ### * opts_hooks
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: opts_hooks
+> ### Title: Hooks for code chunk options
+> ### Aliases: opts_hooks
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> # make sure the figure width is no smaller than fig.height
+> opts_hooks$set(fig.width = function(options) {
++   if (options$fig.width < options$fig.height) {
++     options$fig.width = options$fig.height
++   }
++   options
++ })
+> # remove all hooks
+> opts_hooks$restore()
+> 
+> 
+> 
+> cleanEx()
+> nameEx("opts_knit")
+> ### * opts_knit
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: opts_knit
+> ### Title: Options for the knitr package
+> ### Aliases: opts_knit
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
+[1] FALSE
+> if (interactive()) {
++ # for unnamed chunks, use 'fig' as the figure prefix
++ opts_knit$set(unnamed.chunk.label='fig')
++ knit('001-minimal.Rmd') # from https://github.com/yihui/knitr-examples
++ }
+> 
+> 
+> 
+> cleanEx()
+> nameEx("opts_template")
+> ### * opts_template
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: opts_template
+> ### Title: Template for creating reusable chunk options
+> ### Aliases: opts_template
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> opts_template$set(myfigures = list(fig.height = 4, fig.width = 4))
+> # later you can reuse these chunk options by 'opts.label', e.g.
+> 
+> # <<foo, opts.label='myfigures'>>=
+> 
+> # the above is equivalent to <<foo, fig.height=4, fig.width=4>>=
+> 
+> 
+> 
+> cleanEx()
+> nameEx("output_hooks")
+> ### * output_hooks
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: render_html
+> ### Title: Set or get output hooks for different output formats
+> ### Aliases: render_html hooks_html render_asciidoc hooks_asciidoc
+> ###   render_latex hooks_latex render_sweave hooks_sweave render_listings
+> ###   hooks_listings render_markdown hooks_markdown render_jekyll
+> ###   hooks_jekyll render_rst hooks_rst render_textile hooks_textile
+> ###   render_typst hooks_typst
+> 
+> ### ** Examples
+> 
+> # below is pretty much what knitr::render_markdown() does:
+> knitr::knit_hooks$set(knitr::hooks_markdown())
+> 
+> # you can retrieve a subset of the hooks and set them, e.g.,
+> knitr::knit_hooks$set(knitr::hooks_markdown()["source"])
+> 
+> knitr::knit_hooks$restore()
+> 
+> 
+> 
+> cleanEx()
+> nameEx("output_type")
+> ### * output_type
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: is_latex_output
+> ### Title: Check the current input and output type
+> ### Aliases: is_latex_output is_html_output pandoc_to pandoc_from
+> 
+> ### ** Examples
+> 
+> # check for output formats type
+> knitr::is_latex_output()
+[1] FALSE
+> knitr::is_html_output()
+[1] FALSE
+> knitr::is_html_output(excludes = c('markdown', 'epub'))
+[1] FALSE
+> # Get current formats
+> knitr::pandoc_from()
+[1] "markdown"
+> knitr::pandoc_to()
+NULL
+> # Test if current output format is 'docx'
+> knitr::pandoc_to('docx')
+[1] FALSE
+> 
+> 
+> 
+> cleanEx()
+> nameEx("pandoc")
+> ### * pandoc
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: pandoc
+> ### Title: A Pandoc wrapper to convert documents to other formats
+> ### Aliases: pandoc
+> 
+> ### ** Examples
+> 
+> system('pandoc -h') # see possible output formats
+sh: 1: pandoc: not found
+Warning in system("pandoc -h") : error in running command
+> 
+> 
+> 
+> cleanEx()
+> nameEx("pat_fun")
+> ### * pat_fun
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: pat_rnw
+> ### Title: Set regular expressions to read input documents
+> ### Aliases: pat_rnw pat_brew pat_tex pat_html pat_md pat_rst pat_asciidoc
+> ###   pat_textile pat_typst
+> 
+> ### ** Examples
+> 
+> # see how knit_patterns is modified
+> knit_patterns$get(); pat_rnw(); knit_patterns$get()
+$chunk.begin
+NULL
+
+$chunk.end
+NULL
+
+$chunk.code
+NULL
+
+$inline.code
+NULL
+
+$global.options
+NULL
+
+$input.doc
+NULL
+
+$ref.chunk
+NULL
+
+$header.begin
+NULL
+
+$document.begin
+NULL
+
+$chunk.begin
+[1] "^\\s*<<(.*)>>=.*$"
+
+$chunk.end
+[1] "^\\s*@\\s*(%+.*|)$"
+
+$inline.code
+[1] "\\\\Sexpr\\{([^}]+)\\}"
+
+$inline.comment
+[1] "^\\s*%.*"
+
+$ref.chunk
+[1] "^\\s*<<(.+)>>\\s*$"
+
+$header.begin
+[1] "(^|\n)\\s*\\\\documentclass[^}]+\\}"
+
+$document.begin
+[1] "\\s*\\\\begin\\{document\\}"
+
+> 
+> knit_patterns$restore()  # empty the list
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rand_seed")
+> ### * rand_seed
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rand_seed
+> ### Title: An unevaluated expression to return .Random.seed if exists
+> ### Aliases: rand_seed
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> eval(rand_seed)
+  [1]       10403         624  -169270483  -442010614  -603558397  -222347416  1489374793
+  [8]   865871222  1734802815    98005428   268448037    63650722 -1754793285 -2135275840
+ [15]  -779982911  -864886130  1880007095   463784588  1271615005  1390544442  -544608653
+ [22]  -251475688  -326549447 -1570483546  1965989103  -784675228  1458985493  2146317266
+ [29] -1103943381   289023600  -436963407   109630910    69979943  1606475068  1441346829
+ [36]  -662821782  -381252893  -311574840  1918496297   289721302   507975775  -209037548
+ [43]  1665646341  -466864126   776139675  1704391200  -162823263 -1815571218   471685271
+ [50]  1503042540    -9316355   773770906  1304642387  1931157624 -1378412519   965775622
+ [57]    19361743  1561398212  1879269365  1049118770  1191074315   508275152 -1006204015
+ [64]  -639295458  1060781575  -724498788   257177325 -1004075830   323426243   602271272
+ [71]  1516224009  -111500746  -368663745  1624894580 -1946665755  -305830814  -779330437
+ [78]  1251167616 -2140893311  2068936526  1520009079  -673505972   406802909  -205928710
+ [85]  1641613363  1751721944   454221817 -2089418906  1121694383  1689254180 -1984604715
+ [92]  -781808494  1892940523   409525552 -1134260367 -2025809282   823270631  1407180796
+ [99]  1755457741   783947050  -213904221   536857992  1791983081 -1888114538 -2091016673
+[106] -1860292140  -276190523  2041495746   293352795 -2071504672  1489341281 -1448769106
+[113]  -885320105  -724939092   -89408579   801828698 -2096939757  1355079480 -1942710311
+[120] -1985176122 -1593612913 -2123393404  -410764363  1470169330  1508641739   174702736
+[127]  1980138321  1530086622  -412390457   826632540  1682639533   709842314  1047101827
+[134]  -678208280  2040606153 -1020403978  2130970879  -206624972   796133541  -318747358
+[141]   441089595  1414206528  1684436801   291294222  1773804855   985411596  -953215587
+[148]   -93698118   880402931   403064472  -717996103 -1580438490  1582729327  2024268772
+[155]   149426581   -61889198 -1132557141  -349809680 -1813747919  1851072318  -872535385
+[162]  1834590908 -1060709235  1425982954  -973382045 -1401381816  -657666647  -803519146
+[169]  1303503839   602197140   690968197 -1194194558 -1271974117  -424247392 -2076224735
+[176]  1896824430 -1915841513 -1610038932  1514233725  -139472870   359986899   369450488
+[183]  1175050137  1835887238 -1718805681  1001447748 -1453795467  -158697038  -289178229
+[190] -1653172400 -1258931439 -1522652770 -1534961273 -1267430372  -124936595  -656382390
+[197]  1999481667  1820822440  1447714185  1037425590  1008676543  -384359948  -164391835
+[204]  1513879010  1130520571  1419877120 -1790435583  1398071502  -349144329  1191707340
+[211]  1281005917  1471383674  -517178445   244983128 -1431478407  -634939162  1298079279
+[218]  -404582748 -1068593835 -1989575150  -487399829  -265123152  1949564657 -1333369858
+[225] -1833961369  1592665468  1108824141  1812739754  1530423331  1368926984  1007803753
+[232]  -537550314  1929636255   916334420  -336018875  1515590210  -937690917 -1562089888
+[239]  1886968545   247837486 -1852321321   504493100  -235748547  -695373606  1859678355
+[246]   832347320  1259788121   563279686  1350865167  -963318780 -2126433483    67416690
+[253]   658812747 -1640878576  1754641105   214290014   339674951  1897819868 -1881411027
+[260]  1352283914 -1756130045    25328232  1343966537  -703424394  -149416833   735173812
+[267] -1678319579  1312317090  -560725573 -1034493504  -355891519  -973490802  -323184457
+[274] -1082223220  1535237405 -1135244998 -1313811085   451200024  -348242119  -918059610
+[281]  1437955055  1293941092  1537788181 -1049356590  -437194709  1313702256   622024369
+[288]    43280574    48727591 -1688377284 -1873574899  1419929450  1823945187 -1910605368
+[295]  -731992791 -1950040362 -1458327713   336216596  -744100347  -688203006 -1090356581
+[302] -1882125024  -718134623  1737025518 -1000943721  1906697964  1434445565  -584855142
+[309] -1192383917  -766862472  -887384295 -1562557434  -341195057   484161220   -84062475
+[316]   684698418  -449863413 -1822653232   950332049 -1500892386 -1805552377   973279644
+[323] -1376385555  -767768630   949698243  1967401256 -2032927479 -1197206218  1169078847
+[330]  1721718644 -1669469211 -1581938846  1033855867  -735385472   -55923071 -1374991794
+[337]  1008629367   652208204  1751441629 -1726985734 -1345917133  -878304552 -1499013383
+[344]  -873713050  2098825647    52438052  1186383061 -1389400174 -2026323477  -331925456
+[351]   776105585  -650171010  1516557287  1432840956   255555533 -1350477782  1949809571
+[358] -1597273976 -1586283287  1615371158  1705063711  -957801260  1006033349  1736467394
+[365]  -895304613  1144812512   707471969   538500270  -741634729  2105842092  -660026691
+[372]  -600640934  -579558381  -422618568 -1244129575 -1374924602  1354546319  -112901756
+[379]  1649224373  -844405774  -901492021 -1011508336 -1931222447  1196120030  1118413511
+[386] -1578994596 -1768171091  1585977482 -1262180221  1720489960  -634098487  -766881290
+[393]  2107842559    71275060   864597925  -311201758  1917093179 -2132955328   581670465
+[400]   273260302  1729500215 -1075053812 -1497127779   514050746 -1523660557  1872642456
+[407] -1398325575   -19554522 -1991549073   614665956 -1388805995   358320210  1217024939
+[414]  1890561776  -679393743  1766240830 -1763188313  2144087484  -493933683  -580318998
+[421] -1418066589 -2007017656  1661963433 -1438566314  -563316001   435861396  1084982661
+[428]    78032002  -591610341   384211616 -1490816479 -1657433746   766905111  -462549908
+[435] -1892848003  1685771034 -2043847213   501930232 -1156819303 -1075831418   628978255
+[442]  -695104444 -1024407947   458742962   943899787   905802320 -1928160751 -2083963746
+[449]   -52981625   -75720932  1301114221 -1237571254   630182467   874235560  -369320823
+[456]  -809152842 -1263188545   796036340  1557611365 -1976428318  1313040123  2133800448
+[463]  1955347969 -1317751858 -1151110665 -1922904628   173942877  1037044602   464020147
+[470]   361570392 -1929421191  1053019110      718127 -1939293788  2062416981 -2101845742
+[477]  1806017899  1115088304   680517105 -1486162178  1982902119  -850677636  -301031603
+[484]   -15107670   205393699    60417544 -1728865175  1986958614   154501279 -1744891308
+[491] -1115426491  1731048770 -1492090917   512721248  1138522593    60753454    -2733865
+[498]   153239340  1288557117  -960793638   483907475  -430106696  1249400409   353937990
+[505]  -810817521  -276785404  -391634379   -90892942  1357575755 -1326184176   552669649
+[512] -1329340066  1621835335  1502706140 -1769291475  1511586314  1690090499   -55462552
+[519]   367823945   500501366 -1062917249  -755480652  -735473883 -1867415134  1666975931
+[526]  1172274368  -905140799   374114446  1187418039  1376018572  1190423581 -1487598534
+[533]  1559477363 -1942831336 -1754317255   678869158   655903471  -718199708  1536636949
+[540]  1040579026  -229984469 -2008228752  -382847567  1215036350  1979661607 -1331301572
+[547]  -713436403  -179131798  1346623715 -1858390840 -2099286999 -1852788266 -1682160033
+[554] -1950995180  1312824581   131431938 -1688338021   838281248 -1206599263   940915438
+[561]   938231447   241250796 -1521879555   330618010  -885780141  1860572792 -1814292967
+[568] -1435109626  1963466191  1053974980  1597193717   337841714  -167974901 -1151770672
+[575]  -264287855  -486848994  -874206201 -1897849700  -179055379 -1965126966   202073539
+[582] -1626446808  2110012425  -382105546   926077247 -1718566284   356489957  -642667934
+[589]    55470715   195986304 -1158886015 -2087641778  -687903369 -1869565108  -800690211
+[596]  -873280262  1926288947  1649352152  -608772615   414082406    70475951  1505513252
+[603] -1158401067  1342460562 -1640396565   686920496 -1591980687 -1056325506  -736916761
+[610]  1553659388   -57620787  1624546090  -246717789  1879262088   546503657 -2006479210
+[617]   197184543    -2095148  1319110853   526255810  -345685157  -404910368  2072824161
+[624]  -547868754 -2085092265  -689249108
+> rnorm(1) # .Random.seed is created (or modified)
+[1] -0.6264538
+> eval(rand_seed)
+  [1]       10403           2  1654269195 -1877109783  -961256264  1403523942   124639233
+  [8]   261424787  1836448066  1034917620   -13630729   468718317  1694379396  1559298986
+ [15]  1935866133 -1450855505  2105396150  1802260960  1077391651   539731521   122505520
+ [22]   230898510 -1940184647  1223031755 -1597886342 -1854140036 -1783225921  1484611221
+ [29]  1365746860  -346485118  1206044253  1201793367   956757054   350214264 -1324711077
+ [36] -1071776071 -1831283960  1862871478  1826141937   268853539   607122290  1403468228
+ [43] -1913257593  -346768547  -463801004  1625143162  1387501253  -280700897   422985638
+ [50]   732086576  -725197869  1128169969 -1024391392 -1032957506  -353082935 -1139485317
+ [57]   445858634  1224049580  -796824913   247650405   542595100  -404965774  -423589651
+ [64] -1999189721  1430762830 -1439787608 -1821953621  1808288457 -1668269352 -1099348090
+ [71]    24992353  -140278797  1709299298   269218004  1210153431  -238785587  -383705244
+ [78]  -472446134   -15672651  -538858993  1771793174   -40319552 -1632234109 -1613456479
+ [85]  -109108336  2056208494   -22837735  -195336533   835590810    86083164   517854047
+ [92]  -397095627 -1681163060   985204258   613283965  1720828279   929066654  -293216936
+ [99]   348261563  1602155097  1188944360  -526197738 -1056856175  -999184317 -1361965230
+[106] -1531694108  1775225383  1578975869  -305972364   499275610  -297283163 -1400910401
+[113]  -628019642  -995328816  -416901389  -131985391   838014528   160971294   516863209
+[120] -1388986853 -1140425174   -14278324  1980074767  1968938565  -674453508  1981972050
+[127] -1121442867  -907997817   494782574  1629589576    57352779 -1057292375  2043531000
+[134] -1557378522 -2033982655 -1166473005 -1243272062  1507691188   519478839  -214579923
+[141]   -15421884  -257117334   917217237  1604258159 -1793932170  1404112800   895408227
+[148] -1228178175 -1129918352  1726708750 -1514890119 -1503646709 -1385642694   530830396
+[155] -1346935937  1552658645   -31128340 -1631936958  1895821725   665429015  1197209982
+[162]    25108280  1382701083 -1944495751  1482522568  1344742390  2075751985   887378019
+[169]  2132045874   507710852 -1239616569 -1239992675  1300848148 -2078006086  1822724357
+[176]  1779634911  -346210458    68638448  -651383277   408315825 -2048675232  1331662846
+[183] -1134018679 -1715119941 -1026157430  -262084756 -1837320977  -648290523  -685012516
+[190]  -699648078 -1959870803  -939002265  1368704398  1604498024  -270455189   878774281
+[197] -1496090984  1651241414  -719838943  -170397261  1455721762   967288596  1974706071
+[204] -1131741299  1944879780   693669002   967713525   849937743  1265996374   507097344
+[211]  -355466173  2106394593   467134288  1892604334   231167833   250371435  1139934426
+[218]  -641921636  -858574433  -474934283 -2013707636 -1380890782   119355197   993660855
+[225] -2002084770 -1013984872  -379702021   925663385   -31002328  -442860704 -1075363102
+[232]   641540264  1223098572 -1416033796  1656623026  -797919760  1826465220   503635800
+[239]   479382394  -180521552   335149500  -762107820 -1027404862 -1827060960  1940004796
+[246]   -55285168   820174306 -1241009816   780750156  1441990908   182952690   711513856
+[253] -1637546380  2029275144  1579137466 -1032808496  -740935188  -653815916   804057810
+[260] -1415082400  1411310924     1021216  -350965118  1885104616   987875308  -131369412
+[267]  1998212722 -1838333072   848054564  1637511736 -1985453670   185338320  1063452092
+[274] -1501837164  -244441982  -655956544  1724949308  2018636944   664617762   824380936
+[281]  -454972148  1579726236 -1666261486  -245134464   802374420  1526755624   260631610
+[288] -1205064752  -361627028   937556532  -494404974   -99312288 -1390302900  1614862304
+[295]   774509986  1360092584  -193173876 -1314447940 -1663111566 -1553441808  1474524740
+[302] -1146038184 -2113923014  1375914096 -1694107588  1286052116  -244301118 -1394274592
+[309] -1799518084  1647537872  -826656350   363032616   887266060  1523945916 -1606634702
+[316] -1705936192  1284490292  -611903800   -82717510  1223915152  1740148460 -1417786796
+[323]   261071506  -232439520  -735589940 -1901903136    53278914 -1123929048  -739412052
+[330]  1446503100 -1800705038  1762987568 -1902032988 -1903022664   152627034   717533328
+[337]   246260604  1132269844 -1594365630   343599360 -1585484356   763185488 -1647048414
+[344]  -696819128   134752268 -1533188516 -1147008558  1720888832 -1992442540 -1205072664
+[351]  1506019578   603356880  1553058604   599599348  -568221294   -26303136  1900303372
+[358]  -891679520 -1327582622  -770317144 -2141666228  1110458236 -1984349902   163365488
+[365]  1002681156 -1830044712  -482759814  1341773872 -1905328196 -2080945580   830894146
+[372]  1654662816   550937276  -155556912  -506636958  1307590376  1514790092  1301985788
+[379] -2135581198  1363303552  2121865716  1892557448  1059986234  1182360912 -1907645332
+[386] -1564824172  1223534674 -1003414048  1916359884  -428286304  -449023614 -1081851672
+[393]  1379461868   -76178116    39708786 -1623293328   506321444  2118223928 -1103890150
+[400]  -418716464 -1680746180 -1496452204   625145730  1623387072  1943565884  1450672528
+[407]  1732028450  1481551112   487458956   872206108  -748118894  2140900736  -935907308
+[414]   548710184 -1376221638  1162922448 -1448468116   593599412 -1498189294 -1658751008
+[421]   462232012   124672224   557945890  1357773608   781625868  1816482620  -142301198
+[428]  -510500112  1926556228   -13969832  -233818310 -1136707600   460294844  -416275180
+[435]  1083468994  -781480864  1355603324  1851695056   578619682  -798888280  1535516556
+[442]  -172522308  1128772402  -958671296 -1018973004  1397935176 -1571451462  1620720144
+[449]  -804320020  -120377004   539237138  1130743200  -645778740  1151912544  1355687874
+[456]  1031070504 -1306313446   142889871   589573337 -1228012690 -1810984196 -1041194899
+[463]  -926225385 -1469796896  1488304574 -1061851253  -338333683 -2027587526  -665470856
+[470]  1572082721  -864508205  -357575180   -92260734  -727936233 -1218739743 -1034735834
+[477]  1959295524 -2018968363   970828927  2088100120  1582403638 -1341110589 -1107547387
+[484]   214011554  -657752944 -1164080071  -795818773  -913533476   200285194   752745215
+[491]    63615817 -1335801634 -1217612148  -805518755 -1818050457 -1804608112   621505966
+[498]   918960219   676442173  -402544982 -1789574328   224036721  -764759837  -670177308
+[505]   261209874  -893263129  1281983665   362571510  1179824404  1440671269  -385713361
+[512]  -963744536  2009648582 -1648018317  -719300907  1092938930   163127424   830016617
+[519]  -184674085   343641132   154989626  -583638289   424254841   484102670 -1823956004
+[526]   550505549  -397533257  -309821120 -1833768930   947035883  1101549165  1819580122
+[533]  1254016664   600796417  -119647565   507059668  1219230946   981013879   178359489
+[540] -1798344634   519307140  1302534453   -26966241  -277288328 -1009389738   145067491
+[547]   844768165 -1768828350 -1545351120  -672619431 -1158866485    15817276  -881306518
+[554]   -50051425 -1092056279  1196083134   248280748   296336381   891261767   207606832
+[561] -1985825458 -2102088325  1662966493 -1304487158   873339432   806441617  1094718083
+[568]  1123275652   840202674   725952263  -597236399 -1409356586  -114177612  1521819077
+[575]   401542415  1975999368   -10714458 -1167764909  1721318325 -2086876910   742005472
+[582]   969609033  -890084997 -1277850548  -971870758  1665781711   -20106855  1492599214
+[589]  1206353596   231206701  1215581399  -910904032  -626793858   303180875   704691789
+[596]  1846420602 -1294941000 -2057982367   787944467 -1144544716  -630963134  1707080791
+[603]   636622753  -866277274   434270308   154340245   835108031 -1921487784   511924342
+[610] -1737570173   907225285   803644898  -625275824 -1045666439 -1073554773 -1362001380
+[617]  -645341878   459588927 -1339341943   -24970338 -2003084724  -426558435 -1332570713
+[624]  -956733232   355793518  1450597184
+> 
+> 
+> 
+> cleanEx()
+> nameEx("raw_block")
+> ### * raw_block
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: raw_block
+> ### Title: Mark character strings as raw blocks in R Markdown
+> ### Aliases: raw_block raw_latex raw_html
+> 
+> ### ** Examples
+> 
+> knitr::raw_latex('\\emph{some text}')
+Warning in raw_block(x, "latex", ...) :
+  raw_block() requires Pandoc >= 2.0.0
+[1] "\n```{=latex}\n\\emph{some text}\n```\n"
+attr(,"class")
+[1] "knit_asis"
+attr(,"knit_cacheable")
+[1] NA
+> 
+> 
+> 
+> cleanEx()
+> nameEx("raw_output")
+> ### * raw_output
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: extract_raw_output
+> ### Title: Mark character strings as raw output that should not be
+> ###   converted
+> ### Aliases: extract_raw_output restore_raw_output raw_output
+> 
+> ### ** Examples
+> 
+> library(knitr)
+> out = c('*hello*', raw_output('<special>content</special> *protect* me!'), '*world*')
+> pre = extract_raw_output(out)
+> str(pre)
+List of 2
+ $ value : chr "*hello*\n!!!!!RAW-KNITR-CONTENTc249d7ecacd5f3afb5274321fec9b601RAW-KNITR-CONTENT!!!!!\n*world*"
+ $ chunks: Named chr "<special>content</special> *protect* me!"
+  ..- attr(*, "names")= chr "c249d7ecacd5f3afb5274321fec9b601"
+> pre$value = gsub('[*]([^*]+)[*]', '<em>\\1</em>', pre$value)  # think this as Pandoc conversion
+> pre$value
+[1] "<em>hello</em>\n!!!!!RAW-KNITR-CONTENTc249d7ecacd5f3afb5274321fec9b601RAW-KNITR-CONTENT!!!!!\n<em>world</em>"
+> # raw output was protected from the conversion (e.g. *protect* was not converted)
+> restore_raw_output(pre$value, pre$chunks)
+[1] "<em>hello</em>\n<special>content</special> *protect* me!\n<em>world</em>"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("read_chunk")
+> ### * read_chunk
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: read_chunk
+> ### Title: Read chunks from an external script
+> ### Aliases: read_chunk read_demo
+> 
+> ### ** Examples
+> 
+> ## put this in foo.R and read_chunk('foo.R')
+> 
+> ## ---- my-label ----
+> 1+1
+[1] 2
+> lm(y~x, data=data.frame(x=1:10,y=rnorm(10)))
+
+Call:
+lm(formula = y ~ x, data = data.frame(x = 1:10, y = rnorm(10)))
+
+Coefficients:
+(Intercept)            x  
+   -0.16882      0.05473  
+
+> 
+> ## later you can use <<my-label>>= to reference this chunk
+> 
+> ## the 2nd approach
+> code = c("#@a", '1+1', "#@b", "#@a", 'rnorm(10)', "#@b")
+> read_chunk(lines = code, labels = 'foo') # put all code into one chunk named foo
+> read_chunk(lines = code, labels = 'foo', from = 2, to = 2) # line 2 into chunk foo
+> read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4), to = c(3, 6))
+> # automatically figure out 'to'
+> read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4))
+> read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@a", to = "^#@b")
+> read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@a", to = "^#@b", from.offset = 1, to.offset = -1)
+> 
+> ## later you can use, e.g., <<foo>>=
+> knitr::knit_code$get() # use this to check chunks in the current session
+$foo
+[1] "1+1"
+
+$bar
+[1] "rnorm(10)"
+
+> knitr::knit_code$restore() # clean up the session
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rocco")
+> ### * rocco
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rocco
+> ### Title: Knit R Markdown using the classic Docco style
+> ### Aliases: rocco
+> 
+> ### ** Examples
+> 
+> rocco_view=function(input) {
++ owd = setwd(tempdir()); on.exit(setwd(owd))
++ if (!file.exists(input)) return()
++ o=rocco(input, quiet=TRUE)
++ if (interactive()) browseURL(o)}
+> # knit these two vignettes using the docco style
+> rocco_view(system.file('doc', 'docco-classic.Rmd', package = 'knitr'))
+Warning in in_dir(input_dir(), expr) :
+  You changed the working directory to /tmp/Rtmpaj3DD3 (probably via setwd()). It will be restored to /home/runner/work/knitr/knitr/knitr.Rcheck/knitr/doc. See the Note section in ?knitr::knit
+> rocco_view(system.file('doc', 'knit_expand.Rmd', package = 'knitr'))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("set_alias")
+> ### * set_alias
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: set_alias
+> ### Title: Set aliases for chunk options
+> ### Aliases: set_alias
+> 
+> ### ** Examples
+> 
+> set_alias(w = 'fig.width', h = 'fig.height')
+> # then we can use options w and h in chunk headers instead of fig.width and fig.height
+> 
+> 
+> 
+> cleanEx()
+> nameEx("set_header")
+> ### * set_header
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: set_header
+> ### Title: Set the header information
+> ### Aliases: set_header
+> 
+> ### ** Examples
+> 
+> set_header(tikz = '\\usepackage{tikz}')
+> opts_knit$get('header')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                highlight 
+"\\definecolor{fgcolor}{rgb}{0, 0, 0}\n\\newcommand{\\hlnum}[1]{\\textcolor[rgb]{0.502,0,0.502}{\\textbf{#1}}}%\n\\newcommand{\\hlsng}[1]{\\textcolor[rgb]{0.651,0.522,0}{#1}}%\n\\newcommand{\\hlcom}[1]{\\textcolor[rgb]{1,0.502,0}{#1}}%\n\\newcommand{\\hlopt}[1]{\\textcolor[rgb]{1,0,0.502}{\\textbf{#1}}}%\n\\newcommand{\\hldef}[1]{\\textcolor[rgb]{0,0,0}{#1}}%\n\\newcommand{\\hlkwa}[1]{\\textcolor[rgb]{0.733,0.475,0.467}{\\textbf{#1}}}%\n\\newcommand{\\hlkwb}[1]{\\textcolor[rgb]{0.502,0.502,0.753}{\\textbf{#1}}}%\n\\newcommand{\\hlkwc}[1]{\\textcolor[rgb]{0,0.502,0.753}{#1}}%\n\\newcommand{\\hlkwd}[1]{\\textcolor[rgb]{0,0.267,0.4}{#1}}%\n\\let\\hlipl\\hlkwb" 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     tikz 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     "\\usepackage{tikz}" 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   framed 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       "" 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("set_parent")
+> ### * set_parent
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: set_parent
+> ### Title: Specify the parent document of child documents
+> ### Aliases: set_parent
+> 
+> ### ** Examples
+> 
+> ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
+> 
+> # <<setup-child, include=FALSE>>=
+> 
+> # set_parent('parent_doc.Rnw')
+> 
+> # @
+> 
+> 
+> 
+> cleanEx()
+> nameEx("stitch")
+> ### * stitch
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: stitch
+> ### Title: Automatically create a report based on an R script and a
+> ###   template
+> ### Aliases: stitch stitch_rhtml stitch_rmd
+> 
+> ### ** Examples
+> 
+> s = system.file('misc', 'stitch-test.R', package = 'knitr')
+> if (interactive()) stitch(s)  # compile to PDF
+> 
+> # HTML report
+> stitch(s, system.file('misc', 'knitr-template.Rhtml', package = 'knitr'))
+
+
+processing file: stitch-test.Rhtml
+
+  |       options(width=90)
+  |       if (!exists('.knitr.title')) .knitr.title = 'A Report Generated by knitr'
+  |       .knitr.author = if (exists('.knitr.author')) paste('by', .knitr.author) else '' 
+
+  |   I(.knitr.title)   #128:158
+  |   packageVersion('knitr')   #326:364
+  |   I(.knitr.author)   #371:402
+
+  |   set.seed(1121)
+  |   (x = rnorm(20))
+  |   mean(x);var(x)
+  |   boxplot(x)
+  |   hist(x, main = '')
+  |    
+
+
+  |       sessionInfo()
+  |       Sys.time() 
+
+  |       rm(.knitr.author); rm(.knitr.author) 
+
+Chunk clean-up:
+  Warning in rm(.knitr.author): object '.knitr.author' not found 
+
+    rm(.knitr.author); rm(.knitr.author)
+
+Number of messages:
+warning 
+      1 
+output file: stitch-test.html
+
+[1] "stitch-test.html"
+> 
+> # or convert markdown to HTML
+> stitch(s, system.file('misc', 'knitr-template.Rmd', package = 'knitr'))
+
+
+processing file: stitch-test.Rmd
+
+  |  if (exists('.knitr.title')) I(paste('#', .knitr.title, sep = ''))  #1:69
+  |  if (exists('.knitr.author')) I(.knitr.author)  #72:120
+  |  packageVersion('knitr')  #201:227
+
+  |   set.seed(1121)
+  |   (x = rnorm(20))
+  |   mean(x);var(x)
+  |   boxplot(x)
+  |   hist(x, main = '')
+  |    
+
+
+  |   sessionInfo()
+  |   Sys.time() 
+
+  |   if (exists('.knitr.title')) rm(.knitr.author)
+  |   if (exists('.knitr.author')) rm(.knitr.author) 
+output file: stitch-test.md
+
+HTML output at: stitch-test.html
+[1] "stitch-test.md"
+> 
+> unlink(c('stitch-test.html', 'stitch-test.md', 'figure'), recursive = TRUE)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("vignette_engines")
+> ### * vignette_engines
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: vignette_engines
+> ### Title: Package vignette engines
+> ### Aliases: vignette_engines
+> 
+> ### ** Examples
+> 
+> library(knitr)
+> vig_list = tools::vignetteEngine(package = 'knitr')
+> str(vig_list)
+List of 8
+ $ knitr::rmarkdown             :List of 6
+  ..$ name   : chr "rmarkdown"
+  ..$ package: chr "knitr"
+  ..$ pattern: chr "[.][Rr](md|markdown)$"
+  ..$ weave  :function (...)  
+  ..$ tangle :function (file, ..., encoding = "UTF-8", quiet = FALSE)  
+  ..$ aspell :List of 1
+  .. ..$ filter:function (ifile, encoding = "UTF-8")  
+ $ knitr::docco_classic_notangle:List of 6
+  ..$ name   : chr "docco_classic_notangle"
+  ..$ package: chr "knitr"
+  ..$ pattern: chr "[.][Rr]mk?d$"
+  ..$ weave  :function (file, driver, syntax, encoding = "UTF-8", quiet = FALSE, ...)  
+  ..$ tangle :function (file, ...)  
+  ..$ aspell :List of 1
+  .. ..$ filter:function (ifile, encoding = "UTF-8")  
+ $ knitr::docco_linear_notangle :List of 6
+  ..$ name   : chr "docco_linear_notangle"
+  ..$ package: chr "knitr"
+  ..$ pattern: chr "[.][Rr](md|markdown)$"
+  ..$ weave  :function (file, driver, syntax, encoding = "UTF-8", quiet = FALSE, ...)  
+  ..$ tangle :function (file, ...)  
+  ..$ aspell :List of 1
+  .. ..$ filter:function (ifile, encoding = "UTF-8")  
+ $ knitr::knitr                 :List of 6
+  ..$ name   : chr "knitr"
+  ..$ package: chr "knitr"
+  ..$ pattern: chr "[.]([rRsS](nw|tex)|[Rr](md|html|rst))$"
+  ..$ weave  :function (file, driver, syntax, encoding = "UTF-8", quiet = FALSE, ...)  
+  ..$ tangle :function (file, ..., encoding = "UTF-8", quiet = FALSE)  
+  ..$ aspell :List of 1
+  .. ..$ filter:function (ifile, encoding = "UTF-8")  
+ $ knitr::docco_classic         :List of 6
+  ..$ name   : chr "docco_classic"
+  ..$ package: chr "knitr"
+  ..$ pattern: chr "[.][Rr]mk?d$"
+  ..$ weave  :function (file, driver, syntax, encoding = "UTF-8", quiet = FALSE, ...)  
+  ..$ tangle :function (file, ..., encoding = "UTF-8", quiet = FALSE)  
+  ..$ aspell :List of 1
+  .. ..$ filter:function (ifile, encoding = "UTF-8")  
+ $ knitr::rmarkdown_notangle    :List of 6
+  ..$ name   : chr "rmarkdown_notangle"
+  ..$ package: chr "knitr"
+  ..$ pattern: chr "[.][Rr](md|markdown)$"
+  ..$ weave  :function (...)  
+  ..$ tangle :function (file, ...)  
+  ..$ aspell :List of 1
+  .. ..$ filter:function (ifile, encoding = "UTF-8")  
+ $ knitr::knitr_notangle        :List of 6
+  ..$ name   : chr "knitr_notangle"
+  ..$ package: chr "knitr"
+  ..$ pattern: chr "[.]([rRsS](nw|tex)|[Rr](md|html|rst))$"
+  ..$ weave  :function (file, driver, syntax, encoding = "UTF-8", quiet = FALSE, ...)  
+  ..$ tangle :function (file, ...)  
+  ..$ aspell :List of 1
+  .. ..$ filter:function (ifile, encoding = "UTF-8")  
+ $ knitr::docco_linear          :List of 6
+  ..$ name   : chr "docco_linear"
+  ..$ package: chr "knitr"
+  ..$ pattern: chr "[.][Rr](md|markdown)$"
+  ..$ weave  :function (file, driver, syntax, encoding = "UTF-8", quiet = FALSE, ...)  
+  ..$ tangle :function (file, ..., encoding = "UTF-8", quiet = FALSE)  
+  ..$ aspell :List of 1
+  .. ..$ filter:function (ifile, encoding = "UTF-8")  
+> vig_list[['knitr::knitr']][c('weave', 'tangle')]
+$weave
+function (file, driver, syntax, encoding = "UTF-8", quiet = FALSE, 
+    ...) 
+{
+    {
+        on.exit({
+            opts_chunk$restore()
+            knit_hooks$restore()
+        }, add = TRUE)
+        oopts = options(knitr.knit2html.force_v1 = TRUE)
+        on.exit(options(oopts), add = TRUE)
+    }
+    opts_chunk$set(error = FALSE)
+    knit_hooks$set(purl = function(...) {
+        hook_purl(...)
+        if (!is_R_CMD_check()) 
+            for (i in c("optipng", "pngquant")) if (!is.function(knit_hooks$get(i)) && 
+                Sys.which(i) != "") {
+                switch(i, optipng = hook_optipng(...), pngquant = hook_pngquant(...))
+            }
+    })
+    (if (grepl("\\.[Rr]md$", file)) 
+        knit2html
+    else if (grepl("\\.[Rr]rst$", file)) 
+        knit2pandoc
+    else knit)(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
+        ...)
+}
+<bytecode: 0x564edafb62e8>
+<environment: namespace:knitr>
+
+$tangle
+function (file, ..., encoding = "UTF-8", quiet = FALSE) 
+{
+    purl(file, encoding = encoding, quiet = quiet, ...)
+}
+<bytecode: 0x564edafc1d88>
+<environment: namespace:knitr>
+
+> vig_list[['knitr::knitr_notangle']][c('weave', 'tangle')]
+$weave
+function (file, driver, syntax, encoding = "UTF-8", quiet = FALSE, 
+    ...) 
+{
+    {
+        on.exit({
+            opts_chunk$restore()
+            knit_hooks$restore()
+        }, add = TRUE)
+        oopts = options(knitr.knit2html.force_v1 = TRUE)
+        on.exit(options(oopts), add = TRUE)
+    }
+    opts_chunk$set(error = FALSE)
+    {
+    }
+    (if (grepl("\\.[Rr]md$", file)) 
+        knit2html
+    else if (grepl("\\.[Rr]rst$", file)) 
+        knit2pandoc
+    else knit)(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
+        ...)
+}
+<environment: namespace:knitr>
+
+$tangle
+function (file, ...) 
+{
+    unlink(with_ext(file, "R"))
+    return()
+}
+<bytecode: 0x564edb008760>
+<environment: namespace:knitr>
+
+> vig_list[['knitr::docco_classic']][c('weave', 'tangle')]
+$weave
+function (file, driver, syntax, encoding = "UTF-8", quiet = FALSE, 
+    ...) 
+{
+    {
+        on.exit({
+            opts_chunk$restore()
+            knit_hooks$restore()
+        }, add = TRUE)
+        oopts = options(knitr.knit2html.force_v1 = TRUE)
+        on.exit(options(oopts), add = TRUE)
+    }
+    opts_chunk$set(error = FALSE)
+    knit_hooks$set(purl = function(...) {
+        hook_purl(...)
+        if (!is_R_CMD_check()) 
+            for (i in c("optipng", "pngquant")) if (!is.function(knit_hooks$get(i)) && 
+                Sys.which(i) != "") {
+                switch(i, optipng = hook_optipng(...), pngquant = hook_pngquant(...))
+            }
+    })
+    rocco(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
+        ...)
+}
+<bytecode: 0x564edafe3680>
+<environment: namespace:knitr>
+
+$tangle
+function (file, ..., encoding = "UTF-8", quiet = FALSE) 
+{
+    purl(file, encoding = encoding, quiet = quiet, ...)
+}
+<bytecode: 0x564edafc1d88>
+<environment: namespace:knitr>
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("wrap_rmd")
+> ### * wrap_rmd
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: wrap_rmd
+> ### Title: Wrap long lines in Rmd files
+> ### Aliases: wrap_rmd
+> 
+> ### ** Examples
+> 
+> wrap_rmd(text = c('```', '1+1', '```', '- a list item', '> a quote', '',
++ paste(rep('this is a normal paragraph', 5), collapse = ' ')))
+[1] "```"                                                                   
+[2] "1+1"                                                                   
+[3] "```"                                                                   
+[4] "- a list item"                                                         
+[5] "> a quote"                                                             
+[6] ""                                                                      
+[7] "this is a normal paragraph this is a normal paragraph this is a normal"
+[8] "paragraph this is a normal paragraph this is a normal paragraph"       
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  0.949 0.051 1.003 0 0.002 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

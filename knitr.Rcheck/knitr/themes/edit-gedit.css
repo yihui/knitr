@@ -1,0 +1,31 @@
+.background {
+  color: #ffffff;
+}
+.num {
+  color: #FF00FF;
+}
+.sng {
+  color: #FF00FF;
+}
+.com {
+  color: #003CFF;
+}
+.opt {
+  color: #3A3935;
+}
+.def {
+  color: #3A3935;
+}
+.kwa {
+  color: #A52A35;
+}
+.kwb {
+  color: #2E8B57;
+}
+.kwc {
+  color: #572e8c;
+}
+.kwd {
+  color: #3A3935;
+  font-weight: bold;
+}

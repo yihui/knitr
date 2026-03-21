@@ -1,0 +1,31 @@
+.background {
+  color: #000000;
+}
+.num {
+  color: #ff875f;
+}
+.sng {
+  color: #ffd7d7;
+}
+.com {
+  color: #a8a8a8;
+  font-style: italic;
+}
+.opt {
+  color: #ffffff;
+}
+.def {
+  color: #ffffff;
+}
+.kwa {
+  color: #00d700;
+}
+.kwb {
+  color: #5fafff;
+}
+.kwc {
+  color: #006bd6;
+}
+.kwd {
+  color: #d600d6;
+}

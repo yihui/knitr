@@ -1,0 +1,42 @@
+year = sub('.*(2[[:digit:]]{3})-.*', '\\1', meta[['Date/Publication']], perl = TRUE)
+vers = paste('R package version', meta$Version)
+if (length(year) == 0) year = format(Sys.Date(), '%Y')
+
+bibentry(
+  'manual',
+  title = paste('knitr:', gsub('\\bR\\b', '{R}', meta$Title)),
+  author = Filter(function(p) 'aut' %in% p$role, as.person(meta$Author)),
+  year = year,
+  note = vers,
+  url = meta$URL
+)
+
+bibentry(
+  'book',
+  title = 'Dynamic Documents with {R} and knitr',
+  author = 'Yihui Xie',
+  publisher = 'Chapman and Hall/CRC',
+  address = 'Boca Raton, Florida',
+  year = '2015',
+  edition = '2nd',
+  note = 'ISBN 978-1498716963',
+  url = meta$URL,
+  textVersion = paste('Yihui Xie (2015)', 'Dynamic Documents with R and knitr.',
+                      '2nd edition. Chapman and Hall/CRC. ISBN 978-1498716963')
+)
+
+bibentry(
+  'incollection',
+  booktitle = 'Implementing Reproducible Computational Research',
+  editor = 'Victoria Stodden and Friedrich Leisch and Roger D. Peng',
+  title = 'knitr: A Comprehensive Tool for Reproducible Research in {R}',
+  author = 'Yihui Xie',
+  publisher = 'Chapman and Hall/CRC',
+  year = '2014',
+  note = 'ISBN 978-1466561595',
+  textVersion = paste('Yihui Xie (2014)',
+                      'knitr: A Comprehensive Tool for Reproducible Research in R.',
+                      'In Victoria Stodden, Friedrich Leisch and Roger D. Peng, editors,',
+                      'Implementing Reproducible Computational Research.',
+                      'Chapman and Hall/CRC. ISBN 978-1466561595')
+)

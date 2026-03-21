@@ -1,0 +1,48 @@
+---
+title: "Not An Introduction to knitr"
+author: "Yihui Xie"
+date: "`{r} Sys.Date()`"
+output:
+  html:
+    meta:
+      css: ["@default"]
+vignette: >
+  %\VignetteEngine{litedown::vignette}
+  %\VignetteIndexEntry{Not an Introduction to knitr}
+---
+
+The **knitr** package is an alternative tool to Sweave based on a different
+design with more features. This document is not an introduction, but only serves
+as a placeholder to guide you to the real manuals, which are available on the
+package website <https://yihui.org/knitr/> (e.g. the [main
+manual](https://yihui.org/knitr/demo/manual/) and the [graphics
+manual](https://yihui.org/knitr/demo/graphics/) ), and remember to read the help
+pages of functions in this package. There is a book "Dynamic Docuemnts with R
+and knitr" for this package, too.
+
+Below are code chunk examples:
+
+```{r show-off}
+options(digits = 4)
+rnorm(20)
+fit = lm(dist ~ speed, data = cars)
+b = coef(fit)
+```
+
+```{r echo=FALSE}
+summary(fit)$coefficients
+```
+
+The fitted regression equation is $Y=`{r} b[1]`+`{r} b[2]`x$.
+
+```{r graphics, fig.cap='A scatterplot with a regression line.'}
+par(mar=c(4, 4, 1, .1))
+plot(cars, pch = 20)
+abline(fit, col = 'red')
+```
+
+## References
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+print(citation('knitr'), style = 'html')
+```

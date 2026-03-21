@@ -1,0 +1,7 @@
+\section{Child via the \texttt{child} option}
+
+This chunk below is from the chunk option \texttt{child}.
+
+<<test-a>>=
+1+1 # child a
+@

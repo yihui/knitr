@@ -1,0 +1,6 @@
+\documentclass[12pt]{article}
+\begin{document}
+<<testfig, dev='tikz', error=FALSE, sanitize=TRUE>>=
+plot(runif(100), ylab = 'random %')
+@
+\end{document}

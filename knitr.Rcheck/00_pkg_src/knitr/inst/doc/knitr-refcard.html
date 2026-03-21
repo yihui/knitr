@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="generator" content="litedown 0.9">
+<title>knitr Reference Card</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.24/css/default.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.24/css/prism-xcode.min.css">
+</head>
+<body>
+<div class="frontmatter">
+<div class="title"><h1>knitr Reference Card</h1></div>
+<div class="author"><h2>Yihui Xie</h2></div>
+<div class="date"><h3>2026-03-21</h3></div>
+</div>
+<div class="body">
+<!--
+%\VignetteEngine{litedown::vignette}
+%\VignetteIndexEntry{knitr Reference Card}
+-->
+<h2 id="sec:syntax"><span class="section-number main-number">1</span> Syntax</h2>
+<table>
+<thead>
+<tr>
+<th>format</th>
+<th>start</th>
+<th>end</th>
+<th>inline</th>
+<th>output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rnw</td>
+<td><code>&lt;&lt;*&gt;&gt;=</code></td>
+<td><code>@</code></td>
+<td><code>\Sexpr{x}</code></td>
+<td>TeX</td>
+</tr>
+<tr>
+<td>Rmd</td>
+<td><code>```{r *}</code></td>
+<td><code>```</code></td>
+<td><code>`r x`</code></td>
+<td>Markdown</td>
+</tr>
+<tr>
+<td>Rhtml</td>
+<td><code>&lt;!--begin.rcode *</code></td>
+<td><code>end.rcode--&gt;</code></td>
+<td><code>&lt;!--rinline x--&gt;</code></td>
+<td>HTML</td>
+</tr>
+<tr>
+<td>Rrst</td>
+<td><code>.. {r *}</code></td>
+<td><code>.. ..</code></td>
+<td><code>:r:`x`</code></td>
+<td>reST</td>
+</tr>
+<tr>
+<td>Rtex</td>
+<td><code>% begin.rcode *</code></td>
+<td><code>% end.rcode</code></td>
+<td><code>\rinline{x}</code></td>
+<td>TeX</td>
+</tr>
+<tr>
+<td>Rasciidoc</td>
+<td><code>// begin.rcode *</code></td>
+<td><code>// end.rcode</code></td>
+<td><code>+r x+</code></td>
+<td>AsciiDoc</td>
+</tr>
+<tr>
+<td>Rtextile</td>
+<td><code>### begin.rcode *</code></td>
+<td><code>### end.rcode</code></td>
+<td><code>@r x@</code></td>
+<td>Textile</td>
+</tr>
+<tr>
+<td>brew</td>
+<td></td>
+<td></td>
+<td><code>&lt;% x %&gt;</code></td>
+<td>text</td>
+</tr>
+</tbody>
+</table>
+<p><code>*</code> denotes local chunk options, e.g., <code>&lt;&lt;label, eval=FALSE&gt;&gt;=</code>; <code>x</code> denotes
+inline R code, e.g., <code>`r 1+2`</code>.</p>
+<h2 id="sec:minimal-examples"><span class="section-number main-number">2</span> Minimal Examples</h2>
+<div class="col-2">
+<h3 id="sec:sweave-rnw"><span class="section-number">2.1</span> Sweave (*.Rnw)</h3>
+<pre><code class="language-tex">\documentclass{article}
+\begin{document}
+
+Below is a code chunk.
+
+&lt;&lt;foo, echo=TRUE&gt;&gt;=
+z = 1 + 1
+plot(cars)
+@
+
+The value of z is \Sexpr{z}.
+\end{document}
+</code></pre>
+<h3 id="sec:r-markdown-rmd"><span class="section-number">2.2</span> R Markdown (*.Rmd)</h3>
+<pre><code class="language-md">---
+title: &quot;An R Markdown document&quot;
+---
+
+Hi _Markdown_!
+
+```{r foo, echo=TRUE}
+z = 1 + 1
+plot(cars)
+```
+
+The value of z is `r z`.
+</code></pre>
+</div>
+<h2 id="sec:chunk-options"><span class="section-number main-number">3</span> Chunk Options</h2>
+<p><code>opts_chunk</code> controls global chunk options, e.g.,
+<code>knitr::opts_chunk$set(tidy = FALSE)</code>, which can be overridden by local chunk
+options. See all options at <a href="https://yihui.org/knitr/options/">https://yihui.org/knitr/options/</a>. Some frequently
+used options are:</p>
+<ul>
+<li><code>eval</code>: whether to evaluate the chunk</li>
+<li><code>echo</code>: whether to echo source code</li>
+<li><code>results</code>: <code>'markup'</code>, <code>'asis'</code>, <code>'hold'</code>, <code>'hide'</code></li>
+<li><code>tidy</code>: whether to reformat R code</li>
+<li><code>cache</code>: whether to cache results</li>
+<li><code>fig.width</code>, <code>fig.height</code>, <code>out.width</code>, <code>out.height</code>: device and output size
+of figures</li>
+<li><code>include</code>: whether to include the chunk results in output</li>
+<li><code>child</code>: path to child documents</li>
+<li><code>engine</code>: language name (R, python, …)</li>
+</ul>
+<h2 id="sec:functions"><span class="section-number main-number">4</span> Functions</h2>
+<ul>
+<li><code>knit()</code>: the main function in this package; knit input document and write
+output</li>
+<li><code>purl()</code>: extract R code from an input document</li>
+<li><code>spin()</code>: spin goat’s hair (an R script with roxygen comments) into wool (a
+literate programming document to be passed to <code>knit()</code>)</li>
+<li><code>stitch()</code>: insert an R script into a template and compile the document</li>
+<li><code>knit_hooks$set()</code>: set or reset chunk and output
+<a href="https://yihui.org/knitr/hooks/">hooks</a></li>
+</ul>
+<h2 id="sec:resources"><span class="section-number main-number">5</span> Resources</h2>
+<ul>
+<li>Homepage: <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a></li>
+<li>Github: <a href="https://github.com/yihui/knitr">https://github.com/yihui/knitr</a>
+(<a href="https://cran.r-project.org/package=knitr">CRAN</a>)</li>
+<li>Examples: <a href="https://github.com/yihui/knitr-examples">https://github.com/yihui/knitr-examples</a></li>
+<li>Stack Overflow: <a href="https://stackoverflow.com/tags/knitr/">https://stackoverflow.com/tags/knitr/</a></li>
+</ul>
+<style type="text/css">
+body {
+  max-width: none;
+}
+table {
+  width: 100%;
+}
+.body h2 {
+  border-bottom: none;
+  font-size: 1.3em;
+}
+.body, .col-2 {
+  columns: 2;
+  & > :first-child {
+    margin-top: 0;
+  }
+}
+</style>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+</body>
+</html>

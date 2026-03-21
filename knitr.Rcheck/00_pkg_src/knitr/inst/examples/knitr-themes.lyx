@@ -1,0 +1,605 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass tufte-handout
+\begin_preamble
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\floatpagefraction}{0.75}
+
+\usepackage[breaklinks=true,pdfstartview=FitH]{hyperref}
+\end_preamble
+\options justified
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding default
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 88
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\pdf_author "Ramnath Vaidyanathan"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen true
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\pdf_quoted_options "citecolor = blue, linkcolor = magenta, urlcolor = green"
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<setup, include=FALSE, cache=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(knitr)
+\end_layout
+
+\begin_layout Plain Layout
+
+opts_chunk$set(fig.path='figure/theme-', cache.path='cache/theme-', cache=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+options(formatR.arrow=TRUE,width=78)
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_hooks$set(par=function(before, options, envir){if (before) par(mar=c(4,4,.1,.
+1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\begin_layout Plain Layout
+
+<<solarized-theme, cache=FALSE, echo=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+thm = knit_theme$get("solarized-dark")
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_theme$set(thm)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+Customizing Syntax Highlighting Themes
+\end_layout
+
+\begin_layout Author
+Yihui Xie & Ramnath Vaidyanathan
+\end_layout
+
+\begin_layout Abstract
+This manual
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+source code at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ shows how to customize syntax highlighting of source code using themes.
+ It walks the user through the basics of syntax highlighting in 
+\series bold
+knitr
+\series default
+, and the use of built-in themes.
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+knitr
+\series default
+ package uses the 
+\series bold
+highr
+\series default
+ package to highlight source code in a document.
+ In short, the 
+\series bold
+highr
+\series default
+ package parses the source code, tokenizes it into grammar symbols, and
+ formats their appearance using CSS or LaTeX commands.
+ 
+\end_layout
+
+\begin_layout Section
+Usage
+\end_layout
+
+\begin_layout Standard
+We can use the object 
+\family typewriter
+knit_theme
+\family default
+ to set / get a theme.
+ See 
+\family typewriter
+?knit_theme
+\family default
+ for the usage.
+ For example, we set the theme of this document to be 
+\family typewriter
+solarized-dark
+\family default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<solarized-theme>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Built-in Themes
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float margintable
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eclipse-css, comment=NA, echo=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+cat(c(readLines('../themes/edit-eclipse.css', n=30),'...'),sep='
+\backslash
+n')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The listing on the right shows the CSS file for one of the themes, 
+\family typewriter
+edit-eclipse
+\family default
+, which was adapted from Andre Simon's excellent highlighter
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.andre-simon.de/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ The 
+\series bold
+knitr
+\series default
+ package comes pre-loaded with a number of themes based on this highlighter.
+ Here is list of all available code themes
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+For a preview of all themes, see 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://gist.github.com/yihui/3422133
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<all-themes>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+knit_theme$get()
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Shown below is how the 
+\family typewriter
+solarized-dark
+\family default
+ theme looks like when applied to R code:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<demo-code, eval = FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(XML)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(reshape)
+\end_layout
+
+\begin_layout Plain Layout
+
+# SCRAPE THE DATA FROM WEB 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+base_url = "http://www.mlsoccer.com/stats/%s/reg"
+\end_layout
+
+\begin_layout Plain Layout
+
+years    = 1996:2010
+\end_layout
+
+\begin_layout Plain Layout
+
+options(width = 40)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#' Function to save data for each year
+\end_layout
+
+\begin_layout Plain Layout
+
+save_data = function(y){
+\end_layout
+
+\begin_layout Plain Layout
+
+  url  = sprintf(base_url, y)
+\end_layout
+
+\begin_layout Plain Layout
+
+  tab  = readHTMLTable(url, header = FALSE, stringsAsFactors = FALSE);
+\end_layout
+
+\begin_layout Plain Layout
+
+  pos  = max(grep("United", tab));
+\end_layout
+
+\begin_layout Plain Layout
+
+  tab  = tab[[pos]];
+\end_layout
+
+\begin_layout Plain Layout
+
+  tab$year   = y;
+\end_layout
+
+\begin_layout Plain Layout
+
+  return(tab)            
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+team.list  = lapply(years, save_data);
+\end_layout
+
+\begin_layout Plain Layout
+
+mls        = merge_recurse(team.list);
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Misc
+\end_layout
+
+\begin_layout Standard
+One thing to consider is the foreground color of plots when we use dark
+ themes; we need to make it lighter, otherwise the graphical elements will
+ be difficult to be read.
+ We can access the foreground color of the theme in the list returned by
+ 
+\family typewriter
+knit_theme$get(theme)
+\family default
+, e.g., for this document:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<fg-color>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+## the object thm is from the first chunk
+\end_layout
+
+\begin_layout Plain Layout
+
+thm$foreground  # foreground color
+\end_layout
+
+\begin_layout Plain Layout
+
+thm$background  # background color
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When we make plots, we may use these colors, e.g.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<plot-color, fig.width=6, fig.height=4, out.width='.8
+\backslash
+
+\backslash
+linewidth', par=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+## can design a chunk hook to set foreground color automatically
+\end_layout
+
+\begin_layout Plain Layout
+
+fgcolor=thm$foreground
+\end_layout
+
+\begin_layout Plain Layout
+
+par(fg=fgcolor, col.axis=fgcolor, col.lab=fgcolor)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(rnorm(100),pch=19)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Of course, we do not need to worry about these colors when we use a white
+ background for the plots.
+\end_layout
+
+\end_body
+\end_document

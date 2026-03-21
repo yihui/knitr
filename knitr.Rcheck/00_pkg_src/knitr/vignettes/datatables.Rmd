@@ -1,0 +1,37 @@
+---
+title: Display Tables with the JavaScript Library simple-datatables
+author: Yihui Xie
+date: "`{r} Sys.Date()`"
+output:
+  html:
+    meta:
+      css: ["@default", "@npm/simple-datatables/dist/style.min.css"]
+      js: ["@npm/simple-datatables/dist/umd/simple-datatables.min.js"]
+---
+
+<!--
+%\VignetteEngine{litedown::vignette}
+%\VignetteIndexEntry{Display Tables with the JavaScript Library simple-datatables}
+-->
+
+We can use the JavaScript library [**simple-datatables**](https://github.com/fiduswriter/simple-datatables/) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
+
+::: {#mtcars-table}
+```{r cool, print.args=list(data.frame=list(limit=NULL))}
+mtcars
+```
+:::
+
+Note we assigned an `id` to the table, and next we use the **DataTables** library to initialize the table and you will get an interactive table.
+
+```{js}
+window.addEventListener('load', () => {
+  new simpleDatatables.DataTable('#mtcars-table > table');
+});
+```
+
+By comparison, below is an ordinary table:
+
+```{r boring}
+mtcars
+```

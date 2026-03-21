@@ -1,0 +1,207 @@
+body {
+  background-color: #fff;
+  margin: 1em auto;
+  max-width: 800px;
+  padding: 0 2em;
+  line-height: 1.5;
+}
+
+.title, .author, .date {
+  text-align: center;
+}
+
+#TOC {
+  clear: both;
+  margin: 0 0 10px 0;
+  padding: 4px;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+  background-color: #f6f6f6;
+}
+  #TOC .toctitle {
+    font-weight: bold;
+    font-size: 15px;
+    margin-left: 5px;
+  }
+
+  #TOC ul {
+    padding-left: 40px;
+    margin-left: -1.5em;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  #TOC ul ul {
+    margin-left: -2em;
+  }
+  #TOC li {
+    line-height: 16px;
+  }
+
+table:not([class]) {
+  margin: auto;
+  min-width: 40%;
+  border-width: 1px;
+  border-color: #DDDDDD;
+  border-style: outset;
+  border-collapse: collapse;
+}
+table[summary="R argblock"] {
+  width: 100%;
+  border: none;
+}
+table:not([class]) th {
+  border-width: 2px;
+  padding: 5px;
+  border-style: inset;
+}
+table:not([class]) td {
+  border-width: 1px;
+  border-style: inset;
+  line-height: 18px;
+  padding: 5px 5px;
+}
+table:not([class]), table:not([class]) th, table:not([class]) td {
+  border-left-style: none;
+  border-right-style: none;
+}
+table:not([class]) tr.odd {
+  background-color: #f7f7f7;
+}
+
+blockquote {
+  background-color: #f6f6f6;
+  padding: 1em;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #777;
+  margin: 28px 0;
+}
+
+dl {
+  margin-left: 0;
+}
+  dl dd {
+    margin-bottom: 13px;
+    margin-left: 13px;
+  }
+  dl dt {
+    font-weight: bold;
+  }
+
+ul {
+  margin-top: 0;
+}
+  ul li {
+    list-style: circle outside;
+  }
+  ul ul {
+    margin-bottom: 0;
+  }
+
+pre, code {
+  background-color: #f5f5f5;
+  border-radius: 3px;
+  color: #333;
+}
+pre {
+  overflow-x: auto;
+  border-radius: 3px;
+  margin: 5px 0 10px 0;
+  padding: 10px;
+}
+pre code {
+  display: block;
+}
+pre:not([class]) {
+  background-color: white;
+  border: #f5f5f5 1px solid;
+}
+pre:not([class]) code {
+  color: #444;
+  background-color: white;
+}
+code {
+  font-family: monospace;
+  font-size: 90%;
+}
+p > code, li > code {
+  padding: 2px 4px;
+  color: #d14;
+  border: 1px solid #e1e1e8;
+  white-space: inherit;
+}
+div.figure {
+  text-align: center;
+}
+table > caption, div.figure p.caption {
+  font-style: italic;
+}
+table > caption span, div.figure p.caption span {
+  font-style: normal;
+  font-weight: bold;
+}
+
+img:not([class]) {
+  background-color: #FFFFFF;
+  padding: 2px;
+  border-radius: 3px;
+  border: 1px solid #CCCCCC;
+  margin: 0 5px;
+  max-width: 100%;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 35px;
+}
+
+h2 {
+  border-bottom: 4px solid #f5f5f5;
+  padding-top: 10px;
+  padding-bottom: 2px;
+  font-size: 145%;
+}
+
+h3 {
+  border-bottom: 2px solid #f5f5f5;
+  padding-top: 10px;
+  font-size: 120%;
+}
+
+h4 {
+  border-bottom: 1px solid #f5f5f5;
+  margin-left: 8px;
+  font-size: 105%;
+}
+
+h5, h6 {
+  border-bottom: 1px solid #ccc;
+  font-size: 105%;
+}
+
+a {
+  color: #0033dd;
+  text-decoration: none;
+}
+  a:hover {
+    color: #6666ff; }
+  a:visited {
+    color: #800080; }
+  a:visited:hover {
+    color: #BB00BB; }
+  a[href^="http:"] {
+    text-decoration: underline; }
+  a[href^="https:"] {
+    text-decoration: underline; }
+
+div.r-help-page {
+  background-color: #f9f9f9;
+  border-bottom: #ddd 1px solid;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+div.r-help-page:hover {
+  background-color: #f4f4f4;
+}

@@ -1,0 +1,438 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass beamer
+\begin_preamble
+\usetheme{PaloAlto}
+\end_preamble
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding default
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 10
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<setup, include=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(knitr)
+\end_layout
+
+\begin_layout Plain Layout
+
+opts_chunk$set(fig.path='figure/beamer-',fig.align='center',fig.show='hold',size='f
+ootnotesize')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+\begin_inset Argument 1
+status collapsed
+
+\begin_layout Plain Layout
+knitr, Beamer, and FragileFrame
+\end_layout
+
+\end_inset
+
+A Minimal Demo of knitr with Beamer and Fragile Frames
+\end_layout
+
+\begin_layout Author
+Yihui Xie
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+I thank Richard E.
+ Goldberg for providing this demo.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Background
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The 
+\series bold
+knitr
+\emph on
+ 
+\series default
+\emph default
+package allows you to embed R code and figures in LaTeX documents
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+It has functionality similar to Sweave but looks nicer and gives you more
+ control
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+If you already have Sweave working in LyX, getting 
+\series bold
+knitr
+\series default
+ to work is trivial
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Install the 
+\series bold
+knitr
+\series default
+ package in 
+\emph on
+R
+\end_layout
+
+\begin_layout Enumerate
+Read 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://yihui.org/knitr/demo/lyx/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+If you use Sweave or 
+\series bold
+knitr
+\series default
+ with Beamer in LyX, you must use the
+\emph on
+ FragileFrame
+\emph default
+ environment for the frames that contain R code chunks.
+ Let's see if 
+\series bold
+knitr
+\series default
+ works with Beamer in this small demo.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Section
+First Test
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+First Test
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+OK, let's get started with just some text:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=FALSE,results='hide'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# some setup
+\end_layout
+
+\begin_layout Plain Layout
+
+options(width=60)  # make the printing fit on the page
+\end_layout
+
+\begin_layout Plain Layout
+
+set.seed(1121)   # make the results repeatable
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<>>= 
+\end_layout
+
+\begin_layout Plain Layout
+
+# create some random numbers
+\end_layout
+
+\begin_layout Plain Layout
+
+(x=rnorm(20))  
+\end_layout
+
+\begin_layout Plain Layout
+
+mean(x);var(x)  
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+BTW, the first element of 
+\family typewriter
+x
+\family default
+ is 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{x[1]}
+\end_layout
+
+\end_inset
+
+.
+ (Did you notice the use of
+\family typewriter
+ 
+\backslash
+Sexpr{}
+\family default
+?)
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Second Test
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Second Test
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Text is nice but let's see what happens if we make a couple of plots in
+ our chunk:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<boring-plots,fig.width=4,fig.height=4,out.width='.45
+\backslash
+
+\backslash
+linewidth'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+par(las=1,mar=c(4,4,.1,.1))  # tick labels direction
+\end_layout
+
+\begin_layout Plain Layout
+
+boxplot(x) 
+\end_layout
+
+\begin_layout Plain Layout
+
+hist(x,main='',col="blue",probability=TRUE) 
+\end_layout
+
+\begin_layout Plain Layout
+
+lines(density(x),col="red")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+The Big Question
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+The Big Question
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Do the above chunks work? You should be able to compile the LyX document
+ and get a nice-looking PDF slide presentation.
+ If not, time to double-check everything...
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

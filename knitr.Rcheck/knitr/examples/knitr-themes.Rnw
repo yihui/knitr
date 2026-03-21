@@ -1,0 +1,125 @@
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[nohyper,justified]{tufte-handout}
+\usepackage[T1]{fontenc}
+\usepackage{url}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+
+\title{Customizing Syntax Highlighting Themes}
+\author{Yihui Xie \& Ramnath Vaidyanathan}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\floatpagefraction}{0.75}
+
+\usepackage[breaklinks=true,pdfstartview=FitH]{hyperref}
+
+\makeatother
+
+\begin{document}
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+opts_chunk$set(fig.path='figure/theme-', cache.path='cache/theme-', cache=TRUE)
+options(formatR.arrow=TRUE,width=78)
+knit_hooks$set(par=function(before, options, envir){if (before) par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)})
+@
+<<solarized-theme, cache=FALSE, echo=FALSE>>=
+thm = knit_theme$get("solarized-dark")
+knit_theme$set(thm)
+@
+\maketitle
+\begin{abstract}
+This manual\footnote{source code at \url{https://github.com/yihui/knitr/blob/master/inst/examples/knitr-themes.Rnw}}
+shows how to customize syntax highlighting of source code using themes.
+It walks the user through the basics of syntax highlighting in \textbf{knitr},
+and the use of built-in themes.
+\end{abstract}
+The \textbf{knitr} package uses the \textbf{highr} package to highlight
+source code in a document. In short, the \textbf{highr} package parses
+the source code, tokenizes it into grammar symbols, and formats their
+appearance using CSS or \LaTeX{} commands. 
+
+\section{Usage}
+
+We can use the object \texttt{knit\_theme} to set / get a theme. See
+\texttt{?knit\_theme} for the usage. For example, we set the theme
+of this document to be \texttt{solarized-dark}:
+
+<<solarized-theme>>=
+@
+
+\section{Built-in Themes}
+
+\begin{margintable}
+<<eclipse-css, comment=NA, echo=FALSE>>=
+cat(c(readLines('../themes/edit-eclipse.css', n=30),'...'),sep='\n')
+@
+\end{margintable}
+
+The listing on the right shows the CSS file for one of the themes,
+\texttt{edit-eclipse}, which was adapted from Andre Simon's excellent
+highlighter\footnote{\url{http://www.andre-simon.de/}}. The \textbf{knitr}
+package comes pre-loaded with a number of themes based on this highlighter.
+Here is list of all available code themes\footnote{For a preview of all themes, see \url{https://gist.github.com/yihui/3422133}}:
+
+<<all-themes>>=
+knit_theme$get()
+@
+
+Shown below is how the \texttt{solarized-dark} theme looks like when
+applied to R code:
+
+<<demo-code, eval = FALSE>>=
+library(XML)
+library(reshape)
+# SCRAPE THE DATA FROM WEB 
+
+base_url = "http://www.mlsoccer.com/stats/%s/reg"
+years    = 1996:2010
+options(width = 40)
+
+#' Function to save data for each year
+save_data = function(y){
+  url  = sprintf(base_url, y)
+  tab  = readHTMLTable(url, header = FALSE, stringsAsFactors = FALSE);
+  pos  = max(grep("United", tab));
+  tab  = tab[[pos]];
+  tab$year   = y;
+  return(tab)            
+}
+	
+team.list  = lapply(years, save_data);
+mls        = merge_recurse(team.list);
+@
+
+\section{Misc}
+
+One thing to consider is the foreground color of plots when we use
+dark themes; we need to make it lighter, otherwise the graphical elements
+will be difficult to be read. We can access the foreground color of
+the theme in the list returned by \texttt{knit\_theme\$get(theme)},
+e.g., for this document:
+
+<<fg-color>>=
+## the object thm is from the first chunk
+thm$foreground  # foreground color
+thm$background  # background color
+@
+
+When we make plots, we may use these colors, e.g.
+
+<<plot-color, fig.width=6, fig.height=4, out.width='.8\\linewidth', par=TRUE>>=
+## can design a chunk hook to set foreground color automatically
+fgcolor=thm$foreground
+par(fg=fgcolor, col.axis=fgcolor, col.lab=fgcolor)
+plot(rnorm(100),pch=19)
+@
+
+Of course, we do not need to worry about these colors when we use
+a white background for the plots.
+\end{document}

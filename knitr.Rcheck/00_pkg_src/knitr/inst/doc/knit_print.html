@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="generator" content="litedown 0.9">
+<title>Custom Print Methods</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.24/css/default.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.24/css/prism-xcode.min.css">
+</head>
+<body>
+<div class="frontmatter">
+<div class="title"><h1>Custom Print Methods</h1></div>
+<div class="author"><h2>Yihui Xie</h2></div>
+<div class="date"><h3>2026-03-21</h3></div>
+</div>
+<div class="body">
+<div id="TOC">
+<ul>
+<li><a href="#sec:customize-printing">Customize Printing</a></li>
+<li><a href="#sec:a-low-level-explanation">A Low-level Explanation</a>
+<ul>
+<li><a href="#sec:the-render-option">The <code>render</code> option</a></li>
+<li><a href="#sec:metadata">Metadata</a></li>
+<li><a href="#sec:for-package-authors">For package authors</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Before <strong>knitr</strong> v1.6, printing objects in R code chunks basically emulates the
+R console. For example, a data frame is printed like this<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup>:</p>
+<pre><code class="language-r">head(mtcars)
+</code></pre>
+<pre><code>                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+</code></pre>
+<p>The text representation of the data frame above may look very familiar with most
+R users, but for reporting purposes, it may not be satisfactory – often times
+we want to see a table representation instead. That is the problem that the
+chunk option <code>render</code> and the S3 generic function <code>knit_print()</code> try to solve.</p>
+<h2 id="sec:customize-printing">Customize Printing</h2>
+<p>After we evaluate each R expression in a code chunk, there is an object
+returned. For example, <code>1 + 1</code> returns <code>2</code>. This object is passed to the chunk
+option <code>render</code>, which is a function with two arguments, <code>x</code> and <code>options</code>, or
+<code>x</code> and <code>...</code>. The default value for the <code>render</code> option is <code>knit_print</code>, an S3
+function in <strong>knitr</strong>:</p>
+<pre><code class="language-r">library(knitr)
+knit_print  # an S3 generic function
+</code></pre>
+<pre><code>## function (x, ...) 
+## {
+##     if (getOption(&quot;knitr.in.progress&quot;, FALSE)) {
+##         current_env = parent.frame()
+##         local_options(list(rlang_trace_top_env = current_env))
+##     }
+##     if (need_screenshot(x, ...)) {
+##         html_screenshot(x)
+##     }
+##     else {
+##         UseMethod(&quot;knit_print&quot;)
+##     }
+## }
+## &lt;bytecode: 0x563d4ada13b0&gt;
+## &lt;environment: namespace:knitr&gt;
+</code></pre>
+<pre><code class="language-r">methods(knit_print)
+</code></pre>
+<pre><code>## [1] knit_print.default*       knit_print.knit_asis*    
+## [3] knit_print.knit_asis_url* knit_print.knitr_kable*  
+## see '?methods' for accessing help and source code
+</code></pre>
+<pre><code class="language-r">getS3method('knit_print', 'default')  # the default method
+</code></pre>
+<pre><code>## function (x, ..., inline = FALSE) 
+## {
+##     if (inline) 
+##         x
+##     else normal_print(x)
+## }
+## &lt;bytecode: 0x563d47de84d8&gt;
+## &lt;environment: namespace:knitr&gt;
+</code></pre>
+<pre><code class="language-r">normal_print
+</code></pre>
+<pre><code>## function (x, ...) 
+## {
+##     if (isS4(x)) 
+##         methods::show(x)
+##     else print(x)
+## }
+## &lt;bytecode: 0x563d49c0e7b8&gt;
+## &lt;environment: namespace:knitr&gt;
+</code></pre>
+<p>As we can see, <code>knit_print()</code> has a <code>default</code> method, which is basically
+<code>print()</code> or <code>show()</code>, depending on whether the object is an S4 object. This
+means it does nothing special when printing R objects:</p>
+<pre><code class="language-r">knit_print(1:10)
+##  [1]  1  2  3  4  5  6  7  8  9 10
+knit_print(head(mtcars))
+##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+</code></pre>
+<p>S3 generic functions are extensible in the sense that we can define custom
+methods for them. A method <code>knit_print.foo()</code> will be applied to the object that
+has the class <code>foo</code>. Here is quick example of how we can print data frames as
+tables:</p>
+<pre><code class="language-r">library(knitr)
+# define a method for objects of the class data.frame
+knit_print.data.frame = function(x, ...) {
+  res = paste(c('', '', kable(x)), collapse = '\n')
+  asis_output(res)
+}
+# register the method
+registerS3method(&quot;knit_print&quot;, &quot;data.frame&quot;, knit_print.data.frame)
+</code></pre>
+<p>If you define a method in a code chunk in a <strong>knitr</strong> document, the call to
+<code>registerS3method()</code> will be necessary for R &gt;= 3.5.0, because the S3 dispatch
+mechanism has changed since R 3.5.0. If you are developing an R package, see the
+section [For package authors] below.</p>
+<p>We expect the print method to return a character vector, or an object that can
+be coerced into a character vector. In the example above, the <code>kable()</code> function
+returns a character vector, which we pass to the <code>asis_output()</code> function so
+that later <strong>knitr</strong> knows that this result needs no special treatment (just
+write it as is), otherwise it depends on the chunk option <code>results</code> (<code>= 'asis'</code>
+/ <code>'markup'</code> / <code>'hide'</code>) how a normal character vector should be written. The
+function <code>asis_output()</code> has the same effect as <code>results = 'asis'</code>, but saves us
+the effort to provide this chunk option explicitly. Now we check how the
+printing behavior is changed. We print a number, a character vector, a list, a
+data frame, and write a character value using <code>cat()</code> in the chunk below:</p>
+<pre><code class="language-r">1 + 1
+</code></pre>
+<pre><code>## [1] 2
+</code></pre>
+<pre><code class="language-r">head(letters)
+</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot;
+</code></pre>
+<pre><code class="language-r">list(a = 1, b = 9:4)
+</code></pre>
+<pre><code>## $a
+## [1] 1
+## 
+## $b
+## [1] 9 8 7 6 5 4
+</code></pre>
+<pre><code class="language-r">head(mtcars)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">disp</th>
+<th align="right">hp</th>
+<th align="right">drat</th>
+<th align="right">wt</th>
+<th align="right">qsec</th>
+<th align="right">vs</th>
+<th align="right">am</th>
+<th align="right">gear</th>
+<th align="right">carb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Mazda RX4</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">160</td>
+<td align="right">110</td>
+<td align="right">3.90</td>
+<td align="right">2.620</td>
+<td align="right">16.46</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td align="left">Mazda RX4 Wag</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">160</td>
+<td align="right">110</td>
+<td align="right">3.90</td>
+<td align="right">2.875</td>
+<td align="right">17.02</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td align="left">Datsun 710</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">108</td>
+<td align="right">93</td>
+<td align="right">3.85</td>
+<td align="right">2.320</td>
+<td align="right">18.61</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">Hornet 4 Drive</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">258</td>
+<td align="right">110</td>
+<td align="right">3.08</td>
+<td align="right">3.215</td>
+<td align="right">19.44</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">Hornet Sportabout</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">360</td>
+<td align="right">175</td>
+<td align="right">3.15</td>
+<td align="right">3.440</td>
+<td align="right">17.02</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td align="left">Valiant</td>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">225</td>
+<td align="right">105</td>
+<td align="right">2.76</td>
+<td align="right">3.460</td>
+<td align="right">20.22</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-r">cat('This is cool.')
+</code></pre>
+<pre><code>## This is cool.
+</code></pre>
+<p>We see all objects except the data frame were printed “normally”<sup class="footnote-ref"><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup>. The data
+frame was printed as a real table. Note you do not have to use <code>kable()</code> to
+create tables – there are many other options such as <strong>xtable</strong>. Just make sure
+the print method returns a character string.</p>
+<p>The <a href="https://github.com/yihui/printr"><strong>printr</strong></a> package is a companion to
+<strong>knitr</strong> containing printing methods for some common objects like matrices and
+data frames. Users only need to load this package to get attractive printed
+results. A major factor to consider (which has been considered in <strong>printr</strong>)
+when defining a printing method is the output format. For example, the table
+syntax can be entirely different when the output is LaTeX vs when it is
+Markdown.</p>
+<p>It is strongly recommended that your S3 method has a <code>...</code> argument, so that
+your method can safely ignore arguments that are passed to <code>knit_print()</code> but
+not defined in your method. At the moment, a <code>knit_print()</code> method can have two
+optional arguments:</p>
+<ul>
+<li>the <code>options</code> argument takes a list of the current chunk options;</li>
+<li>the <code>inline</code> argument indicates if the method is called in code chunks or
+inline R code;</li>
+</ul>
+<p>Depending on your application, you may optionally use these arguments. Here are
+some examples:</p>
+<pre><code class="language-r">knit_print.classA = function(x, ...) {
+  # ignore options and inline
+}
+knit_print.classB = function(x, options, ...) {
+  # use the chunk option out.height
+  asis_output(paste0(
+    '&lt;iframe src=&quot;https://yihui.org&quot; height=&quot;', options$out.height, '&quot;&gt;&lt;/iframe&gt;',
+  ))
+}
+knit_print.classC = function(x, inline = FALSE, ...) {
+  # different output according to inline=TRUE/FALSE
+  if (inline) {
+    'inline output for classC'
+  } else {
+    'chunk output for classC'
+  }
+}
+knit_print.classD = function(x, options, inline = FALSE, ...) {
+  # use both options and inline
+}
+</code></pre>
+<p>Note that when <em>using</em> your (or another) <code>knit_print()</code> method <em>inline</em> (if it
+supports that), you must not call <code>knit_print()</code> on the object, but just have it
+return. For example, your inline code should read <code>foo</code> and <em>not</em>
+<code>  </code>. The latter inline code would yield the methods’
+result for <em>in-chunk</em> (not inline), because, as set up in the above,
+<code>knit_print()</code> methods default to <code>inline = FALSE</code>. This default gets
+overwritten depending on the context in which <code>knit_print()</code> is called (inline
+or in-chunk), only when <code>knit_print()</code> is called by <strong>knitr</strong> (not you) via the
+<code>render</code> option (see below). You can, of course, always manually set the inline
+option <code>foo</code>, but that’s a lot of
+typing.</p>
+<h2 id="sec:a-low-level-explanation">A Low-level Explanation</h2>
+<p>You can skip this section if you do not care about the low-level implementation
+details.</p>
+<h3 id="sec:the-render-option">The <code>render</code> option</h3>
+<p>As mentioned before, the chunk option <code>render</code> is a function that defaults to
+<code>knit_print()</code>. We can certainly use other render functions. For example, we
+create a dummy function that always says “I do not know what to print” no matter
+what objects it receives:</p>
+<pre><code class="language-r">dummy_print = function(x, ...) {
+  cat(&quot;I do not know what to print!&quot;)
+  # this function implicitly returns an invisible NULL
+}
+</code></pre>
+<p>Now we use the chunk option <code>render = dummy_print</code>:</p>
+<pre><code class="language-r">1 + 1
+## I do not know what to print!
+head(letters)
+## I do not know what to print!
+list(a = 1, b = 9:4)
+## I do not know what to print!
+head(mtcars)
+## I do not know what to print!
+cat('This is cool.')
+## This is cool.
+</code></pre>
+<p>Note the <code>render</code> function is only applied to visible objects. There are cases
+in which the objects returned are invisible, e.g. those wrapped in
+<code>invisible()</code>.</p>
+<pre><code class="language-r">1 + 1
+</code></pre>
+<pre><code>## [1] 2
+</code></pre>
+<pre><code class="language-r">invisible(1 + 1)
+invisible(head(mtcars))
+x = 1:10  # invisibly returns 1:10
+</code></pre>
+<h3 id="sec:metadata">Metadata</h3>
+<p>The print function can have a side effect of passing “metadata” about objects to
+<strong>knitr</strong>, and <strong>knitr</strong> will collect this information as it prints objects. The
+motivation of collecting metadata is to store external dependencies of the
+objects to be printed. Normally we print an object only to obtain a text
+representation, but there are cases that can be more complicated. For example, a
+<a href="https://ggvis.rstudio.com/"><strong>ggvis</strong></a> graph requires external JavaScript and
+CSS dependencies such as <code>ggvis.js</code>. The graph itself is basically a fragment of
+JavaScript code, which will not work unless the required libraries are loaded
+(in the HTML header). Therefore we need to collect the dependencies of an object
+beside printing the object itself.</p>
+<p>One way to specify the dependencies is through the <code>meta</code> argument of
+<code>asis_output()</code>. Here is a pseudo example:</p>
+<pre><code class="language-r"># pseudo code
+knit_print.ggvis = function(x, ...) {
+  res = ggvis::print_this_object(x)
+  knitr::asis_output(res, meta = list(
+    ggvis = list(
+      version = '0.1.0',
+      js  = system.file('www', 'js',  'ggvis.js',  package = 'ggvis'),
+      css = system.file('www', 'www', 'ggvis.css', package = 'ggvis')
+    )
+  ))
+}
+</code></pre>
+<p>Then when <strong>knitr</strong> prints a <strong>ggvis</strong> object, the <code>meta</code> information will be
+collected and stored. After knitting is done, we can obtain a list of all the
+dependencies via <code>knit_meta()</code>. It is very likely that there are duplicate
+entries in the list, and it is up to the package authors to clean them up, and
+process the metadata list in their own way (e.g. write the dependencies into the
+HTML header). We give a few more quick and dirty examples below to see how
+<code>knit_meta()</code> works.</p>
+<p>Now we define a print method for <code>foo</code> objects:</p>
+<pre><code class="language-r">library(knitr)
+knit_print.foo = function(x, ...) {
+  res = paste('&gt; **This is a `foo` object**:', x)
+  asis_output(res, meta = list(
+    js  = system.file('www', 'shared', 'shiny.js',  package = 'shiny'),
+    css = system.file('www', 'shared', 'shiny.css', package = 'shiny')
+  ))
+}
+</code></pre>
+<p>See what happens when we print <code>foo</code> objects:</p>
+<pre><code class="language-r">new_foo = function(x) structure(x, class = 'foo')
+new_foo('hello')
+</code></pre>
+<blockquote>
+<p><strong>This is a <code>foo</code> object</strong>: hello</p>
+</blockquote>
+<p>Check the metadata now:</p>
+<pre><code class="language-r">str(knit_meta(clean = FALSE))
+</code></pre>
+<pre><code>## List of 2
+##  $ js : chr &quot;&quot;
+##  $ css: chr &quot;&quot;
+##  - attr(*, &quot;knit_meta_id&quot;)= chr [1:2] &quot;unnamed-chunk-9&quot; &quot;unnamed-chunk-9&quot;
+</code></pre>
+<p>Another <code>foo</code> object:</p>
+<pre><code class="language-r">new_foo('world')
+</code></pre>
+<blockquote>
+<p><strong>This is a <code>foo</code> object</strong>: world</p>
+</blockquote>
+<p>Similarly for <code>bar</code> objects:</p>
+<pre><code class="language-r">knit_print.bar = function(x, ...) {
+  asis_output(x, meta = list(head = '&lt;script&gt;console.log(&quot;bar!&quot;)&lt;/script&gt;'))
+}
+new_bar = function(x) structure(x, class = 'bar')
+new_bar('&gt; **hello** world!')
+</code></pre>
+<blockquote>
+<p><strong>hello</strong> world!</p>
+</blockquote>
+<pre><code class="language-r">new_bar('&gt; hello **world**!')
+</code></pre>
+<blockquote>
+<p>hello <strong>world</strong>!</p>
+</blockquote>
+<p>The final version of the metadata, and clean it up:</p>
+<pre><code class="language-r">str(knit_meta())
+</code></pre>
+<pre><code>## List of 6
+##  $ js  : chr &quot;&quot;
+##  $ css : chr &quot;&quot;
+##  $ js  : chr &quot;&quot;
+##  $ css : chr &quot;&quot;
+##  $ head: chr &quot;&lt;script&gt;console.log(\&quot;bar!\&quot;)&lt;/script&gt;&quot;
+##  $ head: chr &quot;&lt;script&gt;console.log(\&quot;bar!\&quot;)&lt;/script&gt;&quot;
+##  - attr(*, &quot;knit_meta_id&quot;)= chr [1:6] &quot;unnamed-chunk-9&quot; &quot;unnamed-chunk-9&quot; &quot;unnamed-chunk-11&quot; &quot;unnamed-chunk-11&quot; ...
+</code></pre>
+<pre><code class="language-r">str(knit_meta()) # empty now, because clean = TRUE by default
+</code></pre>
+<pre><code>##  list()
+</code></pre>
+<h3 id="sec:for-package-authors">For package authors</h3>
+<p>If you are implementing a custom print method in your own package, here are two
+tips:</p>
+<ol>
+<li>
+<p>With R &gt;= 3.6.0 (2019-04-26), you can declare the S3 method in the package
+<code>NAMESPACE</code> with <code>S3method(knitr::knit_print, class)</code>. If you use
+<strong>roxygen2</strong> package, that means a roxygen comment like this:</p>
+<pre><code class="language-r">#' @exportS3Method knitr::knit_print
+knit_print.class &lt;- 
+</code></pre>
+<p>With this method, you do not need to import <strong>knitr</strong> to your package, i.e.,
+<strong>knitr</strong> can be listed in <code>Suggests</code> and not necessarily <code>Imports</code> in the
+package <code>DESCRIPTION</code>. The S3 methods will be automatically registered when
+<strong>knitr</strong> is actually loaded.</p>
+<p>For R &lt; 3.6.0, you need to import <code>knit_print</code> in your package namespace
+via <code>importFrom(knitr, knit_print)</code> (or roxygen:
+<code>#' @importFrom knitr knit_print</code>) (see <a href="https://github.com/yihui/printr">the <strong>printr</strong>
+package</a> for an example).</p>
+</li>
+<li>
+<p><code>asis_output()</code> is simply a function that marks an object with the class
+<code>knit_asis</code>, and you do not have to import this function to your package,
+either—just let your print method return
+<code>structure(x, class = 'knit_asis')</code>, and if there are additional metadata,
+just put it in the <code>knit_meta</code> attribute; here is the source code of this
+function:</p>
+<pre><code class="language-r">knitr::asis_output
+</code></pre>
+<pre><code>## function (x, meta = NULL, cacheable = NA) 
+## {
+##     structure(x, class = &quot;knit_asis&quot;, knit_meta = meta, knit_cacheable = cacheable)
+## }
+## &lt;bytecode: 0x563d4c95cc18&gt;
+## &lt;environment: namespace:knitr&gt;
+</code></pre>
+<p>You may put <strong>knitr</strong> in the <code>Suggests</code> field in <code>DESCRIPTION</code>, and use
+<code>knitr::asis_output()</code>, so that you can avoid the “hard” dependency on
+<strong>knitr</strong>.</p>
+</li>
+</ol>
+<section class="footnotes" data-footnotes>
+<ol>
+<li id="fn-1">
+<p>Note R prints an object without an explicit <code>print()</code> call when it is
+<em>visible</em>; see <code>?invisible</code> <a href="#fnref-1" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="1" aria-label="Back to reference 1">↩</a></p>
+</li>
+<li id="fn-2">
+<p>The two hashes <code>##</code> were from the chunk option <code>comment</code>; you can turn
+them off by <code>comment = ''</code>. <a href="#fnref-2" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="2" aria-label="Back to reference 2">↩</a></p>
+</li>
+</ol>
+</section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+</body>
+</html>
