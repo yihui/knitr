@@ -1,7 +1,0 @@
-Hi, there. I'm a child.
-
-```{r test-child}
-options(digits = 4)
-1+1
-dnorm(0)
-```

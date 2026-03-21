@@ -1,9 +1,0 @@
-This chunk below is from the child document.
-
-<<test-child, out.width='2in', fig.show='asis'>>=
-1+1
-rnorm(5)
-plot(1)
-boxplot(1:10)
-str(mtcars)
-@

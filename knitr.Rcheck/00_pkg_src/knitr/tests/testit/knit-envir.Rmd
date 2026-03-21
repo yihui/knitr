@@ -1,7 +1,0 @@
-Test the `envir` argument of `knit()`.
-
-```{r test, error=FALSE}
-asdfqwerzxcv=1
-y
-z+9
-```

@@ -1,5 +1,0 @@
-\section{Another child via the \texttt{child} option}
-
-<<test-b>>=
-1+1 # child b
-@

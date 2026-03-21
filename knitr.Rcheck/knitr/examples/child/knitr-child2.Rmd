@@ -1,6 +1,0 @@
-Hi, there. I'm another child.
-
-```{r test-child2}
-x <- rnorm(n = 3)
-x
-```
