@@ -212,6 +212,7 @@ format_sci_one = function(
   },
   html = sci_notation('%s%s10<sup>%s</sup>', b, ' &times; ', lx),
   md   = sci_notation('%s%s10^%s^', b, '&times; ', lx),
+  typst = sci_notation('$%s%s10^%s$', b, ' times ', lx),
   rst  = {
     # if AsIs, use the :math: directive
     if (inherits(x, 'AsIs')) {

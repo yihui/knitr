@@ -52,7 +52,9 @@ knit2pandoc = function(
 #' @param compiler A character string giving the LaTeX engine used to compile
 #'   the tex document to PDF. For an Rrst file, setting \code{compiler} to
 #'   \code{'rst2pdf'} will use \code{\link{rst2pdf}} to compile the rst file to
-#'   PDF using the ReportLab open-source library.
+#'   PDF using the ReportLab open-source library. For an Rtyp file, setting
+#'   \code{compiler} to \code{'typst'} will use the \command{typst} command-line
+#'   tool to compile the typ file to PDF.
 #' @param ... Options to be passed to \code{tinytex::\link[tinytex]{latexmk}()}
 #'   or \code{\link{rst2pdf}()}.
 #' @author Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
@@ -65,18 +67,31 @@ knit2pandoc = function(
 #'
 #' #' compile a reST file with rst2pdf
 #' ## knit2pdf(..., compiler = 'rst2pdf')
+#'
+#' #' compile an Rtyp file with typst
+#' ## knit2pdf(..., compiler = 'typst')
 knit2pdf = function(
   input, output = NULL, compiler = NULL, envir = parent.frame(), quiet = FALSE, ...
 ) {
   out = knit(input, output = output, envir = envir, quiet = quiet)
   owd = setwd(dirname(out)); on.exit(setwd(owd))
   if (is.null(compiler)) {
-    compiler = if (grepl('\\.rst$', out)) 'rst2pdf' else 'pdflatex'
+    compiler = if (grepl('\\.rst$', out)) 'rst2pdf' else
+      if (grepl('\\.typ$', out)) 'typst' else 'pdflatex'
   }
   if (identical(compiler, 'rst2pdf')) {
     if (tolower(file_ext(out)) != 'rst')
       stop('for rst2pdf compiler input must be a .rst file')
     rst2pdf(basename(out), ...)
+  } else if (identical(compiler, 'typst')) {
+    if (tolower(file_ext(out)) != 'typ')
+      stop('for typst compiler input must be a .typ file')
+    f = basename(out); o = with_ext(f, 'pdf')
+    status = system2('typst', c('compile', shQuote(f), shQuote(o)))
+    if (!file.exists(o)) stop(
+      'compilation by typst failed (exit status ', status, '); ',
+      'make sure typst is installed and available in your PATH'
+    )
   } else {
     tinytex::latexmk(basename(out), engine = compiler, ...)
   }

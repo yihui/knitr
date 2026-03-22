@@ -181,6 +181,7 @@ Collate:
     'hooks-md.R'
     'hooks-rst.R'
     'hooks-textile.R'
+    'hooks-typst.R'
     'hooks.R'
     'otel.R'
     'output.R'

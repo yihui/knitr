@@ -23,7 +23,9 @@ working directory.}
 \item{compiler}{A character string giving the LaTeX engine used to compile
 the tex document to PDF. For an Rrst file, setting \code{compiler} to
 \code{'rst2pdf'} will use \code{\link{rst2pdf}} to compile the rst file to
-PDF using the ReportLab open-source library.}
+PDF using the ReportLab open-source library. For an Rtyp file, setting
+\code{compiler} to \code{'typst'} will use the \command{typst} command-line
+tool to compile the typ file to PDF.}
 
 \item{envir}{Environment in which code chunks are to be evaluated, for
 example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
@@ -51,6 +53,9 @@ The \code{output} argument specifies the output filename to be passed
 
 #' compile a reST file with rst2pdf
 ## knit2pdf(..., compiler = 'rst2pdf')
+
+#' compile an Rtyp file with typst
+## knit2pdf(..., compiler = 'typst')
 }
 \author{
 Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie

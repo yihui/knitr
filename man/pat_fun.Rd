@@ -9,6 +9,7 @@
 \alias{pat_rst}
 \alias{pat_asciidoc}
 \alias{pat_textile}
+\alias{pat_typst}
 \title{Set regular expressions to read input documents}
 \usage{
 pat_rnw()
@@ -26,6 +27,8 @@ pat_rst()
 pat_asciidoc()
 
 pat_textile()
+
+pat_typst()
 }
 \value{
 The patterns object \code{\link{knit_patterns}} is modified as a side

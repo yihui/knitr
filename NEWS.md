@@ -1,5 +1,9 @@
 # CHANGES IN knitr VERSION 1.52
 
+## NEW FEATURES
+
+- Added support for a new input format `.Rtyp` for the [Typst](https://typst.app) typesetting system (thanks, @blset #2401, @aksigkvgithub #2283). You can use code chunks and inline R expressions in `.Rtyp` files, knit them via `knitr::knit()` to `.typ` output, or compile to PDF directly via `knit2pdf('input.Rtyp')`. See https://github.com/yihui/knitr-examples/blob/master/128-minimal.Rtyp for a minimal example.
+
 ## BUG FIXES
 
 - The `alt` attribute of figure images now has HTML tags stripped (via `xfun::strip_html()`) and is properly escaped for use in HTML attributes (via `xfun::html_escape(attr = TRUE)`). Previously, HTML in `fig.cap` (e.g., a link) could appear verbatim in `alt`, and double quotes in captions could break the `alt` attribute value (thanks, @cderv, #2004).
