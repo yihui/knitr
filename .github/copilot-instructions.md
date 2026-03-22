@@ -63,7 +63,7 @@ Write all test conditions in `()`, use `%==%` to test for `identical()`, and tes
 
 ## Build and Package Conventions
 
-- **Always re-roxygenize**: Run `roxygen2::roxygenize()` after changing any roxygen documentation to update man files
+- **Always re-roxygenize**: Run `Rd2roxygen::rab('.')` after changing any roxygen documentation.
 - **R CMD check before EVERY commit**: You must run `R CMD check` successfully before submitting any code changes. If R or required R packages are not available, you must install them first.
 - **Wait for CI to be green**: After pushing code, you must wait for GitHub Actions CI to complete successfully before claiming the task is done. Never quit while CI is running or failing. You may check CI every 30 seconds and start fixing issues as soon as any CI job has failed instead of waiting for all CI jobs to finish.
 - **NEVER BREAK CI**: Breaking CI is completely unacceptable. If CI fails, you must immediately fix it. This policy must be followed strictly for ALL changes without exception.
