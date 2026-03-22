@@ -31,8 +31,7 @@ not work as image paths. In this case, we have to download the images. This
 function is a wrapper of \code{xfun::\link[xfun]{download_file}()} and
 \code{\link{include_graphics}()}.
 }
-\examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
-knitr::download_image('https://www.r-project.org/Rlogo.png')
-\dontshow{\}) # examplesIf}
+\examples{\dontshow{if (interactive()) \{}
+knitr::download_image("https://www.r-project.org/Rlogo.png")
+\dontshow{\}}
 }

@@ -39,6 +39,6 @@ definitions of the \pkg{listings} package (and modify the output hooks
 accordingly), so we can decorate R code using the \pkg{listings} package.
 }
 \examples{
-set_header(tikz = '\\\\usepackage{tikz}')
-opts_knit$get('header')
+set_header(tikz = "\\\\usepackage{tikz}")
+opts_knit$get("header")
 }

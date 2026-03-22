@@ -14,7 +14,8 @@ all_patterns
 This object is a named list of all built-in patterns.
 }
 \examples{
-all_patterns$rnw; all_patterns$html
+all_patterns$rnw
+all_patterns$html
 
 str(all_patterns)
 }

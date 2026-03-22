@@ -40,7 +40,8 @@ This function is not supposed be called directly like
 # you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw'
 # to input results from child-doc.Rnw in main.tex
 
-# comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
+# comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval =
+# FALSE)}
 }
 \references{
 \url{https://yihui.org/knitr/demo/child/}

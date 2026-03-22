@@ -28,14 +28,15 @@ The syntax highlighting here only applies to \file{.Rnw} (LaTeX) and
   highlighting themes; see \url{https://rmarkdown.rstudio.com}).
 }
 \examples{
-opts_knit$set(out.format='latex'); knit_theme$set('edit-vim')
+opts_knit$set(out.format = "latex")
+knit_theme$set("edit-vim")
 
 knit_theme$get()  # names of all available themes
 
-thm = knit_theme$get('acid')  # parse the theme to a list
+thm = knit_theme$get("acid")  # parse the theme to a list
 knit_theme$set(thm)
 
-opts_knit$set(out.format=NULL) # restore option
+opts_knit$set(out.format = NULL)  # restore option
 }
 \references{
 For a preview of all themes, see
