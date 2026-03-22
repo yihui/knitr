@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- Added support for a new input format `.Rtyp` for the [Typst](https://typst.app) typesetting system. You can use code chunks and inline R expressions in `.Rtyp` files, knit them via `knitr::knit()`, and compile the output `.typ` files to PDF via `knit2pdf(..., compiler = 'typst')` (or simply `knit2pdf()`, which automatically detects the Typst compiler for `.typ` output).
+- Added support for a new input format `.Rtyp` for the [Typst](https://typst.app) typesetting system (thanks, @blset #2401, @aksigkvgithub #2283). You can use code chunks and inline R expressions in `.Rtyp` files, knit them via `knitr::knit()` to `.typ` output, or compile to PDF directly via `knit2pdf('input.Rtyp')`. See https://github.com/yihui/knitr-examples/blob/master/128-minimal.Rtyp for a minimal example.
 
 ## BUG FIXES
 
