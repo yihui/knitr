@@ -1,5 +1,14 @@
 library(testit)
 
+assert("warning-only output does not produce leading blank lines in kframe", {
+  res = knit(
+    text = c('<<echo=FALSE, warning=TRUE>>=', 'warning("a warning")', '@'),
+    quiet = TRUE
+  )
+  # kframe should not start with a blank line (i.e., no \n\n right after \begin{kframe}\n)
+  (!grepl('\\begin{kframe}\n\n', res, fixed = TRUE))
+})
+
 assert("alt text is included in LaTeX output", {
   # no alt text
   (hook_plot_tex('foo.pdf', list(fig.align = 'center', fig.show = 'asis')) %==%
