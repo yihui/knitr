@@ -19,7 +19,7 @@
 - Run tests:
 
    ```bash
-   R CMD check *_*.tar.gz
+   R CMD check --no-manual *_*.tar.gz
    ```
 
    or directly:

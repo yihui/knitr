@@ -24,3 +24,10 @@ jobs:
         uses: r-lib/actions/setup-r@HEAD
         with:
           use-public-rspm: true
+
+      - name: Install TinyTeX
+        uses: r-lib/actions/setup-tinytex@HEAD
+
+      - uses: yihui/actions/setup-r-dependencies@HEAD
+        with:
+          extra-packages: Rd2roxygen
