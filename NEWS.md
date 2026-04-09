@@ -14,6 +14,8 @@
 
 - Fixed invalid LaTeX when warning/message/error is the only chunk output in Rnw documents (thanks, @codeZeilen, #2412).
 
+- Fixed a bug that calling `knit_exit()` could put `knit()` in a non-functioning state when there is only a single code chunk in the input (thanks, @dlampart, #2372).
+
 # CHANGES IN knitr VERSION 1.51
 
 ## NEW FEATURES
