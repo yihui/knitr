@@ -144,6 +144,8 @@ knit = function(
     quiet = !opts_knit$get('progress')
   } else {
     knit_log$restore()
+    # reset terminate in case knit_exit() was called in a previous knit() (#2283)
+    .knitEnv$terminate = NULL
     on.exit(chunk_counter(reset = TRUE), add = TRUE) # restore counter
     adjust_opts_knit()
     # turn off fancy quotes, use a null pdf device to record graphics

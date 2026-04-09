@@ -114,3 +114,9 @@ local({
     (inherits(out, 'error'))
   })
 })
+
+assert('knit_exit() does not leave knitr in a non-functioning state (#2283)', {
+  res1 = knit(text = c('```{r}', 'knitr::knit_exit()', '```'), quiet = TRUE)
+  res2 = knit(text = c('```{r}', 'cat("hello")', '```'), quiet = TRUE)
+  (grepl('hello', res2))
+})
