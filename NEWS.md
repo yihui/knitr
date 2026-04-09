@@ -12,6 +12,8 @@
 
 - `has_crop_tools()` should not throw an error when `tlmgr` exists but cannot be executed (thanks, @lsandig, rstudio/rmarkdown#2612). It returns `FALSE` now.
 
+- Fixed invalid LaTeX when warning/message/error is the only chunk output in Rnw documents (thanks, @codeZeilen, #2412).
+
 # CHANGES IN knitr VERSION 1.51
 
 ## NEW FEATURES
