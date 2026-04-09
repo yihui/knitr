@@ -203,7 +203,7 @@ escape_percent = function(x) gsub('(?<!\\\\)%', '\\\\%', x, perl = TRUE)
   )
   k1 = paste0(col, '\\begin{kframe}\n')
   k2 = '\\end{kframe}'
-  x = .rm.empty.envir(paste0(k1, x, k2))
+  x = .rm.empty.envir(paste0(k1, sub('^\n+', '', x), k2))
   size = if (options$size == 'normalsize') '' else sprintf('\\%s', options$size)
   if (!ai) {
     # if the chunk content starts with \n, don't add \n; similarly, if it ends with \n, don't append \n
