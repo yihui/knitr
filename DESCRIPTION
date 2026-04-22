@@ -138,7 +138,7 @@ Suggests:
     otel,
     otelsdk,
     png,
-    ragg,
+    ragg (>= 1.5.0),
     reticulate (>= 1.4),
     rgl (>= 0.95.1201),
     rlang,

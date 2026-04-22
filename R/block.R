@@ -405,6 +405,10 @@ chunk_device = function(options, record = TRUE, tmp = tempfile()) {
     do.call(ragg_png_dev, c(list(
       filename = tmp, width = width, height = height, units = 'in', res = dpi
     ), get_dargs(dev.args, 'ragg_png')))
+  } else if (identical(dev, 'ragg_webp')) {
+    do.call(ragg_webp_dev, c(list(
+      filename = tmp, width = width, height = height, units = 'in', res = dpi
+    ), get_dargs(dev.args, 'ragg_webp')))
   } else if (identical(dev, 'tikz')) {
     dargs = c(list(
       file = tmp, width = width, height = height
