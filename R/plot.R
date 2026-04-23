@@ -127,28 +127,18 @@ tikz_dev = function(..., engine = getOption('tikzDefaultEngine')) {
   tikzDevice::tikz(..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages))
 }
 
-# a wrapper of the ragg::agg_png device
-ragg_png_dev = function(...) {
-  loadNamespace('ragg')
+# a wrapper of the ragg::agg_* device
+ragg_dev = function(dev) function(...) {
   args = list(...)
   # handle bg -> background gracefully
   args$background = args$background %n% args$bg
   args$bg = NULL
-  do.call(ragg::agg_png, args)
+  dev = getFromNamespace(dev, 'ragg')
+  do.call(dev, args)
 }
 
-# a wrapper of the ragg::agg_webp device
-ragg_webp_dev = function(...) {
-  ns = loadNamespace('ragg')
-  if (!exists('agg_webp', envir = ns, mode = 'function', inherits = FALSE)) {
-    stop("The 'ragg_webp' device requires ragg >= 1.5.0 with WebP support.", call. = FALSE)
-  }
-  args = list(...)
-  # handle bg -> background gracefully
-  args$background = args$background %n% args$bg
-  args$bg = NULL
-  do.call(ragg::agg_webp, args)
-}
+ragg_png_dev = ragg_dev('agg_png')
+ragg_webp_dev = ragg_dev('agg_webp')
 
 # save a recorded plot
 save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
