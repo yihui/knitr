@@ -139,7 +139,10 @@ ragg_png_dev = function(...) {
 
 # a wrapper of the ragg::agg_webp device
 ragg_webp_dev = function(...) {
-  loadNamespace('ragg')
+  ns = loadNamespace('ragg')
+  if (!exists('agg_webp', envir = ns, mode = 'function', inherits = FALSE)) {
+    stop("The 'ragg_webp' device requires ragg >= 1.5.0 with WebP support.", call. = FALSE)
+  }
   args = list(...)
   # handle bg -> background gracefully
   args$background = args$background %n% args$bg

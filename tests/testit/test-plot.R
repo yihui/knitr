@@ -83,6 +83,10 @@ if (requireNamespace("ragg", quietly = TRUE) &&
       TRUE
     }
   )
+}
+
+if (requireNamespace("ragg", quietly = TRUE) &&
+    !has_error({ragg::agg_webp(); dev.off()})) {
   assert(
     'ragg_webp_dev correctly handles bg dev.arg into background arg',
     {
