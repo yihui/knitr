@@ -20,7 +20,14 @@ jobs:
       - uses: actions/configure-pages@v5
         with:
           enablement: true
-      - uses: yihui/litedown/site@HEAD
+      - uses: r-lib/actions/setup-r@HEAD
+        with:
+          use-public-rspm: true
+      - uses: yihui/actions/setup-r-dependencies@HEAD
+        with:
+          extra-packages: litedown xfun .
+          r-universe: yihui
+      - uses: yihui/actions/litedown-site@HEAD
         with:
           site-dir: 'site'
       - uses: actions/upload-pages-artifact@v3
