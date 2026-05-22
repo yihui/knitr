@@ -24,11 +24,17 @@ jobs:
           site-dir: 'site'
       - name: Deploy to gh-pages
         run: |
-          cd site
-          git init
-          git checkout -b gh-pages
-          git add .
+          tmp=$(mktemp -d)
+          cp -r site/. "$tmp"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "deploy site"
-          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
+          if git fetch origin gh-pages; then
+            git switch gh-pages
+          else
+            git switch --orphan gh-pages
+            git rm -rf . 2>/dev/null || true
+          fi
+          find . -maxdepth 1 ! -name .git ! -name . -exec rm -rf {} +
+          cp -r "$tmp"/. .
+          git add -A
+          git diff --cached --quiet || (git commit -m "deploy site" && git push origin gh-pages)
