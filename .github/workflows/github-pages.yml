@@ -22,7 +22,13 @@ jobs:
       - uses: yihui/actions/litedown-site@HEAD
         with:
           site-dir: 'site'
-      - uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+      - name: Deploy to gh-pages
+        run: |
+          cd site
+          git init
+          git checkout -b gh-pages
+          git add .
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "deploy site"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
