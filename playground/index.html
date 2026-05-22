@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playground</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.18/lib/codemirror.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --header-h: 44px;
+  --border: #ccc;
+  --bg: #f7f7f7;
+  --accent: #4a90d9;
+}
+body { font-family: system-ui, -apple-system, sans-serif; height: 100vh; overflow: hidden; }
+header {
+  height: var(--header-h); display: flex; align-items: center;
+  padding: 0 12px; background: var(--bg); border-bottom: 1px solid var(--border);
+  gap: 10px;
+}
+header h1 { font-size: 15px; font-weight: 600; }
+#run-btn {
+  padding: 4px 14px; border: 1px solid var(--accent); border-radius: 4px;
+  background: var(--accent); color: #fff; cursor: pointer; font-size: 13px;
+}
+#run-btn:hover { background: #3a7bc8; }
+#run-btn:disabled { opacity: .5; cursor: not-allowed; }
+#status { font-size: 12px; color: #666; flex: 1; text-align: right; }
+#examples-select {
+  font-size: 12px; padding: 3px 6px;
+  border: 1px solid var(--border); border-radius: 4px; background: #fff; cursor: pointer;
+}
+.container { display: flex; height: calc(100vh - var(--header-h)); }
+.pane { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pane-header {
+  height: 28px; display: flex; align-items: center; padding: 0 10px;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  font-size: 12px; font-weight: 600; color: #555;
+}
+#editor-pane { border-right: 1px solid var(--border); }
+#editor-wrap { flex: 1; overflow: hidden; }
+#editor-wrap .CodeMirror { height: 100%; font-size: 13px; }
+#preview-frame { flex: 1; border: none; width: 100%; background: #fff; transition: opacity .2s; }
+#loading-overlay {
+  position: fixed; inset: 0; background: rgba(255,255,255,.92);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 1000; font-family: system-ui, sans-serif;
+}
+#loading-overlay h2 { font-size: 18px; margin-bottom: 12px; }
+#loading-overlay p { font-size: 13px; color: #666; max-width: 400px; text-align: center; }
+.spinner {
+  width: 32px; height: 32px; border: 3px solid #eee;
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin .8s linear infinite; margin-bottom: 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <h2>Initializing Playground</h2>
+  <p id="loading-msg">Loading webR…</p>
+</div>
+
+<header>
+  <h1>Playground</h1>
+  <button id="run-btn" disabled>&#9654; Run</button>
+  <select id="examples-select"><option value="">Load example…</option></select>
+  <span id="status"></span>
+</header>
+
+<div class="container">
+  <div class="pane" id="editor-pane">
+    <div class="pane-header">Source Editor</div>
+    <div id="editor-wrap"></div>
+  </div>
+  <div class="pane" id="preview-pane">
+    <div class="pane-header">HTML Preview</div>
+    <!-- An iframe is the cleanest way to display litedown's standalone HTML output:
+         its own <head> CSS/JS would conflict with the playground page if injected directly. -->
+    <iframe id="preview-frame"></iframe>
+  </div>
+</div>
+
+<!-- CodeMirror 5 — plain <script> tags from CDN, no ES-module deduplication issues
+     (the problem that plagued CodeMirror 6 when loading its modules from CDN). -->
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.18/lib/codemirror.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.18/mode/markdown/markdown.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.18/mode/r/r.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.18/mode/yaml/yaml.min.js"></script>
+<!-- xml mode is needed by the markdown mode for inline HTML highlighting -->
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.18/mode/xml/xml.min.js"></script>
+
+<script type="module">
+// ---------------------------------------------------------------------------
+// UI references
+// ---------------------------------------------------------------------------
+const runBtn       = document.getElementById('run-btn');
+const statusEl     = document.getElementById('status');
+const overlay      = document.getElementById('loading-overlay');
+const loadingMsg   = document.getElementById('loading-msg');
+const previewFrame = document.getElementById('preview-frame');
+const sel          = document.getElementById('examples-select');
+
+const setStatus  = (msg) => { statusEl.textContent = msg; };
+const setLoading = (msg) => { loadingMsg.textContent = msg; };
+const escapeHtml = (s) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// ---------------------------------------------------------------------------
+// CodeMirror 5 editor  (global `CodeMirror` injected by the <script> tags above)
+// ---------------------------------------------------------------------------
+
+// Register {r} as a MIME alias so fenced ```{r} blocks get R syntax highlighting
+CodeMirror.defineMIME('text/{r}', 'text/x-rsrc');
+
+const rmdMode = { name: 'markdown', fencedCodeBlockHighlighting: true, highlightFormatting: true };
+const rMode   = 'text/x-rsrc';
+
+const editor = CodeMirror(document.getElementById('editor-wrap'), {
+  value: '',
+  mode: rmdMode,
+  lineNumbers: true,
+  lineWrapping: true,
+  extraKeys: {
+    'Ctrl-Shift-Enter': () => run(),
+    'Cmd-Shift-Enter':  () => run(),
+  },
+});
+
+function setEditorMode(file) {
+  const isR = /\.R$/i.test(file) && !/\.Rmd$/i.test(file);
+  editor.setOption('mode', isR ? rMode : rmdMode);
+}
+
+// ---------------------------------------------------------------------------
+// Default content — fetch _default.Rmd or _default.R from playground dir
+// ---------------------------------------------------------------------------
+async function loadDefault() {
+  for (const file of ['_default.Rmd', '_default.R']) {
+    try {
+      const res = await fetch('./' + file);
+      if (!res.ok) continue;
+      const text = await res.text();
+      sel.options[0].value = file;
+      sel.value = file;
+      setEditorMode(file);
+      editor.setValue(text.trimStart());
+      return;
+    } catch (_) {}
+  }
+  // Fallback: empty editor in Rmd mode
+  editor.setOption('mode', rmdMode);
+  editor.setValue('');
+}
+
+// ---------------------------------------------------------------------------
+// Examples dropdown — numbered examples appended from examples.txt when
+// available (generated by the GitHub Actions workflow).
+// ---------------------------------------------------------------------------
+sel.addEventListener('change', async () => {
+  if (sel.selectedIndex === 0) {
+    await loadDefault();
+    return;
+  }
+  try {
+    const r = await fetch('../examples/' + sel.value);
+    if (!r.ok) throw new Error(r.statusText);
+    setEditorMode(sel.value);
+    editor.setValue(await r.text());
+  } catch (e) {
+    console.error('Failed to load example:', e);
+  }
+});
+
+async function initExamples() {
+  try {
+    const res = await fetch('./examples.txt');
+    if (!res.ok) return;
+    const files = (await res.text()).trim().split('\n').filter(Boolean);
+    for (const f of files) {
+      const opt = document.createElement('option');
+      opt.value = f;
+      opt.textContent = f;
+      sel.appendChild(opt);
+    }
+  } catch (_) { /* examples.txt not present */ }
+}
+
+// ---------------------------------------------------------------------------
+// webR setup
+// ---------------------------------------------------------------------------
+let webR, shelter;
+
+async function initWebR() {
+  setLoading('Loading webR (this may take a moment)…');
+  const { WebR } = await import('https://webr.r-wasm.org/latest/webr.mjs');
+  webR = new WebR();
+  await webR.init();
+  shelter = await new webR.Shelter();
+
+  // `codetools` is a recommended base-R package not bundled with webR but
+  // required during code evaluation (used internally by the R evaluator).
+  setLoading('Installing R packages…');
+  await webR.evalRVoid(
+    'webr::shim_install(); webr::install(c("commonmark", "xfun", "litedown", "codetools"), repos = c("https://yihui.r-universe.dev", "https://repo.r-wasm.org"), quiet = TRUE)'
+  );
+
+  // Run setup.R if present in the playground directory
+  try {
+    const setupRes = await fetch('./setup.R');
+    if (setupRes.ok) {
+      setLoading('Running setup.R…');
+      await webR.evalRVoid(await setupRes.text());
+    }
+  } catch (_) { /* setup.R not present */ }
+
+  setLoading('Ready!');
+}
+
+// ---------------------------------------------------------------------------
+// Run — write source to /tmp, call fuse(), display HTML
+// ---------------------------------------------------------------------------
+let running = false;
+
+async function run() {
+  if (running || !webR) return;
+  running = true;
+  runBtn.disabled = true;
+  setStatus('Running…');
+  previewFrame.style.opacity = '.25';
+  document.body.style.cursor = 'wait';
+  const t0 = performance.now();
+
+  const fileName = sel.value || '_playground.Rmd';
+  const tmpFile  = '/tmp/' + fileName;
+
+  try {
+    // Write source to the webR virtual filesystem
+    await shelter.captureR(
+      'writeLines(text, con = file)',
+      { env: { text: editor.getValue(), file: tmpFile } }
+    );
+
+    // fuse() handles both .R and .Rmd inputs.
+    // setwd("/tmp") so plot files land there and litedown base64-encodes them.
+    const result = await shelter.captureR(
+      'setwd("/tmp"); litedown::fuse(file, output = structure(NA, full = TRUE), quiet = TRUE)',
+      { env: { file: tmpFile } }
+    );
+
+    const html = (await result.result.toArray()).join('\n');
+
+    const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+    doc.open();
+    doc.write(html);
+    doc.close();
+    const secs = ((performance.now() - t0) / 1000).toFixed(1);
+    setStatus(`Done in ${secs}s`);
+  } catch (e) {
+    console.error('Run error:', e);
+    setStatus('Error — see preview for details');
+    const errHtml = [
+      '<html><body style="font-family:system-ui;padding:20px">',
+      '<h3 style="color:#c00">Error</h3>',
+      '<pre style="white-space:pre-wrap">' + escapeHtml(String(e)) + '</pre>',
+      '</body></html>'
+    ].join('');
+    const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+    doc.open();
+    doc.write(errHtml);
+    doc.close();
+  } finally {
+    running = false;
+    runBtn.disabled = false;
+    previewFrame.style.opacity = '';
+    document.body.style.cursor = '';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Bootstrap
+// ---------------------------------------------------------------------------
+async function init() {
+  await loadDefault();  // must complete before auto-run so editor is populated
+  initExamples();       // fire-and-forget; independent of webR
+  try {
+    await initWebR();
+    setLoading('Running default example…');
+    runBtn.disabled = false;
+    await run();        // auto-run renders the default content and warms up fuse()
+    overlay.style.display = 'none';
+    setStatus('Ready — click Run or press Ctrl+Shift+Enter');
+  } catch (e) {
+    overlay.style.display = 'none';
+    setStatus('webR failed to load: ' + e.message);
+    console.error('Init error:', e);
+  }
+}
+
+runBtn.addEventListener('click', run);
+init();
+</script>
+</body>
+</html>

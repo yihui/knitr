@@ -1,0 +1,24 @@
+---
+title: R Markdown with the Docco Classic Style
+author: Yihui Xie
+date: "`r Sys.Date()`"
+---
+
+<!--
+%\VignetteEngine{knitr::docco_classic_notangle}
+%\VignetteIndexEntry{R Markdown with the Docco Classic Style}
+-->
+
+```{r setup, echo=FALSE, results='asis'}
+x = readLines('docco-linear.Rmd')[-(1:11)]
+x = gsub('linear', 'classic', x)
+i = grep('^knitr:::docco_classic', x)
+x[i - 1] = '```{r}'
+x[i] = 'knitr::rocco'
+library(knitr)
+cat(knit_child(text = x, quiet = TRUE), sep = '\n')
+```
+
+You probably have noticed that you can adjust the widths of the two columns
+using your cursor. What is more, press `T` on your keyboard, and see what
+happens.

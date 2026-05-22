@@ -1,0 +1,128 @@
+---
+title: "knitr Reference Card"
+author: "Yihui Xie"
+date: "`{r} Sys.Date()`"
+output:
+  html:
+    meta:
+      css: ["@default"]
+    options:
+      number_sections: true
+---
+
+```{=html}
+<!--
+%\VignetteEngine{litedown::vignette}
+%\VignetteIndexEntry{knitr Reference Card}
+-->
+```
+
+## Syntax
+
+| format    | start               | end             | inline             | output   |
+|-----------|---------------------|-----------------|--------------------|----------|
+| Rnw       | `<<*>>=`            | `@`             | `\Sexpr{x}`        | TeX      |
+| Rmd       | ```` ```{r *} ````  | ```` ``` ````   | `` `r x` ``        | Markdown |
+| Rhtml     | `<!--begin.rcode *` | `end.rcode-->`  | `<!--rinline x-->` | HTML     |
+| Rrst      | `.. {r *}`          | `.. ..`         | `` :r:`x` ``       | reST     |
+| Rtex      | `% begin.rcode *`   | `% end.rcode`   | `\rinline{x}`      | TeX      |
+| Rasciidoc | `// begin.rcode *`  | `// end.rcode`  | `+r x+`            | AsciiDoc |
+| Rtextile  | `### begin.rcode *` | `### end.rcode` | `@r x@`            | Textile  |
+| brew      |                     |                 | `<% x %>`          | text     |
+
+`*` denotes local chunk options, e.g., `<<label, eval=FALSE>>=`; `x` denotes
+inline R code, e.g., `` `r 1+2` ``.
+
+## Minimal Examples
+
+::: col-2
+### Sweave (\*.Rnw)
+
+``` tex
+\documentclass{article}
+\begin{document}
+
+Below is a code chunk.
+
+<<foo, echo=TRUE>>=
+z = 1 + 1
+plot(cars)
+@
+
+The value of z is \Sexpr{z}.
+\end{document}
+```
+
+### R Markdown (\*.Rmd)
+
+```` md
+---
+title: "An R Markdown document"
+---
+
+Hi _Markdown_!
+
+```{r foo, echo=TRUE}
+z = 1 + 1
+plot(cars)
+```
+
+The value of z is `r z`.
+````
+:::
+
+## Chunk Options
+
+`opts_chunk` controls global chunk options, e.g.,
+`knitr::opts_chunk$set(tidy = FALSE)`, which can be overridden by local chunk
+options. See all options at <https://yihui.org/knitr/options/>. Some frequently
+used options are:
+
+-   `eval`: whether to evaluate the chunk
+-   `echo`: whether to echo source code
+-   `results`: `'markup'`, `'asis'`, `'hold'`, `'hide'`
+-   `tidy`: whether to reformat R code
+-   `cache`: whether to cache results
+-   `fig.width`, `fig.height`, `out.width`, `out.height`: device and output size
+    of figures
+-   `include`: whether to include the chunk results in output
+-   `child`: path to child documents
+-   `engine`: language name (R, python, ...)
+
+## Functions
+
+-   `knit()`: the main function in this package; knit input document and write
+    output
+-   `purl()`: extract R code from an input document
+-   `spin()`: spin goat's hair (an R script with roxygen comments) into wool (a
+    literate programming document to be passed to `knit()`)
+-   `stitch()`: insert an R script into a template and compile the document
+-   `knit_hooks$set()`: set or reset chunk and output
+    [hooks](https://yihui.org/knitr/hooks/)
+
+## Resources
+
+-   Homepage: <https://yihui.org/knitr/>
+-   Github: <https://github.com/yihui/knitr>
+    ([CRAN](https://cran.r-project.org/package=knitr))
+-   Examples: <https://github.com/yihui/knitr-examples>
+-   Stack Overflow: <https://stackoverflow.com/tags/knitr/>
+
+```{css, echo=FALSE}
+body {
+  max-width: none;
+}
+table {
+  width: 100%;
+}
+.body h2 {
+  border-bottom: none;
+  font-size: 1.3em;
+}
+.body, .col-2 {
+  columns: 2;
+  & > :first-child {
+    margin-top: 0;
+  }
+}
+```
