@@ -65,7 +65,7 @@ knit_print  # an S3 generic function
 ##         UseMethod(&quot;knit_print&quot;)
 ##     }
 ## }
-## &lt;bytecode: 0x5643f7005518&gt;
+## &lt;bytecode: 0x5557ae42e518&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">methods(knit_print)
@@ -82,7 +82,7 @@ knit_print  # an S3 generic function
 ##         x
 ##     else normal_print(x)
 ## }
-## &lt;bytecode: 0x5643f5e039c0&gt;
+## &lt;bytecode: 0x5557ad22c9c0&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">normal_print
@@ -93,7 +93,7 @@ knit_print  # an S3 generic function
 ##         methods::show(x)
 ##     else print(x)
 ## }
-## &lt;bytecode: 0x5643f7c85608&gt;
+## &lt;bytecode: 0x5557af0a23b8&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <p>As we can see, <code>knit_print()</code> has a <code>default</code> method, which is basically
@@ -480,7 +480,7 @@ function:</p>
 ## {
 ##     structure(x, class = &quot;knit_asis&quot;, knit_meta = meta, knit_cacheable = cacheable)
 ## }
-## &lt;bytecode: 0x5643f927e828&gt;
+## &lt;bytecode: 0x5557b06a7a50&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <p>You may put <strong>knitr</strong> in the <code>Suggests</code> field in <code>DESCRIPTION</code>, and use
