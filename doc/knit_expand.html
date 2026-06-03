@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="generator" content="litedown 0.9.9">
+<meta name="generator" content="litedown 0.9.10">
 <title>Templating with knit_expand()</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.44/css/default.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.44/css/prism-xcode.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.47/css/default.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.47/css/prism-xcode.min.css">
 </head>
 <body>
 <div class="frontmatter">
 <div class="title"><h1>Templating with knit_expand()</h1></div>
 <div class="author"><h2>Yihui Xie</h2></div>
-<div class="date"><h3>2026-05-22</h3></div>
+<div class="date"><h3>2026-06-03</h3></div>
 </div>
 <div class="body">
 <!--
@@ -27,7 +27,7 @@ knit_expand(text = 'The value of pi is {{pi}}.')
 </code></pre>
 <pre><code class="language-r">knit_expand(text = 'The value of a is {{a}}, so a + 1 is {{a+1}}.', a = rnorm(1))
 </code></pre>
-<pre><code>#&gt; [1] &quot;The value of a is 0.42194424263423, so a + 1 is 1.42194424263423.&quot;
+<pre><code>#&gt; [1] &quot;The value of a is 0.0802946693944606, so a + 1 is 1.08029466939446.&quot;
 </code></pre>
 <pre><code class="language-r">knit_expand(text = 'The area of a circle with radius {{r}} is {{pi*r^2}}', r = 5)
 </code></pre>
@@ -51,7 +51,7 @@ knit_expand(text = 'The value of pi is {{pi}}.')
 <p>Arbitrary R code:</p>
 <pre><code class="language-r">knit_expand(text = 'you cannot see the value of x {{x=rnorm(1)}}but it is indeed created: x = {{x}}')
 </code></pre>
-<pre><code>#&gt; [1] &quot;you cannot see the value of x but it is indeed created: x = -0.113093673868135&quot;
+<pre><code>#&gt; [1] &quot;you cannot see the value of x but it is indeed created: x = 1.22517254187425&quot;
 </code></pre>
 <pre><code class="language-r">res = knit_expand(text = c(' x | x^2', '{{x=1:5;paste(sprintf(&quot;%2d | %3d&quot;, x, x^2), collapse = &quot;\n&quot;)}}'))
 cat(res)
