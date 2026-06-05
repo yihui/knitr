@@ -1,4 +1,4 @@
-# knitr
+# knitr <a href="https://yihui.org/knitr/"><img src="man/figures/logo.png" align="right" height="138" alt="sitio de knitr" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/yihui/knitr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yihui/knitr/actions/workflows/R-CMD-check.yaml)
