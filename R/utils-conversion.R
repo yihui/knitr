@@ -142,6 +142,70 @@ rnw2pdf = function(
   output
 }
 
+markdown_resource_paths = function(text) {
+  patterns = c(
+    '!\\[[^]]*\\]\\(([^)[:space:]]+)(?:[[:space:]].*)?\\)',
+    '<(?:img|embed)\\b[^>]*\\bsrc=[\'"]([^\'"]+)[\'"]',
+    '<object\\b[^>]*\\bdata=[\'"]([^\'"]+)[\'"]'
+  )
+  paths = unlist(lapply(patterns, function(pattern) {
+    matches = regmatches(text, gregexec(pattern, text, perl = TRUE))
+    unlist(lapply(matches, function(match) {
+      if (length(match) < 2) return(character())
+      match[-1]
+    }), use.names = FALSE)
+  }), use.names = FALSE)
+  paths = sub('#.*$', '', paths)
+  paths = paths[nzchar(paths)]
+  paths = paths[!grepl('^(?:[[:alpha:]][[:alnum:]+.-]*:|//)', paths)]
+  paths = paths[!xfun::is_abs_path(paths)]
+  unique(paths)
+}
+
+stage_markdown_resources = function(input, output) {
+  input_dir = dirname(input)
+  output_dir = dirname(output)
+  if (xfun::same_path(input_dir, output_dir)) return(character())
+
+  paths = markdown_resource_paths(read_utf8(input))
+  if (!length(paths)) return(character())
+
+  dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  staged = character()
+  for (path in paths) {
+    src = file.path(input_dir, path)
+    if (!file.exists(src)) next
+    dest = file.path(output_dir, path)
+    if (file.exists(dest)) next
+    dir.create(dirname(dest), recursive = TRUE, showWarnings = FALSE)
+    if (file.copy(src, dest, overwrite = FALSE)) staged = c(staged, dest)
+  }
+  unique(staged)
+}
+
+cleanup_markdown_resources = function(paths, root) {
+  paths = unique(paths[file.exists(paths)])
+  if (!length(paths)) return(invisible())
+
+  unlink(paths)
+
+  root = normalizePath(root, winslash = '/', mustWork = FALSE)
+  dirs = unique(dirname(paths))
+  dirs = dirs[order(nchar(dirs), decreasing = TRUE)]
+  for (dir in dirs) {
+    current = normalizePath(dir, winslash = '/', mustWork = FALSE)
+    while (!xfun::same_path(current, root)) {
+      if (length(list.files(current, all.files = TRUE, no.. = TRUE)) > 0) break
+      unlink(current, recursive = TRUE)
+      parent = dirname(current)
+      if (xfun::same_path(parent, current)) break
+      current = normalizePath(parent, winslash = '/', mustWork = FALSE)
+    }
+  }
+
+  invisible()
+}
+
 #' Convert markdown to HTML using knit() and mark_html()
 #'
 #' This is a convenience function to knit the input markdown source and call
@@ -192,6 +256,8 @@ knit2html = function(
   mark = if (is_lite) litedown::mark else markdown::mark_html
   if (is.null(text)) {
     output = with_ext(if (is.null(output) || is.na(output)) out else output, 'html')
+    staged = stage_markdown_resources(out, output)
+    on.exit(cleanup_markdown_resources(staged, dirname(output)), add = TRUE)
     mark(out, output, ...)
     invisible(output)
   } else mark(text = out, ...)
