@@ -17,7 +17,7 @@ as a placeholder to guide you to the real manuals, which are available on the
 package website <https://yihui.org/knitr/> (e.g. the [main
 manual](https://yihui.org/knitr/demo/manual/) and the [graphics
 manual](https://yihui.org/knitr/demo/graphics/) ), and remember to read the help
-pages of functions in this package. There is a book "Dynamic Docuemnts with R
+pages of functions in this package. There is a book "Dynamic Documents with R
 and knitr" for this package, too.
 
 Below are code chunk examples:
