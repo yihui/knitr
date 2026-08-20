@@ -32,7 +32,7 @@ HTML help pages for all packages under the \file{html} directory of them.
 Ideally the html pages should be put under the \file{html} directory of
   an installed package which can be found via \code{system.file('html',
   package = 'your_package_name')}, otherwise some links may not work (e.g.
-  the link to the DESCRITION file).
+  the link to the DESCRIPTION file).
 }
 \examples{
 library(knitr)
