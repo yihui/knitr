@@ -61,9 +61,9 @@ dev_get = function(dev, options = opts_current$get(), dpi = options$dpi[1]) {
     pdf = grDevices::pdf,
     png = function(...) png(..., res = dpi, units = 'in'),
     svg = grDevices::svg,
-    gridSVG = function(filename, width, height, ...) {
+    gridSVG = function(filename, width, height, pointsize = 12, ...) {
       # use svg() only for redrawing the plot, and will use gridSVG::grid.export() later
-      grDevices::svg(filename, width, height)
+      grDevices::svg(filename, width, height, pointsize = pointsize)
     },
     pictex = grDevices::pictex,
     tiff = function(...) tiff(..., res = dpi, units = 'in'),
@@ -157,14 +157,18 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 }
 
 plot2dev = function(plot, name, dev, device, path, width, height, options) {
-  dargs = get_dargs(options$dev.args, dev)
+  dargs0 = get_dargs(options$dev.args, dev)
+  dargs = dargs0[intersect(names(dargs0), names(formals(device)))]
   # re-plot the recorded plot to an off-screen device
   do.call(device, c(list(path, width = width, height = height), dargs))
   showtext(options)  # maybe begin showtext and set options
   print(plot)
   # hack: if the device is gridSVG, save the plot to a temp path (with suffix ~)
   path2 = if (dev == 'gridSVG') paste0(path, '~')
-  if (!is.null(path2)) do.call(gridSVG::grid.export, c(list(name = path2), dargs))
+  if (!is.null(path2)) {
+    dargs0 = dargs0[intersect(names(dargs0), names(formals(gridSVG::grid.export)))]
+    do.call(gridSVG::grid.export, c(list(name = path2), dargs0))
+  }
   dev.off()
   # move the temp svg file to `path`
   if (!is.null(path2)) file.rename(path2, path)
