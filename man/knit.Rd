@@ -87,7 +87,7 @@ lists can be found in \code{all_patterns} (call it \code{apat}). First
 \pkg{knitr} will try to decide the pattern list based on the filename
 extension of the input document, e.g. \samp{Rnw} files use the list
 \code{apat$rnw}, \samp{tex} uses the list \code{apat$tex}, \samp{brew} uses
-\code{apat$brew} and HTML files use \code{apat$html}; for unkown extensions,
+\code{apat$brew} and HTML files use \code{apat$html}; for unknown extensions,
 the content of the input document is matched against all pattern lists to
 automatically determine which pattern list is being used. You can also
 manually set the pattern list using the \code{\link{knit_patterns}} object or

@@ -156,18 +156,20 @@ import(grDevices)
 import(graphics)
 import(stats)
 import(utils)
-importFrom(xfun,file_exists)
-importFrom(xfun,file_ext)
-importFrom(xfun,file_string)
-importFrom(xfun,html_escape)
-importFrom(xfun,is_R_CMD_check)
-importFrom(xfun,is_abs_path)
-importFrom(xfun,is_windows)
-importFrom(xfun,loadable)
-importFrom(xfun,parse_only)
-importFrom(xfun,read_utf8)
-importFrom(xfun,sans_ext)
-importFrom(xfun,strip_html)
-importFrom(xfun,try_silent)
-importFrom(xfun,with_ext)
-importFrom(xfun,write_utf8)
+importFrom(xfun,
+  file_exists,
+  file_ext,
+  file_string,
+  html_escape,
+  is_R_CMD_check,
+  is_abs_path,
+  is_windows,
+  loadable,
+  parse_only,
+  read_utf8,
+  sans_ext,
+  strip_html,
+  try_silent,
+  with_ext,
+  write_utf8
+)

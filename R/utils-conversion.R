@@ -277,7 +277,7 @@ knit2wp = function(
 
 #' Watch an input file continuously and knit it when it is updated
 #'
-#' Check the modification time of an input file continously in an infinite loop.
+#' Check the modification time of an input file continuously in an infinite loop.
 #' Whenever the time indicates the file has been modified, call a function to
 #' recompile the input file.
 #'
@@ -286,7 +286,7 @@ knit2wp = function(
 #' process the \code{input} file. To stop the infinite loop, press the
 #' \samp{Escape} key or \samp{Ctrl + C} (depending on your editing environment
 #' and operating system).
-#' @param input An input file path, or a character vector of mutiple input file paths.
+#' @param input An input file path, or a character vector of multiple input file paths.
 #' @param compile A function to compile the \code{input} file. This could be e.g.
 #'   \code{\link{knit}} or \code{\link{knit2pdf}}, depending on the input file
 #'   and the output you want.
