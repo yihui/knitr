@@ -27,7 +27,7 @@ By default, \pkg{knitr} will set up the header automatically. For example, if
 the tikz device is used, \pkg{knitr} will add \samp{\\usepackage{tikz}} to
 the LaTeX preamble, and this is done by setting the header component
 \code{tikz} to be a character string: \code{set_header(tikz =
-'\\usepackage{tikz}')}. Similary, when we highlight R code using the
+'\\usepackage{tikz}')}. Similarly, when we highlight R code using the
 \pkg{highlight} package (i.e. the chunk option \code{highlight = TRUE}),
 \pkg{knitr} will set the \code{highlight} component of the header vector
 automatically; if the output type is HTML, this component will be different
