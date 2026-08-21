@@ -192,7 +192,18 @@ knit2html = function(
   mark = if (is_lite) litedown::mark else markdown::mark_html
   if (is.null(text)) {
     output = with_ext(if (is.null(output) || is.na(output)) out else output, 'html')
-    mark(out, output, ...)
+    # mark() resolves relative resource paths (e.g. figures) against the output
+    # directory, but knit() writes them next to the input; when the output goes
+    # to a different directory, render next to the input first (so resources can
+    # be found/embedded), then move the HTML to the output location (#2408)
+    if (xfun::same_path(dirname(out), dirname(output))) {
+      mark(out, output, ...)
+    } else {
+      html = with_ext(out, 'html')
+      on.exit(if (!xfun::same_path(html, output)) file.remove(html), add = TRUE)
+      mark(out, html, ...)
+      file.copy(html, output, overwrite = TRUE)
+    }
     invisible(output)
   } else mark(text = out, ...)
 }
