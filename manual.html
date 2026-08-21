@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="generator" content="litedown 0.10.1">
+<meta name="generator" content="litedown 0.10.2">
 <title>Help pages</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/css/default.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/css/article.min.css">
@@ -1338,7 +1338,7 @@ passed to <code>knitr::sew()</code> to return a character vector of final output
 </p>
 <h3 id="sec:value_7" class="unnumbered unlisted">Value</h3>
 <p>A character string generated from the source code and output using
-<p>the appropriate output hooks.</p>
+the appropriate output hooks.
 </p>
 <h3 id="sec:examples_8" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">library(knitr)
@@ -2355,16 +2355,16 @@ kable(x, format.args = list(decimal.mark = &quot;,&quot;, big.mark = &quot;'&quo
 </code></pre>
 <pre><code>#&gt; |          V1|          V2|          V3|          V4|          V5|          V6|
 #&gt; |-----------:|-----------:|-----------:|-----------:|-----------:|-----------:|
-#&gt; | 1'014'014,1| 1'007'997,0|   995'870,4|   990'829,0| 1'009'111,5| 1'003'573,1|
-#&gt; |   999'210,4|   993'167,3|   992'165,1| 1'021'801,8|   993'145,8| 1'001'560,1|
-#&gt; |   997'401,1| 1'019'823,7| 1'012'293,5|   987'724,6|   984'540,2| 1'023'263,4|
-#&gt; |   998'530,4| 1'011'379,5| 1'007'235,8| 1'018'804,9|   988'182,3| 1'025'432,2|
-#&gt; | 1'003'575,0| 1'018'699,2|   990'373,1| 1'011'856,4|   996'979,6|   984'402,7|
-#&gt; | 1'014'899,8| 1'011'089,5| 1'001'391,6|   989'495,7|   993'061,5| 1'005'743,1|
-#&gt; | 1'014'524,3| 1'004'226,5|   988'400,1|   998'723,3|   993'901,0| 1'009'941,5|
-#&gt; |   978'619,2| 1'002'256,8|   980'203,3|   998'041,0| 1'003'249,4| 1'018'377,1|
-#&gt; |   995'270,7|   990'279,9| 1'010'590,5|   999'694,5|   993'803,5|   990'943,9|
-#&gt; |   992'693,9|   994'128,7| 1'002'839,8|   991'094,5| 1'012'812,5| 1'012'666,0|
+#&gt; | 1'010'880,0| 1'011'554,7|   991'406,2|   979'436,6| 1'001'936,1| 1'015'569,4|
+#&gt; | 1'008'596,4| 1'007'592,4| 1'003'711,4| 1'011'780,4|   997'205,1|   994'464,3|
+#&gt; |   997'640,1| 1'000'557,6| 1'000'418,5| 1'017'918,8| 1'009'033,1| 1'014'790,1|
+#&gt; | 1'009'037,8| 1'007'707,0| 1'018'279,5|   991'964,2| 1'011'679,1| 1'003'732,4|
+#&gt; | 1'012'622,5| 1'004'282,1| 1'008'702,0|   999'486,4|   998'714,7| 1'013'698,7|
+#&gt; | 1'013'672,0| 1'011'292,4| 1'005'458,4| 1'001'402,5|   993'699,6| 1'021'276,4|
+#&gt; | 1'003'077,6| 1'002'089,9|   998'759,6|   998'111,4| 1'016'984,4|   993'417,1|
+#&gt; |   991'061,9|   990'455,8| 1'016'075,5| 1'002'785,9|   997'001,4|   985'904,1|
+#&gt; |   976'897,6|   987'991,1|   988'725,9| 1'020'540,1| 1'013'836,4|   995'584,0|
+#&gt; |   990'590,0|   994'990,4|   993'511,9|   996'899,3|   999'462,9| 1'014'009,1|
 </code></pre>
 <pre><code class="language-r"># save the value
 x = kable(d2, format = &quot;html&quot;)
@@ -2874,7 +2874,7 @@ unlink(c(&quot;test.Rmd&quot;, &quot;test.html&quot;, &quot;test.md&quot;))
 <td>
 <p>Path to the output file for <code>knit()</code>. If <code>NULL</code>, this
 function will try to guess a default, which will be under the current
-<p>working directory.</p></p>
+working directory.</p>
 </td></tr>
 <tr><td><code>tangle</code></td>
 <td>
@@ -3406,7 +3406,7 @@ access or set hooks in this package.
 </code></pre>
 <pre><code>#&gt; function (x, options) 
 #&gt; x
-#&gt; &lt;bytecode: 0x55d3bb8c0aa8&gt;
+#&gt; &lt;bytecode: 0x557a819d9f50&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">knit_hooks$get(&quot;inline&quot;)
@@ -3417,7 +3417,7 @@ access or set hooks in this package.
 #&gt;         x = round_digits(x)
 #&gt;     paste(as.character(x), collapse = &quot;, &quot;)
 #&gt; }
-#&gt; &lt;bytecode: 0x55d3bb8c0338&gt;
+#&gt; &lt;bytecode: 0x557a819dd5a0&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-knit_meta"><span class="section-number main-number">40</span> Metadata about objects to be printed</h2>
@@ -3543,7 +3543,7 @@ that provides front-ends with a human readable name for the parameter).
 <h2 id="sec:man-knit_params_yaml"><span class="section-number main-number">42</span> Extract knit parameters from YAML text</h2>
 <h3 id="sec:description_42" class="unnumbered unlisted">Description</h3>
 <p>This function reads the YAML front-matter that has already been extracted
-<p>from a document and returns a list of any parameters declared there.</p>
+from a document and returns a list of any parameters declared there.
 </p>
 <h3 id="sec:usage_41" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">knit_params_yaml(yaml, evaluate = TRUE)</code></pre>
@@ -4806,14 +4806,14 @@ the pre-processor, you can <code>extract_raw_output()</code> from the Markdown
 file, store the raw output and MD5 digests, and remove the actual raw output
 from Markdown so Pandoc will never see it. In the post-processor, you can
 read the Pandoc output (e.g., an HTML or RTF file), and restore the raw
-<p>output.</p>
+output.
 </p>
 <h3 id="sec:value_36" class="unnumbered unlisted">Value</h3>
 <p>For <code>extract_raw_output()</code>, a list of two components:
-<p><code>value</code> (the <code>text</code> with raw output replaced by MD5 digests) and
+<code>value</code> (the <code>text</code> with raw output replaced by MD5 digests) and
 <code>chunks</code> (a named character vector, of which the names are MD5 digests
 and values are the raw output). For <code>restore_raw_output()</code>, the
-restored <code>text</code>.</p>
+restored <code>text</code>.
 </p>
 <h3 id="sec:examples_42" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">library(knitr)
@@ -5103,7 +5103,7 @@ press again to hide the text column (show code).
 # knit these two vignettes using the docco style
 rocco_view(system.file(&quot;doc&quot;, &quot;docco-classic.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
-<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/RtmpJ8mAKB (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
+<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/Rtmpn4yhUZ (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
 </code></pre>
 <pre><code class="language-r">rocco_view(system.file(&quot;doc&quot;, &quot;knit_expand.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
@@ -5425,9 +5425,9 @@ provided, it will be guessed from the current knitting process.</p>
 <h2 id="sec:man-stitch"><span class="section-number main-number">71</span> Automatically create a report based on an R script and a template</h2>
 <h3 id="sec:description_71" class="unnumbered unlisted">Description</h3>
 <p>This is a convenience function for small-scale automatic reporting based on
-<p>an R script and a template. The default template is an Rnw file (LaTeX);
+an R script and a template. The default template is an Rnw file (LaTeX);
 <code>stitch_rhtml()</code> and <code>stitch_rmd()</code> are wrappers on top of
-<code>stitch()</code> using the R HTML and R Markdown templates respectively.</p>
+<code>stitch()</code> using the R HTML and R Markdown templates respectively.
 </p>
 <h3 id="sec:usage_70" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">stitch(
@@ -5696,7 +5696,7 @@ str(vig_list)
 #&gt;     else knit)(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55d3b98e5930&gt;
+#&gt; &lt;bytecode: 0x557a7f715110&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -5704,7 +5704,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55d3b98e9818&gt;
+#&gt; &lt;bytecode: 0x557a7f719030&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::knitr_notangle&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -5739,7 +5739,7 @@ str(vig_list)
 #&gt;     unlink(with_ext(file, &quot;R&quot;))
 #&gt;     return()
 #&gt; }
-#&gt; &lt;bytecode: 0x55d3b9923a30&gt;
+#&gt; &lt;bytecode: 0x557a7f7f4670&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::docco_classic&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -5768,7 +5768,7 @@ str(vig_list)
 #&gt;     rocco(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55d3b99039f8&gt;
+#&gt; &lt;bytecode: 0x557a7f73c090&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -5776,7 +5776,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55d3b98e9818&gt;
+#&gt; &lt;bytecode: 0x557a7f719030&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-wrap_rmd"><span class="section-number main-number">73</span> Wrap long lines in Rmd files</h2>
@@ -5848,7 +5848,7 @@ This feature may or may not be added in the future.
 </div>
 <footer><div class="flex-col">
 <p>Developed by <a href="https://yihui.org">Yihui Xie</a></p>
-<p>Site built with <a href="https://github.com/yihui/litedown">litedown</a> v0.10.1</p>
+<p>Site built with <a href="https://github.com/yihui/litedown">litedown</a> v0.10.2</p>
 </div></footer>
 <script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/js/sidenotes.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/js/appendix.min.js" defer></script>
