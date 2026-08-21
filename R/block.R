@@ -393,51 +393,42 @@ chunk_device = function(options, record = TRUE, tmp = tempfile()) {
   dev.args = options$dev.args
   dpi = options$dpi
 
-  # actually I should adjust the recording device according to dev, but here I
-  # have only considered devices like png and tikz (because the measurement
-  # results can be very different especially with the latter, see #1066), the
-  # cairo_pdf device (#1235), and svg (#1705)
-  if (identical(dev, 'png')) {
-    do.call(grDevices::png, c(list(
-      filename = tmp, width = width, height = height, units = 'in', res = dpi
-    ), get_dargs(dev.args, 'png')))
-  } else if (identical(dev, 'ragg_png')) {
-    do.call(ragg_png_dev, c(list(
-      filename = tmp, width = width, height = height, units = 'in', res = dpi
-    ), get_dargs(dev.args, 'ragg_png')))
-  } else if (identical(dev, 'ragg_webp')) {
-    do.call(ragg_webp_dev, c(list(
-      filename = tmp, width = width, height = height, units = 'in', res = dpi
-    ), get_dargs(dev.args, 'ragg_webp')))
-  } else if (identical(dev, 'tikz')) {
-    dargs = c(list(
-      file = tmp, width = width, height = height
-    ), get_dargs(dev.args, 'tikz'))
-    dargs$sanitize = options$sanitize; dargs$standAlone = options$external
-    if (is.null(dargs$verbose)) dargs$verbose = FALSE
-    do.call(tikz_dev, dargs)
-  } else if (identical(dev, 'cairo_pdf')) {
-    do.call(grDevices::cairo_pdf, c(list(
-      filename = tmp, width = width, height = height
-    ), get_dargs(dev.args, 'cairo_pdf')))
-  } else if (identical(dev, 'svg')) {
-    do.call(grDevices::svg, c(list(
-      filename = tmp, width = width, height = height
-    ), get_dargs(dev.args, 'svg')))
-  } else if (identical(dev, 'svglite')) {
-    if (!is.null(dev.args)) {
-      dev.args = get_dargs(dev.args, 'svglite')
-      dev.args = dev.args[intersect(names(dev.args), names(formals(svglite::svglite)))]
+  # open device `fun` with the common size args, plus the fixed args in `extra`
+  # and any matching dev.args; `filter = TRUE` drops dev.args that `fun` does not
+  # accept (for devices whose formals don't include `...`, which would otherwise
+  # error on unknown args).
+  open_dev = function(fun, extra = list(), filter = FALSE) {
+    dargs = get_dargs(dev.args, dev)
+    if (filter) dargs = match_dargs(dargs, fun)
+    do.call(fun, c(list(filename = tmp, width = width, height = height), extra, dargs))
+  }
+
+  # I only adjust the recording device for devices whose measurement results can
+  # differ from the default, e.g., png and tikz (#1066), cairo_pdf (#1235), and
+  # svg (#1705); each opener below is a closure keyed by the device name
+  openers = list(
+    png       = function() open_dev(grDevices::png, list(units = 'in', res = dpi)),
+    ragg_png  = function() open_dev(ragg_png_dev, list(units = 'in', res = dpi)),
+    ragg_webp = function() open_dev(ragg_webp_dev, list(units = 'in', res = dpi)),
+    cairo_pdf = function() open_dev(grDevices::cairo_pdf),
+    svg       = function() open_dev(grDevices::svg),
+    svglite   = function() open_dev(svglite::svglite, filter = TRUE),
+    tikz      = function() {
+      dargs = c(list(
+        file = tmp, width = width, height = height
+      ), get_dargs(dev.args, 'tikz'))
+      dargs$sanitize = options$sanitize; dargs$standAlone = options$external
+      if (is.null(dargs$verbose)) dargs$verbose = FALSE
+      do.call(tikz_dev, dargs)
     }
-    do.call(svglite::svglite, c(list(
-      filename = tmp, width = width, height = height
-    ), dev.args))
+  )
+
+  open = if (length(dev) == 1) openers[[dev]]
+  if (!is.null(open)) {
+    open()
   } else if (identical(getOption('device'), pdf_null)) {
-    if (!is.null(dev.args)) {
-      dev.args = get_dargs(dev.args, 'pdf')
-      dev.args = dev.args[intersect(names(dev.args), names(formals(pdf)))]
-    }
-    do.call(pdf_null, c(list(width = width, height = height), dev.args))
+    dargs = match_dargs(get_dargs(dev.args, 'pdf'), pdf)
+    do.call(pdf_null, c(list(width = width, height = height), dargs))
   } else dev.new(width = width, height = height)
   dev.control(displaylist = if (record) 'enable' else 'inhibit')
 }

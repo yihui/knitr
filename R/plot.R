@@ -166,7 +166,7 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   path2 = if (dev == 'gridSVG') paste0(path, '~')
   if (!is.null(path2)) {
     # dargs may hold args for both svg() and grid.export(); only pass the latter
-    dargs = dargs[intersect(names(dargs), names(formals(gridSVG::grid.export)))]
+    dargs = match_dargs(dargs, gridSVG::grid.export)
     do.call(gridSVG::grid.export, c(list(name = path2), dargs))
   }
   dev.off()
@@ -220,6 +220,14 @@ get_dargs = function(dargs, dev) {
     dargs = dargs[[dev]]
   }
   dargs
+}
+
+# keep only the args in `dargs` that `fun` can accept (unless `fun` has `...`,
+# in which case all args are kept)
+match_dargs = function(dargs, fun) {
+  nms = names(formals(fun))
+  if ('...' %in% nms) return(dargs)
+  dargs[intersect(names(dargs), nms)]
 }
 
 # this is mainly for Cairo
