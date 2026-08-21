@@ -4,6 +4,8 @@
 
 - Added support for a new input format `.Rtyp` for the [Typst](https://typst.app) typesetting system (thanks, @blset #2401, @aksigkvgithub #2283). You can use code chunks and inline R expressions in `.Rtyp` files, knit them via `knitr::knit()` to `.typ` output, or compile to PDF directly via `knit2pdf('input.Rtyp')`. See https://github.com/yihui/knitr-examples/blob/master/128-minimal.Rtyp for a minimal example.
 
+- Added a `knitr::rtyp` vignette engine to build `.Rtyp` vignettes to PDF via Typst, so packages no longer need to register their own engine for this purpose (thanks, @ggrothendieck, #2447).
+
 - Added support for `ragg::agg_webp()` as a graphics device for WebP output (thanks, @heavywatal, #2434). To use this device, set `dev = 'agg_webp'` in the chunk options. This device is available in **ragg** >= 1.5.0.
 
 - The chunk option `dev.args` can now customize the `dev = 'gridSVG'` device. Arguments are passed to both `grDevices::svg()` (e.g., `pointsize`) and `gridSVG::grid.export()` (e.g., `strict`), with each function receiving only the arguments it recognizes (thanks, @deepayan, #2450, #2451).

@@ -66,6 +66,12 @@ body(vweave_rmarkdown)[5L] = expression(rmarkdown::render(
   output_dir = getwd(), ...
 ))
 
+vweave_rtyp = vweave
+body(vweave_rtyp)[5L] = expression(knit2pdf(
+  file, encoding = encoding, quiet = quiet, envir = globalenv(),
+  compiler = 'typst', ...
+))
+
 # do not tangle R code from vignettes
 untangle_weave = function(vig_list, eng) {
   weave = vig_list[[c(eng, 'weave')]]
@@ -106,6 +112,7 @@ register_vignette_engines = function(pkg) {
       if (has_package('litedown')) vweave(...) else vweave_empty(...)
     }
   }, '[.][Rr](md|markdown)$')
+  vig_engine('rtyp', vweave_rtyp, '[.][Rr]typ$')
   # vignette engines that disable tangle
   vig_list = tools::vignetteEngine(package = 'knitr')
   engines  = grep('_notangle$', names(vig_list), value = TRUE, invert = TRUE)
