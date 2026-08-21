@@ -532,6 +532,9 @@
 <p>The <code>alt</code> attribute of figure images now has HTML tags stripped (via <code>xfun::strip_html()</code>) and is properly escaped for use in HTML attributes (via <code>xfun::html_escape(attr = TRUE)</code>). Previously, HTML in <code>fig.cap</code> (e.g., a link) could appear verbatim in <code>alt</code>, and double quotes in captions could break the <code>alt</code> attribute value (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2004">#2004</a>).</p>
 </li>
 <li>
+<p><code>knit2html()</code> now renders the HTML next to the knitted Markdown and then moves it to the output location when the output is written to a different directory, so local figure resources can still be found and embedded (previously they broke with warnings like <code>File 'figure/...png' not found</code>). For more robust rendering of R Markdown to HTML, consider <code>litedown::fuse()</code> instead (thanks, <a href="https://github.com/LeonidasZhak">@LeonidasZhak</a>, <a href="https://github.com/yihui/knitr/issues/2408">#2408</a>).</p>
+</li>
+<li>
 <p>Due to a change in Asymptote, the output file may not be recognized or included correctly (thanks, <a href="https://github.com/DeliciousRoastPotato">@DeliciousRoastPotato</a> <a href="https://github.com/shangeconnew">@shangeconnew</a>, <a href="https://github.com/yihui/knitr/issues/2025">#2025</a>).</p>
 </li>
 <li>
