@@ -521,6 +521,9 @@
 <p>Added support for a new input format <code>.Rtyp</code> for the <a href="https://typst.app">Typst</a> typesetting system (thanks, <a href="https://github.com/blset">@blset</a> <a href="https://github.com/yihui/knitr/issues/2401">#2401</a>, <a href="https://github.com/aksigkvgithub">@aksigkvgithub</a> <a href="https://github.com/yihui/knitr/issues/2283">#2283</a>). You can use code chunks and inline R expressions in <code>.Rtyp</code> files, knit them via <code>knitr::knit()</code> to <code>.typ</code> output, or compile to PDF directly via <code>knit2pdf('input.Rtyp')</code>. See <a href="https://github.com/yihui/knitr-examples/blob/master/128-minimal.Rtyp">https://github.com/yihui/knitr-examples/blob/master/128-minimal.Rtyp</a> for a minimal example.</p>
 </li>
 <li>
+<p>Added a <code>knitr::rtyp</code> vignette engine to build <code>.Rtyp</code> vignettes to PDF via Typst, so packages no longer need to register their own engine for this purpose (thanks, <a href="https://github.com/ggrothendieck">@ggrothendieck</a>, <a href="https://github.com/yihui/knitr/issues/2447">#2447</a>).</p>
+</li>
+<li>
 <p>Added support for <code>ragg::agg_webp()</code> as a graphics device for WebP output (thanks, <a href="https://github.com/heavywatal">@heavywatal</a>, <a href="https://github.com/yihui/knitr/issues/2434">#2434</a>). To use this device, set <code>dev = 'agg_webp'</code> in the chunk options. This device is available in <strong>ragg</strong> &gt;= 1.5.0.</p>
 </li>
 <li>
