@@ -6,6 +6,8 @@
 
 - Added support for `ragg::agg_webp()` as a graphics device for WebP output (thanks, @heavywatal, #2434). To use this device, set `dev = 'agg_webp'` in the chunk options. This device is available in **ragg** >= 1.5.0.
 
+- The chunk option `dev.args` can now customize the `dev = 'gridSVG'` device. Arguments are passed to both `grDevices::svg()` (e.g., `pointsize`) and `gridSVG::grid.export()` (e.g., `strict`), with each function receiving only the arguments it recognizes (thanks, @deepayan, #2450, #2451).
+
 ## BUG FIXES
 
 - The `alt` attribute of figure images now has HTML tags stripped (via `xfun::strip_html()`) and is properly escaped for use in HTML attributes (via `xfun::html_escape(attr = TRUE)`). Previously, HTML in `fig.cap` (e.g., a link) could appear verbatim in `alt`, and double quotes in captions could break the `alt` attribute value (thanks, @cderv, #2004).

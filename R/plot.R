@@ -157,8 +157,7 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
 }
 
 plot2dev = function(plot, name, dev, device, path, width, height, options) {
-  dargs0 = get_dargs(options$dev.args, dev)
-  dargs = dargs0[intersect(names(dargs0), names(formals(device)))]
+  dargs = get_dargs(options$dev.args, dev)
   # re-plot the recorded plot to an off-screen device
   do.call(device, c(list(path, width = width, height = height), dargs))
   showtext(options)  # maybe begin showtext and set options
@@ -166,8 +165,9 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   # hack: if the device is gridSVG, save the plot to a temp path (with suffix ~)
   path2 = if (dev == 'gridSVG') paste0(path, '~')
   if (!is.null(path2)) {
-    dargs0 = dargs0[intersect(names(dargs0), names(formals(gridSVG::grid.export)))]
-    do.call(gridSVG::grid.export, c(list(name = path2), dargs0))
+    # dargs may hold args for both svg() and grid.export(); only pass the latter
+    dargs = dargs[intersect(names(dargs), names(formals(gridSVG::grid.export)))]
+    do.call(gridSVG::grid.export, c(list(name = path2), dargs))
   }
   dev.off()
   # move the temp svg file to `path`
