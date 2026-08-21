@@ -10,7 +10,7 @@
 
 - The `alt` attribute of figure images now has HTML tags stripped (via `xfun::strip_html()`) and is properly escaped for use in HTML attributes (via `xfun::html_escape(attr = TRUE)`). Previously, HTML in `fig.cap` (e.g., a link) could appear verbatim in `alt`, and double quotes in captions could break the `alt` attribute value (thanks, @cderv, #2004).
 
-- `knit2html()` now stages local figure resources when the HTML output is written to a different directory, so embedded images no longer break with warnings like `File 'figure/...png' not found` (thanks, @LeonidasZhak, #2408).
+- `knit2html()` now renders the HTML next to the knitted Markdown and then moves it to the output location when the output is written to a different directory, so local figure resources can still be found and embedded (previously they broke with warnings like `File 'figure/...png' not found`). For more robust rendering of R Markdown to HTML, consider `litedown::fuse()` instead (thanks, @LeonidasZhak, #2408).
 
 - Due to a change in Asymptote, the output file may not be recognized or included correctly (thanks, @DeliciousRoastPotato @shangeconnew, #2025).
 
