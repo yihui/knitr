@@ -142,25 +142,35 @@ rnw2pdf = function(
   output
 }
 
-#' Convert markdown to HTML using knit() and mark_html()
+# Render Markdown to a standalone HTML document via litedown. The markdown
+# package's mark_html() is a thin wrapper of litedown::mark() that forces the
+# HTML template on (to produce a full document instead of a fragment); we
+# replicate that here so knitr no longer depends on the markdown package.
+mark_html = function(..., template = TRUE) {
+  opts = options(litedown.html.template = template)
+  on.exit(options(opts), add = TRUE)
+  litedown::mark(...)
+}
+
+#' Convert markdown to HTML using knit() and litedown::mark()
 #'
 #' This is a convenience function to knit the input markdown source and call
-#' \code{markdown::\link[markdown]{mark_html}()} in the \pkg{markdown}
-#' package to convert the result to HTML.
+#' \code{litedown::\link[litedown]{mark}()} to convert the result to HTML.
 #' @inheritParams knit
-#' @param ... Options passed to
-#'   \code{markdown::\link[markdown]{mark_html}()}.
+#' @param ... Options passed to \code{litedown::\link[litedown]{mark}()}.
 #' @param force_v1 Boolean; whether to force rendering the input document as an
 #'   R Markdown v1 document, even if it is for v2.
 #' @export
-#' @seealso \code{\link{knit}}, \code{markdown::\link[markdown]{mark_html}}
+#' @seealso \code{\link{knit}}, \code{litedown::\link[litedown]{mark}}
 #' @return If the argument \code{text} is NULL, a character string (HTML code)
 #'   is returned; otherwise the result is written into a file and the filename
 #'   is returned.
-#' @note The \pkg{markdown} package is for R Markdown v1, which is much less
-#'   powerful than R Markdown v2, i.e. the \pkg{rmarkdown} package
+#' @note This function renders R Markdown v1, which is much less powerful than R
+#'   Markdown v2, i.e. the \pkg{rmarkdown} package
 #'   (\url{https://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
-#'   HTML, please use \code{rmarkdown::render()} instead.
+#'   HTML, please use \code{rmarkdown::render()} instead. For a lighter-weight
+#'   alternative that handles figure paths robustly, see
+#'   \code{litedown::\link[litedown]{fuse}()}.
 #' @examples # a minimal example
 #' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' knit2html('test.Rmd')
@@ -171,25 +181,22 @@ knit2html = function(
   input, output = NULL, ..., envir = parent.frame(), text = NULL,
   quiet = FALSE, encoding = 'UTF-8', force_v1 = getOption('knitr.knit2html.force_v1', FALSE)
 ) {
-  if (is_cran_check() && !has_package('markdown'))
-    return(vweave_empty(input, .reason = 'markdown'))
+  if (is_cran_check() && !has_package('litedown'))
+    return(vweave_empty(input, .reason = 'litedown'))
 
-  is_lite = FALSE
   if (!force_v1 && is.null(text)) {
-    # test if an Rmd input should be rendered via rmarkdown::render() or (mark|lite)down::mark()
+    # test if an Rmd input should be rendered via rmarkdown::render() instead
     res = xfun::yaml_body(read_utf8(input))$yaml[['output']]
     if (is.list(res)) res = names(res)
-    rmd_v2 = length(res) > 0 && is.character(res) && {
-      is_lite = any(grepl('^litedown::', res) | res == 'html')
-      !is_lite && !any(grepl('^markdown::', res))
-    }
+    rmd_v2 = length(res) > 0 && is.character(res) &&
+      !any(grepl('^litedown::', res) | res == 'html') &&
+      !any(grepl('^markdown::', res))
     if (rmd_v2) warning2(
       'It seems you should call rmarkdown::render() instead of knitr::knit2html() ',
       'because ', input, ' appears to be an R Markdown v2 document.'
     )
   }
   out = knit(input, text = text, envir = envir, quiet = quiet)
-  mark = if (is_lite) litedown::mark else markdown::mark_html
   if (is.null(text)) {
     output = with_ext(if (is.null(output) || is.na(output)) out else output, 'html')
     # mark() resolves relative resource paths (e.g. figures) against the output
@@ -197,15 +204,15 @@ knit2html = function(
     # to a different directory, render next to the input first (so resources can
     # be found/embedded), then move the HTML to the output location (#2408)
     if (xfun::same_path(dirname(out), dirname(output))) {
-      mark(out, output, ...)
+      mark_html(out, output, ...)
     } else {
       html = with_ext(out, 'html')
       on.exit(if (!xfun::same_path(html, output)) file.remove(html), add = TRUE)
-      mark(out, html, ...)
+      mark_html(out, html, ...)
       file.copy(html, output, overwrite = TRUE)
     }
     invisible(output)
-  } else mark(text = out, ...)
+  } else mark_html(text = out, ...)
 }
 
 #' Knit an R Markdown document and post it to WordPress
@@ -255,7 +262,7 @@ knit2wp = function(
   content = read_utf8(out)
   if (missing(title) && length(title2 <- xfun::yaml_body(content)$yaml$title) == 1)
     title = title2
-  content = markdown::mark(text = content)
+  content = litedown::mark(text = content)
   shortcode = rep(shortcode, length.out = 2L)
   if (shortcode[1]) content = gsub(
     '<pre><code class="([[:alpha:]]+)">(.+?)</code></pre>',

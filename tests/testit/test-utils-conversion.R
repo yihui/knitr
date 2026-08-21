@@ -1,6 +1,6 @@
 library(testit)
 
-if (requireNamespace('markdown', quietly = TRUE)) assert(
+if (requireNamespace('litedown', quietly = TRUE)) assert(
   'knit2html() embeds local figure resources when output is written elsewhere', {
     td = tempfile('knit2html-')
     dir.create(td)

@@ -21,7 +21,7 @@ If you use the \code{knitr::rmarkdown} engine, please make sure that
   When the \pkg{rmarkdown} package is not installed or not available, or
   \command{pandoc} cannot be found, the \code{knitr::rmarkdown} engine will
   fall back to the \code{knitr::knitr} engine, which uses R Markdown v1 based
-  on the \pkg{markdown} package.
+  on the \pkg{litedown} package.
 }
 \examples{
 library(knitr)

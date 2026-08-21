@@ -22,6 +22,10 @@
 
 - Fixed a bug that calling `knit_exit()` could put `knit()` in a non-functioning state when there is only a single code chunk in the input (thanks, @dlampart, #2372).
 
+## MINOR CHANGES
+
+- `knit2html()` (and other functions that render Markdown to HTML, such as `stitch()`, `knit_rd()`, `knit2wp()`, `rocco()`, and the `knitr::knitr` vignette engine) now use `litedown::mark()` directly instead of `markdown::mark_html()`. The **markdown** package (>= 1.3) has become a thin wrapper of **litedown**, so this removes the **markdown** dependency (**litedown** is used instead) without changing the HTML output.
+
 # CHANGES IN knitr VERSION 1.51
 
 ## NEW FEATURES

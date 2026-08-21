@@ -16,7 +16,7 @@
 #'   When the \pkg{rmarkdown} package is not installed or not available, or
 #'   \command{pandoc} cannot be found, the \code{knitr::rmarkdown} engine will
 #'   fall back to the \code{knitr::knitr} engine, which uses R Markdown v1 based
-#'   on the \pkg{markdown} package.
+#'   on the \pkg{litedown} package.
 #' @examples library(knitr)
 #' vig_list = tools::vignetteEngine(package = 'knitr')
 #' str(vig_list)
@@ -103,7 +103,7 @@ register_vignette_engines = function(pkg) {
         'Pandoc is required to build R Markdown vignettes but not available. ',
         'Please make sure it is installed.'
       )
-      if (has_package('markdown')) vweave(...) else vweave_empty(...)
+      if (has_package('litedown')) vweave(...) else vweave_empty(...)
     }
   }, '[.][Rr](md|markdown)$')
   # vignette engines that disable tangle
