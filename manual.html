@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="generator" content="litedown 0.10.2">
+<meta name="generator" content="litedown 0.10.3">
 <title>Help pages</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/css/default.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/css/article.min.css">
@@ -2355,16 +2355,16 @@ kable(x, format.args = list(decimal.mark = &quot;,&quot;, big.mark = &quot;'&quo
 </code></pre>
 <pre><code>#&gt; |          V1|          V2|          V3|          V4|          V5|          V6|
 #&gt; |-----------:|-----------:|-----------:|-----------:|-----------:|-----------:|
-#&gt; |   981'386,1| 1'007'437,9| 1'004'781,5| 1'000'209,2|   995'916,8|   997'031,5|
-#&gt; | 1'002'949,0|   976'196,2|   986'611,0|   980'646,2| 1'004'623,8| 1'006'191,5|
-#&gt; |   994'514,4| 1'014'509,5|   992'905,1| 1'002'953,2|   980'627,8| 1'005'952,1|
-#&gt; |   994'901,1| 1'022'514,2| 1'014'278,0|   993'650,7|   998'423,4|   985'376,1|
-#&gt; | 1'022'128,1| 1'000'103,3|   993'412,4|   988'875,5| 1'003'527,6|   977'010,5|
-#&gt; |   998'873,8|   996'290,7| 1'010'218,1| 1'004'637,7|   973'895,5| 1'001'338,9|
-#&gt; |   997'537,9| 1'003'498,8|   984'853,9|   995'525,4| 1'012'886,0|   999'721,3|
-#&gt; | 1'021'127,4| 1'001'069,9|   993'517,7|   991'026,5| 1'023'493,6| 1'020'999,2|
-#&gt; | 1'009'260,5| 1'006'873,2| 1'013'474,9| 1'017'527,6| 1'003'156,2| 1'010'158,9|
-#&gt; | 1'020'353,8|   978'827,5|   991'939,5| 1'003'583,5| 1'009'667,3|   991'170,5|
+#&gt; |   987'718,7|   996'619,3|   999'553,3| 1'014'780,1|   998'900,6|   999'024,2|
+#&gt; | 1'003'445,6|   986'238,5|   998'416,2|   999'332,2|   988'429,5| 1'003'489,6|
+#&gt; | 1'004'398,4| 1'005'512,0|   990'096,4|   996'433,2|   999'608,3| 1'016'461,5|
+#&gt; |   991'712,5|   986'558,6|   997'499,6| 1'000'244,8| 1'010'573,3|   997'733,3|
+#&gt; |   986'424,5| 1'001'989,9| 1'008'301,8| 1'000'680,3|   992'465,8|   986'012,6|
+#&gt; |   995'354,3|   976'621,7|   991'955,6| 1'016'644,6| 1'007'132,3|   995'346,7|
+#&gt; | 1'001'422,8|   998'786,9|   994'978,5| 1'005'414,7|   991'941,8| 1'008'991,6|
+#&gt; | 1'006'936,2| 1'019'818,3| 1'011'577,2| 1'002'090,9|   994'347,9|   983'957,2|
+#&gt; |   991'353,2| 1'007'359,3|   984'098,9|   995'436,6| 1'006'848,5| 1'001'053,7|
+#&gt; |   987'501,7|   988'653,9|   992'753,7| 1'013'369,9| 1'003'251,7| 1'011'515,3|
 </code></pre>
 <pre><code class="language-r"># save the value
 x = kable(d2, format = &quot;html&quot;)
@@ -3406,7 +3406,7 @@ access or set hooks in this package.
 </code></pre>
 <pre><code>#&gt; function (x, options) 
 #&gt; x
-#&gt; &lt;bytecode: 0x560cd9944760&gt;
+#&gt; &lt;bytecode: 0x55a698f81170&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">knit_hooks$get(&quot;inline&quot;)
@@ -3417,7 +3417,7 @@ access or set hooks in this package.
 #&gt;         x = round_digits(x)
 #&gt;     paste(as.character(x), collapse = &quot;, &quot;)
 #&gt; }
-#&gt; &lt;bytecode: 0x560cd9943ff0&gt;
+#&gt; &lt;bytecode: 0x55a698f80a00&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-knit_meta"><span class="section-number main-number">40</span> Metadata about objects to be printed</h2>
@@ -5103,7 +5103,7 @@ press again to hide the text column (show code).
 # knit these two vignettes using the docco style
 rocco_view(system.file(&quot;doc&quot;, &quot;docco-classic.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
-<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/Rtmp085LHd (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
+<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/RtmpmjdQmh (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
 </code></pre>
 <pre><code class="language-r">rocco_view(system.file(&quot;doc&quot;, &quot;knit_expand.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
@@ -5712,7 +5712,7 @@ str(vig_list)
 #&gt;     else knit)(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x560cd7689e20&gt;
+#&gt; &lt;bytecode: 0x55a696cc1570&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -5720,7 +5720,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x560cd76955c8&gt;
+#&gt; &lt;bytecode: 0x55a696cd0c28&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::knitr_notangle&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -5755,7 +5755,7 @@ str(vig_list)
 #&gt;     unlink(with_ext(file, &quot;R&quot;))
 #&gt;     return()
 #&gt; }
-#&gt; &lt;bytecode: 0x560cd7773d60&gt;
+#&gt; &lt;bytecode: 0x55a696dab590&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::docco_classic&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -5784,7 +5784,7 @@ str(vig_list)
 #&gt;     rocco(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x560cd76e6a00&gt;
+#&gt; &lt;bytecode: 0x55a696d1e038&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -5792,7 +5792,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x560cd76955c8&gt;
+#&gt; &lt;bytecode: 0x55a696cd0c28&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-wrap_rmd"><span class="section-number main-number">73</span> Wrap long lines in Rmd files</h2>
@@ -5864,7 +5864,7 @@ This feature may or may not be added in the future.
 </div>
 <footer><div class="flex-col">
 <p>Developed by <a href="https://yihui.org">Yihui Xie</a></p>
-<p>Site built with <a href="https://github.com/yihui/litedown">litedown</a> v0.10.2</p>
+<p>Site built with <a href="https://github.com/yihui/litedown">litedown</a> v0.10.3</p>
 </div></footer>
 <script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/js/sidenotes.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/js/appendix.min.js" defer></script>

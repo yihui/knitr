@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="generator" content="litedown 0.10.2">
+<meta name="generator" content="litedown 0.10.3">
 <title>News</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/css/default.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/css/article.min.css">
@@ -532,6 +532,9 @@
 </ul>
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
+<li>
+<p><code>kable()</code> now escapes special characters (e.g., <code>&amp;</code>) in the <code>caption</code> argument for LaTeX and HTML output when <code>escape = TRUE</code> (the default), just as it does for cell content and column names. Previously, an unescaped <code>&amp;</code> in a caption could cause a fatal LaTeX compilation error (<code>! Misplaced alignment tab character &amp;.</code>) (thanks, <a href="https://github.com/mbs2016">@mbs2016</a>, <a href="https://github.com/yihui/knitr/issues/2436">#2436</a>).</p>
+</li>
 <li>
 <p>The <code>alt</code> attribute of figure images now has HTML tags stripped (via <code>xfun::strip_html()</code>) and is properly escaped for use in HTML attributes (via <code>xfun::html_escape(attr = TRUE)</code>). Previously, HTML in <code>fig.cap</code> (e.g., a link) could appear verbatim in <code>alt</code>, and double quotes in captions could break the <code>alt</code> attribute value (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2004">#2004</a>).</p>
 </li>
@@ -4186,7 +4189,7 @@ based on an R script)</p>
 </div>
 <footer><div class="flex-col">
 <p>Developed by <a href="https://yihui.org">Yihui Xie</a></p>
-<p>Site built with <a href="https://github.com/yihui/litedown">litedown</a> v0.10.2</p>
+<p>Site built with <a href="https://github.com/yihui/litedown">litedown</a> v0.10.3</p>
 </div></footer>
 <script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/js/sidenotes.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/js/appendix.min.js" defer></script>
