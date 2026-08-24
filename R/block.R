@@ -260,6 +260,9 @@ eng_r = function(options) {
 
   cache.exists = cache$exists(options$hash, options$cache.lazy)
   evaluate = knit_hooks$get('evaluate')
+  # record the currently opened devices so we can detect if the chunk opens new
+  # ones (e.g., via dev.new()), which knitr cannot capture (#2355)
+  dev.before = dev.list()
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
     as.source(code)
@@ -276,6 +279,13 @@ eng_r = function(options) {
       output_handler = knit_handlers(options$render, options)
     )
   )
+  # warn if the chunk opened extra devices that knitr cannot record plots from
+  if (length(setdiff(dev.list(), dev.before))) warning2(
+    "The chunk '", options$label, "' opened new graphics device(s) ",
+    "(e.g., via dev.new()), from which knitr cannot capture plots. ",
+    "Please remove the code that opens new devices such as dev.new()."
+  )
+
   if (options$cache %in% 1:2 && (!cache.exists || isTRUE(options$cache.rebuild))) {
     # make a copy for cache=1,2; when cache=2, we do not really need plots
     res.orig = if (options$cache == 2) remove_plot(res, keep == 'high') else res
