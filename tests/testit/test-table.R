@@ -89,6 +89,28 @@ x & col_name\\\\
   )
 })
 
+assert('kable() escapes special characters in the caption (#2436)', {
+  (kable2(data.frame(x = 1), 'latex', caption = 'S&P rating') %==% '\\begin{table}
+
+\\caption{S\\&P rating}
+\\centering
+\\begin{tabular}[t]{r}
+\\hline
+x\\\\
+\\hline
+1\\\\
+\\hline
+\\end{tabular}
+\\end{table}')
+  (grepl('<caption>A &amp; B</caption>', kable2(data.frame(x = 1), 'html', caption = 'A & B')))
+})
+
+assert('kable() does not escape the caption when escape = FALSE (#2436)', {
+  (grepl('\\caption{A & B}', kable2(
+    data.frame(x = 1), 'latex', caption = 'A & B', escape = FALSE
+  ), fixed = TRUE))
+})
+
 assert('kable() adds {} before [] when booktabs = TRUE', {
   (kable2(data.frame(x = c('[0, 1]', '(1, 2]'), y = c(35, 62)), 'latex', booktabs = TRUE) %==% '
 \\begin{tabular}{lr}

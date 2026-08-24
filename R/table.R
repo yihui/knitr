@@ -123,7 +123,7 @@ kable = function(
     return(kables(res, format, caption, label))
   }
 
-  caption = kable_caption(label, caption, format)
+  caption = kable_caption(label, caption, format, escape)
 
   if (!is.matrix(x)) x = as.data.frame(x)
   # show the maximum number of rows if set
@@ -170,7 +170,12 @@ kable = function(
   structure(res, format = format, class = 'knitr_kable')
 }
 
-kable_caption = function(label, caption, format) {
+kable_caption = function(label, caption, format, escape = TRUE) {
+  # escape special characters in the caption (before prepending the label, which
+  # must not be escaped), just as we do for cell content and column names (#2436)
+  if (escape && !is.null(caption) && !anyNA(caption)) caption = switch(
+    format, latex = escape_latex(caption), html = html_escape(caption), caption
+  )
   # create a label for bookdown if applicable
   if (is.null(label)) label = opts_current$get('label')
   if (is.null(label)) label = NA
