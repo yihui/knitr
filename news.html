@@ -533,6 +533,9 @@
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
+<p><code>include_graphics()</code> now converts absolute paths to paths relative to the output directory of the rendered document (communicated by <strong>rmarkdown</strong> &gt;= 2.32 via <code>opts_knit$get('rmarkdown.output_dir')</code>) instead of knitr’s working directory (the input directory), which fixes broken image paths when the input and output directories differ (e.g., rendering to a different <code>output_dir</code>). The existence check (when <code>error = TRUE</code>) also uses the original path so that it no longer reports false negatives when <code>root.dir</code> differs from the output directory (thanks, <a href="https://github.com/naikymen">@naikymen</a> <a href="https://github.com/jameelalsalam">@jameelalsalam</a> <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2171">#2171</a>, <a href="https://github.com/r-lib/pkgdown/issues/2334">r-lib/pkgdown#2334</a>).</p>
+</li>
+<li>
 <p><code>kable()</code> now escapes special characters (e.g., <code>&amp;</code>) in the <code>caption</code> argument for LaTeX and HTML output when <code>escape = TRUE</code> (the default), just as it does for cell content and column names. Previously, an unescaped <code>&amp;</code> in a caption could cause a fatal LaTeX compilation error (<code>! Misplaced alignment tab character &amp;.</code>) (thanks, <a href="https://github.com/mbs2016">@mbs2016</a>, <a href="https://github.com/yihui/knitr/issues/2436">#2436</a>).</p>
 </li>
 <li>
