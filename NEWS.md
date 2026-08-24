@@ -12,6 +12,8 @@
 
 ## BUG FIXES
 
+- `include_graphics()` now converts absolute paths to paths relative to the output directory of the rendered document (communicated by **rmarkdown** >= 2.32 via `opts_knit$get('rmarkdown.output_dir')`) instead of knitr's working directory (the input directory), which fixes broken image paths when the input and output directories differ (e.g., rendering to a different `output_dir`). The existence check (when `error = TRUE`) also uses the original path so that it no longer reports false negatives when `root.dir` differs from the output directory (thanks, @naikymen @jameelalsalam @cderv, #2171, r-lib/pkgdown#2334).
+
 - `kable()` now escapes special characters (e.g., `&`) in the `caption` argument for LaTeX and HTML output when `escape = TRUE` (the default), just as it does for cell content and column names. Previously, an unescaped `&` in a caption could cause a fatal LaTeX compilation error (`! Misplaced alignment tab character &.`) (thanks, @mbs2016, #2436).
 
 - The `alt` attribute of figure images now has HTML tags stripped (via `xfun::strip_html()`) and is properly escaped for use in HTML attributes (via `xfun::html_escape(attr = TRUE)`). Previously, HTML in `fig.cap` (e.g., a link) could appear verbatim in `alt`, and double quotes in captions could break the `alt` attribute value (thanks, @cderv, #2004).

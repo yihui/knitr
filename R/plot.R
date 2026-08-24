@@ -456,7 +456,19 @@ include_graphics = function(
   error = getOption('knitr.graphics.error', TRUE)
 ) {
   path = native_encode(path)  # https://d.cosx.org/d/420524
-  if (any(i <- xfun::is_abs_path(path)) && rel_path && !is.null(d <- opts_knit$get('output.dir'))) {
+  # keep the original paths for the existence check: absolute paths always
+  # resolve unambiguously, whereas paths made relative below are relative to
+  # output.dir, which may differ from the working directory (e.g. when root.dir
+  # is changed) and thus give false negatives (#2171)
+  path0 = path
+  # base directory for absolute -> relative conversion: prefer the directory of
+  # the final output document (communicated by e.g. rmarkdown via the option
+  # below), because that is where the rendered document lives and image paths
+  # must be relative to; fall back to output.dir (knitr's initial working
+  # directory) when the renderer does not provide one
+  # (#2171; see also r-lib/pkgdown#2334)
+  d = opts_knit$get('rmarkdown.output_dir') %n% opts_knit$get('output.dir')
+  if (any(i <- xfun::is_abs_path(path)) && rel_path && !is.null(d)) {
     path[i] = xfun::relative_path(path[i], d, error = FALSE)
     if (any(j <- xfun::is_abs_path(path[i]))) warning(
       'It is highly recommended to use relative paths for images. ',
@@ -468,10 +480,13 @@ include_graphics = function(
     path2 = with_ext(path, 'pdf')
     i = file.exists(path2)
     path[i] = path2[i]
+    path0[i] = with_ext(path0[i], 'pdf')
   }
   # relative paths can be tricky in child documents, so don't error (#1957)
   if (child_mode()) error = FALSE
-  if (error && length(p <- path[!xfun::is_web_path(path) & !file.exists(path)])) stop(
+  # check existence against the original paths (path0): for absolute inputs this
+  # avoids resolving a relative path against the wrong base directory (#2171)
+  if (error && length(p <- path[!xfun::is_web_path(path0) & !file.exists(path0)])) stop(
     'Cannot find the file(s): ', quote_vec(p)
   )
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
