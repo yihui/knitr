@@ -101,6 +101,17 @@ assert("Include a plot by pandoc md", {
     sprintf("![%s](1.png){width=%s %s}", cap, w, ex))
 })
 
+assert("captioned figures in a multi-figure chunk are separated by a blank line (#2032)", {
+  fig = function(cur, num, cap = NULL) opt(cap = cap, fig.cur = cur, fig.num = num)
+  # a captioned figure that is not the last one gets a trailing blank line
+  (hook_plot_md_pandoc(x, fig(1, 2, cap)) %==% sprintf("![%s](1.png)\n\n", cap))
+  # the last figure and single-figure chunks do not
+  (hook_plot_md_pandoc(x, fig(2, 2, cap)) %==% sprintf("![%s](1.png)", cap))
+  (hook_plot_md_pandoc(x, fig(1, 1, cap)) %==% sprintf("![%s](1.png)", cap))
+  # figures without a caption are left inline (Pandoc keeps them as inline images)
+  (hook_plot_md_pandoc(x, fig(1, 2)) %==% "![](1.png)")
+})
+
 assert('empty alt text is preserved and NA alt is discarded', {
   (hook_plot_md(x, opts_chunk$merge(list(fig.alt = ''))) %==% '<img src="1.png" alt=""  />')
   (hook_plot_md(x, opts_chunk$merge(list(fig.alt = NA, out.width = '100'))) %==% '<img src="1.png" width="100" />')
