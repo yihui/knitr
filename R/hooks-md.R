@@ -75,7 +75,7 @@ hook_plot_md_base = function(x, options) {
     res = sprintf('![%s](%s)', cap, x2)
     if (!is.null(lnk) && !is.na(lnk)) res = sprintf('[%s](%s)', res, lnk)
     res = paste0(res, if (nocap) '<!-- -->' else '', if (is_latex_output()) ' ' else '')
-    return(res)
+    return(sep_captioned_fig(res, cap, options))
   }
   add_link = function(x) {
     if (is.null(lnk) || is.na(lnk)) return(x)
@@ -131,7 +131,20 @@ hook_plot_md_pandoc = function(x, options) {
   )
   if (at != '') at = paste0('{', at, '}')
 
-  sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at)
+  sep_captioned_fig(sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at), cap, options)
+}
+
+# When a chunk generates multiple figures that carry captions, the plot hook is
+# called once per figure and the bare `![cap](path)` images would otherwise be
+# concatenated into a single paragraph, e.g. `![cap1](a) ![cap2](b)`. Pandoc
+# treats several images in one paragraph as inline images and drops the captions
+# (no figure environment / <figcaption>). Append a blank line after each
+# captioned figure except the last so that Pandoc emits a figure per image.
+# See https://github.com/yihui/knitr/issues/2032 and #1524.
+sep_captioned_fig = function(res, cap, options) {
+  if (cap != '' && (options$fig.cur %n% 1L) < (options$fig.num %n% 1L))
+    res = paste0(res, '\n\n')
+  res
 }
 
 css_align = function(align) {
