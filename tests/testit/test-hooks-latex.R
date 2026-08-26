@@ -70,8 +70,7 @@ assert("fig.note produces \\figurenote{} inside the figure environment", {
   ))
 
   # pretend we are at the start of a fresh document
-  knitr_env = getFromNamespace('.knitEnv', 'knitr')
-  knitr_env$fig.note.defined = FALSE
+  .knitEnv$fig.note.defined = FALSE
 
   res = hook_plot_tex('foo.pdf', note_opts('A note.'))
   # \figurenote{} appears after \caption and before \end{figure}
