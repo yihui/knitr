@@ -100,6 +100,11 @@ hook_animation = function(options) {
 #'
 #' These hooks are mainly for the package option \code{animation.fun}, e.g. you
 #' can set \code{opts_knit$set(animation.fun = hook_scianimator)}.
+#'
+#' Note that these hooks generate HTML code. For LaTeX output, you can set the
+#' chunk option \code{animation.hook} (or the package option
+#' \code{animation.fun}) to a function that generates LaTeX code; see
+#' \code{\link{hook_plot_tex}}.
 #' @inheritParams hook_plot_tex
 #' @rdname hook_animation
 #' @export
