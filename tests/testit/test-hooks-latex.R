@@ -65,9 +65,15 @@ assert("a user-provided animation hook generates the LaTeX code for animations",
 })
 
 assert("fig.note produces \\figurenote{} inside the figure environment", {
-  res = hook_plot_tex('foo.pdf', opts_chunk$merge(list(
-    label = 'l', fig.cap = 'Cap', fig.note = 'A note.', fig.show = 'asis'
-  )))
+  note_opts = function(note) opts_chunk$merge(list(
+    label = 'l', fig.cap = 'Cap', fig.note = note, fig.show = 'asis'
+  ))
+
+  # pretend we are at the start of a fresh document
+  knitr_env = getFromNamespace('.knitEnv', 'knitr')
+  knitr_env$fig.note.defined = FALSE
+
+  res = hook_plot_tex('foo.pdf', note_opts('A note.'))
   # \figurenote{} appears after \caption and before \end{figure}
   (grepl('\\figurenote{A note.}', res, fixed = TRUE))
   (grepl('\\providecommand{\\figurenote}', res, fixed = TRUE))
@@ -77,8 +83,12 @@ assert("fig.note produces \\figurenote{} inside the figure environment", {
   (regexpr('\\figurenote{A note.}', res, fixed = TRUE) <
      regexpr('\\end{figure}', res, fixed = TRUE))
 
+  # the definition is emitted only once per document: a second figure note
+  # calls \figurenote{} but does not repeat \providecommand
+  res2 = hook_plot_tex('foo.pdf', note_opts('Another note.'))
+  (grepl('\\figurenote{Another note.}', res2, fixed = TRUE))
+  (!grepl('\\providecommand', res2, fixed = TRUE))
+
   # an empty/NA note adds nothing
-  (!grepl('figurenote', hook_plot_tex('foo.pdf', opts_chunk$merge(list(
-    label = 'l', fig.cap = 'Cap', fig.note = NA, fig.show = 'asis'
-  ))), fixed = TRUE))
+  (!grepl('figurenote', hook_plot_tex('foo.pdf', note_opts(NA)), fixed = TRUE))
 })

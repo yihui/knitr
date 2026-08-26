@@ -158,12 +158,8 @@ hook_plot_tex = function(x, options) {
         create_label(lab, if (mcap) c('-', fig.cur), latex = TRUE)
       )
       note = options$fig.note
-      note = if (is.null(note) || is.na(note) || note == '') '' else sprintf(
-        # define a default \figurenote command that users may override in the
-        # preamble (\providecommand won't clobber an existing definition)
-        '\\providecommand{\\figurenote}[1]{\\vspace{2pt}\\par\\raggedright\\footnotesize\\emph{#1}}\\figurenote{%s}\n',
-        escape_percent(note)
-      )
+      note = if (is.null(note) || is.na(note) || note == '') '' else
+        sprintf('%s\\figurenote{%s}\n', define_figurenote(), escape_percent(note))
       fig2 = sprintf('%s%s\\end{%s}\n', cap, note, options$fig.env)
     }
   } else if (pandoc_to(c('latex', 'beamer'))) {
@@ -221,6 +217,17 @@ animation_hook_tex = function(options) {
   if (!is.function(fun)) return()
   for (h in .animation_hooks()) if (identical(fun, h)) return()
   fun
+}
+
+# provide a default \figurenote command (for the chunk option fig.note) the
+# first time it is needed in a document; \providecommand is a no-op if the user
+# has defined \figurenote in the preamble (e.g. via \newcommand), so this both
+# works out of the box and stays customizable; emitting it only once avoids
+# repeating the long definition before every figure note
+define_figurenote = function() {
+  if (isTRUE(.knitEnv$fig.note.defined)) return('')
+  .knitEnv$fig.note.defined = TRUE
+  '\\providecommand{\\figurenote}[1]{\\vspace{2pt}\\par\\raggedright\\footnotesize\\emph{#1}}\n'
 }
 
 # % -> \%, but do not touch \%
