@@ -22,13 +22,21 @@ hook_plot_html = function(x, options) {
   )
 }
 
+# the built-in animation hooks, which generate HTML (and are ignored for LaTeX
+# output); keyed by the character values allowed for the chunk option
+# animation.hook
+.animation_hooks = function() list(
+  ffmpeg = hook_ffmpeg_html, gifski = hook_gifski,
+  scianimator = hook_scianimator, r2swf = hook_r2swf
+)
+
 hook_animation = function(options) {
   if (is.function(fun <- options$animation.hook)) return(fun)
-  if (is.character(fun)) return(switch(
-    fun, ffmpeg = hook_ffmpeg_html, gifski = hook_gifski,
-    scianimator = hook_scianimator, r2swf = hook_r2swf,
-    stop2('Invalid value for the chunk option animation.hook: ', fun)
-  ))
+  if (is.character(fun)) {
+    if (is.null(hook <- .animation_hooks()[[fun]]))
+      stop2('Invalid value for the chunk option animation.hook: ', fun)
+    return(hook)
+  }
   if (is.function(fun <- opts_knit$get('animation.fun'))) return(fun)
   hook_ffmpeg_html
 }
@@ -100,6 +108,11 @@ hook_animation = function(options) {
 #'
 #' These hooks are mainly for the package option \code{animation.fun}, e.g. you
 #' can set \code{opts_knit$set(animation.fun = hook_scianimator)}.
+#'
+#' Note that these hooks generate HTML code. For LaTeX output, you can set the
+#' chunk option \code{animation.hook} (or the package option
+#' \code{animation.fun}) to a function that generates LaTeX code; see
+#' \code{\link{hook_plot_tex}}.
 #' @inheritParams hook_plot_tex
 #' @rdname hook_animation
 #' @export

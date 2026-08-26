@@ -47,6 +47,14 @@ Similarly, \code{hook_plot_html}, \code{hook_plot_md} and
 \code{hook_plot_rst} return character strings which are HTML, Markdown, reST
 code.
 
+For animations (i.e. when the chunk option \code{fig.show} is \code{'animate'}),
+\code{hook_plot_tex} generates \samp{\\animategraphics{}} unless a hook function
+has been provided via the chunk option \code{animation.hook} or the package option
+\code{animation.fun}, in which case that function generates the LaTeX code instead.
+It is called only once per chunk, with the filename of the last plot. The
+built-in hooks (e.g. \code{\link{hook_ffmpeg_html}}) generate HTML, and are
+ignored for LaTeX output.
+
 In most cases we do not need to call these hooks explicitly, and they were
 designed to be used internally. Sometimes we may not be able to record R
 plots using \code{grDevices::\link{recordPlot}()}, and we can make use of

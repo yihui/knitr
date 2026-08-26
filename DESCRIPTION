@@ -1,7 +1,7 @@
 Package: knitr
 Type: Package
 Title: A General-Purpose Package for Dynamic Report Generation in R
-Version: 1.51.13
+Version: 1.51.14
 Authors@R: c(
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666", URL = "https://yihui.org")),
     person("Abhraneel", "Sarma", role = "ctb"),
@@ -53,6 +53,7 @@ Authors@R: c(
     person("Jeremy", "Stephens", role = "ctb"),
     person("Jim", "Hester", role = "ctb"),
     person("Joe", "Cheng", role = "ctb"),
+    person("Johan", "Larsson", role = "ctb"),
     person("Johannes", "Ranke", role = "ctb"),
     person("John", "Honaker", role = "ctb"),
     person("John", "Muschelli", role = "ctb"),
