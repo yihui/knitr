@@ -157,7 +157,14 @@ hook_plot_tex = function(x, options) {
         '\\caption%s{%s}%s\n', escape_percent(scap), escape_percent(cap),
         create_label(lab, if (mcap) c('-', fig.cur), latex = TRUE)
       )
-      fig2 = sprintf('%s\\end{%s}\n', cap, options$fig.env)
+      note = options$fig.note
+      note = if (is.null(note) || is.na(note) || note == '') '' else sprintf(
+        # define a default \figurenote command that users may override in the
+        # preamble (\providecommand won't clobber an existing definition)
+        '\\providecommand{\\figurenote}[1]{\\vspace{2pt}\\par\\raggedright\\footnotesize\\emph{#1}}\\figurenote{%s}\n',
+        escape_percent(note)
+      )
+      fig2 = sprintf('%s%s\\end{%s}\n', cap, note, options$fig.env)
     }
   } else if (pandoc_to(c('latex', 'beamer'))) {
     # use alignment environments for R Markdown latex output (\centering won't work)

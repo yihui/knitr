@@ -63,3 +63,22 @@ assert("a user-provided animation hook generates the LaTeX code for animations",
     'foo-3.pdf', opts(fig.cur = 3, fig.num = 3)
   ), fixed = TRUE))
 })
+
+assert("fig.note produces \\figurenote{} inside the figure environment", {
+  res = hook_plot_tex('foo.pdf', opts_chunk$merge(list(
+    label = 'l', fig.cap = 'Cap', fig.note = 'A note.', fig.show = 'asis'
+  )))
+  # \figurenote{} appears after \caption and before \end{figure}
+  (grepl('\\figurenote{A note.}', res, fixed = TRUE))
+  (grepl('\\providecommand{\\figurenote}', res, fixed = TRUE))
+  # \figurenote{} comes after \caption and before \end{figure}
+  (regexpr('\\caption', res, fixed = TRUE) <
+     regexpr('\\figurenote{A note.}', res, fixed = TRUE))
+  (regexpr('\\figurenote{A note.}', res, fixed = TRUE) <
+     regexpr('\\end{figure}', res, fixed = TRUE))
+
+  # an empty/NA note adds nothing
+  (!grepl('figurenote', hook_plot_tex('foo.pdf', opts_chunk$merge(list(
+    label = 'l', fig.cap = 'Cap', fig.note = NA, fig.show = 'asis'
+  ))), fixed = TRUE))
+})

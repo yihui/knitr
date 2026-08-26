@@ -106,6 +106,20 @@ assert('empty alt text is preserved and NA alt is discarded', {
   (hook_plot_md(x, opts_chunk$merge(list(fig.alt = NA, out.width = '100'))) %==% '<img src="1.png" width="100" />')
 })
 
+assert("fig.note is placed in a figure-note paragraph for HTML output", {
+  old = opts_knit$get('rmarkdown.pandoc.to')
+  opts_knit$set(rmarkdown.pandoc.to = 'html')
+  # note together with a caption
+  (hook_plot_md(x, opt(cap = cap, fig.note = 'A note.')) %==%
+    paste0('<div class="figure">\n<img src="1.png" alt="foo"  />\n',
+           '<p class="caption">foo</p><p class="figure-note">A note.</p>\n</div>'))
+  # note without a caption (no empty caption paragraph)
+  (hook_plot_md(x, opt(fig.note = 'A note.')) %==%
+    paste0('<div class="figure">\n<img src="1.png" alt=""  />\n',
+           '<p class="figure-note">A note.</p>\n</div>'))
+  opts_knit$set('rmarkdown.pandoc.to' = old)
+})
+
 assert("fig.alt does not break office document", {
   old = opts_knit$get('rmarkdown.pandoc.to')
   opts_knit$set(rmarkdown.pandoc.to = "docx")

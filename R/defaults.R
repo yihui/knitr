@@ -93,7 +93,8 @@ opts_chunk = new_defaults(list(
 
   fig.keep = 'high', fig.show = 'asis', fig.align = 'default', fig.path = 'figure/',
   dev = NULL, dev.args = NULL, dpi = 72, fig.ext = NULL, fig.width = 7, fig.height = 7,
-  fig.env = 'figure', fig.cap = NULL, fig.scap = NULL, fig.lp = 'fig:', fig.subcap = NULL,
+  fig.env = 'figure', fig.cap = NULL, fig.scap = NULL, fig.note = NULL,
+  fig.lp = 'fig:', fig.subcap = NULL,
   fig.pos = '', out.width = NULL, out.height = NULL, out.extra = NULL, fig.retina = 1,
   external = TRUE, sanitize = FALSE, interval = 1, aniopts = 'controls,loop',
 
@@ -198,7 +199,7 @@ set_alias = function(...) {
 #' }
 #' @include hooks-html.R
 opts_knit = new_defaults(list(
-  progress = TRUE, verbose = FALSE, eval.after = c('fig.cap', 'fig.scap', 'fig.alt'),
+  progress = TRUE, verbose = FALSE, eval.after = c('fig.cap', 'fig.scap', 'fig.alt', 'fig.note'),
   base.dir = NULL, base.url = NULL, root.dir = NULL, child.path = '',
   upload.fun = identity, global.device = FALSE, global.par = FALSE,
   concordance = FALSE, documentation = 1L, self.contained = TRUE,

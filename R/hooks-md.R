@@ -34,7 +34,7 @@ need_special_plot_hook = function(options) {
   opts = opts_chunk$get(default = TRUE)
   for (i in c(
     'out.width', 'out.height', 'out.extra', 'fig.align', 'fig.subcap',
-    'fig.env', 'fig.scap', 'fig.alt'
+    'fig.env', 'fig.scap', 'fig.alt', 'fig.note'
   )) if (!identical(options[[i]], opts[[i]])) return(TRUE)
   FALSE
 }
@@ -61,13 +61,15 @@ hook_plot_md_base = function(x, options) {
   # self-contained mode?
   sc = any(c('--embed-resources', '--self-contained') %in% opts_knit$get('rmarkdown.pandoc.args'))
   lnk = options$fig.link
-  pandoc_html = cap != '' && is_html_output()
+  note = options$fig.note
+  has_note = !is.null(note) && !is.na(note) && note != ''
+  pandoc_html = (cap != '' || has_note) && is_html_output()
   in_bookdown = isTRUE(opts_knit$get('bookdown.internal.label'))
   plot1 = ai || options$fig.cur <= 1L
   plot2 = ai || options$fig.cur == options$fig.num
   to = pandoc_to(); from = pandoc_from()
   if (is.null(w) && is.null(h) && is.null(s) && is.null(options$fig.alt) &&
-      a == 'default' && !(pandoc_html && in_bookdown) && !is_svg) {
+      a == 'default' && !(pandoc_html && in_bookdown) && !is_svg && !has_note) {
     # append <!-- --> to ![]() to prevent the figure environment in these cases
     nocap = cap == '' && !is.null(to) && !grepl('^markdown', to) &&
       (options$fig.num == 1 || ai) && !grepl('-implicit_figures', from)
@@ -88,13 +90,14 @@ hook_plot_md_base = function(x, options) {
   # use HTML syntax <img src=...>
   if (pandoc_html && !isTRUE(grepl('-implicit_figures', from))) {
     d1 = if (plot1) sprintf('<div class="figure"%s>\n', css_text_align(a))
-    d2 = sprintf('<p class="caption">%s</p>', cap)
+    d2 = if (cap != '') sprintf('<p class="caption">%s</p>', cap)
+    d3 = if (has_note) sprintf('<p class="figure-note">%s</p>', note)
     img = img_code()
     # whether to place figure caption at the top or bottom of a figure
     if (isTRUE(options$fig.topcaption)) {
-      paste0(d1, if (ai || options$fig.cur <= 1) d2, img, if (plot2) '</div>')
+      paste0(d1, if (ai || options$fig.cur <= 1) d2, img, if (plot2) paste0(d3, '</div>'))
     } else {
-      paste0(d1, img, if (plot2) paste0('\n', d2, '\n</div>'))
+      paste0(d1, img, if (plot2) paste0('\n', d2, d3, '\n</div>'))
     }
   } else {
     img_code(sprintf('style="%s"', css_align(a)))
