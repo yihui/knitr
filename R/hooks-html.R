@@ -22,13 +22,21 @@ hook_plot_html = function(x, options) {
   )
 }
 
+# the built-in animation hooks, which generate HTML (and are ignored for LaTeX
+# output); keyed by the character values allowed for the chunk option
+# animation.hook
+.animation_hooks = function() list(
+  ffmpeg = hook_ffmpeg_html, gifski = hook_gifski,
+  scianimator = hook_scianimator, r2swf = hook_r2swf
+)
+
 hook_animation = function(options) {
   if (is.function(fun <- options$animation.hook)) return(fun)
-  if (is.character(fun)) return(switch(
-    fun, ffmpeg = hook_ffmpeg_html, gifski = hook_gifski,
-    scianimator = hook_scianimator, r2swf = hook_r2swf,
-    stop2('Invalid value for the chunk option animation.hook: ', fun)
-  ))
+  if (is.character(fun)) {
+    if (is.null(hook <- .animation_hooks()[[fun]]))
+      stop2('Invalid value for the chunk option animation.hook: ', fun)
+    return(hook)
+  }
   if (is.function(fun <- opts_knit$get('animation.fun'))) return(fun)
   hook_ffmpeg_html
 }

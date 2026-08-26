@@ -180,7 +180,7 @@ hook_plot_tex = function(x, options) {
     if (tikz) {
       sprintf('\\input{%s}', x)
     } else if (animate) {
-      if (is.function(fun <- animation_hook_tex(options))) fun(x, options) else {
+      if (!is.null(fun <- animation_hook_tex(options))) fun(x, options) else {
         # \animategraphics{} should be inserted only *once*!
         aniopts = options$aniopts
         aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
@@ -212,8 +212,7 @@ animation_hook_tex = function(options) {
   fun = options$animation.hook
   if (!is.function(fun)) fun = opts_knit$get('animation.fun')
   if (!is.function(fun)) return()
-  for (h in list(hook_ffmpeg_html, hook_gifski, hook_scianimator, hook_r2swf))
-    if (identical(fun, h)) return()
+  for (h in .animation_hooks()) if (identical(fun, h)) return()
   fun
 }
 
