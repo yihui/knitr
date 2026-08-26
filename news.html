@@ -518,6 +518,9 @@
 <h3 id="sec:new-features_1" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
+<p><code>hook_plot_tex()</code> now respects the chunk option <code>animation.hook</code> (or the package option <code>animation.fun</code>) when it is set to a function of your own, and calls it to generate the LaTeX code for a chunk with <code>fig.show = 'animate'</code> instead of the default <code>\animategraphics{}</code>. This makes the LaTeX plot hook extensible in the same way as <code>hook_plot_html()</code>, which has always supported these options, and allows for LaTeX packages other than <strong>animate</strong> to be used for animations, e.g. <strong>xmpmulti</strong> for beamer overlays. The built-in hooks such as <code>hook_ffmpeg_html()</code> generate HTML and continue to be ignored for LaTeX output, so this does not change the output of existing documents (thanks, <a href="https://github.com/jolars">@jolars</a> <a href="https://github.com/yihui/knitr/issues/2452">#2452</a>).</p>
+</li>
+<li>
 <p>Added support for a new input format <code>.Rtyp</code> for the <a href="https://typst.app">Typst</a> typesetting system (thanks, <a href="https://github.com/blset">@blset</a> <a href="https://github.com/yihui/knitr/issues/2401">#2401</a>, <a href="https://github.com/aksigkvgithub">@aksigkvgithub</a> <a href="https://github.com/yihui/knitr/issues/2283">#2283</a>). You can use code chunks and inline R expressions in <code>.Rtyp</code> files, knit them via <code>knitr::knit()</code> to <code>.typ</code> output, or compile to PDF directly via <code>knit2pdf('input.Rtyp')</code>. See <a href="https://github.com/yihui/knitr-examples/blob/master/128-minimal.Rtyp">https://github.com/yihui/knitr-examples/blob/master/128-minimal.Rtyp</a> for a minimal example.</p>
 </li>
 <li>
