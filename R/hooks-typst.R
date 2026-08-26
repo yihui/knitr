@@ -18,8 +18,14 @@ hook_plot_typst = function(x, options) {
   img_path = paste0(opts_knit$get('base.url'), .upload.url(x))
   img_args = paste(c(sprintf('"%s"', img_path), args), collapse = ', ')
 
+  note = options$fig.note
+  note = if (is.null(note) || is.na(note) || note == '') '' else
+    sprintf('\n#block(inset: (top: 4pt))[#text(size: 0.85em)[#emph[%s]]]\n', note)
+
   if (nzchar(cap)) {
-    sprintf('\n#figure(\n  image(%s),\n  caption: [%s],\n)\n', img_args, cap)
+    sprintf('\n#figure(\n  image(%s),\n  caption: [%s],\n)%s\n', img_args, cap, note)
+  } else if (nzchar(note)) {
+    sprintf('\n#image(%s)%s\n', img_args, note)
   } else {
     sprintf('\n#image(%s)\n', img_args)
   }
