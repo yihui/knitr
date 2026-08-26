@@ -16,6 +16,8 @@
 
 ## BUG FIXES
 
+- Figure captions are no longer dropped when a single chunk produces multiple captioned figures for Markdown-based output (e.g., HTML or PDF via Pandoc). Previously, consecutive images were emitted in one paragraph (`![cap1](a) ![cap2](b)`), which Pandoc treats as inline images and renders without captions. knitr now inserts a blank line after each captioned figure except the last, so Pandoc emits a separate figure (with caption) for each image (thanks, @atusy, #2032, #1524, #1760).
+
 - knitr now emits a warning when a code chunk opens a new graphics device (e.g., via `dev.new()`), because plots drawn on such devices cannot be captured by knitr and will silently fail to render in the output (thanks, @Higgs32584, #2355).
 
 - `include_graphics()` now converts absolute paths to paths relative to the output directory of the rendered document (communicated by **rmarkdown** >= 2.32 via `opts_knit$get('rmarkdown.output_dir')`) instead of knitr's working directory (the input directory), which fixes broken image paths when the input and output directories differ (e.g., rendering to a different `output_dir`). The existence check (when `error = TRUE`) also uses the original path so that it no longer reports false negatives when `root.dir` differs from the output directory (thanks, @naikymen @jameelalsalam @cderv, #2171, r-lib/pkgdown#2334).
