@@ -12,7 +12,7 @@
 <div class="frontmatter">
 <div class="title"><h1>Templating with knit_expand()</h1></div>
 <div class="author"><h2>Yihui Xie</h2></div>
-<div class="date"><h3>2026-08-26</h3></div>
+<div class="date"><h3>2026-08-27</h3></div>
 </div>
 <div class="body">
 <!--
@@ -27,7 +27,7 @@ knit_expand(text = 'The value of pi is {{pi}}.')
 </code></pre>
 <pre><code class="language-r">knit_expand(text = 'The value of a is {{a}}, so a + 1 is {{a+1}}.', a = rnorm(1))
 </code></pre>
-<pre><code>#&gt; [1] &quot;The value of a is -0.560865833727834, so a + 1 is 0.439134166272166.&quot;
+<pre><code>#&gt; [1] &quot;The value of a is 0.462050208334865, so a + 1 is 1.46205020833486.&quot;
 </code></pre>
 <pre><code class="language-r">knit_expand(text = 'The area of a circle with radius {{r}} is {{pi*r^2}}', r = 5)
 </code></pre>
@@ -51,7 +51,7 @@ knit_expand(text = 'The value of pi is {{pi}}.')
 <p>Arbitrary R code:</p>
 <pre><code class="language-r">knit_expand(text = 'you cannot see the value of x {{x=rnorm(1)}}but it is indeed created: x = {{x}}')
 </code></pre>
-<pre><code>#&gt; [1] &quot;you cannot see the value of x but it is indeed created: x = -1.24864249023415&quot;
+<pre><code>#&gt; [1] &quot;you cannot see the value of x but it is indeed created: x = 0.753364641140165&quot;
 </code></pre>
 <pre><code class="language-r">res = knit_expand(text = c(' x | x^2', '{{x=1:5;paste(sprintf(&quot;%2d | %3d&quot;, x, x^2), collapse = &quot;\n&quot;)}}'))
 cat(res)

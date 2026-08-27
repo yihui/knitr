@@ -318,8 +318,8 @@ think of <em>knitter</em> (but it is <em>single t</em>). The name comes from
 FAQ's: <a href="https://yihui.org/knitr/faq/">https://yihui.org/knitr/faq/</a>
 </p>
 <h3 id="sec:see-also_1" class="unnumbered unlisted">See Also</h3>
-<p>The core function in this package: <code><a href="#sec:man-knit">knit</a></code>. If you are an
-Sweave user, see <code><a href="#sec:man-sweave2knitr">Sweave2knitr</a></code> on how to convert Sweave files
+<p>The core function in this package: <code><a href="#sec:man-knit">knit()</a></code>. If you are an
+Sweave user, see <code><a href="#sec:man-sweave2knitr">Sweave2knitr()</a></code> on how to convert Sweave files
 to <span class="pkg">knitr</span>.
 </p>
 <h2 id="sec:man-Sweave2knitr"><span class="section-number main-number">2</span> Convert Sweave to knitr documents</h2>
@@ -352,15 +352,14 @@ string. If <code>text</code> is provided, <code>file</code> will be ignored.</p>
 </td></tr>
 </table>
 <h3 id="sec:details_2" class="unnumbered unlisted">Details</h3>
-<p>The pseudo command &lsquo;<span class="samp">\SweaveInput{file.Rnw}</span>&rsquo; is converted to a code
+<p>The pseudo command <code>\SweaveInput{file.Rnw}</code> is converted to a code
 chunk header <code>&lt;&lt;child='file.Rnw'&gt;&gt;=</code>.
 </p>
-<p>Similarly &lsquo;<span class="samp">\SweaveOpts{opt = value}</span>&rsquo; is converted to a code chunk
-&lsquo;<span class="samp">opts_chunk$set(opt = value)</span>&rsquo; with the chunk option <code>include =
-FALSE</code>; the options are automatically fixed in the same way as local chunk
+<p>Similarly <code>\SweaveOpts{opt = value}</code> is converted to a code chunk
+<code>opts_chunk$set(opt = value)</code> with the chunk option <code>include = FALSE</code>; the options are automatically fixed in the same way as local chunk
 options (explained below).
 </p>
-<p>The Sweave package &lsquo;<span class="samp">\usepackage{Sweave}</span>&rsquo; in the preamble is removed
+<p>The Sweave package <code>\usepackage{Sweave}</code> in the preamble is removed
 because it is not required.
 </p>
 <p>Chunk options are updated if necessary: option values <code>true</code> and
@@ -381,7 +380,7 @@ order of values).
 <p>If a line <code>@</code> (it closes a chunk) directly follows a previous
 <code>@</code>, it is removed; if a line <code>@</code> appears before a code chunk and
 no chunk is before it, it is also removed, because <span class="pkg">knitr</span> only uses one
-&lsquo;<span class="samp">@</span>&rsquo; after &lsquo;<span class="samp">&lt;&lt;&gt;&gt;=</span>&rsquo; by default (which is not the original Noweb
+<code>@</code> after <code>&lt;&lt;&gt;&gt;=</code> by default (which is not the original Noweb
 syntax but more natural).
 </p>
 <h3 id="sec:value_1" class="unnumbered unlisted">Value</h3>
@@ -389,7 +388,7 @@ syntax but more natural).
 <code>NULL</code> is returned. Otherwise, the converted text string is returned.
 </p>
 <h3 id="sec:note_2" class="unnumbered unlisted">Note</h3>
-<p>If &lsquo;<span class="samp">\SweaveOpts{}</span>&rsquo; spans across multiple lines, it will not be
+<p>If <code>\SweaveOpts{}</code> spans across multiple lines, it will not be
 fixed, and you have to fix it manually. The LaTeX-style syntax of Sweave
 chunks are ignored (see <code>?SweaveSyntaxLatex</code>); only the Noweb syntax
 is supported.
@@ -399,7 +398,7 @@ is supported.
 <a href="https://yihui.org/knitr/demo/sweave/">https://yihui.org/knitr/demo/sweave/</a>
 </p>
 <h3 id="sec:see-also_2" class="unnumbered unlisted">See Also</h3>
-<p><code><a href="https://rdrr.io/r/utils/Sweave.html">Sweave</a></code>, <code><a href="https://rdrr.io/r/base/grep.html">gsub</a></code>
+<p><code><a href="https://rdrr.io/r/utils/Sweave.html">Sweave()</a></code>, <code><a href="https://rdrr.io/r/base/grep.html">gsub()</a></code>
 </p>
 <h3 id="sec:examples_1" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">Sweave2knitr(text = &quot;&lt;&lt;echo=TRUE&gt;&gt;=&quot;)  # this is valid
@@ -489,7 +488,7 @@ unlink(&quot;Sweave-test-knitr.Rnw&quot;)
 <h3 id="sec:description_3" class="unnumbered unlisted">Description</h3>
 <p>The function <code>all_labels()</code> returns all chunk labels as a character
 vector. Optionally, you can specify a series of conditions to filter the
-labels. The function 'all_rcpp_labels()' is a wrapper function for
+labels. The function <code>all_rcpp_labels()</code> is a wrapper function for
 <code>all_labels(engine == 'Rcpp')</code>.
 </p>
 <h3 id="sec:usage_2" class="unnumbered unlisted">Usage</h3>
@@ -668,7 +667,7 @@ output.
 <tr><td><code>x</code></td>
 <td>
 <p>An R object. Typically a character string, or an object which can
-be converted to a character string via <code><a href="https://rdrr.io/r/base/character.html">as.character</a>()</code>.</p>
+be converted to a character string via <code><a href="https://rdrr.io/r/base/character.html">as.character()</a></code>.</p>
 </td></tr>
 <tr><td><code>meta</code></td>
 <td>
@@ -685,7 +684,7 @@ that contain <code>asis_output()</code>.</p>
 </table>
 <h3 id="sec:details_4" class="unnumbered unlisted">Details</h3>
 <p>This function is normally used in a custom S3 method based on the printing
-function <code><a href="#sec:man-knit-print">knit_print</a>()</code>.
+function <code><a href="#sec:man-knit-print">knit_print()</a></code>.
 </p>
 <p>For the <code>cacheable</code> argument, you need to be careful when printing the
 object involves non-trivial side effects, in which case it is strongly
@@ -758,7 +757,7 @@ hook_purl(before, options, ...)</code></pre>
 </td></tr>
 </table>
 <h3 id="sec:details_6" class="unnumbered unlisted">Details</h3>
-<p>The function <code>hook_pdfcrop()</code> calls <code><a href="#sec:man-plot-crop">plot_crop</a>()</code> to crop
+<p>The function <code>hook_pdfcrop()</code> calls <code><a href="#sec:man-plot-crop">plot_crop()</a></code> to crop
 the white margins of PDF plots.
 </p>
 <p>The function <code>hook_optipng()</code> calls the program <code>optipng</code> to
@@ -776,25 +775,24 @@ the chunk option <code>mogrify</code> can be used to provide additional paramete
 to the program <code>mogrify</code> (with default <code>-trim</code> to trim PNG
 files).
 </p>
-<p>When the plots are not recordable via <code>grDevices::<a href="https://rdrr.io/r/grDevices/recordplot.html">recordPlot</a>()</code>
+<p>When the plots are not recordable via <code><a href="https://rdrr.io/cran/grDevices/man/recordPlot.html">grDevices::recordPlot()</a></code>
 and we save the plots to files manually via other functions (e.g. <span class="pkg">rgl</span>
 plots), we can use the chunk hook <code>hook_plot_custom</code> to help write code
 for graphics output into the output document.
 </p>
 <p>The hook <code>hook_purl()</code> can be used to write the code chunks to an R
-script. It is an alternative approach to <code><a href="#sec:man-knit">purl</a></code>, and can be more
+script. It is an alternative approach to <code><a href="#sec:man-knit">purl()</a></code>, and can be more
 reliable when the code chunks depend on the execution of them (e.g.
-<code><a href="#sec:man-read-chunk">read_chunk</a>()</code>, or <code><a href="#sec:man-opts-chunk">opts_chunk</a>$set(eval = FALSE)</code>).
+<code><a href="#sec:man-read-chunk">read_chunk()</a></code>, or <code><a href="#sec:man-opts-chunk">opts_chunk</a>$set(eval = FALSE)</code>).
 To enable this hook, it is recommended to associate it with the chunk option
 <code>purl</code>, i.e. <code>knit_hooks$set(purl = hook_purl)</code>. When this hook is
 enabled, an R script will be written while the input document is being
-<code><a href="#sec:man-knit">knit</a></code>. Currently the code chunks that are not R code or have the
+<code><a href="#sec:man-knit">knit()</a></code>. Currently the code chunks that are not R code or have the
 chunk option <code>purl=FALSE</code> are ignored. Please note when the cache is
 turned on (the chunk option <code>cache = TRUE</code>), no chunk hooks will be
 executed, hence <code>hook_purl()</code> will not work, either. To solve this
 problem, we need <code>cache = 2</code> instead of <code>TRUE</code> (see
-<a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a> for the meaning of <code>cache =
-2</code>).
+<a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a> for the meaning of <code>cache = 2</code>).
 </p>
 <h3 id="sec:note_5" class="unnumbered unlisted">Note</h3>
 <p>The two hook functions <code>hook_rgl()</code> and <code>hook_webgl()</code> were
@@ -805,10 +803,8 @@ moved from <span class="pkg">knitr</span> to the <span class="pkg">rgl</span> pa
 <p><a href="https://yihui.org/knitr/hooks/#chunk-hooks">https://yihui.org/knitr/hooks/#chunk-hooks</a>
 </p>
 <h3 id="sec:see-also_4" class="unnumbered unlisted">See Also</h3>
-<p><code>rgl::<a href="https://rdrr.io/cran/rgl/man/snapshot.html">rgl.snapshot</a></code>,
-<code>rgl::<a href="https://rdrr.io/cran/rgl/man/postscript.html">rgl.postscript</a></code>,
-<code>rgl::<a href="https://rdrr.io/cran/rgl/man/hook_rgl.html">hook_rgl</a></code>,
-<code>rgl::<a href="https://rdrr.io/cran/rgl/man/hook_rgl.html">hook_webgl</a></code>
+<p><code><a href="https://rdrr.io/cran/rgl/man/rgl.snapshot.html">rgl::rgl.snapshot()</a></code>, <code><a href="https://rdrr.io/cran/rgl/man/rgl.postscript.html">rgl::rgl.postscript()</a></code>,
+<code><a href="https://rdrr.io/cran/rgl/man/hook_rgl.html">rgl::hook_rgl()</a></code>, <code><a href="https://rdrr.io/cran/rgl/man/hook_webgl.html">rgl::hook_webgl()</a></code>
 </p>
 <h3 id="sec:examples_5" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">if (require(&quot;rgl&quot;) &amp;&amp; exists(&quot;hook_rgl&quot;)) knit_hooks$set(rgl = hook_rgl)
@@ -841,7 +837,7 @@ needed.
 <table role = "presentation">
 <tr><td><code>clean</code></td>
 <td>
-<p>Boolean; whether to remove the files.</p>
+<p>Whether to remove the files.</p>
 </td></tr>
 <tr><td><code>path</code></td>
 <td>
@@ -869,7 +865,7 @@ corresponding to these labels.
 <table role = "presentation">
 <tr><td><code>...</code></td>
 <td>
-<p>Arguments passed to <code>xfun::<a href="https://rdrr.io/cran/xfun/man/join_words.html">join_words</a>()</code>.</p>
+<p>Arguments passed to <code><a href="https://rdrr.io/cran/xfun/man/join_words.html">xfun::join_words()</a></code>.</p>
 </td></tr>
 </table>
 <h2 id="sec:man-convert_chunk_header"><span class="section-number main-number">10</span> Convert the in-header chunk option syntax to the in-body syntax</h2>
@@ -905,58 +901,53 @@ the default is <code>"yaml"</code>) will write each chunk option on a separate
 line. Long chunk option values will be wrapped onto several lines, and you
 can use <code>width = 0</code> to keep one line per option only. <code>"wrap"</code>
 will wrap all chunk options together using
-<code><a href="https://rdrr.io/cran/base/man/strwrap.html">base::strwrap</a>()</code>. <code>"yaml"</code> will convert
+<code><a href="https://rdrr.io/cran/base/man/strwrap.html">base::strwrap()</a></code>. <code>"yaml"</code> will convert
 chunk options to YAML.</p>
 </td></tr>
 <tr><td><code>width</code></td>
 <td>
-<p>An integer passed to <code>base::strwrap()</code> for <code>type =
-"wrap"</code> and <code>type = "multiline"</code>. If set to <code>0</code>, deactivate the
+<p>An integer passed to <code>base::strwrap()</code> for <code>type = "wrap"</code> and <code>type = "multiline"</code>. If set to <code>0</code>, deactivate the
 wrapping (for <code>type = "multiline"</code> only).</p>
 </td></tr>
 </table>
 <h3 id="sec:value_3" class="unnumbered unlisted">Value</h3>
-<p>A character vector of converted <code>input</code> when <code>output =
-  NULL</code>. The output file path with converted content otherwise.
+<p>A character vector of converted <code>input</code> when <code>output = NULL</code>. The output file path with converted content otherwise.
 </p>
 <h3 id="sec:about-knitr-option-syntax" class="unnumbered unlisted">About <span class="pkg">knitr</span> option syntax</h3>
 <p>Historical chunk option syntax have chunk option in the chunk header using
 valid R syntax. This is an example for <code>.Rmd</code> document
 </p>
-<pre>
-```{r, echo = FALSE, fig.width: 10}
+<pre><code>```{r, echo = FALSE, fig.width = 10}
 ```
-</pre>
+</code></pre>
 <p>New syntax allows to pass option inside the chunk using several variants
 </p>
 <ul>
 <li><p> Passing options one per line using valid R syntax. This corresponds to <code>convert_chunk_header(type = "multiline")</code>.
 </p>
-<pre>
-```{r}
+<pre><code>```{r}
 #| echo = FALSE,
 #| fig.width = 10
 ```
-</pre>
+</code></pre>
 </li>
 <li><p> Passing option part from header in-chunk with several line if wrapping is
 needed. This corresponds to <code>convert_chunk_header(type = "wrap")</code>
 </p>
-<pre>
-```{r}
+<pre><code>```{r}
 #| echo = FALSE, fig.width = 10
 ```
-</pre>
+</code></pre>
 </li>
 <li><p> Passing options key value pairs in-chunk using YAML syntax. Values are no
 more R expression but valid YAML syntax. This corresponds to
 <code>convert_chunk_header(type = "yaml")</code> (not implement yet).
 </p>
-<pre>```{r}
+<pre><code>```{r}
 #| echo: false,
 #| fig.width: 10
 ```
-</pre>
+</code></pre>
 </li></ul>
 <h3 id="sec:note_7" class="unnumbered unlisted">Note</h3>
 <p>Learn more about the new chunk option syntax in
@@ -1180,7 +1171,7 @@ convert_chunk_header(&quot;test.Rmd&quot;, output = \(f) sprintf(&quot;%s-new.%s
 </code></pre>
 <h2 id="sec:man-current_input"><span class="section-number main-number">11</span> Query the current input filename</h2>
 <h3 id="sec:description_11" class="unnumbered unlisted">Description</h3>
-<p>Returns the name of the input file passed to <code><a href="#sec:man-knit">knit</a>()</code>.
+<p>Returns the name of the input file passed to <code><a href="#sec:man-knit">knit()</a></code>.
 </p>
 <h3 id="sec:usage_10" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">current_input(dir = FALSE)</code></pre>
@@ -1188,8 +1179,8 @@ convert_chunk_header(&quot;test.Rmd&quot;, output = \(f) sprintf(&quot;%s-new.%s
 <table role = "presentation">
 <tr><td><code>dir</code></td>
 <td>
-<p>Boolean; whether to prepend the current working directory to the file path,
-i.e. whether to return an absolute path or a relative path.</p>
+<p>Whether to prepend the current working directory to the file
+path, i.e., whether to return an absolute path or a relative path.</p>
 </td></tr>
 </table>
 <h3 id="sec:value_4" class="unnumbered unlisted">Value</h3>
@@ -1225,7 +1216,7 @@ built. By default, dependencies for all chunks will be built.</p>
 <h3 id="sec:note_8" class="unnumbered unlisted">Note</h3>
 <p>Be cautious about <code>path</code>: because this function is used in a
 chunk, the working directory when the chunk is evaluated is the directory
-of the input document in <code><a href="#sec:man-knit">knit</a></code>, and if that directory differs
+of the input document in <code><a href="#sec:man-knit">knit()</a></code>, and if that directory differs
 from the working directory before calling <code>knit()</code>, you need to adjust
 the <code>path</code> argument here to make sure this function can find the cache
 files &lsquo;<span class="file">__objects</span>&rsquo; and &lsquo;<span class="file">__globals</span>&rsquo;.
@@ -1234,7 +1225,7 @@ files &lsquo;<span class="file">__objects</span>&rsquo; and &lsquo;<span class="
 <p><a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a>
 </p>
 <h3 id="sec:see-also_5" class="unnumbered unlisted">See Also</h3>
-<p><code><a href="#sec:man-dep-prev">dep_prev</a></code>
+<p><code><a href="#sec:man-dep-prev">dep_prev()</a></code>
 </p>
 <h2 id="sec:man-dep_prev"><span class="section-number main-number">13</span> Make later chunks depend on previous chunks</h2>
 <h3 id="sec:description_13" class="unnumbered unlisted">Description</h3>
@@ -1252,14 +1243,14 @@ effect.
 <p><a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a>
 </p>
 <h3 id="sec:see-also_6" class="unnumbered unlisted">See Also</h3>
-<p><code><a href="#sec:man-dep-auto">dep_auto</a></code>
+<p><code><a href="#sec:man-dep-auto">dep_auto()</a></code>
 </p>
 <h2 id="sec:man-download_image"><span class="section-number main-number">14</span> Download an image from the web and include it in a document</h2>
 <h3 id="sec:description_14" class="unnumbered unlisted">Description</h3>
 <p>When including images in non-HTML output formats such as LaTeX/PDF, URLs will
 not work as image paths. In this case, we have to download the images. This
-function is a wrapper of <code>xfun::<a href="https://rdrr.io/cran/xfun/man/download_file.html">download_file</a>()</code> and
-<code><a href="#sec:man-include-graphics">include_graphics</a>()</code>.
+function is a wrapper of <code><a href="https://rdrr.io/cran/xfun/man/download_file.html">xfun::download_file()</a></code> and
+<code><a href="#sec:man-include-graphics">include_graphics()</a></code>.
 </p>
 <h3 id="sec:usage_13" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">download_image(
@@ -1289,7 +1280,7 @@ path is used for other output formats.</p>
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
-<p>Other arguments to be passed to <code><a href="#sec:man-include-graphics">include_graphics</a>()</code>.</p>
+<p>Other arguments to be passed to <code><a href="#sec:man-include-graphics">include_graphics()</a></code>.</p>
 </td></tr>
 </table>
 <h3 id="sec:examples_7" class="unnumbered unlisted">Examples</h3>
@@ -1312,7 +1303,7 @@ to format and return the text output from your engine.
 <td>
 <p>A list of chunk options. Usually this is just the object
 <code>options</code> passed to the engine function; see
-<code><a href="#sec:man-knit-engines">knit_engines</a></code>.</p>
+<code><a href="#sec:man-knit-engines">knit_engines()</a></code>.</p>
 </td></tr>
 <tr><td><code>code</code></td>
 <td>
@@ -1374,7 +1365,7 @@ chunk option <code>fig.path</code>, return the filename(s).
 </td></tr>
 <tr><td><code>ext</code></td>
 <td>
-<p>The figure file extension, e.g. <code>png</code> or <code>pdf</code>.</p>
+<p>The figure file extension, e.g., <code>png</code> or <code>pdf</code>.</p>
 </td></tr>
 <tr><td><code>number</code></td>
 <td>
@@ -1382,7 +1373,7 @@ chunk option <code>fig.path</code>, return the filename(s).
 </td></tr>
 <tr><td><code>fig.path</code></td>
 <td>
-<p>Passed to <code><a href="#sec:man-fig-path">fig_path</a></code>. By default, the chunk
+<p>Passed to <code><a href="#sec:man-fig-path">fig_path()</a></code>. By default, the chunk
 option <code>fig.path</code> is used.</p>
 </td></tr>
 </table>
@@ -1391,10 +1382,10 @@ option <code>fig.path</code> is used.</p>
 filenames without hard-coding them. For example, if you created a plot in a
 code chunk with the label <code>foo</code> and figure path &lsquo;<span class="file">my-figure/</span>&rsquo;, you
 are not recommended to use hard-coded figure paths like
-&lsquo;<span class="samp">\includegraphics{my-figure/foo-1.pdf}</span>&rsquo; (in &lsquo;<span class="file">.Rnw</span>&rsquo; documents) or
-&lsquo;<span class="samp">![](my-figure/foo-1.png)</span>&rsquo; (R Markdown) in your document. Instead, you
-should use &lsquo;<span class="samp">\Sexpr{fig_chunk('foo', 'pdf')}</span>&rsquo; or &lsquo;<span class="samp">![](`r
-fig_chunk('foo', 'png')`)</span>&rsquo;.
+<code>\includegraphics{my-figure/foo-1.pdf}</code> (in &lsquo;<span class="file">.Rnw</span>&rsquo; documents) or
+<code>![](my-figure/foo-1.png)</code> (R Markdown) in your document. Instead, you
+should use <code>\Sexpr{fig_chunk('foo', 'pdf')}</code> or
+<code>![](`r fig_chunk('foo', 'png')`)</code>.
 </p>
 <p>You can generate plots in a code chunk but not show them inside the code
 chunk by using the chunk option <code>fig.show = 'hide'</code>. Then you can use
@@ -1452,8 +1443,8 @@ contain a dot <code>.</code>, it will be treated as the filename extension (e.g.
 <p>A character vector of the form &lsquo;<span class="file">fig.path-label-i.suffix</span>&rsquo;.
 </p>
 <h3 id="sec:note_9" class="unnumbered unlisted">Note</h3>
-<p>When there are special characters (not alphanumeric or &lsquo;<span class="samp">-</span>&rsquo; or
-&lsquo;<span class="samp">_</span>&rsquo;) in the path, they will be automatically replaced with &lsquo;<span class="samp">_</span>&rsquo;.
+<p>When there are special characters (not alphanumeric or <code>-</code> or
+<code>_</code>) in the path, they will be automatically replaced with <code>_</code>.
 For example, &lsquo;<span class="file">a b/c.d-</span>&rsquo; will be sanitized to &lsquo;<span class="file">a_b/c_d-</span>&rsquo;. This
 makes the filenames safe to LaTeX.
 </p>
@@ -1501,7 +1492,7 @@ can set <code>opts_knit$set(animation.fun = hook_scianimator)</code>.
 <p>Note that these hooks generate HTML code. For LaTeX output, you can set the
 chunk option <code>animation.hook</code> (or the package option
 <code>animation.fun</code>) to a function that generates LaTeX code; see
-<code><a href="#sec:man-hook-plot">hook_plot_tex</a></code>.
+<code><a href="#sec:man-hook-plot">hook_plot_tex()</a></code>.
 </p>
 <h2 id="sec:man-hook_document"><span class="section-number main-number">19</span> Some potentially useful document hooks</h2>
 <h3 id="sec:description_19" class="unnumbered unlisted">Description</h3>
@@ -1518,13 +1509,13 @@ chunk option <code>animation.hook</code> (or the package option
 </table>
 <h3 id="sec:details_10" class="unnumbered unlisted">Details</h3>
 <p><code>hook_movecode()</code> is a document hook to move code chunks out of LaTeX
-floating environments like &lsquo;<span class="samp">figure</span>&rsquo; and &lsquo;<span class="samp">table</span>&rsquo; when the chunks
+floating environments like <code>figure</code> and <code>table</code> when the chunks
 were actually written inside the floats. This function is primarily designed
 for LyX: we often insert code chunks into floats to generate figures or
 tables, but in the final output we do not want the code to float with the
 environments, so we use regular expressions to find out the floating
 environments, extract the code chunks and move them out. To disable this
-behavior, use a comment <code>% knitr_do_not_move</code> in the floating
+behavior, use a comment <code>\% knitr_do_not_move</code> in the floating
 environment.
 </p>
 <h3 id="sec:value_10" class="unnumbered unlisted">Value</h3>
@@ -1575,26 +1566,26 @@ hook_plot_typst(x, options)</code></pre>
 </table>
 <h3 id="sec:details_11" class="unnumbered unlisted">Details</h3>
 <p>Depending on the options passed over, <code>hook_plot_tex</code> may return the
-normal &lsquo;<span class="samp">\includegraphics{}</span>&rsquo; command, or &lsquo;<span class="samp">\input{}</span>&rsquo; (for tikz
-files), or &lsquo;<span class="samp">\animategraphics{}</span>&rsquo; (for animations); it also takes many
+normal <code>\includegraphics{}</code> command, or <code>\input{}</code> (for tikz
+files), or <code>\animategraphics{}</code> (for animations); it also takes many
 other options into consideration to align plots and set figure sizes, etc.
 Similarly, <code>hook_plot_html</code>, <code>hook_plot_md</code> and
 <code>hook_plot_rst</code> return character strings which are HTML, Markdown, reST
 code.
 </p>
 <p>For animations (i.e. when the chunk option <code>fig.show</code> is <code>'animate'</code>),
-<code>hook_plot_tex</code> generates &lsquo;<span class="samp">\animategraphics{}</span>&rsquo; unless a hook function
+<code>hook_plot_tex</code> generates <code>\animategraphics{}</code> unless a hook function
 has been provided via the chunk option <code>animation.hook</code> or the package option
 <code>animation.fun</code>, in which case that function generates the LaTeX code instead.
 It is called only once per chunk, with the filename of the last plot. The
-built-in hooks (e.g. <code><a href="#sec:man-hook-animation">hook_ffmpeg_html</a></code>) generate HTML, and are
+built-in hooks (e.g. <code><a href="#sec:man-hook-animation">hook_ffmpeg_html()</a></code>) generate HTML, and are
 ignored for LaTeX output.
 </p>
 <p>In most cases we do not need to call these hooks explicitly, and they were
 designed to be used internally. Sometimes we may not be able to record R
-plots using <code>grDevices::<a href="https://rdrr.io/r/grDevices/recordplot.html">recordPlot</a>()</code>, and we can make use of
+plots using <code><a href="https://rdrr.io/cran/grDevices/man/recordPlot.html">grDevices::recordPlot()</a></code>, and we can make use of
 these hooks to insert graphics output in the output document; see
-<code><a href="#sec:man-chunk-hook">hook_plot_custom</a></code> for details.
+<code><a href="#sec:man-chunk-hook">hook_plot_custom()</a></code> for details.
 </p>
 <h3 id="sec:value_11" class="unnumbered unlisted">Value</h3>
 <p>A character string of code, with plot filenames wrapped.
@@ -1603,7 +1594,7 @@ these hooks to insert graphics output in the output document; see
 <p><a href="https://yihui.org/knitr/hooks/">https://yihui.org/knitr/hooks/</a>
 </p>
 <h3 id="sec:see-also_7" class="unnumbered unlisted">See Also</h3>
-<p><code><a href="#sec:man-chunk-hook">hook_plot_custom</a></code>
+<p><code><a href="#sec:man-chunk-hook">hook_plot_custom()</a></code>
 </p>
 <h3 id="sec:examples_12" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r"># this is what happens for a chunk like this
@@ -1628,7 +1619,7 @@ hook_plot_tex(&quot;foo5.pdf&quot;, opts_chunk$merge(list(fig.show = &quot;anima
 </code></pre>
 <h2 id="sec:man-image_uri"><span class="section-number main-number">21</span> Encode an image file to a data URI</h2>
 <h3 id="sec:description_21" class="unnumbered unlisted">Description</h3>
-<p>This function is the same as <code>xfun::<a href="https://rdrr.io/cran/xfun/man/base64_uri.html">base64_uri</a>()</code> (only with a
+<p>This function is the same as <code><a href="https://rdrr.io/cran/xfun/man/base64_uri.html">xfun::base64_uri()</a></code> (only with a
 different function name). It can encode an image file as a base64 string,
 which can be used in the <code>img</code> tag in HTML.
 </p>
@@ -1734,7 +1725,7 @@ already provided or <code>dpi = NA</code>.
 <p>When the output format is HTML, <code>include_url()</code> inserts an iframe in the
 output; otherwise it takes a screenshot of the URL and insert the image in
 the output. <code>include_app()</code> takes the URL of a Shiny app and adds
-&lsquo;<span class="samp">?showcase=0</span>&rsquo; to it (to disable the showcase mode), then passes the URL
+<code>?showcase=0</code> to it (to disable the showcase mode), then passes the URL
 to <code>include_url()</code>.
 </p>
 <h3 id="sec:usage_22" class="unnumbered unlisted">Usage</h3>
@@ -1757,15 +1748,14 @@ include_app(url, height = "400px")</code></pre>
 internally to generate the iframes or screenshots.
 </p>
 <h3 id="sec:see-also_8" class="unnumbered unlisted">See Also</h3>
-<p><code><a href="#sec:man-include-graphics">include_graphics</a></code>
+<p><code><a href="#sec:man-include-graphics">include_graphics()</a></code>
 </p>
 <h2 id="sec:man-inline_expr"><span class="section-number main-number">24</span> Wrap code using the inline R expression syntax</h2>
 <h3 id="sec:description_24" class="unnumbered unlisted">Description</h3>
 <p>This is a convenience function to write the &quot;source code&quot; of inline R
-expressions. For example, if you want to write &lsquo;<span class="samp">`r 1+1`</span>&rsquo; literally in an
-R Markdown document, you may write &lsquo;<span class="samp">`` `r knitr::inline_expr('1+1')`
-``</span>&rsquo;; for Rnw documents, this may be
-&lsquo;<span class="samp">\verb|\Sexpr{knitr::inline_expr{'1+1'}}|</span>&rsquo;.
+expressions. For example, if you want to write <code>`r 1+1`</code> literally in an
+R Markdown document, you may write <code>`` `r knitr::inline_expr('1+1')` ``</code>;
+for Rnw documents, this may be <code>\Sexpr{knitr::inline_expr{'1+1'}}</code>.
 </p>
 <h3 id="sec:usage_23" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">inline_expr(code, syntax)</code></pre>
@@ -1777,9 +1767,9 @@ R Markdown document, you may write &lsquo;<span class="samp">`` `r knitr::inline
 </td></tr>
 <tr><td><code>syntax</code></td>
 <td>
-<p>A character string to specify the syntax, e.g. <code>rnw</code>,
-<code>html</code>, or <code>md</code>. If not specified, this will be guessed from
-the knitting context.</p>
+<p>A character string to specify the syntax, e.g., <code>rnw</code>,
+<code>html</code>, or <code>md</code>. If not specified, this will be guessed from the
+knitting context.</p>
 </td></tr>
 </table>
 <h3 id="sec:value_15" class="unnumbered unlisted">Value</h3>
@@ -1890,8 +1880,8 @@ the number of digits for individual columns.</p>
 </td></tr>
 <tr><td><code>row.names</code></td>
 <td>
-<p>Logical: whether to include row names. By default, row names
-are included if <code>rownames(x)</code> is neither <code>NULL</code> nor identical to
+<p>Whether to include row names. By default, row names are
+included if <code>rownames(x)</code> is neither <code>NULL</code> nor identical to
 <code>1:nrow(x)</code>.</p>
 </td></tr>
 <tr><td><code>col.names</code></td>
@@ -1920,14 +1910,14 @@ chunk label). To disable the label, use <code>label = NA</code>.</p>
 </td></tr>
 <tr><td><code>format.args</code></td>
 <td>
-<p>A list of arguments to be passed to <code><a href="https://rdrr.io/r/base/format.html">format</a>()</code>
+<p>A list of arguments to be passed to <code><a href="https://rdrr.io/r/base/format.html">format()</a></code>
 to format table values, e.g. <code>list(big.mark = ',')</code>.</p>
 </td></tr>
 <tr><td><code>escape</code></td>
 <td>
-<p>Boolean; whether to escape special characters when producing
-HTML or LaTeX tables. When <code>escape = FALSE</code>, you have to make sure
-that special characters will not trigger syntax errors in LaTeX or HTML.</p>
+<p>Whether to escape special characters when producing HTML or
+LaTeX tables. When <code>escape = FALSE</code>, you have to make sure that
+special characters will not trigger syntax errors in LaTeX or HTML.</p>
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
@@ -1950,7 +1940,7 @@ rows to show in the table, e.g., <code>options(knitr.kable.max_rows = 30)</code>
 <p>When using <code>kable()</code> as a <em>top-level</em> expression, you do not
 need to explicitly <code>print()</code> it due to R's automatic implicit
 printing. When it is wrapped inside other expressions (such as a
-<code><a href="https://rdrr.io/r/base/Control.html">for</a></code> loop), you must explicitly <code>print(kable(...))</code>.
+<code>for</code> loop), you must explicitly <code>print(kable(...))</code>.
 </p>
 <h3 id="sec:references_11" class="unnumbered unlisted">References</h3>
 <p>See
@@ -2368,16 +2358,16 @@ kable(x, format.args = list(decimal.mark = &quot;,&quot;, big.mark = &quot;'&quo
 </code></pre>
 <pre><code>#&gt; |          V1|          V2|          V3|          V4|          V5|          V6|
 #&gt; |-----------:|-----------:|-----------:|-----------:|-----------:|-----------:|
-#&gt; | 1'006'685,0| 1'010'685,6| 1'013'376,5|   992'191,1|   991'227,1| 1'008'603,6|
-#&gt; |   998'915,7| 1'000'899,5|   991'252,1| 1'011'070,3|   999'821,9| 1'011'214,1|
-#&gt; |   999'091,7|   999'397,2| 1'000'543,0|   996'217,3| 1'008'255,9| 1'010'496,8|
-#&gt; |   994'264,1|   997'558,3|   987'216,0| 1'002'568,9|   999'352,7| 1'010'745,4|
-#&gt; | 1'004'155,0|   987'721,7|   996'702,8| 1'008'909,1| 1'009'761,3|   988'799,0|
-#&gt; | 1'012'769,8| 1'004'907,6|   996'384,9|   996'591,9| 1'015'249,8| 1'015'028,9|
-#&gt; |   991'459,6|   977'799,6|   995'433,6| 1'011'978,8|   993'205,0| 1'003'280,9|
-#&gt; |   983'164,9| 1'000'445,1|   997'304,2|   987'419,6| 1'006'395,0|   995'215,4|
-#&gt; | 1'006'664,9| 1'001'732,9| 1'006'485,3|   994'550,4| 1'002'252,3| 1'009'723,1|
-#&gt; | 1'002'447,5|   993'682,6| 1'001'273,4| 1'008'753,3| 1'008'831,7| 1'004'893,1|
+#&gt; | 1'017'037,9|   996'439,1| 1'001'763,6|   992'904,5|   986'271,1| 1'010'212,4|
+#&gt; |   986'720,7|   980'748,1| 1'008'515,4| 1'018'946,1|   993'893,2|   997'686,1|
+#&gt; | 1'003'543,9|   993'216,9| 1'015'217,6|   986'648,2|   992'252,3| 1'015'546,7|
+#&gt; |   995'821,5| 1'007'742,3|   998'118,5| 1'005'934,5|   997'196,0|   998'087,6|
+#&gt; |   999'508,2|   988'128,2|   995'500,0|   995'695,5| 1'002'171,3|   994'728,9|
+#&gt; |   990'580,7|   995'268,0|   989'843,7| 1'000'073,5|   994'832,1| 1'004'583,6|
+#&gt; | 1'002'817,1| 1'006'011,2| 1'008'381,5|   990'770,9| 1'004'981,2|   987'376,8|
+#&gt; |   991'094,3| 1'014'857,9|   994'052,6| 1'002'172,6|   992'769,2| 1'003'793,4|
+#&gt; | 1'003'651,7| 1'010'523,3| 1'018'368,2|   998'698,4|   988'845,6| 1'003'177,7|
+#&gt; |   979'086,4| 1'004'119,9|   991'419,3|   980'880,4| 1'004'159,9| 1'017'978,4|
 </code></pre>
 <pre><code class="language-r"># save the value
 x = kable(d2, format = &quot;html&quot;)
@@ -2571,8 +2561,8 @@ working directory.</p>
 </td></tr>
 <tr><td><code>tangle</code></td>
 <td>
-<p>Boolean; whether to tangle the R code from the input file (like
-<code>utils::<a href="https://rdrr.io/r/utils/Sweave.html">Stangle</a></code>).</p>
+<p>Whether to tangle the R code from the input file (like
+<code><a href="https://rdrr.io/cran/utils/man/Stangle.html">utils::Stangle()</a></code>).</p>
 </td></tr>
 <tr><td><code>text</code></td>
 <td>
@@ -2581,13 +2571,13 @@ input file.</p>
 </td></tr>
 <tr><td><code>quiet</code></td>
 <td>
-<p>Boolean; suppress the progress bar and messages?</p>
+<p>Whether to suppress the progress bar and messages.</p>
 </td></tr>
 <tr><td><code>envir</code></td>
 <td>
 <p>Environment in which code chunks are to be evaluated, for
-example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a>()</code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env</a>()</code>, or
-<code><a href="https://rdrr.io/r/base/environment.html">globalenv</a>()</code>).</p>
+example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame()</a></code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env()</a></code>, or
+<code><a href="https://rdrr.io/r/base/environment.html">globalenv()</a></code>).</p>
 </td></tr>
 <tr><td><code>encoding</code></td>
 <td>
@@ -2596,7 +2586,7 @@ this argument is effectively ignored).</p>
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
-<p>arguments passed to <code><a href="#sec:man-knit">knit</a>()</code> from <code>purl()</code></p>
+<p>Arguments passed to <code><a href="#sec:man-knit">knit()</a></code> from <code>purl()</code>.</p>
 </td></tr>
 <tr><td><code>documentation</code></td>
 <td>
@@ -2620,8 +2610,8 @@ knitting the document.
 &lsquo;<span class="file">.Rtex</span>&rsquo;, &lsquo;<span class="file">.Rhtml</span>&rsquo; (&lsquo;<span class="file">.Rhtm</span>&rsquo;) and &lsquo;<span class="file">.Rmd</span>&rsquo;
 (&lsquo;<span class="file">.Rmarkdown</span>&rsquo;) will generate &lsquo;<span class="file">.tex</span>&rsquo;, &lsquo;<span class="file">.html</span>&rsquo; and &lsquo;<span class="file">.md</span>&rsquo;
 respectively. For other types of files, if the filename contains
-&lsquo;<span class="samp">_knit_</span>&rsquo;, this part will be removed in the output file, e.g.,
-&lsquo;<span class="file">foo_knit_.html</span>&rsquo; creates the output &lsquo;<span class="file">foo.html</span>&rsquo;; if &lsquo;<span class="samp">_knit_</span>&rsquo; is
+<code>_knit_</code>, this part will be removed in the output file, e.g.,
+&lsquo;<span class="file">foo_knit_.html</span>&rsquo; creates the output &lsquo;<span class="file">foo.html</span>&rsquo;; if <code>_knit_</code> is
 not found in the filename, &lsquo;<span class="file">foo.ext</span>&rsquo; will produce &lsquo;<span class="file">foo.txt</span>&rsquo; if
 <code>ext</code> is not <code>txt</code>, otherwise the output is &lsquo;<span class="file">foo-out.txt</span>&rsquo;. If
 <code>tangle = TRUE</code>, &lsquo;<span class="file">foo.ext</span>&rsquo; generates an R script &lsquo;<span class="file">foo.R</span>&rsquo;.
@@ -2630,27 +2620,27 @@ not found in the filename, &lsquo;<span class="file">foo.ext</span>&rsquo; will 
 options, etc. The syntax is defined in a pattern list. All built-in pattern
 lists can be found in <code>all_patterns</code> (call it <code>apat</code>). First
 <span class="pkg">knitr</span> will try to decide the pattern list based on the filename
-extension of the input document, e.g. &lsquo;<span class="samp">Rnw</span>&rsquo; files use the list
-<code>apat$rnw</code>, &lsquo;<span class="samp">tex</span>&rsquo; uses the list <code>apat$tex</code>, &lsquo;<span class="samp">brew</span>&rsquo; uses
+extension of the input document, e.g. <code>Rnw</code> files use the list
+<code>apat$rnw</code>, <code>tex</code> uses the list <code>apat$tex</code>, <code>brew</code> uses
 <code>apat$brew</code> and HTML files use <code>apat$html</code>; for unknown extensions,
 the content of the input document is matched against all pattern lists to
 automatically determine which pattern list is being used. You can also
 manually set the pattern list using the <code><a href="#sec:man-knit-patterns">knit_patterns</a></code> object or
-the <code><a href="#sec:man-pat-fun">pat_rnw</a></code> series functions in advance and <span class="pkg">knitr</span> will
+the <code><a href="#sec:man-pat-fun">pat_rnw()</a></code> series functions in advance and <span class="pkg">knitr</span> will
 respect the setting.
 </p>
 <p>According to the output format (<code>opts_knit$get('out.format')</code>), a set of
 output hooks will be set to mark up results from R (see
-<code><a href="#sec:man-output-hooks">render_latex</a></code>). The output format can be LaTeX, Sweave and HTML,
+<code><a href="#sec:man-output-hooks">render_latex()</a></code>). The output format can be LaTeX, Sweave and HTML,
 etc. The output hooks decide how to mark up the results (you can customize
 the hooks).
 </p>
-<p>The name <code>knit</code> comes from its counterpart &lsquo;<span class="samp">weave</span>&rsquo; (as in Sweave),
-and the name <code>purl</code> (as &lsquo;<span class="samp">tangle</span>&rsquo; in Stangle) comes from a knitting
+<p>The name <code>knit</code> comes from its counterpart <code>weave</code> (as in Sweave),
+and the name <code>purl</code> (as <code>tangle</code> in Stangle) comes from a knitting
 method &lsquo;knit one, purl one&rsquo;.
 </p>
 <p>If the input document has child documents, they will also be compiled
-recursively. See <code><a href="#sec:man-knit-child">knit_child</a></code>.
+recursively. See <code><a href="#sec:man-knit-child">knit_child()</a></code>.
 </p>
 <p>See the package website and manuals in the references to know more about
 <span class="pkg">knitr</span>, including the full documentation of chunk options and demos,
@@ -2671,7 +2661,7 @@ directory of the input document so that we can use relative paths. However,
 it is possible to change this directory with the package option
 <code><a href="#sec:man-opts-knit">opts_knit</a>$set(root.dir = ...)</code> so all paths in code chunks are
 relative to this <code>root.dir</code>. It is not recommended to change the
-working directory via <code><a href="https://rdrr.io/r/base/getwd.html">setwd</a>()</code> in a code chunk, because it may
+working directory via <code><a href="https://rdrr.io/r/base/getwd.html">setwd()</a></code> in a code chunk, because it may
 lead to terrible consequences (e.g. figure and cache files may be written
 to wrong places). If you do use <code>setwd()</code>, please note that
 <span class="pkg">knitr</span> will always restore the working directory to the original one.
@@ -2696,8 +2686,7 @@ you want to reproduce the computation in a report generated by
 <code>knit()</code>, be sure to use <code>knit()</code>, instead of merely executing
 the R script generated by <code>purl()</code>. This seems to be obvious, but some
 people
-<a href="https://stat.ethz.ch/pipermail/r-devel/2014-May/069113.html">do not
-get it</a>.
+<a href="https://stat.ethz.ch/pipermail/r-devel/2014-May/069113.html">do not get it</a>.
 </p>
 <h3 id="sec:references_12" class="unnumbered unlisted">References</h3>
 <p>Package homepage: <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>. The <span class="pkg">knitr</span>
@@ -2773,7 +2762,7 @@ get it</a>.
 <h2 id="sec:man-knit2html"><span class="section-number main-number">28</span> Convert markdown to HTML using knit() and litedown::mark()</h2>
 <h3 id="sec:description_28" class="unnumbered unlisted">Description</h3>
 <p>This is a convenience function to knit the input markdown source and call
-<code>litedown::<a href="https://rdrr.io/cran/litedown/man/mark.html">mark</a>()</code> to convert the result to HTML.
+<code><a href="https://rdrr.io/cran/litedown/man/mark.html">litedown::mark()</a></code> to convert the result to HTML.
 </p>
 <h3 id="sec:usage_27" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">knit2html(
@@ -2800,13 +2789,13 @@ working directory.</p>
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
-<p>Options passed to <code>litedown::<a href="https://rdrr.io/cran/litedown/man/mark.html">mark</a>()</code>.</p>
+<p>Options passed to <code><a href="https://rdrr.io/cran/litedown/man/mark.html">litedown::mark()</a></code>.</p>
 </td></tr>
 <tr><td><code>envir</code></td>
 <td>
 <p>Environment in which code chunks are to be evaluated, for
-example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a>()</code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env</a>()</code>, or
-<code><a href="https://rdrr.io/r/base/environment.html">globalenv</a>()</code>).</p>
+example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame()</a></code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env()</a></code>, or
+<code><a href="https://rdrr.io/r/base/environment.html">globalenv()</a></code>).</p>
 </td></tr>
 <tr><td><code>text</code></td>
 <td>
@@ -2815,7 +2804,7 @@ input file.</p>
 </td></tr>
 <tr><td><code>quiet</code></td>
 <td>
-<p>Boolean; suppress the progress bar and messages?</p>
+<p>Whether to suppress the progress bar and messages.</p>
 </td></tr>
 <tr><td><code>encoding</code></td>
 <td>
@@ -2824,8 +2813,8 @@ this argument is effectively ignored).</p>
 </td></tr>
 <tr><td><code>force_v1</code></td>
 <td>
-<p>Boolean; whether to force rendering the input document as an
-R Markdown v1 document, even if it is for v2.</p>
+<p>Whether to force rendering the input document as an R
+Markdown v1 document, even if it is for v2.</p>
 </td></tr>
 </table>
 <h3 id="sec:value_19" class="unnumbered unlisted">Value</h3>
@@ -2839,10 +2828,10 @@ Markdown v2, i.e. the <span class="pkg">rmarkdown</span> package
 (<a href="https://rmarkdown.rstudio.com">https://rmarkdown.rstudio.com</a>). To render R Markdown v2 documents to
 HTML, please use <code>rmarkdown::render()</code> instead. For a lighter-weight
 alternative that handles figure paths robustly, see
-<code>litedown::<a href="https://rdrr.io/cran/litedown/man/fuse.html">fuse</a>()</code>.
+<code><a href="https://rdrr.io/cran/litedown/man/fuse.html">litedown::fuse()</a></code>.
 </p>
 <h3 id="sec:see-also_10" class="unnumbered unlisted">See Also</h3>
-<p><code><a href="#sec:man-knit">knit</a></code>, <code>litedown::<a href="https://rdrr.io/cran/litedown/man/mark.html">mark</a></code>
+<p><code><a href="#sec:man-knit">knit()</a></code>, <code><a href="https://rdrr.io/cran/litedown/man/mark.html">litedown::mark()</a></code>
 </p>
 <h3 id="sec:examples_18" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r"># a minimal example
@@ -2891,8 +2880,8 @@ working directory.</p>
 </td></tr>
 <tr><td><code>tangle</code></td>
 <td>
-<p>Boolean; whether to tangle the R code from the input file (like
-<code>utils::<a href="https://rdrr.io/r/utils/Sweave.html">Stangle</a></code>).</p>
+<p>Whether to tangle the R code from the input file (like
+<code><a href="https://rdrr.io/cran/utils/man/Stangle.html">utils::Stangle()</a></code>).</p>
 </td></tr>
 <tr><td><code>text</code></td>
 <td>
@@ -2901,13 +2890,13 @@ input file.</p>
 </td></tr>
 <tr><td><code>quiet</code></td>
 <td>
-<p>Boolean; suppress the progress bar and messages?</p>
+<p>Whether to suppress the progress bar and messages.</p>
 </td></tr>
 <tr><td><code>envir</code></td>
 <td>
 <p>Environment in which code chunks are to be evaluated, for
-example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a>()</code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env</a>()</code>, or
-<code><a href="https://rdrr.io/r/base/environment.html">globalenv</a>()</code>).</p>
+example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame()</a></code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env()</a></code>, or
+<code><a href="https://rdrr.io/r/base/environment.html">globalenv()</a></code>).</p>
 </td></tr>
 <tr><td><code>to</code></td>
 <td>
@@ -2916,8 +2905,8 @@ example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a>
 <tr><td><code>pandoc_wrapper</code></td>
 <td>
 <p>An R function used to call Pandoc. If <code>NULL</code> (the
-default), <code>rmarkdown::<a href="https://rdrr.io/cran/rmarkdown/man/pandoc_convert.html">pandoc_convert</a>()</code> will be used
-if <span class="pkg">rmarkdown</span> is installed, otherwise <code><a href="#sec:man-pandoc">pandoc</a>()</code>.</p>
+default), <code><a href="https://rdrr.io/cran/rmarkdown/man/pandoc_convert.html">rmarkdown::pandoc_convert()</a></code> will be used
+if <span class="pkg">rmarkdown</span> is installed, otherwise <code><a href="#sec:man-pandoc">pandoc()</a></code>.</p>
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
@@ -2937,7 +2926,7 @@ if <span class="pkg">rmarkdown</span> is installed, otherwise <code><a href="#se
 <h2 id="sec:man-knit2pdf"><span class="section-number main-number">30</span> Convert Rnw or Rrst files to PDF</h2>
 <h3 id="sec:description_30" class="unnumbered unlisted">Description</h3>
 <p>Knit the input Rnw or Rrst document, and compile to PDF using
-<code>tinytex::<a href="https://rdrr.io/cran/tinytex/man/latexmk.html">latexmk</a>()</code> or <code><a href="#sec:man-rst2pdf">rst2pdf</a>()</code>.
+<code><a href="https://rdrr.io/cran/tinytex/man/latexmk.html">tinytex::latexmk()</a></code> or <code><a href="#sec:man-rst2pdf">rst2pdf()</a></code>.
 </p>
 <h3 id="sec:usage_29" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">knit2pdf(
@@ -2964,7 +2953,7 @@ working directory.</p>
 <td>
 <p>A character string giving the LaTeX engine used to compile
 the tex document to PDF. For an Rrst file, setting <code>compiler</code> to
-<code>'rst2pdf'</code> will use <code><a href="#sec:man-rst2pdf">rst2pdf</a></code> to compile the rst file to
+<code>'rst2pdf'</code> will use <code><a href="#sec:man-rst2pdf">rst2pdf()</a></code> to compile the rst file to
 PDF using the ReportLab open-source library. For an Rtyp file, setting
 <code>compiler</code> to <code>'typst'</code> will use the <code>typst</code> command-line
 tool to compile the typ file to PDF.</p>
@@ -2972,17 +2961,17 @@ tool to compile the typ file to PDF.</p>
 <tr><td><code>envir</code></td>
 <td>
 <p>Environment in which code chunks are to be evaluated, for
-example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a>()</code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env</a>()</code>, or
-<code><a href="https://rdrr.io/r/base/environment.html">globalenv</a>()</code>).</p>
+example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame()</a></code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env()</a></code>, or
+<code><a href="https://rdrr.io/r/base/environment.html">globalenv()</a></code>).</p>
 </td></tr>
 <tr><td><code>quiet</code></td>
 <td>
-<p>Boolean; suppress the progress bar and messages?</p>
+<p>Whether to suppress the progress bar and messages.</p>
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
-<p>Options to be passed to <code>tinytex::<a href="https://rdrr.io/cran/tinytex/man/latexmk.html">latexmk</a>()</code>
-or <code><a href="#sec:man-rst2pdf">rst2pdf</a>()</code>.</p>
+<p>Options to be passed to <code><a href="https://rdrr.io/cran/tinytex/man/latexmk.html">tinytex::latexmk()</a></code>
+or <code><a href="#sec:man-rst2pdf">rst2pdf()</a></code>.</p>
 </td></tr>
 </table>
 <h3 id="sec:value_21" class="unnumbered unlisted">Value</h3>
@@ -3036,20 +3025,20 @@ blogging with R, you may want to try the <span class="pkg">blogdown</span> packa
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
-<p>Other meta information of the post, e.g. <code>categories = c('R',
-'Stats')</code> and <code>mt_keywords = c('knitr', 'wordpress')</code>, et cetera.</p>
+<p>Other meta information of the post, e.g., <code>categories = c('R', 'Stats')</code> and <code>mt_keywords = c('knitr', 'wordpress')</code>, etc.</p>
 </td></tr>
 <tr><td><code>envir</code></td>
 <td>
 <p>Environment in which code chunks are to be evaluated, for
-example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a>()</code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env</a>()</code>, or
-<code><a href="https://rdrr.io/r/base/environment.html">globalenv</a>()</code>).</p>
+example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame()</a></code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env()</a></code>, or
+<code><a href="https://rdrr.io/r/base/environment.html">globalenv()</a></code>).</p>
 </td></tr>
 <tr><td><code>shortcode</code></td>
 <td>
-<p>A length-2 logical vector: whether to use the shortcode
-&lsquo;<span class="samp">[sourcecode lang='lang']</span>&rsquo;, which can be useful to WordPress.com users
-for syntax highlighting of source code and output. The first element
+<p>A length-2 logical vector indicating whether to use the
+shortcode <code>[sourcecode lang='lang']</code>, which can be useful to
+WordPress.com users for syntax highlighting of source code and output. The
+first element
 applies to source code, and the second applies to text output. By default,
 both are <code>FALSE</code>.</p>
 </td></tr>
@@ -3065,7 +3054,7 @@ must be specified.</p>
 </td></tr>
 <tr><td><code>publish</code></td>
 <td>
-<p>Boolean: publish the post immediately?</p>
+<p>Whether to publish the post immediately.</p>
 </td></tr>
 </table>
 <h3 id="sec:note_16" class="unnumbered unlisted">Note</h3>
@@ -3097,7 +3086,7 @@ option <code>child</code> and serves as the alternative to the
 <table role = "presentation">
 <tr><td><code>...</code></td>
 <td>
-<p>Arguments passed to <code><a href="#sec:man-knit">knit</a></code>.</p>
+<p>Arguments passed to <code><a href="#sec:man-knit">knit()</a></code>.</p>
 </td></tr>
 <tr><td><code>options</code></td>
 <td>
@@ -3109,8 +3098,8 @@ passed to the <code>options</code> argument here.  Ignored if not a list.</p>
 <tr><td><code>envir</code></td>
 <td>
 <p>Environment in which code chunks are to be evaluated, for
-example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a>()</code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env</a>()</code>, or
-<code><a href="https://rdrr.io/r/base/environment.html">globalenv</a>()</code>).</p>
+example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame()</a></code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env()</a></code>, or
+<code><a href="https://rdrr.io/r/base/environment.html">globalenv()</a></code>).</p>
 </td></tr>
 </table>
 <h3 id="sec:value_22" class="unnumbered unlisted">Value</h3>
@@ -3120,8 +3109,8 @@ document directly.
 </p>
 <h3 id="sec:note_17" class="unnumbered unlisted">Note</h3>
 <p>This function is not supposed be called directly like
-<code><a href="#sec:man-knit">knit</a>()</code>; instead it must be placed in a parent document to let
-<code><a href="#sec:man-knit">knit</a>()</code> call it indirectly.
+<code><a href="#sec:man-knit">knit()</a></code>; instead it must be placed in a parent document to let
+<code><a href="#sec:man-knit">knit()</a></code> call it indirectly.
 </p>
 <p>The path of the child document is determined relative to the parent document.
 </p>
@@ -3147,11 +3136,9 @@ character vector of the code in the chunk with the label <code>foo</code>.
 <pre><code class="language-r">knit_code</code></pre>
 <h3 id="sec:note_18" class="unnumbered unlisted">Note</h3>
 <p>The methods on this object include the <code>set()</code> method (i.e., you
-could do something like <code>knitr::knit_code$set(foo = "'my precious new
-  code'")</code>), but we recommend that you do not use this method to modify the
+could do something like <code>knitr::knit_code$set(foo = "'my precious new code'")</code>), but we recommend that you do not use this method to modify the
 content of code chunks, unless you are
-<a href="https://emitanaka.rbind.io/post/knitr-knitr-code/">as creative as Emi
-Tanaka</a> and know what you are doing.
+<a href="https://emitanaka.rbind.io/post/knitr-knitr-code/">as creative as Emi Tanaka</a> and know what you are doing.
 </p>
 <h2 id="sec:man-knit_engines"><span class="section-number main-number">34</span> Engines of other languages</h2>
 <h3 id="sec:description_34" class="unnumbered unlisted">Description</h3>
@@ -3166,17 +3153,15 @@ the output.
 <h3 id="sec:details_14" class="unnumbered unlisted">Details</h3>
 <p>The engine function has one argument <code>options</code>: the source code of the
 current chunk is in <code>options$code</code>. Usually we can call external
-programs to run the code via <code><a href="https://rdrr.io/r/base/system2.html">system2</a></code>. Other chunk options are
+programs to run the code via <code><a href="https://rdrr.io/r/base/system2.html">system2()</a></code>. Other chunk options are
 also contained in this argument, e.g. <code>options$echo</code> and
 <code>options$eval</code>, etc.
 </p>
 <p>In most cases, <code>options$engine</code> can be directly used in command line to
 execute the code, e.g. <code>python</code> or <code>ruby</code>, but sometimes we may
 want to specify the path of the engine program, in which case we can pass it
-through the <code>engine.path</code> option. For example, <code>engine='ruby',
-engine.path='/usr/bin/ruby1.9.1'</code>. Additional command line arguments can be
-passed through <code>options$engine.opts</code>, e.g. <code>engine='ruby',
-engine.opts='-v'</code>.
+through the <code>engine.path</code> option. For example, <code>engine='ruby', engine.path='/usr/bin/ruby1.9.1'</code>. Additional command line arguments can be
+passed through <code>options$engine.opts</code>, e.g. <code>engine='ruby', engine.opts='-v'</code>.
 </p>
 <p>See <code>str(knitr::knit_engines$get())</code> for a list of built-in language
 engines.
@@ -3278,7 +3263,7 @@ engines.
 <h3 id="sec:description_35" class="unnumbered unlisted">Description</h3>
 <p>Sometimes we may want to exit the knitting process early, and completely
 ignore the rest of the document. This function provides a mechanism to
-terminate <code><a href="#sec:man-knit">knit</a>()</code>.
+terminate <code><a href="#sec:man-knit">knit()</a></code>.
 </p>
 <h3 id="sec:usage_34" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">knit_exit(append, fully = TRUE)</code></pre>
@@ -3287,8 +3272,8 @@ terminate <code><a href="#sec:man-knit">knit</a>()</code>.
 <tr><td><code>append</code></td>
 <td>
 <p>A character vector to be appended to the results from
-<code>knit()</code> so far. By default, this is &lsquo;<span class="samp">\end{document}</span>&rsquo; for LaTeX
-output, and &lsquo;<span class="samp">&lt;/body&gt;&lt;/html&gt;</span>&rsquo; for HTML output, to make the output
+<code>knit()</code> so far. By default, this is <code>\end{document}</code> for LaTeX
+output, and <code>&lt;/body&gt;&lt;/html&gt;</code> for HTML output, to make the output
 document complete. For other types of output, it is an empty string.</p>
 </td></tr>
 <tr><td><code>fully</code></td>
@@ -3353,7 +3338,7 @@ if (interactive()) browseVignettes(package = &quot;knitr&quot;)
 <p>When performing spell checking on source documents, we may need to skip R
 code chunks and inline R expressions, because many R functions and symbols
 are likely to be identified as typos. This function is designed for the
-<code>filter</code> argument of <code><a href="https://rdrr.io/r/utils/aspell.html">aspell</a>()</code> to filter out code chunks
+<code>filter</code> argument of <code><a href="https://rdrr.io/r/utils/aspell.html">aspell()</a></code> to filter out code chunks
 and inline expressions.
 </p>
 <h3 id="sec:usage_36" class="unnumbered unlisted">Usage</h3>
@@ -3396,7 +3381,7 @@ if (Sys.which(&quot;aspell&quot;) != &quot;&quot;) {
 <tr><td><code>envir</code></td>
 <td>
 <p>If <code>NULL</code>, the function returns the <code>envir</code> argument
-of <code><a href="#sec:man-knit">knit</a></code>, otherwise it should be a new environment for
+of <code><a href="#sec:man-knit">knit()</a></code>, otherwise it should be a new environment for
 evaluating code, in which case the function returns the old environment
 after setting the new environment.</p>
 </td></tr>
@@ -3419,7 +3404,7 @@ access or set hooks in this package.
 </code></pre>
 <pre><code>#&gt; function (x, options) 
 #&gt; x
-#&gt; &lt;bytecode: 0x562ee9505ad8&gt;
+#&gt; &lt;bytecode: 0x55a79141cba8&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">knit_hooks$get(&quot;inline&quot;)
@@ -3430,7 +3415,7 @@ access or set hooks in this package.
 #&gt;         x = round_digits(x)
 #&gt;     paste(as.character(x), collapse = &quot;, &quot;)
 #&gt; }
-#&gt; &lt;bytecode: 0x562ee9505368&gt;
+#&gt; &lt;bytecode: 0x55a79141c320&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-knit_meta"><span class="section-number main-number">40</span> Metadata about objects to be printed</h2>
@@ -3477,7 +3462,7 @@ defensive (i.e. not to have carryover metadata), you can call
 <p>This function reads the YAML front-matter section of a document and returns a
 list of any parameters declared there. This function exists primarily to
 support the parameterized reports feature of the <span class="pkg">rmarkdown</span> package,
-however is also used by the knitr <code><a href="#sec:man-knit">purl</a></code> function to include
+however is also used by the knitr <code><a href="#sec:man-knit">purl()</a></code> function to include
 the default parameter values in the R code it emits.
 </p>
 <h3 id="sec:usage_40" class="unnumbered unlisted">Usage</h3>
@@ -3490,10 +3475,10 @@ the default parameter values in the R code it emits.
 </td></tr>
 <tr><td><code>evaluate</code></td>
 <td>
-<p>Boolean. If <code>TRUE</code> (the default), expression values embedded
-within the YAML will be evaluated. If <code>FALSE</code>, parameters defined with an
-expression will have the parsed but unevaluated expression in their <code>value</code>
-field.</p>
+<p>Boolean. If <code>TRUE</code> (the default), expression values
+embedded within the YAML will be evaluated. If <code>FALSE</code>, parameters
+defined with an expression will have the parsed but unevaluated expression
+in their <code>value</code> field.</p>
 </td></tr>
 </table>
 <h3 id="sec:details_15" class="unnumbered unlisted">Details</h3>
@@ -3568,27 +3553,27 @@ from a document and returns a list of any parameters declared there.
 </td></tr>
 <tr><td><code>evaluate</code></td>
 <td>
-<p>If <code>TRUE</code> (the default) expression values
-embedded within the YAML will be evaluated. If <code>FALSE</code>, parameters
-defined with an expression will have the parsed but unevaluated expression
-in their <code>value</code> field.</p>
+<p>If <code>TRUE</code> (the default), expression values embedded
+within the YAML will be evaluated. If <code>FALSE</code>, parameters defined with
+an expression will have the parsed but unevaluated expression in their
+<code>value</code> field.</p>
 </td></tr>
 </table>
 <h3 id="sec:value_28" class="unnumbered unlisted">Value</h3>
 <p>List of objects of class <code>knit_param</code> that correspond to the
 parameters declared in the <code>params</code> section of the YAML. See
-<code><a href="#sec:man-knit-params">knit_params</a></code> for a full description of these objects.
+<code><a href="#sec:man-knit-params">knit_params()</a></code> for a full description of these objects.
 </p>
 <h3 id="sec:see-also_11" class="unnumbered unlisted">See Also</h3>
-<p><code><a href="#sec:man-knit-params">knit_params</a></code>
+<p><code><a href="#sec:man-knit-params">knit_params()</a></code>
 </p>
 <h2 id="sec:man-knit_patterns"><span class="section-number main-number">43</span> Patterns to match and extract R code in a document</h2>
 <h3 id="sec:description_43" class="unnumbered unlisted">Description</h3>
 <p>Patterns are regular expressions and will be used in functions like
-<code>base::<a href="https://rdrr.io/r/base/grep.html">grep</a>()</code> to extract R code and chunk options. The object
+<code><a href="https://rdrr.io/cran/base/man/grep.html">base::grep()</a></code> to extract R code and chunk options. The object
 <code>knit_patterns</code> controls the patterns currently used; see the references
 and examples for usage.  All built-in patterns are available in the list
-<a href="#sec:man-all-patterns">all_patterns</a>.
+<code><a href="#sec:man-all-patterns">all_patterns</a></code>.
 </p>
 <h3 id="sec:usage_42" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">knit_patterns</code></pre>
@@ -3711,7 +3696,7 @@ normal_print(x, ...)</code></pre>
 <table role = "presentation">
 <tr><td><code>x</code></td>
 <td>
-<p>An R object to be printed</p>
+<p>An R object to be printed.</p>
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
@@ -3725,12 +3710,12 @@ the references below.</p>
 if we want to print all data frames as tables in the output, we can define a
 method <code>knit_print.data.frame</code> that turns a data.frame into a table (the
 implementation may use other R packages or functions, e.g. <span class="pkg">xtable</span> or
-<code><a href="#sec:man-kable">kable</a>()</code>).
+<code><a href="#sec:man-kable">kable()</a></code>).
 </p>
 <h3 id="sec:value_29" class="unnumbered unlisted">Value</h3>
 <p>The value returned from the print method should be a character vector
 or can be converted to a character value. You can wrap the value in
-<code><a href="#sec:man-asis-output">asis_output</a>()</code> so that <span class="pkg">knitr</span> writes the character value
+<code><a href="#sec:man-asis-output">asis_output()</a></code> so that <span class="pkg">knitr</span> writes the character value
 as is in the output.
 </p>
 <h3 id="sec:note_20" class="unnumbered unlisted">Note</h3>
@@ -3772,12 +3757,12 @@ knit_rd_all()</code></pre>
 <tr><td><code>links</code></td>
 <td>
 <p>A character vector of links to be passed to
-<code>tools::<a href="https://rdrr.io/r/tools/Rd2HTML.html">Rd2HTML</a>()</code>.</p>
+<code><a href="https://rdrr.io/cran/tools/man/Rd2HTML.html">tools::Rd2HTML()</a></code>.</p>
 </td></tr>
 <tr><td><code>frame</code></td>
 <td>
-<p>Boolean: whether to put a navigation frame on the left of the
-index page.</p>
+<p>Whether to put a navigation frame on the left of the index
+page.</p>
 </td></tr>
 </table>
 <h3 id="sec:value_30" class="unnumbered unlisted">Value</h3>
@@ -3787,8 +3772,7 @@ as a table of content.
 </p>
 <h3 id="sec:note_21" class="unnumbered unlisted">Note</h3>
 <p>Ideally the html pages should be put under the &lsquo;<span class="file">html</span>&rsquo; directory of
-an installed package which can be found via <code>system.file('html',
-  package = 'your_package_name')</code>, otherwise some links may not work (e.g.
+an installed package which can be found via <code>system.file('html', package = 'your_package_name')</code>, otherwise some links may not work (e.g.
 the link to the DESCRIPTION file).
 </p>
 <h3 id="sec:examples_29" class="unnumbered unlisted">Examples</h3>
@@ -3879,7 +3863,7 @@ recompile the input file.
 <tr><td><code>compile</code></td>
 <td>
 <p>A function to compile the <code>input</code> file. This could be e.g.
-<code><a href="#sec:man-knit">knit</a></code> or <code><a href="#sec:man-knit2pdf">knit2pdf</a></code>, depending on the input file
+<code><a href="#sec:man-knit">knit()</a></code> or <code><a href="#sec:man-knit2pdf">knit2pdf()</a></code>, depending on the input file
 and the output you want.</p>
 </td></tr>
 <tr><td><code>interval</code></td>
@@ -3895,7 +3879,7 @@ and the output you want.</p>
 <p>This is actually a general function not necessarily restricted to
 applications in <span class="pkg">knitr</span>. You may specify any <code>compile</code> function to
 process the <code>input</code> file. To stop the infinite loop, press the
-&lsquo;<span class="samp">Escape</span>&rsquo; key or &lsquo;<span class="samp">Ctrl + C</span>&rsquo; (depending on your editing environment
+<code>Escape</code> key or <code>Ctrl + C</code> (depending on your editing environment
 and operating system).
 </p>
 <h3 id="sec:examples_31" class="unnumbered unlisted">Examples</h3>
@@ -3954,11 +3938,11 @@ directory otherwise. Any relative <code>path</code> is defined from <code>dir</c
 <td>
 <p>Environment to use for cache loading, into which all objects in
 the cache for the specified chunk (not just that in <code>object</code>) will be
-loaded. Defaults to the value in <code><a href="#sec:man-knit-global">knit_global</a></code>.</p>
+loaded. Defaults to the value in <code><a href="#sec:man-knit-global">knit_global()</a></code>.</p>
 </td></tr>
 <tr><td><code>lazy</code></td>
 <td>
-<p>Whether to <code><a href="https://rdrr.io/r/base/lazyload.html">lazyLoad</a></code> the cache database (depending
+<p>Whether to <code><a href="https://rdrr.io/r/base/lazyload.html">lazyLoad()</a></code> the cache database (depending
 on the chunk option <code>cache.lazy = TRUE</code> or <code>FALSE</code> of that code
 chunk).</p>
 </td></tr>
@@ -4059,7 +4043,7 @@ the base directory of images, etc.
 <h3 id="sec:details_21" class="unnumbered unlisted">Details</h3>
 <p>Besides the standard usage (<code>opts_knit$set()</code>), we can also set package
 options prior to loading <code>knitr</code> or calling <code>knit()</code> using
-<code><a href="https://rdrr.io/r/base/options.html">options</a>()</code> in base R. A global option <code>knitr.package.foo</code>
+<code><a href="https://rdrr.io/r/base/options.html">options()</a></code> in base R. A global option <code>knitr.package.foo</code>
 in <code>options()</code> will be set as an option <code>foo</code> in <code>opts_knit</code>,
 i.e. global options in base R with the prefix <code>knitr.package.</code>
 correspond to options in <code>opts_knit</code>. This can be useful to set package
@@ -4155,11 +4139,11 @@ hooks_typst()</code></pre>
 </td></tr>
 <tr><td><code>strict</code></td>
 <td>
-<p>Boolean; whether to use strict markdown or reST syntax. For markdown, if
+<p>Whether to use strict markdown or reST syntax. For markdown, if
 <code>TRUE</code>, code blocks will be indented by 4 spaces, otherwise they are
 put in fences made by three backticks. For reST, if <code>TRUE</code>, code is
 put under two colons and indented by 4 spaces, otherwise it is put under the
-&lsquo;<span class="samp">sourcecode</span>&rsquo; directive (this is useful for e.g. Sphinx).</p>
+<code>sourcecode</code> directive (this is useful for e.g., Sphinx).</p>
 </td></tr>
 <tr><td><code>fence_char</code></td>
 <td>
@@ -4242,8 +4226,7 @@ the latter, the two Pandoc formats <code>latex</code> and <code>beamer</code> ar
 considered LaTeX output). The function <code>is_html_output()</code> only works for
 R Markdown documents and will test for several Pandoc HTML based output
 formats (by default, these formats are considered as HTML formats:
-<code>c('markdown', 'epub', 'epub2', 'html', 'html4', 'html5', 'revealjs', 's5',
-'slideous', 'slidy', 'gfm')</code>).
+<code>c('markdown', 'epub', 'epub2', 'html', 'html4', 'html5', 'revealjs', 's5', 'slideous', 'slidy', 'gfm')</code>).
 </p>
 <h3 id="sec:usage_53" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">is_latex_output()
@@ -4270,8 +4253,8 @@ revealjs, s5, slideous, slidy, and gfm.</p>
 <tr><td><code>exact</code></td>
 <td>
 <p>Whether to return or use the exact format name. If not, Pandoc
-extensions will be removed from the format name, e.g., &lsquo;<span class="samp">latex-smart</span>&rsquo;
-will be treated as &lsquo;<span class="samp">latex</span>&rsquo;.</p>
+extensions will be removed from the format name, e.g., <code>latex-smart</code>
+will be treated as <code>latex</code>.</p>
 </td></tr>
 </table>
 <h3 id="sec:details_23" class="unnumbered unlisted">Details</h3>
@@ -4356,8 +4339,8 @@ an extension <code>.pandoc</code> (e.g. for &lsquo;<span class="file">foo.md</sp
 <tr><td><code>ext</code></td>
 <td>
 <p>Filename extensions. By default, the extension is inferred from
-the <code>format</code>, e.g. <code>latex</code> creates <code>pdf</code>, <code>dzslides</code>
-creates <code>html</code>, and so on</p>
+the <code>format</code>, e.g., <code>latex</code> creates <code>pdf</code>, <code>dzslides</code>
+creates <code>html</code>, and so on.</p>
 </td></tr>
 </table>
 <h3 id="sec:details_24" class="unnumbered unlisted">Details</h3>
@@ -4365,7 +4348,7 @@ creates <code>html</code>, and so on</p>
 file, or embed the configurations in the input file as special comments
 between <code>&lt;!--pandoc</code> and <code>--&gt;</code>.
 </p>
-<p>The configuration file is a DCF file (see <code><a href="https://rdrr.io/r/base/dcf.html">read.dcf</a></code>). This file
+<p>The configuration file is a DCF file (see <code><a href="https://rdrr.io/r/base/dcf.html">read.dcf()</a></code>). This file
 must contain a field named <code>t</code> which means the output format. The
 configurations are written in the form of <code>tag:value</code> and passed to
 Pandoc (if no value is needed, just leave it empty, e.g. the option
@@ -4391,7 +4374,7 @@ comprehensive support for it, so I'd recommend users who are not familiar
 with command-line tools to use the <span class="pkg">rmarkdown</span> package instead.
 </p>
 <h3 id="sec:see-also_13" class="unnumbered unlisted">See Also</h3>
-<p><code><a href="https://rdrr.io/r/base/dcf.html">read.dcf</a></code>
+<p><code><a href="https://rdrr.io/r/base/dcf.html">read.dcf()</a></code>
 </p>
 <h3 id="sec:examples_38" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">system(&quot;pandoc -h&quot;)  # see possible output formats
@@ -4488,7 +4471,7 @@ knit_patterns$get()
 <h3 id="sec:description_57" class="unnumbered unlisted">Description</h3>
 <p>The program <code>pdfcrop</code> (often shipped with a LaTeX distribution) is
 executed on a PDF plot file, and
-<code>magick::<a href="https://rdrr.io/cran/magick/man/transform.html">image_trim</a>()</code> is executed for other
+<code><a href="https://rdrr.io/cran/magick/man/image_trim.html">magick::image_trim()</a></code> is executed for other
 types of plot files.
 </p>
 <h3 id="sec:usage_56" class="unnumbered unlisted">Usage</h3>
@@ -4507,7 +4490,7 @@ types of plot files.
 <h3 id="sec:details_25" class="unnumbered unlisted">Details</h3>
 <p>The program <code>pdfcrop</code> can crop the extra white margins when the plot
 format is PDF, to make better use of the space in the output document,
-otherwise we often have to struggle with <code>graphics::<a href="https://rdrr.io/r/graphics/par.html">par</a>()</code> to set
+otherwise we often have to struggle with <code><a href="https://rdrr.io/cran/graphics/man/par.html">graphics::par()</a></code> to set
 appropriate margins. Note <code>pdfcrop</code> often comes with a LaTeX
 distribution such as TinyTeX, MiKTeX, or TeX Live, and you may not need to
 install it separately (use <code>Sys.which('pdfcrop')</code> to check it; if it not
@@ -4757,7 +4740,7 @@ is compiled.</p>
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
-<p>Arguments to be passed to <code><a href="#sec:man-asis-output">asis_output</a>()</code>.</p>
+<p>Arguments to be passed to <code><a href="#sec:man-asis-output">asis_output()</a></code>.</p>
 </td></tr>
 </table>
 <h3 id="sec:examples_41" class="unnumbered unlisted">Examples</h3>
@@ -4809,7 +4792,7 @@ see <code>knitr:::raw_markers</code> for the default value.</p>
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
-<p>Arguments to be passed to <code><a href="#sec:man-asis-output">asis_output</a>()</code>.</p>
+<p>Arguments to be passed to <code><a href="#sec:man-asis-output">asis_output()</a></code>.</p>
 </td></tr>
 </table>
 <h3 id="sec:details_27" class="unnumbered unlisted">Details</h3>
@@ -4897,17 +4880,17 @@ code chunks, or a character vector; see Details.</p>
 </td></tr>
 <tr><td><code>roxygen_comments</code></td>
 <td>
-<p>Logical dictating whether to keep trailing
-roxygen-style comments from code chunks in addition to whitespace</p>
+<p>Whether to keep trailing roxygen-style comments from
+code chunks in addition to whitespace.</p>
 </td></tr>
 <tr><td><code>topic</code>, <code>package</code></td>
 <td>
 <p>Name of the demo and the package. See
-<code>utils::<a href="https://rdrr.io/r/utils/demo.html">demo</a></code>.</p>
+<code><a href="https://rdrr.io/cran/utils/man/demo.html">utils::demo()</a></code>.</p>
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
-<p>Arguments passed to <code><a href="#sec:man-read-chunk">read_chunk</a></code>.</p>
+<p>Arguments passed to <code><a href="#sec:man-read-chunk">read_chunk()</a></code>.</p>
 </td></tr>
 </table>
 <h3 id="sec:details_28" class="unnumbered unlisted">Details</h3>
@@ -4992,8 +4975,8 @@ knitr::knit_code$get()  # use this to check chunks in the current session
 </code></pre>
 <h2 id="sec:man-rnw2pdf"><span class="section-number main-number">62</span> Convert an &lsquo;<span class="file">Rnw</span>&rsquo; document to PDF</h2>
 <h3 id="sec:description_62" class="unnumbered unlisted">Description</h3>
-<p>Call <code><a href="#sec:man-knit">knit</a>()</code> to compile the &lsquo;<span class="file">.Rnw</span>&rsquo; input to &lsquo;<span class="file">.tex</span>&rsquo;,
-and then <code>tinytex::<a href="https://rdrr.io/cran/tinytex/man/latexmk.html">latexmk</a>()</code> to convert &lsquo;<span class="file">.tex</span>&rsquo; to
+<p>Call <code><a href="#sec:man-knit">knit()</a></code> to compile the &lsquo;<span class="file">.Rnw</span>&rsquo; input to &lsquo;<span class="file">.tex</span>&rsquo;,
+and then <code><a href="https://rdrr.io/cran/tinytex/man/latexmk.html">tinytex::latexmk()</a></code> to convert &lsquo;<span class="file">.tex</span>&rsquo; to
 &lsquo;<span class="file">.pdf</span>&rsquo;.
 </p>
 <h3 id="sec:usage_61" class="unnumbered unlisted">Usage</h3>
@@ -5021,18 +5004,18 @@ as the <code>input</code>, but changes the file extension to &quot;.pdf&quot;.</
 <tr><td><code>compiler</code>, <code>...</code></td>
 <td>
 <p>The LaTeX engine and other arguments to be passed to
-<code>tinytex::<a href="https://rdrr.io/cran/tinytex/man/latexmk.html">latexmk</a>()</code>. The default compiler is
+<code><a href="https://rdrr.io/cran/tinytex/man/latexmk.html">tinytex::latexmk()</a></code>. The default compiler is
 <code>xelatex</code>.</p>
 </td></tr>
 <tr><td><code>envir</code></td>
 <td>
 <p>Environment in which code chunks are to be evaluated, for
-example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a>()</code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env</a>()</code>, or
-<code><a href="https://rdrr.io/r/base/environment.html">globalenv</a>()</code>).</p>
+example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame()</a></code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env()</a></code>, or
+<code><a href="https://rdrr.io/r/base/environment.html">globalenv()</a></code>).</p>
 </td></tr>
 <tr><td><code>quiet</code></td>
 <td>
-<p>Boolean; suppress the progress bar and messages?</p>
+<p>Whether to suppress the progress bar and messages.</p>
 </td></tr>
 <tr><td><code>clean</code></td>
 <td>
@@ -5044,7 +5027,7 @@ example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a>
 </td></tr>
 </table>
 <h3 id="sec:details_29" class="unnumbered unlisted">Details</h3>
-<p>This function is similar to <code><a href="#sec:man-knit2pdf">knit2pdf</a>()</code>, with the following differences:
+<p>This function is similar to <code><a href="#sec:man-knit2pdf">knit2pdf()</a></code>, with the following differences:
 </p>
 <ol>
 <li><p> The default compiler is &quot;xelatex&quot; instead of &quot;pdflatex&quot;.
@@ -5083,7 +5066,7 @@ code in the right column.
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
-<p>Arguments to be passed to <code><a href="#sec:man-knit2html">knit2html</a></code></p>
+<p>Arguments to be passed to <code><a href="#sec:man-knit2html">knit2html()</a></code></p>
 </td></tr>
 </table>
 <h3 id="sec:details_30" class="unnumbered unlisted">Details</h3>
@@ -5116,7 +5099,7 @@ press again to hide the text column (show code).
 # knit these two vignettes using the docco style
 rocco_view(system.file(&quot;doc&quot;, &quot;docco-classic.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
-<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/RtmpMupS8C (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
+<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/RtmppOlpBr (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
 </code></pre>
 <pre><code class="language-r">rocco_view(system.file(&quot;doc&quot;, &quot;knit_expand.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
@@ -5141,7 +5124,7 @@ given here.</p>
 </td></tr>
 <tr><td><code>options</code></td>
 <td>
-<p>Extra command line options, e.g. <code>'-v'</code>.</p>
+<p>Extra command line options, e.g., <code>'-v'</code>.</p>
 </td></tr>
 </table>
 <h3 id="sec:value_40" class="unnumbered unlisted">Value</h3>
@@ -5155,7 +5138,7 @@ filename is returned if the conversion was successful.
 <p><a href="https://github.com/rst2pdf/rst2pdf">https://github.com/rst2pdf/rst2pdf</a>
 </p>
 <h3 id="sec:see-also_14" class="unnumbered unlisted">See Also</h3>
-<p><code><a href="#sec:man-knit2pdf">knit2pdf</a></code>
+<p><code><a href="#sec:man-knit2pdf">knit2pdf()</a></code>
 </p>
 <h2 id="sec:man-set_alias"><span class="section-number main-number">65</span> Set aliases for chunk options</h2>
 <h3 id="sec:description_65" class="unnumbered unlisted">Description</h3>
@@ -5184,7 +5167,7 @@ are real option names.</p>
 <h2 id="sec:man-set_header"><span class="section-number main-number">66</span> Set the header information</h2>
 <h3 id="sec:description_66" class="unnumbered unlisted">Description</h3>
 <p>Some output documents may need appropriate header information. For example,
-for LaTeX output, we need to write &lsquo;<span class="samp">\usepackage{tikz}</span>&rsquo; into the
+for LaTeX output, we need to write <code>\usepackage{tikz}</code> into the
 preamble if we use tikz graphics; this function sets the header information
 to be written into the output.
 </p>
@@ -5203,10 +5186,10 @@ they do not make sense in the context of HTML.</p>
 </table>
 <h3 id="sec:details_31" class="unnumbered unlisted">Details</h3>
 <p>By default, <span class="pkg">knitr</span> will set up the header automatically. For example, if
-the tikz device is used, <span class="pkg">knitr</span> will add &lsquo;<span class="samp">\usepackage{tikz}</span>&rsquo; to
+the tikz device is used, <span class="pkg">knitr</span> will add <code>\usepackage{tikz}</code> to
 the LaTeX preamble, and this is done by setting the header component
-<code>tikz</code> to be a character string: <code>set_header(tikz =
-'\usepackage{tikz}')</code>. Similarly, when we highlight R code using the
+<code>tikz</code> to be a character string:
+<code>set_header(tikz = '\\usepackage{tikz}')</code>. Similarly, when we highlight R code using the
 <span class="pkg">highlight</span> package (i.e. the chunk option <code>highlight = TRUE</code>),
 <span class="pkg">knitr</span> will set the <code>highlight</code> component of the header vector
 automatically; if the output type is HTML, this component will be different
@@ -5260,8 +5243,8 @@ complete output is written.
 <h3 id="sec:note_27" class="unnumbered unlisted">Note</h3>
 <p>Obviously this function is only useful when the output format is LaTeX.
 This function only works when the child document is compiled in a
-standalone mode using <code><a href="#sec:man-knit">knit</a>()</code> (instead of being called in
-<code><a href="#sec:man-knit-child">knit_child</a>()</code>); when the parent document is compiled, this
+standalone mode using <code><a href="#sec:man-knit">knit()</a></code> (instead of being called in
+<code><a href="#sec:man-knit-child">knit_child()</a></code>); when the parent document is compiled, this
 function in the child document will be ignored.
 </p>
 <h3 id="sec:references_32" class="unnumbered unlisted">References</h3>
@@ -5289,7 +5272,7 @@ pieces of output together into a character vector.
 <table role = "presentation">
 <tr><td><code>x</code></td>
 <td>
-<p>Output from <code>evaluate::<a href="https://rdrr.io/cran/evaluate/man/evaluate.html">evaluate</a>()</code>.</p>
+<p>Output from <code><a href="https://rdrr.io/cran/evaluate/man/evaluate.html">evaluate::evaluate()</a></code>.</p>
 </td></tr>
 <tr><td><code>options</code></td>
 <td>
@@ -5305,7 +5288,7 @@ pieces of output together into a character vector.
 <p>This function takes a specially formatted R script and converts it to a
 literate programming document. By default normal text (documentation) should
 be written after the roxygen comment (<code>#'</code>) and code chunk options are
-written after <code>#|</code> or <code>#+</code> or <code># %%</code> or <code># ----</code>.
+written after <code>#|</code> or <code>#+</code> or <code># \%\%</code> or <code># ----</code>.
 </p>
 <h3 id="sec:usage_68" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">spin(
@@ -5329,12 +5312,12 @@ contains multibyte characters.</p>
 </td></tr>
 <tr><td><code>knit</code></td>
 <td>
-<p>Logical; whether to compile the document after conversion.</p>
+<p>Whether to compile the document after conversion.</p>
 </td></tr>
 <tr><td><code>report</code></td>
 <td>
-<p>Logical; whether to generate a report for &lsquo;<span class="file">Rmd</span>&rsquo;,
-&lsquo;<span class="file">Rnw</span>&rsquo; and &lsquo;<span class="file">Rtex</span>&rsquo; output. Ignored if <code>knit = FALSE</code>.</p>
+<p>Whether to generate a report for &lsquo;<span class="file">Rmd</span>&rsquo;, &lsquo;<span class="file">Rnw</span>&rsquo;, and
+&lsquo;<span class="file">Rtex</span>&rsquo; output. Ignored if <code>knit = FALSE</code>.</p>
 </td></tr>
 <tr><td><code>text</code></td>
 <td>
@@ -5343,7 +5326,7 @@ R source. If <code>text</code> is not <code>NULL</code>, <code>hair</code> will 
 </td></tr>
 <tr><td><code>envir</code></td>
 <td>
-<p>Environment for <code><a href="#sec:man-knit">knit</a>()</code> to evaluate the code.</p>
+<p>Environment for <code><a href="#sec:man-knit">knit()</a></code> to evaluate the code.</p>
 </td></tr>
 <tr><td><code>format</code></td>
 <td>
@@ -5354,7 +5337,7 @@ R source. If <code>text</code> is not <code>NULL</code>, <code>hair</code> will 
 <p>A regular expression to identify the documentation lines; by
 default it follows the roxygen convention, but it can be customized, e.g.
 if you want to use <code>##</code> to denote documentation, you can use
-<code>'^##\\s*'</code>.</p>
+<code>'^##\\\\s*'</code>.</p>
 </td></tr>
 <tr><td><code>inline</code></td>
 <td>
@@ -5371,9 +5354,9 @@ line, and <code>*/</code> at the end, following the convention of C comments.</p
 </td></tr>
 <tr><td><code>precious</code></td>
 <td>
-<p>logical: whether intermediate files (e.g., <code>.Rmd</code> files
-when <code>format</code> is <code>"Rmd"</code>) should be preserved. The default is
-<code>FALSE</code> if <code>knit</code> is <code>TRUE</code> and the input is a file.</p>
+<p>Whether to preserve intermediate files (e.g., <code>.Rmd</code>
+files when <code>format</code> is <code>"Rmd"</code>). The default is <code>FALSE</code> if
+<code>knit</code> is <code>TRUE</code> and the input is a file.</p>
 </td></tr>
 </table>
 <h3 id="sec:details_33" class="unnumbered unlisted">Details</h3>
@@ -5392,9 +5375,9 @@ be compiled. You can always specify the document class and other LaTeX
 settings in roxygen comments manually.
 </p>
 <p>When the output format is <code>Rmd</code>, it is compiled to HTML via
-<code><a href="#sec:man-knit2html">knit2html</a>()</code>, which uses R Markdown v1 instead of v2. If you
+<code><a href="#sec:man-knit2html">knit2html()</a></code>, which uses R Markdown v1 instead of v2. If you
 want to use the latter, you should call
-<code>rmarkdown::<a href="https://rdrr.io/cran/rmarkdown/man/render.html">render</a>()</code> instead. Similarly, if the
+<code><a href="https://rdrr.io/cran/rmarkdown/man/render.html">rmarkdown::render()</a></code> instead. Similarly, if the
 output format is <code>qmd</code>, you need to render the output with Quarto.
 </p>
 <h3 id="sec:author-s_10" class="unnumbered unlisted">Author(s)</h3>
@@ -5405,17 +5388,17 @@ as <code>sowsear()</code> which meant to make a silk purse out of a sow's ear)
 <p><a href="https://yihui.org/knitr/demo/stitch/">https://yihui.org/knitr/demo/stitch/</a>
 </p>
 <h3 id="sec:see-also_15" class="unnumbered unlisted">See Also</h3>
-<p><code><a href="#sec:man-stitch">stitch</a></code> (feed a template with an R script)
+<p><code><a href="#sec:man-stitch">stitch()</a></code> (feed a template with an R script)
 </p>
 <h2 id="sec:man-spin_child"><span class="section-number main-number">70</span> Spin a child R script</h2>
 <h3 id="sec:description_70" class="unnumbered unlisted">Description</h3>
-<p>This function is similar to <code><a href="#sec:man-knit-child">knit_child</a>()</code> but is used in R
+<p>This function is similar to <code><a href="#sec:man-knit-child">knit_child()</a></code> but is used in R
 scripts instead. When the main R script is not called via
-<code><a href="#sec:man-spin">spin</a>()</code>, this function simply executes the child script via
-<code><a href="https://rdrr.io/r/base/sys.source.html">sys.source</a>()</code>, otherwise it calls <code><a href="#sec:man-spin">spin</a>()</code> to spin
-the child script into a source document, and uses <code><a href="#sec:man-knit-child">knit_child</a>()</code>
+<code><a href="#sec:man-spin">spin()</a></code>, this function simply executes the child script via
+<code><a href="https://rdrr.io/r/base/sys.source.html">sys.source()</a></code>, otherwise it calls <code><a href="#sec:man-spin">spin()</a></code> to spin
+the child script into a source document, and uses <code><a href="#sec:man-knit-child">knit_child()</a></code>
 to compile it. You can call this function in R code, or using the syntax of
-inline R expressions in <code><a href="#sec:man-spin">spin</a>()</code> (e.g.
+inline R expressions in <code><a href="#sec:man-spin">spin()</a></code> (e.g.
 <code>{{knitr::spin_child('script.R')}}</code>).
 </p>
 <h3 id="sec:usage_69" class="unnumbered unlisted">Usage</h3>
@@ -5467,7 +5450,7 @@ this package; there is also an HTML template in <span class="pkg">knitr</span>.<
 </td></tr>
 <tr><td><code>output</code></td>
 <td>
-<p>Output filename, passed to <code><a href="#sec:man-knit">knit</a></code>). By default,
+<p>Output filename, passed to <code><a href="#sec:man-knit">knit()</a></code>). By default,
 the base filename of the script is used.</p>
 </td></tr>
 <tr><td><code>text</code></td>
@@ -5478,8 +5461,8 @@ input file.</p>
 <tr><td><code>envir</code></td>
 <td>
 <p>Environment in which code chunks are to be evaluated, for
-example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a>()</code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env</a>()</code>, or
-<code><a href="https://rdrr.io/r/base/environment.html">globalenv</a>()</code>).</p>
+example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame()</a></code>, <code><a href="https://rdrr.io/r/base/environment.html">new.env()</a></code>, or
+<code><a href="https://rdrr.io/r/base/environment.html">globalenv()</a></code>).</p>
 </td></tr>
 <tr><td><code>...</code></td>
 <td>
@@ -5488,12 +5471,12 @@ example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a>
 </table>
 <h3 id="sec:details_34" class="unnumbered unlisted">Details</h3>
 <p>The first two lines of the R script can contain the title and author of the
-report in comments of the form &lsquo;<span class="samp">## title:</span>&rsquo; and &lsquo;<span class="samp">## author:</span>&rsquo;. The
-template must have a token &lsquo;<span class="samp">%sCHUNK_LABEL_HERE</span>&rsquo;, which will be used to
+report in comments of the form <code>## title:</code> and <code>## author:</code>. The
+template must have a token <code>\%sCHUNK_LABEL_HERE</code>, which will be used to
 input all the R code from the script. See the examples below.
 </p>
-<p>The R script may contain chunk headers of the form &lsquo;<span class="samp">## ---- label,
-opt1=val1, opt2=val2</span>&rsquo;, which will be copied to the template; if no chunk
+<p>The R script may contain chunk headers of the form
+<code>## ---- label, opt1=val1, opt2=val2</code>, which will be copied to the template; if no chunk
 headers are found, the whole R script will be inserted into the template as
 one code chunk.
 </p>
@@ -5501,7 +5484,7 @@ one code chunk.
 <p>path of the output document
 </p>
 <h3 id="sec:see-also_16" class="unnumbered unlisted">See Also</h3>
-<p><code><a href="#sec:man-spin">spin</a></code> (turn a specially formatted R script to a report)
+<p><code><a href="#sec:man-spin">spin()</a></code> (turn a specially formatted R script to a report)
 </p>
 <h3 id="sec:examples_48" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">s = system.file(&quot;misc&quot;, &quot;stitch-test.R&quot;, package = &quot;knitr&quot;)
@@ -5590,13 +5573,13 @@ stitch(s, system.file(&quot;misc&quot;, &quot;knitr-template.Rmd&quot;, package 
 <h2 id="sec:man-vignette_engines"><span class="section-number main-number">72</span> Package vignette engines</h2>
 <h3 id="sec:description_72" class="unnumbered unlisted">Description</h3>
 <p>Since R 3.0.0, package vignettes can use non-Sweave engines, and <span class="pkg">knitr</span>
-has provided a few engines to compile vignettes via <code><a href="#sec:man-knit">knit</a>()</code> with
+has provided a few engines to compile vignettes via <code><a href="#sec:man-knit">knit()</a></code> with
 different templates. See <a href="https://yihui.org/knitr/demo/vignette/">https://yihui.org/knitr/demo/vignette/</a> for
 more information.
 </p>
 <h3 id="sec:note_29" class="unnumbered unlisted">Note</h3>
 <p>If you use the <code>knitr::rmarkdown</code> engine, please make sure that
-you put <span class="pkg">rmarkdown</span> in the &lsquo;<span class="samp">Suggests</span>&rsquo; field of your
+you put <span class="pkg">rmarkdown</span> in the <code>Suggests</code> field of your
 &lsquo;<span class="file">DESCRIPTION</span>&rsquo; file. Also make sure <code>pandoc</code> is available
 during <code>R CMD build</code>. If you build your package from RStudio, this
 is normally not a problem. If you build the package outside RStudio, run
@@ -5725,7 +5708,7 @@ str(vig_list)
 #&gt;     else knit)(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x562ee71481d8&gt;
+#&gt; &lt;bytecode: 0x55a78f0e9ea8&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -5733,7 +5716,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x562ee7181188&gt;
+#&gt; &lt;bytecode: 0x55a78f0eddc8&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::knitr_notangle&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -5768,7 +5751,7 @@ str(vig_list)
 #&gt;     unlink(with_ext(file, &quot;R&quot;))
 #&gt;     return()
 #&gt; }
-#&gt; &lt;bytecode: 0x562ee722e370&gt;
+#&gt; &lt;bytecode: 0x55a78f1d3f00&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::docco_classic&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -5797,7 +5780,7 @@ str(vig_list)
 #&gt;     rocco(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x562ee71f96a8&gt;
+#&gt; &lt;bytecode: 0x55a78f111ad8&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -5805,7 +5788,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x562ee7181188&gt;
+#&gt; &lt;bytecode: 0x55a78f0eddc8&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-wrap_rmd"><span class="section-number main-number">73</span> Wrap long lines in Rmd files</h2>
@@ -5870,7 +5853,7 @@ This feature may or may not be added in the future.
 <table role = "presentation">
 <tr><td><code>...</code>, <code>prefix</code></td>
 <td>
-<p>Arguments passed to <code>xfun::<a href="https://rdrr.io/cran/xfun/man/pkg_bib.html">pkg_bib</a>()</code>.</p>
+<p>Arguments passed to <code><a href="https://rdrr.io/cran/xfun/man/pkg_bib.html">xfun::pkg_bib()</a></code>.</p>
 </td></tr>
 </table>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.69/css/manual.min.css">
