@@ -1,32 +1,32 @@
 #' Engines of other languages
 #'
 #' This object controls how to execute the code from languages other than R
-#' (when the chunk option \code{engine} is not \code{'R'}). Each component in
+#' (when the chunk option `engine` is not `'R'`). Each component in
 #' this object is a function that takes a list of current chunk options
 #' (including the source code) and returns a character string to be written into
 #' the output.
 #'
-#' The engine function has one argument \code{options}: the source code of the
-#' current chunk is in \code{options$code}. Usually we can call external
-#' programs to run the code via \code{\link{system2}}. Other chunk options are
-#' also contained in this argument, e.g. \code{options$echo} and
-#' \code{options$eval}, etc.
+#' The engine function has one argument `options`: the source code of the
+#' current chunk is in `options$code`. Usually we can call external
+#' programs to run the code via [system2()]. Other chunk options are
+#' also contained in this argument, e.g. `options$echo` and
+#' `options$eval`, etc.
 #'
-#' In most cases, \code{options$engine} can be directly used in command line to
-#' execute the code, e.g. \code{python} or \code{ruby}, but sometimes we may
+#' In most cases, `options$engine` can be directly used in command line to
+#' execute the code, e.g. `python` or `ruby`, but sometimes we may
 #' want to specify the path of the engine program, in which case we can pass it
-#' through the \code{engine.path} option. For example, \code{engine='ruby',
-#' engine.path='/usr/bin/ruby1.9.1'}. Additional command line arguments can be
-#' passed through \code{options$engine.opts}, e.g. \code{engine='ruby',
-#' engine.opts='-v'}.
+#' through the `engine.path` option. For example, `engine='ruby',
+#' engine.path='/usr/bin/ruby1.9.1'`. Additional command line arguments can be
+#' passed through `options$engine.opts`, e.g. `engine='ruby',
+#' engine.opts='-v'`.
 #'
-#' See \code{str(knitr::knit_engines$get())} for a list of built-in language
+#' See `str(knitr::knit_engines$get())` for a list of built-in language
 #' engines.
 #' @export
-#' @note The Leiningen engine \code{lein} requires lein-exec plugin; see
-#'   \url{https://github.com/yihui/knitr/issues/1176} for details.
-#' @references Usage: \url{https://yihui.org/knitr/objects/}; examples:
-#'   \url{https://yihui.org/knitr/demo/engines/}
+#' @note The Leiningen engine `lein` requires lein-exec plugin; see
+#'   <https://github.com/yihui/knitr/issues/1176> for details.
+#' @references Usage: <https://yihui.org/knitr/objects/>; examples:
+#'   <https://yihui.org/knitr/demo/engines/>
 #' @examples knit_engines$get('python'); knit_engines$get('awk')
 #' names(knit_engines$get())
 knit_engines = new_defaults()
@@ -35,18 +35,18 @@ knit_engines = new_defaults()
 #' Cache engines of other languages
 #'
 #' This object controls how to load cached environments from languages other
-#' than R (when the chunk option \code{engine} is not \code{'R'}). Each
+#' than R (when the chunk option `engine` is not `'R'`). Each
 #' component in this object is a function that takes the current path to the
 #' chunk cache and loads it into the language environment.
 #'
-#' The cache engine function has one argument \code{options}, a list containing
-#' all chunk options. Note that \code{options$hash} is the path to the current
+#' The cache engine function has one argument `options`, a list containing
+#' all chunk options. Note that `options$hash` is the path to the current
 #' chunk cache with the chunk's hash, but without any file extension, and the
 #' language engine may write a cache database to this path (with an extension).
 #'
 #' The cache engine function should load the cache environment and should know
 #' the extension appropriate for the language.
-#' @references See \url{https://github.com/rstudio/reticulate/pull/167} for an
+#' @references See <https://github.com/rstudio/reticulate/pull/167> for an
 #'   implementation of a cache engine for Python.
 #' @export
 cache_engines = new_defaults()
@@ -57,17 +57,17 @@ cache_engines = new_defaults()
 #' to format and return the text output from your engine.
 #'
 #' For expert users, an advanced usage of this function is
-#' \code{engine_output(options, out = LIST)} where \code{LIST} is a list that
-#' has the same structure as the output of \code{evaluate::evaluate()}. In this
-#' case, the arguments \code{code} and \code{extra} are ignored, and the list is
-#' passed to \code{knitr::sew()} to return a character vector of final output.
+#' `engine_output(options, out = LIST)` where `LIST` is a list that
+#' has the same structure as the output of `evaluate::evaluate()`. In this
+#' case, the arguments `code` and `extra` are ignored, and the list is
+#' passed to `knitr::sew()` to return a character vector of final output.
 #' @param options A list of chunk options. Usually this is just the object
-#'   \code{options} passed to the engine function; see
-#'   \code{\link{knit_engines}}.
-#' @param code Source code of the chunk, to which the output hook \code{source}
-#'   is applied, unless the chunk option \code{echo} is \code{FALSE}.
-#' @param out Text output from the engine, to which the hook \code{output} is
-#'   applied, unless the chunk option \code{results} is \code{'hide'}
+#'   `options` passed to the engine function; see
+#'   [knit_engines()].
+#' @param code Source code of the chunk, to which the output hook `source`
+#'   is applied, unless the chunk option `echo` is `FALSE`.
+#' @param out Text output from the engine, to which the hook `output` is
+#'   applied, unless the chunk option `results` is `'hide'`
 #' @param extra Any additional text output that you want to include.
 #' @return A character string generated from the source code and output using
 #'   the appropriate output hooks.

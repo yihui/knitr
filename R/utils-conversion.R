@@ -6,32 +6,32 @@
 #' @param command Character string giving the path of the
 #'   \command{rst2pdf} program. If the program is not in your PATH, the full path has to be
 #'   given here.
-#' @param options Extra command line options, e.g. \code{'-v'}.
+#' @param options Extra command line options, e.g., `'-v'`.
 #' @author Alex Zvoleff and Yihui Xie
 #' @return An input file \file{*.rst} will produce \file{*.pdf} and this output
 #'   filename is returned if the conversion was successful.
 #' @export
-#' @seealso \code{\link{knit2pdf}}
-#' @references \url{https://github.com/rst2pdf/rst2pdf}
+#' @seealso [knit2pdf()]
+#' @references <https://github.com/rst2pdf/rst2pdf>
 rst2pdf = function(input, command = 'rst2pdf', options = '') {
   out = with_ext(input, 'pdf')
   system2(command, paste(shQuote(input), '-o', shQuote(out), options))
   if (file.exists(out)) out else stop('conversion by rst2pdf failed!')
 }
 
-#' Convert various input files to various output files using \code{knit()} and
+#' Convert various input files to various output files using `knit()` and
 #' Pandoc
 #'
 #' Knits the input file and compiles to an output format using Pandoc.
 #' @inheritParams knit
 #' @param to Character string giving the Pandoc output format to use.
-#' @param pandoc_wrapper An R function used to call Pandoc. If \code{NULL} (the
-#'   default), \code{rmarkdown::\link[rmarkdown]{pandoc_convert}()} will be used
-#'   if \pkg{rmarkdown} is installed, otherwise \code{\link{pandoc}()}.
-#' @param ... Options to be passed to the \code{pandoc_wrapper} function.
+#' @param pandoc_wrapper An R function used to call Pandoc. If `NULL` (the
+#'   default), [rmarkdown::pandoc_convert()] will be used
+#'   if \pkg{rmarkdown} is installed, otherwise [pandoc()].
+#' @param ... Options to be passed to the `pandoc_wrapper` function.
 #' @param encoding Ignored (always assumes UTF-8).
 #' @author Trevor L. Davis
-#' @return Returns the output of the \code{pandoc_wrapper} function.
+#' @return Returns the output of the `pandoc_wrapper` function.
 #' @export
 knit2pandoc = function(
   input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
@@ -47,19 +47,19 @@ knit2pandoc = function(
 #' Convert Rnw or Rrst files to PDF
 #'
 #' Knit the input Rnw or Rrst document, and compile to PDF using
-#' \code{tinytex::\link[tinytex]{latexmk}()} or \code{\link{rst2pdf}()}.
+#' [tinytex::latexmk()] or [rst2pdf()].
 #' @inheritParams knit
 #' @param compiler A character string giving the LaTeX engine used to compile
-#'   the tex document to PDF. For an Rrst file, setting \code{compiler} to
-#'   \code{'rst2pdf'} will use \code{\link{rst2pdf}} to compile the rst file to
+#'   the tex document to PDF. For an Rrst file, setting `compiler` to
+#'   `'rst2pdf'` will use [rst2pdf()] to compile the rst file to
 #'   PDF using the ReportLab open-source library. For an Rtyp file, setting
-#'   \code{compiler} to \code{'typst'} will use the \command{typst} command-line
+#'   `compiler` to `'typst'` will use the \command{typst} command-line
 #'   tool to compile the typ file to PDF.
-#' @param ... Options to be passed to \code{tinytex::\link[tinytex]{latexmk}()}
-#'   or \code{\link{rst2pdf}()}.
+#' @param ... Options to be passed to [tinytex::latexmk()]
+#'   or [rst2pdf()].
 #' @author Ramnath Vaidyanathan, Alex Zvoleff and Yihui Xie
 #' @return The filename of the PDF file.
-#' @note The \code{output} argument specifies the output filename to be passed
+#' @note The `output` argument specifies the output filename to be passed
 #'   to the PDF compiler (e.g. a tex document) instead of the PDF filename.
 #' @export
 #' @examples #' compile with xelatex
@@ -100,28 +100,28 @@ knit2pdf = function(
 
 #' Convert an \file{Rnw} document to PDF
 #'
-#' Call \code{\link{knit}()} to compile the \file{.Rnw} input to \file{.tex},
-#' and then \code{tinytex::\link[tinytex]{latexmk}()} to convert \file{.tex} to
+#' Call [knit()] to compile the \file{.Rnw} input to \file{.tex},
+#' and then [tinytex::latexmk()] to convert \file{.tex} to
 #' \file{.pdf}.
 #'
-#' This function is similar to \code{\link{knit2pdf}()}, with the following differences:
+#' This function is similar to [knit2pdf()], with the following differences:
 #' \enumerate{
 #'   \item The default compiler is "xelatex" instead of "pdflatex".
-#'   \item \code{output} uses the file extension ".pdf" instead of ".tex".
-#'   \item Before knitting, it tries to remove the \code{output} file and will throw a clear error if the file cannot be removed.
-#'   \item \code{output} could be under any dir, not necessarily the same directory as \code{input}.
+#'   \item `output` uses the file extension ".pdf" instead of ".tex".
+#'   \item Before knitting, it tries to remove the `output` file and will throw a clear error if the file cannot be removed.
+#'   \item `output` could be under any dir, not necessarily the same directory as `input`.
 #'   \item It cleans up intermediate files by default, including the ".tex" file.
-#'   \item It stops knitting when any error occurs (by setting the chunk option \code{error = FALSE}).
+#'   \item It stops knitting when any error occurs (by setting the chunk option `error = FALSE`).
 #' }
 #' @inheritParams knit
 #' @param output Path of the PDF output file. By default, it uses the same name
-#'   as the \code{input}, but changes the file extension to ".pdf".
+#'   as the `input`, but changes the file extension to ".pdf".
 #' @param compiler,... The LaTeX engine and other arguments to be passed to
-#'   \code{tinytex::\link[tinytex]{latexmk}()}. The default compiler is
-#'   \code{xelatex}.
-#' @param clean If \code{TRUE}, the intermediate files will be removed.
-#' @param error If \code{FALSE}, knitting stops when any error occurs.
-#' @return The \code{output} file path.
+#'   [tinytex::latexmk()]. The default compiler is
+#'   `xelatex`.
+#' @param clean If `TRUE`, the intermediate files will be removed.
+#' @param error If `FALSE`, knitting stops when any error occurs.
+#' @return The `output` file path.
 #' @export
 rnw2pdf = function(
   input, output = with_ext(input, 'pdf'), compiler = 'xelatex',
@@ -155,22 +155,22 @@ mark_html = function(..., template = TRUE) {
 #' Convert markdown to HTML using knit() and litedown::mark()
 #'
 #' This is a convenience function to knit the input markdown source and call
-#' \code{litedown::\link[litedown]{mark}()} to convert the result to HTML.
+#' [litedown::mark()] to convert the result to HTML.
 #' @inheritParams knit
-#' @param ... Options passed to \code{litedown::\link[litedown]{mark}()}.
-#' @param force_v1 Boolean; whether to force rendering the input document as an
-#'   R Markdown v1 document, even if it is for v2.
+#' @param ... Options passed to [litedown::mark()].
+#' @param force_v1 Whether to force rendering the input document as an R
+#'   Markdown v1 document, even if it is for v2.
 #' @export
-#' @seealso \code{\link{knit}}, \code{litedown::\link[litedown]{mark}}
-#' @return If the argument \code{text} is NULL, a character string (HTML code)
+#' @seealso [knit()], [litedown::mark()]
+#' @return If the argument `text` is NULL, a character string (HTML code)
 #'   is returned; otherwise the result is written into a file and the filename
 #'   is returned.
 #' @note This function renders R Markdown v1, which is much less powerful than R
 #'   Markdown v2, i.e. the \pkg{rmarkdown} package
-#'   (\url{https://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
-#'   HTML, please use \code{rmarkdown::render()} instead. For a lighter-weight
+#'   (<https://rmarkdown.rstudio.com>). To render R Markdown v2 documents to
+#'   HTML, please use `rmarkdown::render()` instead. For a lighter-weight
 #'   alternative that handles figure paths robustly, see
-#'   \code{litedown::\link[litedown]{fuse}()}.
+#'   [litedown::fuse()].
 #' @examples # a minimal example
 #' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
 #' knit2html('test.Rmd')
@@ -220,25 +220,26 @@ knit2html = function(
 #' This function is a wrapper around the \pkg{RWordPress} package. It compiles
 #' an R Markdown document to HTML and post the results to WordPress. Please note
 #' that \pkg{RWordPress} has not been updated for several years, which is
-#' \href{https://github.com/yihui/knitr/issues/1866}{not a good sign}. For
+#' [not a good sign](https://github.com/yihui/knitr/issues/1866). For
 #' blogging with R, you may want to try the \pkg{blogdown} package instead.
 #' @param input Filename of the Rmd document.
 #' @param title Title of the post.
-#' @param ... Other meta information of the post, e.g. \code{categories = c('R',
-#'   'Stats')} and \code{mt_keywords = c('knitr', 'wordpress')}, et cetera.
-#' @param shortcode A length-2 logical vector: whether to use the shortcode
-#'   \samp{[sourcecode lang='lang']}, which can be useful to WordPress.com users
-#'   for syntax highlighting of source code and output. The first element
+#' @param ... Other meta information of the post, e.g., `categories =
+#'   c('R', 'Stats')` and `mt_keywords = c('knitr', 'wordpress')`, etc.
+#' @param shortcode A length-2 logical vector indicating whether to use the
+#'   shortcode `[sourcecode lang='lang']`, which can be useful to
+#'   WordPress.com users for syntax highlighting of source code and output. The
+#'   first element
 #'   applies to source code, and the second applies to text output. By default,
-#'   both are \code{FALSE}.
+#'   both are `FALSE`.
 #' @param action Whether to create a new post, update an existing post, or
 #'   create a new page.
-#' @param postid If \code{action} is \code{editPost}, the post id \code{postid}
+#' @param postid If `action` is `editPost`, the post id `postid`
 #'   must be specified.
-#' @param publish Boolean: publish the post immediately?
+#' @param publish Whether to publish the post immediately.
 #' @inheritParams knit
 #' @export
-#' @references \url{https://yihui.org/knitr/demo/wordpress/}
+#' @references <https://yihui.org/knitr/demo/wordpress/>
 #' @author William K. Morris, Yihui Xie, and Jared Lander
 #' @note This function will convert the encoding of the post and the title to
 #'   UTF-8 internally. If you have additional data to send to WordPress (e.g.
@@ -300,16 +301,16 @@ knit2wp = function(
 #' recompile the input file.
 #'
 #' This is actually a general function not necessarily restricted to
-#' applications in \pkg{knitr}. You may specify any \code{compile} function to
-#' process the \code{input} file. To stop the infinite loop, press the
-#' \samp{Escape} key or \samp{Ctrl + C} (depending on your editing environment
+#' applications in \pkg{knitr}. You may specify any `compile` function to
+#' process the `input` file. To stop the infinite loop, press the
+#' `Escape` key or `Ctrl + C` (depending on your editing environment
 #' and operating system).
 #' @param input An input file path, or a character vector of multiple input file paths.
-#' @param compile A function to compile the \code{input} file. This could be e.g.
-#'   \code{\link{knit}} or \code{\link{knit2pdf}}, depending on the input file
+#' @param compile A function to compile the `input` file. This could be e.g.
+#'   [knit()] or [knit2pdf()], depending on the input file
 #'   and the output you want.
 #' @param interval A time interval to pause in each cycle of the infinite loop.
-#' @param ... Other arguments to be passed to the \code{compile} function.
+#' @param ... Other arguments to be passed to the `compile` function.
 #' @export
 #' @examples # knit_watch('foo.Rnw', knit2pdf)
 #'

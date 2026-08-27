@@ -40,26 +40,26 @@ output formats.
 }
 \details{
 Depending on the options passed over, \code{hook_plot_tex} may return the
-normal \samp{\\includegraphics{}} command, or \samp{\\input{}} (for tikz
-files), or \samp{\\animategraphics{}} (for animations); it also takes many
+normal \verb{\\includegraphics\{\}} command, or \verb{\\input\{\}} (for tikz
+files), or \verb{\\animategraphics\{\}} (for animations); it also takes many
 other options into consideration to align plots and set figure sizes, etc.
 Similarly, \code{hook_plot_html}, \code{hook_plot_md} and
 \code{hook_plot_rst} return character strings which are HTML, Markdown, reST
 code.
 
 For animations (i.e. when the chunk option \code{fig.show} is \code{'animate'}),
-\code{hook_plot_tex} generates \samp{\\animategraphics{}} unless a hook function
+\code{hook_plot_tex} generates \verb{\\animategraphics\{\}} unless a hook function
 has been provided via the chunk option \code{animation.hook} or the package option
 \code{animation.fun}, in which case that function generates the LaTeX code instead.
 It is called only once per chunk, with the filename of the last plot. The
-built-in hooks (e.g. \code{\link{hook_ffmpeg_html}}) generate HTML, and are
+built-in hooks (e.g. \code{\link[=hook_ffmpeg_html]{hook_ffmpeg_html()}}) generate HTML, and are
 ignored for LaTeX output.
 
 In most cases we do not need to call these hooks explicitly, and they were
 designed to be used internally. Sometimes we may not be able to record R
-plots using \code{grDevices::\link{recordPlot}()}, and we can make use of
+plots using \code{\link[grDevices:recordPlot]{grDevices::recordPlot()}}, and we can make use of
 these hooks to insert graphics output in the output document; see
-\code{\link{hook_plot_custom}} for details.
+\code{\link[=hook_plot_custom]{hook_plot_custom()}} for details.
 }
 \examples{
 # this is what happens for a chunk like this
@@ -80,5 +80,5 @@ hook_plot_tex("foo5.pdf", opts_chunk$merge(list(fig.show = "animate", interval =
 \url{https://yihui.org/knitr/hooks/}
 }
 \seealso{
-\code{\link{hook_plot_custom}}
+\code{\link[=hook_plot_custom]{hook_plot_custom()}}
 }

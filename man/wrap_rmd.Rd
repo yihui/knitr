@@ -16,11 +16,11 @@ wrap_rmd(file, width = 80, text = NULL, backup)
 
 \item{backup}{Path to back up the original file in case anything goes
 wrong. If set to \code{NULL}, no backup is made. The default value is constructed
-from \code{file} by adding \code{__} before the base filename.}
+from \code{file} by adding \verb{__} before the base filename.}
 }
 \value{
 If \code{file} is provided, it is overwritten; if \code{text} is
-  provided, a character vector is returned.
+provided, a character vector is returned.
 }
 \description{
 This function wraps long paragraphs in an R Markdown file. Other elements are
@@ -30,7 +30,7 @@ easier to review differences in version control.
 }
 \note{
 Currently it does not wrap blockquotes or lists (ordered or unordered).
-  This feature may or may not be added in the future.
+This feature may or may not be added in the future.
 }
 \examples{
 wrap_rmd(text = c("```", "1+1", "```", "- a list item", "> a quote", "",

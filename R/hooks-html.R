@@ -101,18 +101,18 @@ hook_animation = function(options) {
 
 #' Hooks to create animations in HTML output
 #'
-#' \code{hook_ffmpeg_html()} uses FFmpeg to convert images to a video;
-#' \code{hook_gifski()} uses the \pkg{gifski} to convert images to a GIF
-#' animation; \code{hook_scianimator()} uses the JavaScript library SciAnimator
-#' to create animations; \code{hook_r2swf()} uses the \pkg{R2SWF} package.
+#' `hook_ffmpeg_html()` uses FFmpeg to convert images to a video;
+#' `hook_gifski()` uses the \pkg{gifski} to convert images to a GIF
+#' animation; `hook_scianimator()` uses the JavaScript library SciAnimator
+#' to create animations; `hook_r2swf()` uses the \pkg{R2SWF} package.
 #'
-#' These hooks are mainly for the package option \code{animation.fun}, e.g. you
-#' can set \code{opts_knit$set(animation.fun = hook_scianimator)}.
+#' These hooks are mainly for the package option `animation.fun`, e.g. you
+#' can set `opts_knit$set(animation.fun = hook_scianimator)`.
 #'
 #' Note that these hooks generate HTML code. For LaTeX output, you can set the
-#' chunk option \code{animation.hook} (or the package option
-#' \code{animation.fun}) to a function that generates LaTeX code; see
-#' \code{\link{hook_plot_tex}}.
+#' chunk option `animation.hook` (or the package option
+#' `animation.fun`) to a function that generates LaTeX code; see
+#' [hook_plot_tex()].
 #' @inheritParams hook_plot_tex
 #' @rdname hook_animation
 #' @export

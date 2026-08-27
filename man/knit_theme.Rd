@@ -19,9 +19,9 @@ returned by the \code{get()} method. See examples below.
 }
 \note{
 The syntax highlighting here only applies to \file{.Rnw} (LaTeX) and
-  \file{.Rhtml} (HTML) documents, and it does not work for other types of
-  documents, such as \file{.Rmd} (R Markdown, which has its own syntax
-  highlighting themes; see \url{https://rmarkdown.rstudio.com}).
+\file{.Rhtml} (HTML) documents, and it does not work for other types of
+documents, such as \file{.Rmd} (R Markdown, which has its own syntax
+highlighting themes; see \url{https://rmarkdown.rstudio.com}).
 }
 \examples{
 opts_knit$set(out.format = "latex")
@@ -36,7 +36,7 @@ opts_knit$set(out.format = NULL)  # restore option
 }
 \references{
 For a preview of all themes, see
-  \url{https://gist.github.com/yihui/3422133}.
+\url{https://gist.github.com/yihui/3422133}.
 }
 \author{
 Ramnath Vaidyanathan and Yihui Xie

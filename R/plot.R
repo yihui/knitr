@@ -256,8 +256,8 @@ merge_low_plot = function(x, idx = sapply(x, evaluate::is.recordedplot)) {
 #'
 #' Check if one plot only contains a low-level update of another plot.
 #' @param p1,p2 Plot objects.
-#' @return Logical value indicating whether \code{p2} is a low-level update of
-#'   \code{p1}.
+#' @return Logical value indicating whether `p2` is a low-level update of
+#'   `p1`.
 #' @export
 #' @examples
 #' pdf(NULL)
@@ -336,24 +336,24 @@ fig_process = function(FUN, path, options) {
 #'
 #' The program \command{pdfcrop} (often shipped with a LaTeX distribution) is
 #' executed on a PDF plot file, and
-#' \code{magick::\link[magick:transform]{image_trim}()} is executed for other
+#' [magick::image_trim()] is executed for other
 #' types of plot files.
 #'
 #' The program \command{pdfcrop} can crop the extra white margins when the plot
 #' format is PDF, to make better use of the space in the output document,
-#' otherwise we often have to struggle with \code{graphics::\link{par}()} to set
+#' otherwise we often have to struggle with [graphics::par()] to set
 #' appropriate margins. Note \command{pdfcrop} often comes with a LaTeX
 #' distribution such as TinyTeX, MiKTeX, or TeX Live, and you may not need to
-#' install it separately (use \code{Sys.which('pdfcrop')} to check it; if it not
+#' install it separately (use `Sys.which('pdfcrop')` to check it; if it not
 #' empty, you are able to use it). Note that \command{pdfcrop} depends on
 #' GhostScript. You can check if GhostScript is installed via
-#' \code{tools::find_gs_cmd()}.
+#' `tools::find_gs_cmd()`.
 #' @param x Filename of the plot.
 #' @param quiet Whether to suppress standard output from the command.
 #' @export
-#' @references PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}. If you use
+#' @references PDFCrop: <https://www.ctan.org/pkg/pdfcrop>. If you use
 #'   TinyTeX, you may install \command{pdfcrop} with
-#'   \code{tinytex::tlmgr_install('pdfcrop')}.
+#'   `tinytex::tlmgr_install('pdfcrop')`.
 #' @return The original filename.
 plot_crop = function(x, quiet = TRUE) {
   is_pdf = grepl('[.]pdf$', x, ignore.case = TRUE)
@@ -418,25 +418,25 @@ par2 = function(x) {
 #' so you do not need to think if you have to use, for example, LaTeX or
 #' Markdown syntax, to embed an external image. Chunk options related to
 #' graphics output that work for normal R plots also work for these images, such
-#' as \code{out.width} and \code{out.height}.
+#' as `out.width` and `out.height`.
 #' @param path A character vector of image paths. Both local file paths and web
-#'   paths are supported. Note that the \code{auto_pdf} and \code{dpi} arguments
+#'   paths are supported. Note that the `auto_pdf` and `dpi` arguments
 #'   are not supported for web paths.
 #' @param auto_pdf Whether to use PDF images automatically when the output
-#'   format is LaTeX. If \code{TRUE}, then e.g. \file{foo/bar.png} will be
+#'   format is LaTeX. If `TRUE`, then e.g. \file{foo/bar.png} will be
 #'   replaced by \file{foo/bar.pdf} if the latter exists. This can be useful
 #'   since normally PDF images are of higher quality than raster images like
 #'   PNG, when the output is LaTeX/PDF.
 #' @param dpi DPI (dots per inch) value. Used to calculate the output width (in
 #'   inches) of the images. This will be their actual width in pixels, divided
-#'   by \code{dpi}. If not provided, the chunk option \code{dpi} is used; if
-#'   \code{NA}, the output width will not be calculated.
+#'   by `dpi`. If not provided, the chunk option `dpi` is used; if
+#'   `NA`, the output width will not be calculated.
 #' @param rel_path Whether to automatically convert absolute paths to relative
 #'   paths. If you know for sure that absolute paths work, you may set this
-#'   argument or the global option \code{knitr.graphics.rel_path} to
-#'   \code{FALSE}.
+#'   argument or the global option `knitr.graphics.rel_path` to
+#'   `FALSE`.
 #' @param error Whether to signal an error if any files specified in the
-#'   \code{path} argument do not exist and are not web resources.
+#'   `path` argument do not exist and are not web resources.
 #' @note This function is supposed to be used in R code chunks or inline R code
 #'   expressions. For local images, you are recommended to use relative paths
 #'   with forward slashes instead of backslashes (e.g., \file{images/fig1.png}
@@ -444,9 +444,9 @@ par2 = function(x) {
 #'
 #'   The automatic calculation of the output width requires the \pkg{png}
 #'   package (for PNG images) or the \pkg{jpeg} package (for JPEG images). The
-#'   width will not be calculated if the chunk option \code{out.width} is
-#'   already provided or \code{dpi = NA}.
-#' @return The same as the input character vector \code{path} but it is marked
+#'   width will not be calculated if the chunk option `out.width` is
+#'   already provided or `dpi = NA`.
+#' @return The same as the input character vector `path` but it is marked
 #'   with special internal S3 classes so that \pkg{knitr} will convert the file
 #'   paths to proper output code according to the output format.
 #' @export
@@ -496,8 +496,8 @@ include_graphics = function(
 #'
 #' When including images in non-HTML output formats such as LaTeX/PDF, URLs will
 #' not work as image paths. In this case, we have to download the images. This
-#' function is a wrapper of \code{xfun::\link[xfun]{download_file}()} and
-#' \code{\link{include_graphics}()}.
+#' function is a wrapper of [xfun::download_file()] and
+#' [include_graphics()].
 #' @param url The URL of an image.
 #' @param path The download path (inferred from the URL by default). If the file
 #'   exists, it will not be downloaded (downloading can take time and requires
@@ -506,7 +506,7 @@ include_graphics = function(
 #' @param use_file Whether to use the URL or the download path to include the
 #'   image. By default, the URL is used for HTML output formats, and the file
 #'   path is used for other output formats.
-#' @param ... Other arguments to be passed to \code{\link{include_graphics}()}.
+#' @param ... Other arguments to be passed to [include_graphics()].
 #' @export
 #' @examplesIf interactive()
 #' knitr::download_image('https://www.r-project.org/Rlogo.png')
@@ -541,16 +541,16 @@ raster_dpi_width = function(path, dpi) {
 
 #' Embed a URL as an HTML iframe or a screenshot in \pkg{knitr} documents
 #'
-#' When the output format is HTML, \code{include_url()} inserts an iframe in the
+#' When the output format is HTML, `include_url()` inserts an iframe in the
 #' output; otherwise it takes a screenshot of the URL and insert the image in
-#' the output. \code{include_app()} takes the URL of a Shiny app and adds
-#' \samp{?showcase=0} to it (to disable the showcase mode), then passes the URL
-#' to \code{include_url()}.
+#' the output. `include_app()` takes the URL of a Shiny app and adds
+#' `?showcase=0` to it (to disable the showcase mode), then passes the URL
+#' to `include_url()`.
 #' @param url A character vector of URLs.
 #' @param height A character vector to specify the height of iframes.
 #' @return An R object with a special class that \pkg{knitr} recognizes
 #'   internally to generate the iframes or screenshots.
-#' @seealso \code{\link{include_graphics}}
+#' @seealso [include_graphics()]
 #' @export
 include_url = function(url, height = '400px') {
   include_url2(url, height)

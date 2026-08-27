@@ -3,52 +3,52 @@
 #' This function converts an Sweave document to a \pkg{knitr}-compatible
 #' document.
 #'
-#' The pseudo command \samp{\\SweaveInput{file.Rnw}} is converted to a code
-#' chunk header \code{<<child='file.Rnw'>>=}.
+#' The pseudo command `\SweaveInput{file.Rnw}` is converted to a code
+#' chunk header `<<child='file.Rnw'>>=`.
 #'
-#' Similarly \samp{\\SweaveOpts{opt = value}} is converted to a code chunk
-#' \samp{opts_chunk$set(opt = value)} with the chunk option \code{include =
-#' FALSE}; the options are automatically fixed in the same way as local chunk
+#' Similarly `\SweaveOpts{opt = value}` is converted to a code chunk
+#' `opts_chunk$set(opt = value)` with the chunk option `include =
+#' FALSE`; the options are automatically fixed in the same way as local chunk
 #' options (explained below).
 #'
-#' The Sweave package \samp{\\usepackage{Sweave}} in the preamble is removed
+#' The Sweave package `\usepackage{Sweave}` in the preamble is removed
 #' because it is not required.
 #'
-#' Chunk options are updated if necessary: option values \code{true} and
-#' \code{false} are changed to \code{TRUE} and \code{FALSE} respectively;
-#' \code{fig=TRUE} is removed because it is not necessary for \pkg{knitr} (plots
-#' will be automatically generated); \code{fig=FALSE} is changed to
-#' \code{fig.keep='none'}; the devices \code{pdf/jpeg/png/eps/tikz=TRUE} are
-#' converted to \code{dev='pdf'/'jpeg'/'png'/'postscript'/'tikz'};
-#' \code{pdf/jpeg/png/eps/tikz=FALSE} are removed;
-#' \code{results=tex/verbatim/hide} are changed to
-#' \code{results='asis'/'markup'/'hide'}; \code{width/height} are changed to
-#' \code{fig.width/fig.height}; \code{prefix.string} is changed to
-#' \code{fig.path}; \code{print/term/prefix=TRUE/FALSE} are removed; most of the
-#' character options (e.g. \code{engine} and \code{out.width}) are quoted;
-#' \code{keep.source=TRUE/FALSE} is changed to \code{tidy=FALSE/TRUE} (note the
+#' Chunk options are updated if necessary: option values `true` and
+#' `false` are changed to `TRUE` and `FALSE` respectively;
+#' `fig=TRUE` is removed because it is not necessary for \pkg{knitr} (plots
+#' will be automatically generated); `fig=FALSE` is changed to
+#' `fig.keep='none'`; the devices `pdf/jpeg/png/eps/tikz=TRUE` are
+#' converted to `dev='pdf'/'jpeg'/'png'/'postscript'/'tikz'`;
+#' `pdf/jpeg/png/eps/tikz=FALSE` are removed;
+#' `results=tex/verbatim/hide` are changed to
+#' `results='asis'/'markup'/'hide'`; `width/height` are changed to
+#' `fig.width/fig.height`; `prefix.string` is changed to
+#' `fig.path`; `print/term/prefix=TRUE/FALSE` are removed; most of the
+#' character options (e.g. `engine` and `out.width`) are quoted;
+#' `keep.source=TRUE/FALSE` is changed to `tidy=FALSE/TRUE` (note the
 #' order of values).
 #'
-#' If a line \code{@@} (it closes a chunk) directly follows a previous
-#' \code{@@}, it is removed; if a line \code{@@} appears before a code chunk and
+#' If a line `@@` (it closes a chunk) directly follows a previous
+#' `@@`, it is removed; if a line `@@` appears before a code chunk and
 #' no chunk is before it, it is also removed, because \pkg{knitr} only uses one
-#' \samp{@@} after \samp{<<>>=} by default (which is not the original Noweb
+#' `@@` after `<<>>=` by default (which is not the original Noweb
 #' syntax but more natural).
 #' @param file Path to the Rnw file (must be encoded in UTF-8).
 #' @param output Output file path. By default, \file{file.Rnw} produces
-#'   \file{file-knitr.Rnw}); if \code{text} is not NULL, no output file will be
+#'   \file{file-knitr.Rnw}); if `text` is not NULL, no output file will be
 #'   produced.
 #' @param text An alternative way to provide the Sweave code as a character
-#'   string. If \code{text} is provided, \code{file} will be ignored.
-#' @return If \code{text} is \code{NULL}, the \code{output} file is written and
-#'   \code{NULL} is returned. Otherwise, the converted text string is returned.
-#' @note If \samp{\\SweaveOpts{}} spans across multiple lines, it will not be
+#'   string. If `text` is provided, `file` will be ignored.
+#' @return If `text` is `NULL`, the `output` file is written and
+#'   `NULL` is returned. Otherwise, the converted text string is returned.
+#' @note If `\SweaveOpts{}` spans across multiple lines, it will not be
 #'   fixed, and you have to fix it manually. The LaTeX-style syntax of Sweave
-#'   chunks are ignored (see \code{?SweaveSyntaxLatex}); only the Noweb syntax
+#'   chunks are ignored (see `?SweaveSyntaxLatex`); only the Noweb syntax
 #'   is supported.
-#' @seealso \code{\link{Sweave}}, \code{\link{gsub}}
+#' @seealso [Sweave()], [gsub()]
 #' @references The motivation of the changes in the syntax:
-#'   \url{https://yihui.org/knitr/demo/sweave/}
+#'   <https://yihui.org/knitr/demo/sweave/>
 #' @export
 #' @examples Sweave2knitr(text='<<echo=TRUE>>=') # this is valid
 #' Sweave2knitr(text="<<png=true>>=") # dev='png'

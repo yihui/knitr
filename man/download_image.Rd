@@ -23,13 +23,13 @@ again, delete it beforehand.}
 image. By default, the URL is used for HTML output formats, and the file
 path is used for other output formats.}
 
-\item{...}{Other arguments to be passed to \code{\link{include_graphics}()}.}
+\item{...}{Other arguments to be passed to \code{\link[=include_graphics]{include_graphics()}}.}
 }
 \description{
 When including images in non-HTML output formats such as LaTeX/PDF, URLs will
 not work as image paths. In this case, we have to download the images. This
-function is a wrapper of \code{xfun::\link[xfun]{download_file}()} and
-\code{\link{include_graphics}()}.
+function is a wrapper of \code{\link[xfun:download_file]{xfun::download_file()}} and
+\code{\link[=include_graphics]{include_graphics()}}.
 }
 \examples{\dontshow{if (interactive()) \{}
 knitr::download_image("https://www.r-project.org/Rlogo.png")

@@ -1,21 +1,21 @@
 #' Package vignette engines
 #'
 #' Since R 3.0.0, package vignettes can use non-Sweave engines, and \pkg{knitr}
-#' has provided a few engines to compile vignettes via \code{\link{knit}()} with
-#' different templates. See \url{https://yihui.org/knitr/demo/vignette/} for
+#' has provided a few engines to compile vignettes via [knit()] with
+#' different templates. See <https://yihui.org/knitr/demo/vignette/> for
 #' more information.
 #' @name vignette_engines
-#' @note If you use the \code{knitr::rmarkdown} engine, please make sure that
-#'   you put \pkg{rmarkdown} in the \samp{Suggests} field of your
+#' @note If you use the `knitr::rmarkdown` engine, please make sure that
+#'   you put \pkg{rmarkdown} in the `Suggests` field of your
 #'   \file{DESCRIPTION} file. Also make sure \command{pandoc} is available
 #'   during \command{R CMD build}. If you build your package from RStudio, this
 #'   is normally not a problem. If you build the package outside RStudio, run
-#'   \code{rmarkdown::find_pandoc()} in an R session to check if Pandoc can be
+#'   `rmarkdown::find_pandoc()` in an R session to check if Pandoc can be
 #'   found.
 #'
 #'   When the \pkg{rmarkdown} package is not installed or not available, or
-#'   \command{pandoc} cannot be found, the \code{knitr::rmarkdown} engine will
-#'   fall back to the \code{knitr::knitr} engine, which uses R Markdown v1 based
+#'   \command{pandoc} cannot be found, the `knitr::rmarkdown` engine will
+#'   fall back to the `knitr::knitr` engine, which uses R Markdown v1 based
 #'   on the \pkg{litedown} package.
 #' @examples library(knitr)
 #' vig_list = tools::vignetteEngine(package = 'knitr')
@@ -135,10 +135,10 @@ vig_engine = function(..., tangle = vtangle) {
 #' When performing spell checking on source documents, we may need to skip R
 #' code chunks and inline R expressions, because many R functions and symbols
 #' are likely to be identified as typos. This function is designed for the
-#' \code{filter} argument of \code{\link{aspell}()} to filter out code chunks
+#' `filter` argument of [aspell()] to filter out code chunks
 #' and inline expressions.
 #' @param ifile Filename of the source document.
-#' @param encoding Ignored (the file \code{ifile} must be encoded in UTF-8).
+#' @param encoding Ignored (the file `ifile` must be encoded in UTF-8).
 #' @return A character vector of the file content, excluding code chunks and
 #'   inline expressions.
 #' @export

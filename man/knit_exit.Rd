@@ -8,8 +8,8 @@ knit_exit(append, fully = TRUE)
 }
 \arguments{
 \item{append}{A character vector to be appended to the results from
-\code{knit()} so far. By default, this is \samp{\end{document}} for LaTeX
-output, and \samp{</body></html>} for HTML output, to make the output
+\code{knit()} so far. By default, this is \verb{\\end\{document\}} for LaTeX
+output, and \verb{</body></html>} for HTML output, to make the output
 document complete. For other types of output, it is an empty string.}
 
 \item{fully}{Whether to fully exit the knitting process if \code{knit_exit()}
@@ -18,13 +18,13 @@ process of the child document.}
 }
 \value{
 Invisible \code{NULL}. An internal signal is set up (as a side
-  effect) to notify \code{knit()} to quit as if it had reached the end of the
-  document.
+effect) to notify \code{knit()} to quit as if it had reached the end of the
+document.
 }
 \description{
 Sometimes we may want to exit the knitting process early, and completely
 ignore the rest of the document. This function provides a mechanism to
-terminate \code{\link{knit}()}.
+terminate \code{\link[=knit]{knit()}}.
 }
 \examples{
 # see https://github.com/yihui/knitr-examples/blob/master/096-knit-exit.Rmd

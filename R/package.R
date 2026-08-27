@@ -15,15 +15,15 @@
 #' @name knitr-package
 #' @aliases knitr
 #' @import graphics grDevices stats utils
-#' @author Yihui Xie <\url{https://yihui.org}>
-#' @seealso The core function in this package: \code{\link{knit}}. If you are an
-#'   Sweave user, see \code{\link{Sweave2knitr}} on how to convert Sweave files
+#' @author Yihui Xie <<https://yihui.org>>
+#' @seealso The core function in this package: [knit()]. If you are an
+#'   Sweave user, see [Sweave2knitr()] on how to convert Sweave files
 #'   to \pkg{knitr}.
-#' @note The pronunciation of \pkg{knitr} is similar to \emph{neater} or you can
-#'   think of \emph{knitter} (but it is \emph{single t}). The name comes from
-#'   \code{knit} + \code{R} (while \code{Sweave} = \code{S} + \code{weave}).
-#' @references Full documentation and demos: \url{https://yihui.org/knitr/};
-#'   FAQ's: \url{https://yihui.org/knitr/faq/}
+#' @note The pronunciation of \pkg{knitr} is similar to *neater* or you can
+#'   think of *knitter* (but it is *single t*). The name comes from
+#'   `knit` + `R` (while `Sweave` = `S` + `weave`).
+#' @references Full documentation and demos: <https://yihui.org/knitr/>;
+#'   FAQ's: <https://yihui.org/knitr/faq/>
 #' @importFrom xfun file_ext html_escape is_windows loadable parse_only
 #'   sans_ext try_silent with_ext read_utf8 write_utf8 file_string
 #'   is_R_CMD_check is_abs_path file_exists strip_html

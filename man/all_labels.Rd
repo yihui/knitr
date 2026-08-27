@@ -25,7 +25,7 @@ A character vector.
 \description{
 The function \code{all_labels()} returns all chunk labels as a character
 vector. Optionally, you can specify a series of conditions to filter the
-labels. The function `all_rcpp_labels()` is a wrapper function for
+labels. The function \code{all_rcpp_labels()} is a wrapper function for
 \code{all_labels(engine == 'Rcpp')}.
 }
 \details{
@@ -36,8 +36,8 @@ expression fails to be evaluated (e.g. when a certain object does not exist),
 }
 \note{
 Empty code chunks are always ignored, including those chunks that are
-  empty in the original document but filled with code using chunk options
-  such as \code{ref.label} or \code{code}.
+empty in the original document but filled with code using chunk options
+such as \code{ref.label} or \code{code}.
 }
 \examples{
 # the examples below are meaningless unless you put them in a knitr document

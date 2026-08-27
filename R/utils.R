@@ -128,10 +128,10 @@ pure_preamble = function(preamble, patterns) {
 #'   complete output is written.
 #' @note Obviously this function is only useful when the output format is LaTeX.
 #'   This function only works when the child document is compiled in a
-#'   standalone mode using \code{\link{knit}()} (instead of being called in
-#'   \code{\link{knit_child}()}); when the parent document is compiled, this
+#'   standalone mode using [knit()] (instead of being called in
+#'   [knit_child()]); when the parent document is compiled, this
 #'   function in the child document will be ignored.
-#' @references \url{https://yihui.org/knitr/demo/child/}
+#' @references <https://yihui.org/knitr/demo/child/>
 #' @export
 #' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
 #'
@@ -364,24 +364,24 @@ fix_options = function(options) {
 
 #' Check the current input and output type
 #'
-#' The function \code{is_latex_output()} returns \code{TRUE} when the output
+#' The function `is_latex_output()` returns `TRUE` when the output
 #' format is LaTeX; it works for both \file{.Rnw} and R Markdown documents (for
-#' the latter, the two Pandoc formats \code{latex} and \code{beamer} are
-#' considered LaTeX output). The function \code{is_html_output()} only works for
+#' the latter, the two Pandoc formats `latex` and `beamer` are
+#' considered LaTeX output). The function `is_html_output()` only works for
 #' R Markdown documents and will test for several Pandoc HTML based output
 #' formats (by default, these formats are considered as HTML formats:
-#' \code{c('markdown', 'epub', 'epub2', 'html', 'html4', 'html5', 'revealjs', 's5',
-#' 'slideous', 'slidy', 'gfm')}).
+#' `c('markdown', 'epub', 'epub2', 'html', 'html4', 'html5', 'revealjs', 's5',
+#' 'slideous', 'slidy', 'gfm')`).
 #'
-#' The function \code{pandoc_to()} returns the Pandoc output format, and
-#' \code{pandoc_from()} returns Pandoc input format. \code{pandoc_to(fmt)}
+#' The function `pandoc_to()` returns the Pandoc output format, and
+#' `pandoc_from()` returns Pandoc input format. `pandoc_to(fmt)`
 #' allows to check the current output format against a set of format names. Both
 #' are to be used with R Markdown documents.
 #'
 #' These functions may be useful for conditional output that depends on the
 #' output format. For example, you may write out a LaTeX table in an R Markdown
 #' document when the output format is LaTeX, and an HTML or Markdown table when
-#' the output format is HTML. Use \code{pandoc_to(fmt)} to test a more specific
+#' the output format is HTML. Use `pandoc_to(fmt)` to test a more specific
 #' Pandoc format.
 #'
 #' Internally, the Pandoc output format of the current R Markdown document is
@@ -390,7 +390,7 @@ fix_options = function(options) {
 #' \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.from')}
 #'
 #' @note See available Pandoc formats, in
-#'   \href{https://pandoc.org/MANUAL.html}{Pandoc's Manual}
+#'   [Pandoc's Manual](https://pandoc.org/MANUAL.html)
 #' @rdname output_type
 #' @export
 #' @examples
@@ -408,8 +408,8 @@ is_latex_output = function() {
 }
 
 #' @param fmt A character vector of output formats to be checked against. If not
-#'   provided, \code{is_html_output()} uses \code{pandoc_to()}, and
-#'   \code{pandoc_to()} returns the output format name.
+#'   provided, `is_html_output()` uses `pandoc_to()`, and
+#'   `pandoc_to()` returns the output format name.
 #' @param excludes A character vector of output formats that should not be
 #'   considered as HTML format. Options are: markdown, epub, epub2, html, html4, html5,
 #'   revealjs, s5, slideous, slidy, and gfm.
@@ -425,8 +425,8 @@ is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
 }
 
 #' @param exact Whether to return or use the exact format name. If not, Pandoc
-#'   extensions will be removed from the format name, e.g., \samp{latex-smart}
-#'   will be treated as \samp{latex}.
+#'   extensions will be removed from the format name, e.g., `latex-smart`
+#'   will be treated as `latex`.
 #' @rdname output_type
 #' @export
 pandoc_to = function(fmt, exact = FALSE) {
@@ -502,18 +502,18 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
 
 #' Path for figure files
 #'
-#' The filename of figure files is the combination of options \code{fig.path}
-#' and \code{label}. This function returns the path of figures for the current
+#' The filename of figure files is the combination of options `fig.path`
+#' and `label`. This function returns the path of figures for the current
 #' chunk by default.
 #' @param suffix A filename suffix; if it is non-empty and does not
-#'   contain a dot \code{.}, it will be treated as the filename extension (e.g.
-#'   \code{png} will be used as \code{.png})
+#'   contain a dot `.`, it will be treated as the filename extension (e.g.
+#'   `png` will be used as `.png`)
 #' @param options A list of options; by default the options of the current chunk.
 #' @param number The current figure number. The default is the internal chunk option
-#'   \code{fig.cur}, if this is available.
+#'   `fig.cur`, if this is available.
 #' @return A character vector of the form \file{fig.path-label-i.suffix}.
-#' @note When there are special characters (not alphanumeric or \samp{-} or
-#'   \samp{_}) in the path, they will be automatically replaced with \samp{_}.
+#' @note When there are special characters (not alphanumeric or `-` or
+#'   `_`) in the path, they will be automatically replaced with `_`.
 #'   For example, \file{a b/c.d-} will be sanitized to \file{a_b/c_d-}. This
 #'   makes the filenames safe to LaTeX.
 #' @export
@@ -540,25 +540,25 @@ sanitize_fn = function(path, warn = TRUE) {
 #' Obtain the figure filenames for a chunk
 #'
 #' Given a chunk label, the figure file extension, the figure number(s), and the
-#' chunk option \code{fig.path}, return the filename(s).
+#' chunk option `fig.path`, return the filename(s).
 #'
 #' This function can be used in an inline R expression to write out the figure
 #' filenames without hard-coding them. For example, if you created a plot in a
-#' code chunk with the label \code{foo} and figure path \file{my-figure/}, you
+#' code chunk with the label `foo` and figure path \file{my-figure/}, you
 #' are not recommended to use hard-coded figure paths like
-#' \samp{\includegraphics{my-figure/foo-1.pdf}} (in \file{.Rnw} documents) or
-#' \samp{![](my-figure/foo-1.png)} (R Markdown) in your document. Instead, you
-#' should use \samp{\\Sexpr{fig_chunk('foo', 'pdf')}} or \samp{![](`r
-#' fig_chunk('foo', 'png')`)}.
+#' `\includegraphics{my-figure/foo-1.pdf}` (in \file{.Rnw} documents) or
+#' `![](my-figure/foo-1.png)` (R Markdown) in your document. Instead, you
+#' should use `\Sexpr{fig_chunk('foo', 'pdf')}` or
+#' ``` ![](`r fig_chunk('foo', 'png')`) ```.
 #'
 #' You can generate plots in a code chunk but not show them inside the code
-#' chunk by using the chunk option \code{fig.show = 'hide'}. Then you can use
+#' chunk by using the chunk option `fig.show = 'hide'`. Then you can use
 #' this function if you want to show them elsewhere.
 #' @param label The chunk label.
-#' @param ext The figure file extension, e.g. \code{png} or \code{pdf}.
-#' @param number The figure number (by default \code{1}).
-#' @param fig.path Passed to \code{\link{fig_path}}. By default, the chunk
-#'   option \code{fig.path} is used.
+#' @param ext The figure file extension, e.g., `png` or `pdf`.
+#' @param number The figure number (by default `1`).
+#' @param fig.path Passed to [fig_path()]. By default, the chunk
+#'   option `fig.path` is used.
 #' @return A character vector of filenames.
 #' @export
 #' @examples library(knitr)
@@ -574,8 +574,8 @@ fig_chunk = function(label, ext = '', number, fig.path = opts_chunk$get('fig.pat
 #'
 #' Get or set the environment in which code chunks are evaluated.
 #'
-#' @param envir If \code{NULL}, the function returns the \code{envir} argument
-#'   of \code{\link{knit}}, otherwise it should be a new environment for
+#' @param envir If `NULL`, the function returns the `envir` argument
+#'   of [knit()], otherwise it should be a new environment for
 #'   evaluating code, in which case the function returns the old environment
 #'   after setting the new environment.
 #' @export
@@ -719,12 +719,12 @@ is_utf8 = function(x) {
 #' easier to review differences in version control.
 #' @param file The input Rmd file.
 #' @param width The expected line width.
-#' @param text A character vector of text lines, as an alternative to \code{file}. If
-#'   \code{text} is not \code{NULL}, \code{file} is ignored.
+#' @param text A character vector of text lines, as an alternative to `file`. If
+#'   `text` is not `NULL`, `file` is ignored.
 #' @param backup Path to back up the original file in case anything goes
-#'   wrong. If set to \code{NULL}, no backup is made. The default value is constructed
-#'   from \code{file} by adding \code{__} before the base filename.
-#' @return If \code{file} is provided, it is overwritten; if \code{text} is
+#'   wrong. If set to `NULL`, no backup is made. The default value is constructed
+#'   from `file` by adding `__` before the base filename.
+#' @return If `file` is provided, it is overwritten; if `text` is
 #'   provided, a character vector is returned.
 #' @note Currently it does not wrap blockquotes or lists (ordered or unordered).
 #'   This feature may or may not be added in the future.
@@ -827,11 +827,11 @@ has_crop_tools = function(warn = TRUE) {
 
 #' Query the current input filename
 #'
-#' Returns the name of the input file passed to \code{\link{knit}()}.
-#' @param dir Boolean; whether to prepend the current working directory to the file path,
-#'   i.e. whether to return an absolute path or a relative path.
+#' Returns the name of the input file passed to [knit()].
+#' @param dir Whether to prepend the current working directory to the file
+#'   path, i.e., whether to return an absolute path or a relative path.
 #' @return A character string, if this function is called inside an input
-#'   document. Otherwise \code{NULL}.
+#'   document. Otherwise `NULL`.
 #' @export
 current_input = function(dir = FALSE) {
   input = knit_concord$get('infile')
@@ -899,8 +899,8 @@ create_label = function(..., latex = FALSE) {
 
 #' Combine multiple words into a single string
 #'
-#' This is a wrapper function of \code{xfun::join_words()}.
-#' @param ... Arguments passed to \code{xfun::\link[xfun]{join_words}()}.
+#' This is a wrapper function of `xfun::join_words()`.
+#' @param ... Arguments passed to [xfun::join_words()].
 #' @export
 combine_words = function(...) xfun::join_words(...)
 
@@ -950,32 +950,32 @@ restore_raw_output = function(text, chunks, markers = raw_markers) {
 #' Mark character strings as raw output that should not be converted
 #'
 #' These functions provide a mechanism to protect the character output of R code
-#' chunks. The output is annotated with special markers in \code{raw_output};
-#' \code{extract_raw_output()} will extract raw output wrapped in the markers,
-#' and replace the raw output with its MD5 digest; \code{restore_raw_output()}
+#' chunks. The output is annotated with special markers in `raw_output`;
+#' `extract_raw_output()` will extract raw output wrapped in the markers,
+#' and replace the raw output with its MD5 digest; `restore_raw_output()`
 #' will restore the MD5 digest with the original raw output.
 #'
 #' This mechanism is designed primarily for R Markdown pre/post-processors. In
-#' an R code chunk, you generate \code{raw_output()} to the Markdown output. In
-#' the pre-processor, you can \code{extract_raw_output()} from the Markdown
+#' an R code chunk, you generate `raw_output()` to the Markdown output. In
+#' the pre-processor, you can `extract_raw_output()` from the Markdown
 #' file, store the raw output and MD5 digests, and remove the actual raw output
 #' from Markdown so Pandoc will never see it. In the post-processor, you can
 #' read the Pandoc output (e.g., an HTML or RTF file), and restore the raw
 #' output.
 #' @param x The character vector to be protected.
-#' @param markers A length-2 character vector to be used to wrap \code{x};
-#'   see \code{knitr:::raw_markers} for the default value.
-#' @param ... Arguments to be passed to \code{\link{asis_output}()}.
-#' @param text For \code{extract_raw_output()}, the content of the input file
-#'   (e.g. Markdown); for \code{restore_raw_output()}, the content of the output
+#' @param markers A length-2 character vector to be used to wrap `x`;
+#'   see `knitr:::raw_markers` for the default value.
+#' @param ... Arguments to be passed to [asis_output()].
+#' @param text For `extract_raw_output()`, the content of the input file
+#'   (e.g. Markdown); for `restore_raw_output()`, the content of the output
 #'   file (e.g. HTML generated by Pandoc from Markdown).
 #' @param chunks A named character vector returned from
-#'   \code{extract_raw_output()}.
-#' @return For \code{extract_raw_output()}, a list of two components:
-#'   \code{value} (the \code{text} with raw output replaced by MD5 digests) and
-#'   \code{chunks} (a named character vector, of which the names are MD5 digests
-#'   and values are the raw output). For \code{restore_raw_output()}, the
-#'   restored \code{text}.
+#'   `extract_raw_output()`.
+#' @return For `extract_raw_output()`, a list of two components:
+#'   `value` (the `text` with raw output replaced by MD5 digests) and
+#'   `chunks` (a named character vector, of which the names are MD5 digests
+#'   and values are the raw output). For `restore_raw_output()`, the
+#'   restored `text`.
 #' @export
 #' @examples library(knitr)
 #' out = c('*hello*', raw_output('<special>content</special> *protect* me!'), '*world*')
@@ -993,15 +993,15 @@ raw_output = function(x, markers = raw_markers, ...) {
 #' Mark character strings as raw blocks in R Markdown
 #'
 #' Wraps content in a raw attribute block, which protects it from being escaped
-#' by Pandoc. See \url{https://pandoc.org/MANUAL.html#generic-raw-attribute}.
-#' Functions \code{raw_latex()} and \code{raw_html()} are shorthands of
-#' \code{raw_block(x, 'latex')} and \code{raw_block(x, 'html')}, respectively.
+#' by Pandoc. See <https://pandoc.org/MANUAL.html#generic-raw-attribute>.
+#' Functions `raw_latex()` and `raw_html()` are shorthands of
+#' `raw_block(x, 'latex')` and `raw_block(x, 'html')`, respectively.
 #' @param x The character vector to be protected.
 #' @param type The type of raw blocks (i.e., the Pandoc output format). If you
 #'   are not sure about the Pandoc output format of your document, insert a code
-#'   chunk \code{knitr:::pandoc_to()} and see what it returns after the document
+#'   chunk `knitr:::pandoc_to()` and see what it returns after the document
 #'   is compiled.
-#' @param ... Arguments to be passed to \code{\link{asis_output}()}.
+#' @param ... Arguments to be passed to [asis_output()].
 #' @export
 #' @examples
 #' knitr::raw_latex('\\emph{some text}')
@@ -1055,14 +1055,14 @@ quote_vec = function(x, sep = '; ') paste0(sprintf('"%s"', x), collapse = sep)
 
 #' Encode an image file to a data URI
 #'
-#' This function is the same as \code{xfun::\link[xfun]{base64_uri}()} (only with a
+#' This function is the same as [xfun::base64_uri()] (only with a
 #' different function name). It can encode an image file as a base64 string,
-#' which can be used in the \code{img} tag in HTML.
+#' which can be used in the `img` tag in HTML.
 #' @param f Path to the image file.
 #' @return The data URI as a character string.
 #' @author Wush Wu and Yihui Xie
 #' @export
-#' @references \url{https://en.wikipedia.org/wiki/Data_URI_scheme}
+#' @references <https://en.wikipedia.org/wiki/Data_URI_scheme>
 #' @examples uri = image_uri(file.path(R.home('doc'), 'html', 'logo.jpg'))
 #' if (interactive()) {cat(sprintf('<img src="%s" />', uri), file = 'logo.html')
 #' browseURL('logo.html') # you can check its HTML source

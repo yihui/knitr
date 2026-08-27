@@ -22,30 +22,30 @@ working directory.}
 
 \item{compiler}{A character string giving the LaTeX engine used to compile
 the tex document to PDF. For an Rrst file, setting \code{compiler} to
-\code{'rst2pdf'} will use \code{\link{rst2pdf}} to compile the rst file to
+\code{'rst2pdf'} will use \code{\link[=rst2pdf]{rst2pdf()}} to compile the rst file to
 PDF using the ReportLab open-source library. For an Rtyp file, setting
 \code{compiler} to \code{'typst'} will use the \command{typst} command-line
 tool to compile the typ file to PDF.}
 
 \item{envir}{Environment in which code chunks are to be evaluated, for
-example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()}).}
+example, \code{\link[=parent.frame]{parent.frame()}}, \code{\link[=new.env]{new.env()}}, or
+\code{\link[=globalenv]{globalenv()}}).}
 
-\item{quiet}{Boolean; suppress the progress bar and messages?}
+\item{quiet}{Whether to suppress the progress bar and messages.}
 
-\item{...}{Options to be passed to \code{tinytex::\link[tinytex]{latexmk}()}
-or \code{\link{rst2pdf}()}.}
+\item{...}{Options to be passed to \code{\link[tinytex:latexmk]{tinytex::latexmk()}}
+or \code{\link[=rst2pdf]{rst2pdf()}}.}
 }
 \value{
 The filename of the PDF file.
 }
 \description{
 Knit the input Rnw or Rrst document, and compile to PDF using
-\code{tinytex::\link[tinytex]{latexmk}()} or \code{\link{rst2pdf}()}.
+\code{\link[tinytex:latexmk]{tinytex::latexmk()}} or \code{\link[=rst2pdf]{rst2pdf()}}.
 }
 \note{
 The \code{output} argument specifies the output filename to be passed
-  to the PDF compiler (e.g. a tex document) instead of the PDF filename.
+to the PDF compiler (e.g. a tex document) instead of the PDF filename.
 }
 \examples{
 #' compile with xelatex

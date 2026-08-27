@@ -1,19 +1,19 @@
 #' Knit package documentation
 #'
 #' Run examples in a package and insert output into the examples code;
-#' \code{knit_rd_all()} is a wrapper around \code{knit_rd()} to build static
+#' `knit_rd_all()` is a wrapper around `knit_rd()` to build static
 #' HTML help pages for all packages under the \file{html} directory of them.
 #' @param pkg Package name.
 #' @param links A character vector of links to be passed to
-#'   \code{tools::\link{Rd2HTML}()}.
-#' @param frame Boolean: whether to put a navigation frame on the left of the
-#'   index page.
+#'   [tools::Rd2HTML()].
+#' @param frame Whether to put a navigation frame on the left of the index
+#'   page.
 #' @return All HTML pages corresponding to topics in the package are written
 #'   under the current working directory. An \file{index.html} is also written
 #'   as a table of content.
 #' @note Ideally the html pages should be put under the \file{html} directory of
-#'   an installed package which can be found via \code{system.file('html',
-#'   package = 'your_package_name')}, otherwise some links may not work (e.g.
+#'   an installed package which can be found via `system.file('html',
+#'   package = 'your_package_name')`, otherwise some links may not work (e.g.
 #'   the link to the DESCRIPTION file).
 #' @examples library(knitr)
 #' \dontrun{

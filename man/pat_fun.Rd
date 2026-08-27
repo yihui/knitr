@@ -32,7 +32,7 @@ pat_typst()
 }
 \value{
 The patterns object \code{\link{knit_patterns}} is modified as a side
-  effect.
+effect.
 }
 \description{
 These are convenience functions to set pre-defined pattern lists (the syntax

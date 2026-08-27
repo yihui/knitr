@@ -9,7 +9,7 @@ rocco(input, ...)
 \arguments{
 \item{input}{Path of the input R Markdown file.}
 
-\item{...}{Arguments to be passed to \code{\link{knit2html}}}
+\item{...}{Arguments to be passed to \code{\link[=knit2html]{knit2html()}}}
 }
 \value{
 An HTML file is written, and its name is returned.
@@ -41,7 +41,7 @@ rocco_view(system.file("doc", "knit_expand.Rmd", package = "knitr"))
 }
 \references{
 The Docco package by Jeremy Ashkenas:
-  \url{https://github.com/jashkenas/docco}
+\url{https://github.com/jashkenas/docco}
 }
 \author{
 Weicheng Zhu and Yihui Xie

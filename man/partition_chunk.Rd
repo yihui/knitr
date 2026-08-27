@@ -7,7 +7,7 @@
 partition_chunk(engine, code)
 }
 \description{
-This is a wrapper function calling \code{xfun::\link[xfun]{divide_chunk}()}
+This is a wrapper function calling \code{\link[xfun:divide_chunk]{xfun::divide_chunk()}}
 under the hood.
 }
 \keyword{internal}

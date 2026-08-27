@@ -25,15 +25,15 @@ used in the first chunk of a document and this chunk must not be cached.
 }
 \note{
 Be cautious about \code{path}: because this function is used in a
-  chunk, the working directory when the chunk is evaluated is the directory
-  of the input document in \code{\link{knit}}, and if that directory differs
-  from the working directory before calling \code{knit()}, you need to adjust
-  the \code{path} argument here to make sure this function can find the cache
-  files \file{__objects} and \file{__globals}.
+chunk, the working directory when the chunk is evaluated is the directory
+of the input document in \code{\link[=knit]{knit()}}, and if that directory differs
+from the working directory before calling \code{knit()}, you need to adjust
+the \code{path} argument here to make sure this function can find the cache
+files \file{__objects} and \file{__globals}.
 }
 \references{
 \url{https://yihui.org/knitr/demo/cache/}
 }
 \seealso{
-\code{\link{dep_prev}}
+\code{\link[=dep_prev]{dep_prev()}}
 }

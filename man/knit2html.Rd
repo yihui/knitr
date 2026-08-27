@@ -22,39 +22,39 @@ knit2html(
 function will try to guess a default, which will be under the current
 working directory.}
 
-\item{...}{Options passed to \code{litedown::\link[litedown]{mark}()}.}
+\item{...}{Options passed to \code{\link[litedown:mark]{litedown::mark()}}.}
 
 \item{envir}{Environment in which code chunks are to be evaluated, for
-example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()}).}
+example, \code{\link[=parent.frame]{parent.frame()}}, \code{\link[=new.env]{new.env()}}, or
+\code{\link[=globalenv]{globalenv()}}).}
 
 \item{text}{A character vector. This is an alternative way to provide the
 input file.}
 
-\item{quiet}{Boolean; suppress the progress bar and messages?}
+\item{quiet}{Whether to suppress the progress bar and messages.}
 
 \item{encoding}{Encoding of the input file; always assumed to be UTF-8 (i.e.,
 this argument is effectively ignored).}
 
-\item{force_v1}{Boolean; whether to force rendering the input document as an
-R Markdown v1 document, even if it is for v2.}
+\item{force_v1}{Whether to force rendering the input document as an R
+Markdown v1 document, even if it is for v2.}
 }
 \value{
 If the argument \code{text} is NULL, a character string (HTML code)
-  is returned; otherwise the result is written into a file and the filename
-  is returned.
+is returned; otherwise the result is written into a file and the filename
+is returned.
 }
 \description{
 This is a convenience function to knit the input markdown source and call
-\code{litedown::\link[litedown]{mark}()} to convert the result to HTML.
+\code{\link[litedown:mark]{litedown::mark()}} to convert the result to HTML.
 }
 \note{
 This function renders R Markdown v1, which is much less powerful than R
-  Markdown v2, i.e. the \pkg{rmarkdown} package
-  (\url{https://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
-  HTML, please use \code{rmarkdown::render()} instead. For a lighter-weight
-  alternative that handles figure paths robustly, see
-  \code{litedown::\link[litedown]{fuse}()}.
+Markdown v2, i.e. the \pkg{rmarkdown} package
+(\url{https://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
+HTML, please use \code{rmarkdown::render()} instead. For a lighter-weight
+alternative that handles figure paths robustly, see
+\code{\link[litedown:fuse]{litedown::fuse()}}.
 }
 \examples{
 # a minimal example
@@ -66,5 +66,5 @@ if (interactive()) browseURL("test.html")
 unlink(c("test.Rmd", "test.html", "test.md"))
 }
 \seealso{
-\code{\link{knit}}, \code{litedown::\link[litedown]{mark}}
+\code{\link[=knit]{knit()}}, \code{\link[litedown:mark]{litedown::mark()}}
 }

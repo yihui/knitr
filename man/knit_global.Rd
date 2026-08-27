@@ -8,7 +8,7 @@ knit_global(envir = NULL)
 }
 \arguments{
 \item{envir}{If \code{NULL}, the function returns the \code{envir} argument
-of \code{\link{knit}}, otherwise it should be a new environment for
+of \code{\link[=knit]{knit()}}, otherwise it should be a new environment for
 evaluating code, in which case the function returns the old environment
 after setting the new environment.}
 }

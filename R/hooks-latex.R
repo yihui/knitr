@@ -3,33 +3,33 @@
 #' These hook functions define how to mark up graphics output in different
 #' output formats.
 #'
-#' Depending on the options passed over, \code{hook_plot_tex} may return the
-#' normal \samp{\\includegraphics{}} command, or \samp{\\input{}} (for tikz
-#' files), or \samp{\\animategraphics{}} (for animations); it also takes many
+#' Depending on the options passed over, `hook_plot_tex` may return the
+#' normal `\includegraphics{}` command, or `\input{}` (for tikz
+#' files), or `\animategraphics{}` (for animations); it also takes many
 #' other options into consideration to align plots and set figure sizes, etc.
-#' Similarly, \code{hook_plot_html}, \code{hook_plot_md} and
-#' \code{hook_plot_rst} return character strings which are HTML, Markdown, reST
+#' Similarly, `hook_plot_html`, `hook_plot_md` and
+#' `hook_plot_rst` return character strings which are HTML, Markdown, reST
 #' code.
 #'
-#' For animations (i.e. when the chunk option \code{fig.show} is \code{'animate'}),
-#' \code{hook_plot_tex} generates \samp{\\animategraphics{}} unless a hook function
-#' has been provided via the chunk option \code{animation.hook} or the package option
-#' \code{animation.fun}, in which case that function generates the LaTeX code instead.
+#' For animations (i.e. when the chunk option `fig.show` is `'animate'`),
+#' `hook_plot_tex` generates `\animategraphics{}` unless a hook function
+#' has been provided via the chunk option `animation.hook` or the package option
+#' `animation.fun`, in which case that function generates the LaTeX code instead.
 #' It is called only once per chunk, with the filename of the last plot. The
-#' built-in hooks (e.g. \code{\link{hook_ffmpeg_html}}) generate HTML, and are
+#' built-in hooks (e.g. [hook_ffmpeg_html()]) generate HTML, and are
 #' ignored for LaTeX output.
 #'
 #' In most cases we do not need to call these hooks explicitly, and they were
 #' designed to be used internally. Sometimes we may not be able to record R
-#' plots using \code{grDevices::\link{recordPlot}()}, and we can make use of
+#' plots using [grDevices::recordPlot()], and we can make use of
 #' these hooks to insert graphics output in the output document; see
-#' \code{\link{hook_plot_custom}} for details.
+#' [hook_plot_custom()] for details.
 #' @param x Filename for the plot (a character string).
 #' @param options A list of the current chunk options.
 #' @rdname hook_plot
 #' @return A character string of code, with plot filenames wrapped.
-#' @references \url{https://yihui.org/knitr/hooks/}
-#' @seealso \code{\link{hook_plot_custom}}
+#' @references <https://yihui.org/knitr/hooks/>
+#' @seealso [hook_plot_custom()]
 #' @export
 #' @examples # this is what happens for a chunk like this
 #'
@@ -290,51 +290,51 @@ escape_percent = function(x) gsub('(?<!\\\\)%', '\\\\%', x, perl = TRUE)
 
 #' Set or get output hooks for different output formats
 #'
-#' The \code{render_*()} functions set built-in output hooks for LaTeX, HTML,
-#' Markdown, reStructuredText, AsciiDoc, and Textile. The \code{hooks_*()}
+#' The `render_*()` functions set built-in output hooks for LaTeX, HTML,
+#' Markdown, reStructuredText, AsciiDoc, and Textile. The `hooks_*()`
 #' functions return a list of the output hooks for the corresponding format.
 #'
 #' There are three variants of Markdown documents: ordinary Markdown
-#' (\code{render_markdown(strict = TRUE)}, which calls
-#' \code{hooks_markdown(strict = TRUE)}), extended Markdown (e.g., GitHub
-#' Flavored Markdown and Pandoc; \code{render_markdown(strict = FALSE)}, which
-#' calls \code{hooks_markdown(strict = FALSE)}), and Jekyll (a blogging system
-#' on GitHub; \code{render_jekyll()}, which calls \code{hooks_jekyll()}).
+#' (`render_markdown(strict = TRUE)`, which calls
+#' `hooks_markdown(strict = TRUE)`), extended Markdown (e.g., GitHub
+#' Flavored Markdown and Pandoc; `render_markdown(strict = FALSE)`, which
+#' calls `hooks_markdown(strict = FALSE)`), and Jekyll (a blogging system
+#' on GitHub; `render_jekyll()`, which calls `hooks_jekyll()`).
 #'
 #' For LaTeX output, there are three variants: \pkg{knitr}'s default style
-#' (\code{render_latex()}, which calls \code{hooks_latex()} and uses the LaTeX
-#' \pkg{framed} package), Sweave style (\code{render_sweave()}, which calls
-#' \code{hooks_sweave()} and uses \file{Sweave.sty}), and listings style
-#' (\code{render_listings()}, which calls \code{hooks_listings()} and uses LaTeX
+#' (`render_latex()`, which calls `hooks_latex()` and uses the LaTeX
+#' \pkg{framed} package), Sweave style (`render_sweave()`, which calls
+#' `hooks_sweave()` and uses \file{Sweave.sty}), and listings style
+#' (`render_listings()`, which calls `hooks_listings()` and uses LaTeX
 #' \pkg{listings} package).
 #'
-#' Default HTML output hooks are set by \code{render_html()} (which calls
-#' \code{hooks_html()}); \code{render_rst()} (which calls \code{hooks_rst()}) is
-#' for reStructuredText; \code{render_textile()} (which calls
-#' \code{hooks_textile()}) is for Textile, and \code{render_asciidoc()} (which
-#' calls \code{hooks_asciidoc()}) is AsciiDoc.
+#' Default HTML output hooks are set by `render_html()` (which calls
+#' `hooks_html()`); `render_rst()` (which calls `hooks_rst()`) is
+#' for reStructuredText; `render_textile()` (which calls
+#' `hooks_textile()`) is for Textile, and `render_asciidoc()` (which
+#' calls `hooks_asciidoc()`) is AsciiDoc.
 #'
-#' The \code{render_*()} functions can be used before \code{knit()} or in the
+#' The `render_*()` functions can be used before `knit()` or in the
 #' first chunk of the input document (ideally this chunk has options
-#' \code{include = FALSE} and \code{cache = FALSE}) so that all the following
+#' `include = FALSE` and `cache = FALSE`) so that all the following
 #' chunks will be formatted as expected.
 #'
 #' You can also use \code{\link{knit_hooks}} to set the format's hooks with the
-#' \code{hooks_*()} functions; see references for more info on further
+#' `hooks_*()` functions; see references for more info on further
 #' customizing output hooks.
 #'
 #' @rdname output_hooks
-#' @return \code{NULL} for \code{render_*} functions; corresponding hooks are
-#'   set as a side effect. A list of output hooks for \code{hooks_*()}
+#' @return `NULL` for `render_*` functions; corresponding hooks are
+#'   set as a side effect. A list of output hooks for `hooks_*()`
 #'   functions.
 #' @export
-#' @references See output hooks in \url{https://yihui.org/knitr/hooks/}, and
+#' @references See output hooks in <https://yihui.org/knitr/hooks/>, and
 #'   some examples in
-#'   \url{https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html}
+#'   <https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html>
 #'
 #'   Jekyll and Liquid:
-#'   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions}; prettify.js:
-#'   \url{https://code.google.com/archive/p/google-code-prettify}
+#'   <https://github.com/jekyll/jekyll/wiki/Liquid-Extensions>; prettify.js:
+#'   <https://code.google.com/archive/p/google-code-prettify>
 #' @examples
 #' # below is pretty much what knitr::render_markdown() does:
 #' knitr::knit_hooks$set(knitr::hooks_markdown())
@@ -436,23 +436,23 @@ hooks_listings = hooks_sweave
 #'
 #' A document hook is a function to post-process the output document.
 #'
-#' \code{hook_movecode()} is a document hook to move code chunks out of LaTeX
-#' floating environments like \samp{figure} and \samp{table} when the chunks
+#' `hook_movecode()` is a document hook to move code chunks out of LaTeX
+#' floating environments like `figure` and `table` when the chunks
 #' were actually written inside the floats. This function is primarily designed
 #' for LyX: we often insert code chunks into floats to generate figures or
 #' tables, but in the final output we do not want the code to float with the
 #' environments, so we use regular expressions to find out the floating
 #' environments, extract the code chunks and move them out. To disable this
-#' behavior, use a comment \code{\% knitr_do_not_move} in the floating
+#' behavior, use a comment `\% knitr_do_not_move` in the floating
 #' environment.
 #' @rdname hook_document
 #' @param x A character string (the whole output document).
 #' @return The post-processed document as a character string.
-#' @note These functions are hackish. Also note \code{hook_movecode()} assumes
+#' @note These functions are hackish. Also note `hook_movecode()` assumes
 #'   you to use the default output hooks for LaTeX (not Sweave or listings), and
 #'   every figure/table environment must have a label.
 #' @export
-#' @references \url{https://yihui.org/knitr/hooks/}
+#' @references <https://yihui.org/knitr/hooks/>
 #' @examples \dontrun{knit_hooks$set(document = hook_movecode)}
 #' # see example 103 at https://github.com/yihui/knitr-examples
 hook_movecode = function(x) {
