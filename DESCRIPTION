@@ -203,3 +203,4 @@ Collate:
     'utils-vignettes.R'
     'zzz.R'
 Config/roxygen2/version: 8.1.0
+Roxygen: list(markdown = TRUE)

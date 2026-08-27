@@ -127,25 +127,25 @@ cache_rx = '_[abcdef0123456789]{32}[.](rdb|rdx|RData)$'
 
 #' Build automatic dependencies among chunks
 #'
-#' When the chunk option \code{autodep = TRUE}, all names of objects created in
+#' When the chunk option `autodep = TRUE`, all names of objects created in
 #' a chunk will be saved in a file named \file{__objects} and all global objects
 #' used in a chunk will be saved to \file{__globals}. This function can analyze
 #' object names in these files to automatically build cache dependencies, which
-#' is similar to the effect of the \code{dependson} option. It is supposed to be
+#' is similar to the effect of the `dependson` option. It is supposed to be
 #' used in the first chunk of a document and this chunk must not be cached.
 #' @param path Path to the dependency file.
 #' @param labels A vector of labels of chunks for which the dependencies will be
 #'   built. By default, dependencies for all chunks will be built.
-#' @return \code{NULL}. The dependencies are built as a side effect.
-#' @note Be cautious about \code{path}: because this function is used in a
+#' @return `NULL`. The dependencies are built as a side effect.
+#' @note Be cautious about `path`: because this function is used in a
 #'   chunk, the working directory when the chunk is evaluated is the directory
-#'   of the input document in \code{\link{knit}}, and if that directory differs
-#'   from the working directory before calling \code{knit()}, you need to adjust
-#'   the \code{path} argument here to make sure this function can find the cache
+#'   of the input document in [knit()], and if that directory differs
+#'   from the working directory before calling `knit()`, you need to adjust
+#'   the `path` argument here to make sure this function can find the cache
 #'   files \file{__objects} and \file{__globals}.
 #' @export
-#' @seealso \code{\link{dep_prev}}
-#' @references \url{https://yihui.org/knitr/demo/cache/}
+#' @seealso [dep_prev()]
+#' @references <https://yihui.org/knitr/demo/cache/>
 dep_auto = function(path = opts_chunk$get('cache.path'), labels = all_labels()) {
   # this function should be evaluated in the original working directory
   owd = setwd(opts_knit$get('output.dir')); on.exit(setwd(owd))
@@ -179,7 +179,7 @@ parse_objects = function(path) {
 
 #' Load the cache database of a code chunk
 #'
-#' If a code chunk has turned on the chunk option \code{cache = TRUE}, a cache
+#' If a code chunk has turned on the chunk option `cache = TRUE`, a cache
 #' database will be established after the document is compiled. You can use this
 #' function to manually load the database anywhere in the document (even before
 #' the code chunk). This makes it possible to use objects created later in the
@@ -189,28 +189,28 @@ parse_objects = function(path) {
 #' they are created.
 #' @param label The chunk label of the code chunk that has a cache database.
 #' @param object The name of the object to be fetched from the database. If it
-#'   is missing, \code{NULL} is returned).
-#' @param notfound A value to use when the \code{object} cannot be found.
+#'   is missing, `NULL` is returned).
+#' @param notfound A value to use when the `object` cannot be found.
 #' @param path Path of the cache database (normally set in the global chunk
-#'   option \code{cache.path}).
+#'   option `cache.path`).
 #' @param dir Path to use as the working directory. Defaults to the output
 #'   directory if run inside a \pkg{knitr} context and to the current working
-#'   directory otherwise. Any relative \code{path} is defined from \code{dir}.
+#'   directory otherwise. Any relative `path` is defined from `dir`.
 #' @param envir Environment to use for cache loading, into which all objects in
-#'   the cache for the specified chunk (not just that in \code{object}) will be
-#'   loaded. Defaults to the value in \code{\link{knit_global}}.
-#' @param lazy Whether to \code{\link{lazyLoad}} the cache database (depending
-#'   on the chunk option \code{cache.lazy = TRUE} or \code{FALSE} of that code
+#'   the cache for the specified chunk (not just that in `object`) will be
+#'   loaded. Defaults to the value in [knit_global()].
+#' @param lazy Whether to [lazyLoad()] the cache database (depending
+#'   on the chunk option `cache.lazy = TRUE` or `FALSE` of that code
 #'   chunk).
 #' @note Apparently this function loads the value of the object from the
-#'   \emph{previous} run of the document, which may be problematic when the
+#'   *previous* run of the document, which may be problematic when the
 #'   value of the object becomes different the next time the document is
 #'   compiled. Normally you must compile the document twice to make sure the
 #'   cache database is created, and the object can be read from it. Please use
 #'   this function with caution.
 #' @references See the example #114 at
-#'   \url{https://github.com/yihui/knitr-examples}.
-#' @return Invisible \code{NULL} when \code{object} is not specified (the cache
+#'   <https://github.com/yihui/knitr-examples>.
+#' @return Invisible `NULL` when `object` is not specified (the cache
 #'   database will be loaded as a side effect), otherwise the value of the
 #'   object if found.
 #' @export
@@ -250,11 +250,11 @@ load_cache = function(
 #' This function can be used to build dependencies among chunks so that all
 #' later chunks depend on previous chunks, i.e. whenever the cache of a previous
 #' chunk is updated, the cache of all its later chunks will be updated.
-#' @return \code{NULL}; the internal dependency structure is updated as a side
+#' @return `NULL`; the internal dependency structure is updated as a side
 #'   effect.
 #' @export
-#' @seealso \code{\link{dep_auto}}
-#' @references \url{https://yihui.org/knitr/demo/cache/}
+#' @seealso [dep_auto()]
+#' @references <https://yihui.org/knitr/demo/cache/>
 dep_prev = function() {
   labs = names(knit_code$get())
   if ((n <- length(labs)) < 2L) return() # one chunk or less; no sense of deps
@@ -266,15 +266,15 @@ dep_prev = function() {
 
 #' An unevaluated expression to return .Random.seed if exists
 #'
-#' This expression returns \code{.Random.seed} when \code{eval(rand_seed)} and
-#' \code{NULL} otherwise.
+#' This expression returns `.Random.seed` when `eval(rand_seed)` and
+#' `NULL` otherwise.
 #'
-#' It is designed to work with \code{opts_chunk$set(cache.extra = rand_seed)}
+#' It is designed to work with `opts_chunk$set(cache.extra = rand_seed)`
 #' for reproducibility of chunks that involve with random number generation. See
 #' references.
 #' @export
 #' @format NULL
-#' @references \url{https://yihui.org/knitr/demo/cache/}
+#' @references <https://yihui.org/knitr/demo/cache/>
 #' @examples eval(rand_seed)
 #' rnorm(1) # .Random.seed is created (or modified)
 #' eval(rand_seed)
@@ -288,12 +288,12 @@ rand_seed = quote({
 #' will not be automatically cleaned. You can use this function to identify
 #' these possible files, and clean them if you are sure they are no longer
 #' needed.
-#' @param clean Boolean; whether to remove the files.
+#' @param clean Whether to remove the files.
 #' @param path Path to the cache.
 #' @note  The identification is not guaranteed to be correct, especially when
 #'   multiple documents share the same cache directory. You are recommended to
-#'   call \code{clean_cache(FALSE)} and carefully check the list of files (if
-#'   any) before you really delete them (\code{clean_cache(TRUE)}).
+#'   call `clean_cache(FALSE)` and carefully check the list of files (if
+#'   any) before you really delete them (`clean_cache(TRUE)`).
 #'
 #'   This function must be called within a code chunk in a source document,
 #'   since it needs to know all chunk labels of the current document to

@@ -8,7 +8,7 @@ asis_output(x, meta = NULL, cacheable = NA)
 }
 \arguments{
 \item{x}{An R object. Typically a character string, or an object which can
-be converted to a character string via \code{\link{as.character}()}.}
+be converted to a character string via \code{\link[=as.character]{as.character()}}.}
 
 \item{meta}{Additional metadata of the object to be printed. The metadata
 will be collected when the object is printed, and accessible via
@@ -26,7 +26,7 @@ output.
 }
 \details{
 This function is normally used in a custom S3 method based on the printing
-function \code{\link{knit_print}()}.
+function \code{\link[=knit_print]{knit_print()}}.
 
 For the \code{cacheable} argument, you need to be careful when printing the
 object involves non-trivial side effects, in which case it is strongly
@@ -44,8 +44,8 @@ session.
 }
 \note{
 This function only works in top-level R expressions, and it will not
-  work when it is called inside another expression, such as a for-loop. See
-  \url{https://github.com/yihui/knitr/issues/1137} for a discussion.
+work when it is called inside another expression, such as a for-loop. See
+\url{https://github.com/yihui/knitr/issues/1137} for a discussion.
 }
 \examples{
 # see ?knit_print

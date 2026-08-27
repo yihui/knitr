@@ -13,15 +13,15 @@ knit_rd_all()
 \item{pkg}{Package name.}
 
 \item{links}{A character vector of links to be passed to
-\code{tools::\link{Rd2HTML}()}.}
+\code{\link[tools:Rd2HTML]{tools::Rd2HTML()}}.}
 
-\item{frame}{Boolean: whether to put a navigation frame on the left of the
-index page.}
+\item{frame}{Whether to put a navigation frame on the left of the index
+page.}
 }
 \value{
 All HTML pages corresponding to topics in the package are written
-  under the current working directory. An \file{index.html} is also written
-  as a table of content.
+under the current working directory. An \file{index.html} is also written
+as a table of content.
 }
 \description{
 Run examples in a package and insert output into the examples code;
@@ -30,9 +30,8 @@ HTML help pages for all packages under the \file{html} directory of them.
 }
 \note{
 Ideally the html pages should be put under the \file{html} directory of
-  an installed package which can be found via \code{system.file('html',
-  package = 'your_package_name')}, otherwise some links may not work (e.g.
-  the link to the DESCRIPTION file).
+an installed package which can be found via \code{system.file('html', package = 'your_package_name')}, otherwise some links may not work (e.g.
+the link to the DESCRIPTION file).
 }
 \examples{
 library(knitr)

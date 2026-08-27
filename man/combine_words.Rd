@@ -7,7 +7,7 @@
 combine_words(...)
 }
 \arguments{
-\item{...}{Arguments passed to \code{xfun::\link[xfun]{join_words}()}.}
+\item{...}{Arguments passed to \code{\link[xfun:join_words]{xfun::join_words()}}.}
 }
 \description{
 This is a wrapper function of \code{xfun::join_words()}.

@@ -15,9 +15,7 @@ character vector of the code in the chunk with the label \code{foo}.
 }
 \note{
 The methods on this object include the \code{set()} method (i.e., you
-  could do something like \code{knitr::knit_code$set(foo = "'my precious new
-  code'")}), but we recommend that you do not use this method to modify the
-  content of code chunks, unless you are
-  \href{https://emitanaka.rbind.io/post/knitr-knitr-code/}{as creative as Emi
-  Tanaka} and know what you are doing.
+could do something like \code{knitr::knit_code$set(foo = "'my precious new code'")}), but we recommend that you do not use this method to modify the
+content of code chunks, unless you are
+\href{https://emitanaka.rbind.io/post/knitr-knitr-code/}{as creative as Emi Tanaka} and know what you are doing.
 }

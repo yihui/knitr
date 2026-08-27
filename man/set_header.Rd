@@ -18,16 +18,16 @@ The header vector in \code{opts_knit} is set.
 }
 \description{
 Some output documents may need appropriate header information. For example,
-for LaTeX output, we need to write \samp{\\usepackage{tikz}} into the
+for LaTeX output, we need to write \verb{\\usepackage\{tikz\}} into the
 preamble if we use tikz graphics; this function sets the header information
 to be written into the output.
 }
 \details{
 By default, \pkg{knitr} will set up the header automatically. For example, if
-the tikz device is used, \pkg{knitr} will add \samp{\\usepackage{tikz}} to
+the tikz device is used, \pkg{knitr} will add \verb{\\usepackage\{tikz\}} to
 the LaTeX preamble, and this is done by setting the header component
-\code{tikz} to be a character string: \code{set_header(tikz =
-'\\usepackage{tikz}')}. Similarly, when we highlight R code using the
+\code{tikz} to be a character string:
+\code{set_header(tikz = '\\\\usepackage{tikz}')}. Similarly, when we highlight R code using the
 \pkg{highlight} package (i.e. the chunk option \code{highlight = TRUE}),
 \pkg{knitr} will set the \code{highlight} component of the header vector
 automatically; if the output type is HTML, this component will be different

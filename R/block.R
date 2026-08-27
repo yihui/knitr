@@ -180,17 +180,17 @@ block_exec = function(options) {
 #' Engine for R
 #'
 #' This function handles the execution of R code blocks (when the chunk option
-#' \code{engine} is \code{'R'}) and generates the R output for each code block.
+#' `engine` is `'R'`) and generates the R output for each code block.
 #'
-#' This engine function has one argument \code{options}: the source code of the
-#' current chunk is in \code{options$code}. It returns a processed output that
+#' This engine function has one argument `options`: the source code of the
+#' current chunk is in `options$code`. It returns a processed output that
 #' can consist of data frames (as tables), graphs, or character output. This
 #' function is intended for advanced use to allow developers to extend R, and
 #' customize the pipeline with which R code is executed and processed within
 #' knitr.
 #'
 #' @param options A list of chunk options. Usually this is just the object
-#'   \code{options} associated with the current code chunk.
+#'   `options` associated with the current code chunk.
 #' @noRd
 eng_r = function(options) {
   # eval chunks (in an empty envir if cache)

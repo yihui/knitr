@@ -20,7 +20,7 @@ are not sure about the Pandoc output format of your document, insert a code
 chunk \code{knitr:::pandoc_to()} and see what it returns after the document
 is compiled.}
 
-\item{...}{Arguments to be passed to \code{\link{asis_output}()}.}
+\item{...}{Arguments to be passed to \code{\link[=asis_output]{asis_output()}}.}
 }
 \description{
 Wraps content in a raw attribute block, which protects it from being escaped

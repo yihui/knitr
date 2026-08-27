@@ -5,23 +5,23 @@
 \title{Package vignette engines}
 \description{
 Since R 3.0.0, package vignettes can use non-Sweave engines, and \pkg{knitr}
-has provided a few engines to compile vignettes via \code{\link{knit}()} with
+has provided a few engines to compile vignettes via \code{\link[=knit]{knit()}} with
 different templates. See \url{https://yihui.org/knitr/demo/vignette/} for
 more information.
 }
 \note{
 If you use the \code{knitr::rmarkdown} engine, please make sure that
-  you put \pkg{rmarkdown} in the \samp{Suggests} field of your
-  \file{DESCRIPTION} file. Also make sure \command{pandoc} is available
-  during \command{R CMD build}. If you build your package from RStudio, this
-  is normally not a problem. If you build the package outside RStudio, run
-  \code{rmarkdown::find_pandoc()} in an R session to check if Pandoc can be
-  found.
+you put \pkg{rmarkdown} in the \code{Suggests} field of your
+\file{DESCRIPTION} file. Also make sure \command{pandoc} is available
+during \command{R CMD build}. If you build your package from RStudio, this
+is normally not a problem. If you build the package outside RStudio, run
+\code{rmarkdown::find_pandoc()} in an R session to check if Pandoc can be
+found.
 
-  When the \pkg{rmarkdown} package is not installed or not available, or
-  \command{pandoc} cannot be found, the \code{knitr::rmarkdown} engine will
-  fall back to the \code{knitr::knitr} engine, which uses R Markdown v1 based
-  on the \pkg{litedown} package.
+When the \pkg{rmarkdown} package is not installed or not available, or
+\command{pandoc} cannot be found, the \code{knitr::rmarkdown} engine will
+fall back to the \code{knitr::knitr} engine, which uses R Markdown v1 based
+on the \pkg{litedown} package.
 }
 \examples{
 library(knitr)

@@ -57,26 +57,26 @@ new_defaults = function(value = list()) {
 
 #' Default and current chunk options
 #'
-#' Options for R code chunks. When running R code, the object \code{opts_chunk}
+#' Options for R code chunks. When running R code, the object `opts_chunk`
 #' (default options) is not modified by chunk headers (local chunk options are
-#' merged with default options), whereas \code{opts_current} (current options)
+#' merged with default options), whereas `opts_current` (current options)
 #' changes with different chunk headers and it always reflects the options for
 #' the current chunk.
 #'
 #' Normally we set up the global options once in the first code chunk in a
-#' document using \code{opts_chunk$set()}, so that all \emph{latter} chunks will
+#' document using `opts_chunk$set()`, so that all *latter* chunks will
 #' use these options. Note the global options set in one chunk will not affect
 #' the options in this chunk itself, and that is why we often need to set global
 #' options in a separate chunk.
 #'
-#' See \code{str(knitr::opts_chunk$get())} for a list of default chunk options.
-#' @references Usage: \url{https://yihui.org/knitr/objects/}
+#' See `str(knitr::opts_chunk$get())` for a list of default chunk options.
+#' @references Usage: <https://yihui.org/knitr/objects/>
 #'
 #'   A list of available options:
-#'   \url{https://yihui.org/knitr/options/#chunk-options}
-#' @note \code{opts_current} should be treated as read-only and you are supposed
-#'   to only query its values via \code{opts_current$get()}. Calling
-#'   \code{opts_current$set()} will throw an error.
+#'   <https://yihui.org/knitr/options/#chunk-options>
+#' @note `opts_current` should be treated as read-only and you are supposed
+#'   to only query its values via `opts_current$get()`. Calling
+#'   `opts_current$set()` will throw an error.
 #' @export
 #' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
 opts_chunk = new_defaults(list(
@@ -164,7 +164,7 @@ opts_chunk_attr = local({
 #' aliases and the elements in this vector are the real option names.
 #' @param ... Named arguments. Argument names are aliases, and argument values
 #'   are real option names.
-#' @return \code{NULL}. \code{opts_knit$get('aliases')} is modified as the side effect.
+#' @return `NULL`. `opts_knit$get('aliases')` is modified as the side effect.
 #' @export
 #' @examples set_alias(w = 'fig.width', h = 'fig.height')
 #' # then we can use options w and h in chunk headers instead of fig.width and fig.height
@@ -177,19 +177,19 @@ set_alias = function(...) {
 #' Options including whether to use a progress bar when knitting a document, and
 #' the base directory of images, etc.
 #'
-#' Besides the standard usage (\code{opts_knit$set()}), we can also set package
-#' options prior to loading \code{knitr} or calling \code{knit()} using
-#' \code{\link{options}()} in base R. A global option \code{knitr.package.foo}
-#' in \code{options()} will be set as an option \code{foo} in \code{opts_knit},
-#' i.e. global options in base R with the prefix \code{knitr.package.}
-#' correspond to options in \code{opts_knit}. This can be useful to set package
+#' Besides the standard usage (`opts_knit$set()`), we can also set package
+#' options prior to loading `knitr` or calling `knit()` using
+#' [options()] in base R. A global option `knitr.package.foo`
+#' in `options()` will be set as an option `foo` in `opts_knit`,
+#' i.e. global options in base R with the prefix `knitr.package.`
+#' correspond to options in `opts_knit`. This can be useful to set package
 #' options in \file{~/.Rprofile} without loading \pkg{knitr}.
 #'
-#' See \code{str(knitr::opts_knit$get())} for a list of default package options.
-#' @references Usage: \url{https://yihui.org/knitr/objects/}
+#' See `str(knitr::opts_knit$get())` for a list of default package options.
+#' @references Usage: <https://yihui.org/knitr/objects/>
 #'
 #'   A list of available options:
-#'   \url{https://yihui.org/knitr/options/#package-options}
+#'   <https://yihui.org/knitr/options/#package-options>
 #' @export
 #' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
 #' if (interactive()) {

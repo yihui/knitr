@@ -7,7 +7,7 @@
 imgur_upload(file, key = xfun::env_option("knitr.imgur.key"), ...)
 }
 \arguments{
-\item{file, key, ...}{See \code{xfun::\link[xfun]{upload_imgur}()}.}
+\item{file, key, ...}{See \code{\link[xfun:upload_imgur]{xfun::upload_imgur()}}.}
 }
 \description{
 This function is an alias to \code{xfun::upload_imgur()}. It is kept in

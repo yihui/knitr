@@ -25,16 +25,14 @@ the default is \code{"yaml"}) will write each chunk option on a separate
 line. Long chunk option values will be wrapped onto several lines, and you
 can use \code{width = 0} to keep one line per option only. \code{"wrap"}
 will wrap all chunk options together using
-\code{\link[base:strwrap]{base::strwrap}()}. \code{"yaml"} will convert
+\code{\link[base:strwrap]{base::strwrap()}}. \code{"yaml"} will convert
 chunk options to YAML.}
 
-\item{width}{An integer passed to \code{base::strwrap()} for \code{type =
-"wrap"} and \code{type = "multiline"}. If set to \code{0}, deactivate the
+\item{width}{An integer passed to \code{base::strwrap()} for \code{type = "wrap"} and \code{type = "multiline"}. If set to \code{0}, deactivate the
 wrapping (for \code{type = "multiline"} only).}
 }
 \value{
-A character vector of converted \code{input} when \code{output =
-  NULL}. The output file path with converted content otherwise.
+A character vector of converted \code{input} when \code{output = NULL}. The output file path with converted content otherwise.
 }
 \description{
 This is a helper function for moving chunk options from the chunk header to
@@ -42,43 +40,46 @@ the chunk body using the new syntax.
 }
 \note{
 Learn more about the new chunk option syntax in
-  \url{https://yihui.org/en/2022/01/knitr-news/}
+\url{https://yihui.org/en/2022/01/knitr-news/}
 }
 \section{About \pkg{knitr} option syntax}{
 
 
 Historical chunk option syntax have chunk option in the chunk header using
 valid R syntax. This is an example for \verb{.Rmd} document
-\preformatted{
-```\{r, echo = FALSE, fig.width: 10\}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{```\{r, echo = FALSE, fig.width = 10\}
 ```
-}
+}\if{html}{\out{</div>}}
 
 New syntax allows to pass option inside the chunk using several variants
 \itemize{
 \item Passing options one per line using valid R syntax. This corresponds to \code{convert_chunk_header(type = "multiline")}.
-\preformatted{
-```\{r\}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{```\{r\}
 #| echo = FALSE,
 #| fig.width = 10
 ```
-}
+}\if{html}{\out{</div>}}
 
 \item Passing option part from header in-chunk with several line if wrapping is
 needed. This corresponds to \code{convert_chunk_header(type = "wrap")}
-\preformatted{
-```\{r\}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{```\{r\}
 #| echo = FALSE, fig.width = 10
 ```
-}
+}\if{html}{\out{</div>}}
+
 \item Passing options key value pairs in-chunk using YAML syntax. Values are no
 more R expression but valid YAML syntax. This corresponds to
 \code{convert_chunk_header(type = "yaml")} (not implement yet).
-\preformatted{```\{r\}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{```\{r\}
 #| echo: false,
 #| fig.width: 10
 ```
-}
+}\if{html}{\out{</div>}}
+
 }
 }
 

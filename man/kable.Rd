@@ -38,8 +38,8 @@ a function, it must return a character string.}
 \code{round()}. This can also be a vector of length \code{ncol(x)}, to set
 the number of digits for individual columns.}
 
-\item{row.names}{Logical: whether to include row names. By default, row names
-are included if \code{rownames(x)} is neither \code{NULL} nor identical to
+\item{row.names}{Whether to include row names. By default, row names are
+included if \code{rownames(x)} is neither \code{NULL} nor identical to
 \code{1:nrow(x)}.}
 
 \item{col.names}{A character vector of column names to be used in the table.}
@@ -58,12 +58,12 @@ option \code{tab.cap}.}
 from \code{knitr::\link{opts_current}$get('label')} (i.e., the current
 chunk label). To disable the label, use \code{label = NA}.}
 
-\item{format.args}{A list of arguments to be passed to \code{\link{format}()}
+\item{format.args}{A list of arguments to be passed to \code{\link[=format]{format()}}
 to format table values, e.g. \code{list(big.mark = ',')}.}
 
-\item{escape}{Boolean; whether to escape special characters when producing
-HTML or LaTeX tables. When \code{escape = FALSE}, you have to make sure
-that special characters will not trigger syntax errors in LaTeX or HTML.}
+\item{escape}{Whether to escape special characters when producing HTML or
+LaTeX tables. When \code{escape = FALSE}, you have to make sure that
+special characters will not trigger syntax errors in LaTeX or HTML.}
 
 \item{...}{Other arguments (see Examples and References).}
 }
@@ -90,9 +90,9 @@ rows to show in the table, e.g., \code{options(knitr.kable.max_rows = 30)}.
 }
 \note{
 When using \code{kable()} as a \emph{top-level} expression, you do not
-  need to explicitly \code{print()} it due to R's automatic implicit
-  printing. When it is wrapped inside other expressions (such as a
-  \code{\link{for}} loop), you must explicitly \code{print(kable(...))}.
+need to explicitly \code{print()} it due to R's automatic implicit
+printing. When it is wrapped inside other expressions (such as a
+\code{for} loop), you must explicitly \code{print(kable(...))}.
 }
 \examples{
 d1 = head(iris)
@@ -137,15 +137,15 @@ kables(list(kable(d1, align = "l"), kable(d2)), caption = "A tale of two tables"
 }
 \references{
 See
-  \url{https://bookdown.org/yihui/rmarkdown-cookbook/kable.html} for some
-  examples about this function, including specific arguments according to the
-  \code{format} selected.
+\url{https://bookdown.org/yihui/rmarkdown-cookbook/kable.html} for some
+examples about this function, including specific arguments according to the
+\code{format} selected.
 }
 \seealso{
 Other R packages such as \pkg{huxtable}, \pkg{xtable},
-  \pkg{kableExtra}, \pkg{gt} and \pkg{tables} for HTML and LaTeX tables, and
-  \pkg{ascii} and \pkg{pander} for different flavors of markdown output and
-  some advanced features and table styles. For more on other packages for
-  creating tables, see
-  \url{https://bookdown.org/yihui/rmarkdown-cookbook/table-other.html}.
+\pkg{kableExtra}, \pkg{gt} and \pkg{tables} for HTML and LaTeX tables, and
+\pkg{ascii} and \pkg{pander} for different flavors of markdown output and
+some advanced features and table styles. For more on other packages for
+creating tables, see
+\url{https://bookdown.org/yihui/rmarkdown-cookbook/table-other.html}.
 }

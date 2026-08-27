@@ -31,7 +31,7 @@ provides a few useful hooks, which can also serve as examples of how to
 define chunk hooks in \pkg{knitr}.
 }
 \details{
-The function \code{hook_pdfcrop()} calls \code{\link{plot_crop}()} to crop
+The function \code{hook_pdfcrop()} calls \code{\link[=plot_crop]{plot_crop()}} to crop
 the white margins of PDF plots.
 
 The function \code{hook_optipng()} calls the program \command{optipng} to
@@ -49,30 +49,29 @@ the chunk option \code{mogrify} can be used to provide additional parameters
 to the program \command{mogrify} (with default \code{-trim} to trim PNG
 files).
 
-When the plots are not recordable via \code{grDevices::\link{recordPlot}()}
+When the plots are not recordable via \code{\link[grDevices:recordPlot]{grDevices::recordPlot()}}
 and we save the plots to files manually via other functions (e.g. \pkg{rgl}
 plots), we can use the chunk hook \code{hook_plot_custom} to help write code
 for graphics output into the output document.
 
 The hook \code{hook_purl()} can be used to write the code chunks to an R
-script. It is an alternative approach to \code{\link{purl}}, and can be more
+script. It is an alternative approach to \code{\link[=purl]{purl()}}, and can be more
 reliable when the code chunks depend on the execution of them (e.g.
-\code{\link{read_chunk}()}, or \code{\link{opts_chunk}$set(eval = FALSE)}).
+\code{\link[=read_chunk]{read_chunk()}}, or \code{\link{opts_chunk}$set(eval = FALSE)}).
 To enable this hook, it is recommended to associate it with the chunk option
 \code{purl}, i.e. \code{knit_hooks$set(purl = hook_purl)}. When this hook is
 enabled, an R script will be written while the input document is being
-\code{\link{knit}}. Currently the code chunks that are not R code or have the
+\code{\link[=knit]{knit()}}. Currently the code chunks that are not R code or have the
 chunk option \code{purl=FALSE} are ignored. Please note when the cache is
 turned on (the chunk option \code{cache = TRUE}), no chunk hooks will be
 executed, hence \code{hook_purl()} will not work, either. To solve this
 problem, we need \code{cache = 2} instead of \code{TRUE} (see
-\url{https://yihui.org/knitr/demo/cache/} for the meaning of \code{cache =
-2}).
+\url{https://yihui.org/knitr/demo/cache/} for the meaning of \code{cache = 2}).
 }
 \note{
 The two hook functions \code{hook_rgl()} and \code{hook_webgl()} were
-  moved from \pkg{knitr} to the \pkg{rgl} package (>= v0.95.1247) after
-  \pkg{knitr} v1.10.5, and you can \code{library(rgl)} to get them.
+moved from \pkg{knitr} to the \pkg{rgl} package (>= v0.95.1247) after
+\pkg{knitr} v1.10.5, and you can \code{library(rgl)} to get them.
 }
 \examples{
 if (require("rgl") && exists("hook_rgl")) knit_hooks$set(rgl = hook_rgl)
@@ -82,8 +81,6 @@ if (require("rgl") && exists("hook_rgl")) knit_hooks$set(rgl = hook_rgl)
 \url{https://yihui.org/knitr/hooks/#chunk-hooks}
 }
 \seealso{
-\code{rgl::\link[rgl:snapshot]{rgl.snapshot}},
-  \code{rgl::\link[rgl:postscript]{rgl.postscript}},
-  \code{rgl::\link[rgl]{hook_rgl}},
-  \code{rgl::\link[rgl:hook_rgl]{hook_webgl}}
+\code{\link[rgl:rgl.snapshot]{rgl::rgl.snapshot()}}, \code{\link[rgl:rgl.postscript]{rgl::rgl.postscript()}},
+\code{\link[rgl:hook_rgl]{rgl::hook_rgl()}}, \code{\link[rgl:hook_webgl]{rgl::hook_webgl()}}
 }

@@ -1,57 +1,55 @@
 #' Built-in chunk hooks to extend knitr
 #'
 #' Hook functions are called when the corresponding chunk options are not
-#' \code{NULL} to do additional jobs beside the R code in chunks. This package
+#' `NULL` to do additional jobs beside the R code in chunks. This package
 #' provides a few useful hooks, which can also serve as examples of how to
 #' define chunk hooks in \pkg{knitr}.
 #'
-#' The function \code{hook_pdfcrop()} calls \code{\link{plot_crop}()} to crop
+#' The function `hook_pdfcrop()` calls [plot_crop()] to crop
 #' the white margins of PDF plots.
 #'
-#' The function \code{hook_optipng()} calls the program \command{optipng} to
-#' optimize PNG images. Note the chunk option \code{optipng} can be used to
+#' The function `hook_optipng()` calls the program \command{optipng} to
+#' optimize PNG images. Note the chunk option `optipng` can be used to
 #' provide additional parameters to the program \command{optipng}, e.g.
-#' \code{optipng = '-o7'}.
+#' `optipng = '-o7'`.
 #'
-#' The function \code{hook_pngquant()} calls the program \command{pngquant} to
-#' optimize PNG images. Note the chunk option \code{pngquant} can be used to
+#' The function `hook_pngquant()` calls the program \command{pngquant} to
+#' optimize PNG images. Note the chunk option `pngquant` can be used to
 #' provide additional parameters to the program \command{pngquant}, e.g.
-#' \code{pngquant = '--speed=1 --quality=0-50'}.
+#' `pngquant = '--speed=1 --quality=0-50'`.
 #'
-#' The function \code{hook_mogrify()} calls the program \command{mogrify}.  Note
-#' the chunk option \code{mogrify} can be used to provide additional parameters
-#' to the program \command{mogrify} (with default \code{-trim} to trim PNG
+#' The function `hook_mogrify()` calls the program \command{mogrify}.  Note
+#' the chunk option `mogrify` can be used to provide additional parameters
+#' to the program \command{mogrify} (with default `-trim` to trim PNG
 #' files).
 #'
-#' When the plots are not recordable via \code{grDevices::\link{recordPlot}()}
+#' When the plots are not recordable via [grDevices::recordPlot()]
 #' and we save the plots to files manually via other functions (e.g. \pkg{rgl}
-#' plots), we can use the chunk hook \code{hook_plot_custom} to help write code
+#' plots), we can use the chunk hook `hook_plot_custom` to help write code
 #' for graphics output into the output document.
 #'
-#' The hook \code{hook_purl()} can be used to write the code chunks to an R
-#' script. It is an alternative approach to \code{\link{purl}}, and can be more
+#' The hook `hook_purl()` can be used to write the code chunks to an R
+#' script. It is an alternative approach to [purl()], and can be more
 #' reliable when the code chunks depend on the execution of them (e.g.
-#' \code{\link{read_chunk}()}, or \code{\link{opts_chunk}$set(eval = FALSE)}).
+#' [read_chunk()], or \code{\link{opts_chunk}$set(eval = FALSE)}).
 #' To enable this hook, it is recommended to associate it with the chunk option
-#' \code{purl}, i.e. \code{knit_hooks$set(purl = hook_purl)}. When this hook is
+#' `purl`, i.e. `knit_hooks$set(purl = hook_purl)`. When this hook is
 #' enabled, an R script will be written while the input document is being
-#' \code{\link{knit}}. Currently the code chunks that are not R code or have the
-#' chunk option \code{purl=FALSE} are ignored. Please note when the cache is
-#' turned on (the chunk option \code{cache = TRUE}), no chunk hooks will be
-#' executed, hence \code{hook_purl()} will not work, either. To solve this
-#' problem, we need \code{cache = 2} instead of \code{TRUE} (see
-#' \url{https://yihui.org/knitr/demo/cache/} for the meaning of \code{cache =
-#' 2}).
+#' [knit()]. Currently the code chunks that are not R code or have the
+#' chunk option `purl=FALSE` are ignored. Please note when the cache is
+#' turned on (the chunk option `cache = TRUE`), no chunk hooks will be
+#' executed, hence `hook_purl()` will not work, either. To solve this
+#' problem, we need `cache = 2` instead of `TRUE` (see
+#' <https://yihui.org/knitr/demo/cache/> for the meaning of `cache =
+#' 2`).
 #' @rdname chunk_hook
-#' @param before,options,envir,... See \emph{References} below.
-#' @references \url{https://yihui.org/knitr/hooks/#chunk-hooks}
-#' @seealso \code{rgl::\link[rgl:snapshot]{rgl.snapshot}},
-#'   \code{rgl::\link[rgl:postscript]{rgl.postscript}},
-#'   \code{rgl::\link[rgl]{hook_rgl}},
-#'   \code{rgl::\link[rgl:hook_rgl]{hook_webgl}}
-#' @note The two hook functions \code{hook_rgl()} and \code{hook_webgl()} were
+#' @param before,options,envir,... See *References* below.
+#' @references <https://yihui.org/knitr/hooks/#chunk-hooks>
+#' @seealso [rgl::rgl.snapshot()], [rgl::rgl.postscript()],
+#'   [rgl::hook_rgl()], [rgl::hook_webgl()]
+#' @note The two hook functions `hook_rgl()` and `hook_webgl()` were
 #'   moved from \pkg{knitr} to the \pkg{rgl} package (>= v0.95.1247) after
-#'   \pkg{knitr} v1.10.5, and you can \code{library(rgl)} to get them.
+#'   \pkg{knitr} v1.10.5, and you can `library(rgl)` to get them.
 #' @export
 #' @examples if (require('rgl') && exists('hook_rgl')) knit_hooks$set(rgl = hook_rgl)
 #' # then in code chunks, use the option rgl=TRUE

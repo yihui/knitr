@@ -10,7 +10,7 @@ knit_watch(input, compile = knit, interval = 1, ...)
 \item{input}{An input file path, or a character vector of multiple input file paths.}
 
 \item{compile}{A function to compile the \code{input} file. This could be e.g.
-\code{\link{knit}} or \code{\link{knit2pdf}}, depending on the input file
+\code{\link[=knit]{knit()}} or \code{\link[=knit2pdf]{knit2pdf()}}, depending on the input file
 and the output you want.}
 
 \item{interval}{A time interval to pause in each cycle of the infinite loop.}
@@ -26,7 +26,7 @@ recompile the input file.
 This is actually a general function not necessarily restricted to
 applications in \pkg{knitr}. You may specify any \code{compile} function to
 process the \code{input} file. To stop the infinite loop, press the
-\samp{Escape} key or \samp{Ctrl + C} (depending on your editing environment
+\code{Escape} key or \code{Ctrl + C} (depending on your editing environment
 and operating system).
 }
 \examples{

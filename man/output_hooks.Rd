@@ -68,11 +68,11 @@ hooks_typst()
 \arguments{
 \item{envirs}{Names of LaTeX environments for code input, output, and chunk.}
 
-\item{strict}{Boolean; whether to use strict markdown or reST syntax. For markdown, if
+\item{strict}{Whether to use strict markdown or reST syntax. For markdown, if
 \code{TRUE}, code blocks will be indented by 4 spaces, otherwise they are
 put in fences made by three backticks. For reST, if \code{TRUE}, code is
 put under two colons and indented by 4 spaces, otherwise it is put under the
-\samp{sourcecode} directive (this is useful for e.g. Sphinx).}
+\code{sourcecode} directive (this is useful for e.g., Sphinx).}
 
 \item{fence_char}{A single character to be used in the code blocks fence.
 This can be e.g. a backtick or a tilde, depending on your Markdown rendering
@@ -88,13 +88,13 @@ indented by 4 spaces).}
 can be \code{'linenos'}; for \code{prettify}, it can be \code{'linenums'}.}
 }
 \value{
-\code{NULL} for \code{render_*} functions; corresponding hooks are
-  set as a side effect. A list of output hooks for \code{hooks_*()}
-  functions.
+\code{NULL} for \verb{render_*} functions; corresponding hooks are
+set as a side effect. A list of output hooks for \verb{hooks_*()}
+functions.
 }
 \description{
-The \code{render_*()} functions set built-in output hooks for LaTeX, HTML,
-Markdown, reStructuredText, AsciiDoc, and Textile. The \code{hooks_*()}
+The \verb{render_*()} functions set built-in output hooks for LaTeX, HTML,
+Markdown, reStructuredText, AsciiDoc, and Textile. The \verb{hooks_*()}
 functions return a list of the output hooks for the corresponding format.
 }
 \details{
@@ -118,13 +118,13 @@ for reStructuredText; \code{render_textile()} (which calls
 \code{hooks_textile()}) is for Textile, and \code{render_asciidoc()} (which
 calls \code{hooks_asciidoc()}) is AsciiDoc.
 
-The \code{render_*()} functions can be used before \code{knit()} or in the
+The \verb{render_*()} functions can be used before \code{knit()} or in the
 first chunk of the input document (ideally this chunk has options
 \code{include = FALSE} and \code{cache = FALSE}) so that all the following
 chunks will be formatted as expected.
 
 You can also use \code{\link{knit_hooks}} to set the format's hooks with the
-\code{hooks_*()} functions; see references for more info on further
+\verb{hooks_*()} functions; see references for more info on further
 customizing output hooks.
 }
 \examples{
@@ -138,10 +138,10 @@ knitr::knit_hooks$restore()
 }
 \references{
 See output hooks in \url{https://yihui.org/knitr/hooks/}, and
-  some examples in
-  \url{https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html}
+some examples in
+\url{https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html}
 
-  Jekyll and Liquid:
-  \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions}; prettify.js:
-  \url{https://code.google.com/archive/p/google-code-prettify}
+Jekyll and Liquid:
+\url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions}; prettify.js:
+\url{https://code.google.com/archive/p/google-code-prettify}
 }

@@ -23,5 +23,5 @@ the extension appropriate for the language.
 }
 \references{
 See \url{https://github.com/rstudio/reticulate/pull/167} for an
-  implementation of a cache engine for Python.
+implementation of a cache engine for Python.
 }

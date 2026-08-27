@@ -13,13 +13,13 @@ knit_filter(ifile, encoding = "UTF-8")
 }
 \value{
 A character vector of the file content, excluding code chunks and
-  inline expressions.
+inline expressions.
 }
 \description{
 When performing spell checking on source documents, we may need to skip R
 code chunks and inline R expressions, because many R functions and symbols
 are likely to be identified as typos. This function is designed for the
-\code{filter} argument of \code{\link{aspell}()} to filter out code chunks
+\code{filter} argument of \code{\link[=aspell]{aspell()}} to filter out code chunks
 and inline expressions.
 }
 \examples{

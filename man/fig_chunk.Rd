@@ -9,11 +9,11 @@ fig_chunk(label, ext = "", number, fig.path = opts_chunk$get("fig.path"))
 \arguments{
 \item{label}{The chunk label.}
 
-\item{ext}{The figure file extension, e.g. \code{png} or \code{pdf}.}
+\item{ext}{The figure file extension, e.g., \code{png} or \code{pdf}.}
 
 \item{number}{The figure number (by default \code{1}).}
 
-\item{fig.path}{Passed to \code{\link{fig_path}}. By default, the chunk
+\item{fig.path}{Passed to \code{\link[=fig_path]{fig_path()}}. By default, the chunk
 option \code{fig.path} is used.}
 }
 \value{
@@ -28,10 +28,10 @@ This function can be used in an inline R expression to write out the figure
 filenames without hard-coding them. For example, if you created a plot in a
 code chunk with the label \code{foo} and figure path \file{my-figure/}, you
 are not recommended to use hard-coded figure paths like
-\samp{\includegraphics{my-figure/foo-1.pdf}} (in \file{.Rnw} documents) or
-\samp{![](my-figure/foo-1.png)} (R Markdown) in your document. Instead, you
-should use \samp{\\Sexpr{fig_chunk('foo', 'pdf')}} or \samp{![](`r
-fig_chunk('foo', 'png')`)}.
+\verb{\\includegraphics\{my-figure/foo-1.pdf\}} (in \file{.Rnw} documents) or
+\verb{![](my-figure/foo-1.png)} (R Markdown) in your document. Instead, you
+should use \verb{\\Sexpr\{fig_chunk('foo', 'pdf')\}} or
+\verb{![](`r fig_chunk('foo', 'png')`)}.
 
 You can generate plots in a code chunk but not show them inside the code
 chunk by using the chunk option \code{fig.show = 'hide'}. Then you can use

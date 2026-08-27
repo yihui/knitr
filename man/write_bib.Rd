@@ -7,7 +7,7 @@
 write_bib(..., prefix = getOption("knitr.bib.prefix", "R-"))
 }
 \arguments{
-\item{..., prefix}{Arguments passed to \code{xfun::\link[xfun]{pkg_bib}()}.}
+\item{..., prefix}{Arguments passed to \code{\link[xfun:pkg_bib]{xfun::pkg_bib()}}.}
 }
 \description{
 A wrapper function of \code{xfun::pkg_bib()}.

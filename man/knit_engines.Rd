@@ -16,24 +16,22 @@ the output.
 \details{
 The engine function has one argument \code{options}: the source code of the
 current chunk is in \code{options$code}. Usually we can call external
-programs to run the code via \code{\link{system2}}. Other chunk options are
+programs to run the code via \code{\link[=system2]{system2()}}. Other chunk options are
 also contained in this argument, e.g. \code{options$echo} and
 \code{options$eval}, etc.
 
 In most cases, \code{options$engine} can be directly used in command line to
 execute the code, e.g. \code{python} or \code{ruby}, but sometimes we may
 want to specify the path of the engine program, in which case we can pass it
-through the \code{engine.path} option. For example, \code{engine='ruby',
-engine.path='/usr/bin/ruby1.9.1'}. Additional command line arguments can be
-passed through \code{options$engine.opts}, e.g. \code{engine='ruby',
-engine.opts='-v'}.
+through the \code{engine.path} option. For example, \verb{engine='ruby', engine.path='/usr/bin/ruby1.9.1'}. Additional command line arguments can be
+passed through \code{options$engine.opts}, e.g. \verb{engine='ruby', engine.opts='-v'}.
 
 See \code{str(knitr::knit_engines$get())} for a list of built-in language
 engines.
 }
 \note{
 The Leiningen engine \code{lein} requires lein-exec plugin; see
-  \url{https://github.com/yihui/knitr/issues/1176} for details.
+\url{https://github.com/yihui/knitr/issues/1176} for details.
 }
 \examples{
 knit_engines$get("python")
@@ -42,5 +40,5 @@ names(knit_engines$get())
 }
 \references{
 Usage: \url{https://yihui.org/knitr/objects/}; examples:
-  \url{https://yihui.org/knitr/demo/engines/}
+\url{https://yihui.org/knitr/demo/engines/}
 }

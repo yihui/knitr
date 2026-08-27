@@ -2,52 +2,52 @@
 #'
 #' This function takes a specially formatted R script and converts it to a
 #' literate programming document. By default normal text (documentation) should
-#' be written after the roxygen comment (\code{#'}) and code chunk options are
-#' written after \code{#|} or \code{#+} or \code{# \%\%} or \code{# ----}.
+#' be written after the roxygen comment (`#'`) and code chunk options are
+#' written after `#|` or `#+` or `# \%\%` or `# ----`.
 #'
 #' Obviously the goat's hair is the original R script, and the wool is the
 #' literate programming document (ready to be knitted).
 #' @param hair Path to the R script. The script must be encoded in UTF-8 if it
 #'   contains multibyte characters.
-#' @param knit Logical; whether to compile the document after conversion.
-#' @param report Logical; whether to generate a report for \file{Rmd},
-#'   \file{Rnw} and \file{Rtex} output. Ignored if \code{knit = FALSE}.
+#' @param knit Whether to compile the document after conversion.
+#' @param report Whether to generate a report for \file{Rmd}, \file{Rnw}, and
+#'   \file{Rtex} output. Ignored if `knit = FALSE`.
 #' @param text A character vector of code, as an alternative way to provide the
-#'   R source. If \code{text} is not \code{NULL}, \code{hair} will be ignored.
-#' @param envir Environment for \code{\link{knit}()} to evaluate the code.
+#'   R source. If `text` is not `NULL`, `hair` will be ignored.
+#' @param envir Environment for [knit()] to evaluate the code.
 #' @param format Character; the output format. The default is R Markdown.
 #' @param doc A regular expression to identify the documentation lines; by
 #'   default it follows the roxygen convention, but it can be customized, e.g.
-#'   if you want to use \code{##} to denote documentation, you can use
-#'   \code{'^##\\\\s*'}.
+#'   if you want to use `##` to denote documentation, you can use
+#'   `'^##\\\\s*'`.
 #' @param inline A regular expression to identify inline R expressions; by
-#'   default, code of the form \code{\{\{code\}\}} on its own line is treated as
+#'   default, code of the form `{{code}}` on its own line is treated as
 #'   an inline expression.
 #' @param comment A pair of regular expressions for the start and end delimiters
 #'   of comments; the lines between a start and an end delimiter will be
 #'   ignored. By default, the delimiters are \verb{/*} at the beginning of a
 #'   line, and \verb{*/} at the end, following the convention of C comments.
-#' @param precious logical: whether intermediate files (e.g., \code{.Rmd} files
-#'   when \code{format} is \code{"Rmd"}) should be preserved. The default is
-#'   \code{FALSE} if \code{knit} is \code{TRUE} and the input is a file.
+#' @param precious Whether to preserve intermediate files (e.g., `.Rmd`
+#'   files when `format` is `"Rmd"`). The default is `FALSE` if
+#'   `knit` is `TRUE` and the input is a file.
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
-#'   as \code{sowsear()} which meant to make a silk purse out of a sow's ear)
-#' @return If \code{text} is \code{NULL}, the path of the final output document,
+#'   as `sowsear()` which meant to make a silk purse out of a sow's ear)
+#' @return If `text` is `NULL`, the path of the final output document,
 #'   otherwise the content of the output.
-#' @note If the output format is \code{Rnw} and no document class is specified
+#' @note If the output format is `Rnw` and no document class is specified
 #'   in roxygen comments, this function will automatically add the
-#'   \code{article} class to the LaTeX document so that it is complete and can
+#'   `article` class to the LaTeX document so that it is complete and can
 #'   be compiled. You can always specify the document class and other LaTeX
 #'   settings in roxygen comments manually.
 #'
-#'   When the output format is \code{Rmd}, it is compiled to HTML via
-#'   \code{\link{knit2html}()}, which uses R Markdown v1 instead of v2. If you
+#'   When the output format is `Rmd`, it is compiled to HTML via
+#'   [knit2html()], which uses R Markdown v1 instead of v2. If you
 #'   want to use the latter, you should call
-#'   \code{rmarkdown::\link[rmarkdown]{render}()} instead. Similarly, if the
-#'   output format is \code{qmd}, you need to render the output with Quarto.
+#'   [rmarkdown::render()] instead. Similarly, if the
+#'   output format is `qmd`, you need to render the output with Quarto.
 #' @export
-#' @seealso \code{\link{stitch}} (feed a template with an R script)
-#' @references \url{https://yihui.org/knitr/demo/stitch/}
+#' @seealso [stitch()] (feed a template with an R script)
+#' @references <https://yihui.org/knitr/demo/stitch/>
 spin = function(
   hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
   format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst', 'qmd'),
@@ -177,16 +177,16 @@ pipe_comment_start = function(x) {
 
 #' Spin a child R script
 #'
-#' This function is similar to \code{\link{knit_child}()} but is used in R
+#' This function is similar to [knit_child()] but is used in R
 #' scripts instead. When the main R script is not called via
-#' \code{\link{spin}()}, this function simply executes the child script via
-#' \code{\link{sys.source}()}, otherwise it calls \code{\link{spin}()} to spin
-#' the child script into a source document, and uses \code{\link{knit_child}()}
+#' [spin()], this function simply executes the child script via
+#' [sys.source()], otherwise it calls [spin()] to spin
+#' the child script into a source document, and uses [knit_child()]
 #' to compile it. You can call this function in R code, or using the syntax of
-#' inline R expressions in \code{\link{spin}()} (e.g.
-#' \code{{{knitr::spin_child('script.R')}}}).
+#' inline R expressions in [spin()] (e.g.
+#' `{{knitr::spin_child('script.R')}}`).
 #' @param input Filename of the input R script.
-#' @param format Passed to \code{format} in \code{spin()}. If not
+#' @param format Passed to `format` in `spin()`. If not
 #'   provided, it will be guessed from the current knitting process.
 #' @return A character string of the knitted R script.
 #' @export

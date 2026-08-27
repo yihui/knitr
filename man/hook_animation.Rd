@@ -33,5 +33,5 @@ can set \code{opts_knit$set(animation.fun = hook_scianimator)}.
 Note that these hooks generate HTML code. For LaTeX output, you can set the
 chunk option \code{animation.hook} (or the package option
 \code{animation.fun}) to a function that generates LaTeX code; see
-\code{\link{hook_plot_tex}}.
+\code{\link[=hook_plot_tex]{hook_plot_tex()}}.
 }

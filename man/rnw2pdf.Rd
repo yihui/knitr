@@ -22,14 +22,14 @@ rnw2pdf(
 as the \code{input}, but changes the file extension to ".pdf".}
 
 \item{compiler, ...}{The LaTeX engine and other arguments to be passed to
-\code{tinytex::\link[tinytex]{latexmk}()}. The default compiler is
+\code{\link[tinytex:latexmk]{tinytex::latexmk()}}. The default compiler is
 \code{xelatex}.}
 
 \item{envir}{Environment in which code chunks are to be evaluated, for
-example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()}).}
+example, \code{\link[=parent.frame]{parent.frame()}}, \code{\link[=new.env]{new.env()}}, or
+\code{\link[=globalenv]{globalenv()}}).}
 
-\item{quiet}{Boolean; suppress the progress bar and messages?}
+\item{quiet}{Whether to suppress the progress bar and messages.}
 
 \item{clean}{If \code{TRUE}, the intermediate files will be removed.}
 
@@ -39,18 +39,18 @@ example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
 The \code{output} file path.
 }
 \description{
-Call \code{\link{knit}()} to compile the \file{.Rnw} input to \file{.tex},
-and then \code{tinytex::\link[tinytex]{latexmk}()} to convert \file{.tex} to
+Call \code{\link[=knit]{knit()}} to compile the \file{.Rnw} input to \file{.tex},
+and then \code{\link[tinytex:latexmk]{tinytex::latexmk()}} to convert \file{.tex} to
 \file{.pdf}.
 }
 \details{
-This function is similar to \code{\link{knit2pdf}()}, with the following differences:
+This function is similar to \code{\link[=knit2pdf]{knit2pdf()}}, with the following differences:
 \enumerate{
-  \item The default compiler is "xelatex" instead of "pdflatex".
-  \item \code{output} uses the file extension ".pdf" instead of ".tex".
-  \item Before knitting, it tries to remove the \code{output} file and will throw a clear error if the file cannot be removed.
-  \item \code{output} could be under any dir, not necessarily the same directory as \code{input}.
-  \item It cleans up intermediate files by default, including the ".tex" file.
-  \item It stops knitting when any error occurs (by setting the chunk option \code{error = FALSE}).
+\item The default compiler is "xelatex" instead of "pdflatex".
+\item \code{output} uses the file extension ".pdf" instead of ".tex".
+\item Before knitting, it tries to remove the \code{output} file and will throw a clear error if the file cannot be removed.
+\item \code{output} could be under any dir, not necessarily the same directory as \code{input}.
+\item It cleans up intermediate files by default, including the ".tex" file.
+\item It stops knitting when any error occurs (by setting the chunk option \code{error = FALSE}).
 }
 }

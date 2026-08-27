@@ -1,53 +1,53 @@
 #' Create tables in LaTeX, HTML, Markdown and reStructuredText
 #'
 #' A very simple table generator, and it is simple by design. It is not intended
-#' to replace any other R packages for making tables. The \code{kable()}
+#' to replace any other R packages for making tables. The `kable()`
 #' function returns a single table for a single data object, and returns a table
 #' that contains multiple tables if the input object is a list of data objects.
-#' The \code{kables()} function is similar to \code{kable(x)} when \code{x} is a
-#' list of data objects, but \code{kables()} accepts a list of \code{kable()}
+#' The `kables()` function is similar to `kable(x)` when `x` is a
+#' list of data objects, but `kables()` accepts a list of `kable()`
 #' values directly instead of data objects (see examples below).
 #'
-#' Missing values (\code{NA}) in the table are displayed as \code{NA} by
+#' Missing values (`NA`) in the table are displayed as `NA` by
 #' default. If you want to display them with other characters, you can set the
-#' option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
-#' hide \code{NA} values.
+#' option `knitr.kable.NA`, e.g. `options(knitr.kable.NA = '')` to
+#' hide `NA` values.
 #'
-#' You can set the option \code{knitr.kable.max_rows} to limit the number of
-#' rows to show in the table, e.g., \code{options(knitr.kable.max_rows = 30)}.
-#' @param x For \code{kable()}, \code{x} is an R object, which is typically a
-#'   matrix or data frame. For \code{kables()}, a list with each element being a
-#'   returned value from \code{kable()}.
-#' @param format A character string. Possible values are \code{latex},
-#'   \code{html}, \code{pipe} (Pandoc's pipe tables), \code{simple} (Pandoc's
-#'   simple tables), \code{rst}, \code{jira}, and \code{org} (Emacs Org-mode).
+#' You can set the option `knitr.kable.max_rows` to limit the number of
+#' rows to show in the table, e.g., `options(knitr.kable.max_rows = 30)`.
+#' @param x For `kable()`, `x` is an R object, which is typically a
+#'   matrix or data frame. For `kables()`, a list with each element being a
+#'   returned value from `kable()`.
+#' @param format A character string. Possible values are `latex`,
+#'   `html`, `pipe` (Pandoc's pipe tables), `simple` (Pandoc's
+#'   simple tables), `rst`, `jira`, and `org` (Emacs Org-mode).
 #'   The value of this argument will be automatically determined if the function
-#'   is called within a \pkg{knitr} document. The \code{format} value can also
-#'   be set in the global option \code{knitr.table.format}. If \code{format} is
+#'   is called within a \pkg{knitr} document. The `format` value can also
+#'   be set in the global option `knitr.table.format`. If `format` is
 #'   a function, it must return a character string.
 #' @param digits Maximum number of digits for numeric columns, passed to
-#'   \code{round()}. This can also be a vector of length \code{ncol(x)}, to set
+#'   `round()`. This can also be a vector of length `ncol(x)`, to set
 #'   the number of digits for individual columns.
-#' @param row.names Logical: whether to include row names. By default, row names
-#'   are included if \code{rownames(x)} is neither \code{NULL} nor identical to
-#'   \code{1:nrow(x)}.
+#' @param row.names Whether to include row names. By default, row names are
+#'   included if `rownames(x)` is neither `NULL` nor identical to
+#'   `1:nrow(x)`.
 #' @param col.names A character vector of column names to be used in the table.
-#' @param align Column alignment: a character vector consisting of \code{'l'}
-#'   (left), \code{'c'} (center) and/or \code{'r'} (right). By default or if
-#'   \code{align = NULL}, numeric columns are right-aligned, and other columns
-#'   are left-aligned. If \code{length(align) == 1L}, the string will be
-#'   expanded to a vector of individual letters, e.g. \code{'clc'} becomes
-#'   \code{c('c', 'l', 'c')}, unless the output format is LaTeX.
+#' @param align Column alignment: a character vector consisting of `'l'`
+#'   (left), `'c'` (center) and/or `'r'` (right). By default or if
+#'   `align = NULL`, numeric columns are right-aligned, and other columns
+#'   are left-aligned. If `length(align) == 1L`, the string will be
+#'   expanded to a vector of individual letters, e.g. `'clc'` becomes
+#'   `c('c', 'l', 'c')`, unless the output format is LaTeX.
 #' @param caption The table caption. By default, it is retrieved from the chunk
-#'   option \code{tab.cap}.
+#'   option `tab.cap`.
 #' @param label The table reference label. By default, the label is obtained
 #'   from \code{knitr::\link{opts_current}$get('label')} (i.e., the current
-#'   chunk label). To disable the label, use \code{label = NA}.
-#' @param format.args A list of arguments to be passed to \code{\link{format}()}
-#'   to format table values, e.g. \code{list(big.mark = ',')}.
-#' @param escape Boolean; whether to escape special characters when producing
-#'   HTML or LaTeX tables. When \code{escape = FALSE}, you have to make sure
-#'   that special characters will not trigger syntax errors in LaTeX or HTML.
+#'   chunk label). To disable the label, use `label = NA`.
+#' @param format.args A list of arguments to be passed to [format()]
+#'   to format table values, e.g. `list(big.mark = ',')`.
+#' @param escape Whether to escape special characters when producing HTML or
+#'   LaTeX tables. When `escape = FALSE`, you have to make sure that
+#'   special characters will not trigger syntax errors in LaTeX or HTML.
 #' @param ... Other arguments (see Examples and References).
 #' @return A character vector of the table source code.
 #' @seealso Other R packages such as \pkg{huxtable}, \pkg{xtable},
@@ -55,15 +55,15 @@
 #'   \pkg{ascii} and \pkg{pander} for different flavors of markdown output and
 #'   some advanced features and table styles. For more on other packages for
 #'   creating tables, see
-#'   \url{https://bookdown.org/yihui/rmarkdown-cookbook/table-other.html}.
-#' @note When using \code{kable()} as a \emph{top-level} expression, you do not
-#'   need to explicitly \code{print()} it due to R's automatic implicit
+#'   <https://bookdown.org/yihui/rmarkdown-cookbook/table-other.html>.
+#' @note When using `kable()` as a *top-level* expression, you do not
+#'   need to explicitly `print()` it due to R's automatic implicit
 #'   printing. When it is wrapped inside other expressions (such as a
-#'   \code{\link{for}} loop), you must explicitly \code{print(kable(...))}.
+#'   `for` loop), you must explicitly `print(kable(...))`.
 #' @references See
-#'   \url{https://bookdown.org/yihui/rmarkdown-cookbook/kable.html} for some
+#'   <https://bookdown.org/yihui/rmarkdown-cookbook/kable.html> for some
 #'   examples about this function, including specific arguments according to the
-#'   \code{format} selected.
+#'   `format` selected.
 #' @export
 #' @examples d1 = head(iris); d2 = head(mtcars)
 #' # pipe tables by default

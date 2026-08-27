@@ -1,7 +1,7 @@
 #' All built-in patterns
 #'
 #' This object is a named list of all built-in patterns.
-#' @references Usage: \url{https://yihui.org/knitr/patterns/}
+#' @references Usage: <https://yihui.org/knitr/patterns/>
 #' @export
 #' @seealso \code{\link{knit_patterns}}
 #' @examples all_patterns$rnw; all_patterns$html
@@ -71,15 +71,15 @@ all_patterns = list(
 #' Patterns to match and extract R code in a document
 #'
 #' Patterns are regular expressions and will be used in functions like
-#' \code{base::\link{grep}()} to extract R code and chunk options. The object
-#' \code{knit_patterns} controls the patterns currently used; see the references
+#' [base::grep()] to extract R code and chunk options. The object
+#' `knit_patterns` controls the patterns currently used; see the references
 #' and examples for usage.  All built-in patterns are available in the list
-#' \link{all_patterns}.
+#' \code{\link{all_patterns}}.
 #'
 #' @seealso \code{\link{all_patterns}}
-#' @references Usage: \url{https://yihui.org/knitr/objects/}
+#' @references Usage: <https://yihui.org/knitr/objects/>
 #'
-#'   Components in \code{knit_patterns}: \url{https://yihui.org/knitr/patterns/}
+#'   Components in `knit_patterns`: <https://yihui.org/knitr/patterns/>
 #' @export
 #' @examples library(knitr)
 #' opat = knit_patterns$get() # old pattern list (to restore later)
@@ -110,7 +110,7 @@ set_pattern = function(type) {
 #'
 #' These are convenience functions to set pre-defined pattern lists (the syntax
 #' to read input documents). The function names are built from corresponding
-#' file extensions, e.g. \code{pat_rnw()} can set the Sweave syntax to read Rnw
+#' file extensions, e.g. `pat_rnw()` can set the Sweave syntax to read Rnw
 #' documents.
 #' @rdname pat_fun
 #' @return The patterns object \code{\link{knit_patterns}} is modified as a side

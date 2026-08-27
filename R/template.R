@@ -2,27 +2,27 @@
 #'
 #' This is a convenience function for small-scale automatic reporting based on
 #' an R script and a template. The default template is an Rnw file (LaTeX);
-#' \code{stitch_rhtml()} and \code{stitch_rmd()} are wrappers on top of
-#' \code{stitch()} using the R HTML and R Markdown templates respectively.
+#' `stitch_rhtml()` and `stitch_rmd()` are wrappers on top of
+#' `stitch()` using the R HTML and R Markdown templates respectively.
 #'
 #' The first two lines of the R script can contain the title and author of the
-#' report in comments of the form \samp{## title:} and \samp{## author:}. The
-#' template must have a token \samp{\%sCHUNK_LABEL_HERE}, which will be used to
+#' report in comments of the form `## title:` and `## author:`. The
+#' template must have a token `\%sCHUNK_LABEL_HERE`, which will be used to
 #' input all the R code from the script. See the examples below.
 #'
-#' The R script may contain chunk headers of the form \samp{## ---- label,
-#' opt1=val1, opt2=val2}, which will be copied to the template; if no chunk
+#' The R script may contain chunk headers of the form
+#' `## ---- label, opt1=val1, opt2=val2`, which will be copied to the template; if no chunk
 #' headers are found, the whole R script will be inserted into the template as
 #' one code chunk.
 #' @param script Path to the R script.
 #' @param template Path of the template to use. By default, the Rnw template in
 #'   this package; there is also an HTML template in \pkg{knitr}.
-#' @param output Output filename, passed to \code{\link{knit}}). By default,
+#' @param output Output filename, passed to [knit()]). By default,
 #'   the base filename of the script is used.
 #' @inheritParams knit
 #' @return path of the output document
 #' @export
-#' @seealso \code{\link{spin}} (turn a specially formatted R script to a report)
+#' @seealso [spin()] (turn a specially formatted R script to a report)
 #' @examples s = system.file('misc', 'stitch-test.R', package = 'knitr')
 #' if (interactive()) stitch(s)  # compile to PDF
 #'
@@ -77,7 +77,7 @@ stitch = function(script,
   out
 }
 #' @rdname stitch
-#' @param ... Arguments passed to \code{stitch()}.
+#' @param ... Arguments passed to `stitch()`.
 #' @export
 stitch_rhtml = function(..., envir = parent.frame()) stitch(
   ..., envir = envir,
@@ -93,20 +93,20 @@ stitch_rmd = function(..., envir = parent.frame()) stitch(
 
 #' A simple macro preprocessor for templating purposes
 #'
-#' This function expands a template based on the R expressions in \code{{{}}}
-#' (this tag can be customized by the \code{delim} argument). These expressions
+#' This function expands a template based on the R expressions in `{{}}`
+#' (this tag can be customized by the `delim` argument). These expressions
 #' are extracted, evaluated and replaced by their values in the original
 #' template.
 #' @param file The template file.
 #' @param ... A list of variables to be used for the code in the template; note that
 #'   the variables will be searched for in the parent frame as well.
 #' @param text Character vector of lines of code. An alternative way to specify
-#'   the template code directly. If \code{text} is provided, \code{file} will be ignored.
+#'   the template code directly. If `text` is provided, `file` will be ignored.
 #' @param delim A pair of opening and closing delimiters for the templating tags.
 #' @return A character vector, with the tags evaluated and replaced by their
 #'   values.
 #' @references This function was inspired by the pyexpander and m4
-#'   (\url{http://www.gnu.org/software/m4/}), thanks to Frank Harrell.
+#'   (<http://www.gnu.org/software/m4/>), thanks to Frank Harrell.
 #' @export
 #' @examples # see the knit_expand vignette
 #' if (interactive()) browseVignettes(package='knitr')

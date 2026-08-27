@@ -25,10 +25,10 @@ and \code{label}. This function returns the path of figures for the current
 chunk by default.
 }
 \note{
-When there are special characters (not alphanumeric or \samp{-} or
-  \samp{_}) in the path, they will be automatically replaced with \samp{_}.
-  For example, \file{a b/c.d-} will be sanitized to \file{a_b/c_d-}. This
-  makes the filenames safe to LaTeX.
+When there are special characters (not alphanumeric or \code{-} or
+\verb{_}) in the path, they will be automatically replaced with \verb{_}.
+For example, \file{a b/c.d-} will be sanitized to \file{a_b/c_d-}. This
+makes the filenames safe to LaTeX.
 }
 \examples{
 fig_path(".pdf", options = list(fig.path = "figure/abc-", label = "first-plot"))

@@ -31,19 +31,19 @@ code chunks, or a character vector; see Details.}
 
 \item{from.offset, to.offset}{Offsets to be added to \code{from}/\code{to}.}
 
-\item{roxygen_comments}{Logical dictating whether to keep trailing
-roxygen-style comments from code chunks in addition to whitespace}
+\item{roxygen_comments}{Whether to keep trailing roxygen-style comments from
+code chunks in addition to whitespace.}
 
 \item{topic, package}{Name of the demo and the package. See
-\code{utils::\link{demo}}.}
+\code{\link[utils:demo]{utils::demo()}}.}
 
-\item{...}{Arguments passed to \code{\link{read_chunk}}.}
+\item{...}{Arguments passed to \code{\link[=read_chunk]{read_chunk()}}.}
 }
 \value{
 As a side effect, code chunks are read into the current session so
-  that future chunks can (re)use the code by chunk label references. If an
-  external chunk has the same label as a chunk in the current session, chunk
-  label references by future chunks will refer to the external chunk.
+that future chunks can (re)use the code by chunk label references. If an
+external chunk has the same label as a chunk in the current session, chunk
+label references by future chunks will refer to the external chunk.
 }
 \description{
 Chunks can be put in an external script, and this function reads chunks into
@@ -52,7 +52,7 @@ to read a demo script from a package.
 }
 \details{
 There are two approaches to read external code into the current session: (1)
-Use a special separator of the from \code{## ---- chunk-label} (at least four
+Use a special separator of the from \verb{## ---- chunk-label} (at least four
 dashes before the chunk label) in the script; (2) Manually specify the
 labels, starting and ending positions of code chunks in the script.
 
@@ -72,9 +72,9 @@ supposed to be unique so that the numeric positions returned from
 }
 \note{
 This function can only be used in a chunk which is \emph{not} cached
-  (chunk option \code{cache = FALSE}), and the code is read and stored in the
-  current session \emph{without} being executed (to actually run the code,
-  you have to use a chunk with a corresponding label).
+(chunk option \code{cache = FALSE}), and the code is read and stored in the
+current session \emph{without} being executed (to actually run the code,
+you have to use a chunk with a corresponding label).
 }
 \examples{
 ## put this in foo.R and read_chunk('foo.R')
@@ -105,5 +105,5 @@ knitr::knit_code$restore()  # clean up the session
 }
 \author{
 Yihui Xie; the idea of the second approach came from Peter
-  Ruckdeschel (author of the \pkg{SweaveListingUtils} package)
+Ruckdeschel (author of the \pkg{SweaveListingUtils} package)
 }

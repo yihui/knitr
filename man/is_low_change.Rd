@@ -11,7 +11,7 @@ is_low_change(p1, p2)
 }
 \value{
 Logical value indicating whether \code{p2} is a low-level update of
-  \code{p1}.
+\code{p1}.
 }
 \description{
 Check if one plot only contains a low-level update of another plot.
