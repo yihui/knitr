@@ -146,7 +146,14 @@ rnw2pdf = function(
 # package's mark_html() is a thin wrapper of litedown::mark() that forces the
 # HTML template on (to produce a full document instead of a fragment); we
 # replicate that here so knitr no longer depends on the markdown package.
+#
+# During R CMD check (e.g. when building vignettes on CRAN), prefer the markdown
+# package's mark_html() if it is installed, because knitr previously used it and
+# some existing vignettes rely on its behavior (e.g. tolerating YAML like
+# `toc: yes`). This avoids breaking vignettes that built fine before knitr
+# switched to litedown (#2457).
 mark_html = function(..., template = TRUE) {
+  if (is_cran_check() && has_package('markdown')) return(markdown::mark_html(..., template = template))
   opts = options(litedown.html.template = template)
   on.exit(options(opts), add = TRUE)
   litedown::mark(...)

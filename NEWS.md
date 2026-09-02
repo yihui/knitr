@@ -38,7 +38,7 @@
 
 ## MINOR CHANGES
 
-- `knit2html()` (and other functions that render Markdown to HTML, such as `stitch()`, `knit_rd()`, `knit2wp()`, `rocco()`, and the `knitr::knitr` vignette engine) now use `litedown::mark()` directly instead of `markdown::mark_html()`. The **markdown** package (>= 1.3) has become a thin wrapper of **litedown**, so this removes the **markdown** dependency (**litedown** is used instead) without changing the HTML output.
+- `knit2html()` (and other functions that render Markdown to HTML, such as `stitch()`, `knit_rd()`, `knit2wp()`, `rocco()`, and the `knitr::knitr` vignette engine) now use `litedown::mark()` directly instead of `markdown::mark_html()`. The **markdown** package (>= 1.3) has become a thin wrapper of **litedown**, so this removes the **markdown** dependency (**litedown** is used instead) without changing the HTML output. During `R CMD check` (e.g., when building vignettes on CRAN), `markdown::mark_html()` is still preferred if the **markdown** package is installed, to avoid breaking existing vignettes that relied on its behavior (#2457).
 
 # CHANGES IN knitr VERSION 1.51
 
