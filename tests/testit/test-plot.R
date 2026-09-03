@@ -213,16 +213,22 @@ assert('include_graphics() finds a file that exists under the converted path', {
   dir.create(d)
   setwd(d)
   file.create('image.png')
-  # use getwd() (not `d`) as the conversion base: on some platforms getwd() may
-  # differ in form from `d` (e.g. 8.3 short paths on Windows), and the msprog
-  # vignette likewise builds the path from getwd() while it is rendered in place
   wd = getwd()
   opts_knit$set(output.dir = wd, rmarkdown.output_dir = NULL)
 
-  # getwd() + 'image.png' (missing separator) -> exists only after conversion
+  # getwd() + 'image.png' (missing separator) -> an absolute path that does not
+  # exist literally, but xfun::relative_path() strips the common prefix so it
+  # becomes the existing relative path 'image.png'. Guard on the conversion
+  # actually yielding the existing file: xfun::relative_path() operates on path
+  # components on some platforms (e.g. Windows), where a glued last component
+  # does not strip to a sibling file, and the scenario under test would not
+  # arise there.
   bad = paste0(wd, 'image.png')
-  (!has_error(suppressWarnings(include_graphics(bad, error = TRUE))))
-  (unclass(suppressWarnings(include_graphics(bad, error = TRUE))) %==% 'image.png')
+  conv = xfun::relative_path(bad, wd, error = FALSE)
+  if (!xfun::is_abs_path(bad) || file.exists(conv)) {
+    (!has_error(suppressWarnings(include_graphics(bad, error = TRUE))))
+    (unclass(suppressWarnings(include_graphics(bad, error = TRUE))) %==% conv)
+  }
 })
 
 with_par = function(expr, ...) {
