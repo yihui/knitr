@@ -484,9 +484,15 @@ include_graphics = function(
   }
   # relative paths can be tricky in child documents, so don't error (#1957)
   if (child_mode()) error = FALSE
-  # check existence against the original paths (path0): for absolute inputs this
-  # avoids resolving a relative path against the wrong base directory (#2171)
-  if (error && length(p <- path[!xfun::is_web_path(path0) & !file.exists(path0)])) stop(
+  # a file is considered found if it exists under either the original path
+  # (path0) or the converted path (path): checking path0 avoids false negatives
+  # when the relative path is resolved against the wrong base directory (#2171),
+  # while also checking path avoids false negatives when the converted path is
+  # the one that exists (e.g. an absolute path that resolves correctly only
+  # after being made relative, #2461)
+  if (error && length(p <- path[
+    !xfun::is_web_path(path0) & !file.exists(path0) & !file.exists(path)
+  ])) stop(
     'Cannot find the file(s): ', quote_vec(p)
   )
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)

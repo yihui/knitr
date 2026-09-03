@@ -201,6 +201,27 @@ assert('include_graphics() converts absolute paths relative to the output dir', 
   (has_error(include_graphics(file.path(img_dir, 'nope.png'), error = TRUE)))
 })
 
+# https://github.com/yihui/knitr/issues/2461
+# a file is found if it exists under either the original or the converted path;
+# e.g. paste0(getwd(), 'foo.png') (a missing path separator) yields an absolute
+# path that does not exist literally, but is converted to the existing relative
+# path 'foo.png' (this used to work before #2171 and should keep working)
+assert('include_graphics() finds a file that exists under the converted path', {
+  optk = opts_knit$get(); on.exit(opts_knit$restore(optk), add = TRUE)
+  owd = getwd(); on.exit(setwd(owd), add = TRUE)
+
+  d = normalizePath(tempfile(), mustWork = FALSE)
+  dir.create(d)
+  setwd(d)
+  file.create('image.png')
+  opts_knit$set(output.dir = d, rmarkdown.output_dir = NULL)
+
+  # getwd() + 'image.png' (missing separator) -> exists only after conversion
+  bad = paste0(getwd(), 'image.png')
+  (!has_error(suppressWarnings(include_graphics(bad, error = TRUE))))
+  (unclass(suppressWarnings(include_graphics(bad, error = TRUE))) %==% 'image.png')
+})
+
 with_par = function(expr, ...) {
   # set par
   op = graphics::par(...)
