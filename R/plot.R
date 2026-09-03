@@ -489,7 +489,7 @@ include_graphics = function(
   # when the relative path is resolved against the wrong base directory (#2171),
   # while also checking path avoids false negatives when the converted path is
   # the one that exists (e.g. an absolute path that resolves correctly only
-  # after being made relative, #2461)
+  # after being made relative, #2459)
   if (error && length(p <- path[
     !xfun::is_web_path(path0) & !file.exists(path0) & !file.exists(path)
   ])) stop(
