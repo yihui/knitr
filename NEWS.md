@@ -36,9 +36,9 @@
 
 - Fixed a bug that calling `knit_exit()` could put `knit()` in a non-functioning state when there is only a single code chunk in the input (thanks, @dlampart, #2372).
 
-## MINOR CHANGES
+## MAJOR CHANGES
 
-- `knit2html()` (and other functions that render Markdown to HTML, such as `stitch()`, `knit_rd()`, `knit2wp()`, `rocco()`, and the `knitr::knitr` vignette engine) now use `litedown::mark()` directly instead of `markdown::mark_html()`. The **markdown** package (>= 1.3) has become a thin wrapper of **litedown**, so this removes the **markdown** dependency (**litedown** is used instead) without changing the HTML output.
+- `knit2html()` (and other functions that render Markdown to HTML, such as `stitch()`, `knit_rd()`, `knit2wp()`, `rocco()`, and the `knitr::knitr` vignette engine) now use `litedown::mark()` directly instead of `markdown::mark_html()`. The **markdown** package (>= 1.3) has become a thin wrapper of **litedown**, so this removes the **markdown** dependency (**litedown** is used instead) without changing the HTML output. For R packages that rely on the `knitr::knitr` vignette engine, the `DESCRIPTION` file needs to declare `litedown` as a dependency (typically in `Suggests`) instead of `markdown`.
 
 # CHANGES IN knitr VERSION 1.51
 
