@@ -153,7 +153,8 @@ rnw2pdf = function(
 # `toc: yes`). This avoids breaking vignettes that built fine before knitr
 # switched to litedown (#2457).
 mark_html = function(..., template = TRUE) {
-  if (is_cran_check() && has_package('markdown')) return(markdown::mark_html(..., template = template))
+  if (is_cran_check() && has_package('markdown'))
+    return(getFromNamespace('mark_html', 'markdown')(..., template = template))
   opts = options(litedown.html.template = template)
   on.exit(options(opts), add = TRUE)
   litedown::mark(...)
