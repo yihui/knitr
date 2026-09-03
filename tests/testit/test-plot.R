@@ -213,10 +213,14 @@ assert('include_graphics() finds a file that exists under the converted path', {
   dir.create(d)
   setwd(d)
   file.create('image.png')
-  opts_knit$set(output.dir = d, rmarkdown.output_dir = NULL)
+  # use getwd() (not `d`) as the conversion base: on some platforms getwd() may
+  # differ in form from `d` (e.g. 8.3 short paths on Windows), and the msprog
+  # vignette likewise builds the path from getwd() while it is rendered in place
+  wd = getwd()
+  opts_knit$set(output.dir = wd, rmarkdown.output_dir = NULL)
 
   # getwd() + 'image.png' (missing separator) -> exists only after conversion
-  bad = paste0(getwd(), 'image.png')
+  bad = paste0(wd, 'image.png')
   (!has_error(suppressWarnings(include_graphics(bad, error = TRUE))))
   (unclass(suppressWarnings(include_graphics(bad, error = TRUE))) %==% 'image.png')
 })
