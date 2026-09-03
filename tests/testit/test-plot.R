@@ -201,7 +201,6 @@ assert('include_graphics() converts absolute paths relative to the output dir', 
   (has_error(include_graphics(file.path(img_dir, 'nope.png'), error = TRUE)))
 })
 
-# https://github.com/yihui/knitr/issues/2461
 # a file is found if it exists under either the original or the converted path;
 # e.g. paste0(getwd(), 'foo.png') (a missing path separator) yields an absolute
 # path that does not exist literally, but is converted to the existing relative
