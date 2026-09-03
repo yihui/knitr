@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="generator" content="litedown 0.11.2">
+<meta name="generator" content="litedown 0.11.3">
 <title>Help pages</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.72/css/default.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.72/css/article.min.css">
@@ -918,36 +918,35 @@ wrapping (for <code>type = "multiline"</code> only).</p>
 valid R syntax. This is an example for <code>.Rmd</code> document
 </p>
 <pre><code>```{r, echo = FALSE, fig.width = 10}
-```
-</code></pre>
-<p>New syntax allows to pass option inside the chunk using several variants
-</p>
-<ul>
-<li><p> Passing options one per line using valid R syntax. This corresponds to <code>convert_chunk_header(type = "multiline")</code>.
-</p>
-<pre><code>```{r}
+<pre><code>&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;New syntax allows to pass option inside the chunk using several variants
+&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt; Passing options one per line using valid R syntax. This corresponds to &lt;code&gt;convert_chunk_header(type = &quot;multiline&quot;)&lt;/code&gt;.
+&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```{r}
 #| echo = FALSE,
 #| fig.width = 10
-```
 </code></pre>
+<p></code></pre></p>
 </li>
 <li><p> Passing option part from header in-chunk with several line if wrapping is
 needed. This corresponds to <code>convert_chunk_header(type = "wrap")</code>
 </p>
 <pre><code>```{r}
 #| echo = FALSE, fig.width = 10
-```
-</code></pre>
-</li>
-<li><p> Passing options key value pairs in-chunk using YAML syntax. Values are no
+<pre><code>&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt; Passing options key value pairs in-chunk using YAML syntax. Values are no
 more R expression but valid YAML syntax. This corresponds to
-<code>convert_chunk_header(type = "yaml")</code> (not implement yet).
-</p>
-<pre><code>```{r}
+&lt;code&gt;convert_chunk_header(type = &quot;yaml&quot;)&lt;/code&gt; (not implement yet).
+&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```{r}
 #| echo: false,
 #| fig.width: 10
-```
 </code></pre>
+<p></code></pre></p>
 </li></ul>
 <h3 id="sec:note_7" class="unnumbered unlisted">Note</h3>
 <p>Learn more about the new chunk option syntax in
@@ -2358,16 +2357,16 @@ kable(x, format.args = list(decimal.mark = &quot;,&quot;, big.mark = &quot;'&quo
 </code></pre>
 <pre><code>#&gt; |          V1|          V2|          V3|          V4|          V5|          V6|
 #&gt; |-----------:|-----------:|-----------:|-----------:|-----------:|-----------:|
-#&gt; | 1'006'651,0|   985'949,5| 1'017'694,2| 1'004'977,0| 1'007'743,0| 1'001'414,2|
-#&gt; |   994'488,6|   997'836,0|   999'188,5| 1'010'001,4| 1'008'366,7| 1'003'083,6|
-#&gt; | 1'001'168,1| 1'003'879,9|   985'517,3|   998'176,3| 1'001'971,9| 1'001'363,1|
-#&gt; | 1'005'334,4| 1'004'103,0|   987'531,3|   991'774,5| 1'001'620,3| 1'007'337,4|
-#&gt; | 1'018'185,9|   984'153,3|   993'416,1|   997'751,2| 1'002'487,8|   998'884,5|
-#&gt; | 1'008'357,0| 1'004'594,9|   990'891,4|   985'242,1| 1'004'601,2| 1'000'222,6|
-#&gt; |   992'823,4|   988'682,9|   986'348,9|   996'713,6|   990'015,9|   996'163,1|
-#&gt; | 1'002'251,2|   998'626,3| 1'012'941,6|   982'320,3|   998'878,7|   992'790,3|
-#&gt; | 1'028'396,5|   976'729,4| 1'017'007,3| 1'008'413,2|   992'101,5| 1'000'473,8|
-#&gt; | 1'021'138,2| 1'002'873,5|   995'392,0| 1'009'018,1|   993'789,2| 1'008'686,8|
+#&gt; |   992'916,1| 1'006'417,7| 1'003'929,2|   999'010,3| 1'026'352,0|   984'603,2|
+#&gt; | 1'001'892,4|   987'079,2|   995'184,2| 1'003'470,6|   998'987,1| 1'000'970,3|
+#&gt; | 1'005'468,3|   989'791,0|   999'844,4| 1'007'042,6|   979'420,3|   991'148,1|
+#&gt; |   996'776,8| 1'000'437,5|   994'471,9| 1'007'160,7| 1'000'061,8| 1'012'570,6|
+#&gt; |   983'077,3| 1'013'911,1|   998'923,4|   998'805,5| 1'003'204,9| 1'017'047,2|
+#&gt; |   995'340,0| 1'007'008,4| 1'005'243,7| 1'002'970,0|   980'169,3|   998'576,5|
+#&gt; |   989'891,1| 1'017'762,9|   988'145,7| 1'000'524,5|   997'254,8|   996'578,5|
+#&gt; | 1'006'789,6|   991'400,0| 1'017'852,8| 1'002'756,4|   991'658,0|   997'849,0|
+#&gt; | 1'011'202,3|   991'800,0| 1'010'149,6|   991'380,6|   983'947,7| 1'014'014,1|
+#&gt; | 1'000'572,7|   984'927,3| 1'025'656,3| 1'003'841,8| 1'015'474,1| 1'007'421,5|
 </code></pre>
 <pre><code class="language-r"># save the value
 x = kable(d2, format = &quot;html&quot;)
@@ -3404,7 +3403,7 @@ access or set hooks in this package.
 </code></pre>
 <pre><code>#&gt; function (x, options) 
 #&gt; x
-#&gt; &lt;bytecode: 0x55a9a1468708&gt;
+#&gt; &lt;bytecode: 0x56154cb6b770&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">knit_hooks$get(&quot;inline&quot;)
@@ -3415,7 +3414,7 @@ access or set hooks in this package.
 #&gt;         x = round_digits(x)
 #&gt;     paste(as.character(x), collapse = &quot;, &quot;)
 #&gt; }
-#&gt; &lt;bytecode: 0x55a9a1467f98&gt;
+#&gt; &lt;bytecode: 0x56154cb6b000&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-knit_meta"><span class="section-number main-number">40</span> Metadata about objects to be printed</h2>
@@ -5099,7 +5098,7 @@ press again to hide the text column (show code).
 # knit these two vignettes using the docco style
 rocco_view(system.file(&quot;doc&quot;, &quot;docco-classic.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
-<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/RtmpIy240d (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
+<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/RtmpzQPpGI (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
 </code></pre>
 <pre><code class="language-r">rocco_view(system.file(&quot;doc&quot;, &quot;knit_expand.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
@@ -5708,7 +5707,7 @@ str(vig_list)
 #&gt;     else knit)(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55a99f12fea8&gt;
+#&gt; &lt;bytecode: 0x56154a6ae020&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -5716,7 +5715,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55a99f133dc8&gt;
+#&gt; &lt;bytecode: 0x56154a6b1f78&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::knitr_notangle&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -5751,7 +5750,7 @@ str(vig_list)
 #&gt;     unlink(with_ext(file, &quot;R&quot;))
 #&gt;     return()
 #&gt; }
-#&gt; &lt;bytecode: 0x55a99f219f00&gt;
+#&gt; &lt;bytecode: 0x56154a717588&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::docco_classic&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -5780,7 +5779,7 @@ str(vig_list)
 #&gt;     rocco(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55a99f157ad8&gt;
+#&gt; &lt;bytecode: 0x56154a6d1a10&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -5788,7 +5787,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55a99f133dc8&gt;
+#&gt; &lt;bytecode: 0x56154a6b1f78&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-wrap_rmd"><span class="section-number main-number">73</span> Wrap long lines in Rmd files</h2>
@@ -5860,7 +5859,7 @@ This feature may or may not be added in the future.
 </div>
 <footer><div class="flex-col">
 <p>Developed by <a href="https://yihui.org">Yihui Xie</a></p>
-<p>Site built with <a href="https://github.com/yihui/litedown">litedown</a> v0.11.2</p>
+<p>Site built with <a href="https://github.com/yihui/litedown">litedown</a> v0.11.3</p>
 </div></footer>
 <script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.72/js/sidenotes.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.72/js/appendix.min.js" defer></script>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="generator" content="litedown 0.11.2">
+<meta name="generator" content="litedown 0.11.3">
 <title>Not An Introduction to knitr</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.72/css/default.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.5/dist/katex.min.css">
@@ -13,7 +13,7 @@
 <div class="frontmatter">
 <div class="title"><h1>Not An Introduction to knitr</h1></div>
 <div class="author"><h2>Yihui Xie</h2></div>
-<div class="date"><h3>2026-09-01</h3></div>
+<div class="date"><h3>2026-09-03</h3></div>
 </div>
 <div class="body">
 <p>The <strong>knitr</strong> package is an alternative tool to Sweave based on a different
@@ -28,9 +28,9 @@ and knitr” for this package, too.</p>
 <pre><code class="language-r">options(digits = 4)
 rnorm(20)
 </code></pre>
-<pre><code>#&gt;  [1]  1.05220 -0.17467 -0.85438 -1.32278  0.14747 -1.16890 -1.37984 -0.64338
-#&gt;  [9]  0.28472  0.45867  0.33112 -0.09179 -0.30645  0.55222  1.85514 -0.35244
-#&gt; [17] -0.63881 -0.02661 -1.26184 -0.54456
+<pre><code>#&gt;  [1]  1.07966 -0.45621 -0.13904  0.06057 -0.29516 -2.61240  1.22169  0.46083
+#&gt;  [9]  0.22481 -0.74693 -0.86269  0.25232 -0.56869  0.15713 -0.95614 -0.12610
+#&gt; [17] -1.95452 -0.16963 -0.42052  1.04259
 </code></pre>
 <pre><code class="language-r">fit = lm(dist ~ speed, data = cars)
 b = coef(fit)
