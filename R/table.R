@@ -173,8 +173,8 @@ kable = function(
 kable_caption = function(label, caption, format, escape = TRUE) {
   # escape special characters in the caption (before prepending the label, which
   # must not be escaped), just as we do for cell content and column names (#2436)
-  if (!is.null(caption) && !anyNA(caption) && format %in% c('latex', 'html') && escape)
-    caption = if (format == 'latex') escape_latex(caption) else html_escape(caption)
+  if (!is.null(caption) && !anyNA(caption) && format %in% c('latex', 'html'))
+    if (escape) caption = if (format == 'latex') escape_latex(caption) else html_escape(caption)
   # create a label for bookdown if applicable
   if (is.null(label)) label = opts_current$get('label')
   if (is.null(label)) label = NA
