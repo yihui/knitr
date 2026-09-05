@@ -139,7 +139,7 @@ knitr::knit_hooks$restore()
 \references{
 See output hooks in \url{https://yihui.org/knitr/hooks/}, and
 some examples in
-\url{https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html}
+\url{https://pkg.yihui.org/rmarkdown-cookbook/output-hooks.html}
 
 Jekyll and Liquid:
 \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions}; prettify.js:

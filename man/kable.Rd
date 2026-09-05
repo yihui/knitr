@@ -137,7 +137,7 @@ kables(list(kable(d1, align = "l"), kable(d2)), caption = "A tale of two tables"
 }
 \references{
 See
-\url{https://bookdown.org/yihui/rmarkdown-cookbook/kable.html} for some
+\url{https://pkg.yihui.org/rmarkdown-cookbook/kable.html} for some
 examples about this function, including specific arguments according to the
 \code{format} selected.
 }
@@ -147,5 +147,5 @@ Other R packages such as \pkg{huxtable}, \pkg{xtable},
 \pkg{ascii} and \pkg{pander} for different flavors of markdown output and
 some advanced features and table styles. For more on other packages for
 creating tables, see
-\url{https://bookdown.org/yihui/rmarkdown-cookbook/table-other.html}.
+\url{https://pkg.yihui.org/rmarkdown-cookbook/table-other.html}.
 }

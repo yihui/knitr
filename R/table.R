@@ -55,13 +55,13 @@
 #'   \pkg{ascii} and \pkg{pander} for different flavors of markdown output and
 #'   some advanced features and table styles. For more on other packages for
 #'   creating tables, see
-#'   <https://bookdown.org/yihui/rmarkdown-cookbook/table-other.html>.
+#'   <https://pkg.yihui.org/rmarkdown-cookbook/table-other.html>.
 #' @note When using `kable()` as a *top-level* expression, you do not
 #'   need to explicitly `print()` it due to R's automatic implicit
 #'   printing. When it is wrapped inside other expressions (such as a
 #'   `for` loop), you must explicitly `print(kable(...))`.
 #' @references See
-#'   <https://bookdown.org/yihui/rmarkdown-cookbook/kable.html> for some
+#'   <https://pkg.yihui.org/rmarkdown-cookbook/kable.html> for some
 #'   examples about this function, including specific arguments according to the
 #'   `format` selected.
 #' @export
