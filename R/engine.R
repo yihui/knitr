@@ -615,13 +615,26 @@ eng_sql = function(options) {
     max.print = -1
   sql = one_string(options$code)
   params = options$params
+  immediate = NULL
+  if(exists("sql.immediate", where = options) ) { immediate = options$sql.immediate }
+  if(exists('sql.replace', where = options) ) {
+    if(!isTRUE(immediate)) knitr:::stop2("To replace a temprary table, option sql.immediate has to be set to TRUE).")
+    replace = options$sql.replace
+    if (isTRUE(immediate) && isTRUE(replace)) {
+      reptable = gsub('(^.*into[[:space:]]+)(#[0-9A-Za-z]+)(.+from.*$)', '\\2', sql, ignore.case = T)
+      if(!sub('(.).*.$', '\\1', reptable) == '#') knitr:::stop2(
+        "To replace a table, the table has to be a temporary table (tablename staring with # or ##)."
+      )
+      sql <- paste0("if object_id('tempdb.dbo.", reptable, "') is not null drop table ", reptable, " ;", sql)
+    }
+  }
 
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
 
   data = tryCatch({
     if (is_sql_update_query(query)) {
-      DBI::dbExecute(conn, query)
+      DBI::dbExecute(conn, query, immediate = immediate)
       NULL
     } else if (is.null(varname) && max.print > 0) {
       # execute query -- when we are printing with an enforced max.print we
@@ -630,13 +643,12 @@ eng_sql = function(options) {
       data = DBI::dbFetch(res, n = max.print)
       DBI::dbClearResult(res)
       data
-
     } else {
       if (length(params) == 0) {
-        DBI::dbGetQuery(conn, query)
+        DBI::dbGetQuery(conn, query, immediate = immediate)
       } else {
         # If params option is provided, parameters are not interplolated
-        DBI::dbGetQuery(conn, sql, params = params)
+        DBI::dbGetQuery(conn, query, immediate = immediate, params = params)
       }
     }
   }, error = function(e) {
