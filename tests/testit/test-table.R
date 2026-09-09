@@ -55,22 +55,23 @@ assert('kable() does not add extra spaces to character columns', {
 \\hline
 x & y\\\\
 \\hline
-\\(1.20\\) & fooooo\\\\
+1.20 & fooooo\\\\
 \\hline
-\\(4.87\\) & bar\\\\
+4.87 & bar\\\\
 \\hline
 \\end{tabular}')
 })
 
-assert('kable() in LaTeX mode formats minus signs and decimal and thousands separators correctly', {
-  kable2(data.frame(x = c(-1111, 2222), y = c(1111, -0.5), z = c('text,comma', '-0.5')), 'latex', format.args=list(big.mark = ',')) %==% '
-\\begin{tabular}{r|r|l}
+assert('kable() in LaTeX mode formats minus signs, infinities, scientific notation, and decimal and thousands separators correctly', {
+  kable2(data.frame(w = c(1111e10, -0.5e-5), x = c(-1111, -Inf), y = c(1111, -0.5), z = c('text,comma', '-0.5')), 'latex',
+         format.args = list(big.mark = ','), numeric.math = TRUE) %==% '
+\\begin{tabular}{r|r|r|l}
 \\hline
-x & y & z\\\\
+w & x & y & z\\\\
 \\hline
-\\(-1{,}111\\) & \\(1{,}111.0\\) & text,comma\\\\
+\\(1.111\\times 10^{13}\\) & \\(-1{,}111\\) & \\(1{,}111.0\\) & text,comma\\\\
 \\hline
-\\(2{,}222\\) & \\(-0.5\\) & -0.5\\\\
+\\(-5.000\\times 10^{-6}\\) & \\(-\\infty\\) & \\(-0.5\\) & -0.5\\\\
 \\hline
 \\end{tabular}'
 })
@@ -130,8 +131,8 @@ assert('kable() adds {} before [] when booktabs = TRUE', {
 \\toprule
 x & y\\\\
 \\midrule
-{}[0, 1] & \\(35\\)\\\\
-(1, 2] & \\(62\\)\\\\
+{}[0, 1] & 35\\\\
+(1, 2] & 62\\\\
 \\bottomrule
 \\end{tabular}'
    )
@@ -143,11 +144,11 @@ assert('kable(format = "latex", linesep = ...) works', {
 \\hline
 x\\\\
 \\hline
-\\(1\\)\\\\
-\\(2\\)\\\\
-\\(3\\)\\\\
+1\\\\
+2\\\\
+3\\\\
 \\midrule
-\\(4\\)\\\\
+4\\\\
 \\hline
 \\end{tabular}')
 })
