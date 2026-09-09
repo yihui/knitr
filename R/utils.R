@@ -240,6 +240,19 @@ format_sci = function(x, ...) {
   vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 
+# unlike the format_sci() family above, this function is given only
+# characters and has to infer from their structure
+transform_num_for_latex = function(x, times = getOption('knitr.inline.times', '\\times ')) {
+  ifelse(x == "Inf", "\\(\\infty\\)",
+  ifelse(x == "-Inf", "\\(-\\infty\\)",
+  # plain old numbers:
+  ifelse(grepl("^ *[0-9., +-]+ *$", x), paste0('\\(', gsub(',', '{,}', x, fixed=TRUE), '\\)'),
+  # scientific notation: initial + and 0s (unless the only 0) in the exponent get dropped
+  ifelse(lengths(sci <- regmatches(x, regexec("^ *([+-]?[0-9.,]+)e[+]?(-?)0*([0-9.,]+) *$", x))),
+         vapply(sci, function(m) if (length(m)) gsub(',', '{,}', sprintf('\\(%s%s10^{%s%s}\\)', m[2], times, m[3], m[4]), fixed=TRUE)
+                                 else "", ""), x))))
+}
+
 # is tikz device without externalization?
 is_tikz_dev = function(options) {
   'tikz' %in% options$dev && !options$external

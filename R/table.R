@@ -48,6 +48,11 @@
 #' @param escape Whether to escape special characters when producing HTML or
 #'   LaTeX tables. When `escape = FALSE`, you have to make sure that
 #'   special characters will not trigger syntax errors in LaTeX or HTML.
+#' @param numeric.math Whether to typeset numeric columns in math
+#'   mode. This option currently only affects LaTeX output, in which
+#'   it improves typesetting of minus signs, infinite values, and
+#'   scientific notation. The default can be set globally with option
+#'   `knitr.table.numeric.math`.
 #' @param ... Other arguments (see Examples and References).
 #' @return A character vector of the table source code.
 #' @seealso Other R packages such as \pkg{huxtable}, \pkg{xtable},
@@ -105,7 +110,7 @@
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
   align, caption = opts_current$get('tab.cap'), label = NULL, format.args = list(),
-  escape = TRUE, ...
+  escape = TRUE, numeric.math = getOption('knitr.table.numeric.math', FALSE), ...
 ) {
 
   format = kable_format(format)
@@ -118,7 +123,7 @@ kable = function(
     res = lapply(
       x, kable, format = format, digits = digits, row.names = row.names,
       col.names = col.names, align = align, caption = NA,
-      format.args = format.args, escape = escape, ...
+      format.args = format.args, escape = escape, numeric.math = numeric.math, ...
     )
     return(kables(res, format, caption, label))
   }
@@ -166,7 +171,7 @@ kable = function(
   if (format == 'simple' && nrow(x) == 0) format = 'pipe'
   res = do.call(
     paste('kable', format, sep = '_'),
-    list(x = x, caption = caption, escape = escape, isn = isn,...)
+    list(x = x, caption = caption, escape = escape, isn = isn & numeric.math, ...)
   )
   structure(res, format = format, class = 'knitr_kable')
 }
@@ -323,7 +328,7 @@ kable_latex = function(
   linesep = ifelse(linesep == "", linesep, paste0('\n', linesep))
 
   x = escape_latex_table(x, escape, booktabs)
-  x[, isn] = paste0('\\(', gsub(',', '{,}', x[, isn], fixed=TRUE), '\\)')
+  x[, isn] = transform_num_for_latex(x[, isn])
   if (!is.character(toprule)) toprule = NULL
   if (!is.character(bottomrule)) bottomrule = NULL
 
