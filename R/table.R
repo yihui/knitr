@@ -49,12 +49,63 @@
 #'   LaTeX tables. When `escape = FALSE`, you have to make sure that
 #'   special characters will not trigger syntax errors in LaTeX or HTML.
 #' @param ... Other arguments (see Examples and References).
-#' @section Arguments for the \code{latex} format:
+#' @section Arguments for the `latex` format:
 #' \describe{
+#'   \item{`booktabs`}{(`FALSE`) Whether to use the \pkg{booktabs} package
+#'   style, i.e., generate `\toprule`, `\midrule`, and `\bottomrule`
+#'   rules (and no vertical lines) instead of `\hline`.}
+#'   \item{`longtable`}{(`FALSE`) Whether to use the \pkg{longtable} package to
+#'   generate a table that may span multiple pages. This is a shortcut for
+#'   `tabular = 'longtable'`.}
+#'   \item{`tabular`}{The name of the LaTeX tabular environment, e.g.,
+#'   `'tabular'` (the default), `'longtable'`, `'tabularx'`, or
+#'   `'xltabular'`.}
+#'   \item{`valign`}{The vertical alignment of the table specified in the
+#'   optional (or, for `tabularx`/`xltabular`, the mandatory) argument of
+#'   the tabular environment, e.g., `'[t]'`. Only applied when a `caption`
+#'   is present or `valign` is explicitly provided.}
+#'   \item{`position`}{The floating position of the `table` environment,
+#'   e.g., `'h'`, `'!htbp'`. Only used when the table is wrapped in a
+#'   `table` environment (i.e., when there is a caption).}
+#'   \item{`centering`}{(`TRUE`) Whether to center the table with
+#'   `\centering` (only takes effect when a `caption` is present).}
+#'   \item{`vline`}{The vertical line separator between columns in the tabular
+#'   preamble (defaults to `''` for `booktabs = TRUE`, otherwise `'|'`).
+#'   Can be set globally via the option `knitr.table.vline`.}
+#'   \item{`toprule`, `midrule`, `bottomrule`}{The horizontal rules at the
+#'   top of the table, after the header row, and at the bottom of the table,
+#'   respectively. They default to `\toprule`/`\midrule`/`\bottomrule`
+#'   for `booktabs = TRUE`, otherwise `\hline`. Each can also be set
+#'   globally via the options `knitr.table.toprule`,
+#'   `knitr.table.midrule`, and `knitr.table.bottomrule`.}
+#'   \item{`linesep`}{The separator(s) between rows in the table body. By
+#'   default, an empty separator is used and (for `booktabs = TRUE`) an
+#'   `\addlinespace` is inserted after every 5 rows; for `booktabs =
+#'   FALSE`, `\hline` is used between all rows. Provide a character vector
+#'   to control the separators (it is recycled over the body rows).}
+#'   \item{`caption.short`}{A short caption for the table, used in the List of
+#'   Tables (the optional argument of `\caption[]{}`).}
+#'   \item{`table.envir`}{The LaTeX environment that wraps the tabular
+#'   environment, e.g., `'table'` (the default when a caption is present) or
+#'   `'table*'`.}
 #'   \item{`numeric.math`}{Whether to typeset numeric columns in math mode,
 #'   which improves rendering of minus signs, infinite values, and scientific
 #'   notation. The default can be set globally via
 #'   `options(knitr.table.numeric.math = TRUE)`.}
+#' }
+#' @section Arguments for the `html` format:
+#' \describe{
+#'   \item{`table.attr`}{A character string of attributes for the `<table>`
+#'   tag, e.g., `'class="table" id="mytable"'`. Can be set globally via the
+#'   option `knitr.table.html.attr`.}
+#' }
+#' @section Arguments for the `pipe`, `simple`, `rst`, `jira`, and `org` formats:
+#' \describe{
+#'   \item{`padding`}{(`1`) The number of spaces used to pad table cells. Set
+#'   `padding = 0` for no inner padding. Not used by the `rst` format.}
+#'   \item{`caption.label`}{The prefix printed before the caption. It defaults
+#'   to `'Table:'` for the `pipe` format and `'#+CAPTION:'` for the
+#'   `org` format.}
 #' }
 #' @return A character vector of the table source code.
 #' @seealso Other R packages such as \pkg{huxtable}, \pkg{xtable},
