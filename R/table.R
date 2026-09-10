@@ -48,12 +48,14 @@
 #' @param escape Whether to escape special characters when producing HTML or
 #'   LaTeX tables. When `escape = FALSE`, you have to make sure that
 #'   special characters will not trigger syntax errors in LaTeX or HTML.
-#' @param numeric.math Whether to typeset numeric columns in math
-#'   mode. This option currently only affects LaTeX output, in which
-#'   it improves typesetting of minus signs, infinite values, and
-#'   scientific notation. The default can be set globally with option
-#'   `knitr.table.numeric.math`.
 #' @param ... Other arguments (see Examples and References).
+#' @section Arguments for the \code{latex} format:
+#' \describe{
+#'   \item{`numeric.math`}{Whether to typeset numeric columns in math mode,
+#'   which improves rendering of minus signs, infinite values, and scientific
+#'   notation. The default can be set globally via
+#'   `options(knitr.table.numeric.math = TRUE)`.}
+#' }
 #' @return A character vector of the table source code.
 #' @seealso Other R packages such as \pkg{huxtable}, \pkg{xtable},
 #'   \pkg{kableExtra}, \pkg{gt} and \pkg{tables} for HTML and LaTeX tables, and
@@ -110,7 +112,7 @@
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
   align, caption = opts_current$get('tab.cap'), label = NULL, format.args = list(),
-  escape = TRUE, numeric.math = getOption('knitr.table.numeric.math', FALSE), ...
+  escape = TRUE, ...
 ) {
 
   format = kable_format(format)
@@ -123,7 +125,7 @@ kable = function(
     res = lapply(
       x, kable, format = format, digits = digits, row.names = row.names,
       col.names = col.names, align = align, caption = NA,
-      format.args = format.args, escape = escape, numeric.math = numeric.math, ...
+      format.args = format.args, escape = escape, ...
     )
     return(kables(res, format, caption, label))
   }
@@ -136,19 +138,19 @@ kable = function(
   if (identical(col.names, NA)) col.names = colnames(x)
   m = ncol(x)
   # numeric columns
-  isn = if (is.matrix(x)) rep(is.numeric(x), m) else sapply(x, is.numeric)
+  is_num = if (is.matrix(x)) rep(is.numeric(x), m) else sapply(x, is.numeric)
   if (missing(align) || (format == 'latex' && is.null(align)))
-    align = ifelse(isn, 'r', 'l')
+    align = ifelse(is_num, 'r', 'l')
   # rounding
   digits = rep(digits, length.out = m)
   for (j in seq_len(m)) {
     if (is_numeric(x[, j])) x[, j] = round(x[, j], digits[j])
   }
-  if (any(isn)) {
+  if (any(is_num)) {
     if (is.matrix(x)) {
       if (is.table(x) && length(dim(x)) == 2) class(x) = 'matrix'
       x = format_matrix(x, format.args)
-    } else x[, isn] = format_args(x[, isn], format.args)
+    } else x[, is_num] = format_args(x[, is_num], format.args)
   }
   if (is.na(row.names)) row.names = has_rownames(x)
   if (!is.null(align)) align = rep(align, length.out = m)
@@ -156,7 +158,7 @@ kable = function(
     x = cbind(' ' = rownames(x), x)
     if (!is.null(col.names)) col.names = tail(c(' ', col.names), ncol(x))
     if (!is.null(align)) align = c('l', align)  # left align row names
-    isn = c(FALSE, isn)
+    is_num = c(FALSE, is_num)
   }
   n = nrow(x)
   x = replace_na(to_character(x), is.na(x))
@@ -167,11 +169,12 @@ kable = function(
   if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")
   attr(x, 'align') = align
+  attr(x, 'is_num') = is_num
   # simple tables do not 0-row tables (--- will be treated as an hr line)
   if (format == 'simple' && nrow(x) == 0) format = 'pipe'
   res = do.call(
     paste('kable', format, sep = '_'),
-    list(x = x, caption = caption, escape = escape, isn = isn & numeric.math, ...)
+    list(x = x, caption = caption, escape = escape, ...)
   )
   structure(res, format = format, class = 'knitr_kable')
 }
@@ -301,7 +304,7 @@ kable_latex = function(
   midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
-  escape = TRUE, isn = logical(ncol(x)), ...
+  escape = TRUE, numeric.math = getOption('knitr.table.numeric.math', FALSE), ...
 ) {
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
@@ -328,7 +331,8 @@ kable_latex = function(
   linesep = ifelse(linesep == "", linesep, paste0('\n', linesep))
 
   x = escape_latex_table(x, escape, booktabs)
-  x[, isn] = transform_num_for_latex(x[, isn])
+  if (numeric.math && any(is_num <- attr(x, 'is_num')))
+    x[, is_num] = latex_num(x[, is_num])
   if (!is.character(toprule)) toprule = NULL
   if (!is.character(bottomrule)) bottomrule = NULL
 

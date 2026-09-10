@@ -74,6 +74,17 @@ w & x & y & z\\\\
 \\(-5.000\\times 10^{-6}\\) & \\(-\\infty\\) & \\(-0.5\\) & -0.5\\\\
 \\hline
 \\end{tabular}'
+  # zero in a sci-notation column renders as \(0\), not \(0\times 10^{0}\)
+  kable2(data.frame(x = c(0, 1e-5)), 'latex', numeric.math = TRUE) %==% '
+\\begin{tabular}{r}
+\\hline
+x\\\\
+\\hline
+\\(0\\)\\\\
+\\hline
+\\(10^{-5}\\)\\\\
+\\hline
+\\end{tabular}'
 })
 
 assert('kable() escapes LaTeX special characters by default', {

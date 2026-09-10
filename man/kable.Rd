@@ -16,7 +16,6 @@ kable(
   label = NULL,
   format.args = list(),
   escape = TRUE,
-  numeric.math = getOption("knitr.table.numeric.math", FALSE),
   ...
 )
 
@@ -66,12 +65,6 @@ to format table values, e.g. \code{list(big.mark = ',')}.}
 LaTeX tables. When \code{escape = FALSE}, you have to make sure that
 special characters will not trigger syntax errors in LaTeX or HTML.}
 
-\item{numeric.math}{Whether to typeset numeric columns in math
-mode. This option currently only affects LaTeX output, in which
-it improves typesetting of minus signs, infinite values, and
-scientific notation. The default can be set globally with option
-\code{knitr.table.numeric.math}.}
-
 \item{...}{Other arguments (see Examples and References).}
 }
 \value{
@@ -101,44 +94,56 @@ need to explicitly \code{print()} it due to R's automatic implicit
 printing. When it is wrapped inside other expressions (such as a
 \code{for} loop), you must explicitly \code{print(kable(...))}.
 }
+\section{Arguments for the \code{latex} format}{
+
+\describe{
+\item{\code{numeric.math}}{Whether to typeset numeric columns in math mode,
+which improves rendering of minus signs, infinite values, and scientific
+notation. The default can be set globally via
+\code{options(knitr.table.numeric.math = TRUE)}.}
+}
+}
+
 \examples{
-d1 = head(iris); d2 = head(mtcars)
+d1 = head(iris)
+d2 = head(mtcars)
 # pipe tables by default
 kable(d1)
 kable(d2[, 1:5])
 # no inner padding
-kable(d2, format = 'pipe', padding = 0)
+kable(d2, format = "pipe", padding = 0)
 # more padding
-kable(d2, format = 'pipe', padding = 2)
-kable(d1, format = 'latex')
-kable(d1, format = 'html')
-kable(d1, format = 'latex', caption = 'Title of the table')
-kable(d1, format = 'html', caption = 'Title of the table')
+kable(d2, format = "pipe", padding = 2)
+kable(d1, format = "latex")
+kable(d1, format = "html")
+kable(d1, format = "latex", caption = "Title of the table")
+kable(d1, format = "html", caption = "Title of the table")
 # use the booktabs package
-kable(mtcars, format = 'latex', booktabs = TRUE)
+kable(mtcars, format = "latex", booktabs = TRUE)
 # use the longtable package
-kable(matrix(1000, ncol=5), format = 'latex', digits = 2, longtable = TRUE)
+kable(matrix(1000, ncol = 5), format = "latex", digits = 2, longtable = TRUE)
 # change LaTeX default table environment
-kable(d1, format = "latex", caption = "My table", table.envir='table*')
+kable(d1, format = "latex", caption = "My table", table.envir = "table*")
 # add some table attributes
-kable(d1, format = 'html', table.attr = 'id="mytable"')
+kable(d1, format = "html", table.attr = "id=\"mytable\"")
 # reST output
-kable(d2, format = 'rst')
+kable(d2, format = "rst")
 # no row names
-kable(d2, format = 'rst', row.names = FALSE)
+kable(d2, format = "rst", row.names = FALSE)
 # Pandoc simple tables
-kable(d2, format = 'simple', caption = 'Title of the table')
+kable(d2, format = "simple", caption = "Title of the table")
 # format numbers using , as decimal point, and ' as thousands separator
-x = as.data.frame(matrix(rnorm(60, 1e6, 1e4), 10))
-kable(x, format.args = list(decimal.mark = ',', big.mark = "'"))
+x = as.data.frame(matrix(rnorm(60, 1e+06, 10000), 10))
+kable(x, format.args = list(decimal.mark = ",", big.mark = "'"))
 # save the value
-x = kable(d2, format = 'html')
-cat(x, sep = '\n')
+x = kable(d2, format = "html")
+cat(x, sep = "\n")
 # can also set options(knitr.table.format = 'html') so that the output is HTML
 
-# multiple tables via either kable(list(x1, x2)) or kables(list(kable(x1), kable(x2)))
-kable(list(d1, d2), caption = 'A tale of two tables')
-kables(list(kable(d1, align = 'l'), kable(d2)), caption = 'A tale of two tables')
+# multiple tables via either kable(list(x1, x2)) or kables(list(kable(x1),
+# kable(x2)))
+kable(list(d1, d2), caption = "A tale of two tables")
+kables(list(kable(d1, align = "l"), kable(d2)), caption = "A tale of two tables")
 }
 \references{
 See
