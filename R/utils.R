@@ -240,6 +240,43 @@ format_sci = function(x, ...) {
   vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 
+# wrap a character vector of formatted numbers in LaTeX math mode;
+# x is already stringified (e.g. by format_args()), so we parse structure from strings
+latex_num = function(x, times = getOption('knitr.inline.times', '\\times ')) {
+  brace_comma = function(s) gsub(',', '{,}', s, fixed = TRUE)
+  math = function(s) paste0('\\(', s, '\\)')
+
+  # scientific notation: capture base, sign of exponent, and exponent digits;
+  # zero-exponent (e.g. "0e+00") is treated as plain zero below
+  sci_pat  = "^ *([+-]?[0-9.,]+)e[+]?(-?)0*([1-9][0-9]*) *$"
+  zero_sci = grepl("^ *[+-]?[0-9.,]+e[+]?0+ *$", x)
+  is_sci   = grepl(sci_pat, x)
+  is_inf   = x %in% c("Inf", "-Inf")
+  is_plain = !is_sci & !is_inf & !zero_sci & grepl("^ *[0-9., +-]+ *$", x)
+
+  out = x  # non-numeric (NA, NaN, ...) pass through unchanged
+
+  out[x == "Inf"]  = math("\\infty")
+  out[x == "-Inf"] = math("-\\infty")
+  out[zero_sci] = math("0")
+  out[is_plain] = math(brace_comma(x[is_plain]))
+
+  if (any(is_sci)) {
+    m = regmatches(x[is_sci], regexec(sci_pat, x[is_sci]))
+    out[is_sci] = vapply(m, function(parts) {
+      base = brace_comma(parts[2])
+      exp  = paste0(parts[3], parts[4])
+      if (base %in% c('1', '-1')) {
+        math(sprintf('%s10^{%s}', if (base == '-1') '-' else '', exp))
+      } else {
+        math(sprintf('%s%s10^{%s}', base, times, exp))
+      }
+    }, character(1))
+  }
+
+  out
+}
+
 # is tikz device without externalization?
 is_tikz_dev = function(options) {
   'tikz' %in% options$dev && !options$external

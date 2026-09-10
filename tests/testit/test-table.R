@@ -62,6 +62,31 @@ x & y\\\\
 \\end{tabular}')
 })
 
+assert('kable() in LaTeX mode formats minus signs, infinities, scientific notation, and decimal and thousands separators correctly', {
+  kable2(data.frame(w = c(1111e10, -0.5e-5), x = c(-1111, -Inf), y = c(1111, -0.5), z = c('text,comma', '-0.5')), 'latex',
+         format.args = list(big.mark = ','), numeric.math = TRUE) %==% '
+\\begin{tabular}{r|r|r|l}
+\\hline
+w & x & y & z\\\\
+\\hline
+\\(1.111\\times 10^{13}\\) & \\(-1{,}111\\) & \\(1{,}111.0\\) & text,comma\\\\
+\\hline
+\\(-5.000\\times 10^{-6}\\) & \\(-\\infty\\) & \\(-0.5\\) & -0.5\\\\
+\\hline
+\\end{tabular}'
+  # zero in a sci-notation column renders as \(0\), not \(0\times 10^{0}\)
+  kable2(data.frame(x = c(0, 1e-5)), 'latex', numeric.math = TRUE) %==% '
+\\begin{tabular}{r}
+\\hline
+x\\\\
+\\hline
+\\(0\\)\\\\
+\\hline
+\\(10^{-5}\\)\\\\
+\\hline
+\\end{tabular}'
+})
+
 assert('kable() escapes LaTeX special characters by default', {
   (kable2(data.frame(x = c('10%', '5%'), col_name = c('3_8', '40_6')), 'latex') %==% '
 \\begin{tabular}{l|l}

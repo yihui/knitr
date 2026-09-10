@@ -94,6 +94,16 @@ need to explicitly \code{print()} it due to R's automatic implicit
 printing. When it is wrapped inside other expressions (such as a
 \code{for} loop), you must explicitly \code{print(kable(...))}.
 }
+\section{Arguments for the \code{latex} format}{
+
+\describe{
+\item{\code{numeric.math}}{Whether to typeset numeric columns in math mode,
+which improves rendering of minus signs, infinite values, and scientific
+notation. The default can be set globally via
+\code{options(knitr.table.numeric.math = TRUE)}.}
+}
+}
+
 \examples{
 d1 = head(iris)
 d2 = head(mtcars)

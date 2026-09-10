@@ -1,5 +1,8 @@
 # CHANGES IN knitr VERSION 1.53
 
+## NEW FEATURES
+
+- `kable()` operating in LaTeX mode can now optionally typeset numeric columns in math mode for improved rendering of minus signs, infinite values, and scientific notation; in particular, decimal and thousands separator commas are wrapped in braces (`{}`) to preserve spacing. To enable, use `kable(..., format = "latex", numeric.math = TRUE)` or set `options(knitr.table.numeric.math = TRUE)` globally (thanks, @krivit, #1709).
 
 # CHANGES IN knitr VERSION 1.52
 
