@@ -60,6 +60,13 @@ hooks_typst = function() {
     message = hook.text,
     error = hook.text,
     plot = hook_plot_typst,
-    inline = function(x) .inline.hook(format_sci(x, 'typst'))
+    inline = function(x) .inline.hook(format_sci(x, 'typst')),
+    # A .typ document is compiled by typst directly (not via Pandoc), so Pandoc
+    # raw blocks ```{=typst} ... ``` (e.g. from knit_print() methods that emit
+    # them via raw_block()) would be treated as literal code blocks. Unwrap them
+    # to their raw content here (#2462).
+    document = function(x) gsub(
+      '(^|\n)```\\{=typst\\}\n((?s).*?)\n```(\n|$)', '\\1\\2\\3', one_string(x), perl = TRUE
+    )
   )
 }

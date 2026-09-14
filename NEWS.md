@@ -4,6 +4,10 @@
 
 - `kable()` operating in LaTeX mode can now optionally typeset numeric columns in math mode for improved rendering of minus signs, infinite values, and scientific notation; in particular, decimal and thousands separator commas are wrapped in braces (`{}`) to preserve spacing. To enable, use `kable(..., format = "latex", numeric.math = TRUE)` or set `options(knitr.table.numeric.math = TRUE)` globally (thanks, @krivit, #1709).
 
+## BUG FIXES
+
+- For Typst output (`.Rtyp` documents), Pandoc raw blocks (```` ```{=typst} ````) emitted by `knit_print()` methods (e.g. from packages that call `knitr::raw_block()`) are now unwrapped to their raw content, so tables and other raw Typst code are rendered instead of being shown as literal code blocks. This is because a `.typ` file is compiled by Typst directly (not via Pandoc), which would otherwise treat the raw block markup literally (thanks, @jalvesaq, #2462).
+
 # CHANGES IN knitr VERSION 1.52
 
 ## NEW FEATURES
