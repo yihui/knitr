@@ -4,6 +4,14 @@
 
 - `kable()` operating in LaTeX mode can now optionally typeset numeric columns in math mode for improved rendering of minus signs, infinite values, and scientific notation; in particular, decimal and thousands separator commas are wrapped in braces (`{}`) to preserve spacing. To enable, use `kable(..., format = "latex", numeric.math = TRUE)` or set `options(knitr.table.numeric.math = TRUE)` globally (thanks, @krivit, #1709).
 
+- A code chunk that returns a `shiny.tag` or `shiny.tag.list` object (e.g., from **htmltools**) can now have a figure caption and be cross-referenced, in the same way as **htmlwidgets**. For example, the chunk below produces a captioned figure that can be referenced via `\@ref(fig:mytag)` in **bookdown** (thanks, @cpsievert, #1650):
+
+    ````
+    ```{r mytag, fig.cap="A captioned shiny.tag object."}
+    htmltools::div(htmltools::img(src = "logo.png"), htmltools::p("hello"))
+    ```
+    ````
+
 ## BUG FIXES
 
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
