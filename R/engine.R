@@ -564,7 +564,14 @@ is_sql_update_query = function(query) {
   query = gsub('^\\s*--.*\n', '', query)
   # remove multi-line comments
   if (grepl('^\\s*\\/\\*.*', query)) query = gsub('.*\\*\\/', '', query)
-  grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE|DROP|ALTER).*', query, ignore.case = TRUE)
+  keywords = c(
+    # DDL
+    'CREATE', 'ALTER', 'DROP', 'GRANT', 'DENY', 'REVOKE', 'ANALYZE', 'AUDIT',
+    'COMMENT', 'RENAME', 'TRUNCATE',
+    # DML
+    'INSERT', 'UPDATE', 'DELETE', 'MERGE', 'CALL', 'EXPLAIN PLAN', 'LOCK', 'UNLOCK'
+  )
+  grepl(paste0('^\\s*(', paste(keywords, collapse = '|'), ').*'), query, ignore.case = TRUE)
 }
 
 # sql engine
@@ -619,8 +626,17 @@ eng_sql = function(options) {
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
 
+  # whether the query is a statement that does not return a result set (e.g.,
+  # INSERT/UPDATE/CREATE); auto-detected, but can be overridden via the chunk
+  # option sql.is_statement when the detection is wrong (e.g., SELECT ... INTO)
+  is_statement = options$sql.is_statement
+  if (is.null(is_statement)) is_statement = is_sql_update_query(query)
+  if (!is.logical(is_statement)) stop2(
+    "The 'sql.is_statement' chunk option must be TRUE or FALSE."
+  )
+
   data = tryCatch({
-    if (is_sql_update_query(query)) {
+    if (is_statement) {
       DBI::dbExecute(conn, query)
       NULL
     } else if (is.null(varname) && max.print > 0) {
