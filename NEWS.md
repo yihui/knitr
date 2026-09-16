@@ -4,6 +4,10 @@
 
 - `kable()` operating in LaTeX mode can now optionally typeset numeric columns in math mode for improved rendering of minus signs, infinite values, and scientific notation; in particular, decimal and thousands separator commas are wrapped in braces (`{}`) to preserve spacing. To enable, use `kable(..., format = "latex", numeric.math = TRUE)` or set `options(knitr.table.numeric.math = TRUE)` globally (thanks, @krivit, #1709).
 
+## BUG FIXES
+
+- The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
+
 # CHANGES IN knitr VERSION 1.52
 
 ## NEW FEATURES
