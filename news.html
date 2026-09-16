@@ -536,6 +536,9 @@ htmltools::div(htmltools::img(src = &quot;logo.png&quot;), htmltools::p(&quot;he
 <li>
 <p>The <code>sql</code> engine recognizes more SQL keywords (e.g., <code>ALTER</code>, <code>GRANT</code>, <code>MERGE</code>, <code>TRUNCATE</code>, <code>CALL</code>) as statements that do not return a result set, so they are dispatched to <code>DBI::dbExecute()</code> instead of <code>DBI::dbGetQuery()</code> (which avoids warnings from some database drivers). In addition, a new chunk option <code>sql.is_statement</code> can be set to <code>TRUE</code> or <code>FALSE</code> to explicitly control this behavior when the automatic detection based on keywords is not correct (e.g., <code>SELECT ... INTO</code>, or <code>UPDATE ... RETURNING</code>) (thanks, <a href="https://github.com/rnorberg">@rnorberg</a>, <a href="https://github.com/yihui/knitr/issues/1896">#1896</a>).</p>
 </li>
+<li>
+<p>For <code>sql</code> chunks that execute a statement not returning a result set (e.g., <code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code>), the number of affected rows (as returned by <code>DBI::dbExecute()</code>) is now available and can be assigned to a variable via the chunk option <code>output.var</code>. To also report it in the output, set the new chunk option <code>sql.statement.msg</code> to a template string, in which <code>{n}</code> is replaced by the number, e.g., <code>sql.statement.msg = &quot;Number of affected rows: {n}&quot;</code>. By default (when the option is unset) no such output is shown, so existing documents are not affected (thanks, <a href="https://github.com/edalfon">@edalfon</a>, <a href="https://github.com/yihui/knitr/issues/2050">#2050</a>, <a href="https://github.com/yihui/knitr/issues/2051">#2051</a>).</p>
+</li>
 </ul>
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
