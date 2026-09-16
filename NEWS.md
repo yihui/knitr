@@ -12,6 +12,8 @@
     ```
     ````
 
+- The `sql` engine recognizes more SQL keywords (e.g., `ALTER`, `GRANT`, `MERGE`, `TRUNCATE`, `CALL`) as statements that do not return a result set, so they are dispatched to `DBI::dbExecute()` instead of `DBI::dbGetQuery()` (which avoids warnings from some database drivers). In addition, a new chunk option `sql.is_statement` can be set to `TRUE` or `FALSE` to explicitly control this behavior when the automatic detection based on keywords is not correct (e.g., `SELECT ... INTO`, or `UPDATE ... RETURNING`) (thanks, @rnorberg, #1896).
+
 ## BUG FIXES
 
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
