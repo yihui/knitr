@@ -4,7 +4,7 @@
 .num {
   color: #dfaf87;
 }
-.str {
+.sng {
   color: #ffff77;
 }
 .com {
@@ -13,7 +13,7 @@
 .opt {
   color: #ff00cc;
 }
-.std {
+.def {
   color: #f0f0f0;
 }
 .kwa {

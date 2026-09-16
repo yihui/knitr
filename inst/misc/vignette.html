@@ -1,20 +1,4 @@
-<script type="text/javascript">
-window.onload = function() {
-  var i, fig = 1, caps = document.getElementsByClassName('caption');
-  for (i = 0; i < caps.length; i++) {
-    var cap = caps[i];
-    if (cap.parentElement.className !== 'figure' || cap.nodeName !== 'P')
-      continue;
-    cap.innerHTML = '<span>Figure ' + fig + ':</span> ' + cap.innerHTML;
-    fig++;
-  }
-  fig = 1;
-  caps = document.getElementsByTagName('caption');
-  for (i = 0; i < caps.length; i++) {
-    var cap = caps[i];
-    if (cap.parentElement.nodeName !== 'TABLE') continue;
-    cap.innerHTML = '<span>Table ' + fig + ':</span> ' + cap.innerHTML;
-    fig++;
-  }
-}
-</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rstudio/markdown/inst/resources/prism-xcode.css" data-external="1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yihui/knitr/inst/misc/vignette.css" data-external="1">
+<script src="https://cdn.jsdelivr.net/combine/npm/@xiee/utils/js/code-lang.min.js,npm/@xiee/utils/js/number-captions.min.js,npm/prismjs@1.29.0/components/prism-core.min.js" data-external="1" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" data-external="1" defer></script>

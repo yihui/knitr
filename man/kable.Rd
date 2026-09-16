@@ -2,6 +2,7 @@
 % Please edit documentation in R/table.R
 \name{kable}
 \alias{kable}
+\alias{kables}
 \title{Create tables in LaTeX, HTML, Markdown and reStructuredText}
 \usage{
 kable(
@@ -11,28 +12,34 @@ kable(
   row.names = NA,
   col.names = NA,
   align,
-  caption = NULL,
+  caption = opts_current$get("tab.cap"),
   label = NULL,
   format.args = list(),
   escape = TRUE,
   ...
 )
+
+kables(x, format, caption = NULL, label = NULL)
 }
 \arguments{
-\item{x}{An R object, typically a matrix or data frame.}
+\item{x}{For \code{kable()}, \code{x} is an R object, which is typically a
+matrix or data frame. For \code{kables()}, a list with each element being a
+returned value from \code{kable()}.}
 
 \item{format}{A character string. Possible values are \code{latex},
-\code{html}, \code{markdown}, \code{pandoc}, and \code{rst}; this will be
-automatically determined if the function is called within \pkg{knitr}; it
-can also be set in the global option \code{knitr.table.format}. If
-\code{format} is a function, it must return a character string.}
+\code{html}, \code{pipe} (Pandoc's pipe tables), \code{simple} (Pandoc's
+simple tables), \code{rst}, \code{jira}, and \code{org} (Emacs Org-mode).
+The value of this argument will be automatically determined if the function
+is called within a \pkg{knitr} document. The \code{format} value can also
+be set in the global option \code{knitr.table.format}. If \code{format} is
+a function, it must return a character string.}
 
 \item{digits}{Maximum number of digits for numeric columns, passed to
 \code{round()}. This can also be a vector of length \code{ncol(x)}, to set
 the number of digits for individual columns.}
 
-\item{row.names}{Logical: whether to include row names. By default, row names
-are included if \code{rownames(x)} is neither \code{NULL} nor identical to
+\item{row.names}{Whether to include row names. By default, row names are
+included if \code{rownames(x)} is neither \code{NULL} nor identical to
 \code{1:nrow(x)}.}
 
 \item{col.names}{A character vector of column names to be used in the table.}
@@ -44,84 +51,167 @@ are left-aligned. If \code{length(align) == 1L}, the string will be
 expanded to a vector of individual letters, e.g. \code{'clc'} becomes
 \code{c('c', 'l', 'c')}, unless the output format is LaTeX.}
 
-\item{caption}{The table caption.}
+\item{caption}{The table caption. By default, it is retrieved from the chunk
+option \code{tab.cap}.}
 
 \item{label}{The table reference label. By default, the label is obtained
-from \code{knitr::\link{opts_current}$get('label')}.}
+from \code{knitr::\link{opts_current}$get('label')} (i.e., the current
+chunk label). To disable the label, use \code{label = NA}.}
 
-\item{format.args}{A list of arguments to be passed to \code{\link{format}()}
+\item{format.args}{A list of arguments to be passed to \code{\link[=format]{format()}}
 to format table values, e.g. \code{list(big.mark = ',')}.}
 
-\item{escape}{Boolean; whether to escape special characters when producing
-HTML or LaTeX tables. When \code{escape = FALSE}, you have to make sure
-that special characters will not trigger syntax errors in LaTeX or HTML.}
+\item{escape}{Whether to escape special characters when producing HTML or
+LaTeX tables. When \code{escape = FALSE}, you have to make sure that
+special characters will not trigger syntax errors in LaTeX or HTML.}
 
-\item{...}{Other arguments (see Examples).}
+\item{...}{Other arguments (see Examples and References).}
 }
 \value{
 A character vector of the table source code.
 }
 \description{
-This is a very simple table generator. It is simple by design. It is not
-intended to replace any other R packages for making tables.
+A very simple table generator, and it is simple by design. It is not intended
+to replace any other R packages for making tables. The \code{kable()}
+function returns a single table for a single data object, and returns a table
+that contains multiple tables if the input object is a list of data objects.
+The \code{kables()} function is similar to \code{kable(x)} when \code{x} is a
+list of data objects, but \code{kables()} accepts a list of \code{kable()}
+values directly instead of data objects (see examples below).
 }
 \details{
 Missing values (\code{NA}) in the table are displayed as \code{NA} by
 default. If you want to display them with other characters, you can set the
 option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
 hide \code{NA} values.
+
+You can set the option \code{knitr.kable.max_rows} to limit the number of
+rows to show in the table, e.g., \code{options(knitr.kable.max_rows = 30)}.
 }
 \note{
-The tables for \code{format = 'markdown'} also work for Pandoc when the
-  \code{pipe_tables} extension is enabled (this is the default behavior for
-  Pandoc >= 1.10).
-
-  When using \code{kable()} as a \emph{top-level} expression, you do not need
-  to explicitly \code{print()} it due to R's automatic implicit printing.
-  When it is wrapped inside other expressions (such as a \code{\link{for}}
-  loop), you must explicitly \code{print(kable(...))}.
+When using \code{kable()} as a \emph{top-level} expression, you do not
+need to explicitly \code{print()} it due to R's automatic implicit
+printing. When it is wrapped inside other expressions (such as a
+\code{for} loop), you must explicitly \code{print(kable(...))}.
 }
+\section{Arguments for the \code{latex} format}{
+
+\describe{
+\item{\code{booktabs}}{(\code{FALSE}) Whether to use the \pkg{booktabs} package
+style, i.e., generate \verb{\\toprule}, \verb{\\midrule}, and \verb{\\bottomrule}
+rules (and no vertical lines) instead of \verb{\\hline}.}
+\item{\code{longtable}}{(\code{FALSE}) Whether to use the \pkg{longtable} package to
+generate a table that may span multiple pages. This is a shortcut for
+\code{tabular = 'longtable'}.}
+\item{\code{tabular}}{The name of the LaTeX tabular environment, e.g.,
+\code{'tabular'} (the default), \code{'longtable'}, \code{'tabularx'}, or
+\code{'xltabular'}.}
+\item{\code{valign}}{The vertical alignment of the table specified in the
+optional (or, for \code{tabularx}/\code{xltabular}, the mandatory) argument of
+the tabular environment, e.g., \code{'[t]'}. Only applied when a \code{caption}
+is present or \code{valign} is explicitly provided.}
+\item{\code{position}}{The floating position of the \code{table} environment,
+e.g., \code{'h'}, \code{'!htbp'}. Only used when the table is wrapped in a
+\code{table} environment (i.e., when there is a caption).}
+\item{\code{centering}}{(\code{TRUE}) Whether to center the table with
+\verb{\\centering} (only takes effect when a \code{caption} is present).}
+\item{\code{vline}}{The vertical line separator between columns in the tabular
+preamble (defaults to \code{''} for \code{booktabs = TRUE}, otherwise \code{'|'}).
+Can be set globally via the option \code{knitr.table.vline}.}
+\item{\code{toprule}, \code{midrule}, \code{bottomrule}}{The horizontal rules at the
+top of the table, after the header row, and at the bottom of the table,
+respectively. They default to \verb{\\toprule}/\verb{\\midrule}/\verb{\\bottomrule}
+for \code{booktabs = TRUE}, otherwise \verb{\\hline}. Each can also be set
+globally via the options \code{knitr.table.toprule},
+\code{knitr.table.midrule}, and \code{knitr.table.bottomrule}.}
+\item{\code{linesep}}{The separator(s) between rows in the table body. By
+default, an empty separator is used and (for \code{booktabs = TRUE}) an
+\verb{\\addlinespace} is inserted after every 5 rows; for \code{booktabs = FALSE}, \verb{\\hline} is used between all rows. Provide a character vector
+to control the separators (it is recycled over the body rows).}
+\item{\code{caption.short}}{A short caption for the table, used in the List of
+Tables (the optional argument of \verb{\\caption[]\{\}}).}
+\item{\code{table.envir}}{The LaTeX environment that wraps the tabular
+environment, e.g., \code{'table'} (the default when a caption is present) or
+\code{'table*'}.}
+\item{\code{numeric.math}}{Whether to typeset numeric columns in math mode,
+which improves rendering of minus signs, infinite values, and scientific
+notation. The default can be set globally via
+\code{options(knitr.table.numeric.math = TRUE)}.}
+}
+}
+
+\section{Arguments for the \code{html} format}{
+
+\describe{
+\item{\code{table.attr}}{A character string of attributes for the \verb{<table>}
+tag, e.g., \code{'class="table" id="mytable"'}. Can be set globally via the
+option \code{knitr.table.html.attr}.}
+}
+}
+
+\section{Arguments for the \code{pipe}, \code{simple}, \code{rst}, \code{jira}, and \code{org} formats}{
+
+\describe{
+\item{\code{padding}}{(\code{1}) The number of spaces used to pad table cells. Set
+\code{padding = 0} for no inner padding. Not used by the \code{rst} format.}
+\item{\code{caption.label}}{The prefix printed before the caption. It defaults
+to \code{'Table:'} for the \code{pipe} format and \code{'#+CAPTION:'} for the
+\code{org} format.}
+}
+}
+
 \examples{
-kable(head(iris), format = "latex")
-kable(head(iris), format = "html")
-kable(head(iris), format = "latex", caption = "Title of the table")
-kable(head(iris), format = "html", caption = "Title of the table")
+d1 = head(iris)
+d2 = head(mtcars)
+# pipe tables by default
+kable(d1)
+kable(d2[, 1:5])
+# no inner padding
+kable(d2, format = "pipe", padding = 0)
+# more padding
+kable(d2, format = "pipe", padding = 2)
+kable(d1, format = "latex")
+kable(d1, format = "html")
+kable(d1, format = "latex", caption = "Title of the table")
+kable(d1, format = "html", caption = "Title of the table")
 # use the booktabs package
 kable(mtcars, format = "latex", booktabs = TRUE)
 # use the longtable package
 kable(matrix(1000, ncol = 5), format = "latex", digits = 2, longtable = TRUE)
 # change LaTeX default table environment
-kable(head(iris), format = "latex", caption = "My table", table.envir = "table*")
+kable(d1, format = "latex", caption = "My table", table.envir = "table*")
 # add some table attributes
-kable(head(iris), format = "html", table.attr = "id=\"mytable\"")
+kable(d1, format = "html", table.attr = "id=\"mytable\"")
 # reST output
-kable(head(mtcars), format = "rst")
+kable(d2, format = "rst")
 # no row names
-kable(head(mtcars), format = "rst", row.names = FALSE)
-# R Markdown/Github Markdown tables
-kable(head(mtcars[, 1:5]), format = "markdown")
-# no inner padding
-kable(head(mtcars), format = "markdown", padding = 0)
-# more padding
-kable(head(mtcars), format = "markdown", padding = 2)
-# Pandoc tables
-kable(head(mtcars), format = "pandoc", caption = "Title of the table")
+kable(d2, format = "rst", row.names = FALSE)
+# Pandoc simple tables
+kable(d2, format = "simple", caption = "Title of the table")
 # format numbers using , as decimal point, and ' as thousands separator
 x = as.data.frame(matrix(rnorm(60, 1e+06, 10000), 10))
 kable(x, format.args = list(decimal.mark = ",", big.mark = "'"))
 # save the value
-x = kable(mtcars, format = "html")
+x = kable(d2, format = "html")
 cat(x, sep = "\n")
 # can also set options(knitr.table.format = 'html') so that the output is HTML
+
+# multiple tables via either kable(list(x1, x2)) or kables(list(kable(x1),
+# kable(x2)))
+kable(list(d1, d2), caption = "A tale of two tables")
+kables(list(kable(d1, align = "l"), kable(d2)), caption = "A tale of two tables")
 }
 \references{
 See
-  \url{https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw}
-   for some examples in LaTeX, but they also apply to other document formats.
+\url{https://pkg.yihui.org/rmarkdown-cookbook/kable.html} for some
+examples about this function, including specific arguments according to the
+\code{format} selected.
 }
 \seealso{
 Other R packages such as \pkg{huxtable}, \pkg{xtable},
-  \pkg{kableExtra}, and \pkg{tables} for HTML and LaTeX tables, and
-  \pkg{ascii} and \pkg{pander} for different flavors of markdown output and
-  some advanced features and table styles.
+\pkg{kableExtra}, \pkg{gt} and \pkg{tables} for HTML and LaTeX tables, and
+\pkg{ascii} and \pkg{pander} for different flavors of markdown output and
+some advanced features and table styles. For more on other packages for
+creating tables, see
+\url{https://pkg.yihui.org/rmarkdown-cookbook/table-other.html}.
 }

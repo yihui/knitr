@@ -19,7 +19,7 @@ the template code directly. If \code{text} is provided, \code{file} will be igno
 }
 \value{
 A character vector, with the tags evaluated and replaced by their
-  values.
+values.
 }
 \description{
 This function expands a template based on the R expressions in \code{{{}}}
@@ -33,5 +33,5 @@ if (interactive()) browseVignettes(package = "knitr")
 }
 \references{
 This function was inspired by the pyexpander and m4
-  (\url{http://www.gnu.org/software/m4/}), thanks to Frank Harrell.
+(\url{http://www.gnu.org/software/m4/}), thanks to Frank Harrell.
 }

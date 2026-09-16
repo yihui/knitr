@@ -16,19 +16,27 @@ hook_plot_html = function(x, options) {
   d2 = if (plot2) paste0('</div>', if (out_format('html')) '<div class="rcode">')
   paste0(
     d1, .img.tag(
-      .upload.url(x), options$out.width, options$out.height, .img.cap(options),
+      x, options$out.width, options$out.height, .img.cap(options),
       paste(c(options$out.extra, 'class="plot"'), collapse = ' ')
     ), d2, '\n'
   )
 }
 
+# the built-in animation hooks, which generate HTML (and are ignored for LaTeX
+# output); keyed by the character values allowed for the chunk option
+# animation.hook
+.animation_hooks = function() list(
+  ffmpeg = hook_ffmpeg_html, gifski = hook_gifski,
+  scianimator = hook_scianimator, r2swf = hook_r2swf
+)
+
 hook_animation = function(options) {
   if (is.function(fun <- options$animation.hook)) return(fun)
-  if (is.character(fun)) return(switch(
-    fun, ffmpeg = hook_ffmpeg_html, gifski = hook_gifski,
-    scianimator = hook_scianimator, r2swf = hook_r2swf,
-    stop2('Invalid value for the chunk option animation.hook: ', fun)
-  ))
+  if (is.character(fun)) {
+    if (is.null(hook <- .animation_hooks()[[fun]]))
+      stop2('Invalid value for the chunk option animation.hook: ', fun)
+    return(hook)
+  }
   if (is.function(fun <- opts_knit$get('animation.fun'))) return(fun)
   hook_ffmpeg_html
 }
@@ -38,29 +46,37 @@ hook_animation = function(options) {
 }
 
 .img.tag = function(src, w, h, caption, extra) {
-  caption = if (length(caption) == 1 && caption != '') {
-    paste0('title="', caption, '" alt="', caption, '" ')
+  ext = tolower(file_ext(src))
+  tag = 'img'; extra2 = NULL; att = 'src'
+  if (ext == 'pdf') {
+    extra2 = 'type="application/pdf"'; tag = 'embed'
+  } else if (ext == 'svg' && getOption('knitr.svg.object', FALSE)) {
+    extra2 = 'type="image/svg+xml"'; tag = 'object'; att = 'data'
   }
-  tag = if (grepl('[.]pdf$', src, ignore.case = TRUE)) {
-    extra = c(extra, 'type="application/pdf"')
-    'embed'
-  } else 'img'
-  paste0(
-    '<', tag, ' src="', opts_knit$get('base.url'), src, '" ', caption,
-    .img.attr(w, h, extra), ' />'
-  )
+  if (length(caption) != 1 || is.na(caption) || (tag != 'img' && caption == ''))
+    caption = NULL
+  res = paste0(c(
+    paste0('<', tag),
+    sprintf('%s="%s%s"', att, opts_knit$get('base.url') %n% '', .upload.url(src)),
+    sprintf('%s="%s"', if (tag == 'img') 'alt' else 'title', caption),
+    .img.attr(w, h, c(extra, extra2))
+  ), collapse = ' ')
+  paste0(res, if (tag == 'object') '></object>' else ' />')
 }
 
-.img.cap = function(options, alt = FALSE) {
+.img.cap = function(options, alt = FALSE, escape = FALSE) {
   cap = options$fig.cap %n% {
     if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
   }
-  if (length(cap) == 0) cap = ''
+  if (length(cap) == 0 || is.na(cap)) cap = ''
+  if (alt) {
+    alt = options$fig.alt %n% cap
+    return(if (escape) html_escape(strip_html(alt), attr = TRUE) else alt)
+  }
   if (is_blank(cap)) return(cap)
-  if (alt) return(escape_html(cap))
   paste0(create_label(
     options$fig.lp, options$label,
-    if (options$fig.num > 1L && options$fig.show == 'asis') options$fig.cur
+    if (options$fig.num > 1L && options$fig.show == 'asis') c('-', options$fig.cur)
   ), cap)
 }
 
@@ -85,13 +101,18 @@ hook_animation = function(options) {
 
 #' Hooks to create animations in HTML output
 #'
-#' \code{hook_ffmpeg_html()} uses FFmpeg to convert images to a video;
-#' \code{hook_gifski()} uses the \pkg{gifski} to convert images to a GIF
-#' animation; \code{hook_scianimator()} uses the JavaScript library SciAnimator
-#' to create animations; \code{hook_r2swf()} uses the \pkg{R2SWF} package.
+#' `hook_ffmpeg_html()` uses FFmpeg to convert images to a video;
+#' `hook_gifski()` uses the \pkg{gifski} to convert images to a GIF
+#' animation; `hook_scianimator()` uses the JavaScript library SciAnimator
+#' to create animations; `hook_r2swf()` uses the \pkg{R2SWF} package.
 #'
-#' These hooks are mainly for the package option \code{animation.fun}, e.g. you
-#' can set \code{opts_knit$set(animation.fun = hook_scianimator)}.
+#' These hooks are mainly for the package option `animation.fun`, e.g. you
+#' can set `opts_knit$set(animation.fun = hook_scianimator)`.
+#'
+#' Note that these hooks generate HTML code. For LaTeX output, you can set the
+#' chunk option `animation.hook` (or the package option
+#' `animation.fun`) to a function that generates LaTeX code; see
+#' [hook_plot_tex()].
 #' @inheritParams hook_plot_tex
 #' @rdname hook_animation
 #' @export
@@ -136,7 +157,7 @@ hook_ffmpeg = function(x, options, format = 'webm') {
     sprintf('width="%s"', options$out.width),
     sprintf('height="%s"', options$out.height), opts
   )
-  cap = .img.cap(options, alt = TRUE)
+  cap = .img.cap(options, alt = TRUE, escape = TRUE)
   if (cap != '') cap = sprintf('<p>%s</p>', cap)
   sprintf(
     '<video %s><source src="%s" />%s</video>', trimws(opts),
@@ -233,25 +254,32 @@ hook_r2swf = function(x, options) {
 render_html = function() {
   set_html_dev()
   opts_knit$set(out.format = 'html')
+  h = opts_knit$get('header')
+  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
+  knit_hooks$set(hooks_html())
+}
+
+#' @rdname output_hooks
+#' @export
+hooks_html = function() {
   # use div with different classes
-  html.hook = function(name) {
+  hook = function(name) {
     force(name)
     function(x, options) {
+      if (name == 'output' && output_asis(x, options)) return(x)
       x = if (name == 'source') {
         c(hilight_source(x, 'html', options), '')
-      } else escape_html(x)
+      } else html_escape(x)
       x = one_string(x)
       sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>\n', name, tolower(options$engine), x)
     }
   }
-  h = opts_knit$get('header')
-  if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.html)
-  z = list()
-  for (i in c('source', 'warning', 'message', 'error'))
-    z[[i]] = html.hook(i)
-  knit_hooks$set(z)
-  knit_hooks$set(inline = function(x) {
-    sprintf(if (inherits(x, 'AsIs')) '%s' else '<code class="knitr inline">%s</code>',
-            .inline.hook(format_sci(x, 'html')))
-  }, output = html.hook('output'), plot = hook_plot_html, chunk = .chunk.hook.html)
+  list(
+    source = hook('source'), output = hook('output'), warning = hook('warning'),
+    message = hook('message'), error = hook('error'), plot = hook_plot_html,
+    chunk = .chunk.hook.html, inline = function(x) sprintf(
+      if (inherits(x, 'AsIs')) '%s' else '<code class="knitr inline">%s</code>',
+      .inline.hook(format_sci(x, 'html'))
+    )
+  )
 }

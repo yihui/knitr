@@ -22,18 +22,18 @@ get_theme = function(theme = NULL) {
 #' This object can be used to set or get themes in \pkg{knitr} for syntax
 #' highlighting.
 #'
-#' We can use \code{knit_theme$set(theme)} to set the theme, and
-#' \code{knit_theme$get(theme)} to get a theme. The \code{theme} is a character
+#' We can use `knit_theme$set(theme)` to set the theme, and
+#' `knit_theme$get(theme)` to get a theme. The `theme` is a character
 #' string for both methods (either the name of the theme, or the path to the CSS
-#' file of a theme), and for the \code{set()} method, it can also be a list
-#' returned by the \code{get()} method. See examples below.
+#' file of a theme), and for the `set()` method, it can also be a list
+#' returned by the `get()` method. See examples below.
 #' @author Ramnath Vaidyanathan and Yihui Xie
 #' @references For a preview of all themes, see
-#'   \url{https://gist.github.com/yihui/3422133}.
+#'   <https://gist.github.com/yihui/3422133>.
 #' @note The syntax highlighting here only applies to \file{.Rnw} (LaTeX) and
 #'   \file{.Rhtml} (HTML) documents, and it does not work for other types of
 #'   documents, such as \file{.Rmd} (R Markdown, which has its own syntax
-#'   highlighting themes; see \url{http://rmarkdown.rstudio.com}).
+#'   highlighting themes; see <https://rmarkdown.rstudio.com>).
 #' @export
 #' @examples opts_knit$set(out.format='latex'); knit_theme$set('edit-vim')
 #'
@@ -66,7 +66,7 @@ theme_to_header_latex = function(theme) {
 
   # get background and foreground colors
   background = css_out$background$color
-  foreground = css_out$std$color
+  foreground = css_out$def$color
 
   # write latex highlight header
   fgheader = color_def(foreground, 'fgcolor')
@@ -114,8 +114,8 @@ theme2list = function(theme.file) {
 
 # mapping between CSS class and Highlight theme elements
 cls2thm = c(
-  background = 'Canvas', num = 'Number', str = 'String', com = 'BlockComment',
-  opt = 'Operator', std = 'Default',
+  background = 'Canvas', num = 'Number', sng = 'String', com = 'BlockComment',
+  opt = 'Operator', def = 'Default',
   kwa = 'Keyword1', kwb = 'Keyword2', kwc = 'Keyword3', kwd = 'Keyword4'
 )
 

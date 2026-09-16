@@ -1,32 +1,32 @@
 #' Engines of other languages
 #'
 #' This object controls how to execute the code from languages other than R
-#' (when the chunk option \code{engine} is not \code{'R'}). Each component in
+#' (when the chunk option `engine` is not `'R'`). Each component in
 #' this object is a function that takes a list of current chunk options
 #' (including the source code) and returns a character string to be written into
 #' the output.
 #'
-#' The engine function has one argument \code{options}: the source code of the
-#' current chunk is in \code{options$code}. Usually we can call external
-#' programs to run the code via \code{\link{system2}}. Other chunk options are
-#' also contained in this argument, e.g. \code{options$echo} and
-#' \code{options$eval}, etc.
+#' The engine function has one argument `options`: the source code of the
+#' current chunk is in `options$code`. Usually we can call external
+#' programs to run the code via [system2()]. Other chunk options are
+#' also contained in this argument, e.g. `options$echo` and
+#' `options$eval`, etc.
 #'
-#' In most cases, \code{options$engine} can be directly used in command line to
-#' execute the code, e.g. \code{python} or \code{ruby}, but sometimes we may
+#' In most cases, `options$engine` can be directly used in command line to
+#' execute the code, e.g. `python` or `ruby`, but sometimes we may
 #' want to specify the path of the engine program, in which case we can pass it
-#' through the \code{engine.path} option. For example, \code{engine='ruby',
-#' engine.path='/usr/bin/ruby1.9.1'}. Additional command line arguments can be
-#' passed through \code{options$engine.opts}, e.g. \code{engine='ruby',
-#' engine.opts='-v'}.
+#' through the `engine.path` option. For example, `engine='ruby',
+#' engine.path='/usr/bin/ruby1.9.1'`. Additional command line arguments can be
+#' passed through `options$engine.opts`, e.g. `engine='ruby',
+#' engine.opts='-v'`.
 #'
-#' See \code{str(knitr::knit_engines$get())} for a list of built-in language
+#' See `str(knitr::knit_engines$get())` for a list of built-in language
 #' engines.
 #' @export
-#' @note The Leiningen engine \code{lein} requires lein-exec plugin; see
-#'   \url{https://github.com/yihui/knitr/issues/1176} for details.
-#' @references Usage: \url{https://yihui.org/knitr/objects/}; examples:
-#'   \url{https://yihui.org/knitr/demo/engines/}
+#' @note The Leiningen engine `lein` requires lein-exec plugin; see
+#'   <https://github.com/yihui/knitr/issues/1176> for details.
+#' @references Usage: <https://yihui.org/knitr/objects/>; examples:
+#'   <https://yihui.org/knitr/demo/engines/>
 #' @examples knit_engines$get('python'); knit_engines$get('awk')
 #' names(knit_engines$get())
 knit_engines = new_defaults()
@@ -35,18 +35,18 @@ knit_engines = new_defaults()
 #' Cache engines of other languages
 #'
 #' This object controls how to load cached environments from languages other
-#' than R (when the chunk option \code{engine} is not \code{'R'}). Each
+#' than R (when the chunk option `engine` is not `'R'`). Each
 #' component in this object is a function that takes the current path to the
 #' chunk cache and loads it into the language environment.
 #'
-#' The cache engine function has one argument \code{options}, a list containing
-#' all chunk options. Note that \code{options$hash} is the path to the current
+#' The cache engine function has one argument `options`, a list containing
+#' all chunk options. Note that `options$hash` is the path to the current
 #' chunk cache with the chunk's hash, but without any file extension, and the
 #' language engine may write a cache database to this path (with an extension).
 #'
 #' The cache engine function should load the cache environment and should know
 #' the extension appropriate for the language.
-#' @references See \url{https://github.com/rstudio/reticulate/pull/167} for an
+#' @references See <https://github.com/rstudio/reticulate/pull/167> for an
 #'   implementation of a cache engine for Python.
 #' @export
 cache_engines = new_defaults()
@@ -57,18 +57,17 @@ cache_engines = new_defaults()
 #' to format and return the text output from your engine.
 #'
 #' For expert users, an advanced usage of this function is
-#' \code{engine_output(options, out = LIST)} where \code{LIST} is a list that
-#' has the same structure as the output of \code{evaluate::evaluate()}. In this
-#' case, the arguments \code{code} and \code{extra} are ignored, and the list is
-#' passed to an internal function \code{knitr:::wrap()} to return a character
-#' vector of final output.
+#' `engine_output(options, out = LIST)` where `LIST` is a list that
+#' has the same structure as the output of `evaluate::evaluate()`. In this
+#' case, the arguments `code` and `extra` are ignored, and the list is
+#' passed to `knitr::sew()` to return a character vector of final output.
 #' @param options A list of chunk options. Usually this is just the object
-#'   \code{options} passed to the engine function; see
-#'   \code{\link{knit_engines}}.
-#' @param code Source code of the chunk, to which the output hook
-#'   \code{source} is applied, unless the chunk option \code{echo} is \code{FALSE}.
-#' @param out Text output from the engine, to which the hook \code{output}
-#'   is applied, unless the chunk option \code{results} is \code{'hide'}
+#'   `options` passed to the engine function; see
+#'   [knit_engines()].
+#' @param code Source code of the chunk, to which the output hook `source`
+#'   is applied, unless the chunk option `echo` is `FALSE`.
+#' @param out Text output from the engine, to which the hook `output` is
+#'   applied, unless the chunk option `results` is `'hide'`
 #' @param extra Any additional text output that you want to include.
 #' @return A character string generated from the source code and output using
 #'   the appropriate output hooks.
@@ -80,27 +79,22 @@ cache_engines = new_defaults()
 #' # expert use only
 #' engine_output(opts_chunk$merge(list(engine = 'python')), out = list(structure(list(src = '1 + 1'), class = 'source'), '2'))
 engine_output = function(options, code, out, extra = NULL) {
-  if (missing(code) && is.list(out)) return(unlist(wrap(out, options)))
+  if (missing(code) && is.list(out)) return(unlist(sew(out, options)))
   if (!is.logical(options$echo)) code = code[options$echo]
   if (length(code) != 1L) code = one_string(code)
   if (options$engine == 'sas' && length(out) > 1L && !grepl('[[:alnum:]]', out[2]))
     out = tail(out, -3L)
   if (length(out) != 1L) out = one_string(out)
   out = sub('([^\n]+)$', '\\1\n', out)
-  # replace the engine names for markup later, e.g. ```Rscript should be ```r
-  options$engine = switch(
-    options$engine, mysql = 'sql', node = 'javascript', psql = 'sql', Rscript = 'r',
-    options$engine
-  )
   if (options$engine == 'stata') {
-    out = gsub('\n+running.*profile.do', '', out)
-    out = sub('...\n+', '', out)
-    out = sub('\n. \nend of do-file\n', '', out)
+    out = gsub('\n+running.*profile\\.do', '', out)
+    out = sub('\\.\\.\\.\n+', '', out)
+    out = sub('\n\\. \nend of do-file\n', '', out)
   }
   one_string(c(
     if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) {
-      if (options$engine == 'highlight') out else wrap.character(out, options)
+      if (options$engine == 'highlight') out else sew.character(out, options)
     },
     extra
   ))
@@ -140,17 +134,18 @@ eng_interpreted = function(options) {
     )
   } else paste(switch(
     engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -ep',
-    mysql = '-e', node = '-e', octave = '--eval', perl = '-E', psql = '-c',
-    python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c', NULL
+    mysql = '-e', node = '-e', octave = '--eval', perl = '-E', php = '-r',
+    psql = '-c', python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c',
+    NULL
   ), shQuote(one_string(options$code)))
 
   opts = get_engine_opts(options$engine.opts, engine)
   # FIXME: for these engines, the correct order is options + code + file
-  code = if (engine %in% c('awk', 'gawk', 'sed', 'sas'))
+  code = if (engine %in% c('awk', 'gawk', 'sed', 'sas', 'psql', 'mysql'))
     paste(code, opts) else paste(opts, code)
   cmd = get_engine_path(options$engine.path, engine)
   out = if (options$eval) {
-    message('running: ', cmd, ' ', code)
+    if (options$message) message('running: ', cmd, ' ', code)
     tryCatch(
       system2(cmd, code, stdout = TRUE, stderr = TRUE, env = options$engine.env),
       error = function(e) {
@@ -173,11 +168,90 @@ get_engine_opts = function(opts, engine, fallback = '') {
   opts %n% fallback
 }
 
-get_engine_path = function(path, engine) get_engine_opts(path, engine, engine)
+get_engine_path = function(path, engine, fallback = engine) {
+  get_engine_opts(path, engine, fallback)
+}
 
-## C and Fortran (via R CMD SHLIB)
+# execute an arbitrary command (optionally with arguments)
+# engine.opts = list(command, input, ext, clean, args, args1, args2)
+eng_exec = function(options) {
+  opts = options$engine.opts
+  if (!is.character(cmd <- opts$command %n% options$command)) stop(
+    "The command of the 'exec' engine must be a character string."
+  )
+  cmd = get_engine_path(options$engine.path, options$engine, cmd)
+  input = function(code, file) {
+    write_utf8(code, file)
+    file
+  }
+  if (is.character(i0 <- opts$input))
+    opts$input = function(code, file) input(code, i0)
+  # turn all chunk options into function except 'command'
+  opts = list_fun(opts, setdiff(names(opts), 'command'))
+
+  # default options
+  opts2 = list(
+    ext = identity, input = input, args = function(code, file) {
+      file
+    }, clean = function(file) {
+      unlink(file)
+    }, args1 = function() NULL, args2 = function() NULL,
+    output = function(options, code, output, file) {
+      engine_output(options, code, output)
+    }
+  )
+
+  opts = merge_list(opts2, opts)
+  cmd2 = basename(cmd)  # in case command is a full path
+  ext = opts$ext(cmd2)  # file extension
+  f = wd_tempfile(cmd2, paste0('.', ext))
+  if (is.function(opts$clean)) on.exit(opts$clean(f), add = TRUE)
+  f = opts$input(options$code, f)
+  a = c(opts$args1(), opts$args(options$code, f), opts$args2())
+
+  out = if (options$eval) {
+    if (options$message) message('running: ', paste(c(cmd, a), collapse = ' '))
+    f2 = wd_tempfile(cmd2)  # capture stderr
+    on.exit(unlink(f2), add = TRUE)
+    tryCatch({
+      res = (if (options$error) suppressWarnings else identity)(
+        system2(cmd, shQuote(a), stdout = TRUE, stderr = f2, env = options$engine.env)
+      )
+      # check error in the content run
+      if (!is.null(attr(res, 'status')) && file.exists(f2) && file.size(f2) > 0) {
+        e = readLines(f2) # f2 may not be UTF-8
+        if (!options$error) stop(one_string(e)) else e
+      } else {
+        res
+      }
+    }, error = function(e) {
+        # error in the command run
+        if (!options$error) stop(e)
+        paste('Error in running command', cmd)
+      }
+    )
+  } else ''
+  # chunk option error=FALSE means we need to signal the error
+  if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
+  options = set_lang(options, eng2lang(xfun::sans_ext(cmd2)))
+  opts$output(options, options$code, out, f)
+}
+
+# turn elements of a list into functions: if an element is not a function, make
+# it a function that returns the non-function value
+list_fun = function(x, which = names(x)) {
+  for (i in which) {
+    if (!is.function(v <- x[[i]])) x[[i]] = local({
+      # a trick to avoid R's lazy evaluation (make a copy of v)
+      v2 = v; function(...) v2
+    })
+  }
+  x
+}
+
+## C, C++, and Fortran (via R CMD SHLIB)
 eng_shlib = function(options) {
-  n = switch(options$engine, c = 'c', fortran = 'f', fortran95 = 'f95')
+  n = switch(options$engine, c = 'c', cc  = 'cc', fortran = 'f', fortran95 = 'f95')
   f = wd_tempfile(n, paste0('.', n))
   write_utf8(options$code, f)
   on.exit(unlink(c(f, with_ext(f, c('o', 'so', 'dll')))), add = TRUE)
@@ -216,7 +290,6 @@ cache_eng_python = function(options) {
 
 ## Rcpp
 eng_Rcpp = function(options) {
-
   sourceCpp = getFromNamespace('sourceCpp', 'Rcpp')
 
   code = one_string(options$code)
@@ -237,7 +310,6 @@ eng_Rcpp = function(options) {
     do.call(sourceCpp, c(list(code = code), opts))
   }
 
-  options$engine = 'cpp' # wrap up source code in cpp syntax instead of Rcpp
   engine_output(options, code, '')
 }
 
@@ -277,17 +349,23 @@ eng_stan = function(options) {
 eng_tikz = function(options) {
   if (!options$eval) return(engine_output(options, options$code, ''))
 
-  lines = read_utf8(options$engine.opts$template %n%
-                    system.file('misc', 'tikz2pdf.tex', package = 'knitr'))
-  i = grep('%% TIKZ_CODE %%', lines)
-  if (length(i) != 1L)
-    stop("Couldn't find replacement string; or the are multiple of them.")
-
-  s = append(lines, options$code, i)  # insert tikz into tex-template
+  lines = read_utf8(
+    options$engine.opts$template %n% system.file('misc', 'tikz2pdf.tex', package = 'knitr')
+  )
+  # add class options to template
+  lines = insert_template(
+    lines, '%% TIKZ_CLASSOPTION %%', options$engine.opts$classoption %n% 'tikz', TRUE
+  )
+  # insert code into preamble
+  lines = insert_template(
+    lines, '%% EXTRA_TIKZ_PREAMBLE_CODE %%', options$engine.opts$extra.preamble, TRUE
+  )
+  # insert tikz code into the tex template
+  s = insert_template(lines, '%% TIKZ_CODE %%', options$code)
   write_utf8(s, texf <- wd_tempfile('tikz', '.tex'))
   on.exit(unlink(texf), add = TRUE)
 
-  ext = tolower(options$fig.ext %n% dev2ext(options$dev))
+  ext = dev2ext(options)
 
   to_svg = ext == 'svg'
   outf = if (to_svg) tinytex::latexmk(texf, 'latex') else tinytex::latexmk(texf)
@@ -301,8 +379,9 @@ eng_tikz = function(options) {
     # dvisvgm needs to be on the path
     # dvisvgm for windows needs ghostscript bin dir on the path also
     if (Sys.which('dvisvgm') == '') tinytex::tlmgr_install('dvisvgm')
-    if (system2('dvisvgm', c('-o', shQuote(fig2), fig)) != 0)
-      stop('Failed to compile ', fig, ' to ', fig2)
+    if (system2('dvisvgm', c(
+      options$engine.opts$dvisvgm.opts, '-o', shQuote(fig2), fig
+    )) != 0) stop('Failed to compile ', fig, ' to ', fig2)
   } else {
     # convert to the desired output-format using magick
     if (ext != 'pdf') magick::image_write(do.call(magick::image_convert, c(
@@ -312,50 +391,45 @@ eng_tikz = function(options) {
   fig = fig2
 
   options$fig.num = 1L; options$fig.cur = 1L
-  extra = knit_hooks$get('plot')(fig, options)
-  options$engine = 'tex'  # for output hooks to use the correct language class
+  extra = run_hook_plot(fig, options)
   engine_output(options, options$code, '', extra)
 }
 
-## GraphViz (dot) and Asymptote are similar
-eng_dot = function(options) {
-
-  # create temporary file
-  f = wd_tempfile('code')
-  write_utf8(code <- options$code, f)
-  on.exit(unlink(f), add = TRUE)
-
-  # adapt command to either graphviz or asymptote
-  if (options$engine == 'dot') {
-    command_string = '%s %s -T%s -o%s'
-    syntax         = 'dot'
-  } else if (options$engine == 'asy') {
-    command_string = '%s %s -f %s -o %s'
-    syntax         = 'cpp'  # use cpp syntax for syntax highlighting
-  }
-
-  # prepare system command
-  cmd = sprintf(
-    command_string, shQuote(get_engine_path(options$engine.path, options$engine)),
-    shQuote(f), ext <- options$fig.ext %n% dev2ext(options$dev),
-    shQuote(paste0(fig <- fig_path(), '.', ext))
-  )
-
-  # generate output
-  dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
-  outf = paste(fig, ext, sep = '.')
-  unlink(outf)
-  extra = if (options$eval) {
-    message('running: ', cmd)
-    system(cmd)
-    if (!file.exists(outf)) stop('failed to compile content');
-    options$fig.num = 1L; options$fig.cur = 1L
-    knit_hooks$get('plot')(outf, options)
-  }
-
-  # wrap
-  options$engine = syntax
-  engine_output(options, code, '', extra)
+## Commands that generate plots, e.g., GraphViz (dot), Asymptote, and Ditaa
+eng_plot = function(options) {
+  options$command = cmd = options$engine
+  options$fig.ext = ext = dev2ext(options)
+  opts = list(
+    output = function(options, code, output, file) {
+      extra = if (options$eval) {
+        # move the generated plot (with a temp filename) to fig.path
+        if (!file_exists(f1 <- with_ext(file, ext))) {
+          # asymptote may geneate file.ext.ext (see #2025)
+          if (cmd == 'asy') f1 = paste0(f1, '.', ext)
+        }
+        if (!file_exists(f1)) stop(
+          'The command did not generate the expected plot file: ', f1
+        )
+        f2 = paste(fig_path(), ext, sep = '.')
+        xfun::dir_create(dirname(f2))
+        unlink(f2)
+        file.rename(f1, f2)
+        options$fig.num = 1L; options$fig.cur = 1L
+        run_hook_plot(f2, options)
+      }
+      engine_output(options, code, '', extra)
+    },
+    # better default for ditaa: https://github.com/yihui/knitr/pull/2092
+    args1 = if (cmd == 'ditaa') c('-s', 2, '-T', '-S', '-E'),
+    args = function(code, file) {
+      f2 = with_ext(file, ext)
+      if (cmd == 'ditaa') return(c(file, f2))
+      if (cmd %in% c('dot', 'asy')) {
+        c(file, c(dot = '-T', asy = '-f')[cmd], ext, '-o', f2)
+      }
+    })
+  options$engine.opts = merge_list(opts, options$engine.opts)
+  eng_exec(options)
 }
 
 ## Andre Simon's highlight
@@ -373,22 +447,21 @@ eng_highlight = function(options) {
 
 ## save the code
 eng_cat = function(options) {
-  cat2 = function(..., file = '', lang = NULL) {
+  cat2 = function(..., file = '', sep = '\n', lang = NULL) {
     # do not write to stdout like the default behavior of cat()
-    if (!identical(file, '')) cat(..., file = file)
+    if (!identical(file, '')) cat(..., file = file, sep = sep)
   }
   if (options$eval)
-    do.call(cat2, c(list(options$code, sep = '\n'), options$engine.opts))
+    do.call(cat2, c(list(options$code), options$engine.opts))
 
-  if (is.null(lang <- options$engine.opts$lang) && is.null(lang <- options$class.source))
-    return('')
-  options$engine = lang
+  options = set_lang(options, options$class.source)
+  if (is.null(options$lang)) return('')
   engine_output(options, options$code, NULL)
 }
 
 ## output the code without processing it
 eng_asis = function(options) {
-  if (options$echo && options$eval) one_string(options$code)
+  if (options$echo) one_string(options$code)
 }
 
 # write a block environment according to the output format
@@ -454,17 +527,23 @@ eng_block2 = function(options) {
   h4 = options$html.after %n% ''
   h5 = options$html.before2 %n% ''
   h6 = options$html.after2 %n% ''
+  if (is_latex_output()) {
+    h7 = h8 = '\n'
+  } else {
+    h7 = sprintf('<%s class="%s">', h2, type)
+    h8 = sprintf('</%s>', h2)
+  }
 
   sprintf(
-    '\\BeginKnitrBlock{%s}%s%s<%s class="%s">%s%s%s</%s>%s\\EndKnitrBlock{%s}',
-    type, l1, h3, h2, type, h5, code, h6, h2, h4, type
+    '\\BeginKnitrBlock{%s}%s%s%s%s%s%s%s%s\\EndKnitrBlock{%s}',
+    type, l1, h3, h7, h5, code, h6, h8, h4, type
   )
 }
 
 # helper to create engines the wrap embedded html assets (e.g. css,js)
 eng_html_asset = function(prefix, postfix) {
   function(options) {
-    out = if (options$eval && is_html_output(excludes = 'markdown')) {
+    out = if (options$eval && is_html_output()) {
       one_string(c(prefix, options$code, postfix))
     }
     options$results = 'asis'
@@ -473,7 +552,7 @@ eng_html_asset = function(prefix, postfix) {
 }
 
 # include js in a script tag (ignore if not html output)
-eng_js = eng_html_asset('<script type="text/javascript">', '</script>')
+eng_js = eng_html_asset('<script>', '</script>')
 
 # include css in a style tag (ignore if not html output)
 eng_css = eng_html_asset('<style type="text/css">', '</style>')
@@ -485,7 +564,7 @@ is_sql_update_query = function(query) {
   query = gsub('^\\s*--.*\n', '', query)
   # remove multi-line comments
   if (grepl('^\\s*\\/\\*.*', query)) query = gsub('.*\\*\\/', '', query)
-  grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE|DROP).*', query, ignore.case = TRUE)
+  grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE|DROP|ALTER).*', query, ignore.case = TRUE)
 }
 
 # sql engine
@@ -535,22 +614,38 @@ eng_sql = function(options) {
   if (is.na(max.print) || is.null(max.print))
     max.print = -1
   sql = one_string(options$code)
+  params = options$params
 
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
 
-  if (is_sql_update_query(query)) {
-    DBI::dbExecute(conn, query)
-    data = NULL
-  } else if (is.null(varname) && max.print > 0) {
-    # execute query -- when we are printing with an enforced max.print we
-    # use dbFetch so as to only pull down the required number of records
-    res = DBI::dbSendQuery(conn, query)
-    data = DBI::dbFetch(res, n = max.print)
-    DBI::dbClearResult(res)
-  } else {
-    data = DBI::dbGetQuery(conn, query)
-  }
+  data = tryCatch({
+    if (is_sql_update_query(query)) {
+      DBI::dbExecute(conn, query)
+      NULL
+    } else if (is.null(varname) && max.print > 0) {
+      # execute query -- when we are printing with an enforced max.print we
+      # use dbFetch so as to only pull down the required number of records
+      res = DBI::dbSendQuery(conn, query)
+      data = DBI::dbFetch(res, n = max.print)
+      DBI::dbClearResult(res)
+      data
+
+    } else {
+      if (length(params) == 0) {
+        DBI::dbGetQuery(conn, query)
+      } else {
+        # If params option is provided, parameters are not interplolated
+        DBI::dbGetQuery(conn, sql, params = params)
+      }
+    }
+  }, error = function(e) {
+    if (!options$error) stop(e)
+    e
+  })
+
+  if (inherits(data, "error"))
+    return(engine_output(options, query, one_string(data)))
 
   # create output if needed (we have data and we aren't assigning it to a variable)
   output = if (length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)) capture.output({
@@ -571,12 +666,14 @@ eng_sql = function(options) {
       options$results = 'asis'
 
       # force left alignment if the first column is an incremental id column
-      first_column = display_data[[1]]
-      if (is.numeric(first_column) && all(diff(first_column) == 1))
-        display_data[[1]] = as.character(first_column)
+      is_id = function(x) {
+        is.numeric(x) && length(x) > 1 && !anyNA(x) && all(diff(x) == 1)
+      }
+      if (is_id(display_data[[1]])) display_data[[1]] = as.character(display_data[[1]])
 
       # wrap html output in a div so special styling can be applied
-      if (is_html_output()) cat('<div class="knitsql-table">\n')
+      add_div = is_html_output() && getOption('knitr.sql.html_div', TRUE)
+      if (add_div) cat('<div class="knitsql-table">\n')
 
       # determine records caption
       caption = options$tab.cap
@@ -596,7 +693,7 @@ eng_sql = function(options) {
       print(kable(display_data, caption = caption))
 
       # terminate div
-      if (is_html_output()) cat("\n</div>\n")
+      if (add_div) cat("\n</div>\n")
 
       # otherwise use tibble if it's available
     } else if (loadable('tibble')) {
@@ -686,8 +783,9 @@ eng_sxss = function(options) {
   if (use_package) {
     message("Converting with the R package sass")
 
+    sass_fun = options$engine.opts$sass_fun %n% sass::sass
     out = tryCatch(
-      sass::sass(sass::sass_file(f), options = sass::sass_options(output_style = style)),
+      sass_fun(sass::sass_file(f), options = sass::sass_options(output_style = style)),
       error = function(e) {
         if (!options$error) stop(e)
         warning2(paste('Error in converting to CSS using sass R package:', e, sep = "\n"))
@@ -721,25 +819,114 @@ eng_sxss = function(options) {
   }
 
   engine_output(options, options$code, final_out)
+}
 
+eng_bslib = function(options) {
+  if (!loadable("bslib")) {
+    stop2("The 'bslib' package must be installed in order for the knitr engine 'bslib' to work.")
+  }
+  if (!is.null(options$engine.opts$sass_fun)) {
+    stop2("The 'bslib' knitr engine does not allow for customization of the Sass compilation function.")
+  }
+  func = sass::sass_partial
+  formals(func)$bundle = quote(bslib::bs_global_get())
+  options$engine.opts$sass_fun = func
+  eng_sxss(options)
+}
+
+# Target Markdown engine contributed by @wlandau
+# Thread: https://github.com/ropensci/targets/issues/503
+# Usage: https://books.ropensci.org/targets/markdown.html
+# Docs: https://docs.ropensci.org/targets/reference/tar_engine_knitr.html
+eng_targets = function(options) {
+  targets::tar_engine_knitr(options)
+}
+
+# an Eviews engine based on EviewsR
+eng_eviews = function(options) {
+  # EviewsR can't be installed in lower versions of R, hence I can't declare
+  # Suggests dependency in DESCRIPTION
+  f = getFromNamespace('eng_eviews', 'EviewsR')
+  f(options)
+}
+
+# a comment engine to return nothing
+eng_comment = function(options) {}
+
+# a verbatim engine that returns its chunk content verbatim
+eng_verbatim = function(options) {
+  # change default for the cat engine
+  options$eval = FALSE
+  options = set_lang(options)
+  eng_cat(options)
+}
+
+set_lang = function(options, default = 'default') {
+  # specify the lang name in engine.opts = list(lang = ), or lang/language,
+  # or class.source; if all are empty, use 'default'
+  if (is.null(options$lang)) options$lang = options$engine.opts$lang %n% default
+  options
+}
+
+# embed a file verbatim
+eng_embed = function(options) {
+  # if `file` is empty, use `code` as the list of files
+  if (is.null(f <- options$file)) {
+    f = gsub('^["\']|["\']$', '', options$code)  # in case paths are quoted
+    if (length(f) == 0) return()
+    options$code = xfun::read_all(f)
+  }
+  # use the filename extension as the default language name
+  if (nchar(lang <- file_ext(f[1])) > 1) {
+    lang = sub('^R', '', lang)  # Rmd -> md, Rhtml -> html, etc.
+    if (lang == 'nw') lang = 'tex'
+  }
+  options = set_lang(options, tolower(lang))
+  eng_verbatim(options)
 }
 
 # set engines for interpreted languages
 local({
   for (i in c(
     'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'lein', 'mysql',
-    'node', 'octave', 'perl', 'psql', 'Rscript', 'ruby', 'sas',
+    'node', 'octave', 'perl', 'php', 'psql', 'Rscript', 'ruby', 'sas',
     'scala', 'sed', 'sh', 'stata', 'zsh'
   )) knit_engines$set(setNames(list(eng_interpreted), i))
 })
 
 # additional engines
 knit_engines$set(
-  highlight = eng_highlight, Rcpp = eng_Rcpp, tikz = eng_tikz, dot = eng_dot,
-  c = eng_shlib, fortran = eng_shlib, fortran95 = eng_shlib, asy = eng_dot,
-  cat = eng_cat, asis = eng_asis, stan = eng_stan, block = eng_block,
-  block2 = eng_block2, js = eng_js, css = eng_css, sql = eng_sql, go = eng_go,
-  python = eng_python, julia = eng_julia, sass = eng_sxss, scss = eng_sxss
+  asis = eng_asis,
+  asy = eng_plot,
+  block = eng_block,
+  block2 = eng_block2,
+  bslib = eng_bslib,
+  c = eng_shlib,
+  cat = eng_cat,
+  cc = eng_shlib,
+  comment = eng_comment,
+  css = eng_css,
+  ditaa = eng_plot,
+  dot = eng_plot,
+  embed = eng_embed,
+  eviews = eng_eviews,
+  exec = eng_exec,
+  fortran = eng_shlib,
+  fortran95 = eng_shlib,
+  go = eng_go,
+  highlight = eng_highlight,
+  js = eng_js,
+  julia = eng_julia,
+  python = eng_python,
+  R = eng_r,
+  Rcpp = eng_Rcpp,
+  sass = eng_sxss,
+  scss = eng_sxss,
+  sql = eng_sql,
+  stan = eng_stan,
+  targets = eng_targets,
+  tikz = eng_tikz,
+  verbatim = eng_verbatim
 )
 
 cache_engines$set(python = cache_eng_python)

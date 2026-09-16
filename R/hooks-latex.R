@@ -3,25 +3,33 @@
 #' These hook functions define how to mark up graphics output in different
 #' output formats.
 #'
-#' Depending on the options passed over, \code{hook_plot_tex} may return the
-#' normal \samp{\\includegraphics{}} command, or \samp{\\input{}} (for tikz
-#' files), or \samp{\\animategraphics{}} (for animations); it also takes many
+#' Depending on the options passed over, `hook_plot_tex` may return the
+#' normal `\includegraphics{}` command, or `\input{}` (for tikz
+#' files), or `\animategraphics{}` (for animations); it also takes many
 #' other options into consideration to align plots and set figure sizes, etc.
-#' Similarly, \code{hook_plot_html}, \code{hook_plot_md} and
-#' \code{hook_plot_rst} return character strings which are HTML, Markdown, reST
+#' Similarly, `hook_plot_html`, `hook_plot_md` and
+#' `hook_plot_rst` return character strings which are HTML, Markdown, reST
 #' code.
+#'
+#' For animations (i.e. when the chunk option `fig.show` is `'animate'`),
+#' `hook_plot_tex` generates `\animategraphics{}` unless a hook function
+#' has been provided via the chunk option `animation.hook` or the package option
+#' `animation.fun`, in which case that function generates the LaTeX code instead.
+#' It is called only once per chunk, with the filename of the last plot. The
+#' built-in hooks (e.g. [hook_ffmpeg_html()]) generate HTML, and are
+#' ignored for LaTeX output.
 #'
 #' In most cases we do not need to call these hooks explicitly, and they were
 #' designed to be used internally. Sometimes we may not be able to record R
-#' plots using \code{\link[grDevices]{recordPlot}}, and we can make use of these
-#' hooks to insert graphics output in the output document; see
-#' \code{\link{hook_plot_custom}} for details.
+#' plots using [grDevices::recordPlot()], and we can make use of
+#' these hooks to insert graphics output in the output document; see
+#' [hook_plot_custom()] for details.
 #' @param x Filename for the plot (a character string).
 #' @param options A list of the current chunk options.
 #' @rdname hook_plot
 #' @return A character string of code, with plot filenames wrapped.
-#' @references \url{https://yihui.org/knitr/hooks/}
-#' @seealso \code{\link{hook_plot_custom}}
+#' @references <https://yihui.org/knitr/hooks/>
+#' @seealso [hook_plot_custom()]
 #' @export
 #' @examples # this is what happens for a chunk like this
 #'
@@ -57,9 +65,17 @@ hook_plot_tex = function(x, options) {
 
   rw = options$resize.width
   rh = options$resize.height
+  rc = options$resize.command
   resize1 = resize2 = ''
-  if (!is.null(rw) || !is.null(rh)) {
-    resize1 = sprintf('\\resizebox{%s}{%s}{', rw %n% '!', rh %n% '!')
+  if (is.null(rc)) {
+    if (!is.null(rw) || !is.null(rh)) {
+      resize1 = sprintf('\\resizebox{%s}{%s}{', rw %n% '!', rh %n% '!')
+      resize2 = '} '
+    }
+  } else {
+    # users can specify a custom "resize" command (we can use an arbitrary
+    # command, e.g., framebox)
+    resize1 = paste0('\\', rc, '{')
     resize2 = '} '
   }
 
@@ -72,7 +88,10 @@ hook_plot_tex = function(x, options) {
   fig.ncol = options$fig.ncol %n% fig.num
   if (is.null(fig.sep <- options$fig.sep)) {
     fig.sep = character(fig.num)
-    if (fig.ncol < fig.num) fig.sep[seq(fig.ncol, fig.num - 1L, fig.ncol)] = '\\newline'
+    # add \newline after every fig.ncol figures; if the last figure is not the
+    # last on its row, skip adding \newline (not necessary, but may be harmless)
+    if (fig.ncol < fig.num)
+      fig.sep[seq(fig.ncol, fig.num - (fig.num %% fig.ncol > 0), fig.ncol)] = '\\newline'
   }
   sep.cur = NULL
 
@@ -114,9 +133,16 @@ hook_plot_tex = function(x, options) {
     }
     # Add subfloat code if needed
     if (usesub) {
-      sub1 = sprintf('\\subfloat[%s%s]{', subcap, create_label(lab, fig.cur, latex = TRUE))
+      sub1 = sprintf('\\subfloat[%s%s]{', subcap, create_label(lab, '-', fig.cur, latex = TRUE))
       sub2 = '}'
-      sep.cur = fig.sep[fig.cur]; if (is.na(sep.cur)) sep.cur = NULL
+      sep.cur = fig.sep[fig.cur]
+      # when there are more separators than plots, add the first separator
+      # before the first plot, then the (i+1)th separator to the i-th plot
+      if (length(fig.sep) > fig.num) {
+        if (plot1) sub1 = paste0(fig.sep[1], sub1)
+        sep.cur = fig.sep[fig.cur + 1]
+      }
+      if (is.na(sep.cur)) sep.cur = NULL
     }
 
     # If pic is standalone/last in set:
@@ -128,10 +154,13 @@ hook_plot_tex = function(x, options) {
       }
       scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
       cap = if (cap == '') '' else sprintf(
-        '\\caption%s{%s}%s\n', scap, cap,
-        create_label(lab, if (mcap) fig.cur, latex = TRUE)
+        '\\caption%s{%s}%s\n', escape_percent(scap), escape_percent(cap),
+        create_label(lab, if (mcap) c('-', fig.cur), latex = TRUE)
       )
-      fig2 = sprintf('%s\\end{%s}\n', cap, options$fig.env)
+      note = options$fig.note
+      note = if (is.null(note) || is.na(note) || note == '') '' else
+        sprintf('%s\\figurenote{%s}\n', define_figurenote(), escape_percent(note))
+      fig2 = sprintf('%s%s\\end{%s}\n', cap, note, options$fig.env)
     }
   } else if (pandoc_to(c('latex', 'beamer'))) {
     # use alignment environments for R Markdown latex output (\centering won't work)
@@ -144,22 +173,25 @@ hook_plot_tex = function(x, options) {
   # maxwidth does not work with animations
   if (animate && identical(ow, '\\maxwidth')) ow = NULL
   if (is.numeric(ow)) ow = paste0(ow, 'px')
-  size = paste(c(sprintf('width=%s', ow),
-                 sprintf('height=%s', options$out.height),
-                 options$out.extra), collapse = ',')
+  size = paste(c(
+    sprintf('width=%s', ow), sprintf('height=%s', options$out.height),
+    sprintf('alt={%s}', escape_percent(options$fig.alt)), options$out.extra
+  ), collapse = ',')
 
   paste0(
     fig1, align1, sub1, resize1,
     if (tikz) {
       sprintf('\\input{%s}', x)
     } else if (animate) {
-      # \animategraphics{} should be inserted only *once*!
-      aniopts = options$aniopts
-      aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
-      size = paste(c(size, sprintf('%s', aniopts)), collapse = ',')
-      if (nzchar(size)) size = sprintf('[%s]', size)
-      sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1 / options$interval,
-              sub(sprintf('%d$', fig.num), '', sans_ext(x)), 1L, fig.num)
+      if (!is.null(fun <- animation_hook_tex(options))) fun(x, options) else {
+        # \animategraphics{} should be inserted only *once*!
+        aniopts = options$aniopts
+        aniopts = if (is.na(aniopts)) NULL else gsub(';', ',', aniopts)
+        size = paste(c(size, sprintf('%s', aniopts)), collapse = ',')
+        if (nzchar(size)) size = sprintf('[%s]', size)
+        sprintf('\\animategraphics%s{%s}{%s}{%s}{%s}', size, 1 / options$interval,
+                sub(sprintf('%d$', fig.num), '', sans_ext(x)), 1L, fig.num)
+      }
     } else {
       if (nzchar(size)) size = sprintf('[%s]', size)
       res = sprintf(
@@ -174,6 +206,33 @@ hook_plot_tex = function(x, options) {
   )
 }
 
+# Find the animation hook to be used for LaTeX output. Contrary to
+# hook_animation(), this returns NULL unless the user has provided a hook
+# function of their own, in which case hook_plot_tex() falls back to
+# \animategraphics{}. The built-in hooks generate HTML, and used to be ignored
+# for LaTeX output, so they must keep being ignored here.
+animation_hook_tex = function(options) {
+  fun = options$animation.hook
+  if (!is.function(fun)) fun = opts_knit$get('animation.fun')
+  if (!is.function(fun)) return()
+  for (h in .animation_hooks()) if (identical(fun, h)) return()
+  fun
+}
+
+# provide a default \figurenote command (for the chunk option fig.note) the
+# first time it is needed in a document; \providecommand is a no-op if the user
+# has defined \figurenote in the preamble (e.g. via \newcommand), so this both
+# works out of the box and stays customizable; emitting it only once avoids
+# repeating the long definition before every figure note
+define_figurenote = function() {
+  if (isTRUE(.knitEnv$fig.note.defined)) return('')
+  .knitEnv$fig.note.defined = TRUE
+  '\\providecommand{\\figurenote}[1]{\\vspace{2pt}\\par\\raggedright\\footnotesize\\emph{#1}}\n'
+}
+
+# % -> \%, but do not touch \%
+escape_percent = function(x) gsub('(?<!\\\\)%', '\\\\%', x, perl = TRUE)
+
 .chunk.hook.tex = function(x, options) {
   ai = output_asis(x, options)
   col = if (!ai) paste0(
@@ -181,9 +240,15 @@ hook_plot_tex = function(x, options) {
   )
   k1 = paste0(col, '\\begin{kframe}\n')
   k2 = '\\end{kframe}'
-  x = .rm.empty.envir(paste0(k1, x, k2))
+  x = .rm.empty.envir(paste0(k1, sub('^\n+', '', x), k2))
   size = if (options$size == 'normalsize') '' else sprintf('\\%s', options$size)
-  if (!ai) x = sprintf('\\begin{knitrout}%s\n%s\n\\end{knitrout}', size, x)
+  if (!ai) {
+    # if the chunk content starts with \n, don't add \n; similarly, if it ends with \n, don't append \n
+    n1 = n2 = '\n'
+    if (grepl('^\\s*\n', x)) n1 = ''
+    if (grepl('\n\\s*$', x)) n2 = ''
+    x = sprintf('\\begin{knitrout}%s%s%s%s\\end{knitrout}', size, n1, x, n2)
+  }
   if (options$split) {
     name = fig_path('.tex', options, NULL)
     if (!file.exists(dirname(name)))
@@ -223,44 +288,74 @@ hook_plot_tex = function(x, options) {
   }
 }
 
-#' Set output hooks for different output formats
+#' Set or get output hooks for different output formats
 #'
-#' These functions set built-in output hooks for LaTeX, HTML, Markdown,
-#' reStructuredText, AsciiDoc and Textile.
+#' The `render_*()` functions set built-in output hooks for LaTeX, HTML,
+#' Markdown, reStructuredText, AsciiDoc, and Textile. The `hooks_*()`
+#' functions return a list of the output hooks for the corresponding format.
 #'
-#' There are three variants of markdown documents: ordinary markdown
-#' (\code{render_markdown(strict = TRUE)}), extended markdown (e.g. GitHub
-#' Flavored Markdown and pandoc; \code{render_markdown(strict = FALSE)}), and
-#' Jekyll (a blogging system on GitHub; \code{render_jekyll()}). For LaTeX
-#' output, there are three variants as well: \pkg{knitr}'s default style
-#' (\code{render_latex()}; use the LaTeX \pkg{framed} package), Sweave style
-#' (\code{render_sweave()}; use \file{Sweave.sty}) and listings style
-#' (\code{render_listings()}; use LaTeX \pkg{listings} package). Default HTML
-#' output hooks are set by \code{render_html()}; \code{render_rst()} and
-#' \code{render_asciidoc()} are for reStructuredText and AsciiDoc respectively.
+#' There are three variants of Markdown documents: ordinary Markdown
+#' (`render_markdown(strict = TRUE)`, which calls
+#' `hooks_markdown(strict = TRUE)`), extended Markdown (e.g., GitHub
+#' Flavored Markdown and Pandoc; `render_markdown(strict = FALSE)`, which
+#' calls `hooks_markdown(strict = FALSE)`), and Jekyll (a blogging system
+#' on GitHub; `render_jekyll()`, which calls `hooks_jekyll()`).
 #'
-#' These functions can be used before \code{knit()} or in the first chunk of the
-#' input document (ideally this chunk has options \code{include = FALSE} and
-#' \code{cache = FALSE}) so that all the following chunks will be formatted as
-#' expected.
+#' For LaTeX output, there are three variants: \pkg{knitr}'s default style
+#' (`render_latex()`, which calls `hooks_latex()` and uses the LaTeX
+#' \pkg{framed} package), Sweave style (`render_sweave()`, which calls
+#' `hooks_sweave()` and uses \file{Sweave.sty}), and listings style
+#' (`render_listings()`, which calls `hooks_listings()` and uses LaTeX
+#' \pkg{listings} package).
 #'
-#' You can use \code{\link{knit_hooks}} to further customize output hooks; see
-#' references.
+#' Default HTML output hooks are set by `render_html()` (which calls
+#' `hooks_html()`); `render_rst()` (which calls `hooks_rst()`) is
+#' for reStructuredText; `render_textile()` (which calls
+#' `hooks_textile()`) is for Textile, and `render_asciidoc()` (which
+#' calls `hooks_asciidoc()`) is AsciiDoc.
+#'
+#' The `render_*()` functions can be used before `knit()` or in the
+#' first chunk of the input document (ideally this chunk has options
+#' `include = FALSE` and `cache = FALSE`) so that all the following
+#' chunks will be formatted as expected.
+#'
+#' You can also use \code{\link{knit_hooks}} to set the format's hooks with the
+#' `hooks_*()` functions; see references for more info on further
+#' customizing output hooks.
+#'
 #' @rdname output_hooks
-#' @return \code{NULL}; corresponding hooks are set as a side effect
+#' @return `NULL` for `render_*` functions; corresponding hooks are
+#'   set as a side effect. A list of output hooks for `hooks_*()`
+#'   functions.
 #' @export
-#' @references See output hooks in \url{https://yihui.org/knitr/hooks/}.
+#' @references See output hooks in <https://yihui.org/knitr/hooks/>, and
+#'   some examples in
+#'   <https://pkg.yihui.org/rmarkdown-cookbook/output-hooks.html>
 #'
 #'   Jekyll and Liquid:
-#'   \url{https://github.com/jekyll/jekyll/wiki/Liquid-Extensions};
-#'   prettify.js: \url{http://code.google.com/p/google-code-prettify/}
+#'   <https://github.com/jekyll/jekyll/wiki/Liquid-Extensions>; prettify.js:
+#'   <https://code.google.com/archive/p/google-code-prettify>
+#' @examples
+#' # below is pretty much what knitr::render_markdown() does:
+#' knitr::knit_hooks$set(knitr::hooks_markdown())
+#'
+#' # you can retrieve a subset of the hooks and set them, e.g.,
+#' knitr::knit_hooks$set(knitr::hooks_markdown()["source"])
+#'
+#' knitr::knit_hooks$restore()
 render_latex = function() {
   opts_chunk$set(out.width = '\\maxwidth', dev = 'pdf')
   opts_knit$set(out.format = 'latex')
   h = opts_knit$get('header')
   if (!nzchar(h['framed'])) set_header(framed = .header.framed)
   if (!nzchar(h['highlight'])) set_header(highlight = .header.hi.tex)
-  knit_hooks$set(
+  knit_hooks$set(hooks_latex())
+}
+
+#' @rdname output_hooks
+#' @export
+hooks_latex = function() {
+  list(
     source = function(x, options) {
       x = hilight_source(x, 'latex', options)
       if (options$highlight) {
@@ -287,6 +382,7 @@ render_latex = function() {
     }
   )
 }
+
 #' @rdname output_hooks
 #' @export
 render_sweave = function() {
@@ -294,31 +390,45 @@ render_sweave = function() {
   opts_knit$set(out.format = 'sweave')
   test_latex_pkg('Sweave', file.path(R.home('share'), 'texmf', 'tex', 'latex', 'Sweave.sty'))
   set_header(framed = '', highlight = '\\usepackage{Sweave}')
+  knit_hooks$set(hooks_sweave())
+}
+
+#' @param envirs Names of LaTeX environments for code input, output, and chunk.
+#' @rdname output_hooks
+#' @export
+hooks_sweave = function(envirs = c('Sinput', 'Soutput', 'Schunk')) {
   # wrap source code in the Sinput environment, output in Soutput
-  hook.i = function(x, options)
-    one_string(c('\\begin{Sinput}', hilight_source(x, 'sweave', options), '\\end{Sinput}', ''))
+  hook.i = function(x, options) one_string(c(
+    sprintf('\\begin{%s}', envirs[1]), hilight_source(x, 'sweave', options),
+    sprintf('\\end{%s}', envirs[1]), ''
+  ))
   hook.s = function(x, options) {
     if (output_asis(x, options)) return(x)
-    paste0('\\begin{Soutput}\n', x, '\\end{Soutput}\n')
+    sprintf('\\begin{%s}\n%s\\end{%s}\n', envirs[2], x, envirs[2])
   }
   hook.c = function(x, options) {
     if (output_asis(x, options)) return(x)
-    paste0('\\begin{Schunk}\n', x, '\\end{Schunk}')
+    sprintf('\\begin{%s}\n%s\\end{%s}', envirs[3], x, envirs[3])
   }
-  knit_hooks$set(source = hook.i, output = hook.s, warning = hook.s,
-                 message = hook.s, error = hook.s, inline = .inline.hook.tex,
-                 plot = hook_plot_tex, chunk = hook.c)
+  list(
+    source = hook.i, output = hook.s, warning = hook.s, message = hook.s,
+    error = hook.s, plot = hook_plot_tex, inline = .inline.hook.tex, chunk = hook.c
+  )
 }
+
 #' @rdname output_hooks
 #' @export
 render_listings = function() {
-  render_sweave()
-  opts_chunk$set(prompt = FALSE)
+  opts_chunk$set(highlight = FALSE, comment = NA, prompt = FALSE) # mimic Sweave settings
   opts_knit$set(out.format = 'listings')
   test_latex_pkg('Sweavel', system.file('misc', 'Sweavel.sty', package = 'knitr'))
   set_header(framed = '', highlight = '\\usepackage{Sweavel}')
-  invisible(NULL)
+  knit_hooks$set(hooks_listings())
 }
+
+#' @rdname output_hooks
+#' @export
+hooks_listings = hooks_sweave
 
 # may add textile, and many other markup languages
 
@@ -326,23 +436,23 @@ render_listings = function() {
 #'
 #' A document hook is a function to post-process the output document.
 #'
-#' \code{hook_movecode()} is a document hook to move code chunks out of LaTeX
-#' floating environments like \samp{figure} and \samp{table} when the chunks
+#' `hook_movecode()` is a document hook to move code chunks out of LaTeX
+#' floating environments like `figure` and `table` when the chunks
 #' were actually written inside the floats. This function is primarily designed
 #' for LyX: we often insert code chunks into floats to generate figures or
 #' tables, but in the final output we do not want the code to float with the
 #' environments, so we use regular expressions to find out the floating
 #' environments, extract the code chunks and move them out. To disable this
-#' behavior, use a comment \code{\% knitr_do_not_move} in the floating
+#' behavior, use a comment `\% knitr_do_not_move` in the floating
 #' environment.
 #' @rdname hook_document
 #' @param x A character string (the whole output document).
 #' @return The post-processed document as a character string.
-#' @note These functions are hackish. Also note \code{hook_movecode()} assumes
+#' @note These functions are hackish. Also note `hook_movecode()` assumes
 #'   you to use the default output hooks for LaTeX (not Sweave or listings), and
 #'   every figure/table environment must have a label.
 #' @export
-#' @references \url{https://yihui.org/knitr/hooks/}
+#' @references <https://yihui.org/knitr/hooks/>
 #' @examples \dontrun{knit_hooks$set(document = hook_movecode)}
 #' # see example 103 at https://github.com/yihui/knitr-examples
 hook_movecode = function(x) {

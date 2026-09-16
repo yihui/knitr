@@ -25,7 +25,7 @@ defensive (i.e. not to have carryover metadata), you can call
 }
 \value{
 \code{knit_meta()} returns the matched metadata specified by
-  \code{class}; \code{knit_meta_add()} returns all current metadata.
+\code{class}; \code{knit_meta_add()} returns all current metadata.
 }
 \description{
 As an object is printed, \pkg{knitr} will collect metadata about it (if

@@ -32,12 +32,6 @@ travis: build
 	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual
 
-integration-need:
-	git clone https://github.com/${TRAVIS_REPO_SLUG}-examples.git
-	cd knitr-examples && \
-		git checkout ${TRAVIS_BRANCH} && \
-		GIT_PAGER=cat git show HEAD
-
 integration-run:
 	xvfb-run make deps knit -C knitr-examples
 
@@ -49,12 +43,6 @@ integration: install integration-run integration-verify
 examples:
 	cd inst/examples;\
 	Rscript knit-all.R
-
-vignettes:
-	cd vignettes;\
-	lyx -e knitr knitr-refcard.lyx;\
-	sed -i '/\\usepackage{breakurl}/ d' knitr-refcard.Rnw;\
-	mv knitr-refcard.Rnw assets/template-refcard.tex
 
 clean:
 	cd ..;\

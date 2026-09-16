@@ -9,31 +9,31 @@ knit_params(text, evaluate = TRUE)
 \arguments{
 \item{text}{Character vector containing the document text.}
 
-\item{evaluate}{Boolean. If \code{TRUE} (the default), expression values embedded
-within the YAML will be evaluated. If \code{FALSE}, parameters defined with an
-expression will have the parsed but unevaluated expression in their \code{value}
-field.}
+\item{evaluate}{Boolean. If \code{TRUE} (the default), expression values
+embedded within the YAML will be evaluated. If \code{FALSE}, parameters
+defined with an expression will have the parsed but unevaluated expression
+in their \code{value} field.}
 }
 \value{
 List of objects of class \code{knit_param} that correspond to the
-  parameters declared in the \code{params} section of the YAML front matter.
-  These objects have the following fields:
+parameters declared in the \code{params} section of the YAML front matter.
+These objects have the following fields:
 
-  \describe{
-    \item{\code{name}}{The parameter name.}
-    \item{\code{value}}{The default value for the parameter.}
-    \item{\code{expr}}{The R expression (if any) that yielded the default value.}
-  }
+\describe{
+\item{\code{name}}{The parameter name.}
+\item{\code{value}}{The default value for the parameter.}
+\item{\code{expr}}{The R expression (if any) that yielded the default value.}
+}
 
-  In addition, other fields included in the YAML may also be present
-  alongside the name, type, and value fields (e.g. a \code{label} field
-  that provides front-ends with a human readable name for the parameter).
+In addition, other fields included in the YAML may also be present
+alongside the name, type, and value fields (e.g. a \code{label} field
+that provides front-ends with a human readable name for the parameter).
 }
 \description{
 This function reads the YAML front-matter section of a document and returns a
 list of any parameters declared there. This function exists primarily to
 support the parameterized reports feature of the \pkg{rmarkdown} package,
-however is also used by the knitr \code{\link{purl}} function to include
+however is also used by the knitr \code{\link[=purl]{purl()}} function to include
 the default parameter values in the R code it emits.
 }
 \details{

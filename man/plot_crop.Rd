@@ -9,24 +9,30 @@ plot_crop(x, quiet = TRUE)
 \arguments{
 \item{x}{Filename of the plot.}
 
-\item{quiet}{Boolean; whether to suppress standard output from the command line
-utility.}
+\item{quiet}{Whether to suppress standard output from the command.}
 }
 \value{
 The original filename.
 }
 \description{
-The command \command{pdfcrop x x} is executed on a PDF plot file, and
-\command{convert x -trim x} is executed for other types of plot files, where
-\code{x} is the plot filename.
+The program \command{pdfcrop} (often shipped with a LaTeX distribution) is
+executed on a PDF plot file, and
+\code{\link[magick:image_trim]{magick::image_trim()}} is executed for other
+types of plot files.
 }
 \details{
-The utility \command{pdfcrop} is often shipped with a LaTeX distribution, and
-\command{convert} is a command in ImageMagick (Windows users may have to put
-the bin path of ImageMagick into the \var{PATH} variable).
+The program \command{pdfcrop} can crop the extra white margins when the plot
+format is PDF, to make better use of the space in the output document,
+otherwise we often have to struggle with \code{\link[graphics:par]{graphics::par()}} to set
+appropriate margins. Note \command{pdfcrop} often comes with a LaTeX
+distribution such as TinyTeX, MiKTeX, or TeX Live, and you may not need to
+install it separately (use \code{Sys.which('pdfcrop')} to check it; if it not
+empty, you are able to use it). Note that \command{pdfcrop} depends on
+GhostScript. You can check if GhostScript is installed via
+\code{tools::find_gs_cmd()}.
 }
 \references{
-PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}; the
-  \command{convert} command in ImageMagick:
-  \url{http://www.imagemagick.org/script/convert.php}
+PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}. If you use
+TinyTeX, you may install \command{pdfcrop} with
+\code{tinytex::tlmgr_install('pdfcrop')}.
 }

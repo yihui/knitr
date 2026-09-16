@@ -11,7 +11,8 @@ run_hooks = function(before, options, envir = knit_global()) {
     if (is.null(options[[i]]) || is.null(hook <- hooks.a[[i]])) next
     if (is.character(hook)) hook = get(hook, envir = envir, mode = 'function')
     args = list(before = before, options = options, envir = envir, name = i)
-    args = args[names(formals(hook))]
+    anms = names(formals(hook))
+    if (!('...' %in% anms)) args = args[anms]
     res  = do.call(hook, args, envir = envir)
     if (is.character(res)) out = c(out, res)
   }

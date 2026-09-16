@@ -15,21 +15,26 @@ render_markdown()
 
 img_output = function(path, opts = list()) {
   opts = opts_chunk$merge(opts)
-  wrap(knit_print(include_graphics(path)), opts)
+  sew(knit_print(include_graphics(path, error = FALSE)), opts)
 }
 
 assert('include_graphics() includes custom images correctly', {
   (img_output('a.png') %==% '![](a.png)')
   (img_output(c('a.png', 'b.png'), list(fig.show = 'hold')) %==% '![](a.png)![](b.png)')
   (img_output('a.png', list(fig.cap = 'foo bar')) %==% '![foo bar](a.png)')
-  (img_output('a.png', list(out.width = '50%')) %==% '<img src="a.png" width="50%" />')
+  (img_output('a.png', list(out.width = '50%')) %==% '<img src="a.png" alt="" width="50%" />')
   (img_output('a.pdf', list(out.width = '300px')) %==% '<embed src="a.pdf" width="300px" type="application/pdf" />')
 })
 
 hook_src = knit_hooks$get("source")
 options_ = list(engine = "r", prompt = FALSE, highlight = TRUE)
 
-assert('Attributes for souce can be specified class.source and attr.source', {
+assert('Length of fences are satisfied', {
+  (hook_src("", options_) %==% "\n\n``` r\n\n```\n\n")
+  (hook_src("```", options_) %==% "\n\n```` r\n```\n````\n\n")
+})
+
+assert('Attributes for source can be specified class.source and attr.source', {
   (hook_src("1", c(options_, class.source = "a b")) %==% "\n\n```{.r .a .b}\n1\n```\n\n")
   (hook_src("1", c(options_, attr.source = ".a .b")) %==% "\n\n```{.r .a .b}\n1\n```\n\n")
   (hook_src("1", c(options_, class.source = "a", attr.source = "b='1'")) %==%
@@ -38,9 +43,18 @@ assert('Attributes for souce can be specified class.source and attr.source', {
     "\n\n```{.r .a b='1'}\n1\n```\n\n")
 })
 
+assert('class.source and attr.source works also with collapse = TRUE', {
+  hook_chunk = hooks_markdown()$chunk
+  (hook_chunk("```{.r .a b=1}\n1\n```", c(options_, collapse = TRUE)) %==%
+      "```{.r .a b=1}\n1\n```")
+  (hook_chunk("```{.r .a b=1}\n1\n```\n```{.r .a b=1}\n1\n```",
+              c(options_, collapse = TRUE)) %==%
+      "```{.r .a b=1}\n1\n1\n```")
+})
+
 hook_out = knit_hooks$get("output")
 
-assert('Attributes for souce can be specified class.source and attr.source', {
+assert('Attributes for source can be specified class.source and attr.source', {
   (hook_out("1\n", c(options_, class.output = "a b")) %==%
     "\n\n```{.a .b}\n1\n```\n\n")
   (hook_out("1\n", c(options_, attr.output = ".a .b")) %==%
@@ -51,6 +65,15 @@ assert('Attributes for souce can be specified class.source and attr.source', {
     "\n\n```{.a b='1'}\n1\n```\n\n")
 })
 
+hook_chunk = knit_hooks$get("chunk")
+
+assert('Chunks are enclosed by fenced divs when needed.', {
+  (hook_chunk('', list(class.chunk=NULL)) %==% '')
+  (hook_chunk('', list(class.chunk="")) %==% '::: \n\n:::')
+  (hook_chunk('', list(class.chunk="foo")) %==% '::: foo\n\n:::')
+  (hook_chunk(':::', list(class.chunk="foo")) %==% ':::: foo\n:::\n::::')
+})
+
 knit_hooks$restore()
 
 
@@ -58,8 +81,14 @@ x = "1.png"
 w = h = 1
 ex = "style='margin: 0;'"
 cap = "foo"
-opt <- function(w = NULL, h =NULL, ex = NULL, cap = NULL, show = 'asis', ...) {
-  list(out.width = w, out.height = h, out.extra = ex, fig.cap = cap, fig.show = show, ...)
+opt = function(
+  w = NULL, h = NULL, ex = NULL, cap = NULL, show = 'asis',
+  fig.align = 'default', ...
+) {
+  list(
+    out.width = w, out.height = h, out.extra = ex,
+    fig.cap = cap, fig.show = show, fig.align = fig.align, ...
+  )
 }
 
 assert("Include a plot by pandoc md", {
@@ -70,4 +99,42 @@ assert("Include a plot by pandoc md", {
   (hook_plot_md_pandoc(x, opt(ex = ex)) %==% sprintf("![](1.png){%s}", ex))
   (hook_plot_md_pandoc(x, opt(w = w, cap = cap, ex = ex)) %==%
     sprintf("![%s](1.png){width=%s %s}", cap, w, ex))
+})
+
+assert("captioned figures in a multi-figure chunk are separated by a blank line (#2032)", {
+  fig = function(cur, num, cap = NULL) opt(cap = cap, fig.cur = cur, fig.num = num)
+  # a captioned figure that is not the last one gets a trailing blank line
+  (hook_plot_md_pandoc(x, fig(1, 2, cap)) %==% sprintf("![%s](1.png)\n\n", cap))
+  # the last figure and single-figure chunks do not
+  (hook_plot_md_pandoc(x, fig(2, 2, cap)) %==% sprintf("![%s](1.png)", cap))
+  (hook_plot_md_pandoc(x, fig(1, 1, cap)) %==% sprintf("![%s](1.png)", cap))
+  # figures without a caption are left inline (Pandoc keeps them as inline images)
+  (hook_plot_md_pandoc(x, fig(1, 2)) %==% "![](1.png)")
+})
+
+assert('empty alt text is preserved and NA alt is discarded', {
+  (hook_plot_md(x, opts_chunk$merge(list(fig.alt = ''))) %==% '<img src="1.png" alt=""  />')
+  (hook_plot_md(x, opts_chunk$merge(list(fig.alt = NA, out.width = '100'))) %==% '<img src="1.png" width="100" />')
+})
+
+assert("fig.note is placed in a figure-note paragraph for HTML output", {
+  old = opts_knit$get('rmarkdown.pandoc.to')
+  opts_knit$set(rmarkdown.pandoc.to = 'html')
+  # note together with a caption
+  (hook_plot_md(x, opt(cap = cap, fig.note = 'A note.')) %==%
+    paste0('<div class="figure">\n<img src="1.png" alt="foo"  />\n',
+           '<p class="caption">foo</p><p class="figure-note">A note.</p>\n</div>'))
+  # note without a caption (no empty caption paragraph)
+  (hook_plot_md(x, opt(fig.note = 'A note.')) %==%
+    paste0('<div class="figure">\n<img src="1.png" alt=""  />\n',
+           '<p class="figure-note">A note.</p>\n</div>'))
+  opts_knit$set('rmarkdown.pandoc.to' = old)
+})
+
+assert("fig.alt does not break office document", {
+  old = opts_knit$get('rmarkdown.pandoc.to')
+  opts_knit$set(rmarkdown.pandoc.to = "docx")
+  (suppressWarnings(hook_plot_md(x, opt())) %==% "![](1.png)")
+  (suppressWarnings(hook_plot_md(x, opt(fig.alt = "bar"))) %==% "![](1.png)")
+  opts_knit$set('rmarkdown.pandoc.to' = old)
 })

@@ -1,101 +1,93 @@
 #' Built-in chunk hooks to extend knitr
 #'
 #' Hook functions are called when the corresponding chunk options are not
-#' \code{NULL} to do additional jobs beside the R code in chunks. This package
+#' `NULL` to do additional jobs beside the R code in chunks. This package
 #' provides a few useful hooks, which can also serve as examples of how to
 #' define chunk hooks in \pkg{knitr}.
 #'
-#' The function \code{hook_pdfcrop()} can use the program \command{pdfcrop} to
-#' crop the extra white margin when the plot format is PDF to make better use of
-#' the space in the output document, otherwise we often have to struggle with
-#' \code{\link[graphics]{par}} to set appropriate margins. Note
-#' \command{pdfcrop} often comes with a LaTeX distribution such as MiKTeX or
-#' TeXLive, and you may not need to install it separately (use
-#' \code{Sys.which('pdfcrop')} to check it; if it not empty, you are able to use
-#' it). Similarly, when the plot format is not PDF (e.g. PNG), the program
-#' \command{convert} in ImageMagick is used to trim the white margins (call
-#' \command{convert input -trim output}).
+#' The function `hook_pdfcrop()` calls [plot_crop()] to crop
+#' the white margins of PDF plots.
 #'
-#' The function \code{hook_optipng()} calls the program \command{optipng} to
-#' optimize PNG images. Note the chunk option \code{optipng} can be used to
+#' The function `hook_optipng()` calls the program \command{optipng} to
+#' optimize PNG images. Note the chunk option `optipng` can be used to
 #' provide additional parameters to the program \command{optipng}, e.g.
-#' \code{optipng = '-o7'}.
+#' `optipng = '-o7'`.
 #'
-#' The function \code{hook_pngquant()} calls the program \command{pngquant} to
-#' optimize PNG images. Note the chunk option \code{pngquant} can be used to
+#' The function `hook_pngquant()` calls the program \command{pngquant} to
+#' optimize PNG images. Note the chunk option `pngquant` can be used to
 #' provide additional parameters to the program \command{pngquant}, e.g.
-#' \code{pngquant = '--speed=1 --quality=0-50'}.
+#' `pngquant = '--speed=1 --quality=0-50'`.
 #'
-#' The function \code{hook_mogrify()} calls the program \command{mogrify}.  Note
-#' the chunk option \code{mogrify} can be used to provide additional parameters
-#' to the program \command{mogrify} (with default \code{-trim} to trim PNG
+#' The function `hook_mogrify()` calls the program \command{mogrify}.  Note
+#' the chunk option `mogrify` can be used to provide additional parameters
+#' to the program \command{mogrify} (with default `-trim` to trim PNG
 #' files).
 #'
-#' When the plots are not recordable via \code{\link[grDevices]{recordPlot}} and
-#' we save the plots to files manually via other functions (e.g. \pkg{rgl}
-#' plots), we can use the chunk hook \code{hook_plot_custom} to help write code
+#' When the plots are not recordable via [grDevices::recordPlot()]
+#' and we save the plots to files manually via other functions (e.g. \pkg{rgl}
+#' plots), we can use the chunk hook `hook_plot_custom` to help write code
 #' for graphics output into the output document.
 #'
-#' The hook \code{hook_purl()} can be used to write the code chunks to an R
-#' script. It is an alternative approach to \code{\link{purl}}, and can be more
+#' The hook `hook_purl()` can be used to write the code chunks to an R
+#' script. It is an alternative approach to [purl()], and can be more
 #' reliable when the code chunks depend on the execution of them (e.g.
-#' \code{\link{read_chunk}()}, or \code{\link{opts_chunk}$set(eval = FALSE)}).
+#' [read_chunk()], or \code{\link{opts_chunk}$set(eval = FALSE)}).
 #' To enable this hook, it is recommended to associate it with the chunk option
-#' \code{purl}, i.e. \code{knit_hooks$set(purl = hook_purl)}. When this hook is
+#' `purl`, i.e. `knit_hooks$set(purl = hook_purl)`. When this hook is
 #' enabled, an R script will be written while the input document is being
-#' \code{\link{knit}}. Currently the code chunks that are not R code or have the
-#' chunk option \code{purl=FALSE} are ignored. Please note when the cache is
-#' turned on (the chunk option \code{cache = TRUE}), no chunk hooks will be
-#' executed, hence \code{hook_purl()} will not work, either. To solve this
-#' problem, we need \code{cache = 2} instead of \code{TRUE} (see
-#' \url{https://yihui.org/knitr/demo/cache/} for the meaning of \code{cache =
-#' 2}).
+#' [knit()]. Currently the code chunks that are not R code or have the
+#' chunk option `purl=FALSE` are ignored. Please note when the cache is
+#' turned on (the chunk option `cache = TRUE`), no chunk hooks will be
+#' executed, hence `hook_purl()` will not work, either. To solve this
+#' problem, we need `cache = 2` instead of `TRUE` (see
+#' <https://yihui.org/knitr/demo/cache/> for the meaning of `cache =
+#' 2`).
 #' @rdname chunk_hook
-#' @param before,options,envir See \emph{References} below.
-#' @references \url{https://yihui.org/knitr/hooks/#chunk_hooks}
-#' @seealso \code{\link[rgl]{rgl.snapshot}}, \code{\link[rgl]{rgl.postscript}},
-#'   \code{\link[rgl]{hook_rgl}}, \code{\link[rgl]{hook_webgl}}
-#' @note The two hook functions \code{hook_rgl()} and \code{hook_webgl()} were
+#' @param before,options,envir,... See *References* below.
+#' @references <https://yihui.org/knitr/hooks/#chunk-hooks>
+#' @seealso [rgl::rgl.snapshot()], [rgl::rgl.postscript()],
+#'   [rgl::hook_rgl()], [rgl::hook_webgl()]
+#' @note The two hook functions `hook_rgl()` and `hook_webgl()` were
 #'   moved from \pkg{knitr} to the \pkg{rgl} package (>= v0.95.1247) after
-#'   \pkg{knitr} v1.10.5, and you can \code{library(rgl)} to get them.
+#'   \pkg{knitr} v1.10.5, and you can `library(rgl)` to get them.
 #' @export
 #' @examples if (require('rgl') && exists('hook_rgl')) knit_hooks$set(rgl = hook_rgl)
 #' # then in code chunks, use the option rgl=TRUE
-hook_pdfcrop = function(before, options, envir) {
+hook_pdfcrop = function(before, ...) {
   # crops plots after a chunk is evaluated and plot files produced
-  ext = options$fig.ext
-  if (options$dev == 'tikz' && options$external) ext = 'pdf'
-  if (before || (fig.num <- options$fig.num %n% 0L) == 0L) return()
-  paths = all_figs(options, ext, fig.num)
-  in_base_dir(for (f in paths) plot_crop(f))
-}
-#' @export
-#' @rdname chunk_hook
-hook_optipng = function(before, options, envir) {
-  hook_png(before, options, envir, 'optipng')
+  if (before) return()
+  in_base_dir(for (f in get_plot_files()) plot_crop(f))
 }
 
+get_plot_files = function() {
+  unique(opts_knit$get('plot_files'))
+}
+
+#' @export
+#' @rdname chunk_hook
+hook_optipng = function(...) hook_png(..., cmd = 'optipng')
+
 hook_png = function(
-  before, options, envir, cmd = c('optipng', 'pngquant', 'mogrify'), post_process = identity
+  before, options, ..., cmd = c('optipng', 'pngquant', 'mogrify'), post_process = identity
 ) {
   if (before) return()
-  num = options$fig.num
-  if (length(num) == 0 || num == 0) return()  # no figures
-  ext = tolower(options$fig.ext)
-  if (ext != 'png') {
-    warning('this hook only works with PNG at the moment'); return()
-  }
   cmd = match.arg(cmd)
   if (!nzchar(Sys.which(cmd))) {
     warning('cannot find ', cmd, '; please install and put it in PATH'); return()
   }
-  paths = all_figs(options, ext)
+  opts = options[[cmd]]
+  if (isFALSE(opts)) return()
+  if (is.null(opts) || isTRUE(opts)) opts = switch(
+    cmd, optipng = '-quiet', pngquant = '--skip-if-larger', mogrify = '-trim'
+  )
+  if (cmd == 'pngquant') opts = c(opts, '--ext', '-fs8.png')
+
+  paths = get_plot_files()
+  paths = grep('[.]png$', paths, ignore.case = TRUE, value = TRUE)
 
   in_base_dir(
     lapply(paths, function(x) {
-      message('optimizing ', x)
-      cmd = paste(cmd, if (is.character(options[[cmd]])) options[[cmd]], shQuote(x))
-      (if (is_windows()) shell else system)(cmd)
+      system2(cmd, c(opts, shQuote(x)))
       post_process(x)
     })
   )
@@ -104,10 +96,8 @@ hook_png = function(
 
 #' @export
 #' @rdname chunk_hook
-hook_pngquant = function(before, options, envir) {
-  if (is.null(options[['pngquant']])) options$pngquant = '--skip-if-larger'
-  options[['pngquant']] = paste(options[['pngquant']], '--ext -fs8.png')
-  hook_png(before, options, envir, 'pngquant', function(x) {
+hook_pngquant = function(...) {
+  hook_png(..., cmd = 'pngquant', post_process = function(x) {
     # pngquant creates an output file with '-fs8.png' as the extension.
     x2 = sub("\\.png$", "-fs8.png", x)
     if (file.exists(x2)) file.rename(x2, x)
@@ -116,10 +106,7 @@ hook_pngquant = function(before, options, envir) {
 
 #' @export
 #' @rdname chunk_hook
-hook_mogrify = function(before, options, envir) {
-  if (is.null(options[['mogrify']])) options$mogrify = '-trim'
-  hook_png(before, options, envir, cmd = 'mogrify', identity)
-}
+hook_mogrify = function(...) hook_png(..., cmd = 'mogrify')
 
 #' @export
 #' @rdname chunk_hook
@@ -127,7 +114,7 @@ hook_plot_custom = function(before, options, envir){
   if (before) return() # run hook after the chunk
   if (options$fig.show == 'hide') return() # do not show figures
 
-  ext = options$fig.ext %n% dev2ext(options$dev)
+  ext = dev2ext(options)
   hook = knit_hooks$get('plot')
 
   n = options$fig.num
@@ -142,7 +129,7 @@ hook_plot_custom = function(before, options, envir){
 #" a hook function to write out code from chunks
 #' @export
 #' @rdname chunk_hook
-hook_purl = function(before, options, envir) {
+hook_purl = function(before, options, ...) {
   # at the moment, non-R chunks are ignored; it is unclear what I should do
   if (before || !options$purl || options$engine != 'R') return()
 
@@ -156,13 +143,16 @@ hook_purl = function(before, options, envir) {
     .knitEnv$tangle.params = NULL
   }
 
-  code = options$code
-  if (isFALSE(options$eval)) code = comment_out(code, '# ', newline = FALSE)
+  # `options` contains merged chunk options, but we need to check if
+  # `error=TRUE` in local chunk options, so retrieve options from knit_code
+  error = attr(knit_code$get(options$label), 'chunk_opts')[['error']]
+  code = tangle_mask(options$code, options$eval, error)
   if (is.character(output)) {
     code = c(
       if (file.exists(output)) read_utf8(output),
-      label_code(code, options$params.src)
+      label_code(code, options)
     )
     write_utf8(code, output)
   }
+  invisible()
 }
