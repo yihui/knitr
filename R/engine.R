@@ -637,8 +637,8 @@ eng_sql = function(options) {
 
   data = tryCatch({
     if (is_statement) {
+      # dbExecute() returns the number of rows affected by the statement
       DBI::dbExecute(conn, query)
-      NULL
     } else if (is.null(varname) && max.print > 0) {
       # execute query -- when we are printing with an enforced max.print we
       # use dbFetch so as to only pull down the required number of records
@@ -716,7 +716,15 @@ eng_sql = function(options) {
       print(tibble::as_tibble(display_data), n = max.print)
 
     } else print(display_data) # fallback to standard print
-  })
+  }) else if (is.numeric(data) && length(data) == 1 && is.null(varname)) {
+    # a statement (no result set) returns the number of affected rows via
+    # dbExecute(); it is always available via output.var, and is additionally
+    # shown as normal (code-like) output only if the chunk option
+    # sql.statement.msg is set to a template string, where '{n}' is replaced by
+    # the number (opt-in, so existing documents are not affected)
+    msg = options$sql.statement.msg
+    if (is.character(msg)) sub('{n}', data, msg, fixed = TRUE)
+  }
   if (options$results == 'hide') output = NULL
 
   # assign varname if requested
