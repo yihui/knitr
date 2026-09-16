@@ -11,8 +11,7 @@ eng_plot_cmd = function(engine) {
     try(eng_plot(options), silent = TRUE),
     message = function(m) {
       msg <<- c(msg, conditionMessage(m)); invokeRestart('muffleMessage')
-    },
-    warning = function(w) invokeRestart('muffleWarning')
+    }
   )
   gsub('^running: |\n$', '', grep('^running: ', msg, value = TRUE))
 }
