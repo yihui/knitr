@@ -574,6 +574,9 @@ registerS3method(
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
+<p><code>plot_crop()</code> now emits a warning when <code>pdfcrop</code> is found but returns a non-zero exit status (e.g., because GhostScript is missing or the input is corrupt). Previously such failures were silent (thanks, <a href="https://github.com/JackCaster">@JackCaster</a>, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2381">#2381</a>).</p>
+</li>
+<li>
 <p>When a language engine modifies the chunk options (e.g., sets <code>options$results = 'asis'</code> before calling <code>engine_output()</code>), the modified options are now also visible to the <code>chunk</code> hook, not only the <code>output</code> hook. Previously the <code>chunk</code> hook received the options as declared in the chunk header, which could lead to inconsistent behavior between the two hooks (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2333">#2333</a>).</p>
 </li>
 <li>
