@@ -446,7 +446,12 @@ eng_highlight = function(options) {
   # e.g. engine.opts can be '-S matlab -O latex'
   if (is.null(options$engine.opts)) options$engine.opts = '-S text'
   options$engine.opts[1L] = paste('-f', options$engine.opts[1L])
-  options$echo = FALSE; options$results = 'asis'  # do not echo source code
+  # do not echo source code; note we must NOT set options$results = 'asis' here:
+  # the highlight output already bypasses sew() (see the 'highlight' branch in
+  # engine_output()), so 'asis' has no effect on the output, but since #2333 the
+  # engine-modified options reach the 'chunk' hook, where 'asis' would suppress
+  # the surrounding \begin{knitrout} wrapper in LaTeX output
+  options$echo = FALSE
   res = eng_interpreted(options)
   if (out_format('latex')) {
     highlight_header()
