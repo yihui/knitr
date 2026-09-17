@@ -725,15 +725,18 @@ add_html_caption = function(options, code, id = NULL) {
 #' implementation may use other R packages or functions, e.g. \pkg{xtable} or
 #' [kable()]).
 #' @param x An R object to be printed.
-#' @param ... Additional arguments passed to the S3 method. Two optional
-#'   arguments `options` and `inline` are documented below; other arguments are
-#'   currently ignored. See the references below.
-#' @param options A list of the current chunk options, passed to `knit_print()`
-#'   when an object is printed from a code chunk or inline R code. Methods can
-#'   use it to customize the output according to chunk options.
-#' @param inline A logical value indicating whether the object is being printed
-#'   from inline R code (`TRUE`) or from a code chunk (`FALSE`). Methods can use
-#'   it to produce different output for the two contexts.
+#' @param ... Additional arguments passed to the S3 method. \pkg{knitr} passes
+#'   two optional arguments that methods may use (other arguments are currently
+#'   ignored):
+#'   \describe{
+#'     \item{`options`}{A list of the current chunk options, so a method can
+#'       customize its output according to chunk options.}
+#'     \item{`inline`}{A logical value indicating whether the object is being
+#'       printed from inline R code (`TRUE`) or from a code chunk (`FALSE`), so
+#'       a method can produce different output for the two contexts.}
+#'   }
+#'   A method that wants to use these should declare them after `...` (e.g.
+#'   `function(x, ..., options)`).
 #' @return The value returned from the print method should be a character vector
 #'   or can be converted to a character value. You can wrap the value in
 #'   [asis_output()] so that \pkg{knitr} writes the character value
