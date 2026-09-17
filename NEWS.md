@@ -26,6 +26,8 @@
 
 ## BUG FIXES
 
+- `spin()` now checks that the start (`# /*`) and end (`# */`) comment delimiters are correctly paired and ordered. Previously, only the *counts* of start and end delimiters were compared, so mis-ordered delimiters (e.g., an end delimiter appearing before a start delimiter) could silently drop the lines in between without any error. Now `spin()` signals an error that reports the line number of each unmatched delimiter (thanks, @dewittpe, #1801, #1802).
+
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
 
 # CHANGES IN knitr VERSION 1.52

@@ -59,8 +59,7 @@ spin = function(
   x = if (nosrc <- is.null(text)) read_utf8(hair) else split_lines(text)
   stopifnot(length(comment) == 2L)
   c1 = grep(comment[1], x); c2 = grep(comment[2], x)
-  if (length(c1) != length(c2))
-    stop('comments must be put in pairs of start and end delimiters')
+  check_comments(c1, c2)
   # remove comments
   if (length(c1)) x = x[-unique(unlist(mapply(seq, c1, c2, SIMPLIFY = FALSE)))]
 
@@ -209,3 +208,33 @@ spin_child = function(input, format) {
     quiet = TRUE
   ))
 }
+
+# Check that comment delimiters are correctly paired and ordered. c1/c2 are the
+# line numbers of the start (# /*) and end (# */) delimiters, respectively. It is
+# not enough to compare length(c1) and length(c2): the delimiters must also be
+# interleaved correctly (a start must precede its end), otherwise the lines
+# between mis-ordered delimiters would be silently dropped. When any delimiter is
+# unmatched, signal an error reporting the offending line numbers.
+check_comments = function(c1, c2) {
+  # merge and sort delimiters by line number, remembering whether each is a start
+  # (TRUE) or end (FALSE); ties (same line matched by both) resolve start-first
+  i = order(c(c1, c2), c(rep(0, length(c1)), rep(1, length(c2))))
+  lines = c(c1, c2)[i]; starts = c(rep(TRUE, length(c1)), rep(FALSE, length(c2)))[i]
+  notes = character(); open = NA
+  for (j in seq_along(lines)) {
+    if (starts[j]) {
+      # a new start before the previous one was closed: previous start is unmatched
+      if (!is.na(open)) notes = c(notes, sprintf('  * started on line %d; no end delimiter', open))
+      open = lines[j]
+    } else {
+      if (is.na(open)) {
+        notes = c(notes, sprintf('  * no starting delimiter; ended on line %d', lines[j]))
+      } else open = NA  # matched a start with this end
+    }
+  }
+  if (!is.na(open)) notes = c(notes, sprintf('  * started on line %d; no end delimiter', open))
+  if (length(notes)) stop2(one_string(c(
+    'comments must be put in pairs of start and end delimiters.', notes
+  )))
+}
+
