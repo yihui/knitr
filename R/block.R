@@ -624,14 +624,40 @@ tangle_block = function(x) {
     one_string(unlist(cmds))
   } else knit_code$get(label)
   # read external code if exists
-  if (!isFALSE(ev) && length(code) && any(grepl('read_chunk\\(.+\\)', code))) {
-    eval(parse_only(unlist(str_extract(code, 'read_chunk\\(([^)]+)\\)'))))
+  if (!isFALSE(ev) && length(code) && any(grepl('read_chunk', code))) {
+    eval_read_chunk(code)
   }
   code = parse_chunk(code)
   code = tangle_mask(code, ev, x$params$error)
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
   # e.g. when documentation 1 or 2 with purl()
   label_code(code, x)
+}
+
+# find and evaluate read_chunk() calls in a code chunk so that purl() can bring
+# in externally referenced code. We parse the code and walk the syntax tree
+# instead of matching read_chunk\(...\) as a string, because the latter breaks on
+# parentheses inside string arguments, matches functions like fake_read_chunk(),
+# and matches commented-out code (#1753).
+eval_read_chunk = function(code) {
+  exprs = tryCatch(parse_only(code), error = function(e) NULL)
+  if (is.null(exprs)) return()
+  calls = list()
+  is_read_chunk = function(f) {
+    if (is.name(f)) return(as.character(f) == 'read_chunk')
+    # namespaced call knitr::read_chunk() / knitr:::read_chunk()
+    if (is.call(f) && is.name(f[[1]]) && as.character(f[[1]]) %in% c('::', ':::'))
+      return(as.character(f[[3]]) == 'read_chunk')
+    FALSE
+  }
+  find_calls = function(e) {
+    if (is.call(e)) {
+      if (is_read_chunk(e[[1]])) calls[[length(calls) + 1]] <<- e
+      for (i in seq_along(e)) find_calls(e[[i]])
+    }
+  }
+  for (e in exprs) find_calls(e)
+  for (cl in calls) eval(cl)
 }
 
 tangle_mask = function(code, eval, error) {
