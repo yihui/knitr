@@ -874,6 +874,10 @@ current_input = function(dir = FALSE) {
   input = knit_concord$get('infile')
   outwd = opts_knit$get('output.dir')
   if (is.null(input)) return()
+  # Quarto knits an intermediate *.rmarkdown file generated from *.qmd; report
+  # the original *.qmd name, which is what users expect (#2384)
+  if (!is.null(opts_knit$get('quarto.version')) && grepl('[.]rmarkdown$', input))
+    input = with_ext(input, 'qmd')
   if (dir) {
     if (is.null(outwd)) {
       warning('Cannot determine the directory of the input document')

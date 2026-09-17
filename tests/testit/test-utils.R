@@ -113,6 +113,21 @@ assert('current_input() returns NULL by default', {
   (suppressWarnings(is.null(current_input(TRUE))))
 })
 
+assert('current_input() reports the original .qmd name under Quarto', {
+  op = opts_knit$get(); oc = knit_concord$get()
+  on.exit({opts_knit$restore(op); knit_concord$restore(oc)}, add = TRUE)
+
+  knit_concord$set(infile = 'doc.rmarkdown')
+  # not under Quarto: the intermediate name is reported as-is
+  (current_input() %==% 'doc.rmarkdown')
+  # under Quarto: the .rmarkdown intermediate maps back to .qmd
+  opts_knit$set(quarto.version = '1.4.0')
+  (current_input() %==% 'doc.qmd')
+  # other extensions are untouched under Quarto
+  knit_concord$set(infile = 'doc.Rmd')
+  (current_input() %==% 'doc.Rmd')
+})
+
 assert('color_def() generates LaTeX code to define a color variable', {
   (color_def(NA) %==% '')
   (color_def('red') %==% '\\definecolor{shadecolor}{rgb}{1, 0, 0}')
