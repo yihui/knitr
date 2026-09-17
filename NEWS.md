@@ -47,6 +47,8 @@
 
 ## BUG FIXES
 
+- When a language engine modifies the chunk options (e.g., sets `options$results = 'asis'` before calling `engine_output()`), the modified options are now also visible to the `chunk` hook, not only the `output` hook. Previously the `chunk` hook received the options as declared in the chunk header, which could lead to inconsistent behavior between the two hooks (thanks, @cderv, #2333).
+
 - `convert_chunk_header()` now decides its default `type` from the extension of the `output` file when one is provided, so converting an `.Rmd` document to a `.qmd` output (e.g., `convert_chunk_header('foo.Rmd', output = 'foo.qmd')`) defaults to `type = "yaml"` as expected. Previously the default was based solely on the input extension (thanks, @cderv, #2405).
 
 - `spin()` now checks that the start (`# /*`) and end (`# */`) comment delimiters are correctly paired and ordered. Previously, only the *counts* of start and end delimiters were compared, so mis-ordered delimiters (e.g., an end delimiter appearing before a start delimiter) could silently drop the lines in between without any error. Now `spin()` signals an error that reports the line number of each unmatched delimiter (thanks, @dewittpe, #1801, #1802).

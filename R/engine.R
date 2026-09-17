@@ -79,7 +79,11 @@ cache_engines = new_defaults()
 #' # expert use only
 #' engine_output(opts_chunk$merge(list(engine = 'python')), out = list(structure(list(src = '1 + 1'), class = 'source'), '2'))
 engine_output = function(options, code, out, extra = NULL) {
-  if (missing(code) && is.list(out)) return(unlist(sew(out, options)))
+  # attach the (possibly engine-modified) options to the returned output so that
+  # block_exec() can pass them on to the 'chunk' hook, keeping it consistent with
+  # the 'output' hook (#2333)
+  with_opts = function(res) structure(res, chunk_opts = options)
+  if (missing(code) && is.list(out)) return(with_opts(unlist(sew(out, options))))
   if (!is.logical(options$echo)) code = code[options$echo]
   if (length(code) != 1L) code = one_string(code)
   if (options$engine == 'sas' && length(out) > 1L && !grepl('[[:alnum:]]', out[2]))
@@ -91,13 +95,13 @@ engine_output = function(options, code, out, extra = NULL) {
     out = sub('\\.\\.\\.\n+', '', out)
     out = sub('\n\\. \nend of do-file\n', '', out)
   }
-  one_string(c(
+  with_opts(one_string(c(
     if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) {
       if (options$engine == 'highlight') out else sew.character(out, options)
     },
     extra
-  ))
+  )))
 }
 
 ## command-line tools

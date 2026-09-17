@@ -163,6 +163,10 @@ block_exec = function(options) {
     options$yaml.code = NULL
   }
   output = in_input_dir(engine(options))
+  # the engine may have modified the chunk options (e.g. set results = 'asis');
+  # recover them (attached by engine_output()) so the 'chunk' hook sees the same
+  # options as the 'output' hook (#2333)
+  if (is.list(opts <- attr(output, 'chunk_opts'))) options = opts
   if (is.list(output)) output = unlist(output)
   res.after = run_hooks(before = FALSE, options)
   output = paste(c(res.before, output, res.after), collapse = '')
