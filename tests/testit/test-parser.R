@@ -69,6 +69,14 @@ assert('read_chunk() reads code chunks from an R Sweave document (#2041)', {
 
 knit_code$restore()
 
+read_chunk(lines = c('```{r}', '#| label: foo', '#| echo: false', '1+1', '```'),
+           path = 'a.Rmd')
+assert('read_chunk() reads the label from YAML chunk options and strips them (#2041)', {
+  (knit_code$get() %==% list(foo = '1+1'))
+})
+
+knit_code$restore()
+
 # an unlabeled chunk gets an automatic label; text and inline code are ignored
 read_chunk(lines = c('```{r}', '1+1', '```'), path = 'a.Rmd')
 assert('read_chunk() gives unlabeled document chunks an automatic label (#2041)', {

@@ -398,7 +398,8 @@ chunks_from_doc = function(lines, path = NULL) {
   begin = pat$chunk.begin; end = pat$chunk.end
   if (is.null(begin) || is.null(end)) return()
 
-  groups = divide_chunks(lines, begin, end, md = type %in% c('md', 'typst'))
+  md = type %in% c('md', 'typst')
+  groups = divide_chunks(lines, begin, end, md = md)
   code = list()
   for (g in groups) {
     if (!grepl(begin, g[1])) next  # a text (non-code) group
@@ -406,24 +407,23 @@ chunks_from_doc = function(lines, path = NULL) {
     if (n >= 2 && grepl(end, g[n])) g = g[-n]  # drop the optional chunk footer
     g = strip_block(g, pat$chunk.code)  # drop the prefix (e.g. % in Rtex)
     params.src = if (group_pattern(begin)) extract_params_src(begin, g[1]) else ''
-    label = doc_chunk_label(params.src, type)
-    body = strip_white(g[-1])
+    # parse the engine and header options (e.g. ```{r label, echo=FALSE})
+    engine = 'r'
+    if (md) {
+      engine = get_chunk_engine(params.src)
+      params.src = get_chunk_params(params.src)
+    }
+    params.src = clean_empty_params(params.src)
+    params = tryCatch(xfun::csv_options(params.src), error = function(e) list())
+    # separate any in-body options (e.g. YAML `#| label: foo`) from the code
+    parts = partition_chunk(engine, g[-1])
+    label = merge_list(params, parts$options)$label
+    body = strip_white(parts$code)
     if (!length(body)) next
-    if (!nzchar(label)) label = unnamed_chunk()
+    if (is.null(label) || !nzchar(label)) label = unnamed_chunk()
     code[[label]] = as.character(body)
   }
   code
-}
-
-# get the chunk label from the header params of a code chunk in a document
-doc_chunk_label = function(params.src, type) {
-  if (!nzchar(params.src)) return('')
-  # ```{engine, opts} in markdown-like docs: drop the engine name first
-  if (type %in% c('md', 'typst')) params.src = get_chunk_params(params.src)
-  label = tryCatch(xfun::csv_options(params.src)$label, error = function(e) NULL)
-  # fall back to the first token before a comma if options can't be parsed
-  if (is.null(label)) label = trimws(gsub(',.*', '', params.src))
-  if (is.null(label)) '' else label
 }
 
 # convert patterns to numeric indices in a character vector

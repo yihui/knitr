@@ -43,7 +43,7 @@
 
 - `kable()` gained support for the global option `knitr.kable.keep.whitespace`. By default, leading and trailing white spaces in table cells are trimmed, but setting `options(knitr.kable.keep.whitespace = TRUE)` preserves them, which is useful for aligning numbers with a monospace font in the Markdown source (thanks, @jmbarbone, #2066).
 
-- `read_chunk()` can now read code chunks from a **knitr** source document (e.g., an `.Rmd` or `.Rnw` file) in addition to an R script. The code chunks in the document are read in and keyed by their chunk labels, so they can be reused in the current document via chunk label references, just like chunks read from an R script (thanks, @cderv, #2041).
+- `read_chunk()` can now read code chunks from a **knitr** source document (e.g., an `.Rmd` or `.Rnw` file) in addition to an R script. The code chunks in the document are read in and keyed by their chunk labels, so they can be reused in the current document via chunk label references, just like chunks read from an R script. The label can be provided either in the chunk header (e.g., `{r foo}`) or via YAML chunk options (e.g., `#| label: foo`) (thanks, @cderv, #2041).
 
 ## BUG FIXES
 
