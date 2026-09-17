@@ -641,8 +641,6 @@ eng_sql = function(options) {
   # argument). These arguments are passed only when supplied, so DBI's own
   # defaults are otherwise preserved.
   extra_args = options$sql.args %n% list()
-  if (!is.list(extra_args) || (length(extra_args) > 0 && is.null(names(extra_args))))
-    stop2("The 'sql.args' chunk option must be a named list.")
 
   data = tryCatch({
     if (is_statement) {
