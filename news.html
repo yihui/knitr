@@ -539,6 +539,13 @@ htmltools::div(htmltools::img(src = &quot;logo.png&quot;), htmltools::p(&quot;he
 <li>
 <p>For <code>sql</code> chunks that execute a statement not returning a result set (e.g., <code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code>), the number of affected rows (as returned by <code>DBI::dbExecute()</code>) is now available and can be assigned to a variable via the chunk option <code>output.var</code>. To also report it in the output, set the new chunk option <code>sql.statement.msg</code> to a template string, in which <code>{n}</code> is replaced by the number, e.g., <code>sql.statement.msg = &quot;Number of affected rows: {n}&quot;</code>. By default (when the option is unset) no such output is shown, so existing documents are not affected (thanks, <a href="https://github.com/edalfon">@edalfon</a>, <a href="https://github.com/yihui/knitr/issues/2050">#2050</a>, <a href="https://github.com/yihui/knitr/issues/2051">#2051</a>).</p>
 </li>
+<li>
+<p>The <code>sql</code> engine gained a new chunk option <code>sql.args</code>, a named list of extra arguments passed to the underlying DBI query functions (<code>DBI::dbExecute()</code>, <code>DBI::dbSendQuery()</code>, and <code>DBI::dbGetQuery()</code>). This makes it possible to forward any backend-specific argument, e.g., <code>sql.args = list(immediate = TRUE)</code> to control the DBI <code>immediate</code> argument. These arguments are passed only when supplied, so DBI’s own defaults are otherwise preserved (thanks, <a href="https://github.com/AWKruijt">@AWKruijt</a>, <a href="https://github.com/yihui/knitr/issues/2128">#2128</a>).</p>
+<pre><code>```{sql, connection=con, sql.args=list(immediate=TRUE)}
+CREATE TEMP TABLE foo AS SELECT 1 AS x
+```
+</code></pre>
+</li>
 </ul>
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
