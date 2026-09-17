@@ -771,6 +771,75 @@ knit_print.knit_asis = function(x, ...) x
 #' @export
 knit_print.knit_asis_url = function(x, ...) x
 
+#' Retrieve the default alternative text of a plot object
+#'
+#' This S3 generic function returns the alternative text (alt text) associated
+#' with a plot object, which \pkg{knitr} uses as the default value of the chunk
+#' option `fig.alt` for the corresponding figure when the user has not provided
+#' the alt text explicitly.
+#'
+#' The default method returns `NULL` (i.e., no alt text). Package authors can
+#' define methods for their plot classes so that alt text stored in a plot
+#' object can be automatically picked up by \pkg{knitr}. For example, \pkg{knitr}
+#' registers a method for \pkg{ggplot2} plots that returns
+#' `ggplot2::get_alt_text(x)`, so that alt text set via
+#' `ggplot2::labs(alt = ...)` becomes the figure's alt text without the need to
+#' set `fig.alt` in the chunk.
+#'
+#' When a chunk produces multiple plots, `fig.alt` is a vector and each element
+#' corresponds to one plot (in the order the plots are printed). An explicitly
+#' provided `fig.alt` takes precedence; you can also mix explicit and default
+#' values by using `NA` for the plots whose alt text should come from
+#' `fig_alt()`, e.g., `fig.alt = c(NA, "custom alt text")`.
+#' @param x A plot object.
+#' @param ... Additional arguments (currently unused).
+#' @return A character string (the alt text), or `NULL` if none is available.
+#' @export
+#' @examples
+#' # the default method returns NULL
+#' fig_alt(1:10)
+#'
+#' # a package could register a method for its plot class, e.g.:
+#' # registerS3method('fig_alt', 'ggplot', function(x, ...) ggplot2::get_alt_text(x))
+fig_alt = function(x, ...) {
+  UseMethod('fig_alt')
+}
+
+#' @export
+fig_alt.default = function(x, ...) NULL
+
+# per-chunk buffer of default alt text collected from plot objects (in the order
+# they are printed); reset at the start of each chunk in eng_r()
+reset_fig_alt = function() .knitEnv$fig.alt = NULL
+
+# record the default alt text of a printed object, but only for objects for which
+# a non-default fig_alt() method is registered (i.e. objects knitr recognizes as
+# plots carrying alt text), so that ordinary printed values do not occupy a slot.
+# Objects with a method but no alt text get an NA placeholder to preserve the
+# 1-to-1 correspondence between plots and fig.alt elements.
+record_fig_alt = function(x) {
+  has_method = function(cl) !is.null(tryCatch(
+    utils::getS3method('fig_alt', cl, optional = TRUE), error = function(e) NULL
+  ))
+  if (!any(vapply(class(x), has_method, logical(1)))) return(invisible())
+  alt = tryCatch(fig_alt(x), error = function(e) NULL)
+  # treat empty strings as missing (e.g. ggplot2::get_alt_text() returns "")
+  if (length(alt) != 1 || is.na(alt) || !nzchar(alt)) alt = NA_character_
+  .knitEnv$fig.alt = c(.knitEnv$fig.alt, alt)
+  invisible()
+}
+
+# combine the user-supplied fig.alt with the alt text collected from plot objects:
+# the user value wins where it is a non-NA string, and the collected default fills
+# in the rest (element-wise, recycling the user value as fig.alt already does)
+merge_fig_alt = function(user, collected) {
+  if (length(collected) == 0 || all(is.na(collected))) return(user)
+  if (length(user) == 0) return(collected)
+  n = length(collected)
+  user = rep(user, length.out = n)
+  ifelse(!is.na(user) & nzchar(user), user, collected)
+}
+
 #' @rdname knit_print
 #' @export
 normal_print = function(x, ...) {

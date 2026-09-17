@@ -120,3 +120,43 @@ assert('knit_exit() does not leave knitr in a non-functioning state (#2283)', {
   res2 = knit(text = c('```{r}', 'cat("hello")', '```'), quiet = TRUE)
   (grepl('hello', res2))
 })
+
+assert('fig_alt() default method returns NULL', {
+  (is.null(fig_alt(1:10)))
+  (is.null(fig_alt('a')))
+})
+
+assert('merge_fig_alt() lets the user value win over the collected default (#2001)', {
+  # no collected alt text: user value is returned unchanged
+  (merge_fig_alt('u', character(0)) %==% 'u')
+  (merge_fig_alt(NULL, NA_character_) %==% NULL)
+  # no user value: the collected default is used
+  (merge_fig_alt(NULL, c('a', 'b')) %==% c('a', 'b'))
+  # element-wise: NA/'' in the user value falls back to the collected default
+  (merge_fig_alt(c(NA, 'x'), c('a', 'b')) %==% c('a', 'x'))
+  (merge_fig_alt(c('', 'x'), c('a', 'b')) %==% c('a', 'x'))
+  # a scalar user value is recycled (as fig.alt already recycles)
+  (merge_fig_alt('x', c('a', 'b')) %==% c('x', 'x'))
+})
+
+assert('record_fig_alt() collects alt text only for objects with a fig_alt() method (#2001)', {
+  on.exit(reset_fig_alt(), add = TRUE)
+  reset_fig_alt()
+  # ordinary values do not occupy a slot
+  record_fig_alt(1:10)
+  record_fig_alt('a')
+  (length(.knitEnv$fig.alt) == 0)
+
+  # register a method for a fake plot class and check that alt text is collected
+  # in order, with NA placeholders for objects that carry no alt text (the method
+  # is registered in the global env so S3 dispatch finds it without touching the
+  # locked knitr namespace)
+  fig_alt.my_plot <<- function(x, ...) attr(x, 'alt')
+  registerS3method('fig_alt', 'my_plot', fig_alt.my_plot)
+  on.exit(rm('fig_alt.my_plot', envir = globalenv()), add = TRUE)
+  p = function(alt = NULL) structure(list(), class = 'my_plot', alt = alt)
+  record_fig_alt(p('first'))
+  record_fig_alt(p())          # no alt -> NA placeholder
+  record_fig_alt(p('third'))
+  (.knitEnv$fig.alt %==% c('first', NA, 'third'))
+})

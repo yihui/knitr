@@ -43,6 +43,8 @@
 
 - `kable()` gained support for the global option `knitr.kable.keep.whitespace`. By default, leading and trailing white spaces in table cells are trimmed, but setting `options(knitr.kable.keep.whitespace = TRUE)` preserves them, which is useful for aligning numbers with a monospace font in the Markdown source (thanks, @jmbarbone, #2066).
 
+- A new S3 generic `fig_alt()` allows plot objects to provide default alternative text for figures. When a chunk option `fig.alt` is not explicitly set, \pkg{knitr} now calls `fig_alt()` on each printed plot object and uses the returned value as the default alt text. \pkg{knitr} registers a method for \pkg{ggplot2} plots that returns `ggplot2::get_alt_text()`, so alt text set via `ggplot2::labs(alt = ...)` is used automatically, without having to set `fig.alt` in the chunk. For chunks with multiple plots, `fig.alt` is matched to plots element-wise, and an explicitly supplied `fig.alt` still takes precedence (you can mix the two with `NA`, e.g., `fig.alt = c(NA, "custom alt text")`). Package authors can define `fig_alt()` methods for their own plot classes (thanks, @hadley, #2001).
+
 ## BUG FIXES
 
 - `spin()` now checks that the start (`# /*`) and end (`# */`) comment delimiters are correctly paired and ordered. Previously, only the *counts* of start and end delimiters were compared, so mis-ordered delimiters (e.g., an end delimiter appearing before a start delimiter) could silently drop the lines in between without any error. Now `spin()` signals an error that reports the line number of each unmatched delimiter (thanks, @dewittpe, #1801, #1802).
