@@ -87,6 +87,11 @@ hide \code{NA} values.
 
 You can set the option \code{knitr.kable.max_rows} to limit the number of
 rows to show in the table, e.g., \code{options(knitr.kable.max_rows = 30)}.
+
+By default, leading and trailing white spaces in table cells are trimmed. To
+preserve them (e.g. to align numbers with a monospace font in the Markdown
+source), set the option \code{knitr.kable.keep.whitespace} to \code{TRUE}, e.g.,
+\code{options(knitr.kable.keep.whitespace = TRUE)}.
 }
 \note{
 When using \code{kable()} as a \emph{top-level} expression, you do not
