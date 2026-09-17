@@ -1341,11 +1341,335 @@ engine_output(opts_chunk$merge(list(engine = &quot;Rscript&quot;)),
     code = &quot;1 + 1&quot;, out = &quot;[1] 2&quot;)
 </code></pre>
 <pre><code>#&gt; [1] &quot;1 + 1\n## [1] 2\n&quot;
+#&gt; attr(,&quot;chunk_opts&quot;)
+#&gt; attr(,&quot;chunk_opts&quot;)$eval
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$echo
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$results
+#&gt; [1] &quot;markup&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$tidy
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$tidy.opts
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$collapse
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$prompt
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$comment
+#&gt; [1] &quot;##&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$highlight
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$size
+#&gt; [1] &quot;normalsize&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$background
+#&gt; [1] &quot;#F7F7F7&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$strip.white
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.path
+#&gt; [1] &quot;cache/&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.vars
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.lazy
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dependson
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$autodep
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.rebuild
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.keep
+#&gt; [1] &quot;high&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.show
+#&gt; [1] &quot;asis&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.align
+#&gt; [1] &quot;default&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.path
+#&gt; [1] &quot;figure/&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dev
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dev.args
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dpi
+#&gt; [1] 72
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.ext
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.width
+#&gt; [1] 7
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.height
+#&gt; [1] 7
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.env
+#&gt; [1] &quot;figure&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.cap
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.scap
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.note
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.lp
+#&gt; [1] &quot;fig:&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.subcap
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.pos
+#&gt; [1] &quot;&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$out.width
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$out.height
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$out.extra
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.retina
+#&gt; [1] 1
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$external
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$sanitize
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$interval
+#&gt; [1] 1
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$aniopts
+#&gt; [1] &quot;controls,loop&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$warning
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$error
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$message
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$render
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$ref.label
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$child
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$engine
+#&gt; [1] &quot;Rscript&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$split
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$include
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$purl
+#&gt; [1] TRUE
 </code></pre>
 <pre><code class="language-r">engine_output(opts_chunk$merge(list(echo = FALSE, engine = &quot;Rscript&quot;)),
     code = &quot;1 + 1&quot;, out = &quot;[1] 2&quot;)
 </code></pre>
 <pre><code>#&gt; [1] &quot;## [1] 2\n&quot;
+#&gt; attr(,&quot;chunk_opts&quot;)
+#&gt; attr(,&quot;chunk_opts&quot;)$eval
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$echo
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$results
+#&gt; [1] &quot;markup&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$tidy
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$tidy.opts
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$collapse
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$prompt
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$comment
+#&gt; [1] &quot;##&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$highlight
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$size
+#&gt; [1] &quot;normalsize&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$background
+#&gt; [1] &quot;#F7F7F7&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$strip.white
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.path
+#&gt; [1] &quot;cache/&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.vars
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.lazy
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dependson
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$autodep
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.rebuild
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.keep
+#&gt; [1] &quot;high&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.show
+#&gt; [1] &quot;asis&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.align
+#&gt; [1] &quot;default&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.path
+#&gt; [1] &quot;figure/&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dev
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dev.args
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dpi
+#&gt; [1] 72
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.ext
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.width
+#&gt; [1] 7
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.height
+#&gt; [1] 7
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.env
+#&gt; [1] &quot;figure&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.cap
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.scap
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.note
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.lp
+#&gt; [1] &quot;fig:&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.subcap
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.pos
+#&gt; [1] &quot;&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$out.width
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$out.height
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$out.extra
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.retina
+#&gt; [1] 1
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$external
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$sanitize
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$interval
+#&gt; [1] 1
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$aniopts
+#&gt; [1] &quot;controls,loop&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$warning
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$error
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$message
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$render
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$ref.label
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$child
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$engine
+#&gt; [1] &quot;Rscript&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$split
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$include
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$purl
+#&gt; [1] TRUE
 </code></pre>
 <pre><code class="language-r"># expert use only
 engine_output(opts_chunk$merge(list(engine = &quot;python&quot;)),
@@ -1353,6 +1677,168 @@ engine_output(opts_chunk$merge(list(engine = &quot;python&quot;)),
         &quot;2&quot;))
 </code></pre>
 <pre><code>#&gt; [1] &quot;1 + 1&quot;  &quot;## 2\n&quot;
+#&gt; attr(,&quot;chunk_opts&quot;)
+#&gt; attr(,&quot;chunk_opts&quot;)$eval
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$echo
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$results
+#&gt; [1] &quot;markup&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$tidy
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$tidy.opts
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$collapse
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$prompt
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$comment
+#&gt; [1] &quot;##&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$highlight
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$size
+#&gt; [1] &quot;normalsize&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$background
+#&gt; [1] &quot;#F7F7F7&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$strip.white
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.path
+#&gt; [1] &quot;cache/&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.vars
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.lazy
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dependson
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$autodep
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$cache.rebuild
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.keep
+#&gt; [1] &quot;high&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.show
+#&gt; [1] &quot;asis&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.align
+#&gt; [1] &quot;default&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.path
+#&gt; [1] &quot;figure/&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dev
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dev.args
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$dpi
+#&gt; [1] 72
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.ext
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.width
+#&gt; [1] 7
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.height
+#&gt; [1] 7
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.env
+#&gt; [1] &quot;figure&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.cap
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.scap
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.note
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.lp
+#&gt; [1] &quot;fig:&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.subcap
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.pos
+#&gt; [1] &quot;&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$out.width
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$out.height
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$out.extra
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$fig.retina
+#&gt; [1] 1
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$external
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$sanitize
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$interval
+#&gt; [1] 1
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$aniopts
+#&gt; [1] &quot;controls,loop&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$warning
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$error
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$message
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$render
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$ref.label
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$child
+#&gt; NULL
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$engine
+#&gt; [1] &quot;python&quot;
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$split
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$include
+#&gt; [1] TRUE
+#&gt; 
+#&gt; attr(,&quot;chunk_opts&quot;)$purl
+#&gt; [1] TRUE
 </code></pre>
 <h2 id="sec:man-fig_chunk"><span class="section-number main-number">16</span> Obtain the figure filenames for a chunk</h2>
 <h3 id="sec:description_16" class="unnumbered unlisted">Description</h3>
@@ -2439,16 +2925,16 @@ kable(x, format.args = list(decimal.mark = &quot;,&quot;, big.mark = &quot;'&quo
 </code></pre>
 <pre><code>#&gt; |          V1|          V2|          V3|          V4|          V5|          V6|
 #&gt; |-----------:|-----------:|-----------:|-----------:|-----------:|-----------:|
-#&gt; |   994'327,0|   985'673,1|   988'384,3|   981'889,6|   993'650,1| 1'010'266,9|
-#&gt; | 1'019'995,5| 1'016'002,7| 1'013'659,7| 1'016'252,8|   997'725,7| 1'000'070,3|
-#&gt; |   989'524,2| 1'000'547,4| 1'016'730,4|   982'625,2|   989'391,8|   999'029,7|
-#&gt; |   990'345,1| 1'001'340,0|   994'757,9|   989'282,5| 1'002'934,0|   993'592,2|
-#&gt; | 1'011'928,1|   999'861,3| 1'005'881,0|   980'485,2| 1'004'060,1| 1'026'048,8|
-#&gt; | 1'019'176,3|   992'476,5|   995'291,1|   992'682,9|   988'050,5| 1'005'806,3|
-#&gt; |   999'537,7| 1'002'609,2| 1'005'857,1| 1'007'740,5|   982'154,9|   997'362,5|
-#&gt; |   986'434,6|   999'374,0| 1'010'872,8|   995'912,6| 1'009'700,5|   994'833,6|
-#&gt; |   985'051,7|   985'680,3| 1'004'056,6|   985'308,9|   999'940,2| 1'000'147,8|
-#&gt; | 1'000'731,6|   996'650,8| 1'012'076,4| 1'009'172,5| 1'014'218,4| 1'004'580,7|
+#&gt; |   993'500,3| 1'007'555,7|   993'541,9| 1'000'186,2|   984'574,0|   998'357,7|
+#&gt; |   998'918,8| 1'000'456,4|   995'724,8|   994'188,1|   991'483,3|   996'845,5|
+#&gt; | 1'006'776,7| 1'010'782,5|   995'775,7|   999'101,7|   987'943,8| 1'003'028,2|
+#&gt; | 1'010'797,6| 1'001'140,0| 1'001'783,0| 1'012'595,1| 1'000'402,3| 1'024'575,5|
+#&gt; | 1'006'894,6| 1'004'778,0| 1'007'542,5|   997'780,3| 1'008'770,5| 1'018'671,7|
+#&gt; |   999'492,3|   988'248,3| 1'018'392,6| 1'010'994,9| 1'000'865,4| 1'000'300,8|
+#&gt; |   995'471,9| 1'003'856,3| 1'003'789,8|   991'455,0| 1'007'703,5|   995'508,2|
+#&gt; |   999'719,5|   997'731,1|   992'147,0| 1'003'521,7| 1'005'744,6| 1'009'141,2|
+#&gt; | 1'013'878,1| 1'008'079,5| 1'014'608,7| 1'012'812,2|   991'911,3| 1'009'577,5|
+#&gt; |   980'611,8|   980'345,9| 1'012'639,0| 1'004'437,4| 1'020'643,2| 1'004'304,1|
 </code></pre>
 <pre><code class="language-r"># save the value
 x = kable(d2, format = &quot;html&quot;)
@@ -3537,7 +4023,7 @@ access or set hooks in this package.
 </code></pre>
 <pre><code>#&gt; function (x, options) 
 #&gt; x
-#&gt; &lt;bytecode: 0x563d5eb130b0&gt;
+#&gt; &lt;bytecode: 0x55e5047c68a0&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">knit_hooks$get(&quot;inline&quot;)
@@ -3548,7 +4034,7 @@ access or set hooks in this package.
 #&gt;         x = round_digits(x)
 #&gt;     paste(as.character(x), collapse = &quot;, &quot;)
 #&gt; }
-#&gt; &lt;bytecode: 0x563d5eb16738&gt;
+#&gt; &lt;bytecode: 0x55e5047c7010&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-knit_meta"><span class="section-number main-number">41</span> Metadata about objects to be printed</h2>
@@ -5240,7 +5726,7 @@ press again to hide the text column (show code).
 # knit these two vignettes using the docco style
 rocco_view(system.file(&quot;doc&quot;, &quot;docco-classic.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
-<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/RtmpN5YOFX (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
+<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/Rtmp5DJJVK (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
 </code></pre>
 <pre><code class="language-r">rocco_view(system.file(&quot;doc&quot;, &quot;knit_expand.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
@@ -5849,7 +6335,7 @@ str(vig_list)
 #&gt;     else knit)(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x563d5b9c91d0&gt;
+#&gt; &lt;bytecode: 0x55e503516198&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -5857,7 +6343,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x563d5b9cd010&gt;
+#&gt; &lt;bytecode: 0x55e503519fd8&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::knitr_notangle&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -5892,7 +6378,7 @@ str(vig_list)
 #&gt;     unlink(with_ext(file, &quot;R&quot;))
 #&gt;     return()
 #&gt; }
-#&gt; &lt;bytecode: 0x563d5ba37178&gt;
+#&gt; &lt;bytecode: 0x55e503584140&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::docco_classic&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -5921,7 +6407,7 @@ str(vig_list)
 #&gt;     rocco(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x563d5b9eadd8&gt;
+#&gt; &lt;bytecode: 0x55e503537da0&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -5929,7 +6415,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x563d5b9cd010&gt;
+#&gt; &lt;bytecode: 0x55e503519fd8&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-wrap_rmd"><span class="section-number main-number">74</span> Wrap long lines in Rmd files</h2>
