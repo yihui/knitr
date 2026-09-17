@@ -11,7 +11,10 @@ new_cache = function() {
   }
 
   cache_purge = function(hash) {
-    for (h in hash) unlink(paste0(cache_path(h), c('.rds', '.rdb', '.rdx', '.RData', '__extra')), recursive = TRUE)
+    # remove all cache files of a chunk: the lazy-load files (possibly numbered,
+    # e.g., *.0.rds, *.1.rds, ...), the .RData file, and the .rdb/.rdx files from
+    # the former (base R) implementation
+    for (h in hash) unlink(paste0(cache_path(h), '.*'))
   }
 
   cache_save = function(keys, outname, hash, lazy = TRUE) {
@@ -31,8 +34,7 @@ new_cache = function() {
     if (!lazy) return()  # everything has been saved; no need to make lazy db
     # random seed is always load()ed
     keys = as.character(setdiff(keys, '.Random.seed'))
-    envir = knit_global()
-    saveRDS(lapply(setNames(keys, keys), function(k) knit_cache_hook(envir[[k]], k, path)), paste(path, 'rds', sep = '.'))
+    xfun::lazy_save(keys, path = paste0(path, '.'), method = cache_io, envir = knit_global())
     unlink(paste(path, c('rdb', 'rdx'), sep = '.')) # migrate from former implementation
   }
 
@@ -62,16 +64,7 @@ new_cache = function() {
       if (file.exists(paste(path, 'rdb', sep = '.'))) {
         lazyLoad(path, envir = knit_global()) # backward compatibility
       } else {
-        envir = knit_global()
-        obj = readRDS(paste(path, 'rds', sep = '.'))
-        for (nm in names(obj)) {
-          o = obj[[nm]]
-          assign(
-            nm,
-            if (is.function(o) && inherits(o, 'knit_cache_loader') && !inherits(o, 'AsIs')) o() else o,
-            envir = envir
-          )
-        }
+        xfun::lazy_load(paste0(path, '.'), method = cache_io, envir = knit_global())
       }
     }
     # load output from last run if exists
@@ -108,8 +101,10 @@ new_cache = function() {
     path = cache_path(hash)
     if (!lazy) return(file.exists(paste(path, 'RData', sep = '.')))
 
-    # for backward compatibility, allow rdb/rdx
-    file.exists(paste(path, 'rds', sep = '.')) || all(file.exists(paste(path, c('rdb', 'rdx'), sep = '.')))
+    # the lazy-load index file is <hash>.0.rds; for backward compatibility, also
+    # allow the .rdb/.rdx files from the former (base R) implementation
+    file.exists(paste(path, '0', 'rds', sep = '.')) ||
+      all(file.exists(paste(path, c('rdb', 'rdx'), sep = '.')))
   }
 
   # when cache=3, code output is stored in .[hash], so cache=TRUE won't lose
@@ -126,6 +121,65 @@ new_cache = function() {
        exists = cache_exists, output = cache_output, library = cache_library)
 }
 
+#' Customize how objects are cached
+#'
+#' Some objects cannot be cached and restored correctly by the default method
+#' (which serializes them to \file{.rds} files via [saveRDS()] and reads them
+#' back via [readRDS()]), typically because they contain external pointers,
+#' e.g., objects from the \pkg{terra} package. For these objects, you can define
+#' S3 methods for the generic functions `knit_cache_pack()` and
+#' `knit_cache_unpack()`: `knit_cache_pack()` is called on each object before it
+#' is written to the cache, and should return a serializable version of the
+#' object; `knit_cache_unpack()` is called on the object after it is read from
+#' the cache, and should restore the original object. The default methods return
+#' the object unchanged.
+#'
+#' Since `knit_cache_pack()` dispatches on the live (in-memory) object and
+#' `knit_cache_unpack()` dispatches on the packed (deserialized) object, the
+#' packed object should have a different class so that the correct
+#' `knit_cache_unpack()` method can be found (this is naturally the case for
+#' \pkg{terra}, whose `wrap()` turns a `SpatRaster` into a `PackedSpatRaster`).
+#' Package authors can register these methods dynamically in their `.onLoad()`
+#' (see the examples), so users do not need to configure anything.
+#' @param x The object to be packed (before caching) or unpacked (after loading
+#'   from the cache).
+#' @param ... Additional arguments (currently unused; reserved for future use).
+#' @return The packed or unpacked object.
+#' @export
+#' @examples
+#' # e.g., the terra package could register these methods in its .onLoad():
+#' # registerS3method(
+#' #   'knit_cache_pack', 'SpatRaster', function(x, ...) terra::wrap(x),
+#' #   envir = asNamespace('knitr')
+#' # )
+#' # registerS3method(
+#' #   'knit_cache_unpack', 'PackedSpatRaster', function(x, ...) terra::unwrap(x),
+#' #   envir = asNamespace('knitr')
+#' # )
+knit_cache_pack = function(x, ...) UseMethod('knit_cache_pack')
+
+#' @export
+knit_cache_pack.default = function(x, ...) x
+
+#' @rdname knit_cache_pack
+#' @export
+knit_cache_unpack = function(x, ...) UseMethod('knit_cache_unpack')
+
+#' @export
+knit_cache_unpack.default = function(x, ...) x
+
+# the read/write method passed to xfun::lazy_save()/lazy_load(): objects are
+# stored as .rds files, but each object is packed before writing and unpacked
+# after reading, so that S3 methods for knit_cache_pack()/knit_cache_unpack()
+# can customize how special objects (e.g., those with external pointers) are
+# cached. The (un)packing happens at the per-object level, preserving lazy
+# loading: an object is only unpacked when it is actually accessed.
+cache_io = list(
+  name = 'rds',
+  save = function(x, file, ...) saveRDS(knit_cache_pack(x), file),
+  load = function(...) knit_cache_unpack(readRDS(...))
+)
+
 # analyze code and find out all possible variables (not necessarily global variables)
 find_symbols = function(code) {
   if (is.null(code) || length(p <- parse(text = code, keep.source = TRUE)) == 0) return()
@@ -139,59 +193,11 @@ cache_meta_name = function(hash) sprintf('.%s_meta', hash)
 # a variable name to store the text output of code chunks
 cache_output_name = function(hash) sprintf('.%s', hash)
 
-#' Hook cache behavior
-#'
-#' By default, a named list of objects in a chunk is cached as is in a rds
-#' file. If certain classes of objects need custom cache behaviors, register
-#' S3 methods to \code{knit_cache_hook}. The return value of the method
-#' is cached to the rds file. If custom loader is needed, the method should
-#' return a function with \code{knit_cache_loader} class which will be called.
-#'
-#' @param x a value of object to be cached.
-#' @param nm a name of the object to be cached. If a hook creates an external file based on \code{nm}, then apply \code{\link{URLencode}} to \code{nm} in order to avoid invalid file names.
-#' @param path
-#'   a common path of the cache files of a chunk. If the hook creates extra
-#'   files which needs be cleaned up by knitr, then create a directory whose
-#'   name is `\code{path}` suffixed by "__extra", and save the files in it.
-#' @param ... Reserved for future extensions 
-#'
-#' @return
-#' A value to be cached. If the value is the \code{knitr_cache_loader}-classed
-#' function, then the function is called and the returned value is treated as
-#' the loaded value. The loader should receive ellipsis as an argument for the
-#' future extentions.
-#'
-#' @examples
-#' registerS3method(
-#'   "knit_cache_hook",
-#'   "character",
-#'   function(x, nm, path, ...) {
-#'     # Cache x as is if it extends character class
-#'     if (!identical(class(x), "character")) {
-#'       return(x)
-#'     }
-#'
-#'     # Preprocess data (e.g., save data to an external file)
-#'     # Create external files under the directory of `paste0(path, "__extra")`
-#'     # if knitr should cleanup them on refreshing/cleaning cache.
-#'     d <- paste0(path, "__extra")
-#'     dir.create(d, showWarnings = FALSE, recursive = TRUE)
-#'     f <- file.path(d, paste0(URLencode(nm, reserved = TRUE), '.txt'))
-#'     writeLines(x, f)
-#'
-#'     # Return loader function
-#'     # which receives ellipsis for future extentions and has knit_cache_loader class
-#'     structure(function(...) readLines(f), class = 'knit_cache_loader')
-#'   },
-#'   envir = asNamespace("knitr")
-#' )
-knit_cache_hook = function(x, nm, path, ...) UseMethod('knit_cache_hook')
-registerS3method("knit_cache_hook", "default", function(x, nm, path, ...) x)
-
 cache = new_cache()
 
-# a regex for cache files
-cache_rx = '_[abcdef0123456789]{32}([.](rds|rdb|rdx|RData)|__extra)$'
+# a regex for cache files: the hash, followed by either the numbered lazy-load
+# files (e.g., .0.rds, .1.rds), .RData, or the legacy .rdb/.rdx files
+cache_rx = '_[abcdef0123456789]{32}[.]([0-9]+[.]rds|rdb|rdx|RData)$'
 
 #' Build automatic dependencies among chunks
 #'
@@ -300,11 +306,9 @@ load_cache = function(
   if (length(p2) == 0) return(notfound)
   p2 = p2[substr(p2, 1, nchar(p1)) == p1]
   if (length(p2) == 0) return(notfound)
-  if (length(p2) > 3) stop(
-    'Wrong cache databases for the chunk ', label,
-    '. You need to remove redundant cache files. Found ', paste(p2, collapse = ', ')
-  )
-  p2 = unique(gsub('[.](rds|rdb|rdx|RData)$', '', p2))
+  # strip the file extension (e.g., .0.rds, .RData) to recover the label_hash
+  # prefix; a chunk may have several lazy-load files, so all map to one prefix
+  p2 = unique(gsub('[.]([0-9]+[.]rds|rdb|rdx|RData)$', '', p2))
   if (length(p2) != 1) stop('Cannot identify the cache database for chunk ', label)
   cache$load(file.path(p0, p2), lazy)
   if (missing(object)) return(invisible(NULL))

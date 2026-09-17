@@ -24,6 +24,46 @@ assert('cache.lazy = TRUE/FALSE works', {
   (knit_lazy(FALSE))
 })
 
+# knit_cache_pack()/knit_cache_unpack() customize how objects are cached; by
+# default they leave the object unchanged
+assert('knit_cache_pack()/knit_cache_unpack() default to identity', {
+  (knit_cache_pack(1:5) %==% 1:5)
+  (knit_cache_unpack('abc') %==% 'abc')
+})
+
+# register pack/unpack methods for a fake class that mimics an external-pointer
+# object (packed to a plain value on save, restored on load)
+registerS3method(
+  'knit_cache_pack', 'refobj',
+  function(x, ...) structure(list(v = unclass(x)$v), class = 'packed_refobj'),
+  envir = asNamespace('knitr')
+)
+registerS3method(
+  'knit_cache_unpack', 'packed_refobj',
+  function(x, ...) structure(list(v = x$v), class = 'refobj'),
+  envir = asNamespace('knitr')
+)
+
+assert('objects are cached and restored via knit_cache_pack()/knit_cache_unpack()', {
+  d = tempfile('cache-pack'); dir.create(d, showWarnings = FALSE, recursive = TRUE)
+  in_dir(d, {
+    txt = c(
+      '```{r test, cache=TRUE}', 'x1 = Sys.time()',
+      'r = structure(list(v = 42), class = "refobj")', '```',
+      'value: `r r$v`; class: `r class(r)`'
+    )
+    o1 = knit(text = txt, quiet = TRUE)
+    x2 = x1
+    Sys.sleep(0.1)
+    o2 = knit(text = txt, quiet = TRUE)
+    # second run is served from the cache (x1 not re-evaluated)
+    (x1 == x2)
+    # the restored object keeps its original class and value
+    (grepl('value: 42; class: refobj', o2))
+    (o1 %==% o2)
+  })
+})
+
 knit_code$set(a = 1, b = 2, c = 3)
 assert('dep_prev() sets dependencies on previous chunks', {
   # dependency is empty now

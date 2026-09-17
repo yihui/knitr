@@ -24,6 +24,19 @@
     ```
     ````
 
+- The cache now uses `xfun::lazy_save()` / `xfun::lazy_load()` (which store objects in `.rds` files) instead of `tools::makeLazyLoadDB()` / `lazyLoad()`. Existing caches from the previous format (`.rdb` / `.rdx` files) are still recognized and loaded, so this change is backward-compatible. In addition, two new S3 generic functions `knit_cache_pack()` and `knit_cache_unpack()` allow customizing how objects are written to and restored from the cache. This makes it possible to cache objects that the default method cannot handle correctly, e.g., external-pointer objects such as **terra** rasters (see #2176). `knit_cache_pack()` is called on each object before it is cached and should return a serializable version; `knit_cache_unpack()` is called after an object is read from the cache and should restore the original. Package authors can register methods for their classes (typically in `.onLoad()`) so that users do not need to configure anything, e.g., for **terra** (thanks, @atusy, #2340):
+
+    ````
+    registerS3method(
+      "knit_cache_pack", "SpatRaster", function(x, ...) terra::wrap(x),
+      envir = asNamespace("knitr")
+    )
+    registerS3method(
+      "knit_cache_unpack", "PackedSpatRaster", function(x, ...) terra::unwrap(x),
+      envir = asNamespace("knitr")
+    )
+    ````
+
 ## BUG FIXES
 
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
