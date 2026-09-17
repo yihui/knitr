@@ -37,6 +37,8 @@
     )
     ````
 
+- The chunk option `fig.topcaption` (to place a figure's caption above the figure instead of below it) now also works for LaTeX/PDF output; previously it only had an effect on HTML output (thanks, @cderv, #1990).
+
 ## BUG FIXES
 
 - `spin()` now checks that the start (`# /*`) and end (`# */`) comment delimiters are correctly paired and ordered. Previously, only the *counts* of start and end delimiters were compared, so mis-ordered delimiters (e.g., an end delimiter appearing before a start delimiter) could silently drop the lines in between without any error. Now `spin()` signals an error that reports the line number of each unmatched delimiter (thanks, @dewittpe, #1801, #1802).

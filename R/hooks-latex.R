@@ -125,11 +125,27 @@ hook_plot_tex = function(x, options) {
   # Wrap in figure environment only if user specifies a caption
   if (length(cap) && !is.na(cap)) {
     lab = paste0(options$fig.lp, options$label)
+    # place the caption at the top of the figure instead of the bottom? (#1990)
+    topcap = isTRUE(options$fig.topcaption)
+    # build the \caption{} string (with optional short caption and label); in
+    # LaTeX the caption position is determined by where \caption appears in the
+    # figure environment, so a top caption is emitted right after \begin{...}
+    caption = function() {
+      if (is.null(scap) && !grepl('[{].*?[:.;].*?[}]', cap)) {
+        scap = strsplit(cap, '[:.;]( |\\\\|$)')[[1L]][1L]
+      }
+      scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
+      if (cap == '') '' else sprintf(
+        '\\caption%s{%s}%s\n', escape_percent(scap), escape_percent(cap),
+        create_label(lab, if (mcap) c('-', fig.cur), latex = TRUE)
+      )
+    }
     # If pic is standalone/first in set: open figure environment
     if (plot1) {
       pos = options$fig.pos
       if (pos != '' && !grepl('^[[{]', pos)) pos = sprintf('[%s]', pos)
       fig1 = sprintf('\\begin{%s}%s', options$fig.env, pos)
+      if (topcap) fig1 = paste0(fig1, '\n', caption())
     }
     # Add subfloat code if needed
     if (usesub) {
@@ -146,21 +162,13 @@ hook_plot_tex = function(x, options) {
     }
 
     # If pic is standalone/last in set:
-    # * place caption with label
+    # * place caption with label (unless it was already placed at the top)
     # * close figure environment
     if (plot2) {
-      if (is.null(scap) && !grepl('[{].*?[:.;].*?[}]', cap)) {
-        scap = strsplit(cap, '[:.;]( |\\\\|$)')[[1L]][1L]
-      }
-      scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
-      cap = if (cap == '') '' else sprintf(
-        '\\caption%s{%s}%s\n', escape_percent(scap), escape_percent(cap),
-        create_label(lab, if (mcap) c('-', fig.cur), latex = TRUE)
-      )
       note = options$fig.note
       note = if (is.null(note) || is.na(note) || note == '') '' else
         sprintf('%s\\figurenote{%s}\n', define_figurenote(), escape_percent(note))
-      fig2 = sprintf('%s%s\\end{%s}\n', cap, note, options$fig.env)
+      fig2 = sprintf('%s%s\\end{%s}\n', if (topcap) '' else caption(), note, options$fig.env)
     }
   } else if (pandoc_to(c('latex', 'beamer'))) {
     # use alignment environments for R Markdown latex output (\centering won't work)
