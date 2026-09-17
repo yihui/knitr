@@ -364,7 +364,13 @@ plot_crop = function(x, quiet = TRUE) {
 
   if (!quiet) message('cropping ', x)
   if (is_pdf) {
-    system2('pdfcrop', shQuote(c(x, x)), stdout = if (quiet) FALSE else "")
+    # pdfcrop may be found but still fail (e.g. GhostScript missing, corrupt
+    # input); warn instead of failing silently (#2381)
+    status = system2('pdfcrop', shQuote(c(x, x)), stdout = if (quiet) FALSE else "")
+    if (!identical(status, 0L)) warning(
+      "Failed to crop '", x2, "': pdfcrop returned a non-zero exit status (", status, ").",
+      call. = FALSE
+    )
   } else if (loadable('magick')) {
     img = magick::image_read(x)
     magick::image_write(magick::image_trim(img), x)
