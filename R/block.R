@@ -399,7 +399,11 @@ cache_globals = function(option, code) {
 chunk_device = function(options, record = TRUE, tmp = tempfile()) {
   width = options$fig.width[1L]
   height = options$fig.height[1L]
-  dev = fallback_dev(options$dev)
+  # only one recording device is opened; when multiple output devices are
+  # requested, use the first one so that its measurement-affecting arguments
+  # (e.g. pointsize) are applied to the recorded plot, instead of silently
+  # falling back to the default pdf device with default arguments (#1323)
+  dev = fallback_dev(options$dev[1L])
   dev.args = options$dev.args
   dpi = options$dpi
 
