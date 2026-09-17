@@ -27,15 +27,8 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
     }
     if (block) {
-      n = length(g)
-      # remove the optional chunk footer
-      if (n >= 2 && grepl(chunk.end, g[n])) g = g[-n]
-      # remove the optional prefix % in code in Rtex mode
-      g = strip_block(g, patterns$chunk.code)
-      params.src = if (group_pattern(chunk.begin)) {
-        extract_params_src(chunk.begin, g[1])
-      } else ''
-      parse_block(g[-1], g[1], params.src, markdown_mode)
+      p = strip_chunk_group(g, chunk.begin, chunk.end, patterns$chunk.code)
+      parse_block(p$code, p$header, p$params.src, markdown_mode)
     } else parse_inline(g, patterns)
   })
 }
@@ -48,6 +41,17 @@ divide_chunks = function(x, begin, end, md = TRUE) {
 
 extract_params_src = function(chunk.begin, line) {
   trimws(gsub(chunk.begin, '\\1', line))
+}
+
+# trim a code chunk group (as returned by divide_chunks()) into its header,
+# body, and header options source: drop the optional chunk footer, strip the
+# optional code prefix (e.g. the leading % in Rtex), and extract params.src
+strip_chunk_group = function(g, begin, end, code.prefix = NULL) {
+  n = length(g)
+  if (n >= 2 && grepl(end, g[n])) g = g[-n]  # remove the optional chunk footer
+  g = strip_block(g, code.prefix)  # remove the optional code prefix (e.g. % in Rtex)
+  params.src = if (group_pattern(begin)) extract_params_src(begin, g[1]) else ''
+  list(header = g[1], code = g[-1], params.src = params.src)
 }
 
 #' The code manager to manage code in all chunks
@@ -403,12 +407,9 @@ chunks_from_doc = function(lines, path = NULL) {
   code = list()
   for (g in groups) {
     if (!grepl(begin, g[1])) next  # a text (non-code) group
-    n = length(g)
-    if (n >= 2 && grepl(end, g[n])) g = g[-n]  # drop the optional chunk footer
-    g = strip_block(g, pat$chunk.code)  # drop the prefix (e.g. % in Rtex)
-    params.src = if (group_pattern(begin)) extract_params_src(begin, g[1]) else ''
+    p = strip_chunk_group(g, begin, end, pat$chunk.code)
     # parse the engine and header options (e.g. ```{r label, echo=FALSE})
-    engine = 'r'
+    params.src = p$params.src; engine = 'r'
     if (md) {
       engine = get_chunk_engine(params.src)
       params.src = get_chunk_params(params.src)
@@ -416,7 +417,7 @@ chunks_from_doc = function(lines, path = NULL) {
     params.src = clean_empty_params(params.src)
     params = tryCatch(xfun::csv_options(params.src), error = function(e) list())
     # separate any in-body options (e.g. YAML `#| label: foo`) from the code
-    parts = partition_chunk(engine, g[-1])
+    parts = partition_chunk(engine, p$code)
     label = merge_list(params, parts$options)$label
     body = strip_white(parts$code)
     if (!length(body)) next
