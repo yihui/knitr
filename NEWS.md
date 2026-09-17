@@ -47,6 +47,8 @@
 
 ## BUG FIXES
 
+- `plot_crop()` now emits a warning when `pdfcrop` is found but returns a non-zero exit status (e.g., because GhostScript is missing or the input is corrupt). Previously such failures were silent (thanks, @JackCaster, @cderv, #2381).
+
 - When a language engine modifies the chunk options (e.g., sets `options$results = 'asis'` before calling `engine_output()`), the modified options are now also visible to the `chunk` hook, not only the `output` hook. Previously the `chunk` hook received the options as declared in the chunk header, which could lead to inconsistent behavior between the two hooks (thanks, @cderv, #2333).
 
 - `convert_chunk_header()` now decides its default `type` from the extension of the `output` file when one is provided, so converting an `.Rmd` document to a `.qmd` output (e.g., `convert_chunk_header('foo.Rmd', output = 'foo.qmd')`) defaults to `type = "yaml"` as expected. Previously the default was based solely on the input extension (thanks, @cderv, #2405).
