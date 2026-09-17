@@ -27,6 +27,21 @@ assert("spin() uses proper number of backticks", {
     c("", "````{r}", "x <- '", "```", "'", "````", ""))
 })
 
+assert("spin() removes correctly paired comment delimiters", {
+  # lines between `# /*` and `# */` are dropped; the rest is kept
+  (spin_text("#' A", "# /*", "#' hidden", "# */", "#' B") %==% c("A", "B"))
+})
+
+assert("spin() errors on mis-ordered or unmatched comment delimiters", {
+  # end delimiter before start delimiter (equal counts): used to silently drop
+  # the lines in between; now an error is signaled
+  (has_error(spin_text("#' A", "# */", "#' keep", "# /*", "#' B")))
+  # more starts than ends
+  (has_error(spin_text("#' a", "# /*", "#' b", "# /*", "#' c", "# */", "#' d")))
+  # a lone end delimiter
+  (has_error(spin_text("#' a", "# */", "#' b")))
+})
+
 assert("spin() generates code chunks with pipe comments `#|`", {
   (
     spin_text("", "#| echo: false", "#| message: false", "#| include: false", "1+1", "#| eval: false", "2 + 2", "", "#' Text") %==%
