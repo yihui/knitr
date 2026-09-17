@@ -22,6 +22,14 @@ hook_plot_md = function(x, options) {
         warn_options_unsupported('fig.alt', to)
         options$fig.alt = NULL
       }
+      # among office formats, pptx is the only one that does not support the
+      # image width/height (https://github.com/jgm/pandoc/issues/4586)
+      if (to == 'pptx') for (i in c('out.width', 'out.height')) {
+        if (!is.null(options[[i]])) {
+          warn_options_unsupported(i, to)
+          options[[i]] = NULL
+        }
+      }
       return(hook_plot_md_pandoc(x, options))
     }
   }

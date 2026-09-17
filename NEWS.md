@@ -51,6 +51,8 @@
 
 - Subfigures (created via `fig.subcap`) that span multiple rows are now separated by `\\` instead of `\newline` in LaTeX output. Inside a centered figure (`fig.align = 'center'`), `\newline` did not respect the alignment and left the subfigures left-aligned; `\\` centers them correctly (thanks, @StephenGerry, #1907).
 
+- For PowerPoint (`pptx`) output, the chunk options `out.width` and `out.height` are now dropped with a warning, because Pandoc does not support setting the image width/height for `pptx` (https://github.com/jgm/pandoc/issues/4586). Other Office formats such as `docx` still honor these options (thanks, @cderv, #2003).
+
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
 
 # CHANGES IN knitr VERSION 1.52

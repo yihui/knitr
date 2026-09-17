@@ -138,3 +138,18 @@ assert("fig.alt does not break office document", {
   (suppressWarnings(hook_plot_md(x, opt(fig.alt = "bar"))) %==% "![](1.png)")
   opts_knit$set('rmarkdown.pandoc.to' = old)
 })
+
+assert("out.width/out.height are dropped (with a warning) for pptx output (#2003)", {
+  old = opts_knit$get('rmarkdown.pandoc.to')
+  on.exit(opts_knit$set('rmarkdown.pandoc.to' = old), add = TRUE)
+
+  # pptx does not support width/height, so they are stripped from the output
+  opts_knit$set(rmarkdown.pandoc.to = 'pptx')
+  (has_warning(hook_plot_md(x, opt(w = w))))
+  (suppressWarnings(hook_plot_md(x, opt(w = w))) %==% '![](1.png)')
+  (suppressWarnings(hook_plot_md(x, opt(h = h))) %==% '![](1.png)')
+
+  # other office formats (e.g. docx) still honor width/height
+  opts_knit$set(rmarkdown.pandoc.to = 'docx')
+  (hook_plot_md(x, opt(w = w)) %==% sprintf('![](1.png){width=%s}', w))
+})
