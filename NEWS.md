@@ -30,6 +30,8 @@
 
 - When a document is rendered by Quarto, `current_input()` now returns the original `.qmd` filename instead of the `.rmarkdown` intermediate file that Quarto generates and passes to **knitr** (thanks, @bergsmat, #2384).
 
+- When tangling a document with `purl()`, calls to `read_chunk()` are now located by parsing the code and inspecting its syntax tree, instead of matching the pattern `read_chunk(...)` as a string. This fixes spurious parse errors and makes the detection more robust: a closing parenthesis inside a string argument (e.g., `read_chunk(lines = ")")`) no longer breaks `purl()`, functions whose names merely end in `read_chunk` (e.g., `fake_read_chunk()`) are no longer mistaken for `read_chunk()`, commented-out calls are ignored, and namespaced calls (`knitr::read_chunk()`) are now recognized (thanks, @rgayler, @mrdowdeswell, #1753).
+
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
 
 # CHANGES IN knitr VERSION 1.52
