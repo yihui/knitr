@@ -88,10 +88,12 @@ hook_plot_tex = function(x, options) {
   fig.ncol = options$fig.ncol %n% fig.num
   if (is.null(fig.sep <- options$fig.sep)) {
     fig.sep = character(fig.num)
-    # add \newline after every fig.ncol figures; if the last figure is not the
-    # last on its row, skip adding \newline (not necessary, but may be harmless)
+    # start a new row after every fig.ncol figures; if the last figure is not the
+    # last on its row, skip the separator (not necessary, but may be harmless).
+    # Use \\ rather than \newline: inside {\centering ...}, \newline does not
+    # respect the alignment (subfigures stay left-aligned), while \\ does (#1907)
     if (fig.ncol < fig.num)
-      fig.sep[seq(fig.ncol, fig.num - (fig.num %% fig.ncol > 0), fig.ncol)] = '\\newline'
+      fig.sep[seq(fig.ncol, fig.num - (fig.num %% fig.ncol > 0), fig.ncol)] = '\\\\'
   }
   sep.cur = NULL
 

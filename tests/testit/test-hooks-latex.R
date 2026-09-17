@@ -111,3 +111,16 @@ assert("fig.topcaption places \\caption before the image in LaTeX output (#1990)
      regexpr('\\caption', res2, fixed = TRUE))
   (length(gregexpr('\\caption', res2, fixed = TRUE)[[1]]) == 1L)
 })
+
+assert("subfigures are separated by \\\\ (not \\newline) so \\centering works (#1907)", {
+  sub_opts = function(cur) opts_chunk$merge(list(
+    label = 'f', fig.cap = 'C', fig.subcap = c('a', 'b', 'c'), fig.ncol = 1,
+    fig.align = 'center', fig.num = 3L, fig.cur = cur, fig.show = 'asis'
+  ))
+  res = paste(sapply(1:3, function(i) hook_plot_tex(sprintf('f-%d.pdf', i), sub_opts(i))),
+              collapse = '')
+  # \newline left-aligns subfigures inside {\centering ...}; \\ respects it
+  (!grepl('newline', res, fixed = TRUE))
+  (grepl('\\subfloat', res, fixed = TRUE))
+  (grepl('}\\\\', res, fixed = TRUE))
+})
