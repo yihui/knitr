@@ -702,7 +702,9 @@ inline_expr = function(code, syntax) {
 #'   `output = identity` to overwrite the input file).
 #' @param type This determines how the in-body options will be formatted.
 #'   `"mutiline"` (the default, except for \file{qmd} documents, for which
-#'   the default is `"yaml"`) will write each chunk option on a separate
+#'   the default is `"yaml"`; the extension of `output` takes precedence over
+#'   that of `input`, e.g., converting an `.Rmd` to a `.qmd`) will write each
+#'   chunk option on a separate
 #'   line. Long chunk option values will be wrapped onto several lines, and you
 #'   can use `width = 0` to keep one line per option only. `"wrap"`
 #'   will wrap all chunk options together using
@@ -746,7 +748,7 @@ inline_expr = function(code, syntax) {
 #' ````
 #' \item Passing options key value pairs in-chunk using YAML syntax. Values are no
 #' more R expression but valid YAML syntax. This corresponds to
-#' `convert_chunk_header(type = "yaml")` (not implement yet).
+#' `convert_chunk_header(type = "yaml")`.
 #'
 #' ````
 #' ```{r}
@@ -780,7 +782,11 @@ convert_chunk_header = function(
   # extract fenced header information
   text = xfun::read_utf8(input)
   ext  = xfun::file_ext(input)
-  if (missing(type) && ext == 'qmd') type = 'yaml'  # default to yaml for Quarto
+  # resolve the output path early so its extension can inform the default type;
+  # the output extension takes precedence over the input's (e.g. Rmd -> qmd)
+  if (is.function(output)) output = output(input)
+  ext2 = xfun::file_ext(if (is.character(output)) output else input)
+  if (missing(type) && ext2 == 'qmd') type = 'yaml'  # default to yaml for Quarto
   type = match.arg(type)
   pattern = detect_pattern(text, ext)
   # no code chunk in brew file
@@ -867,8 +873,7 @@ convert_chunk_header = function(
   }
 
   if (is.null(output)) return(new_text)
-  # otherwise write to file
-  if (is.function(output)) output = output(input)
+  # otherwise write to file (output was already resolved to a path above)
   xfun::write_utf8(new_text, output)
   invisible(output)
 }

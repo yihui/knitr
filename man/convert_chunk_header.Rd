@@ -21,7 +21,9 @@ takes \code{input} as argument and returns a file path to write into (e.g.,
 
 \item{type}{This determines how the in-body options will be formatted.
 \code{"mutiline"} (the default, except for \file{qmd} documents, for which
-the default is \code{"yaml"}) will write each chunk option on a separate
+the default is \code{"yaml"}; the extension of \code{output} takes precedence over
+that of \code{input}, e.g., converting an \code{.Rmd} to a \code{.qmd}) will write each
+chunk option on a separate
 line. Long chunk option values will be wrapped onto several lines, and you
 can use \code{width = 0} to keep one line per option only. \code{"wrap"}
 will wrap all chunk options together using
@@ -72,7 +74,7 @@ needed. This corresponds to \code{convert_chunk_header(type = "wrap")}
 
 \item Passing options key value pairs in-chunk using YAML syntax. Values are no
 more R expression but valid YAML syntax. This corresponds to
-\code{convert_chunk_header(type = "yaml")} (not implement yet).
+\code{convert_chunk_header(type = "yaml")}.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{```\{r\}
 #| echo: false,

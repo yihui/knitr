@@ -148,3 +148,30 @@ assert('duplicated labels are allowed after setting an option', {
 options(op)
 
 knit_code$restore()
+
+# convert_chunk_header() --------------------------------------------------------
+
+in_rmd = tempfile(fileext = '.Rmd')
+xfun::write_utf8(c('```{r, echo = FALSE, fig.width = 10}', '1 + 1', '```'), in_rmd)
+
+assert('convert_chunk_header() uses the output extension to pick the default type (#2405)', {
+  # converting .Rmd -> .qmd defaults to YAML, keyed on the *output* extension
+  out_qmd = xfun::with_ext(in_rmd, 'qmd')
+  convert_chunk_header(in_rmd, output = out_qmd)
+  (xfun::read_utf8(out_qmd) %==% c('```{r}', '#| echo: false', '#| fig-width: 10', '1 + 1', '```'))
+  # a function output is honoured the same way
+  convert_chunk_header(in_rmd, output = function(f) out_qmd)
+  (xfun::read_utf8(out_qmd) %==% c('```{r}', '#| echo: false', '#| fig-width: 10', '1 + 1', '```'))
+  file.remove(out_qmd)
+  # without a .qmd output, the default is still multiline
+  (convert_chunk_header(in_rmd) %==%
+     c('```{r}', '#| echo = FALSE,', '#| fig.width = 10', '1 + 1', '```'))
+  # an explicit type always wins over the extension-based default
+  out_qmd2 = xfun::with_ext(in_rmd, 'qmd')
+  convert_chunk_header(in_rmd, output = out_qmd2, type = 'wrap')
+  (xfun::read_utf8(out_qmd2) %==%
+     c('```{r}', '#| echo = FALSE, fig.width = 10', '1 + 1', '```'))
+  file.remove(out_qmd2)
+})
+
+file.remove(in_rmd)

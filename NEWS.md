@@ -47,6 +47,8 @@
 
 ## BUG FIXES
 
+- `convert_chunk_header()` now decides its default `type` from the extension of the `output` file when one is provided, so converting an `.Rmd` document to a `.qmd` output (e.g., `convert_chunk_header('foo.Rmd', output = 'foo.qmd')`) defaults to `type = "yaml"` as expected. Previously the default was based solely on the input extension (thanks, @cderv, #2405).
+
 - `spin()` now checks that the start (`# /*`) and end (`# */`) comment delimiters are correctly paired and ordered. Previously, only the *counts* of start and end delimiters were compared, so mis-ordered delimiters (e.g., an end delimiter appearing before a start delimiter) could silently drop the lines in between without any error. Now `spin()` signals an error that reports the line number of each unmatched delimiter (thanks, @dewittpe, #1801, #1802).
 
 - When a document is rendered by Quarto, `current_input()` now returns the original `.qmd` filename instead of the `.rmarkdown` intermediate file that Quarto generates and passes to **knitr** (thanks, @bergsmat, #2384).
