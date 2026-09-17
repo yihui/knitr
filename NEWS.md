@@ -1,8 +1,172 @@
+# CHANGES IN knitr VERSION 1.53
+
+## NEW FEATURES
+
+- `kable()` operating in LaTeX mode can now optionally typeset numeric columns in math mode for improved rendering of minus signs, infinite values, and scientific notation; in particular, decimal and thousands separator commas are wrapped in braces (`{}`) to preserve spacing. To enable, use `kable(..., format = "latex", numeric.math = TRUE)` or set `options(knitr.table.numeric.math = TRUE)` globally (thanks, @krivit, #1709).
+
+- A code chunk that returns a `shiny.tag` or `shiny.tag.list` object (e.g., from **htmltools**) can now have a figure caption and be cross-referenced, in the same way as **htmlwidgets**. For example, the chunk below produces a captioned figure that can be referenced via `\@ref(fig:mytag)` in **bookdown** (thanks, @cpsievert, #1650):
+
+    ````
+    ```{r mytag, fig.cap="A captioned shiny.tag object."}
+    htmltools::div(htmltools::img(src = "logo.png"), htmltools::p("hello"))
+    ```
+    ````
+
+- The `sql` engine recognizes more SQL keywords (e.g., `ALTER`, `GRANT`, `MERGE`, `TRUNCATE`, `CALL`) as statements that do not return a result set, so they are dispatched to `DBI::dbExecute()` instead of `DBI::dbGetQuery()` (which avoids warnings from some database drivers). In addition, a new chunk option `sql.is_statement` can be set to `TRUE` or `FALSE` to explicitly control this behavior when the automatic detection based on keywords is not correct (e.g., `SELECT ... INTO`, or `UPDATE ... RETURNING`) (thanks, @rnorberg, #1896).
+
+## BUG FIXES
+
+- The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
+
+# CHANGES IN knitr VERSION 1.52
+
+## NEW FEATURES
+
+- Added a new chunk option `fig.note` to add a note (e.g., a source or explanatory note) below a figure, separate from its caption (thanks, @turbanisch, #2022). It works for LaTeX/PDF, HTML, and Typst output. For LaTeX, the note is emitted via a `\figurenote{}` command inside the figure environment; a default definition is provided (footnotesize italic) that you may override in the preamble, e.g., `\newcommand{\figurenote}[1]{\floatfoot{#1}}` (with the **floatrow** package). For HTML, the note is placed in `<p class="figure-note">` inside the figure `<div>`, which you can style with CSS.
+
+- Added support for a new input format `.Rtyp` for the [Typst](https://typst.app) typesetting system (thanks, @blset #2401, @aksigkvgithub #2283). You can use code chunks and inline R expressions in `.Rtyp` files, knit them via `knitr::knit()` to `.typ` output, or compile to PDF directly via `knit2pdf('input.Rtyp')`. See https://github.com/yihui/knitr-examples/blob/master/128-minimal.Rtyp for a minimal example.
+
+- Added a `knitr::rtyp` vignette engine to build `.Rtyp` vignettes to PDF via Typst, so packages no longer need to register their own engine for this purpose (thanks, @ggrothendieck, #2447).
+
+- `hook_plot_tex()` now respects the chunk option `animation.hook` (or the package option `animation.fun`) when it is set to a function of your own, and calls it to generate the LaTeX code for a chunk with `fig.show = 'animate'` instead of the default `\animategraphics{}`. This makes the LaTeX plot hook extensible in the same way as `hook_plot_html()`, which has always supported these options, and allows for LaTeX packages other than **animate** to be used for animations, e.g. **xmpmulti** for beamer overlays. The built-in hooks such as `hook_ffmpeg_html()` generate HTML and continue to be ignored for LaTeX output, so this does not change the output of existing documents (thanks, @jolars #2452).
+
+- Added support for `ragg::agg_webp()` as a graphics device for WebP output (thanks, @heavywatal, #2434). To use this device, set `dev = 'agg_webp'` in the chunk options. This device is available in **ragg** >= 1.5.0.
+
+- The chunk option `dev.args` can now customize the `dev = 'gridSVG'` device. Arguments are passed to both `grDevices::svg()` (e.g., `pointsize`) and `gridSVG::grid.export()` (e.g., `strict`), with each function receiving only the arguments it recognizes (thanks, @deepayan, #2450, #2451).
+
+## BUG FIXES
+
+- Figure captions are no longer dropped when a single chunk produces multiple captioned figures for Markdown-based output (e.g., HTML or PDF via Pandoc). Previously, consecutive images were emitted in one paragraph (`![cap1](a) ![cap2](b)`), which Pandoc treats as inline images and renders without captions. knitr now inserts a blank line after each captioned figure except the last, so Pandoc emits a separate figure (with caption) for each image (thanks, @atusy, #2032, #1524, #1760).
+
+- knitr now emits a warning when a code chunk opens a new graphics device (e.g., via `dev.new()`), because plots drawn on such devices cannot be captured by knitr and will silently fail to render in the output (thanks, @Higgs32584, #2355).
+
+- `include_graphics()` now converts absolute paths to paths relative to the output directory of the rendered document (communicated by **rmarkdown** >= 2.32 via `opts_knit$get('rmarkdown.output_dir')`) instead of knitr's working directory (the input directory), which fixes broken image paths when the input and output directories differ (e.g., rendering to a different `output_dir`). The existence check (when `error = TRUE`) also uses the original path so that it no longer reports false negatives when `root.dir` differs from the output directory (thanks, @naikymen @jameelalsalam @cderv, #2171, r-lib/pkgdown#2334).
+
+- `kable()` now escapes special characters (e.g., `&`) in the `caption` argument for LaTeX and HTML output when `escape = TRUE` (the default), just as it does for cell content and column names. Previously, an unescaped `&` in a caption could cause a fatal LaTeX compilation error (`! Misplaced alignment tab character &.`) (thanks, @mbs2016, #2436).
+
+- The `alt` attribute of figure images now has HTML tags stripped (via `xfun::strip_html()`) and is properly escaped for use in HTML attributes (via `xfun::html_escape(attr = TRUE)`). Previously, HTML in `fig.cap` (e.g., a link) could appear verbatim in `alt`, and double quotes in captions could break the `alt` attribute value (thanks, @cderv, #2004).
+
+- `knit2html()` now renders the HTML next to the knitted Markdown and then moves it to the output location when the output is written to a different directory, so local figure resources can still be found and embedded (previously they broke with warnings like `File 'figure/...png' not found`). For more robust rendering of R Markdown to HTML, consider `litedown::fuse()` instead (thanks, @LeonidasZhak, #2408).
+
+- Due to a change in Asymptote, the output file may not be recognized or included correctly (thanks, @DeliciousRoastPotato @shangeconnew, #2025).
+
+- `has_crop_tools()` should not throw an error when `tlmgr` exists but cannot be executed (thanks, @lsandig, rstudio/rmarkdown#2612). It returns `FALSE` now.
+
+- Fixed invalid LaTeX when warning/message/error is the only chunk output in Rnw documents (thanks, @codeZeilen, #2412).
+
+- Fixed a bug that calling `knit_exit()` could put `knit()` in a non-functioning state when there is only a single code chunk in the input (thanks, @dlampart, #2372).
+
+## MAJOR CHANGES
+
+- `knit2html()` (and other functions that render Markdown to HTML, such as `stitch()`, `knit_rd()`, `knit2wp()`, `rocco()`, and the `knitr::knitr` vignette engine) now use `litedown::mark()` directly instead of `markdown::mark_html()`. The **markdown** package (>= 1.3) has become a thin wrapper of **litedown**, so this removes the **markdown** dependency (**litedown** is used instead) without changing the HTML output. For R packages that rely on the `knitr::knitr` vignette engine, the `DESCRIPTION` file needs to declare `litedown` as a dependency (typically in `Suggests`) instead of `markdown`.
+
+# CHANGES IN knitr VERSION 1.51
+
+## NEW FEATURES
+
+- Added support for [OpenTelemetry](https://opentelemetry.io/) observability. When the **otel** and **otelsdk** packages are installed and tracing is enabled, spans are automatically created for all knit operations. See [`otelsdk`'s Collecting Telemetry Data](https://otelsdk.r-lib.org/reference/collecting.html) for more details on configuring OpenTelemetry (thanks, @shikokuchuo, #2422).
+  - `knit()` produces 'knitr processing' and 'knitr output' spans when starting and finishing an operation
+  - `knit()` produces 'knit' spans for each chunk, recording attributes such as the label and knit engine
+
+- Added support for hooks that get executed before and after knitting (thanks, @cderv #2223, @arnaudgallou #2419). To register a hook before knitting starts, use `knitr::knit_hooks$set(before.knit = function() {})`. Similarly, the hook `after.knit` can be registered and will be executed after knitting is finished.
+
+## BUG FIXES
+
+- Fix issue with error traceback not correctly showing when **rlang** is available.
+
+- Improve error traceback when **rlang** is available and **evaluate** > 1.0.3 is used (thanks, @cderv, #2388).
+
+- For Quarto, chunk options written in pipe comments must use the comment character of the chunk's language (#2225). Previously, comments written in `#|` will be parsed even if `#` is not the comment character of the chunk.
+
+- `hook_optipng()` now uses the `-quiet` argument of `optipng` to suppress the messages by default.
+
+- Don't set `vheight` or `vwidth` for `webshot2::webshot()` when the chunk option `out.height` or `out.width` is a percentage (%). Setting `screenshot.opts` chunk option is still a way to specify `vheight` or `vwidth` specifically for `webshot()`, e.g., `screenshot.opts = list(vwidth = 6 * 72, vheight = 6 * 72 * 0.618)` for the width of 6 inches size with 72 dpi and 0.618 of aspect ratio.
+
+- HTML screenshots are taken inside the current working directory by default if it is writable, instead of `tempdir()`, which may not be accessible to certain browsers (thanks, @markschl, #2416). The directory can be customized via the global R option `knitr.html_screenshot.tmpdir`, e.g., if you want the old behavior, you may set `options(knitr.html_screenshot.tmpdir = tempdir())`.
+
+## MINOR CHANGES
+
+- Empty alt text for images is allowed now (thanks, @Olivia-Box-Power, #2415). With the chunk option `fig.alt = ''`, the HTML output will be `<img alt = "" ... />`. Previously, the `alt` attribute was omitted in this case. If you still want to omit the `alt` attribute, you may use `fig.alt = NA`.
+
+# CHANGES IN knitr VERSION 1.50
+
+## NEW FEATURES
+
+- For inline code expressions, their specific line numbers will be shown in the message when errors occur (thanks, @kevinushey, #2387). Previously, the numbers were not specific to the inline code but the lines of the whole text chunk containing the inline code, which are often quite vague.
+
+- Display error traceback when vignettes fail in `R CMD build` (thanks, @hadley, #2390).
+
+- `kable()` properly supports column alignment for Org Mode tables now (thanks, @mclements, #2391).
+
+## MINOR CHANGES
+
+- Moved implementations of `combine_words()` and `write_bib()` to the **xfun** package as `xfun::join_words()` and `xfun::pkg_bib()`, respectively, since they are not directly relevant to **knitr**. The functions `combine_words()` and `write_bib()` are still kept in **knitr**, and can continue to be used in the future.
+
+- A warning will be issued when chunk options are duplicated in both the chunk header and pipe comments (thanks, @cderv, #2386). A chunk option should appear in only one of these places.
+
+- Removed the function `read_rforge()` since it has stopped working for a long time.
+
+- Removed demos from the package (which were early experiments from several years ago).
+
+# CHANGES IN knitr VERSION 1.49
+
+## NEW FEATURES
+
+- In-chunk references of the form `<<label>>` can be disabled via the chunk option `ref.chunk = FALSE` now (thanks, @jennybc @gadenbuie, #2360).
+
+- Added support for `fig.alt` for LaTeX output, i.e., using `\includegraphics[alt={alt text}]` (thanks, @capnrefsmmat, #2378).
+
+- The environment in which code chunks are evaluated can be changed by passing a custom environment to `knit_glbal()` now (thanks, @abhsarma, #2358).
+
+## BUG FIXES
+
+- In-chunk references of the form `<<label>>` should not be resolved if `label` is not found in the document (thanks, @jennybc @gadenbuie, #2360).
+
+- The chunk option `autodep = TRUE` stopped working due to a regression from #2321 (thanks, @heavywatal #2344, @atusy #2377).
+
+- `asis_output()` was not passed to the `output` hook (thanks, @cderv, #2332).
+
+- Avoid partial matching of the `Date/Publication` field when generating `citation('knitr')`, otherwise R will emit a warning when `options(warnPartialMatchDollar = TRUE)` (thanks, @fkohrt, #2361).
+
+## MAJOR CHANGES
+
+- Unbalanced chunk delimiters (fences) in R Markdown documents are strictly prohibited now.
+
+- For code chunks with `error = TRUE`, `purl()` and `hook_purl()` will wrap the code in `try({...})` (thanks, @bastistician #2338, @jeroen #2368).
+
+## MINOR CHANGES
+
+- If a character value is passed to the chunk option `message` or `warning`, it will be coerced by `as.logical()`, e.g., a character string `"NA"` will be coerced to `NA` (thanks, @cderv, #2375).
+
+- Issue a warning when the chunk option `dependson` receives an invalid value (thanks, @otoomet, #2376).
+
+- Changed the format of the reference card from PDF to HTML so building this package will not require LaTeX. See `vignette('knitr-refcard', package = 'knitr')`.
+
+- Switched the vignette engine from **knitr** to `litedown::vignette` for some package vignettes.
+
+# CHANGES IN knitr VERSION 1.48
+
+## BUG FIXES
+
+- Fix regression from 1.46 with `collapse = TRUE` option not correctly collapsing source code and output into one when code chunk returns multiple outputs (thanks, @jennybc, @florisvdh, tidyverse/reprex#463).
+
+- `hook_purl()` should not write the path of the R script to the output document (thanks, @fenguoerbian, #2348).
+
 # CHANGES IN knitr VERSION 1.47
 
 ## NEW FEATURES
 
 - For `kable()`, you can set the global option `knitr.kable.max_rows` to limit the number of rows to show in the table, e.g., `options(knitr.kable.max_rows = 30)`. This is a way to prevent `kable()` from generating a huge table from a large data object by accident.
+
+- `write_bib()` now escapes all non-escaped "&" in the bibliography by default. Previously, it only escaped the title field of the package citation. You can disable the escape with the argument `tweak = FALSE` (thanks, @HedvigS #2335, @atusy #2342).
+
+## BUG FIXES
+
+- Fixed a bug that `write_bib()` fails to use the first URL of a package when multiple URLs are provided in DESCRIPTION and separated by `\n` (thanks, @bastistician, #2343).
+
+## MINOR CHANGES
+
+- The syntax highlighting LaTeX commands for Rnw documents, `\hlstr` and `\hlstd`, were renamed to `\hlsng` and `\hldef`, respectively, to maintain consistency with Andrew Simon's highlight package (thanks, @dcser123, #2341).
 
 # CHANGES IN knitr VERSION 1.46
 
@@ -37,6 +201,8 @@
 ## MAJOR CHANGES
 
 - Unbalanced chunk delimiters (fences) in R Markdown documents are no longer allowed, as announced two years ago at <https://yihui.org/en/2021/10/unbalanced-delimiters/> (#2306). This means the opening delimiter must strictly match the closing delimiter, e.g., if a code chunk starts with four backticks, it must also end with four; or if a chunk header is indented by two spaces, the closing fence must be indented by exactly two spaces. For authors who cannot update their R Markdown documents for any reason at the moment, setting `options(knitr.unbalanced.chunk = TRUE)` (e.g., in `.Rprofile`) can temporarily prevent **knitr** from throwing an error, but it is strongly recommended that you fix the problems as soon as possible, because this workaround will be removed in future.
+
+- Package vignettes are tangled by default during `R CMD check`, per request from CRAN maintainers (d0d1b47). The consequence is that `R CMD check` will check R scripts tangled from vignettes by default, unless you set the environment variable `_R_CHECK_VIGNETTES_SKIP_RUN_MAYBE_=true`. Previously, **knitr** would skip tangling vignettes during `R CMD check`, because R scripts tangled from vignettes are not guaranteed to valid. With the skip undone, `R CMD check` may fail in places other than CRAN (because CRAN has set the environment variable).
 
 ## MINOR CHANGES
 
@@ -697,7 +863,7 @@
 
 ## NEW FEATURES
 
-- Added `knitr::hooks_*()` functions to get a list of output hooks for a specific format. Previously, these hooks only exist inside the `knitr::render_*()` functions, and users do not have direct access to them. Now they can be accessed directly, e.g., via `knitr::hooks_markdown()` to get a list of output hooks for R Markdown documents. You can also set the output hooks individually, e.g., `knitr::knit_hooks$set(knitr::hooks_markdown()['source'])` only sets the _source_ ouput hook. See more on output hooks at https://yihui.org/knitr/hooks/#output-hooks and https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html (thanks, @cderv, #1889).
+- Added `knitr::hooks_*()` functions to get a list of output hooks for a specific format. Previously, these hooks only exist inside the `knitr::render_*()` functions, and users do not have direct access to them. Now they can be accessed directly, e.g., via `knitr::hooks_markdown()` to get a list of output hooks for R Markdown documents. You can also set the output hooks individually, e.g., `knitr::knit_hooks$set(knitr::hooks_markdown()['source'])` only sets the _source_ ouput hook. See more on output hooks at https://yihui.org/knitr/hooks/#output-hooks and https://pkg.yihui.org/rmarkdown-cookbook/output-hooks.html (thanks, @cderv, #1889).
 
 - Added an argument `lib.loc` to `knitr::write_bib()`.
 
@@ -1396,7 +1562,7 @@
 
 - `knit2wp()` can update an existing post or create a page now (thanks, @jaredlander, #916, #917)
 
-- added an engine `stan` to support [Stan](http://mc-stan.org) through the **rstan** package; see http://rpubs.com/jrnold/knitr-stan for an example (thanks, @jrnold, #903)
+- added an engine `stan` to support [Stan](https://mc-stan.org/) through the **rstan** package; see http://rpubs.com/jrnold/knitr-stan for an example (thanks, @jrnold, #903)
 
 - for the `tikz` engine, the path to the `convert` utility of ImageMagick can be specified via the chunk option `engine.opts`, e.g. `engine.opts = list(convert = 'path/to/convert')` (thanks, @mienkoja, #897)
 
@@ -2142,7 +2308,7 @@
 
 ## DOCUMENTATION
 
-- added a simple reference card: http://cran.rstudio.com/web/packages/knitr/vignettes/knitr-refcard.pdf
+- added a simple reference card: `vignette('knitr-refcard', package = 'knitr')`
 
 # CHANGES IN knitr VERSION 0.7
 

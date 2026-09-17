@@ -5,7 +5,7 @@
   color: #72A5E4;
   font-weight: bold;
 }
-.str {
+.sng {
   color: #72A5E4;
   font-weight: bold;
 }
@@ -16,7 +16,7 @@
 .opt {
   color: #ffffff;
 }
-.std {
+.def {
   color: #ffffff;
 }
 .kwa {

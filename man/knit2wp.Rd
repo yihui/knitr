@@ -20,16 +20,16 @@ knit2wp(
 
 \item{title}{Title of the post.}
 
-\item{...}{Other meta information of the post, e.g. \code{categories = c('R',
-'Stats')} and \code{mt_keywords = c('knitr', 'wordpress')}, et cetera.}
+\item{...}{Other meta information of the post, e.g., \code{categories = c('R', 'Stats')} and \code{mt_keywords = c('knitr', 'wordpress')}, etc.}
 
 \item{envir}{Environment in which code chunks are to be evaluated, for
-example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()}).}
+example, \code{\link[=parent.frame]{parent.frame()}}, \code{\link[=new.env]{new.env()}}, or
+\code{\link[=globalenv]{globalenv()}}).}
 
-\item{shortcode}{A length-2 logical vector: whether to use the shortcode
-\samp{[sourcecode lang='lang']}, which can be useful to WordPress.com users
-for syntax highlighting of source code and output. The first element
+\item{shortcode}{A length-2 logical vector indicating whether to use the
+shortcode \verb{[sourcecode lang='lang']}, which can be useful to
+WordPress.com users for syntax highlighting of source code and output. The
+first element
 applies to source code, and the second applies to text output. By default,
 both are \code{FALSE}.}
 
@@ -39,7 +39,7 @@ create a new page.}
 \item{postid}{If \code{action} is \code{editPost}, the post id \code{postid}
 must be specified.}
 
-\item{publish}{Boolean: publish the post immediately?}
+\item{publish}{Whether to publish the post immediately.}
 }
 \description{
 This function is a wrapper around the \pkg{RWordPress} package. It compiles
@@ -50,10 +50,10 @@ blogging with R, you may want to try the \pkg{blogdown} package instead.
 }
 \note{
 This function will convert the encoding of the post and the title to
-  UTF-8 internally. If you have additional data to send to WordPress (e.g.
-  keywords and categories), you may have to manually convert them to the
-  UTF-8 encoding with the \code{\link{iconv}(x, to = 'UTF-8')} function
-  (especially when using Windows).
+UTF-8 internally. If you have additional data to send to WordPress (e.g.
+keywords and categories), you may have to manually convert them to the
+UTF-8 encoding with the \code{\link{iconv}(x, to = 'UTF-8')} function
+(especially when using Windows).
 }
 \examples{
 # see the reference

@@ -65,6 +65,11 @@ assert('parse_chunk() preserves indentation', {
   (pc('<<d>>') %==% c('function() {', '  if (T)', '    1+1', '}'))
 })
 
+assert('parse_chunk() ignores labels not found in knit_code', {
+  # chunk 'e' doesn't exist
+  (pc(c('3*3', '<<a>>', '  <<e>>', '<<b>>  ')) %==% c("3*3", "1+1", "  <<e>>", "2-2"))
+})
+
 knit_code$restore()
 
 # duplication of labels

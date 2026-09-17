@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 ---
 
 <!--
-%\VignetteEngine{knitr::docco_classic}
+%\VignetteEngine{knitr::docco_classic_notangle}
 %\VignetteIndexEntry{R Markdown with the Docco Classic Style}
 -->
 

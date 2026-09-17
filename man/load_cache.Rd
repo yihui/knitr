@@ -31,16 +31,16 @@ directory otherwise. Any relative \code{path} is defined from \code{dir}.}
 
 \item{envir}{Environment to use for cache loading, into which all objects in
 the cache for the specified chunk (not just that in \code{object}) will be
-loaded. Defaults to the value in \code{\link{knit_global}}.}
+loaded. Defaults to the value in \code{\link[=knit_global]{knit_global()}}.}
 
-\item{lazy}{Whether to \code{\link{lazyLoad}} the cache database (depending
+\item{lazy}{Whether to \code{\link[=lazyLoad]{lazyLoad()}} the cache database (depending
 on the chunk option \code{cache.lazy = TRUE} or \code{FALSE} of that code
 chunk).}
 }
 \value{
 Invisible \code{NULL} when \code{object} is not specified (the cache
-  database will be loaded as a side effect), otherwise the value of the
-  object if found.
+database will be loaded as a side effect), otherwise the value of the
+object if found.
 }
 \description{
 If a code chunk has turned on the chunk option \code{cache = TRUE}, a cache
@@ -54,13 +54,13 @@ they are created.
 }
 \note{
 Apparently this function loads the value of the object from the
-  \emph{previous} run of the document, which may be problematic when the
-  value of the object becomes different the next time the document is
-  compiled. Normally you must compile the document twice to make sure the
-  cache database is created, and the object can be read from it. Please use
-  this function with caution.
+\emph{previous} run of the document, which may be problematic when the
+value of the object becomes different the next time the document is
+compiled. Normally you must compile the document twice to make sure the
+cache database is created, and the object can be read from it. Please use
+this function with caution.
 }
 \references{
 See the example #114 at
-  \url{https://github.com/yihui/knitr-examples}.
+\url{https://github.com/yihui/knitr-examples}.
 }

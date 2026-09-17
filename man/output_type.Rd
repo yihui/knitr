@@ -25,8 +25,8 @@ considered as HTML format. Options are: markdown, epub, epub2, html, html4, html
 revealjs, s5, slideous, slidy, and gfm.}
 
 \item{exact}{Whether to return or use the exact format name. If not, Pandoc
-extensions will be removed from the format name, e.g., \samp{latex-smart}
-will be treated as \samp{latex}.}
+extensions will be removed from the format name, e.g., \code{latex-smart}
+will be treated as \code{latex}.}
 }
 \description{
 The function \code{is_latex_output()} returns \code{TRUE} when the output
@@ -35,8 +35,7 @@ the latter, the two Pandoc formats \code{latex} and \code{beamer} are
 considered LaTeX output). The function \code{is_html_output()} only works for
 R Markdown documents and will test for several Pandoc HTML based output
 formats (by default, these formats are considered as HTML formats:
-\code{c('markdown', 'epub', 'epub2', 'html', 'html4', 'html5', 'revealjs', 's5',
-'slideous', 'slidy', 'gfm')}).
+\code{c('markdown', 'epub', 'epub2', 'html', 'html4', 'html5', 'revealjs', 's5', 'slideous', 'slidy', 'gfm')}).
 }
 \details{
 The function \code{pandoc_to()} returns the Pandoc output format, and
@@ -57,7 +56,7 @@ Pandoc input format in
 }
 \note{
 See available Pandoc formats, in
-  \href{https://pandoc.org/MANUAL.html}{Pandoc's Manual}
+\href{https://pandoc.org/MANUAL.html}{Pandoc's Manual}
 }
 \examples{
 # check for output formats type

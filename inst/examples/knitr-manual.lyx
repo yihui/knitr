@@ -2074,11 +2074,11 @@ weaver
  chunk, the latter chunk is said to depend on the previous one.
  The function 
 \emph on
-findGlobals()
+find_globals()
 \emph default
  in the 
 \series bold
-codetools
+xfun
 \series default
  package is used to find out all global objects in a chunk, and according
  to its documentation, the result is an approximation.

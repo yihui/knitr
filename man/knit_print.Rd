@@ -10,7 +10,7 @@ knit_print(x, ...)
 normal_print(x, ...)
 }
 \arguments{
-\item{x}{An R object to be printed}
+\item{x}{An R object to be printed.}
 
 \item{...}{Additional arguments passed to the S3 method. Currently ignored,
 except two optional arguments \code{options} and \code{inline}; see
@@ -18,9 +18,9 @@ the references below.}
 }
 \value{
 The value returned from the print method should be a character vector
-  or can be converted to a character value. You can wrap the value in
-  \code{\link{asis_output}()} so that \pkg{knitr} writes the character value
-  as is in the output.
+or can be converted to a character value. You can wrap the value in
+\code{\link[=asis_output]{asis_output()}} so that \pkg{knitr} writes the character value
+as is in the output.
 }
 \description{
 The S3 generic function \code{knit_print} is the default printing function in
@@ -34,12 +34,12 @@ Users can write custom methods based on this generic function. For example,
 if we want to print all data frames as tables in the output, we can define a
 method \code{knit_print.data.frame} that turns a data.frame into a table (the
 implementation may use other R packages or functions, e.g. \pkg{xtable} or
-\code{\link{kable}()}).
+\code{\link[=kable]{kable()}}).
 }
 \note{
 It is recommended to leave a \code{...} argument in your method, to
-  allow future changes of the \code{knit_print()} API without breaking your
-  method.
+allow future changes of the \code{knit_print()} API without breaking your
+method.
 }
 \examples{
 library(knitr)

@@ -54,15 +54,15 @@ extract_params_src = function(chunk.begin, line) {
 #'
 #' This object provides methods to manage code (as character vectors) in all
 #' chunks in \pkg{knitr} source documents. For example,
-#' \code{knitr::knit_code$get()} returns a named list of all code chunks (the
-#' names are chunk labels), and \code{knitr::knit_code$get('foo')} returns the
-#' character vector of the code in the chunk with the label \code{foo}.
-#' @note The methods on this object include the \code{set()} method (i.e., you
-#'   could do something like \code{knitr::knit_code$set(foo = "'my precious new
-#'   code'")}), but we recommend that you do not use this method to modify the
+#' `knitr::knit_code$get()` returns a named list of all code chunks (the
+#' names are chunk labels), and `knitr::knit_code$get('foo')` returns the
+#' character vector of the code in the chunk with the label `foo`.
+#' @note The methods on this object include the `set()` method (i.e., you
+#'   could do something like `knitr::knit_code$set(foo = "'my precious new
+#'   code'")`), but we recommend that you do not use this method to modify the
 #'   content of code chunks, unless you are
-#'   \href{https://emitanaka.rbind.io/post/knitr-knitr-code/}{as creative as Emi
-#'   Tanaka} and know what you are doing.
+#'   [as creative as Emi
+#'   Tanaka](https://emitanaka.rbind.io/post/knitr-knitr-code/) and know what you are doing.
 #' @export
 knit_code = new_defaults()
 
@@ -99,7 +99,6 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   # for quarto, preserve the actual original params.src and do not remove the engine
   if (!is_quarto() || opts_knit$get('tangle')) params.src = params
   params = xfun::csv_options(params)
-  if (is.null(params$label)) params$label = unnamed_chunk()
 
   # remove indent (and possibly markdown blockquote >) from code
   if (nzchar(spaces <- get_chunk_indent(header))) {
@@ -113,10 +112,17 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
   # merge with possible chunk options written as (YAML or CSV) metadata in
   # chunk, and remove metadata from code body
   parts = partition_chunk(engine, code)
+  dup = intersect(names(params), names(parts$options))
   params = merge_list(params, parts$options)
-  code = parts$code
+  if (is.null(params$label)) params$label = unnamed_chunk()
+  label = params$label
+  if (length(dup)) warning(
+    "Duplicated chunk option(s) ", paste0("'", dup, "'", collapse = ', '),
+    " in both chunk header and pipe comments of the chunk '", label, "'.", call. = FALSE
+  )
 
-  label = params$label; .knitEnv$labels = c(.knitEnv$labels, label)
+  code = parts$code
+  .knitEnv$labels = c(.knitEnv$labels, label)
   if (length(code) || length(params[['file']]) || length(params[['code']])) {
     if (label %in% names(knit_code$get())) {
       if (identical(getOption('knitr.duplicate.label'), 'allow')) {
@@ -137,8 +143,9 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
       deps[deps < 0] = length(.knitEnv$labels) + deps[deps < 0]
       deps = .knitEnv$labels[deps[deps > 0]]
     }
-    for (i in deps)
-      dep_list$set(setNames(list(c(dep_list$get(i), label)), i))
+    if (is.character(deps)) {
+      for (i in deps) dep_list$set(setNames(list(c(dep_list$get(i), label)), i))
+    } else warning2("Invalid chunk option 'dependson' (must be character or numeric)")
   }
 
   # for quarto only
@@ -190,7 +197,7 @@ parse_params = function(params, label = TRUE) {
 
 #' Partition chunk options from the code chunk body
 #'
-#' This is a wrapper function calling \code{xfun::\link[xfun]{divide_chunk}()}
+#' This is a wrapper function calling [xfun::divide_chunk()]
 #' under the hood.
 #' @export
 #' @keywords internal
@@ -198,7 +205,7 @@ partition_chunk = function(engine, code) {
   opts = options(xfun.handle_error.loc_fun = get_loc)
   on.exit(options(opts))
   # the code has been moved to the xfun package
-  xfun::divide_chunk(engine, code)
+  xfun::divide_chunk(engine, code, strict = is_quarto())
 }
 
 print_block = function(x) {
@@ -225,18 +232,21 @@ parse_inline = function(input, patterns) {
   loc = cbind(start = numeric(0), end = numeric(0))
   if (group_pattern(inline.code)) loc = str_locate(input, inline.code)[[1]]
   code1 = code2 = character()
+  lines = integer()
   if (nrow(loc)) {
     code = t(str_match(input, inline.code))
     if (NCOL(code) >= 2L) {
       code1 = code[, 1L]
       code2 = apply(code[, -1L, drop = FALSE], 1, paste, collapse = '')
+      nl = gregexpr('\n', input, fixed = TRUE)[[1]]
+      lines = if (length(nl) > 1 || nl > -1) findInterval(loc, nl) else 0L
     }
   }
 
-  structure(
-    list(input = input, location = loc, code = code2, code.src = code1),
-    class = 'inline'
-  )
+  structure(list(
+    input = input, location = loc, code = code2, code.src = code1,
+    lines = matrix(lines, ncol = 2, nrow = nrow(loc))
+  ), class = 'inline')
 }
 
 print_inline = function(x) {
@@ -251,44 +261,44 @@ print_inline = function(x) {
 #' Read chunks from an external script
 #'
 #' Chunks can be put in an external script, and this function reads chunks into
-#' the current \pkg{knitr} session; \code{read_demo()} is a convenience function
+#' the current \pkg{knitr} session; `read_demo()` is a convenience function
 #' to read a demo script from a package.
 #'
 #' There are two approaches to read external code into the current session: (1)
-#' Use a special separator of the from \code{## ---- chunk-label} (at least four
+#' Use a special separator of the from `## ---- chunk-label` (at least four
 #' dashes before the chunk label) in the script; (2) Manually specify the
 #' labels, starting and ending positions of code chunks in the script.
 #'
-#' The second approach will be used only when \code{labels} is not \code{NULL}.
-#' For this approach, if \code{from} is \code{NULL}, the starting position is 1;
-#' if \code{to} is \code{NULL}, each of its element takes the next element of
-#' \code{from} minus 1, and the last element of \code{to} will be the length of
-#' \code{lines} (e.g. when \code{from = c(1, 3, 8)} and the script has 10 lines
-#' in total, \code{to} will be \code{c(2, 7, 10)}). Alternatively, \code{from}
-#' and \code{to} can be character vectors as regular expressions to specify the
+#' The second approach will be used only when `labels` is not `NULL`.
+#' For this approach, if `from` is `NULL`, the starting position is 1;
+#' if `to` is `NULL`, each of its element takes the next element of
+#' `from` minus 1, and the last element of `to` will be the length of
+#' `lines` (e.g. when `from = c(1, 3, 8)` and the script has 10 lines
+#' in total, `to` will be `c(2, 7, 10)`). Alternatively, `from`
+#' and `to` can be character vectors as regular expressions to specify the
 #' positions; when their length is 1, the single regular expression will be
-#' matched against the \code{lines} vector, otherwise each element of
-#' \code{from}/\code{to} is matched against \code{lines} and the match is
+#' matched against the `lines` vector, otherwise each element of
+#' `from`/`to` is matched against `lines` and the match is
 #' supposed to be unique so that the numeric positions returned from
-#' \code{grep()} will be of the same length of \code{from}/\code{to}. Note
-#' \code{labels} always has to match the length of \code{from} and \code{to}.
+#' `grep()` will be of the same length of `from`/`to`. Note
+#' `labels` always has to match the length of `from` and `to`.
 #' @param path Path to the R script.
 #' @param lines Character vector of lines of code. By default, this is read from
-#'   \code{path}.
-#' @param labels Character vector of chunk labels (default \code{NULL}).
+#'   `path`.
+#' @param labels Character vector of chunk labels (default `NULL`).
 #' @param from,to Numeric vector specifying the starting/ending line numbers of
 #'   code chunks, or a character vector; see Details.
-#' @param from.offset,to.offset Offsets to be added to \code{from}/\code{to}.
-#' @param roxygen_comments Logical dictating whether to keep trailing
-#'   roxygen-style comments from code chunks in addition to whitespace
+#' @param from.offset,to.offset Offsets to be added to `from`/`to`.
+#' @param roxygen_comments Whether to keep trailing roxygen-style comments from
+#'   code chunks in addition to whitespace.
 #' @return As a side effect, code chunks are read into the current session so
 #'   that future chunks can (re)use the code by chunk label references. If an
 #'   external chunk has the same label as a chunk in the current session, chunk
 #'   label references by future chunks will refer to the external chunk.
-#' @references \url{https://yihui.org/knitr/demo/externalization/}
-#' @note This function can only be used in a chunk which is \emph{not} cached
-#'   (chunk option \code{cache = FALSE}), and the code is read and stored in the
-#'   current session \emph{without} being executed (to actually run the code,
+#' @references <https://yihui.org/knitr/demo/externalization/>
+#' @note This function can only be used in a chunk which is *not* cached
+#'   (chunk option `cache = FALSE`), and the code is read and stored in the
+#'   current session *without* being executed (to actually run the code,
 #'   you have to use a chunk with a corresponding label).
 #' @author Yihui Xie; the idea of the second approach came from Peter
 #'   Ruckdeschel (author of the \pkg{SweaveListingUtils} package)
@@ -353,8 +363,8 @@ read_chunk = function(
 
 #' @rdname read_chunk
 #' @param topic,package Name of the demo and the package. See
-#'   \code{utils::\link{demo}}.
-#' @param ... Arguments passed to \code{\link{read_chunk}}.
+#'   [utils::demo()].
+#' @param ... Arguments passed to [read_chunk()].
 #' @export
 read_demo = function(topic, package = NULL, ...) {
   paths = list.files(file.path(find.package(package), 'demo'), full.names = TRUE)
@@ -399,12 +409,13 @@ strip_white = function(x, test_strip = is_blank) {
 parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   if (length(x) == 0L) return(x)
   x = c(x)  # drop attributes of code (e.g. chunk_opts)
-  if (!group_pattern(rc) || !any(idx <- grepl(rc, x))) return(x)
+  if (!group_pattern(rc) || length(idx <- grep(rc, x)) == 0) return(x)
 
   labels = sub(rc, '\\1', x[idx])
-  code = knit_code$get(labels)
+  code = knit_code$get()
+  i = labels %in% names(code)
+  idx = idx[i]; code = code[labels[i]]
   indent = gsub('^(\\s*).*', '\\1', x[idx])
-  if (length(labels) <= 1L) code = list(code)
   code = mapply(indent_block, code, indent, SIMPLIFY = FALSE, USE.NAMES = FALSE)
 
   x = as.list(x)
@@ -469,9 +480,7 @@ match_chunk_end = function(pattern, line, i, b, lines) {
     if (!any(match_chunk_begin(pattern, lines[i + 1:(k - 1)], '^\\1`*\\\\{')))
       return(FALSE)
   }
-  # TODO: clean up the exceptions here (although perhaps some may never update again)
-  signal = if (getOption('knitr.unbalanced.chunk', FALSE)) warning2 else stop2
-  signal(
+  stop2(
     'The closing fence on line ', i, ' ("', line, '") in ', current_input(),
     ' does not match the opening fence "',
     gsub('\\^(\\s*`+).*', '\\1', pattern), '" on line ', b, '. You are recommended to ',
@@ -479,31 +488,30 @@ match_chunk_end = function(pattern, line, i, b, lines) {
     'the same numbers of backticks and same level of indentation (or blockquote). ',
     'See https://yihui.org/en/2021/10/unbalanced-delimiters/ for more info.'
   )
-  TRUE
 }
 
 #' Get all chunk labels in a document
 #'
-#' The function \code{all_labels()} returns all chunk labels as a character
+#' The function `all_labels()` returns all chunk labels as a character
 #' vector. Optionally, you can specify a series of conditions to filter the
 #' labels. The function `all_rcpp_labels()` is a wrapper function for
-#' \code{all_labels(engine == 'Rcpp')}.
+#' `all_labels(engine == 'Rcpp')`.
 #'
-#' For example, suppose the condition expression is \code{engine == 'Rcpp'}, the
-#' object \code{engine} is the local chunk option \code{engine}. If an
+#' For example, suppose the condition expression is `engine == 'Rcpp'`, the
+#' object `engine` is the local chunk option `engine`. If an
 #' expression fails to be evaluated (e.g. when a certain object does not exist),
-#' \code{FALSE} is returned and the label for this chunk will be filtered out.
-#' @param ... A vector of R expressions, each of which should return \code{TRUE}
-#'   or \code{FALSE}. The expressions are evaluated using the \emph{local} chunk
+#' `FALSE` is returned and the label for this chunk will be filtered out.
+#' @param ... A vector of R expressions, each of which should return `TRUE`
+#'   or `FALSE`. The expressions are evaluated using the *local* chunk
 #'   options of each code chunk as the environment, which means global chunk
 #'   options are not considered when evaluating these expressions. For example,
-#'   if you set the global chunk option \code{opts_chunk$set(purl = TRUE)},
-#'   \code{all_labels(purl == TRUE)} will \emph{not} return the labels of all
+#'   if you set the global chunk option `opts_chunk$set(purl = TRUE)`,
+#'   `all_labels(purl == TRUE)` will *not* return the labels of all
 #'   code chunks, but will only return the labels of those code chunks that have
-#'   local chunk options \code{purl = TRUE}.
+#'   local chunk options `purl = TRUE`.
 #' @note Empty code chunks are always ignored, including those chunks that are
 #'   empty in the original document but filled with code using chunk options
-#'   such as \code{ref.label} or \code{code}.
+#'   such as `ref.label` or `code`.
 #' @return A character vector.
 #' @export
 #' @examples # the examples below are meaningless unless you put them in a knitr document
@@ -549,14 +557,13 @@ all_rcpp_labels = function(...) all_labels(expression(engine == 'Rcpp'), ...)
 #' Wrap code using the inline R expression syntax
 #'
 #' This is a convenience function to write the "source code" of inline R
-#' expressions. For example, if you want to write \samp{`r 1+1`} literally in an
-#' R Markdown document, you may write \samp{`` `r knitr::inline_expr('1+1')`
-#' ``}; for Rnw documents, this may be
-#' \samp{\verb|\Sexpr{knitr::inline_expr{'1+1'}}|}.
+#' expressions. For example, if you want to write `` `r 1+1` `` literally in an
+#' R Markdown document, you may write ``` `` `r knitr::inline_expr('1+1')` `` ```;
+#' for Rnw documents, this may be `\Sexpr{knitr::inline_expr{'1+1'}}`.
 #' @param code Character string of the inline R source code.
-#' @param syntax A character string to specify the syntax, e.g. \code{rnw},
-#'   \code{html}, or \code{md}. If not specified, this will be guessed from
-#'   the knitting context.
+#' @param syntax A character string to specify the syntax, e.g., `rnw`,
+#'   `html`, or `md`. If not specified, this will be guessed from the
+#'   knitting context.
 #' @return A character string marked up using the inline R code syntax.
 #' @export
 #' @examples library(knitr)
@@ -588,59 +595,64 @@ inline_expr = function(code, syntax) {
 #' This is a helper function for moving chunk options from the chunk header to
 #' the chunk body using the new syntax.
 #' @param input File path to the document with code chunks to convert.
-#' @param output The default \code{NULL} will output to console. Other values
+#' @param output The default `NULL` will output to console. Other values
 #'   can be a file path to write the converted content into or a function which
-#'   takes \code{input} as argument and returns a file path to write into (e.g.,
-#'   \code{output = identity} to overwrite the input file).
+#'   takes `input` as argument and returns a file path to write into (e.g.,
+#'   `output = identity` to overwrite the input file).
 #' @param type This determines how the in-body options will be formatted.
-#'   \code{"mutiline"} (the default, except for \file{qmd} documents, for which
-#'   the default is \code{"yaml"}) will write each chunk option on a separate
+#'   `"mutiline"` (the default, except for \file{qmd} documents, for which
+#'   the default is `"yaml"`) will write each chunk option on a separate
 #'   line. Long chunk option values will be wrapped onto several lines, and you
-#'   can use \code{width = 0} to keep one line per option only. \code{"wrap"}
+#'   can use `width = 0` to keep one line per option only. `"wrap"`
 #'   will wrap all chunk options together using
-#'   \code{\link[base:strwrap]{base::strwrap}()}. \code{"yaml"} will convert
+#'   [base::strwrap()]. `"yaml"` will convert
 #'   chunk options to YAML.
-#' @param width An integer passed to \code{base::strwrap()} for \code{type =
-#'   "wrap"} and \code{type = "multiline"}. If set to \code{0}, deactivate the
-#'   wrapping (for \code{type = "multiline"} only).
-#' @return A character vector of converted \code{input} when \code{output =
-#'   NULL}. The output file path with converted content otherwise.
+#' @param width An integer passed to `base::strwrap()` for `type =
+#'   "wrap"` and `type = "multiline"`. If set to `0`, deactivate the
+#'   wrapping (for `type = "multiline"` only).
+#' @return A character vector of converted `input` when `output =
+#'   NULL`. The output file path with converted content otherwise.
 #' @note Learn more about the new chunk option syntax in
-#'   \url{https://yihui.org/en/2022/01/knitr-news/}
+#'   <https://yihui.org/en/2022/01/knitr-news/>
 #' @section About \pkg{knitr} option syntax:
 #'
 #' Historical chunk option syntax have chunk option in the chunk header using
 #' valid R syntax. This is an example for \verb{.Rmd} document
-#' \preformatted{
-#' ```\{r, echo = FALSE, fig.width: 10\}
+#'
+#' ````
+#' ```{r, echo = FALSE, fig.width = 10}
 #' ```
-#' }
+#' ````
 #'
 #' New syntax allows to pass option inside the chunk using several variants
 #' \itemize{
-#' \item Passing options one per line using valid R syntax. This corresponds to \code{convert_chunk_header(type = "multiline")}.
-#' \preformatted{
-#' ```\{r\}
+#' \item Passing options one per line using valid R syntax. This corresponds to `convert_chunk_header(type = "multiline")`.
+#'
+#' ````
+#' ```{r}
 #' #| echo = FALSE,
 #' #| fig.width = 10
 #' ```
-#' }
+#' ````
 #'
 #' \item Passing option part from header in-chunk with several line if wrapping is
-#' needed. This corresponds to \code{convert_chunk_header(type = "wrap")}
-#' \preformatted{
-#' ```\{r\}
+#' needed. This corresponds to `convert_chunk_header(type = "wrap")`
+#'
+#' ````
+#' ```{r}
 #' #| echo = FALSE, fig.width = 10
 #' ```
-#' }
+#' ````
 #' \item Passing options key value pairs in-chunk using YAML syntax. Values are no
 #' more R expression but valid YAML syntax. This corresponds to
-#' \code{convert_chunk_header(type = "yaml")} (not implement yet).
-#' \preformatted{```\{r\}
+#' `convert_chunk_header(type = "yaml")` (not implement yet).
+#'
+#' ````
+#' ```{r}
 #' #| echo: false,
 #' #| fig.width: 10
 #' ```
-#' }
+#' ````
 #' }
 #' @examples
 #' knitr_example = function(...) system.file('examples', ..., package = 'knitr')

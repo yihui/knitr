@@ -38,8 +38,8 @@ argument or the global option \code{knitr.graphics.rel_path} to
 }
 \value{
 The same as the input character vector \code{path} but it is marked
-  with special internal S3 classes so that \pkg{knitr} will convert the file
-  paths to proper output code according to the output format.
+with special internal S3 classes so that \pkg{knitr} will convert the file
+paths to proper output code according to the output format.
 }
 \description{
 When plots are not generated from R code, there is no way for \pkg{knitr} to
@@ -54,12 +54,12 @@ as \code{out.width} and \code{out.height}.
 }
 \note{
 This function is supposed to be used in R code chunks or inline R code
-  expressions. For local images, you are recommended to use relative paths
-  with forward slashes instead of backslashes (e.g., \file{images/fig1.png}
-  instead of \file{/Users/me/code/images/fig1.png}).
+expressions. For local images, you are recommended to use relative paths
+with forward slashes instead of backslashes (e.g., \file{images/fig1.png}
+instead of \file{/Users/me/code/images/fig1.png}).
 
-  The automatic calculation of the output width requires the \pkg{png}
-  package (for PNG images) or the \pkg{jpeg} package (for JPEG images). The
-  width will not be calculated if the chunk option \code{out.width} is
-  already provided or \code{dpi = NA}.
+The automatic calculation of the output width requires the \pkg{png}
+package (for PNG images) or the \pkg{jpeg} package (for JPEG images). The
+width will not be calculated if the chunk option \code{out.width} is
+already provided or \code{dpi = NA}.
 }

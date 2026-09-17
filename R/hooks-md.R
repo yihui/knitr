@@ -34,7 +34,7 @@ need_special_plot_hook = function(options) {
   opts = opts_chunk$get(default = TRUE)
   for (i in c(
     'out.width', 'out.height', 'out.extra', 'fig.align', 'fig.subcap',
-    'fig.env', 'fig.scap', 'fig.alt'
+    'fig.env', 'fig.scap', 'fig.alt', 'fig.note'
   )) if (!identical(options[[i]], opts[[i]])) return(TRUE)
   FALSE
 }
@@ -61,13 +61,15 @@ hook_plot_md_base = function(x, options) {
   # self-contained mode?
   sc = any(c('--embed-resources', '--self-contained') %in% opts_knit$get('rmarkdown.pandoc.args'))
   lnk = options$fig.link
-  pandoc_html = cap != '' && is_html_output()
+  note = options$fig.note
+  has_note = !is.null(note) && !is.na(note) && note != ''
+  pandoc_html = (cap != '' || has_note) && is_html_output()
   in_bookdown = isTRUE(opts_knit$get('bookdown.internal.label'))
   plot1 = ai || options$fig.cur <= 1L
   plot2 = ai || options$fig.cur == options$fig.num
   to = pandoc_to(); from = pandoc_from()
   if (is.null(w) && is.null(h) && is.null(s) && is.null(options$fig.alt) &&
-      a == 'default' && !(pandoc_html && in_bookdown) && !is_svg) {
+      a == 'default' && !(pandoc_html && in_bookdown) && !is_svg && !has_note) {
     # append <!-- --> to ![]() to prevent the figure environment in these cases
     nocap = cap == '' && !is.null(to) && !grepl('^markdown', to) &&
       (options$fig.num == 1 || ai) && !grepl('-implicit_figures', from)
@@ -75,7 +77,7 @@ hook_plot_md_base = function(x, options) {
     res = sprintf('![%s](%s)', cap, x2)
     if (!is.null(lnk) && !is.na(lnk)) res = sprintf('[%s](%s)', res, lnk)
     res = paste0(res, if (nocap) '<!-- -->' else '', if (is_latex_output()) ' ' else '')
-    return(res)
+    return(sep_captioned_fig(res, cap, options))
   }
   add_link = function(x) {
     if (is.null(lnk) || is.na(lnk)) return(x)
@@ -88,13 +90,14 @@ hook_plot_md_base = function(x, options) {
   # use HTML syntax <img src=...>
   if (pandoc_html && !isTRUE(grepl('-implicit_figures', from))) {
     d1 = if (plot1) sprintf('<div class="figure"%s>\n', css_text_align(a))
-    d2 = sprintf('<p class="caption">%s</p>', cap)
+    d2 = if (cap != '') sprintf('<p class="caption">%s</p>', cap)
+    d3 = if (has_note) sprintf('<p class="figure-note">%s</p>', note)
     img = img_code()
     # whether to place figure caption at the top or bottom of a figure
     if (isTRUE(options$fig.topcaption)) {
-      paste0(d1, if (ai || options$fig.cur <= 1) d2, img, if (plot2) '</div>')
+      paste0(d1, if (ai || options$fig.cur <= 1) d2, img, if (plot2) paste0(d3, '</div>'))
     } else {
-      paste0(d1, img, if (plot2) paste0('\n', d2, '\n</div>'))
+      paste0(d1, img, if (plot2) paste0('\n', d2, d3, '\n</div>'))
     }
   } else {
     img_code(sprintf('style="%s"', css_align(a)))
@@ -131,7 +134,20 @@ hook_plot_md_pandoc = function(x, options) {
   )
   if (at != '') at = paste0('{', at, '}')
 
-  sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at)
+  sep_captioned_fig(sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at), cap, options)
+}
+
+# When a chunk generates multiple figures that carry captions, the plot hook is
+# called once per figure and the bare `![cap](path)` images would otherwise be
+# concatenated into a single paragraph, e.g. `![cap1](a) ![cap2](b)`. Pandoc
+# treats several images in one paragraph as inline images and drops the captions
+# (no figure environment / <figcaption>). Append a blank line after each
+# captioned figure except the last so that Pandoc emits a figure per image.
+# See https://github.com/yihui/knitr/issues/2032 and #1524.
+sep_captioned_fig = function(res, cap, options) {
+  if (cap != '' && (options$fig.cur %n% 1L) < (options$fig.num %n% 1L))
+    res = paste0(res, '\n\n')
+  res
 }
 
 css_align = function(align) {
@@ -146,11 +162,11 @@ css_text_align = function(align) {
 
 #' @rdname output_hooks
 #' @export
-#' @param strict Boolean; whether to use strict markdown or reST syntax. For markdown, if
-#'   \code{TRUE}, code blocks will be indented by 4 spaces, otherwise they are
-#'   put in fences made by three backticks. For reST, if \code{TRUE}, code is
+#' @param strict Whether to use strict markdown or reST syntax. For markdown, if
+#'   `TRUE`, code blocks will be indented by 4 spaces, otherwise they are
+#'   put in fences made by three backticks. For reST, if `TRUE`, code is
 #'   put under two colons and indented by 4 spaces, otherwise it is put under the
-#'   \samp{sourcecode} directive (this is useful for e.g. Sphinx).
+#'   `sourcecode` directive (this is useful for e.g., Sphinx).
 #' @param fence_char A single character to be used in the code blocks fence.
 #'   This can be e.g. a backtick or a tilde, depending on your Markdown rendering
 #'   engine.
@@ -175,6 +191,7 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
   hook.o = function(class) {
     force(class)
     function(x, options) {
+      if (class == 'output' && output_asis(x, options)) return(x)
       hook.t(x, options[[paste0('attr.', class)]], options[[paste0('class.', class)]])
     }
   }
@@ -199,7 +216,7 @@ hooks_markdown = function(strict = FALSE, fence_char = '`') {
       x = gsub('[\n]+$', '', x)
       x = gsub('^[\n]+', '\n', x)
       if (isTRUE(options$collapse)) {
-        r = sprintf('\n([%s]{3,})\n+\\1((\\{[.])?%s[^\n]*)?\n', fence_char, tolower(options$engine))
+        r = sprintf('\n([%s]{3,})\n+\\1((\\{[.]| )?%s[^\n]*)?\n', fence_char, tolower(options$engine))
         x = gsub(r, '\n', x)
         x = gsub(asis_token, '', x, fixed = TRUE)
       }
@@ -244,13 +261,13 @@ eng2lang = function(x) {
   if (x %in% names(d)) d[x] else x
 }
 
-#' @param highlight Which code highlighting engine to use: if \code{pygments},
-#'   the Liquid syntax is used (default approach Jekyll); if \code{prettify},
+#' @param highlight Which code highlighting engine to use: if `pygments`,
+#'   the Liquid syntax is used (default approach Jekyll); if `prettify`,
 #'   the output is prepared for the JavaScript library \file{prettify.js}; if
-#'   \code{none}, no highlighting engine will be used, and code blocks are simply
+#'   `none`, no highlighting engine will be used, and code blocks are simply
 #'   indented by 4 spaces).
-#' @param extra Extra tags for the highlighting engine. For \code{pygments}, this
-#'   can be \code{'linenos'}; for \code{prettify}, it can be \code{'linenums'}.
+#' @param extra Extra tags for the highlighting engine. For `pygments`, this
+#'   can be `'linenos'`; for `prettify`, it can be `'linenums'`.
 #' @rdname output_hooks
 #' @export
 render_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '') {
@@ -277,12 +294,12 @@ hooks_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '
   }, prettify = {
     hook.r = function(x, options) {
       paste0(
-        '\n\n<pre><code class="prettyprint ', extra, '">', escape_html(x),
+        '\n\n<pre><code class="prettyprint ', extra, '">', html_escape(x),
         '</code></pre>\n\n'
       )
     }
     hook.t = function(x, options) paste0(
-      '\n\n<pre><code>', escape_html(x), '</code></pre>\n\n'
+      '\n\n<pre><code>', html_escape(x), '</code></pre>\n\n'
     )
   })
   source = function(x, options) {
@@ -290,6 +307,9 @@ hooks_jekyll = function(highlight = c('pygments', 'prettify', 'none'), extra = '
     hook.r(x, options)
   }
   merge_list(hook.m, list(
-    source = source, output = hook.t, warning = hook.t, message = hook.t, error = hook.t
+    source = source, warning = hook.t, message = hook.t, error = hook.t,
+    output = function(x, options) {
+      if (output_asis(x, options)) x else hook.t(x, options)
+    }
   ))
 }

@@ -42,7 +42,9 @@ hooks_rst = function(strict = FALSE) {
       (if (strict) hook.s else hook.t)(x, options)
     },
     warning = hook.s, error = hook.s, message = hook.s,
-    output = hook.s, inline = hook.i, plot = hook_plot_rst
+    inline = hook.i, plot = hook_plot_rst, output = function(x, options) {
+      if (output_asis(x, options)) x else hook.s(x, options)
+    }
   )
 }
 

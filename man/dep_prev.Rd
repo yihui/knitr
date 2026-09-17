@@ -8,7 +8,7 @@ dep_prev()
 }
 \value{
 \code{NULL}; the internal dependency structure is updated as a side
-  effect.
+effect.
 }
 \description{
 This function can be used to build dependencies among chunks so that all
@@ -19,5 +19,5 @@ chunk is updated, the cache of all its later chunks will be updated.
 \url{https://yihui.org/knitr/demo/cache/}
 }
 \seealso{
-\code{\link{dep_auto}}
+\code{\link[=dep_auto]{dep_auto()}}
 }

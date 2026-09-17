@@ -142,6 +142,10 @@ table > caption span, div.figure p.caption span {
   font-style: normal;
   font-weight: bold;
 }
+div.figure p.figure-note {
+  font-size: 90%;
+  font-style: italic;
+}
 
 img:not([class]) {
   background-color: #FFFFFF;

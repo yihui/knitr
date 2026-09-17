@@ -52,7 +52,8 @@ call_block = function(block) {
 
   if (opts_knit$get('progress')) print_block(block)
 
-  params[['code']] = parse_chunk(params[['code']]) # parse sub-chunk references
+  if (!isFALSE(params$ref.chunk))
+    params[['code']] = parse_chunk(params[['code']]) # parse sub-chunk references
 
   ohooks = opts_hooks$get()
   for (opt in names(ohooks)) {
@@ -144,6 +145,13 @@ cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fi
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
 block_exec = function(options) {
+  otel_active_span(
+    name = 'knit',
+    label = options$label,
+    attributes = make_chunk_attributes(options),
+    scope = environment()
+  )
+
   if (options$engine == 'R') return(eng_r(options))
 
   # when code is not R language
@@ -172,17 +180,17 @@ block_exec = function(options) {
 #' Engine for R
 #'
 #' This function handles the execution of R code blocks (when the chunk option
-#' \code{engine} is \code{'R'}) and generates the R output for each code block.
+#' `engine` is `'R'`) and generates the R output for each code block.
 #'
-#' This engine function has one argument \code{options}: the source code of the
-#' current chunk is in \code{options$code}. It returns a processed output that
+#' This engine function has one argument `options`: the source code of the
+#' current chunk is in `options$code`. It returns a processed output that
 #' can consist of data frames (as tables), graphs, or character output. This
 #' function is intended for advanced use to allow developers to extend R, and
 #' customize the pipeline with which R code is executed and processed within
 #' knitr.
 #'
 #' @param options A list of chunk options. Usually this is just the object
-#'   \code{options} associated with the current code chunk.
+#'   `options` associated with the current code chunk.
 #' @noRd
 eng_r = function(options) {
   # eval chunks (in an empty envir if cache)
@@ -252,11 +260,14 @@ eng_r = function(options) {
 
   cache.exists = cache$exists(options$hash, options$cache.lazy)
   evaluate = knit_hooks$get('evaluate')
+  # record the currently opened devices so we can detect if the chunk opens new
+  # ones (e.g., via dev.new()), which knitr cannot capture (#2355)
+  dev.before = dev.list()
   # return code with class 'source' if not eval chunks
   res = if (is_blank(code)) list() else if (isFALSE(ev)) {
     as.source(code)
   } else if (cache.exists && isFALSE(options$cache.rebuild)) {
-    fix_evaluate(cache$output(options$hash, 'list'), options$cache == 1)
+    cache$output(options$hash, 'list')
   } else in_input_dir(
     evaluate(
       code, envir = env, new_device = FALSE,
@@ -268,6 +279,13 @@ eng_r = function(options) {
       output_handler = knit_handlers(options$render, options)
     )
   )
+  # warn if the chunk opened extra devices that knitr cannot record plots from
+  if (length(setdiff(dev.list(), dev.before))) warning2(
+    "The chunk '", options$label, "' opened new graphics device(s) ",
+    "(e.g., via dev.new()), from which knitr cannot capture plots. ",
+    "Please remove the code that opens new devices such as dev.new()."
+  )
+
   if (options$cache %in% 1:2 && (!cache.exists || isTRUE(options$cache.rebuild))) {
     # make a copy for cache=1,2; when cache=2, we do not really need plots
     res.orig = if (options$cache == 2) remove_plot(res, keep == 'high') else res
@@ -331,7 +349,7 @@ eng_r = function(options) {
     obj.new = if (is.null(options$cache.vars)) setdiff(ls(globalenv(), all.names = TRUE), obj.before)
     copy_env(globalenv(), env, obj.new)
     objs = if (isFALSE(ev) || length(code) == 0) character(0) else
-      options$cache.vars %n% codetools::findLocalsList(parse_only(code))
+      options$cache.vars %n% xfun::find_locals(code)
     # make sure all objects to be saved exist in env
     objs = intersect(c(objs, obj.new), ls(env, all.names = TRUE))
     if (options$autodep) {
@@ -340,7 +358,12 @@ eng_r = function(options) {
         objs, cache_globals(options$cache.globals, code), options$label,
         options$cache.path
       )
-      dep_auto(labels = options$label)
+      if (isTRUE(opts_knit$get('autodep.initialized'))) {
+        dep_auto(labels = options$label)
+      } else {
+        dep_auto(labels = all_labels())
+        opts_knit$set(autodep.initialized = TRUE)
+      }
     }
     if (options$cache < 3) {
       if (options$cache.rebuild || !cache.exists) block_cache(options, res.orig, objs)
@@ -368,7 +391,7 @@ purge_cache = function(options) {
 
 cache_globals = function(option, code) {
   if (is.character(option)) option else {
-    (if (isFALSE(option)) find_symbols else find_globals)(code)
+    if (isFALSE(option)) find_symbols(code) else xfun::find_globals(code, knit_global())
   }
 }
 
@@ -380,43 +403,42 @@ chunk_device = function(options, record = TRUE, tmp = tempfile()) {
   dev.args = options$dev.args
   dpi = options$dpi
 
-  # actually I should adjust the recording device according to dev, but here I
-  # have only considered devices like png and tikz (because the measurement
-  # results can be very different especially with the latter, see #1066), the
-  # cairo_pdf device (#1235), and svg (#1705)
-  if (identical(dev, 'png')) {
-    do.call(grDevices::png, c(list(
-      filename = tmp, width = width, height = height, units = 'in', res = dpi
-    ), get_dargs(dev.args, 'png')))
-  } else if (identical(dev, 'ragg_png')) {
-    do.call(ragg_png_dev, c(list(
-      filename = tmp, width = width, height = height, units = 'in', res = dpi
-    ), get_dargs(dev.args, 'ragg_png')))
-  } else if (identical(dev, 'tikz')) {
-    dargs = c(list(
-      file = tmp, width = width, height = height
-    ), get_dargs(dev.args, 'tikz'))
-    dargs$sanitize = options$sanitize; dargs$standAlone = options$external
-    if (is.null(dargs$verbose)) dargs$verbose = FALSE
-    do.call(tikz_dev, dargs)
-  } else if (identical(dev, 'cairo_pdf')) {
-    do.call(grDevices::cairo_pdf, c(list(
-      filename = tmp, width = width, height = height
-    ), get_dargs(dev.args, 'cairo_pdf')))
-  } else if (identical(dev, 'svg')) {
-    do.call(grDevices::svg, c(list(
-      filename = tmp, width = width, height = height
-    ), get_dargs(dev.args, 'svg')))
-  } else if (identical(dev, 'svglite')) {
-    do.call(svglite::svglite, c(list(
-      filename = tmp, width = width, height = height
-    ), get_dargs(dev.args, 'svglite')))
-  } else if (identical(getOption('device'), pdf_null)) {
-    if (!is.null(dev.args)) {
-      dev.args = get_dargs(dev.args, 'pdf')
-      dev.args = dev.args[intersect(names(dev.args), names(formals(pdf)))]
+  # open device `fun` with the common size args, plus the fixed args in `extra`
+  # and any matching dev.args; `filter = TRUE` drops dev.args that `fun` does not
+  # accept (for devices whose formals don't include `...`, which would otherwise
+  # error on unknown args).
+  open_dev = function(fun, extra = list(), filter = FALSE) {
+    dargs = get_dargs(dev.args, dev)
+    if (filter) dargs = match_dargs(dargs, fun)
+    do.call(fun, c(list(filename = tmp, width = width, height = height), extra, dargs))
+  }
+
+  # I only adjust the recording device for devices whose measurement results can
+  # differ from the default, e.g., png and tikz (#1066), cairo_pdf (#1235), and
+  # svg (#1705); each opener below is a closure keyed by the device name
+  openers = list(
+    png       = function() open_dev(grDevices::png, list(units = 'in', res = dpi)),
+    ragg_png  = function() open_dev(ragg_png_dev, list(units = 'in', res = dpi)),
+    ragg_webp = function() open_dev(ragg_webp_dev, list(units = 'in', res = dpi)),
+    cairo_pdf = function() open_dev(grDevices::cairo_pdf),
+    svg       = function() open_dev(grDevices::svg),
+    svglite   = function() open_dev(svglite::svglite, filter = TRUE),
+    tikz      = function() {
+      dargs = c(list(
+        file = tmp, width = width, height = height
+      ), get_dargs(dev.args, 'tikz'))
+      dargs$sanitize = options$sanitize; dargs$standAlone = options$external
+      if (is.null(dargs$verbose)) dargs$verbose = FALSE
+      do.call(tikz_dev, dargs)
     }
-    do.call(pdf_null, c(list(width = width, height = height), dev.args))
+  )
+
+  open = if (length(dev) == 1) openers[[dev]]
+  if (!is.null(open)) {
+    open()
+  } else if (identical(getOption('device'), pdf_null)) {
+    dargs = match_dargs(get_dargs(dev.args, 'pdf'), pdf)
+    do.call(pdf_null, c(list(width = width, height = height), dargs))
   } else dev.new(width = width, height = height)
   dev.control(displaylist = if (record) 'enable' else 'inhibit')
 }
@@ -562,9 +584,11 @@ inline_exec = function(
   code = block$code; input = block$input
   if ((n <- length(code)) == 0) return(input) # untouched if no code is found
   code.src = block$code.src
+  lines = block$lines
 
   ans = character(n)
   for (i in 1:n) {
+    knit_concord$set(offset = lines[i, ])
     tryCatch(parse_only(code[i]), error = function(e) {
       stop2('Failed to parse the inline R code: ', code.src[i], '\nReason: ', e$message)
     })
@@ -604,10 +628,16 @@ tangle_block = function(x) {
     eval(parse_only(unlist(str_extract(code, 'read_chunk\\(([^)]+)\\)'))))
   }
   code = parse_chunk(code)
-  if (isFALSE(ev)) code = comment_out(code, params$comment, newline = FALSE)
+  code = tangle_mask(code, ev, x$params$error)
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
   # e.g. when documentation 1 or 2 with purl()
   label_code(code, x)
+}
+
+tangle_mask = function(code, eval, error) {
+  if (isFALSE(eval)) code = comment_out(code, '#', newline = FALSE)
+  if (isTRUE(error)) code = c('try({', code, '})')
+  code
 }
 
 tangle_inline = function(x) {

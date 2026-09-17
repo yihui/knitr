@@ -13,11 +13,11 @@ rst2pdf(input, command = "rst2pdf", options = "")
 \command{rst2pdf} program. If the program is not in your PATH, the full path has to be
 given here.}
 
-\item{options}{Extra command line options, e.g. \code{'-v'}.}
+\item{options}{Extra command line options, e.g., \code{'-v'}.}
 }
 \value{
 An input file \file{*.rst} will produce \file{*.pdf} and this output
-  filename is returned if the conversion was successful.
+filename is returned if the conversion was successful.
 }
 \description{
 Convert reST to PDF using \command{rst2pdf} (which converts from rst to PDF
@@ -27,7 +27,7 @@ using the ReportLab open-source library).
 \url{https://github.com/rst2pdf/rst2pdf}
 }
 \seealso{
-\code{\link{knit2pdf}}
+\code{\link[=knit2pdf]{knit2pdf()}}
 }
 \author{
 Alex Zvoleff and Yihui Xie

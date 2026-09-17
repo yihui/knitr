@@ -22,7 +22,7 @@ assert('include_graphics() includes custom images correctly', {
   (img_output('a.png') %==% '![](a.png)')
   (img_output(c('a.png', 'b.png'), list(fig.show = 'hold')) %==% '![](a.png)![](b.png)')
   (img_output('a.png', list(fig.cap = 'foo bar')) %==% '![foo bar](a.png)')
-  (img_output('a.png', list(out.width = '50%')) %==% '<img src="a.png" width="50%" />')
+  (img_output('a.png', list(out.width = '50%')) %==% '<img src="a.png" alt="" width="50%" />')
   (img_output('a.pdf', list(out.width = '300px')) %==% '<embed src="a.pdf" width="300px" type="application/pdf" />')
 })
 
@@ -30,8 +30,8 @@ hook_src = knit_hooks$get("source")
 options_ = list(engine = "r", prompt = FALSE, highlight = TRUE)
 
 assert('Length of fences are satisfied', {
-  (hook_src("", options_) %==% "\n\n```r\n\n```\n\n")
-  (hook_src("```", options_) %==% "\n\n````r\n```\n````\n\n")
+  (hook_src("", options_) %==% "\n\n``` r\n\n```\n\n")
+  (hook_src("```", options_) %==% "\n\n```` r\n```\n````\n\n")
 })
 
 assert('Attributes for source can be specified class.source and attr.source', {
@@ -99,6 +99,36 @@ assert("Include a plot by pandoc md", {
   (hook_plot_md_pandoc(x, opt(ex = ex)) %==% sprintf("![](1.png){%s}", ex))
   (hook_plot_md_pandoc(x, opt(w = w, cap = cap, ex = ex)) %==%
     sprintf("![%s](1.png){width=%s %s}", cap, w, ex))
+})
+
+assert("captioned figures in a multi-figure chunk are separated by a blank line (#2032)", {
+  fig = function(cur, num, cap = NULL) opt(cap = cap, fig.cur = cur, fig.num = num)
+  # a captioned figure that is not the last one gets a trailing blank line
+  (hook_plot_md_pandoc(x, fig(1, 2, cap)) %==% sprintf("![%s](1.png)\n\n", cap))
+  # the last figure and single-figure chunks do not
+  (hook_plot_md_pandoc(x, fig(2, 2, cap)) %==% sprintf("![%s](1.png)", cap))
+  (hook_plot_md_pandoc(x, fig(1, 1, cap)) %==% sprintf("![%s](1.png)", cap))
+  # figures without a caption are left inline (Pandoc keeps them as inline images)
+  (hook_plot_md_pandoc(x, fig(1, 2)) %==% "![](1.png)")
+})
+
+assert('empty alt text is preserved and NA alt is discarded', {
+  (hook_plot_md(x, opts_chunk$merge(list(fig.alt = ''))) %==% '<img src="1.png" alt=""  />')
+  (hook_plot_md(x, opts_chunk$merge(list(fig.alt = NA, out.width = '100'))) %==% '<img src="1.png" width="100" />')
+})
+
+assert("fig.note is placed in a figure-note paragraph for HTML output", {
+  old = opts_knit$get('rmarkdown.pandoc.to')
+  opts_knit$set(rmarkdown.pandoc.to = 'html')
+  # note together with a caption
+  (hook_plot_md(x, opt(cap = cap, fig.note = 'A note.')) %==%
+    paste0('<div class="figure">\n<img src="1.png" alt="foo"  />\n',
+           '<p class="caption">foo</p><p class="figure-note">A note.</p>\n</div>'))
+  # note without a caption (no empty caption paragraph)
+  (hook_plot_md(x, opt(fig.note = 'A note.')) %==%
+    paste0('<div class="figure">\n<img src="1.png" alt=""  />\n',
+           '<p class="figure-note">A note.</p>\n</div>'))
+  opts_knit$set('rmarkdown.pandoc.to' = old)
 })
 
 assert("fig.alt does not break office document", {

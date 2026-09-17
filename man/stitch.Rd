@@ -24,15 +24,15 @@ stitch_rmd(..., envir = parent.frame())
 \item{template}{Path of the template to use. By default, the Rnw template in
 this package; there is also an HTML template in \pkg{knitr}.}
 
-\item{output}{Output filename, passed to \code{\link{knit}}). By default,
+\item{output}{Output filename, passed to \code{\link[=knit]{knit()}}). By default,
 the base filename of the script is used.}
 
 \item{text}{A character vector. This is an alternative way to provide the
 input file.}
 
 \item{envir}{Environment in which code chunks are to be evaluated, for
-example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()}).}
+example, \code{\link[=parent.frame]{parent.frame()}}, \code{\link[=new.env]{new.env()}}, or
+\code{\link[=globalenv]{globalenv()}}).}
 
 \item{...}{Arguments passed to \code{stitch()}.}
 }
@@ -47,12 +47,12 @@ an R script and a template. The default template is an Rnw file (LaTeX);
 }
 \details{
 The first two lines of the R script can contain the title and author of the
-report in comments of the form \samp{## title:} and \samp{## author:}. The
-template must have a token \samp{\%sCHUNK_LABEL_HERE}, which will be used to
+report in comments of the form \verb{## title:} and \verb{## author:}. The
+template must have a token \verb{\\\%sCHUNK_LABEL_HERE}, which will be used to
 input all the R code from the script. See the examples below.
 
-The R script may contain chunk headers of the form \samp{## ---- label,
-opt1=val1, opt2=val2}, which will be copied to the template; if no chunk
+The R script may contain chunk headers of the form
+\verb{## ---- label, opt1=val1, opt2=val2}, which will be copied to the template; if no chunk
 headers are found, the whole R script will be inserted into the template as
 one code chunk.
 }
@@ -69,5 +69,5 @@ stitch(s, system.file("misc", "knitr-template.Rmd", package = "knitr"))
 unlink(c("stitch-test.html", "stitch-test.md", "figure"), recursive = TRUE)
 }
 \seealso{
-\code{\link{spin}} (turn a specially formatted R script to a report)
+\code{\link[=spin]{spin()}} (turn a specially formatted R script to a report)
 }

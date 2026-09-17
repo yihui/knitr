@@ -38,8 +38,8 @@ a function, it must return a character string.}
 \code{round()}. This can also be a vector of length \code{ncol(x)}, to set
 the number of digits for individual columns.}
 
-\item{row.names}{Logical: whether to include row names. By default, row names
-are included if \code{rownames(x)} is neither \code{NULL} nor identical to
+\item{row.names}{Whether to include row names. By default, row names are
+included if \code{rownames(x)} is neither \code{NULL} nor identical to
 \code{1:nrow(x)}.}
 
 \item{col.names}{A character vector of column names to be used in the table.}
@@ -58,12 +58,12 @@ option \code{tab.cap}.}
 from \code{knitr::\link{opts_current}$get('label')} (i.e., the current
 chunk label). To disable the label, use \code{label = NA}.}
 
-\item{format.args}{A list of arguments to be passed to \code{\link{format}()}
+\item{format.args}{A list of arguments to be passed to \code{\link[=format]{format()}}
 to format table values, e.g. \code{list(big.mark = ',')}.}
 
-\item{escape}{Boolean; whether to escape special characters when producing
-HTML or LaTeX tables. When \code{escape = FALSE}, you have to make sure
-that special characters will not trigger syntax errors in LaTeX or HTML.}
+\item{escape}{Whether to escape special characters when producing HTML or
+LaTeX tables. When \code{escape = FALSE}, you have to make sure that
+special characters will not trigger syntax errors in LaTeX or HTML.}
 
 \item{...}{Other arguments (see Examples and References).}
 }
@@ -90,10 +90,76 @@ rows to show in the table, e.g., \code{options(knitr.kable.max_rows = 30)}.
 }
 \note{
 When using \code{kable()} as a \emph{top-level} expression, you do not
-  need to explicitly \code{print()} it due to R's automatic implicit
-  printing. When it is wrapped inside other expressions (such as a
-  \code{\link{for}} loop), you must explicitly \code{print(kable(...))}.
+need to explicitly \code{print()} it due to R's automatic implicit
+printing. When it is wrapped inside other expressions (such as a
+\code{for} loop), you must explicitly \code{print(kable(...))}.
 }
+\section{Arguments for the \code{latex} format}{
+
+\describe{
+\item{\code{booktabs}}{(\code{FALSE}) Whether to use the \pkg{booktabs} package
+style, i.e., generate \verb{\\toprule}, \verb{\\midrule}, and \verb{\\bottomrule}
+rules (and no vertical lines) instead of \verb{\\hline}.}
+\item{\code{longtable}}{(\code{FALSE}) Whether to use the \pkg{longtable} package to
+generate a table that may span multiple pages. This is a shortcut for
+\code{tabular = 'longtable'}.}
+\item{\code{tabular}}{The name of the LaTeX tabular environment, e.g.,
+\code{'tabular'} (the default), \code{'longtable'}, \code{'tabularx'}, or
+\code{'xltabular'}.}
+\item{\code{valign}}{The vertical alignment of the table specified in the
+optional (or, for \code{tabularx}/\code{xltabular}, the mandatory) argument of
+the tabular environment, e.g., \code{'[t]'}. Only applied when a \code{caption}
+is present or \code{valign} is explicitly provided.}
+\item{\code{position}}{The floating position of the \code{table} environment,
+e.g., \code{'h'}, \code{'!htbp'}. Only used when the table is wrapped in a
+\code{table} environment (i.e., when there is a caption).}
+\item{\code{centering}}{(\code{TRUE}) Whether to center the table with
+\verb{\\centering} (only takes effect when a \code{caption} is present).}
+\item{\code{vline}}{The vertical line separator between columns in the tabular
+preamble (defaults to \code{''} for \code{booktabs = TRUE}, otherwise \code{'|'}).
+Can be set globally via the option \code{knitr.table.vline}.}
+\item{\code{toprule}, \code{midrule}, \code{bottomrule}}{The horizontal rules at the
+top of the table, after the header row, and at the bottom of the table,
+respectively. They default to \verb{\\toprule}/\verb{\\midrule}/\verb{\\bottomrule}
+for \code{booktabs = TRUE}, otherwise \verb{\\hline}. Each can also be set
+globally via the options \code{knitr.table.toprule},
+\code{knitr.table.midrule}, and \code{knitr.table.bottomrule}.}
+\item{\code{linesep}}{The separator(s) between rows in the table body. By
+default, an empty separator is used and (for \code{booktabs = TRUE}) an
+\verb{\\addlinespace} is inserted after every 5 rows; for \code{booktabs = FALSE}, \verb{\\hline} is used between all rows. Provide a character vector
+to control the separators (it is recycled over the body rows).}
+\item{\code{caption.short}}{A short caption for the table, used in the List of
+Tables (the optional argument of \verb{\\caption[]\{\}}).}
+\item{\code{table.envir}}{The LaTeX environment that wraps the tabular
+environment, e.g., \code{'table'} (the default when a caption is present) or
+\code{'table*'}.}
+\item{\code{numeric.math}}{Whether to typeset numeric columns in math mode,
+which improves rendering of minus signs, infinite values, and scientific
+notation. The default can be set globally via
+\code{options(knitr.table.numeric.math = TRUE)}.}
+}
+}
+
+\section{Arguments for the \code{html} format}{
+
+\describe{
+\item{\code{table.attr}}{A character string of attributes for the \verb{<table>}
+tag, e.g., \code{'class="table" id="mytable"'}. Can be set globally via the
+option \code{knitr.table.html.attr}.}
+}
+}
+
+\section{Arguments for the \code{pipe}, \code{simple}, \code{rst}, \code{jira}, and \code{org} formats}{
+
+\describe{
+\item{\code{padding}}{(\code{1}) The number of spaces used to pad table cells. Set
+\code{padding = 0} for no inner padding. Not used by the \code{rst} format.}
+\item{\code{caption.label}}{The prefix printed before the caption. It defaults
+to \code{'Table:'} for the \code{pipe} format and \code{'#+CAPTION:'} for the
+\code{org} format.}
+}
+}
+
 \examples{
 d1 = head(iris)
 d2 = head(mtcars)
@@ -137,15 +203,15 @@ kables(list(kable(d1, align = "l"), kable(d2)), caption = "A tale of two tables"
 }
 \references{
 See
-  \url{https://bookdown.org/yihui/rmarkdown-cookbook/kable.html} for some
-  examples about this function, including specific arguments according to the
-  \code{format} selected.
+\url{https://pkg.yihui.org/rmarkdown-cookbook/kable.html} for some
+examples about this function, including specific arguments according to the
+\code{format} selected.
 }
 \seealso{
 Other R packages such as \pkg{huxtable}, \pkg{xtable},
-  \pkg{kableExtra}, \pkg{gt} and \pkg{tables} for HTML and LaTeX tables, and
-  \pkg{ascii} and \pkg{pander} for different flavors of markdown output and
-  some advanced features and table styles. For more on other packages for
-  creating tables, see
-  \url{https://bookdown.org/yihui/rmarkdown-cookbook/table-other.html}.
+\pkg{kableExtra}, \pkg{gt} and \pkg{tables} for HTML and LaTeX tables, and
+\pkg{ascii} and \pkg{pander} for different flavors of markdown output and
+some advanced features and table styles. For more on other packages for
+creating tables, see
+\url{https://pkg.yihui.org/rmarkdown-cookbook/table-other.html}.
 }

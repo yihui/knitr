@@ -25,23 +25,23 @@ knit2pandoc(
 function will try to guess a default, which will be under the current
 working directory.}
 
-\item{tangle}{Boolean; whether to tangle the R code from the input file (like
-\code{utils::\link{Stangle}}).}
+\item{tangle}{Whether to tangle the R code from the input file (like
+\code{\link[utils:Stangle]{utils::Stangle()}}).}
 
 \item{text}{A character vector. This is an alternative way to provide the
 input file.}
 
-\item{quiet}{Boolean; suppress the progress bar and messages?}
+\item{quiet}{Whether to suppress the progress bar and messages.}
 
 \item{envir}{Environment in which code chunks are to be evaluated, for
-example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()}).}
+example, \code{\link[=parent.frame]{parent.frame()}}, \code{\link[=new.env]{new.env()}}, or
+\code{\link[=globalenv]{globalenv()}}).}
 
 \item{to}{Character string giving the Pandoc output format to use.}
 
 \item{pandoc_wrapper}{An R function used to call Pandoc. If \code{NULL} (the
-default), \code{rmarkdown::\link[rmarkdown]{pandoc_convert}()} will be used
-if \pkg{rmarkdown} is installed, otherwise \code{\link{pandoc}()}.}
+default), \code{\link[rmarkdown:pandoc_convert]{rmarkdown::pandoc_convert()}} will be used
+if \pkg{rmarkdown} is installed, otherwise \code{\link[=pandoc]{pandoc()}}.}
 
 \item{...}{Options to be passed to the \code{pandoc_wrapper} function.}
 

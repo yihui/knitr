@@ -8,41 +8,41 @@
 #' file, or embed the configurations in the input file as special comments
 #' between \verb{<!--pandoc} and \verb{-->}.
 #'
-#' The configuration file is a DCF file (see \code{\link{read.dcf}}). This file
-#' must contain a field named \code{t} which means the output format. The
-#' configurations are written in the form of \code{tag:value} and passed to
+#' The configuration file is a DCF file (see [read.dcf()]). This file
+#' must contain a field named `t` which means the output format. The
+#' configurations are written in the form of `tag:value` and passed to
 #' Pandoc (if no value is needed, just leave it empty, e.g. the option
-#' \code{standalone} or \code{s} for short). If there are multiple output
+#' `standalone` or `s` for short). If there are multiple output
 #' formats, write each format and relevant configurations in a block, and
 #' separate blocks with blank lines.
 #'
-#' If there are multiple records of the \code{t} field in the configuration, the
+#' If there are multiple records of the `t` field in the configuration, the
 #' input markdown file will be converted to all these formats by default, unless
-#' the \code{format} argument is specified as one single format.
+#' the `format` argument is specified as one single format.
 #' @param input A character vector of Markdown filenames (must be encoded in
 #'   UTF-8).
 #' @param format Name of the output format (see References). This can be a
 #'   character vector of multiple formats; by default, it is obtained from the
-#'   \code{t} field in the configuration. If the configuration is empty or the
-#'   \code{t} field is not found, the default output format will be
-#'   \code{'html'}.
+#'   `t` field in the configuration. If the configuration is empty or the
+#'   `t` field is not found, the default output format will be
+#'   `'html'`.
 #' @param config Path to the Pandoc configuration file. If missing, it is
-#'   assumed to be a file with the same base name as the \code{input} file and
-#'   an extension \code{.pandoc} (e.g. for \file{foo.md} it looks for
+#'   assumed to be a file with the same base name as the `input` file and
+#'   an extension `.pandoc` (e.g. for \file{foo.md} it looks for
 #'   \file{foo.pandoc})
 #' @param ext Filename extensions. By default, the extension is inferred from
-#'   the \code{format}, e.g. \code{latex} creates \code{pdf}, \code{dzslides}
-#'   creates \code{html}, and so on
+#'   the `format`, e.g., `latex` creates `pdf`, `dzslides`
+#'   creates `html`, and so on.
 #' @return The output filename(s) (or an error if the conversion failed).
-#' @references Pandoc: \url{https://pandoc.org}; Examples and rules of the
-#'   configurations: \url{https://yihui.org/knitr/demo/pandoc/}
+#' @references Pandoc: <https://pandoc.org>; Examples and rules of the
+#'   configurations: <https://yihui.org/knitr/demo/pandoc/>
 #'
-#'   Also see R Markdown (v2) at \url{https://rmarkdown.rstudio.com}. The
+#'   Also see R Markdown (v2) at <https://rmarkdown.rstudio.com>. The
 #'   \pkg{rmarkdown} package has several convenience functions and templates
 #'   that make it very easy to use Pandoc. The RStudio IDE also has
 #'   comprehensive support for it, so I'd recommend users who are not familiar
 #'   with command-line tools to use the \pkg{rmarkdown} package instead.
-#' @seealso \code{\link{read.dcf}}
+#' @seealso [read.dcf()]
 #' @export
 #' @examples system('pandoc -h') # see possible output formats
 pandoc = function(input, format, config = getOption('config.pandoc'), ext = NA) {

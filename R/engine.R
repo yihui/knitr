@@ -1,32 +1,32 @@
 #' Engines of other languages
 #'
 #' This object controls how to execute the code from languages other than R
-#' (when the chunk option \code{engine} is not \code{'R'}). Each component in
+#' (when the chunk option `engine` is not `'R'`). Each component in
 #' this object is a function that takes a list of current chunk options
 #' (including the source code) and returns a character string to be written into
 #' the output.
 #'
-#' The engine function has one argument \code{options}: the source code of the
-#' current chunk is in \code{options$code}. Usually we can call external
-#' programs to run the code via \code{\link{system2}}. Other chunk options are
-#' also contained in this argument, e.g. \code{options$echo} and
-#' \code{options$eval}, etc.
+#' The engine function has one argument `options`: the source code of the
+#' current chunk is in `options$code`. Usually we can call external
+#' programs to run the code via [system2()]. Other chunk options are
+#' also contained in this argument, e.g. `options$echo` and
+#' `options$eval`, etc.
 #'
-#' In most cases, \code{options$engine} can be directly used in command line to
-#' execute the code, e.g. \code{python} or \code{ruby}, but sometimes we may
+#' In most cases, `options$engine` can be directly used in command line to
+#' execute the code, e.g. `python` or `ruby`, but sometimes we may
 #' want to specify the path of the engine program, in which case we can pass it
-#' through the \code{engine.path} option. For example, \code{engine='ruby',
-#' engine.path='/usr/bin/ruby1.9.1'}. Additional command line arguments can be
-#' passed through \code{options$engine.opts}, e.g. \code{engine='ruby',
-#' engine.opts='-v'}.
+#' through the `engine.path` option. For example, `engine='ruby',
+#' engine.path='/usr/bin/ruby1.9.1'`. Additional command line arguments can be
+#' passed through `options$engine.opts`, e.g. `engine='ruby',
+#' engine.opts='-v'`.
 #'
-#' See \code{str(knitr::knit_engines$get())} for a list of built-in language
+#' See `str(knitr::knit_engines$get())` for a list of built-in language
 #' engines.
 #' @export
-#' @note The Leiningen engine \code{lein} requires lein-exec plugin; see
-#'   \url{https://github.com/yihui/knitr/issues/1176} for details.
-#' @references Usage: \url{https://yihui.org/knitr/objects/}; examples:
-#'   \url{https://yihui.org/knitr/demo/engines/}
+#' @note The Leiningen engine `lein` requires lein-exec plugin; see
+#'   <https://github.com/yihui/knitr/issues/1176> for details.
+#' @references Usage: <https://yihui.org/knitr/objects/>; examples:
+#'   <https://yihui.org/knitr/demo/engines/>
 #' @examples knit_engines$get('python'); knit_engines$get('awk')
 #' names(knit_engines$get())
 knit_engines = new_defaults()
@@ -35,18 +35,18 @@ knit_engines = new_defaults()
 #' Cache engines of other languages
 #'
 #' This object controls how to load cached environments from languages other
-#' than R (when the chunk option \code{engine} is not \code{'R'}). Each
+#' than R (when the chunk option `engine` is not `'R'`). Each
 #' component in this object is a function that takes the current path to the
 #' chunk cache and loads it into the language environment.
 #'
-#' The cache engine function has one argument \code{options}, a list containing
-#' all chunk options. Note that \code{options$hash} is the path to the current
+#' The cache engine function has one argument `options`, a list containing
+#' all chunk options. Note that `options$hash` is the path to the current
 #' chunk cache with the chunk's hash, but without any file extension, and the
 #' language engine may write a cache database to this path (with an extension).
 #'
 #' The cache engine function should load the cache environment and should know
 #' the extension appropriate for the language.
-#' @references See \url{https://github.com/rstudio/reticulate/pull/167} for an
+#' @references See <https://github.com/rstudio/reticulate/pull/167> for an
 #'   implementation of a cache engine for Python.
 #' @export
 cache_engines = new_defaults()
@@ -57,17 +57,17 @@ cache_engines = new_defaults()
 #' to format and return the text output from your engine.
 #'
 #' For expert users, an advanced usage of this function is
-#' \code{engine_output(options, out = LIST)} where \code{LIST} is a list that
-#' has the same structure as the output of \code{evaluate::evaluate()}. In this
-#' case, the arguments \code{code} and \code{extra} are ignored, and the list is
-#' passed to \code{knitr::sew()} to return a character vector of final output.
+#' `engine_output(options, out = LIST)` where `LIST` is a list that
+#' has the same structure as the output of `evaluate::evaluate()`. In this
+#' case, the arguments `code` and `extra` are ignored, and the list is
+#' passed to `knitr::sew()` to return a character vector of final output.
 #' @param options A list of chunk options. Usually this is just the object
-#'   \code{options} passed to the engine function; see
-#'   \code{\link{knit_engines}}.
-#' @param code Source code of the chunk, to which the output hook \code{source}
-#'   is applied, unless the chunk option \code{echo} is \code{FALSE}.
-#' @param out Text output from the engine, to which the hook \code{output} is
-#'   applied, unless the chunk option \code{results} is \code{'hide'}
+#'   `options` passed to the engine function; see
+#'   [knit_engines()].
+#' @param code Source code of the chunk, to which the output hook `source`
+#'   is applied, unless the chunk option `echo` is `FALSE`.
+#' @param out Text output from the engine, to which the hook `output` is
+#'   applied, unless the chunk option `results` is `'hide'`
 #' @param extra Any additional text output that you want to include.
 #' @return A character string generated from the source code and output using
 #'   the appropriate output hooks.
@@ -403,7 +403,13 @@ eng_plot = function(options) {
     output = function(options, code, output, file) {
       extra = if (options$eval) {
         # move the generated plot (with a temp filename) to fig.path
-        f1 = with_ext(file, ext)
+        if (!file_exists(f1 <- with_ext(file, ext))) {
+          # asymptote may geneate file.ext.ext (see #2025)
+          if (cmd == 'asy') f1 = paste0(f1, '.', ext)
+        }
+        if (!file_exists(f1)) stop(
+          'The command did not generate the expected plot file: ', f1
+        )
         f2 = paste(fig_path(), ext, sep = '.')
         xfun::dir_create(dirname(f2))
         unlink(f2)
@@ -414,7 +420,7 @@ eng_plot = function(options) {
       engine_output(options, code, '', extra)
     },
     # better default for ditaa: https://github.com/yihui/knitr/pull/2092
-    args1 = if (cmd == 'ditta') c('-s', 2, '-T', '-S', '-E'),
+    args1 = if (cmd == 'ditaa') c('-s', 2, '-T', '-S', '-E'),
     args = function(code, file) {
       f2 = with_ext(file, ext)
       if (cmd == 'ditaa') return(c(file, f2))
@@ -558,7 +564,14 @@ is_sql_update_query = function(query) {
   query = gsub('^\\s*--.*\n', '', query)
   # remove multi-line comments
   if (grepl('^\\s*\\/\\*.*', query)) query = gsub('.*\\*\\/', '', query)
-  grepl('^\\s*(INSERT|UPDATE|DELETE|CREATE|DROP|ALTER).*', query, ignore.case = TRUE)
+  keywords = c(
+    # DDL
+    'CREATE', 'ALTER', 'DROP', 'GRANT', 'DENY', 'REVOKE', 'ANALYZE', 'AUDIT',
+    'COMMENT', 'RENAME', 'TRUNCATE',
+    # DML
+    'INSERT', 'UPDATE', 'DELETE', 'MERGE', 'CALL', 'EXPLAIN PLAN', 'LOCK', 'UNLOCK'
+  )
+  grepl(paste0('^\\s*(', paste(keywords, collapse = '|'), ').*'), query, ignore.case = TRUE)
 }
 
 # sql engine
@@ -613,8 +626,17 @@ eng_sql = function(options) {
   query = interpolate_from_env(conn, sql)
   if (isFALSE(options$eval)) return(engine_output(options, query, ''))
 
+  # whether the query is a statement that does not return a result set (e.g.,
+  # INSERT/UPDATE/CREATE); auto-detected, but can be overridden via the chunk
+  # option sql.is_statement when the detection is wrong (e.g., SELECT ... INTO)
+  is_statement = options$sql.is_statement
+  if (is.null(is_statement)) is_statement = is_sql_update_query(query)
+  if (!is.logical(is_statement)) stop2(
+    "The 'sql.is_statement' chunk option must be TRUE or FALSE."
+  )
+
   data = tryCatch({
-    if (is_sql_update_query(query)) {
+    if (is_statement) {
       DBI::dbExecute(conn, query)
       NULL
     } else if (is.null(varname) && max.print > 0) {

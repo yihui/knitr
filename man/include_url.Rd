@@ -16,15 +16,15 @@ include_app(url, height = "400px")
 }
 \value{
 An R object with a special class that \pkg{knitr} recognizes
-  internally to generate the iframes or screenshots.
+internally to generate the iframes or screenshots.
 }
 \description{
 When the output format is HTML, \code{include_url()} inserts an iframe in the
 output; otherwise it takes a screenshot of the URL and insert the image in
 the output. \code{include_app()} takes the URL of a Shiny app and adds
-\samp{?showcase=0} to it (to disable the showcase mode), then passes the URL
+\code{?showcase=0} to it (to disable the showcase mode), then passes the URL
 to \code{include_url()}.
 }
 \seealso{
-\code{\link{include_graphics}}
+\code{\link[=include_graphics]{include_graphics()}}
 }

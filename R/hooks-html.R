@@ -22,13 +22,21 @@ hook_plot_html = function(x, options) {
   )
 }
 
+# the built-in animation hooks, which generate HTML (and are ignored for LaTeX
+# output); keyed by the character values allowed for the chunk option
+# animation.hook
+.animation_hooks = function() list(
+  ffmpeg = hook_ffmpeg_html, gifski = hook_gifski,
+  scianimator = hook_scianimator, r2swf = hook_r2swf
+)
+
 hook_animation = function(options) {
   if (is.function(fun <- options$animation.hook)) return(fun)
-  if (is.character(fun)) return(switch(
-    fun, ffmpeg = hook_ffmpeg_html, gifski = hook_gifski,
-    scianimator = hook_scianimator, r2swf = hook_r2swf,
-    stop2('Invalid value for the chunk option animation.hook: ', fun)
-  ))
+  if (is.character(fun)) {
+    if (is.null(hook <- .animation_hooks()[[fun]]))
+      stop2('Invalid value for the chunk option animation.hook: ', fun)
+    return(hook)
+  }
   if (is.function(fun <- opts_knit$get('animation.fun'))) return(fun)
   hook_ffmpeg_html
 }
@@ -39,17 +47,18 @@ hook_animation = function(options) {
 
 .img.tag = function(src, w, h, caption, extra) {
   ext = tolower(file_ext(src))
-  if (length(caption) != 1 || caption == '') caption = NULL
   tag = 'img'; extra2 = NULL; att = 'src'
   if (ext == 'pdf') {
     extra2 = 'type="application/pdf"'; tag = 'embed'
   } else if (ext == 'svg' && getOption('knitr.svg.object', FALSE)) {
     extra2 = 'type="image/svg+xml"'; tag = 'object'; att = 'data'
   }
+  if (length(caption) != 1 || is.na(caption) || (tag != 'img' && caption == ''))
+    caption = NULL
   res = paste0(c(
     paste0('<', tag),
     sprintf('%s="%s%s"', att, opts_knit$get('base.url') %n% '', .upload.url(src)),
-    sprintf('%s="%s"', if (tag %in% c('embed', 'object')) 'title' else 'alt', caption),
+    sprintf('%s="%s"', if (tag == 'img') 'alt' else 'title', caption),
     .img.attr(w, h, c(extra, extra2))
   ), collapse = ' ')
   paste0(res, if (tag == 'object') '></object>' else ' />')
@@ -59,10 +68,10 @@ hook_animation = function(options) {
   cap = options$fig.cap %n% {
     if (is.null(pandoc_to())) sprintf('plot of chunk %s', options$label) else ''
   }
-  if (length(cap) == 0) cap = ''
+  if (length(cap) == 0 || is.na(cap)) cap = ''
   if (alt) {
     alt = options$fig.alt %n% cap
-    return(if (escape) escape_html(alt) else alt)
+    return(if (escape) html_escape(strip_html(alt), attr = TRUE) else alt)
   }
   if (is_blank(cap)) return(cap)
   paste0(create_label(
@@ -92,13 +101,18 @@ hook_animation = function(options) {
 
 #' Hooks to create animations in HTML output
 #'
-#' \code{hook_ffmpeg_html()} uses FFmpeg to convert images to a video;
-#' \code{hook_gifski()} uses the \pkg{gifski} to convert images to a GIF
-#' animation; \code{hook_scianimator()} uses the JavaScript library SciAnimator
-#' to create animations; \code{hook_r2swf()} uses the \pkg{R2SWF} package.
+#' `hook_ffmpeg_html()` uses FFmpeg to convert images to a video;
+#' `hook_gifski()` uses the \pkg{gifski} to convert images to a GIF
+#' animation; `hook_scianimator()` uses the JavaScript library SciAnimator
+#' to create animations; `hook_r2swf()` uses the \pkg{R2SWF} package.
 #'
-#' These hooks are mainly for the package option \code{animation.fun}, e.g. you
-#' can set \code{opts_knit$set(animation.fun = hook_scianimator)}.
+#' These hooks are mainly for the package option `animation.fun`, e.g. you
+#' can set `opts_knit$set(animation.fun = hook_scianimator)`.
+#'
+#' Note that these hooks generate HTML code. For LaTeX output, you can set the
+#' chunk option `animation.hook` (or the package option
+#' `animation.fun`) to a function that generates LaTeX code; see
+#' [hook_plot_tex()].
 #' @inheritParams hook_plot_tex
 #' @rdname hook_animation
 #' @export
@@ -252,9 +266,10 @@ hooks_html = function() {
   hook = function(name) {
     force(name)
     function(x, options) {
+      if (name == 'output' && output_asis(x, options)) return(x)
       x = if (name == 'source') {
         c(hilight_source(x, 'html', options), '')
-      } else escape_html(x)
+      } else html_escape(x)
       x = one_string(x)
       sprintf('<div class="%s"><pre class="knitr %s">%s</pre></div>\n', name, tolower(options$engine), x)
     }

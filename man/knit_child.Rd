@@ -7,7 +7,7 @@
 knit_child(..., options = NULL, envir = knit_global())
 }
 \arguments{
-\item{...}{Arguments passed to \code{\link{knit}}.}
+\item{...}{Arguments passed to \code{\link[=knit]{knit()}}.}
 
 \item{options}{A list of chunk options to be used as global options inside
 the child document. When one uses the \code{child}
@@ -15,13 +15,13 @@ option in a parent chunk, the chunk options of the parent chunk will be
 passed to the \code{options} argument here.  Ignored if not a list.}
 
 \item{envir}{Environment in which code chunks are to be evaluated, for
-example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()}).}
+example, \code{\link[=parent.frame]{parent.frame()}}, \code{\link[=new.env]{new.env()}}, or
+\code{\link[=globalenv]{globalenv()}}).}
 }
 \value{
 A character string of the content of the compiled child document is
-  returned as a character string so it can be written back to the parent
-  document directly.
+returned as a character string so it can be written back to the parent
+document directly.
 }
 \description{
 This function knits a child document and returns a character string to input
@@ -31,10 +31,10 @@ option \code{child} and serves as the alternative to the
 }
 \note{
 This function is not supposed be called directly like
-  \code{\link{knit}()}; instead it must be placed in a parent document to let
-  \code{\link{knit}()} call it indirectly.
+\code{\link[=knit]{knit()}}; instead it must be placed in a parent document to let
+\code{\link[=knit]{knit()}} call it indirectly.
 
-  The path of the child document is determined relative to the parent document.
+The path of the child document is determined relative to the parent document.
 }
 \examples{
 # you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw'

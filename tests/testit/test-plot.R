@@ -6,7 +6,7 @@ op = options(device = function(file = NULL, ...) {
 })
 
 evaluate = evaluate::evaluate
-classes = evaluate:::classes
+classes = function(x) vapply(x, function(x) class(x)[1], character(1))
 
 # remove the blank plot
 assert('blank plots are removed', {
@@ -85,6 +85,21 @@ if (requireNamespace("ragg", quietly = TRUE) &&
   )
 }
 
+if (requireNamespace("ragg", quietly = TRUE) &&
+    !has_error({ragg::agg_webp(); dev.off()})) {
+  assert(
+    'ragg_webp_dev correctly handles bg dev.arg into background arg',
+    {
+      chunk_device(opts_chunk$merge(list(
+        dev = 'ragg_webp', dev.args = list(bg = "grey")
+      )))
+      plot(1:10)
+      dev.off()
+      TRUE
+    }
+  )
+}
+
 # should not error (find `pdf` correctly in grDevices, instead of the one
 # defined below)
 pdf = function() {}
@@ -130,7 +145,7 @@ assert('plots are rearrange based on fig.keep & fig.show options', {
 })
 
 # should not error when a plot label contains special characters and sanitize=TRUE
-if (xfun::loadable('tikzDevice') &&
+if (xfun::loadable('tikzDevice') && Sys.which('pdflatex') != '' &&
     (!is.na(Sys.getenv('CI', NA)) || Sys.getenv('USER') == 'yihui' || !xfun::is_macos())) {
   knit('knit-tikzDevice.Rnw', quiet = TRUE)
   unlink(c('*-tikzDictionary', 'figure', 'knit-tikzDevice.tex'), recursive = TRUE)
@@ -143,6 +158,47 @@ assert('include_graphics() expands ~', {
   path1 = "~/test.png"
   (!has_warning(include_graphics("img/test.png", error = FALSE)))
   (unclass(suppressWarnings(include_graphics(path1, error = FALSE))) %==% path.expand(path1))
+})
+
+# https://github.com/yihui/knitr/issues/2171
+# absolute paths are made relative to the output directory, and the existence
+# check must use the original (absolute) path instead of the converted relative
+# path (which is relative to the output dir, not the working directory)
+assert('include_graphics() converts absolute paths relative to the output dir', {
+  optk = opts_knit$get(); on.exit(opts_knit$restore(optk), add = TRUE)
+  owd = getwd(); on.exit(setwd(owd), add = TRUE)
+
+  # project layout: input dir and output dir at different locations
+  root = normalizePath(tempfile(), mustWork = FALSE)
+  in_dir = file.path(root, 'R', 'Rmd1')     # where the Rmd lives / knitr's wd
+  out_dir = file.path(root, 'output')        # where the rendered doc goes
+  img_dir = file.path(root, 'results')       # where the image lives
+  dir.create(in_dir, recursive = TRUE)
+  dir.create(out_dir, recursive = TRUE)
+  dir.create(img_dir, recursive = TRUE)
+  img = file.path(img_dir, 'image.png')
+  file.create(img)
+
+  # simulate knitr running from the input dir (as under rmarkdown::render())
+  setwd(in_dir)
+  opts_knit$set(output.dir = in_dir, rmarkdown.output_dir = NULL)
+
+  # absolute paths are made relative to output.dir
+  (unclass(suppressWarnings(include_graphics(img, error = TRUE))) %==%
+     xfun::relative_path(img, in_dir))
+
+  # when rmarkdown communicates the output dir, it is preferred as the base
+  opts_knit$set(rmarkdown.output_dir = out_dir)
+  (unclass(suppressWarnings(include_graphics(img, error = TRUE))) %==%
+     xfun::relative_path(img, out_dir))
+
+  # existence is checked against the original path: the relative path (from
+  # out_dir) does not resolve from the working directory (in_dir), but the
+  # original absolute path exists, so no error
+  (!has_error(suppressWarnings(include_graphics(img, error = TRUE))))
+
+  # a genuinely missing absolute file still errors
+  (has_error(include_graphics(file.path(img_dir, 'nope.png'), error = TRUE)))
 })
 
 with_par = function(expr, ...) {

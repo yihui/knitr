@@ -5,7 +5,7 @@
   color: #800080;
   font-weight: bold;
 }
-.str {
+.sng {
   color: #a68500;
 }
 .com {
@@ -15,7 +15,7 @@
   color: #ff0080;
   font-weight: bold;
 }
-.std {
+.def {
   color: #000000;
 }
 .kwa {

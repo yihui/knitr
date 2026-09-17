@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question
+    url: https://forum.posit.co/tag/knitr
+    about: Please ask questions on Posit Community (tagged with `knitr`). Issues in this repo are for bug reports and feature suggestions only.

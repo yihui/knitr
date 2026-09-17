@@ -9,19 +9,18 @@ inline_expr(code, syntax)
 \arguments{
 \item{code}{Character string of the inline R source code.}
 
-\item{syntax}{A character string to specify the syntax, e.g. \code{rnw},
-\code{html}, or \code{md}. If not specified, this will be guessed from
-the knitting context.}
+\item{syntax}{A character string to specify the syntax, e.g., \code{rnw},
+\code{html}, or \code{md}. If not specified, this will be guessed from the
+knitting context.}
 }
 \value{
 A character string marked up using the inline R code syntax.
 }
 \description{
 This is a convenience function to write the "source code" of inline R
-expressions. For example, if you want to write \samp{`r 1+1`} literally in an
-R Markdown document, you may write \samp{`` `r knitr::inline_expr('1+1')`
-``}; for Rnw documents, this may be
-\samp{\verb|\Sexpr{knitr::inline_expr{'1+1'}}|}.
+expressions. For example, if you want to write \code{`r 1+1`} literally in an
+R Markdown document, you may write \verb{`` `r knitr::inline_expr('1+1')` ``};
+for Rnw documents, this may be \verb{\\Sexpr\{knitr::inline_expr\{'1+1'\}\}}.
 }
 \examples{
 library(knitr)

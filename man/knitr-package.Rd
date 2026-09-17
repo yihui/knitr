@@ -22,17 +22,17 @@ package website in the references for more information and examples.
 }
 \note{
 The pronunciation of \pkg{knitr} is similar to \emph{neater} or you can
-  think of \emph{knitter} (but it is \emph{single t}). The name comes from
-  \code{knit} + \code{R} (while \code{Sweave} = \code{S} + \code{weave}).
+think of \emph{knitter} (but it is \emph{single t}). The name comes from
+\code{knit} + \code{R} (while \code{Sweave} = \code{S} + \code{weave}).
 }
 \references{
 Full documentation and demos: \url{https://yihui.org/knitr/};
-  FAQ's: \url{https://yihui.org/knitr/faq/}
+FAQ's: \url{https://yihui.org/knitr/faq/}
 }
 \seealso{
-The core function in this package: \code{\link{knit}}. If you are an
-  Sweave user, see \code{\link{Sweave2knitr}} on how to convert Sweave files
-  to \pkg{knitr}.
+The core function in this package: \code{\link[=knit]{knit()}}. If you are an
+Sweave user, see \code{\link[=Sweave2knitr]{Sweave2knitr()}} on how to convert Sweave files
+to \pkg{knitr}.
 }
 \author{
 Yihui Xie <\url{https://yihui.org}>

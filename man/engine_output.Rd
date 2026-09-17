@@ -9,7 +9,7 @@ engine_output(options, code, out, extra = NULL)
 \arguments{
 \item{options}{A list of chunk options. Usually this is just the object
 \code{options} passed to the engine function; see
-\code{\link{knit_engines}}.}
+\code{\link[=knit_engines]{knit_engines()}}.}
 
 \item{code}{Source code of the chunk, to which the output hook \code{source}
 is applied, unless the chunk option \code{echo} is \code{FALSE}.}
@@ -21,7 +21,7 @@ applied, unless the chunk option \code{results} is \code{'hide'}}
 }
 \value{
 A character string generated from the source code and output using
-  the appropriate output hooks.
+the appropriate output hooks.
 }
 \description{
 If you have designed a language engine, you may call this function in the end

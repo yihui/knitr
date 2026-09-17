@@ -17,14 +17,6 @@ str_insert = function(x, i, value) {
   paste0(substr(x, 1, i), value, substr(x, i + 1, n))
 }
 
-# a wrapper function to make strwrap() return a character vector of the same
-# length as the input vector; each element of the output vector is a string
-# formed by concatenating wrapped strings by \n
-str_wrap = function(...) {
-  res = strwrap(..., simplify = FALSE)
-  unlist(lapply(res, one_string))
-}
-
 # a simplified replacement for stringr::str_locate_all() that returns a list
 # having an element for every element of 'string'; every list element is an
 # integer matrix having a row per match, and two columns: 'start' and 'end'.

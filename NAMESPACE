@@ -49,6 +49,7 @@ export(hook_plot_md)
 export(hook_plot_rst)
 export(hook_plot_tex)
 export(hook_plot_textile)
+export(hook_plot_typst)
 export(hook_pngquant)
 export(hook_purl)
 export(hook_r2swf)
@@ -62,6 +63,7 @@ export(hooks_markdown)
 export(hooks_rst)
 export(hooks_sweave)
 export(hooks_textile)
+export(hooks_typst)
 export(image_uri)
 export(imgur_upload)
 export(include_app)
@@ -115,6 +117,7 @@ export(pat_rnw)
 export(pat_rst)
 export(pat_tex)
 export(pat_textile)
+export(pat_typst)
 export(plot_crop)
 export(purl)
 export(rand_seed)
@@ -124,7 +127,6 @@ export(raw_latex)
 export(raw_output)
 export(read_chunk)
 export(read_demo)
-export(read_rforge)
 export(render_asciidoc)
 export(render_html)
 export(render_jekyll)
@@ -134,6 +136,7 @@ export(render_markdown)
 export(render_rst)
 export(render_sweave)
 export(render_textile)
+export(render_typst)
 export(restore_raw_output)
 export(rnw2pdf)
 export(rocco)
@@ -153,16 +156,20 @@ import(grDevices)
 import(graphics)
 import(stats)
 import(utils)
-importFrom(xfun,attr)
-importFrom(xfun,file_ext)
-importFrom(xfun,file_string)
-importFrom(xfun,is_R_CMD_check)
-importFrom(xfun,is_abs_path)
-importFrom(xfun,is_windows)
-importFrom(xfun,loadable)
-importFrom(xfun,parse_only)
-importFrom(xfun,read_utf8)
-importFrom(xfun,sans_ext)
-importFrom(xfun,try_silent)
-importFrom(xfun,with_ext)
-importFrom(xfun,write_utf8)
+importFrom(xfun,
+  file_exists,
+  file_ext,
+  file_string,
+  html_escape,
+  is_R_CMD_check,
+  is_abs_path,
+  is_windows,
+  loadable,
+  parse_only,
+  read_utf8,
+  sans_ext,
+  strip_html,
+  try_silent,
+  with_ext,
+  write_utf8
+)

@@ -12,7 +12,7 @@ document.}
 }
 \value{
 The preamble is extracted and stored to be used later when the
-  complete output is written.
+complete output is written.
 }
 \description{
 This function extracts the LaTeX preamble of the parent document to use for
@@ -27,10 +27,10 @@ the parent document, it will apply to the child document as well.
 }
 \note{
 Obviously this function is only useful when the output format is LaTeX.
-  This function only works when the child document is compiled in a
-  standalone mode using \code{\link{knit}()} (instead of being called in
-  \code{\link{knit_child}()}); when the parent document is compiled, this
-  function in the child document will be ignored.
+This function only works when the child document is compiled in a
+standalone mode using \code{\link[=knit]{knit()}} (instead of being called in
+\code{\link[=knit_child]{knit_child()}}); when the parent document is compiled, this
+function in the child document will be ignored.
 }
 \examples{
 ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or

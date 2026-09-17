@@ -493,7 +493,7 @@ This is an experimental feature borrowed from \textbf{weaver} which
 frees us from setting chunk dependencies manually. The basic idea
 is, if a latter chunk uses any objects created from a previous chunk,
 the latter chunk is said to depend on the previous one. The function
-\emph{findGlobals()} in the \textbf{codetools} package is used to
+\emph{find_globals()} in the \textbf{xfun} package is used to
 find out all global objects in a chunk, and according to its documentation,
 the result is an approximation. Global objects roughly mean the ones
 which are not created locally, e.g. in the expression \texttt{function()
