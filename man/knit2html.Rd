@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils-conversion.R
 \name{knit2html}
 \alias{knit2html}
-\title{Convert markdown to HTML using knit() and markdownToHTML()}
+\title{Convert markdown to HTML using knit() and litedown::mark()}
 \usage{
 knit2html(
   input,
@@ -12,52 +12,53 @@ knit2html(
   text = NULL,
   quiet = FALSE,
   encoding = "UTF-8",
-  force_v1 = FALSE
+  force_v1 = getOption("knitr.knit2html.force_v1", FALSE)
 )
 }
 \arguments{
 \item{input}{Path to the input file.}
 
 \item{output}{Path to the output file for \code{knit()}. If \code{NULL}, this
-function will try to guess a default, which will be under the current working
-directory.}
+function will try to guess a default, which will be under the current
+working directory.}
 
-\item{...}{Options passed to \code{\link[markdown]{markdownToHTML}}.}
+\item{...}{Options passed to \code{\link[litedown:mark]{litedown::mark()}}.}
 
-\item{envir}{Environment in which code chunks are to be evaluated,
-for example, \code{\link{parent.frame}()}, \code{\link{new.env}()}, or
-\code{\link{globalenv}()}).}
+\item{envir}{Environment in which code chunks are to be evaluated, for
+example, \code{\link[=parent.frame]{parent.frame()}}, \code{\link[=new.env]{new.env()}}, or
+\code{\link[=globalenv]{globalenv()}}).}
 
-\item{text}{A character vector. This is an alternative way to provide the input
-file.}
+\item{text}{A character vector. This is an alternative way to provide the
+input file.}
 
-\item{quiet}{Boolean; suppress the progress bar and messages?}
+\item{quiet}{Whether to suppress the progress bar and messages.}
 
 \item{encoding}{Encoding of the input file; always assumed to be UTF-8 (i.e.,
 this argument is effectively ignored).}
 
-\item{force_v1}{Boolean; whether to force rendering the input document as an R
+\item{force_v1}{Whether to force rendering the input document as an R
 Markdown v1 document, even if it is for v2.}
 }
 \value{
 If the argument \code{text} is NULL, a character string (HTML code)
-  is returned; otherwise the result is written into a file and the filename
-  is returned.
+is returned; otherwise the result is written into a file and the filename
+is returned.
 }
 \description{
 This is a convenience function to knit the input markdown source and call
-\code{\link[markdown]{markdownToHTML}()} in the \pkg{markdown} package to
-convert the result to HTML.
+\code{\link[litedown:mark]{litedown::mark()}} to convert the result to HTML.
 }
 \note{
-The \pkg{markdown} package is for R Markdown v1, which is much less
-  powerful than R Markdown v2, i.e. the \pkg{rmarkdown} package
-  (\url{https://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
-  HTML, please use \code{rmarkdown::render()} instead.
+This function renders R Markdown v1, which is much less powerful than R
+Markdown v2, i.e. the \pkg{rmarkdown} package
+(\url{https://rmarkdown.rstudio.com}). To render R Markdown v2 documents to
+HTML, please use \code{rmarkdown::render()} instead. For a lighter-weight
+alternative that handles figure paths robustly, see
+\code{\link[litedown:fuse]{litedown::fuse()}}.
 }
 \examples{
 # a minimal example
-writeLines(c("# hello markdown", "```{r hello-random, echo=TRUE}", "rnorm(5)", "```"), 
+writeLines(c("# hello markdown", "```{r hello-random, echo=TRUE}", "rnorm(5)", "```"),
     "test.Rmd")
 knit2html("test.Rmd")
 if (interactive()) browseURL("test.html")
@@ -65,5 +66,5 @@ if (interactive()) browseURL("test.html")
 unlink(c("test.Rmd", "test.html", "test.md"))
 }
 \seealso{
-\code{\link{knit}}, \code{\link[markdown]{markdownToHTML}}
+\code{\link[=knit]{knit()}}, \code{\link[litedown:mark]{litedown::mark()}}
 }

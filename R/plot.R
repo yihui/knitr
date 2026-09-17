@@ -1,4 +1,4 @@
-# graphics devices in base R, plus those in Cairo, cairoDevice, tikzDevice
+# graphics devices in base R, plus those in Cairo, tikzDevice
 auto_exts = c(
   bmp = 'bmp', postscript = 'eps', pdf = 'pdf', png = 'png', svg = 'svg',
   jpeg = 'jpeg', pictex = 'tex', tiff = 'tiff', win.metafile = 'wmf',
@@ -11,65 +11,46 @@ auto_exts = c(
   CairoJPEG = 'jpeg', CairoPNG = 'png', CairoPS = 'eps', CairoPDF = 'pdf',
   CairoSVG = 'svg', CairoTIFF = 'tiff',
 
-  Cairo_pdf = 'pdf', Cairo_png = 'png', Cairo_ps = 'eps', Cairo_svg = 'svg',
+  svglite = 'svg', gridSVG = 'svg',
 
-  svglite = 'svg',
+  ragg_png = 'png', ragg_webp = 'webp',
 
   tikz = 'tex'
 )
 
-dev2ext = function(x) {
+# choose a file extension according to the device, unless fig.ext is provided
+dev2ext = function(options) {
+  if (length(ext <- options$fig.ext)) return(ext)
+  x = options$dev
   res = auto_exts[x]
   if (any(idx <- is.na(res))) {
-    for (i in x[idx]) check_dev(i)
+    for (i in x[idx]) dev_get(i)
     stop2(
       'cannot find appropriate filename extensions for device ', x[idx], '; ',
-      "please use chunk option 'fig.ext' (https://yihui.org/knitr/options)"
+      "please use chunk option 'fig.ext' (https://yihui.org/knitr/options/)"
     )
   }
   unname(res)
 }
 
-check_dev = function(dev) {
-  if (exists(dev, mode = 'function', envir = knit_global()))
-    get(dev, mode = 'function', envir = knit_global()) else
-      stop('the graphical device', sQuote(dev), 'does not exist (as a function)')
-}
-
-# quartiz devices under Mac
-quartz_dev = function(type, dpi) {
-  force(type); force(dpi)
-  function(file, width, height, ...) {
-    grDevices::quartz(file = file, width = width, height = height, type = type, dpi = dpi, ...)
+# test if a device is available (and remember it), e.g., dev_available('png',
+# png); capabilities() gives similar results for some devices but this function
+# is more general
+dev_available = local({
+  res = list()
+  function(name, fun = dev_get(name)) {
+    if (!is.null(res[[name]])) return(res[[name]])
+    res[[name]] <<- tryCatch({
+      f = tempfile(); on.exit(unlink(f))
+      fun(f, width = 5, height = 5)
+      grDevices::dev.off()
+      TRUE
+    }, error = function(e) FALSE)
   }
-}
+})
 
-# a wrapper of the tikzDevice::tikz device
-tikz_dev = function(...) {
-  loadNamespace('tikzDevice')
-  packages = switch(
-    getOption('tikzDefaultEngine'),
-    pdftex = getOption('tikzLatexPackages'),
-    xetex = getOption('tikzXelatexPackages'),
-    luatex = getOption('tikzLualatexPackages')
-  )
-  tikzDevice::tikz(..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages))
-}
-
-# save a recorded plot
-save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
-
-  path = paste(name, ext, sep = '.')
-  # when cache=2 and plot file exists, just return the filename
-  if (options$cache == 2 && cache$exists(options$hash, options$cache.lazy)) {
-    if (in_base_dir(!file.exists(path))) {
-      purge_cache(options)
-      stop('cannot find ', path, '; the cache has been purged; please re-compile')
-    }
-    return(paste(name, if (dev == 'tikz' && options$external) 'pdf' else ext, sep = '.'))
-  }
-
-  # built-in devices
+dev_get = function(dev, options = opts_current$get(), dpi = options$dpi[1]) {
+  if (is.null(dpi) || is.na(dpi)) dpi = 72
   device = switch(
     dev,
     bmp = function(...) bmp(...,  res = dpi, units = 'in'),
@@ -80,6 +61,10 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     pdf = grDevices::pdf,
     png = function(...) png(..., res = dpi, units = 'in'),
     svg = grDevices::svg,
+    gridSVG = function(filename, width, height, pointsize = 12, ...) {
+      # use svg() only for redrawing the plot, and will use gridSVG::grid.export() later
+      grDevices::svg(filename, width, height, pointsize = pointsize)
+    },
     pictex = grDevices::pictex,
     tiff = function(...) tiff(..., res = dpi, units = 'in'),
     win.metafile = grDevices::win.metafile,
@@ -101,19 +86,73 @@ save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
     CairoPDF = load_device('CairoPDF', 'Cairo'),
     CairoSVG = load_device('CairoSVG', 'Cairo'),
 
-    Cairo_pdf = load_device('Cairo_pdf', 'cairoDevice'),
-    Cairo_png = load_device('Cairo_png', 'cairoDevice'),
-    Cairo_ps = load_device('Cairo_ps', 'cairoDevice'),
-    Cairo_svg = load_device('Cairo_svg', 'cairoDevice'),
-
     svglite = load_device('svglite', 'svglite'),
+
+    # similar to load_device(), but the `dpi` argument is named `res`
+    ragg_png = function(...) {
+      ragg_png_dev(..., res = dpi, units = 'in')
+    },
+    ragg_webp = function(...) {
+      ragg_webp_dev(..., res = dpi, units = 'in')
+    },
 
     tikz = function(...) {
       tikz_dev(..., sanitize = options$sanitize, standAlone = options$external)
-    },
-
-    check_dev(dev)
+    }
   )
+  if (!is.null(device)) return(device)
+  # custom device provided by user as a character string
+  if (!exists(dev, mode = 'function', envir = knit_global()))
+    stop('The graphical device ', sQuote(dev), ' was not found (as a function).')
+  get(dev, mode = 'function', envir = knit_global())
+}
+
+# quartz devices under Mac
+quartz_dev = function(type, dpi) {
+  force(type); force(dpi)
+  function(file, width, height, ...) {
+    grDevices::quartz(file = file, width = width, height = height, type = type, dpi = dpi, ...)
+  }
+}
+
+# a wrapper of the tikzDevice::tikz device
+tikz_dev = function(..., engine = getOption('tikzDefaultEngine')) {
+  loadNamespace('tikzDevice')
+  packages = switch(
+    engine,
+    pdftex = getOption('tikzLatexPackages'),
+    xetex = getOption('tikzXelatexPackages'),
+    luatex = getOption('tikzLualatexPackages')
+  )
+  tikzDevice::tikz(..., packages = c('\n\\nonstopmode\n', packages, .knitEnv$tikzPackages))
+}
+
+# a wrapper of the ragg::agg_* device
+ragg_dev = function(dev) function(...) {
+  args = list(...)
+  # handle bg -> background gracefully
+  args$background = args$background %n% args$bg
+  args$bg = NULL
+  dev = getFromNamespace(dev, 'ragg')
+  do.call(dev, args)
+}
+
+ragg_png_dev = ragg_dev('agg_png')
+ragg_webp_dev = ragg_dev('agg_webp')
+
+# save a recorded plot
+save_plot = function(plot, name, dev, width, height, ext, dpi, options) {
+
+  path = paste(name, ext, sep = '.')
+  # when cache=2 and plot file exists, just return the filename
+  if (options$cache == 2 && cache$exists(options$hash, options$cache.lazy)) {
+    if (in_base_dir(!file.exists(path))) {
+      purge_cache(options)
+      stop('cannot find ', path, '; the cache has been purged; please re-compile')
+    }
+    return(paste(name, if (dev == 'tikz' && options$external) 'pdf' else ext, sep = '.'))
+  }
+  device = dev_get(dev, options, dpi)
   in_base_dir(plot2dev(plot, name, dev, device, path, width, height, options))
 }
 
@@ -121,9 +160,18 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   dargs = get_dargs(options$dev.args, dev)
   # re-plot the recorded plot to an off-screen device
   do.call(device, c(list(path, width = width, height = height), dargs))
-  showtext(options$fig.showtext)  # showtext support
+  showtext(options)  # maybe begin showtext and set options
   print(plot)
+  # hack: if the device is gridSVG, save the plot to a temp path (with suffix ~)
+  path2 = if (dev == 'gridSVG') paste0(path, '~')
+  if (!is.null(path2)) {
+    # dargs may hold args for both svg() and grid.export(); only pass the latter
+    dargs = match_dargs(dargs, gridSVG::grid.export)
+    do.call(gridSVG::grid.export, c(list(name = path2), dargs))
+  }
   dev.off()
+  # move the temp svg file to `path`
+  if (!is.null(path2)) file.rename(path2, path)
 
   # Cairo::CairoPS always adds the extension .ps, even if you have specified an
   # extension like .eps (https://github.com/yihui/knitr/issues/1364)
@@ -135,7 +183,9 @@ plot2dev = function(plot, name, dev, device, path, width, height, options) {
   # compile tikz to pdf
   if (dev == 'tikz') {
     patch_tikz_tex(path)
-    if (options$external) path = tinytex::latexmk(path, getOption('tikzDefaultEngine'))
+    if (options$external) path = tinytex::latexmk(
+      path, dargs$engine %n% getOption('tikzDefaultEngine')
+    )
   }
 
   fig_process(options$fig.process, path, options)
@@ -163,14 +213,24 @@ patch_tikz_tex = function(path) {
 # filter the dev.args option
 get_dargs = function(dargs, dev) {
   if (length(dargs) == 0) return()
-  if (is.list(dargs) && all(sapply(dargs, is.list))) {
+  nms = names(dargs)
+  if (is.list(dargs) && all(sapply(dargs, is.list)) && length(nms) &&
+      (dev %in% nms || all(nms %in% names(auto_exts)))) {
     # dev.args is list(dev1 = list(arg1 = val1, ...), dev2 = list(arg2, ...))
     dargs = dargs[[dev]]
   }
   dargs
 }
 
-# this is mainly for Cairo and cairoDevice
+# keep only the args in `dargs` that `fun` can accept (unless `fun` has `...`,
+# in which case all args are kept)
+match_dargs = function(dargs, fun) {
+  nms = names(formals(fun))
+  if ('...' %in% nms) return(dargs)
+  dargs[intersect(names(dargs), nms)]
+}
+
+# this is mainly for Cairo
 load_device = function(name, package, dpi = NULL) {
   dev = getFromNamespace(name, package)
   # dpi is for bitmap devices; units must be inches!
@@ -192,8 +252,31 @@ merge_low_plot = function(x, idx = sapply(x, evaluate::is.recordedplot)) {
   if (is.null(m)) x else x[-m]
 }
 
-# compare two recorded plots
+#' Compare two recorded plots
+#'
+#' Check if one plot only contains a low-level update of another plot.
+#' @param p1,p2 Plot objects.
+#' @return Logical value indicating whether `p2` is a low-level update of
+#'   `p1`.
+#' @export
+#' @examples
+#' pdf(NULL)
+#' dev.control('enable')  # enable plot recording
+#' plot(1:10)
+#' p1 = recordPlot()
+#' abline(0, 1)  # add a line (a low-level change)
+#' p2 = recordPlot()
+#' plot(rnorm(100))
+#' p3 = recordPlot()  # draw a completely new plot
+#' dev.off()
+#' knitr::is_low_change(p1, p2)  # true
+#' knitr::is_low_change(p1, p3)  # false
 is_low_change = function(p1, p2) {
+  UseMethod('is_low_change')
+}
+
+#' @export
+is_low_change.default = function(p1, p2) {
   p1 = p1[[1]]; p2 = p2[[1]]  # real plot info is in [[1]]
   if (length(p2) < (n1 <- length(p1))) return(FALSE)  # length must increase
   identical(p1[1:n1], p2[1:n1])
@@ -201,8 +284,8 @@ is_low_change = function(p1, p2) {
 
 # recycle some plot options such as fig.cap, out.width/height, etc when there
 # are multiple plots per chunk
-.recyle.opts = c('fig.cap', 'fig.scap', 'fig.env', 'fig.pos', 'fig.subcap',
-                 'out.width', 'out.height', 'out.extra', 'fig.link')
+.recyle.opts = c('fig.cap', 'fig.scap', 'fig.alt', 'fig.env', 'fig.pos', 'fig.subcap',
+                 'fig.note', 'out.width', 'out.height', 'out.extra', 'fig.link')
 
 # when passing options to plot hooks, reduce the recycled options to scalars
 reduce_plot_opts = function(options) {
@@ -214,38 +297,6 @@ reduce_plot_opts = function(options) {
     options[o] = list(v[j])
   }
   options
-}
-
-# the memory address of a NativeSymbolInfo object will be lost if it is saved to
-# disk; see http://markmail.org/message/zat2r2pfsvhrsfqz for the full
-# discussion; the hack below was stolen (with permission) from RStudio:
-# https://github.com/rstudio/rstudio/blob/master/src/cpp/r/R/Tools.R
-fix_recordedPlot = function(plot) {
-  # restore native symbols for R >= 3.0
-  for (i in seq_along(plot[[1]])) {
-    # get the symbol then test if it's a native symbol
-    symbol = plot[[1]][[i]][[2]][[1]]
-    if (inherits(symbol, 'NativeSymbolInfo')) {
-      # determine the dll that the symbol lives in
-      name = symbol[[if (is.null(symbol$package)) 'dll' else 'package']][['name']]
-      pkgDLL = getLoadedDLLs()[[name]]
-      # reconstruct the native symbol and assign it into the plot
-      nativeSymbol = getNativeSymbolInfo(
-        name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE
-      )
-      plot[[1]][[i]][[2]][[1]] <- nativeSymbol
-    }
-  }
-  attr(plot, 'pid') = Sys.getpid()
-  plot
-}
-
-# fix plots in evaluate() results
-fix_evaluate = function(list, fix = TRUE) {
-  if (!fix) return(list)
-  lapply(list, function(x) {
-    if (evaluate::is.recordedplot(x)) fix_recordedPlot(x) else x
-  })
 }
 
 # remove the plots from the evaluate results for the case of cache=2; if we only
@@ -283,20 +334,32 @@ fig_process = function(FUN, path, options) {
 
 #' Crop a plot (remove the edges) using PDFCrop or ImageMagick
 #'
-#' The command \command{pdfcrop} (often shipped with a LaTeX distribution) is
-#' executed on a PDF plot file, and \code{magick::\link[magick]{image_trim}()}
-#' is executed for other types of plot files.
+#' The program \command{pdfcrop} (often shipped with a LaTeX distribution) is
+#' executed on a PDF plot file, and
+#' [magick::image_trim()] is executed for other
+#' types of plot files.
+#'
+#' The program \command{pdfcrop} can crop the extra white margins when the plot
+#' format is PDF, to make better use of the space in the output document,
+#' otherwise we often have to struggle with [graphics::par()] to set
+#' appropriate margins. Note \command{pdfcrop} often comes with a LaTeX
+#' distribution such as TinyTeX, MiKTeX, or TeX Live, and you may not need to
+#' install it separately (use `Sys.which('pdfcrop')` to check it; if it not
+#' empty, you are able to use it). Note that \command{pdfcrop} depends on
+#' GhostScript. You can check if GhostScript is installed via
+#' `tools::find_gs_cmd()`.
 #' @param x Filename of the plot.
 #' @param quiet Whether to suppress standard output from the command.
 #' @export
-#' @references PDFCrop: \url{https://www.ctan.org/pkg/pdfcrop}. If you use
+#' @references PDFCrop: <https://www.ctan.org/pkg/pdfcrop>. If you use
 #'   TinyTeX, you may install \command{pdfcrop} with
-#'   \code{tinytex::tlmgr_install('pdfcrop')}.
+#'   `tinytex::tlmgr_install('pdfcrop')`.
 #' @return The original filename.
 plot_crop = function(x, quiet = TRUE) {
   is_pdf = grepl('[.]pdf$', x, ignore.case = TRUE)
   x2 = x
   x = path.expand(x)
+  tinytex:::tweak_path()  # in case TinyTeX is installed but not on PATH
   if (is_pdf && !has_utility('pdfcrop')) return(x2)
 
   if (!quiet) message('cropping ', x)
@@ -305,13 +368,17 @@ plot_crop = function(x, quiet = TRUE) {
   } else if (loadable('magick')) {
     img = magick::image_read(x)
     magick::image_write(magick::image_trim(img), x)
-  } else warning(
+  } else message(
     'The magick package is required to crop "', x2, '" but not available.'
   )
   x2
 }
 
-showtext = function(show) if (isTRUE(show)) showtext::showtext_begin()
+showtext = function(options) {
+  if (!isTRUE(options$fig.showtext)) return()
+  showtext::showtext_opts(dpi = options$dpi)
+  showtext::showtext_begin()
+}
 
 # handle some special cases of par()
 par2 = function(x) {
@@ -329,6 +396,12 @@ par2 = function(x) {
     # drawn at (1, 1) instead of (1, 2)
     x$mfg = NULL
   }
+  if (!is.null(x$fg)) {
+    # set fg before the rest of the par because
+    # it resets col to the same value #1603
+    par(fg = x$fg)
+    x$fg = NULL
+  }
   # you are unlikely to want to reset these pars
   x$fig = x$fin = x$pin = x$plt = x$usr = NULL
   x$ask = NULL  # does not make sense for typical non-interactive R sessions
@@ -345,45 +418,101 @@ par2 = function(x) {
 #' so you do not need to think if you have to use, for example, LaTeX or
 #' Markdown syntax, to embed an external image. Chunk options related to
 #' graphics output that work for normal R plots also work for these images, such
-#' as \code{out.width} and \code{out.height}.
-#' @param path A character vector of image paths.
+#' as `out.width` and `out.height`.
+#' @param path A character vector of image paths. Both local file paths and web
+#'   paths are supported. Note that the `auto_pdf` and `dpi` arguments
+#'   are not supported for web paths.
 #' @param auto_pdf Whether to use PDF images automatically when the output
-#'   format is LaTeX. If \code{TRUE}, then e.g. \file{foo/bar.png} will be
+#'   format is LaTeX. If `TRUE`, then e.g. \file{foo/bar.png} will be
 #'   replaced by \file{foo/bar.pdf} if the latter exists. This can be useful
 #'   since normally PDF images are of higher quality than raster images like
 #'   PNG, when the output is LaTeX/PDF.
 #' @param dpi DPI (dots per inch) value. Used to calculate the output width (in
 #'   inches) of the images. This will be their actual width in pixels, divided
-#'   by \code{dpi}. If not provided, the chunk option \code{dpi} is used; if
-#'   \code{NA}, the output width will not be calculated.
+#'   by `dpi`. If not provided, the chunk option `dpi` is used; if
+#'   `NA`, the output width will not be calculated.
+#' @param rel_path Whether to automatically convert absolute paths to relative
+#'   paths. If you know for sure that absolute paths work, you may set this
+#'   argument or the global option `knitr.graphics.rel_path` to
+#'   `FALSE`.
 #' @param error Whether to signal an error if any files specified in the
-#'   \code{path} argument do not exist and are not web resources.
+#'   `path` argument do not exist and are not web resources.
 #' @note This function is supposed to be used in R code chunks or inline R code
-#'   expressions. You are recommended to use forward slashes (\verb{/}) as path
-#'   separators instead of backslashes in the image paths.
+#'   expressions. For local images, you are recommended to use relative paths
+#'   with forward slashes instead of backslashes (e.g., \file{images/fig1.png}
+#'   instead of \file{/Users/me/code/images/fig1.png}).
 #'
 #'   The automatic calculation of the output width requires the \pkg{png}
 #'   package (for PNG images) or the \pkg{jpeg} package (for JPEG images). The
-#'   width will not be calculated if the chunk option \code{out.width} is
-#'   already provided or \code{dpi = NA}.
-#' @return The same as the input character vector \code{path} but it is marked
+#'   width will not be calculated if the chunk option `out.width` is
+#'   already provided or `dpi = NA`.
+#' @return The same as the input character vector `path` but it is marked
 #'   with special internal S3 classes so that \pkg{knitr} will convert the file
 #'   paths to proper output code according to the output format.
 #' @export
 include_graphics = function(
   path, auto_pdf = getOption('knitr.graphics.auto_pdf', FALSE), dpi = NULL,
-  error = TRUE
+  rel_path = getOption('knitr.graphics.rel_path', TRUE),
+  error = getOption('knitr.graphics.error', TRUE)
 ) {
   path = native_encode(path)  # https://d.cosx.org/d/420524
+  # keep the original paths for the existence check: absolute paths always
+  # resolve unambiguously, whereas paths made relative below are relative to
+  # output.dir, which may differ from the working directory (e.g. when root.dir
+  # is changed) and thus give false negatives (#2171)
+  path0 = path
+  # base directory for absolute -> relative conversion: prefer the directory of
+  # the final output document (communicated by e.g. rmarkdown via the option
+  # below), because that is where the rendered document lives and image paths
+  # must be relative to; fall back to output.dir (knitr's initial working
+  # directory) when the renderer does not provide one
+  # (#2171; see also r-lib/pkgdown#2334)
+  d = opts_knit$get('rmarkdown.output_dir') %n% opts_knit$get('output.dir')
+  if (any(i <- xfun::is_abs_path(path)) && rel_path && !is.null(d)) {
+    path[i] = xfun::relative_path(path[i], d, error = FALSE)
+    if (any(j <- xfun::is_abs_path(path[i]))) warning(
+      'It is highly recommended to use relative paths for images. ',
+      'You had absolute paths: ', quote_vec(path[i][j])
+    )
+  }
+  path = path.expand(path) # https://github.com/rstudio/rmarkdown/issues/1053
   if (auto_pdf && is_latex_output()) {
     path2 = with_ext(path, 'pdf')
     i = file.exists(path2)
     path[i] = path2[i]
+    path0[i] = with_ext(path0[i], 'pdf')
   }
-  if (error && length(p <- path[!is_web_path(path) & !file.exists(path)])) stop(
-    'Cannot find the file(s): ', paste0('"', p, '"', collapse = '; ')
+  # relative paths can be tricky in child documents, so don't error (#1957)
+  if (child_mode()) error = FALSE
+  # check existence against the original paths (path0): for absolute inputs this
+  # avoids resolving a relative path against the wrong base directory (#2171)
+  if (error && length(p <- path[!xfun::is_web_path(path0) & !file.exists(path0)])) stop(
+    'Cannot find the file(s): ', quote_vec(p)
   )
   structure(path, class = c('knit_image_paths', 'knit_asis'), dpi = dpi)
+}
+
+#' Download an image from the web and include it in a document
+#'
+#' When including images in non-HTML output formats such as LaTeX/PDF, URLs will
+#' not work as image paths. In this case, we have to download the images. This
+#' function is a wrapper of [xfun::download_file()] and
+#' [include_graphics()].
+#' @param url The URL of an image.
+#' @param path The download path (inferred from the URL by default). If the file
+#'   exists, it will not be downloaded (downloading can take time and requires
+#'   Internet connection). If you are sure the file needs to be downloaded
+#'   again, delete it beforehand.
+#' @param use_file Whether to use the URL or the download path to include the
+#'   image. By default, the URL is used for HTML output formats, and the file
+#'   path is used for other output formats.
+#' @param ... Other arguments to be passed to [include_graphics()].
+#' @export
+#' @examplesIf interactive()
+#' knitr::download_image('https://www.r-project.org/Rlogo.png')
+download_image = function(url, path = xfun::url_filename(url), use_file = !pandoc_to('html'), ...) {
+  if (!file.exists(path) && use_file) xfun::download_file(url, path)
+  include_graphics(if (use_file) path else url, ...)
 }
 
 # calculate the width in inches for PNG/JPEG images given a DPI
@@ -404,7 +533,7 @@ raster_dpi_width = function(path, dpi) {
     w = ncol(jpeg::readJPEG(path, native = TRUE))
   }
   if (is_latex_output()) {
-    paste0(round(w / dpi, 2), 'in')
+    xfun::decimal_dot(paste0(round(w / dpi, 2), 'in'))
   } else if (is_html_output()) {
     round(w / (dpi / 96))
   }
@@ -412,16 +541,16 @@ raster_dpi_width = function(path, dpi) {
 
 #' Embed a URL as an HTML iframe or a screenshot in \pkg{knitr} documents
 #'
-#' When the output format is HTML, \code{include_url()} inserts an iframe in the
+#' When the output format is HTML, `include_url()` inserts an iframe in the
 #' output; otherwise it takes a screenshot of the URL and insert the image in
-#' the output. \code{include_app()} takes the URL of a Shiny app and adds
-#' \samp{?showcase=0} to it (to disable the showcase mode), then passes the URL
-#' to \code{include_url()}.
-#' @param url Character string containing a URL.
-#' @param height Character string with the height of the iframe.
+#' the output. `include_app()` takes the URL of a Shiny app and adds
+#' `?showcase=0` to it (to disable the showcase mode), then passes the URL
+#' to `include_url()`.
+#' @param url A character vector of URLs.
+#' @param height A character vector to specify the height of iframes.
 #' @return An R object with a special class that \pkg{knitr} recognizes
-#'   internally to generate the iframe or screenshot.
-#' @seealso \code{\link{include_graphics}}
+#'   internally to generate the iframes or screenshots.
+#' @seealso [include_graphics()]
 #' @export
 include_url = function(url, height = '400px') {
   include_url2(url, height)
@@ -430,7 +559,7 @@ include_url = function(url, height = '400px') {
 include_url2 = function(url, height = '400px', orig = url) {
   structure(
     list(url = url, height = height, url.orig = orig),
-    class = c('knit_embed_url', 'knit_asis')
+    class = c('knit_embed_url', 'knit_asis_url')
   )
 }
 
@@ -438,13 +567,14 @@ include_url2 = function(url, height = '400px', orig = url) {
 #' @export
 include_app = function(url, height = '400px') {
   orig = url  # store the original URL
-  if (!grepl('?', url, fixed = TRUE)) url = paste0(url, '?showcase=0')
+  i = !grepl('?', url, fixed = TRUE)
+  url[i] = paste0(url[i], '?showcase=0')
   include_url2(url, height, orig)
 }
 
 need_screenshot = function(x, ...) {
   options = list(...)[['options']]
-  # user may say 'I know the consequence; just let me render HTML'
+  # if users specify screenshot.force = FALSE, skip screenshot and render HTML
   if (isFALSE(options$screenshot.force)) return(FALSE)
   # force screenshotting even if the output format support HTML
   force = is.list(options) && isTRUE(options$screenshot.force)
@@ -456,7 +586,7 @@ need_screenshot = function(x, ...) {
   if (length(fmt) == 0 || force) return(i1 || i2 || i3)
   html_format = fmt %in% c('html', 'html4', 'html5', 'revealjs', 's5', 'slideous', 'slidy')
   res = ((i1 || i3) && !html_format) || (i2 && !(html_format && runtime_shiny()))
-  res && webshot_available()
+  res && any(webshot_available())
 }
 
 runtime_shiny = function() {
@@ -464,10 +594,18 @@ runtime_shiny = function() {
 }
 
 webshot_available = local({
-  res = NULL  # cache the availablity of webshot/PhantomJS
+  res = NULL  # cache the availability of webshot2/Chrome and webshot/PhantomJS
+  test = function(pkg, fun, pkg2 = pkg) {
+    loadable(pkg) && tryCatch(
+      file.exists(getFromNamespace(fun, pkg2)()),
+      error = function(e) FALSE
+    )
+  }
   function() {
-    if (is.null(res))
-      res <<- loadable('webshot') && !is.null(getFromNamespace('find_phantom', 'webshot')())
+    if (is.null(res)) res <<- c(
+      webshot2 = test('webshot2', 'find_chrome', 'chromote'),
+      webshot  = test('webshot',  'find_phantom')
+    )
     res
   }
 })
@@ -490,36 +628,44 @@ html_screenshot = function(x, options = opts_current$get(), ...) {
     switch(options$dev[1], pdf = '.pdf', jpeg = '.jpeg', '.png')
   } else '.png'
   wargs = options$screenshot.opts %n% list()
-  if (is.null(wargs$vwidth)) wargs$vwidth = options$out.width.px
-  if (is.null(wargs$vheight)) wargs$vheight = options$out.height.px
+  if (is.null(wargs$vwidth) && !grepl("%$", W <- options$out.width.px)) wargs$vwidth = W
+  if (is.null(wargs$vheight) && !grepl("%$", H <- options$out.height.px)) wargs$vheight = H
   if (is.null(wargs$delay)) wargs$delay = if (i1) 0.2 else 1
-  d = tempfile()
+  d = tempfile(tmpdir = getOption(
+    'knitr.html_screenshot.tmpdir', if (file.access('.', 2) == 0) '.' else tempdir()
+  ))
   dir.create(d); on.exit(unlink(d, recursive = TRUE), add = TRUE)
+  w = webshot_available()
+  webshot = c(options$webshot, names(w)[w])
+  webshot = if (length(webshot) == 0) 'webshot' else webshot[[1L]]
+  if (webshot == 'webshot2' && ext == 'pdf' && getOption('knitr.warn.webshot2', TRUE)) warning(
+    "webshot2 may take the PDF screenshot with the wrong size. You are recommended ",
+    "to use the 'png' format instead (i.e., set the chunk option '",
+    if (is_quarto()) "fig-format" else "dev", "' to 'png'). ",
+    "See https://github.com/yihui/knitr/issues/2276 for more information."
+  )
+  # set quiet opions for webshot2::webshot()
+  local_options(list(webshot.quiet = getOption('webshot.quiet', TRUE)))
   f = in_dir(d, {
     if (i1 || i3) {
       if (i1) {
         f1 = wd_tempfile('widget', '.html')
-        save_widget(x, f1, FALSE, options = options)
+        htmlwidgets::saveWidget(x, f1, FALSE, knitrOptions = options)
       } else f1 = x$url
       f2 = wd_tempfile('webshot', ext)
-      do.call(webshot::webshot, c(list(f1, f2), wargs))
-      normalizePath(f2)
+      f3 = do.call(getFromNamespace('webshot', webshot), c(list(f1, f2), wargs))
+      normalizePath(f3)
     } else if (i2) {
-      f = wd_tempfile('webshot', ext)
-      do.call(webshot::appshot, c(list(x, f), wargs))
-      normalizePath(f)
+      f1 = wd_tempfile('webshot', ext)
+      f2 = do.call(getFromNamespace('appshot', webshot), c(list(x, f1), wargs))
+      normalizePath(f2)
     }
   })
-  res = readBin(f, 'raw', file.info(f)[, 'size'])
-  structure(
-    list(image = res, extension = ext, url = if (i3) x$url.orig),
-    class = 'html_screenshot'
-  )
-}
-
-save_widget = function(..., options) {
-  FUN = htmlwidgets::saveWidget
-  if ('knitrOptions' %in% names(formals(FUN))) {
-    FUN(..., knitrOptions = options)
-  } else FUN(...)
+  lapply(f, function(filename) {
+    res = xfun::read_bin(filename)
+    structure(
+      list(image = res, extension = ext, url = if (i3) x$url.orig[filename == f]),
+      class = 'html_screenshot'
+    )
+  })
 }

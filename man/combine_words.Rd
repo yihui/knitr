@@ -4,37 +4,11 @@
 \alias{combine_words}
 \title{Combine multiple words into a single string}
 \usage{
-combine_words(words, sep = ", ", and = " and ", before = "", after = before)
+combine_words(...)
 }
 \arguments{
-\item{words}{A character vector.}
-
-\item{sep}{Separator to be inserted between words.}
-
-\item{and}{Character string to be prepended to the last word.}
-
-\item{before, after}{A character string to be added before/after each word.}
-}
-\value{
-A character string marked by \code{xfun::\link{raw_string}()}.
+\item{...}{Arguments passed to \code{\link[xfun:join_words]{xfun::join_words()}}.}
 }
 \description{
-When a value from an inline R expression is a character vector of multiple
-elements, we may want to combine them into a phrase like \samp{a and b}, or
-\code{a, b, and c}. That is what this a helper function does.
-}
-\details{
-If the length of the input \code{words} is smaller than or equal to 1,
-\code{words} is returned. When \code{words} is of length 2, the first word
-and second word are combined using the \code{and} string. When the length is
-greater than 2, \code{sep} is used to separate all words, and the \code{and}
-string is prepended to the last word.
-}
-\examples{
-combine_words("a")
-combine_words(c("a", "b"))
-combine_words(c("a", "b", "c"))
-combine_words(c("a", "b", "c"), sep = " / ", and = "")
-combine_words(c("a", "b", "c"), and = "")
-combine_words(c("a", "b", "c"), before = "\"", after = "\"")
+This is a wrapper function of \code{xfun::join_words()}.
 }

@@ -9,7 +9,7 @@ rocco(input, ...)
 \arguments{
 \item{input}{Path of the input R Markdown file.}
 
-\item{...}{Arguments to be passed to \code{\link{knit2html}}}
+\item{...}{Arguments to be passed to \code{\link[=knit2html]{knit2html()}}}
 }
 \value{
 An HTML file is written, and its name is returned.
@@ -29,10 +29,10 @@ press again to hide the text column (show code).
 rocco_view = function(input) {
     owd = setwd(tempdir())
     on.exit(setwd(owd))
-    if (!file.exists(input)) 
+    if (!file.exists(input))
         return()
-    o = rocco(input, header = "", quiet = TRUE)
-    if (interactive()) 
+    o = rocco(input, quiet = TRUE)
+    if (interactive())
         browseURL(o)
 }
 # knit these two vignettes using the docco style
@@ -41,7 +41,7 @@ rocco_view(system.file("doc", "knit_expand.Rmd", package = "knitr"))
 }
 \references{
 The Docco package by Jeremy Ashkenas:
-  \url{https://github.com/jashkenas/docco}
+\url{https://github.com/jashkenas/docco}
 }
 \author{
 Weicheng Zhu and Yihui Xie

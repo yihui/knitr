@@ -27,7 +27,7 @@ line_prompt = function(x, prompt = getOption('prompt'), continue = getOption('co
 # add a prefix to output
 comment_out = function(x, prefix = '##', which = TRUE, newline = TRUE) {
   x = gsub('[\n]{2,}$', '\n', x)
-  if (newline) x = gsub('([^\n])$', '\\1\n', x)  # add \n if not exists
+  if (newline) x = gsub('([^\n]|^)$', '\\1\n', x)  # add \n if not exists
   if (is.null(prefix) || !nzchar(prefix) || is.na(prefix)) return(x)
   prefix = paste(prefix, '')
   x = gsub(' +([\n]*)$', '\\1', x)
@@ -47,6 +47,9 @@ comment_to_var = function(x, varname, pattern, envir) {
 is_blank = function(x) {
   if (length(x)) all(grepl('^\\s*$', x)) else TRUE
 }
+
+attr = function(...) base::attr(..., exact = TRUE)
+
 valid_path = function(prefix, label) {
   if (length(prefix) == 0L || is.na(prefix) || prefix == 'NA') prefix = ''
   paste0(prefix, label)
@@ -54,27 +57,28 @@ valid_path = function(prefix, label) {
 
 # define a color variable in TeX
 color_def = function(col, variable = 'shadecolor') {
-  if (is.na(col)) return('')  # no LaTeX code when color is NA
+  if (all(is.na(col))) return('')  # no LaTeX code when color is NA
   x = if (length(col) == 1L) sc_split(col) else col
   if ((n <- length(x)) != 3L) {
     if (n == 1L) x = drop(col2rgb(x) / 255) else {
       x = switch(variable, shadecolor = rep(.97, 3), fgcolor = rep(0, 3))
       warning("the color '", col, "' is invalid;",
               'using default color...',
-              'see https://yihui.org/knitr/options')
+              'see https://yihui.org/knitr/options/')
     }
   }
   if (length(x) != 3L) stop('invalid color:', col)
   if (is.numeric(x)) x = round(x, 3L)
-  outdec = options(OutDec = '.'); on.exit(options(outdec))
-  sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
+  xfun::decimal_dot(
+    sprintf('\\definecolor{%s}{rgb}{%s, %s, %s}', variable, x[1], x[2], x[3])
+  )
 }
 
 # split by semicolon or colon
 sc_split = function(string) {
   if (is.call(string)) string = eval(string)
   if (is.numeric(string) || length(string) != 1L) return(string)
-  stringr::str_trim(stringr::str_split(string, ';|,')[[1]])
+  trimws(strsplit(string, ';|,')[[1]])
 }
 
 # extract LaTeX packages for tikzDevice
@@ -88,9 +92,9 @@ set_preamble = function(input, patterns = knit_patterns$get()) {
   idx1 = grep(hb, input)[1]
   if (is.na(idx1) || idx1 >= idx2) return()
   txt = one_string(input[idx1:(idx2 - 1L)])  # rough preamble
-  idx = stringr::str_locate(txt, hb)  # locate documentclass
-  options(tikzDocumentDeclaration = stringr::str_sub(txt, idx[, 1L], idx[, 2L]))
-  preamble = pure_preamble(split_lines(stringr::str_sub(txt, idx[, 2L] + 1L)), patterns)
+  idx = str_locate(txt, hb, FALSE)  # locate documentclass
+  options(tikzDocumentDeclaration = substr(txt, idx[, 1L], idx[, 2L]))
+  preamble = pure_preamble(split_lines(substr(txt, idx[, 2L] + 1L, nchar(txt))), patterns)
   .knitEnv$tikzPackages = c(.header.sweave.cmd, preamble, '\n')
   .knitEnv$bibliography = grep('^\\\\bibliography.+', input, value = TRUE)
 }
@@ -124,10 +128,10 @@ pure_preamble = function(preamble, patterns) {
 #'   complete output is written.
 #' @note Obviously this function is only useful when the output format is LaTeX.
 #'   This function only works when the child document is compiled in a
-#'   standalone mode using \code{\link{knit}()} (instead of being called in
-#'   \code{\link{knit_child}()}); when the parent document is compiled, this
+#'   standalone mode using [knit()] (instead of being called in
+#'   [knit_child()]); when the parent document is compiled, this
 #'   function in the child document will be ignored.
-#' @references \url{https://yihui.org/knitr/demo/child/}
+#' @references <https://yihui.org/knitr/demo/child/>
 #' @export
 #' @examples ## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
 #'
@@ -145,27 +149,34 @@ set_parent = function(parent) {
 
 # whether to write results as-is?
 output_asis = function(x, options) {
-  is_blank(x) || options$results == 'asis'
+  is_blank(x) || identical(options$results, 'asis')
 }
 
-# path relative to dir of the input file
-input_dir = function(ignore_root = FALSE) {
+# the working directory: use root.dir if specified, otherwise the dir of the
+# input file unless knitr.use.cwd = TRUE
+input_dir = function() {
   root = opts_knit$get('root.dir')
-  # LyX is a special case: the input file is in tempdir, and we should use
-  # root.dir as the real input dir (#809)
-  if (is_lyx()) return(root)
-  if (ignore_root) {
-    .knitEnv$input.dir %n% '.'
-  } else {
-    root %n% (if (!getOption('knitr.use.cwd', FALSE)) .knitEnv$input.dir) %n% '.'
+  root %n% (if (!getOption('knitr.use.cwd', FALSE)) .knitEnv$input.dir) %n% '.'
+}
+
+# eval expr under the input dir
+in_input_dir = function(expr) in_dir(input_dir(), expr)
+
+# detect if running on CRAN (assuming that CRAN does not set CI or
+# NOT_CRAN=true); or set R_CRANDALF=true (is cran) or false (not cran)
+is_cran = function() {
+  x = Sys.getenv('R_CRANDALF', NA)
+  if (!is.na(x)) tolower(x) == 'true' else {
+    !any(tolower(Sys.getenv(c('CI', 'NOT_CRAN'))) == 'true')
   }
 }
 
-is_lyx = function() {
-  args = commandArgs(TRUE)
-  if (length(args) < 4) return(FALSE)
-  grepl('[.]Rnw$', args[1]) && !is.na(Sys.getenv('LyXDir', NA))
+is_cran_check = function() {
+  is_cran() && is_R_CMD_check()
 }
+
+is_R_CMD_build = function() Sys.getenv('R_BUILD_TEMPLIB') != ''
+is_bioc = function() Sys.getenv('BBS_HOME') != ''
 
 # round a number to getOption('digits') decimal places by default, and format()
 # it using significant digits if the option knitr.digits.signif = TRUE
@@ -195,13 +206,13 @@ format_sci_one = function(
     return(round_digits(x)) # no need sci notation
 
   b = round_digits(x / 10^lx)
-  b[b %in% c(1, -1)] = ''
 
   switch(format, latex = {
     sci_notation('%s%s10^{%s}', b, times, lx)
   },
   html = sci_notation('%s%s10<sup>%s</sup>', b, ' &times; ', lx),
   md   = sci_notation('%s%s10^%s^', b, '&times; ', lx),
+  typst = sci_notation('$%s%s10^%s$', b, ' times ', lx),
   rst  = {
     # if AsIs, use the :math: directive
     if (inherits(x, 'AsIs')) {
@@ -216,7 +227,11 @@ format_sci_one = function(
 }
 
 sci_notation = function(format, base, times, power) {
-  sprintf(format, base, ifelse(base == '', '', times), power)
+  if (base %in% c('1', '-1')) {
+    times = ''
+    base = if (base == '1') '' else '-'
+  }
+  sprintf(format, base, times, power)
 }
 
 # vectorized version of format_sci_one()
@@ -225,14 +240,41 @@ format_sci = function(x, ...) {
   vapply(x, format_sci_one, character(1L), ..., USE.NAMES = FALSE)
 }
 
-# absolute path?
-is_abs_path = function(x) {
-  if (is_windows()) grepl('^(\\\\|[A-Za-z]:)', x) else grepl('^[/~]', x)
-}
+# wrap a character vector of formatted numbers in LaTeX math mode;
+# x is already stringified (e.g. by format_args()), so we parse structure from strings
+latex_num = function(x, times = getOption('knitr.inline.times', '\\times ')) {
+  brace_comma = function(s) gsub(',', '{,}', s, fixed = TRUE)
+  math = function(s) paste0('\\(', s, '\\)')
 
-# paths of web resources?
-is_web_path = function(x) {
-  grepl('^(f|ht)tps?://', x)
+  # scientific notation: capture base, sign of exponent, and exponent digits;
+  # zero-exponent (e.g. "0e+00") is treated as plain zero below
+  sci_pat  = "^ *([+-]?[0-9.,]+)e[+]?(-?)0*([1-9][0-9]*) *$"
+  zero_sci = grepl("^ *[+-]?[0-9.,]+e[+]?0+ *$", x)
+  is_sci   = grepl(sci_pat, x)
+  is_inf   = x %in% c("Inf", "-Inf")
+  is_plain = !is_sci & !is_inf & !zero_sci & grepl("^ *[0-9., +-]+ *$", x)
+
+  out = x  # non-numeric (NA, NaN, ...) pass through unchanged
+
+  out[x == "Inf"]  = math("\\infty")
+  out[x == "-Inf"] = math("-\\infty")
+  out[zero_sci] = math("0")
+  out[is_plain] = math(brace_comma(x[is_plain]))
+
+  if (any(is_sci)) {
+    m = regmatches(x[is_sci], regexec(sci_pat, x[is_sci]))
+    out[is_sci] = vapply(m, function(parts) {
+      base = brace_comma(parts[2])
+      exp  = paste0(parts[3], parts[4])
+      if (base %in% c('1', '-1')) {
+        math(sprintf('%s10^{%s}', if (base == '-1') '-' else '', exp))
+      } else {
+        math(sprintf('%s%s10^{%s}', base, times, exp))
+      }
+    }, character(1))
+  }
+
+  out
 }
 
 # is tikz device without externalization?
@@ -244,10 +286,42 @@ tikz_dict = function(path) {
   paste(sans_ext(basename(path)), 'tikzDictionary', sep = '-')
 }
 
-# compatibility with Sweave and old beta versions of knitr
+# convert dashes in option names with dots (e.g., `fig-height` to `fig.height`),
+# and vice versa (dots work for knitr, and dashes for Quarto)
+fix_names = function(x, char1, char2, aliases) {
+  name1 = grep(char1, names(x), value = TRUE, fixed = TRUE)
+  name2 = gsub(char1, char2, name1, fixed = TRUE)
+  name3 = c(names(opts_chunk_attr), names(opts_chunk$get()))
+  # only convert names that are known to knitr
+  i = (if (char1 == '.') name1 else name2) %in% name3
+  if (any(i)) {
+    x[name2[i]] = x[name1[i]]  # move values to to new names
+    x[name1[i]] = NULL  # delete old names
+  }
+  for (j in intersect(names(x), names(aliases))) {
+    x[[aliases[j]]] = x[[j]]
+    x[[j]] = NULL
+  }
+  x
+}
+
+dot_names = function(x) {
+  fix_names(x, '-', '.', c(fig.format = 'dev', fig.dpi = 'dpi'))
+}
+
+dash_names = function(x) {
+  fix_names(x, '.', '-', c(dev = 'fig-format', dpi = 'fig-dpi', tab.cap = 'tbl-cap'))
+}
+
+# initially for compatibility with Sweave and old beta versions of knitr
+# but now also place to tweak default options
 fix_options = function(options) {
   options = as.strict_list(options)
 
+  # message/warning take logical or numeric values; if character, convert to logical
+  for (i in c('message', 'warning')) {
+    if (is.character(options[[i]])) options[[i]] = as.logical(options[[i]])
+  }
   # if you want to use subfloats, fig.show must be 'hold'
   if (length(options$fig.subcap)) options$fig.show = 'hold'
   # if the animation hook has been set, fig.show must be 'animate'
@@ -266,8 +340,12 @@ fix_options = function(options) {
 
   # cache=TRUE -> 3; FALSE -> 0
   if (is.logical(options$cache)) options$cache = options$cache * 3
-  # non-R code should not use cache=1,2
-  if (options$engine != 'R') options$cache = (options$cache > 0) * 3
+  if (options$engine != 'R') {
+    # non-R code should not use cache = 1, 2
+    options$cache = (options$cache > 0) * 3
+    # error numbers only make sense to R engine, so 0 -> TRUE; 1, 2 -> FALSE
+    if (is.numeric(options$error)) options$error = options$error == 0
+  }
 
   options$eval = unname(options$eval)
 
@@ -307,49 +385,105 @@ fix_options = function(options) {
     }
   }
 
+  # adjust some options when collapse is TRUE
+  if (options$collapse) {
+    options[unlist(lapply(
+      c('class.', 'attr.'), paste0, c('output', 'message', 'warning', 'error')
+    ))] = NULL
+  }
+
+  # change default of value conditionally
+  if (identical(options$strip.white, I(TRUE)))
+    options$strip.white = !options$collapse
+
   options
 }
 
-#' Check if the current output type is LaTeX or HTML
+#' Check the current input and output type
 #'
-#' The function \code{is_latex_output()} returns \code{TRUE} when the output
+#' The function `is_latex_output()` returns `TRUE` when the output
 #' format is LaTeX; it works for both \file{.Rnw} and R Markdown documents (for
-#' the latter, the two Pandoc formats \code{latex} and \code{beamer} are
-#' considered LaTeX output). The function \code{is_html_output()} only works for
-#' R Markdown documents.
+#' the latter, the two Pandoc formats `latex` and `beamer` are
+#' considered LaTeX output). The function `is_html_output()` only works for
+#' R Markdown documents and will test for several Pandoc HTML based output
+#' formats (by default, these formats are considered as HTML formats:
+#' `c('markdown', 'epub', 'epub2', 'html', 'html4', 'html5', 'revealjs', 's5',
+#' 'slideous', 'slidy', 'gfm')`).
+#'
+#' The function `pandoc_to()` returns the Pandoc output format, and
+#' `pandoc_from()` returns Pandoc input format. `pandoc_to(fmt)`
+#' allows to check the current output format against a set of format names. Both
+#' are to be used with R Markdown documents.
 #'
 #' These functions may be useful for conditional output that depends on the
 #' output format. For example, you may write out a LaTeX table in an R Markdown
 #' document when the output format is LaTeX, and an HTML or Markdown table when
-#' the output format is HTML.
+#' the output format is HTML. Use `pandoc_to(fmt)` to test a more specific
+#' Pandoc format.
 #'
 #' Internally, the Pandoc output format of the current R Markdown document is
-#' stored in \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.to')}. By
-#' default, these formats are considered as HTML formats: \code{c('markdown',
-#' 'epub', 'html', 'html5', 'revealjs', 's5', 'slideous', 'slidy')}.
+#' stored in \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.to')}, and the
+#' Pandoc input format in
+#' \code{knitr::\link{opts_knit}$get('rmarkdown.pandoc.from')}
+#'
+#' @note See available Pandoc formats, in
+#'   [Pandoc's Manual](https://pandoc.org/MANUAL.html)
 #' @rdname output_type
 #' @export
-#' @examples knitr::is_latex_output()
+#' @examples
+#' # check for output formats type
+#' knitr::is_latex_output()
 #' knitr::is_html_output()
 #' knitr::is_html_output(excludes = c('markdown', 'epub'))
+#' # Get current formats
+#' knitr::pandoc_from()
+#' knitr::pandoc_to()
+#' # Test if current output format is 'docx'
+#' knitr::pandoc_to('docx')
 is_latex_output = function() {
-  out_format('latex') || pandoc_to(c('latex', 'beamer'))
+  out_format(c('latex', 'sweave', 'listings')) || pandoc_to(c('latex', 'beamer'))
 }
 
-#' @param fmt A character vector of output formats to be checked. By default, this
-#'   is the current Pandoc output format.
+#' @param fmt A character vector of output formats to be checked against. If not
+#'   provided, `is_html_output()` uses `pandoc_to()`, and
+#'   `pandoc_to()` returns the output format name.
 #' @param excludes A character vector of output formats that should not be
-#'   considered as HTML format.
+#'   considered as HTML format. Options are: markdown, epub, epub2, html, html4, html5,
+#'   revealjs, s5, slideous, slidy, and gfm.
 #' @rdname output_type
 #' @export
 is_html_output = function(fmt = pandoc_to(), excludes = NULL) {
+  fmt = fmt %n% out_format()
   if (length(fmt) == 0) return(FALSE)
   if (grepl('^markdown', fmt)) fmt = 'markdown'
   if (fmt == 'epub3') fmt = 'epub'
-  fmts = c('markdown', 'epub', 'html', 'html4', 'html5', 'revealjs', 's5', 'slideous', 'slidy', 'gfm')
+  fmts = c('markdown', 'epub', 'epub2', 'html', 'html4', 'html5', 'revealjs', 's5', 'slideous', 'slidy', 'gfm')
   fmt %in% setdiff(fmts, excludes)
 }
 
+#' @param exact Whether to return or use the exact format name. If not, Pandoc
+#'   extensions will be removed from the format name, e.g., `latex-smart`
+#'   will be treated as `latex`.
+#' @rdname output_type
+#' @export
+pandoc_to = function(fmt, exact = FALSE) {
+  # rmarkdown sets an option for the Pandoc output format from markdown
+  to = fmt_name(opts_knit$get('rmarkdown.pandoc.to'), exact)
+  if (missing(fmt)) to else !is.null(to) && (to %in% fmt)
+}
+
+#' @rdname output_type
+#' @export
+pandoc_from = function(exact = FALSE) {
+  # rmarkdown's input format, obtained from a package option set by rmarkdown
+  fmt_name(opts_knit$get('rmarkdown.pandoc.from'), exact) %n% 'markdown'
+}
+
+# pandoc format name: if not exact, return base name (remove extensions), e.g.,
+# latex-smart -> latex
+fmt_name = function(x, exact = FALSE) {
+  if (exact || is.null(x)) x else gsub('[-+].*', '', x)
+}
 
 # turn percent width/height to LaTeX unit, e.g. out.width = 30% -> .3\linewidth
 latex_percent_size = function(x, which = c('width', 'height')) {
@@ -359,14 +493,17 @@ latex_percent_size = function(x, which = c('width', 'height')) {
   xi = as.numeric(sub('%$', '', x[i]))
   if (any(is.na(xi))) return(x)
   which = match.arg(which)
-  x[i] = paste0(xi / 100, if (which == 'width') '\\linewidth' else '\\textheight')
+  x[i] = paste0(
+    formatC(xi / 100, decimal.mark = '.'),
+    if (which == 'width') '\\linewidth' else '\\textheight'
+  )
   x
 }
 
 # eval options as symbol/language objects
 eval_lang = function(x, envir = knit_global()) {
   if (!is.symbol(x) && !is.language(x)) return(x)
-  eval(x, envir = envir)
+  in_input_dir(eval(x, envir = envir))
 }
 
 # check latex packages; if not exist, copy them over to ./
@@ -391,17 +528,6 @@ out_format = function(x) {
 # tempfile under the current working directory
 wd_tempfile = function(...) basename(tempfile(tmpdir = '.', ...))
 
-# rmarkdown sets an option for the Pandoc output format from markdown
-pandoc_to = function(x) {
-  fmt = opts_knit$get('rmarkdown.pandoc.to')
-  if (missing(x)) fmt else !is.null(fmt) && (fmt %in% x)
-}
-
-# rmarkdown's input format
-pandoc_from = function() {
-  opts_knit$get('rmarkdown.pandoc.from') %n% 'markdown'
-}
-
 pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
   if (length(text) == 0) return(text)
   f1 = wd_tempfile('pandoc', '.md'); f2 = wd_tempfile('pandoc')
@@ -413,70 +539,63 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
 
 #' Path for figure files
 #'
-#' The filename of figure files is the combination of options \code{fig.path}
-#' and \code{label}. This function returns the path of figures for the current
+#' The filename of figure files is the combination of options `fig.path`
+#' and `label`. This function returns the path of figures for the current
 #' chunk by default.
 #' @param suffix A filename suffix; if it is non-empty and does not
-#'   contain a dot \code{.}, it will be treated as the filename extension (e.g.
-#'   \code{png} will be used as \code{.png})
+#'   contain a dot `.`, it will be treated as the filename extension (e.g.
+#'   `png` will be used as `.png`)
 #' @param options A list of options; by default the options of the current chunk.
 #' @param number The current figure number. The default is the internal chunk option
-#'   \code{fig.cur}, if this is available.
+#'   `fig.cur`, if this is available.
 #' @return A character vector of the form \file{fig.path-label-i.suffix}.
-#' @note When there are special characters (not alphanumeric or \samp{-} or
-#'   \samp{_}) in the path, they will be automatically replaced with \samp{_}.
+#' @note When there are special characters (not alphanumeric or `-` or
+#'   `_`) in the path, they will be automatically replaced with `_`.
 #'   For example, \file{a b/c.d-} will be sanitized to \file{a_b/c_d-}. This
 #'   makes the filenames safe to LaTeX.
 #' @export
 #' @examples fig_path('.pdf', options = list(fig.path='figure/abc-', label='first-plot'))
 #' fig_path('.png', list(fig.path='foo-', label='bar'), 1:10)
 fig_path = function(suffix = '', options = opts_current$get(), number) {
-  if (suffix != '' && !grepl('[.]', suffix)) suffix = paste0('.', suffix)
+  suffix = sub('^([^.])', '.\\1', suffix)
   if (missing(number)) number = options$fig.cur %n% 1L
   if (!is.null(number)) suffix = paste0('-', number, suffix)
   path = valid_path(options$fig.path, options$label)
-  (if (out_format(c('latex', 'sweave', 'listings'))) sanitize_fn else
-    paste0)(path, suffix)
+  if (getOption('knitr.sanitize.paths', out_format(c('latex', 'sweave', 'listings'))))
+    path = sanitize_fn(path)
+  paste0(path, suffix)
 }
 # sanitize filename for LaTeX
-sanitize_fn = function(path, suffix = '') {
-  if (grepl('[^~:_./\\[:alnum:]-]', path)) {
-    warning('replaced special characters in figure filename "', path, '" -> "',
-            path <- gsub('[^~:_./\\[:alnum:]-]', '_', path), '"')
-  }
-  # replace . with _ except ../ and ./
-  s = strsplit(path, '[/\\\\]')[[1L]]
-  i = (s != '.') & (s != '..') & grepl('\\.', s)
-  if (any(i)) {
-    s[i] = gsub('\\.', '_', s[i])
-    path = paste(s, collapse = '/')
-    warning('dots in figure paths replaced with _ ("', path, '")')
-  }
-  paste0(path, suffix)
+sanitize_fn = function(path, warn = TRUE) {
+  p = gsub('[^~:_./\\[:alnum:]-]', '_', path)
+  if (warn && (p != path)) warning(
+    "Replaced special characters in figure filename '", path, "' -> '", p, "'"
+  )
+  p
 }
 
 #' Obtain the figure filenames for a chunk
 #'
 #' Given a chunk label, the figure file extension, the figure number(s), and the
-#' chunk option \code{fig.path}, return the filename(s).
+#' chunk option `fig.path`, return the filename(s).
 #'
 #' This function can be used in an inline R expression to write out the figure
 #' filenames without hard-coding them. For example, if you created a plot in a
-#' code chunk with the label \code{foo} and figure path \file{my-figure/}, you
+#' code chunk with the label `foo` and figure path \file{my-figure/}, you
 #' are not recommended to use hard-coded figure paths like
-#' \samp{\includegraphics{my-figure/foo-1.pdf}} (in \file{.Rnw} documents) or
-#' \samp{![](my-figure/foo-1.png)} (R Markdown) in your document. Instead, you
-#' should use \samp{\\Sexpr{fig_chunk('foo', 'pdf')}} or \samp{![](`r
-#' fig_chunk('foo', 'png')`)}.
+#' `\includegraphics{my-figure/foo-1.pdf}` (in \file{.Rnw} documents) or
+#' `![](my-figure/foo-1.png)` (R Markdown) in your document. Instead, you
+#' should use `\Sexpr{fig_chunk('foo', 'pdf')}` or
+#' ``` ![](`r fig_chunk('foo', 'png')`) ```.
 #'
 #' You can generate plots in a code chunk but not show them inside the code
-#' chunk by using the chunk option \code{fig.show = 'hide'}. Then you can use
+#' chunk by using the chunk option `fig.show = 'hide'`. Then you can use
 #' this function if you want to show them elsewhere.
 #' @param label The chunk label.
-#' @param ext The figure file extension, e.g. \code{png} or \code{pdf}.
-#' @param number The figure number (by default \code{1}).
-#' @param fig.path Passed to \code{\link{fig_path}}. By default, the chunk
-#'   option \code{fig.path} is used.
+#' @param ext The figure file extension, e.g., `png` or `pdf`.
+#' @param number The figure number (by default `1`).
+#' @param fig.path Passed to [fig_path()]. By default, the chunk
+#'   option `fig.path` is used.
 #' @return A character vector of filenames.
 #' @export
 #' @examples library(knitr)
@@ -488,18 +607,19 @@ fig_chunk = function(label, ext = '', number, fig.path = opts_chunk$get('fig.pat
   fig_path(ext, list(fig.path = fig.path, label = label), number)
 }
 
-#' The global environment in which code chunks are evaluated
+#' The global environment for evaluating code
 #'
-#' This function makes the environment of a code chunk accessible inside a
-#' chunk.
+#' Get or set the environment in which code chunks are evaluated.
 #'
-#' It returns the \code{envir} argument of \code{\link{knit}}, e.g. if we call
-#' \code{\link{knit}()} in the global environment, \code{knit_global()} returns
-#' R's global environment by default. You can call functions like
-#' \code{\link{ls}()} on this environment.
+#' @param envir If `NULL`, the function returns the `envir` argument
+#'   of [knit()], otherwise it should be a new environment for
+#'   evaluating code, in which case the function returns the old environment
+#'   after setting the new environment.
 #' @export
-knit_global = function() {
-  .knitEnv$knit_global %n% globalenv()
+knit_global = function(envir = NULL) {
+  old = .knitEnv$knit_global %n% globalenv()
+  if (!is.null(envir)) .knitEnv$knit_global = envir
+  old
 }
 
 # Indents a Block
@@ -529,9 +649,19 @@ print_knitlog = function() {
 }
 
 # count the number of lines
-line_count = function(x) stringr::str_count(x, '\n') + 1L
+line_count = function(x) {
+  n = lengths(strsplit(x, '\n', fixed = TRUE))
+  i = grep('\n$', x)
+  n[i] = n[i] + 1L  # add an extra count for lines ending with \n
+  n[n == 0] = 1L  # should be at least one line
+  n
+}
 
 has_package = function(pkg) loadable(pkg, FALSE)
+has_packages = function(pkgs) {
+  for (p in pkgs) if (!has_package(p)) return(FALSE)
+  TRUE
+}
 
 # if LHS is NULL, return the RHS
 `%n%` = function(x, y) if (is.null(x)) y else x
@@ -540,6 +670,18 @@ has_package = function(pkg) loadable(pkg, FALSE)
 merge_list = function(x, y) {
   x[names(y)] = y
   x
+}
+
+# find a token in a template, and replace it with a value
+insert_template = function(text, token, value, ignore = FALSE) {
+  if (is.null(value)) return(text)
+  i = grep(token, text); n = length(i)
+  if (n > 1) stop("There are multiple tokens in the template: '", token, "'")
+  if (n == 0) {
+    if (ignore) return(text)
+    stop("Couldn't find the token '", token, "' in the template.")
+  }
+  append(text, value, i)
 }
 
 # paths of all figures
@@ -577,39 +719,17 @@ escape_latex = function(x, newlines = FALSE, spaces = FALSE) {
   x = gsub('~', '\\\\textasciitilde{}', x)
   x = gsub('\\^', '\\\\textasciicircum{}', x)
   if (newlines) x = gsub('(?<!\n)\n(?!\n)', '\\\\\\\\', x, perl = TRUE)
-  if (spaces) x = gsub('  ', '\\\\ \\\\ ', x)
+  # when there are consecutive spaces, escape each of them except the first one
+  if (spaces) x = gsub('(?<= ) ', '\\\\ ', x, perl = TRUE)
   x
 }
 
-# escape special HTML chars
-escape_html = highr:::escape_html
-
-#' Read source code from R-Forge
-#'
-#' This function reads source code from the SVN repositories on R-Forge.
-#' @param path Relative path to the source script on R-Forge.
-#' @param project Name of the R-Forge project.
-#' @param extra Extra parameters to be passed to the URL (e.g. \code{extra =
-#'   '&revision=48'} to check out the source of revision 48).
-#' @return A character vector of the source code.
-#' @author Yihui Xie and Peter Ruckdeschel
-#' @export
-#' @examples library(knitr)
-#' \donttest{# relies on r-forge.r-project.org being accessible
-#' read_rforge('rgl/R/axes.R', project = 'rgl')
-#' read_rforge('rgl/R/axes.R', project = 'rgl', extra='&revision=519')}
-read_rforge = function(path, project, extra = '') {
-  base = 'http://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg'
-  read_utf8(sprintf('%s/%s?root=%s%s', base, path, project, extra))
+escape_html = function(x) {
+  .Deprecated('xfun::html_escape()', old = 'knitr:::escape_html()')
+  xfun::html_escape(x)
 }
 
-# TODO: just import xfun::split_lines()
-split_lines = function(x) {
-  if (length(grep('\n', x)) == 0L) return(x)
-  x = gsub('\n$', '\n\n', x)
-  x[x == ''] = '\n'
-  unlist(strsplit(x, '\n'))
-}
+split_lines = function(x) xfun::split_lines(x)
 
 # if a string is encoded in UTF-8, convert it to native encoding
 native_encode = function(x, to = '') {
@@ -636,12 +756,12 @@ is_utf8 = function(x) {
 #' easier to review differences in version control.
 #' @param file The input Rmd file.
 #' @param width The expected line width.
-#' @param text A character vector of text lines, as an alternative to \code{file}. If
-#'   \code{text} is not \code{NULL}, \code{file} is ignored.
+#' @param text A character vector of text lines, as an alternative to `file`. If
+#'   `text` is not `NULL`, `file` is ignored.
 #' @param backup Path to back up the original file in case anything goes
-#'   wrong. If set to \code{NULL}, no backup is made. The default value is constructed
-#'   from \code{file} by adding \code{__} before the base filename.
-#' @return If \code{file} is provided, it is overwritten; if \code{text} is
+#'   wrong. If set to `NULL`, no backup is made. The default value is constructed
+#'   from `file` by adding `__` before the base filename.
+#' @return If `file` is provided, it is overwritten; if `text` is
 #'   provided, a character vector is returned.
 #' @note Currently it does not wrap blockquotes or lists (ordered or unordered).
 #'   This feature may or may not be added in the future.
@@ -698,13 +818,7 @@ set_html_dev = function() {
   if (!is.null(opts_chunk$get('dev'))) return()
   # in some cases, png() does not work (e.g. options('bitmapType') == 'Xlib' on
   # headless servers); use svg then
-  opts_chunk$set(dev = if (png_available()) 'png' else 'svg')
-}
-
-png_available = function() {
-  !inherits(try_silent({
-    f = tempfile(); on.exit(unlink(f)); grDevices::png(f); grDevices::dev.off()
-  }), 'try-error')
+  opts_chunk$set(dev = if (dev_available('png')) 'png' else 'svg')
 }
 
 # locate kpsewhich especially for Mac OS because /usr/texbin may not be in PATH
@@ -716,21 +830,45 @@ kpsewhich = function() {
 
 # check if a utility exists; if it does, save its availability in opts_knit
 has_utility = function(name, package = name) {
-  name2 = paste('util', name, sep = '_')  # e.g. util_pdfcrop
+  name2 = paste0('util_', name)  # e.g. util_pdfcrop
   if (is.logical(yes <- opts_knit$get(name2))) return(yes)
-  yes = nzchar(Sys.which(name))
-  if (!yes) warning(package, ' not installed or not in PATH')
+  # a special case: use tools::find_gs_cmd() to find ghostscript
+  if (name == 'pdfcrop') yes = has_crop_tools() else {
+    yes = nzchar(Sys.which(name))
+    if (!yes) warning(package, ' not installed or not in PATH')
+  }
   opts_knit$set(setNames(list(yes), name2))
   yes
 }
 
+# check if pdfcrop and ghostscript are available
+has_crop_tools = function(warn = TRUE) {
+  if (Sys.which('pdfcrop') == '') {
+    if (warn) warning("'pdfcrop' is required but not found")
+    return(FALSE)
+  }
+  if (is_windows() && Sys.which('tlmgr') != '') {
+    # assuming users know what this env var means (rstudio/tinytex#391)
+    if (Sys.getenv('TEXLIVE_WINDOWS_EXTERNAL_GS') != '') return(TRUE)
+    year = tinytex::tlmgr_version('list')$texlive
+    if (is.na(year)) return(FALSE)  # rstudio/rmarkdown#2612
+    if (year < 2023 && warn) warning(
+      'TeX Live version too low. Please consider upgrading, e.g., via tinytex::reinstall_tinytex().'
+    )
+    return(year >= 2023)
+  }
+  gs = tools::find_gs_cmd() != ''
+  if (warn && !gs) warning("'ghostscript' is required but not found")
+  gs
+}
+
 #' Query the current input filename
 #'
-#' Returns the name of the input file passed to \code{\link{knit}()}.
-#' @param dir Boolean; whether to prepend the current working directory to the file path,
-#'   i.e. whether to return an absolute path or a relative path.
+#' Returns the name of the input file passed to [knit()].
+#' @param dir Whether to prepend the current working directory to the file
+#'   path, i.e., whether to return an absolute path or a relative path.
 #' @return A character string, if this function is called inside an input
-#'   document. Otherwise \code{NULL}.
+#'   document. Otherwise `NULL`.
 #' @export
 current_input = function(dir = FALSE) {
   input = knit_concord$get('infile')
@@ -746,30 +884,31 @@ current_input = function(dir = FALSE) {
   if (is_abs_path(input)) input else file.path(outwd, input)
 }
 
-# import output handlers from evaluate
-default_handlers = evaluate:::default_output_handler
+# cache output handlers from evaluate; see .onLoad
+default_handlers = NULL
+# use rlang handler for error only if available; see .onLoad
+rlang_entrace_handler = NULL
 # change the value handler in evaluate default handlers
 knit_handlers = function(fun, options) {
   if (!is.function(fun)) fun = function(x, ...) {
     res = withVisible(knit_print(x, ...))
     # indicate the htmlwidget result with a special class so we can attach
-    # the figure caption to it later in wrap.knit_asis
+    # the figure caption to it later in sew.knit_asis
     if (inherits(x, 'htmlwidget'))
       class(res$value) = c(class(res$value), 'knit_asis_htmlwidget')
+    if (inherits(x, c('shiny.tag', 'shiny.tag.list')))
+      class(res$value) = c(class(res$value), 'knit_asis_shiny_tag')
     if (res$visible) res$value else invisible(res$value)
   }
   if (length(formals(fun)) < 2)
     stop("the chunk option 'render' must be a function of the form ",
          "function(x, options) or function(x, ...)")
-  merge_list(default_handlers, list(value = function(x, visible) {
-    if (visible) fun(x, options = options)
-  }))
-}
-
-# conditionally disable some features during R CMD check
-is_R_CMD_check = function() {
-  ('CheckExEnv' %in% search()) ||
-    any(c('_R_CHECK_TIMINGS_', '_R_CHECK_LICENSE_') %in% names(Sys.getenv()))
+  merge_list(default_handlers, list(
+    value = function(x, visible) {
+      if (visible) fun(x, options = options)
+    },
+    calling_handlers = c(options$calling.handlers, rlang_entrace_handler)
+  ))
 }
 
 # is the inst dir under . or ..? differs in R CMD build/INSTALL and devtools/roxygen2
@@ -794,44 +933,22 @@ create_label = function(..., latex = FALSE) {
   } else {
     return('')  # we don't want the label at all
   }
-  paste0(lab1, ..., lab2)
+  paste(c(lab1, ..., lab2), collapse = '')
 }
 
 #' Combine multiple words into a single string
 #'
-#' When a value from an inline R expression is a character vector of multiple
-#' elements, we may want to combine them into a phrase like \samp{a and b}, or
-#' \code{a, b, and c}. That is what this a helper function does.
-#'
-#' If the length of the input \code{words} is smaller than or equal to 1,
-#' \code{words} is returned. When \code{words} is of length 2, the first word
-#' and second word are combined using the \code{and} string. When the length is
-#' greater than 2, \code{sep} is used to separate all words, and the \code{and}
-#' string is prepended to the last word.
-#' @param words A character vector.
-#' @param sep Separator to be inserted between words.
-#' @param and Character string to be prepended to the last word.
-#' @param before,after A character string to be added before/after each word.
-#' @return A character string marked by \code{xfun::\link{raw_string}()}.
+#' This is a wrapper function of `xfun::join_words()`.
+#' @param ... Arguments passed to [xfun::join_words()].
 #' @export
-#' @examples combine_words('a'); combine_words(c('a', 'b'))
-#' combine_words(c('a', 'b', 'c'))
-#' combine_words(c('a', 'b', 'c'), sep = ' / ', and = '')
-#' combine_words(c('a', 'b', 'c'), and = '')
-#' combine_words(c('a', 'b', 'c'), before = '"', after = '"')
-combine_words = function(words, sep = ', ', and = ' and ', before = '', after = before) {
-  n = length(words); rs = xfun::raw_string
-  if (n == 0) return(words)
-  words = paste0(before, words, after)
-  if (n == 1) return(rs(words))
-  if (n == 2) return(rs(paste(words, collapse = and)))
-  if (grepl('^ ', and) && grepl(' $', sep)) and = gsub('^ ', '', and)
-  words[n] = paste0(and, words[n])
-  rs(paste(words, collapse = sep))
-}
+combine_words = function(...) xfun::join_words(...)
 
 warning2 = function(...) warning(..., call. = FALSE)
 stop2 = function(...) stop(..., call. = FALSE)
+
+warn_options_unsupported = function(option, to) {
+  warning2('Chunk option ', option, ' is not supported for ', to, ' output')
+}
 
 raw_markers = c('!!!!!RAW-KNITR-CONTENT', 'RAW-KNITR-CONTENT!!!!!')
 
@@ -872,32 +989,32 @@ restore_raw_output = function(text, chunks, markers = raw_markers) {
 #' Mark character strings as raw output that should not be converted
 #'
 #' These functions provide a mechanism to protect the character output of R code
-#' chunks. The output is annotated with special markers in \code{raw_output};
-#' \code{extract_raw_output()} will extract raw output wrapped in the markers,
-#' and replace the raw output with its MD5 digest; \code{restore_raw_output()}
+#' chunks. The output is annotated with special markers in `raw_output`;
+#' `extract_raw_output()` will extract raw output wrapped in the markers,
+#' and replace the raw output with its MD5 digest; `restore_raw_output()`
 #' will restore the MD5 digest with the original raw output.
 #'
 #' This mechanism is designed primarily for R Markdown pre/post-processors. In
-#' an R code chunk, you generate \code{raw_output()} to the Markdown output. In
-#' the pre-processor, you can \code{extract_raw_output()} from the Markdown
+#' an R code chunk, you generate `raw_output()` to the Markdown output. In
+#' the pre-processor, you can `extract_raw_output()` from the Markdown
 #' file, store the raw output and MD5 digests, and remove the actual raw output
 #' from Markdown so Pandoc will never see it. In the post-processor, you can
 #' read the Pandoc output (e.g., an HTML or RTF file), and restore the raw
 #' output.
 #' @param x The character vector to be protected.
-#' @param markers A length-2 character vector to be used to wrap \code{x};
-#'   see \code{knitr:::raw_markers} for the default value.
-#' @param ... Arguments to be passed to \code{\link{asis_output}()}.
-#' @param text For \code{extract_raw_output()}, the content of the input file
-#'   (e.g. Markdown); for \code{restore_raw_output()}, the content of the output
+#' @param markers A length-2 character vector to be used to wrap `x`;
+#'   see `knitr:::raw_markers` for the default value.
+#' @param ... Arguments to be passed to [asis_output()].
+#' @param text For `extract_raw_output()`, the content of the input file
+#'   (e.g. Markdown); for `restore_raw_output()`, the content of the output
 #'   file (e.g. HTML generated by Pandoc from Markdown).
 #' @param chunks A named character vector returned from
-#'   \code{extract_raw_output()}.
-#' @return For \code{extract_raw_output()}, a list of two components:
-#'   \code{value} (the \code{text} with raw output replaced by MD5 digests) and
-#'   \code{chunks} (a named character vector, of which the names are MD5 digests
-#'   and values are the raw output). For \code{restore_raw_output()}, the
-#'   restored \code{text}.
+#'   `extract_raw_output()`.
+#' @return For `extract_raw_output()`, a list of two components:
+#'   `value` (the `text` with raw output replaced by MD5 digests) and
+#'   `chunks` (a named character vector, of which the names are MD5 digests
+#'   and values are the raw output). For `restore_raw_output()`, the
+#'   restored `text`.
 #' @export
 #' @examples library(knitr)
 #' out = c('*hello*', raw_output('<special>content</special> *protect* me!'), '*world*')
@@ -915,22 +1032,23 @@ raw_output = function(x, markers = raw_markers, ...) {
 #' Mark character strings as raw blocks in R Markdown
 #'
 #' Wraps content in a raw attribute block, which protects it from being escaped
-#' by Pandoc. See \url{https://pandoc.org/MANUAL.html#generic-raw-attribute}.
-#' Functions \code{raw_latex()} and \code{raw_html()} are shorthands of
-#' \code{raw_block(x, 'latex')} and \code{raw_block(x, 'html')}, respectively.
+#' by Pandoc. See <https://pandoc.org/MANUAL.html#generic-raw-attribute>.
+#' Functions `raw_latex()` and `raw_html()` are shorthands of
+#' `raw_block(x, 'latex')` and `raw_block(x, 'html')`, respectively.
 #' @param x The character vector to be protected.
 #' @param type The type of raw blocks (i.e., the Pandoc output format). If you
 #'   are not sure about the Pandoc output format of your document, insert a code
-#'   chunk \code{knitr:::pandoc_to()} and see what it returns after the document
+#'   chunk `knitr:::pandoc_to()` and see what it returns after the document
 #'   is compiled.
-#' @param ... Arguments to be passed to \code{\link{asis_output}()}.
+#' @param ... Arguments to be passed to [asis_output()].
 #' @export
 #' @examples
 #' knitr::raw_latex('\\emph{some text}')
 raw_block = function(x, type = 'latex', ...) {
   if (!rmarkdown::pandoc_available('2.0.0')) warning('raw_block() requires Pandoc >= 2.0.0')
-  x = c(sprintf('\n```{=%s}', type), x, '```\n')
-  asis_output(one_string(x), ...)
+  x = fenced_block(x, attr = paste0('=', type))
+  x = gsub('^\n|\n$', '', x)
+  asis_output(x, ...)
 }
 
 #' @rdname raw_block
@@ -940,8 +1058,6 @@ raw_latex = function(x, ...) raw_block(x, 'latex', ...)
 #' @rdname raw_block
 #' @export
 raw_html = function(x, ...) raw_block(x, 'html', ...)
-
-trimws = function(x) gsub('^\\s+|\\s+$', '', x)
 
 optipng = function(...) {
   warning2('knitr:::optipng() has been deprecated; please use xfun::optipng()')
@@ -973,14 +1089,101 @@ digest3 = function(x) {
 # collapse by \n
 one_string = function(x, ...) paste(x, ..., collapse = '\n')
 
-# c(1, 1, 1, 2, 3, 3) -> c(1a, 1b, 1c, 2a, 3a, 3b)
-make_unique = function(x) {
-  if (length(x) == 0) return(x)
-  x2 = make.unique(x)
-  if (all(i <- x2 == x)) return(x)
-  x2[i] = paste0(x2[i], '.0')
-  i = as.numeric(sub('.*[.]([0-9]+)$', '\\1', x2)) + 1
-  s = letters[i]
-  s = ifelse(is.na(s), i, s)
-  paste0(x, s)
+# double quote a vector and combine by "; "
+quote_vec = function(x, sep = '; ') paste0(sprintf('"%s"', x), collapse = sep)
+
+#' Encode an image file to a data URI
+#'
+#' This function is the same as [xfun::base64_uri()] (only with a
+#' different function name). It can encode an image file as a base64 string,
+#' which can be used in the `img` tag in HTML.
+#' @param f Path to the image file.
+#' @return The data URI as a character string.
+#' @author Wush Wu and Yihui Xie
+#' @export
+#' @references <https://en.wikipedia.org/wiki/Data_URI_scheme>
+#' @examples uri = image_uri(file.path(R.home('doc'), 'html', 'logo.jpg'))
+#' if (interactive()) {cat(sprintf('<img src="%s" />', uri), file = 'logo.html')
+#' browseURL('logo.html') # you can check its HTML source
+#' }
+image_uri = function(f) xfun::base64_uri(f)
+
+# Change all "[label](url)" to "label" except leave "`[label](url)`" as is
+remove_urls = function(x) {
+  # regex adapted from https://dev.to/mattkenefick/regex-convert-markdown-links-to-html-anchors-f7j
+  gsub("(?<!`)\\[([^]]+)\\]\\(([^)]+)\\)(?!`)", "\\1", x, perl = TRUE)
+}
+
+# patch strsplit() to split '' into '' instead of character(0)
+str_split = function(x, split, ...) {
+  y = strsplit(x, split, ...)
+  y[x == ''] = list('')
+  y
+}
+
+# default progress bar function in knitr: create a text progress bar, and return
+# methods to update/close it
+txt_pb = function(total, labels) {
+  if (getOption('knitr.progress.linenums', FALSE)) {
+    nums = sapply(seq_along(labels), current_lines)
+    labels = sprintf(
+      '%s%s%s:%s', labels, ifelse(labels == '', '', ' @ '),
+      knit_concord$get('infile'), nums
+    )
+  }
+  s = ifelse(labels == '', '', sprintf(' [%s]', labels))  # chunk labels in []
+  w = nchar(s)  # widths of labels
+  n = max(w)
+  # right-pad spaces for same width of all labels so a wider label of the
+  # progress bar in a previous step could be completely wiped (by spaces)
+  s = paste0(s, strrep(' ', n - w))
+  w2 = getOption('width')
+  con = getOption('knitr.progress.output', '')
+  cat_line = function(...) cat(..., sep = '', file = con)
+  # test if it is a "terminal" connection (whether \r is supported)
+  simple = (function() {
+    # a global option to decide whether to use the simple progress output
+    if (!is.null(res <- getOption('knitr.progress.simple'))) return(res)
+    if (identical(con, '')) con = stdout()
+    if (!inherits(con, 'connection')) return(TRUE)
+    if (isatty(con)) return(FALSE)
+    # when in RStudio, return FALSE
+    Sys.getenv('RSTUDIO') != '1'
+  })()
+  # use simple progress output without the bar but only progress and labels
+  if (simple) return(list(
+    update = function(i) cat_line(i, '/', total, s[i], '\n')
+  ))
+  pb = txtProgressBar(
+    0, total, 0, '.', width = max(w2 - 10 - n, 10), style = 3, file = con
+  )
+  list(
+    update = function(i) {
+      setTxtProgressBar(pb, i)
+      cat_line(s[i])  # append chunk label to the progress bar
+    },
+    interrupt = function() message('\n'),
+    done = function() {
+      # wipe the progress bar
+      cat_line('\r', strrep(' ', max(w2, 10) + 10 + n))
+      close(pb)
+    }
+  )
+}
+
+is_quarto = function() isTRUE(.knitEnv$is_quarto)
+
+with_options = function(expr, opts_list) {
+  local_options(opts_list)
+  expr
+}
+
+local_options <- function(opts_list, .local_envir = parent.frame()) {
+  old = options(opts_list)
+  defer(options(old), .local_envir)
+}
+
+defer = function(expr, frame = parent.frame(), after = FALSE) {
+  thunk = as.call(list(function() expr))
+  do.call(on.exit, list(thunk, add = TRUE, after = after), envir = frame)
 }

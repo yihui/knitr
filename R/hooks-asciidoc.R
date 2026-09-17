@@ -17,6 +17,12 @@ hook_plot_asciidoc = function(x, options) {
 render_asciidoc = function() {
   set_html_dev()
   opts_knit$set(out.format = 'asciidoc')
+  knit_hooks$set(hooks_asciidoc())
+}
+
+#' @rdname output_hooks
+#' @export
+hooks_asciidoc = function() {
   hook.source = function(x, options) {
     x = one_string(c(hilight_source(x, 'asciidoc', options), ''))
     sprintf('\n[source,%s]\n----\n%s----\n', tolower(options$engine), x)
@@ -30,8 +36,10 @@ render_asciidoc = function() {
   hook.error = function(x, options) {
     sprintf('\n[CAUTION]\n====\n.Error\n%s\n====\n', gsub('^.*Error: ', '', x))
   }
-  hook.output = function(x, options) sprintf('\n----\n%s----\n', x)
-  knit_hooks$set(
+  hook.output = function(x, options) {
+    if (output_asis(x, options)) x else sprintf('\n----\n%s----\n', x)
+  }
+  list(
     source = hook.source, output = hook.output, message = hook.message,
     warning = hook.warning, error = hook.error, plot = hook_plot_asciidoc
   )

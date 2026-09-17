@@ -5,7 +5,7 @@
   color: #87c6f0;
   font-style: italic;
 }
-.str {
+.sng {
   color: #87c6f0;
   font-style: italic;
 }
@@ -16,7 +16,7 @@
 .opt {
   color: #dedede;
 }
-.std {
+.def {
   color: #dedede;
 }
 .kwa {

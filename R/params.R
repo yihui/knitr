@@ -3,32 +3,32 @@
 #' This function reads the YAML front-matter section of a document and returns a
 #' list of any parameters declared there. This function exists primarily to
 #' support the parameterized reports feature of the \pkg{rmarkdown} package,
-#' however is also used by the knitr \code{\link{purl}} function to include
+#' however is also used by the knitr [purl()] function to include
 #' the default parameter values in the R code it emits.
 #'
 #' @param text Character vector containing the document text.
-#' @param evaluate Boolean. If \code{TRUE} (the default), expression values embedded
-#' within the YAML will be evaluated. If \code{FALSE}, parameters defined with an
-#' expression will have the parsed but unevaluated expression in their \code{value}
-#' field.
+#' @param evaluate Boolean. If `TRUE` (the default), expression values
+#'   embedded within the YAML will be evaluated. If `FALSE`, parameters
+#'   defined with an expression will have the parsed but unevaluated expression
+#'   in their `value` field.
 #'
-#' @return List of objects of class \code{knit_param} that correspond to the
-#'   parameters declared in the \code{params} section of the YAML front matter.
+#' @return List of objects of class `knit_param` that correspond to the
+#'   parameters declared in the `params` section of the YAML front matter.
 #'   These objects have the following fields:
 #'
 #'   \describe{
-#'     \item{\code{name}}{The parameter name.}
-#'     \item{\code{value}}{The default value for the parameter.}
-#'     \item{\code{expr}}{The R expression (if any) that yielded the default value.}
+#'     \item{`name`}{The parameter name.}
+#'     \item{`value`}{The default value for the parameter.}
+#'     \item{`expr`}{The R expression (if any) that yielded the default value.}
 #'   }
 #'
 #'   In addition, other fields included in the YAML may also be present
-#'   alongside the name, type, and value fields (e.g. a \code{label} field
+#'   alongside the name, type, and value fields (e.g. a `label` field
 #'   that provides front-ends with a human readable name for the parameter).
 #'
 #' @details
 #'
-#' Parameters are included in YAML front matter using the \code{params} key.
+#' Parameters are included in YAML front matter using the `params` key.
 #' This key can have any number of subkeys each of which represents a
 #' parameter. For example:
 #'
@@ -43,7 +43,7 @@
 #' }
 #'
 #' Parameter values can be provided inline as illustrated above or can be
-#' included in a \code{value} sub-key. For example:
+#' included in a `value` sub-key. For example:
 #'
 #' \preformatted{
 #' ---
@@ -56,10 +56,10 @@
 #' }
 #'
 #' This second form is useful when you need to provide additional details
-#' about the parameter (e.g. a \code{label} field as describe above).
+#' about the parameter (e.g. a `label` field as describe above).
 #'
 #' You can also use R code to yield the value of a parameter by prefacing the value
-#' with \code{!r}, for example:
+#' with `!r`, for example:
 #'
 #' \preformatted{
 #' ---
@@ -89,16 +89,16 @@ knit_params = function(text, evaluate = TRUE) {
 #' from a document and returns a list of any parameters declared there.
 #'
 #' @param yaml Character vector containing the YAML text.
-#' @param evaluate If \code{TRUE} (the default) expression values
-#' embedded within the YAML will be evaluated. If \code{FALSE}, parameters
-#' defined with an expression will have the parsed but unevaluated expression
-#' in their \code{value} field.
+#' @param evaluate If `TRUE` (the default), expression values embedded
+#'   within the YAML will be evaluated. If `FALSE`, parameters defined with
+#'   an expression will have the parsed but unevaluated expression in their
+#'   `value` field.
 #'
-#' @return List of objects of class \code{knit_param} that correspond to the
-#' parameters declared in the \code{params} section of the YAML. See
-#' \code{\link{knit_params}} for a full description of these objects.
+#' @return List of objects of class `knit_param` that correspond to the
+#' parameters declared in the `params` section of the YAML. See
+#' [knit_params()] for a full description of these objects.
 #'
-#' @seealso \code{\link{knit_params}}
+#' @seealso [knit_params()]
 #'
 #' @export
 knit_params_yaml = function(yaml, evaluate = TRUE) {

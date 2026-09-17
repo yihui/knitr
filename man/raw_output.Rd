@@ -25,14 +25,14 @@ see \code{knitr:::raw_markers} for the default value.}
 
 \item{x}{The character vector to be protected.}
 
-\item{...}{Arguments to be passed to \code{\link{asis_output}()}.}
+\item{...}{Arguments to be passed to \code{\link[=asis_output]{asis_output()}}.}
 }
 \value{
 For \code{extract_raw_output()}, a list of two components:
-  \code{value} (the \code{text} with raw output replaced by MD5 digests) and
-  \code{chunks} (a named character vector, of which the names are MD5 digests
-  and values are the raw output). For \code{restore_raw_output()}, the
-  restored \code{text}.
+\code{value} (the \code{text} with raw output replaced by MD5 digests) and
+\code{chunks} (a named character vector, of which the names are MD5 digests
+and values are the raw output). For \code{restore_raw_output()}, the
+restored \code{text}.
 }
 \description{
 These functions provide a mechanism to protect the character output of R code
@@ -52,14 +52,14 @@ output.
 }
 \examples{
 library(knitr)
-out = c("*hello*", raw_output("<special>content</special> *protect* me!"), 
+out = c("*hello*", raw_output("<special>content</special> *protect* me!"),
     "*world*")
 pre = extract_raw_output(out)
 str(pre)
-pre$value = gsub("[*]([^*]+)[*]", "<em>\\\\1</em>", 
+pre$value = gsub("[*]([^*]+)[*]", "<em>\\\\1</em>",
     pre$value)  # think this as Pandoc conversion
 pre$value
-# raw output was protected from the conversion (e.g.
-# *protect* was not converted)
+# raw output was protected from the conversion
+# (e.g. *protect* was not converted)
 restore_raw_output(pre$value, pre$chunks)
 }

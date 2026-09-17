@@ -14,6 +14,7 @@ packages used):
 ```{r session-info, cache=FALSE}
 sessionInfo()
 Sys.time()
+```
 ```{r clean-up, include=FALSE}
 if (exists('.knitr.title')) rm(.knitr.author)
 if (exists('.knitr.author')) rm(.knitr.author)

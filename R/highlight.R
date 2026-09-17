@@ -1,12 +1,12 @@
 hilight_source = function(x, format, options) {
   if ((format %in% c('latex', 'html')) && options$highlight) {
-    if (options$engine == 'R') {
+    res = if (options$engine == 'R') {
       opts = opts_knit$get('highr.opts')
       highr::hilight(x, format, prompt = options$prompt, markup = opts$markup)
     } else {
       res = try(highr::hi_andre(x, options$engine, format))
       if (inherits(res, 'try-error')) {
-        if (format == 'html') highr:::escape_html(x) else highr:::escape_latex(x)
+        if (format == 'html') html_escape(x) else highr:::escape_latex(x)
       } else {
         highlight_header()
         n = length(res)
@@ -15,18 +15,22 @@ hilight_source = function(x, format, options) {
         res
       }
     }
+    if (format == 'latex' && is.character(tld <- opts_knit$get('latex.tilde'))) {
+      res = gsub('\\hlopt{~}', tld, res, fixed = TRUE)
+    }
+    res
   } else if (options$prompt) {
     # if you did not reformat or evaluate the code, I have to figure out which
     # lines belong to one complete expression first (#779)
     if (options$engine == 'R' && isFALSE(options$tidy) && isFALSE(options$eval))
-      x = vapply(highr:::group_src(x), one_string, character(1))
+      x = vapply(xfun::split_source(x), one_string, character(1))
     line_prompt(x)
   } else x
 }
 
 highlight_header = function() {
   set_header(highlight.extra = paste(c(
-    sprintf('\\let\\hl%s\\hlstd', c('esc', 'pps', 'lin')),
+    sprintf('\\let\\hl%s\\hldef', c('esc', 'pps', 'lin')),
     sprintf('\\let\\hl%s\\hlcom', c('slc', 'ppc'))
   ), collapse = ' '))
 }
@@ -141,7 +145,6 @@ styler_assistant_latex = function(x) {
 
 col2latexrgb = function(hex) {
   # as.character(0.123) -> 0,123 when "OutDec = ,", so make sure . is used
-  outdec = options(OutDec = '.'); on.exit(options(outdec))
   col = col2rgb(hex)[, 1] / 255
-  paste(round(col, 3), collapse = ',')
+  xfun::decimal_dot(paste(round(col, 3), collapse = ','))
 }

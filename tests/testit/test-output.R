@@ -5,67 +5,52 @@ res = mapply(
   c('abc.Rnw', 'abc.rnw', 'abc.rtex', 'abc.Rmd', 'abc.rhtm', 'abc.Rhtml', 'foo.abc.rhtml'),
   USE.NAMES = FALSE
 )
-assert(
-  'auto_out_name() converts .Rfoo to .foo',
-  identical(res, c('abc.tex', 'abc.tex', 'abc.tex', 'abc.md', 'abc.htm', 'abc.html', 'foo.abc.html'))
-)
+assert('auto_out_name() converts .Rfoo to .foo', {
+  (res %==% c('abc.tex', 'abc.tex', 'abc.tex', 'abc.md', 'abc.htm', 'abc.html', 'foo.abc.html'))
+})
 
 res = mapply(
   auto_out_name,
   c('abc.tex', '_knit_abc.tex', '_knit_abc.md', 'foo_knit_.html'),
   USE.NAMES = FALSE
 )
-assert(
-  'auto_out_name() converts .tex/.unknown to .txt, and removes _knit_',
-  identical(res, c('abc.txt', 'abc.tex', 'abc.md', 'foo.html')),
-  identical(auto_out_name('foo.bar'), 'foo.txt')
-)
+assert('auto_out_name() converts .tex/.unknown to .txt, and removes _knit_', {
+  (res %==% c('abc.txt', 'abc.tex', 'abc.md', 'foo.html'))
+  (auto_out_name('foo.bar') %==% 'foo.txt')
+})
 
-assert(
-  'chunks with include=FALSE should stop on error',
-  suppressMessages(
+assert('chunks with include=FALSE should stop on error', {
+  (suppressMessages(
     has_error(knit(text = c('<<include=F>>=', '1+"a"', '@'), quiet = TRUE))
-  )
-)
+  ))
+})
 
-assert(
-  'tidy=FALSE + eval=numeric should work',
-  identical(
-    '[1] 1\n[1] 2\n',
-    knit(
-      text = c('<<tidy=FALSE, eval=1:2, echo=FALSE, results="asis">>=', '1', '1+', '1', '1', '@'),
-      quiet = TRUE
-    )
-  )
-)
+assert('tidy=FALSE + eval=numeric should work', {
+  ('[1] 1\n[1] 2\n' %==% knit(
+    text = c('<<tidy=FALSE, eval=1:2, echo=FALSE, results="asis">>=', '1', '1+', '1', '1', '@'),
+    quiet = TRUE
+  ))
+})
 
-assert(
-  'opts_template options are used',
-  identical(
-    "\n[1] 2\n",
-    knit(
-      text = c(
-        "<<include=FALSE>>=","opts_template$set(quiet = list(echo=FALSE))", "@",
-        "<<results='asis', opts.label='quiet'>>=", "1+1", "@"
-      ),
-      quiet = TRUE
-    )
-  )
-)
+assert('opts_template options are used', {
+  ("\n[1] 2\n" %==% knit(
+    text = c(
+      "<<include=FALSE>>=","opts_template$set(quiet = list(echo=FALSE))", "@",
+      "<<results='asis', opts.label='quiet'>>=", "1+1", "@"
+    ),
+    quiet = TRUE
+  ))
+})
 
-assert(
-  'local chunk options override opts_template',
-  identical(
-    "\n\\begin{kframe}\n\\begin{alltt}\n\\hlnum{1}\\hlopt{+}\\hlnum{1}\n\\end{alltt}\n\\end{kframe}[1] 2\n",
-    knit(
-      text = c(
-        "<<include=FALSE>>=","opts_template$set(quiet = list(echo=FALSE))", "@",
-        "<<results='asis', opts.label='quiet', echo=TRUE, tidy=FALSE>>=", "1+1", "@"
-      ),
-      quiet = TRUE
-    )
-  )
-)
+assert('local chunk options override opts_template', {
+  ("\n\\begin{kframe}\n\\begin{alltt}\n\\hlnum{1}\\hlopt{+}\\hlnum{1}\n\\end{alltt}\n\\end{kframe}[1] 2\n" %==% knit(
+    text = c(
+      "<<include=FALSE>>=","opts_template$set(quiet = list(echo=FALSE))", "@",
+      "<<results='asis', opts.label='quiet', echo=TRUE, tidy=FALSE>>=", "1+1", "@"
+    ),
+    quiet = TRUE
+  ))
+})
 
 # a shortcut
 k = function(text) {
@@ -81,10 +66,10 @@ k(c(
   'x2 = opts_chunk$get("dpi")'
 ))
 
-assert(
-  'using knit_child() does not reset global chunk options set in child documents',
-  x1 == FALSE, x2 == 200
-)
+assert('using knit_child() does not reset global chunk options set in child documents', {
+  (x1 %==% FALSE)
+  (x2 %==% 200)
+})
 
 txt = '%\\documentclass{article}
 \\documentclass{article}
@@ -93,10 +78,9 @@ txt = '%\\documentclass{article}
 \\end{document}'
 res = strsplit(knit(text = txt, quiet = TRUE), '\n')[[1]]
 
-assert(
-  'insert_header_latex() finds the correct \\documentclass{}',
-  identical(res[1], '%\\documentclass{article}')
-)
+assert('insert_header_latex() finds the correct \\documentclass{}', {
+  (res[1] %==% '%\\documentclass{article}')
+})
 
 txt = '\\documentclass{article}
 \\begin{document}
@@ -107,10 +91,9 @@ txt = '\\documentclass{article}
 \\end{document}'
 res = strsplit(knit(text = txt, quiet = TRUE), '\n')[[1]]
 
-assert(
-  'insert_header_latex() finds the correct \\documentclass{}',
-  identical(res[length(res) - 3], '\\documentclass{article}')
-)
+assert('insert_header_latex() finds the correct \\documentclass{}', {
+  (res[length(res) - 3] %==% '\\documentclass{article}')
+})
 
 assert('knit_meta_add() adds meta objects with the correct number of labels', {
   knit_meta(clean = TRUE)
@@ -118,4 +101,22 @@ assert('knit_meta_add() adds meta objects with the correct number of labels', {
   m = attr(knit_meta_add(list(3, 4), label = c('a', 'b')), 'knit_meta_id')
   knit_meta(clean = TRUE)
   (m %==% c('', '', 'a', 'b'))
+})
+
+local({
+  out = NULL
+  hnd = function(cnd) out <<- cnd
+
+  on.exit(file.remove('knit-handlers.md'))
+  knit('knit-handlers.Rmd', quiet = TRUE)
+
+  assert('knit() passes calling handlers to evaluate()', {
+    (inherits(out, 'error'))
+  })
+})
+
+assert('knit_exit() does not leave knitr in a non-functioning state (#2283)', {
+  res1 = knit(text = c('```{r}', 'knitr::knit_exit()', '```'), quiet = TRUE)
+  res2 = knit(text = c('```{r}', 'cat("hello")', '```'), quiet = TRUE)
+  (grepl('hello', res2))
 })

@@ -1,0 +1,40 @@
+name: Build and deploy package site
+
+on:
+  push:
+    branches: ["master"]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: r-lib/actions/setup-r@HEAD
+        with:
+          use-public-rspm: true
+      - uses: yihui/actions/setup-r-dependencies@HEAD
+        with:
+          extra-packages: litedown xfun .
+          r-universe: yihui
+      - uses: yihui/actions/litedown-site@HEAD
+        with:
+          site-dir: 'site'
+      - name: Deploy to gh-pages
+        run: |
+          tmp=$(mktemp -d)
+          cp -r site/. "$tmp"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch origin gh-pages; then
+            git switch gh-pages
+          else
+            git switch --orphan gh-pages
+            git rm -rf . 2>/dev/null || true
+          fi
+          find . -maxdepth 1 ! -name .git ! -name . -exec rm -rf {} +
+          cp -r "$tmp"/. .
+          git add -A
+          git diff --cached --quiet || (git commit -m "deploy site" && git push origin gh-pages)

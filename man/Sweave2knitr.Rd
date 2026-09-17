@@ -22,22 +22,21 @@ string. If \code{text} is provided, \code{file} will be ignored.}
 }
 \value{
 If \code{text} is \code{NULL}, the \code{output} file is written and
-  \code{NULL} is returned. Otherwise, the converted text string is returned.
+\code{NULL} is returned. Otherwise, the converted text string is returned.
 }
 \description{
 This function converts an Sweave document to a \pkg{knitr}-compatible
 document.
 }
 \details{
-The pseudo command \samp{\\SweaveInput{file.Rnw}} is converted to a code
-chunk header \code{<<child='file.Rnw'>>=}.
+The pseudo command \verb{\\SweaveInput\{file.Rnw\}} is converted to a code
+chunk header \verb{<<child='file.Rnw'>>=}.
 
-Similarly \samp{\\SweaveOpts{opt = value}} is converted to a code chunk
-\samp{opts_chunk$set(opt = value)} with the chunk option \code{include =
-FALSE}; the options are automatically fixed in the same way as local chunk
+Similarly \verb{\\SweaveOpts\{opt = value\}} is converted to a code chunk
+\code{opts_chunk$set(opt = value)} with the chunk option \code{include = FALSE}; the options are automatically fixed in the same way as local chunk
 options (explained below).
 
-The Sweave package \samp{\\usepackage{Sweave}} in the preamble is removed
+The Sweave package \verb{\\usepackage\{Sweave\}} in the preamble is removed
 because it is not required.
 
 Chunk options are updated if necessary: option values \code{true} and
@@ -58,14 +57,14 @@ order of values).
 If a line \code{@} (it closes a chunk) directly follows a previous
 \code{@}, it is removed; if a line \code{@} appears before a code chunk and
 no chunk is before it, it is also removed, because \pkg{knitr} only uses one
-\samp{@} after \samp{<<>>=} by default (which is not the original Noweb
+\code{@} after \verb{<<>>=} by default (which is not the original Noweb
 syntax but more natural).
 }
 \note{
-If \samp{\\SweaveOpts{}} spans across multiple lines, it will not be
-  fixed, and you have to fix it manually. The LaTeX-style syntax of Sweave
-  chunks are ignored (see \code{?SweaveSyntaxLatex}); only the Noweb syntax
-  is supported.
+If \verb{\\SweaveOpts\{\}} spans across multiple lines, it will not be
+fixed, and you have to fix it manually. The LaTeX-style syntax of Sweave
+chunks are ignored (see \code{?SweaveSyntaxLatex}); only the Noweb syntax
+is supported.
 }
 \examples{
 Sweave2knitr(text = "<<echo=TRUE>>=")  # this is valid
@@ -82,8 +81,8 @@ unlink("Sweave-test-knitr.Rnw")
 }
 \references{
 The motivation of the changes in the syntax:
-  \url{https://yihui.org/knitr/demo/sweave/}
+\url{https://yihui.org/knitr/demo/sweave/}
 }
 \seealso{
-\code{\link{Sweave}}, \code{\link{gsub}}
+\code{\link[=Sweave]{Sweave()}}, \code{\link[=gsub]{gsub()}}
 }
