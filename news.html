@@ -568,6 +568,9 @@ registerS3method(
 <p>When a document is rendered by Quarto, <code>current_input()</code> now returns the original <code>.qmd</code> filename instead of the <code>.rmarkdown</code> intermediate file that Quarto generates and passes to <strong>knitr</strong> (thanks, <a href="https://github.com/bergsmat">@bergsmat</a>, <a href="https://github.com/yihui/knitr/issues/2384">#2384</a>).</p>
 </li>
 <li>
+<p>When tangling a document with <code>purl()</code>, calls to <code>read_chunk()</code> are now located by parsing the code and inspecting its syntax tree, instead of matching the pattern <code>read_chunk(...)</code> as a string. This fixes spurious parse errors and makes the detection more robust: a closing parenthesis inside a string argument (e.g., <code>read_chunk(lines = &quot;)&quot;)</code>) no longer breaks <code>purl()</code>, functions whose names merely end in <code>read_chunk</code> (e.g., <code>fake_read_chunk()</code>) are no longer mistaken for <code>read_chunk()</code>, commented-out calls are ignored, and namespaced calls (<code>knitr::read_chunk()</code>) are now recognized (thanks, <a href="https://github.com/rgayler">@rgayler</a>, <a href="https://github.com/mrdowdeswell">@mrdowdeswell</a>, <a href="https://github.com/yihui/knitr/issues/1753">#1753</a>).</p>
+</li>
+<li>
 <p>The <code>ditaa</code> engine now applies its intended default arguments (<code>-s 2 -T -S -E</code>). They were guarded by a comparison against <code>'ditta'</code>, which no engine name can match, so they have never been passed since they were introduced in <a href="https://github.com/yihui/knitr/issues/2092">#2092</a>.</p>
 </li>
 </ul>
