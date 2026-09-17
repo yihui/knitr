@@ -383,9 +383,14 @@ eng_tikz = function(options) {
       options$engine.opts$dvisvgm.opts, '-o', shQuote(fig2), fig
     )) != 0) stop('Failed to compile ', fig, ' to ', fig2)
   } else {
-    # convert to the desired output-format using magick
+    # convert to the desired output-format using magick; the resolution of the
+    # rasterized image is controlled by the density at which the PDF is read
+    # (engine.opts$density, in DPI), since image_convert() has no density option
     if (ext != 'pdf') magick::image_write(do.call(magick::image_convert, c(
-      list(magick::image_read_pdf(fig), ext), options$engine.opts$convert.opts
+      list(
+        magick::image_read_pdf(fig, density = options$engine.opts$density %n% 300),
+        ext
+      ), options$engine.opts$convert.opts
     )), fig2)
   }
   fig = fig2
