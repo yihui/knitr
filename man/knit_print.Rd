@@ -12,9 +12,17 @@ normal_print(x, ...)
 \arguments{
 \item{x}{An R object to be printed.}
 
-\item{...}{Additional arguments passed to the S3 method. Currently ignored,
-except two optional arguments \code{options} and \code{inline}; see
-the references below.}
+\item{...}{Additional arguments passed to the S3 method. Two optional
+arguments \code{options} and \code{inline} are documented below; other arguments are
+currently ignored. See the references below.}
+
+\item{options}{A list of the current chunk options, passed to \code{knit_print()}
+when an object is printed from a code chunk or inline R code. Methods can
+use it to customize the output according to chunk options.}
+
+\item{inline}{A logical value indicating whether the object is being printed
+from inline R code (\code{TRUE}) or from a code chunk (\code{FALSE}). Methods can use
+it to produce different output for the two contexts.}
 }
 \value{
 The value returned from the print method should be a character vector
