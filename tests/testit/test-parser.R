@@ -53,6 +53,39 @@ assert('read_chunk() can identify chunk labels', {
 
 knit_code$restore()
 
+read_chunk(lines = c('```{r foo}', '1+1', '```', '', 'text', '',
+                     '```{r bar, echo=FALSE}', 'x <- 2', 'x * 3', '```'),
+           path = 'a.Rmd')
+assert('read_chunk() reads code chunks from an R Markdown document (#2041)', {
+  (knit_code$get() %==% list(foo = '1+1', bar = c('x <- 2', 'x * 3')))
+})
+
+knit_code$restore()
+
+read_chunk(lines = c('<<baz>>=', 'y <- 1', '@'), path = 'a.Rnw')
+assert('read_chunk() reads code chunks from an R Sweave document (#2041)', {
+  (knit_code$get() %==% list(baz = 'y <- 1'))
+})
+
+knit_code$restore()
+
+# an unlabeled chunk gets an automatic label; text and inline code are ignored
+read_chunk(lines = c('```{r}', '1+1', '```'), path = 'a.Rmd')
+assert('read_chunk() gives unlabeled document chunks an automatic label (#2041)', {
+  (length(nm <- names(knit_code$get())) == 1L)
+  (grepl('^unnamed-chunk-', nm))
+})
+
+knit_code$restore()
+
+# a plain R script is still parsed as a script, not misdetected as a document
+read_chunk(lines = c('# ---- foo ----', 'x <- 1  # ```{r} in a comment'), path = 'a.R')
+assert('read_chunk() still parses .R scripts with @knitr markers (#2041)', {
+  (knit_code$get() %==% list(foo = 'x <- 1  # ```{r} in a comment'))
+})
+
+knit_code$restore()
+
 # chunk references with <<>> --------------------------------------------------
 
 knit_code$restore(list(

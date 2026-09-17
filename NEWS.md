@@ -43,6 +43,8 @@
 
 - `kable()` gained support for the global option `knitr.kable.keep.whitespace`. By default, leading and trailing white spaces in table cells are trimmed, but setting `options(knitr.kable.keep.whitespace = TRUE)` preserves them, which is useful for aligning numbers with a monospace font in the Markdown source (thanks, @jmbarbone, #2066).
 
+- `read_chunk()` can now read code chunks from a **knitr** source document (e.g., an `.Rmd` or `.Rnw` file) in addition to an R script. The code chunks in the document are read in and keyed by their chunk labels, so they can be reused in the current document via chunk label references, just like chunks read from an R script (thanks, @cderv, #2041).
+
 ## BUG FIXES
 
 - `spin()` now checks that the start (`# /*`) and end (`# */`) comment delimiters are correctly paired and ordered. Previously, only the *counts* of start and end delimiters were compared, so mis-ordered delimiters (e.g., an end delimiter appearing before a start delimiter) could silently drop the lines in between without any error. Now `spin()` signals an error that reports the line number of each unmatched delimiter (thanks, @dewittpe, #1801, #1802).

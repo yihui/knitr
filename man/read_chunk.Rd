@@ -19,7 +19,8 @@ read_chunk(
 read_demo(topic, package = NULL, ...)
 }
 \arguments{
-\item{path}{Path to the R script.}
+\item{path}{Path to the R script, or a \pkg{knitr} source document such as an
+\code{.Rmd} or \code{.Rnw} file.}
 
 \item{lines}{Character vector of lines of code. By default, this is read from
 \code{path}.}
@@ -55,6 +56,13 @@ There are two approaches to read external code into the current session: (1)
 Use a special separator of the from \verb{## ---- chunk-label} (at least four
 dashes before the chunk label) in the script; (2) Manually specify the
 labels, starting and ending positions of code chunks in the script.
+
+Alternatively, the external file can be a \pkg{knitr} source document (e.g.,
+an R Markdown \code{.Rmd} or R Sweave \code{.Rnw} file) instead of an R script. In this
+case (detected automatically from the file extension or content, when
+\code{labels} is not specified), the code chunks in the document are read in and
+keyed by their chunk labels; chunks without a label are given an automatic
+label. Text and inline code outside code chunks are ignored.
 
 The second approach will be used only when \code{labels} is not \code{NULL}.
 For this approach, if \code{from} is \code{NULL}, the starting position is 1;
