@@ -409,18 +409,63 @@ strip_white = function(x, test_strip = is_blank) {
 parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   if (length(x) == 0L) return(x)
   x = c(x)  # drop attributes of code (e.g. chunk_opts)
-  if (!group_pattern(rc) || length(idx <- grep(rc, x)) == 0) return(x)
+  if (!group_pattern(rc)) return(x)
 
-  labels = sub(rc, '\\1', x[idx])
   code = knit_code$get()
-  i = labels %in% names(code)
-  idx = idx[i]; code = code[labels[i]]
-  indent = gsub('^(\\s*).*', '\\1', x[idx])
-  code = mapply(indent_block, code, indent, SIMPLIFY = FALSE, USE.NAMES = FALSE)
 
-  x = as.list(x)
-  x[idx] = lapply(code, function(z) parse_chunk(z, rc))
-  unlist(x, use.names = FALSE)
+  # first expand references that occupy a whole line, e.g. `  <<foo>>`; these may
+  # bring in multi-line chunks and their indentation is preserved
+  if (length(idx <- grep(rc, x))) {
+    labels = sub(rc, '\\1', x[idx])
+    i = labels %in% names(code)
+    idx = idx[i]; block = code[labels[i]]
+    indent = gsub('^(\\s*).*', '\\1', x[idx])
+    block = mapply(indent_block, block, indent, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+    x = as.list(x)
+    x[idx] = lapply(block, function(z) parse_chunk(z, rc))
+    x = unlist(x, use.names = FALSE)
+  }
+
+  # then expand references embedded in a line together with other code, e.g.
+  # `mtcars %>% <<foo>>` (#2034); a multi-line chunk is spliced into the line
+  unlist(lapply(x, fill_inline_ref, rc = rc, code = code), use.names = FALSE)
+}
+
+# expand chunk references `<<label>>` that appear in a line together with other
+# code (references occupying a whole line are handled separately in
+# parse_chunk()); returns a character vector that may be longer than one line
+# when a referenced chunk spans multiple lines
+fill_inline_ref = function(x, rc, code) {
+  loc = gregexpr('<<[^<>\n]+>>', x)[[1]]
+  if (loc[1L] == -1L) return(x)
+  len = attr(loc, 'match.length')
+  # split the line into alternating literal text and reference pieces
+  pieces = list(); pos = 1L
+  for (k in seq_along(loc)) {
+    s = loc[k]; e = s + len[k] - 1L
+    if (s > pos) pieces = c(pieces, list(substr(x, pos, s - 1L)))
+    z = code[[substr(x, s + 2L, e - 2L)]]  # chunk code for this label (or NULL)
+    # keep an unknown reference verbatim; recursively expand a known one
+    pieces = c(pieces, list(if (length(z) == 0L) substr(x, s, e) else parse_chunk(z, rc)))
+    pos = e + 1L
+  }
+  if (pos <= nchar(x)) pieces = c(pieces, list(substr(x, pos, nchar(x))))
+  out = paste_lines(pieces)
+  # indent continuation lines to the leading whitespace of the host line
+  if (length(out) > 1L && nzchar(indent <- gsub('^(\\s*).*', '\\1', x)))
+    out[-1L] = paste0(indent, out[-1L])
+  out
+}
+
+# concatenate character vectors "horizontally": the last line of one piece is
+# joined with the first line of the next (so multi-line pieces splice in place)
+paste_lines = function(pieces) {
+  Reduce(function(a, b) {
+    if (length(a) == 0L) return(b)
+    if (length(b) == 0L) return(a)
+    n = length(a)
+    c(a[-n], paste0(a[n], b[1L]), b[-1L])
+  }, pieces)
 }
 
 # split text lines into groups of code and text chunks
