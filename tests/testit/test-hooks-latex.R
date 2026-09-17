@@ -91,3 +91,23 @@ assert("fig.note produces \\figurenote{} inside the figure environment", {
   # an empty/NA note adds nothing
   (!grepl('figurenote', hook_plot_tex('foo.pdf', note_opts(NA)), fixed = TRUE))
 })
+
+assert("fig.topcaption places \\caption before the image in LaTeX output (#1990)", {
+  cap_opts = function(top) opts_chunk$merge(list(
+    label = 'l', fig.cap = 'Cap', fig.show = 'asis', fig.topcaption = top
+  ))
+
+  # default: \caption comes after \includegraphics (bottom caption)
+  res = hook_plot_tex('foo.pdf', cap_opts(FALSE))
+  (regexpr('\\includegraphics', res, fixed = TRUE) <
+     regexpr('\\caption', res, fixed = TRUE))
+
+  # fig.topcaption = TRUE: \caption comes before \includegraphics (top caption)
+  res2 = hook_plot_tex('foo.pdf', cap_opts(TRUE))
+  (regexpr('\\caption', res2, fixed = TRUE) <
+     regexpr('\\includegraphics', res2, fixed = TRUE))
+  # the caption is still inside the figure environment and emitted only once
+  (regexpr('\\begin{figure}', res2, fixed = TRUE) <
+     regexpr('\\caption', res2, fixed = TRUE))
+  (length(gregexpr('\\caption', res2, fixed = TRUE)[[1]]) == 1L)
+})
