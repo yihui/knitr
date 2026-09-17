@@ -27,15 +27,8 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
     }
     if (block) {
-      n = length(g)
-      # remove the optional chunk footer
-      if (n >= 2 && grepl(chunk.end, g[n])) g = g[-n]
-      # remove the optional prefix % in code in Rtex mode
-      g = strip_block(g, patterns$chunk.code)
-      params.src = if (group_pattern(chunk.begin)) {
-        extract_params_src(chunk.begin, g[1])
-      } else ''
-      parse_block(g[-1], g[1], params.src, markdown_mode)
+      p = strip_chunk_group(g, chunk.begin, chunk.end, patterns$chunk.code)
+      parse_block(p$code, p$header, p$params.src, markdown_mode)
     } else parse_inline(g, patterns)
   })
 }
@@ -48,6 +41,17 @@ divide_chunks = function(x, begin, end, md = TRUE) {
 
 extract_params_src = function(chunk.begin, line) {
   trimws(gsub(chunk.begin, '\\1', line))
+}
+
+# trim a code chunk group (as returned by divide_chunks()) into its header,
+# body, and header options source: drop the optional chunk footer, strip the
+# optional code prefix (e.g. the leading % in Rtex), and extract params.src
+strip_chunk_group = function(g, begin, end, code.prefix = NULL) {
+  n = length(g)
+  if (n >= 2 && grepl(end, g[n])) g = g[-n]  # remove the optional chunk footer
+  g = strip_block(g, code.prefix)  # remove the optional code prefix (e.g. % in Rtex)
+  params.src = if (group_pattern(begin)) extract_params_src(begin, g[1]) else ''
+  list(header = g[1], code = g[-1], params.src = params.src)
 }
 
 #' The code manager to manage code in all chunks
@@ -269,6 +273,13 @@ print_inline = function(x) {
 #' dashes before the chunk label) in the script; (2) Manually specify the
 #' labels, starting and ending positions of code chunks in the script.
 #'
+#' Alternatively, the external file can be a \pkg{knitr} source document (e.g.,
+#' an R Markdown `.Rmd` or R Sweave `.Rnw` file) instead of an R script. In this
+#' case (detected automatically from the file extension or content, when
+#' `labels` is not specified), the code chunks in the document are read in and
+#' keyed by their chunk labels; chunks without a label are given an automatic
+#' label. Text and inline code outside code chunks are ignored.
+#'
 #' The second approach will be used only when `labels` is not `NULL`.
 #' For this approach, if `from` is `NULL`, the starting position is 1;
 #' if `to` is `NULL`, each of its element takes the next element of
@@ -282,7 +293,8 @@ print_inline = function(x) {
 #' supposed to be unique so that the numeric positions returned from
 #' `grep()` will be of the same length of `from`/`to`. Note
 #' `labels` always has to match the length of `from` and `to`.
-#' @param path Path to the R script.
+#' @param path Path to the R script, or a \pkg{knitr} source document such as an
+#'   `.Rmd` or `.Rnw` file.
 #' @param lines Character vector of lines of code. By default, this is read from
 #'   `path`.
 #' @param labels Character vector of chunk labels (default `NULL`).
@@ -332,6 +344,14 @@ read_chunk = function(
     warning('code is empty')
     return(invisible())
   }
+  # if the source is a knitr document (e.g., .Rmd or .Rnw) instead of an R
+  # script, extract its code chunks by chunk label (#2041)
+  if (is.null(labels) && length(
+    code <- chunks_from_doc(lines, if (!missing(path)) path)
+  )) {
+    knit_code$set(code)
+    return(invisible())
+  }
   lab = .sep.label
   if (is.null(labels)) {
     if (!group_pattern(lab)) return(invisible())
@@ -369,6 +389,42 @@ read_chunk = function(
 read_demo = function(topic, package = NULL, ...) {
   paths = list.files(file.path(find.package(package), 'demo'), full.names = TRUE)
   read_chunk(paths[sans_ext(basename(paths)) == topic], ...)
+}
+
+# extract code chunks (as a named list, keyed by chunk label) from a knitr
+# source document such as .Rmd or .Rnw; return NULL if the input does not look
+# like a knitr document (so read_chunk() can fall back to R-script parsing)
+chunks_from_doc = function(lines, path = NULL) {
+  ext = if (length(path)) file_ext(path)
+  type = if (length(ext)) detect_pattern(lines, ext) else detect_pattern(lines)
+  if (is.null(type)) return()
+  pat = all_patterns[[type]]
+  begin = pat$chunk.begin; end = pat$chunk.end
+  if (is.null(begin) || is.null(end)) return()
+
+  md = type %in% c('md', 'typst')
+  groups = divide_chunks(lines, begin, end, md = md)
+  code = list()
+  for (g in groups) {
+    if (!grepl(begin, g[1])) next  # a text (non-code) group
+    p = strip_chunk_group(g, begin, end, pat$chunk.code)
+    # parse the engine and header options (e.g. ```{r label, echo=FALSE})
+    params.src = p$params.src; engine = 'r'
+    if (md) {
+      engine = get_chunk_engine(params.src)
+      params.src = get_chunk_params(params.src)
+    }
+    params.src = clean_empty_params(params.src)
+    params = tryCatch(xfun::csv_options(params.src), error = function(e) list())
+    # separate any in-body options (e.g. YAML `#| label: foo`) from the code
+    parts = partition_chunk(engine, p$code)
+    label = merge_list(params, parts$options)$label
+    body = strip_white(parts$code)
+    if (!length(body)) next
+    if (is.null(label) || !nzchar(label)) label = unnamed_chunk()
+    code[[label]] = as.character(body)
+  }
+  code
 }
 
 # convert patterns to numeric indices in a character vector
