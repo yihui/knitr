@@ -549,7 +549,12 @@ CREATE TEMP TABLE foo AS SELECT 1 AS x
 </ul>
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
-<li>The <code>ditaa</code> engine now applies its intended default arguments (<code>-s 2 -T -S -E</code>). They were guarded by a comparison against <code>'ditta'</code>, which no engine name can match, so they have never been passed since they were introduced in <a href="https://github.com/yihui/knitr/issues/2092">#2092</a>.</li>
+<li>
+<p><code>spin()</code> now checks that the start (<code># /*</code>) and end (<code># */</code>) comment delimiters are correctly paired and ordered. Previously, only the <em>counts</em> of start and end delimiters were compared, so mis-ordered delimiters (e.g., an end delimiter appearing before a start delimiter) could silently drop the lines in between without any error. Now <code>spin()</code> signals an error that reports the line number of each unmatched delimiter (thanks, <a href="https://github.com/dewittpe">@dewittpe</a>, <a href="https://github.com/yihui/knitr/issues/1801">#1801</a>, <a href="https://github.com/yihui/knitr/issues/1802">#1802</a>).</p>
+</li>
+<li>
+<p>The <code>ditaa</code> engine now applies its intended default arguments (<code>-s 2 -T -S -E</code>). They were guarded by a comparison against <code>'ditta'</code>, which no engine name can match, so they have never been passed since they were introduced in <a href="https://github.com/yihui/knitr/issues/2092">#2092</a>.</p>
+</li>
 </ul>
 <h2 id="sec:knitr-1-52" class="unnumbered">knitr 1.52</h2>
 <h3 id="sec:new-features_2" class="unnumbered">NEW FEATURES</h3>
