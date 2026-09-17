@@ -635,24 +635,33 @@ eng_sql = function(options) {
     "The 'sql.is_statement' chunk option must be TRUE or FALSE."
   )
 
+  # extra arguments to be passed to the DBI query functions (dbExecute(),
+  # dbSendQuery(), dbGetQuery()). The chunk option sql.args may be a named list
+  # of any arguments supported by these functions (e.g., the `immediate`
+  # argument). These arguments are passed only when supplied, so DBI's own
+  # defaults are otherwise preserved.
+  extra_args = options$sql.args %n% list()
+  if (!is.list(extra_args) || (length(extra_args) > 0 && is.null(names(extra_args))))
+    stop2("The 'sql.args' chunk option must be a named list.")
+
   data = tryCatch({
     if (is_statement) {
       # dbExecute() returns the number of rows affected by the statement
-      DBI::dbExecute(conn, query)
+      do.call(DBI::dbExecute, c(list(conn, query), extra_args))
     } else if (is.null(varname) && max.print > 0) {
       # execute query -- when we are printing with an enforced max.print we
       # use dbFetch so as to only pull down the required number of records
-      res = DBI::dbSendQuery(conn, query)
+      res = do.call(DBI::dbSendQuery, c(list(conn, query), extra_args))
       data = DBI::dbFetch(res, n = max.print)
       DBI::dbClearResult(res)
       data
 
     } else {
       if (length(params) == 0) {
-        DBI::dbGetQuery(conn, query)
+        do.call(DBI::dbGetQuery, c(list(conn, query), extra_args))
       } else {
         # If params option is provided, parameters are not interplolated
-        DBI::dbGetQuery(conn, sql, params = params)
+        do.call(DBI::dbGetQuery, c(list(conn, sql, params = params), extra_args))
       }
     }
   }, error = function(e) {
