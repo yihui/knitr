@@ -577,6 +577,9 @@ registerS3method(
 <p>When multiple graphics devices are specified (e.g., <code>dev = c('cairo_pdf', 'svg')</code>), the recording device now uses the first device (and its <code>dev.args</code>) instead of silently falling back to the default <code>pdf</code> device with default arguments. This ensures measurement-affecting arguments such as <code>pointsize</code> take effect on the recorded plot (#1323).</p>
 </li>
 <li>
+<p>Subfigures (created via <code>fig.subcap</code>) that span multiple rows are now separated by <code>\\</code> instead of <code>\newline</code> in LaTeX output. Inside a centered figure (<code>fig.align = 'center'</code>), <code>\newline</code> did not respect the alignment and left the subfigures left-aligned; <code>\\</code> centers them correctly (thanks, <a href="https://github.com/StephenGerry">@StephenGerry</a>, <a href="https://github.com/yihui/knitr/issues/1907">#1907</a>).</p>
+</li>
+<li>
 <p>The <code>ditaa</code> engine now applies its intended default arguments (<code>-s 2 -T -S -E</code>). They were guarded by a comparison against <code>'ditta'</code>, which no engine name can match, so they have never been passed since they were introduced in <a href="https://github.com/yihui/knitr/issues/2092">#2092</a>.</p>
 </li>
 </ul>
