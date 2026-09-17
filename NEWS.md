@@ -57,6 +57,8 @@
 
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
 
+- A chunk reference (e.g., `<<label>>`) can now be embedded in a line together with other code (e.g., `mtcars %>% <<label>>`), as long as the referenced chunk resolves to a single line of code. Previously, a reference was only recognized when it occupied a whole line by itself, so a reference followed by an operator such as `%>%` was left unexpanded (thanks, @Rich-F-G-Mills, #2034).
+
 # CHANGES IN knitr VERSION 1.52
 
 ## NEW FEATURES

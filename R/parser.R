@@ -409,18 +409,41 @@ strip_white = function(x, test_strip = is_blank) {
 parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   if (length(x) == 0L) return(x)
   x = c(x)  # drop attributes of code (e.g. chunk_opts)
-  if (!group_pattern(rc) || length(idx <- grep(rc, x)) == 0) return(x)
+  if (!group_pattern(rc)) return(x)
 
-  labels = sub(rc, '\\1', x[idx])
   code = knit_code$get()
-  i = labels %in% names(code)
-  idx = idx[i]; code = code[labels[i]]
-  indent = gsub('^(\\s*).*', '\\1', x[idx])
-  code = mapply(indent_block, code, indent, SIMPLIFY = FALSE, USE.NAMES = FALSE)
 
-  x = as.list(x)
-  x[idx] = lapply(code, function(z) parse_chunk(z, rc))
-  unlist(x, use.names = FALSE)
+  # first expand references that occupy a whole line, e.g. `  <<foo>>`; these may
+  # bring in multi-line chunks and their indentation is preserved
+  if (length(idx <- grep(rc, x))) {
+    labels = sub(rc, '\\1', x[idx])
+    i = labels %in% names(code)
+    idx = idx[i]; block = code[labels[i]]
+    indent = gsub('^(\\s*).*', '\\1', x[idx])
+    block = mapply(indent_block, block, indent, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+    x = as.list(x)
+    x[idx] = lapply(block, function(z) parse_chunk(z, rc))
+    x = unlist(x, use.names = FALSE)
+  }
+
+  # then expand references embedded in a line together with other code, e.g.
+  # `mtcars %>% <<foo>>` (#2034); only single-line chunks can be inlined
+  vapply(x, fill_inline_ref, character(1), rc = rc, code = code, USE.NAMES = FALSE)
+}
+
+# expand inline chunk references `<<label>>` that appear in the middle of a line
+fill_inline_ref = function(x, rc, code) {
+  refs = regmatches(x, gregexpr('<<[^<>\n]+>>', x))[[1]]
+  for (r in unique(refs)) {
+    label = substr(r, 3L, nchar(r) - 2L)
+    z = code[[label]]
+    # only inline chunks that resolve to a single line of code
+    if (length(z) == 0L) next
+    z = parse_chunk(z, rc)
+    if (length(z) != 1L) next
+    x = gsub(r, z, x, fixed = TRUE)
+  }
+  x
 }
 
 # split text lines into groups of code and text chunks

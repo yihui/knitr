@@ -70,6 +70,20 @@ assert('parse_chunk() ignores labels not found in knit_code', {
   (pc(c('3*3', '<<a>>', '  <<e>>', '<<b>>  ')) %==% c("3*3", "1+1", "  <<e>>", "2-2"))
 })
 
+assert('parse_chunk() expands references embedded in a line (#2034)', {
+  # a reference followed by other code on the same line
+  (pc(c('mtcars %>%', '  <<a>> %>%', '  <<b>>')) %==% c('mtcars %>%', '  1+1 %>%', '  2-2'))
+  # multiple references on one line
+  (pc('<<a>> + <<b>>') %==% '1+1 + 2-2')
+  # unknown labels are left untouched
+  (pc('foo(<<e>>)') %==% 'foo(<<e>>)')
+})
+
+assert('parse_chunk() does not inline multi-line chunks mid-line', {
+  # chunk 'd' expands to multiple lines, so it can't be spliced into a line
+  (pc('x %>% <<d>>') %==% 'x %>% <<d>>')
+})
+
 knit_code$restore()
 
 # duplication of labels
