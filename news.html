@@ -564,6 +564,9 @@ registerS3method(
 <li>
 <p>The <code>tikz</code> engine gained a new <code>engine.opts</code> element <code>density</code> to control the resolution (in DPI) at which the compiled PDF is rasterized when converting to a bitmap format such as PNG, e.g., <code>engine.opts = list(density = 600)</code>. Previously the resolution was fixed at the <strong>magick</strong> default (300 DPI) and could not be changed, because the old <code>convert.opts</code> (e.g., <code>-density 300</code>) referred to the command-line ImageMagick <code>convert</code> tool that <strong>knitr</strong> no longer uses (thanks, <a href="https://github.com/ferenci-tamas">@ferenci-tamas</a>, <a href="https://github.com/justanothergithubber">@justanothergithubber</a>, <a href="https://github.com/yihui/knitr/issues/2114">#2114</a>).</p>
 </li>
+<li>
+<p><code>kable()</code> gained support for the global option <code>knitr.kable.keep.whitespace</code>. By default, leading and trailing white spaces in table cells are trimmed, but setting <code>options(knitr.kable.keep.whitespace = TRUE)</code> preserves them, which is useful for aligning numbers with a monospace font in the Markdown source (thanks, <a href="https://github.com/jmbarbone">@jmbarbone</a>, <a href="https://github.com/yihui/knitr/issues/2066">#2066</a>).</p>
+</li>
 </ul>
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
