@@ -79,7 +79,11 @@ cache_engines = new_defaults()
 #' # expert use only
 #' engine_output(opts_chunk$merge(list(engine = 'python')), out = list(structure(list(src = '1 + 1'), class = 'source'), '2'))
 engine_output = function(options, code, out, extra = NULL) {
-  if (missing(code) && is.list(out)) return(unlist(sew(out, options)))
+  # attach the (possibly engine-modified) options to the returned output so that
+  # block_exec() can pass them on to the 'chunk' hook, keeping it consistent with
+  # the 'output' hook (#2333)
+  with_opts = function(res) structure(res, chunk_opts = options)
+  if (missing(code) && is.list(out)) return(with_opts(unlist(sew(out, options))))
   if (!is.logical(options$echo)) code = code[options$echo]
   if (length(code) != 1L) code = one_string(code)
   if (options$engine == 'sas' && length(out) > 1L && !grepl('[[:alnum:]]', out[2]))
@@ -91,13 +95,13 @@ engine_output = function(options, code, out, extra = NULL) {
     out = sub('\\.\\.\\.\n+', '', out)
     out = sub('\n\\. \nend of do-file\n', '', out)
   }
-  one_string(c(
+  with_opts(one_string(c(
     if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) {
       if (options$engine == 'highlight') out else sew.character(out, options)
     },
     extra
-  ))
+  )))
 }
 
 ## command-line tools
@@ -442,7 +446,12 @@ eng_highlight = function(options) {
   # e.g. engine.opts can be '-S matlab -O latex'
   if (is.null(options$engine.opts)) options$engine.opts = '-S text'
   options$engine.opts[1L] = paste('-f', options$engine.opts[1L])
-  options$echo = FALSE; options$results = 'asis'  # do not echo source code
+  # do not echo source code; note we must NOT set options$results = 'asis' here:
+  # the highlight output already bypasses sew() (see the 'highlight' branch in
+  # engine_output()), so 'asis' has no effect on the output, but since #2333 the
+  # engine-modified options reach the 'chunk' hook, where 'asis' would suppress
+  # the surrounding \begin{knitrout} wrapper in LaTeX output
+  options$echo = FALSE
   res = eng_interpreted(options)
   if (out_format('latex')) {
     highlight_header()
