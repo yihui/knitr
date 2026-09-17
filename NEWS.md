@@ -67,6 +67,10 @@
 
 - A chunk reference (e.g., `<<label>>`) can now be embedded in a line together with other code (e.g., `mtcars %>% <<label>>`). Previously, a reference was only recognized when it occupied a whole line by itself, so a reference followed by an operator such as `%>%` was left unexpanded. A referenced chunk that spans multiple lines is spliced into the line, with continuation lines indented to match (thanks, @Rich-F-G-Mills, #2034).
 
+## MINOR CHANGES
+
+- The `options` and `inline` arguments passed to `knit_print()` methods are now documented in `?knit_print`, so custom methods that declare them explicitly (e.g., `knit_print.foo <- function(x, ..., options)`) no longer trigger `R CMD check` warnings about undocumented arguments (thanks, @maxheld83, #1565).
+
 # CHANGES IN knitr VERSION 1.52
 
 ## NEW FEATURES
