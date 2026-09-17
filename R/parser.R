@@ -427,23 +427,45 @@ parse_chunk = function(x, rc = knit_patterns$get('ref.chunk')) {
   }
 
   # then expand references embedded in a line together with other code, e.g.
-  # `mtcars %>% <<foo>>` (#2034); only single-line chunks can be inlined
-  vapply(x, fill_inline_ref, character(1), rc = rc, code = code, USE.NAMES = FALSE)
+  # `mtcars %>% <<foo>>` (#2034); a multi-line chunk is spliced into the line
+  unlist(lapply(x, fill_inline_ref, rc = rc, code = code), use.names = FALSE)
 }
 
-# expand inline chunk references `<<label>>` that appear in the middle of a line
+# expand chunk references `<<label>>` that appear in a line together with other
+# code (references occupying a whole line are handled separately in
+# parse_chunk()); returns a character vector that may be longer than one line
+# when a referenced chunk spans multiple lines
 fill_inline_ref = function(x, rc, code) {
-  refs = regmatches(x, gregexpr('<<[^<>\n]+>>', x))[[1]]
-  for (r in unique(refs)) {
-    label = substr(r, 3L, nchar(r) - 2L)
-    z = code[[label]]
-    # only inline chunks that resolve to a single line of code
-    if (length(z) == 0L) next
-    z = parse_chunk(z, rc)
-    if (length(z) != 1L) next
-    x = gsub(r, z, x, fixed = TRUE)
+  loc = gregexpr('<<[^<>\n]+>>', x)[[1]]
+  if (loc[1L] == -1L) return(x)
+  len = attr(loc, 'match.length')
+  # split the line into alternating literal text and reference pieces
+  pieces = list(); pos = 1L
+  for (k in seq_along(loc)) {
+    s = loc[k]; e = s + len[k] - 1L
+    if (s > pos) pieces = c(pieces, list(substr(x, pos, s - 1L)))
+    z = code[[substr(x, s + 2L, e - 2L)]]  # chunk code for this label (or NULL)
+    # keep an unknown reference verbatim; recursively expand a known one
+    pieces = c(pieces, list(if (length(z) == 0L) substr(x, s, e) else parse_chunk(z, rc)))
+    pos = e + 1L
   }
-  x
+  if (pos <= nchar(x)) pieces = c(pieces, list(substr(x, pos, nchar(x))))
+  out = paste_lines(pieces)
+  # indent continuation lines to the leading whitespace of the host line
+  if (length(out) > 1L && nzchar(indent <- gsub('^(\\s*).*', '\\1', x)))
+    out[-1L] = paste0(indent, out[-1L])
+  out
+}
+
+# concatenate character vectors "horizontally": the last line of one piece is
+# joined with the first line of the next (so multi-line pieces splice in place)
+paste_lines = function(pieces) {
+  Reduce(function(a, b) {
+    if (length(a) == 0L) return(b)
+    if (length(b) == 0L) return(a)
+    n = length(a)
+    c(a[-n], paste0(a[n], b[1L]), b[-1L])
+  }, pieces)
 }
 
 # split text lines into groups of code and text chunks

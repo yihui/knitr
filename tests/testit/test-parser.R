@@ -79,9 +79,11 @@ assert('parse_chunk() expands references embedded in a line (#2034)', {
   (pc('foo(<<e>>)') %==% 'foo(<<e>>)')
 })
 
-assert('parse_chunk() does not inline multi-line chunks mid-line', {
-  # chunk 'd' expands to multiple lines, so it can't be spliced into a line
-  (pc('x %>% <<d>>') %==% 'x %>% <<d>>')
+assert('parse_chunk() splices multi-line chunks embedded in a line', {
+  # chunk 'd' expands to multiple lines; a trailing reference splices cleanly
+  (pc('x %>% <<d>>') %==% c('x %>% function() {', '  if (T)', '    1+1', '}'))
+  # continuation lines are indented to the leading whitespace of the host line
+  (pc('  y <- <<d>>') %==% c('  y <- function() {', '    if (T)', '      1+1', '  }'))
 })
 
 knit_code$restore()
