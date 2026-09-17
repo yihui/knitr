@@ -15,6 +15,11 @@
 #'
 #' You can set the option `knitr.kable.max_rows` to limit the number of
 #' rows to show in the table, e.g., `options(knitr.kable.max_rows = 30)`.
+#'
+#' By default, leading and trailing white spaces in table cells are trimmed. To
+#' preserve them (e.g. to align numbers with a monospace font in the Markdown
+#' source), set the option `knitr.kable.keep.whitespace` to `TRUE`, e.g.,
+#' `options(knitr.kable.keep.whitespace = TRUE)`.
 #' @param x For `kable()`, `x` is an R object, which is typically a
 #'   matrix or data frame. For `kables()`, a list with each element being a
 #'   returned value from `kable()`.
@@ -214,8 +219,12 @@ kable = function(
   n = nrow(x)
   x = replace_na(to_character(x), is.na(x))
   if (!is.matrix(x)) x = matrix(x, nrow = n)
-  # trim white spaces except those escaped by \ at the end (#2308)
-  x = gsub('^\\s+|(?<!\\\\)\\s+$', '', x, perl = TRUE)
+  # trim white spaces except those escaped by \ at the end (#2308); the trimming
+  # can be disabled via options(knitr.kable.keep.whitespace = TRUE) to preserve
+  # leading/trailing spaces in cells, e.g. for aligning numbers in a monospace
+  # font in the Markdown source (#2066)
+  if (!isTRUE(getOption('knitr.kable.keep.whitespace')))
+    x = gsub('^\\s+|(?<!\\\\)\\s+$', '', x, perl = TRUE)
   colnames(x) = col.names
   if (format != 'latex' && length(align) && !all(align %in% c('l', 'r', 'c')))
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")

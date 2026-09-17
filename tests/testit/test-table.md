@@ -556,3 +556,34 @@ kable(d)
 |:--------|
 |PRINT_ME |
 ```
+
+kable() trims leading/trailing white spaces in cells by default (#2308), but the option `knitr.kable.keep.whitespace` can be set to preserve them (#2066).
+
+```{r}
+x = data.frame(a = c('15 (50)', ' 1 ( 2)'))
+# default: leading spaces are trimmed
+kable(x, format = 'pipe')
+```
+```
+
+
+|a       |
+|:-------|
+|15 (50) |
+|1 ( 2)  |
+```
+
+```{r}
+op = options(knitr.kable.keep.whitespace = TRUE)
+# leading space of ' 1 ( 2)' is preserved to align the numbers
+kable(x, format = 'pipe')
+options(op)
+```
+```
+
+
+|a       |
+|:-------|
+|15 (50) |
+| 1 ( 2) |
+```
