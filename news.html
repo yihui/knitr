@@ -574,6 +574,9 @@ registerS3method(
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
+<p><code>convert_chunk_header()</code> now decides its default <code>type</code> from the extension of the <code>output</code> file when one is provided, so converting an <code>.Rmd</code> document to a <code>.qmd</code> output (e.g., <code>convert_chunk_header('foo.Rmd', output = 'foo.qmd')</code>) defaults to <code>type = &quot;yaml&quot;</code> as expected. Previously the default was based solely on the input extension (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2405">#2405</a>).</p>
+</li>
+<li>
 <p><code>spin()</code> now checks that the start (<code># /*</code>) and end (<code># */</code>) comment delimiters are correctly paired and ordered. Previously, only the <em>counts</em> of start and end delimiters were compared, so mis-ordered delimiters (e.g., an end delimiter appearing before a start delimiter) could silently drop the lines in between without any error. Now <code>spin()</code> signals an error that reports the line number of each unmatched delimiter (thanks, <a href="https://github.com/dewittpe">@dewittpe</a>, <a href="https://github.com/yihui/knitr/issues/1801">#1801</a>, <a href="https://github.com/yihui/knitr/issues/1802">#1802</a>).</p>
 </li>
 <li>
