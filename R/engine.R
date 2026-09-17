@@ -635,24 +635,31 @@ eng_sql = function(options) {
     "The 'sql.is_statement' chunk option must be TRUE or FALSE."
   )
 
+  # extra arguments to be passed to the DBI query functions (dbExecute(),
+  # dbSendQuery(), dbGetQuery()). The chunk option sql.args may be a named list
+  # of any arguments supported by these functions (e.g., the `immediate`
+  # argument). These arguments are passed only when supplied, so DBI's own
+  # defaults are otherwise preserved.
+  extra_args = options$sql.args %n% list()
+
   data = tryCatch({
     if (is_statement) {
-      DBI::dbExecute(conn, query)
-      NULL
+      # dbExecute() returns the number of rows affected by the statement
+      do.call(DBI::dbExecute, c(list(conn, query), extra_args))
     } else if (is.null(varname) && max.print > 0) {
       # execute query -- when we are printing with an enforced max.print we
       # use dbFetch so as to only pull down the required number of records
-      res = DBI::dbSendQuery(conn, query)
+      res = do.call(DBI::dbSendQuery, c(list(conn, query), extra_args))
       data = DBI::dbFetch(res, n = max.print)
       DBI::dbClearResult(res)
       data
 
     } else {
       if (length(params) == 0) {
-        DBI::dbGetQuery(conn, query)
+        do.call(DBI::dbGetQuery, c(list(conn, query), extra_args))
       } else {
         # If params option is provided, parameters are not interplolated
-        DBI::dbGetQuery(conn, sql, params = params)
+        do.call(DBI::dbGetQuery, c(list(conn, sql, params = params), extra_args))
       }
     }
   }, error = function(e) {
@@ -716,7 +723,15 @@ eng_sql = function(options) {
       print(tibble::as_tibble(display_data), n = max.print)
 
     } else print(display_data) # fallback to standard print
-  })
+  }) else if (is.numeric(data) && length(data) == 1 && is.null(varname)) {
+    # a statement (no result set) returns the number of affected rows via
+    # dbExecute(); it is always available via output.var, and is additionally
+    # shown as normal (code-like) output only if the chunk option
+    # sql.statement.msg is set to a template string, where '{n}' is replaced by
+    # the number (opt-in, so existing documents are not affected)
+    msg = options$sql.statement.msg
+    if (is.character(msg)) sub('{n}', data, msg, fixed = TRUE)
+  }
   if (options$results == 'hide') output = NULL
 
   # assign varname if requested
