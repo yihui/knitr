@@ -546,6 +546,18 @@ CREATE TEMP TABLE foo AS SELECT 1 AS x
 ```
 </code></pre>
 </li>
+<li>
+<p>The cache now uses <code>xfun::lazy_save()</code> / <code>xfun::lazy_load()</code> (which store objects in <code>.rds</code> files) instead of <code>tools::makeLazyLoadDB()</code> / <code>lazyLoad()</code>. Existing caches from the previous format (<code>.rdb</code> / <code>.rdx</code> files) are still recognized and loaded, so this change is backward-compatible. In addition, two new S3 generic functions <code>knit_cache_pack()</code> and <code>knit_cache_unpack()</code> allow customizing how objects are written to and restored from the cache. This makes it possible to cache objects that the default method cannot handle correctly, e.g., external-pointer objects such as <strong>terra</strong> rasters (see <a href="https://github.com/yihui/knitr/issues/2176">#2176</a>). <code>knit_cache_pack()</code> is called on each object before it is cached and should return a serializable version; <code>knit_cache_unpack()</code> is called after an object is read from the cache and should restore the original. Package authors can register methods for their classes (typically in <code>.onLoad()</code>) so that users do not need to configure anything, e.g., for <strong>terra</strong> (thanks, <a href="https://github.com/atusy">@atusy</a>, <a href="https://github.com/yihui/knitr/issues/2340">#2340</a>):</p>
+<pre><code>registerS3method(
+  &quot;knit_cache_pack&quot;, &quot;SpatRaster&quot;, function(x, ...) terra::wrap(x),
+  envir = asNamespace(&quot;knitr&quot;)
+)
+registerS3method(
+  &quot;knit_cache_unpack&quot;, &quot;PackedSpatRaster&quot;, function(x, ...) terra::unwrap(x),
+  envir = asNamespace(&quot;knitr&quot;)
+)
+</code></pre>
+</li>
 </ul>
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
