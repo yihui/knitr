@@ -57,6 +57,18 @@ if (!has_error({png(); dev.off()})) {
     dev.off()
     TRUE
   })
+
+  # with multiple devices, the recording device is the first one (#1323) so its
+  # measurement-affecting dev.args are applied, instead of silently falling back
+  # to the default pdf device (the device name of png is platform-dependent,
+  # e.g. 'quartz_off_screen' on macOS, so we only check it is not the pdf fallback)
+  assert('chunk_device() records with the first of multiple devices (#1323)', {
+    chunk_device(opts_chunk$merge(list(
+      dev = c('png', 'pdf'), dev.args = list(png = list(pointsize = 8))
+    )))
+    (names(dev.cur()) != 'pdf')
+    dev.off()
+  })
 }
 
 if (requireNamespace("ragg", quietly = TRUE) &&
