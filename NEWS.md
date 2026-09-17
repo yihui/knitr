@@ -16,6 +16,14 @@
 
 - For `sql` chunks that execute a statement not returning a result set (e.g., `INSERT`/`UPDATE`/`DELETE`), the number of affected rows (as returned by `DBI::dbExecute()`) is now available and can be assigned to a variable via the chunk option `output.var`. To also report it in the output, set the new chunk option `sql.statement.msg` to a template string, in which `{n}` is replaced by the number, e.g., `sql.statement.msg = "Number of affected rows: {n}"`. By default (when the option is unset) no such output is shown, so existing documents are not affected (thanks, @edalfon, #2050, #2051).
 
+- The `sql` engine gained a new chunk option `sql.args`, a named list of extra arguments passed to the underlying DBI query functions (`DBI::dbExecute()`, `DBI::dbSendQuery()`, and `DBI::dbGetQuery()`). This makes it possible to forward any backend-specific argument, e.g., `sql.args = list(immediate = TRUE)` to control the DBI `immediate` argument. These arguments are passed only when supplied, so DBI's own defaults are otherwise preserved (thanks, @AWKruijt, #2128).
+
+    ````
+    ```{sql, connection=con, sql.args=list(immediate=TRUE)}
+    CREATE TEMP TABLE foo AS SELECT 1 AS x
+    ```
+    ````
+
 ## BUG FIXES
 
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
