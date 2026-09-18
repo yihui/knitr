@@ -581,6 +581,9 @@ registerS3method(
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
+<p>When tangling (i.e., <code>purl()</code>) an R Markdown document that defines <code>params</code> in its YAML front matter, chunk options that reference those parameters (e.g., <code>eval = params$foo</code>) are now resolved correctly. Previously such a chunk was silently dropped from the tangled script because <code>params</code> was not available when the option was evaluated. Parsing the YAML <code>params</code> does not involve evaluating any code in the document, so this remains a purely static operation (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/1938">#1938</a>).</p>
+</li>
+<li>
 <p>The <code>ffmpeg</code> animation hook (<code>hook_ffmpeg_html()</code>) now signals an error when the <code>ffmpeg</code> command exits with a non-zero status (e.g., when the installed <code>ffmpeg</code> version does not support the <code>-crf</code> option). Previously the failure was ignored, so the document would reference a video file that was never created, and with caching enabled the broken result could be cached (thanks, <a href="https://github.com/kcarnold">@kcarnold</a>, <a href="https://github.com/yihui/knitr/issues/2130">#2130</a>).</p>
 </li>
 <li>
