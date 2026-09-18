@@ -84,6 +84,21 @@ strip_block = function(x, prefix = NULL) {
 # = c('chunk', 'labels', 'that', 'depend', 'on', 'chunk', 'foo'))
 dep_list = new_defaults()
 
+# the transitive closure of chunks that `label` depends on (its ancestors);
+# dep_list maps a chunk to its dependents, so we invert it here. This lets the
+# cache hash of a chunk fold in the code of the chunks it depends on, so that a
+# dependency's change invalidates the cache even if the dependency is not cached.
+dep_ancestors = function(label, deps = dep_list$get()) {
+  seen = character(); todo = label
+  while (length(todo)) {
+    l = todo[1L]; todo = todo[-1L]
+    parents = names(deps)[vapply(deps, function(x) l %in% x, logical(1))]
+    parents = setdiff(parents, c(seen, label))
+    seen = c(seen, parents); todo = c(todo, parents)
+  }
+  seen
+}
+
 # separate params and R code in code chunks
 parse_block = function(code, header, params.src, markdown_mode = out_format('markdown')) {
   params = params.src
