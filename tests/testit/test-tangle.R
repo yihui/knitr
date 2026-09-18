@@ -67,21 +67,11 @@ assert('purl() resolves params referenced in chunk options (#1938)', {
   (any(grepl('z <- 3', out3, fixed = TRUE)))
 })
 
-# https://github.com/yihui/knitr/issues/2425 an eval=FALSE chunk is commented out
-# in the R script by default, but comment='' (or NA) keeps the code uncommented so
-# that it remains runnable from the script
+# an eval=FALSE chunk is commented out by default, but comment='' (or NA) keeps
+# the code uncommented so it remains runnable from the script (#2425)
 assert('purl() can keep eval=FALSE code uncommented via comment=""', {
-  code = c('```{r, eval=FALSE}', 'x <- 1', '```')
-  # default: the code is commented out with '#'
-  (any(grepl('# x <- 1', tangle_text(code), fixed = TRUE)))
-
-  # comment='' leaves the code uncommented
-  code2 = c('```{r, eval=FALSE, comment=""}', 'x <- 1', '```')
-  out2 = tangle_text(code2)
-  (grepl('\nx <- 1', out2, fixed = TRUE))
-  (!grepl('# x <- 1', out2, fixed = TRUE))
-
-  # comment=NA also leaves the code uncommented
-  code3 = c('```{r, eval=FALSE, comment=NA}', 'x <- 1', '```')
-  (grepl('\nx <- 1', tangle_text(code3), fixed = TRUE))
+  purl0 = function(text) purl(text = text, documentation = 0L)
+  (purl0(c('```{r, eval=FALSE}', 'x <- 1', '```')) %==% '# x <- 1')
+  (purl0(c('```{r, eval=FALSE, comment=""}', 'x <- 1', '```')) %==% 'x <- 1')
+  (purl0(c('```{r, eval=FALSE, comment=NA}', 'x <- 1', '```')) %==% 'x <- 1')
 })

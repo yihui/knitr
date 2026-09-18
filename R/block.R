@@ -654,7 +654,7 @@ tangle_block = function(x) {
     eval_read_chunk(code)
   }
   code = parse_chunk(code)
-  code = tangle_mask(code, ev, x$params$error, params$comment)
+  code = tangle_mask(code, ev, x$params$error, params$comment %n% '#')
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
   # e.g. when documentation 1 or 2 with purl()
   label_code(code, x)
@@ -686,14 +686,10 @@ eval_read_chunk = function(code) {
   for (cl in calls) eval(cl)
 }
 
-tangle_mask = function(code, eval, error, comment = '##') {
-  # code from a chunk with eval=FALSE is commented out with '#' in the R script,
-  # unless the chunk option comment='' (or NA) is set, in which case the code is
-  # left uncommented so that it can still be run from the script (#2425)
-  if (isFALSE(eval)) {
-    prefix = if (is.null(comment) || is.na(comment) || !nzchar(comment)) comment else '#'
-    code = comment_out(code, prefix, newline = FALSE)
-  }
+tangle_mask = function(code, eval, error, comment = '#') {
+  # eval=FALSE code is commented out with '#'; comment='' (or NA) keeps it uncommented
+  if (isFALSE(eval))
+    code = comment_out(code, if (is.na(comment) || comment == '') comment else '#', newline = FALSE)
   if (isTRUE(error)) code = c('try({', code, '})')
   code
 }
