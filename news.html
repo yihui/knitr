@@ -575,6 +575,9 @@ registerS3method(
 <p><code>kable()</code> gained support for the global option <code>knitr.kable.keep.whitespace</code>. By default, leading and trailing white spaces in table cells are trimmed, but setting <code>options(knitr.kable.keep.whitespace = TRUE)</code> preserves them, which is useful for aligning numbers with a monospace font in the Markdown source (thanks, <a href="https://github.com/jmbarbone">@jmbarbone</a>, <a href="https://github.com/yihui/knitr/issues/2066">#2066</a>).</p>
 </li>
 <li>
+<p>The alt text stored in a plot object is now used as the default value of the chunk option <code>fig.alt</code> when the option is not set explicitly. Currently this is supported for <strong>ggplot2</strong> plots, so alt text set via <code>ggplot2::labs(alt = ...)</code> is picked up automatically without having to also set <code>fig.alt</code> in the chunk. For chunks with multiple plots, <code>fig.alt</code> is matched to plots element-wise, and an explicitly supplied <code>fig.alt</code> still takes precedence (you can mix the two with <code>NA</code>, e.g., <code>fig.alt = c(NA, &quot;custom alt text&quot;)</code>) (thanks, <a href="https://github.com/hadley">@hadley</a>, <a href="https://github.com/yihui/knitr/issues/2001">#2001</a>).</p>
+</li>
+<li>
 <p><code>read_chunk()</code> can now read code chunks from a <strong>knitr</strong> source document (e.g., an <code>.Rmd</code> or <code>.Rnw</code> file) in addition to an R script. The code chunks in the document are read in and keyed by their chunk labels, so they can be reused in the current document via chunk label references, just like chunks read from an R script. The label can be provided either in the chunk header (e.g., <code>{r foo}</code>) or via YAML chunk options (e.g., <code>#| label: foo</code>) (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2041">#2041</a>).</p>
 </li>
 <li>
