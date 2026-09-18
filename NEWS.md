@@ -63,6 +63,8 @@
 
 - `kable()` gained an argument `na` to control how missing values (`NA`) are displayed in a single table, e.g. `kable(x, na = '')` to hide `NA`s or `kable(x, na = '-')` to show them as dashes. This is the per-call equivalent of the global option `knitr.kable.NA`, which it defaults to, and overrides the option when both are set (thanks, @mbojan, #1813).
 
+- A cached chunk can now depend on an uncached chunk via the `dependson` option (or `autodep = TRUE`). Previously this combination was not supported (and triggered a warning) because the cache was invalidated by purging the caches of dependent chunks when a dependency's cache was rebuilt, which does not work if the dependency has no cache. Now the code of the chunks that a cached chunk depends on (including transitive dependencies) is folded into the cache key, so changing a dependency's code invalidates the cache regardless of whether the dependency itself is cached (thanks, @PapaNappa, #1039).
+
 ## BUG FIXES
 
 - `spin()` now inserts a space before the chunk label in the generated chunk header when the label comes from a `## ----label` token (as produced by `purl(documentation = 2)`). Previously it produced an invalid header like ```` ```{rlabel} ````, in which the label was glued to the engine name; on a subsequent `purl()`, `rlabel` was then treated as an engine name and the chunk was mis-parsed. This improves the round-trip stability between `purl()` and `spin()` (thanks, @krlmlr, #2014).

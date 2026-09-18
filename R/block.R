@@ -85,6 +85,10 @@ call_block = function(block) {
     if (params$engine == 'R' && isFALSE(params$cache.comments)) {
       content[['code']] = parse_only(content[['code']])
     }
+    # fold in the code of chunks this chunk depends on, so that a dependency's
+    # change invalidates this cache even when the dependency itself is uncached
+    if (length(anc <- dep_ancestors(label)))
+      content[['.deps']] = knit_code$get(sort(anc))
     hash = paste(valid_path(params$cache.path, label), digest(content), sep = '_')
     params$hash = hash
     if (cache$exists(hash, params$cache.lazy) &&
@@ -98,8 +102,7 @@ call_block = function(block) {
     }
     if (params$engine == 'R')
       cache$library(params$cache.path, save = FALSE) # load packages
-  } else if (label %in% names(dep_list$get()) && !isFALSE(opts_knit$get('warn.uncached.dep')))
-    warning2('code chunks must not depend on the uncached chunk "', label, '"')
+  }
 
   params$params.src = block$params.src
   opts_current$restore(params)  # save current options
