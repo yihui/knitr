@@ -127,57 +127,54 @@ new_cache = function() {
 #' (which serializes them to \file{.rds} files via [saveRDS()] and reads them
 #' back via [readRDS()]), typically because they contain external pointers,
 #' e.g., objects from the \pkg{terra} package. For these objects, you can define
-#' S3 methods for the generic functions `knit_cache_pack()` and
-#' `knit_cache_unpack()`: `knit_cache_pack()` is called on each object before it
-#' is written to the cache, and should return a serializable version of the
-#' object; `knit_cache_unpack()` is called on the object after it is read from
-#' the cache, and should restore the original object. The default methods return
-#' the object unchanged.
+#' S3 methods for the generic function `process_cache()`, which is called on
+#' each object both before it is written to the cache (with `pack = TRUE`) and
+#' after it is read from the cache (with `pack = FALSE`). When packing, the
+#' method should return a serializable version of the object; when unpacking, it
+#' should restore the original object. The default method returns the object
+#' unchanged.
 #'
-#' Since `knit_cache_pack()` dispatches on the live (in-memory) object and
-#' `knit_cache_unpack()` dispatches on the packed (deserialized) object, the
-#' packed object should have a different class so that the correct
-#' `knit_cache_unpack()` method can be found (this is naturally the case for
-#' \pkg{terra}, whose `wrap()` turns a `SpatRaster` into a `PackedSpatRaster`).
-#' Package authors can register these methods dynamically in their `.onLoad()`
-#' (see the examples), so users do not need to configure anything.
+#' Since `process_cache()` dispatches on the object's class, and packing and
+#' unpacking are handled by the same generic, the packed object should have a
+#' different class from the original so that the correct method is found in each
+#' direction (this is naturally the case for \pkg{terra}, whose `wrap()` turns a
+#' `SpatRaster` into a `PackedSpatRaster`). Package authors can register these
+#' methods dynamically in their `.onLoad()` (see the examples), so users do not
+#' need to configure anything.
 #' @param x The object to be packed (before caching) or unpacked (after loading
 #'   from the cache).
+#' @param pack Whether the object is being packed (`TRUE`, before writing to the
+#'   cache) or unpacked (`FALSE`, after reading from the cache).
 #' @param ... Additional arguments (currently unused; reserved for future use).
 #' @return The packed or unpacked object.
 #' @export
 #' @examples
 #' # e.g., the terra package could register these methods in its .onLoad():
 #' # registerS3method(
-#' #   'knit_cache_pack', 'SpatRaster', function(x, ...) terra::wrap(x),
+#' #   'process_cache', 'SpatRaster',
+#' #   function(x, pack = TRUE, ...) if (pack) terra::wrap(x) else x,
 #' #   envir = asNamespace('knitr')
 #' # )
 #' # registerS3method(
-#' #   'knit_cache_unpack', 'PackedSpatRaster', function(x, ...) terra::unwrap(x),
+#' #   'process_cache', 'PackedSpatRaster',
+#' #   function(x, pack = TRUE, ...) if (pack) x else terra::unwrap(x),
 #' #   envir = asNamespace('knitr')
 #' # )
-knit_cache_pack = function(x, ...) UseMethod('knit_cache_pack')
+process_cache = function(x, pack = TRUE, ...) UseMethod('process_cache')
 
 #' @export
-knit_cache_pack.default = function(x, ...) x
-
-#' @rdname knit_cache_pack
-#' @export
-knit_cache_unpack = function(x, ...) UseMethod('knit_cache_unpack')
-
-#' @export
-knit_cache_unpack.default = function(x, ...) x
+process_cache.default = function(x, pack = TRUE, ...) x
 
 # the read/write method passed to xfun::lazy_save()/lazy_load(): objects are
 # stored as .rds files, but each object is packed before writing and unpacked
-# after reading, so that S3 methods for knit_cache_pack()/knit_cache_unpack()
-# can customize how special objects (e.g., those with external pointers) are
-# cached. The (un)packing happens at the per-object level, preserving lazy
-# loading: an object is only unpacked when it is actually accessed.
+# after reading, so that S3 methods for process_cache() can customize how
+# special objects (e.g., those with external pointers) are cached. The
+# (un)packing happens at the per-object level, preserving lazy loading: an
+# object is only unpacked when it is actually accessed.
 cache_io = list(
   name = 'rds',
-  save = function(x, file, ...) saveRDS(knit_cache_pack(x), file),
-  load = function(...) knit_cache_unpack(readRDS(...))
+  save = function(x, file, ...) saveRDS(process_cache(x, pack = TRUE), file),
+  load = function(...) process_cache(readRDS(...), pack = FALSE)
 )
 
 # analyze code and find out all possible variables (not necessarily global variables)
