@@ -531,6 +531,36 @@ options(op)
 |   |  4|
 ```
 
+kable() can display NA using the `na` argument for a single table (#1813).
+
+```{r}
+kable(matrix(c(1, NA, 3, 4), nrow = 2), col.names = c('a', 'b'), na = '-')
+```
+```
+
+
+|  a|  b|
+|--:|--:|
+|  1|  3|
+|  -|  4|
+```
+
+The `na` argument overrides the global option `knitr.kable.NA` (#1813).
+
+```{r}
+op = options(knitr.kable.NA = 'OPT')
+kable(matrix(c(1, NA, 3, 4), nrow = 2), col.names = c('a', 'b'), na = '!')
+options(op)
+```
+```
+
+
+|  a|  b|
+|--:|--:|
+|  1|  3|
+|  !|  4|
+```
+
 kable() can apply formatting to custom objects.
 
 ```{r}

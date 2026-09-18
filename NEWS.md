@@ -49,6 +49,8 @@
 
 - `read_chunk()` can now read code chunks from a **knitr** source document (e.g., an `.Rmd` or `.Rnw` file) in addition to an R script. The code chunks in the document are read in and keyed by their chunk labels, so they can be reused in the current document via chunk label references, just like chunks read from an R script. The label can be provided either in the chunk header (e.g., `{r foo}`) or via YAML chunk options (e.g., `#| label: foo`) (thanks, @cderv, #2041).
 
+- `kable()` gained an argument `na` to control how missing values (`NA`) are displayed in a single table, e.g. `kable(x, na = '')` to hide `NA`s or `kable(x, na = '-')` to show them as dashes. This is the per-call equivalent of the global option `knitr.kable.NA`, which it defaults to, and overrides the option when both are set (thanks, @mbojan, #1813).
+
 ## BUG FIXES
 
 - When tangling (i.e., `purl()`) an R Markdown document that defines `params` in its YAML front matter, chunk options that reference those parameters (e.g., `eval = params$foo`) are now resolved correctly. Previously such a chunk was silently dropped from the tangled script because `params` was not available when the option was evaluated. Parsing the YAML `params` does not involve evaluating any code in the document, so this remains a purely static operation (thanks, @cderv, #1938).
