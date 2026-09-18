@@ -175,3 +175,23 @@ assert('convert_chunk_header() uses the output extension to pick the default typ
 })
 
 file.remove(in_rmd)
+
+# a non-R engine (e.g. cat) is handled: the engine is kept in the fence and its
+# options are moved to the option lines (#2404)
+in_cat = tempfile(fileext = '.Rmd')
+xfun::write_utf8(
+  c('```{cat, engine.opts = list(file = "some_file.qmd"), class.source = "md"}',
+    'some text', '```'),
+  in_cat
+)
+assert('convert_chunk_header() handles a non-R engine (#2404)', {
+  (convert_chunk_header(in_cat) %==% c(
+    '```{cat}', '#| engine.opts = list(file = "some_file.qmd"),',
+    '#| class.source = "md"', 'some text', '```'
+  ))
+  (convert_chunk_header(in_cat, type = 'yaml') %==% c(
+    '```{cat}', '#| engine-opts: !expr list(file = "some_file.qmd")',
+    '#| class-source: md', 'some text', '```'
+  ))
+})
+file.remove(in_cat)
