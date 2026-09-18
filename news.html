@@ -575,6 +575,12 @@ registerS3method(
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
+<p>The <code>ffmpeg</code> animation hook (<code>hook_ffmpeg_html()</code>) now signals an error when the <code>ffmpeg</code> command exits with a non-zero status (e.g., when the installed <code>ffmpeg</code> version does not support the <code>-crf</code> option). Previously the failure was ignored, so the document would reference a video file that was never created, and with caching enabled the broken result could be cached (thanks, <a href="https://github.com/kcarnold">@kcarnold</a>, <a href="https://github.com/yihui/knitr/issues/2130">#2130</a>).</p>
+</li>
+<li>
+<p><code>include_graphics()</code> with a <code>dpi</code> argument now sets the image width for Pandoc output formats other than HTML and LaTeX (e.g., Word/<code>docx</code>, ODT). The width is computed from the image’s pixel dimensions and <code>dpi</code>, and emitted as a physical size in inches (e.g., <code>{width=2in}</code>), which Pandoc understands. Previously the width was only computed for HTML and LaTeX output, so <code>dpi</code> had no effect for other formats (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2385">#2385</a>).</p>
+</li>
+<li>
 <p><code>plot_crop()</code> now emits a warning when <code>pdfcrop</code> is found but returns a non-zero exit status (e.g., because GhostScript is missing or the input is corrupt). Previously such failures were silent (thanks, <a href="https://github.com/JackCaster">@JackCaster</a>, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2381">#2381</a>).</p>
 </li>
 <li>
