@@ -47,6 +47,8 @@
 
 ## BUG FIXES
 
+- The `ffmpeg` animation hook (`hook_ffmpeg_html()`) now signals an error when the `ffmpeg` command exits with a non-zero status (e.g., when the installed `ffmpeg` version does not support the `-crf` option). Previously the failure was ignored, so the document would reference a video file that was never created, and with caching enabled the broken result could be cached (thanks, @kcarnold, #2130).
+
 - `include_graphics()` with a `dpi` argument now sets the image width for Pandoc output formats other than HTML and LaTeX (e.g., Word/`docx`, ODT). The width is computed from the image's pixel dimensions and `dpi`, and emitted as a physical size in inches (e.g., `{width=2in}`), which Pandoc understands. Previously the width was only computed for HTML and LaTeX output, so `dpi` had no effect for other formats (thanks, @cderv, #2385).
 
 - `plot_crop()` now emits a warning when `pdfcrop` is found but returns a non-zero exit status (e.g., because GhostScript is missing or the input is corrupt). Previously such failures were silent (thanks, @JackCaster, @cderv, #2381).
