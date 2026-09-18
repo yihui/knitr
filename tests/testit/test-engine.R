@@ -50,3 +50,37 @@ assert('engines can modify chunk options seen by the chunk hook (#2333)', {
   # the chunk hook saw the engine-modified option, not the source-declared default
   (seen$results %==% 'asis')
 })
+
+# an option explicitly set by opts_hooks is the user's final word and must win
+# over an engine's later internal change to the same option, as seen by the
+# 'chunk' hook (#2488); this is what Quarto relies on to wrap annotated output
+assert('opts_hooks wins over engine-modified options at the chunk hook (#2488)', {
+  engines = knit_engines$get(); hooks = knit_hooks$get(); ohooks = opts_hooks$get()
+  fmt = opts_knit$get('out.format')
+  on.exit({
+    knit_engines$restore(engines); knit_hooks$restore(hooks)
+    opts_hooks$restore(ohooks)
+    opts_knit$set(out.format = fmt); knit_code$restore()
+  }, add = TRUE)
+
+  render_markdown()
+  # the engine forces results = 'asis' internally (like css/js/sass/scss)
+  knit_engines$set(demo = function(options) {
+    options$results = 'asis'
+    engine_output(options, options$code, out = 'ASIS')
+  })
+  # but opts_hooks set it to 'hold' first
+  opts_hooks$set(results = function(options) {
+    options$results = 'hold'
+    options
+  })
+  seen = new.env()
+  knit_hooks$set(chunk = function(x, options) {
+    seen$results = options$results
+    x
+  })
+
+  out = knit(text = c('```{demo}', 'code', '```'), quiet = TRUE)
+  # opts_hooks value wins at the chunk hook, not the engine's 'asis'
+  (seen$results %==% 'hold')
+})
