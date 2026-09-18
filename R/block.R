@@ -654,7 +654,7 @@ tangle_block = function(x) {
     eval_read_chunk(code)
   }
   code = parse_chunk(code)
-  code = tangle_mask(code, ev, x$params$error, params$comment %n% '#')
+  code = tangle_mask(code, ev, x$params$error, x$params$comment %n% '#')
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
   # e.g. when documentation 1 or 2 with purl()
   label_code(code, x)
@@ -687,9 +687,8 @@ eval_read_chunk = function(code) {
 }
 
 tangle_mask = function(code, eval, error, comment = '#') {
-  # eval=FALSE code is commented out with '#'; comment='' (or NA) keeps it uncommented
-  if (isFALSE(eval))
-    code = comment_out(code, if (is.na(comment) || comment == '') comment else '#', newline = FALSE)
+  # eval=FALSE code is commented out; comment='' (or NA) keeps it uncommented
+  if (isFALSE(eval)) code = comment_out(code, comment, newline = FALSE)
   if (isTRUE(error)) code = c('try({', code, '})')
   code
 }
