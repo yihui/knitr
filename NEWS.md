@@ -16,6 +16,8 @@
     ```
     ````
 
+- When `purl()` comments out the code of a chunk with `eval = FALSE`, the chunk option `comment` can now be used to control the comment character. In particular, `comment = ''` (or `NA`) leaves the code uncommented, so that it remains runnable from the tangled R script (thanks, @alchemit, #2425).
+
 - The `sql` engine recognizes more SQL keywords (e.g., `ALTER`, `GRANT`, `MERGE`, `TRUNCATE`, `CALL`) as statements that do not return a result set, so they are dispatched to `DBI::dbExecute()` instead of `DBI::dbGetQuery()` (which avoids warnings from some database drivers). In addition, a new chunk option `sql.is_statement` can be set to `TRUE` or `FALSE` to explicitly control this behavior when the automatic detection based on keywords is not correct (e.g., `SELECT ... INTO`, or `UPDATE ... RETURNING`) (thanks, @rnorberg, #1896).
 
 - For `sql` chunks that execute a statement not returning a result set (e.g., `INSERT`/`UPDATE`/`DELETE`), the number of affected rows (as returned by `DBI::dbExecute()`) is now available and can be assigned to a variable via the chunk option `output.var`. To also report it in the output, set the new chunk option `sql.statement.msg` to a template string, in which `{n}` is replaced by the number, e.g., `sql.statement.msg = "Number of affected rows: {n}"`. By default (when the option is unset) no such output is shown, so existing documents are not affected (thanks, @edalfon, #2050, #2051).

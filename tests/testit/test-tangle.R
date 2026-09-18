@@ -66,3 +66,12 @@ assert('purl() resolves params referenced in chunk options (#1938)', {
   (!any(grepl('y <- 2', out3, fixed = TRUE)))
   (any(grepl('z <- 3', out3, fixed = TRUE)))
 })
+
+# an eval=FALSE chunk is commented out by default, but comment='' (or NA) keeps
+# the code uncommented so it remains runnable from the script (#2425)
+assert('purl() can keep eval=FALSE code uncommented via comment=""', {
+  purl0 = function(text) purl(text = text, documentation = 0L)
+  (purl0(c('```{r, eval=FALSE}', 'x <- 1', '```')) %==% '# x <- 1')
+  (purl0(c('```{r, eval=FALSE, comment=""}', 'x <- 1', '```')) %==% 'x <- 1')
+  (purl0(c('```{r, eval=FALSE, comment=NA}', 'x <- 1', '```')) %==% 'x <- 1')
+})
