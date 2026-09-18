@@ -577,6 +577,9 @@ registerS3method(
 <li>
 <p><code>read_chunk()</code> can now read code chunks from a <strong>knitr</strong> source document (e.g., an <code>.Rmd</code> or <code>.Rnw</code> file) in addition to an R script. The code chunks in the document are read in and keyed by their chunk labels, so they can be reused in the current document via chunk label references, just like chunks read from an R script. The label can be provided either in the chunk header (e.g., <code>{r foo}</code>) or via YAML chunk options (e.g., <code>#| label: foo</code>) (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2041">#2041</a>).</p>
 </li>
+<li>
+<p><code>kable()</code> gained an argument <code>na</code> to control how missing values (<code>NA</code>) are displayed in a single table, e.g. <code>kable(x, na = '')</code> to hide <code>NA</code>s or <code>kable(x, na = '-')</code> to show them as dashes. This is the per-call equivalent of the global option <code>knitr.kable.NA</code>, which it defaults to, and overrides the option when both are set (thanks, <a href="https://github.com/mbojan">@mbojan</a>, <a href="https://github.com/yihui/knitr/issues/1813">#1813</a>).</p>
+</li>
 </ul>
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
