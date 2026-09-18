@@ -249,8 +249,14 @@ knit = function(
       }
     } else {
       params = knit_params(text)
-      params = if (length(params))
-        c('params <-', capture.output(dput(flatten_params(params), '')), '')
+      if (length(params)) {
+        params = flatten_params(params)
+        # make the YAML params available to chunk options during tangling, so
+        # that options like eval = params$foo can be resolved (#1938); parsing
+        # YAML doesn't involve evaluating document code, so this is safe
+        if (tangle) assign('params', params, envir = knit_global())
+        params = c('params <-', capture.output(dput(params, '')), '')
+      } else params = NULL
       .knitEnv$tangle.params = params  # for hook_purl()
     }
   }
