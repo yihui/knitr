@@ -541,6 +541,9 @@ htmltools::div(htmltools::img(src = &quot;logo.png&quot;), htmltools::p(&quot;he
 </code></pre>
 </li>
 <li>
+<p>When <code>purl()</code> comments out the code of a chunk with <code>eval = FALSE</code>, the chunk option <code>comment</code> can now be used to control the comment character. In particular, <code>comment = ''</code> (or <code>NA</code>) leaves the code uncommented, so that it remains runnable from the tangled R script (thanks, <a href="https://github.com/alchemit">@alchemit</a>, <a href="https://github.com/yihui/knitr/issues/2425">#2425</a>).</p>
+</li>
+<li>
 <p>The <code>sql</code> engine recognizes more SQL keywords (e.g., <code>ALTER</code>, <code>GRANT</code>, <code>MERGE</code>, <code>TRUNCATE</code>, <code>CALL</code>) as statements that do not return a result set, so they are dispatched to <code>DBI::dbExecute()</code> instead of <code>DBI::dbGetQuery()</code> (which avoids warnings from some database drivers). In addition, a new chunk option <code>sql.is_statement</code> can be set to <code>TRUE</code> or <code>FALSE</code> to explicitly control this behavior when the automatic detection based on keywords is not correct (e.g., <code>SELECT ... INTO</code>, or <code>UPDATE ... RETURNING</code>) (thanks, <a href="https://github.com/rnorberg">@rnorberg</a>, <a href="https://github.com/yihui/knitr/issues/1896">#1896</a>).</p>
 </li>
 <li>
