@@ -777,11 +777,12 @@ knit_print.knit_asis_url = function(x, ...) x
 .alt.classes = 'ggplot'
 
 # extract a plot object's own alt text (e.g. set via ggplot2::labs(alt=)), or
-# return NULL if none. Handle each known class in .alt.classes.
+# return NULL if none. Handle each known class in .alt.classes; when x is a
+# ggplot, ggplot2 is necessarily loaded, so we fetch get_alt_text() from its
+# namespace (available since ggplot2 3.4.0) instead of via ggplot2:: (which
+# would add a Suggests dependency check).
 plot_alt_text = function(x) {
-  if (inherits(x, 'ggplot') && is.function(f <- tryCatch(
-    getExportedValue('ggplot2', 'get_alt_text'), error = function(e) NULL  # ggplot2 >= 3.4.0
-  ))) tryCatch(f(x), error = function(e) NULL)
+  if (inherits(x, 'ggplot')) getNamespace('ggplot2')$get_alt_text(x)
 }
 
 # per-chunk buffer of alt text collected from plot objects (in the order they
