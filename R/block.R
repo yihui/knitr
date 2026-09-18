@@ -197,8 +197,7 @@ eng_r = function(options) {
   env = knit_global()
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
 
-  # reset the buffer of default alt text collected from plot objects (#2001)
-  reset_fig_alt()
+  reset_fig_alt()  # clear alt text collected from plots in the previous chunk (#2001)
 
   keep = options$fig.keep
   keep.idx = NULL
@@ -299,8 +298,7 @@ eng_r = function(options) {
     for (o in opts_knit$get('eval.after'))
       options[o] = list(eval_lang(options[[o]], env))
 
-  # use the alt text collected from plot objects (e.g. via ggplot2::labs(alt=))
-  # as the default fig.alt, letting an explicitly provided fig.alt win (#2001)
+  # use alt text from plots (e.g. ggplot2::labs(alt=)) as the default fig.alt (#2001)
   if (!isFALSE(ev) && length(.knitEnv$fig.alt))
     options['fig.alt'] = list(merge_fig_alt(options[['fig.alt']], .knitEnv$fig.alt))
 

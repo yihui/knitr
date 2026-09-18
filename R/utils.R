@@ -895,9 +895,7 @@ rlang_entrace_handler = NULL
 # change the value handler in evaluate default handlers
 knit_handlers = function(fun, options) {
   if (!is.function(fun)) fun = function(x, ...) {
-    # collect the plot object's own alt text (in plot-printing order) so it can
-    # be used as the default fig.alt when the chunk option is not set (#2001)
-    record_fig_alt(x)
+    record_fig_alt(x)  # collect the plot's own alt text for the default fig.alt (#2001)
     res = withVisible(knit_print(x, ...))
     # indicate the htmlwidget result with a special class so we can attach
     # the figure caption to it later in sew.knit_asis

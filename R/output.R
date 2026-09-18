@@ -771,34 +771,23 @@ knit_print.knit_asis = function(x, ...) x
 #' @export
 knit_print.knit_asis_url = function(x, ...) x
 
-# per-chunk buffer of alt text collected from plot objects (in the order they
-# are printed); reset at the start of each chunk in eng_r()
+# per-chunk buffer of alt text from plot objects (in printing order), reset in eng_r()
 reset_fig_alt = function() .knitEnv$fig.alt = NULL
 
-# record a printed object's own alt text, if knitr recognizes it as an
-# alt-carrying plot. This is the single place that knows which plot classes
-# store alt text and how to read it; add more classes here as other plotting
-# packages gain a way to store alt text in the plot object. Only recognized
-# plots occupy a fig.alt slot (so ordinary printed values do not shift the
-# plot-to-fig.alt mapping), and a recognized plot with no alt text gets an NA
-# placeholder to preserve the 1-to-1 correspondence between plots and fig.alt
-# elements.
+# collect a printed plot's own alt text; add more plot classes here as needed.
+# Only recognized plots occupy a slot; one without alt text gets an NA
+# placeholder to keep fig.alt aligned with plots.
 record_fig_alt = function(x) {
   alt = if (inherits(x, 'ggplot')) {
-    # x being a ggplot means ggplot2 is loaded; fetch get_alt_text() from its
-    # namespace (available since ggplot2 3.4.0) rather than via ggplot2:: (which
-    # would require declaring ggplot2 as a dependency)
-    getNamespace('ggplot2')$get_alt_text(x)
-  } else return(invisible())  # not a recognized plot: does not map to a figure
-  # treat empty strings as missing (e.g. ggplot2::get_alt_text() returns "")
-  if (length(alt) != 1 || is.na(alt) || !nzchar(alt)) alt = NA_character_
+    getNamespace('ggplot2')$get_alt_text(x)  # ggplot2 must be loaded if x is a ggplot
+  } else return()
+  if (length(alt) != 1 || is.na(alt) || !nzchar(alt)) alt = NA_character_  # '' means unset
   .knitEnv$fig.alt = c(.knitEnv$fig.alt, alt)
   invisible()
 }
 
-# combine the user-supplied fig.alt with the alt text collected from plot objects:
-# the user value wins where it is a non-NA string, and the collected default fills
-# in the rest (element-wise, recycling the user value as fig.alt already does)
+# merge user fig.alt with the collected defaults: user value wins where it is a
+# non-empty string, the collected default fills the rest (element-wise)
 merge_fig_alt = function(user, collected) {
   if (length(collected) == 0 || all(is.na(collected))) return(user)
   if (length(user) == 0) return(collected)
