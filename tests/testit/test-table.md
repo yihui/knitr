@@ -248,6 +248,26 @@ grepl('\\caption{A & B}', as.character(kable(
 [1] TRUE
 ```
 
+kable(caption.pos = "bottom") places the LaTeX caption after the tabular (#1189).
+
+```{r}
+kable(data.frame(x = 1), 'latex', caption = 'Cap', caption.pos = 'bottom')
+```
+```
+\begin{table}
+
+\centering
+\begin{tabular}[t]{r}
+\hline
+x\\
+\hline
+1\\
+\hline
+\end{tabular}
+\caption{Cap}
+\end{table}
+```
+
 kable() adds {} before [] when booktabs = TRUE.
 
 ```{r}
