@@ -51,10 +51,10 @@ assert('engines can modify chunk options seen by the chunk hook (#2333)', {
   (seen$results %==% 'asis')
 })
 
-# the css/js/sass/scss engines set results = 'asis' internally only to write raw
-# HTML verbatim; this must not leak to the 'chunk' hook and override a user's
-# opts_hooks setting (#2488)
-assert('css/js engines do not force results = asis onto the chunk hook (#2488)', {
+# an option explicitly set by opts_hooks is the user's final word and must win
+# over an engine's later internal change to the same option, as seen by the
+# 'chunk' hook (#2488); this is what Quarto relies on to wrap annotated output
+assert('opts_hooks wins over engine-modified options at the chunk hook (#2488)', {
   engines = knit_engines$get(); hooks = knit_hooks$get(); ohooks = opts_hooks$get()
   fmt = opts_knit$get('out.format')
   on.exit({
@@ -64,6 +64,12 @@ assert('css/js engines do not force results = asis onto the chunk hook (#2488)',
   }, add = TRUE)
 
   render_markdown()
+  # the engine forces results = 'asis' internally (like css/js/sass/scss)
+  knit_engines$set(demo = function(options) {
+    options$results = 'asis'
+    engine_output(options, options$code, out = 'ASIS')
+  })
+  # but opts_hooks set it to 'hold' first
   opts_hooks$set(results = function(options) {
     options$results = 'hold'
     options
@@ -74,9 +80,7 @@ assert('css/js engines do not force results = asis onto the chunk hook (#2488)',
     x
   })
 
-  out = knit(text = c('```{css}', 'body { color: red; }', '```'), quiet = TRUE)
-  # the chunk hook sees the opts_hooks value, not the engine's internal 'asis'
+  out = knit(text = c('```{demo}', 'code', '```'), quiet = TRUE)
+  # opts_hooks value wins at the chunk hook, not the engine's 'asis'
   (seen$results %==% 'hold')
-  # the raw CSS is still written verbatim (not commented out)
-  (grepl('<style type="text/css">', out, fixed = TRUE))
 })

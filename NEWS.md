@@ -53,8 +53,6 @@
 
 ## BUG FIXES
 
-- The `css`, `js`, `sass`, and `scss` engines set `results = 'asis'` internally only so that the raw HTML they produce is written verbatim; this internal tweak is no longer leaked to the `chunk` hook. Previously (since #2333) it reached the `chunk` hook unconditionally, overriding any `results` value set earlier by an `opts_hooks` callback (which, e.g., Quarto relies on to wrap output based on inline annotation markers) (thanks, @cderv, #2488).
-
 - `spin()` now inserts a space before the chunk label in the generated chunk header when the label comes from a `## ----label` token (as produced by `purl(documentation = 2)`). Previously it produced an invalid header like ```` ```{rlabel} ````, in which the label was glued to the engine name; on a subsequent `purl()`, `rlabel` was then treated as an engine name and the chunk was mis-parsed. This improves the round-trip stability between `purl()` and `spin()` (thanks, @krlmlr, #2014).
 
 - When tangling (i.e., `purl()`) an R Markdown document that defines `params` in its YAML front matter, chunk options that reference those parameters (e.g., `eval = params$foo`) are now resolved correctly. Previously such a chunk was silently dropped from the tangled script because `params` was not available when the option was evaluated. Parsing the YAML `params` does not involve evaluating any code in the document, so this remains a purely static operation (thanks, @cderv, #1938).
