@@ -195,3 +195,55 @@ assert('convert_chunk_header() handles a non-R engine (#2404)', {
   ))
 })
 file.remove(in_cat)
+
+# label_chunks() assigns labels to unnamed chunks (#2228) ----------------------
+
+assert('label_chunks() labels only unnamed chunks and keeps existing labels', {
+  doc = c(
+    '```{r}', '1 + 1', '```', '',
+    '```{r, echo=FALSE}', 'plot(cars)', '```', '',
+    '```{r named}', 'summary(cars)', '```'
+  )
+  (label_chunks(text = doc) %==% c(
+    '```{r unnamed-chunk-1}', '1 + 1', '```', '',
+    '```{r unnamed-chunk-2, echo=FALSE}', 'plot(cars)', '```', '',
+    '```{r named}', 'summary(cars)', '```'
+  ))
+})
+
+assert('label_chunks() accepts a custom label function receiving options and index', {
+  doc = c('```{r, echo=FALSE}', 'x', '```', '', '```{r}', 'y', '```')
+  out = label_chunks(text = doc, label = function(options, i) paste0('chunk', i))
+  (out %==% c('```{r chunk1, echo=FALSE}', 'x', '```', '', '```{r chunk2}', 'y', '```'))
+  # the options list passed to the function excludes the (missing) label
+  labs = character()
+  label_chunks(text = doc, label = function(options, i) {
+    labs[[length(labs) + 1L]] <<- if (isFALSE(options$echo)) 'noecho' else 'echo'
+    paste0('c', i)
+  })
+  (labs %==% c('noecho', 'echo'))
+})
+
+assert('label_chunks() avoids clashing with labels already in the document', {
+  doc = c('```{r unnamed-chunk-1}', 'a', '```', '', '```{r}', 'b', '```')
+  # the default would generate unnamed-chunk-1, which is taken, so a suffix is added
+  (label_chunks(text = doc) %==% c(
+    '```{r unnamed-chunk-1}', 'a', '```', '', '```{r unnamed-chunk-1-1}', 'b', '```'
+  ))
+})
+
+assert('label_chunks() can read from and write to a file', {
+  f = tempfile(fileext = '.Rmd')
+  xfun::write_utf8(c('```{r}', '1 + 1', '```'), f)
+  out = label_chunks(f, output = identity)
+  (out %==% f)
+  (xfun::read_utf8(f) %==% c('```{r unnamed-chunk-1}', '1 + 1', '```'))
+  file.remove(f)
+})
+
+assert('label_chunks() rejects non-Markdown documents', {
+  f = tempfile(fileext = '.Rnw')
+  xfun::write_utf8(c('<<>>=', 'x <- 1', '@'), f)
+  (has_error(label_chunks(f)))
+  file.remove(f)
+})

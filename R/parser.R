@@ -882,3 +882,112 @@ convert_chunk_header = function(
 deparsed_string = function(exprs) {
   unlist(lapply(exprs, function(x) paste(deparse(x, 500), collapse = ' ')))
 }
+
+#' Assign labels to unnamed code chunks in a document
+#'
+#' Find code chunks that do not have a label and insert a generated label into
+#' their chunk headers. This can be useful because \pkg{knitr} refers to
+#' unnamed chunks by an automatically generated label like \samp{unnamed-chunk-1}
+#' in messages and warnings, which does not tell you much about where the chunk
+#' is. Giving each chunk an explicit label makes such messages more informative,
+#' and also makes the cache and figure file names more meaningful.
+#'
+#' Only chunks in \pkg{knitr}'s Markdown syntax (e.g., \verb{```\{r\}}) are
+#' processed; existing labels are left untouched, and the labels of other chunks
+#' are taken into account so that the newly generated labels do not clash with
+#' them.
+#' @inheritParams convert_chunk_header
+#' @param text A character vector of the document content. If provided, `input`
+#'   is ignored, and the document is assumed to use the Markdown syntax.
+#' @param label A function to generate a label for an unnamed chunk. It is
+#'   called with two arguments: the chunk's options (a list, without the
+#'   `label`), and the index of the unnamed chunk in the document (an integer
+#'   starting from 1). It should return a character string. The default function
+#'   generates labels of the form \samp{prefix-i} using the `prefix` argument.
+#'   If a generated label happens to be already in use, a numeric suffix is
+#'   appended to make it unique.
+#' @param prefix The prefix for the default `label` function. Defaults to the
+#'   global option `unnamed.chunk.label` (see [opts_knit]), i.e.,
+#'   \samp{unnamed-chunk}.
+#' @return A character vector of the document with labels assigned when `output
+#'   = NULL`, otherwise the output file path (invisibly), with the labeled
+#'   content written to it.
+#' @seealso [convert_chunk_header()]
+#' @export
+#' @examples
+#' # a document with two unnamed chunks and one named chunk
+#' doc = c(
+#'   '```{r}', '1 + 1', '```', '',
+#'   '```{r, echo=FALSE}', 'plot(cars)', '```', '',
+#'   '```{r named}', 'summary(cars)', '```'
+#' )
+#' cat(knitr::label_chunks(text = doc), sep = '\n')
+#'
+#' # use a custom label function based on the chunk options
+#' cat(knitr::label_chunks(
+#'   text = doc, label = function(options, i) paste0('fig', i)
+#' ), sep = '\n')
+label_chunks = function(
+  input, text = NULL, output = NULL, label = NULL,
+  prefix = opts_knit$get('unnamed.chunk.label')
+) {
+  if (is.null(text)) {
+    text = xfun::read_utf8(input); ext = xfun::file_ext(input)
+    if (is.function(output)) output = output(input)
+  } else {
+    text = split_lines(text); ext = 'Rmd'
+  }
+  pattern = detect_pattern(text, ext)
+  # only knitr's Markdown chunk syntax is supported
+  if (!identical(pattern, 'md')) stop(
+    'label_chunks() only supports documents using the Markdown chunk syntax, ',
+    'e.g., ```{r}.'
+  )
+  chunk_begin = all_patterns[['md']]$chunk.begin
+  if (is.null(label)) label = function(options, i) paste(prefix, i, sep = '-')
+  if (!is.function(label)) stop('The `label` argument must be a function')
+
+  begins = grep(chunk_begin, text)
+  # collect existing labels first so generated ones will not clash with them
+  chunk_label = function(line) {
+    header = extract_params_src(chunk_begin, line)
+    params = get_chunk_params(header)
+    res = tryCatch(xfun::csv_options(params), error = function(e) list())
+    if (is.character(res$label) && res$label != '') res$label else NA_character_
+  }
+  used = Filter(Negate(is.na), lapply(begins, function(i) chunk_label(text[i])))
+  used = unlist(used)
+
+  i_unnamed = 0L
+  for (i in begins) {
+    header = extract_params_src(chunk_begin, text[i])
+    engine = get_chunk_engine(header)
+    params = get_chunk_params(header)
+    opts = tryCatch(xfun::csv_options(params), error = function(e) list())
+    if (is.character(opts$label) && opts$label != '') next  # already labeled
+    i_unnamed = i_unnamed + 1L
+    opts$label = NULL
+    lab = label(opts, i_unnamed)
+    if (!is.character(lab) || length(lab) != 1) stop(
+      'The `label` function must return a single character string'
+    )
+    # ensure the generated label is unique in the document
+    lab0 = lab; j = 1L
+    while (lab %in% used) { lab = paste(lab0, j, sep = '-'); j = j + 1L }
+    used = c(used, lab)
+    inside = paste0(engine, ' ', insert_chunk_label(params, lab))
+    text[i] = sub(header, inside, text[i], fixed = TRUE)
+  }
+
+  if (is.null(output)) return(text)
+  xfun::write_utf8(text, output)
+  invisible(output)
+}
+
+# insert a label at the front of a chunk's option string (the part after the
+# engine name), adding a comma separator only when other options are present
+insert_chunk_label = function(params, label) {
+  params = sub('^\\s+', '', params)  # drop leading whitespace
+  if (params == '') return(label)
+  if (grepl('^,', params)) paste0(label, params) else paste0(label, ', ', params)
+}
