@@ -16,7 +16,7 @@
     ```
     ````
 
-- When `purl()` comments out the code of a chunk with `eval = FALSE`, the chunk option `comment` can now be used to control the comment character. In particular, `comment = ''` (or `NA`) leaves the code uncommented, so that it remains runnable from the tangled R script (thanks, @alchemit, #2425).
+- When `purl()` comments out the code of a chunk with `eval = FALSE`, the chunk option `comment` can now be used to control the comment character. In particular, `comment = ''` (or `NA`) leaves the code uncommented, so that it remains runnable from the tangled R script (thanks, @alchemit, #2425). Conversely, an explicit `comment` prefix (e.g., `comment = '#'`) now comments out the code even when the chunk is evaluated (`eval = TRUE`), which is useful for keeping a record of code that was run but should not be re-run from the tangled script (thanks, @stla, #1352).
 
 - Option hooks (registered via `opts_hooks$set()`) are now also applied when tangling with `purl()`, not only when knitting. This makes it possible to control tangling based on chunk options, e.g., an option hook on `label` can set `purl = FALSE` for chunks whose labels do not match a certain pattern, so that `purl()` extracts only the desired chunks without modifying the source document (thanks, @cderv, #1903).
 

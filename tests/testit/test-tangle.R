@@ -7,6 +7,10 @@ tangle_text = function(text, out.format = 'markdown') {
   purl(text = text)
 }
 
+# tangle to a bare R script (no roxygen documentation), for testing how chunk
+# options such as `eval` and `comment` affect the code written to the script
+purl0 = function(text) purl(text = text, documentation = 0L)
+
 # Test that when there is no pattern specified, no pattern found, and the file
 # is tangled, purl() returns an empty string rather than the original text.
 # https://github.com/yihui/knitr/pull/1660
@@ -70,10 +74,19 @@ assert('purl() resolves params referenced in chunk options (#1938)', {
 # an eval=FALSE chunk is commented out by default, but comment='' (or NA) keeps
 # the code uncommented so it remains runnable from the script (#2425)
 assert('purl() can keep eval=FALSE code uncommented via comment=""', {
-  purl0 = function(text) purl(text = text, documentation = 0L)
   (purl0(c('```{r, eval=FALSE}', 'x <- 1', '```')) %==% '# x <- 1')
   (purl0(c('```{r, eval=FALSE, comment=""}', 'x <- 1', '```')) %==% 'x <- 1')
   (purl0(c('```{r, eval=FALSE, comment=NA}', 'x <- 1', '```')) %==% 'x <- 1')
+})
+
+# conversely, an explicit comment prefix comments out the code even when the
+# chunk is evaluated (eval=TRUE), e.g. to keep a record of code that was run but
+# should not be re-run from the tangled script (#1352)
+assert('purl() comments out evaluated code when comment prefix is set', {
+  # default: evaluated code is kept uncommented
+  (purl0(c('```{r}', 'x <- 1', '```')) %==% 'x <- 1')
+  # comment='#' comments it out despite eval=TRUE
+  (purl0(c('```{r, comment="#"}', 'x <- 1', '```')) %==% '# x <- 1')
 })
 
 # option hooks are now applied during tangling, so a hook can decide which chunks

@@ -143,10 +143,11 @@ hook_purl = function(before, options, ...) {
     .knitEnv$tangle.params = NULL
   }
 
-  # `options` contains merged chunk options, but we need to check if
-  # `error=TRUE` in local chunk options, so retrieve options from knit_code
-  error = attr(knit_code$get(options$label), 'chunk_opts')[['error']]
-  code = tangle_mask(options$code, options$eval, error)
+  # `options` contains merged chunk options, but we need the *local* chunk
+  # options to tell whether `error` and `comment` were explicitly set (the
+  # merged `comment` is never NULL because of its global default)
+  local_opts = attr(knit_code$get(options$label), 'chunk_opts')
+  code = tangle_mask(options$code, options$eval, local_opts[['error']], local_opts[['comment']])
   if (is.character(output)) {
     code = c(
       if (file.exists(output)) read_utf8(output),
