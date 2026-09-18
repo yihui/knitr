@@ -213,6 +213,22 @@ assert('include_graphics() converts absolute paths relative to the output dir', 
   (has_error(include_graphics(file.path(img_dir, 'nope.png'), error = TRUE)))
 })
 
+assert('include_graphics(copy = TRUE) copies images into the figure dir (#1513)', {
+  owd = getwd(); on.exit(setwd(owd), add = TRUE)
+  # an image in a temporary location outside the document directory
+  src = tempfile(fileext = '.png')
+  grDevices::png(src); plot(1); dev.off()
+  td = tempfile(); dir.create(td); setwd(td)
+  # reference the path via a variable instead of embedding it in the code, so
+  # that backslashes in a Windows temp path are not treated as string escapes
+  rmd = c('```{r figA}', 'include_graphics(src, copy = TRUE)', '```')
+  out = knit(text = rmd, quiet = TRUE)
+  # the copy lives in the chunk's figure dir, named after the chunk label, and
+  # is what the image tag references (not the original temp path)
+  (file.exists('figure/figA-1.png'))
+  (grepl('src="figure/figA-1.png"', out))
+})
+
 if (loadable('png')) assert('raster_dpi_width() computes a width for non-HTML/LaTeX output too (#2385)', {
   f = tempfile(fileext = '.png')
   grDevices::png(f, width = 384, height = 288); plot(1); dev.off()
