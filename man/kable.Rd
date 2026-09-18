@@ -141,6 +141,11 @@ default, an empty separator is used and (for \code{booktabs = TRUE}) an
 to control the separators (it is recycled over the body rows).}
 \item{\code{caption.short}}{A short caption for the table, used in the List of
 Tables (the optional argument of \verb{\\caption[]\{\}}).}
+\item{\code{caption.pos}}{The position of the caption relative to the table,
+either \code{'top'} (the default) or \code{'bottom'}. It only applies to tables
+wrapped in a floating \code{table} environment (i.e., not \code{longtable} or
+\code{xltabular}, which always place the caption at the top). The default can
+be set globally via \code{options(knitr.table.caption.pos = 'bottom')}.}
 \item{\code{table.envir}}{The LaTeX environment that wraps the tabular
 environment, e.g., \code{'table'} (the default when a caption is present) or
 \code{'table*'}.}

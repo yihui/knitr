@@ -94,6 +94,11 @@
 #'   to control the separators (it is recycled over the body rows).}
 #'   \item{`caption.short`}{A short caption for the table, used in the List of
 #'   Tables (the optional argument of `\caption[]{}`).}
+#'   \item{`caption.pos`}{The position of the caption relative to the table,
+#'   either `'top'` (the default) or `'bottom'`. It only applies to tables
+#'   wrapped in a floating `table` environment (i.e., not `longtable` or
+#'   `xltabular`, which always place the caption at the top). The default can
+#'   be set globally via `options(knitr.table.caption.pos = 'bottom')`.}
 #'   \item{`table.envir`}{The LaTeX environment that wraps the tabular
 #'   environment, e.g., `'table'` (the default when a caption is present) or
 #'   `'table*'`.}
@@ -368,8 +373,10 @@ kable_latex = function(
   midrule = getOption('knitr.table.midrule', if (booktabs) '\\midrule' else '\\hline'),
   linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline',
   caption = NULL, caption.short = '', table.envir = if (!is.null(caption)) 'table',
+  caption.pos = getOption('knitr.table.caption.pos', 'top'),
   escape = TRUE, numeric.math = getOption('knitr.table.numeric.math', FALSE), ...
 ) {
+  caption.pos = match.arg(caption.pos, c('top', 'bottom'))
   if (!is.null(align <- attr(x, 'align'))) {
     align = paste(align, collapse = vline)
     align = paste0('{', align, '}')
@@ -400,8 +407,15 @@ kable_latex = function(
   if (!is.character(toprule)) toprule = NULL
   if (!is.character(bottomrule)) bottomrule = NULL
 
+  # in a floating table environment, the caption may be placed either above
+  # (default) or below the tabular; longtable/xltabular have no such environment
+  # and always keep the caption at the top of the table (as a row before the
+  # first rule), so caption.pos does not apply there (#1189)
+  cap_env = !tabular %in% c('longtable', 'xltabular')
+  cap_top = cap_env && caption.pos == 'top'
+  cap_bottom = cap_env && caption.pos == 'bottom'
   paste(c(
-    if (cap_env <- !tabular %in% c('longtable', 'xltabular')) c(env1, cap, centering),
+    if (cap_env) c(env1, if (cap_top) cap, centering),
     sprintf('\n\\begin{%s}%s', tabular, valign), align,
     if (!cap_env && cap != '') c(cap, '\\\\'),
     sprintf('\n%s', toprule), '\n',
@@ -412,6 +426,7 @@ kable_latex = function(
     one_string(apply(x, 1, paste, collapse = ' & '), sprintf('\\\\%s', linesep), sep = ''),
     sprintf('\n%s', bottomrule),
     sprintf('\n\\end{%s}', tabular),
+    if (cap_bottom) cap,
     if (cap_env) env2
   ), collapse = '')
 }
