@@ -102,7 +102,13 @@ spin = function(
       j2 = setdiff(pipe_comment_start(block), j1 + 1)
 
       if (length(j3 <- c(j1, j2))) {
-        block[j1] = paste0(p[1], gsub(rc, '\\3', block[j1]), p[2])
+        # the chunk options/label; the `----` token (from purl(documentation =
+        # 2)) leaves no space before the label (e.g. `## ----label`), unlike the
+        # `#+` token, so trim and re-insert a single space to avoid producing an
+        # invalid header like ```{rlabel} that would be parsed as an engine name
+        # on the next round-trip (#2014)
+        opts = trimws(gsub(rc, '\\3', block[j1]))
+        block[j1] = paste0(p[1], ifelse(nzchar(opts), paste0(' ', opts), ''), p[2])
         block[j2] = paste0(p[1], p[2], '\n', block[j2])
 
         # close each chunk if there are multiple chunks in this block

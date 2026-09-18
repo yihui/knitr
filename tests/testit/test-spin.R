@@ -27,6 +27,19 @@ assert("spin() uses proper number of backticks", {
     c("", "````{r}", "x <- '", "```", "'", "````", ""))
 })
 
+assert("spin() inserts a space before the chunk label from `----` tokens (#2014)", {
+  # purl(documentation = 2) uses `## ----label----`, which leaves no space
+  # before the label; spin() must not produce ```{rlabel} (an invalid header
+  # that would be parsed as an engine name on the next round-trip)
+  (spin_text("## ----chunk----", "1 + 2") %==%
+     c("", "```{r chunk}", "1 + 2", "```", ""))
+  (spin_text("## @knitr lbl", "1 + 2") %==%
+     c("", "```{r lbl}", "1 + 2", "```", ""))
+  # no label: no trailing space after r
+  (spin_text("## ----", "1 + 2") %==%
+     c("", "```{r}", "1 + 2", "```", ""))
+})
+
 assert("spin() removes correctly paired comment delimiters", {
   # lines between `# /*` and `# */` are dropped; the rest is kept
   (spin_text("#' A", "# /*", "#' hidden", "# */", "#' B") %==% c("A", "B"))
