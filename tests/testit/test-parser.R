@@ -241,9 +241,24 @@ assert('label_chunks() can read from and write to a file', {
   file.remove(f)
 })
 
-assert('label_chunks() rejects non-Markdown documents', {
-  f = tempfile(fileext = '.Rnw')
-  xfun::write_utf8(c('<<>>=', 'x <- 1', '@'), f)
-  (has_error(label_chunks(f)))
-  file.remove(f)
+assert('label_chunks() also labels non-Markdown syntaxes (e.g. Sweave)', {
+  doc = c('<<>>=', 'x <- 1', '@', '', '<<named>>=', 'y <- 2', '@')
+  (label_chunks(text = doc) %==% c(
+    '<<unnamed-chunk-1>>=', 'x <- 1', '@', '', '<<named>>=', 'y <- 2', '@'
+  ))
+  # a Sweave chunk with options keeps them and gains a leading label
+  doc2 = c('<<echo=FALSE>>=', 'x', '@')
+  (label_chunks(text = doc2) %==% c('<<unnamed-chunk-1, echo=FALSE>>=', 'x', '@'))
+})
+
+assert('label_chunks() labels R HTML chunks (delimiter is a word, not a symbol)', {
+  doc = c('<!--begin.rcode', '1+1', 'end.rcode-->')
+  # a space is inserted between the `begin.rcode` word and the new label
+  (label_chunks(text = doc) %==% c('<!--begin.rcode unnamed-chunk-1', '1+1', 'end.rcode-->'))
+  doc2 = c('<!--begin.rcode echo=FALSE', '1', 'end.rcode-->')
+  (label_chunks(text = doc2) %==% c('<!--begin.rcode unnamed-chunk-1, echo=FALSE', '1', 'end.rcode-->'))
+})
+
+assert('label_chunks() rejects input without labelable chunks', {
+  (has_error(label_chunks(text = c('no code here', 'just text'))))
 })

@@ -16,7 +16,7 @@ label_chunks(
 \item{input}{File path to the document with code chunks to convert.}
 
 \item{text}{A character vector of the document content. If provided, \code{input}
-is ignored, and the document is assumed to use the Markdown syntax.}
+is ignored, and the syntax is detected from the content.}
 
 \item{output}{The default \code{NULL} will output to console. Other values
 can be a file path to write the converted content into or a function which
@@ -48,10 +48,11 @@ is. Giving each chunk an explicit label makes such messages more informative,
 and also makes the cache and figure file names more meaningful.
 }
 \details{
-Only chunks in \pkg{knitr}'s Markdown syntax (e.g., \verb{```\{r\}}) are
-processed; existing labels are left untouched, and the labels of other chunks
-are taken into account so that the newly generated labels do not clash with
-them.
+The document syntax is detected automatically, and all syntaxes that support
+chunk headers are supported (e.g., R Markdown \verb{```\{r\}}, R Sweave
+\verb{<<>>=}, and R HTML). Existing labels are left untouched, and the labels
+of other chunks are taken into account so that the newly generated labels do
+not clash with them.
 }
 \examples{
 # a document with two unnamed chunks and one named chunk

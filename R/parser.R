@@ -892,13 +892,14 @@ deparsed_string = function(exprs) {
 #' is. Giving each chunk an explicit label makes such messages more informative,
 #' and also makes the cache and figure file names more meaningful.
 #'
-#' Only chunks in \pkg{knitr}'s Markdown syntax (e.g., \verb{```\{r\}}) are
-#' processed; existing labels are left untouched, and the labels of other chunks
-#' are taken into account so that the newly generated labels do not clash with
-#' them.
+#' The document syntax is detected automatically, and all syntaxes that support
+#' chunk headers are supported (e.g., R Markdown \verb{```\{r\}}, R Sweave
+#' \verb{<<>>=}, and R HTML). Existing labels are left untouched, and the labels
+#' of other chunks are taken into account so that the newly generated labels do
+#' not clash with them.
 #' @inheritParams convert_chunk_header
 #' @param text A character vector of the document content. If provided, `input`
-#'   is ignored, and the document is assumed to use the Markdown syntax.
+#'   is ignored, and the syntax is detected from the content.
 #' @param label A function to generate a label for an unnamed chunk. It is
 #'   called with two arguments: the chunk's options (a list, without the
 #'   `label`), and the index of the unnamed chunk in the document (an integer
@@ -932,27 +933,37 @@ label_chunks = function(
   prefix = opts_knit$get('unnamed.chunk.label')
 ) {
   if (is.null(text)) {
-    text = xfun::read_utf8(input); ext = xfun::file_ext(input)
+    text = xfun::read_utf8(input)
+    pattern = detect_pattern(text, xfun::file_ext(input))
     if (is.function(output)) output = output(input)
   } else {
-    text = split_lines(text); ext = 'Rmd'
+    text = split_lines(text)
+    pattern = detect_pattern(text)  # sniff the syntax from the content
   }
-  pattern = detect_pattern(text, ext)
-  # only knitr's Markdown chunk syntax is supported
-  if (!identical(pattern, 'md')) stop(
-    'label_chunks() only supports documents using the Markdown chunk syntax, ',
-    'e.g., ```{r}.'
+  # any syntax with a chunk header can be labeled (Markdown, Sweave, HTML, ...),
+  # but brew has no code chunks and there may be no recognizable syntax at all
+  if (is.null(pattern) || pattern == 'brew') stop(
+    'The input does not contain any code chunk that can be labeled.'
   )
-  chunk_begin = all_patterns[['md']]$chunk.begin
+  markdown_mode = pattern == 'md'  # only ```{engine ...} carries an engine word
+  chunk_begin = all_patterns[[pattern]]$chunk.begin
   if (is.null(label)) label = function(options, i) paste(prefix, i, sep = '-')
   if (!is.function(label)) stop('The `label` argument must be a function')
+
+  # split a chunk header line into its engine (only in Markdown; '' otherwise)
+  # and the option string (which may lead with the label as the first token)
+  split_header = function(line) {
+    header = extract_params_src(chunk_begin, line)
+    if (markdown_mode)
+      list(engine = get_chunk_engine(header), params = get_chunk_params(header))
+    else
+      list(engine = '', params = header)
+  }
 
   begins = grep(chunk_begin, text)
   # collect existing labels first so generated ones will not clash with them
   chunk_label = function(line) {
-    header = extract_params_src(chunk_begin, line)
-    params = get_chunk_params(header)
-    res = tryCatch(xfun::csv_options(params), error = function(e) list())
+    res = tryCatch(xfun::csv_options(split_header(line)$params), error = function(e) list())
     if (is.character(res$label) && res$label != '') res$label else NA_character_
   }
   used = Filter(Negate(is.na), lapply(begins, function(i) chunk_label(text[i])))
@@ -960,10 +971,8 @@ label_chunks = function(
 
   i_unnamed = 0L
   for (i in begins) {
-    header = extract_params_src(chunk_begin, text[i])
-    engine = get_chunk_engine(header)
-    params = get_chunk_params(header)
-    opts = tryCatch(xfun::csv_options(params), error = function(e) list())
+    h = split_header(text[i])
+    opts = tryCatch(xfun::csv_options(h$params), error = function(e) list())
     if (is.character(opts$label) && opts$label != '') next  # already labeled
     i_unnamed = i_unnamed + 1L
     opts$label = NULL
@@ -975,8 +984,12 @@ label_chunks = function(
     lab0 = lab; j = 1L
     while (lab %in% used) { lab = paste(lab0, j, sep = '-'); j = j + 1L }
     used = c(used, lab)
-    inside = paste0(engine, ' ', insert_chunk_label(params, lab))
-    text[i] = sub(header, inside, text[i], fixed = TRUE)
+    inside = insert_chunk_label(h$params, lab)
+    if (markdown_mode) inside = paste0(h$engine, ' ', inside)
+    # replace the header's inner content (the part captured by chunk.begin's
+    # group), preserving the surrounding delimiters; splice by offset because the
+    # inner content may be empty (e.g. ```{r} or <<>>=), which sub() cannot match
+    text[i] = replace_group(chunk_begin, text[i], inside)
   }
 
   if (is.null(output)) return(text)
@@ -990,4 +1003,18 @@ insert_chunk_label = function(params, label) {
   params = sub('^\\s+', '', params)  # drop leading whitespace
   if (params == '') return(label)
   if (grepl('^,', params)) paste0(label, params) else paste0(label, ', ', params)
+}
+
+# replace the text captured by the first group of `pattern` in `line` with
+# `value`, keeping everything outside the group intact
+replace_group = function(pattern, line, value) {
+  m = regexec(pattern, line)[[1]]
+  start = m[2]; len = attr(m, 'match.length')[2]
+  if (start < 0) return(line)  # no capture group matched
+  before = substr(line, 1, start - 1)
+  # if the group directly abuts a word delimiter (e.g. `begin.rcode`) with no
+  # options after it, insert a space so the label does not fuse with the word;
+  # symbolic delimiters like `<<` or `{` need no separator
+  if (grepl('[[:alnum:]]$', before) && !grepl('^\\s', value)) value = paste0(' ', value)
+  paste0(before, value, substr(line, start + len, nchar(line)))
 }
