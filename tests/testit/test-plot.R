@@ -219,8 +219,11 @@ assert('include_graphics(copy = TRUE) copies images into the figure dir (#1513)'
   src = tempfile(fileext = '.png')
   grDevices::png(src); plot(1); dev.off()
   td = tempfile(); dir.create(td); setwd(td)
-  rmd = c('```{r figA}', sprintf('include_graphics("%s", copy = TRUE)', src), '```')
-  out = knit(text = rmd, quiet = TRUE)
+  # pass the path via a variable rather than embedding it in the code, so that
+  # backslashes in a Windows temp path are not treated as string escapes
+  e = new.env(); e$src = src
+  rmd = c('```{r figA}', 'include_graphics(src, copy = TRUE)', '```')
+  out = knit(text = rmd, envir = e, quiet = TRUE)
   # the copy lives in the chunk's figure dir, named after the chunk label, and
   # is what the image tag references (not the original temp path)
   (file.exists('figure/figA-1.png'))

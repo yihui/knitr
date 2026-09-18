@@ -469,16 +469,13 @@ include_graphics = function(
   copy = getOption('knitr.graphics.copy', FALSE)
 ) {
   path = native_encode(path)  # https://d.cosx.org/d/420524
-  # copy external images into the chunk's figure directory (named like the plots
-  # this chunk would generate) and include the copies instead; useful for images
-  # in a temporary directory (e.g. from magick) that would not survive to the
-  # rendering step of non-self-contained output formats (#1513)
+  # name the copies like the plots this chunk would generate (#1513)
   if (copy && length(path)) {
     dest = mapply(
       function(p, i) fig_path(paste0('.', file_ext(p)), number = i),
       path, seq_along(path), USE.NAMES = FALSE
     )
-    dir.create(dirname(dest[1]), showWarnings = FALSE, recursive = TRUE)
+    xfun::dir_create(dirname(dest[1]))
     file.copy(path, dest, overwrite = TRUE)
     path = dest
   }
