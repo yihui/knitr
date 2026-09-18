@@ -783,7 +783,6 @@ record_fig_alt = function(x) {
   } else return()
   if (length(alt) != 1 || is.na(alt) || !nzchar(alt)) alt = NA_character_  # '' means unset
   .knitEnv$fig.alt = c(.knitEnv$fig.alt, alt)
-  invisible()
 }
 
 # merge user fig.alt with the collected defaults: user value wins where it is a
