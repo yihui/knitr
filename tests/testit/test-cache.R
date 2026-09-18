@@ -24,27 +24,28 @@ assert('cache.lazy = TRUE/FALSE works', {
   (knit_lazy(FALSE))
 })
 
-# knit_cache_pack()/knit_cache_unpack() customize how objects are cached; by
-# default they leave the object unchanged
-assert('knit_cache_pack()/knit_cache_unpack() default to identity', {
-  (knit_cache_pack(1:5) %==% 1:5)
-  (knit_cache_unpack('abc') %==% 'abc')
+# process_cache() customizes how objects are cached; by default it leaves the
+# object unchanged in both directions
+assert('process_cache() defaults to identity', {
+  (process_cache(1:5, pack = TRUE) %==% 1:5)
+  (process_cache('abc', pack = FALSE) %==% 'abc')
 })
 
-# register pack/unpack methods for a fake class that mimics an external-pointer
-# object (packed to a plain value on save, restored on load)
+# register a method for a fake class that mimics an external-pointer object
+# (packed to a plain value on save, restored on load); the same generic handles
+# both directions via the pack flag, dispatching on the object's class
 registerS3method(
-  'knit_cache_pack', 'refobj',
-  function(x, ...) structure(list(v = unclass(x)$v), class = 'packed_refobj'),
+  'process_cache', 'refobj',
+  function(x, pack = TRUE, ...) structure(list(v = unclass(x)$v), class = 'packed_refobj'),
   envir = asNamespace('knitr')
 )
 registerS3method(
-  'knit_cache_unpack', 'packed_refobj',
-  function(x, ...) structure(list(v = x$v), class = 'refobj'),
+  'process_cache', 'packed_refobj',
+  function(x, pack = TRUE, ...) structure(list(v = x$v), class = 'refobj'),
   envir = asNamespace('knitr')
 )
 
-assert('objects are cached and restored via knit_cache_pack()/knit_cache_unpack()', {
+assert('objects are cached and restored via process_cache()', {
   d = tempfile('cache-pack'); dir.create(d, showWarnings = FALSE, recursive = TRUE)
   in_dir(d, {
     txt = c(
