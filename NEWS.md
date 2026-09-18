@@ -43,7 +43,7 @@
 
 - `kable()` gained support for the global option `knitr.kable.keep.whitespace`. By default, leading and trailing white spaces in table cells are trimmed, but setting `options(knitr.kable.keep.whitespace = TRUE)` preserves them, which is useful for aligning numbers with a monospace font in the Markdown source (thanks, @jmbarbone, #2066).
 
-- The alt text stored in a plot object is now used as the default value of the chunk option `fig.alt` when the option is not set explicitly. Currently this is supported for \pkg{ggplot2} plots, so alt text set via `ggplot2::labs(alt = ...)` is picked up automatically without having to also set `fig.alt` in the chunk. For chunks with multiple plots, `fig.alt` is matched to plots element-wise, and an explicitly supplied `fig.alt` still takes precedence (you can mix the two with `NA`, e.g., `fig.alt = c(NA, "custom alt text")`) (thanks, @hadley, #2001).
+- The alt text stored in a plot object is now used as the default value of the chunk option `fig.alt` when the option is not set explicitly. Currently this is supported for **ggplot2** plots, so alt text set via `ggplot2::labs(alt = ...)` is picked up automatically without having to also set `fig.alt` in the chunk. For chunks with multiple plots, `fig.alt` is matched to plots element-wise, and an explicitly supplied `fig.alt` still takes precedence (you can mix the two with `NA`, e.g., `fig.alt = c(NA, "custom alt text")`) (thanks, @hadley, #2001).
 
 ## BUG FIXES
 
