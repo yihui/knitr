@@ -2,6 +2,10 @@
 
 ## NEW FEATURES
 
+- The `sql` engine gained a new chunk option `sql.result.fun`, a `function(conn, query)` that produces the chunk's result object, replacing the built-in DBI execution. This makes it possible to return objects that should not be collected eagerly, e.g. a lazy table for further **dplyr** processing: `sql.result.fun = function(conn, query) dplyr::tbl(conn, dbplyr::sql(query))`. Combined with `output.var`, the (lazy) object is assigned to a variable without collecting it, while the chunk still benefits from the `sql` engine's syntax highlighting (thanks, @ramnathv, #1778).
+
+- The `sql` engine gained a new chunk option `sql.interlaced`. When set to `TRUE`, a chunk containing multiple SQL statements (separated by semicolons) is split into individual statements that are executed in order, and the source and result of each statement are emitted as an alternating (interlaced) sequence of blocks, similar to how an R chunk echoes each expression with its result. Previously, a multi-statement `sql` chunk submitted all statements at once, and depending on the DBI backend, results after the first statement could be silently dropped. The statement splitting is done by a new pure-R helper that ignores semicolons inside string literals, quoted identifiers, and comments (no external parser is required). If any statement fails, execution stops at that statement (respecting the `error` chunk option), and `output.var` (if set) captures the list of results from all executed statements (thanks, @BrianDiggs, #2093).
+
 - `kable()` operating in LaTeX mode can now optionally typeset numeric columns in math mode for improved rendering of minus signs, infinite values, and scientific notation; in particular, decimal and thousands separator commas are wrapped in braces (`{}`) to preserve spacing. To enable, use `kable(..., format = "latex", numeric.math = TRUE)` or set `options(knitr.table.numeric.math = TRUE)` globally (thanks, @krivit, #1709).
 
 - A code chunk that returns a `shiny.tag` or `shiny.tag.list` object (e.g., from **htmltools**) can now have a figure caption and be cross-referenced, in the same way as **htmlwidgets**. For example, the chunk below produces a captioned figure that can be referenced via `\@ref(fig:mytag)` in **bookdown** (thanks, @cpsievert, #1650):
@@ -44,8 +48,25 @@
 - `kable()` gained support for the global option `knitr.kable.keep.whitespace`. By default, leading and trailing white spaces in table cells are trimmed, but setting `options(knitr.kable.keep.whitespace = TRUE)` preserves them, which is useful for aligning numbers with a monospace font in the Markdown source (thanks, @jmbarbone, #2066).
 
 - The alt text stored in a plot object is now used as the default value of the chunk option `fig.alt` when the option is not set explicitly. Currently this is supported for **ggplot2** plots, so alt text set via `ggplot2::labs(alt = ...)` is picked up automatically without having to also set `fig.alt` in the chunk. For chunks with multiple plots, `fig.alt` is matched to plots element-wise, and an explicitly supplied `fig.alt` still takes precedence (you can mix the two with `NA`, e.g., `fig.alt = c(NA, "custom alt text")`) (thanks, @hadley, #2001).
+- `read_chunk()` can now read code chunks from a **knitr** source document (e.g., an `.Rmd` or `.Rnw` file) in addition to an R script. The code chunks in the document are read in and keyed by their chunk labels, so they can be reused in the current document via chunk label references, just like chunks read from an R script. The label can be provided either in the chunk header (e.g., `{r foo}`) or via YAML chunk options (e.g., `#| label: foo`) (thanks, @cderv, #2041).
+
+- `kable()` gained an argument `na` to control how missing values (`NA`) are displayed in a single table, e.g. `kable(x, na = '')` to hide `NA`s or `kable(x, na = '-')` to show them as dashes. This is the per-call equivalent of the global option `knitr.kable.NA`, which it defaults to, and overrides the option when both are set (thanks, @mbojan, #1813).
 
 ## BUG FIXES
+
+- `spin()` now inserts a space before the chunk label in the generated chunk header when the label comes from a `## ----label` token (as produced by `purl(documentation = 2)`). Previously it produced an invalid header like ```` ```{rlabel} ````, in which the label was glued to the engine name; on a subsequent `purl()`, `rlabel` was then treated as an engine name and the chunk was mis-parsed. This improves the round-trip stability between `purl()` and `spin()` (thanks, @krlmlr, #2014).
+
+- When tangling (i.e., `purl()`) an R Markdown document that defines `params` in its YAML front matter, chunk options that reference those parameters (e.g., `eval = params$foo`) are now resolved correctly. Previously such a chunk was silently dropped from the tangled script because `params` was not available when the option was evaluated. Parsing the YAML `params` does not involve evaluating any code in the document, so this remains a purely static operation (thanks, @cderv, #1938).
+
+- The `ffmpeg` animation hook (`hook_ffmpeg_html()`) now signals an error when the `ffmpeg` command exits with a non-zero status (e.g., when the installed `ffmpeg` version does not support the `-crf` option). Previously the failure was ignored, so the document would reference a video file that was never created, and with caching enabled the broken result could be cached (thanks, @kcarnold, #2130).
+
+- `include_graphics()` with a `dpi` argument now sets the image width for Pandoc output formats other than HTML and LaTeX (e.g., Word/`docx`, ODT). The width is computed from the image's pixel dimensions and `dpi`, and emitted as a physical size in inches (e.g., `{width=2in}`), which Pandoc understands. Previously the width was only computed for HTML and LaTeX output, so `dpi` had no effect for other formats (thanks, @cderv, #2385).
+
+- `plot_crop()` now emits a warning when `pdfcrop` is found but returns a non-zero exit status (e.g., because GhostScript is missing or the input is corrupt). Previously such failures were silent (thanks, @JackCaster, @cderv, #2381).
+
+- When a language engine modifies the chunk options (e.g., sets `options$results = 'asis'` before calling `engine_output()`), the modified options are now also visible to the `chunk` hook, not only the `output` hook. Previously the `chunk` hook received the options as declared in the chunk header, which could lead to inconsistent behavior between the two hooks (thanks, @cderv, #2333).
+
+- `convert_chunk_header()` now decides its default `type` from the extension of the `output` file when one is provided, so converting an `.Rmd` document to a `.qmd` output (e.g., `convert_chunk_header('foo.Rmd', output = 'foo.qmd')`) defaults to `type = "yaml"` as expected. Previously the default was based solely on the input extension (thanks, @cderv, #2405).
 
 - `spin()` now checks that the start (`# /*`) and end (`# */`) comment delimiters are correctly paired and ordered. Previously, only the *counts* of start and end delimiters were compared, so mis-ordered delimiters (e.g., an end delimiter appearing before a start delimiter) could silently drop the lines in between without any error. Now `spin()` signals an error that reports the line number of each unmatched delimiter (thanks, @dewittpe, #1801, #1802).
 
@@ -58,6 +79,12 @@
 - Subfigures (created via `fig.subcap`) that span multiple rows are now separated by `\\` instead of `\newline` in LaTeX output. Inside a centered figure (`fig.align = 'center'`), `\newline` did not respect the alignment and left the subfigures left-aligned; `\\` centers them correctly (thanks, @StephenGerry, #1907).
 
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
+
+- A chunk reference (e.g., `<<label>>`) can now be embedded in a line together with other code (e.g., `mtcars %>% <<label>>`). Previously, a reference was only recognized when it occupied a whole line by itself, so a reference followed by an operator such as `%>%` was left unexpanded. A referenced chunk that spans multiple lines is spliced into the line, with continuation lines indented to match (thanks, @Rich-F-G-Mills, #2034).
+
+## MINOR CHANGES
+
+- The `options` and `inline` arguments passed to `knit_print()` methods are now documented in `?knit_print`, so custom methods that declare them explicitly (e.g., `knit_print.foo <- function(x, ..., options)`) no longer trigger `R CMD check` warnings about undocumented arguments (thanks, @maxheld83, #1565).
 
 # CHANGES IN knitr VERSION 1.52
 

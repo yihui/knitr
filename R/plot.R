@@ -364,7 +364,13 @@ plot_crop = function(x, quiet = TRUE) {
 
   if (!quiet) message('cropping ', x)
   if (is_pdf) {
-    system2('pdfcrop', shQuote(c(x, x)), stdout = if (quiet) FALSE else "")
+    # pdfcrop may be found but still fail (e.g. GhostScript missing, corrupt
+    # input); warn instead of failing silently (#2381)
+    status = system2('pdfcrop', shQuote(c(x, x)), stdout = if (quiet) FALSE else "")
+    if (!identical(status, 0L)) warning(
+      "Failed to crop '", x2, "': pdfcrop returned a non-zero exit status (", status, ").",
+      call. = FALSE
+    )
   } else if (loadable('magick')) {
     img = magick::image_read(x)
     magick::image_write(magick::image_trim(img), x)
@@ -532,10 +538,14 @@ raster_dpi_width = function(path, dpi) {
     if (!is.numeric(dpi)) return()  # there is no dpi info in JPEG
     w = ncol(jpeg::readJPEG(path, native = TRUE))
   }
-  if (is_latex_output()) {
-    xfun::decimal_dot(paste0(round(w / dpi, 2), 'in'))
-  } else if (is_html_output()) {
+  if (is_html_output()) {
+    # HTML <img width> takes a bare pixel value
     round(w / (dpi / 96))
+  } else {
+    # for LaTeX and other Pandoc output formats (e.g. Word, ODT), use a
+    # physical width in inches; Pandoc understands the unit in the image
+    # attribute syntax ![](){width=...in} (#2385)
+    xfun::decimal_dot(paste0(round(w / dpi, 2), 'in'))
   }
 }
 

@@ -53,6 +53,47 @@ assert('read_chunk() can identify chunk labels', {
 
 knit_code$restore()
 
+read_chunk(lines = c('```{r foo}', '1+1', '```', '', 'text', '',
+                     '```{r bar, echo=FALSE}', 'x <- 2', 'x * 3', '```'),
+           path = 'a.Rmd')
+assert('read_chunk() reads code chunks from an R Markdown document (#2041)', {
+  (knit_code$get() %==% list(foo = '1+1', bar = c('x <- 2', 'x * 3')))
+})
+
+knit_code$restore()
+
+read_chunk(lines = c('<<baz>>=', 'y <- 1', '@'), path = 'a.Rnw')
+assert('read_chunk() reads code chunks from an R Sweave document (#2041)', {
+  (knit_code$get() %==% list(baz = 'y <- 1'))
+})
+
+knit_code$restore()
+
+read_chunk(lines = c('```{r}', '#| label: foo', '#| echo: false', '1+1', '```'),
+           path = 'a.Rmd')
+assert('read_chunk() reads the label from YAML chunk options and strips them (#2041)', {
+  (knit_code$get() %==% list(foo = '1+1'))
+})
+
+knit_code$restore()
+
+# an unlabeled chunk gets an automatic label; text and inline code are ignored
+read_chunk(lines = c('```{r}', '1+1', '```'), path = 'a.Rmd')
+assert('read_chunk() gives unlabeled document chunks an automatic label (#2041)', {
+  (length(nm <- names(knit_code$get())) == 1L)
+  (grepl('^unnamed-chunk-', nm))
+})
+
+knit_code$restore()
+
+# a plain R script is still parsed as a script, not misdetected as a document
+read_chunk(lines = c('# ---- foo ----', 'x <- 1  # ```{r} in a comment'), path = 'a.R')
+assert('read_chunk() still parses .R scripts with @knitr markers (#2041)', {
+  (knit_code$get() %==% list(foo = 'x <- 1  # ```{r} in a comment'))
+})
+
+knit_code$restore()
+
 # chunk references with <<>> --------------------------------------------------
 
 knit_code$restore(list(
@@ -68,6 +109,22 @@ assert('parse_chunk() preserves indentation', {
 assert('parse_chunk() ignores labels not found in knit_code', {
   # chunk 'e' doesn't exist
   (pc(c('3*3', '<<a>>', '  <<e>>', '<<b>>  ')) %==% c("3*3", "1+1", "  <<e>>", "2-2"))
+})
+
+assert('parse_chunk() expands references embedded in a line (#2034)', {
+  # a reference followed by other code on the same line
+  (pc(c('mtcars %>%', '  <<a>> %>%', '  <<b>>')) %==% c('mtcars %>%', '  1+1 %>%', '  2-2'))
+  # multiple references on one line
+  (pc('<<a>> + <<b>>') %==% '1+1 + 2-2')
+  # unknown labels are left untouched
+  (pc('foo(<<e>>)') %==% 'foo(<<e>>)')
+})
+
+assert('parse_chunk() splices multi-line chunks embedded in a line', {
+  # chunk 'd' expands to multiple lines; a trailing reference splices cleanly
+  (pc('x %>% <<d>>') %==% c('x %>% function() {', '  if (T)', '    1+1', '}'))
+  # continuation lines are indented to the leading whitespace of the host line
+  (pc('  y <- <<d>>') %==% c('  y <- function() {', '    if (T)', '      1+1', '  }'))
 })
 
 knit_code$restore()
@@ -91,3 +148,50 @@ assert('duplicated labels are allowed after setting an option', {
 options(op)
 
 knit_code$restore()
+
+# convert_chunk_header() --------------------------------------------------------
+
+in_rmd = tempfile(fileext = '.Rmd')
+xfun::write_utf8(c('```{r, echo = FALSE, fig.width = 10}', '1 + 1', '```'), in_rmd)
+
+assert('convert_chunk_header() uses the output extension to pick the default type (#2405)', {
+  # converting .Rmd -> .qmd defaults to YAML, keyed on the *output* extension
+  out_qmd = xfun::with_ext(in_rmd, 'qmd')
+  convert_chunk_header(in_rmd, output = out_qmd)
+  (xfun::read_utf8(out_qmd) %==% c('```{r}', '#| echo: false', '#| fig-width: 10', '1 + 1', '```'))
+  # a function output is honoured the same way
+  convert_chunk_header(in_rmd, output = function(f) out_qmd)
+  (xfun::read_utf8(out_qmd) %==% c('```{r}', '#| echo: false', '#| fig-width: 10', '1 + 1', '```'))
+  file.remove(out_qmd)
+  # without a .qmd output, the default is still multiline
+  (convert_chunk_header(in_rmd) %==%
+     c('```{r}', '#| echo = FALSE,', '#| fig.width = 10', '1 + 1', '```'))
+  # an explicit type always wins over the extension-based default
+  out_qmd2 = xfun::with_ext(in_rmd, 'qmd')
+  convert_chunk_header(in_rmd, output = out_qmd2, type = 'wrap')
+  (xfun::read_utf8(out_qmd2) %==%
+     c('```{r}', '#| echo = FALSE, fig.width = 10', '1 + 1', '```'))
+  file.remove(out_qmd2)
+})
+
+file.remove(in_rmd)
+
+# a non-R engine (e.g. cat) is handled: the engine is kept in the fence and its
+# options are moved to the option lines (#2404)
+in_cat = tempfile(fileext = '.Rmd')
+xfun::write_utf8(
+  c('```{cat, engine.opts = list(file = "some_file.qmd"), class.source = "md"}',
+    'some text', '```'),
+  in_cat
+)
+assert('convert_chunk_header() handles a non-R engine (#2404)', {
+  (convert_chunk_header(in_cat) %==% c(
+    '```{cat}', '#| engine.opts = list(file = "some_file.qmd"),',
+    '#| class.source = "md"', 'some text', '```'
+  ))
+  (convert_chunk_header(in_cat, type = 'yaml') %==% c(
+    '```{cat}', '#| engine-opts: !expr list(file = "some_file.qmd")',
+    '#| class-source: md', 'some text', '```'
+  ))
+})
+file.remove(in_cat)

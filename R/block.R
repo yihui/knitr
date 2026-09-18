@@ -56,6 +56,7 @@ call_block = function(block) {
     params[['code']] = parse_chunk(params[['code']]) # parse sub-chunk references
 
   ohooks = opts_hooks$get()
+  params0 = params  # remember options before opts_hooks so we can detect changes
   for (opt in names(ohooks)) {
     hook = ohooks[[opt]]
     if (!is.function(hook)) {
@@ -66,6 +67,11 @@ call_block = function(block) {
     if (!is.list(params))
       stop("The option hook '", opt, "' should return a list of chunk options")
   }
+  # options changed by opts_hooks are the user's final word: record them so that
+  # they take precedence over any later internal changes an engine makes to the
+  # same options before they reach the 'chunk' hook (#2488)
+  changed = Filter(function(o) !identical(params[[o]], params0[[o]]), union(names(params0), names(params)))
+  attr(params, 'opts_hooks_changed') = changed
 
   params = fix_options(params)  # for compatibility
 
@@ -163,6 +169,16 @@ block_exec = function(options) {
     options$yaml.code = NULL
   }
   output = in_input_dir(engine(options))
+  # the engine may have modified the chunk options (e.g. set results = 'asis');
+  # recover them (attached by engine_output()) so the 'chunk' hook sees the same
+  # options as the 'output' hook (#2333). However, options that opts_hooks
+  # explicitly set are the user's final word and must not be silently overridden
+  # by the engine's internal changes, so re-apply them on top (#2488)
+  if (is.list(opts <- attr(output, 'chunk_opts'))) {
+    keep = attr(options, 'opts_hooks_changed')
+    opts[keep] = options[keep]
+    options = opts
+  }
   if (is.list(output)) output = unlist(output)
   res.after = run_hooks(before = FALSE, options)
   output = paste(c(res.before, output, res.after), collapse = '')

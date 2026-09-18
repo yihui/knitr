@@ -79,7 +79,11 @@ cache_engines = new_defaults()
 #' # expert use only
 #' engine_output(opts_chunk$merge(list(engine = 'python')), out = list(structure(list(src = '1 + 1'), class = 'source'), '2'))
 engine_output = function(options, code, out, extra = NULL) {
-  if (missing(code) && is.list(out)) return(unlist(sew(out, options)))
+  # attach the (possibly engine-modified) options to the returned output so that
+  # block_exec() can pass them on to the 'chunk' hook, keeping it consistent with
+  # the 'output' hook (#2333)
+  with_opts = function(res) structure(res, chunk_opts = options)
+  if (missing(code) && is.list(out)) return(with_opts(unlist(sew(out, options))))
   if (!is.logical(options$echo)) code = code[options$echo]
   if (length(code) != 1L) code = one_string(code)
   if (options$engine == 'sas' && length(out) > 1L && !grepl('[[:alnum:]]', out[2]))
@@ -91,13 +95,13 @@ engine_output = function(options, code, out, extra = NULL) {
     out = sub('\\.\\.\\.\n+', '', out)
     out = sub('\n\\. \nend of do-file\n', '', out)
   }
-  one_string(c(
+  with_opts(one_string(c(
     if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
     if (options$results != 'hide' && !is_blank(out)) {
       if (options$engine == 'highlight') out else sew.character(out, options)
     },
     extra
-  ))
+  )))
 }
 
 ## command-line tools
@@ -442,7 +446,12 @@ eng_highlight = function(options) {
   # e.g. engine.opts can be '-S matlab -O latex'
   if (is.null(options$engine.opts)) options$engine.opts = '-S text'
   options$engine.opts[1L] = paste('-f', options$engine.opts[1L])
-  options$echo = FALSE; options$results = 'asis'  # do not echo source code
+  # do not echo source code; note we must NOT set options$results = 'asis' here:
+  # the highlight output already bypasses sew() (see the 'highlight' branch in
+  # engine_output()), so 'asis' has no effect on the output, but since #2333 the
+  # engine-modified options reach the 'chunk' hook, where 'asis' would suppress
+  # the surrounding \begin{knitrout} wrapper in LaTeX output
+  options$echo = FALSE
   res = eng_interpreted(options)
   if (out_format('latex')) {
     highlight_header()
@@ -562,6 +571,53 @@ eng_js = eng_html_asset('<script>', '</script>')
 # include css in a style tag (ignore if not html output)
 eng_css = eng_html_asset('<style type="text/css">', '</style>')
 
+# split a string of SQL code into individual statements on top-level semicolons,
+# ignoring semicolons inside string literals ('...'), quoted identifiers ("..."
+# and `...`), line comments (-- ... and # ...), and block comments (/* ... */).
+# a pure-R alternative to external parsers (e.g. sqlparse); it does not validate
+# the SQL, only tokenizes enough to find statement boundaries. returns a
+# character vector of statements with surrounding whitespace trimmed and empty
+# statements dropped.
+split_sql = function(code) {
+  x = one_string(code)
+  chars = strsplit(x, '', fixed = TRUE)[[1]]
+  n = length(chars)
+  stmts = character(); buf = character(); i = 1L
+  # states: 'code', 'sq' (single quote), 'dq' (double quote), 'bt' (backtick),
+  # 'line' (line comment), 'block' (block comment)
+  state = 'code'
+  peek = function(k) if (i + k <= n) chars[i + k] else ''
+  while (i <= n) {
+    ch = chars[i]
+    if (state == 'code') {
+      if (ch == "'") { state = 'sq' }
+      else if (ch == '"') { state = 'dq' }
+      else if (ch == '`') { state = 'bt' }
+      else if (ch == '-' && peek(1) == '-') { state = 'line'; buf = c(buf, ch); i = i + 1L; ch = peek(0) }
+      else if (ch == '#') { state = 'line' }
+      else if (ch == '/' && peek(1) == '*') { state = 'block'; buf = c(buf, ch); i = i + 1L; ch = peek(0) }
+      else if (ch == ';') {
+        stmts = c(stmts, paste0(buf, collapse = '')); buf = character(); i = i + 1L; next
+      }
+    } else if (state == 'sq') {
+      # '' is an escaped single quote inside a single-quoted string
+      if (ch == "'") { if (peek(1) == "'") { buf = c(buf, ch); i = i + 1L; ch = peek(0) } else state = 'code' }
+    } else if (state == 'dq') {
+      if (ch == '"') { if (peek(1) == '"') { buf = c(buf, ch); i = i + 1L; ch = peek(0) } else state = 'code' }
+    } else if (state == 'bt') {
+      if (ch == '`') state = 'code'
+    } else if (state == 'line') {
+      if (ch == '\n') state = 'code'
+    } else if (state == 'block') {
+      if (ch == '*' && peek(1) == '/') { buf = c(buf, ch); i = i + 1L; ch = peek(0); state = 'code' }
+    }
+    buf = c(buf, ch); i = i + 1L
+  }
+  stmts = c(stmts, paste0(buf, collapse = ''))
+  stmts = trimws(stmts)
+  stmts[stmts != '']
+}
+
 # perform basic sql parsing to determine if a sql query is an update query
 is_sql_update_query = function(query) {
   query = one_string(query)
@@ -628,17 +684,16 @@ eng_sql = function(options) {
   sql = one_string(options$code)
   params = options$params
 
-  query = interpolate_from_env(conn, sql)
-  if (isFALSE(options$eval)) return(engine_output(options, query, ''))
-
-  # whether the query is a statement that does not return a result set (e.g.,
-  # INSERT/UPDATE/CREATE); auto-detected, but can be overridden via the chunk
-  # option sql.is_statement when the detection is wrong (e.g., SELECT ... INTO)
-  is_statement = options$sql.is_statement
-  if (is.null(is_statement)) is_statement = is_sql_update_query(query)
-  if (!is.logical(is_statement)) stop2(
+  # whether a query is a statement that does not return a result set (e.g.,
+  # INSERT/UPDATE/CREATE); auto-detected per query, but can be overridden for the
+  # whole chunk via the option sql.is_statement (e.g., SELECT ... INTO)
+  is_statement_opt = options$sql.is_statement
+  if (!is.null(is_statement_opt) && !is.logical(is_statement_opt)) stop2(
     "The 'sql.is_statement' chunk option must be TRUE or FALSE."
   )
+  query_is_statement = function(query) {
+    if (is.null(is_statement_opt)) is_sql_update_query(query) else is_statement_opt
+  }
 
   # extra arguments to be passed to the DBI query functions (dbExecute(),
   # dbSendQuery(), dbGetQuery()). The chunk option sql.args may be a named list
@@ -647,96 +702,162 @@ eng_sql = function(options) {
   # defaults are otherwise preserved.
   extra_args = options$sql.args %n% list()
 
-  data = tryCatch({
-    if (is_statement) {
-      # dbExecute() returns the number of rows affected by the statement
-      do.call(DBI::dbExecute, c(list(conn, query), extra_args))
-    } else if (is.null(varname) && max.print > 0) {
-      # execute query -- when we are printing with an enforced max.print we
-      # use dbFetch so as to only pull down the required number of records
-      res = do.call(DBI::dbSendQuery, c(list(conn, query), extra_args))
-      data = DBI::dbFetch(res, n = max.print)
-      DBI::dbClearResult(res)
-      data
+  # an optional user function to produce the result object from the connection
+  # and query, replacing the built-in DBI execution. This makes it possible to
+  # return objects that should not be collected eagerly, e.g. a lazy table:
+  # sql.result.fun = function(conn, query) dplyr::tbl(conn, dplyr::sql(query))
+  # (#1778)
+  result_fun = options$sql.result.fun
+  if (!is.null(result_fun) && !is.function(result_fun)) stop2(
+    "The 'sql.result.fun' chunk option must be a function(conn, query)."
+  )
 
-    } else {
-      if (length(params) == 0) {
-        do.call(DBI::dbGetQuery, c(list(conn, query), extra_args))
+  # run a single (already interpolated) query and return the result data, or the
+  # captured error object when the chunk option error = TRUE
+  run_query = function(query, is_statement) {
+    tryCatch({
+      if (!is.null(result_fun)) {
+        # delegate to the user function; it decides whether/how to execute
+        result_fun(conn, query)
+      } else if (is_statement) {
+        # dbExecute() returns the number of rows affected by the statement
+        do.call(DBI::dbExecute, c(list(conn, query), extra_args))
+      } else if (is.null(varname) && max.print > 0) {
+        # execute query -- when we are printing with an enforced max.print we
+        # use dbFetch so as to only pull down the required number of records
+        res = do.call(DBI::dbSendQuery, c(list(conn, query), extra_args))
+        d = DBI::dbFetch(res, n = max.print)
+        DBI::dbClearResult(res)
+        d
       } else {
-        # If params option is provided, parameters are not interplolated
-        do.call(DBI::dbGetQuery, c(list(conn, sql, params = params), extra_args))
+        if (length(params) == 0) {
+          do.call(DBI::dbGetQuery, c(list(conn, query), extra_args))
+        } else {
+          # If params option is provided, parameters are not interpolated
+          do.call(DBI::dbGetQuery, c(list(conn, sql, params = params), extra_args))
+        }
       }
+    }, error = function(e) {
+      if (!options$error) stop(e)
+      e
+    })
+  }
+
+  # render the result data of a single query to an output string; returns a list
+  # with the output text and whether it should be treated as raw ('asis')
+  render_output = function(data) {
+    asis = FALSE
+    # a custom result function may return an object that should not be collected
+    # (e.g. a lazy table); do not coerce it through kable/head, just print it
+    # using its own method (which typically shows a preview) (#1778)
+    if (!is.null(result_fun)) {
+      output = if (is.null(varname)) capture.output(print(data))
+      return(list(output = output, asis = asis))
     }
-  }, error = function(e) {
-    if (!options$error) stop(e)
-    e
-  })
+    output = if (length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)) capture.output({
+
+      # apply max.print to data
+      display_data = if (max.print == -1) data else head(data, n = max.print)
+
+      # get custom sql print function
+      sql.print = opts_knit$get('sql.print')
+
+      # use kable for markdown
+      if (!is.null(sql.print)) {
+        asis = TRUE
+        cat(sql.print(data))
+      } else if (out_format('markdown')) {
+
+        # we are going to output raw markdown so set results = 'asis'
+        asis = TRUE
+
+        # force left alignment if the first column is an incremental id column
+        is_id = function(x) {
+          is.numeric(x) && length(x) > 1 && !anyNA(x) && all(diff(x) == 1)
+        }
+        if (is_id(display_data[[1]])) display_data[[1]] = as.character(display_data[[1]])
+
+        # wrap html output in a div so special styling can be applied
+        add_div = is_html_output() && getOption('knitr.sql.html_div', TRUE)
+        if (add_div) cat('<div class="knitsql-table">\n')
+
+        # determine records caption
+        caption = options$tab.cap
+        if (is.null(caption)) {
+          rows = nrow(data)
+          rows_formatted = formatC(rows, format = "d", big.mark = ',')
+          caption = if (max.print == -1 || rows < max.print) {
+            paste(rows_formatted, "records")
+          } else {
+            paste("Displaying records 1 -", rows_formatted)
+          }
+        }
+        # disable caption
+        if (identical(caption, NA)) caption = NULL
+
+        # print using kable
+        print(kable(display_data, caption = caption))
+
+        # terminate div
+        if (add_div) cat("\n</div>\n")
+
+        # otherwise use tibble if it's available
+      } else if (loadable('tibble')) {
+        print(tibble::as_tibble(display_data), n = max.print)
+
+      } else print(display_data) # fallback to standard print
+    }) else if (is.numeric(data) && length(data) == 1 && is.null(varname)) {
+      # a statement (no result set) returns the number of affected rows via
+      # dbExecute(); it is always available via output.var, and is additionally
+      # shown as normal (code-like) output only if the chunk option
+      # sql.statement.msg is set to a template string, where '{n}' is replaced by
+      # the number (opt-in, so existing documents are not affected)
+      msg = options$sql.statement.msg
+      if (is.character(msg)) sub('{n}', data, msg, fixed = TRUE)
+    }
+    list(output = output, asis = asis)
+  }
+
+  query = interpolate_from_env(conn, sql)
+  if (isFALSE(options$eval)) return(engine_output(options, query, ''))
+
+  # interlaced mode: split the chunk into individual statements, run each in
+  # order, and emit an alternating sequence of source and output blocks (like a
+  # normal R chunk echoing each expression with its result) (#2093)
+  if (isTRUE(options$sql.interlaced)) {
+    statements = split_sql(options$code)
+    if (length(statements) > 1) {
+      results = list(); blocks = character()
+      for (stmt in statements) {
+        q = interpolate_from_env(conn, stmt)
+        data = run_query(q, query_is_statement(q))
+        opts_k = options
+        # each statement gets its own source block (interpolated if requested)
+        src = if (isTRUE(options$sql.show_interpolated)) q else stmt
+        if (inherits(data, 'error')) {
+          blocks = c(blocks, engine_output(opts_k, src, one_string(data)))
+          break  # stop at the first failing statement, as R chunks do
+        }
+        results[[length(results) + 1L]] = data
+        r = render_output(data)
+        if (r$asis) opts_k$results = 'asis'
+        out = if (opts_k$results == 'hide') NULL else r$output
+        blocks = c(blocks, engine_output(opts_k, src, out))
+      }
+      # output.var captures the list of all statement results in interlaced mode
+      if (!is.null(varname)) assign(varname, results, envir = knit_global())
+      return(one_string(blocks))
+    }
+  }
+
+  data = run_query(query, query_is_statement(query))
 
   if (inherits(data, "error"))
     return(engine_output(options, query, one_string(data)))
 
-  # create output if needed (we have data and we aren't assigning it to a variable)
-  output = if (length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)) capture.output({
-
-    # apply max.print to data
-    display_data = if (max.print == -1) data else head(data, n = max.print)
-
-    # get custom sql print function
-    sql.print = opts_knit$get('sql.print')
-
-    # use kable for markdown
-    if (!is.null(sql.print)) {
-      options$results = 'asis'
-      cat(sql.print(data))
-    } else if (out_format('markdown')) {
-
-      # we are going to output raw markdown so set results = 'asis'
-      options$results = 'asis'
-
-      # force left alignment if the first column is an incremental id column
-      is_id = function(x) {
-        is.numeric(x) && length(x) > 1 && !anyNA(x) && all(diff(x) == 1)
-      }
-      if (is_id(display_data[[1]])) display_data[[1]] = as.character(display_data[[1]])
-
-      # wrap html output in a div so special styling can be applied
-      add_div = is_html_output() && getOption('knitr.sql.html_div', TRUE)
-      if (add_div) cat('<div class="knitsql-table">\n')
-
-      # determine records caption
-      caption = options$tab.cap
-      if (is.null(caption)) {
-        rows = nrow(data)
-        rows_formatted = formatC(rows, format = "d", big.mark = ',')
-        caption = if (max.print == -1 || rows < max.print) {
-          paste(rows_formatted, "records")
-        } else {
-          paste("Displaying records 1 -", rows_formatted)
-        }
-      }
-      # disable caption
-      if (identical(caption, NA)) caption = NULL
-
-      # print using kable
-      print(kable(display_data, caption = caption))
-
-      # terminate div
-      if (add_div) cat("\n</div>\n")
-
-      # otherwise use tibble if it's available
-    } else if (loadable('tibble')) {
-      print(tibble::as_tibble(display_data), n = max.print)
-
-    } else print(display_data) # fallback to standard print
-  }) else if (is.numeric(data) && length(data) == 1 && is.null(varname)) {
-    # a statement (no result set) returns the number of affected rows via
-    # dbExecute(); it is always available via output.var, and is additionally
-    # shown as normal (code-like) output only if the chunk option
-    # sql.statement.msg is set to a template string, where '{n}' is replaced by
-    # the number (opt-in, so existing documents are not affected)
-    msg = options$sql.statement.msg
-    if (is.character(msg)) sub('{n}', data, msg, fixed = TRUE)
-  }
+  r = render_output(data)
+  if (r$asis) options$results = 'asis'
+  output = r$output
   if (options$results == 'hide') output = NULL
 
   # assign varname if requested

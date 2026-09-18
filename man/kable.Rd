@@ -16,6 +16,7 @@ kable(
   label = NULL,
   format.args = list(),
   escape = TRUE,
+  na = getOption("knitr.kable.NA"),
   ...
 )
 
@@ -65,6 +66,11 @@ to format table values, e.g. \code{list(big.mark = ',')}.}
 LaTeX tables. When \code{escape = FALSE}, you have to make sure that
 special characters will not trigger syntax errors in LaTeX or HTML.}
 
+\item{na}{The character string to display for missing values (\code{NA}) in the
+table. This is the per-call equivalent of the global option
+\code{knitr.kable.NA}, which it defaults to (so \code{NA}s are shown as \code{NA} unless
+the option is set), e.g. \code{na = ''} to hide \code{NA} values in a single table.}
+
 \item{...}{Other arguments (see Examples and References).}
 }
 \value{
@@ -83,7 +89,7 @@ values directly instead of data objects (see examples below).
 Missing values (\code{NA}) in the table are displayed as \code{NA} by
 default. If you want to display them with other characters, you can set the
 option \code{knitr.kable.NA}, e.g. \code{options(knitr.kable.NA = '')} to
-hide \code{NA} values.
+hide \code{NA} values, or use the \code{na} argument to do this for a single table.
 
 You can set the option \code{knitr.kable.max_rows} to limit the number of
 rows to show in the table, e.g., \code{options(knitr.kable.max_rows = 30)}.

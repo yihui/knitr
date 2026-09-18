@@ -249,8 +249,14 @@ knit = function(
       }
     } else {
       params = knit_params(text)
-      params = if (length(params))
-        c('params <-', capture.output(dput(flatten_params(params), '')), '')
+      if (length(params)) {
+        params = flatten_params(params)
+        # make the YAML params available to chunk options during tangling, so
+        # that options like eval = params$foo can be resolved (#1938); parsing
+        # YAML doesn't involve evaluating document code, so this is safe
+        if (tangle) assign('params', params, envir = knit_global())
+        params = c('params <-', capture.output(dput(params, '')), '')
+      } else params = NULL
       .knitEnv$tangle.params = params  # for hook_purl()
     }
   }
@@ -725,9 +731,18 @@ add_html_caption = function(options, code, id = NULL) {
 #' implementation may use other R packages or functions, e.g. \pkg{xtable} or
 #' [kable()]).
 #' @param x An R object to be printed.
-#' @param ... Additional arguments passed to the S3 method. Currently ignored,
-#'   except two optional arguments `options` and `inline`; see
-#'   the references below.
+#' @param ... Additional arguments passed to the S3 method. \pkg{knitr} passes
+#'   two optional arguments that methods may use (other arguments are currently
+#'   ignored):
+#'   \describe{
+#'     \item{`options`}{A list of the current chunk options, so a method can
+#'       customize its output according to chunk options.}
+#'     \item{`inline`}{A logical value indicating whether the object is being
+#'       printed from inline R code (`TRUE`) or from a code chunk (`FALSE`), so
+#'       a method can produce different output for the two contexts.}
+#'   }
+#'   A method that wants to use these should declare them after `...` (e.g.
+#'   `function(x, ..., options)`).
 #' @return The value returned from the print method should be a character vector
 #'   or can be converted to a character value. You can wrap the value in
 #'   [asis_output()] so that \pkg{knitr} writes the character value
