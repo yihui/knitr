@@ -36,3 +36,33 @@ assert('purl() reads external code via a genuine read_chunk() call', {
   out = tangle_text(code)
   (any(grepl('x <- 1 + 1', out, fixed = TRUE)))
 })
+
+# https://github.com/yihui/knitr/issues/1938 YAML params are made available to
+# chunk options during tangling, so a chunk with eval = params$foo is not dropped
+assert('purl() resolves params referenced in chunk options (#1938)', {
+  code = c(
+    '---', 'params:', '  paramcd: TRUE', '---', '',
+    '```{r, eval = params$paramcd}', 'print(params$paramcd)', '```'
+  )
+  out = tangle_text(code)
+  # the params list is emitted, and the code chunk is kept (not dropped)
+  (any(grepl('params <-', out, fixed = TRUE)))
+  (any(grepl('print(params$paramcd)', out, fixed = TRUE)))
+
+  # a chunk with eval = params$foo evaluating to FALSE is commented out but kept
+  code2 = c(
+    '---', 'params:', '  run: FALSE', '---', '',
+    '```{r, eval = params$run}', 'x <- 1', '```'
+  )
+  out2 = tangle_text(code2)
+  (any(grepl('# x <- 1', out2, fixed = TRUE)))
+
+  # purl = params$foo (FALSE) drops the chunk entirely
+  code3 = c(
+    '---', 'params:', '  p: FALSE', '---', '',
+    '```{r, purl = params$p}', 'y <- 2', '```', '', '```{r}', 'z <- 3', '```'
+  )
+  out3 = tangle_text(code3)
+  (!any(grepl('y <- 2', out3, fixed = TRUE)))
+  (any(grepl('z <- 3', out3, fixed = TRUE)))
+})

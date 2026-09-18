@@ -51,6 +51,8 @@
 
 ## BUG FIXES
 
+- When tangling (i.e., `purl()`) an R Markdown document that defines `params` in its YAML front matter, chunk options that reference those parameters (e.g., `eval = params$foo`) are now resolved correctly. Previously such a chunk was silently dropped from the tangled script because `params` was not available when the option was evaluated. Parsing the YAML `params` does not involve evaluating any code in the document, so this remains a purely static operation (thanks, @cderv, #1938).
+
 - The `ffmpeg` animation hook (`hook_ffmpeg_html()`) now signals an error when the `ffmpeg` command exits with a non-zero status (e.g., when the installed `ffmpeg` version does not support the `-crf` option). Previously the failure was ignored, so the document would reference a video file that was never created, and with caching enabled the broken result could be cached (thanks, @kcarnold, #2130).
 
 - `include_graphics()` with a `dpi` argument now sets the image width for Pandoc output formats other than HTML and LaTeX (e.g., Word/`docx`, ODT). The width is computed from the image's pixel dimensions and `dpi`, and emitted as a physical size in inches (e.g., `{width=2in}`), which Pandoc understands. Previously the width was only computed for HTML and LaTeX output, so `dpi` had no effect for other formats (thanks, @cderv, #2385).
