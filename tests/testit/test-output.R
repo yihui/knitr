@@ -120,3 +120,25 @@ assert('knit_exit() does not leave knitr in a non-functioning state (#2283)', {
   res2 = knit(text = c('```{r}', 'cat("hello")', '```'), quiet = TRUE)
   (grepl('hello', res2))
 })
+
+assert('merge_fig_alt() lets the user value win over the collected default (#2001)', {
+  # no collected alt text: user value is returned unchanged
+  (merge_fig_alt('u', character(0)) %==% 'u')
+  (merge_fig_alt(NULL, NA_character_) %==% NULL)
+  # no user value: the collected default is used
+  (merge_fig_alt(NULL, c('a', 'b')) %==% c('a', 'b'))
+  # element-wise: NA/'' in the user value falls back to the collected default
+  (merge_fig_alt(c(NA, 'x'), c('a', 'b')) %==% c('a', 'x'))
+  (merge_fig_alt(c('', 'x'), c('a', 'b')) %==% c('a', 'x'))
+  # a scalar user value is recycled (as fig.alt already recycles)
+  (merge_fig_alt('x', c('a', 'b')) %==% c('x', 'x'))
+})
+
+assert('record_fig_alt() collects alt text only for recognized plot objects (#2001)', {
+  on.exit(reset_fig_alt(), add = TRUE)
+  reset_fig_alt()
+  # ordinary values are not recognized as plots and do not occupy a slot
+  record_fig_alt(1:10)
+  record_fig_alt('a')
+  (length(.knitEnv$fig.alt) == 0)
+})

@@ -786,6 +786,30 @@ knit_print.knit_asis = function(x, ...) x
 #' @export
 knit_print.knit_asis_url = function(x, ...) x
 
+# per-chunk buffer of alt text from plot objects (in printing order), reset in eng_r()
+reset_fig_alt = function() .knitEnv$fig.alt = NULL
+
+# collect a printed plot's own alt text; add more plot classes here as needed.
+# Only recognized plots occupy a slot; one without alt text gets an NA
+# placeholder to keep fig.alt aligned with plots.
+record_fig_alt = function(x) {
+  alt = if (inherits(x, 'ggplot')) {
+    getNamespace('ggplot2')$get_alt_text(x)  # ggplot2 must be loaded if x is a ggplot
+  } else return()
+  if (length(alt) != 1 || is.na(alt) || !nzchar(alt)) alt = NA_character_  # '' means unset
+  .knitEnv$fig.alt = c(.knitEnv$fig.alt, alt)
+}
+
+# merge user fig.alt with the collected defaults: user value wins where it is a
+# non-empty string, the collected default fills the rest (element-wise)
+merge_fig_alt = function(user, collected) {
+  if (length(collected) == 0 || all(is.na(collected))) return(user)
+  if (length(user) == 0) return(collected)
+  n = length(collected)
+  user = rep(user, length.out = n)
+  ifelse(!is.na(user) & nzchar(user), user, collected)
+}
+
 #' @rdname knit_print
 #' @export
 normal_print = function(x, ...) {

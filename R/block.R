@@ -213,6 +213,8 @@ eng_r = function(options) {
   env = knit_global()
   obj.before = ls(globalenv(), all.names = TRUE)  # global objects before chunk
 
+  reset_fig_alt()  # clear alt text collected from plots in the previous chunk
+
   keep = options$fig.keep
   keep.idx = NULL
   if (is.logical(keep)) keep = which(keep)
@@ -311,6 +313,10 @@ eng_r = function(options) {
   if (!isFALSE(ev))
     for (o in opts_knit$get('eval.after'))
       options[o] = list(eval_lang(options[[o]], env))
+
+  # use alt text from plots (e.g. ggplot2::labs(alt=)) as the default fig.alt
+  if (!isFALSE(ev) && length(.knitEnv$fig.alt))
+    options['fig.alt'] = list(merge_fig_alt(options[['fig.alt']], .knitEnv$fig.alt))
 
   # remove some components according options
   if (isFALSE(echo)) {
