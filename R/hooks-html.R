@@ -143,7 +143,14 @@ hook_ffmpeg = function(x, options, format = 'webm') {
     'hook option or install ffmpeg with libvpx enabled.'
   )
   message('executing: ', ffmpeg.cmd)
-  system(ffmpeg.cmd, ignore.stdout = TRUE)
+  # ffmpeg may exit with a non-zero status (e.g. a version that does not support
+  # the -crf option) without producing the output video; error out instead of
+  # silently referencing a missing file (and caching the broken result) (#2130)
+  if (system(ffmpeg.cmd, ignore.stdout = TRUE) != 0) stop2(
+    'The ffmpeg command failed (see the log above). ',
+    'You may need to adjust the chunk options (e.g. ffmpeg.format) ',
+    'or use a different ffmpeg version.'
+  )
 
   # use a normal plot hook if the output is GIF
   if (format == 'gif') {
