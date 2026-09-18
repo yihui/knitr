@@ -534,6 +534,9 @@
 <p><code>kable()</code> operating in LaTeX mode can now optionally typeset numeric columns in math mode for improved rendering of minus signs, infinite values, and scientific notation; in particular, decimal and thousands separator commas are wrapped in braces (<code>{}</code>) to preserve spacing. To enable, use <code>kable(..., format = &quot;latex&quot;, numeric.math = TRUE)</code> or set <code>options(knitr.table.numeric.math = TRUE)</code> globally (thanks, <a href="https://github.com/krivit">@krivit</a>, <a href="https://github.com/yihui/knitr/issues/1709">#1709</a>).</p>
 </li>
 <li>
+<p><code>kable()</code> in LaTeX mode gained a new argument <code>caption.pos</code> to control whether the table caption is placed at the <code>'top'</code> (the default) or <code>'bottom'</code> of a table wrapped in a floating <code>table</code> environment. The default can be set globally via <code>options(knitr.table.caption.pos = 'bottom')</code> (thanks, <a href="https://github.com/njtierney">@njtierney</a>, <a href="https://github.com/yihui/knitr/issues/1189">#1189</a>).</p>
+</li>
+<li>
 <p>A code chunk that returns a <code>shiny.tag</code> or <code>shiny.tag.list</code> object (e.g., from <strong>htmltools</strong>) can now have a figure caption and be cross-referenced, in the same way as <strong>htmlwidgets</strong>. For example, the chunk below produces a captioned figure that can be referenced via <code>\@ref(fig:mytag)</code> in <strong>bookdown</strong> (thanks, <a href="https://github.com/cpsievert">@cpsievert</a>, <a href="https://github.com/yihui/knitr/issues/1650">#1650</a>):</p>
 <pre><code>```{r mytag, fig.cap=&quot;A captioned shiny.tag object.&quot;}
 htmltools::div(htmltools::img(src = &quot;logo.png&quot;), htmltools::p(&quot;hello&quot;))
