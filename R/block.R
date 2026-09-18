@@ -662,7 +662,7 @@ tangle_block = function(x) {
     eval_read_chunk(code)
   }
   code = parse_chunk(code)
-  code = tangle_mask(code, ev, x$params$error, x$params$comment %n% '#')
+  code = tangle_mask(code, ev, x$params$error, x$params$comment)
   if (opts_knit$get('documentation') == 0L) return(one_string(code))
   # e.g. when documentation 1 or 2 with purl()
   label_code(code, x)
@@ -694,9 +694,15 @@ eval_read_chunk = function(code) {
   for (cl in calls) eval(cl)
 }
 
-tangle_mask = function(code, eval, error, comment = '#') {
-  # eval=FALSE code is commented out; comment='' (or NA) keeps it uncommented
-  if (isFALSE(eval)) code = comment_out(code, comment, newline = FALSE)
+tangle_mask = function(code, eval, error, comment = NULL) {
+  # whether to comment out the code in the tangled script: if the `comment`
+  # option is explicitly provided, it expresses the user's intention and is
+  # always respected (an empty string or NA keeps code uncommented, #2425;
+  # a prefix like '#' comments it out even when eval = TRUE, #1352); otherwise
+  # eval = FALSE code is commented out with '#' by default
+  # comment_out() leaves the code untouched when the prefix is empty (or NA)
+  prefix = if (is.null(comment)) if (isFALSE(eval)) '#' else '' else comment
+  code = comment_out(code, prefix, newline = FALSE)
   if (isTRUE(error)) code = c('try({', code, '})')
   code
 }
