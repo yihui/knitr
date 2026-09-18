@@ -537,6 +537,9 @@
 <p><code>kable()</code> in LaTeX mode gained a new argument <code>caption.pos</code> to control whether the table caption is placed at the <code>'top'</code> (the default) or <code>'bottom'</code> of a table wrapped in a floating <code>table</code> environment. The default can be set globally via <code>options(knitr.table.caption.pos = 'bottom')</code> (thanks, <a href="https://github.com/njtierney">@njtierney</a>, <a href="https://github.com/yihui/knitr/issues/1189">#1189</a>).</p>
 </li>
 <li>
+<p><code>spin()</code> gained a new argument <code>engine</code> to set the default language engine for all code chunks, which makes it possible to spin a script written in another language (e.g., a Python <code>.py</code> file) into a report without having to set <code>#+ engine=...</code> on every chunk. By default, the engine is guessed from the input file’s extension (e.g., <code>.py</code> implies <code>python</code>), and a chunk that sets its own <code>engine</code> option still overrides the default. This only applies to the Markdown output formats (thanks, <a href="https://github.com/fdetsch">@fdetsch</a>, <a href="https://github.com/katrinabrock">@katrinabrock</a>, <a href="https://github.com/yihui/knitr/issues/1773">#1773</a>).</p>
+</li>
+<li>
 <p>A code chunk that returns a <code>shiny.tag</code> or <code>shiny.tag.list</code> object (e.g., from <strong>htmltools</strong>) can now have a figure caption and be cross-referenced, in the same way as <strong>htmlwidgets</strong>. For example, the chunk below produces a captioned figure that can be referenced via <code>\@ref(fig:mytag)</code> in <strong>bookdown</strong> (thanks, <a href="https://github.com/cpsievert">@cpsievert</a>, <a href="https://github.com/yihui/knitr/issues/1650">#1650</a>):</p>
 <pre><code>```{r mytag, fig.cap=&quot;A captioned shiny.tag object.&quot;}
 htmltools::div(htmltools::img(src = &quot;logo.png&quot;), htmltools::p(&quot;hello&quot;))
