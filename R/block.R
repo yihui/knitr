@@ -55,18 +55,8 @@ call_block = function(block) {
   if (!isFALSE(params$ref.chunk))
     params[['code']] = parse_chunk(params[['code']]) # parse sub-chunk references
 
-  ohooks = opts_hooks$get()
   params0 = params  # remember options before opts_hooks so we can detect changes
-  for (opt in names(ohooks)) {
-    hook = ohooks[[opt]]
-    if (!is.function(hook)) {
-      warning("The option hook '", opt, "' should be a function")
-      next
-    }
-    if (!is.null(params[[opt]])) params = as.strict_list(hook(params))
-    if (!is.list(params))
-      stop("The option hook '", opt, "' should return a list of chunk options")
-  }
+  params = run_opts_hooks(params)
   # options changed by opts_hooks are the user's final word: record them so that
   # they take precedence over any later internal changes an engine makes to the
   # same options before they reach the 'chunk' hook (#2488)
@@ -629,6 +619,22 @@ inline_exec = function(
   str_replace(input, block$location, ans)
 }
 
+# run all registered option hooks on a set of chunk options; a hook is applied
+# only if the option it is named after is present (not NULL)
+run_opts_hooks = function(options) {
+  for (opt in names(ohooks <- opts_hooks$get())) {
+    hook = ohooks[[opt]]
+    if (!is.function(hook)) {
+      warning("The option hook '", opt, "' should be a function")
+      next
+    }
+    if (!is.null(options[[opt]])) options = as.strict_list(hook(options))
+    if (!is.list(options))
+      stop("The option hook '", opt, "' should return a list of chunk options")
+  }
+  options
+}
+
 process_tangle = function(x) {
   if (inherits(x, 'block')) tangle_block(x) else tangle_inline(x)
 }
@@ -640,6 +646,8 @@ tangle_block = function(x) {
       params[['purl']] = FALSE  # if any of these options cannot be determined, don't purl
     }
   }
+  # option hooks may set options like purl based on other options, e.g. label (#1903)
+  params = run_opts_hooks(params)
   if (isFALSE(params$purl)) return('')
   label = params$label; ev = params$eval
   if (params$engine != 'R') return(

@@ -75,3 +75,18 @@ assert('purl() can keep eval=FALSE code uncommented via comment=""', {
   (purl0(c('```{r, eval=FALSE, comment=""}', 'x <- 1', '```')) %==% 'x <- 1')
   (purl0(c('```{r, eval=FALSE, comment=NA}', 'x <- 1', '```')) %==% 'x <- 1')
 })
+
+# option hooks are now applied during tangling, so a hook can decide which chunks
+# to keep in the tangled script based on other options such as the label (#1903)
+assert('purl() runs option hooks so a label hook can set purl', {
+  opts_hooks$set(label = function(options) {
+    options$purl = grepl('-solution$', options$label)
+    options
+  })
+  on.exit(opts_hooks$restore(), add = TRUE)
+  out = purl(text = c(
+    '```{r iris}', 'plot(iris)', '```', '',
+    '```{r car-solution}', 'plot(cars)', '```'
+  ), documentation = 0L)
+  (out %==% 'plot(cars)')
+})
