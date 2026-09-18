@@ -111,6 +111,21 @@ if (all(vapply(c('DBI', 'RSQLite'), loadable, logical(1)))) {
     (res[[1]][['A']] %==% 1L && res[[2]][['B']] %==% 2L)
   })
 
+  assert('sql.result.fun replaces DBI execution and can return a lazy object (#1778)', {
+    # a function that captures the query without executing it against the DB
+    fun = function(conn, query) structure(list(query = query), class = 'lazyquery')
+    # with output.var, the object is assigned and no result is collected
+    out = run_sql('SELECT * FROM nonesuch', output.var = 'lazy_res', sql.result.fun = fun)
+    res = get('lazy_res', envir = knit_global())
+    (inherits(res, 'lazyquery'))
+    (as.character(res$query) %==% 'SELECT * FROM nonesuch')  # query passed through verbatim, unrun
+    # the source is still echoed, but there is no result output
+    (grepl('SELECT \\* FROM nonesuch', out))
+
+    # a non-function value is rejected
+    (has_error(run_sql('SELECT 1', sql.result.fun = 'nope')))
+  })
+
   DBI::dbDisconnect(con)
   opts_knit$restore()
 }

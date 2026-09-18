@@ -702,11 +702,24 @@ eng_sql = function(options) {
   # defaults are otherwise preserved.
   extra_args = options$sql.args %n% list()
 
+  # an optional user function to produce the result object from the connection
+  # and query, replacing the built-in DBI execution. This makes it possible to
+  # return objects that should not be collected eagerly, e.g. a lazy table:
+  # sql.result.fun = function(conn, query) dplyr::tbl(conn, dplyr::sql(query))
+  # (#1778)
+  result_fun = options$sql.result.fun
+  if (!is.null(result_fun) && !is.function(result_fun)) stop2(
+    "The 'sql.result.fun' chunk option must be a function(conn, query)."
+  )
+
   # run a single (already interpolated) query and return the result data, or the
   # captured error object when the chunk option error = TRUE
   run_query = function(query, is_statement) {
     tryCatch({
-      if (is_statement) {
+      if (!is.null(result_fun)) {
+        # delegate to the user function; it decides whether/how to execute
+        result_fun(conn, query)
+      } else if (is_statement) {
         # dbExecute() returns the number of rows affected by the statement
         do.call(DBI::dbExecute, c(list(conn, query), extra_args))
       } else if (is.null(varname) && max.print > 0) {
@@ -734,6 +747,13 @@ eng_sql = function(options) {
   # with the output text and whether it should be treated as raw ('asis')
   render_output = function(data) {
     asis = FALSE
+    # a custom result function may return an object that should not be collected
+    # (e.g. a lazy table); do not coerce it through kable/head, just print it
+    # using its own method (which typically shows a preview) (#1778)
+    if (!is.null(result_fun)) {
+      output = if (is.null(varname)) capture.output(print(data))
+      return(list(output = output, asis = asis))
+    }
     output = if (length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)) capture.output({
 
       # apply max.print to data
