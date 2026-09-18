@@ -47,6 +47,8 @@
 
 ## BUG FIXES
 
+- `include_graphics()` with a `dpi` argument now sets the image width for Pandoc output formats other than HTML and LaTeX (e.g., Word/`docx`, ODT). The width is computed from the image's pixel dimensions and `dpi`, and emitted as a physical size in inches (e.g., `{width=2in}`), which Pandoc understands. Previously the width was only computed for HTML and LaTeX output, so `dpi` had no effect for other formats (thanks, @cderv, #2385).
+
 - `plot_crop()` now emits a warning when `pdfcrop` is found but returns a non-zero exit status (e.g., because GhostScript is missing or the input is corrupt). Previously such failures were silent (thanks, @JackCaster, @cderv, #2381).
 
 - When a language engine modifies the chunk options (e.g., sets `options$results = 'asis'` before calling `engine_output()`), the modified options are now also visible to the `chunk` hook, not only the `output` hook. Previously the `chunk` hook received the options as declared in the chunk header, which could lead to inconsistent behavior between the two hooks (thanks, @cderv, #2333).

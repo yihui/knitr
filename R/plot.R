@@ -538,10 +538,14 @@ raster_dpi_width = function(path, dpi) {
     if (!is.numeric(dpi)) return()  # there is no dpi info in JPEG
     w = ncol(jpeg::readJPEG(path, native = TRUE))
   }
-  if (is_latex_output()) {
-    xfun::decimal_dot(paste0(round(w / dpi, 2), 'in'))
-  } else if (is_html_output()) {
+  if (is_html_output()) {
+    # HTML <img width> takes a bare pixel value
     round(w / (dpi / 96))
+  } else {
+    # for LaTeX and other Pandoc output formats (e.g. Word, ODT), use a
+    # physical width in inches; Pandoc understands the unit in the image
+    # attribute syntax ![](){width=...in} (#2385)
+    xfun::decimal_dot(paste0(round(w / dpi, 2), 'in'))
   }
 }
 
