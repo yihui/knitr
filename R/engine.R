@@ -78,11 +78,15 @@ cache_engines = new_defaults()
 #'
 #' # expert use only
 #' engine_output(opts_chunk$merge(list(engine = 'python')), out = list(structure(list(src = '1 + 1'), class = 'source'), '2'))
-engine_output = function(options, code, out, extra = NULL) {
+engine_output = function(options, code, out, extra = NULL, chunk_opts = options) {
   # attach the (possibly engine-modified) options to the returned output so that
   # block_exec() can pass them on to the 'chunk' hook, keeping it consistent with
-  # the 'output' hook (#2333)
-  with_opts = function(res) structure(res, chunk_opts = options)
+  # the 'output' hook (#2333). By default the options used to produce the output
+  # are also handed to the 'chunk' hook, but an engine may pass a different
+  # `chunk_opts` when its internal tweaks to `options` (e.g. results = 'asis')
+  # only control how the output is written and should not leak to the 'chunk'
+  # hook, where they would override a user's opts_hooks setting (#2488)
+  with_opts = function(res) structure(res, chunk_opts = chunk_opts)
   if (missing(code) && is.list(out)) return(with_opts(unlist(sew(out, options))))
   if (!is.logical(options$echo)) code = code[options$echo]
   if (length(code) != 1L) code = one_string(code)
@@ -560,8 +564,10 @@ eng_html_asset = function(prefix, postfix) {
     out = if (options$eval && is_html_output()) {
       one_string(c(prefix, options$code, postfix))
     }
-    options$results = 'asis'
-    engine_output(options, options$code, out)
+    # force results = 'asis' so the raw HTML is written verbatim by sew(), but do
+    # not let this internal tweak reach the 'chunk' hook (#2488)
+    opts = options; opts$results = 'asis'
+    engine_output(opts, options$code, out, chunk_opts = options)
   }
 }
 
@@ -919,9 +925,13 @@ eng_go = function(options) {
 #  Please refer to respective package / executable documentation for more details
 eng_sxss = function(options) {
 
+  # force results = 'asis' so the compiled CSS is written verbatim by sew(), but
+  # keep the original options for the 'chunk' hook so this internal tweak does
+  # not override a user's opts_hooks setting (#2488)
+  opts = options; opts$results = 'asis'
+
   # early exit if evaluated output not requested
-  options$results = 'asis'
-  if (!options$eval) return(engine_output(options, options$code, ''))
+  if (!options$eval) return(engine_output(opts, options$code, '', chunk_opts = options))
 
   # create temporary file with input code
   f = wd_tempfile('code', paste0('.', options$engine))
@@ -975,7 +985,7 @@ eng_sxss = function(options) {
     one_string(c('<style type="text/css">', out, '</style>'))
   }
 
-  engine_output(options, options$code, final_out)
+  engine_output(opts, options$code, final_out, chunk_opts = options)
 }
 
 eng_bslib = function(options) {

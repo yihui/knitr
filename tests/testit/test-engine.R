@@ -50,3 +50,33 @@ assert('engines can modify chunk options seen by the chunk hook (#2333)', {
   # the chunk hook saw the engine-modified option, not the source-declared default
   (seen$results %==% 'asis')
 })
+
+# the css/js/sass/scss engines set results = 'asis' internally only to write raw
+# HTML verbatim; this must not leak to the 'chunk' hook and override a user's
+# opts_hooks setting (#2488)
+assert('css/js engines do not force results = asis onto the chunk hook (#2488)', {
+  engines = knit_engines$get(); hooks = knit_hooks$get(); ohooks = opts_hooks$get()
+  fmt = opts_knit$get('out.format')
+  on.exit({
+    knit_engines$restore(engines); knit_hooks$restore(hooks)
+    opts_hooks$restore(ohooks)
+    opts_knit$set(out.format = fmt); knit_code$restore()
+  }, add = TRUE)
+
+  render_markdown()
+  opts_hooks$set(results = function(options) {
+    options$results = 'hold'
+    options
+  })
+  seen = new.env()
+  knit_hooks$set(chunk = function(x, options) {
+    seen$results = options$results
+    x
+  })
+
+  out = knit(text = c('```{css}', 'body { color: red; }', '```'), quiet = TRUE)
+  # the chunk hook sees the opts_hooks value, not the engine's internal 'asis'
+  (seen$results %==% 'hold')
+  # the raw CSS is still written verbatim (not commented out)
+  (grepl('<style type="text/css">', out, fixed = TRUE))
+})
