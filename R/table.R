@@ -11,7 +11,7 @@
 #' Missing values (`NA`) in the table are displayed as `NA` by
 #' default. If you want to display them with other characters, you can set the
 #' option `knitr.kable.NA`, e.g. `options(knitr.kable.NA = '')` to
-#' hide `NA` values.
+#' hide `NA` values, or use the `na` argument to do this for a single table.
 #'
 #' You can set the option `knitr.kable.max_rows` to limit the number of
 #' rows to show in the table, e.g., `options(knitr.kable.max_rows = 30)`.
@@ -48,6 +48,10 @@
 #' @param label The table reference label. By default, the label is obtained
 #'   from \code{knitr::\link{opts_current}$get('label')} (i.e., the current
 #'   chunk label). To disable the label, use `label = NA`.
+#' @param na The character string to display for missing values (`NA`) in the
+#'   table. This is the per-call equivalent of the global option
+#'   `knitr.kable.NA`, which it defaults to (so `NA`s are shown as `NA` unless
+#'   the option is set), e.g. `na = ''` to hide `NA` values in a single table.
 #' @param format.args A list of arguments to be passed to [format()]
 #'   to format table values, e.g. `list(big.mark = ',')`.
 #' @param escape Whether to escape special characters when producing HTML or
@@ -168,7 +172,7 @@
 kable = function(
   x, format, digits = getOption('digits'), row.names = NA, col.names = NA,
   align, caption = opts_current$get('tab.cap'), label = NULL, format.args = list(),
-  escape = TRUE, ...
+  escape = TRUE, na = getOption('knitr.kable.NA'), ...
 ) {
 
   format = kable_format(format)
@@ -181,7 +185,7 @@ kable = function(
     res = lapply(
       x, kable, format = format, digits = digits, row.names = row.names,
       col.names = col.names, align = align, caption = NA,
-      format.args = format.args, escape = escape, ...
+      format.args = format.args, escape = escape, na = na, ...
     )
     return(kables(res, format, caption, label))
   }
@@ -205,8 +209,8 @@ kable = function(
   if (any(is_num)) {
     if (is.matrix(x)) {
       if (is.table(x) && length(dim(x)) == 2) class(x) = 'matrix'
-      x = format_matrix(x, format.args)
-    } else x[, is_num] = format_args(x[, is_num], format.args)
+      x = format_matrix(x, format.args, na)
+    } else x[, is_num] = format_args(x[, is_num], format.args, na)
   }
   if (is.na(row.names)) row.names = has_rownames(x)
   if (!is.null(align)) align = rep(align, length.out = m)
@@ -217,7 +221,7 @@ kable = function(
     is_num = c(FALSE, is_num)
   }
   n = nrow(x)
-  x = replace_na(to_character(x), is.na(x))
+  x = replace_na(to_character(x), is.na(x), na)
   if (!is.matrix(x)) x = matrix(x, nrow = n)
   # trim white spaces except those escaped by \ at the end (#2308); the trimming
   # can be disabled via options(knitr.kable.keep.whitespace = TRUE) to preserve
@@ -316,18 +320,18 @@ to_character = function(x) {
 }
 
 # as.data.frame() does not allow duplicate row names (#898)
-format_matrix = function(x, args) {
+format_matrix = function(x, args, na = getOption('knitr.kable.NA')) {
   nms = rownames(x)
   rownames(x) = NULL
-  x = as.matrix(format_args(as.data.frame(x), args))
+  x = as.matrix(format_args(as.data.frame(x), args, na))
   rownames(x) = nms
   x
 }
 
-format_args = function(x, args = list()) {
+format_args = function(x, args = list(), na = getOption('knitr.kable.NA')) {
   args$x = x
   args$trim = TRUE
-  replace_na(do.call(format, args), is.na(x))
+  replace_na(do.call(format, args), is.na(x), na)
 }
 
 replace_na = function(x, which = is.na(x), to = getOption('knitr.kable.NA')) {
