@@ -597,6 +597,9 @@ registerS3method(
 <li>
 <p><code>kable()</code> gained an argument <code>na</code> to control how missing values (<code>NA</code>) are displayed in a single table, e.g. <code>kable(x, na = '')</code> to hide <code>NA</code>s or <code>kable(x, na = '-')</code> to show them as dashes. This is the per-call equivalent of the global option <code>knitr.kable.NA</code>, which it defaults to, and overrides the option when both are set (thanks, <a href="https://github.com/mbojan">@mbojan</a>, <a href="https://github.com/yihui/knitr/issues/1813">#1813</a>).</p>
 </li>
+<li>
+<p>A cached chunk can now depend on an uncached chunk via the <code>dependson</code> option (or <code>autodep = TRUE</code>). Previously this combination was not supported (and triggered a warning) because the cache was invalidated by purging the caches of dependent chunks when a dependency’s cache was rebuilt, which does not work if the dependency has no cache. Now the code of the chunks that a cached chunk depends on (including transitive dependencies) is folded into the cache key, so changing a dependency’s code invalidates the cache regardless of whether the dependency itself is cached (thanks, <a href="https://github.com/PapaNappa">@PapaNappa</a>, <a href="https://github.com/yihui/knitr/issues/1039">#1039</a>).</p>
+</li>
 </ul>
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
