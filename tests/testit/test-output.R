@@ -121,11 +121,6 @@ assert('knit_exit() does not leave knitr in a non-functioning state (#2283)', {
   (grepl('hello', res2))
 })
 
-assert('fig_alt() default method returns NULL', {
-  (is.null(fig_alt(1:10)))
-  (is.null(fig_alt('a')))
-})
-
 assert('merge_fig_alt() lets the user value win over the collected default (#2001)', {
   # no collected alt text: user value is returned unchanged
   (merge_fig_alt('u', character(0)) %==% 'u')
@@ -139,24 +134,48 @@ assert('merge_fig_alt() lets the user value win over the collected default (#200
   (merge_fig_alt('x', c('a', 'b')) %==% c('x', 'x'))
 })
 
-assert('record_fig_alt() collects alt text only for objects with a fig_alt() method (#2001)', {
+assert('record_fig_alt() collects alt text only for recognized plot objects (#2001)', {
   on.exit(reset_fig_alt(), add = TRUE)
   reset_fig_alt()
-  # ordinary values do not occupy a slot
+  # ordinary values are not recognized as plots and do not occupy a slot
   record_fig_alt(1:10)
   record_fig_alt('a')
   (length(.knitEnv$fig.alt) == 0)
-
-  # register a method for a fake plot class and check that alt text is collected
-  # in order, with NA placeholders for objects that carry no alt text (the method
-  # is registered in the global env so S3 dispatch finds it without touching the
-  # locked knitr namespace)
-  fig_alt.my_plot <<- function(x, ...) attr(x, 'alt')
-  registerS3method('fig_alt', 'my_plot', fig_alt.my_plot)
-  on.exit(rm('fig_alt.my_plot', envir = globalenv()), add = TRUE)
-  p = function(alt = NULL) structure(list(), class = 'my_plot', alt = alt)
-  record_fig_alt(p('first'))
-  record_fig_alt(p())          # no alt -> NA placeholder
-  record_fig_alt(p('third'))
-  (.knitEnv$fig.alt %==% c('first', NA, 'third'))
 })
+
+if (requireNamespace('ggplot2', quietly = TRUE) && packageVersion('ggplot2') >= '3.4.0') {
+  library(ggplot2)
+  gg = function(alt) {
+    p = ggplot(data.frame(x = 1, y = 1), aes(x, y)) + geom_point()
+    if (!missing(alt)) p = p + labs(alt = alt)
+    p
+  }
+
+  assert('record_fig_alt() reads ggplot alt text, with NA for plots lacking it (#2001)', {
+    on.exit(reset_fig_alt(), add = TRUE)
+    reset_fig_alt()
+    record_fig_alt(gg('first'))
+    record_fig_alt(gg())          # no alt -> NA placeholder
+    record_fig_alt(gg('third'))
+    (.knitEnv$fig.alt %==% c('first', NA, 'third'))
+  })
+
+  assert('ggplot2::labs(alt=) provides the default fig.alt for figures (#2001)', {
+    # alt text from labs(alt=) is used when fig.alt is not set
+    res = knit(text = c(
+      '```{r}', 'library(ggplot2)',
+      'ggplot(mtcars, aes(wt, mpg)) + geom_point() + labs(alt = "from labs")',
+      '```'
+    ), quiet = TRUE)
+    (grepl('alt="from labs"', res, fixed = TRUE))
+
+    # an explicit fig.alt still wins over labs(alt=)
+    res = knit(text = c(
+      '```{r fig.alt="explicit", echo=FALSE}', 'library(ggplot2)',
+      'ggplot(mtcars, aes(wt, mpg)) + geom_point() + labs(alt = "from labs")',
+      '```'
+    ), quiet = TRUE)
+    (grepl('alt="explicit"', res, fixed = TRUE))
+    (!grepl('from labs', res, fixed = TRUE))  # not the labs value (echo off)
+  })
+}

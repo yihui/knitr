@@ -299,8 +299,8 @@ eng_r = function(options) {
     for (o in opts_knit$get('eval.after'))
       options[o] = list(eval_lang(options[[o]], env))
 
-  # use alt text collected from plot objects (via fig_alt()) as the default
-  # fig.alt, letting an explicitly provided fig.alt take precedence (#2001)
+  # use the alt text collected from plot objects (e.g. via ggplot2::labs(alt=))
+  # as the default fig.alt, letting an explicitly provided fig.alt win (#2001)
   if (!isFALSE(ev) && length(.knitEnv$fig.alt))
     options['fig.alt'] = list(merge_fig_alt(options[['fig.alt']], .knitEnv$fig.alt))
 
