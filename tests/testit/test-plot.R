@@ -213,6 +213,25 @@ assert('include_graphics() converts absolute paths relative to the output dir', 
   (has_error(include_graphics(file.path(img_dir, 'nope.png'), error = TRUE)))
 })
 
+if (loadable('png')) assert('raster_dpi_width() computes a width for non-HTML/LaTeX output too (#2385)', {
+  f = tempfile(fileext = '.png')
+  grDevices::png(f, width = 384, height = 288); plot(1); dev.off()
+  op = opts_knit$get(c('rmarkdown.pandoc.to', 'out.format'))
+  on.exit(opts_knit$set(op), add = TRUE)
+
+  # 384px at 96 dpi -> 96px in HTML (bare pixel value)
+  opts_knit$set(rmarkdown.pandoc.to = 'html', out.format = 'markdown')
+  (raster_dpi_width(f, 96) %==% 384)
+  # LaTeX uses a physical width in inches
+  opts_knit$set(rmarkdown.pandoc.to = 'latex', out.format = 'latex')
+  (raster_dpi_width(f, 192) %==% '2in')
+  # other Pandoc formats (e.g. Word) also get inches, not NULL (#2385)
+  opts_knit$set(rmarkdown.pandoc.to = 'docx', out.format = 'markdown')
+  (raster_dpi_width(f, 192) %==% '2in')
+
+  unlink(f)
+})
+
 with_par = function(expr, ...) {
   # set par
   op = graphics::par(...)
