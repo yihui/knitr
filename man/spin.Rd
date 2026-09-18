@@ -14,7 +14,8 @@ spin(
   doc = "^#+'[ ]?",
   inline = "^[{][{](.+)[}][}][ ]*$",
   comment = c("^[# ]*/[*]", "^.*[*]/ *$"),
-  precious = !knit && is.null(text)
+  precious = !knit && is.null(text),
+  engine = NULL
 )
 }
 \arguments{
@@ -50,6 +51,16 @@ line, and \verb{*/} at the end, following the convention of C comments.}
 \item{precious}{Whether to preserve intermediate files (e.g., \code{.Rmd}
 files when \code{format} is \code{"Rmd"}). The default is \code{FALSE} if
 \code{knit} is \code{TRUE} and the input is a file.}
+
+\item{engine}{The default language engine for the code chunks, e.g., \code{'r'} or
+\code{'python'}. This is useful for spinning a script written in another
+language (e.g., a Python \code{.py} file) so that all chunks use that engine
+(via the chunk fence, e.g. \verb{```\{python\}}) without setting
+\verb{#+ engine=...} on every chunk. It only applies to the Markdown output
+formats (\code{Rmd} and \code{qmd}). By default, the engine is guessed from the input
+file's extension (e.g., \code{.py} implies \code{'python'}, and other extensions
+imply \code{'r'}). A chunk that sets its own \code{engine} option overrides this
+default.}
 }
 \value{
 If \code{text} is \code{NULL}, the path of the final output document,

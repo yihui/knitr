@@ -1,7 +1,7 @@
 library(testit)
 
-spin_text = function(..., format = "Rmd") {
-  x = spin(text = c(...), knit = FALSE, format = format)
+spin_text = function(..., format = "Rmd", engine = NULL) {
+  x = spin(text = c(...), knit = FALSE, format = format, engine = engine)
   xfun::split_lines(x)
 }
 
@@ -72,4 +72,24 @@ assert("spin() generates code chunks with pipe comments `#|`", {
     spin_text('# %%', '#| echo: false', '1+1', '#| label: test', '1+1') %==%
     c('', '```{r}', '#| echo: false', '1+1', '```', '```{r}', '#| label: test', '1+1', '```', '')
   )
+})
+
+assert("spin() can set a default chunk engine for non-R scripts", {
+  (spin_text("#' Doc", "print(1)", engine = "python") %==%
+     c('Doc', '', '```{python}', 'print(1)', '```', ''))
+  # existing chunk options are kept
+  (spin_text("#+ label=foo, echo=FALSE", "print(1)", engine = "python") %==%
+     c('', '```{python label=foo, echo=FALSE}', 'print(1)', '```', ''))
+  # a chunk's own engine option overrides the fence engine at knit time
+  (spin_text('#+ engine="R"', "y <- 2", engine = "python") %==%
+     c('', '```{python engine="R"}', 'y <- 2', '```', ''))
+  (spin_text("#+ foo", "x <- 1") %==% c('', '```{r foo}', 'x <- 1', '```', ''))
+})
+
+assert("spin() guesses the chunk engine from the file extension", {
+  f = tempfile(fileext = '.py')
+  xfun::write_utf8(c("#' Doc", "print(1)"), f)
+  out = spin(f, knit = FALSE, format = "Rmd")
+  (xfun::read_utf8(out) %==% c('Doc', '', '```{python}', 'print(1)', '```', ''))
+  file.remove(f, out)
 })

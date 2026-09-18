@@ -30,6 +30,15 @@
 #' @param precious Whether to preserve intermediate files (e.g., `.Rmd`
 #'   files when `format` is `"Rmd"`). The default is `FALSE` if
 #'   `knit` is `TRUE` and the input is a file.
+#' @param engine The default language engine for the code chunks, e.g., `'r'` or
+#'   `'python'`. This is useful for spinning a script written in another
+#'   language (e.g., a Python `.py` file) so that all chunks use that engine
+#'   (via the chunk fence, e.g. \verb{```\{python\}}) without setting
+#'   `#+ engine=...` on every chunk. It only applies to the Markdown output
+#'   formats (`Rmd` and `qmd`). By default, the engine is guessed from the input
+#'   file's extension (e.g., `.py` implies `'python'`, and other extensions
+#'   imply `'r'`). A chunk that sets its own `engine` option overrides this
+#'   default.
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
 #'   as `sowsear()` which meant to make a silk purse out of a sow's ear)
 #' @return If `text` is `NULL`, the path of the final output document,
@@ -52,11 +61,13 @@ spin = function(
   hair, knit = TRUE, report = TRUE, text = NULL, envir = parent.frame(),
   format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst', 'qmd'),
   doc = "^#+'[ ]?", inline = '^[{][{](.+)[}][}][ ]*$',
-  comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text)
+  comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text),
+  engine = NULL
 ) {
 
   format = match.arg(format)
   x = if (nosrc <- is.null(text)) read_utf8(hair) else split_lines(text)
+  if (is.null(engine)) engine = if (nosrc) spin_engine(file_ext(hair)) else 'r'
   stopifnot(length(comment) == 2L)
   c1 = grep(comment[1], x); c2 = grep(comment[2], x)
   check_comments(c1, c2)
@@ -77,7 +88,14 @@ spin = function(
 
   # .Rmd/.qmd need to be treated specially
   is_md = grepl('^[Rq]md$', format)
-  p = if (is_md) .fmt.rmd(x) else .fmt.pat[[tolower(format)]]
+  p = if (is_md) .fmt.rmd(x, engine) else .fmt.pat[[tolower(format)]]
+
+  # a chunk header (fence + options); vectorized over opts as a block may
+  # contain multiple chunk starts
+  chunk_header = function(opts = '') {
+    opts = trimws(opts)
+    paste0(p[1], ifelse(nzchar(opts), paste0(' ', opts), ''), p[2])
+  }
 
   # turn {{expr}} into inline expressions, e.g. `r expr` or \Sexpr{expr}
   if (any(i <- matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
@@ -108,8 +126,8 @@ spin = function(
         # invalid header like ```{rlabel} that would be parsed as an engine name
         # on the next round-trip (#2014)
         opts = trimws(gsub(rc, '\\3', block[j1]))
-        block[j1] = paste0(p[1], ifelse(nzchar(opts), paste0(' ', opts), ''), p[2])
-        block[j2] = paste0(p[1], p[2], '\n', block[j2])
+        block[j1] = chunk_header(opts)
+        block[j2] = paste0(chunk_header(), '\n', block[j2])
 
         # close each chunk if there are multiple chunks in this block
         if (any(j3 > 1)) {
@@ -118,7 +136,7 @@ spin = function(
         }
       }
       if (!startsWith(block[1L], p[1L])) {
-        block = c(paste0(p[1L], p[2L]), block)
+        block = c(chunk_header(), block)
       }
       c('', block, p[3L], '')
     }
@@ -157,7 +175,7 @@ spin = function(
 )
 
 # determine how many backticks we need to wrap code blocks and inline code
-.fmt.rmd = function(x) {
+.fmt.rmd = function(x, engine = 'r') {
   x = one_string(x)
   l = attr(gregexpr('`+', x)[[1]], 'match.length')
   l = max(l, 0)
@@ -168,7 +186,13 @@ spin = function(
     i = '`'
     b = '```'
   }
-  c(paste0(b, '{r'), '}', b, paste0(i, 'r \\1 ', i))
+  # the fence takes the chunk engine; inline expressions are always R
+  c(paste0(b, '{', engine), '}', b, paste0(i, 'r \\1 ', i))
+}
+
+# language engine for a script's file extension (default 'r')
+spin_engine = function(ext) {
+  switch(tolower(ext), py = 'python', jl = 'julia', sh = 'bash', 'r')
 }
 
 # find the position of the starting `#|` in a consecutive block of `#|` comments
