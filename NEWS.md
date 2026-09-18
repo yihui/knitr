@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- The `sql` engine gained a new chunk option `sql.interlaced`. When set to `TRUE`, a chunk containing multiple SQL statements (separated by semicolons) is split into individual statements that are executed in order, and the source and result of each statement are emitted as an alternating (interlaced) sequence of blocks, similar to how an R chunk echoes each expression with its result. Previously, a multi-statement `sql` chunk submitted all statements at once, and depending on the DBI backend, results after the first statement could be silently dropped. The statement splitting is done by a new pure-R helper that ignores semicolons inside string literals, quoted identifiers, and comments (no external parser is required). If any statement fails, execution stops at that statement (respecting the `error` chunk option), and `output.var` (if set) captures the list of results from all executed statements (thanks, @BrianDiggs, #2093).
+
 - `kable()` operating in LaTeX mode can now optionally typeset numeric columns in math mode for improved rendering of minus signs, infinite values, and scientific notation; in particular, decimal and thousands separator commas are wrapped in braces (`{}`) to preserve spacing. To enable, use `kable(..., format = "latex", numeric.math = TRUE)` or set `options(knitr.table.numeric.math = TRUE)` globally (thanks, @krivit, #1709).
 
 - A code chunk that returns a `shiny.tag` or `shiny.tag.list` object (e.g., from **htmltools**) can now have a figure caption and be cross-referenced, in the same way as **htmlwidgets**. For example, the chunk below produces a captioned figure that can be referenced via `\@ref(fig:mytag)` in **bookdown** (thanks, @cpsievert, #1650):

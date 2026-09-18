@@ -142,6 +142,7 @@ Suggests:
     png,
     ragg (>= 1.5.0),
     reticulate (>= 1.4),
+    RSQLite,
     rgl (>= 0.95.1201),
     rlang,
     rmarkdown,
