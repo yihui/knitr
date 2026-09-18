@@ -525,6 +525,9 @@
 <h3 id="sec:new-features_1" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
+<p>The <code>sql</code> engine gained a new chunk option <code>sql.interlaced</code>. When set to <code>TRUE</code>, a chunk containing multiple SQL statements (separated by semicolons) is split into individual statements that are executed in order, and the source and result of each statement are emitted as an alternating (interlaced) sequence of blocks, similar to how an R chunk echoes each expression with its result. Previously, a multi-statement <code>sql</code> chunk submitted all statements at once, and depending on the DBI backend, results after the first statement could be silently dropped. The statement splitting is done by a new pure-R helper that ignores semicolons inside string literals, quoted identifiers, and comments (no external parser is required). If any statement fails, execution stops at that statement (respecting the <code>error</code> chunk option), and <code>output.var</code> (if set) captures the list of results from all executed statements (thanks, <a href="https://github.com/BrianDiggs">@BrianDiggs</a>, <a href="https://github.com/yihui/knitr/issues/2093">#2093</a>).</p>
+</li>
+<li>
 <p><code>kable()</code> operating in LaTeX mode can now optionally typeset numeric columns in math mode for improved rendering of minus signs, infinite values, and scientific notation; in particular, decimal and thousands separator commas are wrapped in braces (<code>{}</code>) to preserve spacing. To enable, use <code>kable(..., format = &quot;latex&quot;, numeric.math = TRUE)</code> or set <code>options(knitr.table.numeric.math = TRUE)</code> globally (thanks, <a href="https://github.com/krivit">@krivit</a>, <a href="https://github.com/yihui/knitr/issues/1709">#1709</a>).</p>
 </li>
 <li>
