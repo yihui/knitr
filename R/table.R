@@ -573,6 +573,10 @@ kable_pipe = function(x, caption = NULL, padding = 1, caption.label = 'Table:', 
 
 # Pandoc's simple table
 kable_simple = function(x, caption = NULL, padding = 1, ...) {
+  # simple tables cannot represent line breaks in cells; switch to a multiline
+  # table when any cell contains \n (#2021)
+  if (any(grepl('\n', x, fixed = TRUE)))
+    return(kable_multiline(x, caption = caption, padding = padding, ...))
   tab = kable_mark(
     x, c(NA, '-', if (is_blank(colnames(x))) '-' else NA),
     padding = padding, ...
@@ -580,6 +584,45 @@ kable_simple = function(x, caption = NULL, padding = 1, ...) {
   # when x has only one column with name, indent by one space so --- won't be
   # treated as an hr line
   if (ncol(x) == 1 && !is.null(colnames(x))) tab = paste0(' ', tab)
+  kable_pandoc_caption(tab, caption)
+}
+
+# Pandoc's multiline table: like a simple table, but cells may span multiple
+# lines, so logical rows are delimited by a blank line and the table is enclosed
+# by rules at the top and bottom (#2021)
+kable_multiline = function(x, caption = NULL, padding = 1, ...) {
+  cn = colnames(x); align = attr(x, 'align'); is_num = attr(x, 'is_num')
+  m = ncol(x); n = nrow(x); has_header = !is.null(cn)
+  # split each cell into lines and stack the cells of a row into physical rows,
+  # then separate logical rows by a blank physical row
+  blocks = lapply(seq_len(n), function(i) {
+    lines = lapply(seq_len(m), function(j) {
+      z = strsplit(x[i, j], '\n', fixed = TRUE)[[1]]
+      if (length(z) == 0) '' else z
+    })
+    h = max(lengths(lines))
+    blk = matrix('', h, m)
+    for (j in seq_len(m)) blk[seq_along(lines[[j]]), j] = lines[[j]]
+    blk
+  })
+  body = if (n == 0) matrix('', 0, m) else {
+    sep = matrix('', 1, m)
+    do.call(rbind, head(do.call(c, lapply(blocks, list, sep)), -1))
+  }
+  colnames(body) = cn
+  attr(body, 'align') = align
+  attr(body, 'is_num') = is_num
+  # header case: top rule, header, header rule, body, bottom rule; headerless
+  # case: top rule, body, bottom rule
+  tab = kable_mark(
+    body, if (has_header) c('-', '-', '-') else c(NA, '-', '-'),
+    padding = padding, ...
+  )
+  # when x has only one column with a name, indent by one space so --- won't be
+  # treated as an hr line
+  if (m == 1 && has_header) tab = paste0(' ', tab)
+  # turn the space-only separator rows into truly blank lines for Pandoc
+  tab = sub('^\\s+$', '', tab)
   kable_pandoc_caption(tab, caption)
 }
 

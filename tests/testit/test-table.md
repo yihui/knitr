@@ -687,3 +687,39 @@ options(op)
 |15 (50) |
 | 1 ( 2) |
 ```
+
+kable(format = "simple") switches to a Pandoc multiline table when a cell contains a line break, so the alignment of multiline content is preserved (#2021).
+
+```{r}
+kable(data.frame(id = 1:3, text = c('line1\nline2', 'bbbb', 'cccc')), format = 'simple')
+```
+```
+
+
+---  ------
+ id  text  
+---  ------
+  1  line1 
+     line2 
+
+  2  bbbb  
+
+  3  cccc  
+---  ------
+```
+
+A multiline table without column names uses a top rule instead of a header (#2021).
+
+```{r}
+kable(matrix(c('a\nb', 'c', 'd', 'e'), 2), format = 'simple', col.names = NULL)
+```
+```
+
+
+---  ---
+a    d  
+b       
+
+c    e  
+---  ---
+```
