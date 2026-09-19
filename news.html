@@ -549,6 +549,9 @@
 <p>Added a new chunk option <code>fig.cap.command</code> for LaTeX output to customize the command that generates figure captions (defaults to <code>\caption</code>), e.g., <code>fig.cap.command = &quot;\\appendcaption&quot;</code> for figures in an appendix (thanks, <a href="https://github.com/eliocamp">@eliocamp</a>, <a href="https://github.com/yihui/knitr/issues/1872">#1872</a>).</p>
 </li>
 <li>
+<p>When the first code chunk of a document is not R but another language, <code>purl()</code> now tangles the document to a script in that language, using the engine name as the file extension by default (e.g., a Python-first document generates a <code>.py</code> script; use the <code>output</code> argument to override the extension). Chunk headers become <code>#%%</code> code cells, and chunks of other languages are ignored (thanks, <a href="https://github.com/GitHunter0">@GitHunter0</a>, <a href="https://github.com/yihui/knitr/issues/1928">#1928</a>).</p>
+</li>
+<li>
 <p><code>spin()</code> gained a new argument <code>engine</code> to set the default language engine for all code chunks, which makes it possible to spin a script written in another language (e.g., a Python <code>.py</code> file) into a report without having to set <code>#+ engine=...</code> on every chunk. By default, the engine is guessed from the input file’s extension (e.g., <code>.py</code> implies <code>python</code>), and a chunk that sets its own <code>engine</code> option still overrides the default. This only applies to the Markdown output formats (thanks, <a href="https://github.com/fdetsch">@fdetsch</a>, <a href="https://github.com/katrinabrock">@katrinabrock</a>, <a href="https://github.com/yihui/knitr/issues/1773">#1773</a>).</p>
 </li>
 <li>
