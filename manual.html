@@ -2955,16 +2955,16 @@ kable(x, format.args = list(decimal.mark = &quot;,&quot;, big.mark = &quot;'&quo
 </code></pre>
 <pre><code>#&gt; |          V1|          V2|          V3|          V4|          V5|          V6|
 #&gt; |-----------:|-----------:|-----------:|-----------:|-----------:|-----------:|
-#&gt; |   991'326,7|   985'928,3| 1'008'016,9|   997'727,3|   991'723,3| 1'008'076,3|
-#&gt; | 1'013'639,4|   996'446,1|   989'435,9| 1'000'824,7| 1'009'887,5| 1'008'859,0|
-#&gt; | 1'003'868,0| 1'010'591,0|   994'987,9|   996'068,1|   992'743,3| 1'006'192,1|
-#&gt; |   995'524,8| 1'004'673,3|   983'046,7| 1'002'611,4| 1'009'422,3|   995'479,1|
-#&gt; | 1'006'553,7| 1'011'575,3| 1'013'233,1|   995'676,9|   989'501,9|   998'748,5|
-#&gt; | 1'008'013,1| 1'006'328,8|   989'742,4|   998'915,5| 1'008'591,4| 1'004'168,2|
-#&gt; |   997'188,2|   996'335,4| 1'009'617,7|   985'554,7|   985'584,3|   999'710,3|
-#&gt; |   994'117,0|   986'227,0|   999'698,1| 1'012'217,4|   988'430,3| 1'003'859,5|
-#&gt; |   997'504,5| 1'005'076,3|   997'791,0|   994'492,4| 1'006'327,1| 1'013'641,5|
-#&gt; | 1'006'960,6| 1'006'032,9| 1'022'926,4| 1'008'622,6| 1'014'299,0| 1'002'225,3|
+#&gt; |   997'483,9|   989'541,2| 1'004'920,7| 1'003'746,3|   985'504,4|   991'952,0|
+#&gt; | 1'007'092,5| 1'010'403,9| 1'003'720,2| 1'003'943,3|   994'304,7| 1'020'166,3|
+#&gt; | 1'009'351,9|   999'872,9|   981'330,5|   986'125,6|   999'124,5|   999'492,3|
+#&gt; | 1'003'851,0| 1'000'698,4| 1'014'235,1| 1'001'360,2|   994'687,7| 1'012'695,4|
+#&gt; |   990'876,7|   986'234,1| 1'006'246,8|   996'668,9|   996'945,1|   998'877,4|
+#&gt; | 1'005'447,3| 1'006'425,6|   988'310,6| 1'012'473,6| 1'001'397,7|   988'871,5|
+#&gt; | 1'004'854,9|   990'026,9|   999'121,9|   998'342,7|   988'075,5| 1'018'056,5|
+#&gt; | 1'011'522,5| 1'016'363,2| 1'001'262,3|   994'777,1| 1'010'795,0|   989'702,2|
+#&gt; |   988'774,0|   990'888,8| 1'002'600,6|   996'030,0|   973'671,7| 1'001'257,8|
+#&gt; |   988'821,8| 1'016'638,9| 1'000'925,7| 1'015'142,2| 1'016'427,8| 1'011'286,9|
 </code></pre>
 <pre><code class="language-r"># save the value
 x = kable(d2, format = &quot;html&quot;)
@@ -3859,8 +3859,8 @@ engines.
 #&gt; [22] &quot;asis&quot;      &quot;asy&quot;       &quot;block&quot;     &quot;block2&quot;    &quot;bslib&quot;     &quot;c&quot;         &quot;cat&quot;      
 #&gt; [29] &quot;cc&quot;        &quot;comment&quot;   &quot;css&quot;       &quot;ditaa&quot;     &quot;dot&quot;       &quot;embed&quot;     &quot;eviews&quot;   
 #&gt; [36] &quot;exec&quot;      &quot;fortran&quot;   &quot;fortran95&quot; &quot;go&quot;        &quot;highlight&quot; &quot;js&quot;        &quot;julia&quot;    
-#&gt; [43] &quot;python&quot;    &quot;R&quot;         &quot;Rcpp&quot;      &quot;sass&quot;      &quot;scss&quot;      &quot;sql&quot;       &quot;stan&quot;     
-#&gt; [50] &quot;targets&quot;   &quot;tikz&quot;      &quot;verbatim&quot; 
+#&gt; [43] &quot;ps&quot;        &quot;python&quot;    &quot;R&quot;         &quot;Rcpp&quot;      &quot;sass&quot;      &quot;scss&quot;      &quot;sql&quot;      
+#&gt; [50] &quot;stan&quot;      &quot;targets&quot;   &quot;tikz&quot;      &quot;verbatim&quot; 
 </code></pre>
 <h2 id="sec:man-knit_exit"><span class="section-number main-number">35</span> Exit knitting early</h2>
 <h3 id="sec:description_35" class="unnumbered unlisted">Description</h3>
@@ -4007,7 +4007,7 @@ access or set hooks in this package.
 </code></pre>
 <pre><code>#&gt; function (x, options) 
 #&gt; x
-#&gt; &lt;bytecode: 0x5589784a3080&gt;
+#&gt; &lt;bytecode: 0x55c558c21800&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">knit_hooks$get(&quot;inline&quot;)
@@ -4018,7 +4018,7 @@ access or set hooks in this package.
 #&gt;         x = round_digits(x)
 #&gt;     paste(as.character(x), collapse = &quot;, &quot;)
 #&gt; }
-#&gt; &lt;bytecode: 0x55897849fb80&gt;
+#&gt; &lt;bytecode: 0x55c558c1ce60&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-knit_meta"><span class="section-number main-number">40</span> Metadata about objects to be printed</h2>
@@ -5773,7 +5773,7 @@ press again to hide the text column (show code).
 # knit these two vignettes using the docco style
 rocco_view(system.file(&quot;doc&quot;, &quot;docco-classic.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
-<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/RtmpKvQtHd (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
+<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/RtmpyDqY2H (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
 </code></pre>
 <pre><code class="language-r">rocco_view(system.file(&quot;doc&quot;, &quot;knit_expand.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
@@ -6395,7 +6395,7 @@ str(vig_list)
 #&gt;     else knit)(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x558977e66390&gt;
+#&gt; &lt;bytecode: 0x55c5585d9508&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -6403,7 +6403,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x558977e6a128&gt;
+#&gt; &lt;bytecode: 0x55c5585dd1c0&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::knitr_notangle&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -6438,7 +6438,7 @@ str(vig_list)
 #&gt;     unlink(with_ext(file, &quot;R&quot;))
 #&gt;     return()
 #&gt; }
-#&gt; &lt;bytecode: 0x558977ec6dc0&gt;
+#&gt; &lt;bytecode: 0x55c558639e90&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::docco_classic&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -6467,7 +6467,7 @@ str(vig_list)
 #&gt;     rocco(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x558977e828d8&gt;
+#&gt; &lt;bytecode: 0x55c5585f5a50&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -6475,7 +6475,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x558977e6a128&gt;
+#&gt; &lt;bytecode: 0x55c5585dd1c0&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-wrap_rmd"><span class="section-number main-number">74</span> Wrap long lines in Rmd files</h2>
