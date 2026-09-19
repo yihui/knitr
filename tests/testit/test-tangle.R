@@ -89,6 +89,45 @@ assert('purl() comments out evaluated code when comment prefix is set', {
   (purl0(c('```{r, comment="#"}', 'x <- 1', '```')) %==% '# x <- 1')
 })
 
+# purl() tangles a document to a non-R language when the first code chunk uses
+# that language, keeping its chunks as runnable code and marking chunk headers
+# with #%% (so IDEs treat them as code cells); chunks of other languages are
+# dropped (#1928)
+assert('purl() tangles a Python-first document to Python code (#1928)', {
+  out = split_lines(tangle_text(c(
+    '```{python setup, echo=FALSE}', 'import os', '```', '',
+    '```{python compute}', 'x = 1', '```'
+  )))
+  # Python code is kept uncommented and runnable
+  ('import os' %in% out)
+  ('x = 1' %in% out)
+  # chunk headers become #%% cells (not R's ## ---- comments)
+  (any(grepl('^#%% setup', out)))
+  (!any(grepl('^## ----', out)))
+
+  # a chunk of another language is dropped when the first chunk sets Python
+  out2 = split_lines(tangle_text(c(
+    '```{python a}', 'p = 1', '```', '',
+    '```{r b}', 'y <- 2', '```'
+  )))
+  ('p = 1' %in% out2)
+  (!any(grepl('y <- 2', out2, fixed = TRUE)))
+
+  # an R-first document is unaffected (still tangles to R as before)
+  out3 = split_lines(tangle_text(c(
+    '```{r a}', 'x <- 1', '```', '', '```{python b}', 'p = 2', '```'
+  )))
+  ('x <- 1' %in% out3)
+  (any(grepl('^## ----a', out3)))
+  ('## p = 2' %in% out3)  # the Python chunk is commented out as before
+
+  # any non-R first chunk works, not just Python: the chunk header uses the
+  # language's comment character (a block comment is closed, e.g. C's /* */)
+  out4 = split_lines(tangle_text(c('```{c a}', 'int x = 1;', '```')))
+  ('int x = 1;' %in% out4)
+  (any(grepl('^/[*]%% a .* [*]/$', out4)))
+})
+
 # option hooks are now applied during tangling, so a hook can decide which chunks
 # to keep in the tangled script based on other options such as the label (#1903)
 assert('purl() runs option hooks so a label hook can set purl', {

@@ -642,6 +642,27 @@ process_tangle = function(x) {
   if (inherits(x, 'block')) tangle_block(x) else tangle_inline(x)
 }
 
+# file extension for a language whose engine name differs from the conventional
+# extension; for other languages the engine name is used as the extension
+tangle_exts = c(python = 'py', ruby = 'rb', perl = 'pl', bash = 'sh', haskell = 'hs')
+
+# the engine of the first code chunk if it is not R (NULL means tangle R code)
+detect_tangle_lang = function(text) {
+  pat = knit_patterns$get('chunk.begin')
+  if (!length(pat) || is.null(pat)) return()
+  if (!length(i <- grep(pat, text, perl = TRUE))) return()
+  lang = tolower(get_chunk_engine(sub(pat, '\\1', text[i[1]], perl = TRUE)))
+  if (lang != 'r') lang
+}
+
+tangle_lang_ext = function(lang) if (is.na(e <- tangle_exts[lang])) lang else unname(e)
+
+# the comment character(s) for a language (a length-1 line-comment prefix, or a
+# length-2 c(open, close) pair for block comments); fall back to '#' if unknown
+tangle_lang_comment = function(lang) {
+  xfun:::comment_chars[[lang]] %n% '#'
+}
+
 tangle_block = function(x) {
   params = opts_chunk$merge(x$params)
   for (o in c('purl', 'eval', 'child')) {
@@ -653,6 +674,12 @@ tangle_block = function(x) {
   params = run_opts_hooks(params)
   if (isFALSE(params$purl)) return('')
   label = params$label; ev = params$eval
+  # when tangling to a non-R language, keep chunks of that language as-is and
+  # drop chunks of any other language, so the script is directly runnable
+  if (!is.null(lang <- .knitEnv$tangle.lang)) {
+    if (tolower(params$engine) != lang) return('')
+    return(label_code_lang(parse_chunk(knit_code$get(label)), x, tangle_lang_comment(lang)))
+  }
   if (params$engine != 'R') return(
     one_string(comment_out(knit_code$get(label), params$comment, newline = FALSE))
   )
@@ -738,6 +765,18 @@ label_code = function(code, options) {
     '----'
   )
   one_string(c(comments, options$params.chunk, code, ''))
+}
+
+# like label_code() but marks the chunk header as a #%% code cell (recognized by
+# some editors) using the language's comment character(s); char is a length-1
+# line-comment prefix or a length-2 c(open, close) pair for block comments
+label_code_lang = function(code, options, char = '#') {
+  if (opts_knit$get('documentation') == 0L) return(one_string(c(code, '')))
+  # drop the engine="lang" that parse_block() appended to params.src
+  src = gsub('\\s*,?\\s*engine\\s*=\\s*"[^"]*"', '', options$params.src)
+  header = paste0(char[1], '%% ', src, ' ', strrep('-', max(4L, 60L - nchar(src))))
+  if (length(char) > 1) header = paste0(header, ' ', char[2])
+  one_string(c(header, code, ''))
 }
 
 as.source = function(code) {

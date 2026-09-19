@@ -18,6 +18,8 @@
 
 - Added a new chunk option `fig.cap.command` for LaTeX output to customize the command that generates figure captions (defaults to `\caption`), e.g., `fig.cap.command = "\\appendcaption"` for figures in an appendix (thanks, @eliocamp, #1872).
 
+- When the first code chunk of a document is not R but another language, `purl()` now tangles the document to a script in that language, using the engine name as the file extension by default (e.g., a Python-first document generates a `.py` script; use the `output` argument to override the extension). Chunk headers become `#%%` code cells, and chunks of other languages are ignored (thanks, @GitHunter0, #1928).
+
 - `spin()` gained a new argument `engine` to set the default language engine for all code chunks, which makes it possible to spin a script written in another language (e.g., a Python `.py` file) into a report without having to set `#+ engine=...` on every chunk. By default, the engine is guessed from the input file's extension (e.g., `.py` implies `python`), and a chunk that sets its own `engine` option still overrides the default. This only applies to the Markdown output formats (thanks, @fdetsch, @katrinabrock, #1773).
 
 - A code chunk that returns a `shiny.tag` or `shiny.tag.list` object (e.g., from **htmltools**) can now have a figure caption and be cross-referenced, in the same way as **htmlwidgets**. For example, the chunk below produces a captioned figure that can be referenced via `\@ref(fig:mytag)` in **bookdown** (thanks, @cpsievert, #1650):
