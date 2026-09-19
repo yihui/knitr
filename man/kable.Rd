@@ -163,6 +163,12 @@ notation. The default can be set globally via
 tag, e.g., \code{'class="table" id="mytable"'}. Can be set globally via the
 option \code{knitr.table.html.attr}.}
 }
+Column headers are always given the \code{scope="col"} attribute for
+accessibility. In addition, if the option \code{knitr.table.html.row.header} is
+set to \code{TRUE}, the row-name cells (i.e., the first column when row names are
+included) are marked up as row headers with \verb{<th scope="row">} instead of
+\verb{<td>}. This is off by default because \verb{<th>} cells may be rendered
+differently from \verb{<td>} (e.g., in bold) and could affect existing styles.
 }
 
 \section{Arguments for the \code{pipe}, \code{simple}, \code{rst}, \code{jira}, and \code{org} formats}{
