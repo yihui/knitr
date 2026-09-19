@@ -16,6 +16,8 @@
 
 - `kable(format = "simple")` now generates a Pandoc multiline table when any cell contains a line break (`\n`), so that the alignment of multiline content is preserved. Previously, a line break broke the layout because Pandoc's simple tables cannot represent line breaks in cells (thanks, @mgacc0, #2021).
 
+- Added a new chunk option `fig.cap.command` for LaTeX output to customize the command that generates figure captions (defaults to `\caption`), e.g., `fig.cap.command = "\\appendcaption"` for figures in an appendix (thanks, @eliocamp, #1872).
+
 - `spin()` gained a new argument `engine` to set the default language engine for all code chunks, which makes it possible to spin a script written in another language (e.g., a Python `.py` file) into a report without having to set `#+ engine=...` on every chunk. By default, the engine is guessed from the input file's extension (e.g., `.py` implies `python`), and a chunk that sets its own `engine` option still overrides the default. This only applies to the Markdown output formats (thanks, @fdetsch, @katrinabrock, #1773).
 
 - A code chunk that returns a `shiny.tag` or `shiny.tag.list` object (e.g., from **htmltools**) can now have a figure caption and be cross-referenced, in the same way as **htmlwidgets**. For example, the chunk below produces a captioned figure that can be referenced via `\@ref(fig:mytag)` in **bookdown** (thanks, @cpsievert, #1650):

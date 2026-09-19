@@ -137,8 +137,11 @@ hook_plot_tex = function(x, options) {
         scap = strsplit(cap, '[:.;]( |\\\\|$)')[[1L]][1L]
       }
       scap = if (is.null(scap) || is.na(scap)) '' else sprintf('[%s]', scap)
+      # caption command; customizable via fig.cap.command, e.g. \appendcaption
+      # for appendix figures (#1872)
+      cmd = options$fig.cap.command %n% '\\caption'
       if (cap == '') '' else sprintf(
-        '\\caption%s{%s}%s\n', escape_percent(scap), escape_percent(cap),
+        '%s%s{%s}%s\n', cmd, escape_percent(scap), escape_percent(cap),
         create_label(lab, if (mcap) c('-', fig.cur), latex = TRUE)
       )
     }
