@@ -43,7 +43,7 @@ local({
 # Rcpp can be loaded on a machine without a C++ compiler (it ships as a binary),
 # so first probe that a trivial chunk actually compiles; skip only if it doesn't
 # (no toolchain). The real assertion then runs unguarded, so a regression in the
-# multi-file path surfaces as a failure instead of being masked as a skip (#2367)
+# multi-file path surfaces as a failure instead of being masked as a skip
 local({
   if (!loadable('Rcpp')) return()
   probe = tryCatch(knit(text = c(
@@ -61,7 +61,7 @@ local({
   # not from the concatenated code (the header would be missing at build time)
   assert('an Rcpp chunk compiles a source file with its sibling header (#2367)', {
     knit(text = sprintf('```{Rcpp, file=c("%s", "%s")}\n```', h, cpp), quiet = TRUE)
-    (exists('add_one')); (add_one(41L) == 42L)
+    (add_one(41L) == 42L)
   })
 })
 
