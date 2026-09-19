@@ -546,6 +546,9 @@
 <p><code>kable(format = &quot;simple&quot;)</code> now generates a Pandoc multiline table when any cell contains a line break (<code>\n</code>), so that the alignment of multiline content is preserved. Previously, a line break broke the layout because Pandoc’s simple tables cannot represent line breaks in cells (thanks, <a href="https://github.com/mgacc0">@mgacc0</a>, <a href="https://github.com/yihui/knitr/issues/2021">#2021</a>).</p>
 </li>
 <li>
+<p>Added a new chunk option <code>fig.cap.command</code> for LaTeX output to customize the command that generates figure captions (defaults to <code>\caption</code>), e.g., <code>fig.cap.command = &quot;\\appendcaption&quot;</code> for figures in an appendix (thanks, <a href="https://github.com/eliocamp">@eliocamp</a>, <a href="https://github.com/yihui/knitr/issues/1872">#1872</a>).</p>
+</li>
+<li>
 <p><code>spin()</code> gained a new argument <code>engine</code> to set the default language engine for all code chunks, which makes it possible to spin a script written in another language (e.g., a Python <code>.py</code> file) into a report without having to set <code>#+ engine=...</code> on every chunk. By default, the engine is guessed from the input file’s extension (e.g., <code>.py</code> implies <code>python</code>), and a chunk that sets its own <code>engine</code> option still overrides the default. This only applies to the Markdown output formats (thanks, <a href="https://github.com/fdetsch">@fdetsch</a>, <a href="https://github.com/katrinabrock">@katrinabrock</a>, <a href="https://github.com/yihui/knitr/issues/1773">#1773</a>).</p>
 </li>
 <li>
