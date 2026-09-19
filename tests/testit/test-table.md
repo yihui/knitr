@@ -330,8 +330,8 @@ kable(data.frame(x = c('10<>', '5&2'), y = c('3>8', '"40"')), 'html')
 <table>
  <thead>
   <tr>
-   <th style="text-align:left;"> x </th>
-   <th style="text-align:left;"> y </th>
+   <th scope="col" style="text-align:left;"> x </th>
+   <th scope="col" style="text-align:left;"> y </th>
   </tr>
  </thead>
 <tbody>
@@ -356,8 +356,8 @@ kable(data.frame(x = c('10<>', '5&2'), y = c('3>8', '"40"')), 'html', escape = F
 <table>
  <thead>
   <tr>
-   <th style="text-align:left;"> x </th>
-   <th style="text-align:left;"> y </th>
+   <th scope="col" style="text-align:left;"> x </th>
+   <th scope="col" style="text-align:left;"> y </th>
   </tr>
  </thead>
 <tbody>
@@ -368,6 +368,56 @@ kable(data.frame(x = c('10<>', '5&2'), y = c('3>8', '"40"')), 'html', escape = F
   <tr>
    <td style="text-align:left;"> 5&2 </td>
    <td style="text-align:left;"> "40" </td>
+  </tr>
+</tbody>
+</table>
+```
+
+kable() marks up column headers with scope="col", and (when the option knitr.table.html.row.header is TRUE) row-name cells with <th scope="row">, for accessibility (#1747). The empty corner cell above the row names is not a header for either dimension and gets no scope.
+
+```{r}
+local({
+  opts = options(knitr.table.html.row.header = TRUE); on.exit(options(opts))
+  kable(matrix(1:2, 1, dimnames = list('a', c('x', 'y'))), format = 'html')
+})
+```
+```
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th scope="col" style="text-align:right;"> x </th>
+   <th scope="col" style="text-align:right;"> y </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <th scope="row" style="text-align:left;"> a </th>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 2 </td>
+  </tr>
+</tbody>
+</table>
+```
+
+```{r}
+m = matrix(1:2, nrow = 1, dimnames = list('a', c('x', 'y')))
+kable(m, format = 'html')
+```
+```
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th scope="col" style="text-align:right;"> x </th>
+   <th scope="col" style="text-align:right;"> y </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> a </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 2 </td>
   </tr>
 </tbody>
 </table>

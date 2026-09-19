@@ -113,6 +113,12 @@
 #'   tag, e.g., `'class="table" id="mytable"'`. Can be set globally via the
 #'   option `knitr.table.html.attr`.}
 #' }
+#' Column headers are always given the `scope="col"` attribute for
+#' accessibility. In addition, if the option `knitr.table.html.row.header` is
+#' set to `TRUE`, the row-name cells (i.e., the first column when row names are
+#' included) are marked up as row headers with `<th scope="row">` instead of
+#' `<td>`. This is off by default because `<th>` cells may be rendered
+#' differently from `<td>` (e.g., in bold) and could affect existing styles.
 #' @section Arguments for the `pipe`, `simple`, `rst`, `jira`, and `org` formats:
 #' \describe{
 #'   \item{`padding`}{(`1`) The number of spaces used to pad table cells. Set
@@ -239,6 +245,7 @@ kable = function(
     stop("'align' must be a character vector of possible values 'l', 'r', and 'c'")
   attr(x, 'align') = align
   attr(x, 'is_num') = is_num
+  attr(x, 'rownames') = row.names
   # simple tables do not 0-row tables (--- will be treated as an hr line)
   if (format == 'simple' && nrow(x) == 0) format = 'pipe'
   res = do.call(
@@ -457,17 +464,31 @@ kable_html = function(
   }
   if (identical(caption, NA)) caption = NULL
   cap = if (length(caption)) sprintf('\n<caption>%s</caption>', caption) else ''
+  # does the first column hold row names?
+  has_rn = isTRUE(attr(x, 'rownames'))
+  # whether to also mark up row-name cells as row headers (<th scope="row">) for
+  # accessibility (#1747); off by default because <th> is rendered differently
+  # from <td> (e.g., bold) and may affect existing CSS
+  row_header = has_rn && isTRUE(getOption('knitr.table.html.row.header', FALSE))
   if (escape) x = html_escape(x)
   one_string(c(
     sprintf('<table%s>%s', table.attr, cap),
     if (!is.null(cn <- colnames(x))) {
       if (escape) cn = html_escape(cn)
-      c(' <thead>', '  <tr>', sprintf('   <th%s> %s </th>', align, cn), '  </tr>', ' </thead>')
+      # column headers get scope="col"; the corner cell above the row names (if
+      # any) is not a header for either dimension, so it gets no scope
+      scope = rep(' scope="col"', length(cn))
+      if (has_rn) scope[1L] = ''
+      c(' <thead>', '  <tr>', sprintf('   <th%s%s> %s </th>', scope, align, cn), '  </tr>', ' </thead>')
     },
     '<tbody>',
     paste(
       '  <tr>',
-      apply(x, 1, function(z) one_string(sprintf('   <td%s> %s </td>', align, z))),
+      apply(x, 1, function(z) {
+        # the row-name cell (first column) becomes a row header
+        tag = if (row_header) c('th scope="row"', rep('td', length(z) - 1L)) else rep('td', length(z))
+        one_string(sprintf('   <%s%s> %s </%s>', tag, align, z, sub(' .*', '', tag)))
+      }),
       '  </tr>', sep = '\n'
     ),
     '</tbody>',
