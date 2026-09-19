@@ -81,6 +81,8 @@
 
 ## BUG FIXES
 
+- `hook_purl()` (the hook that writes a tangled R script while weaving a document) now preserves the `#|` cell options in the output, matching the behavior of `purl()`. Previously these options were dropped (thanks, @cderv, #2414).
+
 - `spin()` now inserts a space before the chunk label in the generated chunk header when the label comes from a `## ----label` token (as produced by `purl(documentation = 2)`). Previously it produced an invalid header like ```` ```{rlabel} ````, in which the label was glued to the engine name; on a subsequent `purl()`, `rlabel` was then treated as an engine name and the chunk was mis-parsed. This improves the round-trip stability between `purl()` and `spin()` (thanks, @krlmlr, #2014).
 
 - When tangling (i.e., `purl()`) an R Markdown document that defines `params` in its YAML front matter, chunk options that reference those parameters (e.g., `eval = params$foo`) are now resolved correctly. Previously such a chunk was silently dropped from the tangled script because `params` was not available when the option was evaluated. Parsing the YAML `params` does not involve evaluating any code in the document, so this remains a purely static operation (thanks, @cderv, #1938).
