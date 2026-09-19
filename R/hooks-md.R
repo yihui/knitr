@@ -254,8 +254,8 @@ fenced_block = function(x, attr = NULL, class = NULL, .char = '`') {
 # convert some engine names to language names
 eng2lang = function(x) {
   d = c(
-    asy = 'cpp', mysql = 'sql', node = 'javascript', psql = 'sql',
-    rscript = 'r', rcpp = 'cpp', tikz = 'tex'
+    asy = 'cpp', mysql = 'sql', node = 'javascript', ps = 'powershell',
+    psql = 'sql', rscript = 'r', rcpp = 'cpp', tikz = 'tex'
   )
   x = tolower(x)
   if (x %in% names(d)) d[x] else x

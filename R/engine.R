@@ -459,6 +459,18 @@ eng_highlight = function(options) {
   } else res
 }
 
+## PowerShell: run the chunk as a .ps1 script file (PowerShell requires the
+## .ps1 extension and the -File argument; -ExecutionPolicy Bypass lets the
+## unsigned temp script run under Windows' default policy), via the exec engine
+eng_ps = function(options) {
+  opts = list(
+    command = 'powershell', ext = 'ps1',
+    args1 = c('-ExecutionPolicy', 'Bypass', '-File')
+  )
+  options$engine.opts = merge_list(opts, options$engine.opts)
+  eng_exec(options)
+}
+
 ## save the code
 eng_cat = function(options) {
   cat2 = function(..., file = '', sep = '\n', lang = NULL) {
@@ -1074,6 +1086,7 @@ knit_engines$set(
   highlight = eng_highlight,
   js = eng_js,
   julia = eng_julia,
+  ps = eng_ps,
   python = eng_python,
   R = eng_r,
   Rcpp = eng_Rcpp,
