@@ -112,6 +112,20 @@ assert("fig.topcaption places \\caption before the image in LaTeX output (#1990)
   (length(gregexpr('\\caption', res2, fixed = TRUE)[[1]]) == 1L)
 })
 
+assert("fig.cap.command customizes the caption command (#1872)", {
+  cap_opts = function(...) opts_chunk$merge(list(
+    label = 'l', fig.cap = 'Cap', fig.scap = NA, fig.show = 'asis', ...
+  ))
+
+  # default: \caption
+  (grepl('\\caption{Cap}', hook_plot_tex('foo.pdf', cap_opts()), fixed = TRUE))
+
+  # custom command
+  res = hook_plot_tex('foo.pdf', cap_opts(fig.cap.command = '\\appendcaption'))
+  (grepl('\\appendcaption{Cap}', res, fixed = TRUE))
+  (!grepl('\\caption{Cap}', res, fixed = TRUE))
+})
+
 assert("subfigures are separated by \\\\ (not \\newline) so \\centering works (#1907)", {
   sub_opts = function(cur) opts_chunk$merge(list(
     label = 'f', fig.cap = 'C', fig.subcap = c('a', 'b', 'c'), fig.ncol = 1,
