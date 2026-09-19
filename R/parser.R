@@ -152,7 +152,11 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
       )
     }
     code = as.character(code)
-    knit_code$set(setNames(list(structure(code, chunk_opts = params)), label))
+    # also stash the raw `#|` option lines so hook_purl() can reproduce them in
+    # the tangled script (it has no access to the parsed block's params.chunk)
+    knit_code$set(setNames(list(
+      structure(code, chunk_opts = params, chunk_src = parts$src)
+    ), label))
   }
 
   # store dependencies

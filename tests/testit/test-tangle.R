@@ -128,6 +128,20 @@ assert('purl() tangles a Python-first document to Python code (#1928)', {
   (any(grepl('^/[*]%% a .* [*]/$', out4)))
 })
 
+# hook_purl() writes the tangled script while weaving; it should preserve the
+# `#|` cell options in the output, just like purl() itself does (#2414)
+assert('hook_purl() keeps `#|` cell options in the tangled script (#2414)', {
+  hooks = knit_hooks$get('purl'); knit_hooks$set(purl = hook_purl)
+  input = tempfile(fileext = '.Rmd'); script = with_ext(input, 'R')
+  on.exit({
+    knit_hooks$set(purl = hooks); unlink(c(input, script, with_ext(input, 'md')))
+  }, add = TRUE)
+  write_utf8(c('```{r}', '#| eval: false', '#| fig.width: 8', '1 + 1', '```'), input)
+  knit(input, output = with_ext(input, 'md'), quiet = TRUE)
+  out = read_utf8(script)
+  ('#| eval: false' %in% out); ('#| fig.width: 8' %in% out)
+})
+
 # option hooks are now applied during tangling, so a hook can decide which chunks
 # to keep in the tangled script based on other options such as the label (#1903)
 assert('purl() runs option hooks so a label hook can set purl', {
