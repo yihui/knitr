@@ -311,10 +311,33 @@ eng_Rcpp = function(options) {
   if (!is.environment(opts$env)) opts$env = knit_global() # default env is knit_global()
   if (options$eval) {
     message('Building shared library for Rcpp code chunk...')
-    do.call(sourceCpp, c(list(code = code), opts))
+    # when the chunk reads from files (the `file` option), compile the file(s)
+    # instead of the concatenated code, so that a source file can #include its
+    # sibling headers (sourceCpp() adds the source file's dir to the include
+    # path); this supports .h/.cpp pairs and multi-file chunks (#2367)
+    if (length(files <- options$file)) {
+      do.call(sourceCpp_files, c(list(sourceCpp, files), opts))
+    } else {
+      do.call(sourceCpp, c(list(code = code), opts))
+    }
   }
 
   engine_output(options, code, '')
+}
+
+# compile Rcpp source file(s) with sourceCpp(): copy all files into one dir
+# under their original basenames so a .cpp can #include its sibling headers,
+# then compile the last .cpp/.cc file (headers are typically listed first)
+sourceCpp_files = function(sourceCpp, files, ...) {
+  i = grep('[.]c(c|pp|xx)$', files, ignore.case = TRUE)
+  if (length(i) == 0) stop(
+    "the 'file' option for an Rcpp chunk must include a .cpp source file"
+  )
+  files = in_input_dir(normalizePath(files))
+  d = tempfile('rcpp'); dir.create(d)
+  on.exit(unlink(d, recursive = TRUE), add = TRUE)
+  file.copy(files, file.path(d, basename(files)))
+  sourceCpp(file = file.path(d, basename(files[i[length(i)]])), ...)
 }
 
 ## Julia
