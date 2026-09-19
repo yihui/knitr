@@ -20,6 +20,26 @@ assert('the ditaa engine passes its default arguments (#2092)', {
   (grepl('^ditaa -s 2 -T -S -E ', eng_plot_cmd('ditaa')))
 })
 
+# run PowerShell only if it is both found and actually executable here (avoid
+# assuming it works on CRAN/Windows machines: try a trivial command first and
+# skip the test unless it produces the expected output)
+local({
+  if (!nzchar(ps_cmd <- Sys.which('powershell')) && !nzchar(ps_cmd <- Sys.which('pwsh')))
+    return()
+  probe = tryCatch(
+    system2(ps_cmd, c('-Command', 'Write-Output ok'), stdout = TRUE, stderr = TRUE),
+    error = function(e) ''
+  )
+  if (!any(grepl('^ok$', probe))) return()
+  assert('the ps engine runs PowerShell code (#1932)', {
+    out = knit(text = c(
+      sprintf('```{ps, engine.opts=list(command="%s")}', basename(ps_cmd)),
+      'Write-Output "hello ps"', '```'
+    ), quiet = TRUE)
+    (grepl('hello ps', out))
+  })
+})
+
 assert('other plot engines do not take the ditaa arguments', {
   (!grepl('-s 2 -T -S -E', eng_plot_cmd('dot')))
   (!grepl('-s 2 -T -S -E', eng_plot_cmd('asy')))
