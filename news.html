@@ -625,6 +625,9 @@ registerS3method(
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
+<p><code>hook_purl()</code> (the hook that writes a tangled R script while weaving a document) now preserves the <code>#|</code> cell options in the output, matching the behavior of <code>purl()</code>. Previously these options were dropped (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2414">#2414</a>).</p>
+</li>
+<li>
 <p><code>spin()</code> now inserts a space before the chunk label in the generated chunk header when the label comes from a <code>## ----label</code> token (as produced by <code>purl(documentation = 2)</code>). Previously it produced an invalid header like <code>```{rlabel}</code>, in which the label was glued to the engine name; on a subsequent <code>purl()</code>, <code>rlabel</code> was then treated as an engine name and the chunk was mis-parsed. This improves the round-trip stability between <code>purl()</code> and <code>spin()</code> (thanks, <a href="https://github.com/krlmlr">@krlmlr</a>, <a href="https://github.com/yihui/knitr/issues/2014">#2014</a>).</p>
 </li>
 <li>
