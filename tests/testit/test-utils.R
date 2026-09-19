@@ -278,3 +278,25 @@ assert('dev and dpi are convert to fig-format and fig-dpi', {
   (dash_names(opts)[['fig-dpi']] %==% 750)
   rm(opts)
 })
+
+# vignette_depends() reads \VignetteDepends{} from the current input and turns
+# off chunk evaluation when any declared package is unavailable (#2164)
+assert('vignette_depends() disables eval when a declared dependency is missing (#2164)', {
+  on.exit(opts_chunk$restore(), add = TRUE)
+  render_vignette = function(dep) {
+    input = tempfile(fileext = '.Rmd')
+    writeLines(c(
+      '---', 'title: t', 'vignette: >',
+      paste0('  %\\VignetteDepends{', dep, '}'), '---',
+      '```{r}', 'knitr::vignette_depends()', '```',
+      '```{r}', '41 + 1', '```'
+    ), input)
+    on.exit(unlink(input), add = TRUE)
+    out = knit(input, tempfile(fileext = '.md'), quiet = TRUE)
+    any(grepl('42', read_utf8(out)))
+  }
+  # a missing dependency skips the later chunk, so its output (42) is absent
+  (!render_vignette('a_package_that_does_not_exist_2164'))
+  # available dependencies leave evaluation on
+  (render_vignette('tools, utils'))
+})
