@@ -40,6 +40,31 @@ local({
   })
 })
 
+# Rcpp can be loaded on a machine without a C++ compiler (it ships as a binary),
+# so first probe that a trivial chunk actually compiles; skip only if it doesn't
+# (no toolchain). The real assertion then runs unguarded, so a regression in the
+# multi-file path surfaces as a failure instead of being masked as a skip
+local({
+  if (!loadable('Rcpp')) return()
+  probe = tryCatch(knit(text = c(
+    '```{Rcpp}', '// [[Rcpp::export]]', 'int knitr_probe() { return 1; }', '```'
+  ), quiet = TRUE), error = function(e) NULL)
+  if (is.null(probe) || !exists('knitr_probe')) return()
+
+  d = tempfile(); dir.create(d); on.exit(unlink(d, recursive = TRUE), add = TRUE)
+  writeLines(c('#include <Rcpp.h>', 'int addone(int x);'), h <- file.path(d, 'inc.h'))
+  writeLines(c(
+    '#include "inc.h"', 'int addone(int x) { return x + 1; }',
+    '// [[Rcpp::export]]', 'int add_one(int y) { return addone(y); }'
+  ), cpp <- file.path(d, 'src.cpp'))
+  # a source file that #includes a sibling header must be compiled from files,
+  # not from the concatenated code (the header would be missing at build time)
+  assert('an Rcpp chunk compiles a source file with its sibling header (#2367)', {
+    knit(text = sprintf('```{Rcpp, file=c("%s", "%s")}\n```', h, cpp), quiet = TRUE)
+    (add_one(41L) == 42L)
+  })
+})
+
 assert('other plot engines do not take the ditaa arguments', {
   (!grepl('-s 2 -T -S -E', eng_plot_cmd('dot')))
   (!grepl('-s 2 -T -S -E', eng_plot_cmd('asy')))
