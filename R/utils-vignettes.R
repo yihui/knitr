@@ -25,6 +25,34 @@
 #' vig_list[['knitr::docco_classic']][c('weave', 'tangle')]
 NULL
 
+#' Skip vignette evaluation when declared dependencies are unavailable
+#'
+#' A vignette may illustrate the use of a package in combination with other
+#' packages that are only \samp{Suggests}ed and could be unavailable when the
+#' vignette is built (e.g., on CRAN). If these packages are declared via
+#' \samp{\\VignetteDepends{}} in the vignette, calling `vignette_depends()` in
+#' the first code chunk sets the chunk option `eval = FALSE` (via
+#' [opts_chunk]) when any of them is not installed, so that the rest of the
+#' vignette is not evaluated (but still shown).
+#'
+#' The dependencies are read from the current input document (see
+#' [current_input()]) with [tools::vignetteInfo()], so this function only makes
+#' sense when called while a vignette is being built.
+#' @return The character vector of missing packages (if any), invisibly. As a
+#'   side effect, `eval = FALSE` is set globally for subsequent chunks when the
+#'   vector is non-empty.
+#' @export
+#' @examples
+#' # in the setup chunk of a vignette that has \VignetteDepends{pkgA, pkgB}:
+#' # knitr::vignette_depends()
+vignette_depends = function() {
+  input = current_input()
+  pkgs = if (length(input)) tools::vignetteInfo(input)$depends
+  missing = pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]
+  if (length(missing)) opts_chunk$set(eval = FALSE)
+  invisible(missing)
+}
+
 vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
   {
     on.exit({opts_chunk$restore(); knit_hooks$restore()}, add = TRUE)
