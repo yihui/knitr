@@ -628,6 +628,9 @@ registerS3method(
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
+<p>A <code>verbatim</code> (or <code>embed</code>) chunk now ignores a global <code>echo = FALSE</code> and always shows its content, since displaying the content verbatim is the whole point of these chunks (a global <code>echo = FALSE</code> is common, e.g., it is the default of Quarto’s <code>revealjs</code> format). An <code>echo</code> option set on the chunk itself is still honored, so <code>echo = FALSE</code> on a specific <code>verbatim</code> chunk continues to hide it (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2239">#2239</a>).</p>
+</li>
+<li>
 <p><code>hook_purl()</code> (the hook that writes a tangled R script while weaving a document) now preserves the <code>#|</code> cell options in the output, matching the behavior of <code>purl()</code>. Previously these options were dropped (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2414">#2414</a>).</p>
 </li>
 <li>
