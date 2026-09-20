@@ -30,6 +30,8 @@
 
 - Added a `ps` engine to run PowerShell code chunks. The code is written to a `.ps1` script and executed with `powershell -File`. To use the newer cross-platform PowerShell (`pwsh`), set the chunk option `engine.opts = list(command = "pwsh")` (thanks, @cderv, #1932).
 
+- Added a chunk option `log.echo`. When set to `TRUE`, each expression in an R code chunk is logged to `stderr` immediately before it is evaluated (via the `log_echo` argument of `evaluate::evaluate()`). This is useful for debugging documents rendered in remote or batch contexts, where you can see exactly which code is executing (and, if the logging platform adds timestamps, which code is slow) before the output document is produced (thanks, @hadley, #2222).
+
 - A code chunk that returns a `shiny.tag` or `shiny.tag.list` object (e.g., from **htmltools**) can now have a figure caption and be cross-referenced, in the same way as **htmlwidgets**. For example, the chunk below produces a captioned figure that can be referenced via `\@ref(fig:mytag)` in **bookdown** (thanks, @cpsievert, #1650):
 
     ````
