@@ -87,6 +87,8 @@
 
 ## BUG FIXES
 
+- A `sql` chunk that contains no `?`-style interpolation variable is no longer passed to `DBI::sqlParseVariables()` / `DBI::sqlInterpolate()`. Those functions re-lex the SQL and could raise a spurious `Unterminated literal` error on valid queries that they cannot fully parse, such as Postgres dollar-quoted string constants (e.g. `SELECT $$Dianne's horse$$;`). Interpolation of `?`-variables is unaffected (thanks, @ZhangAngus, rstudio/rmarkdown#2342).
+
 - When the chunk option `eval` is a numeric vector (i.e., only certain lines of a chunk are evaluated), the lines that are echoed but not evaluated are no longer prefixed with the comment marker `## ` in the output. This makes it possible to show one line of code but the result of another without polluting the displayed source, e.g., `eval = 2` on a chunk containing `mtcars` and `rmarkdown::paged_table(mtcars)` echoes both lines as-is but only runs the second one (thanks, @cderv, #2129).
 
 - A `verbatim` (or `embed`) chunk now ignores a global `echo = FALSE` and always shows its content, since displaying the content verbatim is the whole point of these chunks (a global `echo = FALSE` is common, e.g., it is the default of Quarto's `revealjs` format). An `echo` option set on the chunk itself is still honored, so `echo = FALSE` on a specific `verbatim` chunk continues to hide it (thanks, @cderv, #2239).
