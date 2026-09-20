@@ -679,6 +679,10 @@ eng_sql = function(options) {
 
   # Return char vector of sql interpolation param names
   varnames_from_sql = function(conn, sql) {
+    # only parse for interpolation variables when the `?` placeholder is present;
+    # otherwise DBI::sqlParseVariables() can error on valid SQL that it cannot fully
+    # lex, e.g. Postgres dollar-quoted string constants like `$$Dianne's horse$$`
+    if (!grepl('?', sql, fixed = TRUE)) return(NULL)
     varPos = DBI::sqlParseVariables(conn, sql)
     if (length(varPos$start) > 0) {
       varNames = substring(sql, varPos$start, varPos$end)
@@ -694,6 +698,9 @@ eng_sql = function(options) {
   # Interpolate a sql query based on the variables in an environment
   interpolate_from_env = function(conn, sql, env = knit_global(), inherits = TRUE) {
     names = unique(varnames_from_sql(conn, sql))
+    # nothing to interpolate: return the query as-is (sqlInterpolate() would also
+    # re-lex the SQL and could choke on constructs like dollar-quoted strings)
+    if (length(names) == 0) return(sql)
     names_missing = names[!mexists(names, env, inherits)]
     if (length(names_missing) > 0) {
       stop("Object(s) not found: ", paste('"', names_missing, '"', collapse = ", "))

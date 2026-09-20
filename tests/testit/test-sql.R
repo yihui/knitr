@@ -126,6 +126,19 @@ if (all(vapply(c('DBI', 'RSQLite'), loadable, logical(1)))) {
     (has_error(run_sql('SELECT 1', sql.result.fun = 'nope')))
   })
 
+  assert('a query without ?-placeholders is not parsed for interpolation (rstudio/rmarkdown#2342)', {
+    # a string literal containing an apostrophe (and no `?` interpolation variable)
+    # must not be handed to DBI::sqlParseVariables()/sqlInterpolate(), which would
+    # mis-lex it (e.g. Postgres dollar-quoting triggers "Unterminated literal")
+    out = run_sql("SELECT 'Dianne''s horse' AS x")
+    (grepl("Dianne", out))
+    # interpolation of ?-variables still works
+    assign('id', 2L, envir = knit_global())
+    out = run_sql('SELECT ?id AS x')
+    (grepl('\\|[ ]*2[ ]*\\|', out))
+    rm('id', envir = knit_global())
+  })
+
   DBI::dbDisconnect(con)
   opts_knit$restore()
 }
