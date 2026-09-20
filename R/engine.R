@@ -1052,17 +1052,10 @@ eng_verbatim = function(options) {
   # the whole point of a verbatim chunk is to show its content, so a global
   # echo = FALSE (e.g. the default of the revealjs format) should not silence
   # it; ignore the inherited default but still honor an echo set on this chunk
-  if (isFALSE(options$echo) && is.null(chunk_option(options$label, 'echo')))
+  if (isFALSE(options$echo) && is.null(local_chunk_opts(options$label, 'echo')))
     options$echo = TRUE
   options = set_lang(options)
   eng_cat(options)
-}
-
-# the value of a chunk option as explicitly written in the chunk header (or the
-# `#|` lines), i.e. before merging with the global options; NULL if not set
-chunk_option = function(label, name) {
-  if (is.null(label)) return()
-  attr(knit_code$get(label), 'chunk_opts')[[name]]
 }
 
 set_lang = function(options, default = 'default') {

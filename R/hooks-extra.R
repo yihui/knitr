@@ -147,7 +147,7 @@ hook_purl = function(before, options, ...) {
   # options to tell whether `error` and `comment` were explicitly set (the
   # merged `comment` is never NULL because of its global default)
   block = knit_code$get(options$label)
-  local_opts = attr(block, 'chunk_opts')
+  local_opts = local_chunk_opts(block)
   code = tangle_mask(options$code, options$eval, local_opts[['error']], local_opts[['comment']])
   if (is.character(output)) {
     # carry the raw `#|` option lines into label_code() so they are preserved in
