@@ -297,6 +297,9 @@ eng_r = function(options) {
       stop_on_error = if (is.numeric(options$error)) options$error else {
         if (options$error && options$include) 0L else 2L
       },
+      # log each expression to stderr as it runs, so long-running or failing code
+      # can be traced in remote/batch contexts where the output is not visible yet
+      log_echo = isTRUE(options$log.echo),
       output_handler = knit_handlers(options$render, options)
     )
   )

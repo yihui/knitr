@@ -22,3 +22,13 @@ assert('label_code correct adds comment on code for yaml block or parsed param',
   (label_code("1+1", list(params.chunk = c("#| label: test", "#| eval: true"))) %==%
       "## --------\n#| label: test\n#| eval: true\n1+1\n")
 })
+
+assert('the chunk option log.echo streams executing code to stderr (#2222)', {
+  code = c('```{r log.echo=TRUE}', 'x <- 1', 'x + 1', '```')
+  err = capture.output(out <- knit(text = code, quiet = TRUE), type = 'message')
+  (all(c('x <- 1', 'x + 1') %in% err))
+  # off by default: no code is logged to stderr
+  code = c('```{r}', 'y <- 2', 'y + 2', '```')
+  err = capture.output(out <- knit(text = code, quiet = TRUE), type = 'message')
+  (!any(c('y <- 2', 'y + 2') %in% err))
+})
