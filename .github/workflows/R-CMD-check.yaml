@@ -38,14 +38,14 @@ jobs:
           - {os: ubuntu-latest,  r: 'oldrel-1'}
           - {os: ubuntu-latest,  r: 'oldrel-2'}
           - {os: ubuntu-latest,  r: 'oldrel-3'}
-          - {os: ubuntu-latest,  r: 'oldrel-4', extra-packages: 'magick@2.8.5'}
+          - {os: ubuntu-latest,  r: 'oldrel-4'}
 
     env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       DISPLAY: ':99.0'
       RGL_USE_NULL: TRUE
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      _R_CHECK_FORCE_SUGGESTS_: false
 
     steps:
       - uses: actions/checkout@v7
@@ -63,30 +63,35 @@ jobs:
 
       - if: github.event.inputs.extra-packages
         run: |
-          echo "::notice::Running with the following extra packages for pak: ${{ github.event.inputs.extra-packages }}"
+          echo "::notice::Running with the following extra packages: ${{ github.event.inputs.extra-packages }}"
         shell: bash
 
-      - uses: r-lib/actions/setup-r-dependencies@v2.13.0
+      - uses: yihui/actions/setup-r-dependencies@HEAD
         with:
+          r-universe: cran
           extra-packages: >
-            any::rcmdcheck,
-            gridSVG=?ignore-before-r=4.0.0,
-            targets=?ignore-before-r=4.0.0,
-            JuliaCall=?ignore-before-r=4.0.0,
-            magick=?ignore-before-r=4.0.0,
-            ${{ matrix.config.extra-packages && format('{0},', join(matrix.config.extra-packages, ',')) }}
+            ${{ (runner.os == 'Linux' && matrix.config.r == 'release') && 'covr' || '' }}
             ${{ github.event.inputs.extra-packages }}
-          needs: check
 
-      - uses: r-lib/actions/check-r-package@v2.13.0
-        env:
-          _R_CHECK_FORCE_SUGGESTS_: false
-        with:
-          upload-snapshots: true
+      - uses: yihui/actions/check-r-package@HEAD
 
       - name: Test coverage
         if: success() && runner.os == 'Linux' && matrix.config.r == 'release'
         run: |
-          pak::pak("covr")
-          covr::codecov()
+          cov = covr::package_coverage(
+            quiet = FALSE,
+            clean = FALSE,
+            install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
+          )
+          print(cov)
+          covr::to_cobertura(cov)
         shell: Rscript {0}
+
+      - uses: codecov/codecov-action@HEAD
+        if: success() && runner.os == 'Linux' && matrix.config.r == 'release'
+        with:
+          fail_ci_if_error: ${{ github.event_name != 'pull_request' || secrets.CODECOV_TOKEN }}
+          files: ./cobertura.xml
+          plugins: noop
+          disable_search: true
+          token: ${{ secrets.CODECOV_TOKEN }}
