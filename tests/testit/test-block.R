@@ -50,3 +50,23 @@ assert('a numeric eval echoes non-evaluated lines without a comment mask (#2129)
   (grepl('# keep me', out))
   (!grepl('#<knitr>', out))
 })
+
+if (loadable('rlang')) assert('warnings get an rlang backtrace when opted in (#2219)', {
+  code = c('```{r}', 'f = function() g()', 'g = function() warning("oops")', 'f()', '```')
+  op = options(rlang_backtrace_on_warning_report = NULL)
+
+  # off by default: only the warning message, no backtrace
+  out = knit(text = code, quiet = TRUE)
+  (grepl('Warning.*oops', out))
+  (!grepl('Backtrace', out))
+
+  # opt in: the backtrace is shown (the call tree includes both f() and g())
+  options(rlang_backtrace_on_warning_report = 'full')
+  out = knit(text = code, quiet = TRUE)
+  (grepl('Backtrace', out))
+  (grepl('f\\(\\)', out) && grepl('g\\(\\)', out))
+  # the backtrace appears exactly once (no duplication)
+  (length(gregexpr('Backtrace', out)[[1]]) == 1L)
+
+  options(op)
+})
