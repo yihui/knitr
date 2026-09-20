@@ -479,6 +479,32 @@ pandoc_from = function(exact = FALSE) {
   fmt_name(opts_knit$get('rmarkdown.pandoc.from'), exact) %n% 'markdown'
 }
 
+#' Get or check the active Quarto profile
+#'
+#' When a document is rendered by Quarto, the active
+#' [profile](https://quarto.org/docs/projects/profiles.html) names are stored in
+#' the environment variable \env{QUARTO_PROFILE} (multiple profiles are separated
+#' by commas). This function reads that variable so that you can make chunk
+#' output conditional on the profile, e.g., set the chunk option `eval` or
+#' `include` to `quarto_profile('production')`.
+#' @param profile An optional character vector of profile names to check against
+#'   the active profiles. If not provided, the active profile names are returned.
+#' @return If `profile` is not provided, a character vector of the active profile
+#'   names (or an empty vector when no profile is active). Otherwise, a logical
+#'   value indicating whether any of the given names is among the active
+#'   profiles.
+#' @export
+#' @examples
+#' # the active profiles
+#' knitr::quarto_profile()
+#' # whether the 'production' profile is active
+#' knitr::quarto_profile('production')
+quarto_profile = function(profile) {
+  active = Sys.getenv('QUARTO_PROFILE')
+  active = if (active == '') character() else trimws(strsplit(active, ',')[[1]])
+  if (missing(profile)) active else any(profile %in% active)
+}
+
 # pandoc format name: if not exact, return base name (remove extensions), e.g.,
 # latex-smart -> latex
 fmt_name = function(x, exact = FALSE) {

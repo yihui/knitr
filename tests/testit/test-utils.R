@@ -223,6 +223,23 @@ assert('pandoc_to gets the current Pandoc format', {
   opts_knit$set(opts)
 })
 
+assert('quarto_profile() reads QUARTO_PROFILE and checks membership', {
+  old = Sys.getenv('QUARTO_PROFILE', unset = NA)
+  on.exit(if (is.na(old)) Sys.unsetenv('QUARTO_PROFILE') else Sys.setenv(QUARTO_PROFILE = old), add = TRUE)
+
+  Sys.unsetenv('QUARTO_PROFILE')
+  (quarto_profile() %==% character())
+  (!quarto_profile('production'))
+
+  # multiple profiles are comma-separated and may carry surrounding spaces
+  Sys.setenv(QUARTO_PROFILE = 'production, fast')
+  (quarto_profile() %==% c('production', 'fast'))
+  (quarto_profile('production'))
+  (quarto_profile('fast'))
+  (!quarto_profile('draft'))
+  (quarto_profile(c('draft', 'fast')))
+})
+
 assert('comment_out() add prefix and newlines if asked', {
   (comment_out("a") %==% "## a\n")
   (comment_out("ab cd") %==% "## ab cd\n")
