@@ -561,6 +561,9 @@
 <p><code>spin()</code> gained a new argument <code>engine</code> to set the default language engine for all code chunks, which makes it possible to spin a script written in another language (e.g., a Python <code>.py</code> file) into a report without having to set <code>#+ engine=...</code> on every chunk. By default, the engine is guessed from the input file’s extension (e.g., <code>.py</code> implies <code>python</code>), and a chunk that sets its own <code>engine</code> option still overrides the default. This only applies to the Markdown output formats (thanks, <a href="https://github.com/fdetsch">@fdetsch</a>, <a href="https://github.com/katrinabrock">@katrinabrock</a>, <a href="https://github.com/yihui/knitr/issues/1773">#1773</a>).</p>
 </li>
 <li>
+<p><code>spin()</code> gained a new argument <code>roxygen</code>. When <code>roxygen = TRUE</code>, a block of consecutive <code>#'</code> lines that contains a <strong>roxygen2</strong> tag (a line like <code>#' [@param](https://github.com/param)</code>) is kept verbatim inside the code chunk instead of being converted to prose, so that the script remains valid <strong>roxygen2</strong> input; <code>#'</code> blocks without any tag are still treated as documentation (thanks, <a href="https://github.com/kylebutts">@kylebutts</a>, <a href="https://github.com/yihui/knitr/issues/2317">#2317</a>).</p>
+</li>
+<li>
 <p>Added a <code>ps</code> engine to run PowerShell code chunks. The code is written to a <code>.ps1</code> script and executed with <code>powershell -File</code>. To use the newer cross-platform PowerShell (<code>pwsh</code>), set the chunk option <code>engine.opts = list(command = &quot;pwsh&quot;)</code> (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/1932">#1932</a>).</p>
 </li>
 <li>
