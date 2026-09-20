@@ -39,6 +39,14 @@
 #'   file's extension (e.g., `.py` implies `'python'`, and other extensions
 #'   imply `'r'`). A chunk that sets its own `engine` option overrides this
 #'   default.
+#' @param roxygen Whether to preserve \pkg{roxygen2} documentation blocks as
+#'   code instead of converting them to prose. By default, all lines matching
+#'   `doc` (e.g. `#'`) become documentation text, which mangles \pkg{roxygen2}
+#'   comments (e.g. `#' @param` would lose its meaning). When `roxygen = TRUE`,
+#'   a block of consecutive `#'` lines that contains a roxygen tag (a line of
+#'   the form `#' @tag`) is kept verbatim inside the code chunk, so that the
+#'   script remains valid \pkg{roxygen2} input; `#'` blocks without any tag are
+#'   still treated as documentation.
 #' @author Yihui Xie, with the original idea from Richard FitzJohn (who named it
 #'   as `sowsear()` which meant to make a silk purse out of a sow's ear)
 #' @return If `text` is `NULL`, the path of the final output document,
@@ -62,7 +70,7 @@ spin = function(
   format = c('Rmd', 'Rnw', 'Rhtml', 'Rtex', 'Rrst', 'qmd'),
   doc = "^#+'[ ]?", inline = '^[{][{](.+)[}][}][ ]*$',
   comment = c("^[# ]*/[*]", "^.*[*]/ *$"), precious = !knit && is.null(text),
-  engine = NULL
+  engine = NULL, roxygen = FALSE
 ) {
 
   format = match.arg(format)
@@ -100,7 +108,20 @@ spin = function(
   # turn {{expr}} into inline expressions, e.g. `r expr` or \Sexpr{expr}
   if (any(i <- matchable & grepl(inline, x))) x[i] = gsub(inline, p[4], x[i])
 
-  r = rle((matchable & grepl(doc, x)) | i)  # inline expressions are treated as doc instead of code
+  is_doc = matchable & grepl(doc, x)
+  # when roxygen = TRUE, keep roxygen blocks as code (verbatim) instead of turning
+  # them into prose: within a run of consecutive doc lines, if any line carries a
+  # roxygen tag (`#' @tag`), the whole run is treated as code (#2317)
+  if (roxygen && any(is_doc)) {
+    tag = is_doc & grepl("^#+'[ ]?@", x)
+    d = rle(is_doc)
+    end = cumsum(d$lengths); start = end - d$lengths + 1L
+    for (k in which(d$values)) {
+      j = start[k]:end[k]
+      if (any(tag[j])) is_doc[j] = FALSE
+    }
+  }
+  r = rle(is_doc | i)  # inline expressions are treated as doc instead of code
   n = length(r$lengths); txt = vector('list', n); idx = c(0L, cumsum(r$lengths))
 
   for (i in seq_len(n)) {

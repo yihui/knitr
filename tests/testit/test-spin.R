@@ -93,3 +93,16 @@ assert("spin() guesses the chunk engine from the file extension", {
   (xfun::read_utf8(out) %==% c('Doc', '', '```{python}', 'print(1)', '```', ''))
   file.remove(f, out)
 })
+
+assert("spin(roxygen = TRUE) keeps roxygen blocks as code but plain #' as prose (#2317)", {
+  rox = c("#' @param x a number", "#' @export", "f <- function(x) x")
+  # by default a roxygen block is mangled into prose (@tags lose their meaning)
+  (spin_text(rox) %==%
+     c('@param x a number', '@export', '', '```{r}', 'f <- function(x) x', '```', ''))
+  # with roxygen = TRUE, a #' block containing an @tag is kept verbatim as code
+  (xfun::split_lines(spin(text = rox, knit = FALSE, roxygen = TRUE)) %==%
+     c('', '```{r}', rox, '```', ''))
+  # a #' block without any @tag is still treated as documentation
+  (xfun::split_lines(spin(text = c("#' just prose", "1 + 1"), knit = FALSE, roxygen = TRUE)) %==%
+     c('just prose', '', '```{r}', '1 + 1', '```', ''))
+})

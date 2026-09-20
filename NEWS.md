@@ -26,6 +26,8 @@
 
 - `spin()` gained a new argument `engine` to set the default language engine for all code chunks, which makes it possible to spin a script written in another language (e.g., a Python `.py` file) into a report without having to set `#+ engine=...` on every chunk. By default, the engine is guessed from the input file's extension (e.g., `.py` implies `python`), and a chunk that sets its own `engine` option still overrides the default. This only applies to the Markdown output formats (thanks, @fdetsch, @katrinabrock, #1773).
 
+- `spin()` gained a new argument `roxygen`. When `roxygen = TRUE`, a block of consecutive `#'` lines that contains a **roxygen2** tag (a line like `#' @param`) is kept verbatim inside the code chunk instead of being converted to prose, so that the script remains valid **roxygen2** input; `#'` blocks without any tag are still treated as documentation (thanks, @kylebutts, #2317).
+
 - Added a `ps` engine to run PowerShell code chunks. The code is written to a `.ps1` script and executed with `powershell -File`. To use the newer cross-platform PowerShell (`pwsh`), set the chunk option `engine.opts = list(command = "pwsh")` (thanks, @cderv, #1932).
 
 - A code chunk that returns a `shiny.tag` or `shiny.tag.list` object (e.g., from **htmltools**) can now have a figure caption and be cross-referenced, in the same way as **htmlwidgets**. For example, the chunk below produces a captioned figure that can be referenced via `\@ref(fig:mytag)` in **bookdown** (thanks, @cpsievert, #1650):

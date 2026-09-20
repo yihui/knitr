@@ -15,7 +15,8 @@ spin(
   inline = "^[{][{](.+)[}][}][ ]*$",
   comment = c("^[# ]*/[*]", "^.*[*]/ *$"),
   precious = !knit && is.null(text),
-  engine = NULL
+  engine = NULL,
+  roxygen = FALSE
 )
 }
 \arguments{
@@ -61,6 +62,15 @@ formats (\code{Rmd} and \code{qmd}). By default, the engine is guessed from the 
 file's extension (e.g., \code{.py} implies \code{'python'}, and other extensions
 imply \code{'r'}). A chunk that sets its own \code{engine} option overrides this
 default.}
+
+\item{roxygen}{Whether to preserve \pkg{roxygen2} documentation blocks as
+code instead of converting them to prose. By default, all lines matching
+\code{doc} (e.g. \verb{#'}) become documentation text, which mangles \pkg{roxygen2}
+comments (e.g. \verb{#' @param} would lose its meaning). When \code{roxygen = TRUE},
+a block of consecutive \verb{#'} lines that contains a roxygen tag (a line of
+the form \verb{#' @tag}) is kept verbatim inside the code chunk, so that the
+script remains valid \pkg{roxygen2} input; \verb{#'} blocks without any tag are
+still treated as documentation.}
 }
 \value{
 If \code{text} is \code{NULL}, the path of the final output document,
