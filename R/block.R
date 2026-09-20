@@ -146,6 +146,24 @@ local_chunk_opts = function(x, name) {
   if (missing(name)) opts else opts[[name]]
 }
 
+# the sentinel comment used to mask lines that should be echoed but not evaluated
+# (when `eval` is a numeric vector); it makes evaluate() skip these lines, and is
+# stripped from the echoed source afterwards so no comment marker leaks (#2129)
+mask.eval = '#<knitr>'
+
+# remove the mask.eval sentinel (added at the beginning of each masked line,
+# including continuation lines) from the source elements of an evaluate() result
+strip_mask = function(res) {
+  # mask.eval contains no regex metacharacters, so it is safe to use in a pattern;
+  # the sentinel is added at the start of the string and after each newline
+  rx = paste0('(^|\n)', mask.eval, ' ')
+  for (i in seq_along(res)) {
+    if (evaluate::is.source(res[[i]]))
+      res[[i]]$src = gsub(rx, '\\1', res[[i]]$src)
+  }
+  res
+}
+
 # options that should affect cache when cache level = 1,2
 cache1.opts = c('code', 'eval', 'cache', 'cache.path', 'cache.globals', 'message', 'warning', 'error')
 # more options affecting cache level 2
@@ -274,7 +292,9 @@ eng_r = function(options) {
     # group source code into syntactically complete expressions
     if (isFALSE(options$tidy)) code = sapply(xfun::split_source(code), one_string)
     iss = seq_along(code)
-    code = comment_out(code, '##', setdiff(iss, iss[ev]), newline = FALSE)
+    # mask the lines that should not be evaluated with a sentinel comment so that
+    # evaluate() skips them; the sentinel is stripped from the echoed source below
+    code = comment_out(code, mask.eval, setdiff(iss, iss[ev]), newline = FALSE)
   }
   # guess plot file type if it is NULL
   if (keep != 'none') options$fig.ext = dev2ext(options)
@@ -309,6 +329,10 @@ eng_r = function(options) {
     "(e.g., via dev.new()), from which knitr cannot capture plots. ",
     "Please remove the code that opens new devices such as dev.new()."
   )
+
+  # strip the sentinel comment from the masked (echoed but not evaluated) lines so
+  # that they are shown as the original code without any comment marker (#2129)
+  if (is.numeric(ev)) res = strip_mask(res)
 
   if (options$cache %in% 1:2 && (!cache.exists || isTRUE(options$cache.rebuild))) {
     # make a copy for cache=1,2; when cache=2, we do not really need plots

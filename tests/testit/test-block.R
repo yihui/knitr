@@ -32,3 +32,21 @@ assert('the chunk option log.echo streams executing code to stderr (#2222)', {
   err = capture.output(out <- knit(text = code, quiet = TRUE), type = 'message')
   (!any(c('y <- 2', 'y + 2') %in% err))
 })
+
+assert('a numeric eval echoes non-evaluated lines without a comment mask (#2129)', {
+  # line 1 is echoed but not evaluated: it must appear verbatim (no `## ` prefix),
+  # and only line 2 is run (so `42` is in the output)
+  out = knit(text = c('```{r, eval=2}', 'mtcars', '1 + 41', '```'), quiet = TRUE)
+  (grepl('\n mtcars\n', out) || grepl('\nmtcars\n', out))
+  (!grepl('## mtcars', out))
+  (grepl('42', out))
+  # a multi-line masked expression keeps all its lines unmasked
+  out = knit(text = c('```{r, eval=2}', 'f <- function() {', '  1', '}', '1 + 41', '```'), quiet = TRUE)
+  (!grepl('#<knitr>', out))
+  (!grepl('## f <- function', out))
+  (grepl('f <- function\\(\\) \\{', out))
+  # a real comment on a masked line is preserved
+  out = knit(text = c('```{r, eval=2}', 'x <- 1  # keep me', '1 + 41', '```'), quiet = TRUE)
+  (grepl('# keep me', out))
+  (!grepl('#<knitr>', out))
+})
