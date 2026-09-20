@@ -12,7 +12,7 @@
 <div class="frontmatter">
 <div class="title"><h1>Custom Print Methods</h1></div>
 <div class="author"><h2>Yihui Xie</h2></div>
-<div class="date"><h3>2026-09-19</h3></div>
+<div class="date"><h3>2026-09-20</h3></div>
 </div>
 <div class="body">
 <div id="TOC">
@@ -65,7 +65,7 @@ knit_print  # an S3 generic function
 ##         UseMethod(&quot;knit_print&quot;)
 ##     }
 ## }
-## &lt;bytecode: 0x5635cb5e4ce8&gt;
+## &lt;bytecode: 0x558cb1f0fd18&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">methods(knit_print)
@@ -82,7 +82,7 @@ knit_print  # an S3 generic function
 ##         x
 ##     else normal_print(x)
 ## }
-## &lt;bytecode: 0x5635c8908d90&gt;
+## &lt;bytecode: 0x558caf233d90&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">normal_print
@@ -93,7 +93,7 @@ knit_print  # an S3 generic function
 ##         methods::show(x)
 ##     else print(x)
 ## }
-## &lt;bytecode: 0x5635cc1266f8&gt;
+## &lt;bytecode: 0x558cb2a50430&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <p>As we can see, <code>knit_print()</code> has a <code>default</code> method, which is basically
@@ -480,7 +480,7 @@ function:</p>
 ## {
 ##     structure(x, class = &quot;knit_asis&quot;, knit_meta = meta, knit_cacheable = cacheable)
 ## }
-## &lt;bytecode: 0x5635cd59e9a8&gt;
+## &lt;bytecode: 0x558cb3ec8a68&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <p>You may put <strong>knitr</strong> in the <code>Suggests</code> field in <code>DESCRIPTION</code>, and use
