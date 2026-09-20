@@ -634,6 +634,9 @@ registerS3method(
 <h3 id="sec:bug-fixes_1" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
+<p>A <code>sql</code> chunk that contains no <code>?</code>-style interpolation variable is no longer passed to <code>DBI::sqlParseVariables()</code> / <code>DBI::sqlInterpolate()</code>. Those functions re-lex the SQL and could raise a spurious <code>Unterminated literal</code> error on valid queries that they cannot fully parse, such as Postgres dollar-quoted string constants (e.g. <code>SELECT $$Dianne's horse$$;</code>). Interpolation of <code>?</code>-variables is unaffected (thanks, <a href="https://github.com/ZhangAngus">@ZhangAngus</a>, <a href="https://github.com/rstudio/rmarkdown/issues/2342">rstudio/rmarkdown#2342</a>).</p>
+</li>
+<li>
 <p>When the chunk option <code>eval</code> is a numeric vector (i.e., only certain lines of a chunk are evaluated), the lines that are echoed but not evaluated are no longer prefixed with the comment marker <code>## </code> in the output. This makes it possible to show one line of code but the result of another without polluting the displayed source, e.g., <code>eval = 2</code> on a chunk containing <code>mtcars</code> and <code>rmarkdown::paged_table(mtcars)</code> echoes both lines as-is but only runs the second one (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2129">#2129</a>).</p>
 </li>
 <li>
