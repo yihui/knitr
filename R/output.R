@@ -394,9 +394,28 @@ rule = function() {
   paste0(strrep('~', getOption('width')), '\n')
 }
 
-# return a string to point out the current location in the doc
+# return a string to point out the current location in the doc, e.g., for the
+# "Quitting from" message when a chunk errors out; the file path is turned into a
+# clickable link if the front-end supports terminal hyperlinks (e.g., RStudio)
 get_loc = function(label = '') {
-  paste0(knit_concord$get('infile'), ':', current_lines(), label)
+  file = knit_concord$get('infile')
+  lines = current_lines()
+  paste0(ansi_path(file, lines), ':', lines, label)
+}
+
+# wrap a file path in an ANSI hyperlink (OSC 8) pointing to a specific line, so
+# that clicking it in a supporting front-end jumps to the error location; the
+# link is only added when the front-end advertises support (RStudio sets the
+# env var RSTUDIO_CLI_HYPERLINKS), otherwise the plain path is returned
+ansi_path = function(file, lines = '') {
+  if (!length(file) || is.na(file) || file == '') return(file)
+  if (!isTRUE(as.logical(Sys.getenv('RSTUDIO_CLI_HYPERLINKS')))) return(file)
+  line = as.integer(strsplit(lines, '-', fixed = TRUE)[[1]][1])
+  if (is.na(line)) return(file)
+  sprintf(
+    '\033]8;line = %d:col = 1;file://%s\a%s\033]8;;\a',
+    line, normalizePath(file, mustWork = FALSE), file
+  )
 }
 
 auto_out_name = function(input, ext = tolower(file_ext(input))) {

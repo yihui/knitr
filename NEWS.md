@@ -2,6 +2,8 @@
 
 ## NEW FEATURES
 
+- The file path in the "Quitting from" message (shown when a chunk fails) is now a clickable hyperlink in front-ends that support terminal hyperlinks (e.g., the RStudio IDE, which sets the environment variable `RSTUDIO_CLI_HYPERLINKS`), so you can jump straight to the line where the error occurred. In other environments, the plain path is shown as before (thanks, @olivroy, #2153).
+
 - Warnings emitted while knitting can now show an **rlang** backtrace, in the same way errors already do. Set `options(rlang_backtrace_on_warning_report = "full")` (or `"branch"`) to append the call tree that led to each warning, which makes it much easier to locate where a warning came from in a large document. This is off by default (thanks, @hadley, #2219).
 
 - Added a function `quarto_profile()` to get the active Quarto [profile(s)](https://quarto.org/docs/projects/profiles.html) from the environment variable `QUARTO_PROFILE`, or to test whether a given profile is active. This makes conditional chunk output easier, e.g., `eval = knitr::quarto_profile('production')` (thanks, @cderv, #2216).
