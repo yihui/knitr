@@ -89,6 +89,17 @@ assert('purl() comments out evaluated code when comment prefix is set', {
   (purl0(c('```{r, comment="#"}', 'x <- 1', '```')) %==% '# x <- 1')
 })
 
+# in Rnw (and other non-markdown formats) the first token of a chunk header is
+# the label, not the engine name, so purl() must tangle to a .R script and not
+# mistake the label (e.g. `setup`) for a language extension
+assert('purl() of an Rnw file tangles to a .R script, not <label>.<label>', {
+  f = system.file('examples', 'knitr-minimal.Rnw', package = 'knitr')
+  d = tempfile(); dir.create(d)
+  owd = setwd(d); on.exit({setwd(owd); unlink(d, recursive = TRUE)}, add = TRUE)
+  out = purl(f, quiet = TRUE)
+  (basename(out) %==% 'knitr-minimal.R')
+})
+
 # purl() tangles a document to a non-R language when the first code chunk uses
 # that language, keeping its chunks as runnable code and marking chunk headers
 # with #%% (so IDEs treat them as code cells); chunks of other languages are

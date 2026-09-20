@@ -685,6 +685,10 @@ tangle_exts = c(python = 'py', ruby = 'rb', perl = 'pl', bash = 'sh', haskell = 
 
 # the engine of the first code chunk if it is not R (NULL means tangle R code)
 detect_tangle_lang = function(text) {
+  # the engine name is only encoded in the chunk header in markdown documents;
+  # for other formats (e.g. Rnw) the first token is the chunk label, not an
+  # engine, so those documents always tangle R code
+  if (!out_format('markdown')) return()
   pat = knit_patterns$get('chunk.begin')
   if (!length(pat) || is.null(pat)) return()
   if (!length(i <- grep(pat, text, perl = TRUE))) return()
