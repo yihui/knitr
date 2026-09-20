@@ -83,23 +83,24 @@
 <li><a href="#sec:man-pat_fun"><span class="section-number main-number">56</span> Set regular expressions to read input documents</a></li>
 <li><a href="#sec:man-plot_crop"><span class="section-number main-number">57</span> Crop a plot (remove the edges) using PDFCrop or ImageMagick</a></li>
 <li><a href="#sec:man-process_cache"><span class="section-number main-number">58</span> Customize how objects are cached</a></li>
-<li><a href="#sec:man-rand_seed"><span class="section-number main-number">59</span> An unevaluated expression to return .Random.seed if exists</a></li>
-<li><a href="#sec:man-raw_block"><span class="section-number main-number">60</span> Mark character strings as raw blocks in R Markdown</a></li>
-<li><a href="#sec:man-raw_output"><span class="section-number main-number">61</span> Mark character strings as raw output that should not be converted</a></li>
-<li><a href="#sec:man-read_chunk"><span class="section-number main-number">62</span> Read chunks from an external script</a></li>
-<li><a href="#sec:man-rnw2pdf"><span class="section-number main-number">63</span> Convert an ‘<span class="file">Rnw</span>’ document to PDF</a></li>
-<li><a href="#sec:man-rocco"><span class="section-number main-number">64</span> Knit R Markdown using the classic Docco style</a></li>
-<li><a href="#sec:man-rst2pdf"><span class="section-number main-number">65</span> A wrapper for rst2pdf</a></li>
-<li><a href="#sec:man-set_alias"><span class="section-number main-number">66</span> Set aliases for chunk options</a></li>
-<li><a href="#sec:man-set_header"><span class="section-number main-number">67</span> Set the header information</a></li>
-<li><a href="#sec:man-set_parent"><span class="section-number main-number">68</span> Specify the parent document of child documents</a></li>
-<li><a href="#sec:man-sew"><span class="section-number main-number">69</span> Wrap evaluated results for output</a></li>
-<li><a href="#sec:man-spin"><span class="section-number main-number">70</span> Spin goat's hair into wool</a></li>
-<li><a href="#sec:man-spin_child"><span class="section-number main-number">71</span> Spin a child R script</a></li>
-<li><a href="#sec:man-stitch"><span class="section-number main-number">72</span> Automatically create a report based on an R script and a template</a></li>
-<li><a href="#sec:man-vignette_engines"><span class="section-number main-number">73</span> Package vignette engines</a></li>
-<li><a href="#sec:man-wrap_rmd"><span class="section-number main-number">74</span> Wrap long lines in Rmd files</a></li>
-<li><a href="#sec:man-write_bib"><span class="section-number main-number">75</span> Generate BibTeX bibliography databases for R packages</a></li>
+<li><a href="#sec:man-quarto_profile"><span class="section-number main-number">59</span> Get or check the active Quarto profile</a></li>
+<li><a href="#sec:man-rand_seed"><span class="section-number main-number">60</span> An unevaluated expression to return .Random.seed if exists</a></li>
+<li><a href="#sec:man-raw_block"><span class="section-number main-number">61</span> Mark character strings as raw blocks in R Markdown</a></li>
+<li><a href="#sec:man-raw_output"><span class="section-number main-number">62</span> Mark character strings as raw output that should not be converted</a></li>
+<li><a href="#sec:man-read_chunk"><span class="section-number main-number">63</span> Read chunks from an external script</a></li>
+<li><a href="#sec:man-rnw2pdf"><span class="section-number main-number">64</span> Convert an ‘<span class="file">Rnw</span>’ document to PDF</a></li>
+<li><a href="#sec:man-rocco"><span class="section-number main-number">65</span> Knit R Markdown using the classic Docco style</a></li>
+<li><a href="#sec:man-rst2pdf"><span class="section-number main-number">66</span> A wrapper for rst2pdf</a></li>
+<li><a href="#sec:man-set_alias"><span class="section-number main-number">67</span> Set aliases for chunk options</a></li>
+<li><a href="#sec:man-set_header"><span class="section-number main-number">68</span> Set the header information</a></li>
+<li><a href="#sec:man-set_parent"><span class="section-number main-number">69</span> Specify the parent document of child documents</a></li>
+<li><a href="#sec:man-sew"><span class="section-number main-number">70</span> Wrap evaluated results for output</a></li>
+<li><a href="#sec:man-spin"><span class="section-number main-number">71</span> Spin goat's hair into wool</a></li>
+<li><a href="#sec:man-spin_child"><span class="section-number main-number">72</span> Spin a child R script</a></li>
+<li><a href="#sec:man-stitch"><span class="section-number main-number">73</span> Automatically create a report based on an R script and a template</a></li>
+<li><a href="#sec:man-vignette_engines"><span class="section-number main-number">74</span> Package vignette engines</a></li>
+<li><a href="#sec:man-wrap_rmd"><span class="section-number main-number">75</span> Wrap long lines in Rmd files</a></li>
+<li><a href="#sec:man-write_bib"><span class="section-number main-number">76</span> Generate BibTeX bibliography databases for R packages</a></li>
 </ul>
 </div>
 <style type="text/css">
@@ -244,6 +245,10 @@ h2 {
 <a href="#sec:man-pat_fun"><code>pat_typst()</code></a>
 <a href="#sec:man-plot_crop"><code>plot_crop()</code></a>
 <a href="#sec:man-process_cache"><code>process_cache()</code></a>
+</p>
+<p>
+<b>-- <kbd>Q</kbd> --</b>
+<a href="#sec:man-quarto_profile"><code>quarto_profile()</code></a>
 </p>
 <p>
 <b>-- <kbd>R</kbd> --</b>
@@ -2955,16 +2960,16 @@ kable(x, format.args = list(decimal.mark = &quot;,&quot;, big.mark = &quot;'&quo
 </code></pre>
 <pre><code>#&gt; |          V1|          V2|          V3|          V4|          V5|          V6|
 #&gt; |-----------:|-----------:|-----------:|-----------:|-----------:|-----------:|
-#&gt; |   982'225,3|   995'767,9| 1'007'297,4| 1'009'537,5| 1'001'078,2| 1'003'776,6|
-#&gt; |   996'460,6| 1'012'017,7| 1'021'624,4| 1'004'661,3| 1'010'625,5|   995'903,6|
-#&gt; | 1'006'640,1|   985'106,2| 1'003'117,2|   989'134,6| 1'009'465,0| 1'009'732,8|
-#&gt; |   989'881,3| 1'000'068,2|   990'392,2| 1'015'825,9| 1'017'577,9| 1'013'055,9|
-#&gt; |   986'885,5| 1'000'677,1|   993'257,2| 1'005'042,1|   987'632,1|   982'520,9|
-#&gt; |   987'154,5| 1'002'629,1|   991'695,0| 1'002'844,7|   988'550,1| 1'009'833,1|
-#&gt; |   987'160,0| 1'001'340,7|   991'315,7|   984'280,9| 1'002'031,7|   997'482,0|
-#&gt; | 1'008'599,9|   989'449,8| 1'021'206,7|   994'553,0|   996'376,1|   990'312,6|
-#&gt; |   969'937,3| 1'002'920,4|   996'252,8|   992'981,1| 1'010'719,1| 1'014'870,8|
-#&gt; | 1'012'950,6|   992'478,4| 1'007'955,1|   993'378,2| 1'016'045,5|   987'218,5|
+#&gt; | 1'016'915,5| 1'008'067,3|   995'186,9|   992'785,6| 1'008'641,6| 1'001'019,1|
+#&gt; | 1'028'525,2|   989'388,0|   999'029,2| 1'000'052,0|   986'468,1| 1'006'832,4|
+#&gt; | 1'000'542,3| 1'011'696,5| 1'004'494,8| 1'010'054,7| 1'012'271,7| 1'020'691,9|
+#&gt; | 1'000'970,7| 1'006'526,3| 1'005'303,3| 1'001'237,5|   990'782,4| 1'008'982,4|
+#&gt; |   997'115,1| 1'000'801,8|   987'504,7|   986'138,4|   984'451,6| 1'001'545,4|
+#&gt; | 1'024'894,3| 1'002'892,7| 1'007'364,1|   985'607,9| 1'016'664,8|   990'820,5|
+#&gt; | 1'014'015,2| 1'003'223,2|   979'476,5|   998'728,5|   999'714,0|   980'383,7|
+#&gt; |   984'206,5|   994'652,8| 1'003'676,5| 1'011'176,7| 1'014'613,7|   995'144,7|
+#&gt; |   994'748,6|   983'902,7| 1'011'618,6|   990'592,7|   989'734,9|   984'841,4|
+#&gt; | 1'000'677,3|   994'761,8| 1'006'412,9|   985'409,3| 1'020'828,0|   991'035,0|
 </code></pre>
 <pre><code class="language-r"># save the value
 x = kable(d2, format = &quot;html&quot;)
@@ -4007,7 +4012,7 @@ access or set hooks in this package.
 </code></pre>
 <pre><code>#&gt; function (x, options) 
 #&gt; x
-#&gt; &lt;bytecode: 0x55d9bf41a970&gt;
+#&gt; &lt;bytecode: 0x55a3efdf1e88&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">knit_hooks$get(&quot;inline&quot;)
@@ -4018,7 +4023,7 @@ access or set hooks in this package.
 #&gt;         x = round_digits(x)
 #&gt;     paste(as.character(x), collapse = &quot;, &quot;)
 #&gt; }
-#&gt; &lt;bytecode: 0x55d9bf418180&gt;
+#&gt; &lt;bytecode: 0x55a3efdeae58&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <h2 id="sec:man-knit_meta"><span class="section-number main-number">40</span> Metadata about objects to be printed</h2>
@@ -5172,12 +5177,48 @@ need to configure anything.
 # registerS3method( 'process_cache', 'PackedSpatRaster', function(x, pack =
 # TRUE, ...) if (pack) x else terra::unwrap(x), envir = asNamespace('knitr') )
 </code></pre>
-<h2 id="sec:man-rand_seed"><span class="section-number main-number">59</span> An unevaluated expression to return .Random.seed if exists</h2>
+<h2 id="sec:man-quarto_profile"><span class="section-number main-number">59</span> Get or check the active Quarto profile</h2>
 <h3 id="sec:description_59" class="unnumbered unlisted">Description</h3>
+<p>When a document is rendered by Quarto, the active
+<a href="https://quarto.org/docs/projects/profiles.html">profile</a> names are stored in
+the environment variable <span class="env">QUARTO_PROFILE</span> (multiple profiles are separated
+by commas). This function reads that variable so that you can make chunk
+output conditional on the profile, e.g., set the chunk option <code>eval</code> or
+<code>include</code> to <code>quarto_profile('production')</code>.
+</p>
+<h3 id="sec:usage_58" class="unnumbered unlisted">Usage</h3>
+<pre><code class="language-r">quarto_profile(profile)</code></pre>
+<h3 id="sec:arguments_45" class="unnumbered unlisted">Arguments</h3>
+<table role = "presentation">
+<tr><td><code>profile</code></td>
+<td>
+<p>An optional character vector of profile names to check against
+the active profiles. If not provided, the active profile names are returned.</p>
+</td></tr>
+</table>
+<h3 id="sec:value_37" class="unnumbered unlisted">Value</h3>
+<p>If <code>profile</code> is not provided, a character vector of the active profile
+names (or an empty vector when no profile is active). Otherwise, a logical
+value indicating whether any of the given names is among the active
+profiles.
+</p>
+<h3 id="sec:examples_41" class="unnumbered unlisted">Examples</h3>
+<pre><code class="language-r"># the active profiles
+knitr::quarto_profile()
+</code></pre>
+<pre><code>#&gt; character(0)
+</code></pre>
+<pre><code class="language-r"># whether the 'production' profile is active
+knitr::quarto_profile(&quot;production&quot;)
+</code></pre>
+<pre><code>#&gt; [1] FALSE
+</code></pre>
+<h2 id="sec:man-rand_seed"><span class="section-number main-number">60</span> An unevaluated expression to return .Random.seed if exists</h2>
+<h3 id="sec:description_60" class="unnumbered unlisted">Description</h3>
 <p>This expression returns <code>.Random.seed</code> when <code>eval(rand_seed)</code> and
 <code>NULL</code> otherwise.
 </p>
-<h3 id="sec:usage_58" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_59" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">rand_seed</code></pre>
 <h3 id="sec:details_27" class="unnumbered unlisted">Details</h3>
 <p>It is designed to work with <code>opts_chunk$set(cache.extra = rand_seed)</code>
@@ -5187,7 +5228,7 @@ references.
 <h3 id="sec:references_28" class="unnumbered unlisted">References</h3>
 <p><a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a>
 </p>
-<h3 id="sec:examples_41" class="unnumbered unlisted">Examples</h3>
+<h3 id="sec:examples_42" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">eval(rand_seed)
 </code></pre>
 <pre><code>#&gt;   [1]       10403          50 -1064009061  -514322183   169112136   335961462  -580236111
@@ -5378,20 +5419,20 @@ references.
 #&gt; [617] -1348732870 -1116989713 -1568466567  -957413874  -282286116  -759885747   534827959
 #&gt; [624]   330886464  1804143646  -267855448
 </code></pre>
-<h2 id="sec:man-raw_block"><span class="section-number main-number">60</span> Mark character strings as raw blocks in R Markdown</h2>
-<h3 id="sec:description_60" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-raw_block"><span class="section-number main-number">61</span> Mark character strings as raw blocks in R Markdown</h2>
+<h3 id="sec:description_61" class="unnumbered unlisted">Description</h3>
 <p>Wraps content in a raw attribute block, which protects it from being escaped
 by Pandoc. See <a href="https://pandoc.org/MANUAL.html#generic-raw-attribute">https://pandoc.org/MANUAL.html#generic-raw-attribute</a>.
 Functions <code>raw_latex()</code> and <code>raw_html()</code> are shorthands of
 <code>raw_block(x, 'latex')</code> and <code>raw_block(x, 'html')</code>, respectively.
 </p>
-<h3 id="sec:usage_59" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_60" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">raw_block(x, type = "latex", ...)
 
 raw_latex(x, ...)
 
 raw_html(x, ...)</code></pre>
-<h3 id="sec:arguments_45" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_46" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>x</code></td>
 <td>
@@ -5409,7 +5450,7 @@ is compiled.</p>
 <p>Arguments to be passed to <code><a href="#sec:man-asis-output">asis_output()</a></code>.</p>
 </td></tr>
 </table>
-<h3 id="sec:examples_42" class="unnumbered unlisted">Examples</h3>
+<h3 id="sec:examples_43" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">knitr::raw_latex(&quot;\\emph{some text}&quot;)
 </code></pre>
 <pre><code class="language-plain warning">#&gt; raw_block() requires Pandoc &gt;= 2.0.0
@@ -5420,21 +5461,21 @@ is compiled.</p>
 #&gt; attr(,&quot;knit_cacheable&quot;)
 #&gt; [1] NA
 </code></pre>
-<h2 id="sec:man-raw_output"><span class="section-number main-number">61</span> Mark character strings as raw output that should not be converted</h2>
-<h3 id="sec:description_61" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-raw_output"><span class="section-number main-number">62</span> Mark character strings as raw output that should not be converted</h2>
+<h3 id="sec:description_62" class="unnumbered unlisted">Description</h3>
 <p>These functions provide a mechanism to protect the character output of R code
 chunks. The output is annotated with special markers in <code>raw_output</code>;
 <code>extract_raw_output()</code> will extract raw output wrapped in the markers,
 and replace the raw output with its MD5 digest; <code>restore_raw_output()</code>
 will restore the MD5 digest with the original raw output.
 </p>
-<h3 id="sec:usage_60" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_61" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">extract_raw_output(text, markers = raw_markers)
 
 restore_raw_output(text, chunks, markers = raw_markers)
 
 raw_output(x, markers = raw_markers, ...)</code></pre>
-<h3 id="sec:arguments_46" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_47" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>text</code></td>
 <td>
@@ -5470,14 +5511,14 @@ from Markdown so Pandoc will never see it. In the post-processor, you can
 read the Pandoc output (e.g., an HTML or RTF file), and restore the raw
 output.
 </p>
-<h3 id="sec:value_37" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_38" class="unnumbered unlisted">Value</h3>
 <p>For <code>extract_raw_output()</code>, a list of two components:
 <code>value</code> (the <code>text</code> with raw output replaced by MD5 digests) and
 <code>chunks</code> (a named character vector, of which the names are MD5 digests
 and values are the raw output). For <code>restore_raw_output()</code>, the
 restored <code>text</code>.
 </p>
-<h3 id="sec:examples_43" class="unnumbered unlisted">Examples</h3>
+<h3 id="sec:examples_44" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">library(knitr)
 out = c(&quot;*hello*&quot;, raw_output(&quot;&lt;special&gt;content&lt;/special&gt; *protect* me!&quot;),
     &quot;*world*&quot;)
@@ -5501,13 +5542,13 @@ restore_raw_output(pre$value, pre$chunks)
 </code></pre>
 <pre><code>#&gt; [1] &quot;&lt;em&gt;hello&lt;/em&gt;\n&lt;special&gt;content&lt;/special&gt; *protect* me!\n&lt;em&gt;world&lt;/em&gt;&quot;
 </code></pre>
-<h2 id="sec:man-read_chunk"><span class="section-number main-number">62</span> Read chunks from an external script</h2>
-<h3 id="sec:description_62" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-read_chunk"><span class="section-number main-number">63</span> Read chunks from an external script</h2>
+<h3 id="sec:description_63" class="unnumbered unlisted">Description</h3>
 <p>Chunks can be put in an external script, and this function reads chunks into
 the current <span class="pkg">knitr</span> session; <code>read_demo()</code> is a convenience function
 to read a demo script from a package.
 </p>
-<h3 id="sec:usage_61" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_62" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">read_chunk(
   path,
   lines = read_utf8(path),
@@ -5520,7 +5561,7 @@ to read a demo script from a package.
 )
 
 read_demo(topic, package = NULL, ...)</code></pre>
-<h3 id="sec:arguments_47" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_48" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>path</code></td>
 <td>
@@ -5587,7 +5628,7 @@ supposed to be unique so that the numeric positions returned from
 <code>grep()</code> will be of the same length of <code>from</code>/<code>to</code>. Note
 <code>labels</code> always has to match the length of <code>from</code> and <code>to</code>.
 </p>
-<h3 id="sec:value_38" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_39" class="unnumbered unlisted">Value</h3>
 <p>As a side effect, code chunks are read into the current session so
 that future chunks can (re)use the code by chunk label references. If an
 external chunk has the same label as a chunk in the current session, chunk
@@ -5606,7 +5647,7 @@ Ruckdeschel (author of the <span class="pkg">SweaveListingUtils</span> package)
 <h3 id="sec:references_29" class="unnumbered unlisted">References</h3>
 <p><a href="https://yihui.org/knitr/demo/externalization/">https://yihui.org/knitr/demo/externalization/</a>
 </p>
-<h3 id="sec:examples_44" class="unnumbered unlisted">Examples</h3>
+<h3 id="sec:examples_45" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">## put this in foo.R and read_chunk('foo.R')
 
 ## ---- my-label ----
@@ -5647,13 +5688,13 @@ knitr::knit_code$get()  # use this to check chunks in the current session
 </code></pre>
 <pre><code class="language-r">knitr::knit_code$restore()  # clean up the session
 </code></pre>
-<h2 id="sec:man-rnw2pdf"><span class="section-number main-number">63</span> Convert an &lsquo;<span class="file">Rnw</span>&rsquo; document to PDF</h2>
-<h3 id="sec:description_63" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-rnw2pdf"><span class="section-number main-number">64</span> Convert an &lsquo;<span class="file">Rnw</span>&rsquo; document to PDF</h2>
+<h3 id="sec:description_64" class="unnumbered unlisted">Description</h3>
 <p>Call <code><a href="#sec:man-knit">knit()</a></code> to compile the &lsquo;<span class="file">.Rnw</span>&rsquo; input to &lsquo;<span class="file">.tex</span>&rsquo;,
 and then <code><a href="https://rdrr.io/cran/tinytex/man/latexmk.html">tinytex::latexmk()</a></code> to convert &lsquo;<span class="file">.tex</span>&rsquo; to
 &lsquo;<span class="file">.pdf</span>&rsquo;.
 </p>
-<h3 id="sec:usage_62" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_63" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">rnw2pdf(
   input,
   output = with_ext(input, "pdf"),
@@ -5664,7 +5705,7 @@ and then <code><a href="https://rdrr.io/cran/tinytex/man/latexmk.html">tinytex::
   error = FALSE,
   ...
 )</code></pre>
-<h3 id="sec:arguments_48" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_49" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>input</code></td>
 <td>
@@ -5722,17 +5763,17 @@ example, <code><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame()</
 <li><p> It stops knitting when any error occurs (by setting the chunk option <code>error = FALSE</code>).
 </p>
 </li></ol>
-<h3 id="sec:value_39" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_40" class="unnumbered unlisted">Value</h3>
 <p>The <code>output</code> file path.
 </p>
-<h2 id="sec:man-rocco"><span class="section-number main-number">64</span> Knit R Markdown using the classic Docco style</h2>
-<h3 id="sec:description_64" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-rocco"><span class="section-number main-number">65</span> Knit R Markdown using the classic Docco style</h2>
+<h3 id="sec:description_65" class="unnumbered unlisted">Description</h3>
 <p>The classic Docco style is a two-column layout, with text in the left and
 code in the right column.
 </p>
-<h3 id="sec:usage_63" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_64" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">rocco(input, ...)</code></pre>
-<h3 id="sec:arguments_49" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_50" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>input</code></td>
 <td>
@@ -5750,7 +5791,7 @@ bidirectional resize cursor; drag the cursor to resize the two columns. Press
 the key <code>t</code> to hide the code column (show the text column only), and
 press again to hide the text column (show code).
 </p>
-<h3 id="sec:value_40" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_41" class="unnumbered unlisted">Value</h3>
 <p>An HTML file is written, and its name is returned.
 </p>
 <h3 id="sec:author-s_8" class="unnumbered unlisted">Author(s)</h3>
@@ -5760,7 +5801,7 @@ press again to hide the text column (show code).
 <p>The Docco package by Jeremy Ashkenas:
 <a href="https://github.com/jashkenas/docco">https://github.com/jashkenas/docco</a>
 </p>
-<h3 id="sec:examples_45" class="unnumbered unlisted">Examples</h3>
+<h3 id="sec:examples_46" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">rocco_view = function(input) {
     owd = setwd(tempdir())
     on.exit(setwd(owd))
@@ -5773,18 +5814,18 @@ press again to hide the text column (show code).
 # knit these two vignettes using the docco style
 rocco_view(system.file(&quot;doc&quot;, &quot;docco-classic.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
-<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/RtmpWPdPiW (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
+<pre><code class="language-plain warning">#&gt; You changed the working directory to /tmp/RtmphoXG0i (probably via setwd()). It will be restored to /home/runner/work/_temp/Library/knitr/doc. See the Note section in ?knitr::knit
 </code></pre>
 <pre><code class="language-r">rocco_view(system.file(&quot;doc&quot;, &quot;knit_expand.Rmd&quot;, package = &quot;knitr&quot;))
 </code></pre>
-<h2 id="sec:man-rst2pdf"><span class="section-number main-number">65</span> A wrapper for rst2pdf</h2>
-<h3 id="sec:description_65" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-rst2pdf"><span class="section-number main-number">66</span> A wrapper for rst2pdf</h2>
+<h3 id="sec:description_66" class="unnumbered unlisted">Description</h3>
 <p>Convert reST to PDF using <code>rst2pdf</code> (which converts from rst to PDF
 using the ReportLab open-source library).
 </p>
-<h3 id="sec:usage_64" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_65" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">rst2pdf(input, command = "rst2pdf", options = "")</code></pre>
-<h3 id="sec:arguments_50" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_51" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>input</code></td>
 <td>
@@ -5801,7 +5842,7 @@ given here.</p>
 <p>Extra command line options, e.g., <code>'-v'</code>.</p>
 </td></tr>
 </table>
-<h3 id="sec:value_41" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_42" class="unnumbered unlisted">Value</h3>
 <p>An input file &lsquo;<span class="file">*.rst</span>&rsquo; will produce &lsquo;<span class="file">*.pdf</span>&rsquo; and this output
 filename is returned if the conversion was successful.
 </p>
@@ -5814,15 +5855,15 @@ filename is returned if the conversion was successful.
 <h3 id="sec:see-also_14" class="unnumbered unlisted">See Also</h3>
 <p><code><a href="#sec:man-knit2pdf">knit2pdf()</a></code>
 </p>
-<h2 id="sec:man-set_alias"><span class="section-number main-number">66</span> Set aliases for chunk options</h2>
-<h3 id="sec:description_66" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-set_alias"><span class="section-number main-number">67</span> Set aliases for chunk options</h2>
+<h3 id="sec:description_67" class="unnumbered unlisted">Description</h3>
 <p>We do not have to use the chunk option names given in <span class="pkg">knitr</span>; we can set
 aliases for them. The aliases are a named character vector; the names are
 aliases and the elements in this vector are the real option names.
 </p>
-<h3 id="sec:usage_65" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_66" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">set_alias(...)</code></pre>
-<h3 id="sec:arguments_51" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_52" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>...</code></td>
 <td>
@@ -5830,24 +5871,24 @@ aliases and the elements in this vector are the real option names.
 are real option names.</p>
 </td></tr>
 </table>
-<h3 id="sec:value_42" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_43" class="unnumbered unlisted">Value</h3>
 <p><code>NULL</code>. <code>opts_knit$get('aliases')</code> is modified as the side effect.
 </p>
-<h3 id="sec:examples_46" class="unnumbered unlisted">Examples</h3>
+<h3 id="sec:examples_47" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">set_alias(w = &quot;fig.width&quot;, h = &quot;fig.height&quot;)
 # then we can use options w and h in chunk headers instead of fig.width and
 # fig.height
 </code></pre>
-<h2 id="sec:man-set_header"><span class="section-number main-number">67</span> Set the header information</h2>
-<h3 id="sec:description_67" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-set_header"><span class="section-number main-number">68</span> Set the header information</h2>
+<h3 id="sec:description_68" class="unnumbered unlisted">Description</h3>
 <p>Some output documents may need appropriate header information. For example,
 for LaTeX output, we need to write <code>\usepackage{tikz}</code> into the
 preamble if we use tikz graphics; this function sets the header information
 to be written into the output.
 </p>
-<h3 id="sec:usage_66" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_67" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">set_header(...)</code></pre>
-<h3 id="sec:arguments_52" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_53" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>...</code></td>
 <td>
@@ -5874,10 +5915,10 @@ type of output. For instance, we can change <code>highlight</code> to LaTeX
 definitions of the <span class="pkg">listings</span> package (and modify the output hooks
 accordingly), so we can decorate R code using the <span class="pkg">listings</span> package.
 </p>
-<h3 id="sec:value_43" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_44" class="unnumbered unlisted">Value</h3>
 <p>The header vector in <code>opts_knit</code> is set.
 </p>
-<h3 id="sec:examples_47" class="unnumbered unlisted">Examples</h3>
+<h3 id="sec:examples_48" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">set_header(tikz = &quot;\\usepackage{tikz}&quot;)
 opts_knit$get(&quot;header&quot;)
 </code></pre>
@@ -5888,15 +5929,15 @@ opts_knit$get(&quot;header&quot;)
 #&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    framed 
 #&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        &quot;&quot; 
 </code></pre>
-<h2 id="sec:man-set_parent"><span class="section-number main-number">68</span> Specify the parent document of child documents</h2>
-<h3 id="sec:description_68" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-set_parent"><span class="section-number main-number">69</span> Specify the parent document of child documents</h2>
+<h3 id="sec:description_69" class="unnumbered unlisted">Description</h3>
 <p>This function extracts the LaTeX preamble of the parent document to use for
 the child document, so that the child document can be compiled as an
 individual document.
 </p>
-<h3 id="sec:usage_67" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_68" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">set_parent(parent)</code></pre>
-<h3 id="sec:arguments_53" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_54" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>parent</code></td>
 <td>
@@ -5910,7 +5951,7 @@ R code, they will be evaluated as if they were in this child document. For
 examples, when <span class="pkg">knitr</span> hooks or other options are set in the preamble of
 the parent document, it will apply to the child document as well.
 </p>
-<h3 id="sec:value_44" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_45" class="unnumbered unlisted">Value</h3>
 <p>The preamble is extracted and stored to be used later when the
 complete output is written.
 </p>
@@ -5924,7 +5965,7 @@ function in the child document will be ignored.
 <h3 id="sec:references_32" class="unnumbered unlisted">References</h3>
 <p><a href="https://yihui.org/knitr/demo/child/">https://yihui.org/knitr/demo/child/</a>
 </p>
-<h3 id="sec:examples_48" class="unnumbered unlisted">Examples</h3>
+<h3 id="sec:examples_49" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
 
 # &lt;&lt;setup-child, include=FALSE&gt;&gt;=
@@ -5933,16 +5974,16 @@ function in the child document will be ignored.
 
 # @
 </code></pre>
-<h2 id="sec:man-sew"><span class="section-number main-number">69</span> Wrap evaluated results for output</h2>
-<h3 id="sec:description_69" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-sew"><span class="section-number main-number">70</span> Wrap evaluated results for output</h2>
+<h3 id="sec:description_70" class="unnumbered unlisted">Description</h3>
 <p>This function is mainly for internal use: it is called on each part of the
 output of the code chunk (code, messages, text output, and plots, etc.) after
 all statements in the code chunk have been evaluated, and will sew these
 pieces of output together into a character vector.
 </p>
-<h3 id="sec:usage_68" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_69" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">sew(x, options = list(), ...)</code></pre>
-<h3 id="sec:arguments_54" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_55" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>x</code></td>
 <td>
@@ -5957,14 +5998,14 @@ pieces of output together into a character vector.
 <p>Other arguments to pass to methods.</p>
 </td></tr>
 </table>
-<h2 id="sec:man-spin"><span class="section-number main-number">70</span> Spin goat's hair into wool</h2>
-<h3 id="sec:description_70" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-spin"><span class="section-number main-number">71</span> Spin goat's hair into wool</h2>
+<h3 id="sec:description_71" class="unnumbered unlisted">Description</h3>
 <p>This function takes a specially formatted R script and converts it to a
 literate programming document. By default normal text (documentation) should
 be written after the roxygen comment (<code>#'</code>) and code chunk options are
 written after <code>#|</code> or <code>#+</code> or <code># \%\%</code> or <code># ----</code>.
 </p>
-<h3 id="sec:usage_69" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_70" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">spin(
   hair,
   knit = TRUE,
@@ -5978,7 +6019,7 @@ written after <code>#|</code> or <code>#+</code> or <code># \%\%</code> or <code
   precious = !knit &amp;&amp; is.null(text),
   engine = NULL
 )</code></pre>
-<h3 id="sec:arguments_55" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_56" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>hair</code></td>
 <td>
@@ -6050,7 +6091,7 @@ default.</p>
 <p>Obviously the goat's hair is the original R script, and the wool is the
 literate programming document (ready to be knitted).
 </p>
-<h3 id="sec:value_45" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_46" class="unnumbered unlisted">Value</h3>
 <p>If <code>text</code> is <code>NULL</code>, the path of the final output document,
 otherwise the content of the output.
 </p>
@@ -6077,8 +6118,8 @@ as <code>sowsear()</code> which meant to make a silk purse out of a sow's ear)
 <h3 id="sec:see-also_15" class="unnumbered unlisted">See Also</h3>
 <p><code><a href="#sec:man-stitch">stitch()</a></code> (feed a template with an R script)
 </p>
-<h2 id="sec:man-spin_child"><span class="section-number main-number">71</span> Spin a child R script</h2>
-<h3 id="sec:description_71" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-spin_child"><span class="section-number main-number">72</span> Spin a child R script</h2>
+<h3 id="sec:description_72" class="unnumbered unlisted">Description</h3>
 <p>This function is similar to <code><a href="#sec:man-knit-child">knit_child()</a></code> but is used in R
 scripts instead. When the main R script is not called via
 <code><a href="#sec:man-spin">spin()</a></code>, this function simply executes the child script via
@@ -6088,9 +6129,9 @@ to compile it. You can call this function in R code, or using the syntax of
 inline R expressions in <code><a href="#sec:man-spin">spin()</a></code> (e.g.
 <code>{{knitr::spin_child('script.R')}}</code>).
 </p>
-<h3 id="sec:usage_70" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_71" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">spin_child(input, format)</code></pre>
-<h3 id="sec:arguments_56" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_57" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>input</code></td>
 <td>
@@ -6102,17 +6143,17 @@ inline R expressions in <code><a href="#sec:man-spin">spin()</a></code> (e.g.
 provided, it will be guessed from the current knitting process.</p>
 </td></tr>
 </table>
-<h3 id="sec:value_46" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_47" class="unnumbered unlisted">Value</h3>
 <p>A character string of the knitted R script.
 </p>
-<h2 id="sec:man-stitch"><span class="section-number main-number">72</span> Automatically create a report based on an R script and a template</h2>
-<h3 id="sec:description_72" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-stitch"><span class="section-number main-number">73</span> Automatically create a report based on an R script and a template</h2>
+<h3 id="sec:description_73" class="unnumbered unlisted">Description</h3>
 <p>This is a convenience function for small-scale automatic reporting based on
 an R script and a template. The default template is an Rnw file (LaTeX);
 <code>stitch_rhtml()</code> and <code>stitch_rmd()</code> are wrappers on top of
 <code>stitch()</code> using the R HTML and R Markdown templates respectively.
 </p>
-<h3 id="sec:usage_71" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_72" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">stitch(
   script,
   template = system.file("misc", "knitr-template.Rnw", package = "knitr"),
@@ -6124,7 +6165,7 @@ an R script and a template. The default template is an Rnw file (LaTeX);
 stitch_rhtml(..., envir = parent.frame())
 
 stitch_rmd(..., envir = parent.frame())</code></pre>
-<h3 id="sec:arguments_57" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_58" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>script</code></td>
 <td>
@@ -6167,13 +6208,13 @@ input all the R code from the script. See the examples below.
 headers are found, the whole R script will be inserted into the template as
 one code chunk.
 </p>
-<h3 id="sec:value_47" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_48" class="unnumbered unlisted">Value</h3>
 <p>path of the output document
 </p>
 <h3 id="sec:see-also_16" class="unnumbered unlisted">See Also</h3>
 <p><code><a href="#sec:man-spin">spin()</a></code> (turn a specially formatted R script to a report)
 </p>
-<h3 id="sec:examples_49" class="unnumbered unlisted">Examples</h3>
+<h3 id="sec:examples_50" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">s = system.file(&quot;misc&quot;, &quot;stitch-test.R&quot;, package = &quot;knitr&quot;)
 if (interactive()) stitch(s)  # compile to PDF
 
@@ -6257,8 +6298,8 @@ stitch(s, system.file(&quot;misc&quot;, &quot;knitr-template.Rmd&quot;, package 
 </code></pre>
 <pre><code class="language-r">unlink(c(&quot;stitch-test.html&quot;, &quot;stitch-test.md&quot;, &quot;figure&quot;), recursive = TRUE)
 </code></pre>
-<h2 id="sec:man-vignette_engines"><span class="section-number main-number">73</span> Package vignette engines</h2>
-<h3 id="sec:description_73" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-vignette_engines"><span class="section-number main-number">74</span> Package vignette engines</h2>
+<h3 id="sec:description_74" class="unnumbered unlisted">Description</h3>
 <p>Since R 3.0.0, package vignettes can use non-Sweave engines, and <span class="pkg">knitr</span>
 has provided a few engines to compile vignettes via <code><a href="#sec:man-knit">knit()</a></code> with
 different templates. See <a href="https://yihui.org/knitr/demo/vignette/">https://yihui.org/knitr/demo/vignette/</a> for
@@ -6278,7 +6319,7 @@ found.
 fall back to the <code>knitr::knitr</code> engine, which uses R Markdown v1 based
 on the <span class="pkg">litedown</span> package.
 </p>
-<h3 id="sec:examples_50" class="unnumbered unlisted">Examples</h3>
+<h3 id="sec:examples_51" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">library(knitr)
 vig_list = tools::vignetteEngine(package = &quot;knitr&quot;)
 str(vig_list)
@@ -6395,7 +6436,7 @@ str(vig_list)
 #&gt;     else knit)(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55d9bedb1d38&gt;
+#&gt; &lt;bytecode: 0x55a3ef7a4940&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -6403,7 +6444,7 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55d9bedb5ad0&gt;
+#&gt; &lt;bytecode: 0x55a3ef7a8748&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::knitr_notangle&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -6438,7 +6479,7 @@ str(vig_list)
 #&gt;     unlink(with_ext(file, &quot;R&quot;))
 #&gt;     return()
 #&gt; }
-#&gt; &lt;bytecode: 0x55d9bee164f0&gt;
+#&gt; &lt;bytecode: 0x55a3ef832810&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">vig_list[[&quot;knitr::docco_classic&quot;]][c(&quot;weave&quot;, &quot;tangle&quot;)]
@@ -6467,7 +6508,7 @@ str(vig_list)
 #&gt;     rocco(file, encoding = encoding, quiet = quiet, envir = globalenv(), 
 #&gt;         ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55d9bedce248&gt;
+#&gt; &lt;bytecode: 0x55a3ef7d3ab8&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 #&gt; 
 #&gt; $tangle
@@ -6475,19 +6516,19 @@ str(vig_list)
 #&gt; {
 #&gt;     purl(file, encoding = encoding, quiet = quiet, ...)
 #&gt; }
-#&gt; &lt;bytecode: 0x55d9bedb5ad0&gt;
+#&gt; &lt;bytecode: 0x55a3ef7a8748&gt;
 #&gt; &lt;environment: namespace:knitr&gt;
 </code></pre>
-<h2 id="sec:man-wrap_rmd"><span class="section-number main-number">74</span> Wrap long lines in Rmd files</h2>
-<h3 id="sec:description_74" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-wrap_rmd"><span class="section-number main-number">75</span> Wrap long lines in Rmd files</h2>
+<h3 id="sec:description_75" class="unnumbered unlisted">Description</h3>
 <p>This function wraps long paragraphs in an R Markdown file. Other elements are
 not wrapped: the YAML preamble, fenced code blocks, section headers and
 indented elements. The main reason for wrapping long lines is to make it
 easier to review differences in version control.
 </p>
-<h3 id="sec:usage_72" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_73" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">wrap_rmd(file, width = 80, text = NULL, backup)</code></pre>
-<h3 id="sec:arguments_58" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_59" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>file</code></td>
 <td>
@@ -6509,7 +6550,7 @@ wrong. If set to <code>NULL</code>, no backup is made. The default value is cons
 from <code>file</code> by adding <code>__</code> before the base filename.</p>
 </td></tr>
 </table>
-<h3 id="sec:value_48" class="unnumbered unlisted">Value</h3>
+<h3 id="sec:value_49" class="unnumbered unlisted">Value</h3>
 <p>If <code>file</code> is provided, it is overwritten; if <code>text</code> is
 provided, a character vector is returned.
 </p>
@@ -6517,7 +6558,7 @@ provided, a character vector is returned.
 <p>Currently it does not wrap blockquotes or lists (ordered or unordered).
 This feature may or may not be added in the future.
 </p>
-<h3 id="sec:examples_51" class="unnumbered unlisted">Examples</h3>
+<h3 id="sec:examples_52" class="unnumbered unlisted">Examples</h3>
 <pre><code class="language-r">wrap_rmd(text = c(&quot;```&quot;, &quot;1+1&quot;, &quot;```&quot;, &quot;- a list item&quot;, &quot;&gt; a quote&quot;, &quot;&quot;,
     paste(rep(&quot;this is a normal paragraph&quot;, 5), collapse = &quot; &quot;)))
 </code></pre>
@@ -6530,13 +6571,13 @@ This feature may or may not be added in the future.
 #&gt; [7] &quot;this is a normal paragraph this is a normal paragraph this is a normal&quot;
 #&gt; [8] &quot;paragraph this is a normal paragraph this is a normal paragraph&quot;       
 </code></pre>
-<h2 id="sec:man-write_bib"><span class="section-number main-number">75</span> Generate BibTeX bibliography databases for R packages</h2>
-<h3 id="sec:description_75" class="unnumbered unlisted">Description</h3>
+<h2 id="sec:man-write_bib"><span class="section-number main-number">76</span> Generate BibTeX bibliography databases for R packages</h2>
+<h3 id="sec:description_76" class="unnumbered unlisted">Description</h3>
 <p>A wrapper function of <code>xfun::pkg_bib()</code>.
 </p>
-<h3 id="sec:usage_73" class="unnumbered unlisted">Usage</h3>
+<h3 id="sec:usage_74" class="unnumbered unlisted">Usage</h3>
 <pre><code class="language-r">write_bib(..., prefix = getOption("knitr.bib.prefix", "R-"))</code></pre>
-<h3 id="sec:arguments_59" class="unnumbered unlisted">Arguments</h3>
+<h3 id="sec:arguments_60" class="unnumbered unlisted">Arguments</h3>
 <table role = "presentation">
 <tr><td><code>...</code>, <code>prefix</code></td>
 <td>
