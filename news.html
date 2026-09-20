@@ -525,6 +525,9 @@
 <h3 id="sec:new-features_1" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
+<p>The file path in the “Quitting from” message (shown when a chunk fails) is now a clickable hyperlink in front-ends that support terminal hyperlinks (e.g., the RStudio IDE, which sets the environment variable <code>RSTUDIO_CLI_HYPERLINKS</code>), so you can jump straight to the line where the error occurred. In other environments, the plain path is shown as before (thanks, <a href="https://github.com/olivroy">@olivroy</a>, <a href="https://github.com/yihui/knitr/issues/2153">#2153</a>).</p>
+</li>
+<li>
 <p>Warnings emitted while knitting can now show an <strong>rlang</strong> backtrace, in the same way errors already do. Set <code>options(rlang_backtrace_on_warning_report = &quot;full&quot;)</code> (or <code>&quot;branch&quot;</code>) to append the call tree that led to each warning, which makes it much easier to locate where a warning came from in a large document. This is off by default (thanks, <a href="https://github.com/hadley">@hadley</a>, <a href="https://github.com/yihui/knitr/issues/2219">#2219</a>).</p>
 </li>
 <li>
