@@ -129,3 +129,26 @@ assert('opts_hooks wins over engine-modified options at the chunk hook (#2488)',
   # opts_hooks value wins at the chunk hook, not the engine's 'asis'
   (seen$results %==% 'hold')
 })
+
+# a verbatim chunk exists to show its content, so a global echo = FALSE should
+# not silence it; an echo set on the chunk itself is still honored (#2239)
+assert('verbatim ignores a global echo = FALSE but honors a per-chunk echo (#2239)', {
+  opts = opts_chunk$get('echo'); fmt = opts_knit$get('out.format')
+  on.exit({
+    opts_chunk$set(echo = opts); opts_knit$set(out.format = fmt); knit_code$restore()
+  }, add = TRUE)
+  render_markdown()
+  opts_chunk$set(echo = FALSE)
+
+  # inherited global echo = FALSE is ignored: the content is still shown
+  out = knit(text = c('```{verbatim}', 'show A', '```'), quiet = TRUE)
+  (grepl('show A', out))
+
+  # an explicit echo = FALSE on the chunk still hides it
+  out = knit(text = c('```{verbatim, echo=FALSE}', 'hide B', '```'), quiet = TRUE)
+  (!grepl('hide B', out))
+
+  # the same explicit echo works through the `#|` cell-option syntax
+  out = knit(text = c('```{verbatim}', '#| echo: false', 'hide C', '```'), quiet = TRUE)
+  (!grepl('hide C', out))
+})

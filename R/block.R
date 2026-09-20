@@ -34,7 +34,7 @@ call_block = function(block) {
   params2 = NULL
   for (lab in params$opts.label) {
     # referenced chunk options (if any) override template options
-    params3 = merge_list(opts_template$get(lab), attr(knit_code$get(lab), 'chunk_opts'))
+    params3 = merge_list(opts_template$get(lab), local_chunk_opts(lab))
     params2 = merge_list(params2, params3)
   }
   if (length(params2)) {
@@ -134,6 +134,16 @@ set_code = function(label, code) {
   res = knit_code$get(label)
   attributes(code) = attributes(res)
   knit_code$set(setNames(list(code), label))
+}
+
+# the raw per-chunk (local) options as written in the chunk header (or the `#|`
+# lines), i.e. before merging with the global options; these are stashed on the
+# code object in knit_code by the parser. `x` is a chunk label or a code object;
+# with `name`, return that single option (NULL if unset), otherwise the whole list
+local_chunk_opts = function(x, name) {
+  if (is.character(x)) x = knit_code$get(x)
+  opts = attr(x, 'chunk_opts')
+  if (missing(name)) opts else opts[[name]]
 }
 
 # options that should affect cache when cache level = 1,2
