@@ -79,7 +79,7 @@ if (all(vapply(c('DBI', 'RSQLite'), loadable, logical(1)))) {
     o = opts_chunk$merge(list(
       engine = 'sql', connection = con, label = 'test-sql', code = code, ...
     ))
-    one_string(knitr:::eng_sql(o))
+    one_string(eng_sql(o))
   }
 
   assert('sql.interlaced runs each statement and emits its own result (#2093)', {
