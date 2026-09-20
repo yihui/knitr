@@ -61,16 +61,10 @@ jobs:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
 
-      - if: github.event.inputs.extra-packages
-        run: |
-          echo "::notice::Running with the following extra packages: ${{ github.event.inputs.extra-packages }}"
-        shell: bash
-
       - uses: yihui/actions/setup-r-dependencies@HEAD
         with:
-          r-universe: cran
           extra-packages: >
-            ${{ (runner.os == 'Linux' && matrix.config.r == 'release') && 'covr' || '' }}
+            ${{ (runner.os == 'Linux' && matrix.config.r == 'release') && 'covr xml2' || '' }}
             ${{ github.event.inputs.extra-packages }}
 
       - uses: yihui/actions/check-r-package@HEAD
