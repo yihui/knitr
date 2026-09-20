@@ -707,10 +707,12 @@ sew.knit_embed_url = function(x, options = opts_chunk$get(), inline = FALSE, ...
   options$fig.cur = plot_counter()
   options = reduce_plot_opts(options)
   if (length(extra <- options$out.extra)) extra = paste('', extra, collapse = '')
+  # the iframe height honors the chunk option out.height, falling back to the
+  # height passed to include_url() (#1998); out.width is likewise honored
   add_html_caption(options, sprintf(
     '<iframe src="%s" width="%s" height="%s" data-external="1"%s></iframe>',
-    html_escape(x$url), options$out.width %n% '100%', x$height %n% '400px',
-    extra %n% ''
+    html_escape(x$url), options$out.width %n% '100%',
+    options$out.height %n% x$height %n% '400px', extra %n% ''
   ))
 }
 

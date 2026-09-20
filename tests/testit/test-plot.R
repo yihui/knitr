@@ -283,3 +283,16 @@ assert("par2 correctly handles specific pars", {
   # old = par("plt")
   # (with_par(par("plt") %==% old, plt = old / 2))
 })
+
+# include_url() iframes honor the chunk option out.height (falling back to the
+# height= passed to include_url()), consistent with out.width (#1998)
+assert('sew.knit_embed_url honors out.height, then include_url height (#1998)', {
+  embed = knitr::include_url('https://example.org', height = '800px')
+  iframe = function(opts) sew(embed, opts_chunk$merge(opts))
+  # out.height wins when set
+  (grepl('height="600px"', iframe(list(out.height = '600px'))))
+  # otherwise the include_url() height is used
+  (grepl('height="800px"', iframe(list(out.height = NULL))))
+  # out.width is honored the same way
+  (grepl('width="50%"', iframe(list(out.width = '50%'))))
+})
