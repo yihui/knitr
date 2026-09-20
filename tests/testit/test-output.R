@@ -142,3 +142,23 @@ assert('record_fig_alt() collects alt text only for recognized plot objects (#20
   record_fig_alt('a')
   (length(.knitEnv$fig.alt) == 0)
 })
+
+assert('ansi_path() adds a clickable file link only when the front-end supports it (#2153)', {
+  op = Sys.getenv('RSTUDIO_CLI_HYPERLINKS', unset = NA)
+  on.exit(if (is.na(op)) Sys.unsetenv('RSTUDIO_CLI_HYPERLINKS') else
+    Sys.setenv(RSTUDIO_CLI_HYPERLINKS = op), add = TRUE)
+
+  # no hyperlink support: the path is returned unchanged
+  Sys.setenv(RSTUDIO_CLI_HYPERLINKS = 'false')
+  (ansi_path('foo.Rmd', '1-4') %==% 'foo.Rmd')
+  # empty/NA path is never linked
+  (ansi_path('', '1-4') %==% '')
+
+  # with support: wrap the path in an OSC 8 link that points to the first line
+  Sys.setenv(RSTUDIO_CLI_HYPERLINKS = 'true')
+  out = ansi_path('foo.Rmd', '10-20')
+  (grepl('\033]8;line = 10:col = 1;file://', out, fixed = TRUE))
+  (grepl('foo.Rmd\033]8;;\a', out, fixed = TRUE))
+  # a single line number (no range) also works
+  (grepl('line = 5:col = 1', ansi_path('foo.Rmd', '5'), fixed = TRUE))
+})
