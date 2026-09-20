@@ -567,6 +567,9 @@
 <p>Added a <code>ps</code> engine to run PowerShell code chunks. The code is written to a <code>.ps1</code> script and executed with <code>powershell -File</code>. To use the newer cross-platform PowerShell (<code>pwsh</code>), set the chunk option <code>engine.opts = list(command = &quot;pwsh&quot;)</code> (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/1932">#1932</a>).</p>
 </li>
 <li>
+<p>Added a chunk option <code>log.echo</code>. When set to <code>TRUE</code>, each expression in an R code chunk is logged to <code>stderr</code> immediately before it is evaluated (via the <code>log_echo</code> argument of <code>evaluate::evaluate()</code>). This is useful for debugging documents rendered in remote or batch contexts, where you can see exactly which code is executing (and, if the logging platform adds timestamps, which code is slow) before the output document is produced (thanks, <a href="https://github.com/hadley">@hadley</a>, <a href="https://github.com/yihui/knitr/issues/2222">#2222</a>).</p>
+</li>
+<li>
 <p>A code chunk that returns a <code>shiny.tag</code> or <code>shiny.tag.list</code> object (e.g., from <strong>htmltools</strong>) can now have a figure caption and be cross-referenced, in the same way as <strong>htmlwidgets</strong>. For example, the chunk below produces a captioned figure that can be referenced via <code>\@ref(fig:mytag)</code> in <strong>bookdown</strong> (thanks, <a href="https://github.com/cpsievert">@cpsievert</a>, <a href="https://github.com/yihui/knitr/issues/1650">#1650</a>):</p>
 <pre><code>```{r mytag, fig.cap=&quot;A captioned shiny.tag object.&quot;}
 htmltools::div(htmltools::img(src = &quot;logo.png&quot;), htmltools::p(&quot;hello&quot;))
