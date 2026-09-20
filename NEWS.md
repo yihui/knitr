@@ -117,6 +117,8 @@
 
 ## MINOR CHANGES
 
+- Added optional internal debug logging via the **debugme** package, intended for debugging **knitr** itself and packages that build on it. It is off by default and only takes effect when the environment variable `DEBUGME` is set to include `knitr` (e.g., `Sys.setenv(DEBUGME = "knitr")` before loading the package) and **debugme** is installed (thanks, @leogama, #2203).
+
 - The `options` and `inline` arguments passed to `knit_print()` methods are now documented in `?knit_print`, so custom methods that declare them explicitly (e.g., `knit_print.foo <- function(x, ..., options)`) no longer trigger `R CMD check` warnings about undocumented arguments (thanks, @maxheld83, #1565).
 
 # CHANGES IN knitr VERSION 1.52

@@ -94,6 +94,7 @@ call_block = function(block) {
     if (cache$exists(hash, params$cache.lazy) &&
         isFALSE(params$cache.rebuild) &&
         params$engine != 'Rcpp') {
+      "!DEBUG loading cache for chunk '`label`' (hash: `hash`)"
       if (opts_knit$get('verbose')) message('  loading cache from ', hash)
       cache$load(hash, lazy = params$cache.lazy)
       cache_engine(params)
@@ -144,6 +145,7 @@ cache2.opts = c('fig.keep', 'fig.path', 'fig.ext', 'dev', 'dpi', 'dev.args', 'fi
 cache0.opts = c('include', 'out.width.px', 'out.height.px', 'cache.rebuild')
 
 block_exec = function(options) {
+  "!DEBUG block_exec() for chunk '`options$label`' (engine: `options$engine`)"
   otel_active_span(
     name = 'knit',
     label = options$label,
@@ -389,6 +391,7 @@ eng_r = function(options) {
 }
 
 block_cache = function(options, output, objects) {
+  "!DEBUG saving cache for chunk '`options$label`' (hash: `options$hash`)"
   hash = options$hash
   outname = cache_output_name(hash)
   assign(outname, output, envir = knit_global())
