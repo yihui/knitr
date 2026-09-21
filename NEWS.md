@@ -135,6 +135,8 @@
 
 - The `options` and `inline` arguments passed to `knit_print()` methods are now documented in `?knit_print`, so custom methods that declare them explicitly (e.g., `knit_print.foo <- function(x, ..., options)`) no longer trigger `R CMD check` warnings about undocumented arguments (thanks, @maxheld83, #1565).
 
+- The raw chunk body (as written in the document, before the `code` or `file` option replaces it) is now stashed as the internal option `original.code` in the `quarto_options` bundle, so that Quarto can echo the original content under `echo: fenced` even when `code`/`file` supplies the code (thanks, @cderv, #2239).
+
 # CHANGES IN knitr VERSION 1.52
 
 ## NEW FEATURES
