@@ -152,3 +152,22 @@ assert('verbatim ignores a global echo = FALSE but honors a per-chunk echo (#223
   out = knit(text = c('```{verbatim}', '#| echo: false', 'hide C', '```'), quiet = TRUE)
   (!grepl('hide C', out))
 })
+
+# for a cat chunk, class.source doubles as the language, so it must be emitted
+# only once in the fence, not both as the language and as an extra class (#2519)
+assert('a cat chunk does not duplicate class.source as both language and class (#2519)', {
+  fmt = opts_knit$get('out.format')
+  on.exit({ opts_knit$set(out.format = fmt); knit_code$restore() }, add = TRUE)
+  render_markdown()
+
+  fence = function(header) {
+    out = knit(text = c(header, 'echo hello', '```'), quiet = TRUE)
+    grep('^```', strsplit(out, '\n')[[1]], value = TRUE)[1]
+  }
+
+  # class.source supplies the language: one class only, same as lang='sh'
+  (fence("```{cat, class.source='sh'}") %==% '``` sh')
+  (fence("```{cat, lang='sh'}") %==% '``` sh')
+  # lang supplies the language and class.source adds one extra class on top
+  (fence("```{cat, lang='sh', class.source='extra'}") %==% '```{.sh .extra}')
+})

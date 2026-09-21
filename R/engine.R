@@ -503,7 +503,14 @@ eng_cat = function(options) {
   if (options$eval)
     do.call(cat2, c(list(options$code), options$engine.opts))
 
-  options = set_lang(options, options$class.source)
+  # use class.source as the language if lang is not otherwise provided, and
+  # consume it so it is not also emitted as an extra class in the fence
+  if (is.null(options$lang) && is.null(options$engine.opts$lang) &&
+      !is.null(options$class.source)) {
+    options$lang = options$class.source
+    options$class.source = NULL
+  }
+  options = set_lang(options, NULL)
   if (is.null(options$lang)) return('')
   engine_output(options, options$code, NULL)
 }
