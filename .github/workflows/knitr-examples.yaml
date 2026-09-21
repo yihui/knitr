@@ -71,19 +71,14 @@ jobs:
         # On PR, it will checkout same branch if it exists there
         uses: ./.github/actions/checkout-knitr-examples
 
-      - name: Install knitr-example dev
-        run: install.packages(readLines("knitr-examples/R-packages"))
-        shell: Rscript {0}
-
-      - name: Install system dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get install -y libpoppler-cpp-dev graphviz asymptote highlight coffeescript scala optipng ghostscript
-
-      - name: Install CTAN dependencies
-        run: |
-          tinytex::tlmgr_install("dvisvgm")
-        shell: Rscript {0}
+      # install the example dependencies (R packages, system packages, LaTeX)
+      # via knitr-examples' own composite action, so this workflow does not
+      # hardcode anything from that repo. The dev version of knitr installed
+      # above is preserved (extra-packages is left empty here).
+      - name: Install knitr-examples dependencies
+        uses: ./knitr-examples/.github/actions/setup
+        with:
+          working-directory: knitr-examples
 
       - name: Check knitr-examples
         run: |
