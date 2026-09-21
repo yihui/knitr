@@ -125,6 +125,8 @@
 
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
 
+- A `cat` chunk that sets its language via `class.source` (e.g., ` ```{cat, class.source='sh'} `) no longer duplicates that class in the output fence (previously ` ```{.sh .sh} `). The class is now promoted to the language and emitted only once, matching `lang='sh'`. Using `lang` and `class.source` together still adds the extra class (thanks, @cderv, #2519).
+
 ## MAJOR CHANGES
 
 - When the chunk option `eval` is a numeric vector (i.e., only certain lines of a chunk are evaluated), the lines that are echoed but not evaluated are no longer prefixed with the comment marker `## ` in the output. This makes it possible to show one line of code but the result of another without polluting the displayed source, e.g., `eval = 2` on a chunk containing `mtcars` and `rmarkdown::paged_table(mtcars)` echoes both lines as-is but only runs the second one (thanks, @cderv, #2129).
