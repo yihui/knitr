@@ -706,7 +706,12 @@ registerS3method(
 </ul>
 <h3 id="sec:minor-changes_1" class="unnumbered">MINOR CHANGES</h3>
 <ul>
-<li>The <code>options</code> and <code>inline</code> arguments passed to <code>knit_print()</code> methods are now documented in <code>?knit_print</code>, so custom methods that declare them explicitly (e.g., <code>knit_print.foo &lt;- function(x, ..., options)</code>) no longer trigger <code>R CMD check</code> warnings about undocumented arguments (thanks, <a href="https://github.com/maxheld83">@maxheld83</a>, <a href="https://github.com/yihui/knitr/issues/1565">#1565</a>).</li>
+<li>
+<p>The <code>options</code> and <code>inline</code> arguments passed to <code>knit_print()</code> methods are now documented in <code>?knit_print</code>, so custom methods that declare them explicitly (e.g., <code>knit_print.foo &lt;- function(x, ..., options)</code>) no longer trigger <code>R CMD check</code> warnings about undocumented arguments (thanks, <a href="https://github.com/maxheld83">@maxheld83</a>, <a href="https://github.com/yihui/knitr/issues/1565">#1565</a>).</p>
+</li>
+<li>
+<p>The raw chunk body (as written in the document, before the <code>code</code> or <code>file</code> option replaces it) is now stashed as the internal option <code>original.code</code> in the <code>quarto_options</code> bundle, so that Quarto can echo the original content under <code>echo: fenced</code> even when <code>code</code>/<code>file</code> supplies the code (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2239">#2239</a>).</p>
+</li>
 </ul>
 <h2 id="sec:knitr-1-52" class="unnumbered">knitr 1.52</h2>
 <h3 id="sec:new-features_2" class="unnumbered">NEW FEATURES</h3>
