@@ -176,7 +176,13 @@ parse_block = function(code, header, params.src, markdown_mode = out_format('mar
     params$original.params.src = params.src
     params$chunk.echo = isTRUE(params[['echo']])
     params$yaml.code = parts$src
-    attr(params, 'quarto_options') = c('original.params.src', 'chunk.echo', 'yaml.code')
+    # the raw chunk body as written in the document, so that Quarto can echo the
+    # original content (e.g. for `echo: fenced`) even when the `code` or `file`
+    # option later replaces the body via get_code() (#2239)
+    params$original.code = parts$code
+    attr(params, 'quarto_options') = c(
+      'original.params.src', 'chunk.echo', 'yaml.code', 'original.code'
+    )
     # alias 'warning' explicitly set in chunk metadata to the 'message' option
     if (!is.null(parts$options[['warning']])) {
       params$message = parts$options[['warning']]
