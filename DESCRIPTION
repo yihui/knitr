@@ -156,7 +156,8 @@ Suggests:
     tinytex (>= 0.56),
     webshot,
     rstudioapi,
-    svglite
+    svglite,
+    rextendr
 License: GPL
 URL: https://yihui.org/knitr/
 BugReports: https://github.com/yihui/knitr/issues
