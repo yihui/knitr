@@ -65,6 +65,30 @@ local({
   })
 })
 
+# test rust engine if rextendr and cargo are available
+local({
+  if (!loadable('rextendr') || !nzchar(Sys.which('cargo'))) return()
+  assert('a rust chunk evaluates rust code by default', {
+    txt = c(
+      '```{rust}',
+      '2 + 2',
+      '```'
+    )
+    out = knit(text = txt, quiet = TRUE)
+    (grepl('[1] 4', out, fixed = TRUE))
+  })
+  assert('a rust chunk with rust.source = TRUE exports rust functions to R', {
+    txt = c(
+      '```{rust, rust.source = TRUE}',
+      '#[extendr]',
+      'fn add_one(x: i32) -> i32 { x + 1 }',
+      '```'
+    )
+    knit(text = txt, quiet = TRUE)
+    (add_one(41L) == 42L)
+  })
+})
+
 assert('other plot engines do not take the ditaa arguments', {
   (!grepl('-s 2 -T -S -E', eng_plot_cmd('dot')))
   (!grepl('-s 2 -T -S -E', eng_plot_cmd('asy')))
