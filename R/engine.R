@@ -29,7 +29,7 @@
 #'   <https://yihui.org/knitr/demo/engines/>
 #' @examples knit_engines$get('python'); knit_engines$get('awk')
 #' names(knit_engines$get())
-knit_engines = new_defaults()
+knit_engines <- new_defaults()
 
 
 #' Cache engines of other languages
@@ -49,7 +49,7 @@ knit_engines = new_defaults()
 #' @references See <https://github.com/rstudio/reticulate/pull/167> for an
 #'   implementation of a cache engine for Python.
 #' @export
-cache_engines = new_defaults()
+cache_engines <- new_defaults()
 
 #' An output wrapper for language engine output
 #'
@@ -78,25 +78,38 @@ cache_engines = new_defaults()
 #'
 #' # expert use only
 #' engine_output(opts_chunk$merge(list(engine = 'python')), out = list(structure(list(src = '1 + 1'), class = 'source'), '2'))
-engine_output = function(options, code, out, extra = NULL) {
+engine_output <- function(options, code, out, extra = NULL) {
   # attach the (possibly engine-modified) options to the returned output so that
   # block_exec() can pass them on to the 'chunk' hook, keeping it consistent with
   # the 'output' hook (#2333)
-  with_opts = function(res) structure(res, chunk_opts = options)
-  if (missing(code) && is.list(out)) return(with_opts(unlist(sew(out, options))))
-  if (!is.logical(options$echo)) code = code[options$echo]
-  if (length(code) != 1L) code = one_string(code)
-  if (options$engine == 'sas' && length(out) > 1L && !grepl('[[:alnum:]]', out[2]))
-    out = tail(out, -3L)
-  if (length(out) != 1L) out = one_string(out)
-  out = sub('([^\n]+)$', '\\1\n', out)
+  with_opts <- function(res) structure(res, chunk_opts = options)
+  if (missing(code) && is.list(out)) {
+    return(with_opts(unlist(sew(out, options))))
+  }
+  if (!is.logical(options$echo)) {
+    code <- code[options$echo]
+  }
+  if (length(code) != 1L) {
+    code <- one_string(code)
+  }
+  if (
+    options$engine == 'sas' && length(out) > 1L && !grepl('[[:alnum:]]', out[2])
+  ) {
+    out <- tail(out, -3L)
+  }
+  if (length(out) != 1L) {
+    out <- one_string(out)
+  }
+  out <- sub('([^\n]+)$', '\\1\n', out)
   if (options$engine == 'stata') {
-    out = gsub('\n+running.*profile\\.do', '', out)
-    out = sub('\\.\\.\\.\n+', '', out)
-    out = sub('\n\\. \nend of do-file\n', '', out)
+    out <- gsub('\n+running.*profile\\.do', '', out)
+    out <- sub('\\.\\.\\.\n+', '', out)
+    out <- sub('\n\\. \nend of do-file\n', '', out)
   }
   with_opts(one_string(c(
-    if (length(options$echo) > 1L || options$echo) knit_hooks$get('source')(code, options),
+    if (length(options$echo) > 1L || options$echo) {
+      knit_hooks$get('source')(code, options)
+    },
     if (options$results != 'hide' && !is_blank(out)) {
       if (options$engine == 'highlight') out else sew.character(out, options)
     },
@@ -105,187 +118,284 @@ engine_output = function(options, code, out, extra = NULL) {
 }
 
 ## command-line tools
-eng_interpreted = function(options) {
-  engine = options$engine
-  code = if (engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')) {
-    f = wd_tempfile(engine, switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', '.txt'))
-    write_utf8(c(switch(
+eng_interpreted <- function(options) {
+  engine <- options$engine
+  code <- if (
+    engine %in% c('highlight', 'Rscript', 'sas', 'haskell', 'stata')
+  ) {
+    f <- wd_tempfile(
       engine,
-      sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
-      NULL
-    ), options$code), f)
+      switch(engine, sas = '.sas', Rscript = '.R', stata = '.do', '.txt')
+    )
+    write_utf8(
+      c(
+        switch(
+          engine,
+          sas = "OPTIONS NONUMBER NODATE PAGESIZE = MAX FORMCHAR = '|----|+|---+=|-/<>*' FORMDLIM=' ';title;",
+          NULL
+        ),
+        options$code
+      ),
+      f
+    )
     on.exit(unlink(f), add = TRUE)
     switch(
       engine,
       haskell = paste('-e', shQuote(paste(':script', f))),
       sas = {
-        logf = sub('[.]sas$', '.lst', f)
+        logf <- sub('[.]sas$', '.lst', f)
         on.exit(unlink(c(logf, sub('[.]sas$', '.log', f))), add = TRUE)
         f
       },
       stata = {
-        logf = sub('[.]do$', '.log', f)
+        logf <- sub('[.]do$', '.log', f)
         on.exit(unlink(c(logf)), add = TRUE)
-        sprintf(switch(
-          Sys.info()[['sysname']],
-          Windows = '/q /e do %s',
-          Darwin = paste('-q < %s >', shQuote(xfun::normalize_path(logf))),
-          Linux = '-q -e do %s',
-          '-q -b do %s'
-        ), shQuote(normalizePath(f)))
+        sprintf(
+          switch(
+            Sys.info()[['sysname']],
+            Windows = '/q /e do %s',
+            Darwin = paste('-q < %s >', shQuote(xfun::normalize_path(logf))),
+            Linux = '-q -e do %s',
+            '-q -b do %s'
+          ),
+          shQuote(normalizePath(f))
+        )
       },
       f
     )
-  } else paste(switch(
-    engine, bash = '-c', coffee = '-e', groovy = '-e', lein = 'exec -ep',
-    mysql = '-e', node = '-e', octave = '--eval', perl = '-E', php = '-r',
-    psql = '-c', python = '-c', ruby = '-e', scala = '-e', sh = '-c', zsh = '-c',
-    NULL
-  ), shQuote(one_string(options$code)))
+  } else {
+    paste(
+      switch(
+        engine,
+        bash = '-c',
+        coffee = '-e',
+        groovy = '-e',
+        lein = 'exec -ep',
+        mysql = '-e',
+        node = '-e',
+        octave = '--eval',
+        perl = '-E',
+        php = '-r',
+        psql = '-c',
+        python = '-c',
+        ruby = '-e',
+        scala = '-e',
+        sh = '-c',
+        zsh = '-c',
+        NULL
+      ),
+      shQuote(one_string(options$code))
+    )
+  }
 
-  opts = get_engine_opts(options$engine.opts, engine)
+  opts <- get_engine_opts(options$engine.opts, engine)
   # FIXME: for these engines, the correct order is options + code + file
-  code = if (engine %in% c('awk', 'gawk', 'sed', 'sas', 'psql', 'mysql'))
-    paste(code, opts) else paste(opts, code)
-  cmd = get_engine_path(options$engine.path, engine)
-  out = if (options$eval) {
-    if (options$message) message('running: ', cmd, ' ', code)
+  code <- if (engine %in% c('awk', 'gawk', 'sed', 'sas', 'psql', 'mysql')) {
+    paste(code, opts)
+  } else {
+    paste(opts, code)
+  }
+  cmd <- get_engine_path(options$engine.path, engine)
+  out <- if (options$eval) {
+    if (options$message) {
+      message('running: ', cmd, ' ', code)
+    }
     tryCatch(
-      system2(cmd, code, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+      system2(
+        cmd,
+        code,
+        stdout = TRUE,
+        stderr = TRUE,
+        env = options$engine.env
+      ),
       error = function(e) {
-        if (!options$error) stop(e)
+        if (!options$error) {
+          stop(e)
+        }
         paste('Error in running command', cmd)
       }
     )
-  } else ''
+  } else {
+    ''
+  }
   # chunk option error=FALSE means we need to signal the error
-  if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
-  if (options$eval && engine %in% c('sas', 'stata') && file.exists(logf))
-    out = c(read_utf8(logf), out)
+  if (!options$error && !is.null(attr(out, 'status'))) {
+    stop(one_string(out))
+  }
+  if (options$eval && engine %in% c('sas', 'stata') && file.exists(logf)) {
+    out <- c(read_utf8(logf), out)
+  }
   engine_output(options, options$code, out)
 }
 
 # options$engine.path can be list(name1 = path1, name2 = path2, ...); similarly,
 # options$engine.opts can be list(name1 = opts1, ...)
-get_engine_opts = function(opts, engine, fallback = '') {
-  if (is.list(opts)) opts = opts[[engine]]
+get_engine_opts <- function(opts, engine, fallback = '') {
+  if (is.list(opts)) {
+    opts <- opts[[engine]]
+  }
   opts %n% fallback
 }
 
-get_engine_path = function(path, engine, fallback = engine) {
+get_engine_path <- function(path, engine, fallback = engine) {
   get_engine_opts(path, engine, fallback)
 }
 
 # execute an arbitrary command (optionally with arguments)
 # engine.opts = list(command, input, ext, clean, args, args1, args2)
-eng_exec = function(options) {
-  opts = options$engine.opts
-  if (!is.character(cmd <- opts$command %n% options$command)) stop(
-    "The command of the 'exec' engine must be a character string."
-  )
-  cmd = get_engine_path(options$engine.path, options$engine, cmd)
-  input = function(code, file) {
+eng_exec <- function(options) {
+  opts <- options$engine.opts
+  if (!is.character(cmd <- opts$command %n% options$command)) {
+    stop(
+      "The command of the 'exec' engine must be a character string."
+    )
+  }
+  cmd <- get_engine_path(options$engine.path, options$engine, cmd)
+  input <- function(code, file) {
     write_utf8(code, file)
     file
   }
-  if (is.character(i0 <- opts$input))
-    opts$input = function(code, file) input(code, i0)
+  if (is.character(i0 <- opts$input)) {
+    opts$input <- function(code, file) input(code, i0)
+  }
   # turn all chunk options into function except 'command'
-  opts = list_fun(opts, setdiff(names(opts), 'command'))
+  opts <- list_fun(opts, setdiff(names(opts), 'command'))
 
   # default options
-  opts2 = list(
-    ext = identity, input = input, args = function(code, file) {
+  opts2 <- list(
+    ext = identity,
+    input = input,
+    args = function(code, file) {
       file
-    }, clean = function(file) {
+    },
+    clean = function(file) {
       unlink(file)
-    }, args1 = function() NULL, args2 = function() NULL,
+    },
+    args1 = function() NULL,
+    args2 = function() NULL,
     output = function(options, code, output, file) {
       engine_output(options, code, output)
     }
   )
 
-  opts = merge_list(opts2, opts)
-  cmd2 = basename(cmd)  # in case command is a full path
-  ext = opts$ext(cmd2)  # file extension
-  f = wd_tempfile(cmd2, paste0('.', ext))
-  if (is.function(opts$clean)) on.exit(opts$clean(f), add = TRUE)
-  f = opts$input(options$code, f)
-  a = c(opts$args1(), opts$args(options$code, f), opts$args2())
+  opts <- merge_list(opts2, opts)
+  cmd2 <- basename(cmd) # in case command is a full path
+  ext <- opts$ext(cmd2) # file extension
+  f <- wd_tempfile(cmd2, paste0('.', ext))
+  if (is.function(opts$clean)) {
+    on.exit(opts$clean(f), add = TRUE)
+  }
+  f <- opts$input(options$code, f)
+  a <- c(opts$args1(), opts$args(options$code, f), opts$args2())
 
-  out = if (options$eval) {
-    if (options$message) message('running: ', paste(c(cmd, a), collapse = ' '))
-    f2 = wd_tempfile(cmd2)  # capture stderr
+  out <- if (options$eval) {
+    if (options$message) {
+      message('running: ', paste(c(cmd, a), collapse = ' '))
+    }
+    f2 <- wd_tempfile(cmd2) # capture stderr
     on.exit(unlink(f2), add = TRUE)
-    tryCatch({
-      res = (if (options$error) suppressWarnings else identity)(
-        system2(cmd, shQuote(a), stdout = TRUE, stderr = f2, env = options$engine.env)
-      )
-      # check error in the content run
-      if (!is.null(attr(res, 'status')) && file.exists(f2) && file.size(f2) > 0) {
-        e = readLines(f2) # f2 may not be UTF-8
-        if (!options$error) stop(one_string(e)) else e
-      } else {
-        res
-      }
-    }, error = function(e) {
+    tryCatch(
+      {
+        res <- (if (options$error) suppressWarnings else identity)(
+          system2(
+            cmd,
+            shQuote(a),
+            stdout = TRUE,
+            stderr = f2,
+            env = options$engine.env
+          )
+        )
+        # check error in the content run
+        if (
+          !is.null(attr(res, 'status')) && file.exists(f2) && file.size(f2) > 0
+        ) {
+          e <- readLines(f2) # f2 may not be UTF-8
+          if (!options$error) stop(one_string(e)) else e
+        } else {
+          res
+        }
+      },
+      error = function(e) {
         # error in the command run
-        if (!options$error) stop(e)
+        if (!options$error) {
+          stop(e)
+        }
         paste('Error in running command', cmd)
       }
     )
-  } else ''
+  } else {
+    ''
+  }
   # chunk option error=FALSE means we need to signal the error
-  if (!options$error && !is.null(attr(out, 'status'))) stop(one_string(out))
-  options = set_lang(options, eng2lang(xfun::sans_ext(cmd2)))
+  if (!options$error && !is.null(attr(out, 'status'))) {
+    stop(one_string(out))
+  }
+  options <- set_lang(options, eng2lang(xfun::sans_ext(cmd2)))
   opts$output(options, options$code, out, f)
 }
 
 # turn elements of a list into functions: if an element is not a function, make
 # it a function that returns the non-function value
-list_fun = function(x, which = names(x)) {
+list_fun <- function(x, which = names(x)) {
   for (i in which) {
-    if (!is.function(v <- x[[i]])) x[[i]] = local({
-      # a trick to avoid R's lazy evaluation (make a copy of v)
-      v2 = v; function(...) v2
-    })
+    if (!is.function(v <- x[[i]])) {
+      x[[i]] <- local({
+        # a trick to avoid R's lazy evaluation (make a copy of v)
+        v2 <- v
+        function(...) v2
+      })
+    }
   }
   x
 }
 
 ## C, C++, and Fortran (via R CMD SHLIB)
-eng_shlib = function(options) {
-  n = switch(options$engine, c = 'c', cc  = 'cc', fortran = 'f', fortran95 = 'f95')
-  f = wd_tempfile(n, paste0('.', n))
+eng_shlib <- function(options) {
+  n <- switch(
+    options$engine,
+    c = 'c',
+    cc = 'cc',
+    fortran = 'f',
+    fortran95 = 'f95'
+  )
+  f <- wd_tempfile(n, paste0('.', n))
   write_utf8(options$code, f)
   on.exit(unlink(c(f, with_ext(f, c('o', 'so', 'dll')))), add = TRUE)
   if (options$eval) {
-    out = system(paste('R CMD SHLIB', f), intern = TRUE)
+    out <- system(paste('R CMD SHLIB', f), intern = TRUE)
     dyn.load(sub(sprintf('[.]%s$', n), .Platform$dynlib.ext, f))
-  } else out = ''
+  } else {
+    out <- ''
+  }
   engine_output(options, options$code, out)
 }
 
 ## Python
-eng_python = function(options) {
+eng_python <- function(options) {
   if (isFALSE(options$python.reticulate)) {
     eng_interpreted(options)
   } else {
-    if (!loadable('reticulate')) warning2(
-      "The 'python' engine in knitr requires the reticulate package. ",
-      "If you do not want to use the reticulate package, set the chunk option ",
-      "python.reticulate = FALSE."
-    )
+    if (!loadable('reticulate')) {
+      warning2(
+        "The 'python' engine in knitr requires the reticulate package. ",
+        "If you do not want to use the reticulate package, set the chunk option ",
+        "python.reticulate = FALSE."
+      )
+    }
     reticulate::eng_python(options)
   }
 }
 
-cache_eng_python = function(options) {
-  if (isFALSE(options$python.reticulate)) return()
+cache_eng_python <- function(options) {
+  if (isFALSE(options$python.reticulate)) {
+    return()
+  }
   # TODO: change this hack to reticulate::cache_eng_python(options) after
   # https://github.com/rstudio/reticulate/pull/167 is merged and released
-  if (!'cache_eng_python' %in% ls(asNamespace('reticulate'))) return()
-  fun = getFromNamespace('cache_eng_python', 'reticulate')
+  if (!'cache_eng_python' %in% ls(asNamespace('reticulate'))) {
+    return()
+  }
+  fun <- getFromNamespace('cache_eng_python', 'reticulate')
   fun(options)
 }
 
@@ -293,22 +403,28 @@ cache_eng_python = function(options) {
 #  e.g. see http://cran.rstudio.com/package=jvmr
 
 ## Rcpp
-eng_Rcpp = function(options) {
-  sourceCpp = getFromNamespace('sourceCpp', 'Rcpp')
+eng_Rcpp <- function(options) {
+  sourceCpp <- getFromNamespace('sourceCpp', 'Rcpp')
 
-  code = one_string(options$code)
+  code <- one_string(options$code)
   # engine.opts is a list of arguments to be passed to Rcpp function, e.g.
   # engine.opts=list(plugin='RcppArmadillo')
-  opts = options$engine.opts
+  opts <- options$engine.opts
 
   # use custom cacheDir for sourceCpp if it's supported
-  cache = options$cache && ('cacheDir' %in% names(formals(sourceCpp)))
+  cache <- options$cache && ('cacheDir' %in% names(formals(sourceCpp)))
   if (cache) {
-    opts$cacheDir = paste(valid_path(options$cache.path, options$label), 'sourceCpp', sep = '_')
-    opts$cleanupCacheDir = TRUE
+    opts$cacheDir <- paste(
+      valid_path(options$cache.path, options$label),
+      'sourceCpp',
+      sep = '_'
+    )
+    opts$cleanupCacheDir <- TRUE
   }
 
-  if (!is.environment(opts$env)) opts$env = knit_global() # default env is knit_global()
+  if (!is.environment(opts$env)) {
+    opts$env <- knit_global()
+  } # default env is knit_global()
   if (options$eval) {
     message('Building shared library for Rcpp code chunk...')
     # when the chunk reads from files (the `file` option), compile the file(s)
@@ -328,44 +444,54 @@ eng_Rcpp = function(options) {
 # compile Rcpp source file(s) with sourceCpp(): copy all files into one dir
 # under their original basenames so a .cpp can #include its sibling headers,
 # then compile the last .cpp/.cc file (headers are typically listed first)
-sourceCpp_files = function(sourceCpp, files, ...) {
-  i = grep('[.]c(c|pp|xx)$', files, ignore.case = TRUE)
-  if (length(i) == 0) stop(
-    "the 'file' option for an Rcpp chunk must include a .cpp source file"
-  )
-  files = in_input_dir(normalizePath(files))
-  d = tempfile('rcpp'); dir.create(d)
+sourceCpp_files <- function(sourceCpp, files, ...) {
+  i <- grep('[.]c(c|pp|xx)$', files, ignore.case = TRUE)
+  if (length(i) == 0) {
+    stop(
+      "the 'file' option for an Rcpp chunk must include a .cpp source file"
+    )
+  }
+  files <- in_input_dir(normalizePath(files))
+  d <- tempfile('rcpp')
+  dir.create(d)
   on.exit(unlink(d, recursive = TRUE), add = TRUE)
   file.copy(files, file.path(d, basename(files)))
   sourceCpp(file = file.path(d, basename(files[i[length(i)]])), ...)
 }
 
 ## Julia
-eng_julia = function(options) {
+eng_julia <- function(options) {
   JuliaCall::eng_juliacall(options)
 }
 
 ## Stan
 ## Compiles Stan model in the code chunk, creates a stanmodel object,
 ## and assigns it to a variable with the name given in engine.opts$x.
-eng_stan = function(options) {
-  code = one_string(options$code)
-  opts = options$engine.opts
+eng_stan <- function(options) {
+  code <- one_string(options$code)
+  opts <- options$engine.opts
   ## name of the modelfit object returned by stan_model
   if (is.null(x <- options$output.var)) {
-    warning("the option engine.opts$x is deprecated; use the chunk option output.var instead")
-    x = opts$x
+    warning(
+      "the option engine.opts$x is deprecated; use the chunk option output.var instead"
+    )
+    x <- opts$x
   }
-  if (!is.character(x) || length(x) != 1L) stop(
-    "the chunk option output.var must be a character string ",
-    "providing a name for the returned `stanmodel` object."
-  )
-  opts$x = NULL
+  if (!is.character(x) || length(x) != 1L) {
+    stop(
+      "the chunk option output.var must be a character string ",
+      "providing a name for the returned `stanmodel` object."
+    )
+  }
+  opts$x <- NULL
   if (options$eval) {
     message("Creating a 'stanmodel' object ", x)
     assign(
       x,
-      do.call(getFromNamespace('stan_model', 'rstan'), c(list(model_code = code), opts)),
+      do.call(
+        getFromNamespace('stan_model', 'rstan'),
+        c(list(model_code = code), opts)
+      ),
       envir = knit_global()
     )
   }
@@ -373,80 +499,123 @@ eng_stan = function(options) {
 }
 
 ## convert tikz string to PDF
-eng_tikz = function(options) {
-  if (!options$eval) return(engine_output(options, options$code, ''))
+eng_tikz <- function(options) {
+  if (!options$eval) {
+    return(engine_output(options, options$code, ''))
+  }
 
-  lines = read_utf8(
-    options$engine.opts$template %n% system.file('misc', 'tikz2pdf.tex', package = 'knitr')
+  lines <- read_utf8(
+    options$engine.opts$template %n%
+      system.file('misc', 'tikz2pdf.tex', package = 'knitr')
   )
   # add class options to template
-  lines = insert_template(
-    lines, '%% TIKZ_CLASSOPTION %%', options$engine.opts$classoption %n% 'tikz', TRUE
+  lines <- insert_template(
+    lines,
+    '%% TIKZ_CLASSOPTION %%',
+    options$engine.opts$classoption %n% 'tikz',
+    TRUE
   )
   # insert code into preamble
-  lines = insert_template(
-    lines, '%% EXTRA_TIKZ_PREAMBLE_CODE %%', options$engine.opts$extra.preamble, TRUE
+  lines <- insert_template(
+    lines,
+    '%% EXTRA_TIKZ_PREAMBLE_CODE %%',
+    options$engine.opts$extra.preamble,
+    TRUE
   )
   # insert tikz code into the tex template
-  s = insert_template(lines, '%% TIKZ_CODE %%', options$code)
+  s <- insert_template(lines, '%% TIKZ_CODE %%', options$code)
   write_utf8(s, texf <- wd_tempfile('tikz', '.tex'))
   on.exit(unlink(texf), add = TRUE)
 
-  ext = dev2ext(options)
+  ext <- dev2ext(options)
 
-  to_svg = ext == 'svg'
-  outf = if (to_svg) tinytex::latexmk(texf, 'latex') else tinytex::latexmk(texf)
+  to_svg <- ext == 'svg'
+  outf <- if (to_svg) {
+    tinytex::latexmk(texf, 'latex')
+  } else {
+    tinytex::latexmk(texf)
+  }
 
-  fig = fig_path(if (to_svg) '.dvi' else '.pdf', options)
+  fig <- fig_path(if (to_svg) '.dvi' else '.pdf', options)
   dir.create(dirname(fig), recursive = TRUE, showWarnings = FALSE)
   file.rename(outf, fig)
 
-  fig2 = with_ext(fig, ext)
+  fig2 <- with_ext(fig, ext)
   if (to_svg) {
     # dvisvgm needs to be on the path
     # dvisvgm for windows needs ghostscript bin dir on the path also
-    if (Sys.which('dvisvgm') == '') tinytex::tlmgr_install('dvisvgm')
-    if (system2('dvisvgm', c(
-      options$engine.opts$dvisvgm.opts, '-o', shQuote(fig2), fig
-    )) != 0) stop('Failed to compile ', fig, ' to ', fig2)
+    if (Sys.which('dvisvgm') == '') {
+      tinytex::tlmgr_install('dvisvgm')
+    }
+    if (
+      system2(
+        'dvisvgm',
+        c(
+          options$engine.opts$dvisvgm.opts,
+          '-o',
+          shQuote(fig2),
+          fig
+        )
+      ) !=
+        0
+    ) {
+      stop('Failed to compile ', fig, ' to ', fig2)
+    }
   } else {
     # convert to the desired output-format using magick; the resolution of the
     # rasterized image is controlled by the density at which the PDF is read
     # (engine.opts$density, in DPI), since image_convert() has no density option
-    if (ext != 'pdf') magick::image_write(do.call(magick::image_convert, c(
-      list(
-        magick::image_read_pdf(fig, density = options$engine.opts$density %n% 300),
-        ext
-      ), options$engine.opts$convert.opts
-    )), fig2)
+    if (ext != 'pdf') {
+      magick::image_write(
+        do.call(
+          magick::image_convert,
+          c(
+            list(
+              magick::image_read_pdf(
+                fig,
+                density = options$engine.opts$density %n% 300
+              ),
+              ext
+            ),
+            options$engine.opts$convert.opts
+          )
+        ),
+        fig2
+      )
+    }
   }
-  fig = fig2
+  fig <- fig2
 
-  options$fig.num = 1L; options$fig.cur = 1L
-  extra = run_hook_plot(fig, options)
+  options$fig.num <- 1L
+  options$fig.cur <- 1L
+  extra <- run_hook_plot(fig, options)
   engine_output(options, options$code, '', extra)
 }
 
 ## Commands that generate plots, e.g., GraphViz (dot), Asymptote, and Ditaa
-eng_plot = function(options) {
-  options$command = cmd = options$engine
-  options$fig.ext = ext = dev2ext(options)
-  opts = list(
+eng_plot <- function(options) {
+  options$command <- cmd <- options$engine
+  options$fig.ext <- ext <- dev2ext(options)
+  opts <- list(
     output = function(options, code, output, file) {
-      extra = if (options$eval) {
+      extra <- if (options$eval) {
         # move the generated plot (with a temp filename) to fig.path
         if (!file_exists(f1 <- with_ext(file, ext))) {
           # asymptote may geneate file.ext.ext (see #2025)
-          if (cmd == 'asy') f1 = paste0(f1, '.', ext)
+          if (cmd == 'asy') f1 <- paste0(f1, '.', ext)
         }
-        if (!file_exists(f1)) stop(
-          'The command did not generate the expected plot file: ', f1
-        )
-        f2 = paste(fig_path(), ext, sep = '.')
+        if (!file_exists(f1)) {
+          stop(
+            'The command did not generate the expected plot file: ',
+            f1
+          )
+        }
+        f2 <- paste(fig_path(), ext, sep = '.')
         xfun::dir_create(dirname(f2))
         unlink(f2)
         file.rename(f1, f2)
-        options$fig.num = 1L; options$fig.cur = 1L
+        options$fig.num <- 1L
+        options$fig.cur <- 1L
         run_hook_plot(f2, options)
       }
       engine_output(options, code, '', extra)
@@ -454,164 +623,217 @@ eng_plot = function(options) {
     # better default for ditaa: https://github.com/yihui/knitr/pull/2092
     args1 = if (cmd == 'ditaa') c('-s', 2, '-T', '-S', '-E'),
     args = function(code, file) {
-      f2 = with_ext(file, ext)
-      if (cmd == 'ditaa') return(c(file, f2))
+      f2 <- with_ext(file, ext)
+      if (cmd == 'ditaa') {
+        return(c(file, f2))
+      }
       if (cmd %in% c('dot', 'asy')) {
         c(file, c(dot = '-T', asy = '-f')[cmd], ext, '-o', f2)
       }
-    })
-  options$engine.opts = merge_list(opts, options$engine.opts)
+    }
+  )
+  options$engine.opts <- merge_list(opts, options$engine.opts)
   eng_exec(options)
 }
 
 ## Andre Simon's highlight
-eng_highlight = function(options) {
+eng_highlight <- function(options) {
   # e.g. engine.opts can be '-S matlab -O latex'
-  if (is.null(options$engine.opts)) options$engine.opts = '-S text'
-  options$engine.opts[1L] = paste('-f', options$engine.opts[1L])
+  if (is.null(options$engine.opts)) {
+    options$engine.opts <- '-S text'
+  }
+  options$engine.opts[1L] <- paste('-f', options$engine.opts[1L])
   # do not echo source code; note we must NOT set options$results = 'asis' here:
   # the highlight output already bypasses sew() (see the 'highlight' branch in
   # engine_output()), so 'asis' has no effect on the output, but since #2333 the
   # engine-modified options reach the 'chunk' hook, where 'asis' would suppress
   # the surrounding \begin{knitrout} wrapper in LaTeX output
-  options$echo = FALSE
-  res = eng_interpreted(options)
+  options$echo <- FALSE
+  res <- eng_interpreted(options)
   if (out_format('latex')) {
     highlight_header()
     sub('(.*)\\\\\\\\(.*)', '\\1\\2', res)
-  } else res
+  } else {
+    res
+  }
 }
 
 ## PowerShell: run the chunk as a .ps1 script file (PowerShell requires the
 ## .ps1 extension and the -File argument; -ExecutionPolicy Bypass lets the
 ## unsigned temp script run under Windows' default policy), via the exec engine
-eng_ps = function(options) {
-  opts = list(
-    command = 'powershell', ext = 'ps1',
+eng_ps <- function(options) {
+  opts <- list(
+    command = 'powershell',
+    ext = 'ps1',
     args1 = c('-ExecutionPolicy', 'Bypass', '-File')
   )
-  options$engine.opts = merge_list(opts, options$engine.opts)
+  options$engine.opts <- merge_list(opts, options$engine.opts)
   eng_exec(options)
 }
 
 ## save the code
-eng_cat = function(options) {
-  cat2 = function(..., file = '', sep = '\n', lang = NULL) {
+eng_cat <- function(options) {
+  cat2 <- function(..., file = '', sep = '\n', lang = NULL) {
     # do not write to stdout like the default behavior of cat()
     if (!identical(file, '')) cat(..., file = file, sep = sep)
   }
-  if (options$eval)
+  if (options$eval) {
     do.call(cat2, c(list(options$code), options$engine.opts))
+  }
 
   # use class.source as the language if lang is not otherwise provided, and
   # consume it so it is not also emitted as an extra class in the fence
-  if (is.null(options$lang) && is.null(options$engine.opts$lang) &&
-      !is.null(options$class.source)) {
-    options$lang = options$class.source
-    options$class.source = NULL
+  if (
+    is.null(options$lang) &&
+      is.null(options$engine.opts$lang) &&
+      !is.null(options$class.source)
+  ) {
+    options$lang <- options$class.source
+    options$class.source <- NULL
   }
-  options = set_lang(options, NULL)
-  if (is.null(options$lang)) return('')
+  options <- set_lang(options, NULL)
+  if (is.null(options$lang)) {
+    return('')
+  }
   engine_output(options, options$code, NULL)
 }
 
 ## output the code without processing it
-eng_asis = function(options) {
+eng_asis <- function(options) {
   if (options$echo) one_string(options$code)
 }
 
 # write a block environment according to the output format
-eng_block = function(options) {
-  if (isFALSE(options$echo)) return()
-  code = one_string(options$code)
-  to = pandoc_to()
-  is_pandoc = !is.null(to)
+eng_block <- function(options) {
+  if (isFALSE(options$echo)) {
+    return()
+  }
+  code <- one_string(options$code)
+  to <- pandoc_to()
+  is_pandoc <- !is.null(to)
   if (!is_pandoc) {
     # not in R Markdown v2
-    to = out_format()
-    if (!(to %in% c('latex', 'html', 'markdown'))) to = NULL
+    to <- out_format()
+    if (!(to %in% c('latex', 'html', 'markdown'))) to <- NULL
   }
-  if (is.null(to)) return(code)
-  if (to == 'beamer') to = 'latex'
-  if (is_html_output(to)) to = 'html'
-  type = options$type
-  if (is.null(type)) return(code)
+  if (is.null(to)) {
+    return(code)
+  }
+  if (to == 'beamer') {
+    to <- 'latex'
+  }
+  if (is_html_output(to)) {
+    to <- 'html'
+  }
+  type <- options$type
+  if (is.null(type)) {
+    return(code)
+  }
   # convert the chunk content to HTML or LaTeX (ideally I only need to specify
   # the markdown extension, but it is not implemented yet for LaTeX:
   # https://github.com/jgm/pandoc/issues/2453)
-  if (is_pandoc) code = pandoc_fragment(code, if (to == 'html') 'html4' else to)
-  l1 = options$latex.options
-  if (is.null(l1)) l1 = ''
-  h2 = options$html.tag %n% 'div'
-  h3 = options$html.before %n% ''
-  h4 = options$html.after %n% ''
+  if (is_pandoc) {
+    code <- pandoc_fragment(code, if (to == 'html') 'html4' else to)
+  }
+  l1 <- options$latex.options
+  if (is.null(l1)) {
+    l1 <- ''
+  }
+  h2 <- options$html.tag %n% 'div'
+  h3 <- options$html.before %n% ''
+  h4 <- options$html.after %n% ''
   # e.g. type = c(latex = 'marginfigure', html = 'marginnote')
-  if (to %in% names(type)) type = type[to]
+  if (to %in% names(type)) {
+    type <- type[to]
+  }
   # block level tags? this is an incomplete list, but should work for most cases
-  if (to == 'html') if (h2 %in% c('div', 'p', 'blockquote')) {
-    code = paste0('\n', code, '\n')
-  } else {
-    code = gsub('<p>', '<span style="display: block;">', code)
-    code = gsub('</p>', '</span>', code)
+  if (to == 'html') {
+    if (h2 %in% c('div', 'p', 'blockquote')) {
+      code <- paste0('\n', code, '\n')
+    } else {
+      code <- gsub('<p>', '<span style="display: block;">', code)
+      code <- gsub('</p>', '</span>', code)
+    }
   }
   switch(
     to,
     latex = sprintf('\\begin{%s}%s\n%s\n\\end{%s}', type, l1, code, type),
-    html =  sprintf('%s<%s class="%s">%s</%s>%s', h3, h2, type, code, h2, h4),
+    html = sprintf('%s<%s class="%s">%s</%s>%s', h3, h2, type, code, h2, h4),
     code
   )
 }
 
-eng_block2 = function(options) {
-  if (isFALSE(options$echo)) return()
+eng_block2 <- function(options) {
+  if (isFALSE(options$echo)) {
+    return()
+  }
 
-  code = one_string(options$code); type = options$type
-  if (is.null(type)) return(code)
+  code <- one_string(options$code)
+  type <- options$type
+  if (is.null(type)) {
+    return(code)
+  }
 
-  if (is.null(pandoc_to())) stop('The engine "block2" is for R Markdown only')
+  if (is.null(pandoc_to())) {
+    stop('The engine "block2" is for R Markdown only')
+  }
 
-  l1 = options$latex.options
-  if (is.null(l1)) l1 = ''
+  l1 <- options$latex.options
+  if (is.null(l1)) {
+    l1 <- ''
+  }
   # protect environment options because Pandoc may escape the characters like
   # {}; when encoded in integers, they won't be escaped, but will need to
   # restore them later; see bookdown:::restore_block2
-  if (l1 != '') l1 = paste(
-    c('\\iffalse{', utf8ToInt(enc2utf8(l1)), '}\\fi{}'), collapse = '-'
-  )
-  h2 = options$html.tag %n% 'div'
-  h3 = options$html.before %n% ''
-  h4 = options$html.after %n% ''
-  h5 = options$html.before2 %n% ''
-  h6 = options$html.after2 %n% ''
+  if (l1 != '') {
+    l1 <- paste(
+      c('\\iffalse{', utf8ToInt(enc2utf8(l1)), '}\\fi{}'),
+      collapse = '-'
+    )
+  }
+  h2 <- options$html.tag %n% 'div'
+  h3 <- options$html.before %n% ''
+  h4 <- options$html.after %n% ''
+  h5 <- options$html.before2 %n% ''
+  h6 <- options$html.after2 %n% ''
   if (is_latex_output()) {
-    h7 = h8 = '\n'
+    h7 <- h8 <- '\n'
   } else {
-    h7 = sprintf('<%s class="%s">', h2, type)
-    h8 = sprintf('</%s>', h2)
+    h7 <- sprintf('<%s class="%s">', h2, type)
+    h8 <- sprintf('</%s>', h2)
   }
 
   sprintf(
     '\\BeginKnitrBlock{%s}%s%s%s%s%s%s%s%s\\EndKnitrBlock{%s}',
-    type, l1, h3, h7, h5, code, h6, h8, h4, type
+    type,
+    l1,
+    h3,
+    h7,
+    h5,
+    code,
+    h6,
+    h8,
+    h4,
+    type
   )
 }
 
 # helper to create engines the wrap embedded html assets (e.g. css,js)
-eng_html_asset = function(prefix, postfix) {
+eng_html_asset <- function(prefix, postfix) {
   function(options) {
-    out = if (options$eval && is_html_output()) {
+    out <- if (options$eval && is_html_output()) {
       one_string(c(prefix, options$code, postfix))
     }
-    options$results = 'asis'
+    options$results <- 'asis'
     engine_output(options, options$code, out)
   }
 }
 
 # include js in a script tag (ignore if not html output)
-eng_js = eng_html_asset('<script>', '</script>')
+eng_js <- eng_html_asset('<script>', '</script>')
 
 # include css in a style tag (ignore if not html output)
-eng_css = eng_html_asset('<style type="text/css">', '</style>')
+eng_css <- eng_html_asset('<style type="text/css">', '</style>')
 
 # split a string of SQL code into individual statements on top-level semicolons,
 # ignoring semicolons inside string literals ('...'), quoted identifiers ("..."
@@ -620,128 +842,215 @@ eng_css = eng_html_asset('<style type="text/css">', '</style>')
 # the SQL, only tokenizes enough to find statement boundaries. returns a
 # character vector of statements with surrounding whitespace trimmed and empty
 # statements dropped.
-split_sql = function(code) {
-  x = one_string(code)
-  chars = strsplit(x, '', fixed = TRUE)[[1]]
-  n = length(chars)
-  stmts = character(); buf = character(); i = 1L
+split_sql <- function(code) {
+  x <- one_string(code)
+  chars <- strsplit(x, '', fixed = TRUE)[[1]]
+  n <- length(chars)
+  stmts <- character()
+  buf <- character()
+  i <- 1L
   # states: 'code', 'sq' (single quote), 'dq' (double quote), 'bt' (backtick),
   # 'line' (line comment), 'block' (block comment)
-  state = 'code'
-  peek = function(k) if (i + k <= n) chars[i + k] else ''
+  state <- 'code'
+  peek <- function(k) if (i + k <= n) chars[i + k] else ''
   while (i <= n) {
-    ch = chars[i]
+    ch <- chars[i]
     if (state == 'code') {
-      if (ch == "'") { state = 'sq' }
-      else if (ch == '"') { state = 'dq' }
-      else if (ch == '`') { state = 'bt' }
-      else if (ch == '-' && peek(1) == '-') { state = 'line'; buf = c(buf, ch); i = i + 1L; ch = peek(0) }
-      else if (ch == '#') { state = 'line' }
-      else if (ch == '/' && peek(1) == '*') { state = 'block'; buf = c(buf, ch); i = i + 1L; ch = peek(0) }
-      else if (ch == ';') {
-        stmts = c(stmts, paste0(buf, collapse = '')); buf = character(); i = i + 1L; next
+      if (ch == "'") {
+        state <- 'sq'
+      } else if (ch == '"') {
+        state <- 'dq'
+      } else if (ch == '`') {
+        state <- 'bt'
+      } else if (ch == '-' && peek(1) == '-') {
+        state <- 'line'
+        buf <- c(buf, ch)
+        i <- i + 1L
+        ch <- peek(0)
+      } else if (ch == '#') {
+        state <- 'line'
+      } else if (ch == '/' && peek(1) == '*') {
+        state <- 'block'
+        buf <- c(buf, ch)
+        i <- i + 1L
+        ch <- peek(0)
+      } else if (ch == ';') {
+        stmts <- c(stmts, paste0(buf, collapse = ''))
+        buf <- character()
+        i <- i + 1L
+        next
       }
     } else if (state == 'sq') {
       # '' is an escaped single quote inside a single-quoted string
-      if (ch == "'") { if (peek(1) == "'") { buf = c(buf, ch); i = i + 1L; ch = peek(0) } else state = 'code' }
+      if (ch == "'") {
+        if (peek(1) == "'") {
+          buf <- c(buf, ch)
+          i <- i + 1L
+          ch <- peek(0)
+        } else {
+          state <- 'code'
+        }
+      }
     } else if (state == 'dq') {
-      if (ch == '"') { if (peek(1) == '"') { buf = c(buf, ch); i = i + 1L; ch = peek(0) } else state = 'code' }
+      if (ch == '"') {
+        if (peek(1) == '"') {
+          buf <- c(buf, ch)
+          i <- i + 1L
+          ch <- peek(0)
+        } else {
+          state <- 'code'
+        }
+      }
     } else if (state == 'bt') {
-      if (ch == '`') state = 'code'
+      if (ch == '`') state <- 'code'
     } else if (state == 'line') {
-      if (ch == '\n') state = 'code'
+      if (ch == '\n') state <- 'code'
     } else if (state == 'block') {
-      if (ch == '*' && peek(1) == '/') { buf = c(buf, ch); i = i + 1L; ch = peek(0); state = 'code' }
+      if (ch == '*' && peek(1) == '/') {
+        buf <- c(buf, ch)
+        i <- i + 1L
+        ch <- peek(0)
+        state <- 'code'
+      }
     }
-    buf = c(buf, ch); i = i + 1L
+    buf <- c(buf, ch)
+    i <- i + 1L
   }
-  stmts = c(stmts, paste0(buf, collapse = ''))
-  stmts = trimws(stmts)
+  stmts <- c(stmts, paste0(buf, collapse = ''))
+  stmts <- trimws(stmts)
   stmts[stmts != '']
 }
 
 # perform basic sql parsing to determine if a sql query is an update query
-is_sql_update_query = function(query) {
-  query = one_string(query)
+is_sql_update_query <- function(query) {
+  query <- one_string(query)
   # remove line comments
-  query = gsub('^\\s*--.*\n', '', query)
+  query <- gsub('^\\s*--.*\n', '', query)
   # remove multi-line comments
-  if (grepl('^\\s*\\/\\*.*', query)) query = gsub('.*\\*\\/', '', query)
-  keywords = c(
+  if (grepl('^\\s*\\/\\*.*', query)) {
+    query <- gsub('.*\\*\\/', '', query)
+  }
+  keywords <- c(
     # DDL
-    'CREATE', 'ALTER', 'DROP', 'GRANT', 'DENY', 'REVOKE', 'ANALYZE', 'AUDIT',
-    'COMMENT', 'RENAME', 'TRUNCATE',
+    'CREATE',
+    'ALTER',
+    'DROP',
+    'GRANT',
+    'DENY',
+    'REVOKE',
+    'ANALYZE',
+    'AUDIT',
+    'COMMENT',
+    'RENAME',
+    'TRUNCATE',
     # DML
-    'INSERT', 'UPDATE', 'DELETE', 'MERGE', 'CALL', 'EXPLAIN PLAN', 'LOCK', 'UNLOCK'
+    'INSERT',
+    'UPDATE',
+    'DELETE',
+    'MERGE',
+    'CALL',
+    'EXPLAIN PLAN',
+    'LOCK',
+    'UNLOCK'
   )
-  grepl(paste0('^\\s*(', paste(keywords, collapse = '|'), ').*'), query, ignore.case = TRUE)
+  grepl(
+    paste0('^\\s*(', paste(keywords, collapse = '|'), ').*'),
+    query,
+    ignore.case = TRUE
+  )
 }
 
 # sql engine
-eng_sql = function(options) {
+eng_sql <- function(options) {
   # return chunk before interpolation eagerly to avoid connection option check
   if (isFALSE(options$eval) && !isTRUE(options$sql.show_interpolated)) {
     return(engine_output(options, options$code, ''))
   }
 
   # Return char vector of sql interpolation param names
-  varnames_from_sql = function(conn, sql) {
+  varnames_from_sql <- function(conn, sql) {
     # only parse for interpolation variables when the `?` placeholder is present;
     # otherwise DBI::sqlParseVariables() can error on valid SQL that it cannot fully
     # lex, e.g. Postgres dollar-quoted string constants like `$$Dianne's horse$$`
-    if (!grepl('?', sql, fixed = TRUE)) return(NULL)
-    varPos = DBI::sqlParseVariables(conn, sql)
+    if (!grepl('?', sql, fixed = TRUE)) {
+      return(NULL)
+    }
+    varPos <- DBI::sqlParseVariables(conn, sql)
     if (length(varPos$start) > 0) {
-      varNames = substring(sql, varPos$start, varPos$end)
+      varNames <- substring(sql, varPos$start, varPos$end)
       sub('^\\?', '', varNames)
     }
   }
 
   # Vectorized version of exists
-  mexists = function(x, env = knit_global(), inherits = TRUE) {
+  mexists <- function(x, env = knit_global(), inherits = TRUE) {
     vapply(x, exists, logical(1), where = env, inherits = inherits)
   }
 
   # Interpolate a sql query based on the variables in an environment
-  interpolate_from_env = function(conn, sql, env = knit_global(), inherits = TRUE) {
-    names = unique(varnames_from_sql(conn, sql))
+  interpolate_from_env <- function(
+    conn,
+    sql,
+    env = knit_global(),
+    inherits = TRUE
+  ) {
+    names <- unique(varnames_from_sql(conn, sql))
     # nothing to interpolate: return the query as-is (sqlInterpolate() would also
     # re-lex the SQL and could choke on constructs like dollar-quoted strings)
-    if (length(names) == 0) return(sql)
-    names_missing = names[!mexists(names, env, inherits)]
+    if (length(names) == 0) {
+      return(sql)
+    }
+    names_missing <- names[!mexists(names, env, inherits)]
     if (length(names_missing) > 0) {
-      stop("Object(s) not found: ", paste('"', names_missing, '"', collapse = ", "))
+      stop(
+        "Object(s) not found: ",
+        paste('"', names_missing, '"', collapse = ", ")
+      )
     }
 
-    args = if (length(names) > 0) setNames(
-      mget(names, envir = env, inherits = inherits), names
-    )
+    args <- if (length(names) > 0) {
+      setNames(
+        mget(names, envir = env, inherits = inherits),
+        names
+      )
+    }
 
     do.call(DBI::sqlInterpolate, c(list(conn, sql), args))
   }
 
   # extract options
-  conn = options$connection
-  if (is.character(conn)) conn = get(conn, envir = knit_global())
-  if (is.null(conn)) stop2(
-    "The 'connection' option (DBI connection) is required for sql chunks."
-  )
-  varname = options$output.var
-  max.print = options$max.print %n% (opts_knit$get('sql.max.print') %n% 10)
-  if (is.na(max.print) || is.null(max.print))
-    max.print = -1
-  sql = one_string(options$code)
-  params = options$params
+  conn <- options$connection
+  if (is.character(conn)) {
+    conn <- get(conn, envir = knit_global())
+  }
+  if (is.null(conn)) {
+    stop2(
+      "The 'connection' option (DBI connection) is required for sql chunks."
+    )
+  }
+  varname <- options$output.var
+  max.print <- options$max.print %n% (opts_knit$get('sql.max.print') %n% 10)
+  if (is.na(max.print) || is.null(max.print)) {
+    max.print <- -1
+  }
+  sql <- one_string(options$code)
+  params <- options$params
 
   # whether a query is a statement that does not return a result set (e.g.,
   # INSERT/UPDATE/CREATE); auto-detected per query, but can be overridden for the
   # whole chunk via the option sql.is_statement (e.g., SELECT ... INTO)
-  is_statement_opt = options$sql.is_statement
-  if (!is.null(is_statement_opt) && !is.logical(is_statement_opt)) stop2(
-    "The 'sql.is_statement' chunk option must be TRUE or FALSE."
-  )
-  query_is_statement = function(query) {
-    if (is.null(is_statement_opt)) is_sql_update_query(query) else is_statement_opt
+  is_statement_opt <- options$sql.is_statement
+  if (!is.null(is_statement_opt) && !is.logical(is_statement_opt)) {
+    stop2(
+      "The 'sql.is_statement' chunk option must be TRUE or FALSE."
+    )
+  }
+  query_is_statement <- function(query) {
+    if (is.null(is_statement_opt)) {
+      is_sql_update_query(query)
+    } else {
+      is_statement_opt
+    }
   }
 
   # extra arguments to be passed to the DBI query functions (dbExecute(),
@@ -749,208 +1058,270 @@ eng_sql = function(options) {
   # of any arguments supported by these functions (e.g., the `immediate`
   # argument). These arguments are passed only when supplied, so DBI's own
   # defaults are otherwise preserved.
-  extra_args = options$sql.args %n% list()
+  extra_args <- options$sql.args %n% list()
 
   # an optional user function to produce the result object from the connection
   # and query, replacing the built-in DBI execution. This makes it possible to
   # return objects that should not be collected eagerly, e.g. a lazy table:
   # sql.result.fun = function(conn, query) dplyr::tbl(conn, dplyr::sql(query))
   # (#1778)
-  result_fun = options$sql.result.fun
-  if (!is.null(result_fun) && !is.function(result_fun)) stop2(
-    "The 'sql.result.fun' chunk option must be a function(conn, query)."
-  )
+  result_fun <- options$sql.result.fun
+  if (!is.null(result_fun) && !is.function(result_fun)) {
+    stop2(
+      "The 'sql.result.fun' chunk option must be a function(conn, query)."
+    )
+  }
 
   # run a single (already interpolated) query and return the result data, or the
   # captured error object when the chunk option error = TRUE
-  run_query = function(query, is_statement) {
-    tryCatch({
-      if (!is.null(result_fun)) {
-        # delegate to the user function; it decides whether/how to execute
-        result_fun(conn, query)
-      } else if (is_statement) {
-        # dbExecute() returns the number of rows affected by the statement
-        do.call(DBI::dbExecute, c(list(conn, query), extra_args))
-      } else if (is.null(varname) && max.print > 0) {
-        # execute query -- when we are printing with an enforced max.print we
-        # use dbFetch so as to only pull down the required number of records
-        res = do.call(DBI::dbSendQuery, c(list(conn, query), extra_args))
-        d = DBI::dbFetch(res, n = max.print)
-        DBI::dbClearResult(res)
-        d
-      } else {
-        if (length(params) == 0) {
-          do.call(DBI::dbGetQuery, c(list(conn, query), extra_args))
+  run_query <- function(query, is_statement) {
+    tryCatch(
+      {
+        if (!is.null(result_fun)) {
+          # delegate to the user function; it decides whether/how to execute
+          result_fun(conn, query)
+        } else if (is_statement) {
+          # dbExecute() returns the number of rows affected by the statement
+          do.call(DBI::dbExecute, c(list(conn, query), extra_args))
+        } else if (is.null(varname) && max.print > 0) {
+          # execute query -- when we are printing with an enforced max.print we
+          # use dbFetch so as to only pull down the required number of records
+          res <- do.call(DBI::dbSendQuery, c(list(conn, query), extra_args))
+          d <- DBI::dbFetch(res, n = max.print)
+          DBI::dbClearResult(res)
+          d
         } else {
-          # If params option is provided, parameters are not interpolated
-          do.call(DBI::dbGetQuery, c(list(conn, sql, params = params), extra_args))
+          if (length(params) == 0) {
+            do.call(DBI::dbGetQuery, c(list(conn, query), extra_args))
+          } else {
+            # If params option is provided, parameters are not interpolated
+            do.call(
+              DBI::dbGetQuery,
+              c(list(conn, sql, params = params), extra_args)
+            )
+          }
         }
+      },
+      error = function(e) {
+        if (!options$error) {
+          stop(e)
+        }
+        e
       }
-    }, error = function(e) {
-      if (!options$error) stop(e)
-      e
-    })
+    )
   }
 
   # render the result data of a single query to an output string; returns a list
   # with the output text and whether it should be treated as raw ('asis')
-  render_output = function(data) {
-    asis = FALSE
+  render_output <- function(data) {
+    asis <- FALSE
     # a custom result function may return an object that should not be collected
     # (e.g. a lazy table); do not coerce it through kable/head, just print it
     # using its own method (which typically shows a preview) (#1778)
     if (!is.null(result_fun)) {
-      output = if (is.null(varname)) capture.output(print(data))
+      output <- if (is.null(varname)) capture.output(print(data))
       return(list(output = output, asis = asis))
     }
-    output = if (length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)) capture.output({
+    output <- if (
+      length(dim(data)) == 2 && ncol(data) > 0 && is.null(varname)
+    ) {
+      capture.output({
+        # apply max.print to data
+        display_data <- if (max.print == -1) data else head(data, n = max.print)
 
-      # apply max.print to data
-      display_data = if (max.print == -1) data else head(data, n = max.print)
+        # get custom sql print function
+        sql.print <- opts_knit$get('sql.print')
 
-      # get custom sql print function
-      sql.print = opts_knit$get('sql.print')
+        # use kable for markdown
+        if (!is.null(sql.print)) {
+          asis <- TRUE
+          cat(sql.print(data))
+        } else if (out_format('markdown')) {
+          # we are going to output raw markdown so set results = 'asis'
+          asis <- TRUE
 
-      # use kable for markdown
-      if (!is.null(sql.print)) {
-        asis = TRUE
-        cat(sql.print(data))
-      } else if (out_format('markdown')) {
-
-        # we are going to output raw markdown so set results = 'asis'
-        asis = TRUE
-
-        # force left alignment if the first column is an incremental id column
-        is_id = function(x) {
-          is.numeric(x) && length(x) > 1 && !anyNA(x) && all(diff(x) == 1)
-        }
-        if (is_id(display_data[[1]])) display_data[[1]] = as.character(display_data[[1]])
-
-        # wrap html output in a div so special styling can be applied
-        add_div = is_html_output() && getOption('knitr.sql.html_div', TRUE)
-        if (add_div) cat('<div class="knitsql-table">\n')
-
-        # determine records caption
-        caption = options$tab.cap
-        if (is.null(caption)) {
-          rows = nrow(data)
-          rows_formatted = formatC(rows, format = "d", big.mark = ',')
-          caption = if (max.print == -1 || rows < max.print) {
-            paste(rows_formatted, "records")
-          } else {
-            paste("Displaying records 1 -", rows_formatted)
+          # force left alignment if the first column is an incremental id column
+          is_id <- function(x) {
+            is.numeric(x) && length(x) > 1 && !anyNA(x) && all(diff(x) == 1)
           }
-        }
-        # disable caption
-        if (identical(caption, NA)) caption = NULL
+          if (is_id(display_data[[1]])) {
+            display_data[[1]] <- as.character(display_data[[1]])
+          }
 
-        # print using kable
-        print(kable(display_data, caption = caption))
+          # wrap html output in a div so special styling can be applied
+          add_div <- is_html_output() && getOption('knitr.sql.html_div', TRUE)
+          if (add_div) {
+            cat('<div class="knitsql-table">\n')
+          }
 
-        # terminate div
-        if (add_div) cat("\n</div>\n")
+          # determine records caption
+          caption <- options$tab.cap
+          if (is.null(caption)) {
+            rows <- nrow(data)
+            rows_formatted <- formatC(rows, format = "d", big.mark = ',')
+            caption <- if (max.print == -1 || rows < max.print) {
+              paste(rows_formatted, "records")
+            } else {
+              paste("Displaying records 1 -", rows_formatted)
+            }
+          }
+          # disable caption
+          if (identical(caption, NA)) {
+            caption <- NULL
+          }
 
-        # otherwise use tibble if it's available
-      } else if (loadable('tibble')) {
-        print(tibble::as_tibble(display_data), n = max.print)
+          # print using kable
+          print(kable(display_data, caption = caption))
 
-      } else print(display_data) # fallback to standard print
-    }) else if (is.numeric(data) && length(data) == 1 && is.null(varname)) {
+          # terminate div
+          if (add_div) cat("\n</div>\n")
+
+          # otherwise use tibble if it's available
+        } else if (loadable('tibble')) {
+          print(tibble::as_tibble(display_data), n = max.print)
+        } else {
+          print(display_data)
+        } # fallback to standard print
+      })
+    } else if (is.numeric(data) && length(data) == 1 && is.null(varname)) {
       # a statement (no result set) returns the number of affected rows via
       # dbExecute(); it is always available via output.var, and is additionally
       # shown as normal (code-like) output only if the chunk option
       # sql.statement.msg is set to a template string, where '{n}' is replaced by
       # the number (opt-in, so existing documents are not affected)
-      msg = options$sql.statement.msg
+      msg <- options$sql.statement.msg
       if (is.character(msg)) sub('{n}', data, msg, fixed = TRUE)
     }
     list(output = output, asis = asis)
   }
 
-  query = interpolate_from_env(conn, sql)
-  if (isFALSE(options$eval)) return(engine_output(options, query, ''))
+  query <- interpolate_from_env(conn, sql)
+  if (isFALSE(options$eval)) {
+    return(engine_output(options, query, ''))
+  }
 
   # interlaced mode: split the chunk into individual statements, run each in
   # order, and emit an alternating sequence of source and output blocks (like a
   # normal R chunk echoing each expression with its result) (#2093)
   if (isTRUE(options$sql.interlaced)) {
-    statements = split_sql(options$code)
+    statements <- split_sql(options$code)
     if (length(statements) > 1) {
-      results = list(); blocks = character()
+      results <- list()
+      blocks <- character()
       for (stmt in statements) {
-        q = interpolate_from_env(conn, stmt)
-        data = run_query(q, query_is_statement(q))
-        opts_k = options
+        q <- interpolate_from_env(conn, stmt)
+        data <- run_query(q, query_is_statement(q))
+        opts_k <- options
         # each statement gets its own source block (interpolated if requested)
-        src = if (isTRUE(options$sql.show_interpolated)) q else stmt
+        src <- if (isTRUE(options$sql.show_interpolated)) q else stmt
         if (inherits(data, 'error')) {
-          blocks = c(blocks, engine_output(opts_k, src, one_string(data)))
-          break  # stop at the first failing statement, as R chunks do
+          blocks <- c(blocks, engine_output(opts_k, src, one_string(data)))
+          break # stop at the first failing statement, as R chunks do
         }
-        results[[length(results) + 1L]] = data
-        r = render_output(data)
-        if (r$asis) opts_k$results = 'asis'
-        out = if (opts_k$results == 'hide') NULL else r$output
-        blocks = c(blocks, engine_output(opts_k, src, out))
+        results[[length(results) + 1L]] <- data
+        r <- render_output(data)
+        if (r$asis) {
+          opts_k$results <- 'asis'
+        }
+        out <- if (opts_k$results == 'hide') NULL else r$output
+        blocks <- c(blocks, engine_output(opts_k, src, out))
       }
       # output.var captures the list of all statement results in interlaced mode
-      if (!is.null(varname)) assign(varname, results, envir = knit_global())
+      if (!is.null(varname)) {
+        assign(varname, results, envir = knit_global())
+      }
       return(one_string(blocks))
     }
   }
 
-  data = run_query(query, query_is_statement(query))
+  data <- run_query(query, query_is_statement(query))
 
-  if (inherits(data, "error"))
+  if (inherits(data, "error")) {
     return(engine_output(options, query, one_string(data)))
+  }
 
-  r = render_output(data)
-  if (r$asis) options$results = 'asis'
-  output = r$output
-  if (options$results == 'hide') output = NULL
+  r <- render_output(data)
+  if (r$asis) {
+    options$results <- 'asis'
+  }
+  output <- r$output
+  if (options$results == 'hide') {
+    output <- NULL
+  }
 
   # assign varname if requested
-  if (!is.null(varname)) assign(varname, data, envir = knit_global())
+  if (!is.null(varname)) {
+    assign(varname, data, envir = knit_global())
+  }
 
   # reset query to pre-interpolated if not expanding
-  if (!isTRUE(options$sql.show_interpolated)) query <- options$code
+  if (!isTRUE(options$sql.show_interpolated)) {
+    query <- options$code
+  }
 
   # return output
   engine_output(options, query, output)
 }
 
 # go engine, added by @hodgesds https://github.com/yihui/knitr/pull/1330
-eng_go = function(options) {
-  f = wd_tempfile('code', '.go')
+eng_go <- function(options) {
+  f <- wd_tempfile('code', '.go')
   write_utf8(code <- options$code, f)
   on.exit(unlink(f), add = TRUE)
-  cmd = get_engine_path(options$engine.path, options$engine)
+  cmd <- get_engine_path(options$engine.path, options$engine)
 
-  fmt_args = sprintf('fmt %s', f)
+  fmt_args <- sprintf('fmt %s', f)
 
   tryCatch(
-    system2(cmd, fmt_args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+    system2(
+      cmd,
+      fmt_args,
+      stdout = TRUE,
+      stderr = TRUE,
+      env = options$engine.env
+    ),
     error = function(e) {
       if (!options$error) stop(e)
     }
   )
 
-  run_args = sprintf(" run %s", f)
+  run_args <- sprintf(" run %s", f)
 
-  extra = if (options$eval) {
+  extra <- if (options$eval) {
     message('running: ', cmd, run_args)
     tryCatch(
-      system2(cmd, run_args, stdout = TRUE, stderr = TRUE, env = options$engine.env),
+      system2(
+        cmd,
+        run_args,
+        stdout = TRUE,
+        stderr = TRUE,
+        env = options$engine.env
+      ),
       error = function(e) {
-        if (!options$error) stop(e)
+        if (!options$error) {
+          stop(e)
+        }
         'Error in executing go code'
       }
     )
   }
 
-  if (options$results == 'hide') extra = NULL
+  if (options$results == 'hide') {
+    extra <- NULL
+  }
 
   engine_output(options, code, extra)
+}
+
+# rust engine
+eng_rust <- function(options) {
+  if (isTRUE(options$rust.source)) {
+    # source rust code so it can be called in r code chunks
+    rextendr::eng_extendrsrc(options)
+  } else {
+    # evaluate rust code and return result (default)
+    rextendr::eng_extendr(options)
+  }
 }
 
 # SASS / SCSS engine (contributed via https://github.com/yihui/knitr/pull/1666)
@@ -966,51 +1337,70 @@ eng_go = function(options) {
 #  For the sass R package, valid styles are "compressed","expanded", "nested", and "compact"
 #  For the executable, valid styles are "compressed" and "expanded"
 #  Please refer to respective package / executable documentation for more details
-eng_sxss = function(options) {
-
+eng_sxss <- function(options) {
   # early exit if evaluated output not requested
-  options$results = 'asis'
-  if (!options$eval) return(engine_output(options, options$code, ''))
+  options$results <- 'asis'
+  if (!options$eval) {
+    return(engine_output(options, options$code, ''))
+  }
 
   # create temporary file with input code
-  f = wd_tempfile('code', paste0('.', options$engine))
-  xfun::write_utf8(options$code , f)
+  f <- wd_tempfile('code', paste0('.', options$engine))
+  xfun::write_utf8(options$code, f)
   on.exit(unlink(f), add = TRUE)
 
   # process provided engine options
-  package = options$engine.opts$package %n% TRUE
-  style = options$engine.opts$style %n% "compressed"
-  cmd = get_engine_path(options$engine.path, "sass")
+  package <- options$engine.opts$package %n% TRUE
+  style <- options$engine.opts$style %n% "compressed"
+  cmd <- get_engine_path(options$engine.path, "sass")
 
-  use_package = loadable("sass") && package && cmd == "sass"
+  use_package <- loadable("sass") && package && cmd == "sass"
 
-  style = match.arg(style, c("compressed", "expanded", if (use_package) c("compact", "nested")))
+  style <- match.arg(
+    style,
+    c("compressed", "expanded", if (use_package) c("compact", "nested"))
+  )
   # convert sass/sxss -> css
   if (use_package) {
     message("Converting with the R package sass")
 
-    sass_fun = options$engine.opts$sass_fun %n% sass::sass
-    out = tryCatch(
-      sass_fun(sass::sass_file(f), options = sass::sass_options(output_style = style)),
+    sass_fun <- options$engine.opts$sass_fun %n% sass::sass
+    out <- tryCatch(
+      sass_fun(
+        sass::sass_file(f),
+        options = sass::sass_options(output_style = style)
+      ),
       error = function(e) {
-        if (!options$error) stop(e)
-        warning2(paste('Error in converting to CSS using sass R package:', e, sep = "\n"))
+        if (!options$error) {
+          stop(e)
+        }
+        warning2(paste(
+          'Error in converting to CSS using sass R package:',
+          e,
+          sep = "\n"
+        ))
         NULL
       }
     )
 
     # remove final newline chars from output
-    if (!is.null(out)) out = sub("\\n$", "", out)
+    if (!is.null(out)) out <- sub("\\n$", "", out)
   } else {
     message("Converting sass with ", cmd)
-    style = paste0("--style=", style)
+    style <- paste0("--style=", style)
 
     # attempt execution of sass
-    out = tryCatch(
+    out <- tryCatch(
       system2(cmd, args = c(f, style), stdout = TRUE, stderr = TRUE),
       error = function(e) {
-        if (!options$error) stop2(e)
-        warning2(paste('Error in converting to CSS using executable:', e, sep = "\n"))
+        if (!options$error) {
+          stop2(e)
+        }
+        warning2(paste(
+          'Error in converting to CSS using executable:',
+          e,
+          sep = "\n"
+        ))
         NULL
       }
     )
@@ -1020,23 +1410,27 @@ eng_sxss = function(options) {
   }
 
   # wrap final output for correct rendering
-  final_out = if (!is.null(out) && is_html_output(excludes = 'markdown')) {
+  final_out <- if (!is.null(out) && is_html_output(excludes = 'markdown')) {
     one_string(c('<style type="text/css">', out, '</style>'))
   }
 
   engine_output(options, options$code, final_out)
 }
 
-eng_bslib = function(options) {
+eng_bslib <- function(options) {
   if (!loadable("bslib")) {
-    stop2("The 'bslib' package must be installed in order for the knitr engine 'bslib' to work.")
+    stop2(
+      "The 'bslib' package must be installed in order for the knitr engine 'bslib' to work."
+    )
   }
   if (!is.null(options$engine.opts$sass_fun)) {
-    stop2("The 'bslib' knitr engine does not allow for customization of the Sass compilation function.")
+    stop2(
+      "The 'bslib' knitr engine does not allow for customization of the Sass compilation function."
+    )
   }
-  func = sass::sass_partial
-  formals(func)$bundle = quote(bslib::bs_global_get())
-  options$engine.opts$sass_fun = func
+  func <- sass::sass_partial
+  formals(func)$bundle <- quote(bslib::bs_global_get())
+  options$engine.opts$sass_fun <- func
   eng_sxss(options)
 }
 
@@ -1044,65 +1438,92 @@ eng_bslib = function(options) {
 # Thread: https://github.com/ropensci/targets/issues/503
 # Usage: https://books.ropensci.org/targets/markdown.html
 # Docs: https://docs.ropensci.org/targets/reference/tar_engine_knitr.html
-eng_targets = function(options) {
+eng_targets <- function(options) {
   targets::tar_engine_knitr(options)
 }
 
 # an Eviews engine based on EviewsR
-eng_eviews = function(options) {
+eng_eviews <- function(options) {
   # EviewsR can't be installed in lower versions of R, hence I can't declare
   # Suggests dependency in DESCRIPTION
-  f = getFromNamespace('eng_eviews', 'EviewsR')
+  f <- getFromNamespace('eng_eviews', 'EviewsR')
   f(options)
 }
 
 # a comment engine to return nothing
-eng_comment = function(options) {}
+eng_comment <- function(options) {}
 
 # a verbatim engine that returns its chunk content verbatim
-eng_verbatim = function(options) {
+eng_verbatim <- function(options) {
   # change default for the cat engine
-  options$eval = FALSE
+  options$eval <- FALSE
   # the whole point of a verbatim chunk is to show its content, so a global
   # echo = FALSE (e.g. the default of the revealjs format) should not silence
   # it; ignore the inherited default but still honor an echo set on this chunk
-  if (isFALSE(options$echo) && is.null(local_chunk_opts(options$label, 'echo')))
-    options$echo = TRUE
-  options = set_lang(options)
+  if (
+    isFALSE(options$echo) && is.null(local_chunk_opts(options$label, 'echo'))
+  ) {
+    options$echo <- TRUE
+  }
+  options <- set_lang(options)
   eng_cat(options)
 }
 
-set_lang = function(options, default = 'default') {
+set_lang <- function(options, default = 'default') {
   # specify the lang name in engine.opts = list(lang = ), or lang/language,
   # or class.source; if all are empty, use 'default'
-  if (is.null(options$lang)) options$lang = options$engine.opts$lang %n% default
+  if (is.null(options$lang)) {
+    options$lang <- options$engine.opts$lang %n% default
+  }
   options
 }
 
 # embed a file verbatim
-eng_embed = function(options) {
+eng_embed <- function(options) {
   # if `file` is empty, use `code` as the list of files
   if (is.null(f <- options$file)) {
-    f = gsub('^["\']|["\']$', '', options$code)  # in case paths are quoted
-    if (length(f) == 0) return()
-    options$code = xfun::read_all(f)
+    f <- gsub('^["\']|["\']$', '', options$code) # in case paths are quoted
+    if (length(f) == 0) {
+      return()
+    }
+    options$code <- xfun::read_all(f)
   }
   # use the filename extension as the default language name
   if (nchar(lang <- file_ext(f[1])) > 1) {
-    lang = sub('^R', '', lang)  # Rmd -> md, Rhtml -> html, etc.
-    if (lang == 'nw') lang = 'tex'
+    lang <- sub('^R', '', lang) # Rmd -> md, Rhtml -> html, etc.
+    if (lang == 'nw') lang <- 'tex'
   }
-  options = set_lang(options, tolower(lang))
+  options <- set_lang(options, tolower(lang))
   eng_verbatim(options)
 }
 
 # set engines for interpreted languages
 local({
   for (i in c(
-    'awk', 'bash', 'coffee', 'gawk', 'groovy', 'haskell', 'lein', 'mysql',
-    'node', 'octave', 'perl', 'php', 'psql', 'Rscript', 'ruby', 'sas',
-    'scala', 'sed', 'sh', 'stata', 'zsh'
-  )) knit_engines$set(setNames(list(eng_interpreted), i))
+    'awk',
+    'bash',
+    'coffee',
+    'gawk',
+    'groovy',
+    'haskell',
+    'lein',
+    'mysql',
+    'node',
+    'octave',
+    'perl',
+    'php',
+    'psql',
+    'Rscript',
+    'ruby',
+    'sas',
+    'scala',
+    'sed',
+    'sh',
+    'stata',
+    'zsh'
+  )) {
+    knit_engines$set(setNames(list(eng_interpreted), i))
+  }
 })
 
 # additional engines
@@ -1132,6 +1553,7 @@ knit_engines$set(
   python = eng_python,
   R = eng_r,
   Rcpp = eng_Rcpp,
+  rust = eng_rust,
   sass = eng_sxss,
   scss = eng_sxss,
   sql = eng_sql,
@@ -1143,11 +1565,14 @@ knit_engines$set(
 
 cache_engines$set(python = cache_eng_python)
 
-get_engine = function(name) {
-  fun = knit_engines$get(name)
-  if (is.function(fun)) return(fun)
+get_engine <- function(name) {
+  fun <- knit_engines$get(name)
+  if (is.function(fun)) {
+    return(fun)
+  }
   warning(
-    "Unknown language engine '", name,
+    "Unknown language engine '",
+    name,
     "' (must be registered via knit_engines$set())."
   )
   function(options) {
@@ -1155,12 +1580,17 @@ get_engine = function(name) {
   }
 }
 
-cache_engine = function(options) {
-  cache_fun = cache_engines$get(options$engine)
-  if (!is.function(cache_fun)) return()
+cache_engine <- function(options) {
+  cache_fun <- cache_engines$get(options$engine)
+  if (!is.function(cache_fun)) {
+    return()
+  }
   cache_fun(options)
 }
 
 # possible values for engines (for auto-completion in RStudio)
-opts_chunk_attr$engine = as.list(sort(c('R', names(knit_engines$get()))))
-opts_chunk_attr[c('engine.path', 'engine.opts')] = list('character', 'character')
+opts_chunk_attr$engine <- as.list(sort(c('R', names(knit_engines$get()))))
+opts_chunk_attr[c('engine.path', 'engine.opts')] <- list(
+  'character',
+  'character'
+)
