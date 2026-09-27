@@ -6,14 +6,14 @@
 <meta name="generator" content="litedown 0.11.4">
 <title>Not An Introduction to knitr</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.73/css/default.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.7/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.9/dist/katex.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.73/css/prism-xcode.min.css">
 </head>
 <body>
 <div class="frontmatter">
 <div class="title"><h1>Not An Introduction to knitr</h1></div>
 <div class="author"><h2>Yihui Xie</h2></div>
-<div class="date"><h3>2026-09-21</h3></div>
+<div class="date"><h3>2026-09-27</h3></div>
 </div>
 <div class="body">
 <p>The <strong>knitr</strong> package is an alternative tool to Sweave based on a different
@@ -28,9 +28,9 @@ and knitr” for this package, too.</p>
 <pre><code class="language-r">options(digits = 4)
 rnorm(20)
 </code></pre>
-<pre><code>#&gt;  [1]  0.914227  2.060416  0.491543  1.476438  0.030122  0.294743 -1.054226
-#&gt;  [8]  0.597427 -0.292372 -0.855255 -0.852643  0.233470 -1.923180  0.002884
-#&gt; [15] -1.017461 -0.840641  1.232506  1.707845  1.465154  0.374646
+<pre><code>#&gt;  [1]  0.62411 -0.65162  0.24500 -0.84292 -2.88668  0.47068 -0.26975  0.08083
+#&gt;  [9]  0.91605  0.25760 -0.29711 -0.57351 -0.04501  0.96800  2.38578 -0.51410
+#&gt; [17]  1.32895 -0.06054 -1.03088  0.70524
 </code></pre>
 <pre><code class="language-r">fit = lm(dist ~ speed, data = cars)
 b = coef(fit)
@@ -91,7 +91,7 @@ Chapman and Hall/CRC.
 ISBN 978-1466561595. 
 </p>
 </div>
-<script src="https://cdn.jsdelivr.net/combine/npm/katex@0.18.7/dist/katex.min.js,npm/katex@0.18.7/dist/contrib/auto-render.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/combine/npm/katex@0.18.9/dist/katex.min.js,npm/katex@0.18.9/dist/contrib/auto-render.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.73/js/render-katex.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
