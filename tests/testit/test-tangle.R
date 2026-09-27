@@ -100,6 +100,16 @@ assert('purl() of an Rnw file tangles to a .R script, not <label>.<label>', {
   (basename(out) %==% 'knitr-minimal.R')
 })
 
+# Typst (.Rtyp) chunk headers carry the engine name just like R Markdown
+assert('purl() of a Python-first Rtyp file tangles to a .py script', {
+  d = tempfile(); dir.create(d)
+  owd = setwd(d); on.exit({setwd(owd); unlink(d, recursive = TRUE)}, add = TRUE)
+  write_utf8(c('= Title', '```{python}', 'x = 1', '```'), 'test.Rtyp')
+  out = purl('test.Rtyp', quiet = TRUE)
+  (basename(out) %==% 'test.py')
+  ('x = 1' %in% read_utf8(out))
+})
+
 # purl() tangles a document to a non-R language when the first code chunk uses
 # that language, keeping its chunks as runnable code and marking chunk headers
 # with #%% (so IDEs treat them as code cells); chunks of other languages are
