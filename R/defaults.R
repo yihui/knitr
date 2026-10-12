@@ -195,9 +195,9 @@ set_alias = function(...) {
 #' @examples opts_knit$get("verbose")
 #' opts_knit$set(verbose = TRUE)  # change it
 #' if (interactive()) {
-#' # for unnamed chunks, use 'fig' as the figure prefix
-#' opts_knit$set(unnamed.chunk.label = "fig")
-#' knit("001-minimal.Rmd") # from https://github.com/yihui/knitr-examples
+#'   # for unnamed chunks, use 'fig' as the figure prefix
+#'   opts_knit$set(unnamed.chunk.label = "fig")
+#'   knit("001-minimal.Rmd") # from https://github.com/yihui/knitr-examples
 #' }
 #' @include hooks-html.R
 opts_knit = new_defaults(list(

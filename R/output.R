@@ -895,7 +895,7 @@ normal_print = function(x, ...) {
 #'   work when it is called inside another expression, such as a for-loop. See
 #'   <https://github.com/yihui/knitr/issues/1137> for a discussion.
 #' @export
-#' @examples  # see ?knit_print
+#' @examples # see ?knit_print
 asis_output = function(x, meta = NULL, cacheable = NA) {
   structure(x, class = 'knit_asis', knit_meta = meta, knit_cacheable = cacheable)
 }

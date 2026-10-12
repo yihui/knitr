@@ -48,5 +48,5 @@ work when it is called inside another expression, such as a for-loop. See
 \url{https://github.com/yihui/knitr/issues/1137} for a discussion.
 }
 \examples{
- # see ?knit_print
+# see ?knit_print
 }

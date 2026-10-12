@@ -1143,8 +1143,9 @@ quote_vec = function(x, sep = '; ') paste0(sprintf('"%s"', x), collapse = sep)
 #' @export
 #' @references <https://en.wikipedia.org/wiki/Data_URI_scheme>
 #' @examples uri = image_uri(file.path(R.home("doc"), "html", "logo.jpg"))
-#' if (interactive()) {cat(sprintf('<img src="%s" />', uri), file = "logo.html")
-#' browseURL("logo.html") # you can check its HTML source
+#' if (interactive()) {
+#'   cat(sprintf('<img src="%s" />', uri), file = "logo.html")
+#'   browseURL("logo.html")  # you can check its HTML source
 #' }
 image_uri = function(f) xfun::base64_uri(f)
 

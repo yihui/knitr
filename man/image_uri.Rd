@@ -19,8 +19,9 @@ which can be used in the \code{img} tag in HTML.
 }
 \examples{
 uri = image_uri(file.path(R.home("doc"), "html", "logo.jpg"))
-if (interactive()) {cat(sprintf('<img src="\%s" />', uri), file = "logo.html")
-browseURL("logo.html") # you can check its HTML source
+if (interactive()) {
+  cat(sprintf('<img src="\%s" />', uri), file = "logo.html")
+  browseURL("logo.html")  # you can check its HTML source
 }
 }
 \references{
