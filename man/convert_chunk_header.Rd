@@ -97,14 +97,14 @@ convert_chunk_header(
   width = 0.6 * getOption("width")
 )
 \dontrun{
-  # Explicitly name the output
-  convert_chunk_header("test.Rmd", output = "test2.Rmd")
-  # Overwrite the input
-  convert_chunk_header("test.Rmd", output = identity)
-  # Use a custom function to name the output
-  convert_chunk_header(
-    "test.Rmd",
-    output = \(f) sprintf("\%s-new.\%s", xfun::sans_ext(f), xfun::file_ext(f))
-  )
+# Explicitly name the output
+convert_chunk_header("test.Rmd", output = "test2.Rmd")
+# Overwrite the input
+convert_chunk_header("test.Rmd", output = identity)
+# Use a custom function to name the output
+convert_chunk_header(
+  "test.Rmd",
+  output = \(f) sprintf("\%s-new.\%s", xfun::sans_ext(f), xfun::file_ext(f))
+)
 }
 }
