@@ -137,6 +137,7 @@ Suggests:
     JuliaCall (>= 0.11.1),
     magick,
     litedown (>= 0.10),
+    mirai,
     otel,
     otelsdk,
     png,

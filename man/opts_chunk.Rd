@@ -30,6 +30,50 @@ See \code{str(knitr::opts_chunk$get())} for a list of default chunk options.
 to only query its values via \code{opts_current$get()}. Calling
 \code{opts_current$set()} will throw an error.
 }
+
+\section{Routing chunks to another process with \code{compute}}{
+
+The chunk option \code{compute} routes a chunk to an \emph{executor} registered in
+the global option \code{compute.executor} (for example
+\code{mirai::register_render()}). The executor evaluates the chunk in another
+R process instead of in \code{\link[=knit_global]{knit_global()}}. \verb{#| compute: true} routes to the
+backend's default profile. \verb{#| compute: gpu} routes to the profile named
+\code{"gpu"}. Any other value is invalid: knitr warns, and the chunk evaluates
+locally. A tagged chunk raises an error when no executor is registered.
+
+Routed chunks on the same profile share the executing process's global
+environment. Objects created in one routed chunk are visible to later
+chunks on the same profile. They are not visible to untagged chunks,
+inline code, or \code{eval.after} options, which always evaluate host-side in
+\code{\link[=knit_global]{knit_global()}}. Host-side objects are not visible to routed chunks
+either. Consequences of evaluating elsewhere:
+\itemize{
+\item Routed chunks bypass \code{in_input_dir()} and any user-customized
+\code{evaluate} knit hook. Relative paths resolve against the worker's
+working directory.
+\item \code{log.echo = TRUE} streams to the worker's stderr rather than the host
+render output.
+\item Plots are recorded on the worker and replayed on the host device.
+Recorded plots are not portable across R or graphics engine versions,
+so use the same R version on host and worker for chunks that plot.
+\item Format-dependent printing follows the worker's renderer state (a fresh
+\code{opts_knit}), not the host's. Conveniences from rmarkdown or Quarto,
+such as paged tables, can differ between routed and untagged chunks.
+\item \code{showtext} fonts and \code{opts_knit$get('global.par')} pars are set up
+host-side only. Routed chunks start from the worker device's defaults.
+\item Chunk caching works as usual for routed chunks: the chunk evaluates on
+the worker, and knitr caches its output on the host. On a cache hit,
+the cached output is reused, and the chunk is not re-sent to the
+worker (with \code{cache = 3} the engine is skipped entirely). A cache hit
+restores objects into the host environment only, not onto the worker.
+With a warm cache and fresh workers, a routed chunk that depends on an
+earlier cached routed chunk will not find its state there.
+}
+
+The worker process needs the knitr package installed. Use the same
+version as on the host.
+}
+
 \examples{
 opts_chunk$get("prompt"); opts_chunk$get("fig.keep")
 }
