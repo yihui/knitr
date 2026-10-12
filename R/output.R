@@ -121,14 +121,14 @@
 #'
 #'   See `citation('knitr')` for the citation information.
 #' @examples library(knitr)
-#' (f = system.file('examples', 'knitr-minimal.Rnw', package = 'knitr'))
+#' (f = system.file("examples", "knitr-minimal.Rnw", package = "knitr"))
 #' knit(f)  # compile to tex
 #'
 #' purl(f)  # tangle R code
 #' purl(f, documentation = 0)  # extract R code only
 #' purl(f, documentation = 2)  # also include documentation
 #'
-#' unlink(c('knitr-minimal.tex', 'knitr-minimal.R', 'figure'), recursive = TRUE)
+#' unlink(c("knitr-minimal.tex", "knitr-minimal.R", "figure"), recursive = TRUE)
 knit = function(
   input, output = NULL, tangle = FALSE, text = NULL, quiet = FALSE,
   envir = parent.frame(), encoding = 'UTF-8'
@@ -470,10 +470,11 @@ auto_format = function(ext) {
 #'
 #'   The path of the child document is determined relative to the parent document.
 #' @export
-#' @examples # you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file 'main.Rnw'
-#' # to input results from child-doc.Rnw in main.tex
+#' @examples # you can write \Sexpr{knit_child('child-doc.Rnw')} in an Rnw file
+#' # 'main.Rnw' to input results from child-doc.Rnw in main.tex
 #'
-#' # comment out the child doc by \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
+#' # comment out the child doc by
+#' # \Sexpr{knit_child('child-doc.Rnw', eval = FALSE)}
 knit_child = function(..., options = NULL, envir = knit_global()) {
   child = child_mode()
   opts_knit$set(child = TRUE) # yes, in child mode now
@@ -509,7 +510,8 @@ knit_child = function(..., options = NULL, envir = knit_global()) {
 #'   effect) to notify `knit()` to quit as if it had reached the end of the
 #'   document.
 #' @export
-#' @examples # see https://github.com/yihui/knitr-examples/blob/master/096-knit-exit.Rmd
+#' @examples # see
+#' # https://github.com/yihui/knitr-examples/blob/master/096-knit-exit.Rmd
 knit_exit = function(append, fully = TRUE) {
   if (missing(append)) append = if (out_format(c('latex', 'sweave', 'listings')))
     '\\end{document}' else if (out_format('html')) '</body>\n</html>' else ''
@@ -797,7 +799,7 @@ add_html_caption = function(options, code, id = NULL) {
 #' @examples library(knitr)
 #' # write tables for data frames
 #' knit_print.data.frame = function(x, ...) {
-#'   res = paste(c('', '', kable(x, output = FALSE)), collapse = '\n')
+#'   res = paste(c("", "", kable(x, output = FALSE)), collapse = "\n")
 #'   asis_output(res)
 #' }
 #' # register the method

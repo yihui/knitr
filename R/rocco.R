@@ -15,14 +15,14 @@
 #' @references The Docco package by Jeremy Ashkenas:
 #'   <https://github.com/jashkenas/docco>
 #' @export
-#' @examples rocco_view=function(input) {
+#' @examples rocco_view = function(input) {
 #' owd = setwd(tempdir()); on.exit(setwd(owd))
 #' if (!file.exists(input)) return()
-#' o=rocco(input, quiet=TRUE)
+#' o = rocco(input, quiet = TRUE)
 #' if (interactive()) browseURL(o)}
 #' # knit these two vignettes using the docco style
-#' rocco_view(system.file('doc', 'docco-classic.Rmd', package = 'knitr'))
-#' rocco_view(system.file('doc', 'knit_expand.Rmd', package = 'knitr'))
+#' rocco_view(system.file("doc", "docco-classic.Rmd", package = "knitr"))
+#' rocco_view(system.file("doc", "knit_expand.Rmd", package = "knitr"))
 rocco = function(input, ...) {
   knit2html(
     input, ...,

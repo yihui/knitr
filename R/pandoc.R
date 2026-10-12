@@ -44,7 +44,7 @@
 #'   with command-line tools to use the \pkg{rmarkdown} package instead.
 #' @seealso [read.dcf()]
 #' @export
-#' @examples system('pandoc -h') # see possible output formats
+#' @examples system("pandoc -h") # see possible output formats
 pandoc = function(input, format, config = getOption('config.pandoc'), ext = NA) {
   exec = tryCatch(rmarkdown::pandoc_exec(), error = function(e) Sys.which('pandoc'))
   if (length(exec) != 1 || exec == '')

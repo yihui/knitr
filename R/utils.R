@@ -434,12 +434,12 @@ fix_options = function(options) {
 #' # check for output formats type
 #' knitr::is_latex_output()
 #' knitr::is_html_output()
-#' knitr::is_html_output(excludes = c('markdown', 'epub'))
+#' knitr::is_html_output(excludes = c("markdown", "epub"))
 #' # Get current formats
 #' knitr::pandoc_from()
 #' knitr::pandoc_to()
 #' # Test if current output format is 'docx'
-#' knitr::pandoc_to('docx')
+#' knitr::pandoc_to("docx")
 is_latex_output = function() {
   out_format(c('latex', 'sweave', 'listings')) || pandoc_to(c('latex', 'beamer'))
 }
@@ -498,7 +498,7 @@ pandoc_from = function(exact = FALSE) {
 #' # the active profiles
 #' knitr::quarto_profile()
 #' # whether the 'production' profile is active
-#' knitr::quarto_profile('production')
+#' knitr::quarto_profile("production")
 quarto_profile = function(profile) {
   active = Sys.getenv('QUARTO_PROFILE')
   active = if (active == '') character() else trimws(strsplit(active, ',')[[1]])
@@ -580,8 +580,10 @@ pandoc_fragment = function(text, to = pandoc_to(), from = pandoc_from()) {
 #'   For example, \file{a b/c.d-} will be sanitized to \file{a_b/c_d-}. This
 #'   makes the filenames safe to LaTeX.
 #' @export
-#' @examples fig_path('.pdf', options = list(fig.path='figure/abc-', label='first-plot'))
-#' fig_path('.png', list(fig.path='foo-', label='bar'), 1:10)
+#' @examples fig_path(
+#'   ".pdf", options = list(fig.path = "figure/abc-", label = "first-plot")
+#' )
+#' fig_path(".png", list(fig.path = "foo-", label = "bar"), 1:10)
 fig_path = function(suffix = '', options = opts_current$get(), number) {
   suffix = sub('^([^.])', '.\\1', suffix)
   if (missing(number)) number = options$fig.cur %n% 1L
@@ -625,10 +627,10 @@ sanitize_fn = function(path, warn = TRUE) {
 #' @return A character vector of filenames.
 #' @export
 #' @examples library(knitr)
-#' fig_chunk('foo', 'png')
-#' fig_chunk('foo', 'pdf')
-#' fig_chunk('foo', 'svg', 2)  # the second plot of the chunk foo
-#' fig_chunk('foo', 'png', 1:5)  # if the chunk foo produced 5 plots
+#' fig_chunk("foo", "png")
+#' fig_chunk("foo", "pdf")
+#' fig_chunk("foo", "svg", 2)  # the second plot of the chunk foo
+#' fig_chunk("foo", "png", 1:5)  # if the chunk foo produced 5 plots
 fig_chunk = function(label, ext = '', number, fig.path = opts_chunk$get('fig.path')) {
   fig_path(ext, list(fig.path = fig.path, label = label), number)
 }
@@ -792,8 +794,9 @@ is_utf8 = function(x) {
 #' @note Currently it does not wrap blockquotes or lists (ordered or unordered).
 #'   This feature may or may not be added in the future.
 #' @export
-#' @examples wrap_rmd(text = c('```', '1+1', '```', '- a list item', '> a quote', '',
-#' paste(rep('this is a normal paragraph', 5), collapse = ' ')))
+#' @examples wrap_rmd(
+#'   text = c("```", "1+1", "```", "- a list item", "> a quote", "",
+#'     paste(rep("this is a normal paragraph", 5), collapse = " ")))
 wrap_rmd = function(file, width = 80, text = NULL, backup) {
   x = if (is.null(text)) read_utf8(file) else split_lines(text)
   x = strip_white(x)  # strip blank lines in the beginning and end
@@ -1048,12 +1051,18 @@ restore_raw_output = function(text, chunks, markers = raw_markers) {
 #'   restored `text`.
 #' @export
 #' @examples library(knitr)
-#' out = c('*hello*', raw_output('<special>content</special> *protect* me!'), '*world*')
+#' out = c(
+#'   "*hello*",
+#'   raw_output("<special>content</special> *protect* me!"),
+#'   "*world*"
+#' )
 #' pre = extract_raw_output(out)
 #' str(pre)
-#' pre$value = gsub('[*]([^*]+)[*]', '<em>\\1</em>', pre$value)  # think this as Pandoc conversion
+#' # think this as Pandoc conversion
+#' pre$value = gsub("[*]([^*]+)[*]", "<em>\\1</em>", pre$value)
 #' pre$value
-#' # raw output was protected from the conversion (e.g. *protect* was not converted)
+#' # raw output was protected from the conversion
+#' # (e.g. *protect* was not converted)
 #' restore_raw_output(pre$value, pre$chunks)
 raw_output = function(x, markers = raw_markers, ...) {
   asis_output(paste(c(markers[1], x, markers[2]), collapse = ''), ...)
@@ -1074,7 +1083,7 @@ raw_output = function(x, markers = raw_markers, ...) {
 #' @param ... Arguments to be passed to [asis_output()].
 #' @export
 #' @examples
-#' knitr::raw_latex('\\emph{some text}')
+#' knitr::raw_latex("\\emph{some text}")
 raw_block = function(x, type = 'latex', ...) {
   if (!rmarkdown::pandoc_available('2.0.0')) warning('raw_block() requires Pandoc >= 2.0.0')
   x = fenced_block(x, attr = paste0('=', type))
@@ -1133,9 +1142,9 @@ quote_vec = function(x, sep = '; ') paste0(sprintf('"%s"', x), collapse = sep)
 #' @author Wush Wu and Yihui Xie
 #' @export
 #' @references <https://en.wikipedia.org/wiki/Data_URI_scheme>
-#' @examples uri = image_uri(file.path(R.home('doc'), 'html', 'logo.jpg'))
-#' if (interactive()) {cat(sprintf('<img src="%s" />', uri), file = 'logo.html')
-#' browseURL('logo.html') # you can check its HTML source
+#' @examples uri = image_uri(file.path(R.home("doc"), "html", "logo.jpg"))
+#' if (interactive()) {cat(sprintf('<img src="%s" />', uri), file = "logo.html")
+#' browseURL("logo.html") # you can check its HTML source
 #' }
 image_uri = function(f) xfun::base64_uri(f)
 

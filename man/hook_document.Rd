@@ -32,9 +32,7 @@ you to use the default output hooks for LaTeX (not Sweave or listings), and
 every figure/table environment must have a label.
 }
 \examples{
-\dontrun{
-knit_hooks$set(document = hook_movecode)
-}
+\dontrun{knit_hooks$set(document = hook_movecode)}
 # see example 103 at https://github.com/yihui/knitr-examples
 }
 \references{

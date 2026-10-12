@@ -26,7 +26,7 @@
 #' @references Usage: <https://yihui.org/knitr/objects/>
 #'
 #' Components in `knit_hooks`: <https://yihui.org/knitr/hooks/>
-#' @examples knit_hooks$get('source'); knit_hooks$get('inline')
+#' @examples knit_hooks$get("source"); knit_hooks$get("inline")
 knit_hooks = new_defaults(.default.hooks)
 
 run_hook = function(.name, ...) {

@@ -51,7 +51,8 @@
 #'   moved from \pkg{knitr} to the \pkg{rgl} package (>= v0.95.1247) after
 #'   \pkg{knitr} v1.10.5, and you can `library(rgl)` to get them.
 #' @export
-#' @examples if (require('rgl') && exists('hook_rgl')) knit_hooks$set(rgl = hook_rgl)
+#' @examples if (require("rgl") && exists("hook_rgl"))
+#'   knit_hooks$set(rgl = hook_rgl)
 #' # then in code chunks, use the option rgl=TRUE
 hook_pdfcrop = function(before, ...) {
   # crops plots after a chunk is evaluated and plot files produced

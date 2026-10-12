@@ -10,7 +10,7 @@ deps:
 	Rscript -e 'if (!require("Rd2roxygen")) install.packages("Rd2roxygen", repos="http://cran.rstudio.com")'
 
 docs:
-	R -q -e 'library(Rd2roxygen); rab(".", build = FALSE)'
+	Rscript -e 'roxygen2::roxygenize(".")'
 
 build:
 	cd ..;\

@@ -18,12 +18,13 @@
 #' @examples library(knitr)
 #' \dontrun{
 #'
-#' knit_rd('maps')
-#' knit_rd('rpart')
-#' setwd(system.file('html', package = 'ggplot2'))
-#' knit_rd('ggplot2') # time-consuming!
+#' knit_rd("maps")
+#' knit_rd("rpart")
+#' setwd(system.file("html", package = "ggplot2"))
+#' knit_rd("ggplot2") # time-consuming!
 #'
-#' knit_rd_all()  # this may take really long time if you have many packages installed
+#' # this may take really long time if you have many packages installed
+#' knit_rd_all()
 #' }
 #' @export
 knit_rd = function(pkg, links = tools::findHTMLlinks(), frame = TRUE) {

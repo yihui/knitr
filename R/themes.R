@@ -35,14 +35,14 @@ get_theme = function(theme = NULL) {
 #'   documents, such as \file{.Rmd} (R Markdown, which has its own syntax
 #'   highlighting themes; see <https://rmarkdown.rstudio.com>).
 #' @export
-#' @examples opts_knit$set(out.format='latex'); knit_theme$set('edit-vim')
+#' @examples opts_knit$set(out.format = "latex"); knit_theme$set("edit-vim")
 #'
 #' knit_theme$get()  # names of all available themes
 #'
-#' thm = knit_theme$get('acid')  # parse the theme to a list
+#' thm = knit_theme$get("acid")  # parse the theme to a list
 #' knit_theme$set(thm)
 #'
-#' opts_knit$set(out.format=NULL) # restore option
+#' opts_knit$set(out.format = NULL) # restore option
 knit_theme = list(set = set_theme, get = get_theme)
 
 

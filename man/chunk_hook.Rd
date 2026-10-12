@@ -74,7 +74,8 @@ moved from \pkg{knitr} to the \pkg{rgl} package (>= v0.95.1247) after
 \pkg{knitr} v1.10.5, and you can \code{library(rgl)} to get them.
 }
 \examples{
-if (require("rgl") && exists("hook_rgl")) knit_hooks$set(rgl = hook_rgl)
+if (require("rgl") && exists("hook_rgl"))
+  knit_hooks$set(rgl = hook_rgl)
 # then in code chunks, use the option rgl=TRUE
 }
 \references{

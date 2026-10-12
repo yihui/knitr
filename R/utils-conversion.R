@@ -180,11 +180,14 @@ mark_html = function(..., template = TRUE) {
 #'   alternative that handles figure paths robustly, see
 #'   [litedown::fuse()].
 #' @examples # a minimal example
-#' writeLines(c("# hello markdown", '```{r hello-random, echo=TRUE}', 'rnorm(5)', '```'), 'test.Rmd')
-#' knit2html('test.Rmd')
-#' if (interactive()) browseURL('test.html')
+#' writeLines(
+#'   c("# hello markdown", "```{r hello-random, echo=TRUE}", "rnorm(5)", "```"),
+#'   "test.Rmd"
+#' )
+#' knit2html("test.Rmd")
+#' if (interactive()) browseURL("test.html")
 #'
-#' unlink(c('test.Rmd', 'test.html', 'test.md'))
+#' unlink(c("test.Rmd", "test.html", "test.md"))
 knit2html = function(
   input, output = NULL, ..., envir = parent.frame(), text = NULL,
   quiet = FALSE, encoding = 'UTF-8', force_v1 = getOption('knitr.knit2html.force_v1', FALSE)

@@ -31,8 +31,7 @@ to only query its values via \code{opts_current$get()}. Calling
 \code{opts_current$set()} will throw an error.
 }
 \examples{
-opts_chunk$get("prompt")
-opts_chunk$get("fig.keep")
+opts_chunk$get("prompt"); opts_chunk$get("fig.keep")
 }
 \references{
 Usage: \url{https://yihui.org/knitr/objects/}

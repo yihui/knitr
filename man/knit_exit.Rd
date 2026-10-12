@@ -27,5 +27,6 @@ ignore the rest of the document. This function provides a mechanism to
 terminate \code{\link[=knit]{knit()}}.
 }
 \examples{
-# see https://github.com/yihui/knitr-examples/blob/master/096-knit-exit.Rmd
+# see
+# https://github.com/yihui/knitr-examples/blob/master/096-knit-exit.Rmd
 }

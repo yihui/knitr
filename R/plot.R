@@ -261,7 +261,7 @@ merge_low_plot = function(x, idx = sapply(x, evaluate::is.recordedplot)) {
 #' @export
 #' @examples
 #' pdf(NULL)
-#' dev.control('enable')  # enable plot recording
+#' dev.control("enable")  # enable plot recording
 #' plot(1:10)
 #' p1 = recordPlot()
 #' abline(0, 1)  # add a line (a low-level change)
@@ -532,7 +532,7 @@ include_graphics = function(
 #' @param ... Other arguments to be passed to [include_graphics()].
 #' @export
 #' @examplesIf interactive()
-#' knitr::download_image('https://www.r-project.org/Rlogo.png')
+#' knitr::download_image("https://www.r-project.org/Rlogo.png")
 download_image = function(url, path = xfun::url_filename(url), use_file = !pandoc_to('html'), ...) {
   if (!file.exists(path) && use_file) xfun::download_file(url, path)
   include_graphics(if (use_file) path else url, ...)

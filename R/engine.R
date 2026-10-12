@@ -27,7 +27,7 @@
 #'   <https://github.com/yihui/knitr/issues/1176> for details.
 #' @references Usage: <https://yihui.org/knitr/objects/>; examples:
 #'   <https://yihui.org/knitr/demo/engines/>
-#' @examples knit_engines$get('python'); knit_engines$get('awk')
+#' @examples knit_engines$get("python"); knit_engines$get("awk")
 #' names(knit_engines$get())
 knit_engines = new_defaults()
 
@@ -73,11 +73,19 @@ cache_engines = new_defaults()
 #'   the appropriate output hooks.
 #' @export
 #' @examples library(knitr)
-#' engine_output(opts_chunk$merge(list(engine = 'Rscript')), code = '1 + 1', out = '[1] 2')
-#' engine_output(opts_chunk$merge(list(echo = FALSE, engine = 'Rscript')), code = '1 + 1', out = '[1] 2')
+#' engine_output(
+#'   opts_chunk$merge(list(engine = "Rscript")), code = "1 + 1", out = "[1] 2"
+#' )
+#' engine_output(
+#'   opts_chunk$merge(list(echo = FALSE, engine = "Rscript")),
+#'   code = "1 + 1", out = "[1] 2"
+#' )
 #'
 #' # expert use only
-#' engine_output(opts_chunk$merge(list(engine = 'python')), out = list(structure(list(src = '1 + 1'), class = 'source'), '2'))
+#' engine_output(
+#'   opts_chunk$merge(list(engine = "python")),
+#'   out = list(structure(list(src = "1 + 1"), class = "source"), "2")
+#' )
 engine_output = function(options, code, out, extra = NULL) {
   # attach the (possibly engine-modified) options to the returned output so that
   # block_exec() can pass them on to the 'chunk' hook, keeping it consistent with

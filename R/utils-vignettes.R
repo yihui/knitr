@@ -18,11 +18,11 @@
 #'   fall back to the `knitr::knitr` engine, which uses R Markdown v1 based
 #'   on the \pkg{litedown} package.
 #' @examples library(knitr)
-#' vig_list = tools::vignetteEngine(package = 'knitr')
+#' vig_list = tools::vignetteEngine(package = "knitr")
 #' str(vig_list)
-#' vig_list[['knitr::knitr']][c('weave', 'tangle')]
-#' vig_list[['knitr::knitr_notangle']][c('weave', 'tangle')]
-#' vig_list[['knitr::docco_classic']][c('weave', 'tangle')]
+#' vig_list[["knitr::knitr"]][c("weave", "tangle")]
+#' vig_list[["knitr::knitr_notangle"]][c("weave", "tangle")]
+#' vig_list[["knitr::docco_classic"]][c("weave", "tangle")]
 NULL
 
 vweave = function(file, driver, syntax, encoding = 'UTF-8', quiet = FALSE, ...) {
@@ -143,14 +143,18 @@ vig_engine = function(..., tangle = vtangle) {
 #'   inline expressions.
 #' @export
 #' @examples library(knitr)
-#' knitr_example = function(...) system.file('examples', ..., package = 'knitr')
+#' knitr_example = function(...) system.file("examples", ..., package = "knitr")
 #' \donttest{
-#' if (Sys.which('aspell') != '') {
+#' if (Sys.which("aspell") != "") {
 #' # -t means the TeX mode
-#' utils::aspell(knitr_example('knitr-minimal.Rnw'), knit_filter, control = '-t')
+#' utils::aspell(
+#'   knitr_example("knitr-minimal.Rnw"), knit_filter, control = "-t"
+#' )
 #'
 #' # -H is the HTML mode
-#' utils::aspell(knitr_example('knitr-minimal.Rmd'), knit_filter, control = '-H -t')
+#' utils::aspell(
+#'   knitr_example("knitr-minimal.Rmd"), knit_filter, control = "-H -t"
+#' )
 #' }}
 knit_filter = function(ifile, encoding = 'UTF-8') {
   x = read_utf8(ifile)
