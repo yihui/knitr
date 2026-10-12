@@ -214,6 +214,17 @@ block_exec = function(options) {
   if (options$include) output else ''
 }
 
+# resolve the chunk option `compute` to a compute profile: FALSE means the
+# chunk is not routed and evaluates in the host session; NULL means the
+# backend's default profile (`compute: true`); otherwise the profile name
+compute_profile = function(opt) {
+  if (is.null(opt) || isFALSE(opt)) return(FALSE)
+  if (isTRUE(opt)) return(NULL)
+  if (is.character(opt) && length(opt) == 1 && nzchar(opt)) return(opt)
+  warning("ignoring invalid 'compute' chunk option; expected TRUE or a profile name")
+  FALSE
+}
+
 #' Engine for R
 #'
 #' This function handles the execution of R code blocks (when the chunk option
@@ -299,7 +310,22 @@ eng_r = function(options) {
   # guess plot file type if it is NULL
   if (keep != 'none') options$fig.ext = dev2ext(options)
 
+  # assemble the evaluate() arguments once. The local and routed paths differ
+  # only in where the code runs
+  ev_args = list(
+    keep_warning = if (is.numeric(options$warning)) TRUE else options$warning,
+    keep_message = if (is.numeric(options$message)) TRUE else options$message,
+    stop_on_error = if (is.numeric(options$error)) options$error else {
+      if (options$error && options$include) 0L else 2L
+    },
+    # log each expression to stderr as it runs, so long-running or failing code
+    # can be traced in remote/batch contexts where the output is not visible yet
+    log_echo = isTRUE(options$log.echo)
+  )
+  profile = compute_profile(options$compute)
   cache.exists = cache$exists(options$hash, options$cache.lazy)
+  # the local path below calls the hook variable, so a user-customized
+  # `evaluate` hook stays live locally
   evaluate = knit_hooks$get('evaluate')
   # record the currently opened devices so we can detect if the chunk opens new
   # ones (e.g., via dev.new()), which knitr cannot capture (#2355)
@@ -309,20 +335,24 @@ eng_r = function(options) {
     as.source(code)
   } else if (cache.exists && isFALSE(options$cache.rebuild)) {
     cache$output(options$hash, 'list')
-  } else in_input_dir(
-    evaluate(
+  } else if (isFALSE(profile)) in_input_dir(
+    do.call(evaluate, c(list(
       code, envir = env, new_device = FALSE,
-      keep_warning = if (is.numeric(options$warning)) TRUE else options$warning,
-      keep_message = if (is.numeric(options$message)) TRUE else options$message,
-      stop_on_error = if (is.numeric(options$error)) options$error else {
-        if (options$error && options$include) 0L else 2L
-      },
-      # log each expression to stderr as it runs, so long-running or failing code
-      # can be traced in remote/batch contexts where the output is not visible yet
-      log_echo = isTRUE(options$log.echo),
       output_handler = knit_handlers(options$render, options)
+    ), ev_args))
+  ) else {
+    # routed chunk: delegate evaluation to the registered executor, which calls
+    # eng_r_remote() in another process and returns its result bundle
+    ex = getOption('compute.executor')
+    if (!is.function(ex)) stop2(
+      "the 'compute' chunk option requires a registered executor; set one with ",
+      "options(compute.executor = ...), for example mirai::register_render()"
     )
-  )
+    out = ex(eng_r_remote, list(code = code, ev_args = ev_args, options = options), profile)
+    # alt text was collected on the worker and is merged into options$fig.alt below
+    .knitEnv$fig.alt = out$fig.alt
+    out$res
+  }
   # warn if the chunk opened extra devices that knitr cannot record plots from
   if (length(setdiff(dev.list(), dev.before))) warning2(
     "The chunk '", options$label, "' opened new graphics device(s) ",
@@ -423,6 +453,18 @@ eng_r = function(options) {
   }
 
   if (options$include) output else if (is.null(s <- options$indent)) '' else s
+}
+
+# Runs in the executing process: builds the output handler from the local knitr
+# (and rlang, if installed there), records plots on a fresh device, and returns
+# the evaluate() result together with the alt text collected by record_fig_alt().
+eng_r_remote = function(code, ev_args, options) {
+  reset_fig_alt()
+  res = do.call(evaluate::evaluate, c(list(
+    code, envir = globalenv(), new_device = TRUE,
+    output_handler = knit_handlers(options$render, options)
+  ), ev_args))
+  list(res = res, fig.alt = .knitEnv$fig.alt)
 }
 
 block_cache = function(options, output, objects) {
