@@ -121,8 +121,8 @@ insert_header_html = function(doc, b) {
 #'   they do not make sense in the context of HTML.
 #' @return The header vector in `opts_knit` is set.
 #' @export
-#' @examples set_header(tikz = '\\usepackage{tikz}')
-#' opts_knit$get('header')
+#' @examples set_header(tikz = "\\usepackage{tikz}")
+#' opts_knit$get("header")
 set_header = function(...) {
   opts_knit$set(header = merge_list(opts_knit$get('header'), c(...)))
 }

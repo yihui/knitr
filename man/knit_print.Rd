@@ -54,8 +54,8 @@ method.
 library(knitr)
 # write tables for data frames
 knit_print.data.frame = function(x, ...) {
-    res = paste(c("", "", kable(x, output = FALSE)), collapse = "\n")
-    asis_output(res)
+  res = paste(c("", "", kable(x, output = FALSE)), collapse = "\n")
+  asis_output(res)
 }
 # register the method
 registerS3method("knit_print", "data.frame", knit_print.data.frame)

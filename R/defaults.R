@@ -78,7 +78,7 @@ new_defaults = function(value = list()) {
 #'   to only query its values via `opts_current$get()`. Calling
 #'   `opts_current$set()` will throw an error.
 #' @export
-#' @examples opts_chunk$get('prompt'); opts_chunk$get('fig.keep')
+#' @examples opts_chunk$get("prompt"); opts_chunk$get("fig.keep")
 opts_chunk = new_defaults(list(
   eval = TRUE, echo = TRUE, results = 'markup', tidy = FALSE, tidy.opts = NULL,
   collapse = FALSE, prompt = FALSE, comment = '##', highlight = TRUE,
@@ -166,8 +166,9 @@ opts_chunk_attr = local({
 #'   are real option names.
 #' @return `NULL`. `opts_knit$get('aliases')` is modified as the side effect.
 #' @export
-#' @examples set_alias(w = 'fig.width', h = 'fig.height')
-#' # then we can use options w and h in chunk headers instead of fig.width and fig.height
+#' @examples set_alias(w = "fig.width", h = "fig.height")
+#' # then we can use options w and h in chunk headers instead of
+#' # fig.width and fig.height
 set_alias = function(...) {
   opts_knit$set(aliases = c(...))
 }
@@ -191,11 +192,12 @@ set_alias = function(...) {
 #'   A list of available options:
 #'   <https://yihui.org/knitr/options/#package-options>
 #' @export
-#' @examples opts_knit$get('verbose'); opts_knit$set(verbose = TRUE)  # change it
+#' @examples opts_knit$get("verbose")
+#' opts_knit$set(verbose = TRUE)  # change it
 #' if (interactive()) {
-#' # for unnamed chunks, use 'fig' as the figure prefix
-#' opts_knit$set(unnamed.chunk.label='fig')
-#' knit('001-minimal.Rmd') # from https://github.com/yihui/knitr-examples
+#'   # for unnamed chunks, use 'fig' as the figure prefix
+#'   opts_knit$set(unnamed.chunk.label = "fig")
+#'   knit("001-minimal.Rmd") # from https://github.com/yihui/knitr-examples
 #' }
 #' @include hooks-html.R
 opts_knit = new_defaults(list(

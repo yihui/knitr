@@ -41,8 +41,14 @@ need to configure anything.
 }
 \examples{
 # e.g., the terra package could register these methods in its .onLoad():
-# registerS3method( 'process_cache', 'SpatRaster', function(x, pack = TRUE,
-# ...) if (pack) terra::wrap(x) else x, envir = asNamespace('knitr') )
-# registerS3method( 'process_cache', 'PackedSpatRaster', function(x, pack =
-# TRUE, ...) if (pack) x else terra::unwrap(x), envir = asNamespace('knitr') )
+# registerS3method(
+#   'process_cache', 'SpatRaster',
+#   function(x, pack = TRUE, ...) if (pack) terra::wrap(x) else x,
+#   envir = asNamespace('knitr')
+# )
+# registerS3method(
+#   'process_cache', 'PackedSpatRaster',
+#   function(x, pack = TRUE, ...) if (pack) x else terra::unwrap(x),
+#   envir = asNamespace('knitr')
+# )
 }

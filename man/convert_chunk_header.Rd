@@ -92,15 +92,19 @@ convert_chunk_header(knitr_example("knitr-minimal.Rmd"))
 # Convert a document for wrap type
 convert_chunk_header(knitr_example("knitr-minimal.Rmd"), type = "wrap")
 # Reduce default wrapping width
-convert_chunk_header(knitr_example("knitr-minimal.Rmd"), type = "wrap", width = 0.6 *
-    getOption("width"))
+convert_chunk_header(
+  knitr_example("knitr-minimal.Rmd"), type = "wrap",
+  width = 0.6 * getOption("width")
+)
 \dontrun{
 # Explicitly name the output
 convert_chunk_header("test.Rmd", output = "test2.Rmd")
 # Overwrite the input
 convert_chunk_header("test.Rmd", output = identity)
 # Use a custom function to name the output
-convert_chunk_header("test.Rmd", output = \(f) sprintf("\%s-new.\%s",
-    xfun::sans_ext(f), xfun::file_ext(f)))
+convert_chunk_header(
+  "test.Rmd",
+  output = \(f) sprintf("\%s-new.\%s", xfun::sans_ext(f), xfun::file_ext(f))
+)
 }
 }

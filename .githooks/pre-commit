@@ -1,0 +1,10 @@
+#!/bin/sh
+command -v perl > /dev/null 2>&1 || exit 0
+staged=$(git diff --cached --name-only --diff-filter=ACM | grep '^man/.*\.Rd$')
+[ -z "$staged" ] && exit 0
+perl -i -0pe '
+  s/^(\\examples\{)\n(\\dontshow\{if [^\n]*?) withAutoprint\(\\{ # examplesIf\}$/$1$2 \\{}/mg;
+  s/^\\dontshow\{\\}\) # examplesIf\}$/\\dontshow{\\}}/mg;
+  s/^(\\examples\{)\n(\\dont(?:run|test|show)\{)$/$1$2/mg;
+' $staged
+git add $staged

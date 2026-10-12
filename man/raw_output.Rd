@@ -52,12 +52,15 @@ output.
 }
 \examples{
 library(knitr)
-out = c("*hello*", raw_output("<special>content</special> *protect* me!"),
-    "*world*")
+out = c(
+  "*hello*",
+  raw_output("<special>content</special> *protect* me!"),
+  "*world*"
+)
 pre = extract_raw_output(out)
 str(pre)
-pre$value = gsub("[*]([^*]+)[*]", "<em>\\\\1</em>",
-    pre$value)  # think this as Pandoc conversion
+# think this as Pandoc conversion
+pre$value = gsub("[*]([^*]+)[*]", "<em>\\\\1</em>", pre$value)
 pre$value
 # raw output was protected from the conversion
 # (e.g. *protect* was not converted)

@@ -343,20 +343,27 @@ print_inline = function(x) {
 #' @examples ## put this in foo.R and read_chunk('foo.R')
 #'
 #' ## ---- my-label ----
-#' 1+1
-#' lm(y~x, data=data.frame(x=1:10,y=rnorm(10)))
+#' 1 + 1
+#' lm(y ~ x, data = data.frame(x = 1:10, y = rnorm(10)))
 #'
 #' ## later you can use <<my-label>>= to reference this chunk
 #'
 #' ## the 2nd approach
-#' code = c("#@@a", '1+1', "#@@b", "#@@a", 'rnorm(10)', "#@@b")
-#' read_chunk(lines = code, labels = 'foo') # put all code into one chunk named foo
-#' read_chunk(lines = code, labels = 'foo', from = 2, to = 2) # line 2 into chunk foo
-#' read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4), to = c(3, 6))
+#' code = c("#@@a", "1+1", "#@@b", "#@@a", "rnorm(10)", "#@@b")
+#' read_chunk(lines = code, labels = "foo")  # put all code into one chunk
+#' read_chunk(lines = code, labels = "foo", from = 2, to = 2)  # line 2
+#' read_chunk(
+#'   lines = code, labels = c("foo", "bar"), from = c(1, 4), to = c(3, 6)
+#' )
 #' # automatically figure out 'to'
-#' read_chunk(lines = code, labels = c('foo', 'bar'), from = c(1, 4))
-#' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a", to = "^#@@b")
-#' read_chunk(lines = code, labels = c('foo', 'bar'), from = "^#@@a", to = "^#@@b", from.offset = 1, to.offset = -1)
+#' read_chunk(lines = code, labels = c("foo", "bar"), from = c(1, 4))
+#' read_chunk(
+#'   lines = code, labels = c("foo", "bar"), from = "^#@@a", to = "^#@@b"
+#' )
+#' read_chunk(
+#'   lines = code, labels = c("foo", "bar"),
+#'   from = "^#@@a", to = "^#@@b", from.offset = 1, to.offset = -1
+#' )
 #'
 #' ## later you can use, e.g., <<foo>>=
 #' knitr::knit_code$get() # use this to check chunks in the current session
@@ -640,12 +647,13 @@ match_chunk_end = function(pattern, line, i, b, lines) {
 #'   such as `ref.label` or `code`.
 #' @return A character vector.
 #' @export
-#' @examples # the examples below are meaningless unless you put them in a knitr document
+#' @examples # the examples below are meaningless unless you put them in a
+#' # knitr document
 #' all_labels()
-#' all_labels(engine == 'Rcpp')
-#' all_labels(echo == FALSE && results != 'hide')
+#' all_labels(engine == "Rcpp")
+#' all_labels(echo == FALSE && results != "hide")
 #' # or separate the two conditions
-#' all_labels(echo == FALSE, results != 'hide')
+#' all_labels(echo == FALSE, results != "hide")
 all_labels = function(...) {
   cond = as.list(match.call())[-1]
   code = knit_code$get()
@@ -693,7 +701,9 @@ all_rcpp_labels = function(...) all_labels(expression(engine == 'Rcpp'), ...)
 #' @return A character string marked up using the inline R code syntax.
 #' @export
 #' @examples library(knitr)
-#' inline_expr('1+1', 'rnw'); inline_expr('1+1', 'html'); inline_expr('1+1', 'md')
+#' inline_expr("1+1", "rnw")
+#' inline_expr("1+1", "html")
+#' inline_expr("1+1", "md")
 inline_expr = function(code, syntax) {
   if (!is.character(code) || length(code) != 1)
     stop('The inline code must be a character string')
@@ -783,20 +793,26 @@ inline_expr = function(code, syntax) {
 #' ````
 #' }
 #' @examples
-#' knitr_example = function(...) system.file('examples', ..., package = 'knitr')
+#' knitr_example = function(...) system.file("examples", ..., package = "knitr")
 #' # Convert a document for multiline type
-#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'))
+#' convert_chunk_header(knitr_example("knitr-minimal.Rmd"))
 #' # Convert a document for wrap type
-#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap")
+#' convert_chunk_header(knitr_example("knitr-minimal.Rmd"), type = "wrap")
 #' # Reduce default wrapping width
-#' convert_chunk_header(knitr_example('knitr-minimal.Rmd'), type = "wrap", width = 0.6 * getOption('width'))
+#' convert_chunk_header(
+#'   knitr_example("knitr-minimal.Rmd"), type = "wrap",
+#'   width = 0.6 * getOption("width")
+#' )
 #' \dontrun{
 #' # Explicitly name the output
-#' convert_chunk_header('test.Rmd', output = 'test2.Rmd')
+#' convert_chunk_header("test.Rmd", output = "test2.Rmd")
 #' # Overwrite the input
-#' convert_chunk_header('test.Rmd', output = identity)
+#' convert_chunk_header("test.Rmd", output = identity)
 #' # Use a custom function to name the output
-#' convert_chunk_header('test.Rmd', output = \(f) sprintf('%s-new.%s', xfun::sans_ext(f), xfun::file_ext(f)))
+#' convert_chunk_header(
+#'   "test.Rmd",
+#'   output = \(f) sprintf("%s-new.%s", xfun::sans_ext(f), xfun::file_ext(f))
+#' )
 #' }
 #' @export
 convert_chunk_header = function(

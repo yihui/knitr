@@ -183,8 +183,7 @@ to \code{'Table:'} for the \code{pipe} format and \code{'#+CAPTION:'} for the
 }
 
 \examples{
-d1 = head(iris)
-d2 = head(mtcars)
+d1 = head(iris); d2 = head(mtcars)
 # pipe tables by default
 kable(d1)
 kable(d2[, 1:5])
@@ -203,7 +202,7 @@ kable(matrix(1000, ncol = 5), format = "latex", digits = 2, longtable = TRUE)
 # change LaTeX default table environment
 kable(d1, format = "latex", caption = "My table", table.envir = "table*")
 # add some table attributes
-kable(d1, format = "html", table.attr = "id=\"mytable\"")
+kable(d1, format = "html", table.attr = 'id="mytable"')
 # reST output
 kable(d2, format = "rst")
 # no row names
@@ -211,17 +210,20 @@ kable(d2, format = "rst", row.names = FALSE)
 # Pandoc simple tables
 kable(d2, format = "simple", caption = "Title of the table")
 # format numbers using , as decimal point, and ' as thousands separator
-x = as.data.frame(matrix(rnorm(60, 1e+06, 10000), 10))
+x = as.data.frame(matrix(rnorm(60, 1e6, 1e4), 10))
 kable(x, format.args = list(decimal.mark = ",", big.mark = "'"))
 # save the value
 x = kable(d2, format = "html")
 cat(x, sep = "\n")
-# can also set options(knitr.table.format = 'html') so that the output is HTML
+# can also set options(knitr.table.format = 'html') so that the output is
+# HTML
 
-# multiple tables via either kable(list(x1, x2)) or kables(list(kable(x1),
-# kable(x2)))
+# multiple tables via either kable(list(x1, x2)) or
+# kables(list(kable(x1), kable(x2)))
 kable(list(d1, d2), caption = "A tale of two tables")
-kables(list(kable(d1, align = "l"), kable(d2)), caption = "A tale of two tables")
+kables(
+  list(kable(d1, align = "l"), kable(d2)), caption = "A tale of two tables"
+)
 }
 \references{
 See

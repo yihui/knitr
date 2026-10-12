@@ -23,16 +23,16 @@
 #' @return path of the output document
 #' @export
 #' @seealso [spin()] (turn a specially formatted R script to a report)
-#' @examples s = system.file('misc', 'stitch-test.R', package = 'knitr')
+#' @examples s = system.file("misc", "stitch-test.R", package = "knitr")
 #' if (interactive()) stitch(s)  # compile to PDF
 #'
 #' # HTML report
-#' stitch(s, system.file('misc', 'knitr-template.Rhtml', package = 'knitr'))
+#' stitch(s, system.file("misc", "knitr-template.Rhtml", package = "knitr"))
 #'
 #' # or convert markdown to HTML
-#' stitch(s, system.file('misc', 'knitr-template.Rmd', package = 'knitr'))
+#' stitch(s, system.file("misc", "knitr-template.Rmd", package = "knitr"))
 #'
-#' unlink(c('stitch-test.html', 'stitch-test.md', 'figure'), recursive = TRUE)
+#' unlink(c("stitch-test.html", "stitch-test.md", "figure"), recursive = TRUE)
 stitch = function(script,
                   template = system.file('misc', 'knitr-template.Rnw', package = 'knitr'),
                   output = NULL, text = NULL, envir = parent.frame()) {
@@ -109,7 +109,7 @@ stitch_rmd = function(..., envir = parent.frame()) stitch(
 #'   (<http://www.gnu.org/software/m4/>), thanks to Frank Harrell.
 #' @export
 #' @examples # see the knit_expand vignette
-#' if (interactive()) browseVignettes(package='knitr')
+#' if (interactive()) browseVignettes(package = "knitr")
 knit_expand = function(file, ..., text = read_utf8(file), delim = c('{{', '}}') ){
 
   # check if delim is a pair, escaping regex as necessary

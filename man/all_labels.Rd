@@ -40,7 +40,8 @@ empty in the original document but filled with code using chunk options
 such as \code{ref.label} or \code{code}.
 }
 \examples{
-# the examples below are meaningless unless you put them in a knitr document
+# the examples below are meaningless unless you put them in a
+# knitr document
 all_labels()
 all_labels(engine == "Rcpp")
 all_labels(echo == FALSE && results != "hide")
