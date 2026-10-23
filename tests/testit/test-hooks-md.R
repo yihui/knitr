@@ -110,6 +110,8 @@ assert("captioned figures in a multi-figure chunk are separated by a blank line 
   (hook_plot_md_pandoc(x, fig(1, 1, cap)) %==% sprintf("![%s](1.png)", cap))
   # figures without a caption are left inline (Pandoc keeps them as inline images)
   (hook_plot_md_pandoc(x, fig(1, 2)) %==% "![](1.png)")
+  # a default caption (no fig.cap, as in plain knit()) does not count
+  (hook_plot_md_base(x, fig(1, 2)) %==% "![](1.png)")
   # fig.sep overrides the blank line (fig.sep = '' restores the old output)
   o = fig(1, 2, cap)
   o$fig.sep = ''

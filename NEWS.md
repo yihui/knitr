@@ -12,7 +12,7 @@
 
 - `kable()` gained support for the global option `knitr.kable.keep.whitespace`. By default, leading and trailing white spaces in table cells are trimmed, but setting `options(knitr.kable.keep.whitespace = TRUE)` preserves them, which is useful for aligning numbers with a monospace font in the Markdown source (thanks, @jmbarbone, #2066).
 
-- For Markdown-based output, the blank line inserted between multiple captioned figures in a chunk (since 1.52) can now be changed via the chunk option `fig.sep`, e.g., `fig.sep = ''` restores the previous behavior of keeping the images in one paragraph (thanks, @heavywatal, #2529).
+- For Markdown-based output, the blank line inserted between multiple figures in a chunk (since 1.52) is now only added when the chunk option `fig.cap` is set explicitly, so plain `knit()` (whose default captions are not real captions) keeps the images inline as before. The blank line can also be changed via `fig.sep`, e.g., `fig.sep = ''` keeps the images in one paragraph (thanks, @heavywatal, #2529).
 
 - `kable(format = "simple")` now generates a Pandoc multiline table when any cell contains a line break (`\n`), so that the alignment of multiline content is preserved. Previously, a line break broke the layout because Pandoc's simple tables cannot represent line breaks in cells (thanks, @mgacc0, #2021).
 
