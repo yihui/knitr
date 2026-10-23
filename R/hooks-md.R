@@ -142,11 +142,13 @@ hook_plot_md_pandoc = function(x, options) {
 # concatenated into a single paragraph, e.g. `![cap1](a) ![cap2](b)`. Pandoc
 # treats several images in one paragraph as inline images and drops the captions
 # (no figure environment / <figcaption>). Append a blank line after each
-# captioned figure except the last so that Pandoc emits a figure per image.
+# captioned figure except the last so that Pandoc emits a figure per image; the
+# chunk option `fig.sep` can override the blank line (e.g., `fig.sep = ''`).
 # See https://github.com/yihui/knitr/issues/2032 and #1524.
 sep_captioned_fig = function(res, cap, options) {
-  if (cap != '' && (options$fig.cur %n% 1L) < (options$fig.num %n% 1L))
-    res = paste0(res, '\n\n')
+  cur = options$fig.cur %n% 1L
+  if (cap != '' && cur < (options$fig.num %n% 1L))
+    res = paste0(res, rep_len(options$fig.sep %n% '\n\n', cur)[cur])
   res
 }
 
