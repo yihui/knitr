@@ -12,8 +12,6 @@
 
 - `kable()` gained support for the global option `knitr.kable.keep.whitespace`. By default, leading and trailing white spaces in table cells are trimmed, but setting `options(knitr.kable.keep.whitespace = TRUE)` preserves them, which is useful for aligning numbers with a monospace font in the Markdown source (thanks, @jmbarbone, #2066).
 
-- For Markdown-based output, the blank line inserted between multiple figures in a chunk (since 1.52) is now only added when the chunk option `fig.cap` is set explicitly, so plain `knit()` (whose default captions are not real captions) keeps the images inline as before. The blank line can also be changed via `fig.sep`, e.g., `fig.sep = ''` keeps the images in one paragraph (thanks, @heavywatal, #2529).
-
 - `kable(format = "simple")` now generates a Pandoc multiline table when any cell contains a line break (`\n`), so that the alignment of multiline content is preserved. Previously, a line break broke the layout because Pandoc's simple tables cannot represent line breaks in cells (thanks, @mgacc0, #2021).
 
 - `kable()` in LaTeX mode gained a new argument `caption.pos` to control whether the table caption is placed at the `'top'` (the default) or `'bottom'` of a table wrapped in a floating `table` environment. The default can be set globally via `options(knitr.table.caption.pos = 'bottom')` (thanks, @njtierney, #1189).
@@ -124,6 +122,8 @@
 - When multiple graphics devices are specified (e.g., `dev = c('cairo_pdf', 'svg')`), the recording device now uses the first device (and its `dev.args`) instead of silently falling back to the default `pdf` device with default arguments. This ensures measurement-affecting arguments such as `pointsize` take effect on the recorded plot (#1323).
 
 - Subfigures (created via `fig.subcap`) that span multiple rows are now separated by `\\` instead of `\newline` in LaTeX output. Inside a centered figure (`fig.align = 'center'`), `\newline` did not respect the alignment and left the subfigures left-aligned; `\\` centers them correctly (thanks, @StephenGerry, #1907).
+
+- For Markdown-based output, the blank line inserted between multiple figures in a chunk (since 1.52) is now only added when the chunk option `fig.cap` is set explicitly, so plain `knit()` (whose default captions are not real captions) keeps the images inline as before. The blank line can also be changed via `fig.sep`, e.g., `fig.sep = ''` keeps the images in one paragraph (thanks, @heavywatal, #2529).
 
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
 
