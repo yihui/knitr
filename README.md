@@ -5,6 +5,7 @@
 [![Check knitr examples](https://github.com/yihui/knitr/actions/workflows/knitr-examples.yaml/badge.svg)](https://github.com/yihui/knitr/actions/workflows/knitr-examples.yaml)
 [![Codecov test coverage](https://codecov.io/gh/yihui/knitr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/yihui/knitr?branch=master)
 [![CRAN release](https://www.r-pkg.org/badges/version/knitr)](https://cran.r-project.org/package=knitr)
+[![Build site](https://github.com/yihui/knitr/actions/workflows/litedown-site.yml/badge.svg)](https://github.com/yihui/knitr/actions/workflows/litedown-site.yml)
 <!-- badges: end -->
 
 The R package **knitr** is a general-purpose literate programming engine,
