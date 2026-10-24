@@ -29,7 +29,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if git fetch origin gh-pages; then
-            git switch gh-pages
+            git switch -f gh-pages
           else
             git switch --orphan gh-pages
             git rm -rf . 2>/dev/null || true
