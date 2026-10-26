@@ -1,0 +1,119 @@
+name: Package site
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+  delete:
+
+permissions:
+  contents: write
+  pull-requests: write # comment the preview URL
+
+env:
+  SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+
+jobs:
+  # The domain of the PR preview (<owner>-<repo>-pr-<N>.surge.sh), derived once
+  # and shared by the jobs below.
+  preview:
+    runs-on: ubuntu-latest
+    outputs:
+      domain: ${{ steps.domain.outputs.domain }}
+    steps:
+      - id: domain
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REF: ${{ github.event.ref }}
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            num="${{ github.event.pull_request.number }}"
+          elif [ "${{ github.event_name }}" = "delete" ]; then
+            num=$(gh pr list --repo "${{ github.repository }}" --state all \
+              --head "$REF" --json number --jq '.[0].number // empty')
+          fi
+          if [ -n "$num" ]; then
+            name=$(echo "${{ github.repository }}-pr-$num" |
+              tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')
+            echo "domain=$name.surge.sh" >> "$GITHUB_OUTPUT"
+          fi
+
+  deploy:
+    needs: preview
+    # Skip closed PRs (see teardown) and fork PRs, which cannot read the secret
+    # or write to the repo.
+    if: >-
+      github.event_name == 'push' || (
+      github.event_name == 'pull_request' &&
+      github.event.action != 'closed' &&
+      github.event.pull_request.head.repo.full_name == github.repository)
+    # One run per ref; a new push supersedes the previous one.
+    concurrency:
+      group: site-${{ github.ref }}
+      cancel-in-progress: true
+    runs-on: macos-latest
+    env:
+      PREVIEW_DOMAIN: ${{ needs.preview.outputs.domain }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - uses: yihui/actions/setup-r-dependencies@v1.4.0
+        with:
+          extra-packages: litedown .
+          r-universe: yihui
+      - uses: yihui/actions/litedown-site@HEAD
+        with:
+          site-dir: 'site'
+      - name: Deploy PR preview to surge
+        if: github.event_name == 'pull_request' && env.SURGE_TOKEN != ''
+        run: |
+          npm install -g surge
+          surge ./site "$PREVIEW_DOMAIN"
+      - name: Comment preview URL
+        if: github.event_name == 'pull_request' && env.SURGE_TOKEN != ''
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: surge-preview
+          message: |
+            Site preview: https://${{ env.PREVIEW_DOMAIN }}
+
+            Updates on every push; removed when this PR closes.
+      - name: Deploy to gh-pages
+        if: github.event_name == 'push'
+        run: |
+          tmp=$(mktemp -d)
+          cp -r site/. "$tmp"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch origin gh-pages; then
+            git switch -f gh-pages
+          else
+            git switch --orphan gh-pages
+            git rm -rf . 2>/dev/null || true
+          fi
+          find . -maxdepth 1 ! -name .git ! -name . -exec rm -rf {} +
+          cp -r "$tmp"/. .
+          git add -A
+          git diff --cached --quiet || (git commit -m "deploy site" && git push origin gh-pages)
+
+  # Remove the preview of a PR. A deleted branch is the primary trigger, since
+  # deleting the branch at merge time cancels `closed` runs; `closed` covers PRs
+  # whose branch is kept. Teardown is idempotent.
+  teardown:
+    needs: preview
+    # Ignore tag deletions; only branches map to a preview.
+    if: >-
+      github.event.action == 'closed' ||
+      (github.event_name == 'delete' && github.event.ref_type == 'branch')
+    runs-on: ubuntu-latest
+    env:
+      PREVIEW_DOMAIN: ${{ needs.preview.outputs.domain }}
+    steps:
+      - name: Teardown preview
+        if: env.SURGE_TOKEN != '' && env.PREVIEW_DOMAIN != ''
+        run: |
+          npm install -g surge
+          surge teardown "$PREVIEW_DOMAIN" || true
