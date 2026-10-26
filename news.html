@@ -1,24 +1,25 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="generator" content="litedown 0.11.7">
+<meta name="generator" content="litedown 0.11.14">
 <title>News</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/css/default.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/css/article.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/css/copy-button.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/css/heading-anchor.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/css/pages.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/css/site.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/css/prism-xcode.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/css/default.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/css/article.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/css/copy-button.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/css/heading-anchor.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/css/pages.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/css/site.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/css/prism-xcode.min.css">
 </head>
 <body>
 <nav><p><a href="index.html">Home</a>
 <a href="articles.html">Articles</a>
 <a href="manual.html">Manual</a>
 <a href="news.html">News</a>
-<a href="playground/">Playground</a></p></nav>
+<a href="playground/">Playground</a>
+<a href="https://github.com/yihui/knitr/" class="right"><img src="https://cdn.jsdelivr.net/npm/@primer/octicons@19/build/svg/mark-github-24.svg" alt="GitHub" class="no-invert" /></a></p></nav>
 <div class="frontmatter">
 <div class="title"><h1>News</h1></div>
 </div>
@@ -683,7 +684,7 @@ registerS3method(
 <p>When tangling a document with <code>purl()</code>, calls to <code>read_chunk()</code> are now located by parsing the code and inspecting its syntax tree, instead of matching the pattern <code>read_chunk(...)</code> as a string. This fixes spurious parse errors and makes the detection more robust: a closing parenthesis inside a string argument (e.g., <code>read_chunk(lines = &quot;)&quot;)</code>) no longer breaks <code>purl()</code>, functions whose names merely end in <code>read_chunk</code> (e.g., <code>fake_read_chunk()</code>) are no longer mistaken for <code>read_chunk()</code>, commented-out calls are ignored, and namespaced calls (<code>knitr::read_chunk()</code>) are now recognized (thanks, <a href="https://github.com/rgayler">@rgayler</a>, <a href="https://github.com/mrdowdeswell">@mrdowdeswell</a>, <a href="https://github.com/yihui/knitr/issues/1753">#1753</a>).</p>
 </li>
 <li>
-<p>When multiple graphics devices are specified (e.g., <code>dev = c('cairo_pdf', 'svg')</code>), the recording device now uses the first device (and its <code>dev.args</code>) instead of silently falling back to the default <code>pdf</code> device with default arguments. This ensures measurement-affecting arguments such as <code>pointsize</code> take effect on the recorded plot (#1323).</p>
+<p>When multiple graphics devices are specified (e.g., <code>dev = c('cairo_pdf', 'svg')</code>), the recording device now uses the first device (and its <code>dev.args</code>) instead of silently falling back to the default <code>pdf</code> device with default arguments. This ensures measurement-affecting arguments such as <code>pointsize</code> take effect on the recorded plot (<a href="https://github.com/yihui/knitr/issues/1323">#1323</a>).</p>
 </li>
 <li>
 <p>Subfigures (created via <code>fig.subcap</code>) that span multiple rows are now separated by <code>\\</code> instead of <code>\newline</code> in LaTeX output. Inside a centered figure (<code>fig.align = 'center'</code>), <code>\newline</code> did not respect the alignment and left the subfigures left-aligned; <code>\\</code> centers them correctly (thanks, <a href="https://github.com/StephenGerry">@StephenGerry</a>, <a href="https://github.com/yihui/knitr/issues/1907">#1907</a>).</p>
@@ -795,7 +796,7 @@ registerS3method(
 <p>Improve error traceback when <strong>rlang</strong> is available and <strong>evaluate</strong> &gt; 1.0.3 is used (thanks, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/yihui/knitr/issues/2388">#2388</a>).</p>
 </li>
 <li>
-<p>For Quarto, chunk options written in pipe comments must use the comment character of the chunk’s language (#2225). Previously, comments written in <code>#|</code> will be parsed even if <code>#</code> is not the comment character of the chunk.</p>
+<p>For Quarto, chunk options written in pipe comments must use the comment character of the chunk’s language (<a href="https://github.com/yihui/knitr/issues/2225">#2225</a>). Previously, comments written in <code>#|</code> will be parsed even if <code>#</code> is not the comment character of the chunk.</p>
 </li>
 <li>
 <p><code>hook_optipng()</code> now uses the <code>-quiet</code> argument of <code>optipng</code> to suppress the messages by default.</p>
@@ -965,7 +966,7 @@ registerS3method(
 <h3 id="sec:major-changes_4" class="unnumbered">MAJOR CHANGES</h3>
 <ul>
 <li>
-<p>Unbalanced chunk delimiters (fences) in R Markdown documents are no longer allowed, as announced two years ago at <a href="https://yihui.org/en/2021/10/unbalanced-delimiters/">https://yihui.org/en/2021/10/unbalanced-delimiters/</a> (#2306). This means the opening delimiter must strictly match the closing delimiter, e.g., if a code chunk starts with four backticks, it must also end with four; or if a chunk header is indented by two spaces, the closing fence must be indented by exactly two spaces. For authors who cannot update their R Markdown documents for any reason at the moment, setting <code>options(knitr.unbalanced.chunk = TRUE)</code> (e.g., in <code>.Rprofile</code>) can temporarily prevent <strong>knitr</strong> from throwing an error, but it is strongly recommended that you fix the problems as soon as possible, because this workaround will be removed in future.</p>
+<p>Unbalanced chunk delimiters (fences) in R Markdown documents are no longer allowed, as announced two years ago at <a href="https://yihui.org/en/2021/10/unbalanced-delimiters/">https://yihui.org/en/2021/10/unbalanced-delimiters/</a> (<a href="https://github.com/yihui/knitr/issues/2306">#2306</a>). This means the opening delimiter must strictly match the closing delimiter, e.g., if a code chunk starts with four backticks, it must also end with four; or if a chunk header is indented by two spaces, the closing fence must be indented by exactly two spaces. For authors who cannot update their R Markdown documents for any reason at the moment, setting <code>options(knitr.unbalanced.chunk = TRUE)</code> (e.g., in <code>.Rprofile</code>) can temporarily prevent <strong>knitr</strong> from throwing an error, but it is strongly recommended that you fix the problems as soon as possible, because this workaround will be removed in future.</p>
 </li>
 <li>
 <p>Package vignettes are tangled by default during <code>R CMD check</code>, per request from CRAN maintainers (d0d1b47). The consequence is that <code>R CMD check</code> will check R scripts tangled from vignettes by default, unless you set the environment variable <code>_R_CHECK_VIGNETTES_SKIP_RUN_MAYBE_=true</code>. Previously, <strong>knitr</strong> would skip tangling vignettes during <code>R CMD check</code>, because R scripts tangled from vignettes are not guaranteed to valid. With the skip undone, <code>R CMD check</code> may fail in places other than CRAN (because CRAN has set the environment variable).</p>
@@ -980,7 +981,7 @@ registerS3method(
 <p>SQL code chunks that run <code>ALTER</code> statements are only executed and not tried to fecth a result (thanks, <a href="https://github.com/maxschmi">@maxschmi</a>, <a href="https://github.com/yihui/knitr/issues/2330">#2330</a>).</p>
 </li>
 <li>
-<p>The function <code>imgur_upload()</code> has been moved to (and enhanced in) the <strong>xfun</strong> package as <code>xfun::upload_imgur()</code> so it is no longer tied to <strong>knitr</strong> and can be reused by other pakages. Now <code>knitr::imgur_upload()</code> is only a wrapper function of <code>xfun::upload_imgur()</code>. You are recommended to use the latter (#2325).</p>
+<p>The function <code>imgur_upload()</code> has been moved to (and enhanced in) the <strong>xfun</strong> package as <code>xfun::upload_imgur()</code> so it is no longer tied to <strong>knitr</strong> and can be reused by other pakages. Now <code>knitr::imgur_upload()</code> is only a wrapper function of <code>xfun::upload_imgur()</code>. You are recommended to use the latter (<a href="https://github.com/yihui/knitr/issues/2325">#2325</a>).</p>
 </li>
 <li>
 <p><code>spin()</code> dropped support for <code>#-</code> as the chunk delimiter token. Please use <code>#+</code> or <code># %%</code> or <code>#|</code> instead.</p>
@@ -1021,7 +1022,7 @@ registerS3method(
 <p>The object <code>opts_current</code> will be restored after each code chunk has finished executing. Previously, it would not be restored, which means even for inline R expressions, <code>opts_current$get()</code> will inherit chunk options from a previous code chunk (thanks, <a href="https://github.com/rundel">@rundel</a>, <a href="https://github.com/yihui/knitr/issues/1988">#1988</a>). Besides, <code>opts_current$get('label')</code> will return a unique label for inline expressions. One possible application is to construct unique figure paths via <code>fig_path()</code> (e.g., <a href="https://github.com/ropensci/magick/issues/310">ropensci/magick#310</a>).</p>
 </li>
 <li>
-<p><code>opts_current$set()</code> without <code>opts_current$lock(FALSE)</code> will trigger a warning instead of an error for now and it will become an error in future (#2296).</p>
+<p><code>opts_current$set()</code> without <code>opts_current$lock(FALSE)</code> will trigger a warning instead of an error for now and it will become an error in future (<a href="https://github.com/yihui/knitr/issues/2296">#2296</a>).</p>
 </li>
 </ul>
 <h2 id="sec:knitr-1-44" class="unnumbered">knitr 1.44</h2>
@@ -1069,7 +1070,7 @@ registerS3method(
 </ul>
 <h3 id="sec:major-changes_6" class="unnumbered">MAJOR CHANGES</h3>
 <ul>
-<li>Dashes (<code>-</code>) in the names of all chunk options are normalized to dots (<code>.</code>) now, e.g., <code>fig-height</code> will be converted to <code>fig.height</code>. This is to make <strong>knitr</strong> more compatible with Quarto since Quarto always use dashes in chunk option names (#2282).</li>
+<li>Dashes (<code>-</code>) in the names of all chunk options are normalized to dots (<code>.</code>) now, e.g., <code>fig-height</code> will be converted to <code>fig.height</code>. This is to make <strong>knitr</strong> more compatible with Quarto since Quarto always use dashes in chunk option names (<a href="https://github.com/yihui/knitr/issues/2282">#2282</a>).</li>
 </ul>
 <h3 id="sec:minor-changes_7" class="unnumbered">MINOR CHANGES</h3>
 <ul>
@@ -1218,7 +1219,7 @@ registerS3method(
 <h3 id="sec:new-features_13" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
-<p>Added a function <code>convert_chunk_header()</code> to convert the old in-header chunk options to the new in-body chunk options (#2149 <a href="https://github.com/yihui/knitr/issues/2151">#2151</a>).</p>
+<p>Added a function <code>convert_chunk_header()</code> to convert the old in-header chunk options to the new in-body chunk options (<a href="https://github.com/yihui/knitr/issues/2149">#2149</a> <a href="https://github.com/yihui/knitr/issues/2151">#2151</a>).</p>
 </li>
 <li>
 <p>Added a new “graphics device”, <code>dev = &quot;gridSVG&quot;</code>, which uses <code>gridSVG::grid.export()</code> to export grid graphics to SVG (thanks, <a href="https://github.com/jooyoungseo">@jooyoungseo</a>, <a href="https://github.com/yihui/knitr/issues/2152">#2152</a>).</p>
@@ -1230,7 +1231,7 @@ registerS3method(
 <p>Added support for a <code>php</code> engine like other engines for interpreted languages. It will call <code>php -r &lt;code&gt;</code>, with <code>&lt;code&gt;</code> being the chunk content (thanks, <a href="https://github.com/ralmond">@ralmond</a>, <a href="https://github.com/yihui/knitr/issues/2144">#2144</a>).</p>
 </li>
 <li>
-<p>Per suggestion of <a href="https://github.com/jakubkaczor">@jakubkaczor</a> (#2116) and discussion with <a href="https://github.com/pedropark99">@pedropark99</a> (#2140), the chunk option <code>fig.sep</code> can also be used to add LaTeX code before the first sub-figure now. Previously this option can only be used for adding LaTeX code <em>after</em> each sub-figure.</p>
+<p>Per suggestion of <a href="https://github.com/jakubkaczor">@jakubkaczor</a> (<a href="https://github.com/yihui/knitr/issues/2116">#2116</a>) and discussion with <a href="https://github.com/pedropark99">@pedropark99</a> (<a href="https://github.com/yihui/knitr/issues/2140">#2140</a>), the chunk option <code>fig.sep</code> can also be used to add LaTeX code before the first sub-figure now. Previously this option can only be used for adding LaTeX code <em>after</em> each sub-figure.</p>
 </li>
 <li>
 <p><code>knitr::kable()</code> supports <code>tabularx</code> and <code>xltabular</code> environments now for LaTeX tables, e.g., <code>knitr::kable(head(iris), format = 'latex', tabular = 'tabularx')</code> (thanks, <a href="https://github.com/amarakon">@amarakon</a>, <a href="https://github.com/yihui/knitr/issues/2138">#2138</a>).</p>
@@ -1274,10 +1275,10 @@ registerS3method(
 <h3 id="sec:minor-changes_11" class="unnumbered">MINOR CHANGES</h3>
 <ul>
 <li>
-<p>For <strong>knitr</strong> source documents that generate <code>.tex</code> output documents (such as <code>.Rnw</code> and <code>.Rtex</code>), the LaTeX package <strong>xcolor</strong> will be used instead of <strong>color</strong> (#2085). This may cause option clashes if <strong>xcolor</strong> is already loaded by users with options, e.g., <code>\usepackage[dvipsnames]{xcolor}</code>. If this happens, you may set the package option <code>knitr::opts_knit$set(latex.options.xcolor = 'OPTIONS')</code> where <code>OPTIONS</code> is the options you used for <strong>xcolor</strong>, e.g., <code>dvipsnames</code>.</p>
+<p>For <strong>knitr</strong> source documents that generate <code>.tex</code> output documents (such as <code>.Rnw</code> and <code>.Rtex</code>), the LaTeX package <strong>xcolor</strong> will be used instead of <strong>color</strong> (<a href="https://github.com/yihui/knitr/issues/2085">#2085</a>). This may cause option clashes if <strong>xcolor</strong> is already loaded by users with options, e.g., <code>\usepackage[dvipsnames]{xcolor}</code>. If this happens, you may set the package option <code>knitr::opts_knit$set(latex.options.xcolor = 'OPTIONS')</code> where <code>OPTIONS</code> is the options you used for <strong>xcolor</strong>, e.g., <code>dvipsnames</code>.</p>
 </li>
 <li>
-<p>The evaluation of chunk options written after <code>#|</code> using the YAML <code>!expr</code> syntax will be delayed until before the chunk is to be evaluated (#2120).</p>
+<p>The evaluation of chunk options written after <code>#|</code> using the YAML <code>!expr</code> syntax will be delayed until before the chunk is to be evaluated (<a href="https://github.com/yihui/knitr/issues/2120">#2120</a>).</p>
 </li>
 </ul>
 <h2 id="sec:knitr-1-38" class="unnumbered">knitr 1.38</h2>
@@ -1287,7 +1288,7 @@ registerS3method(
 <p>The chunk option <code>file</code> can take a vector of file paths now, i.e., this option can be used to read more than one file (e.g., <code>file = c(&quot;foo.R&quot;, &quot;bar.R&quot;)</code>.</p>
 </li>
 <li>
-<p>Added a new engine named <code>exec</code> (#2073) to execute an arbitrary command on the code chunk, e.g.,</p>
+<p>Added a new engine named <code>exec</code> (<a href="https://github.com/yihui/knitr/issues/2073">#2073</a>) to execute an arbitrary command on the code chunk, e.g.,</p>
 <pre><code class="language-md">```{exec, command='Rscript'}
 1 + 1
 ```
@@ -1305,7 +1306,7 @@ echo 'Hello world!'
 </code></pre>
 <p>With this new engine, we no longer need to provide or maintain other simple command-based engines. For example, to support TypeScript (<a href="https://github.com/yihui/knitr/pull/1833">https://github.com/yihui/knitr/pull/1833</a>), we only need to specify <code>command = 'ts-node'</code> with the <code>exec</code> engine.</p>
 <p>If the command has significant side-effects (e.g., compile source code to an executable and run the executable, or generate plots to be included in the output), it is also possible to create a new engine based on the <code>exec</code> engine. The example <a href="https://github.com/yihui/knitr/issues/124">#124</a> in the <code>knitr-examples</code> repo has provided a <code>gcc</code> example.</p>
-<p>We’d like to thank <a href="https://github.com/TianyiShi2001">@TianyiShi2001</a> for the inspiration (#1829 <a href="https://github.com/yihui/knitr/issues/1823">#1823</a> <a href="https://github.com/yihui/knitr/issues/1833">#1833</a>).</p>
+<p>We’d like to thank <a href="https://github.com/TianyiShi2001">@TianyiShi2001</a> for the inspiration (<a href="https://github.com/yihui/knitr/issues/1829">#1829</a> <a href="https://github.com/yihui/knitr/issues/1823">#1823</a> <a href="https://github.com/yihui/knitr/issues/1833">#1833</a>).</p>
 </li>
 <li>
 <p>Added a new engine <code>ditaa</code> based on the <code>exec</code> engine to convert ASCII art diagrams to bitmaps via <a href="https://github.com/stathissideris/ditaa">the <code>ditaa</code> command</a> (thanks, <a href="https://github.com/kondziu">@kondziu</a>, <a href="https://github.com/yihui/knitr/issues/2092">#2092</a>).</p>
@@ -1329,7 +1330,7 @@ echo 'Hello world!'
 <p>The minimal required version of R was bumped from 3.2.3 to 3.3.0 (thanks, <a href="https://github.com/essemenoff">@essemenoff</a>, <a href="https://github.com/yihui/knitr/issues/2100">#2100</a>).</p>
 </li>
 <li>
-<p>The working directory under which chunk options are evaluated has been changed to the directory of the source document by default. If the package option <code>root.dir</code> is set to a different directory, that directory will be used as the working directory (#2081).</p>
+<p>The working directory under which chunk options are evaluated has been changed to the directory of the source document by default. If the package option <code>root.dir</code> is set to a different directory, that directory will be used as the working directory (<a href="https://github.com/yihui/knitr/issues/2081">#2081</a>).</p>
 </li>
 <li>
 <p><code>include_graphics()</code> will expand <code>~</code> in the image paths now and also warn against absolute paths (thanks, <a href="https://github.com/kcarnold">@kcarnold</a>, <a href="https://github.com/yihui/knitr/issues/2063">#2063</a>).</p>
@@ -1553,16 +1554,16 @@ plot(cars)
 <h3 id="sec:major-changes_12" class="unnumbered">MAJOR CHANGES</h3>
 <ul>
 <li>
-<p>An error is now thrown when an inline code result is not coercible to character. This has always been the assumed behavior but it happens to be different in certain formats with unknown automatic coercion. This is now enforced to prevent any unexpected output. An inline code expression must evaluate to a character vector or an object coercible by <code>as.character()</code> (#2006).</p>
+<p>An error is now thrown when an inline code result is not coercible to character. This has always been the assumed behavior but it happens to be different in certain formats with unknown automatic coercion. This is now enforced to prevent any unexpected output. An inline code expression must evaluate to a character vector or an object coercible by <code>as.character()</code> (<a href="https://github.com/yihui/knitr/issues/2006">#2006</a>).</p>
 </li>
 <li>
-<p>The <strong>markdown</strong> package has been moved from <code>Imports</code> to <code>Suggests</code> in <strong>knitr</strong>’s <code>DESCRIPTION</code>, which means it is no longer a hard dependency but has become a soft dependency of <strong>knitr</strong> (#1864). One consequence for package developers is that if you use the vignette engines based on <strong>markdown</strong> (such as <code>knitr::knitr</code>), you will have to explicitly declare the (soft) dependency on <strong>markdown</strong>, because the implicit dependency through <strong>knitr</strong> is no longer there.</p>
+<p>The <strong>markdown</strong> package has been moved from <code>Imports</code> to <code>Suggests</code> in <strong>knitr</strong>’s <code>DESCRIPTION</code>, which means it is no longer a hard dependency but has become a soft dependency of <strong>knitr</strong> (<a href="https://github.com/yihui/knitr/issues/1864">#1864</a>). One consequence for package developers is that if you use the vignette engines based on <strong>markdown</strong> (such as <code>knitr::knitr</code>), you will have to explicitly declare the (soft) dependency on <strong>markdown</strong>, because the implicit dependency through <strong>knitr</strong> is no longer there.</p>
 </li>
 <li>
-<p>For R packages that use the <code>knitr::rmarkdown</code> engine to build their vignettes, <code>rmarkdown</code> must be declared as a dependency in the package <code>DESCRIPTION</code> (e.g., in <code>Suggests</code>). Previously, <strong>knitr</strong> would fall back to using the <strong>markdown</strong> package to build vignettes if <strong>rmarkdown</strong> is not declared (#1864, <a href="https://github.com/yihui/knitr/issues/2020">#2020</a>).</p>
+<p>For R packages that use the <code>knitr::rmarkdown</code> engine to build their vignettes, <code>rmarkdown</code> must be declared as a dependency in the package <code>DESCRIPTION</code> (e.g., in <code>Suggests</code>). Previously, <strong>knitr</strong> would fall back to using the <strong>markdown</strong> package to build vignettes if <strong>rmarkdown</strong> is not declared (<a href="https://github.com/yihui/knitr/issues/1864">#1864</a>, <a href="https://github.com/yihui/knitr/issues/2020">#2020</a>).</p>
 </li>
 <li>
-<p><code>write_bib()</code> only uses the first URL if multiple are found in a package (#2028).</p>
+<p><code>write_bib()</code> only uses the first URL if multiple are found in a package (<a href="https://github.com/yihui/knitr/issues/2028">#2028</a>).</p>
 </li>
 </ul>
 <h3 id="sec:minor-changes_14" class="unnumbered">MINOR CHANGES</h3>
@@ -1613,7 +1614,7 @@ plot(cars)
 <h3 id="sec:minor-changes_15" class="unnumbered">MINOR CHANGES</h3>
 <ul>
 <li>
-<p>For package vignettes that use the vignette engine <code>knitr::docco_linear</code> or <code>knitr::docco_classic</code>, <strong>knitr</strong> will signal an error during <code>R CMD build</code> if the <strong>markdown</strong> package is not declared as a soft dependency in the <code>Suggests</code> field in <code>DESCRIPTION</code>. The same treatment has been applied in the previous version of <strong>knitr</strong> for the vignette engine <code>knitr::knitr</code> (#1864).</p>
+<p>For package vignettes that use the vignette engine <code>knitr::docco_linear</code> or <code>knitr::docco_classic</code>, <strong>knitr</strong> will signal an error during <code>R CMD build</code> if the <strong>markdown</strong> package is not declared as a soft dependency in the <code>Suggests</code> field in <code>DESCRIPTION</code>. The same treatment has been applied in the previous version of <strong>knitr</strong> for the vignette engine <code>knitr::knitr</code> (<a href="https://github.com/yihui/knitr/issues/1864">#1864</a>).</p>
 </li>
 <li>
 <p><code>R CMD build</code> will signal an error when a package uses R Markdown vignettes to be build with the <strong>rmarkdown</strong> package but the <strong>rmarkdown</strong> package is not installed (thanks, <a href="https://github.com/nsheff">@nsheff</a>, <a href="https://github.com/yihui/knitr/issues/1864">#1864</a>).</p>
@@ -1665,13 +1666,13 @@ plot(cars)
 <p>Fixed an issue with <code>kable(format = &quot;latex&quot;, booktabs = TRUE)</code> when the first cell of the table stats with <code>[</code> (thanks, <a href="https://github.com/jonnypenarth">@jonnypenarth</a>, <a href="https://github.com/yihui/knitr/issues/1595">#1595</a>).</p>
 </li>
 <li>
-<p>For child documents, <code>include_graphics(error = FALSE)</code> is the default now (#1957).</p>
+<p>For child documents, <code>include_graphics(error = FALSE)</code> is the default now (<a href="https://github.com/yihui/knitr/issues/1957">#1957</a>).</p>
 </li>
 <li>
 <p>For Rnw documents, the commented <code>%\begin{document}</code> will no longer cause trouble (thanks, <a href="https://github.com/NewbieKnitter">@NewbieKnitter</a> <a href="https://github.com/shrektan">@shrektan</a>, <a href="https://github.com/yihui/knitr/issues/1819">#1819</a>).</p>
 </li>
 <li>
-<p>Fixed an issue with the chunk option <code>fig.alt</code> causing figures to disappear in <code>rmarkdown::word_document()</code> output. This option is currently supported for HTML output only. If provided for office output in <strong>rmarkdown</strong>, it will emit a warning and be ignored (#1966).</p>
+<p>Fixed an issue with the chunk option <code>fig.alt</code> causing figures to disappear in <code>rmarkdown::word_document()</code> output. This option is currently supported for HTML output only. If provided for office output in <strong>rmarkdown</strong>, it will emit a warning and be ignored (<a href="https://github.com/yihui/knitr/issues/1966">#1966</a>).</p>
 </li>
 <li>
 <p>Spaces in messages were not properly escaped in <code>.Rnw</code> documents (thanks, <a href="https://github.com/elbersb">@elbersb</a>, <a href="https://github.com/yihui/knitr/issues/1978">#1978</a>).</p>
@@ -1803,7 +1804,7 @@ plot(cars)
 <p>The chunk option <code>dpi</code> is correctly passed to <code>showtext::showtext_opts()</code> now (thanks, <a href="https://github.com/cpsievert">@cpsievert</a>, <a href="https://github.com/yixuan/showtext/issues/33">yixuan/showtext#33</a>).</p>
 </li>
 <li>
-<p>Theorem environments in <strong>bookdown</strong> fail to work with Pandoc &gt;= 2.7.3 because of an issue in the <code>block2</code> engine of <strong>knitr</strong> (rstudio/bookdown#883).</p>
+<p>Theorem environments in <strong>bookdown</strong> fail to work with Pandoc &gt;= 2.7.3 because of an issue in the <code>block2</code> engine of <strong>knitr</strong> (<a href="https://github.com/rstudio/bookdown/issues/883">rstudio/bookdown#883</a>).</p>
 </li>
 </ul>
 <h3 id="sec:major-changes_15" class="unnumbered">MAJOR CHANGES</h3>
@@ -1827,7 +1828,7 @@ plot(cars)
 <p><code>knitr::image_uri()</code> calls <code>xfun::base64_uri()</code> instead of <code>markdown:::.b64EncodeFile()</code> now.</p>
 </li>
 <li>
-<p><code>knitr::write_bib()</code> now adds an empty line after each BibTeX entry (#1862).</p>
+<p><code>knitr::write_bib()</code> now adds an empty line after each BibTeX entry (<a href="https://github.com/yihui/knitr/issues/1862">#1862</a>).</p>
 </li>
 </ul>
 <h2 id="sec:knitr-1-28" class="unnumbered">knitr 1.28</h2>
@@ -2077,7 +2078,7 @@ plot(cars)
 <p>Can now pass additional arguments to knitr vignette engines if needed (thanks, <a href="https://github.com/jimhester">@jimhester</a>, <a href="https://github.com/yihui/knitr/issues/1577">#1577</a>).</p>
 </li>
 <li>
-<p>When <code>options(knitr.include_graphics.ext = TRUE)</code> is set, the full filename will be used in <code>\includegraphics{}</code> (e.g., <code>\includegraphics{foo.pdf}</code>) instead of the (default) base filename (e.g., <code>\includegraphics{foo}</code>) if a plot is embedded in the LaTeX output. This will avoid the ambiguity for LaTeX to choose the correct file (#1587).</p>
+<p>When <code>options(knitr.include_graphics.ext = TRUE)</code> is set, the full filename will be used in <code>\includegraphics{}</code> (e.g., <code>\includegraphics{foo.pdf}</code>) instead of the (default) base filename (e.g., <code>\includegraphics{foo}</code>) if a plot is embedded in the LaTeX output. This will avoid the ambiguity for LaTeX to choose the correct file (<a href="https://github.com/yihui/knitr/issues/1587">#1587</a>).</p>
 </li>
 <li>
 <p>The chunk option <code>engine.opts</code> can also take a list now, so that users can specify different options for different language engines (thanks, <a href="https://github.com/kiwiroy">@kiwiroy</a>, <a href="https://github.com/yihui/knitr/issues/1632">#1632</a>).</p>
@@ -2312,7 +2313,7 @@ plot(cars)
 <h3 id="sec:new-features_34" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
-<p><code>NA</code> values can be displayed using different characters (including empty strings) in <code>kable()</code>; you can set the option <code>knitr.kable.NA</code>, e.g. <code>options(knitr.kable.NA = '')</code> to hide <code>NA</code> values (#1283)</p>
+<p><code>NA</code> values can be displayed using different characters (including empty strings) in <code>kable()</code>; you can set the option <code>knitr.kable.NA</code>, e.g. <code>options(knitr.kable.NA = '')</code> to hide <code>NA</code> values (<a href="https://github.com/yihui/knitr/issues/1283">#1283</a>)</p>
 </li>
 <li>
 <p>added a <code>fortran95</code> engine (thanks, <a href="https://github.com/stefanedwards">@stefanedwards</a>, <a href="https://github.com/yihui/knitr/issues/1282">#1282</a>)</p>
@@ -2339,7 +2340,7 @@ plot(cars)
 <p>if <code>options(knitr.digits.signif = TRUE)</code>, numbers from inline expressions will be formatted using <code>getOption('digits')</code> as the number of significant digits, otherwise (the default behavior) <code>getOption('digits')</code> is treated as the number of decimal places (thanks, <a href="https://github.com/numatt">@numatt</a>, <a href="https://github.com/yihui/knitr/issues/1053">#1053</a>)</p>
 </li>
 <li>
-<p>the chunk option <code>engine.path</code> can also be a list of paths to the engine executables now, e.g., you can set <code>knitr::opts_chunk$set(engine.path = list(python = '/anaconda/bin/python', perl = '/usr/local/bin/perl'))</code>, then when a <code>python</code> code chunk is executed, <code>/anaconda/bin/python</code> will be called instead of the system default (rstudio/rmarkdown#812)</p>
+<p>the chunk option <code>engine.path</code> can also be a list of paths to the engine executables now, e.g., you can set <code>knitr::opts_chunk$set(engine.path = list(python = '/anaconda/bin/python', perl = '/usr/local/bin/perl'))</code>, then when a <code>python</code> code chunk is executed, <code>/anaconda/bin/python</code> will be called instead of the system default (<a href="https://github.com/rstudio/rmarkdown/issues/812">rstudio/rmarkdown#812</a>)</p>
 </li>
 <li>
 <p>introduced a mechanism to protect text output in the sense that it will not be touched by Pandoc during the conversion from R Markdown to another format; this is primarily for package developers to extend R Markdown; see <code>?raw_output</code> for details (which also shows new functions <code>extract_raw_output()</code> and <code>restore_raw_output()</code>)</p>
@@ -2348,13 +2349,13 @@ plot(cars)
 <h3 id="sec:major-changes_27" class="unnumbered">MAJOR CHANGES</h3>
 <ul>
 <li>
-<p>the minimal version of R required for <strong>knitr</strong> is 3.1.0 now (#1269)</p>
+<p>the minimal version of R required for <strong>knitr</strong> is 3.1.0 now (<a href="https://github.com/yihui/knitr/issues/1269">#1269</a>)</p>
 </li>
 <li>
 <p>the <strong>formatR</strong> package is an optional package since the default chunk option <code>tidy = FALSE</code> has been there for a long time; if you use <code>tidy = TRUE</code>, you need to install <strong>formatR</strong> separately if it is not installed</p>
 </li>
 <li>
-<p><code>:set +m</code> is no longer automatically added to <code>haskell</code> code chunks (#1274)</p>
+<p><code>:set +m</code> is no longer automatically added to <code>haskell</code> code chunks (<a href="https://github.com/yihui/knitr/issues/1274">#1274</a>)</p>
 </li>
 </ul>
 <h3 id="sec:minor-changes_25" class="unnumbered">MINOR CHANGES</h3>
@@ -2363,7 +2364,7 @@ plot(cars)
 <p>the package option <code>opts_knit$get('stop_on_error')</code> has been removed</p>
 </li>
 <li>
-<p>the confusing warning message about <code>knitr::knit2html()</code> when building package vignettes using the <code>knitr::rmarkdown</code> engine without <code>pandoc</code>/<code>pandoc-citeproc</code> has been removed (#1286)</p>
+<p>the confusing warning message about <code>knitr::knit2html()</code> when building package vignettes using the <code>knitr::rmarkdown</code> engine without <code>pandoc</code>/<code>pandoc-citeproc</code> has been removed (<a href="https://github.com/yihui/knitr/issues/1286">#1286</a>)</p>
 </li>
 <li>
 <p>the default value of the <code>quiet</code> argument of <code>plot_crop()</code> was changed from <code>!opts_knit$get('progress')</code> to <code>TRUE</code>, i.e., by default the messages from cropping images are suppressed</p>
@@ -2388,10 +2389,10 @@ plot(cars)
 <p>added a helper function <code>all_rcpp_labels()</code>, which is simply <code>all_labels(engine == 'Rcpp')</code> and can be used to extract all chunk labels of Rcpp chunks</p>
 </li>
 <li>
-<p>added a new engine named <code>sql</code> that uses the <strong>DBI</strong> package to execute SQL queries, and optionally assign the result to a variable in the <strong>knitr</strong> session; see <a href="https://rmarkdown.rstudio.com/authoring_knitr_engines.html">https://rmarkdown.rstudio.com/authoring_knitr_engines.html</a> for details (#1241)</p>
+<p>added a new engine named <code>sql</code> that uses the <strong>DBI</strong> package to execute SQL queries, and optionally assign the result to a variable in the <strong>knitr</strong> session; see <a href="https://rmarkdown.rstudio.com/authoring_knitr_engines.html">https://rmarkdown.rstudio.com/authoring_knitr_engines.html</a> for details (<a href="https://github.com/yihui/knitr/issues/1241">#1241</a>)</p>
 </li>
 <li>
-<p><code>fig.keep</code> now accepts numeric values to index low-level plots to keep (#1265)</p>
+<p><code>fig.keep</code> now accepts numeric values to index low-level plots to keep (<a href="https://github.com/yihui/knitr/issues/1265">#1265</a>)</p>
 </li>
 </ul>
 <h3 id="sec:bug-fixes_38" class="unnumbered">BUG FIXES</h3>
@@ -2419,7 +2420,7 @@ plot(cars)
 <h3 id="sec:minor-changes_26" class="unnumbered">MINOR CHANGES</h3>
 <ul>
 <li>
-<p>if <code>dev = 'cairo_pdf'</code>, the <code>cairo_pdf</code> device will be used to record plots (previously the <code>pdf</code> device was used) (#1235)</p>
+<p>if <code>dev = 'cairo_pdf'</code>, the <code>cairo_pdf</code> device will be used to record plots (previously the <code>pdf</code> device was used) (<a href="https://github.com/yihui/knitr/issues/1235">#1235</a>)</p>
 </li>
 <li>
 <p>LaTeX short captions now go up to the first <code>.</code>, <code>:</code> or <code>;</code> character followed by a space or newline (thanks, <a href="https://github.com/knokknok">@knokknok</a>, <a href="https://github.com/yihui/knitr/issues/1249">#1249</a>)</p>
@@ -2432,7 +2433,7 @@ plot(cars)
 <p><code>kable</code> now accepts a single multi-character string for alignment, so <code>kable(..., align=c('c','l'))</code> can be shortened to <code>kable(..., align='cl')</code></p>
 </li>
 <li>
-<p>code chunks that generate metadata may be cached now; it requires htmlwidgets &gt;= v0.6 and htmltools &gt;= 0.3.3 if you cache code chunks that contain HTML widgets or Shiny inputs/outputs (#1158)</p>
+<p>code chunks that generate metadata may be cached now; it requires htmlwidgets &gt;= v0.6 and htmltools &gt;= 0.3.3 if you cache code chunks that contain HTML widgets or Shiny inputs/outputs (<a href="https://github.com/yihui/knitr/issues/1158">#1158</a>)</p>
 </li>
 <li>
 <p>when the output format is not HTML, HTML widgets used to fail to render; now <strong>knitr</strong> will try to generate static screenshots for HTML widgets automatically using the <a href="https://github.com/wch/webshot"><strong>webshot</strong></a> package; you can specify alternative screenshots via the chunk option <code>screenshot.alt</code> (which takes a character vector of image paths), and pass more options to <code>webshot::webshot()</code> via the chunk option <code>screenshot.opts</code>, e.g. <code>list(delay = 3, cliprect = 'viewport')</code></p>
@@ -2542,7 +2543,7 @@ plot(cars)
 <p>added a chunk option <code>ffmpeg.bitrate</code> (default: <code>1M</code>) to control the quality of WebM videos created from FFmpeg (thanks, <a href="https://github.com/JsonPunyon">@JsonPunyon</a>, <a href="https://github.com/yihui/knitr/issues/1090">#1090</a>)</p>
 </li>
 <li>
-<p>added a chunk option <code>ffmpeg.format</code> (default: <code>webm</code>) to control the video format of FFmpeg; this option specifies the filename extension of the video (#712)</p>
+<p>added a chunk option <code>ffmpeg.format</code> (default: <code>webm</code>) to control the video format of FFmpeg; this option specifies the filename extension of the video (<a href="https://github.com/yihui/knitr/issues/712">#712</a>)</p>
 </li>
 <li>
 <p>plots drawn by <code>tikzDevice</code> are also measured and recorded with that device (thanks, <a href="https://github.com/krlmlr">@krlmlr</a>, <a href="https://github.com/yihui/knitr/issues/1066">#1066</a>)</p>
@@ -2591,10 +2592,10 @@ plot(cars)
 <h3 id="sec:minor-changes_27" class="unnumbered">MINOR CHANGES</h3>
 <ul>
 <li>
-<p>added an argument <code>force_v1</code> to <code>knit2html()</code>; when it is <code>TRUE</code>, <code>knit2html()</code> renders the input file as an R Markdown v1 document even if it is for R Markdown v2 (#1130)</p>
+<p>added an argument <code>force_v1</code> to <code>knit2html()</code>; when it is <code>TRUE</code>, <code>knit2html()</code> renders the input file as an R Markdown v1 document even if it is for R Markdown v2 (<a href="https://github.com/yihui/knitr/issues/1130">#1130</a>)</p>
 </li>
 <li>
-<p>the trailing space after <code>![]()</code> (for plots) in Markdown output has been removed (#1049)</p>
+<p>the trailing space after <code>![]()</code> (for plots) in Markdown output has been removed (<a href="https://github.com/yihui/knitr/issues/1049">#1049</a>)</p>
 </li>
 </ul>
 <h2 id="sec:knitr-1-11" class="unnumbered">knitr 1.11</h2>
@@ -2607,7 +2608,7 @@ plot(cars)
 <p>added an argument <code>quiet</code> to <code>plot_crop()</code> (thanks, <a href="https://github.com/WastlM">@WastlM</a>, <a href="https://github.com/yihui/knitr/issues/1034">#1034</a>)</p>
 </li>
 <li>
-<p>added <code>!expr</code> and <code>!r</code> support in YAML for <code>knit_params()</code> (#1069)</p>
+<p>added <code>!expr</code> and <code>!r</code> support in YAML for <code>knit_params()</code> (<a href="https://github.com/yihui/knitr/issues/1069">#1069</a>)</p>
 </li>
 <li>
 <p>added two language engines <code>mysql</code> and <code>psql</code> (thanks, <a href="https://github.com/beanumber">@beanumber</a>, <a href="https://github.com/yihui/knitr/issues/1076">#1076</a>)</p>
@@ -2711,7 +2712,7 @@ plot(cars)
 <p>for the <code>tikz</code> engine, the path to the <code>convert</code> utility of ImageMagick can be specified via the chunk option <code>engine.opts</code>, e.g. <code>engine.opts = list(convert = 'path/to/convert')</code> (thanks, <a href="https://github.com/mienkoja">@mienkoja</a>, <a href="https://github.com/yihui/knitr/issues/897">#897</a>)</p>
 </li>
 <li>
-<p>similarly, more command line arguments to <code>convert</code> can be specified via, for example, <code>engine.opts = list(convert.opts = '-density 300')</code> (#896)</p>
+<p>similarly, more command line arguments to <code>convert</code> can be specified via, for example, <code>engine.opts = list(convert.opts = '-density 300')</code> (<a href="https://github.com/yihui/knitr/issues/896">#896</a>)</p>
 </li>
 </ul>
 <h3 id="sec:major-changes_34" class="unnumbered">MAJOR CHANGES</h3>
@@ -2723,7 +2724,7 @@ plot(cars)
 <p>currently, R (3.1.2) does not really pass the vignette encoding to vignette engines (which is probably a bug), and <strong>knitr</strong> vignette engines will assume UTF-8 is the file encoding</p>
 </li>
 <li>
-<p>when the chunk option <code>tidy=FALSE</code>, and <code>eval</code> takes a numeric vector, it used to mean the line numbers of the code chunk; now it means the indices of the R expressions in the code chunk, regardless of <code>tidy=FALSE</code> or <code>TRUE</code> (yihui/knitr-examples#39, thanks, <a href="https://github.com/isomorphisms">@isomorphisms</a>)</p>
+<p>when the chunk option <code>tidy=FALSE</code>, and <code>eval</code> takes a numeric vector, it used to mean the line numbers of the code chunk; now it means the indices of the R expressions in the code chunk, regardless of <code>tidy=FALSE</code> or <code>TRUE</code> (<a href="https://github.com/yihui/knitr-examples/issues/39">yihui/knitr-examples#39</a>, thanks, <a href="https://github.com/isomorphisms">@isomorphisms</a>)</p>
 </li>
 </ul>
 <h3 id="sec:minor-changes_28" class="unnumbered">MINOR CHANGES</h3>
@@ -2760,13 +2761,13 @@ plot(cars)
 <p>added an argument <code>escape = TRUE</code> to <code>kable()</code> to escape special characters in LaTeX and HTML tables (thanks, <a href="https://github.com/juba">@juba</a>, <a href="https://github.com/yihui/knitr/issues/852">#852</a>)</p>
 </li>
 <li>
-<p>added a new function <code>knit_filter()</code> to filter out code chunks and inline R expressions; this function can be used as the filter for the spell check function <code>utils::aspell()</code>; see <code>?knit_filter</code> for examples (#581)</p>
+<p>added a new function <code>knit_filter()</code> to filter out code chunks and inline R expressions; this function can be used as the filter for the spell check function <code>utils::aspell()</code>; see <code>?knit_filter</code> for examples (<a href="https://github.com/yihui/knitr/issues/581">#581</a>)</p>
 </li>
 <li>
 <p>added a new function <code>spin_child()</code> to spin child R scripts when we <code>spin()</code> a main script (thanks, <a href="https://github.com/krlmlr">@krlmlr</a>, <a href="https://github.com/yihui/knitr/issues/621">#621</a>)</p>
 </li>
 <li>
-<p>added a new function <code>inline_expr()</code> to help authors write the “source code” of the inline expression, e.g. <code>inline_expr('1+1')</code> generates <code>`r 1+1`</code> in R Markdown documents (#890)</p>
+<p>added a new function <code>inline_expr()</code> to help authors write the “source code” of the inline expression, e.g. <code>inline_expr('1+1')</code> generates <code>`r 1+1`</code> in R Markdown documents (<a href="https://github.com/yihui/knitr/issues/890">#890</a>)</p>
 </li>
 <li>
 <p>the cache will attempt to preserve the order in which packages are stored on the search path (thanks, <a href="https://github.com/dgrtwo">@dgrtwo</a>, <a href="https://github.com/yihui/knitr/issues/867">#867</a>)</p>
@@ -2903,7 +2904,7 @@ plot(cars)
 <h3 id="sec:new-features_43" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
-<p>added Textile (<a href="http://txstyle.org">http://txstyle.org</a>) support thanks to Richard Cotton; see the example 105 at <a href="https://github.com/yihui/knitr-examples">https://github.com/yihui/knitr-examples</a> (#623)</p>
+<p>added Textile (<a href="http://txstyle.org">http://txstyle.org</a>) support thanks to Richard Cotton; see the example 105 at <a href="https://github.com/yihui/knitr-examples">https://github.com/yihui/knitr-examples</a> (<a href="https://github.com/yihui/knitr/issues/623">#623</a>)</p>
 </li>
 <li>
 <p>added an argument <code>inline</code> to <code>spin()</code> so that some R code (by default, code of the form <code>{{code}}</code>) can be treated as inline expressions (thanks, Kirill Müller, <a href="https://github.com/yihui/knitr/issues/620">#620</a>)</p>
@@ -2936,16 +2937,16 @@ plot(cars)
 <p>added a new S3 generic function <code>knit_print()</code>, which is used as the default printing function for R objects in the code output now; users can define custom S3 methods to change the printing behaviour of R objects in <strong>knitr</strong></p>
 </li>
 <li>
-<p>added a new engine <code>scala</code> for Scala thanks to Simeon Fitch (#640)</p>
+<p>added a new engine <code>scala</code> for Scala thanks to Simeon Fitch (<a href="https://github.com/yihui/knitr/issues/640">#640</a>)</p>
 </li>
 <li>
 <p>added a new engine named <code>asis</code> to write the chunk content without processing it; it also respects the chunk options <code>echo</code> and <code>eval</code> – when either one is <code>FALSE</code>, the chunk will be hidden; this makes it possible to write text conditionally (thanks, Simon, <a href="https://github.com/yihui/knitr/issues/622">#622</a>)</p>
 </li>
 <li>
-<p>the Haskell engine supports multiline clauses using <code>:set +m</code> now, thanks to Adam Vogt (#633)</p>
+<p>the Haskell engine supports multiline clauses using <code>:set +m</code> now, thanks to Adam Vogt (<a href="https://github.com/yihui/knitr/issues/633">#633</a>)</p>
 </li>
 <li>
-<p>added a new hook function <code>hook_purl()</code> so that code can be more reliably extracted from input documents; see <code>?hook_purl</code> for details (#607)</p>
+<p>added a new hook function <code>hook_purl()</code> so that code can be more reliably extracted from input documents; see <code>?hook_purl</code> for details (<a href="https://github.com/yihui/knitr/issues/607">#607</a>)</p>
 </li>
 <li>
 <p>exported a function <code>plot_crop()</code> which was used in <code>hook_pdfcrop()</code> in previous versions to crop the white margin of plots</p>
@@ -3099,7 +3100,7 @@ plot(cars)
 <p>when cache is enabled, automatic chunk dependencies can be truly automatic now; there is no need to call <code>dep_auto()</code> explicitly, and all we need to do is the chunk option <code>autodep=TRUE</code>; the chunk dependencies will be rebuilt after each chunk, so when new chunks are inserted into the document, <strong>knitr</strong> can also figure out the new dependencies automatically (thanks, <a href="https://github.com/knokknok">@knokknok</a>, <a href="https://github.com/yihui/knitr/issues/592">#592</a>)</p>
 </li>
 <li>
-<p>for Sublime Text users, there is a <a href="https://github.com/andrewheiss/SublimeKnitr">SublimeKnitr</a> package to support LaTeX and Markdown with <strong>knitr</strong>; thanks, Andrew Heiss (#449) (this is not really a new feature of <strong>knitr</strong> itself, though)</p>
+<p>for Sublime Text users, there is a <a href="https://github.com/andrewheiss/SublimeKnitr">SublimeKnitr</a> package to support LaTeX and Markdown with <strong>knitr</strong>; thanks, Andrew Heiss (<a href="https://github.com/yihui/knitr/issues/449">#449</a>) (this is not really a new feature of <strong>knitr</strong> itself, though)</p>
 </li>
 <li>
 <p>now the chunk options <code>warning</code> and <code>message</code> can also take numeric values as indices to select which warnings/messages to include in the output (thanks, Simon Urbanek, <a href="https://github.com/yihui/knitr/issues/590">#590</a>)</p>
@@ -3142,7 +3143,7 @@ plot(cars)
 <p><code>knitr:::.onLoad()</code> no longer modifies the <code>PATH</code> variable when <code>/usr/texbin</code> is not in <code>PATH</code> under Mac OS</p>
 </li>
 <li>
-<p>when a message/warning/error contains line breaks, they are preserved and the message will not be re-wrapped (#602, thanks, Tyler Rinker)</p>
+<p>when a message/warning/error contains line breaks, they are preserved and the message will not be re-wrapped (<a href="https://github.com/yihui/knitr/issues/602">#602</a>, thanks, Tyler Rinker)</p>
 </li>
 <li>
 <p><code>read_chunk()</code> tolerates white spaces at the end of the chunk headers now (suggested by John Maindonald, <a href="https://github.com/yihui/knitr/issues/606">#606</a>)</p>
@@ -3151,7 +3152,7 @@ plot(cars)
 <p>for R HTML documents, only the <code>highlight</code> component in <code>opts_knit$get('header')</code> was used in previous versions; now all components except <code>framed</code> and <code>tikz</code> are used; this makes it possible to further customize the HTML header (thanks, Wahlen Neuwirth and Erich Neuwirth)</p>
 </li>
 <li>
-<p>in previous versions, the global option <code>KNITR_WIDTH</code> in R was used to set <code>options(width)</code>; now this option is set from <code>opts_knit$get('width')</code>, which has the same default value <code>75</code> (#597)</p>
+<p>in previous versions, the global option <code>KNITR_WIDTH</code> in R was used to set <code>options(width)</code>; now this option is set from <code>opts_knit$get('width')</code>, which has the same default value <code>75</code> (<a href="https://github.com/yihui/knitr/issues/597">#597</a>)</p>
 </li>
 </ul>
 <h2 id="sec:knitr-1-4" class="unnumbered">knitr 1.4</h2>
@@ -3180,7 +3181,7 @@ plot(cars)
 <p>added a new argument <code>ext</code> to the <code>pandoc()</code> function so that users can manually specify the output filename extensions (thanks, Baptiste, <a href="http://stackoverflow.com/q/17710249/559676">http://stackoverflow.com/q/17710249/559676</a>)</p>
 </li>
 <li>
-<p>for LaTeX and HTML output, syntax highlighting can be done for languages besides R (e.g. Python, Perl, …); this is achieved by <code>highr::hi_andre()</code>, so Andre Simon’s Highlight must be installed, otherwise <strong>knitr</strong> will fall back to verbatim output for source code; see <a href="https://github.com/yihui/knitr-examples/blob/master/098-highlight-python.Rnw">https://github.com/yihui/knitr-examples/blob/master/098-highlight-python.Rnw</a> for an example (#495)</p>
+<p>for LaTeX and HTML output, syntax highlighting can be done for languages besides R (e.g. Python, Perl, …); this is achieved by <code>highr::hi_andre()</code>, so Andre Simon’s Highlight must be installed, otherwise <strong>knitr</strong> will fall back to verbatim output for source code; see <a href="https://github.com/yihui/knitr-examples/blob/master/098-highlight-python.Rnw">https://github.com/yihui/knitr-examples/blob/master/098-highlight-python.Rnw</a> for an example (<a href="https://github.com/yihui/knitr/issues/495">#495</a>)</p>
 </li>
 </ul>
 <h3 id="sec:major-changes_38" class="unnumbered">MAJOR CHANGES</h3>
@@ -3201,7 +3202,7 @@ plot(cars)
 <h3 id="sec:minor-changes_32" class="unnumbered">MINOR CHANGES</h3>
 <ul>
 <li>
-<p>for the chunk options set in package option <code>opts_knit$get('eval.after')</code>, they will not be evaluated after a chunk if <code>eval=FALSE</code> for that chunk (#570, thanks, <a href="https://github.com/knokknok">@knokknok</a>)</p>
+<p>for the chunk options set in package option <code>opts_knit$get('eval.after')</code>, they will not be evaluated after a chunk if <code>eval=FALSE</code> for that chunk (<a href="https://github.com/yihui/knitr/issues/570">#570</a>, thanks, <a href="https://github.com/knokknok">@knokknok</a>)</p>
 </li>
 <li>
 <p>for document formats that produce HTML output, the default graphical device is changed to <code>png</code> only if it is <code>pdf</code>; if the device has been changed to values other than <code>pdf</code>, <strong>knitr</strong> will no longer modify it internally; when the <code>png</code> device is not available, the <code>svg</code> device will be used instead</p>
@@ -3221,22 +3222,22 @@ plot(cars)
 <p>added support for AsciiDoc; see example 089 at <a href="https://github.com/yihui/knitr-examples/blob/master/089-minimal.Rasciidoc">https://github.com/yihui/knitr-examples/blob/master/089-minimal.Rasciidoc</a> (thanks, Richard Cotton)</p>
 </li>
 <li>
-<p>added support for reStructuredText vignettes in packages; now <code>*.Rrst</code> documents are recognized as vignettes as well, and they will be compiled to PDF via <code>rst2pdf</code> (#533) (thanks, Trevor L Davis)</p>
+<p>added support for reStructuredText vignettes in packages; now <code>*.Rrst</code> documents are recognized as vignettes as well, and they will be compiled to PDF via <code>rst2pdf</code> (<a href="https://github.com/yihui/knitr/issues/533">#533</a>) (thanks, Trevor L Davis)</p>
 </li>
 <li>
 <p>a new function <code>kable()</code> to produce simple tables; see the vignette <code>datatables</code> in <code>browseVignettes(package = 'knitr')</code> for an application; also see a LaTeX example at <a href="https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw">https://github.com/yihui/knitr-examples/blob/master/091-knitr-table.Rnw</a></p>
 </li>
 <li>
-<p>the chunk options <code>fig.width</code> and <code>fig.height</code> are vectorized according to the <code>dev</code> option, e.g. <code>fig.wdith = c(7, 10)</code> and <code>dev = c('pdf', 'png')</code> (#538) (thanks, <a href="https://github.com/baptiste">@baptiste</a>)</p>
+<p>the chunk options <code>fig.width</code> and <code>fig.height</code> are vectorized according to the <code>dev</code> option, e.g. <code>fig.wdith = c(7, 10)</code> and <code>dev = c('pdf', 'png')</code> (<a href="https://github.com/yihui/knitr/issues/538">#538</a>) (thanks, <a href="https://github.com/baptiste">@baptiste</a>)</p>
 </li>
 <li>
-<p>for <code>purl()</code>, code chunks with the option <code>purl=FALSE</code> will not be included in the R script (#519, thanks, Sebastian)</p>
+<p>for <code>purl()</code>, code chunks with the option <code>purl=FALSE</code> will not be included in the R script (<a href="https://github.com/yihui/knitr/issues/519">#519</a>, thanks, Sebastian)</p>
 </li>
 <li>
-<p>new <code>'hide'</code> value to the <code>fig.show</code> option; the figures are created but not included in the output document (#532) (thanks, Simon)</p>
+<p>new <code>'hide'</code> value to the <code>fig.show</code> option; the figures are created but not included in the output document (<a href="https://github.com/yihui/knitr/issues/532">#532</a>) (thanks, Simon)</p>
 </li>
 <li>
-<p>the <code>sas</code> engine uses the listings output now (#541) and was tweaked for better LaTeX display (#562) (thanks, Nick Salkowski)</p>
+<p>the <code>sas</code> engine uses the listings output now (<a href="https://github.com/yihui/knitr/issues/541">#541</a>) and was tweaked for better LaTeX display (<a href="https://github.com/yihui/knitr/issues/562">#562</a>) (thanks, Nick Salkowski)</p>
 </li>
 <li>
 <p>added a quick and dirty <code>c</code> engine (via <code>R CMD SHLIB</code>); see <a href="https://github.com/yihui/knitr-examples/blob/master/090-engine-c.Rmd">https://github.com/yihui/knitr-examples/blob/master/090-engine-c.Rmd</a> for an example</p>
@@ -3248,13 +3249,13 @@ plot(cars)
 <p>added a new engine <code>cat</code> to write the content of a code chunk to a file; see the example 095 at <a href="https://github.com/yihui/knitr-examples">https://github.com/yihui/knitr-examples</a> (thanks, Stephen Eglen)</p>
 </li>
 <li>
-<p>added a new function <code>knit_exit()</code> to allow <code>knit()</code> to exit early as if it had reached the end of the document (#524, thanks, Renaud)</p>
+<p>added a new function <code>knit_exit()</code> to allow <code>knit()</code> to exit early as if it had reached the end of the document (<a href="https://github.com/yihui/knitr/issues/524">#524</a>, thanks, Renaud)</p>
 </li>
 <li>
-<p>the chunk option <code>fig.align</code> also works for Markdown output now, e.g., <code>fig.align = 'center'</code> will center images in HTML via the <code>style</code> attribute of the <code>&lt;img&gt;</code> tag (#387)</p>
+<p>the chunk option <code>fig.align</code> also works for Markdown output now, e.g., <code>fig.align = 'center'</code> will center images in HTML via the <code>style</code> attribute of the <code>&lt;img&gt;</code> tag (<a href="https://github.com/yihui/knitr/issues/387">#387</a>)</p>
 </li>
 <li>
-<p>the argument <code>format</code> in the <code>pandoc()</code> function was vectorized, e.g. we can call <code>pandoc(input, format = c('html', 'latex'))</code> and the input file will be converted to HTML and LaTeX, respectively (#547, thanks, Jeroen Ooms)</p>
+<p>the argument <code>format</code> in the <code>pandoc()</code> function was vectorized, e.g. we can call <code>pandoc(input, format = c('html', 'latex'))</code> and the input file will be converted to HTML and LaTeX, respectively (<a href="https://github.com/yihui/knitr/issues/547">#547</a>, thanks, Jeroen Ooms)</p>
 </li>
 <li>
 <p>added an argument <code>options</code> to <code>knit_child()</code> to set global chunk options for child documents; if a parent chunk calls a child document (via the <code>child</code> option), the chunk options of the parent chunk will be used as global options for the child document, e.g. for <code>&lt;&lt;foo, child='bar.Rnw', fig.path='figure/foo-'&gt;&gt;=</code>, the figure path prefix will be <code>figure/foo-</code> in <code>bar.Rnw</code>; see <a href="http://stackoverflow.com/q/17514055/559676">http://stackoverflow.com/q/17514055/559676</a> for an application</p>
@@ -3263,10 +3264,10 @@ plot(cars)
 <p><code>eclipse_theme()</code> works with font weight (bold) and font style (italic) now when parsing themes from <a href="http://eclipsecolorthemes.org">http://eclipsecolorthemes.org</a></p>
 </li>
 <li>
-<p>added two package options <code>latex.options.graphicx</code> and <code>latex.options.color</code> to allow customization of LaTeX package options, e.g. <code>opts_knit$set(latex.options.color = 'monochrome')</code> generates <code>\usepackage[monochrome]{color}</code> in the LaTeX output (#546)</p>
+<p>added two package options <code>latex.options.graphicx</code> and <code>latex.options.color</code> to allow customization of LaTeX package options, e.g. <code>opts_knit$set(latex.options.color = 'monochrome')</code> generates <code>\usepackage[monochrome]{color}</code> in the LaTeX output (<a href="https://github.com/yihui/knitr/issues/546">#546</a>)</p>
 </li>
 <li>
-<p>added a new package option <code>unnamed.chunk.label</code> to set the chunk labels for unnamed chunks, e.g. <code>opts_knit$set(unnamed.chunk.label = 'fig')</code> will generate chunk labels <code>fig-1</code>, <code>fig-2</code>, … (#555) (thanks, Noam Ross)</p>
+<p>added a new package option <code>unnamed.chunk.label</code> to set the chunk labels for unnamed chunks, e.g. <code>opts_knit$set(unnamed.chunk.label = 'fig')</code> will generate chunk labels <code>fig-1</code>, <code>fig-2</code>, … (<a href="https://github.com/yihui/knitr/issues/555">#555</a>) (thanks, Noam Ross)</p>
 </li>
 <li>
 <p>when <code>knit()</code> is running, a global option <code>knitr.in.progress</code> will be set to <code>TRUE</code>; this allows other package authors (e.g. <code>rCharts</code> and <code>googleVis</code>) to adjust certain package options according to <code>getOption('knitr.in.progress')</code> (thanks, Ramnath V, <a href="https://github.com/yihui/knitr/issues/564">#564</a>)</p>
@@ -3302,25 +3303,25 @@ plot(cars)
 <p><code>purl()</code> will write the chunk headers in <code># ---- label, opts ----</code> instead of <code># [@knitr](https://github.com/knitr) label, opts</code>, i.e. <code>@knitr</code> was changed to four dashes <code>----</code>; similarly, <code>read_chunk()</code> will use the pattern <code># ---- label ----</code> to read external code (the old syntax <code># [@knitr](https://github.com/knitr)</code> is still preserved for compatibility); the main reason for this change is that RStudio uses four dashes in R comments as section headings, so that it is possible to fold sections of R</p>
 </li>
 <li>
-<p>syntax highlighting is done by the <strong>highr</strong> package if it has been installed, otherwise, the old regular-expression-based syntax highlighting will still be used; the <strong>highr</strong> package does much better syntax highlighting than the regexp-based approach (#327)</p>
+<p>syntax highlighting is done by the <strong>highr</strong> package if it has been installed, otherwise, the old regular-expression-based syntax highlighting will still be used; the <strong>highr</strong> package does much better syntax highlighting than the regexp-based approach (<a href="https://github.com/yihui/knitr/issues/327">#327</a>)</p>
 </li>
 <li>
-<p>the commands for syntax highlighting were changed for compatibility with Andre Simon’s Highlight package; this will affect LaTeX and HTML users, e.g. <code>\hlnumber</code> was renamed to <code>\hlnum</code>; cached LaTeX and HTML will have to be rebuilt for the new syntax highlighting commands to work (#470)</p>
+<p>the commands for syntax highlighting were changed for compatibility with Andre Simon’s Highlight package; this will affect LaTeX and HTML users, e.g. <code>\hlnumber</code> was renamed to <code>\hlnum</code>; cached LaTeX and HTML will have to be rebuilt for the new syntax highlighting commands to work (<a href="https://github.com/yihui/knitr/issues/470">#470</a>)</p>
 </li>
 <li>
 <p>the argument <code>eval</code> was removed in <code>knit_child()</code>; if we do not want to evaluate a child document, we can set <code>eval=FALSE</code> in its parent chunk</p>
 </li>
 <li>
-<p>the script <code>inst/bin/knit</code> gains an option <code>-o</code> to specify the output filenames for <code>knit()</code> (#525, thanks, Aaron Wolen)</p>
+<p>the script <code>inst/bin/knit</code> gains an option <code>-o</code> to specify the output filenames for <code>knit()</code> (<a href="https://github.com/yihui/knitr/issues/525">#525</a>, thanks, Aaron Wolen)</p>
 </li>
 <li>
 <p>the default video format for animations is OGG (it is open and free) instead of MP4 (non-free) now; this means Internet Explorer under Windows may not work with the animations (consider Firefox, Chrome and other modern web browsers)</p>
 </li>
 <li>
-<p>warnings and messages in adjacent output chunks are merged, respectively (#534)</p>
+<p>warnings and messages in adjacent output chunks are merged, respectively (<a href="https://github.com/yihui/knitr/issues/534">#534</a>)</p>
 </li>
 <li>
-<p>when the package option <code>verbose = TRUE</code>, the time stamp will be printed after each chunk using <code>timestamp()</code>, but this will mess up with the R command history, so now <strong>knitr</strong> uses <code>cat()</code> to write the time stamp (#545) (thanks, <a href="https://github.com/knokknok">@knokknok</a>)</p>
+<p>when the package option <code>verbose = TRUE</code>, the time stamp will be printed after each chunk using <code>timestamp()</code>, but this will mess up with the R command history, so now <strong>knitr</strong> uses <code>cat()</code> to write the time stamp (<a href="https://github.com/yihui/knitr/issues/545">#545</a>) (thanks, <a href="https://github.com/knokknok">@knokknok</a>)</p>
 </li>
 <li>
 <p>the argument <code>base</code> in <code>read_rforge()</code> was removed and hard-coded inside the function instead</p>
@@ -3350,13 +3351,13 @@ plot(cars)
 <h3 id="sec:new-features_47" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
-<p>added a Pandoc wrapper function <code>pandoc()</code> to convert Markdown documents to other formats that Pandoc support such as LaTeX/PDF, OpenDocument, HTML5 slides and unfortunately also Word (#206)</p>
+<p>added a Pandoc wrapper function <code>pandoc()</code> to convert Markdown documents to other formats that Pandoc support such as LaTeX/PDF, OpenDocument, HTML5 slides and unfortunately also Word (<a href="https://github.com/yihui/knitr/issues/206">#206</a>)</p>
 </li>
 <li>
-<p>in the past, the chunk hooks were ignored when the chunk option <code>engine != 'R'</code> (i.e. code in the chunk is not R); now they are executed regardless of the language of the code chunk (#483) (thanks, <a href="https://github.com/cdrv">@cdrv</a>)</p>
+<p>in the past, the chunk hooks were ignored when the chunk option <code>engine != 'R'</code> (i.e. code in the chunk is not R); now they are executed regardless of the language of the code chunk (<a href="https://github.com/yihui/knitr/issues/483">#483</a>) (thanks, <a href="https://github.com/cdrv">@cdrv</a>)</p>
 </li>
 <li>
-<p>multiple WebGL objects from the <strong>rgl</strong> package can be generated in the same web page now; each object is uniquely identified by the corresponding chunk label; see <a href="https://dl.dropbox.com/u/15335397/misc/webgl-rmd.html">https://dl.dropbox.com/u/15335397/misc/webgl-rmd.html</a> for an example (#494) (thanks, Carson Sievert)</p>
+<p>multiple WebGL objects from the <strong>rgl</strong> package can be generated in the same web page now; each object is uniquely identified by the corresponding chunk label; see <a href="https://dl.dropbox.com/u/15335397/misc/webgl-rmd.html">https://dl.dropbox.com/u/15335397/misc/webgl-rmd.html</a> for an example (<a href="https://github.com/yihui/knitr/issues/494">#494</a>) (thanks, Carson Sievert)</p>
 </li>
 <li>
 <p>if multiple graphical devices are used (the chunk option <code>dev</code> is a vector of length greater than 1), the chunk option <code>dev.args</code> can be a named list of lists of device arguments, with each element a list of arguments to be passed to the single device; see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a></p>
@@ -3377,7 +3378,7 @@ plot(cars)
 <p><code>knit()</code> and <code>knit2html()</code> gained a <code>quiet</code> argument to suppress messages and the progress bar (thanks, Vince Buffalo)</p>
 </li>
 <li>
-<p>added the <code>text</code> argument to <code>spin()</code> and <code>stitch()</code> respectively as an alternative way to provide the input like <code>knit()</code> (#509) (thanks, Craig Watson)</p>
+<p>added the <code>text</code> argument to <code>spin()</code> and <code>stitch()</code> respectively as an alternative way to provide the input like <code>knit()</code> (<a href="https://github.com/yihui/knitr/issues/509">#509</a>) (thanks, Craig Watson)</p>
 </li>
 <li>
 <p>a new function <code>wrap_rmd()</code> to wrap long lines in Rmd files without affecting the code blocks (if there are any); this makes it easier for version control purposes</p>
@@ -3386,7 +3387,7 @@ plot(cars)
 <p><code>rst2pdf()</code> will pass a default output filename to <code>rst2pdf</code> (if the input is <code>foo.rst</code>, the output will be <code>foo.pdf</code>)</p>
 </li>
 <li>
-<p><code>knit2wp()</code> gained a new argument <code>publish = TRUE</code> (thanks, Eric Nantz) (#512)</p>
+<p><code>knit2wp()</code> gained a new argument <code>publish = TRUE</code> (thanks, Eric Nantz) (<a href="https://github.com/yihui/knitr/issues/512">#512</a>)</p>
 </li>
 </ul>
 <h3 id="sec:bug-fixes_51" class="unnumbered">BUG FIXES</h3>
@@ -3401,7 +3402,7 @@ plot(cars)
 <p>when the chunk option <code>engine</code> is not <code>R</code>, the code is also executed under the directory <code>opts_knit$get('root.dir')</code> (if specified); thanks, Winawer <a href="http://stackoverflow.com/q/15512545/559676">http://stackoverflow.com/q/15512545/559676</a></p>
 </li>
 <li>
-<p><code>:</code> is permitted in <code>fig.path</code> now (#513) (thanks, Sebastian)</p>
+<p><code>:</code> is permitted in <code>fig.path</code> now (<a href="https://github.com/yihui/knitr/issues/513">#513</a>) (thanks, Sebastian)</p>
 </li>
 <li>
 <p>fixed an encoding problem (<code>CP950</code>) for Hong Kong Windows users reported at <a href="http://bit.ly/16RQL5E">http://bit.ly/16RQL5E</a></p>
@@ -3430,7 +3431,7 @@ plot(cars)
 </ul>
 <h3 id="sec:minor-changes_34" class="unnumbered">MINOR CHANGES</h3>
 <ul>
-<li>the progress bar symbol was changed from <code>&gt;</code> to <code>.</code> so it looks less intrusive (#395) (thanks, Michael Friendly)</li>
+<li>the progress bar symbol was changed from <code>&gt;</code> to <code>.</code> so it looks less intrusive (<a href="https://github.com/yihui/knitr/issues/395">#395</a>) (thanks, Michael Friendly)</li>
 </ul>
 <h3 id="sec:documentation_1" class="unnumbered">DOCUMENTATION</h3>
 <ul>
@@ -3454,7 +3455,7 @@ plot(cars)
 <p>when the chunk option <code>eval=FALSE</code>, <code>purl()</code> will comment out the code when extracting code chunks (thanks, Randall Pruim)</p>
 </li>
 <li>
-<p>the global option <code>KNITR_PROGRESS</code> can be used to set the package option <code>progress</code> in <code>opts_knit</code>, e.g. after <code>options(KNITR_PROGRESS = FALSE)</code>, this option will be set to <code>FALSE</code> when the package is loaded (#395)</p>
+<p>the global option <code>KNITR_PROGRESS</code> can be used to set the package option <code>progress</code> in <code>opts_knit</code>, e.g. after <code>options(KNITR_PROGRESS = FALSE)</code>, this option will be set to <code>FALSE</code> when the package is loaded (<a href="https://github.com/yihui/knitr/issues/395">#395</a>)</p>
 </li>
 <li>
 <p>the global option <code>KNITR_WIDTH</code> can be use to set the R option <code>width</code> before <strong>knitr</strong> is called; in the past this option was hard-coded to <code>75</code>, and now it is set as <code>options(width = getOption('KNITR_WIDTH', 75L))</code></p>
@@ -3499,7 +3500,7 @@ plot(cars)
 <h3 id="sec:minor-changes_35" class="unnumbered">MINOR CHANGES</h3>
 <ul>
 <li>
-<p>the function <code>imgur_upload()</code> uses Imgur API version 3 now; if you are using the key obtained from version 2, you need to register for your own client id: <a href="http://api.imgur.com">http://api.imgur.com</a> (#439)</p>
+<p>the function <code>imgur_upload()</code> uses Imgur API version 3 now; if you are using the key obtained from version 2, you need to register for your own client id: <a href="http://api.imgur.com">http://api.imgur.com</a> (<a href="https://github.com/yihui/knitr/issues/439">#439</a>)</p>
 </li>
 <li>
 <p>allow users to pass a custom environment to <code>Rcpp::sourceCpp()</code> in the <code>Rcpp</code> engine; fixes <a href="http://stackoverflow.com/q/14882486/559676">http://stackoverflow.com/q/14882486/559676</a></p>
@@ -3512,13 +3513,13 @@ plot(cars)
 <h3 id="sec:new-features_49" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
-<p>a new function <code>knit_expand()</code> which is similar to <strong>brew</strong> and mustache, e.g. it expands <code>pi is {{pi}}</code> to <code>pi is 3.14</code>; it can also be used for building child documents (see <a href="https://github.com/yihui/knitr-examples/blob/master/075-knit-expand.Rnw">https://github.com/yihui/knitr-examples/blob/master/075-knit-expand.Rnw</a> for example) (#397) (thanks, Frank Harrell)</p>
+<p>a new function <code>knit_expand()</code> which is similar to <strong>brew</strong> and mustache, e.g. it expands <code>pi is {{pi}}</code> to <code>pi is 3.14</code>; it can also be used for building child documents (see <a href="https://github.com/yihui/knitr-examples/blob/master/075-knit-expand.Rnw">https://github.com/yihui/knitr-examples/blob/master/075-knit-expand.Rnw</a> for example) (<a href="https://github.com/yihui/knitr/issues/397">#397</a>) (thanks, Frank Harrell)</p>
 </li>
 <li>
 <p><code>knit()</code> gained a new argument <code>encoding</code> to specify the encoding of the input file (multilingual support is complete now), e.g. <code>knit(..., encoding = 'GBK')</code> for Simplified Chinese</p>
 </li>
 <li>
-<p>a new function <code>Sweave2knitr()</code> to convert Sweave documents to <strong>knitr</strong>; several automatic translations can be done, e.g. <code>results=tex</code> to <code>results='asis'</code>, <code>width=5</code> to <code>fig.width=5</code>, <code>echo=true</code> to <code>echo=TRUE</code>, <code>keep.source=TRUE</code> to <code>tidy=FALSE</code>, <code>eps=TRUE</code> to <code>dev='postscript'</code>, <code>\SweaveOpts{...}</code> to <code>opts_chunk$set(...)</code> and so on; see the documentation in the package for details (#451)</p>
+<p>a new function <code>Sweave2knitr()</code> to convert Sweave documents to <strong>knitr</strong>; several automatic translations can be done, e.g. <code>results=tex</code> to <code>results='asis'</code>, <code>width=5</code> to <code>fig.width=5</code>, <code>echo=true</code> to <code>echo=TRUE</code>, <code>keep.source=TRUE</code> to <code>tidy=FALSE</code>, <code>eps=TRUE</code> to <code>dev='postscript'</code>, <code>\SweaveOpts{...}</code> to <code>opts_chunk$set(...)</code> and so on; see the documentation in the package for details (<a href="https://github.com/yihui/knitr/issues/451">#451</a>)</p>
 </li>
 <li>
 <p>if the Sweave syntax is detected in an Rnw document, a message box (<strong>tcltk</strong>) will pop up as a reminder on how to fix it</p>
@@ -3551,7 +3552,7 @@ plot(cars)
 <p>chunk labels can be arbitrary characters now; in the past they had to be valid R symbols, e.g. <code>2a</code> was an invalid label; this restriction has been removed, because chunk labels will be automatically quoted when necessary (<code>&lt;&lt;2a&gt;&gt;=</code> will become <code>&lt;&lt;'2a'&gt;&gt;=</code>, but <code>&lt;&lt;'3-function'&gt;&gt;=</code> will remain untouched)</p>
 </li>
 <li>
-<p>if the chunk option <code>include=FALSE</code>, the evaluation will stop if errors occur (i.e. <code>stop_on_error=2L</code> for <strong>evaluate</strong>) because otherwise, it will be very difficult for authors to notice errors in chunks which have <code>include=FALSE</code> (#453) (thanks, Joshua Pritikin)</p>
+<p>if the chunk option <code>include=FALSE</code>, the evaluation will stop if errors occur (i.e. <code>stop_on_error=2L</code> for <strong>evaluate</strong>) because otherwise, it will be very difficult for authors to notice errors in chunks which have <code>include=FALSE</code> (<a href="https://github.com/yihui/knitr/issues/453">#453</a>) (thanks, Joshua Pritikin)</p>
 </li>
 <li>
 <p>the function <code>knit_env()</code> is no longer available (it is not exported any more), and <code>knit_global()</code> has been exported now</p>
@@ -3567,7 +3568,7 @@ plot(cars)
 <p>fixed <a href="https://github.com/yihui/knitr/issues/432">#432</a>: no longer uses <code>\\\\</code> in LaTeX output; only a single line break is converted to <code>\\</code> (thanks, Kevin Wright)</p>
 </li>
 <li>
-<p><code>render_html()</code> guarantees that the R source code is highlighted when the chunk option <code>highlight = TRUE</code> (#447) (thanks, Ramnath Vaidyanathan)</p>
+<p><code>render_html()</code> guarantees that the R source code is highlighted when the chunk option <code>highlight = TRUE</code> (<a href="https://github.com/yihui/knitr/issues/447">#447</a>) (thanks, Ramnath Vaidyanathan)</p>
 </li>
 <li>
 <p><code>dep_auto()</code> was unable to find the cache files if the input document is not under the current working directory (thanks, Hui Yao)</p>
@@ -3575,7 +3576,7 @@ plot(cars)
 </ul>
 <h3 id="sec:documentation_2" class="unnumbered">Documentation</h3>
 <ul>
-<li>because Github has deprecated downloads, all downloads were moved to Bitbucket, and the links in the package website, as well as all examples, have been updated (#438)</li>
+<li>because Github has deprecated downloads, all downloads were moved to Bitbucket, and the links in the package website, as well as all examples, have been updated (<a href="https://github.com/yihui/knitr/issues/438">#438</a>)</li>
 </ul>
 <h2 id="sec:knitr-0-9" class="unnumbered">knitr 0.9</h2>
 <h3 id="sec:new-features_50" class="unnumbered">NEW FEATURES</h3>
@@ -3584,31 +3585,31 @@ plot(cars)
 <p>added a demo named <code>notebook</code> which is an R notebook based on the <strong>shiny</strong> package (<a href="https://github.com/rstudio/shiny">https://github.com/rstudio/shiny</a>); use <code>demo('notebook', package = 'knitr')</code> to see it, or visit <a href="http://glimmer.rstudio.com/yihui/knitr">http://glimmer.rstudio.com/yihui/knitr</a></p>
 </li>
 <li>
-<p>for numeric inline output in LaTeX, the <code>I()</code> trick is no longer needed, e.g. <code>$x=\Sexpr{1.2e10}$</code> is safe for LaTeX now due to <code>\ensuremath{}</code> (#137) (thanks, Randall Pruim)</p>
+<p>for numeric inline output in LaTeX, the <code>I()</code> trick is no longer needed, e.g. <code>$x=\Sexpr{1.2e10}$</code> is safe for LaTeX now due to <code>\ensuremath{}</code> (<a href="https://github.com/yihui/knitr/issues/137">#137</a>) (thanks, Randall Pruim)</p>
 </li>
 <li>
-<p>the chunk option <code>eval</code> can take numeric values now, specifying which expressions to evaluate in a chunk (#383) (thanks, Jared Lander)</p>
+<p>the chunk option <code>eval</code> can take numeric values now, specifying which expressions to evaluate in a chunk (<a href="https://github.com/yihui/knitr/issues/383">#383</a>) (thanks, Jared Lander)</p>
 </li>
 <li>
-<p>a new package option <code>stop_on_error</code> which specifies the behavior of errors in code chunks; this option is passed to the <strong>evaluate</strong> package, e.g. <code>opts_knit$set(stop_on_error = 2L)</code> will make <strong>knitr</strong> completely stop on errors (the default value is <code>0L</code> which means to move on even if errors occurred); this makes it possible to see the call stacks via <code>traceback()</code> in an interactive R session when an error occurs (#344) (thanks, Hadley Wickham and Dzidorius Martinaitis)</p>
+<p>a new package option <code>stop_on_error</code> which specifies the behavior of errors in code chunks; this option is passed to the <strong>evaluate</strong> package, e.g. <code>opts_knit$set(stop_on_error = 2L)</code> will make <strong>knitr</strong> completely stop on errors (the default value is <code>0L</code> which means to move on even if errors occurred); this makes it possible to see the call stacks via <code>traceback()</code> in an interactive R session when an error occurs (<a href="https://github.com/yihui/knitr/issues/344">#344</a>) (thanks, Hadley Wickham and Dzidorius Martinaitis)</p>
 </li>
 <li>
-<p>added support to the <strong>Rcpp</strong> package through the chunk option <code>engine='Rcpp'</code> so that we can write C++ source code in the document; see <a href="https://github.com/yihui/knitr-examples/blob/master/029-engine-Rcpp.Rmd">https://github.com/yihui/knitr-examples/blob/master/029-engine-Rcpp.Rmd</a> for an example (#415) (thanks, JJ Allaire)</p>
+<p>added support to the <strong>Rcpp</strong> package through the chunk option <code>engine='Rcpp'</code> so that we can write C++ source code in the document; see <a href="https://github.com/yihui/knitr-examples/blob/master/029-engine-Rcpp.Rmd">https://github.com/yihui/knitr-examples/blob/master/029-engine-Rcpp.Rmd</a> for an example (<a href="https://github.com/yihui/knitr/issues/415">#415</a>) (thanks, JJ Allaire)</p>
 </li>
 <li>
-<p><strong>knitr</strong> throws a warning when a cached chunk depends on an uncached chunk because this kind of dependency will be ignored (#431) (thanks, <a href="https://github.com/ghostwheel">@ghostwheel</a>)</p>
+<p><strong>knitr</strong> throws a warning when a cached chunk depends on an uncached chunk because this kind of dependency will be ignored (<a href="https://github.com/yihui/knitr/issues/431">#431</a>) (thanks, <a href="https://github.com/ghostwheel">@ghostwheel</a>)</p>
 </li>
 <li>
-<p>a list of arguments can be passed to <code>formatR::tidy.source()</code> as the chunk option <code>tidy.opts</code> now, e.g. <code>tidy.opts=list(width.cutoff=60, keep.blank.line=FALSE)</code> (#429)</p>
+<p>a list of arguments can be passed to <code>formatR::tidy.source()</code> as the chunk option <code>tidy.opts</code> now, e.g. <code>tidy.opts=list(width.cutoff=60, keep.blank.line=FALSE)</code> (<a href="https://github.com/yihui/knitr/issues/429">#429</a>)</p>
 </li>
 <li>
 <p>some chunk options are recycled for plots such as <code>fig.env</code>, <code>out.width</code> and <code>out.extra</code>, etc; this means if there are multiple plots per chunk, we can specify different output options for them individually (e.g. <code>out.width=c('2in', '.4\\linewidth')</code> for two plots); see <a href="https://github.com/yihui/knitr-examples/blob/master/067-graphics-options.Rnw">https://github.com/yihui/knitr-examples/blob/master/067-graphics-options.Rnw</a> for an example (motivated by <a href="https://github.com/yihui/knitr/issues/430">#430</a>) (thanks, <a href="https://github.com/autumnlin">@autumnlin</a>)</p>
 </li>
 <li>
-<p>added a new chunk option <code>fig.subcap</code> for captions of subfigures in LaTeX; when there are multiple plots in a chunk, and neither <code>fig.subcap</code> nor <code>fig.cap</code> is NULL, <code>\subfloat{}</code> will be used for individual plots (you need to add <code>\usepackage{subfig}</code> in the preamble); also see <a href="https://github.com/yihui/knitr-examples/blob/master/067-graphics-options.Rnw">https://github.com/yihui/knitr-examples/blob/master/067-graphics-options.Rnw</a> for an example (#388) (thanks, <a href="https://github.com/skipperhoyer">@skipperhoyer</a>)</p>
+<p>added a new chunk option <code>fig.subcap</code> for captions of subfigures in LaTeX; when there are multiple plots in a chunk, and neither <code>fig.subcap</code> nor <code>fig.cap</code> is NULL, <code>\subfloat{}</code> will be used for individual plots (you need to add <code>\usepackage{subfig}</code> in the preamble); also see <a href="https://github.com/yihui/knitr-examples/blob/master/067-graphics-options.Rnw">https://github.com/yihui/knitr-examples/blob/master/067-graphics-options.Rnw</a> for an example (<a href="https://github.com/yihui/knitr/issues/388">#388</a>) (thanks, <a href="https://github.com/skipperhoyer">@skipperhoyer</a>)</p>
 </li>
 <li>
-<p><code>stitch()</code> accepts labelled R scripts now; if an R script contains chunk headers of the form <code>## [@knitr](https://github.com/knitr) label, options</code>, they will be used in the template (#411) (thanks, <a href="https://github.com/jamiefolson">@jamiefolson</a>)</p>
+<p><code>stitch()</code> accepts labelled R scripts now; if an R script contains chunk headers of the form <code>## [@knitr](https://github.com/knitr) label, options</code>, they will be used in the template (<a href="https://github.com/yihui/knitr/issues/411">#411</a>) (thanks, <a href="https://github.com/jamiefolson">@jamiefolson</a>)</p>
 </li>
 <li>
 <p>the function <code>read_chunk()</code> gained a few new arguments so that we can reference external code chunks in another way, which was an idea from the <strong>SweaveListingUtils</strong> package (thanks, Peter Ruckdeschel)</p>
@@ -3623,7 +3624,7 @@ plot(cars)
 <p>chunk options are also written after <code>## [@knitr](https://github.com/knitr)</code> along with chunk labels when tangling R scripts via <code>purl()</code></p>
 </li>
 <li>
-<p><code>purl()</code> gained a new argument <code>documentation</code> to also write documentation lines into the R script (#391 and <a href="https://github.com/yihui/knitr/issues/401">#401</a>) (thanks, Noam Ross and Fernando Mayer)</p>
+<p><code>purl()</code> gained a new argument <code>documentation</code> to also write documentation lines into the R script (<a href="https://github.com/yihui/knitr/issues/391">#391</a> and <a href="https://github.com/yihui/knitr/issues/401">#401</a>) (thanks, Noam Ross and Fernando Mayer)</p>
 </li>
 <li>
 <p><code>knit_rd()</code> generates a navigation frame on the left and builds links now; this is like the CHM help in old days (thanks, Michael Friendly)</p>
@@ -3635,7 +3636,7 @@ plot(cars)
 <p>we can also use <code>## [@knitr](https://github.com/knitr)</code> to write chunk options for <code>spin()</code> now (<code>#+</code> and <code>#-</code> still work)</p>
 </li>
 <li>
-<p>added new language support for Perl and Z Shell (<code>zsh</code>); see an example at <a href="https://github.com/yihui/knitr-examples/blob/master/028-engine-perl.Rmd">https://github.com/yihui/knitr-examples/blob/master/028-engine-perl.Rmd</a> (#406) (thanks, Jim Hester)</p>
+<p>added new language support for Perl and Z Shell (<code>zsh</code>); see an example at <a href="https://github.com/yihui/knitr-examples/blob/master/028-engine-perl.Rmd">https://github.com/yihui/knitr-examples/blob/master/028-engine-perl.Rmd</a> (<a href="https://github.com/yihui/knitr/issues/406">#406</a>) (thanks, Jim Hester)</p>
 </li>
 <li>
 <p><code>render_jekyll()</code> gained an argument <code>highlight</code> to specify which highlighting engine to use (Pygments or Prettify.js) (thanks, Yanping Chen)</p>
@@ -3644,10 +3645,10 @@ plot(cars)
 <p>two new chunk options for language engines: <code>engine.path</code> and <code>engine.opts</code>; the former can be used to specify the path of the program (e.g. <code>&lt;&lt;engine='ruby', engine.path='/usr/bin/ruby1.9.1'&gt;&gt;=</code>); the latter can be used to pass additional arguments to the engine program</p>
 </li>
 <li>
-<p>added new engines for GraphViz (<code>engine='dot'</code>) and TikZ (<code>engine='tikz'</code>); see <a href="https://github.com/yihui/knitr-examples/blob/master/057-engine-dot.Rmd">https://github.com/yihui/knitr-examples/blob/master/057-engine-dot.Rmd</a> and <a href="https://github.com/yihui/knitr-examples/blob/master/058-engine-tikz.Rmd">https://github.com/yihui/knitr-examples/blob/master/058-engine-tikz.Rmd</a> for examples (#419) (thanks, Michel Kuhlmann)</p>
+<p>added new engines for GraphViz (<code>engine='dot'</code>) and TikZ (<code>engine='tikz'</code>); see <a href="https://github.com/yihui/knitr-examples/blob/master/057-engine-dot.Rmd">https://github.com/yihui/knitr-examples/blob/master/057-engine-dot.Rmd</a> and <a href="https://github.com/yihui/knitr-examples/blob/master/058-engine-tikz.Rmd">https://github.com/yihui/knitr-examples/blob/master/058-engine-tikz.Rmd</a> for examples (<a href="https://github.com/yihui/knitr/issues/419">#419</a>) (thanks, Michel Kuhlmann)</p>
 </li>
 <li>
-<p>added a preliminary engine for SAS which is basically a call like <code>system('sas chunk-code.sas')</code> (#354)</p>
+<p>added a preliminary engine for SAS which is basically a call like <code>system('sas chunk-code.sas')</code> (<a href="https://github.com/yihui/knitr/issues/354">#354</a>)</p>
 </li>
 <li>
 <p>a new <code>document</code> hook to post-process the LaTeX output document to move code chunks out of figure/table environments so that code chunks will not float with the environments; see <code>?hook_movecode</code> for details</p>
@@ -3671,10 +3672,10 @@ plot(cars)
 <p>based on the same reason, it is recommended to use the chunk option <code>child</code> to input child documents; old syntax like <code>\SweaveInput{}</code> will be deprecated</p>
 </li>
 <li>
-<p>for markdown output, results from inline R code will no longer be put in a pair of backticks (#379)</p>
+<p>for markdown output, results from inline R code will no longer be put in a pair of backticks (<a href="https://github.com/yihui/knitr/issues/379">#379</a>)</p>
 </li>
 <li>
-<p>the package option <code>opts_knit$get('cache.extra')</code> was removed because this option should really be a chunk option instead; see <a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a> for the updated documentation (#404 and <a href="https://github.com/yihui/knitr/issues/405">#405</a>) (thanks, Jim Hester)</p>
+<p>the package option <code>opts_knit$get('cache.extra')</code> was removed because this option should really be a chunk option instead; see <a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a> for the updated documentation (<a href="https://github.com/yihui/knitr/issues/404">#404</a> and <a href="https://github.com/yihui/knitr/issues/405">#405</a>) (thanks, Jim Hester)</p>
 </li>
 <li>
 <p>the chunk option <code>highlight.opts</code> was deprecated and renamed to <code>engine.opts</code>; this affects users who use Andre Simon’s highlight through the <code>highlight</code> engine in <strong>knitr</strong></p>
@@ -3689,13 +3690,13 @@ plot(cars)
 <h3 id="sec:minor-changes_37" class="unnumbered">MINOR CHANGES</h3>
 <ul>
 <li>
-<p>when <code>opts_knit$get('verbose')</code> is <code>TRUE</code>, a <code>timestamp()</code> will be printed before each code chunk is evaluated (#377) (thanks, Carl Boettiger)</p>
+<p>when <code>opts_knit$get('verbose')</code> is <code>TRUE</code>, a <code>timestamp()</code> will be printed before each code chunk is evaluated (<a href="https://github.com/yihui/knitr/issues/377">#377</a>) (thanks, Carl Boettiger)</p>
 </li>
 <li>
 <p><code>stitch()</code> will no longer copy the template over to the current working directory (thanks, Michael Friendly)</p>
 </li>
 <li>
-<p><code>stitch()</code> will no longer open the PDF/HTML output automatically (#411) (thanks, Michel Kuhlmann)</p>
+<p><code>stitch()</code> will no longer open the PDF/HTML output automatically (<a href="https://github.com/yihui/knitr/issues/411">#411</a>) (thanks, Michel Kuhlmann)</p>
 </li>
 <li>
 <p>the script <code>inst/bin/knit</code> can also convert R Markdown documents to HTML now; the argument <code>--pdf</code> was removed and a new argument <code>--no-convert</code> was added</p>
@@ -3724,16 +3725,16 @@ plot(cars)
 <p>output from other languages (e.g. python, awk, …) can also be cached like R output when <code>cache=TRUE</code>; see <a href="https://github.com/yihui/knitr-examples/blob/master/023-engine-python.Rmd">023-engine-python.Rmd</a> for an example</p>
 </li>
 <li>
-<p>added support for bash/shell scripts; use the chunk option <code>engine='bash'</code> or <code>engine='sh'</code> to write shell scripts in code chunks (#361)</p>
+<p>added support for bash/shell scripts; use the chunk option <code>engine='bash'</code> or <code>engine='sh'</code> to write shell scripts in code chunks (<a href="https://github.com/yihui/knitr/issues/361">#361</a>)</p>
 </li>
 <li>
-<p>a new function <code>knit_rd()</code> to knit package documentation (run examples code and insert output in the HTML documentation) (#227) (thanks, Taiyun Wei)</p>
+<p>a new function <code>knit_rd()</code> to knit package documentation (run examples code and insert output in the HTML documentation) (<a href="https://github.com/yihui/knitr/issues/227">#227</a>) (thanks, Taiyun Wei)</p>
 </li>
 <li>
-<p>added LuaTeX support for tikz graphics with the <strong>tikzDevice</strong> package (set <code>options(tikzDefaultEngine = 'luatex')</code>); this feature requires <strong>tikzDevice</strong> version &gt; 0.6.2 (#358) (thanks, Alastair Andrew)</p>
+<p>added LuaTeX support for tikz graphics with the <strong>tikzDevice</strong> package (set <code>options(tikzDefaultEngine = 'luatex')</code>); this feature requires <strong>tikzDevice</strong> version &gt; 0.6.2 (<a href="https://github.com/yihui/knitr/issues/358">#358</a>) (thanks, Alastair Andrew)</p>
 </li>
 <li>
-<p>a new chunk option <code>fig.env</code> to set which environment to use for figures in LaTeX, e.g. we can set <code>fig.env='marginfigure'</code> to use <code>\begin{marginfigure}</code> (#364) (thanks, Bryan Hanson)</p>
+<p>a new chunk option <code>fig.env</code> to set which environment to use for figures in LaTeX, e.g. we can set <code>fig.env='marginfigure'</code> to use <code>\begin{marginfigure}</code> (<a href="https://github.com/yihui/knitr/issues/364">#364</a>) (thanks, Bryan Hanson)</p>
 </li>
 <li>
 <p>added a new package option <code>global.device</code> (default <code>FALSE</code>) which specifies whether to use a global graphics device to capture plots; if <code>TRUE</code>, it is possible to write <code>plot(1:10)</code> in a previous chunk and <code>abline(0, 1)</code> in a latter chunk because all code chunks share the same device, however, this may also bring unexpected consequences (in particular, using <code>par()</code> can bring redundant plots)</p>
@@ -3742,10 +3743,10 @@ plot(cars)
 <h3 id="sec:bug-fixes_55" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
-<p>dots in figure paths are more safely replaced with <code>_</code> now, e.g. <code>fig.path='../figure'</code> will no longer be replaced by <code>__/figure</code> (#346) (thanks, <a href="https://github.com/ralfer">@ralfer</a>)</p>
+<p>dots in figure paths are more safely replaced with <code>_</code> now, e.g. <code>fig.path='../figure'</code> will no longer be replaced by <code>__/figure</code> (<a href="https://github.com/yihui/knitr/issues/346">#346</a>) (thanks, <a href="https://github.com/ralfer">@ralfer</a>)</p>
 </li>
 <li>
-<p>the <code>c()</code> syntax for the chunk option <code>dependson</code> did not actually work, e.g. <code>dependson=c('foo', 'bar')</code> (#350) (thanks, Cassio Pereira)</p>
+<p>the <code>c()</code> syntax for the chunk option <code>dependson</code> did not actually work, e.g. <code>dependson=c('foo', 'bar')</code> (<a href="https://github.com/yihui/knitr/issues/350">#350</a>) (thanks, Cassio Pereira)</p>
 </li>
 <li>
 <p>fixed a bug when <code>eval=FALSE</code> and <code>prompt=TRUE</code> (the continuation character was used in some places where there should be the prompt character) (thanks, Derek Ogle)</p>
@@ -3757,13 +3758,13 @@ plot(cars)
 <h3 id="sec:major-changes_44" class="unnumbered">MAJOR CHANGES</h3>
 <ul>
 <li>
-<p>leading spaces are allowed in chunk headers now, e.g. in the past <code>&lt;&lt;&gt;&gt;=</code> must appear in the beginning of a line, but now we can indent the chunk header by a number of white spaces; this amount of spaces will be stripped off the chunk if the whole chunk is indented (#236) (thanks, <a href="https://github.com/jamiefolson">@jamiefolson</a> and Vitalie Spinu)</p>
+<p>leading spaces are allowed in chunk headers now, e.g. in the past <code>&lt;&lt;&gt;&gt;=</code> must appear in the beginning of a line, but now we can indent the chunk header by a number of white spaces; this amount of spaces will be stripped off the chunk if the whole chunk is indented (<a href="https://github.com/yihui/knitr/issues/236">#236</a>) (thanks, <a href="https://github.com/jamiefolson">@jamiefolson</a> and Vitalie Spinu)</p>
 </li>
 <li>
 <p>markdown output will be indented if the original code chunk is indented; this allows chunk output to be nested within its parent environment, e.g. inside an ordered list (see <a href="https://github.com/yihui/knitr-examples/blob/master/001-minimal.Rmd">001-minimal.Rmd</a> for example)</p>
 </li>
 <li>
-<p>when the global chunk option <code>eval=FALSE</code>, inline R code will not be evaluated, and <code>??</code> is returned for inline R expressions (#367)</p>
+<p>when the global chunk option <code>eval=FALSE</code>, inline R code will not be evaluated, and <code>??</code> is returned for inline R expressions (<a href="https://github.com/yihui/knitr/issues/367">#367</a>)</p>
 </li>
 </ul>
 <h3 id="sec:minor-changes_38" class="unnumbered">MINOR CHANGES</h3>
@@ -3789,40 +3790,40 @@ plot(cars)
 <h3 id="sec:new-features_52" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
-<p>added a new chunk option <code>out.extra</code> to write extra graphics output options, e.g. <code>&lt;&lt;out.extra='angle=90'&gt;&gt;=</code> to rotate the figure by 90 degrees; see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a> (#301) (thanks, <a href="https://github.com/knokknok">@knokknok</a>)</p>
+<p>added a new chunk option <code>out.extra</code> to write extra graphics output options, e.g. <code>&lt;&lt;out.extra='angle=90'&gt;&gt;=</code> to rotate the figure by 90 degrees; see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a> (<a href="https://github.com/yihui/knitr/issues/301">#301</a>) (thanks, <a href="https://github.com/knokknok">@knokknok</a>)</p>
 </li>
 <li>
-<p>when <code>opts_knit$get('verbose')</code> is TRUE, logs (messages, warnings and errors) along with the corresponding R code will be printed after <code>knit()</code> is done; this might help users figure out possible problems in R code quickly (#276)</p>
+<p>when <code>opts_knit$get('verbose')</code> is TRUE, logs (messages, warnings and errors) along with the corresponding R code will be printed after <code>knit()</code> is done; this might help users figure out possible problems in R code quickly (<a href="https://github.com/yihui/knitr/issues/276">#276</a>)</p>
 </li>
 <li>
-<p><code>.Random.seed</code> is cached again for the sake of reproducibility; see <a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a> for how to maintain reproducibility when the computation involves with random number generation (#274) (thanks, Renaud)</p>
+<p><code>.Random.seed</code> is cached again for the sake of reproducibility; see <a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a> for how to maintain reproducibility when the computation involves with random number generation (<a href="https://github.com/yihui/knitr/issues/274">#274</a>) (thanks, Renaud)</p>
 </li>
 <li>
 <p>the package option <code>opts_knit$get('cache.extra')</code> can be an unevaluated R expression now, e.g. <code>opts_knit$set(cache.extra = quote(.Random.seed))</code>; see the cache page above for a concrete example</p>
 </li>
 <li>
-<p>added a new package option <code>'root.dir'</code> (default <code>NULL</code>) which can be used to set the root directory to evaluate code chunks in a document; by default, the root directory is the directory of the input document, and this option enables users to set other directories as the working directory for code chunks (#277) (thanks, Ken Williams)</p>
+<p>added a new package option <code>'root.dir'</code> (default <code>NULL</code>) which can be used to set the root directory to evaluate code chunks in a document; by default, the root directory is the directory of the input document, and this option enables users to set other directories as the working directory for code chunks (<a href="https://github.com/yihui/knitr/issues/277">#277</a>) (thanks, Ken Williams)</p>
 </li>
 <li>
-<p><code>spin()</code> will add <code>\documentclass{article}</code> for Rnw output if no document class is specified in the R script so that the LaTeX output will be a complete document (#295) (thanks, Christiaan Klijn)</p>
+<p><code>spin()</code> will add <code>\documentclass{article}</code> for Rnw output if no document class is specified in the R script so that the LaTeX output will be a complete document (<a href="https://github.com/yihui/knitr/issues/295">#295</a>) (thanks, Christiaan Klijn)</p>
 </li>
 <li>
-<p>added Ruby support in the <code>engine</code> option; see the example <a href="https://github.com/yihui/knitr/blob/master/inst/examples/knitr-lang.Rmd">https://github.com/yihui/knitr/blob/master/inst/examples/knitr-lang.Rmd</a> (#294) (thanks, Ramnath Vaidyanathan)</p>
+<p>added Ruby support in the <code>engine</code> option; see the example <a href="https://github.com/yihui/knitr/blob/master/inst/examples/knitr-lang.Rmd">https://github.com/yihui/knitr/blob/master/inst/examples/knitr-lang.Rmd</a> (<a href="https://github.com/yihui/knitr/issues/294">#294</a>) (thanks, Ramnath Vaidyanathan)</p>
 </li>
 <li>
-<p>also added Haskell support in the option <code>engine='haskell'</code> through calling <code>ghc</code> (#336) (thanks, Michel Kuhlmann)</p>
+<p>also added Haskell support in the option <code>engine='haskell'</code> through calling <code>ghc</code> (<a href="https://github.com/yihui/knitr/issues/336">#336</a>) (thanks, Michel Kuhlmann)</p>
 </li>
 <li>
 <p>added support to Andre Simon’s <code>highlight</code> through the option <code>engine='highlight'</code>; see <a href="https://gist.github.com/3114112">https://gist.github.com/3114112</a> for an example of highlighting Matlab code in LaTeX (thanks, Dirk Eddelbuettel and Renaud Gaujoux)</p>
 </li>
 <li>
-<p>the output hooks for LaTeX, HTML, Markdown and reST will respect the <code>engine</code> option now, so these hooks can be readily used for output when the language is not R, e.g. <code>render_markdown(strict = TRUE)</code> also works for Python output (#251) (thanks, Chris Fonnesbeck)</p>
+<p>the output hooks for LaTeX, HTML, Markdown and reST will respect the <code>engine</code> option now, so these hooks can be readily used for output when the language is not R, e.g. <code>render_markdown(strict = TRUE)</code> also works for Python output (<a href="https://github.com/yihui/knitr/issues/251">#251</a>) (thanks, Chris Fonnesbeck)</p>
 </li>
 <li>
-<p>the chunk options <code>eval</code>, <code>echo</code> and <code>results</code> are also respected when the language is not R, e.g. for a Python code chunk with <code>eval=FALSE</code>, the code will not be evaluated, or for a Ruby chunk with <code>results='hide'</code>, the output will be hidden (#293) (thanks, Ramnath Vaidyanathan)</p>
+<p>the chunk options <code>eval</code>, <code>echo</code> and <code>results</code> are also respected when the language is not R, e.g. for a Python code chunk with <code>eval=FALSE</code>, the code will not be evaluated, or for a Ruby chunk with <code>results='hide'</code>, the output will be hidden (<a href="https://github.com/yihui/knitr/issues/293">#293</a>) (thanks, Ramnath Vaidyanathan)</p>
 </li>
 <li>
-<p>chunk options <code>out.width</code>, <code>out.height</code> and <code>out.extra</code> also work for plots in HTML and Markdown output now, e.g. <code>out.width='200px'</code> or <code>out.extra='style=&quot;display:block;&quot;'</code> (#297) (thanks, Taiyun Wei and Alan Severini)</p>
+<p>chunk options <code>out.width</code>, <code>out.height</code> and <code>out.extra</code> also work for plots in HTML and Markdown output now, e.g. <code>out.width='200px'</code> or <code>out.extra='style=&quot;display:block;&quot;'</code> (<a href="https://github.com/yihui/knitr/issues/297">#297</a>) (thanks, Taiyun Wei and Alan Severini)</p>
 </li>
 <li>
 <p>the hook function to create animations in HTML output is exported now as <code>hook_ffmpeg_html()</code></p>
@@ -3834,22 +3835,22 @@ plot(cars)
 <p>added two functions <code>hook_r2swf()</code> and <code>hook_scianimator()</code> which can be set as the package option <code>opts_knit$get('animation.fun')</code> and create animations via the <strong>R2SWF</strong> package or the <strong>SciAnimator</strong> library (see <code>animation::saveHTML</code>) (thanks, Taiyun Wei)</p>
 </li>
 <li>
-<p>a new function <code>image_uri()</code> to create data URIs for image files; we can set <code>opts_knit$set(upload.fun = image_uri)</code> so that images are embedded in the HTML output as data URIs (hence the HTML page does not depend on external images) (#298, <a href="https://github.com/yihui/knitr/issues/324">#324</a>) (thanks, Wush Wu)</p>
+<p>a new function <code>image_uri()</code> to create data URIs for image files; we can set <code>opts_knit$set(upload.fun = image_uri)</code> so that images are embedded in the HTML output as data URIs (hence the HTML page does not depend on external images) (<a href="https://github.com/yihui/knitr/issues/298">#298</a>, <a href="https://github.com/yihui/knitr/issues/324">#324</a>) (thanks, Wush Wu)</p>
 </li>
 <li>
-<p>added a new object <code>opts_template</code> which can be used to set a group of chunk options and they can be referenced later with the new chunk option <code>opts.label</code>; see <code>?opts_template</code> for examples; this makes it easy to reuse groups of frequently used chunk options (#316, <a href="https://github.com/yihui/knitr/issues/320">#320</a>) (thanks, Cassio Pereira)</p>
+<p>added a new object <code>opts_template</code> which can be used to set a group of chunk options and they can be referenced later with the new chunk option <code>opts.label</code>; see <code>?opts_template</code> for examples; this makes it easy to reuse groups of frequently used chunk options (<a href="https://github.com/yihui/knitr/issues/316">#316</a>, <a href="https://github.com/yihui/knitr/issues/320">#320</a>) (thanks, Cassio Pereira)</p>
 </li>
 <li>
-<p>a new function <code>dep_prev()</code> to build chunk cache dependencies so that all later chunks will depend on previous chunks; if any of a previous chunk is updated, the cache of all chunks after it will be updated as well (#285) (thanks, <a href="https://github.com/muelleki">@muelleki</a>)</p>
+<p>a new function <code>dep_prev()</code> to build chunk cache dependencies so that all later chunks will depend on previous chunks; if any of a previous chunk is updated, the cache of all chunks after it will be updated as well (<a href="https://github.com/yihui/knitr/issues/285">#285</a>) (thanks, <a href="https://github.com/muelleki">@muelleki</a>)</p>
 </li>
 <li>
-<p>a new chunk hook function <code>hook_optipng()</code> to optimize PNG images using <code>optipng</code> (#272) (thanks, Winston Chang)</p>
+<p>a new chunk hook function <code>hook_optipng()</code> to optimize PNG images using <code>optipng</code> (<a href="https://github.com/yihui/knitr/issues/272">#272</a>) (thanks, Winston Chang)</p>
 </li>
 <li>
 <p>added a new output hook named <code>document</code> in <code>knit_hooks</code> (see <code>knit_hooks$get('document')</code>); this hook function is used to process the output of the whole document; it can be useful when we want to post-process the whole output before writing it to the output file</p>
 </li>
 <li>
-<p>a new function <code>rst2pdf()</code> which uses the program <code>rst2pdf</code> to convert reST documents to PDF; it is also supported by <code>knit2pdf()</code> when <code>compiler='rst2pdf'</code> (#300) (thanks, Alex Zvoleff)</p>
+<p>a new function <code>rst2pdf()</code> which uses the program <code>rst2pdf</code> to convert reST documents to PDF; it is also supported by <code>knit2pdf()</code> when <code>compiler='rst2pdf'</code> (<a href="https://github.com/yihui/knitr/issues/300">#300</a>) (thanks, Alex Zvoleff)</p>
 </li>
 </ul>
 <h3 id="sec:bug-fixes_56" class="unnumbered">BUG FIXES</h3>
@@ -3867,7 +3868,7 @@ plot(cars)
 <p>fixed <a href="https://github.com/yihui/knitr/issues/302">#302</a>: when there are multiple instances of <code>\documentclass</code> in the source document, <strong>knitr</strong> will be unable to insert the LaTeX preamble</p>
 </li>
 <li>
-<p>fixed <a href="https://github.com/yihui/knitr/issues/308">#308</a>: if <code>options('OutDec')</code> was set to a character other than <code>.</code>, the LaTeX code can be malformed (#308) (thanks, Cassio Pereira)</p>
+<p>fixed <a href="https://github.com/yihui/knitr/issues/308">#308</a>: if <code>options('OutDec')</code> was set to a character other than <code>.</code>, the LaTeX code can be malformed (<a href="https://github.com/yihui/knitr/issues/308">#308</a>) (thanks, Cassio Pereira)</p>
 </li>
 <li>
 <p><code>opts_chunk$set()</code> in a child document was only working in that child document, but was expected to change chunk options globally; now it works everywhere, and will affect all chunks after this setting, no matter where <code>opts_chunk$set()</code> is (thanks, Guy Lebanon) (<a href="http://bit.ly/MexHXd">http://bit.ly/MexHXd</a>)</p>
@@ -3882,13 +3883,13 @@ plot(cars)
 <h3 id="sec:major-changes_45" class="unnumbered">MAJOR CHANGES</h3>
 <ul>
 <li>
-<p>if the chunk label contains non-alphanumeric characters (except <code>-</code> and <code>_</code>), these characters will be replaced by <code>_</code> in the figure filenames (if there are any) and a warning will be issued; this is to guarantee the figure filenames are valid to LaTeX (#321) (thanks, (Roman Lustrik)</p>
+<p>if the chunk label contains non-alphanumeric characters (except <code>-</code> and <code>_</code>), these characters will be replaced by <code>_</code> in the figure filenames (if there are any) and a warning will be issued; this is to guarantee the figure filenames are valid to LaTeX (<a href="https://github.com/yihui/knitr/issues/321">#321</a>) (thanks, (Roman Lustrik)</p>
 </li>
 <li>
 <p>the <a href="https://cran.r-project.org/package=highlight"><strong>highlight</strong></a> package is not enabled by default; use <code>opts_knit$set(use.highlight = TRUE)</code> to enable it</p>
 </li>
 <li>
-<p>the default LaTeX output will put messages, warnings and errors in special LaTeX environments: errors are red, warnings are magenta, and messages are italic; in previous versions, they were in the <code>verbatim</code> environment (#264) (thanks, <a href="https://github.com/muelleki">@muelleki</a>)</p>
+<p>the default LaTeX output will put messages, warnings and errors in special LaTeX environments: errors are red, warnings are magenta, and messages are italic; in previous versions, they were in the <code>verbatim</code> environment (<a href="https://github.com/yihui/knitr/issues/264">#264</a>) (thanks, <a href="https://github.com/muelleki">@muelleki</a>)</p>
 </li>
 <li>
 <p>unnamed chunks are named sequentially in a single call of <code>knit()</code> according to the order of their appearance no matter where they are, e.g. if there are two unnamed chunks in two child documents respectively, they will be named <code>unnamed-chunk-1</code> and <code>unnamed-chunk-2</code>; in previous versions, both will be named as <code>unnamed-chunk-1</code> which can cause clashes of cache and figure files</p>
@@ -3903,10 +3904,10 @@ plot(cars)
 <h3 id="sec:minor-changes_39" class="unnumbered">MINOR CHANGES</h3>
 <ul>
 <li>
-<p>the LaTeX environment <code>kframe</code> was updated so that it can be used in other environments such as <code>center</code> or <code>tabular</code> (#283) (thanks, <a href="https://github.com/muelleki">@muelleki</a>)</p>
+<p>the LaTeX environment <code>kframe</code> was updated so that it can be used in other environments such as <code>center</code> or <code>tabular</code> (<a href="https://github.com/yihui/knitr/issues/283">#283</a>) (thanks, <a href="https://github.com/muelleki">@muelleki</a>)</p>
 </li>
 <li>
-<p>the OpenCPU demo is more robust to double quotes in the text (#271); see <a href="http://public.opencpu.org/userapps/opencpu/knitr/">http://public.opencpu.org/userapps/opencpu/knitr/</a></p>
+<p>the OpenCPU demo is more robust to double quotes in the text (<a href="https://github.com/yihui/knitr/issues/271">#271</a>); see <a href="http://public.opencpu.org/userapps/opencpu/knitr/">http://public.opencpu.org/userapps/opencpu/knitr/</a></p>
 </li>
 <li>
 <p>for Sweave output, the results will not be put inside the Schunk environment when <code>results='asis'</code></p>
@@ -3918,13 +3919,13 @@ plot(cars)
 <p><code>stitch()</code> templates no longer use default title and author names; if the user did not set them in the R script (as meta comments <code># title:</code> and <code># author:</code>), there will not be titles or authors in the output</p>
 </li>
 <li>
-<p><strong>knitr</strong> will no longer use scientific notations for integers in inline R code output; sci notation only applies to double-precision numbers (#296) (thanks, <a href="https://github.com/knokknok">@knokknok</a>)</p>
+<p><strong>knitr</strong> will no longer use scientific notations for integers in inline R code output; sci notation only applies to double-precision numbers (<a href="https://github.com/yihui/knitr/issues/296">#296</a>) (thanks, <a href="https://github.com/knokknok">@knokknok</a>)</p>
 </li>
 <li>
-<p><code>options()</code> set in the main document will apply to its child documents (e.g. <code>options('digits')</code>) (#306) (thanks, Cassio Pereira)</p>
+<p><code>options()</code> set in the main document will apply to its child documents (e.g. <code>options('digits')</code>) (<a href="https://github.com/yihui/knitr/issues/306">#306</a>) (thanks, Cassio Pereira)</p>
 </li>
 <li>
-<p>the <code>...</code> argument in <code>knit2html()</code> is passed to <code>markdown::markdownToHTML()</code> instead of <code>knit()</code>; this allows us to pass more arguments to control the rendering of HTML output, e.g. <code>knit2html(input, fragment.only = TRUE)</code> (#333) (thanks, <a href="https://github.com/Bart6114">@Bart6114</a>)</p>
+<p>the <code>...</code> argument in <code>knit2html()</code> is passed to <code>markdown::markdownToHTML()</code> instead of <code>knit()</code>; this allows us to pass more arguments to control the rendering of HTML output, e.g. <code>knit2html(input, fragment.only = TRUE)</code> (<a href="https://github.com/yihui/knitr/issues/333">#333</a>) (thanks, <a href="https://github.com/Bart6114">@Bart6114</a>)</p>
 </li>
 </ul>
 <h3 id="sec:documentation_5" class="unnumbered">DOCUMENTATION</h3>
@@ -3938,7 +3939,7 @@ plot(cars)
 </ul>
 <h3 id="sec:new-features_53" class="unnumbered">NEW FEATURES</h3>
 <ul>
-<li><code>spin()</code> gained a new argument <code>report</code> for Rnw/Rtex/Rmd documents to be compiled to PDF/HTML respectively (#287) (thanks, kohske takahashi)</li>
+<li><code>spin()</code> gained a new argument <code>report</code> for Rnw/Rtex/Rmd documents to be compiled to PDF/HTML respectively (<a href="https://github.com/yihui/knitr/issues/287">#287</a>) (thanks, kohske takahashi)</li>
 </ul>
 <h3 id="sec:bug-fixes_57" class="unnumbered">BUG FIXES</h3>
 <ul>
@@ -3946,13 +3947,13 @@ plot(cars)
 <p><code>stitch()</code> and <code>spin()</code> should use <code>parent.frame()</code> to evaluate code by default; in 0.6, the default parent frame for the inner <code>knit()</code> was a wrong environment to use (thanks, Michael Nelson)</p>
 </li>
 <li>
-<p>use <code>unnamed-chunk-i</code> as the label when chunk <code>label == ''</code> (#280) (thanks, Josh Paulson)</p>
+<p>use <code>unnamed-chunk-i</code> as the label when chunk <code>label == ''</code> (<a href="https://github.com/yihui/knitr/issues/280">#280</a>) (thanks, Josh Paulson)</p>
 </li>
 <li>
 <p>fixed <a href="https://github.com/yihui/knitr/issues/279">#279</a> and <a href="https://github.com/yihui/knitr/issues/281">#281</a>, both of which are about concordance</p>
 </li>
 <li>
-<p><code>'\\maxwidth'</code> does not apply to LaTeX/PDF animations, so the default value of <code>out.width</code> for animations in LaTeX is still <code>NULL</code>; you will have to set <code>out.width</code> manually for a reasonable width (#282) (thanks, Ramnath Vaidyanathan)</p>
+<p><code>'\\maxwidth'</code> does not apply to LaTeX/PDF animations, so the default value of <code>out.width</code> for animations in LaTeX is still <code>NULL</code>; you will have to set <code>out.width</code> manually for a reasonable width (<a href="https://github.com/yihui/knitr/issues/282">#282</a>) (thanks, Ramnath Vaidyanathan)</p>
 </li>
 </ul>
 <h3 id="sec:misc_2" class="unnumbered">MISC</h3>
@@ -3963,49 +3964,49 @@ plot(cars)
 <h3 id="sec:new-features_54" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
-<p>for LaTeX output, the chunk option <code>out.width</code> defaults to <code>'\\maxwidth'</code> now; see <a href="https://yihui.org/knitr/demo/framed/">https://yihui.org/knitr/demo/framed/</a> for its definition; this makes sure the figures do not overflow the page margins (#221)</p>
+<p>for LaTeX output, the chunk option <code>out.width</code> defaults to <code>'\\maxwidth'</code> now; see <a href="https://yihui.org/knitr/demo/framed/">https://yihui.org/knitr/demo/framed/</a> for its definition; this makes sure the figures do not overflow the page margins (<a href="https://github.com/yihui/knitr/issues/221">#221</a>)</p>
 </li>
 <li>
 <p>the chunk option <code>size</code> now defines the font size of the whole chunk instead of only some special characters in it, so that the old trick of redefining the <code>knitrout</code> environment for different font sizes is no longer necessary; see updates in the beamer examples: <a href="https://yihui.org/knitr/demo/beamer/">https://yihui.org/knitr/demo/beamer/</a> (thanks, Baptiste Auguie)</p>
 </li>
 <li>
-<p>added a new chunk option <code>dev.args</code> which can be used to pass more arguments to the graphical device (#254) (thanks, knokknok)</p>
+<p>added a new chunk option <code>dev.args</code> which can be used to pass more arguments to the graphical device (<a href="https://github.com/yihui/knitr/issues/254">#254</a>) (thanks, knokknok)</p>
 </li>
 <li>
-<p>warnings, messages and errors will be wrapped according to <code>options('width')</code>; this will make long messages stay within the page margin when the width option is appropriately small (#259) (thanks, <a href="https://github.com/muelleki">@muelleki</a>)</p>
+<p>warnings, messages and errors will be wrapped according to <code>options('width')</code>; this will make long messages stay within the page margin when the width option is appropriately small (<a href="https://github.com/yihui/knitr/issues/259">#259</a>) (thanks, <a href="https://github.com/muelleki">@muelleki</a>)</p>
 </li>
 <li>
-<p>added a new function <code>spin()</code> to turn a specially formatted R script to a report; see <a href="https://yihui.org/knitr/demo/stitch/">https://yihui.org/knitr/demo/stitch/</a> (#223) (thanks, Rich FitzJohn)</p>
+<p>added a new function <code>spin()</code> to turn a specially formatted R script to a report; see <a href="https://yihui.org/knitr/demo/stitch/">https://yihui.org/knitr/demo/stitch/</a> (<a href="https://github.com/yihui/knitr/issues/223">#223</a>) (thanks, Rich FitzJohn)</p>
 </li>
 <li>
-<p><code>knit()</code> gained a new argument <code>envir</code> to specify the environment in which to evaluate code chunks (by default in the parent frame); this will allow users to run code in a specified environment so that the global environment will not be cluttered by objects in chunks, which can hopefully make the documents more reproducible (#228)</p>
+<p><code>knit()</code> gained a new argument <code>envir</code> to specify the environment in which to evaluate code chunks (by default in the parent frame); this will allow users to run code in a specified environment so that the global environment will not be cluttered by objects in chunks, which can hopefully make the documents more reproducible (<a href="https://github.com/yihui/knitr/issues/228">#228</a>)</p>
 </li>
 <li>
-<p>added a new component <code>inline.comment</code> in <code>knit_patterns</code> to strip off tokens of inline R code from inline comments, e.g. a comment line like <code>% x is \Sexpr{x}</code> will become <code>% x is x</code> (#110); this will only happen to LaTeX documents because HTML does not have inline comments (it only has block comments <code>&lt;!-- --&gt;</code>)</p>
+<p>added a new component <code>inline.comment</code> in <code>knit_patterns</code> to strip off tokens of inline R code from inline comments, e.g. a comment line like <code>% x is \Sexpr{x}</code> will become <code>% x is x</code> (<a href="https://github.com/yihui/knitr/issues/110">#110</a>); this will only happen to LaTeX documents because HTML does not have inline comments (it only has block comments <code>&lt;!-- --&gt;</code>)</p>
 </li>
 <li>
-<p>concordance works for child documents as well now (try RStudio), although it is not very precise (#225); note when concordance is enabled, the results from child documents will be written into the parent output instead of individual tex files; also note you have to set <code>opts_knit$set(self.contained = FALSE)</code> for concordance to work better</p>
+<p>concordance works for child documents as well now (try RStudio), although it is not very precise (<a href="https://github.com/yihui/knitr/issues/225">#225</a>); note when concordance is enabled, the results from child documents will be written into the parent output instead of individual tex files; also note you have to set <code>opts_knit$set(self.contained = FALSE)</code> for concordance to work better</p>
 </li>
 <li>
 <p>added an OpenCPU app so that we can run knitr in the cloud now; see <code>system.file('opencpu', 'apps', 'index.html', package = 'knitr')</code> or <a href="http://public.opencpu.org/apps/knitr">http://public.opencpu.org/apps/knitr</a> (thanks, Jeroen Ooms)</p>
 </li>
 <li>
-<p>all messages, errors and warnings during evaluation are recorded in an internal object <code>knit_log</code> (use <code>knitr:::knit_log$get()</code> to get all messages) and they are printed if the package option <code>verbose</code> is <code>TRUE</code> (i.e. <code>opts_knit$get('verbose')</code>) (#224)</p>
+<p>all messages, errors and warnings during evaluation are recorded in an internal object <code>knit_log</code> (use <code>knitr:::knit_log$get()</code> to get all messages) and they are printed if the package option <code>verbose</code> is <code>TRUE</code> (i.e. <code>opts_knit$get('verbose')</code>) (<a href="https://github.com/yihui/knitr/issues/224">#224</a>)</p>
 </li>
 <li>
-<p>child documents are also supported in other document formats besides LaTeX, e.g. Markdown and HTML, etc; please use the chunk option <code>child</code> to specify the child documents; see <code>system.file('examples', 'child', 'knitr-main.Rmd', package = 'knitr')</code> for an example in markdown (#268) (thanks, <a href="https://github.com/martinaryee">@martinaryee</a>)</p>
+<p>child documents are also supported in other document formats besides LaTeX, e.g. Markdown and HTML, etc; please use the chunk option <code>child</code> to specify the child documents; see <code>system.file('examples', 'child', 'knitr-main.Rmd', package = 'knitr')</code> for an example in markdown (<a href="https://github.com/yihui/knitr/issues/268">#268</a>) (thanks, <a href="https://github.com/martinaryee">@martinaryee</a>)</p>
 </li>
 </ul>
 <h3 id="sec:bug-fixes_58" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
-<p>the templates for <code>stitch()</code> used <code>results=hide</code> which should really be <code>results='hide'</code> (#219) (thanks, <a href="https://github.com/r2d3">@r2d3</a>)</p>
+<p>the templates for <code>stitch()</code> used <code>results=hide</code> which should really be <code>results='hide'</code> (<a href="https://github.com/yihui/knitr/issues/219">#219</a>) (thanks, <a href="https://github.com/r2d3">@r2d3</a>)</p>
 </li>
 <li>
-<p>format numbers with the reST syntax instead of HTML (#218) (thanks, Jeffrey Arnold)</p>
+<p>format numbers with the reST syntax instead of HTML (<a href="https://github.com/yihui/knitr/issues/218">#218</a>) (thanks, Jeffrey Arnold)</p>
 </li>
 <li>
-<p><code>hook_pdfcrop()</code> should work better under Windows now (#209) (thanks <a href="https://github.com/DCCKC">@DCCKC</a> and <a href="https://github.com/r2d3">@r2d3</a>)</p>
+<p><code>hook_pdfcrop()</code> should work better under Windows now (<a href="https://github.com/yihui/knitr/issues/209">#209</a>) (thanks <a href="https://github.com/DCCKC">@DCCKC</a> and <a href="https://github.com/r2d3">@r2d3</a>)</p>
 </li>
 <li>
 <p>tikz compilation fails on Windows network drives</p>
@@ -4017,16 +4018,16 @@ plot(cars)
 <p>child documents can fail when they are in different subdirectories (thanks, Christoph J)</p>
 </li>
 <li>
-<p><code>set_parent()</code> failed to work in the last version due to a bug when inserting the parent preamble into the child document (#240)</p>
+<p><code>set_parent()</code> failed to work in the last version due to a bug when inserting the parent preamble into the child document (<a href="https://github.com/yihui/knitr/issues/240">#240</a>)</p>
 </li>
 <li>
-<p>better preserve plot sizes in interactive sessions (#258)</p>
+<p>better preserve plot sizes in interactive sessions (<a href="https://github.com/yihui/knitr/issues/258">#258</a>)</p>
 </li>
 </ul>
 <h3 id="sec:major-changes_47" class="unnumbered">MAJOR CHANGES</h3>
 <ul>
 <li>
-<p><code>.Random.seed</code> is not cached any more because of weird problems due to lazy loading (#248 and <a href="https://github.com/yihui/knitr/issues/253">#253</a>); users should use <code>set.seed()</code> to make sure reproducibility of random simulations; the chunk output is cached in a <code>.RData</code> database instead of a lazy-load database to avoid problems in <a href="https://github.com/yihui/knitr/issues/253">#253</a></p>
+<p><code>.Random.seed</code> is not cached any more because of weird problems due to lazy loading (<a href="https://github.com/yihui/knitr/issues/248">#248</a> and <a href="https://github.com/yihui/knitr/issues/253">#253</a>); users should use <code>set.seed()</code> to make sure reproducibility of random simulations; the chunk output is cached in a <code>.RData</code> database instead of a lazy-load database to avoid problems in <a href="https://github.com/yihui/knitr/issues/253">#253</a></p>
 </li>
 <li>
 <p>the default graphics device is set to the null PDF device before evaluating code chunks, i.e. <code>pdf(file = NULL)</code>, so that neither <code>Rplots.pdf</code> nor plot windows will be opened during knitting</p>
@@ -4038,13 +4039,13 @@ plot(cars)
 <p><strong>knitr</strong> will show a message when a chunk is empty; this helps users who do not actually want a chunk to be empty realize the problem like <a href="https://github.com/yihui/knitr/issues/229">#229</a>; in the past, knitr just silently returns an empty string from such chunks</p>
 </li>
 <li>
-<p><strong>knitr</strong> will show a message when the cache is loaded and the option <code>opts_knit$get('verbose')</code> is <code>TRUE</code> (#249) (thanks, Carl Boettiger)</p>
+<p><strong>knitr</strong> will show a message when the cache is loaded and the option <code>opts_knit$get('verbose')</code> is <code>TRUE</code> (<a href="https://github.com/yihui/knitr/issues/249">#249</a>) (thanks, Carl Boettiger)</p>
 </li>
 <li>
 <p>the filename extensions <code>Snw</code> and <code>Stex</code> are also supported (<code>foo.Snw</code>/<code>foo.Stex</code> produces <code>foo.tex</code>)</p>
 </li>
 <li>
-<p>the HTML output hooks are changed according to the suggestion of Barry Rowlingson (#250) and the default CSS is also slightly modified</p>
+<p>the HTML output hooks are changed according to the suggestion of Barry Rowlingson (<a href="https://github.com/yihui/knitr/issues/250">#250</a>) and the default CSS is also slightly modified</p>
 </li>
 <li>
 <p><code>knit()</code> will no longer try to remove the file <code>NA</code> generated by <code>pdf(file = NULL)</code> before R 2.14.2 (which was a bug and fixed later); you should update R if you see this file</p>
@@ -4067,10 +4068,10 @@ plot(cars)
 <p>RStudio has added full support to <strong>knitr</strong>: we can knit HTML and Markdown documents easily now, and markdown output will be automatically converted to an HTML preview page just like TeX to PDF</p>
 </li>
 <li>
-<p>if the pattern list is not set in advance, <strong>knitr</strong> will try to detect the syntax automatically by matching all built-in pattern lists against the input document, e.g. if the input contains <code>&lt;&lt;&gt;&gt;=</code>, the Rnw syntax will be used, and if <code>```{r}</code> is detected, the markdown syntax will be used; this feature enables us to use different sets of syntax freely, e.g. we can use Sweave syntax in markdown files and knitr will be able to recognize it (#189)</p>
+<p>if the pattern list is not set in advance, <strong>knitr</strong> will try to detect the syntax automatically by matching all built-in pattern lists against the input document, e.g. if the input contains <code>&lt;&lt;&gt;&gt;=</code>, the Rnw syntax will be used, and if <code>```{r}</code> is detected, the markdown syntax will be used; this feature enables us to use different sets of syntax freely, e.g. we can use Sweave syntax in markdown files and knitr will be able to recognize it (<a href="https://github.com/yihui/knitr/issues/189">#189</a>)</p>
 </li>
 <li>
-<p>new filename extensions with a prefix <code>R</code> or <code>r</code> are introduced: <code>*.Rhtml</code>, <code>*.Rhtm</code>, <code>*.Rtex</code>, <code>*.Rmd</code> and <code>*.Rmarkdown</code> will be recognized as source documents like <code>*.Rnw</code>, and the output filename will be automatically determined by removing the <code>R</code> prefix, e.g. <code>foo.Rmd</code> produces <code>foo.md</code> by default; the old clumsy naming convention <code>foo_knit_.md</code> is still preserved but not recommended any more (#187)</p>
+<p>new filename extensions with a prefix <code>R</code> or <code>r</code> are introduced: <code>*.Rhtml</code>, <code>*.Rhtm</code>, <code>*.Rtex</code>, <code>*.Rmd</code> and <code>*.Rmarkdown</code> will be recognized as source documents like <code>*.Rnw</code>, and the output filename will be automatically determined by removing the <code>R</code> prefix, e.g. <code>foo.Rmd</code> produces <code>foo.md</code> by default; the old clumsy naming convention <code>foo_knit_.md</code> is still preserved but not recommended any more (<a href="https://github.com/yihui/knitr/issues/187">#187</a>)</p>
 </li>
 <li>
 <p>new function <code>knit2html()</code> to knit an Rmd file (R with markdown) and convert to HTML in one step using the <strong>markdown</strong> package</p>
@@ -4079,13 +4080,13 @@ plot(cars)
 <p>new functions <code>pat_rst()</code> and <code>render_rst()</code> to support reStructuredText; use <code>.. {r label, options}</code> and <code>.. ..</code> to write R code chunks; see <a href="https://github.com/yihui/knitr/tree/master/inst/examples/knitr-minimal.Rrst">https://github.com/yihui/knitr/tree/master/inst/examples/knitr-minimal.Rrst</a> (thanks, Jeffrey Arnold and Ramnath Vaidyanathan)</p>
 </li>
 <li>
-<p>new package option <code>self.contained</code> which decides whether to write style definitions (highlighting) in external files or put them in the output document; the highlighting definitions in LaTeX output is often too long, so <code>opts_knit$set(self.contained = FALSE)</code> can help in this case (#176) (thanks, Ramnath Vaidyanathan)</p>
+<p>new package option <code>self.contained</code> which decides whether to write style definitions (highlighting) in external files or put them in the output document; the highlighting definitions in LaTeX output is often too long, so <code>opts_knit$set(self.contained = FALSE)</code> can help in this case (<a href="https://github.com/yihui/knitr/issues/176">#176</a>) (thanks, Ramnath Vaidyanathan)</p>
 </li>
 <li>
 <p>new package option <code>filter.chunk.end</code> which decides if the <code>chunk.end</code> pattern really means <code>chunk.end</code>; see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a> (thanks, Joe Cheng)</p>
 </li>
 <li>
-<p>syntax highlighting themes are also available to HTML output now; the usage is the same as in LaTeX (#179) (thanks, Ramnath Vaidyanathan)</p>
+<p>syntax highlighting themes are also available to HTML output now; the usage is the same as in LaTeX (<a href="https://github.com/yihui/knitr/issues/179">#179</a>) (thanks, Ramnath Vaidyanathan)</p>
 </li>
 <li>
 <p>the chunk option <code>fig.cap</code> is also used in markdown output now</p>
@@ -4094,25 +4095,25 @@ plot(cars)
 <p>the random seed <code>.Random.seed</code> is also cached for the sake of reproducibility in random simulations</p>
 </li>
 <li>
-<p>the function call <code>read_chunk()</code> will be evaluated when tangling R code via <code>purl()</code> (#175) (thanks, Carl Boettiger)</p>
+<p>the function call <code>read_chunk()</code> will be evaluated when tangling R code via <code>purl()</code> (<a href="https://github.com/yihui/knitr/issues/175">#175</a>) (thanks, Carl Boettiger)</p>
 </li>
 <li>
 <p>the default LaTeX output will use the <strong>upquote</strong> package if it exists so that single quotes are straight in the output (thanks, Mathematical Coffee <a href="http://bit.ly/IKjluw">http://bit.ly/IKjluw</a>)</p>
 </li>
 <li>
-<p>the chunk option <code>engine</code> is back but it is used to run code from other languages instead of just ignoring the code in chunks which have <code>engine != 'R'</code>; currently this option is still in rough edges and only supports python and awk; other languages may be added in future versions, but users can also do it by themselves by <code>knit_engines$set(language = function(options) {...})</code>; see an example at <code>system.file('examples', 'knitr-lang.Rmd')</code> (#201)</p>
+<p>the chunk option <code>engine</code> is back but it is used to run code from other languages instead of just ignoring the code in chunks which have <code>engine != 'R'</code>; currently this option is still in rough edges and only supports python and awk; other languages may be added in future versions, but users can also do it by themselves by <code>knit_engines$set(language = function(options) {...})</code>; see an example at <code>system.file('examples', 'knitr-lang.Rmd')</code> (<a href="https://github.com/yihui/knitr/issues/201">#201</a>)</p>
 </li>
 <li>
-<p>new function <code>write_bib()</code> to write Bibtex citations for R packages; see the main manual for a sample usage (#13)</p>
+<p>new function <code>write_bib()</code> to write Bibtex citations for R packages; see the main manual for a sample usage (<a href="https://github.com/yihui/knitr/issues/13">#13</a>)</p>
 </li>
 <li>
-<p><code>hook_pdfcrop()</code> also supports cropping other image formats like PNG or JPEG through ImageMagick (<code>convert -trim</code>) (#203) (thanks, <a href="https://github.com/r2d3">@r2d3</a>)</p>
+<p><code>hook_pdfcrop()</code> also supports cropping other image formats like PNG or JPEG through ImageMagick (<code>convert -trim</code>) (<a href="https://github.com/yihui/knitr/issues/203">#203</a>) (thanks, <a href="https://github.com/r2d3">@r2d3</a>)</p>
 </li>
 </ul>
 <h3 id="sec:major-changes_48" class="unnumbered">MAJOR CHANGES</h3>
 <ul>
 <li>
-<p><strong>knitr</strong> will completely stop when duplicated labels are found and the corresponding chunks are non-empty; in the previous version, only a warning is given and R code in later chunks will override previous chunks (#185) (thanks, Randall Pruim)</p>
+<p><strong>knitr</strong> will completely stop when duplicated labels are found and the corresponding chunks are non-empty; in the previous version, only a warning is given and R code in later chunks will override previous chunks (<a href="https://github.com/yihui/knitr/issues/185">#185</a>) (thanks, Randall Pruim)</p>
 </li>
 <li>
 <p>the default graphical device for HTML and markdown output is <code>png()</code> now to avoid the possible unexpected consequence that PDF plots are included in an HTML page which will not work normally in browsers</p>
@@ -4136,10 +4137,10 @@ plot(cars)
 <h3 id="sec:bug-fixes_59" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
-<p>the compilation of tikz graphics can hang up when there are TeX errors in the tikz file; now we use <code>\nonstopmode</code> to avoid hiccup (#188)</p>
+<p>the compilation of tikz graphics can hang up when there are TeX errors in the tikz file; now we use <code>\nonstopmode</code> to avoid hiccup (<a href="https://github.com/yihui/knitr/issues/188">#188</a>)</p>
 </li>
 <li>
-<p>multiple devices per chunk was buggy (#181)</p>
+<p>multiple devices per chunk was buggy (<a href="https://github.com/yihui/knitr/issues/181">#181</a>)</p>
 </li>
 <li>
 <p>S4 objects will be printed by <code>show()</code> instead of <code>print()</code>; this is a bug of the <strong>evaluate</strong> package, which has been fixed (please update it to be &gt; 0.4.2)</p>
@@ -4148,7 +4149,7 @@ plot(cars)
 <h3 id="sec:misc_3" class="unnumbered">MISC</h3>
 <ul>
 <li>
-<p>it is recommended to use <code>opts_chunk$set()</code> to set global chunk options now instead of <code>\SweaveOpts{}</code>; all documentation has been updated (#216)</p>
+<p>it is recommended to use <code>opts_chunk$set()</code> to set global chunk options now instead of <code>\SweaveOpts{}</code>; all documentation has been updated (<a href="https://github.com/yihui/knitr/issues/216">#216</a>)</p>
 </li>
 <li>
 <p>number of downloads (<a href="https://github.com/yihui/knitr/downloads">https://github.com/yihui/knitr/downloads</a>) of <strong>knitr</strong> documentation before I removed and updated them on GitHub: c(main = ?, graphics = 275+)</p>
@@ -4158,49 +4159,49 @@ plot(cars)
 <h3 id="sec:new-features_56" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
-<p>Sweave concordance was finally implemented: when <code>opts_knit$get('concordance')</code> is <code>TRUE</code>, <strong>knitr</strong> will write a file named <code>'input-concordance.tex'</code> which contains the mapping between input Rnw and output tex line numbers; this feature is mainly for (but not limited to) RStudio to provide better error navigations: you can jump from the TeX error message to the Rnw source directly to know where the error comes from (the line number of the source of the error may not be accurate but should be in the ballpark) (#133) (thanks, JJ Allaire and Joe Cheng)</p>
+<p>Sweave concordance was finally implemented: when <code>opts_knit$get('concordance')</code> is <code>TRUE</code>, <strong>knitr</strong> will write a file named <code>'input-concordance.tex'</code> which contains the mapping between input Rnw and output tex line numbers; this feature is mainly for (but not limited to) RStudio to provide better error navigations: you can jump from the TeX error message to the Rnw source directly to know where the error comes from (the line number of the source of the error may not be accurate but should be in the ballpark) (<a href="https://github.com/yihui/knitr/issues/133">#133</a>) (thanks, JJ Allaire and Joe Cheng)</p>
 </li>
 <li>
-<p>if output hooks have been set before calling <code>knit()</code>, they will be respected, i.e. <strong>knitr</strong> will no longer override them by default hooks; you need to make sure <em>all</em> output hooks are set appropriately, e.g. you can start by <code>render_latex()</code> and change some individual hooks later (#165) (thanks, Andrew Redd)</p>
+<p>if output hooks have been set before calling <code>knit()</code>, they will be respected, i.e. <strong>knitr</strong> will no longer override them by default hooks; you need to make sure <em>all</em> output hooks are set appropriately, e.g. you can start by <code>render_latex()</code> and change some individual hooks later (<a href="https://github.com/yihui/knitr/issues/165">#165</a>) (thanks, Andrew Redd)</p>
 </li>
 <li>
-<p>newly created objects in the global environment will also be cached if cache is turned on (<code>cache=TRUE</code>); in previous versions <strong>knitr</strong> is unaware of objects created in <code>globalenv()</code>, e.g. <code>setGeneric()</code> creates S4 generic functions in <code>globalenv()</code> and <strong>knitr</strong> was unable to capture them (#138) (thanks, syoh)</p>
+<p>newly created objects in the global environment will also be cached if cache is turned on (<code>cache=TRUE</code>); in previous versions <strong>knitr</strong> is unaware of objects created in <code>globalenv()</code>, e.g. <code>setGeneric()</code> creates S4 generic functions in <code>globalenv()</code> and <strong>knitr</strong> was unable to capture them (<a href="https://github.com/yihui/knitr/issues/138">#138</a>) (thanks, syoh)</p>
 </li>
 <li>
-<p>chunk options <code>dev</code>, <code>fig.ext</code> and <code>dpi</code> can be vectors now; this allows one to save a plot to multiple formats, e.g. <code>&lt;&lt;foo, dev=c('pdf', 'png')&gt;&gt;=</code> creates two files for the same plot: <code>foo.pdf</code> and <code>foo.png</code> (#168) (thanks, MYaseen208)</p>
+<p>chunk options <code>dev</code>, <code>fig.ext</code> and <code>dpi</code> can be vectors now; this allows one to save a plot to multiple formats, e.g. <code>&lt;&lt;foo, dev=c('pdf', 'png')&gt;&gt;=</code> creates two files for the same plot: <code>foo.pdf</code> and <code>foo.png</code> (<a href="https://github.com/yihui/knitr/issues/168">#168</a>) (thanks, MYaseen208)</p>
 </li>
 <li>
-<p>an experimental feature for animations created by FFmpeg in HTML/markdown output when <code>fig.show='animate'</code> (#166) (thanks, gabysbrain)</p>
+<p>an experimental feature for animations created by FFmpeg in HTML/markdown output when <code>fig.show='animate'</code> (<a href="https://github.com/yihui/knitr/issues/166">#166</a>) (thanks, gabysbrain)</p>
 </li>
 <li>
-<p>the chunk option <code>fig.cap</code> supports multiple figure captions in LaTeX now, e.g. if a chunk produces two plots, we can use <code>fig.cap = c('first caption', 'second caption')</code> to assign two different captions to them respectively when <code>fig.show = 'asis'</code> (#155) (thanks, Jonathan Kennel)</p>
+<p>the chunk option <code>fig.cap</code> supports multiple figure captions in LaTeX now, e.g. if a chunk produces two plots, we can use <code>fig.cap = c('first caption', 'second caption')</code> to assign two different captions to them respectively when <code>fig.show = 'asis'</code> (<a href="https://github.com/yihui/knitr/issues/155">#155</a>) (thanks, Jonathan Kennel)</p>
 </li>
 <li>
-<p>new package option <code>opts_knit$get('upload.fun')</code> which is a function that takes a plot file to upload to a certain host and returns the link to the image; by default it is <code>imgur_upload()</code>, and you can use your own function to upload images to other hosts like Flickr (#159) (thanks, Carl Boettiger)</p>
+<p>new package option <code>opts_knit$get('upload.fun')</code> which is a function that takes a plot file to upload to a certain host and returns the link to the image; by default it is <code>imgur_upload()</code>, and you can use your own function to upload images to other hosts like Flickr (<a href="https://github.com/yihui/knitr/issues/159">#159</a>) (thanks, Carl Boettiger)</p>
 </li>
 <li>
-<p>all packages loaded in the current session are also cached, so as long as a package has been loaded previously, it will be available to all following chunks (#160)</p>
+<p>all packages loaded in the current session are also cached, so as long as a package has been loaded previously, it will be available to all following chunks (<a href="https://github.com/yihui/knitr/issues/160">#160</a>)</p>
 </li>
 <li>
-<p>new chunk option <code>autodep</code> and function <code>build_dep()</code> to build cache dependencies among cached chunks automatically by analyzing object names in all cached chunks; this is a loose alternative to the <code>dependson</code> option (see main manual and <code>?build_dep</code> for details) (#72) (thanks, Seth Falcon)</p>
+<p>new chunk option <code>autodep</code> and function <code>build_dep()</code> to build cache dependencies among cached chunks automatically by analyzing object names in all cached chunks; this is a loose alternative to the <code>dependson</code> option (see main manual and <code>?build_dep</code> for details) (<a href="https://github.com/yihui/knitr/issues/72">#72</a>) (thanks, Seth Falcon)</p>
 </li>
 <li>
-<p>input and output in <code>knit()</code> are no longer restricted to files; they can be <code>stdin()</code>/<code>stdout()</code> or other types of connections (#162; see <a href="https://github.com/yihui/knitr/issues/162">https://github.com/yihui/knitr/issues/162</a>) (thanks, gabysbrain)</p>
+<p>input and output in <code>knit()</code> are no longer restricted to files; they can be <code>stdin()</code>/<code>stdout()</code> or other types of connections (<a href="https://github.com/yihui/knitr/issues/162">#162</a>; see <a href="https://github.com/yihui/knitr/issues/162">https://github.com/yihui/knitr/issues/162</a>) (thanks, gabysbrain)</p>
 </li>
 <li>
-<p>as-is output (<code>results='asis'</code>) and plots are no longer put in the framed environments because of incompatibilities (#163) (thanks, DCCKC, Murray Logan and Jennym Hutchison)</p>
+<p>as-is output (<code>results='asis'</code>) and plots are no longer put in the framed environments because of incompatibilities (<a href="https://github.com/yihui/knitr/issues/163">#163</a>) (thanks, DCCKC, Murray Logan and Jennym Hutchison)</p>
 </li>
 </ul>
 <h3 id="sec:bug-fixes_60" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
-<p>for plots in LaTeX output, centering should be done with <code>{\centering }</code> instead of <code>\centering{}</code> (#156) (thanks, Ramnath Vaidyanathan)</p>
+<p>for plots in LaTeX output, centering should be done with <code>{\centering }</code> instead of <code>\centering{}</code> (<a href="https://github.com/yihui/knitr/issues/156">#156</a>) (thanks, Ramnath Vaidyanathan)</p>
 </li>
 <li>
-<p>the recorded plot is a more precise representation of the expected plot now because the recording device also takes the plot size into consideration (#157) (thanks, Christiaan Klijn and Frank Harrell)</p>
+<p>the recorded plot is a more precise representation of the expected plot now because the recording device also takes the plot size into consideration (<a href="https://github.com/yihui/knitr/issues/157">#157</a>) (thanks, Christiaan Klijn and Frank Harrell)</p>
 </li>
 <li>
-<p><code>format_sci()</code> now correctly formats 0; this function is used for inline R code to format numbers in scientific notation (#161) (thanks, Kihoro J. M.)</p>
+<p><code>format_sci()</code> now correctly formats 0; this function is used for inline R code to format numbers in scientific notation (<a href="https://github.com/yihui/knitr/issues/161">#161</a>) (thanks, Kihoro J. M.)</p>
 </li>
 <li>
 <p>fixed a bug for the case in which the chunk option only contains the label like <code>&lt;&lt;label=foobar&gt;&gt;=</code>; knitr 0.3 was unable to parse the label correctly (<code>&lt;&lt;foobar&gt;&gt;=</code> is OK) (thanks, Muhammad Yaseen)</p>
@@ -4235,10 +4236,10 @@ plot(cars)
 <h3 id="sec:new-features_57" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
-<p>a fundamental and important new feature for writing chunk options: they can be written as valid R code now, just like we write function arguments (e.g. <code>echo=c(1, 3, 5)</code>, <code>fig.cap=&quot;my figure caption&quot;</code>); all options will be parsed and evaluated as R code by default; see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a> for details (#142) (thanks, Baptiste Auguie)</p>
+<p>a fundamental and important new feature for writing chunk options: they can be written as valid R code now, just like we write function arguments (e.g. <code>echo=c(1, 3, 5)</code>, <code>fig.cap=&quot;my figure caption&quot;</code>); all options will be parsed and evaluated as R code by default; see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a> for details (<a href="https://github.com/yihui/knitr/issues/142">#142</a>) (thanks, Baptiste Auguie)</p>
 </li>
 <li>
-<p>chunk references using <code>&lt;&lt;label&gt;&gt;</code> is supported now (#86); thanks to Kevin R. Coombe and Terry Therneau for the discussion</p>
+<p>chunk references using <code>&lt;&lt;label&gt;&gt;</code> is supported now (<a href="https://github.com/yihui/knitr/issues/86">#86</a>); thanks to Kevin R. Coombe and Terry Therneau for the discussion</p>
 </li>
 <li>
 <p>new function <code>run_chunk()</code> to run the code in a specified chunk, which is an alternative to the chunk reference in Sweave; see <a href="https://yihui.org/knitr/demo/reference/">https://yihui.org/knitr/demo/reference/</a></p>
@@ -4253,31 +4254,31 @@ plot(cars)
 <p>if you still use old Sweave syntax for chunk options, it is possible to write literal commas in chunk options now – they have to be escaped by <code>\</code>, e.g. <code>caption=hello\, world</code>; this will be parsed to <code>'hello, world'</code> as a character string; of course this looks ugly and has limited power, so please please consider the new syntax!</p>
 </li>
 <li>
-<p><code>knit2pdf()</code> gained another argument <code>compiler</code> which can be used to specify the program to compile the tex document to PDF, such as xelatex (#131) (thanks, Ramnath Vaidyanathan and Dennis Murphy)</p>
+<p><code>knit2pdf()</code> gained another argument <code>compiler</code> which can be used to specify the program to compile the tex document to PDF, such as xelatex (<a href="https://github.com/yihui/knitr/issues/131">#131</a>) (thanks, Ramnath Vaidyanathan and Dennis Murphy)</p>
 </li>
 <li>
-<p>a new function <code>imgur_upload()</code> to upload images to imgur.com; it can be used in HTML or Markdown hooks so the output is a self-contained document which does not need additional image files; <code>opts_knit$get('upload.fun'</code>) can use this function (#66) (thanks, Ramnath Vaidyanathan)</p>
+<p>a new function <code>imgur_upload()</code> to upload images to imgur.com; it can be used in HTML or Markdown hooks so the output is a self-contained document which does not need additional image files; <code>opts_knit$get('upload.fun'</code>) can use this function (<a href="https://github.com/yihui/knitr/issues/66">#66</a>) (thanks, Ramnath Vaidyanathan)</p>
 </li>
 <li>
-<p>a child document can be compiled individually with the LaTeX preamble borrowed automatically from a parent document using a new function <code>set_parent()</code>; see the help page for details (#136) (thanks, Helder Correia)</p>
+<p>a child document can be compiled individually with the LaTeX preamble borrowed automatically from a parent document using a new function <code>set_parent()</code>; see the help page for details (<a href="https://github.com/yihui/knitr/issues/136">#136</a>) (thanks, Helder Correia)</p>
 </li>
 <li>
 <p>to avoid <code>$$</code> around numbers in the inline output, we can use <code>I()</code> to protect the numeric inline output, e.g. <code>$x = \Sexpr{I(10^7)}$</code> gives <code>$x = 10^7$</code> whereas <code>\Sexpr{10^7}</code> gives <code>$10^7$</code> (thanks, Kevin Middleton)</p>
 </li>
 <li>
-<p>the listings package is formally supported now (see <code>?render_listings</code>); the default style is borrowed from <code>Sweavel.sty</code> written by Frank Harrell (#101) (thanks, Frank)</p>
+<p>the listings package is formally supported now (see <code>?render_listings</code>); the default style is borrowed from <code>Sweavel.sty</code> written by Frank Harrell (<a href="https://github.com/yihui/knitr/issues/101">#101</a>) (thanks, Frank)</p>
 </li>
 <li>
-<p>new package option <code>cache.extra</code> which allows more objects to affect cache; see <a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a> (#134)</p>
+<p>new package option <code>cache.extra</code> which allows more objects to affect cache; see <a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a> (<a href="https://github.com/yihui/knitr/issues/134">#134</a>)</p>
 </li>
 <li>
-<p>new package option <code>child.path</code> to specify the search path of child documents relative to the parent document (#141)</p>
+<p>new package option <code>child.path</code> to specify the search path of child documents relative to the parent document (<a href="https://github.com/yihui/knitr/issues/141">#141</a>)</p>
 </li>
 <li>
-<p>new package option <code>aliases</code> to set aliases for chunk options; see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a> (#144)</p>
+<p>new package option <code>aliases</code> to set aliases for chunk options; see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a> (<a href="https://github.com/yihui/knitr/issues/144">#144</a>)</p>
 </li>
 <li>
-<p>new chunk options <code>fig.cap</code>, <code>fig.scap</code> and <code>fig.lp</code> to write captions, short captions, label prefix for the figure environment in LaTeX (#145) (thanks, Frank Harrell)</p>
+<p>new chunk options <code>fig.cap</code>, <code>fig.scap</code> and <code>fig.lp</code> to write captions, short captions, label prefix for the figure environment in LaTeX (<a href="https://github.com/yihui/knitr/issues/145">#145</a>) (thanks, Frank Harrell)</p>
 </li>
 <li>
 <p>new package option <code>eval.after</code> to set a character vector of chunk options which should be evaluated <em>after</em> a chunk is executed (thanks, Frank Harrell)</p>
@@ -4292,13 +4293,13 @@ plot(cars)
 <p>package option <code>eval.opts</code> has been dropped: all options of classes <code>symbol</code> or <code>language</code> will be evaluated, so there is no need to specify which options to evaluate manually; remember, the chunk options are similar to function arguments, so you can use any valid R code there</p>
 </li>
 <li>
-<p>the default value for the <code>output</code> argument in <code>knit()</code> is NULL now, so we can also provide output filenames to <code>stitch()</code> and <code>knit2pdf()</code> (#119)</p>
+<p>the default value for the <code>output</code> argument in <code>knit()</code> is NULL now, so we can also provide output filenames to <code>stitch()</code> and <code>knit2pdf()</code> (<a href="https://github.com/yihui/knitr/issues/119">#119</a>)</p>
 </li>
 <li>
 <p>standard LaTeX messages are suppressed when a tikz plot is compiled to PDF so that we can see the <strong>knitr</strong> process more clearly</p>
 </li>
 <li>
-<p><code>%\SweaveInput{}</code> will be ignored now (#150)</p>
+<p><code>%\SweaveInput{}</code> will be ignored now (<a href="https://github.com/yihui/knitr/issues/150">#150</a>)</p>
 </li>
 <li>
 <p><code>results=asis</code> will no longer affect the <code>chunk</code> hook (in the past, the chunk output was not wrapped in the <code>kframe</code> environment when <code>results=asis</code>); it only affects the <code>output</code> hook now</p>
@@ -4331,7 +4332,7 @@ plot(cars)
 <h3 id="sec:new-features_58" class="unnumbered">NEW FEATURES</h3>
 <ul>
 <li>
-<p>added support for including child documents in the main document (like <code>\SweaveInput{}</code> but with different implementations); see <a href="https://yihui.org/knitr/demo/child/">https://yihui.org/knitr/demo/child/</a> (#92)</p>
+<p>added support for including child documents in the main document (like <code>\SweaveInput{}</code> but with different implementations); see <a href="https://yihui.org/knitr/demo/child/">https://yihui.org/knitr/demo/child/</a> (<a href="https://github.com/yihui/knitr/issues/92">#92</a>)</p>
 </li>
 <li>
 <p>for inline R code, character results are returned as-is now (without <code>\texttt{}</code>)</p>
@@ -4340,16 +4341,16 @@ plot(cars)
 <p>new function <code>purl()</code> as a wrapper to <code>knit(..., tangle = TRUE)</code> which extracts R code from the input document (thanks to Dieter Menne’s wife who suggested the function name)</p>
 </li>
 <li>
-<p>the error hook applies to inline R code when an error occurs in the inline R code, in which case knitr will not stop by default; instead, it writes the error message into the output (#85)</p>
+<p>the error hook applies to inline R code when an error occurs in the inline R code, in which case knitr will not stop by default; instead, it writes the error message into the output (<a href="https://github.com/yihui/knitr/issues/85">#85</a>)</p>
 </li>
 <li>
-<p>chunk option <code>split</code> also works for HTML output now using <code>&lt;iframe&gt;&lt;/iframe&gt;</code> (#82)</p>
+<p>chunk option <code>split</code> also works for HTML output now using <code>&lt;iframe&gt;&lt;/iframe&gt;</code> (<a href="https://github.com/yihui/knitr/issues/82">#82</a>)</p>
 </li>
 <li>
-<p><code>knit()</code> gained an argument <code>text</code> as an alternative to <code>input</code> (#88)</p>
+<p><code>knit()</code> gained an argument <code>text</code> as an alternative to <code>input</code> (<a href="https://github.com/yihui/knitr/issues/88">#88</a>)</p>
 </li>
 <li>
-<p>new chunk option <code>child</code> to include child documents into the main document (#92)</p>
+<p>new chunk option <code>child</code> to include child documents into the main document (<a href="https://github.com/yihui/knitr/issues/92">#92</a>)</p>
 </li>
 <li>
 <p>chunk option <code>external</code> defaults to <code>TRUE</code> now (was <code>FALSE</code> by default in the last version)</p>
@@ -4358,10 +4359,10 @@ plot(cars)
 <p>added a new demo to show how to build package vignettes with knitr: <a href="https://yihui.org/knitr/demo/vignette/">https://yihui.org/knitr/demo/vignette/</a></p>
 </li>
 <li>
-<p>added support to the <code>quartz()</code> device under Mac (#103); now the <code>dev</code> option has more choices (see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a>)</p>
+<p>added support to the <code>quartz()</code> device under Mac (<a href="https://github.com/yihui/knitr/issues/103">#103</a>); now the <code>dev</code> option has more choices (see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a>)</p>
 </li>
 <li>
-<p>chunk option <code>echo</code> can take a numeric vector to select which R expressions to echo into the output now (#108); see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a></p>
+<p>chunk option <code>echo</code> can take a numeric vector to select which R expressions to echo into the output now (<a href="https://github.com/yihui/knitr/issues/108">#108</a>); see <a href="https://yihui.org/knitr/options">https://yihui.org/knitr/options</a></p>
 </li>
 <li>
 <p>a new function <code>stitch()</code> which is a convenience function to insert an R script into a template and compile (to quickly create a report
@@ -4380,10 +4381,10 @@ based on an R script)</p>
 <h3 id="sec:bug-fixes_62" class="unnumbered">BUG FIXES</h3>
 <ul>
 <li>
-<p>the code used to merge global chunk options and local options was buggy for cache; it has been fixed now, so cache is more stable (#105), but users may see previously cached chunks being re-evaluated with this version, which should be regarded as a normal phenomenon, and on the second run, the cached chunks will not be evaluated again</p>
+<p>the code used to merge global chunk options and local options was buggy for cache; it has been fixed now, so cache is more stable (<a href="https://github.com/yihui/knitr/issues/105">#105</a>), but users may see previously cached chunks being re-evaluated with this version, which should be regarded as a normal phenomenon, and on the second run, the cached chunks will not be evaluated again</p>
 </li>
 <li>
-<p>fixed a buglet when using both options <code>out.width</code> and <code>out.height</code> in Rnw (#113)</p>
+<p>fixed a buglet when using both options <code>out.width</code> and <code>out.height</code> in Rnw (<a href="https://github.com/yihui/knitr/issues/113">#113</a>)</p>
 </li>
 </ul>
 <h2 id="sec:knitr-0-1" class="unnumbered">knitr 0.1</h2>
@@ -4403,14 +4404,14 @@ based on an R script)</p>
 </div>
 <footer><div class="flex-col">
 <p>Developed by <a href="https://yihui.org">Yihui Xie</a></p>
-<p>Site built with <a href="https://github.com/yihui/litedown">litedown</a> v0.11.7</p>
+<p>Site built with <a href="https://github.com/yihui/litedown">litedown</a> v0.11.14</p>
 </div></footer>
-<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/js/sidenotes.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/js/appendix.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/js/toc-highlight.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/js/copy-button.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/js/heading-anchor.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.107/js/pages.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/js/sidenotes.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/js/appendix.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/js/toc-highlight.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/js/copy-button.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/js/heading-anchor.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/js/pages.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
 </body>

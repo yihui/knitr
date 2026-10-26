@@ -1,0 +1,49 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --header-h: 44px;
+  --border: #ccc;
+  --bg: #f7f7f7;
+  --accent: #4a90d9;
+}
+body { font-family: system-ui, -apple-system, sans-serif; height: 100vh; overflow: hidden; }
+header {
+  height: var(--header-h); display: flex; align-items: center;
+  padding: 0 12px; background: var(--bg); border-bottom: 1px solid var(--border);
+  gap: 10px;
+}
+header h1 { font-size: 15px; font-weight: 600; }
+#run-btn {
+  padding: 4px 14px; border: 1px solid var(--accent); border-radius: 4px;
+  background: var(--accent); color: #fff; cursor: pointer; font-size: 13px;
+}
+#run-btn:hover { background: #3a7bc8; }
+#run-btn:disabled { opacity: .5; cursor: not-allowed; }
+#status { font-size: 12px; color: #666; flex: 1; text-align: right; }
+#examples-select {
+  font-size: 12px; padding: 3px 6px;
+  border: 1px solid var(--border); border-radius: 4px; background: #fff; cursor: pointer;
+}
+.container { display: flex; height: calc(100vh - var(--header-h)); }
+.pane { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pane-header {
+  height: 28px; display: flex; align-items: center; padding: 0 10px;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  font-size: 12px; font-weight: 600; color: #555;
+}
+#editor-pane { border-right: 1px solid var(--border); }
+#editor-wrap { flex: 1; overflow: hidden; }
+#editor-wrap .CodeMirror { height: 100%; font-size: 13px; }
+#preview-frame { flex: 1; border: none; width: 100%; background: #fff; transition: opacity .2s; }
+#loading-overlay {
+  position: fixed; inset: 0; background: rgba(255,255,255,.92);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 1000; font-family: system-ui, sans-serif;
+}
+#loading-overlay h2 { font-size: 18px; margin-bottom: 12px; }
+#loading-overlay p { font-size: 13px; color: #666; max-width: 400px; text-align: center; }
+.spinner {
+  width: 32px; height: 32px; border: 3px solid #eee;
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin .8s linear infinite; margin-bottom: 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
