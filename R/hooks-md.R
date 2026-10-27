@@ -137,15 +137,9 @@ hook_plot_md_pandoc = function(x, options) {
   sep_figs(sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at), cap, options)
 }
 
-# When a chunk generates multiple figures that carry captions, the plot hook is
-# called once per figure and the bare `![cap](path)` images would otherwise be
-# concatenated into a single paragraph, e.g. `![cap1](a) ![cap2](b)`. Pandoc
-# treats several images in one paragraph as inline images and drops the captions
-# (no figure environment / <figcaption>). Append a blank line after each
-# explicitly captioned figure except the last so that Pandoc emits a figure per
-# image (the default caption of plain knit() does not count). The chunk option
-# `fig.sep`, if set, is used instead, regardless of captions.
-# See https://github.com/yihui/knitr/issues/2032 and #1524.
+# Pandoc drops the captions of multiple images in one paragraph, so separate
+# explicitly captioned figures (except the last) by a blank line, unless the
+# chunk option `fig.sep` says otherwise. See #2032 and #1524.
 sep_figs = function(res, cap, options) {
   cur = options$fig.cur %n% 1L
   if (cur >= (options$fig.num %n% 1L)) return(res)
