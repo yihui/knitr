@@ -1,10 +1,15 @@
 #!/bin/sh
+# Post-process changed (staged, unstaged, or new) Rd files, but only re-stage
+# the ones already staged (don't drag unstaged Rd changes into the commit):
+#   1. @examplesIf: join \examples{ + \dontshow line, strip withAutoprint
+#   2. \examples{ followed by \dont*: join onto one line
 command -v perl > /dev/null 2>&1 || exit 0
-staged=$(git diff --cached --name-only --diff-filter=ACM | grep '^man/.*\.Rd$')
-[ -z "$staged" ] && exit 0
+changed=$(git status --porcelain --untracked-files=all -- man | grep -v '^.\?D' | cut -c4- | grep '\.Rd$')
+[ -z "$changed" ] && exit 0
 perl -i -0pe '
   s/^(\\examples\{)\n(\\dontshow\{if [^\n]*?) withAutoprint\(\\{ # examplesIf\}$/$1$2 \\{}/mg;
   s/^\\dontshow\{\\}\) # examplesIf\}$/\\dontshow{\\}}/mg;
   s/^(\\examples\{)\n(\\dont(?:run|test|show)\{)$/$1$2/mg;
-' $staged
-git add $staged
+' $changed
+staged=$(git diff --cached --name-only --diff-filter=ACM -- man | grep '\.Rd$')
+[ -n "$staged" ] && git add $staged || exit 0
