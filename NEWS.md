@@ -123,6 +123,8 @@
 
 - Subfigures (created via `fig.subcap`) that span multiple rows are now separated by `\\` instead of `\newline` in LaTeX output. Inside a centered figure (`fig.align = 'center'`), `\newline` did not respect the alignment and left the subfigures left-aligned; `\\` centers them correctly (thanks, @StephenGerry, #1907).
 
+- For Markdown-based output, the blank line inserted between multiple figures in a chunk (since 1.52) is now only added when the chunk option `fig.cap` is set explicitly, so plain `knit()` (whose default captions are not real captions) keeps the images inline as before. The separator can also be set via the chunk option `fig.sep` (with or without `fig.cap`), e.g., `fig.sep = ''` keeps the images in one paragraph (thanks, @heavywatal, #2529).
+
 - The `ditaa` engine now applies its intended default arguments (`-s 2 -T -S -E`). They were guarded by a comparison against `'ditta'`, which no engine name can match, so they have never been passed since they were introduced in #2092.
 
 - A `cat` chunk that sets its language via `class.source` (e.g., ` ```{cat, class.source='sh'} `) no longer duplicates that class in the output fence (previously ` ```{.sh .sh} `). The class is now promoted to the language and emitted only once, matching `lang='sh'`. Using `lang` and `class.source` together still adds the extra class (thanks, @cderv, #2519).
