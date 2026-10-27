@@ -118,6 +118,11 @@ assert("captioned figures in a multi-figure chunk are separated by a blank line 
   (hook_plot_md_pandoc(x, o) %==% sprintf("![%s](1.png)", cap))
   o$fig.sep = '\n'
   (hook_plot_md_pandoc(x, o) %==% sprintf("![%s](1.png)\n", cap))
+  # fig.sep also applies to figures without a caption
+  o = fig(1, 2)
+  o$fig.sep = '\n\n'
+  (hook_plot_md_pandoc(x, o) %==% "![](1.png)\n\n")
+  (hook_plot_md_base(x, o) %==% "![](1.png)\n\n")
 })
 
 assert('empty alt text is preserved and NA alt is discarded', {

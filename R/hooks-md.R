@@ -77,7 +77,7 @@ hook_plot_md_base = function(x, options) {
     res = sprintf('![%s](%s)', cap, x2)
     if (!is.null(lnk) && !is.na(lnk)) res = sprintf('[%s](%s)', res, lnk)
     res = paste0(res, if (nocap) '<!-- -->' else '', if (is_latex_output()) ' ' else '')
-    return(sep_captioned_fig(res, cap, options))
+    return(sep_figs(res, cap, options))
   }
   add_link = function(x) {
     if (is.null(lnk) || is.na(lnk)) return(x)
@@ -134,7 +134,7 @@ hook_plot_md_pandoc = function(x, options) {
   )
   if (at != '') at = paste0('{', at, '}')
 
-  sep_captioned_fig(sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at), cap, options)
+  sep_figs(sprintf('![%s](%s%s)%s', cap, base, .upload.url(x), at), cap, options)
 }
 
 # When a chunk generates multiple figures that carry captions, the plot hook is
@@ -142,14 +142,16 @@ hook_plot_md_pandoc = function(x, options) {
 # concatenated into a single paragraph, e.g. `![cap1](a) ![cap2](b)`. Pandoc
 # treats several images in one paragraph as inline images and drops the captions
 # (no figure environment / <figcaption>). Append a blank line after each
-# captioned figure except the last so that Pandoc emits a figure per image; the
-# chunk option `fig.sep` can override the blank line (e.g., `fig.sep = ''`).
+# explicitly captioned figure except the last so that Pandoc emits a figure per
+# image (the default caption of plain knit() does not count). The chunk option
+# `fig.sep`, if set, is used instead, regardless of captions.
 # See https://github.com/yihui/knitr/issues/2032 and #1524.
-sep_captioned_fig = function(res, cap, options) {
+sep_figs = function(res, cap, options) {
   cur = options$fig.cur %n% 1L
-  # only an explicit fig.cap counts (not the default caption of plain knit())
-  if (!is.null(options$fig.cap) && cap != '' && cur < (options$fig.num %n% 1L))
-    res = paste0(res, rep_len(options$fig.sep %n% '\n\n', cur)[cur])
+  if (cur >= (options$fig.num %n% 1L)) return(res)
+  sep = options$fig.sep
+  if (is.null(sep) && !is.null(options$fig.cap) && cap != '') sep = '\n\n'
+  if (length(sep)) res = paste0(res, rep_len(sep, cur)[cur])
   res
 }
 
