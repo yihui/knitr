@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="generator" content="litedown 0.11.14">
+<meta name="generator" content="litedown 0.11.20">
 <title>Not An Introduction to knitr</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/css/default.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.126/css/default.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.19.1/dist/katex.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/css/prism-xcode.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.126/css/prism-xcode.min.css">
 </head>
 <body>
-<div class="frontmatter">
+<header class="frontmatter">
 <div class="title"><h1>Not An Introduction to knitr</h1></div>
 <div class="author"><h2>Yihui Xie</h2></div>
-<div class="date"><h3>2026-10-26</h3></div>
-</div>
-<div class="body">
+<div class="date"><h3>2026-10-27</h3></div>
+</header>
+<main class="body">
 <p>The <strong>knitr</strong> package is an alternative tool to Sweave based on a different
 design with more features. This document is not an introduction, but only serves
 as a placeholder to guide you to the real manuals, which are available on the
@@ -28,9 +28,9 @@ and knitr” for this package, too.</p>
 <pre><code class="language-r">options(digits = 4)
 rnorm(20)
 </code></pre>
-<pre><code>#&gt;  [1]  0.2268  1.1839  0.9769  0.7755 -1.0800 -0.9195  0.7359 -0.5135 -0.9011
-#&gt; [10] -0.1718 -0.1436  0.2823  0.5105  1.2057 -0.3910  0.5830  0.4539  1.0672
-#&gt; [19] -0.5736 -0.5434
+<pre><code>#&gt;  [1]  0.9722 -0.7773  0.5833 -0.8501  0.4877 -1.2692  0.1549  2.0420 -0.4413
+#&gt; [10]  1.1322  0.1804 -0.9670 -0.8292 -0.1505  0.7103 -1.0405  0.2840 -0.1964
+#&gt; [19]  0.5969  1.3573
 </code></pre>
 <pre><code class="language-r">fit = lm(dist ~ speed, data = cars)
 b = coef(fit)
@@ -77,7 +77,7 @@ A scatterplot with a regression line.</p>
 <h2 id="sec:references">References</h2>
 <p>Xie Y (2026).
 <em>knitr: A General-Purpose Package for Dynamic Report Generation in R</em>.
-R package version 1.52.4, <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>. 
+R package version 1.52.5, <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>. 
 </p>
 <p>Xie Y (2015).
 <em>Dynamic Documents with R and knitr</em>, 2nd edition.
@@ -90,9 +90,10 @@ In Stodden V, Leisch F, Peng RD (eds.), <em>Implementing Reproducible Computatio
 Chapman and Hall/CRC.
 ISBN 978-1466561595. 
 </p>
-</div>
+
+</main>
 <script src="https://cdn.jsdelivr.net/combine/npm/katex@0.19.1/dist/katex.min.js,npm/katex@0.19.1/dist/contrib/auto-render.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.119/js/render-katex.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.126/js/render-katex.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
 </body>
