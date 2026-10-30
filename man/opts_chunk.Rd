@@ -64,10 +64,12 @@ host-side only. Routed chunks start from the worker device's defaults.
 \item Chunk caching works as usual for routed chunks: the chunk evaluates on
 the worker, and knitr caches its output on the host. On a cache hit,
 the cached output is reused, and the chunk is not re-sent to the
-worker (with \code{cache = 3} the engine is skipped entirely). A cache hit
-restores objects into the host environment only, not onto the worker.
-With a warm cache and fresh workers, a routed chunk that depends on an
-earlier cached routed chunk will not find its state there.
+worker (with \code{cache = 3} the engine is skipped entirely). Only the
+output is cached: objects live in the worker's environment and are
+never saved, so a cache hit restores nothing (\code{cache.vars} has no
+effect). With a warm cache and fresh workers, a routed chunk that
+depends on an earlier cached routed chunk will not find its state
+there.
 }
 
 The worker process needs the knitr package installed. Use the same
