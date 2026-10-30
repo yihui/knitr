@@ -34,8 +34,8 @@ to only query its values via \code{opts_current$get()}. Calling
 \section{Routing chunks to another process with \code{compute}}{
 
 The chunk option \code{compute} routes a chunk to an \emph{executor} registered in
-the global option \code{compute.executor} (for example
-\code{mirai::register_render()}). The executor evaluates the chunk in another
+the global option \code{compute.executor} (an upcoming version of mirai will
+provide one). The executor evaluates the chunk in another
 R process instead of in \code{\link[=knit_global]{knit_global()}}. \verb{#| compute: true} routes to the
 backend's default profile. \verb{#| compute: gpu} routes to the profile named
 \code{"gpu"}. Any other value is invalid: knitr warns, and the chunk evaluates

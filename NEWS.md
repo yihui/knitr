@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-- Added support for a `compute` chunk option. Chunks tagged with `#| compute: gpu` (or `#| compute: true` for the backend's default profile) now evaluate via the executor registered with `options(compute.executor = ...)`, for example `mirai::register_render()`, instead of in the host session. Routed chunks share state only within their profile. Untagged chunks and inline code are unaffected. See the section "Routing chunks to another process with `compute`" in `?opts_chunk` for details.
+- Added support for a `compute` chunk option. Chunks tagged with `#| compute: gpu` (or `#| compute: true` for the backend's default profile) now evaluate via the executor registered with `options(compute.executor = ...)` (an upcoming version of mirai will provide one) instead of in the host session. Routed chunks share state only within their profile. Untagged chunks and inline code are unaffected. See the section "Routing chunks to another process with `compute`" in `?opts_chunk` for details.
 
 - The file path in the "Quitting from" message (shown when a chunk fails) is now a clickable hyperlink in front-ends that support terminal hyperlinks (e.g., the RStudio IDE, which sets the environment variable `RSTUDIO_CLI_HYPERLINKS`), so you can jump straight to the line where the error occurred. In other environments, the plain path is shown as before (thanks, @olivroy, #2153).
 

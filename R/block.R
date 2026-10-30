@@ -346,7 +346,7 @@ eng_r = function(options) {
     ex = getOption('compute.executor')
     if (!is.function(ex)) stop2(
       "the 'compute' chunk option requires a registered executor; set one with ",
-      "options(compute.executor = ...), for example mirai::register_render()"
+      "options(compute.executor = ...), for example an executor provided by mirai"
     )
     out = ex(eng_r_remote, list(code = code, ev_args = ev_args, options = options), profile)
     # alt text was collected on the worker and is merged into options$fig.alt below

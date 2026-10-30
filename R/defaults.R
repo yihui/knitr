@@ -72,8 +72,8 @@ new_defaults = function(value = list()) {
 #' See `str(knitr::opts_chunk$get())` for a list of default chunk options.
 #' @section Routing chunks to another process with `compute`:
 #'   The chunk option `compute` routes a chunk to an *executor* registered in
-#'   the global option `compute.executor` (for example
-#'   `mirai::register_render()`). The executor evaluates the chunk in another
+#'   the global option `compute.executor` (an upcoming version of mirai will
+#'   provide one). The executor evaluates the chunk in another
 #'   R process instead of in [knit_global()]. `#| compute: true` routes to the
 #'   backend's default profile. `#| compute: gpu` routes to the profile named
 #'   `"gpu"`. Any other value is invalid: knitr warns, and the chunk evaluates
