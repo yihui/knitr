@@ -91,8 +91,9 @@ new_defaults = function(value = list()) {
 #'     working directory.
 #'   - `log.echo = TRUE` streams to the worker's stderr rather than the host
 #'     render output.
-#'   - Plots are recorded on the worker and replayed on the host device.
-#'     Recorded plots are not portable across R or graphics engine versions,
+#'   - Plots are recorded on the worker at the chunk's `fig.dim` and replayed
+#'     on the host device. Recorded plots are not portable across R or
+#'     graphics engine versions,
 #'     so use the same R version on host and worker for chunks that plot.
 #'   - Format-dependent printing follows the worker's renderer state (a fresh
 #'     `opts_knit`), not the host's. Conveniences from rmarkdown or Quarto,

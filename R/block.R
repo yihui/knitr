@@ -456,15 +456,34 @@ eng_r = function(options) {
 }
 
 # Runs in the executing process: builds the output handler from the local knitr
-# (and rlang, if installed there), records plots on a fresh device, and returns
-# the evaluate() result together with the alt text collected by record_fig_alt().
+# (and rlang, if installed there), records plots on a device sized to the
+# chunk's fig.dim, and returns the evaluate() result together with the alt text
+# collected by record_fig_alt().
 eng_r_remote = function(code, ev_args, options) {
   reset_fig_alt()
+  dv = record_device(options)
+  on.exit(dev.off(dv), add = TRUE)
   res = do.call(evaluate::evaluate, c(list(
-    code, envir = globalenv(), new_device = TRUE,
+    code, envir = globalenv(), new_device = FALSE,
     output_handler = knit_handlers(options$render, options)
   ), ev_args))
   list(res = res, fig.alt = .knitEnv$fig.alt)
+}
+
+# open a headless device to record plots at the chunk's physical size, like
+# chunk_device() does on the host, so that size-dependent measurements (e.g.
+# text metrics) are taken at fig.dim and do not rescale when the host replays
+# the recorded plots; mirrors the device evaluate() would choose (ragg if
+# available, else a null pdf)
+record_device = function(options) {
+  width = options$fig.width[1L]; height = options$fig.height[1L]
+  if (loadable('ragg')) {
+    ragg::agg_record(width = width, height = height, units = 'in', res = options$dpi[1L])
+  } else {
+    pdf_null(width, height)
+  }
+  dev.control(displaylist = 'enable')
+  dev.cur()
 }
 
 block_cache = function(options, output, objects) {

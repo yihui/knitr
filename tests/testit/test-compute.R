@@ -108,6 +108,17 @@ if (loadable('ggplot2')) assert('automatic fig.alt survives a routed chunk', {
   (grepl('alt="my alt text"', out, fixed = TRUE))
 })
 
+assert('the worker records plots on a device sized to fig.dim', {
+  options(compute.executor = function(fun, args, profile) do.call(fun, args))
+  out = knit_md(c(
+    "```{r}", "#| compute: true", "#| fig.dim: [4, 3]",
+    "cat(par('din'))", "```"
+  ))
+  options(compute.executor = NULL)
+  # the recording device matches the chunk's fig.dim rather than a device default
+  (grepl('4 3', out, fixed = TRUE))
+})
+
 # end-to-end contract test against a real mirai backend; sync daemons evaluate
 # in-process (mirai >= 2.5.1), so no daemon processes, ports or sleeps
 if (requireNamespace('mirai', quietly = TRUE)) {
@@ -135,7 +146,7 @@ if (requireNamespace('mirai', quietly = TRUE)) {
     ))
     files = file.path('kn-test-fig', c('multi-1.png', 'multi-2.png'))
     exists = file.exists(files)
-    # the worker records on a default-size device. Replay rescales to fig.dim
+    # the worker records at fig.dim, so the host replays without rescaling
     dims = if (loadable('png')) dim(png::readPNG(files[1L]))[1:2] else c(216L, 288L)
     unlink('kn-test-fig', recursive = TRUE)
     (all(exists))
