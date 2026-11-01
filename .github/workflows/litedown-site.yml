@@ -74,7 +74,7 @@ jobs:
           surge ./site "$PREVIEW_DOMAIN"
       - name: Comment preview URL
         if: github.event_name == 'pull_request' && env.SURGE_TOKEN != ''
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@v3
         with:
           header: surge-preview
           message: |
