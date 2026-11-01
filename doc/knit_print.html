@@ -3,18 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="generator" content="litedown 0.11.20">
+<meta name="generator" content="litedown 0.11.23">
 <title>Custom Print Methods</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.126/css/default.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.126/css/prism-xcode.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.139/css/default.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.139/css/prism-xcode.min.css">
 </head>
 <body>
 <header class="frontmatter">
 <div class="title"><h1>Custom Print Methods</h1></div>
 <div class="author"><h2>Yihui Xie</h2></div>
-<div class="date"><h3>2026-10-27</h3></div>
+<div class="date"><h3>2026-11-01</h3></div>
 </header>
-<main class="body">
+<main>
+<article class="">
 <nav id="TOC">
 <ul>
 <li><a href="#sec:customize-printing">Customize Printing</a></li>
@@ -65,7 +66,7 @@ knit_print  # an S3 generic function
 ##         UseMethod(&quot;knit_print&quot;)
 ##     }
 ## }
-## &lt;bytecode: 0x7d1a2b770&gt;
+## &lt;bytecode: 0xa77a51070&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">methods(knit_print)
@@ -82,7 +83,7 @@ knit_print  # an S3 generic function
 ##         x
 ##     else normal_print(x)
 ## }
-## &lt;bytecode: 0x7cfd62fc8&gt;
+## &lt;bytecode: 0xa75bab268&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">normal_print
@@ -93,7 +94,7 @@ knit_print  # an S3 generic function
 ##         methods::show(x)
 ##     else print(x)
 ## }
-## &lt;bytecode: 0x7d4a3dd20&gt;
+## &lt;bytecode: 0xa7d8e7428&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <p>As we can see, <code>knit_print()</code> has a <code>default</code> method, which is basically
@@ -480,7 +481,7 @@ function:</p>
 ## {
 ##     structure(x, class = &quot;knit_asis&quot;, knit_meta = meta, knit_cacheable = cacheable)
 ## }
-## &lt;bytecode: 0x7d5ac75e8&gt;
+## &lt;bytecode: 0xa7e976a88&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <p>You may put <strong>knitr</strong> in the <code>Suggests</code> field in <code>DESCRIPTION</code>, and use
@@ -501,6 +502,7 @@ them off by <code>comment = ''</code>. <a href="#fnref-2" class="footnote-backre
 </ol>
 </section>
 
+</article>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
