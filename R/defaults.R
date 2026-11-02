@@ -70,6 +70,48 @@ new_defaults = function(value = list()) {
 #' options in a separate chunk.
 #'
 #' See `str(knitr::opts_chunk$get())` for a list of default chunk options.
+#' @section Routing chunks to another process with `compute`:
+#'   The chunk option `compute` routes a chunk to an *executor* registered in
+#'   the global option `compute.executor` (an upcoming version of mirai will
+#'   provide one). The executor evaluates the chunk in another
+#'   R process instead of in [knit_global()]. `#| compute: true` routes to the
+#'   backend's default profile. `#| compute: gpu` routes to the profile named
+#'   `"gpu"`. Any other value is invalid: knitr warns, and the chunk evaluates
+#'   locally. A tagged chunk raises an error when no executor is registered.
+#'
+#'   Routed chunks on the same profile share the executing process's global
+#'   environment. Objects created in one routed chunk are visible to later
+#'   chunks on the same profile. They are not visible to untagged chunks,
+#'   inline code, or `eval.after` options, which always evaluate host-side in
+#'   [knit_global()]. Host-side objects are not visible to routed chunks
+#'   either. Consequences of evaluating elsewhere:
+#'
+#'   - Routed chunks bypass `in_input_dir()` and any user-customized
+#'     `evaluate` knit hook. Relative paths resolve against the worker's
+#'     working directory.
+#'   - `log.echo = TRUE` streams to the worker's stderr rather than the host
+#'     render output.
+#'   - Plots are recorded on the worker at the chunk's `fig.dim` and replayed
+#'     on the host device. Recorded plots are not portable across R or
+#'     graphics engine versions,
+#'     so use the same R version on host and worker for chunks that plot.
+#'   - Format-dependent printing follows the worker's renderer state (a fresh
+#'     `opts_knit`), not the host's. Conveniences from rmarkdown or Quarto,
+#'     such as paged tables, can differ between routed and untagged chunks.
+#'   - `showtext` fonts and `opts_knit$get('global.par')` pars are set up
+#'     host-side only. Routed chunks start from the worker device's defaults.
+#'   - Chunk caching works as usual for routed chunks: the chunk evaluates on
+#'     the worker, and knitr caches its output on the host. On a cache hit,
+#'     the cached output is reused, and the chunk is not re-sent to the
+#'     worker (with `cache = 3` the engine is skipped entirely). Only the
+#'     output is cached: objects live in the worker's environment and are
+#'     never saved, so a cache hit restores nothing (`cache.vars` has no
+#'     effect). With a warm cache and fresh workers, a routed chunk that
+#'     depends on an earlier cached routed chunk will not find its state
+#'     there.
+#'
+#'   The worker process needs the knitr package installed. Use the same
+#'   version as on the host.
 #' @references Usage: <https://yihui.org/knitr/objects/>
 #'
 #'   A list of available options:
@@ -101,6 +143,8 @@ opts_chunk = new_defaults(list(
   warning = TRUE, error = TRUE, message = TRUE,
 
   render = NULL,
+
+  compute = NULL,
 
   ref.label = NULL, child = NULL, engine = 'R', split = FALSE, include = TRUE, purl = TRUE
 
