@@ -51,7 +51,9 @@ local({
   ), quiet = TRUE), error = function(e) NULL)
   if (is.null(probe) || !exists('knitr_probe')) return()
 
-  d = tempfile(); dir.create(d); on.exit(unlink(d, recursive = TRUE), add = TRUE)
+  # forward slashes: backslashes in Windows paths break the chunk header
+  d = gsub('\\', '/', tempfile(), fixed = TRUE)
+  dir.create(d); on.exit(unlink(d, recursive = TRUE), add = TRUE)
   writeLines(c('#include <Rcpp.h>', 'int addone(int x);'), h <- file.path(d, 'inc.h'))
   writeLines(c(
     '#include "inc.h"', 'int addone(int x) { return x + 1; }',
