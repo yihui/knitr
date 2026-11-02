@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="generator" content="litedown 0.11.23">
+<meta name="generator" content="litedown 1.0.2">
 <title>Custom Print Methods</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.139/css/default.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.139/css/prism-xcode.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.140/css/default.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.140/css/prism-xcode.min.css">
 </head>
 <body>
 <header class="frontmatter">
 <div class="title"><h1>Custom Print Methods</h1></div>
 <div class="author"><h2>Yihui Xie</h2></div>
-<div class="date"><h3>2026-11-01</h3></div>
+<div class="date"><h3>2026-11-02</h3></div>
 </header>
 <main>
 <article class="">
@@ -66,7 +66,7 @@ knit_print  # an S3 generic function
 ##         UseMethod(&quot;knit_print&quot;)
 ##     }
 ## }
-## &lt;bytecode: 0xa77a51070&gt;
+## &lt;bytecode: 0x8325a5268&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">methods(knit_print)
@@ -83,7 +83,7 @@ knit_print  # an S3 generic function
 ##         x
 ##     else normal_print(x)
 ## }
-## &lt;bytecode: 0xa75bab268&gt;
+## &lt;bytecode: 0x8310bfc40&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <pre><code class="language-r">normal_print
@@ -94,7 +94,7 @@ knit_print  # an S3 generic function
 ##         methods::show(x)
 ##     else print(x)
 ## }
-## &lt;bytecode: 0xa7d8e7428&gt;
+## &lt;bytecode: 0x836cd2e40&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <p>As we can see, <code>knit_print()</code> has a <code>default</code> method, which is basically
@@ -481,7 +481,7 @@ function:</p>
 ## {
 ##     structure(x, class = &quot;knit_asis&quot;, knit_meta = meta, knit_cacheable = cacheable)
 ## }
-## &lt;bytecode: 0xa7e976a88&gt;
+## &lt;bytecode: 0x837c28900&gt;
 ## &lt;environment: namespace:knitr&gt;
 </code></pre>
 <p>You may put <strong>knitr</strong> in the <code>Suggests</code> field in <code>DESCRIPTION</code>, and use
